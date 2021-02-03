@@ -1,0 +1,5516 @@
+#
+# List of changes in translation
+#
+
+
+#
+# Added 07/06/13
+#
+
+#: site/admin/manageSubnetEditResult.php:169
+msgid "Subnet edit successfull"
+msgstr ""
+
+#: site/admin/manageSubnetEditResult.php:169
+msgid "Subnet add successfull"
+msgstr ""
+
+#: site/admin/manageSubnetEditResult.php:169
+msgid "Subnet delete successfull"
+msgstr ""
+
+#: site/functons/functions-common.php
+msgid "Read / Write / Admin"
+msgstr ""
+
+#: site/ipaddr/modifyIpAddressCheck.php
+msgid "IP edit successful"
+msgstr ""
+
+#: site/ipaddr/modifyIpAddressCheck.php
+msgid "IP add successful"
+msgstr ""
+
+#: site/ipaddr/modifyIpAddressCheck.php
+msgid "IP delete successful"
+msgstr ""
+
+
+#
+# Added 11/06/13
+#
+
+#: site/admin/subnetDetailsSlaves.php
+msgid "You do not have permissions to truncate subnet"
+msgstr ""
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Failed to add device"
+msgstr ""
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Failed to edit device"
+msgstr ""
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Failed to delete device"
+msgstr ""
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Device add successfull"
+msgstr ""
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Device edit successfull"
+msgstr ""
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Device delete successfull"
+msgstr ""
+
+#: site/admin/manageVLANEditresult.php
+msgid "Failed to add VLAN"
+msgstr ""
+
+#: site/admin/manageVLANEditresult.php
+msgid "Failed to edit VLAN"
+msgstr ""
+
+#: site/admin/manageVLANEditresult.php
+msgid "Failed to delete VLAN"
+msgstr ""
+
+#: site/admin/manageVLANEditresult.php
+msgid "VLAN add successfull"
+msgstr ""
+
+#: site/admin/manageVLANEditresult.php
+msgid "VLAN edit successfull"
+msgstr ""
+
+#: site/admin/manageVLANEditresult.php
+msgid "VLAN delete successfull"
+msgstr ""
+
+#: site/admin/manageVRFEditResult.php
+msgid "Failed to add VRF"
+msgstr ""
+
+#: site/admin/manageVRFEditResult.php
+msgid "Failed to edit VRF"
+msgstr ""
+
+#: site/admin/manageVRFEditResult.php
+msgid "Failed to delete VRF"
+msgstr ""
+
+#: site/admin/manageVRFEditResult.php
+msgid "VRF add successfull"
+msgstr ""
+
+#: site/admin/manageVRFEditResult.php
+msgid "VRF edit successfull"
+msgstr ""
+
+#: site/admin/manageVRFEditResult.php
+msgid "VRF delete successfull"
+msgstr ""
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Failed to add field"
+msgstr ""
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Failed to edit field"
+msgstr ""
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Failed to delete field"
+msgstr ""
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Field add success"
+msgstr ""
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Field edit success"
+msgstr ""
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Field delete success"
+msgstr ""
+
+#: site/tools/userMenuSelfMod.php
+msgid "To apply language change please log in again"
+msgstr ""
+
+
+#
+# Added 13/06/13
+#
+
+#: site/dashboard/top10_percentage.php
+#: site/dashboard/top10_hosts.php
+msgid "No IPv4 hosts configured"
+msgstr ""
+
+#: site/dashboard/top10_hosts.php
+msgid "No IPv6 hosts configured"
+msgstr ""
+
+#: site/dashboard/top10_percentage.php
+msgid "Add some hosts to subnets to calculate usage percentage"
+msgstr ""
+
+#: site/dashboard/top10_hosts.php
+msgid "Add some hosts to subnets to show graph of used hosts per subnet"
+msgstr ""
+
+
+#
+# Added 14/06/13
+#
+
+#: site/admin/usersEditPrint.php
+msgid "edit user"
+msgstr""
+
+#: site/admin/usersEditPrint.php
+msgid "delete user"
+msgstr ""
+
+#
+# Added 20/06/13
+#
+
+#: site/admin/manageSubnetEdit.php
+msgid "Check hosts status"
+msgstr ""
+
+#: site/admin/manageSubnetEdit.php
+msgid "Ping hosts inside subnet to check availability"
+msgstr ""
+
+#: site/ipaddr/subnetDetials.php
+msgid "Hosts check"
+msgstr ""
+
+#: site/ipaddr/modifyIpAddress.php
+msgid "Ping exclude"
+msgstr ""
+
+#: site/ipaddr/modifyIpAddress.php
+msgid "Exclude from ping status checks"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Check availability"
+msgstr ""
+
+#: site/ipaddr/pingCheck.php
+msgid "Insufficient permissions"
+msgstr ""
+
+#: site/ipaddr/pingCheck.php
+msgid "is alive"
+msgstr ""
+
+#: site/ipaddr/pingCheck.php
+msgid "is not alive"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "Ping status intervals"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "Ping status intervals for IP addresses in seconds - warning;offline (Default: 1800;3600)"
+msgstr ""
+
+#: site/admin/settingsEdit.php
+msgid "Invalid ping status intervals"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device is alive"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device warning"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device is offline"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device status unknown"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Last seen"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Never"
+msgstr ""
+
+#
+# Added 21/06/13
+#
+
+#: site/tools/ipCalcResult.php
+msgid "Number of hosts"
+msgstr ""
+
+#
+# Added 26/06/13
+#
+
+#: site/ipaddr/subnetDetails.php
+msgid "Scan subnet for new hosts"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "You do not have permissions to modify hosts in this subnet"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "Scan subnet"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "Select Scan type"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "scan"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "You can set parameters for scan under functions/scan/config-scan.php"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "Discovery scans"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "Status update scans"
+msgstr ""
+
+#: site/ipaddr/subnetScanUpdatePing.php
+msgid "Scan results"
+msgstr ""
+
+
+####### 0.82.006 #######
+
+#: site/admin/settings.php
+msgid "Default language"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "Select default language"
+msgstr ""
+
+#: site/admin/languages.php
+msgid "Version"
+msgstr ""
+
+
+### 0.84.001 ###
+
+#: site/admin/manageSection.php
+msgid "Section order"
+msgstr ""
+
+#: site/admin/manageSectionOrder.php
+msgid "You can manually set order in which sections are displayed in. Default is creation date."
+msgstr ""
+
+#: site/admin/manageSectionOrder.php
+msgid "Order"
+msgstr ""
+
+#: site/admin/manageSectionOrderResult.php
+msgid "Section reordering successful"
+msgstr ""
+
+#: site/functions/functions-admin.php
+msgid "Cannot reorder sections"
+msgstr ""
+
+
+### 0.84.002 ###
+
+#: site/admin/manageSectionEdit.php
+msgid "Default"
+msgstr ""
+
+
+### 0.84.005 ###
+
+#: site/ipaddr/subnetDiscoveryPing.php
+msgid "Threading is required for scanning subnets. Please recompile PHP with pcntl extension"
+msgstr ""
+
+#: site/ipaddr/subnetDiscoveryPing.php
+msgid "Add discovered hosts"
+msgstr ""
+
+#: site/ipaddr/subnetDiscoveryPingResult.php
+msgid "Scan results added to database"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "Invalid ping path"
+msgstr ""
+
+
+### 0.85.002 ###
+
+#: site/admin/settings.php
+msgid "Display settings"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "Enable or disable API server module"
+msgstr ""
+
+#: site/admin/api.php
+msgid "Please enable API module under server management"
+msgstr ""
+
+#: site/admin/adminMenu.php
+#: site/admin/api.php
+msgid "API management"
+msgstr ""
+
+#: site/admin/api.php
+msgid "Create API key"
+msgstr ""
+
+#: site/admin/api.php
+msgid "App id"
+msgstr ""
+
+#: site/admin/api.php
+msgid "App code"
+msgstr ""
+
+#: site/admin/api.php
+msgid "App permissions"
+msgstr ""
+
+#: site/admin/api.php
+msgid "edit app details"
+msgstr ""
+
+#: site/admin/api.php
+msgid "remove app"
+msgstr ""
+
+#: site/admin/api.php
+msgid "No Apps available"
+msgstr ""
+
+#: site/admin/api.php
+msgid "API instructions"
+msgstr ""
+
+#: site/admin/api.php
+msgid "API documentation"
+msgstr ""
+
+#: site/admin/api.php
+msgid "The following PHP extensions for API server are missing"
+msgstr ""
+
+#: site/admin/api.php
+msgid "Please recompile PHP to include missing extensions for API server"
+msgstr ""
+
+#: site/admin/apiEdit.php
+msgid "Add new api key"
+msgstr ""
+
+#: site/admin/apiEdit.php
+msgid "Enter application identifier"
+msgstr ""
+
+#: site/admin/apiEdit.php
+msgid "Application code"
+msgstr ""
+
+#: site/admin/apiEdit.php
+msgid "Regenerate"
+msgstr ""
+
+#: site/admin/apiEdit.php
+msgid "Disabled"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "Invalid application code"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "Invalid application id"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "Invalid permissions"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "API add error"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "API edit error"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "API delete error"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "API add success"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "API edit success"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "API delete success"
+msgstr ""
+
+
+
+### 0.86.001 ###
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "DHCP range"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Check availability (disabled)"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "DHCP compress"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "Compress DHCP ranges in IP table"
+msgstr ""
+
+
+### 0.86.002 ###
+
+#: site/subnets.php
+msgid "Add new"
+msgstr ""
+
+#: site/subnets.php
+msgid "Add new folder to"
+msgstr ""
+
+# site/subnets.php
+msgid "Available VLANs"
+msgstr ""
+
+# site/subnets.php
+msgid "Available VRFs"
+msgstr ""
+
+#: functions/functions-common.php
+msgid "Subnet contains more subnets"
+msgstr ""
+
+#: functions/functions-common.php
+msgid "Click on folder to open/close"
+msgstr ""
+
+#: functions/functions-common.php
+msgid "VLAN contains subnets"
+msgstr ""
+
+#: functions/functions-common.php
+msgid "VRF contains subnets"
+msgstr ""
+
+
+### 0.87.001 ###
+
+#: site/admin/manageSection.php
+msgid "Show VLANs"
+msgstr ""
+
+#: site/admin/manageSection.php
+msgid "Show VRFs"
+msgstr ""
+
+#: site/admin/manageSectionEdit.php
+msgid "Show list of VLANs and belonging subnets in subnet list"
+msgstr ""
+
+#: site/admin/manageSectionEdit.php
+msgid "Show list of VRFs and belonging subnets in subnet list"
+msgstr ""
+
+#: site/ipaddr/vlanDetails.php
+msgid "VLAN details"
+msgstr ""
+
+#: site/ipaddr/vlanSubnets.php
+msgid "has no belonging subnets"
+msgstr ""
+
+#: site/ipaddr/vlanSubnets.php
+msgid "belonging subnets"
+msgstr ""
+
+#: site/ipaddr/vlanDetails.php
+msgid "VRF details"
+msgstr ""
+
+#: site/ipaddr/vlanDetails.php
+msgid "Invalid VLAN id"
+msgstr ""
+
+#: site/ipaddr/vrfDetails.php
+msgid "Invalid VRF id"
+msgstr ""
+
+
+### 0.87.004 ###
+
+#: site/ipaddr/scan/subnetScan.php
+msgid "IPv6 scanning is not supported"
+msgstr ""
+
+#: site/admin/manageFolderEdit.php
+msgid "You do not have permissions to add new folder in this section"
+msgstr ""
+
+#: site/admin/manageFolderEdit.php
+msgid "You do not have permissions to add edit/delete this folder"
+msgstr ""
+
+#: site/admin/manageFolderEdit.php
+msgid "folder"
+msgstr ""
+
+#: site/admin/manageFolderEdit.php
+msgid "Enter folder name"
+msgstr ""
+
+#: site/admin/manageFolderEdit.php
+msgid "Enter master folder if you want to nest it under existing folder, "
+"or select root to create root folder"
+msgstr ""
+
+#: site/admin/manageFolderEdit.php
+msgid "Master Folder"
+msgstr ""
+
+#: functions-functions-network.php
+msgid "Select Master folder"
+msgstr ""
+
+#: functions-functions-network.php
+msgid "Root folder"
+msgstr ""
+
+#: functions-functions-network.php
+msgid "Subnets"
+msgstr ""
+
+#: functions-functions-network.php
+msgid "Folders"
+msgstr ""
+
+#: functions-functions-common.php
+msgid "Folder contains more subnets"
+msgstr ""
+
+
+### 0.88.001 ###
+
+#: site/admin/manageSection.php
+msgid "Parent"
+msgstr ""
+
+#: site/sections.php
+msgid "SubSections in"
+msgstr ""
+
+#: site/admin/manageSectionEdit.php
+msgid "Select parent section to create subsection"
+msgstr ""
+
+### 0.89.001 ###
+
+#: site/tools/userMenu.php
+msgid "Widgets"
+msgstr ""
+
+msgid "Select widgets to be displayed on dashboard"
+msgstr ""
+
+#: site/dashboard/index.php
+msgid "No widgets selected"
+msgstr ""
+
+msgid "Please select widgets to be displayed on dashboard on user menu page"
+msgstr ""
+
+
+### 0.89.002 ###
+
+#: site/admin/customUserFieldsEdit.php
+msgid "Enter comment for users"
+msgstr ""
+
+msgid "Required field"
+msgstr ""
+
+#: site/admin/custopmIPFields.php
+msgid "Required"
+msgstr ""
+
+#: site/admin/customDeviceFieldsEdit.php
+msgid "Custom device fields"
+msgstr ""
+
+msgid "Add new custom device field"
+msgstr ""
+
+#: site/ipaddr/sectionAllSubnets.php
+msgid "Belonging subsections"
+msgstr ""
+
+#: site/subnets.php
+msgid "Back to"
+msgstr ""
+
+
+### 0.891.001 ###
+
+#: site/admin/manageAD_AD.php
+msgid "Domain account"
+msgstr ""
+
+msgid "Domain account for search operations"
+msgstr ""
+
+#: site/admin/userADsearchResult.php
+msgid "No users found"
+msgstr ""
+
+msgid "Possible reasons"
+msgstr ""
+
+msgid "Username not existing"
+msgstr ""
+
+msgid "Invalid baseDN setting for AD"
+msgstr ""
+
+msgid "AD account does not have enough privileges for search"
+msgstr ""
+
+
+### 0.891.003 ###
+
+#: site/admin/usersEditResult.php
+msgid "Admin user cannot be deleted"
+msgstr ""
+
+
+### 0.891.004 ###
+
+#: site/admin/manageFolderSubmit.php
+msgid "Error adding new folder"
+msgstr ""
+
+msgid "Folder, IP addresses and all belonging subnets deleted successfully"
+msgstr ""
+
+msgid "Folder add successfull"
+msgstr ""
+
+msgid "Folder edit successfull"
+msgstr ""
+
+#: site/ipaddr/folderDetails.php
+msgid "Folder does not exist"
+msgstr ""
+
+msgid "You do not have permission to access this folder"
+msgstr ""
+
+msgid "Folder details"
+msgstr ""
+
+msgid "Folder name"
+msgstr ""
+
+msgid "Add new nested folder"
+msgstr ""
+
+msgid "directly nested folders"
+msgstr ""
+
+msgid "Folder has no nested folders or belonging subnets"
+msgstr ""
+
+msgid "You do not have permissions to edit folder"
+msgstr ""
+
+msgid "Edit folder"
+msgstr ""
+
+msgid "Manage folder permissions"
+msgstr ""
+
+msgid "Delete folder"
+msgstr ""
+
+
+
+
+### 0.891.005 ###
+
+#: site/admin/CSVimportSubmit.php
+msgid "Errors marked with red will be ignored from importing"
+msgstr ""
+
+
+
+### 0.9 ###
+
+#: site/admin/userADsearchForm.php
+msgid "Search user in AD"
+msgstr ""
+
+msgid "Following users were found"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+
+
+### 0.91.001 ###
+
+#: functions/functions-common.php
+msgid "Favourite subnets"
+msgstr ""
+
+msgid "No favourite subnets selected"
+msgstr ""
+
+msgid "You can add subnets to favourites by clicking star icon in subnet details"
+msgstr ""
+
+msgid "Click to remove from favourites"
+msgstr ""
+
+msgid "Click to add to favourites"
+msgstr ""
+
+#: site/tools/favouriteEdit.php
+msgid "Error editing favourite"
+msgstr ""
+
+#: site/sections.php
+msgid "Favourite networks"
+msgstr ""
+
+
+### 0.92.001 ###
+
+#: site/ipaddr/ipDetailsChangelog.php
+msgid "Changelog"
+msgstr ""
+
+msgid "No changelogs available"
+msgstr ""
+
+msgid "No changelog entries are available for this host"
+msgstr ""
+
+msgid "No changelog entries are available for this subnet"
+msgstr ""
+
+msgid "No changelog entries are available for this section"
+msgstr ""
+
+msgid "No changelog entries are available"
+msgstr ""
+
+#: site/ipaddr/ipDetails.php
+msgid "Availability"
+msgstr ""
+
+msgid "Last edited"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "Result"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+#: site/tools/changelogPrint.php
+msgid "Output has been limited to last 50 lines"
+msgstr ""
+
+msgid "Output has been limited to last 100 lines"
+msgstr ""
+
+msgid "Output has been limited to last 250 lines"
+msgstr ""
+
+msgid "Output has been limited to last 500 lines"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "Enable changelog"
+msgstr ""
+
+#: site/tools/changelog.php
+msgid "Change logging is disabled. You can enable it under administration"
+msgstr ""
+
+
+
+### 0.94.002 ###
+
+#: site/admin/settings.php
+msgid "Ping path"
+msgstr ""
+
+msgid "Set path for ping executable file (default /bin/ping)"
+msgstr ""
+
+msgid "Max scan threads"
+msgstr ""
+
+msgid "Set maximum nubmer of concurrent ICMP checks (default 128)"
+msgstr ""
+
+#: functions/functions-common.php
+msgid "Last 5 change log entries"
+msgstr ""
+
+
+### 0.95.001 ###
+
+#: site/admin/widgets.php
+msgid "Widgets"
+msgstr ""
+
+msgid "You can manage widgets here"
+msgstr ""
+
+msgid "Create new widget"
+msgstr ""
+
+msgid "No widgets created yet"
+msgstr ""
+
+msgid "Create widget file in directory site/dashboard/widgets/"
+msgstr ""
+
+#: site/admin/widgetEdit.php
+msgid "Add new widget"
+msgstr ""
+
+msgid "Edit widget"
+msgstr ""
+
+msgid "Delete widget"
+msgstr ""
+
+#: site/admin/widgetEditResult.php
+msgid "Widget add error"
+msgstr ""
+
+msgid "Widget edit error"
+msgstr ""
+
+msgid "Widget delete error"
+msgstr ""
+
+msgid "Widget add success"
+msgstr ""
+
+msgid "Widget edit success"
+msgstr ""
+
+msgid "Widget delete success"
+msgstr ""
+
+
+### 0.96.002 ###
+
+#: site/dashboard/widgets/requests.php
+msgid "Active IP address requests"
+msgstr ""
+
+#: site/sections.php
+msgid "Click to reorder widgets"
+msgstr ""
+
+msgid "Click to save widgets order"
+msgstr ""
+
+#: site/dashboard/widgetPopup.php
+msgid "Add new widget to dashboard"
+msgstr ""
+
+msgid "All available widgets are already on dashboard"
+msgstr ""
+
+#: site/tools/userMenu.php
+msgid "Save order"
+msgstr ""
+
+#: site/admin/widgets.php
+msgid "File"
+msgstr ""
+
+msgid "Admin only"
+msgstr ""
+
+msgid "Link to page"
+msgstr ""
+
+msgid "Widget size"
+msgstr ""
+
+
+### 0.96.007 ###
+
+#: site/ipaddr/scan/subnetScanDiscoveryPing.php
+msgid "No alive host found"
+msgstr ""
+
+msgid "Errors occured during scan"
+msgstr ""
+
+msgid "Excluded from check"
+msgstr ""
+
+
+### 0.97.001 ###
+
+#: site/login/loginCheck.php
+msgid "Invalid characters in username"
+msgstr ""
+
+msgid "Invalid characters in password"
+msgstr ""
+
+#: site/admin/adminMenu.php
+msgid "Mail settings"
+msgstr ""
+
+msgid "Mail server settings"
+msgstr ""
+
+msgid "Server type"
+msgstr ""
+
+msgid "Localhost"
+msgstr ""
+
+msgid "SMTP"
+msgstr ""
+
+msgid "Select server type for sending mail messages"
+msgstr ""
+
+msgid "Server authentication"
+msgstr ""
+
+msgid "Select yes if authentication is required"
+msgstr ""
+
+msgid "Set username for SMTP authentication"
+msgstr ""
+
+msgid "Set password for SMTP authentication"
+msgstr ""
+
+msgid "Mail sender settings"
+msgstr ""
+
+msgid "Send test email"
+msgstr ""
+
+msgid "Mail server type"
+msgstr ""
+
+msgid "SMTP settings"
+msgstr ""
+
+msgid "Server address"
+msgstr ""
+
+msgid "Sender name"
+msgstr ""
+
+msgid "Sender mail"
+msgstr ""
+
+#: site/admin.settings.php
+msgid "Set administrator name"
+msgstr ""
+
+msgid "Set administrator email"
+msgstr ""
+
+
+
+### 0.97.003 ###
+
+#: site/ipaddr/scan/subnetScan.php
+msgid "Separate multiple ports with ;"
+msgstr ""
+
+#: site/ipaddr/scan/subnetScanDiscoveryTelnet.php
+msgid "Please enter ports to scan"
+msgstr ""
+
+msgid "Invalid port"
+msgstr ""
+
+
+
+### 0.98.001 ###
+
+#: site/admin/verifyDatabase.php
+msgid "Cannot get fix for table"
+msgstr ""
+
+msgid "Fix table"
+msgstr ""
+
+msgid "Fix field"
+msgstr ""
+
+#: site/admin/verifyDatabaseFix.php
+msgid "Wrong parameters"
+msgstr ""
+
+msgid "Table fixed"
+msgstr ""
+
+msgid "Field fixed"
+msgstr ""
+
+#: site/sections.php
+msgid "Database errors detected"
+msgstr ""
+
+
+### 0.99.002 ###
+
+#: site/tools/devicesPrint.php
+msgid "Show all hosts"
+msgstr ""
+
+msgid "No hosts belonging to this device"
+msgstr ""
+
+msgid "Sort by vendor"
+msgstr ""
+
+
+
+### 1.02.001 ###
+
+#: site/admin/userEditPrint.php
+msgid "Mail State changes"
+msgstr ""
+
+msgid "Select yes to receive notification change mail for State change"
+msgstr ""
+
+msgid "Mail Changelog"
+msgstr ""
+
+msgid "Select yes to receive notification change mail for changelog"
+msgstr ""
+
+
+### 1.03.001 ###
+
+#: site/admin/usersEditPrint.php
+msgid "Require user to change password after initial login"
+msgstr ""
+
+#: site/tools/changePasswordRequired.php
+msgid "Password change required"
+msgstr ""
+
+msgid "You are required to change your password before you can access phpipam."
+msgstr ""
+
+msgid "Password change"
+msgstr ""
+
+msgid "Save password"
+msgstr ""
+
+
+
+### 1.04.001 ###
+
+#: site/login/loginCheck.php
+msgid "You have been blocked for 5 minutes due to authentication failures"
+msgstr ""
+
+
+### 1.06.001 ###
+
+#: site/admin/settings.php
+msgid "Use nicer URL structure"
+msgstr ""
+
+msgid "Please note that mod_rewrite is required with appropriate settings if pretified links are selected."
+msgstr ""
+
+
+### 1.07.002 ##
+
+#: site/admin/settings.php
+msgid "Hide free range"
+msgstr ""
+
+msgid "Do not display free range in IP address and subnets list"
+msgstr ""
+
+msgid "Highest VLAN number"
+msgstr ""
+
+msgid "Set highest VLAN number (default 4096)"
+msgstr ""
+
+#: site/admin/manageVLANresult.php
+msgid "Highest possible VLAN number is "
+msgstr ""
+
+msgid "VLAN number cannot be negative"
+msgstr ""
+
+msgid "Not number"
+msgstr ""
+
+
+### 1.07.004 ###
+
+#: site/admin.custimFilterFields.php
+msgid "Fields saved"
+msgstr ""
+
+msgid "Filter custom field display"
+msgstr ""
+
+msgid "Selected fields will not be visible in table view, only in detail view"
+msgstr ""
+
+msgid "Save filter"
+msgstr ""
+
+
+### 1.07.010 ###
+
+#: site/admin/manageSubnetEditResult.php
+msgid "I will delete"
+msgstr ""
+
+msgid "Are you sure you want to delete above items?"
+msgstr ""
+
+msgid "Are you sure you want to delete IP address"
+msgstr ""
+
+
+### 1.08.001 ###
+
+#:site/settings/setitngs.php
+msgid "Inactivity timeout"
+msgstr ""
+
+msgid "Select inactive timeout for user sessions. Please note that if default php session settings in php.ini are lower they will override this"
+msgstr ""
+
+#: site/login/index.php
+msgid "You session has timed out"
+msgstr ""
+
+#: site/admin/manageSubnetEdit.php
+msgid "Discover new hosts"
+msgstr ""
+
+msgid "Discover new hosts in this subnet"
+msgstr ""
+
+
+
+
+
+### 1.18.006 ###
+
+
+msgid "Invalid ID"
+msgstr ""
+
+msgid "Folder contains more subnets"
+msgstr ""
+
+msgid "IP address request added"
+msgstr ""
+
+msgid "IP address request edited"
+msgstr ""
+
+msgid "IP address request deleted"
+msgstr ""
+
+msgid "Online"
+msgstr ""
+
+msgid "Folders"
+msgstr ""
+
+msgid "Select Master folder"
+msgstr ""
+
+msgid "Root folder"
+msgstr ""
+
+msgid "Discover"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "l2 domain"
+msgstr ""
+
+msgid "Select l2 domain"
+msgstr ""
+
+msgid "Add L2 Domain"
+msgstr ""
+
+msgid "Descripton"
+msgstr ""
+
+msgid "Available VLANs in domain"
+msgstr ""
+
+msgid "L2 Domains"
+msgstr ""
+
+msgid "No VLANS configured"
+msgstr ""
+
+msgid "Addresses"
+msgstr ""
+
+msgid "Folder"
+msgstr ""
+
+msgid "VLAN search results"
+msgstr ""
+
+msgid "Edit folder details"
+msgstr ""
+
+msgid "No results"
+msgstr ""
+
+msgid "Search term"
+msgstr ""
+
+msgid "IP addresses"
+msgstr ""
+
+msgid "Error updating user account!"
+msgstr ""
+
+msgid "Mail notifications"
+msgstr ""
+
+msgid "Select yes to receive notification change mail for state change"
+msgstr ""
+
+msgid "Override compression"
+msgstr ""
+
+msgid "Uncompress address ranges if compressed"
+msgstr ""
+
+msgid "Widgets updated"
+msgstr ""
+
+msgid "Manage"
+msgstr ""
+
+msgid "Password repeat"
+msgstr ""
+
+msgid "Invalid password"
+msgstr ""
+
+msgid "Passwords do not match"
+msgstr ""
+
+msgid "Temporary sharing disabled"
+msgstr ""
+
+msgid "Invalid type"
+msgstr ""
+
+msgid "Invalid code"
+msgstr ""
+
+msgid "Invalid date"
+msgstr ""
+
+msgid "1 week is max validity time"
+msgstr ""
+
+msgid "Invalid email address"
+msgstr ""
+
+msgid "Temporary share create error"
+msgstr ""
+
+msgid "Temporary share created"
+msgstr ""
+
+msgid "Create new temporary access"
+msgstr ""
+
+msgid "Share details"
+msgstr ""
+
+msgid "Set validity"
+msgstr ""
+
+msgid "Set validity time for created share"
+msgstr ""
+
+msgid "Mail invitation"
+msgstr ""
+
+msgid "If you wish to mail share details enter email address (separate multiple with ,)"
+msgstr ""
+
+msgid "List of temporary shared objects"
+msgstr ""
+
+msgid "No temporary shares available"
+msgstr ""
+
+msgid "Share type"
+msgstr ""
+
+msgid "Code"
+msgstr ""
+
+msgid "Valid until"
+msgstr ""
+
+msgid "Created by"
+msgstr ""
+
+msgid "Access log"
+msgstr ""
+
+msgid "Remove temporary share"
+msgstr ""
+
+msgid "Code does not exist"
+msgstr ""
+
+msgid "Temporary share delete error"
+msgstr ""
+
+msgid "Temporary share deleted"
+msgstr ""
+
+msgid "Object"
+msgstr ""
+
+msgid "Subnet masks"
+msgstr ""
+
+msgid "Bitmask"
+msgstr ""
+
+msgid "Netmask"
+msgstr ""
+
+msgid "Binary"
+msgstr ""
+
+msgid "Hosts"
+msgstr ""
+
+msgid "Subnet bits"
+msgstr ""
+
+msgid "Host bits"
+msgstr ""
+
+msgid "Scanned subnets summary"
+msgstr ""
+
+msgid "No subnets"
+msgstr ""
+
+msgid "No changelog entries are available"
+msgstr ""
+
+msgid "Device details"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "Filter applied:"
+msgstr ""
+
+msgid "Sort by type"
+msgstr ""
+
+msgid "Sort by model"
+msgstr ""
+
+msgid "VRF has no belonging subnets"
+msgstr ""
+
+msgid "Invalid request"
+msgstr ""
+
+msgid "Database already installed"
+msgstr ""
+
+msgid "Number of VLANs"
+msgstr ""
+
+msgid "Invalid widget"
+msgstr ""
+
+msgid "No $type hosts configured"
+msgstr ""
+
+msgid "Loading statistics"
+msgstr ""
+
+msgid "upgrade"
+msgstr ""
+
+msgid "Set SMTP server address"
+msgstr ""
+
+msgid "Set SMTP server port"
+msgstr ""
+
+msgid "Security"
+msgstr ""
+
+msgid "SSL"
+msgstr ""
+
+msgid "TLS"
+msgstr ""
+
+msgid "No languages present created yet"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+msgid "Prettify links"
+msgstr ""
+
+msgid "API"
+msgstr ""
+
+msgid "Temporary shares"
+msgstr ""
+
+msgid "Allow temporary subnet sharing"
+msgstr ""
+
+msgid "Enable changelog module"
+msgstr ""
+
+msgid "ICMP settings"
+msgstr ""
+
+msgid "Scan type"
+msgstr ""
+
+msgid "Select which utility to use for status checks."
+msgstr ""
+
+msgid "FPing path"
+msgstr ""
+
+msgid "Set path for fping executable file (default /bin/fping)"
+msgstr ""
+
+msgid "Invalid email"
+msgstr ""
+
+msgid "Invalid value for Max VLAN number"
+msgstr ""
+
+msgid "Manage device types"
+msgstr ""
+
+msgid "Cannot delete locked tag"
+msgstr ""
+
+msgid "Invalid tag name"
+msgstr ""
+
+msgid "Invalid bg color"
+msgstr ""
+
+msgid "Invalid fg color"
+msgstr ""
+
+msgid "Tag add error"
+msgstr ""
+
+msgid "Tag edit error"
+msgstr ""
+
+msgid "Tag delete error"
+msgstr ""
+
+msgid "Tag add success"
+msgstr ""
+
+msgid "Tag edit success"
+msgstr ""
+
+msgid "Tag delete success"
+msgstr ""
+
+msgid "Manage Address Tags"
+msgstr ""
+
+msgid "Add Tag"
+msgstr ""
+
+msgid "type"
+msgstr ""
+
+msgid "Show Tag"
+msgstr ""
+
+msgid "BG color"
+msgstr ""
+
+msgid "FG color"
+msgstr ""
+
+msgid "Compress range"
+msgstr ""
+
+msgid "Locked"
+msgstr ""
+
+msgid "tag"
+msgstr ""
+
+msgid "Show tag"
+msgstr ""
+
+msgid "Bg color"
+msgstr ""
+
+msgid "Fg color"
+msgstr ""
+
+msgid "Default value settings"
+msgstr ""
+
+msgid "Name servers"
+msgstr ""
+
+msgid "Enter name servers, separate multiple with ;"
+msgstr ""
+
+msgid "Hostmaster"
+msgstr ""
+
+msgid "Enter default hostmaster for domain"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "How often a secondary will poll the primary server to see if the serial number for the zone has increased."
+msgstr ""
+
+msgid "Retry"
+msgstr ""
+
+msgid "If a secondary was unable to contact the primary at the last refresh, wait the retry value before trying again."
+msgstr ""
+
+msgid "Expire"
+msgstr ""
+
+msgid "How long a secondary will still treat its copy of the zone data as valid if it can't contact the primary."
+msgstr ""
+
+msgid "negative caching time - the time a NAME ERROR = NXDOMAIN result may be cached by any resolver"
+msgstr ""
+
+msgid "Default TTL for domain records"
+msgstr ""
+
+msgid "Failed to add domain"
+msgstr ""
+
+msgid "Failed to edit domain"
+msgstr ""
+
+msgid "Failed to delete domain"
+msgstr ""
+
+msgid "Domain add successfull"
+msgstr ""
+
+msgid "Domain edit successfull"
+msgstr ""
+
+msgid "Domain delete successfull"
+msgstr ""
+
+msgid "domain"
+msgstr ""
+
+msgid "FQDN domain name"
+msgstr ""
+
+msgid "Master NS"
+msgstr ""
+
+msgid "NULL"
+msgstr ""
+
+msgid "Domain type"
+msgstr ""
+
+msgid "Default record values (SOA, NS)"
+msgstr ""
+
+msgid "Dont create default records (SOA, NS)"
+msgstr ""
+
+msgid "removing Domain will also remove all referenced entries!"
+msgstr ""
+
+msgid "Invalid domain"
+msgstr ""
+
+msgid "Records for domain"
+msgstr ""
+
+msgid "Domains"
+msgstr ""
+
+msgid "New record"
+msgstr ""
+
+msgid "Domain has no records"
+msgstr ""
+
+msgid "Prio"
+msgstr ""
+
+msgid "Last update"
+msgstr ""
+
+msgid "SOA, NS records"
+msgstr ""
+
+msgid "Domain records"
+msgstr ""
+
+msgid "No records"
+msgstr ""
+
+msgid "Create domain"
+msgstr ""
+
+msgid "No domains configured"
+msgstr ""
+
+msgid "Domain"
+msgstr ""
+
+msgid "Records"
+msgstr ""
+
+msgid "Serial number"
+msgstr ""
+
+msgid "IPv4 reverse domain"
+msgstr ""
+
+msgid "IPv6 reverse domains"
+msgstr ""
+
+msgid "PowerDNS management"
+msgstr ""
+
+msgid "Please enable powerDNS module under server management"
+msgstr ""
+
+msgid "Invalid name"
+msgstr ""
+
+msgid "Invalid content"
+msgstr ""
+
+msgid "Domain does not exist"
+msgstr ""
+
+msgid "DNS record"
+msgstr ""
+
+msgid "Record type"
+msgstr ""
+
+msgid "Priority"
+msgstr ""
+
+msgid "Invalid subnet"
+msgstr ""
+
+msgid "Automatic PTR creation for this subnet is disabled"
+msgstr ""
+
+msgid "PowerDNS not enabled"
+msgstr ""
+
+msgid "PTR zone refresh records"
+msgstr ""
+
+msgid "Clicking on regenerate will remove all PTR records for subnet and recreate new."
+msgstr ""
+
+msgid "Database settings"
+msgstr ""
+
+msgid "Host"
+msgstr ""
+
+msgid "Primary nameserver is mandatory"
+msgstr ""
+
+msgid "Failed to add nameserver set"
+msgstr ""
+
+msgid "Failed to edit nameserver set"
+msgstr ""
+
+msgid "Failed to delete nameserver set"
+msgstr ""
+
+msgid "Nameserver set add successfull"
+msgstr ""
+
+msgid "Nameserver set edit successfull"
+msgstr ""
+
+msgid "Nameserver set delete successfull"
+msgstr ""
+
+msgid "Nameserver set"
+msgstr ""
+
+msgid "Primary"
+msgstr ""
+
+msgid "Primary nameserver"
+msgstr ""
+
+msgid "Secondary"
+msgstr ""
+
+msgid "Secondary nameserver"
+msgstr ""
+
+msgid "Tertiary"
+msgstr ""
+
+msgid "Tertiary nameserver"
+msgstr ""
+
+msgid "Sections to display nameserver set in"
+msgstr ""
+
+msgid "removing nameserver set will also remove all references from belonging subnets!"
+msgstr ""
+
+msgid "Manage Nameserver sets"
+msgstr ""
+
+msgid "Add nameserver set"
+msgstr ""
+
+msgid "No nameserver sets defined"
+msgstr ""
+
+msgid "device type"
+msgstr ""
+
+msgid "Device type management"
+msgstr ""
+
+msgid "Add device type"
+msgstr ""
+
+msgid "subnets"
+msgstr ""
+
+msgid "Confirm"
+msgstr ""
+
+msgid "Section add failed"
+msgstr ""
+
+msgid "Section edit failed"
+msgstr ""
+
+msgid "Section delete failed"
+msgstr ""
+
+msgid "Section reordering failed"
+msgstr ""
+
+msgid "No groups available"
+msgstr ""
+
+msgid "Default domain cannot be deleted"
+msgstr ""
+
+msgid "Name is required"
+msgstr ""
+
+msgid "VLANs in domain"
+msgstr ""
+
+msgid "domain name"
+msgstr ""
+
+msgid "Sections to display domain in"
+msgstr ""
+
+msgid "Current l2 domain"
+msgstr ""
+
+msgid "New domain"
+msgstr ""
+
+msgid "No domains available!"
+msgstr ""
+
+msgid "Failed to move VLAN to new domain"
+msgstr ""
+
+msgid "VLAN moved to new domain successfully"
+msgstr ""
+
+msgid "removing VRF will also remove VRF reference from belonging subnets!"
+msgstr ""
+
+msgid "Show name"
+msgstr ""
+
+msgid "Failed to reject IP request"
+msgstr ""
+
+msgid "Failed to create IP address"
+msgstr ""
+
+msgid "IP request accepted/rejected"
+msgstr ""
+
+msgid "Enter IP owner"
+msgstr ""
+
+msgid "Process"
+msgstr ""
+
+msgid "List of all processes IP addresses requests"
+msgstr ""
+
+msgid "Admin comment"
+msgstr ""
+
+msgid "Accepted"
+msgstr ""
+
+msgid "custom field"
+msgstr ""
+
+msgid "Size / Length"
+msgstr ""
+
+msgid "Enter field length"
+msgstr ""
+
+msgid "Default value"
+msgstr ""
+
+msgid "Enter default value"
+msgstr ""
+
+msgid "Required fields must have default values"
+msgstr ""
+
+msgid "Boolean values can only be 0 or 1"
+msgstr ""
+
+msgid "Default boolean values can only be 0 or 1"
+msgstr ""
+
+msgid "Fieldsize must be numeric"
+msgstr ""
+
+msgid "Varchar size limit is 256 characters"
+msgstr ""
+
+msgid "Integer values must be numeric"
+msgstr ""
+
+msgid "Filter custom field display"
+msgstr ""
+
+msgid "Selected fields will not be visible in table view, only in detail view"
+msgstr ""
+
+msgid "Save filter"
+msgstr ""
+
+msgid "Filter saved"
+msgstr ""
+
+msgid "Field type"
+msgstr ""
+
+msgid "Visible"
+msgstr ""
+
+msgid "Set which field to display in table"
+msgstr ""
+
+msgid "Cannot get fix for table field "
+msgstr ""
+
+msgid "No users"
+msgstr ""
+
+msgid "App security"
+msgstr ""
+
+msgid "Not used"
+msgstr ""
+
+msgid "Per user"
+msgstr ""
+
+msgid "api"
+msgstr ""
+
+msgid "Application permissions"
+msgstr ""
+
+msgid "Application security"
+msgstr ""
+
+msgid "Invalid server ID"
+msgstr ""
+
+msgid "Missing credentials"
+msgstr ""
+
+msgid "Please enter at least 2 characters"
+msgstr ""
+
+msgid "Invalid credentials"
+msgstr ""
+
+msgid " Following users were found"
+msgstr ""
+
+msgid "Authentication method"
+msgstr ""
+
+msgid "Select authentication method for user"
+msgstr ""
+
+msgid "Invalid authentication method"
+msgstr ""
+
+msgid "Username must be at least 6 characters long!"
+msgstr ""
+
+msgid "No servers available"
+msgstr ""
+
+msgid "Authentication"
+msgstr ""
+
+msgid "Last login"
+msgstr ""
+
+msgid "All users"
+msgstr ""
+
+msgid "Authentication settings"
+msgstr ""
+
+msgid "Last activity"
+msgstr ""
+
+msgid "compress override"
+msgstr ""
+
+msgid "Changelog notifications"
+msgstr ""
+
+msgid "Set name for authentication method"
+msgstr ""
+
+msgid "Enter domain controllers, separated by ;"
+msgstr ""
+
+msgid "Enter base DN for LDAP"
+msgstr ""
+
+msgid "Authentication methods"
+msgstr ""
+
+msgid "Create new Radius authentication"
+msgstr ""
+
+msgid "Create new AD authentication"
+msgstr ""
+
+msgid "Create new LDAP authentication"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Protected"
+msgstr ""
+
+msgid "Here you can set different authentication methods for your users."
+msgstr ""
+
+msgid "phpIPAM currently supports 4 methods for authentication:"
+msgstr ""
+
+msgid "Local authentication"
+msgstr ""
+
+msgid "AD (Active Directory) authentication"
+msgstr ""
+
+msgid "LDAP authentication"
+msgstr ""
+
+msgid "Radius authentication"
+msgstr ""
+
+msgid "For AD/LDAP connection phpipam is using adLDAP, for documentation please check "
+msgstr ""
+
+msgid "First create new user under user management with <u>same username as on AD</u> and set authention type to one of available methods."
+msgstr ""
+
+msgid "Failed to edit authentication method"
+msgstr ""
+
+msgid "Authentication method updated"
+msgstr ""
+
+msgid "Method cannot be change as it is protected"
+msgstr ""
+
+msgid "Invalid method type"
+msgstr ""
+
+msgid "The account suffix for your domain"
+msgstr ""
+
+msgid "Domain account for search operations (optional)"
+msgstr ""
+
+msgid "Radius connection settings"
+msgstr ""
+
+msgid "Radius server"
+msgstr ""
+
+msgid "Enter Radius server"
+msgstr ""
+
+msgid "Secret"
+msgstr ""
+
+msgid "Enter radius secret"
+msgstr ""
+
+msgid "Enter radius port (default 1812)"
+msgstr ""
+
+msgid "Suffix"
+msgstr ""
+
+msgid "Enter suffix"
+msgstr ""
+
+msgid "Timeout"
+msgstr ""
+
+msgid "Set timeout in seconds"
+msgstr ""
+
+msgid "php Socket extension missing!"
+msgstr ""
+
+msgid "Check for  not implemented"
+msgstr ""
+
+msgid "Filename and title are mandatory"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+msgid "Nameservers"
+msgstr ""
+
+msgid "Select nameserver set"
+msgstr ""
+
+msgid "Autocreate reverse records"
+msgstr ""
+
+msgid "Auto create reverse (PTR) records for this subnet"
+msgstr ""
+
+msgid "Show DNS records"
+msgstr ""
+
+msgid "Show DNS records for hosts"
+msgstr ""
+
+msgid "No VLANs"
+msgstr ""
+
+msgid "Please enter subnet description to show as name!"
+msgstr ""
+
+msgid "Error editing subnet"
+msgstr ""
+
+msgid "Cannot connect to powerDNS database"
+msgstr ""
+
+msgid "Do you wish to delete DNS zone and all records"
+msgstr ""
+
+msgid "Failed to set subnet permissons"
+msgstr ""
+
+msgid "Manage permissions for folder"
+msgstr ""
+
+msgid "Only subnets that have no nested subnets can be splitted"
+msgstr ""
+
+msgid "Subnet too small to be splitted"
+msgstr ""
+
+msgid "Name prefix"
+msgstr ""
+
+msgid "Folder name must have at least 2 characters"
+msgstr ""
+
+msgid "Error editing folder"
+msgstr ""
+
+msgid "Failed to truncate subnet"
+msgstr ""
+
+msgid "folder"
+msgstr ""
+
+msgid "Enter folder name"
+msgstr ""
+
+msgid "Master Folder"
+msgstr ""
+
+msgid "Enter master folder if you want to nest it under existing folder, or select root to create root folder"
+msgstr ""
+
+msgid "No nameservers"
+msgstr ""
+
+msgid "Error: "
+msgstr ""
+
+msgid "Security code"
+msgstr ""
+
+msgid "Invalid security code"
+msgstr ""
+
+msgid "IP requests disabled"
+msgstr ""
+
+msgid "Invalid share key"
+msgstr ""
+
+msgid "Share expired"
+msgstr ""
+
+msgid "Share expires on "
+msgstr ""
+
+msgid "Gateway"
+msgstr ""
+
+msgid "IP addresses belonging to ALL nested subnets"
+msgstr ""
+
+msgid "Address is marked as gateway"
+msgstr ""
+
+msgid "Back to subnet"
+msgstr ""
+
+msgid "IP status"
+msgstr ""
+
+msgid "IP address not existing in database"
+msgstr ""
+
+msgid "Usage graph"
+msgstr ""
+
+msgid "Subnet is empty"
+msgstr ""
+
+msgid "status"
+msgstr ""
+
+msgid "Invalid scan type"
+msgstr ""
+
+msgid "Please enter ports to scan"
+msgstr ""
+
+msgid "Invalid port"
+msgstr ""
+
+msgid "No entries available"
+msgstr ""
+
+msgid "IPv6 scanning is not supported"
+msgstr ""
+
+msgid "Ports"
+msgstr ""
+
+msgid "Separate multiple ports with ;"
+msgstr ""
+
+msgid "Debug"
+msgstr ""
+
+msgid "Discovery scans discover new hosts"
+msgstr ""
+
+msgid "Status update scans update alive status for whole subnet"
+msgstr ""
+
+msgid "Subnet is in section"
+msgstr ""
+
+msgid "Slave subnets"
+msgstr ""
+
+msgid "Underlying hosts"
+msgstr ""
+
+msgid "Active subnet shares"
+msgstr ""
+
+msgid "Expires"
+msgstr ""
+
+msgid "Expired subnet shares"
+msgstr ""
+
+msgid "Expired"
+msgstr ""
+
+msgid "Temporary share subnet"
+msgstr ""
+
+msgid "DNS records"
+msgstr ""
+
+msgid "Active shares"
+msgstr ""
+
+msgid "Expired shares"
+msgstr ""
+
+msgid "Temporary share address"
+msgstr ""
+
+msgid "Missing required fields"
+msgstr ""
+
+msgid " can not be empty!"
+msgstr ""
+
+msgid "Invalid address range"
+msgstr ""
+
+msgid "Tag"
+msgstr ""
+
+msgid "Is gateway"
+msgstr ""
+
+msgid "PTR exclude"
+msgstr ""
+
+msgid "Dont create PTR records"
+msgstr ""
+
+msgid "You do not have access to this network"
+msgstr ""
+
+msgid "VLAN ID"
+msgstr ""
+
+msgid "Mac address"
+msgstr ""
+
+msgid "Owners"
+msgstr ""
+
+msgid "Separate multiple recepients with "
+msgstr ""
+
+msgid "Ping check result"
+msgstr ""
+
+msgid "Repeat"
+msgstr ""
+
+msgid "range"
+msgstr ""
+
+msgid "Cannot open upload/import.csv"
+msgstr ""
+
+msgid "Invalid file type"
+msgstr ""
+
+msgid "Errors marked with red will be ignored from importing"
+msgstr ""
+
+msgid "Invalid subnet ID"
+msgstr ""
+
+msgid "Import failed"
+msgstr ""
+
+msgid "Import file and show addresses"
+msgstr ""
+
+msgid "VLAN has no belonging subnets"
+msgstr ""
+
+msgid "Folder has no subfolders"
+msgstr ""
+
+msgid "Folder has no belonging subnets"
+msgstr ""
+
+msgid "Folder has no subfolders or belonging subnets"
+msgstr ""
+
+msgid "Subnets menu"
+msgstr ""
+
+msgid "No sections available!"
+msgstr ""
+
+msgid "Click to reorder widgets"
+msgstr ""
+
+msgid "Database verified"
+msgstr ""
+
+msgid "New version available"
+msgstr ""
+
+msgid "Back to section"
+msgstr ""
+
+msgid "Available subnets in subsection"
+msgstr ""
+
+msgid "Invalid action"
+msgstr ""
+
+msgid "Database error: "
+msgstr ""
+
+msgid "Error: Invalid authentication method"
+msgstr ""
+
+msgid "Invalid username or password"
+msgstr ""
+
+msgid "php Socket extension missing"
+msgstr ""
+
+msgid "Radius login successful"
+msgstr ""
+
+msgid "No crypt types supported"
+msgstr ""
+
+msgid "your password was updated"
+msgstr ""
+
+msgid "Administrative privileges required"
+msgstr ""
+
+msgid "No records found to replace"
+msgstr ""
+
+msgid "Update: "
+msgstr ""
+
+msgid "Invalid action!"
+msgstr ""
+
+msgid "Failed to update address status"
+msgstr ""
+
+msgid "Failed to delegate permissions"
+msgstr ""
+
+msgid "Invalid PDNS action"
+msgstr ""
+
+msgid "Invalid subnet Id"
+msgstr ""
+
+msgid "Failed to move IP address"
+msgstr ""
+
+msgid "Invalid Network!"
+msgstr ""
+
+msgid "Subnet $new_subnet overlaps with"
+msgstr ""
+
+msgid "Mask must be an integer"
+msgstr ""
+
+msgid "New network is same as old network"
+msgstr ""
+
+msgid "Subnet it same as "
+msgstr ""
+
+msgid "Invalid number of subnets"
+msgstr ""
+
+msgid "Subnet overlapping - "
+msgstr ""
+
+msgid "Record created"
+msgstr ""
+
+msgid "Record updated"
+msgstr ""
+
+msgid "Record deleted"
+msgstr ""
+
+msgid "Domain id must be an integer"
+msgstr ""
+
+msgid "Invalid record name"
+msgstr ""
+
+msgid "Invalid record type"
+msgstr ""
+
+msgid "All records for domain removed"
+msgstr ""
+
+
+
+### 1.18.009 ###
+
+msgid "Select device where subnet is located"
+msgstr ""
+
+msgid "Belonging hosts"
+msgstr ""
+
+msgid "No subnets belong to this device"
+msgstr ""
+
+
+### 1.19.000 ###
+
+msgid "Log files are sent to syslog"
+msgstr ""
+
+msgid "Syslog files are sent to syslog"
+msgstr ""
+
+msgid "Number of discovered hosts exceed maximum possible defined by php.ini - set to"
+msgstr ""
+
+msgid "Please adjust your php.ini settings for value `max_input_vars`"
+msgstr ""
+
+msgid "For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation please check "
+msgstr ""
+
+msgid "Search domain groups"
+msgstr ""
+
+msgid "Add group"
+msgstr ""
+
+msgid "No members"
+msgstr ""
+
+msgid "Group already exists"
+msgstr ""
+
+msgid "You do not have permissions to process this request"
+msgstr ""
+
+msgid "Select agent"
+msgstr ""
+
+msgid "Select which scanagent to use"
+msgstr ""
+
+msgid "No agents available"
+msgstr ""
+
+msgid "phpipam Scan agents"
+msgstr ""
+
+msgid "Create new agent"
+msgstr ""
+
+msgid "Last access"
+msgstr ""
+
+msgid "edit agent details"
+msgstr ""
+
+msgid "Create new scan agent"
+msgstr ""
+
+msgid "Enter scan agent name"
+msgstr ""
+
+msgid "Agent description'"
+msgstr ""
+
+msgid "Agent type"
+msgstr ""
+
+msgid "Invalid agent code"
+msgstr ""
+
+msgid "Invalid agent name"
+msgstr ""
+
+msgid "Invalid agent Id"
+msgstr ""
+
+msgid "Agent add error"
+msgstr ""
+
+msgid "Agent edit error"
+msgstr ""
+
+msgid "Agent delete error"
+msgstr ""
+
+msgid "Agent add success"
+msgstr ""
+
+msgid "Agent edit success"
+msgstr ""
+
+msgid "Agent delete success"
+msgstr ""
+
+msgid "Cannot remove localhost scan agent"
+msgstr ""
+
+msgid "Scan agent references removed"
+msgstr ""
+
+
+### 1.19.002 ###
+
+msgid "Enable Firewall Zones"
+msgstr ""
+
+msgid "Enable or disable firewall zone management module"
+msgstr ""
+
+msgid "Firewall zone management"
+msgstr ""
+
+msgid "Invalid zone alias value."
+msgstr ""
+
+msgid "Invalid interface."
+msgstr ""
+
+msgid "Invalid zone ID."
+msgstr ""
+
+msgid "Invalid mapping ID."
+msgstr ""
+
+msgid "Cannot add mapping"
+msgstr ""
+
+msgid "Mapping modified successfully"
+msgstr ""
+
+msgid "Invalid ID. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Invalid action. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Add a mapping between a firewall device and a firewall zone"
+msgstr ""
+
+msgid "Zone to map"
+msgstr ""
+
+msgid "Select a firewall zone"
+msgstr ""
+
+msgid "Firewall to map"
+msgstr ""
+
+msgid "Select firewall"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Create Firewall zone mapping"
+msgstr ""
+
+msgid "Firewall interface"
+msgstr ""
+
+msgid "Zone alias"
+msgstr ""
+
+msgid "Local zone alias"
+msgstr ""
+
+msgid "You are about to remove the firewall to zone mapping!"
+msgstr ""
+
+msgid "Zone"
+msgstr ""
+
+msgid "Alias"
+msgstr ""
+
+msgid "Devicename"
+msgstr ""
+
+msgid "No firewall zones configured"
+msgstr ""
+
+msgid "Invalid zone name length parameter. A valid valid value is between 3 and 31"
+msgstr ""
+
+msgid "Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
+msgstr ""
+
+msgid "Invalid separator. Only &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
+msgstr ""
+
+msgid "Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
+msgstr ""
+
+msgid "Invalid zone generator method. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Invalid zone generator types [decimal]. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Invalid zone generator types [hex]. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Invalid zone generator types [text]. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Invalid padding value. Use the checkbox to set the padding value to on or off."
+msgstr ""
+
+msgid "Invalid device type."
+msgstr ""
+
+msgid "Maximum zone name length"
+msgstr ""
+
+msgid "Choose a maximum lenght of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgstr ""
+
+msgid "IPv4 address type alias"
+msgstr ""
+
+msgid "IPv6 address type alias"
+msgstr ""
+
+msgid "Address type aliases are used to indicate a IPv4 or IPv6 address object."
+msgstr ""
+
+msgid "The separator is used to keep the name of address objects tidy."
+msgstr ""
+
+msgid "Own zone indicator"
+msgstr ""
+
+msgid "The indicator is used to indicate a zone wether is owned by the company or by a customer.<br>It is the leading character of the zone name but will be separated from the zone name in the database."
+msgstr ""
+
+msgid "Customer zone indicator"
+msgstr ""
+
+msgid "Zone generator method"
+msgstr ""
+
+msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own unique zone names you can choose the option &quot;text&quot."
+msgstr ""
+
+msgid "Zone name padding"
+msgstr ""
+
+msgid "Insert leading zeros into the zone name if you want to have a constant length of your zone name.<br>This setting will be ignored if you use the \"text\" zone name generator."
+msgstr ""
+
+msgid "Zone name strict mode"
+msgstr ""
+
+msgid "Zone name strict mode is enabled by default.<br>If you like to use your own zone names with the &quot;text&quot; mode you may uncheck this to have not unique zone names."
+msgstr ""
+
+msgid "Firewall device Type"
+msgstr ""
+
+msgid "Select the appropriate device type to match firewall devices."
+msgstr ""
+
+msgid "Invalid zone name value."
+msgstr ""
+
+msgid "Invalid indicator ID."
+msgstr ""
+
+msgid "Invalid section ID."
+msgstr ""
+
+msgid "Invalid subnet ID."
+msgstr ""
+
+msgid "Invalid L2 domain ID."
+msgstr ""
+
+msgid "Invalid VLAN ID."
+msgstr ""
+
+msgid "Invalid generator ID."
+msgstr ""
+
+msgid "Invalid padding setting."
+msgstr ""
+
+msgid "Cannot generate zone name"
+msgstr ""
+
+msgid "Cannot validate zone name"
+msgstr ""
+
+msgid "Cannot add zone"
+msgstr ""
+
+msgid "Zone modified successfully"
+msgstr ""
+
+msgid "Add a firewall zone"
+msgstr ""
+
+msgid "Zone name (Only alphanumeric and special characters like .-_ and space.)"
+msgstr ""
+
+msgid "The zone name will be automatically generated"
+msgstr ""
+
+msgid "Zone name"
+msgstr ""
+
+msgid "Own zone"
+msgstr ""
+
+msgid "Customer zone"
+msgstr ""
+
+msgid "Removing this firewall zone will also remove all referenced mappings!"
+msgstr ""
+
+msgid "Create Firewall zone"
+msgstr ""
+
+msgid "Firewall zone and device mappings"
+msgstr ""
+
+
+### 1.19.020
+
+msgid "Base DN for your directory"
+msgstr ""
+
+msgid "Users DN"
+msgstr ""
+
+msgid "Base DN for your users, if different from the base DN above"
+msgstr ""
+
+msgid "LDAP Security Type"
+msgstr ""
+
+msgid "SSL, TLS, or None (default: TLS)"
+msgstr ""
+
+msgid "LDAP port"
+msgstr ""
+
+msgid "Listening port for your LDAP service. TLS/unencrypted Default: 389 <br /> SSL Default: 636"
+msgstr ""
+
+msgid "Bind user"
+msgstr ""
+
+msgid "User DN to bind as for search operations (optional). "
+msgstr ""
+
+msgid "Bind password"
+msgstr ""
+
+msgid "Password for the bind account (only required if bind user is set)."
+msgstr ""
+
+msgid "Only AD group search is supported right now. Sorry."
+msgstr ""
+
+msgid "Invalid baseDN setting for LDAP"
+msgstr ""
+
+msgid "LDAP account does not have enough privileges for search"
+msgstr ""
+
+### 1.19.021
+
+msgid "Please select fields to populate:"
+msgstr ""
+
+msgid "fill"
+msgstr ""
+
+
+### 1.19.040
+
+msgid "Propagate changes"
+msgstr ""
+
+msgid "Apply changes to underlying subnets"
+msgstr ""
+
+
+
+### 1.21.001
+
+msgid "SNMP module"
+msgstr ""
+
+msgid "Enable or disable multicast module"
+msgstr ""
+
+msgid "Multicast module"
+msgstr ""
+
+msgid "Enable or disable SNMP module for devices"
+msgstr ""
+
+msgid "Threshold module"
+msgstr ""
+
+msgid "Enable or disable threshold module"
+msgstr ""
+
+msgid "Rack module"
+msgstr ""
+
+msgid "Enable or disable rack drawing module"
+msgstr ""
+
+msgid "Rack management"
+msgstr ""
+
+msgid "Community"
+msgstr ""
+
+msgid "Queries"
+msgstr ""
+
+msgid "Test"
+msgstr ""
+
+msgid "Invalid version"
+msgstr ""
+
+msgid "Invalid timeout"
+msgstr ""
+
+msgid "Invalid device"
+msgstr ""
+
+msgid "Invalid method"
+msgstr ""
+
+msgid "No queries"
+msgstr ""
+
+msgid "SNMP edit failed"
+msgstr ""
+
+msgid "SNMP edit successfull"
+msgstr ""
+
+msgid "Invalid device IP address"
+msgstr ""
+
+msgid "rack"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Invalid rack size"
+msgstr ""
+
+msgid "Invalid rack identifier"
+msgstr ""
+
+msgid "Rack does not exist"
+msgstr ""
+
+msgid "Rack add successfull"
+msgstr ""
+
+msgid "Rack edit successfull"
+msgstr ""
+
+msgid "Rack delete successfull"
+msgstr ""
+
+msgid "Failed to remove device from rack"
+msgstr ""
+
+msgid "Device removed from rack"
+msgstr ""
+
+msgid "device to rack"
+msgstr ""
+
+msgid "No devices available"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Start position"
+msgstr ""
+
+msgid "Rack size in U"
+msgstr ""
+
+msgid "Invalid start value"
+msgstr ""
+
+msgid "Invalid size value"
+msgstr ""
+
+msgid "Invalid rack position (overflow)"
+msgstr ""
+
+msgid "Failed to add device to rack"
+msgstr ""
+
+msgid "Device added to rack"
+msgstr ""
+
+msgid "SNMP queries"
+msgstr ""
+
+msgid "Create SNMP query"
+msgstr ""
+
+msgid "Method"
+msgstr ""
+
+msgid "No SNMP queries available"
+msgstr ""
+
+msgid "edit snmp details"
+msgstr ""
+
+msgid "remove snmp"
+msgstr ""
+
+msgid "No devices for SNMP route table query available"
+msgstr ""
+
+msgid "No new subnets found"
+msgstr ""
+
+msgid "SNMP module disbled"
+msgstr ""
+
+msgid "No devices for SNMP ARP query available"
+msgstr ""
+
+msgid "Failed to import entry"
+msgstr ""
+
+
+### 1.24.001
+
+msgid "Manage your account"
+msgstr ""
+
+msgid "Number of VRFs"
+msgstr ""
+
+msgid "Inactive hosts"
+msgstr ""
+
+msgid "Inactive Hosts"
+msgstr ""
+
+msgid "List of inactive hosts"
+msgstr ""
+
+msgid "No inactive hosts found"
+msgstr ""
+
+msgid "Threshold"
+msgstr ""
+
+msgid "Usage"
+msgstr ""
+
+msgid "List of thresholded subnets"
+msgstr ""
+
+msgid "All configured devices"
+msgstr ""
+
+msgid "Scanned networks"
+msgstr ""
+
+msgid "List of subnets to be scanned for online hosts and detect new hosts"
+msgstr ""
+
+msgid "Table of all subnet masks with different representations"
+msgstr ""
+
+msgid "Racks"
+msgstr ""
+
+msgid "Rack information"
+msgstr ""
+
+msgid "All tools"
+msgstr ""
+
+msgid "PSTN prefixes"
+msgstr ""
+
+msgid "Add prefix"
+msgstr ""
+
+msgid "NAT translations"
+msgstr ""
+
+msgid Source objects"
+msgstr ""
+
+msgid "Add new object"
+msgstr ""
+
+msgid "Destination objects"
+msgstr ""
+
+msgid "Src Port"
+msgstr ""
+
+msgid "Source Port"
+msgstr ""
+
+msgid "Dst Port"
+msgstr ""
+
+msgid "Destination Port"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Locations"
+msgstr ""
+
+msgid "List of all locations"
+msgstr ""
+
+msgid "Map"
+msgstr ""
+
+msgid "Objects"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+msgid "Set Location name"
+msgstr ""
+
+msgid "Location address"
+msgstr ""
+
+msgid "Latitude"
+msgstr ""
+
+msgid "Longitude"
+msgstr
+
+msgid "Utilization"
+msgstr ""
+
+msgid "Belonging prefixes"
+msgstr ""
+
+msgid "Belonging Numbers"
+msgstr ""
+
+msgid "Manage user authentication methods and servers"
+msgstr ""
+
+msgid "Set mail parameters and mail server settings"
+msgstr ""
+
+msgid "PowerDNS settings"
+msgstr ""
+
+msgid "DHCP settings"
+msgstr ""
+
+msgid "Manage languages"
+msgstr ""
+
+msgid "Manage widget settings"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Manage tags"
+msgstr ""
+
+msgid "Set phpipam instructions for end users"
+msgstr ""
+
+msgid "NAT settings"
+msgstr ""
+
+msgid "Firewall zone management"
+msgstr ""
+
+msgid "RIPE import"
+msgstr ""
+
+msgid "Import subnets from RIPE"
+msgstr ""
+
+msgid "Select which default address fields to display"
+msgstr ""
+
+msgid "Manage custom fields"
+msgstr ""
+
+msgid "Check for latest version of phpipam"
+msgstr ""
+
+msgid "Verify that database files are installed ok"
+msgstr ""
+
+msgid "Search and replace content in database"
+msgstr ""
+
+msgid "Invalid CSRF cookie"
+msgstr ""
+
+msgid "Transaction lock"
+msgstr ""
+
+msgid "Lock POST transactions"
+msgstr ""
+
+msgid "Lock timeout"
+msgstr ""
+
+msgid "Seconds to wait for transaction lock to clear"
+msgstr ""
+
+msgid "Transaction locking"
+msgstr ""
+
+msgid "Use SSL (LDAPS), your server needs to be setup (default: false)"
+msgstr ""
+
+msgid "The default port for LDAP non-SSL connections"
+msgstr ""
+
+msgid "LDAP hosts, separated by a semicolon (;)"
+msgstr ""
+
+msgid "Base DN for your users, if different from the base DN above."
+msgstr ""
+
+msgid "UID Attribute"
+msgstr ""
+
+msgid "LDAP uid naming attribute for users, e.g. \"uid\" or \"cn\""
+msgstr ""
+
+msgid "NetIQ connection settings"
+msgstr ""
+
+msgid "Create new:"
+msgstr ""
+
+msgid "phpIPAM currently supports 7 methods for authentication:"
+msgstr ""
+
+msgid "Apache authentication"
+msgstr ""
+
+msgid "NetIQ authentication"
+msgstr ""
+
+msgid "SAMLv2 authentication"
+msgstr ""
+
+msgid "SAML2 connection settings"
+msgstr ""
+
+msgid "Use advanced settings"
+msgstr ""
+
+msgid "Use Onelogin php-saml settings.php configuration"
+msgstr ""
+
+msgid "IDP issuer"
+msgstr ""
+
+msgid "Enter idp issuer"
+msgstr ""
+
+msgid "IDP login url"
+msgstr ""
+
+msgid "Enter IDP login url"
+msgstr ""
+
+msgid "IDP logout url"
+msgstr ""
+
+msgid "Enter IDP logout url"
+msgstr ""
+
+msgid "IDP cert fingerprint"
+msgstr ""
+
+msgid "Enter IDP X509 certificate fingerprint"
+msgstr ""
+
+msgid "IDP cert algorithm"
+msgstr ""
+
+msgid "Enter IDP X509 certificate algorithm"
+msgstr ""
+
+msgid "php XML extension missing!"
+msgstr ""
+
+msgid "php Date extension missing!"
+msgstr ""
+
+msgid "php zlib extension missing!"
+msgstr ""
+
+msgid "php openssl extension missing!"
+msgstr ""
+
+msgid "php mcrypt extension missing!"
+msgstr ""
+
+msgid "php gettext extension missing!"
+msgstr ""
+
+msgid "Manage devices"
+msgstr ""
+
+msgid "Invalid rack start position"
+msgstr ""
+
+msgid "Rack"
+msgstr ""
+
+msgid "Show rack"
+msgstr ""
+
+msgid "SNMP"
+msgstr ""
+
+msgid "Invalid ID."
+msgstr ""
+
+msgid "Invalid netZone ID."
+msgstr ""
+
+msgid "Delete Network"
+msgstr ""
+
+msgid "Please enable the firewall zone module under server management"
+msgstr ""
+
+msgid "Invalid action."
+msgstr ""
+
+msgid "Invalid device ID."
+msgstr ""
+
+msgid "Please select a device."
+msgstr ""
+
+msgid "Invalid zone name length parameter. A valid valid value is between 1 and 31."
+msgstr ""
+
+msgid "Invalid autogen value. Use the checkbox to set the autogen value to on or off."
+msgstr ""
+
+msgid "Invalid pattern value."
+msgstr ""
+
+msgid "Please select at least one item to generate a valid name pattern."
+msgstr ""
+
+msgid "Invalid subnet name type [network]. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Invalid subnet name type [description]. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Invalid subnet name. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Zone settings"
+msgstr ""
+
+msgid "Choose a maximum lenght of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgstr ""
+
+msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot."
+msgstr ""
+
+msgid "Firewall address object settings"
+msgstr ""
+
+msgid "Autogenerate address objects"
+msgstr ""
+
+msgid "Automaticaly generate firewall address objects as an additional information of an IP address.<br>(Works only for subnets which are bound to a firewall zone.)"
+msgstr ""
+
+msgid "Separator"
+msgstr ""
+
+msgid "Available items"
+msgstr ""
+
+msgid "Name pattern"
+msgstr ""
+
+msgid "Subnet name"
+msgstr ""
+
+msgid "Firewall address objects for subnets will contain this information instead of FQDN or hostname.<br>By choosing \"description\" spaces and other characters but hiven or underline will be replaced by the separator value."
+msgstr ""
+
+msgid "Invalid subnet ID. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Invalid or no zone ID. "
+msgstr ""
+
+msgid "Invalid device ID. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Cannot add this network to a zone."
+msgstr ""
+
+msgid "Invalid operation. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "No zones available"
+msgstr ""
+
+msgid "Add this subnet to a firewall zone"
+msgstr ""
+
+msgid "Select a Zone"
+msgstr ""
+
+msgid "Please choose a appropriate network to bind to the firewall zone."
+msgstr ""
+
+msgid "Invalid network ID."
+msgstr ""
+
+msgid "Cannot add the network to the zone."
+msgstr ""
+
+msgid "Network successfully added."
+msgstr ""
+
+msgid "Cannot delete the network mapping."
+msgstr ""
+
+msgid "Successfully deleted the networt mapping."
+msgstr ""
+
+msgid "First select a section to choose a subnet afterwards."
+msgstr ""
+
+msgid "No section selected"
+msgstr ""
+
+msgid "Invalid zone name length."
+msgstr ""
+
+msgid "Indicator"
+msgstr ""
+
+msgid "Padding"
+msgstr ""
+
+msgid "Zone description"
+msgstr ""
+
+msgid "Add a network to the Zone"
+msgstr ""
+
+msgid "Search domains in AD"
+msgstr ""
+
+msgid "Enter search filter"
+msgstr ""
+
+msgid "No groups found"
+msgstr ""
+
+msgid " Following groups were found"
+msgstr ""
+
+msgid "Members:"
+msgstr ""
+
+msgid "Group $_POST[action] error"
+msgstr ""
+
+msgid "Group $_POST[action] success"
+msgstr ""
+
+msgid "Invalid Id"
+msgstr ""
+
+msgid "All sections :"
+msgstr ""
+
+msgid "Select sections and IP address fields to export"
+msgstr ""
+
+msgid "IP Address"
+msgstr ""
+
+msgid "Mandatory"
+msgstr ""
+
+msgid "Include the sections in a separate sheet."
+msgstr ""
+
+msgid "Export each section in a separate sheet."
+msgstr ""
+
+msgid "Select L2 Domain fields to export"
+msgstr ""
+
+msgid "Select sections and subnets fields to export"
+msgstr ""
+
+msgid "VLAN Domain"
+msgstr ""
+
+msgid "Host check"
+msgstr ""
+
+msgid "Select VLAN fields to export"
+msgstr ""
+
+msgid "Include the L2 domains in a separate sheet."
+msgstr ""
+
+msgid "Select VRF fields to export"
+msgstr ""
+
+msgid "Select file"
+msgstr ""
+
+msgid "Browse / Drag & Drop"
+msgstr ""
+
+msgid "Cancel upload"
+msgstr ""
+
+msgid "Match fields"
+msgstr ""
+
+msgid "Pick import colum for"
+msgstr ""
+
+msgid "No fields were automatically matched. The import file needs to have a header row!"
+msgstr ""
+
+msgid "Not all the fields were automatically matched. Please check manually."
+msgstr ""
+
+msgid "All the fields were automatically matched. Please check if correct."
+msgstr ""
+
+msgid "No header row found in uploaded file. Please check."
+msgstr ""
+
+msgid "L2 Domain import"
+msgstr ""
+
+msgid "L2 Domain import data preview"
+msgstr ""
+
+msgid "Uploaded data"
+msgstr ""
+
+msgid "The entries marked with "
+msgstr ""
+
+msgid "will be skipped."
+msgstr ""
+
+msgid "Summary: "
+msgstr ""
+
+msgid "Scroll down for details."
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Select L2 Domain file and fields to import"
+msgstr ""
+
+msgid "Template"
+msgstr ""
+
+msgid "The import XLS/CSV should have the following fields and a <b>header row</b> for a succesful import:"
+msgstr ""
+
+msgid "The fields marked with * are mandatory"
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid "Error: could not read the uploaded file type!"
+msgstr ""
+
+msgid "Error: missing required field mapping for expected field"
+msgstr ""
+
+msgid "Internal error: missing import field mapping."
+msgstr ""
+
+msgid "Extra column found on line "
+msgstr ""
+
+msgid "Root"
+msgstr ""
+
+msgid "No change, skip"
+msgstr ""
+
+msgid "Subnets master/nested recompute data preview"
+msgstr ""
+
+msgid "Recomputed data"
+msgstr ""
+
+msgid "didn't change the master."
+msgstr ""
+
+msgid "Select Subnet sections, VRFs and IP version to recompute"
+msgstr ""
+
+msgid "Sections and IP versions"
+msgstr ""
+
+msgid "Please choose which section and IP version to recompute:"
+msgstr ""
+
+msgid "Subnets master/nested recompute save"
+msgstr ""
+
+msgid "Subnets import data preview"
+msgstr ""
+
+msgid "Select Subnets file and fields to import"
+msgstr ""
+
+msgid "The fields marked with * are mandatory."
+msgstr ""
+
+msgid "The mask can be provided either as a separate field or with the subnet, sparated by \"/\""
+msgstr ""
+
+msgid "Show PHPIPAM specific columns."
+msgstr ""
+
+msgid "Subnets import"
+msgstr ""
+
+msgid "After the import you should perform an automatic recomputation of the master/nested relations using the Recompute button after you close this window."
+msgstr ""
+
+msgid "DNS Hostname"
+msgstr ""
+
+msgid "Domain name"
+msgstr ""
+
+msgid "VLAN import data preview"
+msgstr ""
+
+msgid "Select VLAN file and fields to import"
+msgstr ""
+
+msgid "Add missing VLAN domains"
+msgstr ""
+
+msgid "VLAN import"
+msgstr ""
+
+msgid "VRF import data preview"
+msgstr ""
+
+msgid "Select VRF file and fields to import"
+msgstr ""
+
+msgid "VRF import"
+msgstr ""
+
+msgid "Import / Export"
+msgstr ""
+
+msgid "Pick a data set type, and click on an action"
+msgstr ""
+
+msgid "Data set"
+msgstr ""
+
+msgid "Pick data set"
+msgstr ""
+
+msgid "Device types"
+msgstr ""
+
+msgid "Not all options are available currently."
+msgstr ""
+
+msgid "Import data entries for the selected type"
+msgstr ""
+
+msgid "Export data entries for the selected type"
+msgstr ""
+
+msgid "Recompute master/nested subnet relations."
+msgstr ""
+
+msgid "Not implemented"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+msgid "IP Addresses import data preview"
+msgstr ""
+
+msgid "Select IP Addresses file and fields to import"
+msgstr ""
+
+msgid "Providing a subnet is optional, the system will add the IP to the longest match if no subnet is provided."
+msgstr ""
+
+msgid "Search for matching subnet in all VRFs (ignore provided VRF)."
+msgstr ""
+
+msgid "IP Addresses import"
+msgstr ""
+
+msgid "Mail settings are missing. Please set admin mail and name!"
+msgstr ""
+
+msgid "Failed to $_POST[action] nameserver set"
+msgstr ""
+
+msgid "Nameserver"
+msgstr ""
+
+msgid "Add nameserver"
+msgstr ""
+
+msgid "Default PTR domain"
+msgstr ""
+
+msgid "Default PTR domain if no valid hostname for PTR is provided"
+msgstr ""
+
+msgid "NXDOMAIN TTL"
+msgstr ""
+
+msgid "Default TTL"
+msgstr ""
+
+msgid "TTL"
+msgstr ""
+
+msgid "NXDOMAIN ttl"
+msgstr ""
+
+msgid "IPv4 reverse domains"
+msgstr ""
+
+msgid "Adding domain record on slave zone is not permitted"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Autoserial"
+msgstr ""
+
+msgid "Automatic"
+msgstr ""
+
+msgid "This script imports subnets from RIPE database for specific AS. Enter desired AS to search for subnets"
+msgstr ""
+
+msgid "Invalid AS"
+msgstr ""
+
+msgid "agent"
+msgstr ""
+
+msgid "Agent code"
+msgstr ""
+
+msgid "Agent id"
+msgstr ""
+
+msgid "remove agent"
+msgstr ""
+
+msgid "phpipam-agent documentation"
+msgstr ""
+
+msgid "Show only supernets"
+msgstr ""
+
+msgid "Show only supernets in list of subnets in section"
+msgstr ""
+
+msgid "Permission changes will be propagated to all nested subnets"
+msgstr ""
+
+msgid "Invalid object Id"
+msgstr ""
+
+msgid "Map object to NAT"
+msgstr ""
+
+msgid "Existing NAT"
+msgstr ""
+
+msgid "New object"
+msgstr ""
+
+msgid "Add new object to NAT as"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Destination"
+msgstr ""
+
+msgid "Invalid NAT object identifier"
+msgstr ""
+
+msgid "Name must have at least 3 characters"
+msgstr ""
+
+msgid "Invalid NAT type"
+msgstr ""
+
+msgid "NAT add failed"
+msgstr ""
+
+msgid "NAT edit failed"
+msgstr ""
+
+msgid "NAT delete failed"
+msgstr ""
+
+msgid "NAT add successful"
+msgstr ""
+
+msgid "NAT edit successful"
+msgstr ""
+
+msgid "NAT delete successful"
+msgstr ""
+
+msgid "NAT"
+msgstr ""
+
+msgid "Select NAT name"
+msgstr ""
+
+msgid "Select NAT type"
+msgstr ""
+
+msgid "Select Device"
+msgstr ""
+
+msgid "Source port"
+msgstr ""
+
+msgid "Destination port"
+msgstr ""
+
+msgid "Please enter IP address"
+msgstr ""
+
+msgid "Invalid NAT item ID"
+msgstr ""
+
+msgid "Invalid NAT direction"
+msgstr ""
+
+msgid "No results found"
+msgstr ""
+
+msgid "Static NAT can only contain IP address"
+msgstr ""
+
+msgid "Static NAT can only have 1 source address"
+msgstr ""
+
+msgid "Static NAT can only have 1 destination address"
+msgstr ""
+
+msgid "Invalid object identifier"
+msgstr ""
+
+msgid "Missing object type or id"
+msgstr ""
+
+msgid "Add NAT item"
+msgstr ""
+
+msgid "Search objects"
+msgstr ""
+
+msgid "Enter subnet/IP"
+msgstr ""
+
+msgid "Remove NAT item"
+msgstr ""
+
+msgid "Login text"
+msgstr ""
+
+msgid "Show text above 'username' field on login page (default empty)"
+msgstr ""
+
+msgid "Maintenance mode"
+msgstr ""
+
+msgid "Put phpipam to maintenance mode"
+msgstr ""
+
+msgid "Enable NAT"
+msgstr ""
+
+msgid "Enable or disable NAT module"
+msgstr ""
+
+msgid "Enable PowerDNS"
+msgstr ""
+
+msgid "Enable or disable PowerDNS module"
+msgstr ""
+
+msgid "Enable DHCP"
+msgstr ""
+
+msgid "Enable or disable DHCP module"
+msgstr ""
+
+msgid "Locations module"
+msgstr ""
+
+msgid "Enable or disable locations module"
+msgstr ""
+
+msgid "PSTN module"
+msgstr ""
+
+msgid "Enable or disable PSTN module to manage phone numbers"
+msgstr ""
+
+msgid "Link addresses"
+msgstr ""
+
+msgid "Display linked addresses from another subnet if it matches selected field"
+msgstr ""
+
+msgid "Syslog"
+msgstr ""
+
+msgid "Set where to send system logs"
+msgstr ""
+
+msgid "Update Tags"
+msgstr ""
+
+msgid "Update address tags when address state change occurs"
+msgstr ""
+
+msgid "Require uniques subnets"
+msgstr ""
+
+msgid "Require unique subnets accross all sections"
+msgstr ""
+
+msgid "Set maximum number of concurrent ICMP checks (default 128)"
+msgstr ""
+
+msgid "Subnet Display"
+msgstr ""
+
+msgid "Subnet Network Only"
+msgstr ""
+
+msgid "Select which view you would prefer on the menu"
+msgstr ""
+
+msgid "Upload logo"
+msgstr ""
+
+msgid "Upload custom logo"
+msgstr ""
+
+msgid "Missing snmp support in php"
+msgstr ""
+
+msgid "Missing gd support in php"
+msgstr ""
+
+msgid "Current"
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "Select image"
+msgstr ""
+
+msgid "Maintaneance mode removed"
+msgstr ""
+
+msgid "Folder cannot nest behind itself!"
+msgstr ""
+
+msgid "Folder $_POST[action] successfull"
+msgstr ""
+
+msgid "Invalid location value"
+msgstr ""
+
+msgid "Invalid threshold value"
+msgstr ""
+
+msgid "Invalid subnetId"
+msgstr ""
+
+msgid "Search for subnets through SNMP"
+msgstr ""
+
+msgid "Enter subnet in CIDR format"
+msgstr ""
+
+msgid "Mark as full"
+msgstr ""
+
+msgid "Mark subnet as utilized"
+msgstr ""
+
+msgid "Set subnet alert threshold"
+msgstr ""
+
+msgid "Failed to set subnet permissons for subnet"
+msgstr ""
+
+msgid "No result"
+msgstr ""
+
+msgid "Subnet splitted successfully"
+msgstr ""
+
+msgid "Copy custom field values"
+msgstr ""
+
+msgid "Subnet linked"
+msgstr ""
+
+msgid "Link IPv4 subnet to IPv6 subnet"
+msgstr ""
+
+msgid "Select IPv6 subnet to link to current subnet"
+msgstr ""
+
+msgid "Not linked"
+msgstr ""
+
+msgid "Link"
+msgstr ""
+
+msgid "Update address tag to online/offline if state change occurs. Combine with settings > Update Tags"
+msgstr ""
+
+msgid "Cannot send mail, mail settings are missing. Please set them under administration > Mail Settings !"
+msgstr ""
+
+msgid "Username must be at least 1 character long!"
+msgstr ""
+
+msgid "VLANs / VRFs"
+msgstr ""
+
+msgid "Select to allow user to manage VLANs and VRFs"
+msgstr ""
+
+msgid "PowerDNS"
+msgstr ""
+
+msgid "Select to allow user to create DNS records"
+msgstr ""
+
+msgid "PSTN"
+msgstr ""
+
+msgid "Select to allow user to manage PSTN numbers"
+msgstr ""
+
+msgid "Manage VLANs / VRFs"
+msgstr ""
+
+msgid "Menu type"
+msgstr ""
+
+msgid "Invalid subnets"
+msgstr ""
+
+msgid "No invalid subnets detected"
+msgstr ""
+
+msgid "Invalid addresses"
+msgstr ""
+
+msgid "No invalid addresses detected"
+msgstr ""
+
+msgid "Not allowed to change VLANs"
+msgstr ""
+
+msgid "VLAN already exists in another domain!"
+msgstr ""
+
+msgid "Unique VLAN"
+msgstr ""
+
+msgid "Require unique vlan accross domains"
+msgstr ""
+
+msgid "Admin privileges required"
+msgstr ""
+
+msgid "Invalid domain Id"
+msgstr ""
+
+msgid "No devices for SNMP VLAN query available"
+msgstr ""
+
+msgid "No VLANS found"
+msgstr ""
+
+msgid "Add discovered VLANS"
+msgstr ""
+
+msgid "Select devices"
+msgstr ""
+
+msgid "Select devices to query VLAN table from"
+msgstr ""
+
+msgid "Scan"
+msgstr ""
+
+msgid "Not allowed to change VRFs"
+msgstr ""
+
+msgid "Failed to $_POST[action] VRF"
+msgstr ""
+
+msgid "VRF $_POST[action] successfull"
+msgstr ""
+
+msgid "Scan for VRFs"
+msgstr ""
+
+msgid "No devices for SNMP VRF query available"
+msgstr ""
+
+msgid "No vrfs found"
+msgstr ""
+
+msgid "Add discovered vrfs"
+msgstr ""
+
+msgid "Select devices to query VRF table from"
+msgstr ""
+
+msgid "Widget $_POST[action] error"
+msgstr ""
+
+msgid "Widget $_POST[action] success"
+msgstr ""
+
+msgid "DHCP management"
+msgstr ""
+
+msgid "Please enable DHCP module under server management"
+msgstr ""
+
+msgid "Invalid Location object identifier"
+msgstr ""
+
+msgid "Invalid Latitude"
+msgstr ""
+
+msgid "Invalid Longitude"
+msgstr ""
+
+msgid "Failed to update location lat/lng from google"
+msgstr ""
+
+msgid "Location add failed"
+msgstr ""
+
+msgid "Location edit failed"
+msgstr ""
+
+msgid "Location delete failed"
+msgstr ""
+
+msgid "Location add successful"
+msgstr ""
+
+msgid "Location edit successful"
+msgstr ""
+
+msgid "Location delete successful"
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+msgid "latitude"
+msgstr ""
+
+msgid "Query"
+msgstr ""
+
+msgid "OID"
+msgstr ""
+
+msgid "No devices"
+msgstr ""
+
+msgid "No groups"
+msgstr ""
+
+msgid "You are not member of any group. Please contact system administrator!"
+msgstr ""
+
+msgid "Changelog files are sent to syslog"
+msgstr ""
+
+msgid "Full"
+msgstr ""
+
+msgid "Threshold module disabled"
+msgstr ""
+
+msgid "You can enable threshold module under settings"
+msgstr ""
+
+msgid "No subnet is selected for threshold check"
+msgstr ""
+
+msgid "You can set threshold for subnets under subnet settings"
+msgstr ""
+
+msgid "No subnet selected for threshold check available"
+msgstr ""
+
+msgid "No subnet with threshold check available"
+msgstr ""
+
+msgid "Current usage"
+msgstr ""
+
+msgid "Folder is empty"
+msgstr ""
+
+msgid "Only master subnets are shown"
+msgstr ""
+
+msgid "Switched to"
+msgstr ""
+
+msgid "Switch back user"
+msgstr ""
+
+msgid "Available sections"
+msgstr ""
+
+msgid "No sections available"
+msgstr ""
+
+msgid "All sections"
+msgstr ""
+
+msgid "Show all sections"
+msgstr ""
+
+msgid "All items"
+msgstr ""
+
+msgid "Cannot add address as subnet is market as used"
+msgstr ""
+
+msgid "Remove DNS records"
+msgstr ""
+
+msgid "Remove all associated DNS records:"
+msgstr ""
+
+msgid "Addresses linked with"
+msgstr ""
+
+msgid "No linked addresses found"
+msgstr ""
+
+msgid "Address linking disabled"
+msgstr ""
+
+msgid "Location not set !"
+msgstr ""
+
+msgid "Duplicated addresses"
+msgstr ""
+
+msgid "Mac"
+msgstr ""
+
+msgid "No duplicated addresses found"
+msgstr ""
+
+msgid "Address NAT translations"
+msgstr ""
+
+msgid "Map to existing NAT"
+msgstr ""
+
+msgid "No NAT objects available"
+msgstr ""
+
+msgid "No NAT translations for this address"
+msgstr ""
+
+msgid "Address permissions"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid "Firewall address object"
+msgstr ""
+
+msgid "Availability"
+msgstr ""
+
+msgid "DNS info"
+msgstr ""
+
+msgid "Regenerate firewall addres object."
+msgstr ""
+
+msgid "Rack details"
+msgstr ""
+
+msgid "FW Object"
+msgstr ""
+
+msgid "Filename"
+msgstr ""
+
+msgid "fw object"
+msgstr ""
+
+msgid "Invalid IP address"
+msgstr ""
+
+msgid "IP addresses in $location "
+msgstr ""
+
+msgid "Remove all"
+msgstr ""
+
+msgid "Sort by firewall address object"
+msgstr ""
+
+msgid "Sort by MAC"
+msgstr ""
+
+msgid "Address was never online"
+msgstr ""
+
+msgid "Address is alive"
+msgstr ""
+
+msgid "Address warning"
+msgstr ""
+
+msgid "Address is offline"
+msgstr ""
+
+msgid "Address status unknown"
+msgstr ""
+
+msgid "Duplicate MAC"
+msgstr ""
+
+msgid "Gegenerate or regenerate a firewall addres object of this ip address."
+msgstr ""
+
+msgid "Back to folder"
+msgstr ""
+
+msgid "Linked addresses"
+msgstr ""
+
+msgid "Multicast"
+msgstr ""
+
+msgid "Only 4096 IP addresses at once"
+msgstr ""
+
+msgid "Invalid MAC address"
+msgstr ""
+
+msgid "IP $action successful"
+msgstr ""
+
+msgid "fw_object"
+msgstr ""
+
+msgid "Cannot scan as subnet is market as used"
+msgstr ""
+
+msgid "FW object"
+msgstr ""
+
+msgid "Ignore errors"
+msgstr ""
+
+msgid "Invalid subnet Identifier"
+msgstr ""
+
+msgid "No new hosts found"
+msgstr ""
+
+msgid "Subnet must have VLAN assigned for MAc address query"
+msgstr ""
+
+msgid "No devices for SNMP MAC address query available"
+msgstr ""
+
+msgid "No new hosts found from ARP scan, MAC address scan will not be performed"
+msgstr ""
+
+msgid "No MAC address found via MAC address scan"
+msgstr ""
+
+msgid "Invalid section Id"
+msgstr ""
+
+msgid "Add subnets to section"
+msgstr ""
+
+msgid "Associated VLANs"
+msgstr ""
+
+msgid "Associated VRFs"
+msgstr ""
+
+msgid "Linked IPv6 subnet"
+msgstr ""
+
+msgid "Linked IPv4 subnets"
+msgstr ""
+
+msgid "Subnet is natted"
+msgstr ""
+
+msgid "Subnet is marked as used"
+msgstr ""
+
+msgid "Alert threshold"
+msgstr ""
+
+msgid "Firewall zone"
+msgstr ""
+
+msgid "Address object"
+msgstr ""
+
+msgid "Generate or regenerate the subnets firewall address object name."
+msgstr ""
+
+msgid "disabled - marked as full"
+msgstr ""
+
+msgid "Scan agent"
+msgstr ""
+
+msgid "Invalid scan agent"
+msgstr ""
+
+msgid "Last check"
+msgstr ""
+
+msgid "Last scan"
+msgstr ""
+
+msgid "Manage linked IPv6 subnet"
+msgstr ""
+
+msgid "Map subnet to firewall zone"
+msgstr ""
+
+msgid "Generate or regenerate firewall address objects for all ip addresses within this subnet."
+msgstr ""
+
+msgid "Subnet NAT translations"
+msgstr ""
+
+msgid "No NAT translations for this subnet"
+msgstr ""
+
+msgid "Temporary share"
+msgstr ""
+
+msgid "Invalid search string"
+msgstr ""
+
+msgid "Invalid limit"
+msgstr ""
+
+msgid "Output has been limited to last $_REQUEST[climit] lines"
+msgstr ""
+
+msgid "Invalid permission"
+msgstr ""
+
+msgid "Changelog details"
+msgstr ""
+
+msgid "Show details"
+msgstr ""
+
+msgid "Belonging addresses"
+msgstr ""
+
+msgid "All devices"
+msgstr ""
+
+msgid "Location is not set for this device"
+msgstr ""
+
+msgid "No NAT translations for this device"
+msgstr ""
+
+msgid "Belonging PSTN prefixes"
+msgstr ""
+
+msgid "PSTN prefixes module disabled."
+msgstr ""
+
+msgid "Prefix"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "Stop"
+msgstr ""
+
+msgid " Firewall Zones"
+msgstr ""
+
+msgid "Manage zones"
+msgstr ""
+
+msgid "Administrative privileges required!"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Domain type:"
+msgstr ""
+
+msgid "Master servers"
+msgstr ""
+
+msgid "Notified serial:"
+msgstr ""
+
+msgid "Last check:"
+msgstr ""
+
+msgid "No records found for filter "
+msgstr ""
+
+msgid "You do not have permission to manage DNS. Please contact administrator!"
+msgstr ""
+
+msgid "No host records available"
+msgstr ""
+
+msgid "PowerDNS IP records"
+msgstr ""
+
+msgid "List of all DNS records resolving to IP address"
+msgstr ""
+
+msgid "List of unprocessed IP addresses requests"
+msgstr ""
+
+msgid "VRF search results"
+msgstr ""
+
+msgid "Search results (VRFs)"
+msgstr ""
+
+msgid "Search results (PSTN Prefixes)"
+msgstr ""
+
+msgid "Search results (PSTN Numbers)"
+msgstr ""
+
+msgid "Wildcard mask"
+msgstr ""
+
+msgid "custom tool"
+msgstr ""
+
+msgid "Select yes to receive mail notification changes (IP state change, new hosts, requests)"
+msgstr ""
+
+msgid "Select yes to receive mail notifications for IP requests"
+msgstr ""
+
+msgid "Menu Type"
+msgstr ""
+
+msgid "Static"
+msgstr ""
+
+msgid "Dynamic"
+msgstr ""
+
+msgid "Select menu type to display"
+msgstr ""
+
+msgid "Invalid language!"
+msgstr ""
+
+msgid "VLANs in all domains"
+msgstr ""
+
+msgid "List of VLANS in all domains"
+msgstr ""
+
+msgid "L2domain"
+msgstr ""
+
+msgid "Scan for VLANs"
+msgstr ""
+
+msgid "L2 domains"
+msgstr ""
+
+msgid "All domains"
+msgstr ""
+
+msgid "List of all VLANs in all domains"
+msgstr ""
+
+msgid "Available in sections"
+msgstr ""
+
+msgid "DHCP information"
+msgstr ""
+
+msgid "Active leases"
+msgstr ""
+
+msgid "Subnet id"
+msgstr ""
+
+msgid "Client_id"
+msgstr ""
+
+msgid "Lifetime"
+msgstr ""
+
+msgid "IPv4 leases"
+msgstr ""
+
+msgid "IPv4 not configured on DHCP server"
+msgstr ""
+
+msgid "No IPv4 leases"
+msgstr ""
+
+msgid "IPv6 leases"
+msgstr ""
+
+msgid "IPv6 not configured on DHCP server"
+msgstr ""
+
+msgid "No IPv6 leases"
+msgstr ""
+
+msgid "Reservations"
+msgstr ""
+
+msgid "Reserved in"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Classes"
+msgstr ""
+
+msgid "Subnets and pools"
+msgstr ""
+
+msgid "Pools"
+msgstr ""
+
+msgid "IPv4 subnets"
+msgstr ""
+
+msgid "No IPv4 subnets"
+msgstr ""
+
+msgid "IPv6 subnets"
+msgstr ""
+
+msgid "No IPv6 subnets"
+msgstr ""
+
+msgid "Add location"
+msgstr ""
+
+msgid "Locations module disabled."
+msgstr ""
+
+msgid "Coordinates"
+msgstr ""
+
+msgid "objects"
+msgstr ""
+
+msgid "Location not set"
+msgstr ""
+
+msgid "Locations Map"
+msgstr ""
+
+msgid "Locations list"
+msgstr ""
+
+msgid "Location details"
+msgstr ""
+
+msgid "Location not found"
+msgstr ""
+
+msgid "Belonging objects"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Multicast networks"
+msgstr ""
+
+msgid "Subnets has no hosts"
+msgstr ""
+
+msgid "Add new address"
+msgstr ""
+
+msgid "No multicast subnets available"
+msgstr ""
+
+msgid "Add nat"
+msgstr ""
+
+msgid "NAT module disabled."
+msgstr ""
+
+msgid "Translation"
+msgstr ""
+
+msgid "List of PSTN prefixes"
+msgstr ""
+
+msgid "Numbers"
+msgstr ""
+
+msgid "You do not have permission to manage PSTN numbers"
+msgstr ""
+
+msgid "Invalid PSTN number identifier"
+msgstr ""
+
+msgid "Number must be numeric"
+msgstr ""
+
+msgid "Invalid prefix"
+msgstr ""
+
+msgid "Duplicate number"
+msgstr ""
+
+msgid "Number not inside prefix"
+msgstr ""
+
+msgid "Number add failed"
+msgstr ""
+
+msgid "Number edit failed"
+msgstr ""
+
+msgid "Number delete failed"
+msgstr ""
+
+msgid "Number add successful"
+msgstr ""
+
+msgid "Number edit successful"
+msgstr ""
+
+msgid "Number delete successful"
+msgstr ""
+
+msgid "Invalid prefix ID"
+msgstr ""
+
+msgid "PSTN number"
+msgstr ""
+
+msgid "Number Name"
+msgstr ""
+
+msgid "Address owner"
+msgstr ""
+
+msgid "Select device where prefix is located"
+msgstr ""
+
+msgid "You do not have permission to manage PSTN prefixes"
+msgstr ""
+
+msgid "Invalid PSTN object identifier"
+msgstr ""
+
+msgid "Start must be numeric"
+msgstr ""
+
+msgid "Stop must be numeric"
+msgstr ""
+
+msgid "Invalid master prefix"
+msgstr ""
+
+msgid "Prefix cannot be same as master"
+msgstr ""
+
+msgid "Prefix not inside its master"
+msgstr ""
+
+msgid "Prefix overlaps with prefix "
+msgstr ""
+
+msgid "Prefix add failed"
+msgstr ""
+
+msgid "Prefix edit failed"
+msgstr ""
+
+msgid "Prefix delete failed"
+msgstr ""
+
+msgid "Prefix add successful"
+msgstr ""
+
+msgid "Prefix edit successful"
+msgstr ""
+
+msgid "Prefix delete successful"
+msgstr ""
+
+msgid "Invalid master ID"
+msgstr ""
+
+msgid "PSTN prefix"
+msgstr ""
+
+msgid "Master prefix"
+msgstr ""
+
+msgid "Set Prefix name"
+msgstr ""
+
+msgid "Set start number"
+msgstr ""
+
+msgid "Set stop number"
+msgstr ""
+
+msgid "Enter master prefix if you want to nest it under existing subnet, or select root to create root prefix"
+msgstr ""
+
+msgid "Short"
+msgstr ""
+
+msgid "No numbers"
+msgstr ""
+
+msgid "Unused"
+msgstr ""
+
+msgid "PSTN prefix details"
+msgstr ""
+
+msgid "Prefix not found"
+msgstr ""
+
+msgid "All prefixes"
+msgstr ""
+
+msgid "Prefix details"
+msgstr ""
+
+msgid "Edit prefix properties"
+msgstr ""
+
+msgid "Create new prefix"
+msgstr ""
+
+msgid "Delete prefix"
+msgstr ""
+
+msgid "You do not have permissions to edit prefix"
+msgstr ""
+
+msgid "Add address to prefix"
+msgstr ""
+
+msgid "RACK list"
+msgstr ""
+
+msgid "Add rack"
+msgstr ""
+
+msgid "RACK management disabled."
+msgstr ""
+
+msgid "No racks available"
+msgstr ""
+
+msgid "Rack is empty"
+msgstr ""
+
+msgid "Invalid rack Id"
+msgstr ""
+
+msgid "RACK details"
+msgstr ""
+
+msgid "Invalid subpage"
+msgstr ""
+
+msgid "Subpage does not exist"
+msgstr ""
+
+msgid "Add option"
+msgstr ""
+
+msgid "prefix option"
+msgstr ""
+
+msgid "Option"
+msgstr ""
+
+msgid "New Option"
+msgstr ""
+
+msgid "Value cannot be empty"
+msgstr ""
+
+msgid "Options updated"
+msgstr ""
+
+msgid "Upgrade"
+msgstr ""
+
+msgid "Object is Natted"
+msgstr ""
+
+msgid "Invalid generator ID"
+msgstr ""
+
+msgid "Maximum zone name length reached! Consider to change your settings in order to generate larger zone names."
+msgstr ""
+
+msgid "The maximum convertable vlaue is reached. Consider to switch to decimal or text mode and change the zone name length value."
+msgstr ""
+
+msgid "Zone Name"
+msgstr ""
+
+msgid "This network is already bound to this or another zone.<br>The binding must be unique."
+msgstr ""
+
+msgid "Invalid log command"
+msgstr ""
+
+msgid "A record must be an IP address"
+msgstr ""
+
+msgid "AAAA record must be an IP address"
+msgstr ""
+
+msgid "Subnet permissions recursively set"
+msgstr ""
+
+msgid "Subnet $cidr overlaps with"
+msgstr ""
+
+msgid "New subnet cannot be same as master subnet"
+msgstr ""
+
+msgid "Invalid Mask"
+msgstr ""
+
+msgid "Invalid request action"
+msgstr ""
+
+msgid "Invalid filetype"
+msgstr ""
+
+msgid "System is running in maintenance mode"
+msgstr ""
+
+msgid "Invalid username"
+msgstr ""
+
+msgid "SAML2 login successful"
+msgstr ""
+
+msgid "Invalid server type $server_type"
+msgstr ""
+
+msgid "Missing class file"
+msgstr ""
+
+msgid "User attributes:"
+msgstr ""
+
+msgid "No attributes found."
+msgstr ""
+
+msgid "Attributes not found"
+msgstr ""
+
+
+
+
+
+### Customers module ###
+
+msgid "All customers"
+msgstr ""
+
+msgid "Add customer"
+msgstr ""
+
+msgid "Customer"
+msgstr ""
+
+msgid "Customers"
+msgstr ""
+
+msgid "Select customer"
+msgstr ""
+
+msgid "Edit customer"
+msgstr ""
+
+msgid "Delete customer"
+msgstr ""
+
+msgid "Contact"
+msgstr ""
+
+msgid "Customer title"
+msgstr ""
+
+msgid "Customer address"
+msgstr ""
+
+msgid "Contact details"
+msgstr ""
+
+msgid "Customer contact details"
+msgstr ""
+
+msgid "Circuits"
+msgstr ""
+
+msgid "Postcode"
+msgstr ""
+
+msgid "City"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Contact person"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "Random notes"
+msgstr ""
+
+msgid "Customers module"
+msgstr ""
+
+msgid "Enable or disable customers module for customer management"
+msgstr ""
+
+
+
+### 2FA ###
+
+msgid "2FA authentication"
+msgstr ""
+
+msgid "2FA provider"
+msgstr ""
+
+msgid "Current 2FA provider"
+msgstr ""
+
+msgid "2FA users"
+msgstr ""
+
+msgid "2FA status"
+msgstr ""
+
+msgid "2FA status legend"
+msgstr ""
+
+msgid "2FA is enabled"
+msgstr ""
+
+msgid "2FA disabled"
+msgstr ""
+
+msgid "2fa is enabled, but secret is not set. User will be given new secret upon first login"
+msgstr ""
+
+msgid "Reset secret"
+msgstr ""
+
+msgid "2FA name"
+msgstr ""
+
+msgid "Name for 2fa application that will be displayed"
+msgstr ""
+
+msgid "2FA length"
+msgstr ""
+
+msgid "Length of 2FA secret (16 to 32)"
+msgstr ""
+
+msgid "2FA status legend"
+msgstr ""
+
+msgid "2FA user change"
+msgstr ""
+
+msgid "Can users change 2fa settings for their account"
+msgstr ""
+
+msgid "Apply to all users"
+msgstr ""
+
+msgid "Force all users to use 2fa on next login or disable 2fa for all users"
+msgstr ""
+
+
+
+
+### Password policy ###
+
+msgid "phpIPAM password policy settings"
+msgstr ""
+
+msgid "Here you can set password policy for user authentication"
+msgstr ""
+
+msgid "Minimum length"
+msgstr ""
+
+msgid "Minimum password length"
+msgstr ""
+
+msgid "Maximum length"
+msgstr ""
+
+msgid "Maximum password length"
+msgstr ""
+
+msgid "Minimum numbers"
+msgstr ""
+
+msgid "Minumum number of numbers"
+msgstr ""
+
+msgid "Minimum letters"
+msgstr ""
+
+msgid "Minumum number of letters"
+msgstr ""
+
+msgid "Minimum lowercase letter"
+msgstr ""
+
+msgid "Minumum number of lowercase letters"
+msgstr ""
+
+msgid "Minimum uppercase letter"
+msgstr ""
+
+msgid "Minumum number of uppercase letters"
+msgstr ""
+
+msgid "Minimum symbols"
+msgstr ""
+
+msgid "Minumum number of symbols"
+msgstr ""
+
+msgid "Maximum symbols"
+msgstr ""
+
+msgid "Maximum number of symbols"
+msgstr ""
+
+msgid "Symbols"
+msgstr ""
+
+msgid "List of allowed symbols. csv separated."
+msgstr ""
+
+msgid "Enforce"
+msgstr ""
+
+msgid "Require all users to change password upon next login."
+msgstr ""
+
+
+
+
+
+### Circuits ####
+
+msgid "Circuit options"
+msgstr ""
+
+msgid "Physical Circuits"
+msgstr ""
+
+msgid "Logical Circuits"
+msgstr ""
+
+msgid "Circuit providers"
+msgstr ""
+
+msgid "Circuit map"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Point A"
+msgstr ""
+
+msgid "Point B"
+msgstr ""
+
+msgid "Provider"
+msgstr ""
+
+msgid "Circuit type"
+msgstr ""
+
+msgid "Capacity"
+msgstr ""
+
+msgid "Point A"
+msgstr ""
+
+msgid "Purpose"
+msgstr ""
+
+msgid "Circuit count"
+msgstr ""
+
+msgid "Members"
+msgstr ""
+
+msgid "Logical circuit physical members"
+msgstr ""
+
+msgid "Available physical circuits"
+msgstr ""
+
+
+
+### Misc 1.4 ###
+
+msgid "Theme"
+msgstr ""
+
+msgid "Select UI theme"
+msgstr ""
+
+msgid "dark"
+msgstr ""
+
+msgid "white"
+msgstr ""
+
+msgid "Compress text in top menu"
+msgstr ""
+
+msgid "Bandwidth calculator"
+msgstr ""
+
+msgid "TCP Window size"
+msgstr ""
+
+msgid "Delay"
+msgstr ""
+
+msgid "Filesize"
+msgstr ""
+
+msgid "Transfer time"
+msgstr ""
+
+msgid "IP Request"
+msgstr ""
+
+msgid "Active IP address requests"
+msgstr ""
+
+msgid "Enable Firewall Zones"
+msgstr ""
+
+msgid "Enable or disable firewall zone management module"
+msgstr ""
+
+msgid "Allow duplicate vlans"
+msgstr ""
+
+msgid "Allow duplicated vlans inside L2 domain"
+msgstr ""
+
+msgid "Decode MAC vendor"
+msgstr ""
+
+msgid "Decode MAC address vendor for addresses"
+msgstr ""
+
+msgid "Module permissions"
+msgstr ""
+
+msgid "Scan agents"
+msgstr ""
+
