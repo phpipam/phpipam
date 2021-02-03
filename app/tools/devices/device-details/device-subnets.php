@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("devices", 1, true, false);
+$User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 
 # check
 is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true);
@@ -30,7 +30,7 @@ print "<tr>";
 print "	<th>"._('Subnet')."</th>";
 print "	<th>"._('Section')."</th>";
 print "	<th>"._('Description')."</th>";
-if($User->get_module_permissions ("vlan")>0) {
+if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
 print "	<th>"._('VLAN')."</th>";
 }
 print "</tr>";
@@ -55,7 +55,7 @@ if ($subnets !== false ) {
 			print "	<td class='ip'><a href='".create_link("subnets",$section['id'],$s->id)."'>".$Subnets->transform_to_dotted($s->subnet)."/".$s->mask."</a></td>";
 			print "	<td class='ip'><a href='".create_link("subnets",$section['id'])."'>".$section['description']."</a></td>";
 			print "	<td class='port'>".$s->description."</td>";
-			if($User->get_module_permissions ("vlan")>0) {
+			if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
 				print "	<td class='description'>".@$vlan->number ." ".@$vlan->description."</td>";
 			}
 

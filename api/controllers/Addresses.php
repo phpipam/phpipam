@@ -415,12 +415,6 @@ class Addresses_controller extends Common_api_functions  {
 		$values['ip_addr'] = $this->Addresses->transform_address($values['ip_addr'] ,"decimal");
 		// set action
 		$values['action'] = "add";
-		// location fix because of UI
-		if(isset($values['location'])) {
-			$values['location_item'] = $values['location'];
-			unset($values['location']);
-		}
-
 		# execute
 		if(!$this->Addresses->modify_address ($values)) {
 			$this->Response->throw_exception(500, "Failed to create address");
@@ -600,12 +594,16 @@ class Addresses_controller extends Common_api_functions  {
 	 * @access private
 	 * @return void
 	 */
-	private function validate_subnet () {
-		// numberic
-		if(!is_numeric($this->_params->subnetId))											{ $this->Response->throw_exception(400, "Subnet Id must be numeric"); }
-		// check subnet
-		if(is_null($res = $this->Subnets->fetch_subnet ("id", $this->_params->subnetId)))	{ $this->Response->throw_exception(404, "Invalid subnet Id"); }
-		else																				{ $this->subnet_details = $res; }
+	private function validate_subnetId () {
+		if(!is_numeric($this->_params->subnetId))
+			$this->Response->throw_exception(400, _("SubnetId must be numeric"));
+
+		// check subnet exists
+		$res = $this->Subnets->fetch_subnet ("id", $this->_params->subnetId);
+		if(!is_object($res))
+			$this->Response->throw_exception(404, _("Invalid subnet Id"));
+
+		$this->subnet_details = $res;
 	}
 
 	/**
@@ -633,22 +631,14 @@ class Addresses_controller extends Common_api_functions  {
 	 */
 	public function validate_create_parameters () {
 		// validate subnet
-		$this->validate_subnet ();
+		$this->validate_subnetId ();
 
 		// validate overlapping
 		if($this->Addresses->address_exists ($this->_params->ip_addr, $this->_params->subnetId))
 			$this->Response->throw_exception(409, "IP address already exists");
 
-		// fetch subnet
-		$subnet = $this->subnet_details;
-		// check if it is not folder
-		if($subnet->isFolder!="1") {
-			// formulate CIDR
-			$subnet = $this->Subnets->transform_to_dotted ($subnet->subnet)."/".$subnet->mask;
-
-			// validate address, that it is inside subnet, not subnet/broadcast
-			$this->Addresses->verify_address( $this->_params->ip_addr, $subnet, false, true );
-		} else {
+		// check if it is a folder
+		if($this->subnet_details->isFolder) {
 			if($this->Addresses->validate_address ($this->_params->ip_addr)===false)
 				$this->Response->throw_exception(400, "Invalid address");
 		}

@@ -519,6 +519,7 @@ class User_controller extends Common_api_functions {
 			else {
 				if(($token = $this->Admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false)
 													{ $this->Response->throw_exception(403, "Invalid token"); }
+
 				// save token
 				$this->User->user    = $token;
 				$this->token         = $token->token;

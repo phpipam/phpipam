@@ -17,7 +17,7 @@ if(!is_numeric($_GET['subnetId'])) {
 }
 else {
     # perm check
-    if ($User->get_module_permissions ("locations")<1) {
+    if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
         $Result->show("danger", _("You do not have permissions to access this module"), false);
     }
     # check that location support isenabled
@@ -94,7 +94,7 @@ else {
             		foreach($cfields as $key=>$field) {
             			$location->{$key} = str_replace("\n", "<br>",$location->{$key});
             			// create links
-            			$location->{$key} = $Result->create_links($location->{$key});
+            			$location->{$key} = $Tools->create_links($location->{$key});
             			print "<tr>";
             			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
             			print "	<td style='vertical-align:top;align:left;'>".$location->{$key}."</td>";
@@ -103,7 +103,7 @@ else {
             	}
 
             	# actions
-                if ($User->get_module_permissions ("locations")>1) {
+                if ($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
                 	print "<tr>";
                 	print " <td colspan='2'><hr></td>";
                 	print "</tr>";
@@ -112,11 +112,11 @@ else {
                 	print "	<th></th>";
                 	print "	<td>";
                     $links = [];
-                    $links[] = ["type"=>"header", "text"=>"Manage"];
-                    $links[] = ["type"=>"link", "text"=>"Edit location", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='edit'  data-id='$location->id'", "icon"=>"pencil"];
+                    $links[] = ["type"=>"header", "text"=>_("Manage")];
+                    $links[] = ["type"=>"link", "text"=>_("Edit location"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='edit'  data-id='$location->id'", "icon"=>"pencil"];
 
-                    if($User->get_module_permissions ("locations")>2) {
-                        $links[] = ["type"=>"link", "text"=>"Delete location", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='delete'  data-id='$location->id'", "icon"=>"times"];
+                    if($User->get_module_permissions ("locations")>=User::ACCESS_RWA) {
+                        $links[] = ["type"=>"link", "text"=>_("Delete location"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='delete'  data-id='$location->id'", "icon"=>"times"];
                         $links[] = ["type"=>"divider"];
                     }
                     // print links
@@ -147,15 +147,15 @@ else {
                     }
 
                     # permissions
-                    if($User->get_module_permissions ("racks")<1)
+                    if($User->get_module_permissions ("racks")==User::ACCESS_NONE)
                     unset($object_groups['racks']);
 
                     # permissions
-                    if($User->get_module_permissions ("devices")<1)
+                    if($User->get_module_permissions ("devices")==User::ACCESS_NONE)
                     unset($object_groups['devices']);
 
                     # permissions
-                    if($User->get_module_permissions ("circuits")<1)
+                    if($User->get_module_permissions ("circuits")==User::ACCESS_NONE)
                     unset($object_groups['circuits']);
 
                     // loop

@@ -50,7 +50,7 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 	}
 
 	# check permissions
-	$User->check_module_permissions ("racks", 1, true, false);
+	$User->check_module_permissions ("racks", User::ACCESS_R, true, false);
 
 	# rack devices
 	$rack_devices = $Racks->fetch_rack_devices($rack->id);

@@ -1,7 +1,7 @@
 <?php
 
-# Check we have been included via subnet-scan-result.php and not called directly
-require("subnet-scan-check-included.php");
+# Check we have been included and not called directly
+require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
 /*
  * Discover newsubnetshosts with snmp
@@ -18,8 +18,6 @@ foreach ($_POST as $k=>$p) {
         if ($section===false)                                           { $Result->show("danger", _("Invalid section Id"), true, false, false, true); }
     }
 }
-
-if(sizeof($_POST)>=ini_get("max_input_vars"))                           { $Result->show("danger", _("Number of discovered hosts exceed maximum possible defined by php.ini - set to ")." $max <hr>"._("Please adjust your php.ini settings for value `max_input_vars`"), true, false, false, true); }
 
 # scan disabled
 if ($User->settings->enableSNMP!="1")                           { $Result->show("danger", _("SNMP module disbled"), true); }

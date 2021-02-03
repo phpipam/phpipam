@@ -6,7 +6,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("vlan", 1, true, false);
+$User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 
 # get VLAN details
 $vlan = (array) $Tools->fetch_object("vlans", "vlanId", $_GET['sPage']);
@@ -25,7 +25,7 @@ if($vlan[0]===false)				{ $Result->show("danger", _('Invalid VLAN id'), true); }
 $custom_fields = $Tools->fetch_custom_fields('vlans');
 
 # customer
-if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 	$customer = $Tools->fetch_object ("customers", "id", $vlan['customer_id']);
 	if($customer===false) {
 		$customer = new StdClass ();
@@ -63,7 +63,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 		<td><?php print html_entity_decode($vlan['description']); ?></td>
 	</tr>
 
-	<?php if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) { ?>
+	<?php if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
 	<tr>
 		<td colspan='2'><hr></td>
 	</tr>
@@ -92,7 +92,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 			}
 
 			// create links
-			$vlan[$key] = $Result->create_links($vlan[$key]);
+			$vlan[$key] = $Tools->create_links($vlan[$key]);
 
 			print "<tr>";
 			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
@@ -103,7 +103,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 
 
 	# permissions
-	if($User->get_module_permissions ("vlan")>1) {
+	if($User->get_module_permissions ("vlan")>=User::ACCESS_RW) {
 		print "<tr>";
 		print "	<td colspan='2'><hr></td>";
 		print "</tr>";
@@ -115,11 +115,11 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 
         // actions
         $links = [];
-        $links[] = ["type"=>"header", "text"=>"Manage"];
-        $links[] = ["type"=>"link", "text"=>"Edit VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$vlan[vlanId]'", "icon"=>"pencil"];
+        $links[] = ["type"=>"header", "text"=>_("Manage")];
+        $links[] = ["type"=>"link", "text"=>_("Edit VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$vlan[vlanId]'", "icon"=>"pencil"];
 
-        if($User->get_module_permissions ("vlan")>2) {
-            $links[] = ["type"=>"link", "text"=>"Delete VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$vlan[vlanId]'", "icon"=>"times"];
+        if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) {
+            $links[] = ["type"=>"link", "text"=>_("Delete VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$vlan[vlanId]'", "icon"=>"times"];
         }
         // print links
         print $User->print_actions($User->user->compress_actions, $links, true, true);

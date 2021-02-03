@@ -8,7 +8,7 @@
 foreach($admin_menu as $k=>$menu) {
 
 	# headers
-	print "<h4>"._($k)."</h4>";
+	print "<h4>".$k."</h4>";
 	print "<hr>";
 
 	# items
@@ -17,7 +17,7 @@ foreach($admin_menu as $k=>$menu) {
 		print "	<div class='inner thumbnail'>";
 		print "		<div class='hContent'>";
 		print "			<div class='icon'><a href='".create_link("administration",$t['href'])."'><i class='fa $t[icon]'></i></a></div>";
-		print "			<div class='text'><a href='".create_link("administration",$t['href'])."'>"._($t['name'])."</a><hr><span class='text-muted'>"._($t['description'])."</span></div>";
+		print "			<div class='text'><a href='".create_link("administration",$t['href'])."'>".$t['name']."</a><hr><span class='text-muted'>".$t['description']."</span></div>";
 		print "		</div>";
 		print "	</div>";
 		print "	</div>";

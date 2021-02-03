@@ -53,7 +53,7 @@ if($_POST['netZoneId'] && !preg_match('/^[0-9]+$/i',$_POST['netZoneId'])) {
 		else 																			{ $Result->show("success", _("Network successfully added."), true);  }
 	} elseif ($_POST['action'] == 'delete') {
 		if(!$Zones->delete_zone_network($_POST['netZoneId'],$_POST['masterSubnetId']))	{ $Result->show("danger",  _("Cannot delete the network mapping."), true); }
-		else 																			{ $Result->show("success", _("Successfully deleted the networt mapping."), true);  }
+		else 																			{ $Result->show("success", _("Successfully deleted the network mapping."), true);  }
 	}
 }
 ?>

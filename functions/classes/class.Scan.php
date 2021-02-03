@@ -114,18 +114,24 @@ class Scan extends Common_functions {
 		$this->Database = $database;
 		# initialize Result
 		$this->Result = new Result ();
+
 		# fetch settings
-		$this->settings = is_null($this->settings) ? $this->get_settings() : (object) $this->settings;
+		$settings = is_null($this->settings) ? $this->get_settings() : (object) $this->settings;
+
+		$this->ping_type   = $settings->scanPingType;
+		$this->ping_path   = $settings->scanPingPath;
+		$this->fping_path  = $settings->scanFPingPath;
+
 		# set type
-		$this->reset_scan_method ($this->settings->scanPingType);
+		$this->reset_scan_method ($this->ping_type);
 		# set OS type
 		$this->set_os_type ();
 		# set php exec
 		$this->set_php_exec ();
 		# Log object
-		$this->Log = new Logging ($this->Database, $this->settings);
+		$this->Log = new Logging ($this->Database, $settings);
 
-		if ($errmsg = php_feature_missing(null, ['exec']))
+		if ($this->icmp_type != "none" && $errmsg = php_feature_missing(null, ['exec']))
 			$this->Result->show("danger", $errmsg, true);
 	}
 
@@ -136,7 +142,7 @@ class Scan extends Common_functions {
 	 * @return array
 	 */
 	public function ping_fetch_types () {
-		return array("ping", "pear", "fping");
+		return ["none", "ping", "pear", "fping"];
 	}
 
 	/**
@@ -152,8 +158,8 @@ class Scan extends Common_functions {
 		//check
 		if(!in_array($method, $possible)) {
 			//die or print?
-			if($this->icmp_exit)				{ die(json_encode(array("status"=>1, "error"=>"Invalid scan method"))); }
-			else								{ $this->Result->show("danger", "Invalid scan method", true); }
+			if($this->icmp_exit)				{ die(json_encode(array("status"=>1, "error"=>_("Invalid scan method.")))); }
+			else								{ $this->Result->show("danger", _("Invalid scan method."), true); }
 		}
 		//ok
 		else {
@@ -175,7 +181,7 @@ class Scan extends Common_functions {
 		}
 
 		// Invoked via HTML (or php5.3)
-		$php_cli_binary = Config::get('php_cli_binary');
+		$php_cli_binary = Config::ValueOf('php_cli_binary');
 
 		// Check for user specified php-cli binary (Multiple php versions installed)
 		if ( !empty($php_cli_binary) ) {
@@ -259,6 +265,17 @@ class Scan extends Common_functions {
 	}
 
 	/**
+	 * Null Ping method - return "Scanning disabled" (1001)
+	 */
+	protected function ping_address_method_none($address) {
+		if($this->icmp_exit) {
+			exit(1001);
+		} else {
+			return 1001;
+		}
+	}
+
+	/**
 	 * Ping selected address and return response
 	 *
 	 *	timeout value: for miliseconds multiplyy by 1000
@@ -268,17 +285,17 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	protected function ping_address_method_ping ($address) {
-		# verify ping path
-		$this->ping_verify_path ($this->settings->scanPingPath);
-
 		# if ipv6 append 6
-		if ($this->identify_address ($address)=="IPv6")	{ $this->settings->scanPingPath = $this->settings->scanPingPath."6"; }
+		$ping_path = ($this->identify_address ($address)=="IPv6") ? $this->ping_path."6" : $this->ping_path;
+
+		# verify ping path
+		$this->ping_verify_path ($ping_path);
 
 		# set ping command based on OS type
-		if ($this->os_type == "FreeBSD")    { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
-		elseif($this->os_type == "Linux")   { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W $this->icmp_timeout $address 1>/dev/null 2>&1"; }
-		elseif($this->os_type == "Windows")	{ $cmd = $this->settings->scanPingPath." -n $this->icmp_count -w ".($this->icmp_timeout*1000)." $address"; }
-		else								{ $cmd = $this->settings->scanPingPath." -c $this->icmp_count -n $address 1>/dev/null 2>&1"; }
+		if ($this->os_type == "FreeBSD")    { $cmd = $ping_path." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
+		elseif($this->os_type == "Linux")   { $cmd = $ping_path." -c $this->icmp_count -W $this->icmp_timeout $address 1>/dev/null 2>&1"; }
+		elseif($this->os_type == "Windows")	{ $cmd = $ping_path." -n $this->icmp_count -w ".($this->icmp_timeout*1000)." $address"; }
+		else								{ $cmd = $ping_path." -c $this->icmp_count -n $address 1>/dev/null 2>&1"; }
 
         # for IPv6 remove wait
         if ($this->identify_address ($address)=="IPv6") {
@@ -374,14 +391,11 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	public function ping_address_method_fping ($address) {
-		# verify ping path
-		$this->ping_verify_path ($this->settings->scanFPingPath);
-
-		# if ipv6 append 6
-		if ($this->identify_address ($address)=="IPv6")	{ $this->settings->scanFPingPath = $this->settings->scanFPingPath."6"; }
+		$this->ping_verify_path ($this->fping_path);
 
 		# set command
-		$cmd = $this->settings->scanFPingPath." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." $address";
+		$type = ($this->identify_address ($address)=="IPv6") ? '--ipv6' : '--ipv4';
+		$cmd = $this->fping_path." $type -c $this->icmp_count -t ".($this->icmp_timeout*1000)." $address";
 		# execute command, return $retval
 	    exec($cmd, $output, $retval);
 
@@ -427,10 +441,10 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	public function ping_address_method_fping_subnet ($subnet_cidr, $return_result = false) {
-		# verify ping path
-		$this->ping_verify_path ($this->settings->scanFPingPath);
+		$this->ping_verify_path ($this->fping_path);
+
 		# set command
-		$cmd = $this->settings->scanFPingPath." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." -Ag $subnet_cidr";
+		$cmd = $this->fping_path." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." -Ag $subnet_cidr";
 		# execute command, return $retval
 	    exec($cmd, $output, $retval);
 
@@ -517,7 +531,8 @@ class Scan extends Common_functions {
 		$explain_codes[75] = "EX_TEMPFAIL";
 		$explain_codes[77] = "EX_NOPERM";
 		$explain_codes[255] = "EX_NOT_SUPPORTED";
-		$explain_codes[1000] = "Invalid ping path";
+		$explain_codes[1000] = _("Invalid ping path");
+		$explain_codes[1001] = _("Scanning disabled");
 		# return codes
 		return $explain_codes;
 	}
@@ -538,7 +553,7 @@ class Scan extends Common_functions {
 		catch (Exception $e) {
 			!$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false);
 			# log
-			!$this->debugging ? : $this->Log->write ("status_update", _('Failed to update address status'), 0 );
+			!$this->debugging ? : $this->Log->write (_("Status update"), _('Failed to update address status.'), 0 );
 		}
 	}
 
@@ -686,7 +701,7 @@ class Scan extends Common_functions {
 		# update addresses statuses
 		elseif($type=="update") { return $this->prepare_addresses_to_update ($subnet); }
 		# fail
-		else 					{ die(json_encode(array("status"=>1, "error"=>"Invalid scan type provided"))); }
+		else 					{ die(json_encode(array("status"=>1, "error"=>_("Invalid scan type provided.")))); }
 	}
 
 	/**
@@ -703,17 +718,17 @@ class Scan extends Common_functions {
 		//subnet ID is provided, fetch subnet
 		$subnet = $Subnets->fetch_subnet(null, $subnetId);
 		if($subnet===false)	{
-			 if ($die)											{ die(json_encode(array("status"=>1, "error"=>"Invalid subnet ID provided"))); }
+			 if ($die)											{ die(json_encode(array("status"=>1, "error"=>_("Invalid subnet ID provided.")))); }
 			 else												{ return array(); }
 		}
 
 		// we should support only up to 4094 hosts!
-		if($Subnets->get_max_hosts ($subnet->mask, "IPv4")>4094 && php_sapi_name()!="cli")
-		if ($die)												{ die(json_encode(array("status"=>1, "error"=>"Scanning from GUI is only available for subnets up to /20 or 4094 hosts!"))); }
+		if($Subnets->max_hosts ($subnet)>4096 && php_sapi_name()!="cli")
+		if ($die)												{ die(json_encode(array("status"=>1, "error"=>_("Scanning from GUI is only available for subnets up to /20 or 4096 hosts!")))); }
 		else													{ return array(); }
 
 		# set array of addresses to scan, exclude existing!
-		$ip = $this->get_all_possible_subnet_addresses ($subnet->subnet, $subnet->mask);
+		$ip = $Subnets->get_all_possible_subnet_addresses ($subnet);
 
 		# remove existing
 		$ip = $this->remove_existing_subnet_addresses ($ip, $subnetId);
@@ -724,42 +739,6 @@ class Scan extends Common_functions {
 			else												{ return array(); }
 		}
 
-		//return
-		return $ip;
-	}
-
-	/**
-	 * Fetches all possible subnet addresses
-	 *
-	 * @access private
-	 * @param $subnet		//subnet in decimal format
-	 * @param int $mask		//subnet mask
-	 * @return void			//array of ip addresses in decimal format
-	 */
-	private function get_all_possible_subnet_addresses ($subnet, $mask) {
-		# initialize classes
-		$Subnets   = new Subnets ($this->Database);
-		# make sure we have proper subnet format
-		$subnet    = $Subnets->transform_address($subnet, "decimal");
-		//fetch start and stop addresses
-		$boundaries = (object) $Subnets->get_network_boundaries ($subnet, $mask);
-		//create array
-		if($mask==32) {
-			$ip[] = $Subnets->transform_to_decimal($boundaries->network);
-		}
-		elseif($mask==31) {
-			$ip[] = $Subnets->transform_to_decimal($boundaries->network);
-			$ip[] = $Subnets->transform_to_decimal($boundaries->broadcast);
-		}
-		else {
-			//set loop limits
-			$start = gmp_strval(gmp_add($Subnets->transform_to_decimal($boundaries->network),1));
-			$stop  = gmp_strval($Subnets->transform_to_decimal($boundaries->broadcast));
-			//loop
-			for($m=$start; $m<$stop; $m++) {
-				$ip[] = $m;
-			}
-		}
 		//return
 		return $ip;
 	}
@@ -800,12 +779,13 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	public function prepare_addresses_to_discover_subnet ($subnet) {
-		//set subnet / mask
-		$subnet_parsed = explode("/", $subnet);
+		# initialize classes
+		$Subnets   = new Subnets ($this->Database);
+
 		# result
-		$ip = $this->get_all_possible_subnet_addresses ($subnet_parsed[0], $subnet_parsed[1]);
+		$ip = $Subnets->get_all_possible_subnet_addresses ($subnet);
 		//none to scan?
-		if(sizeof($ip)==0)									{ die(json_encode(array("status"=>1, "error"=>"Didn't find any address to scan!"))); }
+		if(sizeof($ip)==0)									{ die(json_encode(array("status"=>1, "error"=>_("Didn't find any address to scan!")))); }
 		//result
 		return $ip;
 	}

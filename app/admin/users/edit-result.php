@@ -58,7 +58,7 @@ if((strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add") && $auth_method
 # general checks
 if(strlen(@$_POST['real_name'])==0)										{ $Result->show("danger", _("Real name field is mandatory!"), true); }
 # email format must be valid
-if (!$Result->validate_email(@$_POST['email'])) 						{ $Result->show("danger", _("Invalid email address!"), true); }
+if (!$Tools->validate_email(@$_POST['email'])) 						{ $Result->show("danger", _("Invalid email address!"), true); }
 
 # username must not already exist (if action is add)
 if ($_POST['action']=="add") {
@@ -94,7 +94,7 @@ if(sizeof($myFields) > 0) {
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", '"'.$myField['name'].'" can not be empty!', true); }
+		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 	}
 }
 
@@ -102,6 +102,7 @@ if(sizeof($myFields) > 0) {
 /* update */
 
 # formulate update values
+# nothing to do here for l10n, the content of the array goes into the database
 $values = array(
 				"id"             =>@$_POST['userId'],
 				"real_name"      =>$_POST['real_name'],
@@ -161,8 +162,12 @@ foreach ($User->get_modules_with_permissions() as $m) {
 $values['module_permissions'] = json_encode($permissions);
 
 # execute
-if(!$Admin->object_modify("users", $_POST['action'], "id", $values))	{ $Result->show("danger",  _("User $_POST[action] failed").'!', true); }
-else																	{ $Result->show("success", _("User $_POST[action] successfull").'!', false); }
+if(!$Admin->object_modify("users", $_POST['action'], "id", $values)) {
+    $Result->show("danger", _("User")." ".$_POST["action"]." "._("failed").'!', true);
+}
+else {
+    $Result->show("success", _("User")." ".$_POST["action"]." "._("successful").'!', false);
+}
 
 # mail user
 if($Admin->verify_checkbox(@$_POST['notifyUser'])!="0") { include("edit-notify.php"); }

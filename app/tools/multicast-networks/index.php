@@ -197,7 +197,7 @@ if ($subnets!==false) {
 
 		       		# print info button for hover
 		       		if(in_array('note', $selected_ip_fields)) {
-		        		if(!empty($address->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",$address->note)."'></td>"; }
+		        		if(!empty($address->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",$address->note)."'></i></td>"; }
 		        		else 										{ print "<td class='narrow'></td>"; }
 		        	}
 
@@ -221,7 +221,7 @@ if ($subnets!==false) {
 								print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 								// create html links
-								$address->{$myField['name']} = $Result->create_links($address->{$myField['name']}, $myField['type']);
+								$address->{$myField['name']} = $Tools->create_links($address->{$myField['name']}, $myField['type']);
 
 								//booleans
 								if($myField['type']=="tinyint(1)")	{

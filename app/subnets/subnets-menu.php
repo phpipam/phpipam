@@ -77,20 +77,18 @@ else {
 	    print "</div>";
     }
 
-	# header
-    print "<h4>"._('Available subnets')." <span class='pull-right' style='margin-right:5px;cursor:pointer;'><i class='fa fa-gray fa-sm $iconClass' rel='tooltip' data-placement='bottom' title='"._('Expand/compress all folders')."' id='expandfolders' data-action='$action'></i></span></h4>";
-    print "<hr>";
-
 	/* print subnets menu ---------- */
-	print "<div class='subnets'>";
-	# print links
-	$section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section'], false, false, array());
-	print $Subnets->print_subnets_menu($User->user, $section_subnets);
-	print "</div>";
+    if ($section['showSubnet'] == 1) {
+        # header
+        print "<h4>"._('Available subnets')." <span class='pull-right' style='margin-right:5px;cursor:pointer;'><i class='fa fa-gray fa-sm $iconClass' rel='tooltip' data-placement='bottom' title='"._('Expand/compress all folders')."' id='expandfolders' data-action='$action'></i></span></h4>";
+        print "<hr>";
 
-
+        if (!is_array($section_subnets))
+            $section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section'], false, false, []);
+        print $Subnets->print_subnets_menu($User->user, $section_subnets);
+    }
 	/* print VLAN menu ---------- */
-	if($section['showVLAN'] == 1 && $User->get_module_permissions ("vlan")>0) {
+	if($section['showVLAN'] == 1 && $User->get_module_permissions ("vlan")>=User::ACCESS_R) {
 		$vlans = $Sections->fetch_section_vlans($_GET['section']);
 
 		# if some is present
@@ -99,6 +97,8 @@ else {
 				# title
 				print "<hr><h4>"._('Associated VLANs')."</h4><hr>";
 				# create and print menu
+				if (!is_array($section_subnets))
+					$section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section'], false, false, []);
 				print $Subnets->print_vlan_menu($User->user, $vlans, $section_subnets, $_GET['section']);
 			print "</div>";
 		}
@@ -106,7 +106,7 @@ else {
 
 
 	/* print VRF menu ---------- */
-	if($User->settings->enableVRF==1 && $section['showVRF']==1 && $User->get_module_permissions ("vrf")>0) {
+	if($User->settings->enableVRF==1 && $section['showVRF']==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
 		$vrfs = $Sections->fetch_section_vrfs($_GET['section']);
 
 		# if some is present
@@ -115,6 +115,8 @@ else {
 				# title
 				print "<hr><h4>"._('Associated VRFs')."</h4><hr>";
 				# create and print menu
+				if (!is_array($section_subnets))
+					$section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section'], false, false, []);
 				print $Subnets->print_vrf_menu($User->user, $vrfs, $section_subnets, $_GET['section']);
 			print "</div>";
 		}

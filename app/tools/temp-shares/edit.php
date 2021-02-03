@@ -47,7 +47,7 @@ $share->code = $User->Crypto->generate_html_safe_token(32);
 $share->validity = date("Y-m-d H:i:s", strtotime("+1 day"));
 
 # set url for printing
-$url = $Result->createURL().create_link("temp_share",$share->code);
+$url = $Tools->createURL().create_link("temp_share",$share->code);
 
 ?>
 

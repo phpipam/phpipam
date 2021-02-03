@@ -1,5 +1,8 @@
 <?php
 
+# Check we have been included and not called directly
+require( dirname(__FILE__) . '/../../../functions/include-only.php' );
+
 /**
  *
  * Circuit settings
@@ -22,12 +25,12 @@ if($User->is_admin(false)) {
 	$circuit_options = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 
     foreach($circuit_options as $v) {
-	$html[] = " <a class='open_popup' data-script='app/admin/circuits/edit-options.php' data-action='delete' data-type='type' data-op_id='$v->id' data-value='$v->ctname' data-color='$v->ctcolor' data-pattern='$v->ctpattern' href='' rel='tooltip' data-placement='right' title='Remove option'>";
-	$html[] = "    <span class='badge badge1' style='color:white;background:$v->ctcolor !important'><i class='fa fa-remove'></i> $v->ctname ($v->ctpattern Line)</span>";
-	$html[] = "</a><br>";
+        $html[] = " <a class='open_popup' data-script='app/admin/circuits/edit-options.php' data-action='delete' data-type='type' data-op_id='$v->id' data-value='$v->ctname' data-color='$v->ctcolor' data-pattern='$v->ctpattern' href='' rel='tooltip' data-placement='right' title='"._("Remove option")."'>";
+        $html[] = "    <span class='badge badge1' style='color:white;background:$v->ctcolor !important'><i class='fa fa-remove'></i> $v->ctname ($v->ctpattern Line)</span>";
+        $html[] = "</a><br>";
     }
     $html[] = "<br>";
-    $html[] = " <a class='open_popup' data-script='app/admin/circuits/edit-options.php' data-action='add' data-type='type' data-op_id='' data-value='' data-color=''  data-pattern=''  href='' rel='tooltip' data-placement='right'  title='Add option'>";
+    $html[] = " <a class='open_popup' data-script='app/admin/circuits/edit-options.php' data-action='add' data-type='type' data-op_id='' data-value='' data-color=''  data-pattern=''  href='' rel='tooltip' data-placement='right'  title='"._("Add option")."'>";
     $html[] = "    <span class='badge badge1 alert-success'><i class='fa fa-plus'></i> "._('Add option')."</span>";
     $html[] = "</a>";
 }
@@ -43,16 +46,16 @@ print implode("\n", $html);
 
 /* fetch all custom fields */
 $custom_tables = array(
-						"circuitProviders" => "Circuit providers",
-						"circuits"         => "Circuits",
-						"circuitsLogical"  => "Logical circuits"
+						"circuitProviders" => _("Circuit providers"),
+						"circuits"         => _("Circuits"),
+						"circuitsLogical"  => _("Logical circuits")
 						);
 # create array
 foreach($custom_tables as $k=>$f) {
-	$custom_fields[$k]				= $Tools->fetch_custom_fields($k);
-	$custom_fields_numeric[$k]		= $Tools->fetch_custom_fields_numeric($k);
-	$custom_fields[$k]['title'] 	= "Custom $f fields";
-	$custom_fields[$k]['tooltip']	= "Add new custom $f field";
+	$custom_fields[$k]            = $Tools->fetch_custom_fields($k);
+	$custom_fields_numeric[$k]    = $Tools->fetch_custom_fields_numeric($k);
+	$custom_fields[$k]['title']   = _("Custom")." ".$f." "._("fields");
+	$custom_fields[$k]['tooltip'] = _("Add new custom")." ".$f." "._("field");
 }
 ?>
 
@@ -122,7 +125,7 @@ foreach($custom_fields as $k=>$cf) {
 			print "<tr class='$class'>";
 
 			# ordering
-			if (( ($m+1) != $size) ) 	{ print "<td style='width:10px;'><button class='btn btn-xs btn-default down' data-direction='down' data-table='$table' rel='tooltip' title='Move down' data-fieldname='".$custom_fields_numeric[$table][$m]['name']."' data-nextfieldname='".$custom_fields_numeric[$table][$m+1]['name']."'><i class='fa fa-chevron-down'></i></button></td>";	}
+			if (( ($m+1) != $size) ) 	{ print "<td style='width:10px;'><button class='btn btn-xs btn-default down' data-direction='down' data-table='$table' rel='tooltip' title='"._("Move down")."' data-fieldname='".$custom_fields_numeric[$table][$m]['name']."' data-nextfieldname='".$custom_fields_numeric[$table][$m+1]['name']."'><i class='fa fa-chevron-down'></i></button></td>";	}
 			else 						{ print "<td style='width:10px;'></td>";}
 
 			print "<td class='name'>".$Tools->print_custom_field_name ($f['name'])."</td>";

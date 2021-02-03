@@ -109,7 +109,7 @@ $locations = $Tools->fetch_all_objects ("locations", "name");
 
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 /* bootstrap switch */
 var switch_options = {
@@ -191,7 +191,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		<div class="input-group">
 			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print $Subnets->transform_address($address['ip_addr'], "dotted");; if(is_numeric($_POST['stopIP'])>0) print "-".$Subnets->transform_address($_POST['stopIP'],"dotted"); ?>" placeholder="<?php print _('IP address'); ?>">
     		<span class="input-group-addon" style="border-left:none;">
-    			<a class="ping_ipaddress ping_ipaddress_new" data-subnetid="<?php print $subnetId; ?>" data-id="" href="#" rel="tooltip" data-container="body" title="" data-original-title="Check availability">
+    			<a class="ping_ipaddress ping_ipaddress_new" data-subnetid="<?php print $subnetId; ?>" data-id="" href="#" rel="tooltip" data-container="body" title="" data-original-title="<?php print _('Check availability'); ?>">
  					<i class="fa fa-gray fa-cogs"></i>
     			</a>
  			</span>
@@ -214,10 +214,6 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 			<?php
 			if (strpos($_SERVER['HTTP_REFERER'], "verify-database")!=0) { print "<input type='hidden' name='verifydatabase' value='yes'>"; }
 			?>
-
-			<?php if($action=="edit" || $action=="delete") { ?>
-			<input type="hidden" name="nostrict" value="yes">
-			<?php }  ?>
     	</td>
 	</tr>
 
@@ -438,7 +434,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	print "</tr>";
 
 	// customer
-	if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+	if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 
 		print '<tr>'. "\n";
 		print '	<td>'._('Customer').'</td>'. "\n";
@@ -483,7 +479,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	if(!isset($address['port'])) 	{$address['port'] = "";}
 
 	# both are active
-	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>0) {
+	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
 
 		// set star if field is required
 		$required = in_array("switch", $required_ip_fields) ? " *" : "";
@@ -536,17 +532,17 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 
     // location
-    if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
+    if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
 	<tr>
 		<td>
 			<?php
 			// set star if field is required
-			$required = in_array("location_item", $required_ip_fields) ? " *" : "";
+			$required = in_array("location", $required_ip_fields) ? " *" : "";
 			print _('Location').$required;
 			?>
 			</td>
 		<td>
-			<select name="location_item" class="form-control input-sm input-w-auto">
+			<select name="location" class="form-control input-sm input-w-auto">
 				<?php if($required=="") { ?>
     			<option value="0"><?php print _("None"); ?></option>
     			<?php } ?>
@@ -606,96 +602,14 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		}
 
 		# count datepickers
-		$timeP = 0;
-
-		# all my fields
+		$timepicker_index = 0;
 		foreach($custom_fields as $field) {
-			# replace spaces with |
-			$field['nameNew'] = str_replace(" ", "___", $field['name']);
-
-			# required
-			if($field['Null']=="NO")	{ $required = "*"; }
-			else						{ $required = ""; }
-
-			# set default value !
-			if ($_POST['action']=="add" || $_POST['action']=="all-add")	{ $address[$field['name']] = $field['Default']; }
+			$custom_input = $Tools->create_custom_field_input ($field, $address, $timepicker_index);
+			$timepicker_index = $custom_input['timepicker_index'];
 
 			print '<tr>'. "\n";
-			print '	<td>'. $Tools->print_custom_field_name ($field['name']) .' '.$required.'</td>'. "\n";
-			print '	<td>'. "\n";
-
-			//set type
-			if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
-				//parse values
-				$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
-				//null
-				if($field['Null']!="NO") { array_unshift($tmp, ""); }
-
-				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
-				foreach($tmp as $v) {
-					if($v==@$address[$field['name']])	{ print "<option value='$v' selected='selected'>$v</option>"; }
-					else								{ print "<option value='$v'>$v</option>"; }
-				}
-				print "</select>";
-			}
-			//date and time picker
-			elseif($field['type'] == "date" || $field['type'] == "datetime") {
-				// just for first
-				if($timeP==0) {
-					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css?v='.SCRIPT_PREFIX.'">';
-					print '<script src="js/bootstrap-datetimepicker.min.js?v='.SCRIPT_PREFIX.'"></script>';
-					print '<script>';
-					print '$(document).ready(function() {';
-					//date only
-					print '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';
-					//date + time
-					print '	$(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );';
-
-					print '})';
-					print '</script>';
-				}
-				$timeP++;
-
-				//set size
-				if($field['type'] == "date")	{ $size = 10; $class='datepicker';		$format = "yyyy-MM-dd"; }
-				else							{ $size = 19; $class='datetimepicker';	$format = "yyyy-MM-dd"; }
-
-				//field
-				if(!isset($address[$field['name']]))	{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" '.$delete.' rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
-				else									{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $address[$field['name']]. '" '.$delete.' rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
-			}
-			//boolean
-			elseif($field['type'] == "tinyint(1)") {
-				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
-				$tmp = array(0=>"No",1=>"Yes");
-				//null
-				if($field['Null']!="NO") { $tmp[2] = ""; }
-
-				foreach($tmp as $k=>$v) {
-					if(strlen(@$address[$field['name']])==0 && $k==2)	{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
-					elseif($k==@$address[$field['name']])				{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
-					else												{ print "<option value='$k'>"._($v)."</option>"; }
-				}
-				print "</select>";
-			}
-			//text
-			elseif($field['type'] == "text") {
-				print ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" '.$delete.' rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. $address[$field['name']]. '</textarea>'. "\n";
-			}
-			//default - input field
-			else {
-                // max length
-                $maxlength = 0;
-                if(strpos($field['type'],"varchar")!==false) {
-                    $maxlength = str_replace(array("varchar","(",")"),"", $field['type']);
-                }
-                // fix maxlength=0
-                $maxlength = $maxlength==0 ? "" : $maxlength;
-                // print
-				print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $address[$field['name']]. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'">'. "\n";
-			}
-
-			print '	</td>'. "\n";
+			print " <td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
+			print " <td>".$custom_input['field']."</td>";
 			print '</tr>'. "\n";
 		}
 	}
@@ -715,36 +629,6 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
         </td>
     </tr>
     <?php } ?>
-
-	<?php
-	#get type
-	 $type = $Addresses->identify_address ($subnet['subnet']);
-
-	 if($subnet['mask'] < 31 && ($action=='add' ||  substr($action, 0,4)=="all-") && $type == "IPv4" ) { ?>
-	 <!-- ignore NW /BC checks -->
-	 <tr>
-		<td><?php print _('Not strict'); ?></td>
-		<td>
-		<div class='checkbox info2'>
-			<input type="checkbox" name="nostrict" value="yes"><?php print _('Permit adding network/broadcast as IP'); ?>
-		</div>
-		</td>
-	</tr>
-	<?php } ?>
-
-	<?php
-	 if($subnet['mask'] < 127 && $action=='add' && $type == "IPv6" ) { ?>
-	 <!-- ignore NW /BC checks -->
-	 <tr>
-		<td><?php print _('Not strict'); ?></td>
-		<td>
-		<div class='checkbox info2'>
-			<input type="checkbox" name="nostrict" value="yes"><?php print _('Permit adding network/broadcast as IP'); ?>
-		</div>
-		</td>
-	</tr>
-	<?php } ?>
-
 
 </table>	<!-- end edit ip address table -->
 <?php if($config['split_ip_custom_fields']===true) {

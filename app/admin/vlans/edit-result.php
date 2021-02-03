@@ -20,10 +20,10 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("vlan", 2, true, false);
+    $User->check_module_permissions ("vlan", User::ACCESS_RW, true, false);
 }
 else {
-    $User->check_module_permissions ("vlan", 3, true, false);
+    $User->check_module_permissions ("vlan", User::ACCESS_RWA, true, false);
 }
 
 # strip input tags
@@ -97,7 +97,7 @@ if($User->settings->enableCustomers=="1") {
 
 # update
 if(!$Admin->object_modify("vlans", $_POST['action'], "vlanId", $values))	{ $Result->show("danger",  _("Failed to $_POST[action] VLAN").'!', true); }
-else																		{ $Result->show("success", _("VLAN $_POST[action] successfull").'!', false); }
+else																		{ $Result->show("success", _("VLAN $_POST[action] successful").'!', false); }
 
 # remove all references if delete
 if($_POST['action']=="delete") { $Admin->remove_object_references ("subnets", "vlanId", $_POST['vlanid']); }

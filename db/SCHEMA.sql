@@ -21,14 +21,14 @@ CREATE TABLE `customers` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(128) NOT NULL DEFAULT '',
   `address` varchar(255) DEFAULT NULL,
-  `postcode` int(8) DEFAULT NULL,
+  `postcode` VARCHAR(32) NULL DEFAULT NULL,
   `city` varchar(255) DEFAULT NULL,
   `state` varchar(255) DEFAULT NULL,
   `lat` varchar(12) DEFAULT NULL,
   `long` varchar(12) DEFAULT NULL,
   `contact_person` text DEFAULT NULL,
   `contact_phone` varchar(32) DEFAULT NULL,
-  `contact_mail` varchar(255) DEFAULT NULL,
+  `contact_mail` varchar(254) DEFAULT NULL,
   `note` text DEFAULT NULL,
   `status` set('Active','Reserved','Inactive') DEFAULT 'Active',
   PRIMARY KEY (`id`),
@@ -44,7 +44,7 @@ CREATE TABLE `ipaddresses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `subnetId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `ip_addr` varchar(100) NOT NULL,
-  `is_gateway` TINYINT(1)  NULL  DEFAULT '0',
+  `is_gateway` BOOL NOT NULL DEFAULT '0',
   `description` varchar(64) DEFAULT NULL,
   `hostname` varchar(255) DEFAULT NULL,
   `mac` varchar(20) DEFAULT NULL,
@@ -55,8 +55,8 @@ CREATE TABLE `ipaddresses` (
   `port` varchar(32) DEFAULT NULL,
   `note` text,
   `lastSeen` DATETIME  NULL  DEFAULT '1970-01-01 00:00:01',
-  `excludePing` BINARY  NULL  DEFAULT '0',
-  `PTRignore` BINARY  NULL  DEFAULT '0',
+  `excludePing` BOOL NOT NULL DEFAULT '0',
+  `PTRignore` BOOL NOT NULL DEFAULT '0',
   `PTR` INT(11)  UNSIGNED  NULL  DEFAULT '0',
   `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
@@ -108,6 +108,7 @@ CREATE TABLE `requests` (
   `subnetId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `ip_addr` varchar(100) DEFAULT NULL,
   `description` varchar(64) DEFAULT NULL,
+  `mac` varchar(20) DEFAULT NULL,
   `hostname` varchar(255) DEFAULT NULL,
   `state` INT  NULL  DEFAULT '2',
   `owner` varchar(128) DEFAULT NULL,
@@ -134,6 +135,7 @@ CREATE TABLE `sections` (
   `subnetOrdering` VARCHAR(16)  NULL  DEFAULT NULL,
   `order` INT(3)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
+  `showSubnet` BOOL NOT NULL DEFAULT '1',
   `showVLAN` BOOL  NOT NULL  DEFAULT '0',
   `showVRF` BOOL  NOT NULL  DEFAULT '0',
   `showSupernetOnly` BOOL  NOT NULL  DEFAULT '0',
@@ -156,7 +158,7 @@ CREATE TABLE `settings` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `siteTitle` varchar(64) DEFAULT NULL,
   `siteAdminName` varchar(64) DEFAULT NULL,
-  `siteAdminMail` varchar(64) DEFAULT NULL,
+  `siteAdminMail` varchar(254) DEFAULT NULL,
   `siteDomain` varchar(32) DEFAULT NULL,
   `siteURL` varchar(64) DEFAULT NULL,
   `siteLoginText` varchar(128) DEFAULT NULL,
@@ -179,6 +181,7 @@ CREATE TABLE `settings` (
   `enablePSTN` TINYINT(1)  NULL  DEFAULT '0',
   `enableChangelog` TINYINT(1)  NOT NULL  DEFAULT '1',
   `enableCustomers` TINYINT(1)  NOT NULL  DEFAULT '1',
+  `enableVaults` TINYINT(1)  NOT NULL  DEFAULT '1',
   `link_field` VARCHAR(32)  NULL  DEFAULT '0',
   `version` varchar(5) DEFAULT NULL,
   `dbversion` INT(8) NOT NULL DEFAULT '0',
@@ -199,9 +202,9 @@ CREATE TABLE `settings` (
   `api` BINARY  NOT NULL  DEFAULT '0',
   `scanPingPath` VARCHAR(64)  NULL  DEFAULT '/bin/ping',
   `scanFPingPath` VARCHAR(64)  NULL  DEFAULT '/bin/fping',
-  `scanPingType` SET('ping','pear','fping')  NOT NULL  DEFAULT 'ping',
+  `scanPingType` ENUM('none','ping','pear','fping') NOT NULL DEFAULT 'ping',
   `scanMaxThreads` INT(4)  NULL  DEFAULT '128',
-  `prettyLinks` SET("Yes","No")  NOT NULL  DEFAULT 'No',
+  `prettyLinks` ENUM('Yes','No') NOT NULL DEFAULT 'No',
   `hiddenCustomFields` text NULL,
   `inactivityTimeout` INT(5)  NOT NULL  DEFAULT '3600',
   `updateTags` TINYINT(1)  NULL  DEFAULT '0',
@@ -211,13 +214,13 @@ CREATE TABLE `settings` (
   `decodeMAC` TINYINT(1)  NULL  DEFAULT '1',
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
-  `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
+  `log` ENUM('Database','syslog', 'both') NOT NULL DEFAULT 'Database',
   `subnetView` TINYINT  NOT NULL  DEFAULT '0',
   `enableCircuits` TINYINT(1)  NULL  DEFAULT '1',
   `enableRouting` TINYINT(1)  NULL  DEFAULT '0',
   `permissionPropagate` TINYINT(1)  NULL  DEFAULT '1',
   `passwordPolicy` VARCHAR(1024)  NULL  DEFAULT '{\"minLength\":8,\"maxLength\":0,\"minNumbers\":0,\"minLetters\":0,\"minLowerCase\":0,\"minUpperCase\":0,\"minSymbols\":0,\"maxSymbols\":0,\"allowedSymbols\":\"#,_,-,!,[,],=,~\"}',
-  `2fa_provider` SET('none','Google_Authenticator')  NULL  DEFAULT 'none',
+  `2fa_provider` ENUM('none','Google_Authenticator') NULL DEFAULT 'none',
   `2fa_name` VARCHAR(32)  NULL  DEFAULT 'phpipam',
   `2fa_length` INT(2)  NULL  DEFAULT '16',
   `2fa_userchange` BOOL  NOT NULL  DEFAULT '1',
@@ -235,15 +238,15 @@ DROP TABLE IF EXISTS `settingsMail`;
 
 CREATE TABLE `settingsMail` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `mtype` set('localhost','smtp') NOT NULL DEFAULT 'localhost',
-  `msecure` SET('none','ssl','tls')  NOT NULL  DEFAULT 'none',
-  `mauth` set('yes','no') NOT NULL DEFAULT 'no',
+  `mtype` ENUM('localhost','smtp') NOT NULL DEFAULT 'localhost',
+  `msecure` ENUM('none','ssl','tls')  NOT NULL  DEFAULT 'none',
+  `mauth` ENUM('yes','no') NOT NULL DEFAULT 'no',
   `mserver` varchar(128) DEFAULT NULL,
   `mport` int(5) DEFAULT '25',
-  `muser` varchar(64) DEFAULT NULL,
-  `mpass` varchar(64) DEFAULT NULL,
-  `mAdminName` varchar(64) DEFAULT NULL,
-  `mAdminMail` varchar(64) DEFAULT NULL,
+  `muser` varchar(254) DEFAULT NULL,
+  `mpass` varchar(128) DEFAULT NULL,
+  `mAdminName` varchar(128) DEFAULT NULL,
+  `mAdminMail` varchar(254) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -266,21 +269,22 @@ CREATE TABLE `subnets` (
   `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,
   `vrfId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `masterSubnetId` INT(11)  UNSIGNED  NOT NULL default 0,
-  `allowRequests` tinyint(1) DEFAULT '0',
+  `allowRequests` BOOL NOT NULL DEFAULT '0',
   `vlanId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
-  `showName` tinyint(1) DEFAULT '0',
+  `showName` BOOL NOT NULL DEFAULT '0',
   `device` INT  UNSIGNED  NULL  DEFAULT '0',
   `permissions` varchar(1024) DEFAULT NULL,
-  `pingSubnet` BOOL NULL  DEFAULT '0',
-  `discoverSubnet` BINARY(1)  NULL  DEFAULT '0',
-  `resolveDNS` TINYINT(1)  NULL  DEFAULT '0',
-  `DNSrecursive` TINYINT(1)  NULL  DEFAULT '0',
-  `DNSrecords` TINYINT(1)  NULL  DEFAULT '0',
+  `pingSubnet` BOOL NOT NULL DEFAULT '0',
+  `discoverSubnet` BOOL NOT NULL DEFAULT '0',
+  `resolveDNS` BOOL NOT NULL DEFAULT '0',
+  `DNSrecursive` BOOL NOT NULL DEFAULT '0',
+  `DNSrecords` BOOL NOT NULL DEFAULT '0',
   `nameserverId` INT(11) NULL DEFAULT '0',
   `scanAgent` INT(11)  DEFAULT NULL,
   `customer_id` INT(11) unsigned NULL default NULL,
-  `isFolder` BOOL NULL  DEFAULT '0',
-  `isFull` TINYINT(1)  NULL  DEFAULT '0',
+  `isFolder` BOOL NOT NULL DEFAULT '0',
+  `isFull` BOOL NOT NULL DEFAULT '0',
+  `isPool` BOOL NOT NULL DEFAULT '0',
   `state` INT(3)  NULL  DEFAULT '2',
   `threshold` int(3)  NULL  DEFAULT 0,
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
@@ -370,28 +374,28 @@ CREATE TABLE `users` (
   `groups` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
   `role` text CHARACTER SET utf8,
   `real_name` varchar(128) CHARACTER SET utf8 DEFAULT NULL,
-  `email` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
+  `email` varchar(254) CHARACTER SET utf8 DEFAULT NULL,
   `domainUser` binary(1) DEFAULT '0',
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',
   `lang` INT(11) UNSIGNED  NULL  DEFAULT '9',
   `favourite_subnets` VARCHAR(1024)  NULL  DEFAULT NULL,
-  `disabled` SET('Yes','No')  NOT NULL  DEFAULT 'No',
-  `mailNotify` SET('Yes','No')  NULL  DEFAULT 'No',
-  `mailChangelog` SET('Yes','No')  NULL  DEFAULT 'No',
-  `passChange` SET('Yes','No')  NOT NULL  DEFAULT 'No',
+  `disabled` ENUM('Yes','No')  NOT NULL  DEFAULT 'No',
+  `mailNotify` ENUM('Yes','No')  NOT NULL  DEFAULT 'No',
+  `mailChangelog` ENUM('Yes','No')  NOT NULL  DEFAULT 'No',
+  `passChange` ENUM('Yes','No')  NOT NULL  DEFAULT 'No',
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   `lastLogin` TIMESTAMP  NULL,
   `lastActivity` TIMESTAMP  NULL,
-  `compressOverride` SET('default','Uncompress') NOT NULL DEFAULT 'default',
+  `compressOverride` ENUM('default','Uncompress') NOT NULL DEFAULT 'default',
   `hideFreeRange` tinyint(1) DEFAULT '0',
-  `menuType` SET('Static','Dynamic')  NULL  DEFAULT 'Dynamic',
+  `menuType` ENUM('Static','Dynamic')  NOT NULL  DEFAULT 'Dynamic',
   `menuCompact` TINYINT  NULL  DEFAULT '1',
   `2fa` BOOL  NOT NULL  DEFAULT '0',
   `2fa_secret` VARCHAR(32)  NULL  DEFAULT NULL,
   `theme` VARCHAR(32)  NULL  DEFAULT '',
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
-  `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{"vlan":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1","locations":"1","devices":"1"}',
+  `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{"vlan":"1","l2dom":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1","locations":"1","devices":"1"}',
   `compress_actions` TINYINT(1)  NULL  DEFAULT '1',
   PRIMARY KEY (`username`),
   UNIQUE KEY `id_2` (`id`)
@@ -415,18 +419,20 @@ CREATE TABLE `lang` (
 /* insert default values */
 INSERT INTO `lang` (`l_id`, `l_code`, `l_name`)
 VALUES
-	(1, 'en_GB.UTF-8', 'English'),
-	(2, 'sl_SI.UTF-8', 'Slovenščina'),
-	(3, 'fr_FR.UTF-8', 'Français'),
-	(4, 'nl_NL.UTF-8', 'Nederlands'),
-	(5, 'de_DE.UTF-8', 'Deutsch'),
-	(6, 'pt_BR.UTF-8', 'Brazil'),
-	(7,	'es_ES.UTF-8', 'Español'),
-	(8, 'cs_CZ.UTF-8', 'Czech'),
-	(9, 'en_US.UTF-8', 'English (US)'),
-  (10,'ru_RU.UTF-8', 'Russian'),
-  (11,'zh_CN.UTF-8', 'Chinese'),
-  (12,'ja_JP.UTF-8', 'Japanese');
+   (1, 'en_GB.UTF-8', 'English'),
+   (2, 'sl_SI.UTF-8', 'Slovenščina'),
+   (3, 'fr_FR.UTF-8', 'Français'),
+   (4, 'nl_NL.UTF-8', 'Nederlands'),
+   (5, 'de_DE.UTF-8', 'Deutsch'),
+   (6, 'pt_BR.UTF-8', 'Brazil'),
+   (7, 'es_ES.UTF-8', 'Español'),
+   (8, 'cs_CZ.UTF-8', 'Czech'),
+   (9, 'en_US.UTF-8', 'English (US)'),
+  (10, 'ru_RU.UTF-8', 'Russian'),
+  (11, 'zh_CN.UTF-8', 'Chinese'),
+  (12, 'ja_JP.UTF-8', 'Japanese'),
+  (13, 'zh_TW.UTF-8', 'Chinese traditional (繁體中文)'),
+  (14, 'it_IT.UTF-8', 'Italian');
 
 
 # Dump of table vlans
@@ -630,9 +636,9 @@ DROP TABLE IF EXISTS `usersAuthMethod`;
 
 CREATE TABLE `usersAuthMethod` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `type` set('local','http','AD','LDAP','NetIQ','Radius','SAML2') NOT NULL DEFAULT 'local',
-  `params` varchar(2048) DEFAULT NULL,
-  `protected` set('Yes','No') NOT NULL DEFAULT 'Yes',
+  `type` ENUM('local','http','AD','LDAP','NetIQ','Radius','SAML2') NOT NULL DEFAULT 'local',
+  `params` text DEFAULT NULL,
+  `protected` ENUM('Yes','No') NOT NULL DEFAULT 'Yes',
   `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -990,9 +996,38 @@ CREATE TABLE `routing_subnets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+# Dump of table vaults
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `vaults`;
+
+CREATE TABLE `vaults` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `type` enum('passwords','certificates') NOT NULL DEFAULT 'passwords',
+  `description` text,
+  `test` char(128) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table vaultItems
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `vaultItems`;
+
+CREATE TABLE `vaultItems` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `vaultId` int(11) unsigned NOT NULL,
+  `type` enum('password','certificate') NOT NULL DEFAULT 'password',
+  `type_certificate` enum('public','pkcs12','certificate','website') NOT NULL DEFAULT 'public',
+  `values` text,
+  PRIMARY KEY (`id`),
+  KEY `vaultId` (`vaultId`),
+  CONSTRAINT `vaultItems_ibfk_1` FOREIGN KEY (`vaultId`) REFERENCES `vaults` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
-UPDATE `settings` SET `version` = "1.42";
-UPDATE `settings` SET `dbversion` = 25;
+UPDATE `settings` SET `version` = "1.5";
+UPDATE `settings` SET `dbversion` = 36;

@@ -1,7 +1,7 @@
 <?php
 
-# Check we have been included via subnet-scan-excute.php and not called directly
-require("subnet-scan-check-included.php");
+# Check we have been included and not called directly
+require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
 /*
  * Discover new subnets with snmp
@@ -129,6 +129,7 @@ else {
 
     	//table
         print '<form id="editSubnetDetailsSNMPall">';
+        print "<input type='hidden' name='csrf_cookie' value='$csrf'>";
     	print "<table class='table table-striped table-top table-condensed' id='editSubnetDetailsSNMPallTable'>";
 
     	// titles
@@ -211,7 +212,6 @@ else {
                     		print " <input type='hidden' name='masterSubnetId-$m' value='$_POST[subnetId]'>";
                             else
                     		print " <input type='hidden' name='masterSubnetId-$m' value='0'>";
-                    		print " <input type='hidden' name='csrf_cookie' value='$csrf'>";
                     		print "</td>";
 
                     		//vlan

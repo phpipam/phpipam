@@ -16,9 +16,14 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# check if $_POST input data has been truncated (canary=true input dropped)
+if(!isset($_POST['canary']))
+	$Result->show("danger", _("Number of discovered hosts exceed maximum possible defined by php.ini")."<br>"._("Please increase your php.ini setting:"). " `max_input_vars` = ".ini_get('max_input_vars'), true);
+else
+	unset($_POST['canary']);
+
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "scan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-
 
 $type = $_POST['type'];
 

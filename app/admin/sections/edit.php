@@ -99,9 +99,21 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 			</td>
 		</tr>
 
+		<!-- Show Subnets -->
+		<tr>
+			<td><?php print _('Show subnet menu'); ?></td>
+			<td colspan="2">
+				<select name="showSubnet" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($_POST['action']=="delete") print 'disabled="disabled"'; ?>>
+					<option value="1"><?php print _('Yes'); ?></option>
+					<option value="0" <?php if(@$section['showSubnet'] == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
+				</select>
+				<span class="help-inline info2"><?php print _('Show list of section subnets in subnet list'); ?></span>
+			</td>
+		</tr>
+
 		<!-- Show VLANs -->
 		<tr>
-			<td><?php print _('Show VLANs'); ?></td>
+			<td><?php print _('Show VLAN menu'); ?></td>
 			<td colspan="2">
 				<select name="showVLAN" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($_POST['action']=="delete") print 'disabled="disabled"'; ?>>
 					<option value="1"><?php print _('Yes'); ?></option>
@@ -113,7 +125,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 
 		<!-- Show VRFs -->
 		<tr>
-			<td><?php print _('Show VRFs'); ?></td>
+			<td><?php print _('Show VRF menu'); ?></td>
 			<td colspan="2">
 				<select name="showVRF" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($_POST['action']=="delete") print 'disabled="disabled"'; ?>>
 					<option value="1"><?php print _('Yes'); ?></option>
@@ -255,7 +267,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 </div>
 
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 /* bootstrap switch */
 var switch_options = {

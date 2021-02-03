@@ -54,7 +54,7 @@ if ($User->twofa_required()===false || $User->user->{'2fa'}==0) {
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script type="text/javascript" src="js/dieIE.js"></script>
+	<script src="js/dieIE.js"></script>
 	<![endif]-->
 </head>
 

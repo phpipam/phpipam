@@ -15,6 +15,7 @@ to be able to display javascript quickly and correctly.
 
 ## Branches
  - MASTER: Current development release
+ - 1.4: Productional branch for 1.4.x release
  - 1.3: Productional branch for 1.3.x release
  - 1.2: Productional branch for 1.2.x release (obsolete)
  - Other branches: Feature testing
@@ -25,6 +26,9 @@ Just run `php functions/scripts/reset-admin-password.php` in the cli and enter y
 ## What are the credentials for a fresh install?
 The Default credentials for a new instance of phpIPAM are the same as the credentials for
 the demo page: `Admin / ipamadmin`
+
+## Docker
+Community maintained docker images are available at https://hub.docker.com/u/phpipam
 
 ## Changelog
 See misc/CHANGELOG

@@ -49,11 +49,12 @@ $Scan->ping_set_exit(true);
 $Scan->set_debugging(false);
 // fetch agent
 $agent = $Tools->fetch_object("scanAgents", "id", 1);
-// set address types array
-$Tools->get_addresses_types ();
 // change scan type?
 if(@$config['ping_check_method'])
 $Scan->reset_scan_method ($config['ping_check_method']);
+
+# Check if scanning has been disabled
+if($Scan->icmp_type=="none") { $Result->show("danger", _('Scanning disabled').' (scanPingType=None)', true, true); }
 
 // set ping statuses
 $statuses = explode(";", $Scan->settings->pingStatus);
@@ -462,7 +463,7 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 
 	    		// reformat
 	    		$lastSeen = date("m/d H:i", strtotime($change['lastSeen']) );
-				$ago 	  = $lastSeen." (".$Result->sec2hms($timeDiff)." ago)";
+				$ago 	  = $lastSeen." (".$Tools->sec2hms($timeDiff)." ago)";
 			}
 	        // desc
 			$change['description'] = strlen($change['description'])>0 ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";

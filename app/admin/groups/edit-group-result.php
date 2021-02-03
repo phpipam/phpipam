@@ -57,7 +57,7 @@ if(sizeof($custom) > 0) {
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name']." can not be empty!", true); }
 
 		# save to update array
 		$update[$myField['name']] = $_POST[$myField['nameTest']];
@@ -75,8 +75,8 @@ if(isset($update)) {
 }
 
 /* try to execute */
-if(!$Admin->object_modify("userGroups", $_POST['action'], "g_id", $values)) { $Result->show("danger",  _("Group $_POST[action] error")."!", false); }
-else 					 													{ $Result->show("success", _("Group $_POST[action] success")."!", false); }
+if(!$Admin->object_modify("userGroups", $_POST['action'], "g_id", $values)) { $Result->show("danger",  _("Group")." ".$_POST["action"]." "._("error")."!", false); }
+else 					 													{ $Result->show("success", _("Group")." ".$_POST["action"]." "._("success")."!", false); }
 
 # from list of usernames provided from AD result if some user matches add him to group
 if (strlen($_POST['gmembers'])>0) {

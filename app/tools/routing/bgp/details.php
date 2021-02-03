@@ -1,7 +1,7 @@
 <?php
 
 # perm check
-$User->check_module_permissions ("routing", 1, true, false);
+$User->check_module_permissions ("routing", User::ACCESS_R, true, false);
 
 # check
 is_numeric($_GET['sPage']) ? : $Result->show("danger", _("Invalid ID"), true);

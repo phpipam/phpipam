@@ -44,7 +44,7 @@ if($_POST['action']!="delete") {
     	elseif ($_POST['app_lock_wait']<1)                                                                  { $error[] = "Invalid wait value"; }
 	}
 	# api_allow_unsafe check
-	if($_POST['app_security']=="none" && Config::get('api_allow_unsafe')!==true)											{ $error[] = "API server requires SSL. Please set \$api_allow_unsafe in config.php to override"; }
+	if($_POST['app_security']=="none" && Config::ValueOf('api_allow_unsafe')!==true)											{ $error[] = "API server requires SSL. Please set \$api_allow_unsafe in config.php to override"; }
 }
 
 # default lock_wait
@@ -70,6 +70,6 @@ else {
 					);
 
 	# execute
-	if(!$Admin->object_modify("api", $_POST['action'], "id", $values)) 	{ $Result->show("danger",  _("API $_POST[action] error"), true); }
-	else 																{ $Result->show("success", _("API $_POST[action] success"), true); }
+	if(!$Admin->object_modify("api", $_POST['action'], "id", $values)) 	{ $Result->show("danger",  _("API"). $_POST['action'] ._("error"), true); }
+	else 																{ $Result->show("success", _("API"). $_POST['action'] ._("success"), true); }
 }

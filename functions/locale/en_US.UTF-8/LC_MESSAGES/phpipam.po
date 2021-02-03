@@ -7698,7 +7698,7 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-msgid "Avalibility"
+msgid "Availability"
 msgstr ""
 
 msgid "Rack details"

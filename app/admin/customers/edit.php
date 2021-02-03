@@ -17,10 +17,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 # verify module permissions
 if($_POST['action']=="edit") {
-	$User->check_module_permissions ("customers", 2, true, true);
+	$User->check_module_permissions ("customers", User::ACCESS_RW, true, true);
 }
 else {
-	$User->check_module_permissions ("customers", 3, true, true);
+	$User->check_module_permissions ("customers", User::ACCESS_RWA, true, true);
 }
 
 # create csrf token
@@ -132,9 +132,8 @@ if($_POST['action']!="add") {
 			// readonly
 			$disabled = $readonly == "readonly" ? true : false;
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $customer, $_POST['action'], $timepicker_index, $disabled);
-    		// add datepicker index
-    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+    		$custom_input = $Tools->create_custom_field_input ($field, $customer, $timepicker_index, $disabled);
+    		$timepicker_index = $custom_input['timepicker_index'];
             // print
 			print "<tr>";
 			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";

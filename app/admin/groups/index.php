@@ -87,7 +87,7 @@ $colspanCustom = 0;
 	}
 	?>
 	</td>
-	<td><?php print _('All sections :'); ?> <span class="badge badge1 badge5">Read / Write</span></td>
+	<td><?php print _('All sections:'); ?> <span class="badge badge1 badge5"><?php print _("Read / Write"); ?></span></td>
 	<td colspan="<?php print 2+$colspanCustom; ?>"></td>
 </tr>
 

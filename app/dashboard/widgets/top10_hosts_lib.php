@@ -62,7 +62,7 @@ function top10_widget($type_ip, $type_percentage, $height, $slimit) {
 		print "</blockquote>";
 		#remove loading
 		?>
-		<script type="text/javascript">
+		<script>
 			$(document).ready(function() {
 				$("#<?php print $type_name; ?>").fadeOut('fast');
 			});
@@ -72,7 +72,7 @@ function top10_widget($type_ip, $type_percentage, $height, $slimit) {
 	}
 
 	?>
-	<script type="text/javascript">
+	<script>
 		$(function () {
 
 			var data = [

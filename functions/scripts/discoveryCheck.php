@@ -42,6 +42,10 @@ $Scan->set_debugging(false);
 // change scan type?
 if(@$config['discovery_check_method'])
 $Scan->reset_scan_method ($config['discovery_check_method']);
+
+# Check if scanning has been disabled
+if($Scan->icmp_type=="none") { $Result->show("danger", _('Scanning disabled').' (scanPingType=None)', true, true); }
+
 // set ping statuses
 $statuses = explode(";", $Scan->settings->pingStatus);
 // set mail override flag
@@ -249,8 +253,8 @@ foreach($scan_subnets as $s) {
 							"subnetId"    =>$s->id,
 							"ip_addr"     =>$ip,
 							"hostname"    =>$hostname['name'],
-							"description" =>"-- autodiscovered --",
-							"note"        =>"This host was autodiscovered on ".$nowdate,
+							"description" =>_("-- autodiscovered --"),
+							"note"        =>_("This host was autodiscovered on")." ".$nowdate,
 							"lastSeen"    =>$nowdate,
 							"state"       =>"2",
 							"action"      =>"add"
@@ -293,19 +297,19 @@ if($discovered>0 && $config['discovery_check_send_mail']) {
 		$phpipam_mail = new phpipam_mail($Scan->settings, $mail_settings);
 
 		// set subject
-		$subject	= "phpIPAM new addresses detected ".date("Y-m-d H:i:s");
+		$subject	= _("phpIPAM new addresses detected")." ".date("Y-m-d H:i:s");
 
 		//html
-		$content[] = "<h3>phpIPAM found $discovered new hosts</h3>";
+		$content[] = "<h3>"._("phpIPAM found")." $discovered "._("new hosts")."</h3>";
 		$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;border:1px solid gray;'>";
 		$content[] = "<tr>";
-		$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>IP</th>";
-		$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Hostname</th>";
-		$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Subnet</th>";
-		$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Section</th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>"._("IP")."</th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>"._("Hostname")."</th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>"._("Subnet")."</th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>"._("Section")."</th>";
 		$content[] = "</tr>";
 		//plain
-		$content_plain[] = "phpIPAM found $discovered new hosts\r\n------------------------------";
+		$content_plain[] = _("phpIPAM found")." $discovered "._("new hosts")."\r\n------------------------------";
 		//Changes
 		foreach($scan_subnets as $s) {
 			if(is_array($s->discovered)) {
@@ -345,8 +349,8 @@ if($discovered>0 && $config['discovery_check_send_mail']) {
 		//send
 		$phpipam_mail->Php_mailer->send();
 	} catch (phpmailerException $e) {
-		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
+		$Result->show_cli(_("Mailer Error").": ".$e->errorMessage(), true);
 	} catch (Exception $e) {
-		$Result->show_cli("Mailer Error: ".$e->getMessage(), true);
+		$Result->show_cli(_("Mailer Error").": ".$e->getMessage(), true);
 	}
 }

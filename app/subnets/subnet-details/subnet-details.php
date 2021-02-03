@@ -121,7 +121,7 @@ else {
 	</tr>
 	<?php } ?>
 
-	<?php if($User->get_module_permissions ("vlan")>0) { ?>
+	<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_R) { ?>
 	<tr>
 		<th><?php print _('VLAN'); ?></th>
 		<td>
@@ -134,7 +134,7 @@ else {
 		// domain
 		if (isset($vlan['domainId'])) {
     		$l2domain = $Tools->fetch_object("vlanDomains", "id", $vlan['domainId']);
-    		if($l2domain!==false)       { print " <span class='badge badge1 badge5' rel='tooltip' title='VLAN is in domain $l2domain->name'>$l2domain->name "._('Domain')." </span>"; }
+    		if($l2domain!==false)       { print " <span class='badge badge1 badge5' rel='tooltip' title='"._('VLAN is in domain')." $l2domain->name'>$l2domain->name "._('Domain')." </span>"; }
         }
 		?>
 		</td>
@@ -143,7 +143,7 @@ else {
 
 	<?php
 	# VRF
-	if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>0) {
+	if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
 		# get vrf details
 		$vrf = $Tools->fetch_object("vrf", "vrfId" ,$subnet['vrfId']);
 		# null
@@ -188,7 +188,7 @@ else {
 	</tr>
 
 	<!-- Customers -->
-	<?php if($User->get_module_permissions ("customers")>0) { ?>
+	<?php if($User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
 	<tr>
 		<th><?php print _('Customer'); ?></th>
 		<td>
@@ -212,7 +212,7 @@ else {
 	</tr>
 	<?php } ?>
 
-	<?php if($User->get_module_permissions ("devices")>0) { ?>
+	<?php if($User->get_module_permissions ("devices")>=User::ACCESS_R) { ?>
 	<!-- devices -->
 	<tr>
 		<th><?php print _('Device'); ?></th>
@@ -223,12 +223,14 @@ else {
 		if(!empty($subnet['device'])) {
 			# fetch recursive nameserver details
 			$device = $Tools->fetch_object("devices", "id", $subnet['device']);
-			if ($device!==false) {
-    			# rack
-    			if ($User->settings->enableRACK=="1" && strlen($device->rack)>0 && $User->get_module_permissions ("racks")>1) {
-        			$rack = $Tools->fetch_object("racks", "id", $device->rack);
-        			$rack_text = $rack===false ? "" : "<br><span class='badge badge1 badge5' style='padding-top:4px;'>$rack->name / "._('Position').": $device->rack_start "._("Size").": $device->rack_size U <i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackId='$rack->id' data-deviceId='$device->id'></i></span>";
-    			}
+			if (is_object($device)) {
+				# rack
+				if ($User->settings->enableRACK=="1" && strlen($device->rack)>0 && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
+					if (!is_object($Racks)) $Racks = new phpipam_rack ($Database);
+					$Racks->add_rack_start_print($device);
+					$rack = $Tools->fetch_object("racks", "id", $device->rack);
+					$rack_text = !is_object($rack) ? "" : "<br><span class='badge badge1 badge5' style='padding-top:4px;'>$rack->name / "._('Position').": $device->rack_start_print "._("Size").": $device->rack_size U <i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackId='$rack->id' data-deviceId='$device->id'></i></span>";
+				}
 				print "<a href='".create_link("tools","devices",$device->id)."'>".$device->hostname."</a>";
 				if (strlen($device->description)>0) {
 					print ' ('.$device->description.')';
@@ -248,7 +250,7 @@ else {
 	<?php } ?>
 
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
+	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
 	<tr>
 		<th><?php print _('Location'); ?></th>
 		<td>
@@ -271,13 +273,19 @@ else {
 	</tr>
     <?php } ?>
 
-    <?php if(@$subnet['isFull']=="1") { ?>
+    <?php if(@$subnet['isFull'] || @$subnet['isPool']) { ?>
     <tr>
         <td colspan="2"><hr></td>
     </tr>
     <tr>
         <th></th>
-        <td class="isFull"><?php print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as used"), false, false, true); ?></td>
+        <td class="isFull">
+        <?php
+        if ($subnet['isFull'])
+        print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as full"), false, false, true);
+        if ($subnet['isPool'])
+        print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as pool"), false, false, true);
+        ?></td>
     </tr>
     <?php } ?>
 
@@ -288,7 +296,7 @@ else {
     		<span class="text-muted">
     		<?php
     		if(strlen($subnet['editDate'])>1)  	{ print $subnet['editDate']; }
-    		else 								{ print "Never"; }
+    		else 								{ print _("Never"); }
     		?>
     		</span>
     	</td>
@@ -422,7 +430,7 @@ else {
 	}
 
 	# autocreate PTR records
-	if($User->settings->enablePowerDNS==1 && $subnet_permission==3 && $User->get_module_permissions ("pdns")>0) {
+	if($User->settings->enablePowerDNS==1 && $subnet_permission==3 && $User->get_module_permissions ("pdns")>=User::ACCESS_R) {
 		// initialize class
 		if ($subnet['DNSrecursive'] == 1 || $subnet['DNSrecords']==1) {
 			# powerDNS class
@@ -436,7 +444,7 @@ else {
 			$domain = $PowerDNS->fetch_domain_by_name ($zone);
 			// count PTR records
 			if ($domain!==false) {
-				if ($User->is_admin (false) || $User->check_module_permissions ("pdns", 3, false, false)) {
+				if ($User->check_module_permissions ("pdns", User::ACCESS_RWA, false, false)) {
 				$btns[] = "<div class='btn-group'>";
             if (preg_match("/^.*ip6.arpa$/", $domain->name)) {
 				   $btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("tools", "powerDNS", "reverse_v6", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
@@ -455,7 +463,7 @@ else {
 				$zone = "<span class='text-muted'>(domain $zone)</span> <span class='badge badge1 badge5'>".$PowerDNS->count_domain_records_by_type ($domain->id, "PTR")." records</span>";
 			}
 			else {
-				if ($User->is_admin () || $User->check_module_permissions ("pdns", 3, false, false)) {
+				if ($User->check_module_permissions ("pdns", User::ACCESS_RWA, false, false)) {
 				$btns[] = "<div class='btn-group'>";
 				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
 				$btns[] = "</div>";
@@ -503,7 +511,7 @@ else {
 					elseif($subnet[$key] == "1")	{ $html_custom[] = _("Yes"); }
 				}
 				else {
-					$html_custom[] = $Result->create_links($subnet[$key]);
+					$html_custom[] = $Tools->create_links($subnet[$key]);
 				}
 				$html_custom[] = "	</td>";
 				$html_custom[] = "</tr>";
@@ -691,7 +699,7 @@ else {
 		if($subnet_permission>1 && $User->settings->tempShare==1) {
         print "<a class='btn btn-xs btn-default open_popup' data-script='app/tools/temp-shares/edit.php' data-class='700' data-action='edit' data-id='$subnet[id]' data-type='subnets' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."'><i class='fa fa-share-alt'></i></a>";
 		}
-        print "<a class='mail_subnet btn btn-xs btn-default' href='#' data-id='$subnet[id]' rel='tooltip' data-container='body' title='' data-original-title='Send mail notification'>          <i class='fa fa-gray fa-envelope-o'></i></a>";
+        print "<a class='mail_subnet btn btn-xs btn-default' href='#' data-id='$subnet[id]' rel='tooltip' data-container='body' title='' data-original-title='"._('Send mail notification')."'>          <i class='fa fa-gray fa-envelope-o'></i></a>";
 	print "</div>";
 
 		# firewall address object actions

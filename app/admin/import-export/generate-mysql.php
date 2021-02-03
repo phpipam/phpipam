@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	Generate XLS file
+ *	Generate SQL file
  *********************************/
 
 /* functions */
@@ -14,7 +14,7 @@ $User 		= new User ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
-$mysqldump = Config::get('mysqldump_cli_binary', '/usr/bin/mysqldump');
+$mysqldump = Config::ValueOf('mysqldump_cli_binary', '/usr/bin/mysqldump');
 
 if ( !file_exists($mysqldump) ) {
     $filename = "error_message.txt";
@@ -24,7 +24,7 @@ if ( !file_exists($mysqldump) ) {
 } else {
     $filename = "phpipam_MySQL_dump_". date("Y-m-d") .".sql";
 
-    $db = Config::get('db');
+    $db = Config::ValueOf('db');
 
     $command      = "$mysqldump --opt -h '". $db['host'] ."' -u '". $db['user'] ."' -p'". $db['pass'] ."' '". $db['name'] ."'";
     $command_safe = "$mysqldump --opt -h '". $db['host'] ."' -u '". "<REDACTED>" ."' -p'". "<REDACTED>" ."' '". $db['name'] ."'";

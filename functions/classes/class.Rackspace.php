@@ -176,6 +176,31 @@ class phpipam_rack extends Tools {
     }
 
     /**
+     * Calculate and add rack_start_print
+     *
+     * @param   array|object  $devices
+     * @return  void
+     */
+    public function add_rack_start_print($devices) {
+        if (is_object($devices))
+            $devices = [$devices];
+
+        if (!is_array($devices))
+            return;
+
+        foreach($devices as $device) {
+            if (!property_exists($device, 'rack') || !property_exists($device, 'rack_start'))
+                continue;
+
+            $rack = $this->fetch_rack_details($device->rack);
+            if (!is_object($rack))
+                continue;
+
+            $device->rack_start_print = $device->rack_start > $rack->size ? $device->rack_start - $rack->size : $device->rack_start;
+        }
+    }
+
+    /**
      * Fetches all freeform contents attached to rack
      *
      * @access public

@@ -13,7 +13,7 @@ $Tools	    = new Tools ($Database);
 $Install 	= new Install ($Database);
 
 # reset url for base
-$url = $Result->createURL ();
+$url = $Install->createURL ();
 
 # If User is not available create fake user object for create_link!
 if(!is_object(@$User)) {
@@ -76,7 +76,7 @@ if($Install->check_db_connection(false) && $Install->check_table("vrf", false)) 
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script type="text/javascript" src="js/dieIE.js"></script>
+	<script src="js/dieIE.js"></script>
 	<![endif]-->
 </head>
 

@@ -21,7 +21,7 @@ $all_method_types = $User->fetch_available_auth_method_types();
 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 <?php
 foreach($all_method_types as $type) {
-	print "<li><a class='open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='add' data-type='$type'><i class='fa fa-plus'></i> "._("Create new $type authentication")."</a></li>";
+	print "<li><a class='open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='add' data-type='$type'><i class='fa fa-plus'></i> "._("Create new ").$type._(" authentication")."</a></li>";
 }
 ?>
 </ul>
@@ -61,16 +61,22 @@ foreach($all_methods as $method) {
 	print "	<td>";
 	print "	<span class='text-muted'>";
 	if(strlen($method->params)>0) {
+		$secure_keys=[
+			'adminPassword',
+			'secret',
+			'spx509key'
+		];
 		$params = json_decode($method->params);
 		foreach($params as $key=>$parameter) {
-			// mask user/pass
-			if($key=="adminPassword")	{ $parameter = "********"; }
+			// mask secure keys
+			if(in_array($key, $secure_keys) && strlen($parameter)>0 ) { $parameter = "********"; }
+			$parameter = $Tools->shorten_text($parameter, 80);
 			// print
 			print $key." => ".$parameter."<br>";
 		}
 	}
 	else {
-		print "no parameters";
+		print _("no parameters");
 	}
 	print "	</span>";
 	print "	</td>";
@@ -81,10 +87,10 @@ foreach($all_methods as $method) {
 	print "	<td class='actions'>";
 	print "	<div class='btn-group'>";
 	if ($method->type=="SAML2")
-	print "		<a class='btn btn-xs btn-default' href='".create_link('saml2-idp')."' target='_blank' title='SAML2 Metadata'><i class='fa fa-info'></i></a>";
-	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='edit' data-type='$method->type' data-id='$method->id' title='Edit'><i class='fa fa-pencil'></i></button>";
-	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='delete' data-type='$method->type' data-id='$method->id' title='Delete'><i class='fa fa-times'></i></button>";
-	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/check-connection.php' data-class='500' data-id='$method->id' title='Verify connection' $disabled><i class='fa fa-bolt'></i></button>";
+	print "		<a class='btn btn-xs btn-default' href='".create_link('saml2-idp')."' target='_blank' title='"._("SAML2 Metadata")."'><i class='fa fa-info'></i></a>";
+	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='edit' data-type='$method->type' data-id='$method->id' title='"._("Edit")."'><i class='fa fa-pencil'></i></button>";
+	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='delete' data-type='$method->type' data-id='$method->id' title='"._("Delete")."'><i class='fa fa-times'></i></button>";
+	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/check-connection.php' data-class='500' data-id='$method->id' title='"._("Verify connection")."' $disabled><i class='fa fa-bolt'></i></button>";
 	print "	</div>";
 	print "	</td>";
 	print "</tr>";

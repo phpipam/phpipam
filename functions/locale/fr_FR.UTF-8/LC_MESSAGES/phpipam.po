@@ -7588,9 +7588,6 @@ msgstr "Permissions d’adresses"
 msgid "General"
 msgstr "Général"
 
-msgid "Avalibility"
-msgstr "Disponibilité"
-
 msgid "Rack details"
 msgstr "Détails du rack"
 

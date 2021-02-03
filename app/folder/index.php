@@ -31,32 +31,5 @@ $addresses = $Addresses->fetch_subnet_addresses ($folder['id'], $sort['field'], 
 
 # print Folder details
 print "<div class='subnetDetails'>";
-include_once("folder-details.php");
+include_once("folder-menu.php");
 print "</div>";
-
-# Subnets in Folder
-if ($slaves!==false) {
-    print '<div class="ipaddresses_overlay">';
-    include_once('folder-subnets.php');
-    print '</div>';
-}
-
-# search for IP addresses in Folder
-if (sizeof($addresses)>0) {
-    // set subnet
-    $subnet = $folder;
-    $subnet_permission = $folder_permission;
-    $location = "folder";
-    $User->user->hideFreeRange=1;
-    $slaves = false;
-    // print
-    print '<div class="ipaddresses_overlay">';
-    include_once(dirname(__FILE__).'/../subnets/addresses/print-address-table.php');
-    print '</div>';
-}
-
-# empty
-if (sizeof($addresses)==0 && !$slaves) {
-    print "<hr>";
-    $Result->show("info alert-absolute", _("Folder is empty"), false);
-}

@@ -3871,7 +3871,7 @@ msgid "Check hosts status"
 msgstr "Kontrola stavu hostů"
 
 #: site/admin/manageSubnetEdit.php
-msgid "Ping hosts inside subnet to check avalibility"
+msgid "Ping hosts inside subnet to check availability"
 msgstr "Ping na hosty uvnitř subsítě pro kontrolu dostupnosti"
 
 #: site/ipaddr/subnetDetials.php
@@ -3887,7 +3887,7 @@ msgid "Exclude from ping status checks"
 msgstr "Výjmout z ping kontroly stavu"
 
 #: site/ipaddr/ipAddressPrintTable.php
-msgid "Check avalibility"
+msgid "Check availability"
 msgstr "Zkontrolovat dostupnost"
 
 #: site/ipaddr/pingCheck.php
@@ -4148,7 +4148,7 @@ msgid "DHCP range"
 msgstr "DHCP rozsah"
 
 #: site/ipaddr/ipAddressPrintTable.php
-msgid "Check avalibility (disabled)"
+msgid "Check availability (disabled)"
 msgstr "Kontrola dostupnosti (zakázána)"
 
 #: site/admin/settings.php
@@ -4408,7 +4408,7 @@ msgid "No changelog entries are available for this section"
 msgstr "Nejsou dostupné změnové záznamy pro tuto sekci"
 
 #: site/ipaddr/ipDetails.php
-msgid "Avalibility"
+msgid "Availability"
 msgstr "Dostupnost"
 
 msgid "Last edited"

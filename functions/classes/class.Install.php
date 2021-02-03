@@ -103,7 +103,7 @@ class Install extends Common_functions {
 		    # return true, if some errors occured script already died! */
 			sleep(1);
 			$this->Log = new Logging ($this->Database);
-			$this->Log->write( "Database installation", "Database installed successfully. Version ".VERSION.".".REVISION." installed", 1 );
+			$this->Log->write( _("Database installation"), _("Database installed successfully.")._(" Version ").VERSION.".".REVISION._(" installed"), 1 );
 			return true;
 		}
 	}
@@ -188,11 +188,11 @@ class Install extends Common_functions {
 					//drop database
 					try { $this->Database_root->runQuery("drop database if exists `". $this->db['name'] ."`;"); }
 					catch (Exception $e) {
-						$this->Result->show("danger", 'Cannot drop database: '.$e->getMessage(), true);
+						$this->Result->show("danger", _("Cannot drop database: ").$e->getMessage(), true);
 					}
 					//print error
-					$this->Result->show("danger", "Cannot install sql SCHEMA file: ".$e->getMessage()."<br>query that failed: <pre>$q</pre>", false);
-					$this->Result->show("info", "Database dropped", false);
+					$this->Result->show("danger", _("Cannot install sql SCHEMA file").": ".$e->getMessage()."<br>"._("query that failed").": <pre>$q</pre>", false);
+					$this->Result->show("info", _("Database dropped"), false);
 
 					return false;
 				}
@@ -271,7 +271,7 @@ class Install extends Common_functions {
 	 * @return void
 	 */
 	private function set_db_params () {
-		$this->db = Config::get('db');
+		$this->db = Config::ValueOf('db');
 	}
 
 
@@ -470,10 +470,10 @@ class Upgrade extends Install {
 	 * @return void
 	 */
 	public function upgrade_database () {
-		if($this->old_version == VERSION.DBVERSION) { $this->Result->show("danger", "Database already at latest version", true); }
+		if($this->old_version == VERSION.DBVERSION) { $this->Result->show("danger", _("Database already at latest version"), true); }
 		else {
 			# check db connection
-			if($this->check_db_connection(false)===false)  	{ $this->Result->show("danger", "Cannot connect to database", true); }
+			if($this->check_db_connection(false)===false)  	{ $this->Result->show("danger", _("Cannot connect to database"), true); }
 			# execute
 			else {
 				return $this->upgrade_database_execute ();
@@ -502,7 +502,11 @@ class Upgrade extends Install {
 			foreach($queries as $k=>$query) {
 				// execute
 				if(strpos($query, "--")!==0 && strlen(trim($query))>0) {
+					$ignore_on_failure = (strpos($query, '-- IGNORE_ON_FAILURE')!== false);
+
+					if ($ignore_on_failure) $this->Database->setErrMode(\PDO::ERRMODE_SILENT);
 					$this->Database->runQuery($query);
+					if ($ignore_on_failure) $this->Database->setErrMode(\PDO::ERRMODE_EXCEPTION);
 				}
 				// save ok
 				$queries_ok[] = $query;
@@ -522,19 +526,19 @@ class Upgrade extends Install {
 			$this->Database->rollBack();
 			// write log
 			$this->Log = new Logging ($this->Database);
-			$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
+			$this->Log->write( _("Database upgrade"), $e->getMessage()."<br>"._("query: ").$query, 2 );
 			# fail
-			print "<h3>Upgrade failed !</h3><hr style='margin:30px;'>";
-			$this->Result->show("danger", $e->getMessage()."<hr>Failed query: <pre>".$query."</pre>", false);
+			print "<h3>"._("Upgrade failed")." !</h3><hr style='margin:30px;'>";
+			$this->Result->show("danger", $e->getMessage()."<hr>"._("Failed query").": <pre>".$query."</pre>", false);
 
 			# print failure
 			$this->Result->show("danger", _("Failed to upgrade database!"), false);
-			print "<div class='text-right'><a class='btn btn-sm btn-default' href='".create_link('administration', "verify-database")."'>Go to administration and fix</a></div><br><hr><br>";
+			print "<div class='text-right'><a class='btn btn-sm btn-default' href='".create_link('administration', "verify-database")."'>"._("Go to administration and fix")."</a></div><br><hr><br>";
 
 			if(sizeof($queries_ok)>0)
-			$this->Result->show("success", "Succesfull queries: <pre>".implode("<br>", $queries_ok)."</pre>", false);
+			$this->Result->show("success", _("Succesfull queries").": <pre>".implode("<br>", $queries_ok)."</pre>", false);
 			if(sizeof($queries)>0)
-			$this->Result->show("warning", "Not executed queries: <pre>".implode("<br>", $queries)."</pre>", false);
+			$this->Result->show("warning", _("Not executed queries").": <pre>".implode("<br>", $queries)."</pre>", false);
 
 			return false;
 		}
@@ -542,7 +546,7 @@ class Upgrade extends Install {
 		# all good, print it
 		usleep(500000);
 		$this->Log = new Logging ($this->Database);
-		$this->Log->write( "Database upgrade", "Database upgraded from version ".$this->settings->version.".r".$this->settings->dbversion." to version ".VERSION.".r".DBVERSION, 1 );
+		$this->Log->write( _("Database upgrade"), _("Database upgraded from version ").$this->settings->version._(".r").$this->settings->dbversion._(" to version ").VERSION._(".r").DBVERSION, 1 );
 		return true;
 	}
 }
