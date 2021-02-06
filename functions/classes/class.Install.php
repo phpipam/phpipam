@@ -143,13 +143,23 @@ class Install extends Common_functions {
 	 * @return void
 	 */
 	private function create_grants () {
-		# Set webhost
-		$webhost = !empty($this->db['webhost']) ? $this->db['webhost'] : 'localhost';
-		# set query
-		$query = 'grant ALL on `'. $this->db['name'] .'`.* to \''. $this->db['user'] .'\'@\''. $webhost .'\' identified by "'. $this->db['pass'] .'";';
-		# execute
-		try { $this->Database_root->runQuery($query); }
-		catch (Exception $e) {	$this->Result->show("danger", $e->getMessage(), true);}
+		$esc_user = addcslashes($this->db['user'],"'");
+		$esc_pass = addcslashes($this->db['pass'],"'");
+		$db_name  = $this->db['name'];
+		$webhost  = is_string($this->db['webhost']) && strlen($this->db['webhost']) > 0 ? addcslashes($this->db['webhost'],"'") : 'localhost';
+
+		try {
+			# Check if user exists;
+			$result = $this->Database_root->getObjectQuery("SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$esc_user' AND host = '$webhost') AS user_exists;");
+
+			# create user if not exists and set permissions
+			if ($result->user_exists == 0) {
+				$this->Database_root->runQuery("CREATE USER '$esc_user'@'$webhost' IDENTIFIED BY '$esc_pass';");
+			}
+			$this->Database_root->runQuery("GRANT ALL ON `$db_name`.* TO '$esc_user'@'$webhost';");
+			$this->Database_root->runQuery("FLUSH PRIVILEGES;");
+
+		} catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
 	}
 
 	/**
