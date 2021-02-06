@@ -49,7 +49,16 @@ exit</pre>
 				?>
 
 				<li>Set permissions for phpipam user
-				<pre>GRANT ALL on `<?php print $db['name'];?>`.* to <?php print $db['user'];?>@localhost identified by '<?php print $db['pass'];?>';</pre>
+				<pre><?php
+					$esc_user = addcslashes($db['user'],"'");
+					$esc_pass = addcslashes($db['pass'],"'");
+					$db_name  = $db['name'];
+					$webhost  = is_string($db['webhost']) && strlen($db['webhost']) > 0 ? addcslashes($db['webhost'],"'") : 'localhost';
+
+					print "CREATE USER '$esc_user'@'$webhost' IDENTIFIED BY '$esc_pass'; <br>";
+					print "GRANT ALL ON `$db_name`.* TO '$esc_user'@'$webhost'; <br>";
+					print "FLUSH PRIVILEGES; <br>";
+				?></pre>
 				</li>
 
 				<li>Finished ! Now login with <strong>Admin/ipamadmin</strong> to webpage<br>

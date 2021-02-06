@@ -10,6 +10,7 @@
     + Table layout not aligned (#3105,#3113);
     + Invalid scan type () error (#2785);
     + Invalid CSRF cookie editing rack items (#2556);
+    + MySQL 8.0 compatibility (#3036);
 
     Security Fixes:
     ----------------------------
