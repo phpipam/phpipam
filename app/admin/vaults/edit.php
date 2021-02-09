@@ -76,10 +76,10 @@ $custom = $Tools->fetch_custom_fields('vaults');
 	    <td>
 	    	<select name="type" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$types = array("passwords"=>"Password vault","certificates"=>"Certificates vault");
+	    	$types = array("passwords"=>_("Password vault"),"certificates"=>_("Certificates vault"));
 	    	foreach($types as $k=>$p) {
-		    	if($k==$vault->type)	{ print "<option value='$k' selected='selected'>"._($p)."</option>"; }
-		    	else					{ print "<option value='$k' 				   >"._($p)."</option>"; }
+		    	if($k==$vault->type)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
+		    	else					{ print "<option value='$k' 				   >".$p."</option>"; }
 	    	}
 	    	?>
 	    	</select>
