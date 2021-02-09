@@ -58,11 +58,11 @@ foreach($temp_shares as $s) {
 		//set details
 		unset($tmp);
 		if($s->type=="subnets") {
-			$tmp[] = "Share type: subnet<hr>"."<a href='".create_link("subnets", $object->sectionId, $object->id)."'>".$Subnets->transform_to_dotted($object->subnet)."/$object->mask</a>";
+			$tmp[] = _("Share type: subnet")."<hr>"."<a href='".create_link("subnets", $object->sectionId, $object->id)."'>".$Subnets->transform_to_dotted($object->subnet)."/$object->mask</a>";
 			$tmp[] = $object->description;
 		}
 		else {
-			$tmp[] = "Share type: IP address<hr>".$Subnets->transform_to_dotted($object->ip_addr);
+			$tmp[] = _("Share type: IP address")."<hr>".$Subnets->transform_to_dotted($object->ip_addr);
 			$tmp[] = $object->description;
 		}
 		$s->details = implode("<br>", $tmp);

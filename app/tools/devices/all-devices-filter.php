@@ -1,5 +1,5 @@
 <br><br>
-<span class='text-muted'>Filter by:</span><br>
+<span class='text-muted'><?php print _("Filter by"); ?>:</span><br>
 <?php
 
 # filter if requested
