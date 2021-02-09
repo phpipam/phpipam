@@ -53,8 +53,8 @@ foreach($all_types as $t){ array_push($type_id_array, $t->id); }
 if(!in_array($circuit['type'], $type_id_array))									{ $Result->show("danger", _('Invalid type').'!', true); }
 
 # status
-$statuses = array ("Active", "Inactive", "Reserved");
-if(!in_array($circuit['status'], $statuses))									{ $Result->show("danger", _('Invalid status').'!', true); }
+$statuses = array (_("Active"), _("Inactive"), _("Reserved"));
+if(!in_array(_($circuit['status']), $statuses))									{ $Result->show("danger", _('Invalid status').'!', true); }
 
 #Check if circuit is part of a larger circuit
 if($_POST['action'] == 'delete'){
