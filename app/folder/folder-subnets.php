@@ -30,7 +30,7 @@ if($slaves) {
 	}
 
 	# first print belonging folders
-	if(isset($folders)) {
+	if(isset($folders) && @$_GET['sPage']!=="map" && @$_GET['sPage']!=="mapsearch") {
 		# print title
 		print "<h4>"._("Folder")." $folder[description] "._('has')." ". sizeof($folders)." "._('directly nested folders').":</h4><hr>";
 
@@ -71,7 +71,7 @@ if($slaves) {
 		print "</table>";
 	}
 	# print subnets
-	if(sizeof($subnets)>0) {
+	if(sizeof($subnets)>0 && @$_GET['sPage']!=="map" && @$_GET['sPage']!=="mapsearch") {
 		# title
 		print "<h4>"._("Folder")." $folder[description] "._('has')." ".sizeof($subnets)." "._('directly nested subnets').":</h4><hr><br>";
 

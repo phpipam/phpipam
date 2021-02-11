@@ -356,6 +356,9 @@ $(document).ready(function(){
 	// Routing
 	if ($User->settings->enableRouting==1)
 	$perm_modules["perm_routing"] = "Routing";
+	// Vaults
+	if ($User->settings->enableVaults==1)
+	$perm_modules["perm_vaults"] = "Vaults";
 
 	// get permissions
 	$module_permissions = json_decode($user['module_permissions'], true);

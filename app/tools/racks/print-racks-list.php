@@ -122,17 +122,17 @@ else {
             print "<td class='actions'>";
             $links = [];
             if($User->get_module_permissions ("racks")>=User::ACCESS_R) {
-                $links[] = ["type"=>"header", "text"=>"Show Rack"];
-                $links[] = ["type"=>"link", "text"=>"Show rack", "href"=>create_link($_GET['page'], "racks", $r->id), "icon"=>"eye", "visible"=>"dropdown"];
-                $links[] = ["type"=>"link", "text"=>"Show popup", "href"=>"", "class"=>"showRackPopup", "dataparams"=>"data-rackId='$r->id' data-deviceId='0'", "icon"=>"server"];
+                $links[] = ["type"=>"header", "text"=>_("Show rack")];
+                $links[] = ["type"=>"link", "text"=>_("Show rack"), "href"=>create_link($_GET['page'], "racks", $r->id), "icon"=>"eye", "visible"=>"dropdown"];
+                $links[] = ["type"=>"link", "text"=>_("Show popup"), "href"=>"", "class"=>"showRackPopup", "dataparams"=>"data-rackId='$r->id' data-deviceId='0'", "icon"=>"server"];
                 $links[] = ["type"=>"divider"];
             }
             if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
-                $links[] = ["type"=>"header", "text"=>"Manage rack"];
-                $links[] = ["type"=>"link", "text"=>"Edit rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='edit' data-rackid='$r->id'", "icon"=>"pencil"];
+                $links[] = ["type"=>"header", "text"=>_("Manage rack")];
+                $links[] = ["type"=>"link", "text"=>_("Edit rack"), "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='edit' data-rackid='$r->id'", "icon"=>"pencil"];
             }
             if($User->get_module_permissions ("racks")>=User::ACCESS_RWA) {
-                $links[] = ["type"=>"link", "text"=>"Delete rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='delete' data-rackid='$r->id'", "icon"=>"times"];
+                $links[] = ["type"=>"link", "text"=>_("Delete rack"), "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='delete' data-rackid='$r->id'", "icon"=>"times"];
                 $links[] = ["type"=>"divider"];
             }
             // print links

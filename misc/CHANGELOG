@@ -7,6 +7,8 @@
     + L2 Domains user permissions;
     + Add scanPingType=="none" option to disable scanning;
     + Custom fields on IP request forms (#2956);
+    + Added subnet free space map for each possible subnet mask;
+    + Added Vaults (Certificate andf password storing);
 
     Enhancements, changes:
     ----------------------------
@@ -20,6 +22,7 @@
         + php-saml protocol debugging;
         + Support for signed assertions;
         + SAML usernames can be extracted from assertion attributes (#2948);
+    + Selectable mask for number of subnets/hosts in subnet masks;
 
     Bugfixes:
     ----------------------------
@@ -27,7 +30,7 @@
     + Fixed boolean printout in footer (#2625);
     + Fixed BGP Admin isn't working (#2631);
     + do not show statistics in dashboard widget for disabled modules (#2602);
-    + MySQL 8.0 compatibility. (#2646,#2239);
+    + MySQL 8.0 compatibility. (#2646,#2239,#3036);
     + Permit non-numeric postcodes for customers (#2393);
     + Bandwidth calculator - 400 Bad Request (#1807,#2648);
     + Table layout not aligned (#2656,#3105,#3113);

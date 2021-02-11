@@ -842,7 +842,7 @@ class Common_functions  {
 
 		foreach($logs as $key=>$req) {
 			# ignore __ and PHPSESSID
-			if( substr($key,0,2)=='__' || substr($key,0,9)=='PHPSESSID' || substr($key,0,4)=='pass' || $key=='plainpass' )
+			if( substr($key,0,2)=='__' || substr($key,0,9)=='PHPSESSID' || substr($key,0,4)=='pass' || $key=='plainpass' || $key=='values')
 				continue;
 
 			// NOTE The colon character ":" is reserved as it used in array_to_log for implode/explode.
@@ -1681,14 +1681,20 @@ class Common_functions  {
 	 *
 	 * @param  string $type
 	 * @param  string $value
+	 * @param  string $delimiter
 	 *
 	 * @return void
 	 */
-	public function print_custom_field ($type, $value) {
+	public function print_custom_field ($type, $value, $delimiter = false, $replacement = false) {
 		// escape
 		$value = str_replace("'", "&#39;", $value);
 		// create links
 		$value = $this->create_links ($value, $type);
+
+		// delimiter ?
+		if($delimiter !== false && $replacement !== false) {
+			$value = str_replace($delimiter, $replacement, $value);
+		}
 
 		//booleans
 		if($type=="tinyint(1)")	{
@@ -2140,7 +2146,7 @@ class Common_functions  {
 	    $action_text = $print_text ? " <i class='fa fa-cogs'></i> "._("Actions")." " : " <i class='fa fa-cogs'></i> ";
 
 	    $html[] = "<div class='dropdown'>";
-	    $html[] = "  <button class='btn btn-xs btn-default dropdown-toggle ' type='button' id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true' rel='tooltip' title='"._("Actions")."'> "._($action_text)." <span class='caret'></span></button>";
+	    $html[] = "  <button class='btn btn-xs btn-default dropdown-toggle ' type='button' id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true' rel='tooltip' title='"._("Actions")."'> ".$action_text." <span class='caret'></span></button>";
 	    $html[] = "  <ul class='dropdown-menu $alignment' aria-labelledby='dropdownMenu'>";
 
 	    // loop items
@@ -2162,7 +2168,7 @@ class Common_functions  {
 	        }
 	        // item
 	        else {
-	            $html[] = "   <li><a class='$i[class]' href='$i[href]' $i[dataparams]><i class='fa fa-$i[icon]'></i> "._($i['text'])."</a></li>";
+	            $html[] = "   <li><a class='$i[class]' href='$i[href]' $i[dataparams]><i class='fa fa-$i[icon]'></i> ".$i['text']."</a></li>";
 	        }
 	    }
 	    // remove last divider if present
@@ -2199,7 +2205,7 @@ class Common_functions  {
 	        }
 	        // save only links
 	        if($i['type']=="link") {
-	            $html[] = " <a href='$i[href]' class='btn btn-xs btn-default $i[class]' $i[dataparams] rel='tooltip' title='"._($i['text'])."'><i class='fa fa-$i[icon]'></i></a>";
+	            $html[] = " <a href='$i[href]' class='btn btn-xs btn-default $i[class]' $i[dataparams] rel='tooltip' title='".$i['text']."'><i class='fa fa-$i[icon]'></i></a>";
 	        }
 	    }
 	    // end

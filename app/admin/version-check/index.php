@@ -14,7 +14,7 @@ else {
 	//print result
 	if(VERSION_VISIBLE == $version) 		{ $Result->show("success", _('Latest version').' ('. VERSION_VISIBLE .') '._('already installed').'!', false); }
 	else if (VERSION_VISIBLE > $version) 	{ $Result->show("success", _('Development version').' ('. VERSION_VISIBLE .') '._('installed! Latest production version is').' '. $version, false);}
-	else 									{ $Result->show("danger",  _('New version of phpipam available').':</b><hr>'._('Installed version').': '.VERSION_VISIBLE."<br>"._('Available version').': '. $version."<br><br>"._('You can download new version').' <a href="https://sourceforge.net/projects/phpipam/files/current/phpipam-'. $version .'.tar/download">'._('here').'</a>.', false); }
+	else 									{ $Result->show("danger",  _('New version of phpipam available').':</b><hr>'._('Installed version').': '.VERSION_VISIBLE."<br>"._('Available version').': '. $version."<br><br>"._('You can download new version'). " <a href='https://github.com/phpipam/phpipam/releases/tag/v$version'>"._('GitHub').'</a>' . ' ( '._('archive').' <a href="https://sourceforge.net/projects/phpipam/files/current/phpipam-'. $version .'.tar/download">'._('SourceForge').'</a> ).', false); }
 }
 
 # release and commit logs

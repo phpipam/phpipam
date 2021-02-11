@@ -48,6 +48,7 @@ $tools_menu_items = [
 					"customers" => _("customers"),
 					"duplicates" => _("duplicates"),
 					"routing" => _("routing"),
+ 					"vaults" => _("vaults"),
 					];
 
 
@@ -89,6 +90,8 @@ $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-database",    "href"=
 if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>=User::ACCESS_R)
 $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-phone",       "href"=>"pstn-prefixes",               "name"=>_("PSTN prefixes"),        "description"=>_("PSTN prefixes")];
 $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-sitemap",     "href"=>"mac-lookup",                  "name"=>_("MAC lookup"),           "description"=>_("Lookup MAC address vendor")];
+if($User->settings->enableVaults == 1 && $User->get_module_permissions ("vaults")>=User::ACCESS_R)
+$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-key",         "href"=>"vaults",                      "name"=>_("Vaults"),               "description"=>_("Secure information storing")];
 
 # Subnets
 if($User->settings->enableCustomers == 1 && $User->get_module_permissions ("customers")>=User::ACCESS_R)

@@ -70,4 +70,8 @@ print "<tr><td>"._("PSTN")."</td><td>".$User->print_permission_badge($user['perm
 if ($User->settings->enableRouting==1)
 print "<tr><td>"._("Routing")."</td><td>".$User->print_permission_badge($user['perm_routing'])."</td></tr>";
 
+// vaults
+if ($User->settings->enableVaults==1)
+print "<tr><td>"._("Routing")."</td><td>".$User->print_permission_badge($user['perm_vaults'])."</td></tr>";
+
 print "</table>";
