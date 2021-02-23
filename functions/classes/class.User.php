@@ -1931,8 +1931,6 @@ class AD_user_sync extends User {
         // check if some servers are available
         if (sizeof($this->servers_autocreate)==0) { return false; }
 
-        if($username!="mihapet") { return false; }
-
         // make new connection for each
         foreach ($this->servers_autocreate as $ad_index) {
             // connect
@@ -2044,7 +2042,7 @@ class AD_user_sync extends User {
      * @method phpipam_all_ad_groups
      * @return [type]
      */
-    private function phpipam_all_ad_groups () {
+    public function phpipam_all_ad_groups () {
         return $this->fetch_multiple_objects ("userGroups", "g_domain", $this->ad_index, "g_id");
     }
 
