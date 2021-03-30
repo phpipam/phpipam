@@ -50,6 +50,10 @@ $custom_fields = $Tools->fetch_custom_fields("vrf");
 if(sizeof($custom_fields) > 0) {
 	$res[] = $custom_fields;
 	foreach($custom_fields as $myField) {
+		# add field to required fields if needed
+		if ($myField['Null'] == "NO") { $reqfields[] = $myField['name']; }
+		# mark required fields with *
+		$msgr = in_array($myField['name'],$reqfields) ? "*" : "";
 		$tpl_field_names.= "<th>". $myField['name'] ."</th>";
 		$tpl_field_types.= "<td><small>". wordwrap($myField['type'],18,"<br>\n",true) ."</small></td>";
 		$expfields[] = $myField['name'];

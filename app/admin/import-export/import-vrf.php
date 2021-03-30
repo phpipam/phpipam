@@ -40,6 +40,13 @@ foreach ($data as &$cdata) {
 						"rd"=>$cdata['rd'],
 						"description"=>$cdata['description']
 						);
+		# add custom fields
+		if(sizeof($custom_fields) > 0) {
+			foreach($custom_fields as $myField) {
+				if(isset($cdata[$myField['name']])) { $values[$myField['name']] = $cdata[$myField['name']]; }
+			}
+		}
+		
 		# update
 		$cdata['result'] = $Admin->object_modify("vrf", $cdata['action'], "vrfId", $values);
 
@@ -54,6 +61,7 @@ foreach ($data as &$cdata) {
 			<td>".$cdata['name']."</td>
 			<td>".$cdata['rd']."</td>
 			<td>".$cdata['description']."</td>
+			".$cfieldtds."
 			<td>"._($msg)."</td></tr>";
 	}
 }
