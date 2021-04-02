@@ -159,8 +159,8 @@ class Subnets extends Common_functions {
 		# execute based on action
 		if($action=="add")			{ return $this->subnet_add ($values); }
 		elseif($action=="edit")		{ return $this->subnet_edit ($values, $mail_changelog); }
-		elseif($action=="delete")	{ return $this->subnet_delete ($values['id']); }
-		elseif($action=="truncate")	{ return $this->subnet_truncate ($values['id']); }
+		elseif($action=="delete")	{ return $this->subnet_delete ($values); }
+		elseif($action=="truncate")	{ return $this->subnet_truncate ($values); }
 		elseif($action=="resize")	{ return $this->subnet_resize ($values['id'], $values['subnet'], $values['mask']); }
 		else						{ return $this->Result->show("danger", _("Invalid action"), true); }
 	}
@@ -225,12 +225,11 @@ class Subnets extends Common_functions {
 		$this->lastInsertId = $this->Database->lastInsertId();
 		$values['id'] = $this->lastInsertId;
 		# ok
-		$this->Log->write( _("Subnet creation"), _("New subnet created").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
+		$this->Log->write( _("Subnet creation")." '".long2ip($values['subnet'])."/".$values['mask']."' ", _("New subnet created").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		# write changelog
 		$this->Log->write_changelog('subnet', "add", 'success', array(), $values);
 		return true;
 	}
-
 	/**
 	 * Edit subnet
 	 *
@@ -268,7 +267,9 @@ class Subnets extends Common_functions {
 		if($mail_changelog)
 		$this->Log->write_changelog('subnet', "edit", 'success', $old_subnet, $values);
 		# ok
-		$this->Log->write( _("Subnet")." ".$old_subnet->description." "._("edit"), _("Subnet")." ".$old_subnet->description." "._("edited").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
+		#$this->Log->write("id: ".$values['id']);
+		
+		$this->Log->write(  _("Subnet")."  '".long2ip($values['subnet'])."/".$values['mask']."' ".$old_subnet->description." "._("edit"), _("Subnet")." ".$old_subnet->description." "._("edited").".<hr>ceva".$values['id'].$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		return true;
 	}
 
@@ -279,10 +280,13 @@ class Subnets extends Common_functions {
 	 * @param mixed $id
 	 * @return bool
 	 */
-	private function subnet_delete ($id) {
+	//$subnet="1449749504";
+	private function subnet_delete ($values) {
 		# save old values
-		$old_subnet = $this->fetch_subnet (null, $id);
+		$id=$values['id'];
 
+		$old_subnet = $this->fetch_subnet (null, $id);
+		
 		# delete and truncate all slave subnets
 		$this->reset_subnet_slaves_recursive();
 		$this->fetch_subnet_slaves_recursive($id);
@@ -307,11 +311,13 @@ class Subnets extends Common_functions {
 		# remove from NAT
 		$this->remove_subnet_nat_items ($id, true);
 
+
 		# write changelog
 		$this->Log->write_changelog('subnet', "delete", 'success', $old_subnet, array());
 		# ok
-		$this->Log->write( _("Subnet")." ".$old_subnet->description." "._("delete"), _("Subnet")." ".$old_subnet->description." "._("deleted").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ((array) $old_subnet)), 0);
+		$this->Log->write(  _("Subnet")." '".long2ip($values['subnet'])."/".$values['mask']."' ".$old_subnet->description." "._("delete"), _("Subnet")." ".$old_subnet->description." "._("deleted").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ((array) $old_subnet)), 0);
 		return true;
+		
 	}
 
 	/**
@@ -321,8 +327,11 @@ class Subnets extends Common_functions {
 	 * @param int $subnetId
 	 * @return bool
 	 */
-	public function subnet_truncate ($subnetId) {
+	public function subnet_truncate ($values) {
 		# save old values
+		$subnetId=$values[id];
+		//global $subnet2;
+		//$subnet2=$values['subnet'];
 		$old_subnet = $this->fetch_subnet (null, $subnetId);
 		# execute
 		try { $this->Database->deleteRow("ipaddresses", "subnetId", $subnetId); }
@@ -330,7 +339,7 @@ class Subnets extends Common_functions {
 			$this->Log->write( _("Subnet truncate"), _("Failed to truncate subnet")." ".$old_subnet->description." "._("id")." ".$old_subnet->id.".<hr>".$e->getMessage(), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
 		}
-		$this->Log->write( _("Subnet truncate"), _("Subnet")." ".$old_subnet->description." "._("id")." ".$old_subnet->id." "._("truncated"), 0);
+		$this->Log->write( _("Subnet truncate")." ( ".long2ip($values['subnet'])."/".$values['mask']." ) ", _("Subnet")." ".$old_subnet->description." "._("id")." ".$old_subnet->id." "._("truncated"), 0);
 		return true;
 	}
 
@@ -354,7 +363,7 @@ class Subnets extends Common_functions {
 			return false;
 		}
 		# ok
-		$this->Log->write( _("Subnet resize"), _("Subnet")." ".$old_subnet->description." "._("id")." ".$old_subnet->id." "._("resized").".<hr>".$this->array_to_log(array("id"=>$subnetId, "mask"=>$mask)), 0);
+		$this->Log->write( _("Subnet resize")." ( ".long2ip($values['subnet'])."/".$values['mask']." ) ", _("Subnet")." ".$old_subnet->description." "._("id")." ".$old_subnet->id." "._("resized").".<hr>".$this->array_to_log(array("id"=>$subnetId, "mask"=>$mask)), 0);
 		return true;
 	}
 
@@ -2048,7 +2057,7 @@ class Subnets extends Common_functions {
 		$this->initialize_pear_net_IPv4 ();
 		# validate
         if ($net = $this->Net_IPv4->parseAddress ($cidr)) {
-            if (!$this->Net_IPv4->validateIP ($net->ip)) 				{ return _("Invalid IP address!"); }														//validate IP
+            if (!$this->Net_IPv4->validateIP ($net->ip)) 				{ return _("Invalid IP address!"); }												//validate IP
             elseif (($net->network != $net->ip) && ($issubnet))			{ return _("IP address cannot be subnet! (Consider using")." ". $net->network .")"; }		//network must be same as provided IP address
             elseif (!$this->Net_IPv4->validateNetmask ($net->netmask)) 	{ return _('Invalid netmask').' ' . $net->netmask; }    									//validate netmask
             else														{ return true; }
