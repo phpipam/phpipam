@@ -727,7 +727,7 @@ class adLDAP {
         $ret = true;
 
         //OpenLDAP?
-        if ($this->openLDAP == true) { $this->ldapBind = @ldap_bind($this->ldapConnection, "uid=".$username.$this->accountSuffix, $password); }
+        if ($this->openLDAP == true) { $this->ldapBind = @ldap_bind($this->ldapConnection, $username.$this->accountSuffix, $password); }
         else { $this->ldapBind = @ldap_bind($this->ldapConnection, $username.$this->accountSuffix, $password); }
 
         if (!$this->ldapBind) {
