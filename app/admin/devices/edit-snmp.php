@@ -170,9 +170,9 @@ $('#switchSNMPManagementEdit').change(function() {
 
 	<!-- v3 -->
 	<tr class="details3" style="<?php print $display_v3; ?>">
-		<td><?php print _('Context engind ID'); ?></td>
+		<td><?php print _('Context engine ID'); ?></td>
 		<td>
-    		<input type='text' name="snmp_v3_ctx_engine_id" class="form-control" placeholder="SNMP <?php print _('Context engind ID'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_ctx_engine_id); ?>'>
+    		<input type='text' name="snmp_v3_ctx_engine_id" class="form-control" placeholder="SNMP <?php print _('Context engine ID'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_ctx_engine_id); ?>'>
 		</td>
 	</tr>
 
