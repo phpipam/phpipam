@@ -98,7 +98,7 @@ if(sizeof($custom_fields) > 0) {
 
 	<!-- title -->
 	<tr>
-		<th><?php print _('Title'); ?></t>
+		<th><?php print _('Title'); ?></th>
 		<td>
 			<input type="text" class='form-control input-sm' name="subject" style="width:400px;" value="<?php print $title; ?>">
 		</td>
