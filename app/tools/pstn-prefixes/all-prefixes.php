@@ -62,7 +62,7 @@ else {
     # if none than print
     if($all_prefixes===false) {
         print "<tr>";
-        print " <td colspan='$colspan'>".$Result->show("info","No PSTN prefixes configured", false, false, true)."</td>";
+        print " <td colspan='$colspan'>".$Result->show("info",_("No PSTN prefixes configured"), false, false, true)."</td>";
         print "</tr>";
     }
     else {
@@ -73,7 +73,7 @@ else {
 
         else {
             print "<tr>";
-            print " <td colspan='$colspan'>".$Result->show("info","No PSTN prefixes available", false, false, true)."</td>";
+            print " <td colspan='$colspan'>".$Result->show("info",_("No PSTN prefixes available"), false, false, true)."</td>";
             print "</tr>";
         }
     }

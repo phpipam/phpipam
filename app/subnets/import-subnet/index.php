@@ -62,12 +62,12 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<!-- notes -->
 	<?php print _('To successfully import data please use the following XLS/CSV structure:'); ?><br>
 	<div class="alert alert-info alert-absolute">
- 	<?php print implode(" | ", $standard_fields).$custFields; ?>
+	<?php print implode(" | ", $standard_fields).$custFields; ?>
 	</div>
 	<div class="clearfix"></div>
 
 	<!-- Download template -->
-	<a class="csvtemplate btn btn-sm btn-default" id="csvtemplate">Download template</a>
+	<a class="csvtemplate btn btn-sm btn-default" id="csvtemplate"><?php print _("Download template"); ?></a>
 
 	<br><br>
 

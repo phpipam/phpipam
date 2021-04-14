@@ -504,7 +504,7 @@ class Circuits_controller extends Common_api_functions {
 	private function validate_circuit_status ($action="add") {
 		if (isset($this->_params->status)) {
 			$statuses = array ("Active", "Inactive", "Reserved");
-			if(!in_array($this->_params->status, $statuses))								{ $this->Response->throw_exception(400, "Invalid status"); }
+			if(!in_array($this->_params->status, $statuses))								{ $this->Response->throw_exception(400, _("Invalid status")); }
 		}
 		else {
 			if ($action=="add") {
