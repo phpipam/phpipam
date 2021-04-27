@@ -225,7 +225,7 @@ class Subnets extends Common_functions {
 		$this->lastInsertId = $this->Database->lastInsertId();
 		$values['id'] = $this->lastInsertId;
 		# ok
-		$this->Log->write( _("Subnet creation")." '".long2ip($values['subnet'])."/".$values['mask']."' ", _("New subnet created").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
+		$this->Log->write( _("Subnet creation")." '".$this->transform_address($values['subnet'])."/".$values['mask']."' ", _("New subnet created").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		# write changelog
 		$this->Log->write_changelog('subnet', "add", 'success', array(), $values);
 		return true;
@@ -269,7 +269,7 @@ class Subnets extends Common_functions {
 		# ok
 		#$this->Log->write("id: ".$values['id']);
 		
-		$this->Log->write(  _("Subnet")."  '".long2ip($values['subnet'])."/".$values['mask']."' ".$old_subnet->description." "._("edit"), _("Subnet")." ".$old_subnet->description." "._("edited").".<hr>ceva".$values['id'].$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
+		$this->Log->write(  _("Subnet")."  '".$this->transform_address($values['subnet'])."/".$values['mask']."' ".$old_subnet->description." "._("edit"), _("Subnet")." ".$old_subnet->description." "._("edited").".<hr>ceva".$values['id'].$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		return true;
 	}
 
@@ -315,7 +315,7 @@ class Subnets extends Common_functions {
 		# write changelog
 		$this->Log->write_changelog('subnet', "delete", 'success', $old_subnet, array());
 		# ok
-		$this->Log->write(  _("Subnet")." '".long2ip($values['subnet'])."/".$values['mask']."' ".$old_subnet->description." "._("delete"), _("Subnet")." ".$old_subnet->description." "._("deleted").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ((array) $old_subnet)), 0);
+		$this->Log->write(  _("Subnet")." '".$this->transform_address($values['subnet'])."/".$values['mask']."' ".$old_subnet->description." "._("delete"), _("Subnet")." ".$old_subnet->description." "._("deleted").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ((array) $old_subnet)), 0);
 		return true;
 		
 	}
@@ -339,7 +339,7 @@ class Subnets extends Common_functions {
 			$this->Log->write( _("Subnet truncate"), _("Failed to truncate subnet")." ".$old_subnet->description." "._("id")." ".$old_subnet->id.".<hr>".$e->getMessage(), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
 		}
-		$this->Log->write( _("Subnet truncate")." ( ".long2ip($values['subnet'])."/".$values['mask']." ) ", _("Subnet")." ".$old_subnet->description." "._("id")." ".$old_subnet->id." "._("truncated"), 0);
+		$this->Log->write( _("Subnet truncate")." ( ".$this->transform_address($values['subnet'])."/".$values['mask']." ) ", _("Subnet")." ".$old_subnet->description." "._("id")." ".$old_subnet->id." "._("truncated"), 0);
 		return true;
 	}
 
@@ -363,7 +363,7 @@ class Subnets extends Common_functions {
 			return false;
 		}
 		# ok
-		$this->Log->write( _("Subnet resize")." ( ".long2ip($values['subnet'])."/".$values['mask']." ) ", _("Subnet")." ".$old_subnet->description." "._("id")." ".$old_subnet->id." "._("resized").".<hr>".$this->array_to_log(array("id"=>$subnetId, "mask"=>$mask)), 0);
+		$this->Log->write( _("Subnet resize")." ( ".$this->transform_address($values['subnet'])."/".$values['mask']." ) ", _("Subnet")." ".$old_subnet->description." "._("id")." ".$old_subnet->id." "._("resized").".<hr>".$this->array_to_log(array("id"=>$subnetId, "mask"=>$mask)), 0);
 		return true;
 	}
 
