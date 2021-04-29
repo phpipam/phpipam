@@ -56,6 +56,7 @@
     + Linked ip_addr shows integer notation (#3100);
     + Invalid scan type () error (#2785);
     + Invalid CSRF cookie editing rack items (#2556);
+    + FPing discovery marks all addresses as alive (#2888);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
         + Address IP field not displayed when using filter_by (#2934);
