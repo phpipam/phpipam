@@ -427,18 +427,20 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	public function ping_address_method_fping_subnet ($subnet_cidr, $return_result = false) {
-		# verify ping path
 		$this->ping_verify_path ($this->settings->scanFPingPath);
+		$out = array();
 		# set command
-		$cmd = $this->settings->scanFPingPath." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." -Ag $subnet_cidr";
+		$cmd = $this->settings->scanFPingPath . ' -c ' . $this->icmp_count . ' -t ' . ($this->icmp_timeout*1000) . ' -Ag ' . $subnet_cidr;
 		# execute command, return $retval
 	    exec($cmd, $output, $retval);
 
 	    # save result
 	    if(sizeof($output)>0) {
 	    	foreach($output as $line) {
-		    	$tmp = explode(" ",$line);
-		    	$out[] = $tmp[0];
+				if (!preg_match("/(timed out|100% loss)/", $line)) {
+					$tmp = explode(" ",$line);
+					$out[] = $tmp[0];
+				}
 	    	}
 	    }
 
