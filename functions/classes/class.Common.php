@@ -959,16 +959,24 @@ class Common_functions  {
 	* @access public
 	* @return bool
 	*/
-	public function isHttps() {
-		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+	public function isHttps () {
+		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+			return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https');
+		}
+
+		if (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
 			return true;
 		}
-		if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+
+		if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 			return true;
 		}
-		if (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+
+		$port = is_numeric($_SERVER['HTTP_X_FORWARDED_PORT']) ? $_SERVER['HTTP_X_FORWARDED_PORT'] : $_SERVER['SERVER_PORT'];
+		if($port == 443) {
 			return true;
 		}
+
 		return false;
 	}
 
@@ -976,36 +984,26 @@ class Common_functions  {
 	 * Create URL for base
 	 *
 	 * @access public
-	 * @return mixed
+	 * @return string
 	 */
 	public function createURL () {
-		// SSL on standard port
-		if(($_SERVER['HTTPS'] == 'on') || ($_SERVER['SERVER_PORT'] == 443)) {
-			$url = "https://".$_SERVER['HTTP_HOST'];
-		}
-		// reverse proxy doing SSL offloading
-		elseif(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
-			if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
-				$url = "https://".$_SERVER['HTTP_X_FORWARDED_HOST'];
-			}
-			else {
-				$url = "https://".$_SERVER['HTTP_HOST'];
-			}
-		}
-		elseif(isset($_SERVER['HTTP_X_SECURE_REQUEST'])  && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') {
-			$url = "https://".$_SERVER['SERVER_NAME'];
-		}
-		// custom port
-		elseif($_SERVER['SERVER_PORT']!="80" && (isset($_SERVER['HTTP_X_FORWARDED_PORT']) && $_SERVER['HTTP_X_FORWARDED_PORT']!="80")) {
-			$url = "http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'];
-		}
-		// normal http
-		else {
-			$url = "http://".$_SERVER['HTTP_HOST'];
+		$proto = $this->isHttps() ? 'https' : 'http';
+
+		$url = $_SERVER['HTTP_HOST'];
+
+		if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+			$url = $_SERVER['HTTP_X_FORWARDED_HOST'];
+		} elseif (isset($_SERVER['HTTP_X_SECURE_REQUEST']) && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') {
+			$url = $_SERVER['SERVER_NAME'];
 		}
 
-		//result
-		return $url;
+		$port = is_numeric($_SERVER['HTTP_X_FORWARDED_PORT']) ? $_SERVER['HTTP_X_FORWARDED_PORT'] : $_SERVER['SERVER_PORT'];
+
+		if (($proto == "http" && $port == 80) || ($proto == "https" && $port == 443)) {
+			return "$proto://$url";
+		} else {
+			return "$proto://$url:$port";
+		}
 	}
 
 	/**
