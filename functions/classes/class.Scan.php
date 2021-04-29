@@ -442,17 +442,19 @@ class Scan extends Common_functions {
 	 */
 	public function ping_address_method_fping_subnet ($subnet_cidr, $return_result = false) {
 		$this->ping_verify_path ($this->fping_path);
-
+		$out = array();
 		# set command
-		$cmd = $this->fping_path." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." -Ag $subnet_cidr";
+		$cmd = $this->fping_path . ' -c ' . $this->icmp_count . ' -t ' . ($this->icmp_timeout*1000) . ' -Ag ' . $subnet_cidr;
 		# execute command, return $retval
 	    exec($cmd, $output, $retval);
 
 	    # save result
 	    if(sizeof($output)>0) {
 	    	foreach($output as $line) {
-		    	$tmp = explode(" ",$line);
-		    	$out[] = $tmp[0];
+				if (!preg_match("/(timed out|100% loss)/", $line)) {
+					$tmp = explode(" ",$line);
+					$out[] = $tmp[0];
+				}
 	    	}
 	    }
 
