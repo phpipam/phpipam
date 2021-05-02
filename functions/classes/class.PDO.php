@@ -93,6 +93,13 @@ abstract class DB {
 	 */
 	public $cache = array();
 
+	/**
+	 * Enable MySQL CTE query support
+	 *
+	 * @var bool|null
+	 */
+	private $ctes_enabled = null;
+
 
 
 
@@ -252,6 +259,36 @@ abstract class DB {
 	 */
 	public function isConnected() {
 		return ($this->pdo !== null);
+	}
+
+	/**
+	 * MySQL CTE support checks
+	 *
+	 * @access public
+	 * @return  bool
+	 */
+	public function is_cte_enabled() {
+		// Check cached result
+		if (is_bool($this->ctes_enabled))
+			return $this->ctes_enabled;
+
+		$db = Config::ValueOf("db");
+		$ctes_enabled = filter_var($db['use_cte'], FILTER_VALIDATE_INT, ['options'=>['default' => 1, 'min_range' => 0, 'max_range' => 2]]);
+
+		if ($ctes_enabled===0) {	            // Disable CTE Support
+			$this->ctes_enabled = false;
+		} elseif($ctes_enabled===2) {        // Force enable CTE support
+			$this->ctes_enabled = true;
+		} else {
+			try {                           // (default) Autodetect CTE support
+				@$this->runQuery('WITH RECURSIVE cte_test(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM cte_test WHERE n < 3) SELECT n FROM cte_test;');
+				$this->ctes_enabled = true;
+			} catch(Exception $e) {
+				$this->ctes_enabled = false;
+			}
+		}
+
+		return $this->ctes_enabled;
 	}
 
 	/**

@@ -39,13 +39,8 @@ $db['ssl_ca']     = '/path/to/ca.crt';               // path to a file containin
 $db['ssl_capath'] = '/path/to/ca_certs';             // path to a directory containing CA certs
 $db['ssl_cipher'] = 'DHE-RSA-AES256-SHA:AES128-SHA'; // one or more SSL Ciphers
 $db['ssl_verify'] = 'true';                          // Verify Common Name (CN) of server certificate?
-
-
-/**
- * temporary table type to create slave subnets table
- * (MEMORY, InnoDB)
- ******************************/
-$db['tmptable_engine_type'] = "MEMORY";
+$db['tmptable_engine_type'] = "MEMORY";              // Temporary table type to construct complex queries (MEMORY, InnoDB)
+$db['use_cte']    = 1;                               // Use recursive CTE queries [>=MariaDB 10.2.2, >=MySQL 8.0] (0=disabled, 1=autodetect, 2=force enable)
 
 
 /**
