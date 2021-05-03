@@ -329,6 +329,66 @@ abstract class DB {
 	}
 
 	/**
+	 * Emulate a SQL CTE query using temporary tables
+	 *
+	 * @param   string  $schema           Temporary table schema e.g (int(11))
+	 * @param   string  $anchor_query     CTE Anchor query (may contain ?)
+	 * @param   array   $anchor_args      CTE Anchor args
+	 * @param   string  $recursive_query  Recursive query, should reference temporary table cte_last
+	 * @param   string  $results_query    Results query
+	 *
+	 * @return  mixed
+	 */
+	public function emulate_cte_query($schema, $anchor_query, $anchor_args, $recursive_query, $results_query, $cleanup=true) {
+		$results = false;
+
+		/**
+		 * Reset engine type if set in config.php (MEMORY or InnoDB)
+		 */
+		$db = Config::ValueOf('db');
+		$tmptable_engine_type = ($db['tmptable_engine_type']=="InnoDB") ? "InnoDB" : "MEMORY";
+
+		try {
+			// Emulate SQL CTE query using temporary tables.
+			//  - cte_query, holds accumulated results
+			//  - cte_0,     temporary results storage (can't reference a temporary table name multiple times in the same query)
+			//  - cte_last,  results of the last iteration.
+
+			$query = "DROP TABLE IF EXISTS cte_query, cte_0, cte_1, cte_last;" .
+					"CREATE TEMPORARY TABLE cte_query $schema ENGINE = $tmptable_engine_type;" .
+					"CREATE TEMPORARY TABLE cte_0     $schema ENGINE = $tmptable_engine_type;" .
+					"CREATE TEMPORARY TABLE cte_last  $schema ENGINE = $tmptable_engine_type;";
+			$this->runQuery($query);
+
+			// Run Anchor query then the recursive query until there are no more results
+			$level = 1;
+			do {
+				$query = "INSERT INTO cte_0 ".($level++==1 ? $anchor_query : $recursive_query).";" .
+						"TRUNCATE TABLE cte_last;" .
+						"INSERT IGNORE INTO cte_last  SELECT * FROM cte_0;" .
+						"TRUNCATE TABLE cte_0;" .
+						"INSERT IGNORE INTO cte_query SELECT * FROM cte_last;";
+				$result = $this->runQuery($query, $anchor_args, $rowCount);
+
+				if ($level>256) { throw new Exception(_('Recursion limit reached.')); }
+			} while ($result == 1 && $rowCount > 0);
+
+			// Run $result_query using cte temporary table results
+			$results = $this->getObjectsQuery($results_query);
+
+		} catch (Exception $e) {
+			if ($cleanup)
+				$this->runQuery("DROP TABLE IF EXISTS cte_query, cte_0, cte_last;");
+			throw $e;
+		}
+
+		// Cleanup and return results
+		if ($cleanup)
+			$this->runQuery("DROP TABLE IF EXISTS cte_query, cte_0, cte_last;");
+		return $results;
+	}
+
+	/**
 	 * Allow a value to be escaped, ready for insertion as a mysql parameter
 	 * Note: for usage as a value (rather than prepared statements), you MUST manually quote around.
 	 *
