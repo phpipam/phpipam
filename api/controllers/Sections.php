@@ -353,7 +353,7 @@ class Sections_controller extends Common_api_functions {
 		if($subnet===false)
 														{ $this->Response->throw_exception(200, "Subnet does not exist"); }
         # calculate
-        $subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet, true);     //Calculate free/used etc
+        $subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet);     //Calculate free/used etc
 
         # return
         return $subnet_usage;

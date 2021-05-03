@@ -649,7 +649,7 @@ class Subnets_controller extends Common_api_functions {
 		if($subnet===false)
 														{ $this->Response->throw_exception(400, "Subnet does not exist"); }
 		# get usage
-		$subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet, true);
+		$subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet);
 		# return
 		return $subnet_usage;
 	}

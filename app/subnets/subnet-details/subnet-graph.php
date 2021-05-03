@@ -5,7 +5,7 @@
  ********************************************/
 
 # get usage
-$details = $Subnets->calculate_subnet_usage ($subnet, true);
+$details = $Subnets->calculate_subnet_usage ($subnet);
 
 # set free color
 $unused_color = $User->user->ui_theme=="dark" ? "rgba(0,0,0,0.1)" : "white";
