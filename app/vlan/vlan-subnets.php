@@ -59,25 +59,6 @@ else {
 			if($subnet['pingSubnet'] == 1) 				{ print '<td class="allowRequests small hidden-xs hidden-sm">'._('enabled').'</td>'; }
 			else 										{ print '<td class="allowRequests small hidden-xs hidden-sm"></td>'; }
 
-			# increase IP count
-			$ipCount = 0;
-			if(!$Subnets->has_slaves ($subnet['id']))	{ $ipCount = $Addresses->count_subnet_addresses ($subnet['id']); }			//ip count - no slaves
-			else 										{
-				# fix for subnet and broadcast free space calculation
-				$ipCount = 0;															//initial count
-				$Subnets->reset_subnet_slaves_recursive ();
-				$Subnets->fetch_subnet_slaves_recursive ($subnet['id']);		//fetch all slaves
-				if(is_array($Subnets->slaves)) {
-					foreach($Subnets->slaves as $s) {
-						$ipCount = $ipCount + $Addresses->count_subnet_addresses ($s);
-						# subnet and broadcast add used
-						if($Subnets->get_ip_version ($subnet['subnet'])=="IPv4" && $subnet['mask']<31) {
-							$ipCount = $ipCount+2;
-						}
-					}
-				}
-			}
-
 			# print usage
 			$calculate = $Subnets->calculate_subnet_usage ($subnet);
 		    print ' <td class="small hidden-xs hidden-sm">'. $calculate['used'] .'/'. $calculate['maxhosts'] .'</td>'. "\n";
