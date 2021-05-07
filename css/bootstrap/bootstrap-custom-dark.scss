@@ -724,6 +724,9 @@ html {
                 color: $color_gray_3 !important;
 
             }
+            &.ip-0 {
+                color: white !important;
+            }
             &.ip-1 {
                 border-color: $alert_red_2;
                 background-color: rgba(255,0,0,0.05) !important;
