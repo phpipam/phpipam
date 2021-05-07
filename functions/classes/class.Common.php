@@ -997,7 +997,12 @@ class Common_functions  {
 			$url = $_SERVER['SERVER_NAME'];
 		}
 
-		$port = is_numeric($_SERVER['HTTP_X_FORWARDED_PORT']) ? $_SERVER['HTTP_X_FORWARDED_PORT'] : $_SERVER['SERVER_PORT'];
+		// If only HTTP_X_FORWARDED_PROTO='https' is set assume port=443. Override if required by setting HTTP_X_FORWARDED_PORT
+		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && !isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
+			$port = ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 443 : 80;
+		} else {
+			$port = is_numeric($_SERVER['HTTP_X_FORWARDED_PORT']) ? $_SERVER['HTTP_X_FORWARDED_PORT'] : $_SERVER['SERVER_PORT'];
+		}
 
 		if (($proto == "http" && $port == 80) || ($proto == "https" && $port == 443)) {
 			return "$proto://$url";
