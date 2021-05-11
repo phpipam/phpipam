@@ -56,7 +56,7 @@ function print_subnets ($s) {
         foreach ($config['Dhcp4']['option-data'] as $d) {
             // if more specific parameter is already set for subnet ignore, otherwise show
             if(!in_array($d['name'], $printed_options)) {
-                $hr = $m==0 ? "<hr><span class='text-muted'>Defaults:</span><br>" : "<br>";
+                $hr = $m==0 ? "<hr><span class='text-muted'>"._("Defaults").":</span><br>" : "<br>";
                 $html[] = $hr.$d['name'].": ".$d['data'];
                 // next index
                 $m++;

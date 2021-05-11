@@ -35,12 +35,12 @@ if(strlen($_POST['email'])>0) {
 $object = $Admin->fetch_object ($_POST['type'], "id", $_POST['id']);
 
 if($_POST['type']=="subnets") {
-	$tmp[] = "Share type: subnet";
+	$tmp[] = _("Share type: subnet");
 	$tmp[] = "\t".$Subnets->transform_to_dotted($object->subnet)."/$object->mask";
 	$tmp[] = "\t".$object->description;
 }
 else {
-	$tmp[] = "Share type: IP address";
+	$tmp[] = _("Share type: IP address");
 	$tmp[] = "\t".$Subnets->transform_to_dotted($object->ip_addr);
 	$tmp[] = "\t".$object->description;
 }

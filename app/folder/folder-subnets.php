@@ -119,7 +119,7 @@ if($slaves) {
 				}
 
 				// calculate usage
-                $calculate  = $Subnets->calculate_subnet_usage ($slave, false);
+                $calculate  = $Subnets->calculate_subnet_usage ($slave);
 
 				# add full information
                 $fullinfo = $slave['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";

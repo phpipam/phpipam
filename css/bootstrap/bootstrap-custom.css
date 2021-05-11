@@ -1535,7 +1535,7 @@ span.status-hidden {
 }
 .status-warning {
 	background: #FFCE57;
-	border-radius: 50% 50% 25% 25%;
+	border-radius: 50%;
 }
 .status.status-padded {
 	background: transparent;
