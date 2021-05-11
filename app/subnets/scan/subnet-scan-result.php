@@ -18,7 +18,7 @@ $User->check_user_session();
 
 # check if $_POST input data has been truncated (canary=true input dropped)
 if(!isset($_POST['canary']))
-	$Result->show("danger", _("Number of discovered hosts exceed maximum possible defined by php.ini")."<br>"._("Please increase your php.ini setting:"). " `max_input_vars` = ".ini_get('max_input_vars'), true);
+	$Result->show("danger", _("phpIPAM received truncated POST data")."<br>"._("Please check your webserver and/or php.ini setting:"). " `max_input_vars` = ".ini_get('max_input_vars'), true);
 else
 	unset($_POST['canary']);
 

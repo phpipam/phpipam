@@ -2,6 +2,7 @@
 
     Bugfixes:
     ----------------------------
+    + SNMP, number of discovered hosts exceed maximum warning (#3279);
 
 == 1.4.2
 
