@@ -369,7 +369,7 @@ else {
 			    $gw = $addresses[$n]->is_gateway==1 ? "gateway" : "";
 
 			    print "	<td class='ipaddress $gw'><span class='status status-$hStatus' $hTooltip></span><a href='".create_link("subnets",$subnet['sectionId'],$_GET['subnetId'],"address-details",$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr)."</a>";
-			    if($addresses[$n]->is_gateway==1)						{ print " <i class='fa fa-info-circle fa-gateway' rel='tooltip' title='"._('Address is marked as gateway')."'></i>"; }
+			    if($addresses[$n]->is_gateway==1)						{ print " <i class='fa fa-arrows' rel='tooltip' title='"._('Address is marked as gateway')."'></i>"; }
 			    print $Addresses->address_type_format_tag($addresses[$n]->state);
 
                 # set subnet nat
