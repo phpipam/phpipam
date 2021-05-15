@@ -145,7 +145,6 @@ $private_subpages = array();
  *  from overview tab, so go to Credentials tab and make an API key for your project.
  ******************************/
 $gmaps_api_key         = "";
-$gmaps_api_geocode_key = "";
 
 /**
  * proxy connection details

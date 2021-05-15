@@ -30,7 +30,8 @@ elseif ($locA->name_print!=="/" && $locB->name_print!=="/") {
         }
         // recode
         elseif (strlen($l->long)==0 && strlen($l->lat)==0 && strlen($l->address)>0) {
-            $latlng = $Tools->get_latlng_from_address ($l->address);
+            $OSM = new OpenStreetMap($Database);
+            $latlng = $OSM->get_latlng_from_address ($l->address);
             if($latlng['lat']==NULL || $latlng['lng']==NULL) {
                 unset($all_locations[$k]);
             }
