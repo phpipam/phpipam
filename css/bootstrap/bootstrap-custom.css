@@ -914,8 +914,9 @@ table#subnetsMenu td#subnetsLeft .menu-tools {
     margin: 0px !important;
 }
 
-#gmap {
+#osmap {
     border: 5px solid white;
+    z-index: 10;
 }
 
 

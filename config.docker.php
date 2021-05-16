@@ -48,14 +48,6 @@ $db['name']    = file_env('IPAM_DATABASE_NAME',    $db['name']);
 $db['port']    = file_env('IPAM_DATABASE_PORT',    $db['port']);
 $db['webhost'] = file_env('IPAM_DATABASE_WEBHOST', $db['webhost']);
 
- /**
-  * Google MAPs API key for locations to display map
-  *
-  *  Obtain key: Go to your Google Console (https://console.developers.google.com) and enable "Google Maps JavaScript API"
-  *  from overview tab, so go to Credentials tab and make an API key for your project.
-  ******************************/
-$gmaps_api_key = file_env('IPAM_GMAPS_API_KEY', $gmaps_api_key);
-
 /**
  * proxy connection details
  ******************************/

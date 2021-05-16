@@ -22,15 +22,17 @@ class LockForUpdate {
      * @param integer $id
      */
     function __construct(Database_PDO $Database, $tableName, $id) {
-        if (!is_string($tableName) || strlen($tableName)<1)
+        if (!is_string($tableName) || strlen($tableName)<1) {
             throw new Exception(_('Invalid table name'));
+        }
 
         $this->Database = $Database;
 
         $tableName = $this->Database->escape($tableName);
 
-        if (!$this->Database->beginTransaction())
+        if (!$this->Database->beginTransaction()) {
             throw new Exception(_('Unable to start transaction'));
+        }
 
         $this->locked_row = $this->Database->getObjectQuery("SELECT * FROM `$tableName` WHERE `id`=? FOR UPDATE;", [$id]);
     }
