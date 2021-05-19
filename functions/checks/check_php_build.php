@@ -46,7 +46,7 @@ if ((@include_once 'PEAR.php') != true) {
 }
 
 # if any extension is missing print error and die!
-if (sizeof($missingExt) != 1 || (phpversion() < "5.4") || PHP_INT_SIZE==4) {
+if (sizeof($missingExt) != 1 || (phpversion() < "5.4") || (phpversion() > "7.9") || PHP_INT_SIZE==4) {
 
     /* remove dummy 0 line */
     unset($missingExt[0]);
@@ -75,6 +75,11 @@ if (sizeof($missingExt) != 1 || (phpversion() < "5.4") || PHP_INT_SIZE==4) {
         }
         $error[] = '</ul><hr>' . "\n";
         $error[] = _('Please recompile PHP to include missing extensions and restart Apache.') . "\n";
+    }
+    elseif(phpversion() > "7.9") { # 8.0 or above
+        $error[] = "<div class='alert alert-danger' style='margin:auto;margin-top:20px;width:500px;'><strong>"._('Unsupported PHP version')."!</strong><br><hr>";
+        $error[] = _('phpIPAM is not yet compatible with this version of php!')."<br>";
+        $error[] = _("Detected PHP version: ").phpversion(). "<br><br>\n";
     }
     /* php version error */
     elseif(phpversion() < "5.4") {
