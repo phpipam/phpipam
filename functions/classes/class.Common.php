@@ -989,19 +989,25 @@ class Common_functions  {
 	public function createURL () {
 		$proto = $this->isHttps() ? 'https' : 'http';
 
-		$url = $_SERVER['HTTP_HOST'];
+		$url = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "localhost";
 
 		if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
 			$url = $_SERVER['HTTP_X_FORWARDED_HOST'];
-		} elseif (isset($_SERVER['HTTP_X_SECURE_REQUEST']) && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') {
+		} elseif (isset($_SERVER['SERVER_NAME']) && isset($_SERVER['HTTP_X_SECURE_REQUEST']) && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') {
 			$url = $_SERVER['SERVER_NAME'];
 		}
+
+		$url = preg_replace('/:.*$/', '', $url);
 
 		// If only HTTP_X_FORWARDED_PROTO='https' is set assume port=443. Override if required by setting HTTP_X_FORWARDED_PORT
 		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && !isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
 			$port = ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 443 : 80;
+		} elseif (isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
+			$port = $_SERVER['HTTP_X_FORWARDED_PORT'];
+		} elseif (isset($_SERVER['SERVER_PORT'])) {
+			$port = $_SERVER['SERVER_PORT'];
 		} else {
-			$port = is_numeric($_SERVER['HTTP_X_FORWARDED_PORT']) ? $_SERVER['HTTP_X_FORWARDED_PORT'] : $_SERVER['SERVER_PORT'];
+			$port = 80;
 		}
 
 		if (($proto == "http" && $port == 80) || ($proto == "https" && $port == 443)) {
