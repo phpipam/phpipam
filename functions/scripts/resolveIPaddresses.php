@@ -14,16 +14,15 @@
 # include required scripts
 require_once( dirname(__FILE__) . '/../functions.php' );
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 # initialize objects
 $Database 	= new Database_PDO;
 $Admin		= new Admin ($Database, false);
 $Subnets	= new Subnets ($Database);
 $DNS		= new DNS ($Database);
 $Result		= new Result();
-
-// set to 1 in case of errors
-ini_set('display_errors', 0);
-error_reporting(E_ERROR);
 
 # cli required
 if( php_sapi_name()!="cli" ) { $Result->show_cli("cli only\n", true); }

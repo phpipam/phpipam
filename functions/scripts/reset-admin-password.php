@@ -10,8 +10,8 @@
 # include required scripts
 require_once( dirname(__FILE__) . '/../functions.php' );
 
-# Set php warnign levels
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+# Don't corrupt output with php errors!
+disable_php_errors();
 
 # set debugging
 $debugging = false;
