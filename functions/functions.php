@@ -43,6 +43,7 @@ if(Config::ValueOf('debugging')==true) {
 }
 else {
 	disable_php_errors();
+	error_reporting(E_ERROR | E_WARNING);
 }
 
 // auto-set base if not already defined

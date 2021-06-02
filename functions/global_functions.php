@@ -16,7 +16,6 @@ function disable_php_errors() {
 	# Don't corrupt json,xml,sql,png... output with php errors!
 	ini_set('display_errors', 0);
 	ini_set('display_startup_errors', 0);
-	error_reporting(0);
 }
 
 /**
