@@ -24,8 +24,8 @@ CREATE TABLE `customers` (
   `postcode` VARCHAR(32) NULL DEFAULT NULL,
   `city` varchar(255) DEFAULT NULL,
   `state` varchar(255) DEFAULT NULL,
-  `lat` varchar(12) DEFAULT NULL,
-  `long` varchar(12) DEFAULT NULL,
+  `lat` varchar(31) DEFAULT NULL,
+  `long` varchar(31) DEFAULT NULL,
   `contact_person` text DEFAULT NULL,
   `contact_phone` varchar(32) DEFAULT NULL,
   `contact_mail` varchar(254) DEFAULT NULL,
@@ -813,8 +813,8 @@ CREATE TABLE `locations` (
   `name` varchar(128) NOT NULL DEFAULT '',
   `description` text,
   `address` VARCHAR(128)  NULL  DEFAULT NULL,
-  `lat` varchar(12) DEFAULT NULL,
-  `long` varchar(12) DEFAULT NULL,
+  `lat` varchar(31) DEFAULT NULL,
+  `long` varchar(31) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1026,8 +1026,34 @@ CREATE TABLE `vaultItems` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+# Dump of table nominatim
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `nominatim`;
+
+CREATE TABLE `nominatim` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `nominatim` (`id`, `url`) VALUES (1, 'https://nominatim.openstreetmap.org/search');
+
+
+# Dump of table nominatim_cache
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `nominatim_cache`;
+
+CREATE TABLE `nominatim_cache` (
+  `sha256` binary(32) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `query` text NOT NULL,
+  `lat_lng` text NOT NULL,
+  PRIMARY KEY (`sha256`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.5";
-UPDATE `settings` SET `dbversion` = 36;
+UPDATE `settings` SET `dbversion` = 37;

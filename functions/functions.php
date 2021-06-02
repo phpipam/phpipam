@@ -85,6 +85,7 @@ require( dirname(__FILE__) . '/classes/class.Crypto.php' );	    	// Crypto class
 require( dirname(__FILE__) . '/classes/class.Password_check.php' );	// Class for password check
 require( dirname(__FILE__) . '/classes/class.Session_DB.php' );	    // Class for storing sessions to database
 require( dirname(__FILE__) . '/classes/class.LockForUpdate.php' );	    // Class for MySQL row locking
+require( dirname(__FILE__) . '/classes/class.OpenStreetMap.php' );	    // Class for OSM
 
 
 

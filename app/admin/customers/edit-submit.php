@@ -94,17 +94,14 @@ if(isset($update)) {
 }
 
 // set lat lng
-$latlng = $Tools->get_latlng_from_address ($_POST['address'].", ".$_POST['postcode']." ".$_POST['city'].", ".$_POST['state']);
+$OSM = new OpenStreetMap($Database);
+$latlng = $OSM->get_latlng_from_address ($_POST['address'].", ".$_POST['postcode']." ".$_POST['city'].", ".$_POST['state']);
 if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
     $values['lat']  = $latlng['lat'];
     $values['long'] = $latlng['lng'];
 }
 else {
-	if (!empty($latlng['info'])) {
-		$Result->show("info", escape_input($latlng['info']), false);
-	} else {
-		$Result->show("warning", _('Failed to update location lat/lng from Google').".<br>".escape_input($latlng['error']), false);
-	}
+	$Result->show("warning", _('Failed to update location lat/lng from Nominatim').".<br>".escape_input($latlng['error']), false);
 }
 
 // update customer
