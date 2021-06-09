@@ -5,6 +5,10 @@
     + FPing discovery marks all addresses as alive (#2888);
     + SNMP, number of discovered hosts exceed maximum warning (#3279);
 
+    Security Fixes:
+    ----------------------------
+    + PHP session ID fixation (#3342);
+
 == 1.4.2
 
     Enhancements, changes:
