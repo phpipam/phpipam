@@ -265,6 +265,9 @@ class User extends Common_functions {
     private function write_session_parameters () {
         // not for api
         if ($this->api !== true) {
+            // Avoid session ID fixation attacks
+            session_regenerate_id(true);
+
             $_SESSION['ipamusername'] = $this->user->username;
             $_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
             $_SESSION['lastactive']   = time();
@@ -355,11 +358,11 @@ class User extends Common_functions {
      * @return string|false
      */
     public function check_user_session ($redirect = true, $ignore_2fa = false) {
+        # set url
+        $url = $this->createURL();
+
         # not authenticated
         if($this->authenticated===false) {
-            # set url
-            $url = $this->createURL();
-
             # error print for AJAX
             if(@$_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest") {
                 # for AJAX always check origin
