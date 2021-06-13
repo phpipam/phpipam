@@ -2223,10 +2223,11 @@ $(document).on("click", ".remove-snmp-subnet", function() {
 });
 ///add subnets to section
 $(document).on("click", "#add-subnets-to-section-snmp", function() {
-   var postData = $('form#editSubnetDetailsSNMPall').serialize();
-   var postData = postData+"&type=snmp-route-all";
-   submit_popup_data (".add-subnets-to-section-snmp-result", "app/subnets/scan/subnet-scan-result.php", postData);
-   return false;
+    var postData = "type=snmp-route-all";
+    var postData = postData+"&"+$('form#editSubnetDetailsSNMPall').serialize();
+    var postData = postData+"&canary=true";
+    submit_popup_data (".add-subnets-to-section-snmp-result", "app/subnets/scan/subnet-scan-result.php", postData);
+    return false;
 });
 
 

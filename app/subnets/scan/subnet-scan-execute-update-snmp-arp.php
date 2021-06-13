@@ -3,6 +3,9 @@
 # Check we have been included and not called directly
 require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 /*
  * Discover new hosts with snmp
  *******************************/
@@ -18,9 +21,6 @@ if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result
 
 # set class
 $Snmp = new phpipamSNMP ();
-
-// no errors
-error_reporting(E_ERROR);
 
 // fetch all hosts to be scanned
 $all_subnet_hosts = (array) $Addresses->fetch_subnet_addresses ($_POST['subnetId']);
