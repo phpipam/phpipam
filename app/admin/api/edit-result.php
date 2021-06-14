@@ -33,7 +33,7 @@ if($_POST['action']!="delete") {
 	if(strlen($_POST['app_code'])!=32 || !preg_match("#^[a-zA-Z0-9-_=]+$#", $_POST['app_code']))								{ $error[] = "Invalid application code"; }
 	}
 	# name must be more than 2 and alphanumberic
-	if(strlen($_POST['app_id'])<3 || strlen($_POST['app_id'])>12 || !preg_match("#^[a-zA-Z0-9]+$#",$_POST['app_id']))			{ $error[] = "Invalid application id"; }
+	if(strlen($_POST['app_id'])<3 || strlen($_POST['app_id'])>12 || !preg_match("#^[a-zA-Z0-9-_=]+$#",$_POST['app_id']))			{ $error[] = "Invalid application id"; }
 	# permissions must be 0,1,2
 	if($_POST['app_security']!="user") {
 	if(!($_POST['app_permissions']==0 || $_POST['app_permissions']==1 || $_POST['app_permissions'] ==2 || $_POST['app_permissions'] ==3 ))	{ $error[] = "Invalid permissions"; }
