@@ -955,6 +955,28 @@ class Common_functions  {
 	}
 
 	/**
+	 * Return port number used to access the site
+	 *
+	 * @access  private
+	 * @return  int
+	 */
+	private function httpPort() {
+		// If only HTTP_X_FORWARDED_PROTO='https' is set assume port=443. Override if required by setting HTTP_X_FORWARDED_PORT
+		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && !isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
+			return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 443 : 80;
+		}
+		elseif (isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
+			return $_SERVER['HTTP_X_FORWARDED_PORT'];
+		}
+		elseif (isset($_SERVER['SERVER_PORT'])) {
+			return $_SERVER['SERVER_PORT'];
+		}
+		else {
+			return 80;
+		}
+	}
+
+	/**
 	* Returns true if site is accessed with https
 	*
 	* @access public
@@ -964,21 +986,18 @@ class Common_functions  {
 		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
 			return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https');
 		}
-
-		if (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+		elseif (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
 			return true;
 		}
-
-		if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+		elseif(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 			return true;
 		}
-
-		$port = is_numeric($_SERVER['HTTP_X_FORWARDED_PORT']) ? $_SERVER['HTTP_X_FORWARDED_PORT'] : $_SERVER['SERVER_PORT'];
-		if($port == 443) {
+		elseif($this->httpPort() == 443) {
 			return true;
 		}
-
-		return false;
+		else {
+			return false;
+		}
 	}
 
 	/**
@@ -990,31 +1009,26 @@ class Common_functions  {
 	public function createURL () {
 		$proto = $this->isHttps() ? 'https' : 'http';
 
-		$url = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "localhost";
-
 		if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
 			$url = $_SERVER['HTTP_X_FORWARDED_HOST'];
-		} elseif (isset($_SERVER['SERVER_NAME']) && isset($_SERVER['HTTP_X_SECURE_REQUEST']) && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') {
+		}
+		elseif (isset($_SERVER['HTTP_HOST'])) {
+			$url = $_SERVER['HTTP_HOST'];
+		}
+		elseif (isset($_SERVER['SERVER_NAME'])) {
 			$url = $_SERVER['SERVER_NAME'];
 		}
-
-		$url = preg_replace('/:.*$/', '', $url);
-
-		// If only HTTP_X_FORWARDED_PROTO='https' is set assume port=443. Override if required by setting HTTP_X_FORWARDED_PORT
-		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && !isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
-			$port = ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 443 : 80;
-		} elseif (isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
-			$port = $_SERVER['HTTP_X_FORWARDED_PORT'];
-		} elseif (isset($_SERVER['SERVER_PORT'])) {
-			$port = $_SERVER['SERVER_PORT'];
-		} else {
-			$port = 80;
+		else {
+			$url = "localhost";
 		}
+		$host = parse_url("$proto://$url", PHP_URL_HOST) ?: "localhost";
+
+		$port = $this->httpPort();
 
 		if (($proto == "http" && $port == 80) || ($proto == "https" && $port == 443)) {
-			return "$proto://$url";
+			return "$proto://$host";
 		} else {
-			return "$proto://$url:$port";
+			return "$proto://$host:$port";
 		}
 	}
 
