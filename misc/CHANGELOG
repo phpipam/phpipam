@@ -1,3 +1,9 @@
+== 1.4.4
+
+    Security Fixes:
+    ----------------------------
+    + XSS (reflected) in IP calculator (#3351);
+
 == 1.4.3
 
     Bugfixes:
