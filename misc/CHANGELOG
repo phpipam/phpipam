@@ -73,6 +73,7 @@
     + Upgraded jQuery to 3.5.1 (#3119);
     + Stored XSS in instructions widgets (#3025);
     + PHP session ID fixation (#3342);
+    + XSS (reflected) in IP calculator (#3351);
 
     Translations:
     ----------------------------
