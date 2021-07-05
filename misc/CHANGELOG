@@ -1,4 +1,7 @@
 == 1.4.4
+    Bugfixes:
+    ----------------------------
+    + Allow UTF-8 in instruction widgets (#3360);
 
     Security Fixes:
     ----------------------------
