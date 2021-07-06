@@ -2,6 +2,7 @@
     Bugfixes:
     ----------------------------
     + Allow UTF-8 in instruction widgets (#3360);
+    + Exclude IPv6 from Ping and Discovery scans (#3354);
 
     Security Fixes:
     ----------------------------

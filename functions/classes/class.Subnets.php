@@ -655,7 +655,7 @@ class Subnets extends Common_functions {
 	 * @return array|false
 	 */
 	public function fetch_all_subnets_for_pingCheck ($agentId=null) {
-		return $this->fetch_all_subnets_for_check('pingSubnet', $agentId);
+		return $this->fetch_all_subnets_for_Check('pingSubnet', $agentId);
 	}
 
 	/**
@@ -665,7 +665,7 @@ class Subnets extends Common_functions {
 	 * @return array|false
 	 */
 	public function fetch_all_subnets_for_discoveryCheck ($agentId=null) {
-		return $this->fetch_all_subnets_for_check('discoverSubnet', $agentId);
+		return $this->fetch_all_subnets_for_Check('discoverSubnet', $agentId);
 	}
 
 	/**
@@ -676,7 +676,11 @@ class Subnets extends Common_functions {
 	 */
 	private function fetch_all_subnets_for_Check($discoverytype, $agentId) {
 		if (is_null($agentId) || !is_numeric($agentId))	{ return false; }
-		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask`,`resolveDNS`,`nameserverId` FROM `subnets` WHERE `scanAgent` = ? AND `$discoverytype` = 1 AND COALESCE(`isFolder`,0) = 0 AND `mask` > 0;", array($agentId)); }
+		// Exclude subnets with children
+		$query = "SELECT s.id, s.subnet, s.sectionId, s.mask, s.resolveDNS, s.nameserverId FROM subnets AS s
+				LEFT JOIN subnets AS child ON child.masterSubnetId = s.id
+				WHERE s.scanAgent = ? AND s.$discoverytype = 1 AND s.isFolder = 0 AND s.mask > 0 AND s.subnet < 4294967296 AND child.id IS NULL;";
+		try { $subnets = $this->Database->getObjectsQuery($query, array($agentId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
