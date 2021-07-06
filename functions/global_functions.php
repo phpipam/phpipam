@@ -87,7 +87,7 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 		$link = BASE.implode('/', $parts);
 
 		# IP search fix
-		if (!is_null($parts[6]) || ($parts[0]=="tools" && $parts[1]=="search" && isset($parts[2])))
+		if ((isset($parts[6]) && !is_null($parts[6])) || (isset($parts[2]) && $parts[0]=="tools" && $parts[1]=="search"))
 			return $link;
 
 		return $link.'/';

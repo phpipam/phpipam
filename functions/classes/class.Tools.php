@@ -177,13 +177,13 @@ class Tools extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $search_term
-	 * @param string $high (default: "")
-	 * @param string $low (default: "")
+	 * @param string $high
+	 * @param string $low
 	 * @param mixed $search_req
 	 * @param mixed $custom_fields (default: array())
 	 * @return array
 	 */
-	public function search_subnets($search_term, $high = "", $low = "", $search_req, $custom_fields = array()) {
+	public function search_subnets($search_term, $high, $low, $search_req, $custom_fields = array()) {
 		# first search if range provided
 		$result1 = $this->search_subnets_range  ($search_term, $high, $low, $custom_fields);
 		# search inside subnets even if IP does not exist!
@@ -1008,11 +1008,11 @@ class Tools extends Common_functions {
 	 * Sends mail for IP request
 	 *
 	 * @access public
-	 * @param string $action (default: "new")
+	 * @param string $action
 	 * @param mixed $values
 	 * @return bool
 	 */
-	public function ip_request_send_mail ($action="new", $values) {
+	public function ip_request_send_mail ($action, $values) {
 
 		$this->get_settings ();
 
@@ -3248,12 +3248,12 @@ class Tools extends Common_functions {
 	 * Parses import file
 	 *
 	 * @access public
-	 * @param string $filetype (default: "xls")
+	 * @param string $filetype
 	 * @param object $subnet
 	 * @param array $custom_address_fields
 	 * @return array
 	 */
-	public function parse_import_file ($filetype = "xls", $subnet = object, $custom_address_fields) {
+	public function parse_import_file ($filetype, $subnet, $custom_address_fields) {
     	# start object and get settings
     	$this->get_settings ();
     	$this->Subnets = new Subnets ($this->Database);

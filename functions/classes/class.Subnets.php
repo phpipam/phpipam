@@ -501,11 +501,11 @@ class Subnets extends Common_functions {
 	 * Fetches subnetd by specified method
 	 *
 	 * @access public
-	 * @param string $method (default: "id")
+	 * @param string $method
 	 * @param mixed $value
 	 * @return array|false
 	 */
-	public function fetch_subnet ($method="id", $value) {
+	public function fetch_subnet ($method, $value) {
 		# null method
 		$method = is_null($method) ? "id" : $method;
 		# fetch
@@ -3580,12 +3580,12 @@ class Subnets extends Common_functions {
 	 * Fetch details from ripe or arin
 	 *
 	 * @access private
-	 * @param string $network (default: "ripe")
-	 * @param string $type (default: "inetnum")
+	 * @param string $network
+	 * @param string $type
 	 * @param mixed $subnet
 	 * @return array
 	 */
-	private function ripe_arin_fetch ($network = "ripe", $type = "inetnum", $subnet) {
+	private function ripe_arin_fetch ($network, $type, $subnet) {
 		// set url
 		$url = $network=="ripe" ? "http://rest.db.ripe.net/ripe/$type/$subnet" : "http://whois.arin.net/rest/nets;q=$subnet?showDetails=true&showARIN=false&showNonArinTopLevelNet=false&ext=netref2";
 

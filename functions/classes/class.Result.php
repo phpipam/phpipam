@@ -234,11 +234,11 @@ class Result {
 	 * Sets new header and throws exception
 	 *
 	 * @access public
-	 * @param int $code (default: 500)
+	 * @param int $code
 	 * @param mixed $exception
 	 * @return void
 	 */
-	public function throw_exception ($code = 500, $exception) {
+	public function throw_exception ($code, $exception) {
 		// set failed
 		$this->exception = true;
 

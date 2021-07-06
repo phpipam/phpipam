@@ -225,11 +225,11 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $table
-	 * @param mixed $method (default: null)
+	 * @param mixed $method
 	 * @param mixed $value
 	 * @return false|object
 	 */
-	public function fetch_object ($table=null, $method=null, $value) {
+	public function fetch_object ($table, $method, $value) {
 		// checks
 		if(!is_string($table)) return false;
 		if(strlen($table)==0)  return false;
