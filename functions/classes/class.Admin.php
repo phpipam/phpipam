@@ -159,6 +159,7 @@ class Admin extends Common_functions {
 
 		# execute based on action
 		if($action=="add")					{ return $this->object_add ($table, $values, $values_log); }
+		if($action=="copy")					{ return $this->object_add ($table, $values, $values_log); }
 		elseif($action=="edit")				{ return $this->object_edit ($table, $field, $values, $values_log); }
 		elseif($action=="edit-multiple")	{ return $this->object_edit_multiple ($table, $field, $values); }		//$field = array of ids
 		elseif($action=="delete")			{ return $this->object_delete ($table, $field, $values[$field]); }

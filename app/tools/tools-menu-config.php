@@ -27,6 +27,7 @@ $tools_menu_items = array(
 						'multicast-networks',
 						'pass-change',
 						'powerDNS',
+                                                'portMaps',
 						'request-ip',
 						'requests',
 						'racks',
@@ -129,6 +130,7 @@ if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circu
 $tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-random", 	 "name"=>"Circuits",  			"href"=>"circuits", 		"description"=>"Circuit information");
 if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>0)
 $tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-map", 	     "name"=>"Locations",  			"href"=>"locations", 	"description"=>"Locations");
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-map", 	     "name"=>"Port Maps",  			"href"=>"portMaps", 	"description"=>"Port Maps");
 
 
 # user menu
