@@ -149,13 +149,13 @@ $(document).ready(function(){
                     if($rack->hasBack!="0") {
                         print "<optgroup label='"._("Front")."'>";
                         foreach ($available as $a) {
-                            print "<option value='$a'>$a</option>";
+                            print "<option value='$a'>Front:$a</option>";
                         }
                         print "</optgroup>";
 
                         print "<optgroup label='"._("Back")."'>";
                         foreach ($available_back as $k=>$a) {
-                            print "<option value='$k'>$a</option>";
+                            print "<option value='$k'>Back:$a</option>";
                         }
                         print "</optgroup>";
                     }
