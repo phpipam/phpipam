@@ -77,14 +77,14 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 			    print "<optgroup label='"._("Front")."'>";
 			    foreach ($available as $a) {
 			    	$selected = $a==$device['rack_start'] ? "selected" : "";
-			        print "<option value='$a' $selected $disabled>$a</option>";
+			        print "<option value='$a' $selected $disabled>Front:$a</option>";
 			    }
 			    print "</optgroup>";
 
 			    print "<optgroup label='"._("Back")."'>";
 			    foreach ($available_back as $k=>$a) {
 			    	$selected = $k==$device['rack_start'] ? "selected" : "";
-			        print "<option value='$k' $selected>$a</option>";
+			        print "<option value='$k' $selected>Back:$a</option>";
 			    }
 			    print "</optgroup>";
 			}
