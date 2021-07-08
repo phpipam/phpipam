@@ -260,6 +260,34 @@ class Addresses extends Common_functions {
 	}
 
 	/**
+	 *  Fetches duplicate addresses
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function fetch_duplicate_addresses() {
+		try {
+			$query = "SELECT a.* FROM ipaddresses AS a
+				INNER JOIN (SELECT ip_addr,COUNT(*) AS cnt FROM ipaddresses GROUP BY ip_addr HAVING cnt >1) dups ON a.ip_addr=dups.ip_addr
+				ORDER BY a.ip_addr,a.subnetId,a.id;";
+
+			$addresses = $this->Database->getObjectsQuery($query);
+
+			# save to addresses cache
+			if(is_array($addresses)) {
+				foreach($addresses as $address) {
+					$this->cache["id=>".$address->id] = (object) $address;
+				}
+			}
+		}
+		catch (Exception $e) {
+			$addresses = [];
+		}
+
+		return is_array($addresses) ? $addresses : [];
+	}
+
+	/**
 	 * Bulk fetch similar addresses.
 	 *
 	 * The subnets details page will call search_similar_addresses() for EVERY IP in the subnet.
