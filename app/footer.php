@@ -11,6 +11,9 @@
 		if (defined("GIT_VCS_REF")) {
 			print " git <a href='https://github.com/phpipam/phpipam/tree/".GIT_VCS_REF."'>".GIT_VCS_REF."</a>";
 		}
+		if (phpversion() >= UNSUPPORTED_PHP_VERSION) {
+			print " "._('UNSUPPORTED_PHP_VERSION').":".phpversion();
+		}
 		?>
 	</td>
 
