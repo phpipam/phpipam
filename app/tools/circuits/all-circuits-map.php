@@ -70,7 +70,7 @@ foreach ($circuits as $circuit) {
 
     $OSM->add_circuit($circuit_l1, $circuit_l2, $type_hash[$circuit->type]);
 }
-$OSM->map($height);
+$OSM->map();
 
 print "<hr>";
 print "<div class='text-right'>";

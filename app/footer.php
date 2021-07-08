@@ -16,7 +16,7 @@
 
 	<?php
 	# custom footer message
-	if(is_string($config['footer_message']) && strlen($config['footer_message'])>0) {
+	if(isset($config['footer_message']) && strlen($config['footer_message'])>0) {
 		print '<td> '.$config['footer_message'].' </td>';
 	}
 

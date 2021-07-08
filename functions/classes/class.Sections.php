@@ -542,7 +542,7 @@ class Sections extends Common_functions {
 		$custom = $Tools->fetch_custom_fields ("subnets");
 
 		# set hidden fields
-		$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+		$hidden_fields = json_decode($User->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
 		$hidden_fields = is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 
 		# check permission

@@ -1523,7 +1523,7 @@ class Subnets extends Common_functions {
 		$type = $this->identify_address($subnet->subnet);
 
 		# Address/NAT pools & IPv6
-		if ($subnet->isPool || $type == 'IPv6')
+		if ($type == 'IPv6' || (property_exists($subnet, 'isPool') && $subnet->isPool))
 			return false;
 
 		# IPv4, handle /32 & /31
