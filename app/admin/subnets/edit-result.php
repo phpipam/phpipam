@@ -315,8 +315,8 @@ else {
 					"DNSrecords"     => $Admin->verify_checkbox(@$_POST['DNSrecords']),
 					"nameserverId"   => $_POST['nameserverId'],
 					"device"         => $_POST['device'],
-					"isFull"         => $Admin->verify_checkbox($_POST['isFull']),
-					"isPool"         => $Admin->verify_checkbox($_POST['isPool'])
+					"isFull"         => $Admin->verify_checkbox(@$_POST['isFull']),
+					"isPool"         => $Admin->verify_checkbox(@$_POST['isPool'])
 					);
     # location
     if (isset($_POST['location'])) {

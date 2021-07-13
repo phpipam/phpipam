@@ -470,19 +470,29 @@ class User extends Common_functions {
      */
     private function set_redirect_cookie () {
         # save current redirect vaule
-        if( $_SERVER['SCRIPT_URL']=="/login/" ||
-            $_SERVER['SCRIPT_URL']=="logout" ||
-            $_SERVER['SCRIPT_URL']=="?page=login" ||
-            $_SERVER['SCRIPT_URL']=="?page=logout" ||
-            $_SERVER['SCRIPT_URL']=="index.php?page=login" ||
-            $_SERVER['SCRIPT_URL']=="index.php?page=logout" ||
-            $_SERVER['SCRIPT_URL']=="/" ||
-            $_SERVER['SCRIPT_URL']=="%2f")
-        {
-            return;
+        if (isset($_SERVER['SCRIPT_URL'])) {
+            if( $_SERVER['SCRIPT_URL']=="/login/" ||
+                $_SERVER['SCRIPT_URL']=="logout" ||
+                $_SERVER['SCRIPT_URL']=="?page=login" ||
+                $_SERVER['SCRIPT_URL']=="?page=logout" ||
+                $_SERVER['SCRIPT_URL']=="index.php?page=login" ||
+                $_SERVER['SCRIPT_URL']=="index.php?page=logout" ||
+                $_SERVER['SCRIPT_URL']=="/" ||
+                $_SERVER['SCRIPT_URL']=="%2f")
+            {
+                return;
+            }
         }
 
-        $uri = is_string($_SERVER['HTTP_X_FORWARDED_URI']) ? $_SERVER['HTTP_X_FORWARDED_URI'] : $_SERVER['REQUEST_URI'];
+        if (isset($_SERVER['HTTP_X_FORWARDED_URI'])) {
+            $uri = $_SERVER['HTTP_X_FORWARDED_URI'];
+        }
+        elseif (isset($_SERVER['REQUEST_URI'])) {
+            $uri = $_SERVER['REQUEST_URI'];
+        }
+        else {
+            return;
+        }
 
         setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 10, true);
     }

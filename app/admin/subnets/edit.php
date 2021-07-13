@@ -23,7 +23,8 @@ $User->check_user_session();
 # create csrf token
 $csrf = $_POST['action']=="add" ? $User->Crypto->csrf_cookie ("create", "subnet_add") : $User->Crypto->csrf_cookie ("create", "subnet_".$_POST['subnetId']);
 
-# strip tags - XSS
+# Ensure keys exist and strip tags - XSS
+$_POST = array_merge(array_fill_keys(['action', 'bitmask', 'freespaceMSID', 'location', 'secionId', 'subnet', 'subnetId', 'vlanId'], null), $_POST);
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
@@ -175,7 +176,7 @@ $("input[name='subnet']").change(function() {
         <td class="middle"><?php print _('Subnet'); ?></td>
         <td>
         	<?php
-            if (($_POST['subnetId']||$_POST['subnet']) && $_POST['action'] == "add"){ $showDropMenuFull = 1; }
+            $showDropMenuFull = (($_POST['subnetId']||$_POST['subnet']) && $_POST['action'] == "add") ? 1 : 0;
         	# set CIDR
         	if (isset($subnet_old_temp['subnet'])&&$subnet_old_temp['isFolder']!="1")	{ $cidr = $Subnets->transform_to_dotted($subnet_old_temp['subnet']).'/'.($subnet_old_temp['mask']+1);} 		//for nested
         	if (isset($subnet_old_temp['subnet']) && ($showDropMenuFull)) 				{ $dropdown_menu = $Subnets->subnet_dropdown_print_available($_POST['sectionId'], $_POST['subnetId']);  }
@@ -433,7 +434,7 @@ $("input[name='subnet']").change(function() {
 	<tr>
         <td class="middle"><?php print _('Threshold'); ?></td>
         <td>
-            <?php $svalue = !is_null($subnet_old_details['threshold']) ? $subnet_old_details['threshold'] : 0; ?>
+            <?php $svalue = isset($subnet_old_details['threshold']) ? $subnet_old_details['threshold'] : 0; ?>
             <input type="text" style="width:200px;" class="slider" name="threshold" value="<?php print $svalue; ?>" data-slider-handle="square" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="<?php print $svalue; ?>" data-slider-orientation="horizontal" data-slider-selection="after">
         </td>
         <td class="info2"><?php print _('Set subnet alert threshold'); ?> <span class='badge badge1 badge5 slider-text'><span><?php print $svalue; ?></span>%</span></td>
