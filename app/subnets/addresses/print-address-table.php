@@ -50,7 +50,7 @@ if(!is_numeric($_GET['subnetId'])) 		{ $Result->show("danger", _('Invalid ID'), 
 # reset custom fields to ip addresses
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
-$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true) ? : ['ipaddresses'=>null];
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array

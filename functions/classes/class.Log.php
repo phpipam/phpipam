@@ -956,6 +956,7 @@ class Logging extends Common_functions {
 		$this->object_old['ip_addr'] = $this->Subnets->transform_address($this->object_old['ip_addr'], "dotted");
 		$this->object_new['ip_addr'] = $this->Subnets->transform_address($this->object_new['ip_addr'], "dotted");
 
+		$log = [];
 		// check each value
 		foreach($this->object_new as $k=>$v) {
 			//change
@@ -1471,12 +1472,12 @@ class Logging extends Common_functions {
 	 * fetches all changelogs
 	 *
 	 * @access public
-	 * @param bool $filter (default: false)
+	 * @param bool $filter
 	 * @param mixed $expr
 	 * @param int $limit (default: 100)
 	 * @return void
 	 */
-	public function fetch_all_changelogs ($filter = false, $expr, $limit = 100) {
+	public function fetch_all_changelogs ($filter, $expr, $limit = 100) {
     	# limit check
     	if(!is_numeric($limit))        { $this->Result->show("danger", _("Invalid limit"), true);	return false; }
 

@@ -61,7 +61,9 @@ foreach($vlan_domains as $domain) {
 		foreach($sections_tmp as $t) {
 			//fetch section
 			$tmp_section = $Sections->fetch_section(null, $t);
-			$sec[] = " &middot; ".$tmp_section->name;
+			if (is_object($tmp_section)) {
+				$sec[] = " &middot; ".$tmp_section->name;
+			}
 		}
 		//implode
 		$sections = implode("<br>", $sec);

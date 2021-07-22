@@ -8,16 +8,6 @@ class Addresses extends Common_functions {
 
 
 	/**
-	 * (array of objects) to store addresses, address ID is array index
-	 *
-	 * (default value: array)
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	private $cache = array();
-
-	/**
 	 * Address types array
 	 *
 	 * @var mixed
@@ -212,9 +202,12 @@ class Addresses extends Common_functions {
 	public function fetch_address ($method, $id) {
 		# null method
 		$method = is_null($method) ? "id" : $method;
+
 		# check cache first
-		if(isset($this->cache["$method=>$id"]))	{
-			return $this->cache["$method=>$id"];
+		$cached = ($method=="id") ? $this->cache_check("ipaddresses", $id) : false;
+
+		if(is_object($cached))	{
+			return $cached;
 		}
 		else {
 			try { $address = $this->Database->getObjectQuery("SELECT * FROM `ipaddresses` where `$method` = ? limit 1;", array($id)); }
@@ -223,11 +216,8 @@ class Addresses extends Common_functions {
 				return false;
 			}
 			# save to addresses cache
-			if(!is_null($address)) {
-				# add decimal format
-				$address->ip = $this->transform_to_dotted ($address->ip_addr);
-				# save to cache
-				$this->cache["$method=>$id"] = (object) $address;
+			if(is_object($address)) {
+				$this->cache_write("ipaddresses", $address);
 			}
 			#result
 			return !is_null($address) ? $address : false;
@@ -250,13 +240,38 @@ class Addresses extends Common_functions {
 		}
 		# save to addresses cache
 		if(is_object($address)) {
-			# add decimal format
-			$address->ip = $this->transform_to_dotted ($address->ip_addr);
-			# save to subnets
-			$this->cache["id=>".$address->id] = (object) $address;
+			$this->cache_write("ipaddresses", $address);
 		}
 		#result
 		return !is_null($address) ? $address : false;
+	}
+
+	/**
+	 *  Fetches duplicate addresses
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function fetch_duplicate_addresses() {
+		try {
+			$query = "SELECT a.* FROM ipaddresses AS a
+				INNER JOIN (SELECT ip_addr,COUNT(*) AS cnt FROM ipaddresses GROUP BY ip_addr HAVING cnt >1) dups ON a.ip_addr=dups.ip_addr
+				ORDER BY a.ip_addr,a.subnetId,a.id;";
+
+			$addresses = $this->Database->getObjectsQuery($query);
+
+			# save to addresses cache
+			if(is_array($addresses)) {
+				foreach($addresses as $address) {
+					$this->cache_write("ipaddresses", $address);
+				}
+			}
+		}
+		catch (Exception $e) {
+			$addresses = [];
+		}
+
+		return is_array($addresses) ? $addresses : [];
 	}
 
 	/**
@@ -1279,15 +1294,10 @@ class Addresses extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
-		# save to addresses cache
-		if(is_array($addresses)) {
-			foreach($addresses as $k=>$address) {
-				# add decimal format
-				$address->ip = $this->transform_to_dotted ($address->ip_addr);
-				if ($fields=="*") {
-					# save complete objects to cache
-					$this->cache["id=>".$address->id] = (object) $address;
-				}
+		# save to addresses cache (complete objects only)
+		if(is_array($addresses) && $fields=="*") {
+			foreach($addresses as $address) {
+				$this->cache_write("ipaddresses", $address);
 			}
 		}
 		# result

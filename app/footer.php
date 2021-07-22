@@ -11,12 +11,15 @@
 		if (defined("GIT_VCS_REF")) {
 			print " git <a href='https://github.com/phpipam/phpipam/tree/".GIT_VCS_REF."'>".GIT_VCS_REF."</a>";
 		}
+		if (phpversion() >= UNSUPPORTED_PHP_VERSION) {
+			print " "._('UNSUPPORTED_PHP_VERSION').":".phpversion();
+		}
 		?>
 	</td>
 
 	<?php
 	# custom footer message
-	if(is_string($config['footer_message']) && strlen($config['footer_message'])>0) {
+	if(isset($config['footer_message']) && strlen($config['footer_message'])>0) {
 		print '<td> '.$config['footer_message'].' </td>';
 	}
 

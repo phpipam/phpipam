@@ -501,11 +501,11 @@ class Subnets extends Common_functions {
 	 * Fetches subnetd by specified method
 	 *
 	 * @access public
-	 * @param string $method (default: "id")
+	 * @param string $method
 	 * @param mixed $value
 	 * @return array|false
 	 */
-	public function fetch_subnet ($method="id", $value) {
+	public function fetch_subnet ($method, $value) {
 		# null method
 		$method = is_null($method) ? "id" : $method;
 		# fetch
@@ -747,6 +747,34 @@ class Subnets extends Common_functions {
 	}
 
 	/**
+	 *  Fetches duplicate subnets
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function fetch_duplicate_subnets() {
+		try {
+			$query = "SELECT s.* FROM subnets AS s
+				INNER JOIN (SELECT subnet,mask,COUNT(*) AS cnt FROM subnets GROUP BY subnet,mask HAVING cnt >1) dups ON s.subnet=dups.subnet AND s.mask=dups.mask
+				ORDER BY s.subnet,s.mask,s.id;";
+
+			$subnets = $this->Database->getObjectsQuery($query);
+
+			# save to subnets cache
+			if(is_array($subnets)) {
+				foreach($subnets as $subnet) {
+					$this->cache_write ("subnets", $subnet);
+				}
+			}
+		}
+		catch (Exception $e) {
+			$subnets = [];
+		}
+
+		return is_array($subnets) ? $subnets : [];
+	}
+
+	/**
 	 * Fetch all subnets marked for ping checks. Needed for pingCheck script
 	 *
 	 * @param  $agentId (default:null)
@@ -777,7 +805,7 @@ class Subnets extends Common_functions {
 		// Exclude subnets with children
 		$query = "SELECT s.id, s.subnet, s.sectionId, s.mask, s.resolveDNS, s.nameserverId FROM subnets AS s
 				LEFT JOIN subnets AS child ON child.masterSubnetId = s.id
-				WHERE s.scanAgent = ? AND s.$discoverytype = 1 AND s.isFolder = 0 AND s.mask > 0 AND child.id IS NULL;";
+				WHERE s.scanAgent = ? AND s.$discoverytype = 1 AND s.isFolder = 0 AND s.mask > 0 AND s.subnet < 4294967296 AND child.id IS NULL;";
 		try { $subnets = $this->Database->getObjectsQuery($query, array($agentId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
@@ -1495,7 +1523,7 @@ class Subnets extends Common_functions {
 		$type = $this->identify_address($subnet->subnet);
 
 		# Address/NAT pools & IPv6
-		if ($subnet->isPool || $type == 'IPv6')
+		if ($type == 'IPv6' || (property_exists($subnet, 'isPool') && $subnet->isPool))
 			return false;
 
 		# IPv4, handle /32 & /31
@@ -3580,12 +3608,12 @@ class Subnets extends Common_functions {
 	 * Fetch details from ripe or arin
 	 *
 	 * @access private
-	 * @param string $network (default: "ripe")
-	 * @param string $type (default: "inetnum")
+	 * @param string $network
+	 * @param string $type
 	 * @param mixed $subnet
 	 * @return array
 	 */
-	private function ripe_arin_fetch ($network = "ripe", $type = "inetnum", $subnet) {
+	private function ripe_arin_fetch ($network, $type, $subnet) {
 		// set url
 		$url = $network=="ripe" ? "http://rest.db.ripe.net/ripe/$type/$subnet" : "http://whois.arin.net/rest/nets;q=$subnet?showDetails=true&showARIN=false&showNonArinTopLevelNet=false&ext=netref2";
 

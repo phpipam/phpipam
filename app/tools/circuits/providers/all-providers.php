@@ -54,6 +54,7 @@ print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Name')
 print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Description')."'>"._('Description').'</span></th>';
 print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Circuits')."'>"._('Circuits').'</span></th>';
 print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Contact')."'>"._('Contact').'</span></th>';
+$colspanCustom = 0;
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_fields)) {

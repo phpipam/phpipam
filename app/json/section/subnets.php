@@ -56,6 +56,7 @@ function complete_search_cidr($search_cidr) {
 
 
 # Validate inputs
+$search           = isset($_GET['search']) ? $_GET['search'] : null;
 $sectionId        = filter_var($_GET['sectionId'], FILTER_VALIDATE_INT);
 $showSupernetOnly = filter_var($_GET['showSupernetOnly'], FILTER_VALIDATE_BOOLEAN);
 $offset           = filter_var($_GET['offset'], FILTER_VALIDATE_INT);
@@ -64,7 +65,7 @@ $limit            = filter_var($_GET['limit'], FILTER_VALIDATE_INT);
 if ($sectionId===false || $offset===false || $limit===false) { return; }
 
 # Try to auto-complete search string.
-$search_cidr = complete_search_cidr($_GET['search']);
+$search_cidr = complete_search_cidr($search);
 # Ensure search is a valid CIDR address
 if ($Subnets->verify_cidr_address($search_cidr)!==true)
     $search_cidr = false;

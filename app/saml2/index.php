@@ -63,6 +63,7 @@ else{
             'authnRequestsSigned' => filter_var($params->spsignauthn, FILTER_VALIDATE_BOOLEAN),
         ),
     );
+	OneLogin\Saml2\Utils::setProxyVars(true);
 	$auth = new OneLogin\Saml2\Auth($settings);
 }
 
