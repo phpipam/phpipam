@@ -67,7 +67,7 @@ else {
     # if none than print
     if($subprefixes===false) {
         print "<tr>";
-        print " <td colspan='$colspan'>".$Result->show("info","No PSTN prefixes attached to device", false, false, true)."</td>";
+        print " <td colspan='$colspan'>".$Result->show("info",_("No PSTN prefixes attached to device"), false, false, true)."</td>";
         print "</tr>";
     }
     else {
