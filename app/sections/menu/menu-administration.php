@@ -33,7 +33,7 @@ if($User->settings->enableVRF == 1) {
 $admin_items["vrf"] = array(
                         "name"=>"VRF",
                         "href"=>array("administration", "vrf"),
-                        "title"=>"VRF managements",
+                        "title"=>"VRF management",
                         "icon"=>"fa-cloud"
                        );
 }
