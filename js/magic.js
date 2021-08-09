@@ -1187,13 +1187,8 @@ $('form#cform').submit(function () {
 /* changePassRequired */
 $('form#changePassRequiredForm').submit(function() {
 	showSpinner();
-
-    //get username
-    var ipampassword1 = $('#ipampassword1', this).val();
-    var ipampassword2 = $('#ipampassword2', this).val();
-    //get login data
-    var postData = "ipampassword1="+ipampassword1+"&ipampassword2="+ipampassword2;
-
+    //get csrf_cookie, old + new passwords
+    var postData = $('form#changePassRequiredForm').serialize();
     $.post('app/tools/pass-change/result.php', postData, function(data) {
         $('div#changePassRequiredResult').html(data).fadeIn('fast');
         hideSpinner();
