@@ -1,4 +1,5 @@
 == 1.4.4
+
     Bugfixes:
     ----------------------------
     + Allow UTF-8 in instruction widgets (#3360);
@@ -7,6 +8,7 @@
     Security Fixes:
     ----------------------------
     + XSS (reflected) in IP calculator (#3351);
+    + XSS in pass-change/result.php (#3373);
 
 == 1.4.3
 

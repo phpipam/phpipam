@@ -1,6 +1,9 @@
 <?php
 # user must be authenticated
 $User->check_user_session ();
+
+# create csrf token
+$csrf = $User->Crypto->csrf_cookie ("create", "pass-change");
 ?>
 
 <div class="col-xs-12 col-md-6 col-md-offset-3" style="margin-top:50px;">
@@ -20,15 +23,22 @@ $User->check_user_session ();
 
 		<form name="changePassRequired" id="changePassRequiredForm" class="form-inline" method="post">
 		<div class="row" style="margin-top:30px;">
+			<input type="hidden" id="csrf_cookie" name="csrf_cookie" value="<?php print $csrf; ?>">
+
+			<!-- old password -->
+			<div class="col-xs-12 col-md-4"><strong><?php print _('Old Password'); ?></strong></div>
+			<div class="col-xs-12 col-md-8">
+				<input type="password" style="width:100%;" id="oldpassword" name="oldpassword" class="form-control" autofocus="autofocus" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></input>
+			</div>
 
 			<!-- new password -->
-			<div class="col-xs-12 col-md-4"><strong><?php print _('Password'); ?></strong></div>
-			<div class="col-xs-12 col-md-8">
+			<div class="col-xs-12 col-md-4"  style="margin-top:30px;"><strong><?php print _('New Password'); ?></strong></div>
+			<div class="col-xs-12 col-md-8"  style="margin-top:30px;">
 				<input type="password" style="width:100%;" id="ipampassword1" name="ipampassword1" class="form-control" autofocus="autofocus" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></input>
 			</div>
 
 			<!-- new password repeat -->
-			<div class="col-xs-12 col-md-4" style="margin-top:10px;"><strong><?php print _('Password repeat'); ?></strong></div>
+			<div class="col-xs-12 col-md-4" style="margin-top:10px;"><strong><?php print _('New Password repeat'); ?></strong></div>
 			<div class="col-xs-12 col-md-8" style="margin-top:10px;">
 				<input type="password" style="width:100%;" id="ipampassword2" name="ipampassword2" class="form-control" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></input>
 			</div>
