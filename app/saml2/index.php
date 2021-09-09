@@ -112,7 +112,51 @@ else{
 		$username = $auth->getNameId();
 	}
 
-	$User->authenticate ($username, '', true);
+    // attempt JIT if enabled
+    if(filter_var($params->jit, FILTER_VALIDATE_BOOLEAN)) {
+        $table = "users";
+        $values = array(
+            "id"             =>null,
+            "real_name"      =>$auth->getAttribute("display_name")[0],
+            "username"       =>$username,
+            "email"          =>$auth->getAttribute("email")[0],
+            "role"           =>$auth->getAttribute("role")[0],
+            "authMethod"     =>$dbobj->id,
+            "lang"           =>$User->settings->defaultLang,
+            "mailNotify"     =>"No",
+            "mailChangelog"  =>"No",
+            "theme"          =>"",
+            "disabled"       =>"No"
+            );
+        // update existing user
+        if($User->user != null) {
+            $values["id"] = $User->user->id;
+            # null empty values
+            $values = $User->reformat_empty_array_fields ($values, null);
+    
+            # execute
+            try { $Database->updateObject($table, $values, $key); }
+            catch (Exception $e) {
+                $User->Log->write( $table." "._("object")." ".$values[$key]." "._("edit"), _("Failed to edit object")." ".$key=$values[$key]." "._("in")." $table.<hr>".$e->getMessage()."<hr>".$User->array_to_log($User->reformat_empty_array_fields ($values_log, "NULL")), 2);
+            }
+            # ok
+            $User->Log->write( $table." "._("object")." ".$values[$key]." "._("edit"), _("Object")." ".$key=$values[$key]." "._("in")." ".$table." "._("edited").".<hr>".$User->array_to_log($User->reformat_empty_array_fields ($values_log, "NULL")), 0);
+        // create new user if necessary
+        } else {
+            # null empty values
+            $values = $User->reformat_empty_array_fields ($values, null);
+    
+            # execute
+            try { $Database->insertObject($table, $values); }
+            catch (Exception $e) {
+                $User->Log->write( $table." "._("object creation"), _("Failed to create new")." ".$table." "._("database object").".<hr>".$e->getMessage()."<hr>".$User->array_to_log($User->reformat_empty_array_fields ($values_log, "NULL")), 2);
+            }
+            # ok
+            $User->Log->write( $table." "._("Object creation"), _("A new")." ".$table." "._("database object created").".<hr>".$User->array_to_log($User->reformat_empty_array_fields ($values_log, "NULL")), 0);
+        }
+    }
+
+    $User->authenticate ($username, '', true);
 
 	// Redirect user where he came from, if unknown go to dashboard.
 	if( !empty($_COOKIE['phpipamredirect']) )   { header("Location: ".escape_input($_COOKIE['phpipamredirect'])); }
