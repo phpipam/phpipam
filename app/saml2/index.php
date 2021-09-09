@@ -129,13 +129,14 @@ else{
             "disabled"       =>"No"
             );
         // update existing user
-        if($User->user != null) {
-            $values["id"] = $User->user->id;
+        $existing = $Database->getObjectQuery("SELECT * FROM `users` where `username` = '$username' limit 1;", $values);
+        if( $existing != null) {
+            $values["id"] = $existing->id;
             # null empty values
             $values = $User->reformat_empty_array_fields ($values, null);
     
             # execute
-            try { $Database->updateObject($table, $values, $key); }
+            try { $Database->updateObject($table, $values); }
             catch (Exception $e) {
                 $User->Log->write( $table." "._("object")." ".$values[$key]." "._("edit"), _("Failed to edit object")." ".$key=$values[$key]." "._("in")." $table.<hr>".$e->getMessage()."<hr>".$User->array_to_log($User->reformat_empty_array_fields ($values_log, "NULL")), 2);
             }
