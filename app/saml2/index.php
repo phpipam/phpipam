@@ -112,9 +112,25 @@ else{
 		$username = $auth->getNameId();
 	}
 
-    // attempt JIT if enabled
-    if(filter_var($params->jit, FILTER_VALIDATE_BOOLEAN)) {
+    // Attempt JIT if enabled
+    if(filter_var($params->jit, FILTER_VALIDATE_BOOLEAN)) {            
+        // Construct admin object for helper functions
+        $Admin = new Admin($Database, $admin_required = false);
+        $Log = new Logging ($Database);
         $table = "users";
+        $action = "add";
+
+        // Parse groups
+        $groups = $Admin->fetch_all_objects("userGroups", "g_id");
+        $ug = [];
+        foreach ($groups as $g) {
+            $g = (array) $g;
+            if (in_array($g["g_name"], explode(',', $auth->getAttribute("groups")[0]))) {
+                $ug["groups"][$g["g_id"]] = $g["g_id"];
+            }
+        }
+        
+        // Construct user object with SAML attributes
         $values = array(
             "id"             =>null,
             "real_name"      =>$auth->getAttribute("display_name")[0],
@@ -125,36 +141,19 @@ else{
             "lang"           =>$User->settings->defaultLang,
             "mailNotify"     =>"No",
             "mailChangelog"  =>"No",
-            "theme"          =>"",
-            "disabled"       =>"No"
-            );
-        // update existing user
-        $existing = $Database->getObjectQuery("SELECT * FROM `users` where `username` = '$username' limit 1;", $values);
-        if( $existing != null) {
+            "theme"          =>"No",
+            "disabled"       =>"No",
+            "groups"         =>json_encode($ug["groups"]),
+        );
+
+        // Check for existing user so we know whether to create or update
+        $existing = $Database->findObject($table, "username", $username);
+        if ( $existing != null ) {
             $values["id"] = $existing->id;
-            # null empty values
-            $values = $User->reformat_empty_array_fields ($values, null);
-    
-            # execute
-            try { $Database->updateObject($table, $values); }
-            catch (Exception $e) {
-                $User->Log->write( $table." "._("object")." ".$values[$key]." "._("edit"), _("Failed to edit object")." ".$key=$values[$key]." "._("in")." $table.<hr>".$e->getMessage()."<hr>".$User->array_to_log($User->reformat_empty_array_fields ($values_log, "NULL")), 2);
-            }
-            # ok
-            $User->Log->write( $table." "._("object")." ".$values[$key]." "._("edit"), _("Object")." ".$key=$values[$key]." "._("in")." ".$table." "._("edited").".<hr>".$User->array_to_log($User->reformat_empty_array_fields ($values_log, "NULL")), 0);
-        // create new user if necessary
-        } else {
-            # null empty values
-            $values = $User->reformat_empty_array_fields ($values, null);
-    
-            # execute
-            try { $Database->insertObject($table, $values); }
-            catch (Exception $e) {
-                $User->Log->write( $table." "._("object creation"), _("Failed to create new")." ".$table." "._("database object").".<hr>".$e->getMessage()."<hr>".$User->array_to_log($User->reformat_empty_array_fields ($values_log, "NULL")), 2);
-            }
-            # ok
-            $User->Log->write( $table." "._("Object creation"), _("A new")." ".$table." "._("database object created").".<hr>".$User->array_to_log($User->reformat_empty_array_fields ($values_log, "NULL")), 0);
+            $action = "edit";
         }
+        $Admin->object_modify($table, $action, "id", $values);
+
     }
 
     $User->authenticate ($username, '', true);
