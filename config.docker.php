@@ -67,6 +67,12 @@ $proxy_use_auth = file_env('PROXY_USE_AUTH', $proxy_use_auth);
 $debugging = filter_var(file_env('IPAM_DEBUG', $debugging), FILTER_VALIDATE_BOOLEAN);
 
 /**
+ * allow api without encryption
+ ******************************/
+
+$api_allow_unsafe = file_env('API_ALLOW_UNSAFE', $api_allow_unsafe);
+
+/**
  * Session storage - files or database
  *
  * @var string
