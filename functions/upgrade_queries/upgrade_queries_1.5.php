@@ -185,3 +185,11 @@ $upgrade_queries["1.5.37"][] = "CREATE TABLE `nominatim_cache` (
 
 $upgrade_queries["1.5.37"][] = "-- Database version bump";
 $upgrade_queries["1.5.37"][] = "UPDATE `settings` set `dbversion` = '37';";
+
+// Primary key for DB HA on Galera (#2498)
+//
+$upgrade_queries["1.5.38"][] = "ALTER TABLE `firewallZoneSubnet` ADD PRIMARY KEY (`zoneId`,`subnetId`);";
+$upgrade_queries["1.5.38"][] = "ALTER TABLE `circuitsLogicalMapping` ADD PRIMARY KEY (`logicalCircuit_id`, `circuit_id`);";
+
+$upgrade_queries["1.5.38"][] = "-- Database version bump";
+$upgrade_queries["1.5.38"][] = "UPDATE `settings` set `dbversion` = '38';";

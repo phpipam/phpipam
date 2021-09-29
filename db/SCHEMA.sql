@@ -715,6 +715,7 @@ DROP TABLE IF EXISTS `firewallZoneSubnet`;
 CREATE TABLE `firewallZoneSubnet` (
   `zoneId` INT NOT NULL,
   `subnetId` INT(11) NOT NULL,
+  PRIMARY KEY (`zoneId`,`subnetId`),
   INDEX `fk_zoneId_idx` (`zoneId` ASC),
   INDEX `fk_subnetId_idx` (`subnetId` ASC),
   CONSTRAINT `fk_zoneId`
@@ -919,7 +920,8 @@ DROP TABLE IF EXISTS `circuitsLogicalMapping`;
 CREATE TABLE `circuitsLogicalMapping` (
   `logicalCircuit_id` int(11) unsigned NOT NULL,
   `circuit_id` int(11) unsigned NOT NULL,
-  `order` int(10) unsigned DEFAULT NULL
+  `order` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`logicalCircuit_id`, `circuit_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1056,4 +1058,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.5";
-UPDATE `settings` SET `dbversion` = 37;
+UPDATE `settings` SET `dbversion` = 38;
