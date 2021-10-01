@@ -32,10 +32,14 @@ the demo page: `Admin / ipamadmin`
 Community maintained docker images are available at https://hub.docker.com/u/phpipam
 
 ## Changelog
-See misc/CHANGELOG
+See [misc/CHANGELOG](misc/CHANGELOG)
 
 ## Roadmap
-See misc/Roadmap
+See [misc/Roadmap](misc/Roadmap)
+
+## Security
+
+See [SECURITY.md](SECURITY.md)
 
 ## Contact
 miha.petkovsek@gmail.com
@@ -46,4 +50,4 @@ that is used for development of phpIPAM and for demo site.
 And also to all users that filed a bug report / feature report and helped with feature testing!
 
 ## License
-phpIPAM is released under the GPL v3 license, see misc/gpl-3.0.txt.
+phpIPAM is released under the GPL v3 license, see [misc/gpl-3.0.txt](misc/gpl-3.0.txt).
