@@ -111,6 +111,10 @@ try {
 		$Response->throw_exception(503, 'Invalid app security');
 	}
 
+	// Alias PUT request to PATCH
+	if($_SERVER['REQUEST_METHOD'] == "PUT") {
+       		$_SERVER['REQUEST_METHOD'] = "PATCH";
+	}
 
 	// Append Global API parameters / POST parameters if POST,PATCH or DELETE
 	if($_SERVER['REQUEST_METHOD']=="GET" || $_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE") {
