@@ -8,15 +8,6 @@
 
 class Tools_controller extends Common_api_functions {
 
-
-	/**
-	 * _params provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
 	/**
 	 * subcontrollers
 	 *
@@ -41,45 +32,6 @@ class Tools_controller extends Common_api_functions {
 	 */
 	protected $identifiers;
 
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Response
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Response;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-	/**
-	 * Main Admin class
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Admin;
-
-	/**
-	 * Main Subnets class
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Subnets;
 
 	/**
 	 * __construct function
@@ -410,21 +362,6 @@ class Tools_controller extends Common_api_functions {
 
 		//set result
 		return array("code"=>201, "data"=>$table_name." object created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/tools/".$table_name."/".$this->Admin->lastId."/");
-	}
-
-
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 
