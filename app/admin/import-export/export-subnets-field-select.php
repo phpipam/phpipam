@@ -83,6 +83,7 @@ print "	<th>"._('Master Subnet')."</th>";
 print "	<th>"._('Requests')."</th>";
 print "	<th>"._('Hosts check')."</th>";
 print "	<th>"._('Discover')."</th>";
+print "	<th>"._('Customer')."</th>";
 print $custom_fields_names;
 print "	</tr>";
 
@@ -96,6 +97,7 @@ print "	<td><input type='checkbox' name='master'> </td>";
 print "	<td><input type='checkbox' name='requests'> </td>";
 print "	<td><input type='checkbox' name='hostscheck'> </td>";
 print "	<td><input type='checkbox' name='discover'> </td>";
+print "	<td><input type='checkbox' name='customer'> </td>";
 print $custom_fields_boxes;
 print "	</tr>";
 

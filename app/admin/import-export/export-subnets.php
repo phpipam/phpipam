@@ -111,6 +111,10 @@ if( (isset($_GET['discover'])) && ($_GET['discover'] == "on") ) {
 	$worksheet->write($curRow, $curColumn, _('Discover') ,$format_header);
 	$curColumn++;
 }
+if( (isset($_GET['customer'])) && ($_GET['customer'] == "on") ) {
+	$worksheet->write($curRow, $curColumn, _('Customer') ,$format_header);
+	$curColumn++;
+}
 
 //custom fields
 if(sizeof($custom_fields) > 0) {
@@ -220,6 +224,17 @@ if($all_sections!==false) {
 
 				if( (isset($_GET['discover'])) && ($_GET['discover'] == "on") ) {
 					$worksheet->write($curRow, $curColumn, $subnet['discoverSubnet'], $format_text);
+					$curColumn++;
+				}
+
+				if( (isset($_GET['customer'])) && ($_GET['customer'] == "on") ) {
+					// get customer
+					if (!empty($subnet['customer_id'])) {
+						$customer = (array) $Tools->fetch_object("customers", "id", $subnet['customer_id']);
+						$worksheet->write($curRow, $curColumn, $customer['title'], $format_text);
+					} else {
+						$worksheet->write($curRow, $curColumn, '', $format_text);
+					}
 					$curColumn++;
 				}
 

@@ -39,6 +39,7 @@ $(document).on('change', "select#dataType", function() {
 					<option value='ipaddr'><?php print _('IP addresses'); ?></option>
 					<option value='devices' ><?php print _('Devices'); ?></option>
 					<option value='devtype' ><?php print _('Device types'); ?></option>
+					<option value='customers' ><?php print _('Customers'); ?></option>
 			</select>
 		</td>
 		<td class="info2"><?php print _('Not all options are available currently.'); ?></td>
