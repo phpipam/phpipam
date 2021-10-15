@@ -26,9 +26,6 @@ class Responses extends Result {
 	public $time = false;
 
 
-
-
-
 	/**
 	 * __construct function
 	 *

@@ -8,68 +8,12 @@
 class Subnets_controller extends Common_api_functions {
 
 	/**
-	 * _params provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
-	/**
-	 * custom_fields
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	public $custom_fields;
-
-	/**
 	 * settings
 	 *
 	 * @var mixed
 	 * @access protected
 	 */
 	protected $settings;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Response handler
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Response;
-
-	/**
-	 * Master Subnets object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Subnets;
-
-	/**
-	 * Master  Addresses object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Addresses;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
 
 
 	/**
@@ -308,20 +252,6 @@ class Subnets_controller extends Common_api_functions {
 		}
 		// false
 		else 											{ $this->Response->throw_exception(404, 'Invalid Id'); }
-	}
-
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 

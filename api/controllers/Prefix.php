@@ -33,22 +33,6 @@
 class Prefix_controller extends Common_api_functions {
 
     /**
-     * _params provided
-     *
-     * @var mixed
-     * @access public
-     */
-    public $_params;
-
-    /**
-     * custom_fields
-     *
-     * @var mixed
-     * @access protected
-     */
-    public $custom_fields;
-
-    /**
      * Custom field selector
      *
      *  This will be used to search for subnets that have {$custom_field_name = customer_type}
@@ -240,22 +224,6 @@ class Prefix_controller extends Common_api_functions {
     private $master_subnet = false;
 
     /**
-     * Database object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Database;
-
-    /**
-     *  Response handler
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Response;
-
-    /**
      * Subnets controller
      *
      * @var mixed
@@ -270,38 +238,6 @@ class Prefix_controller extends Common_api_functions {
      * @access protected
      */
     protected $Addresses_controller;
-
-    /**
-     * Master Subnets object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Subnets;
-
-    /**
-     * Master Addresses object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Addresses;
-
-    /**
-     * Master Sections object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Sections;
-
-    /**
-     * Master Tools object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Tools;
 
 
     /**
@@ -521,19 +457,6 @@ class Prefix_controller extends Common_api_functions {
 
 
 
-    /**
-     * HEAD, no response
-     *
-     * @access public
-     * @return void
-     */
-    public function HEAD () {
-        return $this->GET ();
-    }
-
-
-
-
 
     /**
      * Creates new prefix or address, based on input parameters
@@ -647,33 +570,6 @@ class Prefix_controller extends Common_api_functions {
     		//set result
             return array("code"=>201, "message"=>"Address created", "id"=>$this->Addresses->lastId, "subnetId"=>$this->master_subnet->id, "data"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted"), "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
 		}
-    }
-
-
-
-
-    /**
-     * PATCH method
-     *
-     *  Not needed
-     *
-     * @access public
-     * @return void
-     */
-    public function PATCH () {
-        $this->Response->throw_exception(501, "Method not imeplemented");
-    }
-
-    /**
-     * DELETE method
-     *
-     *  Not needed
-     *
-     * @access public
-     * @return void
-     */
-    public function DELETE () {
-        $this->Response->throw_exception(501, "Method not imeplemented");
     }
 
 
@@ -960,5 +856,3 @@ class Prefix_controller extends Common_api_functions {
         }
     }
 }
-
-?>

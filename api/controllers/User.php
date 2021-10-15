@@ -8,7 +8,6 @@
 
 class User_controller extends Common_api_functions {
 
-
 	/**
 	 * users token
 	 *
@@ -58,47 +57,6 @@ class User_controller extends Common_api_functions {
 	 * @access private
 	 */
 	private $block_ip = true;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-	/**
-	 * Master Admin object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Admin;
-
-	/**
-	 * Master User object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $User;
-
-	/**
-	 * requested parameters
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
 
 
 	/**

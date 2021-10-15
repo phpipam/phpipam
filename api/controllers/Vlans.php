@@ -8,23 +8,6 @@
 
 class Vlans_controller extends Common_api_functions {
 
-
-	/**
-	 * _params provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
-	/**
-	 * custom_fields
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	public $custom_fields;
-
 	/**
 	 * settings
 	 *
@@ -32,38 +15,6 @@ class Vlans_controller extends Common_api_functions {
 	 * @access protected
 	 */
 	protected $settings;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Master Sections object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Sections;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-	/**
-	 * Master Admin object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Admin;
 
 
 	/**
@@ -196,19 +147,6 @@ class Vlans_controller extends Common_api_functions {
 			if($result==NULL)						{ $this->Response->throw_exception(200, "Vlan not found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
-	}
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 
@@ -394,5 +332,3 @@ class Vlans_controller extends Common_api_functions {
     	return $this->Subnets->find_gateway ($subnetId);
 	}
 }
-
-?>
