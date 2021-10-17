@@ -113,47 +113,60 @@ else{
 	}
 
     // Attempt JIT if enabled
-    if(filter_var($params->jit, FILTER_VALIDATE_BOOLEAN)) {            
-        // Construct admin object for helper functions
-        $Admin = new Admin($Database, $admin_required = false);
-        $Log = new Logging ($Database);
-        $table = "users";
-        $action = "add";
+    if(filter_var($params->jit, FILTER_VALIDATE_BOOLEAN)) {
+
+        // Ensure mandatory fields are present.
+        if (empty($username)) {
+            $Result->show("danger", _("Mandatory SAML JIT attribute missing")." : username (string)", true);
+        }
+        elseif (empty($auth->getAttribute("display_name")[0])) {
+            $Result->show("danger", _("Mandatory SAML JIT attribute missing")." : display_name (string)", true);
+        }
+        elseif (!filter_var($auth->getAttribute("email")[0], FILTER_VALIDATE_EMAIL)) {
+            $Result->show("danger", _("Mandatory SAML JIT attribute missing")." : email (string)", true);
+        }
+
+        $values = [];
+
+        $existing_user = $User->fetch_object("users", "username", $username);
+
+        if (is_object($existing_user)) {
+            // User exists in DB. Check this is a SAML account.
+
+            if ($existing_user->authMethod != $dbobj->id) {
+                $Result->show("danger", _("Requested SAML user is not configured for SAML authentication")." : ".escape_input($username), true);
+            }
+
+            $action = "edit";
+            $values["id"] = $existing_user->id;
+        }
+        else {
+            // User does not exist in DB. Auto-provision user.
+
+            $action = "add";
+            $values["username"] = $username;
+            $values["authMethod"] = $dbobj->id;
+            $values["lang"] = $User->settings->defaultLang;
+        }
+
+        $values["real_name"] = $auth->getAttribute("display_name")[0];
+        $values["email"] = $auth->getAttribute("email")[0];
+        $values["role"] = filter_var($auth->getAttribute("isAdmin")[0], FILTER_VALIDATE_BOOLEAN) ? "Administrator" : "User";
 
         // Parse groups
-        $groups = $Admin->fetch_all_objects("userGroups", "g_id");
+        $membership = explode(',', $auth->getAttribute("groups")[0]) ? : [];
+
         $ug = [];
-        foreach ($groups as $g) {
-            $g = (array) $g;
-            if (in_array($g["g_name"], explode(',', $auth->getAttribute("groups")[0]))) {
-                $ug["groups"][$g["g_id"]] = $g["g_id"];
+        foreach ($Tools->fetch_all_objects("userGroups", "g_id") as $g) {
+            if (in_array($g->g_name, $membership)) {
+                $ug[$g->g_id] = $g->g_id;
             }
         }
-        
-        // Construct user object with SAML attributes
-        $values = array(
-            "id"             =>null,
-            "real_name"      =>$auth->getAttribute("display_name")[0],
-            "username"       =>$username,
-            "email"          =>$auth->getAttribute("email")[0],
-            "role"           =>$auth->getAttribute("role")[0],
-            "authMethod"     =>$dbobj->id,
-            "lang"           =>$User->settings->defaultLang,
-            "mailNotify"     =>"No",
-            "mailChangelog"  =>"No",
-            "theme"          =>"No",
-            "disabled"       =>"No",
-            "groups"         =>json_encode($ug["groups"]),
-        );
+        $values["groups"]  = json_encode($ug);
 
-        // Check for existing user so we know whether to create or update
-        $existing = $Database->findObject($table, "username", $username);
-        if ( $existing != null ) {
-            $values["id"] = $existing->id;
-            $action = "edit";
-        }
-        $Admin->object_modify($table, $action, "id", $values);
-
+        // Construct admin object for helper functions
+        $Admin = new Admin($Database, false);
+        $Admin->object_modify("users", $action, "id", $values);
     }
 
     $User->authenticate ($username, '', true);
