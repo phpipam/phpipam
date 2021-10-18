@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	IP Addresses export
+ *	Devices export
  */
 
 # include required scripts
