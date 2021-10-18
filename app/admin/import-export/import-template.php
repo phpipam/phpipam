@@ -141,6 +141,27 @@ elseif ($type == 'l2dom'){
 		$fc++;
 	}
 
+} elseif ($type == 'customers'){
+	$curColumn=0;
+	//get all custom fields!
+	$custom_address_fields = $Tools->fetch_custom_fields('customers');
+	// set headers
+	$worksheet->write($lineCount, $curColumn++, _('title'));
+	$worksheet->write($lineCount, $curColumn++, _('address'));
+	$worksheet->write($lineCount, $curColumn++, _('postcode'));
+	$worksheet->write($lineCount, $curColumn++, _('city'));
+	$worksheet->write($lineCount, $curColumn++, _('state'));
+	// $worksheet->write($lineCount, $curColumn++, _('lat'));
+	// $worksheet->write($lineCount, $curColumn++, _('long'));
+	$worksheet->write($lineCount, $curColumn++, _('contact_person'));
+	$worksheet->write($lineCount, $curColumn++, _('contact_phone'));
+	$worksheet->write($lineCount, $curColumn++, _('contact_mail'));
+	$worksheet->write($lineCount, $curColumn++, _('note'));
+	foreach($custom_address_fields as $k=>$f) {
+		$worksheet->write($lineCount, $curColumn, $k);
+		$curColumn++;
+	}
+
 }
 
 // sending HTTP headers

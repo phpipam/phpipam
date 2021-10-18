@@ -887,7 +887,8 @@ $(document).on("click", "#ipaddrtemplate", function() {
 //download device template
 $(document).on("click", "#devicestemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=devices'></iframe></div>");	return false;
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=devices'></iframe></div>");	
+    return false;
 });
 
 
@@ -898,6 +899,12 @@ $(document).on("click", "#devtypetemplate", function() {
 	return false;
 });
 
+//download customers template
+$(document).on("click", "#customerstemplate", function() {
+    $("div.dl").remove();    //remove old innerDiv
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=customers'></iframe></div>");
+    return false;
+});
 
 
 /*    export IP addresses
@@ -2616,10 +2623,11 @@ $('button#XLSdump, button#MySQLdump, button#hostfileDump').click(function () {
 
 //Export Section
 $('button.dataExport').click(function () {
-	var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype"]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype", "customers"]; var popsize = {};
 	popsize["subnets"] = "w700";
 	popsize["ipaddr"] = "w700";
 	popsize["devices"] = "max";
+    popsize["customers"] = "max";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
     //show popup window
@@ -2691,6 +2699,12 @@ $(document).on("click", "button#dataExportSubmit", function() {
 			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-devtype.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
 			setTimeout(function (){hidePopups();}, 1500);
 			break;
+        case 'customers':
+            var exportSections = $('form#selectExportSections').serialize();
+            $("div.dl").remove();    //remove old innerDiv
+            $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-customers.php?" + exportFields + "'></iframe></div>");
+            setTimeout(function (){hidePopups();}, 1500);
+            break;
 	}
     return false;
 });
@@ -2756,10 +2770,11 @@ $(document).on("click", "input#recomputeCVRFSelectAll", function() {
 });
 //Import Section
 $('button.dataImport').click(function () {
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype"]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype", "customers"]; var popsize = {};
 	popsize["subnets"] = "max";
 	popsize["ipaddr"] = "max";
 	popsize["devices"] = "max";
+    popsize["customers"] = "max";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
     //show popup window, if implemented
@@ -2786,7 +2801,7 @@ $('button.dataImport').click(function () {
 //import buttons
 $(document).on("click", "button#dataImportPreview", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype" ]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype", "customers" ]; var popsize = {};
 	popsize["subnets"] = "max";
 	popsize["recompute"] = "max";
 	popsize["ipaddr"] = "max";
@@ -2818,7 +2833,7 @@ $(document).on("click", "button#dataImportPreview", function() {
 });
 $(document).on("click", "button#dataImportSubmit", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype" ]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype", "customers" ]; var popsize = {};
 	popsize["subnets"] = "max";
 	popsize["recompute"] = "max";
 	popsize["ipaddr"] = "max";

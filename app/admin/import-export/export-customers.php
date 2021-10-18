@@ -28,7 +28,7 @@ $custom_fields = $Tools->fetch_custom_fields('customers');
 # prepare HTML variables
 $custom_fields_names = "";
 $custom_fields_boxes = "";
-$fields = array ( 'id', 'title', 'address', 'postcode', 'city', 'state', 'lat', 'long', 'contact_person', 'contact_phone', 'contact_mail', 'note' );
+$fields = array ( 'id', 'title', 'address', 'postcode', 'city', 'state', 'contact_person', 'contact_phone', 'contact_mail', 'note' );
 
 if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $myField) {
@@ -42,7 +42,7 @@ $customers = $Customers->fetch_all_objects("customers", "id");
 
 # Create a workbook
 $today = date("Ymd");
-$filename = $today."_phpipam_deviceTypes_export.xls";
+$filename = $today."_phpipam_customers_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
 $workbook->setVersion(8);
 
@@ -57,7 +57,7 @@ $format_header->setAlign('left');
 $format_text =& $workbook->addFormat();
 
 // Create a worksheet
-$worksheet_name = "devtypes domains";
+$worksheet_name = "customers";
 $worksheet =& $workbook->addWorksheet($worksheet_name);
 $worksheet->setInputEncoding("utf-8");
 
@@ -76,7 +76,7 @@ foreach ($fields as $k) {
 $curRow++;
 $curColumn = 0;
 
-foreach ($devices as $d) {
+foreach ($customers as $d) {
 	//cast
 	$d = (array) $d;
 
