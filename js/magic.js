@@ -126,7 +126,7 @@ function showPopup(pClass, data, secondary) {
     //disable page scrolling on bottom
     $('body').addClass('stop-scrolling');
     // resize
-    resize_pContent ()
+    resize_pContent();
 }
 function hidePopup(pClass, secondary) {
 	// secondary - load secondary popupoverlay
@@ -195,10 +195,10 @@ function randomPass() {
 }
 
 // on load
-resize_pContent ()
+resize_pContent();
 // on resize
 $(window).resize(function () {
-    resize_pContent ()
+    resize_pContent();
 });
 
 function resize_pContent () {
@@ -2770,7 +2770,7 @@ $(document).on("click", "input#recomputeCVRFSelectAll", function() {
 });
 //Import Section
 $('button.dataImport').click(function () {
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype", "customers"]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr","l2dom","devices","devtype","customers"]; var popsize = {};
 	popsize["subnets"] = "max";
 	popsize["ipaddr"] = "max";
 	popsize["devices"] = "max";
