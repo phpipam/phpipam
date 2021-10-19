@@ -70,8 +70,15 @@ foreach ($data as &$cdata) {
 	if (!isset($unique[$cdata['title']])) { $unique[$cdata['title']] = $cdata['title']; }
 
 	$rows.="<tr class='".$colors[$action]."'><td><i class='fa ".$icons[$action]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>
-		<td>".$cdata['tname']."</td>
-		<td>".$cdata['tdescription']."</td>
+		<td>".$cdata['title']."</td>
+		<td>".$cdata['address']."</td>
+		<td>".$cdata['postcode']."</td>
+		<td>".$cdata['city']."</td>
+		<td>".$cdata['state']."</td>
+		<td>".$cdata['contact_person']."</td>
+		<td>".$cdata['contact_phone']."</td>
+		<td>".$cdata['contact_mail']."</td>
+		<td>".$cdata['note']."</td>
 		<td>"._($cdata['msg'])."</td></tr>";
 
 }
