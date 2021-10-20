@@ -25,7 +25,7 @@ $edata = array();
 foreach ($customers as $c) {
 	//cast
 	$c = (array) $c;
-	$edata[$c['id']] = $c;
+	$edata[$c['title']] = $c;
 }
 
 $rows = "";
@@ -47,14 +47,14 @@ foreach ($data as &$cdata) {
 		if (isset($edata[$cdata['title']])) {
 			$cdata['id'] = $edata[$cdata['title']]['id'];
 			$action = "skip"; # skip duplicate fields if identical, update if different
-			if ($cdata['address'] != $edata[$cdata['title']]['address']) { $msg.= " address will be updated."; $action = "edit"; }
-			if ($cdata['postcode'] != $edata[$cdata['title']]['postcode']) { $msg.= " postcode will be updated."; $action = "edit"; }
-			if ($cdata['city'] != $edata[$cdata['title']]['city']) { $msg.= " city will be updated."; $action = "edit"; }
-			if ($cdata['state'] != $edata[$cdata['title']]['state']) { $msg.= " state will be updated."; $action = "edit"; }
-			if ($cdata['contact_person'] != $edata[$cdata['title']]['contact_person']) { $msg.= " contact person will be updated."; $action = "edit"; }
-			if ($cdata['contact_phone'] != $edata[$cdata['title']]['contact_phone']) { $msg.= " contact phone will be updated."; $action = "edit"; }
-			if ($cdata['contact_mail'] != $edata[$cdata['title']]['contact_mail']) { $msg.= " contact email will be updated."; $action = "edit"; }
-			if ($cdata['note'] != $edata[$cdata['title']]['note']) { $msg.= " note will be updated."; $action = "edit"; }
+			if ($cdata['address'] != $edata[$cdata['title']]['address']) { $msg.= " Address will be updated."; $action = "edit"; }
+			if ($cdata['postcode'] != $edata[$cdata['title']]['postcode']) { $msg.= " Postcode will be updated."; $action = "edit"; }
+			if ($cdata['city'] != $edata[$cdata['title']]['city']) { $msg.= " City will be updated."; $action = "edit"; }
+			if ($cdata['state'] != $edata[$cdata['title']]['state']) { $msg.= " State will be updated."; $action = "edit"; }
+			if ($cdata['contact_person'] != $edata[$cdata['title']]['contact_person']) { $msg.= " Contact person will be updated."; $action = "edit"; }
+			if ($cdata['contact_phone'] != $edata[$cdata['title']]['contact_phone']) { $msg.= " Contact phone will be updated."; $action = "edit"; }
+			if ($cdata['contact_mail'] != $edata[$cdata['title']]['contact_mail']) { $msg.= " Contact email will be updated."; $action = "edit"; }
+			if ($cdata['note'] != $edata[$cdata['title']]['note']) { $msg.= " Note will be updated."; $action = "edit"; }
 
 			if ($action == "skip") {
 				$msg.= "Duplicate, will skip.";
