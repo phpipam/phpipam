@@ -112,7 +112,7 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
  * @return string
  */
 function escape_input($data) {
-	if (!isset($data) || !is_string($data))
+	if (!isset($data) || strlen($data)==0)
 		return '';
 	$safe_data = htmlentities($data, ENT_QUOTES);
 	return is_string($safe_data) ? $safe_data : '';
@@ -125,7 +125,7 @@ function escape_input($data) {
  * @return  string
  */
 function safeurlencode($url) {
-	if (!isset($url) || !is_string($url))
+	if (!isset($url) || strlen($url)==0)
 		return '';
 	$safe_url = rawurlencode(filter_var(trim($url), FILTER_SANITIZE_URL));
 	return is_string($safe_url) ? $safe_url : '';
