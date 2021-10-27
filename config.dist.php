@@ -98,8 +98,8 @@ $phpsessname = "phpipam";
 /**
  * Cookie SameSite settings ("None", "Lax"=Default, "Strict")
  * - "Strict" increases security
- * - "Lax" required for SAML2
- * - "None" requires HTTPS
+ * - "Lax" required for SAML2, some SAML topologies may require "None".
+ * - "None" requires HTTPS (implies "Secure;")
  */
 $cookie_samesite = "Lax";
 
