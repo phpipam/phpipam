@@ -484,7 +484,7 @@ class User extends Common_functions {
 
         $uri = is_string($_SERVER['HTTP_X_FORWARDED_URI']) ? $_SERVER['HTTP_X_FORWARDED_URI'] : $_SERVER['REQUEST_URI'];
 
-        setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 10, true);
+        setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 120, true);
     }
 
     /**

@@ -2,6 +2,7 @@
 
     Bugfixes:
     ----------------------------
+    + Fix for SAML/2FA login redirection after timeout (#3492);
 
 == 1.4.4
 
