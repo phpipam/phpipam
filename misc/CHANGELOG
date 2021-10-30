@@ -23,6 +23,7 @@
         + php-saml protocol debugging;
         + Support for signed assertions;
         + SAML usernames can be extracted from assertion attributes (#2948);
+        + JIT auto-provisioning of accounts (#3389);
     + Selectable mask for number of subnets/hosts in subnet masks;
     + Switch from Google Maps to OpenStreeMap and Nominatim;
 

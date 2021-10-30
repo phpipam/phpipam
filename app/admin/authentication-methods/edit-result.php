@@ -44,14 +44,28 @@ $values = array(
 				"type"        =>$_POST['type'],
 				"description" =>@$_POST['description'],
 				);
+
+# Validate input
+if (isset($_POST['type']) && $_POST['type']=="SAML2") {
+	# The JIT & SAML mapped user options are mutually exclusive.
+	if (filter_var($_POST['jit'], FILTER_VALIDATE_BOOLEAN) && !empty($_POST['MappedUser'])) {
+		$Result->show("danger",  _("The JIT and mapped user options are mutually exclusive"), true);
+	}
+
+	# Validate Prettify links is enabled for strict mode.
+	if (filter_var($_POST['strict'], FILTER_VALIDATE_BOOLEAN) && !filter_var($User->settings->prettyLinks, FILTER_VALIDATE_BOOLEAN)) {
+		$Result->show("danger",  _("Strict mode requires global setting \"Prettify links\"=yes"), true);
+	}
+
+	# Verify that the private certificate and key are provided if Signing Authn Requests is set
+	if($action!="delete" && filter_var(['spsignauthn'], FILTER_VALIDATE_BOOLEAN) && (empty($_POST['spx509cert']) || empty($_POST['spx509key']))) {
+		$Result->show("danger",  _("SP (Client) certificate and key are required to sign Authn requests"), true);
+	}
+}
+
 # remove processed params
 unset($_POST['id'], $_POST['type'], $_POST['description'], $_POST['action']);
 $values["params"]=json_encode($_POST);
-
-#Verify that the private certificate and key are provided if Signing Authn Requests is set
-if($action!="delete" && @$_POST['spsignauthn']=="1" && (empty($_POST['spx509cert']) || empty($_POST['spx509key']))) {
-	$Result->show("danger",  _("SP (Client) certificate and key are required to sign Authn requests"), true);
-}
 
 $secure_keys=[
 	'adminUsername',

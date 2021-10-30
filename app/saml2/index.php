@@ -107,19 +107,46 @@ else{
         // Extract username from attribute
         $attr = $auth->getAttribute($params->UserNameAttr);
         $username = is_array($attr) ? $attr[0] : '';
+        $username_source = "getAttribute(".escape_input($params->UserNameAttr).")";
 	} else {
         // Extract username from NameId
 		$username = $auth->getNameId();
+        $username_source = "getNameId()";
 	}
+
+    // Validate username
+    if (!isset($username) || !is_string($username) || strlen($username)==0) {
+        $Result->show("danger", _("Could not extract valid username from SAML response")." : ".$username_source, true);
+    }
 
     // Attempt JIT if enabled
     if(filter_var($params->jit, FILTER_VALIDATE_BOOLEAN)) {
 
-        // Ensure mandatory fields are present.
-        if (empty($username)) {
-            $Result->show("danger", _("Mandatory SAML JIT attribute missing")." : username (string)", true);
-        }
-        elseif (empty($auth->getAttribute("display_name")[0])) {
+        //
+        // Auto provision users via SAML attributes
+        //
+        // - "display_name", (String), MANDATORY
+        //   Users real name / full name.
+        //   Can not be blank.
+        //
+        // - "email", (String), MANDATORY
+        //   Users email address.
+        //   Can not be blank. Must pass filter_var($email, FILTER_VALIDATE_EMAIL).
+        //
+        // - "is_admin", (Boolean), OPTIONAL, default: 0
+        //   User role, "Administrator" or "Normal User".
+        //
+        // - "groups", (String), OPTIONAL (Admins have admin level access to all groups), default: ""
+        //   Comma separated list of group membership.
+        //   e.g "groups"="Operators,Guests"
+        //
+        // - "modules", (String), OPTIONAL (Admins have admin level access to all modules), default: ""
+        //   Comma separated list of modules with permission level, 0=None, 1=Read, 2=Read/Write, 3=Admin
+        //   "*" can be used to wildcard match all modules.
+        //   e.g The following will assign admin permissions to the vlan module and read permissions to everything else.
+        //       "modules" = "*:1,vlan:3"
+
+        if (empty($auth->getAttribute("display_name")[0])) {
             $Result->show("danger", _("Mandatory SAML JIT attribute missing")." : display_name (string)", true);
         }
         elseif (!filter_var($auth->getAttribute("email")[0], FILTER_VALIDATE_EMAIL)) {
@@ -151,22 +178,43 @@ else{
 
         $values["real_name"] = $auth->getAttribute("display_name")[0];
         $values["email"] = $auth->getAttribute("email")[0];
-        $values["role"] = filter_var($auth->getAttribute("isAdmin")[0], FILTER_VALIDATE_BOOLEAN) ? "Administrator" : "User";
+        $values["role"] = filter_var($auth->getAttribute("is_admin")[0], FILTER_VALIDATE_BOOLEAN) ? "Administrator" : "User";
 
         // Parse groups
-        $membership = explode(',', $auth->getAttribute("groups")[0]) ? : [];
+        $saml_groups = array_map('trim', explode(',', $auth->getAttribute("groups")[0])) ? : [];
 
         $ug = [];
         foreach ($Tools->fetch_all_objects("userGroups", "g_id") as $g) {
-            if (in_array($g->g_name, $membership)) {
+            if (in_array($g->g_name, $saml_groups)) {
                 $ug[$g->g_id] = $g->g_id;
             }
         }
         $values["groups"]  = json_encode($ug);
 
+        //parse modules
+        $saml_modules = [];
+        foreach(explode(',', $auth->getAttribute("modules")[0]) as $entry){
+            if (strpos($entry, ":")!==false) {
+                list($module_name, $module_perm) = array_map('trim', explode(':', $entry)) ? : ['', 0];
+                $saml_modules[$module_name] = filter_var($module_perm, FILTER_VALIDATE_INT, ["options"=>["default"=>0, "min_range"=>0, "max_range"=>3]]);
+            }
+        }
+
+        $um = [];
+        foreach($User->get_modules_with_permissions() as $module) {
+            // Allow "*" wildcard
+            if (array_key_exists('*', $saml_modules)) {
+                $um[$module] = $saml_modules['*'];
+            }
+            if (array_key_exists($module, $saml_modules)) {
+                $um[$module] = $saml_modules[$module];
+            }
+        }
+        $values["module_permissions"] = json_encode($um);
+
         // Construct admin object for helper functions
         $Admin = new Admin($Database, false);
-        $Admin->object_modify("users", $action, "id", $values);
+        if (!$Admin->object_modify("users", $action, "id", $values)) { $Result->show("danger", _("Failed to create/update SAML JIT user")." : ".escape_input($username), true); }
     }
 
     $User->authenticate ($username, '', true);
