@@ -3,6 +3,7 @@
     Bugfixes:
     ----------------------------
     + Fix for SAML/2FA login redirection after timeout (#3492);
+    + php_sessions table doesn't exist error when upgrading (#3417);
 
 == 1.4.4
 
