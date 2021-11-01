@@ -194,7 +194,7 @@ class User extends Common_functions {
      */
     private function start_session () {
         // check if database should be set for sessions
-        if (Config::ValueOf('session_storage') == "database") {
+        if (Config::ValueOf('session_storage') == "database" && $this->settings->dbversion >= 3) {
             new Session_db ($this->Database);
         }
         // local
