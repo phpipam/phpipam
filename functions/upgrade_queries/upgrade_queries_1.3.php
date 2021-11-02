@@ -7,8 +7,6 @@
 # Version 1.3 queries
 #
 $upgrade_queries["1.3.0"]   = [];
-$upgrade_queries["1.3.0"][] = "-- Version update";
-$upgrade_queries["1.3.0"][] = "UPDATE `settings` set `version` = '1.3';";
 // add option to globally enforce uniqueness
 $upgrade_queries["1.3.0"][] = "-- Add option to globally enforce uniqueness";
 $upgrade_queries["1.3.0"][] = "ALTER TABLE `settings` ADD `enforceUnique` TINYINT(1)  NULL  DEFAULT '1';";
@@ -47,14 +45,13 @@ $upgrade_queries["1.3.0"][] = "ALTER TABLE `devices` CHANGE `hostname` `hostname
 // decode mac addresses
 $upgrade_queries["1.3.0"][] = "-- Decode MAC addresses switch";
 $upgrade_queries["1.3.0"][] = "ALTER TABLE `settings` ADD `decodeMAC` TINYINT(1)  NULL  DEFAULT '1';";
-
+$upgrade_queries["1.3.0"][] = "-- Version update";
+$upgrade_queries["1.3.0"][] = "UPDATE `settings` set `version` = '1.3';";
 
 #
 # Version 1.31 queries
 #
 $upgrade_queries["1.31.0"]   = [];
-$upgrade_queries["1.31.0"][] = "-- Version update";
-$upgrade_queries["1.31.0"][] = "UPDATE `settings` set `version` = '1.31';";
 // Circuits flag
 $upgrade_queries["1.31.0"][] = "-- Enable circuits switch and circuits tables";
 $upgrade_queries["1.31.0"][] = "ALTER TABLE `settings` ADD `enableCircuits` TINYINT(1)  NULL  DEFAULT '1';";
@@ -123,14 +120,13 @@ $upgrade_queries["1.31.0"][] = "ALTER TABLE `subnets` ADD INDEX (`location`);";
 $upgrade_queries["1.31.0"][] = "ALTER TABLE `ipaddresses` ADD INDEX (`location`);";
 $upgrade_queries["1.31.0"][] = "ALTER TABLE `circuits` ADD INDEX (`location1`);";
 $upgrade_queries["1.31.0"][] = "ALTER TABLE `circuits` ADD INDEX (`location2`);";
-
+$upgrade_queries["1.31.0"][] = "-- Version update";
+$upgrade_queries["1.31.0"][] = "UPDATE `settings` set `version` = '1.31';";
 
 #
 # Version 1.32 queries
 #
 $upgrade_queries["1.32.0"]   = [];
-$upgrade_queries["1.32.0"][] = "-- Version update";
-$upgrade_queries["1.32.0"][] = "UPDATE `settings` set `version` = '1.32';";
 // Required IP fields
 $upgrade_queries["1.32.0"][] = "-- Required IP fields";
 $upgrade_queries["1.32.0"][] = "ALTER TABLE `settings` ADD `IPrequired` VARCHAR(128)  NULL  DEFAULT NULL;";
@@ -156,3 +152,5 @@ $upgrade_queries["1.32.0"][] = "ALTER TABLE `devices` CHANGE `snmp_version` `snm
 // Add database schema version field
 $upgrade_queries["1.32.0"][] = "-- Add database schema version field";
 $upgrade_queries["1.32.0"][] = "ALTER TABLE `settings` ADD `dbversion` INT(8)  NOT NULL  DEFAULT '0';";
+$upgrade_queries["1.32.0"][] = "-- Version update";
+$upgrade_queries["1.32.0"][] = "UPDATE `settings` set `version` = '1.32';";
