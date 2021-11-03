@@ -171,7 +171,7 @@ $upgrade_queries["1.5.37"][] = "UPDATE `settings` set `dbversion` = '37';";
 // Truncated change log errors, module defaults, MariaDB Galera compatibility
 $upgrade_queries["1.5.38"]   = [];
 
-$upgrade_queries["1.5.38"][] = "ALTER TABLE `logs` CHANGE `command` `command` text DEFAULT '0';";
+$upgrade_queries["1.5.38"][] = "ALTER TABLE `logs` CHANGE `command` `command` text DEFAULT NULL;";
 $upgrade_queries["1.5.38"][] = "ALTER TABLE `logs` CHANGE `details` `details` text DEFAULT NULL;";
 $upgrade_queries["1.5.38"][] = "ALTER TABLE `changelog` CHANGE `caction` `caction` ENUM('add','edit','delete','truncate','resize','perm_change') NOT NULL DEFAULT 'edit';";
 $upgrade_queries["1.5.38"][] = "ALTER TABLE `changelog` CHANGE `cresult` `cresult` ENUM('error','success') NOT NULL DEFAULT 'success';";
