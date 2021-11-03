@@ -93,7 +93,7 @@ CREATE TABLE `logs` (
   `date` varchar(32) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `ipaddr` varchar(64) DEFAULT NULL,
-  `command` text DEFAULT '0',
+  `command` text DEFAULT NULL,
   `details` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
