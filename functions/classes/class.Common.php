@@ -154,8 +154,8 @@ class Common_functions  {
 	 * @return int
 	 */
 	public function cmp_version_strings($verA, $verB) {
-		$a = explode('.', $verA);
-		$b = explode('.', $verB);
+		$a = array_pad(explode('.', $verA), 3, 0);
+		$b = array_pad(explode('.', $verB), 3, 0);
 
 		if ($a[0] != $b[0]) return $a[0] < $b[0] ? -1 : 1;			// 1.x.y is less than 2.x.y
 		if (strcmp($a[1], $b[1]) != 0) return strcmp($a[1], $b[1]);	// 1.21.y is less than 1.3.y
