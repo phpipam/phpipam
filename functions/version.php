@@ -2,7 +2,7 @@
 /* set latest version */
 define("VERSION", "1.5");									//decimal release version e.g 1.32
 /* set latest version */
-define("VERSION_VISIBLE", "1.5");							//visible version in footer e.g 1.3.2
+define("VERSION_VISIBLE", "1.5.0");							//visible version in footer e.g 1.3.2
 /* set latest revision */
 define("REVISION", "012");									//increment on static content changes (js/css) or point releases to avoid caching issues
 /* set last possible upgrade */

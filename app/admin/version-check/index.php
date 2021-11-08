@@ -11,10 +11,11 @@ print "<h4>phpIPAM version check</h4><hr>";
 # get latest version */
 if(!$version = $Tools->check_latest_phpipam_version(true)) { $Result->show("danger", _("Version check failed").'!', false); }
 else {
+	$version_delta = $Tools->cmp_version_strings(VERSION_VISIBLE, $version);
 	//print result
-	if(VERSION_VISIBLE == $version) 		{ $Result->show("success", _('Latest version').' ('. VERSION_VISIBLE .') '._('already installed').'!', false); }
-	else if (VERSION_VISIBLE > $version) 	{ $Result->show("success", _('Development version').' ('. VERSION_VISIBLE .') '._('installed! Latest production version is').' '. $version, false);}
-	else 									{ $Result->show("danger",  _('New version of phpipam available').':</b><hr>'._('Installed version').': '.VERSION_VISIBLE."<br>"._('Available version').': '. $version."<br><br>"._('You can download new version'). " <a href='https://github.com/phpipam/phpipam/releases/tag/v$version'>"._('GitHub').'</a>' . ' ( '._('archive').' <a href="https://sourceforge.net/projects/phpipam/files/current/phpipam-'. $version .'.tar/download">'._('SourceForge').'</a> ).', false); }
+	if($version_delta == 0) 		{ $Result->show("success", _('Latest version').' ('. VERSION_VISIBLE .') '._('already installed').'!', false); }
+	else if ($version_delta > 0) 	{ $Result->show("success", _('Development version').' ('. VERSION_VISIBLE .') '._('installed! Latest production version is').' '. $version, false);}
+	else 							{ $Result->show("danger",  _('New version of phpipam available').':</b><hr>'._('Installed version').': '.VERSION_VISIBLE."<br>"._('Available version').': '. $version."<br><br>"._('You can download new version'). " <a href='https://github.com/phpipam/phpipam/releases/tag/v$version'>"._('GitHub').'</a>' . ' ( '._('archive').' <a href="https://sourceforge.net/projects/phpipam/files/current/phpipam-'. $version .'.tar/download">'._('SourceForge').'</a> ).', false); }
 }
 
 # release and commit logs
@@ -22,7 +23,7 @@ print "<ul class='nav nav-tabs log-tabs'>";
 print "<li role='presentation' class='active'><a href='' data-target='changelog'>Change log</a></li>";
 if(!is_null($Tools->phpipam_releases))
 print "<li role='presentation'>				  <a href='' data-target='releaselog'>Release log</a></li>";
-if (VERSION_VISIBLE > $version)
+if ($version_delta > 0)
 print "<li role='presentation'>				  <a href='' data-target='gitlog'>Commit log (local)</a></li>";
 print "</ul>";
 
@@ -60,7 +61,7 @@ print "</div>";
 }
 
 # commit log for devel
-if (VERSION_VISIBLE > $version) {
+if ($version_delta > 0) {
 
 	print "<div class='log-print gitlog' style='display:none'>";
 
