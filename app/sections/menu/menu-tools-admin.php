@@ -192,6 +192,12 @@ if($User->is_admin(false)) {
 			}
 		}
 	}
+
+	if ($User->is_admin(false) && $Tools->cmp_version_strings(VERSION, $User->settings->version) != 0) {
+		print "<li>";
+		print "	<a href='".create_link("administration","version-check")."' class='icon-li btn-danger' rel='tooltip' data-placement='bottom' title='"._("Incompatible php and database schema versions")."'><i class='fa fa-bullhorn'></i><sup>".$User->settings->version."</sup></a>";
+		print "</li>";
+	}
 	?>
 
 </ul>
