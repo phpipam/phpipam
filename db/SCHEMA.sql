@@ -13,6 +13,29 @@ VALUES
 	(1,'You can write instructions under admin menu!');
 
 
+# Dump of table customers
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `customers`;
+
+CREATE TABLE `customers` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(128) NOT NULL DEFAULT '',
+  `address` varchar(255) DEFAULT NULL,
+  `postcode` VARCHAR(32) NULL DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `state` varchar(255) DEFAULT NULL,
+  `lat` varchar(31) DEFAULT NULL,
+  `long` varchar(31) DEFAULT NULL,
+  `contact_person` text DEFAULT NULL,
+  `contact_phone` varchar(32) DEFAULT NULL,
+  `contact_mail` varchar(254) DEFAULT NULL,
+  `note` text DEFAULT NULL,
+  `status` set('Active','Reserved','Inactive') DEFAULT 'Active',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `title` (`title`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 # Dump of table ipaddresses
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `ipaddresses`;
@@ -21,28 +44,32 @@ CREATE TABLE `ipaddresses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `subnetId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `ip_addr` varchar(100) NOT NULL,
-  `is_gateway` TINYINT(1)  NULL  DEFAULT '0',
+  `is_gateway` BOOL NOT NULL DEFAULT '0',
   `description` varchar(64) DEFAULT NULL,
-  `dns_name` varchar(100) DEFAULT NULL,
+  `hostname` varchar(255) DEFAULT NULL,
   `mac` varchar(20) DEFAULT NULL,
-  `owner` varchar(32) DEFAULT NULL,
+  `owner` varchar(128) DEFAULT NULL,
   `state`  INT(3)  NULL  DEFAULT '2',
   `switch` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `port` varchar(32) DEFAULT NULL,
   `note` text,
   `lastSeen` DATETIME  NULL  DEFAULT '1970-01-01 00:00:01',
-  `excludePing` BINARY  NULL  DEFAULT '0',
-  `PTRignore` BINARY  NULL  DEFAULT '0',
+  `excludePing` BOOL NOT NULL DEFAULT '0',
+  `PTRignore` BOOL NOT NULL DEFAULT '0',
   `PTR` INT(11)  UNSIGNED  NULL  DEFAULT '0',
   `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
+  `customer_id` INT(11) unsigned NULL default NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sid_ip_unique` (`ip_addr`,`subnetId`),
-  KEY `subnetid` (`subnetId`)
+  KEY `subnetid` (`subnetId`),
+  KEY `location` (`location`),
+  KEY `customer_ip` (`customer_id`),
+  CONSTRAINT `customer_ip` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
-INSERT INTO `ipaddresses` (`id`, `subnetId`, `ip_addr`, `description`, `dns_name`, `state`)
+INSERT INTO `ipaddresses` (`id`, `subnetId`, `ip_addr`, `description`, `hostname`, `state`)
 VALUES
 	(1,3,'168427779','Server1','server1.cust1.local',2),
 	(2,3,'168427780','Server2','server2.cust1.local',2),
@@ -66,8 +93,8 @@ CREATE TABLE `logs` (
   `date` varchar(32) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `ipaddr` varchar(64) DEFAULT NULL,
-  `command` varchar(128) DEFAULT '0',
-  `details` varchar(1024) DEFAULT NULL,
+  `command` text DEFAULT NULL,
+  `details` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -81,9 +108,10 @@ CREATE TABLE `requests` (
   `subnetId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `ip_addr` varchar(100) DEFAULT NULL,
   `description` varchar(64) DEFAULT NULL,
-  `dns_name` varchar(100) DEFAULT NULL,
+  `mac` varchar(20) DEFAULT NULL,
+  `hostname` varchar(255) DEFAULT NULL,
   `state` INT  NULL  DEFAULT '2',
-  `owner` varchar(32) DEFAULT NULL,
+  `owner` varchar(128) DEFAULT NULL,
   `requester` varchar(128) DEFAULT NULL,
   `comment` text,
   `processed` binary(1) DEFAULT NULL,
@@ -107,13 +135,13 @@ CREATE TABLE `sections` (
   `subnetOrdering` VARCHAR(16)  NULL  DEFAULT NULL,
   `order` INT(3)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
+  `showSubnet` BOOL NOT NULL DEFAULT '1',
   `showVLAN` BOOL  NOT NULL  DEFAULT '0',
   `showVRF` BOOL  NOT NULL  DEFAULT '0',
   `showSupernetOnly` BOOL  NOT NULL  DEFAULT '0',
   `DNS` VARCHAR(128)  NULL  DEFAULT NULL,
   PRIMARY KEY (`name`),
-  UNIQUE KEY `id_2` (`id`),
-  KEY `id` (`id`)
+  UNIQUE KEY `id_2` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `sections` (`id`, `name`, `description`, `permissions`)
@@ -130,7 +158,7 @@ CREATE TABLE `settings` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `siteTitle` varchar(64) DEFAULT NULL,
   `siteAdminName` varchar(64) DEFAULT NULL,
-  `siteAdminMail` varchar(64) DEFAULT NULL,
+  `siteAdminMail` varchar(254) DEFAULT NULL,
   `siteDomain` varchar(32) DEFAULT NULL,
   `siteURL` varchar(64) DEFAULT NULL,
   `siteLoginText` varchar(128) DEFAULT NULL,
@@ -151,27 +179,32 @@ CREATE TABLE `settings` (
   `enableRACK` TINYINT(1)  NULL  DEFAULT '1',
   `enableLocations` TINYINT(1)  NULL  DEFAULT '1',
   `enablePSTN` TINYINT(1)  NULL  DEFAULT '0',
+  `enableChangelog` TINYINT(1)  NOT NULL  DEFAULT '1',
+  `enableCustomers` TINYINT(1)  NOT NULL  DEFAULT '1',
+  `enableVaults` TINYINT(1)  NOT NULL  DEFAULT '1',
   `link_field` VARCHAR(32)  NULL  DEFAULT '0',
   `version` varchar(5) DEFAULT NULL,
+  `dbversion` INT(8) NOT NULL DEFAULT '0',
   `dbverified` BINARY(1)  NOT NULL  DEFAULT '0',
   `donate` tinyint(1) DEFAULT '0',
   `IPfilter` varchar(128) DEFAULT NULL,
+  `IPrequired` VARCHAR(128)  NULL  DEFAULT NULL,
   `vlanDuplicate` int(1) DEFAULT '0',
   `vlanMax` INT(8)  NULL  DEFAULT '4096',
   `subnetOrdering` varchar(16) DEFAULT 'subnet,asc',
   `visualLimit` int(2) NOT NULL DEFAULT '0',
+  `theme` VARCHAR(32)  NOT NULL  DEFAULT 'dark',
   `autoSuggestNetwork` TINYINT(1)  NOT NULL  DEFAULT '0',
   `pingStatus` VARCHAR(32)  NOT NULL  DEFAULT '1800;3600',
   `defaultLang` INT(3)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   `vcheckDate` DATETIME  NULL  DEFAULT NULL ,
   `api` BINARY  NOT NULL  DEFAULT '0',
-  `enableChangelog` TINYINT(1)  NOT NULL  DEFAULT '1',
   `scanPingPath` VARCHAR(64)  NULL  DEFAULT '/bin/ping',
   `scanFPingPath` VARCHAR(64)  NULL  DEFAULT '/bin/fping',
-  `scanPingType` SET('ping','pear','fping')  NOT NULL  DEFAULT 'ping',
+  `scanPingType` ENUM('none','ping','pear','fping') NOT NULL DEFAULT 'ping',
   `scanMaxThreads` INT(4)  NULL  DEFAULT '128',
-  `prettyLinks` SET("Yes","No")  NOT NULL  DEFAULT 'No',
+  `prettyLinks` ENUM('Yes','No') NOT NULL DEFAULT 'No',
   `hiddenCustomFields` text NULL,
   `inactivityTimeout` INT(5)  NOT NULL  DEFAULT '3600',
   `updateTags` TINYINT(1)  NULL  DEFAULT '0',
@@ -181,14 +214,22 @@ CREATE TABLE `settings` (
   `decodeMAC` TINYINT(1)  NULL  DEFAULT '1',
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
-  `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
+  `log` ENUM('Database','syslog', 'both') NOT NULL DEFAULT 'Database',
   `subnetView` TINYINT  NOT NULL  DEFAULT '0',
+  `enableCircuits` TINYINT(1)  NULL  DEFAULT '1',
+  `enableRouting` TINYINT(1)  NULL  DEFAULT '0',
+  `permissionPropagate` TINYINT(1)  NULL  DEFAULT '1',
+  `passwordPolicy` VARCHAR(1024)  NULL  DEFAULT '{\"minLength\":8,\"maxLength\":0,\"minNumbers\":0,\"minLetters\":0,\"minLowerCase\":0,\"minUpperCase\":0,\"minSymbols\":0,\"maxSymbols\":0,\"allowedSymbols\":\"#,_,-,!,[,],=,~\"}',
+  `2fa_provider` ENUM('none','Google_Authenticator') NULL DEFAULT 'none',
+  `2fa_name` VARCHAR(32)  NULL  DEFAULT 'phpipam',
+  `2fa_length` INT(2)  NULL  DEFAULT '16',
+  `2fa_userchange` BOOL  NOT NULL  DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `settings` (`id`, `siteTitle`, `siteAdminName`, `siteAdminMail`, `siteDomain`, `siteURL`, `domainAuth`, `enableIPrequests`, `enableVRF`, `enableDNSresolving`, `version`, `donate`, `IPfilter`, `vlanDuplicate`, `subnetOrdering`, `visualLimit`)
 VALUES
-	(1, 'phpipam IP address management', 'Sysadmin', 'admin@domain.local', 'domain.local', 'http://yourpublicurl.com', 0, 0, 0, 0, '1.1', 0, 'mac;owner;state;switch;note;firewallAddressObject', 1, 'subnet,asc', 24);
+	(1, 'phpipam IP address management', 'Sysadmin', 'admin@domain.local', 'domain.local', 'http://yourpublicurl.com', 0, 0, 0, 0, '1.4', 0, 'mac;owner;state;switch;note;firewallAddressObject', 1, 'subnet,asc', 24);
 
 
 # Dump of table settingsMail
@@ -197,15 +238,15 @@ DROP TABLE IF EXISTS `settingsMail`;
 
 CREATE TABLE `settingsMail` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `mtype` set('localhost','smtp') NOT NULL DEFAULT 'localhost',
-  `msecure` SET('none','ssl','tls')  NOT NULL  DEFAULT 'none',
-  `mauth` set('yes','no') NOT NULL DEFAULT 'no',
+  `mtype` ENUM('localhost','smtp') NOT NULL DEFAULT 'localhost',
+  `msecure` ENUM('none','ssl','tls')  NOT NULL  DEFAULT 'none',
+  `mauth` ENUM('yes','no') NOT NULL DEFAULT 'no',
   `mserver` varchar(128) DEFAULT NULL,
   `mport` int(5) DEFAULT '25',
-  `muser` varchar(64) DEFAULT NULL,
-  `mpass` varchar(64) DEFAULT NULL,
-  `mAdminName` varchar(64) DEFAULT NULL,
-  `mAdminMail` varchar(64) DEFAULT NULL,
+  `muser` varchar(254) DEFAULT NULL,
+  `mpass` varchar(128) DEFAULT NULL,
+  `mAdminName` varchar(128) DEFAULT NULL,
+  `mAdminMail` varchar(254) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -228,26 +269,35 @@ CREATE TABLE `subnets` (
   `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,
   `vrfId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `masterSubnetId` INT(11)  UNSIGNED  NOT NULL default 0,
-  `allowRequests` tinyint(1) DEFAULT '0',
+  `allowRequests` BOOL NOT NULL DEFAULT '0',
   `vlanId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
-  `showName` tinyint(1) DEFAULT '0',
+  `showName` BOOL NOT NULL DEFAULT '0',
   `device` INT  UNSIGNED  NULL  DEFAULT '0',
   `permissions` varchar(1024) DEFAULT NULL,
-  `pingSubnet` BOOL NULL  DEFAULT '0',
-  `discoverSubnet` BINARY(1)  NULL  DEFAULT '0',
-  `DNSrecursive` TINYINT(1)  NULL  DEFAULT '0',
-  `DNSrecords` TINYINT(1)  NULL  DEFAULT '0',
+  `pingSubnet` BOOL NOT NULL DEFAULT '0',
+  `discoverSubnet` BOOL NOT NULL DEFAULT '0',
+  `resolveDNS` BOOL NOT NULL DEFAULT '0',
+  `DNSrecursive` BOOL NOT NULL DEFAULT '0',
+  `DNSrecords` BOOL NOT NULL DEFAULT '0',
   `nameserverId` INT(11) NULL DEFAULT '0',
   `scanAgent` INT(11)  DEFAULT NULL,
-  `isFolder` BOOL NULL  DEFAULT '0',
-  `isFull` TINYINT(1)  NULL  DEFAULT '0',
+  `customer_id` INT(11) unsigned NULL default NULL,
+  `isFolder` BOOL NOT NULL DEFAULT '0',
+  `isFull` BOOL NOT NULL DEFAULT '0',
+  `isPool` BOOL NOT NULL DEFAULT '0',
   `state` INT(3)  NULL  DEFAULT '2',
   `threshold` int(3)  NULL  DEFAULT 0,
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   `lastScan` TIMESTAMP  NULL,
   `lastDiscovery` TIMESTAMP  NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `masterSubnetId` (`masterSubnetId`),
+  KEY `location` (`location`),
+  KEY `sectionId` (`sectionId`),
+  KEY `vrfId` (`vrfId`),
+  KEY `customer_subnets` (`customer_id`),
+  CONSTRAINT `customer_subnets` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `subnets` (`id`, `subnet`, `mask`, `sectionId`, `description`, `vrfId`, `masterSubnetId`, `allowRequests`, `vlanId`, `showName`, `permissions`, `isFolder`)
@@ -266,23 +316,31 @@ DROP TABLE IF EXISTS `devices`;
 
 CREATE TABLE `devices` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `hostname` varchar(100) DEFAULT NULL,
+  `hostname` varchar(255) DEFAULT NULL,
   `ip_addr` varchar(100) DEFAULT NULL,
   `type` int(2) DEFAULT '0',
   `description` varchar(256) DEFAULT NULL,
   `sections` varchar(1024) DEFAULT NULL,
   `snmp_community` varchar(100) DEFAULT NULL,
-  `snmp_version` set('0','1','2') DEFAULT '0',
+  `snmp_version` set('0','1','2','3') DEFAULT '0',
   `snmp_port` mediumint(5) unsigned DEFAULT '161',
-  `snmp_timeout` mediumint(5) unsigned DEFAULT '1000000',
-  `snmp_queries` VARCHAR(128)  NULL  DEFAULT NULL,
-  `rack` int(11) unsigned NULL DEFAULT null,
-  `rack_start` int(11) unsigned DEFAULT null,
-  `rack_size` int(11) unsigned DEFAULT null,
-  `location` INT(11)  unsigned  NULL  DEFAULT NULL,
+  `snmp_timeout` mediumint(5) unsigned DEFAULT '1000',
+  `snmp_queries` varchar(128) DEFAULT NULL,
+  `snmp_v3_sec_level` set('none','noAuthNoPriv','authNoPriv','authPriv') DEFAULT 'none',
+  `snmp_v3_auth_protocol` set('none','MD5','SHA') DEFAULT 'none',
+  `snmp_v3_auth_pass` varchar(64) DEFAULT NULL,
+  `snmp_v3_priv_protocol` set('none','DES','AES') DEFAULT 'none',
+  `snmp_v3_priv_pass` varchar(64) DEFAULT NULL,
+  `snmp_v3_ctx_name` varchar(64) DEFAULT NULL,
+  `snmp_v3_ctx_engine_id` varchar(64) DEFAULT NULL,
+  `rack` int(11) unsigned DEFAULT NULL,
+  `rack_start` int(11) unsigned DEFAULT NULL,
+  `rack_size` int(11) unsigned DEFAULT NULL,
+  `location` int(11) unsigned DEFAULT NULL,
   `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `hostname` (`hostname`)
+  KEY `hostname` (`hostname`),
+  KEY `location` (`location`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -316,28 +374,31 @@ CREATE TABLE `users` (
   `groups` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
   `role` text CHARACTER SET utf8,
   `real_name` varchar(128) CHARACTER SET utf8 DEFAULT NULL,
-  `email` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
-  `pdns` SET('Yes','No')  NULL  DEFAULT 'No' ,
-  `editVlan` SET('Yes','No')  NULL  DEFAULT 'No',
-  `pstn` INT(1)  NULL  DEFAULT '1',
+  `email` varchar(254) CHARACTER SET utf8 DEFAULT NULL,
   `domainUser` binary(1) DEFAULT '0',
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',
   `lang` INT(11) UNSIGNED  NULL  DEFAULT '9',
   `favourite_subnets` VARCHAR(1024)  NULL  DEFAULT NULL,
-  `mailNotify` SET('Yes','No')  NULL  DEFAULT 'No',
-  `mailChangelog` SET('Yes','No')  NULL  DEFAULT 'No',
-  `passChange` SET('Yes','No')  NOT NULL  DEFAULT 'No',
+  `disabled` ENUM('Yes','No')  NOT NULL  DEFAULT 'No',
+  `mailNotify` ENUM('Yes','No')  NOT NULL  DEFAULT 'No',
+  `mailChangelog` ENUM('Yes','No')  NOT NULL  DEFAULT 'No',
+  `passChange` ENUM('Yes','No')  NOT NULL  DEFAULT 'No',
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   `lastLogin` TIMESTAMP  NULL,
   `lastActivity` TIMESTAMP  NULL,
-  `compressOverride` SET('default','Uncompress') NOT NULL DEFAULT 'default',
+  `compressOverride` ENUM('default','Uncompress') NOT NULL DEFAULT 'default',
   `hideFreeRange` tinyint(1) DEFAULT '0',
-  `menuType` SET('Static','Dynamic')  NULL  DEFAULT 'Dynamic',
+  `menuType` ENUM('Static','Dynamic')  NOT NULL  DEFAULT 'Dynamic',
+  `menuCompact` TINYINT  NULL  DEFAULT '1',
+  `2fa` BOOL  NOT NULL  DEFAULT '0',
+  `2fa_secret` VARCHAR(32)  NULL  DEFAULT NULL,
+  `theme` VARCHAR(32)  NULL  DEFAULT '',
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
+  `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{"vlan":"1","l2dom":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1","locations":"1","devices":"1","routing":"1","vaults":"1"}',
+  `compress_actions` TINYINT(1)  NULL  DEFAULT '1',
   PRIMARY KEY (`username`),
-  UNIQUE KEY `id_2` (`id`),
-  KEY `id` (`id`)
+  UNIQUE KEY `id_2` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /* insert default values */
 INSERT INTO `users` (`id`, `username`, `password`, `groups`, `role`, `real_name`, `email`, `domainUser`,`widgets`, `passChange`)
@@ -358,17 +419,20 @@ CREATE TABLE `lang` (
 /* insert default values */
 INSERT INTO `lang` (`l_id`, `l_code`, `l_name`)
 VALUES
-	(1, 'en_GB.UTF-8', 'English'),
-	(2, 'sl_SI.UTF-8', 'Slovenščina'),
-	(3, 'fr_FR.UTF-8', 'Français'),
-	(4, 'nl_NL.UTF-8', 'Nederlands'),
-	(5, 'de_DE.UTF-8', 'Deutsch'),
-	(6, 'pt_BR.UTF-8', 'Brazil'),
-	(7,	'es_ES.UTF-8', 'Español'),
-	(8, 'cs_CZ.UTF-8', 'Czech'),
-	(9, 'en_US.UTF-8', 'English (US)'),
-  (10,'ru_RU.UTF-8', 'Russian'),
-  (11,'zh_CN.UTF-8', 'Chinese');
+   (1, 'en_GB.UTF-8', 'English'),
+   (2, 'sl_SI.UTF-8', 'Slovenščina'),
+   (3, 'fr_FR.UTF-8', 'Français'),
+   (4, 'nl_NL.UTF-8', 'Nederlands'),
+   (5, 'de_DE.UTF-8', 'Deutsch'),
+   (6, 'pt_BR.UTF-8', 'Brazil'),
+   (7, 'es_ES.UTF-8', 'Español'),
+   (8, 'cs_CZ.UTF-8', 'Czech'),
+   (9, 'en_US.UTF-8', 'English (US)'),
+  (10, 'ru_RU.UTF-8', 'Russian'),
+  (11, 'zh_CN.UTF-8', 'Chinese'),
+  (12, 'ja_JP.UTF-8', 'Japanese'),
+  (13, 'zh_TW.UTF-8', 'Chinese traditional (繁體中文)'),
+  (14, 'it_IT.UTF-8', 'Italian');
 
 
 # Dump of table vlans
@@ -382,7 +446,10 @@ CREATE TABLE `vlans` (
   `number` int(4) DEFAULT NULL,
   `description` text,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`vlanId`)
+  `customer_id` INT(11) unsigned NULL default NULL,
+  PRIMARY KEY (`vlanId`),
+  KEY `customer_vlans` (`customer_id`),
+  CONSTRAINT `customer_vlans` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `vlans` (`vlanId`, `name`, `number`, `description`)
@@ -419,7 +486,10 @@ CREATE TABLE `vrf` (
   `description` varchar(256) DEFAULT NULL,
   `sections` VARCHAR(128)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`vrfId`)
+  `customer_id` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`vrfId`),
+  KEY `customer_vrf` (`customer_id`),
+  CONSTRAINT `customer_vrf` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 # Dump of table nameservers
@@ -452,11 +522,12 @@ CREATE TABLE `api` (
   `app_code` varchar(32) NULL DEFAULT '',
   `app_permissions` int(1) DEFAULT '1',
   `app_comment` TEXT  NULL,
-  `app_security` SET('crypt','ssl','user','none')  NOT NULL  DEFAULT 'ssl',
+  `app_security`SET('ssl_code','ssl_token','crypt','user','none')  NOT NULL  DEFAULT 'ssl_token',
   `app_lock` INT(1)  NOT NULL  DEFAULT '0',
   `app_lock_wait` INT(4)  NOT NULL  DEFAULT '30',
   `app_nest_custom_fields` TINYINT(1)  NULL  DEFAULT '0',
   `app_show_links` TINYINT(1)  NULL  DEFAULT '0',
+  `app_last_access` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_id` (`app_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -471,10 +542,10 @@ CREATE TABLE `changelog` (
   `ctype` set('ip_addr','subnet','section') NOT NULL DEFAULT '',
   `coid` int(11) unsigned NOT NULL,
   `cuser` int(11) unsigned NOT NULL,
-  `caction` set('add','edit','delete','truncate','resize','perm_change') NOT NULL DEFAULT 'edit',
-  `cresult` set('error','success') NOT NULL DEFAULT '',
+  `caction` ENUM('add','edit','delete','truncate','resize','perm_change') NOT NULL DEFAULT 'edit',
+  `cresult` ENUM('error','success') NOT NULL DEFAULT 'success',
   `cdate` datetime NOT NULL,
-  `cdiff` varchar(2048) DEFAULT NULL,
+  `cdiff` text DEFAULT NULL,
   PRIMARY KEY (`cid`),
   KEY `coid` (`coid`),
   KEY `ctype` (`ctype`)
@@ -491,12 +562,12 @@ CREATE TABLE `widgets` (
   `wdescription` varchar(1024) DEFAULT NULL,
   `wfile` varchar(64) NOT NULL DEFAULT '',
   `wparams` varchar(1024) DEFAULT NULL,
-  `whref` set('yes','no') NOT NULL DEFAULT 'no',
-  `wsize` SET('4','6','8','12') NOT NULL DEFAULT '6',
-  `wadminonly` set('yes','no') NOT NULL DEFAULT 'no',
-  `wactive` set('yes','no') NOT NULL DEFAULT 'no',
+  `whref` enum('yes','no') NOT NULL DEFAULT 'no',
+  `wsize` enum('4','6','8','12') NOT NULL DEFAULT '6',
+  `wadminonly` enum('yes','no') NOT NULL DEFAULT 'no',
+  `wactive` enum('yes','no') NOT NULL DEFAULT 'no',
   PRIMARY KEY (`wid`)
-) DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`)
 VALUES
@@ -514,8 +585,10 @@ VALUES
 	(12,'IP Request', 'IP Request widget', 'iprequest', NULL, 'no', '6', 'no', 'yes'),
 	(13,'Threshold', 'Shows threshold usage for top 5 subnets', 'threshold', NULL, 'yes', '6', 'no', 'yes'),
 	(14,'Inactive hosts', 'Shows list of inactive hosts for defined period', 'inactive-hosts', 86400, 'yes', '6', 'yes', 'yes'),
-	(15, 'Locations', 'Shows map of locations', 'locations', NULL, 'yes', '6', 'no', 'yes');
-
+	(15, 'Locations', 'Shows map of locations', 'locations', NULL, 'yes', '6', 'no', 'yes'),
+  (16, 'Bandwidth calculator', 'Calculate bandwidth', 'bw_calculator', NULL, 'no', '6', 'no', 'yes'),
+  (17, 'Customers', 'Shows customer list', 'customers', NULL, 'yes', '6', 'no', 'yes'),
+  (18, 'User Instructions', 'Shows user instructions', 'instructions', NULL, 'yes', '6', 'no', 'yes');
 
 
 
@@ -563,9 +636,9 @@ DROP TABLE IF EXISTS `usersAuthMethod`;
 
 CREATE TABLE `usersAuthMethod` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `type` set('local','http','AD','LDAP','NetIQ','Radius','SAML2') NOT NULL DEFAULT 'local',
-  `params` varchar(1024) DEFAULT NULL,
-  `protected` set('Yes','No') NOT NULL DEFAULT 'Yes',
+  `type` ENUM('local','http','AD','LDAP','NetIQ','Radius','SAML2') NOT NULL DEFAULT 'local',
+  `params` text DEFAULT NULL,
+  `protected` ENUM('Yes','No') NOT NULL DEFAULT 'Yes',
   `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -642,6 +715,7 @@ DROP TABLE IF EXISTS `firewallZoneSubnet`;
 CREATE TABLE `firewallZoneSubnet` (
   `zoneId` INT NOT NULL,
   `subnetId` INT(11) NOT NULL,
+  PRIMARY KEY (`zoneId`,`subnetId`),
   INDEX `fk_zoneId_idx` (`zoneId` ASC),
   INDEX `fk_subnetId_idx` (`subnetId` ASC),
   CONSTRAINT `fk_zoneId`
@@ -653,7 +727,8 @@ CREATE TABLE `firewallZoneSubnet` (
     FOREIGN KEY (`subnetId`)
     REFERENCES `subnets` (`id`)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION);
+    ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Dump of table scanAgents
@@ -684,15 +759,16 @@ CREATE TABLE `nat` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) DEFAULT NULL,
   `type` set('source','static','destination') DEFAULT 'source',
-  `src` text,
-  `dst` text,
+  `src` text DEFAULT NULL,
+  `dst` text DEFAULT NULL,
   `src_port` int(5) DEFAULT NULL,
-  `dst_port` INT(5) DEFAULT NULL,
-  `device` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
-  `description` text,
+  `dst_port` int(5) DEFAULT NULL,
+  `device` int(11) unsigned DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `policy` set('Yes','No') NOT NULL DEFAULT 'No',
+  `policy_dst` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 # Dump of table racks
 # ------------------------------------------------------------
@@ -703,10 +779,30 @@ CREATE TABLE `racks` (
   `name` varchar(64) NOT NULL DEFAULT '',
   `size` int(2) DEFAULT NULL,
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
+  `row` INT(11)  NOT NULL  DEFAULT '1',
+  `hasBack` TINYINT(1)  NOT NULL  DEFAULT '0',
+  `topDown` tinyint(1) NOT NULL DEFAULT '0',
   `description` text,
-  PRIMARY KEY (`id`)
+  `customer_id` INT(11) unsigned NULL default NULL,
+  PRIMARY KEY (`id`),
+  KEY `location` (`location`),
+  KEY `customer_racks` (`customer_id`),
+  CONSTRAINT `customer_racks` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+# Dump of table rackContents
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `rackContents`;
+
+CREATE TABLE `rackContents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `rack` int(11) unsigned DEFAULT NULL,
+  `rack_start` int(11) unsigned DEFAULT NULL,
+  `rack_size` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rack` (`rack`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Dump of table locations
@@ -718,14 +814,14 @@ CREATE TABLE `locations` (
   `name` varchar(128) NOT NULL DEFAULT '',
   `description` text,
   `address` VARCHAR(128)  NULL  DEFAULT NULL,
-  `lat` varchar(12) DEFAULT NULL,
-  `long` varchar(12) DEFAULT NULL,
+  `lat` varchar(31) DEFAULT NULL,
+  `long` varchar(31) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
-    # Dump of table pstnPrefixes
+# Dump of table pstnPrefixes
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `pstnPrefixes`;
 
@@ -761,12 +857,205 @@ CREATE TABLE `pstnNumbers` (
 
 
 
+# Dump of table circuitProviders
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuitProviders`;
+
+CREATE TABLE `circuitProviders` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) DEFAULT NULL,
+  `description` text,
+  `contact` varchar(128) DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table circuits
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuits`;
+
+CREATE TABLE `circuits` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `cid` varchar(128) DEFAULT NULL,
+  `provider` int(11) unsigned NOT NULL,
+  `type` int(10) unsigned DEFAULT NULL,
+  `capacity` varchar(128) DEFAULT NULL,
+  `status` enum('Active','Inactive','Reserved') NOT NULL DEFAULT 'Active',
+  `device1` int(11) unsigned DEFAULT NULL,
+  `location1` int(11) unsigned DEFAULT NULL,
+  `device2` int(11) unsigned DEFAULT NULL,
+  `location2` int(11) unsigned DEFAULT NULL,
+  `comment` text,
+  `parent` int(10) unsigned NOT NULL DEFAULT '0',
+  `customer_id` int(11) unsigned DEFAULT NULL,
+  `differentiator` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `circuits_diff_UN` (`cid`,`differentiator`),
+  KEY `location1` (`location1`),
+  KEY `location2` (`location2`),
+  KEY `customer_circuits` (`customer_id`),
+  CONSTRAINT `customer_circuits` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+# Dump of table circuitsLogical
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuitsLogical`;
+
+CREATE TABLE `circuitsLogical` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `logical_cid` varchar(128) NOT NULL,
+  `purpose` varchar(64) DEFAULT NULL,
+  `comments` text,
+  `member_count` int(4) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `circuitsLogical_UN` (`logical_cid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table circuitsLogicalMapping
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuitsLogicalMapping`;
+
+CREATE TABLE `circuitsLogicalMapping` (
+  `logicalCircuit_id` int(11) unsigned NOT NULL,
+  `circuit_id` int(11) unsigned NOT NULL,
+  `order` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`logicalCircuit_id`, `circuit_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table circuitTypes
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuitTypes`;
+
+CREATE TABLE `circuitTypes` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `ctname` varchar(64) NOT NULL,
+  `ctcolor` varchar(7) DEFAULT '#000000',
+  `ctpattern` enum('Solid','Dotted') DEFAULT 'Solid',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/* insert default values */
+INSERT INTO `circuitTypes` (`ctname`) VALUES ('Default');
+
+
+# Dump of table php_sessions
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `php_sessions`;
+
+CREATE TABLE `php_sessions` (
+  `id` varchar(128) NOT NULL DEFAULT '',
+  `access` int(10) unsigned DEFAULT NULL,
+  `data` text NOT NULL,
+  `remote_ip` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table routing_bgp
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `routing_bgp`;
+
+CREATE TABLE `routing_bgp` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `local_as` int(12) unsigned NOT NULL,
+  `local_address` varchar(100) NOT NULL DEFAULT '',
+  `peer_name` varchar(255) NOT NULL DEFAULT '',
+  `peer_as` int(12) unsigned NOT NULL,
+  `peer_address` varchar(100) NOT NULL DEFAULT '',
+  `bgp_type` enum('internal','external') NOT NULL DEFAULT 'external',
+  `vrf_id` int(11) unsigned DEFAULT NULL,
+  `circuit_id` int(11) unsigned DEFAULT NULL,
+  `customer_id` int(11) unsigned DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `vrf_id` (`vrf_id`),
+  KEY `circuit_id` (`circuit_id`),
+  KEY `cust_id` (`customer_id`),
+  CONSTRAINT `circuit_id` FOREIGN KEY (`circuit_id`) REFERENCES `circuits` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `cust_id` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `vrf_id` FOREIGN KEY (`vrf_id`) REFERENCES `vrf` (`vrfId`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table routing_subnets
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `routing_subnets`;
+
+CREATE TABLE `routing_subnets` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` enum('bgp','ospf') NOT NULL DEFAULT 'bgp',
+  `direction` enum('advertised','received') NOT NULL DEFAULT 'advertised',
+  `object_id` int(11) unsigned NOT NULL,
+  `subnet_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `type` (`type`,`object_id`,`subnet_id`),
+  KEY `bgp_id` (`object_id`),
+  KEY `subnet_id` (`subnet_id`),
+  CONSTRAINT `bgp_id` FOREIGN KEY (`object_id`) REFERENCES `routing_bgp` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `subnet_id` FOREIGN KEY (`subnet_id`) REFERENCES `subnets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table vaults
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `vaults`;
+
+CREATE TABLE `vaults` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `type` enum('passwords','certificates') NOT NULL DEFAULT 'passwords',
+  `description` text,
+  `test` char(128) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table vaultItems
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `vaultItems`;
+
+CREATE TABLE `vaultItems` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `vaultId` int(11) unsigned NOT NULL,
+  `type` enum('password','certificate') NOT NULL DEFAULT 'password',
+  `type_certificate` enum('public','pkcs12','certificate','website') NOT NULL DEFAULT 'public',
+  `values` text,
+  PRIMARY KEY (`id`),
+  KEY `vaultId` (`vaultId`),
+  CONSTRAINT `vaultItems_ibfk_1` FOREIGN KEY (`vaultId`) REFERENCES `vaults` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table nominatim
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `nominatim`;
+
+CREATE TABLE `nominatim` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/* insert default values */
+INSERT INTO `nominatim` (`id`, `url`) VALUES (1, 'https://nominatim.openstreetmap.org/search');
+
+
+# Dump of table nominatim_cache
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `nominatim_cache`;
+
+CREATE TABLE `nominatim_cache` (
+  `sha256` binary(32) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `query` text NOT NULL,
+  `lat_lng` text NOT NULL,
+  PRIMARY KEY (`sha256`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
-
-# update version
-# ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.3';
+UPDATE `settings` SET `version` = "1.5";
+UPDATE `settings` SET `dbversion` = 38;

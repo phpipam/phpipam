@@ -5,7 +5,7 @@
  *************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "apiedit");
+$csrf = $User->Crypto->csrf_cookie ("create", "apiedit");
 
 # validate action
 $Admin->validate_action ($_POST['action'], true);
@@ -36,7 +36,7 @@ if($_POST['action']!="add") {
 } else {
 	# generate new code
 	$api = new StdClass;
-	$api->app_code = str_shuffle(md5(microtime()));
+	$api->app_code = $User->Crypto->generate_html_safe_token(32);
 	# title
 	$title = _('Add new api key');
 }
@@ -56,7 +56,7 @@ if($_POST['action']!="add") {
 	<tr>
 	    <td><?php print _('App id'); ?></td>
 	    <td>
-	    	<input type="text" name="app_id" class="form-control input-sm" value="<?php print @$api->app_id; ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
+	    	<input type="text" name="app_id" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$api->app_id); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 	        <input type="hidden" name="id" value="<?php print $api->id; ?>">
     		<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
@@ -67,7 +67,7 @@ if($_POST['action']!="add") {
 	<!-- code -->
 	<tr>
 	    <td><?php print _('App code'); ?></td>
-	    <td><input type="text" id="appcode" name="app_code" class="form-control input-sm"  value="<?php print @$api->app_code; ?>"  maxlength='32' <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
+	    <td><input type="text" id="appcode" name="app_code" class="form-control input-sm"  value="<?php print $Admin->strip_xss(@$api->app_code); ?>"  maxlength='32' <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
        	<td class="info2"><?php print _('Application code'); ?> <button class="btn btn-xs btn-default" id="regApiKey"><i class="fa fa-random"></i> <?php print _('Regenerate'); ?></button></td>
     </tr>
 
@@ -77,10 +77,10 @@ if($_POST['action']!="add") {
 	    <td>
 	    	<select name="app_permissions" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>"Disabled",1=>"Read",2=>"Read / Write",3=>"Read / Write / Admin");
+	    	$perms = array(0=>_("Disabled"),1=>_("Read"),2=>_("Read / Write"),3=>_("Read / Write / Admin"));
 	    	foreach($perms as $k=>$p) {
-		    	if($k==$api->app_permissions)	{ print "<option value='$k' selected='selected'>"._($p)."</option>"; }
-		    	else							{ print "<option value='$k' 				   >"._($p)."</option>"; }
+		    	if($k==$api->app_permissions)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
+		    	else							{ print "<option value='$k' 				   >".$p."</option>"; }
 	    	}
 	    	?>
 	    	</select>
@@ -94,14 +94,11 @@ if($_POST['action']!="add") {
 	    <td>
 	    	<select name="app_security" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>"crypt",1=>"ssl",2=>"none",3=>"user");
-
-	    	// user not yet supported
-	    	unset($perms[3]);
+	    	$perms = array("ssl_token"=>_("SSL with User token"), "ssl_code"=>_("SSL with App code token"), "crypt"=>_("Encrypted"), "none"=>_("User token"));
 
 	    	foreach($perms as $k=>$p) {
-		    	if($p==$api->app_security)		{ print "<option value='$p' selected='selected'>"._($p)."</option>"; }
-		    	else							{ print "<option value='$p' 				   >"._($p)."</option>"; }
+		    	if($k==$api->app_security)		{ print "<option value='$k' selected='selected'>$p</option>"; }
+		    	else							{ print "<option value='$k' 				   >$p</option>"; }
 	    	}
 	    	?>
 	    	</select>
@@ -115,10 +112,10 @@ if($_POST['action']!="add") {
 	    <td>
 	    	<select name="app_lock" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>"No",1=>"Yes");
+	    	$perms = array(0=>_("No"),1=>_("Yes"));
 	    	foreach($perms as $k=>$p) {
-		    	if($k==$api->app_lock)	{ print "<option value='$k' selected='selected'>"._($p)."</option>"; }
-		    	else					{ print "<option value='$k' 				   >"._($p)."</option>"; }
+		    	if($k==$api->app_lock)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
+		    	else					{ print "<option value='$k' 				   >".$p."</option>"; }
 	    	}
 	    	?>
 	    	</select>
@@ -130,7 +127,7 @@ if($_POST['action']!="add") {
 	<tr>
 	    <td><?php print _('Lock timeout'); ?></td>
 	    <td>
-	    	<input name="app_lock_wait" class="form-control input-sm input-w-auto" value="<?php print $api->app_lock_wait; ?>">
+	    	<input name="app_lock_wait" class="form-control input-sm input-w-auto" value="<?php print $Admin->strip_xss($api->app_lock_wait); ?>">
 	    </td>
        	<td class="info2"><?php print _('Seconds to wait for transaction lock to clear'); ?></td>
     </tr>
@@ -141,10 +138,10 @@ if($_POST['action']!="add") {
 	    <td>
 	    	<select name="app_nest_custom_fields" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>"No",1=>"Yes");
+	    	$perms = array(0=>_("No"),1=>_("Yes"));
 	    	foreach($perms as $k=>$p) {
-		    	if($k==$api->app_nest_custom_fields)	{ print "<option value='$k' selected='selected'>"._($p)."</option>"; }
-		    	else									{ print "<option value='$k' 				   >"._($p)."</option>"; }
+		    	if($k==$api->app_nest_custom_fields)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
+		    	else									{ print "<option value='$k' 				   >".$p."</option>"; }
 	    	}
 	    	?>
 	    	</select>
@@ -158,10 +155,10 @@ if($_POST['action']!="add") {
 	    <td>
 	    	<select name="app_show_links" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>"No",1=>"Yes");
+	    	$perms = array(0=>_("No"),1=>_("Yes"));
 	    	foreach($perms as $k=>$p) {
-		    	if($k==$api->app_show_links)	{ print "<option value='$k' selected='selected'>"._($p)."</option>"; }
-		    	else							{ print "<option value='$k' 				   >"._($p)."</option>"; }
+		    	if($k==$api->app_show_links)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
+		    	else							{ print "<option value='$k' 				   >".$p."</option>"; }
 	    	}
 	    	?>
 	    	</select>
@@ -173,7 +170,7 @@ if($_POST['action']!="add") {
     <tr>
     	<td><?php print _('Description'); ?></td>
     	<td>
-    		<input type="text" name="app_comment" class="form-control input-sm" value="<?php print @$api->app_comment; ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
+    		<input type="text" name="app_comment" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$api->app_comment); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
     	</td>
     	<td class="info2"><?php print _('Enter description'); ?></td>
     </tr>
@@ -188,8 +185,11 @@ if($_POST['action']!="add") {
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="apiEditSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/api/edit-result.php" data-result_div="apiEditResult" data-form='apiEdit'>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?>
+		</button>
+
 	</div>
 	<!-- Result -->
-	<div class="apiEditResult"></div>
+	<div id="apiEditResult"></div>
 </div>

@@ -6,7 +6,7 @@
  ******************************************/
 
 # functions
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize classes
 $Database = new Database_PDO;
@@ -40,7 +40,7 @@ if ($_POST['action'] != 'add') {
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 	/* bootstrap switch */
 	var switch_options = {

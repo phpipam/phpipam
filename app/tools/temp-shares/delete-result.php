@@ -1,5 +1,3 @@
-<div class="pHeader"><?php print _("Remove temporary share"); ?></div>
-<div class="pContent">
 <?php
 
 /**
@@ -7,7 +5,7 @@
  *************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -18,6 +16,9 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+
+print '<div class="pHeader">'._("Remove temporary share").'</div>';
+print '<div class="pContent">';
 
 /* checks */
 if($User->settings->tempShare!=1)									{ $Result->show("danger", _("Temporary sharing disabled"), true); }

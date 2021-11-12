@@ -5,21 +5,28 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 $PowerDNS 	= new PowerDNS ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("pdns", User::ACCESS_RW, true, true);
+}
+else {
+    $User->check_module_permissions ("pdns", User::ACCESS_RWA, true, true);
+}
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "domain");
+$csrf = $User->Crypto->csrf_cookie ("create", "domain");
 
 # validate action
 $Admin->validate_action ($_POST['action'], true);
@@ -70,7 +77,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 	<tr>
 		<td><?php print _('Domain type'); ?></td>
 		<td>
-			<select name="type" class="form-control input-w-auto" <?php print $readonly; ?>>
+			<select name="type" class="form-control input-w-auto input-sm" <?php print $readonly; ?>>
 			<?php
 			// loop
 			foreach($PowerDNS->domain_types as $type) {

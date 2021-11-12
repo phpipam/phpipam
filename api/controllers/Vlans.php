@@ -8,23 +8,6 @@
 
 class Vlans_controller extends Common_api_functions {
 
-
-	/**
-	 * _params provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
-	/**
-	 * custom_fields
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	public $custom_fields;
-
 	/**
 	 * settings
 	 *
@@ -32,38 +15,6 @@ class Vlans_controller extends Common_api_functions {
 	 * @access protected
 	 */
 	protected $settings;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Master Sections object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Sections;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-	/**
-	 * Master Admin object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Admin;
 
 
 	/**
@@ -128,13 +79,14 @@ class Vlans_controller extends Common_api_functions {
 	 *		- /{id}/subnets/{sectionId}/	returns subnets belonging to this VLAN inside one section
 	 *		- /custom_fields/			    returns custom fields
 	 *		- /search/{number}/			    returns all vlans with specified number
+	 *      - /all/                         returns all vlans
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function GET () {
 		// all
-		if (!isset($this->_params->id)) {
+		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ("vlans", 'vlanId');
 			// check result
 			if($result===false)						{ $this->Response->throw_exception(200, 'No vlans configured'); }
@@ -195,19 +147,6 @@ class Vlans_controller extends Common_api_functions {
 			if($result==NULL)						{ $this->Response->throw_exception(200, "Vlan not found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
-	}
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 
@@ -338,7 +277,11 @@ class Vlans_controller extends Common_api_functions {
 	 */
 	private function validate_vlan_edit () {
 		# get settings
-		$this->settings = $this->Admin->fetch_object ("settings", "id", 1);
+		$this->settings = $this->Admin->get_settings();
+
+		# Check vlan number
+		if ( $this->_params->number > $this->settings->vlanMax )
+			$this->Response->throw_exception(500, _('Highest possible VLAN number is ').$this->settings->vlanMax.'!');
 
 		//if it already exist die
 		if($this->settings->vlanDuplicate==0 && $_SERVER['REQUEST_METHOD']=="POST") {
@@ -389,5 +332,3 @@ class Vlans_controller extends Common_api_functions {
     	return $this->Subnets->find_gateway ($subnetId);
 	}
 }
-
-?>

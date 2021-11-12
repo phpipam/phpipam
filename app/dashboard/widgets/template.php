@@ -8,7 +8,7 @@ This is a template for creating new widgets
 
 # required functions
 if(!is_object(@$User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
+	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);
@@ -35,7 +35,7 @@ else													{ $dashboard = false; }
 </style>
 
 <!-- JS -->
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 	//if you need some JS write it here, jQuery is already included
 	return false;

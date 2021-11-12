@@ -25,10 +25,10 @@
 	    <input type="password" id="password" name="ipampassword" class="login form-control input-sm" placeholder="<?php print _('Password'); ?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></input>
 	    <?php
 	    // add requested var for redirect
-	    if(isset($_COOKIE['phpipamredirect'])) {
+	    if(!empty($_COOKIE['phpipamredirect'])) {
 		    //ignore login, logout
 		    if(strpos($_COOKIE['phpipamredirect'],"login")==0 && strpos($_COOKIE['phpipamredirect'],"logout")==0)
-	        print "<input type='hidden' name='phpipamredirect' id='phpipamredirect' value='".@$_COOKIE['phpipamredirect']."'>";
+	        print "<input type='hidden' name='phpipamredirect' id='phpipamredirect' value='".escape_input($_COOKIE['phpipamredirect'])."'>";
 	    }
 	    ?>
 	</div>
@@ -40,11 +40,11 @@
 	?>
 	<!-- captcha -->
 	<div class="col-xs-12"><strong><?php print _('Security code'); ?></strong></div>
-	<div class="col-xs-6">
+	<div class="col-xs-12">
 		<input id="validate_captcha" type="text" name="captcha" class="login form-control input-sm col-xs-12">
 	</div>
-	<div class="col-xs-6">
-		<img src="<?php print $url.BASE; ?>app/login/captcha/captchashow.php" class="imgcaptcha" align="captcha">
+	<div class="col-xs-12">
+		<img src="<?php print $url.BASE; ?>app/login/captchashow.php" alt="<?php print _("CAPTCHA image"); ?>" class="imgcaptcha" align="captcha">
 	</div>
 	<?php } ?>
 

@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 /* fix for ajax-loading tooltips */
 $('body').tooltip({ selector: '[rel=tooltip]' });
 </script>
@@ -19,6 +19,9 @@ $folderId = $_GET['subnetId'];
 # get section details
 $section = $Sections->fetch_section ("id", $folder['sectionId']);
 
+// init subnets
+$subnets = array();
+
 if($slaves) {
 	# sort slaves by folder / subnet
 	foreach($slaves as $s) {
@@ -27,20 +30,23 @@ if($slaves) {
 	}
 
 	# first print belonging folders
-	if(sizeof(@$folders)>0) {
+	if(isset($folders) && @$_GET['sPage']!=="map" && @$_GET['sPage']!=="mapsearch") {
 		# print title
 		print "<h4>"._("Folder")." $folder[description] "._('has')." ". sizeof($folders)." "._('directly nested folders').":</h4><hr>";
 
 		# table
-		print '<table class="slaves table table-striped table-condensed table-hover table-full table-top" style="margin-bottom:50px;">'. "\n";
+		print '<table class="slaves table sorted table-striped table-condensed table-hover table-full table-top" style="margin-bottom:50px;" data-cookie-id-table="folder_subnets">'. "\n";
 		# headers
+		print "<thead>";
 		print "<tr>";
 		print "	<th class='small' style='width:55px;'></th>";
 		print "	<th class='description'>"._('Folder')."</th>";
 		print "</tr>";
+		print "</thead>";
 
 		# folders
 		$m=0;
+		print "<tbody>";
 		foreach($folders as $f) {
 			$f = (array) $f;
 			# check permission
@@ -61,21 +67,23 @@ if($slaves) {
 			print "</td>";
 			print "</tr>";
 		}
-
+		print "</tbody>";
 		print "</table>";
 	}
 	# print subnets
-	if(sizeof(@$subnets)>0) {
+	if(sizeof($subnets)>0 && @$_GET['sPage']!=="map" && @$_GET['sPage']!=="mapsearch") {
 		# title
 		print "<h4>"._("Folder")." $folder[description] "._('has')." ".sizeof($subnets)." "._('directly nested subnets').":</h4><hr><br>";
 
 		# print table
-		print '<table class="slaves table table-striped table-condensed table-hover table-full table-top">'. "\n";
+		print '<table class="slaves table sorted table-striped table-condensed table-hover table-full table-top" data-cookie-id-table="folder_subnets_sorted">'. "\n";
 
 		# headers
+		print "<thead>";
 		print "<tr>";
+		if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
 		print "	<th class='small'>"._('VLAN')."</th>";
-		if($User->settings->enableVRF==1)
+		if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R)
 		print "	<th class='small'>"._('VRF')."</th>";
 		print "	<th class='small description'>"._('Subnet description')."</th>";
 		print "	<th>"._('Subnet')."</th>";
@@ -84,9 +92,11 @@ if($slaves) {
 		print "	<th class='small hidden-xs hidden-sm'>"._('Requests')."</th>";
 		print " <th class='actions'></th>";
 		print "</tr>";
+		print "</thead>";
 
 		# print slave subnets
 		$m=0;
+		print "<tbody>";
 		foreach ($subnets as $slave) {
 			# cast
 			$slave = (array) $slave;
@@ -109,18 +119,19 @@ if($slaves) {
 				}
 
 				// calculate usage
-                $calculate  = $Subnets->calculate_subnet_usage ($slave, false);
+                $calculate  = $Subnets->calculate_subnet_usage ($slave);
 
 				# add full information
                 $fullinfo = $slave['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
-                if ($slave['isFull']!==1) {
+                if ($slave['isFull']!=1) {
                     # if usage is 100%, fake usFull to true!
                     if ($calculate['freehosts']==0)  { $fullinfo = "<span class='badge badge1 badge2 badge4'>"._("Full")."</span>"; }
                 }
 
 				print "<tr>";
+				if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
 			    print "	<td class='small'>".$vlan['number']."</td>";
-			    if($User->settings->enableVRF==1)
+			    if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R)
 			    print "	<td class='small'>".$vrf['name']."</td>";
 
 			    print "	<td class='small description'><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[description]</a></td>";
@@ -139,6 +150,13 @@ if($slaves) {
 					print "	<td class='actions'>";
 					print "	<div class='btn-group'>";
 					print "		<button class='btn btn-xs btn-default editSubnet'     data-action='edit'   data-subnetid='".$slave['id']."'  data-sectionid='".$slave['sectionId']."'><i class='fa fa-gray fa fa-pencil'></i></button>";
+					if($User->is_subnet_favourite($slave['id'])){
+                                                print " <a class='btn btn-xs btn-default btn-info editFavourite favourite-$slave[id]' href='' data-container='body' rel='tooltip' title='"._('Click to remove from favourites')."' data-subnetId='$slave[id]' data-action='remove'><i class='fa fa-star></i></a>";
+                                        }
+					else{
+                                                print " <a class='btn btn-xs btn-default editFavourite favourite-$slave[id]' href='' data-container='body' rel='tooltip' title='"._('Click to add to favourites')."' data-subnetId='$slave[id]' data-action='add'><i class='fa fa-star fa-star-o'></i></a>";
+                                        }
+
 					print "		<button class='btn btn-xs btn-default showSubnetPerm' data-action='show'   data-subnetid='".$slave['id']."'  data-sectionid='".$slave['sectionId']."'><i class='fa fa-gray fa fa-tasks'></i></button>";
 					print "		<button class='btn btn-xs btn-default editSubnet'     data-action='delete' data-subnetid='".$slave['id']."'  data-sectionid='".$slave['sectionId']."'><i class='fa fa-gray fa fa-times'></i></button>";
 					print "	</div>";
@@ -167,7 +185,7 @@ if($slaves) {
 			print "</td>";
 			print "</tr>";
 		}
-
+		print "</tbody>";
 		print '</table>'. "\n";
 	}
 }

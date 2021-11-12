@@ -1,7 +1,7 @@
 <?php
 
 # show available widgets
-require(dirname(__FILE__) . '../../../functions/functions.php');
+require_once( dirname(__FILE__) . '../../../functions/functions.php' );
 
 # Classes
 $Database	= new Database_PDO;
@@ -37,7 +37,7 @@ $widgets = (array) $widgets;
 			# size fix
 			if(strlen($wtmp['wsize'])==0)	{ $wtmp['wsize']=6; }
 			print "<li id='$k'>";
-			print "	<a href='' class='btn btn-xs fa-marg-right  btn-default widget-add' id='w-$wtmp[wfile]' data-size='$wtmp[wsize]' data-htitle='$wtmp[wtitle]'><i class='fa fa-plus'></i></a>"._($wtmp['wtitle']);
+			print "	<a href='' class='btn btn-xs fa-marg-right  btn-default btn-success widget-add' id='w-$wtmp[wfile]' data-size='$wtmp[wsize]' data-htitle='$wtmp[wtitle]'><i class='fa fa-plus'></i></a>"._($wtmp['wtitle']);
 			print "	<div class='muted' style='margin-left:27px;'>"._($wtmp['wdescription'])."</div>";
 			print "</li>";
 			$m++;

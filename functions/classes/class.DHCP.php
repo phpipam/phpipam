@@ -65,15 +65,6 @@ class DHCP extends Common_functions {
      */
     private $DHCP_server = false;
 
-    /**
-     * Result holder
-     *
-     *  Fore result printing in case of errors
-     *
-     * @var mixed
-     * @access public
-     */
-    public $Result;
 
 
 
@@ -94,7 +85,7 @@ class DHCP extends Common_functions {
 
         // validate and set server type
         if(!in_array($server_type, $this->dhcp_server_types)) {
-            $this->Result->show("danger",_("Invalid server type $server_type"), true);
+            $this->Result->show("danger",_("Invalid server type")." ".$server_type, true);
         }
         else {
             $this->dhcp_selected_type = $server_type;
@@ -151,7 +142,7 @@ class DHCP extends Common_functions {
      */
     private function validate_dhcp_type_method ($method) {
         if (!method_exists($this->DHCP_server, $method)) {
-            $this->Result->show("danger", _("Method `$method` does not exist in class `class.DHCP.".$this->dhcp_selected_type.".php`"), true);
+            $this->Result->show("danger", _("Method")." `$method` "._("does not exist in class")." `class.DHCP".$this->dhcp_selected_type.".php`", true);
         }
     }
 
@@ -316,5 +307,3 @@ class DHCP extends Common_functions {
     /* @write methods --------------- */
 
 }
-
-?>

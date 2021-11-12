@@ -27,7 +27,11 @@
  */
 
 /* functions */
-require( dirname(__FILE__) . '/../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../functions/functions.php' );
+
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
 
 # initialize user object
@@ -51,7 +55,7 @@ if(php_sapi_name()!="cli") 								{ die(json_encode(array("status"=>1, "error"=
 if(!isset($argv[1]) || !isset($argv[2]))				{ die(json_encode(array("status"=>1, "error"=>"Missing required input parameters"))); }
 // test to see if threading is available
 if($Scan->settings->scanPingType!="fping")
-if( !Thread::available() ) 								{ die(json_encode(array("status"=>1, "error"=>"Threading is required for scanning subnets. Please recompile PHP with pcntl extension"))); }
+if( !PingThread::available($errmsg) ) 								{ die(json_encode(array("status"=>1, "error"=>"Threading is required for scanning subnets - Error: $errmsg\n"))); }
 //check script
 if($argv[1]!="update"&&$argv[1]!="discovery")			{ die(json_encode(array("status"=>1, "error"=>"Invalid scan type!"))); }
 //verify cidr
@@ -85,7 +89,7 @@ if($Scan->settings->scanPingType=="fping" && $argv[1]=="discovery") {
 	if($retval==4)										{ die(json_encode(array("status"=>1, "error"=>"system call failure"))); }
 
 	# parse result
-	if(sizeof(@$Scan->fping_result)==0)					{ die(json_encode(array("status"=>0, "values"=>array("alive"=>null)))); }
+	if(empty($Scan->fping_result))					{ die(json_encode(array("status"=>0, "values"=>array("alive"=>null)))); }
 	else {
 		//check each line
 		foreach($Scan->fping_result as $l) {
@@ -115,7 +119,7 @@ elseif($Scan->settings->scanPingType=="fping") {
 	if($retval==4)										{ die(json_encode(array("status"=>1, "error"=>"system call failure"))); }
 
 	# parse result
-	if(sizeof(@$Scan->fping_result)==0)					{ die(json_encode(array("status"=>0, "values"=>array("alive"=>null)))); }
+	if(empty($Scan->fping_result))					{ die(json_encode(array("status"=>0, "values"=>array("alive"=>null)))); }
 	else {
 		//check each line
 		foreach($Scan->fping_result as $l) {
@@ -142,7 +146,7 @@ else {
 	    	//only if index exists!
 	    	if(isset($scan_addresses[$z])) {
 				//start new thread
-	            $threads[$z] = new Thread( "ping_address" );
+	            $threads[$z] = new PingThread( "ping_address" );
 	            $threads[$z]->start( $Subnets->transform_to_dotted($scan_addresses[$z], true) );
 
 	            $z++;				//next index

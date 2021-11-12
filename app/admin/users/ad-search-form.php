@@ -5,7 +5,7 @@
  *************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -43,7 +43,7 @@ if(sizeof($servers)==0) 	{ $Result->show("danger", _("No servers available"), tr
 	</tr>
 
 	<tr>
-		<td>Select server</td>
+		<td><?php print _("Select server"); ?></td>
 		<td>
 			<select name="server" id="adserver" class="form-control input-w-auto">
 			<?php

@@ -30,7 +30,7 @@
  */
 
 # include required scripts
-require( dirname(__FILE__) . '/../functions.php' );
+require_once( dirname(__FILE__) . '/../functions.php' );
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
 
 # initialize objects
@@ -38,20 +38,23 @@ $Database 	= new Database_PDO;
 $Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 $Tools		= new Tools ($Database);
+$Admin		= new Admin ($Database, false);
 $Scan		= new Scan ($Database);
+$DNS		= new DNS ($Database);
 $Result		= new Result();
 
 // set exit flag to true
 $Scan->ping_set_exit(true);
 // set debugging
-$Scan->reset_debugging(false);
+$Scan->set_debugging(false);
 // fetch agent
 $agent = $Tools->fetch_object("scanAgents", "id", 1);
-// set address types array
-$Tools->get_addresses_types ();
 // change scan type?
 if(@$config['ping_check_method'])
 $Scan->reset_scan_method ($config['ping_check_method']);
+
+# Check if scanning has been disabled
+if($Scan->icmp_type=="none") { $Result->show("danger", _('Scanning disabled').' (scanPingType=None)', true, true); }
 
 // set ping statuses
 $statuses = explode(";", $Scan->settings->pingStatus);
@@ -71,7 +74,7 @@ $nowdate = date ("Y-m-d H:i:s");
 // script can only be run from cli
 if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!"); }
 // test to see if threading is available
-if(!Thread::available()) 						{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl extension"); }
+if(!PingThread::available($errmsg)) 			{ die("Threading is required for scanning subnets - Error: $errmsg\n"); }
 // verify ping path
 if ($Scan->icmp_type=="ping") {
 if(!file_exists($Scan->settings->scanPingPath)) { die("Invalid ping path!"); }
@@ -84,7 +87,7 @@ if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
 
 //first fetch all subnets to be scanned
 $scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck (1);
-if($Scan->debugging)							{ print_r($scan_subnets); }
+if($Scan->get_debugging()==true)				{ print_r($scan_subnets); }
 if($scan_subnets===false) 						{ die("No subnets are marked for checking status updates\n"); }
 //fetch all addresses that need to be checked
 foreach($scan_subnets as $s) {
@@ -95,20 +98,47 @@ foreach($scan_subnets as $s) {
 		$subnet_addresses = $Addresses->fetch_subnet_addresses ($s->id);
 		//set array for fping
 		if($Scan->icmp_type=="fping")	{
-			$subnets[] = array("id"=>$s->id, "cidr"=>$Subnets->transform_to_dotted($s->subnet)."/".$s->mask);
+			$subnets[] = array(
+								"id"         =>$s->id,
+								"cidr"       =>$Subnets->transform_to_dotted($s->subnet)."/".$s->mask,
+								"nsid"       =>$s->nameserverId,
+								"resolveDNS" =>$s->resolveDNS
+			                   );
 		}
 		//save addresses
-		if(sizeof($subnet_addresses)>0) {
+		if(is_array($subnet_addresses) && sizeof($subnet_addresses)>0) {
 			foreach($subnet_addresses as $a) {
 				//ignore excludePing
 				if($a->excludePing!=1) {
 					//create different array for fping
 					if($Scan->icmp_type=="fping")	{
-						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen, "lastSeen"=>$a->lastSeen, "state"=>$a->state);	//used for status check
-						$addresses[$s->id][$a->id]  = $a->ip_addr;																												//used for alive check
+						$addresses2[$s->id][$a->id] = array(
+															"id"          =>$a->id,
+															"ip_addr"     =>$a->ip_addr,
+															"description" =>$a->description,
+															"hostname"    =>$a->hostname,
+															"subnetId"    =>$a->subnetId,
+															"lastSeenOld" =>$a->lastSeen,
+															"lastSeen"    =>$a->lastSeen,
+															"state"       =>$a->state,
+															"resolveDNS"  =>$s->resolveDNS,
+															"nsid"        =>$s->nsid
+															);
+						$addresses[$s->id][$a->id]  = $a->ip_addr;
 					}
 					else {
-						$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen, "lastSeen"=>$a->lastSeen, "state"=>$a->state);
+						$addresses[] 		 		= array(
+															"id"          =>$a->id,
+															"ip_addr"     =>$a->ip_addr,
+															"description" =>$a->description,
+															"hostname"    =>$a->hostname,
+															"subnetId"    =>$a->subnetId,
+															"lastSeenOld" =>$a->lastSeen,
+															"lastSeen"    =>$a->lastSeen,
+															"state"       =>$a->state,
+															"resolveDNS"  =>$s->resolveDNS,
+															"nsid"        =>$s->nsid
+						                          			);
 					}
 				}
 			}
@@ -119,7 +149,7 @@ foreach($scan_subnets as $s) {
 }
 
 
-if($Scan->debugging)							{ print "Using $Scan->icmp_type\n--------------------\n\n";print_r($addresses); }
+if($Scan->get_debugging()==true)				{ print "Using $Scan->icmp_type\n--------------------\n\n";print_r($addresses); }
 //if none die
 if(!isset($addresses))							{ die("No addresses to check"); }
 
@@ -139,7 +169,7 @@ if($Scan->icmp_type=="fping") {
 	    	//only if index exists!
 	    	if(isset($subnets[$z])) {
 				//start new thread
-	            $threads[$z] = new Thread( 'fping_subnet' );
+	            $threads[$z] = new PingThread( 'fping_subnet' );
 	            $threads[$z]->start_fping( $subnets[$z]['cidr'] );
 	            $z++;				//next index
 			}
@@ -171,7 +201,7 @@ if($Scan->icmp_type=="fping") {
 
 	//now we must remove all non-existing hosts
 	foreach($subnets as $sk=>$s) {
-		if(sizeof(@$s['result'])>0 && isset($addresses[$s['id']])) {
+		if(!empty($s['result']) && is_array($addresses[$s['id']])) {
 			//loop addresses
 			foreach($addresses[$s['id']] as $ak=>$a) {
 				//offline host
@@ -190,6 +220,18 @@ if($Scan->icmp_type=="fping") {
                     //update status
                     $Scan->ping_update_lastseen ($addresses2[$s['id']][$ak]['id'], $nowdate);
 				}
+
+		        //resolve hostnames
+				if($subnets[$sk]['resolveDNS']=="1") {
+					$old_hostname_save = $addresses2[$s['id']][$ak]['hostname'];	// save old hostname to detect change
+					$old_hostname = $config['resolve_emptyonly']===false ? false : $addresses2[$s['id']][$ak]['hostname'];
+			        $hostname = $DNS->resolve_address ($Subnets->transform_to_dotted($addresses2[$s['id']][$ak]['ip_addr']), $old_hostname, true, $subnets[$sk]['nsid']);
+					if($hostname['class']=="resolved") {
+						if ($hostname['name']!=$old_hostname_save) {
+							$Addresses->update_address_hostname ($Subnets->transform_to_dotted($addresses2[$s['id']][$ak]['ip_addr']), $addresses2[$s['id']][$ak]['id'], $hostname['name']);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -205,7 +247,7 @@ else {
 	    	//only if index exists!
 	    	if(isset($addresses[$z])) {
 				//start new thread
-	            $threads[$z] = new Thread( 'ping_address' );
+	            $threads[$z] = new PingThread( 'ping_address' );
 	            $threads[$z]->start($Subnets->transform_to_dotted($addresses[$z]['ip_addr']));
 	            $z++;				//next index
 			}
@@ -239,15 +281,29 @@ else {
 	//update statuses for online
 
 	# re-initialize classes
-	$Database = new Database_PDO;
-	$Scan = new Scan ($Database, $Subnets->settings);
+	$Database  = new Database_PDO;
+	$Scan      = new Scan ($Database, $Subnets->settings);
+	$Addresses = new Addresses ($Database);
+
 	// reset debugging
-	$Scan->reset_debugging(false);
+	$Scan->set_debugging(false);
 
 	# update all active statuses
 	foreach($addresses as $k=>$a) {
 		if($a['newStatus']==0) {
 			$Scan->ping_update_lastseen ($a['id'], $nowdate);
+		}
+
+        //resolve hostnames
+		if($a['resolveDNS']=="1") {
+			$old_hostname_save = $a['hostname'];	// save old hostname to detect change
+			$old_hostname = $config['resolve_emptyonly']===false ? false : $a['hostname'];
+	        $hostname = $DNS->resolve_address ($Subnets->transform_to_dotted($a['ip_addr']), $old_hostname, true, $a['nsid']);
+			if($hostname['class']=="resolved") {
+				if ($hostname['name']!=$old_hostname_save) {
+					$Addresses->update_address_hostname ($Subnets->transform_to_dotted($a['ip_addr']), $a['id'], $hostname['name']);
+				}
+			}
 		}
 	}
 }
@@ -325,7 +381,7 @@ $Scan->ping_update_scanagent_checktime (1, $nowdate);
 
 
 # print change
-if($Scan->debugging)							{ print "\nAddress changes:\n----------\n"; print_r($address_change); }
+if($Scan->get_debugging()==true)				{ print "\nAddress changes:\n----------\n"; print_r($address_change); }
 
 # all done, mail diff?
 if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
@@ -343,7 +399,7 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 	// set exit flag to true
 	$Scan->ping_set_exit(true);
 	// set debugging
-	$Scan->reset_debugging(false);
+	$Scan->set_debugging(false);
 
 
 	# check for recipients
@@ -355,87 +411,86 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 	# none?
 	if(!isset($recepients))	{ die(); }
 
-	# fetch mailer settings
-	$mail_settings = $Tools->fetch_object("settingsMail", "id", 1);
 	# fake user object, needed for create_link
 	$User = new StdClass();
 	@$User->settings->prettyLinks = $Scan->settings->prettyLinks;
 
-	# initialize mailer
-	$phpipam_mail = new phpipam_mail($Scan->settings, $mail_settings);
-	$phpipam_mail->initialize_mailer();
-
-	// set subject
-	$subject	= "phpIPAM IP state change ".$nowdate;
-
-	//html
-	$content[] = "<p style='margin-left:10px;'>$Subnets->mail_font_style <font style='font-size:16px;size:16px;'>phpIPAM host changes</font></font></p><br>";
-
-	$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;border:1px solid #ccc;'>";
-	$content[] = "<tr>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;white-space:nowrap;'>$Subnets->mail_font_style IP</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Description</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Hostname</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Subnet</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Last seen</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Status</font></th>";
-	$content[] = "</tr>";
-
-	//plain
-	$content_plain[] = "phpIPAM host changes \r\n------------------------------";
-
-	//Changes
-	foreach($address_change as $change) {
-		//reformat statuses
-		if($change['oldStatus'] == 0) {
-			$oldStatus = "<font style='color:#04B486'>Online</font>";
-			$newStatus = "<font style='color:#DF0101'>Offline</font>";
-		}
-		else {
-			$oldStatus = "<font style='color:#DF0101'>Offline</font>";
-			$newStatus = "<font style='color:#04B486'>Online</font>";
-		}
-
-		//set subnet
-		$subnet 	 = $Subnets->fetch_subnet(null, $change['subnetId']);
-		//ago
-		if(is_null($change['lastSeen']) || $change['lastSeen']=="1970-01-01 00:00:01" || $change['lastSeen']=="0000-00-00 00:00:00") {
-			$ago	  = "never";
-		} else {
-			$timeDiff = $now - strtotime($change['lastSeen']);
-
-    		// reformat
-    		$lastSeen = date("m/d H:i", strtotime($change['lastSeen']) );
-			$ago 	  = $lastSeen." (".$Result->sec2hms($timeDiff)." ago)";
-		}
-        // desc
-		$change['description'] = strlen($change['description'])>0 ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
-		// subnet desc
-		$subnet->description = strlen($subnet->description)>0 ? "$Subnets->mail_font_style $subnet->description</font>" : "$Subnets->mail_font_style / </font>";
-
-		//content
-		$content[] = "<tr>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'><a href='".rtrim(str_replace(BASE, "",$Scan->settings->siteURL), "/")."".create_link("subnets",$subnet->sectionId,$subnet->id)."'>$Subnets->mail_font_style_href ".$Subnets->transform_to_dotted($change['ip_addr'])."</font></a></td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $change[description]</font></td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style_href $change[dns_name]</font></td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'><a href='".rtrim(str_replace(BASE, "",$Scan->settings->siteURL), "/")."".create_link("subnets",$subnet->sectionId,$subnet->id)."'>$Subnets->mail_font_style_href ".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask."</font></a>".$subnet->description."</td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $ago</td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $oldStatus > $newStatus</td>";
-		$content[] = "</tr>";
-
-		//plain content
-		$content_plain[] = "\t * ".$Subnets->transform_to_dotted($change['ip_addr'])." (".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask.")\r\n \t  ".strip_tags($oldStatus)." => ".strip_tags($newStatus);
-
-	}
-	$content[] = "</table>";
-
-
-	# set content
-	$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-	$content_plain 	= implode("\r\n",$content_plain);
-
 	# try to send
 	try {
+		# fetch mailer settings
+		$mail_settings = $Tools->fetch_object("settingsMail", "id", 1);
+		# initialize mailer
+		$phpipam_mail = new phpipam_mail($Scan->settings, $mail_settings);
+
+		// set subject
+		$subject	= "phpIPAM IP state change ".$nowdate;
+
+		//html
+		$content[] = "<p style='margin-left:10px;'>$Subnets->mail_font_style <font style='font-size:16px;size:16px;'>phpIPAM host changes</font></font></p><br>";
+
+		$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;border:1px solid #ccc;'>";
+		$content[] = "<tr>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;white-space:nowrap;'>$Subnets->mail_font_style IP</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Description</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Hostname</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Subnet</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Last seen</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Status</font></th>";
+		$content[] = "</tr>";
+
+		//plain
+		$content_plain[] = "phpIPAM host changes \r\n------------------------------";
+
+		//Changes
+		foreach($address_change as $change) {
+			//reformat statuses
+			if($change['oldStatus'] == 0) {
+				$oldStatus = "<font style='color:#04B486'>Online</font>";
+				$newStatus = "<font style='color:#DF0101'>Offline</font>";
+			}
+			else {
+				$oldStatus = "<font style='color:#DF0101'>Offline</font>";
+				$newStatus = "<font style='color:#04B486'>Online</font>";
+			}
+
+			//set subnet
+			$subnet 	 = $Subnets->fetch_subnet(null, $change['subnetId']);
+			//ago
+			if(is_null($change['lastSeen']) || $change['lastSeen']=="1970-01-01 00:00:01" || $change['lastSeen']=="0000-00-00 00:00:00") {
+				$ago	  = "never";
+			} else {
+				$timeDiff = $now - strtotime($change['lastSeen']);
+
+	    		// reformat
+	    		$lastSeen = date("m/d H:i", strtotime($change['lastSeen']) );
+				$ago 	  = $lastSeen." (".$Tools->sec2hms($timeDiff)." ago)";
+			}
+	        // desc
+			$change['description'] = strlen($change['description'])>0 ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
+			// subnet desc
+			$subnet->description = strlen($subnet->description)>0 ? "$Subnets->mail_font_style $subnet->description</font>" : "$Subnets->mail_font_style / </font>";
+
+			//content
+			$content[] = "<tr>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'><a href='".rtrim(str_replace(BASE, "",$Scan->settings->siteURL), "/")."".create_link("subnets",$subnet->sectionId,$subnet->id)."'>$Subnets->mail_font_style_href ".$Subnets->transform_to_dotted($change['ip_addr'])."</font></a></td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $change[description]</font></td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style_href $change[hostname]</font></td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'><a href='".rtrim(str_replace(BASE, "",$Scan->settings->siteURL), "/")."".create_link("subnets",$subnet->sectionId,$subnet->id)."'>$Subnets->mail_font_style_href ".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask."</font></a>".$subnet->description."</td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $ago</td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $oldStatus > $newStatus</td>";
+			$content[] = "</tr>";
+
+			//plain content
+			$content_plain[] = "\t * ".$Subnets->transform_to_dotted($change['ip_addr'])." (".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask.")\r\n \t  ".strip_tags($oldStatus)." => ".strip_tags($newStatus);
+
+		}
+		$content[] = "</table>";
+
+
+		# set content
+		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+		$content_plain 	= implode("\r\n",$content_plain);
+
 		$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 		//add all admins to CC
 		foreach($recepients as $admin) {
@@ -449,8 +504,6 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 	} catch (phpmailerException $e) {
 		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
 	} catch (Exception $e) {
-		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
+		$Result->show_cli("Mailer Error: ".$e->getMessage(), true);
 	}
 }
-
-?>

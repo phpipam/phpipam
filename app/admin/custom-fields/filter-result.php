@@ -6,12 +6,13 @@
 
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
+$Tools		= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
@@ -23,10 +24,14 @@ $User->check_maintaneance_mode ();
 $table = $_POST['table'];
 unset($_POST['table']);
 
+# fetch custom fields
+$fields = $Tools->fetch_custom_fields($table);
+
 /* enthing to write? */
 if(sizeof($_POST)>0) {
 	foreach($_POST as $k=>$v) {
-		$filtered_fields[] = $k;
+		$kTest = str_replace("___", " ", $k);
+		$filtered_fields[] = array_key_exists($kTest, $fields) ? $kTest : $k;
 	}
 }
 else {
@@ -36,4 +41,3 @@ else {
 /* save */
 if(!$Admin->save_custom_fields_filter($table, $filtered_fields))	{  }
 else																{ $Result->show("success", _('Filter saved')); }
-?>

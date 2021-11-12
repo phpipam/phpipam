@@ -6,7 +6,6 @@
 
 class Install extends Common_functions {
 
-
 	/**
 	 * to store DB exceptions
 	 *
@@ -24,47 +23,12 @@ class Install extends Common_functions {
 	protected $db;
 
 	/**
-	 * debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $debugging = false;
-
-	/**
-	 * Result
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
-	 * Database
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
 	 * Database_root - for initial installation
 	 *
 	 * @var mixed
 	 * @access protected
 	 */
 	protected $Database_root;
-
-	/**
-	 * Log
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
-
 
 
 
@@ -76,13 +40,13 @@ class Install extends Common_functions {
 	 * @param Database_PDO $Database
 	 */
 	public function __construct (Database_PDO $Database) {
+		parent::__construct();
+
 		# initialize Result
 		$this->Result = new Result ();
 		# initialize object
 		$this->Database = $Database;
-		# set debugging
-		$this->set_debugging ();
-		# set debugging
+		# set db
 		$this->set_db_params ();
 		# Log object
 		try { $this->Database->connect(); }
@@ -139,7 +103,7 @@ class Install extends Common_functions {
 		    # return true, if some errors occured script already died! */
 			sleep(1);
 			$this->Log = new Logging ($this->Database);
-			$this->Log->write( "Database installation", "Database installed successfully. Version ".VERSION.".".REVISION." installed", 1 );
+			$this->Log->write( _("Database installation"), _("Database installed successfully.")._(" Version ").VERSION.".".REVISION._(" installed"), 1 );
 			return true;
 		}
 	}
@@ -179,11 +143,23 @@ class Install extends Common_functions {
 	 * @return void
 	 */
 	private function create_grants () {
-	 	# set query
-	    $query = 'grant ALL on `'. $this->db['name'] .'`.* to '. $this->db['user'] .'@localhost identified by "'. $this->db['pass'] .'";';
-		# execute
-		try { $this->Database_root->runQuery($query); }
-		catch (Exception $e) {	$this->Result->show("danger", $e->getMessage(), true);}
+		$esc_user = addcslashes($this->db['user'],"'");
+		$esc_pass = addcslashes($this->db['pass'],"'");
+		$db_name  = $this->db['name'];
+		$webhost  = is_string($this->db['webhost']) && strlen($this->db['webhost']) > 0 ? addcslashes($this->db['webhost'],"'") : 'localhost';
+
+		try {
+			# Check if user exists;
+			$result = $this->Database_root->getObjectQuery("SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$esc_user' AND host = '$webhost') AS user_exists;");
+
+			# create user if not exists and set permissions
+			if ($result->user_exists == 0) {
+				$this->Database_root->runQuery("CREATE USER '$esc_user'@'$webhost' IDENTIFIED BY '$esc_pass';");
+			}
+			$this->Database_root->runQuery("GRANT ALL ON `$db_name`.* TO '$esc_user'@'$webhost';");
+			$this->Database_root->runQuery("FLUSH PRIVILEGES;");
+
+		} catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
 	}
 
 	/**
@@ -205,6 +181,11 @@ class Install extends Common_functions {
 	    # formulate queries
 	    $queries = array_filter(explode(";\n", $query));
 
+	    # append version
+		$queries[] = "UPDATE `settings` SET `version` = '".VERSION."'";
+		$queries[] = "UPDATE `settings` SET `dbversion` = '".DBVERSION."'";
+		$queries[] = "UPDATE `settings` SET `dbverified` = 0";
+
 	    # execute
 	    foreach($queries as $q) {
 		    //length check
@@ -217,11 +198,11 @@ class Install extends Common_functions {
 					//drop database
 					try { $this->Database_root->runQuery("drop database if exists `". $this->db['name'] ."`;"); }
 					catch (Exception $e) {
-						$this->Result->show("danger", 'Cannot drop database: '.$e->getMessage(), true);
+						$this->Result->show("danger", _("Cannot drop database: ").$e->getMessage(), true);
 					}
 					//print error
-					$this->Result->show("danger", "Cannot install sql SCHEMA file: ".$e->getMessage()."<br>query that failed: <pre>$q</pre>", false);
-					$this->Result->show("info", "Database dropped", false);
+					$this->Result->show("danger", _("Cannot install sql SCHEMA file").": ".$e->getMessage()."<br>"._("query that failed").": <pre>$q</pre>", false);
+					$this->Result->show("info", _("Database dropped"), false);
 
 					return false;
 				}
@@ -294,25 +275,13 @@ class Install extends Common_functions {
 	}
 
 	/**
-	 * sets debugging if set in config.php file
-	 *
-	 * @access private
-	 * @return void
-	 */
-	public function set_debugging () {
-		require( dirname(__FILE__) . '/../../config.php' );
-		if($debugging==true) { $this->debugging = true; }
-	}
-
-	/**
 	 * Sets DB parmaeters
 	 *
 	 * @access private
 	 * @return void
 	 */
 	private function set_db_params () {
-		require( dirname(__FILE__) . '/../../config.php' );
-		$this->db = $db;
+		$this->db = Config::ValueOf('db');
 	}
 
 
@@ -372,19 +341,132 @@ class Install extends Common_functions {
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false); }
 		return true;
 	}
+}
 
 
 
 
 
 
+/**
+ *
+ * Upgrade class
+ *
+ */
+class Upgrade extends Install {
 
+	/**
+	 * upgrade queries with comments
+	 * @var array
+	 */
+	private $queries = [];
+
+	/**
+	 * Old version
+	 * @var string
+	 */
+	private $old_version = "1.2";
+
+
+	/**
+	 * __construct function.
+	 *
+	 * @method __construct
+	 * @param  Database_PDO $Database
+	 */
+	public function __construct (Database_PDO $Database) {
+		# initialize objects
+		$this->Database = $Database;
+		$this->Result   = new Result ();
+		// check DB connection
+		try { $this->Database->connect(); }
+		catch ( Exception $e ) {}
+		// get old version
+		$this->get_old_version ();
+		// load queries
+		$this->load_all_queries ();
+	}
+
+	/**
+	 * Get old version from database
+	 *
+	 * @method get_old_version
+	 * @return void
+	 */
+	private function get_old_version () {
+		// fetch settings from database
+		$this->get_settings ();
+		// save version
+		$this->old_version = $this->settings->version.".".$this->settings->dbversion;
+	}
+
+	/**
+	 * Load all queries from upgrade list and add them to array of queries
+	 *
+	 * @method load_all_queries
+	 * @return void
+	 */
+	private function load_all_queries () {
+		// include upgrade files
+		require (dirname(__FILE__)."/../upgrade_queries.php");
+		// add queries
+		foreach ($upgrade_queries as $version=>$query_arr) {
+			foreach ($query_arr as $query) {
+				// save query
+				$this->reqister_query ($version, $query);
+			}
+		}
+	}
+
+	/**
+	 * Add new query to upgrade query list
+	 *
+	 * @method reqister_query
+	 * @param  string $version
+	 * @param  string $query
+	 * @return void
+	 */
+	private function reqister_query ($version, $query) {
+		// check if version is higher than old version, otherwise skip query
+		if ($this->cmp_version_strings($version, $this->old_version) > 0) {
+			// break
+			if (strpos($query, "--")===0) {
+				$this->queries[] = "\n";
+			}
+			// save query
+			$this->queries[] = trim($this->process_procedures($query));
+		}
+	}
+
+	/**
+	 * Returns all upgrade queries to be executed
+	 *
+	 * @method get_queries
+	 * @return array
+	 */
+	public function get_queries () {
+		return $this->queries;
+	}
+
+	/**
+	 * For PDO execution we cannot use delimiters so we need to remove them
+	 * @method process_procedures
+	 * @param  string $query
+	 * @return string
+	 */
+	private function process_procedures ($query) {
+		$query = str_replace("DELIMITER $$", "", $query);		// remove DELIMITER $$ start statement
+		$query = str_replace("DELIMITER $", "", $query);		// remove DELIMITER $  end statement
+		$query = str_replace("END $$", "END;", $query);		// Replace END $$ with END;
+		// result
+		return $query;
+	}
 
 
 
 	/**
-	 * @upgrade database
-	 * -----------------
+	 * Execute upgrade
+	 * ---------------
 	 */
 
 	/**
@@ -394,13 +476,10 @@ class Install extends Common_functions {
 	 * @return void
 	 */
 	public function upgrade_database () {
-		# first check version
-		$this->get_settings ();
-
-		if($this->settings->version == VERSION)				{ $this->Result->show("danger", "Database already at latest version", true); }
+		if($this->old_version == VERSION.DBVERSION) { $this->Result->show("danger", _("Database already at latest version"), true); }
 		else {
 			# check db connection
-			if($this->check_db_connection(false)===false)  	{ $this->Result->show("danger", "Cannot connect to database", true); }
+			if($this->check_db_connection(false)===false)  	{ $this->Result->show("danger", _("Cannot connect to database"), true); }
 			# execute
 			else {
 				return $this->upgrade_database_execute ();
@@ -416,81 +495,64 @@ class Install extends Common_functions {
 	 */
 	private function upgrade_database_execute () {
 		# set queries
-		$subversion_queries = $this->get_upgrade_queries ();
+		$queries = $this->get_queries ();
 		// create default arrays
-		$queries = array();
-		// succesfull queries:
-		$queries_ok = array();
+		$queries_ok = array();			// succesfull queries
 
-		// replace CRLF
-		$subversion_queries = str_replace("\r\n", "\n", $subversion_queries);
-		$queries = array_filter(explode(";\n", $subversion_queries));
+		// execute
+		try {
+			# Begin transaction
+			$this->Database->beginTransaction();
 
-	    # execute all queries
-	    foreach($queries as $query) {
-    	    if (strlen($query)>5) {
-    			try { $this->Database->runQuery($query); }
-    			catch (Exception $e) {
-    				$this->Log = new Logging ($this->Database);
-    				# write log
-    				$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
-    				# fail
-    				print "<h3>Upgrade failed !</h3><hr style='margin:30px;'>";
-    				$this->Result->show("danger", $e->getMessage()."<hr>Failed query: <pre>".$query.";</pre>", false);
-    				$this->Result->show("success", "Succesfull queries: <pre>".implode(";", $queries_ok).";</pre>", false);
-    				# revert version
-    				//try { $this->Database->runQuery('update `settings` set `version` = ?', array($this->settings->version)); }
-    				//catch (Exception $e) { var_dump($e); }
-    				// false
-    				return false;
-    			}
-    			// save ok
-    			$queries_ok[] = $query;
+			# execute all queries
+			foreach($queries as $k=>$query) {
+				// execute
+				if(strpos($query, "--")!==0 && strlen(trim($query))>0) {
+					$ignore_on_failure = (strpos($query, '-- IGNORE_ON_FAILURE')!== false);
+
+					if ($ignore_on_failure) $this->Database->setErrMode(\PDO::ERRMODE_SILENT);
+					$this->Database->runQuery($query);
+					if ($ignore_on_failure) $this->Database->setErrMode(\PDO::ERRMODE_EXCEPTION);
+				}
+				// save ok
+				$queries_ok[] = $query;
+				// remove old
+				unset($queries[$k]);
 			}
-	    }
 
+			$this->Database->runQuery("UPDATE `settings` SET `version` = ?", VERSION);
+			$this->Database->runQuery("UPDATE `settings` SET `dbversion` = ?", DBVERSION);
+			$this->Database->runQuery("UPDATE `settings` SET `dbverified` = ?", 0);
+
+			# All good, commit changes
+			$this->Database->commit();
+		}
+		catch (Exception $e) {
+			# Something went wrong, revert all upgrade changes
+			$this->Database->rollBack();
+			// write log
+			$this->Log = new Logging ($this->Database);
+			$this->Log->write( _("Database upgrade"), $e->getMessage()."<br>"._("query: ").$query, 2 );
+			# fail
+			print "<h3>"._("Upgrade failed")." !</h3><hr style='margin:30px;'>";
+			$this->Result->show("danger", $e->getMessage()."<hr>"._("Failed query").": <pre>".$query."</pre>", false);
+
+			# print failure
+			$this->Result->show("danger", _("Failed to upgrade database!"), false);
+			print "<div class='text-right'><a class='btn btn-sm btn-default' href='".create_link('administration', "verify-database")."'>"._("Go to administration and fix")."</a></div><br><hr><br>";
+
+			if(sizeof($queries_ok)>0)
+			$this->Result->show("success", _("Succesfull queries").": <pre>".implode("<br>", $queries_ok)."</pre>", false);
+			if(sizeof($queries)>0)
+			$this->Result->show("warning", _("Not executed queries").": <pre>".implode("<br>", $queries)."</pre>", false);
+
+			return false;
+		}
 
 		# all good, print it
-		sleep(1);
+		usleep(500000);
 		$this->Log = new Logging ($this->Database);
-		$this->Log->write( "Database upgrade", "Database upgraded from version ".$this->settings->version." to version ".VERSION.".".REVISION, 1 );
+		$this->Log->write( _("Database upgrade"), _("Database upgraded from version ").$this->settings->version._(".r").$this->settings->dbversion._(" to version ").VERSION._(".r").DBVERSION, 1 );
 		return true;
-	}
-
-	/**
-	 * Fetch all upgrade queries from DB files
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function get_upgrade_queries () {
-		// save all queries fro UPDATE.sql file
-		$queries = str_replace("\r\n", "\n", (file_get_contents( dirname(__FILE__) . '/../../db/UPDATE.sql')));
-
-		// fetch settings if not present - for manual instructions
-		if (!isset($this->settings->version)) { $this->get_settings (); }
-
-        // explode and loop to get next version from current
-        $delimiter = false;
-        foreach (explode("/* VERSION ", $queries) as $k=>$q) {
-            $q_version = str_replace(" */", "", array_shift(explode("\n", $q)));
-
-            // if delimiter was found in previous loop
-            if ($delimiter!==false) {
-                $delimiter = $q_version;
-                break;
-            }
-            // if match with current set pointer to next item - delimiter
-            if ($q_version==$this->settings->version) {
-                $delimiter = true;
-            };
-        }
-
-        // remove older queries before this version
-        $old_queries = explode("/* VERSION $delimiter */", $queries);
-        $old_queries = trim($old_queries[1]);
-
-		# return
-		return $old_queries;
 	}
 }

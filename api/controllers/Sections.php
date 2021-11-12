@@ -7,64 +7,6 @@
  */
 class Sections_controller extends Common_api_functions {
 
-
-	/**
-	 * _params provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
-	/**
-	 * custom_fields
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	public $custom_fields;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 *  Response handler
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Response;
-
-	/**
-	 * Master Subnets object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Subnets;
-
-	/**
-	 * Master Sections object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Sections;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-
 	/**
 	 * __construct function
 	 *
@@ -143,33 +85,36 @@ class Sections_controller extends Common_api_functions {
 			$this->init_object ("Addresses", $this->Database);
 			//fetch
 			$result = $this->Subnets->fetch_section_subnets ($this->_params->id);
-            // add gateway
-			if(sizeof($result)>0) {
+			if(is_array($result)) {
+				// add subnet details
 				foreach ($result as $k=>$r) {
+					// Don't calculate statistics for folders.
+					if ($r->isFolder == 1) continue;
+
 					//gw
-    				$gateway = $this->read_subnet_gateway ($r->id);
-            		if ( $gateway!== false) {
-                		$result[$k]->gatewayId = $gateway->id;
-            		}
+					$gateway = $this->read_subnet_gateway ($r->id);
+					if ( $gateway!== false) {
+						$result[$k]->gatewayId = $gateway->id;
+					}
 
-            		//nameservers
-            		$ns = $this->read_subnet_nameserver ($r->nameserverId);
-                    if ($ns!==false) {
-                            $result[$k]->nameservers = $ns;
-                    }
+					//nameservers
+					$ns = $this->read_subnet_nameserver ($r->nameserverId);
+					if ($ns!==false) {
+						$result[$k]->nameservers = $ns;
+					}
 
-                    // get usage
-                    $result[$k]->usage = $this->read_subnet_usage($r->id);
+					// get usage
+					$result[$k]->usage = $this->read_subnet_usage($r->id);
 
-                    // fetch addresses
-        			if(@$this->_params->id3=="addresses") {
-            			// fetch
-            			$result[$k]->addresses = $this->Addresses->fetch_subnet_addresses ($r->id);
-        			}
+					// fetch addresses
+					if(@$this->_params->id3=="addresses") {
+						// fetch
+						$result[$k]->addresses = $this->Addresses->fetch_subnet_addresses ($r->id);
+					}
 				}
 			}
 			// check result
-			if(sizeof($result)==0) 						{ $this->Response->throw_exception(200, "No subnets found"); }
+			if(empty($result)) 						{ $this->Response->throw_exception(200, "No subnets found"); }
 			else {
 				$this->custom_fields = $this->Tools->fetch_custom_fields('subnets');
 				return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true));
@@ -204,19 +149,6 @@ class Sections_controller extends Common_api_functions {
 				if($result===false) 					{ return array("code"=>200, "message"=>"No sections available"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
-	}
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 
@@ -350,11 +282,9 @@ class Sections_controller extends Common_api_functions {
 		if($subnet===false)
 														{ $this->Response->throw_exception(200, "Subnet does not exist"); }
         # calculate
-        $subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet, true);     //Calculate free/used etc
+        $subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet);     //Calculate free/used etc
 
         # return
         return $subnet_usage;
 	 }
 }
-
-?>

@@ -253,7 +253,9 @@ class Net_DNS2_Header
      */
     public function get(Net_DNS2_Packet &$packet)
     {
-        $data = pack('n', $this->id) . 
+        $packet->offset += Net_DNS2_Lookups::DNS_HEADER_SIZE;
+
+        return pack('n', $this->id) . 
             chr(
                 ($this->qr << 7) | ($this->opcode << 3) | 
                 ($this->aa << 2) | ($this->tc << 1) | ($this->rd)
@@ -261,14 +263,7 @@ class Net_DNS2_Header
             chr(
                 ($this->ra << 7) | ($this->ad << 5) | ($this->cd << 4) | $this->rcode
             ) .
-            chr($this->qdcount << 8) . chr($this->qdcount) .
-            chr($this->ancount << 8) . chr($this->ancount) . 
-            chr($this->nscount << 8) . chr($this->nscount) .
-            chr($this->arcount << 8) . chr($this->arcount);
-
-        $packet->offset += Net_DNS2_Lookups::DNS_HEADER_SIZE;
-
-        return $data;
+            pack('n4', $this->qdcount, $this->ancount, $this->nscount, $this->arcount);
     }
 }
 

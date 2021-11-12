@@ -4,6 +4,8 @@ $User->check_user_session();
 
 # custom fields
 $custom_fields = $Tools->fetch_custom_fields ('pstnNumbers');
+# perm check
+$User->check_module_permissions ("pstn", User::ACCESS_R, true, false);
 
 // colspan
 $colspan = 8;
@@ -11,7 +13,7 @@ $colspan_dhcp = 4;
 ?>
 
 
-<table class="table sorted table-striped table-top ipaddresses">
+<table class="table sorted table-striped table-top ipaddresses" data-cookie-id-table="pstn_prefixes">
     <!-- headers -->
     <thead>
     <tr>
@@ -20,19 +22,23 @@ $colspan_dhcp = 4;
         <th><?php print _("Name"); ?></th>
         <th><?php print _("Owner"); ?></th>
         <th><?php print _("State"); ?></th>
+        <?php if ($User->get_module_permissions ("devices")>=User::ACCESS_R) { ?>
         <th><?php print _("Device"); ?></th>
+        <?php } ?>
         <th></th>
         <?php
     	# custom fields
     	if(sizeof($custom_fields) > 0) {
     		foreach($custom_fields as $myField) 	{
-    			print "<th class='hidden-xs hidden-sm hidden-md'>$myField[name]</span></th>";
+    			print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($myField['name'])."</span></th>";
     			$colspan++;
     			$colspan_dhcp++;
     		}
     	}
         ?>
+        <?php  if($User->get_module_permissions ("pstn")>=User::ACCESS_RW) { ?>
         <th></th>
+        <?php } ?>
     </tr>
     </thead>
 
@@ -112,7 +118,9 @@ $colspan_dhcp = 4;
             // state
             print "<td>".$Addresses->address_type_index_to_type ($n->state)."</td>";
             // device
+            if ($User->get_module_permissions ("devices")>=User::ACCESS_R) {
             print "<td>$device</td>";
+            }
             // description
             print "<td>$description</td>";
 
@@ -122,7 +130,7 @@ $colspan_dhcp = 4;
 					print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 					// create html links
-					$n->{$myField['name']} = $Result->create_links($n->{$myField['name']}, $myField['type']);
+					$n->{$myField['name']} = $Tools->create_links($n->{$myField['name']}, $myField['type']);
 
 					//booleans
 					if($myField['type']=="tinyint(1)")	{
@@ -142,13 +150,23 @@ $colspan_dhcp = 4;
 				}
 			}
 
+
 			# actions
-        	print "	<td class='actions'>";
-            print "	<div class='btn-group'>";
-    		print "		<a href='' class='btn btn-xs btn-default editPSTNnumber' data-action='edit'   data-id='$n->id'><i class='fa fa-pencil'></i></a>";
-    		print "		<a href='' class='btn btn-xs btn-default editPSTNnumber' data-action='delete' data-id='$n->id'><i class='fa fa-times'></i></a>";
-    		print "	</div>";
-        	print " </td>";
+            if($User->get_module_permissions ("pstn")>=User::ACCESS_R) {
+            	print "	<td class='actions'>";
+
+                $links = [];
+                if($User->get_module_permissions ("pstn")>=User::ACCESS_RW) {
+                $links[] = ["type"=>"header", "text"=>_("Manage")];
+                $links[] = ["type"=>"link", "text"=>_("Edit number"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit-number.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
+                }
+                if($User->get_module_permissions ("pstn")>=User::ACCESS_RWA) {
+                $links[] = ["type"=>"link", "text"=>_("Delete number"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit-number.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
+                }
+                print $User->print_actions($User->user->compress_actions, $links);
+
+            	print " </td>";
+            }
 
             print "</tr>";
 

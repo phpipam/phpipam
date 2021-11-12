@@ -8,5 +8,3 @@ $Install = new Install ($Database);
 $Install->check_db_connection(true);
 # connection is ok, check that table exists
 $Install->check_table("vrf", true);
-
-?>

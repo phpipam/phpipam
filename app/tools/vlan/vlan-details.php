@@ -5,6 +5,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 
 # get VLAN details
 $vlan = (array) $Tools->fetch_object("vlans", "vlanId", $_GET['sPage']);
@@ -13,11 +15,23 @@ $vlan = (array) $Tools->fetch_object("vlans", "vlanId", $_GET['sPage']);
 $vlan_domain = $Tools->fetch_object("vlanDomains", "id", $vlan['domainId']);
 if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true); }
 
+# Check user has read level permission to l2domain (or die with warning)
+$User->check_l2domain_permissions($vlan_domain);
+
 # not existing
 if($vlan[0]===false)				{ $Result->show("danger", _('Invalid VLAN id'), true); }
 
 # get custom VLAN fields
 $custom_fields = $Tools->fetch_custom_fields('vlans');
+
+# customer
+if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+	$customer = $Tools->fetch_object ("customers", "id", $vlan['customer_id']);
+	if($customer===false) {
+		$customer = new StdClass ();
+		$customer->title = "/";
+	}
+}
 ?>
 
 
@@ -49,6 +63,16 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 		<td><?php print html_entity_decode($vlan['description']); ?></td>
 	</tr>
 
+	<?php if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
+	<tr>
+		<td colspan='2'><hr></td>
+	</tr>
+	<tr>
+		<th><?php print _('Customer'); ?></th>
+		<td><?php print $customer->title . " <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a>"; ?></td>
+	</tr>
+	<?php } ?>
+
 	<?php
 	/* print custom subnet fields if any */
 	if(sizeof($custom_fields) > 0) {
@@ -68,39 +92,41 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 			}
 
 			// create links
-			$vlan[$key] = $Result->create_links($vlan[$key]);
+			$vlan[$key] = $Tools->create_links($vlan[$key]);
 
 			print "<tr>";
-			print "	<th>$key</th>";
+			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
 			print "	<td style='vertical-align:top;align:left;'>$vlan[$key]</td>";
 			print "</tr>";
 		}
 	}
 
-	print "<tr>";
-	print "	<td colspan='2'><hr></td>";
-	print "</tr>";
-
-	/* action button groups */
-	print "<tr>";
-	print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
-	print "	<td style='vertical-align:bottom;align:left;'>";
-
-	print "	<div class='btn-toolbar' style='margin-bottom:0px'>";
-	print "	<div class='btn-group'>";
 
 	# permissions
-	if($User->is_admin(false)==true || $User->user->editVlan=="Yes") {
-		print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$vlan[vlanId]'><i class='fa fa-pencil'></i></button>";
-        print "		<button class='btn btn-xs btn-default moveVLAN' 					 data-vlanid='$vlan[vlanId]'><i class='fa fa-external-link'></i></button>";
-		print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$vlan[vlanId]'><i class='fa fa-times'></i></button>";
+	if($User->get_module_permissions ("vlan")>=User::ACCESS_RW) {
+		print "<tr>";
+		print "	<td colspan='2'><hr></td>";
+		print "</tr>";
+
+		/* action button groups */
+		print "<tr>";
+		print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
+		print "	<td style='vertical-align:bottom;align:left;'>";
+
+        // actions
+        $links = [];
+        $links[] = ["type"=>"header", "text"=>_("Manage")];
+        $links[] = ["type"=>"link", "text"=>_("Edit VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$vlan[vlanId]'", "icon"=>"pencil"];
+
+        if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) {
+            $links[] = ["type"=>"link", "text"=>_("Delete VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$vlan[vlanId]'", "icon"=>"times"];
+        }
+        // print links
+        print $User->print_actions($User->user->compress_actions, $links, true, true);
+
+		print "	</td>";
+		print "</tr>";
 	}
-
-	print "	</div>";
-	print "	</div>";
-
-	print "	</td>";
-	print "</tr>";
 
 	?>
 
@@ -195,5 +221,3 @@ else {
 
 	print '</table>'. "\n";
 }
-
-?>

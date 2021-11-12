@@ -5,7 +5,7 @@
  *************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -22,7 +22,7 @@ $User->check_maintaneance_mode ();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "tags", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "tags", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fetch old values
 if($_POST['action']=="delete") {
@@ -51,8 +51,8 @@ $values = array("id"=>@$_POST['id'],
 				);
 
 # execute
-if(!$Admin->object_modify("ipTags", $_POST['action'], "id", $values)) 	{ $Result->show("danger",  _("Tag $_POST[action] error"), true); }
-else 																	{ $Result->show("success", _("Tag $_POST[action] success"), false); }
+if(!$Admin->object_modify("ipTags", $_POST['action'], "id", $values)) 	{ $Result->show("danger", _("Tag")." ".$_POST["action"]._(" error"), true); }
+else 																	{ $Result->show("success", _("Tag")." ".$_POST["action"]._(" success"), false); }
 
 # reset if delete to online
 if($_POST['action']=="delete") {

@@ -6,7 +6,7 @@
 
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -92,6 +92,6 @@ else {
 		}
 	}
 	//check if all is ok and print it!
-	if($errors_import_failed == 0) 	{ $Result->show("success", _("Import successfull")."!", false); }
+	if($errors_import_failed == 0) 	{ $Result->show("success", _("Import successful")."!", false); }
 }
 ?>

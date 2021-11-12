@@ -1,12 +1,12 @@
 <?php
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -15,7 +15,13 @@ $User->check_user_session();
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
-
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
+}
+else {
+    $User->check_module_permissions ("nat", User::ACCESS_RWA, true, true);
+}
 
 # validations
 if($_POST['object_type']!=="subnets" && $_POST['object_type']!=="ipaddresses")

@@ -2,8 +2,11 @@
 # verify that user is logged in
 $User->check_user_session();
 
+if($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
+    $Result->show ("danger", _("You do not have permissions to access this module"), true);
+}
 # only if set
-if (is_numeric($address['location'])) {
+elseif (is_numeric($address['location'])) {
     if($address['location']>0) {
         // fake data
         $loc_old = $location;
@@ -30,4 +33,3 @@ if (is_numeric($address['location'])) {
 else {
     $Result->show('info', _('Location not set !'), false);
 }
-?>

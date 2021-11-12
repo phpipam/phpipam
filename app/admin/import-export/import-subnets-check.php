@@ -46,6 +46,7 @@ foreach ($vlan_domains as $vlan_domain) {
 		//cast
 		$vlan = (array) $vlan;
 		$vlan_data[$vlan_domain['name']][$vlan['number']] = $vlan;
+		$vlan_data[$vlan_domain['name']][strtolower($vlan['name'])] = $vlan;
 	}
 }
 
@@ -84,7 +85,7 @@ foreach ($all_sections as $section) {
 	}
 }
 
-#print_r($vlan_data);
+error_log ( "vlan data : " . json_encode($vlan_data, true ) );
 
 $rows = "";
 $counters = array();
@@ -144,10 +145,11 @@ foreach ($data as &$cdata) {
 		if (!empty($cdata['vlan'])) {
 		        if (in_array(strtolower($cdata['vlan']),array("na","n/a","nan"))) { $cdata['vlan'] = ""; }
 			if ((!empty($cdata['vlan'])) && (strtolower($cdata['vlan']) != "na")) {
-				if (!isset($vlan_data[$cdom][$cdata['vlan']])) {
+			    $v = strtolower($cdata['vlan']);
+				if (!isset($vlan_data[$cdom][$v])) {
 					$msg.= "VLAN not found in provided domain."; $action = "error";
 				} else {
-					$cdata['vlanId'] = $vlan_data[$cdom][$cdata['vlan']]['vlanId'];
+					$cdata['vlanId'] = $vlan_data[$cdom][$v]['vlanId'];
 				}
 			} else {
 				# no VLAN provided
@@ -164,9 +166,10 @@ foreach ($data as &$cdata) {
 			if (strlen($cidr_check)>5) { $msg.=$cidr_check; $action = "error"; }
 		} else { $msg.=$net['message']; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
-		if ((!empty($cdata['vrf'])) && (!preg_match("/^[a-zA-Z0-9-:]+$/", $cdata['vrf']))) { $msg.="Invalid VRF name format."; $action = "error"; }
-		if ((!empty($cdata['vlan'])) && (!preg_match("/^[0-9]+$/", $cdata['vlan']))) { $msg.="Invalid VLAN number format."; $action = "error"; }
-		if ((!empty($cdata['domain'])) && (!preg_match("/^[a-zA-Z0-9-_ ]+$/", $cdata['domain']))) { $msg.="Invalid VLAN domain format."; $action = "error"; }
+		if ((!empty($cdata['vrf'])) && (!preg_match("/^[a-zA-Z0-9-_]+$/", $cdata['vrf']))) { $msg.="Invalid VRF name format."; $action = "error"; }
+# Allow VLAN to be the string now.		
+#		if ((!empty($cdata['vlan'])) && (!preg_match("/^[0-9]+$/", $cdata['vlan']))) { $msg.="Invalid VLAN number format."; $action = "error"; }
+		if ((!empty($cdata['domain'])) && (!preg_match("/^[a-zA-Z0-9-_. ]+$/", $cdata['domain']))) { $msg.="Invalid VLAN domain format."; $action = "error"; }
 	}
 
 	# check if duplicate in the import data

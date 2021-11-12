@@ -5,7 +5,7 @@
  *************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # classes
 $Database 	= new Database_PDO;
@@ -55,17 +55,19 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 	# set standard fields
 	$standard_fields = array ("ip address","ip state","description","hostname","fw_object","mac","owner","device","port","notes", "location");
+
+	if (!is_writeable( dirname(__FILE__) . '/upload' )) $Result->show("danger", _("'app/subnets/import-subnet/upload' folder is not writeable."), false, false);
 	?>
 
 	<!-- notes -->
 	<?php print _('To successfully import data please use the following XLS/CSV structure:'); ?><br>
 	<div class="alert alert-info alert-absolute">
- 	<?php print implode(" | ", $standard_fields).$custFields; ?>
+	<?php print implode(" | ", $standard_fields).$custFields; ?>
 	</div>
 	<div class="clearfix"></div>
 
 	<!-- Download template -->
-	<a class="csvtemplate btn btn-sm btn-default" id="csvtemplate">Download template</a>
+	<a class="csvtemplate btn btn-sm btn-default" id="csvtemplate"><?php print _("Download template"); ?></a>
 
 	<br><br>
 
@@ -77,7 +79,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<div id="drop">
 		<input type="file" name="file" id="csvfile" style="display:none;">
 
-		<?php print _('Select CSV file'); ?>: <a class="btn btn-sm btn-default">Browse</a>
+		<?php print _('Select CSV file'); ?>: <a class="btn btn-sm btn-default"><?php print _("Browse"); ?></a>
 	</div>
 	<span class="fname" style="display:none"></span>
 
@@ -89,12 +91,12 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 
     <!-- jQuery File Upload Dependencies -->
-    <script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.ui.widget.js"></script>
-    <script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.iframe-transport.js"></script>
-    <script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.fileupload.js"></script>
+    <script src="js/uploader/jquery.ui.widget.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+    <script src="js/uploader/jquery.iframe-transport.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+    <script src="js/uploader/jquery.fileupload.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 
-    <script type="text/javascript">
+    <script>
 	$(function(){
 
 	    var ul = $('#csvimport ul');
@@ -163,7 +165,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	            //success
 	            if(respStat == "success") {
 	            	$('ul.progressUl li.alert').addClass('alert-success');		//add success class
-	            	$('ul.progressUl li.alert p').append('<br><strong>Upload successfull</strong>');	//add ok sign
+	            	$('ul.progressUl li.alert p').append('<br><strong>Upload successful</strong>');	//add ok sign
 	            }
 	            //error
 	            else {

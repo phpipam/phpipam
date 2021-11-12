@@ -67,14 +67,14 @@ if ($_GET['sPage'] == "search" && strlen(@$_POST['domain-filter']) > 0) {
 <h4><?php print $title;?></h4><hr>
 
 <!-- Back -->
-<div class="btn-group" style="margin-bottom:10px;margin-top: 10px;">
+<div class="btn-group">
     <?php if ($domains === false && isset($_POST['domain-filter'])) {?>
     <a class='btn btn-sm btn-default btn-default'  href="<?php print create_link("tools", "powerDNS", $_GET['subnetId']);?>"><i class='fa fa-angle-left'></i> <?php print _('Back');?></a>
     <?php }?>
-    <?php if ($admin) {?>
+    <?php if ($User->get_module_permissions ("pdns")>=User::ACCESS_RWA) {?>
     <!-- Create -->
-	<div class="btn-group" style="margin-bottom:10px;margin-top: 10px;">
-	    <button class='btn btn-sm btn-default btn-success editDomain' data-action='add' data-id='0'><i class='fa fa-plus'></i> <?php print _('Create domain');?></button>
+	<div class="btn-group noborder">
+        <button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0'><i class='fa fa-plus'></i> <?php print _('Create domain');?></button>
 	</div>
 
    <?php }?>
@@ -91,14 +91,14 @@ elseif ($domains === false) {$Result->show("info alert-absolute", _("No domains 
     ?>
 
 <!-- table -->
-<table id="zonesPrint" class="table sorted table-striped table-top">
+<table id="zonesPrint" class="table sorted table-striped table-top" data-cookie-id-table="pdns">
 
 <!-- Headers -->
 <thead>
 <tr>
-	<?if ($admin): ?>
+	<?php if ($User->get_module_permissions ("pdns")>=User::ACCESS_RW) { ?>
 	<th style="width:80px;"></th>
-	<?endif;?>
+	<?php } ?>
     <th><?php print _('Domain');?></th>
     <th><?php print _('Type');?></th>
     <th><?php print _('Master NS');?></th>
@@ -127,12 +127,13 @@ foreach ($domains as $d) {
     $serial = $serial[2];
 
     print "<tr>";
-    if ($admin) {
+    if ($User->get_module_permissions ("pdns")>=User::ACCESS_RW) {
         // actions
         print "	<td>";
         print "	<div class='btn-group'>";
-        print "		<button class='btn btn-default btn-xs editDomain' data-action='edit' data-id='$d->id'><i class='fa fa-pencil'></i></button>";
-        print "		<button class='btn btn-default btn-xs editDomain' data-action='delete' data-id='$d->id'><i class='fa fa-remove'></i></button>";
+        print "     <button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='edit' data-id='$d->id'><i class='fa fa-pencil'></i></button>";
+        if($User->get_module_permissions ("pdns")>=User::ACCESS_RWA)
+        print "     <button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='delete' data-id='$d->id'><i class='fa fa-times'></i></button>";
         print "	</div>";
         print "	</td>";
     }

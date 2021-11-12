@@ -8,56 +8,6 @@
 
 class L2domains_controller extends Common_api_functions {
 
-
-	/**
-	 * _params provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
-	/**
-	 * custom_fields
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	public $custom_fields;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * master Sections object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Sections;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-	/**
-	 * Master Admin object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Admin;
-
-
 	/**
 	 * __construct function
 	 *
@@ -118,13 +68,14 @@ class L2domains_controller extends Common_api_functions {
 	 *		- /{id}/
 	 *		- /{id}/vlans/
 	 *		- /custom_fields/
+	 *		- /all/				// will return all domains
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function GET () {
 		// all domains
-		if(!isset($this->_params->id)) {
+		if(!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ("vlanDomains", 'id', true);
 			// check result
 			if($result===false)						{ $this->Response->throw_exception(200, 'No domains configured'); }
@@ -159,19 +110,6 @@ class L2domains_controller extends Common_api_functions {
 			}
 
 		}
-	}
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 
@@ -323,5 +261,3 @@ class L2domains_controller extends Common_api_functions {
 
 	}
 }
-
-?>

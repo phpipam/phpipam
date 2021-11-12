@@ -8,16 +8,6 @@ class Addresses extends Common_functions {
 
 
 	/**
-	 * (array of objects) to store addresses, address ID is array index
-	 *
-	 * (default value: array)
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $addresses = array();
-
-	/**
 	 * Address types array
 	 *
 	 * @var mixed
@@ -46,54 +36,12 @@ class Addresses extends Common_functions {
     public $lastId = false;
 
 	/**
-	 * Debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access protected
-	 */
-	protected $debugging = false;
-
-	/**
-	 * PEAR NET IPv4 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv4;
-
-	/**
-	 * PEAR NET IPv6 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv6;
-
-	/**
-	 * Database conenction
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
 	 * Subnets object
 	 *
 	 * @var mixed
 	 * @access protected
 	 */
 	protected $Subnets;
-
-	/**
-	 * Logging object
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
 
 	/**
 	 * PowerDNS object
@@ -112,12 +60,12 @@ class Addresses extends Common_functions {
 	 * @access public
 	 */
 	public function __construct (Database_PDO $Database) {
+		parent::__construct();
+
 		# Save database object
 		$this->Database = $Database;
 		# initialize Result
 		$this->Result = new Result ();
-		# debugging
-		$this->set_debugging();
 
 		# Log object
 		$this->Log = new Logging ($this->Database);
@@ -247,16 +195,19 @@ class Addresses extends Common_functions {
 	 * Fetches address by specified method
 	 *
 	 * @access public
-	 * @param string $method (default: "id")
+	 * @param string $method
 	 * @param mixed $id
 	 * @return object address
 	 */
 	public function fetch_address ($method, $id) {
 		# null method
 		$method = is_null($method) ? "id" : $method;
+
 		# check cache first
-		if(isset($this->addresses[$id]))	{
-			return $this->addresses[$id];
+		$cached = ($method=="id") ? $this->cache_check("ipaddresses", $id) : false;
+
+		if(is_object($cached))	{
+			return $cached;
 		}
 		else {
 			try { $address = $this->Database->getObjectQuery("SELECT * FROM `ipaddresses` where `$method` = ? limit 1;", array($id)); }
@@ -265,14 +216,11 @@ class Addresses extends Common_functions {
 				return false;
 			}
 			# save to addresses cache
-			if(sizeof($address)>0) {
-				# add decimal format
-				$address->ip = $this->transform_to_dotted ($address->ip_addr);
-				# save to subnets
-				$this->addresses[$id] = (object) $address;
+			if(is_object($address)) {
+				$this->cache_write("ipaddresses", $address);
 			}
 			#result
-			return sizeof($address)>0 ? $address : false;
+			return !is_null($address) ? $address : false;
 		}
 	}
 
@@ -291,40 +239,110 @@ class Addresses extends Common_functions {
 			return false;
 		}
 		# save to addresses cache
-		if(sizeof($address)>0) {
-			# add decimal format
-			$address->ip = $this->transform_to_dotted ($address->ip_addr);
-			# save to subnets
-			$this->addresses[$address->id] = (object) $address;
+		if(is_object($address)) {
+			$this->cache_write("ipaddresses", $address);
 		}
 		#result
-		return sizeof($address)>0 ? $address : false;
+		return !is_null($address) ? $address : false;
+	}
+
+	/**
+	 *  Fetches duplicate addresses
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function fetch_duplicate_addresses() {
+		try {
+			$query = "SELECT a.* FROM ipaddresses AS a
+				INNER JOIN (SELECT ip_addr,COUNT(*) AS cnt FROM ipaddresses GROUP BY ip_addr HAVING cnt >1) dups ON a.ip_addr=dups.ip_addr
+				ORDER BY a.ip_addr,a.subnetId,a.id;";
+
+			$addresses = $this->Database->getObjectsQuery($query);
+
+			# save to addresses cache
+			if(is_array($addresses)) {
+				foreach($addresses as $address) {
+					$this->cache_write("ipaddresses", $address);
+				}
+			}
+		}
+		catch (Exception $e) {
+			$addresses = [];
+		}
+
+		return is_array($addresses) ? $addresses : [];
+	}
+
+	/**
+	 * Bulk fetch similar addresses.
+	 *
+	 * The subnets details page will call search_similar_addresses() for EVERY IP in the subnet.
+	 * Bulk request and cache this information on the first call. Sort returned IPs by ip_addr.
+	 *
+	 * Returns an array indexed by $value.  $bulk_search[$value] = Array of similar IPs with same $value
+	 *
+	 * @access public
+	 * @param object $address
+	 * @param mixed $linked_field
+	 * @param mixed $value
+	 * @return void
+	 */
+	private function bulk_fetch_similar_addresses($address, $linked_field, $value) {
+		// Check cache
+		$cached_item = $this->cache_check("similar_addresses", "f=$linked_field id=$address->subnetId");
+		if (is_object($cached_item))
+			return $cached_item->result;
+
+		// Fetch all similar addresses for entire subnet.
+		try {
+			$query = "SELECT * FROM `ipaddresses` WHERE `state`<>4 AND `$linked_field` IN (SELECT `$linked_field` FROM `ipaddresses` WHERE `subnetId`=? AND LENGTH(`$linked_field`)>0) ORDER BY LPAD(ip_addr,39,0)";
+			$linked_subnet_addrs = $this->Database->getObjectsQuery($query, array($address->subnetId));
+		} catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+		$bulk_search = [];
+		if (is_array($linked_subnet_addrs)) {
+			foreach($linked_subnet_addrs as $linked) {
+				// Index by $linked->{$linked_field} for easy searching.
+				$bulk_search[$linked->{$linked_field}][] = $linked;
+			}
+		}
+
+		// Save to cache and return
+		$this->cache_write ("similar_addresses", (object) ["id"=>"f=$linked_field id=$address->subnetId", "result" => $bulk_search]);
+		return $bulk_search;
 	}
 
 	/**
 	 * Searches database for similar addresses
 	 *
 	 * @access public
+	 * @param object $address
 	 * @param mixed $linked_field
 	 * @param mixed $value
-	 * @param mixed $address_id
 	 * @return void
 	 */
-	public function search_similar_addresses ($linked_field, $value, $address_id) {
-    	// checks
-    	if(strlen($linked_field)>0 && strlen($value)>0 && is_numeric($address_id)) {
-        	// search
-     		try { $addresses = $this->Database->getObjectsQuery("SELECT * FROM `ipaddresses` where `$linked_field` = ? and `id` != ? and state != 4;", array($value, $address_id)); }
-    		catch (Exception $e) {
-    			$this->Result->show("danger", _("Error: ").$e->getMessage());
-    			return false;
-    		}
-    		#result
-    		return sizeof($addresses)>0 ? $addresses : false;
-        }
-        else {
-            return false;
-        }
+	public function search_similar_addresses ($address, $linked_field, $value) {
+		// sanity checks
+		if(!is_object($address) || !property_exists($address, $linked_field) || strlen($value)==0)
+			return false;
+
+		$bulk_search = $this->bulk_fetch_similar_addresses($address, $linked_field, $value);
+
+		// Check if similar addresses exist with the specifed $value
+		if (!isset($bulk_search[$address->{$linked_field}]))
+			return false;
+
+		$results = $bulk_search[$address->{$linked_field}];
+		// Remove $address from results
+		foreach ($results as $i => $similar) {
+			if ($similar->id == $address->id) unset($results[$i]);
+		}
+
+		return !empty($results) ? $results : false;
 	}
 
 	/**
@@ -351,6 +369,43 @@ class Addresses extends Common_functions {
 	}
 
 	/**
+	 * Check address add/edit fields are valid
+	 * @param  array|object $values
+	 * @return array
+	 */
+	private function address_check_values($values) {
+	    $User = new User ($this->Database);
+
+	    $values = (array) $values;
+	    $values['ip_addr'] = $this->transform_address($values['ip_addr'],"decimal");
+
+	    $valid_fields = array_keys( $this->getTableSchemaByField('ipaddresses') );
+
+	    if(!$this->api) {
+	        # permissions
+	        if ($User->get_module_permissions("devices")<User::ACCESS_RW)   { unset($valid_fields['switch']); unset($valid_fields['port']); }
+	        if ($User->get_module_permissions("customers")<User::ACCESS_RW) { unset($valid_fields['customer_id']); }
+	        if ($User->get_module_permissions("locations")<User::ACCESS_RW) { unset($valid_fields['location']); }
+	    }
+
+	    // Remove non-valid fields
+	    foreach($values as $i => $v) {
+	        if (!in_array($i, $valid_fields))
+	            unset($values[$i]);
+	    }
+
+	    // ToDo: These fields should have foreign key constraints
+	    $numeric_fields = ['switch', 'customer_id', 'location'];
+	    foreach($numeric_fields as $field) {
+	        if (isset($values[$field]) && (!is_numeric($values[$field]) || $values[$field] <= 0))
+	            $values[$field] = NULL;
+	    }
+
+	    # null empty values
+	    return $this->reformat_empty_array_fields($values, null);
+	}
+
+	/**
 	 * Inserts new IP address to table
 	 *
 	 * @access protected
@@ -358,45 +413,17 @@ class Addresses extends Common_functions {
 	 * @return boolean success/failure
 	 */
 	protected function modify_address_add ($address) {
-		# set insert array
-		$insert = array("ip_addr"=>$this->transform_address($address['ip_addr'],"decimal"),
-						"subnetId"=>$address['subnetId'],
-						"description"=>@$address['description'],
-						"dns_name"=>@$address['dns_name'],
-						"mac"=>@$address['mac'],
-						"owner"=>@$address['owner'],
-						"state"=>@$address['state'],
-						"switch"=>@$address['switch'],
-						"port"=>@$address['port'],
-						"note"=>@$address['note'],
-						"is_gateway"=>@$address['is_gateway'],
-						"excludePing"=>@$address['excludePing'],
-						"PTRignore"=>@$address['PTRignore'],
-						"firewallAddressObject"=>@$address['firewallAddressObject'],
-						"lastSeen"=>@$address['lastSeen']
-						);
-        # location
-        if (isset($address['location_item'])) {
-            if (!is_numeric($address['location_item'])) {
-                $Result->show("danger", _("Invalid location value"), true);
-            }
-            $insert['location'] = $address['location_item'];
-        }
-		# custom fields, append to array
-		foreach($this->set_custom_fields() as $c) {
-			$insert[$c['name']] = strlen(@$address[$c['name']])>0 ? @$address[$c['name']] : null;
-		}
+		$address = $this->address_check_values($address);
 
-		# null empty values
-		$insert = $this->reformat_empty_array_fields ($insert, null);
+		$this->address_within_subnetId($address['ip_addr'], $address['subnetId'], true);
 
 		# remove gateway
 		if($address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
 
 		# execute
-		try { $this->Database->insertObject("ipaddresses", $insert); }
+		try { $this->Database->insertObject("ipaddresses", $address); }
 		catch (Exception $e) {
-			$this->Log->write( "Address create", "Failed to create new address<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
+			$this->Log->write( _("Address create"), _("Failed to create new address").".<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
@@ -405,11 +432,11 @@ class Addresses extends Common_functions {
 
 		# log and changelog
 		$address['id'] = $this->lastId;
-		$this->Log->write( "Address created", "New address created<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
+		$this->Log->write( _("Address create"), _("New address created").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
 		$this->Log->write_changelog('ip_addr', "add", 'success', array(), $address, $this->mail_changelog);
 
 		# edit DNS PTR record
-		$this->ptr_modify ("add", $insert);
+		$this->ptr_modify ("add", $address);
 
 		# threshold alert
 		$this->threshold_check($address);
@@ -428,39 +455,19 @@ class Addresses extends Common_functions {
 	protected function modify_address_edit ($address) {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
-		# set update array
-		$insert = array("id"=>$address['id'],
-						"subnetId"=>$address['subnetId'],
-						"ip_addr"=>$this->transform_address($address['ip_addr'], "decimal"),
-						"description"=>@$address['description'],
-						"dns_name"=>@$address['dns_name'],
-						"mac"=>@$address['mac'],
-						"owner"=>@$address['owner'],
-						"state"=>@$address['state'],
-						"switch"=>@$address['switch'],
-						"port"=>@$address['port'],
-						"note"=>@$address['note'],
-						"is_gateway"=>@$address['is_gateway'],
-						"excludePing"=>@$address['excludePing'],
-						"PTRignore"=>@$address['PTRignore']
-						);
-        # location
-        if (isset($address['location_item'])) {
-            if (!is_numeric($address['location_item'])) {
-                $Result->show("danger", _("Invalid location value"), true);
-            }
-            $insert['location'] = $address['location_item'];
-        }
-		# custom fields, append to array
-		foreach($this->set_custom_fields() as $c) {
-			$insert[$c['name']] = strlen(@$address[$c['name']])>0 ? @$address[$c['name']] : null;
-		}
+		if (isset($address['section'])) $address_old->section = $address['section'];
+
+		$address = $this->address_check_values($address);
+
+		$subnetId = array_key_exists('subnetId', $address) ? $address['subnetId'] : $address_old->subnetId;
+		if (array_key_exists('ip_addr', $address))
+			$this->address_within_subnetId($address['ip_addr'], $subnetId, true);
 
 		# set primary key for update
 		if($address['type']=="series") {
 			$id1 = "subnetId";
 			$id2 = "ip_addr";
-			unset($insert['id']);
+			unset($address['id']);
 		} else {
 			$id1 = "id";
 			$id2 = null;
@@ -470,9 +477,9 @@ class Addresses extends Common_functions {
 		if($address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
 
 		# execute
-		try { $this->Database->updateObject("ipaddresses", $insert, $id1, $id2); }
+		try { $this->Database->updateObject("ipaddresses", $address, $id1, $id2); }
 		catch (Exception $e) {
-			$this->Log->write( "Address edit", "Failed to edit address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
+			$this->Log->write( _("Address edit"), _("Failed to edit address")." ".$address["ip_addr"].".<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
@@ -481,12 +488,11 @@ class Addresses extends Common_functions {
 		$address['firewallAddressObject'] = $address_old->firewallAddressObject;
 
  		# log and changelog
-		$this->Log->write( "Address updated", "Address $address[ip_addr] updated<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
+		$this->Log->write( _("Address update"), _("Address")." ".$address["ip_addr"]." "._("updated").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
 		$this->Log->write_changelog('ip_addr', "edit", 'success', (array) $address_old, $address, $this->mail_changelog);
 
 		# edit DNS PTR record
-		$insert['PTR']=@$address['PTR'];
-		$this->ptr_modify ("edit", $insert);
+		$this->ptr_modify ("edit", $address);
 
 		# ok
 		return true;
@@ -502,6 +508,8 @@ class Addresses extends Common_functions {
 	protected function modify_address_delete ($address) {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
+		if (isset($address['section'])) $address_old->section = $address['section'];
+
 		# series?
 		if($address['type']=="series") {
 			$field  = "subnetId";	$value  = $address['subnetId'];
@@ -513,13 +521,13 @@ class Addresses extends Common_functions {
 		# execute
 		try { $this->Database->deleteRow("ipaddresses", $field, $value, $field2, $value2); }
 		catch (Exception $e) {
-			$this->Log->write( "Address delete", "Failed to delete address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log((array) $address_old), 2);
+			$this->Log->write( _("Address delete"), _("Failed to delete address")." ".$address["ip_addr"].".<hr>".$e->getMessage()."<hr>".$this->array_to_log((array) $address_old), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 
 		# log and changelog
-		$this->Log->write( "Address deleted", "Address $address[ip_addr] deleted<hr>".$this->array_to_log((array) $address_old), 0);
+		$this->Log->write( _("Address delete"), _("Address")." ".$address["ip_addr"]." "._("deleted").".<hr>".$this->array_to_log((array) $address_old), 0);
 		$this->Log->write_changelog('ip_addr', "delete", 'success', (array) $address_old, array(), $this->mail_changelog);
 
 		# edit DNS PTR record
@@ -529,6 +537,8 @@ class Addresses extends Common_functions {
 		if(@$address['remove_all_dns_records']=="1") {
     		$this->pdns_remove_ip_and_hostname_records ($address);
         }
+        # remove from NAT
+        $this->remove_address_nat_items ($address['id'], true);
 		# ok
 		return true;
 	}
@@ -552,6 +562,83 @@ class Addresses extends Common_functions {
 	}
 
 	/**
+	 * Remove item from nat when item is removed
+	 *
+	 * @method remove_nat_item
+	 *
+	 * @param  int $obj_id
+	 * @param  bool $print
+	 *
+	 * @return int
+	 */
+	public function remove_address_nat_items ($obj_id = 0, $print = true) {
+		# set found flag for returns
+		$found = 0;
+		# fetch all nats
+		try { $all_nats = $this->Database->getObjectsQuery ("select * from `nat` where `src` like :id or `dst` like :id", array ("id"=>'%"'.$obj_id.'"%')); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# loop and check for object ids
+		if(!empty($all_nats)) {
+			# init admin object
+			$Admin = new Admin ($this->Database, false);
+			# loop
+			foreach ($all_nats as $nat) {
+			    # remove item from nat
+			    $s = json_decode($nat->src, true);
+			    $d = json_decode($nat->dst, true);
+
+			    if(is_array($s['ipaddresses']))
+			    $s['ipaddresses'] = array_diff($s['ipaddresses'], array($obj_id));
+			    if(is_array($d['ipaddresses']))
+			    $d['ipaddresses'] = array_diff($d['ipaddresses'], array($obj_id));
+
+			    # save back and update
+			    $src_new = json_encode(array_filter($s));
+			    $dst_new = json_encode(array_filter($d));
+
+			    # update only if diff found
+			    if($s!=$src_new || $d!=$dst_new) {
+			    	$found++;
+
+				    if($Admin->object_modify ("nat", "edit", "id", array("id"=>$nat->id, "src"=>$src_new, "dst"=>$dst_new))!==false) {
+				    	if($print) {
+					        $this->Result->show("success", _("Address removed from NAT"), false);
+						}
+				    }
+			    }
+			}
+		}
+		# return
+		return $found;
+	}
+
+	/**
+	 * Updates hostname for IP addresses
+	 *
+	 * @method update_address_hostname
+	 *
+	 * @param  mixed $ip
+	 * @param  int $id
+	 * @param  string $hostname
+	 *
+	 * @return void
+	 */
+	public function update_address_hostname ($ip, $id, $hostname = "") {
+		if(is_numeric($id) && strlen($hostname)>0) {
+			try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "hostname"=>$hostname)); }
+			catch (Exception $e) {
+				return false;
+			}
+			// save log
+			$this->Log->write( _("Address DNS resolved"), _("Address")." ".$ip." "._("resolved").".<hr>".$this->array_to_log((array) $hostname), 0);
+			$this->Log->write_changelog('ip_addr', "edit", 'success', array ("id"=>$id, "hostname"=>""), array("id"=>$id, "hostname"=>$hostname), $this->mail_changelog);
+		}
+	}
+
+	/**
 	 * Checks if subnet usage is over threshold and sends alert
 	 *
 	 * @access private
@@ -567,11 +654,7 @@ class Addresses extends Common_functions {
         $this->get_settings ();
     	# enabled ?
     	if ($this->settings->enableThreshold=="1") {
-        	# object
-        	if (!is_object($this->Subnets)) {
-            	$this->Subnets = new Subnets ($this->Database);
-        	}
-        	# fetch subnet
+        	$this->initialize_subnets_object();
         	$subnet = $this->Subnets->fetch_subnet("id", $address->subnetId);
         	# threshold set ?
         	if ($subnet->threshold>0) {
@@ -584,31 +667,30 @@ class Addresses extends Common_functions {
                 	$admins        = $Tools->fetch_multiple_objects ("users", "role", "Administrator");
                 	// if some recipients
                 	if ($admins !== false) {
-                    	// mail settings
-                        $mail_settings = $Tools->fetch_object ("settingsMail", "id", 1);
-                    	// mail class
-                    	$phpipam_mail = new phpipam_mail ($this->settings, $mail_settings);
+						# try to send
+						try {
+	                    	// mail settings
+	                        $mail_settings = $Tools->fetch_object ("settingsMail", "id", 1);
+	                    	// mail class
+	                    	$phpipam_mail = new phpipam_mail ($this->settings, $mail_settings);
 
-                        // send
-                        $phpipam_mail->initialize_mailer();
-                        // set parameters
-                        $subject = "Subnet threshold limit reached"." (".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask.")";
-                        $content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
-                        $content[] = "<tr><td style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;' colspan='2'>$this->mail_font_style<strong>$subject</font></td></tr>";
-                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Subnet').'</a></font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;padding-top:10px;"><a href="'.$this->createURL().''.create_link("subnets",$subnet->sectionId, $subnet->id).'">'.$this->mail_font_style_href . $this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask .'</font></a></td></tr>';
-                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Description').'</font></td>	  	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. $subnet->description .'</font></td></tr>';
-                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Usage').' (%)</font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0))) .'</font></td></tr>';
-                        $content[] = "</table>";
-                        // plain
-                        $content_plain[] = "$subject"."\r\n------------------------------\r\n";
-                        $content_plain[] = _("Subnet").": ".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask;
-                        $content_plain[] = _("Usage")." (%) : ".gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));
+	                        // set parameters
+	                        $subject = "Subnet threshold limit reached"." (".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask.")";
+	                        $content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
+	                        $content[] = "<tr><td style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;' colspan='2'>$this->mail_font_style<strong>$subject</font></td></tr>";
+	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Subnet').'</a></font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;padding-top:10px;"><a href="'.$this->createURL().''.create_link("subnets",$subnet->sectionId, $subnet->id).'">'.$this->mail_font_style_href . $this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask .'</font></a></td></tr>';
+	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Description').'</font></td>	  	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. $subnet->description .'</font></td></tr>';
+	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Usage').' (%)</font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0))) .'</font></td></tr>';
+	                        $content[] = "</table>";
+	                        // plain
+	                        $content_plain[] = "$subject"."\r\n------------------------------\r\n";
+	                        $content_plain[] = _("Subnet").": ".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask;
+	                        $content_plain[] = _("Usage")." (%) : ".gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));
 
-                        # set content
-                        $content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-                        $content_plain 	= implode("\r\n",$content_plain);
-                        # try to send
-                        try {
+	                        # set content
+	                        $content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+	                        $content_plain 	= implode("\r\n",$content_plain);
+
                         	$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
                         	//add all admins to CC
                         	$recipients = $this->changelog_mail_get_recipients ($subnet->id);
@@ -628,9 +710,9 @@ class Addresses extends Common_functions {
                             	return true;
                         	}
                         } catch (phpmailerException $e) {
-                        	$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+                        	$this->Result->show("danger", _("Mailer Error").": ".$e->errorMessage(), true);
                         } catch (Exception $e) {
-                        	$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+                        	$this->Result->show("danger", _("Mailer Error").": ".$e->getMessage(), true);
                         }
                     }
             	}
@@ -725,17 +807,18 @@ class Addresses extends Common_functions {
 
 		# fetch all addresses in subnet and subnet
 		$addresses = $this->fetch_subnet_addresses ($subnetId, "ip_addr", "asc", array("ip_addr"));
+		if (!is_array($addresses)) { $addresses = array(); }
 		$subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
 
 		# if folder return false
 		if ($subnet['isFolder']=="1")                                                                   { return false; }
 
 		# false if slaves
-		$this->Subnets = new Subnets ($this->Database);
+		$this->initialize_subnets_object();
 		if($this->Subnets->has_slaves ($subnetId))                                                      { return false; }
 
 	    # get max hosts
-	    $max_hosts = $Subnets->get_max_hosts ($subnet['mask'], $this->identify_address($subnet['subnet']));
+	    $max_hosts = $Subnets->max_hosts ($subnet);
 
 		# full subnet?
 		if(sizeof($addresses)>=$max_hosts)																{ return false; } 	//full subnet
@@ -798,7 +881,7 @@ class Addresses extends Common_functions {
 	 */
 	public function ptr_modify ($action, $address, $print_error = true) {
         // fetch settings
-        $this->settings ();
+        $this->get_settings ();
         //check if powerdns enabled
         if ($this->settings->enablePowerDNS!=1) {
             return false;
@@ -845,7 +928,7 @@ class Addresses extends Common_functions {
 	 */
 	public function pdns_remove_ip_and_hostname_records ($address) {
         // fetch settings
-        $this->settings ();
+        $this->get_settings ();
         //check if powerdns enabled
         if ($this->settings->enablePowerDNS!=1) {
             return false;
@@ -853,7 +936,7 @@ class Addresses extends Common_functions {
 		// validate db
 		$this->pdns_validate_connection ();
 		// execute
-		return $this->PowerDNS->pdns_remove_ip_and_hostname_records ($address['dns_name'], $address['ip_addr']);
+		return $this->PowerDNS->pdns_remove_ip_and_hostname_records ($address['hostname'], $address['ip_addr']);
 	}
 
 	/**
@@ -910,18 +993,18 @@ class Addresses extends Common_functions {
 		$values = json_decode($this->settings->powerDNS);
 
     	// set default hostname for PTR if set
-    	if (strlen($address->dns_name)==0) {
+    	if (strlen($address->hostname)==0) {
         	if (strlen($values->def_ptr_domain)>0) {
-            	$address->dns_name = $values->def_ptr_domain;
+            	$address->hostname = $values->def_ptr_domain;
         	}
     	}
 		// validate hostname
-		if ($this->validate_hostname ($address->dns_name)===false)		{ return false; }
+		if ($this->validate_hostname ($address->hostname)===false)		{ return false; }
 		// fetch domain
 		$domain = $this->pdns_fetch_domain ($address->subnetId);
 
 		// formulate new record
-		$record = $this->PowerDNS->formulate_new_record ($domain->id, $this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), "PTR", $address->dns_name, $values->ttl);
+		$record = $this->PowerDNS->formulate_new_record ($domain->id, $this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), "PTR", $address->hostname, $values->ttl);
 		// insert record
 		$this->PowerDNS->add_domain_record ($record, false);
 		// link to address
@@ -929,7 +1012,7 @@ class Addresses extends Common_functions {
 		$this->ptr_link ($id, $this->PowerDNS->lastId);
 		// ok
 		if ($print_error && php_sapi_name()!="cli")
-		$this->Result->show("success", "PTR record created", false);
+		$this->Result->show("success", _("PTR record created"), false);
 
 		return true;
 	}
@@ -944,7 +1027,7 @@ class Addresses extends Common_functions {
 	 */
 	public function ptr_edit ($address, $print_error = true) {
 		// validate hostname
-		if ($this->validate_hostname ($address->dns_name)===false)	{
+		if ($this->validate_hostname ($address->hostname)===false)	{
 			// remove pointer if it exists!
 			if ($this->ptr_exists ($address->PTR)===true)	{ $this->ptr_delete ($address, $print_error); }
 			else											{ return false; }
@@ -966,14 +1049,14 @@ class Addresses extends Common_functions {
 			$old_record = $this->PowerDNS->fetch_record ($address->PTR);
 
 			// create insert array
-			$update = $this->PowerDNS->formulate_update_record ($this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), null, $address->dns_name, null, null, null, $old_record->change_date);
+			$update = $this->PowerDNS->formulate_update_record ($this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), null, $address->hostname, null, null, null, $old_record->change_date);
 			$update['id'] = $address->PTR;
 
 			// update
 			$this->PowerDNS->update_domain_record ($domain->id, $update, $print_error);
 			// ok
 			if ($print_error && php_sapi_name()!="cli")
-			$this->Result->show("success", "PTR record updated", false);
+			$this->Result->show("success", _("PTR record updated"), false);
  		}
 	}
 
@@ -999,7 +1082,7 @@ class Addresses extends Common_functions {
 			$this->PowerDNS->remove_domain_record ($domain->id, $address->PTR);
     		// ok
     		if ($print_error && php_sapi_name()!="cli")
-    		$this->Result->show("success", "PTR record removed", false);
+    		$this->Result->show("success", _("PTR record removed"), false);
 		}
 	}
 
@@ -1124,8 +1207,6 @@ class Addresses extends Common_functions {
 	    # fetch subnet details
 	    $subnet = (array) $this->Subnets->fetch_subnet(null, $subnetId);
 
-	    # verify address
-	    if($this->verify_address( $address[0], $this->transform_to_dotted($subnet['subnet'])."/".$subnet['mask'], false, false)!==false) { return false; }
 	    # check for duplicates
 	    if ($this->address_exists($address[0], $subnetId)) { return _('IP address already exists').' - '.$address[0]; }
 
@@ -1134,7 +1215,7 @@ class Addresses extends Common_functions {
 								"ip_addr"=>$address[0],
 								"state"=>$address[1],
 								"description"=>$address[2],
-								"dns_name"=>$address[3],
+								"hostname"=>$address[3],
 								"mac"=>$address[4],
 								"owner"=>$address[5],
 								"switch"=>$address[6],
@@ -1213,14 +1294,10 @@ class Addresses extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
-		# save to addresses cache
-		if(sizeof($addresses)>0) {
-			foreach($addresses as $k=>$address) {
-				# add decimal format
-				$address->ip = $this->transform_to_dotted ($address->ip_addr);
-				# save to subnets
-				$this->addresses[$address->id] = (object) $address;
-				$addresses[$k]->ip = $address->ip;
+		# save to addresses cache (complete objects only)
+		if(is_array($addresses) && $fields=="*") {
+			foreach($addresses as $address) {
+				$this->cache_write("ipaddresses", $address);
 			}
 		}
 		# result
@@ -1291,7 +1368,6 @@ class Addresses extends Common_functions {
 	public function fetch_subnet_addresses_recursive ($subnetId, $count = false, $order=null, $order_direction=null ) {
 		# initialize subnets
 		$this->initialize_subnets_object ();
-		$this->Subnets = new Subnets ($this->Database);
 		$this->Subnets->reset_subnet_slaves_recursive();				//reset array of slaves before continuing
 	    $this->Subnets->fetch_subnet_slaves_recursive($subnetId);		//fetch array of slaves
 	    $this->Subnets->slaves = array_unique($this->Subnets->slaves);	//remove possible duplicates
@@ -1329,181 +1405,6 @@ class Addresses extends Common_functions {
 	    return $count ? (int) $addresses[0]->cnt : $addresses;
 	}
 
-	/**
-	 * Search for unused address space between 2 IP addresses
-	 *
-	 * possible unused addresses by type
-	 *
-	 * @access public
-	 * @param int $address1
-	 * @param int $address2
-	 * @param int $netmask
-	 * @param bool $empty (default: false)
-	 * @param bool $is_subnet (default: false)
-	 * @param bool $is_broadcast (default: false)
-	 * @return void
-	 */
-	public function find_unused_addresses ($address1, $address2, $netmask, $empty=false, $is_subnet=false, $is_broadcast=false) {
-		# make sure addresses are in decimal format
-		$address1 = $this->transform_address ($address1, "decimal");
-		$address2 = $this->transform_address ($address2, "decimal");
-		# check for space
-		return $this->identify_address($address1)=="IPv6" ? $this->find_unused_addresses_IPv6 ($address1, $address2, $netmask, $empty, $is_subnet, $is_broadcast) : $this->find_unused_addresses_IPv4 ($address1, $address2, $netmask, $empty);
-	}
-
-	/**
-	 * Search for unused address space between 2 IPv4 addresses.
-	 *
-	 * unused address range or false if none available
-	 *
-	 * @access protected
-	 * @param int $address1
-	 * @param int $address2
-	 * @param int $netmask
-	 * @param bool $empty
-	 * @return void
-	 */
-	protected function find_unused_addresses_IPv4 ($address1, $address2, $netmask, $empty) {
-		# calculate diff
-		$diff = $this->calculate_address_diff ($address1, $address2);
-		# 32 subnets
-		if($netmask==32) {
-			if($empty) {
-				return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>1);
-			}
-			else {
-				return false;
-			}
-		}
-		# 31 subnets
-		elseif($netmask==31) {
-
-			if($empty) {
-				return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>2);
-			}
-			elseif($diff==1) {
-				if($this->is_network($address1, $netmask)) {
-					return array("ip"=>$this->transform_to_dotted($address2), "hosts"=>1);
-				}
-				elseif($this->is_broadcast($address2, $netmask)) {
-					return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>1);
-				}
-				else {
-					return false;
-				}
-			}
-			else {
-				return false;
-			}
-		}
-		# if diff is less than 2 return false */
-		elseif ( $diff < 2 ) {
-        		return false;
-    	}
-		# if diff is 2 return 1 IP address in the middle */
-		elseif ( $diff == 2 ) {
-				return array("ip"=>$this->transform_to_dotted($address1+1), "hosts"=>1);
-    	}
-		# if diff is more than 2 return pool */
-		else {
-            	return array("ip"=>$this->transform_to_dotted($address1+1)." - ".$this->transform_to_dotted(($address2-1)), "hosts"=>gmp_strval(gmp_sub($diff, 1)));
-    	}
-    	# default false
-    	return false;
-	}
-
-	/**
-	 * Search for unused address space between 2 IPv6 addresses
-	 *
-	 * Return unused address range or false if none available
-	 *
-	 * @access protected
-	 * @param int $address1
-	 * @param int $address2
-	 * @param int $netmask
-	 * @param bool $empty (default: false)
-	 * @param bool $is_subnet (default: false)
-	 * @param bool $is_broadcast (default: false)
-	 * @return void
-	 */
-	protected function find_unused_addresses_IPv6 ($address1, $address2, $netmask, $empty = false, $is_subnet = false, $is_broadcast = false) {
-		# Initialize PEAR NET object
-		$this->initialize_pear_net_IPv6 ();
-
-		if($empty) {
-    		$Subnets = new Subnets ($this->Database);
-    		return array("ip"=>$this->transform_to_dotted(gmp_strval($address1))." - ".$this->transform_to_dotted(gmp_strval($address2)), "hosts"=>$Subnets->get_max_hosts ($netmask, "IPv6"));
-		}
-        else {
-    		# calculate diff
-    		$diff = $this->calculate_address_diff ($address1, $address2);
-
-    		# /128
-    		if($netmask == 128) {
-        		if($diff>1) {
-                    return array("ip"=>$this->transform_to_dotted(gmp_strval($address1)), "hosts"=>1);
-                }
-        	}
-    		# /127
-    	    elseif($netmask == 127) {
-        	    if($diff==1 && $this->is_network($address1, $netmask)) {
-    				return array("ip"=>$this->transform_to_dotted($address2), "hosts"=>1);
-    			}
-    			elseif($diff==1 && $this->is_broadcast($address2, $netmask)) {
-    				return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>1);
-    			}
-    			elseif($diff==0) {
-        			return false;
-    			}
-    			else {
-    				return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>2);
-    			}
-    	    }
-    	    # null
-    	    elseif ($diff==0) {
-        	    return false;
-    	    }
-    	    # diff 1
-    	    elseif ($diff==1) {
-         		if($is_subnet) {
-                    return array("ip"=>$this->transform_to_dotted(gmp_strval($address1)), "hosts"=>1);
-        		}
-        		elseif($is_broadcast) {
-                    return array("ip"=>$this->transform_to_dotted(gmp_strval($address2)), "hosts"=>1);
-        		}
-        		else {
-            		return false;
-                }
-    	    }
-    	    # diff 2
-    	    elseif ($diff==2 && !$is_subnet && !$is_broadcast) {
-                return array("ip"=>$this->transform_to_dotted(gmp_strval(gmp_add($address1,1))), "hosts"=>1);
-    	    }
-    	    # default
-    	    else {
-        		if($is_subnet) {
-                    return array("ip"=>$this->transform_to_dotted(gmp_strval($address1))." - ".$this->transform_to_dotted(gmp_strval(gmp_sub($address2,1))), "hosts"=>$this->reformat_number(gmp_strval(gmp_sub($diff,0))));
-        		}
-        		elseif($is_broadcast) {
-                    return array("ip"=>$this->transform_to_dotted(gmp_strval(gmp_add($address1,1)))." - ".$this->transform_to_dotted(gmp_strval($address2)), "hosts"=>$this->reformat_number(gmp_strval(gmp_sub($diff,0))));
-        		}
-        		else {
-                    return array("ip"=>$this->transform_to_dotted(gmp_strval(gmp_add($address1,1)))." - ".$this->transform_to_dotted(gmp_strval(gmp_sub($address2,1))), "hosts"=>$this->reformat_number(gmp_strval(gmp_strval(gmp_sub($diff,1)))));
-                }
-        	}
-
-        	# default false
-        	return false;
-    	}
-	}
-
-
-
-
-
-
-
-
 
 
 
@@ -1511,79 +1412,6 @@ class Addresses extends Common_functions {
 	* @address verification methods
 	* -------------------------------
 	*/
-
-	/**
-	 * Verify IP address
-	 *
-	 * @access public
-	 * @param int $address
-	 * @param mixed $subnet (CIDR)
-	 * @param bool $no_strict (default: false)
-	 * @param bool $die (default: false)
-	 * @return boolean
-	 */
-	public function verify_address( $address, $subnet, $no_strict = false, $die=true ) {
-		# subnet should be in CIDR format
-		$this->initialize_subnets_object ();
-		if(strlen($error = $this->Subnets->verify_cidr ($subnet))>1)				{ $this->Result->show("danger", $error, $die); return true; }
-
-		# make checks
-		return $this->identify_address ($address)=="IPv6" ? $this->verify_address_IPv6 ($address, $subnet, $die) : $this->verify_address_IPv4 ($address, $subnet, $no_strict, $die);
-	}
-
-	/**
-	 * Verify IPv4 address
-	 *
-	 * @access public
-	 * @param int $address
-	 * @param mixed $subnet (CIDR)
-	 * @param bool $no_strict
-	 * @param bool $die
-	 * @return boolean
-	 */
-	public function verify_address_IPv4 ($address, $subnet, $no_strict, $die) {
-		# Initialize PEAR NET object
-		$this->initialize_pear_net_IPv4 ();
-        # fetch mask part
-        $mask = explode("/", $subnet);
-
-		# is address valid?
-		if (!$this->Net_IPv4->validateIP($address)) 						{ $this->Result->show("danger", _("IP address not valid")."! ($address)", $die); return true; }
-		# is address in provided subnet
-		elseif (!$this->Net_IPv4->ipInNetwork($address, $subnet)) 			{ $this->Result->show("danger", _("IP address not in selected subnet")."! ($address)", $die); return true; }
-		# ignore  /31 and /32 subnet broadcast and subnet checks!
-		elseif ($mask[1] == 31 || $mask[1] == 32 || $no_strict == true) 	{ }
-		# It cannot be subnet or broadcast
-		else {
-            $net = $this->Net_IPv4->parseAddress($subnet);
-
-            if ($net->network == $address) 									{ $this->Result->show("danger", _("Cannot add subnet as IP address!"), $die); return true; }
-            elseif ($net->broadcast == $address)							{ $this->Result->show("danger", _("Cannot add broadcast as IP address!"), $die); return true; }
-		}
-		# default
-		return false;
-	}
-
-	/**
-	 * Verify IPv6 address
-	 *
-	 * @access public
-	 * @param int $address
-	 * @param mixed $subnet (CIDR)
-	 * @param bool $die
-	 * @return boolean
-	 */
-	public function verify_address_IPv6 ($address, $subnet, $die) {
-		# Initialize PEAR NET object
-		$this->initialize_pear_net_IPv6 ();
-
-		# is it valid?
-		if (!$this->Net_IPv6->checkIPv6($address)) 							{ $this->Result->show("danger", _("IP address not valid")."! ($address)", $die); return true; }
-		# it must be in provided subnet
-		elseif (!$this->Net_IPv6->isInNetmask($address, $subnet)) 			{ $this->Result->show("danger", _("IP address not in selected subnet")."! ($address)", $die); return true; }
-		# default
-		return false;
-	}
 
 	/**
 	 * Validates IP address
@@ -1597,6 +1425,10 @@ class Addresses extends Common_functions {
 		$this->initialize_pear_net_IPv4 ();
 		$this->initialize_pear_net_IPv6 ();
 
+		// no null
+		if($this->transform_address ($address, "decimal")==0) {
+			return false;
+		}
 		// transform
 		$address = $this->transform_address ($address, "dotted");
 		// ipv6
@@ -1645,7 +1477,7 @@ class Addresses extends Common_functions {
 	 * @return boolean
 	 */
 	public function is_hostname_unique ($hostname) {
-		try { $cnt = $this->Database->numObjectsFilter("ipaddresses", "dns_name", $hostname); }
+		try { $cnt = $this->Database->numObjectsFilter("ipaddresses", "hostname", $hostname); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -1653,6 +1485,58 @@ class Addresses extends Common_functions {
 		return $cnt==0 ? true : false;
 	}
 
+	/**
+	 * Check if address is within subnet (object)
+	 * @param  mixed   $address
+	 * @param  mixed   $subnet
+	 * @param  boolean $die (default:true)
+	 * @return boolean
+	 */
+	public function address_within_subnet($address, $subnet, $die=true) {
+		$address = $this->transform_address($address, "decimal");
+
+		if (is_array($subnet))
+			$subnet = (object) $subnet;
+
+		if (!is_object($subnet) || !property_exists($subnet, 'subnet') || !property_exists($subnet, 'mask')) {
+			$this->Result->show("danger", _("Invalid subnet"), $die);
+			return false;
+		}
+
+		if ($subnet->isFolder)
+			return true;
+
+		// Check if IP is within valid range
+		$this->initialize_subnets_object();
+		list($min, $max) = $this->Subnets->subnet_boundaries($subnet);
+
+		if (gmp_cmp($address, $min)<0 || gmp_cmp($address, $max)>0) {
+			$ip = $this->transform_to_dotted($address);
+			$subnet = $this->transform_to_dotted($subnet->subnet).'/'.$subnet->mask;
+			$this->Result->show("danger", $ip._(" is not a valid address for subnet ").$subnet, $die);
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check if address is within subnetId
+	 * @param  mixed   $address
+	 * @param  mixed   $subnetId
+	 * @param  boolean $die (default:true)
+	 * @return boolean
+	 */
+	public function address_within_subnetId($address, $subnetId, $die=true) {
+		$subnet = $this->fetch_object("subnets", "id", $subnetId);
+
+		if (!is_object($subnet)) {
+			$this->Result->show("danger", _("Invalid subnet Id"), $die);
+			return false;
+		}
+
+		return $this->address_within_subnet($address, $subnet, $die);
+	}
 
 
 
@@ -1685,7 +1569,6 @@ class Addresses extends Common_functions {
     	$size = sizeof($addresses);
     	// vars
     	$addresses_formatted = array();
-    	$fIndex = int;
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {
@@ -1754,9 +1637,11 @@ class Addresses extends Common_functions {
     	$false = array();
 		// find unique ids
 		$ids = $this->find_unique_subnetids ();
-		if ($ids===false)										{ return false; }
 
 		// validate
+		if (!is_array($ids))
+			return false;
+
 		foreach ($ids as $id) {
 			if ($this->verify_subnet_id ($id->subnetId)===false) {
 				$false[] = $this->fetch_subnet_addresses ($id->subnetId);
@@ -1834,11 +1719,7 @@ class Addresses extends Common_functions {
 		# if user is admin then return 3, otherwise check
 		if($user->role == "Administrator")	{ return 3; }
 
-    	# object
-    	if (!is_object($this->Subnets)) {
-        	$this->Subnets = new Subnets ($this->Database);
-    	}
-        # fetch subnet
+    	$this->initialize_subnets_object();
         $subnet = $this->Subnets->fetch_subnet("id", $subnetId);
 		# set subnet permissions
 		$subnetP = json_decode($subnet->permissions);

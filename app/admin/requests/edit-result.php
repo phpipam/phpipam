@@ -5,7 +5,7 @@
  ***********************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -25,7 +25,7 @@ $User->check_maintaneance_mode ();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "requests", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "requests", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # verify permissions
 if($Subnets->check_permission($User->user, $_POST['subnetId']) != 3)	{ $Result->show("danger", _('You do not have permissions to process this request')."!", true); }
@@ -60,25 +60,46 @@ else {
 	// fetch subnet
 	$subnet_temp = $Addresses->transform_to_dotted ($subnet['subnet'])."/".$subnet['mask'];
 
-	//verify IP and subnet
-	$Addresses->verify_address( $Addresses->transform_address($_POST['ip_addr'], "dotted"), $subnet_temp, false, true);
-
 	//check if already existing and die
 	if ($Addresses->address_exists($Addresses->transform_address($_POST['ip_addr'], "decimal"), $subnet['id'])) { $Result->show("danger", _('IP address already exists'), true); }
 
 	//insert to ipaddresses table
-	$values = array("action"=>"add",
-					"ip_addr"=>$Addresses->transform_address($_POST['ip_addr'],"decimal"),
-					"subnetId"=>$_POST['subnetId'],
-					"description"=>@$_POST['description'],
-					"dns_name"=>@$_POST['dns_name'],
-					"mac"=>@$_POST['mac'],
-					"owner"=>@$_POST['owner'],
-					"state"=>@$_POST['state'],
-					"switch"=>@$_POST['switch'],
-					"port"=>@$_POST['port'],
-					"note"=>@$_POST['note']
+	$values = array(
+					"action"      =>"add",
+					"ip_addr"     =>$Addresses->transform_address($_POST['ip_addr'],"decimal"),
+					"subnetId"    =>$_POST['subnetId'],
+					"description" =>@$_POST['description'],
+					"hostname"    =>@$_POST['hostname'],
+					"mac"         =>@$_POST['mac'],
+					"owner"       =>@$_POST['owner'],
+					"state"       =>@$_POST['state'],
+					"switch"      =>@$_POST['switch'],
+					"port"        =>@$_POST['port'],
+					"note"        =>@$_POST['note']
 					);
+
+	// custom fields
+	if(sizeof($custom) > 0) {
+		foreach($custom as $myField) {
+
+			//replace possible ___ back to spaces
+			$myField['nameTest'] = str_replace(" ", "___", $myField['name']);
+			if(isset($_POST[$myField['nameTest']])) { $_POST[$myField['name']] = $_POST[$myField['nameTest']];}
+
+			//booleans can be only 0 and 1!
+			if($myField['type']=="tinyint(1)") {
+				if($_POST[$myField['name']]>1) {
+					$_POST[$myField['name']] = 0;
+				}
+			}
+			//not null!
+			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+
+			# save to update array
+			$values[$myField['name']] = $_POST[$myField['name']];
+		}
+ 	}
+
 	if(!$Addresses->modify_address($values))	{ $Result->show("danger",  _("Failed to create IP address"), true); }
 
 	//accept message
@@ -110,5 +131,3 @@ else {
 
 	$Tools->ip_request_send_mail ("accept", $_POST);
 }
-
-?>

@@ -8,7 +8,6 @@
 
 class User_controller extends Common_api_functions {
 
-
 	/**
 	 * users token
 	 *
@@ -58,47 +57,6 @@ class User_controller extends Common_api_functions {
 	 * @access private
 	 */
 	private $block_ip = true;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-	/**
-	 * Master Admin object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Admin;
-
-	/**
-	 * Master User object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $User;
-
-	/**
-	 * requested parameters
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
 
 
 	/**
@@ -292,6 +250,23 @@ class User_controller extends Common_api_functions {
 
 
 
+	/**
+	 * Checks authentication token (app_code) from ssl_code method
+	 *
+	 * @method check_auth_code
+	 * @param  string $app_id
+	 * @return void
+	 */
+	public function check_auth_code ($app_id = "") {
+		// block IP
+		$this->validate_block ();
+		// validate token
+		$this->validate_requested_token_code ($app_id);
+	}
+
+
+
+
 
 
 
@@ -383,8 +358,8 @@ class User_controller extends Common_api_functions {
 	 */
 	public function set_token_valid_time ($token_valid_time = null) {
 		// validate integer
-		if ($this->token_length!=null) {
-			if (!is_numeric($this->token_length))	{ $this->Response->throw_exception(500, "token valid time must be an integer"); }
+		if (!is_null($token_valid_time)) {
+			if (!is_numeric($token_valid_time))	{ $this->Response->throw_exception(500, "Token valid time must be an integer"); }
 		}
 		// save
 		$this->token_valid_time = is_null($token_valid_time) ? 21600 : $token_valid_time;
@@ -397,10 +372,10 @@ class User_controller extends Common_api_functions {
 	 * @param mixed $failures (default: null)
 	 * @return void
 	 */
-	public function set_max_failures ($failures=null) {
+	public function set_max_failures ($failures = null) {
 		// validate integer
-		if ($this->token_length!=null) {
-			if (!is_numeric($this->token_length))	{ $this->Response->throw_exception(500, "Max failures must be an integer"); }
+		if (!is_null($failures)) {
+			if (!is_numeric($failures))	{ $this->Response->throw_exception(500, "Max failures must be an integer"); }
 		}
 		// save
 		$this->max_failures = $failures==null ? 10 : $failures;
@@ -414,12 +389,10 @@ class User_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function block_ip ($block = true) {
-		// validate integer
-		if (!is_bool($block)) {
-			if (!is_numeric($this->token_length))	{ $this->Response->throw_exception(500, "Max failures must be an integer"); }
-		}
+		// validate boolean
+		if (!is_bool($block))	{ $this->Response->throw_exception(500, "Block IP must be a boolean"); }
 		// save
-		$this->block_ip = $$block;
+		$this->block_ip = $block;
 	}
 
 	/**
@@ -496,17 +469,24 @@ class User_controller extends Common_api_functions {
 		if(!isset($_SERVER['HTTP_PHPIPAM_TOKEN']))	{ $this->Response->throw_exception(403, "Please provide token"); }
 		// validate and remove token
 		else {
-			// fetch token
-			if(($token = $this->Admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false)
+			// fetch token - for SSL with APP code differently
+			if($this->app->app_security=="ssl_code") {
+				if($_SERVER['HTTP_PHPIPAM_TOKEN']!=$this->app->app_code)
 													{ $this->Response->throw_exception(403, "Invalid token"); }
-			// save token
-			$this->User->user = $token;
-			$this->token = $token->token;
-			$this->token_expires = $token->token_valid_until;
+			}
+			else {
+				if(($token = $this->Admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false)
+													{ $this->Response->throw_exception(403, "Invalid token"); }
 
-			// expired
-			if($this->validate_token_expiration () === true)
+				// save token
+				$this->User->user    = $token;
+				$this->token         = $token->token;
+				$this->token_expires = $token->token_valid_until;
+
+				// expired
+				if($this->validate_token_expiration () === true)
 													{  $this->Response->throw_exception(403, "Token expired");  }
+			}
 		}
 	}
 
@@ -525,8 +505,8 @@ class User_controller extends Common_api_functions {
 			if(($token = $this->Admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false)
 													{ $this->Response->throw_exception(401, $this->Response->errors[401]); }
 			// save token
-			$this->User->user = $token;
-			$this->token = $token->token;
+			$this->User->user    = $token;
+			$this->token         = $token->token;
 			$this->token_expires = $token->token_valid_until;
 
 			// expired
@@ -534,6 +514,27 @@ class User_controller extends Common_api_functions {
 													{  $this->Response->throw_exception(401, $this->Response->errors[401]);  }
 			// refresh
 			$this->refresh_token_expiration ();
+		}
+	}
+
+	/**
+	 * Validates token for ssl_code method
+	 *
+	 * @method validate_requested_token_code
+	 * @param  string $app_id
+	 * @return void
+	 */
+	private function validate_requested_token_code ($app_id) {
+		// check that token is present
+		if(!isset($_SERVER['HTTP_PHPIPAM_TOKEN']))	{ $this->Response->throw_exception(401, $this->Response->errors[401]); }
+		// validate and remove token
+		else {
+			// fetch app_id from token
+			if(($app_temp = $this->Admin->fetch_object ("api", "app_code", $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false)
+													{ $this->Response->throw_exception(401, $this->Response->errors[401]); }
+
+			// if they dont match die
+			if ($app_id != $app_temp->app_id)		{ $this->Response->throw_exception(403, "Invalid token"); }
 		}
 	}
 
@@ -604,18 +605,9 @@ class User_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function generate_token () {
-	    $chars 		  = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_$%!=.';
-	    $chars_length = strlen($chars);
-	    // generate string
-	    $token = '';
-	    for ($i = 0; $i < $this->token_length; $i++) {
-	        $token .= $chars[rand(0, $chars_length - 1)];
-	    }
-	    // save token and valid time
-	    $this->token = $token;
-	    $this->token_expires = date("Y-m-d H:i:s", time()+$this->token_valid_time);
+		// save token and valid time
+		$this->token = $this->User->Crypto->generate_html_safe_token($this->token_length);
+		$this->token_expires = date("Y-m-d H:i:s", time()+$this->token_valid_time);
 	}
 
 }
-
-?>

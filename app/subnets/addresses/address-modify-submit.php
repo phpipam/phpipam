@@ -6,7 +6,7 @@
  *************************************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -26,10 +26,10 @@ $User->check_maintaneance_mode ();
 
 # validate csrf cookie
 if($_POST['action']=="add") {
-	$User->csrf_cookie ("validate", "address_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+	$User->Crypto->csrf_cookie ("validate", "address_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 }
 else {
-	$User->csrf_cookie ("validate", "address_".$_POST['id'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+	$User->Crypto->csrf_cookie ("validate", "address_".$_POST['id'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 }
 
 # validate action
@@ -43,8 +43,42 @@ if(isset($_POST['action-visual'])) {
 # save $_POST to $address
 $address = $_POST;
 
-# remove all spaces in dns_name
-if (strlen($address['dns_name'])>0) { $address['dns_name'] = str_replace(" ", "", $address['dns_name']); }
+
+// set selected address and required addresses fields array
+$selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);
+$required_ip_fields = $Tools->explode_filtered(";", $User->settings->IPrequired);
+// append one missing from selected
+$selected_ip_fields[] = "description";
+$selected_ip_fields[] = "hostname";
+// if field is present in required fields but not in selected remove it !
+foreach ($required_ip_fields as $k=>$f) {
+	if (!in_array($f, $selected_ip_fields)) {
+		unset ($required_ip_fields[$k]);
+	}
+}
+// checks
+if(is_array($required_ip_fields) && $action!="delete") {
+	// remove modules not enabled from required fields
+	if($User->settings->enableLocations=="0") { unset($required_ip_fields['location']); }
+
+	// set default array
+	$required_field_errors = array();
+	// Check that all required fields are present
+	foreach ($required_ip_fields as $required_field) {
+		if (!isset($address[$required_field]) || strlen($address[$required_field])==0) {
+			$required_field_errors[] = ucwords($required_field)." "._("is required");
+		}
+	}
+	// check
+	if(sizeof($required_field_errors)>0) {
+		array_unshift($required_field_errors, _("Please fix following errors:"));
+		$Result->show("danger", implode("<br> - ", $required_field_errors), true);
+	}
+}
+
+
+# remove all spaces in hostname
+if (strlen($address['hostname'])>0) { $address['hostname'] = str_replace(" ", "", $address['hostname']); }
 
 # required fields
 isset($address['action']) ?:		$Result->show("danger", _("Missing required fields"). " action", true);
@@ -59,7 +93,7 @@ if(!isset($address['PTRignore']))	$address['PTRignore']=0;
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 if ($firewallZoneSettings->autogen == 'on') {
 	if ($address['action'] == 'add' ) {
-		$address['firewallAddressObject'] = $Zones->generate_address_object($address['subnetId'],$address['dns_name']);
+		$address['firewallAddressObject'] = $Zones->generate_address_object($address['subnetId'],$address['hostname']);
 	} else {
 		if ($_POST['firewallAddressObject']) {
 			$address['firewallAddressObject'] = $_POST['firewallAddressObject'];
@@ -83,7 +117,7 @@ $address = $Addresses->reformat_empty_array_fields ($address, null);
 
 # custom fields and checks
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
-if(sizeof($custom_fields) > 0) {
+if(sizeof($custom_fields) > 0 && $action!="delete") {
 	foreach($custom_fields as $field) {
 		# replace possible ___ back to spaces!
 		$field['nameTest']      = str_replace(" ", "___", $field['name']);
@@ -97,7 +131,7 @@ if(sizeof($custom_fields) > 0) {
 		}
 		# null custom fields not permitted
 		if($field['Null']=="NO" && strlen($address[$field['name']])==0) {
-			$Result->show("danger", $field['name']._(" can not be empty!"), true);
+			$Result->show("danger", $field['name']." "._("can not be empty!"), true);
 		}
 	}
 }
@@ -109,9 +143,6 @@ if($action=="edit" || $action=="delete" || $action=="move") {
 
 # set excludePing value
 $address['excludePing'] = @$address['excludePing']==1 ? 1 : 0;
-
-# no strict checks flag - for range networks and /31, /32
-$not_strict = @$address['nostrict']=="yes" ? true : false;
 
 # check if subnet is multicast
 $subnet_is_multicast = $Subnets->is_multicast ($subnet['subnet']);
@@ -136,9 +167,9 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
     	if($Addresses->validate_ip( $address['stop'])===false)      { $Result->show("danger", _("Invalid IP address")."!", true); }
 	}
 	else {
-    	$Addresses->verify_address( $address['start'], "$subnet[ip]/$subnet[mask]", $not_strict );
-    	$Addresses->verify_address( $address['stop'] , "$subnet[ip]/$subnet[mask]", $not_strict );
-    }
+		$Addresses->address_within_subnet($address['start'], $subnet, true);
+		$Addresses->address_within_subnet($address['stop'],  $subnet, true);
+	}
 
 	# go from start to stop and insert / update / delete IPs
 	$start = $Subnets->transform_to_decimal($address['start']);
@@ -230,24 +261,24 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 
 		# print errors if they exist
 		if(isset($errors)) {
-			$log = $Result->array_to_log ($errors);
+			$log = $Log->array_to_log ($errors);
 			$Result->show("danger", $log, false);
-			$Log->write( "IP address modification", "'Error $action range $address[start] - $address[stop]<br> $log", 2);
+			$Log->write( _("IP address modification"), _("Error")." ".$action." "._("range")." ".$address["start"]." - ".$address["stop"]."<br> $log", 2);
 		}
 		else {
 			# reset IP for mailing
 			$address['ip_addr'] = $address['start'] .' - '. $address['stop'];
 			# log and changelog
-			$Result->show("success", _("Range")." $address[start] - $address[stop] "._($action)." "._("successfull")."!", false);
-			$Log->write( "IP address modification", "Range $address[start] - $address[stop] $action successfull!", 0);
+			$Result->show("success", _("Range")." $address[start] - $address[stop] "._($action)." "._("successful")."!", false);
+			$Log->write( _("IP address modification"), _("Range")." ".$address["start"]." - ".$address["stop"]." ".$action." "._("successful")."!", 0);
 
 			# send changelog mail
 			$Log->object_action = $action;
-			$Log->object_type   = "address range";
-			$Log->object_result = "success";
+			$Log->object_type   = _("address range");
+			$Log->object_result = _("success");
 			$Log->user 			= $User->user;
 
-			$Log->changelog_send_mail ("Address range $address[start] - $address[stop] $action");
+			$Log->changelog_send_mail ( _("Address range")." ".$address["start"]." - "."$address[stop] $action");
 		}
 	}
 }
@@ -256,9 +287,9 @@ else {
 
 	# unique hostname requested?
 	if(isset($address['unique'])) {
-		if($address['unique'] == 1 && strlen($address['dns_name'])>0) {
+		if($address['unique'] == 1 && strlen($address['hostname'])>0) {
 			# check if unique
-			if(!$Addresses->is_hostname_unique($address['dns_name'])) 						{ $Result->show("danger", _('Hostname is not unique')."!", true); }
+			if(!$Addresses->is_hostname_unique($address['hostname'])) 						{ $Result->show("danger", _('Hostname is not unique')."!", true); }
 		}
 	}
 
@@ -281,14 +312,6 @@ else {
 		$subnet = (array) $Subnets->fetch_subnet(null, $address['newSubnet']);
 		$address['ip_addr'] = $address_old['ip'];
 	}
-	# verify address
-	if($action!=="delete" && $subnet['isFolder']!="1") {
-		$verify = $Addresses->verify_address( $address['ip_addr'], "$subnet[ip]/$subnet[mask]", $not_strict );
-	}
-	elseif ($action!=="delete" && $subnet['isFolder']=="1") {
-		$verify = $Addresses->verify_address( $address['ip_addr'], "0.0.0.0/0", $not_strict );
-	}
-
 	# if errors are present print them, else execute query!
 	if($verify) 				{ $Result->show("danger", _('Error').": $verify ($address[ip_addr])", true); }
 	else {
@@ -357,4 +380,3 @@ else {
 		}
 	}
 }
-?>

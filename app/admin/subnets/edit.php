@@ -6,7 +6,7 @@
 
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -21,9 +21,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $_POST['action']=="add" ? $User->csrf_cookie ("create", "subnet_add") : $User->csrf_cookie ("create", "subnet_".$_POST['subnetId']);
+$csrf = $_POST['action']=="add" ? $User->Crypto->csrf_cookie ("create", "subnet_add") : $User->Crypto->csrf_cookie ("create", "subnet_".$_POST['subnetId']);
 
-# strip tags - XSS
+# Ensure keys exist and strip tags - XSS
+$_POST = array_merge(array_fill_keys(['action', 'bitmask', 'freespaceMSID', 'location', 'secionId', 'subnet', 'subnetId', 'vlanId'], null), $_POST);
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
@@ -78,6 +79,12 @@ else {
     	$subnet_old_details['nameserverId']     = @$subnet_old_temp['nameserverId'];      // inherit nameserver
     	if($User->settings->enableLocations=="1")
     	$subnet_old_details['location']         = @$subnet_old_temp['location'];          // inherit location
+        if($User->settings->enableCustomers=="1")
+        $subnet_old_details['customer_id']         = @$subnet_old_temp['customer_id'];          // inherit location
+       if($User->settings->enablePowerDNS=="1")
+       $subnet_old_details['DNSrecursive']     = @$subnet_old_temp['DNSrecursive'];      // inherit DNSrecursive
+       if($User->settings->enablePowerDNS=="1")
+       $subnet_old_details['DNSrecords']     = @$subnet_old_temp['DNSrecords'];          // inherit DNSrecords
 	}
 	# set master if it came from free space!
 	if(isset($_POST['freespaceMSID'])) {
@@ -107,7 +114,10 @@ $locations = $Tools->fetch_all_objects ("locations", "name");
 $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : false;
 ?>
 
-<script type="text/javascript">
+<?php if ($User->settings->enableThreshold=="1") { ?>
+<script src="js/bootstrap-slider.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<?php } ?>
+<script>
 $(document).ready(function() {
 /* bootstrap switch */
 var switch_options = {
@@ -138,10 +148,19 @@ $('.slider').slider().on('slide', function(ev){
 });
 <?php } ?>
 
+// mastersubnet Ajax
+$("input[name='subnet']").change(function() {
+	var $masterdopdown = $("select[name='masterSubnetId']");
+	$masterdopdown.load('<?php print 'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=' + $masterdopdown.val());
+});
+
+<?php if($_POST['location']=="ipcalc" && !isset($_POST['freespaceMSID'])) { ?>
+    var $masterdopdown = $("select[name='masterSubnetId']");
+    $masterdopdown.load('<?php print 'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=0');
+<?php } ?>
+
 });
 </script>
-
-
 
 <!-- header -->
 <div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('subnet'); ?></div>
@@ -157,7 +176,7 @@ $('.slider').slider().on('slide', function(ev){
         <td class="middle"><?php print _('Subnet'); ?></td>
         <td>
         	<?php
-            if (($_POST['subnetId']||$_POST['subnet']) && $_POST['action'] == "add"){ $showDropMenuFull = 1; }
+            $showDropMenuFull = (($_POST['subnetId']||$_POST['subnet']) && $_POST['action'] == "add") ? 1 : 0;
         	# set CIDR
         	if (isset($subnet_old_temp['subnet'])&&$subnet_old_temp['isFolder']!="1")	{ $cidr = $Subnets->transform_to_dotted($subnet_old_temp['subnet']).'/'.($subnet_old_temp['mask']+1);} 		//for nested
         	if (isset($subnet_old_temp['subnet']) && ($showDropMenuFull)) 				{ $dropdown_menu = $Subnets->subnet_dropdown_print_available($_POST['sectionId'], $_POST['subnetId']);  }
@@ -182,7 +201,7 @@ $('.slider').slider().on('slide', function(ev){
 				<input type="text" class="form-control input-sm input-w-200" name="subnet" placeholder="<?php print _('subnet in CIDR'); ?>" value="<?php print @$cidr; ?>">
 				<?php if (strlen($dropdown_menu)>0) { ?>
 				<div class="input-group-btn">
-					<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select <span class="caret"></span></button>
+					<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php print _("Select"); ?> <span class="caret"></span></button>
 					<ul class="dropdown-menu dropdown-menu-right dropdown-subnets">
 						<?php print $dropdown_menu; ?>
 					</ul>
@@ -195,8 +214,8 @@ $('.slider').slider().on('slide', function(ev){
         <td class="info2">
             <div class="btn-group">
             	<button type="button" class="btn btn-xs btn-default show-masks" rel='tooltip' data-placement="bottom" title='<?php print _('Subnet masks'); ?>' data-closeClass="hidePopup2"><i class="fa fa-th-large"></i></button>
-            	<?php if($User->settings->enableSNMP == "1" && $_POST['action']=="add") { ?>
-            	<button type="button" class="btn btn-xs btn-default"  id='snmp-routing' rel='tooltip' data-placement="bottom" title='<?php print _('Search for subnets through SNMP'); ?>'><i class="fa fa-cogs"></i></button>
+            	<?php if($User->settings->enableSNMP == "1" && $_POST['action']=="add") { $csrf_scan = $User->Crypto->csrf_cookie ("create-if-not-exists", "scan"); ?>
+            	<button type="button" class="btn btn-xs btn-default"  id='snmp-routing' rel='tooltip' data-placement="bottom" data-csrf-cookie='<?php print $csrf_scan; ?>' title='<?php print _('Search for subnets through SNMP'); ?>'><i class="fa fa-cogs"></i></button>
             	<?php } ?>
             	<button type="button" class="btn btn-xs btn-default"  id='get-ripe' rel='tooltip' data-placement="bottom" title='<?php print _('Get information from RIPE / ARIN database'); ?>'><i class="fa fa-refresh"></i></button>
             </div>
@@ -208,7 +227,7 @@ $('.slider').slider().on('slide', function(ev){
     <tr>
         <td class="middle"><?php print _('Description'); ?></td>
         <td>
-            <input type="text" class="form-control input-sm input-w-200" id="field-description" name="description"  placeholder="<?php print _('subnet description'); ?>" value="<?php print @$subnet_old_details['description']; ?>">
+            <input type="text" class="form-control input-sm input-w-200" id="field-description" name="description"  placeholder="<?php print _('subnet description'); ?>" value="<?php print $Tools->strip_xss(@$subnet_old_details['description']); ?>">
         </td>
         <td class="info2"><?php print _('Enter subnet description'); ?></td>
     </tr>
@@ -234,6 +253,7 @@ $('.slider').slider().on('slide', function(ev){
     </tr>
     <?php } ?>
 
+    <?php if($User->get_module_permissions ("vlan")>=User::ACCESS_R) { ?>
     <!-- vlan -->
     <tr>
         <td class="middle"><?php print _('VLAN'); ?></td>
@@ -242,7 +262,10 @@ $('.slider').slider().on('slide', function(ev){
          </td>
         <td class="info2"><?php print _('Select VLAN'); ?></td>
     </tr>
+    <?php } ?>
 
+
+    <?php if($User->get_module_permissions ("devices")>=User::ACCESS_R) { ?>
 	<!-- Device -->
 	<tr>
 		<td class="middle"><?php print _('Device'); ?></td>
@@ -269,6 +292,7 @@ $('.slider').slider().on('slide', function(ev){
 		</td>
 		<td class="info2"><?php print _('Select device where subnet is located'); ?></td>
     </tr>
+    <?php } ?>
 
 	<!-- Nameservers -->
 	<tr>
@@ -300,7 +324,7 @@ $('.slider').slider().on('slide', function(ev){
 	if(empty($subnet_old_details['allowRequests'])) 	{ $subnet_old_details['allowRequests'] = "0"; }
 
 	/* if vlan support is enabled print available vlans */
-	if($User->settings->enableVRF==1) {
+	if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
 		print '<tr>' . "\n";
         print '	<td class="middle">'._('VRF').'</td>' . "\n";
         print '	<td>' . "\n";
@@ -337,14 +361,40 @@ $('.slider').slider().on('slide', function(ev){
 		print '<tr style="display:none"><td colspan="8"><input type="hidden" name="vrfId" value="'. $subnet_old_details['vrfId'] .'"></td></tr>'. "\n";
 	}
 
+    // customers
+    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+        // fetch customers
+        $customers = $Tools->fetch_all_objects ("customers", "title");
+        // print
+        print '<tr>' . "\n";
+        print ' <td class="middle">'._('Customer').'</td>' . "\n";
+        print ' <td>' . "\n";
+        print ' <select name="customer_id" class="form-control input-sm input-w-auto">'. "\n";
+
+        //blank
+        print '<option disabled="disabled">'._('Select Customer').'</option>';
+        print '<option value="0">'._('None').'</option>';
+
+        if($customers!=false) {
+            foreach($customers as $customer) {
+                if ($customer->id == $subnet_old_details['customer_id'])    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
+                else                                                        { print '<option value="'. $customer->id .'">'.$customer->title.'</option>'; }
+            }
+        }
+
+        print ' </select>'. "\n";
+        print ' </td>' . "\n";
+        print ' <td class="info2">'._('Assign subnet to customer').'</td>' . "\n";
+        print '</tr>' . "\n";
+    }
 	?>
 
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1") { ?>
+	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
 	<tr>
 		<td><?php print _('Location'); ?></td>
 		<td>
-			<select name="location_item" class="form-control input-sm input-w-auto">
+			<select name="location" class="form-control input-sm input-w-auto">
     			<option value="0"><?php print _("None"); ?></option>
     			<?php
                 if($locations!==false) {
@@ -365,18 +415,26 @@ $('.slider').slider().on('slide', function(ev){
 	    <td colspan="3"><hr></td>
     </tr>
 	<tr>
+        <td class="middle"><?php print _('Mark as Pool'); ?></td>
+        <td>
+            <?php $checked = @$subnet_old_details['isPool']==1 ? "checked": ""; ?>
+            <input type="checkbox" name="isPool" class="input-switch" value="1" <?php print $checked; ?>>
+        </td>
+        <td class="info2"><?php print _('Mark subnet as an address pool'); ?></td>
+    </tr>
+	<tr>
         <td class="middle"><?php print _('Mark as full'); ?></td>
         <td>
             <?php $checked = @$subnet_old_details['isFull']==1 ? "checked": ""; ?>
             <input type="checkbox" name="isFull" class="input-switch" value="1" <?php print $checked; ?>>
         </td>
-        <td class="info2"><?php print _('Mark subnet as utilized'); ?></td>
+        <td class="info2"><?php print _('Mark subnet as full'); ?></td>
     </tr>
     <?php if ($User->settings->enableThreshold=="1") { ?>
 	<tr>
         <td class="middle"><?php print _('Threshold'); ?></td>
         <td>
-            <?php $svalue = !is_null($subnet_old_details['threshold']) ? $subnet_old_details['threshold'] : 0; ?>
+            <?php $svalue = isset($subnet_old_details['threshold']) ? $subnet_old_details['threshold'] : 0; ?>
             <input type="text" style="width:200px;" class="slider" name="threshold" value="<?php print $svalue; ?>" data-slider-handle="square" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="<?php print $svalue; ?>" data-slider-orientation="horizontal" data-slider-selection="after">
         </td>
         <td class="info2"><?php print _('Set subnet alert threshold'); ?> <span class='badge badge1 badge5 slider-text'><span><?php print $svalue; ?></span>%</span></td>
@@ -450,6 +508,16 @@ $('.slider').slider().on('slide', function(ev){
     print '	</td>' . "\n";
     print '	<td class="info2">'._('Discover new hosts in this subnet').'</td>' . "\n";
     print '</tr>';
+
+    //resolve hostname
+    $checked = @$subnet_old_details['resolveDNS']==1 ? "checked": "";
+    print '<tr>' . "\n";
+    print ' <td>'._('Resolve DNS names').'</td>' . "\n";
+    print ' <td>' . "\n";
+    print '     <input type="checkbox" name="resolveDNS" class="input-switch-agents-scan" value="1" '.$checked.'>'. "\n";
+    print ' </td>' . "\n";
+    print ' <td class="info2">'._('Resolve hostnames in this subnet').'</td>' . "\n";
+    print '</tr>';
 	?>
 
     <tr>
@@ -489,7 +557,6 @@ $('.slider').slider().on('slide', function(ev){
             <input type="hidden" name="sectionId"       value="<?php print $_POST['sectionId']; ?>">
             <input type="hidden" name="subnetId"        value="<?php print $_POST['subnetId'];  ?>">
             <input type="hidden" name="action"    		value="<?php print $_POST['action'];    ?>">
-            <input type="hidden" name="location"    	value="<?php print @$_POST['location']; ?>">
             <?php if(isset($_POST['freespaceMSID'])) { ?>
             <input type="hidden" name="freespace"    	value="true">
             <?php } ?>
@@ -526,98 +593,26 @@ $('.slider').slider().on('slide', function(ev){
     	//custom Subnet fields
 	    if(sizeof($custom_fields) > 0) {
 	    	# count datepickers
-			$timeP = 0;
+			$timepicker_index = 0;
 
 	    	print "<tr>";
 	    	print "	<td colspan='3' class='hr'><hr></td>";
 	    	print "</tr>";
+
 		    foreach($custom_fields as $field) {
-
-		    	# replace spaces
-		    	$field['nameNew'] = str_replace(" ", "___", $field['name']);
-		    	# retain newlines
-		    	$subnet_old_details[$field['name']] = str_replace("\n", "\\n", @$subnet_old_details[$field['name']]);
-
 				# set default value !
 				if ($_POST['action']=="add")	{ $subnet_old_details[$field['name']] = $field['Default']; }
 
-		    	# required
-		    	$required = $field['Null']=="NO" ? "*" : "";
-				print '<tr>'. "\n";
-				print '	<td>'. $field['name'] .' '.$required.'</td>'. "\n";
-				print '	<td colspan="2">'. "\n";
 
-				//set type
-				if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
-					//parse values
-					$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
-					//null
-					if($field['Null']!="NO") { array_unshift($tmp, ""); }
+                // create input > result is array (required, input(html), timepicker_index)
+                $custom_input = $Tools->create_custom_field_input ($field, $subnet_old_details, $timepicker_index);
+                $timepicker_index = $custom_input['timepicker_index'];
 
-					print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
-					foreach($tmp as $v) {
-						if($v==$subnet_old_details[$field['name']])	{ print "<option value='$v' selected='selected'>$v</option>"; }
-						else										{ print "<option value='$v'>$v</option>"; }
-					}
-					print "</select>";
-				}
-				//date and time picker
-				elseif($field['type'] == "date" || $field['type'] == "datetime") {
-					// just for first
-					if($timeP==0) {
-						print '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap-datetimepicker.min.css">';
-						print '<script type="text/javascript" src="js/'.SCRIPT_PREFIX.'/bootstrap-datetimepicker.min.js"></script>';
-						print '<script type="text/javascript">';
-						print '$(document).ready(function() {';
-						//date only
-						print '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';
-						//date + time
-						print '	$(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );';
-
-						print '})';
-						print '</script>';
-					}
-					$timeP++;
-
-					//set size
-					if($field['type'] == "date")	{ $size = 10; $class='datepicker';		$format = "yyyy-MM-dd"; }
-					else							{ $size = 19; $class='datetimepicker';	$format = "yyyy-MM-dd"; }
-
-					//field
-					if(!isset($subnet_old_details[$field['name']]))	{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
-					else											{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $subnet_old_details[$field['name']]. '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
-				}
-				//boolean
-				elseif($field['type'] == "tinyint(1)") {
-					print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
-					$tmp = array(0=>"No",1=>"Yes");
-					//null
-					if($field['Null']!="NO") { $tmp[2] = ""; }
-
-					foreach($tmp as $k=>$v) {
-						if(strlen($subnet_old_details[$field['name']])==0 && $k==2)	{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
-						elseif($k==$subnet_old_details[$field['name']])				{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
-						else														{ print "<option value='$k'>"._($v)."</option>"; }
-					}
-					print "</select>";
-				}
-				//text
-				elseif($field['type'] == "text") {
-					print ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. str_replace("\\n","",$subnet_old_details[$field['name']]). '</textarea>'. "\n";
-				}
-				//default - input field
-				else {
-                    // max length
-                    $maxlength = 0;
-                    if(strpos($field['type'],"varchar")!==false) {
-                        $maxlength = str_replace(array("varchar","(",")"),"", $field['type']);
-                    }
-                    // print
-					print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $subnet_old_details[$field['name']]. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'">'. "\n";
-				}
-
-				print '	</td>'. "\n";
-				print '</tr>'. "\n";
+                // print
+                print "<tr>";
+                print " <td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
+                print " <td>".$custom_input['field']."</td>";
+                print "</tr>";
 		    }
 	    }
 

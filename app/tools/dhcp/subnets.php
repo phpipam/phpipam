@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("dhcp", User::ACCESS_R, true, false);
 
 # get subnets
 $subnets4 = $DHCP->read_subnets ("IPv4");
@@ -54,7 +56,7 @@ function print_subnets ($s) {
         foreach ($config['Dhcp4']['option-data'] as $d) {
             // if more specific parameter is already set for subnet ignore, otherwise show
             if(!in_array($d['name'], $printed_options)) {
-                $hr = $m==0 ? "<hr><span class='text-muted'>Defaults:</span><br>" : "<br>";
+                $hr = $m==0 ? "<hr><span class='text-muted'>"._("Defaults").":</span><br>" : "<br>";
                 $html[] = $hr.$d['name'].": ".$d['data'];
                 // next index
                 $m++;
@@ -83,7 +85,7 @@ function print_subnets ($s) {
 <br>
 
 <!-- table -->
-<table id="zonesPrint" class="table sorted table-striped table-top table-td-top">
+<table id="zonesPrint" class="table sorted table-striped table-top table-td-top" data-cookie-id-table="dhcp_subnets">
 
 <!-- Headers -->
 <thead>
@@ -99,7 +101,7 @@ function print_subnets ($s) {
 <?php
 // v4
 $html[] = "<tr>";
-$html[] = "<th colspan='4'>"._("IPv4 subnets")."</th>";
+$html[] = "<td class='th' colspan='4'>"._("IPv4 subnets")."</td>";
 $html[] = "</tr>";
 
 // IPv4 not configured
@@ -123,7 +125,7 @@ else {
 
 // v6
 $html[] = "<tr>";
-$html[] = "<th colspan='4'>"._("IPv6 subnets")."</th>";
+$html[] = "<td class='th' colspan='4'>"._("IPv6 subnets")."</td>";
 $html[] = "</tr>";
 
 // IPv6 not configured

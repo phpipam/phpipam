@@ -5,20 +5,27 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
+}
+else {
+    $User->check_module_permissions ("nat", User::ACCESS_RWA, true, true);
+}
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "nat");
+$csrf = $User->Crypto->csrf_cookie ("create", "nat");
 
 # validate action
 $Admin->validate_action ($_POST['action'], true);
@@ -32,6 +39,9 @@ if($_POST['action']!="add") {
 # disable edit on delete
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 $link = $readonly ? false : true;
+
+# fetch custom fields
+$custom = $Tools->fetch_custom_fields('nat');
 ?>
 
 
@@ -49,7 +59,7 @@ $link = $readonly ? false : true;
     	<tr>
         	<th><?php print _('Name'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="name" value="<?php print $nat->name; ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($nat->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print $nat->id; ?>">
             	<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
@@ -81,6 +91,7 @@ $link = $readonly ? false : true;
         </tr>
 
     	<!-- Device -->
+        <?php if($User->get_module_permissions ("devices")>=User::ACCESS_R) { ?>
     	<tr>
         	<th><?php print _('Device'); ?></th>
         	<td>
@@ -103,14 +114,50 @@ $link = $readonly ? false : true;
             	<span class="text-muted"><?php print _("Select Device"); ?></span>
         	</td>
         </tr>
+        <?php } ?>
+
+        <tr>
+            <th><?php print _('Description'); ?></th>
+            <td colspan="2">
+                <textarea class="form-control input-sm" name="description" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>><?php print $nat->description; ?></textarea>
+            </td>
+        </tr>
 
     	<!-- Source -->
     	<?php if($_POST['action']!=="add") { ?>
+
+        <!-- Policy nat -->
+        <tr class='port'>
+            <th><?php print _('Policy NAT'); ?></th>
+            <td>
+                <select name="policy" class="form-control input-sm input-w-auto" <?php print $readonly; ?>>
+                <?php
+                foreach (["No", "Yes"] as $d) {
+                    $selected = $nat->policy==$d ? "selected" : "";
+                    print "<option value='$d' $selected>$d</option>";
+                }
+                ?>
+            </td>
+            <td>
+                <span class="text-muted"><?php print _("Create policy NAT"); ?></span>
+            </td>
+        </tr>
+
+        <tr class='port'>
+            <th><?php print $nat->type=="source" ? _('Destination address') : _('Source address'); ?></th>
+            <td>
+                <input type="text" class="form-control input-sm" name="policy_dst" value="<?php print $nat->policy_dst; ?>" placeholder='<?php print _('IP'); ?>' <?php print $readonly; ?>>
+            </td>
+            <td>
+                <span class="text-muted"><?php print $nat->type=="source" ? _('Destination') : _('Source'); print _(" address for policy NAT"); ?></span>
+            </td>
+        </tr>
+
     	<tr>
         	<td colspan="3"><hr></td>
     	</tr>
     	<tr>
-        	<th><?php print _('Source objects'); ?></th>
+        	<th><?php print $nat->type=="destination" ? _('Destination objects') : _('Source objects'); ?></th>
         	<td class='nat-src'>
             	<?php
                 // print sources
@@ -147,7 +194,7 @@ $link = $readonly ? false : true;
         	<td colspan="3"><hr></td>
     	</tr>
     	<tr>
-        	<th><?php print _('Destination objects'); ?></th>
+            <th><?php print _('Translated objects'); ?></th>
         	<td class='nat-dst'>
             	<?php
                 // print sources
@@ -201,14 +248,34 @@ $link = $readonly ? false : true;
             	<span class="text-muted"><?php print _("Destination port"); ?></span>
         	</td>
         </tr>
+
         <?php } ?>
 
-    	<tr>
-        	<th><?php print _('Description'); ?></th>
-        	<td colspan="2">
-            	<textarea class="form-control input-sm" name="description" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>><?php print $nat->description; ?></textarea>
-        	</td>
-        </tr>
+        <!-- Custom -->
+        <?php
+        if(sizeof($custom) > 0) {
+
+            print '<tr>';
+            print ' <td colspan="3"><hr></td>';
+            print '</tr>';
+
+            # count datepickers
+            $timepicker_index = 0;
+
+            # all my fields
+            foreach($custom as $field) {
+                // create input > result is array (required, input(html), timepicker_index)
+                $custom_input = $Tools->create_custom_field_input ($field, $nat, $timepicker_index);
+                $timepicker_index = $custom_input['timepicker_index'];
+                // print
+                print "<tr>";
+                print " <th>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</th>";
+                print " <td>".$custom_input['field']."</td>";
+                print " <td><span class='muted'>".$field['Comment']."</span></td>";
+                print "</tr>";
+            }
+        }
+        ?>
 
 	</tbody>
 

@@ -22,10 +22,11 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 <hr><br>
 
 <!-- Add new -->
-<button class='btn btn-sm btn-default editUser' style="margin-bottom:10px;" data-action='add'><i class='fa fa-plus'></i> <?php print _('Create user'); ?></button>
+<button class='btn btn-sm btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create user'); ?></button>
+
 
 <!-- table -->
-<table id="userPrint1" class="table sorted table-striped table-top">
+<table id="userPrint1" class="table sorted table-striped table-top table-td-top" data-cookie-id-table="admin_users">
 
 <!-- Headers -->
 <thead>
@@ -37,13 +38,7 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
     <th><?php print _('Role'); ?></th>
     <th><?php print _('Language'); ?></th>
     <th><?php print _('Authentication'); ?></th>
-    <?php if ($User->settings->enablePowerDNS==1) { ?>
-    <th><?php print _('PowerDNS'); ?></th>
-    <?php } ?>
-    <th><?php print _('Manage VLANs / VRFs'); ?></th>
-    <?php if ($User->settings->enablePSTN==1) { ?>
-    <th><?php print _('PSTN'); ?></th>
-    <?php } ?>
+    <th><?php print _('Module permissions'); ?></th>
     <th><?php print _('Groups'); ?></th>
     <th><?php print _('Last login'); ?></th>
 	<?php
@@ -68,10 +63,13 @@ foreach ($users as $user) {
 	print '<tr>' . "\n";
 
 	# set icon based on normal user or admin
-	if($user['role'] == "Administrator") 	{ print '	<td><img src="css/'.SCRIPT_PREFIX.'/images/userVader.png" rel="tooltip" title="'._('Administrator').'"></td>'. "\n"; }
-	else 									{ print '	<td><img src="css/'.SCRIPT_PREFIX.'/images/userTrooper.png" rel="tooltip" title="'. _($user['role']) .'"></td>'. "\n";	}
+	if($user['role'] == "Administrator") 	{ print '	<td><img src="css/images/userVader.png" alt="'._("Administrator user icon").'" rel="tooltip" title="'._('Administrator').'"></td>'. "\n"; }
+	else 									{ print '	<td><img src="css/images/userTrooper.png" alt="'._("Standard user icon").'" rel="tooltip" title="'. _($user['role']) .'"></td>'. "\n";	}
 
-	print '	<td><a href="'.create_link("administration","users",$user['id']).'">' . $user['real_name'] . '</a></td>'. "\n";
+	# disabled
+	$disabled = $user['disabled']=="Yes" ? "<span class='badge badge1 badge5 alert-danger'>"._("Disabled")."</span>" : "";
+
+	print '	<td><a href="'.create_link("administration","users",$user['id']).'">' . $user['real_name'] . '</a> '.$disabled.'</td>'. "\n";
 	print '	<td>' . $user['username']  . '</td>'. "\n";
 	print '	<td>' . $user['email']     . '</td>'. "\n";
 	print '	<td>' . $user['role']      . '</td>'. "\n";
@@ -94,46 +92,14 @@ foreach ($users as $user) {
 	else 					 { print $auth_method->type." <span class='text-muted'>(".$auth_method->description."</a>)"; }
 	print "</span></td>";
 
-	# powerDNS
+	# Module permisisons
 	if($user['role']=="Administrator") {
-    	if ($User->settings->enablePowerDNS==1) {
-     	print "<td><span class='badge badge1 badge5 alert-success'>"._("Yes")."</span></td>";
-     	}
-     	print "<td><span class='badge badge1 badge5 alert-success'>"._("Yes")."</span></td>";
-    	if ($User->settings->enablePSTN==1) {
-     	print "<td><span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions (3))."</span></td>";
-     	}
+     	print "<td><span class='badge badge1 badge5 alert-success'>"._("All")."</span></td>";
 	}
 	else {
-    	if ($User->settings->enablePowerDNS==1) {
-    	if(strlen($user['pdns'])==0) $user['pdns'] = "No";
-
-        // append badge
-    	$user['pdns'] = $user['pdns']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['pdns'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($user['pdns'])."</span>";
-
-    	print "<td>";
-    	print $user['pdns'];
-    	print "</td>";
-    	}
-
-    	if(strlen($user['editVlan'])==0) $user['editVlan'] = "No";
-
-        // append badge
-    	$user['editVlan'] = $user['editVlan']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['editVlan'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($user['editVlan'])."</span>";
-
-    	print "<td>";
-    	print $user['editVlan'];
-    	print "</td>";
-
-        // pstn
-    	if ($User->settings->enablePSTN==1) {
-         // append badge
-    	$user['pstn'] = $user['pstn']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['pstn'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions ($user['pstn']))."</span>";
-
-    	print "<td>";
-    	print $user['pstn'];
-    	print "</td>";
-    	}
+		print "<td>";
+		include("print_module_permissions.php");
+		print "</td>";
 	}
 
 	# groups
@@ -185,16 +151,23 @@ foreach ($users as $user) {
 		}
 	}
 
-	# edit, delete
+
 	print "	<td class='actions'>";
-	print "	<div class='btn-group nowrap'>";
-	print "		<a class='btn btn-xs btn-default' href='".create_link("administration","users",$user['id'])."'><i class='fa fa-eye'></i></a></button>";
-	print "		<button class='btn btn-xs btn-default editUser' data-userid='$user[id]' data-action='edit'  ><i class='fa fa-pencil'></i></button>";
-	print "		<a class='btn btn-xs btn-default";
-	if($_SESSION['realipamusername']) { print " disabled";}
-	print "' href='".create_link("administration","users","switch","$user[username]")."'><i class='fa fa-exchange'></i></a></button>";
-	print "		<button class='btn btn-xs btn-default editUser' data-userid='$user[id]' data-action='delete'><i class='fa fa-times'></i></button>";
-	print "	</div>";
+    $links = [];
+    $links[] = ["type"=>"header", "text"=>_("Show user")];
+    $links[] = ["type"=>"link", "text"=>_("Show user"), "href"=>create_link("administration", "users", $user['id']), "icon"=>"eye", "visible"=>"dropdown"];
+    $links[] = ["type"=>"divider"];
+    $links[] = ["type"=>"header", "text"=>_("Manage user")];
+    $links[] = ["type"=>"link", "text"=>_("Edit user"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/users/edit.php' data-class='700' data-action='edit' data-id='$user[id]'", "icon"=>"pencil"];
+    $links[] = ["type"=>"link", "text"=>_("Delete user"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/users/edit.php' data-class='700' data-action='delete' data-id='$user[id]'", "icon"=>"times"];
+    if(!isset($_SESSION['realipamusername'])) {
+        $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>_("Swap user")];
+        $links[] = ["type"=>"link", "text"=>_("Swap user"), "href"=>create_link("administration", "users", "switch", $user['username']), "icon"=>"exchange"];
+    }
+
+    // print links
+    print $User->print_actions($User->user->compress_actions, $links);
 	print "	</td>";
 
 	print '</tr>' . "\n";

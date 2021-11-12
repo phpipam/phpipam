@@ -14,11 +14,11 @@ $subnets = $Subnets->fetch_multicast_subnets();
 $custom_fields = $Tools->fetch_custom_fields('subnets');
 
 # set hidden fields
-$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
 $hidden_cfields = is_array($hidden_cfields['subnets']) ? $hidden_cfields['subnets'] : array();
 
 # set selected address fields array
-$selected_ip_fields = explode(";", $User->settings->IPfilter);  																	//format to array
+$selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);  																	//format to array
 // if fw not set remove!
 unset($selected_ip_fields['firewallAddressObject']);
 
@@ -65,7 +65,7 @@ if ($subnets!==false) {
     	# custom fields
     	if(sizeof($custom_fields) > 0) {
     		foreach($custom_fields as $myField) 	{
-    			print "<th class='hidden-xs hidden-sm hidden-md'>$myField[name]</th>";
+    			print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($myField['name'])."</th>";
     		}
     	}
     	# actions
@@ -80,7 +80,7 @@ if ($subnets!==false) {
 		# check permission
 		$permission = $Subnets->check_permission ($User->user, $subnet->id);
 		//if it has slaves dont print it, slaves will be printed automatically
-		if($permission > 0 && ($Subnets->has_slaves($subnet->id)===false || $subnet->isFolder!="0")) {
+		if($permission > 0 && ($Subnets->has_slaves($subnet->id)===false || $subnet->isFolder=="1")) {
     		// add to count
     		$subnet_count++;
 
@@ -151,7 +151,7 @@ if ($subnets!==false) {
 				    print "</td>";
 
 				    # resolve dns name
-																	{ print "<td class='hostname'>$address->dns_name</td>"; }
+																	{ print "<td class='hostname'>$address->hostname</td>"; }
 
 					# print description - mandatory
 		        													{ print "<td class='description'>".$address->description."</td>"; }
@@ -197,7 +197,7 @@ if ($subnets!==false) {
 
 		       		# print info button for hover
 		       		if(in_array('note', $selected_ip_fields)) {
-		        		if(!empty($address->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",$address->note)."'></td>"; }
+		        		if(!empty($address->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",$address->note)."'></i></td>"; }
 		        		else 										{ print "<td class='narrow'></td>"; }
 		        	}
 
@@ -221,7 +221,7 @@ if ($subnets!==false) {
 								print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 								// create html links
-								$address->{$myField['name']} = $Result->create_links($address->{$myField['name']}, $myField['type']);
+								$address->{$myField['name']} = $Tools->create_links($address->{$myField['name']}, $myField['type']);
 
 								//booleans
 								if($myField['type']=="tinyint(1)")	{
@@ -251,7 +251,7 @@ if ($subnets!==false) {
 						print "<a class='ping_ipaddress   btn btn-xs btn-default' data-subnetId='".$address->subnetId."' data-id='".$address->id."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
 						print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0)   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
 						print "<a class='mail_ipaddress   btn btn-xs btn-default          ' href='#' data-id='".$address->id."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																		<i class='fa fa-gray fa-envelope-o'></i></a>";
-						if(in_array('firewallAddressObject', $selected_ip_fields)) { if($zone) { print "<a class='fw_autogen	   	  btn btn-default btn-xs          ' href='#' data-subnetid='".$address->subnetId."' data-action='adr' data-ipid='".$address->id."' data-dnsname='".$address->dns_name."' rel='tooltip' data-container='body' title='"._('Gegenerate or regenerate a firewall addres object of this ip address.')."'><i class='fa fa-gray fa-repeat'></i></a>"; }}
+						if(in_array('firewallAddressObject', $selected_ip_fields)) { if($zone) { print "<a class='fw_autogen	   	  btn btn-default btn-xs          ' href='#' data-subnetid='".$address->subnetId."' data-action='adr' data-ipid='".$address->id."' data-dnsname='".$address->hostname."' rel='tooltip' data-container='body' title='"._('Generate or regenerate a firewall address object of this ip address.')."'><i class='fa fa-gray fa-repeat'></i></a>"; }}
 						print "<a class='delete_ipaddress btn btn-xs btn-default modIPaddr' data-action='delete' data-subnetId='".$address->subnetId."' data-id='".$address->id."' href='#' id2='".$Subnets->transform_to_dotted($address->ip_addr)."'>		<i class='fa fa-gray fa-times'>  </i></a>";
     				}
     				# write not permitted

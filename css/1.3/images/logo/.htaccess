@@ -1,7 +1,0 @@
-Options -ExecCGI -Indexes
-<FilesMatch "\.*$">
-deny from all
-</FilesMatch>
-<FilesMatch "\.(png)$">
-allow from all
-</FilesMatch>

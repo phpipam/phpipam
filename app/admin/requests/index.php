@@ -8,8 +8,11 @@
 $User->check_user_session();
 
 # fetch all Active requests
-$active_requests   = $Admin->fetch_multiple_objects ("requests", "processed", 0, "id", false);
-$inactive_requests = $Admin->fetch_multiple_objects ("requests", "processed", 1, "id", false);
+$active_requests   = $Tools->fetch_multiple_objects ("requests", "processed", 0, "id", false);
+$inactive_requests = $Tools->fetch_multiple_objects ("requests", "processed", 1, "id", false);
+# set hidden custom fields
+$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_cfields = is_array($hidden_cfields['requests']) ? $hidden_cfields['requests'] : array();
 ?>
 
 <h4><?php print _('List of all active IP addresses requests'); ?></h4>
@@ -20,7 +23,7 @@ $inactive_requests = $Admin->fetch_multiple_objects ("requests", "processed", 1,
 if($active_requests===false) { print "<div class='alert alert-info'>"._('No IP address requests available')."!</div>"; }
 else {
 ?>
-<table id="requestedIPaddresses" class="table sorted table-striped table-condensed table-hover table-top">
+<table id="requestedIPaddresses" class="table sorted table-striped table-condensed table-hover table-top" data-cookie-id-table="admin_requests">
 
 <!-- headers -->
 <thead>
@@ -32,6 +35,27 @@ else {
 	<th><?php print _('Description'); ?></th>
 	<th><?php print _('Requested by'); ?></th>
 	<th><?php print _('Comment'); ?></th>
+	<!-- Custom fields -->
+	<?php
+	$custom_fields = $Tools->fetch_custom_fields('requests');	
+	# hidden custom
+	if(sizeof($custom_fields) > 0) {
+		foreach($custom_fields as $ck=>$myField) 	{
+			if(in_array($myField['name'], $hidden_cfields)) {
+				unset($custom_fields[$ck]);
+			}
+		}
+	}
+	# print custom field
+	if(sizeof($custom_fields) > 0) {
+		foreach ($custom_fields as $field) {
+			print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			if(!in_array($myField['name'], $hidden_cfields)) 	{
+				print '<td>'.ucwords($Tools->print_custom_field_name ($field['name'])).'</td>';
+			}
+		}
+	}
+	?>
 </tr>
 </thead>
 
@@ -41,10 +65,8 @@ else {
 	foreach($active_requests as $k=>$request) {
 		//cast
 		$request = (array) $request;
-
 		//get subnet details
 		$subnet = (array) $Subnets->fetch_subnet (null, $request['subnetId']);
-
 		//valid
 		if(sizeof($subnet)==0 || @$subnet[0]===false) {
 			unset($active_requests[$k]);
@@ -54,13 +76,19 @@ else {
 			$request['ip_addr'] = strlen($request['ip_addr'])>0 ? $request['ip_addr'] : _("Automatic");
 
 			print '<tr>'. "\n";
-			print "	<td><button class='btn btn-sm btn-default' data-requestid='$request[id]'><i class='fa fa-pencil'></i> "._('Process')."</button></td>";
+			print "	<td><button class='btn btn-xs btn-default open_popup' data-script='app/admin/requests/edit.php' data-class='700' data-action='edit' data-requestid='$request[id]'><i class='fa fa-pencil' rel='tooltip' data-title=' "._('Process')."'></i></td>";
 			print '	<td>'. $request['ip_addr'] .'</td>'. "\n";
 			print '	<td>'. $Subnets->transform_to_dotted($subnet['subnet']) .'/'. $subnet['mask'] .' ('. $subnet['description'] .')</td>'. "\n";
-			print '	<td>'. $request['dns_name'] .'</td>'. "\n";
+			print '	<td>'. $request['hostname'] .'</td>'. "\n";
 			print '	<td>'. $request['description'] .'</td>'. "\n";
 			print '	<td>'. $request['requester'] .'</td>'. "\n";
 			print '	<td>'. $request['comment'] .'</td>'. "\n";
+			// custom fields
+			if(sizeof($custom_fields) > 0) {
+				foreach ($custom_fields as $field) {
+					print '<td>'.$request[$field['name']] .'</td>';
+				}
+			}
 			print '</tr>'. "\n";
 		}
 	}
@@ -70,12 +98,12 @@ else {
 <?php
 }
 # print resolved if present
-if($inactive_requests!==false) { ?>
+if($inactive_requests!==false && !isset($tools)) { ?>
 
 <h4 style="margin-top:50px;"><?php print _('List of all processes IP addresses requests'); ?></h4>
 <hr><br>
 
-<table id="requestedIPaddresses" class="table sorted table-striped table-condensed table-hover table-top table-auto1">
+<table id="requestedIPaddresses" class="table sorted table-striped table-condensed table-hover" data-cookie-id-table="admin_requests_2">
 
 <!-- headers -->
 <thead>
@@ -107,7 +135,7 @@ if($inactive_requests!==false) { ?>
 		else {
 			print '<tr>'. "\n";
 			print '	<td>'. $Subnets->transform_to_dotted($subnet['subnet']) .'/'. $subnet['mask'] .' ('. $subnet['description'] .')</td>'. "\n";
-			print '	<td>'. $request['dns_name'] .'</td>'. "\n";
+			print '	<td>'. $request['hostname'] .'</td>'. "\n";
 			print '	<td>'. $request['description'] .'</td>'. "\n";
 			print '	<td>'. $request['requester'] .'</td>'. "\n";
 			print '	<td>'. $request['comment'] .'</td>'. "\n";

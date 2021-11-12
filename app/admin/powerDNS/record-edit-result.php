@@ -5,7 +5,7 @@
  ***************************/
 
 /* functions */
-require dirname(__FILE__) . '/../../../functions/functions.php';
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database = new Database_PDO;
@@ -18,12 +18,19 @@ $PowerDNS = new PowerDNS($Database);
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("pdns", User::ACCESS_RW, true, true);
+}
+else {
+    $User->check_module_permissions ("pdns", User::ACCESS_RWA, true, true);
+}
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie("validate", "record", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie("validate", "record", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fetch old record
 if ($_POST['action'] != "add") {

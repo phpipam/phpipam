@@ -6,7 +6,7 @@
 
 # required functions if requested via AJAX
 if(!is_object(@$User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
+	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);
@@ -29,6 +29,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 if ($User->settings->log!="syslog") {
 	/* get logs */
 	$clogs = $Log->fetch_all_changelogs (false, "", 50);
+	if (!is_array($clogs)) { $clogs = array(); }
 }
 
 # syslog
@@ -100,7 +101,7 @@ else {
 
             		// field
             		$field = explode(":", $c);
-            	    $value = explode("=>", $field[1]);
+            	    $value = explode("=>", html_entity_decode($field[1]));
 
             	    $field = trim(str_replace(array("[","]"), "", $field[0]));
             	    if(is_array(@$Log->changelog_keys[$type])) {
@@ -109,9 +110,9 @@ else {
                 	    }
             	    }
 
-            		$diff_1  = "<strong>$field</strong>: ".trim($value[0]);
+            		$diff_1  = "<strong>$field</strong>: ".trim(escape_input($value[0]));
             		if($l['caction']=="edit")
-            		$diff_1 .= "  => ".trim($value[1]);
+            		$diff_1 .= "  => ".trim(escape_input($value[1]));
 
             		$diff[] = $diff_1;
         		}

@@ -5,7 +5,7 @@
  */
 
 # functions
-require( dirname(__FILE__) . '/../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../functions/functions.php' );
 
 # objects
 $Database 	= new Database_PDO;
@@ -34,6 +34,6 @@ else {
 	# all good, update password!
 	$Install->postauth_update($_POST['password1'], $_POST['siteTitle'], $_POST['siteURL']);
 	# ok
-													{ $Result->show("success", "Settings updated, installation complete!<hr><a class='btn btn-sm btn-default' href='".create_link("login")."'>Proceed to login</a>", false); }
+													{ $Result->show( "success", _("Settings updated, installation complete!")."<hr><a class='btn btn-sm btn-default' href='".create_link("login")."'>"._("Proceed to login.")."</a>", false); }
 }
 ?>

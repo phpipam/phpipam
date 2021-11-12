@@ -8,68 +8,12 @@
 class Subnets_controller extends Common_api_functions {
 
 	/**
-	 * _params provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
-	/**
-	 * custom_fields
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	public $custom_fields;
-
-	/**
 	 * settings
 	 *
 	 * @var mixed
 	 * @access protected
 	 */
 	protected $settings;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Response handler
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Response;
-
-	/**
-	 * Master Subnets object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Subnets;
-
-	/**
-	 * Master  Addresses object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Addresses;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
 
 
 	/**
@@ -130,6 +74,7 @@ class Subnets_controller extends Common_api_functions {
 	 *	optional params : all subnet values
 	 *
 	 *      - /subnets/{id}/first_subnet/{mask}/       // creates first free subnet under master with specified mask
+	 *      - /subnets/{id}/last_subnet/{mask}/        // creates last free subnet under master with specified mask
 	 *
 	 * @access public
 	 * @return array
@@ -139,21 +84,14 @@ class Subnets_controller extends Common_api_functions {
 		if(!isset($this->_params->isFolder)) { $this->_params->isFolder = "0"; }
 		elseif($this->_params->isFolder==1)	 { unset($this->_params->subnet, $this->_params->mask); }
 
-		// first free
-		if($this->_params->id2=="first_subnet")   {
-    		$subnet_tmp = explode("/", $this->subnet_first_free (false));
+		if ($this->_params->id2=="first_subnet" || $this->_params->id2=="last_subnet") {
+			$this->validate_subnet_id ();
 
-    		// get master subnet
-    		$master = $this->read_subnet ();
+			// Obtain exclusive MySQL lock so parallel API requests on the same object are thread safe.
+			$Lock = new LockForUpdate($this->Database, 'subnets', $this->_params->id);
 
-    		$this->_params->subnet = $subnet_tmp[0];
-    		$this->_params->mask = $subnet_tmp[1];
-    		$this->_params->sectionId = $master->sectionId;
-    		$this->_params->masterSubnetId = $master->id;
-    		$this->_params->permissions = $master->permissions;
-    		unset($this->_params->id2, $this->_params->id3);
-            // description
-            if(!isset($this->_params->description))    { $this->_params->description = "API autocreated"; }
+			$direction = ($this->_params->id2=="first_subnet") ? Subnets::SEARCH_FIND_FIRST : Subnets::SEARCH_FIND_LAST;
+			$this->post_find_free_subnet($direction);
 		}
 
 		# validate parameters
@@ -174,6 +112,27 @@ class Subnets_controller extends Common_api_functions {
 		}
 	}
 
+	/**
+	 * Populate subnet details from first/last available subnet
+	 * @access private
+	 * @param  integer
+	 * @return void
+	 */
+	private function post_find_free_subnet($direction = Subnets::SEARCH_FIND_FIRST) {
+		$subnet_tmp = explode("/", $this->subnet_find_free (1, $direction));
+
+		// get master subnet
+		$master = $this->read_subnet ();
+
+		$this->_params->subnet = $subnet_tmp[0];
+		$this->_params->mask = $subnet_tmp[1];
+		$this->_params->sectionId = $master->sectionId;
+		$this->_params->masterSubnetId = $master->id;
+		$this->_params->permissions = $master->permissions;
+		unset($this->_params->id2, $this->_params->id3);
+		// description
+		if(!isset($this->_params->description))    { $this->_params->description = "API autocreated"; }
+	}
 
 
 
@@ -182,10 +141,12 @@ class Subnets_controller extends Common_api_functions {
 	 * Reads subnet functions
 	 *
 	 *	Identifier can be:
+	 *		- /								// returns all subnets in all sections
 	 *		- /{id}/
 	 *		- /custom_fields/				// returns custom fields
 	 *		- /cidr/{subnet}/				// subnets in CIDR format
 	 *		- /search/{subnet}/				// subnets in CIDR format (same as above)
+	 *		- /overlaping/{subnet}/			// returns all overlapping subnets
 	 *		- /{id}/usage/				    // returns subnet usage
 	 *		- /{id}/slaves/ 			    // returns all immediate slave subnets
 	 *		- /{id}/slaves_recursive/ 	    // returns all slave subnets recursively
@@ -193,6 +154,7 @@ class Subnets_controller extends Common_api_functions {
 	 *      - /{id}/addresses/{ip}/         // returns IP address from subnet
 	 *		- /{id}/first_free/			    // returns first free address in subnet
 	 *      - /{id}/first_subnet/{mask}/    // returns first available subnets with specified mask
+	 *      - /{id}/last_subnet/{mask}/     // returns last available subnets with specified mask
 	 *      - /{id}/all_subnets/{mask}/     // returns all available subnets with specified mask
 	 *		- /all/							// returns all subnets in all sections
 	 *
@@ -200,33 +162,47 @@ class Subnets_controller extends Common_api_functions {
 	 * @return array
 	 */
 	public function GET () {
+		// all
+		if (!isset($this->_params->id) || $this->_params->id == "all") {
+			$result = $this->read_all_subnets();
+			// check result
+			if ($result===false)						{ $this->Response->throw_exception(500, "Unable to read subnets"); }
+			else										{ return array("code"=>200, "data"=>$this->prepare_result($result, "subnets", true, true)); }
+		}
 		// cidr check
 		// check if id2 is set ?
-		if(isset($this->_params->id2)) {
+		elseif(isset($this->_params->id2)) {
 			// is IP address provided
-			if($this->_params->id=="cidr") {
+			if($this->_params->id=="cidr" || $this->_params->id=="search") {
 				$result = $this->read_search_subnet ();
 				// check result
 				if($result==false)						{ $this->Response->throw_exception(200, "No subnets found"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
-			else {
-				// validate id
-				$this->validate_subnet_id ();
+
+			if($this->_params->id=="overlapping") {
+				$result = $this->read_overlapping_subnet ();
+				if($result==false)						{ $this->Response->throw_exception(200, "No subnets found"); }
+				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
+
+			// validate id
+			$this->validate_subnet_id ();
 
 			// addresses in subnet
 			if($this->_params->id2=="addresses") {
 				$result = $this->read_subnet_addresses ();
 				// if {ip} is set filter it out
 				if(isset($this->_params->id3)) {
-						$addresses = $result;
-    				foreach ($addresses as $k=>$r) {
-        				if ($r->ip === $this->_params->id3) {
-                    $result = $r;
-                    break;
-        				}
-    				}
+					if(is_array($result)) {
+                        $addresses = $result;
+	    				foreach ($addresses as $r) {
+	        				if ($r->ip === $this->_params->id3) {
+                                $result = $r;
+                                break;
+        				    }
+	    				}
+	    			}
                     if(sizeof($result)==0) { $result = false; }
 				}
 				// check result
@@ -255,9 +231,11 @@ class Subnets_controller extends Common_api_functions {
 			// first available address
 			elseif ($this->_params->id2=="first_free") 	{ return array("code"=>200, "data"=>$this->subnet_first_free_address ());  }
 			// search for new free subnet
-			elseif ($this->_params->id2=="all_subnets") { return array("code"=>200, "data"=>$this->subnet_first_free (true));  }
+			elseif ($this->_params->id2=="all_subnets") { return array("code"=>200, "data"=>$this->subnet_find_free (Subnets::SEARCH_FIND_ALL, Subnets::SEARCH_FIND_FIRST));  }
 			// search for new free subnet
-			elseif ($this->_params->id2=="first_subnet"){ return array("code"=>200, "data"=>$this->subnet_first_free (false));  }
+			elseif ($this->_params->id2=="first_subnet"){ return array("code"=>200, "data"=>$this->subnet_find_free (1, Subnets::SEARCH_FIND_FIRST));  }
+			// search for new free subnet
+			elseif ($this->_params->id2=="last_subnet") { return array("code"=>200, "data"=>$this->subnet_find_free (1, Subnets::SEARCH_FIND_LAST));  }
 			// fail
 			else										{ $this->Response->throw_exception(400, 'Invalid request'); }
 		}
@@ -274,29 +252,8 @@ class Subnets_controller extends Common_api_functions {
 			if($result==false)							{ $this->Response->throw_exception(400, "Invalid subnet Id (".$this->_params->id.")"); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
 		}
-		// all
-		elseif ($this->_params->id=="all") {
-			$result = $this->read_all_subnets();
-			// check result
-			if ($result===false)						{ $this->Response->throw_exception(500, "Unable to read subnets"); }
-			else										{ return array("code"=>200, "data"=>$this->prepare_result($result, "subnets", true, true)); }
-		}
 		// false
 		else 											{ $this->Response->throw_exception(404, 'Invalid Id'); }
-	}
-
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 
@@ -490,13 +447,12 @@ class Subnets_controller extends Common_api_functions {
 		// validate input parmeters
 		if(!is_numeric($this->_params->number))			{ $this->Response->throw_exception(400, "Invalid number of new subnets"); }
 		if(!isset($this->_params->group))				{ $this->_params->group = "yes"; }
-		if(!isset($this->_params->strict))				{ $this->_params->strict = "yes"; }
 		if(!isset($this->_params->copy_custom))			{ $this->_params->copy_custom = "yes"; }
 
 		// fetch old subnet
 		$subnet_old = $this->Subnets->fetch_subnet ("id", $this->_params->id);
 		// create new subnets and move addresses
-		$this->Subnets->subnet_split ($subnet_old, $this->_params->number, $this->_params->prefix, $this->_params->group, $this->_params->strict, $this->_params->copy_custom);
+		$this->Subnets->subnet_split ($subnet_old, $this->_params->number, $this->_params->prefix, $this->_params->group, $this->_params->copy_custom);
 
 		//set result
 		return array("code"=>200, "message"=>"Subnet splitted");
@@ -625,7 +581,7 @@ class Subnets_controller extends Common_api_functions {
 		if($subnet===false)
 														{ $this->Response->throw_exception(400, "Subnet does not exist"); }
 		# get usage
-		$subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet, true);
+		$subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet);
 		# return
 		return $subnet_usage;
 	}
@@ -659,36 +615,24 @@ class Subnets_controller extends Common_api_functions {
 	}
 
 	/**
-	 * Returns first available subnet with specified mask
+	 * Returns first|last $count available subnets with specified mask
 	 *
 	 * @access public
-	 * @param bool $all (default: false)
+	 * @param integer $count (default: Subnets::SEARCH_FIND_ALL)
+	 * @param integer $direction (default: Subnets::SEARCH_FIND_FIRST)
 	 * @return array|string
 	 */
-	public function subnet_first_free ($all = false) {
+	public function subnet_find_free ($count = Subnets::SEARCH_FIND_ALL, $direction = Subnets::SEARCH_FIND_FIRST) {
 		// Check for id
 		$this->validate_subnet_id ();
-		// single or all ?
-		if ($all) {
-    		$first = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3, 30);
 
-		}
-		else {
-    		$first = $this->Subnets->search_available_single_subnet ($this->_params->id, $this->_params->id3);
+		$found = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3, $count, $direction);
+
+		if ($found===false) {
+			$this->Response->throw_exception(200, "No subnets found");
 		}
 
-		# return
-		if ($first===false) {
-    		$this->Response->throw_exception(200, "No subnets found");
-		}
-		else {
-    		if($all) {
-        		return $first;
-    		}
-    		else {
-        		return $first[0];
-    		}
-		}
+		return ($count == 1) ?  $found[0] : $found;
 	}
 
 
@@ -722,11 +666,14 @@ class Subnets_controller extends Common_api_functions {
         		$result->gateway = $gateway;
     		}
 
-    		$result->calculation = $this->Tools->calculate_ip_calc_results($this->Subnets->transform_address($result->subnet,"dotted")."/".$result->mask);
+    		if (!$result->isFolder)
+		    {
+			    $result->calculation = $this->Tools->calculate_ip_calc_results($this->Subnets->transform_address($result->subnet, "dotted") . "/" . $result->mask);
+		    }
 		}
 
 		# result
-		return sizeof($result)==0 ? false : $result;
+		return empty($result) ? false : $result;
 	}
 
 	/**
@@ -739,33 +686,41 @@ class Subnets_controller extends Common_api_functions {
 		// fetch
 		$results = $this->Subnets->fetch_all_subnets();
 
-		// add nameservers, GW, permission and location for each network found
-		if($results!==false) {
-			foreach($results as $key => $result) {
-				$ns = $this->read_subnet_nameserver($result->nameserverId);
-				if ($ns!==false) {
-					$result->nameservers = $ns;
-				}
+		if (!is_array($results))
+			return false;
 
-				$gateway = $this->read_subnet_gateway ($result->id);
-				if ( $gateway!== false) {
-					$result->gatewayId = $gateway->id;
-					$gateway = $this->transform_address ($gateway);
-					$result->gateway = $gateway;
-				}
-
-				$result->permissions = $this->User->get_user_permissions_from_json($result->permissions);
-
-				// location details
-				if(!empty($result->location)) {
-					$result->location = $this->Tools->fetch_object ("locations", "id", $result->location);
-				} else {
-					$result->location = array();
-				}
-
-    			// erase old values
-    			$results[$key] = $result;
+		$subnet_gws = [];
+		$gateways = $this->Subnets->fetch_multiple_objects('ipaddresses', 'is_gateway', 1);
+		if (is_array($gateways)) {
+			foreach($gateways as $gw) {
+				$subnet_gws[$gw->id][] = $this->transform_address ($gw);
 			}
+		}
+
+		// add nameservers, GW, permission and location for each network found
+		foreach($results as $key => $result) {
+			$ns = $this->read_subnet_nameserver($result->nameserverId);
+			if ($ns!==false) {
+				$result->nameservers = $ns;
+			}
+
+			if (isset($subnet_gws[$result->id])) {
+				$gateway = $subnet_gws[$result->id][0];
+				$result->gatewayId = $gateway->id;
+				$result->gateway = $gateway;
+			}
+
+			$result->permissions = $this->User->get_user_permissions_from_json($result->permissions);
+
+			// location details
+			if(!empty($result->location)) {
+				$result->location = $this->Tools->fetch_object ("locations", "id", $result->location);
+			} else {
+				$result->location = array();
+			}
+
+			// erase old values
+			$results[$key] = $result;
 		}
 
 		# result
@@ -803,7 +758,8 @@ class Subnets_controller extends Common_api_functions {
 	 * @return array|false
 	 */
 	private function read_subnet_nameserver ($nsid) {
-    	return $this->Tools->fetch_object ("nameservers", "id", $nsid);
+		if (!is_numeric($nsid) || $nsid <= 0) return false;
+		return $this->Tools->fetch_object ("nameservers", "id", $nsid);
 	}
 
 	/**
@@ -828,12 +784,14 @@ class Subnets_controller extends Common_api_functions {
 	private function read_subnet_slaves_recursive () {
 		// get array of ids
 		$this->Subnets->fetch_subnet_slaves_recursive ($this->_params->id);
+		// init result
+		$result = array ();
 		// fetch all;
 		foreach($this->Subnets->slaves as $s) {
 			$result[] = $this->read_subnet ($s);
 		}
 		# result
-		return $result===false ? NULL : $result;
+		return sizeof($result)==0 ? NULL : $result;
 	}
 
 	/**
@@ -857,6 +815,18 @@ class Subnets_controller extends Common_api_functions {
 		}
 		# result
 		return !isset($result) ? false : $result;
+	}
+
+	/**
+	 * Searches for overlapping subnets in database (Supports IPv4 & IPv6)
+	 *
+	 * @access private
+	 * @return array|false
+	 */
+	private function read_overlapping_subnet () {
+		// Fetch overlapping subnets
+		$subnet = $this->Subnets->fetch_overlapping_subnets ($this->_params->id2.'/'.$this->_params->id3);
+		return is_array($subnet) ? $subnet : false;
 	}
 
 
@@ -1013,7 +983,7 @@ class Subnets_controller extends Common_api_functions {
 		$section = $this->Tools->fetch_object ("sections", "id", $this->_params->sectionId);
 		if($section===false)																		{ $this->Response->throw_exception(400, "Invalid section Id"); }
 		// settings
-		$this->settings = $this->Tools->fetch_object ("settings", "id", 1);
+		$this->settings = $this->Tools->get_settings();
 
 		# get master subnet details for folder overrides
 		if($this->_params->masterSubnetId!=0)	{
@@ -1043,7 +1013,7 @@ class Subnets_controller extends Common_api_functions {
 		        if (!$this->Subnets->verify_subnet_nesting($this->_params->masterSubnetId, $cidr)) 	{ $this->Response->throw_exception(409, "Nested subnet not in root subnet"); }
 
 			    //nested?
-		        $overlap = $this->Subnets->verify_nested_subnet_overlapping($this->_params->sectionId, $cidr, $this->_params->vrfId, $this->_params->masterSubnetId);
+		        $overlap = $this->Subnets->verify_nested_subnet_overlapping($cidr, $this->_params->vrfId, $this->_params->masterSubnetId);
 				if($overlap!==false) 																{ $this->Response->throw_exception(409, $overlap); }
 		    }
 		}

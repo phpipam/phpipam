@@ -5,7 +5,11 @@
  *********************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # initialize required objects
@@ -19,15 +23,11 @@ $Addresses	= new Addresses ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
-# we dont need any errors!
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
-
 # fetch subnet details
 $subnet = (array) $Tools->fetch_object ("subnets", "id", $_GET['subnetId']);
 # fetch all IP addresses in subnet
 $addresses = $Addresses->fetch_subnet_addresses ($_GET['subnetId'], "ip_addr", "asc");
+if (!is_array($addresses)) { $addresses = array(); }
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 
@@ -107,7 +107,7 @@ if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('description') ,$format_title);
 	$rowCount++;
 }
-if( (isset($_GET['dns_name'])) && ($_GET['dns_name'] == "on") ) {
+if( (isset($_GET['hostname'])) && ($_GET['hostname'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('hostname') ,$format_title);
 	$rowCount++;
 }
@@ -208,8 +208,8 @@ foreach ($addresses as $ip) {
 		$worksheet->write($lineCount, $rowCount, $ip['description']);
 		$rowCount++;
 	}
-	if( (isset($_GET['dns_name'])) && ($_GET['dns_name'] == "on") ) {
-		$worksheet->write($lineCount, $rowCount, $ip['dns_name']);
+	if( (isset($_GET['hostname'])) && ($_GET['hostname'] == "on") ) {
+		$worksheet->write($lineCount, $rowCount, $ip['hostname']);
 		$rowCount++;
 	}
 	if( (isset($_GET['firewallAddressObject'])) && ($_GET['firewallAddressObject'] == "on") ) {

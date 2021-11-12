@@ -1,86 +1,40 @@
-Feature candidates for 1.4:
+Feature candidates for 1.5:
 ---------------------------
 
-https://github.com/phpipam/phpipam/milestone/2
+Features:
 
-    Enhancements
-        #33   2FA
-        #30   DNS Update to Active Directory DNS
-        #149  LDAP login requires a local user of same name
-        #442  Efficiency
-        #762  Auto Updation to Latest Stable version
-        #849  Move to ADLDAP2 as submodule (#791)
-              + CSV import tab with fields;
-        #829  Provide Dockerfile (#311)
-        #684  Bulk/range edit non-contiguous IP addresses
-        #516  PHP sessions in database
-        #728  "X.in-addr.arpa" reverse zone support
-        #598  Section for vlans domain (Layer2)
-        #858  swagger for clients/api docs
-        #518  use PowerDNS API rather than modifying the backend DB
-        #198  Enhancement: Multiple PowerDNS
-        #109  IP deletion request for non administrative users
-        #1068 Custom section and other fields
-        #1023 Location tags, subnet tags, ...
-        #998  User credentials security constraints are too tight and not configurable
+    - LDAP group authentication without local user (group with adldap2 migration)
+    - Webhooks support - send data via json to external URL / script
+    - Display free subnet ranges joined for each section
+    - API - permit IP/subnet as identifier insteaad of index (GET /api/test/subnets/1/ > /api/test/subnets/10.10.10.0_24/) and name for other objects
 
-    API:
-        #800  Changelog Doesn't Track Changes Made Via API
-        #576  Get last_available_address
-        #448  allow full text search like in frontend
-        #953  PSTN prefixes controller
-        #1022 Add timezone to token timestamp output
 
-    User interface:
-        #770  Show usage graph for whole section
-        #700  Enhance changelog information in changelog and mail
-        #798  Move orphaned hosts to new master subnet
-        #785  Show expandable tree structure for section subnets full view
-        #768  Add search by sections into search field :: Search enhancements
-        #735  Subnet Percent Usage Round Down
-        #405  Display free subnet ranges joined for each section
+Optional:
+    - User PowerDNS API instead of direct DB entries;
+    - KEA management via API
+    - DCIM improvements
+    - NTP Server addresses
 
-    IP requests
-        #820  Expand fields for IP requests (#791)
-        #771  Subnet request
 
     New modules
-        #694  Customers module;
-        #777  KEA management (DHCP integration);
-        #335  BGP support
-                #344  VRF RD/RT confusion; update display and perhaps track separately
         #769  Enhancement in Inventory management
-                #653  interactive racks and DCIM improvements
-                #731  Circuits module
+        #653  interactive racks and DCIM improvements
         #696  Password management
         #545  Wirelless LAN list
-        #880  webhooks or similar mechanism to send data to external URL / script
-        #1046 NTP Server addresses
 
 
 
 Ideas for next releases:
 ---------------------------
 
-    #702  custom field relations
-
     + User
-    	+ LDAP auth without local user;
         + IP address owner (from internal users - suggestions);
-        + L2 domain permissions for groups ?
         + Autocomplete mail addresses and owners from users table;
 
     + Configurable cron from UI;
 
     + Tools enhancements
-        + Devices permissions;
         + Changelog for VLANs, l2-domains, devices or vrf's, nameservers and firewallzones;
-
-    + DNS enhancements
-        + Export domain in bind format + script;
-        + DNS scripts (nsupdate,...)
 
     + Subnet, addresses
     	+ assign a state to a subnet, vlan;
-
-	+ Map/Link MPLS VRF to VLAN;

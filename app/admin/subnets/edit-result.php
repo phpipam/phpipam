@@ -7,7 +7,7 @@
 /* this can come from snmp, so if objects are already initialized print it */
 if (!function_exists("create_link")) {
     /* functions */
-    require( dirname(__FILE__) . '/../../../functions/functions.php');
+    require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
     # initialize user object
     $Database 	= new Database_PDO;
@@ -30,10 +30,10 @@ $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
 if($_POST['action']=="add") {
-	$User->csrf_cookie ("validate", "subnet_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+	$User->Crypto->csrf_cookie ("validate", "subnet_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 }
 else {
-	$User->csrf_cookie ("validate", "subnet_".$_POST['subnetId'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+	$User->Crypto->csrf_cookie ("validate", "subnet_".$_POST['subnetId'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 }
 
 # if show name than description must be set
@@ -118,7 +118,7 @@ if ($_POST['action']=="add") {
 	        }
 	        else {
     	        //check for overlapping against existing subnets under same master
-    	        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
+    	        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
     			if($overlap!==false) {
     	            $errors[] = $overlap;
     	        }
@@ -135,7 +135,7 @@ if ($_POST['action']=="add") {
 	# parent is folder checks
 	elseif($section['strictMode']==1) {
         //check for overlapping against existing subnets under same master
-        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
+        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
 		if($overlap!==false) {
             $errors[] = $overlap;
         }
@@ -294,34 +294,48 @@ elseif ($_POST['action']=="delete" && !isset($_POST['deleteconfirm'])) {
 else {
 
 	# remove scanagent if not needed
-	if (!isset($_POST['pingSubnet'])&&!isset($_POST['discoverSubnet']))	{ $_POST['scanAgent']=0; }
+	if (!isset($_POST['pingSubnet'])&&!isset($_POST['discoverSubnet'])&&!isset($_POST['resolveDNS']))	{ $_POST['scanAgent']=0; }
 
 	# create array of default update values
-	$values = array("id"=>@$_POST['subnetId'],
-					"isFolder"=>0,
-					"masterSubnetId"=>$_POST['masterSubnetId'],
-					"subnet"=>$Subnets->transform_to_decimal($_POST['subnet']),
-					"mask"=>$_POST['mask'],
-					"description"=>@$_POST['description'],
-					"vlanId"=>$_POST['vlanId'],
-					"allowRequests"=>$Admin->verify_checkbox(@$_POST['allowRequests']),
-					"showName"=>$Admin->verify_checkbox(@$_POST['showName']),
-					"discoverSubnet"=>$Admin->verify_checkbox(@$_POST['discoverSubnet']),
-					"pingSubnet"=>$Admin->verify_checkbox(@$_POST['pingSubnet']),
-					"scanAgent"=>@$_POST['scanAgent'],
-					"DNSrecursive"=>$Admin->verify_checkbox(@$_POST['DNSrecursive']),
-					"DNSrecords"=>$Admin->verify_checkbox(@$_POST['DNSrecords']),
-					"nameserverId"=>$_POST['nameserverId'],
-					"device"=>$_POST['device'],
-                    "isFull"=>$Admin->verify_checkbox($_POST['isFull'])
+	$values = array(
+					"id"             => @$_POST['subnetId'],
+					"isFolder"       => 0,
+					"masterSubnetId" => $_POST['masterSubnetId'],
+					"subnet"         => $Subnets->transform_to_decimal($_POST['subnet']),
+					"mask"           => $_POST['mask'],
+					"description"    => @$_POST['description'],
+					"vlanId"         => $_POST['vlanId'],
+					"allowRequests"  => $Admin->verify_checkbox(@$_POST['allowRequests']),
+					"showName"       => $Admin->verify_checkbox(@$_POST['showName']),
+					"discoverSubnet" => $Admin->verify_checkbox(@$_POST['discoverSubnet']),
+					"pingSubnet"     => $Admin->verify_checkbox(@$_POST['pingSubnet']),
+					"resolveDNS"     => $Admin->verify_checkbox(@$_POST['resolveDNS']),
+					"scanAgent"      => @$_POST['scanAgent'],
+					"DNSrecursive"   => $Admin->verify_checkbox(@$_POST['DNSrecursive']),
+					"DNSrecords"     => $Admin->verify_checkbox(@$_POST['DNSrecords']),
+					"nameserverId"   => $_POST['nameserverId'],
+					"device"         => $_POST['device'],
+					"isFull"         => $Admin->verify_checkbox(@$_POST['isFull']),
+					"isPool"         => $Admin->verify_checkbox(@$_POST['isPool'])
 					);
     # location
-    if (isset($_POST['location_item'])) {
-        if (!is_numeric($_POST['location_item'])) {
+    if (isset($_POST['location'])) {
+        if (!is_numeric($_POST['location'])) {
             $Result->show("danger", _("Invalid location value"), true);
         }
-        $values['location'] = $_POST['location_item'];
+        $values['location'] = $_POST['location'];
     }
+	# append customerId
+	if($User->settings->enableCustomers=="1") {
+		if (is_numeric($_POST['customer_id'])) {
+			if ($_POST['customer_id']>0) {
+				$values['customer_id'] = $_POST['customer_id'];
+			}
+			else {
+				$values['customer_id'] = NULL;
+			}
+		}
+	}
     # threshold
     if (isset($_POST['threshold'])) {
         if (!is_numeric($_POST['threshold'])) {
@@ -362,7 +376,7 @@ else {
 				}
 			}
 			//not null!
-			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 
 			# save to update array
 			$values[$myField['name']] = $_POST[$myField['name']];
@@ -389,9 +403,9 @@ else {
 		# edit success
 		if($_POST['action']=="delete")	{ $Result->show("success", _('Subnet, IP addresses and all belonging subnets deleted successfully').'!', false); }
 		# create - for redirect
-		elseif ($_POST['action']=="add"){ $Result->show("success", _("Subnet $_POST[action] successfull").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
+		elseif ($_POST['action']=="add") { $Result->show("success", _("Subnet")." ". $_POST["action"]." "._("successful").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
 		#
-		else							{ $Result->show("success", _("Subnet $_POST[action] successfull").'!', false); }
+		else { $Result->show("success", _("Subnet")." ".$_POST["action"]." "._("successful").'!', false); }
 	}
 
 	# propagate to slaves
@@ -404,12 +418,13 @@ else {
 		}
     	# set what to update
     	$values = array(
-					"vlanId"=>$_POST['vlanId'],
-					"vrfId"=>$_POST['vrfId'],
-					"nameserverId"=>$_POST['nameserverId'],
-					"scanAgent"=>@$_POST['scanAgent'],
-					"device"=>$_POST['device'],
-					"isFull"=>$_POST['isFull']
+					"vlanId"       =>$_POST['vlanId'],
+					"vrfId"        =>$_POST['vrfId'],
+					"nameserverId" =>$_POST['nameserverId'],
+					"scanAgent"    =>@$_POST['scanAgent'],
+					"device"       =>$_POST['device'],
+					"isFull"       =>$Admin->verify_checkbox($_POST['isFull']),
+					"isPool"       =>$Admin->verify_checkbox($_POST['isPool'])
 					);
         # optional values
         if(isset($_POST['allowRequests']))  $values['allowRequests']  = $Admin->verify_checkbox(@$_POST['allowRequests']);
@@ -418,7 +433,7 @@ else {
         if(isset($_POST['pingSubnet']))     $values['pingSubnet']     = $Admin->verify_checkbox(@$_POST['pingSubnet']);
 
         # propagate changes
-		if(sizeof($Subnets->slaves)>0) {
+		if(is_array($Subnets->slaves) && sizeof($Subnets->slaves)>0) {
 			foreach($Subnets->slaves as $slaveId) {
 				 $Admin->object_modify ("subnets", "edit", "id", array_merge(array("id"=>$slaveId), $values));
 			}
@@ -441,7 +456,7 @@ else {
 		if (!isset($_POST['DNSrecursive']) && @$old_subnet_details->DNSrecursive==0) { $_POST['DNSrecursive'] = 0; }
 
 		// recreate csrf cookie
-        $csrf = $User->csrf_cookie ("create", "domain");
+        $csrf = $User->Crypto->csrf_cookie ("create", "domain");
 
 		//delete
 		if ($_POST['action']=="delete") {
@@ -456,7 +471,7 @@ else {
 				print "	</div>";
 
 				print _('Do you wish to delete DNS zone and all records')."?<br>";
-				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
+				print "	&nbsp;&nbsp; "._("DNS zone")." <strong>$domain->name</strong></li>";
 				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'><input type='hidden' name='csrf_cookie' value='$csrf'></form>";
 				print "	<div class='domain-edit-result'></div>";
 				print "</div>";
@@ -488,7 +503,7 @@ else {
 				print "	</div>";
 
 				print _('Do you wish to delete DNS zone and all records')."?<br>";
-				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
+				print "	&nbsp;&nbsp; "._("DNS zone")." <strong>$domain->name</strong></li>";
 				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'><input type='hidden' name='csrf_cookie' value='$csrf'></form>";
 				print "	<div class='domain-edit-result'></div>";
 				print "</div>";
@@ -509,7 +524,7 @@ else {
 				$Addresses->pdns_validate_connection ();
 				$hosts = $Addresses->fetch_subnet_addresses ($old_subnet_details->id, "ip_addr", "asc");
 				// loop
-				if (sizeof($hosts)>0) {
+				if (is_array($hosts) && sizeof($hosts)>0) {
 					$cnt = 0;
 					$err = 0;
 					$ski = 0;
@@ -526,10 +541,10 @@ else {
 						}
 					}
 					// print
-					$Result->show ("success", "$cnt PTR records created");
+					$Result->show ("success", "$cnt "._("PTR records created"));
 					// error
 					if ($err!=0) {
-					$Result->show ("warning", "$err invalid hostnames");
+					$Result->show ("warning", "$err "._("invalid hostnames"));
 					}
 				}
 			}
@@ -537,4 +552,3 @@ else {
 	}
 }
 ?>
-

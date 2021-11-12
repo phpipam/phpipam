@@ -21,9 +21,9 @@ print "</p>";
 ?>
 
 <!-- Add new -->
-<button class="btn btn-sm btn-default wedit" data-action='add' style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _("Create new widget"); ?></button>
+<button class='btn btn-sm btn-default open_popup' style="margin-bottom:10px;" data-script='app/admin/widgets/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create new widget'); ?></button>
 
-<table class="table sorted table-striped table-top" style="min-width:400px;">
+<table class="table sorted table-striped table-top" style="min-width:400px;" data-cookie-id-table="widgets">
 
 	<!-- Language list -->
 	<?php
@@ -56,8 +56,8 @@ print "</p>";
 			# verify validity
 			$valid = $Tools->verify_widget($w['wfile']);
 
-			if($valid)  { $vPrint = "<span class='alert alert-success'>"._('Valid')."</span>"; }
-			else		{ $vPrint = "<span class='alert alert-danger'>"._('Invalid')."</span>"; }
+			if($valid)  { $vPrint = "<span class='badge badge1 badge5 alert-success'>"._('Valid')."</span>"; }
+			else		{ $vPrint = "<span class='badge badge1 badge5 alert-danger'>"._('Invalid')."</span>"; }
 
 			print "<tr>";
 			print "	<td>"._($w['wtitle'])."</td>";
@@ -69,8 +69,8 @@ print "</p>";
 			print "	<td>$vPrint</td>";
 			print "	<td>";
 			print "	<div class='btn-group'>";
-			print "		<button class='btn btn-xs btn-default wedit' data-action='edit' data-wid='$w[wid]'><i class='fa fa-pencil'></i></button>";
-			print "		<button class='btn btn-xs btn-default wedit' data-action='delete' data-wid='$w[wid]'><i class='fa fa-times'></i></button>";
+			print "		<button class='btn btn-xs btn-default open_popup' data-wid='$w[wid]' data-script='app/admin/widgets/edit.php' data-class='700' data-action='edit'><i class='fa fa-pencil'></i></button>";
+			print "		<button class='btn btn-xs btn-default open_popup' data-wid='$w[wid]' data-script='app/admin/widgets/edit.php' data-class='700' data-action='delete'><i class='fa fa-times'></i></button>";
 			print "	</div>";
 			print "	</td>";
 			print "</tr>";
@@ -78,8 +78,6 @@ print "</p>";
 		print "</tbody>";
 	}
 	?>
-
-
 </table>
 
 <hr>

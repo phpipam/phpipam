@@ -5,7 +5,7 @@
  ************************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -28,6 +28,7 @@ include 'import-ipaddr-check.php';
 <!-- content -->
 <div class="pContent">
 <?php
+$searchallvrfs = (isset($_GET['searchallvrfs']) && $_GET['searchallvrfs'] == 'on') ? 'on' : '';
 
 print '<h4>'._("Uploaded data").'</h4><hr>';
 print _("The entries marked with ")."<i class='fa ".$icons['add']."'></i>, "._("will be added,
@@ -45,6 +46,7 @@ print "<input name='expfields' type='hidden' value='".implode('|',$expfields)."'
 print "<input name='reqfields' type='hidden' value='".implode('|',$reqfields)."' style='display:none;'>";
 print $hiddenfields;
 print "<input name='filetype' id='filetype' type='hidden' value='".$filetype."' style='display:none;'>";
+print "<input name='searchallvrfs' id='searchallvrfs' type='hidden' value='".$searchallvrfs."' style='display:none;'>";
 print "</form>";
 print "<table class='table table-condensed table-hover' id='previewtable'><tbody>";
 print "<tr class='active'>".$hrow."<th>Action</th></tr>";
@@ -68,7 +70,7 @@ print "<br><br><br>";
 if (($counters['add'] > 0) || ($counters['edit'] > 0)) {
 ?>
 
-	<script type="text/javascript">
+	<script>
 	$(function(){
 		$('#dataImportSubmit').removeAttr('disabled');
 		$('#dataImportSubmit').removeClass('btn-default');

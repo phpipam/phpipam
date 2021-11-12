@@ -5,7 +5,7 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -19,10 +19,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "pstn_number");
+$csrf = $User->Crypto->csrf_cookie ("create", "pstn_number");
 
-# check permissions
-if($Tools->check_prefix_permission ($User->user) < 2)   { $Result->show("danger", _('You do not have permission to manage PSTN numbers'), true, true); }
+# perm check popup
+$User->check_module_permissions ("pstn", User::ACCESS_RW, true, true);
 
 # get Location object
 if($_POST['action']!="add") {
@@ -101,7 +101,7 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     	<tr>
         	<th><?php print _('Name'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="name" value="<?php print $number->name; ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($number->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print $number->id; ?>">
             	<input type="hidden" name="prefix" value="<?php print $number->prefix; ?>">
@@ -116,7 +116,7 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     	<tr>
         	<th><?php print _('Owner'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="owner" value="<?php print $number->owner; ?>" placeholder='<?php print _('Owner'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="owner" value="<?php print $Tools->strip_xss($number->owner); ?>" placeholder='<?php print _('Owner'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Address owner"); ?></span>
@@ -145,6 +145,7 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     	?>
 
     	<!-- Device -->
+        <?php if ($User->get_module_permissions ("devices")>=User::ACCESS_R) { ?>
     	<tr>
     		<th><?php print _('Device'); ?></th>
     		<td id="deviceDropdown">
@@ -152,7 +153,7 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     				<option value="0"><?php print _('None'); ?></option>
     				<?php
     				// fetch all devices
-    				$devices = $Admin->fetch_all_objects("devices");
+    				$devices = $Admin->fetch_all_objects("devices", "hostname");
     				// loop
     				if ($devices!==false) {
     					foreach($devices as $device) {
@@ -166,6 +167,7 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     		</td>
     		<td class="info2"><?php print _('Select device where prefix is located'); ?></td>
         </tr>
+        <?php } ?>
 
         <!-- description -->
     	<tr>
@@ -193,12 +195,11 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     		# all my fields
     		foreach($custom as $field) {
         		// create input > result is array (required, input(html), timepicker_index)
-        		$custom_input = $Tools->create_custom_field_input ($field, $number, $_POST['action'], $timepicker_index);
-        		// add datepicker index
-        		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+        		$custom_input = $Tools->create_custom_field_input ($field, $number, $timepicker_index);
+        		$timepicker_index = $custom_input['timepicker_index'];
                 // print
     			print "<tr>";
-    			print "	<td>".ucwords($field['name'])." ".$custom_input['required']."</td>";
+    			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
     			print "	<td>".$custom_input['field']."</td>";
     			print "</tr>";
     		}

@@ -1,7 +1,7 @@
 <?php
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -16,15 +16,21 @@ $User->check_user_session();
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
-# check permissions
-if($Tools->check_prefix_permission ($User->user) <3)   { $Result->show("danger", _('You do not have permission to manage PSTN prefixes'), true); }
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("pstn", User::ACCESS_RW, true, false);
+}
+else {
+    $User->check_module_permissions ("pstn", User::ACCESS_RWA, true, false);
+}
+
 
 # validate csrf cookie
 if($_POST['action']=="add") {
-    $User->csrf_cookie ("validate", "pstn_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+    $User->Crypto->csrf_cookie ("validate", "pstn_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 }
 else {
-    $User->csrf_cookie ("validate", "pstn_".$_POST['id'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+    $User->Crypto->csrf_cookie ("validate", "pstn_".$_POST['id'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 }
 
 
@@ -39,7 +45,7 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
     if(strlen($_POST['name'])<3)                                        { $Result->show("danger",  _("Name must have at least 3 characters"), true); }
 
     // prefix
-    if(!$_POST['prefix'])						{ $Result->show("danger", "Prefix can not be empty!", true); }
+    if(!$_POST['prefix'])                                               { $Result->show("danger", _("Prefix can not be empty!"), true); }
 
     // number
     if(!is_numeric($_POST['start']))                                    { $Result->show("danger",  _("Start must be numeric"), true); }
@@ -81,7 +87,7 @@ if($_POST['action']=="add" && $_POST['master']==0) {
     if($all_prefixes!==false) {
         foreach ($all_prefixes as $master_prefix) {
 
-            $overlap_text = _("Prefix overlaps with prefix ".$master_prefix->name." (".$master_prefix->prefix.")");
+            $overlap_text = _("Prefix overlaps with prefix")." ".$master_prefix->name." (".$master_prefix->prefix.")";
 
             // ranges
             $master_prefix->prefix_raw = $Tools->prefix_normalize ($master_prefix->prefix);
@@ -117,7 +123,7 @@ if(sizeof($custom) > 0) {
 		}
 		//not null!
 		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) {
-																		{ $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+			{ $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 		}
 		# save to update array
 		$update[$myField['name']] = $_POST[$myField['name']];
@@ -126,15 +132,20 @@ if(sizeof($custom) > 0) {
 
 // set values
 $values = array(
-    "id"=>@$_POST['id'],
-    "name"=>$_POST['name'],
-    "prefix"=>$_POST['prefix'],
-    "master"=>$_POST['master'],
-    "start"=>$_POST['start'],
-    "stop"=>$_POST['stop'],
-    "deviceId"=>$_POST['deviceId'],
-    "description"=>$_POST['description']
+    "id"          =>@$_POST['id'],
+    "name"        =>$_POST['name'],
+    "prefix"      =>$_POST['prefix'],
+    "master"      =>$_POST['master'],
+    "start"       =>$_POST['start'],
+    "stop"        =>$_POST['stop'],
+    "deviceId"    =>$_POST['deviceId'],
+    "description" =>$_POST['description']
     );
+
+# perm check
+if ($User->get_module_permissions ("devices")==User::ACCESS_NONE) {
+    unset ($values['deviceId']);
+}
 
 # custom fields
 if(isset($update)) {
@@ -142,15 +153,17 @@ if(isset($update)) {
 }
 
 # execute update
-if(!$Admin->object_modify ("pstnPrefixes", $_POST['action'], "id", $values))    { $Result->show("danger",  _("Prefix $_POST[action] failed"), false); }
-else																	        { $Result->show("success", _("Prefix $_POST[action] successful"), false); }
+if(!$Admin->object_modify ("pstnPrefixes", $_POST['action'], "id", $values)) {
+    $Result->show("danger", _("Prefix")." ".$_POST["action"]." "._("failed"), false);
+}
+else {
+    $Result->show("success", _("Prefix")." ".$_POST["action"]." "._("successful"), false);
+}
 
 # if delete remove all slaves
 if ($_POST['action']=="delete") {
-    $values['master'] =  $values['id'];
-	# remove all references from prefixes and remove all numbers
-	$Admin->remove_object_references ("pstnPrefixes", "master", $values["id"], 0);
+    $values['master'] = $values['id'];
+    # remove all references from prefixes and remove all numbers
+    $Admin->remove_object_references ("pstnPrefixes", "master", $values["id"], 0);
     $Admin->object_modify ("pstnNumbers", "delete", "prefix", $values);
 }
-
-?>

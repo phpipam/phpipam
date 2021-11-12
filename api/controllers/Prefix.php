@@ -33,22 +33,6 @@
 class Prefix_controller extends Common_api_functions {
 
     /**
-     * _params provided
-     *
-     * @var mixed
-     * @access public
-     */
-    public $_params;
-
-    /**
-     * custom_fields
-     *
-     * @var mixed
-     * @access protected
-     */
-    public $custom_fields;
-
-    /**
      * Custom field selector
      *
      *  This will be used to search for subnets that have {$custom_field_name = customer_type}
@@ -63,7 +47,7 @@ class Prefix_controller extends Common_api_functions {
      * @var string
      * @access private
      */
-    private $custom_field_name = "customer_type";
+    private $custom_field_name = "custom_customer_type";
 
     /**
      * This selector will be used to order found subnets
@@ -100,7 +84,7 @@ class Prefix_controller extends Common_api_functions {
      * @var string
      * @access private
      */
-    private $custom_field_name_addr = "customer_address_type";
+    private $custom_field_name_addr = "custom_customer_address_type";
 
     /**
      * External identifier to link subnets and addresses with
@@ -240,22 +224,6 @@ class Prefix_controller extends Common_api_functions {
     private $master_subnet = false;
 
     /**
-     * Database object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Database;
-
-    /**
-     *  Response handler
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Response;
-
-    /**
      * Subnets controller
      *
      * @var mixed
@@ -270,38 +238,6 @@ class Prefix_controller extends Common_api_functions {
      * @access protected
      */
     protected $Addresses_controller;
-
-    /**
-     * Master Subnets object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Subnets;
-
-    /**
-     * Master Addresses object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Addresses;
-
-    /**
-     * Master Sections object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Sections;
-
-    /**
-     * Master Tools object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Tools;
 
 
     /**
@@ -521,19 +457,6 @@ class Prefix_controller extends Common_api_functions {
 
 
 
-    /**
-     * HEAD, no response
-     *
-     * @access public
-     * @return void
-     */
-    public function HEAD () {
-        return $this->GET ();
-    }
-
-
-
-
 
     /**
      * Creates new prefix or address, based on input parameters
@@ -652,33 +575,6 @@ class Prefix_controller extends Common_api_functions {
 
 
 
-    /**
-     * PATCH method
-     *
-     *  Not needed
-     *
-     * @access public
-     * @return void
-     */
-    public function PATCH () {
-        $this->Response->throw_exception(501, "Method not imeplemented");
-    }
-
-    /**
-     * DELETE method
-     *
-     *  Not needed
-     *
-     * @access public
-     * @return void
-     */
-    public function DELETE () {
-        $this->Response->throw_exception(501, "Method not imeplemented");
-    }
-
-
-
-
 
 
 
@@ -783,8 +679,8 @@ class Prefix_controller extends Common_api_functions {
      */
     private function search_custom_field_name_subnets () {
         // set limit base on type
-        if($this->address_type=="IPv4")     { $limit = " and `subnet` < 4294967296"; }
-        elseif($this->address_type=="IPv6") { $limit = " and `subnet` > 4294967296"; }
+        if($this->address_type=="IPv4")     { $limit = " and CAST(`subnet` AS UNSIGNED) <= 4294967295"; }
+        elseif($this->address_type=="IPv6") { $limit = " and CAST(`subnet` AS UNSIGNED) >  4294967295"; }
         else                                { $limit = ""; }
         // set query and params
         $query = "select * from `subnets` where `".$this->custom_field_name."` = ? $limit order by `".$this->custom_field_orderby."` ".$this->custom_field_order_direction.";";
@@ -834,7 +730,7 @@ class Prefix_controller extends Common_api_functions {
 		if($subnet===false)
 														{ $this->Response->throw_exception(404, "Subnet does not exist"); }
         # get usage
-		$subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet, true);
+		$subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet);
 
 		# return
 		return $subnet_usage;
@@ -875,7 +771,7 @@ class Prefix_controller extends Common_api_functions {
      */
     public function search_first_available_subnet ($master_subnet_id, $bitmask) {
         // fetch
-        $first = $this->Subnets->search_available_single_subnet ($master_subnet_id, $bitmask);
+        $first = $this->Subnets->search_available_subnets ($master_subnet_id, $bitmask, 1, Subnets::SEARCH_FIND_FIRST);
         // return result
         return $first===false ? false : $first[0];
     }
@@ -960,5 +856,3 @@ class Prefix_controller extends Common_api_functions {
         }
     }
 }
-
-?>

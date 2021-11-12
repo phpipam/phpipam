@@ -78,6 +78,27 @@ abstract class DB {
 	 */
 	protected $port 	= '3306';
 
+	/**
+	 * Cache file to store all results from queries to
+	 *
+	 *  structure:
+	 *
+	 *      [table][index] = (object) $content
+	 *
+	 *
+	 * (default value: array())
+	 *
+	 * @var array
+	 * @access public
+	 */
+	public $cache = array();
+
+	/**
+	 * Enable MySQL CTE query support
+	 *
+	 * @var bool|null
+	 */
+	private $ctes_enabled = null;
 
 
 
@@ -139,13 +160,21 @@ abstract class DB {
 				$this->pdo = new \PDO($dsn, $this->username, $this->password);
 			}
 
-			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$this->setErrMode(\PDO::ERRMODE_EXCEPTION);
 
 		} catch (\PDOException $e) {
 			throw new Exception ("Could not connect to database! ".$e->getMessage());
 		}
 
 		@$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
+	}
+
+	/**
+	 * Set PDO error mode
+	 * @param mixed $mode
+	 */
+	public function setErrMode($mode = \PDO::ERRMODE_EXCEPTION) {
+		$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, $mode);
 	}
 
 	/**
@@ -233,6 +262,36 @@ abstract class DB {
 	}
 
 	/**
+	 * MySQL CTE support checks
+	 *
+	 * @access public
+	 * @return  bool
+	 */
+	public function is_cte_enabled() {
+		// Check cached result
+		if (is_bool($this->ctes_enabled))
+			return $this->ctes_enabled;
+
+		$db = Config::ValueOf("db");
+		$ctes_enabled = filter_var($db['use_cte'], FILTER_VALIDATE_INT, ['options'=>['default' => 1, 'min_range' => 0, 'max_range' => 2]]);
+
+		if ($ctes_enabled===0) {	            // Disable CTE Support
+			$this->ctes_enabled = false;
+		} elseif($ctes_enabled===2) {        // Force enable CTE support
+			$this->ctes_enabled = true;
+		} else {
+			try {                           // (default) Autodetect CTE support
+				@$this->runQuery('WITH RECURSIVE cte_test(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM cte_test WHERE n < 3) SELECT n FROM cte_test;');
+				$this->ctes_enabled = true;
+			} catch(Exception $e) {
+				$this->ctes_enabled = false;
+			}
+		}
+
+		return $this->ctes_enabled;
+	}
+
+	/**
 	 * Returns last insert ID
 	 *
 	 * @access public
@@ -249,22 +308,84 @@ abstract class DB {
 	 * @access public
 	 * @param mixed $query
 	 * @param array $values (default: array())
+	 * @param integer|null &$rowCount (default: null)
 	 * @return void
 	 */
 	public function runQuery($query, $values = array(), &$rowCount = null) {
 		if (!$this->isConnected()) $this->connect();
 
-		//debuq
-		$this->log_query($statement, $values);
-
 		$result = null;
 
 		$statement = $this->pdo->prepare($query);
+
+		//debuq
+		$this->log_query($statement, $values);
+
 		if (is_object($statement)) {
 			$result = $statement->execute((array)$values); //this array cast allows single values to be used as the parameter
 			$rowCount = $statement->rowCount();
 		}
 		return $result;
+	}
+
+	/**
+	 * Emulate a SQL CTE query using temporary tables
+	 *
+	 * @param   string  $schema           Temporary table schema e.g (int(11))
+	 * @param   string  $anchor_query     CTE Anchor query (may contain ?)
+	 * @param   array   $anchor_args      CTE Anchor args
+	 * @param   string  $recursive_query  Recursive query, should reference temporary table cte_last
+	 * @param   string  $results_query    Results query
+	 *
+	 * @return  mixed
+	 */
+	public function emulate_cte_query($schema, $anchor_query, $anchor_args, $recursive_query, $results_query, $cleanup=true) {
+		$results = false;
+
+		/**
+		 * Reset engine type if set in config.php (MEMORY or InnoDB)
+		 */
+		$db = Config::ValueOf('db');
+		$tmptable_engine_type = ($db['tmptable_engine_type']=="InnoDB") ? "InnoDB" : "MEMORY";
+
+		try {
+			// Emulate SQL CTE query using temporary tables.
+			//  - cte_query, holds accumulated results
+			//  - cte_0,     temporary results storage (can't reference a temporary table name multiple times in the same query)
+			//  - cte_last,  results of the last iteration.
+
+			$query = "DROP TABLE IF EXISTS cte_query, cte_0, cte_1, cte_last;" .
+					"CREATE TEMPORARY TABLE cte_query $schema ENGINE = $tmptable_engine_type;" .
+					"CREATE TEMPORARY TABLE cte_0     $schema ENGINE = $tmptable_engine_type;" .
+					"CREATE TEMPORARY TABLE cte_last  $schema ENGINE = $tmptable_engine_type;";
+			$this->runQuery($query);
+
+			// Run Anchor query then the recursive query until there are no more results
+			$level = 1;
+			do {
+				$query = "INSERT INTO cte_0 ".($level++==1 ? $anchor_query : $recursive_query).";" .
+						"TRUNCATE TABLE cte_last;" .
+						"INSERT IGNORE INTO cte_last  SELECT * FROM cte_0;" .
+						"TRUNCATE TABLE cte_0;" .
+						"INSERT IGNORE INTO cte_query SELECT * FROM cte_last;";
+				$result = $this->runQuery($query, $anchor_args, $rowCount);
+
+				if ($level>256) { throw new Exception(_('Recursion limit reached.')); }
+			} while ($result == 1 && $rowCount > 0);
+
+			// Run $result_query using cte temporary table results
+			$results = $this->getObjectsQuery($results_query);
+
+		} catch (Exception $e) {
+			if ($cleanup)
+				$this->runQuery("DROP TABLE IF EXISTS cte_query, cte_0, cte_last;");
+			throw $e;
+		}
+
+		// Cleanup and return results
+		if ($cleanup)
+			$this->runQuery("DROP TABLE IF EXISTS cte_query, cte_0, cte_last;");
+		return $results;
 	}
 
 	/**
@@ -276,9 +397,14 @@ abstract class DB {
 	 * @return void
 	 */
 	public function escape($str) {
+		$str = (string) $str;
+		if (strlen($str) == 0) return "";
+
 		if (!$this->isConnected()) $this->connect();
 
-		return $this->unquote_outer($this->pdo->quote((string)$str));
+		// SQL Injection - strip backquote character
+		$str = str_replace('`', '', $str);
+		return $this->unquote_outer($this->pdo->quote($str));
 	}
 
 	/**
@@ -510,6 +636,10 @@ abstract class DB {
 			$sortStr = 'DESC';
 		}
 
+		// change sort fields for vlans and vrfs. ugly :/
+	    if ($tableName=='vlans' && $sortField=='id') { $sortField = "vlanId"; }
+	    if ($tableName=='vrf' && $sortField=='id') { $sortField = "vrfId"; }
+
 		//we should escape all of the params that we need to
 		$tableName = $this->escape($tableName);
 		$sortField = $this->escape($sortField);
@@ -525,9 +655,7 @@ abstract class DB {
 		$results = array();
 
 		if (is_object($statement)) {
-			while ($newObj = $statement->fetchObject($class)) {
-				$results[] = $newObj;
-			}
+			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
 		}
 
 		return $results;
@@ -587,9 +715,32 @@ abstract class DB {
 		$results = array();
 
 		if (is_object($statement)) {
-			while ($newObj = $statement->fetchObject($class)) {
-				$results[] = $newObj;
-			}
+			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
+		}
+
+		return $results;
+	}
+
+	/**
+	 * Get all objects groped by $groupField, array of (id,count(*)) pairs
+	 *
+	 * @param  string $tableName
+	 * @param  string $groupField
+	 * @return array
+	 */
+	public function getGroupBy($tableName, $groupField = 'id') {
+		if (!$this->isConnected()) $this->connect();
+
+		$statement = $this->pdo->prepare("SELECT `$groupField`,COUNT(*) FROM `$tableName` GROUP BY `$groupField`");
+
+		//debug
+		$this->log_query ($statement, array());
+		$statement->execute();
+
+		$results = array();
+
+		if (is_object($statement)) {
+			$results = $statement->fetchAll(PDO::FETCH_KEY_PAIR);
 		}
 
 		return $results;
@@ -680,6 +831,23 @@ abstract class DB {
 	}
 
 	/**
+	 * Escape $result_fields parameter
+	 *
+	 * @access public
+	 * @param string|array $result_fields
+	 * @return string
+	 */
+	public function escape_result_fields($result_fields) {
+		if (empty($result_fields)) return "*";
+
+		if (is_array($result_fields)) {
+			foreach ($result_fields as $i => $f) $result_fields[$i] = "`$f`";
+			$result_fields = implode(',', $result_fields);
+		}
+		return $result_fields;
+	}
+
+	/**
 	 * Searches for object in database
 	 *
 	 * @access public
@@ -690,6 +858,7 @@ abstract class DB {
 	 * @param bool $sortAsc (default: true)
 	 * @param bool $like (default: false)
 	 * @param bool $negate (default: false)
+	 * @param string|array $result_fields (default: "*")
 	 * @return void
 	 */
 	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false, $result_fields = "*") {
@@ -699,23 +868,18 @@ abstract class DB {
 		$like === true ? $operator = "LIKE" : $operator = "=";
 		$negate === true ? $negate_operator = "NOT " : $negate_operator = "";
 
-		// set fields
-		if($result_fields!="*") {
-    		$result_fields_arr = array();
-    		foreach ($result_fields as $f) {
-        		$result_fields_arr[] = "`$f`";
-    		}
-    		// implode
-    		$result_fields = implode(",", $result_fields);
-		}
+		$result_fields = $this->escape_result_fields($result_fields);
 
-        // subnets
-        if ($table=="subnets" && $sortField=="subnet_int") {
-    		return $this->getObjectsQuery('SELECT '.$result_fields.',CAST(subnet AS DECIMAL(39,0)) as subnet_int FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
-        }
-        else {
-    		return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
-        }
+		// change sort fields for vlans and vrfs. ugly :/
+	    if ($table=='vlans' && $sortField=='id') { $sortField = "vlanId"; }
+	    if ($table=='vrf' && $sortField=='id') { $sortField = "vrfId"; }
+
+	    // subnets
+	    if ($table=='subnets' && $sortField=='subnet') {
+	        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY LPAD(`subnet`,39,0) ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+	    } else {
+	        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+	    }
 	}
 
 	/**
@@ -747,6 +911,10 @@ abstract class DB {
 		$objs = $this->getObjectsQuery($query, $values, $class);
 
 		$list = array();
+
+		if (!is_array($objs))
+			return $list;
+
 		foreach ($objs as $obj) {
 			$columns = array_values((array)$obj);
 			$list[] = $columns[0];
@@ -784,6 +952,22 @@ abstract class DB {
 	}
 
 	/**
+	 * Delete a list of objects from the database based on identifier
+	 *
+	 * @method deleteObjects
+	 * @param  string $tableName
+	 * @param  string $identifier
+	 * @param  mixed $ids
+	 * @return bool
+	 */
+	public function deleteObjectsByIdentifier($tableName, $identifier = "id", $id = 0) {
+		$tableName = $this->escape($tableName);
+		$identifier = $this->escape($identifier);
+
+		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$identifier.'` = ?', $id);
+	}
+
+	/**
 	 * Delete specified row
 	 *
 	 * @access public
@@ -795,9 +979,10 @@ abstract class DB {
 	public function deleteRow($tableName, $field, $value, $field2=null, $value2 = null) {
 		$tableName = $this->escape($tableName);
 		$field = $this->escape($field);
+		$field2 = $this->escape($field2);
 
 		//multiple
-		if(!is_null($field2))
+		if(!empty($field2))
 		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=? and `'.$field2.'`=?;', array($value, $value2));
 		else
 		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=?;', array($value));
@@ -815,6 +1000,36 @@ abstract class DB {
 		$tableName = $this->escape($tableName);
 		//execute
 		return $this->runQuery('TRUNCATE TABLE `'.$tableName.'`;');
+	}
+
+	/**
+	 * Begin SQL Transaction
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function beginTransaction() {
+		return $this->pdo->beginTransaction();
+	}
+
+	/**
+	 * Commit SQL Transaction
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function commit() {
+		return $this->pdo->commit();
+	}
+
+	/**
+	 * Commit SQL Transaction
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function rollBack() {
+		return $this->pdo->rollBack();
 	}
 }
 
@@ -897,7 +1112,8 @@ class Database_PDO extends DB {
 	 */
 	private function set_db_params () {
 		# use config file
-		require( dirname(__FILE__) . '/../../config.php' );
+		$db = Config::ValueOf('db');
+
 		# set
 		$this->host 	= $db['host'];
 		$this->port 	= $db['port'];
@@ -906,7 +1122,7 @@ class Database_PDO extends DB {
 		$this->dbname 	= $db['name'];
 
 		$this->ssl = false;
-		if ($db['ssl']===true) {
+		if (@$db['ssl']===true) {
 
 			$this->pdo_ssl_opts = array (
 				'ssl_key'    => PDO::MYSQL_ATTR_SSL_KEY,
@@ -917,6 +1133,10 @@ class Database_PDO extends DB {
 			);
 
 			$this->ssl = array();
+
+			if ($db['ssl_verify']===false) {
+				$this->ssl[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
+			}
 
 			foreach ($this->pdo_ssl_opts as $key => $pdoopt) {
 				if ($db[$key]) {
@@ -965,6 +1185,10 @@ class Database_PDO extends DB {
 		");
 
 		$columnsByTable = array();
+
+		if (!is_array($columns))
+			return $columnsByTable;
+
 		foreach ($columns as $column) {
 			if (!isset($columnsByTable[$column->table_name])) {
 				$columnsByTable[$column->table_name] = array();
@@ -1009,6 +1233,10 @@ class Database_PDO extends DB {
 
 		$foreignLinksByTable = array();
 		$foreignLinksByRefTable = array();
+
+		if (!is_array($foreignLinks))
+			return array($foreignLinksByTable, $foreignLinksByRefTable);
+
 		foreach ($foreignLinks as $foreignLink) {
 			if (!isset($foreignLinksByTable[$foreignLink->table_name])) {
 				$foreignLinksByTable[$foreignLink->table_name] = array();
@@ -1025,7 +1253,3 @@ class Database_PDO extends DB {
 		return array($foreignLinksByTable, $foreignLinksByRefTable);
 	}
 }
-
-
-
-?>

@@ -28,11 +28,7 @@ if($folder['sectionId']!=$_GET['section'])	{
 }
 ?>
 
-<!-- folder details upper table -->
-<h4><?php print _('Folder details'); ?></h4>
-<hr>
-
-<table class="ipaddress_subnet table-condensed table-auto">
+<table class="ipaddress_subnet table-condensed table-auto" style='margin-top:20px;'>
 
 	<tr>
 		<th><?php print _('Hierarchy'); ?></th>
@@ -51,11 +47,11 @@ if($folder['sectionId']!=$_GET['section'])	{
 
 	<?php
 	# print custom subnet fields if any
-	if(sizeof(sizeof($cfields)) > 0) {
+	if(!is_null($cfields)) {
 		foreach($cfields as $key=>$field) {
 			if(strlen($folder[$key]) > 0) {
 			print "<tr>";
-			print "	<th>$key</th>";
+			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
 			print "	<td>";
 				# booleans
 				if($field['type']=="tinyint(1)")	{
@@ -141,7 +137,8 @@ if($folder['sectionId']!=$_GET['section'])	{
 	print "<div class='btn-group'>";
 		print "<a class='modIPaddr btn btn-xs btn-default btn-success' 	href='' data-container='body' rel='tooltip' title='"._('Add new IP address')."' data-subnetId='$folder[id]' data-action='add' data-id=''>	<i class='fa fa-plus'></i></a> ";
         if($folder_permission>1 && $User->settings->enableSNMP=="1") {
-        print "<button class='btn btn-xs btn-success' id='snmp-routing-section' rel='tooltip' data-container='body' title='"._('Search for subnets through SNMP')."' data-subnetId='$folder[id]' data-sectionId='$folder[sectionId]'><i class='fa fa-cogs'></i></button>";
+		$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "scan");
+        print "<button class='btn btn-xs btn-success' id='snmp-routing-section' rel='tooltip' data-container='body' title='"._('Search for subnets through SNMP')."' data-subnetId='$folder[id]' data-sectionId='$folder[sectionId]' data-csrf-cookie='$csrf'><i class='fa fa-cogs'></i></button>";
         print "<button class='btn btn-xs btn-default' id='truncate' rel='tooltip' data-container='body' title='"._('Truncate subnet')."' data-subnetId='$folder[id]'><i class='fa fa-gray fa-trash-o'></i></button>";
         }
 	print "</div>";

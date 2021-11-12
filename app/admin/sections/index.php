@@ -36,13 +36,13 @@ if ($sections !== false) {
 
 <!-- Add new section -->
 <div class="btn-group" style='margin-bottom:20px;margin-top:10px;'>
-	<button class='btn btn-sm btn-default editSection' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add section'); ?></button>
-	<button class='btn btn-sm btn-default sectionOrder' ><i class='fa fa-tasks'></i> <?php print _('Section order'); ?></button>
+	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add section'); ?></button>
+	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/sections/edit-order.php' data-class='700' data-action='add'><i class='fa fa-tasks'></i> <?php print _('Section order'); ?></button>
 </div>
 
 <!-- show sections -->
 <?php if($sections!==false) { ?>
-<table class="table sorted table-striped table-condensed table-top">
+<table class="table sorted table-striped table-condensed table-top" data-cookie-id-table="admin_sections">
 <!-- headers -->
 <thead>
 <tr>
@@ -50,8 +50,9 @@ if ($sections !== false) {
     <th><?php print _('Description'); ?></th>
     <th><?php print _('Parent'); ?></th>
     <th><?php print _('Strict mode'); ?></th>
-    <th><?php print _('Show VLANs'); ?></th>
-    <th><?php print _('Show VRFs'); ?></th>
+    <th><?php print _('Show subnet menu'); ?></th>
+    <th><?php print _('Show VLAN menu'); ?></th>
+    <th><?php print _('Show VRF menu'); ?></th>
     <th><?php print _('Show only supernets'); ?></th>
     <th><?php print _('Group Permissions'); ?></th>
     <th></th>
@@ -68,7 +69,7 @@ if(isset($sections_sorted)) {
 
 		print '<tr class="'.$section['class'].'">'. "\n";
 
-	    print '	<td>'. str_replace("_", " ", $section['name']).'</td>'. "\n";
+	    print '	<td><span class="btn btn-xs btn-default"><i class="fa fa-server prefix"></i> '. str_replace("_", " ", $section['name']).'</span></td>'. "\n";
 	    print '	<td>'. $section['description'] .'</td>'. "\n";
 	    //master Section
 	    if($section['masterSection']!=0) {
@@ -81,6 +82,10 @@ if(isset($sections_sorted)) {
 	    //strictMode
 	    $mode = $section['strictMode']==0 ? "<span class='badge badge1 badge5 alert-danger'>"._("No") : "<span class='badge badge1 badge5 alert-success'>"._("Yes");
 	    print '	<td>'. $mode .'</span></td>'. "\n";
+	    //Show Subnets
+	    print " <td>";
+	    print @$section['showSubnet']==1 ? "<span class='badge badge1 badge5 alert-success'>"._("Yes") : "<span class='badge badge1 badge5 alert-danger'>"._("No");
+	    print "	</span></td>";
 	    //Show VLANs
 	    print " <td>";
 	    print @$section['showVLAN']==1 ? "<span class='badge badge1 badge5 alert-success'>"._("Yes") : "<span class='badge badge1 badge5 alert-danger'>"._("No");
@@ -118,9 +123,9 @@ if(isset($sections_sorted)) {
 
 	   	print '	<td class="actions">'. "\n";
 	   	print "	<div class='btn-group btn-group-xs'>";
-		print "		<button class='btn btn-default editSection' data-action='edit'   data-sectionid='$section[id]'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='edit' data-sectionid='$section[id]'><i class='fa fa-pencil'></i></button>";
 		print "		<a class='btn btn-default' href='".create_link("administration","sections","section-changelog",$section['id'])."'><i class='fa fa-clock-o'></i></a>";
-		print "		<button class='btn btn-default editSection' data-action='delete' data-sectionid='$section[id]'><i class='fa fa-times'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='delete' data-sectionid='$section[id]'><i class='fa fa-times'></i></button>";
 		print "	</div>";
 		print '	</td>'. "\n";
 

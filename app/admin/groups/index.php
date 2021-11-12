@@ -26,6 +26,15 @@ if ($auth_methods!==false) {
 		$auth_methods = false;
 	}
 }
+
+# fetch custom fields
+$custom = $Tools->fetch_custom_fields('userGroups');
+
+/* check customfields */
+$ffields = json_decode($User->settings->hiddenCustomFields, true);
+$ffields = is_array(@$ffields['userGroups']) ? $ffields['userGroups'] : array();
+
+$colspanCustom = 0;
 ?>
 
 
@@ -35,14 +44,14 @@ if ($auth_methods!==false) {
 
 <!-- Add new -->
 <div class="btn-group">
-	<button class='btn btn-sm btn-default editGroup' style="margin-bottom:10px;" data-action='add'><i class='fa fa-plus'></i> <?php print _('Create group'); ?></button>
+	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/groups/edit-group.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create group'); ?></button>
 	<?php if($auth_methods!==false) { ?>
-	<button class='btn btn-sm btn-default adLookup'><i class='fa fa-search'> <?php print _('Search domain groups'); ?></i></button>
+	<button class='btn btn-sm btn-default adLookup'><i class='fa fa-search'></i> <?php print _('Search domain groups'); ?></button>
 	<?php } ?>
 </div>
 
 <!-- table -->
-<table id="userPrint1" class="table sorted table-striped table-top">
+<table id="userPrint" class="table sorted table-striped table-top" data-cookie-id-table="admin_groups">
 
 <!-- Headers -->
 <thead>
@@ -51,7 +60,18 @@ if ($auth_methods!==false) {
     <th><?php print _('Group description'); ?></th>
     <th><?php print _('Belonging users'); ?></th>
     <th><?php print _('Section permissions'); ?></th>
-    <th colspan="2"></th>
+	<?php
+	if(sizeof(@$custom) > 0) {
+		foreach($custom as $field) {
+			if(!in_array($field['name'], $ffields)) {
+				$colspanCustom++;
+				print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			}
+		}
+	}
+	?>
+    <th></th>
+    <th></th>
 </tr>
 </thead>
 
@@ -67,8 +87,8 @@ if ($auth_methods!==false) {
 	}
 	?>
 	</td>
-	<td><?php print _('All sections :'); ?> <span class="badge badge1 badge5">Read / Write</span></td>
-	<td colspan="2"></td>
+	<td><?php print _('All sections:'); ?> <span class="badge badge1 badge5"><?php print _("Read / Write"); ?></span></td>
+	<td colspan="<?php print 2+$colspanCustom; ?>"></td>
 </tr>
 
 <?php
@@ -107,20 +127,30 @@ if($groups) {
 		}
 		print "</td>";
 
+		# custom
+		if(sizeof($custom) > 0) {
+			foreach($custom as $field) {
+				if(!in_array($field['name'], $ffields)) {
+					print "<td class='hidden-xs hidden-sm hidden-md'>";
+					$Tools->print_custom_field ($field['type'], $g[$field['name']]);
+					print "</td>";
+				}
+			}
+		}
 
 		# add/remove users
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
-		print "		<button class='btn btn-xs btn-default addToGroup' 		data-groupid='$g[g_id]' data-action='add'    rel='tooltip' data-container='body'  title='"._('add users to this group')."'>   	<i class='fa fa-plus'></i></button>";
-		print "		<button class='btn btn-xs btn-default removeFromGroup' 	data-groupid='$g[g_id]' data-action='remove' rel='tooltip' data-container='body'  title='"._('remove users from this group')."'><i class='fa fa-minus'></i></button>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/groups/add-users.php' data-class='700' data-action='add' data-g_id='$g[g_id]' rel='tooltip' data-container='body'  title='"._('add users to this group')."'><i class='fa fa-plus'></i></a>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/groups/remove-users.php' data-class='700' data-action='remove' data-g_id='$g[g_id]' rel='tooltip' data-container='body'  title='"._('remove users from this group')."'><i class='fa fa-minus'></i></a>";
 		print "	</div>";
 		print "</td>";
 
 		# edit, delete
 		print "<td class='actions'>";
 		print "	<div class='btn-group'>";
-		print "		<button class='btn btn-xs btn-default editGroup'  		data-groupid='$g[g_id]' data-action='edit'   rel='tooltip' data-container='body'  title='"._('edit group details')."'>	<i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default editGroup'  		data-groupid='$g[g_id]' data-action='delete' rel='tooltip' data-container='body'  title='"._('remove group')."'>		<i class='fa fa-times'></i></button>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/groups/edit-group.php' data-class='700' data-action='edit' data-id='$g[g_id]'><i class='fa fa-pencil'></i></a>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/groups/edit-group.php' data-class='700' data-action='delete' data-id='$g[g_id]'><i class='fa fa-times'></i></a>";
 		print "	</div>";
 		print "</td>";
 

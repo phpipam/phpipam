@@ -5,11 +5,12 @@ $User->check_user_session();
 // now search for similar addresses if chosen
 if (strlen($User->settings->link_field)>0) {
 	// search
-	$similar = $Addresses->search_similar_addresses ($User->settings->link_field, $address[$User->settings->link_field], $address['id']);
+	$similar = $Addresses->search_similar_addresses ((object)$address, $User->settings->link_field, $address[$User->settings->link_field]);
 
 	if($similar!==false) {
+		$link_field_print = $User->settings->link_field == "ip_addr" ? $Subnets->transform_to_dotted($address[$User->settings->link_field]) : $address[$User->settings->link_field];
 
-		print "<h4>"._('Addresses linked with')." ".$User->settings->link_field." <strong>".$address[$User->settings->link_field]."</strong>:</h4><hr>";
+		print "<h4>"._('Addresses linked with')." ".$User->settings->link_field." <strong>".$link_field_print."</strong>:</h4><hr>";
 
         print "<table class='ipaddress_subnet table-condensed table-auto'>";
 
@@ -30,18 +31,16 @@ if (strlen($User->settings->link_field)>0) {
             // hostname
             print "<tr>";
             print " <th>"._("Hostname")."</th>";
-            print " <td>$s->dns_name</td>";
+            print " <td>$s->hostname</td>";
             print "</tr>";
 
             // section
-            $se->description = strlen($se->description)>0 ? "(".$se->description.")" : "";
             print "<tr>";
             print " <th>"._("Section")."</th>";
             print " <td><a href='".create_link("subnets", $sn->sectionId)."'>$se->name</a> $se_description</td>";
             print "</tr>";
 
             // subnet
-            $sn->description = strlen($sn->description)>0 ? "(".$sn->description.")" : "";
             print "<tr>";
             print " <th>"._("Subnet")."</th>";
             print " <td><a href='".create_link("subnets", $sn->sectionId, $sn->id)."'>".$Subnets->transform_address($sn->subnet, "dotted")."/".$sn->mask."</a> ".$sn_description."</td>";
@@ -63,4 +62,3 @@ if (strlen($User->settings->link_field)>0) {
 else {
     $Result->show("info", _("Address linking disabled"), false);
 }
-?>

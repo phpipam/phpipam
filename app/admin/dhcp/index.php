@@ -11,7 +11,12 @@ $tabs = array("subnets", "leases", "reservations", "settings", "config");
 <h4><?php print _('DHCP management'); ?></h4>
 <hr><br>
 
-<?php if($User->settings->enableDHCP==1) { ?>
+<?php
+# perm check
+if ($User->get_module_permissions ("dhcp")==User::ACCESS_NONE) {
+    $Result->show("danger", _("You do not have permissions to access this module"), false);
+}
+elseif($User->settings->enableDHCP==1) { ?>
 
     <?php
     # validate DHCP settings - JSON
@@ -55,6 +60,7 @@ $tabs = array("subnets", "leases", "reservations", "settings", "config");
         <?php
         // include file
         if(!file_exists(dirname(__FILE__) . "/$_GET[subnetId].php")) 	{ $Result->show("danger", "Invalid request", true); }
+        elseif (!in_array($_GET['subnetId'], $tabs))                    { $Result->show("danger", "Invalid request", true); }
         else													        { include(dirname(__FILE__) . "/$_GET[subnetId].php"); }
         ?>
         </div>

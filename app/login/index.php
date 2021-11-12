@@ -8,9 +8,13 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
     // try to authenticate
 	$User->authenticate ($_SERVER['PHP_AUTH_USER'], '');
 	// Redirect user where he came from, if unknown go to dashboard.
-	if( isset($_COOKIE['phpipamredirect']) )    { header("Location: ".$_COOKIE['phpipamredirect']); }
+	if( !empty($_COOKIE['phpipamredirect']) )   { header("Location: ".safeurlencode($_COOKIE['phpipamredirect'])); }
 	else                                        { header("Location: ".create_link("dashboard")); }
 	exit();
+}
+// disable requests module for public
+if(@$config['requests_public']===false) {
+	$User->settings->enableIPrequests = 0;
 }
 ?>
 
@@ -37,22 +41,25 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 	<title><?php print $User->settings->siteTitle; ?> :: login</title>
 
 	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-custom.css">
-	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/font-awesome/font-awesome.min.css">
-	<link rel="shortcut icon" href="css/<?php print SCRIPT_PREFIX; ?>/images/favicon.png">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<?php if ($User->settings->theme!="white") { ?>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->settings->theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<?php } ?>
+	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-3.1.1.min.js"></script>
-	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/login.js"></script>
-	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap.min.js"></script>
-	<script type="text/javascript">
+	<script src="js/jquery-3.5.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script>
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/dieIE.js"></script>
+	<script src="js/dieIE.js"></script>
 	<![endif]-->
 </head>
 
@@ -83,8 +90,10 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
     <!-- logo -->
 	<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <?php
-	if(file_exists( "css/".SCRIPT_PREFIX."/images/logo/logo.png")) {
-    	print "<img style='width:220px;margin:10px;margin-top:20px;' src='css/".SCRIPT_PREFIX."/images/logo/logo.png'>";
+	if(file_exists( "css/images/logo/logo.png")) {
+		// set width
+		$logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
+    	print "<img style='max-width:".$logo_width."px;margin:10px;margin-top:20px;' src='css/images/logo/logo.png'>";
 	}
     ?>
 	</div>
@@ -106,19 +115,20 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 	<?php
 	# set default language
 	if(isset($User->settings->defaultLang) && !is_null($User->settings->defaultLang) ) {
-		# get language
+		# get global default language
 		$lang = $User->get_default_lang();
-
-		putenv("LC_ALL=".$lang->l_code);
-		setlocale(LC_ALL, $lang->l_code);					// set language
-		bindtextdomain("phpipam", "./functions/locale");	// Specify location of translation tables
-		textdomain("phpipam");								// Choose domain
+		if (is_object($lang))
+			set_ui_language($lang->l_code);
 	}
 	?>
 
 	<?php
 	# include proper subpage
-	if($_GET['page'] == "login") 				{ include_once('login_form.php'); }
+	if($_GET['page'] == "login") 				{
+		# disable main login form if you want use another authentification method by default (SAML, LDAP, etc.)
+		$include_main_login_form = !isset($config['disable_main_login_form']) || !$config['disable_main_login_form'];
+		if ($include_main_login_form) include_once('login_form.php');
+	}
 	else if ($_GET['page'] == "request_ip") 	{ include_once('request_ip_form.php'); }
 	else 										{ $_GET['subnetId'] = "404"; print "<div id='error'>"; include_once('app/error.php'); print "</div>"; }
 	?>
@@ -129,11 +139,13 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 		# deauthenticate user
 		if ( $User->is_authenticated()===true ) {
 			# print result
-			if($_GET['section']=="timeout")		{ $Result->show("success", _('You session has timed out')); }
-			else								{ $Result->show("success", _('You have logged out')); }
+			if(isset($_GET['section']) && $_GET['section']=="timeout")
+				$Result->show("success", _('You session has timed out'));
+			else
+				$Result->show("success", _('You have logged out'));
 
 			# write log
-			$Log->write( "User logged out", "User $User->username has logged out", 0, $User->username );
+			$Log->write( _("User logged out"), _("User")." ".$User->username." "._("has logged out"), 0, $User->username );
 
 			# destroy session
 			$User->destroy_session();
@@ -141,8 +153,16 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 
 		//check if SAML2 login is possible
 		$saml2settings=$Tools->fetch_object("usersAuthMethod", "type", "SAML2");
-		if($saml2settings!=false){
-			$Result->show("success", _('You can login with SAML2 <a href="'.create_link('saml2').'">here</a>'));
+
+		if ($saml2settings!=false) {
+			$version = json_decode(@file_get_contents(dirname(__FILE__).'/../../functions/php-saml/src/Saml2/version.json'), true);
+			$version = $version['php-saml']['version'];
+
+			if ($version < 3.4) {
+				$Result->show("danger", _('php-saml library missing, please update submodules'));
+			} else {
+				$Result->show("success", _('You can login with SAML2').' <a href="'.create_link('saml2').'">'._('here').'</a>!');
+			}
 		}
 
 		?>

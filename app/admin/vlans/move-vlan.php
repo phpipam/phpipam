@@ -5,21 +5,22 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-
+# perm check popup
+$User->check_module_permissions ("vlan", User::ACCESS_RW, true, true);
 
 # fetch vlan details
-$vlan = $Admin->fetch_object ("vlans", "vlanId", @$_POST['vlanId']);
+$vlan = $Admin->fetch_object ("vlans", "vlanid", @$_POST['vlanid']);
 if($vlan===false)					{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch current domain
@@ -30,7 +31,7 @@ if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true, true
 $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });
@@ -50,13 +51,17 @@ $(document).ready(function(){
 		<th><?php print $vlan_domain->name." (".$vlan_domain->description.")"; ?></th>
 	</tr>
 	<tr>
+		<td><?php print _('VLAN'); ?></td>
+		<th><?php print $vlan->name." ("._("VLAN")." ".$vlan->number.")"; ?></th>
+	</tr>
+	<tr>
 		<td colspan="2"><hr></td>
 	</tr>
 	<!-- new domain -->
 	<tr>
 		<td><?php print _('New domain'); ?></td>
 		<td>
-		<input type="hidden" name="vlanId" value="<?php print $vlan->vlanId; ?>">
+		<input type="hidden" name="vlanid" value="<?php print $vlan->vlanId; ?>">
 		<select name="newDomainId" class="form-control input-w-auto input-sm">
 		<?php
 		$m=0;
@@ -83,10 +88,10 @@ $(document).ready(function(){
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<?php if($m>0) { ?>
-		<button class="btn btn-sm btn-default btn-success" id="moveVLANsubmit"><?php print ("Move"); ?></button>
+		<button class='btn btn-sm btn-default submit_popup' data-script="app/admin/vlans/move-vlan-result.php" data-result_div="moveVLANSubmitResult" data-form='moveVLAN'><?php print ("Move"); ?></button>
 		<?php } ?>
 	</div>
 
 	<!-- result -->
-	<div class="moveVLANSubmitResult"></div>
+	<div id="moveVLANSubmitResult"></div>
 </div>

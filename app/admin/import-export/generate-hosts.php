@@ -6,7 +6,10 @@
 
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+
+# Don't corrupt output with php errors!
+disable_php_errors();
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -45,7 +48,7 @@ if(sizeof($hosts)>0) {
 		$diff = 17 - strlen($Subnets->transform_to_dotted($host->ip_addr));	//for print offset
 		$diff>0 ? : $diff = 3;												//IPv6 print offset
 
-		$res[] = $Subnets->transform_to_dotted($host->ip_addr).str_repeat(" ", $diff)."$host->dns_name";
+		$res[] = $Subnets->transform_to_dotted($host->ip_addr).str_repeat(" ", $diff)."$host->hostname";
 
 		//break
 		if($hosts[$m]->subnetId!=@$hosts[$m+1]->subnetId) {
@@ -67,4 +70,3 @@ header('Content-type: application/octet-stream');
 header('Content-Disposition: attachment; filename="'. $filename .'"');
 
 print($content);
-?>

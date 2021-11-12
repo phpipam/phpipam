@@ -9,7 +9,7 @@
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "instructions");
+$csrf = $User->Crypto->csrf_cookie ("create", "instructions");
 
 // default
 if(!isset($_GET['subnetId'])) { $_GET['subnetId'] = 1; }
@@ -21,10 +21,10 @@ if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
 
     # set params
     if($_GET['subnetId']=="1")  {
-        $title = "Edit user instructions";
+        $title = _("Edit user instructions");
     }
     else {
-        $title = "Edit IP request instructions";
+        $title = _("Edit IP request instructions");
     }
 
     //count rows
@@ -36,8 +36,8 @@ if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
     ?>
 
     <ul class="nav nav-tabs" style="margin-bottom: 30px;">
-        <li role="presentation" <?php if($_GET['subnetId']==1) { print "class='active'"; } ?>><a href="<?php print create_link("administration", "instructions", 1); ?>">User instructions</a></li>
-        <li role="presentation" <?php if($_GET['subnetId']==2) { print "class='active'"; } ?>><a href="<?php print create_link("administration", "instructions", 2); ?>">IP request instructions</a></li>
+        <li role="presentation" <?php if($_GET['subnetId']==1) { print "class='active'"; } ?>><a href="<?php print create_link("administration", "instructions", 1); ?>"><?php print _("User instructions"); ?></a></li>
+        <li role="presentation" <?php if($_GET['subnetId']==2) { print "class='active'"; } ?>><a href="<?php print create_link("administration", "instructions", 2); ?>"><?php print _("IP request instructions"); ?></a></li>
     </ul>
 
     <!-- title -->
@@ -52,7 +52,7 @@ if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
     	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	<input type="hidden" name="id" value="<?php print $_GET['subnetId']; ?>">
 
-    	<script src="js/<?php print SCRIPT_PREFIX; ?>/ckeditor/ckeditor.js"></script>
+    	<script src="js/ckeditor/ckeditor.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
     	<script>
         	CKEDITOR.replace( 'instructions', {
     	    	uiColor: '#f9f9f9',
@@ -77,6 +77,5 @@ if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
     <?php
 }
 else {
-    $Result->show("danger", "Invalid ID", false);
+    $Result->show("danger", _("Invalid ID"), false);
 }
-?>

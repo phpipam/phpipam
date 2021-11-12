@@ -5,6 +5,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 
 # not existing
 if(!$vrf) { $Result->show("danger", _('Invalid VRF id'), true); }
@@ -76,7 +78,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 		foreach($cfields as $key=>$field) {
 			$vrf->{$key} = str_replace("\n", "<br>",$vrf->{$key});
 			// create links
-			$vrf->{$key} = $Result->create_links($vrf->{$key});
+			$vrf->{$key} = $Tools->create_links($vrf->{$key});
 			print "<tr>";
 			print "	<th>$key</th>";
 			print "	<td style='vertical-align:top;align:left;'>".$vrf->{$key}."</td>";
@@ -95,9 +97,9 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 	print "	<div class='btn-group'>";
 
 	# permissions
-	if($User->is_admin (false)) {
-		print "		<button class='btn btn-xs btn-default vrfManagement' data-action='edit'   data-vrfId='$vrf->vrfId'><i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default vrfManagement' data-action='delete' data-vrfId='$vrf->vrfId'><i class='fa fa-times'></i></button>";
+	if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrf/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrf/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf->vrfId'><i class='fa fa-times'></i></button>";
 	}
 
 	print "	</div>";

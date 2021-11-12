@@ -1,14 +1,3 @@
-<script type="text/javascript">
-$(document).ready(function() {
-	if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
-
-	return false;
-});
-</script>
-
-
-<table id="logs" class="table table-condensed table-hover table-top" style="margin-top:10px;">
-
 <?php
 
 /**
@@ -16,10 +5,10 @@ $(document).ready(function() {
  **********************************/
 
 /* required functions */
-if(!is_object($User)) {
+if(!isset($User) || !is_object($User)) {
 
 	/* functions */
-	require( dirname(__FILE__) . '/../../../functions/functions.php');
+	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 	# initialize user object
 	$Database 	= new Database_PDO;
@@ -40,15 +29,30 @@ if ( empty($_POST['Informational']) && empty($_POST['Notice']) && empty($_POST['
 }
 ?>
 
+<script>
+$(document).ready(function() {
+	if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+
+	return false;
+});
+</script>
+
+
+<table id="logs" class="table sorted nosearch nopagination table-condensed table-hover table-top" style="margin-top:10px;" data-cookie-id-table="show_logs">
+
 <!-- print headers -->
+<thead>
 <tr>
     <th class="date" style="width:130px;white-space:nowrap"><?php print _('Date'); ?></th>
     <th><?php print _('Severity'); ?></th>
     <th><?php print _('Username'); ?></th>
     <th><?php print _('IP address'); ?></th>
-    <th colspan="2"><?php print _('Event'); ?></th>
+    <th><?php print _('Event'); ?></th>
+    <th></th>
 </tr>
+</thead>
 
+<tbody>
 <!-- print logs -->
 <?php
 
@@ -69,6 +73,7 @@ if(!isset($_POST['direction'])) 									{ $_POST['direction'] = ""; }
 
 /* get requested logs */
 $logs = $Log->fetch_logs($logCount, $_POST['direction'], $_POST['lastId'], $highestId, $informational, $notice, $warning);
+if (!is_array($logs)) { $logs = array(); }
 
 $x = 0;
 foreach ($logs as $log) {
@@ -109,7 +114,7 @@ foreach ($logs as $log) {
 	print '</tr>'. "\n";
 }
 ?>
-
+</tbody>
 </table>	<!-- end filter table -->
 
 

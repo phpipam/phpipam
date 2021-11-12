@@ -5,17 +5,19 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# validate permissions
+$User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 
 # validate id
 if(!is_numeric($_POST['id']))                           { $Result->show("danger", _("Invalid ID"), true, true); }
@@ -27,7 +29,7 @@ $nat = $Admin->fetch_object ("nat", "id", $_POST['id']);
 $nat!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
 // new cookie
-$csrf_cookie = $User->csrf_cookie ("create", "nat_add");
+$csrf_cookie = $User->Crypto->csrf_cookie ("create", "nat_add");
 ?>
 
 <!-- header -->
@@ -60,7 +62,7 @@ $csrf_cookie = $User->csrf_cookie ("create", "nat_add");
 </div>
 
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
     $('form#search_nats').submit(function() {
         $.post("app/admin/nat/item-add-search.php", $(this).serialize(), function(data) {

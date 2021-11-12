@@ -5,7 +5,7 @@
  */
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -21,8 +21,6 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode (true);
 
-# set address types array
-$Tools->get_addresses_types ();
 // set tagChange
 $tagChange = false;
 

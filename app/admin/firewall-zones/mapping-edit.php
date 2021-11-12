@@ -5,7 +5,7 @@
  **************************************************/
 
 # functions
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize classes
 $Database = new Database_PDO;
@@ -33,6 +33,7 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 
 # fetch all firewall zones
 $firewallZones = $Zones->get_zones();
+if (!is_array($firewallZones)) { $firewallZones = array(); }
 
 # fetch settings
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);

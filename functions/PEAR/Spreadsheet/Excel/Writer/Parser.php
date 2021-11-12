@@ -679,9 +679,9 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
         // TODO: possible class value 0,1,2 check Formula.pm
         // Split the range into 2 cell refs
         if (preg_match("/^([A-Ia-i]?[A-Za-z])(\d+)\:([A-Ia-i]?[A-Za-z])(\d+)$/", $range)) {
-            list($cell1, $cell2) = split(':', $range);
+            list($cell1, $cell2) = preg_split('/:/', $range);
         } elseif (preg_match("/^([A-Ia-i]?[A-Za-z])(\d+)\.\.([A-Ia-i]?[A-Za-z])(\d+)$/", $range)) {
-            list($cell1, $cell2) = split('\.\.', $range);
+            list($cell1, $cell2) = preg_split('/\.\./', $range);
 
         } else {
             // TODO: use real error codes
@@ -727,7 +727,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
         $class = 2; // as far as I know, this is magick.
 
         // Split the ref at the ! symbol
-        list($ext_ref, $range) = split('!', $token);
+        list($ext_ref, $range) = preg_split('/!/', $token);
 
         // Convert the external reference part (different for BIFF8)
         if ($this->_BIFF_version == 0x0500) {
@@ -743,7 +743,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
         }
 
         // Split the range into 2 cell refs
-        list($cell1, $cell2) = split(':', $range);
+        list($cell1, $cell2) = preg_split('/:/', $range);
 
         // Convert the cell references
         if (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?(\d+)$/", $cell1)) {
@@ -824,7 +824,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
         $class = 2; // as far as I know, this is magick.
 
         // Split the ref at the ! symbol
-        list($ext_ref, $cell) = split('!', $cell);
+        list($ext_ref, $cell) = preg_split('/!/', $cell);
 
         // Convert the external reference part (different for BIFF8)
         if ($this->_BIFF_version == 0x0500) {
@@ -871,7 +871,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
 
         // Check if there is a sheet range eg., Sheet1:Sheet2.
         if (preg_match("/:/", $ext_ref)) {
-            list($sheet_name1, $sheet_name2) = split(':', $ext_ref);
+            list($sheet_name1, $sheet_name2) = preg_split('/:/', $ext_ref);
 
             $sheet1 = $this->_getSheetIndex($sheet_name1);
             if ($sheet1 == -1) {
@@ -917,7 +917,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
 
         // Check if there is a sheet range eg., Sheet1:Sheet2.
         if (preg_match("/:/", $ext_ref)) {
-            list($sheet_name1, $sheet_name2) = split(':', $ext_ref);
+            list($sheet_name1, $sheet_name2) = preg_split('/:/', $ext_ref);
 
             $sheet1 = $this->_getSheetIndex($sheet_name1);
             if ($sheet1 == -1) {
@@ -1095,7 +1095,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
         $col    = 0;
         $col_ref_length = strlen($col_ref);
         for ($i = 0; $i < $col_ref_length; $i++) {
-            $col += (ord($col_ref{$i}) - ord('A') + 1) * pow(26, $expn);
+            $col += (ord($col_ref[$i]) - ord('A') + 1) * pow(26, $expn);
             $expn--;
         }
 
@@ -1117,27 +1117,27 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
         $formula_length = strlen($this->_formula);
         // eat up white spaces
         if ($i < $formula_length) {
-            while ($this->_formula{$i} == " ") {
+            while ($this->_formula[$i] == " ") {
                 $i++;
             }
 
             if ($i < ($formula_length - 1)) {
-                $this->_lookahead = $this->_formula{$i+1};
+                $this->_lookahead = $this->_formula[$i+1];
             }
             $token = '';
         }
 
         while ($i < $formula_length) {
-            $token .= $this->_formula{$i};
+            $token .= $this->_formula[$i];
             if ($i < ($formula_length - 1)) {
-                $this->_lookahead = $this->_formula{$i+1};
+                $this->_lookahead = $this->_formula[$i+1];
             } else {
                 $this->_lookahead = '';
             }
 
             if ($this->_match($token) != '') {
                 //if ($i < strlen($this->_formula) - 1) {
-                //    $this->_lookahead = $this->_formula{$i+1};
+                //    $this->_lookahead = $this->_formula[$i+1];
                 //}
                 $this->_current_char = $i + 1;
                 $this->_current_token = $token;
@@ -1145,7 +1145,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
             }
 
             if ($i < ($formula_length - 2)) {
-                $this->_lookahead = $this->_formula{$i+2};
+                $this->_lookahead = $this->_formula[$i+2];
             } else { // if we run out of characters _lookahead becomes empty
                 $this->_lookahead = '';
             }
@@ -1296,7 +1296,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
     {
         $this->_current_char = 0;
         $this->_formula      = $formula;
-        $this->_lookahead    = $formula{1};
+        $this->_lookahead    = $formula[1];
         $this->_advance();
         $this->_parse_tree   = $this->_condition();
         if (PEAR::isError($this->_parse_tree)) {

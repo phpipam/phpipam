@@ -133,7 +133,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<input type="text" name="ad_port" class="form-control input-sm input-w-100" value="<?php print @$method_settings->params->ad_port; ?>" <?php print $delete; ?>>
 		</td>
 		<td class="port info2">
-			<?php print _('The default port for LDAP non-SSL connections'); ?>
+			<?php print _('The default port for LDAP non-SSL connections'); ?>: 389 (SSL=636)
 		</td>
 	</tr>
 
@@ -162,7 +162,9 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editAuthMethodSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/authentication-methods/edit-result.php" data-result_div="editAuthMethodResult" data-form='editAuthMethod'>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?>
+		</button>
 	</div>
 
 	<?php
@@ -176,5 +178,5 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 	?>
 
 	<!-- Result -->
-	<div class="editAuthMethodResult"></div>
+	<div id="editAuthMethodResult"></div>
 </div>

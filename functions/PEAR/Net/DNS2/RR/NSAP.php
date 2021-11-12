@@ -130,7 +130,7 @@ class Net_DNS2_RR_NSAP extends Net_DNS2_RR
         //
         // make sure the afi value is 47
         //
-        if ($x['afi'] == 47) {
+        if ($x['afi'] == '47') {
 
             $this->afi  = '0x' . $x['afi'];
             $this->idi  = $x['idi'];
@@ -169,7 +169,7 @@ class Net_DNS2_RR_NSAP extends Net_DNS2_RR
             //
             // we only support AFI 47- there arent' any others defined.
             //
-            if ($this->afi == 47) {
+            if ($this->afi == '47') {
 
                 //
                 // unpack the rest of the values
@@ -212,7 +212,7 @@ class Net_DNS2_RR_NSAP extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if ($this->afi == 0x47) {
+        if ($this->afi == '0x47') {
 
             //
             // build the aa field

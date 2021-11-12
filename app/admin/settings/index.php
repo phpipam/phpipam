@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "settings");
+$csrf = $User->Crypto->csrf_cookie ("create", "settings");
 
 # fetch all languages
 $languages = $Admin->fetch_all_objects("lang", "l_id");
@@ -17,7 +17,7 @@ $languages = $Admin->fetch_all_objects("lang", "l_id");
 $settings = (array) $User->settings;
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 	/* bootstrap switch */
 	var switch_options = {
@@ -117,6 +117,35 @@ $(document).ready(function() {
 	</td>
 	<td class="info2"><?php print _('Select default language'); ?></td>
 </tr>
+<!-- Default theme -->
+<tr>
+	<td class="title"><?php print _('Default theme'); ?></td>
+	<td>
+		<select name="theme" class="form-control input-sm input-w-auto">
+		<?php
+		//default
+		foreach($User->themes as $theme) {
+			if($theme==$settings['theme']) 	{ print "<option value='$theme' selected='selected'>$theme</option>"; }
+			else							{ print "<option value='$theme' 				   >$theme</option>"; }
+		}
+		?>
+		</select>
+	</td>
+	<td class="info2"><?php print _('Select default UI theme'); ?></td>
+</tr>
+
+
+<!-- Policy propagation -->
+<tr>
+	<td class="title"><?php print _('Default permission propagation'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="permissionPropagate" <?php if($settings['permissionPropagate'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Set subnet / section permission propagate button to on by default'); ?>
+	</td>
+</tr>
+
 
 <!-- Mex session duration -->
 <tr>
@@ -124,7 +153,15 @@ $(document).ready(function() {
 	<td>
 		<select name="inactivityTimeout" class="form-control input-sm input-w-auto">
 		<?php
-		$durations = array("900"=>"15 minutes","1800"=>"30 minutes", "3600"=>"1 hour", "7200"=>"2 hours", "21600"=>"6 hours", "43200"=>"12 hours", "86400"=>"24 hours");
+		$durations = [
+			"900"  =>"15 "._("minutes"),
+			"1800" =>"30 "._("minutes"),
+			"3600" =>"60 "._("minutes"),
+			"7200" =>"2 "._("hours"),
+			"21600"=>"6 "._("hours"),
+			"43200"=>"12 "._("hours"),
+			"86400"=>"24 "._("hours")
+		];
 		//default
 		foreach($durations as $k=>$d) {
 			if($k==$settings['inactivityTimeout']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
@@ -339,6 +376,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Circuits -->
+<tr>
+	<td class="title"><?php print _('Circuits module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableCircuits" <?php if($settings['enableCircuits'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable Circuits module'); ?>
+	</td>
+</tr>
+
 <!-- Locations -->
 <tr>
 	<td class="title"><?php print _('Locations module'); ?></td>
@@ -373,6 +421,31 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+
+<!-- customers -->
+<tr>
+	<td class="title"><?php print _('Customers module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableCustomers" <?php if($settings['enableCustomers'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable customers module for customer management'); ?>
+	</td>
+</tr>
+
+
+<!-- Routing -->
+<tr>
+	<td class="title"><?php print _('Routing module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableRouting" <?php if($settings['enableRouting'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable Routing module for routing management'); ?>
+	</td>
+</tr>
+
+
 <!-- Link fields -->
 <tr>
 	<td class="title"><?php print _('Link addresses'); ?></td>
@@ -383,7 +456,7 @@ $(document).ready(function() {
         $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
         $custom_fields2[]['name'] = "None";
         $custom_fields2[]['name'] = "ip_addr";
-        $custom_fields2[]['name'] = "dns_name";
+        $custom_fields2[]['name'] = "hostname";
         $custom_fields2[]['name'] = "mac";
         $custom_fields2[]['name'] = "owner";
         // merge
@@ -409,7 +482,7 @@ $(document).ready(function() {
 	<td>
 		<select name="log" class="form-control input-sm input-w-auto">
 		<?php
-		$types = array("Database"=>"Database", "syslog"=>"Syslog", "both"=>"Syslog and local Database");
+		$types = array("Database"=>_("Database"), "syslog"=>_("Syslog"), "both"=>_("Syslog and local Database"));
 		//default
 		foreach($types as $k=>$d) {
 			if($k==$settings['log']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
@@ -468,6 +541,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Vaults -->
+<tr>
+	<td class="title"><?php print _("Enable Vaults"); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableVaults" <?php if($settings['enableVaults'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable Vaults for storing encrypted information'); ?>
+	</td>
+</tr>
+
 
 <!-- ICPM -->
 <tr class="settings-title">
@@ -480,7 +564,7 @@ $(document).ready(function() {
 	<td>
 		<select name="scanPingType" class="form-control input-sm input-w-auto">
 		<?php
-		$types = array("ping"=>"ping", "pear"=>"pear ping", "fping"=>"fping");
+		$types = ["none"=>"none (disabled)", "ping"=>"ping", "pear"=>"pear ping", "fping"=>"fping"];
 		//default
 		foreach($types as $k=>$d) {
 			if($k==$settings['scanPingType']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
@@ -630,8 +714,8 @@ $(document).ready(function() {
 			<?php
 			$opts = array(
 				"0"=>_("Subnet Network Only"),
-				"1"=>"Description Only",
-				"2"=>"Subnet Network and Description"
+				"1"=>_("Description Only"),
+				"2"=>_("Subnet Network and Description")
 			);
 			foreach($opts as $key=>$line) {
 				if($settings['subnetView'] == $key) { print "<option value='$key' selected>$line</option>"; }
@@ -649,7 +733,7 @@ $(document).ready(function() {
 <tr>
 	<td class="title"><?php print _('Upload logo'); ?></td>
 	<td>
-	    <a class="btn btn-sm btn-default" id="upload-logo"><i class="fa fa-upload"></i> <?php print _("Upload"); ?></a>
+		<a class='btn btn-sm btn-default open_popup' data-script='app/admin/settings/logo/logo-uploader.php' data-class='700' data-csrf_cookie='<?php print $csrf; ?>'><i class="fa fa-upload"></i> <?php print _("Upload"); ?></a>
 	</td>
 	<td class="info2">
 		<?php print _('Upload custom logo'); ?>
@@ -660,7 +744,7 @@ $(document).ready(function() {
 <!-- result -->
 <tr class="th">
 	<td colspan="2">
-		<div class="settingsEdit"></div>
+		<div id="settingsEdit"></div>
 	</td>
 	<td></td>
 </tr>
@@ -669,7 +753,7 @@ $(document).ready(function() {
 <tr class="th">
 	<td class="title"></td>
 	<td class="submit">
-		<input type="submit" class="btn btn-sm btn-success pull-right" value="<?php print _('Save changes'); ?>">
+		<input type="submit" class="btn btn-default btn-success btn-sm submit_popup" data-script="app/admin/settings/settings-save.php" data-result_div="settingsEdit" data-form='settings' value="<?php print _("Save"); ?>">
 	</td>
 	<td></td>
 </tr>

@@ -2,7 +2,7 @@
 
 # required functions
 if(!is_object(@$User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
+	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);
@@ -18,42 +18,23 @@ $User->check_user_session ();
 
 # prepare list of permitted subnets with requests
 
-// get all sections
-$sections = $Sections->fetch_all_sections();
-
 $subnets_count = 0;
-if ($sections!==false) {
-    foreach ($sections as $section) {
-    	# cast
-    	$section = (array) $section;
 
+$subnets = $Tools->requests_fetch_available_subnets();
+if (is_array($subnets)) {
+    foreach($subnets as $subnet) {
     	# check permission
-    	$permission = $Sections->check_permission ($User->user, $section['id']);
-    	if($permission > 0) {
-    		$subnets = $Subnets->fetch_section_subnets ($section['id']);
-    		if ($subnets!==false) {
-        		foreach($subnets as $subnet) {
-        			# check permission
-        			$subpermission = $Subnets->check_permission ($User->user, $subnet->id);
-        			if($subpermission > 0) {
-        				/* show only subnets that allow IP exporting */
-        				if($subnet->allowRequests == 1) {
-        					$subnets_count ++;
-        					/* must not have any nested subnets! */
-        					if(!$Subnets->has_slaves($subnet->id))
-        					{
-        						$html[] = '<option value="'. $subnet->id .'">' . $Subnets->transform_to_dotted($subnet->subnet) .'/'. $subnet->mask .' ['. $subnet->description .']</option>';
-        					}
-        				}
-        			}
-        		}
-    		}
-    	}
+		if(!$Subnets->check_permission ($User->user, $subnet->id))
+			continue;
+
+		$html[] = '<option value="'. $subnet->id .'">' . $Subnets->transform_to_dotted($subnet->subnet) .'/'. $subnet->mask .' ['. $subnet->description .']</option>';
+		$subnets_count ++;
     }
 }
 ?>
 
-<table class="table table-condensed table-hover">
+<div class="container-fluid">
+<table class="table table-condensed table-hover table-noborder">
 
 
 <?php
@@ -68,7 +49,7 @@ else {
 <tr>
 	<td><?php print _('Select subnet'); ?> *</td>
 	<td>
-		<select name="subnetId" id="subnetId" class="form-control" class="input-sm input-w-auto">
+		<select name="subnetId" id="subnetId" class="form-control btn-sm" class="input-sm input-w-auto">
     	<?php
         foreach ($html as $h) {
             print $h;
@@ -81,7 +62,7 @@ else {
 <tr>
 	<td><?php print _('First IP Address available'); ?></td>
 	<td>
-		<input type="text" name="ip_addr" id="ip_addr_widget" class="form-control ip_addr" size="30" placeholder="<?php print _('IP Address'); ?>">
+		<input type="text" name="ip_addr" id="ip_addr_widget" class="form-control btn-sm ip_addr" size="30" placeholder="<?php print _('IP Address'); ?>">
 	</td>
 </tr>
 <tr>
@@ -90,7 +71,9 @@ else {
 	</td>
 </tr>
 </table>
-<script type="text/javascript">
+</div>
+
+<script>
 	$(document).ready(function() {
     	if ($('#subnetId').children('option').length>0) {
     		var subnetId = $('select#subnetId option:selected').attr('value');

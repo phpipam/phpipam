@@ -5,7 +5,7 @@
  *********************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -21,7 +21,7 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "split", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "split", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 # id must be numeric
@@ -35,7 +35,7 @@ $subnetPerm = $Subnets->check_permission ($User->user, $subnet_old->id);
 if($subnetPerm < 3) 						{ $Result->show("danger", _('You do not have permissions to resize subnet').'!', true); }
 
 # verify
-$Subnets->subnet_split ($subnet_old, $_POST['number'], $_POST['prefix'], @$_POST['group'], @$_POST['strict'], @$_POST['custom_fields']);
+$Subnets->subnet_split ($subnet_old, $_POST['number'], $_POST['prefix'], @$_POST['group'], @$_POST['custom_fields']);
 
 # all good
 $Result->show("success", _("Subnet splitted successfully")."!", true);

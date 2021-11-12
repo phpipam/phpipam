@@ -4,7 +4,7 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
 
-# "Project-Id-Version: 1.3\n"
+# "Project-Id-Version: 1.40\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
 # "PO-Revision-Date: 2017-02-21 14:33+0200\n"
@@ -14,65 +14,6 @@
 # "Content-Type: text/plain; charset=UTF-8\n"
 # "Content-Transfer-Encoding: 8bit\n"
 
-#: functions/functions-install.php:85 functions/functions-install.php:133
-#: functions/functions-install.php:150 functions/functions-install.php:182
-#: functions/functions-install.php:199 functions/functions-install.php:236
-#: functions/functions-install.php:272 functions/functions-install.php:379
-#: functions/functions-install.php:453 functions/functions-install.php:495
-#: functions/functions-install.php:524 functions/functions-install.php:549
-#: functions/functions-install.php:576 functions/functions-admin.php:41
-#: functions/functions-admin.php:73 functions/functions-admin.php:147
-#: functions/functions-admin.php:185 functions/functions-admin.php:217
-#: functions/functions-admin.php:241 functions/functions-admin.php:387
-#: functions/functions-admin.php:507 functions/functions-admin.php:533
-#: functions/functions-admin.php:887 functions/functions-admin.php:1124
-#: functions/functions-admin.php:1204 functions/functions-admin.php:1238
-#: functions/functions-admin.php:1283 functions/functions-admin.php:1374
-#: functions/functions-admin.php:1493 functions/functions-admin.php:1633
-#: functions/functions-admin.php:1661 functions/functions-admin.php:1717
-#: functions/functions-admin.php:1750 functions/functions-admin.php:1848
-#: functions/functions-admin.php:1881 functions/functions-admin.php:1980
-#: functions/functions-admin.php:2012 functions/functions-admin.php:2106
-#: functions/functions-admin.php:2138 functions/functions-common.php:105
-#: functions/functions-common.php:154 functions/functions-common.php:177
-#: functions/functions-common.php:200 functions/functions-common.php:223
-#: functions/functions-common.php:246 functions/functions-common.php:396
-#: functions/functions-common.php:420 functions/functions-common.php:453
-#: functions/functions-common.php:709 functions/functions-network.php:90
-#: functions/functions-network.php:116 functions/functions-network.php:142
-#: functions/functions-network.php:197 functions/functions-network.php:231
-#: functions/functions-network.php:255 functions/functions-network.php:289
-#: functions/functions-network.php:313 functions/functions-network.php:337
-#: functions/functions-network.php:361 functions/functions-network.php:396
-#: functions/functions-network.php:420 functions/functions-network.php:454
-#: functions/functions-network.php:478 functions/functions-network.php:502
-#: functions/functions-network.php:526 functions/functions-network.php:550
-#: functions/functions-network.php:586 functions/functions-network.php:610
-#: functions/functions-network.php:641 functions/functions-network.php:670
-#: functions/functions-network.php:694 functions/functions-network.php:802
-#: functions/functions-network.php:873 functions/functions-network.php:956
-#: functions/functions-network.php:1252 functions/functions-network.php:1289
-#: functions/functions-network.php:1313 functions/functions-network.php:1366
-#: functions/functions-network.php:1417 functions/functions-network.php:1460
-#: functions/functions-network.php:1487 functions/functions-network.php:1512
-#: functions/functions-network.php:1536 functions/functions-network.php:1562
-#: functions/functions-network.php:1590 functions/functions-network.php:1620
-#: functions/functions-network.php:1729 functions/functions-network.php:1754
-#: functions/functions-network.php:2072 functions/functions-network.php:2181
-#: functions/functions-network.php:2251 functions/functions-tools.php:220
-#: functions/functions-tools.php:241 functions/functions-tools.php:284
-#: functions/functions-tools.php:311 functions/functions-tools.php:333
-#: functions/functions-tools.php:355 functions/functions-tools.php:398
-#: functions/functions-tools.php:429 functions/functions-tools.php:453
-#: functions/functions-tools.php:478 functions/functions-tools.php:620
-#: functions/functions-tools.php:644 functions/functions-tools.php:666
-#: functions/functions-tools.php:688 functions/functions-tools.php:711
-#: functions/functions-tools.php:740 functions/functions-tools.php:766
-#: functions/functions-tools.php:817 functions/functions-tools.php:856
-#: functions/functions-tools.php:880 functions/functions-tools.php:905
-#: functions/functions-tools.php:941 site/ipaddr/modifyIpAddressCheck.php:102
-#: site/ipaddr/modifyIpAddressCheck.php:103
-#: site/ipaddr/modifyIpAddressCheck.php:179
 msgid "Error"
 msgstr "Napaka"
 
@@ -695,6 +636,8 @@ msgstr "Glavno omrežje ne obstaja"
 #: site/ipaddr/subnetDetails.php:126
 msgid "enabled"
 msgstr "omogočeno"
+msgid "Enabled"
+msgstr "Omogočeno"
 
 #: site/tools/vrf.php:114
 msgid "No subnets belonging to this VRF"
@@ -1172,7 +1115,7 @@ msgstr "Loči več prejemnikov z ,"
 
 #: site/ipaddr/mailNotifyIP.php:104
 msgid "Title"
-msgstr "Naslov"
+msgstr "Ime"
 
 #: site/ipaddr/mailNotifyIP.php:112
 msgid "Content"
@@ -7502,9 +7445,6 @@ msgstr "Pravice IP naslova"
 msgid "General"
 msgstr "Splošni"
 
-msgid "Avalibility"
-msgstr "Razpoložljivost"
-
 msgid "Rack details"
 msgstr "Podatki o str. omari"
 
@@ -8110,3 +8050,314 @@ msgstr "Ni atributov"
 
 msgid "phpIPAM settings"
 msgstr "phpIPAM nastavitve"
+
+
+### Customers module ###
+
+msgid "All customers"
+msgstr "Vse stranke"
+
+msgid "Add customer"
+msgstr "Dodaj stranko"
+
+msgid "Customer"
+msgstr "Stranka"
+
+msgid "Customers"
+msgstr "Stranke"
+
+msgid "Select customer"
+msgstr "Izberi stranko"
+
+msgid "Edit customer"
+msgstr "Urejanje stranke"
+
+msgid "Delete customer"
+msgstr "Izbris stranke"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Customer title"
+msgstr "Ime stranke"
+
+msgid "Customer address"
+msgstr "Naslov stranke"
+
+msgid "Contact details"
+msgstr "Kontaktni podatki"
+
+msgid "Customer contact details"
+msgstr "Kontaktni podatki od stranke"
+
+msgid "Postcode"
+msgstr "Poštna številka"
+
+msgid "City"
+msgstr "Mesto"
+
+msgid "Contact person"
+msgstr "Kontaktna oseba"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Random notes"
+msgstr "Naključne opombe"
+
+msgid "Customers module"
+msgstr "Modul stranke"
+
+msgid "Enable or disable customers module for customer management"
+msgstr "Omogoči modul za stranke"
+
+
+
+### 2FA ###
+
+msgid "2FA authentication"
+msgstr "Dvofaktorska avtentikacija"
+
+msgid "2FA provider"
+msgstr "Ponudnik 2FA"
+
+msgid "Current 2FA provider"
+msgstr "Trenuten ponudnik dvofaktorske avtentikacije"
+
+msgid "2FA users"
+msgstr "Uporabniki dvofaktorske avtentikacije"
+
+msgid "2FA status"
+msgstr "Status"
+
+msgid "2FA status legend"
+msgstr "Legenda statusev"
+
+msgid "2FA is enabled"
+msgstr "Dvofaktorska avtentikacija omogočena"
+
+msgid "2FA disabled"
+msgstr "Dvofaktorska avtentikacija onemogočena"
+
+msgid "2fa is enabled, but secret is not set. User will be given new secret upon first login"
+msgstr "Dvofaktorska avtentikacije je omogočena, a skrivni ključ ni nastavljen. Uporabniku bo dodeljen nov skrivni ključ ob prvi prijavi"
+
+msgid "Reset secret"
+msgstr "Resetiraj skrivni sključ"
+
+msgid "2FA name"
+msgstr "Ime aplikacije"
+
+msgid "Name for 2fa application that will be displayed"
+msgstr "Ime za dvofaktorsko avtentikacijo, ki bo prikazana na zaslonu"
+
+msgid "2FA length"
+msgstr "Dolžina ključa"
+
+msgid "Length of 2FA secret (16 to 32)"
+msgstr "Dolžina 2fa ključa (16 do 32)"
+
+msgid "2FA user change"
+msgstr "Dovoli spremembe uporabnikom"
+
+msgid "Enabled, not activated"
+msgstr "Omogočeno, ni aktiviran"
+
+msgid "Can users change 2fa settings for their account"
+msgstr "Dovoli, da si uporabniki sami nastavljajo dvofaktorsko avtentikacijo"
+
+msgid "Apply to all users"
+msgstr "Uporabi za vse uporabnike"
+
+msgid "Force all users to use 2fa on next login or disable 2fa for all users"
+msgstr "Prisili vse uporabnike v uporabo dvofaktorske avtentikacije ob naslednji prijavi ali onemogoči za vse uporabnike"
+
+
+
+
+### Password policy ###
+
+msgid "phpIPAM password policy settings"
+msgstr "Nastavitve parametrov za politiko gesel"
+
+msgid "Here you can set password policy for user authentication"
+msgstr "tukaj se lahko nastavijo parametri za politiko dodelitve gesel"
+
+msgid "Minimum length"
+msgstr "Min dolžina"
+
+msgid "Minimum password length"
+msgstr "Minimalno število znakov v geslu"
+
+msgid "Maximum length"
+msgstr "Max dolžina"
+
+msgid "Maximum password length"
+msgstr "Maksimalna dolžina znakov v geslu"
+
+msgid "Minimum numbers"
+msgstr "Min število števil"
+
+msgid "Minumum number of numbers"
+msgstr "Minimalno število števil"
+
+msgid "Minimum letters"
+msgstr "Min število črk"
+
+msgid "Minumum number of letters"
+msgstr "Minimalno število črk v geslu"
+
+msgid "Minimum lowercase letter"
+msgstr "Min malih črk"
+
+msgid "Minumum number of lowercase letters"
+msgstr "Minimalno število malih črk v geslu"
+
+msgid "Minimum uppercase letter"
+msgstr "Min velikih črk"
+
+msgid "Minumum number of uppercase letters"
+msgstr "Minimalno število velikih črk v geslu"
+
+msgid "Minimum symbols"
+msgstr "Min simbolov"
+
+msgid "Minumum number of symbols"
+msgstr "Minimalno število simbolov v geslu"
+
+msgid "Maximum symbols"
+msgstr "Max simbolov"
+
+msgid "Maximum number of symbols"
+msgstr "Maksimalno število simbolov v geslu"
+
+msgid "Symbols"
+msgstr "Simboli"
+
+msgid "List of allowed symbols. csv separated."
+msgstr "Seznam "
+
+msgid "Enforce"
+msgstr "Vsili"
+
+msgid "Require all users to change password upon next login."
+msgstr "Zahtevaj spremembo gesla za vse uporabnike ob naslednji prijavi"
+
+
+
+
+
+### Circuits ####
+
+msgid "Circuit options"
+msgstr ""
+
+msgid "Physical Circuits"
+msgstr ""
+
+msgid "Logical Circuits"
+msgstr ""
+
+msgid "Circuit providers"
+msgstr ""
+
+msgid "Circuit map"
+msgstr ""
+
+msgid "Options"
+msgstr "Možnosti"
+
+msgid "Point A"
+msgstr "Točka A"
+
+msgid "Point B"
+msgstr "Točka B"
+
+msgid "Provider"
+msgstr "Ponudnik"
+
+msgid "Circuit type"
+msgstr "Tip"
+
+msgid "Capacity"
+msgstr "Kapaciteta"
+
+msgid "Purpose"
+msgstr "Namen"
+
+msgid "Circuit count"
+msgstr "Stevilo"
+
+msgid "Members"
+msgstr "Člani"
+
+msgid "Logical circuit physical members"
+msgstr ""
+
+msgid "Available physical circuits"
+msgstr ""
+
+
+
+### Misc 1.4 ###
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "Select UI theme"
+msgstr "Izberi temo vmesnika"
+
+msgid "dark"
+msgstr "temna"
+
+msgid "white"
+msgstr "bela"
+
+msgid "Compress text in top menu"
+msgstr "Kompresiraj tekst v meniju"
+
+msgid "Bandwidth calculator"
+msgstr "Kalkulator pasovne širine"
+
+msgid "TCP Window size"
+msgstr "Velikost TCP okna"
+
+msgid "Delay"
+msgstr "Zakasnitev"
+
+msgid "Filesize"
+msgstr "Velikost datoteke"
+
+msgid "Transfer time"
+msgstr "Čas prenosa"
+
+msgid "IP Request"
+msgstr "IP zahtevki"
+
+msgid "Active IP address requests."
+msgstr "Aktivni IP zahtevki"
+
+msgid "Enable Firewall Zones"
+msgstr "Modul pożarnih pregrad"
+
+msgid "Enable or disable firewall zone management module"
+msgstr "Omogoči modul za pożarne pregrade"
+
+msgid "Allow duplicate vlans"
+msgstr "Dovoli duplicirane VLANe"
+
+msgid "Allow duplicated vlans inside L2 domain"
+msgstr "Dovoli duplicirane VLANe znotraj L2 domene"
+
+msgid "Decode MAC vendor"
+msgstr "Dekodiraj MAC proizvajalca"
+
+msgid "Decode MAC address vendor for addresses"
+msgstr "Dokodiraj MAC anslov verndorja"
+
+msgid "Module permissions"
+msgstr "Pravice modulov"
+
+msgid "Scan agents"
+msgstr "Agenti skeniranja"
+

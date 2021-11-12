@@ -6,7 +6,7 @@
  *************************************************************/
 
 # functions
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize classes
 $Database = new Database_PDO;
@@ -26,7 +26,7 @@ if (!preg_match('/^[0-9]+$/i', $_POST['subnetId'])) 	{ $Result->show("danger", _
 $firewallZones = $Zones->get_zones();
 
 # no zones
-if($firewallZones===false)                              { $Result->show("danger", _("No zones available"), true, true); }
+if(!is_array($firewallZones))                              { $Result->show("danger", _("No zones available"), true, true); }
 ?>
 
 <!-- header  -->

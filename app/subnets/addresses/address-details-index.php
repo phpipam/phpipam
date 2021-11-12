@@ -22,7 +22,7 @@ $subnet  = (array) $Subnets->fetch_subnet(null, $address['subnetId']);
 # fetch all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
-$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true) ? : ['ipaddresses' => null];
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
@@ -45,7 +45,7 @@ if($subnet_permission == 0)				{ $Result->show("danger", _('You do not have perm
 
  # resolve dns name
 $DNS = new DNS ($Database);
-$resolve = $DNS->resolve_address($address['ip_addr'], $address['dns_name'], false, $subnet['nameserverId']);
+$resolve = $DNS->resolve_address($address['ip_addr'], $address['hostname'], false, $subnet['nameserverId']);
 
 # reformat empty fields
 $address = $Addresses->reformat_empty_array_fields($address, "<span class='text-muted'>/</span>");
@@ -94,7 +94,7 @@ if(sizeof($address)>1) {
     $active = @$_GET['tab']=="permissions" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "permissions")."'>"._("Permissions")."</a></li>";
     }
-    if($User->settings->enableNAT==1) {
+    if($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User::ACCESS_R) {
     $active = @$_GET['tab']=="nat" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "nat")."'>"._("NAT")."</a></li>";
     }

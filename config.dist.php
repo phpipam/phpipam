@@ -9,6 +9,17 @@ $db['pass'] = 'phpipamadmin';
 $db['name'] = 'phpipam';
 $db['port'] = 3306;
 
+/**
+ * Database webhost settings
+ *
+ * Change this setting if your MySQL database does not run on localhost
+ * and you want to use the automatic database installation method to
+ * create a database user for you (which by default is created @localhost)
+ *
+ * Set to the hostname or IP address of the webserver, or % to allow all
+ ******************************/
+$db['webhost'] = '';
+
 
 /**
  *  SSL options for MySQL
@@ -26,19 +37,16 @@ $db['ssl_key']    = '/path/to/cert.key';             // path to an SSL key file.
 $db['ssl_cert']   = '/path/to/cert.crt';             // path to an SSL certificate file. Only makes sense combined with ssl_key
 $db['ssl_ca']     = '/path/to/ca.crt';               // path to a file containing SSL CA certs
 $db['ssl_capath'] = '/path/to/ca_certs';             // path to a directory containing CA certs
-$db['ssl_cipher'] = '/DHE-RSA-AES256-SHA:AES128-SHA'; // one or more SSL Ciphers
-
-
-/**
- * temporary table type to create slave subnets table
- * (MEMORY, InnoDB)
- ******************************/
-$db['tmptable_engine_type'] = "MEMORY";
+$db['ssl_cipher'] = 'DHE-RSA-AES256-SHA:AES128-SHA'; // one or more SSL Ciphers
+$db['ssl_verify'] = 'true';                          // Verify Common Name (CN) of server certificate?
+$db['tmptable_engine_type'] = "MEMORY";              // Temporary table type to construct complex queries (MEMORY, InnoDB)
+$db['use_cte']    = 1;                               // Use recursive CTE queries [>=MariaDB 10.2.2, >=MySQL 8.0] (0=disabled, 1=autodetect, 2=force enable)
 
 
 /**
  * Mail sending and other parameters for pingCheck and DiscoveryCheck scripts
  ******************************/
+
 # pingCheck.php script parameters
 $config['ping_check_send_mail']        = true;       // true/false, send or not mail on ping check
 $config['ping_check_method']           = false;      // false/ping/pear/fping, reset scan method
@@ -51,10 +59,7 @@ $config['removed_addresses_timelimit'] = 86400 * 7;  // int, after how many seco
 # resolveIPaddresses.php script parameters
 $config['resolve_emptyonly']           = true;       // if true it will only update the ones without DNS entry!
 $config['resolve_verbose']             = true;       // verbose response - prints results, cron will email it to you!
-$config['resolve_subnets']             = array();    // which subnets to check - by id
-                                                     //  example -> array(1,3,5) will only update subnets with id 1,3,5
-                                                     //  you can get id's and descriptions with following MySQL query:
-                                                     //  select `id`,`description` from `subnets`;
+$config['disable_main_login_form']     = false;      // disable main login form if you want use another authentification method by default (SAML, LDAP, etc.)
 
 
 /**
@@ -65,6 +70,23 @@ $config['resolve_subnets']             = array();    // which subnets to check -
  ******************************/
 $debugging = false;
 
+/*
+ * API Crypt security provider. "mcrypt" or "openssl*"
+ * Supported methods:
+ *    openssl-128-cbc (alias openssl, openssl-128) *default
+ *    openssl-256-cbc (alias openssl-256)
+ *
+ * default as of 1.3.2 "openssl-128-cbc"
+ ******************************/
+// $api_crypt_encryption_library = "mcrypt";
+
+
+/**
+ * Allow API calls over HTTP (security = none)
+ *
+ * @var bool
+ */
+$api_allow_unsafe = false;
 
 /**
  *  manual set session name for auth
@@ -73,10 +95,32 @@ $debugging = false;
  ******************************/
 $phpsessname = "phpipam";
 
+/**
+ * Cookie SameSite settings ("None", "Lax"=Default, "Strict")
+ * - "Strict" increases security
+ * - "Lax" required for SAML2, some SAML topologies may require "None".
+ * - "None" requires HTTPS (implies "Secure;")
+ */
+$cookie_samesite = "Lax";
 
 /**
- *	BASE definition if phpipam
- * 	is not in root directory (e.g. /phpipam/)
+ * Session storage - files or database
+ *
+ * @var string
+ */
+$session_storage = "files";
+
+
+/**
+ * Path to access phpipam in site URL, http:/url/BASE/
+ *
+ * BASE definition should end with a trailing slash "/"
+ * BASE will be set automatically if not defined. Examples...
+ *
+ *  If you access the login page at http://phpipam.local/           =  define('BASE', "/");
+ *  If you access the login page at http://company.website/phpipam/ =  define('BASE', "/phpipam/");
+ *  If you access the login page at http://company.website/ipam/    =  define('BASE', "/ipam/");
+ *
  ******************************/
 if(!defined('BASE'))
 define('BASE', "/");
@@ -88,31 +132,10 @@ define('BASE', "/");
 if(!defined('MCUNIQUE'))
 define('MCUNIQUE', "section");
 
-
-/**
- * SAML mappings
- ******************************/
-if(!defined('MAP_SAML_USER'))
-define('MAP_SAML_USER', true);    // Enable SAML username mapping
-
-if(!defined('SAML_USERNAME'))
-define('SAML_USERNAME', 'admin'); // Map SAML to explicit user
-
-
 /**
  * Permit private subpages - private apps under /app/tools/custom/<custom_app_name>/index.php
  ******************************/
 $private_subpages = array();
-
-
-/**
- * Google MAPs API key for locations to display map
- *
- *  Obtain key: Go to your Google Console (https://console.developers.google.com) and enable "Google Maps JavaScript API"
- *  from overview tab, so go to Credentials tab and make an API key for your project.
- ******************************/
-$gmaps_api_key = "";
-
 
 /**
  * proxy connection details
@@ -125,21 +148,31 @@ $proxy_pass     = 'PASSWORD';                             // Proxy Password
 $proxy_use_auth = false;                                  // Enable/Disable Proxy authentication
 
 /**
- * proxy to use for every internet access like update check
+ * Failed access
+ * Message to log into webserver logs in case of failed access, for further processing by tools like Fail2Ban
+ * The message can contain a %u parameter which will be replaced with the login user identifier.
  ******************************/
-$proxy_auth     = base64_encode("$proxy_user:$proxy_pass");
+// $failed_access_message = '';
 
-if ($proxy_enabled == true && $proxy_use_auth == false) {
-    stream_context_set_default(array('http' => array('proxy'=>'tcp://'.$proxy_server.':'.$proxy_port)));
-}
-elseif ($proxy_enabled == true && $proxy_use_auth == true) {
-    stream_context_set_default(
-        array('http' => array(
-              'proxy' => "tcp://$proxy_server:$proxy_port",
-              'request_fulluri' => true,
-              'header' => "Proxy-Authorization: Basic $proxy_auth"
-        )));
-}
+/**
+ * General tweaks
+ ******************************/
+$config['logo_width']             = 220;                    // logo width
+$config['requests_public']        = true;                   // Show IP request module on login page
+$config['split_ip_custom_fields'] = false;                  // Show custom fields in separate table when editing IP address
+$config['footer_message']         = "";                     // Custom message included in the footer of every page
 
-/* for debugging proxy config uncomment next line */
-#var_dump(stream_context_get_options(stream_context_get_default()));
+/**
+ * PHP CLI binary for scanning and network discovery.
+ *
+ * The default behaviour is to use the system wide default php version symlinked to php in PHP_BINDIR (/usr/bin/php).
+ * If multiple php versions are present; overide selection with $php_cli_binary.
+ */
+// $php_cli_binary = '/usr/bin/php7.1';
+
+/**
+ * Path to mysqldump binary
+ *
+ * default: '/usr/bin/mysqldump'
+ */
+// $mysqldump_cli_binary = '/usr/bin/mysqldump';

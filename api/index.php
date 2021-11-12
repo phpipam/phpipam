@@ -17,24 +17,26 @@
  *
  */
 
-# include funtions
-require( dirname(__FILE__) . '/../functions/functions.php');		// functions and objects from phpipam
-require( dirname(__FILE__) . '/controllers/Common.php');			// common methods
-require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, header and response handling
+# include functions
+if(!function_exists("create_link"))
+require_once( dirname(__FILE__) . '/../functions/functions.php' );		// functions and objects from phpipam
+
+# include common API controllers
+require_once( dirname(__FILE__) . '/controllers/Common.php');			// common methods
+require_once( dirname(__FILE__) . '/controllers/Responses.php');			// exception, header and response handling
 
 # settings
-$enable_authentication = true;
 $time_response         = true;          // adds [time] to response
 $lock_file             = "";            // (optional) file to write lock to
 
 # database and exceptions/result object
 $Database = new Database_PDO;
 $Tools    = new Tools ($Database);
+$User     = new User ($Database);
 $Response = new Responses ();
 
 # get phpipam settings
-if(SETTINGS===null)
-$settings = $Tools->fetch_object ("settings", "id", 1);
+$settings = $Tools->get_settings();
 
 # set empty controller for options
 if($_SERVER['REQUEST_METHOD']=="OPTIONS") {
@@ -51,7 +53,7 @@ try {
 	// verify that API is enabled on server
 	if($settings->api!=1) 									{ $Response->throw_exception(503, "API server disabled");}
 
-	# fetch app
+	// fetch app
 	$app = $Tools->fetch_object ("api", "app_id", $_GET['app_id']);
 
 	// verify app_id
@@ -64,25 +66,44 @@ try {
 
 	// crypt check
 	if($app->app_security=="crypt") {
-		// verify php extensions
-		foreach (array("mcrypt") as $extension) {
-	    	if (!in_array($extension, get_loaded_extensions()))
-	    													{ $Response->throw_exception(500, 'php extension '.$extension.' missing'); }
+		$encryption_method = Config::ValueOf('api_crypt_encryption_library', 'openssl-128-cbc');
+
+		// decrypt request - form_encoded
+		if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
+			$decoded = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $encryption_method);
+			if ($decoded === false) $Response->throw_exception(503, 'Invalid enc_request');
+			$decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
+			parse_str($decoded, $encrypted_params);
+			$encrypted_params['app_id'] = $_GET['app_id'];
+			$params = (object) $encrypted_params;
 		}
-		// decrypt request - to JSON
-		$params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB)));
+		// json_encoded
+		else {
+			$encrypted_params = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $encryption_method);
+			if ($encrypted_params === false) $Response->throw_exception(503, 'Invalid enc_request');
+			$encrypted_params = json_decode($encrypted_params, true);
+			$encrypted_params['app_id'] = $_GET['app_id'];
+			$params = (object) $encrypted_params;
+		}
 	}
 	// SSL checks
-	elseif($app->app_security=="ssl") {
+	elseif($app->app_security=="ssl_token" || $app->app_security=="ssl_code") {
 		// verify SSL
-		if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443)) {
-															{ $Response->throw_exception(503, 'App requires SSL connection'); }
+		if (!$Tools->isHttps()) {
+			$Response->throw_exception(503, _('SSL connection is required for API'));
 		}
+
 		// save request parameters
 		$params = (object) $_GET;
 	}
 	// no security
 	elseif($app->app_security=="none") {
+		// make sure it is permitted in config.php
+		if (Config::ValueOf('api_allow_unsafe')!==true) {
+			$Response->throw_exception(503, _('SSL connection is required for API'));
+		}
+
+		// save request parameters
 		$params = (object) $_GET;
 	}
 	// error, invalid security
@@ -91,8 +112,8 @@ try {
 	}
 
 
-	// append POST parameters if POST or PATCH
-	if($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE") {
+	// Append Global API parameters / POST parameters if POST,PATCH or DELETE
+	if($_SERVER['REQUEST_METHOD']=="GET" || $_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE") {
 		// if application tupe is JSON (application/json)
         if(strpos($_SERVER['CONTENT_TYPE'], "application/json")!==false){
             $rawPostData = file_get_contents('php://input');
@@ -128,18 +149,41 @@ try {
         }
     }
 
+	/* Sanitise input ---------- (user/User/USER) */
+	if (isset($params->controller)) $params->controller = strtolower($params->controller);
+
 	/* Authentication ---------- */
 
 	// authenticate user if required
-	if (@$params->controller != "user" && $enable_authentication) {
-		if($app->app_security=="ssl" || $app->app_security=="none") {
+	if (@$params->controller != "user") {
+		if($app->app_security=="ssl_token" || $app->app_security=="none") {
 			// start auth class and validate connection
-			require( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
+			require_once( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
 			$Authentication = new User_controller ($Database, $Tools, $params, $Response);
 			$Authentication->check_auth ();
 		}
-	}
 
+		// validate ssl_code
+		if($app->app_security=="ssl_code") {
+			// start auth class and validate connection
+			require_once( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
+			$Authentication = new User_controller ($Database, $Tools, $params, $Response);
+			$Authentication->check_auth_code ($app->app_id);
+		}
+	}
+	// throw token not needed
+	else {
+		// validate ssl_code
+		if($app->app_security=="ssl_code" && $_SERVER['REQUEST_METHOD']!="GET") {
+			// start auth class and validate connection
+			require_once( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
+			$Authentication = new User_controller ($Database, $Tools, $params, $Response);
+			$Authentication->check_auth_code ($app->app_id);
+
+			// passwd
+			$Response->throw_exception(409, 'Authentication not needed');
+		}
+	}
 
 	/* verify request ---------- */
 
@@ -168,11 +212,11 @@ try {
 
 	// check if the controller exists. if not, throw an exception
 	if( file_exists( dirname(__FILE__) . "/controllers/$controller_file.php") ) {
-		require( dirname(__FILE__) . "/controllers/$controller_file.php");
+		require_once( dirname(__FILE__) . "/controllers/$controller_file.php");
 	}
 	// check custom controllers
 	elseif( file_exists( dirname(__FILE__) . "/controllers/custom/$controller_file.php") ) {
-		require( dirname(__FILE__) . "/controllers/custom/$controller_file.php");
+		require_once( dirname(__FILE__) . "/controllers/custom/$controller_file.php");
 	}
 	else {
 		$Response->throw_exception(400, 'Invalid controller');
@@ -236,7 +280,7 @@ try {
 	// set flag if it came from Result, just to be sure
 	if($Response->exception!==true) {
 		$Response->exception = true;
-		$Response->result['success'] = 0;
+		$Response->result['success'] = false;
 		$Response->result['code'] 	 = 500;
 		$Response->result['message'] = $result;
 	}
@@ -260,7 +304,9 @@ if($time_response) {
 //output result
 echo $Response->formulate_result ($result, $time, $app->app_nest_custom_fields, $controller->custom_fields);
 
+// update access time
+try { $Database->updateObject("api", ["app_id"=>$app->app_id, "app_last_access"=>date("Y-m-d H:i:s")], 'app_id'); }
+catch (Exception $e) {}
+
 // exit
 exit();
-
-?>

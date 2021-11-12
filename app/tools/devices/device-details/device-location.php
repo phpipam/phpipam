@@ -1,7 +1,7 @@
 <?php
 
 # location
-if ($User->settings->enableLocations=="1") {
+if ($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
 
     print "<h4>"._('Location')."</h4><hr>";
 
@@ -18,8 +18,6 @@ if ($User->settings->enableLocations=="1") {
         $_GET['subnetId'] = $device['location'];
 
         $hide_title = true;
-
-
         include(dirname(__FILE__).'/../../locations/single-location.php');
 
         $_GET['subnetId'] = $sid_orig;
@@ -29,6 +27,3 @@ if ($User->settings->enableLocations=="1") {
         $Result->show("info", _("Location is not set for this device"), false);
     }
 }
-
-
-?>

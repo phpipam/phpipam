@@ -5,21 +5,28 @@
  ************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Racks      = new phpipam_rack ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("racks", User::ACCESS_RW, true, true);
+}
+else {
+    $User->check_module_permissions ("racks", User::ACCESS_RWA, true, true);
+}
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "rack");
+$csrf = $User->Crypto->csrf_cookie ("create", "rack");
 
 # validate action
 $Admin->validate_action ($_POST['action'], true);
@@ -37,7 +44,11 @@ if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 else {
     $rack = new StdClass ();
     $rack->size = 42;
+    $rack->topDown = 1;
 }
+
+# fetch all racks
+$Racks->fetch_all_racks();
 
 # all locations
 if($User->settings->enableLocations=="1")
@@ -47,9 +58,19 @@ $locations = $Tools->fetch_all_objects ("locations", "name");
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    onText: 'Yes',
+	    offText: 'No',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
 });
 </script>
 
@@ -68,11 +89,11 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($rack->name)) print $rack->name; ?>" <?php print $readonly; ?>>
+			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($rack->name)) print $Tools->strip_xss($rack->name); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
-	<!-- Type -->
+	<!-- Size -->
 	<tr>
 		<td><?php print _('Size'); ?></td>
 		<td>
@@ -87,8 +108,28 @@ $(document).ready(function(){
 		</td>
 	</tr>
 
+	<!-- Front -->
+	<tr>
+		<td><?php print _('Back side'); ?></td>
+		<td>
+			<?php $checked = @$rack->hasBack=="1" ? "checked" : ""; ?>
+			<input type="checkbox" name="hasBack" class="input-switch" value="1" <?php print $checked; ?>>
+		</td>
+	</tr>
+
+    <!-- Orientation -->
+    <tr>
+        <td><?php print _('Orientation'); ?></td>
+        <td>
+            <select name="topDown" class="form-control input-sm input-w-auto">
+                <option value="1"<?php if ($rack->topDown) print " selected" ?>><?php print _("Top-down (unit 1 at the top)"); ?></option>
+                <option value="0"<?php if (!$rack->topDown) print " selected" ?>><?php print _("Bottom-up (unit 1 at the bottom)"); ?></option>
+            </select>
+        </td>
+    </tr>
+
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1") { ?>
+	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
 	<tr>
 		<td><?php print _('Location'); ?></td>
 		<td>
@@ -106,6 +147,34 @@ $(document).ready(function(){
 		</td>
 	</tr>
 	<?php } ?>
+
+	<?php
+    // customers
+    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+        // fetch customers
+        $customers = $Tools->fetch_all_objects ("customers", "title");
+        // print
+        print '<tr>' . "\n";
+        print ' <td class="middle">'._('Customer').'</td>' . "\n";
+        print ' <td>' . "\n";
+        print ' <select name="customer_id" class="form-control input-sm input-w-auto">'. "\n";
+
+        //blank
+        print '<option disabled="disabled">'._('Select Customer').'</option>';
+        print '<option value="0">'._('None').'</option>';
+
+        if($customers!=false) {
+            foreach($customers as $customer) {
+                if ($customer->id == $rack->customer_id)    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
+                else                                        { print '<option value="'. $customer->id .'">'.$customer->title.'</option>'; }
+            }
+        }
+
+        print ' </select>'. "\n";
+        print ' </td>' . "\n";
+        print '</tr>' . "\n";
+    }
+	?>
 
 	<!-- Description -->
 	<tr>
@@ -135,12 +204,11 @@ $(document).ready(function(){
 		# all my fields
 		foreach($custom as $field) {
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $rack, $_POST['action'], $timepicker_index);
-    		// add datepicker index
-    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+    		$custom_input = $Tools->create_custom_field_input ($field, $rack, $timepicker_index);
+    		$timepicker_index = $custom_input['timepicker_index'];
             // print
 			print "<tr>";
-			print "	<td>".ucwords($field['name'])." ".$custom_input['required']."</td>";
+			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
 			print "	<td>".$custom_input['field']."</td>";
 			print "</tr>";
 		}
@@ -157,9 +225,12 @@ $(document).ready(function(){
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editRacksubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<a class='btn btn-sm btn-default submit_popup' data-script="app/admin/racks/edit-result.php" data-result_div="rackManagementEditResult" data-form='rackManagementEdit'>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?>
+		</a>
+
 	</div>
 
 	<!-- result -->
-	<div class="rackManagementEditResult"></div>
+	<div id="rackManagementEditResult"></div>
 </div>

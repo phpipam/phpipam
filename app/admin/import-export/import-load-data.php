@@ -31,8 +31,8 @@ $hiddenfields="";
 
 # read field mapping from previous window
 foreach ($expfields as $expfield) {
-	if (isset($_GET['importFields__'.str_replace(" ", "_",$expfield)])) {
-		$impfield = $_GET['importFields__'.str_replace(" ", "_",$expfield)];
+	if (isset($_GET['importFields__'.str_replace(" ", "_",trim($expfield))])) {
+		$impfield = $_GET['importFields__'.str_replace(" ", "_",trim($expfield))];
 		if (in_array($expfield,$reqfields) && ($impfield == "-")) {
 			$Result->show('danger', _("Error: missing required field mapping for expected field")." <b>".$expfield."</b>."._("Please check field matching in previous window."), true, true);
 		} else {
@@ -44,7 +44,7 @@ foreach ($expfields as $expfield) {
 	# prepare header row for preview table
 	$hrow.="<th>".$expfield."</th>";
 	# prepare select field to transfer to actual import file
-	$hiddenfields.="<input name='importFields__".str_replace(" ", "_",$expfield)."' type='hidden' value='".$impfield."' style='display:none;'>";
+	$hiddenfields.="<input name='importFields__".str_replace(" ", "_",trim($expfield))."' type='hidden' value='".$impfield."' style='display:none;'>";
 }
 
 $data = array();
@@ -54,12 +54,11 @@ if (strtolower($filetype) == "csv") {
 	# open CSV file
 	$filehdl = fopen('upload/data_import.csv', 'r');
 
-	# set delimiter
-	$Tools->set_csv_delimiter ($filehdl);
-
 	# read header row
 	$row = 0;$col = 0;
 	$line = fgets($filehdl);
+	# set delimiter
+	$Tools->set_csv_delimiter ($line);
 	$row++;
 	$line = str_replace( array("\r\n","\r","\n") , "" , $line);	//remove line break
 	$cols = str_getcsv ($line, $Tools->csv_delimiter);
@@ -98,7 +97,7 @@ elseif(strtolower($filetype) == "xls") {
 
 	# map import columns to expected fields as per previous window
 	for($col=1;$col<=$xls->colcount($sheet);$col++) {
-		$fieldmap[$col] = $impfields[$xls->val($row,$col,$sheet)];
+		$fieldmap[$col] = $impfields[$Tools->convert_encoding_to_UTF8($xls->val($row,$col,$sheet))];
 		$hcol = $col;
 	}
 
@@ -110,7 +109,7 @@ elseif(strtolower($filetype) == "xls") {
 			if ($col > $hcol) {
 					$Result->show('danger', _("Extra column found on line ").$row._(" in XLS file. Please check input file."), true);
 			} else {
-				$record[$fieldmap[$col]] = trim($xls->val($row,$col,$sheet));
+				$record[$fieldmap[$col]] = trim($Tools->convert_encoding_to_UTF8($xls->val($row,$col,$sheet)));
 			}
 		}
 		$data[] = $record;

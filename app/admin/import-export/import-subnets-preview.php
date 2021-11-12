@@ -5,7 +5,7 @@
  ************************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -69,7 +69,7 @@ print "<br><br><br>";
 if (($counters['add'] > 0) || ($counters['edit'] > 0)) {
 ?>
 
-	<script type="text/javascript">
+	<script>
 	$(function(){
 		$('#dataImportSubmit').removeAttr('disabled');
 		$('#dataImportSubmit').removeClass('btn-default');

@@ -9,4 +9,3 @@ $User->check_user_session();
 
 # print leases
 include(dirname(__FILE__)."/../../tools/dhcp/leases.php");
-?>

@@ -8,64 +8,6 @@
 
 class Vrfs_controller extends Common_api_functions {
 
-
-	/**
-	 * _params [provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
-	/**
-	 * Custom address fields
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $custom_fields;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Master Sections object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Sections;
-
-	/**
-	 * Master Subnets object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Subnets;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-	/**
-	 * Master  Admin object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Admin;
-
-
 	/**
 	 * __construct function
 	 *
@@ -127,6 +69,7 @@ class Vrfs_controller extends Common_api_functions {
 	 *		- /custom_fields/		// returns all VRF custom fields
 	 *		- /{id}/				// returns VRF by id
 	 *		- /{id}/subnets/		// subnets inside vrf
+	 *		- /all/			        // returns all VRFs
 	 *
 	 *
 	 * @access public
@@ -134,7 +77,7 @@ class Vrfs_controller extends Common_api_functions {
 	 */
 	public function GET () {
 		// all
-		if (!isset($this->_params->id)) {
+		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ("vrf", 'vrfId');
 			// check result
 			if($result===false)						{ $this->Response->throw_exception(200, 'No vrfs configured'); }
@@ -180,24 +123,12 @@ class Vrfs_controller extends Common_api_functions {
 		else {
 			// validate
 			$this->validate_vrf ();
+			// fetch
+			$result = $this->Tools->fetch_object ("vrf", "vrfId", $this->_params->id);
 			// check result
-			if($result==NULL)						{ $this->Response->throw_exception(404, "VRF not found"); }
+			if($result===false)						{ $this->Response->throw_exception(404, "VRF not found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
-	}
-
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 
@@ -357,5 +288,3 @@ class Vrfs_controller extends Common_api_functions {
 	}
 
 }
-
-?>
