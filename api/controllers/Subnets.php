@@ -195,15 +195,15 @@ class Subnets_controller extends Common_api_functions {
 				// if {ip} is set filter it out
 				if(isset($this->_params->id3)) {
 					if(is_array($result)) {
-                        $addresses = $result;
-	    				foreach ($addresses as $r) {
-	        				if ($r->ip === $this->_params->id3) {
-                                $result = $r;
-                                break;
-        				    }
-	    				}
-	    			}
-                    if(sizeof($result)==0) { $result = false; }
+						$addresses = $result;
+						foreach ($addresses as $r) {
+							if ($r->ip === $this->_params->id3) {
+								$result = $r;
+								break;
+							}
+						}
+					}
+					if(sizeof($result)==0) { $result = false; }
 				}
 				// check result
 				if($result===false)						{ $this->Response->throw_exception(200, "No addresses found"); }
