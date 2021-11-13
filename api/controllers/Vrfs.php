@@ -80,13 +80,13 @@ class Vrfs_controller extends Common_api_functions {
 		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ("vrf", 'vrfId');
 			// check result
-			if($result===false)						{ $this->Response->throw_exception(200, 'No vrfs configured'); }
+			if($result===false)						{ $this->Response->throw_exception(404, 'No vrfs configured'); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 		// custom fields
 		if($this->_params->id=="custom_fields") {
 			// check result
-			if(sizeof($this->custom_fields)==0)			{ $this->Response->throw_exception(200, 'No custom fields defined'); }
+			if(sizeof($this->custom_fields)==0)			{ $this->Response->throw_exception(404, 'No custom fields defined'); }
 			else										{ return array("code"=>200, "data"=>$this->custom_fields); }
 		}
 		// subnets
@@ -108,7 +108,7 @@ class Vrfs_controller extends Common_api_functions {
     			}
 
 				// check result
-				if($result===false)					{ $this->Response->throw_exception(200, 'No subnets belonging to this vrf'); }
+				if($result===false)					{ $this->Response->throw_exception(404, 'No subnets belonging to this vrf'); }
 				else {
 					$this->custom_fields = $this->Tools->fetch_custom_fields('subnets');
 					return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true));
