@@ -109,11 +109,6 @@ $Upgrade = new Upgrade ($Database);
  *	LAST_POSSIBLE		 	 //last possible for upgrade
  */
 
-# default dbversion for older releases
-if(!isset($User->settings->dbversion)) {
-	$User->settings->dbversion = 0;
-}
-
 # authenticated, but not admins
 if (!$User->is_admin(false)) {
 	# version is ok

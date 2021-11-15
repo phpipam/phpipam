@@ -84,6 +84,15 @@ $(document).ready(function() {
 
 	<!-- Advanced Settings -->
 	<tr>
+		<td><?php print _('Enable JIT'); ?></td>
+		<td>
+			<input type="checkbox" class="input-switch" value="1" name="jit" <?php if(@$method_settings->params->jit == 1) print 'checked'; ?>  <?php print $is_disabled; ?> >
+		</td>
+		<td class="info2">
+			<?php print _('Provision new users automatically'); ?><br>
+		</td>
+	</tr>
+	<tr>
 		<td><?php print _('Use advanced settings'); ?></td>
 		<td>
 			<input type="checkbox" class="input-switch" value="1" name="advanced" <?php if(@$method_settings->params->advanced == 1) print 'checked'; ?>  <?php print $is_disabled; ?> >

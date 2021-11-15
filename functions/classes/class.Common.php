@@ -164,8 +164,8 @@ class Common_functions  {
 	 * @return int
 	 */
 	public function cmp_version_strings($verA, $verB) {
-		$a = explode('.', $verA);
-		$b = explode('.', $verB);
+		$a = array_pad(explode('.', $verA), 3, 0);
+		$b = array_pad(explode('.', $verB), 3, 0);
 
 		if ($a[0] != $b[0]) return $a[0] < $b[0] ? -1 : 1;			// 1.x.y is less than 2.x.y
 		if (strcmp($a[1], $b[1]) != 0) return strcmp($a[1], $b[1]);	// 1.21.y is less than 1.3.y
@@ -173,6 +173,20 @@ class Common_functions  {
 		return 0;
 	}
 
+	/**
+	 * Fetch mysql version info
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function fetch_mysql_version () {
+		# fetch
+		try { $result = $this->Database->getObjectQuery("SELECT VERSION() AS 'version';"); }
+		catch (Exception $e) {
+			return "";
+		}
+		return is_object($result) ? $result->version : "";
+	}
 
 
 
@@ -422,6 +436,10 @@ class Common_functions  {
 
 		if (!is_object($settings))
 			return false;
+
+		// default dbversion for older releases
+		if (!property_exists($settings, 'dbversion'))
+			$settings->dbversion = 0;
 
 		#save
 		$this->settings = $settings;

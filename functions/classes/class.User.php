@@ -194,7 +194,7 @@ class User extends Common_functions {
      */
     private function start_session () {
         // check if database should be set for sessions
-        if (Config::ValueOf('session_storage') == "database") {
+        if (Config::ValueOf('session_storage') == "database" && $this->settings->dbversion >= 3) {
             new Session_db ($this->Database);
         }
         // local
@@ -494,7 +494,7 @@ class User extends Common_functions {
             return;
         }
 
-        setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 10, true);
+        setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 120, true);
     }
 
     /**

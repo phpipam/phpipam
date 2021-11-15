@@ -181,7 +181,7 @@ if($User->is_admin(false)) {
 			$Tools->update_phpipam_checktime ();
 		} else {
 			# new version available
-			if ($User->settings->version < $version) {
+			if ($Tools->cmp_version_strings(VERSION_VISIBLE, $version) < 0) {
 				print "<li>";
 				print "	<a href='".create_link("administration","version-check")."' class='icon-li btn-warning' rel='tooltip' data-placement='bottom' title='"._('New version available')."'><i class='fa fa-bullhorn'></i><sup>$version</sup></a>";
 				print "</li>";
@@ -190,6 +190,12 @@ if($User->is_admin(false)) {
 				$Tools->update_phpipam_checktime ();
 			}
 		}
+	}
+
+	if ($User->is_admin(false) && $Tools->cmp_version_strings(VERSION, $User->settings->version) != 0) {
+		print "<li>";
+		print "	<a href='".create_link("administration","version-check")."' class='icon-li btn-danger' rel='tooltip' data-placement='bottom' title='"._("Incompatible php and database schema versions")."'><i class='fa fa-bullhorn'></i><sup>".$User->settings->version."</sup></a>";
+		print "</li>";
 	}
 	?>
 

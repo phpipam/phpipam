@@ -396,10 +396,6 @@ class Upgrade extends Install {
 	private function get_old_version () {
 		// fetch settings from database
 		$this->get_settings ();
-		// reset dbversion if not set
-		if (!isset($this->settings->dbversion)) {
-			$this->settings->dbversion = 0;
-		}
 		// save version
 		$this->old_version = $this->settings->version.".".$this->settings->dbversion;
 	}

@@ -7,24 +7,20 @@ $upgrade_queries["1.4.0"]   = [];
 $upgrade_queries["1.4.0"][] = "-- Version update";
 $upgrade_queries["1.4.0"][] = "UPDATE `settings` set `version` = '1.4';";
 
-
 #
 # Subversion 1.4.1 queries
 #
-$upgrade_queries["1.4.1"]   = [];
-$upgrade_queries["1.4.1"][] = "-- Database version bump";
-$upgrade_queries["1.4.1"][] = "UPDATE `settings` set `dbversion` = '1';";
 // Add password policy
+$upgrade_queries["1.4.1"]   = [];
 $upgrade_queries["1.4.1"][] = "-- Add password policy";
 $upgrade_queries["1.4.1"][] = "ALTER TABLE `settings` ADD `passwordPolicy` VARCHAR(1024)  NULL  DEFAULT '{\"minLength\":8,\"maxLength\":0,\"minNumbers\":0,\"minLetters\":0,\"minLowerCase\":0,\"minUpperCase\":0,\"minSymbols\":0,\"maxSymbols\":0,\"allowedSymbols\":\"#,_,-,!,[,],=,~\"}';";
-
+$upgrade_queries["1.4.1"][] = "-- Database version bump";
+$upgrade_queries["1.4.1"][] = "UPDATE `settings` set `dbversion` = '1';";
 
 #
 # Subversion 1.4.2 queries
 #
-//$upgrade_queries["1.4.2"]   = [];
-$upgrade_queries["1.4.2"][] = "-- Database version bump";
-$upgrade_queries["1.4.2"][] = "UPDATE `settings` set `dbversion` = '2';";
+$upgrade_queries["1.4.2"]   = [];
 // Create circuit type table and convert existing circuits
 $upgrade_queries["1.4.2"][] = "-- Create circuit type table and convert existing circuits";
 $upgrade_queries["1.4.2"][] = "
@@ -123,13 +119,13 @@ $upgrade_queries["1.4.2"][] = "ALTER TABLE `circuits` ADD differentiator varchar
 $upgrade_queries["1.4.2"][] = "ALTER TABLE `circuits` DROP KEY cid ;";
 $upgrade_queries["1.4.2"][] = "ALTER TABLE `circuits` ADD CONSTRAINT circuits_diff_UN UNIQUE KEY (cid,differentiator) ;";
 $upgrade_queries["1.4.2"][] = "ALTER TABLE `circuits` MODIFY `type` INT UNSIGNED DEFAULT 1 NOT NULL ;";
-
+$upgrade_queries["1.4.2"][] = "-- Database version bump";
+$upgrade_queries["1.4.2"][] = "UPDATE `settings` set `dbversion` = '2';";
 
 #
 # Subversion 1.4.3 queries
 #
-$upgrade_queries["1.4.3"][] = "-- Database version bump";
-$upgrade_queries["1.4.3"][] = "UPDATE `settings` set `dbversion` = '3';";
+$upgrade_queries["1.4.3"]   = [];
 $upgrade_queries["1.4.3"][] = "-- Create php_sessions table";
 $upgrade_queries["1.4.3"][] = "CREATE TABLE `php_sessions` (
   `id` varchar(32) NOT NULL DEFAULT '',
@@ -138,13 +134,13 @@ $upgrade_queries["1.4.3"][] = "CREATE TABLE `php_sessions` (
   `remote_ip` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-
+$upgrade_queries["1.4.3"][] = "-- Database version bump";
+$upgrade_queries["1.4.3"][] = "UPDATE `settings` set `dbversion` = '3';";
 
 #
 # Subversion 1.4.4 queries
 #
-$upgrade_queries["1.4.4"][] = "-- Database version bump";
-$upgrade_queries["1.4.4"][] = "UPDATE `settings` set `dbversion` = '4';";
+$upgrade_queries["1.4.4"]   = [];
 $upgrade_queries["1.4.4"][] = "-- Add 2fa to settings";
 $upgrade_queries["1.4.4"][] = "ALTER TABLE `settings` ADD `2fa_provider` SET('none','Google_Authenticator')  NULL  DEFAULT 'none';";
 $upgrade_queries["1.4.4"][] = "ALTER TABLE `settings` ADD `2fa_name` VARCHAR(32)  NULL  DEFAULT 'phpipam';";
@@ -153,14 +149,14 @@ $upgrade_queries["1.4.4"][] = "ALTER TABLE `settings` ADD `2fa_userchange` BOOL 
 $upgrade_queries["1.4.4"][] = "-- Add 2fa to users";
 $upgrade_queries["1.4.4"][] = "ALTER TABLE `users` ADD `2fa` BOOL  NOT NULL  DEFAULT '0';";
 $upgrade_queries["1.4.4"][] = "ALTER TABLE `users` ADD `2fa_secret` VARCHAR(32)  NULL  DEFAULT NULL;";
-
+$upgrade_queries["1.4.4"][] = "-- Database version bump";
+$upgrade_queries["1.4.4"][] = "UPDATE `settings` set `dbversion` = '4';";
 
 #
 # Subversion 1.4.5 queries
 #
-$upgrade_queries["1.4.5"][] = "-- Database version bump";
-$upgrade_queries["1.4.5"][] = "UPDATE `settings` set `dbversion` = '5';";
-// cusotmers module
+$upgrade_queries["1.4.5"]   = [];
+// customers module
 $upgrade_queries["1.4.5"][] = "-- Add customers module switch";
 $upgrade_queries["1.4.5"][] = "ALTER TABLE `settings` ADD `enableCustomers` TINYINT(1)  NULL  DEFAULT '0';";
 // customers table
@@ -204,24 +200,24 @@ $upgrade_queries["1.4.5"][] = "ALTER TABLE `racks` ADD CONSTRAINT `customer_rack
 // add widget
 $upgrade_queries["1.4.5"][] = "-- Add customers widget";
 $upgrade_queries["1.4.5"][] = "INSERT INTO `widgets` ( `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('Customers', 'Shows customer list', 'customers', NULL, 'yes', '6', 'no', 'yes');";
-
-
+$upgrade_queries["1.4.5"][] = "-- Database version bump";
+$upgrade_queries["1.4.5"][] = "UPDATE `settings` set `dbversion` = '5';";
 
 #
 # Subversion 1.4.6 queries
 #
-$upgrade_queries["1.4.6"][] = "-- Database version bump";
-$upgrade_queries["1.4.6"][] = "UPDATE `settings` set `dbversion` = '6';";
+$upgrade_queries["1.4.6"]   = [];
 // change permissions for modules
 $upgrade_queries["1.4.6"][] = "-- Change permissions for modules";
 $upgrade_queries["1.4.6"][] = "UPDATE `users` SET `pstn` = '1' WHERE `pstn` IS NULL;";
 $upgrade_queries["1.4.6"][] = "ALTER TABLE `users` CHANGE `pstn` `perm_pstn` INT(1)  NOT NULL  DEFAULT '1';";
+$upgrade_queries["1.4.6"][] = "-- Database version bump";
+$upgrade_queries["1.4.6"][] = "UPDATE `settings` set `dbversion` = '5';";
 
 #
 # Subversion 1.4.7 queries
 #
-$upgrade_queries["1.4.7"][] = "-- Database version bump";
-$upgrade_queries["1.4.7"][] = "UPDATE `settings` set `dbversion` = '7';";
+$upgrade_queries["1.4.7"]   = [];
 $upgrade_queries["1.4.7"][] = "ALTER TABLE `racks` ADD `topDown` tinyint(1) NOT NULL DEFAULT '0';";
 $upgrade_queries["1.4.7"][] = "CREATE TABLE `rackContents` (
                                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -232,35 +228,35 @@ $upgrade_queries["1.4.7"][] = "CREATE TABLE `rackContents` (
                                 PRIMARY KEY (`id`),
                                 KEY `rack` (`rack`)
                                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-
+$upgrade_queries["1.4.7"][] = "-- Database version bump";
+$upgrade_queries["1.4.7"][] = "UPDATE `settings` set `dbversion` = '7';";
 
 #
 # Subversion 1.4.8 queries
 #
-$upgrade_queries["1.4.8"][] = "-- Database version bump";
-$upgrade_queries["1.4.8"][] = "UPDATE `settings` set `dbversion` = '8';";
+$upgrade_queries["1.4.8"]   = [];
 $upgrade_queries["1.4.8"][] = "-- Fix Consistency of VARCHAR Size on 'owner' column across tables 'ipaddresses','requests','pstnNumbers'";
 $upgrade_queries["1.4.8"][] = "ALTER TABLE `ipaddresses` MODIFY COLUMN owner VARCHAR(128);";
 $upgrade_queries["1.4.8"][] = "ALTER TABLE `requests` MODIFY COLUMN owner VARCHAR(128);";
-
+$upgrade_queries["1.4.8"][] = "-- Database version bump";
+$upgrade_queries["1.4.8"][] = "UPDATE `settings` set `dbversion` = '8';";
 
 #
 # Subversion 1.4.9 queries
 #
-$upgrade_queries["1.4.9"][] = "-- Database version bump";
-$upgrade_queries["1.4.9"][] = "UPDATE `settings` set `dbversion` = '9';";
 // Set permissions
+$upgrade_queries["1.4.9"]   = [];
 $upgrade_queries["1.4.9"][] = "-- Change permissions for modules";
 $upgrade_queries["1.4.9"][] = "ALTER TABLE `users` ADD `perm_racks` INT(1)  NOT NULL  DEFAULT '1';";
 $upgrade_queries["1.4.9"][] = "ALTER TABLE `users` ADD `perm_nat` INT(1)  NOT NULL  DEFAULT '1';";
-
+$upgrade_queries["1.4.9"][] = "-- Database version bump";
+$upgrade_queries["1.4.9"][] = "UPDATE `settings` set `dbversion` = '9';";
 
 #
 # Subversion 1.4.10 queries
 #
-$upgrade_queries["1.4.10"][] = "-- Database version bump";
-$upgrade_queries["1.4.10"][] = "UPDATE `settings` set `dbversion` = '10';";
 // Set permissions
+$upgrade_queries["1.4.10"]   = [];
 $upgrade_queries["1.4.10"][] = "-- Change permissions for modules";
 $upgrade_queries["1.4.10"][] = "ALTER TABLE `users` ADD `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{\"vlan\":\"1\",\"vrf\":\"1\",\"pdns\":\"1\",\"circuits\":\"1\",\"racks\":\"1\",\"nat\":\"1\",\"pstn\":\"1\",\"customers\":\"1\"}';";
 // Drop old permission fields
@@ -271,47 +267,49 @@ $upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_nat`;";
 $upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_racks`;";
 $upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_pstn`;";
 $upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_customers`;";
-
+$upgrade_queries["1.4.10"][] = "-- Database version bump";
+$upgrade_queries["1.4.10"][] = "UPDATE `settings` set `dbversion` = '10';";
 
 #
 # Subversion 1.4.11 queries
 #
+$upgrade_queries["1.4.11"]   = [];
+$upgrade_queries["1.4.11"][] = "ALTER TABLE `users` CHANGE `module_permissions` `module_permissions` VARCHAR(255)  CHARACTER SET utf8  BINARY  NULL  DEFAULT '{\"vlan\":\"1\",\"vrf\":\"1\",\"pdns\":\"1\",\"circuits\":\"1\",\"racks\":\"1\",\"nat\":\"1\",\"pstn\":\"1\",\"customers\":\"1\",\"locations\":\"1\",\"devices\":\"1\"}';";
 $upgrade_queries["1.4.11"][] = "-- Database version bump";
 $upgrade_queries["1.4.11"][] = "UPDATE `settings` set `dbversion` = '11';";
-$upgrade_queries["1.4.11"][] = "ALTER TABLE `users` CHANGE `module_permissions` `module_permissions` VARCHAR(255)  CHARACTER SET utf8  BINARY  NULL  DEFAULT '{\"vlan\":\"1\",\"vrf\":\"1\",\"pdns\":\"1\",\"circuits\":\"1\",\"racks\":\"1\",\"nat\":\"1\",\"pstn\":\"1\",\"customers\":\"1\",\"locations\":\"1\",\"devices\":\"1\"}';";
-
 
 #
 # Subversion 1.4.12 queries
 #
+$upgrade_queries["1.4.12"]   = [];
+$upgrade_queries["1.4.12"][] = "ALTER TABLE usersAuthMethod MODIFY COLUMN `params` varchar(2048) DEFAULT NULL;";
 $upgrade_queries["1.4.12"][] = "-- Database version bump";
 $upgrade_queries["1.4.12"][] = "UPDATE `settings` set `dbversion` = '12';";
-$upgrade_queries["1.4.12"][] = "ALTER TABLE usersAuthMethod MODIFY COLUMN `params` varchar(2048) DEFAULT NULL;";
-
 
 #
 # Subversion 1.4.13 queries
 #
+$upgrade_queries["1.4.13"]   = [];
+$upgrade_queries["1.4.13"][] = "ALTER TABLE `users` ADD `compress_actions` TINYINT(1)  NULL  DEFAULT '1';";
 $upgrade_queries["1.4.13"][] = "-- Database version bump";
 $upgrade_queries["1.4.13"][] = "UPDATE `settings` set `dbversion` = '13';";
-$upgrade_queries["1.4.13"][] = "ALTER TABLE `users` ADD `compress_actions` TINYINT(1)  NULL  DEFAULT '1';";
-
 
 #
 # Subversion 1.4.14 queries
 #
-$upgrade_queries["1.4.14"][] = "-- Database version bump";
-$upgrade_queries["1.4.14"][] = "UPDATE `settings` set `dbversion` = '14';";
+$upgrade_queries["1.4.14"]   = [];
 $upgrade_queries["1.4.14"][] = "-- Change API security";
 $upgrade_queries["1.4.14"][] = "ALTER TABLE `api` CHANGE `app_security` `app_security` SET('ssl_code','ssl_token','crypt','user','none','ssl') CHARACTER SET utf8  COLLATE utf8_general_ci  NOT NULL  DEFAULT 'ssl_token';";
 $upgrade_queries["1.4.14"][] = "UPDATE `api` set `app_security` = 'ssl_token' where `app_security` = 'ssl';";
 $upgrade_queries["1.4.14"][] = "ALTER TABLE `api` CHANGE `app_security` `app_security` SET('ssl_code','ssl_token','crypt','user','none') CHARACTER SET utf8  COLLATE utf8_general_ci  NOT NULL  DEFAULT 'ssl_token';";
 $upgrade_queries["1.4.14"][] = "ALTER TABLE `api` ADD `app_last_access` DATETIME  NULL;";
-
+$upgrade_queries["1.4.14"][] = "-- Database version bump";
+$upgrade_queries["1.4.14"][] = "UPDATE `settings` set `dbversion` = '14';";
 
 #
 # Subversion 1.4.15 queries
 #
+$upgrade_queries["1.4.15"]   = [];
 $upgrade_queries["1.4.15"][] = "-- Convert snmp_timeout to milliseconds";
 $upgrade_queries["1.4.15"][] = "ALTER TABLE `devices` CHANGE `snmp_timeout` `snmp_timeout` mediumint(5) unsigned DEFAULT '1000';";
 $upgrade_queries["1.4.15"][] = "UPDATE `devices` SET `snmp_timeout` = `snmp_timeout`/1000 WHERE `snmp_timeout` > 10000;";
@@ -321,6 +319,7 @@ $upgrade_queries["1.4.15"][] = "UPDATE `settings` set `dbversion` = '15';";
 #
 # Subversion 1.4.16 queries
 #
+$upgrade_queries["1.4.16"]   = [];
 $upgrade_queries["1.4.16"][] = "-- Fix masterSubnetId index definition";
 $upgrade_queries["1.4.16"][] = "ALTER TABLE `subnets` DROP INDEX `masterSubnetId`;";
 $upgrade_queries["1.4.16"][] = "ALTER TABLE `subnets` ADD INDEX(`masterSubnetId`);";
@@ -328,20 +327,23 @@ $upgrade_queries["1.4.16"][] = "-- Database version bump";
 $upgrade_queries["1.4.16"][] = "UPDATE `settings` set `dbversion` = '16';";
 
 #
-# Subversion 1.4.17 queries
+# Subversion 1.4.17 queries - Performance fix for linked addresses, moved to settings
 #
-$upgrade_queries["1.4.17"][] = "-- Performance fix for linked addresses, moved to settings;";
-
+$upgrade_queries["1.4.17"]   = [];
+$upgrade_queries["1.4.17"][] = "-- Database version bump";
+$upgrade_queries["1.4.17"][] = "UPDATE `settings` set `dbversion` = '17';";
 
 #
 # Subversion 1.4.18 queries
 #
+$upgrade_queries["1.4.18"]   = [];
 $upgrade_queries["1.4.18"][] = "-- Database version bump";
 $upgrade_queries["1.4.18"][] = "UPDATE `settings` set `dbversion` = '18';";
 
 #
 # Subversion 1.4.19 queries
 #
+$upgrade_queries["1.4.19"]   = [];
 $upgrade_queries["1.4.19"][] = "-- Support longer php_session ids (session.hash_function = sha512/whirlpool);";
 $upgrade_queries["1.4.19"][] = "ALTER TABLE `php_sessions` CHANGE `id` `id` VARCHAR(128) NOT NULL DEFAULT '';";
 $upgrade_queries["1.4.19"][] = "-- Database version bump";
@@ -351,6 +353,7 @@ $upgrade_queries["1.4.19"][] = "UPDATE `settings` set `dbversion` = '19';";
 # Subversion 1.4.20 queries
 #
 // japanese translation
+$upgrade_queries["1.4.20"]   = [];
 $upgrade_queries["1.4.20"][] = "-- Add Japanese translation";
 $upgrade_queries["1.4.20"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Japanese', 'ja_JP.UTF-8');";
 $upgrade_queries["1.4.20"][] = "-- Database version bump";
@@ -360,6 +363,7 @@ $upgrade_queries["1.4.20"][] = "UPDATE `settings` set `dbversion` = '20';";
 # Subversion 1.4.21 queries
 #
 // instructions widget
+$upgrade_queries["1.4.21"]   = [];
 $upgrade_queries["1.4.21"][] = "-- Instruction widget";
 $upgrade_queries["1.4.21"][] = "ALTER TABLE `widgets` CHANGE `whref` `whref` ENUM('yes','no') NOT NULL DEFAULT 'no';";
 $upgrade_queries["1.4.21"][] = "ALTER TABLE `widgets` CHANGE `wsize` `wsize` ENUM('4','6','8','12') NOT NULL DEFAULT '6';";
@@ -373,6 +377,7 @@ $upgrade_queries["1.4.21"][] = "UPDATE `settings` set `dbversion` = '21';";
 # Subversion 1.4.22 queries
 #
 // disable user
+$upgrade_queries["1.4.22"]   = [];
 $upgrade_queries["1.4.22"][] = "-- Add disabled user flag";
 $upgrade_queries["1.4.22"][] = "ALTER TABLE `users` ADD `disabled` SET('Yes','No')  NOT NULL  DEFAULT 'No';";
 $upgrade_queries["1.4.22"][] = "-- Database version bump";
@@ -382,6 +387,7 @@ $upgrade_queries["1.4.22"][] = "UPDATE `settings` set `dbversion` = '22';";
 # Subversion 1.4.23 queries
 #
 // extend hostname for devices
+$upgrade_queries["1.4.23"]   = [];
 $upgrade_queries["1.4.23"][] = "ALTER TABLE `devices` CHANGE `hostname` `hostname` VARCHAR(255)  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL  DEFAULT NULL;";
 // routing module
 $upgrade_queries["1.4.23"][] = "-- Add routing module flag";
@@ -429,16 +435,17 @@ $upgrade_queries["1.4.23"][] = "UPDATE `settings` set `dbversion` = '23';";
 # Subversion 1.4.24 queries
 #
 // add policy NAT option
+$upgrade_queries["1.4.24"]   = [];
 $upgrade_queries["1.4.24"][] = "ALTER TABLE `nat` ADD `policy` SET('Yes','No')  NOT NULL  DEFAULT 'No';";
 $upgrade_queries["1.4.24"][] = "ALTER TABLE `nat` ADD `policy_dst` VARCHAR(255)  NULL  DEFAULT NULL;";
 $upgrade_queries["1.4.24"][] = "-- Database version bump";
 $upgrade_queries["1.4.24"][] = "UPDATE `settings` set `dbversion` = '24';";
 
-
 #
 # Subversion 1.4.25 queries
 #
 // Traditional chinese traslation
+$upgrade_queries["1.4.25"]   = [];
 $upgrade_queries["1.4.25"][] = "-- Add russian and Chinese translations";
 $upgrade_queries["1.4.25"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Chinese traditional (繁體中文)', 'zh_TW.UTF-8');";
 $upgrade_queries["1.4.25"][] = "-- Database version bump";
