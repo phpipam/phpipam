@@ -53,13 +53,14 @@ elseif ($type == 'ipaddr'){
 	$worksheet->write($lineCount, 3, _('Description'));
 	$worksheet->write($lineCount, 4, _('VRF'));
 	$worksheet->write($lineCount, 5, _('Subnet'));
-	$worksheet->write($lineCount, 6, _('MAC'));
-	$worksheet->write($lineCount, 7, _('Owner'));
-	$worksheet->write($lineCount, 8, _('Device'));
-	$worksheet->write($lineCount, 9, _('Note'));
-	$worksheet->write($lineCount, 10, _('Tag'));
-	$worksheet->write($lineCount, 11, _('Is_Gateway'));
-	$fc =12 ;
+	$worksheet->write($lineCount, 6, _('Customer'));
+	$worksheet->write($lineCount, 7, _('MAC'));
+	$worksheet->write($lineCount, 8, _('Owner'));
+	$worksheet->write($lineCount, 9, _('Device'));
+	$worksheet->write($lineCount, 10, _('Note'));
+	$worksheet->write($lineCount, 11, _('Tag'));
+	$worksheet->write($lineCount, 12, _('Is_Gateway'));
+	$fc =13 ;
 	foreach($custom_address_fields as $k=>$f) {
 		$worksheet->write($lineCount, $fc, $k);
 		$fc++;

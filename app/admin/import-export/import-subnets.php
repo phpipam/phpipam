@@ -45,7 +45,7 @@ foreach ($data as &$cdata) {
 						"vrfId"=>$cdata['vrfId'],
 						"masterSubnetId"=>$cdata['masterSubnetId'],
 						"permissions"=>$cdata['permissions'],
-						"customer"=>$cdata['customer'],
+						"customer_id"=>$cdata['customer_id'],
 						"isFolder"=>0
 						);
 

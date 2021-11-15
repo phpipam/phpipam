@@ -156,6 +156,18 @@ foreach ($data as &$cdata) {
 		$cdata['vrfId'] = 0;
 	}
 
+	# Check if customer is provided and valid and link it if it is
+	if (!empty($cdata['customer'])) {
+		if (!isset($customer_data[$cdata['customer']])) {
+			$msg.= "Invalid Customer."; $action = "error";
+		} else {
+			$cdata['customer_id'] = $customer_data[$cdata['customer']]['id'];
+		}
+	} else {
+		# no customer provided
+		$cdata['id'] = 0;
+	}
+
 
 	# Check Subnet and mask are defined
 	if (empty($cdata['subnet']) or empty($cdata['mask'])) {
@@ -221,6 +233,7 @@ foreach ($data as &$cdata) {
 		if ($cdata['mac']) {
 			if (!preg_match("/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/", $cdata['mac'])) { $msg.="Invalid MAC address."; $action = "error"; }
 		}
+		if (preg_match("/[;'\"]/", $cdata['customer_id'])) { $msg.="Invalid characters in customer name."; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['owner'])) { $msg.="Invalid characters in owner name."; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['note'])) { $msg.="Invalid characters in note."; $action = "error"; }
 	}
@@ -249,6 +262,7 @@ foreach ($data as &$cdata) {
 			if ($cdata['hostname'] != $cedata['hostname']) { $msg.= "Address DNS name will be updated."; $action = "edit"; }
 			if ($cdata['description'] != $cedata['description']) { $msg.= "Address description will be updated."; $action = "edit"; }
 			if ($cdata['mac'] != $cedata['mac']) { $msg.= "Address MAC address will be updated."; $action = "edit"; }
+			if ($cdata['customer_id'] != $cedata['customer_id']) { $msg.= "Customer will be updated."; $action = "edit"; }
 			if ($cdata['owner'] != $cedata['owner']) { $msg.= "Address owner will be updated."; $action = "edit"; }
 			if ($cdata['switch'] != $cedata['switch']) { $msg.= "Device will be updated."; $action = "edit"; }
 			if ($cdata['note'] != $cedata['note']) { $msg.= "Address note will be updated."; $action = "edit"; }

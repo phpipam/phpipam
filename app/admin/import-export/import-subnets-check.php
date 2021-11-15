@@ -155,7 +155,7 @@ foreach ($data as &$cdata) {
 		if (!isset($customer_data[$cdata['customer']])) {
 			$msg.= "Invalid Customer."; $action = "error";
 		} else {
-			$cdata['id'] = $customer_data[$cdata['customer']]['id'];
+			$cdata['customer_id'] = $customer_data[$cdata['customer']]['id'];
 		}
 	} else {
 		# no customer provided
@@ -213,6 +213,7 @@ foreach ($data as &$cdata) {
 			$action = "skip"; # skip duplicate fields if identical, update if different
 			if ($cdata['description'] != $cedata['description']) { $msg.= "Subnet description will be updated."; $action = "edit"; }
 			if ($cdata['vlanId'] != $cedata['vlanId']) { $msg.= "VLAN ID will be updated."; $action = "edit"; }
+			if ($cdata['customer_id'] != $cedata['customer_id']) { $msg.= "Customer will be updated."; $action = "edit"; }
 			# Check if the values of the custom fields have changed
 			if(sizeof($custom_fields) > 0) {
 				foreach($custom_fields as $myField) {

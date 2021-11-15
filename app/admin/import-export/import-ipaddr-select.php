@@ -20,7 +20,7 @@ $tpl_field_names = "";
 $tpl_field_types = "";
 
 # predefine field list
-$expfields = array ("section","ip_addr","hostname","description","vrf","subnet","mac","owner","device","note","tag","is_gateway", "port", "location");
+$expfields = array ("section","ip_addr","hostname","description","vrf","subnet","mac","customer","owner","device","note","tag","is_gateway", "port", "location");
 //$disfields = array ("Section","IP Address","Hostname","Description","VRF","Subnet","MAC","owner","device","note","TAG");
 $mtable = "ipaddresses"; # main table where to check the fields
 
@@ -43,6 +43,9 @@ $extfields["device"]["pname"] = "device";
 $extfields["tag"]["table"] = "ipTags";
 $extfields["tag"]["field"] = "type";
 $extfields["tag"]["pname"] = "tag";
+$extfields["customer"]["table"] = "customers";
+$extfields["customer"]["field"] = "title";
+$extfields["customer"]["pname"] = "customer";
 
 ## using the extra fields as a trick to display some nicer names for these regular fields
 $extfields["ip_addr"]["table"] = "ipaddresses";

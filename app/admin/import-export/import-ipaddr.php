@@ -43,6 +43,7 @@ foreach ($data as &$cdata) {
 						"hostname"    =>$cdata['hostname'],
 						"description" =>$cdata['description'],
 						"mac"         =>$cdata['mac'],
+						"customer"    =>$cdata['customer'],
 						"owner"       =>$cdata['owner'],
 						"switch"      =>$cdata['switch'],
 						"state"       =>$cdata['state'],

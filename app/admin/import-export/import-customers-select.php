@@ -22,7 +22,7 @@ $tpl_field_types = "";
 $expfields = array ("title","address","postcode","city","state","contact_person","contact_phone","contact_mail","note");
 $mtable = "customers"; # main table where to check the fields
 # required fields without which we will not continue
-$reqfields = array("title","address","postcode","city","state");
+$reqfields = array("title"); #,"address","postcode","city","state");
 
 # manually adjust the standard fields
 foreach($expfields as $std_field) {
