@@ -26,3 +26,6 @@
 [submodule "functions/xmlseclibs"]
 	path = functions/xmlseclibs
 	url = https://github.com/robrichards/xmlseclibs.git
+[submodule "functions/parsedown"]
+	path = functions/parsedown
+	url = https://github.com/erusev/parsedown.git
