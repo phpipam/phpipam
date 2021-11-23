@@ -1,30 +1,29 @@
-Table of Contents
-=================
+# Table of Contents
 
-   * [phpIPAM API documentation](#phpipam-api-documentation)
-   * [1. General information](#1-general-information)
-      * [1.1 HTTP Request methods](#11-http-request-methods)
-      * [1.2 Request structure](#12-request-structure)
-      * [1.3 Encrypted requests](#13-encrypted-requests)
-      * [1.4 Response handling](#14-response-handling)
-      * [1.5 Output format](#15-output-format)
-      * [1.6 Global API parameters](#16-global-api-parameters)
-   * [2. Authentication and permissions](#2-authentication-and-permissions)
-      * [2.1 Authentication](#21-authentication)
-      * [2.2 Authorisation (permissions)](#22-authorisation-permissions)
-   * [3. Controllers](#3-controllers)
-      * [3.1 Sections controller](#31-sections-controller)
-      * [3.2 Subnets controller](#32-subnets-controller)
-      * [3.3 Folders controller](#33-folders-controller)
-      * [3.4 Addresses controller](#34-addresses-controller)
-      * [3.5 VLAN controller](#35-vlan-controller)
-      * [3.6 VLAN Domains controller (L2 domains)](#36-vlan-domains-controller-l2-domains)
-      * [3.7 VRF controller](#37-vrf-controller)
-      * [3.8 Devices controller](#38-devices-controller)
-      * [3.9 Tools controller](#39-tools-controller)
-      * [3.10 Prefixes controller](#310-prefixes-controller)
+* [phpIPAM API documentation](#phpipam-api-documentation)
+* [1. General information](#1-general-information)
+  * [1.1 HTTP Request methods](#11-http-request-methods)
+  * [1.2 Request structure](#12-request-structure)
+  * [1.3 Encrypted requests](#13-encrypted-requests)
+  * [1.4 Response handling](#14-response-handling)
+  * [1.5 Output format](#15-output-format)
+  * [1.6 Global API parameters](#16-global-api-parameters)
+* [2. Authentication and permissions](#2-authentication-and-permissions)
+  * [2.1 Authentication](#21-authentication)
+  * [2.2 Authorisation (permissions)](#22-authorisation-permissions)
+  * [3. Controllers](#3-controllers)
+  * [3.1 Sections controller](#31-sections-controller)
+  * [3.2 Subnets controller](#32-subnets-controller)
+  * [3.3 Folders controller](#33-folders-controller)
+  * [3.4 Addresses controller](#34-addresses-controller)
+  * [3.5 VLAN controller](#35-vlan-controller)
+  * [3.6 VLAN Domains controller (L2 domains)](#36-vlan-domains-controller-l2-domains)
+  * [3.7 VRF controller](#37-vrf-controller)
+  * [3.8 Devices controller](#38-devices-controller)
+  * [3.9 Tools controller](#39-tools-controller)
+  * [3.10 Prefixes controller](#310-prefixes-controller)
 
-# phpIPAM API documentation
+## phpIPAM API documentation
 
 phpIPAM comes with full REST API you can use to interact with phpipam with your own applications. It follows rest guidelines and recommendations.
 
@@ -32,9 +31,9 @@ phpIPAM comes with full REST API you can use to interact with phpipam with your 
 
 **To simplify deployment you can use API classes for different languages available on [Github - Collection of API clients for phpipam API](https://github.com/phpipam/phpipam-api-clients).**
 
-# 1. General information
+## 1. General information
 
-## 1.1 HTTP Request methods
+### 1.1 HTTP Request methods
 
 phpipam API uses standard HTML request methods that are described in below table:
 
@@ -47,28 +46,28 @@ PUT     | Changes object values
 PATCH   | Alias to PUT method
 DELETE  | Deletes an object
 
-## 1.2 Request structure
+### 1.2 Request structure
 
 REST request to be sent to API server for unencrypted and SSL API requests should be provided in standard URL structure:
 
-```
+```http
     <HTTP_METHOD> /api/<APP_NAME>/<CONTROLLER>/ HTTP/1.1
 ```
 
 __Example:__
 
-```
+```http
     GET /api/myAPP/sections/ HTTP/1.1
     Content-Type: application/json
     token: UJMcRNGjxH5UvHGeRy!vzgtL
     Host: api.phpipam.net
 ```
 
-## 1.3 Encrypted requests
+### 1.3 Encrypted requests
 
-phpIPAM API also supports encrypted requsts that can be sent over internet via normal HTTP request with encrypted payload. To create encrypted app select "crypt" under api settings (App security). Encrypted requests should be sent to API server in following format:
+phpIPAM API also supports encrypted requests that can be sent over internet via normal HTTP request with encrypted payload. To create encrypted app select "crypt" under api settings (App security). Encrypted requests should be sent to API server in following format:
 
-```
+```http
     GET /api/?app_id=&enc_request={encrypted_request} HTTP/1.1
 ```
 
@@ -80,31 +79,31 @@ To encrypt and decrypt requests base64_encoded MCRYPT_RIJNDAEL_256 encrypted jso
 
 Steps to create above request:
 
-  * json_encode request parameters ($_GET)
-  * encrypt json_encoded parameters with rijndael_256 using app_key provided in phpipam gui for app
-  * base64 encode encrypted parameters to ensure html chars are encoded
-  * send GET request with app_id and created enc_request parameters
+* json_encode request parameters ($_GET)
+* encrypt json_encoded parameters with rijndael_256 using app_key provided in phpipam gui for app
+* base64 encode encrypted parameters to ensure html chars are encoded
+* send GET request with app_id and created enc_request parameters
 
 Examples for php clients can be found in _examples directory in API folder.
 
-## 1.4 Response handling
+### 1.4 Response handling
 
 API response will be handled with standard HTTP result codes present in response header:
 
-  * 2xx success
-  * 4xx client errors
-  * 5xx server errors
+* 2xx success
+* 4xx client errors
+* 5xx server errors
 
 Response in JSON/XML format will always contain following fields to simplify management:
 
-  * success (true, false)
-  * code (http result code)
-  * message (in case of failures)
-  * data (in case data is present)
+* success (true, false)
+* code (http result code)
+* message (in case of failures)
+* data (in case data is present)
 
 __Examples:__
 
-```
+```http
     HTTP/1.1 200 OK
     Date: Tue, 16 Jun 2015 06:19:33 GMT
     Server: Apache/2.4.12 (FreeBSD) OpenSSL/1.0.1l-freebsd
@@ -128,7 +127,7 @@ __Examples:__
 
 Example of bad request:
 
-```
+```http
     HTTP/1.1 400 Bad Request
     Date: Tue, 16 Jun 2015 06:38:41 GMT
     Server: Apache/2.4.12 (FreeBSD) OpenSSL/1.0.1l-freebsd
@@ -146,14 +145,14 @@ Example of bad request:
 
 If new object will be created header will also contain **Location field** with href of newly created element and id field:
 
-```
+```http
     HTTP/1.1 201 Created
     Date: Mon, 15 Jun 2015 14:01:36 GMT
     Server: Apache/2.4.12 (FreeBSD) OpenSSL/1.0.1l-freebsd
     Expires: Thu, 19 Nov 1981 08:52:00 GMT
     Cache-Control: no-cache
     Pragma: no-cache
-    **Location: /api/myAPP/sections/92/**
+    Location: /api/myAPP/sections/92/
     Content-Length: 65
     Connection: close
     Content-Type: application/json
@@ -165,42 +164,40 @@ If new object will be created header will also contain **Location field** with h
     }
 ```
 
-## 1.5 Output format
+### 1.5 Output format
 
 Output format, e.g. the way result data is presented to client is handled with "Content-type" request header. By default API will return data in json format, you can change this with Content-type header.
 
 API supports 2 types of result formatting:
 
-  * JSON (default)
-  * XML
+* JSON (default)
+* XML
 
 By default API will return JSON format, if XML is required add Content-Type request header:
 
-
-```
+```http
     Content-Type: application/xml
 ```
 
-## 1.6 Global API parameters
+### 1.6 Global API parameters
 
-Global parameters can be added to each API requst to manage result handling. Currently supported global parameters are:
+Global parameters can be added to each API request to manage result handling. Currently supported global parameters are:
 
-parameter | type | description
----|---|---
-links | boolean | Controls weather to show links inside results to discover options. Default: true
-filter_by | varchar | Filters result by this field (field must exist)
-* If no results are present response will be http 404 (not found)
-filter_value | varchar | Filters results by this value
-* required if filter_by is specified
+Parameter    | Type               | Description
+-------------|--------------------|----------------------------------------------------------------------------------------------------------------------
+links        | boolean            | Controls weather to show links inside results to discover options.<br>Default: true
+filter_by    | varchar            | Filters result by this field (field must exist).<br>* If no results are present response will be http 404 (not found)
+filter_value | varchar            | Filters results by this value <br>* required if filter_by is specified.
+filter_match | full,partial,regex | Controls if filter_value is a full match, partial match or regex search.<br>Default: full
 
 tips:
 
-  * If you need timed response set var $time_response to true in api/index.php.
-  * If you need API to work in thread-safe mode set this for each app under administration.
+* If you need timed response set var $time_response to true in api/index.php.
+* If you need API to work in thread-safe mode set this for each app under administration.
 
 __Example:__
 
-``` json
+```json
     {
     "code": 200,
     "success": true,
@@ -208,7 +205,7 @@ __Example:__
         "id": "1472",
         "showName": "0",
         ...
-        " **links** ": [
+        "links": [
             {
             "rel": "self",
             "href": "/api/myAPP/subnets/1472/",
@@ -227,20 +224,22 @@ __Example:__
                 ]
             }
             ...
+            ]
         }
+    }
 ```
 
-# 2. Authentication and permissions
+## 2. Authentication and permissions
 
-## 2.1 Authentication
+### 2.1 Authentication
 
-To use API first you have to authenticate with username/password from account created in phpipam application. Authentication is done via "authorization" HTTP header. If authentication is successfull **you will receive API token that needs to be included in header in each next API requests**. Please note that SSL is highly recommended, if authentication type is BASIC request is sent unencrypted and can be easily interceted and decoded.
+To use API first you have to authenticate with username/password from account created in phpipam application. Authentication is done via "authorization" HTTP header. If authentication is successful **you will receive API token that needs to be included in header in each next API requests**. Please note that SSL is highly recommended, if authentication type is BASIC request is sent unencrypted and can be easily intercepted and decoded.
 
-  * Authentication is required for NONE and SSL security
-  * Authentication can be disabled by setting the $enable_authentication to false in index.php
-  * SSL security is highly recommended
+* Authentication is required for NONE and SSL security
+* Authentication can be disabled by setting the $enable_authentication to false in index.php
+* SSL security is highly recommended
 
-Along with token you will receive also token expiration date, which is set to 6 hours by default and can be changed. Each successfull request resets the expiration time for token. Token validity can be checked by issuing a GET request to user (GET /api/myAPI/user/) with "phpipam-token" or "token" header containg token. To reset validity issue a PATCH request to same URL.
+Along with token you will receive also token expiration date, which is set to 6 hours by default and can be changed. Each successful request resets the expiration time for token. Token validity can be checked by issuing a GET request to user (GET /api/myAPI/user/) with "phpipam-token" or "token" header containing token. To reset validity issue a PATCH request to same URL.
 
 _Note: "token" or "phpipam-token" header needs to be included in each API request to identify yourself!_
 
@@ -253,7 +252,7 @@ GET    | /api/my_app/user/               | Checks if token is still valid and re
 &nbsp; | /api/my_app/user/token_expires/ | Returns token expiration date
 &nbsp; | /api/my_app/user/all/           | Returns all users<br> _rwa app permissions required_
 &nbsp; | /api/my_app/user/admins/        | Returns admin users<br> _rwa app permissions required_
-POST   | /api/my_app/user/               | Authenticates user through "authorization" header.<br> Successfull response contains "token" and "expires".<br> **This token must be included in each following interactions with API as "phpipam-token" HTTP header.**
+POST   | /api/my_app/user/               | Authenticates user through "authorization" header.<br> Successful response contains "token" and "expires".<br> **This token must be included in each following interactions with API as "phpipam-token" HTTP header.**
 PATCH  | /api/my_app/user/               | Same as GET, but it resets the expiration of token.<br> _"phpipam-token" or "token" HTTP header must be present._
 DELETE | /api/my_app/user/               | Removes (revokes) token.<br> _"phpipam-token" or "token" HTTP header must be present._
 
@@ -261,7 +260,7 @@ __Example:__
 
 Request:
 
-```
+```http
     POST /api/myAPP/user/ HTTP/1.1
     **Authorization: Basic YWgta146c3A0bm1raWE=**
     Host: api.phpipam.net
@@ -269,7 +268,7 @@ Request:
 
 Response (success):
 
-```
+```http
     HTTP/1.1 200 OK
     Date: Thu, 09 Jul 2015 06:05:28 GMT
     Server: Apache/2.4.12 (FreeBSD) OpenSSL/1.0.1l-freebsd
@@ -283,20 +282,20 @@ Response (success):
 
 API Call to get all sections:
 
-```
+```http
     GET /api/myAPP/sections/ HTTP/1.1
     token: Z1q=j2bdwx56NR14KFcTi7P$
     Host: api.phpipam.net
 ```
 
-## 2.2 Authorisation (permissions)
+### 2.2 Authorisation (permissions)
 
 Authorisation (permissions) are controlled with app_id - ID of your application. You can set authorisation parameters on phpipam web UI. To retrieve permissions for current APP you can use OPTIONS, result will output permissions, they can be one of the following:
 
-  * Disabled
-  * Read
-  * Read / Write
-  * Read / Write / Admin
+* Disabled
+* Read
+* Read / Write
+* Read / Write / Admin
 
 __Example:__
 
@@ -321,7 +320,7 @@ Response:
     }
 ```
 
-# 3. Controllers
+## 3. Controllers
 
 Controllers control which portion of phpipam you wish to work on, or which objects. Controller is a second request parameter that should be sent to server. Currently available API controllers are:
 
@@ -339,7 +338,7 @@ prefix     | Prefix controller (special)
 
 _Tip: All supported controllers can be fetched using OPTIONS** method:_
 
-```
+```http
     OPTIONS /api/myAPP/ HTTP/1.1
     Host: api.phpipam.net
     token: UJMcRNGjxH5UvHGeRy!vzgtL
@@ -366,7 +365,7 @@ _Tip: All supported controllers can be fetched using OPTIONS** method:_
     }
 ```
 
-## 3.1 Sections controller
+### 3.1 Sections controller
 
 Available API calls for sections controller:
 
@@ -399,7 +398,7 @@ Parameter            | Type           | Methods          | Description
 **showSupernetOnly** | binary         | POST, PATCH      | Show only supernets in subnet list(default: 0)
 **DNS**              | varchar        | POST, PATCH      | Id of NS resolver to be used for section
 
-## 3.2 Subnets controller
+### 3.2 Subnets controller
 
 Available API calls for subnets controller:
 
@@ -431,7 +430,7 @@ Available parameters for subnets controller:
 
 Parameter          | Type           | Methods            | Description
 -------------------|----------------|--------------------|----------------------------------------------------------------------------------------
-**id**             | number         | GET, PATCH, DELETE | Subnet identifier, identifies which subnetto work on.
+**id**             | number         | GET, PATCH, DELETE | Subnet identifier, identifies which subnet to work on.
 **subnet**         | IP             | POST               | IP address of subnet in dotted format (e.g. 10.10.10.0)
 **mask**           | int            | POST, PATCH        | Subnet bitmask
 **description**    | text           | POST, PATCH        | Subnet description
@@ -451,16 +450,16 @@ Parameter          | Type           | Methods            | Description
 **discoverSubnet** | binary         | POST, PATCH        | Controls if new hosts should be discovered for new host scans (default: 0)
 **isFolder**       | binary         | POST               | Controls if we are adding subnet or folder (default: 0)
 **isFull**         | binary         | POST, PATCH        | Marks subnet as used (default: 0)
-**state**          | int            | POST, PATCH        | Assignes state (tag) to subnet (default: 1 - Used)
+**state**          | int            | POST, PATCH        | Assigns state (tag) to subnet (default: 1 - Used)
 **threshold**      | int            | POST, PATCH        | Subnet threshold
 **location**       | int            | POST, PATCH        | Location index
 **editDate**       | datetime       | /                  | Date and time of last update
 
-## 3.3 Folders controller
+### 3.3 Folders controller
 
-Folder controller is an **alias for subnets controller**. Folder is cdefined with with isFolder=1 parameter.
+Folder controller is an **alias for subnets controller**. Folder is defined with with isFolder=1 parameter.
 
-## 3.4 Addresses controller
+### 3.4 Addresses controller
 
 Available API calls for addresses controller:
 
@@ -486,7 +485,7 @@ Available parameters for addresses controller:
 
 Parameter       | Type     | Methods            | Description
 ----------------|----------|--------------------|--------------------------------------------------------
-**id**          | number   | GET, PATCH, DELETE | address identifier, identifies which addressto work on.
+**id**          | number   | GET, PATCH, DELETE | address identifier, identifies which address to work on.
 **subnetId**    | number   | POST               | Id of subnet address belongs to
 **ip**          | ip       | POST               | IP address
 **is_gateway**  | binary   | POST, PATCH        | Defines if address is presented as gateway
@@ -504,7 +503,7 @@ Parameter       | Type     | Methods            | Description
 **excludePing** | binary   | POST, PATCH        | Exclude this address from status update scans (ping)
 **editDate**    | datetime | /                  | Date and time of last update
 
-## 3.5 VLAN controller
+### 3.5 VLAN controller
 
 Available API calls for VLAN controller:
 
@@ -512,7 +511,7 @@ Method | URL                                        | Description
 -------|--------------------------------------------|---------------------------------------------------------
 GET    | /api/my_app/vlan/                          | Returns all Vlans
 &nbsp; | /api/my_app/vlan/{id}/                     | Returns specific Vlan
-&nbsp; | /api/my_app/vlan/{id}/subnets/             | Returns all subnets attached tovlan
+&nbsp; | /api/my_app/vlan/{id}/subnets/             | Returns all subnets attached to vlan
 &nbsp; | /api/my_app/vlan/{id}/subnets/{sectionId}/ | Returns all subnets attached to vlan in specific section
 &nbsp; | /api/my_app/vlan/{id}/custom_fields/       | Returns custom VLAN fields
 &nbsp; | /api/my_app/vlan/{id}/search/{number}/     | Searches for VLAN
@@ -531,7 +530,7 @@ Parameter       | Type     | Methods            | Description
 **description** | text     | POST, PATCH        | Vlan description
 **editDate**    | datetime | /                  | Date and time of last update
 
-## 3.6 VLAN Domains controller (L2 domains)
+### 3.6 VLAN Domains controller (L2 domains)
 
 Available API calls for VLAN Domains controller:
 
@@ -556,7 +555,7 @@ Parameter       | Type     | Methods            | Description
 **description** | text     | POST, PATCH        | Vlan description
 **editDate**    | datetime | /                  | Date and time of last update
 
-## 3.7 VRF controller
+### 3.7 VRF controller
 
 Available API calls for VRF controller:
 
@@ -581,7 +580,7 @@ Parameter       | Type     | Methods            | Description
 **sections**    | text     | POST, PATCH        | In which sections to display VRF. Blanks shows in all.
 **editDate**    | datetime | /                  | Date and time of last update
 
-## 3.8 Devices controller
+### 3.8 Devices controller
 
 Available API calls for Devices controller:
 
@@ -608,26 +607,26 @@ Parameter                       | Type    | Methods            | Description
 **rack, rack_start, rack_size** | varchar | POST, PATCH        | Device rack index, start position and size in U
 **location**                    | varchar | POST, PATCH        | Device location index
 
-## 3.9 Tools controller
+### 3.9 Tools controller
 
 Tools controller is a special controller that uses subcontrollers to work on specific objects within database. For API call {subcontroller} parameter must be used in following structure:
 
-```
+```http
     <HTTP_METHOD> /api/<APP_NAME>/<CONTROLLER>/<SUBCONTROLLER>/ HTTP/1.1
 ```
 
 Available subcontrollers are:
 
-  * tags
-  * devices
-  * device_types
-  * vlans
-  * vrfs
-  * nameservers
-  * scanagents
-  * locations
-  * nat
-  * racks
+* tags
+* devices
+* device_types
+* vlans
+* vrfs
+* nameservers
+* scanagents
+* locations
+* nat
+* racks
 
 Available API calls for Tools controller:
 
@@ -654,7 +653,7 @@ GET    | /tools/racks/{id}/devices/        | Returns all devices that belong to 
 GET    | /tools/nat/{id}/objects/          | Returns nat details and array of all attached objects
 GET    | /tools/nat/{id}/objects_full/     | Returns nat details and full array of all attached objects
 
-## 3.10 Prefixes controller
+### 3.10 Prefixes controller
 
 Prefix controller purpose is to simplify automatic subnet / address provisioning by eliminating the need to specify subnetId, sectionId etc in API calls, but instead relies on custom fields that marks subnets that are being used for this process.
 
@@ -662,14 +661,15 @@ This controller returns first available subnet or first available address from a
 
 Default subnet selectors:
 
-  * $custom_field_name = "customer_type";
-  * $custom_field_orderby = "subnet";
-  * $custom_field_order_direction = "asc";
+* $custom_field_name = "customer_type";
+* $custom_field_orderby = "subnet";
+* $custom_field_order_direction = "asc";
 
 Default address subnet selectors:
-  * $custom_field_name_addr = "customer_type";
-  * $custom_field_orderby_addr= "subnet";
-  * $custom_field_order_direction_addr = "asc";
+
+* $custom_field_name_addr = "customer_type";
+* $custom_field_orderby_addr= "subnet";
+* $custom_field_order_direction_addr = "asc";
 
 Method | URL                                                      | Description
 -------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------
@@ -684,7 +684,7 @@ POST   | /api/my_app/prefix/{customer_type}/{ip_version}/{mask}/  | Creates firs
 
 __Example call:__
 
-```
+```http
     GET/POST /api/{app_id}/prefixes/{customer_type}/{address_type}/{mask}/
     address_type: v4/v6
     mask: requested mask
@@ -692,7 +692,7 @@ __Example call:__
 
 This will return first available subnet for requested IP version/mask, response will be:
 
-```
+```php
     Array
     (
         [code] => 201

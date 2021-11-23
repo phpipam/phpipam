@@ -1,6 +1,6 @@
 # phpIPAM API reference
 
-### 1. Authentication
+## 1. Authentication
 
 Method | URL                             | Description
 -------|---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ POST   | /api/my_app/user/               | Authenticates user through "authoriza
 PATCH  | /api/my_app/user/               | Same as GET, but it resets the expiration of token.<br> _"phpipam-token" or "token" HTTP header must be present._
 DELETE | /api/my_app/user/               | Removes (revokes) token.<br> _"phpipam-token" or "token" HTTP header must be present._
 
-### 2. Sections controller
+## 2. Sections controller
 
 Method | URL                                 | Description
 -------|-------------------------------------|---------------------------------------------------------
@@ -26,7 +26,7 @@ POST   | /api/my_app/sections/               | Creates new section
 PATCH  | /api/my_app/sections/               | Updates section
 DELETE | /api/my_app/sections/               | Deletes section with all belonging subnets and addresses
 
-### 3. Subnets controller
+## 3. Subnets controller
 
 Method | URL                                           | Description
 -------|-----------------------------------------------|-----------------------------------------------------------
@@ -52,7 +52,7 @@ DELETE | /api/my_app/subnets/{id}/                     | Deletes Subnet
 &nbsp; | /api/my_app/subnets/{id}/truncate/            | Removes all addresses from subnet
 &nbsp; | /api/my_app/subnets/{id}/permissions/         | Removes all permissions
 
-### 4. Addresses controller
+## 4. Addresses controller
 
 Method | URL                                               | Description
 -------|---------------------------------------------------|--------------------------------------------------------------------------------------------
@@ -72,13 +72,13 @@ PATCH  | /api/my_app/addresses/{id}/                       | Updates address
 DELETE | /api/my_app/addresses/{id}/                       | Deletes address use 'remove_dns=1' parameter to remove all related DNS records
 &nbsp; | /api/my_app/addresses/{ip}/{subnetId}/            | Deletes address by IP in specific subnet
 
-### 5. VLAN controller
+## 5. VLAN controller
 
 Method | URL                                        | Description
 -------|--------------------------------------------|---------------------------------------------------------
 GET    | /api/my_app/vlan/                          | Returns all Vlans
 &nbsp; | /api/my_app/vlan/{id}/                     | Returns specific Vlan
-&nbsp; | /api/my_app/vlan/{id}/subnets/             | Returns all subnets attached tovlan
+&nbsp; | /api/my_app/vlan/{id}/subnets/             | Returns all subnets attached to vlan
 &nbsp; | /api/my_app/vlan/{id}/subnets/{sectionId}/ | Returns all subnets attached to vlan in specific section
 &nbsp; | /api/my_app/vlan/{id}/custom_fields/       | Returns custom VLAN fields
 &nbsp; | /api/my_app/vlan/{id}/search/{number}/     | Searches for VLAN
@@ -86,7 +86,7 @@ POST   | /api/my_app/vlan/                          | Creates new VLAN
 PATCH  | /api/my_app/vlan/                          | Updates VLAN
 DELETE | /api/my_app/vlan/                          | Deletes VLAN
 
-### 6. VLAN domains controller
+## 6. VLAN domains controller
 
 Method | URL                                  | Description
 -------|--------------------------------------|-----------------------------------
@@ -98,7 +98,7 @@ POST   | /api/my_app/l2domains/               | Creates new L2 domain
 PATCH  | /api/my_app/l2domains/               | Updates L2 domain
 DELETE | /api/my_app/l2domains/               | Deletes L2 domain
 
-### 7. VRF controller
+## 7. VRF controller
 
 Method | URL                            | Description
 -------|--------------------------------|-------------------------------
@@ -110,7 +110,7 @@ POST   | /api/my_app/vrf/               | Creates new VRF
 PATCH  | /api/my_app/vrf/               | Updates VRF
 DELETE | /api/my_app/vrf/               | Deletes VRF
 
-### 8. Devices controller
+## 8. Devices controller
 
 Method | URL                                         | Description
 -------|---------------------------------------------|-----------------------------------------------------------------
@@ -123,7 +123,7 @@ POST   | /api/my_app/devices/                        | Creates new device
 PATCH  | /api/my_app/devices/                        | Updates device
 DELETE | /api/my_app/devices/                        | Deletes device
 
-### 9. Tools controller
+## 9. Tools controller
 
 Method | URL                                             | Description
 -------|-------------------------------------------------|--------------------------------------
@@ -133,7 +133,7 @@ POST   | /api/my_app/tools/{subcontroller}/              | Creates new subcontro
 PATCH  | /api/my_app/tools/{subcontroller}/{identifier}/ | Updates subcontroller object
 DELETE | /api/my_app/tools/{subcontroller}/{identifier}/ | Deletes subcontroller object
 
-### 10. Prefixes controller
+## 10. Prefixes controller
 
 Method | URL                                                      | Description
 -------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------

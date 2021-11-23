@@ -39,21 +39,19 @@ Here is a short example how to get details for specific section:
 
 API client takes following parameters for initialization:
 
-  * **$api_url** : Url of your phpipam API server - https://10.10.10.3/phpipam/api/
-  * **$api_app_id** : Name / id of your application as created in phpipam API under administration - myfirstapi
-  * **$api_key** : API key if API security is set to crypt for you API appid. This will be used to encrypt requests, otherwise set to false
-  * **$api_username, $api_password** : Username / password of some phpipam account to use for authorization. Not needed for encrypted requests
-  * **$result_format** : can by one of following: json / xml / array / object
-
+* **$api_url** : Url of your phpipam API server - `https://10.10.10.3/phpipam/api/`
+* **$api_app_id** : Name / id of your application as created in phpipam API under administration - myfirstapi
+* **$api_key** : API key if API security is set to crypt for you API appid. This will be used to encrypt requests, otherwise set to false
+* **$api_username, $api_password** : Username / password of some phpipam account to use for authorization. Not needed for encrypted requests
+* **$result_format** : can by one of following: json / xml / array / object
 
 For call execution following parameters are needed:
 
-  * **method** : HTTP method to use (OPTIONS, GET, POST, DELETE, PATCH, PUT) - - REQUIRED
-  * **controller** : Which controller to use (sections, subnets, vlans, ...) - REQUIRED
-  * **identifiers** : array of identifiers to add to URL request. (/api/myfistapi/sections/identifier1/identifier2/...)
-  * **parameters** : key/value array of GET/POST parameters to add to URL request. (POST /api/myfistapi/sections/1/?name=test)
-  * **Token file** : if this is set to false than for each query first authorisation query will be made to obtain access token, meaning 1 additional request. If you specify filename here the token will be saved to this file, so no additional queries will be required as long as token is valid.
-
+* **method** : HTTP method to use (OPTIONS, GET, POST, DELETE, PATCH, PUT) - - REQUIRED
+* **controller** : Which controller to use (sections, subnets, vlans, ...) - REQUIRED
+* **identifiers** : array of identifiers to add to URL request. (/api/myfistapi/sections/identifier1/identifier2/...)
+* **parameters** : key/value array of GET/POST parameters to add to URL request. (POST /api/myfistapi/sections/1/?name=test)
+* **Token file** : if this is set to false than for each query first authorisation query will be made to obtain access token, meaning 1 additional request. If you specify filename here the token will be saved to this file, so no additional queries will be required as long as token is valid.
 
 This is an output from terminal with debug mode :
 
