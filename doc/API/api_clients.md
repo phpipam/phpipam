@@ -37,10 +37,9 @@ Here is a short example how to get details for specific section:
     ?>
 ```
 
-
 API client takes following parameters for initialization:
 
-  * **$api_url** : Url of your phpipam API server - http://10.10.10.3/phpipam/api/
+  * **$api_url** : Url of your phpipam API server - https://10.10.10.3/phpipam/api/
   * **$api_app_id** : Name / id of your application as created in phpipam API under administration - myfirstapi
   * **$api_key** : API key if API security is set to crypt for you API appid. This will be used to encrypt requests, otherwise set to false
   * **$api_username, $api_password** : Username / password of some phpipam account to use for authorization. Not needed for encrypted requests
@@ -57,7 +56,8 @@ For call execution following parameters are needed:
 
 
 This is an output from terminal with debug mode :
-```
+
+```bash
     [php-client (master*) #] php example.php
     *   Trying 46.19.10.34...
     * Connected to devel.phpipam.net (46.19.10.34) port 80 (#0)

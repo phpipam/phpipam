@@ -10,8 +10,8 @@ Go to settings in phpipam GUI and enable API module, than go to settings > API a
 
 First we need to authenticate to API server by providing username/password from some valid phpipam account to receive token:
 
-```
-    curl -X **POST** --user test:test123 http://devel.phpipam.net/api/apiclient/user/ -i
+```bash
+    curl -X POST --user test:test123 https://devel.phpipam.net/api/apiclient/user/ -i
     HTTP/1.1 200 OK
     Content-Length: 116
     Content-Type: application/json
@@ -19,14 +19,12 @@ First we need to authenticate to API server by providing username/password from 
     {"code":200,"success":true,"data":{"token":".J1e9ipFZkPE6EvIRAqEf9hp","expires":"2017-01-05 14:18:43"},"time":0.009}%
 ```
 
-After authentication in succesfull you receive token that you need to include in each following rquest. In our case the token is `.J1e9ipFZkPE6EvIRAqEf9hp`. We can also see that token expires in 6 hours.
-
-
+After authentication in succesfull you receive token that you need to include in each following request. In our case the token is `.J1e9ipFZkPE6EvIRAqEf9hp`. We can also see that token expires in 6 hours.
 
 To extend token validity make a POST or PATCH request to server with token (or phpipam-token) http header `"token: .J1e9ipFZkPE6EvIRAqEf9hp"`:
 
-```
-    curl -X **PATCH** http://devel.phpipam.net/1.3/api/apiclient/user/ --header "token: .J1e9ipFZkPE6EvIRAqEf9hp" -i
+```bash
+    curl -X PATCH https://devel.phpipam.net/1.3/api/apiclient/user/ --header "token: .J1e9ipFZkPE6EvIRAqEf9hp" -i
     HTTP/1.1 200 OK
     Content-Type: application/json
 
@@ -36,8 +34,9 @@ To extend token validity make a POST or PATCH request to server with token (or p
 ### Some example calls
 
 Get details for specific subnet (set links=false to hide links):
-```
-    curl http://devel.phpipam.net/1.3/api/apiclient/subnets/22/\?links\=false --header "token: .J1e9ipFZkPE6EvIRAqEf9hp" -i
+
+```bash
+    curl https://devel.phpipam.net/1.3/api/apiclient/subnets/22/\?links\=false --header "token: .J1e9ipFZkPE6EvIRAqEf9hp" -i
     HTTP/1.1 200 OK
     Content-Length: 898
     Content-Type: application/json
@@ -46,17 +45,20 @@ Get details for specific subnet (set links=false to hide links):
 ```
 
 Update subnet description (using JSON data):
-```
-    curl -X **PATCH** --data '{"description":"Test swedish2"}' http://devel.phpipam.net/1.3/api/apiclient/subnets/22/ --header "token: .J1e9ipFZkPE6EvIRAqEf9hp" --header "Content-Type: application/json" -i
+
+```bash
+    curl -X PATCH --data '{"description":"Test swedish2"}' https://devel.phpipam.net/1.3/api/apiclient/subnets/22/ --header "token: .J1e9ipFZkPE6EvIRAqEf9hp" --header "Content-Type: application/json" -i
     HTTP/1.1 200 OK
     Content-Length: 66
     Content-Type: application/json
 
     {"code":200,"success":true,"message":"Subnet updated","time":0.01}%
 ```
+
 Update subnet description (using form-encoded data):
-```
-    curl -X **PATCH** --data 'description="Test%20Swedish' http://devel.phpipam.net/1.3/api/apiclient/subnets/22/ --header "token: .J1e9ipFZkPE6EvIRAqEf9hp" --header "Content-type: application/x-www-form-urlencoded" -i
+
+```bash
+    curl -X PATCH --data 'description="Test%20Swedish' https://devel.phpipam.net/1.3/api/apiclient/subnets/22/ --header "token: .J1e9ipFZkPE6EvIRAqEf9hp" --header "Content-type: application/x-www-form-urlencoded" -i
     HTTP/1.1 200 OK
     Server: Apache/2.4.23 (FreeBSD) OpenSSL/1.0.2j
     Content-Length: 67
@@ -64,11 +66,10 @@ Update subnet description (using form-encoded data):
     {"code":200,"success":true,"message":"Subnet updated","time":0.008}%
 ```
 
-
-
 Request fist available subnet with mask /29 inside specific subnet:
-```
-    curl -X **GET** http://devel.phpipam.net/api/apiclient/subnets/92/first_subnet/29/ --header "token: .J1e9ipFZkPE6EvIRAqEf9hp" -i
+
+```bash
+    curl -X GET https://devel.phpipam.net/api/apiclient/subnets/92/first_subnet/29/ --header "token: .J1e9ipFZkPE6EvIRAqEf9hp" -i
     HTTP/1.1 200 OK
     Content-Type: application/json
     token: .J1e9ipFZkPE6EvIRAqEf9hp
@@ -76,10 +77,10 @@ Request fist available subnet with mask /29 inside specific subnet:
     {"code":200,"success":true,"data":"192.168.20.16\/29"}
 ```
 
-
 Create new subnet with first available /29 mask using POST request:
-```
-    curl -X **POST** http://devel.phpipam.net/api/apiclient/subnets/92/first_subnet/29/ HTTP/1.1 --header "token: .J1e9ipFZkPE6EvIRAqEf9hp" -v
+
+```bash
+    curl -X POST https://devel.phpipam.net/api/apiclient/subnets/92/first_subnet/29/ HTTP/1.1 --header "token: .J1e9ipFZkPE6EvIRAqEf9hp" -v
     HTTP/1.1 201 CREATED
     Content-Type: application/json
     token: .J1e9ipFZkPE6EvIRAqEf9hp
