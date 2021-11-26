@@ -655,8 +655,7 @@ class Common_functions  {
 
 		try {
 			$dom = new \DOMDocument();
-
-			if ($dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NOERROR) === false)
+			if ($dom->loadHTML("<html>".$html."</html>", LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NOERROR) === false)
 				return "";
 
 			$banned_elements = ['script', 'iframe', 'embed'];
@@ -686,7 +685,7 @@ class Common_functions  {
 					$e->parentNode->removeChild($e);
 
 				// Return sanitised HTML
-				$html = $dom->saveHTML();
+				$html = str_replace(['<html>', '</html>'], '', $dom->saveHTML());
 			}
 		} catch (Exception $e) {
 			$html = "";
