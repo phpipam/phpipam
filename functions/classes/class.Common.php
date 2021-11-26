@@ -2014,9 +2014,9 @@ class Common_functions  {
     				print "	<li><a href='".create_link("tools",$req['section'],$parent[0])."'><i class='icon-folder-open icon-gray'></i> $prefix->name</a> <span class='divider'></span></li>";
     			}
 
-		    }
-		    $prefix = $this->fetch_object("pstnPrefixes", "id", $req['subnetId']);
-		    print "	<li class='active'>$prefix->name</li>";
+		    	$prefix = $this->fetch_object("pstnPrefixes", "id", $req['subnetId']);
+		    	print "	<li class='active'>$prefix->name</li>";
+			}
 		}
 		print "</ul>";
 	}
