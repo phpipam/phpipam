@@ -31,6 +31,7 @@ $tools_menu_items = [
 					"requests" => _("requests"),
 					"racks" => _("racks"),
 					"scanned-networks" => _("scanned-networks"),
+					"documentation"=> _("documentation"),
 					"search" => _("search"),
 					"subnet-masks" => _("subnet-masks"),
 					"subnets" => _("subnets"),
@@ -74,6 +75,7 @@ $tools_menu[_('Tools')]     = [];
 $tools_menu[_('User Menu')] = [];
 
 # Tools
+$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-book",        "href"=>"documentation",               "name"=>_("Documentation"),         "description"=>_("Read phpIPAM documentation")];
 $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-search",      "href"=>"search",                      "name"=>_("Search"),               "description"=>_("Search database Addresses, subnets and VLANs")];
 $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-calculator",  "href"=>"ip-calculator",               "name"=>_("IP calculator"),        "description"=>_("IPv4v6 calculator for subnet calculations")];
 $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-calculator",  "href"=>"ip-calculator/bw-calculator", "name"=>_("Bandwidth calculator"), "description"=>_("Bandwidth calculator")];

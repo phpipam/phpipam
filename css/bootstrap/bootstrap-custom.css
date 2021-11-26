@@ -59,7 +59,7 @@ table.table-threshold td:nth-child(1) {
 table.table-threshold td {
     border-bottom: 1px solid #eee !important;
 }
-table.table-threshold tr:last-child () {
+table.table-threshold tr:last-child {
     border-bottom: none !important;
 }
 table.multicast tr.subnets-title td {
@@ -2608,7 +2608,7 @@ div.jqueryError a {
 .navbar .navbar-nav > li.active > a {
     background: #272b30;
 }
-@media (min-width: 768px)
+@media (min-width: 768px) {}
 .navbar-collapse {
     padding-right: 0px !important;
 }
@@ -2754,4 +2754,84 @@ div.fixed-table-container {
 }
 .ip_vis_subnet span a {
 	font-size: 12px;
+}
+
+.markdown-body code,.markdown-body kbd,.markdown-body pre,.markdown-body samp {
+	font-family: monospace,monospace;
+	font-size: 1em;
+}
+
+.markdown-body table {
+	border-spacing: 0;
+	border-collapse: collapse;
+	width: 100%;
+	display: block;
+	overflow: auto;
+	overflow-wrap: break-word;
+}
+
+.markdown-body p,.markdown-body blockquote,.markdown-body ul,.markdown-body ol,.markdown-body dl,.markdown-body table,.markdown-body pre,.markdown-body details {
+	margin-top: 0;
+	margin-bottom: 16px
+}
+
+.markdown-body pre {
+	background-color: #00000018;
+}
+
+.markdown-body code {
+	color: unset;
+	background-color: unset;
+	font-weight: 100;
+}
+
+.markdown-body table th,.markdown-body table td {
+	padding: 6px 13px;
+	border-top: 1px solid #d0d7de;
+}
+
+.markdown-body table th {
+	font-weight: 900;
+}
+
+.markdown-body table tr {
+	border-top: 1px solid #d0d7de;
+}
+
+.markdown-body table tr:nth-child(2n) {
+	background-color: #00000018;
+}
+
+.markdown-body ul.no-list,.markdown-body ol.no-list {
+	padding: 0;
+	list-style-type: none
+}
+
+.markdown-body ol[type="1"] {
+	list-style-type: decimal
+}
+
+.markdown-body ol[type=a] {
+	list-style-type: lower-alpha
+}
+
+.markdown-body ol[type=i] {
+	list-style-type: lower-roman
+}
+
+.markdown-body div>ol:not([type]) {
+	list-style-type: decimal
+}
+
+.markdown-body ul ul,.markdown-body ul ol,.markdown-body ol ol,.markdown-body ol ul {
+	margin-top: 0;
+	margin-bottom: 0
+}
+
+.markdown-body li>p {
+	margin-top: 16px
+}
+
+.markdown-body li+li {
+	margin-top: .25em
 }
