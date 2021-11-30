@@ -67,6 +67,7 @@ if (is_file($path_doc) && preg_match('/\.md$/', $document)) {
                     $value =  $e->getAttribute('src');
                     if (strpos($value, 'http://') !== 0 && strpos($value, 'https://') !== 0) {
                         // Fix relative url img paths
+                        $value = preg_replace('/^\/+/', '', $value);
                         $e->setAttribute('src', create_link().$value);
                     }
                 }

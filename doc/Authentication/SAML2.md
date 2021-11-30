@@ -20,7 +20,7 @@
 
 ## SAML2 Connection Settings
 
-![SAML2 connection settings](doc/img/saml2_connection_settings.png "SAML2 connection settings")
+![SAML2 connection settings](/doc/img/saml2_connection_settings.png "SAML2 connection settings")
 
 ### Description
 
