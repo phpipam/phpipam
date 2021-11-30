@@ -2756,9 +2756,17 @@ div.fixed-table-container {
 	font-size: 12px;
 }
 
+.markdown-body {
+ font-size: 14px;
+}
+
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
+	font-weight: 800;
+}
+
 .markdown-body code,.markdown-body kbd,.markdown-body pre,.markdown-body samp {
 	font-family: monospace,monospace;
-	font-size: 1em;
+	font-size: 14px;
 }
 
 .markdown-body table {
@@ -2780,9 +2788,13 @@ div.fixed-table-container {
 }
 
 .markdown-body code {
-	color: unset;
+	color: #baa16d;
 	background-color: unset;
 	font-weight: 100;
+}
+
+.markdown-body pre code {
+	color: unset;
 }
 
 .markdown-body table th,.markdown-body table td {
@@ -2791,7 +2803,7 @@ div.fixed-table-container {
 }
 
 .markdown-body table th {
-	font-weight: 900;
+	font-weight: 800;
 }
 
 .markdown-body table tr {

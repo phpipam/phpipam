@@ -44,7 +44,7 @@ if($_POST['action']!="add") {
 
 
 <!-- header -->
-<div class="pHeader"><?php print $title; ?></div>
+<div class="pHeader"><?php print $title.$User->print_doc_link("API"); ?></div>
 
 <!-- content -->
 <div class="pContent">

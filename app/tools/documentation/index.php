@@ -17,19 +17,30 @@ if (!file_exists($parse_down_class)) {
 $Parsedown = new \Parsedown();
 $dom = new \DOMDocument();
 
-$document = isset($_GET['subnetId']) ? urldecode($_GET['subnetId']) : '';
+if (isset($_GET['sPage'])) {
+    $document = rawurldecode($_GET['subnetId']) . "/" . rawurldecode($_GET['sPage']);
+}
+elseif (isset($_GET['subnetId'])) {
+    $document = rawurldecode($_GET['subnetId']);
+}
+else {
+    $document = "";
+}
 
-$doc_path = realpath(dirname(__FILE__) . "/../../../doc");
-$req_uri  = realpath("$doc_path/$document");
+# Strip leading and trailing slashes
+$document = preg_replace('/((^\/+)|(\/+$))/', '', $document);
 
-if (strpos($req_uri, $doc_path) !== 0) {
+$path_root = realpath(dirname(__FILE__) . "/../../../doc");
+$path_doc  = realpath("$path_root/$document");
+
+if (strpos($path_doc, $path_root) !== 0) {
     $Result->show("danger", _('Requested resource is not inside doc directory'), true);
 }
 
-if (is_file($req_uri) && preg_match('/\.md$/', $document)) {
+if (is_file($path_doc) && preg_match('/\.md$/', $document)) {
     # Display file. We know this file exists under doc folder and ends .md
 
-    $md = file_get_contents($req_uri) ? : "";
+    $md = file_get_contents($path_doc) ? : "";
 
     $html = $Parsedown->text(mb_convert_encoding($md, 'HTML-ENTITIES', 'UTF-8')) ? : "";
 
@@ -45,14 +56,18 @@ if (is_file($req_uri) && preg_match('/\.md$/', $document)) {
                     $id = str_replace(' ', '-', $id);
                     $e->setAttribute('id', $id);
                 }
-                // Fix up relative URLs
                 if ($e->hasAttribute('href')) {
                     $value =  $e->getAttribute('href');
                     if (strpos($value, '#') === 0) {
-                        $e->setAttribute('href', create_link("tools/documentation/".urlencode($document)).$value);
+                        // Fix URI fragment links to header ids within same page
+                        $e->setAttribute('href', create_link("tools/documentation/$document").$value);
                     }
-                    elseif (strpos($value, 'http://') !== 0 && strpos($value, 'https://') !== 0) {
-                        $e->setAttribute('href', create_link("tools/documentation/$value"));
+                }
+                if ($e->hasAttribute('src')) {
+                    $value =  $e->getAttribute('src');
+                    if (strpos($value, 'http://') !== 0 && strpos($value, 'https://') !== 0) {
+                        // Fix relative url img paths
+                        $e->setAttribute('src', create_link().$value);
                     }
                 }
             }
@@ -61,20 +76,23 @@ if (is_file($req_uri) && preg_match('/\.md$/', $document)) {
         $html = str_replace(['<html>', '</html>'], '', $dom->saveHTML());
     }
 }
-elseif (is_dir($req_uri)) {
+elseif (is_dir($path_doc)) {
     # Display list of available documents & folders. We know this directory exists under doc folder
 
     $contents = [];
-    if ($dh = opendir($req_uri)) {
+    if ($dh = opendir($path_doc)) {
         while (($file = readdir($dh)) !== false) {
-            if ($file === "." || $file === ".." || $file === "img") { continue; }
+            if (in_array($file, ['.', '..', 'img'])) {
+                continue;
+            }
 
-            $payload = empty($document) ? urlencode($file) : urlencode("$document/$file");
+            $doc = empty($document) ? rawurlencode($file) : rawurlencode($document)."/".rawurlencode($file);
 
-            if (is_dir("$req_uri/$file")) {
-                $contents[$file] = "- ** [$file](".create_link("tools/documentation/$payload").") **";
-            } elseif (preg_match('/\.md$/', $file)) {
-                $contents[$file] = "- [$file](".create_link("tools/documentation/$payload").")";
+            if (is_dir("$path_doc/$file")) {
+                $contents[$file] = "- ** [$file](".create_link("tools/documentation/$doc").") **";
+            }
+            elseif (preg_match('/\.md$/', $file)) {
+                $contents[$file] = "- [$file](".create_link("tools/documentation/$doc").")";
             }
         }
         closedir($dh);
