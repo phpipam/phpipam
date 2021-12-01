@@ -1419,6 +1419,11 @@ class Common_functions  {
 	public function curl_fetch_url($url, $headers=false, $timeout=30) {
 		$result = ['result'=>false, 'result_code'=>503, 'error_msg'=>''];
 
+		if (Config::ValueOf('offline_mode')) {
+			$result['error_msg'] = _('Internet access disabled in config.php');
+			return $result;
+		}
+
 		try {
 			$curl = curl_init();
 			curl_setopt($curl, CURLOPT_URL, $url);

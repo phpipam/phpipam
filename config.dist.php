@@ -147,6 +147,8 @@ $proxy_user     = 'USERNAME';                             // Proxy Username
 $proxy_pass     = 'PASSWORD';                             // Proxy Password
 $proxy_use_auth = false;                                  // Enable/Disable Proxy authentication
 
+$offline_mode   = false;                                  // Offline mode, disable server-side Internet requests (proxy/OpenStreetMap)
+
 /**
  * Failed access
  * Message to log into webserver logs in case of failed access, for further processing by tools like Fail2Ban

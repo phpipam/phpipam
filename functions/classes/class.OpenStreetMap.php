@@ -320,6 +320,11 @@ class OpenStreetMap extends Common_functions {
             return $results;
         }
 
+		if (Config::ValueOf('offline_mode')) {
+			$result['error'] = _('Internet access disabled in config.php');
+			return $result;
+		}
+
         try {
             // Obtain exclusive MySQL row lock
             $Lock = new LockForUpdate($this->Database, 'nominatim', 1);
