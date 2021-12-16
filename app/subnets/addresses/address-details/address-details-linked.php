@@ -25,7 +25,7 @@ if (strlen($User->settings->link_field)>0) {
             // address
             print "<tr>";
             print " <th>"._("Address")."</th>";
-            print " <td><a href='".create_link("subnets", $sn->sectionId, $sn->id)."'>".$Subnets->transform_to_dotted( $s->ip_addr)."</a></td>";
+            print " <td><a href='".create_link("subnets", $sn->sectionId, $sn->id, "address-details", $s->id)."'>".$Subnets->transform_to_dotted( $s->ip_addr)."</a></td>";
             print "</tr>";
 
             // hostname
