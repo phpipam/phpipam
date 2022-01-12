@@ -709,7 +709,7 @@ class Addresses extends Common_functions {
                         	else {
                             	return true;
                         	}
-                        } catch (phpmailerException $e) {
+                        } catch (PHPMailer\PHPMailer\Exception $e) {
                         	$this->Result->show("danger", _("Mailer Error").": ".$e->errorMessage(), true);
                         } catch (Exception $e) {
                         	$this->Result->show("danger", _("Mailer Error").": ".$e->getMessage(), true);
