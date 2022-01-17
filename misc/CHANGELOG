@@ -6,6 +6,12 @@
     + php_sessions table doesn't exist error when upgrading (#3417);
     + RFC 6265 compliant cookies (#3452);
 
+    Security Fixes:
+    ----------------------------
+    + SQL injection in edit-bgp-mapping-search.php;
+    + Stored XSS in the "Site title" parameter;
+    + XSS while uploading CVS files;
+
 == 1.4.4
 
     Bugfixes:
