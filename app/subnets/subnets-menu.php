@@ -9,6 +9,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf_ffss = $User->Crypto->csrf_cookie ("create-if-not-exists", "find_free_section_subnets");
+
 # ID must be numeric
 if(!is_numeric($_GET['section'])) { $Result->show("danger",_('Invalid ID'), true); }
 
@@ -133,7 +136,7 @@ if($section_permission == 3) {
 	print "	<span>";
 	print "	<div class='btn-group'>";
 	print "	 <button id='add_subnet' class='btn btn-xs btn-default btn-success'  rel='tooltip' data-container='body'  data-placement='top' title='"._('Add new subnet to')." $section[name]'  data-subnetId='' data-sectionId='$section[id]' data-action='add'><i class='fa fa-sm fa-plus'></i></button>";
-	print "	 <button class='btn btn-xs btn-default btn-success open_popup' data-script='app/admin/subnets/find_free_section_subnets.php'  data-class='700' rel='tooltip' data-container='body'  data-placement='top' title='"._('Search for free subnets in section ')." $section[name]'  data-sectionId='$section[id]'><i class='fa fa-sm fa-search'></i></button>";
+	print "	 <button class='btn btn-xs btn-default btn-success open_popup' data-script='app/admin/subnets/find_free_section_subnets.php' data-csrf_cookie='$csrf_ffss' data-class='700' rel='tooltip' data-container='body'  data-placement='top' title='"._('Search for free subnets in section ')." $section[name]'  data-sectionId='$section[id]'><i class='fa fa-sm fa-search'></i></button>";
 	# snmp
 	if($User->settings->enableSNMP==1) {
     $csrf = $User->Crypto->csrf_cookie ("create", "scan");

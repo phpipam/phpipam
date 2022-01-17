@@ -20,6 +20,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+$User->Crypto->csrf_cookie ("validate", "find_free_section_subnets", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+
 # verify that user has permissions to add subnet
 if($Sections->check_permission ($User->user, $_POST['sectionid']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }
 
@@ -92,7 +95,7 @@ $(document).ready(function() {
         <td>
             <div class="input-group">
                 <input type="text" class="form-control input-sm input-w-auto" name="results" value='50'>
-                <input type="hidden" name="sectionid" value='<?php print $_POST['sectionid']; ?>'>
+                <input type="hidden" name="sectionid" value='<?php print escape_input($_POST['sectionid']); ?>'>
             </div>
 
         </td>
