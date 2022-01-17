@@ -11,6 +11,7 @@
     + SQL injection in edit-bgp-mapping-search.php;
     + Stored XSS in the "Site title" parameter;
     + XSS while uploading CVS files;
+    + XSS (reflected) in 'find subnets';
 
 == 1.4.4
 
