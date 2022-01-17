@@ -84,6 +84,9 @@
     + PHP session ID fixation (#3342);
     + XSS (reflected) in IP calculator (#3351);
     + XSS in pass-change/result.php (#3373);
+    + SQL injection in edit-bgp-mapping-search.php;
+    + Stored XSS in the "Site title" parameter;
+    + XSS while uploading CVS files;
 
     Translations:
     ----------------------------

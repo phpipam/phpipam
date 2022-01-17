@@ -79,7 +79,7 @@ foreach($outFile as $line) {
 
 	foreach ($line as $value) {
 		if (!empty($line[0])) {			//IP address must be present otherwise ignore field
-			print '<td>'. $value .'</td>';
+			print '<td>'. escape_input($value) .'</td>';
 		}
 	}
 	print '</tr>';
