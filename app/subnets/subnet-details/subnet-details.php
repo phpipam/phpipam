@@ -108,7 +108,17 @@ else {
 	if($gateway !==false) { ?>
 	<tr>
 		<th><?php print _('Gateway'); ?></th>
-		<td><strong><?php print $Subnets->transform_to_dotted($gateway->ip_addr);?></strong></td>
+		<td><strong><?php print $Subnets->transform_to_dotted($gateway->ip_addr)."</strong>";
+		$address = (array) $Addresses-> fetch_address(null, $gateway->id);
+		if(strlen($address['switch'])>0) {
+    		# get device
+    		$device = (array) $Tools->fetch_object("devices", "id", $address['switch']);
+    		$device = $Addresses->reformat_empty_array_fields($device, "");
+    		print "	<a href='".create_link("tools","devices",$device['id'])."'>".@$device['hostname']."</a>";
+			if(strlen($address['port'])>0) { print " "._('Port')." ".@$address['port']; }
+    		} else {
+    			print "	$address[switch]";
+    		} ?></td>
 	</tr>
 	<?php } ?>
 
