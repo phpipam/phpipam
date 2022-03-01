@@ -69,7 +69,7 @@ class Common_functions  {
 	/**
 	 * Database
 	 *
-	 * @var mixed
+	 * @var Database_PDO
 	 * @access protected
 	 */
 	protected $Database;
@@ -77,7 +77,7 @@ class Common_functions  {
 	/**
 	 * Result
 	 *
-	 * @var mixed
+	 * @var Result
 	 * @access public
 	 */
 	public $Result;
@@ -85,7 +85,7 @@ class Common_functions  {
 	/**
 	 * Log
 	 *
-	 * @var mixed
+	 * @var Logging
 	 * @access public
 	 */
 	public $Log;
@@ -93,7 +93,7 @@ class Common_functions  {
 	/**
 	 * Net_IPv4
 	 *
-	 * @var mixed
+	 * @var Net_IPv4
 	 * @access protected
 	 */
 	protected $Net_IPv4;
@@ -101,7 +101,7 @@ class Common_functions  {
 	/**
 	 * Net_IPv6
 	 *
-	 * @var mixed
+	 * @var Net_IPv6
 	 * @access protected
 	 */
 	protected $Net_IPv6;
@@ -119,7 +119,7 @@ class Common_functions  {
 	/**
 	 * NET_DNS object
 	 *
-	 * @var mixed
+	 * @var NET_DNS
 	 * @access protected
 	 */
 	protected $DNS2;
@@ -127,7 +127,7 @@ class Common_functions  {
 	/**
 	 * debugging flag
 	 *
-	 * @var mixed
+	 * @var bool
 	 * @access protected
 	 */
 	protected $debugging;
@@ -241,7 +241,7 @@ class Common_functions  {
 	 * @param mixed $table
 	 * @param mixed $method
 	 * @param mixed $value
-	 * @return false|object
+	 * @return object|false
 	 */
 	public function fetch_object ($table, $method, $value) {
 		// checks
@@ -284,7 +284,7 @@ class Common_functions  {
 	 * @param bool $sortAsc (default: true)
 	 * @param bool $like (default: false)
 	 * @param array|mixed $result_fields (default: *)
-	 * @return bool|array
+	 * @return array|false
 	 */
 	public function fetch_multiple_objects ($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $result_fields = "*") {
 		# null table
@@ -380,7 +380,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param bool|mixed $subnetId
-	 * @return bool|array
+	 * @return array|false
 	 */
 	public function changelog_mail_get_recipients ($subnetId = false) {
     	// fetch all users with mailNotify
@@ -425,7 +425,7 @@ class Common_functions  {
 	 * fetches settings from database
 	 *
 	 * @access private
-	 * @return mixed
+	 * @return object|false
 	 */
 	public function get_settings () {
 		if (is_object($this->settings))
@@ -549,7 +549,7 @@ class Common_functions  {
      * @access protected
      * @param mixed $table
      * @param mixed $id
-     * @return bool|array
+     * @return object|false
      */
     protected function cache_check ($table, $id) {
         // get identifier
@@ -567,7 +567,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param bool $debug (default: false)
-	 * @return void
+	 * @return bool
 	 */
 	public function set_debugging ($debug = false) {
 		$this->debugging = $debug==true ? true : false;

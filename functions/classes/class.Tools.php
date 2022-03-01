@@ -786,7 +786,7 @@ class Tools extends Common_functions {
 	 * Read the SCHEMA.sql file and enforce UNIX LF
 	 *
 	 * @access private
-	 * @return array
+	 * @return string
 	 */
 	private function read_db_schema() {
 		$fh = fopen(dirname(__FILE__) . '/../../db/SCHEMA.sql', 'r');
@@ -1993,12 +1993,12 @@ class Tools extends Common_functions {
      * Translates NAT objects to be shown on page
      *
      * @access public
-     * @param json $json_objects
+     * @param string $json_objects
      * @param int|bool $nat_id (default: false)
      * @param bool $json_objects (default: false)
      * @param bool $object_type (default: false) - to bold it (ipaddresses / subnets)
      * @param int|bool object_id (default: false) - to bold it
-     * @return array|bool
+     * @return array|false
      */
     public function translate_nat_objects_for_display ($json_objects, $nat_id = false, $admin = false, $object_type = false, $object_id=false) {
         // to array "subnets"=>array(1,2,3)
@@ -2736,8 +2736,8 @@ class Tools extends Common_functions {
 	 * Calculates pstn usage - dhcp, active, ...
 	 *
 	 * @access public
-	 * @param obj $prefix        //subnet in decimal format
-	 * @param obj $numbers	     //netmask in decimal format
+	 * @param object $prefix        //subnet in decimal format
+	 * @param object $numbers	     //netmask in decimal format
 	 * @return array
 	 */
 	public function calculate_prefix_usege ($prefix, $numbers) {

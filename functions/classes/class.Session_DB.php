@@ -50,7 +50,7 @@ class Session_DB {
 	/**
 	 * Open connection
 	 * @method _open
-	 * @return [type]
+	 * @return bool
 	 */
 	public function _open () {
 		try {

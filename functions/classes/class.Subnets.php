@@ -503,7 +503,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param string $method
 	 * @param mixed $value
-	 * @return array|false
+	 * @return object|false
 	 */
 	public function fetch_subnet ($method, $value) {
 		# null method

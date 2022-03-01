@@ -126,7 +126,7 @@ class FirewallZones extends Common_functions {
 	 * @access private
 	 * @param mixed $zoneLength
 	 * @param mixed $zoneGenerator
-	 * @return void
+	 * @return string|false
 	 */
 	private function generate_numeric_zone_name ($zoneLength,$zoneGenerator) {
 
@@ -376,7 +376,7 @@ class FirewallZones extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $id
-	 * @return void
+	 * @return object|false
 	 */
 	public function get_zone_subnet_info ($id) {
 		# try to fetch id specific zone information
@@ -487,7 +487,7 @@ class FirewallZones extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $id
-	 * @return void
+	 * @return object|false
 	 */
 	public function get_zone ($id) {
 		# try to fetch zone with ID $id

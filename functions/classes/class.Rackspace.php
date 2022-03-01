@@ -58,7 +58,7 @@ class phpipam_rack extends Tools {
     /**
      * Rack
      *
-     * @var mixed
+     * @var Rack
      * @access protected
      */
     protected $Rack;
@@ -66,7 +66,7 @@ class phpipam_rack extends Tools {
     /**
      * Drawer
      *
-     * @var mixed
+     * @var Drawer
      * @access protected
      */
     protected $Drawer;
@@ -74,7 +74,7 @@ class phpipam_rack extends Tools {
     /**
      * RackContent
      *
-     * @var mixed
+     * @var RackContent
      * @access protected
      */
     protected $RackContent;
@@ -152,7 +152,7 @@ class phpipam_rack extends Tools {
      *
      * @access public
      * @param mixed $id
-     * @return void
+     * @return object|false
      */
     public function fetch_rack_details ($id) {
         // first check all_racks
@@ -169,7 +169,7 @@ class phpipam_rack extends Tools {
      *
      * @access public
      * @param mixed $id
-     * @return void
+     * @return array|false
      */
     public function fetch_rack_devices ($id) {
         return $this->fetch_multiple_objects ("devices", "rack", $id, "rack_start", true);
@@ -205,7 +205,7 @@ class phpipam_rack extends Tools {
      *
      * @access public
      * @param mixed $id
-     * @return void
+     * @return array|false
      */
     public function fetch_rack_contents ($id) {
         return $this->fetch_multiple_objects ("rackContents", "rack", $id, "rack_start", true);
@@ -471,7 +471,7 @@ class RackDrawer extends Common_functions {
     /**
      * template
      *
-     * @var resource
+     * @var GdImage
      * @access private
      */
     private $template;
@@ -593,7 +593,7 @@ class RackDrawer extends Common_functions {
     /**
      * Inserts the passed text in fontsize and color into the passed image
      *
-     * @param resource $img
+     * @param GdImage $img
      * @param string $text
      * @param int $color
      */
@@ -805,7 +805,7 @@ class Rack extends Model {
      * Returns rack content.
      *
      * @access public
-     * @return void
+     * @return mixed
      */
     public function getContent() {
         return $this->content;

@@ -25,7 +25,7 @@ class PingThread {
 	* callback for the function that should
 	* run as a separate thread
 	*
-	* @var callback
+	* @var callable
 	*/
     protected $runnable;
 
@@ -106,7 +106,7 @@ class PingThread {
 	*
 	* can be called statically
 	*
-	* @param callback $_runnable
+	* @param string $_runnable
 	* @return boolean
 	*/
     public static function runnableOk( $_runnable ) {
