@@ -122,7 +122,7 @@ class Crypto {
                 break;
 
             default:
-                $this->Result->show("danger", _("Error: "). _("Unsupported")." ".$api_crypt_encryption_library." "._("method").": ".escape_input($method), true);
+                $this->Result->show("danger", _("Error: "). _("Unsupported encryption method").": ".escape_input($method), true);
         }
 
         $required_ext = ($retval === 'mcrypt') ? 'mcrypt' : 'openssl';

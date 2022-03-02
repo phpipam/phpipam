@@ -2675,6 +2675,7 @@ class Tools extends Common_functions {
     	$size = sizeof($numbers);
     	// vars
     	$numbers_formatted = array();
+		$fIndex = null;
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {
@@ -3400,8 +3401,10 @@ class Tools extends Common_functions {
 	 * @param object $subnet
 	 * @return void
 	 */
-	private function parse_validate_file ($outFile = array(), $subnet = object) {
+	private function parse_validate_file ($outFile = array(), $subnet) {
     	$result = array();
+    	$errors = 0;
+
     	# present ?
     	if (sizeof($outFile)>0) {
             foreach($outFile as $k=>$line) {

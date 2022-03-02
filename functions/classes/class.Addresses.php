@@ -1570,6 +1570,7 @@ class Addresses extends Common_functions {
     	$size = sizeof($addresses);
     	// vars
     	$addresses_formatted = array();
+		$fIndex = null;
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {
@@ -1726,8 +1727,8 @@ class Addresses extends Common_functions {
 		$subnetP = json_decode($subnet->permissions);
 
 		# set section permissions
-		$Section = new Section ($this->Database);
-		$section = $Section->fetch_section ("id", $subnet->sectionId);
+		$Sections = new Sections ($this->Database);
+		$section = $Sections->fetch_section ("id", $subnet->sectionId);
 		$sectionP = json_decode($section->permissions);
 
 		# default permission

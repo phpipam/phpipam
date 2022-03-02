@@ -1937,7 +1937,7 @@ class Subnets extends Common_functions {
 	 */
 	public function get_freespacemap_last_available ($fsm, $mask, $count) {
 		if ($mask < 0 || $mask > $fsm['max_search_mask']) {
-			return array (subnets => array(), truncated => false);
+			return array ('subnets' => array(), 'truncated' => false);
 		}
 
 		$subnets = array();
@@ -3573,7 +3573,7 @@ class Subnets extends Common_functions {
 		// fail
 		if ($arin_result['result_code']!==200) {
 			// return array
-			return array("result"=>"error", "error"=>_("Error connecting to ARIN REST API")." : ".$ripe_result['error_msg']);
+			return array("result"=>"error", "error"=>_("Error connecting to ARIN REST API")." : ".$arin_result['error_msg']);
 		}
 		else {
     		$out = array();
