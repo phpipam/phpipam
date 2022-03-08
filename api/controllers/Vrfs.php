@@ -275,16 +275,4 @@ class Vrfs_controller extends Common_api_functions {
 			}
 		}
 	}
-
-	/**
-	 * Returns id of subnet gateay
-	 *
-	 * @access private
-	 * @params mixed $subnetId
-	 * @return void
-	 */
-	private function read_subnet_gateway ($subnetId) {
-    	return $this->Subnets->find_gateway ($subnetId);
-	}
-
 }

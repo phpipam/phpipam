@@ -3088,7 +3088,7 @@ class Tools extends Common_functions {
 			// fetch location
 			$location = $this->fetch_object ("locations", "id", $locationId);
 			// check
-			if ($device === false) {
+			if ($location === false) {
 				return false;
 			}
 			else {

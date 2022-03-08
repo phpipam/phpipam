@@ -290,7 +290,7 @@ class phpipam_rack extends Tools {
      * @param  bool $is_back        // we are drwaing back side
      * @param  bool $draw_names     // user permission for devices
      *
-     * @return [type]
+     * @return void
      */
     public function draw_rack ($id, $deviceId = false, $is_back = false, $draw_names = true) {
         // fetch rack details
@@ -487,7 +487,7 @@ class RackDrawer extends Common_functions {
     /**
      * rackInsideXOffset
      *
-     * @var mixed
+     * @var int
      * @access private
      */
     private $rackInsideXOffset = 27;
@@ -495,7 +495,7 @@ class RackDrawer extends Common_functions {
     /**
      * rackInsideXSize
      *
-     * @var mixed
+     * @var int
      * @access private
      */
     private $rackInsideXSize = 200;
@@ -503,7 +503,7 @@ class RackDrawer extends Common_functions {
     /**
      * topYSize
      *
-     * @var mixed
+     * @var int
      * @access private
      */
     private $topYSize;
@@ -511,7 +511,7 @@ class RackDrawer extends Common_functions {
     /**
      * unitYSize
      *
-     * @var mixed
+     * @var int
      * @access private
      */
     private $unitYSize;
@@ -519,7 +519,7 @@ class RackDrawer extends Common_functions {
     /**
      * bottomYSize
      *
-     * @var mixed
+     * @var int
      * @access private
      */
     private $bottomYSize;
@@ -596,6 +596,7 @@ class RackDrawer extends Common_functions {
      * @param GdImage $img
      * @param string $text
      * @param int $color
+     * @return void
      */
     private function imageCenterString($img, $text, $color) {
         $font = 0;
@@ -694,7 +695,7 @@ class Rack extends Model {
     /**
      * Name
      *
-     * @var mixed
+     * @var string
      * @access private
      */
     private $name;
@@ -742,7 +743,7 @@ class Rack extends Model {
      * returns name.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function getName() {
         return $this->name;
@@ -763,7 +764,7 @@ class Rack extends Model {
      * getSpace function.
      *
      * @access public
-     * @return void
+     * @return int
      */
     public function getSpace() {
         return $this->space;
@@ -784,7 +785,7 @@ class Rack extends Model {
      * getOrientation function.
      *
      * @access public
-     * @return void
+     * @return int
      */
     public function getOrientation() {
         return $this->orientation;
@@ -826,7 +827,7 @@ class Rack extends Model {
      * Checks if item is active
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function isActive() {
         return $this->active;
@@ -861,7 +862,7 @@ class RackContent extends Model {
     /**
      * Rack name
      *
-     * @var mixed
+     * @var string
      * @access private
      */
     private $name;
@@ -897,7 +898,7 @@ class RackContent extends Model {
      * returns id
      *
      * @access public
-     * @return void
+     * @return int
      */
     public function getId() {
         return $this->id;
@@ -918,7 +919,7 @@ class RackContent extends Model {
      * Returns rack name
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function getName() {
         return $this->name;
@@ -939,7 +940,7 @@ class RackContent extends Model {
      * Checks if item is active
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function isActive() {
         return $this->active;
@@ -960,7 +961,7 @@ class RackContent extends Model {
      * Returns start position
      *
      * @access public
-     * @return void
+     * @return int
      */
     public function getStartLocation() {
         return $this->startLocation;
@@ -981,7 +982,7 @@ class RackContent extends Model {
      * Gets rack size.
      *
      * @access public
-     * @return void
+     * @return int
      */
     public function getSize() {
         return $this->size;

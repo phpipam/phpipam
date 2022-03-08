@@ -320,15 +320,4 @@ class Vlans_controller extends Common_api_functions {
 		if($this->Tools->fetch_object ("vlanDomains", "id", $this->_params->domainId) === false )
 																							{ $this->Response->throw_exception(400, "Invalid domain id"); }
 	}
-
-	/**
-	 * Returns id of subnet gateay
-	 *
-	 * @access private
-	 * @params mixed $subnetId
-	 * @return void
-	 */
-	private function read_subnet_gateway ($subnetId) {
-    	return $this->Subnets->find_gateway ($subnetId);
-	}
 }

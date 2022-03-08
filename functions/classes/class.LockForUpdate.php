@@ -6,8 +6,18 @@
 
 class LockForUpdate {
 
+    /**
+     * Database Class
+     *
+     * @var Database_PDO
+     */
     private $Database;
 
+    /**
+     * Locked row
+     *
+     * @var object|null
+     */
     public $locked_row = null;
 
     /**

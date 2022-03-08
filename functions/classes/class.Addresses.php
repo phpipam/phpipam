@@ -1093,7 +1093,7 @@ class Addresses extends Common_functions {
 	 * @access public
 	 * @param mixed $address_id
 	 * @param mixed $ptr_id
-	 * @return void
+	 * @return bool
 	 */
 	public function ptr_link ($address_id, $ptr_id) {
 		# execute
@@ -1102,6 +1102,7 @@ class Addresses extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+		return true;
 	}
 
 	/**
@@ -1109,7 +1110,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $address_id
-	 * @return void
+	 * @return bool
 	 */
 	private function ptr_unlink ($address_id) {
 		# execute
@@ -1118,6 +1119,7 @@ class Addresses extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+		return true;
 	}
 
 	/**
@@ -1125,7 +1127,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnet_id
-	 * @return void
+	 * @return bool
 	 */
 	public function ptr_unlink_subnet_addresses ($subnet_id) {
 		try { $this->Database->runQuery("update `ipaddresses` set `PTR` = 0 where `subnetId` = ?;", array($subnet_id)); }
@@ -1142,7 +1144,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $ptr_id (default: 0)
-	 * @return void
+	 * @return bool
 	 */
 	private function ptr_exists ($ptr_id = 0) {
 		return $this->PowerDNS->record_id_exists ($ptr_id);
@@ -1274,7 +1276,7 @@ class Addresses extends Common_functions {
 	 * @param mixed $order (default: null)
 	 * @param mixed $order_direction (default: null)
 	 * @param mixed $fields (default: "*")
-	 * @return void
+	 * @return array
 	 */
 	public function fetch_subnet_addresses ($subnetId, $order=null, $order_direction=null, $fields = "*") {
 		# set order

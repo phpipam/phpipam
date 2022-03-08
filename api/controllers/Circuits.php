@@ -471,20 +471,20 @@ class Circuits_controller extends Common_api_functions {
 	private function validate_circuit_devices_locations ($action="add") {
 		// check
 		for($m=1; $m<3; $m++) {
-			if(!isset($this->_params->{device.$m}) && !isset($this->_params->{location.$m})) {
+			if(!isset($this->_params->{'device'.$m}) && !isset($this->_params->{'location'.$m})) {
 				if($action=="add") {
-					$this->_params->{device.$m}   = 0;
-					$this->_params->{location.$m} = 0;
+					$this->_params->{'device'.$m}   = 0;
+					$this->_params->{'location'.$m} = 0;
 				}
 			}
 			else {
-				if ($this->_params->{device.$m}!==null) {
-					if($this->Tools->fetch_object("devices","id",$this->_params->{device.$m})===false) 	{ $this->Response->throw_exception(400, "Invalid device $m"); }
-					$this->_params->{location.$m} = 0;
+				if ($this->_params->{'device'.$m}!==null) {
+					if($this->Tools->fetch_object("devices","id",$this->_params->{'device'.$m})===false) 	{ $this->Response->throw_exception(400, "Invalid device $m"); }
+					$this->_params->{'location'.$m} = 0;
 				}
 				else {
-					if($this->Tools->fetch_object("locations","id",$this->_params->{location.$m})===false) 	{ $this->Response->throw_exception(400, "Invalid location $m"); }
-					$this->_params->{device.$m} = 0;
+					if($this->Tools->fetch_object("locations","id",$this->_params->{'location'.$m})===false) 	{ $this->Response->throw_exception(400, "Invalid location $m"); }
+					$this->_params->{'device'.$m} = 0;
 				}
 			}
 		}

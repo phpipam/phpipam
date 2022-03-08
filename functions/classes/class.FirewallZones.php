@@ -160,7 +160,7 @@ class FirewallZones extends Common_functions {
 		}
 
 		# return the values
-		return sizeof($zoneName)>0 ? $zoneName : false;
+		return $zoneName>0 ? $zoneName : false;
 	}
 
 
