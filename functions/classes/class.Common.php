@@ -1778,40 +1778,31 @@ class Common_functions  {
 	 * @param  mixed $mac
 	 * @return string
 	 */
-	public function get_mac_address_vendor_details ($mac) {
-		// set default arrays
-		$matches = array();
-		// validate mac
-		if(strlen($mac)<4)				{ return ""; }
-		if(!$this->validate_mac ($mac))	{ return ""; }
-		// reformat mac address
-		$mac = strtoupper($this->reformat_mac_address ($mac, 1));
-		$mac_partial = explode(":", $mac);
-		// get mac XML database
-
-		if (is_null($this->mac_address_vendors)) {
-			//populate mac vendors array
-			$this->mac_address_vendors = array();
-
-			$data = file_get_contents(dirname(__FILE__)."/../vendormacs.xml");
-
-			if (preg_match_all('/\<VendorMapping\smac_prefix="([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})"\svendor_name="(.*)"\/\>/', $data, $matches, PREG_SET_ORDER)) {
-				if (is_array($matches)) {
-					foreach ($matches as $match) {
-						$mac_vendor = strtoupper($match[1] . ':' . $match[2] . ':' . $match[3]);
-						$this->mac_address_vendors[$mac_vendor] = $match[4];
-					}
-				}
-			}
-		}
-
-		$mac_vendor = strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2]);
-
-		if (isset($this->mac_address_vendors[$mac_vendor])) {
-			return $this->mac_address_vendors[$mac_vendor];
-		} else {
+	public function get_mac_address_vendor_details($mac) {
+		if (strlen($mac) < 4 || !$this->validate_mac($mac)) {
 			return "";
 		}
+
+		if (empty($this->mac_address_vendors)) {
+			// Generated from vendorMac.xml
+			// Unique MAC address: 45344
+			// Updated: 12 March 2022
+			$data = file_get_contents(dirname(__FILE__) . "/../vendormacs.json");
+			$this->mac_address_vendors = json_decode($data, true);
+		}
+
+		// Find longest prefix match in $this->mac_address_vendors array
+		$mac = substr($this->reformat_mac_address($mac, 4), 0, 9);
+
+		while (strlen($mac) > 0) {
+			if (isset($this->mac_address_vendors[$mac])) {
+				return $this->mac_address_vendors[$mac];
+			}
+
+			$mac = substr($mac, 0, -1);
+		}
+
+		return "";
 	}
 
 	/**
