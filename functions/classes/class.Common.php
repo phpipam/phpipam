@@ -954,7 +954,7 @@ class Common_functions  {
 	 *      2 : 00-66-23-33-55-66
 	 *      3 : 0066.2333.5566
 	 *      4 : 006623335566
-	 * @return mixed
+	 * @return string
 	 */
 	public function reformat_mac_address ($mac, $format = 1) {
     	// strip al tags first
@@ -2023,7 +2023,8 @@ class Common_functions  {
 	/**
 	 * Print documentation link
 	 *
-	 * @param   string $doc  document path/file
+	 * @param string $doc  document path/file
+	 * @return void
 	 */
 	public function print_doc_link($doc) {
 		print "<a style='float:right' target=_ href='".create_link("tools/documentation/$doc")."'>"._("Documentation")." <i class='fa fa-book'></i></a>";
@@ -2034,7 +2035,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $get
-	 * @return void
+	 * @return string
 	 */
 	public function get_site_title ($get) {
     	// remove html tags

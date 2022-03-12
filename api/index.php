@@ -19,7 +19,7 @@
 
 # include functions
 if(!function_exists("create_link"))
-require_once( dirname(__FILE__) . '/../functions/functions.php' );		// functions and objects from phpipam
+    require_once( dirname(__FILE__) . '/../functions/functions.php' );		// functions and objects from phpipam
 
 # include common API controllers
 require_once( dirname(__FILE__) . '/controllers/Common.php');			// common methods
@@ -147,7 +147,7 @@ try {
         else {
             // input
             $input = file_get_contents('php://input');
-            if (strlen($input)>0) {;
+            if (strlen($input)>0) {
                 parse_str($input, $out);
                 if(is_array($out)) {
                     $params = array_merge((array) $params, $out);

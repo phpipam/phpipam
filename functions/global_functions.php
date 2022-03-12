@@ -97,7 +97,7 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 	$el = array("page", "section", "subnetId", "sPage", "ipaddrid", "tab");
 	// override for search
 	if ($l0=="tools" && $l1=="search")
-	$el = array("page", "section", "ip", "addresses", "subnets", "vlans", "ip");
+	    $el = array("page", "section", "ip", "addresses", "subnets", "vlans", "ip");
 
 	foreach($parts as $i=>$p) {
 		$parts[$i] = "$el[$i]=$p";
@@ -171,11 +171,14 @@ function php_feature_missing($required_extensions = null, $required_functions = 
  *  2) Administration -> phpIPAM settings -> Default language
  *  3) LC_ALL environment
  *  4) HTTP_ACCEPT_LANGUAGE header
+ *
+ * @param string $default_lang
+ * @return bool
  */
 function set_ui_language($default_lang = null) {
 
 	if (php_feature_missing(["gettext", "pcre"]))
-		return;
+		return false;
 
 	$user_lang = isset($_SESSION['ipamlanguage']) ? $_SESSION['ipamlanguage'] : null;
 	$sys_lang  = is_string(getenv("LC_ALL")) ? getenv("LC_ALL") : null;

@@ -53,7 +53,7 @@ if(!defined('BASE')) {
 }
 
 // Fix JSON_UNESCAPED_UNICODE for PHP 5.3
-defined('JSON_UNESCAPED_UNICODE') or define('JSON_UNESCAPED_UNICODE', 256);
+defined('JSON_UNESCAPED_UNICODE') || define('JSON_UNESCAPED_UNICODE', 256);
 
 /* @classes ---------------------- */
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions
