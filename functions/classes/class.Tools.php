@@ -1954,7 +1954,7 @@ class Tools extends Common_functions {
 	 */
 	private function define_ipv6_address_types () {
         $all_types[10] = "NET_IPV6_NO_NETMASK";
-        $all_types[1]  = "NET_IPV6";
+        $all_types[1]  = "NET_IPV6";  				// NET_IPV6_UNASSIGNED
         $all_types[11] = "NET_IPV6_RESERVED";
         $all_types[12] = "NET_IPV6_RESERVED_NSAP";
         $all_types[13] = "NET_IPV6_RESERVED_IPX";
@@ -1964,9 +1964,9 @@ class Tools extends Common_functions {
         $all_types[42] = "NET_IPV6_LOCAL_LINK";
         $all_types[43] = "NET_IPV6_LOCAL_SITE";
         $all_types[51] = "NET_IPV6_IPV4MAPPING";
-        $all_types[51] = "NET_IPV6_UNSPECIFIED";
-        $all_types[51] = "NET_IPV6_LOOPBACK";
-        $all_types[51] = "NET_IPV6_UNKNOWN_TYPE";
+        $all_types[52] = "NET_IPV6_UNSPECIFIED";
+        $all_types[53] = "NET_IPV6_LOOPBACK";
+        $all_types[1001] = "NET_IPV6_UNKNOWN_TYPE";
 		# response
         return $all_types;
 	}

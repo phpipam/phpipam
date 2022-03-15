@@ -1741,7 +1741,7 @@ class Subnets extends Common_functions {
 	 */
 	public function decimal_network_address($decimalIP, $mask) {
 		if ($decimalIP === false) return false;
-		$type = ($decimalIP <= 4294967295) ? 'IPv4' : 'IPv6';
+		$type = ($decimalIP <= 4294967295 && $mask <= 32) ? 'IPv4' : 'IPv6';
 		// Calculate network address (decimal) by clearing the /mask bits
 		$network_address = gmp_and($decimalIP, $this->gmp_bitmasks[$type][$mask]['network']);
 		return gmp_strval($network_address);
@@ -1757,7 +1757,7 @@ class Subnets extends Common_functions {
 	 */
 	public function decimal_broadcast_address($decimalIP, $mask) {
 		if ($decimalIP === false) return false;
-		$type = ($decimalIP <= 4294967295) ? 'IPv4' : 'IPv6';
+		$type = ($decimalIP <= 4294967295 && $mask <= 32) ? 'IPv4' : 'IPv6';
 		// Calculate broadcast address (decimal) by setting the /mask bits
 		$network_broadcast = gmp_or($decimalIP, $this->gmp_bitmasks[$type][$mask]['broadcast']);
 		return gmp_strval($network_broadcast);
@@ -1771,7 +1771,7 @@ class Subnets extends Common_functions {
 	private function network_or_broadcast_address_in_use($subnet) {
 		$subnet = (object) $subnet;
 
-		$type = ($subnet->subnet <= 4294967295) ? 'IPv4' : 'IPv6';
+		$type = ($subnet->subnet <= 4294967295 && $subnet->mask <= 32) ? 'IPv4' : 'IPv6';
 
 		if (($type=="IPv4" && $subnet->mask>=31) || $type=="IPv6")
 			return false;
