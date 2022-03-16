@@ -1806,3 +1806,24 @@ class User extends Common_functions {
         return $level=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._($this->parse_permissions ($level))."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($this->parse_permissions ($level))."</span>";
     }
 }
+/**
+ * Fake User object for install/scripts
+ */
+class FakeUser {
+    /**
+     * Settings object
+     * @var StdClass
+     */
+    public $settings = null;
+
+    /**
+     * __construct function.
+     *
+     * @param bool $prettyLinks
+     */
+    public function __construct($prettyLinks) {
+        $this->settings = new StdClass();
+        $this->settings->prettyLinks = $prettyLinks ? "Yes" : "No";
+        $this->settings->theme = "dark";
+    }
+}

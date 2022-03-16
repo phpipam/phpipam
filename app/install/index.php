@@ -11,15 +11,14 @@ $Database 	= new Database_PDO;
 $Result		= new Result;
 $Tools	    = new Tools ($Database);
 $Install 	= new Install ($Database);
+$User       = new FakeUser (false);
 
 # reset url for base
 $url = $Install->createURL ();
 
 # If User is not available create fake user object for create_link!
-if(!is_object(@$User)) {
-	$User = new StdClass ();
-	@$User->settings->prettyLinks = "No";
-	@$User->settings->theme = "dark";
+if (!isset($User)) {
+	$User = new FakeUser(false);
 }
 
 # if already installed than redirect !
