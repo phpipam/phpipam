@@ -667,6 +667,7 @@ class Common_functions  {
 
 		// Throw loadHTML() parsing errors
 		$err_mode = libxml_use_internal_errors(false);
+		$php_reporting = error_reporting(0);
 
 		try {
 			$dom = new \DOMDocument();
@@ -708,6 +709,7 @@ class Common_functions  {
 
 		// restore error mode
 		libxml_use_internal_errors($err_mode);
+		error_reporting($php_reporting);
 
 		return is_string($html) ? $html : "";
 	}
