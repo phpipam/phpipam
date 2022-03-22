@@ -1772,12 +1772,32 @@ class Common_functions  {
 	}
 
 	/**
+	 * Show MAC address and vendor details
+	 *
+	 * @param string $mac
+	 * @return string
+	 */
+	public function show_mac_and_vendor($mac) {
+		// Check if MAC decoding is enabled
+		$this->get_settings();
+		if (is_object($this->settings) && $this->settings->decodeMAC) {
+			$vendor = $this->get_mac_address_vendor_details($mac);
+
+			if (!empty($vendor)) {
+				return  _("MAC") . ": " . escape_input($mac) . "<hr>" . _("Vendor") . ": " . escape_input($vendor);
+			}
+		}
+
+		return _("MAC") . ": " . escape_input($mac);
+	}
+
+	/**
 	 * Get MAC address vendor details
 	 *
 	 * https://www.macvendorlookup.com/vendormacs-xml-download
 	 *
 	 * @method get_mac_address_vendor
-	 * @param  mixed $mac
+	 * @param  string $mac
 	 * @return string
 	 */
 	public function get_mac_address_vendor_details($mac) {
@@ -1793,15 +1813,15 @@ class Common_functions  {
 			$this->mac_address_vendors = json_decode($data, true);
 		}
 
-		// Find longest prefix match in $this->mac_address_vendors array
-		$mac = substr($this->reformat_mac_address($mac, 4), 0, 9);
+		// Find longest prefix match in $this->mac_address_vendors array (max 9)
+		$search_mac = substr($this->reformat_mac_address($mac, 4), 0, 9);
 
-		while (strlen($mac) > 0) {
-			if (isset($this->mac_address_vendors[$mac])) {
-				return $this->mac_address_vendors[$mac];
+		while (strlen($search_mac) > 0) {
+			if (isset($this->mac_address_vendors[$search_mac])) {
+				return $this->mac_address_vendors[$search_mac];
 			}
 
-			$mac = substr($mac, 0, -1);
+			$search_mac = substr($search_mac, 0, -1);
 		}
 
 		return "";
