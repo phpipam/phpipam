@@ -25,8 +25,8 @@ spec:
         image: docker-registry.umusic.com/networking/phpipam:v1.4.2-umg-1.0
         resources:
           limits:
-            memory: 1024Mi
-            cpu: 1000m
+            memory: 4096Mi
+            cpu: 4000m
           requests:
             memory: 1024Mi
             cpu: 1000m
