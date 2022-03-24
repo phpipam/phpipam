@@ -1,3 +1,9 @@
+== 1.4.6
+
+    Bugfixes:
+    ----------------------------
+    + Require unique subnets not working as intended (#3529);
+
 == 1.4.5
 
     Bugfixes:
