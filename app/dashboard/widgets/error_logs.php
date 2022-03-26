@@ -8,6 +8,7 @@ if(!is_object(@$User)) {
 	$User 		= new User ($Database);
 	$Tools 		= new Tools ($Database);
 	$Log		= new Logging ($Database);
+	$Admin		= new Admin ($Database);
 	$Result		= new Result ();
 }
 

@@ -89,6 +89,7 @@
     + Stored XSS in the "Site title" parameter;
     + XSS while uploading CVS files;
     + XSS (reflected) in 'find subnets';
+    + Incorrect privilege assignments (#3506);
 
     Translations:
     ----------------------------
