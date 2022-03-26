@@ -107,17 +107,15 @@ class Admin extends Common_functions {
 	 */
 	public function is_admin () {
 		// user not required for cli
-		if (php_sapi_name()!="cli") {
+		if (php_sapi_name() != "cli") {
 			# initialize user class
-			$this->User = new User ($this->Database);
-    		# save settings
-    		$this->settings = $this->User->settings;
-    		# if required die !
-    		if($this->User->is_admin(false)!==true && $this->admin_required===true) {
-    			// popup ?
-    			if(@$_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest") 	{ $this->Result->show("danger", _("Administrative privileges required"),true, true); }
-    			else 														{ $this->Result->show("danger", _("Administrative privileges required"),true); }
-    		}
+			$this->User = new User($this->Database);
+			# save settings
+			$this->settings = $this->User->settings;
+			# if required die !
+			if ($this->User->is_admin(false) !== true && $this->admin_required === true) {
+				$this->Result->fatal_http_error(403, _("Administrative privileges required"));
+			}
 		}
 	}
 

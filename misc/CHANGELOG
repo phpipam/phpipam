@@ -1,5 +1,9 @@
 == 1.4.6
 
+    Security Fixes:
+    ----------------------------
+    + Incorrect privilege assignments (#3506);
+
     Bugfixes:
     ----------------------------
     + Require unique subnets not working as intended (#3529);
