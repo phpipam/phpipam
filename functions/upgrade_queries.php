@@ -975,6 +975,13 @@ $upgrade_queries["1.45.25"]   = [];
 $upgrade_queries["1.45.25"][] = "-- Version update";
 $upgrade_queries["1.45.25"][] = "UPDATE `settings` set `version` = '1.45';";
 
+#
+# Version 1.46.25 queries
+#
+$upgrade_queries["1.46.25"]   = [];
+$upgrade_queries["1.46.25"][] = "-- Version update";
+$upgrade_queries["1.46.25"][] = "UPDATE `settings` set `version` = '1.46';";
+
 
 // output if required
 if(!defined('VERSION') && php_sapi_name()=="cli") {
