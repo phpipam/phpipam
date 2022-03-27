@@ -1798,9 +1798,10 @@ class Common_functions  {
 	 *
 	 * @method get_mac_address_vendor
 	 * @param  string $mac
+	 * @param  string &$prefix
 	 * @return string
 	 */
-	public function get_mac_address_vendor_details($mac) {
+	public function get_mac_address_vendor_details($mac, &$prefix=null) {
 		if (strlen($mac) < 4 || !$this->validate_mac($mac)) {
 			return "";
 		}
@@ -1818,6 +1819,7 @@ class Common_functions  {
 
 		while (strlen($search_mac) > 0) {
 			if (isset($this->mac_address_vendors[$search_mac])) {
+				$prefix = implode(":", str_split(strtoupper($search_mac), 2));
 				return $this->mac_address_vendors[$search_mac];
 			}
 

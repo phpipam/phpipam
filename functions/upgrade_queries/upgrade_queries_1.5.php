@@ -170,7 +170,6 @@ $upgrade_queries["1.5.37"][] = "UPDATE `settings` set `dbversion` = '37';";
 
 // Truncated change log errors, module defaults, MariaDB Galera compatibility
 $upgrade_queries["1.5.38"]   = [];
-
 $upgrade_queries["1.5.38"][] = "ALTER TABLE `logs` CHANGE `command` `command` text DEFAULT NULL;";
 $upgrade_queries["1.5.38"][] = "ALTER TABLE `logs` CHANGE `details` `details` text DEFAULT NULL;";
 $upgrade_queries["1.5.38"][] = "ALTER TABLE `changelog` CHANGE `caction` `caction` ENUM('add','edit','delete','truncate','resize','perm_change') NOT NULL DEFAULT 'edit';";
@@ -179,6 +178,11 @@ $upgrade_queries["1.5.38"][] = "ALTER TABLE `changelog` CHANGE `cdiff` `cdiff` t
 $upgrade_queries["1.5.38"][] = "ALTER TABLE `users` CHANGE `module_permissions` `module_permissions` varchar(255) DEFAULT '{\"vlan\":\"1\",\"l2dom\":\"1\",\"vrf\":\"1\",\"pdns\":\"1\",\"circuits\":\"1\",\"racks\":\"1\",\"nat\":\"1\",\"pstn\":\"1\",\"customers\":\"1\",\"locations\":\"1\",\"devices\":\"1\",\"routing\":\"1\",\"vaults\":\"1\"}';";
 $upgrade_queries["1.5.38"][] = "ALTER TABLE `firewallZoneSubnet` ADD PRIMARY KEY (`zoneId`,`subnetId`);";
 $upgrade_queries["1.5.38"][] = "ALTER TABLE `circuitsLogicalMapping` ADD PRIMARY KEY (`logicalCircuit_id`, `circuit_id`);";
-
 $upgrade_queries["1.5.38"][] = "-- Database version bump";
 $upgrade_queries["1.5.38"][] = "UPDATE `settings` set `dbversion` = '38';";
+
+// MAC lookup widget
+$upgrade_queries["1.5.39"]   = [];
+$upgrade_queries["1.5.39"][] = "INSERT INTO `widgets` (`wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('MAC lookup', 'Shows MAC address vendor', 'mac-lookup', NULL, 'yes', '6', 'no', 'yes');";
+$upgrade_queries["1.5.39"][] = "-- Database version bump";
+$upgrade_queries["1.5.39"][] = "UPDATE `settings` set `dbversion` = '39';";
