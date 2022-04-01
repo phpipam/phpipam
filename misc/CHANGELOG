@@ -91,6 +91,7 @@
     + XSS while uploading CVS files;
     + XSS (reflected) in 'find subnets';
     + Incorrect privilege assignments (#3506);
+    + XXS (reflected) in ripe-arin-query;
 
     Translations:
     ----------------------------
