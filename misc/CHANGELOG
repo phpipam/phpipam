@@ -1,3 +1,9 @@
+== 1.4.7
+
+    Security Fixes:
+    ----------------------------
+    + XXS (reflected) in ripe-arin-query;
+
 == 1.4.6
 
     Bugfixes:
