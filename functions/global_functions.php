@@ -122,19 +122,6 @@ function escape_input($data) {
 }
 
 /**
- * Sanitise URL inputs/outputs
- *
- * @param   mixed  $url
- * @return  string
- */
-function safeurlencode($url) {
-	if (!isset($url) || strlen($url)==0)
-		return '';
-	$safe_url = rawurlencode(filter_var(trim($url), FILTER_SANITIZE_URL));
-	return is_string($safe_url) ? $safe_url : '';
-}
-
-/**
  * Check if required php features are missing
  * @param  mixed $required_extensions
  * @param  mixed $required_functions

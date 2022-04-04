@@ -1,5 +1,9 @@
 == 1.4.7
 
+    Bugfixes:
+    ----------------------------
+    + Fix for SAML/2FA/login redirections (#3492, #3435, #3517)
+
     Security Fixes:
     ----------------------------
     + XXS (reflected) in ripe-arin-query;

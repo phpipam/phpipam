@@ -463,6 +463,27 @@ class User extends Common_functions {
     }
 
     /**
+     * Reads and validates redirect cookie
+     *
+     * @return string|false
+     */
+    public function get_redirect_cookie () {
+        if (!isset($_COOKIE['phpipamredirect']))
+            return false;
+
+        $urlpath = $_COOKIE['phpipamredirect'];
+
+        if (!is_string($urlpath) || strlen($urlpath) == 0 || !filter_var('https://ipam/' . $urlpath, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED))
+            return false;
+
+        // ignore login / logout
+        if (strpos($urlpath, "login") !== false || strpos($urlpath, "logout") !== false)
+            return false;
+
+        return $urlpath;
+    }
+
+    /**
      * Saves redirect cookie if session times out
      *
      * @access private

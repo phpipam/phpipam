@@ -19,12 +19,10 @@ $csrf = $User->Crypto->csrf_cookie ("create", "2fa_validation");
 		<input type="text" id="2fa_code" name="code" class="login form-control input-sm" placeholder="<?php print _('Enter 2fa code'); ?>" autofocus="autofocus" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></input>
 		<input type="hidden" id='csrf_cookie' name="csrf_cookie" value="<?php print $csrf; ?>">
 	    <?php
-	    // add requested var for redirect
-	    if(!empty($_COOKIE['phpipamredirect'])) {
-		    //ignore login, logout
-		    if(strpos($_COOKIE['phpipamredirect'],"login")==0 && strpos($_COOKIE['phpipamredirect'],"logout")==0)
-	        print "<input type='hidden' name='phpipamredirect' id='phpipamredirect' value='".escape_input($_COOKIE['phpipamredirect'])."'>";
-	    }
+		// add requested var for redirect
+		if ($redirect = $User->get_redirect_cookie()) {
+			print "<input type='hidden' name='phpipamredirect' id='phpipamredirect' value='" . escape_input($redirect) . "'>";
+		}
 	    ?>
 	</div>
 	<div class="col-xs-12">
