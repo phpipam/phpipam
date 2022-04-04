@@ -603,7 +603,7 @@ class Subnets_controller extends Common_api_functions {
         // slaves
         if($this->Subnets->has_slaves ($this->_params->id)) { $this->Response->throw_exception(409, "Subnet contains subnets"); }
 		// fetch
-		$first = $this->Addresses->get_first_available_address ($this->_params->id, $this->Subnets);
+		$first = $this->Addresses->get_first_available_address ($this->_params->id);
 		// available?
 		if($first===false)	{ $this->Response->throw_exception(404, "No free addresses found"); }
 		else				{ $first = $this->Addresses->transform_to_dotted($first); }

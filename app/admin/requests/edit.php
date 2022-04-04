@@ -45,7 +45,7 @@ if(strlen($request['ip_addr'])>0) {
 		$errmsg = _("Requested IP address").' '.($request['ip_addr']).' '._("already used. First available address automatically provided.");
 		$errmsg_class = "warning";
 		//fetch first free
-		$ip_address = $Addresses->transform_to_dotted($Addresses->get_first_available_address ($request['subnetId'], $Subnets));
+		$ip_address = $Addresses->transform_to_dotted($Addresses->get_first_available_address ($request['subnetId']));
 	}
 	else {
 		$ip_address = $request['ip_addr'];
@@ -53,7 +53,7 @@ if(strlen($request['ip_addr'])>0) {
 
 } else {
 	// fetch first free
-	$ip_address = $Addresses->transform_to_dotted($Addresses->get_first_available_address ($request['subnetId'], $Subnets));
+	$ip_address = $Addresses->transform_to_dotted($Addresses->get_first_available_address ($request['subnetId']));
 }
 
 // false
