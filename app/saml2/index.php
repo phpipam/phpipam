@@ -220,7 +220,6 @@ else{
     $User->authenticate ($username, '', true);
 
 	// Redirect user where he came from, if unknown go to dashboard.
-	if( !empty($_COOKIE['phpipamredirect']) )   { header("Location: ".safeurlencode($_COOKIE['phpipamredirect'])); }
-	else                                        { header("Location: ".create_link("dashboard")); }
-
+	if ($redirect = $User->get_redirect_cookie()) { header("Location: " . $redirect); }
+	else                                          { header("Location: " . create_link("dashboard")); }
 }
