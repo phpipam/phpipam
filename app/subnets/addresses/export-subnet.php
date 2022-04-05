@@ -26,7 +26,7 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 
 # fetch subnet details
 $subnet = $Tools->fetch_object("subnets", "id", $_GET['subnetId']);
-if (!is_object($subnet) || $Subnets->check_permission($User->user, $_GET['subnetId'], $subnet) == User::ACCESS_NONE) {
+if (!is_object($subnet) || $Subnets->check_permission($User->user, $_GET['subnetId'], $subnet) == 0) {
 	$Result->fatal_http_error(404, _("Subnet not found"));
 }
 $subnet = (array) $subnet;
