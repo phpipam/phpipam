@@ -285,7 +285,7 @@ class Logging extends Common_functions {
 		# Result
 		$this->Result = new Result ();
 		# User
-		$this->log_username = @$_SESSION['ipamusername'];
+		$this->log_username = $this->get_user_name();
 
 		# settings
 		if ($settings===null || $settings===false) {
@@ -301,6 +301,17 @@ class Logging extends Common_functions {
 
 
 
+	/**
+	 * Get user name to log
+	 *
+	 * @return string|null
+	 */
+	private function get_user_name() {
+		if (php_sapi_name() === "cli")
+			return null;
+
+		return isset($_SESSION['ipamusername']) ? $_SESSION['ipamusername'] : null;
+	}
 
 
 	/**
@@ -352,7 +363,7 @@ class Logging extends Common_functions {
 				catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
 			}
 			# save id
-			$this->user_id = $user_id->id;
+			$this->user_id = is_object($user_id) ? $user_id->id : null;
 			# save user
 			$this->user = $user_id;
 		}
@@ -567,7 +578,7 @@ class Logging extends Common_functions {
 					"severity" =>$this->log_severity,
 					"date"     =>$this->Database->toDate(),
 					"username" =>$this->log_username,
-					"ipaddr"   => array_key_exists('HTTP_X_REAL_IP', $_SERVER) ? $_SERVER['HTTP_X_REAL_IP'] : @$_SERVER['REMOTE_ADDR'],
+					"ipaddr"   =>$this->get_user_ip(),
 					"details"  =>$this->log_details
 					);
 		# null empty values
@@ -1136,10 +1147,10 @@ class Logging extends Common_functions {
 	 * @return void
 	 */
 	private function changelog_format_tag_diff ($k, $v) {
-		$this->object_old[$k] = $this->Addresses->address_type_index_to_type($this->object_old[$k]);
-		$v 					  = $this->Addresses->address_type_index_to_type($v);
-		//result
-		return $v;
+		if (isset($this->object_old[$k])) {
+			$this->object_old[$k] = $this->Addresses->address_type_index_to_type($this->object_old[$k]);
+		}
+		return $this->Addresses->address_type_index_to_type($v);
 	}
 
 	/**
@@ -1174,13 +1185,16 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_master_subnet_diff ($k, $v) {
 		//Old root or not
-		if($this->object_old[$k]==0){
-			$this->object_old[$k] = _("Root");
-		}
-		else {
-			$subnet = $this->Subnets->fetch_subnet("id", $this->object_old[$k]);
-			$this->object_old[$k] = strlen($subnet->description)>0 ? $this->Subnets->transform_address($subnet->subnet, "dotted")."/$subnet->mask [$subnet->description]" : $this->Subnets->transform_address($subnet->subnet, "dotted")."/".$subnet->mask;
-			$this->object_old[$k] .= " (id ".$subnet->id.")";
+		if (isset($this->object_old[$k])) {
+			if ($this->object_old[$k] == 0) {
+				$this->object_old[$k] = _("Root");
+			} else {
+				$subnet = $this->Subnets->fetch_subnet("id", $this->object_old[$k]);
+				if (is_object($subnet)) {
+					$this->object_old[$k] = strlen($subnet->description) > 0 ? $this->Subnets->transform_address($subnet->subnet, "dotted") . "/$subnet->mask [$subnet->description]" : $this->Subnets->transform_address($subnet->subnet, "dotted") . "/" . $subnet->mask;
+					$this->object_old[$k] .= " (id " . $subnet->id . ")";
+				}
+			}
 		}
 		//New root or not
 		if($v==0) {

@@ -1031,6 +1031,24 @@ class Common_functions  {
 	}
 
 	/**
+	 * Get IP address of connected user
+	 *
+	 * @return string|null
+	 */
+	protected function get_user_ip() {
+		if (php_sapi_name() === "cli")
+			return null;
+
+		if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && filter_var($_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP))
+			return $_SERVER['HTTP_X_FORWARDED_FOR'];
+
+		if (isset($_SERVER['REMOTE_ADDR']) && filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP))
+			return $_SERVER['REMOTE_ADDR'];
+
+		return null;
+	}
+
+	/**
 	 * Create URL for base
 	 *
 	 * @access public

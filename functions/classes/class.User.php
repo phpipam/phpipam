@@ -141,16 +141,18 @@ class User extends Common_functions {
         # initialize Crypto
         $this->Crypto = new Crypto ();
 
-        # register new session
-        $this->register_session ();
-        # check timeut
-        $this->check_timeout ();
-        # set authenticated flag
-        $this->is_authenticated ();
-        # get users IP address
-        $this->block_get_ip ();
-        # set theme
-        $this->set_user_theme ();
+        if (php_sapi_name() !== "cli") {
+            # register new session
+            $this->register_session();
+            # check timeout
+            $this->check_timeout();
+            # set authenticated flag
+            $this->is_authenticated();
+            # get users IP address
+            $this->block_get_ip();
+            # set theme
+            $this->set_user_theme();
+        }
     }
 
 
@@ -195,7 +197,7 @@ class User extends Common_functions {
     private function start_session () {
         // check if database should be set for sessions
         if (Config::ValueOf('session_storage') == "database" && $this->settings->dbversion >= 3) {
-            new Session_db ($this->Database);
+            new Session_DB ($this->Database);
         }
         // local
         else {
@@ -1489,9 +1491,7 @@ class User extends Common_functions {
      * @return void
      */
     private function block_get_ip () {
-        # set IP
-        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) { $this->ip = @$_SERVER['HTTP_X_FORWARDED_FOR']; }
-        else                                        { $this->ip = @$_SERVER['REMOTE_ADDR']; }
+        $this->ip = $this->get_user_ip();
     }
 
     /**
@@ -1752,18 +1752,16 @@ class User extends Common_functions {
      * @return int
      */
     public function get_module_permissions ($module_name = "") {
-        if(in_array($module_name, $this->get_modules_with_permissions())) {
-            // admin
-            if($this->is_admin(false)) {
-                return User::ACCESS_RWA;
-            }
-            else {
-                return $this->user->{'perm_'.$module_name};
-            }
-        }
-        else {
+        if(!in_array($module_name, $this->get_modules_with_permissions()))
             return User::ACCESS_NONE;
-        }
+
+        if($this->is_admin(false))
+            return User::ACCESS_RWA;
+
+        if (!is_object($this->user) || !property_exists($this->user, 'perm_'.$module_name))
+            return USER::ACCESS_NONE;
+
+        return $this->user->{'perm_'.$module_name};
     }
 
     /**

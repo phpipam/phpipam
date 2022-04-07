@@ -77,10 +77,12 @@ class Rewrite {
 	 * @method __construct
 	 */
 	public function __construct () {
-		// process request URI
-		$this->process_request_uri ();
-		// formulate GET request
-		$this->create_get_params ();
+		if (php_sapi_name() !== "cli") {
+			// process request URI
+			$this->process_request_uri();
+			// formulate GET request
+			$this->create_get_params();
+		}
 	}
 
 	/**
@@ -238,7 +240,6 @@ class Rewrite {
 				if (isset($this->get_params['section']) && isset($this->get_params['subnetId'])) {
 					if ($this->get_params['section']=="search") {
 						$this->get_params['ip'] = $this->get_params['subnetId'];
-						$this->get_params['ip'] = $this->get_params['ip'];
 						unset($this->get_params['subnetId']);
 					}
 				}
