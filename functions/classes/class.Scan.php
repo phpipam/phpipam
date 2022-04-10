@@ -444,25 +444,29 @@ class Scan extends Common_functions {
 		$this->ping_verify_path ($this->fping_path);
 		$out = array();
 		# set command
-		$cmd = $this->fping_path . ' -c ' . $this->icmp_count . ' -t ' . ($this->icmp_timeout*1000) . ' -Ag ' . $subnet_cidr;
+		$cmd = $this->fping_path . ' -c ' . $this->icmp_count . ' -t ' . ($this->icmp_timeout * 1000) . ' -Agq ' . $subnet_cidr . ' 2>&1';
 		# execute command, return $retval
-	    exec($cmd, $output, $retval);
+		exec($cmd, $output, $retval);
 
-	    # save result
-	    if(sizeof($output)>0) {
-	    	foreach($output as $line) {
-				if (!preg_match("/(timed out|100% loss)/", $line)) {
-					$tmp = explode(" ",$line);
-					$out[] = $tmp[0];
-				}
-	    	}
-	    }
+		# save result
+		if (is_array($output)) {
+			foreach ($output as $line) {
+				$match = preg_match('/xmt\/rcv\/%loss = \d+\/\d+\/(\d+)%/', $line, $matches);
 
-	    # save to var
-	    $this->fping_result = $out;
+				# no match or 100% packet loss
+				if (!$match || $matches[1] == 100)
+					continue;
+
+				$tmp = explode(" ", $line);
+				$out[] = $tmp[0];
+			}
+		}
+
+		# save to var
+		$this->fping_result = $out;
 
 	    # return result?
-	    if($return_result)		{ return $out; }
+		if($return_result)		{ return $out; }
 
 		# return result for web or cmd
 		if($this->icmp_exit)	{ exit  ($retval); }
@@ -564,15 +568,14 @@ class Scan extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $id
-	 * @param datetime $date
+	 * @param  false|datetime $datetime
 	 * @return void
 	 */
-	public function ping_update_scanagent_checktime ($id, $date = false) {
-    	# set time
-    	if ($date === false)    { $date = date("Y-m-d H:i:s"); }
-    	else                    { $date = $date; }
+	public function ping_update_scanagent_checktime ($id, $datetime = false) {
+    	// set date
+		$datetime = $datetime===false ? date("Y-m-d H:i:s") : $datetime;
 		# execute
-		try { $this->Database->updateObject("scanAgents", array("id"=>$id, "last_access"=>date("Y-m-d H:i:s")), "id"); }
+		try { $this->Database->updateObject("scanAgents", array("id"=>$id, "last_access"=>$datetime), "id"); }
 		catch (Exception $e) {
 		}
 	}
@@ -695,7 +698,7 @@ class Scan extends Common_functions {
 	 * @param mixed $type		//discovery, update
 	 * @param mixed $subnet
 	 * @param bool $type
-	 * @return void
+	 * @return array
 	 */
 	public function prepare_addresses_to_scan ($type, $subnet, $die = true) {
 		# discover new addresses
@@ -711,7 +714,7 @@ class Scan extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return array
 	 */
 	public function prepare_addresses_to_discover_subnetId ($subnetId, $die) {
 		# initialize classes
@@ -778,7 +781,7 @@ class Scan extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnet
-	 * @return void
+	 * @return array
 	 */
 	public function prepare_addresses_to_discover_subnet ($subnet) {
 		# initialize classes
@@ -797,7 +800,7 @@ class Scan extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return array
 	 */
 	public function prepare_addresses_to_update ($subnetId) {
 		# first fetch all addresses

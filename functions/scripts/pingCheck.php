@@ -81,94 +81,83 @@ if (php_sapi_name() != "cli") {
 if (!PingThread::available($errmsg)) {
     die("Threading is required for scanning subnets - Error: $errmsg\n");
 }
-// verify ping path
-if ($Scan->icmp_type == "ping") {
-    if (!file_exists($Scan->settings->scanPingPath)) {
-        die("Invalid ping path!");
-    }
-}
-// verify fping path
-if ($Scan->icmp_type == "fping") {
-    if (!file_exists($Scan->settings->scanFPingPath)) {
-        die("Invalid fping path!");
-    }
-}
 
+// verify fping / ping path
+if ($Scan->icmp_type == "fping" && !file_exists($Scan->settings->scanFPingPath)) {
+    die("Invalid fping path!");
+} elseif (!file_exists($Scan->settings->scanPingPath)) {
+    die("Invalid ping path!");
+}
 
 //first fetch all subnets to be scanned
 $scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck(1);
-if ($Scan->get_debugging() == true) {
-    print_r($scan_subnets);
-}
-if ($scan_subnets === false) {
+if (empty($scan_subnets)) {
     die("No subnets are marked for checking status updates\n");
 }
+if ($Scan->get_debugging()) {
+    print_r($scan_subnets);
+}
+
+$subnets = [];
 //fetch all addresses that need to be checked
 foreach ($scan_subnets as $s) {
+    //set array for fping
+    if ($Scan->icmp_type == "fping") {
+        $subnets[] = array(
+            "id"         => $s->id,
+            "cidr"       => $Subnets->transform_to_dotted($s->subnet) . "/" . $s->mask,
+            "nsid"       => $s->nameserverId,
+            "resolveDNS" => $s->resolveDNS
+        );
+    }
 
-    // if subnet has slaves dont check it
-    if ($Subnets->has_slaves($s->id) === false) {
+    $subnet_addresses = $Addresses->fetch_subnet_addresses($s->id) ?: [];
 
-        $subnet_addresses = $Addresses->fetch_subnet_addresses($s->id);
-        //set array for fping
-        if ($Scan->icmp_type == "fping") {
-            $subnets[] = array(
-                "id"         => $s->id,
-                "cidr"       => $Subnets->transform_to_dotted($s->subnet) . "/" . $s->mask,
-                "nsid"       => $s->nameserverId,
-                "resolveDNS" => $s->resolveDNS
-            );
-        }
-        //save addresses
-        if (is_array($subnet_addresses) && sizeof($subnet_addresses) > 0) {
-            foreach ($subnet_addresses as $a) {
-                //ignore excludePing
-                if ($a->excludePing != 1) {
-                    //create different array for fping
-                    if ($Scan->icmp_type == "fping") {
-                        $addresses2[$s->id][$a->id] = array(
-                            "id"          => $a->id,
-                            "ip_addr"     => $a->ip_addr,
-                            "description" => $a->description,
-                            "hostname"    => $a->hostname,
-                            "subnetId"    => $a->subnetId,
-                            "lastSeenOld" => $a->lastSeen,
-                            "lastSeen"    => $a->lastSeen,
-                            "state"       => $a->state,
-                            "resolveDNS"  => $s->resolveDNS,
-                            "nsid"        => $s->nsid
-                        );
-                        $addresses[$s->id][$a->id]  = $a->ip_addr;
-                    } else {
-                        $addresses[]                = array(
-                            "id"          => $a->id,
-                            "ip_addr"     => $a->ip_addr,
-                            "description" => $a->description,
-                            "hostname"    => $a->hostname,
-                            "subnetId"    => $a->subnetId,
-                            "lastSeenOld" => $a->lastSeen,
-                            "lastSeen"    => $a->lastSeen,
-                            "state"       => $a->state,
-                            "resolveDNS"  => $s->resolveDNS,
-                            "nsid"        => $s->nsid
-                        );
-                    }
-                }
+    foreach ($subnet_addresses as $a) {
+        //ignore excludePing
+        if ($a->excludePing != 1) {
+            //create different array for fping
+            if ($Scan->icmp_type == "fping") {
+                $addresses2[$s->id][$a->id] = array(
+                    "id"          => $a->id,
+                    "ip_addr"     => $a->ip_addr,
+                    "description" => $a->description,
+                    "hostname"    => $a->hostname,
+                    "subnetId"    => $a->subnetId,
+                    "lastSeenOld" => $a->lastSeen,
+                    "lastSeen"    => $a->lastSeen,
+                    "state"       => $a->state,
+                    "resolveDNS"  => $s->resolveDNS,
+                    "nsid"        => $s->nameserverId,
+                );
+                $addresses[$s->id][$a->id]  = $a->ip_addr;
+            } else {
+                $addresses[]                = array(
+                    "id"          => $a->id,
+                    "ip_addr"     => $a->ip_addr,
+                    "description" => $a->description,
+                    "hostname"    => $a->hostname,
+                    "subnetId"    => $a->subnetId,
+                    "lastSeenOld" => $a->lastSeen,
+                    "lastSeen"    => $a->lastSeen,
+                    "state"       => $a->state,
+                    "resolveDNS"  => $s->resolveDNS,
+                    "nsid"        => $s->nameserverId,
+                );
             }
         }
-        // save update time
-        $Scan->update_subnet_scantime($s->id, $nowdate);
     }
+    // save update time
+    $Scan->update_subnet_scantime($s->id, $nowdate);
 }
 
-
-if ($Scan->get_debugging() == true) {
+//if none die
+if (empty($addresses)) {
+    die("No addresses to check");
+}
+if ($Scan->get_debugging()) {
     print "Using $Scan->icmp_type\n--------------------\n\n";
     print_r($addresses);
-}
-//if none die
-if (!isset($addresses)) {
-    die("No addresses to check");
 }
 
 
@@ -176,45 +165,37 @@ if (!isset($addresses)) {
 
 $z = 0;         //addresses array index
 
-//different scan for fping
 if ($Scan->icmp_type == "fping") {
-    //run per MAX_THREADS
-    for ($m = 0; $m <= sizeof($subnets); $m += $Scan->settings->scanMaxThreads) {
-        // create threads
-        $threads = array();
-        //fork processes
-        for ($i = 0; $i <= $Scan->settings->scanMaxThreads && $i <= sizeof($subnets); $i++) {
-            //only if index exists!
-            if (isset($subnets[$z])) {
-                //start new thread
-                $threads[$z] = new PingThread('fping_subnet');
-                $threads[$z]->start_fping($subnets[$z]['cidr']);
-                $z++;               //next index
-            }
-        }
-        // wait for all the threads to finish
-        while (!empty($threads)) {
-            foreach ($threads as $index => $thread) {
-                $child_pipe = "/tmp/pipe_" . $thread->getPid();
+    print "PingCheck scanning " . sizeof($subnets) . " subnets\n";
 
-                if (file_exists($child_pipe)) {
-                    $file_descriptor = fopen($child_pipe, "r");
-                    $child_response = "";
-                    while (!feof($file_descriptor)) {
-                        $child_response .= fread($file_descriptor, 8192);
-                    }
-                    //we have the child data in the parent, but serialized:
-                    $child_response = unserialize($child_response);
-                    //store
-                    $subnets[$index]['result'] = $child_response;
+    //different scan for fping
+    while ($z < sizeof($subnets)) {
 
-                    //now, child is dead, and parent close the pipe
-                    unlink($child_pipe);
-                    unset($threads[$index]);
+        $threads = [];
+        try {
+            //run per MAX_THREADS
+            for ($i = 0; $i < $Scan->settings->scanMaxThreads; $i++) {
+                if (isset($subnets[$z])) {
+                    $thread = new PingThread('fping_subnet');
+                    $thread->start_fping($subnets[$z]['cidr']);
+                    $threads[$z++] = $thread;
                 }
             }
-            usleep(200000);
+        } catch (Exception $e) {
+            // We failed to spawn a scanning process.
+            print "Failed to start scanning pool, spawned " . sizeof($threads) . " of " . $Scan->settings->scanMaxThreads . "\n";
         }
+
+        if (empty($threads)) {
+            die("Unable to spawn scanning pool");
+        }
+
+        // wait for all the threads to finish
+        foreach ($threads as $index => $thread) {
+            $subnets[$index]['result'] = $thread->ipc_recv_data();
+            $thread->getExitCode();
+        }
+        unset($threads);
     }
 
     //now we must remove all non-existing hosts
@@ -253,47 +234,49 @@ if ($Scan->icmp_type == "fping") {
             }
         }
     }
-}
-//ping, pear
-else {
-    //run per MAX_THREADS
-    for ($m = 0; $m <= sizeof($addresses); $m += $Scan->settings->scanMaxThreads) {
-        // create threads
-        $threads = array();
-        //fork processes
-        for ($i = 0; $i <= $Scan->settings->scanMaxThreads && $i <= sizeof($addresses); $i++) {
-            //only if index exists!
-            if (isset($addresses[$z])) {
-                //start new thread
-                $threads[$z] = new PingThread('ping_address');
-                $threads[$z]->start($Subnets->transform_to_dotted($addresses[$z]['ip_addr']));
-                $z++;               //next index
-            }
-        }
-        // wait for all the threads to finish
-        while (!empty($threads)) {
-            foreach ($threads as $index => $thread) {
-                if (!$thread->isAlive()) {
-                    //online
-                    if ($thread->getExitCode() == 0) {
-                        // set new available time
-                        $addresses[$index]['lastSeenNew'] =  $nowdate;
-                        $address_change[$index] = $addresses[$index];                   //change to online
-                    }
-                    //offline
-                    else {
-                        // set nw online
-                        $addresses[$index]['lastSeenNew'] =  NULL;
-                        $address_change[$index] = $addresses[$index];                   //change to online
-                    }
-                    //save exit code for host
-                    $addresses[$index]['newStatus'] = $thread->getExitCode();
-                    //remove thread
-                    unset($threads[$index]);
+} else {
+    //ping, pear
+    print "pingCheck scanning " . sizeof($addresses) . " IPs\n";
+
+    while ($z < sizeof($addresses)) {
+
+        $threads = [];
+
+        try {
+            //run per MAX_THREADS
+            for ($i = 0; $i < $Scan->settings->scanMaxThreads; $i++) {
+                if (isset($addresses[$z])) {
+                    $thread = new PingThread('ping_address');
+                    $thread->start($Subnets->transform_to_dotted($addresses[$z]['ip_addr']));
+                    $threads[$z++] = $thread;
                 }
             }
-            usleep(200000);
+        } catch (Exception $e) {
+            // We failed to spawn a scanning process.
+            print "Failed to start scanning pool, spawned " . sizeof($threads) . " of " . $Scan->settings->scanMaxThreads . "\n";
         }
+
+        if (empty($threads)) {
+            die("Unable to spawn scanning pool");
+        }
+
+        // wait for all the threads to finish
+        foreach ($threads as $index => $thread) {
+            $code = $thread->getExitCode();
+
+            if ($code === 0) {
+                // online -- set new available time
+                $addresses[$index]['lastSeenNew'] =  $nowdate;
+                $address_change[$index] = $addresses[$index];
+            } else {
+                // offline -- set to offline
+                $addresses[$index]['lastSeenNew'] =  NULL;
+                $address_change[$index] = $addresses[$index];
+            }
+            //save exit code for host
+            $addresses[$index]['newStatus'] = ($code === 0) ? 0 : 1;
+        }
+        unset($threads);
     }
 
     //update statuses for online
@@ -349,7 +332,7 @@ foreach ($address_change as $k => $change) {
         $address_change[$k]['newStatus'] = 0;
         // update tag if not already online
         // tags have different indexes than script exit code is - 1=offline, 2=online
-        if ($address_change[$k]['state'] != 2 && $Scan->settings->updateTags == 1 && $Tools->address_types[$address_change[$k]['state']]['updateTag'] == 1) {
+        if ($address_change[$k]['state'] != 2 && $Scan->settings->updateTags == 1 && $Subnets->address_types[$address_change[$k]['state']]['updateTag'] == 1) {
             $Scan->update_address_tag($address_change[$k]['id'], 2, $address_change[$k]['state'], $change['lastSeenOld']);
         }
     }
@@ -361,12 +344,12 @@ foreach ($address_change as $k => $change) {
             $address_change[$k]['newStatus'] = 2;
             // update tag if not already offline
             // tags have different indexes than script exit code is - 1=offline, 2=online
-            if ($address_change[$k]['state'] != 1 && $Scan->settings->updateTags == 1 && $Tools->address_types[$address_change[$k]['state']]['updateTag'] == 1) {
+            if ($address_change[$k]['state'] != 1 && $Scan->settings->updateTags == 1 && $Subnets->address_types[$address_change[$k]['state']]['updateTag'] == 1) {
                 $Scan->update_address_tag($address_change[$k]['id'], 1, $address_change[$k]['state'], $change['lastSeenOld']);
             }
         } else {
             // already reported, check tag
-            if ($address_change[$k]['state'] != 1 && $Scan->settings->updateTags == 1 && $Tools->address_types[$address_change[$k]['state']]['updateTag'] == 1) {
+            if ($address_change[$k]['state'] != 1 && $Scan->settings->updateTags == 1 && $Subnets->address_types[$address_change[$k]['state']]['updateTag'] == 1) {
                 $Scan->update_address_tag($address_change[$k]['id'], 1, $address_change[$k]['state'], $change['lastSeenOld']);
             }
             // remove from change array
@@ -379,13 +362,13 @@ foreach ($address_change as $k => $change) {
         if ($change['lastSeenNew'] != NULL) {
             // update tag if not already online
             // tags have different indexes than script exit code is - 1=offline, 2=online
-            if ($address_change[$k]['state'] != 2 && $Scan->settings->updateTags == 1 && $Tools->address_types[$address_change[$k]['state']]['updateTag'] == 1) {
+            if ($address_change[$k]['state'] != 2 && $Scan->settings->updateTags == 1 && $Subnets->address_types[$address_change[$k]['state']]['updateTag'] == 1) {
                 $Scan->update_address_tag($address_change[$k]['id'], 2, $address_change[$k]['state'], $change['lastSeenOld']);
             }
         } else {
             // update tag if not already offline
             // tags have different indexes than script exit code is - 1=offline, 2=online
-            if ($address_change[$k]['state'] != 1 && $Scan->settings->updateTags == 1 && $Tools->address_types[$address_change[$k]['state']]['updateTag'] == 1) {
+            if ($address_change[$k]['state'] != 1 && $Scan->settings->updateTags == 1 && $Subnets->address_types[$address_change[$k]['state']]['updateTag'] == 1) {
                 $Scan->update_address_tag($address_change[$k]['id'], 1, $address_change[$k]['state'], $change['lastSeenOld']);
             }
         }
@@ -396,16 +379,16 @@ foreach ($address_change as $k => $change) {
 
 # update scan time
 $Scan->ping_update_scanagent_checktime(1, $nowdate);
-
+print "pingCheck complete, ".sizeof($address_change)." updates\n";
 
 # print change
-if ($Scan->get_debugging() == true) {
+if ($Scan->get_debugging()) {
     print "\nAddress changes:\n----------\n";
     print_r($address_change);
 }
 
 # all done, mail diff?
-if (sizeof($address_change) > 0 && $config['ping_check_send_mail']) {
+if (!empty($address_change) && $config['ping_check_send_mail']) {
 
     # remove old classes
     unset($Database, $Subnets, $Addresses, $Tools, $Scan, $Result);
