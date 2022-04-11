@@ -2112,6 +2112,53 @@ class Subnets extends Common_functions {
 	}
 
 	/**
+	 * Verifies VRF overlapping - globally
+	 *
+	 * @method verify_vrf_overlapping
+	 * @param  string $cidr
+	 * @param  int $vrfId
+	 * @param  int $subnetId (default: 0)
+	 * @param  int $masterSubnetId (default: 0)
+	 * @return false|string
+	 */
+	public function verify_vrf_overlapping ($cidr, $vrfId, $subnetId=0, $masterSubnetId=0) {
+		// fix null vrfid
+		$vrfId = is_numeric($vrfId) ? $vrfId : 0;
+		// fix null masterSubnetId
+		$masterSubnetId = is_numeric($masterSubnetId) ? $masterSubnetId : 0;
+
+		// fetch all overlapping subnets in VRF globally
+		$overlaping = $this->fetch_overlapping_subnets($cidr, 'vrfId', $vrfId);
+
+		if (empty($overlaping))
+			return false;
+
+		if ($subnetId > 0) {
+			$this->reset_subnet_slaves_recursive();
+			$this->fetch_subnet_slaves_recursive($subnetId);
+			$excluded_ids = array_merge($this->slaves ?: [], $this->fetch_parents_recursive($subnetId) ?: []);
+		} else {
+			$excluded_ids = $this->fetch_parents_recursive($masterSubnetId) ?: [];
+			$excluded_ids[] = $masterSubnetId;
+		}
+
+		// Remove parents and children
+		foreach ($overlaping as $i => $subnet) {
+			if ($subnet->isFolder || (int) $subnet->vrfId != $vrfId || in_array($subnet->id, $excluded_ids)) {
+				unset($overlaping[$i]);
+			}
+		}
+		// Re-index
+		$overlaping = array_values(array_filter($overlaping));
+
+		if (empty($overlaping))
+			return false;
+
+		$section = $this->fetch_object('sections', 'id', $overlaping[0]->sectionId);
+		return _("Subnet") . " " . $cidr . " " . _("overlaps with") . ' ' . $this->transform_to_dotted($overlaping[0]->subnet) . '/' . $overlaping[0]->mask . " (" . $overlaping[0]->description . ") " . _("in section") . " " . $section->name;
+	}
+
+	/**
 	 * Verifies overlapping between folders
 	 *
 	 * @access public
@@ -2154,41 +2201,6 @@ class Subnets extends Common_functions {
 					            }
 							}
 						}
-					}
-				}
-			}
-		}
-	    # default false - does not overlap
-	    return false;
-	}
-
-	/**
-	 * Verifies VRF overlapping - globally
-	 *
-	 * @method verify_vrf_overlapping
-	 * @param  string $cidr
-	 * @param  int $vrfId
-	 * @param  int $subnetId (default: 0)
-	 * @param  int $masterSubnetId (default: 0)
-	 * @return false|string
-	 */
-	public function verify_vrf_overlapping ($cidr, $vrfId, $subnetId=0, $masterSubnetId=0) {
-		# fetch all overlapping subnets in VRF globally
-		$all_subnets = $this->fetch_overlapping_subnets($cidr, 'vrfId', $vrfId);
-		# fetch all parents
-		$allParents = $subnetId!=0 ? $this->fetch_parents_recursive($subnetId) : $this->fetch_parents_recursive($masterSubnetId);
-		# add self
-		$allParents[] = $masterSubnetId;
-
-		if($all_subnets!==false && is_array($all_subnets)) {
-			foreach ($all_subnets as $existing_subnet) {
-	            // ignore folders - precaution and ignore self for edits
-	            if($existing_subnet->isFolder!=1 && $existing_subnet->id!==$subnetId && !in_array($existing_subnet->id, $allParents)) {
-		            # check overlapping globally if subnet is not nested
-					if($this->verify_overlapping ($cidr,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-						$Section = new Sections($this->Database);
-						$section = $Section->fetch_section('id', $existing_subnet->sectionId);
-						return _("Subnet")." ".$cidr." "._("overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.") "._("in section")." ".$section->name;
 					}
 				}
 			}
