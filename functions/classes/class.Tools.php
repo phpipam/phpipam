@@ -213,6 +213,8 @@ class Tools extends Common_functions {
 
 		# set search query
 		$query[] = "select * from `subnets` where `description` like :search_term ";
+		# search low/high
+		$query[] = " or (`subnet` >=  '$low' and `subnet` <=  '$high')";
 		# custom
 	    if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {
