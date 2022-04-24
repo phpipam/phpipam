@@ -7,6 +7,7 @@
     Security Fixes:
     ----------------------------
     + XXS (reflected) in ripe-arin-query;
+    + XSS (reflected) in import previews;
 
 == 1.4.6
 
