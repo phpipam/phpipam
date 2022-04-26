@@ -75,24 +75,29 @@ $nowdate = date("Y-m-d H:i:s");
 
 // script can only be run from cli
 if (php_sapi_name() != "cli") {
-    die("This script can only be run from cli!");
+    die("pingCheck-Fatal-Error: This script can only be run from cli!\n");
 }
 // test to see if threading is available
 if (!PingThread::available($errmsg)) {
-    die("Threading is required for scanning subnets - Error: $errmsg\n");
+    die("pingCheck-Fatal-Error: Threading is required for scanning subnets - Error: $errmsg\n");
 }
 
 // verify fping / ping path
 if ($Scan->icmp_type == "fping" && !file_exists($Scan->settings->scanFPingPath)) {
-    die("Invalid fping path!");
+    die("pingCheck-Fatal-Error: Invalid fping path!\n");
 } elseif (!file_exists($Scan->settings->scanPingPath)) {
-    die("Invalid ping path!");
+    die("pingCheck-Fatal-Error: Invalid ping path!\n");
+}
+// verify date.timezone
+if (strlen(ini_get('date.timezone')) == 0) {
+    print("pingCheck-Warning: date.timezone is not set in ".php_ini_loaded_file()."\n");
+    print("pingCheck-Warning: Online/Offline calculations may be unreliable due to incorrect local time.\n\n");
 }
 
 //first fetch all subnets to be scanned
 $scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck(1);
 if (empty($scan_subnets)) {
-    die("No subnets are marked for checking status updates\n");
+    die("pingCheck: No subnets are marked for checking status updates\n");
 }
 if ($Scan->get_debugging()) {
     print_r($scan_subnets);
@@ -153,10 +158,10 @@ foreach ($scan_subnets as $s) {
 
 //if none die
 if (empty($addresses)) {
-    die("No addresses to check");
+    die("pingCheck: No addresses to check\n");
 }
 if ($Scan->get_debugging()) {
-    print "Using $Scan->icmp_type\n--------------------\n\n";
+    print "pingCheck: Using $Scan->icmp_type\n--------------------\n\n";
     print_r($addresses);
 }
 
@@ -166,7 +171,7 @@ if ($Scan->get_debugging()) {
 $z = 0;         //addresses array index
 
 if ($Scan->icmp_type == "fping") {
-    print "PingCheck scanning " . sizeof($subnets) . " subnets\n";
+    print "pingCheck: Scan start, " . sizeof($subnets) . " subnets\n";
 
     //different scan for fping
     while ($z < sizeof($subnets)) {
@@ -183,11 +188,11 @@ if ($Scan->icmp_type == "fping") {
             }
         } catch (Exception $e) {
             // We failed to spawn a scanning process.
-            print "Failed to start scanning pool, spawned " . sizeof($threads) . " of " . $Scan->settings->scanMaxThreads . "\n";
+            print "pingCheck-Warning: Failed to start scanning pool, spawned " . sizeof($threads) . " of " . $Scan->settings->scanMaxThreads . "\n";
         }
 
         if (empty($threads)) {
-            die("Unable to spawn scanning pool");
+            die("pingCheck-Fatal-Error: Unable to spawn scanning pool\n");
         }
 
         // wait for all the threads to finish
@@ -236,7 +241,7 @@ if ($Scan->icmp_type == "fping") {
     }
 } else {
     //ping, pear
-    print "pingCheck scanning " . sizeof($addresses) . " IPs\n";
+    print "pingCheck: Scan start, " . sizeof($addresses) . " IPs\n";
 
     while ($z < sizeof($addresses)) {
 
@@ -253,11 +258,11 @@ if ($Scan->icmp_type == "fping") {
             }
         } catch (Exception $e) {
             // We failed to spawn a scanning process.
-            print "Failed to start scanning pool, spawned " . sizeof($threads) . " of " . $Scan->settings->scanMaxThreads . "\n";
+            print "pingCheck-Warning: Failed to start scanning pool, spawned " . sizeof($threads) . " of " . $Scan->settings->scanMaxThreads . "\n";
         }
 
         if (empty($threads)) {
-            die("Unable to spawn scanning pool");
+            die("pingCheck-Fatal-Error: Unable to spawn scanning pool\n");
         }
 
         // wait for all the threads to finish
@@ -379,11 +384,12 @@ foreach ($address_change as $k => $change) {
 
 # update scan time
 $Scan->ping_update_scanagent_checktime(1, $nowdate);
-print "pingCheck complete, ".sizeof($address_change)." updates\n";
+print "pingCheck: Scan complete, ".sizeof($address_change)." updates\n";
 
 # print change
 if ($Scan->get_debugging()) {
-    print "\nAddress changes:\n----------\n";
+    print "\n";
+    print "pingCheck: Address changes:\n----------\n";
     print_r($address_change);
 }
 

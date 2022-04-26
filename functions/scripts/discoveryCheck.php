@@ -66,18 +66,24 @@ $hostnames      = [];          // Array with detected hostnames
 
 // script can only be run from cli
 if (php_sapi_name() != "cli") {
-    die("This script can only be run from cli!");
+    die("discoveryCheck-Fatal-Error: This script can only be run from cli!\n");
 }
 // test to see if threading is available
 if (!PingThread::available($errmsg)) {
-    die("Threading is required for scanning subnets - Error: $errmsg\n");
+    die("discoveryCheck-Fatal-Error: Threading is required for scanning subnets - Error: $errmsg\n");
 }
 // verify fping / ping path
 if ($Scan->icmp_type == "fping" && !file_exists($Scan->settings->scanFPingPath)) {
-    die("Invalid fping path!");
+    die("discoveryCheck-Fatal-Error: Invalid fping path!\n");
 } elseif (!file_exists($Scan->settings->scanPingPath)) {
-    die("Invalid ping path!");
+    die("discoveryCheck-Fatal-Error: Invalid ping path!\n");
 }
+// verify date.timezone
+if (strlen(ini_get('date.timezone')) == 0) {
+    print("discoveryCheck-Warning: date.timezone is not set in ".php_ini_loaded_file()."\n");
+    print("discoveryCheck-Warning: Online/Offline calculations may be unreliable due to incorrect local time.\n\n");
+}
+
 
 //first fetch all subnets to be scanned
 $scan_subnets = $Subnets->fetch_all_subnets_for_discoveryCheck(1);
@@ -104,10 +110,10 @@ if ($scan_subnets !== false) {
 
 
 if (empty($scan_subnets)) {
-    die("No subnets are marked for new hosts checking\n");
+    die("discoveryCheck: No subnets are marked for new hosts checking\n");
 }
 if ($Scan->get_debugging()) {
-    print "Using $Scan->icmp_type\n--------------------\n\n";
+    print "discoveryCheck: Using $Scan->icmp_type\n--------------------\n\n";
     print_r($scan_subnets);
 }
 
@@ -120,7 +126,7 @@ $addresses     = array_values($addresses);
 
 if ($Scan->icmp_type == "fping") {
     //different scan for fping
-    print "discoveryCheck start, " . sizeof($scan_subnets) . " subnets\n";
+    print "discoveryCheck: Scan start, " . sizeof($scan_subnets) . " subnets\n";
 
     while ($z < sizeof($scan_subnets)) {
 
@@ -137,11 +143,11 @@ if ($Scan->icmp_type == "fping") {
             }
         } catch (Exception $e) {
             // We failed to spawn a scanning process.
-            print "Failed to start scanning pool, spawned " . sizeof($threads) . " of " . $Scan->settings->scanMaxThreads . "\n";
+            print "discoveryCheck-Warning: Failed to start scanning pool, spawned " . sizeof($threads) . " of " . $Scan->settings->scanMaxThreads . "\n";
         }
 
         if (empty($threads)) {
-            die("Unable to spawn scanning pool");
+            die("discoveryCheck-Fatal-Error: Unable to spawn scanning pool\n");
         }
 
         // wait for all the threads to finish
@@ -166,7 +172,7 @@ if ($Scan->icmp_type == "fping") {
     }
 } else {
     //ping, pear
-    print "discoveryCheck start, " . sizeof($addresses) . " IPs\n";
+    print "discoveryCheck: Scan start, " . sizeof($addresses) . " IPs\n";
 
     while ($z < sizeof($addresses)) {
 
@@ -183,11 +189,11 @@ if ($Scan->icmp_type == "fping") {
             }
         } catch (Exception $e) {
             // We failed to spawn a scanning process.
-            print "Failed to start scanning pool, spawned " . sizeof($threads) . " of " . $Scan->settings->scanMaxThreads . "\n";
+            print "discoveryCheck-Warning: Failed to start scanning pool, spawned " . sizeof($threads) . " of " . $Scan->settings->scanMaxThreads . "\n";
         }
 
         if (empty($threads)) {
-            die("Unable to spawn scanning pool");
+            die("discoveryCheck-Fatal-Error: Unable to spawn scanning pool\n");
         }
 
         // wait for all the threads to finish
@@ -216,7 +222,8 @@ if ($Scan->icmp_type == "fping") {
 
 # print change
 if ($Scan->get_debugging()) {
-    print "\nDiscovered addresses:\n----------\n";
+    print "\n";
+    print "discoveryCheck: Discovered addresses:\n----------\n";
     print_r($scan_subnets);
 }
 
@@ -267,7 +274,7 @@ foreach ($scan_subnets as $s) {
 
 # update scan time
 $Scan->ping_update_scanagent_checktime(1, $nowdate);
-print "discoveryCheck complete, $discovered new hosts\n";
+print "discoveryCheck: Scan complete, $discovered new hosts\n";
 
 # send mail
 if ($discovered > 0 && $config['discovery_check_send_mail']) {
