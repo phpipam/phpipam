@@ -2260,7 +2260,30 @@ $(document).on("click", "#editLocationSubmit", function() {
     return false;
 });
 
+/* ---- Port Map ----- */
+//load edit form
+$(document).on("click", ".editPortMap", function() {
+	open_popup("700", "app/admin/portMaps/edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
+    return false;
+});
+//submit form
+$(document).on("click", "#editPortMapSubmit", function() {
+    submit_popup_data (".editPortMapResult", "app/admin/portMaps/edit-result.php", $('form#editPortMap').serialize());
+    return false;
+});
 
+
+/* ---- Ports ----- */
+//load edit form
+$(document).on("click", ".editPort", function() {
+	open_popup("700", "app/admin/ports/edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action'), mapId:$(this).attr('data-mapId')} );
+    return false;
+});
+//submit form
+$(document).on("click", "#editPortSubmit", function() {
+    submit_popup_data (".editPortResult", "app/admin/ports/edit-result.php", $('form#editPort').serialize());
+    return false;
+});
 
 /* ---- PSTN ---- */
 //load edit form

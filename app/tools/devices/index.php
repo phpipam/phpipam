@@ -65,6 +65,7 @@ elseif(isset($_GET['subnetId'])) {
             <?php if($User->settings->enableCircuits==1 && $User->get_module_permissions ("circuits")>0) { ?>
             <li role='presentation' <?php if(@$_GET['sPage']=="circuits") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "circuits"); ?>'><?php print _("Circuits"); ?> <span class='badge badge1 badge5' style="margin-left:5px;display:inline;"><?php print $cnt_circuits; ?></span></a></li>
             <?php } ?>
+            <li role='presentation' <?php if (@$_GET['sPage'] == "portMap") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "portMap", $subnet['id']); ?>'><?php print _("Port Map"); ?></a></li>
         </ul>
 
         <!-- details -->
@@ -89,6 +90,9 @@ elseif(isset($_GET['subnetId'])) {
         }
         elseif(@$_GET['sPage']=="circuits") {
             include("device-details/device-circuits.php");
+        }
+        elseif (@$_GET['sPage'] == "portMap") {
+            include("device-details/device-portMap.php");
         }
     }
 } else {
