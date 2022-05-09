@@ -18,7 +18,7 @@ $filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
 		<a href="<?php print create_link("install"); ?>" class="btn btn-sm btn-default"><i class='fa fa-angle-left'></i> <?php print _("Back"); ?></a>
 		<!-- Instructions -->
 		<div style="margin-top:10px;padding:30px 20px;">
-			<?php print _("Please follow below steps for")." ".$title_prefix." "._("with mysqlimport:"); ?><hr>
+			<?php print _("Please follow the steps below for")." ".$title_prefix." "._("with mysqlimport:"); ?><hr>
 			<ol>
 				<li><?php print _("Set variables for database connection in config.php"); ?></li>
 				<li><?php print _("Open mysql connection"); ?>
@@ -61,7 +61,7 @@ exit</pre>
 				?></pre>
 				</li>
 
-				<li><?php print _("Finished ! Now login with <strong>Admin/ipamadmin</strong> to webpage."); ?><br>
+				<li><?php print _("Finished ! Now log in with <strong>Admin/ipamadmin</strong> to web page."); ?><br>
 				<a href="<?php print create_link(null,null,null,null,null,true); ?>" class="btn btn-sm btn-info"><?php print _("Login"); ?></a>
 				</li>
 				<?php } ?>
