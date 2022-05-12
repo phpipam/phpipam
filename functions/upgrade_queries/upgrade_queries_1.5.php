@@ -80,6 +80,8 @@ $upgrade_queries["1.5.32"][] = "UPDATE `settings` set `dbversion` = '32';";
 // Fix SET/ENUM usage in usersAuthMethod
 // Allow for longer json params (e.g. certificates in SAML2)
 $upgrade_queries["1.5.33"]   = [];
+$upgrade_queries["1.5.33"][] = "UPDATE `usersAuthMethod` SET `type` = 'local' WHERE id = 1;"; // Issue #3563
+$upgrade_queries["1.5.33"][] = "UPDATE `usersAuthMethod` SET `type` = 'http'  WHERE id = 2;"; // Issue #3563
 $upgrade_queries["1.5.33"][] = "ALTER TABLE `usersAuthMethod` CHANGE `type` `type` ENUM('local','http','AD','LDAP','NetIQ','Radius','SAML2') NOT NULL DEFAULT 'local';";
 $upgrade_queries["1.5.33"][] = "ALTER TABLE `usersAuthMethod` CHANGE `params` `params` text DEFAULT NULL;";
 $upgrade_queries["1.5.33"][] = "ALTER TABLE `usersAuthMethod` CHANGE `protected` `protected` ENUM('Yes','No') NOT NULL DEFAULT 'Yes';";
