@@ -359,6 +359,7 @@ class phpipam_rack extends Tools {
                                     "name"=>$d->hostname,
                                     "startLocation"=>$d->rack_start-$rack->size,
                                     "size"=>$d->rack_size,
+				    "active"=>true,
                                     "rackName"=>$rack->name
                                     );
                         // if startlocation is not set
@@ -377,6 +378,7 @@ class phpipam_rack extends Tools {
                                     "name"=>$d->hostname,
                                     "startLocation"=>$d->rack_start,
                                     "size"=>$d->rack_size,
+				    "active"=>true,
                                     "rackName"=>$rack->name
                                     );
                         // if startlocation is not set
