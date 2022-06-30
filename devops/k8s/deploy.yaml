@@ -23,6 +23,9 @@ spec:
       containers:
       - name: phpipam
         image: docker-registry.umusic.com/networking/phpipam:v1.4.2-umg-1.0
+        env:
+        - name: IPAM_BASE
+          value: "/phpipam/"
         resources:
           limits:
             memory: 4096Mi
