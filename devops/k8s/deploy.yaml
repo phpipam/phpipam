@@ -33,6 +33,8 @@ spec:
         env:
         - name: VAULT_KV_PATH
           value: VAULT_KV_PATH
+        - name: IPAM_BASE
+          value: "/phpipam/"
         ports:
         - containerPort: 80
         - containerPort: 443
