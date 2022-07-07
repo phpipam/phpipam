@@ -43,12 +43,8 @@ foreach ($all_vrfs as $vrf) {
 	$vrf_byid[$vrf['vrfId']] = $vrf['name'];
 }
 
-<<<<<<< HEAD
 
 # new code - ccrane - 7/7/2022 - testing location import
-=======
-# new code - dolgin - 6/29/2022 - testing location import
->>>>>>> 328d6428bdcd85e3b933f57e9c779b6b468576c6
 # cloned from VRF code above
 # fetch all locations
 $all_locations = $Admin->fetch_all_objects("locations", "id");
