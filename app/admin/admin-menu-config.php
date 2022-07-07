@@ -65,7 +65,7 @@ $admin_menu[_('Device management')][] =     ["show"=>true, "icon"=>"fa-random", 
 if($User->settings->enableSNMP == 1)
 $admin_menu[_('Device management')][] =     ["show"=>true, "icon"=>"fa-cogs",           "href"=>"snmp",                   "name"=>_("SNMP"),                     "description"=>_("SNMP management")];
 if($User->settings->enableLocations == 1)
-$admin_menu[_('Device management')][]  =    ["show"=>true, "icon"=>"fa-map",            "href"=>"locations",              "name"=>_("Locations"),                "description"=>_("Locations")];
+//$admin_menu[_('Device management')][]  =    ["show"=>true, "icon"=>"fa-map",            "href"=>"locations",              "name"=>_("Locations"),                "description"=>_("Locations")];
 
 # Tools
 $admin_menu[_('Tools')][] =                 ["show"=>true, "icon"=>"fa-check",          "href"=>"version-check",          "name"=>_("Version check"),            "description"=>_("Check for latest version of phpipam")];
