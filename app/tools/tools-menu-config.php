@@ -126,8 +126,8 @@ if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>=
 $tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-bars",        "href"=>"racks",                       "name"=>_("Racks"),                "description"=>_("Rack information")];
 if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>=User::ACCESS_R)
 $tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-random",      "href"=>"circuits",                    "name"=>_("Circuits"),             "description"=>_("Circuit information")];
-if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>=User::ACCESS_R)
-$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-map",         "href"=>"locations",                   "name"=>_("Locations"),            "description"=>_("Locations")];
+//if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>=User::ACCESS_R)
+//$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-map",         "href"=>"locations",                   "name"=>_("Locations"),            "description"=>_("Locations")];
 
 # user menu
 $tools_menu[_('User Menu')][] = ["show"=>true, "icon"=>"fa-user",        "href"=>"user-menu",                   "name"=>_("My account"),           "description"=>_("Manage your account")];
