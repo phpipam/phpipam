@@ -229,4 +229,8 @@ $tool_items["search"] = array (
     <li class='<?php if($_GET['page']=="tools" && (!isset($_GET['section']) || strlen($_GET['section'])==0)) print "active"; ?>'>
          <a href='<?php print create_link("tools"); ?>'><i class='fa fa-list'></i> <?php print _('All tools'); ?></a>
     </li>
+    <!-- automation DB -->
+        <li rel='tooltip' title='Automation DB' data-placement='bottom' class='$active'>
+		<a href='/autodb/'><i class='fa fa-database'></i>Automation DB</a>
+	</li>
 </ul>
