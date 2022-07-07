@@ -49,8 +49,6 @@ class Tools extends Common_functions {
 		$this->Database = $database;
 		# initialize Result
 		$this->Result = new Result ();
-		// fetch address types
-		$this->get_addresses_types();
 	}
 
 
@@ -2743,6 +2741,9 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	public function calculate_prefix_usege ($prefix, $numbers) {
+		// fetch address types
+		$this->get_addresses_types();
+
 	    # calculate max number of hosts
 	    $details = array();
 	    $details['maxhosts'] = ($prefix->stop - $prefix->start + 1);
@@ -2775,6 +2776,9 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	public function calculate_prefix_usage_sort_numbers ($numbers) {
+		// fetch address types
+		$this->get_addresses_types();
+
 		$count = array();
 		$count['used'] = 0;				//initial sum count
 		# create array of keys with initial value of 0
