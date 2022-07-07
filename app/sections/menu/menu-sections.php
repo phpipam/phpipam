@@ -76,4 +76,7 @@ $User->check_user_session();
 	}
 
 	?>
+	<li rel='tooltip' title='Automation DB' data-placement='bottom' class='$active'>
+		<a href='/autodb/'><i class='fa fa-database'></i>Automation DB</a>
+	</li>	
 </ul>
