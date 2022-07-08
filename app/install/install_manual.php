@@ -49,13 +49,20 @@ $filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
 		<div>
 		<pre>
 <?php
+
+$esc_user = addcslashes($db['user'],"'");
+$esc_pass = addcslashes($db['pass'],"'");
+$webhost  = is_string($db['webhost']) && strlen($db['webhost']) ? addcslashes($db['webhost'],"'") : 'localhost';
+
 $file  = "# Create phpipam database\n";
 $file .= "# ------------------------------------------------------------\n";
 $file .= "CREATE DATABASE $db[name];\n\n";
 
 $file .= "# Set permissions for phpipam user\n";
 $file .= "# ------------------------------------------------------------\n";
-$file .= "GRANT ALL on `$db[name]`.* to $db[user]@localhost identified by '$db[pass]';\n\n";
+$file .= "CREATE USER '$esc_user'@'$webhost' IDENTIFIED BY '$esc_pass';\n";
+$file .= "GRANT ALL ON $db[name].* TO '$esc_user'@'$webhost';\n";
+$file .= "FLUSH PRIVILEGES;\n\n";
 
 $file .= "# Select created database\n";
 $file .= "# ------------------------------------------------------------\n";
