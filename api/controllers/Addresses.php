@@ -122,6 +122,7 @@ class Addresses_controller extends Common_api_functions  {
         		$subnet = $this->Tools->fetch_object ("subnets", "id", $this->_params->id2);
             }
     		if($subnet->isFull==1)                       { $this->Response->throw_exception(404, 'No free addresses found'); }
+		if ($subnet->allowRequests==0) 		{ $this->Response->throw_exception(404, 'Subnet not enabled for IP Requests'); }
 
     		$this->_params->ip_addr = $this->Addresses->get_first_available_address ($subnet->id);
     		// null
@@ -304,6 +305,8 @@ class Addresses_controller extends Common_api_functions  {
             }
     		if($subnet===false)                          { $this->Response->throw_exception(400, "Invalid subnet identifier"); }
     		if($subnet->isFull==1)                       { $this->Response->throw_exception(404, "No free addresses found (subnet is full)"); }
+		if($subnet->allowRequests==0) 		     { $this->Response->throw_exception(404, 'Subnet not enabled for IP Requests'); }
+
 
     		// Obtain exclusive MySQL lock so parallel API requests on the same object are thread safe.
     		$Lock = new LockForUpdate($this->Database, 'subnets', $subnet->id);
