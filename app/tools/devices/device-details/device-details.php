@@ -247,7 +247,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
 
     			print "<tr>";
     			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
-    			print "<td>".$device[$field['name']]."</d>";
+    			print "<td>".$device[$field['name']]."</td>";
     			print "</tr>";
     		}
 
