@@ -53,8 +53,8 @@ if ($User->settings->enableIPrequests==1) {
 }
 
 # get admin and tools menu items
-require( dirname(__FILE__) . '/../tools/tools-menu-config.php' );
-require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
+//require( dirname(__FILE__) . '/../tools/tools-menu-config.php' );
+//require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 
 ?>
 
@@ -75,7 +75,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 	<!-- menu -->
 	<div class="collapse navbar-collapse" id="menu-collapse">
         <?php
-       /* # static?
+       # static?
         if($User->user->menuType=="Static") {
             # static menu
             include("menu/menu-static.php");
@@ -95,7 +95,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 
             # tools and admin menu
             include("menu/menu-tools-admin.php");
-        }*/
+        }
         ?>
 	</div>	 <!-- end menu div -->
 </nav>
