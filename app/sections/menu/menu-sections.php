@@ -41,7 +41,7 @@ $User->check_user_session();
 
 						print "<li class='dropdown'>";
 
-						print " <a class='dropdown-toggle' data-toggle='dropdown'>$section->name<b class='caret' style='margin-top:0px;margin-left:5px;'></b></a>";
+						print " <a class='dropdown-toggle' data-toggle='dropdown'>$section->name<b class='caret' style='maring-top:0px;margin-left:5px;'></b></a>";
 						print "	<ul class='dropdown-menu tools'>";
 
 						# section
@@ -75,8 +75,9 @@ $User->check_user_session();
 		print "<div class='text-muted'>"._("No sections available!")."</div>";
 	}
 
+
 	?>
 	<li rel='tooltip' title='Automation DB' data-placement='bottom' class='$active'>
 		<a href='/autodb/'><i class='fa fa-database'></i>Automation DB</a>
-	</li>	
+	</li>
 </ul>

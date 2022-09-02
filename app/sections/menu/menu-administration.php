@@ -10,81 +10,72 @@ $admin_items = array();
 // users
 $admin_items["users"] = array (
                         "name"=>"Users",
-                        "href"=>array("administration", "users"),
+                        "href"=>array("phpipam","admin", "users"),
                         "title"=>"User management",
                         "icon"=>"fa-user"
                         );
 // sections
 $admin_items["sections"] = array(
                         "name"=>"Sections",
-                        "href"=>array("administration", "sections"),
+                        "href"=>array("phpipam","admin", "sections"),
                         "title"=>"Section management",
                         "icon"=>"fa-server"
                        );
-// vlans
-$admin_items["vlans"] = array (
-                        "name"=>"VLAN",
-                        "href"=>array("administration", "vlans"),
-                        "title"=>"VLAN management",
-                        "icon"=>"fa-cloud"
-                        );
-// VRF
-if($User->settings->enableVRF == 1) {
-$admin_items["vrf"] = array(
-                        "name"=>"VRF",
-                        "href"=>array("administration", "vrf"),
-                        "title"=>"VRF managements",
-                        "icon"=>"fa-cloud"
-                       );
-}
-// nat
-if($User->settings->enableNAT==1) {
-$admin_items["nat"] = array (
-                        "name"=>"NAT",
-                        "href"=>array("administration", "nat"),
-                        "title"=>"NAT management",
-                        "icon"=>"fa-exchange"
+// locations
+if($User->settings->enableLocations == 1) {
+$admin_items["locations"] = array (
+                        "name"=>"Locations",
+                        "href"=>array("admin", "locations"),
+                        "title"=>"Show locations",
+                        "icon"=>"fa-map"
                         );
 }
-// pdns
-if($User->settings->enablePowerDNS==1) {
-$admin_items["powerDNS"] = array (
-                        "name"=>"PowerDNS",
-                        "href"=>array("administration", "powerDNS"),
-                        "title"=>"powerDNS management",
-                        "icon"=>"fa-database"
-                        );
-}
-// dhcp
-if($User->settings->enableDHCP==1) {
-$admin_items["dhcp"] = array (
-                        "name"=>"DHCP",
-                        "href"=>array("administration", "dhcp"),
-                        "title"=>"DHCP information",
-                        "icon"=>"fa-database"
+// rack
+if($User->settings->enableRACK == 1) {
+$admin_items["racks"] = array (
+                        "name"=>"Racks",
+                        "href"=>array("admin", "racks"),
+                        "title"=>"Show racks",
+                        "icon"=>"fa-bars"
                         );
 }
 // devices
 $admin_items["devices"] = array (
                         "name"=>"Devices",
-                        "href"=>array("administration", "devices"),
+                        "href"=>array("admin", "devices"),
                         "title"=>"Show all configured devices",
                         "icon"=>"fa-desktop"
                         );
-// rack
-if($User->settings->enableRACK == 1) {
-$admin_items["racks"] = array (
-                        "name"=>"Racks",
-                        "href"=>array("administration", "racks"),
-                        "title"=>"Show racks",
-                        "icon"=>"fa-bars"
+// VRF
+if($User->settings->enableVRF == 1) {
+$admin_items["vrf"] = array(
+                        "name"=>"VRF",
+                        "href"=>array("admin", "vrf"),
+                        "title"=>"VRF managements",
+                        "icon"=>"fa-cloud"
+                       );
+}
+// vlans
+$admin_items["vlans"] = array (
+                        "name"=>"VLAN",
+                        "href"=>array("admin", "vlans"),
+                        "title"=>"VLAN management",
+                        "icon"=>"fa-cloud"
+                        );
+// dhcp
+if($User->settings->enableDHCP==1) {
+$admin_items["dhcp"] = array (
+                        "name"=>"DHCP",
+                        "href"=>array("phpipam","admin", "dhcp"),
+                        "title"=>"DHCP information",
+                        "icon"=>"fa-database"
                         );
 }
 // circuits
 if($User->settings->enableCircuits == 1) {
 $admin_items["circuits"] = array (
                         "name"=>"Circuits",
-                        "href"=>array("administration", "circuits"),
+                        "href"=>array("admin", "circuits"),
                         "title"=>"Show circuits",
                         "icon"=>"fa-random"
                         );
@@ -93,20 +84,12 @@ $admin_items["circuits"] = array (
 if($User->settings->enableRouting == 1) {
 $admin_items["routing"] = array (
                         "name"=>"Routing",
-                        "href"=>array("administration", "routing"),
+                        "href"=>array("phpipam","admin", "routing"),
                         "title"=>"Show Routing",
                         "icon"=>"fa-exchange"
                         );
 }
-// locations
-if($User->settings->enableLocations == 1) {
-$admin_items["locations"] = array (
-                        "name"=>"Locations",
-                        "href"=>array("administration", "locations"),
-                        "title"=>"Show locations",
-                        "icon"=>"fa-map"
-                        );
-}
+
 ?>
 
 <!-- sections -->
@@ -175,17 +158,23 @@ $admin_items["locations"] = array (
         }
 
         print "<li rel='tooltip' title='"._($t['title'])."' data-placement='bottom' class='$active'>";
-        print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i> "._($t['name'])."</a>";
-        print "</li>";
-    }
+		if ($t['href'][0]=="phpipam") {
+			print " <a href='/".$t['href'][0]."/index.php?page=".$t['href'][1]."&section=".$t['href'][2]."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
+		}
+		elseif(sizeof($t['href'])>0) {	
+			print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
+		}
+		print "</li>";
+		
+	}
     ?>
 
     <!-- all tools -->
     <li class='<?php if($_GET['page']=="administration" && (!isset($_GET['section']) || strlen($_GET['section'])==0)) print "active"; ?>'>
          <a href='<?php print create_link("administration"); ?>'><i class='fa fa-list'></i> <?php print _('All items'); ?></a>
     </li>
-	<!-- automation DB -->
     <li rel='tooltip' title='Automation DB' data-placement='bottom' class='$active'>
-		<a href='/autodb/'><i class='fa fa-database'></i>Automation DB</a>
-	</li>    
+		<a href='/phpipam/'><i class='fa fa-database'></i>PHPipam</a>
+	</li>
+	
 </ul>

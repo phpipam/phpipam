@@ -6,128 +6,133 @@
  */
 
 # default
-$tools_menu = [];
+$tools_menu = array();
 
 # icons
-$tools_menu_icons[_('Tools')]     = "fa-wrench";
-$tools_menu_icons[_('Subnets')]   = "fa-sitemap";
-$tools_menu_icons[_('User Menu')] = "fa-user";
-$tools_menu_icons[_('Devices')]   = "fa-desktop";
+$tools_menu_icons['Tools'] 		= "fa-wrench";
+$tools_menu_icons['Subnets'] 	= "fa-sitemap";
+$tools_menu_icons['User Menu'] 	= "fa-user";
+$tools_menu_icons['Devices'] 	= "fa-desktop";
 
 # inclusion check
-$tools_menu_items = [
-					"changelog" => _("changelog"),
-					"dhcp" => _("dhcp"),
-					"devices" => _("devices"),
-					"favourites" => _("favourites"),
-					"firewall-zones" => _("firewall-zones"),
-					"instructions" => _("instructions"),
-					"ip-calculator" => _("ip-calculator"),
-					"logs" => _("logs"),
-					"multicast-networks" => _("multicast-networks"),
-					"pass-change" => _("pass-change"),
-					"powerDNS" => _("powerDNS"),
-					"request-ip" => _("request-ip"),
-					"requests" => _("requests"),
-					"racks" => _("racks"),
-					"scanned-networks" => _("scanned-networks"),
-					"search" => _("search"),
-					"subnet-masks" => _("subnet-masks"),
-					"subnets" => _("subnets"),
-					"temp-shares" => _("temp-shares"),
-					"user-menu" => _("user-menu"),
-					"vlan" => _("vlan"),
-					"vrf" => _("vrf"),
-					"inactive-hosts" => _("inactive-hosts"),
-					"threshold" => _("threshold"),
-					"nat" => _("nat"),
-					"locations" => _("locations"),
-					"pstn-prefixes" => _("pstn-prefixes"),
-					"mac-lookup" => _("mac-lookup"),
-					"circuits" => _("circuits"),
-					"customers" => _("customers"),
-					"duplicates" => _("duplicates"),
-					"routing" => _("routing"),
- 					"vaults" => _("vaults"),
-					];
+$tools_menu_items = array(
+						'swstandards',
+						'test',
+						'dhcp',
+						'vendors',
+						'hwstatus',
+						'hwowners',
+						'hwtypes',
+						'hwmodels',
+						'hardware',
+						'devices',
+						'favourites',
+						'firewall-zones',
+						'instructions',
+						'ip-calculator',
+						'logs',
+						'multicast-networks',
+						'pass-change',
+						'powerDNS',
+						'request-ip',
+						'requests',
+						'racks',
+						'scanned-networks',
+						'search',
+						'subnet-masks',
+						'subnets',
+						'temp-shares',
+						'user-menu',
+						'vlan',
+						'vrf',
+						'inactive-hosts',
+						"threshold",
+						'nat',
+						'locations',
+						'pstn-prefixes',
+						'mac-lookup',
+						'circuits',
+						'customers',
+						'duplicates',
+						'gensiteips',
+						'routing',
+						'contacts'
+                    );
 
 
 #custom
-$private_subpages = Config::ValueOf('private_subpages');
+$private_subpages = Config::get('private_subpages');
 if(is_array($private_subpages) && sizeof($private_subpages)>0) {
     # array and icon
-    $tools_menu[_('Custom tools')] = [];
-    $tools_menu_icons[_('Custom tools')] = "fa-star";
+    $tools_menu['Custom tools'] = array();
+    $tools_menu_icons['Custom tools'] = "fa-star";
     // loop
     foreach ($private_subpages as $s) {
         // title
-        $tools_menu[_('Custom tools')][] = ["show"=>true, "icon"=>"fa-angle-right", "href"=>$s, "name"=>ucwords($s), "description"=>ucwords($s)." "._("custom tool")];
+        $tools_menu['Custom tools'][] = array("show"=>true,	"icon"=>"fa-angle-right", "name"=>ucwords($s),  "href"=>$s, 	"description"=>ucwords($s)." "._("custom tool"));
         // add to inclusion check
-        $tools_menu_items[$s] = $s;
+        $tools_menu_items[] = $s;
     }
 }
 
 # arrays
-$tools_menu[_('Subnets')]   = [];
-$tools_menu[_('Devices')]   = [];
-$tools_menu[_('Tools')]     = [];
-$tools_menu[_('User Menu')] = [];
+$tools_menu['Locations']   = array();
+$tools_menu['Devices']   = array();
+$tools_menu['Tools']     = array();
+$tools_menu['User Menu'] = array();
 
 # Tools
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-search",      "href"=>"search",                      "name"=>_("Search"),               "description"=>_("Search database Addresses, subnets and VLANs")];
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-calculator",  "href"=>"ip-calculator",               "name"=>_("IP calculator"),        "description"=>_("IPv4v6 calculator for subnet calculations")];
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-calculator",  "href"=>"ip-calculator/bw-calculator", "name"=>_("Bandwidth calculator"), "description"=>_("Bandwidth calculator")];
-if($User->settings->enableChangelog == 1)
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-clock-o",     "href"=>"changelog",                   "name"=>_("Changelog"),            "description"=>_("Changelog for all network objects")];
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-list",        "href"=>"logs",                        "name"=>_("Log files"),            "description"=>_("Browse phpipam log files")];
-if($User->settings->enableIPrequests==1)
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-plus",        "href"=>"requests",                    "name"=>_("IP requests"),          "description"=>_("Manage IP requests")];
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-info",        "href"=>"instructions",                "name"=>_("Instructions"),         "description"=>_("Instructions for managing IP addresses")];
-if($User->settings->enablePowerDNS==1 && $User->get_module_permissions ("pdns")>=User::ACCESS_R)
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-database",    "href"=>"powerDNS",                    "name"=>_("PowerDNS"),             "description"=>_("PowerDNS")];
-if($User->settings->enableDHCP==1 && $User->get_module_permissions ("dhcp")>=User::ACCESS_R)
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-database",    "href"=>"dhcp",                        "name"=>_("DHCP"),                 "description"=>_("DHCP information")];
-if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>=User::ACCESS_R)
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-phone",       "href"=>"pstn-prefixes",               "name"=>_("PSTN prefixes"),        "description"=>_("PSTN prefixes")];
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-sitemap",     "href"=>"mac-lookup",                  "name"=>_("MAC lookup"),           "description"=>_("Lookup MAC address vendor")];
-if($User->settings->enableVaults == 1 && $User->get_module_permissions ("vaults")>=User::ACCESS_R)
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-key",         "href"=>"vaults",                      "name"=>_("Vaults"),               "description"=>_("Secure information storing")];
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-search", 		"name"=>"Search", 		 		"href"=>"search", 										"description"=>"Search database Addresses, subnets and VLANs");
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-sitemap", 		"name"=>"Generate Site IPs", 	"href"=>"gensiteips", 									"description"=>"Generate Site IPs");
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-sitemap", 		"name"=>"Test", 				"href"=>"test", 										"description"=>"Test");
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-calculator",	"name"=>"IP calculator", 		"href"=>"phpipam/tools/ip-calculator",					"description"=>"IPv4v6 calculator for subnet calculations");
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-calculator",	"name"=>"Bandwidth calculator", "href"=>"phpipam/tools/ip-calculator/bw-calculator",	"description"=>"Bandwidth calculator");
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-database", 	  	"name"=>"DHCP",  		        "href"=>"phpipam/tools/dhcp", 							"description"=>"DHCP information");
+if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>0)
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-sitemap", 	  	"name"=>"MAC lookup",  		 	"href"=>"phpipam/tools/mac-lookup", 					"description"=>"Lookup MAC address vendor");
+$tools_menu['Tools'][] 	= array("show"=>true,	"icon"=>"fa-thumbs-down",  	"name"=>"Inactive Hosts", 		"href"=>"phpipam/tools/inactive-hosts",					"description"=>"List of inactive hosts");
+$tools_menu['Tools'][] 	= array("show"=>true,	"icon"=>"fa-files-o",  		"name"=>"Duplicates", 			"href"=>"phpipam/tools/duplicates",						"description"=>"List of duplicate subnets and addresses");
+$tools_menu['Tools'][] 	= array("show"=>true,	"icon"=>"fa-th-large", 	 	"name"=>"Subnet masks", 		"href"=>"phpipam/tools/subnet-masks",					"description"=>"Table of all subnet masks with different representations");
 
-# Subnets
-if($User->settings->enableCustomers == 1 && $User->get_module_permissions ("customers")>=User::ACCESS_R)
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-users",       "href"=>"customers",                   "name"=>_("Customers"),            "description"=>_("Customers")];
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-star",        "href"=>"favourites",                  "name"=>_("Favourite networks"),   "description"=>_("Favourite networks")];
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-sitemap",     "href"=>"subnets",                     "name"=>_("Subnets"),              "description"=>_("All subnets")];
-if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-cloud",       "href"=>"vlan",                        "name"=>_("VLAN"),                 "description"=>_("VLANs and belonging subnets")];
-if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R)
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-cloud",       "href"=>"vrf",                         "name"=>_("VRF"),                  "description"=>_("VRFs and belonging networks")];
-if($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User::ACCESS_R)
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-exchange",    "href"=>"nat",                         "name"=>_("NAT"),                  "description"=>_("NAT translations")];
-if($User->settings->enableRouting==1 && $User->get_module_permissions ("routing")>=User::ACCESS_R)
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-exchange",    "href"=>"routing",                     "name"=>_("Routing"),              "description"=>_("Routing information")];
+
+# Devices
+if($User->get_module_permissions ("devices")>0)
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>"HW Owners",  			"href"=>"hwowners", 						"description"=>"All HW Owners");
+if($User->get_module_permissions ("devices")>0)
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>"HW Status",  			"href"=>"hwstatus", 						"description"=>"All HW Status");
+if($User->get_module_permissions ("devices")>0)
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>"HW Types",  			"href"=>"hwtypes", 							"description"=>"All HW Types");
+if($User->get_module_permissions ("devices")>0)
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>"HW Models",  			"href"=>"hwmodels", 						"description"=>"All HW Models");
+if($User->get_module_permissions ("devices")>0)
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>"Hardware",  			"href"=>"hardware", 						"description"=>"All Hardware");
+if($User->get_module_permissions ("devices")>0)
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>"Devices",  			"href"=>"devices", 							"description"=>"All configured devices");
+if($User->get_module_permissions ("devices")>0)
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>"SW Standards",  		"href"=>"swstandards", 						"description"=>"All Software Standards");
+if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>0)
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-cloud", 	 "name"=>"VRF",  				"href"=>"vrf", 								"description"=>"VRFs and belonging networks");
+if($User->get_module_permissions ("vlan")>0)
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-cloud", 	 "name"=>"VLAN",  				"href"=>"vlan", 							"description"=>"VLANs and belonging subnets");
+if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>0)
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-random", 	 "name"=>"Circuits",  			"href"=>"circuits", 						"description"=>"Circuit information");
+if($User->settings->enableRouting==1 && $User->get_module_permissions ("routing")>0)
+$tools_menu['Devices'][] = array("show"=>true,	"icon"=>"fa-exchange", 	     "name"=>"Routing", 			"href"=>"phpipam/tools/routing", 			"description"=>"Routing information");
 if($User->settings->enableMulticast == 1)
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-map-o",       "href"=>"multicast-networks",          "name"=>_("Multicast networks"),   "description"=>_("Multicast subnets and mapping")];
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-map-o",		 "name"=>"Multicast networks", 	"href"=>"phpipam/tools/multicast-networks", "description"=>"Multicast subnets and mapping");
 if($User->settings->enableFirewallZones == 1)
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-fire",        "href"=>"firewall-zones",              "name"=>_("Firewall Zones"),       "description"=>_("Display firewall zone to device mappings")];
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-eye",         "href"=>"scanned-networks",            "name"=>_("Scanned networks"),     "description"=>_("List of subnets to be scanned for online hosts and detect new hosts")];
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-th-large",    "href"=>"subnet-masks",                "name"=>_("Subnet masks"),         "description"=>_("Table of all subnet masks with different representations")];
-if($User->settings->tempShare==1)
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-share-alt",   "href"=>"temp-shares",                 "name"=>_("Temporary shares"),     "description"=>_("List of temporary shared objects")];
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-thumbs-down", "href"=>"inactive-hosts",              "name"=>_("Inactive Hosts"),       "description"=>_("List of inactive hosts")];
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-files-o",     "href"=>"duplicates",                  "name"=>_("Duplicates"),           "description"=>_("List of duplicate subnets and addresses")];
-if($User->settings->enableThreshold==1)
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-bullhorn",    "href"=>"threshold",                   "name"=>_("Threshold"),            "description"=>_("List of thresholded subnets")];
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-fire",		 "name"=>"Firewall Zones", 		"href"=>"phpipam/tools/firewall-zones", 	"description"=>"Display firewall zone to device mappings");
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-fire",		 "name"=>"Vendors", 			"href"=>"vendors", 							"description"=>"All Vendors");
 
-# devices
-if($User->get_module_permissions ("devices")>=User::ACCESS_R)
-$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-desktop",     "href"=>"devices",                     "name"=>_("Devices"),              "description"=>_("All configured devices")];
-if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>=User::ACCESS_R)
-$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-bars",        "href"=>"racks",                       "name"=>_("Racks"),                "description"=>_("Rack information")];
-if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>=User::ACCESS_R)
-$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-random",      "href"=>"circuits",                    "name"=>_("Circuits"),             "description"=>_("Circuit information")];
-//if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>=User::ACCESS_R)
-//$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-map",         "href"=>"locations",                   "name"=>_("Locations"),            "description"=>_("Locations")];
+
+# Locations
+if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>0)
+$tools_menu['Locations'][] 	= array("show"=>true,	"icon"=>"fa-map", 	     "name"=>"Locations",  			"href"=>"locations", 						"description"=>"Locations");
+if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>0)
+$tools_menu['Locations'][] 	= array("show"=>true,	"icon"=>"fa-map", 	     "name"=>"Location Contacts",  	"href"=>"contacts", 						"description"=>"Locations");
+if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>0)
+$tools_menu['Locations'][] 	= array("show"=>true,	"icon"=>"fa-bars", 	     "name"=>"Racks",  				"href"=>"racks", 							"description"=>"Rack information");
+
 
 # user menu
-$tools_menu[_('User Menu')][] = ["show"=>true, "icon"=>"fa-user",        "href"=>"user-menu",                   "name"=>_("My account"),           "description"=>_("Manage your account")];
+$tools_menu['User Menu'][] = array("show"=>true,	"icon"=>"fa-user", 		"name"=>"My account",  			"href"=>"phpipam/tools/user-menu", 			"description"=>"Manage your account");
