@@ -26,7 +26,7 @@ foreach($tools_menu as $k=>$tool) {
 		# multiple hrefs ?
 		$href = explode("/", $t['href']);
 
-		if ($href[0]=="phpipam") {
+		if ($href[0]=="autodb") {
 			print "<a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
 		}
 		elseif(sizeof($href)>0) {

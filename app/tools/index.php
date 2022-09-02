@@ -20,7 +20,7 @@ foreach($tools_menu as $k=>$tool) {
 			print "	<div class='col-xs-12 col-md-6 col-lg-6 widget-dash'>";
 			print "	<div class='inner thumbnail'>";
 			print "		<div class='hContent'>";
-			if ($href[0]=="phpipam") {
+			if ($href[0]=="autodb") {
 				print "			<div class='icon'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'><i class='fa $t[icon]'></i></a></div>";
 				print "			<div class='text'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($t['name'])."</a><hr><span class='text-muted'>"._($t['description'])."</span></div>";
 			}

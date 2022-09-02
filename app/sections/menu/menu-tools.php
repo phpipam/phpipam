@@ -1,5 +1,4 @@
 <?php
-
 # verify that user is logged in
 $User->check_user_session();
 
@@ -8,49 +7,49 @@ if(!isset($_GET['section'])) { $_GET['section'] = ""; }
 
 # tool items
 $tool_items = array();
-// locations
-if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>0) {
-$tool_items["locations"] = array (
-                        "name"=>"Locations",
-                        "href"=>array("tools", "locations"),
-                        "title"=>"Show locations",
-                        "icon"=>"fa-map"
-                        );
-}
-// rack
-if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>0) {
-$tool_items["racks"] = array (
-                        "name"=>"Racks",
-                        "href"=>array("tools", "racks"),
-                        "title"=>"Show racks",
-                        "icon"=>"fa-bars"
-                        );
-}
-// devices
-if($User->get_module_permissions ("devices")>0){
-$tool_items["devices"] = array (
-                        "name"=>"Devices",
-                        "href"=>array("tools", "devices"),
-                        "title"=>"Show all configured devices",
-                        "icon"=>"fa-desktop"
-                        );
-}
-// VRF
-if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>0) {
-$tool_items["vrf"] = array(
-                        "name"=>"VRF",
-                        "href"=>array("tools", "vrf"),
-                        "title"=>"Show VRFs and belonging networks",
-                        "icon"=>"fa-cloud"
+// customers
+if($User->settings->enableCustomers == 1  && $User->get_module_permissions ("customers")>0) {
+$tool_items["customers"] = array(
+                        "name"=>"Customers",
+                        "href"=>array("tools", "customers"),
+                        "title"=>"Customers",
+                        "icon"=>"fa-users"
                        );
 }
 // vlans
 if($User->get_module_permissions ("vlan")>0) {
 $tool_items["vlan"] = array (
                         "name"=>"VLAN",
-                        "href"=>array("tools", "vlan"),
+                        "href"=>array("autodb","tools", "vlan"),
                         "title"=>"Show VLANs and belonging subnets",
                         "icon"=>"fa-cloud"
+                        );
+}
+// VRF
+if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>0) {
+$tool_items["vrf"] = array(
+                        "name"=>"VRF",
+                        "href"=>array("autodb","tools", "vrf"),
+                        "title"=>"Show VRFs and belonging networks",
+                        "icon"=>"fa-cloud"
+                       );
+}
+// nat
+if($User->settings->enableNAT==1  && $User->get_module_permissions ("nat")>0) {
+$tool_items["nat"] = array (
+                        "name"=>"NAT",
+                        "href"=>array("tools", "nat"),
+                        "title"=>"Nat translations",
+                        "icon"=>"fa-exchange"
+                        );
+}
+// pdns
+if($User->settings->enablePowerDNS==1 && $User->get_module_permissions ("pdns")>0) {
+$tool_items["powerDNS"] = array (
+                        "name"=>"PowerDNS",
+                        "href"=>array("tools", "powerDNS"),
+                        "title"=>"powerDNS management",
+                        "icon"=>"fa-database"
                         );
 }
 // dhcp
@@ -62,11 +61,37 @@ $tool_items["dhcp"] = array (
                         "icon"=>"fa-database"
                         );
 }
+// locations
+if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>0) {
+$tool_items["locations"] = array (
+                        "name"=>"Locations",
+                        "href"=>array("autodb","tools", "locations"),
+                        "title"=>"Show locations",
+                        "icon"=>"fa-map"
+                        );
+}
+// devices
+if($User->get_module_permissions ("devices")>0)
+$tool_items["devices"] = array (
+                        "name"=>"Devices",
+                        "href"=>array("autodb","tools", "devices"),
+                        "title"=>"Show all configured devices",
+                        "icon"=>"fa-desktop"
+                        );
+// rack
+if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>0) {
+$tool_items["racks"] = array (
+                        "name"=>"Racks",
+                        "href"=>array("autodb","tools", "racks"),
+                        "title"=>"Show racks",
+                        "icon"=>"fa-bars"
+                        );
+}
 // circuits
 if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>0) {
 $tool_items["circuits"] = array (
                         "name"=>"Circuits",
-                        "href"=>array("tools", "circuits"),
+                        "href"=>array("autodb","tools", "circuits"),
                         "title"=>"Show circuits",
                         "icon"=>"fa-random"
                         );
@@ -75,9 +100,28 @@ $tool_items["circuits"] = array (
 if($User->settings->enableRouting == 1 && $User->get_module_permissions ("routing")>0) {
 $tool_items["routing"] = array (
                         "name"=>"Routing",
-                        "href"=>array("phpipam","tools", "routing"),
+                        "href"=>array("tools", "routing"),
                         "title"=>"Show routing",
                         "icon"=>"fa-exchange"
+                        );
+}
+// pstn
+if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>0) {
+$tool_items["pstn-prefixes"] = array (
+                        "name"=>"PSTN",
+                        "href"=>array("tools", "pstn-prefixes"),
+                        "title"=>"PSTN prefixes",
+                        "icon"=>"fa-phone"
+                        );
+}
+
+// multicast
+if($User->settings->enableMulticast == 1) {
+$tool_items["multicast-networks"] = array (
+                        "name"=>"Multicast",
+                        "href"=>array("tools", "multicast-networks"),
+                        "title"=>"Show multicast subnets and mapping",
+                        "icon"=>"fa-map-o"
                         );
 }
 // search
@@ -161,7 +205,7 @@ $tool_items["search"] = array (
         print "<li rel='tooltip' title='"._($t['title'])."' data-placement='bottom' class='$active'>";
         // compact menu
 		if($User->user->menuCompact=="1") {
-			if ($t['href'][0]=="phpipam") {
+			if ($t['href'][0]=="autodb") {
 				print "	 <a href='/".$t['href'][0]."/index.php?page=".$t['href'][1]."&section=".$t['href'][2]."'><i class='hidden-xs fa $t[icon]'></i><span class='visible-xs'> <i class='fa $t[icon]'></i>"._($t['name'])."</span></a>";
 			}
 			elseif(sizeof($t['href'])>0) {		
@@ -170,7 +214,7 @@ $tool_items["search"] = array (
 			}
 		}
 		else {
-			if ($t['href'][0]=="phpipam") {
+			if ($t['href'][0]=="autodb") {
 				print " <a href='/".$t['href'][0]."/index.php?page=".$t['href'][1]."&section=".$t['href'][2]."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
 			}
 			elseif(sizeof($t['href'])>0) {	
@@ -179,7 +223,7 @@ $tool_items["search"] = array (
 		}
 
         print "</li>";
-	}
+    }
     ?>
 
     <!-- all tools -->
@@ -188,6 +232,6 @@ $tool_items["search"] = array (
     </li>
 	<!-- automation DB -->
     <li rel='tooltip' title='Automation DB' data-placement='bottom' class='$active'>
-		<a href='/phpipam/'><i class='fa fa-database'></i>PHPipam</a>
+		<a href='/autodb/'><i class='fa fa-database'></i>Automation DB</a>
 	</li>
 </ul>

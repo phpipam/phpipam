@@ -10,72 +10,81 @@ $admin_items = array();
 // users
 $admin_items["users"] = array (
                         "name"=>"Users",
-                        "href"=>array("phpipam","admin", "users"),
+                        "href"=>array("administration", "users"),
                         "title"=>"User management",
                         "icon"=>"fa-user"
                         );
 // sections
 $admin_items["sections"] = array(
                         "name"=>"Sections",
-                        "href"=>array("phpipam","admin", "sections"),
+                        "href"=>array("administration", "sections"),
                         "title"=>"Section management",
                         "icon"=>"fa-server"
                        );
-// locations
-if($User->settings->enableLocations == 1) {
-$admin_items["locations"] = array (
-                        "name"=>"Locations",
-                        "href"=>array("admin", "locations"),
-                        "title"=>"Show locations",
-                        "icon"=>"fa-map"
-                        );
-}
-// rack
-if($User->settings->enableRACK == 1) {
-$admin_items["racks"] = array (
-                        "name"=>"Racks",
-                        "href"=>array("admin", "racks"),
-                        "title"=>"Show racks",
-                        "icon"=>"fa-bars"
-                        );
-}
-// devices
-$admin_items["devices"] = array (
-                        "name"=>"Devices",
-                        "href"=>array("admin", "devices"),
-                        "title"=>"Show all configured devices",
-                        "icon"=>"fa-desktop"
+// vlans
+$admin_items["vlans"] = array (
+                        "name"=>"VLAN",
+                        "href"=>array("autodb","administration", "vlans"),
+                        "title"=>"VLAN management",
+                        "icon"=>"fa-cloud"
                         );
 // VRF
 if($User->settings->enableVRF == 1) {
 $admin_items["vrf"] = array(
                         "name"=>"VRF",
-                        "href"=>array("admin", "vrf"),
+                        "href"=>array("autodb","administration", "vrf"),
                         "title"=>"VRF managements",
                         "icon"=>"fa-cloud"
                        );
 }
-// vlans
-$admin_items["vlans"] = array (
-                        "name"=>"VLAN",
-                        "href"=>array("admin", "vlans"),
-                        "title"=>"VLAN management",
-                        "icon"=>"fa-cloud"
+// nat
+if($User->settings->enableNAT==1) {
+$admin_items["nat"] = array (
+                        "name"=>"NAT",
+                        "href"=>array("administration", "nat"),
+                        "title"=>"NAT management",
+                        "icon"=>"fa-exchange"
                         );
+}
+// pdns
+if($User->settings->enablePowerDNS==1) {
+$admin_items["powerDNS"] = array (
+                        "name"=>"PowerDNS",
+                        "href"=>array("administration", "powerDNS"),
+                        "title"=>"powerDNS management",
+                        "icon"=>"fa-database"
+                        );
+}
 // dhcp
 if($User->settings->enableDHCP==1) {
 $admin_items["dhcp"] = array (
                         "name"=>"DHCP",
-                        "href"=>array("phpipam","admin", "dhcp"),
+                        "href"=>array("administration", "dhcp"),
                         "title"=>"DHCP information",
                         "icon"=>"fa-database"
+                        );
+}
+// devices
+$admin_items["devices"] = array (
+                        "name"=>"Devices",
+                        "href"=>array("autodb","administration", "devices"),
+                        "title"=>"Show all configured devices",
+                        "icon"=>"fa-desktop"
+                        );
+// rack
+if($User->settings->enableRACK == 1) {
+$admin_items["racks"] = array (
+                        "name"=>"Racks",
+                        "href"=>array("autodb","administration", "racks"),
+                        "title"=>"Show racks",
+                        "icon"=>"fa-bars"
                         );
 }
 // circuits
 if($User->settings->enableCircuits == 1) {
 $admin_items["circuits"] = array (
                         "name"=>"Circuits",
-                        "href"=>array("admin", "circuits"),
+                        "href"=>array("autodb","administration", "circuits"),
                         "title"=>"Show circuits",
                         "icon"=>"fa-random"
                         );
@@ -84,12 +93,20 @@ $admin_items["circuits"] = array (
 if($User->settings->enableRouting == 1) {
 $admin_items["routing"] = array (
                         "name"=>"Routing",
-                        "href"=>array("phpipam","admin", "routing"),
+                        "href"=>array("administration", "routing"),
                         "title"=>"Show Routing",
                         "icon"=>"fa-exchange"
                         );
 }
-
+// locations
+if($User->settings->enableLocations == 1) {
+$admin_items["locations"] = array (
+                        "name"=>"Locations",
+                        "href"=>array("autodb","administration", "locations"),
+                        "title"=>"Show locations",
+                        "icon"=>"fa-map"
+                        );
+}
 ?>
 
 <!-- sections -->
@@ -158,15 +175,14 @@ $admin_items["routing"] = array (
         }
 
         print "<li rel='tooltip' title='"._($t['title'])."' data-placement='bottom' class='$active'>";
-		if ($t['href'][0]=="phpipam") {
+		if ($t['href'][0]=="autodb") {
 			print " <a href='/".$t['href'][0]."/index.php?page=".$t['href'][1]."&section=".$t['href'][2]."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
 		}
 		elseif(sizeof($t['href'])>0) {	
 			print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
 		}
-		print "</li>";
-		
-	}
+        print "</li>";
+    }
     ?>
 
     <!-- all tools -->
@@ -174,7 +190,7 @@ $admin_items["routing"] = array (
          <a href='<?php print create_link("administration"); ?>'><i class='fa fa-list'></i> <?php print _('All items'); ?></a>
     </li>
     <li rel='tooltip' title='Automation DB' data-placement='bottom' class='$active'>
-		<a href='/phpipam/'><i class='fa fa-database'></i>PHPipam</a>
+		<a href='/autodb/'><i class='fa fa-database'></i>Automation DB</a>
 	</li>
 	
 </ul>

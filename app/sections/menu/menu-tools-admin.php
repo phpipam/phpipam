@@ -32,7 +32,7 @@ if($User->is_admin(false)) {
 					$active = "";
 				}
 				$href = explode("/", $i['href']);
-				if ($href[0]=="phpipam") {
+				if ($href[0]=="autodb") {
 					print "<li class='$active'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($i['name'])."</a></li>";
 				}
 				else {
@@ -78,7 +78,7 @@ if($User->is_admin(false)) {
 							$active = "";
 						}
 						$href = explode("/", $i['href']);
-						if ($href[0]=="phpipam") {
+						if ($href[0]=="autodb") {
 							print "<li class='$active'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($i['name'])."</a></li>";
 						}
 						else {
@@ -151,7 +151,7 @@ if($User->is_admin(false)) {
 							$active = "";
 						}
 						list($l0, $l1,$l2) = explode('/', $i['href']);
-						if ($l0=="phpipam") {
+						if ($l0=="autodb") {
 							print "<li class='$active'><a href='/".$l0."/index.php?page=".$l1."&section=".$l2."'>"._($i['name'])."</a></li>";
 						}
 						else {
