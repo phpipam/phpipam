@@ -91,7 +91,7 @@ if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>0)
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-phone", 	  	"name"=>"PSTN prefixes",  		 "href"=>"pstn-prefixes", "description"=>"PSTN prefixes");
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-sitemap", 	  	"name"=>"MAC lookup",  		 	 "href"=>"mac-lookup", "description"=>"Lookup MAC address vendor");
 
-
+/*
 # Subnets
 if($User->settings->enableCustomers == 1 && $User->get_module_permissions ("customers")>0)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-users", 	 "name"=>"Customers",  	"href"=>"customers", 	"description"=>"Customers");
@@ -132,4 +132,4 @@ $tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-map", 	     "name"=>
 
 
 # user menu
-$tools_menu['User Menu'][] = array("show"=>true,	"icon"=>"fa-user", 		"name"=>"My account",  			"href"=>"user-menu", 	"description"=>"Manage your account");
+$tools_menu['User Menu'][] = array("show"=>true,	"icon"=>"fa-user", 		"name"=>"My account",  			"href"=>"user-menu", 	"description"=>"Manage your account");*/
