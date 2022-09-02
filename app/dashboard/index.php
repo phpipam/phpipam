@@ -12,7 +12,7 @@ $User->check_user_session();
 $csrf = $User->Crypto->csrf_cookie ("create", "user-menu");
 
 ?>
-<script>
+<script type="text/javascript">
 //show clock
 $(function($) {
 	$('span.jclock').jclock();
@@ -77,9 +77,9 @@ $(document).ready(function() {
 
 
 <!-- charts -->
-<script src="js/flot/jquery.flot.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-<script src="js/flot/jquery.flot.categories.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-<!--[if lte IE 8]><script src="js/flot/excanvas.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.categories.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot/excanvas.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script><![endif]-->
 
 
 <div class="welcome" style="text-align:right">

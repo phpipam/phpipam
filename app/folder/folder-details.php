@@ -28,7 +28,11 @@ if($folder['sectionId']!=$_GET['section'])	{
 }
 ?>
 
-<table class="ipaddress_subnet table-condensed table-auto" style='margin-top:20px;'>
+<!-- folder details upper table -->
+<h4><?php print _('Folder details'); ?></h4>
+<hr>
+
+<table class="ipaddress_subnet table-condensed table-auto" >
 
 	<tr>
 		<th><?php print _('Hierarchy'); ?></th>

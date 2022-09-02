@@ -45,16 +45,16 @@ if ($User->twofa_required()===false || $User->user->{'2fa'}==0) {
 	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script src="js/jquery-3.5.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-	<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-	<script>
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript" src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script src="js/dieIE.js"></script>
+	<script type="text/javascript" src="js/dieIE.js"></script>
 	<![endif]-->
 </head>
 

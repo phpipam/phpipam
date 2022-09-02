@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
 /* fix for ajax-loading tooltips */
 $('body').tooltip({ selector: '[rel=tooltip]' });
 </script>
@@ -119,7 +119,7 @@ $m = sizeof($addresses) -1;		//last address index
 
 # if no IP is configured only display free subnet!
 if ($addresses===false || sizeof($addresses)==0) {
-   	$unused = $Subnets->find_unused_addresses ($subnet, false, false);
+   	$unused = $Addresses->find_unused_addresses($Subnets->transform_to_decimal($subnet_detailed['network']), $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'], $empty=true );
 	print '<tr class="th"><td colspan="'.$colspan['empty'].'" class="unused">'.$unused['ip'].' (' .$Subnets->reformat_number($unused['hosts']).')</td></tr>'. "\n";
 }
 # print IP address
@@ -130,9 +130,9 @@ else {
        	#
 
        	# check gap between network address and first IP address
-       	if ( $n == 0 ) 																	{ $unused = $Subnets->find_unused_addresses ($subnet, false, $addresses[$n]->ip_addr); }
+       	if ( $n == 0 ) 																	{ $unused = $Addresses->find_unused_addresses ( $Subnets->transform_to_decimal($subnet_detailed['network']), $addresses[$n]->ip_addr, $subnet['mask']); }
        	# check unused space between IP addresses
-       	else 																			{ $unused = $Subnets->find_unused_addresses ($subnet, $addresses[$n-1]->ip_addr, $addresses[$n]->ip_addr);  }
+       	else 																			{ $unused = $Addresses->find_unused_addresses ( $addresses[$n-1]->ip_addr, $addresses[$n]->ip_addr, $subnet['mask'] );  }
 
        	# if there is some result for unused print it - if sort == ip_addr
 	    if ( $unused ) {
@@ -201,7 +201,7 @@ else {
 
        		# print info button for hover
        		if(in_array('note', $selected_ip_fields)) {
-        		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",$addresses[$n]->note)."'></i></td>"; }
+        		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",$addresses[$n]->note)."'></td>"; }
         		else 												{ print "<td class='narrow'></td>"; }
         	}
 
@@ -250,8 +250,8 @@ else {
 		if ( $n == $m )
 		{
 			# compressed?
-			if(isset($addresses[$n]->stopIP))	{ $unused = $Subnets->find_unused_addresses ($subnet, $addresses[$n]->stopIP,  false); }
-			else 								{ $unused = $Subnets->find_unused_addresses ($subnet, $addresses[$n]->ip_addr, false); }
+			if(isset($addresses[$n]->stopIP))	{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->stopIP,  $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'] ); }
+			else 								{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->ip_addr, $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'] ); }
 
         	if ( $unused  ) {
         		print "<tr class='th'>";

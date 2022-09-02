@@ -13,7 +13,7 @@ $Tools	    = new Tools ($Database);
 $Install 	= new Install ($Database);
 
 # reset url for base
-$url = $Install->createURL ();
+$url = $Result->createURL ();
 
 # If User is not available create fake user object for create_link!
 if(!is_object(@$User)) {
@@ -67,16 +67,16 @@ if($Install->check_db_connection(false) && $Install->check_table("vrf", false)) 
 	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script src="js/jquery-3.5.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-	<script src="js/install.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-	<script>
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript" src="js/install.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script src="js/dieIE.js"></script>
+	<script type="text/javascript" src="js/dieIE.js"></script>
 	<![endif]-->
 </head>
 

@@ -46,7 +46,7 @@ if(php_sapi_name()!="cli") 								{ die(json_encode(array("status"=>1, "error"=
 //check input parameters
 if(!isset($argv[1]) || !isset($argv[2]))				{ die(json_encode(array("status"=>1, "error"=>"Missing required input parameters"))); }
 // test to see if threading is available
-if( !PingThread::available($errmsg) ) 								{ die(json_encode(array("status"=>1, "error"=>"Threading is required for scanning subnets - Error: $errmsg\n"))); }
+if( !PingThread::available() ) 								{ die(json_encode(array("status"=>1, "error"=>"Threading is required for scanning subnets. Please recompile PHP with pcntl extension"))); }
 
 /**
  *	Create array of addresses to scan

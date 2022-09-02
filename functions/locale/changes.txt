@@ -4478,7 +4478,7 @@ msgstr ""
 msgid "Firewall address object"
 msgstr ""
 
-msgid "Availability"
+msgid "Avalibility"
 msgstr ""
 
 msgid "DNS info"

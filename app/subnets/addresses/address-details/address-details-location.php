@@ -2,7 +2,7 @@
 # verify that user is logged in
 $User->check_user_session();
 
-if($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
+if($User->get_module_permissions ("locations")<1) {
     $Result->show ("danger", _("You do not have permissions to access this module"), true);
 }
 # only if set

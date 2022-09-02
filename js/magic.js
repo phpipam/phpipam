@@ -183,12 +183,12 @@ $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropa
 
 /*    generate random password */
 function randomPass() {
-    var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890#_-![]=~";
+    var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     var pass = "";
     var x;
     var i;
     for(x=0; x<10; x++) {
-        i = Math.floor(Math.random() * 70);
+        i = Math.floor(Math.random() * 62);
         pass += chars.charAt(i);
     }
     return pass;
@@ -765,11 +765,9 @@ $(document).on('click', 'a#saveScanResults', function() {
 	showSpinner();
 	var script   = $(this).attr('data-script');
 	var subnetId = $(this).attr('data-subnetId');
-	var postData = "type="+script;
+	var postData = $('form.'+script+"-form").serialize();
 	var postData = postData+"&subnetId="+subnetId;
-	var postData = postData+"&"+$('form.'+script+"-form").serialize();
-	var postData = postData+"&canary=true";
-
+	var postData = postData+"&type="+script;
 	$.post('app/subnets/scan/subnet-scan-result.php', postData, function(data) {
         $('#subnetScanAddResult').html(data);
         //hide if success!
@@ -1424,15 +1422,6 @@ $('#clearLogs').click(function() {
     showSpinner();
     $.post('app/tools/logs/clear-logs.php', function(data) {
     	$('div.logs').html(data);
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//logs clear
-$('#clearChangeLogs').click(function() {
-    showSpinner();
-    $.post('app/tools/changelog/clear-logs.php', function(data) {
-        $('div.logs').html(data);
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;

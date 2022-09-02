@@ -19,7 +19,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 }
 ?>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
 	if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 

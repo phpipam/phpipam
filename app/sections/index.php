@@ -75,7 +75,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 	<!-- menu -->
 	<div class="collapse navbar-collapse" id="menu-collapse">
         <?php
-       # static?
+        # static?
         if($User->user->menuType=="Static") {
             # static menu
             include("menu/menu-static.php");
