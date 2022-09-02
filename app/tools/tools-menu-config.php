@@ -50,7 +50,7 @@ $tools_menu_items = array(
 						"routing"
                     );
 
-/*
+
 #custom
 $private_subpages = Config::get('private_subpages');
 if(is_array($private_subpages) && sizeof($private_subpages)>0) {
@@ -75,7 +75,7 @@ $tools_menu['User Menu'] = array();
 # Tools
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-search", 		"name"=>"Search", 		 		"href"=>"search", 		"description"=>"Search database Addresses, subnets and VLANs");
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-calculator",	"name"=>"IP calculator", 		"href"=>"ip-calculator","description"=>"IPv4v6 calculator for subnet calculations");
-$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-calculator",	"name"=>"Bandwidth calculator", "href"=>"ip-calculator/bw-calculator","description"=>"Bandwidth calculator");
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-calculator",	"name"=>"Bandwidth calculator", "href"=>"ip-calculator/bw-calculator","description"=>"Bandwidth calculator");/*
 if($User->settings->enableChangelog == 1)
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-clock-o", 		"name"=>"Changelog", 	 		"href"=>"changelog", 	"description"=>"Changelog for all network objects");
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-list", 			"name"=>"Log files", 			"href"=>"logs",		 	"description"=>"Browse phpipam log files");
