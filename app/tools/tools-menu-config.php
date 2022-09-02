@@ -47,10 +47,10 @@ $tools_menu_items = array(
 						'circuits',
 						'customers',
 						'duplicates',
-						"routing"
+						'routing'
                     );
 
-
+/*
 #custom
 $private_subpages = Config::get('private_subpages');
 if(is_array($private_subpages) && sizeof($private_subpages)>0) {
@@ -65,7 +65,7 @@ if(is_array($private_subpages) && sizeof($private_subpages)>0) {
         $tools_menu_items[] = $s;
     }
 }
-
+*/
 # arrays
 $tools_menu['Subnets']   = array();
 $tools_menu['Devices']   = array();
