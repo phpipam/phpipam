@@ -71,7 +71,7 @@ $tools_menu['Subnets']   = array();
 $tools_menu['Devices']   = array();
 $tools_menu['Tools']     = array();
 $tools_menu['User Menu'] = array();
-/*
+
 # Tools
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-search", 		"name"=>"Search", 		 		"href"=>"search", 		"description"=>"Search database Addresses, subnets and VLANs");
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-calculator",	"name"=>"IP calculator", 		"href"=>"ip-calculator","description"=>"IPv4v6 calculator for subnet calculations");
@@ -132,4 +132,4 @@ $tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-map", 	     "name"=>
 
 
 # user menu
-$tools_menu['User Menu'][] = array("show"=>true,	"icon"=>"fa-user", 		"name"=>"My account",  			"href"=>"user-menu", 	"description"=>"Manage your account");*/
+$tools_menu['User Menu'][] = array("show"=>true,	"icon"=>"fa-user", 		"name"=>"My account",  			"href"=>"user-menu", 	"description"=>"Manage your account");
