@@ -50,7 +50,7 @@ $tools_menu_items = array(
 						"routing"
                     );
 
-
+/*
 #custom
 $private_subpages = Config::get('private_subpages');
 if(is_array($private_subpages) && sizeof($private_subpages)>0) {
@@ -91,7 +91,7 @@ if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>0)
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-phone", 	  	"name"=>"PSTN prefixes",  		 "href"=>"pstn-prefixes", "description"=>"PSTN prefixes");
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-sitemap", 	  	"name"=>"MAC lookup",  		 	 "href"=>"mac-lookup", "description"=>"Lookup MAC address vendor");
 
-/*
+
 # Subnets
 if($User->settings->enableCustomers == 1 && $User->get_module_permissions ("customers")>0)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-users", 	 "name"=>"Customers",  	"href"=>"customers", 	"description"=>"Customers");
