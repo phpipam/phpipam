@@ -25,14 +25,18 @@ foreach($tools_menu as $k=>$tool) {
 		print "<li class='list-group-item $active'>";
 		# multiple hrefs ?
 		$href = explode("/", $t['href']);
-		if(sizeof($href)>0) {
+
+		if ($href[0]=="autodb") {
+			print "<a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
+		}
+		elseif(sizeof($href)>0) {
 			if(isset($href[1]))
-			print "<a href='".create_link("tools", $href[0], $href[1])."'><i class='fa fa-angle-right pull-right icon-gray'></i>".$t['name']."</a>";
+			print "<a href='".create_link("tools", $href[0], $href[1])."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
 			else
-			print "<a href='".create_link("tools", $href[0])."'><i class='fa fa-angle-right pull-right icon-gray'></i>".$t['name']."</a>";
+			print "<a href='".create_link("tools", $href[0])."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
 		}
 		else {
-			print "<a href='".create_link("tools", $t['href'])."'><i class='fa fa-angle-right pull-right icon-gray'></i>".$t['name']."</a>";
+			print "<a href='".create_link("tools", $t['href'])."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
 		}
 		print "</li>";
 	}

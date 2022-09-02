@@ -27,7 +27,20 @@ foreach($admin_menu as $k=>$tool) {
         }
 		# print
 		print "<li class='list-group-item $active'>";
-		print "<a href='".create_link("administration", $t['href'])."'><i class='fa fa-angle-right pull-right icon-gray'></i>".$t['name']."</a>";
+		$href = explode("/", $t['href']);
+
+		if ($href[0]=="autodb") {
+			print "<a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
+		}
+		elseif(sizeof($href)>0) {
+			if(isset($href[1]))
+			print "<a href='".create_link("administration", $href[0], $href[1])."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
+			else
+			print "<a href='".create_link("administration", $href[0])."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
+		}
+		else {
+			print "<a href='".create_link("administration", $t['href'])."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
+		}
 		print "</li>";
 	}
 	print "</ul>";

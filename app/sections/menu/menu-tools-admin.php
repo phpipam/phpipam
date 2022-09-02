@@ -31,7 +31,13 @@ if($User->is_admin(false)) {
 				} else {
 					$active = "";
 				}
-				print "<li class='$active'><a href='".create_link("administration",$i['href'])."'>".$i['name']."</a></li>";
+				$href = explode("/", $i['href']);
+				if ($href[0]=="autodb") {
+					print "<li class='$active'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($i['name'])."</a></li>";
+				}
+				else {
+					print "<li class='$active'><a href='".create_link("administration",$i['href'])."'>"._($i['name'])."</a></li>";
+				}
 			}
 		}
 	}

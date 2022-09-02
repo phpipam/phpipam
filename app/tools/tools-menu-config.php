@@ -99,9 +99,9 @@ $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-users",       "href"=
 $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-star",        "href"=>"favourites",                  "name"=>_("Favourite networks"),   "description"=>_("Favourite networks")];
 $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-sitemap",     "href"=>"subnets",                     "name"=>_("Subnets"),              "description"=>_("All subnets")];
 if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-cloud",       "href"=>"vlan",                        "name"=>_("VLAN"),                 "description"=>_("VLANs and belonging subnets")];
+$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-cloud",       "href"=>"autodb/tools/vlan",                        "name"=>_("VLAN"),                 "description"=>_("VLANs and belonging subnets")];
 if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R)
-$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-cloud",       "href"=>"vrf",                         "name"=>_("VRF"),                  "description"=>_("VRFs and belonging networks")];
+$tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-cloud",       "href"=>"autodb/tools/vrf",                         "name"=>_("VRF"),                  "description"=>_("VRFs and belonging networks")];
 if($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User::ACCESS_R)
 $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-exchange",    "href"=>"nat",                         "name"=>_("NAT"),                  "description"=>_("NAT translations")];
 if($User->settings->enableRouting==1 && $User->get_module_permissions ("routing")>=User::ACCESS_R)
@@ -121,13 +121,13 @@ $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-bullhorn",    "href"=
 
 # devices
 if($User->get_module_permissions ("devices")>=User::ACCESS_R)
-$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-desktop",     "href"=>"devices",                     "name"=>_("Devices"),              "description"=>_("All configured devices")];
+$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-desktop",     "href"=>"autodb/tools/devices",                     "name"=>_("Devices"),              "description"=>_("All configured devices")];
 if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>=User::ACCESS_R)
-$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-bars",        "href"=>"racks",                       "name"=>_("Racks"),                "description"=>_("Rack information")];
+$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-bars",        "href"=>"autodb/tools/racks",                       "name"=>_("Racks"),                "description"=>_("Rack information")];
 if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>=User::ACCESS_R)
-$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-random",      "href"=>"circuits",                    "name"=>_("Circuits"),             "description"=>_("Circuit information")];
-//if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>=User::ACCESS_R)
-//$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-map",         "href"=>"locations",                   "name"=>_("Locations"),            "description"=>_("Locations")];
+$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-random",      "href"=>"autodb/tools/circuits",                    "name"=>_("Circuits"),             "description"=>_("Circuit information")];
+if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>=User::ACCESS_R)
+$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-map",         "href"=>"autodb/tools/locations",                   "name"=>_("Locations"),            "description"=>_("Locations")];
 
 # user menu
 $tools_menu[_('User Menu')][] = ["show"=>true, "icon"=>"fa-user",        "href"=>"user-menu",                   "name"=>_("My account"),           "description"=>_("Manage your account")];

@@ -20,7 +20,7 @@ $tool_items["customers"] = array(
 if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
 $tool_items["vlan"] = array (
                         "name"=>"VLAN",
-                        "href"=>array("tools", "vlan"),
+                        "href"=>array("autodb","tools", "vlan"),
                         "title"=>"Show VLANs and belonging subnets",
                         "icon"=>"fa-cloud"
                         );
@@ -29,7 +29,7 @@ $tool_items["vlan"] = array (
 if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
 $tool_items["vrf"] = array(
                         "name"=>"VRF",
-                        "href"=>array("tools", "vrf"),
+                        "href"=>array("autodb","tools", "vrf"),
                         "title"=>"Show VRFs and belonging networks",
                         "icon"=>"fa-cloud"
                        );
@@ -65,7 +65,7 @@ $tool_items["dhcp"] = array (
 if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
 $tool_items["locations"] = array (
                         "name"=>"Locations",
-                        "href"=>array("tools", "locations"),
+                        "href"=>array("autodb","tools", "locations"),
                         "title"=>"Show locations",
                         "icon"=>"fa-map"
                         );
@@ -74,7 +74,7 @@ $tool_items["locations"] = array (
 if($User->get_module_permissions ("devices")>=User::ACCESS_R)
 $tool_items["devices"] = array (
                         "name"=>"Devices",
-                        "href"=>array("tools", "devices"),
+                        "href"=>array("autodb","tools", "devices"),
                         "title"=>"Show all configured devices",
                         "icon"=>"fa-desktop"
                         );
@@ -82,7 +82,7 @@ $tool_items["devices"] = array (
 if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
 $tool_items["racks"] = array (
                         "name"=>"Racks",
-                        "href"=>array("tools", "racks"),
+                        "href"=>array("autodb","tools", "racks"),
                         "title"=>"Show racks",
                         "icon"=>"fa-bars"
                         );
@@ -91,7 +91,7 @@ $tool_items["racks"] = array (
 if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>=User::ACCESS_R) {
 $tool_items["circuits"] = array (
                         "name"=>"Circuits",
-                        "href"=>array("tools", "circuits"),
+                        "href"=>array("autodb","tools", "circuits"),
                         "title"=>"Show circuits",
                         "icon"=>"fa-random"
                         );
@@ -215,12 +215,23 @@ $tool_items["search"] = array (
 
         print "<li rel='tooltip' title='"._($t['title'])."' data-placement='bottom' class='$active'>";
         // compact menu
-        if($User->user->menuCompact=="1") {
-            print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='hidden-xs fa $t[icon]'></i><span class='visible-xs'> <i class='fa $t[icon]'></i>"._($t['name'])."</span></a>";
-        }
-        else {
-            print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
-        }
+		if($User->user->menuCompact=="1") {
+			if ($t['href'][0]=="autodb") {
+				print "	 <a href='/".$t['href'][0]."/index.php?page=".$t['href'][1]."&section=".$t['href'][2]."'><i class='hidden-xs fa $t[icon]'></i><span class='visible-xs'> <i class='fa $t[icon]'></i>"._($t['name'])."</span></a>";
+			}
+			elseif(sizeof($t['href'])>0) {		
+
+				print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='hidden-xs fa $t[icon]'></i><span class='visible-xs'> <i class='fa $t[icon]'></i>"._($t['name'])."</span></a>";
+			}
+		}
+		else {
+			if ($t['href'][0]=="autodb") {
+				print " <a href='/".$t['href'][0]."/index.php?page=".$t['href'][1]."&section=".$t['href'][2]."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
+			}
+			elseif(sizeof($t['href'])>0) {	
+				print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
+			}
+		}
         print "</li>";
     }
     ?>

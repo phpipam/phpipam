@@ -36,9 +36,9 @@ if($User->settings->enableCustomers==1)
 $admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-users",          "href"=>"customers",              "name"=>_("Customers"),                "description"=>_("Customer management")];
 $admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-server",         "href"=>"sections",               "name"=>_("Sections"),                 "description"=>_("Section management")];
 $admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-sitemap",        "href"=>"subnets",                "name"=>_("Subnets"),                  "description"=>_("Subnet management")];
-$admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-cloud",          "href"=>"vlans",                  "name"=>_("VLAN"),                     "description"=>_("VLAN management")];
+$admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-cloud",          "href"=>"autodb/administration/vlans",                  "name"=>_("VLAN"),                     "description"=>_("VLAN management")];
 if($User->settings->enableVRF==1)
-$admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-cloud",          "href"=>"vrf",                    "name"=>_("VRF"),                      "description"=>_("VRF management")];
+$admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-cloud",          "href"=>"autodb/administration/vrf",                    "name"=>_("VRF"),                      "description"=>_("VRF management")];
 if($User->settings->enableNAT==1)
 $admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-exchange",       "href"=>"nat",                    "name"=>_("NAT"),                      "description"=>_("NAT settings")];
 if($User->settings->enableRouting==1)
@@ -57,15 +57,15 @@ $admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-filter", 
 $admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-magic",          "href"=>"custom-fields",          "name"=>_("Custom fields"),            "description"=>_("Manage custom fields")];
 
 # device managements
-$admin_menu[_('Device management')][] =     ["show"=>true, "icon"=>"fa-desktop",        "href"=>"devices",                "name"=>_("Devices"),                  "description"=>_("Device management")];
+$admin_menu[_('Device management')][] =     ["show"=>true, "icon"=>"fa-desktop",        "href"=>"autodb/administration/devices",                "name"=>_("Devices"),                  "description"=>_("Device management")];
 if($User->settings->enableRACK == 1)
-$admin_menu[_('Device management')][] =     ["show"=>true, "icon"=>"fa-bars",           "href"=>"racks",                  "name"=>_("Racks"),                    "description"=>_("Rack management")];
+$admin_menu[_('Device management')][] =     ["show"=>true, "icon"=>"fa-bars",           "href"=>"autodb/administration/racks",                  "name"=>_("Racks"),                    "description"=>_("Rack management")];
 if($User->settings->enableCircuits == 1)
-$admin_menu[_('Device management')][] =     ["show"=>true, "icon"=>"fa-random",         "href"=>"circuits",               "name"=>_("Circuits"),                 "description"=>_("Circuits management")];
+$admin_menu[_('Device management')][] =     ["show"=>true, "icon"=>"fa-random",         "href"=>"autodb/administration/circuits",               "name"=>_("Circuits"),                 "description"=>_("Circuits management")];
 if($User->settings->enableSNMP == 1)
 $admin_menu[_('Device management')][] =     ["show"=>true, "icon"=>"fa-cogs",           "href"=>"snmp",                   "name"=>_("SNMP"),                     "description"=>_("SNMP management")];
 if($User->settings->enableLocations == 1)
-//$admin_menu[_('Device management')][]  =    ["show"=>true, "icon"=>"fa-map",            "href"=>"locations",              "name"=>_("Locations"),                "description"=>_("Locations")];
+$admin_menu[_('Device management')][]  =    ["show"=>true, "icon"=>"fa-map",            "href"=>"autodb/administration/locations",              "name"=>_("Locations"),                "description"=>_("Locations")];
 
 # Tools
 $admin_menu[_('Tools')][] =                 ["show"=>true, "icon"=>"fa-check",          "href"=>"version-check",          "name"=>_("Version check"),            "description"=>_("Check for latest version of phpipam")];
