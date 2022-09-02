@@ -87,8 +87,8 @@ else {
 ?>
 
 
-<script src="functions/qrcodejs/qrcode.min.js"></script>
-<script>
+<script type="text/javascript" src="functions/qrcodejs/qrcode.min.js"></script>
+<script type="text/javascript">
 $(document).ready(function() {
 	/* bootstrap switch */
 	var switch_options = {

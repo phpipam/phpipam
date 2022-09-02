@@ -9,7 +9,7 @@ $User->check_user_session();
 
 <?php
 # check permissions
-if ($User->get_module_permissions ("pdns")>=User::ACCESS_R) {
+if ($User->get_module_permissions ("pdns")>0) {
 ?>
     <div class="powerDNS">
 

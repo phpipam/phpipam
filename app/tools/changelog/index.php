@@ -32,6 +32,7 @@ if($User->settings->enableChangelog == 1) {
 		$input_climit  = 50;
 	}
 ?>
+
 	<!-- filter -->
 	<div class="text-right">
 	<form name='cform' id='cform' class='form-inline'>
@@ -58,9 +59,6 @@ if($User->settings->enableChangelog == 1) {
 
 		</div>
 	</form>
-
-		<!-- clear log files -->
-		<button id="clearChangeLogs" class="btn btn-sm btn-default pull-left"><i class="fa fa-trash-o"></i> <?php print _('Clear logs'); ?></button>
 	</div>
 
 	<?php
@@ -70,3 +68,4 @@ if($User->settings->enableChangelog == 1) {
 else {
 	$Result->show("info",_("Change logging is disabled. You can enable it under administration")."!", false);
 }
+?>

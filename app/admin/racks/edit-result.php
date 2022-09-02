@@ -19,10 +19,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("racks", User::ACCESS_RW, true, true);
+    $User->check_module_permissions ("racks", 2, true, true);
 }
 else {
-    $User->check_module_permissions ("racks", User::ACCESS_RWA, true, true);
+    $User->check_module_permissions ("racks", 3, true, true);
 }
 
 # check maintaneance mode
@@ -100,7 +100,7 @@ if(sizeof($custom) > 0) {
 		}
 		//not null!
 		if($myField['Null']=="NO" && strlen($rack[$myField['name']])==0) {
-			{ $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
+																		{ $Result->show("danger", $myField['name'].'" can not be empty!', true); }
 		}
 		# save to update array
 		$update[$myField['name']] = $rack[$myField['name']];
@@ -122,14 +122,14 @@ if(isset($update)) {
 }
 
 # append location
-if ($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_RW) {
+if ($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>1) {
     if (is_numeric($_POST['location'])) {
         $values['location'] = $_POST['location'] > 0 ? $_POST['location'] : NULL;
     }
 }
 
 # append customerId
-if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_RW) {
+if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>1) {
     if (is_numeric($_POST['customer_id'])) {
         $values['customer_id'] = $_POST['customer_id'] > 0 ? $_POST['customer_id'] : NULL;
     }
@@ -137,7 +137,7 @@ if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cust
 
 # update rack
 if(!$Admin->object_modify("racks", $_POST['action'], "id", $values))	{}
-else { $Result->show("success", _("Rack")." ".$rack["action"]." "._("successful").'!', false); }
+else																	{ $Result->show("success", _("Rack $rack[action] successfull").'!', false); }
 
 if($_POST['action']=="delete"){
 	# remove all references from subnets and ip addresses

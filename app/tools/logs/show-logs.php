@@ -1,3 +1,14 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+
+	return false;
+});
+</script>
+
+
+<table id="logs" class="table sorted nosearch nopagination table-condensed table-hover table-top" style="margin-top:10px;" data-cookie-id-table="show_logs">
+
 <?php
 
 /**
@@ -5,7 +16,7 @@
  **********************************/
 
 /* required functions */
-if(!isset($User) || !is_object($User)) {
+if(!is_object($User)) {
 
 	/* functions */
 	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
@@ -28,17 +39,6 @@ if ( empty($_POST['Informational']) && empty($_POST['Notice']) && empty($_POST['
     $_POST['Warning']       = "Warning";
 }
 ?>
-
-<script>
-$(document).ready(function() {
-	if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
-
-	return false;
-});
-</script>
-
-
-<table id="logs" class="table sorted nosearch nopagination table-condensed table-hover table-top" style="margin-top:10px;" data-cookie-id-table="show_logs">
 
 <!-- print headers -->
 <thead>

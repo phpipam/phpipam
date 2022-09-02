@@ -19,10 +19,10 @@ $User->check_user_session();
 
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("circuits", User::ACCESS_RW, true, true);
+    $User->check_module_permissions ("circuits", 2, true, true);
 }
 else {
-    $User->check_module_permissions ("circuits", User::ACCESS_RWA, true, true);
+    $User->check_module_permissions ("circuits", 3, true, true);
 }
 
 # create csrf token
@@ -59,7 +59,7 @@ $all_locations     = $Tools->fetch_all_objects("locations", "name");
 
 # no providers
 if($circuit_providers===false) 	{
-	$btn = $User->get_module_permissions ("circuits")>=User::ACCESS_RWA ? "<hr><a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='add' data-providerid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add provider')."</a>" : "";
+	$btn = $User->get_module_permissions ("circuits")>2 ? "<hr><a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='add' data-providerid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add provider')."</a>" : "";
 	$Result->show("danger", _("No circuit providers configured."."<hr>".$btn), true, true);
 }
 
@@ -70,7 +70,7 @@ $all_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });
@@ -161,7 +161,7 @@ $(document).ready(function(){
 
 	<?php
     // customers
-    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>0) {
         // fetch customers
         $customers = $Tools->fetch_all_objects ("customers", "title");
         // print
@@ -193,10 +193,10 @@ $(document).ready(function(){
 	</tr>
 
 	<tr>
-		<td><?php print _("Point A"); ?></td>
+		<td>Point A</td>
 		<td>
 			<select name="device1" class="form-control input-w-auto input-sm">
-				<option value="0"><?php print _("None"); ?></option>
+				<option value="0">None</option>
 				<optgroup label="Devices">
 					<?php
 					if($all_devices!==false) {
@@ -224,10 +224,10 @@ $(document).ready(function(){
 	</tr>
 
 	<tr>
-		<td><?php print _("Point B"); ?></td>
+		<td>Point B</td>
 		<td>
 			<select name="device2" class="form-control input-w-auto input-sm">
-				<option value="0"><?php print _("None"); ?></option>
+				<option value="0">None</option>
 				<optgroup label="Devices">
 					<?php
 					if($all_devices!==false) {
@@ -284,8 +284,9 @@ $(document).ready(function(){
 			// readonly
 			$disabled = $readonly == "readonly" ? true : false;
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $circuit, $timepicker_index, $disabled);
-    		$timepicker_index = $custom_input['timepicker_index'];
+    		$custom_input = $Tools->create_custom_field_input ($field, $circuit, $_POST['action'], $timepicker_index, $disabled);
+    		// add datepicker index
+    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
             // print
 			print "<tr>";
 			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";

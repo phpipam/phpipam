@@ -2,19 +2,19 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("pstn", User::ACCESS_R, true, false);
+$User->check_module_permissions ("pstn", 1, true, false);
 ?>
 
 
 <div id="pieChart" style="height:220px;width:100%;"></div>
 
 <!-- charts -->
-<script src="js/flot/jquery.flot.js"></script>
-<script src="js/flot/jquery.flot.pie.js"></script>
-<!--[if lte IE 8]><script src="js/flot/excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js"></script>
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.pie.js"></script>
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot/excanvas.min.js"></script><![endif]-->
 
 
-<script>
+<script type="text/javascript">
 $(function () {
 	//data
     var data = [

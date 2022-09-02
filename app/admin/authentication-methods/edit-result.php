@@ -22,9 +22,8 @@ $User->check_maintaneance_mode ();
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
-# validate & remove csrf cookie
+# validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "authmethods", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-unset($_POST['csrf_cookie']);
 
 # get action
 $action = $_POST['action'];
@@ -44,29 +43,15 @@ $values = array(
 				"type"        =>$_POST['type'],
 				"description" =>@$_POST['description'],
 				);
-# remove processed params
+# add params
 unset($_POST['id'], $_POST['type'], $_POST['description'], $_POST['action']);
 $values["params"]=json_encode($_POST);
 
-#Verify that the private certificate and key are provided if Signing Authn Requests is set
-if($action!="delete" && @$_POST['spsignauthn']=="1" && (empty($_POST['spx509cert']) || empty($_POST['spx509key']))) {
-	$Result->show("danger",  _("SP (Client) certificate and key are required to sign Authn requests"), true);
-}
-
-$secure_keys=[
-	'adminUsername',
-	'adminPassword',
-	'secret',
-	'idpx509cert',
-	'spx509cert',
-	'spx509key'
-	];
 # log values
 $values_log = $values;
-# mask secure keys
-foreach($_POST as $key => $value) {
-	if(in_array($key, $secure_keys)){ $_POST[$key] = "********"; }
-}
+$_POST['adminUsername'] = "********";
+$_POST['adminPassword'] = "********";
+$_POST['secret']	 	= "********";
 $values_log["params"]=json_encode($_POST);
 
 # add - set protected

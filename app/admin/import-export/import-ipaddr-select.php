@@ -43,10 +43,6 @@ $extfields["device"]["pname"] = "device";
 $extfields["tag"]["table"] = "ipTags";
 $extfields["tag"]["field"] = "type";
 $extfields["tag"]["pname"] = "tag";
-// dolgin 6/29/2022 added location fields
-$extfields["location"]["table"] = "locations";
-$extfields["location"]["field"] = "name";
-$extfields["location"]["pname"] = "location";
 
 ## using the extra fields as a trick to display some nicer names for these regular fields
 $extfields["ip_addr"]["table"] = "ipaddresses";
@@ -60,7 +56,7 @@ $extfields["gateway"]["field"] = "is_gateway";
 $extfields["gateway"]["pname"] = "gateway";
 
 # required fields without which we will not continue
-$reqfields = array("section","ip_addr","subnet","location");
+$reqfields = array("section","ip_addr","subnet");
 
 # manually adjust the standard fields
 foreach($expfields as $std_field) {

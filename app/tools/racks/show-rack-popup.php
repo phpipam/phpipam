@@ -19,7 +19,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # verify module permissions
-$User->check_module_permissions ("racks", User::ACCESS_R, true, true);
+$User->check_module_permissions ("racks", 1, true, true);
 
 # check that rack support isenabled
 if ($User->settings->enableRACK!="1") {

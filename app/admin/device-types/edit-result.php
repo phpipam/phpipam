@@ -36,12 +36,8 @@ $values = array("tid"=>@$_POST['tid'],
 				"tdescription"=>@$_POST['tdescription']);
 
 # update
-if(!$Admin->object_modify("deviceTypes", $_POST['action'], "tid", $values)) {
-    $Result->show("danger", _("Failed to")." "._($_POST["action"])." "._("device type").'!', false);
-}
-else {
-    $Result->show("success", _("Device type")." "._($_POST["action"])." "._("successful").'!', false);
-}
+if(!$Admin->object_modify("deviceTypes", $_POST['action'], "tid", $values)) 	{ $Result->show("danger",  _("Failed to $_POST[action] device type").'!', false); }
+else 																			{ $Result->show("success", _("Device type $_POST[action] successfull").'!', false); }
 
 if($_POST['action']=="delete") {
     $Admin->remove_object_references ("devices", "type", $values["tid"]);

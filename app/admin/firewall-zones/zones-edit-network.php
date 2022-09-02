@@ -34,7 +34,7 @@ $sections = $Sections->fetch_all_sections();
 
 ?>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
 	/* bootstrap switch */
 	var switch_options = {

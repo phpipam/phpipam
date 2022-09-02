@@ -20,10 +20,10 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("vrf", User::ACCESS_RW, true, true);
+    $User->check_module_permissions ("vrf", 2, true, true);
 }
 else {
-    $User->check_module_permissions ("vrf", User::ACCESS_RWA, true, true);
+    $User->check_module_permissions ("vrf", 3, true, true);
 }
 
 # strip input tags
@@ -78,12 +78,9 @@ if($User->settings->enableCustomers=="1") {
 	}
 }
 # update
-if(!$Admin->object_modify("vrf", $_POST['action'], "vrfId", $values)) {
-    $Result->show("danger", _("Failed to")." ".$_POST["action"]." "._("VRF").'!', true);
-}
-else {
-    $Result->show("success", _("VRF")." ".$_POST["action"]." "._("successful").'!', false);
-}
+if(!$Admin->object_modify("vrf", $_POST['action'], "vrfId", $values))	{ $Result->show("danger",  _("Failed to $_POST[action] VRF").'!', true); }
+else																	{ $Result->show("success", _("VRF $_POST[action] successfull").'!', false); }
+
 
 # remove all references if delete
 if($_POST['action']=="delete") { $Admin->remove_object_references ("subnets", "vrfId", $_POST['vrfId']); }

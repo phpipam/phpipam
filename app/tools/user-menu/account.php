@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
 	/* bootstrap switch */
 	var switch_options = {

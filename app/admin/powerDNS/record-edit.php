@@ -19,10 +19,10 @@ $PowerDNS 	= new PowerDNS ($Database);
 $User->check_user_session();
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("pdns", User::ACCESS_RW, true, true);
+    $User->check_module_permissions ("pdns", 2, true, true);
 }
 else {
-    $User->check_module_permissions ("pdns", User::ACCESS_RWA, true, true);
+    $User->check_module_permissions ("pdns", 3, true, true);
 }
 
 # create csrf token
@@ -103,7 +103,7 @@ if (!isset($record)) {
 }
 
 // if IPv6 automaticall add AAAA record!
-if ($User->identify_address($record->content)=="IPv6" && $User->validate_ip($record->content)) {
+if ($User->identify_address($record->content)=="IPv6") {
     $record->type = "AAAA";
 }
 
@@ -156,7 +156,8 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 	<tr>
 		<td><?php print _('Content'); ?></td>
 		<td>
-			<input type="text" class="name form-control input-sm" name="content" placeholder="<?php print _('10.10.10.1'); ?>" value='<?php print $record->content; ?>' <?php print $readonly; ?>>
+			<input type="text" class="name form-control input-sm" name="content" placeholder="<?php print _('10.10.10.1'); ?>" value="<?php print $record->content; ?>" <?php print $readonly; ?>>
+
 		</td>
 	</tr>
 
@@ -209,7 +210,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<?php if($_POST['action']!=="delete" && isset($record->id) && $User->get_module_permissions ("pdns")>=User::ACCESS_RWA) { ?>
+		<?php if($_POST['action']!=="delete" && isset($record->id) && $User->get_module_permissions ("pdns")>2) { ?>
 		<button class="btn btn-sm btn-default btn-danger" id="editRecordSubmitDelete"><i class="fa fa-trash-o"></i> <?php print _("Delete"); ?></button>
 		<?php } ?>
 		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editRecordSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>

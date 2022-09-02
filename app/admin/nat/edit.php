@@ -18,10 +18,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
+    $User->check_module_permissions ("nat", 2, true, true);
 }
 else {
-    $User->check_module_permissions ("nat", User::ACCESS_RWA, true, true);
+    $User->check_module_permissions ("nat", 3, true, true);
 }
 
 # create csrf token
@@ -91,7 +91,7 @@ $custom = $Tools->fetch_custom_fields('nat');
         </tr>
 
     	<!-- Device -->
-        <?php if($User->get_module_permissions ("devices")>=User::ACCESS_R) { ?>
+        <?php if($User->get_module_permissions ("devices")>0) { ?>
     	<tr>
         	<th><?php print _('Device'); ?></th>
         	<td>
@@ -139,17 +139,17 @@ $custom = $Tools->fetch_custom_fields('nat');
                 ?>
             </td>
             <td>
-                <span class="text-muted"><?php print _("Create policy NAT"); ?></span>
+                <span class="text-muted"><?php print _("Use destination policy NAT"); ?></span>
             </td>
         </tr>
 
         <tr class='port'>
-            <th><?php print $nat->type=="source" ? _('Destination address') : _('Source address'); ?></th>
+            <th><?php print _('Destination address'); ?></th>
             <td>
                 <input type="text" class="form-control input-sm" name="policy_dst" value="<?php print $nat->policy_dst; ?>" placeholder='<?php print _('IP'); ?>' <?php print $readonly; ?>>
             </td>
             <td>
-                <span class="text-muted"><?php print $nat->type=="source" ? _('Destination') : _('Source'); print _(" address for policy NAT"); ?></span>
+                <span class="text-muted"><?php print _("Destination address for policy NAT"); ?></span>
             </td>
         </tr>
 
@@ -157,7 +157,7 @@ $custom = $Tools->fetch_custom_fields('nat');
         	<td colspan="3"><hr></td>
     	</tr>
     	<tr>
-        	<th><?php print $nat->type=="destination" ? _('Destination objects') : _('Source objects'); ?></th>
+        	<th><?php print _('Source objects'); ?></th>
         	<td class='nat-src'>
             	<?php
                 // print sources
@@ -194,7 +194,7 @@ $custom = $Tools->fetch_custom_fields('nat');
         	<td colspan="3"><hr></td>
     	</tr>
     	<tr>
-            <th><?php print _('Translated objects'); ?></th>
+        	<th><?php print _('Destination objects'); ?></th>
         	<td class='nat-dst'>
             	<?php
                 // print sources
@@ -265,8 +265,9 @@ $custom = $Tools->fetch_custom_fields('nat');
             # all my fields
             foreach($custom as $field) {
                 // create input > result is array (required, input(html), timepicker_index)
-                $custom_input = $Tools->create_custom_field_input ($field, $nat, $timepicker_index);
-                $timepicker_index = $custom_input['timepicker_index'];
+                $custom_input = $Tools->create_custom_field_input ($field, $nat, $_POST['action'], $timepicker_index);
+                // add datepicker index
+                $timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
                 // print
                 print "<tr>";
                 print " <th>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</th>";

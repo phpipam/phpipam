@@ -36,7 +36,7 @@ $User->check_user_session();
 <script src="js/uploader/jquery.iframe-transport.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 <script src="js/uploader/jquery.fileupload.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
-<script>
+<script type="text/javascript">
 $(function(){
 
 	$('#drop a').click(function(){

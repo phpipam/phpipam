@@ -55,7 +55,7 @@ print "<br><br><br>";
 if ($counters['edit'] > 0) {
 ?>
 
-	<script>
+	<script type="text/javascript">
 	$(function(){
 		$('#dataImportSubmit').removeAttr('disabled');
 		$('#dataImportSubmit').removeClass('btn-default');

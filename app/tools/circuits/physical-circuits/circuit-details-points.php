@@ -1,10 +1,7 @@
 <?php
 
-# Check we have been included and not called directly
-require( dirname(__FILE__) . '/../../../../functions/include-only.php' );
-
 # perm check
-$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
+$User->check_module_permissions ("circuits", 1, true, false);
 
 // title
 print "<h4>"._('Connections')."</h4>";
@@ -128,8 +125,8 @@ print "<table class='table table-condensed table-top'>";
 	// headers
 	print "<tr>";
 	print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'></th>";
-	print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'><img src='css/images/red-dot.png' alt='"._("Red locator pin")."' style='height:18px;'> "._("Point A")."</th>";
-	print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'><img src='css/images/blue-dot.png' alt='"._("Blue locator pin")."' style='height:18px;'> "._("Point B")."</th>";
+	print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'><img src='css/images/red-dot.png' style='height:18px;'> "._("Point A")."</th>";
+	print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'><img src='css/images/blue-dot.png' style='height:18px;'> "._("Point B")."</th>";
 	print "</tr>";
 
 	// type

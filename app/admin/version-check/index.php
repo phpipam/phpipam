@@ -14,7 +14,7 @@ else {
 	//print result
 	if(VERSION_VISIBLE == $version) 		{ $Result->show("success", _('Latest version').' ('. VERSION_VISIBLE .') '._('already installed').'!', false); }
 	else if (VERSION_VISIBLE > $version) 	{ $Result->show("success", _('Development version').' ('. VERSION_VISIBLE .') '._('installed! Latest production version is').' '. $version, false);}
-	else 									{ $Result->show("danger",  _('New version of phpipam available').':</b><hr>'._('Installed version').': '.VERSION_VISIBLE."<br>"._('Available version').': '. $version."<br><br>"._('You can download new version'). " <a href='https://github.com/phpipam/phpipam/releases/tag/v$version'>"._('GitHub').'</a>' . ' ( '._('archive').' <a href="https://sourceforge.net/projects/phpipam/files/current/phpipam-'. $version .'.tar/download">'._('SourceForge').'</a> ).', false); }
+	else 									{ $Result->show("danger",  _('New version of phpipam available').':</b><hr>'._('Installed version').': '.VERSION_VISIBLE."<br>"._('Available version').': '. $version."<br><br>"._('You can download new version').' <a href="https://sourceforge.net/projects/phpipam/files/current/phpipam-'. $version .'.tar/download">'._('here').'</a>.', false); }
 }
 
 # release and commit logs
@@ -65,16 +65,16 @@ if (VERSION_VISIBLE > $version) {
 	print "<div class='log-print gitlog' style='display:none'>";
 
 	# check
-	$commit_log = shell_exec("git log -n100");
+	$commit_log = shell_exec("git log");
 
-	if (!is_string($commit_log)) {
+	if ($commit_log=="NULL") {
 		$Result->show("info", "Git not available", false);
 	}
 	else {
 		// title
-		print "<h4 style='margin-top:40px;'>Commit log (local) [Last 100]</h4><hr>";
+		print "<h4 style='margin-top:40px;'>Commit log (local)</h4><hr>";
 		// split commits
-		$commit_log = preg_split('/\r?\ncommit /', "\n".$commit_log, null, PREG_SPLIT_NO_EMPTY);
+		$commit_log = array_filter(explode("commit ", $commit_log));
 
 		// loop
 		foreach ($commit_log as $commit) {
@@ -85,23 +85,21 @@ if (VERSION_VISIBLE > $version) {
 			$out['commit'] = $lines[0];
 			// remove unneeded
 			foreach ($lines as $k=>$l) {
-				if     (strpos($l, "Author: ")===0)	{ $out['author'] = substr($l, 7);	unset($lines[$k]); }
-				elseif (strpos($l, "Date: ")===0)	{ $out['date'] = substr($l, 7);     unset($lines[$k]); }
-				elseif (strpos($l, "Merge: ")===0)	{ $out['pr'] = $l;	unset($lines[$k]); }
-				elseif (strlen(trim($l))==0)		{ unset($lines[$k]); }
+				if (strpos($l, "Author")!==false)		{ $out['author'] = substr($l, 7);	unset($lines[$k]); }
+				elseif (strpos($l, "Date")!==false)		{ $out['date'] = substr($l, 7);     unset($lines[$k]); }
+				elseif (strpos($l, "Merge:")!==false)	{ $out['pr'] = $l;	unset($lines[$k]); }
+				elseif (strlen(trim($l))==0)			{ unset($lines[$k]); }
 				unset($lines[0]);
 			}
 			// merge
-			foreach ($lines as $i => $line)
-				$lines[$i] = escape_input($line);
 			$lines = implode("<br>", array_filter($lines));
 
 			// title
-			print "<h5><i class='fa fa-angle-double-right'></i> ".escape_input($out['commit'])."</h5>";
+			print "<h5><i class='fa fa-angle-double-right'></i> $out[commit]</h5>";
 			// date
 			print "<div style='padding-left:20px;margin-bottom:20px;'>";
-			print escape_input($out['author'])." <span class='text-muted'>(pushed on ".escape_input($out['date']).")</span>";
-			print "<div style='padding:10px;max-width:400px;border-radius:6px;border:1px solid #ddd;'>".$lines."</div>";
+			print "$out[author] <span class='text-muted'>(pushed on $out[date])</span>";
+			print "<div style='padding:10px;max-width:400px;border-radius:6px;border:1px solid #ddd;'>$lines</div>";
 			// tag
 			print "<a class='btn btn-xs btn-default' style='margin-top:3px;' href='https://github.com/phpipam/phpipam/commit/$out[commit]' target='_blank'>View</a>";
 			print "</div>";

@@ -70,7 +70,7 @@ print "<br><br><br>";
 if (($counters['add'] > 0) || ($counters['edit'] > 0)) {
 ?>
 
-	<script>
+	<script type="text/javascript">
 	$(function(){
 		$('#dataImportSubmit').removeAttr('disabled');
 		$('#dataImportSubmit').removeClass('btn-default');

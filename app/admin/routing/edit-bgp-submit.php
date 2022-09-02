@@ -5,7 +5,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
+$Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -17,10 +17,10 @@ $User->Crypto->csrf_cookie ("validate", "routing_bgp", $_POST['csrf_cookie']) ==
 
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("routing", User::ACCESS_RW, true, true);
+    $User->check_module_permissions ("routing", 2, true, true);
 }
 else {
-    $User->check_module_permissions ("routing", User::ACCESS_RWA, true, true);
+    $User->check_module_permissions ("routing", 3, true, true);
 }
 
 # validate
@@ -36,15 +36,15 @@ if ($_POST['action']=="edit" || $_POST['action']=="delete") {
 
 # permission recheck for modules
 if(isset($_POST['vrf_id'])) {
-	if( $User->get_module_permissions ("vrf")==User::ACCESS_NONE)  		{ $Result->show("danger",  _("Insufficient permissions for module VRF"), true); }
+	if( $User->get_module_permissions ("vrf")==0)  		{ $Result->show("danger",  _("Insufficient permissions for module VRF"), true); }
 	if(!is_numeric($_POST['vrf_id']))  					{ $Result->show("danger",  _("Invalid VRF ID"), true); }
 }
 if(isset($_POST['circuit_id'])) {
-	if( $User->get_module_permissions ("circuits")==User::ACCESS_NONE)  { $Result->show("danger",  _("Insufficient permissions for module Circuits"), true); }
+	if( $User->get_module_permissions ("circuits")==0)  { $Result->show("danger",  _("Insufficient permissions for module Circuits"), true); }
 	if(!is_numeric($_POST['circuit_id']))  				{ $Result->show("danger",  _("Invalid Circuits ID"), true); }
 }
 if(isset($_POST['customer_id'])) {
-	if( $User->get_module_permissions ("customers")==User::ACCESS_NONE) { $Result->show("danger",  _("Insufficient permissions for module Customers"), true); }
+	if( $User->get_module_permissions ("customers")==0) { $Result->show("danger",  _("Insufficient permissions for module Customers"), true); }
 	if(!is_numeric($_POST['customer_id']))  			{ $Result->show("danger",  _("Invalid Customer ID"), true); }
 }
 
@@ -73,12 +73,8 @@ if(isset($_POST['customer_id'])) {
 
 
 # execute update
-if(!$Admin->object_modify ("routing_bgp", $_POST['action'], "id", $values)) {
-    $Result->show("danger", _("BGP")." ".$_POST["action"]." "._("failed"), false);
-}
-else {
-    $Result->show("success", _("BGP")." ".$_POST["action"]." "._("successful"), false);
-}
+if(!$Admin->object_modify ("routing_bgp", $_POST['action'], "id", $values))  { $Result->show("danger",  _("BGP $_POST[action] failed"), false); }
+else																 		 { $Result->show("success", _("BGP $_POST[action] successful"), false); }
 
 # add
 if($_POST['action']=="add") {

@@ -20,10 +20,10 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("l2dom", User::ACCESS_RW, true, false);
+    $User->check_module_permissions ("vlan", 2, true, false);
 }
 else {
-    $User->check_module_permissions ("l2dom", User::ACCESS_RWA, true, false);
+    $User->check_module_permissions ("vlan", 3, true, false);
 }
 
 # strip input tags
@@ -67,7 +67,7 @@ $values = array(
 
 # update domain
 if(!$Admin->object_modify("vlanDomains", $_POST['action'], "id", $values))	{}
-else { $Result->show("success", _("Domain")." ".$_POST["action"]." "._("successful").'!', false); }
+else																		{ $Result->show("success", _("Domain $_POST[action] successfull").'!', false); }
 
 # if delete move all vlans to default domain!
 if($_POST['action']=="delete") {

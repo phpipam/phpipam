@@ -161,23 +161,23 @@ else {
 
 
 <article style='margin-top:50px;' class="text-muted">
-<?php print _("phpIPAM supports two-factor-authentication to add additional security layer for user authentication."); ?>
+phpIPAM supports two-factor-authentication to add additional security layer for user authentication.
 <br>
-<?php print _("After user successfully logs in it will be presented with additional screen to enter code from Google authenticator application."); ?>
+After user successfully logs in it will be presented with additional screen to enter code from Google authenticator application.
 <br><br>
-<?php print _("Google Authenticator is available on following links based on your OS:"); ?>
+Google Authenticator is available on following links based on your OS:
 <ul>
 	<li> <a href='https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8' target="_self">Apple iOS</a></li>
 	<li> <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_self">Android</a></li>
 </ul>
-<?php print _("You can also use Microsoft or any other otp provider."); ?>
+You can also use Microsoft or any other otp provider.
 </article>
 
 
 
 
 
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
 	/* bootstrap switch */
 	var switch_options = {

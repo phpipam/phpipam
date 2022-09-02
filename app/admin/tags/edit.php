@@ -37,9 +37,9 @@ if($_POST['action']!="add") {
 }
 ?>
 
-<script src="js/bootstrap-colorpicker.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<script type="text/javascript" src="js/bootstrap-colorpicker.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-colorpicker.min.css?v=<?php print SCRIPT_PREFIX; ?>">
-<script>
+<script type="text/javascript">
 $(function(){
     $('.select-bgcolor').colorpicker();
 });

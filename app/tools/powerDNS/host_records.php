@@ -54,7 +54,7 @@ else {
 <!-- Headers -->
 <thead>
 <tr>
-    <?php if($User->get_module_permissions ("pdns")>=User::ACCESS_RW) { ?>
+    <?php if($User->get_module_permissions ("pdns")>1) { ?>
 	<th></th>
     <?php } ?>
     <th><?php print _('Name'); ?></th>
@@ -77,11 +77,11 @@ function print_record ($r) {
 
 	print "<tr class='$trclass'>";
 	// actions
-    if($User->get_module_permissions ("pdns")>=User::ACCESS_RW) {
+    if($User->get_module_permissions ("pdns")>1) {
 	print "	<td>";
 	print "	<div class='btn-group'>";
 	print "		<button class='btn btn-default btn-xs editRecord' data-action='edit'   data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-pencil'></i></button>";
-    if($User->get_module_permissions ("pdns")>=User::ACCESS_RWA)
+    if($User->get_module_permissions ("pdns")>2)
 	print "		<button class='btn btn-default btn-xs editRecord' data-action='delete' data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-remove'></i></button>";
 	print "	</div>";
 	print "	</td>";
