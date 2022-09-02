@@ -23,7 +23,7 @@
 
 # verify that user is logged in
 $User->check_user_session();
-/*
+
 # fetch all sections
 $sections = $Sections->fetch_all_sections ();
 
@@ -75,7 +75,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 	<!-- menu -->
 	<div class="collapse navbar-collapse" id="menu-collapse">
         <?php
-        # static?
+       /* # static?
         if($User->user->menuType=="Static") {
             # static menu
             include("menu/menu-static.php");
@@ -95,8 +95,8 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 
             # tools and admin menu
             include("menu/menu-tools-admin.php");
-        }
+        }*/
         ?>
 	</div>	 <!-- end menu div -->
 </nav>
-</div>*/
+</div>
