@@ -23,7 +23,7 @@
 
 # verify that user is logged in
 $User->check_user_session();
-
+/*
 # fetch all sections
 $sections = $Sections->fetch_all_sections ();
 
@@ -99,4 +99,4 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
         ?>
 	</div>	 <!-- end menu div -->
 </nav>
-</div>
+</div>*/
