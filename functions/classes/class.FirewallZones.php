@@ -147,7 +147,7 @@ class FirewallZones extends Common_functions {
 			} elseif($zoneGenerator == 1) {
 				# the highest convertable integer value for dechex() is 4294967295!
 				if($zoneName > 4294967295) {
-					return $this->Result->show("danger", _("The maximum convertable vlaue is reached. Consider to switch to decimal or text mode and change the zone name length value."), true);
+					return $this->Result->show("danger", _("The maximum convertable value is reached. Consider to switch to decimal or text mode and change the zone name length value."), true);
 				}
 				if(strlen(dechex($zoneName)) > $zoneLength){
 					return $this->Result->show("danger", _("Maximum zone name length reached! Consider to change your settings in order to generate larger zone names."), true);
@@ -192,7 +192,7 @@ class FirewallZones extends Common_functions {
 
 		if ($uniqueZone[0]->zone && $firewallZoneSettings['strictMode'] == 'on') {
 
-			$this->Result->show("danger", _("Error: The zone name ".$uniqueZone[0]->zone." is not unique!"), false);
+			$this->Result->show("danger", _("Error: The zone name")." ".$uniqueZone[0]->zone." "._("is not unique")."!", false);
 
 		} else {
 			# set the initial zone name to "1"
@@ -556,14 +556,14 @@ class FirewallZones extends Common_functions {
 
 		# build html output
 		print '<table class="table table-auto table-condensed" style="margin-bottom:0px;">';
-		print "<tr><td colspan='2'><h4>Zone details</h4><hr></td></tr>";
+		print "<tr><td colspan='2'><h4>"._("Zone details")."</h4><hr></td></tr>";
 		print '<tr>';
 		print '<td style="width:110px;">'._('Zone Name').'</td>';
 		print '<td>'.$zoneInformation->zone.'</td>';
 		print '</tr>';
 		print '<tr>';
 		print '<td>'._('Indicator').'</td>';
-		$title = $zoneInformation->indicator == 0 ? 'Own Zone' : 'Customer Zone';
+		$title = $zoneInformation->indicator == 0 ? _("Own Zone") : _("Customer Zone");
 		print '<td><span class="fa fa-home"  title="'._($title).'"></span></td>';
 		print '</tr>';
 		print '<tr>';
@@ -574,7 +574,7 @@ class FirewallZones extends Common_functions {
 		// networks
 		if ($zoneInformation->network) {
 			print "<table class='table table-condensed' style='margin-bottom:30px;'>";
-			print "<tr><td colspan='2'><br><h4>Subnets</h4><hr></td></tr>";
+			print "<tr><td colspan='2'><br><h4>"._("Subnets")."</h4><hr></td></tr>";
 			print '<tr>';
 			print '<th>'._('Subnet').'</th>';
 			print '<th>'._('VLAN').'</th>';
@@ -638,7 +638,7 @@ class FirewallZones extends Common_functions {
 			print "</a>";
 
 			if ($network->subnetIsFolder == 1) {
-				print 'Folder: '.$network->subnetDescription;
+				print _("Folder").": ".$network->subnetDescription;
 			} else {
 				# display network information with or without description
 				if ($network->subnetDescription) 	{	print $this->Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.' ('.$network->subnetDescription.')</td>';	}
@@ -669,7 +669,7 @@ class FirewallZones extends Common_functions {
 			# return dummy value
 			return 'success';
 		} else {
-			$this->Result->show("danger","<strong>"._('Error').":</strong><br>"._("This network is already bound to this or another zone.<br>The binding must be unique."), false);
+			$this->Result->show("danger","<strong>"._('Error').":</strong><br>"._("This network is already bound to this or another zone.")."<br>"._("The binding must be unique."), false);
 			return false;
 		}
 		# return dummy value
@@ -702,7 +702,7 @@ class FirewallZones extends Common_functions {
 			# throw exception
 			catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 		} else {
-			$this->Result->show("danger","<strong>"._('Error').":</strong><br>"._("This network is already bound to this or another zone.<br>The binding must be unique."), false);
+			$this->Result->show("danger","<strong>"._('Error').":</strong><br>"._("This network is already bound to this or another zone.")."<br>"._("The binding must be unique."), false);
 			return false;
 		}
 		# return dummy value
@@ -783,7 +783,7 @@ class FirewallZones extends Common_functions {
 		try { $this->Database->insertObject("firewallZones", $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "Firewall zone created", "Failed to add new firewall zone<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone create"), _("Failed to add new firewall zone").".<hr>".$e->getMessage(), 2, $this->User->username);
 			return false;
 		}
 
@@ -824,11 +824,11 @@ class FirewallZones extends Common_functions {
 		try { $this->Database->updateObject("firewallZones", $values, "id"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "Firewall zone edited", "Failed to edit firewall zone<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone edit"), _("Failed to edit firewall zone").".<hr>".$e->getMessage(), 2, $this->User->username);
 			return false;
 		}
 		# ok
-		$this->Log->write( "Firewall zone edited", "Firewall zone edited<hr>".$this->array_to_log($values), 0, $this->User->username);
+		$this->Log->write( _("Firewall zone edit"), _("Firewall zone edited").".<hr>".$this->array_to_log($values), 0, $this->User->username);
 		return true;
 	}
 
@@ -847,7 +847,7 @@ class FirewallZones extends Common_functions {
 		# delete mappings
 		try { $this->Database->deleteRow("firewallZoneMapping", "zoneId", $id); }
 		catch (Exception $e) {
-			$this->Log->write( "Firewall zone and mappings delete", "Failed to delete firewall zone mappfings of $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone and mappings delete"), _("Failed to delete firewall zone mappings of")." $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
@@ -855,12 +855,12 @@ class FirewallZones extends Common_functions {
 		# delete zone
 		try { $this->Database->deleteRow("firewallZones", "id", $id); }
 		catch (Exception $e) {
-			$this->Log->write( "Firewall zone delete", "Failed to delete firewall zone $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone delete"), _("Failed to delete firewall zone")." $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 		# ok
-		$this->Log->write( "Firewall zone deleted", "Firewall zone ".$old_zone->zone." deleted<hr>".$this->array_to_log($old_subnet), 0, $this->User->username);
+		$this->Log->write( _("Firewall zone delete"), _("Firewall zone")." ".$old_zone->zone." "._("deleted").".<hr>".$this->array_to_log($old_subnet), 0, $this->User->username);
 
 		return true;
 	}
@@ -904,11 +904,11 @@ class FirewallZones extends Common_functions {
 		try { $this->Database->insertObject("firewallZoneMapping", $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "Firewall zone mapping created", "Failed to add new firewall zone mapping<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone mapping create"), _("Failed to add new firewall zone mapping").".<hr>".$e->getMessage(), 2, $this->User->username);
 			return false;
 		}
 		# ok
-		$this->Log->write( "Firewall zone mapping created", "New firewall zone mapping created<hr>".$this->array_to_log($values), 0, $this->User->username);
+		$this->Log->write( _("Firewall zone mapping create"), _("New firewall zone mapping created").".<hr>".$this->array_to_log($values), 0, $this->User->username);
 		return true;
 	}
 
@@ -925,11 +925,11 @@ class FirewallZones extends Common_functions {
 		try { $this->Database->updateObject("firewallZoneMapping", $values, "id"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "Firewall zone mapping edited", "Failed to edit firewall zone mapping<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone mapping edit"), _("Failed to edit firewall zone mapping").".<hr>".$e->getMessage(), 2, $this->User->username);
 			return false;
 		}
 		# ok
-		$this->Log->write( "Firewall zone mapping edited", "Firewall zone mapping edited<hr>".$this->array_to_log($values), 0, $this->User->username);
+		$this->Log->write( _("Firewall zone mapping edit"), _("Firewall zone mapping edited").".<hr>".$this->array_to_log($values), 0, $this->User->username);
 		return true;
 	}
 
@@ -948,12 +948,12 @@ class FirewallZones extends Common_functions {
 		# delete mapping
 		try { $this->Database->deleteRow("firewallZoneMapping", "id", $id); }
 		catch (Exception $e) {
-			$this->Log->write( "Firewall zone mapping delete", "Failed to delete firewall zone mapping $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone mapping delete"), _("Failed to delete firewall zone mapping")." ".$old_zone->zone.".<hr>".$e->getMessage(), 2, $this->User->username);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 		# ok
-		$this->Log->write( "Firewall zone mapping deleted", "Firewall zone mapping ".$old_zone->zone." deleted<hr>".$this->array_to_log($old_subnet), 0, $this->User->username);
+		$this->Log->write( _("Firewall zone mapping delete"), _("Firewall zone mapping")." ".$old_zone->zone." "._("deleted").".<hr>".$this->array_to_log($old_subnet), 0, $this->User->username);
 
 		return true;
 	}
@@ -1027,7 +1027,7 @@ class FirewallZones extends Common_functions {
 			# write changelog
 			$this->Log->write_changelog('subnet', 'edit', 'success', $subnet_old,$subnet);
 
-			return ture;
+			return true;
 		}
 		return false;
 	}
@@ -1146,7 +1146,7 @@ class FirewallZones extends Common_functions {
 			# write changelog
 			$this->Log->write_changelog('ip_addr', 'edit', 'success', (array)$address_old,(array)$address);
 
-			return ture;
+			return true;
 		}
 
 		return false;

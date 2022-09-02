@@ -34,7 +34,7 @@ function complete_search_cidr($search_cidr) {
         return $search_cidr;
 
     # Complete the 'search' cidr by guessing the mask, IPv4 only...
-    $ipv4 = array_filter(explode('.', $search_cidr));
+    $ipv4 = array_filter(explode('.', $search_cidr), 'strlen');
     $search_cidr = implode('.', $ipv4);
 
     switch (sizeof($ipv4)) {

@@ -20,7 +20,7 @@ if($User->is_admin(false)) {
 	# print admin items
 	foreach($admin_menu as $k=>$item) {
 		# header
-		print "<li class='nav-header'>"._($k)."</li>";
+		print "<li class='nav-header'>".$k."</li>";
 		# items
 		foreach($item as $i) {
 			# only selected
@@ -31,13 +31,7 @@ if($User->is_admin(false)) {
 				} else {
 					$active = "";
 				}
-				$href = explode("/", $i['href']);
-				if ($href[0]=="autodb") {
-					print "<li class='$active'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($i['name'])."</a></li>";
-				}
-				else {
-					print "<li class='$active'><a href='".create_link("administration",$i['href'])."'>"._($i['name'])."</a></li>";
-				}
+				print "<li class='$active'><a href='".create_link("administration",$i['href'])."'>".$i['name']."</a></li>";
 			}
 		}
 	}
@@ -65,7 +59,7 @@ if($User->is_admin(false)) {
 			$m=0;
 			foreach($tools_menu as $k=>$item) {
 				# header
-				print "<li class='nav-header'>"._($k)."</li>";
+				print "<li class='nav-header'>".$k."</li>";
 				# items
 				foreach($item as $i) {
 					# only active
@@ -73,18 +67,10 @@ if($User->is_admin(false)) {
 						# active?
 						if($_GET['page']=="tools") {
 							$active = $_GET['section']==$i['href'] ? "active" : "";
-						} 
-						else {
+						} else {
 							$active = "";
 						}
-						$href = explode("/", $i['href']);
-						if ($href[0]=="autodb") {
-							print "<li class='$active'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($i['name'])."</a></li>";
-						}
-						else {
-							print "<li class='$active'><a href='".create_link("tools",$i['href'])."'>"._($i['name'])."</a></li>";
-						}
-						
+						print "<li class='$active'><a href='".create_link("tools",$i['href'])."'>".$i['name']."</a></li>";
 					}
 				}
 			}
@@ -125,7 +111,7 @@ if($User->is_admin(false)) {
 	</li>
 
 	<!-- tools -->
-	<li class="tools dropdown <?php if(@$_GET['page']=="tools") { print " active"; } ?>">
+	<li class="tools dropdown <?php if(@$_GET['page']=="tools") { print " ac1tive"; } ?>">
 		<a class="dropdown-toggle icon-li" data-toggle="dropdown" href="" rel='tooltip' data-placement='bottom' title='<?php print _('Show tools menu'); ?>'><i class="fa fa-wrench"></i></a>
 		<ul class="dropdown-menu admin tools_dropdown">
 			<!-- public -->
@@ -139,7 +125,7 @@ if($User->is_admin(false)) {
 			# print tools items
 			foreach($tools_menu as $k=>$item) {
 				# header
-				print "<li class='nav-header'>"._($k)."</li>";
+				print "<li class='nav-header'>".$k."</li>";
 				# items
 				foreach($item as $i) {
 					# only selected
@@ -150,13 +136,7 @@ if($User->is_admin(false)) {
 						} else {
 							$active = "";
 						}
-						list($l0, $l1,$l2) = explode('/', $i['href']);
-						if ($l0=="autodb") {
-							print "<li class='$active'><a href='/".$l0."/index.php?page=".$l1."&section=".$l2."'>"._($i['name'])."</a></li>";
-						}
-						else {
-						print "<li class='$active'><a href='".create_link("tools",$l0, $l1)."'>"._($i['name'])."</a></li>";
-						}
+						print "<li class='$active'><a href='".create_link("tools",$i['href'])."'>".$i['name']."</a></li>";
 					}
 				}
 			}

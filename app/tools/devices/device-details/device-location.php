@@ -1,7 +1,7 @@
 <?php
 
 # location
-if ($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0 && $User->get_module_permissions ("devices")>0) {
+if ($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
 
     print "<h4>"._('Location')."</h4><hr>";
 

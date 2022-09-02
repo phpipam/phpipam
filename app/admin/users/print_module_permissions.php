@@ -29,6 +29,9 @@ print "<table class='table-noborder popover_table'>";
 // VLAN
 print "<tr><td>"._("VLAN")."</td><td>".$User->print_permission_badge($user['perm_vlan'])."</td></tr>";
 
+// L2Domains
+print "<tr><td>"._("L2Domains")."</td><td>".$User->print_permission_badge($user['perm_l2dom'])."</td></tr>";
+
 // VRF
 print "<tr><td>"._("VRF")."</td><td>".$User->print_permission_badge($user['perm_vrf'])."</td></tr>";
 
@@ -66,5 +69,9 @@ print "<tr><td>"._("PSTN")."</td><td>".$User->print_permission_badge($user['perm
 // routing
 if ($User->settings->enableRouting==1)
 print "<tr><td>"._("Routing")."</td><td>".$User->print_permission_badge($user['perm_routing'])."</td></tr>";
+
+// vaults
+if ($User->settings->enableVaults==1)
+print "<tr><td>"._("Routing")."</td><td>".$User->print_permission_badge($user['perm_vaults'])."</td></tr>";
 
 print "</table>";

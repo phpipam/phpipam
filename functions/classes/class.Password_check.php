@@ -143,7 +143,7 @@ class Password_check extends Common_functions {
 	 */
 	private function validate_minLength () {
 		if (strlen($this->password) < $this->requirements['minLength']) {
-			$this->save_error (_("Password is too short")." (minumim {$this->requirements['minLength']}).");
+			$this->save_error (_("Password is too short")." ("._("minimum")." {$this->requirements['minLength']}).");
 		}
 	}
 
@@ -155,7 +155,7 @@ class Password_check extends Common_functions {
 	 */
 	private function validate_maxLength () {
 		if (strlen($this->password) > $this->requirements['maxLength'] && $this->requirements['maxLength']!=0) {
-			$this->save_error (_("Password is too long")." (maximum {$this->requirements['maxLength']}).");
+			$this->save_error (_("Password is too long")." ("._("maximum")." {$this->requirements['maxLength']}).");
 		}
 	}
 
@@ -167,7 +167,7 @@ class Password_check extends Common_functions {
 	 */
 	private function validate_minNumbers () {
 		if(preg_match_all( "/[0-9]/", $this->password) < $this->requirements['minNumbers']) {
-			$this->save_error (_("Not enough numbers")." (minumim {$this->requirements['minNumbers']}).");
+			$this->save_error (_("Not enough numbers")." ("._("minimum")." {$this->requirements['minNumbers']}).");
 		}
 	}
 
@@ -179,7 +179,7 @@ class Password_check extends Common_functions {
 	 */
 	private function validate_minLetters () {
 		if(preg_match_all( "/[a-z,A-Z]/u", $this->password) < $this->requirements['minLetters']) {
-			$this->save_error (_("Not enough letters")." (minumim {$this->requirements['minLetters']}).");
+			$this->save_error (_("Not enough letters")." ("._("minimum")." {$this->requirements['minLetters']}).");
 		}
 	}
 
@@ -191,7 +191,7 @@ class Password_check extends Common_functions {
 	 */
 	private function validate_minLowerCase () {
 		if(preg_match_all( "/[a-z]/u", $this->password) < $this->requirements['minLowerCase']) {
-			$this->save_error (_("Not enough lowercase letters")." (minumim {$this->requirements['minLowerCase']}).");
+			$this->save_error (_("Not enough lowercase letters")." ("._("minimum")." {$this->requirements['minLowerCase']}).");
 		}
 	}
 
@@ -202,7 +202,7 @@ class Password_check extends Common_functions {
 	 */
 	private function validate_minUpperCase () {
 		if(preg_match_all( "/[A-Z]/u", $this->password) < $this->requirements['minUpperCase']) {
-			$this->save_error (_("Not enough uppercase letters")." (minumim {$this->requirements['minUpperCase']}).");
+			$this->save_error (_("Not enough uppercase letters")." ("._("minimum")." {$this->requirements['minUpperCase']}).");
 		}
 	}
 
@@ -216,7 +216,7 @@ class Password_check extends Common_functions {
 		$cnt = $this->count_symbols ();
 		// check
 		if ($cnt < $this->requirements['minSymbols']) {
-			$this->save_error (_("Not enough symbols")." (minumim {$this->requirements['minSymbols']}).");
+			$this->save_error (_("Not enough symbols")." ("._("minimum")." {$this->requirements['minSymbols']}).");
 		}
 	}
 
@@ -230,7 +230,7 @@ class Password_check extends Common_functions {
 		$cnt = $this->count_symbols ();
 		// check
 		if ($cnt < $this->requirements['maxSymbols']) {
-			$this->save_error (_("Too many symbols")." (maximum {$this->requirements['maxSymbols']}).");
+			$this->save_error (_("Too many symbols")." ("._("maximum")." {$this->requirements['maxSymbols']}).");
 		}
 	}
 

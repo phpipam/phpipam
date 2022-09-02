@@ -30,7 +30,7 @@ else {
 	print "	<th>"._('Object')."</th>";
 	print "	<th>"._('Description')."</th>";
 	print "	<th>"._('Section')."</th>";
-	if($User->get_module_permissions ("vlan")>0)
+	if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
 	print "	<th class='hidden-xs hidden-sm'>"._('VLAN')."</th>";
 	print "	<th class='hidden-xs hidden-sm'>"._('Used')."</th>";
 	print "	<th></th>";
@@ -64,7 +64,7 @@ else {
 			$vlan = $Tools->fetch_object("vlans", "vlanId", $f['vlanId']);
 			$vlan = $vlan===false ? "" : $vlan->number;
 
-			if($User->get_module_permissions ("vlan")>0)
+			if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
 			print "	<td class='hidden-xs hidden-sm'>$vlan</td>";
 
 			# usage

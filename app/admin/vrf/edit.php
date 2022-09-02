@@ -19,10 +19,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("vrf", 2, true, true);
+    $User->check_module_permissions ("vrf", User::ACCESS_RW, true, true);
 }
 else {
-    $User->check_module_permissions ("vrf", 3, true, true);
+    $User->check_module_permissions ("vrf", User::ACCESS_RWA, true, true);
 }
 
 # create csrf token
@@ -148,9 +148,8 @@ $custom = $Tools->fetch_custom_fields('vrf');
 		# all my fields
 		foreach($custom as $field) {
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $vrf, $_POST['action'], $timepicker_index);
-    		// add datepicker index
-    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+    		$custom_input = $Tools->create_custom_field_input ($field, $vrf, $timepicker_index);
+    		$timepicker_index = $custom_input['timepicker_index'];
             // print
 			print "<tr>";
 			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";

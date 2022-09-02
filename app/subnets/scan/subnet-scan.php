@@ -26,6 +26,9 @@ if(!is_numeric($_POST['subnetId']))										{ $Result->show("danger", _("Invali
 # verify that user has write permissionss for subnet
 if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
 
+# Check if scanning has been disabled
+if($User->settings->scanPingType=="none") { $Result->show("danger", _('Scanning disabled').' (scanPingType=None)', true, true); }
+
 # fetch subnet details
 $subnet = $Subnets->fetch_subnet (null, $_POST['subnetId']);
 $subnet!==false ? : $Result->show("danger", _("Invalid ID"), true, true);

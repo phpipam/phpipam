@@ -12,7 +12,7 @@ $User->check_user_session();
 <hr>
 
 
-<?php if($User->settings->enableNAT=="1" && $User->get_module_permissions ("nat")==3) { ?>
+<?php if($User->settings->enableNAT=="1" && $User->get_module_permissions ("nat")>=User::ACCESS_RWA) { ?>
 <div class="btn-group">
 	<a href="" class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/edit.php' data-class='700' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add nat'); ?></a>
     <a class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/cleanup.php' data-class='700'><i class="fa fa-legal"></i> <?php print _('Cleanup'); ?></a>
@@ -26,7 +26,7 @@ if ($User->settings->enableNAT!="1") {
     $Result->show("danger", _("NAT module disabled."), false);
 }
 # no access
-elseif ($User->check_module_permissions ("nat", 1, false, false)===false) {
+elseif ($User->check_module_permissions ("nat", User::ACCESS_R, false, false)===false) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 else {
@@ -53,12 +53,12 @@ else {
     print " <th></th>";
     print " <th></th>";
     if($policy_nat_found)
-    print " <th>"._('Policy DST IP')."</th>";
+    print " <th>"._('Policy SRC/DST IP')."</th>";
     print " <th>"._('Device')."</th>";
     print " <th>"._('Src Port')."</th>";
     print " <th>"._('Dst Port')."</th>";
     print " <th>"._('Description')."</th>";
-    if($User->get_module_permissions ("nat")>1)
+    if($User->get_module_permissions ("nat")>=User::ACCESS_RW)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -92,7 +92,7 @@ else {
         # if none than print
         if(sizeof($nats)==0) {
             print "<tr>";
-            print " <td colspan='$colspan'>".$Result->show("info","No $k NAT configured", false, false, true)."</td>";
+            print " <td colspan='$colspan'>".$Result->show("info",_("No")." $k "._("NAT configured"), false, false, true)."</td>";
             print "</tr>";
         }
         else {
@@ -145,12 +145,12 @@ else {
                 print " <td>$n->dst_port</td>";
                 print " <td><span class='text-muted'>$n->description</span></td>";
                 // actions
-                if($User->get_module_permissions ("nat")>1) {
+                if($User->get_module_permissions ("nat")>=User::ACCESS_RW) {
         		print "	<td class='actions'>";
                 $links = [];
-                $links[] = ["type"=>"header", "text"=>"Manage NAT"];
-                $links[] = ["type"=>"link", "text"=>"Edit NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
-                $links[] = ["type"=>"link", "text"=>"Delete NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
+                $links[] = ["type"=>"header", "text"=>_("Manage NAT")];
+                $links[] = ["type"=>"link", "text"=>_("Edit NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
+                $links[] = ["type"=>"link", "text"=>_("Delete NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
                 // print links
                 print $User->print_actions($User->user->compress_actions, $links);
         		print " </td>";

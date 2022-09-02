@@ -77,7 +77,7 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 	print "</div>";
 
 	// filters - rack
-	if($User->get_module_permissions ("racks")>0 && $User->settings->enableRACK=="1") {
+	if($User->get_module_permissions ("racks")>=User::ACCESS_R && $User->settings->enableRACK=="1") {
 	    # init racks object
 		$Racks = new phpipam_rack ($Database);
 		$Racks->fetch_all_racks(true);
@@ -96,7 +96,7 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 	}
 
 	// filters - location
-	if($User->get_module_permissions ("locations")>0 && $User->settings->enableLocations=="1") {
+	if($User->get_module_permissions ("locations")>=User::ACCESS_R && $User->settings->enableLocations=="1") {
 		# fetch locations
 		$all_locations = $Tools->fetch_all_objects("locations", "name");
 

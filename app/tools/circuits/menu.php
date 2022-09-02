@@ -1,3 +1,9 @@
+<?php
+
+# Check we have been included and not called directly
+require( dirname(__FILE__) . '/../../../functions/include-only.php' );
+
+?>
 <ul class='nav nav-tabs' style='margin-top:0px;margin-bottom:20px;'>
     <li role='presentation' <?php if(!isset($_GET['subnetId'])||is_numeric($_GET['subnetId'])) print " class='active'"; ?>>
         <a href='<?php print create_link($_GET['page'], "circuits"); ?>'><?php print _("Physical Circuits"); ?></a>

@@ -237,10 +237,11 @@ class SubnetsMenu {
 			$this->menu_nested_level($s->level, $s->masterSubnet);  // Applied Style is based on parent
 			$this->menu_item($s);
 		}
-		$this->menu_nested_level(0, null);
 
 		# Close menu
 		$this->html[] = '</ul>';
+
+		$this->menu_nested_level(0, null);
 	}
 
 	/**

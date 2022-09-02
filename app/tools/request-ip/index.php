@@ -9,6 +9,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 $Database 	= new Database_PDO;
 $Result		= new Result;
 $User		= new User ($Database);
+$Tools		= new Tools ($Database);
 $Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 
@@ -50,6 +51,12 @@ $User->check_user_session();
 	<tr>
 		<td><?php print _('Description');?></td>
 		<td><input class="form-control" type="text" name="description" size="30" placeholder="<?php print _('Enter description');?>"></td>
+	</tr>
+
+	<!-- MAC address -->
+	<tr>
+		<td><?php print _('MAC Address'); ?></td>
+		<td><input type="text" name="mac" class="form-control" size="30" placeholder="<?php print _('MAC Address'); ?>"></td>
 	</tr>
 
 	<!-- DNS name -->
@@ -100,6 +107,23 @@ $User->check_user_session();
 		</td>
 	</tr>
 
+	<!-- custom fields -->
+	<?php
+	$custom_fields = $Tools->fetch_custom_fields('requests');
+
+	if(sizeof($custom_fields) > 0) {
+		$timepicker_index = 0;
+		foreach ($custom_fields as $field) {
+			$custom_input = $Tools->create_custom_field_input ($field, $address, $timepicker_index);
+			$timepicker_index = $custom_input['timepicker_index'];
+
+			print ' <tr>'. "\n";
+			print " <td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
+			print " <td>".$custom_input['field']."</td>";
+			print '</tr>'. "\n";
+		}
+	}
+	?>
 
 	</table>
 	</form>

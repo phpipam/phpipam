@@ -1,18 +1,12 @@
 <?php
 
-# Check we have been included via subnet-scan-result.php and not called directly
-require("subnet-scan-check-included.php");
+# Check we have been included and not called directly
+require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
 /*
  * insert new hosts to database
  *******************************/
 
-# validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "scan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-
-# check for number of input values
-$max = ini_get("max_input_vars");
-if(sizeof($_POST)>=ini_get("max_input_vars")) 							{ $Result->show("danger", _("Number of discovered hosts exceed maximum possible defined by php.ini - set to ")." $max <hr>"._("Please adjust your php.ini settings for value `max_input_vars`"), true); }
 # subnet Id must be a integer
 if(!is_numeric($_POST['subnetId']) || $_POST['subnetId']==0)			{ $Result->show("danger", _("Invalid ID"), true); }
 # verify that user has write permissionss for subnet

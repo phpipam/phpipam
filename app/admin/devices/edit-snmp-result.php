@@ -70,4 +70,4 @@ $values = array(
 
 # update device
 if(!$Admin->object_modify("devices", "edit", "id", $values))    { $Result->show("danger",  _("SNMP edit failed").'!', false); }
-else														    { $Result->show("success", _("SNMP edit successfull").'!', false); }
+else														    { $Result->show("success", _("SNMP edit successful").'!', false); }

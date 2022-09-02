@@ -57,7 +57,7 @@ if(sizeof($result_vrf) > 0) {
 		if(sizeof($custom_vrf_fields) > 0) {
 			foreach($custom_vrf_fields as $field) {
 				if(!in_array($field['name'], $hidden_vrf_fields)) {
-					$vrf[$field['name']] = $Result->create_links ($vrf[$field['name']], $field['type']);
+					$vrf[$field['name']] = $Tools->create_links ($vrf[$field['name']], $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>";
 					$Tools->print_custom_field ($field['type'], $vrf[$field['name']]);
 					print "	</td>";

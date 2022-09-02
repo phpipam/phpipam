@@ -34,7 +34,7 @@ isset($filters[$_POST['table']]) ? : $filters[$_POST['table']] = array();
 $custom = $Tools->fetch_custom_fields($_POST['table']);
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 /* bootstrap switch */
 var switch_options = {

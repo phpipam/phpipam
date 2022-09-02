@@ -1,5 +1,7 @@
 <?php
 
+# Check we have been included and not called directly
+require( dirname(__FILE__) . '/../../../../functions/include-only.php' );
 
 // title
 print "<h4>"._('Member Circuits')."</h4>";
@@ -126,8 +128,8 @@ if($member_circuits != false){
 			// headers
 			print "<tr>";
 			print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."'><i class='fa fa-random prefix' style='border:none;'></i> $circuit->cid</a></th>";
-			print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'><img src='css/images/red-dot.png' style='height:18px;'> "._("Point A")."</th>";
-			print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'><img src='css/images/blue-dot.png' style='height:18px;'> "._("Point B")."</th>";
+			print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'><img src='css/images/red-dot.png' alt='"._("Red locator pin")."' style='height:18px;'> "._("Point A")."</th>";
+			print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'><img src='css/images/blue-dot.png' alt='"._("Blue locator pin")."' style='height:18px;'> "._("Point B")."</th>";
 			print "</tr>";
 
 			// type

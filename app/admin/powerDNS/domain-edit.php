@@ -19,10 +19,10 @@ $PowerDNS 	= new PowerDNS ($Database);
 $User->check_user_session();
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("pdns", 2, true, true);
+    $User->check_module_permissions ("pdns", User::ACCESS_RW, true, true);
 }
 else {
-    $User->check_module_permissions ("pdns", 3, true, true);
+    $User->check_module_permissions ("pdns", User::ACCESS_RWA, true, true);
 }
 
 # create csrf token

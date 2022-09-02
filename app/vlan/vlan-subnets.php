@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("vlan", 1, true, false);
+$User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 
 # fetch all subnets in VLAN in this section
 $slaves = $Subnets->fetch_vlan_subnets ($_GET['subnetId'], $_GET['section']);
@@ -15,7 +15,7 @@ $slaves = $Subnets->fetch_vlan_subnets ($_GET['subnetId'], $_GET['section']);
 # no subnets
 if(!$slaves) {
 	print "<hr>";
-	print "<h4>"._('VLAN')." $vlan[number] (".$vlan[name].") "._('has no belonging subnets')."</h4>";
+	print "<h4>"._('VLAN')." $vlan[number] (".$vlan["name"].") "._('has no belonging subnets')."</h4>";
 }
 else {
 	# cast

@@ -18,8 +18,8 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # verify module permissions
-$User->check_module_permissions ("racks", 2, true, true);
-$User->check_module_permissions ("devices", 1, true, true);
+$User->check_module_permissions ("racks", User::ACCESS_RW, true, true);
+$User->check_module_permissions ("devices", User::ACCESS_R, true, true);
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
@@ -60,7 +60,7 @@ if ($_POST['action']=="remove") {
 
     # js
     ?>
-    <script type="text/javascript">
+    <script>
     $(document).ready(function() {
     $('.hidePopups').click(function(){
        window. location.reload();
@@ -75,7 +75,7 @@ if ($_POST['action']=="remove") {
 # add to rack
 else {
     # create csrf token
-    $csrf = $User->Crypto->csrf_cookie ("create", "rack_devices");
+    $csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "rack_devices");
     # fetch rack details
     $rack = $Admin->fetch_object("racks", "id", $_POST['rackid']);
     # check
@@ -97,7 +97,7 @@ else {
     }
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });
@@ -143,57 +143,7 @@ $(document).ready(function(){
         		<td>
                     <select name="rack_start" class="form-control input-sm input-w-auto">
             		<?php
-                    // available spaces
-                    $available = array();
-                    for($m=1; $m<=$rack->size; $m++) {
-                        $available[$m] = $m;
-                    }
-                    // available back
-                    if($rack->hasBack!="0") {
-                    for($m=1; $m<=$rack->size; $m++) {
-                        $available_back[$m+$rack->size] = $m;
-                    }
-                    }
-
-                    if($rack_devices!==false) {
-                        // front side
-                        foreach ($rack_devices as $d) {
-                            for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
-                                if(array_key_exists($m, $available)) {
-                                    unset($available[$m]);
-                                }
-                            }
-                        }
-                        // back side
-                        if($rack->hasBack!="0") {
-                            foreach ($rack_devices as $d) {
-                                for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
-                                    if(array_key_exists($m, $available_back)) {
-                                        unset($available_back[$m]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if($rack_contents!==false) {
-                        // front side
-                        foreach ($rack_contents as $d) {
-                            for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
-                                if(array_key_exists($m, $available)) {
-                                    unset($available[$m]);
-                                }
-                            }
-                        }
-                        // back side
-                        foreach ($rack_contents as $d) {
-                            for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
-                                if(is_array($available_back) && array_key_exists($m, $available_back)) {
-                                    unset($available_back[$m]);
-                                }
-                            }
-                        }
-                    }
+                    list($available, $available_back) = $Racks->free_u($rack, $rack_devices, $rack_contents);
 
                     // print available spaces
                     if($rack->hasBack!="0") {

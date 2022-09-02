@@ -153,13 +153,21 @@ abstract class DB {
 				$this->pdo = new \PDO($dsn, $this->username, $this->password);
 			}
 
-			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$this->setErrMode(\PDO::ERRMODE_EXCEPTION);
 
 		} catch (\PDOException $e) {
 			throw new Exception ("Could not connect to database! ".$e->getMessage());
 		}
 
 		@$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
+	}
+
+	/**
+	 * Set PDO error mode
+	 * @param mixed $mode
+	 */
+	public function setErrMode($mode = \PDO::ERRMODE_EXCEPTION) {
+		$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, $mode);
 	}
 
 	/**
@@ -292,9 +300,14 @@ abstract class DB {
 	 * @return void
 	 */
 	public function escape($str) {
+		$str = (string) $str;
+		if (strlen($str) == 0) return "";
+
 		if (!$this->isConnected()) $this->connect();
 
-		return $this->unquote_outer($this->pdo->quote((string)$str));
+		// SQL Injection - strip backquote character
+		$str = str_replace('`', '', $str);
+		return $this->unquote_outer($this->pdo->quote($str));
 	}
 
 	/**
@@ -621,7 +634,7 @@ abstract class DB {
 	public function getGroupBy($tableName, $groupField = 'id') {
 		if (!$this->isConnected()) $this->connect();
 
-		$statement = $this->pdo->prepare("SELECT SQL_CACHE `$groupField`,COUNT(*) FROM `$tableName` GROUP BY `$groupField`");
+		$statement = $this->pdo->prepare("SELECT `$groupField`,COUNT(*) FROM `$tableName` GROUP BY `$groupField`");
 
 		//debug
 		$this->log_query ($statement, array());
@@ -852,6 +865,8 @@ abstract class DB {
 	 */
 	public function deleteObjectsByIdentifier($tableName, $identifier = "id", $id = 0) {
 		$tableName = $this->escape($tableName);
+		$identifier = $this->escape($identifier);
+
 		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$identifier.'` = ?', $id);
 	}
 
@@ -867,9 +882,10 @@ abstract class DB {
 	public function deleteRow($tableName, $field, $value, $field2=null, $value2 = null) {
 		$tableName = $this->escape($tableName);
 		$field = $this->escape($field);
+		$field2 = $this->escape($field2);
 
 		//multiple
-		if(!is_null($field2))
+		if(!empty($field2))
 		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=? and `'.$field2.'`=?;', array($value, $value2));
 		else
 		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=?;', array($value));
@@ -999,7 +1015,7 @@ class Database_PDO extends DB {
 	 */
 	private function set_db_params () {
 		# use config file
-		$db = Config::get('db');
+		$db = Config::ValueOf('db');
 
 		# set
 		$this->host 	= $db['host'];

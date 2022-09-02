@@ -29,20 +29,20 @@ else 				{ $type = "WAN"; }
 <hr>
 <p>
 
-<strong>Transfer time (h:m:s):</strong>
+<strong><?php print _("Transfer time (h:m:s)"); ?>:</strong>
 <div class='res_val'><?php print $User->sec2hms($time); ?></div>
 
 <?php if(!isset($_POST['widget'])) { ?>
 <div class="clearfix"></div>
 
 <br><br>
-<strong>Calculation parameters:</strong>
+<strong><?php print _("Calculation parameters"); ?>:</strong>
 <ul>
-	<li> TCP window size: <?php print $tcp; ?></li>
-	<li> Delay: <?php print $delay; ?> ms</li>
-	<li> Speed: <?php print $mbps; ?> MBps</li>
-	<li> Newtork type: <?php print $type; ?></li>
-	<li> File size: <?php print $fsize; ?> MB</li>
+	<li> <?php print _("TCP window size").": $tcp"; ?></li>
+	<li> <?php print _("Delay").": $delay"." "._("ms"); ?></li>
+	<li> <?php print _("Speed").": $mbps"." "._("MBps"); ?></li>
+	<li> <?php print _("Newtork type").": $type"; ?></li>
+	<li> <?php print _("File size").": $fsize"." "."MB"; ?></li>
 </ul>
 </p>
 <br>

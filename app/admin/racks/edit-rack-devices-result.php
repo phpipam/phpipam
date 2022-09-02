@@ -16,8 +16,8 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # verify module permissions
-$User->check_module_permissions ("racks", 2, true, false);
-$User->check_module_permissions ("devices", 1, true, false);
+$User->check_module_permissions ("racks", User::ACCESS_RW, true, false);
+$User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 
 # check maintaneance mode
 $User->check_maintaneance_mode ();

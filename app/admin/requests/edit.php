@@ -42,7 +42,7 @@ if($Subnets->check_permission($User->user, $request['subnetId']) != 3)	{ $Result
 if(strlen($request['ip_addr'])>0) {
 	// check if it exists
 	if ( $Addresses->address_exists ($request['ip_addr'], $request['subnetId'])) {
-		$errmsg = "Requested IP address ($request[ip_addr]) already used. First available address automatically provided.";
+		$errmsg = _("Requested IP address").' '.($request[ip_addr]).' '._("already used. First available address automatically provided.");
 		$errmsg_class = "warning";
 		//fetch first free
 		$ip_address = $Addresses->transform_to_dotted($Addresses->get_first_available_address ($request['subnetId'], $Subnets));
@@ -59,7 +59,7 @@ if(strlen($request['ip_addr'])>0) {
 // false
 if ($ip_address===false) {
 	$ip_address = "";
-	$errmsg = "No IP addresses available in requested subnet";
+	$errmsg = _("No IP addresses available in requested subnet.");
 	$errmsg_class = "danger";
 }
 
@@ -93,7 +93,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 	<!-- divider -->
 	<tr>
-		<td colspan="2"><h4>Request details</h4><hr></td>
+		<td colspan="2"><h4><?php print _('Request details'); ?></h4><hr></td>
 	</tr>
 
 	<!-- Subnet -->
@@ -129,6 +129,13 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 		<th><?php print _('Description'); ?></th>
 		<td>
 			<input type="text" name="description" class="form-control input-sm" value="<?php print $Tools->strip_xss(@$request['description']); ?>" size="30" placeholder="<?php print _('Enter IP description'); ?>">
+		</td>
+	</tr>
+	<!-- MAC Address -->
+	<tr>
+		<th><?php print _('MAC Address'); ?></th>
+		<td>
+			<input type="text" name="mac" class="form-control input-sm" value="<?php print $Tools->strip_xss(@$request['mac']); ?>" size="30" placeholder="<?php print _('Enter MAC Address'); ?>">
 		</td>
 	</tr>
 	<!-- DNS name -->
@@ -220,9 +227,8 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 		# all my fields
 		foreach($custom_fields as $field) {
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $details, $_POST['action'], $timepicker_index);
-    		// add datepicker index
-    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+    		$custom_input = $Tools->create_custom_field_input ($field, $request, $timepicker_index);
+    		$timepicker_index = $custom_input['timepicker_index'];
             // print
 			print "<tr>";
 			print "	<th>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</th>";
@@ -234,7 +240,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 	<!-- divider -->
 	<tr>
-		<td colspan="2" style="padding-top:30px;"><h4>Additional information</h4><hr></td>
+		<td colspan="2" style="padding-top:30px;"><h4><?php print _('Additional information'); ?></h4><hr></td>
 	</tr>
 
 	<!-- requested by -->
