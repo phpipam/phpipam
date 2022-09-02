@@ -232,8 +232,9 @@ $tool_items["search"] = array (
 				print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
 			}
 		}
+
         print "</li>";
-    }
+	}
     ?>
 
     <!-- all tools -->

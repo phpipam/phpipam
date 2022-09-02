@@ -15,6 +15,7 @@ foreach($tools_menu as $k=>$tool) {
 
 		# items
 		foreach($tool as $t) {
+			$href = explode("/", $t['href']);
 			print "	<div class='col-xs-12 col-md-6 col-lg-6 widget-dash'>";
 			print "	<div class='inner thumbnail'>";
 			print "		<div class='hContent'>";
