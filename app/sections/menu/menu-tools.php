@@ -1,5 +1,5 @@
 <?php
-# verify that user is logged in
+/*# verify that user is logged in
 $User->check_user_session();
 
 # if section is not set
@@ -234,4 +234,4 @@ $tool_items["search"] = array (
     <li rel='tooltip' title='Automation DB' data-placement='bottom' class='$active'>
 		<a href='/autodb/'><i class='fa fa-database'></i>Automation DB</a>
 	</li>
-</ul>
+</ul>*/
