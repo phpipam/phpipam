@@ -167,7 +167,7 @@ else {
 	<!-- header -->
 	<div class="row" id="header">
 	    <!-- logo -->
-		<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+		<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12"><p>here</p>
 	    <?php
 		if(file_exists( dirname(__FILE__)."/css/images/logo/logo.png")) {
 			// set width
