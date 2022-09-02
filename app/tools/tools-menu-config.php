@@ -39,14 +39,14 @@ $tools_menu_items = array(
 						'vlan',
 						'vrf',
 						'inactive-hosts',
-						"threshold",
+						'threshold',
 						'nat',
 						'locations',
 						'pstn-prefixes',
 						'mac-lookup',
 						'circuits',
 						'customers',
-						"duplicates",
+						'duplicates',
 						"routing"
                     );
 
