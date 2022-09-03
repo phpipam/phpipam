@@ -184,7 +184,11 @@ else{
         $saml_groups = array();
         foreach ($auth->getAttribute("groups") as $group_attr) {
             foreach (array_map('trim', explode(',', $group_attr)) as $g) {
-                if ($g) $saml_groups[] = $g;
+                if (preg_match('/^(cn|ou)=([^,]+),/i'), $g, $m) { // ldap dn
+                    $saml_groups[] = $m[1]
+                } elseif ($g) {
+                    $saml_groups[] = $g;
+                }
             }
         }
 
