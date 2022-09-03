@@ -180,8 +180,13 @@ else{
         $values["email"] = $auth->getAttribute("email")[0];
         $values["role"] = filter_var($auth->getAttribute("is_admin")[0], FILTER_VALIDATE_BOOLEAN) ? "Administrator" : "User";
 
-        // Parse groups
-        $saml_groups = array_map('trim', explode(',', $auth->getAttribute("groups")[0])) ? : [];
+        // parse groups
+        $saml_groups = array();
+        foreach ($auth->getAttribute("groups") as $group_attr) {
+            foreach (array_map('trim', explode(',', $group_attr)) as $g) {
+                if ($g) $saml_groups[] = $g;
+            }
+        }
 
         $ug = [];
         foreach ($Tools->fetch_all_objects("userGroups", "g_id") as $g) {
