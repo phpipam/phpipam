@@ -53,8 +53,8 @@ if ($User->settings->enableIPrequests==1) {
 }
 
 # get admin and tools menu items
-require( dirname(__FILE__) . '/../tools/tools-menu-config.php' );
-//require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
+//require( dirname(__FILE__) . '/../tools/tools-menu-config.php' );
+require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 
 ?>
 
