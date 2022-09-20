@@ -20,7 +20,7 @@ $User->check_user_session();
     print " <a href='".create_link("subnets")."'><i class='fa fa-angle-right'></i> "._('Subnets')."</a>";
     print "</li>";
 
-	# printout
+	/*# printout
 	if($sections!==false) {
 		# loop
 		foreach($sections as $section) {
@@ -80,4 +80,4 @@ $User->check_user_session();
 	<li rel='tooltip' title='Automation DB' data-placement='bottom' class='$active'>
 		<a href='/autodb/'><i class='fa fa-database'></i>Automation DB</a>
 	</li>
-</ul>
+</ul>*/
