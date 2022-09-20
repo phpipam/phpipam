@@ -8,7 +8,7 @@ if(!isset($_GET['section'])) { $_GET['section'] = ""; }
 # tool items
 $tool_items = array();
 // customers
-if($User->settings->enableCustomers == 1  && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+if($User->settings->enableCustomers == 1  && $User->get_module_permissions ("customers")>0) {
 $tool_items["customers"] = array(
                         "name"=>"Customers",
                         "href"=>array("tools", "customers"),
@@ -17,7 +17,7 @@ $tool_items["customers"] = array(
                        );
 }
 // vlans
-if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
+if($User->get_module_permissions ("vlan")>0) {
 $tool_items["vlan"] = array (
                         "name"=>"VLAN",
                         "href"=>array("autodb","tools", "vlan"),
@@ -26,7 +26,7 @@ $tool_items["vlan"] = array (
                         );
 }
 // VRF
-if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
+if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>0) {
 $tool_items["vrf"] = array(
                         "name"=>"VRF",
                         "href"=>array("autodb","tools", "vrf"),
@@ -35,7 +35,7 @@ $tool_items["vrf"] = array(
                        );
 }
 // nat
-if($User->settings->enableNAT==1  && $User->get_module_permissions ("nat")>=User::ACCESS_R) {
+if($User->settings->enableNAT==1  && $User->get_module_permissions ("nat")>0) {
 $tool_items["nat"] = array (
                         "name"=>"NAT",
                         "href"=>array("tools", "nat"),
@@ -44,7 +44,7 @@ $tool_items["nat"] = array (
                         );
 }
 // pdns
-if($User->settings->enablePowerDNS==1 && $User->get_module_permissions ("pdns")>=User::ACCESS_R) {
+if($User->settings->enablePowerDNS==1 && $User->get_module_permissions ("pdns")>0) {
 $tool_items["powerDNS"] = array (
                         "name"=>"PowerDNS",
                         "href"=>array("tools", "powerDNS"),
@@ -53,7 +53,7 @@ $tool_items["powerDNS"] = array (
                         );
 }
 // dhcp
-if($User->settings->enableDHCP==1 && $User->get_module_permissions ("dhcp")>=User::ACCESS_R) {
+if($User->settings->enableDHCP==1 && $User->get_module_permissions ("dhcp")>0) {
 $tool_items["dhcp"] = array (
                         "name"=>"DHCP",
                         "href"=>array("tools", "dhcp"),
@@ -62,7 +62,7 @@ $tool_items["dhcp"] = array (
                         );
 }
 // locations
-if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
+if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>0) {
 $tool_items["locations"] = array (
                         "name"=>"Locations",
                         "href"=>array("autodb","tools", "locations"),
@@ -71,7 +71,7 @@ $tool_items["locations"] = array (
                         );
 }
 // devices
-if($User->get_module_permissions ("devices")>=User::ACCESS_R)
+if($User->get_module_permissions ("devices")>0)
 $tool_items["devices"] = array (
                         "name"=>"Devices",
                         "href"=>array("autodb","tools", "devices"),
@@ -79,7 +79,7 @@ $tool_items["devices"] = array (
                         "icon"=>"fa-desktop"
                         );
 // rack
-if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
+if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>0) {
 $tool_items["racks"] = array (
                         "name"=>"Racks",
                         "href"=>array("autodb","tools", "racks"),
@@ -88,7 +88,7 @@ $tool_items["racks"] = array (
                         );
 }
 // circuits
-if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>=User::ACCESS_R) {
+if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>0) {
 $tool_items["circuits"] = array (
                         "name"=>"Circuits",
                         "href"=>array("autodb","tools", "circuits"),
@@ -97,7 +97,7 @@ $tool_items["circuits"] = array (
                         );
 }
 // Routing
-if($User->settings->enableRouting == 1 && $User->get_module_permissions ("routing")>=User::ACCESS_R) {
+if($User->settings->enableRouting == 1 && $User->get_module_permissions ("routing")>0) {
 $tool_items["routing"] = array (
                         "name"=>"Routing",
                         "href"=>array("tools", "routing"),
@@ -106,7 +106,7 @@ $tool_items["routing"] = array (
                         );
 }
 // pstn
-if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>=User::ACCESS_R) {
+if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>0) {
 $tool_items["pstn-prefixes"] = array (
                         "name"=>"PSTN",
                         "href"=>array("tools", "pstn-prefixes"),
@@ -124,17 +124,6 @@ $tool_items["multicast-networks"] = array (
                         "icon"=>"fa-map-o"
                         );
 }
-
-// vaults
-if($User->settings->enableVaults==1 && $User->get_module_permissions ("vaults")>=User::ACCESS_R) {
-$tool_items["vaults"] = array (
-                        "name"=>"Vaults",
-                        "href"=>array("tools", "vaults"),
-                        "title"=>"Vaults",
-                        "icon"=>"fa-key"
-                        );
-}
-
 // search
 $tool_items["search"] = array (
                         "name"=>"Search",
@@ -234,15 +223,15 @@ $tool_items["search"] = array (
 		}
 
         print "</li>";
-	}
+    }
     ?>
 
     <!-- all tools -->
     <li class='<?php if($_GET['page']=="tools" && (!isset($_GET['section']) || strlen($_GET['section'])==0)) print "active"; ?>'>
          <a href='<?php print create_link("tools"); ?>'><i class='fa fa-list'></i> <?php print _('All tools'); ?></a>
     </li>
-    <!-- automation DB -->
-        <li rel='tooltip' title='Automation DB' data-placement='bottom' class='$active'>
+	<!-- automation DB -->
+    <li rel='tooltip' title='Automation DB' data-placement='bottom' class='$active'>
 		<a href='/autodb/'><i class='fa fa-database'></i>Automation DB</a>
 	</li>
 </ul>

@@ -20,7 +20,7 @@ if($User->is_admin(false)) {
 	# print admin items
 	foreach($admin_menu as $k=>$item) {
 		# header
-		print "<li class='nav-header'>".$k."</li>";
+		print "<li class='nav-header'>"._($k)."</li>";
 		# items
 		foreach($item as $i) {
 			# only selected
