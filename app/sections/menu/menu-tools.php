@@ -100,7 +100,7 @@ $tool_items["circuits"] = array (
 if($User->settings->enableRouting == 1 && $User->get_module_permissions ("routing")>0) {
 $tool_items["routing"] = array (
                         "name"=>"Routing",
-                        "href"=>array("tools", "routing"),
+                        "href"=>array("autodb","tools", "routing"),
                         "title"=>"Show routing",
                         "icon"=>"fa-exchange"
                         );
