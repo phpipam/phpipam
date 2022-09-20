@@ -204,7 +204,7 @@ else {
 	<!-- page sections / menu -->
 	<div class="content">
 	<div id="sections_overlay">
-	<?php //if($_GET['page']!="login" && $_GET['page']!="request_ip" && $_GET['page']!="upgrade" && $_GET['page']!="install" && $User->user->passChange!="Yes")  include('app/sections/index.php');?>
+	<?php if($_GET['page']!="login" && $_GET['page']!="request_ip" && $_GET['page']!="upgrade" && $_GET['page']!="install" && $User->user->passChange!="Yes")  include('app/sections/index.php');?>
 	</div>
 	</div>
 
