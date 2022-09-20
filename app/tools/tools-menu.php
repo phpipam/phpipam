@@ -13,7 +13,7 @@ foreach($tools_menu as $k=>$tool) {
 	print "<div class='panel panel-default toolsMenu'>";
 	# header
 	print "<div class='panel-heading'>";
-	print "<h3 class='panel-title'><i class='fa $tools_menu_icons[$k]'></i> ".$k."</h3>";
+	print "<h3 class='panel-title'><i class='fa $tools_menu_icons[$k]'></i> "._($k)."</h3>";
 	print "</div>";
 
 	# items

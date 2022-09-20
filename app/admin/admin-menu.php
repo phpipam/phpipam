@@ -11,7 +11,7 @@ foreach($admin_menu as $k=>$tool) {
 	print "<div class='panel panel-default adminMenu'>";
 	# header
 	print "<div class='panel-heading'>";
-	print "<h3 class='panel-title'><i class='fa $admin_menu_icons[$k]'></i> ".$k."</h3>";
+	print "<h3 class='panel-title'><i class='fa $admin_menu_icons[$k]'></i> "._($k)."</h3>";
 	print "</div>";
 
 	# items
@@ -19,12 +19,6 @@ foreach($admin_menu as $k=>$tool) {
 	foreach($tool as $t) {
 		# active?
 		$active = $_GET['section']==$t['href'] ? "active" : "";
-		# exception
-		if ($t['href']=="devices") {
-    		if ($_GET['section']=="device-types") {
-        		$active = "active";
-    		}
-        }
 		# print
 		print "<li class='list-group-item $active'>";
 		$href = explode("/", $t['href']);
