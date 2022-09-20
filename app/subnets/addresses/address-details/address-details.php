@@ -116,7 +116,7 @@ if(sizeof($address)>1) {
     	}
 
         # customer
-        if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+        if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
         $customer= $Tools->fetch_object ("customers", "id", $address['customer_id']);
         print "<tr>";
         print " <th>"._('Customer')."</th>";
@@ -144,7 +144,7 @@ if(sizeof($address)>1) {
     	}
 
     	# switch
-    	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
+    	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>0) {
     	print "<tr>";
     	print "	<th>"._('Device')."</th>";
     	if(strlen($address['switch'])>0) {
@@ -166,7 +166,7 @@ if(sizeof($address)>1) {
         print "</tr>";
         }
 
-    	if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
+    	if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
     	<tr>
     		<th><?php print _('Location'); ?></th>
     		<td>
@@ -201,7 +201,7 @@ if(sizeof($address)>1) {
 
 
     	# availability
-        print "<tr><td colspan='2'><h4 style='padding-top:20px;'>"._('Availability')."</h4></tr>";
+        print "<tr><td colspan='2'><h4 style='padding-top:20px;'>"._('Avalibility')."</h4></tr>";
     	print "<tr>";
 
     	# calculate
@@ -261,7 +261,7 @@ if(sizeof($address)>1) {
     				elseif($address[$key] == 1)	{ print _("Yes"); }
     			}
     			else {
-    				print $Tools->create_links($address[$key]);
+    				print $Result->create_links($address[$key]);
     			}
     			print "	</td>";
     			print "</tr>";
@@ -346,7 +346,7 @@ if(sizeof($address)>1) {
     			print "		<a class='search_ipaddress btn btn-default btn-xs         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0)   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
     			print "		<a class='mail_ipaddress   btn btn-default btn-xs          ' href='#' data-id='".$address['id']."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																<i class='fa fa-gray fa-envelope-o'></i></a>";
     			if($zone) {
-    			print "		<a class='fw_autogen	   btn btn-default btn-xs          ' href='#' data-subnetid='".$subnet['id']."' data-action='adr' data-ipid='".$address['id']."' data-dnsname='".((preg_match('/\//i',$address['hostname'])) ? '':$address['hostname'])."' rel='tooltip' data-container='body' title='"._('Regenerate firewall address object.')."'><i class='fa fa-gray fa-fire'></i></a>";
+    			print "		<a class='fw_autogen	   btn btn-default btn-xs          ' href='#' data-subnetid='".$subnet['id']."' data-action='adr' data-ipid='".$address['id']."' data-dnsname='".((preg_match('/\//i',$address['hostname'])) ? '':$address['hostname'])."' rel='tooltip' data-container='body' title='"._('Regenerate firewall addres object.')."'><i class='fa fa-gray fa-fire'></i></a>";
     			}
     			print "		<a class='delete_ipaddress btn btn-default btn-xs modIPaddr' data-action='delete' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' id2='$address[ip]' rel='tooltip' data-container='body' title='"._('Delete IP address')."'>													<i class='fa fa-gray fa-times'></i></a>";
     			//share

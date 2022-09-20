@@ -16,7 +16,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("circuits", User::ACCESS_RWA, true, false);
+$User->check_module_permissions ("circuits", 3, true, false);
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "circuit_options");
@@ -95,9 +95,9 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 </div>
 
 
-<script src="js/bootstrap-colorpicker.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<script type="text/javascript" src="js/bootstrap-colorpicker.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-colorpicker.min.css?v=<?php print SCRIPT_PREFIX; ?>">
-<script>
+<script type="text/javascript">
 $(function(){
     $('#color-picker').colorpicker();
 });

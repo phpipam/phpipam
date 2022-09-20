@@ -1,17 +1,14 @@
 <?php
 
-# Check we have been included and not called directly
-require( dirname(__FILE__) . '/../../../../functions/include-only.php' );
-
 # perm check
-$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
+$User->check_module_permissions ("circuits", 1, true, false);
 
 // title
 print "<h4>"._('Map')."</h4>";
 print "<hr>";
 
 // check
-if ($User->settings->enableLocations=="1" && strlen(Config::ValueOf('gmaps_api_key'))==0) {
+if ($User->settings->enableLocations=="1" && strlen(Config::get('gmaps_api_key'))==0) {
     $Result->show("info text-center nomargin", _("Location: Google Maps API key is unset. Please configure config.php \$gmaps_api_key to enable."));
 }
 elseif ($locA->name_print!=="/" && $locB->name_print!=="/") {
@@ -48,7 +45,7 @@ elseif ($locA->name_print!=="/" && $locB->name_print!=="/") {
 
     // print
     if (sizeof($all_locations)>0) { ?>
-        <script>
+        <script type="text/javascript">
             $(document).ready(function() {
                 // init gmaps
                 var map = new GMaps({

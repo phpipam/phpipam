@@ -47,14 +47,14 @@ $share->code = $User->Crypto->generate_html_safe_token(32);
 $share->validity = date("Y-m-d H:i:s", strtotime("+1 day"));
 
 # set url for printing
-$url = $Tools->createURL().create_link("temp_share",$share->code);
+$url = $Result->createURL().create_link("temp_share",$share->code);
 
 ?>
 
 
-<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css?v=<?php print SCRIPT_PREFIX; ?>">
-<script src="js/bootstrap-datetimepicker.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-<script>
+<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">
+<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript">
 $(document).ready(function() {
 $(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );
 })

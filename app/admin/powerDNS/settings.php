@@ -11,7 +11,7 @@ $User->check_user_session();
 $csrf = $User->Crypto->csrf_cookie ("create", "pdns_settings");
 ?>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
 	/* bootstrap switch */
 	var switch_options = {

@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
 /* fix for ajax-loading tooltips */
 $('body').tooltip({ selector: '[rel=tooltip]' });
 </script>
@@ -34,11 +34,11 @@ print '<table class="slaves table sorted table-striped table-condensed table-hov
 # headers
 print "<thead>";
 print "<tr>";
-if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
+if($User->get_module_permissions ("vlan")>0)
 print "	<th class='small'>"._('VLAN')."</th>";
 print "	<th class='small description'>"._('Subnet description')."</th>";
 print "	<th>"._('Subnet')."</th>";
-if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
 print "	<th>"._('Customer')."</th>";
 $colspan_subnets++;
 }
@@ -88,8 +88,11 @@ foreach ($slave_subnets as $slave_subnet) {
 	$calculate = $Subnets->calculate_subnet_usage ( $slave_subnet, true);
 
 	# add full information
-	# if usage is 100%, fake isFull to true!
-	$fullinfo = ($slave_subnet['isFull']==1 || ($calculate['freehosts']<=0))? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+	$fullinfo = $slave_subnet['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+    if ($slave_subnet['isFull']!=1) {
+        # if usage is 100%, fake usFull to true!
+        if ($calculate['freehosts']==0)  { $fullinfo = "<span class='badge badge1 badge2 badge4'>"._("Full")."</span>"; }
+    }
 
 	# slaves info
 	$has_slaves = $Subnets->has_slaves ($slave_subnet['id']) ? true : false;
@@ -100,13 +103,13 @@ foreach ($slave_subnets as $slave_subnet) {
 	$slave_subnet['description'] = $has_slaves_ind . $slave_subnet['description'];
 
 	print "<tr>";
-	if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
+	if($User->get_module_permissions ("vlan")>0)
     print "	<td class='small'>".@$slave_vlan['number']."</td>";
     print "	<td class='small description'><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[description]</a></td>";
     print "	<td><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>".$Subnets->transform_address($slave_subnet['subnet'],"dotted")."/$slave_subnet[mask]</a> $fullinfo</td>";
 
     # customer
-    if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+    if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
     	if(is_numeric($slave_subnet['customer_id'])) {
 	    	$customer = $Tools->fetch_object ("customers", "id", $slave_subnet['customer_id']);
 	    	if ($customer===false) {
@@ -131,7 +134,7 @@ foreach ($slave_subnets as $slave_subnet) {
 			elseif($slave_subnet[$key] == "1")	{ $html_custom = _("Yes"); }
 		}
 		else {
-			$html_custom = $Tools->create_links($slave_subnet[$key]);
+			$html_custom = $Result->create_links($slave_subnet[$key]);
 		}
 
         print "<td>".$html_custom."</td>";
@@ -151,12 +154,6 @@ foreach ($slave_subnets as $slave_subnet) {
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
 		print "		<button class='btn btn btn-xs btn-default editSubnet'     data-action='edit'   data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'><i class='fa fa-gray fa-pencil'></i></button>";
-		if ($User->is_subnet_favourite($slave_subnet['id'])){
-			print " <a class='btn btn-xs btn-default btn-info editFavourite favourite-$slave_subnet[id]' href='' data-container='body' rel='tooltip' title='"._('Click to remove from favourites')."' data-subnetId='$slave_subnet[id]' data-action='remove'><i class='fa fa-star'></i></a>";
-		}
-		else{
-			print " <a class='btn btn-xs btn-default editFavourite favourite-$slave_subnet[id]' href='' data-container='body' rel='tooltip' title='"._('Click to add to favourites')."' data-subnetId='$slave_subnet[id]' data-action='add'><i class='fa fa-star fa-star-o'></i></a>";
-		}
 		print "		<button class='btn btn btn-xs btn-default showSubnetPerm' data-action='show'   data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'><i class='fa fa-gray fa-tasks'></i></button>";
 		print "		<button class='btn btn btn-xs btn-default editSubnet'     data-action='delete' data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'><i class='fa fa-gray fa-times'></i></button>";
 		print "	</div>";

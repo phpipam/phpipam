@@ -1,9 +1,4 @@
-<?php
-
-# Check we have been included and not called directly
-require( dirname(__FILE__) . '/../../../../functions/include-only.php' );
-?>
-<script>
+<script type="text/javascript">
 /* fix for ajax-loading tooltips */
 $('body').tooltip({ selector: '[rel=tooltip]' });
 </script>
@@ -18,7 +13,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
+$User->check_module_permissions ("circuits", 1, true, false);
 
 # filter circuits or fetch print all?
 $circuit_providers = $Tools->fetch_all_objects("circuitProviders", "name");
@@ -39,7 +34,7 @@ print "<hr>";
 # print link to manage
 print "<div class='btn-group'>";
 	// add
-	if($User->get_module_permissions ("circuits")>=User::ACCESS_RWA) {
+	if($User->get_module_permissions ("circuits")>2) {
     print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='add' data-providerid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add provider')."</a>";
 	}
 print "</div>";
@@ -99,15 +94,15 @@ else {
 		// actions
         print "<td class='actions'>";
         $links = [];
-        $links[] = ["type"=>"header", "text"=>_("View")];
-        $links[] = ["type"=>"link", "text"=>_("Show provider"), "href"=>create_link($_GET['page'], "circuits","providers",$provider->id), "icon"=>"eye", "visible"=>"dropdown"];
+        $links[] = ["type"=>"header", "text"=>"View"];
+        $links[] = ["type"=>"link", "text"=>"Show provider", "href"=>create_link($_GET['page'], "circuits","providers",$provider->id), "icon"=>"eye", "visible"=>"dropdown"];
         $links[] = ["type"=>"divider"];
-        if($User->get_module_permissions ("circuits")>=User::ACCESS_RW) {
-            $links[] = ["type"=>"header", "text"=>_("Manage provider")];
-            $links[] = ["type"=>"link", "text"=>_("Edit provider"), "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='edit' data-providerid='$provider->id'", "icon"=>"pencil"];
+        if($User->get_module_permissions ("circuits")>1) {
+            $links[] = ["type"=>"header", "text"=>"Manage provider"];
+            $links[] = ["type"=>"link", "text"=>"Edit provider", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='edit' data-providerid='$provider->id'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("circuits")>=User::ACCESS_RWA) {
-            $links[] = ["type"=>"link", "text"=>_("Delete provider"), "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='delete' data-providerid='$provider->id'", "icon"=>"times"];
+        if($User->get_module_permissions ("circuits")>2) {
+            $links[] = ["type"=>"link", "text"=>"Delete provider", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='delete' data-providerid='$provider->id'", "icon"=>"times"];
             $links[] = ["type"=>"divider"];
         }
         // print links

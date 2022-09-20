@@ -15,7 +15,7 @@ $hidden_custom_fields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_custom_fields = is_array(@$hidden_custom_fields['pstnPrefixes']) ? $hidden_custom_fields['pstnPrefixes'] : array();
 
 # perm check
-if ($User->get_module_permissions ("pstn")==User::ACCESS_NONE) {
+if ($User->get_module_permissions ("pstn")<1) {
 	$Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 # check that prefix support isenabled

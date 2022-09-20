@@ -5,7 +5,7 @@
 
 <?php if($admin && $User->settings->enableLocations=="1") { ?>
 <?php
-if($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
+if($User->get_module_permissions ("locations")>1) {
 include('menu.php');
 }
 ?>
@@ -20,17 +20,17 @@ include('menu.php');
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("locations", User::ACCESS_R, true, false);
+$User->check_module_permissions ("locations", 1, true, false);
 
 # perm check
-if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
+if ($User->get_module_permissions ("locations")<1) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 # check that location support isenabled
 elseif ($User->settings->enableLocations!="1") {
     $Result->show("danger", _("Locations module disabled."), false);
 }
-elseif ($User->settings->enableLocations=="1" && strlen(Config::ValueOf('gmaps_api_key'))==0) {
+elseif ($User->settings->enableLocations=="1" && strlen(Config::get('gmaps_api_key'))==0) {
     $Result->show("info text-center nomargin", _("Location: Google Maps API key is unset. Please configure config.php \$gmaps_api_key to enable."));
 }
 else {
@@ -69,7 +69,7 @@ else {
 
         // calculate
         if (sizeof($all_locations)>0) { ?>
-            <script>
+            <script type="text/javascript">
                 $(document).ready(function() {
                     // init gmaps
                     var map = new GMaps({

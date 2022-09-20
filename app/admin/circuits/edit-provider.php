@@ -19,10 +19,10 @@ $User->check_user_session();
 
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("circuits", User::ACCESS_RW, true, true);
+    $User->check_module_permissions ("circuits", 2, true, true);
 }
 else {
-    $User->check_module_permissions ("circuits", User::ACCESS_RWA, true, true);
+    $User->check_module_permissions ("circuits", 3, true, true);
 }
 
 # create csrf token
@@ -55,7 +55,7 @@ else {
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });
@@ -118,8 +118,9 @@ $(document).ready(function(){
 			// readonly
 			$disabled = $readonly == "readonly" ? true : false;
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $provider, $timepicker_index, $disabled);
-    		$timepicker_index = $custom_input['timepicker_index'];
+    		$custom_input = $Tools->create_custom_field_input ($field, $provider, $_POST['action'], $timepicker_index. $disabled);
+    		// add datepicker index
+    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
             // print
 			print "<tr>";
 			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";

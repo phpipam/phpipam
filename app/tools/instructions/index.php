@@ -12,7 +12,8 @@ $instructions = $instructions->instructions;
 $instructions = stripslashes($instructions);		//show html
 
 /* prevent <script> */
-$instructions = $Tools->noxss_html($instructions);
+$instructions = str_replace("<script", "<div class='error'><xmp><script", $instructions);
+$instructions = str_replace("</script>", "</script></xmp></div>", $instructions);
 
 // HSS header
 header('X-XSS-Protection:1; mode=block');

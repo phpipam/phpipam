@@ -21,6 +21,8 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode (true);
 
+# set address types array
+$Tools->get_addresses_types ();
 // set tagChange
 $tagChange = false;
 

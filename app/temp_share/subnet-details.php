@@ -101,16 +101,6 @@
 		print "</tr>";
 	}
 	?>
-	<tr>
-		<th></th>
-		<td class="isFull">
-		<?php
-		if ($subnet['isFull'])
-		 	print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as full"), false, false, true);
-		if ($subnet['isPool'])
-			print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as pool"), false, false, true);
-		?></td>
-	</tr>
 
 	<?php
 	# custom subnet fields

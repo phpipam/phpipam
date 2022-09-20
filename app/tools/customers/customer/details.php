@@ -8,7 +8,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # verify module permissions
-$User->check_module_permissions ("customers", User::ACCESS_R, true);
+$User->check_module_permissions ("customers", 1, true);
 
 
 print "<h4>"._('Customer details')." - $customer->title</h4>";
@@ -88,7 +88,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 			}
 
 			# create links
-			$customer->{$field['name']} = $Tools->create_links ($customer->{$field['name']});
+			$customer->{$field['name']} = $Result->create_links ($customer->{$field['name']});
 
 			print "<tr>";
 			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
@@ -98,7 +98,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 	}
 
 	// edit, delete
-	if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
+	if($User->get_module_permissions ("customers")>1) {
 		print "<tr>";
 		print "	<td colspan='2'><hr></td>";
 		print "</tr>";
@@ -109,12 +109,12 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
         // actions
         print "<td class='actions'>";
         $links = [];
-        if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
-            $links[] = ["type"=>"header", "text"=>_("Manage")];
-            $links[] = ["type"=>"link", "text"=>_("Edit customer"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='edit' data-id='$customer->id'", "icon"=>"pencil"];
+        if($User->get_module_permissions ("customers")>1) {
+            $links[] = ["type"=>"header", "text"=>"Manage"];
+            $links[] = ["type"=>"link", "text"=>"Edit customer", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='edit' data-id='$customer->id'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("customers")>=User::ACCESS_RWA) {
-            $links[] = ["type"=>"link", "text"=>_("Delete customer"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='delete' data-id='$customer->id'", "icon"=>"times"];
+        if($User->get_module_permissions ("customers")>2) {
+            $links[] = ["type"=>"link", "text"=>"Delete customer", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='delete' data-id='$customer->id'", "icon"=>"times"];
         }
         // print links
         print $User->print_actions($User->user->compress_actions, $links, true, true);

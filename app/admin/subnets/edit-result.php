@@ -315,15 +315,14 @@ else {
 					"DNSrecords"     => $Admin->verify_checkbox(@$_POST['DNSrecords']),
 					"nameserverId"   => $_POST['nameserverId'],
 					"device"         => $_POST['device'],
-					"isFull"         => $Admin->verify_checkbox($_POST['isFull']),
-					"isPool"         => $Admin->verify_checkbox($_POST['isPool'])
+					"isFull"         => $Admin->verify_checkbox($_POST['isFull'])
 					);
     # location
-    if (isset($_POST['location'])) {
-        if (!is_numeric($_POST['location'])) {
+    if (isset($_POST['location_item'])) {
+        if (!is_numeric($_POST['location_item'])) {
             $Result->show("danger", _("Invalid location value"), true);
         }
-        $values['location'] = $_POST['location'];
+        $values['location'] = $_POST['location_item'];
     }
 	# append customerId
 	if($User->settings->enableCustomers=="1") {
@@ -376,7 +375,7 @@ else {
 				}
 			}
 			//not null!
-			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
+			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
 
 			# save to update array
 			$values[$myField['name']] = $_POST[$myField['name']];
@@ -403,9 +402,9 @@ else {
 		# edit success
 		if($_POST['action']=="delete")	{ $Result->show("success", _('Subnet, IP addresses and all belonging subnets deleted successfully').'!', false); }
 		# create - for redirect
-		elseif ($_POST['action']=="add") { $Result->show("success", _("Subnet")." ". $_POST["action"]." "._("successful").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
+		elseif ($_POST['action']=="add"){ $Result->show("success", _("Subnet $_POST[action] successfull").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
 		#
-		else { $Result->show("success", _("Subnet")." ".$_POST["action"]." "._("successful").'!', false); }
+		else							{ $Result->show("success", _("Subnet $_POST[action] successfull").'!', false); }
 	}
 
 	# propagate to slaves
@@ -423,8 +422,7 @@ else {
 					"nameserverId" =>$_POST['nameserverId'],
 					"scanAgent"    =>@$_POST['scanAgent'],
 					"device"       =>$_POST['device'],
-					"isFull"       =>$Admin->verify_checkbox($_POST['isFull']),
-					"isPool"       =>$Admin->verify_checkbox($_POST['isPool'])
+					"isFull"       =>$_POST['isFull']
 					);
         # optional values
         if(isset($_POST['allowRequests']))  $values['allowRequests']  = $Admin->verify_checkbox(@$_POST['allowRequests']);
@@ -433,7 +431,7 @@ else {
         if(isset($_POST['pingSubnet']))     $values['pingSubnet']     = $Admin->verify_checkbox(@$_POST['pingSubnet']);
 
         # propagate changes
-		if(is_array($Subnets->slaves) && sizeof($Subnets->slaves)>0) {
+		if(sizeof($Subnets->slaves)>0) {
 			foreach($Subnets->slaves as $slaveId) {
 				 $Admin->object_modify ("subnets", "edit", "id", array_merge(array("id"=>$slaveId), $values));
 			}
@@ -471,7 +469,7 @@ else {
 				print "	</div>";
 
 				print _('Do you wish to delete DNS zone and all records')."?<br>";
-				print "	&nbsp;&nbsp; "._("DNS zone")." <strong>$domain->name</strong></li>";
+				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
 				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'><input type='hidden' name='csrf_cookie' value='$csrf'></form>";
 				print "	<div class='domain-edit-result'></div>";
 				print "</div>";
@@ -503,7 +501,7 @@ else {
 				print "	</div>";
 
 				print _('Do you wish to delete DNS zone and all records')."?<br>";
-				print "	&nbsp;&nbsp; "._("DNS zone")." <strong>$domain->name</strong></li>";
+				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
 				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'><input type='hidden' name='csrf_cookie' value='$csrf'></form>";
 				print "	<div class='domain-edit-result'></div>";
 				print "</div>";
@@ -541,10 +539,10 @@ else {
 						}
 					}
 					// print
-					$Result->show ("success", "$cnt "._("PTR records created"));
+					$Result->show ("success", "$cnt PTR records created");
 					// error
 					if ($err!=0) {
-					$Result->show ("warning", "$err "._("invalid hostnames"));
+					$Result->show ("warning", "$err invalid hostnames");
 					}
 				}
 			}

@@ -17,7 +17,7 @@ if ($User->settings->enableNAT!="1") {
     $Result->show("danger", _("NAT module disabled."), false);
 }
 # no access
-elseif ($User->check_module_permissions ("nat", User::ACCESS_R, false, false)===false) {
+elseif ($User->check_module_permissions ("nat", 1, false, false)===false) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 else {
@@ -114,9 +114,8 @@ else {
         print " <td>".implode("<br>", $destinations)."</td>";
         print "</tr>";
         if($n->policy=="Yes") {
-        $ntype_p = $n->type=="destination Policy" ? "Source" : "Destination";
         print "<tr>";
-        print " <td colspan='3'>if ".$ntype_p._(" address ")." is ".$n->policy_dst."</td>";
+        print " <td colspan='3'><br>if "._("Destination address ")." is ".$n->policy_dst."</td>";
         print "</tr>";
         }
         print "</table>";
@@ -158,7 +157,7 @@ else {
 				}
 
 				# create links
-				$n->{$field['name']} = $Tools->create_links ($n->{$field['name']});
+				$n->{$field['name']} = $Result->create_links ($n->{$field['name']});
 
 				print "<tr>";
 				print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
@@ -168,7 +167,7 @@ else {
 		}
 
         // actions
-        if($User->get_module_permissions ("nat")>=User::ACCESS_RW) {
+        if($User->get_module_permissions ("nat")>1) {
 
         print "<tr>";
         print "	<td colspan='4'><hr></th>";
@@ -176,9 +175,9 @@ else {
         print "<tr>";
         print "	<th>"._("Actions")."</th>";
         $links = [];
-        $links[] = ["type"=>"header", "text"=>_("Manage NAT")];
-        $links[] = ["type"=>"link", "text"=>_("Edit NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
-        $links[] = ["type"=>"link", "text"=>_("Delete NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
+        $links[] = ["type"=>"header", "text"=>"Manage NAT"];
+        $links[] = ["type"=>"link", "text"=>"Edit NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
+        $links[] = ["type"=>"link", "text"=>"Delete NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
         // print links
         print "<td>".$User->print_actions($User->user->compress_actions, $links)."</td>";
         print "</tr>";

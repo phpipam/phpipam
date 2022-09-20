@@ -22,7 +22,7 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 # perm check
-$User->check_module_permissions ("pdns", User::ACCESS_RW, true, false);
+$User->check_module_permissions ("pdns", 2, true, false);
 
 # fetch subnet
 $subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
@@ -73,7 +73,7 @@ if (is_array($hosts) && sizeof($hosts)>0) {
 			$ignored[] = $h;
 		}
 		// validate hostname, we only add valid hostnames
-		elseif ($PowerDNS->validate_hostname ($h->hostname) !== false) {
+		elseif ($Result->validate_hostname ($h->hostname) !== false) {
 			// formulate new record
 			$record = $PowerDNS->formulate_new_record ($domain->id, $PowerDNS->get_ip_ptr_name ($h->ip), "PTR", $h->hostname, $values['ttl']);
 			// insert record

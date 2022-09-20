@@ -13,7 +13,7 @@ $User->check_user_session();
 <?php
 
 # perm check
-if ($User->get_module_permissions ("pstn")==User::ACCESS_NONE) {
+if ($User->get_module_permissions ("pstn")<1) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 // validate
@@ -105,7 +105,7 @@ else {
         	print "	<td>$prefix->description</td>";
         	print "</tr>";
 
-            if($User->get_module_permissions ("devices")>=User::ACCESS_R) {
+            if($User->get_module_permissions ("devices")>0) {
             	# device
             	print "<tr>";
             	print "	<th>"._('Device')."</th>";
@@ -157,7 +157,7 @@ else {
         		foreach($cfields as $key=>$field) {
         			$prefix->{$key} = str_replace("\n", "<br>",$prefix->{$key});
         			// create links
-        			$prefix->{$key} = $Tools->create_links($prefix->{$key});
+        			$prefix->{$key} = $Result->create_links($prefix->{$key});
         			print "<tr>";
         			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
         			print "	<td style='vertical-align:top;align:left;'>".$prefix->{$key}."</td>";
@@ -172,19 +172,19 @@ else {
         	print " <div class='btn-group'>";
 
             $links = [];
-            if($User->get_module_permissions ("pstn")>=User::ACCESS_RW) {
+            if($User->get_module_permissions ("pstn")>1) {
                 if(!$isMaster) {
-                $links[] = ["type"=>"header", "text"=>_("Create address")];
-                $links[] = ["type"=>"link", "text"=>_("Add address to prefix"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit-number.php' data-class='700' data-action='add' data-id='$prefix->id'", "icon"=>"plus"];
+                $links[] = ["type"=>"header", "text"=>"Create address"];
+                $links[] = ["type"=>"link", "text"=>"Add address to prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit-number.php' data-class='700' data-action='add' data-id='$prefix->id'", "icon"=>"plus"];
                 }
-                $links[] = ["type"=>"header", "text"=>_("Create")];
-                $links[] = ["type"=>"link", "text"=>_("Create new prefix"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='add' data-id='$prefix->id'", "icon"=>"plus-circle"];
+                $links[] = ["type"=>"header", "text"=>"Create"];
+                $links[] = ["type"=>"link", "text"=>"Create new prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='add' data-id='$prefix->id'", "icon"=>"plus-circle"];
                 $links[] = ["type"=>"divider"];
-                $links[] = ["type"=>"header", "text"=>_("Manage")];
-                $links[] = ["type"=>"link", "text"=>_("Edit prefix"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='edit' data-id='$prefix->id'", "icon"=>"pencil"];
+                $links[] = ["type"=>"header", "text"=>"Manage"];
+                $links[] = ["type"=>"link", "text"=>"Edit prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='edit' data-id='$prefix->id'", "icon"=>"pencil"];
             }
-            if($User->get_module_permissions ("pstn")>=User::ACCESS_RWA) {
-                $links[] = ["type"=>"link", "text"=>_("Delete prefix"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='delete' data-id='$prefix->id'", "icon"=>"times"];
+            if($User->get_module_permissions ("pstn")>2) {
+                $links[] = ["type"=>"link", "text"=>"Delete prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='delete' data-id='$prefix->id'", "icon"=>"times"];
             }
             print $User->print_actions($User->user->compress_actions, $links, true);
 

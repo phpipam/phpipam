@@ -110,7 +110,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "routing_bgp_mapping");
 	</div>
 </div>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
 	$('.searchSubmit').click(function() {
 		var subnet = $('#bgp_subnet_mapping input[name=ip]').val();

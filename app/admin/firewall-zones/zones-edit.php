@@ -40,7 +40,7 @@ if ($_POST['action'] != 'add') {
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
 	/* bootstrap switch */
 	var switch_options = {

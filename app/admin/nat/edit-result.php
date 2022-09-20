@@ -17,10 +17,10 @@ $User->check_maintaneance_mode ();
 
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("nat", User::ACCESS_RW, true, false);
+    $User->check_module_permissions ("nat", 2, true, false);
 }
 else {
-    $User->check_module_permissions ("nat", User::ACCESS_RWA, true, false);
+    $User->check_module_permissions ("nat", 3, true, false);
 }
 
 # fetch custom fields
@@ -48,7 +48,6 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
 }
 
 // set values
-// nothing to do here for l10n, the content of the array goes into the database
 $values = array(
     "id"          => @$_POST['id'],
     "name"        => $_POST['name'],
@@ -61,13 +60,13 @@ $values = array(
     "policy_dst"  =>  ""
      );
 
-if ($User->get_module_permissions ("devices")==User::ACCESS_NONE) {
+if ($User->get_module_permissions ("devices")<1) {
     unset ($values['device']);
 }
 
 // policy NAT override
-if($_POST['action']=="edit" && strlen($_POST['policy_dst'])>0) {
-    $values['policy']     = "Yes";
+if($_POST['action']=="edit" && $_POST['policy']=="Yes" && strlen($_POST['policy_dst'])>0) {
+    $values['policy']     = $_POST['policy'];
     $values['policy_dst'] = $Tools->strip_input_tags($_POST['policy_dst']);
 }
 
@@ -81,12 +80,9 @@ if(sizeof($custom) > 0) {
 }
 
 # execute update
-if(!$Admin->object_modify ("nat", $_POST['action'], "id", $values)) {
-    $Result->show("danger", _("NAT")." "._($_POST["action"])." "._("failed"), false);
-}
-else {
-    $Result->show("success", _("NAT")." "._($_POST["action"])." "._("successful"), false);
-}
+if(!$Admin->object_modify ("nat", $_POST['action'], "id", $values))  { $Result->show("danger",  _("NAT $_POST[action] failed"), false); }
+else																 { $Result->show("success", _("NAT $_POST[action] successful"), false); }
+
 # add
 if($_POST['action']=="add") {
     print "<div class='new_nat_id hidden'>$Admin->lastId</div>";

@@ -13,7 +13,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # perm check popup
-$User->check_module_permissions ("routing", User::ACCESS_RW, true, true);
+$User->check_module_permissions ("routing", 2, true, true);
 
 # values
 $values = [
@@ -24,9 +24,5 @@ $values = [
 			];
 
 # submit
-if(!$Admin->object_modify ("routing_subnets", "add", "id", $values)) {
-    $Result->show("danger", _("Mapping")." ".$_POST["action"]." "._("failed"), false);
-}
-else {
-    $Result->show("success", _("Mapping")." ".$_POST["action"]." "._("successful"), false);
-}
+if(!$Admin->object_modify ("routing_subnets", "add", "id", $values))  { $Result->show("danger",  _("Mapping $_POST[action] failed"), false); }
+else																  { $Result->show("success", _("Mapping $_POST[action] successful"), false); }

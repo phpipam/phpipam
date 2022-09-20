@@ -17,7 +17,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-$User->check_module_permissions ("vlan", User::ACCESS_RW, true, true);
+$User->check_module_permissions ("vlan", 2, true, true);
 
 # fetch vlan details
 $vlan = $Admin->fetch_object ("vlans", "vlanid", @$_POST['vlanid']);
@@ -31,7 +31,7 @@ if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true, true
 $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 ?>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });

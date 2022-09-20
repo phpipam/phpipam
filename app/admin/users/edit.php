@@ -53,7 +53,7 @@ else {
 }
 ?>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function(){
     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 
@@ -326,8 +326,6 @@ $(document).ready(function(){
 	$perm_modules = [];
 	// VLAN
 	$perm_modules["perm_vlan"] = "VLAN";
-	// VLAN
-	$perm_modules["perm_l2dom"] = "L2Domains";
 	// VRF
 	$perm_modules["perm_vrf"]  = "VRF";
 	// powerDNS
@@ -356,9 +354,6 @@ $(document).ready(function(){
 	// Routing
 	if ($User->settings->enableRouting==1)
 	$perm_modules["perm_routing"] = "Routing";
-	// Vaults
-	if ($User->settings->enableVaults==1)
-	$perm_modules["perm_vaults"] = "Vaults";
 
 	// get permissions
 	$module_permissions = json_decode($user['module_permissions'], true);
@@ -396,8 +391,9 @@ $(document).ready(function(){
 		# all my fields
 		foreach($custom as $field) {
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $user, $timepicker_index);
-    		$timepicker_index = $custom_input['timepicker_index'];
+    		$custom_input = $Tools->create_custom_field_input ($field, $user, $_POST['action'], $timepicker_index);
+    		// add datepicker index
+    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
             // print
 			print "<tr>";
 			print "	<td>".ucwords($field['name'])." ".$custom_input['required']."</td>";

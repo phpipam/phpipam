@@ -79,7 +79,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<div id="drop">
 		<input type="file" name="file" id="csvfile" style="display:none;">
 
-		<?php print _('Select CSV file'); ?>: <a class="btn btn-sm btn-default"><?php print _("Browse"); ?></a>
+		<?php print _('Select CSV file'); ?>: <a class="btn btn-sm btn-default">Browse</a>
 	</div>
 	<span class="fname" style="display:none"></span>
 
@@ -96,7 +96,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
     <script src="js/uploader/jquery.fileupload.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 
-    <script>
+    <script type="text/javascript">
 	$(function(){
 
 	    var ul = $('#csvimport ul');
@@ -165,7 +165,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	            //success
 	            if(respStat == "success") {
 	            	$('ul.progressUl li.alert').addClass('alert-success');		//add success class
-	            	$('ul.progressUl li.alert p').append('<br><strong>Upload successful</strong>');	//add ok sign
+	            	$('ul.progressUl li.alert p').append('<br><strong>Upload successfull</strong>');	//add ok sign
 	            }
 	            //error
 	            else {

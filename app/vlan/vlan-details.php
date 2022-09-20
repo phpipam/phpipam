@@ -7,7 +7,7 @@
 $User->check_user_session();
 
 # perm check
-$User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
+$User->check_module_permissions ("vlan", 1, true, false);
 
 # to array
 $vlan = (array) $vlan;
@@ -58,7 +58,7 @@ $cfields = $Tools->fetch_custom_fields ('vlans');
 		foreach($cfields as $key=>$field) {
 			$vlan[$key] = str_replace("\n", "<br>",$vlan[$key]);
 			// create links
-			$vlan[$key] = $Tools->create_links($vlan[$key]);
+			$vlan[$key] = $Result->create_links($vlan[$key]);
 			print "<tr>";
 			print "	<th>$key</th>";
 			print "	<td style='vertical-align:top;align:left;'>$vlan[$key]</td>";
@@ -72,12 +72,12 @@ $cfields = $Tools->fetch_custom_fields ('vlans');
 	print "<tr>";
     print "<td class='actions'>";
     $links = [];
-    if($User->get_module_permissions ("vlan")>=User::ACCESS_RW) {
-        $links[] = ["type"=>"header", "text"=>_("Manage")];
-        $links[] = ["type"=>"link", "text"=>_("Edit VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$vlan[vlanId]'", "icon"=>"pencil"];
+    if($User->get_module_permissions ("vlan")>1) {
+        $links[] = ["type"=>"header", "text"=>"Manage"];
+        $links[] = ["type"=>"link", "text"=>"Edit VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$vlan[vlanId]'", "icon"=>"pencil"];
     }
-    if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) {
-        $links[] = ["type"=>"link", "text"=>_("Delete VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$vlan[vlanId]'", "icon"=>"times"];
+    if($User->get_module_permissions ("vlan")>2) {
+        $links[] = ["type"=>"link", "text"=>"Delete VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$vlan[vlanId]'", "icon"=>"times"];
     }
     // print links
     print $User->print_actions($User->user->compress_actions, $links);

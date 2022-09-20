@@ -21,10 +21,10 @@ $User->check_maintaneance_mode ();
 
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("circuits", User::ACCESS_RW, true, false);
+    $User->check_module_permissions ("circuits", 2, true, false);
 }
 else {
-    $User->check_module_permissions ("circuits", User::ACCESS_RWA, true, false);
+    $User->check_module_permissions ("circuits", 3, true, false);
 }
 
 # validate csrf cookie
@@ -61,7 +61,7 @@ if(sizeof($custom) > 0) {
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && strlen($circuit[$myField['name']])==0) { $Result->show("danger", $myField['name']." "._("can not be empty").'!', true); }
+		if($myField['Null']=="NO" && strlen($circuit[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
 		# save to update array
 		$update[$myField['name']] = $circuit[$myField['nameTest']];
 	}
@@ -122,14 +122,14 @@ else {
 			$order++;
 		}
 		// all ok
-		$Result->show("success", _("Logical Circuit")." ".$circuit["action"]." "._("successful")."!", false);
+		$Result->show("success", _("Logical Circuit $circuit[action] successful").'!', false);
 	}
 	else {
 		if($circuit['action'] == "delete"){
-        $Result->show("success", _("Logical Circuit")." ".$circuit["action"]." "._("successful")."!", false);
+        		$Result->show("success", _("Logical Circuit $circuit[action] successful").'!', false);
 		}
 		else{
-        $Result->show("warning", _("No circuits selected")."!", false);
+        		$Result->show("warning", _("No circuits selected").'!', false);
 		}
 	}
 }

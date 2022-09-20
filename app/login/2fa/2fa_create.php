@@ -54,8 +54,8 @@ else {
 ?>
 
 <!-- Show QR code -->
-<script src="functions/qrcodejs/qrcode.min.js"></script>
-<script>
+<script type="text/javascript" src="functions/qrcodejs/qrcode.min.js"></script>
+<script type="text/javascript">
 var qrcode = new QRCode(document.getElementById("qrcode"), {
 	text: "otpauth://totp/<?php print $username."?secret=".$secret; ?>",
 	width: 200,

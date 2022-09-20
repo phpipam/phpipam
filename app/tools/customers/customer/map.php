@@ -8,11 +8,11 @@
 # verify that user is logged in
 $User->check_user_session();
 # verify module permissions
-$User->check_module_permissions ("customers", User::ACCESS_R, true);
+$User->check_module_permissions ("customers", 1, true);
 
 
 # check key
-if (strlen(Config::ValueOf('gmaps_api_key'))==0) {
+if (strlen(Config::get('gmaps_api_key'))==0) {
     $Result->show("info text-center nomargin", _("Location: Google Maps API key is unset. Please configure config.php \$gmaps_api_key to enable."));
 }
 else {
@@ -37,7 +37,7 @@ else {
     $customer->note = strlen($customer->note)>0 ? "<span class=\'text-muted\'>".escape_input($customer->note)."</span>" : "";
     $customer->note = str_replace(array("\r\n","\n","\r"), "<br>", $customer->note );
     ?>
-    <script>
+    <script type="text/javascript">
         $(document).ready(function() {
 
             // init gmaps

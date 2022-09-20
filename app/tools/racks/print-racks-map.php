@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # verify module permissions
-$User->check_module_permissions ("racks", User::ACCESS_R, true);
+$User->check_module_permissions ("racks", 1, true);
 ?>
 
 <?php

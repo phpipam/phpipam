@@ -6,7 +6,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("vrf", User::ACCESS_R, true, false);
+$User->check_module_permissions ("vrf", 1, true, false);
 
 # not existing
 if(!$vrf) { $Result->show("danger", _('Invalid VRF id'), true); }
@@ -80,7 +80,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 
 	<?php
 	// customers
-	if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+	if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
 		 $customer = $Tools->fetch_object ("customers", "id", $vrf->customer_id);
 
 		 print "<tr>";
@@ -107,7 +107,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 		foreach($cfields as $key=>$field) {
 			$vrf->{$key} = str_replace("\n", "<br>",$vrf->{$key});
 			// create links
-			$vrf->{$key} = $Tools->create_links($vrf->{$key});
+			$vrf->{$key} = $Result->create_links($vrf->{$key});
 			print "<tr>";
 			print "	<th>$key</th>";
 			print "	<td style='vertical-align:top;align:left;'>".$vrf->{$key}."</td>";
@@ -118,7 +118,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 	}
 
 	# permissions
-	if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
+	if($User->get_module_permissions ("vrf")>1) {
 		# action button groups
 		print "<tr>";
 		print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
@@ -126,12 +126,12 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 
 		// actions
         $links = [];
-        if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
-            $links[] = ["type"=>"header", "text"=>_("Manage")];
-            $links[] = ["type"=>"link", "text"=>_("Edit VRF"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'", "icon"=>"pencil"];
+        if($User->get_module_permissions ("vrf")>1) {
+            $links[] = ["type"=>"header", "text"=>"Manage"];
+            $links[] = ["type"=>"link", "text"=>"Edit VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("vrf")>=User::ACCESS_RWA) {
-            $links[] = ["type"=>"link", "text"=>_("Delete VRF"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf->vrfId'", "icon"=>"times"];
+        if($User->get_module_permissions ("vrf")>2) {
+            $links[] = ["type"=>"link", "text"=>"Delete VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf->vrfId'", "icon"=>"times"];
         }
         // print links
         print $User->print_actions($User->user->compress_actions, $links, true, true);

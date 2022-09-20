@@ -84,7 +84,7 @@ if(strlen($_POST['email'])>0) {
 		$phpipam_mail = new phpipam_mail($User->settings, $mail_settings);
 
 		// generate url
-		$url = $Admin->createURL().create_link("temp_share",$_POST['code']);
+		$url = $Result->createURL().create_link("temp_share",$_POST['code']);
 
 		// set html content
 		$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";

@@ -27,9 +27,11 @@ unset($standard_fields['id'],
       $standard_fields['PTR'],
       $standard_fields['PTRignore'],
       $standard_fields['state'],
-      $standard_fields['firewallAddressObject']
+      $standard_fields['firewallAddressObject'],
+      $standard_fields['location']
       );
 // append extra
+$standard_fields['location'] = "location_item";
 ?>
 
 

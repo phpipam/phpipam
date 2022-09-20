@@ -111,7 +111,7 @@ foreach($outFile as $k=>$line) {
 								"switch"                => $line[7],
 								"port"                  => $line[8],
 								"note"                  => $line[9],
-								"location"              => $line[10]
+								"location_item"         => $line[10]
 								);
 		// add id
 		if ($action=="edit")	{ $address_insert["id"] = $id; }

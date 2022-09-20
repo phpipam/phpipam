@@ -31,39 +31,31 @@ $msg = "";
 $rows = "";
 
 # Update Subnet masters
-try {
-	$Database->beginTransaction();
+foreach($edata as $sect_id => $a) {
+	foreach($edata[$sect_id] as &$c_subnet) {
 
-	foreach($edata as $sect_id => $a) {
-		foreach($edata[$sect_id] as $c_subnet) {
+		if ($c_subnet['action'] != "edit") { continue; }
 
-			if ($c_subnet['action'] != "edit") { continue; }
+		# We only need id and new master
+		$values = array("id"=>$c_subnet['id'], "masterSubnetId"=>$c_subnet['new_masterSubnetId']);
 
-			# We only need id and new master
-			$values = array("id"=>$c_subnet['id'], "masterSubnetId"=>$c_subnet['new_masterSubnetId']);
+		# update
+		$c_subnet['result'] = $Admin->object_modify("subnets", $c_subnet['action'], "id", $values);
 
-			# update
-			$c_subnet['result'] = $Admin->object_modify("subnets", $c_subnet['action'], "id", $values);
-
-			if ($c_subnet['result']) {
-				$trc = $colors[$c_subnet['action']];
-				$msg = "Master ".$c_subnet['action']." successful.";
-			} else {
-				$trc = "danger";
-				$msg = "Master ".$c_subnet['action']." failed.";
-			}
-
-			$rows.="<tr class='".$trc."'><td><i class='fa ".$icons[$c_subnet['action']]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>";
-			$rows.="<td>".$sect_names[$sect_id]."</td><td>".$c_subnet['ip']."/".$c_subnet['mask']."</td>";
-			$rows.="<td>".$c_subnet['description']."</td><td>".$vrf_name[$c_subnet['vrfId']]."</td><td>";
-			$rows.=$c_subnet['new_master']."</td><td>"._($msg)."</td></tr>\n";
+		if ($c_subnet['result']) {
+			$trc = $colors[$c_subnet['action']];
+			$msg = "Master ".$c_subnet['action']." successful.";
+		} else {
+			$trc = "danger";
+			$msg = "Master ".$c_subnet['action']." failed.";
 		}
-	}
-	$Database->commit();
 
-} catch(Exception $e) {
-	$Database->rollBack();
-	throw $e;
+		$rows.="<tr class='".$trc."'><td><i class='fa ".$icons[$c_subnet['action']]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>";
+		$rows.="<td>".$sect_names[$sect_id]."</td><td>".$c_subnet['ip']."/".$c_subnet['mask']."</td>";
+		$rows.="<td>".$c_subnet['description']."</td><td>".$vrf_name[$c_subnet['vrfId']]."</td><td>";
+		$rows.=$c_subnet['new_master']."</td><td>"._($msg)."</td></tr>\n";
+	}
+	unset($c_subnet);
 }
 
 print "<table class='table table-condensed table-hover' id='resultstable'><tbody>";

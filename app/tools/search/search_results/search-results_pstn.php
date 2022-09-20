@@ -70,7 +70,7 @@ if(sizeof($result_pstn) > 0) {
 		if(sizeof($custom_pstn_fields) > 0) {
 			foreach($custom_pstn_fields as $field) {
 				if(!in_array($field['name'], $hidden_pstn_fields)) {
-					$pstn->{$field['name']} = $Tools->create_links ($pstn->{$field['name']}, $field['type']);
+					$pstn->{$field['name']} = $Result->create_links ($pstn->{$field['name']}, $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>".$pstn->{$field['name']}."</td>";
 				}
 			}
@@ -149,7 +149,7 @@ if(sizeof($result_pstnn) > 0) {
 		if(sizeof($custom_pstnn_fields) > 0) {
 			foreach($custom_pstnn_fields as $field) {
 				if(!in_array($field['name'], $hidden_pstnn_fields)) {
-					$pstnn->{$field['name']} = $Tools->create_links ($pstnn->{$field['name']}, $field['type']);
+					$pstnn->{$field['name']} = $Result->create_links ($pstnn->{$field['name']}, $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>".$pstnn->{$field['name']}."</td>";
 				}
 			}

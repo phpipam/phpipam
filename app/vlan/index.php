@@ -4,7 +4,7 @@
 $vlan = $Tools->fetch_object("vlans", "vlanId", $_GET['subnetId']);
 
 # perm check
-if ($User->get_module_permissions ("vlan")==User::ACCESS_NONE) {
+if ($User->get_module_permissions ("vlan")<1) {
 	$Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 # size check

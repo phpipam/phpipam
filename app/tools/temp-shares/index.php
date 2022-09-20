@@ -84,7 +84,7 @@ foreach($temp_shares as $s) {
 		print "<tr class='text-top'>";
 		print "	<td>$s->type_text</td>";
 		print "	<td>$s->details</td>";
-		print "	<td><a href='".$Tools->createURL().BASE."temp_share/$s->code/'>$s->code</a></td>";
+		print "	<td><a href='".$Result->createURL().BASE."temp_share/$s->code/'>$s->code</a></td>";
 		print "	<td class='$class'>".date("Y-m-d H:i:s", $s->validity)."</td>";
 		print "	<td>$user->real_name ($user->username)</td>";
 		print "	<td>$logText</td>";
