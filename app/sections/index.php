@@ -87,14 +87,14 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
             }
             # admin menu
             elseif ($_GET['page']=="administration") {
-                include("menu/menu-administration.php");
+                //include("menu/menu-administration.php");
             }
             else {
-                include("menu/menu-sections.php");
+                //include("menu/menu-sections.php");
             }
 
             # tools and admin menu
-            include("menu/menu-tools-admin.php");
+            //include("menu/menu-tools-admin.php");
         }
         ?>
 	</div>	 <!-- end menu div -->
