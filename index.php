@@ -285,7 +285,7 @@ else {
 					# tools
 					elseif ($_GET['page']=="tools") {
 						if (!isset($_GET['section']))										{ include("app/tools/index.php"); }
-						else {
+						else {print_r ($tools_menu_items);print "<p>";
 	                        if (!isset($tools_menu_items[$_GET['section']]))             { header("Location: ".create_link("error","400")); die(); }
 							elseif (!file_exists("app/tools/$_GET[section]/index.php") && !file_exists("app/tools/custom/$_GET[section]/index.php"))
 							                                                                { header("Location: ".create_link("error","404")); die(); }
@@ -306,7 +306,7 @@ else {
 
 						if (!isset($_GET['section']))										{ include("app/admin/index.php"); }
 						elseif (@$_GET['subnetId']=="section-changelog")					{ include("app/sections/section-changelog.php"); }
-						else {
+						else {print_r ($admin_menu_items);print"<p>";
 	                        if (!isset($admin_menu_items[$_GET['section']]))             { print "<h4>Here</h4>;header("Location: ".create_link("error","400")); die(); }
 							elseif(!file_exists("app/admin/".$_GET['section']."/index.php")) 		{ header("Location: ".create_link("error","404")); die(); }
 							else 															{ include("app/admin/$_GET[section]/index.php"); }
