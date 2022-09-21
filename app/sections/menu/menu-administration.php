@@ -24,7 +24,7 @@ $admin_items["sections"] = array(
 // vlans
 $admin_items["vlans"] = array (
                         "name"=>"VLAN",
-                        "href"=>array("administration", "vlans"),
+                        "href"=>array("autodb","administration", "vlans"),
                         "title"=>"VLAN management",
                         "icon"=>"fa-cloud"
                         );
@@ -32,7 +32,7 @@ $admin_items["vlans"] = array (
 if($User->settings->enableVRF == 1) {
 $admin_items["vrf"] = array(
                         "name"=>"VRF",
-                        "href"=>array("administration", "vrf"),
+                        "href"=>array("autodb","administration", "vrf"),
                         "title"=>"VRF managements",
                         "icon"=>"fa-cloud"
                        );
@@ -67,7 +67,7 @@ $admin_items["dhcp"] = array (
 // devices
 $admin_items["devices"] = array (
                         "name"=>"Devices",
-                        "href"=>array("administration", "devices"),
+                        "href"=>array("autodb","administration", "devices"),
                         "title"=>"Show all configured devices",
                         "icon"=>"fa-desktop"
                         );
@@ -75,7 +75,7 @@ $admin_items["devices"] = array (
 if($User->settings->enableRACK == 1) {
 $admin_items["racks"] = array (
                         "name"=>"Racks",
-                        "href"=>array("administration", "racks"),
+                        "href"=>array("autodb","administration", "racks"),
                         "title"=>"Show racks",
                         "icon"=>"fa-bars"
                         );
@@ -84,7 +84,7 @@ $admin_items["racks"] = array (
 if($User->settings->enableCircuits == 1) {
 $admin_items["circuits"] = array (
                         "name"=>"Circuits",
-                        "href"=>array("administration", "circuits"),
+                        "href"=>array("autodb","administration", "circuits"),
                         "title"=>"Show circuits",
                         "icon"=>"fa-random"
                         );
@@ -102,7 +102,7 @@ $admin_items["routing"] = array (
 if($User->settings->enableLocations == 1) {
 $admin_items["locations"] = array (
                         "name"=>"Locations",
-                        "href"=>array("administration", "locations"),
+                        "href"=>array("autodb","administration", "locations"),
                         "title"=>"Show locations",
                         "icon"=>"fa-map"
                         );
@@ -175,7 +175,12 @@ $admin_items["locations"] = array (
         }
 
         print "<li rel='tooltip' title='"._($t['title'])."' data-placement='bottom' class='$active'>";
-        print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i> "._($t['name'])."</a>";
+		if ($t['href'][0]=="autodb") {
+			print " <a href='/".$t['href'][0]."/index.php?page=".$t['href'][1]."&section=".$t['href'][2]."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
+		}
+		elseif(sizeof($t['href'])>0) {	
+			print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
+		}
         print "</li>";
     }
     ?>
@@ -184,8 +189,8 @@ $admin_items["locations"] = array (
     <li class='<?php if($_GET['page']=="administration" && (!isset($_GET['section']) || strlen($_GET['section'])==0)) print "active"; ?>'>
          <a href='<?php print create_link("administration"); ?>'><i class='fa fa-list'></i> <?php print _('All items'); ?></a>
     </li>
-	<!-- automation DB -->
     <li rel='tooltip' title='Automation DB' data-placement='bottom' class='$active'>
 		<a href='/autodb/'><i class='fa fa-database'></i>Automation DB</a>
-	</li>    
+	</li>
+	
 </ul>
