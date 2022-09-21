@@ -14,11 +14,11 @@ $User->check_user_session();
 print "<table class='table table-condensed table-td-top table-auto'>";
 
 // add
-if($User->get_module_permissions ("nat")>2) {
+if($User->get_module_permissions ("nat")>=User::ACCESS_RWA) {
 print "<tr>";
 print " <td colspan='4'>";
 print "     <div class='btn-group' role='group' style='margin-bottom:10px;'>";
-print "         <a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/edit.php' data-class='700' data-action='add' data-id=''><i class='fa fa-plus'></i> Add new nat</a>";
+print "         <a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/edit.php' data-class='700' data-action='add' data-id=''><i class='fa fa-plus'></i> "._("Add new nat")."</a>";
 if(!empty($all_nats)) {
 print "         <div class='btn-group' role='group'>";
 print "             <button type='button' class='btn btn-sm btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>"._("Map to existing NAT")." <span class='caret'></span></button>";
@@ -44,7 +44,7 @@ print "</tr>";
 }
 
 # print
-if($User->get_module_permissions ("nat")<1) {
+if($User->get_module_permissions ("nat")==User::ACCESS_NONE) {
     $Result->show ("danger", _("You do not have permissions to access this module"), true);
 }
 elseif(isset($all_nats_per_object['ipaddresses'][$address['id']])) {
@@ -53,10 +53,10 @@ elseif(isset($all_nats_per_object['ipaddresses'][$address['id']])) {
         $n = $all_nats[$nat];
         // set actions
         $links = [];
-        if($User->get_module_permissions ("nat")>1) {
-            $links[] = ["type"=>"header", "text"=>"Manage"];
-            $links[] = ["type"=>"link", "text"=>"Edit NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
-            $links[] = ["type"=>"link", "text"=>"Delete NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
+        if($User->get_module_permissions ("nat")>=User::ACCESS_RW) {
+            $links[] = ["type"=>"header", "text"=>_("Manage")];
+            $links[] = ["type"=>"link", "text"=>_("Edit NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
+            $links[] = ["type"=>"link", "text"=>_("Delete NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
         };
         // print
         print $Tools->print_nat_table ($n, $User->is_admin(false), false, false, "ipaddresses", $address['id'], $User->print_actions($User->user->compress_actions, $links, true));

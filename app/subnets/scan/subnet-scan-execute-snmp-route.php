@@ -1,7 +1,7 @@
 <?php
 
-# Check we have been included via subnet-scan-excute.php and not called directly
-require("subnet-scan-check-included.php");
+# Check we have been included and not called directly
+require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
 /*
  * This script finds slave subnets via snmp
