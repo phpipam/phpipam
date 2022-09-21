@@ -15,57 +15,57 @@ $tools_menu_icons['User Menu'] 	= "fa-user";
 $tools_menu_icons['Devices'] 	= "fa-desktop";
 
 # inclusion check
-$tools_menu_items = array(
-						'changelog',
-						'dhcp',
-						'devices',
-						'favourites',
-						'firewall-zones',
-						'instructions',
-						'ip-calculator',
-						'logs',
-						'multicast-networks',
-						'pass-change',
-						'powerDNS',
-						'request-ip',
-						'requests',
-						'racks',
-						'scanned-networks',
-						'search',
-						'subnet-masks',
-						'subnets',
-						'temp-shares',
-						'user-menu',
-						'vlan',
-						'vrf',
-						'inactive-hosts',
-						'threshold',
-						'nat',
-						'locations',
-						'pstn-prefixes',
-						'mac-lookup',
-						'circuits',
-						'customers',
-						'duplicates',
-						'routing'
-                    );
+$tools_menu_items = [
+	"changelog" => _("changelog"),
+	"dhcp" => _("dhcp"),
+	"devices" => _("devices"),
+	"favourites" => _("favourites"),
+	"firewall-zones" => _("firewall-zones"),
+	"instructions" => _("instructions"),
+	"ip-calculator" => _("ip-calculator"),
+	"logs" => _("logs"),
+	"multicast-networks" => _("multicast-networks"),
+	"pass-change" => _("pass-change"),
+	"powerDNS" => _("powerDNS"),
+	"request-ip" => _("request-ip"),
+	"requests" => _("requests"),
+	"racks" => _("racks"),
+	"scanned-networks" => _("scanned-networks"),
+	"documentation"=> _("documentation"),
+	"search" => _("search"),
+	"subnet-masks" => _("subnet-masks"),
+	"subnets" => _("subnets"),
+	"temp-shares" => _("temp-shares"),
+	"user-menu" => _("user-menu"),
+	"vlan" => _("vlan"),
+	"vrf" => _("vrf"),
+	"inactive-hosts" => _("inactive-hosts"),
+	"threshold" => _("threshold"),
+	"nat" => _("nat"),
+	"locations" => _("locations"),
+	"pstn-prefixes" => _("pstn-prefixes"),
+	"mac-lookup" => _("mac-lookup"),
+	"circuits" => _("circuits"),
+	"customers" => _("customers"),
+	"duplicates" => _("duplicates"),
+	"routing" => _("routing"),
+	 "vaults" => _("vaults"),
+	];
 
-/*
-#custom
-$private_subpages = Config::get('private_subpages');
-if(is_array($private_subpages) && sizeof($private_subpages)>0) {
-    # array and icon
-    $tools_menu['Custom tools'] = array();
-    $tools_menu_icons['Custom tools'] = "fa-star";
-    // loop
-    foreach ($private_subpages as $s) {
-        // title
-        $tools_menu['Custom tools'][] = array("show"=>true,	"icon"=>"fa-angle-right", "name"=>ucwords($s),  "href"=>$s, 	"description"=>ucwords($s)." "._("custom tool"));
-        // add to inclusion check
-        $tools_menu_items[] = $s;
-    }
-}
-*/
+	$private_subpages = Config::ValueOf('private_subpages');
+	if(is_array($private_subpages) && sizeof($private_subpages)>0) {
+		# array and icon
+		$tools_menu[_('Custom tools')] = [];
+		$tools_menu_icons[_('Custom tools')] = "fa-star";
+		// loop
+		foreach ($private_subpages as $s) {
+			// title
+			$tools_menu[_('Custom tools')][] = ["show"=>true, "icon"=>"fa-angle-right", "href"=>$s, "name"=>ucwords($s), "description"=>ucwords($s)." "._("custom tool")];
+			// add to inclusion check
+			$tools_menu_items[$s] = $s;
+		}
+	}
+	
 # arrays
 $tools_menu['Subnets']   = array();
 $tools_menu['Devices']   = array();
