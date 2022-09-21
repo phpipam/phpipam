@@ -1,6 +1,35 @@
-<?php
-ob_start();
+Skip to content
+Search or jump to…
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@chuck-crane 
+umg
+/
+phpipam
+Public
+forked from phpipam/phpipam
+Code
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+Settings
+phpipam/index.php /
+@GaryAllan
+GaryAllan Bugfix: Import leaflet.js v1.7.1 and leaflet.fullscreen v1.0.2
+…
+Latest commit c7eec13 on Oct 3, 2021
+ History
+ 6 contributors
+@phpipam@GaryAllan@Junixx@dcec@coaxke@nhowe91
+Executable File  355 lines (309 sloc)  13.7 KB
 
+<?php
 /* config */
 if (!file_exists("config.php"))	{ die("<br><hr>-- config.php file missing! Please copy default config file `config.dist.php` to `config.php` and set configuration! --<hr><br>phpipam installation documentation: <a href='http://phpipam.net/documents/installation/'>http://phpipam.net/documents/installation/</a>"); }
 
@@ -62,7 +91,7 @@ else {
 
 		# set default pagesize
 		if(!isset($_COOKIE['table-page-size'])) {
-	        setcookie("table-page-size", 50, time()+2592000, "/", false, false, false);
+			setcookie_samesite("table-page-size", 50, 2592000, false);
 		}
 	?>
 	<!DOCTYPE HTML>
@@ -106,28 +135,30 @@ else {
 		<?php } ?>
 
 		<!-- js -->
-		<script type="text/javascript" src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-		<script type="text/javascript" src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/jquery-3.5.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
-		<script type="text/javascript" src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php } ?>
-		<script type="text/javascript" src="js/magic.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-		<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-		<script type="text/javascript" src="js/bootstrap-switch.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/magic.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/bootstrap-switch.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 		<!-- bootstrap table -->
 		<script src="js/bootstrap-table/bootstrap-table.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script src="js/bootstrap-table/bootstrap-table-cookie.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 		<!--[if lt IE 9]>
-		<script type="text/javascript" src="js/dieIE.js"></script>
+		<script src="js/dieIE.js"></script>
 		<![endif]-->
-		<?php if ($User->settings->enableLocations=="1" && strlen(Config::get('gmaps_api_key'))>0) { ?>
-		<script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print "?key=".Config::get('gmaps_api_key'); ?>"></script>
-		<script type="text/javascript" src="js/gmaps.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<?php if ($User->settings->enableLocations=="1") { ?>
+		<link rel="stylesheet" href="css/leaflet.css"/>
+		<script src="js/leaflet.js"></script>
+		<link rel="stylesheet" href="css/leaflet.fullscreen.css"/>
+		<script src="js/leaflet.fullscreen.min.js"></script>
 		<?php }	?>
 		<!-- jQuery UI -->
-		<script type="text/javascript" src="js/jquery-ui-1.12.1.custom.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/jquery-ui-1.12.1.custom.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 	</head>
 
@@ -288,7 +319,7 @@ else {
 					elseif ($_GET['page']=="tools") {
 						if (!isset($_GET['section']))										{ include("app/tools/index.php"); }
 						else {
-	                        if (!in_array($_GET['section'], $tools_menu_items))             { header("Location: ".create_link("error","400")); die(); }
+	                        if (!isset($tools_menu_items[$_GET['section']]))             { header("Location: ".create_link("error","400")); die(); }
 							elseif (!file_exists("app/tools/$_GET[section]/index.php") && !file_exists("app/tools/custom/$_GET[section]/index.php"))
 							                                                                { header("Location: ".create_link("error","404")); die(); }
 							else 															{
@@ -309,7 +340,7 @@ else {
 						if (!isset($_GET['section']))										{ include("app/admin/index.php"); }
 						elseif (@$_GET['subnetId']=="section-changelog")					{ include("app/sections/section-changelog.php"); }
 						else {
-	                        if (!in_array($_GET['section'], $admin_menu_items))             { header("Location: ".create_link("error","400")); die(); }
+	                        if (!isset($admin_menu_items[$_GET['section']]))             { header("Location: ".create_link("error","400")); die(); }
 							elseif(!file_exists("app/admin/$_GET[section]/index.php")) 		{ header("Location: ".create_link("error","404")); die(); }
 							else 															{ include("app/admin/$_GET[section]/index.php"); }
 						}
@@ -351,6 +382,5 @@ else {
 	<!-- end body -->
 	</body>
 	</html>
-	<?php ob_end_flush(); ?>
 	<?php } ?>
 <?php } ?>
