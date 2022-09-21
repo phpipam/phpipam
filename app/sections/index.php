@@ -83,7 +83,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
         else {
             # dashboard, tools menu
             if (!isset($_GET['page']) || $_GET['page']=="dashboard" || $_GET['page']=="tools") {
-                include("menu/menu-tools.php");
+                //include("menu/menu-tools.php");
             }
             # admin menu
             elseif ($_GET['page']=="administration") {
@@ -94,7 +94,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
             }
 
             # tools and admin menu
-           // include("menu/menu-tools-admin.php");
+            include("menu/menu-tools-admin.php");
         }
         ?>
 	</div>	 <!-- end menu div -->
