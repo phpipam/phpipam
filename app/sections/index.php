@@ -94,7 +94,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
             }
 
             # tools and admin menu
-            include("menu/menu-tools-admin.php");
+           // include("menu/menu-tools-admin.php");
         }
         ?>
 	</div>	 <!-- end menu div -->
