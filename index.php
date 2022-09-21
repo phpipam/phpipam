@@ -1,34 +1,3 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@chuck-crane 
-umg
-/
-phpipam
-Public
-forked from phpipam/phpipam
-Code
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Settings
-phpipam/index.php /
-@GaryAllan
-GaryAllan Bugfix: Import leaflet.js v1.7.1 and leaflet.fullscreen v1.0.2
-…
-Latest commit c7eec13 on Oct 3, 2021
- History
- 6 contributors
-@phpipam@GaryAllan@Junixx@dcec@coaxke@nhowe91
-Executable File  355 lines (309 sloc)  13.7 KB
-
 <?php
 /* config */
 if (!file_exists("config.php"))	{ die("<br><hr>-- config.php file missing! Please copy default config file `config.dist.php` to `config.php` and set configuration! --<hr><br>phpipam installation documentation: <a href='http://phpipam.net/documents/installation/'>http://phpipam.net/documents/installation/</a>"); }
