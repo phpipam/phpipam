@@ -11,7 +11,7 @@
 $User->check_user_session();
 
 # perm check
-if ($User->get_module_permissions ("customers")<1) {
+if ($User->get_module_permissions ("customers")==User::ACCESS_NONE) {
 	$Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 # load subpage

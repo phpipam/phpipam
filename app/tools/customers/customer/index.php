@@ -8,7 +8,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # verify module permissions
-$User->check_module_permissions ("customers", 1, true);
+$User->check_module_permissions ("customers", User::ACCESS_R, true);
 
 # strip tags - XSS
 $_GET = $User->strip_input_tags ($_GET);

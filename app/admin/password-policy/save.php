@@ -61,6 +61,6 @@ else															{ $Result->show("success", _("Settings updated successfully")
 if(@$_POST['enforce']==1) {
 	try { $Database->runQuery("update `users` set `passChange` = 'Yes' where `authMethod` = 1;"); }
 	catch (Exception $e) {
-		$Result->show("danger", _('Error updateing users: ').$e->getMessage(), false);
+		$Result->show("danger", _('Error updating users: ').$e->getMessage(), false);
 	}
 }

@@ -17,7 +17,7 @@ $User->check_user_session();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # perm check
-$User->check_module_permissions ("pstn", 2, true, false);
+$User->check_module_permissions ("pstn", User::ACCESS_RW, true, false);
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "pstn_number", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
@@ -70,7 +70,7 @@ if(sizeof($custom) > 0) {
 		}
 		//not null!
 		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) {
-																		{ $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+			{ $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 		}
 		# save to update array
 		$update[$myField['name']] = $_POST[$myField['name']];
@@ -89,7 +89,7 @@ $values = array(
     "description" =>$_POST['description']
     );
 # remove device
-if ($User->get_module_permissions ("devices")<2) {
+if ($User->get_module_permissions ("devices")<User::ACCESS_RW) {
     unset ($values['deviceId']);
 }
 
@@ -99,5 +99,9 @@ if(isset($update)) {
 }
 
 # execute update
-if(!$Admin->object_modify ("pstnNumbers", $_POST['action'], "id", $values))    { $Result->show("danger",   _("Number $_POST[action] failed"), false); }
-else																	       { $Result->show("success", _("Number $_POST[action] successful"), false); }
+if(!$Admin->object_modify ("pstnNumbers", $_POST['action'], "id", $values)) {
+    $Result->show("danger", _("Number")." ".$_POST["action"]." "._("failed"), false);
+}
+else {
+    $Result->show("success", _("Number")." ".$_POST["action"]." "._("successful"), false);
+}

@@ -103,7 +103,7 @@ if(sizeof($custom_bgp) > 0) {
         }
 
         # create links
-        $bgp->{$field['name']} = $Result->create_links ($bgp->{$field['name']});
+        $bgp->{$field['name']} = $Tools->create_links ($bgp->{$field['name']});
 
         print "<tr>";
         print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
@@ -113,7 +113,7 @@ if(sizeof($custom_bgp) > 0) {
 }
 
 // edit, delete
-if($User->get_module_permissions ("routing")>1) {
+if($User->get_module_permissions ("routing")>=User::ACCESS_RW) {
     print "<tr>";
     print " <td colspan='2'><hr></td>";
     print "</tr>";
@@ -123,13 +123,13 @@ if($User->get_module_permissions ("routing")>1) {
     print " <td class='actions'>";
 
     $links = [];
-    if($User->get_module_permissions ("routing")>1) {
-        $links[] = ["type"=>"header", "text"=>"Manage BGP"];
-        $links[] = ["type"=>"link", "text"=>"Edit BGP", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp.php' data-action='edit' data-class='700' data-bgpid='$bgp->id'", "icon"=>"pencil"];
+    if($User->get_module_permissions ("routing")>=User::ACCESS_RW) {
+        $links[] = ["type"=>"header", "text"=>_("Manage BGP")];
+        $links[] = ["type"=>"link", "text"=>_("Edit BGP"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp.php' data-action='edit' data-class='700' data-bgpid='$bgp->id'", "icon"=>"pencil"];
     }
-    if($User->get_module_permissions ("routing")>2) {
-        $links[] = ["type"=>"link", "text"=>"Delete BGP", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp.php' data-action='delete' data-class='700' data-bgpid='$bgp->id'", "icon"=>"times"];
-        $links[] = ["type"=>"link", "text"=>"Subnet mapping", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp-mapping.php' data-class='700' data-secondary='true' data-bgpid='$bgp->id'",  "icon"=>"plus"];
+    if($User->get_module_permissions ("routing")>=User::ACCESS_RWA) {
+        $links[] = ["type"=>"link", "text"=>_("Delete BGP"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp.php' data-action='delete' data-class='700' data-bgpid='$bgp->id'", "icon"=>"times"];
+        $links[] = ["type"=>"link", "text"=>_("Subnet mapping"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp-mapping.php' data-class='700' data-secondary='true' data-bgpid='$bgp->id'",  "icon"=>"plus"];
         $links[] = ["type"=>"divider"];
     }
     // print links

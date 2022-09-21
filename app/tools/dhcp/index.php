@@ -12,7 +12,7 @@ $tabs = array("subnets", "leases", "reservations");
 <h4><?php print _('DHCP information'); ?></h4>
 <hr><br>
 
-<?php if($User->settings->enableDHCP==1 && $User->get_module_permissions ("dhcp")>0) { ?>
+<?php if($User->settings->enableDHCP==1 && $User->get_module_permissions ("dhcp")>=User::ACCESS_R) { ?>
 
     <?php
     # validate DHCP settings - JSON
@@ -62,7 +62,7 @@ $tabs = array("subnets", "leases", "reservations");
 <?php
 }
 } else {
-    if($User->get_module_permissions ("dhcp")<1) {
+    if($User->get_module_permissions ("dhcp")==User::ACCESS_NONE) {
         $Result->show("danger", _("You do not have permissions to access this module"), false);
     }
     else {

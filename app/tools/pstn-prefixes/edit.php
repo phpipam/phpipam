@@ -22,10 +22,10 @@ $csrf = $_POST['action']=="add" ? $User->Crypto->csrf_cookie ("create", "pstn_ad
 
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("pstn", 2, true, true);
+    $User->check_module_permissions ("pstn", User::ACCESS_RW, true, true);
 }
 else {
-    $User->check_module_permissions ("pstn", 3, true, true);
+    $User->check_module_permissions ("pstn", User::ACCESS_RWA, true, true);
 }
 
 
@@ -167,7 +167,7 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
 
 
     	<!-- Device -->
-        <?php if($User->get_module_permissions ("devices")>0) { ?>
+        <?php if($User->get_module_permissions ("devices")>=User::ACCESS_R) { ?>
     	<tr>
     		<th><?php print _('Device'); ?></th>
     		<td id="deviceDropdown">
@@ -214,9 +214,8 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
     		# all my fields
     		foreach($custom as $field) {
         		// create input > result is array (required, input(html), timepicker_index)
-        		$custom_input = $Tools->create_custom_field_input ($field, $prefix, $_POST['action'], $timepicker_index);
-        		// add datepicker index
-        		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+        		$custom_input = $Tools->create_custom_field_input ($field, $prefix, $timepicker_index);
+        		$timepicker_index = $custom_input['timepicker_index'];
                 // print
     			print "<tr>";
     			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";

@@ -1,5 +1,8 @@
 <?php
 
+# Check we have been included and not called directly
+require( dirname(__FILE__) . '/../../../functions/include-only.php' );
+
 /**
  * Based on GET parameter we load:
  * 	- all circuits
@@ -25,7 +28,7 @@ $hidden_provider_fields = is_array(@$hidden_provider_fields['circuitProviders'])
 include("app/tools/circuits/menu.php");
 
 # perm check
-if ($User->get_module_permissions ("circuits")<1) {
+if ($User->get_module_permissions ("circuits")==User::ACCESS_NONE) {
 	$Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 # load subpage

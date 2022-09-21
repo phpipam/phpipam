@@ -74,8 +74,8 @@ $values = array("id"=>@$_POST['nameserverid'],
 				"description"=>$_POST['description']
 				);
 # update
-if(!$Admin->object_modify("nameservers", $_POST['action'], "id", $values))	{ $Result->show("danger",  _("Failed to $_POST[action] nameserver set").'!', true); }
-else																		{ $Result->show("success", _("Nameserver set $_POST[action] successfull").'!', false); }
+if(!$Admin->object_modify("nameservers", $_POST['action'], "id", $values))	{ $Result->show("danger", _("Failed to")." ".$_POST["action"]." "._("nameserver set").'!', true); }
+else { $Result->show("success", _("Nameserver set")." ".$_POST["action"]." "._("successful").'!', false); }
 
 
 # remove all references if delete

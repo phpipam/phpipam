@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("devices", 1, true, false);
+$User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 
 # check
 is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true);
@@ -52,7 +52,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print "	<td>$device_type->tname</td>";
     	print "</tr>";
 
-        if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
+        if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
     	<tr>
     		<th><?php print _('Location'); ?></th>
     		<td>
@@ -77,22 +77,22 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
         <?php }
 
         // acrtions
-        if($User->get_module_permissions ("devices")>1) {
+        if($User->get_module_permissions ("devices")>=User::ACCESS_RW) {
             print "<tr>";
             print " <td></td>";
             print " <td>";
 
             $links = [];
-            $links[] = ["type"=>"header", "text"=>"Manage device"];
-            $links[] = ["type"=>"link", "text"=>"Edit device", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='edit' data-switchId='$device[id]'", "icon"=>"pencil"];
+            $links[] = ["type"=>"header", "text"=>_("Manage device")];
+            $links[] = ["type"=>"link", "text"=>_("Edit device"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='edit' data-switchId='$device[id]'", "icon"=>"pencil"];
 
-            if($User->get_module_permissions ("devices")>2) {
-                $links[] = ["type"=>"link", "text"=>"Delete device", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='delete' data-switchId='$device[id]'", "icon"=>"times"];
+            if($User->get_module_permissions ("devices")>=User::ACCESS_RWA) {
+                $links[] = ["type"=>"link", "text"=>_("Delete device"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='delete' data-switchId='$device[id]'", "icon"=>"times"];
                 $links[] = ["type"=>"divider"];
             }
             if($User->settings->enableSNMP=="1" && $User->is_admin(false)) {
-                $links[] = ["type"=>"header", "text"=>"SNMP"];
-                $links[] = ["type"=>"link", "text"=>"Manage SNMP", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='delete' data-switchId='$device[id]''", "icon"=>"cogs"];
+                $links[] = ["type"=>"header", "text"=>_("SNMP")];
+                $links[] = ["type"=>"link", "text"=>_("Manage SNMP"), "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='delete' data-switchId='$device[id]''", "icon"=>"cogs"];
             }
             // print links
             print $User->print_actions($User->user->compress_actions, $links, true, true);
@@ -128,7 +128,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
             print "</tr>";
 
             // version
-            $version = $device['snmp_version']=="0" ? "<span class='text-muted'>Disabled</span>" : "Version ".$device['snmp_version'];
+            $version = $device['snmp_version']=="0" ? "<span class='text-muted'>"._("Disabled")."</span>" : _("Version")." ".$device['snmp_version'];
             print '<tr>';
             print " <th>". _('SNMP version').'</th>';
             print " <td>$version</td>";
@@ -211,17 +211,17 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print " <td><span class='badge badge1 badge5'>$cnt_addresses "._('Addresses')."</span></td>";
     	print "</tr>";
     	print "<tr>";
-        if($User->settings->enableNAT=="1" && $User->get_module_permissions ("nat")>0) {
+        if($User->settings->enableNAT=="1" && $User->get_module_permissions ("nat")>=User::ACCESS_R) {
     	print " <th>"._('NAT')."</th>";
     	print " <td><span class='badge badge1 badge5'>$cnt_nat "._('NAT')."</span></td>";
     	print "</tr>";
         }
-        if($User->settings->enablePSTN=="1" && $User->get_module_permissions ("pstn")>0) {
+        if($User->settings->enablePSTN=="1" && $User->get_module_permissions ("pstn")>=User::ACCESS_R) {
         print " <th>"._('PSTN')."</th>";
         print " <td><span class='badge badge1 badge5'>$cnt_pstn "._('PSTN')."</span></td>";
         print "</tr>";
         }
-        if($User->settings->enableCircuits=="1" && $User->get_module_permissions ("pstn")>0) {
+        if($User->settings->enableCircuits=="1" && $User->get_module_permissions ("pstn")>=User::ACCESS_R) {
         print " <th>"._('Circuits')."</th>";
         print " <td><span class='badge badge1 badge5'>$cnt_circuits "._('Circuits')."</span></td>";
         print "</tr>";
@@ -243,7 +243,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     			}
 
     			# create links
-    			$device[$field['name']] = $Result->create_links ($device[$field['name']]);
+    			$device[$field['name']] = $Tools->create_links ($device[$field['name']]);
 
     			print "<tr>";
     			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
@@ -274,7 +274,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
 
 
 	# rack
-	if ($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>0) {
+	if ($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
 
     	print "<td vertical-align:top !important;' class='text-right'>";
         // validate rack

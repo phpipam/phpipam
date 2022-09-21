@@ -1,7 +1,10 @@
 <?php
 
+# Check we have been included and not called directly
+require( dirname(__FILE__) . '/../../../../functions/include-only.php' );
+
 # perm check
-$User->check_module_permissions ("circuits", 1, true, false);
+$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
 
 # title
 print "<h4>"._('Provider details')."</h4>";
@@ -41,7 +44,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 			}
 
 			# create links
-			$provider->{$field['name']} = $Result->create_links ($provider->{$field['name']});
+			$provider->{$field['name']} = $Tools->create_links ($provider->{$field['name']});
 
 			print "<tr>";
 			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

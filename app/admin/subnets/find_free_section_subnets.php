@@ -42,7 +42,7 @@ if ($section_subnets!==false) {
 }
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
     // select dropdown value
     $('.dropdown-subnet_search li a').click(function () {

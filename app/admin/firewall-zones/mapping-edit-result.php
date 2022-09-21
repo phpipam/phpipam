@@ -21,12 +21,12 @@ $User->check_user_session();
 if($_POST['action'] != 'add' && $_POST['action'] != 'delete' && $_POST['action'] != 'edit'){
 	$Result->show("danger", _("Invalid action."), true);
 }
-# check the zone alias. valid values are alphanumeric characters and special characters like ".-_ "
-if($_POST['alias'] && !preg_match('/^[0-9a-zA-Z.\/\-_ ]+$/i',$_POST['alias'])) {
+# check the zone alias. valid values are alphanumeric characters and special characters like ".-_: "
+if($_POST['alias'] && !preg_match('/^[0-9a-zA-Z.\/\-_ :]+$/i',$_POST['alias'])) {
 	$Result->show("danger", _("Invalid zone alias value."), true);
 }
-# check the interface name. valid values are alphanumeric characters and special characters like ".-_/ "
-if($_POST['interface'] && !preg_match('/^[0-9a-zA-Z.\/\-_ ]+$/i',$_POST['interface'])) {
+# check the interface name. valid values are alphanumeric characters and special characters like ".-_/: "
+if($_POST['interface'] && !preg_match('/^[0-9a-zA-Z.\/\-_ :]+$/i',$_POST['interface'])) {
 	$Result->show("danger", _("Invalid interface."), true);
 }
 if ($_POST['action'] != 'delete') {

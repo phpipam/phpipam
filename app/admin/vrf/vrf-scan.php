@@ -20,7 +20,7 @@ $User->check_user_session();
 # scan disabled
 if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true, true); }
 # perm check
-$User->check_module_permissions ("vrf", 3, true, false);
+$User->check_module_permissions ("vrf", User::ACCESS_RWA, true, false);
 
 # fetch devices that use get_routing_table query
 $scan_devices = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_vrf_table%", "id", true, true);

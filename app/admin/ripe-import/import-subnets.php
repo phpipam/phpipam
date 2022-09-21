@@ -92,6 +92,6 @@ else {
 		}
 	}
 	//check if all is ok and print it!
-	if($errors_import_failed == 0) 	{ $Result->show("success", _("Import successfull")."!", false); }
+	if($errors_import_failed == 0) 	{ $Result->show("success", _("Import successful")."!", false); }
 }
 ?>

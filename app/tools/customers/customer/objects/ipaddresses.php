@@ -2,7 +2,7 @@
 <hr>
 <span class="text-muted"><?php print _("All IP addresses belonging to customer"); ?>.</span>
 
-<script type="text/javascript">
+<script>
 /* fix for ajax-loading tooltips */
 $('body').tooltip({ selector: '[rel=tooltip]' });
 </script>
@@ -135,7 +135,7 @@ foreach($addresses as $dummy) {
 
 	// print info button for hover
 	if(in_array('note', $selected_ip_fields)) {
-		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", addslashes(str_replace("'", "&#39;", $addresses[$n]->note)))."'></td>"; }
+		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", addslashes(str_replace("'", "&#39;", $addresses[$n]->note)))."'></i></td>"; }
 		else 												{ print "<td class='narrow'></td>"; }
 	}
 
@@ -165,24 +165,24 @@ foreach($addresses as $dummy) {
 	print "	<td class='actions'>";
     $links = [];
 
-    $links[] = ["type"=>"header", "text"=>"View"];
-    $links[] = ["type"=>"link", "text"=>"Show address", "href"=>create_link("subnets",$subnet['sectionId'],$dummy->subnetId,"address-details",$dummy->id), "icon"=>"eye", "visible"=>"dropdown"];
+    $links[] = ["type"=>"header", "text"=>_("View")];
+    $links[] = ["type"=>"link", "text"=>_("Show address"), "href"=>create_link("subnets",$subnet['sectionId'],$dummy->subnetId,"address-details",$dummy->id), "icon"=>"eye", "visible"=>"dropdown"];
 
     if($subnet_permission>1) {
-    	// manage
-	    $links[] = ["type"=>"divider"];
-        $links[] = ["type"=>"header", "text"=>"Manage"];
-        $links[] = ["type"=>"link", "text"=>"Edit address",   "href"=>"", "class"=>"modIPaddr", "dataparams"=>" data-action='edit'  data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."'", "icon"=>"pencil"];
-        $links[] = ["type"=>"link", "text"=>"Delete address", "href"=>"", "class"=>"modIPaddr", "dataparams"=>" data-action='delete' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' id2='".$Subnets->transform_to_dotted($addresses[$n]->ip_addr)."'", "icon"=>"times"];
-	    // ping
-	    $links[] = ["type"=>"divider"];
-        $links[] = ["type"=>"header", "text"=>"Status check"];
-        $links[] = ["type"=>"link", "text"=>"Check avalibility", "href"=>"", "class"=>"ping_ipaddress", "dataparams"=>" data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."'", "icon"=>"cogs"];
+        // manage
+        $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>_("Manage")];
+        $links[] = ["type"=>"link", "text"=>_("Edit address"), "href"=>"", "class"=>"modIPaddr", "dataparams"=>" data-action='edit'  data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."'", "icon"=>"pencil"];
+        $links[] = ["type"=>"link", "text"=>_("Delete address"), "href"=>"", "class"=>"modIPaddr", "dataparams"=>" data-action='delete' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' id2='".$Subnets->transform_to_dotted($addresses[$n]->ip_addr)."'", "icon"=>"times"];
+        // ping
+        $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>_("Status check")];
+        $links[] = ["type"=>"link", "text"=>_("Check availability"), "href"=>"", "class"=>"ping_ipaddress", "dataparams"=>" data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."'", "icon"=>"cogs"];
     }
-    if($User->get_module_permissions ("customers")>1) {
- 	    $links[] = ["type"=>"divider"];
-        $links[] = ["type"=>"header", "text"=>"Unlink"];
-        $links[] = ["type"=>"link", "text"=>"Unlink object", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700' data-object='ipaddresses' data-id='{$addresses[$n]->id}'", "icon"=>"unlink"];
+    if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
+        $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>_("Unlink")];
+        $links[] = ["type"=>"link", "text"=>_("Unlink object"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700' data-object='ipaddresses' data-id='{$addresses[$n]->id}'", "icon"=>"unlink"];
     }
     // print links
     print $User->print_actions($User->user->compress_actions, $links);
