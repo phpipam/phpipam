@@ -1,4 +1,6 @@
 <?php
+ob_start();
+
 /* config */
 if (!file_exists("config.php"))	{ die("<br><hr>-- config.php file missing! Please copy default config file `config.dist.php` to `config.php` and set configuration! --<hr><br>phpipam installation documentation: <a href='http://phpipam.net/documents/installation/'>http://phpipam.net/documents/installation/</a>"); }
 
@@ -60,7 +62,7 @@ else {
 
 		# set default pagesize
 		if(!isset($_COOKIE['table-page-size'])) {
-			setcookie_samesite("table-page-size", 50, 2592000, false);
+	        setcookie("table-page-size", 50, time()+2592000, "/", false, false, false);
 		}
 	?>
 	<!DOCTYPE HTML>
@@ -104,28 +106,28 @@ else {
 		<?php } ?>
 
 		<!-- js -->
-		<script src="js/jquery-3.5.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-		<script src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script type="text/javascript" src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
-		<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script type="text/javascript" src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php } ?>
-		<script src="js/magic.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-		<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-		<script src="js/bootstrap-switch.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script type="text/javascript" src="js/magic.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script type="text/javascript" src="js/bootstrap-switch.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 		<!-- bootstrap table -->
 		<script src="js/bootstrap-table/bootstrap-table.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script src="js/bootstrap-table/bootstrap-table-cookie.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 		<!--[if lt IE 9]>
-		<script src="js/dieIE.js"></script>
+		<script type="text/javascript" src="js/dieIE.js"></script>
 		<![endif]-->
-		<?php if ($User->settings->enableLocations=="1" && strlen(Config::ValueOf('gmaps_api_key'))>0) { ?>
-		<script src="https://maps.google.com/maps/api/js<?php print "?key=".Config::ValueOf('gmaps_api_key'); ?>"></script>
-		<script src="js/gmaps.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<?php if ($User->settings->enableLocations=="1" && strlen(Config::get('gmaps_api_key'))>0) { ?>
+		<script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print "?key=".Config::get('gmaps_api_key'); ?>"></script>
+		<script type="text/javascript" src="js/gmaps.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php }	?>
 		<!-- jQuery UI -->
-		<script src="js/jquery-ui-1.12.1.custom.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.12.1.custom.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 	</head>
 
@@ -204,7 +206,7 @@ else {
 	<!-- page sections / menu -->
 	<div class="content">
 	<div id="sections_overlay">
-	<?php if($_GET['page']!="login" && $_GET['page']!="request_ip" && $_GET['page']!="upgrade" && $_GET['page']!="install" && $User->user->passChange!="Yes")  include('app/sections/index.php');?>
+	    <?php if($_GET['page']!="login" && $_GET['page']!="request_ip" && $_GET['page']!="upgrade" && $_GET['page']!="install" && $User->user->passChange!="Yes")  include('app/sections/index.php');?>
 	</div>
 	</div>
 
@@ -285,8 +287,8 @@ else {
 					# tools
 					elseif ($_GET['page']=="tools") {
 						if (!isset($_GET['section']))										{ include("app/tools/index.php"); }
-						else {print_r ($tools_menu_items);print "<p>";
-	                        if (!isset($tools_menu_items[$_GET['section']]))             { header("Location: ".create_link("error","400")); die(); }
+						else {
+	                        if (!in_array($_GET['section'], $tools_menu_items))             { header("Location: ".create_link("error","400")); die(); }
 							elseif (!file_exists("app/tools/$_GET[section]/index.php") && !file_exists("app/tools/custom/$_GET[section]/index.php"))
 							                                                                { header("Location: ".create_link("error","404")); die(); }
 							else 															{
@@ -306,15 +308,15 @@ else {
 
 						if (!isset($_GET['section']))										{ include("app/admin/index.php"); }
 						elseif (@$_GET['subnetId']=="section-changelog")					{ include("app/sections/section-changelog.php"); }
-						else {print_r ($admin_menu_items);print"<p>";
-	                        if (!isset($admin_menu_items[$_GET['section']]))             { print "<h4>Here</h4>";die;header("Location: ".create_link("error","400")); die(); }
-							elseif(!file_exists("app/admin/".$_GET['section']."/index.php")) 		{ header("Location: ".create_link("error","404")); die(); }
+						else {
+	                        if (!in_array($_GET['section'], $admin_menu_items))             { header("Location: ".create_link("error","400")); die(); }
+							elseif(!file_exists("app/admin/$_GET[section]/index.php")) 		{ header("Location: ".create_link("error","404")); die(); }
 							else 															{ include("app/admin/$_GET[section]/index.php"); }
 						}
 					}
 					# default - error
 					else {
-																							{ print "<h4>Other</h4>";die;header("Location: ".create_link("error","400")); die(); }
+																							{ header("Location: ".create_link("error","400")); die(); }
 					}
 				print "</div>";
 				print "</td>";
@@ -349,5 +351,6 @@ else {
 	<!-- end body -->
 	</body>
 	</html>
+	<?php ob_end_flush(); ?>
 	<?php } ?>
 <?php } ?>
