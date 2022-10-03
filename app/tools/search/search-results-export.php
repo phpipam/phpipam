@@ -284,7 +284,7 @@ if(is_array($result_subnets) && sizeof($result_subnets)>0) {
 	$rc = 0;
 	$worksheet->write($lineCount, $rc, _('Section') ,$format_title);
 	$rc++;
-	$worksheet->write($lineCount, $rc, _('Subet') ,$format_title);
+	$worksheet->write($lineCount, $rc, _('Subnet') ,$format_title);
 	$rc++;
 	$worksheet->write($lineCount, $rc, _('Mask') ,$format_title);
 	$rc++;
