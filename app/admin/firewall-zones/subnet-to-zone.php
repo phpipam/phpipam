@@ -6,7 +6,7 @@
  *************************************************************/
 
 # functions
-require_once( dirname(__FILE__) . '/phpipam/functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 print "loc=".$_POST[loc];
 /*
 # initialize classes
