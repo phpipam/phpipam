@@ -26,7 +26,7 @@ if (!preg_match('/^[0-9]+$/i', $_POST['subnetId'])) 	{ $Result->show("danger", _
 
 //$firewallZones = $Admin->fetch_multiple_objects("firewallZoneMapping","deviceId",$_POST['vr'],"alias");
 $fwtype=$Admin->fetch_object("devicetypes","tname","fwl");
-$fwinfo=$Database->getObjectsQuery('SELECT * from devices where location='. $_POST[loc].' and type='.$fwtype->tid);
+//$fwinfo=$Database->getObjectsQuery('SELECT * from devices where location='. $_POST[loc].' and type='.$fwtype->tid);
 //$fwvsysinfo=$Admin->fetch_multiple_objects("fwvsys","firewall",$_POST['fw'],"name");
 //$fwvrinfo=$Admin->fetch_multiple_objects("fwvrs","vfw",$_POST['vsys'],"name");
 /*
