@@ -4,7 +4,7 @@ print "loc=".$_POST[loc];
  *	subnet-to-zone.php
  *	add subnet (from detail view) to existing firewall zone
  *************************************************************/
-/*
+
 # functions
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
@@ -14,7 +14,7 @@ $Admin 	  = new Admin ($Database);
 $User 	  = new User ($Database);
 $Result   = new Result ();
 $Zones    = new FirewallZones($Database);
-
+/*
 # validate session parameters
 $User->check_user_session();
 
