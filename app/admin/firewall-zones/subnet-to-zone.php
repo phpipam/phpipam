@@ -6,8 +6,8 @@ print "loc=".$_POST[loc];
  *************************************************************/
 
 # functions
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-/*
+//require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+
 # initialize classes
 $Database = new Database_PDO;
 $Admin 	  = new Admin ($Database);
