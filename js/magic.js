@@ -1585,9 +1585,10 @@ $(document).on("click", ".subnet_to_zone", function() {
     showSpinner();
     var subnetId  = $(this).attr('data-subnetId');
     var operation = $(this).attr('data-operation');
+    var loc = $(this).attr('data-loc');
     //format posted values
-    var postdata = "operation="+operation+"&subnetId="+subnetId;
-    $.post('app/admin/firewall-zones/subnet-to-zone.php', postdata, function(data) {
+    var postdata = "operation="+operation+"&subnetId="+subnetId+"&loc="+loc;
+    $.post('/autodb/app/admin/firewall-zones/subnet-to-zone.php', postdata, function(data) {
         $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
@@ -1597,8 +1598,14 @@ $(document).on("click", ".subnet_to_zone", function() {
 
 //submit form
 $(document).on("click", "#subnet-to-zone-submit", function() {
-    submit_popup_data (".subnet-to-zone-result", "app/admin/firewall-zones/subnet-to-zone-save.php", $('form#subnet-to-zone-edit').serialize());
+    submit_popup_data (".subnet-to-zone-result", "/autodb/app/admin/firewall-zones/subnet-to-zone-save.php", $('form#subnet-to-zone-edit').serialize());
 });
+
+//field change
+$(document).on("change", "#fwzsubmap", function(){
+	open_popup("500", "/autodb/app/admin/firewall-zones/subnet-to-zone.php", $('form#subnet-to-zone-edit').serialize() );
+  });
+
 
 // trigger the check for any mapping of the selected zone
 $(document).on("change", ".checkMapping",(function () {
@@ -1607,7 +1614,7 @@ $(document).on("change", ".checkMapping",(function () {
     pData.push({name:'operation',value:'checkMapping'});
 
     //load results
-    $.post('app/admin/firewall-zones/ajax.php', pData, function(data) {
+    $.post('/autodb/app/admin/firewall-zones/ajax.php', pData, function(data) {
         $('div.mappingAdd').html(data).slideDown('fast');
 
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
