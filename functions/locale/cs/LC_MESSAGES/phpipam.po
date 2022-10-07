@@ -3,15 +3,17 @@
 # This file is distributed under the same license as the phpipam package.
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
+
 # "Project-Id-Version: 1.40\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
-# "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+# "PO-Revision-Date: 2015-08-02 14:33+0200\n"
 # "Last-Translator: \n"
-# "Language: \n"
+# "Language: English\n"
 # "MIME-Version: 1.0\n"
 # "Content-Type: text/plain; charset=UTF-8\n"
 # "Content-Transfer-Encoding: 8bit\n"
+
 #: functions/functions-install.php:85 functions/functions-install.php:133
 #: functions/functions-install.php:150 functions/functions-install.php:182
 #: functions/functions-install.php:199 functions/functions-install.php:236
@@ -72,87 +74,85 @@
 #: site/ipaddr/modifyIpAddressCheck.php:103
 #: site/ipaddr/modifyIpAddressCheck.php:179
 msgid "Error"
-msgstr "Erro"
+msgstr "Chyba"
 
 #: functions/functions-install.php:252
 msgid "Login successful"
-msgstr "Login bem sucedido"
+msgstr "Úspěšné přihlášení"
 
 #: functions/functions-install.php:292
 msgid "AD login successful"
-msgstr "Login no AD bem sucedido"
+msgstr "AD přihlášení úspěšné"
 
 #: functions/functions-install.php:296
 msgid "LDAP login successful"
-msgstr "Login no LDAP bem sucedido"
+msgstr "LDAP přihlášení úspěšné"
 
 #: functions/functions-install.php:304
 msgid "Failed to connect to AD server"
-msgstr "Falha ao conectar ao servidor de AD"
+msgstr "Chyba spojení s AD serverem"
 
 #: functions/functions-install.php:308
 msgid "Failed to connect to LDAP server"
-msgstr "Falha ao conectar ao servidor LDAP"
+msgstr "Chyba spojení s LDAP serverem"
 
 #: functions/functions-install.php:316
 msgid "Failed to authenticate user against AD"
-msgstr "Falha na autentica&ccedil;&atilde;o do usu&aacute;rio no AD"
+msgstr "Chyba autentikace uživatele s AD"
 
 #: functions/functions-install.php:320
 msgid "Failed to authenticate user against LDAP"
-msgstr "Falha na autentica&ccedil;&atilde;o do usu&aacute;rio no LDAP"
+msgstr "Chyba autentikace uživatele s LDAP"
 
 #: functions/functions-install.php:328 functions/functions-install.php:332
 #: functions/functions-install.php:341 functions/functions-install.php:345
 msgid "Wrong username or password"
-msgstr "Nome de usu&aacute;rio ou senha errada"
+msgstr "Chybný uživatel nebo heslo"
 
 #: functions/functions-install.php:353
 msgid "Failed to log in"
-msgstr "Falha ao entrar"
+msgstr "Chyba přihlášení"
 
 #: functions/functions-install.php:466
 msgid "Administrator level privileges are required to access this site"
-msgstr ""
-"Privil&eacute;gios de administrador s&atilde;o necess&aacute;rios para "
-"acessar a este site"
+msgstr "Pro přístup na tyto stránky je potřeba oprávnění úrovně Administrátora"
 
 #: functions/functions-admin.php:20
 msgid "Real name field is mandatory!"
-msgstr "Campo nome real &eacute; obrigat&oacute;rio!"
+msgstr "Pole skutečné jméno je povinné!"
 
 #: functions/functions-admin.php:22 site/tools/userMenuSelfMod.php:29
 msgid "Passwords do not match!"
-msgstr "As senhas n&atilde;o s&atilde;o iguais!"
+msgstr "Hesla nesouhlasí"
 
 #: functions/functions-admin.php:25 functions/functions-admin.php:26
 #: site/tools/userMenuSelfMod.php:28
 msgid "Password must be at least 8 characters long!"
-msgstr "A senha deve ter pelo menos 8 caracteres!"
+msgstr "Heslo musí mít délku nejméně 8 znaků!"
 
 #: functions/functions-admin.php:29
 msgid "Invalid email address!"
-msgstr "E-mail inv&aacute;lido!"
+msgstr "Chyba v emailové adrese!"
 
 #: functions/functions-admin.php:45 site/admin/usersEditResult.php:97
 msgid "User"
-msgstr "Usu&aacute;rio"
+msgstr "Uživatel"
 
 #: functions/functions-admin.php:45
 msgid "already exists!"
-msgstr "j&aacute; existe!"
+msgstr "již existuje!"
 
 #: functions/functions-admin.php:73 site/admin/usersEditResult.php:43
 msgid "Cannot delete user"
-msgstr "N&atilde;o &eacute; poss&iacute;vel excluir usu&aacute;rio"
+msgstr "Uživatele nelze vymazat"
 
 #: functions/functions-admin.php:185
 msgid "Cannot update user"
-msgstr "N&atilde;o &eacute; poss&iacute;vel atualizar usu&aacute;rio"
+msgstr "Uživatele nelze aktualizovat"
 
 #: functions/functions-admin.php:921 site/admin/manageVRFEditResult.php:23
 msgid "Name is mandatory"
-msgstr "Nome &eacute; obrigat&oacute;rio"
+msgstr "Jméno je povinné"
 
 #: functions/functions-admin.php:1138 functions/functions-admin.php:1158
 #: site/tools/searchResults.php:114
@@ -177,88 +177,88 @@ msgstr "Hub"
 
 #: functions/functions-admin.php:1142 functions/functions-admin.php:1162
 msgid "Wireless"
-msgstr "Wireless"
+msgstr ""
 
 #: functions/functions-admin.php:1143 functions/functions-admin.php:1163
 msgid "Database"
-msgstr "Banco de Dados"
+msgstr "Databáze"
 
 #: functions/functions-admin.php:1144 functions/functions-admin.php:1164
 msgid "Workstation"
-msgstr "Workstation"
+msgstr ""
 
 #: functions/functions-admin.php:1145
 msgid "Laptop"
-msgstr "Laptop"
+msgstr ""
 
 #: functions/functions-admin.php:1146 functions/functions-admin.php:1165
 #: site/admin/adminMenu.php:85
 msgid "Other"
-msgstr "Outro"
+msgstr "Jiné"
 
 #: functions/functions-admin.php:1449
 msgid "Update settings error"
-msgstr "Erro na altera&ccedil;&atilde;o das configura&ccedil;&otilde;es"
+msgstr "Chyba aktualizace nastavení"
 
 #: functions/functions-admin.php:1497
 msgid "Replaced"
-msgstr "Substitu&iacute;do"
+msgstr "Nahrazen"
 
 #: functions/functions-admin.php:1497
 msgid "items successfully"
-msgstr "itens com sucesso"
+msgstr "položky úspěšné"
 
 #: functions/functions-admin.php:1546
 msgid "Wrong IP address"
-msgstr "Endere&ccedil;o IP errado"
+msgstr "Chybná IP adresa"
 
 #: functions/functions-admin.php:1551
 msgid "IP address already exists"
-msgstr "Endere&ccedil;o IP j&aacute; existe"
+msgstr "IP adresa již existuje"
 
 #: functions/functions-common.php:25
 msgid "Page not referred properly"
-msgstr "P&aacute;gina n&atilde;o se refere propriamente"
+msgstr ""
 
 #: functions/functions-common.php:46
 msgid "Please login first"
-msgstr "Por favor, autentique-se primeiro"
+msgstr "Nejdříve se přihlaste, prosím"
 
 #: functions/functions-common.php:117
 msgid "Administrator level privileges required"
-msgstr "Privil&eacute;gios de administrador necess&aacute;rios"
+msgstr ""
 
 #: functions/functions-common.php:532
 msgid "No access"
-msgstr "Sem acesso"
+msgstr "Bez přístupu"
 
 #: functions/functions-common.php:533
 msgid "Read"
-msgstr "Leitura"
+msgstr "Čtení"
 
 #: functions/functions-common.php:534
 msgid "Read / Write"
-msgstr "Leitura / Escrita"
+msgstr "Čtení / Zápis"
 
 #: functions/functions-common.php:535 site/admin/groupEditResult.php:23
 msgid "error"
-msgstr "erro"
+msgstr "chyba"
 
 #: functions/functions-common.php:768 site/tools/toolsMenu.php:22
 #: site/sections.php:88
 msgid "Tools"
-msgstr "Ferramentas"
+msgstr "Nástroje"
 
 #: functions/functions-network.php:67
 msgid "Not in use (Offline)"
-msgstr "N&atilde;o est&aacute; em uso (Offline)"
+msgstr "Nevyužíváno (Offline)"
 
 #: functions/functions-network.php:69 site/ipaddr/ipAddressPrintTable.php:240
 #: site/ipaddr/modifyIpAddress.php:246 site/ipaddr/subnetDetailsGraph.php:52
 #: site/admin/manageRequestEdit.php:94 site/admin/exportGenerateXLS.php:119
 #: site/admin/exportSubnet.php:154
 msgid "Reserved"
-msgstr "Reservado"
+msgstr "Rezervováno"
 
 #: functions/functions-network.php:70 site/ipaddr/ipAddressPrintTable.php:241
 #: site/ipaddr/modifyIpAddress.php:248 site/ipaddr/subnetDetailsGraph.php:55
@@ -268,82 +268,76 @@ msgstr "DHCP"
 
 #: functions/functions-network.php:177
 msgid "VLAN must be numeric value!"
-msgstr "Valor da VLAN deve ser num&eacute;rico!"
+msgstr "VLAN musí být číselná hodnota!"
 
 #: functions/functions-network.php:178
 msgid "Vlan number can be max 4094"
-msgstr "N&uacute;mero de VLANs deve ser de no m&aacute;ximo 4094"
+msgstr "Číslo vlan musí být max 4094"
 
 #: functions/functions-network.php:825 functions/functions-network.php:842
 #: functions/functions-network.php:904 functions/functions-network.php:930
 msgid "Subnet overlaps with"
-msgstr "Sub-rede se sobrep&otilde;e a"
+msgstr "Podsíť se překrývá s"
 
 #: functions/functions-network.php:1199
 msgid "Select Master subnet"
-msgstr "Selecione a Sub-rede mestre"
+msgstr "Zvolte hlavní subnet"
 
 #: functions/functions-network.php:1200
 msgid "Root subnet"
-msgstr "Sub-rede ra&iacute;z"
+msgstr "Kořenová podsíť"
 
 #: functions/functions-network.php:1789 functions/functions-network.php:1813
 msgid "IP address not valid"
-msgstr "Endere&ccedil;o de IP n&atilde;o &eacute; v&aacute;lido"
+msgstr "IP adresa není platná"
 
 #: functions/functions-network.php:1791 functions/functions-network.php:1815
 msgid "IP address not in selected subnet"
-msgstr "Endere&ccedil;o de IP n&atilde;o est&aacute; na sub-rede selecionada"
+msgstr "IP adresa není ve zvolené podsíti"
 
 #: functions/functions-network.php:1798 functions/functions-network.php:1819
 msgid "Cannot add subnet as IP address!"
-msgstr ""
-"N&atilde;o foi poss&iacute;vel adicionar a sub-rede como um endere&ccedil;o "
-"IP"
+msgstr "Nelze vložit podsíť jako IP adresu!"
 
 #: functions/functions-network.php:1799
 msgid "Cannot add broadcast as IP address!"
-msgstr ""
-"N&atilde;o foi possivel adicionar um endere&ccedil;o broadcast como um "
-"endere&ccedil;o IP"
+msgstr "Nelze vložit broadcast jako IP adresu!"
 
 #: functions/functions-network.php:1843 functions/functions-network.php:1863
 msgid "Invalid CIDR format!"
-msgstr "Formato CIDR inv&aacute;lido"
+msgstr "Chybný CIDR formát!"
 
 #: functions/functions-network.php:1857
 msgid "Invalid IP address!"
-msgstr "Endere&ccedil;o IP inv&aacute;lido!"
+msgstr "Chybná IP adresa!"
 
 #: functions/functions-network.php:1859 functions/functions-network.php:1883
 msgid "IP address cannot be subnet! (Consider using"
-msgstr "Endere&ccedil;o IP n&atilde;o pode ser sub-dividido! (Considere usar"
+msgstr "IP adresa nemůže být podsítí! (Zvažte užití"
 
 #: functions/functions-network.php:1861
 msgid "Invalid netmask"
-msgstr "M&aacute;scara de rede inv&aacute;lida"
+msgstr "Chybná maska"
 
 #: functions/functions-network.php:1872
 msgid "Invalid IPv6 address!"
-msgstr "Endere&ccedil;o IPv6 inv&aacute;lido!"
+msgstr "Chybná IPv6 adresa!"
 
 #: functions/checkPhpBuild.php:57
 msgid "The following required PHP extensions are missing"
-msgstr "As seguintes extens&otilde;es PHP est&atilde;o faltando"
+msgstr "Následující vyžadované PHP rozšíření chybí"
 
 #: functions/checkPhpBuild.php:63
 msgid "Please recompile PHP to include missing extensions and restart Apache."
-msgstr ""
-"Por favor, recompile o PHP para incluir as extens&otilde;es que faltando e "
-"reinicie o Apache server"
+msgstr "Přeložte PHP včetně chybějících rozšíření a restartujte Apache, prosím."
 
 #: functions/checkPhpBuild.php:82
 msgid "Database connection failed"
-msgstr "Falha ao conectar no banco de dados"
+msgstr "Chyba spojení s databází"
 
 #: functions/functions-tools.php:31
 msgid "(closest parent)"
-msgstr "(parente pr&oacute;ximo)"
+msgstr "(nejbližší rodič)"
 
 #: functions/functions-mail.php:167 functions/functions-mail.php:196
 #: site/tools/searchResults.php:337 site/admin/customIPFieldsEdit.php:29
@@ -353,7 +347,7 @@ msgstr "(parente pr&oacute;ximo)"
 #: site/admin/manageVLANs.php:34 site/admin/groupAddUsers.php:40
 #: site/admin/groupRemoveUsers.php:40 site/admin/customUserFieldsEdit.php:29
 msgid "Name"
-msgstr "Nome"
+msgstr "Jméno"
 
 #: functions/functions-mail.php:170 functions/functions-mail.php:176
 #: functions/functions-mail.php:199 functions/functions-mail.php:205
@@ -363,7 +357,7 @@ msgstr "Nome"
 #: site/admin/groupAddUsers.php:41 site/admin/groupRemoveUsers.php:41
 #: site/login/loginForm.php:11 site/login/loginForm.php:13
 msgid "Username"
-msgstr "Nome de usu&aacute;rio"
+msgstr "Uživatelské jméno"
 
 #: functions/functions-mail.php:172 functions/functions-mail.php:177
 #: functions/functions-mail.php:201 functions/functions-mail.php:206
@@ -372,15 +366,15 @@ msgstr "Nome de usu&aacute;rio"
 #: site/admin/usersEditPrint.php:121 site/login/loginForm.php:19
 #: site/login/loginForm.php:21
 msgid "Password"
-msgstr "Senha"
+msgstr "Heslo"
 
 #: functions/functions-mail.php:176
 msgid "your domain username"
-msgstr "seu usu&aacute;rio do dom&iacute;nio"
+msgstr "vaše doménové uživatelské jméno"
 
 #: functions/functions-mail.php:177
 msgid "your domain password"
-msgstr "sua senha no dom&iacute;no"
+msgstr "vaše doménové heslo"
 
 #: functions/functions-mail.php:180 functions/functions-mail.php:209
 #: site/admin/groupAddUsers.php:42 site/admin/groupRemoveUsers.php:42
@@ -390,7 +384,7 @@ msgstr "Email"
 #: functions/functions-mail.php:181 functions/functions-mail.php:210
 #: site/admin/users.php:40
 msgid "Role"
-msgstr "Papel"
+msgstr "Role"
 
 #: functions/functions-mail.php:182 functions/functions-mail.php:211
 msgid "WebApp"
@@ -399,11 +393,11 @@ msgstr "WebApp"
 #: functions/functions-mail.php:184 functions/functions-mail.php:213
 #: functions/functions-mail.php:395
 msgid "Sent by user"
-msgstr "Enviado pelo usu&aacute;rio"
+msgstr "Odesláno uživatelem"
 
 #: functions/functions-mail.php:269
 msgid "New IP address request in subnet"
-msgstr "Novo endere&ccedil;o IP solicitado na sub-rede"
+msgstr "Nový IP požadavek v podsíti"
 
 #: functions/functions-mail.php:282 functions/functions-mail.php:305
 #: functions/functions-mail.php:383 functions/functions-mail.php:411
@@ -413,7 +407,7 @@ msgstr "Novo endere&ccedil;o IP solicitado na sub-rede"
 #: site/admin/manageSectionEditResult.php:46
 #: site/admin/exportGenerateHostDump.php:27
 msgid "Section"
-msgstr "Se&ccedil;&atilde;o"
+msgstr "Sekce"
 
 #: functions/functions-mail.php:283 functions/functions-mail.php:306
 #: functions/functions-mail.php:384 functions/functions-mail.php:412
@@ -425,7 +419,7 @@ msgstr "Se&ccedil;&atilde;o"
 #: site/admin/RIPE / ARINImportTelnet.php:74 site/admin/manageSubnetsplit.php:64
 #: site/admin/manageSubnetresize.php:35 site/admin/manageSubnettruncate.php:37
 msgid "Subnet"
-msgstr "Sub-Rede"
+msgstr "Podsíť"
 
 #: functions/functions-mail.php:284 functions/functions-mail.php:307
 #: functions/functions-mail.php:388 functions/functions-mail.php:416
@@ -448,7 +442,7 @@ msgstr "Sub-Rede"
 #: site/admin/manageDevices.php:37 site/admin/groupEditPrint.php:57
 #: site/login/requestIPform.php:82
 msgid "Description"
-msgstr "Descri&ccedil;&atilde;o"
+msgstr "Popis"
 
 #: functions/functions-mail.php:285 functions/functions-mail.php:308
 #: functions/functions-mail.php:389 functions/functions-mail.php:417
@@ -472,62 +466,61 @@ msgstr "Hostname"
 #: site/admin/CSVimportShowFile.php:69 site/admin/replaceFields.php:29
 #: site/login/requestIPform.php:106
 msgid "Owner"
-msgstr "Dono"
+msgstr "Vlastník"
 
 #: functions/functions-mail.php:287 functions/functions-mail.php:310
 #: functions/functions-mail.php:419 site/admin/manageRequests.php:27
 msgid "Requested by"
-msgstr "Solicitado por"
+msgstr "Požaduje"
 
 #: functions/functions-mail.php:288 functions/functions-mail.php:311
 #: site/admin/manageRequests.php:28
 msgid "Comment"
-msgstr "Coment&aacute;rio"
+msgstr "Komentář"
 
 #: functions/functions-mail.php:290 functions/functions-mail.php:313
 msgid "Sent at"
-msgstr "Enviado &agrave;"
+msgstr "Odesláno v"
 
 #: functions/functions-mail.php:349
 msgid "IP address request"
-msgstr "Endere&ccedil;o IP solicitado"
+msgstr "IP požadavek"
 
 #: functions/functions-mail.php:386
 msgid "assigned IP address"
-msgstr "endere&ccedil;o IP atribu&iacute;do"
+msgstr "přiřazená IP adresa"
 
 #: functions/functions-mail.php:414
 msgid "Assigned IP address"
-msgstr "Endere&ccedil;o IP atribu&iacute;do"
+msgstr "Přiřazená IP adresa"
 
 #: functions/functions-mail.php:391
 msgid "Requested from"
-msgstr "Solicitado de"
+msgstr "Požaduje"
 
 #: functions/functions-mail.php:392 functions/functions-mail.php:420
 msgid "Comment (request)"
-msgstr "Coment&aacute;rio (solicitado)"
+msgstr "Komentář (požadavek)"
 
 #: functions/functions-mail.php:393 functions/functions-mail.php:421
 msgid "Admin accept/reject comment"
-msgstr "Coment&aacute;rio aceito/rejeitado pelo Admin"
+msgstr ""
 
 #: index.php:111
 msgid "Loading"
-msgstr "Carregando"
+msgstr "Pracuji"
 
 #: index.php:182
 msgid "Please select subnet from left menu"
-msgstr "Por favor, selecione a sub-rede no menu lateral esquerdo"
+msgstr "Zvolte laskavě podsíť z nabídky vlevo"
 
 #: index.php:185 site/tools/showAll.php:4
 msgid "Please select tool from left menu!"
-msgstr "Por favor, selecione a ferramenta no menu lateral esquerdo"
+msgstr "Zvolte nástroj z nabídky vlevo"
 
 #: index.php:188
 msgid "Please select setting from left menu!"
-msgstr ""
-"Por favor, selecione a configura&ccedil;&atilde;o no menu lateral esquerdo"
+msgstr "Zvolte nastavení z nabídky vlevo"
 
 #: site/tools/searchResultsExport.php:95
 msgid "phpipam_search_export_"
@@ -535,21 +528,21 @@ msgstr "phpipam_search_export_"
 
 #: site/tools/searchResultsExport.php:127
 msgid "IP Search results"
-msgstr "Resultados da busca por IP"
+msgstr "Výsledky vyhledávání IP"
 
 #: site/tools/searchResultsExport.php:131 site/admin/exportGenerateXLS.php:91
 #: site/admin/exportSubnet.php:95
 msgid "ip address"
-msgstr "endere&ccedil;o ip"
+msgstr "ip adresa"
 
 #: site/tools/searchResultsExport.php:135
 msgid "state"
-msgstr "estado"
+msgstr "stav"
 
 #: site/tools/searchResultsExport.php:138 site/admin/exportGenerateXLS.php:93
 #: site/admin/exportSubnet.php:103
 msgid "description"
-msgstr "descri&ccedil;&atilde;o"
+msgstr "popis"
 
 #: site/tools/searchResultsExport.php:139 site/tools/requestIPform.php:36
 #: site/admin/exportGenerateXLS.php:94 site/admin/exportSubnet.php:107
@@ -564,12 +557,12 @@ msgstr "switch"
 #: site/tools/searchResultsExport.php:146 site/admin/manageRequestEdit.php:115
 #: site/admin/exportGenerateXLS.php:98 site/admin/exportSubnet.php:123
 msgid "port"
-msgstr "porta"
+msgstr "port"
 
 #: site/tools/searchResultsExport.php:150 site/admin/exportGenerateXLS.php:96
 #: site/admin/exportSubnet.php:115
 msgid "owner"
-msgstr "dono"
+msgstr "vlastník"
 
 #: site/tools/searchResultsExport.php:154 site/admin/exportGenerateXLS.php:95
 #: site/admin/exportSubnet.php:111
@@ -579,23 +572,23 @@ msgstr "mac"
 #: site/tools/searchResultsExport.php:158 site/admin/exportGenerateXLS.php:99
 #: site/admin/exportSubnet.php:127
 msgid "note"
-msgstr "notas"
+msgstr "poznámka"
 
 #: site/tools/searchResultsExport.php:266
 msgid "Subnet search results"
-msgstr "Resutados da buscas por sub-rede"
+msgstr "Výsledky hledání subsítě"
 
 #: site/tools/searchResultsExport.php:270
 msgid "Subet"
-msgstr "Sub-Rede"
+msgstr "Podsíť"
 
 #: site/tools/searchResultsExport.php:271 site/tools/searchResults.php:260
 msgid "Mask"
-msgstr "M&aacute;scara"
+msgstr "Maska"
 
 #: site/tools/searchResultsExport.php:273 site/tools/searchResults.php:262
 msgid "Master subnet"
-msgstr "Sub-rede mestre"
+msgstr "Hlavní podsíť"
 
 #: site/tools/searchResultsExport.php:274 site/tools/vrf.php:42
 #: site/tools/subnets.php:47 site/tools/searchResults.php:107
@@ -611,27 +604,27 @@ msgstr "VLAN"
 
 #: site/tools/ipCalcResult.php:22
 msgid "Invalid input"
-msgstr "Entrada inv&aacute;lida"
+msgstr "Chybný vstup"
 
 #: site/tools/ipCalcResult.php:29
 msgid "Subnetting details for"
-msgstr "Detalhes de sub-rede para"
+msgstr ""
 
 #: site/tools/ipCalcResult.php:53
 msgid "Create subnet from result"
-msgstr "Criar uma sub-rede a partir dos resultados"
+msgstr "Vytvoř podsíť z výsledku"
 
 #: site/tools/ipCalcResult.php:59
 msgid "Select Section"
-msgstr "Selecione uma se&ccedil;&atilde;o"
+msgstr "Zvolte sekci"
 
 #: site/tools/ipCalcResult.php:63
 msgid "Please select"
-msgstr "Por favor, selecione"
+msgstr "Zvolte prosím"
 
 #: site/tools/ipCalc.php:6
 msgid "IPv4v6 calculator"
-msgstr "Calculadora IPv4v6"
+msgstr "IPv4/v6 kalkulátor"
 
 #: site/tools/ipCalc.php:15 site/tools/devices.php:66
 #: site/tools/requestIPform.php:12 site/tools/searchResults.php:106
@@ -646,81 +639,78 @@ msgstr "Calculadora IPv4v6"
 #: site/admin/manageDevicesEdit.php:43 site/admin/manageDevicesEdit.php:45
 #: site/admin/logResult.php:27 site/admin/manageDevices.php:32
 msgid "IP address"
-msgstr "Endere&ccedil;o IP"
+msgstr "IP adresa"
 
 #: site/tools/ipCalc.php:15
 msgid "mask"
-msgstr "m&aacute;scara"
+msgstr "maska"
 
 #: site/tools/ipCalc.php:20
 msgid "Please enter IP address and mask in CIDR format"
-msgstr ""
-"Por favor, digite um endere&ccedil;o IP e a m&aacute;scara no formato CIDR"
+msgstr "Vložte laskavě IP adresu a masku v CIDR formátu (př. 192.168.1.0/24)"
 
 #: site/tools/ipCalc.php:28
 msgid "Calculate"
-msgstr "Calcular"
+msgstr "Vypočítej"
 
 #: site/tools/ipCalc.php:29
 msgid "Reset"
-msgstr "Resetar"
+msgstr "Reset"
 
 #: site/tools/vrf.php:17
 msgid "Available VRFs and belonging subnets"
-msgstr "VRFs dispon&iacute;veis e suas sub-redes"
+msgstr "Dostupné VRFs a příslušné podsítě"
 
 #: site/tools/vrf.php:22 site/admin/manageVRF.php:25
 msgid "No VRFs configured"
-msgstr "VRFs n&atilde;o configuradas"
+msgstr "VRF nejsou konfigurovány"
 
 #: site/tools/vrf.php:45 site/tools/subnets.php:48
 #: site/admin/manageSubnetEdit.php:162
 msgid "Master Subnet"
-msgstr "Sub-rede Mestre"
+msgstr "Hlavní podsíť"
 
 #: site/tools/vrf.php:46 site/tools/vlan.php:30 site/tools/subnets.php:49
 #: site/ipaddr/ipAddressPrintTableSlaves.php:35
 #: site/ipaddr/subnetDetails.php:89
 msgid "Used"
-msgstr "Usado"
+msgstr "Využito"
 
 #: site/tools/vrf.php:47 site/ipaddr/ipAddressPrintTableSlaves.php:36
 #: site/ipaddr/subnetDetails.php:90 site/ipaddr/subnetDetailsGraph.php:43
 msgid "Free"
-msgstr "Livre"
+msgstr "Volné"
 
 #: site/tools/vrf.php:48 site/tools/subnets.php:51
 #: site/tools/searchResults.php:264
 #: site/ipaddr/ipAddressPrintTableSlaves.php:37 site/admin/manageSubnet.php:82
 msgid "Requests"
-msgstr "Solicitados"
+msgstr "Požadavky"
 
 #: site/tools/vrf.php:86
 msgid "Master subnet does not exist"
-msgstr "Sub-rede mestre n&atilde;o existe"
+msgstr "Hlavní podsíť neexistuje"
 
 #: site/tools/vrf.php:104 site/tools/subnets.php:104
 #: site/ipaddr/subnetDetails.php:126
 msgid "enabled"
-msgstr "habilitado"
+msgstr "povoleno"
 
 #: site/tools/vrf.php:114
 msgid "No subnets belonging to this VRF"
-msgstr "Nenhuma sub-rede pertencente &agrave; esta VRF"
+msgstr "Do této VRF nepatří žádná podsíť"
 
 #: site/tools/devices.php:23
 msgid "List of network devices"
-msgstr "Lista de dispositivos de rede"
+msgstr "Seznam síťových zařízení"
 
 #: site/tools/devices.php:39
 msgid "Device not specified"
-msgstr "Dispositivo n&atilde;o especificado"
+msgstr "Zařízení nebylo specifikováno"
 
 #: site/tools/devices.php:56
 msgid "click to show/hide belonging IP addresses"
-msgstr ""
-"clique para mostrar/esconder os endere&ccedil;os ip pertencentes &agrave; "
-"esta"
+msgstr "kliknutím zobrazíte/skryjete náležející IP adresy"
 
 #: site/tools/devices.php:67 site/tools/searchResults.php:116
 #: site/ipaddr/ipAddressPrintTableOrphaned.php:91
@@ -729,36 +719,36 @@ msgstr ""
 #: site/admin/manageRequestEdit.php:131 site/admin/CSVimportShowFile.php:71
 #: site/admin/replaceFields.php:32
 msgid "Port"
-msgstr "Porta"
+msgstr "Port"
 
 #: site/tools/vlan.php:17
 msgid "Available VLANs:"
-msgstr "VLANs dispon&iacute;veis:"
+msgstr "Dostupné VLANy:"
 
 #: site/tools/vlan.php:25 site/tools/searchResults.php:338
 #: site/admin/manageVLANEdit.php:50 site/admin/manageVLANs.php:35
 msgid "Number"
-msgstr "N&uacute;mero"
+msgstr "Číslo"
 
 #: site/tools/vlan.php:28 site/tools/searchResults.php:340
 msgid "Belonging subnets"
-msgstr "Sub-redes pertencentes"
+msgstr "Náležející subsítě"
 
 #: site/tools/vlan.php:31 site/tools/subnets.php:50
 msgid "free"
-msgstr "livre"
+msgstr "volné"
 
 #: site/tools/userMenu.php:17
 msgid "here you can change your account details"
-msgstr "aqui voc&ecirc; pode mudar os detalhes da sua conta"
+msgstr "zde můžete upravit detaily Vašeho účtu"
 
 #: site/tools/userMenu.php:29 site/admin/usersEditPrint.php:58
 msgid "Real name"
-msgstr "Nome real"
+msgstr "Skutečné jméno"
 
 #: site/tools/userMenu.php:33
 msgid "Display name"
-msgstr "Nome de visualiza&ccedil;&atilde;o"
+msgstr "Zobrazované jméno"
 
 #: site/admin/usersEditPrint.php:72
 msgid "e-mail"
@@ -766,62 +756,60 @@ msgstr "e-mail"
 
 #: site/tools/userMenu.php:42
 msgid "Email address"
-msgstr "Endere&ccedil;o de email"
+msgstr "Emailová adresa"
 
 #: site/tools/userMenu.php:55
 msgid "Random"
-msgstr "Aleat&oacute;rio"
+msgstr "Náhodné"
 
 #: site/tools/userMenu.php:60
 msgid "repeat"
-msgstr "repetir"
+msgstr "opakujte"
 
 #: site/tools/userMenu.php:64 site/admin/usersEditPrint.php:123
 msgid "Re-type password"
-msgstr "Redigite sua senha"
+msgstr "Zopakujte heslo"
 
 #: site/tools/userMenu.php:73 site/admin/settings.php:268
 msgid "Save changes"
-msgstr "Salvar altera&ccedil;&otilde;es"
+msgstr "Uložit změny"
 
 #: site/tools/instructions.php:20
 msgid "Instructions for managing IP addresses"
-msgstr "Instru&ccedil;&otilde;es para gerenciamento de endere&ccedil;os IP"
+msgstr "Instrukce ke správě IP adres"
 
 #: site/tools/requestIPform.php:2 site/login/requestIPform.php:9
 msgid "IP request form"
-msgstr "IP solicitado por"
+msgstr "IP požadavek od"
 
 #: site/tools/requestIPform.php:30 site/admin/groupEditPrint.php:64
 msgid "Enter description"
-msgstr "Digite um descri&ccedil;&atilde;o"
+msgstr "Zadejte popis"
 
 #: site/tools/requestIPform.php:35 site/ipaddr/moveIpAddress.php:72
 #: site/ipaddr/modifyIpAddress.php:144
 msgid "DNS name"
-msgstr "Nome DNS"
+msgstr "DNS název"
 
 #: site/tools/requestIPform.php:44
 msgid "Owner of IP address"
-msgstr "Dono do endere&ccedil;o IP"
+msgstr "Vlastník IP adresy"
 
 #: site/tools/requestIPform.php:49 site/login/requestIPform.php:118
 msgid "Requester"
-msgstr "Solicitante"
+msgstr "Žadatel"
 
 #: site/tools/requestIPform.php:51
 msgid "your email address"
-msgstr "seu endere&ccedil;o email"
+msgstr "vaše emailová adresa"
 
 #: site/tools/requestIPform.php:57 site/login/requestIPform.php:126
 msgid "Additional comment"
-msgstr "Coment&aacute;rio adicional"
+msgstr "Další poznámky"
 
 #: site/tools/requestIPform.php:59
 msgid "Enter additional details for request if they are needed"
-msgstr ""
-"Digite detalhes adicionais para solicita&ccedil;&atilde;o, caso forem "
-"precisos"
+msgstr "Zadejte další podrobnosti k požadavku, je-li třeba"
 
 #: site/tools/requestIPform.php:71 site/ipaddr/mailNotifyIP.php:124
 #: site/ipaddr/moveIpAddress.php:113 site/ipaddr/modifyIpAddress.php:33
@@ -834,148 +822,133 @@ msgstr ""
 #: site/admin/groupEditPrint.php:77 site/admin/groupRemoveUsers.php:75
 #: site/admin/manageSubnetShowPermissions.php:82
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr "Storno"
 
 #: site/tools/requestIPform.php:72
 msgid "Request IP"
-msgstr "Solicitar IP"
+msgstr "IP požadavek"
 
 #: site/tools/search.php:11
 msgid "Search IP database"
-msgstr "Pesquisar IP no banco de dados"
+msgstr "Hledat v IP databázi"
 
 #: site/tools/search.php:17
 msgid "search"
-msgstr "pesquisar"
+msgstr "hledat"
 
 #: site/tools/searchTips.php:8
 msgid "Some search tips"
-msgstr "Algumas dicas de pesquisa"
+msgstr ""
 
 #: site/tools/searchTips.php:15
 msgid "Text search"
-msgstr "Pesquisa por texto"
+msgstr "Hledání textu"
 
 #: site/tools/searchTips.php:17
 msgid "Text searches through description, hostname, switch, port and owner"
-msgstr ""
-"A procura por texto &eacute; feita nos campos descri&ccedil;&atilde;o, "
-"hostname, switch, porta e dono"
+msgstr "Text je hledán v popisech, názvech hostů, switchů, portů a vlastníků"
 
 #: site/tools/searchTips.php:18
 msgid "For wildcard search add * (user*)"
-msgstr "Para pesquisa por wildcard, adicione *(user*)"
+msgstr "Hledání zástupným znakem přidejte * (uživatel*)"
 
 #: site/tools/searchTips.php:25
 msgid "IPv4 search tips"
-msgstr "Dicas para pesquisa IPv4"
+msgstr "Tipy pro hledání IPv4"
 
 #: site/tools/searchTips.php:27
 msgid "You can search through ranges with * (e.g. 10.23.3.*)"
-msgstr ""
-"Voc&ecirc; pode pesquisar atrav&eacute;s de faixas como *(e.g.10.23.3.*)"
+msgstr "Můžete vyhledávat v rozsazích pomocí * (např. 10.23.3.*)"
 
 #: site/tools/searchTips.php:28
 msgid "* shows ALL IP addresses and subnets"
-msgstr "* mostra TODOS endere&ccedil;os IPs e sub-redes"
+msgstr "* zobrazí všechny IP adresy a podsítě"
 
 #: site/tools/searchTips.php:35
 msgid "IPv6 search tips"
-msgstr "Dicas de pesquisas por IPv6"
+msgstr "Tipy pro hledání IPv6"
 
 #: site/tools/searchTips.php:37
-msgid ""
-"You can search through ranges by specifying whole subnet (e.g. "
+msgid "You can search through ranges by specifying whole subnet (e.g. "
 "2002:8a10::/32)"
-msgstr ""
-"Voc&ecirc; pode pesquisar atrav&eacute;s de faixas, especificando toda uma "
-"sub-rede (e.g. 2002:8a10::/32)"
+msgstr "Můžete vyhledávat v rozsazích specifikování celé podsítě (např. "
+"2002:8a10::/32)"
 
 #: site/tools/searchTips.php:44
 msgid "Hostname search tips"
-msgstr "Dicas de pesquisa por hostname"
+msgstr "Tipy pro hledání hostů"
 
 #: site/tools/searchTips.php:46
-msgid ""
-"You can get all IP addresses some host uses and all ports it is connected to "
+msgid "You can get all IP addresses some host uses and all ports it is connected to "
 "by entering hostname in search field"
 msgstr ""
-"Voc&ecirc; poder obter todo endere&ccedil;os IP que os hosts utilizam e "
-"todas as portas &agrave; eles conectados digitando o hostname no campo de "
-"pesquisa"
 
 #: site/tools/searchTips.php:53
 msgid "Device search tips"
-msgstr "Dicas de pesquisa por dispositivos"
+msgstr "Tipy pro hledání zařízení"
 
 #: site/tools/searchTips.php:55
-msgid ""
-"You can get all used / available ports and connected IP's / hostnames in "
+msgid "You can get all used / available ports and connected IP's / hostnames in "
 "some device by entering device name in search field"
-msgstr ""
-"Voc&ecirc; pode obter todos IP's conectados, usados e portas dispon&iacute;"
-"veis e hostnames de algum dispositvo, digitando o nome do dispositivo no "
-"campo de pesquisa"
+msgstr "Můžete získat všechny použité/volné porty a vztažené IP / názvy hostů "
+"zařízení vložením názvu zařízení do vyhledávacího pole"
 
 #: site/tools/searchTips.php:62
 msgid "MAC search tips"
-msgstr "Dicas de pesquisa por MAC"
+msgstr "Tipy pro hledání MAC"
 
 #: site/tools/searchTips.php:64
-msgid ""
-"You can search by MAC address list entering MAC in 00:1cd:d4:78:ec:46 or "
+msgid "You can search by MAC address list entering MAC in 00:1cd:d4:78:ec:46 or "
 "001dd478ec46 format, or search multiple with 00:1c:c4:"
-msgstr ""
-"Voc&ecirc; pode fazer pesquisas por endere&ccedil;os MAC no formato 00:1cd:"
-"d4:78:ec:46 ou no formato 001dd478ec46, ou procurar por v&aacute;rios no "
-"formato 00:1c:c4:"
+msgstr "Můžete hledat dle seznamu MAC adres vložením MAC ve formátu 00:1cd:d4:78:ec:46 nebo"
+"001dd478ec46 případně více adres pomocí 00:1c:c4:"
 
 #: site/tools/searchTips.php:71
 msgid "Custom field search tips"
-msgstr "Dicas para pesquisa em campos personalizados"
+msgstr "Tipy pro vyhledávání uživatelských polí"
 
 #: site/tools/searchTips.php:73
 msgid "You can search custom fields"
-msgstr "Voc&ecirc; pode pesquisar por campos personalizados"
+msgstr "Můžete hledat v uživatelských polích"
 
 #: site/tools/userMenuSelfMod.php:19
 msgid "Email not valid!"
-msgstr "Email n&atilde;o v&aacute;lido!"
+msgstr "Email není platný"
 
 #: site/tools/userMenuSelfMod.php:34
 msgid "Please fix the following error"
-msgstr "Por favor, corrija o seguinte erro"
+msgstr "Upravte laskavě následující chyby"
 
 #: site/tools/userMenuSelfMod.php:36
 msgid "Error updating"
-msgstr "Erro ao atualizar"
+msgstr "Chyba aktualizace"
 
 #: site/tools/userMenuSelfMod.php:37
 msgid "Account updated successfully"
-msgstr "Conta atualizada com sucesso"
+msgstr "Účet aktualizován úspěšně"
 
 #: site/tools/subnets.php:17 site/subnets.php:55
 msgid "Available subnets"
-msgstr "Sub-redes dispon&iacute;veis"
+msgstr "Dostupné podsítě"
 
 #: site/tools/toolsMenu.php:25 site/sections.php:97
 msgid "IP calculator"
-msgstr "Calculadora IP"
+msgstr "IP kalkulátor"
 
 #: site/tools/toolsMenu.php:28 site/admin/manageAD_AD.php:19
 #: site/admin/manageAD_LDAP.php:19
 msgid "Instructions"
-msgstr "Instru&ccedil;&otilde;es"
+msgstr "Instrukce"
 
 #: site/tools/toolsMenu.php:31 site/admin/RIPE / ARINImport.php:19
 #: site/userMenu.php:22 site/sections.php:104
 msgid "Search"
-msgstr "Pesquisa"
+msgstr "Hledat"
 
 #: site/tools/toolsMenu.php:35 site/tools/toolsMenu.php:38
 #: site/sections.php:98 site/sections.php:147
 msgid "Devices"
-msgstr "Dispositivos"
+msgstr "Zařízení"
 
 #: site/tools/toolsMenu.php:43 site/ipaddr/subnetDetailsSlaves.php:106
 #: site/ipaddr/subnetDetails.php:117 site/admin/manageVRFEditResult.php:26
@@ -986,168 +959,165 @@ msgstr "VRF"
 
 #: site/tools/toolsMenu.php:47 site/sections.php:102 site/sections.php:148
 msgid "VLANs"
-msgstr "VLANs"
+msgstr "VLANy"
 
 #: site/tools/toolsMenu.php:50 site/sections.php:103 site/sections.php:146
 msgid "Subnets"
-msgstr "Sub-redes"
+msgstr "Podsítě"
 
 #: site/tools/toolsMenu.php:56
 msgid "User menu"
-msgstr "Menu de usu&aacute;rio"
+msgstr "Uživatelská nabídka"
 
 #: site/tools/toolsMenu.php:59
 msgid "My account"
-msgstr "Minha conta"
+msgstr "Můj účet"
 
 #: site/tools/searchResults.php:93
 msgid "Search results (IP address list)"
-msgstr "Resultados da pesquisa (lista de endere&ccedil;os IP)"
+msgstr "Výsledky hledání (seznam IP adres)"
 
 #: site/tools/searchResults.php:93
 msgid "Export All results to XLS"
-msgstr "Exportar todos reultados para XLS"
+msgstr "Exportovat všechny výsledky do XLS"
 
 #: site/tools/searchResults.php:226 site/ipaddr/ipAddressPrintTable.php:299
 msgid "Edit IP address details"
-msgstr "Editar os detalhes do endere&ccedil;o IP"
+msgstr "Upravit detaily IP adresy"
 
 #: site/tools/searchResults.php:227 site/tools/searchResults.php:233
 #: site/ipaddr/ipAddressPrintTable.php:308
 msgid "Send mail notification"
-msgstr "Enviar notifica&ccedil;&atilde;o via e-mail"
+msgstr "Odeslat emailové upozornění"
 
 #: site/tools/searchResults.php:228 site/ipaddr/ipAddressPrintTable.php:302
 #: site/ipaddr/ipAddressPrintTableOrphaned.php:172
 msgid "Delete IP address"
-msgstr "Deletar endere&ccedil;o IP"
+msgstr "Vymazat IP adresu"
 
 #: site/tools/searchResults.php:232 site/ipaddr/ipAddressPrintTable.php:306
 msgid "Edit IP address details (disabled)"
-msgstr "Editar os detalhes do endere&ccedil;o IP (desabilitado)"
+msgstr "Upravit detaily IP adresy (zakázáno)"
 
 #: site/tools/searchResults.php:234 site/ipaddr/ipAddressPrintTable.php:309
 msgid "Delete IP address (disabled)"
-msgstr "Deletar endere&ccedil;o IP (desabilitado)"
+msgstr "Vymazat IP adresu (zakázáno)"
 
 #: site/tools/searchResults.php:251
 msgid "Search results (Subnet list)"
-msgstr "Resultados da pesquisa (Lista da sub-rede)"
+msgstr "Výsledky hledání (Seznam podsítí)"
 
 #: site/tools/searchResults.php:312
 msgid "Edit subnet details"
-msgstr "Editar detalhes da sub-rede"
+msgstr "Upravit detail podsítě"
 
 #: site/tools/searchResults.php:315
 msgid "Edit subnet (disabled)"
-msgstr "Editar sub-rede (desabilitado)"
+msgstr "Upravit podsíť (zakázáno)"
 
 #: site/tools/searchResults.php:330
 msgid "Search results (VLANs)"
-msgstr "Resultados da pesquisa (VLANs)"
+msgstr "Výsledky hledání (VLAN)"
 
 #: site/tools/showAll.php:1
 msgid "phpIPAM tools"
-msgstr "Ferramentas phpIPAM"
+msgstr "phpIPAM nástroje"
 
 #: site/error.php:62
 msgid "Oops! Something went wrong!"
-msgstr "Oops! Alguma coisa deu errado!"
+msgstr "Oops! Něco je špatně!"
 
 #: site/error.php:64
 msgid "Provided http error code is"
-msgstr "O erro do servidor http &eacute;"
+msgstr "Dostupný http chybový kód je"
 
 #: site/ipaddr/mailNotifyCheck.php:31
 msgid "Sending mail failed"
-msgstr "Falha ao enviar e-mail"
+msgstr "Odeslání pošty se nezdařilo"
 
 #: site/ipaddr/mailNotifyCheck.php:32
 msgid "Sending mail succeeded"
-msgstr " Email enviado com sucesso"
+msgstr "Odeslání pošty bylo úspěšné"
 
 #: site/ipaddr/mailNotifyCheck.php:35
 msgid "Wrong recipients! (separate multiple with ,)"
-msgstr ""
-"Destinat&aacute;rios errados! (use , para separar m&uacute;ltiplos "
-"destinat&aacute;rios)"
+msgstr "Chybný příjemce! (oddělte více příjemců pomocí ,)"
 
 #: site/ipaddr/ipAddressPrintTableSlaves.php:25
 msgid "has"
-msgstr "tem"
+msgstr "má"
 
 #: site/ipaddr/ipAddressPrintTableSlaves.php:25
 msgid "directly nested subnets"
-msgstr "Sub-redes diretamente aninhadas"
+msgstr "podřízené podsítě"
 
 #: site/ipaddr/ipAddressPrintTableSlaves.php:33
 #: site/ipaddr/subnetDetailsSlaves.php:77 site/ipaddr/subnetDetails.php:79
 msgid "Subnet description"
-msgstr "Descri&ccedil;&atilde;o de sub-rede"
+msgstr "Popis podsítě"
 
 #: site/ipaddr/ipAddressPrintTableSlaves.php:59
 #: site/ipaddr/ipAddressPrintTableSlaves.php:111
 #: site/ipaddr/ipAddressPrintTableSlaves.php:139
 msgid "Free space"
-msgstr "Espa&ccedil;o livre"
+msgstr "Volný prostor"
 
 #: site/ipaddr/ipAddressPrintTable.php:54
 msgid "IP addresses in subnet "
-msgstr "Endere&ccedil;os IP na sub-rede"
+msgstr "IP adresy v posíti "
 
 #: site/ipaddr/ipAddressPrintTable.php:56
 msgid "All IP addresses belonging to ALL nested subnets"
-msgstr ""
-"Todos endere&ccedil;os IP pertencentes &agrave; todas sub-redes aninhadas"
+msgstr "Všechny IP adresy náleží do Všech podřízených podsítí"
 
 #: site/ipaddr/ipAddressPrintTable.php:60
 #: site/ipaddr/ipAddressPrintTableOrphaned.php:39
 #: site/ipaddr/subnetDetailsSlaves.php:24 site/ipaddr/subnetDetails.php:23
 msgid "Subnet does not exist"
-msgstr "Sub-rede n&atilde;o existe"
+msgstr "Podsíť neexistuje"
 
 #: site/ipaddr/ipAddressPrintTable.php:106
 #: site/ipaddr/ipAddressPrintTable.php:126
 msgid "Page"
-msgstr "P&aacute;gina"
+msgstr "Strana"
 
 #: site/ipaddr/ipAddressPrintTable.php:113
 #: site/ipaddr/ipAddressPrintTable.php:346 site/admin/logs.php:27
 msgid "Previous page"
-msgstr "P&aacute;gina anterior"
+msgstr "Předchozí strana"
 
 #: site/ipaddr/ipAddressPrintTable.php:114
 #: site/ipaddr/ipAddressPrintTable.php:347 site/admin/logs.php:28
 msgid "Next page"
-msgstr "Pr&oacute;xima p&aacute;gina"
+msgstr "Další strana"
 
 #: site/ipaddr/ipAddressPrintTable.php:146
 msgid "Sort by IP address"
-msgstr "Ordenado por endere&ccedil;o IP"
+msgstr "Seřadit dle IP adresy"
 
 #: site/ipaddr/ipAddressPrintTable.php:148
 msgid "Sort by hostname"
-msgstr "Ordenado por hostname"
+msgstr "Seřadit dle hostname"
 
 #: site/ipaddr/ipAddressPrintTable.php:152
 msgid "Sort by description"
-msgstr "Ordenado por descri&ccedil;&atilde;o"
+msgstr "Seřadit dle popisu"
 
 #: site/ipaddr/ipAddressPrintTable.php:156
 msgid "Sort by device"
-msgstr "Ordenado por dispositivo"
+msgstr "Seřadit dle zařízení"
 
 #: site/ipaddr/ipAddressPrintTable.php:158
 msgid "Sort by port"
-msgstr "Ordenado por porta"
+msgstr "Seřadit dle portu"
 
 #: site/ipaddr/ipAddressPrintTable.php:160
 msgid "Sort by owner"
-msgstr "Ordenado por dono"
+msgstr "Seřadit dle vlastníka"
 
 #: site/ipaddr/ipAddressPrintTable.php:164
 msgid "Sort by"
-msgstr "Ordenado por"
+msgstr "Seřadit dle"
 
 #: site/ipaddr/ipAddressPrintTable.php:239 site/ipaddr/modifyIpAddress.php:247
 #: site/ipaddr/subnetDetailsGraph.php:49 site/admin/manageRequestEdit.php:95
@@ -1164,78 +1134,75 @@ msgstr "MAC"
 #: site/ipaddr/ipAddressPrintTable.php:300
 #: site/ipaddr/ipAddressPrintTable.php:307
 msgid "Search same hostnames in db"
-msgstr "Pesquisar mesmos hostnames no banco de Dados"
+msgstr "Hledat stejný hostname v db"
 
 #: site/ipaddr/ipAddressPrintTableOrphaned.php:69
 msgid "Orphaned IP addresses for subnet"
-msgstr "Endere&ccedil;os IP &oacute;rf&atilde;os por sub-rede"
+msgstr "Osiřelé IP adresy pro podsíť"
 
 #: site/ipaddr/ipAddressPrintTableOrphaned.php:69
-msgid ""
-"This happens if subnet had IP addresses<br>when new nested subnet was added"
+msgid "This happens if subnet had IP addresses<br>when new nested subnet was added"
 msgstr ""
-"Isso acontece se a sub-rede tem endere&ccedil;os IP <br>quando uma nova sub-"
-"rede aninhada &eacute; adicionada"
 
 #: site/ipaddr/ipAddressPrintTableOrphaned.php:171
 msgid "Move to different subnet"
-msgstr "Mover para uma sub-rede aninhada"
+msgstr "Přesunout do jiné podsítě"
 
 #: site/ipaddr/mailNotifyIP.php:38
 msgid "IP address details"
-msgstr "Detalhes do endere&ccedil;o IP"
+msgstr "Detaily IP adresy"
 
 #: site/ipaddr/mailNotifyIP.php:54
 msgid "Subnet desc"
-msgstr "Descri&ccedil;&atilde;o de sub-rede"
+msgstr "Popis podsítě"
 
 #: site/ipaddr/mailNotifyIP.php:84
 msgid "Send email notification"
-msgstr "Envirar notifica&ccedil;&atilde;o por email"
+msgstr "Odeslat upozornění poštou"
 
 #: site/ipaddr/mailNotifyIP.php:95
 msgid "Recipients"
-msgstr "Destinat&aacute;rios"
+msgstr "Příjemci"
 
 #: site/ipaddr/mailNotifyIP.php:98
 msgid "Separate multiple recepients with ,"
-msgstr "Separar v&aacute;rios destinat&aacute;rios com ,"
+msgstr "Oddělte příjemce pomocí ,"
 
 #: site/ipaddr/mailNotifyIP.php:104
 msgid "Title"
-msgstr "T&iacute;tulo"
+msgstr "Název"
 
 #: site/ipaddr/mailNotifyIP.php:112
 msgid "Content"
-msgstr "Conte&uacute;do"
+msgstr "Obsah"
 
 #: site/ipaddr/mailNotifyIP.php:125
 msgid "Send Mail"
-msgstr "Enviar email"
+msgstr "Odeslat Mail"
 
 #: site/ipaddr/modifyIpAddressCheck.php:19
 msgid "Cannot edit IP address"
-msgstr "N&atilde;o foi poss&iacute;vel editar o endere&ccedil;o IP"
+msgstr "Nelze editovat IP adresu"
 
 #: site/ipaddr/modifyIpAddressCheck.php:73
 msgid "Invalid hostname"
-msgstr "Hostname inv&aacute;lido"
+msgstr "Neplatný hostname"
 
 #: site/ipaddr/modifyIpAddressCheck.php:114
 msgid "Only 255 IP addresses at once"
-msgstr "Apenas 255 endere&ccedil;os IP de uma vez"
+msgstr "Pouze 255 IP současně"
 
 #: site/ipaddr/modifyIpAddressCheck.php:134
 msgid "Cannot"
-msgstr "N&atilde;o foi poss&iacute;vel"
+msgstr "Nelze"
 
 #: site/ipaddr/modifyIpAddressCheck.php:149
 msgid "Range"
-msgstr "Faixa"
+msgstr "Rozsah"
 
 #: site/ipaddr/modifyIpAddressCheck.php:149
 msgid "updated successfully"
-msgstr "atualizado com sucesso"
+msgstr "aktualizován úspěšně"
 
 #: site/ipaddr/modifyIpAddressCheck.php:150
 #: site/admin/manageVRFEditResult.php:27
@@ -1244,420 +1211,408 @@ msgstr "atualizado com sucesso"
 #: site/admin/manageSubnetEditResult.php:169 site/admin/usersEditResult.php:97
 #: site/admin/manageVLANEditResult.php:48
 msgid "successfull"
-msgstr "com sucesso"
+msgstr "úspěšný"
 
 #: site/ipaddr/modifyIpAddressCheck.php:161
 msgid "Hostname is not unique"
-msgstr "Hostname n&atilde;o &eacute; &uacute;nico"
+msgstr "Název hosta není unikátní"
 
 #: site/ipaddr/modifyIpAddressCheck.php:187
 #: site/ipaddr/modifyIpAddressCheck.php:196
 msgid "already existing in database"
-msgstr "j&aacute; existe no banco de dados"
+msgstr "již existuje v databázi"
 
 #: site/ipaddr/modifyIpAddressCheck.php:204
 msgid "Duplicate IP address"
-msgstr "Duplicar endere&ccedil;os IP"
+msgstr "Duplicitní IP adresa"
 
 #: site/ipaddr/modifyIpAddressCheck.php:204
 msgid "already existing in selected network"
-msgstr "j&aacute; existe na rede selecionada"
+msgstr "již existuje ve vybrané síti"
 
 #: site/ipaddr/modifyIpAddressCheck.php:210
 msgid "Error inserting IP address"
-msgstr "Erro ao inserir o endere&ccedil;o IP"
+msgstr "Chyba ve vložení IP adresy"
 
 #: site/ipaddr/subnetDetailsSlaves.php:49 site/ipaddr/subnetDetails.php:50
 msgid "You do not have permission to access this network"
-msgstr "Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa rede"
+msgstr "Nemáte oprávnění pro přístup k této síti"
 
 #: site/ipaddr/subnetDetailsSlaves.php:58
 #: site/ipaddr/subnetDetailsSlaves.php:63 site/ipaddr/subnetDetails.php:59
 #: site/ipaddr/subnetDetails.php:64
 msgid "Subnet details"
-msgstr "detalhes da sub-rede"
+msgstr "Detail podsítě"
 
 #: site/ipaddr/subnetDetailsSlaves.php:71 site/ipaddr/subnetDetails.php:73
 msgid "Hierarchy"
-msgstr "Hierarquia"
+msgstr "Hierarchie"
 
 #: site/ipaddr/subnetDetailsSlaves.php:81 site/ipaddr/subnetDetails.php:83
 msgid "Permission"
-msgstr "Permiss&atilde;o"
+msgstr "Oprávnění"
 
 #: site/ipaddr/subnetDetailsSlaves.php:126 site/ipaddr/subnetDetails.php:147
 msgid "Actions"
-msgstr "A&ccedil;&otilde;es"
+msgstr "Akce"
 
 #: site/ipaddr/subnetDetailsSlaves.php:134
 msgid "You do not have permissions to edit subnet"
-msgstr "Voc&ecirc; n&atilde;o tem permiss&atilde;o para editar essa sub-rede"
+msgstr "Nemáte oprávnění k úpravě podsítě"
 
 #: site/ipaddr/subnetDetailsSlaves.php:137
 #: site/ipaddr/subnetDetailsSlaves.php:149 site/ipaddr/subnetDetails.php:159
 #: site/ipaddr/subnetDetails.php:177
 msgid "Add new nested subnet"
-msgstr "Adicionar nova rede aninhada"
+msgstr "Přidat vnořenou podsíť"
 
 #: site/ipaddr/subnetDetailsSlaves.php:144 site/ipaddr/subnetDetails.php:172
 msgid "Edit subnet properties"
-msgstr "Editar propriedades da sub-rede"
+msgstr "Upravit nastavení podsítě"
 
 #: site/ipaddr/subnetDetailsSlaves.php:146 site/ipaddr/subnetDetails.php:174
 #: site/admin/manageSubnetShowPermissions.php:26
 msgid "Manage subnet permissions"
-msgstr "Administrar permiss&otilde;es da sub-rede"
+msgstr "Správa přístupu k podsíti"
 
 #: site/ipaddr/moveIpAddress.php:35
 msgid "Move IP address to different subnet"
-msgstr "Mover endere&ccedil;o IP para uma sub-rede diferente"
+msgstr "Přesunout IP adresy do jiné podsítě"
 
 #: site/ipaddr/moveIpAddress.php:85
 msgid "Select new subnet"
-msgstr "Selecionar nova sub-rede"
+msgstr "Zvolte novou podsíť"
 
 #: site/ipaddr/moveIpAddress.php:114
 msgid "Move IP address"
-msgstr "Mover endere&ccedil;o IP"
+msgstr "Přesunout IP adresy"
 
 #: site/ipaddr/modifyIpAddress.php:31
 msgid "Cannot edit IP address details"
-msgstr ""
-"N&atilde;o foi poss&iacute;vel editar os detalhes do endere&ccedil;o IP"
+msgstr "Nelze upravit detaily IP adres"
 
 #: site/ipaddr/modifyIpAddress.php:31
 msgid "You do not have write access for this network'"
-msgstr "NimaÅ¡ pravic za pisanje v tem omreÅ¾ju"
+msgstr "Nemáte oprávnění k zápisu do této sítě"
 
 #: site/ipaddr/modifyIpAddress.php:79 site/ipaddr/modifyIpAddress.php:80
 msgid "add"
-msgstr "adicionar"
+msgstr "přidat"
 
 #: site/ipaddr/modifyIpAddress.php:81 site/ipaddr/modifyIpAddress.php:82
 msgid "edit"
-msgstr "editar"
+msgstr "upravit"
 
 #: site/ipaddr/modifyIpAddress.php:83
 msgid "delete"
-msgstr "deletar"
+msgstr "vymazat"
 
 #: site/ipaddr/modifyIpAddress.php:115
-msgid ""
-"You can add,edit or delete multiple IP addresses<br>by specifying IP range "
+msgid "You can add,edit or delete multiple IP addresses<br>by specifying IP range "
 "(e.g. 10.10.0.0-10.10.0.25)"
-msgstr ""
-"Voc&ecirc; pode adicionar, editar, ou deletar m&uacute;ltiplos endere&ccedil;"
-"os IP especificando uma faixa de IP (e.g. 10.10.0.0-10.10.0.25)"
+msgstr "Můžete přidat, upravit nebo vymazat více IP adres současně<br>uvedením rozsahu IP"
+"(např. 10.10.0.0-10.10.0.25)"
 
 #: site/ipaddr/modifyIpAddress.php:147
 msgid "Click to check for hostname"
-msgstr "Clique para checar o hostname"
+msgstr "Kontrola jména hosta"
 
 #: site/ipaddr/modifyIpAddress.php:157 site/ipaddr/modifyIpAddress.php:159
 #: site/ipaddr/exportSelectFields.php:60 site/admin/replaceFields.php:30
 msgid "MAC address"
-msgstr "Endere&ccedil;o MAC"
+msgstr "MAC adresa"
 
 #: site/ipaddr/modifyIpAddress.php:173
 msgid "IP address owner"
-msgstr "Dono do endere&ccedil;o IP"
+msgstr "Vlastník IP"
 
 #: site/ipaddr/modifyIpAddress.php:186 site/admin/manageRequestEdit.php:115
 #: site/admin/manageDevicesEditResult.php:65
 #: site/admin/manageDevicesEditResult.php:69
 msgid "Device"
-msgstr "Dispositivo"
+msgstr "Zařízení"
 
 #: site/ipaddr/modifyIpAddress.php:190 site/admin/manageRequestEdit.php:118
 msgid "Select device"
-msgstr "Selecionar dispositivo"
+msgstr "Zvolte zařízení"
 
 #: site/ipaddr/modifyIpAddress.php:191 site/admin/manageRequestEdit.php:119
 msgid "None"
-msgstr "Nenhum"
+msgstr "Žádné"
 
 #: site/ipaddr/modifyIpAddress.php:227 site/ipaddr/exportSelectFields.php:88
 #: site/admin/manageRequestEdit.php:145 site/admin/CSVimportShowFile.php:72
 msgid "Note"
-msgstr "Notas"
+msgstr "Poznámka"
 
 #: site/ipaddr/modifyIpAddress.php:229
 msgid "Additional notes about IP address"
-msgstr "Adicionar notas sobre o endere&ccedil;o IP"
+msgstr "Další poznámky k IP adrese"
 
 #: site/ipaddr/modifyIpAddress.php:240 site/admin/users.php:41
 #: site/admin/manageDevices.php:33
 msgid "Type"
-msgstr "Tipo"
+msgstr "Typ"
 
 #: site/ipaddr/modifyIpAddress.php:245 site/ipaddr/subnetDetailsGraph.php:46
 #: site/admin/manageRequestEdit.php:93 site/admin/exportGenerateXLS.php:118
 #: site/admin/exportSubnet.php:153
 msgid "Active"
-msgstr "Ativo"
+msgstr "Aktivní"
 
 #: site/ipaddr/modifyIpAddress.php:282
 msgid "Unique"
-msgstr "&uacute;nico"
+msgstr "Unikátní"
 
 #: site/ipaddr/modifyIpAddress.php:285
 msgid "Unique hostname"
-msgstr "&uacute;nico hostname"
+msgstr "Unikátní hostname"
 
 #: site/ipaddr/modifyIpAddress.php:296 site/ipaddr/modifyIpAddress.php:308
 msgid "Not strict"
-msgstr "N&atilde;o estrito"
+msgstr "Není striktní"
 
 #: site/ipaddr/modifyIpAddress.php:299 site/ipaddr/modifyIpAddress.php:311
 msgid "Permit adding network/broadcast as IP"
-msgstr "Permiss&atilde;o para adicionar endere&ccedil;o de rede/broadcast"
+msgstr "Povolit přidat síť/broadcast jako IP"
 
 #: site/ipaddr/modifyIpAddress.php:331
 msgid "Delete IP"
-msgstr "Deletar IP"
+msgstr "Vymazání IP"
 
 #: site/ipaddr/subnetDetails.php:87
 msgid "Subnet Usage"
-msgstr "Uso de sub-rede"
+msgstr "Využití podsítě"
 
 #: site/ipaddr/subnetDetails.php:91
 msgid "Total"
-msgstr "Total"
+msgstr "Celkem"
 
 #: site/ipaddr/subnetDetails.php:125 site/admin/adminMenu.php:73
 #: site/sections.php:133
 msgid "IP requests"
-msgstr "Solicita&ccedil;&otilde;es IP"
+msgstr "Žádosti o IP"
 
 #: site/ipaddr/subnetDetails.php:127
 msgid "disabled"
-msgstr "desabilitado"
+msgstr "zakázáno"
 
 #: site/ipaddr/subnetDetails.php:155
 msgid "You do not have permissions to edit subnet or IP addresses"
-msgstr ""
-"Voc&ecirc; n&atilde;o tem permiss&otilde;es para editar sub-redes ou "
-"endere&ccedil;os IP"
+msgstr "Nemáte oprávnění k edistaci podsítě, nebo přidání IP"
 
 #: site/ipaddr/subnetDetails.php:165 site/ipaddr/subnetDetails.php:182
 msgid "Export IP addresses"
-msgstr "Exportar endere&ccedil;os IP"
+msgstr "Exportovat IP adresy"
 
 #: site/ipaddr/subnetDetails.php:167 site/login/loginForm.php:46
 msgid "Request new IP address"
-msgstr "Solicitar novo endere&ccedil;o IP"
+msgstr "Požádat o novou IP adresu"
 
 #: site/ipaddr/subnetDetails.php:171
 msgid "Add new IP address"
-msgstr "Adicionar novo endere&ccedil;o IP"
+msgstr "Vložit novou IP adresu"
 
 #: site/ipaddr/subnetDetails.php:181
 msgid "Import IP addresses"
-msgstr "Importar endere&ccedil;os IP"
+msgstr "Importovat IP adresy"
 
 #: site/ipaddr/exportSelectFields.php:2
 msgid "Select fields to export"
-msgstr "Selecionar campos para exportar"
+msgstr "Zvolte pole pro export"
 
 #: site/ipaddr/exportSelectFields.php:26
 msgid "You cannot access this subnet"
-msgstr "Voc&ecirc; pode adicionar essa sub-rede"
+msgstr "Nemáte přístup k této podsíti"
 
 #: site/ipaddr/exportSelectFields.php:43
 msgid "IP state"
-msgstr "Estado do IP"
+msgstr "Stav IP"
 
 #: site/ipaddr/exportSelectFields.php:114
 msgid "Export"
-msgstr "Exportar"
+msgstr "Export"
 
 #: site/ipaddr/ipAddressPrintVisual.php:12
 msgid "Click on IP address box<br>to manage IP address"
-msgstr "Clicar na caixa de endere&ccedil;o IP<br>para gerenci&aacute;-los"
+msgstr "Kliknutím na IP box<br>spravujte IP adresu"
 
 #: site/footer.php:26
 msgid "phpIPAM is free, open-source project"
-msgstr "phpIPAM &eacute; gr&aacute;tis, um projeto de c&oacute;digo aberto"
+msgstr "phpIPAM je open-source projekt"
 
 #: site/footer.php:26
-msgid ""
-"If you like the software you can donate by clicking this button to support "
+msgid "If you like the software you can donate by clicking this button to support "
 "further development"
-msgstr ""
-"Se voc&ecirc; gostou do software voc&ecirc; pode fazer doa&ccedil;&otilde;es "
-"clicando neste bot&atilde;o para apoiar mais desenvolvimento"
+msgstr "Pokud se vám tento software líbí, můžete přispět k vývoji kliknutím na tlačítko"
 
-#: site/dashboard/statistics.php:27
+#: site/dashboard/widgets/statistics.php:27
 msgid "Number of Sections"
-msgstr "N&uacute;meros de Se&ccedil;&otilde;es"
+msgstr "Počet sekcí"
 
 #: site/dashboard/statistics.php:33
 msgid "Number of Subnets"
-msgstr "N&uacute;meros de Sub-Rede"
+msgstr "Počet podsítí"
 
 #: site/dashboard/statistics.php:39
 msgid "Number of IPv4 addresses"
-msgstr "N&uacute;mero de endere&ccedil;os IPv4"
+msgstr "Počet IPv4 adres"
 
 #: site/dashboard/statistics.php:45
 msgid "Number of IPv6 addresses"
-msgstr "N&uacute;mero de endere&ccedil;os IPv6"
+msgstr "Počet IPv6 adres"
 
 #: site/dashboard/statistics.php:51
 msgid "Number of users"
-msgstr "N&uacute;meros de usu&aacute;rios"
+msgstr "Počet uživatelů"
 
 #: site/dashboard/error_logs.php:10 site/dashboard/access_logs.php:10
 #: site/admin/logDetail.php:61 site/admin/logsExport.php:59
 #: site/admin/logResult.php:25
 msgid "Severity"
-msgstr "Gravidade"
+msgstr "Závažnost"
 
 #: site/dashboard/error_logs.php:11 site/dashboard/access_logs.php:11
 #: site/admin/logsExport.php:62
 msgid "Command"
-msgstr "Comando"
+msgstr "Příkaz"
 
 #: site/dashboard/error_logs.php:12 site/dashboard/access_logs.php:12
 #: site/admin/logDetail.php:65 site/admin/logsExport.php:60
 #: site/admin/logResult.php:24
 msgid "Date"
-msgstr "Data"
+msgstr "Datum"
 
 #: site/dashboard/error_logs.php:19 site/dashboard/top10_percentage.php:189
 #: site/dashboard/top10_hosts.php:153 site/dashboard/access_logs.php:19
 msgid "Info"
-msgstr "Informa&ccedil;&atilde;o"
+msgstr "Informace"
 
 #: site/dashboard/error_logs.php:20 site/dashboard/access_logs.php:20
 msgid "Warn"
-msgstr "Aviso"
+msgstr "Varování"
 
 #: site/dashboard/error_logs.php:21 site/dashboard/access_logs.php:21
 msgid "Err"
-msgstr "Erro"
+msgstr "Chyba"
 
 #: site/dashboard/error_logs.php:36
 msgid "No error logs available"
-msgstr "Sem logs de erro dispon&iacute;veis"
+msgstr "Není dostupný chybový log"
 
 #: site/dashboard/top10_percentage.php:189 site/dashboard/top10_hosts.php:153
 #: site/admin/CSVimportShowFile.php:106 site/admin/manageSectionEdit.php:63
 #: site/admin/manageSubnetsplit.php:88
 msgid "No"
-msgstr "N&atilde;o"
+msgstr "Ne"
 
 #: site/dashboard/top10_percentage.php:189
 msgid "No IPv4 host configured"
-msgstr "Nenhum host IPv4 foi configurado"
+msgstr "Není konfigurován žádný IPv4 host"
 
 #: site/dashboard/top10_hosts.php:153
 msgid "No IPv6 host configured"
-msgstr "Nenhum host IPv6 foi configurado"
+msgstr "Není konfigurován žádný IPv6 host"
 
 #: site/dashboard/access_logs.php:36 site/admin/logResult.php:116
 msgid "No logs available"
-msgstr "Sem logs dispon&iacute;veis"
+msgstr "Logy nejsou dostupné"
 
 #: site/dashboard/index.php:27
 msgid "welcome to your IPAM dashboard"
-msgstr "Bem vindo ao seu painel IPAM"
+msgstr "Vítejte ve Vašem IPAM dashboardu"
 
 #: site/dashboard/index.php:34
 msgid "There are"
-msgstr "Existem"
+msgstr "Existuje"
 
 #: site/dashboard/index.php:34
 msgid "requests"
-msgstr "solicita&ccedil;&otilde;es"
+msgstr "požadavků"
 
 #: site/dashboard/index.php:34
 msgid "for IP address waiting for your approval"
-msgstr "para endere&ccedil;os IP esperando por usa aprova&ccedil;&atilde;o"
+msgstr "na IP adresu, čekající na schválení"
 
 #: site/dashboard/index.php:43
 msgid "Statistics"
-msgstr "Estat&iacute;sticas"
+msgstr "Statistiky"
 
 #: site/dashboard/index.php:53
 msgid "Top 10 IPv4 subnets by usage percentage"
-msgstr "Top 10 IPv4 porcentagem do uso de sub-redes "
+msgstr "Top 10 IPv4 podsítí dle proceuntálního využití"
 
 #: site/dashboard/index.php:66
 msgid "Top 10 IPv4 subnets by number of hosts"
-msgstr "Top 10 IPv4 sub-redes por n&uacute;meros de hosts"
+msgstr "Top 10 IPv4 podsítí dle počtu hostů"
 
 #: site/dashboard/index.php:76
 msgid "Top 10 IPv6 subnets by number of hosts"
-msgstr "Top 10 IPv6 sub-redes por n&uacute;meros de hosts"
+msgstr "Top 10 IPv6 podsítí dle počtu hostů"
 
 #: site/dashboard/index.php:91
 msgid "Last 5 informational logs"
-msgstr "&uacute;ltimos 5 logs informacionais"
+msgstr "Posledních 5 informačních logů"
 
 #: site/dashboard/index.php:101
 msgid "Last 5 warning / error logs"
-msgstr "&uacute;ltimos 5 logs de erro/aviso"
+msgstr "Posledních 5 upozornění / chyb"
 
 #: site/admin/verifyDatabase.php:13
 msgid "Database structure verification"
-msgstr "Verifica&ccedil;&atilde;o da estrutura do banco de dados"
+msgstr "Kontrola struktury databáze"
 
 #: site/admin/verifyDatabase.php:59
 msgid "All tables and fields are installed properly"
-msgstr "Todas tabelas e campos est&atilde;o instaladas corretamente"
+msgstr "Všechny tabulky a pole jsou v pořádku"
 
 #: site/admin/verifyDatabase.php:63
 msgid "Missing table"
-msgstr "Tabelas faltando"
+msgstr "Chybějící tabulka"
 
 #: site/admin/verifyDatabase.php:75
 msgid "Missing fields"
-msgstr "Campos faltando"
+msgstr "Chybějící pole"
 
 #: site/admin/RIPE / ARINImport.php:12
 msgid "Import subnets from RIPE / ARIN"
-msgstr "Importar sub-redes do RIPE / ARIN"
+msgstr "Importovat podsítě z RIPE / ARIN"
 
 #: site/admin/RIPE / ARINImport.php:15
-msgid ""
-"This script imports subnets from RIPE / ARIN database for specific AS. Enter "
+msgid "This script imports subnets from RIPE / ARIN database for specific AS. Enter "
 "desired AS to search for subnets"
-msgstr ""
-"Esse script importa sub-redes do banco de dados RIPE / ARIN para uma AS "
-"espec&iacute;fica. Entre com a AS desejada para pesquisar por sub-redes"
+msgstr "Tento skript importuje podsítě z databáze RIPE / ARIN specifické AD. Zadejte "
+"cílovou AS pro hledání v podsítích"
 
 #: site/admin/RIPE / ARINImport.php:19
 msgid "AS number"
-msgstr "N&uacute;mero da AS"
+msgstr "Číslo AS"
 
 #: site/admin/customIPFieldsEditResult.php:22
 #: site/admin/customVLANFieldsEditResult.php:22
 #: site/admin/customSubnetFieldsEditResult.php:22
 #: site/admin/customUserFieldsEditResult.php:22
 msgid "Name must be between 4 and 24 characters"
-msgstr "Nome deve conter entre 4 e 24 caracteres"
+msgstr "Jméno musí být mezi 4 a 24 znaky"
 
 #: site/admin/customIPFieldsEditResult.php:27
 #: site/admin/customVLANFieldsEditResult.php:27
 #: site/admin/customSubnetFieldsEditResult.php:27
 #: site/admin/customUserFieldsEditResult.php:27
 msgid "Name must not start with number"
-msgstr "O nome n&atilde;o pode come&ccedil;ar com n&uacute;meros"
+msgstr "Jméno nesmí začínat číslem"
 
 #: site/admin/customIPFieldsEditResult.php:30
 #: site/admin/customVLANFieldsEditResult.php:30
 #: site/admin/customSubnetFieldsEditResult.php:30
 #: site/admin/customUserFieldsEditResult.php:30
 msgid "Only alphanumeric, spaces and underscore characters are allowed"
-msgstr ""
-"Apenas caracteres alfanum&eacute;rico, espa&ccedil;os e underscore s&atilde;"
-"o permitidos"
+msgstr "Pouze alfanumerické znaky, mezery a podtržítka jsou povoleny"
 
 #: site/admin/customIPFieldsEditResult.php:36
 #: site/admin/customSubnetFieldsEditResult.php:38
 msgid "Please correct the following errors"
-msgstr "Por favor, corrija os seguintes erros"
+msgstr "Odstraňte následující chyby, prosím"
 
 #: site/admin/customIPFieldsEditResult.php:45
 #: site/admin/manageVRFEditResult.php:26
@@ -1667,21 +1622,21 @@ msgstr "Por favor, corrija os seguintes erros"
 #: site/admin/customSubnetFieldsEditResult.php:47
 #: site/admin/customUserFieldsEditResult.php:46
 msgid "Failed to"
-msgstr "Falha ao"
+msgstr ""
 
 #: site/admin/customIPFieldsEditResult.php:45
 #: site/admin/customVLANFieldsEditResult.php:46
 #: site/admin/customSubnetFieldsEditResult.php:47
 #: site/admin/customUserFieldsEditResult.php:46
 msgid "field"
-msgstr "campo"
+msgstr "pole"
 
 #: site/admin/customIPFieldsEditResult.php:46
 #: site/admin/customVLANFieldsEditResult.php:47
 #: site/admin/customSubnetFieldsEditResult.php:48
 #: site/admin/customUserFieldsEditResult.php:47
 msgid "Field"
-msgstr "Campo"
+msgstr "Pole"
 
 #: site/admin/customIPFieldsEditResult.php:46
 #: site/admin/customVLANFieldsEditResult.php:47
@@ -1689,146 +1644,124 @@ msgstr "Campo"
 #: site/admin/customSubnetFieldsEditResult.php:48
 #: site/admin/customUserFieldsEditResult.php:47
 msgid "success"
-msgstr "com sucesso"
+msgstr "úspěch"
 
 #: site/admin/manageAD_AD.php:13
 msgid "Active Directory connection settings"
-msgstr ""
-"Configura&ccedil;&otilde;es de conex&atilde;o com servidor Active Directory"
+msgstr "Nastavení spojení s Active Directory"
 
 #: site/admin/manageAD_AD.php:17
-msgid ""
-"Here you can set parameters for connecting to AD for authenticating users. "
+msgid "Here you can set parameters for connecting to AD for authenticating users. "
 "phpIPAM uses"
-msgstr ""
-"Aqui voc&ecirc; pode setar os parâmetros de conex&atilde;o com o AD para "
-"autenticar usu&aacute;rios. Utilizado pelo phpIPAM"
+msgstr "Zde můžete nastavit parametry pro spojení s AD pro autentikaci uživatelů. "
+"phpIPAM používá"
 
 #: site/admin/manageAD_AD.php:17 site/admin/manageAD_LDAP.php:17
-msgid ""
-"to authenticate users. If you need additional settings please take a look at "
+msgid "to authenticate users. If you need additional settings please take a look at "
 "functions/adLDAP or check online documentation!"
-msgstr ""
-"para autenticar usu&aacute;rios. Se voc&ecirc; precisar de alguma "
-"configura&ccedil;&atilde;o adicional, por favor cheque a fun&ccedil;&atilde;"
-"o adLDAP ou cheque a documenta&ccedil;&atilde;o online!"
+msgstr "k autentikaci uživatelů. Pokud potřebujete další nastavení, podívejte se prosím "
+"do functions/adLDAP nebo na online dokumentaci!"
 
 #: site/admin/manageAD_AD.php:20
-msgid ""
-"First create new user under user management with <u>same username as on AD</"
-"u> and set usertype to domain user. Also set proper permissions - group "
-"membership for new user."
-msgstr ""
-"Primeiro crie novo usu&aacute;rio sob o gerenciamento de usu&aacute;rios com "
-"<u> mesmo nome de um usu&aacute;rio do AD </u> e defina um tipo de "
-"usu&aacute;rio no dom&iacute;nio. Tamb&eacute;m defina as permiss&otilde;es "
-"adequadas - membros do grupo para novo usu&aacute;rio."
+msgid "First create new user under user management with <u>same username as on AD</u>"
+" and set usertype to domain user. Also set proper permissions - group membership "
+"for new user."
+msgstr "Nejdříve vytvořte nového uživatele ve správě uživatelů <u>se stejným jménem jako v AD</u>"
+" a nastavte typ uživatele na doménového. Také nastavte správná oprávnění - členství ve skupině "
+"pro nového uživatele."
 
 #: site/admin/manageAD_AD.php:29 site/admin/manageAD_LDAP.php:29
 msgid "ldap extension not enabled in php"
-msgstr "extens&atilde;o ldap n&atilde;o habilitado no php"
+msgstr "ldap rozšíření není povolené v php"
 
 #: site/admin/manageAD_AD.php:38
 msgid "Domain controllers"
-msgstr "Controladores do dom&iacute;no"
+msgstr "Doménové řadiče"
 
 #: site/admin/manageAD_AD.php:43 site/admin/manageAD_LDAP.php:42
-msgid ""
-"Enter domain controllers, separated by ; (default: dc1.domain.local;dc2."
+msgid "Enter domain controllers, separated by ; (default: dc1.domain.local;dc2."
 "domain.local)"
-msgstr ""
-"Entre com os controladores de dom&iacute;no, separados por ; (ex: dc1.domain."
-"local;dc2.domain.local)"
+msgstr "Zadejte doménové řadiče oddělené pomocí ; (standardně: dc1.domain.local;dc2."
+"domain.local)"
 
 #: site/admin/manageAD_AD.php:49 site/admin/manageAD_LDAP.php:48
 msgid "Base DN"
-msgstr "Base DN"
+msgstr "Základní DN"
 
 #: site/admin/manageAD_AD.php:54
-msgid ""
-"Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,"
-"DC=local)<br>\n"
+msgid "Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)"
+"<br>\n"
 "\t\tIf this is set to null then adLDAP will attempt to obtain this "
 "automatically from the rootDSE"
 msgstr ""
-"Entre com a base DN do LDAP (ex: CN=Users,CN=Company,DC=domain,"
-"DC=local)<br>\n"
-"\t\t Se for setado como vazio ent&atilde;o o adLDAP ir&aacute; tentar obter "
-"isso automaticamente do rootDSE"
 
 #: site/admin/manageAD_AD.php:61
 msgid "Account suffix"
-msgstr "Sufixo da conta"
+msgstr "Přípona účtu"
 
 #: site/admin/manageAD_AD.php:66
 msgid "The account suffix for your domain (default: @domain.local)"
-msgstr "O sufixo da conta para o dom&iacute;nio (ex: @domain.local)"
+msgstr "Přípona účtu pro Vaši doménu (standardně: @domain.local)"
 
 #: site/admin/manageAD_AD.php:72 site/admin/manageAD_LDAP.php:61
 msgid "Use SSL"
-msgstr "Uso do SSL"
+msgstr "Použít SSL"
 
 #: site/admin/manageAD_AD.php:75 site/admin/manageAD_AD.php:90
 #: site/admin/manageAD_LDAP.php:79
 msgid "false"
-msgstr "falso"
+msgstr ""
 
 #: site/admin/manageAD_AD.php:76 site/admin/manageAD_AD.php:91
 #: site/admin/manageAD_LDAP.php:80
 msgid "true"
-msgstr "verdadeiro"
+msgstr ""
 
 #: site/admin/manageAD_AD.php:80 site/admin/manageAD_LDAP.php:69
-msgid ""
-"Use SSL (LDAPS), your server needs to be setup (default: false), please see"
-msgstr ""
-"para usar  o SSL (LDAPS), seu servidor deve ser configurado (ex: falso), por "
-"favor, veja"
+msgid "Use SSL (LDAPS), your server needs to be setup (default: false), please see"
+msgstr "Užití SSL (LDAPS) vyžaduje nastavit server (defaultně: vypnuto), prosím podívejte se"
 
 #: site/admin/manageAD_AD.php:87 site/admin/manageAD_LDAP.php:76
 msgid "Use TLS"
-msgstr "Uso do TLS"
+msgstr "Použít TLC"
 
 #: site/admin/manageAD_AD.php:95 site/admin/manageAD_LDAP.php:84
-msgid ""
-"If you wish to use TLS you should ensure that useSSL is set to false and "
+msgid "If you wish to use TLS you should ensure that useSSL is set to false and "
 "vice-versa (default: false)"
-msgstr ""
-"Se voc&ecirc; deseja usar o TLS voc&ecirc; deve certificar-se de que o SSL "
-"est&aacute; configurado como falso e vice-versa (ex: false)"
+msgstr "Chcete-li využít TLS, ujistěte se že použití SSL je nastaveno na vypnuto a "
+"naopak (defaultně: vypnuto)"
 
 #: site/admin/manageAD_AD.php:102
 msgid "AD port"
-msgstr "Porta do AD"
+msgstr "AD port"
 
 #: site/admin/manageAD_AD.php:107 site/admin/manageAD_LDAP.php:96
 msgid "The default port for LDAP non-SSL connections (default: 389)"
-msgstr ""
-"A porta padr&atilde;o para conex&atilde;o LDAP sem SSL (padr&atilde;o: 389)"
+msgstr "Výchozí port pro LDAP non-SSL spojení (standardně: 389)"
 
 #: site/admin/manageAD_AD.php:115 site/admin/manageAD_LDAP.php:104
 msgid "Test settings"
-msgstr "Configura&ccedil;&otilde;es de teste"
+msgstr "Test nastavení"
 
 #: site/admin/manageAD_AD.php:116 site/admin/manageAD_LDAP.php:105
 msgid "Save settings"
-msgstr "Salvar configura&ccedil;&otilde;es"
+msgstr "Uložit nastavení"
 
 #: site/admin/logs.php:11 site/admin/adminMenu.php:41 site/sections.php:141
 msgid "Log files"
-msgstr "Arquivos de log"
+msgstr "Logovací soubory"
 
 #: site/admin/logs.php:16 site/admin/logDetail.php:23
 #: site/admin/logsExport.php:72 site/admin/logResult.php:16
 #: site/admin/logResult.php:40 site/admin/logResult.php:76
 msgid "Informational"
-msgstr "Informativo"
+msgstr "Informační"
 
 #: site/admin/logs.php:17 site/admin/logDetail.php:27
 #: site/admin/logResult.php:17 site/admin/logResult.php:45
 #: site/admin/logResult.php:80
 msgid "Notice"
-msgstr "Notifica&ccedil;&atilde;o"
+msgstr "Oznámení"
 
 #: site/admin/logs.php:18 site/admin/logDetail.php:31
 #: site/admin/manageSubnetEdit.php:310 site/admin/customIPFields.php:141
@@ -1838,128 +1771,122 @@ msgstr "Notifica&ccedil;&atilde;o"
 #: site/admin/logResult.php:18 site/admin/logResult.php:51
 #: site/admin/logResult.php:84
 msgid "Warning"
-msgstr "Aviso"
+msgstr "Upozornění"
 
 #: site/admin/logs.php:21
 msgid "Download logs"
-msgstr "Download logs"
+msgstr "Stáhnout log"
 
 #: site/admin/logs.php:24
 msgid "Clear logs"
-msgstr "Limpar logs"
+msgstr "Vyčistit log"
 
 #: site/admin/logDetail.php:44
 msgid "Log details"
-msgstr "Detalhes do log"
+msgstr "Detail logu"
 
 #: site/admin/logDetail.php:53
 msgid "Log ID"
-msgstr "Id do log"
+msgstr "ID logu"
 
 #: site/admin/logDetail.php:57 site/admin/logResult.php:28
 msgid "Event"
-msgstr "Evento"
+msgstr "Událost"
 
 #: site/admin/logDetail.php:69
 msgid "User details"
-msgstr "Detalhes de usu&aacute;rio"
+msgstr "Detail uživatele"
 
 #: site/admin/logDetail.php:77 site/admin/logsExport.php:63
 msgid "Details"
-msgstr "Detalhes"
+msgstr "Detaily"
 
 #: site/admin/logDetail.php:88 site/admin/CSVimport.php:94
 msgid "Close window"
-msgstr "Fechar janela"
+msgstr "Zavřít okno"
 
 #: site/admin/filterIPFields.php:33
 msgid "Filter which fields to display in IP list"
-msgstr "Filtrar quais campos &agrave; serem mostrados na lista de IP"
+msgstr "Filtr polí, které se mají zobrazit v seznamu"
 
 #: site/admin/filterIPFields.php:36
-msgid ""
-"You can select which fields are actually being used for IP management, so "
+msgid "You can select which fields are actually being used for IP management, so "
 "you dont show any overhead if not used. IP, hostname and description are "
 "mandatory"
-msgstr ""
-"Voc&ecirc; pode selecionar quais campos est&atilde;o realmente sendo usados "
-"para o gerenciamento IP, ent&atilde;o n&atilde;o ser&aacute; necess&aacute;"
-"rio mostrar no geral se n&atilde;o estiver sendo usado, hostname e "
-"descri&ccedil;&atilde;o s&atilde;o obrigat&oacute;rios"
+msgstr "Můžte si zvolit, která pole jsou pro IP management důležitá, a tak"
+"nepotřebné informace Vás nebudou obtěžovat. IP, název hosta a popis jsou pole povinná. "
 
 #: site/admin/filterIPFields.php:44
 msgid "Check which fields to use for IP addresses"
-msgstr "Checar quais campos usar nos endere&ccedil;os IP"
+msgstr "Zvolte pole, které chcete použít pro IP adresy"
 
 #: site/admin/filterIPFields.php:70
 msgid "Save"
-msgstr "Salvar"
+msgstr "Uložit"
 
 #: site/admin/manageRequestEdit.php:20
 msgid "Request does not exist"
-msgstr "Solicita&ccedil;&atilde;o n&atilde;o existe"
+msgstr "Požadavek neexistuje"
 
 #: site/admin/manageRequestEdit.php:35
 msgid "Manage IP address request"
-msgstr "Solicita&ccedil;&atilde;o para gerenciamento de endere&ccedil;os IP"
+msgstr "Správa požadavků IP adres"
 
 #: site/admin/manageRequestEdit.php:46
 msgid "Requested subnet"
-msgstr "Sub-rede solicitada"
+msgstr "Požadovaná podsíť"
 
 #: site/admin/manageRequestEdit.php:76
 msgid "Enter IP description"
-msgstr "Entre com a descri&ccedil;&atilde;o do IP"
+msgstr "Vložte popis IP"
 
 #: site/admin/manageRequestEdit.php:83
 msgid "Enter hostname"
-msgstr "Entre com o hostname"
+msgstr "Vložte hostname"
 
 #: site/admin/manageRequestEdit.php:90
 msgid "State"
-msgstr "Estado"
+msgstr "Stav"
 
 #: site/admin/manageRequestEdit.php:147
 msgid "Write note"
-msgstr "Escrever notas"
+msgstr "Zapsat poznámku"
 
 #: site/admin/manageRequestEdit.php:178
 msgid "Requester email"
-msgstr "Email do solicitante"
+msgstr "E-mail žadatele"
 
 #: site/admin/manageRequestEdit.php:183
 msgid "Requester comment"
-msgstr "Coment&aacute;rio do solicitante"
+msgstr "Poznámka žadatele"
 
 #: site/admin/manageRequestEdit.php:188
 msgid "Comment approval/reject"
-msgstr "Aprova&ccedil;&atilde;o/Rejei&ccedil;&atilde;o de coment&aacute;rio"
+msgstr "Komentář k souhlasu/odmítnutí"
 
 #: site/admin/manageRequestEdit.php:190
 msgid "Enter reason for reject/approval to be sent to requester"
-msgstr ""
-"Entre com a raz&atilde;o pelas quais isso foir rejeitado / aprovado para ser "
-"enviado ao solicitante"
+msgstr "Zadejte důvod odmítnutí/povolení, které bude odeslána žadateli"
 
 #: site/admin/manageRequestEdit.php:201
 msgid "Reject"
-msgstr "Rejeitar"
+msgstr "Odmítnout"
 
 #: site/admin/manageRequestEdit.php:202
 msgid "Accept"
-msgstr "Aceitar"
+msgstr "Příjmout"
 
 #: site/admin/users.php:24 site/admin/adminMenu.php:20
 msgid "User management"
-msgstr "Gerenciar usu&aacute;rios"
+msgstr "Správa uživatelů"
 
 #: site/admin/users.php:28
 msgid "Create user"
-msgstr "Criar usu&aacute;rios"
+msgstr "Vytvořit uživatele"
 
 #: site/admin/users.php:37
 msgid "Real Name"
-msgstr "Nome Real"
+msgstr "Skutečné jméno"
 
 #: site/admin/users.php:39
 msgid "E-mail"
@@ -1968,403 +1895,378 @@ msgstr "E-mail"
 #: site/admin/users.php:42 site/admin/usersEditPrint.php:157
 #: site/sections.php:140
 msgid "Groups"
-msgstr "Grupos"
+msgstr "Skupiny"
 
 #: site/admin/users.php:60 site/admin/usersEditPrint.php:138
 msgid "Administrator"
-msgstr "Administrador"
+msgstr "Administrátor"
 
 #: site/admin/users.php:69 site/admin/usersEditPrint.php:92
 msgid "Local user"
-msgstr "Usu&aacute;rio local"
+msgstr "Místní uživatel"
 
 #: site/admin/users.php:71
 msgid "LDAP user"
-msgstr "Usu&aacute;rio do LDAP"
+msgstr "LDAP uživatel"
 
 #: site/admin/users.php:72 site/admin/usersEditPrint.php:95
 msgid "Domain user"
-msgstr "Usu&aacute;rios do dom&iacute;nio"
+msgstr "Doménový uživatel"
 
 #: site/admin/users.php:77
 msgid "All groups"
-msgstr "Todos os grupos"
+msgstr "Všechny skupiny"
 
 #: site/admin/users.php:116
-msgid ""
-"Administrator users will be able to view and edit all all sections and subnets"
-msgstr ""
-"Usu&aacute;rios administradores estar&atilde;o aptos a visualizar e editar "
-"todas se&ccedil;&otilde;es e sub-redes"
+msgid "Administrator users will be able to view and edit all all sections and subnets"
+msgstr "Administrátoři budou schopni vidět a upravovat všechny sekce a podsítě"
 
 #: site/admin/users.php:117
-msgid ""
-"Normal users will have permissions set based on group access to sections and "
+msgid "Normal users will have permissions set based on group access to sections and "
 "subnets"
-msgstr ""
-"Usu&aacute;rios normais poder&atilde;o ter permiss&otilde;es baseadas no "
-"grupo para acessar se&ccedil;&otilde;es e sub-redes"
+msgstr "Běžní uživatelé budou mít oprávnění získaná na základě přiřazení ke skupinám"
 
 #: site/admin/manageSubnet.php:11 site/admin/adminMenu.php:53
 msgid "Subnet management"
-msgstr "Gerenciamento de sub-rede"
+msgstr "Správa podsítí"
 
 #: site/admin/manageSubnet.php:45
 msgid "click to show/hide all subnets"
-msgstr "clique para mostrar/esconder todas sub-redes"
+msgstr "zobrazít/skrýt všechny podsítě"
 
 #: site/admin/manageSubnet.php:63
 msgid "click to show/hide belonging subnets"
-msgstr "cliqeu para mostrar/esconder todas sub-redes pertencentes"
+msgstr "kliknutím zobrazíte/skryjete přičleněné subsítě"
 
 #: site/admin/manageSubnet.php:89
 msgid "Add new subnet to section"
-msgstr "Adicionar nova sub-rede nessa se&ccedil;&atilde;o"
+msgstr "Přidat novou podsíť do sekce"
 
 #: site/admin/manageSubnet.php:89
 msgid "Add subnet"
-msgstr "Adicionar sub-rede"
+msgstr "Přidat podsíť"
 
 #: site/admin/manageSubnet.php:95
 msgid "Section has no subnets"
-msgstr "Essa se&ccedil;&atilde;o n&atilde;o possui sub-rede"
+msgstr "Sekce nemá podsítě"
 
 #: site/admin/adminMenu.php:14
 msgid "Server management"
-msgstr "Gerenciamento do servidor"
+msgstr "Správa serveru"
 
 #: site/admin/adminMenu.php:17 site/sections.php:138
 msgid "IPAM settings"
-msgstr "Configura&ccedil;&atilde;o IPAM"
+msgstr "Nastavení IPAM"
 
 #: site/admin/adminMenu.php:23 site/admin/groups.php:20
 msgid "Group management"
-msgstr "Gerenciamento de grupo"
+msgstr "Správa skupin"
 
 #: site/admin/adminMenu.php:28
 msgid "AD connection settings"
-msgstr "Configura&ccedil;&otilde;es de conex&atilde;o com AD"
+msgstr "Nastavení AD spojení"
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
 msgid "LDAP connection settings"
-msgstr "Configura&ccedil;&otilde;es de conex&atilde;o com OpenLDAP"
+msgstr "Nastavení OpenLDAP spojení"
 
 #: site/admin/adminMenu.php:38
 msgid "Edit instructions"
-msgstr "Instru&ccedil;&otilde;es de edi&ccedil;&atilde;o"
+msgstr "Instrukce úprav"
 
 #: site/admin/adminMenu.php:47
 msgid "IP related management"
-msgstr "Gerenciamento de IP relatado"
+msgstr "Správa související s IP"
 
 #: site/admin/adminMenu.php:50 site/admin/manageSection.php:15
 msgid "Section management"
-msgstr "Gerenciamento de se&ccedil;&atilde;o"
+msgstr "Správa sekce"
 
 #: site/admin/adminMenu.php:56 site/admin/manageDevices.php:15
 msgid "Device management"
-msgstr "Gerenciamento de dispositivos"
+msgstr "Správa zařízení"
 
 #: site/admin/adminMenu.php:59
 msgid "VLAN management"
-msgstr "Gerenciamento de VLAN"
+msgstr "Správa VLAN"
 
 #: site/admin/adminMenu.php:64
 msgid "VRF management"
-msgstr "Gerenciamento de VRF"
+msgstr "Správa VRF"
 
 #: site/admin/adminMenu.php:68
 msgid "RIPE / ARIN import"
-msgstr "Importar RIPE / ARIN"
+msgstr "Import RIPE / ARIN"
 
 #: site/admin/adminMenu.php:77
 msgid "Filter IP fields"
-msgstr "Filtrar campos IP"
+msgstr "Filtr polí IP"
 
 #: site/admin/adminMenu.php:80 site/admin/customIPFields.php:33
 msgid "Custom fields"
-msgstr "Campos personalizados"
+msgstr "Uživatelská pole"
 
 #: site/admin/adminMenu.php:88
 msgid "Version check"
-msgstr "Verificar vers&atilde;o"
+msgstr "Kontrola verze"
 
 #: site/admin/adminMenu.php:91
 msgid "Verify database"
-msgstr "Verificar banco de dados"
+msgstr "Kontrola databáze"
 
 #: site/admin/adminMenu.php:94
 msgid "Replace fields"
-msgstr "Substituir campos"
+msgstr "Nahradit pole"
 
 #: site/admin/adminMenu.php:97
 msgid "Export database"
-msgstr "Exportar banco de dados"
+msgstr "Export databáze"
 
 #: site/admin/usersEditPrint.php:34
 msgid "user"
-msgstr "usu&aacute;rio"
+msgstr "uživatel"
 
 #: site/admin/usersEditPrint.php:35 site/admin/usersEditPrint.php:44
 msgid "Add new user"
-msgstr "Adicionar novo usu&aacute;rio"
+msgstr "Přidat nového uživatele"
 
 #: site/admin/usersEditPrint.php:60
 msgid "Enter users real name"
-msgstr "Digite o nome real do usu&aacute;rio"
+msgstr "Vložte skutečné jméno"
 
 #: site/admin/usersEditPrint.php:67
 msgid "Enter username"
-msgstr "Digite o nome de usu&aacute;rio"
+msgstr "Uživatelské jméno"
 
 #: site/admin/usersEditPrint.php:74
 msgid "Enter users email address"
-msgstr "Digite o email do usu&aacute;rio"
+msgstr "Vložte emailovou adresu uživatele"
 
 #: site/admin/usersEditPrint.php:87
 msgid "User Type"
-msgstr "Tipo de Usu&aacute;rio"
+msgstr "Typ uživatele"
 
 #: site/admin/usersEditPrint.php:98
 msgid "Set user type"
-msgstr "Setar tipo de usu&aacute;rio"
+msgstr "Nastavit typ uživatele"
 
 #: site/admin/usersEditPrint.php:100
 msgid "Local authenticates here"
-msgstr "Autentica&ccedil;&atilde;o local aqui"
+msgstr ""
 
 #: site/admin/usersEditPrint.php:101
-msgid ""
-"Domain authenticates on AD, but still needs to be setup here for permissions "
+msgid "Domain authenticates on AD, but still needs to be setup here for permissions "
 "etc."
 msgstr ""
-"Autentica&ccedil;&atilde;o no dom&iacute;nio de AD, mas ainda &eacute; "
-"necess&aacute;rio configurar as permiss&otilde;es e etc."
 
 #: site/admin/usersEditPrint.php:116
 msgid "User's password"
-msgstr "Senha do usu&aacute;rio"
+msgstr "Heslo uživatele"
 
 #: site/admin/usersEditPrint.php:116
 msgid "click to generate random"
-msgstr "clique para gerer uma senha aleat&oacute;ria"
+msgstr "generovat náhodné heslo"
 
 #: site/admin/usersEditPrint.php:128
 msgid "Notification"
-msgstr "Notifica&ccedil;&atilde;o"
+msgstr "Upozornění"
 
 #: site/admin/usersEditPrint.php:130
 msgid "Send notification email to user with account details"
-msgstr ""
-"Enviar email de notifica&ccedil;&atilde;o para o usu&aacute;rio com os "
-"detalhes da conta"
+msgstr "Odeslat uživateli emailové oznámění s detaily účtu"
 
 #: site/admin/usersEditPrint.php:135
 msgid "User role"
-msgstr "Pap&eacute;is do usu&aacute;rio"
+msgstr "Role uživatele"
 
 #: site/admin/usersEditPrint.php:139
 msgid "Normal User"
-msgstr "Usu&aacute;rio Normal"
+msgstr "Běžný uživatel"
 
 #: site/admin/usersEditPrint.php:147
 msgid "Select user role"
-msgstr "Selecione o papel do usu&aacute;rio"
+msgstr "Zvolte roli uživatele"
 
 #: site/admin/usersEditPrint.php:149
 msgid "Administrator is almighty"
-msgstr "O administrador &eacute; poderoso"
+msgstr "Administrátor je všemocný"
 
 #: site/admin/usersEditPrint.php:150
 msgid "Users have access defined based on groups"
-msgstr "Usu&aacute;rios possuem acessos definidos, baseados em grupos"
+msgstr "Uživatel má přísup dle skupiny"
 
 #: site/admin/usersEditPrint.php:177
 msgid "No groups configured"
-msgstr "Nenhum grupo configurado"
+msgstr "Není nakonfigurovaná žádná skupina"
 
 #: site/admin/usersEditPrint.php:182
 msgid "Select to which groups the user belongs to"
-msgstr "Selecione &agrave; qual grupo esse usu&aacute;rio pertence"
+msgstr "Zvolte, do kterých skupin uživatel náleží"
 
 #: site/admin/export.php:13
 msgid "phpIPAM database export"
-msgstr "Exportar banco de dados phpIPAM"
+msgstr "Export databáze phpIPAM"
 
 #: site/admin/export.php:16
-msgid ""
-"You can download MySQL dump of database or generate XLS file of IP addresses"
-msgstr ""
-"Voc&ecirc; pode faxer o download do dump MYSQL do banco de dados ou gerar um "
-"arquivo XLS para os endere&ccedil;os IP"
+msgid "You can download MySQL dump of database or generate XLS file of IP addresses"
+msgstr "Můžete stáhnout MySQL dump databáze nebo vygenerovat XLS soubor IP adres"
 
 #: site/admin/export.php:19
 msgid "Create MySQL database dump"
-msgstr "Criar um banco de dados dump MYSQL"
+msgstr "Vytvořit dump MySQL databáze"
 
 #: site/admin/export.php:20
 msgid "Prepare MySQL dump"
-msgstr "Preparar dump MYSQL"
+msgstr "Připravit MySQL dump"
 
 #: site/admin/export.php:23
 msgid "Create XLS file of IP addresses"
-msgstr "Criar arquivo XLS ou endere&ccedil;os IP"
+msgstr "Vytvořit XLS soubor IP adres"
 
 #: site/admin/export.php:24
 msgid "Prepare XLS dump"
-msgstr "Preparar dump XLS"
+msgstr "Připravit XLS dump"
 
 #: site/admin/export.php:27
 msgid "Create hostfile dump"
-msgstr "Criar do dump de hostfile"
+msgstr "Vytvořit dump hostů"
 
 #: site/admin/export.php:28
 msgid "Prepare hostfile dump"
-msgstr "Preparar o dump de hostfile"
+msgstr "Připravit dump hostů"
 
 #: site/admin/manageSubnetEdit.php:14 site/admin/manageSubnetEditResult.php:14
 msgid "You do not have permissions to add new subnet in this section"
-msgstr ""
-"Voc&ecirc; n&atilde;o tem permiss&atilde;o para adicionar uma nova sub-rede "
-"nessa se&ccedil;&atilde;o"
+msgstr "Nemáte oprávnění k přidání nové podsítě v této sekci"
 
 #: site/admin/manageSubnetEdit.php:21 site/admin/manageSubnetEditResult.php:21
 msgid "You do not have permissions to add edit/delete this subnet"
-msgstr ""
-"Voc&ecirc; n&atilde;o tem permiss&atilde;o para adicionar, editar ou deletar "
-"essa sub-rede"
+msgstr "Nemáte oprávnění k přidání úpravě/výmazu této sekce"
 
 #: site/admin/manageSubnetEdit.php:65
 msgid "subnet"
-msgstr "sub-rede"
+msgstr "podsíť"
 
 #: site/admin/manageSubnetEdit.php:83
 msgid "subnet in CIDR"
-msgstr "CIDR na sub-rede"
+msgstr "podsíť v CIDR"
 
 #: site/admin/manageSubnetEdit.php:86
 msgid "Get information from RIPE / ARIN database"
-msgstr "Obter informa&ccedil;&otilde;es do banco de dados RIPE / ARIN"
+msgstr "Získat informace z databáze RIPE / ARIN"
 
 #: site/admin/manageSubnetEdit.php:87
 msgid "Enter subnet in CIDR format (e.g. 192.168.1.1/24)"
-msgstr "Digite a sub-rede no formato CIDR (e.g. 192.168.1.1/24)"
+msgstr "Podsíť v CIDR formátu (např. 10.1.1.1/24)"
 
 #: site/admin/manageSubnetEdit.php:95
 msgid "subnet description"
-msgstr "descri&ccedil;&atilde;o de sub-rede"
+msgstr "popis podsítě"
 
 #: site/admin/manageSubnetEdit.php:97
 msgid "Enter subnet description"
-msgstr "Digite a descri&ccedil;&atilde;o da sub-rede"
+msgstr "Vložte popis podsítě"
 
 #: site/admin/manageSubnetEdit.php:119
 msgid "Move to different section"
-msgstr "Mover para uma se&ccedil;&atilde;o diferente"
+msgstr "Přesunout do jiné sekce"
 
 #: site/admin/manageSubnetEdit.php:128 site/admin/manageSubnetEdit.php:157
 #: site/admin/manageVLANdropdownReload.php:16
 msgid "Select VLAN"
-msgstr "Selecionar uma VLAN"
+msgstr "Zvolte VLAN"
 
 #: site/admin/manageSubnetEdit.php:135
 #: site/admin/manageVLANdropdownReload.php:23
 msgid "No VLAN"
-msgstr "Nenhuma VLAN"
+msgstr "Žádná VLAN"
 
 #: site/admin/manageSubnetEdit.php:138
 #: site/admin/manageVLANdropdownReload.php:26
 msgid "Add"
-msgstr "Adicionar"
+msgstr "Přidat"
 
 #: site/admin/manageSubnetEdit.php:139
 #: site/admin/manageVLANdropdownReload.php:27
 msgid "+ Add new VLAN"
-msgstr "+ Adicionar uma nova VLAN"
+msgstr "+ Přidat novou VLAN"
 
 #: site/admin/manageSubnetEdit.php:166
-msgid ""
-"Enter master subnet if you want to nest it under existing subnet, or select "
+msgid "Enter master subnet if you want to nest it under existing subnet, or select "
 "root to create root subnet"
 msgstr ""
-"Digite a sub-rede mestre se voc&ecirc; deseja aninh&aacute;-la dentro de uma "
-"sub-rede existente, ou selecione a sub-rede root para criar uma sub-net root"
 
 #: site/admin/manageSubnetEdit.php:188
 msgid "Select VRF"
-msgstr "Selecione uma VRF"
+msgstr "Zvolte VRF"
 
 #: site/admin/manageSubnetEdit.php:201
 msgid "Add this subnet to VRF"
-msgstr "Adicione esta sub-rede a uma VRF"
+msgstr "Přidat tuto podsíť do VRF"
 
 #: site/admin/manageSubnetEdit.php:213
 msgid "Resize"
-msgstr "Redimensionar"
+msgstr "Změnit velikost"
 
 #: site/admin/manageSubnetEdit.php:213
 msgid "split"
-msgstr "dividir"
+msgstr "Rozdělit"
 
 #: site/admin/manageSubnetEdit.php:217 site/admin/manageSubnetresize.php:24
 #: site/admin/manageSubnetresize.php:72
 msgid "Resize subnet"
-msgstr "Redimensionar sub-rede"
+msgstr "Změnit velikost podsítě"
 
 #: site/admin/manageSubnetEdit.php:222 site/admin/manageSubnetsplit.php:53
 #: site/admin/manageSubnetsplit.php:121
 msgid "Split subnet"
-msgstr "Dividir subrede"
+msgstr "Rozdělit podsíť"
 
 #: site/admin/manageSubnetEdit.php:223 site/admin/manageSubnettruncate.php:27
 #: site/admin/manageSubnettruncate.php:60
 msgid "Truncate subnet"
-msgstr "Truncar sub-rede"
+msgstr "Oříznout podsíť"
 
 #: site/admin/manageSubnetEdit.php:227
 msgid "Resize, split or truncate this subnet"
-msgstr "Redimensionar, dividir, ou truncar esta sub-rede"
+msgstr "Změnit velikost, rozdělit, nebo oříznout tuto podsíť"
 
 #: site/admin/manageSubnetEdit.php:239
 msgid "IP Requests"
-msgstr "Solicita&ccedil;&otilde;es IP"
+msgstr "IP žádosti"
 
 #: site/admin/manageSubnetEdit.php:243
 msgid "Allow or deny IP requests for this subnet"
-msgstr "Permitir ou negar solicita&ccedil;&otilde;es IP para esta sub-rede"
+msgstr "Povolit nebo zakázat IP žádosti pro tuto podsíť"
 
 #: site/admin/manageSubnetEdit.php:253
 msgid "Show as name"
-msgstr "Mostrar como nome"
+msgstr "Zobrazit jako název"
 
 #: site/admin/manageSubnetEdit.php:274
 msgid "Show Subnet name instead of subnet IP address"
-msgstr ""
-"Exibir nome de Sub-rede ao inv&eacute;s do endere&ccedil;o IP da sub-rede"
+msgstr "Zobrazí jméno podsítě namísto IP adresy"
 
 #: site/admin/manageSubnetEdit.php:310
-msgid ""
-"Removing subnets will delete ALL underlaying subnets and belonging IP "
+msgid "Removing subnets will delete ALL underlaying subnets and belonging IP "
 "addresses"
-msgstr ""
-"Remo&ccedil;&atilde;o de sub-redes ir&aacute; apagar todas sub-redes "
-"subjacentes e todos os endere&ccedil;os IP pertencentes a ela."
+msgstr "Odstraněním podsítě dojde k vymazání přiřazených podsítí a IP adres"
 
 #: site/admin/manageSubnetEdit.php:324
 msgid "Delete subnet"
-msgstr "Deletar sub-rede"
+msgstr "Vymazat podsíť"
 
 #: site/admin/exportGenerateXLS.php:92 site/admin/exportSubnet.php:99
 msgid "ip state"
-msgstr "estado do ip"
+msgstr "stav ip"
 
 #: site/admin/exportGenerateXLS.php:145
 msgid "No hosts"
-msgstr "Nenhum hosts"
+msgstr "Žádný host"
 
 #: site/admin/CSVimportShowFile.php:16 site/admin/CSVimportSubmit.php:19
 msgid "Cannot open csvupload/import.csv"
-msgstr "N&atilde;o foi poss&iacute;vel abrir o csvupload/import.csv"
+msgstr "Nelze otevřít csvupload/import.csv"
 
 #: site/admin/CSVimportShowFile.php:64
 msgid "IP"
@@ -2372,156 +2274,152 @@ msgstr "IP"
 
 #: site/admin/CSVimportShowFile.php:65
 msgid "Status"
-msgstr "Estado"
+msgstr "Status"
 
 #: site/admin/CSVimportShowFile.php:100 site/admin/RIPE / ARINImportTelnet.php:108
 msgid "Import to database"
-msgstr "Importar para o banco de dados"
+msgstr "Importovat do databáze"
 
 #: site/admin/CSVimportShowFile.php:102
 msgid "Should I import values to database"
-msgstr "Devo importar esses valores para o banco de dados"
+msgstr "Měl bych importovat hodnoty do databáze"
 
 #: site/admin/CSVimportShowFile.php:105 site/admin/manageSectionEdit.php:62
 #: site/admin/manageSubnetsplit.php:89
 msgid "Yes"
-msgstr "Sim"
+msgstr "Ano"
 
 #: site/admin/customSubnetFieldsEdit.php:19
 msgid "custom subnet field"
-msgstr "Campo de sub-rede customizado"
+msgstr "uživatelské pole podsítě"
 
 #: site/admin/customSubnetFieldsEdit.php:31
 #: site/admin/customIPFieldsEdit.php:31 site/admin/customVLANFieldsEdit.php:31
 #: site/admin/customUserFieldsEdit.php:31
 msgid "Select field name"
-msgstr "Selecionar nome do campo"
+msgstr "Zvolte název pole"
 
 #: site/admin/customSubnetFieldsEdit.php:45
 #: site/admin/customIPFieldsEdit.php:45 site/admin/customVLANFieldsEdit.php:45
 #: site/admin/customUserFieldsEdit.php:45
 msgid "Close"
-msgstr "Fechar"
+msgstr "Zavřít"
 
 #: site/admin/customIPFields.php:42
 msgid "Custom IP address fields"
-msgstr "Campos de endere&ccedil;o IP customizados"
+msgstr "Uživatelská pole IP adresy"
 
 #: site/admin/customIPFields.php:49
 msgid "No custom fields created yet"
-msgstr "Nenhum campo customizado foi criado ainda"
+msgstr "Doposud nebyla vytvořena žádná uživatelská pole"
 
 #: site/admin/customIPFields.php:76 site/admin/customIPFields.php:141
 #: site/admin/customIPFields.php:210 site/admin/customIPFields.php:275
 msgid "Invalid field name"
-msgstr "Nome do campo inv&aacute;lido"
+msgstr "Chybný název pole"
 
 #: site/admin/customIPFields.php:89
 msgid "Add new custom IP address field"
-msgstr "Adicionar novo campo de endere&ccedil;o IP customizado"
+msgstr "Přidání nového uživatelského pole IP adresy selhalo"
 
 #: site/admin/customIPFields.php:107
 msgid "Custom subnet fields"
-msgstr "Campos de sub-rede customizado"
+msgstr "Uživatelská pole podsítě"
 
 #: site/admin/customIPFields.php:114
 msgid "No custom subnet fields created yet"
-msgstr "Nenhuma campo de sub-rede customizado foi criado ainda "
+msgstr "Doposud nebyla vytvořena žádná uživatelská pole podsítě"
 
 #: site/admin/customIPFields.php:128 site/admin/customIPFields.php:197
 #: site/admin/customIPFields.php:262
 msgid "Move down"
-msgstr "Mover para baixo"
+msgstr "Přesunout dolů"
 
 #: site/admin/customIPFields.php:156
 msgid "Add new custom subnet field"
-msgstr "Adicionar novo campo de sub-rede customizado"
+msgstr "Přidat nové uživatelské pole do podsítě"
 
 #: site/admin/customIPFields.php:176
 msgid "Custom VLAN fields"
-msgstr "Campos de VLAN customizado"
+msgstr "Uživatelská pole VLAN"
 
 #: site/admin/customIPFields.php:183
 msgid "No custom VLAN fields created yet"
-msgstr "Nenhum campo de VLAN customizado foir criado ainda"
+msgstr "Doposud nebyla vytvořena žádná uživatelská pole VLAN"
 
 #: site/admin/customIPFields.php:224
 msgid "Add new custom VLAN field"
-msgstr "Adicionar novo campo de VLAN customizado"
+msgstr "Přidat nové uživatelské pole VLAN"
 
 #: site/admin/customIPFields.php:241
 msgid "Custom User fields"
-msgstr "Campos de usu&aacute;rio customizados"
+msgstr "Uživatelská pole Uživatele"
 
 #: site/admin/customIPFields.php:248
 msgid "No custom user fields created yet"
-msgstr "Nenhum campo de usu&aacute;rio customizado foi criado ainda"
+msgstr "Doposud nebyla vytvořena žádná uživatelská pole uživatele"
 
 #: site/admin/customIPFields.php:289
 msgid "Add new custom User field"
-msgstr "Adicionar novo campo de Usu&aacute;rio customizado"
+msgstr "Přidat nové pole Uživatele"
 
 #: site/admin/customIPFields.php:304
-msgid ""
-"You can add additional custom fields to IP addresses and subnets (like "
+msgid "You can add additional custom fields to IP addresses and subnets (like "
 "CustomerId, location, ...)"
-msgstr ""
-"Voc&ecirc; pode adicionar campos customizados para endere&ccedil;os IP e sub-"
-"redes (por exemplo: IdCliente, local, ...)"
+msgstr "Můžete přidat další uživatelská pole do IP adres a podsítí (jako "
+"CustomerId, location, ...)"
 
 #: site/admin/searchReplaceResult.php:16
 msgid "Please enter something in search field"
-msgstr "Por favor, digite alguma coisa no campo de pesquisa"
+msgstr "Vložte laskavě něco k vyhledání"
 
 #: site/admin/searchReplaceResult.php:20 site/admin/searchReplaceResult.php:21
 msgid "does not exist, first create switch under admin menu"
-msgstr "n&atilde;o esxiste, crie primeiramente um switch abaixo do menu admin"
+msgstr "neexistuje, nejdříve vytvořte switch v administrační nabídce"
 
 #: site/admin/manageRequestResult.php:29
 msgid "Cannot update request"
-msgstr "N&atilde;o foi poss&iacute;vel atualiza&ccedil;&atilde;o solicitada"
+msgstr "Nelze aktualizovat požadavek"
 
 #: site/admin/manageRequestResult.php:33
 msgid "Request has beed rejected"
-msgstr "Sua solicita&ccedil;&atilde;o foi rejeitada"
+msgstr "Požadavek byl odmítnut"
 
 #: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
 msgid "already in use"
-msgstr "j&aacute; em uso"
+msgstr "již využíván"
 
 #: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
 msgid "First available IP address is"
-msgstr "O primeiro IP dispon&iacute;vel &eacute;"
+msgstr "První dostupná IP adresa je"
 
 #: site/admin/manageRequestResult.php:66
 msgid "Cannot confirm IP address"
-msgstr "N&atilde;o foi poss&iacute;vel confirmar o endere&ccedil;o IP"
+msgstr "Nelze potvrdit IP adresu"
 
 #: site/admin/manageRequestResult.php:70
 msgid "IP address request confirmed and added to database"
-msgstr ""
-"Solicita&ccedil;&atilde;o de endere&ccedil;o IP confirmado e adicionado ao "
-"banco de dados"
+msgstr "Požadavek na IP adresu byl potvrzen a zadán do databáze"
 
 #: site/admin/customIPFieldsEdit.php:19
 msgid "custom IP field"
-msgstr "Campo IP customizado"
+msgstr "uživatelské pole IP"
 
 #: site/admin/filterIPFieldsResult.php:14
 msgid "Update failed"
-msgstr "Falha ao atualizar"
+msgstr "Aktualizace selhala"
 
 #: site/admin/filterIPFieldsResult.php:15
 msgid "Update successfull"
-msgstr "Atualiza&ccedil;&atilde;o conclu&iacute;da com sucesso"
+msgstr "Aktualizace úspěšná"
 
 #: site/admin/manageVRF.php:15
 msgid "Manage VRF"
-msgstr "Gerenciar VRF"
+msgstr "Správa VRF"
 
 #: site/admin/manageVRF.php:18
 msgid "Add VRF"
-msgstr "Adicionar VRF"
+msgstr "Přidat VRF"
 
 #: site/admin/manageVRF.php:35 site/admin/manageVRFEdit.php:43
 msgid "RD"
@@ -2529,700 +2427,629 @@ msgstr "RD"
 
 #: site/admin/CSVimportSubmit.php:88
 msgid "Errors occured when importing to database!"
-msgstr ""
-"Erros ocorreram no momento da importa&ccedil;&atilde;o do banco de dados"
+msgstr "Při importu databáze nastala chyba!"
 
 #: site/admin/CSVimportSubmit.php:95 site/admin/RIPE / ARINImportResult.php:72
 msgid "Import successfull"
-msgstr "Importa&ccedil;&atilde;o feita com sucesso"
+msgstr "Import proběhl úspěšně"
 
 #: site/admin/CSVimportVerify.php:25
 msgid "Cannot upload - Return Code:"
-msgstr ""
-"N&atilde;o foi poss&iacute;vel a atualiza&ccedil;&atilde;o - C&oacute;digo "
-"retornado:"
+msgstr "Nelze nahrát - Návratový kód:"
 
 #: site/admin/CSVimportVerify.php:31
 msgid "Cannot move file to upload dir"
-msgstr ""
-"N&atilde;o foi poss&iacute;vel mover arquivo para atualiza&ccedil;&atilde;o "
-"do diret&oacute;rio"
+msgstr "Nemohu přesunout soubor do adresáře upload"
 
 #: site/admin/CSVimportVerify.php:35
 msgid "Success"
-msgstr "Sucesso"
+msgstr "Úspěch"
 
 #: site/admin/manageDevicesEdit.php:24
 #: site/admin/manageDevicesEditResult.php:60
 msgid "device"
-msgstr "dispositivo"
+msgstr "zařízení"
 
 #: site/admin/manageDevicesEdit.php:51
 msgid "Device type"
-msgstr "Tipo do dispositivo"
+msgstr "Typ zařízení"
 
 #: site/admin/manageDevicesEdit.php:67 site/admin/manageDevicesEdit.php:69
 #: site/admin/manageDevices.php:34
 msgid "Vendor"
-msgstr "Fabricante"
+msgstr "Výrobce"
 
 #: site/admin/manageDevicesEdit.php:75 site/admin/manageDevicesEdit.php:77
 #: site/admin/manageDevices.php:35
 msgid "Model"
-msgstr "Modelo"
+msgstr "Model"
 
 #: site/admin/manageDevicesEdit.php:83 site/admin/manageDevices.php:36
 msgid "SW version"
-msgstr "Vers&atilde;o de SW"
+msgstr "Verze SW"
 
 #: site/admin/manageDevicesEdit.php:85
 msgid "Software version"
-msgstr "Vers&atilde;o do Software"
+msgstr "Verze software"
 
 #: site/admin/manageDevicesEdit.php:109
 msgid "Sections to display device in"
-msgstr "Se&ccedil;&atilde;o &agrave; qual o dispositivo ser&aacute; exibido"
+msgstr "Zařízení zobrazit v sekcích"
 
 #: site/admin/manageDevicesEditResult.php:41
 msgid "Hostname is mandatory"
-msgstr "Hostname &eacute; obrigat&oacute;rio"
+msgstr "Jméno hosta je povinné"
 
 #: site/admin/manageVRFEdit.php:38
 msgid "VRF name"
-msgstr "Nome da VRF"
+msgstr "Jméno VRF"
 
 #: site/admin/manageVRFEdit.php:45
 msgid "Route distinguisher"
-msgstr "Distin&ccedil;&atilde;o de rotas"
+msgstr "Odlišení tras"
 
 #: site/admin/manageSubnetEditResult.php:87
 #: site/admin/manageSubnetEditResult.php:104
 msgid "Nested subnet not in root subnet!"
-msgstr "Sub-rede aninhada n&atilde;o &eacute; uma sub-rede root!"
+msgstr "Podřízená podsíť není v kořenové podsíti!"
 
 #: site/admin/manageSubnetEditResult.php:109
 msgid "Subnet cannot nest behind itself!"
-msgstr "Sub-rede n&atilde;o pôde aninhada em s&iacute; mesma!"
+msgstr ""
 
 #: site/admin/manageSubnetEditResult.php:157
 msgid "Please fix following problems"
-msgstr "Por favor, corrija os seguintes problemas"
+msgstr "Opravte laskavě následující problémy"
 
 #: site/admin/manageSubnetEditResult.php:165
 msgid "Error adding new subnet"
-msgstr "Erro ao adicionar uma nova sub-rede"
+msgstr "CHyba přidání nové podsítě"
 
 #: site/admin/manageSubnetEditResult.php:168
 msgid "Subnet, IP addresses and all belonging subnets deleted successfully"
-msgstr ""
-"Sub-redes, endere&ccedil;os IP e todas as sub-redes pertencentes &agrave; "
-"esta foram deletadas com sucesso"
+msgstr "Podsíť, IP adresy a příslušné podsítě vymazány úspěšně"
 
 #: site/admin/manageVLANEdit.php:44
 msgid "VLAN name"
-msgstr "Nome da VLAN"
+msgstr "Náze VLAN"
 
 #: site/admin/manageVLANEdit.php:52
 msgid "VLAN number"
-msgstr "N&uacute;mero da VLAN"
+msgstr "Číslo VLAN"
 
 #: site/admin/manageVLANEdit.php:97
 msgid "removing VLAN will also remove VLAN reference from belonging subnets"
-msgstr ""
-"Ao remover a VLAN, as refer&ecirc;ncias pertencentes a esta VLAN nas sub-"
-"redes tamb&eacute;m ser&atilde;o removidas"
+msgstr "odstraněním VLAN budou odstraněny také reference příslušných podsítí"
 
 #: site/admin/manageRequests.php:15
 msgid "List of all active IP addresses requests"
-msgstr ""
-"Lista de todas solicita&ccedil;&otilde;es &agrave; endere&ccedil;os IP ativos"
+msgstr "Seznam všech aktivních žádostí o IP adresy"
 
 #: site/admin/manageRequests.php:39
 msgid "Edit"
-msgstr "Editar"
+msgstr "Editovat"
 
 #: site/admin/manageRequests.php:53
 msgid "No IP address requests available"
-msgstr ""
-"Nenhuma solicita&ccedil;&atilde;o a endere&ccedil;os IP est&atilde;o "
-"dispon&iacute;veis"
+msgstr "Nejsou dostupné žádné žádosti o IP adresu"
 
 #: site/admin/usersEditResult.php:44
 msgid "User deleted successfully"
-msgstr "Usu&aacute;rio deletado com sucesso"
+msgstr "Uživatel vymazán úspěšně"
 
 #: site/admin/customVLANFieldsEdit.php:19
 msgid "custom VLAN field"
-msgstr "Campo de VLAN customizado"
+msgstr "uživatelské pole VLAN"
 
 #: site/admin/groupEditResult.php:14
 msgid "Name must be at least 4 characters long"
-msgstr "Nome deve conter no m&iacute;nimo 4 caracteres"
+msgstr "Jméno musí být nejméně 4 znaky dlouhé"
 
 #: site/admin/groupEditResult.php:23 site/admin/groupEditResult.php:24
 msgid "Group edit error"
-msgstr "Erro ao editar grupo"
-
+msgstr "Chyba úpravy skupiny"
 msgid "Group add error"
-msgstr "Erro ao adicionar grupo"
-
+msgstr "Chyba přidání skupiny"
 msgid "Group delete error"
-msgstr "Erro ao deletar grupo"
+msgstr "Chyba výmazu skupiny"
 
 msgid "Group edit success"
-msgstr "Grupo editado com sucesso"
-
+msgstr "Úprava skupiny úspěšná"
 msgid "Group add success"
-msgstr "Grupo adicionar com sucesso"
-
+msgstr "Přidání skupiny úspěšné"
 msgid "Group delete success"
-msgstr "Grupo deletado com sucesso"
+msgstr "Výmaz skupiny úspěšné"
 
 #: site/admin/manageADresult.php:16
 msgid "Failed to update AD settings"
-msgstr "Falha ao atualizar as configura&ccedil;&otilde;es do AD"
+msgstr "Chyba v aktualizace nastavení AD"
 
 #: site/admin/manageADresult.php:17
 msgid "AD settings updated"
-msgstr "Configura&ccedil;&otilde;es do AD atualizadas"
+msgstr "AD nastavení aktualizováno"
 
 #: site/admin/settings.php:15
 msgid "phpIPAM Server settings"
-msgstr "Configura&ccedil;&otilde;es do Servidor phpIPAM"
+msgstr "Nastavení serveru phpIPAM"
 
 #: site/admin/settings.php:23
 msgid "Site settings"
-msgstr "Configura&ccedil;&otilde;es do site"
+msgstr "Nastavení stránek"
 
 #: site/admin/settings.php:28
 msgid "Site title"
-msgstr "T&iacute;tulo do site"
+msgstr "Název stránek"
 
 #: site/admin/settings.php:32
 msgid "Set site title"
-msgstr "Adicionar t&iacute;tulo ao site"
+msgstr "Nastavení názvu stránek"
 
 #: site/admin/settings.php:37
 msgid "Site domain"
-msgstr "Dom&iacute;nio do site"
+msgstr "Doména stránek"
 
 #: site/admin/settings.php:41
 msgid "Set domain for sending mail notifications"
-msgstr ""
-"Setar dom&iacute;nio para o envio de notifica&ccedil;&otilde;es via e-mail"
+msgstr "Nastavení domény pro odeslání e-mailu oznámení"
 
 #: site/admin/settings.php:46
 msgid "Site URL"
-msgstr "URL do site"
+msgstr "URL adresa"
 
 #: site/admin/settings.php:50
 msgid "Set site URL"
-msgstr "Setar URL do site"
+msgstr "Nastavení URL stránek"
 
 #: site/admin/settings.php:56
 msgid "Admin settings"
-msgstr "Configura&ccedil;&otilde;es do administrador"
+msgstr "Admin nastavení"
 
 #: site/admin/settings.php:61
 msgid "Admin name"
-msgstr "Nome do administrador"
+msgstr "Jméno Administrátora"
 
 #: site/admin/settings.php:66
-msgid ""
-"Set administrator name to display when sending mails and for contact info"
-msgstr ""
-"Setar nome do administrador a ser mostrado nos emails enviados e nas "
-"informa&ccedil;&otilde;es do contato"
+msgid "Set administrator name to display when sending mails and for contact info"
+msgstr "Nastavte zobrazované jméno administrátora při odesílání pošty"
 
 #: site/admin/settings.php:72
 msgid "Admin mail"
-msgstr "Email do administrador"
+msgstr "Adresa administrátora"
 
 #: site/admin/settings.php:77
-msgid ""
-"Set administrator e-mail to display when sending mails and for contact info"
-msgstr ""
-"Setar email do administrador a ser mostrado nos emails enviados e nas "
-"informa&ccedil;&otilde;es do contato"
+msgid "Set administrator e-mail to display when sending mails and for contact info"
+msgstr "Nastavte zobrazovaný email administrátora pro odesílání zpráv a kontaktiních informací"
 
 #: site/admin/settings.php:85
 msgid "Feature settings"
-msgstr "Configura&ccedil;&atilde;o de aspecto"
+msgstr "Nastavení vlastností"
 
 #: site/admin/settings.php:90
 msgid "Auth type"
-msgstr "Tipo de autentifica&ccedil;&atilde;o"
+msgstr "Typ autentikace"
 
 #: site/admin/settings.php:93
 msgid "Local authentication only"
-msgstr "Somente autentica&ccedil;&atilde;o local"
+msgstr "Pouze lokální autentikace"
 
 #: site/admin/settings.php:94
 msgid "AD authentication"
-msgstr "Autentica&ccedil;&atilde;o via AD"
+msgstr "AD autentikace"
 
 #: site/admin/settings.php:95
 msgid "OpenLDAP authentication"
-msgstr "Autentica&ccedil;&atilde;o via OpenLDAP"
+msgstr "OpenLDAP autentikace"
 
 #: site/admin/settings.php:99
-msgid ""
-"Set authentication type for users. Requires php LDAP support. Set connection "
+msgid "Set authentication type for users. Requires php LDAP support. Set connection "
 "settings in admin menu"
-msgstr ""
-"Setar tipo de autentica&ccedil;&atilde;o para usu&aacute;rios. Reque suporte "
-"php LDAP. Configure configura&ccedil;&otilde;es de conex&atilde;o no menu "
-"admin"
+msgstr "Nastavte typ autentikace uživatelů. Vyžaduje podporu php LDAP.  "
 
 #: site/admin/settings.php:105
 msgid "Tooltips"
-msgstr "Dicas de ferramentas"
+msgstr "Popisky"
 
 #: site/admin/settings.php:110
 msgid "Enable or disable tooltips"
-msgstr "Habilitar ou desabilitar dicas de ferramentas"
+msgstr "Pvolit nebo zakázat popisky"
 
 #: site/admin/settings.php:116
 msgid "IP request module"
-msgstr "M&oacute;dulo de solicita&ccedil;&atilde;o IP"
+msgstr "Modul IP žádostí"
 
 #: site/admin/settings.php:121
 msgid "Enable or disable IP request module"
-msgstr ""
-"Habilitar ou desabilitar o m&oacute;dulo de solicita&ccedil;&atilde;o por IP"
+msgstr "Povolit nebo zakázat modul IP žádostí"
 
 #: site/admin/settings.php:127
 msgid "Enable VRF support"
-msgstr "Habilitar suporte VRF"
+msgstr "Povolit VRF podporu"
 
 #: site/admin/settings.php:132
 msgid "Enable or disable VRF module"
-msgstr "Habilitar ou desabilitar m&oacute;dulo VRF"
+msgstr "Povolit nebo zakázat VRF modul"
 
 #: site/admin/settings.php:138
 msgid "Resolve DNS names"
-msgstr "Resolver nomes DNS"
+msgstr "Vyhledat DNS názvy"
 
 #: site/admin/settings.php:143
-msgid ""
-"Check reverse dns lookups for IP addresses that do not have hostname in "
+msgid "Check reverse dns lookups for IP addresses that do not have hostname in "
 "database. (Activating this feature can significantly increase ip address "
 "pages loading time!)"
-msgstr ""
-"Checar lookup de dns reverso  para endere&ccedil;os IP que n&atilde;o "
-"possuem hostname no banco de dados (Ativando essa caracter&iacute;stica pode "
-"aumentar significantemente o tempo de carregamento das p&aacute;ginas de "
-"endere&ccedil;os IP!)"
+msgstr "Kontrola zpětných DNS záznamů IP adres, které nemají vyplněné pole hostname."
+"(Aktivací této vlastnosti může dojít k prodloužení časů načítání "
+"stránky s IP adresami!)"
 
 #: site/admin/settings.php:149
 msgid "Duplicate VLANs"
-msgstr "Duplicar VLANs"
+msgstr "Duplikovat VLANy"
 
 #: site/admin/settings.php:154
 msgid "Allow duplicate VLAN numbers"
-msgstr "Habilitar a duplica&ccedil;&atilde;o dos n&uacute;meros de VLAN"
+msgstr "Povolit duplikaci čísel VLAN"
 
 #: site/admin/settings.php:160
 msgid "HTML email"
-msgstr "Email HTML"
+msgstr "HTML email"
 
 #: site/admin/settings.php:165
 msgid "Send html mail instead of plain text"
-msgstr "Enviar emails html ao inv&eacute;s de pleno texto"
+msgstr "Odeslat html mail namísto prostého textu"
 
 #: site/admin/settings.php:171 site/admin/settings.php:176
 msgid "Hide donation button"
-msgstr "Esconder bot&otilde;a de doa&ccedil;&otilde;a"
+msgstr "Skrýt tlačítko příspěvku"
 
 #: site/admin/settings.php:182
 msgid "IP visual display limit"
-msgstr "Limite de IPs a serem mostrados"
+msgstr "Limit zobrazení IP adres"
 
 #: site/admin/settings.php:187
 msgid "Don't show visual display"
-msgstr "N&otilde;a mostrar exibi&ccedil;&atilde;o visual"
+msgstr ""
 
 #: site/admin/settings.php:205
-msgid ""
-"Select netmask limit for visual display of IP addresses (mask equal or "
+msgid "Select netmask limit for visual display of IP addresses (mask equal or "
 "bigger than - more then /22 not recommended)"
 msgstr ""
-"Selecione o limite da m&aacute;scara de rede para exibi&ccedil;&atilde;o do "
-"endere&ccedil;o IP (m&aacute;scara igual ou maior que  - mais que  /22 "
-"n&atilde;o &eacute; recomendado)"
 
 #: site/admin/settings.php:212
 msgid "IP address print limit"
-msgstr "Limite de impress&atilde;o de endere&ccedil;os IP"
+msgstr "Omezení zobrazení IP adres"
 
 #: site/admin/settings.php:217
 msgid "Show all"
-msgstr "Mostrar tudo"
+msgstr "Zobrazit vše"
 
 #: site/admin/settings.php:233
 msgid "Number of IP addresses per page"
-msgstr "N&uacute;mero de endere&ccedil;os IP por p&aacute;gina"
+msgstr "Počet IP adres na stránku"
 
 #: site/admin/settings.php:239
 msgid "Subnet ordering"
-msgstr "Ordena&ccedil;&atilde;o de Sub-Rede"
+msgstr "Řazení podsítí"
 
 #: site/admin/settings.php:244
 msgid "Subnet, ascending"
-msgstr "Sub-rede, crescente"
+msgstr "Podsíť, vzestupně"
 
 #: site/admin/settings.php:245
 msgid "Subnet, descending"
-msgstr "Sub-rede, decrescente"
+msgstr "Podsíť, sestupně"
 
 #: site/admin/settings.php:246
 msgid "Description, ascending"
-msgstr "Descri&ccedil;&atilde;o, crescente"
+msgstr "Popis, vzestupně"
 
 #: site/admin/settings.php:247
 msgid "Description, descending"
-msgstr "Descri&ccedil;&atilde;o, decrescente"
+msgstr "Popis, sestupně"
 
 #: site/admin/settings.php:259
 msgid "How to order display of subnets"
-msgstr "Como ordenar visualiza&ccedil;&atilde;o de sub-redes"
+msgstr "Jak řadit zobrazení podsítí"
 
 #: site/admin/replaceFields.php:16
 msgid "Search and replace fields in IP address list"
-msgstr "Pesquisar e substituir campos na lista de endere&ccedil;os IP"
+msgstr "Vyhledá a nahradí pole v seznamu IP adres"
 
 #: site/admin/replaceFields.php:24
 msgid "Select field to replace"
-msgstr "Selecionar campo &agrave; ser substitu&iacute;do"
+msgstr "Zvolte pole k nahrazení"
 
 #: site/admin/replaceFields.php:49
 msgid "Select search string"
-msgstr "Selecionar string pesquisada"
+msgstr "Zvolte vyhledávací řetězec"
 
 #: site/admin/replaceFields.php:51
 msgid "search string"
-msgstr "pesquisar por string"
+msgstr "řetězec k nahrazení"
 
 #: site/admin/replaceFields.php:56
 msgid "Select replace string"
-msgstr "Selecionar string &agrave; ser substitu&iacute;da"
+msgstr "Zvolte nový řetězec"
 
 #: site/admin/replaceFields.php:58
 msgid "replace string"
-msgstr "substituir string"
+msgstr "nový řetězec"
 
 #: site/admin/replaceFields.php:65
 msgid "Replace"
-msgstr "Substituir"
+msgstr "Nahradit"
 
 #: site/admin/instructionsResult.php:20
 msgid "Failed to update instructions"
-msgstr "Falha ao atualizar as instru&ccedil;&otilde;es"
+msgstr "Chyba aktualizace instrukcí"
 
 #: site/admin/instructionsResult.php:21
 msgid "Instructions updated successfully"
-msgstr "Instru&ccedil;&otilde;es atualizadas com sucesso"
+msgstr "Instrukce aktualizovány úspěšn"
 
 #: site/admin/RIPE / ARINImportTelnet.php:48
 msgid "No subnets found"
-msgstr "Nenhuma sub-rede encontrada"
+msgstr "Podsítě nenalezeny"
 
 #: site/admin/RIPE / ARINImportTelnet.php:56
 msgid "I found the following routes belonging to AS"
-msgstr "Eu encontrei as seguintes rotas pertencentes as AS’s"
+msgstr ""
 
 #: site/admin/RIPE / ARINImportTelnet.php:69
 msgid "Remove this subnet"
-msgstr "Remover essa sub-rede"
+msgstr "Odstranit tuto podsíť"
 
 #: site/admin/RIPE / ARINImportTelnet.php:79
 msgid "select section"
-msgstr "selecionar se&ccedil;&atilde;o"
+msgstr "zvolte sekci"
 
 #: site/admin/settingsEdit.php:23
 msgid "Cannot update settings"
 msgstr ""
-"N&atilde;o foi poss&iacute;vel atualizar as configura&ccedil;&otilde;es"
 
 #: site/admin/settingsEdit.php:24
 msgid "Settings updated successfully"
-msgstr "Configura&ccedil;&otilde;es atualizadas com sucesso"
+msgstr "Nastavení aktualizováno úspěšně"
 
 #: site/admin/manageSection.php:19
 msgid "Add section"
-msgstr "Adicionar se&ccedil;&atilde;o"
+msgstr "Přidat sekci"
 
 #: site/admin/manageSection.php:29 site/admin/manageSubnetsplit.php:96
 msgid "Strict mode"
-msgstr "Modo estrito"
+msgstr ""
 
 #: site/admin/manageSection.php:30
 msgid "Group Permissions"
-msgstr "Permiss&otilde;es de Grupo"
+msgstr "Oprávnění skupiny"
 
 #: site/admin/manageSection.php:43
 msgid "no"
-msgstr "n&atilde;o"
+msgstr "ne"
 
 #: site/admin/manageSection.php:44
 msgid "yes"
-msgstr "sim"
+msgstr "ano"
 
 #: site/admin/manageSection.php:64
 msgid "All groups: No access"
-msgstr "Todos os gurpos: sem acesso"
+msgstr "Všechny skupiny: Bez přístupu"
 
 #: site/admin/manageSection.php:84
 msgid "No sections configured"
-msgstr "Nenhuma se&ccedil;&atilde;o configurada"
+msgstr "Sekce nejsou konfigurovány"
 
 #: site/admin/manageSection.php:90
 msgid "Permissions info"
-msgstr "Informa&ccedil;&otilde;es de permiss&atilde;o"
+msgstr ""
 
 #: site/admin/manageSection.php:92
-msgid ""
-"If group is not set in permissions then it will not have access to subnet"
+msgid "If group is not set in permissions then it will not have access to subnet"
 msgstr ""
-"Se o grupo n&atilde;o estiver atrelado &agrave;s permiss&otilde;es "
-"ent&atilde;o n&atilde;o ser&aacute; poss&iacute;vel o acesso &agrave; sub-"
-"rede"
 
 #: site/admin/manageSection.php:93
 msgid "Groups with RO permissions will not be able to create new subnets"
-msgstr ""
-"Grupos com permiss&otilde;es RO n&atilde;o estar&atilde;o aptos a criar "
-"novas sub-redes"
+msgstr "Skupiny s RO oprávněním nebudou schopné vytvořit podsítě"
 
 #: site/admin/manageSection.php:94
-msgid ""
-"Subnet permissions must be set separately. By default if group has access to "
+msgid "Subnet permissions must be set separately. By default if group has access to "
 "section<br>it will have same permission on subnets"
 msgstr ""
-"As permiss&otilde;es de sub-rede devem ser configuradas separadamente. Por "
-"padr&atilde;o se um grupo tem acesso a essa se&ccedil;&atilde;o<br>, este "
-"ter&aacute; as mesmas permiss&otilde;es nas sub-redes"
 
 #: site/admin/manageSection.php:95
-msgid ""
-"You can choose to delegate section permissions to all underlying subnets"
+msgid "You can choose to delegate section permissions to all underlying subnets"
 msgstr ""
-"Voc&ecirc; pode escolher delegar as permiss&otilde;es de se&ccedil;&atilde;o "
-"para todas sub-redes subjacentes"
 
 #: site/admin/manageSection.php:96
-msgid ""
-"If group does not have access to section it will not be able to access "
+msgid "If group does not have access to section it will not be able to access "
 "subnet, even if<br>subnet permissions are set"
 msgstr ""
-"Se um grupo n&atilde;o tem acesso &agrave;s se&ccedil;&otilde;es, este "
-"tamb&eacute;m n&atilde;o ser&aacute; capaz de acessar as sub-redes, mesmo "
-"se<br>as permiss&otilde;es a esta sub-rede estiver configurada"
 
 #: site/admin/customSubnetFieldsOrder.php:15
 #: site/admin/customIPFieldsOrder.php:15
 #: site/admin/customVLANFieldsOrder.php:15
 #: site/admin/customUserFieldsOrder.php:15
 msgid "Fileds cannot be empty"
-msgstr "Os campos n&atilde;o podem ficar vazios"
+msgstr "Pole nemohou být prázdná"
 
 #: site/admin/customSubnetFieldsOrder.php:19
 #: site/admin/customIPFieldsOrder.php:19
 #: site/admin/customVLANFieldsOrder.php:19
 #: site/admin/customUserFieldsOrder.php:19
 msgid "Reordering failed"
-msgstr "Falha ao reordenar"
+msgstr "Přeřazení polí"
 
 #: site/admin/customSubnetFieldsOrder.php:20
 msgid "Fields reordered successfully!"
-msgstr "Campos reordenados com sucesso!"
+msgstr "Pole přeřazena úspěšně"
 
 #: site/admin/showAll.php:1
 msgid "phpIPAM server settings"
-msgstr "Configura&ccedil;&otilde;es do servidor phpIPAM"
+msgstr "Nastavení serveru phpIPAM"
 
 #: site/admin/showAll.php:4
 msgid "Please select setting from left menu"
-msgstr "Por favor, selecione as configura&ccedil;&otilde;es no menu a esquerda"
+msgstr "Zvolte prosím nastavení z nabídky vlevo"
 
 #: site/admin/manageVLANEditResult.php:23
 msgid "VLAN already exists"
-msgstr "VLAN j&aacute; existe"
+msgstr "VLAN již existuje"
 
 #: site/admin/manageVLANEditResult.php:44
 msgid "Number is mandatory"
-msgstr "N&uacute;mero &eacute; obrigat&oacute;rio"
+msgstr "Číslo je povinné"
 
 #: site/admin/versionCheck.php:13
 msgid "Version check failed"
-msgstr "Falha ao checar vers&atilde;o"
+msgstr "Chyba kontroly verze"
 
 #: site/admin/versionCheck.php:19
 msgid "Latest version"
-msgstr "Ultima vers&atilde;o"
+msgstr "Poslední verze"
 
 #: site/admin/versionCheck.php:19
 msgid "already installed"
-msgstr "j&aacute; instalado"
+msgstr "je již nainstalovaná"
 
 #: site/admin/versionCheck.php:22
 msgid "Development version"
-msgstr "Vers&atilde;o de desenvolvimento"
+msgstr "Vývojová verze"
 
 #: site/admin/versionCheck.php:22
 msgid "installed! Latest production version is"
-msgstr "instalado! Ultima vers&atilde;o em produ&ccedil;&atilde;o &eacute;"
+msgstr "instalována! Poslední produktivní je"
 
 #: site/admin/versionCheck.php:25
 msgid "New version of phpipam available"
-msgstr "Nova vers&atilde;o do phpIPAM est&aacute; dispon&iacute;vel"
+msgstr "Je dostupná nová verze phpipam!"
 
 #: site/admin/versionCheck.php:26
 msgid "Installed version"
-msgstr "Vers&atilde;o instalada"
+msgstr "Instalovaná verze"
 
 #: site/admin/versionCheck.php:27
 msgid "Available version"
-msgstr "Vers&atilde;o dispon&iacute;vel"
+msgstr "Dostupná verze"
 
 #: site/admin/versionCheck.php:28
 msgid "You can download new version"
-msgstr "Voc&ecirc; pode fazer o download da nova vers&atilde;o"
+msgstr "Můžete stáhnout novou verzi"
 
 #: site/admin/versionCheck.php:28
 msgid "here"
-msgstr "aqui"
+msgstr "zde"
 
 #: site/admin/manageSectionEdit.php:42
 msgid "Section name"
-msgstr "Selecione o nome"
+msgstr "Jméno sekce"
 
 #: site/admin/manageSectionEdit.php:53
 msgid "Section description"
-msgstr "Selecione a descri&ccedil;&atilde;o"
+msgstr "Popis sekce"
 
 #: site/admin/manageSectionEdit.php:59
 msgid "Strict Mode"
-msgstr "Modo estrito"
+msgstr "Striktní mód"
 
 #: site/admin/manageSectionEdit.php:65
-msgid ""
-"No disables overlapping subnet checks. Subnets can be nested/created "
+msgid "No disables overlapping subnet checks. Subnets can be nested/created "
 "randomly. Anarchy."
 msgstr ""
-"N&atilde;o desativar verifica&ccedil;&otilde;es de sub-rede que se "
-"sobrep&otilde;em. As sub-redes podem ser aninhadas / criadas aleatoriamente. "
-"Anarquia"
 
 #: site/admin/manageSectionEdit.php:90
 msgid "Permissions"
-msgstr "Permiss&atilde;o"
+msgstr "Oprávnění"
 
 #: site/admin/manageSectionEdit.php:123
 msgid "Delegate"
-msgstr "Delega&ccedil;&atilde;o"
+msgstr "Delegování"
 
 #: site/admin/manageSectionEdit.php:125
 msgid "Check to delegate permissions to all subnets in section"
 msgstr ""
-"Checar permiss&otilde;es delegadas a todas sub-redes da se&ccedil;&atilde;o"
 
 #: site/admin/manageSectionEdit.php:136
 msgid "Deleting Section will delete all belonging subnets and IP addresses"
-msgstr ""
-"Excluindo Se&ccedil;&atilde;o ir&aacute; apagar todoas as sub-redes e "
-"endere&ccedil;os IP pertencentes"
+msgstr "Vymazáním sekce vymažete také příslušné podsítě a IP adresy"
 
 #: site/admin/customIPFieldsOrder.php:20
 #: site/admin/customVLANFieldsOrder.php:20
 #: site/admin/customUserFieldsOrder.php:20
 msgid "Fields reordered successfully"
-msgstr "Campos reordenados com sucesso"
+msgstr "Přeorganizování polí bylo úspěšné"
 
 #: site/admin/logClear.php:14
 msgid "Error clearing logs"
-msgstr "Erro ao apagar logs"
+msgstr "Chyba při čištění logů"
 
 #: site/admin/logClear.php:15
 msgid "Logs cleared successfully"
-msgstr "Logs apagados com sucesso"
+msgstr "Logy vyčištěny úspěšně"
 
 #: site/admin/RIPE / ARINImportResult.php:66
 msgid "Failed to import subnet"
-msgstr "Falha ao importar sub-rede"
+msgstr "Chyba importu podsítí"
 
 #: site/admin/RIPE / ARINImportResult.php:76
 msgid "Please fix the following errors before inserting"
-msgstr "Por favor, corrija os seguintes erros antes de inserir o desejado"
+msgstr "Opravte laskavě následující chyby před vložením"
 
 #: site/admin/manageADcheck.php:43
 msgid "AD network connection ok"
-msgstr "Conex&atilde;o com a rede AD ok"
+msgstr "AD síťové spojení ok"
 
 #: site/admin/manageVLANs.php:17
 msgid "Manage VLANs"
-msgstr "Gerenciar VLANs"
+msgstr "Správa VLAN"
 
 #: site/admin/manageVLANs.php:21
 msgid "Add VLAN"
-msgstr "Adicionar VLAN"
+msgstr "Přidat VLAN"
 
 #: site/admin/manageVLANs.php:26
 msgid "No VLANs configured"
-msgstr "Nenhuma VLAN configurada"
+msgstr "Žádná VLAN není nakonfigurovaná"
 
 #: site/admin/manageAD_LDAP.php:17
-msgid ""
-"Here you can set parameters for connecting to OpenLDAP for authenticating "
+msgid "Here you can set parameters for connecting to OpenLDAP for authenticating "
 "users. phpIPAM uses"
 msgstr ""
-"Aqui voc&ecirc; pode setar os parâmetros de conex&atilde;o ao OpenLDAP para "
-"a autentica&ccedil;&atilde;o de usu&aacute;rios. O phpIPAM usa"
 
 #: site/admin/manageAD_LDAP.php:20
-msgid ""
-"First create new user under user management with <u>same username as on "
-"LDAP</u> and set usertype to domain user. Also set proper groups "
-"(premissions) for this user."
+msgid "First create new user under user management with <u>same username as on "
+"LDAP</u> and set usertype to domain user. Also set proper groups (premissions) for this user."
 msgstr ""
-"Primeiramente, crie um novo usu&aacute;rio administrador com <u>mesmo nome "
-"de usu&aacute;rio no LDAP</u> e configure o tipo de usu&aacute;rio ao "
-"usu&aacute;rio do dom&iacute;nio. Configure tamb&eacute;m as propriedades do "
-"grupo (permiss&otilde;es) para esse usu&aacute;rio."
 
 #: site/admin/manageAD_LDAP.php:38
 msgid "LDAP servers"
-msgstr "Servidor OpenLDAP"
+msgstr "OpenLDAP servery"
 
 #: site/admin/manageAD_LDAP.php:54
-msgid ""
-"Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)"
-msgstr "Digite a base DN do LDAP (ex: CN=Users,CN=Company,DC=domain,DC=local)"
+msgid "Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)"
+msgstr ""
 
 #: site/admin/manageAD_LDAP.php:91
 msgid "Server port"
-msgstr "Porta do servidor"
+msgstr "Port serveru"
 
 #: site/admin/manageRequestResultMail.php:14 site/login/requestIPresult.php:35
 msgid "Sending mail for new IP request failed"
-msgstr "Falha ao enviar email de solicita&ccedil;&atilde;o de IP"
+msgstr ""
 
 #: site/admin/manageRequestResultMail.php:15 site/login/requestIPresult.php:36
 msgid "Sending mail for IP request succeeded"
 msgstr ""
-"Email de solicita&ccedil;&atilde;o de endere&ccedil;o IP enviado com sucesso"
 
 #: site/admin/instructions.php:23
 msgid "Edit user instructions"
-msgstr "Editar instru&ccedil;&otilde;es do usu&aacute;rio"
+msgstr "Úprava instrukcí uživatele"
 
 #: site/admin/instructions.php:43
 msgid "preview"
-msgstr "pr&eacute;-visualiza&ccedil;&atilde;o"
+msgstr "náhled"
 
 #: site/admin/instructions.php:44
 msgid "Save instructions"
-msgstr "Salvar instru&ccedil;&otilde;es"
+msgstr "Uložit instrukce"
 
 #: site/admin/logsExport.php:58
 msgid "id"
@@ -3230,101 +3057,97 @@ msgstr "id"
 
 #: site/admin/logsExport.php:74
 msgid "Critical"
-msgstr "Cr&iacute;tico"
+msgstr "Kritické"
 
 #: site/admin/groups.php:24
 msgid "Create group"
-msgstr "Criar grupo"
+msgstr "Vytvořit skupinu"
 
 #: site/admin/groups.php:32 site/admin/groupEditPrint.php:50
 msgid "Group name"
-msgstr "Nome do grupo"
+msgstr "Název skupiny"
 
 #: site/admin/groups.php:33
 msgid "Group description"
-msgstr "Descri&ccedil;&atilde;o do grupo"
+msgstr "Popis skupiny"
 
 #: site/admin/groups.php:34
 msgid "Belonging users"
-msgstr "Usu&aacute;rios pertencentes"
+msgstr "Členové"
 
 #: site/admin/groups.php:35
 msgid "Section permissions"
-msgstr "Permiss&otilde;es da se&ccedil;&atilde;o"
+msgstr "Oprávnnění sekce"
 
 #: site/admin/groups.php:41
 msgid "Administrators"
-msgstr "Administradores"
+msgstr "Administrátoři"
 
 #: site/admin/groups.php:42
 msgid "Administrator level users"
-msgstr "N&iacute;vel dos usu&aacute;rios administradores"
+msgstr ""
 
 #: site/admin/groups.php:51
 msgid "All sections : Read / Write"
-msgstr "Todas se&ccedil;&otilde;es: Leitura / Escrita"
+msgstr "Všechny sekce: Čtení / Zápis"
 
 #: site/admin/groups.php:93
 msgid "add users to this group"
-msgstr "adicionar usu&aacute;rios a esse grupo"
+msgstr "přidat uživatele do této skupiny"
 
 #: site/admin/groups.php:94
 msgid "remove users from this group"
-msgstr "remor usu&aacute;rios desse grupo"
+msgstr "odebrat uživatele ze skupiny"
 
 #: site/admin/groups.php:101
 msgid "edit group details"
-msgstr "editar detalhes do grupo"
+msgstr "upravit detaily skupiny"
 
 #: site/admin/groups.php:102
 msgid "remove group"
-msgstr "remover grupo"
+msgstr "odstranit skupinu"
 
 #: site/admin/logResult.php:104
 msgid "Event details"
-msgstr "Detalhes do evento"
+msgstr "Detaily události"
 
 #: site/admin/CSVimport.php:14
 msgid "You cannot write to this subnet"
-msgstr "Voc&ecirc; n&atilde;o pode escrever nessa sub-rede"
+msgstr "Nemůžete zapisovat do této podsítě"
 
 #: site/admin/CSVimport.php:21
 msgid "XLS / CSV subnet import"
-msgstr "Importar sub-rede de XLS/CSV"
+msgstr "XLS / CSV import podsítě"
 
 #: site/admin/CSVimport.php:42
-msgid ""
-"To successfully import data please use the following XLS/CSV structure:"
-"<br>( ip | State | Description | hostname | MAC | Owner | Device | Port | "
-"Note "
-msgstr ""
-"Para importar dados com sucesso, por favor use a seguinte estrutura XLS/CSV:"
-"<br>( ip | State | Description | hostname | MAC | Owner | Device | Port | "
-"Note)"
+msgid "To successfully import data please use the following XLS/CSV structure:<br>"
+"( ip | State | Description | hostname | MAC | Owner | Device | Port | Note "
+msgstr "Pro úspěšný import dat užite následující strukturu XLS/CSF:<br>"
+"( ip | Stav | Popis | hostname | MAC | Vlastník | Zařízení | Port | Poznámka "
 
 #: site/admin/CSVimport.php:48
 msgid "Upload file"
-msgstr "Upload do arquivo"
+msgstr "Nahrát soubor"
 
 #: site/admin/CSVimport.php:52
 msgid "Select CSV file"
-msgstr "Selecitar arquivo CSV"
+msgstr "Vyberte CSV soubor"
 
 #: site/admin/CSVimport.php:54
 msgid "Clear"
-msgstr "Limpar"
+msgstr "Vyčistit"
 
 #: site/admin/CSVimport.php:55
 msgid "Upload"
-msgstr "Upload"
+msgstr "Nahrát"
 
 #: site/admin/CSVimport.php:81
 msgid "Import file"
-msgstr "Importar arquivos"
+msgstr ""
 
 #: site/admin/CSVimport.php:85
 msgid "Show uploaded subnets"
-msgstr "Mostrar sub-redes carregadas"
+msgstr "Zobrazit nahrané podsítě"
 
 #: site/admin/manageSubnetResizeSave.php:12
 #: site/admin/manageSubnetsplit.php:12 site/admin/manageSubnetresize.php:12
@@ -3332,751 +3155,1587 @@ msgstr "Mostrar sub-redes carregadas"
 #: site/admin/manageSubnettruncate.php:12
 #: site/admin/manageSubnetTruncateSave.php:12
 msgid "You do not have permissions to resize subnet"
-msgstr ""
-"Voc&ecirc; n&atilde;o tem permiss&atilde;o para redimensionar a sub-rede"
+msgstr "Nemáte oprávnění ke změně velikosti podsítě"
 
 #: site/admin/manageSubnetResizeSave.php:43
 msgid "New mask must be at least /8"
-msgstr "Nova m&aacute;scara de rede deve ser no m&iacute;nimo /8"
+msgstr "Nová maska musí být nejméně /8"
 
 #: site/admin/manageSubnetResizeSave.php:53
 msgid "New subnet not in master subnet"
-msgstr "A nova sub-rede n&atilde;o est&aacute; na sub-rede mestre"
+msgstr "Nová podsíť není v hlavní podsíti"
 
 #: site/admin/manageSubnetResizeSave.php:66
 msgid "Nested subnet out of new subnet"
-msgstr "A sub-rede aninhada est&aacute; fora da nova sub-rede"
+msgstr ""
 
 #: site/admin/manageSubnetResizeSave.php:84
 msgid "Error resizing subnet"
-msgstr "Erro ao redimensionar a sub-rede"
+msgstr "Chyba při změně velikosti"
 
 #: site/admin/manageSubnetResizeSave.php:86
 msgid "Subnet resized successfully"
-msgstr "Sub-rede redimensionada com sucesso"
+msgstr "Podsíť změněna (velikost) úspěšně"
 
 #: site/admin/manageSubnetsplit.php:70
 msgid "Number of subnets"
-msgstr "N&uacute;meros de sub-redes"
+msgstr "Počet podsítí"
 
 #: site/admin/manageSubnetsplit.php:85
 msgid "Group under current"
-msgstr "Grupo subcorrente"
+msgstr ""
 
 #: site/admin/manageSubnetsplit.php:107
-msgid ""
-"You can split subnet to smaller subnets by specifying new subnets. Please "
-"note:"
-msgstr ""
-"Voc&ecirc; pode dividir a sub-rede em sub-redes menores especificando a nova "
-"sub-rede. Por favor, note:"
+msgid "You can split subnet to smaller subnets by specifying new subnets. Please note:"
+msgstr "Můžete rozdělit podsíť na menší specifikováním nových podsítí: Poznámka:"
 
 #: site/admin/manageSubnetsplit.php:109
 msgid "Existing IP addresses will be assigned to new subnets"
-msgstr ""
-"Endere&ccedil;os IP existentes ser&atilde;o atribu&iacute;dos a novas sub-"
-"redes"
+msgstr "Existující IP adresy budou přiřazeny nové podsíti"
 
 #: site/admin/manageSubnetsplit.php:110
 msgid "Group under current will create new nested subnets under current one"
 msgstr ""
-"O grupo subcorrente ir&aacute; criar uma nova sub-rede aninhada abaixo "
-"&agrave; atual"
 
 #: site/admin/manageSubnetsplit.php:111
-msgid ""
-"If existing IP will fall to subnet/broadcast of new subnets split will fail, "
+msgid "If existing IP will fall to subnet/broadcast of new subnets split will fail, "
 "except if strict mode is disabled"
-msgstr "Se um IP existente "
+msgstr ""
 
 #: site/admin/manageSubnetresize.php:41
 msgid "Current mask"
-msgstr "M&aacute;scara atual"
+msgstr "Aktuální maska"
 
 #: site/admin/manageSubnetresize.php:47
 msgid "New mask"
-msgstr "Nova m&aacute;scara"
+msgstr "Nová maska"
 
 #: site/admin/manageSubnetresize.php:59
-msgid ""
-"You can change subnet size by specifying new mask (bigger or smaller). "
+msgid "You can change subnet size by specifying new mask (bigger or smaller). "
 "Please note"
 msgstr ""
-"Voc&ecirc; pode mudar o tamanho da sub-rede especificando uma nova m&aacute;"
-"scara (maior ou menor). Por favor, tome nota"
 
 #: site/admin/manageSubnetresize.php:61
-msgid ""
-"If subnet has hosts outside of resized subnet resizing will not be possible"
+msgid "If subnet has hosts outside of resized subnet resizing will not be possible"
 msgstr ""
-"Se sub-rede possui hosts fora da sub-rede redimensionada, o "
-"redimensionamento n&atilde;o ser&aacute; poss&iacute;vel"
 
 #: site/admin/manageSubnetresize.php:62
-msgid ""
-"If strict mode is enabled check will be made to ensure it is still inside "
+msgid "If strict mode is enabled check will be made to ensure it is still inside "
 "master subnet"
 msgstr ""
-"Se o modo estrito estiver habilitado, uma checagem ser&aacute; feira para "
-"garantir que esta esteja dentro de uma sub-rede mestre"
 
 #: site/admin/manageDevices.php:17
 msgid "Add device"
-msgstr "Adicionar dispositivo"
+msgstr "Přidat zařízení"
 
 #: site/admin/manageDevices.php:22
 msgid "No devices configured"
-msgstr "Nenhum disposotivo configurado"
+msgstr "Není konfigurované žádné zařízení"
 
 #: site/admin/manageDevices.php:38
 msgid "Shows in which sections device will be visible for selection"
 msgstr ""
-"Monstra em quais se&ccedil;&otilde;es os dispositivos ser&atilde;o mostrados "
-"para serem selecionados"
 
 #: site/admin/manageDevices.php:38 site/sections.php:145
 msgid "Sections"
-msgstr "Se&ccedil;&otilde;es"
+msgstr "Sekce"
 
 #: site/admin/manageSubnetSplitSave.php:111
 #: site/admin/manageSubnetSplitSave.php:147
 msgid "Wrong IP addresses (subnet or broadcast)"
-msgstr "Endere&ccedil;os IP errados (sub-rede ou broadcast)"
+msgstr "Chybné IP adresy (podsíť nebo broadcast)"
 
 #: site/admin/manageSubnetSplitSave.php:157
 #: site/admin/manageSubnetSplitSave.php:162
 msgid "Subnet splitted ok"
-msgstr "Divis&atilde;o de sub-rede ok"
+msgstr "Podsíť byla rozdělena"
 
 #: site/admin/manageSubnetSplitSave.php:161
 msgid "Failed to remove old subnet"
-msgstr "Falha ao remover sub-rede mais antiga"
+msgstr "Chyba při odebrání staré podsítě"
 
 #: site/admin/manageSubnettruncate.php:43
 msgid "Number of IP addresses"
-msgstr "N&uacute;meros dos endere&ccedil;os IP"
+msgstr "Počet IP adres"
 
 #: site/admin/manageSubnettruncate.php:51
-msgid ""
-"Truncating network will remove all IP addresses, that belong to selected "
+msgid "Truncating network will remove all IP addresses, that belong to selected "
 "subnet!"
 msgstr ""
-"Rede truncada ir&aacute; remover todos os endere&ccedil;os IP que pertencem "
-"a sub-rede selecionada"
 
 #: site/admin/manageSubnetTruncateSave.php:23
 msgid "Subnet truncated succesfully"
-msgstr "Sub-rede truncada com sucesso"
+msgstr ""
 
 #: site/admin/usersEditEmailNotif.php:23
 msgid "New ipam account created"
-msgstr "Nova conta ipam criada"
+msgstr "Nový účet ipam byl vytvořen"
 
 #: site/admin/usersEditEmailNotif.php:24
 msgid "User ipam account updated"
-msgstr "Conta de usu&aacute;rio ipam atualizado"
+msgstr "Uživatelský účet ipam byl aktualizován"
 
 #: site/admin/usersEditEmailNotif.php:25
 msgid "IPAM account details"
-msgstr "Detalhes da conta IPAM"
+msgstr "Detaily účtu IPAM"
 
 #: site/admin/usersEditEmailNotif.php:28
 msgid "Sending notification mail for new account failed"
-msgstr "Falha ao enviar email de notifica&ccedil;&atilde;o de nova conta"
+msgstr "Odeslání oznamovacího emailu pro nový účet selhalo"
 
 #: site/admin/usersEditEmailNotif.php:29
 msgid "Notification mail for new account sent"
-msgstr "Notifica&ccedil;&atilde;o de nova conta enviada via e-mail"
+msgstr "Oznamovací email pro nový účet odeslán"
 
 #: site/admin/groupEditPrint.php:29
 msgid "group"
-msgstr "grupo"
+msgstr "skupina"
 
 #: site/admin/groupEditPrint.php:36
 msgid "Add new group"
-msgstr "Adicionar novo grupo"
+msgstr "Přidat novou skupinu"
 
 #: site/admin/groupEditPrint.php:52
 msgid "Enter group name"
-msgstr "Digite o nome do grupo"
+msgstr "Vložte jméno skupiny"
 
 #: site/admin/groupAddUsers.php:25
 msgid "Add users to group"
-msgstr "Adicionar usu&aacute;rio ao grupo"
+msgstr "Přidat uživatele do skupiny"
 
 #: site/admin/groupAddUsers.php:67
 msgid "No available users to add to group"
-msgstr "Nenhum usu&aacute;rio dispon&iacute;vel para ser adicionado ao grupo"
+msgstr ""
 
 #: site/admin/groupAddUsersResult.php:22
 #: site/admin/groupRemoveUsersResult.php:21
 msgid "Error - no group ID"
-msgstr "Erro - nenhum ID de grupo"
+msgstr ""
 
 #: site/admin/groupAddUsersResult.php:35
 msgid "Please select user(s) to add to selected group!"
-msgstr ""
-"Por favor selecione o(s) usu&aacute;rio(s) a ser(em) adicionados ao grupo!"
+msgstr "Zvolte laskavě uživatele pro přidání do vybrané skupiny!"
 
 #: site/admin/groupAddUsersResult.php:41
 msgid "Failed to add users"
-msgstr "Falha ao adicionar usu&aacute;rio"
+msgstr "Přidání uživatelů selhalo"
 
 #: site/admin/groupAddUsersResult.php:50
 msgid "Users added to group"
-msgstr "Usu&aacute;rios adicionados ao grupo"
+msgstr "Uživatelé přidáni do skupiny"
 
 #: site/admin/groupRemoveUsers.php:25
 msgid "Remove users from group"
-msgstr "Remover usu&aacute;rios do grupo"
+msgstr "Ostranit uživatele ze skupiny"
 
 #: site/admin/groupRemoveUsers.php:67
 msgid "No users in this group"
-msgstr "Nenhum usu&aacute;rio neste grupo"
+msgstr "Ve skupině nejsou uživatelé"
 
 #: site/admin/groupRemoveUsers.php:77
 msgid "Remove selected users"
-msgstr "Remover usu&aacute;rio selecionado"
+msgstr "Odstranit vybrané uživatele"
 
 #: site/admin/groupRemoveUsersResult.php:34
 msgid "Please select user(s) to remove from group!"
-msgstr ""
-"Por favor, selecione o(s) usu&aacute;rio(s) a serem removidos do grupo!"
+msgstr "Zvolte laskavě uživatele pro odebrání ze skupiny!"
 
 #: site/admin/groupRemoveUsersResult.php:40
 msgid "Failed to remove users"
-msgstr "Falha ao remover usu&aacute;rios do grupo"
+msgstr "Chyba při odebrání uživatelů"
 
 #: site/admin/groupRemoveUsersResult.php:49
 msgid "Users removed from group"
-msgstr "Usu&aacute;rios removidos do grupo"
+msgstr "Uživatelé odebráni ze skupiny"
 
 #: site/admin/manageSubnetShowPermissions.php:31
 msgid "Manage permissions for subnet"
-msgstr "Gerenciar permiss&otilde;es para sub-rede"
+msgstr "Nastavení oprávnění k podsíti"
 
 #: site/admin/manageSubnetShowPermissions.php:74
 msgid "Permissions for all nested subnets will be overridden"
-msgstr ""
-"Permiss&otilde;es para sub-redes aninhadas ser&atilde;o subst&iacute;"
-"tu&iacute;das"
+msgstr "Oprávnění pro všechny podřízené podsítě bude přepsáno"
 
 #: site/admin/manageSubnetShowPermissions.php:83
 msgid "Set permissions"
-msgstr "Configurar permiss&otilde;es"
+msgstr "Nastavit oprávnění"
 
 #: site/admin/manageSubnetPermissionsSubmit.php:40
 msgid "Subnet permissions set for subnet and underlying subnets"
 msgstr ""
-"Permiss&otilde;es de sub-rede para definir sub-rede e sub-redes subjacentes"
 
 #: site/admin/manageSubnetPermissionsSubmit.php:41
 msgid "Subnet permissions set"
-msgstr "Setar permiss&otilde;es de sub-rede"
+msgstr "Oprávnění podsítě nastaveno"
 
 #: site/admin/customUserFieldsEdit.php:19
 msgid "custom User field"
-msgstr "Campo de usu&aacute;rio customizado"
+msgstr "Uživatelské pole Uživatele"
 
 #: site/login/loginForm.php:7
 msgid "Please login"
-msgstr "Por favor, fa&ccedil;a o login"
+msgstr "Přihlašte se prosím"
 
 #: site/login/loginForm.php:28
 msgid "Login"
-msgstr "Login"
+msgstr "Přihlásit"
 
 #: site/index.php:118
 msgid "login"
-msgstr "login"
+msgstr "přihlášení"
 
 #: site/login/requestIPresult.php:29
 msgid "Please provide valid email address"
-msgstr "Por favor, informe um endere&ccedil;o de e-mail v&aacute;lido"
+msgstr "Poskytněte laskavě platnou emailovou adresu"
 
 #: site/login/requestIPresult.php:29
 msgid "requester"
-msgstr "solicitante"
+msgstr "žadatel"
 
 #: site/login/requestIPresult.php:32
 msgid "Request submitted successfully"
-msgstr "Solicita&ccedil;&atilde;o enviada com sucesso"
+msgstr "Žádost odeslána úspěšně"
 
 #: site/login/requestIPresult.php:39
 msgid "Error submitting new IP address request"
-msgstr "Erro ao enviar nova solicita&ccedil;&atilde;o de endere&ccedil;o IP"
+msgstr "Chyba při odeslání nového požadavku na IP adresu"
 
 #: site/login/requestIPform.php:34
 msgid "No subnets available for requests"
-msgstr "Nenhuma sub-rede dispon&iacute;vel para solicita&ccedil;&atilde;o"
+msgstr "Pro požadavky nejsou dostupné podsítě"
 
 #: site/login/requestIPform.php:43 site/login/requestIPform.php:150
 msgid "Back to login"
-msgstr "Volte para login"
+msgstr "Zpět na přihlášení"
 
 #: site/login/requestIPform.php:53
 msgid "Select subnet"
-msgstr "Selecione a sub-rede"
+msgstr "Zvolte podsíť"
 
 #: site/login/requestIPform.php:84
 msgid "IP description"
-msgstr "Descri&ccedil;&atilde;o de IP"
+msgstr "Popis IP"
 
 #: site/login/requestIPform.php:91
 msgid "device hostname"
-msgstr "hostname do dispositivo"
+msgstr "hostname zařízení"
 
 #: site/login/requestIPform.php:109
 msgid "Responsible person"
-msgstr "Pessoa respons&aacute;vel"
+msgstr "Odpovědná osoba"
 
 #: site/login/requestIPform.php:120
 msgid "Your email address"
-msgstr "Seu endere&ccedil;o de e-mail"
+msgstr "Váše emailová adresa"
 
 #: site/login/requestIPform.php:128
-msgid ""
-"If there is anything else you want to say about request write it in this box"
-msgstr ""
-"Se voc&ecirc; tiver algo a mais para dizar sobre sua solicita&ccedil;&atilde;"
-"o, escreva nesta caixa"
+msgid "If there is anything else you want to say about request write it in this box"
+msgstr "Pokud máte ještě potřebu něco sdělit ohledně požadavku, zapište to zde"
 
 #: site/login/requestIPform.php:136
 msgid "Submit request"
-msgstr "Enviando solicita&ccedil;&atilde;o"
+msgstr "Odeslat požadavek"
 
 #: site/login/loginCheck.php:26
 msgid "Please enter your username and password"
-msgstr "Por favor, digite seu nome de usu&aacute;rio e senha"
+msgstr "Vložte laskavě vaše jméno a heslo"
 
 #: site/login/index.php:20
 msgid "You have logged out"
-msgstr "Voc&ecirc; se deslogou"
+msgstr "Byl(a) jste odhlášen(a)"
 
 #: site/subnets.php:29
 msgid "Sorry, must be admin"
-msgstr "Desculpe, voc&ecirc; deve ser admin"
+msgstr "Lituji, musíte být administrátorem"
 
 #: site/subnets.php:43
 msgid "You do not have access to this section"
-msgstr "Voc&ecirc; n&atilde;o tem acesso a esta se&ccedil;&atilde;o"
+msgstr "Nemáte do této sekce přístup"
 
 #: site/subnets.php:46
 msgid "Section does not exist"
-msgstr "Se&ccedil;&atilde;o n&atilde;o existe"
+msgstr "Sekce neexistuje"
 
 #: site/subnets.php:55
 msgid "Expand/compress all folders"
-msgstr "Expandir/Comprimir todas as pastas"
+msgstr "Rozbalit/Sbalit všechny adresáře"
 
 #: site/subnets.php:74
 msgid "Hide subnet list"
-msgstr "Esconder lista de sub-rede"
+msgstr "Skrýt seznam podsítí"
 
 #: site/subnets.php:76
 msgid "Add new subnet"
-msgstr "Adicionar nova sub-rede"
+msgstr "Přidat novou podsíť"
 
 #: site/subnets.php:76
 msgid "Add new subnet to"
-msgstr "Adicionar nova sub-rede a"
+msgstr "Přidat novou podsíť do"
 
 #: site/userMenu.php:22
 msgid "Search string"
-msgstr "Pesquisa por string"
+msgstr "řetězec k vyhledání"
 
 #: site/userMenu.php:28
 msgid "Hi"
-msgstr "Oi"
+msgstr "Vítejte"
 
 #: site/userMenu.php:29
 msgid "Logged in as"
-msgstr "Logado como"
+msgstr "Přihlášen jako"
 
 #: site/userMenu.php:32
 msgid "Logout"
-msgstr "Deslogar-se"
+msgstr "Odhlásit"
 
 #: site/sections.php:66
 msgid "Show all subnets in section"
-msgstr "Mostrar todas sub-redes desta se&ccedil;&atilde;o"
+msgstr "Zobrazit všechny podsítě v sekci"
 
 #: site/sections.php:66
 msgid "section"
-msgstr "se&ccedil;&atilde;o"
+msgstr "sekce"
 
 #: site/sections.php:79
 msgid "Show IP addressing guide"
-msgstr "Mostrar guia de endere&ccedil;amento IP"
+msgstr "Zobrazit návod IP adresace"
 
 #: site/sections.php:91
 msgid "Available IPAM tools"
-msgstr "Feramentas IPAM dispon&iacute;veis"
+msgstr "Dostupné nástroje IPAM"
 
 #: site/sections.php:100
 msgid "VRFs"
-msgstr "VRFs"
+msgstr "VRF"
 
 #: site/sections.php:106
 msgid "Show all tools"
-msgstr "Mostrar todas ferramentas"
+msgstr "Zobrazit všechny nástroje"
 
 #: site/sections.php:124
 msgid "Show Administration menu"
-msgstr "Mostrar menu de administra&ccedil;&atilde;o"
+msgstr "Zobrazit administrační menu"
 
 #: site/sections.php:124
 msgid "Administration"
-msgstr "Administra&ccedil;&atilde;o"
+msgstr "Administrace"
 
 #: site/sections.php:139
 msgid "Users"
-msgstr "Usu&aacute;rios"
+msgstr "Uživatelé"
 
 #: site/sections.php:154
 msgid "Show all settings"
-msgstr "Mostrar todas configura&ccedil;&otilde;es"
+msgstr "Zobrazit všechna nastavení"
 
 #: site/admin/usersEditResult.php:97
 msgid "User edit successfull"
-msgstr "Usu&aacute;rio editado com sucesso"
+msgstr "Uživatel upraven úspěšně"
 
 #: site/admin/usersEditResult.php:97
 msgid "User delete successfull"
-msgstr "Usu&aacute;rio deletado com sucesso"
+msgstr "Uživatel vymazán úspěšně"
 
 #: site/admin/usersEditResult.php:97
 msgid "User add successfull"
-msgstr "Usu&aacute;rio adicionado com sucesso"
+msgstr "Uživatel přidán úspěšně"
 
 #: site/admin/manageSectionEditResult.php:46
 msgid "Section edit successful"
-msgstr "Se&ccedil;&atilde;o editada com sucesso"
+msgstr "Sekce upravena úspěšně"
 
 #: site/admin/manageSectionEditResult.php:46
 msgid "Section add successful"
-msgstr "Se&ccedil;&atilde;o adicionada com sucesso"
+msgstr "Sekce přidána úspěšně"
 
 #: site/admin/manageSectionEditResult.php:46
 msgid "Section delete successful"
-msgstr "Se&ccedil;&atilde;o deletada com sucesso"
+msgstr "Sekde smazána úspěšně"
 
 #: site/sections.php:88
 msgid "Show tools menu"
-msgstr "Mostrar menu de ferramentas"
+msgstr "Zobrazit nabídků nástrojů"
 
 #: site/sections.php:144
 msgid "IP related settings"
-msgstr "Configura&ccedil;&atilde;o de IP relatados"
+msgstr "Nastavení související s IP"
 
 #: site/footer.php:20
 msgid "In case of problems please contact"
-msgstr "Em caso de problema, por favor contate"
+msgstr "V případě problémů kontaktujte laskavě"
 
 #: site/ipaddr/ipAddressPrintVisual.php:12
 msgid "Visual subnet display"
-msgstr "Exibi&ccedil;&atilde;o de sub-rede"
+msgstr "Vizuální zobrazení podsítě"
 
 #: site/tools/ipCalcResult.php:40
 msgid "Network"
-msgstr "Rede"
+msgstr "Síť"
 
 #: site/tools/ipCalcResult.php:40
 msgid "Subnet netmask"
-msgstr "M&aacute;scara de sub-rede"
+msgstr "Maska podsítě"
 
 #: site/tools/ipCalcResult.php:40
 msgid "Subnet bitmask"
-msgstr "M&aacute;scara bit de sub-rede"
+msgstr "Bitová maska podsítě"
 
 #: site/tools/ipCalcResult.php:40
 msgid "Min host IP"
-msgstr "M&iacute;nimo de host por IP"
+msgstr "Min host IP"
 
 #: site/tools/ipCalcResult.php:40
 msgid "Max host IP"
-msgstr "M&aacute;ximo de host por IP"
+msgstr "Max host IP"
 
 #: site/tools/ipCalcResult.php:40
 msgid "Numbet of hosts"
-msgstr "N&uacute;meros de hosts"
+msgstr "Počet hostů"
 
 #: site/tools/ipCalcResult.php:40
 msgid "Subnet Class"
-msgstr "Classe da sub-rede"
+msgstr "Třída podsítě"
 
 #: site/tools/userMenu.php:72
 msgid "Language"
-msgstr "Linguagem"
+msgstr "Jazyk"
 
 #: site/tools/userMenu.php:83
 msgid "Select language"
-msgstr "Selecionar Linguagem"
+msgstr "Vyberte jazyk"
 
 #: site/admin/adminMenu.php
 msgid "Languages"
-msgstr "Linguagens"
+msgstr "Jazyky"
 
 #: site/admin/languages.php
 msgid "Manage translations"
-msgstr "Gerenciar tradu&ccedil;&otilde;es"
+msgstr "Správa překladů"
 
 #: site/admin/languages
 msgid "Language code"
-msgstr "C&oacute;digo de liguagem"
+msgstr "Kód jazyka"
 
 #: site/admin/languages
 msgid "Language name"
-msgstr "Nome da l&iacute;ngua"
+msgstr "Název jazyka"
 
 #: site/admin/languages
 msgid "Validity"
-msgstr "Validade"
+msgstr "Platnost"
 
 #: site/admin/languages
 msgid "Valid"
-msgstr "V&aacute;lida"
+msgstr "Platný"
 
 #: site/admin/languages
 msgid "Invalid"
-msgstr "Inv&aacute;lida"
+msgstr "Neplatný"
 
 #: site/admin/languages
 msgid "Create new language"
-msgstr "Criar nova linguagem"
+msgstr "Vytvořit nový jazyk"
 
 #: site/admin/languages
 msgid "You can edit different language translations here"
-msgstr ""
-"Voc&ecirc; pode editar diferentes tradu&ccedil;&otilde;es de l&iacute;nguas "
-"aqui"
+msgstr "Zde můžete upravit různé jazykové překlady"
 
 #: site/admin/languages
 msgid "Add translation file to directory functions/locale/ in phpipam"
-msgstr ""
-"Adicionar arquivo de tradu&ccedil;&atilde;o no diret&oacute;rio /functions/"
-"locale/ no phpipam"
+msgstr "Přidat soubor s překlady do adresáře functions/locale v phpipam"
 
 #: site/admin/languages
 msgid "Create new language with same code as translation file"
-msgstr ""
-"Criar nova l&iacute;ngua com o mesmo c&oacute;digo como arquivo de "
-"tradu&ccedil;&atilde;o"
+msgstr "Vytvořit nový jazyk se stejným kódem jako překladový soubor"
 
 #: site/admin/lanuguageEdit.php
 msgid "Add new language"
-msgstr "Adicionar nova linguagem"
+msgstr "Přidat nový jazyk"
 
 #: site/admin/lanuguageEdit.php
 msgid "Edit language"
-msgstr "Editar linguagem"
+msgstr "Editace jazyka"
 
 #: site/admin/lanuguageEdit.php
 msgid "Delete language"
-msgstr "Deletar linguagem"
+msgstr "Vymazat jazyk"
 
 #: site/admin/lanuguageEditResult.php
 msgid "Code must be at least 2 characters long"
-msgstr "O c&oacute;digo deve ter no m&iacute;nimo 2 caracteres"
+msgstr "Kód musí být dlouhý alespoň 2 znaky"
 
 #: site/admin/lanuguageEditResult.php
 msgid "Name must be at least 2 characters long"
-msgstr "O nome deve ter no m&iacute;nimo 2 caracteres"
+msgstr "Jméno musí být dlouhé alespoň 2 znaky"
 
 #: site/admin/lanuguageEditResult.php
 msgid "Language edit error"
-msgstr "Erro ao editar linguagem"
+msgstr "Chyba úpravy jazyka"
 
 #: site/admin/lanuguageEditResult.php
 msgid "Language edit success"
-msgstr "Linguagem editada com sucesso"
+msgstr "Jazyk upraven úspěšně"
 
 #: site/admin/lanuguageEditResult.php
 msgid "Language add error"
-msgstr "Erro ao adicionar liguagem"
+msgstr "Chyba v přidání jazyka"
 
 #: site/admin/lanuguageEditResult.php
 msgid "Language add success"
-msgstr "Linguagem adicionada com sucesso"
+msgstr "Jazyk přidán úspěšně"
 
 #: site/admin/lanuguageEditResult.php
 msgid "Language delete error"
-msgstr "Erro ao deletar linguagem"
+msgstr "Chyba výmazu jazyka"
 
 #: site/admin/lanuguageEditResult.php
 msgid "Language delete success"
-msgstr "Linguagem deletada com sucesso"
+msgstr "Jazyk vymazán úspěšně"
 
 #: site/admin/manageSubnetEditResult.php:169
 msgid "Subnet edit successfull"
-msgstr "Sub-rede editado com sucesso"
+msgstr "Podsíť upravena úspěšně"
 
 #: site/admin/manageSubnetEditResult.php:169
 msgid "Subnet add successfull"
-msgstr "Sub-rede adicionada com sucesso"
+msgstr "Podsíť přidána úspěšně"
 
 #: site/admin/manageSubnetEditResult.php:169
 msgid "Subnet delete successfull"
-msgstr "Sub-rede de&ccedil;etadp cp, sucesso"
+msgstr "Podpis vymazána úspěšně"
 
 #: site/functons/functions-common.php
 msgid "Read / Write / Admin"
-msgstr "Leitura / Escrita / Admin"
+msgstr "Čtení / Zápis / Správa"
 
 #: site/ipaddr/modifyIpAddressCheck.php
 msgid "IP edit successful"
-msgstr "IP editado com sucesso"
+msgstr "Editace IP úspěšná"
 
 #: site/ipaddr/modifyIpAddressCheck.php
 msgid "IP add successful"
-msgstr "IP adicionado com sucesso"
+msgstr "IP přidána úspěšně"
 
 #: site/ipaddr/modifyIpAddressCheck.php
 msgid "IP delete successful"
-msgstr "IP deletado com sucesso"
+msgstr "IP vymazána úspěšně"
 
 #: site/admin/subnetDetailsSlaves.php
 msgid "You do not have permissions to truncate subnet"
-msgstr "Voc&ecirc; n&atilde;o tem permiss&atilde;o para truncar essa sub-rede"
+msgstr "Nemáte oprávnění k oříznutí podsítě"
 
 #: site/admin/manageDevicesEditResult.php
 msgid "Failed to add device"
-msgstr "Falha ao adicionar dispositivo"
+msgstr "Nelze přidat zařízení"
 
 #: site/admin/manageDevicesEditResult.php
 msgid "Failed to edit device"
-msgstr "Falha ao editar o dispositivo"
+msgstr "Nelze upravit zařízení"
 
 #: site/admin/manageDevicesEditResult.php
 msgid "Failed to delete device"
-msgstr "Falha ao deletar o dispositivo"
+msgstr "Nelze vymazat zařízení"
 
 #: site/admin/manageDevicesEditResult.php
 msgid "Device add successfull"
-msgstr "Dispositivo adicionado com sucesso"
+msgstr "Zařízení přidáno úspěšně"
 
 #: site/admin/manageDevicesEditResult.php
 msgid "Device edit successfull"
-msgstr "Dispositivo editado com sucesso"
+msgstr "Zařízení upraveno úspěšně"
 
 #: site/admin/manageDevicesEditResult.php
 msgid "Device delete successfull"
-msgstr "Dispositivo deletado com sucesso"
+msgstr "Zařízení vymazáno úspěšně"
 
 #: site/admin/manageVLANEditresult.php
 msgid "Failed to add VLAN"
-msgstr "Falha ao adicionar VLAN"
+msgstr "Nelze přidat VLAN"
 
 #: site/admin/manageVLANEditresult.php
 msgid "Failed to edit VLAN"
-msgstr "Falha ao editar VLAN"
+msgstr "Chyba při úpravě VLAN"
 
 #: site/admin/manageVLANEditresult.php
 msgid "Failed to delete VLAN"
-msgstr "Falha ao deletar VLAN"
+msgstr "Chyba při výmazu VLAN"
 
 #: site/admin/manageVLANEditresult.php
 msgid "VLAN add successfull"
-msgstr "VLAN adicionada com sucesso"
+msgstr "VLAD přidána úspěšně"
 
 #: site/admin/manageVLANEditresult.php
 msgid "VLAN edit successfull"
-msgstr "VLAN editada com sucesso"
+msgstr "VLAN upravena úspěšně"
 
 #: site/admin/manageVLANEditresult.php
 msgid "VLAN delete successfull"
-msgstr "VLAN deletada com sucesso"
+msgstr "VLAN vymazána úspěšně"
 
 #: site/admin/manageVRFEditResult.php
 msgid "Failed to add VRF"
-msgstr "Falha ao adicionar VRF"
+msgstr "Chyba při přidání VRF"
 
 #: site/admin/manageVRFEditResult.php
 msgid "Failed to edit VRF"
-msgstr "Falha ao editar VRF"
+msgstr "Chyba při úpravě VRF"
 
 #: site/admin/manageVRFEditResult.php
 msgid "Failed to delete VRF"
-msgstr "Falha ao deletar VRF"
+msgstr "Chyba při výmazu VRF"
 
 #: site/admin/manageVRFEditResult.php
 msgid "VRF add successfull"
-msgstr "VRF adicionada com sucesso"
+msgstr "VRF přidána úspěšně"
 
 #: site/admin/manageVRFEditResult.php
 msgid "VRF edit successfull"
-msgstr "VRF editada com sucesso"
+msgstr "VRF upravena úspěšně"
 
 #: site/admin/manageVRFEditResult.php
 msgid "VRF delete successfull"
-msgstr "VRF deletada com sucesso"
+msgstr "VRF vymazána úspěšně"
 
 #: site/admin/customIPFieldsEditResult.php
 #: site/admin/customSubnetFieldsEditResult.php
 #: site/admin/customVLANFieldsEditResult.php
 #: site/admin/customUserFieldsEditResult.php
 msgid "Failed to add field"
-msgstr "Falha ao adicionar campo"
+msgstr "Nelze přidat pole"
 
 #: site/admin/customIPFieldsEditResult.php
 #: site/admin/customSubnetFieldsEditResult.php
 #: site/admin/customVLANFieldsEditResult.php
 #: site/admin/customUserFieldsEditResult.php
 msgid "Failed to edit field"
-msgstr "Falha ao editar campo"
+msgstr "Chyba při úpravě pole"
 
 #: site/admin/customIPFieldsEditResult.php
 #: site/admin/customSubnetFieldsEditResult.php
 #: site/admin/customVLANFieldsEditResult.php
 #: site/admin/customUserFieldsEditResult.php
 msgid "Failed to delete field"
-msgstr "Falha ao deletar campo"
+msgstr "Chyba při výmazu pole"
 
 #: site/admin/customIPFieldsEditResult.php
 #: site/admin/customSubnetFieldsEditResult.php
 #: site/admin/customVLANFieldsEditResult.php
 #: site/admin/customUserFieldsEditResult.php
 msgid "Field add success"
-msgstr "Campo adicionado com sucesso"
+msgstr "Pole přidáno úspěšně"
 
 #: site/admin/customIPFieldsEditResult.php
 #: site/admin/customSubnetFieldsEditResult.php
 #: site/admin/customVLANFieldsEditResult.php
 #: site/admin/customUserFieldsEditResult.php
 msgid "Field edit success"
-msgstr "Campo editado com sucesso"
+msgstr "Pole upraveno úspěšně"
 
 #: site/admin/customIPFieldsEditResult.php
 #: site/admin/customSubnetFieldsEditResult.php
 #: site/admin/customVLANFieldsEditResult.php
 #: site/admin/customUserFieldsEditResult.php
 msgid "Field delete success"
-msgstr "Campo deletado com sucesso"
+msgstr "Pole vymazáno úspěšně"
 
 #: site/tools/userMenuSelfMod.php
 msgid "To apply language change please log in again"
-msgstr ""
-"Para aplicar a mudan&ccedil;a de linguagem, por favor fa&ccedil;a o login "
-"novamente"
+msgstr "Pro aplikaci změn jazyka se opětovně přihlašte"
 
-#: site/dashboard/top10_percentage.php site/dashboard/top10_hosts.php
+#: site/dashboard/top10_percentage.php
+#: site/dashboard/top10_hosts.php
 msgid "No IPv4 hosts configured"
-msgstr "Nenhum host IPv4 configurado"
+msgstr "Žádný IPv4 host nakonfigurován"
 
 #: site/dashboard/top10_hosts.php
 msgid "No IPv6 hosts configured"
-msgstr "Nenhum host IPv6 configurado"
+msgstr "Žádný IPv6 host nakonfigurován"
 
 #: site/dashboard/top10_percentage.php
 msgid "Add some hosts to subnets to calculate usage percentage"
-msgstr "Adicione algum host nas sub-redes para calcular a porcentagem de uso"
+msgstr "Vložte  hosty do podsítě pro výpočet procentuálního využití"
 
 #: site/dashboard/top10_hosts.php
 msgid "Add some hosts to subnets to show graph of used hosts per subnet"
-msgstr ""
-"Adicione algum host nas sub-redes para mostrar o gr&aacute;fico de hosts "
-"utilizados por sub-redes"
+msgstr "Vložte hosty do podsítě pro zobrazení grafu užití hostů v subsíti"
 
 #: site/admin/usersEditPrint.php
+msgid "edit user"
+msgstr"upravit uživatele"
+
 msgid "delete user"
-msgstr "deletar usu&aacute;rio"
+msgstr "vymazat uživatele"
+
+#: site/admin/manageSubnetEdit.php
+msgid "Check hosts status"
+msgstr "Kontrola stavu hostů"
+
+#: site/admin/manageSubnetEdit.php
+msgid "Ping hosts inside subnet to check availability"
+msgstr "Ping na hosty uvnitř subsítě pro kontrolu dostupnosti"
+
+#: site/ipaddr/subnetDetials.php
+msgid "Hosts check"
+msgstr "Kontrola hostů"
+
+#: site/ipaddr/modifyIpAddress.php
+msgid "Ping exclude"
+msgstr "Výjimky pingu"
+
+#: site/ipaddr/modifyIpAddress.php
+msgid "Exclude from ping status checks"
+msgstr "Výjmout z ping kontroly stavu"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Check availability"
+msgstr "Zkontrolovat dostupnost"
+
+#: site/ipaddr/pingCheck.php
+msgid "Insufficient permissions"
+msgstr "Nedostatečná oprávnění"
+
+#: site/ipaddr/pingCheck.php
+msgid "is alive"
+msgstr "je dostupná"
+
+#: site/ipaddr/pingCheck.php
+msgid "is not alive"
+msgstr "není dostupný"
+
+#: site/admin/settings.php
+msgid "Ping status intervals"
+msgstr "Interval Ping kontroly"
+
+#: site/admin/settings.php
+msgid "Ping status intervals for IP addresses in seconds - warning;offline (Default: 1800;3600)"
+msgstr "Ping status interval pro IP adresu v sekundách - upozornění;owwline (výchozí: 1800;3600)"
+
+#: site/admin/settingsEdit.php
+msgid "Invalid ping status intervals"
+msgstr "Nepltaný interval kontroly pingem"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device is alive"
+msgstr "Zařízení je dostupné"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device warning"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device is offline"
+msgstr "Zařízení není dostupné"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device status unknown"
+msgstr "Stav zařízení je nesnámé"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Last seen"
+msgstr "Naposledy dostupné"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Never"
+msgstr "Nikdy"
+
+#: site/tools/ipCalcResult.php:40
+msgid "Number of hosts"
+msgstr "Počet hostů"
+
+#: site/ipaddr/subnetDetails.php
+msgid "Scan subnet for new hosts"
+msgstr "Vyhledat v podsíti nové hosty"
+
+#: site/ipaddr/subnetScan.php
+msgid "You do not have permissions to modify hosts in this subnet"
+msgstr "Nemáte oprávnění k úpravě hosta v této subsíti"
+
+#: site/ipaddr/subnetScan.php
+msgid "Scan subnet"
+msgstr "Prohledat podsíť"
+
+#: site/ipaddr/subnetScan.php
+msgid "Select Scan type"
+msgstr "Zvolte typ skenování"
+
+#: site/ipaddr/subnetScan.php
+msgid "scan"
+msgstr "sken"
+
+#: site/ipaddr/subnetScan.php
+msgid "You can set parameters for scan under functions/scan/config-scan.php"
+msgstr "Dále můžete nastavit parametry pro skenování v functions/scan/config-scan.php"
+
+#: site/ipaddr/subnetScan.php
+msgid "Discovery scans"
+msgstr "Vyhledávací skeny"
+
+#: site/ipaddr/subnetScan.php
+msgid "Status update scans"
+msgstr "Sken aktualizace stavu"
+
+#: site/ipaddr/subnetScanUpdatePing.php
+msgid "Scan results"
+msgstr "Výsledky hledání"
+
+#: site/admin/settings.php
+msgid "Default language"
+msgstr "Výchozí jazyk"
+
+#: site/admin/settings.php
+msgid "Select default language"
+msgstr "Zvolte výchozí jazyk"
+
+#: site/admin/manageSection.php
+msgid "Section order"
+msgstr "Řazení sekce"
+
+#: site/admin/manageSectionOrder.php
+msgid "You can manually set order in which sections are displayed in. Default is creation date."
+msgstr "Můžete manuálně nastavit pořadí zobrazení sekcí. Výchozí je datum vytvoření."
+
+#: site/admin/manageSectionOrder.php
+msgid "Order"
+msgstr "Řazení"
+
+#: site/admin/manageSectionOrderResult.php
+msgid "Section reordering successful"
+msgstr "Seřazení sekce bylo úspěšné"
+
+#: site/functions/functions-admin.php
+msgid "Cannot reorder sections"
+msgstr "Nelze seřadit sekce"
+
+#: site/admin/manageSectionEdit.php
+msgid "Default"
+msgstr "Výchozí"
+
+#: site/ipaddr/subnetDiscoveryPing.php
+msgid "Threading is required for scanning subnets. Please recompile PHP with pcntl extension"
+msgstr "Threading je vyžadován ke skenování subsítí. Prosím, přeložte PHP s rozšířením pcntl"
+
+#: site/ipaddr/subnetDiscoveryPing.php
+msgid "Add discovered hosts"
+msgstr "Vložit nalezené hosty"
+
+#: site/ipaddr/subnetDiscoveryPingResult.php
+msgid "Scan results added to database"
+msgstr "Výsledky hledání vloženy do databáze"
+
+#: site/ipaddr/subnetScan.php
+msgid "Invalid ping path"
+msgstr "Neplatná cesta k pingu"
+
+#: site/admin/settings.php
+msgid "Display settings"
+msgstr "Nastavení zobrazení"
+
+#: site/admin/settings.php
+msgid "Enable or disable API server module"
+msgstr "Povolit nebo zakázat API modul serveru"
+
+#: site/admin/api.php
+msgid "Please enable API module under server management"
+msgstr "Povolte laskavě modul API ve správě serveru"
+
+#: site/admin/adminMenu.php
+#: site/admin/api.php
+msgid "API management"
+msgstr "Správa API"
+
+#: site/admin/api.php
+msgid "Create API key"
+msgstr "Vytvořit API klíč"
+
+#: site/admin/api.php
+msgid "App id"
+msgstr "App id"
+
+#: site/admin/api.php
+msgid "App code"
+msgstr "App kód"
+
+#: site/admin/api.php
+msgid "App permissions"
+msgstr "Oprávnění App"
+
+#: site/admin/api.php
+msgid "edit app details"
+msgstr "úprava detailů app"
+
+#: site/admin/api.php
+msgid "remove app"
+msgstr "odstranit app"
+
+#: site/admin/api.php
+msgid "No Apps available"
+msgstr ""
+
+#: site/admin/api.php
+msgid "API instructions"
+msgstr "API instrukce"
+
+#: site/admin/api.php
+msgid "API documentation"
+msgstr "API dokumentace"
+
+#: site/admin/api.php
+msgid "The following PHP extensions for API server are missing"
+msgstr "Následující PHP rozšíření pro API server chybí"
+
+#: site/admin/api.php
+msgid "Please recompile PHP to include missing extensions for API server"
+msgstr "Překompilujte laskavě PHP včetně chybějících rozšíření pro API server"
+
+#: site/admin/apiEdit.php
+msgid "Add new api key"
+msgstr "Přidat nový api klíč"
+
+#: site/admin/apiEdit.php
+msgid "Enter application identifier"
+msgstr "Zadejte identifikátor aplikace"
+
+#: site/admin/apiEdit.php
+msgid "Application code"
+msgstr "Aplikační kód"
+
+#: site/admin/apiEdit.php
+msgid "Regenerate"
+msgstr "Regenerovat"
+
+#: site/admin/apiEdit.php
+msgid "Disabled"
+msgstr "Zakázat"
+
+#: site/admin/apiEditResult.php
+msgid "Invalid application code"
+msgstr "Neplatný aplikační kód"
+
+#: site/admin/apiEditResult.php
+msgid "Invalid application id"
+msgstr "Neplatné ID aplikace"
+
+#: site/admin/apiEditResult.php
+msgid "Invalid permissions"
+msgstr "Neplatná oprávnění"
+
+#: site/admin/apiEditResult.php
+msgid "API add error"
+msgstr "Chyba při přídání API"
+
+#: site/admin/apiEditResult.php
+msgid "API edit error"
+msgstr "Chyba při úpravě API"
+
+#: site/admin/apiEditResult.php
+msgid "API delete error"
+msgstr "Chyba při odstranění API"
+
+#: site/admin/apiEditResult.php
+msgid "API add success"
+msgstr "API přidáno úspěšně"
+
+#: site/admin/apiEditResult.php
+msgid "API edit success"
+msgstr "API upraveno úspěšně"
+
+#: site/admin/apiEditResult.php
+msgid "API delete success"
+msgstr "API odstraněno úspěšně"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "DHCP range"
+msgstr "DHCP rozsah"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Check availability (disabled)"
+msgstr "Kontrola dostupnosti (zakázána)"
+
+#: site/admin/settings.php
+msgid "DHCP compress"
+msgstr "DHCP komprese"
+
+#: site/admin/settings.php
+msgid "Compress DHCP ranges in IP table"
+msgstr "Komprese DHCP rozsahu v IP tabulce"
+
+#: site/subnets.php
+msgid "Add new"
+msgstr "Přidat nový"
+
+#: site/subnets.php
+msgid "Add new folder to"
+msgstr "Přidat nový adresář do"
+
+# site/subnets.php
+msgid "Available VLANs"
+msgstr "Dostupné VLANy"
+
+# site/subnets.php
+msgid "Available VRFs"
+msgstr "Dostupné VRFs"
+
+#: functions/functions-common.php
+msgid "Subnet contains more subnets"
+msgstr "Podsíť obsahuje více podsítí"
+
+#: functions/functions-common.php
+msgid "Click on folder to open/close"
+msgstr "Kliknutím adresář otevřete/zavřete"
+
+#: functions/functions-common.php
+msgid "VLAN contains subnets"
+msgstr "VLAN obsahuje podsítě"
+
+#: functions/functions-common.php
+msgid "VRF contains subnets"
+msgstr "VRF obsahuje podsítě"
+
+#: site/admin/manageSection.php
+msgid "Show VLANs"
+msgstr "Zobrazit VLANy"
+
+#: site/admin/manageSection.php
+msgid "Show VRFs"
+msgstr "Zobrazit VRFs"
+
+#: site/admin/manageSectionEdit.php
+msgid "Show list of VLANs and belonging subnets in subnet list"
+msgstr "Zobrazit seznam VLAN a příslušných podsítí"
+
+#: site/admin/manageSectionEdit.php
+msgid "Show list of VRFs and belonging subnets in subnet list"
+msgstr "Zobrazit seznam VRFs a příslušných podsítí"
+
+#: site/ipaddr/vlanDetails.php
+msgid "VLAN details"
+msgstr "Detaily VLAN"
+
+#: site/ipaddr/vlanSubnets.php
+msgid "has no belonging subnets"
+msgstr "nemá přiřazené podsítě"
+
+#: site/ipaddr/vlanSubnets.php
+msgid "belonging subnets"
+msgstr "Přiřazené podsítě"
+
+#: site/ipaddr/vlanDetails.php
+msgid "VRF details"
+msgstr "Detauly VRF"
+
+#: site/ipaddr/vlanDetails.php
+msgid "Invalid VLAN id"
+msgstr "Neplatné VLAN id"
+
+#: site/ipaddr/vrfDetails.php
+msgid "Invalid VRF id"
+msgstr "Neplatné VRF id"
+
+#: site/admin/manageSection.php
+msgid "Parent"
+msgstr "Nadřazený"
+
+#: site/sections.php
+msgid "SubSections in"
+msgstr "Podsekce v"
+
+#: site/admin/manageSectionEdit.php
+msgid "Select parent section to create subsection"
+msgstr ""
+
+#: site/tools/userMenu.php
+msgid "Widgets"
+msgstr "Widgety"
+
+msgid "Select widgets to be displayed on dashboard"
+msgstr "Zvolte widgety pro zobrazení na dahsboardu"
+
+#: site/dashboard/index.php
+msgid "No widgets selected"
+msgstr "Není vybrát widget"
+
+msgid "Please select widgets to be displayed on dashboard on user menu page"
+msgstr "Zvolte prosím widget pro zobrazení na dashboardu"
+
+#: site/admin/customUserFieldsEdit.php
+msgid "Enter comment for users"
+msgstr "Vlože komentář pro uživatele"
+
+msgid "Required field"
+msgstr "Požadované pole"
+
+#: site/admin/custopmIPFields.php
+msgid "Required"
+msgstr "Vyžadované"
+
+#: site/admin/customDeviceFieldsEdit.php
+msgid "Custom device fields"
+msgstr "Uživatelská pole zařízení"
+
+msgid "Add new custom device field"
+msgstr "Přidat nové uživatelské pole zařízení"
+
+#: site/ipaddr/sectionAllSubnets.php
+msgid "Belonging subsections"
+msgstr "Přiřazené podsítě"
+
+#: site/subnets.php
+msgid "Back to"
+msgstr "Zpět na"
+
+#: site/admin/manageAD_AD.php
+msgid "Domain account"
+msgstr "Doménový účet"
+
+msgid "Domain account for search operations"
+msgstr "Doménový účet pro operace vyhledávání"
+
+#: site/admin/userADsearchResult.php
+msgid "No users found"
+msgstr "Uživatelé nenalezeni"
+
+msgid "Possible reasons"
+msgstr "Možné příčiny"
+
+msgid "Username not existing"
+msgstr "Uživatelské jméno neexistuje"
+
+msgid "Invalid baseDN setting for AD"
+msgstr "Chybné baseDN nastavení pro AD"
+
+msgid "AD account does not have enough privileges for search"
+msgstr "AD účet nemá dostatečná oprávnění k vyhledávání"
+
+#: site/admin/usersEditResult.php
+msgid "Admin user cannot be deleted"
+msgstr "Účet Admin nelze vymazat"
+
+#: site/admin/manageFolderSubmit.php
+msgid "Error adding new folder"
+msgstr "Chyba přidání nového adresáře"
+
+msgid "Folder, IP addresses and all belonging subnets deleted successfully"
+msgstr "Adresář, IP adresy a příslušné podsítě byly vymazány úspěšně"
+
+msgid "Folder add successfull"
+msgstr "Adresář přidán úspěšně"
+
+msgid "Folder edit successfull"
+msgstr "Adresář upraven úspěšně"
+
+#: site/ipaddr/folderDetails.php
+msgid "Folder does not exist"
+msgstr "Adresář neexistuje"
+
+msgid "You do not have permission to access this folder"
+msgstr "Nemáte oprávnění k přístupu do tohoto adresáře"
+
+msgid "Folder details"
+msgstr "Detaily adresáře"
+
+msgid "Folder name"
+msgstr "Název adresáře"
+
+msgid "Add new nested folder"
+msgstr "Přidat podřízený adresář"
+
+msgid "directly nested folders"
+msgstr "podřízené adresáře"
+
+msgid "Folder has no nested folders or belonging subnets"
+msgstr "Adresář nemá podřízené adresáře, či subsítě"
+
+msgid "You do not have permissions to edit folder"
+msgstr "Nemáte oprávnění upravit adresář"
+
+msgid "Edit folder"
+msgstr "Upravit adresář"
+
+msgid "Manage folder permissions"
+msgstr "Správa oprávnění k adresáři"
+
+msgid "Delete folder"
+msgstr "Vymazat adresář"
+
+#: site/admin/userADsearchForm.php
+msgid "Search user in AD"
+msgstr "Hledat uživatele v AD"
+
+msgid "Following users were found"
+msgstr "Následující uživatelé byli nalezeni"
+
+msgid "Select"
+msgstr "Zvolte"
+
+#: functions/functions-common.php
+msgid "Favourite subnets"
+msgstr "Oblíbené podsítě"
+
+msgid "No favourite subnets selected"
+msgstr "Źádné oblíbené sítě nejsou vybrány"
+
+msgid "You can add subnets to favourites by clicking star icon in subnet details"
+msgstr "Pro přidání subsítě do oblíbených klikněte na ikonu hvězdy v detailu podsítě"
+
+msgid "Click to remove from favourites"
+msgstr "Kliknutím odstraníte z oblíbených"
+
+msgid "Click to add to favourites"
+msgstr "Kliknutím přídáte k oblíbeným"
+
+#: site/tools/favouriteEdit.php
+msgid "Error editing favourite"
+msgstr "Chyba editace oblíbených"
+
+#: site/sections.php
+msgid "Favourite networks"
+msgstr "Oblíbené sítě"
+
+#: site/ipaddr/ipDetailsChangelog.php
+msgid "Changelog"
+msgstr "Změnový log"
+
+msgid "No changelogs available"
+msgstr "Nejsou dostupné změnové logy"
+
+msgid "No changelog entries are available for this host"
+msgstr "Nejsou dostupné změnové záznamy pro tohoto hosta"
+
+msgid "No changelog entries are available for this subnet"
+msgstr "Nejsou dostupné změnové záznamy pro tuto podsíť"
+
+msgid "No changelog entries are available for this section"
+msgstr "Nejsou dostupné změnové záznamy pro tuto sekci"
+
+#: site/ipaddr/ipDetails.php
+msgid "Availability"
+msgstr "Dostupnost"
+
+msgid "Last edited"
+msgstr "Naposledy upraven"
+
+msgid "Action"
+msgstr "Akce"
+
+msgid "Result"
+msgstr "Výsledek"
+
+msgid "Change"
+msgstr "Změna"
+
+#: site/tools/changelogPrint.php
+msgid "Output has been limited to last 50 lines"
+msgstr "Výstup omezen na posledních 50 záznamů"
+
+msgid "Output has been limited to last 100 lines"
+msgstr "Výstup omezen na posledních 100 záznamů"
+
+msgid "Output has been limited to last 250 lines"
+msgstr "Výstup omezen na posledních 250 záznamů"
+
+msgid "Output has been limited to last 500 lines"
+msgstr "Výstup omezen na posledních 500 záznamů"
+
+#: site/admin/settings.php
+msgid "Enable changelog"
+msgstr "Povolit logování změn"
+
+#: site/tools/changelog.php
+msgid "Change logging is disabled. You can enable it under administration"
+msgstr "Logování změn je neaktivní. Aktivovat jej můžete v administračním menu"
+
+#: site/admin/settings.php
+msgid "Ping path"
+msgstr "Cesta k programu ping"
+
+msgid "Set path for ping executable file (default /bin/ping)"
+msgstr "Nastavte cestu k souboru ping (standardně /bin/ping)"
+
+msgid "Max scan threads"
+msgstr "Max. skenovacích vláken"
+
+msgid "Set maximum nubmer of concurrent ICMP checks (default 128)"
+msgstr "Nastavení maxima současných ICPM kontrol (standardně 128)"
+
+#: functions/functions-common.php
+msgid "Last 5 change log entries"
+msgstr "5 posledních změnových záznamů"
+
+#: site/admin/widgets.php
+msgid "You can manage widgets here"
+msgstr "Zde můžete spravovat widgety"
+
+msgid "Create new widget"
+msgstr "Vytvořit nový widget"
+
+msgid "No widgets created yet"
+msgstr "Zatím nebyl vytvořen widget"
+
+msgid "Create widget file in directory site/dashboard/widgets/"
+msgstr "Vytvořit soubor widgetu v adresáři site/dashboard/widgets/"
+
+#: site/admin/widgetEdit.php
+msgid "Add new widget"
+msgstr "Přidat nový widget"
+
+msgid "Edit widget"
+msgstr "Upravit widget"
+
+msgid "Delete widget"
+msgstr "Vymazat widget"
+
+#: site/admin/widgetEditResult.php
+msgid "Widget add error"
+msgstr "Chyba přidání widgetu"
+
+msgid "Widget edit error"
+msgstr "Chyba úpravy widgetu"
+
+msgid "Widget delete error"
+msgstr "Chyba výmazu widgetu"
+
+msgid "Widget add success"
+msgstr "Widget přidán úspěšně"
+
+msgid "Widget edit success"
+msgstr "Widget upraven úspěšně"
+
+msgid "Widget delete success"
+msgstr "Widget vymazán úspěšně"
+
+#: site/dashboard/widgets/requests.php
+msgid "Active IP address requests"
+msgstr "Aktivní žádosti o IP adresy"
+
+#: site/sections.php
+msgid "Click to reorder widgets"
+msgstr "Kliknutím přeorganizujete widgety"
+
+msgid "Click to save widgets order"
+msgstr "Kliknutím uložit rozložení widgetů"
+
+#: site/dashboard/widgetPopup.php
+msgid "Add new widget to dashboard"
+msgstr "Přidat nový widget na dashboard"
+
+msgid "All available widgets are already on dashboard"
+msgstr "Všechny dostupné widgety jsou již na dashboardu"
+
+#: site/tools/userMenu.php
+msgid "Save order"
+msgstr "Uložit pořadí"
+
+#: site/admin/widgets.php
+msgid "File"
+msgstr "Soubor"
+
+msgid "Admin only"
+msgstr "Pouze Admin"
+
+msgid "Link to page"
+msgstr "Odkaz na stránku"
+
+msgid "Widget size"
+msgstr "Velikost widgetu"
+
+#: site/ipaddr/scan/subnetScanDiscoveryPing.php
+msgid "No alive host found"
+msgstr "Žádní aktivní hosté nenalezeni"
+
+msgid "Errors occured during scan"
+msgstr "Nastala chyba během skenování"
+
+msgid "Excluded from check"
+msgstr "Vyřazen z kontroly"
+
+#: site/login/loginCheck.php
+msgid "Invalid characters in username"
+msgstr "Chybné znaky v uživatelském jméně"
+
+msgid "Invalid characters in password"
+msgstr "Chybné znaky v hesle"
+
+#: site/admin/adminMenu.php
+msgid "Mail settings"
+msgstr "Nastavení pošty"
+
+msgid "Mail server settings"
+msgstr "Nastavení poštovního serveru"
+
+msgid "Server type"
+msgstr "Typ serveru"
+
+msgid "Localhost"
+msgstr "Localhost"
+
+msgid "SMTP"
+msgstr "SMTP"
+
+msgid "Select server type for sending mail messages"
+msgstr "Zvolte typ serveru pro odeslání zpráv"
+
+msgid "Server authentication"
+msgstr "Ověřování serveru"
+
+msgid "Select yes if authentication is required"
+msgstr "Zvolte ano, pokud je autentikace vyžadovaná"
+
+msgid "Set username for SMTP authentication"
+msgstr "Nastavte uživatele pro SMTP autentikaci"
+
+msgid "Set password for SMTP authentication"
+msgstr "Nastavte heslo pro SMTP autentikaci"
+
+msgid "Mail sender settings"
+msgstr "Nastavení odesílatale emailů"
+
+msgid "Send test email"
+msgstr "Odeslat testovací email"
+
+msgid "Mail server type"
+msgstr "Typ poštovního serveru"
+
+msgid "SMTP settings"
+msgstr "SMTP nastavení"
+
+msgid "Server address"
+msgstr "Adresa serveru"
+
+msgid "Sender name"
+msgstr "Jméno odesilatele"
+
+msgid "Sender mail"
+msgstr "Email odesilatele"
+
+#: site/admin/settings.php
+msgid "Set administrator name"
+msgstr "Nastavit jméno administrátora"
+
+msgid "Set administrator email"
+msgstr "Nastavit email administrátora"
+
+#: site/admin/verifyDatabase.php
+msgid "Cannot get fix for table"
+msgstr "Tabulku se nezdařilo opravit"
+
+msgid "Fix table"
+msgstr "Oprava tabulky"
+
+msgid "Fix field"
+msgstr "Oprava pole"
+
+#: site/admin/verifyDatabaseFix.php
+msgid "Wrong parameters"
+msgstr "Chybné parametry"
+
+msgid "Table fixed"
+msgstr "Tabulka opravena"
+
+msgid "Field fixed"
+msgstr "Pole opraveno"
+
+#: site/sections.php
+msgid "Database errors detected"
+msgstr "Detekována chyba databáze"
+
+#: site/tools/devicesPrint.php
+msgid "Show all hosts"
+msgstr "Zobrazit všechny hosty"
+
+msgid "No hosts belonging to this device"
+msgstr "Žádní hosté nenáleží k tomuto zařízení"
+
+msgid "Sort by vendor"
+msgstr "Třídit dle výrobce"
+
+#: site/admin/userEditPrint.php
+msgid "Mail State changes"
+msgstr ""
+
+msgid "Select yes to receive notification change mail for State change"
+msgstr "Zvolte ano pro získávání emailových oznámení o změně stavu"
+
+msgid "Mail Changelog"
+msgstr "Změnový log emailu"
+
+msgid "Select yes to receive notification change mail for changelog"
+msgstr "Zvolte ano pro získávání emailových oznámení z logu změn"
+
+#: site/admin/usersEditPrint.php
+msgid "Require user to change password after initial login"
+msgstr "Vyžadovat změnu hesla po prvotním přihlášení"
+
+#: site/tools/changePasswordRequired.php
+msgid "Password change required"
+msgstr "Je vyžadována změna hesla"
+
+msgid "You are required to change your password before you can access phpipam."
+msgstr "Je nutné změnit si heslo před vstupem do phpipam."
+
+msgid "Password change"
+msgstr "Změna hesla"
+
+msgid "Save password"
+msgstr "Uložit heslo"
+
+#: site/login/loginCheck.php
+msgid "You have been blocked for 5 minutes due to authentication failures"
+msgstr "Váš účet byl zablokován na 5 minut z důvodu chyby autentikace"
+
+#: site/admin/settings.php
+msgid "Use nicer URL structure"
+msgstr "Použít hezká URL"
+
+msgid "Please note that mod_rewrite is required with appropriate settings if pretified links are selected."
+msgstr "Pokud chcete použít hezká URL, je vyžadován modul mod_rewrite včetně příslušných nastavení."
+
+#: site/admin/settings.php
+msgid "Hide free range"
+msgstr "Skrýt volné rozsahy"
+
+msgid "Do not display free range in IP address and subnets list"
+msgstr "Nezobrazovat volné rozsahy v IP adresách a seznamech subsítí"
+
+msgid "Highest VLAN number"
+msgstr "Nejvyšší číslo VLNA"
+
+msgid "Set highest VLAN number (default 4096)"
+msgstr "Nastavit nejvyšší číslo VLAN (standardně 4096)"
+
+#: site/admin/manageVLANresult.php
+msgid "Highest possible VLAN number is "
+msgstr "Nejvyšší možné číslo VLAN je "
+
+msgid "VLAN number cannot be negative"
+msgstr "Číslo VLAN nemůže být záporné"
+
+msgid "Not number"
+msgstr "Není číslo"
+
+#: site/admin/manageSubnetEditResult.php
+msgid "I will delete"
+msgstr "Vymažu"
+
+msgid "Are you sure you want to delete above items?"
+msgstr "Jste si jistý výmazem uvedených položek?"
+
+msgid "Are you sure you want to delete IP address"
+msgstr "Jste si jistý výmazem IP adresy"
+
+#:site/settings/setitngs.php
+msgid "Inactivity timeout"
+msgstr "Limit nečinnosti"
+
+msgid "Select inactive timeout for user sessions. Please note that if default php session settings in php.ini are lower they will override this"
+msgstr "Zvolte timeout neaktivity pro uživatelskou relaci. Vemte na vědomí, že výchozí nastavení relace v php je nižší a toto nastavení přepíše"
+
+#: site/login/index.php
+msgid "You session has timed out"
+msgstr "Tvoje sezení vypršelo"
+
+#: site/admin/manageSubnetEdit.php
+msgid "Discover new hosts"
+msgstr "Vyhledat nové hosty"
+
+msgid "Discover new hosts in this subnet"
+msgstr "Vyhledat nové hosty v této podsíti"
