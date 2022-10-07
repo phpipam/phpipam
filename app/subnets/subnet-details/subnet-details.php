@@ -333,7 +333,10 @@ else {
 			// alias fix
 			$fwZone->alias 		= strlen($fwZone->alias)>0 ? "(".$fwZone->alias.")" : "";
 			$fwZone->description 	= strlen($fwZone->description)>0 ? " - ".$fwZone->description : "";
-			$fwZone->interface 	= strlen($fwZone->interface)>0 ? "(".$fwZone->interface.")" : "";
+			$fwvrinfo=$Tools->fetch_object("fwvrs", "id", $fwZone->fwvrid);
+			$fwvsysinfo=$Tools->fetch_object("fwvsys", "id", $fwvrinfo->vfw);
+			$vsysinfo=$Tools->fetch_object("vsysnames", "id", $fwvsysinfo->name);
+			$fwinfo=$Tools->fetch_object("devices", "id", $fwvsysinfo->firewall);
 
 			# divider
 			print "<tr>";
@@ -341,9 +344,24 @@ else {
 			print "</tr>";
 			# zone details
 			print "<tr>";
-			print "	<th>"._('Firewall zone')."</th>";
+			print "	<th>"._('Firewall')."</th>";
 			print "	<td>";
-			print $fwZone->zone." ".$fwZone->alias." ".$fwZone->description."<br>".$fwZone->deviceName." ".$fwZone->interface;
+			print $fwinfo->hostname;
+			print "	</td>";
+			print "</tr>";			print "<tr>";
+			print "	<th>"._('vSys')."</th>";
+			print "	<td>";
+			print $vsysinfo->name;
+			print "	</td>";
+			print "</tr>";			print "<tr>";
+			print "	<th>"._('Virtual Router')."</th>";
+			print "	<td>";
+			print $fwZone->deviceName;
+			print "	</td>";
+			print "</tr>";			print "<tr>";
+			print "	<th>"._('Firewall zone (alias)')."</th>";
+			print "	<td>";
+			print $fwZone->zone." ".$fwZone->alias." ".$fwZone->description;
 			print "	</td>";
 			print "</tr>";
 			# divider
