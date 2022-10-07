@@ -923,7 +923,7 @@ msgstr "升級錯誤"
 
 #: site/tools/userMenuSelfMod.php:37
 msgid "Account updated successfully"
-msgstr "帳號更新錯誤"
+msgstr "帳號更新成功"
 
 #: site/tools/subnets.php:17 site/subnets.php:55
 msgid "Available subnets"
