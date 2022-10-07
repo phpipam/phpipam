@@ -7,15 +7,14 @@
 
 # functions
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-print "loc=".$_POST[loc];
-/*
+
 # initialize classes
 $Database = new Database_PDO;
 $Admin 	  = new Admin ($Database);
 $User 	  = new User ($Database);
 $Result   = new Result ();
 $Zones    = new FirewallZones($Database);
-/*
+
 # validate session parameters
 $User->check_user_session();
 
@@ -25,7 +24,7 @@ if ($_POST['operation'] != 'subnet2zone') 				{ $Result->show("danger", _("Inval
 # validate $_POST['subnetId'] values
 if (!preg_match('/^[0-9]+$/i', $_POST['subnetId'])) 	{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!"), true); }
 
-/*$firewallZones = $Admin->fetch_multiple_objects("firewallZoneMapping","deviceId",$_POST['vr'],"alias");
+$firewallZones = $Admin->fetch_multiple_objects("firewallZoneMapping","deviceId",$_POST['vr'],"alias");
 $fwtype=$Admin->fetch_object("devicetypes","tname","fwl");
 $fwinfo=$Database->getObjectsQuery('SELECT * from devices where location='. $_POST[loc].' and type='.$fwtype->tid);
 $fwvsysinfo=$Admin->fetch_multiple_objects("fwvsys","firewall",$_POST['fw'],"name");
@@ -131,4 +130,4 @@ if(!is_array($firewallZones) && isset($_POST['vr']))                            
 	</div>
 	<!-- result -->
 	<div class="subnet-to-zone-result"></div>
-</div>*/
+</div>
