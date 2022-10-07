@@ -1588,7 +1588,7 @@ $(document).on("click", ".subnet_to_zone", function() {
     var loc = $(this).attr('data-loc');
     //format posted values
     var postdata = "operation="+operation+"&subnetId="+subnetId+"&loc="+loc;
-    $.post('app/admin/firewall-zones/subnet-to-zone.php', postdata, function(data) {
+    $.post('/autodb/app/admin/firewall-zones/subnet-to-zone.php', postdata, function(data) {
         $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
