@@ -23,13 +23,13 @@ if ($_POST['operation'] != 'subnet2zone') 				{ $Result->show("danger", _("Inval
 
 # validate $_POST['subnetId'] values
 if (!preg_match('/^[0-9]+$/i', $_POST['subnetId'])) 	{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!"), true); }
-/*
+
 $firewallZones = $Admin->fetch_multiple_objects("firewallZoneMapping","deviceId",$_POST['vr'],"alias");
 $fwtype=$Admin->fetch_object("devicetypes","tname","fwl");
 $fwinfo=$Database->getObjectsQuery('SELECT * from devices where location='. $_POST[loc].' and type='.$fwtype->tid);
 $fwvsysinfo=$Admin->fetch_multiple_objects("fwvsys","firewall",$_POST['fw'],"name");
 $fwvrinfo=$Admin->fetch_multiple_objects("fwvrs","vfw",$_POST['vsys'],"name");
-
+/*
 # no zones
 if(!is_array($firewallZones) && isset($_POST['vr']))                              { $Result->show("danger", _("No zones available"), true, true); }
 ?>
