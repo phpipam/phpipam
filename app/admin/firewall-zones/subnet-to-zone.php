@@ -1,5 +1,5 @@
 <?php
-print "loc=".$_POST[loc];
+
 /**
  *	subnet-to-zone.php
  *	add subnet (from detail view) to existing firewall zone
@@ -7,6 +7,7 @@ print "loc=".$_POST[loc];
 
 # functions
 require_once( dirname(__FILE__) . '/phpipam/functions/functions.php' );
+print "loc=".$_POST[loc];
 /*
 # initialize classes
 $Database = new Database_PDO;
