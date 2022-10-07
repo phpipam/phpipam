@@ -1,0 +1,28 @@
+{
+    "API": {
+        "APIVersion": "v1",
+        "Pipeline": "poc-vault"
+    },
+    "Git": {
+        "Ref": "refs/heads/umg-master",
+        "Revision": "",
+        "URL": "https://github.com/umg/phpipam.git"
+    },
+    "Image": {
+        "URL": "docker-registry.umusic.com/networking/phpipam",
+        "Tag": "v1.4.2-umg-1.0.12",
+        "Dockerfile": "Dockerfile",
+        "Context": ""
+    },
+    "K8S": {
+        "YamlPath": "devops/app.yaml",
+        "YamlDir": "devops/k8s",
+        "Namespace": "phpipam-dev",
+        "ClusterName": "aws42-istio-networking"
+    },
+    "Config": {
+        "VaultKVPath": "network-engineering/phpipam/dev",
+        "UserData": "",
+        "EventID": ""
+    }
+}

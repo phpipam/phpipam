@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpipam-cron-v1
+  namespace: umg
+  labels:
+    app: phpipam-cron
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpipam-cron
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: phpipam-cron
+        version: v1
+    spec:
+      serviceAccountName: phpipam
+      containers:
+      - name: phpipam
+        image: docker-registry.umusic.com/networking/phpipam-cron:v1.4.2-umg-1.0
+        resources:
+          limits:
+            memory: 1024Mi
+            cpu: 1000m
+          requests:
+            memory: 1024Mi
+            cpu: 1000m
+        env:
+        - name: VAULT_KV_PATH
+          value: VAULT_KV_PATH
+        securityContext:
+          capabilities:
+            add: ["IPC_LOCK"]
+      imagePullSecrets:
+      - name: regcred
