@@ -380,26 +380,27 @@ class FirewallZones extends Common_functions {
 	public function get_zone_subnet_info ($id) {
 		# try to fetch id specific zone information
 		try { $info =  $this->Database->getObjectsQuery('SELECT
-						firewallZones.zone as zone,
-						firewallZones.padding as padding,
-						firewallZones.length as length,
-						firewallZones.indicator as indicator,
-						firewallZones.generator as generator,
-						firewallZoneMapping.alias as alias,
-						firewallZones.description as description,
-						firewallZoneSubnet.subnetId as subnetId,
-						subnets.subnet as subnet,
-						subnets.mask as mask,
-						subnets.description as subnetDescription,
-						subnets.firewallAddressObject as firewallAddressObject,
-						fwvrs.name as deviceName,
-						fwvrs.id as fwvrid
-						FROM firewallZoneMapping
-						RIGHT JOIN firewallZones on firewallZoneMapping.zoneId = firewallZones.id
-						LEFT JOIN firewallZoneSubnet on firewallZoneMapping.zoneId = firewallZoneSubnet.zoneId
-						LEFT JOIN fwvrs ON firewallZoneMapping.deviceId = fwvrs.id
-						LEFT JOIN subnets ON firewallZoneSubnet.subnetId = subnets.id
-						HAVING firewallZoneSubnet.subnetId = ?;', $id);}
+			firewallZones.zone as zone,
+			firewallZones.padding as padding,
+			firewallZones.length as length,
+			firewallZones.indicator as indicator,
+			firewallZones.generator as generator,
+			firewallZoneMapping.alias as alias,
+			firewallZoneSubnet.zoneId as zoneId,
+			firewallZoneSubnet.subnetId as subnetId,
+			subnets.subnet as subnet,
+			subnets.mask as mask,
+			subnets.description as subnetDescription,
+			subnets.firewallAddressObject as firewallAddressObject,
+			fwvrs.name as deviceName,
+			fwvrs.id as fwvrid
+			FROM firewallZoneSubnet
+			inner join subnets ON firewallZoneSubnet.subnetId = subnets.id
+			inner JOIN firewallZoneMapping on firewallZoneMapping.id = firewallZoneSubnet.zoneId
+			inner JOIN firewallZones on firewallZoneMapping.zoneId = firewallZones.id
+			inner JOIN fwvrs ON firewallZoneMapping.deviceId = fwvrs.id
+			HAVING firewallZoneSubnet.subnetId = ?;', $id);}
+
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 		if ($info) {
