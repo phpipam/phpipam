@@ -4,7 +4,7 @@ print "loc=".$_POST[loc];
  *	subnet-to-zone.php
  *	add subnet (from detail view) to existing firewall zone
  *************************************************************/
-
+/*
 # functions
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
