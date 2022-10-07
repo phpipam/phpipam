@@ -10,7 +10,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize classes
 $Database = new Database_PDO;
-$Admin 	  = new Admin ($Database);
+//$Admin 	  = new Admin ($Database);
 $User 	  = new User ($Database);
 $Result   = new Result ();
 $Zones    = new FirewallZones($Database);
