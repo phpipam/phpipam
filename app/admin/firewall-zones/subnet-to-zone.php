@@ -29,7 +29,7 @@ $fwtype=$Admin->fetch_object("deviceTypes","tname","fwl");
 $fwinfo=$Database->getObjectsQuery('SELECT * from devices where location='. $_POST[loc].' and type='.$fwtype->tid);
 $fwvsysinfo=$Admin->fetch_multiple_objects("fwvsys","firewall",$_POST['fw'],"name");
 $fwvrinfo=$Admin->fetch_multiple_objects("fwvrs","vfw",$_POST['vsys'],"name");
-/*
+
 # no zones
 if(!is_array($firewallZones) && isset($_POST['vr']))                              { $Result->show("danger", _("No zones available"), true, true); }
 ?>
@@ -130,4 +130,4 @@ if(!is_array($firewallZones) && isset($_POST['vr']))                            
 	</div>
 	<!-- result -->
 	<div class="subnet-to-zone-result"></div>
-</div>*/
+</div>
