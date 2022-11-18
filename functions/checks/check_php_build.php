@@ -11,8 +11,11 @@ $requiredExt  = array("session", "sockets", "filter", "openssl", "gmp", "json", 
 # Required functions (included in php-xml or php-simplexml package)
 $requiredFns  = array("simplexml_load_string");
 
-if(!defined('UNSUPPORTED_PHP_VERSION'))
-define('UNSUPPORTED_PHP_VERSION', "8.0");
+if(!defined('PHPIPAM_PHP_MIN'))
+define('PHPIPAM_PHP_MIN', "5.4");
+
+if(!defined('PHPIPAM_PHP_UNTESTED'))
+define('PHPIPAM_PHP_UNTESTED', "8.2");  // PHP 8.2 or greater is untested & unsupported
 
 
 # Empty missing arrays to prevent errors
@@ -67,15 +70,15 @@ if ( PHP_INT_SIZE == 4 ) {
     $error[] = "<strong>"._('Not 64-bit system')."!</strong><br><hr>";
     $error[] = _('From release 1.4 on 64bit system is required!');
 }
-elseif ( phpversion() < "5.4" ) {
+elseif ( phpversion() < PHPIPAM_PHP_MIN ) {
     $error[] = "<strong>"._('Unsupported PHP version')."!</strong><br><hr>";
-    $error[] = _('From release 1.3.2 on at least PHP version 5.4 is required!')."<br>";
+    $error[] = _('Minimum PHP version required').": ".PHPIPAM_PHP_MIN."<br>";
     $error[] = _("Detected PHP version: ").phpversion();
 
 }
-elseif ( phpversion() >= UNSUPPORTED_PHP_VERSION && !Config::ValueOf('allow_untested_php_versions', false) ) {
+elseif ( phpversion() >= PHPIPAM_PHP_UNTESTED && !Config::ValueOf('allow_untested_php_versions', false) ) {
     $error[] = "<strong>"._('Unsupported PHP version')."!</strong><br><hr>";
-    $error[] = _("Detected PHP version: ").phpversion()." >= ".UNSUPPORTED_PHP_VERSION."<br><br>";
+    $error[] = _("Detected PHP version: ").phpversion()." >= ".PHPIPAM_PHP_UNTESTED."<br><br>";
     $error[] = _('phpIPAM is not yet compatible with this version of php.')." "._('You may encounter issues & errors.')."<br><br>";
     $error[] = _('Please set <q>$allow_untested_php_versions=true;</q> in config.php to continue at your own risk.');
 }
