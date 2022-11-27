@@ -4,6 +4,10 @@
     ----------------------------
     + php8.1 compatibility (php8.x support is work-in-progress);
 
+    Security Fixes:
+    ----------------------------
+    + XSS (reflected) in 'bw-calulator-result.php';
+
 == 1.5.0
 
     New features:

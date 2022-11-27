@@ -10,12 +10,12 @@ $User		= new User ($Database);
 $User->check_user_session();
 
 // process input values
-$tcp   = $_POST['wsize'];
-$delay = $_POST['delay'];
-$fsize = $_POST['fsize'];
+$tcp   = filter_var($_POST['wsize'], FILTER_VALIDATE_INT,   ["options" => ["min_range"=>1024, "max_range"=>65536]]) ?: die(_("Invalid input"));
+$delay = filter_var($_POST['delay'], FILTER_VALIDATE_FLOAT, ["options" => ["min_range"=>0.1,  "max_range"=>1000]])  ?: die(_("Invalid input"));
+$fsize = filter_var($_POST['fsize'], FILTER_VALIDATE_FLOAT, ["options" => ["min_range"=>100,  "max_range"=>4096]])  ?: die(_("Invalid input"));
 
 // get mbps values from config
-$mbps = round($tcp/($delay/1000)/(1024*1024),2);
+$mbps = round($tcp/($delay/1000)/(1024*1024), 4);
 
 // Calculate transfer time
 $time = round(($fsize / $mbps), 2);
