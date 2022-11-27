@@ -190,3 +190,10 @@ $upgrade_queries["1.5.39"]   = [];
 $upgrade_queries["1.5.39"][] = "INSERT INTO `widgets` (`wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('MAC lookup', 'Shows MAC address vendor', 'mac-lookup', NULL, 'yes', '6', 'no', 'yes');";
 $upgrade_queries["1.5.39"][] = "-- Database version bump";
 $upgrade_queries["1.5.39"][] = "UPDATE `settings` set `dbversion` = '39';";
+
+#
+# Version 1.51.39 queries
+#
+$upgrade_queries["1.51.39"]   = [];
+$upgrade_queries["1.51.39"][] = "-- Version update";
+$upgrade_queries["1.51.39"][] = "UPDATE `settings` set `version` = '1.51';";
