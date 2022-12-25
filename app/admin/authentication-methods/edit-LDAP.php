@@ -20,6 +20,7 @@ if($_POST['action']!="add") {
 }
 else {
 	$method_settings = new StdClass ();
+	$method_settings->params = new StdClass ();
 	# set default values
    @$method_settings->params->domain_controllers = "ldap1.domain.local;ldap2.domain.local";
 	$method_settings->params->base_dn = "CN=Users,CN=Company,DC=domain,DC=local";
