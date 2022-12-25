@@ -169,7 +169,7 @@ class Sections extends Common_functions {
 		# truncate and delete all subnets in all sections, than delete sections
 		foreach($all_ids as $id) {
 			$section_subnets = $Subnets->fetch_section_subnets ($id);
-			if(sizeof($section_subnets)>0) {
+			if(is_array($section_subnets) && sizeof($section_subnets)>0) {
 				foreach($section_subnets as $ss) {
 					//delete subnet
 					$Subnets->modify_subnet("delete", array("id"=>$ss->id));

@@ -64,7 +64,7 @@ if ($_POST['action']=="delete" && !isset($_POST['deleteconfirm'])) {
 	# no subsections
 	else {
 		$subnets  = $Subnets->fetch_section_subnets ($_POST['id']);			//fetch all subnets in section
-		$num_subnets = sizeof($subnets);
+		$num_subnets = is_array($subnets) ? sizeof($subnets) : 0;
 		$ipcnt = $Addresses->count_addresses_in_multiple_subnets($subnets);
 	}
 
