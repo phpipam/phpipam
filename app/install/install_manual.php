@@ -17,16 +17,16 @@ $filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
 		<a href="<?php print create_link("install"); ?>" class="btn btn-sm btn-default"><i class='fa fa-angle-left'></i> <?php print _("Back"); ?></a>
 		<!-- Instructions -->
 		<div style="margin-top:10px;padding:30px 20px;">
-			<?php print _("For importing database file with mysqlimport tool please follow below instructions:"); ?><hr>
+			<?php print _("For importing database file with mysqlimport tool please follow the instructions below:"); ?><hr>
 			<ol>
 				<li><?php print _("Set variables for database connection in config.php"); ?></li>
 				<li><?php print _("Open mysql connection, create database"); ?>
 					<pre>mysql -u root -p</pre>
 				</li>
 				<li>
-					<?php print _("Copy below SQL queries and paste them to mysql"); ?>
+					<?php print _("Copy the SQL queries below and paste them into mysql"); ?>
 				</li>
-				<li><?php print _("Finished ! Now login with <strong>Admin/ipamadmin</strong> to webpage."); ?><br>
+				<li><?php print _("Finished ! Now log in with <strong>Admin/ipamadmin</strong> to web page."); ?><br>
 				<a href="<?php print create_link(null,null,null,null,null,true); ?>" class="btn btn-sm btn-info"><?php print _("Login"); ?></a>
 				</li>
 			</ol>

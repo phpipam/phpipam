@@ -5,12 +5,12 @@
 	<div class="hContent">
 
 		<div class="text-muted" style="margin:10px;">
-		<?php print _("Hi, almost set, lets just set some basic settings. You can change all settings under administration once logged in!"); ?>
+		<?php print _("Hi. Almost set. Let's just set some basic settings. You can change all settings under administration once logged in!"); ?>
 		</div>
 		<hr>
 
 		<?php
-		# lets verify database
+		# let's verify database
 		$errors = $Tools->verify_database ();
 
 		/* print result */
@@ -41,7 +41,7 @@
 			}
 			print "</div>";
 		}
-		# no db errors, lets configure !
+		# no db errors, so lets configure !
 		else {
 		?>
 
