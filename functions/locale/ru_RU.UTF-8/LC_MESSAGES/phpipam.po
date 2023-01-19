@@ -5568,7 +5568,7 @@ msgid "with mysqlimport tool"
 msgstr "с утилитой mysqlimport"
 
 #: app/install/install_mysqlimport.php:21
-msgid "Please follow below steps for"
+msgid "Please follow the steps below for"
 msgstr "Пожалуйста, пройдите по шагам ниже для"
 
 #: app/install/install_mysqlimport.php:21
@@ -5596,7 +5596,7 @@ msgid "Invalid installation type"
 msgstr "Неправильный тип установки"
 
 #: app/install/invalid_install_type.php:7
-msgid "This installation type does not exist. Please select valid installation method!"
+msgid "This installation type does not exist. Please select a valid installation method!"
 msgstr "Этот тип установки не существует. Пожалуйста, выберите правильный метод установки!"
 
 #: app/install/postinstall_configure.php:3
@@ -5604,7 +5604,7 @@ msgid "Postinstall configuration"
 msgstr "Конфигурация после установки"
 
 #: app/install/postinstall_configure.php:8
-msgid "Hi, almost set, lets just set some basic settings. You can change all settings under administration once logged in!"
+msgid "Hi, almost set. Let's just set some basic settings. You can change all settings under administration once logged in!"
 msgstr "Почти закончили, теперь надо выполнить некоторые базовые настройки. Вы можете изменить все настройки в меню администрирования после входа!"
 
 #: app/install/postinstall_configure.php:20
@@ -8453,7 +8453,7 @@ msgid "Manual database"
 msgstr "Установка базы данных вручную"
 
 #: app/install/install_manual.php:20
-msgid "For importing database file with mysqlimport tool please follow below instructions:"
+msgid "For importing database file with mysqlimport tool please follow the instructions below:"
 msgstr "Для импорта файла базы данных вручную с помощью утилиты mysqlimport, следуйте инструкциям ниже:"
 
 #: app/install/install_manual.php:22 app/install/install_mysqlimport.php:23
@@ -8465,11 +8465,11 @@ msgid "Open mysql connection, create database"
 msgstr "Открыть соединение mysql, создать базу данных"
 
 #: app/install/install_manual.php:27
-msgid "Copy below SQL queries and paste them to mysql"
+msgid "Copy the SQL queries below and paste them into mysql"
 msgstr "Скопируйте SQL запрос ниже и вставьте его в mysql"
 
 #: app/install/install_manual.php:29 app/install/install_mysqlimport.php:64
-msgid "Finished ! Now login with <strong>Admin/ipamadmin</strong> to webpage."
+msgid "Finished ! Now log in with <strong>Admin/ipamadmin</strong> to web page."
 msgstr "Завершено ! Теперь зайдите с <strong>Admin/ipamadmin</strong> на вебстраницу."
 
 #: app/install/install_automatic.php:78
