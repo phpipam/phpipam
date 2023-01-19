@@ -151,7 +151,7 @@ if($slaves) {
 					print "	<div class='btn-group'>";
 					print "		<button class='btn btn-xs btn-default editSubnet'     data-action='edit'   data-subnetid='".$slave['id']."'  data-sectionid='".$slave['sectionId']."'><i class='fa fa-gray fa fa-pencil'></i></button>";
 					if($User->is_subnet_favourite($slave['id'])){
-                                                print " <a class='btn btn-xs btn-default btn-info editFavourite favourite-$slave[id]' href='' data-container='body' rel='tooltip' title='"._('Click to remove from favourites')."' data-subnetId='$slave[id]' data-action='remove'><i class='fa fa-star></i></a>";
+                                                print " <a class='btn btn-xs btn-default btn-info editFavourite favourite-$slave[id]' href='' data-container='body' rel='tooltip' title='"._('Click to remove from favourites')."' data-subnetId='$slave[id]' data-action='remove'><i class='fa fa-star'></i></a>";
                                         }
 					else{
                                                 print " <a class='btn btn-xs btn-default editFavourite favourite-$slave[id]' href='' data-container='body' rel='tooltip' title='"._('Click to add to favourites')."' data-subnetId='$slave[id]' data-action='add'><i class='fa fa-star fa-star-o'></i></a>";
