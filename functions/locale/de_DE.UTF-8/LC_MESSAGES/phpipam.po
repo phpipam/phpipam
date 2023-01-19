@@ -10209,8 +10209,8 @@ msgstr "Manuelle Datenbank"
 
 #: app/install/install_manual.php:20
 msgid ""
-"For importing database file with mysqlimport tool please follow below "
-"instructions:"
+"For importing database file with mysqlimport tool please follow the "
+"instructions below:"
 msgstr ""
 "Um eine Datenbank mit dem mysqlimport Werkzeug zu importieren folgen Sie "
 "bitte den nachfolgenden Anweisungen:"
@@ -10224,13 +10224,13 @@ msgid "Open mysql connection, create database"
 msgstr "&Ouml;ffnen einer MySQL Verbindung, Erstellen einer Datenbank"
 
 #: app/install/install_manual.php:27
-msgid "Copy below SQL queries and paste them to mysql"
+msgid "Copy the SQL queries below and paste them into mysql"
 msgstr ""
 "Kopieren Sie die folgenden SQL-Queries und f&uuml;hren diese in der MySQL "
 "CLI aus."
 
 #: app/install/install_manual.php:29 app/install/install_mysqlimport.php:64
-msgid "Finished ! Now login with <strong>Admin/ipamadmin</strong> to webpage."
+msgid "Finished ! Now log in with <strong>Admin/ipamadmin</strong> to web page."
 msgstr ""
 "Fertig ! Loggen Sie sich mit <strong>Admin/ipamadmin</strong> auf der "
 "Webseite ein."
@@ -10247,7 +10247,7 @@ msgid "with mysqlimport tool"
 msgstr "mit dem mysqlimport Werkzeug"
 
 #: app/install/install_mysqlimport.php:21
-msgid "Please follow below steps for"
+msgid "Please follow the steps below for"
 msgstr "Bitte f&uuml;hren Sie die nachfolgenden Schritte aus für eine"
 
 #: app/install/install_mysqlimport.php:21
@@ -10276,7 +10276,7 @@ msgstr "Ung&uuml;ltiger Installationstyp"
 
 #: app/install/invalid_install_type.php:7
 msgid ""
-"This installation type does not exist. Please select valid installation "
+"This installation type does not exist. Please select a valid installation "
 "method!"
 msgstr ""
 "Dieser Installationstyp existiert nicht. Bitte w&auml;hlen Sie eine g&uuml;"
@@ -10288,7 +10288,7 @@ msgstr "Postinstall configuration"
 
 #: app/install/postinstall_configure.php:8
 msgid ""
-"Hi, almost set, lets just set some basic settings. You can change all "
+"Hi, almost set. Let's just set some basic settings. You can change all "
 "settings under administration once logged in!"
 msgstr ""
 "Hi, fast geschafft, ein paar wenige Basiseinstellungen m&uuml;ssen noch "
