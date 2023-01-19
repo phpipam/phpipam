@@ -25,7 +25,7 @@ $masks = [];
 print "<h4>"._("Select mask").":</h4><hr>";
 for($m=$biggest_subnet_mask+1; $m<=$pow; $m++) {
 	// active
-	$active = $m==$_GET['ipaddrid'] ? "btn-success" : "";
+	$active = $m==@$_GET['ipaddrid'] ? "btn-success" : "";
 
 	// number of subnets
 	$subnet_num = @gmp_strval(gmp_pow(2, ($m-$subnet['mask'])));

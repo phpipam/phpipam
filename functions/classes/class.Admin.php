@@ -569,11 +569,13 @@ class Admin extends Common_functions {
 		foreach($sections as $s) {
 			$g = json_decode($s->permissions, true);
 
-			if(sizeof($g)>0) {
-				if(array_key_exists($gid, $g)) {
-					unset($g[$gid]);
-					$ng = json_encode($g);
-					$this->update_section_groups($s->id,$ng);
+			if(is_array($g)) {
+				if(sizeof($g)>0) {
+					if(array_key_exists($gid, $g)) {
+						unset($g[$gid]);
+						$ng = json_encode($g);
+						$this->update_section_groups($s->id,$ng);
+					}
 				}
 			}
 		}

@@ -8,10 +8,10 @@
 $User->check_user_session();
 
 $version = json_decode(@file_get_contents(dirname(__FILE__).'/../../../functions/php-saml/src/Saml2/version.json'), true);
-$version = $version['php-saml']['version'];
+$version = @$version['php-saml']['version'];
 
 if ($version < 3.4) {
-	$Result->show("danger", _('php-saml library missing, please update submodules'), true);
+	$Result->show("danger", _('php-saml library missing, please update submodules'), true, true);
 }
 
 # validate action
@@ -27,8 +27,8 @@ if($_POST['action']!="add") {
 }
 else {
 	$method_settings = new StdClass ();
-	$method_settings->params = new StdClass ();
 	# set default values
+	$method_settings->params = new StdClass ();
 	$method_settings->params->clientId = $User->createURL().create_link();
 	$method_settings->params->strict = "1";
 	$method_settings->params->idpissuer = "";

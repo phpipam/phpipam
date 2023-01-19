@@ -127,7 +127,7 @@ if($_POST['action']!="add") {
 	<tr>
 	    <td><?php print _('Lock timeout'); ?></td>
 	    <td>
-	    	<input name="app_lock_wait" class="form-control input-sm input-w-auto" value="<?php print $Admin->strip_xss($api->app_lock_wait); ?>">
+	    	<input name="app_lock_wait" class="form-control input-sm input-w-auto" value="<?php print $Admin->strip_xss(@$api->app_lock_wait); ?>">
 	    </td>
        	<td class="info2"><?php print _('Seconds to wait for transaction lock to clear'); ?></td>
     </tr>

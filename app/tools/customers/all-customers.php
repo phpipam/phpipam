@@ -26,6 +26,8 @@ $custom_fields = $Tools->fetch_custom_fields('customers');
 $hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['customers'] : array();
 
+$colspanCustom = 0;
+
 # title
 print "<h4>"._('All customers')."</h4>";
 print "<hr>";

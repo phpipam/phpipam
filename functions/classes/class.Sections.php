@@ -499,6 +499,7 @@ class Sections extends Common_functions {
         if ($sections !== false) {
     		foreach($sections as $section) {
     			$p = json_decode($section->permissions, true);
+    			$p = is_array($p) ? $p : [];
     			if(sizeof($p)>0) {
     				if($name) {
     					if(array_key_exists($gid, $p)) {

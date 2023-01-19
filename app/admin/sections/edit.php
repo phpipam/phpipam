@@ -54,7 +54,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="name" value="<?php print $Admin->strip_xss(@$section['name']); ?>" size="30" <?php if ($_POST['action'] == "delete" ) { print ' readonly '; } ?> placeholder="<?php print _('Section name'); ?>">
 				<!-- hidden -->
 				<input type="hidden" name="action" 	value="<?php print $_POST['action']; ?>">
-				<input type="hidden" name="id" 		value="<?php print $_POST['sectionid']; ?>">
+				<input type="hidden" name="id" 		value="<?php print @$_POST['sectionid']; ?>">
 				<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			</td>
 		</tr>

@@ -1198,8 +1198,8 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function reset_subnet_slaves_recursive () {
-		$this->slaves = null;
-		$this->slaves_full = null;
+		$this->slaves = [];
+		$this->slaves_full = [];
 	}
 
 	/**
@@ -3138,7 +3138,7 @@ class Subnets extends Common_functions {
 			$subnetsTree->walk(false);
 		}
 
-		$menu = new SubnetsMenu($this, $_COOKIE['sstr'], $_COOKIE['expandfolders'], $_GET['subnetId']);
+		$menu = new SubnetsMenu($this, @$_COOKIE['sstr'], @$_COOKIE['expandfolders'], @$_GET['subnetId']);
 		$menu->subnetsTree($subnetsTree);
 
 		return $menu->html();

@@ -51,6 +51,7 @@ if ($User->settings->enableNAT==1) {
     $all_nats = $Tools->fetch_all_objects ("nat", "name");
 
     if ($all_nats!==false) {
+    	$out = [];
         foreach ($all_nats as $n) {
             $out[$n->id] = $n;
         }

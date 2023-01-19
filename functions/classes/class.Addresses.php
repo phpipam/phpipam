@@ -1358,7 +1358,10 @@ class Addresses extends Common_functions {
 		$this->initialize_subnets_object ();
 		$this->Subnets->reset_subnet_slaves_recursive();				//reset array of slaves before continuing
 	    $this->Subnets->fetch_subnet_slaves_recursive($subnetId);		//fetch array of slaves
+	    if(is_array($this->Subnets->slaves))
 	    $this->Subnets->slaves = array_unique($this->Subnets->slaves);	//remove possible duplicates
+		else
+		$this->Subnets->slaves = [];
 
 		# ip address order
 		if(!is_null($order)) 	{ $order_addr = array($order, $order_direction); }

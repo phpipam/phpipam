@@ -58,4 +58,3 @@ else 																	{ $Result->show("success", _("Tag")." ".$_POST["action"]._
 if($_POST['action']=="delete") {
 	$Admin->update_object_references ("ipaddresses", "state", $old_tag->id, 0);
 }
-?>

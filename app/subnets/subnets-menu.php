@@ -86,7 +86,7 @@ else {
         print "<h4>"._('Available subnets')." <span class='pull-right' style='margin-right:5px;cursor:pointer;'><i class='fa fa-gray fa-sm $iconClass' rel='tooltip' data-placement='bottom' title='"._('Expand/compress all folders')."' id='expandfolders' data-action='$action'></i></span></h4>";
         print "<hr>";
 
-        if (!is_array($section_subnets))
+        if (!@is_array($section_subnets))
             $section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section'], false, false, []);
         print $Subnets->print_subnets_menu($User->user, $section_subnets);
     }

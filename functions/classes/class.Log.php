@@ -1608,6 +1608,7 @@ class Logging extends Common_functions {
 	    if (!is_object($this->Addresses)) $this->Addresses = new Addresses ($this->Database);
 	    $ips = $this->Addresses->fetch_subnet_addresses_recursive ($subnetId, false);
 
+
 	    # fetch changelog for IPs
 	    if(sizeof($ips) > 0) {
 		    # query
@@ -1708,31 +1709,33 @@ class Logging extends Common_functions {
 		$this->Subnets->reset_subnet_slaves_recursive ();
 		$this->Subnets->fetch_subnet_slaves_recursive ($subnetId);
 		# remove master subnet ID
-		$key = array_search($subnetId, $this->Subnets->slaves);
-		unset($this->Subnets->slaves[$key]);
-		$this->Subnets->slaves = array_unique($this->Subnets->slaves);
+		if(!is_null($this->Subnets->slaves)) {
+			$key = array_search($subnetId, $this->Subnets->slaves);
+			unset($this->Subnets->slaves[$key]);
+			$this->Subnets->slaves = array_unique($this->Subnets->slaves);
 
-	    # if some slaves are present get changelog
-	    if(sizeof($this->Subnets->slaves) > 0) {
-		    # set query
-		    $query  = "select
-						`u`.`real_name`,`o`.`sectionId`,`o`.`subnet`,`o`.`mask`,`o`.`isFolder`,`o`.`description`,`o`.`id`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`  from `changelog` as `c`, `users` as `u`, `subnets` as `o`
-						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
-						and (";
-			foreach($this->Subnets->slaves as $slaveId) {
-			if(!isset($args)) $args = array();
-			$query .= "`c`.`coid` = ? or ";
-			$args[] = $slaveId;							//set keys
+		    # if some slaves are present get changelog
+		    if(sizeof($this->Subnets->slaves) > 0) {
+			    # set query
+			    $query  = "select
+							`u`.`real_name`,`o`.`sectionId`,`o`.`subnet`,`o`.`mask`,`o`.`isFolder`,`o`.`description`,`o`.`id`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`  from `changelog` as `c`, `users` as `u`, `subnets` as `o`
+							where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
+							and (";
+				foreach($this->Subnets->slaves as $slaveId) {
+				if(!isset($args)) $args = array();
+				$query .= "`c`.`coid` = ? or ";
+				$args[] = $slaveId;							//set keys
+				}
+				$query  = substr($query, 0, -3);
+				$query .= ") and `c`.`ctype` = 'subnet' order by `c`.`cid` desc limit $limit;";
+
+				# fetch
+			    try { $logs = $this->Database->getObjectsQuery($query, $args); }
+				catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
+
+			    # return result
+			    return $logs;
 			}
-			$query  = substr($query, 0, -3);
-			$query .= ") and `c`.`ctype` = 'subnet' order by `c`.`cid` desc limit $limit;";
-
-			# fetch
-		    try { $logs = $this->Database->getObjectsQuery($query, $args); }
-			catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-
-		    # return result
-		    return $logs;
 	    }
 		else {
 			return false;

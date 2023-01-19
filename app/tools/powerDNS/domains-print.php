@@ -39,7 +39,7 @@ switch ($type) {
 if (strlen(@$_POST['domain-filter']) == 0) {unset($_POST['domain-filter']);}
 
 // if search filter out hits
-if ($_GET['sPage'] == "search" && strlen(@$_POST['domain-filter']) > 0) {
+if (@$_GET['sPage'] == "search" && strlen(@$_POST['domain-filter']) > 0) {
     // loop domains
     foreach ($domains as $k => $d) {
         // search through records, if no hits unset

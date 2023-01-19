@@ -21,7 +21,8 @@ if($_POST['action']!="add") {
 else {
 	$method_settings = new StdClass ();
 	# set default values
-   @$method_settings->params->hostname = "localhost";
+    $method_settings->params = new StdClass ();
+    $method_settings->params->hostname = "localhost";
 	$method_settings->params->port = 1812;
 	$method_settings->params->timeout = 2;
 

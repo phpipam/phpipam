@@ -10,7 +10,7 @@
  */
 
 # show only for numeric (set) rackid
-if($_POST['rackid']>0 || @$device['rack']>0) {
+if(@$_POST['rackid']>0 || @$device['rack']>0) {
 	# load objects for ajax-loaded stuff
 	if(!isset($User) || !is_object($User)) {
 		/* functions */

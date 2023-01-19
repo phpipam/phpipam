@@ -114,12 +114,12 @@ else {
 
 	<?php } ?>
 
-	<?php if(@array_key_exists($subnet['id'], $all_nats_per_object['subnets'])) { ?>
+	<?php if(@is_array($all_nats_per_object['subnets'])) { if(@array_key_exists($subnet['id'], $all_nats_per_object['subnets'])) { ?>
 	<tr>
 		<th><?php print _('NAT'); ?></th>
 		<td><?php $Addresses->print_nat_link($all_nats, $all_nats_per_object, $subnet, false, "subnet"); ?> <?php print _("Subnet is natted"); ?></a></td>
 	</tr>
-	<?php } ?>
+	<?php }} ?>
 
 	<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_R) { ?>
 	<tr>

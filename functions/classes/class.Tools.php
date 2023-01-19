@@ -3317,7 +3317,7 @@ class Tools extends Common_functions {
 	 * @param object $subnet
 	 * @return void
 	 */
-	private function parse_validate_file ($outFile = array(), $subnet) {
+	private function parse_validate_file ($outFile = array(), $subnet = obj) {
     	$result = array();
     	$errors = 0;
 

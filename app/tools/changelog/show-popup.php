@@ -110,7 +110,7 @@ print "	<td>";
 	foreach ($changelog as $c) {
 		// field
 		$field = explode(": ", $c);
-	    $value = explode("=>", $field[1]);
+	    $value = explode("=>", @$field[1]);
 
 	    $field_name = trim(str_replace(array("[","]"), "", $field[0]));
 

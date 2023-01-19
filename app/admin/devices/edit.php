@@ -62,7 +62,7 @@ if($User->settings->enableLocations=="1")
 $locations = $Tools->fetch_all_objects ("locations", "name");
 
 // set show for rack
-if (is_null($device['rack']))   { $display='display:none'; }
+if (is_null(@$device['rack']))  { $display='display:none'; }
 else                            { $display=''; }
 ?>
 
@@ -244,7 +244,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 		$sections = $Sections->fetch_all_sections();
 
 		# reformat device sections to array
-		$deviceSections = explode(";", $device['sections']);
+		$deviceSections = explode(";", @$device['sections']);
 		$deviceSections = is_array($deviceSections) ? $deviceSections : array();
 
 		if ($sections!==false) {

@@ -48,7 +48,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "pdns_defaults");
 <tr>
 	<td><?php print _('Default PTR domain'); ?></th>
 	<td>
-		<input type="text" class="form-control input-sm" name="def_ptr_domain" placeholder="Not used" value="<?php print $pdns->def_ptr_domain; ?>">
+		<input type="text" class="form-control input-sm" name="def_ptr_domain" placeholder="Not used" value="<?php print @$pdns->def_ptr_domain; ?>">
 	</td>
 	<td>
 		<span class="text-muted"><?php print _("Default PTR domain if no valid hostname for PTR is provided"); ?></span>
