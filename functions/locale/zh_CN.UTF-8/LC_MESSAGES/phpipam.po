@@ -541,7 +541,7 @@ msgid "Error updating"
 msgstr "升级错误"
 
 msgid "Account updated successfully"
-msgstr "账号更新错误"
+msgstr "账号更新成功"
 
 msgid "Available subnets"
 msgstr "可用的VLAN号"
