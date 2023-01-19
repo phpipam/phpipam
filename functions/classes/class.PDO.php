@@ -363,6 +363,9 @@ abstract class DB {
 			// Run Anchor query then the recursive query until there are no more results
 			$level = 1;
 			do {
+				// reset args for recursive query
+				$anchor_args = $level==1 ? $anchor_args : [];
+
 				$query = "INSERT INTO cte_0 ".($level++==1 ? $anchor_query : $recursive_query).";" .
 						"TRUNCATE TABLE cte_last;" .
 						"INSERT IGNORE INTO cte_last  SELECT * FROM cte_0;" .
