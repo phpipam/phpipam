@@ -15,6 +15,9 @@ if (!isset($Admin)) { $Admin = new Admin ($Database); }
 # verify that user is logged in, to guard against direct access of page and possible exploits
 $User->check_user_session();
 
+# read again the custom fields, if any
+if (!isset($custom_fields)) { $custom_fields = $Tools->fetch_custom_fields("vrf"); }
+
 # Load existing data
 $all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
 if (!$all_vrfs) { $all_vrfs = array(); }
@@ -54,6 +57,15 @@ foreach ($data as &$cdata) {
 			if ($cdata['name'] != $edata[$cdata['rd']]['name']) { $msg.= "VRF name will be updated."; $action = "edit"; }
 			if ($cdata['description'] != $edata[$cdata['rd']]['description']) { $msg.= "VRF description will be updated."; $action = "edit"; }
 
+			# Check if the values of the custom fields have changed
+			if(sizeof($custom_fields) > 0) {
+				foreach($custom_fields as $myField) {
+					if ($cdata[$myField['name']] != $edata[$cdata['rd']][$myField['name']]) {
+						$msg.= $myField['name']." will be updated."; $action = "edit";
+					}
+				}
+			}
+			
 			if ($action == "skip") {
 				$msg.= "Duplicate, will skip.";
 			}
@@ -66,11 +78,9 @@ foreach ($data as &$cdata) {
 	$cdata['action'] = $action;
 	$counters[$action]++;
 
-	$rows.="<tr class='".$colors[$action]."'><td><i class='fa ".$icons[$action]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>
-		<td>".$cdata['name']."</td>
-		<td>".$cdata['rd']."</td>
-		<td>".$cdata['description']."</td>
-		<td>"._($msg)."</td></tr>";
+	$rows.="<tr class='".$colors[$action]."'><td><i class='fa ".$icons[$action]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>";
+	foreach ($expfields as $cfield) { $rows.= "<td>".$cdata[$cfield]."</td>"; }
+	$rows.= "<td>"._($cdata['msg'])."</td></tr>";
 
 }
 
