@@ -1,5 +1,8 @@
 <?php
 
+# script can only be run from cli
+if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!"); }
+
 # include required scripts
 require_once( dirname(__FILE__) . '/../functions.php' );
 
@@ -40,4 +43,3 @@ if (isset($out)) {
     // do something with output
     print_r($out);
 }
-?>
