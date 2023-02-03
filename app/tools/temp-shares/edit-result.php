@@ -27,7 +27,7 @@ if($_POST['validity']>date("Y-m-d H:i:s", strtotime("+ 7 days")))	{ $Result->sho
 # verify each recipient
 if(strlen($_POST['email'])>0) {
 	foreach (explode(",", $_POST['email']) as $rec) {
-		if(!filter_var(trim($rec), FILTER_VALIDATE_EMAIL)) 			{ $Result->show("danger", _("Invalid email address")." - ".$rec, true); }
+		if(!filter_var(trim($rec), FILTER_VALIDATE_EMAIL)) 			{ $Result->show("danger", _("Invalid email address")." - ".escape_input($rec), true); }
 	}
 }
 

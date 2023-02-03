@@ -3,6 +3,7 @@
     Security Fixes:
     ----------------------------
     + XSS (reflected) in 'bw-calulator-result.php';
+    + XSS (reflected) by invalid email address response;
     + Restrict find_full_subnets.php to CLI;
 
 == 1.5.0
