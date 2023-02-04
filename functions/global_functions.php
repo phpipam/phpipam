@@ -39,6 +39,49 @@ if(!function_exists('hash_equals')) {
 }
 
 /**
+ * Supported in PHP 5 >= 5.6.0
+ * ldap_escape — Escape a string for use in an LDAP filter or DN
+ */
+if (!function_exists('ldap_escape')) {
+	if (!defined('LDAP_ESCAPE_FILTER')) {
+		define('LDAP_ESCAPE_FILTER', 1);
+	}
+	if (!defined('LDAP_ESCAPE_DN')) {
+		define('LDAP_ESCAPE_DN', 2);
+	}
+	function ldap_escape($value, $ignore = null, $flags = 0) {
+		if (!is_string($value) || strlen($value) == 0)
+			return '';
+
+		$search = [];
+		$replace = [];
+
+		if ($flags & LDAP_ESCAPE_FILTER) {
+			$search = array_merge($search, ['\\', '*', '(', ')', "\x00"]);
+		}
+		if ($flags & LDAP_ESCAPE_DN) {
+			$search = array_merge($search, ['\\', ',', '=', '+', '<', '>', ';', '"', '#', "\r"]);
+		}
+
+		$search = array_unique($search);
+
+		if (empty($search)) {
+			$v = [];
+			foreach (str_split($value) as $s) {
+				$v[] = sprintf('\\%02x', ord($s));
+			}
+			$value = implode($v);
+		}
+
+		foreach ($search as $s) {
+			$replace[] = sprintf('\\%02x', ord($s));
+		}
+
+		return str_replace($search, $replace, $value);
+	}
+}
+
+/**
  *  Supported in PHP 5 >= 5.5.0
  *  For older php versions make sure that function "json_last_error_msg" exist and create it if not
 */

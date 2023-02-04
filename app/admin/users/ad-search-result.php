@@ -57,7 +57,8 @@ try {
 	}
 
 	//search for domain user!
-	$userinfo = $adldap->user()->info("$_POST[dname]*", array("*"),false,$server->type);
+	$escaped_dn = ldap_escape($_POST["dname"], null, LDAP_ESCAPE_DN);
+	$userinfo = $adldap->user()->info("$escaped_dn*", array("*"), false, $server->type);
 
 	//echo $adldap->getLastError();
 }
@@ -86,18 +87,16 @@ if(!isset($userinfo['count'])) {
 		// loop
 		foreach($userinfo as $u) {
 			print "<tr>";
-			print "	<td>".$u['displayname'][0];
+			print "	<td>".escape_input($u['displayname'][0]);
 			print "</td>";
-			print "	<td>".$u['samaccountname'][0]."</td>";
-			print "	<td>".$u['mail'][0]."</td>";
+			print "	<td>".escape_input($u['samaccountname'][0])."</td>";
+			print "	<td>".escape_input($u['mail'][0])."</td>";
 			//actions
 			print " <td style='width:10px;'>";
-			print "		<a href='' class='btn btn-sm btn-default btn-success userselect' data-uname='".$u['displayname'][0]."' data-username='".$u['samaccountname'][0]."' data-email='".$u['mail'][0]."' data-server='".$_POST['server']."' data-server-type='".$server->type."'>"._('Select')."</a>";
+			print "		<a href='' class='btn btn-sm btn-default btn-success userselect' data-uname='".escape_input($u['displayname'][0])."' data-username='".escape_input($u['samaccountname'][0])."' data-email='".escape_input($u['mail'][0])."' data-server='".escape_input($_POST['server'])."' data-server-type='".$server->type."'>"._('Select')."</a>";
 			print "	</td>";
 			print "</tr>";
 		}
 	}
 	print "</table>";
 }
-
-?>
