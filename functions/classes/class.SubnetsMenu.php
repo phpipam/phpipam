@@ -52,7 +52,7 @@ class SubnetsMenu {
 		$this->Subnets = $Subnets;
 		$this->Subnets->get_Settings();
 		if (isset($expanded)) {
-			$expanded = array_filter(explode("|", $expanded));
+			$expanded = array_filter(pf_explode("|", $expanded));
 			// Store expanded subnets/folders to allow fast index lookups.
 			foreach($expanded as $e) $this->expanded[$e] = 1;
 		}

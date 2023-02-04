@@ -15,8 +15,8 @@ if (!isset($Tools)) 	{ $Tools 	= new Tools ($Database); }
 # verify that user is logged in, to guard against direct access of page and possible exploits
 $User->check_user_session();
 
-$expfields = explode("|",$_GET['expfields']);
-$reqfields = explode("|",$_GET['reqfields']);
+$expfields = pf_explode("|",$_GET['expfields']);
+$reqfields = pf_explode("|",$_GET['reqfields']);
 if (isset($_GET['filetype'])) {
 	$filetype = $_GET['filetype'];
 } else {

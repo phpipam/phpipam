@@ -663,7 +663,7 @@ class User extends Common_functions {
         # ok
         else {
             # store to array
-            $subnets = explode(";", $this->user->favourite_subnets);
+            $subnets = pf_explode(";", $this->user->favourite_subnets);
             $subnets = array_filter($subnets);
 
             if(sizeof($subnets)>0) {
@@ -714,7 +714,7 @@ class User extends Common_functions {
      */
     private function remove_favourite ($subnetId) {
         # set old favourite subnets
-        $old_favourites = explode(";", $this->user->favourite_subnets);
+        $old_favourites = pf_explode(";", $this->user->favourite_subnets);
         # set new
         $new_favourites = implode(";", array_diff($old_favourites, array($subnetId)));
         # update
@@ -734,7 +734,7 @@ class User extends Common_functions {
      */
     private function add_favourite ($subnetId) {
         # set old favourite subnets
-        $old_favourites = explode(";", $this->user->favourite_subnets);
+        $old_favourites = pf_explode(";", $this->user->favourite_subnets);
         $old_favourites = is_array($old_favourites) ? $old_favourites : array();
         # set new
         $new_favourites = implode(";",array_merge(array($subnetId), $old_favourites));
@@ -755,7 +755,7 @@ class User extends Common_functions {
      */
     public function is_subnet_favourite ($subnetId) {
         # check if in array
-        $subnets = explode(";", $this->user->favourite_subnets);
+        $subnets = pf_explode(";", $this->user->favourite_subnets);
         $subnets = array_filter($subnets);
         # result
         return in_array($subnetId, $subnets) ? true : false;
@@ -1028,7 +1028,7 @@ class User extends Common_functions {
         $dirparams['base_dn'] = @$authparams['base_dn'];
         $dirparams['ad_port'] = @$authparams['ad_port'];
         $dirparams['account_suffix'] = @$authparams['account_suffix'];
-        $dirparams['domain_controllers'] = explode(";", str_replace(" ", "", $authparams['domain_controllers']));
+        $dirparams['domain_controllers'] = pf_explode(";", str_replace(" ", "", $authparams['domain_controllers']));
         // set ssl and tls separate for ldap and AD
         if ($this->ldap) {
             // set ssl and tls
@@ -1663,7 +1663,7 @@ class User extends Common_functions {
 
         $max_permission = 0;
 
-        $ids = explode(";", $valid_sections);
+        $ids = pf_explode(";", $valid_sections);
         foreach($ids as $id) {
             $section = $this->fetch_object("sections", "id", $id);
 

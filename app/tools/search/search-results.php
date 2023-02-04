@@ -26,7 +26,7 @@ $hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);
+$selected_ip_fields = pf_explode(";", $selected_ip_fields);
 
 
 // all are off?

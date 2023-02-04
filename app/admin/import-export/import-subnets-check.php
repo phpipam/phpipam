@@ -103,7 +103,7 @@ foreach ($data as &$cdata) {
 	# if the subnet contains "/", split it in network and mask
 	if ($action != "error") {
 		if (preg_match("/\//", $cdata['subnet'])) {
-			list($caddr,$cmask) = explode("/",$cdata['subnet'],2);
+			list($caddr,$cmask) = pf_explode("/",$cdata['subnet'],2);
 			$cdata['mask'] = $cmask;
 			$cdata['subnet'] = $caddr;
 		} else { # check that mask is provided
@@ -167,7 +167,7 @@ foreach ($data as &$cdata) {
 		} else { $msg.=$net['message']; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 		if ((!empty($cdata['vrf'])) && (!preg_match("/^[a-zA-Z0-9-_]+$/", $cdata['vrf']))) { $msg.="Invalid VRF name format."; $action = "error"; }
-# Allow VLAN to be the string now.		
+# Allow VLAN to be the string now.
 #		if ((!empty($cdata['vlan'])) && (!preg_match("/^[0-9]+$/", $cdata['vlan']))) { $msg.="Invalid VLAN number format."; $action = "error"; }
 		if ((!empty($cdata['domain'])) && (!preg_match("/^[a-zA-Z0-9-_. ]+$/", $cdata['domain']))) { $msg.="Invalid VLAN domain format."; $action = "error"; }
 	}

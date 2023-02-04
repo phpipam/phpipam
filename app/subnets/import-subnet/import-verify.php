@@ -5,7 +5,7 @@
 
 /* get extension */
 $filename = $_FILES['file']['name'];
-$filename = explode(".", $filename);
+$filename = pf_explode(".", $filename);
 $filename = end($filename);
 
 // no / in filename !

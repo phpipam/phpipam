@@ -248,7 +248,7 @@ else {
                             if($vrfs!=false) {
                     	        foreach($vrfs as $vrf) {
                         	        // set permitted
-                        	        $permitted_sections = explode(";", $vrf->sections);
+                        	        $permitted_sections = pf_explode(";", $vrf->sections);
                         	        // section must be in array
                         	        if (is_blank($vrf->sections) || in_array(@$_POST['sectionId'], $permitted_sections)) {
                         				//cast
@@ -275,7 +275,7 @@ else {
                         				foreach($n as $ns) {
                         					// set print
                         					$printNS = "$ns->name";
-                        					$printNS .= " (" . array_shift(explode(";",$ns->namesrv1)).",...)";
+                        					$printNS .= " (" . array_shift(pf_explode(";",$ns->namesrv1)).",...)";
                                             print '<option value="'. $ns->id .'">'. $printNS .'</option>'. "\n";
                         				}
                         			}

@@ -94,7 +94,7 @@ if($Scan->settings->scanPingType=="fping") {
 		//check each line
 		foreach($Scan->fping_result as $l) {
 			//split
-			$field = array_filter(explode(" ", $l));
+			$field = array_filter(pf_explode(" ", $l));
 			//create result
 			$out['alive'][] = $Subnets->transform_to_decimal($field[0]);
 		}

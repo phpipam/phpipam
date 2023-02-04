@@ -39,7 +39,7 @@ for($searchmask=$subnetmask+1; $searchmask<$maxmask; $searchmask++) {
 			// remove found subnets with hosts !
 			foreach($found as $k=>$f) {
 				// parse
-				$parsed = explode("/", $f);
+				$parsed = pf_explode("/", $f);
 				// boundaries
 				$boundaries = $Subnets->get_network_boundaries ($parsed[0], $searchmask);
 				// broadcast to int

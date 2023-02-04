@@ -299,7 +299,7 @@ class Scan extends Common_functions {
 
         # for IPv6 remove wait
         if ($this->identify_address ($address)=="IPv6") {
-            $cmd = explode(" ", $cmd);
+            $cmd = pf_explode(" ", $cmd);
             unset($cmd[3], $cmd[4]);
             $cmd = implode(" ", $cmd);
         }
@@ -418,7 +418,7 @@ class Scan extends Common_functions {
 	 */
 	private function save_fping_rtt ($line) {
 		// 173.192.112.30 : xmt/rcv/%loss = 1/1/0%, min/avg/max = 160/160/160
- 		$tmp = explode(" ",$line);
+ 		$tmp = pf_explode(" ",$line);
 
  		# save rtt
 		@$this->rtt	= "RTT: ".str_replace("(", "", $tmp[7]);
@@ -457,7 +457,7 @@ class Scan extends Common_functions {
 				if (!$match || $matches[1] == 100)
 					continue;
 
-				$tmp = explode(" ", $line);
+				$tmp = pf_explode(" ", $line);
 				$out[] = $tmp[0];
 			}
 		}
@@ -658,7 +658,7 @@ class Scan extends Common_functions {
 	 */
 	public function telnet_address ($address, $port) {
 		# set all ports
-		$ports = explode(",", str_replace(";",",",$port));
+		$ports = pf_explode(",", str_replace(";",",",$port));
 		# default response is dead
 		$retval = 1;
 		//try each port untill one is alive

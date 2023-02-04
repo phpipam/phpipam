@@ -52,11 +52,11 @@ else {
 		if ($all_domains!==false) {
 
 			// Reverse the hostname, this fixes #1471 and #2374
-			$r_hostdomain = implode(".", array_reverse(array_slice(explode(".", $_POST['domain_id']), 1)));
+			$r_hostdomain = implode(".", array_reverse(array_slice(pf_explode(".", $_POST['domain_id']), 1)));
 
 			foreach($all_domains as $dk=>$domain_s) {
 				// Reverse the domain and compare it reversed, this fixes #1471 and #2374
-				$r_domain = implode(".", array_reverse(explode(".", $domain_s->name)));
+				$r_domain = implode(".", array_reverse(pf_explode(".", $domain_s->name)));
 
 				if (substr($r_hostdomain, 0, strlen($r_domain)) == $r_domain) {
 					$matches[$dk] = $domain_s;

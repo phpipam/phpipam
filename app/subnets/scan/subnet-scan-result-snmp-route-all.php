@@ -28,7 +28,7 @@ if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Resul
 # loop
 foreach ($_POST as $k=>$p) {
     # explode
-    $k = explode("-", $k);
+    $k = pf_explode("-", $k);
     # numeric
     if (is_numeric($k[1])) {
         // output array

@@ -19,7 +19,7 @@ $Result 	= new Result;
 $User->check_user_session();
 
 # set filetype
-$filetype = explode(".", $_POST['filetype']);
+$filetype = pf_explode(".", $_POST['filetype']);
 $filetype = end($filetype);
 
 # check integer

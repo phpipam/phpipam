@@ -99,7 +99,7 @@ if ($version_delta > 0) {
 		// loop
 		foreach ($commit_log as $commit) {
 			// lines to array
-			$lines = explode("\n", $commit);
+			$lines = pf_explode("\n", $commit);
 			// commit
 			unset($out);
 			$out['commit'] = $lines[0];

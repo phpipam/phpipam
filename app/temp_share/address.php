@@ -15,13 +15,13 @@ $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 
 # set selected address fields array
 $selected_ip_fields = $settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);																			//format to array
+$selected_ip_fields = pf_explode(";", $selected_ip_fields);																			//format to array
 $selected_ip_fields_size = in_array('state', $selected_ip_fields) ? (sizeof($selected_ip_fields)-1) : sizeof($selected_ip_fields);	//set size of selected fields
 if($selected_ip_fields_size==1 && is_blank($selected_ip_fields[0])) { $selected_ip_fields_size = 0; }								//fix for 0
 
 
 # set ping statuses
-$statuses = explode(";", $settings->pingStatus);
+$statuses = pf_explode(";", $settings->pingStatus);
 
 # checks
 if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesnt exist

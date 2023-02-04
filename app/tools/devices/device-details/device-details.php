@@ -109,7 +109,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print "	<th>". _('Sections').':</th>';
     	print "	<td>";
     	if(!is_blank($device['hostname'])) {
-    		$section_ids = explode(";", $device['sections']);
+    		$section_ids = pf_explode(";", $device['sections']);
     		foreach($section_ids as $k=>$id) {
     			$section = $Sections->fetch_section(null, $id);
     			$section_print[$k]  = "&middot; ".$section->name;

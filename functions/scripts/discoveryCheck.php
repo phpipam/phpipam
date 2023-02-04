@@ -49,7 +49,7 @@ if ($Scan->icmp_type == "none") {
 }
 
 // set ping statuses
-$statuses = explode(";", $Scan->settings->pingStatus);
+$statuses = pf_explode(";", $Scan->settings->pingStatus);
 // set mail override flag
 if (!isset($config['discovery_check_send_mail'])) {
     $config['discovery_check_send_mail'] = true;

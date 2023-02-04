@@ -93,7 +93,7 @@ $widgets = $Tools->fetch_widgets ($User->is_admin(false), false);
 $widgets = (array) $widgets;
 
 # show user-selected widgets
-$uwidgets = array_filter(explode(";",$User->user->widgets));
+$uwidgets = array_filter(pf_explode(";",$User->user->widgets));
 
 # if user has no groups and is not admin print warning
 if ($User->is_admin(false)!==true && (is_blank($User->user->groups) || $User->user->groups==="null") ) {

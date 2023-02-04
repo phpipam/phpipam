@@ -41,7 +41,7 @@ if (sizeof($all_subnet_hosts)>0) {
     if ($devices_used !== false) {
         foreach ($devices_used as $d) {
             // get possible sections
-            $permitted_sections = explode(";", $d->sections);
+            $permitted_sections = pf_explode(";", $d->sections);
             // check
             if (in_array($subnet->sectionId, $permitted_sections)) {
                 $permitted_devices[] = $d;

@@ -158,7 +158,7 @@ if (!is_blank(strstr($address['ip_addr'],"-"))) {
 	$address['ip_addr'] = str_replace(" ", "", $address['ip_addr']);
 
 	# get start and stop of range
-	$range		 = explode("-", $address['ip_addr']);
+	$range		 = pf_explode("-", $address['ip_addr']);
 	$address['start'] = $range[0];
 	$address['stop']  = $range[1];
 

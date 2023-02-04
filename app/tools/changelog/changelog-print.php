@@ -81,7 +81,7 @@ else {
 			# format diff
     		$changelog = str_replace("\r\n", "<br>",$l['cdiff']);
     		$changelog = str_replace("\n", "<br>",$changelog);
-    		$changelog = array_filter(explode("<br>", $changelog));
+    		$changelog = array_filter(pf_explode("<br>", $changelog));
 
             $diff = array();
 
@@ -102,8 +102,8 @@ else {
         		}
 
         		// field
-        		$field = explode(":", $c);
-        	    $value = isset($field[1]) ? explode("=>", $field[1]) : [null];
+        		$field = pf_explode(":", $c);
+        	    $value = isset($field[1]) ? pf_explode("=>", $field[1]) : [null];
 
         	    $field = trim(str_replace(array("[","]"), "", $field[0]));
         	    if(is_array(@$Log->changelog_keys[$type])) {

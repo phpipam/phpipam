@@ -121,7 +121,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
 		# select sections
 		$sections = $Sections->fetch_all_sections();
 		# reformat domains sections to array
-		$vrf_sections = explode(";", @$vrf['sections']);
+		$vrf_sections = pf_explode(";", @$vrf['sections']);
 		$vrf_sections = is_array($vrf_sections) ? $vrf_sections : array();
 		// loop
 		if($sections!==false) {

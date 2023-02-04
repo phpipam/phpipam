@@ -1067,7 +1067,7 @@ class FirewallZones extends Common_functions {
 					}
 					break;
 				case 'patternHost':
-						$hostName = explode('.', $dnsName);
+						$hostName = pf_explode('.', $dnsName);
 						$firewallAddressObject = $firewallAddressObject.$hostName[0];
 					break;
 				case 'patternFQDN':
@@ -1122,7 +1122,7 @@ class FirewallZones extends Common_functions {
 					}
 					break;
 				case 'patternHost':
-						$hostName = explode('.', $dnsName);
+						$hostName = pf_explode('.', $dnsName);
 						$firewallAddressObject = $firewallAddressObject.$hostName[0];
 					break;
 				case 'patternFQDN':
@@ -1200,7 +1200,7 @@ class FirewallZones extends Common_functions {
 						}
 						break;
 					case 'patternHost':
-							$hostName = explode('.', $ipaddress->hostname);
+							$hostName = pf_explode('.', $ipaddress->hostname);
 							$firewallAddressObject = $firewallAddressObject.$hostName[0];
 						break;
 					case 'patternFQDN':

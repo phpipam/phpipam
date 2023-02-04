@@ -495,7 +495,7 @@ class Prefix_controller extends Common_api_functions {
         if($available===false)          { $this->Response->throw_exception(404, "No subnets found"); }
         else {
             // parse avilable
-    		$subnet_tmp = explode("/", $available);
+    		$subnet_tmp = pf_explode("/", $available);
             // set params
     		$this->_params->subnet          = $subnet_tmp[0];
     		$this->_params->mask            = $subnet_tmp[1];

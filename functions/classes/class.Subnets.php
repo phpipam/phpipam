@@ -115,7 +115,7 @@ class Subnets extends Common_functions {
 	 */
 	private function get_subnet_order () {
 	    $this->get_settings ();
-	    return explode(",", $this->settings->subnetOrdering);
+	    return pf_explode(",", $this->settings->subnetOrdering);
 	}
 
 
@@ -530,7 +530,7 @@ class Subnets extends Common_functions {
 
 		# section ordering - overrides network
 		$section  = $this->fetch_object ("sections", "id", $sectionId);
-		if(@$section->subnetOrdering!="default" && !is_blank(@$section->subnetOrdering) ) 	{ $order = explode(',', $section->subnetOrdering); }
+		if(@$section->subnetOrdering!="default" && !is_blank(@$section->subnetOrdering) ) 	{ $order = pf_explode(',', $section->subnetOrdering); }
 
 		// subnet fix
 		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
@@ -718,7 +718,7 @@ class Subnets extends Common_functions {
 
 		$result_fields = $this->Database->escape_result_fields($result_fields);
 
-		list($cidr, $cidr_mask) = explode('/', $cidr);
+		list($cidr, $cidr_mask) = pf_explode('/', $cidr);
 		$cidr_decimal = $this->transform_to_decimal($cidr);
 		$cidr_network = $this->decimal_network_address($cidr_decimal, $cidr_mask);
 		$cidr_broadcast = $this->decimal_broadcast_address($cidr_decimal, $cidr_mask);
@@ -836,7 +836,7 @@ class Subnets extends Common_functions {
 
 		# section ordering - overrides network
 		$section  = $this->fetch_object ("sections", "id", $sectionId);
-		if(@$section->subnetOrdering!="default" && !is_blank(@$section->subnetOrdering) ) 	{ $order = explode(',', $section->subnetOrdering); }
+		if(@$section->subnetOrdering!="default" && !is_blank(@$section->subnetOrdering) ) 	{ $order = pf_explode(',', $section->subnetOrdering); }
 
 		// subnet fix
 		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
@@ -928,7 +928,7 @@ class Subnets extends Common_functions {
 
 		# section ordering - overrides network
 		$section  = $this->fetch_object ("sections", "id", $sectionId);
-		if(@$section->subnetOrdering!="default" && !is_blank(@$section->subnetOrdering) ) 	{ $order = explode(',', $section->subnetOrdering); }
+		if(@$section->subnetOrdering!="default" && !is_blank(@$section->subnetOrdering) ) 	{ $order = pf_explode(',', $section->subnetOrdering); }
 
 		// subnet fix
 		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
@@ -1057,7 +1057,7 @@ class Subnets extends Common_functions {
 			$out[$mask]->wildcard = long2ip(~ip2long($net->netmask));	   //0.0.255.255
 
 			// binary
-			$parts = explode(".", $net->netmask);
+			$parts = pf_explode(".", $net->netmask);
 			foreach($parts as $k=>$p) { $parts[$k] = str_pad(decbin($p),8, 0); }
 			$out[$mask]->binary = implode(".", $parts);
 		}
@@ -1092,7 +1092,7 @@ class Subnets extends Common_functions {
 			$out[$mask]->wildcard = long2ip(~ip2long($net->netmask));	   //0.0.255.255
 
 			// binary
-			$parts = explode(".", $net->netmask);
+			$parts = pf_explode(".", $net->netmask);
 			foreach($parts as $k=>$p) { $parts[$k] = str_pad(decbin($p),8, 0); }
 			$out[$mask]->binary = implode(".", $parts);
 		}
@@ -1276,7 +1276,7 @@ class Subnets extends Common_functions {
     	if (!is_numeric($sectionId))                        { return false; }
     	if ($this->verify_cidr_address ($cidr) !== true)    { return false; }
     	// set subnet / mask
-    	$tmp = explode("/", $cidr);
+    	$tmp = pf_explode("/", $cidr);
     	// search
 		try { $subnet = $this->Database->getObjectQuery("select * from `subnets` where `subnet`=? and `mask`=? and `sectionId`=?;", $values = array($this->transform_address($tmp[0],"decimal"), $tmp[1], $sectionId)); }
 		catch (Exception $e) {
@@ -2044,7 +2044,7 @@ class Subnets extends Common_functions {
         else {
             $subnet = $this->Net_IPv6->getNetmask($cidr);			//validate subnet
             $subnet = $this->Net_IPv6->compress($subnet);			//get subnet part
-            $subnetParse = explode("/", $cidr);
+            $subnetParse = pf_explode("/", $cidr);
             # Compress entered IPv4/IPv6 address
             $subnetParse[0] = inet_ntop(inet_pton($subnetParse[0]));
             # validate that subnet is subnet
@@ -2061,7 +2061,7 @@ class Subnets extends Common_functions {
 	 * @return string
 	 */
 	public function verify_cidr ($cidr) {
-		$cidr =  explode("/", $cidr);
+		$cidr =  pf_explode("/", $cidr);
 		# verify network part
 	    if(is_blank($cidr[0]) || is_blank($cidr[1])) 				{ return _("Invalid CIDR format!"); }
 	    # verify network part
@@ -2301,8 +2301,8 @@ class Subnets extends Common_functions {
 	public function verify_overlapping ($cidr1, $cidr2, $check_if_nested = false) {
 		if (empty($cidr1) || empty($cidr2)) return false;
 
-		$c1 = explode('/', $cidr1);
-		$c2 = explode('/', $cidr2);
+		$c1 = pf_explode('/', $cidr1);
+		$c2 = pf_explode('/', $cidr2);
 
 		if (filter_var($c1[0], FILTER_VALIDATE_IP)===false) return false;
 		if (filter_var($c2[0], FILTER_VALIDATE_IP)===false) return false;
@@ -2814,7 +2814,7 @@ class Subnets extends Common_functions {
     	// ipv4
     	if ($this->identify_address ($address)=="IPv4") {
         	// to array
-        	$mac_tmp = explode(".", $address);
+        	$mac_tmp = pf_explode(".", $address);
         	// check 3rd octet
         	if ($mac_tmp[1]>=128) { $mac_tmp[1]=$mac_tmp[1]-128; }
         	// create mac
@@ -2826,7 +2826,7 @@ class Subnets extends Common_functions {
             	//expand
             	$expanded = $this->Net_IPv6->uncompress($address);
             	// to array
-                $mac_tmp = explode(":", $expanded);
+                $mac_tmp = pf_explode(":", $expanded);
             	$mac = strtolower("33:33:".str_pad(dechex($mac_tmp[4]),2,"0",STR_PAD_LEFT).":".str_pad(dechex($mac_tmp[5]),2,"0",STR_PAD_LEFT).":".str_pad(dechex($mac_tmp[6]),2,"0",STR_PAD_LEFT).":".str_pad(dechex($mac_tmp[7]),2,"0",STR_PAD_LEFT));
         	}
         	else {
@@ -2931,7 +2931,7 @@ class Subnets extends Common_functions {
 	public function validate_multicast_mac ($mac, $sectionId, $vlanId, $unique_required="vlan", $address_id = 0) {
     	// first put it to common format (1)
     	$mac = $this->reformat_mac_address ($mac);
-    	$mac_delimited =  explode(":", $mac);
+    	$mac_delimited =  pf_explode(":", $mac);
     	// we permit empty
         if (is_blank($mac)) {
             return true;
@@ -3524,7 +3524,7 @@ class Subnets extends Common_functions {
 		// set subnet allocations
 		$this->define_ripe_arin_subnets ();
 		// take only first bit of ip address to match /8 delegations
-		$subnet_check = reset(explode(".", $subnet));
+		$subnet_check = reset(pf_explode(".", $subnet));
 		// ripe or arin?
 		if (in_array($subnet_check, $this->ripe))		{ return $this->query_ripe ($subnet); }
 		elseif (in_array($subnet_check, $this->arin))	{ return $this->query_arin ($subnet); }
@@ -3577,7 +3577,7 @@ class Subnets extends Common_functions {
 	 */
 	private function query_arin ($subnet) {
 		// remove netmask
-		$subnet_arr = explode("/", $subnet);
+		$subnet_arr = pf_explode("/", $subnet);
 		$subnet = reset($subnet_arr);
 		// fetch
 		$arin_result = $this->ripe_arin_fetch ("arin", null, $subnet);
@@ -3668,7 +3668,7 @@ class Subnets extends Common_functions {
 		    while (!feof($ripe_connection)) { $out .= fgets($ripe_connection); }
 
 		    //parse it
-		    $out = explode("\n", $out);
+		    $out = pf_explode("\n", $out);
 
 		    //we only need route
 		    foreach($out as $line) {
@@ -3677,7 +3677,7 @@ class Subnets extends Common_functions {
 					//replace route6 with route
 					$line = str_replace("route6:", "route:", $line);
 					//only take IP address
-					$line = explode("route:", $line);
+					$line = pf_explode("route:", $line);
 					$line = trim($line[1]);
 					//set result
 					$subnet[] = $line;

@@ -79,7 +79,7 @@ else {
         		$changelog = str_replace("\r\n", "<br>",$l['cdiff']);
         		$changelog = str_replace("\n", "<br>",$changelog);
         		$changelog = htmlentities($changelog);
-        		$changelog = array_filter(explode("<br>", $changelog));
+        		$changelog = array_filter(pf_explode("<br>", $changelog));
 
                 $diff = array();
 
@@ -100,8 +100,8 @@ else {
             		}
 
             		// field
-            		$field = explode(":", $c);
-            	    $value = explode("=>", html_entity_decode($field[1]));
+            		$field = pf_explode(":", $c);
+            	    $value = pf_explode("=>", html_entity_decode($field[1]));
 
             	    $field = trim(str_replace(array("[","]"), "", $field[0]));
             	    if(is_array(@$Log->changelog_keys[$type])) {

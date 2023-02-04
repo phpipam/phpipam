@@ -767,7 +767,7 @@ class phpipamSNMP extends Common_functions {
         foreach ($res1 as $k=>$r) {
             // set number
             $k = str_replace($this->snmp_oids['CISCO-VTP-MIB::vtpVlanName'].'.1.', "", $k);
-            $k = array_pop(explode(".", $k));
+            $k = array_pop(pf_explode(".", $k));
             // set value
             $r  = trim(str_replace("\"","",substr($r, strpos($r, ":")+2)));
             $res[$k] = $r;
@@ -790,7 +790,7 @@ class phpipamSNMP extends Common_functions {
         // the first octet is the string length, and subsequent octets are
         // the ASCII codes of each character.
         // For example, “vpn1” is represented as 4.118.112.110.49.
-        $a = array_values(array_filter(explode('.', $oid)));
+        $a = array_values(array_filter(pf_explode('.', $oid)));
         if (($a[0]+1) != sizeof($a))
             return $oid;
 

@@ -41,7 +41,7 @@ if (sizeof($all_subnet_hosts)>0) {
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);
+$selected_ip_fields = pf_explode(";", $selected_ip_fields);
 
 # fetch devices that use get_routing_table query
 $devices_used_arp = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_arp_table%", "id", true, true);
@@ -51,7 +51,7 @@ $devices_used_mac = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "
 if ($devices_used_arp !== false) {
     foreach ($devices_used_arp as $d) {
         // get possible sections
-        $permitted_sections = explode(";", $d->sections);
+        $permitted_sections = pf_explode(";", $d->sections);
         // check
         if (in_array($subnet->sectionId, $permitted_sections)) {
             $permitted_devices_arp[] = $d;
@@ -62,7 +62,7 @@ if ($devices_used_arp !== false) {
 if ($devices_used_mac !== false) {
     foreach ($devices_used_mac as $d) {
         // get possible sections
-        $permitted_sections = explode(";", $d->sections);
+        $permitted_sections = pf_explode(";", $d->sections);
         // check
         if (in_array($subnet->sectionId, $permitted_sections)) {
             $permitted_devices_mac[] = $d;

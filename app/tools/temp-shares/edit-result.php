@@ -26,7 +26,7 @@ if($_POST['validity']<date("Y-m-d H:i:s"))							{ $Result->show("danger", _("In
 if($_POST['validity']>date("Y-m-d H:i:s", strtotime("+ 7 days")))	{ $Result->show("danger", _("1 week is max validity time"), true); }
 # verify each recipient
 if(!is_blank($_POST['email'])) {
-	foreach (explode(",", $_POST['email']) as $rec) {
+	foreach (pf_explode(",", $_POST['email']) as $rec) {
 		if(!filter_var(trim($rec), FILTER_VALIDATE_EMAIL)) 			{ $Result->show("danger", _("Invalid email address")." - ".escape_input($rec), true); }
 	}
 }
@@ -106,7 +106,7 @@ if(!is_blank($_POST['email'])) {
 		$content_plain 	= implode("\r\n",$content_plain);
 
 		$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
-		foreach(explode(",", $_POST['email']) as $r) {
+		foreach(pf_explode(",", $_POST['email']) as $r) {
 		$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r)));
 		}
 		$phpipam_mail->Php_mailer->Subject = "New ipam share created";

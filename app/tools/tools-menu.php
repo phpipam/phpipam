@@ -24,7 +24,7 @@ foreach($tools_menu as $k=>$tool) {
 		# print
 		print "<li class='list-group-item $active'>";
 		# multiple hrefs ?
-		$href = explode("/", $t['href']);
+		$href = pf_explode("/", $t['href']);
 		if(sizeof($href)>0) {
 			if(isset($href[1]))
 			print "<a href='".create_link("tools", $href[0], $href[1])."'><i class='fa fa-angle-right pull-right icon-gray'></i>".$t['name']."</a>";

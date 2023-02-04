@@ -35,7 +35,7 @@ $selected_ip_fields_size = in_array('state', $selected_ip_fields) ? sizeof($sele
 if($selected_ip_fields_size==1 && is_blank($selected_ip_fields[0])) { $selected_ip_fields_size = 0; }								//fix for 0
 
 # set ping statuses for warning and offline
-$statuses = explode(";", $User->settings->pingStatus);
+$statuses = pf_explode(";", $User->settings->pingStatus);
 ?>
 
 <!-- table -->

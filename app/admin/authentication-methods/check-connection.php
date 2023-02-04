@@ -29,7 +29,7 @@ if($auth_settings->type=="AD" || $auth_settings->type=="LDAP" || $auth_settings-
 	# adLDAP function
 	include (dirname(__FILE__) . "/../../../functions/adLDAP/src/adLDAP.php");
 	# set controllers
-	$controllers = explode(";", str_replace(" ", "", $parameters->domain_controllers));
+	$controllers = pf_explode(";", str_replace(" ", "", $parameters->domain_controllers));
 
 	//open connection
 	try {

@@ -59,7 +59,7 @@ $z = 0;			//addresses array index
 /*
 test
 */
-$ports = explode(";", $argv[2]);
+$ports = pf_explode(";", $argv[2]);
 
 $out = array();
 

@@ -25,3 +25,17 @@ function pf_json_decode($json, $associative = null, $depth = 512, $flags = 0)
 
     return json_decode($json, $associative, $depth, $flags);
 }
+
+/**
+ * Split a string by a string
+ *
+ * @param string $separator
+ * @param string $string
+ * @return string[]|false
+ */
+function pf_explode($separator, $string) {
+    if (is_blank($string))
+        return [''];
+
+    return explode($separator, $string);
+}

@@ -71,7 +71,7 @@ $custom_customer_fields  = $_REQUEST['customers']=="on" ? $Tools->fetch_custom_f
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);
+$selected_ip_fields = pf_explode(";", $selected_ip_fields);
 
 # set col size
 $fieldSize 	= sizeof($selected_ip_fields);

@@ -27,7 +27,7 @@ if($_POST['ipampassword1']==$_POST['oldpassword']) { $Result->show("danger", _("
 
 # Enforce password policy
 $policy = (pf_json_decode($User->settings->passwordPolicy, true));
-$Password_check->set_requirements($policy, explode(",",$policy['allowedSymbols']));
+$Password_check->set_requirements($policy, pf_explode(",",$policy['allowedSymbols']));
 if (!$Password_check->validate ($_POST['ipampassword1'])) { $Result->show("danger alert-danger ", _('Password validation errors').":<br> - ".implode("<br> - ", $Password_check->get_errors ()), true); }
 
 if($_POST['ipampassword1']!=$_POST['ipampassword2']) { $Result->show("danger", _("New passwords do not match"), true); }

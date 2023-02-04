@@ -150,7 +150,7 @@ class DNS extends Common_functions {
 				}
 				else {
 					// to array
-					$nsarray = explode(";", $nameservers->namesrv1);
+					$nsarray = pf_explode(";", $nameservers->namesrv1);
 					// check against dead NSes
 					foreach ($nsarray as $k=>$nsserv) {
 						trim($nsserv);

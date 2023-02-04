@@ -48,7 +48,7 @@ if((!is_blank(@$_POST['password1']) || (@$_POST['action']=="add") && $auth_metho
 
 	//enforce password policy
 	$policy = (pf_json_decode($User->settings->passwordPolicy, true));
-	$Password_check->set_requirements  ($policy, explode(",",$policy['allowedSymbols']));
+	$Password_check->set_requirements  ($policy, pf_explode(",",$policy['allowedSymbols']));
 	if (!$Password_check->validate ($_POST['password1'])) 				{ $Result->show("danger alert-danger ", _('Password validation errors').":<br> - ".implode("<br> - ", $Password_check->get_errors ()), true); }
 
 	//hash passowrd

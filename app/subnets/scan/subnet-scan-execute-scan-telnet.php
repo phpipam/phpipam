@@ -11,7 +11,7 @@ require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 if(empty($_POST['port'])) 	  { $Result->show("danger", _('Please enter ports to scan').'!', true); }
 
 //verify ports
-$pcheck = explode(";", str_replace(",",";",$_POST['port']));
+$pcheck = pf_explode(";", str_replace(",",";",$_POST['port']));
 foreach($pcheck as $p) {
 	if(!is_numeric($p)) {
 		$Result->show("danger", _("Invalid port").' ('.escape_input($p).')', true);

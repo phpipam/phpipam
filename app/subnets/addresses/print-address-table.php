@@ -118,7 +118,7 @@ if(sizeof($custom_fields) > 0) {
 }
 
 # set ping statuses for warning and offline
-$statuses = explode(";", $User->settings->pingStatus);
+$statuses = pf_explode(";", $User->settings->pingStatus);
 
 # Set $zone
 if(in_array('firewallAddressObject', $selected_ip_fields)) {

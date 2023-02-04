@@ -179,7 +179,7 @@ class Install extends Common_functions {
 		}
 
 	    # formulate queries
-	    $queries = array_filter(explode(";\n", $query));
+	    $queries = array_filter(pf_explode(";\n", $query));
 
 	    # append version
 		$queries[] = "UPDATE `settings` SET `version` = '".VERSION."'";

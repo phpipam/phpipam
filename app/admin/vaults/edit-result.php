@@ -46,7 +46,7 @@ if($_POST['action']=="add") {
 
 	//enforce password policy
 	$policy = (pf_json_decode($User->settings->passwordPolicy, true));
-	$Password_check->set_requirements  ($policy, explode(",",$policy['allowedSymbols']));
+	$Password_check->set_requirements  ($policy, pf_explode(",",$policy['allowedSymbols']));
 	if (!$Password_check->validate ($_POST['secret'])) 				{ $Result->show("danger alert-danger ", _('Secret validation errors').":<br> - ".implode("<br> - ", $Password_check->get_errors ()), true); }
 }
 

@@ -97,7 +97,7 @@ print "	<td>";
 	# format diff
 	$changelog = str_replace("\r\n", "<br>",$clog->cdiff);
 	$changelog = str_replace("\n", "<br>",$changelog);
-	$changelog = array_filter(explode("<br>", $changelog));
+	$changelog = array_filter(pf_explode("<br>", $changelog));
 
 	# set type
 	if($clog->ctype=="ip_addr") 	 { $type = "address"; }
@@ -109,8 +109,8 @@ print "	<td>";
 
 	foreach ($changelog as $c) {
 		// field
-		$field = explode(": ", $c);
-	    $value = explode("=>", @$field[1]);
+		$field = pf_explode(": ", $c);
+	    $value = pf_explode("=>", @$field[1]);
 
 	    $field_name = trim(str_replace(array("[","]"), "", $field[0]));
 

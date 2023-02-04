@@ -83,7 +83,7 @@ if (!is_blank($_POST['gmembers'])) {
 	// save id
 	$gid = $Admin->lastId;
 	// to array
-	$gmembers = explode(";", $_POST['gmembers']);
+	$gmembers = pf_explode(";", $_POST['gmembers']);
 	// check
 	foreach ($gmembers as $gm) {
 		// check if user exists

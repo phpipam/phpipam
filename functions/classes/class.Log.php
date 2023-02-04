@@ -1819,13 +1819,13 @@ class Logging extends Common_functions {
 		$content[] = "<td>";
 		// add changelog
 		$changelog = str_replace("\r\n", "<br>",$changelog);
-		$changelog = array_filter(explode("<br>", $changelog));
+		$changelog = array_filter(pf_explode("<br>", $changelog));
 		$content[] = "<table>";
 
 		foreach ($changelog as $c) {
     		// field
-    		$field = explode(":", $c);
-    	    $value = explode("=>", $field[1]);
+    		$field = pf_explode(":", $c);
+    	    $value = pf_explode("=>", $field[1]);
 
     	    // format field
     	    $field = trim(str_replace(array("[","]"), "", $field[0]));

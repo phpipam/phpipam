@@ -225,7 +225,7 @@ foreach ($old_data as $table => $table_content) {
 			}
 			// sections
 			if(strlen($value_obj->sections)>1) {
-				$sections     = explode(";", $value_obj->sections);
+				$sections     = pf_explode(";", $value_obj->sections);
 				$sections_new = array();
 				foreach ($sections as $k=>$v) {
 					$sections_new[$highest_ids_append["sections"] + $k] = $v;
@@ -271,7 +271,7 @@ foreach ($old_data as $table => $table_content) {
 				}
 				// favourite subnets
 				if(!is_blank($value_obj->favourite_subnets)) {
-					$fs_tmp = explode(";", $value_obj->favourite_subnets);
+					$fs_tmp = pf_explode(";", $value_obj->favourite_subnets);
 					$fs_new = array();
 					foreach ($fs_tmp as $gid) {
 						$fs_new[] = $gid+$highest_ids_append["subnets"];
@@ -299,7 +299,7 @@ foreach ($old_data as $table => $table_content) {
 			$new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
 			// permissions
 			if(!is_blank($value_obj->permissions)) {
-				$fs_tmp = explode(";", $value_obj->permissions);
+				$fs_tmp = pf_explode(";", $value_obj->permissions);
 				$fs_new = array();
 				foreach ($fs_tmp as $gid) {
 					$fs_new[] = $gid+$highest_ids_append["sections"];
@@ -315,7 +315,7 @@ foreach ($old_data as $table => $table_content) {
 			$new_data[$table][$lk]->vrfId = $highest_ids_append[$table] + $value_obj->vrfId;
 			// sections
 			if(!is_blank($value_obj->sections)) {
-				$fs_tmp = explode(";", $value_obj->sections);
+				$fs_tmp = pf_explode(";", $value_obj->sections);
 				$fs_new = array();
 				foreach ($fs_tmp as $gid) {
 					$fs_new[] = $gid+$highest_ids_append["sections"];
@@ -331,7 +331,7 @@ foreach ($old_data as $table => $table_content) {
 			$new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
 			// permissions
 			if(!is_blank($value_obj->permissions)) {
-				$fs_tmp = explode(";", $value_obj->permissions);
+				$fs_tmp = pf_explode(";", $value_obj->permissions);
 				$fs_new = array();
 				foreach ($fs_tmp as $gid) {
 					$fs_new[] = $gid+$highest_ids_append["sections"];

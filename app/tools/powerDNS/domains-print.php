@@ -123,7 +123,7 @@ foreach ($domains as $d) {
     $cnt = $PowerDNS->count_domain_records($d->id);
     // get SOA record
     $soa = $PowerDNS->fetch_domain_records_by_type($d->id, "SOA");
-    $serial = explode(" ", $soa[0]->content);
+    $serial = pf_explode(" ", $soa[0]->content);
     $serial = $serial[2];
 
     print "<tr>";

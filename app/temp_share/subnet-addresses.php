@@ -19,7 +19,7 @@ $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ip
 
 # set selected address fields array
 $selected_ip_fields = $settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);																			//format to array
+$selected_ip_fields = pf_explode(";", $selected_ip_fields);																			//format to array
 $selected_ip_fields_size = in_array('state', $selected_ip_fields) ? (sizeof($selected_ip_fields)-1) : sizeof($selected_ip_fields);	//set size of selected fields
 if($selected_ip_fields_size==1 && is_blank($selected_ip_fields[0])) { $selected_ip_fields_size = 0; }								//fix for 0
 
@@ -61,7 +61,7 @@ foreach($custom_fields as $field) {
 # set page limit for pagination
 $page_limit = 100000000;
 # set ping statuses for warning and offline
-$statuses = explode(";", $settings->pingStatus);
+$statuses = pf_explode(";", $settings->pingStatus);
 ?>
 
 <!-- print title and pagenum -->
