@@ -150,12 +150,22 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 }
 
 /**
+ * Do we have data with length >1
+ *
+ * @param mixed $data
+ * @return boolean
+ */
+function is_blank($data) {
+	return (!isset($data) || strlen($data)==0) ? true : false;
+}
+
+/**
  * Escape HTML and quotes in user provided input
  * @param  mixed $data
  * @return string
  */
 function escape_input($data) {
-	if (!isset($data) || strlen($data)==0)
+	if (is_blank($data))
 		return '';
 	$safe_data = htmlentities($data, ENT_QUOTES);
 	return is_string($safe_data) ? $safe_data : '';
@@ -279,3 +289,6 @@ function setcookie_samesite($name, $value, $lifetime, $httponly=false) {
 
 	header("Set-Cookie: $name=$value; expires=$expire_date; Max-Age=$lifetime; path=/; SameSite=$samesite;".$secure.$httponly);
 }
+
+// Include backwards compatibility wrapper functions.
+require_once('php_poly_fill.php');
