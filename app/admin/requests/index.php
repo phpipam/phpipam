@@ -11,7 +11,7 @@ $User->check_user_session();
 $active_requests   = $Tools->fetch_multiple_objects ("requests", "processed", 0, "id", false);
 $inactive_requests = $Tools->fetch_multiple_objects ("requests", "processed", 1, "id", false);
 # set hidden custom fields
-$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_cfields = pf_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_cfields = is_array($hidden_cfields['requests']) ? $hidden_cfields['requests'] : array();
 ?>
 
@@ -37,7 +37,7 @@ else {
 	<th><?php print _('Comment'); ?></th>
 	<!-- Custom fields -->
 	<?php
-	$custom_fields = $Tools->fetch_custom_fields('requests');	
+	$custom_fields = $Tools->fetch_custom_fields('requests');
 	# hidden custom
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $ck=>$myField) 	{

@@ -23,7 +23,7 @@ $_GET = $User->strip_input_tags ($_GET);
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('customers');
 # get hidden fields */
-$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['customers'] : array();
 
 $colspanCustom = 0;

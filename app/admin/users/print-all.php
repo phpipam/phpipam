@@ -13,7 +13,7 @@ $users = $Admin->fetch_all_objects("users", "username");
 $custom = $Tools->fetch_custom_fields('users');
 
 /* check customfields */
-$ffields = json_decode($User->settings->hiddenCustomFields, true);
+$ffields = pf_json_decode($User->settings->hiddenCustomFields, true);
 $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 ?>
 
@@ -107,7 +107,7 @@ foreach ($users as $user) {
 	print '	<td>'._('All groups').'</td>'. "\n";
 	}
 	else {
-		$groups = json_decode($user['groups'], true);
+		$groups = pf_json_decode($user['groups'], true);
 		$gr = $Admin->groups_parse($groups);
 
 		print '	<td>';

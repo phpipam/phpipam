@@ -587,8 +587,8 @@ class Addresses extends Common_functions {
 			# loop
 			foreach ($all_nats as $nat) {
 			    # remove item from nat
-			    $s = json_decode($nat->src, true);
-			    $d = json_decode($nat->dst, true);
+			    $s = pf_json_decode($nat->src, true);
+			    $d = pf_json_decode($nat->dst, true);
 
 			    if(is_array($s['ipaddresses']))
 			    $s['ipaddresses'] = array_diff($s['ipaddresses'], array($obj_id));
@@ -976,7 +976,7 @@ class Addresses extends Common_functions {
 	 */
 	public function ptr_add ($address, $print_error = true, $id = null) {
 		// decode values
-		$values = json_decode($this->settings->powerDNS);
+		$values = pf_json_decode($this->settings->powerDNS);
 
     	// set default hostname for PTR if set
     	if (strlen($address->hostname)==0) {
@@ -1706,7 +1706,7 @@ class Addresses extends Common_functions {
 	public function check_permission ($user, $subnetId) {
 
 		# get all user groups
-		$groups = json_decode($user->groups);
+		$groups = pf_json_decode($user->groups);
 
 		# if user is admin then return 3, otherwise check
 		if($user->role == "Administrator")	{ return 3; }
@@ -1714,12 +1714,12 @@ class Addresses extends Common_functions {
     	$this->initialize_subnets_object();
         $subnet = $this->Subnets->fetch_subnet("id", $subnetId);
 		# set subnet permissions
-		$subnetP = json_decode($subnet->permissions);
+		$subnetP = pf_json_decode($subnet->permissions);
 
 		# set section permissions
 		$Sections = new Sections ($this->Database);
 		$section = $Sections->fetch_section ("id", $subnet->sectionId);
-		$sectionP = json_decode($section->permissions);
+		$sectionP = pf_json_decode($section->permissions);
 
 		# default permission
 		$out = 0;
@@ -1936,7 +1936,7 @@ class Addresses extends Common_functions {
      */
     public function translate_nat_objects_for_popup ($json_objects, $nat_id = false, $admin = false, $object_type = false, $object_id=false) {
         // to array "subnets"=>array(1,2,3)
-        $objects = json_decode($json_objects, true);
+        $objects = pf_json_decode($json_objects, true);
         // init out array
         $out = array();
         // check

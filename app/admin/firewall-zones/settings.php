@@ -49,7 +49,7 @@ $Database = new Database_PDO;
 $Tools = new Tools($Database);
 
 # fetch module settings
-$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings,true);
 
 # check if subnetPatternValues are already available, if not set them
 if (!$firewallZoneSettings['subnetPatternValues']) {

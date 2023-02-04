@@ -25,7 +25,7 @@ if($User->settings->tempShare!=1)									{ $Result->show("danger", _("Temporary
 if(strlen($_POST['code'])!=32) 										{ $Result->show("danger", _("Invalid code"), true); }
 
 # remove object
-$old_access = json_decode($User->settings->tempAccess, true);
+$old_access = pf_json_decode($User->settings->tempAccess, true);
 //check that it exists
 if(!isset($old_access[$_POST['code']]))								{ $Result->show("danger", _("Code does not exist"), true); }
 //remove

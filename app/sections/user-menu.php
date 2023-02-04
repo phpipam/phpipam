@@ -14,7 +14,7 @@ $User->check_user_session();
 
 // set parameters form cookie
 if (isset($_COOKIE['search_parameters'])) {
-    $params = json_decode($_COOKIE['search_parameters'], true);
+    $params = pf_json_decode($_COOKIE['search_parameters'], true);
     if($params) {
         foreach ($params as $k=>$p) {
             if ($p=="on") {

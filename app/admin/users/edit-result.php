@@ -47,7 +47,7 @@ if((strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add") && $auth_method
 	if(strlen($_POST['password1'])<8)									{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
 
 	//enforce password policy
-	$policy = (json_decode($User->settings->passwordPolicy, true));
+	$policy = (pf_json_decode($User->settings->passwordPolicy, true));
 	$Password_check->set_requirements  ($policy, explode(",",$policy['allowedSymbols']));
 	if (!$Password_check->validate ($_POST['password1'])) 				{ $Result->show("danger alert-danger ", _('Password validation errors').":<br> - ".implode("<br> - ", $Password_check->get_errors ()), true); }
 

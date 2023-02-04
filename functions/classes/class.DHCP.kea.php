@@ -241,7 +241,7 @@ class DHCP_kea extends Common_functions {
 		}
 
         // save config
-        $this->config = json_decode($config, true);
+        $this->config = pf_json_decode($config, true);
         // save IPv4 / IPv6 flags
         if(isset($this->config['Dhcp4']))   { $this->ipv4_used = true; }
         if(isset($this->config['Dhcp6']))   { $this->ipv6_used = true; }

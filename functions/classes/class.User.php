@@ -1111,7 +1111,7 @@ class User extends Common_functions {
      */
     private function auth_AD ($username, $password) {
         // parse settings for LDAP connection and store them to array
-        $authparams = json_decode($this->authmethodparams, true);
+        $authparams = pf_json_decode($this->authmethodparams, true);
         // authenticate
         $this->directory_authenticate($authparams, $username, $password);
     }
@@ -1127,7 +1127,7 @@ class User extends Common_functions {
      */
     private function auth_LDAP ($username, $password) {
         // parse settings for LDAP connection and store them to array
-        $authparams = json_decode($this->authmethodparams, true);
+        $authparams = pf_json_decode($this->authmethodparams, true);
         $this->ldap = true;                            //set ldap flag
 
         // set uid
@@ -1163,7 +1163,7 @@ class User extends Common_functions {
      */
     private function auth_radius ($username, $password) {
         # decode radius parameters
-        $params = json_decode($this->authmethodparams);
+        $params = pf_json_decode($this->authmethodparams);
 
         # check for socket support !
         if(!in_array("sockets", get_loaded_extensions())) {
@@ -1577,7 +1577,7 @@ class User extends Common_functions {
         if(is_object($cached_item)) return $cached_item->result;
 
         $groups = array();
-        foreach((array) json_decode($json, true) as $group_id => $perm) {
+        foreach((array) pf_json_decode($json, true) as $group_id => $perm) {
             $group_details = $this->groups_parse (array($group_id));
 
             $tmp = array();
@@ -1665,13 +1665,13 @@ class User extends Common_functions {
             if (!is_object($section)) continue;
 
             # Get Section permissions
-            $sectionP = json_decode($section->permissions, true);
+            $sectionP = pf_json_decode($section->permissions, true);
 
             # ok, user has section access, check also for any higher access from subnet
             if(!is_array($sectionP)) continue;
 
             # get all user groups
-            $groups = json_decode($this->user->groups, true);
+            $groups = pf_json_decode($this->user->groups, true);
 
             foreach($sectionP as $sk=>$sp) {
                 # check each group if user is in it and if so check for permissions for that group
@@ -1718,7 +1718,7 @@ class User extends Common_functions {
      */
     private function register_user_module_permissions () {
         // decode
-        $permissions = json_decode($this->user->module_permissions, true);
+        $permissions = pf_json_decode($this->user->module_permissions, true);
         // check for each module
         foreach ($this->get_modules_with_permissions() as $m) {
             if (!is_array($permissions)) {

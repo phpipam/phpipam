@@ -422,7 +422,7 @@ class Sections extends Common_functions {
 	 */
 	public function parse_section_permissions($permissions) {
 		# save to array
-		$permissions = json_decode($permissions, true);
+		$permissions = pf_json_decode($permissions, true);
 		# start Tools object
 		$Tools = new Tools ($this->Database);
 		if(sizeof($permissions)>0) {
@@ -450,14 +450,14 @@ class Sections extends Common_functions {
 	 */
 	public function check_permission ($user, $sectionid) {
 		# decode groups user belongs to
-		$groups = json_decode($user->groups, true);
+		$groups = pf_json_decode($user->groups, true);
 
 		# admins always has permission rwa
 		if($user->role == "Administrator")		{ return 3; }
 		else {
 			# fetch section details and check permissions
 			$section  = $this->fetch_section ("id", $sectionid);
-			$sectionP = json_decode($section->permissions, true);
+			$sectionP = pf_json_decode($section->permissions, true);
 
 			# default permission is no access
 			$out = 0;
@@ -498,7 +498,7 @@ class Sections extends Common_functions {
 		# loop through sections and check if group_id in permissions
         if ($sections !== false) {
     		foreach($sections as $section) {
-    			$p = json_decode($section->permissions, true);
+    			$p = pf_json_decode($section->permissions, true);
     			$p = is_array($p) ? $p : [];
     			if(sizeof($p)>0) {
     				if($name) {
@@ -546,7 +546,7 @@ class Sections extends Common_functions {
 		$custom = $Tools->fetch_custom_fields ("subnets");
 
 		# set hidden fields
-		$hidden_fields = json_decode($User->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
+		$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
 		$hidden_fields = is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 
 		# check permission

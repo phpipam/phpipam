@@ -33,8 +33,8 @@ if($nat->type=="static") {
     }
 
     // decode
-    $nat_src = json_decode($nat->src, true);
-    $nat_dst = json_decode($nat->dst, true);
+    $nat_src = pf_json_decode($nat->src, true);
+    $nat_dst = pf_json_decode($nat->dst, true);
 
     // validate all objects
     if(is_array(@$nat_src['ipaddresses'])) {
@@ -102,10 +102,10 @@ if(isset($_POST['object_type']) && isset($_POST['object_id'])) {
     if($item!==false) {
         // update
         if($nat_type=="src") {
-            $nat_array = json_decode($nat->src, true);
+            $nat_array = pf_json_decode($nat->src, true);
         }
         else {
-            $nat_array = json_decode($nat->dst, true);
+            $nat_array = pf_json_decode($nat->dst, true);
         }
 
         if(is_array($nat_array[$obj_type]))

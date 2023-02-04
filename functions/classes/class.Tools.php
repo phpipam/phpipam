@@ -1605,7 +1605,7 @@ class Tools extends Common_functions {
 		// if ok
 		if ($xml!==false) {
 			// encode to json
-			$json = json_decode(json_encode($xml));
+			$json = pf_json_decode(json_encode($xml));
 			// save all releases
 			$this->phpipam_releases = $json->entry;
 			// check for latest release
@@ -1918,7 +1918,7 @@ class Tools extends Common_functions {
      */
     public function translate_nat_objects_for_display ($json_objects, $nat_id = false, $admin = false, $object_type = false, $object_id=false) {
         // to array "subnets"=>array(1,2,3)
-        $objects = json_decode($json_objects, true);
+        $objects = pf_json_decode($json_objects, true);
         // init out array
         $out = array();
         // set ping statuses for warning and offline
@@ -2002,8 +2002,8 @@ class Tools extends Common_functions {
         if(is_array($all_nats)) {
             if (sizeof($all_nats)>0) {
                 foreach ($all_nats as $n) {
-                    $src = json_decode($n->src, true);
-                    $dst = json_decode($n->dst, true);
+                    $src = pf_json_decode($n->src, true);
+                    $dst = pf_json_decode($n->dst, true);
 
                     // src
                     if(is_array($src)) {
@@ -2328,7 +2328,7 @@ class Tools extends Common_functions {
 
 		# set hidden fields
 		$this->get_settings ();
-		$hidden_fields = json_decode($this->settings->hiddenCustomFields, true);
+		$hidden_fields = pf_json_decode($this->settings->hiddenCustomFields, true);
 		$hidden_fields = is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 
 		# set html array

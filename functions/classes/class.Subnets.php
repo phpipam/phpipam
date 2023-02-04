@@ -453,8 +453,8 @@ class Subnets extends Common_functions {
 			# loop
 			foreach ($all_nats as $nat) {
 			    # remove item from nat
-			    $s = json_decode($nat->src, true);
-			    $d = json_decode($nat->dst, true);
+			    $s = pf_json_decode($nat->src, true);
+			    $d = pf_json_decode($nat->dst, true);
 
 			    if(is_array($s['subnets']))
 			    $s['subnets'] = array_diff($s['subnets'], array($obj_id));
@@ -2998,15 +2998,15 @@ class Subnets extends Common_functions {
 		$cached_item = $this->cache_check('subnet_permissions', "p=$subnet->permissions s=$subnet->sectionId");
 		if(is_object($cached_item)) return $cached_item->result;
 
-		$subnetP = json_decode(@$subnet->permissions, true);
+		$subnetP = pf_json_decode(@$subnet->permissions, true);
 
 		# set section permissions
 		$Section = new Sections ($this->Database);
 		$section = $Section->fetch_section ("id", $subnet->sectionId);
-		$sectionP = json_decode($section->permissions, true);
+		$sectionP = pf_json_decode($section->permissions, true);
 
 		# get all user groups
-		$groups = json_decode($user->groups, true);
+		$groups = pf_json_decode($user->groups, true);
 
 		# default permission
 		$out = 0;
@@ -3062,7 +3062,7 @@ class Subnets extends Common_functions {
 			// loop
 			foreach ($subnets as $s) {
 				// to array
-				$s_old_perm = json_decode($s->permissions, true);
+				$s_old_perm = pf_json_decode($s->permissions, true);
 				// removed
 				if (is_array($removed_permissions)) {
 					foreach ($removed_permissions as $k=>$p) unset($s_old_perm[$k]);
@@ -3636,7 +3636,7 @@ class Subnets extends Common_functions {
 
 		$result = $this->curl_fetch_url($url, ["Accept: application/json"]);
 
-		$result['result'] = json_decode($result['result']);
+		$result['result'] = pf_json_decode($result['result']);
 
 		// result
 		return $result;

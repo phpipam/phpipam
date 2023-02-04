@@ -66,7 +66,7 @@ foreach($all_methods as $method) {
 			'secret',
 			'spx509key'
 		];
-		$params = json_decode($method->params);
+		$params = pf_json_decode($method->params);
 		foreach($params as $key=>$parameter) {
 			// mask secure keys
 			if(in_array($key, $secure_keys) && strlen($parameter)>0 ) { $parameter = "********"; }

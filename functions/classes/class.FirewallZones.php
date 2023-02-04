@@ -89,7 +89,7 @@ class FirewallZones extends Common_functions {
 	 * @return string
 	 */
 	public function zone2hex ($zone) {
-		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
 		if ($firewallZoneSettings['padding'] == 'on') {
 			return str_pad(dechex($zone),$firewallZoneSettings['zoneLength'],"0",STR_PAD_LEFT);
 		} else {
@@ -108,7 +108,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function generate_zone_name ($values = NULL) {
 		# get settings
-		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
 		# execute based on action
 		if($firewallZoneSettings['zoneGenerator'] == 0 || $firewallZoneSettings['zoneGenerator'] == 1 ) {
 			return $this->generate_numeric_zone_name ($firewallZoneSettings['zoneLength'],$firewallZoneSettings['zoneGenerator']);
@@ -173,7 +173,7 @@ class FirewallZones extends Common_functions {
 	 */
 	private function validate_text_zone_name ($values) {
 		# get settings
-		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
 
 		if($values[1]){
 			$query = 'SELECT zone FROM firewallZones WHERE zone = ? AND id NOT LIKE ?;';
@@ -774,7 +774,7 @@ class FirewallZones extends Common_functions {
 	 */
 	private function zone_add ($values,$network) {
 		# get the settings
-		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
 
 		# push the zone name length into the values array
 		$values['length'] = $firewallZoneSettings['zoneLength'];
@@ -898,7 +898,7 @@ class FirewallZones extends Common_functions {
 	 */
 	private function mapping_add ($values) {
 		# get the settings
-		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
 
 		# execute
 		try { $this->Database->insertObject("firewallZoneMapping", $values); }
@@ -967,7 +967,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function generate_subnet_object ($id) {
 		# fetch the settings
-		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($id);
@@ -1043,7 +1043,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function generate_address_object ($id,$dnsName) {
 		# fetch the settings
-		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($id);
@@ -1098,7 +1098,7 @@ class FirewallZones extends Common_functions {
 		$address_old = $this->Addresses->fetch_address (null, $IPId);
 
 		# fetch the settings
-		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($subnetId);
@@ -1167,7 +1167,7 @@ class FirewallZones extends Common_functions {
 		$this->Addresses = new Addresses ($this->Database);
 
 		# fetch the settings
-		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($subnetId);

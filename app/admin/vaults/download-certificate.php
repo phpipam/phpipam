@@ -31,7 +31,7 @@ if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])!="test") {
 
 // fetch item
 $vault_item = $Tools->fetch_object("vaultItems", "id", $_POST['id']);
-$vault_item_values = json_decode($User->Crypto->decrypt($vault_item->values, $_SESSION[$vault_id]));
+$vault_item_values = pf_json_decode($User->Crypto->decrypt($vault_item->values, $_SESSION[$vault_id]));
 ?>
 
 <!-- header -->

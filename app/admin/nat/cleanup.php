@@ -31,8 +31,8 @@ $address_ids = array ();
 # decode and save ids for each item to array
 foreach ($all_nat as $nat) {
     # remove item from nat
-    $s = json_decode($nat->src, true);
-    $d = json_decode($nat->dst, true);
+    $s = pf_json_decode($nat->src, true);
+    $d = pf_json_decode($nat->dst, true);
 
     if(is_array(@$s['subnets'])) {
         foreach ($s['subnets'] as $s) {

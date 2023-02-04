@@ -10,11 +10,11 @@ $User->check_user_session();
 
 # fetch custom fields
 $custom_bgp = $Tools->fetch_custom_fields('routing_bgp');
-$hidden_custom_fields_bgp = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_custom_fields_bgp = pf_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_custom_fields_bgp = is_array(@$hidden_custom_fields['routing_bgp']) ? $hidden_custom_fields['routing_bgp'] : array();
 
 // $custom_ospf = $Tools->fetch_custom_fields('routing_ospf');
-// $hidden_custom_fields_ospf = json_decode($User->settings->hiddenCustomFields, true);
+// $hidden_custom_fields_ospf = pf_json_decode($User->settings->hiddenCustomFields, true);
 // $hidden_custom_fields_ospf = is_array(@$hidden_custom_fields['routing_ospf']) ? $hidden_custom_fields['routing_ospf'] : array();
 
 

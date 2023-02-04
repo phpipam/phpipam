@@ -52,7 +52,7 @@ if($certificates_db!==false) {
 			print "</tr>";
 		}
 		else {
-			$values = json_decode($values, true);
+			$values = pf_json_decode($values, true);
 			$trclass = "";
 			// parse certificate
 			$certificate = openssl_x509_parse(base64_decode($values['certificate']));

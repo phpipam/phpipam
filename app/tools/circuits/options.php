@@ -92,7 +92,7 @@ foreach($custom_fields as $k=>$cf) {
 	$table = $k;
 
 	# get custom fields
-	$ffields = json_decode($User->settings->hiddenCustomFields, true);
+	$ffields = pf_json_decode($User->settings->hiddenCustomFields, true);
 	$ffields = is_array(@$ffields[$table]) ? $ffields[$table] : array();
 
 	print "<tbody id='custom-$k'>";

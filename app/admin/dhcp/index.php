@@ -28,7 +28,7 @@ elseif($User->settings->enableDHCP==1) { ?>
     }
     else {
         # parse and verify settings
-        $dhcp_db = json_decode($User->settings->DHCP, true);
+        $dhcp_db = pf_json_decode($User->settings->DHCP, true);
 
         # DHCP wrapper class
         $DHCP	= new DHCP ($dhcp_db['type'], $dhcp_db['settings']);

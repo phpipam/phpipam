@@ -27,7 +27,7 @@ $device_types = $Tools->fetch_all_objects ("deviceTypes", "tid");
 $custom_fields = (array) $Tools->fetch_custom_fields('devices');
 
 # set hidden fields
-$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['devices']) ? $hidden_fields['devices'] : array();
 
 # size of custom fields

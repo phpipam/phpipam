@@ -286,7 +286,7 @@ $(document).ready(function(){
 		//print groups
 		if($groups!==false) {
 			//set groups
-			$ugroups = json_decode(@$user['groups'], true);
+			$ugroups = pf_json_decode(@$user['groups'], true);
 			$ugroups = $Admin->groups_parse_ids($ugroups);
 
 			foreach($groups as $g) {
@@ -361,7 +361,7 @@ $(document).ready(function(){
 	$perm_modules["perm_vaults"] = "Vaults";
 
 	// get permissions
-	$module_permissions = json_decode($user['module_permissions'], true);
+	$module_permissions = pf_json_decode($user['module_permissions'], true);
 
 	// loop
 	foreach ($perm_modules as $key=>$name) {

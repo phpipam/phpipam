@@ -17,7 +17,7 @@ if (isset($objects["routing_bgp"])) {
 
 	# fetch custom fields
 	$custom_bgp = $Tools->fetch_custom_fields('routing_bgp');
-	$hidden_custom_fields_bgp = json_decode($User->settings->hiddenCustomFields, true);
+	$hidden_custom_fields_bgp = pf_json_decode($User->settings->hiddenCustomFields, true);
 	$hidden_custom_fields_bgp = is_array(@$hidden_custom_fields['routing_bgp']) ? $hidden_custom_fields['routing_bgp'] : array();
 
     // colspan

@@ -581,7 +581,7 @@ class Tools_controller extends Common_api_functions {
 	 */
 	private function parse_nat_objects ($obj) {
     	if($this->Tools->validate_json_string($obj)!==false) {
-        	return(json_decode($obj, true));
+        	return(pf_json_decode($obj, true));
     	}
     	else {
         	return array ();

@@ -22,7 +22,7 @@ if (preg_match('/^[a-f0-9.:\/]+$/i', $searchTerm)) {
 }
 
 # set hidden custom fields
-$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;

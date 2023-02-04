@@ -31,7 +31,7 @@ if ($auth_methods!==false) {
 $custom = $Tools->fetch_custom_fields('userGroups');
 
 /* check customfields */
-$ffields = json_decode($User->settings->hiddenCustomFields, true);
+$ffields = pf_json_decode($User->settings->hiddenCustomFields, true);
 $ffields = is_array(@$ffields['userGroups']) ? $ffields['userGroups'] : array();
 
 $colspanCustom = 0;

@@ -45,7 +45,7 @@ if($_POST['action']=="add") {
 	if(strlen($_POST['secret'])<8)									{ $Result->show("danger", _("Secret must be at least 8 characters long!"), true); }
 
 	//enforce password policy
-	$policy = (json_decode($User->settings->passwordPolicy, true));
+	$policy = (pf_json_decode($User->settings->passwordPolicy, true));
 	$Password_check->set_requirements  ($policy, explode(",",$policy['allowedSymbols']));
 	if (!$Password_check->validate ($_POST['secret'])) 				{ $Result->show("danger alert-danger ", _('Secret validation errors').":<br> - ".implode("<br> - ", $Password_check->get_errors ()), true); }
 }

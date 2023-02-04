@@ -25,7 +25,7 @@ $server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
 $csrf = $User->Crypto->csrf_cookie ("create", "group");
 
 //parse parameters
-$params = json_decode($server->params);
+$params = pf_json_decode($server->params);
 
 if ($server->type == "LDAP") {
 

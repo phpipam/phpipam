@@ -20,7 +20,7 @@ if (isset($objects["circuits"])) {
 	$custom_fields = $Tools->fetch_custom_fields('circuits');
 
 	# get hidden fields
-	$hidden_circuit_fields = json_decode($User->settings->hiddenCustomFields, true);
+	$hidden_circuit_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
 	$hidden_circuit_fields = is_array(@$hidden_circuit_fields['circuits']) ? $hidden_circuit_fields['circuits'] : array();
 
 

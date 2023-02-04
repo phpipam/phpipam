@@ -414,7 +414,7 @@ class Admin extends Common_functions {
 		# check if $gid in array
 		if($users!==false) {
 			foreach($users as $u) {
-				$group_array = json_decode($u->groups, true);
+				$group_array = pf_json_decode($u->groups, true);
 				$group_array = $this->groups_parse($group_array);
 
 				if(sizeof($group_array)>0) {
@@ -446,7 +446,7 @@ class Admin extends Common_functions {
 		if($users!==false) {
 			foreach($users as $u) {
 				if($u->role != "Administrator") {
-					$g = json_decode($u->groups, true);
+					$g = pf_json_decode($u->groups, true);
 					if(!@in_array($group_id, $g)) { $out[] = $u->id; }
 				}
 			}
@@ -468,7 +468,7 @@ class Admin extends Common_functions {
 		$user = $this->fetch_object ("users", "id", $uid);
 
 		# append new group
-		$g = json_decode($user->groups, true);
+		$g = pf_json_decode($user->groups, true);
 		$g[$gid] = $gid;
 		$g = json_encode($g);
 
@@ -490,7 +490,7 @@ class Admin extends Common_functions {
 		$user = $this->fetch_object ("users", "id", $uid);
 
 		# remove group
-		$g = json_decode($user->groups, true);
+		$g = pf_json_decode($user->groups, true);
 		unset($g[$gid]);
 		$g = json_encode($g);
 
@@ -537,7 +537,7 @@ class Admin extends Common_functions {
 		# check if $gid in array
 		if($users!==false) {
 			foreach($users as $u) {
-				$g  = json_decode($u->groups, true);
+				$g  = pf_json_decode($u->groups, true);
 				$go = $g;
 				$g  = $this->groups_parse($g);
 				# check
@@ -567,7 +567,7 @@ class Admin extends Common_functions {
 		$sections = $this->fetch_all_objects ("sections", "id");
 		# check if $gid in array
 		foreach($sections as $s) {
-			$g = json_decode($s->permissions, true);
+			$g = pf_json_decode($s->permissions, true);
 
 			if(is_array($g)) {
 				if(sizeof($g)>0) {
@@ -732,7 +732,7 @@ class Admin extends Common_functions {
 	 */
 	public function save_custom_fields_filter ($table, $filtered_fields) {
 		# old custom fields, save them to array
-		$hidden_array = strlen($this->settings->hiddenCustomFields)>0 ? json_decode($this->settings->hiddenCustomFields, true) : array();
+		$hidden_array = strlen($this->settings->hiddenCustomFields)>0 ? pf_json_decode($this->settings->hiddenCustomFields, true) : array();
 
 		# set new array for table
 		if(is_null($filtered_fields))	{ unset($hidden_array[$table]); }

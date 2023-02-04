@@ -27,7 +27,7 @@ $User->Crypto->csrf_cookie ("validate", "permissions", $_POST['csrf_cookie']) ==
 # fetch old subnet
 $subnet_old = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
 // parse old permissions
-$old_permissions = json_decode($subnet_old->permissions, true);
+$old_permissions = pf_json_decode($subnet_old->permissions, true);
 
 list($removed_permissions, $changed_permissions) = $Subnets->get_permission_changes ((array) $_POST, $old_permissions);
 

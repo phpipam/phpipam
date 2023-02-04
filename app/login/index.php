@@ -155,7 +155,7 @@ if(@$config['requests_public']===false) {
 		$saml2settings=$Tools->fetch_object("usersAuthMethod", "type", "SAML2");
 
 		if ($saml2settings!=false) {
-			$version = json_decode(@file_get_contents(dirname(__FILE__).'/../../functions/php-saml/src/Saml2/version.json'), true);
+			$version = pf_json_decode(@file_get_contents(dirname(__FILE__).'/../../functions/php-saml/src/Saml2/version.json'), true);
 			$version = $version['php-saml']['version'];
 
 			if ($version < 3.4) {

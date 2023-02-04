@@ -140,7 +140,7 @@ foreach ($old_data as $table => $table_content) {
 			}
 			// permissions
 			if(strlen($value_obj->permissions)>0 && $value_obj->permissions!="null") {
-				$permissions = json_decode($value_obj->permissions);
+				$permissions = pf_json_decode($value_obj->permissions);
 				$permissions_new = new StdClass ();
 				foreach ($permissions as $k=>$v) {
 					$permissions_new->{$highest_ids_append["userGroups"] + $k} = $v;
@@ -189,7 +189,7 @@ foreach ($old_data as $table => $table_content) {
 			}
 			// permissions
 			if(strlen($value_obj->permissions)>0 && $value_obj->permissions!="null") {
-				$permissions = json_decode($value_obj->permissions);
+				$permissions = pf_json_decode($value_obj->permissions);
 				$permissions_new = new StdClass ();
 				foreach ($permissions as $k=>$v) {
 					$permissions_new->{$highest_ids_append["userGroups"] + $k} = $v;
@@ -262,7 +262,7 @@ foreach ($old_data as $table => $table_content) {
 				}
 				// groups
 				if($value_obj->role!="Administrator") {
-					$groups_tmp = json_decode($value_obj->groups, true);
+					$groups_tmp = pf_json_decode($value_obj->groups, true);
 					$groups_new = array();
 					foreach ($groups_tmp as $gid=>$gid2) {
 						$groups_new[$gid+$highest_ids_append["userGroups"]] = $gid+$highest_ids_append["userGroups"];

@@ -38,7 +38,7 @@ $zone = $PowerDNS->get_ptr_zone_name ($subnet->ip, $subnet->mask);
 // try to fetch domain
 $domain = $PowerDNS->fetch_domain_by_name ($zone);
 // default values
-$values = json_decode($User->settings->powerDNS, true);
+$values = pf_json_decode($User->settings->powerDNS, true);
 $values['name'] = $zone;
 
 // domain missing, create it and default records

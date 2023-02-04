@@ -1215,7 +1215,7 @@ class Common_functions  {
      */
     public function validate_json_string($string) {
         // try to decode
-        json_decode($string);
+        pf_json_decode($string);
         // check for error
         $parse_result = json_last_error_msg();
         // save possible error
@@ -1829,7 +1829,7 @@ class Common_functions  {
 			// Unique MAC address: 45344
 			// Updated: 12 March 2022
 			$data = file_get_contents(dirname(__FILE__) . "/../vendormacs.json");
-			$this->mac_address_vendors = json_decode($data, true);
+			$this->mac_address_vendors = pf_json_decode($data, true);
 		}
 
 		// Find longest prefix match in $this->mac_address_vendors array (max 9)

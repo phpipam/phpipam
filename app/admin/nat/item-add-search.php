@@ -45,8 +45,8 @@ $search_term = str_replace("*", "%", $search_term);
 
 # fetch old details
 $nat = $Tools->fetch_object("nat", "id", $_POST['id']);
-$nat->src = json_decode($nat->src, true);
-$nat->dst = json_decode($nat->dst, true);
+$nat->src = pf_json_decode($nat->src, true);
+$nat->dst = pf_json_decode($nat->dst, true);
 
 // identify
 $type = $Admin->identify_address( $search_term ); //identify address type

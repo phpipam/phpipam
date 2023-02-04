@@ -26,7 +26,7 @@ if(!hash_equals($User->user->password, crypt($_POST['oldpassword'], $User->user-
 if($_POST['ipampassword1']==$_POST['oldpassword']) { $Result->show("danger", _("New password must be different"), true); }
 
 # Enforce password policy
-$policy = (json_decode($User->settings->passwordPolicy, true));
+$policy = (pf_json_decode($User->settings->passwordPolicy, true));
 $Password_check->set_requirements($policy, explode(",",$policy['allowedSymbols']));
 if (!$Password_check->validate ($_POST['ipampassword1'])) { $Result->show("danger alert-danger ", _('Password validation errors').":<br> - ".implode("<br> - ", $Password_check->get_errors ()), true); }
 

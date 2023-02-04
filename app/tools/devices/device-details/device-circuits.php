@@ -14,7 +14,7 @@ $User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('circuits');
 # get hidden fields */
-$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['circuits']) ? $hidden_fields['circuits'] : array();
 
 # check

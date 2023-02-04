@@ -26,7 +26,7 @@ if ($User->get_module_permissions ("pdns")>=User::ACCESS_R) {
 
         // check if TTL is set
         if ($test!==false) {
-            $test_ttl = json_decode($User->settings->powerDNS);
+            $test_ttl = pf_json_decode($User->settings->powerDNS);
             if ($test_ttl->ttl==NULL) {
                 $Result->show("warning", "Please set <a href='".create_link("administration", "powerDNS", "defaults")."'>default powerDNS values</a>!", false);
             }

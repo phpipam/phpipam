@@ -18,7 +18,7 @@ exec($cmd, $output, $retval);
 
 # format result back to object
 $output = array_values(array_filter($output));
-$script_result = json_decode($output[0]);
+$script_result = pf_json_decode($output[0]);
 
 # json error
 if(json_last_error() !== JSON_ERROR_NONE)

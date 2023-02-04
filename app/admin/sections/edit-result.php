@@ -90,7 +90,7 @@ else {
     # fetch old section
     $section_old = $Sections->fetch_section ("id", $_POST['id']);
     // parse old permissions
-    $old_permissions = json_decode($section_old->permissions, true);
+    $old_permissions = pf_json_decode($section_old->permissions, true);
 
 	list($removed_permissions, $changed_permissions, $new_permissions) = $Sections->get_permission_changes ((array) $_POST, $old_permissions);
 

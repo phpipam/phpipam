@@ -13,7 +13,7 @@ if(!$dbobj){
 }
 
 //decode authentication module params
-$params=json_decode($dbobj->params);
+$params=pf_json_decode($dbobj->params);
 
 //if using advanced settings, instantiate without db settings
 if(filter_var($params->advanced, FILTER_VALIDATE_BOOLEAN)){

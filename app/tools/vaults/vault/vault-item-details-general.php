@@ -25,7 +25,7 @@ else {
 
 		// fetch item
 		$vault_item = $Tools->fetch_object("vaultItems", "id", $_GET['sPage']);
-		$vault_item_values = json_decode($User->Crypto->decrypt($vault_item->values, $_SESSION[$vault_id]));
+		$vault_item_values = pf_json_decode($User->Crypto->decrypt($vault_item->values, $_SESSION[$vault_id]));
 
 		// get custom fields
 		$custom_fields = $Tools->fetch_custom_fields('vaultItems');

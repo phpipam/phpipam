@@ -86,7 +86,7 @@ $settings = $Tools->get_settings();
 
 <?php
 # decode objects
-$temp_objects = json_decode($settings->tempAccess);
+$temp_objects = pf_json_decode($settings->tempAccess);
 # check
 $temp_objects = !is_null($temp_objects) ? (array) $temp_objects : array();
 # set width

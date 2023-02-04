@@ -1,7 +1,7 @@
 <?php
 
 // process permissions
-$permissions = json_decode($user['module_permissions'], true);
+$permissions = pf_json_decode($user['module_permissions'], true);
 // loop
 if (is_array($permissions)) {
     if (sizeof($permissions)>0) {
