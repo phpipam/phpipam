@@ -27,7 +27,7 @@ $User->check_user_session();
 <div class="searchResult">
 <?php
 /* include results if IP address is posted */
-if (strlen(@$_POST['mac'])>0) 	{ include('results.php'); }
+if (!is_blank(@$_POST['mac'])) 	{ include('results.php'); }
 else 							{ include('tips.php');}
 ?>
 </div>

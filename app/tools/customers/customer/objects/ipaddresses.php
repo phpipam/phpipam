@@ -115,7 +115,7 @@ foreach($addresses as $dummy) {
 	// Print mac address icon
 	if(in_array('mac', $selected_ip_fields)) {
         # normalize MAC address
-    	if(strlen(@$addresses[$n]->mac)>0) {
+    	if(!is_blank(@$addresses[$n]->mac)) {
         	if($User->validate_mac ($addresses[$n]->mac)!==false) {
             	$addresses[$n]->mac = $User->reformat_mac_address ($addresses[$n]->mac, 1);
         	}

@@ -109,14 +109,14 @@ if(sizeof($result_addresses) > 0) {
 			//mac
 			if(in_array('mac', $selected_ip_fields)) {
 				print '	<td>'. "\n";
-				if(strlen($line['mac']) > 0) {
+				if(!is_blank($line['mac'])) {
 					print "<i class='info fa fa-gray fa-sitemap' rel='tooltip' data-container='body' data-html='true' title='".$User->show_mac_and_vendor($line['mac'])."'></i>";
 				}
 				print '	</td>'. "\n";
 			}
 			//device
 			if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
-				if(strlen($line['switch'])>0 && $line['switch']!="0") {
+				if(!is_blank($line['switch']) && $line['switch']!="0") {
 					# get switch
 					$switch = (array) $Tools->fetch_object("devices", "id", $line['switch']);
 					$line['switch'] = $switch['hostname'];
@@ -130,7 +130,7 @@ if(sizeof($result_addresses) > 0) {
 			//port
 			if(in_array('port', $selected_ip_fields)) 										{ print ' <td>'. $line['port']  .'</td>' . "\n"; }
 			//location
-			if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) { 
+			if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
 				$location_name = $Tools->fetch_object("locations", "id", $line['location']);
 				print ' <td>'. $location_name->name .'</td>' . "\n";
 			}

@@ -41,7 +41,7 @@ foreach($custom_fields as $field) {
 	if($addresses!==false) {
 		foreach($addresses as $ip) {
 			$ip = (array) $ip;
-			if(strlen($ip[$field['name']]) > 0) {
+			if(!is_blank($ip[$field['name']])) {
 				$sizeMyFields[$field['name']]++;		// +1
 			}
 		}
@@ -231,7 +231,7 @@ else {
 						}
 						//text
 						elseif($myField['type']=="text") {
-							if(strlen($addresses[$n]->{$myField['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n][$myField['name']])."'>"; }
+							if(!is_blank($addresses[$n]->{$myField['name']}))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n][$myField['name']])."'>"; }
 							else											{ print ""; }
 						}
 						else {

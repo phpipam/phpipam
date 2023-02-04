@@ -212,7 +212,7 @@ class User extends Common_functions {
         $session_lifetime = ini_get('session.cookie_lifetime');
         $session_use_cookies  = ini_get('session.use_cookies');
 
-        if ($session_use_cookies && is_string($session_id) && strlen($session_id) > 0)
+        if ($session_use_cookies && is_string($session_id) && !is_blank($session_id))
             setcookie_samesite($session_name, $session_id, $session_lifetime, true);
     }
 
@@ -304,7 +304,7 @@ class User extends Common_functions {
     public function is_authenticated () {
         # if checked for subpages first check if $user is array
         if(!is_array($this->user)) {
-            if( strlen(@$_SESSION['ipamusername'])>0 ) {
+            if( !is_blank(@$_SESSION['ipamusername']) ) {
                 # save username
                 $this->username = $_SESSION['ipamusername'];
                 # check for timeout
@@ -445,7 +445,7 @@ class User extends Common_functions {
     private function check_timeout () {
         //session set
         if(isset($_SESSION['lastactive'])) {
-            if( strlen($this->settings->inactivityTimeout)>0 && (time()-@$_SESSION['lastactive']) > $this->settings->inactivityTimeout) {
+            if( !is_blank($this->settings->inactivityTimeout) && (time()-@$_SESSION['lastactive']) > $this->settings->inactivityTimeout) {
                 $this->timeout = true;
                 unset($_SESSION['lastactive']);
             }
@@ -799,7 +799,7 @@ class User extends Common_functions {
         # first we need to check if username exists
         $this->fetch_user_details ($username);
         # set method type if set, otherwise presume local auth
-        $this->authmethodid = strlen(@$this->user->authMethod)>0 ? $this->user->authMethod : 1;
+        $this->authmethodid = !is_blank(@$this->user->authMethod) ? $this->user->authMethod : 1;
 
         # 2fa
         if ($this->user->{'2fa'}==1) {
@@ -1351,7 +1351,7 @@ class User extends Common_functions {
                         "theme"            => $post['theme'],
                         "2fa"              => $this->verify_checkbox(@$post['2fa']),
                         );
-        if(strlen($post['password1'])>0) {
+        if(!is_blank($post['password1'])) {
         $items['password'] = $this->crypt_user_pass ($post['password1']);
         }
 

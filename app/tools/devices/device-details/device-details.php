@@ -108,12 +108,12 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print '<tr>';
     	print "	<th>". _('Sections').':</th>';
     	print "	<td>";
-    	if(strlen($device['hostname'])>0) {
+    	if(!is_blank($device['hostname'])) {
     		$section_ids = explode(";", $device['sections']);
     		foreach($section_ids as $k=>$id) {
     			$section = $Sections->fetch_section(null, $id);
     			$section_print[$k]  = "&middot; ".$section->name;
-    			$section_print[$k] .= strlen($section->description)>0 ? " <span class='text-muted'>($section->description)</span>" : "";
+    			$section_print[$k] .= !is_blank($section->description) ? " <span class='text-muted'>($section->description)</span>" : "";
     		}
     		print implode("<br>", $section_print);
     	}

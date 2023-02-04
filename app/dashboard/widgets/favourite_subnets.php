@@ -76,7 +76,7 @@ else {
 
 			# get vlan info
 			if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
-			if(strlen($f['vlanId'])>0 && $f['vlanId']!=0) {
+			if(!is_blank($f['vlanId']) && $f['vlanId']!=0) {
 				$vlan = $Tools->fetch_object("vlans", "vlanId", $f['vlanId']);
 				print "	<td>$vlan->number</td>";
 			} else {

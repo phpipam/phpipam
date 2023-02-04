@@ -166,7 +166,7 @@ class SubnetsTable {
 					}
 					//text
 					elseif($field['type']=="text") {
-						if(strlen($subnet->{$field['name']})>0)
+						if(!is_blank($subnet->{$field['name']}))
 							$tr[$field_name] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='". ($subnet->{$field['name']}) ."'>";
 						else
 							$tr[$field_name] = '';

@@ -39,7 +39,7 @@ if($Subnets->check_permission($User->user, $request['subnetId']) != 3)	{ $Result
 # set IP address
 # if provided (requested from logged in user) check if already in use, if it is warn and set next free
 # else get next free
-if(strlen($request['ip_addr'])>0) {
+if(!is_blank($request['ip_addr'])) {
 	// check if it exists
 	if ( $Addresses->address_exists ($request['ip_addr'], $request['subnetId'])) {
 		$errmsg = _("Requested IP address").' '.($request['ip_addr']).' '._("already used. First available address automatically provided.");

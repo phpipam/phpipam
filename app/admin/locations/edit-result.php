@@ -41,16 +41,16 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
     // lat, long
     if($_POST['action']!=="delete") {
         // lat
-        if(strlen($_POST['lat'])>0) {
+        if(!is_blank($_POST['lat'])) {
             if(!preg_match('/^(\-?\d+(\.\d+)?).\s*(\-?\d+(\.\d+)?)$/', $_POST['lat'])) { $Result->show("danger",  _("Invalid Latitude"), true); }
         }
         // long
-        if(strlen($_POST['long'])>0) {
+        if(!is_blank($_POST['long'])) {
             if(!preg_match('/^(\-?\d+(\.\d+)?).\s*(\-?\d+(\.\d+)?)$/', $_POST['long'])) { $Result->show("danger",  _("Invalid Longitude"), true); }
         }
 
         // fetch latlng
-        if(is_blank($_POST['lat']) && is_blank($_POST['long']) && strlen($_POST['address'])>0) {
+        if(is_blank($_POST['lat']) && is_blank($_POST['long']) && !is_blank($_POST['address'])) {
             $OSM = new OpenStreetMap($Database);
             $latlng = $OSM->get_latlng_from_address ($_POST['address']);
             if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {

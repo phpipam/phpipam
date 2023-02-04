@@ -189,9 +189,9 @@ if(is_array($result_addresses) && sizeof($result_addresses)>0) {
 			$vlan 	 = (array) (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
 			//format vlan
 			if(sizeof($vlan)>0) {
-				if(strlen($vlan['number']) > 0) {
+				if(!is_blank($vlan['number'])) {
 					$vlanText = " (vlan: " . $vlan['number'];
-					if(strlen($vlan['name']) > 0) {
+					if(!is_blank($vlan['name'])) {
 						$vlanText .= ' - '. $vlan['name'] . ')';
 					}
 					else {
@@ -227,7 +227,7 @@ if(is_array($result_addresses) && sizeof($result_addresses)>0) {
 			$worksheet->write($lineCount, $x, $ip['hostname']);						$x++;
 			# switch
 			if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
-				if(strlen($ip['switch'])>0 && $ip['switch']!=0) {
+				if(!is_blank($ip['switch']) && $ip['switch']!=0) {
 					$device = (array) $Tools->fetch_object("devices", "id", $ip['switch']);
 					$ip['switch'] = $device!=0 ? $device['hostname'] : "";
 				}
@@ -605,7 +605,7 @@ if(is_array($result_customers) && sizeof($result_customers)>0) {
 		//print details
 		$worksheet->write($lineCount, 0, $line['title'], $format_left);
 		$worksheet->write($lineCount, 1, $line['address'].", ".$line['postcode']." ".$line['city'].", ".$line['state']);
-		if(strlen($line['contact_person'])>0)
+		if(!is_blank($line['contact_person']))
 		$worksheet->write($lineCount, 2, $line['contact_person']." - ".$line['contact_mail']." (".$line['contact_phone'].")");
 		else
 		$worksheet->write($lineCount, 2, "");

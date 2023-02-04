@@ -116,7 +116,7 @@
 	# custom subnet fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $key=>$field) {
-			if(strlen($subnet[$key])>0) {
+			if(!is_blank($subnet[$key])) {
 				$subnet[$key] = str_replace(array("\n", "\r\n"), "<br>",$subnet[$key]);
 				$html_custom[] = "<tr>";
 				$html_custom[] = "	<th>".$Tools->print_custom_field_name ($key)."</th>";

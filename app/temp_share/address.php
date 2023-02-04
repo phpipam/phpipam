@@ -123,7 +123,7 @@ if(sizeof($address)>1) {
 	if(in_array('switch', $selected_ip_fields)) {
 	print "<tr>";
 	print "	<th>"._('Device')."</th>";
-	if(strlen($address['switch'])>0) {
+	if(!is_blank($address['switch'])) {
 		# get device
 		$device = $Tools->fetch_object("devices", "id", $address['switch']);
 		if($device!==false) {
@@ -189,7 +189,7 @@ if(sizeof($address)>1) {
 		print "</tr>";
 
 		foreach($custom_fields as $key=>$field) {
-			if(strlen($address[$key])>0) {
+			if(!is_blank($address[$key])) {
 			$address[$key] = str_replace(array("\n", "\r\n"), "<br>",$address[$key]);
 			print "<tr>";
 			print "	<th>$key</th>";

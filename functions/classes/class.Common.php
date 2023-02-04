@@ -1742,7 +1742,7 @@ class Common_functions  {
 		}
 		//text
 		elseif($type=="text") {
-			if(strlen($value)>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $value)."'>"; }
+			if(!is_blank($value))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $value)."'>"; }
 			else					{ print ""; }
 		}
 		else {
@@ -1835,7 +1835,7 @@ class Common_functions  {
 		// Find longest prefix match in $this->mac_address_vendors array (max 9)
 		$search_mac = substr($this->reformat_mac_address($mac, 4), 0, 9);
 
-		while (strlen($search_mac) > 0) {
+		while (!is_blank($search_mac)) {
 			if (isset($this->mac_address_vendors[$search_mac])) {
 				$prefix = implode(":", str_split(strtoupper($search_mac), 2));
 				return $this->mac_address_vendors[$search_mac];
@@ -2116,7 +2116,7 @@ class Common_functions  {
                         	$title[] = $sn->description;
                     	}
                     	else {
-                        	$sn->description = strlen($sn->description)>0 ? " (".$sn->description.")" : "";
+                        	$sn->description = !is_blank($sn->description) ? " (".$sn->description.")" : "";
                         	$title[] = $this->transform_address($sn->subnet, "dotted")."/".$sn->mask.$sn->description;
                         }
                 	}

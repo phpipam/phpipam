@@ -139,7 +139,7 @@ $colspan_dhcp = 4;
 					}
 					//text
 					elseif($myField['type']=="text") {
-						if(strlen($n->{$myField['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $n->{$myField['name']})."'>"; }
+						if(!is_blank($n->{$myField['name']}))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $n->{$myField['name']})."'>"; }
 						else									{ print ""; }
 					}
 					else {

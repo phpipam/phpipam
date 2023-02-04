@@ -845,7 +845,7 @@ class Logging extends Common_functions {
 			return false;
 		}
 		# mail
-		if ($this->mail_changelog && strlen($changelog)>0) {
+		if ($this->mail_changelog && !is_blank($changelog)) {
 			$this->changelog_send_mail ($changelog);
 		}
 		# ok
@@ -1120,8 +1120,8 @@ class Logging extends Common_functions {
 			}
 
 			//transform subnet to IP address format
-			if(strlen($this->object_new['subnet'])>0) 	{ $this->object_new['subnet'] = $this->Subnets->transform_address ($this->object_new['subnet'], "dotted");}
-			if(strlen($this->object_old['subnet'])>0) 	{ $this->object_old['subnet'] = $this->Subnets->transform_address ($this->object_old['subnet'], "dotted");}
+			if(!is_blank($this->object_new['subnet'])) 	{ $this->object_new['subnet'] = $this->Subnets->transform_address ($this->object_new['subnet'], "dotted");}
+			if(!is_blank($this->object_old['subnet'])) 	{ $this->object_old['subnet'] = $this->Subnets->transform_address ($this->object_old['subnet'], "dotted");}
 
 			//remove subnet/mask for folders
 			if (@$this->object_new['isFolder']=="1")	{ unset($this->object_new['subnet'], $this->object_new['mask']); }
@@ -1191,7 +1191,7 @@ class Logging extends Common_functions {
 			} else {
 				$subnet = $this->Subnets->fetch_subnet("id", $this->object_old[$k]);
 				if (is_object($subnet)) {
-					$this->object_old[$k] = strlen($subnet->description) > 0 ? $this->Subnets->transform_address($subnet->subnet, "dotted") . "/$subnet->mask [$subnet->description]" : $this->Subnets->transform_address($subnet->subnet, "dotted") . "/" . $subnet->mask;
+					$this->object_old[$k] = !is_blank($subnet->description) ? $this->Subnets->transform_address($subnet->subnet, "dotted") . "/$subnet->mask [$subnet->description]" : $this->Subnets->transform_address($subnet->subnet, "dotted") . "/" . $subnet->mask;
 					$this->object_old[$k] .= " (id " . $subnet->id . ")";
 				}
 			}
@@ -1202,7 +1202,7 @@ class Logging extends Common_functions {
 		}
 		else {
 			$subnet = $this->Subnets->fetch_subnet("id", $v);
-			$v  = strlen($subnet->description)>0 ? $this->Subnets->transform_address($subnet->subnet, "dotted")."/$subnet->mask [$subnet->description]" : $this->Subnets->transform_address($subnet->subnet, "dotted")."/".$subnet->mask;
+			$v  = !is_blank($subnet->description) ? $this->Subnets->transform_address($subnet->subnet, "dotted")."/$subnet->mask [$subnet->description]" : $this->Subnets->transform_address($subnet->subnet, "dotted")."/".$subnet->mask;
 			$v .= " (id ".$subnet->id.")";
 		}
 		//result
@@ -1340,7 +1340,7 @@ class Logging extends Common_functions {
 		}
 		elseif($this->object_old[$k] != "NULL") {
 			$location = $this->Tools->fetch_object("locations", "id", $this->object_old[$k]);
-			$this->object_old[$k] = strlen($location->description>0) ? $location->name." [$location->description]" : $location->name;
+			$this->object_old[$k] = !is_blank($location->description) ? $location->name." [$location->description]" : $location->name;
 		}
 		// new none
 		if($v == 0)	{
@@ -1348,7 +1348,7 @@ class Logging extends Common_functions {
 		}
 		elseif($v != "NULL") {
 			$location = $this->Tools->fetch_object("locations", "id", $v);
-			$v = strlen($location->description>0) ? $location->name." [$location->description]" : $location->name;
+			$v = !is_blank($location->description) ? $location->name." [$location->description]" : $location->name;
 		}
 		//result
 		return $v;

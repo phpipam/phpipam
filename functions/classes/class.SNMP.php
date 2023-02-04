@@ -378,7 +378,7 @@ class phpipamSNMP extends Common_functions {
 	 * @return void
 	 */
 	private function set_snmp_hostname ($hostname) {
-    	if (strlen($hostname)>0) {
+    	if (!is_blank($hostname)) {
         	$this->snmp_hostname = $hostname;
     	}
 	}
@@ -392,7 +392,7 @@ class phpipamSNMP extends Common_functions {
 	 * @return void
 	 */
 	private function set_snmp_community ($community, $vlan_number) {
-    	if (strlen($community)>0) {
+    	if (!is_blank($community)) {
         	// vlan ?
         	if ($vlan_number!==false && is_numeric($vlan_number)) {
                 $this->snmp_community = $community."@".$vlan_number;

@@ -381,7 +381,7 @@ class Subnets extends Common_functions {
 		foreach($newsubnets as $m => $subnet) {
 			//set new subnet insert values
 			$values = array(
-							"description"    => strlen($prefix)>0 ? $prefix.($m+1) : "split_subnet_".($m+1),
+							"description"    => !is_blank($prefix) ? $prefix.($m+1) : "split_subnet_".($m+1),
 							"subnet"         => $subnet['subnet'],
 							"mask"           => $subnet['mask'],
 							"sectionId"      => $subnet['sectionId'],
@@ -530,7 +530,7 @@ class Subnets extends Common_functions {
 
 		# section ordering - overrides network
 		$section  = $this->fetch_object ("sections", "id", $sectionId);
-		if(@$section->subnetOrdering!="default" && strlen(@$section->subnetOrdering)>0 ) 	{ $order = explode(',', $section->subnetOrdering); }
+		if(@$section->subnetOrdering!="default" && !is_blank(@$section->subnetOrdering) ) 	{ $order = explode(',', $section->subnetOrdering); }
 
 		// subnet fix
 		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
@@ -836,7 +836,7 @@ class Subnets extends Common_functions {
 
 		# section ordering - overrides network
 		$section  = $this->fetch_object ("sections", "id", $sectionId);
-		if(@$section->subnetOrdering!="default" && strlen(@$section->subnetOrdering)>0 ) 	{ $order = explode(',', $section->subnetOrdering); }
+		if(@$section->subnetOrdering!="default" && !is_blank(@$section->subnetOrdering) ) 	{ $order = explode(',', $section->subnetOrdering); }
 
 		// subnet fix
 		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
@@ -928,7 +928,7 @@ class Subnets extends Common_functions {
 
 		# section ordering - overrides network
 		$section  = $this->fetch_object ("sections", "id", $sectionId);
-		if(@$section->subnetOrdering!="default" && strlen(@$section->subnetOrdering)>0 ) 	{ $order = explode(',', $section->subnetOrdering); }
+		if(@$section->subnetOrdering!="default" && !is_blank(@$section->subnetOrdering) ) 	{ $order = explode(',', $section->subnetOrdering); }
 
 		// subnet fix
 		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
@@ -2000,7 +2000,7 @@ class Subnets extends Common_functions {
 	 */
 	public function verify_cidr_address ($cidr, $issubnet = true) {
 		# first verify address and mask format
-		if(strlen($error = $this->verify_cidr ($cidr))>0)	{ return $error; }
+		if(!is_blank($error = $this->verify_cidr ($cidr)))	{ return $error; }
 		# make checks
 		return $this->identify_address ($cidr)=="IPv6" ? $this->verify_cidr_address_IPv6 ($cidr, $issubnet) : $this->verify_cidr_address_IPv4 ($cidr, $issubnet);
 	}
@@ -3672,7 +3672,7 @@ class Subnets extends Common_functions {
 
 		    //we only need route
 		    foreach($out as $line) {
-				if (strlen(strstr($line,"route"))>0) {
+				if (!is_blank(strstr($line,"route"))) {
     				if(!isset($subnet)) $subnet = array();
 					//replace route6 with route
 					$line = str_replace("route6:", "route:", $line);

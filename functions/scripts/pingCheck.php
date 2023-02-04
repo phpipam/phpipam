@@ -476,9 +476,9 @@ if (!empty($address_change) && $config['ping_check_send_mail']) {
                 $ago      = $lastSeen . " (" . $Tools->sec2hms($timeDiff) . " ago)";
             }
             // desc
-            $change['description'] = strlen($change['description']) > 0 ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
+            $change['description'] = !is_blank($change['description']) ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
             // subnet desc
-            $subnet->description = strlen($subnet->description) > 0 ? "$Subnets->mail_font_style $subnet->description</font>" : "$Subnets->mail_font_style / </font>";
+            $subnet->description = !is_blank($subnet->description) ? "$Subnets->mail_font_style $subnet->description</font>" : "$Subnets->mail_font_style / </font>";
 
             //content
             $content[] = "<tr>";

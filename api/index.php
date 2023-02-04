@@ -117,7 +117,7 @@ try {
 		// if application tupe is JSON (application/json)
 		if(strpos($_SERVER['CONTENT_TYPE'], "application/json")!==false){
 			$rawPostData = file_get_contents('php://input');
-			if (is_string($rawPostData) && strlen($rawPostData)>0) {
+			if (is_string($rawPostData) && !is_blank($rawPostData)) {
 				$json = pf_json_decode($rawPostData, true);
 				if(!is_array($json)) {
 					$Response->throw_exception(400, 'Invalid JSON: '.json_last_error_msg());
@@ -129,7 +129,7 @@ try {
 		// if application tupe is XML (application/json)
 		elseif(strpos($_SERVER['CONTENT_TYPE'], "application/xml")!==false){
 			$rawPostData = file_get_contents('php://input');
-			if (is_string($rawPostData) && strlen($rawPostData)>0) {
+			if (is_string($rawPostData) && !is_blank($rawPostData)) {
 				$xml = $Response->xml_to_array($rawPostData);
 				if(!is_array($xml)) {
 					$Response->throw_exception(400, 'Invalid XML');
@@ -147,7 +147,7 @@ try {
         else {
             // input
             $input = file_get_contents('php://input');
-            if (strlen($input)>0) {
+            if (!is_blank($input)) {
                 parse_str($input, $out);
                 if(is_array($out)) {
                     $params = array_merge((array) $params, $out);

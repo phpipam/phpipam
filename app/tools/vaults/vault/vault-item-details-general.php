@@ -188,7 +188,7 @@ else {
 				print "<tr>";
 				print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Issuer")."</h4><hr></td>";
 				print "</tr>";
-				if(strlen($certificate_details['issuer']['C'])>0) {
+				if(!is_blank($certificate_details['issuer']['C'])) {
 				print "<tr>";
 				print "	<th>"._("Country")."</th>";
 				print "	<td>".$certificate_details['issuer']['C']."</td>";
@@ -206,7 +206,7 @@ else {
 				print "	<td>".$certificate_details['issuer']['L']."</td>";
 				print "</tr>";
 				}
-				if(strlen($certificate_details['issuer']['O'])>0) {
+				if(!is_blank($certificate_details['issuer']['O'])) {
 				print "<tr>";
 				print "	<th>"._("Organisation name")."</th>";
 				print "	<td>".$certificate_details['issuer']['O']."</td>";

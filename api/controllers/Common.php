@@ -1006,7 +1006,7 @@ class Common_api_functions {
 	 * @return void
 	 */
 	public function set_transaction_lock_file ($file = "") {
-        if(strlen($file)>0) {
+        if(!is_blank($file)) {
             $this->lock_file_name = $file;
         }
 	}

@@ -46,7 +46,7 @@ foreach ($passwordPolicy as $k=>$f) {
 	}
 }
 # symbols
-if (strlen($_POST['allowedSymbols'])>0) {
+if (!is_blank($_POST['allowedSymbols'])) {
 	$_POST['passwordPolicy'] = str_replace(" ", "", $_POST['passwordPolicy']);
 	$passwordPolicy['allowedSymbols'] = $_POST['allowedSymbols'];
 }

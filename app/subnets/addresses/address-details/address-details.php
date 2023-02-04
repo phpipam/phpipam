@@ -250,7 +250,7 @@ if(sizeof($address)>1) {
         	print "<tr><td colspan='2'><h4 style='padding-top:20px;'>"._('Custom fields')."</h4></tr>";
 
     		foreach($custom_fields as $key=>$field) {
-    			if(strlen($address[$key])>0) {
+    			if(!is_blank($address[$key])) {
     			$address[$key] = str_replace(array("\n", "\r\n"), "<br>",$address[$key]);
     			print "<tr>";
     			print "	<th>$key</th>";
@@ -271,7 +271,7 @@ if(sizeof($address)>1) {
 
     	# check for temporary shares!
     	if($User->settings->tempShare==1) {
-    		if (strlen($User->settings->tempAccess)>0) {
+    		if (!is_blank($User->settings->tempAccess)) {
     			foreach(pf_json_decode($User->settings->tempAccess) as $s) {
     				if($s->type=="ipaddresses" && $s->id==$address['id']) {
     					if(time()<$s->validity) {
@@ -343,7 +343,7 @@ if(sizeof($address)>1) {
     		{
     			print "		<a class='edit_ipaddress   btn btn-default btn-xs modIPaddr' data-action='edit'   data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' 											   rel='tooltip' data-container='body' title='"._('Edit IP address details')."'>				<i class='fa fa-gray fa-pencil'></i></a>";
     			print "		<a class='ping_ipaddress   btn btn-default btn-xs' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' 						   													rel='tooltip' data-container='body' title='"._('Check availability')."'>							<i class='fa fa-gray fa-cogs'></i></a>";
-    			print "		<a class='search_ipaddress btn btn-default btn-xs         "; if(is_blank($resolve['name'])) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0)   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
+    			print "		<a class='search_ipaddress btn btn-default btn-xs         "; if(is_blank($resolve['name'])) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(!is_blank($resolve['name']))   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
     			print "		<a class='mail_ipaddress   btn btn-default btn-xs          ' href='#' data-id='".$address['id']."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																<i class='fa fa-gray fa-envelope-o'></i></a>";
     			if($zone) {
     			print "		<a class='fw_autogen	   btn btn-default btn-xs          ' href='#' data-subnetid='".$subnet['id']."' data-action='adr' data-ipid='".$address['id']."' data-dnsname='".((preg_match('/\//i',$address['hostname'])) ? '':$address['hostname'])."' rel='tooltip' data-container='body' title='"._('Regenerate firewall address object.')."'><i class='fa fa-gray fa-fire'></i></a>";
@@ -369,7 +369,7 @@ if(sizeof($address)>1) {
     		{
     			print "		<a class='edit_ipaddress   btn btn-default btn-xs disabled' rel='tooltip' data-container='body' title='"._('Edit IP address details (disabled)')."'>							<i class='fa fa-gray fa-pencil'>  </i></a>";
     			print "		<a class='				   btn btn-default btn-xs disabled'  data-id='".$address['id']."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>		<i class='fa fa-gray fa-retweet'>  </i></a>";
-    			print "		<a class='search_ipaddress btn btn-default btn-xs         "; if(is_blank($resolve['name'])) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0) { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
+    			print "		<a class='search_ipaddress btn btn-default btn-xs         "; if(is_blank($resolve['name'])) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(!is_blank($resolve['name'])) { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
     			print "		<a class='mail_ipaddress   btn btn-default btn-xs          ' href='#' data-id='".$address['id']."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>		<i class='fa fa-gray fa-envelope'></i></a>";
     			print "		<a class='delete_ipaddress btn btn-default btn-xs disabled' rel='tooltip' data-container='body' title='"._('Delete IP address (disabled)')."'>				<i class='fa fa-gray fa-times'>  </i></a>";
     		}

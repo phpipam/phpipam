@@ -64,7 +64,7 @@ if (is_array($hosts) && sizeof($hosts)>0) {
 	foreach ($hosts as $h) {
     	// set default hostname for PTR if set
     	if (is_blank($h->hostname)) {
-        	if (strlen($values['def_ptr_domain'])>0) {
+        	if (!is_blank($values['def_ptr_domain'])) {
             	$h->hostname = $values['def_ptr_domain'];
         	}
     	}

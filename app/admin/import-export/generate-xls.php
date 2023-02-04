@@ -97,9 +97,9 @@ foreach ($sections as $section) {
 		if($subnet['isFolder']!="1") {
 			//vlan details
 			$vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
-			if(strlen($vlan['number']) > 0) {
+			if(!is_blank($vlan['number'])) {
 				$vlanText = " (vlan: " . $vlan['number'];
-				if(strlen($vlan['name']) > 0) {
+				if(!is_blank($vlan['name'])) {
 					$vlanText .= ' - '. $vlan['name'] . ')';
 				}
 				else {

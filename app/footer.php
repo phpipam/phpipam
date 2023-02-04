@@ -19,7 +19,7 @@
 
 	<?php
 	# custom footer message
-	if(isset($config['footer_message']) && strlen($config['footer_message'])>0) {
+	if(isset($config['footer_message']) && !is_blank($config['footer_message'])) {
 		print '<td> '.$config['footer_message'].' </td>';
 	}
 

@@ -40,7 +40,7 @@ foreach ($all_locations as $k=>$l) {
         unset($all_locations[$k]);
     }
     // recode
-    elseif (is_blank($l->long) && is_blank($l->lat) && strlen($l->address)>0) {
+    elseif (is_blank($l->long) && is_blank($l->lat) && !is_blank($l->address)) {
         $latlng = $OSM->get_latlng_from_address ($l->address);
         if($latlng['lat']==NULL || $latlng['lng']==NULL) {
             unset($all_locations[$k]);

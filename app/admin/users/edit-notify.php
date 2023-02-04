@@ -40,7 +40,7 @@ try {
 	//we dont need pass for domain account
 	if($auth_method->type == "local") {
 	$content[] = '<tr><td style="padding: 0px;padding-left:10px;line-height:18px;text-align:left;">'.$User->mail_font_style.' &bull; '._('Username').'</font></td>	<td style="padding: 0px;padding-left:15px;line-height:18px;text-align:left;">'.$User->mail_font_style.' '. $_POST['username'] 	.'</font></td></tr>';
-	if(strlen($_POST['password2']) != 0) {
+	if(!is_blank($_POST['password2'])) {
 	$content[] = '<tr><td style="padding: 0px;padding-left:10px;line-height:18px;text-align:left;">'.$User->mail_font_style.' &bull; '._('Password').'</font></td>	<td style="padding: 0px;padding-left:15px;line-height:18px;text-align:left;">'.$User->mail_font_style.' '. $_POST['password2'] .'</font></td></tr>';
 	}}
 	else {
@@ -59,7 +59,7 @@ try {
 	# we dont need pass for domain account
 	if($auth_method->type == "local") {
 	$content_plain[] = _("Username").": $_POST[username]";
-	if(strlen($_POST['password2']) != 0) {
+	if(!is_blank($_POST['password2'])) {
 	$content_plain[] = _("Password").": $_POST[password2]";
 	}}
 	else {

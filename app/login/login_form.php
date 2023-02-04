@@ -8,7 +8,7 @@
 		<legend style="margin-top:10px;"><?php print _('Please login'); ?></legend>
 	</div>
 
-	<?php if(strlen(@$User->settings->siteLoginText)>0) { ?>
+	<?php if(!is_blank(@$User->settings->siteLoginText)) { ?>
     <!-- login text -->
     <div class="col-xs-12 text-muted text-right" style="margin-bottom:1em;"><?php print $User->settings->siteLoginText; ?></div>
 	<?php } ?>

@@ -30,7 +30,7 @@ else {
 
             if ($linked_subnet !== false) {
                 // desc fix
-                $linked_subnet->description = strlen($linked_subnet->description)>0 ? "($linked_subnet->description)" : "";
+                $linked_subnet->description = !is_blank($linked_subnet->description) ? "($linked_subnet->description)" : "";
 
                 print "<tr>";
                 print " <th style='font-weight:normal'>";
@@ -61,7 +61,7 @@ else {
                 print " <ul class='submenu-linked'>";
                 foreach ($is_linked_subnets as $k=>$linked_subnet) {
                     // desc fix
-                    $linked_subnet->description = strlen($linked_subnet->description)>0 ? "($linked_subnet->description)" : "";
+                    $linked_subnet->description = !is_blank($linked_subnet->description) ? "($linked_subnet->description)" : "";
 
                     print "<li style='font-size:13px;'>";
                     print "<i class='icon-gray fa fa-gray fa-angle-right'></i> ";
@@ -225,14 +225,14 @@ else {
 			$device = $Tools->fetch_object("devices", "id", $subnet['device']);
 			if (is_object($device)) {
 				# rack
-				if ($User->settings->enableRACK=="1" && strlen($device->rack)>0 && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
+				if ($User->settings->enableRACK=="1" && !is_blank($device->rack) && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
 					if (!is_object($Racks)) $Racks = new phpipam_rack ($Database);
 					$Racks->add_rack_start_print($device);
 					$rack = $Tools->fetch_object("racks", "id", $device->rack);
 					$rack_text = !is_object($rack) ? "" : "<br><span class='badge badge1 badge5' style='padding-top:4px;'>$rack->name / "._('Position').": $device->rack_start_print "._("Size").": $device->rack_size U <i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackId='$rack->id' data-deviceId='$device->id'></i></span>";
 				}
 				print "<a href='".create_link("tools","devices",$device->id)."'>".$device->hostname."</a>";
-				if (strlen($device->description)>0) {
+				if (!is_blank($device->description)) {
 					print ' ('.$device->description.')';
 				}
 				print $rack_text;
@@ -331,9 +331,9 @@ else {
 
 		if ($fwZone!==false) {
 			// alias fix
-			$fwZone->alias 		= strlen($fwZone->alias)>0 ? "(".$fwZone->alias.")" : "";
-			$fwZone->description 	= strlen($fwZone->description)>0 ? " - ".$fwZone->description : "";
-			$fwZone->interface 	= strlen($fwZone->interface)>0 ? "(".$fwZone->interface.")" : "";
+			$fwZone->alias 		= !is_blank($fwZone->alias) ? "(".$fwZone->alias.")" : "";
+			$fwZone->description 	= !is_blank($fwZone->description) ? " - ".$fwZone->description : "";
+			$fwZone->interface 	= !is_blank($fwZone->interface) ? "(".$fwZone->interface.")" : "";
 
 			# divider
 			print "<tr>";
@@ -500,7 +500,7 @@ else {
 	# custom subnet fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $key=>$field) {
-			if(strlen($subnet[$key])>0) {
+			if(!is_blank($subnet[$key])) {
 				$subnet[$key] = str_replace(array("\n", "\r\n"), "<br>",$subnet[$key]);
 				$html_custom[] = "<tr>";
 				$html_custom[] = "	<th>".$Tools->print_custom_field_name ($key)."</th>";

@@ -139,7 +139,7 @@ foreach ($old_data as $table => $table_content) {
 				$new_data[$table][$lk]->masterSection = $highest_ids_append["sections"] + $value_obj->masterSection;
 			}
 			// permissions
-			if(strlen($value_obj->permissions)>0 && $value_obj->permissions!="null") {
+			if(!is_blank($value_obj->permissions) && $value_obj->permissions!="null") {
 				$permissions = pf_json_decode($value_obj->permissions);
 				$permissions_new = new StdClass ();
 				foreach ($permissions as $k=>$v) {
@@ -188,7 +188,7 @@ foreach ($old_data as $table => $table_content) {
 				$new_data[$table][$lk]->scanAgent = $highest_ids_append["scanAgents"] + $value_obj->scanAgent;
 			}
 			// permissions
-			if(strlen($value_obj->permissions)>0 && $value_obj->permissions!="null") {
+			if(!is_blank($value_obj->permissions) && $value_obj->permissions!="null") {
 				$permissions = pf_json_decode($value_obj->permissions);
 				$permissions_new = new StdClass ();
 				foreach ($permissions as $k=>$v) {
@@ -270,7 +270,7 @@ foreach ($old_data as $table => $table_content) {
 					$new_data[$table][$lk]->groups = json_encode($groups_new);
 				}
 				// favourite subnets
-				if(strlen($value_obj->favourite_subnets)>0) {
+				if(!is_blank($value_obj->favourite_subnets)) {
 					$fs_tmp = explode(";", $value_obj->favourite_subnets);
 					$fs_new = array();
 					foreach ($fs_tmp as $gid) {
@@ -298,7 +298,7 @@ foreach ($old_data as $table => $table_content) {
 		foreach ($table_content as $lk=>$value_obj) {
 			$new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
 			// permissions
-			if(strlen($value_obj->permissions)>0) {
+			if(!is_blank($value_obj->permissions)) {
 				$fs_tmp = explode(";", $value_obj->permissions);
 				$fs_new = array();
 				foreach ($fs_tmp as $gid) {
@@ -314,7 +314,7 @@ foreach ($old_data as $table => $table_content) {
 		foreach ($table_content as $lk=>$value_obj) {
 			$new_data[$table][$lk]->vrfId = $highest_ids_append[$table] + $value_obj->vrfId;
 			// sections
-			if(strlen($value_obj->sections)>0) {
+			if(!is_blank($value_obj->sections)) {
 				$fs_tmp = explode(";", $value_obj->sections);
 				$fs_new = array();
 				foreach ($fs_tmp as $gid) {
@@ -330,7 +330,7 @@ foreach ($old_data as $table => $table_content) {
 		foreach ($table_content as $lk=>$value_obj) {
 			$new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
 			// permissions
-			if(strlen($value_obj->permissions)>0) {
+			if(!is_blank($value_obj->permissions)) {
 				$fs_tmp = explode(";", $value_obj->permissions);
 				$fs_new = array();
 				foreach ($fs_tmp as $gid) {
@@ -412,7 +412,7 @@ foreach ($old_data as $table => $table_content) {
 		foreach ($table_content as $lk=>$value_obj) {
 			$new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
 			// src
-			if (strlen($value_obj->src) > 0) {
+			if (!is_blank($value_obj->src)) {
 				$arr     = json_encode($value_obj->src, true);
 				$arr_new = array();
 				if (is_array($arr)) {
@@ -428,7 +428,7 @@ foreach ($old_data as $table => $table_content) {
 				$new_data[$table][$lk]->src = json_encode($arr_new);
 			}
 			// dst
-			if (strlen($value_obj->dst) > 0) {
+			if (!is_blank($value_obj->dst)) {
 				$arr     = json_encode($value_obj->dst, true);
 				$arr_new = array();
 				if (is_array($arr)) {
@@ -490,7 +490,7 @@ if(isset($new_custom_fields)) {
 		// each field
 		foreach ($field as $fname=>$fval) {
 			$null = $fval['Null']=="YES" ? "" : "NOT NULL";
-			$default = strlen($fval['Default'])>0 ? "DEFAULT '$fval[Default]'" : "";
+			$default = !is_blank($fval['Default']) ? "DEFAULT '$fval[Default]'" : "";
 			// update teable definition
 			$query = "ALTER TABLE `$table` ADD COLUMN `$fval[name]` $fval[type] $default $null COMMENT '$fval[Comment]';";
 			// update

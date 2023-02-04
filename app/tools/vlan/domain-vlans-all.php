@@ -104,8 +104,8 @@ else {
 		}
 
 		// fixes
-		$vlan->description = strlen($vlan->description)>0 ? " <span class='text-muted'>( ".$vlan->description." )</span>" : "";
-		$vlan->domainDescription = strlen($vlan->domainDescription)>0 ? " <span class='text-muted'>( ".$vlan->domainDescription." )</span>" : "";
+		$vlan->description = !is_blank($vlan->description) ? " <span class='text-muted'>( ".$vlan->description." )</span>" : "";
+		$vlan->domainDescription = !is_blank($vlan->domainDescription) ? " <span class='text-muted'>( ".$vlan->domainDescription." )</span>" : "";
 
 		// set odd / even
 		$n = @$n==1 ? 0 : 1;

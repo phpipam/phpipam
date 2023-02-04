@@ -42,7 +42,7 @@ if($subnet===false) {
 $prefix = $subnet->isFolder=="1" ? "folder" : "subnet";
 
 # reformat description
-$subnet->description = strlen($subnet->description)>0 ? "($subnet->description)" : "";
+$subnet->description = !is_blank($subnet->description) ? "($subnet->description)" : "";
 # set subnet
 $subnet->description = $subnet->isFolder=="1" ? $subnet->description : $Subnets->transform_to_dotted($subnet->subnet)."/$subnet->mask $subnet->description";
 ?>

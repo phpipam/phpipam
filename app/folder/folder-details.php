@@ -49,7 +49,7 @@ if($folder['sectionId']!=$_GET['section'])	{
 	# print custom subnet fields if any
 	if(!is_null($cfields)) {
 		foreach($cfields as $key=>$field) {
-			if(strlen($folder[$key]) > 0) {
+			if(!is_blank($folder[$key])) {
 			print "<tr>";
 			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
 			print "	<td>";

@@ -6,7 +6,7 @@ if ($User->settings->enableLocations=="1" && $User->get_module_permissions ("loc
     print "<h4>"._('Location')."</h4><hr>";
 
     // set?
-    if ($device->location!=0 && strlen($device->location)>0) {
+    if ($device->location!=0 && !is_blank($device->location)) {
         // array
         $device = (array) $device;
         // fake data

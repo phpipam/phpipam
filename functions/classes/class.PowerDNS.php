@@ -1203,7 +1203,7 @@ class PowerDNS extends Common_functions {
         }
 
         // for all other record types null is ok, otherwise URI is required
-        if (strlen($name)>0 && !$this->validate_hostname($name)){ $this->Result->show("danger", _("Invalid record name"), true); }
+        if (!is_blank($name) && !$this->validate_hostname($name)){ $this->Result->show("danger", _("Invalid record name"), true); }
         // ok
         return $name;
     }
@@ -1287,7 +1287,7 @@ class PowerDNS extends Common_functions {
      */
     private function validate_prio ($prio) {
         // validate numbric
-        if(!is_null($prio) && strlen($prio)>0) {
+        if(!is_null($prio) && !is_blank($prio)) {
             if(!is_numeric($prio))                        { $this->Result->show("danger", _("Invalid priority value"), true); }
             // range
             if(0 > $prio || $prio > 1000)                 { $this->Result->show("danger", _("Priority range is from 0 to 1000"), true); }
@@ -1305,7 +1305,7 @@ class PowerDNS extends Common_functions {
      */
     private function validate_integer ($int) {
         // validate numbric
-        if(strlen($int)>0 && !is_null($int) && $int!==false) {
+        if(!is_blank($int) && !is_null($int) && $int!==false) {
             if(!is_numeric($int))                        { $this->Result->show("danger", _("Invalid integer value"), true); }
         }
         // ok

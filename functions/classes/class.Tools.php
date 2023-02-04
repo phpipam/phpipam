@@ -1078,14 +1078,14 @@ class Tools extends Common_functions {
 
 				$subnet = $this->fetch_object("subnets", "id", $v);
 				$mail["Subnet"]  = $this->transform_address ($subnet->subnet, "dotted")."/".$subnet->mask;
-				$mail["Subnet"] .= strlen($subnet->description)>0 ? " - ".$subnet->description : "";
+				$mail["Subnet"] .= !is_blank($subnet->description) ? " - ".$subnet->description : "";
 			}
 			// ip_addr
 			elseif ($k=="ip_addr") {
 				// add title
 				$mail["s_title_2"] = "<br>"._("Address details");
 
-				if (strlen($v)>0) {
+				if (!is_blank($v)) {
 					$mail['IP address'] = $this->transform_address($v, "dotted");
 				} else {
 					$mail['IP address'] = _("Automatic");
@@ -1128,13 +1128,13 @@ class Tools extends Common_functions {
 			}
 			// nameservers
 			elseif ($k=="dns") {
-				if (strlen($v)>0) {
+				if (!is_blank($v)) {
 				$mail['DNS servers'] = $v;
 				}
 			}
 			// vlans
 			elseif ($k=="vlan") {
-				if (strlen($v)>0) {
+				if (!is_blank($v)) {
 				$mail['VLAN'] = $v;
 				}
 			}
@@ -2067,13 +2067,13 @@ class Tools extends Common_functions {
 
         // description
         $n->description = str_replace("\n", "<br>", $n->description);
-        $n->description = strlen($n->description)>0 ? "<br>$n->description" : "";
+        $n->description = !is_blank($n->description) ? "<br>$n->description" : "";
 
         // device
         if (strlen($n->device)) {
             if($n->device !== 0) {
                 $device = $this->fetch_object ("devices", "id", $n->device);
-                $description = strlen($device->description)>0 ? " ($device->description)" : "";
+                $description = !is_blank($device->description) ? " ($device->description)" : "";
                 $n->device = $device===false ? "/" : "<a href='".create_link("tools", "devices", $device->id)."'>$device->hostname</a> ($device->ip_addr) <span class='text-muted'>$description</span>";
             }
         }
@@ -2096,7 +2096,7 @@ class Tools extends Common_functions {
         $html[] = "</tr>";
 
         // append ports
-        if(($n->type=="static" || $n->type=="destination") && (strlen($n->src_port)>0 && strlen($n->dst_port)>0)) {
+        if(($n->type=="static" || $n->type=="destination") && (!is_blank($n->src_port) && !is_blank($n->dst_port))) {
             $sources      = implode("<br>", $sources)." :".$n->src_port;
             $destinations = implode("<br>", $destinations)." :".$n->dst_port;
         }
@@ -2392,7 +2392,7 @@ class Tools extends Common_functions {
 			$name = is_blank($option['name']) ? "/" : $option['name'];
 
 			# print table line
-			if(strlen($option['prefix']) > 0) {
+			if(!is_blank($option['prefix'])) {
     			# count change?
 				$html[] = "<tr class='level$count'>";
 
@@ -2462,7 +2462,7 @@ class Tools extends Common_functions {
 							}
 							//text
 							elseif($field['type']=="text") {
-								if(strlen($option[$field['name']])>0)		{ $html[] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $option[$field['name']])."'>"; }
+								if(!is_blank($option[$field['name']]))		{ $html[] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $option[$field['name']])."'>"; }
 								else												{ $html[] = ""; }
 							}
 							else {
@@ -3344,7 +3344,7 @@ class Tools extends Common_functions {
                 }
             	// make sure mac does not exist
                 if ($this->settings->enableMulticast=="1" && is_blank($class)) {
-                    if (strlen($field[5])>0 && $this->Subnets->is_multicast($field[0])) {
+                    if (!is_blank($field[5]) && $this->Subnets->is_multicast($field[0])) {
                         if($this->Subnets->validate_multicast_mac ($field[5], $subnet->sectionId, $subnet->vlanId, MCUNIQUE)!==true) {
                             $errors++; $class = "danger";
                         }

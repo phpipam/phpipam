@@ -226,7 +226,7 @@ class DHCP_kea extends Common_functions {
         foreach ($config as $k=>$f) {
             if (strpos($f, "#")!==false || is_blank($f)) {}
             else {
-                if(strlen($f)>0) {
+                if(!is_blank($f)) {
                     $out[] = $f;
                 }
             }
@@ -580,7 +580,7 @@ class DHCP_kea extends Common_functions {
     		// loop
     		foreach ($reservations as $k=>$l) {
         		// check for subnet
-        		if ($l->dhcp4_subnet_id!==0 && strlen($l->dhcp4_subnet_id)>0) {
+        		if ($l->dhcp4_subnet_id!==0 && !is_blank($l->dhcp4_subnet_id)) {
             		if($type=="IPv4") {
                 		foreach($this->subnets4 as $s) {
                     		if($s['id']==$l->dhcp4_subnet_id) {

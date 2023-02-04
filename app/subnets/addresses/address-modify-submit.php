@@ -78,7 +78,7 @@ if(is_array($required_ip_fields) && $action!="delete") {
 
 
 # remove all spaces in hostname
-if (strlen($address['hostname'])>0) { $address['hostname'] = str_replace(" ", "", $address['hostname']); }
+if (!is_blank($address['hostname'])) { $address['hostname'] = str_replace(" ", "", $address['hostname']); }
 
 # required fields
 isset($address['action']) ?:		$Result->show("danger", _("Missing required fields"). " action", true);
@@ -233,7 +233,7 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 
         	# validate and normalize MAC address
         	if($action!=="delete") {
-            	if(strlen(@$address['mac'])>0) {
+            	if(!is_blank(@$address['mac'])) {
                 	if($User->validate_mac ($address['mac'])===false) {
                     	$errors[] = _('Invalid MAC address')."!";
                 	}
@@ -288,7 +288,7 @@ else {
 
 	# unique hostname requested?
 	if(isset($address['unique'])) {
-		if($address['unique'] == 1 && strlen($address['hostname'])>0) {
+		if($address['unique'] == 1 && !is_blank($address['hostname'])) {
 			# check if unique
 			if(!$Addresses->is_hostname_unique($address['hostname'])) 						{ $Result->show("danger", _('Hostname is not unique')."!", true); }
 		}
@@ -296,7 +296,7 @@ else {
 
 	# validate and normalize MAC address
 	if($action!=="delete") {
-    	if(strlen(@$address['mac'])>0) {
+    	if(!is_blank(@$address['mac'])) {
     		$address['mac'] = trim($address['mac']);
         	if($User->validate_mac ($address['mac'])===false) {
             	$Result->show("danger", _('Invalid MAC address')."!", true);

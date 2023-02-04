@@ -64,7 +64,7 @@ foreach($outFile as $k=>$line) {
 		$line[1] = $Addresses->address_type_type_to_index($line[1]);
 
 		// reformat device from name to id
-		if(strlen($line[7])>0) {
+		if(!is_blank($line[7])) {
     		if ($devices!==false) {
         		foreach($devices as $d) {
         			if($d->hostname==$line[7])	{ $line[7] = $d->id; }
@@ -79,7 +79,7 @@ foreach($outFile as $k=>$line) {
 		}
 
 		// reformat location from name to id
-		if(strlen($line[10])>0) {
+		if(!is_blank($line[10])) {
     		if ($locations!==false) {
         		foreach($locations as $d) {
         			if($d->name==$line[10])	{ $line[10] = $d->id; }

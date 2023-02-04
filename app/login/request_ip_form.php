@@ -183,7 +183,7 @@ if(sizeof($custom_fields) > 0) {
 $instructions = $Database->getObject("instructions", 2);
 
 if(is_object($instructions)) {
-    if(strlen($instructions->instructions)>0) {
+    if(!is_blank($instructions->instructions)) {
 
         /* format line breaks */
         $instructions->instructions = stripslashes($instructions->instructions);		//show html

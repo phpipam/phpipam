@@ -87,7 +87,7 @@ $upgrade_queries["1.5.33"][] = "UPDATE `usersAuthMethod` SET `type` = 'http'  WH
 $upgrade_queries["1.5.33"][] = "ALTER TABLE `usersAuthMethod` CHANGE `type` `type` ENUM('local','http','AD','LDAP','NetIQ','Radius','SAML2') NOT NULL DEFAULT 'local';";
 $upgrade_queries["1.5.33"][] = "ALTER TABLE `usersAuthMethod` CHANGE `params` `params` text DEFAULT NULL;";
 $upgrade_queries["1.5.33"][] = "ALTER TABLE `usersAuthMethod` CHANGE `protected` `protected` ENUM('Yes','No') NOT NULL DEFAULT 'Yes';";
-if(defined('MAP_SAML_USER') && defined('SAML_USERNAME') && MAP_SAML_USER!=false && strlen(SAML_USERNAME)>0) {
+if(defined('MAP_SAML_USER') && defined('SAML_USERNAME') && MAP_SAML_USER!=false && !is_blank(SAML_USERNAME)) {
     $upgrade_queries["1.5.33"][] = "UPDATE `usersAuthMethod` SET `params` = JSON_SET(`params`,'$.MappedUser','".SAML_USERNAME."') WHERE `type`='SAML2'; -- IGNORE_ON_FAILURE"; // MySQL 5.7+
 }
 $upgrade_queries["1.5.33"][] = "-- Database version bump";

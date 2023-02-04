@@ -32,8 +32,8 @@ foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
 		$id = (int) $visual_addresses[$m]['id'];
 
 		# tooltip
-		if(strlen($visual_addresses[$m]['hostname'])>0)		{ $title .= "<br>".$visual_addresses[$m]['hostname']; }
-		if(strlen($visual_addresses[$m]['description'])>0)	{ $title .= "<br>".$visual_addresses[$m]['description']; }
+		if(!is_blank($visual_addresses[$m]['hostname']))		{ $title .= "<br>".$visual_addresses[$m]['hostname']; }
+		if(!is_blank($visual_addresses[$m]['description']))	{ $title .= "<br>".$visual_addresses[$m]['description']; }
 
 		# set colors
 		$background = $Subnets->address_types[$visual_addresses[$m]['state']]['bgcolor'].$alpha." !important";

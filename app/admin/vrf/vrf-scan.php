@@ -42,7 +42,7 @@ if ($scan_devices===false)                      { $Result->show("danger", _("No 
         <?php
         // loop
         foreach ($scan_devices as $d) {
-            $description = strlen($d->description)>0 ? "<span class='text-muted'>$d->description</span>" : "";
+            $description = !is_blank($d->description) ? "<span class='text-muted'>$d->description</span>" : "";
             print " <input type='checkbox' name='device-$d->id' checked> $d->hostname ($d->ip_addr) $description<br>";
         }
         ?>

@@ -27,7 +27,7 @@ $tagChange = false;
 # validate post
 is_numeric($_POST['subnetId']) ?:							$Result->show("danger", _("Invalid ID"), true, true, false, true);
 if(is_numeric($_POST['id'])) {
-	strlen($_POST['id'])!=0 ?:								$Result->show("danger", _("Invalid ID"), true, true, false, true);
+	!is_blank($_POST['id']) ?:								$Result->show("danger", _("Invalid ID"), true, true, false, true);
 	# fetch address
 	$address = (array) $Addresses->fetch_address(null, $_POST['id']);
 }

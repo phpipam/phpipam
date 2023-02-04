@@ -280,7 +280,7 @@ else {
     		print "</td>";
     		// info
     		print "<td>";
-    		if(strlen(@$ip['port_alias'])>0)
+    		if(!is_blank(@$ip['port_alias']))
     		print "	<i class='fa fa-info-circle' rel='tooltip' title='Interface description: $ip[port_alias]'></i>";
     		print "</td>";
 			// custom

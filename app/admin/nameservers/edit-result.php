@@ -48,7 +48,7 @@ if ($_POST['action']!="delete") {
 // merge nameservers
 foreach($_POST as $key=>$line) {
 	if (strlen(strstr($key,"namesrv-"))>0) {
-		if (strlen($line)>0) {
+		if (!is_blank($line)) {
 			$all_nameservers[] = trim($line);
 		}
 	}

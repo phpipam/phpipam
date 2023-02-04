@@ -627,7 +627,7 @@ class Addresses extends Common_functions {
 	 * @return void
 	 */
 	public function update_address_hostname ($ip, $id, $hostname = "") {
-		if(is_numeric($id) && strlen($hostname)>0) {
+		if(is_numeric($id) && !is_blank($hostname)) {
 			try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "hostname"=>$hostname)); }
 			catch (Exception $e) {
 				return false;
@@ -980,7 +980,7 @@ class Addresses extends Common_functions {
 
     	// set default hostname for PTR if set
     	if (is_blank($address->hostname)) {
-        	if (strlen($values->def_ptr_domain)>0) {
+        	if (!is_blank($values->def_ptr_domain)) {
             	$address->hostname = $values->def_ptr_domain;
         	}
     	}
@@ -1899,7 +1899,7 @@ class Addresses extends Common_functions {
         $html[] = "</tr>";
 
         // append ports
-        if(($n->type=="static" || $n->type=="destination") && (strlen($n->src_port)>0 && strlen($n->dst_port)>0)) {
+        if(($n->type=="static" || $n->type=="destination") && (!is_blank($n->src_port) && !is_blank($n->dst_port))) {
             $sources      = implode("<br>", $sources)." /".$n->src_port;
             $destinations = implode("<br>", $destinations)." /".$n->dst_port;
         }

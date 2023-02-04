@@ -25,7 +25,7 @@ if(strlen($_POST['code'])!=32) 										{ $Result->show("danger", _("Invalid co
 if($_POST['validity']<date("Y-m-d H:i:s"))							{ $Result->show("danger", _("Invalid date"), true); }
 if($_POST['validity']>date("Y-m-d H:i:s", strtotime("+ 7 days")))	{ $Result->show("danger", _("1 week is max validity time"), true); }
 # verify each recipient
-if(strlen($_POST['email'])>0) {
+if(!is_blank($_POST['email'])) {
 	foreach (explode(",", $_POST['email']) as $rec) {
 		if(!filter_var(trim($rec), FILTER_VALIDATE_EMAIL)) 			{ $Result->show("danger", _("Invalid email address")." - ".escape_input($rec), true); }
 	}
@@ -74,7 +74,7 @@ if(!$Admin->object_modify("settings", "edit", "id", array("id"=>1,"tempAccess"=>
 else 																							{ $Result->show("success", _("Temporary share created"), false); }
 
 # send mail
-if(strlen($_POST['email'])>0) {
+if(!is_blank($_POST['email'])) {
 	# try to send
 	try {
 		# fetch mailer settings

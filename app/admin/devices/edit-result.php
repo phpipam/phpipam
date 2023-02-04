@@ -106,7 +106,7 @@ if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 # rack
-if (strlen(@$device['rack'])>0 && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
+if (!is_blank(@$device['rack']) && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
 	$values['rack']       = $device['rack'];
 	$values['rack_start'] = $device['rack_start'];
 	$values['rack_size']  = $device['rack_size'];

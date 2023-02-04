@@ -41,7 +41,7 @@ if ($_POST['action']!="delete") {
 	if ($_POST['action']=="add")
 	if($Tools->validate_hostname($_POST['name'])===false)			{ $Result->show("danger", _("Invalid domain name"), true); }
 	// master
-	if (strlen($_POST['master'])>0) {
+	if (!is_blank($_POST['master'])) {
     	// if multilpe masters
     	if (strpos($_POST['master'], ",")!==false) {
         	// to array and trim, check each

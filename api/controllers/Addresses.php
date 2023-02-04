@@ -586,7 +586,7 @@ class Addresses_controller extends Common_api_functions  {
 	 */
 	private function validate_create_update_common () {
 		//validate and normalize MAC address
-		if(strlen($this->_params->mac)>0) {
+		if(!is_blank($this->_params->mac)) {
 			if($this->validate_mac ($this->_params->mac)===false)
 				$this->Response->throw_exception(400, "Invalid MAC address");
 			// normalize

@@ -146,7 +146,7 @@ class Install extends Common_functions {
 		$esc_user = addcslashes($this->db['user'],"'");
 		$esc_pass = addcslashes($this->db['pass'],"'");
 		$db_name  = $this->db['name'];
-		$webhost  = is_string($this->db['webhost']) && strlen($this->db['webhost']) > 0 ? addcslashes($this->db['webhost'],"'") : 'localhost';
+		$webhost  = is_string($this->db['webhost']) && !is_blank($this->db['webhost']) ? addcslashes($this->db['webhost'],"'") : 'localhost';
 
 		try {
 			# Check if user exists;
@@ -189,7 +189,7 @@ class Install extends Common_functions {
 	    # execute
 	    foreach($queries as $q) {
 		    //length check
-		    if (strlen($q)>0) {
+		    if (!is_blank($q)) {
 				try { $this->Database_root->runQuery($q.";"); }
 				catch (Exception $e) {
 					//unlock tables
@@ -507,7 +507,7 @@ class Upgrade extends Install {
 			# execute all queries
 			foreach($queries as $k=>$query) {
 				// execute
-				if(strpos($query, "--")!==0 && strlen(trim($query))>0) {
+				if(strpos($query, "--")!==0 && !is_blank(trim($query ?: ''))) {
 					$ignore_on_failure = (strpos($query, '-- IGNORE_ON_FAILURE')!== false);
 
 					if ($ignore_on_failure) $this->Database->setErrMode(\PDO::ERRMODE_SILENT);

@@ -116,9 +116,9 @@ if(sizeof($removed_addresses)>0 && $config['removed_addresses_send_mail']) {
 			$subnet = $Subnets->fetch_subnet(null, $change['subnetId']);
 
 	        // desc
-			$change['description'] = strlen($change['description'])>0 ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
+			$change['description'] = !is_blank($change['description']) ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
 			// subnet desc
-			$subnet->description = strlen($subnet->description)>0 ? "$Subnets->mail_font_style $subnet->description</font>" : "$Subnets->mail_font_style / </font>";
+			$subnet->description = !is_blank($subnet->description) ? "$Subnets->mail_font_style $subnet->description</font>" : "$Subnets->mail_font_style / </font>";
 
 			//content
 			$content[] = "<tr>";

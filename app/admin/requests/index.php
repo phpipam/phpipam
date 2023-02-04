@@ -73,7 +73,7 @@ else {
 		}
 		else {
 			// ip not provided
-			$request['ip_addr'] = strlen($request['ip_addr'])>0 ? $request['ip_addr'] : _("Automatic");
+			$request['ip_addr'] = !is_blank($request['ip_addr']) ? $request['ip_addr'] : _("Automatic");
 
 			print '<tr>'. "\n";
 			print "	<td><button class='btn btn-xs btn-default open_popup' data-script='app/admin/requests/edit.php' data-class='700' data-action='edit' data-requestid='$request[id]'><i class='fa fa-pencil' rel='tooltip' data-title=' "._('Process')."'></i></td>";

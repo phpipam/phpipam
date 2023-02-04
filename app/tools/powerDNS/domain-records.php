@@ -75,7 +75,7 @@ if ($domain === false) {
         print "<td>" . _("Master servers") . ":</td>";
         print "<td>";
         foreach ($master as $k => $m) {
-            if (strlen($m) > 0) {
+            if (!is_blank($m)) {
                 print "<span class='badge badge1'>$m</span><br>";
             }
         }
@@ -83,13 +83,13 @@ if ($domain === false) {
         print "</tr>";
 
         // notified serial
-        $domain->notified_serial = strlen($domain->notified_serial) > 0 ? $domain->notified_serial : "/";
+        $domain->notified_serial = !is_blank($domain->notified_serial) ? $domain->notified_serial : "/";
         print "<tr>";
         print " <td>" . _("Notified serial:") . "</td>";
         print " <td>" . $domain->notified_serial . "</td>";
         print "</tr>";
         // last check
-        $domain->last_check = strlen($domain->last_check) > 0 ? $domain->last_check : _("Never");
+        $domain->last_check = !is_blank($domain->last_check) ? $domain->last_check : _("Never");
         print "<tr>";
         print " <td>" . _("Last check:") . "</td>";
         print " <td>" . $domain->last_check . "</td>";

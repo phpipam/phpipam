@@ -254,7 +254,7 @@ else {
                         				//cast
                         				$vrf = (array) $vrf;
                         				// set description if present
-                        				$vrf['description'] = strlen($vrf['description'])>0 ? " ($vrf[description])" : "";
+                        				$vrf['description'] = !is_blank($vrf['description']) ? " ($vrf[description])" : "";
                         	        	print '<option value="'. $vrf['vrfId'] .'">'.$vrf['name'].$vrf['description'].'</option>';
                         	        }
                     	        }

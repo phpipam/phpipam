@@ -47,13 +47,13 @@ if ($destinations===false)
     $destinations = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
 
 // description
-$n->description = strlen($n->description)>0 ? "($n->description)" : "";
+$n->description = !is_blank($n->description) ? "($n->description)" : "";
 
 // device
 if (strlen($n->device)) {
     if($n->device !== 0) {
         $device = $Tools->fetch_object ("devices", "id", $n->device);
-        $description = strlen($device->description)>0 ? "($device->description)" : "";
+        $description = !is_blank($device->description) ? "($device->description)" : "";
         $n->device = $device===false ? "/" : "<a href='".create_link("tools", "devices", $device->id)."'>$device->hostname</a> ($device->ip_addr), <span class='text-muted'>$description</span>";
     }
 }

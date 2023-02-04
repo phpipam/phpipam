@@ -732,7 +732,7 @@ class Admin extends Common_functions {
 	 */
 	public function save_custom_fields_filter ($table, $filtered_fields) {
 		# old custom fields, save them to array
-		$hidden_array = strlen($this->settings->hiddenCustomFields)>0 ? pf_json_decode($this->settings->hiddenCustomFields, true) : array();
+		$hidden_array = !is_blank($this->settings->hiddenCustomFields) ? pf_json_decode($this->settings->hiddenCustomFields, true) : array();
 
 		# set new array for table
 		if(is_null($filtered_fields))	{ unset($hidden_array[$table]); }

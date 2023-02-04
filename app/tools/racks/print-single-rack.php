@@ -259,7 +259,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         }
         ?>
 
-        <?php if($User->settings->enableLocations==1 && strlen($rack->location)>0 && $rack->location!=0) { ?>
+        <?php if($User->settings->enableLocations==1 && !is_blank($rack->location) && $rack->location!=0) { ?>
         <tr><td colspan='2' style="padding-top:50px !important;"><hr></td></tr>
         <tr>
             <td colspan="2">
@@ -275,7 +275,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
     </div>
 
     <!-- location -->
-    <?php if($User->settings->enableLocations==1 && strlen($rack->location)>0 && $rack->location!=0) {  ?>
+    <?php if($User->settings->enableLocations==1 && !is_blank($rack->location) && $rack->location!=0) {  ?>
     <div class="col-xs-12 col-md-6">
 
         <div>
@@ -294,7 +294,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
     <?php } ?>
 
     <!-- image -->
-    <?php if(!($User->settings->enableLocations==1 && strlen($rack->location)>0 && $rack->location!=0)) { ?>
+    <?php if(!($User->settings->enableLocations==1 && !is_blank($rack->location) && $rack->location!=0)) { ?>
     <div class="col-xs-12 col-md-6">
         <?php if($rack->hasBack!="0") { ?>
         <img src="<?php print $Tools->create_rack_link ($rack->id, NULL, true); ?>" style='width:200px;margin-left:5px;float:right;'>

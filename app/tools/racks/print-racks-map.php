@@ -91,7 +91,7 @@ else {
                     print "<h4>$m.) ".$location->name."</h4><hr>";
                     else
                     print "<h4><a href='".create_link("tools", "locations", $location_id)."'>$m.) ".$location->name."</a></h4><hr>";
-                    print strlen($location->description)>0 ? "<span class='text-muted'>$location->description</span>" : "";
+                    print !is_blank($location->description) ? "<span class='text-muted'>$location->description</span>" : "";
                     // racks
                     print "<div style='margin-bottom:30px;'>";
                     foreach ($all_racks as $r) {

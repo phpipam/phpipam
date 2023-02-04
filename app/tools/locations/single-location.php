@@ -62,14 +62,14 @@ else {
             	print "<tr>";
             	print "	<th>"._('Address')."</th>";
             	print "	<td>";
-            	print strlen($location->address)>0 ? escape_input($location->address) : "/";
+            	print !is_blank($location->address) ? escape_input($location->address) : "/";
             	print "</td>";
             	print "</tr>";
 
             	print "<tr>";
             	print "	<th>"._('Coordinates')."</th>";
             	print "	<td>";
-            	print strlen($location->lat)>0 && strlen($location->long)>0 ? "<span class='text-muted'>".escape_input($location->lat)." / ".escape_input($location->long)."</span> <a href='https://www.google.com/maps/@?api=1&map_action=map&center=".escape_input($location->lat)."%2C".escape_input($location->long). "&zoom=20&basemap=satellite' target='_blank'><i class='fa fa-gray fa-google' rel='tooltip' title='"._("Google Maps Satellite View")."'></i></a>" : "/";
+            	print !is_blank($location->lat) && !is_blank($location->long) ? "<span class='text-muted'>".escape_input($location->lat)." / ".escape_input($location->long)."</span> <a href='https://www.google.com/maps/@?api=1&map_action=map&center=".escape_input($location->lat)."%2C".escape_input($location->long). "&zoom=20&basemap=satellite' target='_blank'><i class='fa fa-gray fa-google' rel='tooltip' title='"._("Google Maps Satellite View")."'></i></a>" : "/";
             	print "</td>";
             	print "</tr>";
 
@@ -178,7 +178,7 @@ else {
                             	else                        { $href = create_link("tools", "racks", $o->id); }
 
                             	// description
-                            	$o->description = strlen($o->description)>0 ? " <span class='text-muted'>($o->description)</span>" : "";
+                            	$o->description = !is_blank($o->description) ? " <span class='text-muted'>($o->description)</span>" : "";
 
                             	// subnet name
                             	if ($o->type=="subnets")    $o->name = $Tools->transform_address ($o->name,"dotted")."/".$o->mask;

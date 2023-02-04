@@ -56,8 +56,8 @@ if (isset($objects["vlans"])) {
 	foreach ($vlans as $vlan) {
 
 		// fixes
-		$vlan->description = strlen($vlan->description)>0 ? " <span class='text-muted'>( ".$vlan->description." )</span>" : "";
-		$vlan->domainDescription = strlen($vlan->domainDescription)>0 ? " <span class='text-muted'>( ".$vlan->domainDescription." )</span>" : "";
+		$vlan->description = !is_blank($vlan->description) ? " <span class='text-muted'>( ".$vlan->description." )</span>" : "";
+		$vlan->domainDescription = !is_blank($vlan->domainDescription) ? " <span class='text-muted'>( ".$vlan->domainDescription." )</span>" : "";
 
 		// l2 domain
 		$domain = $Tools->fetch_object ("vlanDomains", "id", $vlan->domainId);

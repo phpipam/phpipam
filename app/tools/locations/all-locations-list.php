@@ -80,7 +80,7 @@ else {
             $l->address = is_blank($l->address) ? "/" : $l->address;
             print "<td>$l->address</td>";
             // coordinates
-            if(strlen($l->lat)>0 || is_blank($l->long)) { print "<td><span class='text-muted'>$l->lat / $l->long</span></td>"; }
+            if(!is_blank($l->lat) || is_blank($l->long)) { print "<td><span class='text-muted'>$l->lat / $l->long</span></td>"; }
             else                                         { print "<td>".$Result->show("warning", _("Location not set"), false, false, true)."</td>"; }
     		//custom
     		if(sizeof($custom) > 0) {

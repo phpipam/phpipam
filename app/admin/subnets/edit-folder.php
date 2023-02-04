@@ -50,7 +50,7 @@ if ($_POST['action'] != "add") {
 # we are adding new folder - get folder details
 else {
 	# for selecting master subnet if added from subnet details!
-	if(strlen($_POST['subnetId']) > 0) {
+	if(!is_blank($_POST['subnetId'])) {
     	$subnet_old_temp = (array) $Subnets->fetch_subnet(null, $_POST['subnetId']);
     	$subnet_old_details['masterSubnetId'] 	= @$subnet_old_temp['id'];			// same master subnet ID for nested
     	$subnet_old_details['vlanId'] 		 	= @$subnet_old_temp['vlanId'];		// same default vlan for nested

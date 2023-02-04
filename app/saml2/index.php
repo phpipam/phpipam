@@ -100,10 +100,10 @@ else{
 	}
 
 	// try to authenticate in phpipam
-	if(is_string($params->MappedUser) && strlen($params->MappedUser)>0) {
+	if(is_string($params->MappedUser) && !is_blank($params->MappedUser)) {
         // Map all SAML users to a local account
 		$username = $params->MappedUser;
-	} elseif(is_string($params->UserNameAttr) && strlen($params->UserNameAttr)>0) {
+	} elseif(is_string($params->UserNameAttr) && !is_blank($params->UserNameAttr)) {
         // Extract username from attribute
         $attr = $auth->getAttribute($params->UserNameAttr);
         $username = is_array($attr) ? $attr[0] : '';

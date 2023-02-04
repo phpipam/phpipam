@@ -38,7 +38,7 @@ $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 
 
 # Create a workbook
-$filename = isset($_GET['filename'])&&strlen(@$_GET['filename'])>0 ? $_GET['filename'] : "phpipam_subnet_export.xls";
+$filename = isset($_GET['filename'])&&!is_blank(@$_GET['filename']) ? $_GET['filename'] : "phpipam_subnet_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
 $workbook->setVersion(8);
 
@@ -89,7 +89,7 @@ $lineCount++;
 $vlan = $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
 if($vlan!=false) {
 	$vlan = (array) $vlan;
-	$vlan_text = strlen($vlan['name'])>0 ? "vlan: $vlan[number] - $vlan[name]" : "vlan: $vlan[number]";
+	$vlan_text = !is_blank($vlan['name']) ? "vlan: $vlan[number] - $vlan[name]" : "vlan: $vlan[number]";
 
 	$worksheet->write($lineCount, $rowCount, $vlan_text, $format_vlan );
 	$lineCount++;

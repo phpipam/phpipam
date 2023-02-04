@@ -23,7 +23,7 @@ elseif(!is_object($location)) {
     $OSM = new OpenStreetMap($Database);
 
     // recode
-    if (is_blank($location->long) && is_blank($location->lat) && strlen($location->address)>0) {
+    if (is_blank($location->long) && is_blank($location->lat) && !is_blank($location->address)) {
         $latlng = $OSM->get_latlng_from_address ($location->address);
         if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
             // save
@@ -37,7 +37,7 @@ elseif(!is_object($location)) {
     $resize = @$resize === false ? false : true;
 
     # no long/lat
-    if( (strlen($location->long)>0 && strlen($location->lat))) {
+    if( (!is_blank($location->long) && strlen($location->lat))) {
         $OSM->add_location($location);
         $OSM->map($height);
     }

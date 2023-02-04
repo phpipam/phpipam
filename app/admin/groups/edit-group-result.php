@@ -79,7 +79,7 @@ if(!$Admin->object_modify("userGroups", $_POST['action'], "g_id", $values)) { $R
 else 					 													{ $Result->show("success", _("Group")." ".$_POST["action"]." "._("success")."!", false); }
 
 # from list of usernames provided from AD result if some user matches add him to group
-if (strlen($_POST['gmembers'])>0) {
+if (!is_blank($_POST['gmembers'])) {
 	// save id
 	$gid = $Admin->lastId;
 	// to array
