@@ -50,23 +50,24 @@ $filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
 		<pre>
 <?php
 
-$esc_user = addcslashes($db['user'],"'");
-$esc_pass = addcslashes($db['pass'],"'");
-$webhost  = is_string($db['webhost']) && strlen($db['webhost']) ? addcslashes($db['webhost'],"'") : 'localhost';
+$esc_user = escape_input($db['user']);
+$esc_pass = escape_input(_("<YOUR SECRET PASSWORD FROM config.php>"));
+$esc_webhost = is_string($db['webhost']) && strlen($db['webhost']) ? escape_input($db['webhost']) : 'localhost';
+$db_name  = escape_input($db['name']);
 
 $file  = "# Create phpipam database\n";
 $file .= "# ------------------------------------------------------------\n";
-$file .= "CREATE DATABASE $db[name];\n\n";
+$file .= "CREATE DATABASE $db_name;\n\n";
 
 $file .= "# Set permissions for phpipam user\n";
 $file .= "# ------------------------------------------------------------\n";
-$file .= "CREATE USER '$esc_user'@'$webhost' IDENTIFIED BY '$esc_pass';\n";
-$file .= "GRANT ALL ON $db[name].* TO '$esc_user'@'$webhost';\n";
+$file .= "CREATE USER '$esc_user'@'$esc_webhost' IDENTIFIED BY '$esc_pass';\n";
+$file .= "GRANT ALL ON $db_name.* TO '$esc_user'@'$esc_webhost';\n";
 $file .= "FLUSH PRIVILEGES;\n\n";
 
 $file .= "# Select created database\n";
 $file .= "# ------------------------------------------------------------\n";
-$file .= "USE `$db[name]`;\n\n\n";
+$file .= "USE `$db_name`;\n\n\n";
 
 $file .= "# Create tables and import data\n";
 $file .= "# ------------------------------------------------------------\n\n\n\n";
