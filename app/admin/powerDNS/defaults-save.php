@@ -22,7 +22,7 @@ $User->check_maintaneance_mode ();
 $User->Crypto->csrf_cookie ("validate", "pdns_defaults", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 // validations
-if(strlen($_POST['ttl'])==0)	{ $_POST['ttl'] = $PowerDNS->defaults->ttl; }
+if(is_blank($_POST['ttl']))	{ $_POST['ttl'] = $PowerDNS->defaults->ttl; }
 
 // formulate json
 $values = new StdClass ();

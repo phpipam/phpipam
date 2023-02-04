@@ -259,7 +259,7 @@ class Vrfs_controller extends Common_api_functions {
 		// check for POST method
 		if($_SERVER['REQUEST_METHOD']=="POST") {
 			// check name
-			if(strlen($this->_params->name)==0)												{ $this->Response->throw_exception(400, "VRF name is required"); }
+			if(is_blank($this->_params->name))												{ $this->Response->throw_exception(400, "VRF name is required"); }
 			// check that it exists
 			if($this->Tools->fetch_object ("vrf", "name", $this->_params->name) !== false )	{ $this->Response->throw_exception(409, "VRF with that name already exists"); }
 		}

@@ -32,7 +32,7 @@ $selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter); 
 
 // set size
 $selected_ip_fields_size = in_array('state', $selected_ip_fields) ? sizeof($selected_ip_fields)-1 : sizeof($selected_ip_fields);	//set size of selected fields
-if($selected_ip_fields_size==1 && strlen($selected_ip_fields[0])==0) { $selected_ip_fields_size = 0; }								//fix for 0
+if($selected_ip_fields_size==1 && is_blank($selected_ip_fields[0])) { $selected_ip_fields_size = 0; }								//fix for 0
 
 # set ping statuses for warning and offline
 $statuses = explode(";", $User->settings->pingStatus);

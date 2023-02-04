@@ -23,7 +23,7 @@ $User->check_module_permissions ("circuits", User::ACCESS_RWA, true, false);
 $User->Crypto->csrf_cookie ("validate", "circuit_options", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # empty
-if(strlen($_POST['option'])==0)                           { $Result->show("danger", _('Value cannot be empty'), true); }
+if(is_blank($_POST['option']))                           { $Result->show("danger", _('Value cannot be empty'), true); }
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
 

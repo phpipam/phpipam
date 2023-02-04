@@ -24,7 +24,7 @@ $providers = ['none', "Google_Authenticator"];
 if(!in_array($_POST['2fa_provider'], $providers)) 							{ $Result->show("danger", _("Invalid provider"), true); }
 
 // verify name
-if(strlen($_POST['2fa_name'])>32 || strlen($_POST['2fa_name'])<1)			{ $Result->show("danger", _("Invalid application name"), true); }
+if(strlen($_POST['2fa_name'])>32 || is_blank($_POST['2fa_name']))			{ $Result->show("danger", _("Invalid application name"), true); }
 
 // verify length
 if(!is_numeric($_POST['2fa_length']))										{ $Result->show("danger", _("Invalid value for length"), true); }

@@ -65,7 +65,7 @@ if(is_array($required_ip_fields) && $action!="delete") {
 	$required_field_errors = array();
 	// Check that all required fields are present
 	foreach ($required_ip_fields as $required_field) {
-		if (!isset($address[$required_field]) || strlen($address[$required_field])==0) {
+		if (!isset($address[$required_field]) || is_blank($address[$required_field])) {
 			$required_field_errors[] = ucwords($required_field)." "._("is required");
 		}
 	}
@@ -130,7 +130,7 @@ if(sizeof($custom_fields) > 0 && $action!="delete") {
 			}
 		}
 		# null custom fields not permitted
-		if($field['Null']=="NO" && strlen($address[$field['name']])==0) {
+		if($field['Null']=="NO" && is_blank($address[$field['name']])) {
 			$Result->show("danger", $field['name']." "._("can not be empty!"), true);
 		}
 	}

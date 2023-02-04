@@ -29,7 +29,7 @@ $Tools->validate_action ($_POST['action']);
 
 # validate post
 is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid subnet ID"), true, true);
-is_numeric($_POST['id']) || strlen($_POST['id'])==0 ?:	$Result->show("danger", _("Invalid ID"), true, true);
+is_numeric($_POST['id']) || is_blank($_POST['id']) ?:	$Result->show("danger", _("Invalid ID"), true, true);
 
 # get posted values
 $subnetId= escape_input($_POST['subnetId']);

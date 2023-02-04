@@ -34,7 +34,7 @@ $passwordPolicy = [
 # check for numbers and set parameters
 foreach ($passwordPolicy as $k=>$f) {
 	if (isset($_POST[$k])) {
-		if (strlen($_POST[$k])==0) {
+		if (is_blank($_POST[$k])) {
 			$passwordPolicy[$k] = 0;
 		}
 		elseif (!is_numeric($_POST[$k])) {

@@ -64,7 +64,7 @@ if ($_POST['action']!="delete") {
 
 	// if slave master must be present
 	if ($_POST['type']=="SLAVE") {
-    	if (strlen($_POST['master'])==0) { $Result->show("danger", _("Please set master server(s) if domain type is SLAVE"), true); }
+    	if (is_blank($_POST['master'])) { $Result->show("danger", _("Please set master server(s) if domain type is SLAVE"), true); }
         else {
         	if (strpos($_POST['master'], ",")!==false) {
             	// to array and trim, check each

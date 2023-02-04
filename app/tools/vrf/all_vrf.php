@@ -73,7 +73,7 @@ else {
 		$vrf = (array) $vrf;
 
     	// format sections
-    	if(strlen($vrf['sections'])==0) {
+    	if(is_blank($vrf['sections'])) {
     		$sections = "All sections";
     	}
     	else {

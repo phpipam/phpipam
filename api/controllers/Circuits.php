@@ -366,7 +366,7 @@ class Circuits_controller extends Common_api_functions {
 	private function validate_provider_name ($action) {
 		if($action=="add") {
 			if (!isset($this->_params->name)) 		 { $this->Response->throw_exception(404, "Name is mandatory"); }
-			elseif (strlen($this->_params->name)==0) { $this->Response->throw_exception(404, "Name is mandatory"); }
+			elseif (is_blank($this->_params->name)) { $this->Response->throw_exception(404, "Name is mandatory"); }
 		}
 	}
 

@@ -973,8 +973,8 @@ class Logging extends Common_functions {
 			//change
 			if($this->object_old[$k]!=$v && ($this->object_old[$k] != str_replace("\'", "'", $v)))	{
 				//empty
-				if(strlen(@$this->object_old[$k])==0)	{ $this->object_old[$k] = "NULL"; }
-				if(strlen(@$v)==0)						{ $v = "NULL"; }
+				if(is_blank(@$this->object_old[$k]))	{ $this->object_old[$k] = "NULL"; }
+				if(is_blank(@$v))						{ $v = "NULL"; }
 
 				//tag change
 				if($k == 'state') 				{ $v = $this->changelog_format_tag_diff ($k, $v); }

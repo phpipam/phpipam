@@ -121,7 +121,7 @@ if(sizeof($custom) > 0) {
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && strlen($circuit[$myField['name']])==0) { $Result->show("danger", $myField['name']." "._("can not be empty")."!", true); }
+		if($myField['Null']=="NO" && is_blank($circuit[$myField['name']])) { $Result->show("danger", $myField['name']." "._("can not be empty")."!", true); }
 
 		# save to update array
 		$update[$myField['name']] = $circuit[$myField['nameTest']];

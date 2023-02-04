@@ -226,7 +226,7 @@ $tool_items["search"] = array (
     ?>
 
     <!-- all tools -->
-    <li class='<?php if($_GET['page']=="tools" && (!isset($_GET['section']) || strlen($_GET['section'])==0)) print "active"; ?>'>
+    <li class='<?php if($_GET['page']=="tools" && (!isset($_GET['section']) || is_blank($_GET['section']))) print "active"; ?>'>
          <a href='<?php print create_link("tools"); ?>'><i class='fa fa-list'></i> <?php print _('All tools'); ?></a>
     </li>
 </ul>

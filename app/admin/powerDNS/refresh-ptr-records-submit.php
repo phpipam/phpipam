@@ -63,7 +63,7 @@ $hosts   = $Addresses->fetch_subnet_addresses ($subnet->id, "ip_addr", "asc");
 if (is_array($hosts) && sizeof($hosts)>0) {
 	foreach ($hosts as $h) {
     	// set default hostname for PTR if set
-    	if (strlen($h->hostname)==0) {
+    	if (is_blank($h->hostname)) {
         	if (strlen($values['def_ptr_domain'])>0) {
             	$h->hostname = $values['def_ptr_domain'];
         	}

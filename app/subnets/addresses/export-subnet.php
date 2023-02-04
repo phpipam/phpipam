@@ -196,8 +196,8 @@ foreach ($addresses as $ip) {
 	$rowCount = 0;
 
 	//change switch ID to name
-	$ip['switch']   = is_null($ip['switch'])||strlen($ip['switch'])==0||$ip['switch']==0||!isset($devices_indexed[$ip['switch']]) ? "" : $devices_indexed[$ip['switch']]->hostname;
-	$ip['location'] = is_null($ip['location'])||strlen($ip['location'])==0||$ip['location']==0||!isset($locations_indexed[$ip['location']]) ? "" : $locations_indexed[$ip['location']]->name;
+	$ip['switch']   = is_null($ip['switch'])||is_blank($ip['switch'])||$ip['switch']==0||!isset($devices_indexed[$ip['switch']]) ? "" : $devices_indexed[$ip['switch']]->hostname;
+	$ip['location'] = is_null($ip['location'])||is_blank($ip['location'])||$ip['location']==0||!isset($locations_indexed[$ip['location']]) ? "" : $locations_indexed[$ip['location']]->name;
 
 	if( (isset($_GET['ip_addr'])) && ($_GET['ip_addr'] == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $Subnets->transform_address($ip['ip_addr'],"dotted"), $format_left);

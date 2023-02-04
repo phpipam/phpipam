@@ -181,7 +181,7 @@ $admin_items["locations"] = array (
     ?>
 
     <!-- all tools -->
-    <li class='<?php if($_GET['page']=="administration" && (!isset($_GET['section']) || strlen($_GET['section'])==0)) print "active"; ?>'>
+    <li class='<?php if($_GET['page']=="administration" && (!isset($_GET['section']) || is_blank($_GET['section']))) print "active"; ?>'>
          <a href='<?php print create_link("administration"); ?>'><i class='fa fa-list'></i> <?php print _('All items'); ?></a>
     </li>
 </ul>

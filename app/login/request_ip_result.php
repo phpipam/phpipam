@@ -46,7 +46,7 @@ if($Tools->settings->enableIPrequests==1) {
 					"processed"   => 0
 	    			);
 
-	# custom fields				
+	# custom fields
 	$custom = $Tools->fetch_custom_fields('requests');
 	if(sizeof($custom) > 0) {
 		foreach($custom as $myField) {
@@ -62,7 +62,7 @@ if($Tools->settings->enableIPrequests==1) {
 				}
 			}
 			# not null!
-			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+			if($myField['Null']=="NO" && is_blank($_POST[$myField['name']])) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
 
 			# save to update array
 			$values[$myField['name']] = $_POST[$myField['name']];

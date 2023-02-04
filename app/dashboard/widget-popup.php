@@ -35,7 +35,7 @@ $widgets = (array) $widgets;
 		if(!in_array($k, $uwidgets))	{
 			$wtmp = (array) $widgets[$k];
 			# size fix
-			if(strlen($wtmp['wsize'])==0)	{ $wtmp['wsize']=6; }
+			if(is_blank($wtmp['wsize']))	{ $wtmp['wsize']=6; }
 			print "<li id='$k'>";
 			print "	<a href='' class='btn btn-xs fa-marg-right  btn-default btn-success widget-add' id='w-$wtmp[wfile]' data-size='$wtmp[wsize]' data-htitle='$wtmp[wtitle]'><i class='fa fa-plus'></i></a>"._($wtmp['wtitle']);
 			print "	<div class='muted' style='margin-left:27px;'>"._($wtmp['wdescription'])."</div>";

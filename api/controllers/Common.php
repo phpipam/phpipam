@@ -394,7 +394,7 @@ class Common_api_functions {
 		if(!isset($this->_params->filter_value))
 			$this->Response->throw_exception(400, _('Missing filter_value'));
 
-		if (strlen($this->_params->filter_value)==0)
+		if (is_blank($this->_params->filter_value))
 			$this->Response->throw_exception(400, _('Empty filter_value'));
 
 		// validate filter_by is a valid property

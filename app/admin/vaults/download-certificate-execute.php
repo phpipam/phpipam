@@ -51,7 +51,7 @@ else {
 }
 
 // no key
-if(strlen(@$_GET['key'])==0) { $_GET['key'] = ""; }
+if(is_blank(@$_GET['key'])) { $_GET['key'] = ""; }
 
 // all ok, proceed
 try {

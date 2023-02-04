@@ -20,8 +20,8 @@ $User->check_user_session();
 if ($User->settings->enableMulticast!="1")          { die("True"); }
 
 # default vlan/id if not set
-if (strlen($_POST['vlanId'])==0)                    { $_POST['vlanId'] = 0; }
-if (strlen($_POST['id'])==0)                        { $_POST['id'] = 0; }
+if (is_blank($_POST['vlanId']))                    { $_POST['vlanId'] = 0; }
+if (is_blank($_POST['id']))                        { $_POST['id'] = 0; }
 
 # validations
 if (strlen($_POST['mac'])>21)                       { die("True"); }

@@ -32,7 +32,7 @@ if($_POST['zone'] && !preg_match('/^[0-9a-zA-Z.\-_ ]+$/i',$_POST['zone'])) {
 }
 
 if($firewallZoneSettings['zoneGenerator']=="2")
-if(strlen(@$_POST['zone']) < 1 || strlen(@$_POST['zone'])>$firewallZoneSettings['zoneLength']) {
+if(is_blank(@$_POST['zone']) || strlen(@$_POST['zone'])>$firewallZoneSettings['zoneLength']) {
 	$Result->show("danger", _("Invalid zone name length."), true);
 }
 

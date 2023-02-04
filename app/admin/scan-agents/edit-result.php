@@ -51,7 +51,7 @@ if($_POST['action']!="delete") {
 	if(strlen($_POST['code'])!=32 || !preg_match("#^[a-zA-Z0-9-_=]+$#", $_POST['code']))		{ $error[] = _("Invalid agent code"); }
 	}
 	# name must be more than 2 and alphanumberic
-	if(strlen($_POST['name'])==0)										{ $error[] = _("Invalid agent name"); }
+	if(is_blank($_POST['name']))										{ $error[] = _("Invalid agent name"); }
 }
 
 # die if errors

@@ -72,8 +72,8 @@ else {
         $n->description = str_replace("\n", "<br>", $n->description);
 
         // port
-        if(strlen($n->src_port)==0) $n->src_port = "/";
-        if(strlen($n->dst_port)==0) $n->dst_port = "/";
+        if(is_blank($n->src_port)) $n->src_port = "/";
+        if(is_blank($n->dst_port)) $n->dst_port = "/";
 
         // print
         print "<table class='ipaddress_subnet table-condensed'>";

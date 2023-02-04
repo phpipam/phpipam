@@ -56,7 +56,7 @@ if (isset($objects["racks"])) {
         $cnt = $Tools->count_database_objects ("devices", "rack", $r->id);
 
         // fix possible null
-        if(strlen($r->location)==0) $r->location = 0;
+        if(is_blank($r->location)) $r->location = 0;
 
         // print
         print "<tr>";

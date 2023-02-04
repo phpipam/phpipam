@@ -109,7 +109,7 @@ if ($User->twofa_required()===false || $User->user->{'2fa'}==0) {
 
 	<?php
 	// if user did not receive code yet print it out !
-	if (strlen($User->user->{'2fa_secret'})==0) {
+	if (is_blank($User->user->{'2fa_secret'})) {
 		include ('2fa_create.php');
 	}
 	// print form

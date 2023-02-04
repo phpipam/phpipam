@@ -342,7 +342,7 @@ class OpenStreetMap extends Common_functions
     {
         $results = ['lat' => null, 'lng' => null, 'error' => null];
 
-        if (!is_string($address) || strlen($address) == 0) {
+        if (!is_string($address) || is_blank($address)) {
             $results['error'] = _('invalid address');
             return $results;
         }

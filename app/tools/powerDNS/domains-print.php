@@ -36,7 +36,7 @@ switch ($type) {
 }
 
 // if serach blank unset
-if (strlen(@$_POST['domain-filter']) == 0) {unset($_POST['domain-filter']);}
+if (is_blank(@$_POST['domain-filter'])) {unset($_POST['domain-filter']);}
 
 // if search filter out hits
 if (@$_GET['sPage'] == "search" && strlen(@$_POST['domain-filter']) > 0) {
@@ -114,7 +114,7 @@ elseif ($domains === false) {$Result->show("info alert-absolute", _("No domains 
 foreach ($domains as $d) {
     // nulls
     foreach ($d as $k => $v) {
-        if (strlen($v) == 0) {
+        if (is_blank($v)) {
             $d->$k = "<span class='muted'>/</span>";
         }
 

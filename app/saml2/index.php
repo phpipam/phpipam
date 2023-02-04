@@ -115,7 +115,7 @@ else{
 	}
 
     // Validate username
-    if (!isset($username) || !is_string($username) || strlen($username)==0) {
+    if (!isset($username) || !is_string($username) || is_blank($username)) {
         $Result->show("danger", _("Could not extract valid username from SAML response")." : ".$username_source, true);
     }
 

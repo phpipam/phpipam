@@ -211,7 +211,7 @@ class Common_functions  {
 	 */
 	public function fetch_all_objects ($table=null, $sortField="id", $sortAsc=true) {
 		# null table
-		if(is_null($table)||strlen($table)==0) return false;
+		if(is_null($table)||is_blank($table)) return false;
 
 		$cached_item = $this->cache_check("fetch_all_objects", "t=$table f=$sortField o=$sortAsc");
 		if(is_object($cached_item)) return $cached_item->result;
@@ -246,7 +246,7 @@ class Common_functions  {
 	public function fetch_object ($table, $method, $value) {
 		// checks
 		if(!is_string($table)) return false;
-		if(strlen($table)==0)  return false;
+		if(is_blank($table))  return false;
 		if(is_null($method))   return false;
 		if(is_null($value))    return false;
 		if($value===0)         return false;
@@ -288,7 +288,7 @@ class Common_functions  {
 	 */
 	public function fetch_multiple_objects ($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $result_fields = "*") {
 		# null table
-		if(is_null($table)||strlen($table)==0) return false;
+		if(is_null($table)||is_blank($table)) return false;
 		else {
 			try { $res = $this->Database->findObjects($table, $field, $value, $sortField, $sortAsc, $like, false, $result_fields); }
 			catch (Exception $e) {
@@ -659,7 +659,7 @@ class Common_functions  {
 	 * @return  string
 	 */
 	public function noxss_html($html) {
-		if (!is_string($html) || strlen($html)==0)
+		if (!is_string($html) || is_blank($html))
 			return "";
 
 		// Convert encoding to UTF-8
@@ -730,7 +730,7 @@ class Common_functions  {
         		$out[$k] = $v;
     		}
     		else {
-    			if(is_null($v) || strlen($v)==0) {
+    			if(is_null($v) || is_blank($v)) {
     				$out[$k] = 	$char;
     			} else {
     				$out[$k] = $v;
@@ -754,7 +754,7 @@ class Common_functions  {
     	// loop
     	if(is_array($fields)) {
 			foreach($fields as $k=>$v) {
-				if(is_null($v) || strlen($v)==0) {
+				if(is_null($v) || is_blank($v)) {
 				}
 				else {
 					$out[$k] = $v;
@@ -821,7 +821,7 @@ class Common_functions  {
 	 * @return int|mixed
 	 */
 	public function verify_checkbox ($field) {
-		return (!isset($field) || strlen($field)==0) ? 0 : escape_input($field);
+		return (!isset($field) || is_blank($field)) ? 0 : escape_input($field);
 	}
 
 	/**
@@ -1201,7 +1201,7 @@ class Common_functions  {
     	// first put it to common format (1)
     	$mac = $this->reformat_mac_address ($mac);
     	// we permit empty
-        if (strlen($mac)==0)                                                            { return true; }
+        if (is_blank($mac))                                                            { return true; }
     	elseif (preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', $mac) != 1)   { return false; }
     	else                                                                            { return true; }
 	}
@@ -1582,7 +1582,7 @@ class Common_functions  {
     		// set selected
 			$selected = $v==$object->{$field['name']} ? "selected='selected'" : "";
 			// parse delimiter
-			if(strlen($set_delimiter)==0) {
+			if(is_blank($set_delimiter)) {
 				// save
 		        $html[] = "<option value='$v' $selected>$v</option>";
 			}
@@ -1660,7 +1660,7 @@ class Common_functions  {
     	if($field['Null']!="NO") { $tmp[2] = ""; }
 
     	foreach($tmp as $k=>$v) {
-    		if(strlen($object->{$field['name']})==0 && $k==2)	{ $html[] = "<option value='$k' selected='selected'>"._($v)."</option>"; }
+    		if(is_blank($object->{$field['name']}) && $k==2)	{ $html[] = "<option value='$k' selected='selected'>"._($v)."</option>"; }
     		elseif($k==$object->{$field['name']})				{ $html[] = "<option value='$k' selected='selected'>"._($v)."</option>"; }
     		else											    { $html[] = "<option value='$k'>"._($v)."</option>"; }
     	}
@@ -1737,7 +1737,7 @@ class Common_functions  {
 		//booleans
 		if($type=="tinyint(1)")	{
 			if($value == "1")			{ print _("Yes"); }
-			elseif(strlen($value)==0) 	{ print "/"; }
+			elseif(is_blank($value)) 	{ print "/"; }
 			else						{ print _("No"); }
 		}
 		//text

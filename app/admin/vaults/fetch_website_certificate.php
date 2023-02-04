@@ -58,7 +58,7 @@ $r = stream_socket_client($website, $errno, $errstr, 30, STREAM_CLIENT_CONNECT, 
 restore_error_handler();
 
 // check
-if($r===false && strlen($errstr)==0) {
+if($r===false && is_blank($errstr)) {
 	die_with_error(_("Unable to establish socket connection"));
 }
 elseif (strlen($errstr)>0) {

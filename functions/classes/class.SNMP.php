@@ -296,8 +296,8 @@ class phpipamSNMP extends Common_functions {
 	private function snmp_poll ($type, $oid, $index) {
 		// Convert to numerical OIDs.
 		$oid_num   = isset($this->snmp_oids[$oid]) ? $this->snmp_oids[$oid] : $oid;
-		$query     = strlen($index) == 0 ? $oid     : $oid.'.'.$index;
-		$query_num = strlen($index) == 0 ? $oid_num : $oid_num.'.'.$index;
+		$query     = is_blank($index) ? $oid     : $oid.'.'.$index;
+		$query_num = is_blank($index) ? $oid_num : $oid_num.'.'.$index;
 
 		// try
 		try {

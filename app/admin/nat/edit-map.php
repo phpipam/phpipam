@@ -62,7 +62,7 @@ else {
 }
 
 // port
-if(strlen($n->port)==0)
+if(is_blank($n->port))
 $n->port = "/";
 
 // icon

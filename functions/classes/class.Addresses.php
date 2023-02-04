@@ -158,7 +158,7 @@ class Addresses extends Common_functions {
 	 */
 	public function address_type_type_to_index ($type = "Used") {
 		# null of no length
-		$type = strlen($type)==0 || is_null($type) ? "Used" : $type;
+		$type = is_blank($type) || is_null($type) ? "Used" : $type;
 		# fetch address states
 		$this->addresses_types_fetch();
 		# reindex
@@ -327,7 +327,7 @@ class Addresses extends Common_functions {
 	 */
 	public function search_similar_addresses ($address, $linked_field, $value) {
 		// sanity checks
-		if(!is_object($address) || !property_exists($address, $linked_field) || strlen($value)==0)
+		if(!is_object($address) || !property_exists($address, $linked_field) || is_blank($value))
 			return false;
 
 		$bulk_search = $this->bulk_fetch_similar_addresses($address, $linked_field, $value);
@@ -979,7 +979,7 @@ class Addresses extends Common_functions {
 		$values = pf_json_decode($this->settings->powerDNS);
 
     	// set default hostname for PTR if set
-    	if (strlen($address->hostname)==0) {
+    	if (is_blank($address->hostname)) {
         	if (strlen($values->def_ptr_domain)>0) {
             	$address->hostname = $values->def_ptr_domain;
         	}
@@ -1212,8 +1212,8 @@ class Addresses extends Common_functions {
 								);
 
 		# switch to 0, state to active
-		$address_insert['switch'] = strlen($address_insert['switch'])==0 ? 0 : $address_insert['switch'];
-		$address_insert['state']  = strlen($address_insert['state'])==0 ?  1 : $address_insert['state'];
+		$address_insert['switch'] = is_blank($address_insert['switch']) ? 0 : $address_insert['switch'];
+		$address_insert['state']  = is_blank($address_insert['state']) ?  1 : $address_insert['state'];
 
 		# custom fields, append to array
 		$m=9;

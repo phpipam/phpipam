@@ -22,7 +22,7 @@ try {
 	$mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
 
 	# verify admin mail and name
-	if (strlen($mail_settings->mAdminMail)==0 || strlen($mail_settings->mAdminName)==0) {
+	if (is_blank($mail_settings->mAdminMail) || is_blank($mail_settings->mAdminName)) {
 		$Result->show("danger", _("Mail settings are missing. Please set admin mail and name!"), true);
 	}
 

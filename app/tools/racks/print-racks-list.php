@@ -71,7 +71,7 @@ else {
             $cnt = $Tools->count_database_objects ("devices", "rack", $r->id) + $Tools->count_database_objects ("rackContents", "rack", $r->id);
 
             // fix possible null
-            if(strlen($r->location)==0) $r->location = 0;
+            if(is_blank($r->location)) $r->location = 0;
 
             // print location ?
             if($User->settings->enableLocations=="1") {

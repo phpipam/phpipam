@@ -530,7 +530,7 @@ class Tools extends Common_functions {
 			$address = explode(".", $address);
             # remove empty
             foreach($address as $k=>$a) {
-                if (strlen($a)==0)  unset($address[$k]);
+                if (is_blank($a))  unset($address[$k]);
             }
 
 			# 4 pieces is ok, host
@@ -2389,7 +2389,7 @@ class Tools extends Common_functions {
 			$count = count( $parent_stack ) + 1;
 
 			# description
-			$name = strlen($option['name'])==0 ? "/" : $option['name'];
+			$name = is_blank($option['name']) ? "/" : $option['name'];
 
 			# print table line
 			if(strlen($option['prefix']) > 0) {
@@ -3216,7 +3216,7 @@ class Tools extends Common_functions {
         		//for multicast
         		$mac = $data->val($m,'F');
         		if ($this->settings->enableMulticast=="1") {
-            		if (strlen($data->val($m,'F'))==0 && $this->Subnets->is_multicast($data->val($m,'A')))    {
+            		if (is_blank($data->val($m,'F')) && $this->Subnets->is_multicast($data->val($m,'A')))    {
                 		$mac = $this->Subnets->create_multicast_mac ($data->val($m,'A'));
                     }
                 }
@@ -3270,7 +3270,7 @@ class Tools extends Common_functions {
         	else {
             	# mac
         		if ($this->settings->enableMulticast=="1") {
-            		if (strlen($field[5])==0 && $this->Subnets->is_multicast($field[0]))  {
+            		if (is_blank($field[5]) && $this->Subnets->is_multicast($field[0]))  {
                 		$field[5] = $this->Subnets->create_multicast_mac ($field[0]);
                     }
         		}
@@ -3343,7 +3343,7 @@ class Tools extends Common_functions {
                     if ($this->Subnets->is_subnet_inside_subnet ($field[0]."/" . $ipsm, $this->transform_address($subnet->subnet, "dotted")."/".$subnet->mask)==false)    { $class = "danger"; $errors++; }
                 }
             	// make sure mac does not exist
-                if ($this->settings->enableMulticast=="1" && strlen($class)==0) {
+                if ($this->settings->enableMulticast=="1" && is_blank($class)) {
                     if (strlen($field[5])>0 && $this->Subnets->is_multicast($field[0])) {
                         if($this->Subnets->validate_multicast_mac ($field[5], $subnet->sectionId, $subnet->vlanId, MCUNIQUE)!==true) {
                             $errors++; $class = "danger";

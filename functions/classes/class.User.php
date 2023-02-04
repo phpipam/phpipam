@@ -475,7 +475,7 @@ class User extends Common_functions {
 
         $urlpath = $_COOKIE['phpipamredirect'];
 
-        if (!is_string($urlpath) || strlen($urlpath) == 0 || !filter_var('https://ipam/' . $urlpath, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED))
+        if (!is_string($urlpath) || is_blank($urlpath) || !filter_var('https://ipam/' . $urlpath, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED))
             return false;
 
         // ignore login / logout
@@ -652,7 +652,7 @@ class User extends Common_functions {
      */
     public function fetch_favourite_subnets () {
         # none
-        if(strlen($this->user->favourite_subnets)==0) {
+        if(is_blank($this->user->favourite_subnets)) {
             return false;
         }
         # ok
@@ -1553,7 +1553,7 @@ class User extends Common_functions {
     private function log_failed_access($username) {
         $log_msg = Config::ValueOf('failed_access_message');
 
-        if (!is_string($username) || !is_string($log_msg) || strlen($log_msg)<1)
+        if (!is_string($username) || !is_string($log_msg) || is_blank($log_msg))
             return;
 
         $log_msg = str_replace("%u", $username, $log_msg);

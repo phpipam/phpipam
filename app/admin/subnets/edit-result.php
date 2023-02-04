@@ -37,7 +37,7 @@ else {
 }
 
 # if show name than description must be set
-if(@$_POST['showName']==1 && strlen($_POST['description'])==0) 	{ $Result->show("danger", _("Please enter subnet description to show as name!"), true); }
+if(@$_POST['showName']==1 && is_blank($_POST['description'])) 	{ $Result->show("danger", _("Please enter subnet description to show as name!"), true); }
 
 # we need old values for mailing
 if($_POST['action']=="edit" || $_POST['action']=="delete") {
@@ -242,7 +242,7 @@ if(sizeof($custom) > 0) {
 			}
 		}
 		//not empty
-		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) {
+		if($myField['Null']=="NO" && is_blank($_POST[$myField['name']])) {
 			$errors[] = "Field \"$myField[name]\" cannot be empty!";
 		}
 	}
@@ -376,7 +376,7 @@ else {
 				}
 			}
 			//not null!
-			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
+			if($myField['Null']=="NO" && is_blank($_POST[$myField['name']])) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 
 			# save to update array
 			$values[$myField['name']] = $_POST[$myField['name']];

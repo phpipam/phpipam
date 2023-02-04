@@ -73,7 +73,7 @@ else {
             	print "</td>";
             	print "</tr>";
 
-            	if(strlen($location->lat)==0 || strlen($location->long)==0) {
+            	if(is_blank($location->lat) || is_blank($location->long)) {
                 	print "<tr>";
                 	print "	<th></th>";
                 	print "	<td>".$Result->show("warning", _('Location not set'), false, false, true)."</td>";

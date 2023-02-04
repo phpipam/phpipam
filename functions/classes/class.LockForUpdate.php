@@ -32,7 +32,7 @@ class LockForUpdate {
      * @param integer $id
      */
     function __construct(Database_PDO $Database, $tableName, $id) {
-        if (!is_string($tableName) || strlen($tableName)<1) {
+        if (!is_string($tableName) || is_blank($tableName)) {
             throw new Exception(_('Invalid table name'));
         }
 

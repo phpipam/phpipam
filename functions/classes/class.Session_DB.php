@@ -105,7 +105,7 @@ class Session_DB {
 	 */
 	public function _write ($id, $data) {
 		// we need some data otherwise dont save session
-		if(strlen($data)==0) {
+		if(is_blank($data)) {
 			//return true;
 		}
 		// set insert / update values

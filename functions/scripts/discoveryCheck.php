@@ -79,7 +79,7 @@ if ($Scan->icmp_type == "fping" && !file_exists($Scan->settings->scanFPingPath))
     die("discoveryCheck-Fatal-Error: Invalid ping path!\n");
 }
 // verify date.timezone
-if (strlen(ini_get('date.timezone')) == 0) {
+if (is_blank(ini_get('date.timezone'))) {
     print("discoveryCheck-Warning: date.timezone is not set in ".php_ini_loaded_file()."\n");
     print("discoveryCheck-Warning: Online/Offline calculations may be unreliable due to incorrect local time.\n\n");
 }

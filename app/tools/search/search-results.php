@@ -34,7 +34,7 @@ if(!isset($_GET['addresses']) && !isset($_GET['subnets']) && !isset($_GET['vlans
     include("search-tips.php");
 }
 // empty request
-elseif (strlen($_GET['ip'])==0)  {
+elseif (is_blank($_GET['ip']))  {
     include("search-tips.php");
 }
 // ok, search results print

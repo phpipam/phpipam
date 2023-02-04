@@ -145,7 +145,7 @@ class DNS extends Common_functions {
 			}
 			// ok
 			else {
-				if (strlen($nameservers->namesrv1)==0) {
+				if (is_blank($nameservers->namesrv1)) {
 					return false;
 				}
 				else {

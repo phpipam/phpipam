@@ -93,7 +93,7 @@ else {
 				}
 			}
 			//not null!
-			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+			if($myField['Null']=="NO" && is_blank($_POST[$myField['name']])) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
 
 			# save to update array
 			$values[$myField['name']] = $_POST[$myField['name']];

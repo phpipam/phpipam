@@ -150,7 +150,7 @@ foreach ($sections as $section) {
 				else										{ $ip['state'] = ""; }
 
 				//change switch ID to name
-				$ip['switch'] = is_null($ip['switch'])||strlen($ip['switch'])==0||$ip['switch']==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
+				$ip['switch'] = is_null($ip['switch'])||is_blank($ip['switch'])||$ip['switch']==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
 
 				$worksheet->write($lineCount, 0, $Subnets->transform_to_dotted($ip['ip_addr']), $format_left);
 				$worksheet->write($lineCount, 1, $ip['state']);

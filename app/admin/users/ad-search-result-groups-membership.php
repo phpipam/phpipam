@@ -25,7 +25,7 @@ $server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
 $params = pf_json_decode($server->params);
 
 //no login parameters
-if(strlen(@$params->adminUsername)==0 || strlen(@$params->adminPassword)==0)	{ $Result->show("danger", _("Missing credentials"), true); }
+if(is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword))	{ $Result->show("danger", _("Missing credentials"), true); }
 
 //open connection
 try {

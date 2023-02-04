@@ -73,7 +73,7 @@ else {
 					];
 
 	# remove certificate if not present
-	if($_POST['action']!="delete" && strlen($_POST['certificate'])==0) {
+	if($_POST['action']!="delete" && is_blank($_POST['certificate'])) {
 		$Result->show("danger", _("Invalid certificate"), true);
 	}
 

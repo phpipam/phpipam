@@ -12,7 +12,7 @@ $User->check_module_permissions ("customers", User::ACCESS_R, true);
 
 // get lat long
 $OSM = new OpenStreetMap($Database);
-if (strlen($customer->long)==0 && strlen($customer->lat)==0 && strlen($customer->address)>0) {
+if (is_blank($customer->long) && is_blank($customer->lat) && strlen($customer->address)>0) {
 
     $latlng = $OSM->get_latlng_from_address ($customer->address);
     if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {

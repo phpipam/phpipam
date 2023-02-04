@@ -401,7 +401,7 @@ abstract class DB {
 	 */
 	public function escape($str) {
 		$str = (string) $str;
-		if (strlen($str) == 0) return "";
+		if (is_blank($str)) return "";
 
 		if (!$this->isConnected()) $this->connect();
 

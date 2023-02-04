@@ -595,7 +595,7 @@ class Tools_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function format_location () {
-		if((strlen(@$this->_params->lat)==0 || strlen(@$this->_params->long)==0) && strlen(@$this->_params->address)>0) {
+		if((is_blank(@$this->_params->lat) || is_blank(@$this->_params->long)) && strlen(@$this->_params->address)>0) {
             $OSM = new OpenStreetMap($this->Database);
             $latlng = $OSM->get_latlng_from_address ($this->_params->address);
             if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {

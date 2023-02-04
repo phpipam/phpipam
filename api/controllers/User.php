@@ -438,9 +438,9 @@ class User_controller extends Common_api_functions {
 	 */
 	private function validate_user_token () {
 		// is set
-		if (strlen($this->User->user->token)==0)							{ return false; }
+		if (is_blank($this->User->user->token))							{ return false; }
 		// date not set
-		elseif (strlen($this->User->user->token_valid_until)==0)			{ return false; }
+		elseif (is_blank($this->User->user->token_valid_until))			{ return false; }
 		// expired
 		elseif ($this->User->user->token_valid_until < date("Y-m-d H:is:"))	{ return false; }
 		// ok

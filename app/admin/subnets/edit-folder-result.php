@@ -105,7 +105,7 @@ if(sizeof($custom) > 0 && $_POST['action']!="delete") {
 			}
 		}
 		//not empty
-		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) {
+		if($myField['Null']=="NO" && is_blank($_POST[$myField['name']])) {
 			$errors[] = "Field \"$myField[name]\" cannot be empty!";
 		}
 	}
@@ -180,7 +180,7 @@ else {
 			}
 			//not null!
 			if ($_POST['action']!="delete") {
-          if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
+          if($myField['Null']=="NO" && is_blank($_POST[$myField['name']])) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
       }
 
 			# save to update array

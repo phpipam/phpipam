@@ -37,7 +37,7 @@ if($_POST['action']=="delete" || $_POST['action']=="edit") {
 }
 if($_POST['action']=="add" || $_POST['action']=="edit") {
     // name
-    if(strlen($_POST['name'])<1)                                            {  $Result->show("danger",  _("Name must have at least 1 character"), true); }
+    if(is_blank($_POST['name']))                                            {  $Result->show("danger",  _("Name must have at least 1 character"), true); }
     // lat, long
     if($_POST['action']!=="delete") {
         // lat
@@ -50,7 +50,7 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
         }
 
         // fetch latlng
-        if(strlen($_POST['lat'])==0 && strlen($_POST['long'])==0 && strlen($_POST['address'])>0) {
+        if(is_blank($_POST['lat']) && is_blank($_POST['long']) && strlen($_POST['address'])>0) {
             $OSM = new OpenStreetMap($Database);
             $latlng = $OSM->get_latlng_from_address ($_POST['address']);
             if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
@@ -77,7 +77,7 @@ if(sizeof($custom) > 0) {
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) {
+		if($myField['Null']=="NO" && is_blank($_POST[$myField['name']])) {
 			{ $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 		}
 		# save to update array

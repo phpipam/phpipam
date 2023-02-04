@@ -83,7 +83,7 @@ class SubnetsTable {
 
 		$tr = array();
 		# description
-		$description = strlen($subnet->description)==0 ? "/" : $subnet->description;
+		$description = is_blank($subnet->description) ? "/" : $subnet->description;
 
 		if ($subnet->isFolder == 1) {
 			$tr['subnet'] = "<span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-sfolder fa-pad-right-3 fa-folder-open'></i> <a href='".create_link("folder",$subnet->sectionId,$subnet->id)."'> $subnet->description</a>";

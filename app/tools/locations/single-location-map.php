@@ -23,7 +23,7 @@ elseif(!is_object($location)) {
     $OSM = new OpenStreetMap($Database);
 
     // recode
-    if (strlen($location->long)==0 && strlen($location->lat)==0 && strlen($location->address)>0) {
+    if (is_blank($location->long) && is_blank($location->lat) && strlen($location->address)>0) {
         $latlng = $OSM->get_latlng_from_address ($location->address);
         if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
             // save

@@ -77,7 +77,7 @@ $app_perms_text = array( _("SSL with User token")=>"ssl_token", _("SSL with App 
 
 			$a['app_security'] = array_search($a['app_security'], $app_perms_text);
 
-			$a['app_last_access'] = strlen($a['app_last_access'])==0 ? _("Never") : $a['app_last_access'];
+			$a['app_last_access'] = is_blank($a['app_last_access']) ? _("Never") : $a['app_last_access'];
 
 			print '	<td>' . $a['app_permissions'] . '</td>'. "\n";
 			print '	<td>' . $a['app_security'] . '</td>'. "\n";

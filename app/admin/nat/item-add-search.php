@@ -23,7 +23,7 @@ $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 $User->Crypto->csrf_cookie ("validate", "nat_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # length
-if(strlen($_POST['ip'])==0)   { $Result->show("danger", _("Please enter IP address"), true); }
+if(is_blank($_POST['ip']))   { $Result->show("danger", _("Please enter IP address"), true); }
 # id
 if(!is_numeric($_POST['id'])) { $Result->show("danger", _("Invalid NAT item ID"), true); }
 # type

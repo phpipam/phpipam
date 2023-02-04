@@ -339,7 +339,7 @@ $("input[name='subnet']").change(function() {
     	        // set permitted
     	        $permitted_sections = explode(";", $vrf->sections);
     	        // section must be in array
-    	        if (strlen($vrf->sections)==0 || in_array(@$_POST['sectionId'], $permitted_sections)) {
+    	        if (is_blank($vrf->sections) || in_array(@$_POST['sectionId'], $permitted_sections)) {
     				//cast
     				$vrf = (array) $vrf;
     				// set description if present

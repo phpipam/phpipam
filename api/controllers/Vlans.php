@@ -302,7 +302,7 @@ class Vlans_controller extends Common_api_functions {
 			if($this->_params->number<0)													{ $this->Response->throw_exception(400, "Vlan number cannot be negative"); }
 			elseif(!is_numeric($this->_params->number))										{ $this->Response->throw_exception(400, "Vlan number must be number"); }
 		}
-		if(strlen($this->_params->name)==0)													{ $this->Response->throw_exception(400, "Vlan name is required"); }
+		if(is_blank($this->_params->name))													{ $this->Response->throw_exception(400, "Vlan name is required"); }
 	}
 
 	/**

@@ -53,7 +53,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
         <div class="text-muted">
         <?php
         	// format sections
-        	if(strlen($vrf->sections)==0) {
+        	if(is_blank($vrf->sections)) {
         		$sections = "All sections";
         	}
         	else {

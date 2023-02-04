@@ -62,7 +62,7 @@ if($_POST['action']=="add") {
 	if($_POST['number']<0)													{ $Result->show("danger", _('VLAN number cannot be negative').'!', true); }
 	elseif(!is_numeric($_POST['number']))									{ $Result->show("danger", _('Not number').'!', true); }
 }
-if(strlen($_POST['name'])==0)												{ $Result->show("danger", _('Name is required').'!', true); }
+if(is_blank($_POST['name']))												{ $Result->show("danger", _('Name is required').'!', true); }
 
 
 # formulate update query

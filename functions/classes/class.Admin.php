@@ -147,7 +147,7 @@ class Admin extends Common_functions {
 	 * @return void
 	 */
 	public function object_modify ($table, $action=null, $field="id", $values = [], $values_log = []) {
-		if (!is_string($table) || strlen($table) == 0) return false;
+		if (!is_string($table) || is_blank($table)) return false;
 		# strip tags
 		$values     = $this->strip_input_tags ($values);
 		$values_log = $this->strip_input_tags ($values_log);
@@ -328,7 +328,7 @@ class Admin extends Common_functions {
 	 */
 	public function truncate_table ($table = null) {
 		# null table
-		if(is_null($table)||strlen($table)==0) return false;
+		if(is_null($table)||is_blank($table)) return false;
 		else {
 			try { $this->Database->emptyTable($table); }
 			catch (Exception $e) {
@@ -676,7 +676,7 @@ class Admin extends Common_functions {
 	    else																																{ $field['ftype'] = $field['fieldType']."(".$field['fieldSize'].")"; }
 
 	    # default value null
-	    $field['fieldDefault'] = strlen($field['fieldDefault'])==0 ? NULL : $field['fieldDefault'];
+	    $field['fieldDefault'] = is_blank($field['fieldDefault']) ? NULL : $field['fieldDefault'];
 
 	    # character set if needed
 	    if($field['fieldType']=="varchar" || $field['fieldType']=="text" || $field['fieldType']=="set" || $field['fieldType']=="enum")	{ $charset = "CHARACTER SET utf8"; }

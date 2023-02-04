@@ -2063,7 +2063,7 @@ class Subnets extends Common_functions {
 	public function verify_cidr ($cidr) {
 		$cidr =  explode("/", $cidr);
 		# verify network part
-	    if(strlen($cidr[0])==0 || strlen($cidr[1])==0) 				{ return _("Invalid CIDR format!"); }
+	    if(is_blank($cidr[0]) || is_blank($cidr[1])) 				{ return _("Invalid CIDR format!"); }
 	    # verify network part
 		if($this->identify_address_format ($cidr[0])!="dotted")		{ return _("Invalid Network!"); }
 		# verify mask
@@ -2933,7 +2933,7 @@ class Subnets extends Common_functions {
     	$mac = $this->reformat_mac_address ($mac);
     	$mac_delimited =  explode(":", $mac);
     	// we permit empty
-        if (strlen($mac)==0) {
+        if (is_blank($mac)) {
             return true;
         }
     	// validate mac

@@ -99,7 +99,7 @@ if(sizeof($custom) > 0) {
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && strlen($rack[$myField['name']])==0) {
+		if($myField['Null']=="NO" && is_blank($rack[$myField['name']])) {
 			{ $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 		}
 		# save to update array

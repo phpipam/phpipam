@@ -224,7 +224,7 @@ class DHCP_kea extends Common_functions {
         // loop and remove comments (contains #) and replace multilpe spaces
         $out   = array();
         foreach ($config as $k=>$f) {
-            if (strpos($f, "#")!==false || strlen($f)==0) {}
+            if (strpos($f, "#")!==false || is_blank($f)) {}
             else {
                 if(strlen($f)>0) {
                     $out[] = $f;
@@ -374,7 +374,7 @@ class DHCP_kea extends Common_functions {
      */
     private function get_leases_mysql ($lease_database, $type) {
         // if host not specified assume localhost
-        if (strlen($lease_database['host'])==0) { $lease_database['host'] = "localhost"; }
+        if (is_blank($lease_database['host'])) { $lease_database['host'] = "localhost"; }
         // open DB connection
         $this->init_database_conection ($lease_database['user'], $lease_database['password'], $lease_database['host'], 3306, $lease_database['name']);
         // set query
@@ -558,7 +558,7 @@ class DHCP_kea extends Common_functions {
      */
     private function get_reservations_mysql ($reservations_database, $type) {
         // if host not specified assume localhost
-        if (strlen($reservations_database['host'])==0) { $reservations_database['host'] = "localhost"; }
+        if (is_blank($reservations_database['host'])) { $reservations_database['host'] = "localhost"; }
         // open DB connection
         $this->init_database_conection ($reservations_database['user'], $reservations_database['password'], $reservations_database['host'], 3306, $reservations_database['name']);
         // set query

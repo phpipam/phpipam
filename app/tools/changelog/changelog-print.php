@@ -134,7 +134,7 @@ else {
 			print "	<td>$l[ctype]</td>";
 
 			# subnet, section or ip address
-			if(strlen($l['tid'])==0) {
+			if(is_blank($l['tid'])) {
 				print "<td><span class='badge badge1 badge5 alert-danger'>"._("Deleted")."</span></td>";
 			}
 			elseif($l['ctype']=="IP address")	{
