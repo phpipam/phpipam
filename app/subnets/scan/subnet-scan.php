@@ -48,7 +48,7 @@ $subnet->description = !is_blank($subnet->description) ? "(".$subnet->descriptio
 <div class="pContent">
 	<?php
 	// verify date.timezone
-	if (strlen(ini_get('date.timezone')) == 0) {
+	if (is_blank(ini_get('date.timezone'))) {
 		$Result->show("warning", _("Online & offline results may be unreliable: date.timezone not set in ").php_ini_loaded_file());
 	}
 	?>

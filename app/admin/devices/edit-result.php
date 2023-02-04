@@ -39,7 +39,7 @@ if($_POST['action']!="add" && !is_numeric($_POST['switchid']))			{ $Result->show
 
 # available devices set
 foreach($device as $key=>$line) {
-	if (strlen(strstr($key,"section-"))>0) {
+	if (!is_blank(strstr($key,"section-"))) {
 		$key2 = str_replace("section-", "", $key);
 		$temp[] = $key2;
 
@@ -53,7 +53,7 @@ $device['sections'] = !empty($temp) ? implode(";", $temp) : null;
 if($device['hostname'] == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }
 
 # rack checks
-if (strlen(@$device['rack']>0) && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
+if (!is_blank(@$device['rack']) && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
     if ($User->settings->enableRACK!="1") {
         unset($device['rack']);
     }

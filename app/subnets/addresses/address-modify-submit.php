@@ -149,7 +149,7 @@ $address['is_gateway'] = @$address['is_gateway']==1 ? 1 : 0;
 $subnet_is_multicast = $Subnets->is_multicast ($subnet['subnet']);
 
 # are we adding/editing range?
-if (strlen(strstr($address['ip_addr'],"-")) > 0) {
+if (!is_blank(strstr($address['ip_addr'],"-"))) {
 
 	# set flag for updating
 	$address['type'] = "series";

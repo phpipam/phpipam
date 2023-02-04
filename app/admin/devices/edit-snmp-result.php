@@ -42,7 +42,7 @@ if ($Admin->validate_ip($device->ip_addr)===false)            { $Result->show("d
 
 # set snmp queries
 foreach($_POST as $key=>$line) {
-	if (strlen(strstr($key,"query-"))>0) {
+	if (!is_blank(strstr($key,"query-"))) {
 		$key2 = str_replace("query-", "", $key);
 		$temp[] = $key2;
 		unset($_POST[$key]);

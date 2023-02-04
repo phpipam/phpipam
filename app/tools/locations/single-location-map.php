@@ -37,7 +37,7 @@ elseif(!is_object($location)) {
     $resize = @$resize === false ? false : true;
 
     # no long/lat
-    if( (!is_blank($location->long) && strlen($location->lat))) {
+    if( (!is_blank($location->long) && !is_blank($location->lat))) {
         $OSM->add_location($location);
         $OSM->map($height);
     }

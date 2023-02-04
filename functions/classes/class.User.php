@@ -79,6 +79,11 @@ class User extends Common_functions {
     private $authmethodtype = "local";
 
     /**
+     * @var bool
+     */
+    private $twofa =  false;
+
+    /**
      * ldap is used flag
      *
      * (default value: false)

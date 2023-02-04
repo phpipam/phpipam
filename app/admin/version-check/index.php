@@ -94,7 +94,7 @@ if ($version_delta > 0) {
 		// title
 		print "<h4 style='margin-top:40px;'>Commit log (local) [Last 100]</h4><hr>";
 		// split commits
-		$commit_log = preg_split('/\r?\ncommit /', "\n".$commit_log, null, PREG_SPLIT_NO_EMPTY);
+		$commit_log = preg_split('/\r?\ncommit /', "\n".$commit_log, -1, PREG_SPLIT_NO_EMPTY);
 
 		// loop
 		foreach ($commit_log as $commit) {
@@ -108,7 +108,7 @@ if ($version_delta > 0) {
 				if     (strpos($l, "Author: ")===0)	{ $out['author'] = substr($l, 7);	unset($lines[$k]); }
 				elseif (strpos($l, "Date: ")===0)	{ $out['date'] = substr($l, 7);     unset($lines[$k]); }
 				elseif (strpos($l, "Merge: ")===0)	{ $out['pr'] = $l;	unset($lines[$k]); }
-				elseif (strlen(trim($l))==0)		{ unset($lines[$k]); }
+				elseif (is_blank(trim($l ?: '')))	{ unset($lines[$k]); }
 				unset($lines[0]);
 			}
 			// merge

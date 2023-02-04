@@ -25,7 +25,7 @@ $size = sizeof($_POST) / 4;
 
 //get unique keys for subnets because they are not sequential if deleted!!!
 foreach($_POST as $key=>$line) {
-	if (strlen(strstr($key,"subnet"))>0) {
+	if (!is_blank(strstr($key,"subnet"))) {
 		$allSubnets[] = $key;
 	}
 }

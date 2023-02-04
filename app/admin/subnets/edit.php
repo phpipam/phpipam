@@ -399,7 +399,7 @@ $("input[name='subnet']").change(function() {
     			<?php
                 if($locations!==false) {
         			foreach($locations as $l) {
-        				if($subnet_old_details['location'] == $l->id)	{ print "<option value='$l->id' selected='selected'>$l->name</option>"; }
+        				if(isset($subnet_old_details['location']) && $subnet_old_details['location'] == $l->id)	{ print "<option value='$l->id' selected='selected'>$l->name</option>"; }
         				else					{ print "<option value='$l->id'>$l->name</option>"; }
         			}
     			}

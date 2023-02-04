@@ -798,7 +798,7 @@ class Common_functions  {
 	 * @return string
 	 */
 	public function strip_xss ($input) {
-		return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
+		return htmlspecialchars($input ?: '', ENT_QUOTES, 'UTF-8');
 	}
 
 	/**
@@ -935,6 +935,9 @@ class Common_functions  {
 	 * @return mixed
 	 */
 	public function shorten_text($text, $chars = 25) {
+		if (is_blank($text))
+			return '';
+
 		// minimum length = 8
 		if ($chars < 8) $chars = 8;
 		// count input text size

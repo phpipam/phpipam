@@ -7,6 +7,11 @@
 class Tools extends Common_functions {
 
 	/**
+	 * var Subnets
+	 */
+	private $Subnets = null;
+
+	/**
 	 * CSV delimiter
 	 *
 	 * @var string
@@ -3317,7 +3322,7 @@ class Tools extends Common_functions {
 	 * @param object $subnet
 	 * @return void
 	 */
-	private function parse_validate_file ($outFile = array(), $subnet = obj) {
+	private function parse_validate_file ($outFile, $subnet) {
     	$result = array();
     	$errors = 0;
 

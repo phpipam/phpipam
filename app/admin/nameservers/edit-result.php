@@ -47,7 +47,7 @@ if ($_POST['action']!="delete") {
 
 // merge nameservers
 foreach($_POST as $key=>$line) {
-	if (strlen(strstr($key,"namesrv-"))>0) {
+	if (!is_blank(strstr($key,"namesrv-"))) {
 		if (!is_blank($line)) {
 			$all_nameservers[] = trim($line);
 		}
@@ -57,7 +57,7 @@ $_POST['namesrv1'] = isset($all_nameservers) ? implode(";", $all_nameservers) : 
 
 // set sections
 foreach($_POST as $key=>$line) {
-	if (strlen(strstr($key,"section-"))>0) {
+	if (!is_blank(strstr($key,"section-"))) {
 		$key2 = str_replace("section-", "", $key);
 		$temp[] = $key2;
 		unset($_POST[$key]);

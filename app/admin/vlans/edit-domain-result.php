@@ -44,7 +44,7 @@ if(@$_POST['name'] == "") 												{ $Result->show("danger", _('Name is manda
 if(@$_POST['id']!=1) {
 	$temp = [];
 	foreach($_POST as $key=>$line) {
-		if (strlen(strstr($key,"section-"))>0) {
+		if (!is_blank(strstr($key,"section-"))) {
 			$key2 = str_replace("section-", "", $key);
 			$temp[] = $key2;
 			unset($_POST[$key]);

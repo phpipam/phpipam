@@ -295,7 +295,7 @@ else {
     	<td>
     		<span class="text-muted">
     		<?php
-    		if(strlen($subnet['editDate'])>1)  	{ print $subnet['editDate']; }
+    		if(!is_blank($subnet['editDate']))  	{ print $subnet['editDate']; }
     		else 								{ print _("Never"); }
     		?>
     		</span>
