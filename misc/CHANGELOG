@@ -9,6 +9,7 @@
     + XSS (reflected) in 'bw-calulator-result.php';
     + XSS (reflected) by invalid email address response;
     + XSS and LDAP injection in ad-search-result.php;
+    + XSS and LDAP injection in ad-search-group-result.php;
     + Restrict find_full_subnets.php to CLI;
     + Ensure confidentiality of database password;
 

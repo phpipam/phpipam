@@ -6,7 +6,7 @@
 
 /* functions */
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-require( dirname(__FILE__) . "/../../../functions/adLDAP/src/adLDAP.php");
+require_once( dirname(__FILE__) . "/../../../functions/adLDAP/src/adLDAP.php");
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -52,13 +52,13 @@ try {
 
 	//try to login with higher credentials for search
 	$authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
-	if ($authUser == false) {
+	if (!$authUser) {
 		$Result->show("danger", _("Invalid credentials")."<br>".$adldap->getLastError(), true);
 	}
 
 	//search for domain user!
-	$escaped_dn = ldap_escape($_POST["dname"], null, LDAP_ESCAPE_DN);
-	$userinfo = $adldap->user()->info("$escaped_dn*", array("*"), false, $server->type);
+	$esc_dname = ldap_escape($_POST["dname"], null, LDAP_ESCAPE_FILTER);
+	$userinfo = $adldap->user()->info("*$esc_dname*", array("*"), false, $server->type);
 
 	//echo $adldap->getLastError();
 }
@@ -87,8 +87,7 @@ if(!isset($userinfo['count'])) {
 		// loop
 		foreach($userinfo as $u) {
 			print "<tr>";
-			print "	<td>".escape_input($u['displayname'][0]);
-			print "</td>";
+			print "	<td>".escape_input($u['displayname'][0])."</td>";
 			print "	<td>".escape_input($u['samaccountname'][0])."</td>";
 			print "	<td>".escape_input($u['mail'][0])."</td>";
 			//actions

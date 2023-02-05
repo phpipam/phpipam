@@ -6,7 +6,7 @@
 
 /* functions */
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-require( dirname(__FILE__) . "/../../../functions/adLDAP/src/adLDAP.php");
+require_once( dirname(__FILE__) . "/../../../functions/adLDAP/src/adLDAP.php");
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -59,13 +59,14 @@ try {
 	// Use credentials if they've been provided
 	if (isset($params->adminUsername) && isset($params->adminPassword)) {
 		$authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
-		if ($authUser == false) {
+		if (!$authUser) {
 			$Result->show("danger", _("Invalid credentials"), true);
 		}
 	}
 
 	//search groups
-	$groups = $adldap->group()->search(adLDAP::ADLDAP_SECURITY_GLOBAL_GROUP,true,"*$_POST[dfilter]*");
+	$esc_dfilter = ldap_escape($_POST["dfilter"], null, LDAP_ESCAPE_FILTER);
+	$groups = $adldap->group()->search(adLDAP::ADLDAP_SECURITY_GLOBAL_GROUP, true, "*$esc_dfilter*");
 
 	//echo $adldap->getLastError();
 }
@@ -81,8 +82,8 @@ if(sizeof($groups)==0) {
 	print _('No groups found')."!<hr>";
 	print _('Possible reasons').":";
 	print "<ul>";
-	print "<li>"._('Invalid baseDN setting for ' . $server->type)."</li>";
-	print "<li>"._($server->type . ' account does not have enough privileges for search')."</li>";
+	print "<li>"._('Invalid baseDN setting for ') . escape_input($server->type)."</li>";
+	print "<li>".escape_input($server->type). ' '. _('account does not have enough privileges for search')."</li>";
 	print "</div>";
 } else {
 	print _(" Following groups were found").": (".sizeof($groups)."):<hr>";
@@ -91,32 +92,33 @@ if(sizeof($groups)==0) {
 
 	// loop
  	foreach($groups as $k=>$g) {
+		$esc_k = escape_input($k);
+		$esc_g = escape_input($g);
+
+		// search members
+		$groupMembers = $adldap->group()->members($k) ?: [];
+		$esc_members = !empty($groupMembers) ? escape_input(implode(";", $groupMembers)) : '';
+
 		print "<tr>";
-		print "	<td>$k</td>";
-		print "	<td>$g</td>";
+		print "	<td>$esc_k</td>";
+		print "	<td>$esc_g</td>";
 		//actions
 		print " <td style='width:10px;'>";
-		print "		<a href='' class='btn btn-sm btn-default btn-success groupselect' data-gname='$k' data-gdescription='$g' data-members='$members' data-gid='$k' data-csrf_cookie='$csrf'>"._('Add group')."</a>";
+		print "		<a href='' class='btn btn-sm btn-default btn-success groupselect' data-gname='$esc_k' data-gdescription='$esc_g' data-members='$esc_members' data-gid='$esc_k' data-csrf_cookie='$csrf'>"._('Add group')."</a>";
 		print "	</td>";
 		print "</tr>";
 
 		print "<tr>";
 		print "	<td>"._("Members:")."</td>";
 		print "<td colspan='2'>";
-		print "	<div class='adgroup-$k'></div>";
-		// search members
-		$groupMembers = $adldap->group()->members($k);
-		unset($members);
-		if($groupMembers!==false) {
+		print "	<div class='adgroup-$esc_k'></div>";
+
+		if (!empty($groupMembers)) {
 			foreach($groupMembers as $m) {
-				print "<span class='muted'>$m</span><br>";
-				$members[] = $m;
+				print "<span class='muted'>".escape_input($m)."</span><br>";
 			}
-			if(isset($members))
-			$members = implode(";", $members);
 		}
 		else {
-			$members = "";
 			print "<span class='muted'>"._("No members")."</span>";
 		}
 		print "	</td>";
@@ -125,5 +127,3 @@ if(sizeof($groups)==0) {
 	}
 	print "</table>";
 }
-
-?>
