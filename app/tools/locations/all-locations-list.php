@@ -1,6 +1,15 @@
 <h4><?php print _('List of all locations'); ?></h4>
 <hr>
 
+<ul class='nav nav-tabs' style='margin-top:0px;margin-bottom:20px;'>
+    <li role='presentation' <?php if(!isset($_GET['subnetId'])||is_numeric($_GET['subnetId'])) print " class='active'"; ?>>
+        <a href='<?php print create_link($_GET['page'], "locations"); ?>'><?php print _("Locations list"); ?></a>
+    </li>
+    <li role='presentation' <?php if(@$_GET['subnetId']=="map") print " class='active'"; ?>>
+        <a href='<?php print create_link($_GET['page'], "locations", "map"); ?>'><?php print _("Locations map"); ?></a>
+    </li>
+</ul>
+
 <?php
 if($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
 include('menu.php');
