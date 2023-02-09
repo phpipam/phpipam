@@ -4,6 +4,7 @@
     ----------------------------
     + XSS (reflected) in 'bw-calulator-result.php';
     + XSS (reflected) by invalid email address response;
+    + XSS (reflected) by /app/tools/subnet-masks/popup.php (#3738);
     + XSS and LDAP injection in ad-search-result.php;
     + XSS and LDAP injection in ad-search-group-result.php;
     + Restrict find_full_subnets.php to CLI;
