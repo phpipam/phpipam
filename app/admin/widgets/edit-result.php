@@ -31,7 +31,7 @@ if($_POST['action']!="add") {
 }
 # Title and path must be present!
 if($_POST['action']!="delete") {
-if(strlen($_POST['wtitle'])==0 || strlen($_POST['wfile'])==0) 	{ $Result->show("danger", _("Filename and title are mandatory")."!", true); }
+if(is_blank($_POST['wtitle']) || is_blank($_POST['wfile'])) 	{ $Result->show("danger", _("Filename and title are mandatory")."!", true); }
 }
 
 # Remove .php form wfile if it is present

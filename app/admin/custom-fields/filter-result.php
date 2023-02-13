@@ -41,4 +41,3 @@ else {
 /* save */
 if(!$Admin->save_custom_fields_filter($table, $filtered_fields))	{  }
 else																{ $Result->show("success", _('Filter saved')); }
-?>

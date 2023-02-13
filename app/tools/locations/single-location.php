@@ -16,8 +16,12 @@ if(!is_numeric($_GET['subnetId'])) {
     $Result->show("danger", _("Invalid Id"), true);
 }
 else {
+    # perm check
+    if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
+        $Result->show("danger", _("You do not have permissions to access this module"), false);
+    }
     # check that location support isenabled
-    if ($User->settings->enableLocations!="1") {
+    elseif ($User->settings->enableLocations!="1") {
         $Result->show("danger", _("Locations module disabled."), false);
     }
     else {
@@ -58,18 +62,18 @@ else {
             	print "<tr>";
             	print "	<th>"._('Address')."</th>";
             	print "	<td>";
-            	print strlen($location->address)>0 ? escape_input($location->address) : "/";
+            	print !is_blank($location->address) ? escape_input($location->address) : "/";
             	print "</td>";
             	print "</tr>";
 
             	print "<tr>";
             	print "	<th>"._('Coordinates')."</th>";
             	print "	<td>";
-            	print strlen($location->lat)>0 && strlen($location->long)>0 ? "<span class='text-muted'>".escape_input($location->lat)." / ".escape_input($location->long)."</span>" : "/";
+            	print !is_blank($location->lat) && !is_blank($location->long) ? "<span class='text-muted'>".escape_input($location->lat)." / ".escape_input($location->long)."</span> <a href='https://www.google.com/maps/@?api=1&map_action=map&center=".escape_input($location->lat)."%2C".escape_input($location->long). "&zoom=20&basemap=satellite' target='_blank'><i class='fa fa-gray fa-google' rel='tooltip' title='"._("Google Maps Satellite View")."'></i></a>" : "/";
             	print "</td>";
             	print "</tr>";
 
-            	if(strlen($location->lat)==0 || strlen($location->long)==0) {
+            	if(is_blank($location->lat) || is_blank($location->long)) {
                 	print "<tr>";
                 	print "	<th></th>";
                 	print "	<td>".$Result->show("warning", _('Location not set'), false, false, true)."</td>";
@@ -90,7 +94,7 @@ else {
             		foreach($cfields as $key=>$field) {
             			$location->{$key} = str_replace("\n", "<br>",$location->{$key});
             			// create links
-            			$location->{$key} = $Result->create_links($location->{$key});
+            			$location->{$key} = $Tools->create_links($location->{$key});
             			print "<tr>";
             			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
             			print "	<td style='vertical-align:top;align:left;'>".$location->{$key}."</td>";
@@ -99,19 +103,28 @@ else {
             	}
 
             	# actions
-            	print "<tr>";
-            	print " <td colspan='2'><hr></td>";
-            	print "</tr>";
+                if ($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
+                	print "<tr>";
+                	print " <td colspan='2'><hr></td>";
+                	print "</tr>";
 
-            	print "<tr>";
-            	print "	<th></th>";
-            	print "	<td>";
-                print "	<div class='btn-group'>";
-        		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='edit'   data-id='$location->id'><i class='fa fa-pencil'></i></a>";
-        		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='delete' data-id='$location->id'><i class='fa fa-times'></i></a>";
-        		print "	</div>";
-            	print " </td>";
-            	print "</tr>";
+                	print "<tr>";
+                	print "	<th></th>";
+                	print "	<td>";
+                    $links = [];
+                    $links[] = ["type"=>"header", "text"=>_("Manage")];
+                    $links[] = ["type"=>"link", "text"=>_("Edit location"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='edit'  data-id='$location->id'", "icon"=>"pencil"];
+
+                    if($User->get_module_permissions ("locations")>=User::ACCESS_RWA) {
+                        $links[] = ["type"=>"link", "text"=>_("Delete location"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='delete'  data-id='$location->id'", "icon"=>"times"];
+                        $links[] = ["type"=>"divider"];
+                    }
+                    // print links
+                    print $User->print_actions($User->user->compress_actions, $links, true, true);
+
+                	print " </td>";
+                	print "</tr>";
+                }
 
             	// fetch objects
             	$objects = $Tools->fetch_location_objects ($location->id);
@@ -133,6 +146,18 @@ else {
                         $object_groups[$o->type][] = $o;
                     }
 
+                    # permissions
+                    if($User->get_module_permissions ("racks")==User::ACCESS_NONE)
+                    unset($object_groups['racks']);
+
+                    # permissions
+                    if($User->get_module_permissions ("devices")==User::ACCESS_NONE)
+                    unset($object_groups['devices']);
+
+                    # permissions
+                    if($User->get_module_permissions ("circuits")==User::ACCESS_NONE)
+                    unset($object_groups['circuits']);
+
                     // loop
                     foreach ($object_groups as $t=>$ob) {
                     	print "<tr>";
@@ -153,7 +178,7 @@ else {
                             	else                        { $href = create_link("tools", "racks", $o->id); }
 
                             	// description
-                            	$o->description = strlen($o->description)>0 ? " <span class='text-muted'>($o->description)</span>" : "";
+                            	$o->description = !is_blank($o->description) ? " <span class='text-muted'>($o->description)</span>" : "";
 
                             	// subnet name
                             	if ($o->type=="subnets")    $o->name = $Tools->transform_address ($o->name,"dotted")."/".$o->mask;
@@ -190,4 +215,3 @@ else {
         }
     }
 }
-?>

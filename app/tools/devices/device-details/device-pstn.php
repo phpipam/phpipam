@@ -10,7 +10,7 @@ $User->check_user_session();
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('pstnPrefixes');
 # get hidden fields */
-$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['pstnPrefixes']) ? $hidden_fields['pstnPrefixes'] : array();
 
 # check
@@ -31,6 +31,10 @@ print "<table id='switchMainTable' class='devices table table-striped table-top 
 # headers
 if ($User->settings->enablePSTN!="1") {
     $Result->show("danger", _("PSTN prefixes module disabled."), false);
+}
+# perm check
+elseif ($User->get_module_permissions ("pstn")==User::ACCESS_NONE) {
+    $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 else {
     $colspan = 6;
@@ -63,7 +67,7 @@ else {
     # if none than print
     if($subprefixes===false) {
         print "<tr>";
-        print " <td colspan='$colspan'>".$Result->show("info","No PSTN prefixes attached to device", false, false, true)."</td>";
+        print " <td colspan='$colspan'>".$Result->show("info",_("No PSTN prefixes attached to device"), false, false, true)."</td>";
         print "</tr>";
     }
     else {
@@ -105,7 +109,7 @@ else {
     					}
     					//text
     					elseif($field['type']=="text") {
-    						if(strlen($sp->{$field['name']})>0)		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $sp->{$field['name']})."'>"; }
+    						if(!is_blank($sp->{$field['name']}))		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $sp->{$field['name']})."'>"; }
     						else										{ print ""; }
     					}
     					else {
@@ -117,13 +121,10 @@ else {
     	    	}
     	    }
 
-    		# set permission
-    		$permission = $Tools->check_prefix_permission ($User->user);
-
     		print "	<td class='actions' style='padding:0px;'>";
     		print "	<div class='btn-group'>";
 
-    		if($permission>1) {
+    		if($User->get_module_permissions ("pstn")>=User::ACCESS_RW) {
     			print "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$sp->id."'><i class='fa fa-gray fa-pencil'></i></button>";
     			print "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$sp->id."'><i class='fa fa-gray fa-times'></i></button>";
     		}

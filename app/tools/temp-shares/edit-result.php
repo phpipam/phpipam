@@ -25,9 +25,9 @@ if(strlen($_POST['code'])!=32) 										{ $Result->show("danger", _("Invalid co
 if($_POST['validity']<date("Y-m-d H:i:s"))							{ $Result->show("danger", _("Invalid date"), true); }
 if($_POST['validity']>date("Y-m-d H:i:s", strtotime("+ 7 days")))	{ $Result->show("danger", _("1 week is max validity time"), true); }
 # verify each recipient
-if(strlen($_POST['email'])>0) {
-	foreach (explode(",", $_POST['email']) as $rec) {
-		if(!filter_var(trim($rec), FILTER_VALIDATE_EMAIL)) 			{ $Result->show("danger", _("Invalid email address")." - ".$rec, true); }
+if(!is_blank($_POST['email'])) {
+	foreach (pf_explode(",", $_POST['email']) as $rec) {
+		if(!filter_var(trim($rec), FILTER_VALIDATE_EMAIL)) 			{ $Result->show("danger", _("Invalid email address")." - ".escape_input($rec), true); }
 	}
 }
 
@@ -35,12 +35,12 @@ if(strlen($_POST['email'])>0) {
 $object = $Admin->fetch_object ($_POST['type'], "id", $_POST['id']);
 
 if($_POST['type']=="subnets") {
-	$tmp[] = "Share type: subnet";
+	$tmp[] = _("Share type: subnet");
 	$tmp[] = "\t".$Subnets->transform_to_dotted($object->subnet)."/$object->mask";
 	$tmp[] = "\t".$object->description;
 }
 else {
-	$tmp[] = "Share type: IP address";
+	$tmp[] = _("Share type: IP address");
 	$tmp[] = "\t".$Subnets->transform_to_dotted($object->ip_addr);
 	$tmp[] = "\t".$object->description;
 }
@@ -54,7 +54,7 @@ $new_access[$_POST['code']] = array("id"=>$_POST['id'],
 									);
 
 # create array of values for modification
-$old_access = json_decode($User->settings->tempAccess, true);
+$old_access = pf_json_decode($User->settings->tempAccess, true);
 if(!is_array($old_access)) {
 	$old_access = array();
 } else {
@@ -74,42 +74,39 @@ if(!$Admin->object_modify("settings", "edit", "id", array("id"=>1,"tempAccess"=>
 else 																							{ $Result->show("success", _("Temporary share created"), false); }
 
 # send mail
-if(strlen($_POST['email'])>0) {
-
-	# fetch mailer settings
-	$mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
-
-	# initialize mailer
-	$phpipam_mail = new phpipam_mail($User->settings, $mail_settings);
-	$phpipam_mail->initialize_mailer();
-
-	// generate url
-	$url = $Result->createURL().create_link("temp_share",$_POST['code']);
-
-	// set html content
-	$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
-	$content[] = "<tr><td>$User->mail_font_style<strong>New ipam share created</strong></font><br><br></td></tr>";
-
-	$content[] = "<tr><td colspan='2'>$User->mail_font_style Hi, new share was created on ".$User->settings->siteTitle.", available on following address:</font></td></tr>";
-	$content[] = "<tr><td colspan='2'><a href='$url'>$User->mail_font_style_href <xmp>$url</xmp></font></a></td></tr>";
-	$content[] = "<tr><td colsapn='2' style='line-height:18px;'>$User->mail_font_style <strong>Details:</strong><br>".implode("<br> - ", $tmp)."</font><br></td></tr>";
-	$content[] = "<tr><td style='padding:5px;padding-left:15px;padding-top:20px;font-style:italic;'>$User->mail_font_style_light Sent by user ".$User->user->real_name." at ".date('Y/m/d H:i')."</font></td></tr>";
-	//set al content
-	$content_plain[] = "$subject"."\r\n------------------------------\r\n";
-	$content_plain[] = "Hi, new share was created on ".$User->settings->siteTitle.", available on following address:\r\n ".$url;
-	$content_plain[] = "\r\nDetails: \r\n".implode("\r\n", $tmp)."\r\n";
-	$content_plain[] = "\r\n\r\n"._("Sent by user")." ".$User->user->real_name." at ".date('Y/m/d H:i');
-	$content[] = "</table>";
-
-	// set alt content
-	$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-	$content_plain 	= implode("\r\n",$content_plain);
-
-
+if(!is_blank($_POST['email'])) {
 	# try to send
 	try {
+		# fetch mailer settings
+		$mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
+
+		# initialize mailer
+		$phpipam_mail = new phpipam_mail($User->settings, $mail_settings);
+
+		// generate url
+		$url = $Admin->createURL().create_link("temp_share",$_POST['code']);
+
+		// set html content
+		$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
+		$content[] = "<tr><td>$User->mail_font_style<strong>New ipam share created</strong></font><br><br></td></tr>";
+
+		$content[] = "<tr><td colspan='2'>$User->mail_font_style Hi, new share was created on ".$User->settings->siteTitle.", available on following address:</font></td></tr>";
+		$content[] = "<tr><td colspan='2'><a href='$url'>$User->mail_font_style_href <xmp>$url</xmp></font></a></td></tr>";
+		$content[] = "<tr><td colsapn='2' style='line-height:18px;'>$User->mail_font_style <strong>Details:</strong><br>".implode("<br> - ", $tmp)."</font><br></td></tr>";
+		$content[] = "<tr><td style='padding:5px;padding-left:15px;padding-top:20px;font-style:italic;'>$User->mail_font_style_light Sent by user ".$User->user->real_name." at ".date('Y/m/d H:i')."</font></td></tr>";
+		//set al content
+		$content_plain[] = "$subject"."\r\n------------------------------\r\n";
+		$content_plain[] = "Hi, new share was created on ".$User->settings->siteTitle.", available on following address:\r\n ".$url;
+		$content_plain[] = "\r\nDetails: \r\n".implode("\r\n", $tmp)."\r\n";
+		$content_plain[] = "\r\n\r\n"._("Sent by user")." ".$User->user->real_name." at ".date('Y/m/d H:i');
+		$content[] = "</table>";
+
+		// set alt content
+		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+		$content_plain 	= implode("\r\n",$content_plain);
+
 		$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
-		foreach(explode(",", $_POST['email']) as $r) {
+		foreach(pf_explode(",", $_POST['email']) as $r) {
 		$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r)));
 		}
 		$phpipam_mail->Php_mailer->Subject = "New ipam share created";
@@ -117,10 +114,10 @@ if(strlen($_POST['email'])>0) {
 		$phpipam_mail->Php_mailer->AltBody = $content_plain;
 		//send
 		$phpipam_mail->Php_mailer->send();
-	} catch (phpmailerException $e) {
+	} catch (PHPMailer\PHPMailer\Exception $e) {
 		$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
 	} catch (Exception $e) {
-		$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+		$Result->show("danger", "Mailer Error: ".$e->getMessage(), true);
 	}
 
 	# all good

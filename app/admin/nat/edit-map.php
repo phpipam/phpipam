@@ -6,7 +6,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -15,7 +15,13 @@ $User->check_user_session();
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
-
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
+}
+else {
+    $User->check_module_permissions ("nat", User::ACCESS_RWA, true, true);
+}
 
 # validations
 if($_POST['object_type']!=="subnets" && $_POST['object_type']!=="ipaddresses")
@@ -41,13 +47,13 @@ if ($destinations===false)
     $destinations = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
 
 // description
-$n->description = strlen($n->description)>0 ? "($n->description)" : "";
+$n->description = !is_blank($n->description) ? "($n->description)" : "";
 
 // device
 if (strlen($n->device)) {
     if($n->device !== 0) {
         $device = $Tools->fetch_object ("devices", "id", $n->device);
-        $description = strlen($device->description)>0 ? "($device->description)" : "";
+        $description = !is_blank($device->description) ? "($device->description)" : "";
         $n->device = $device===false ? "/" : "<a href='".create_link("tools", "devices", $device->id)."'>$device->hostname</a> ($device->ip_addr), <span class='text-muted'>$description</span>";
     }
 }
@@ -56,7 +62,7 @@ else {
 }
 
 // port
-if(strlen($n->port)==0)
+if(is_blank($n->port))
 $n->port = "/";
 
 // icon

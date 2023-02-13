@@ -94,7 +94,7 @@ else {
     // count usage
     foreach ($out as $k=>$s) {
         // calculate usage
-        $subnet_usage  = $Subnets->calculate_subnet_usage ($s, false);		//Calculate free/used etc
+        $subnet_usage  = $Subnets->calculate_subnet_usage ($s);		//Calculate free/used etc
 
         # set additional threshold parameters
         $subnet_usage['usedhosts_percent'] = gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));
@@ -121,7 +121,7 @@ else {
             $aclass = $s->usage->usedhosts_percent > $s->threshold ? "progress-bar-danger" : "progress-bar-info";
             # limit description
             $s->description = $Tools->shorten_text($s->description, 10);
-            $s->description = strlen($s->description)>0  ? " (".$s->description.")" : "";
+            $s->description = !is_blank($s->description)  ? " (".$s->description.")" : "";
             # limit class
             $limit_class = $s->usage->until_threshold<0 ? "progress-limit-negative" : "progress-limit";
 

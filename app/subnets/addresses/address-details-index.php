@@ -22,18 +22,18 @@ $subnet  = (array) $Subnets->fetch_subnet(null, $address['subnetId']);
 # fetch all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
-$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_cfields = pf_json_decode($User->settings->hiddenCustomFields, true) ? : ['ipaddresses' => null];
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);																			//format to array
+$selected_ip_fields = pf_explode(";", $selected_ip_fields);																			//format to array
 $selected_ip_fields_size = in_array('state', $selected_ip_fields) ? (sizeof($selected_ip_fields)-1) : sizeof($selected_ip_fields);	//set size of selected fields
-if($selected_ip_fields_size==1 && strlen($selected_ip_fields[0])==0) { $selected_ip_fields_size = 0; }								//fix for 0
+if($selected_ip_fields_size==1 && is_blank($selected_ip_fields[0])) { $selected_ip_fields_size = 0; }								//fix for 0
 
 
 # set ping statuses
-$statuses = explode(";", $User->settings->pingStatus);
+$statuses = pf_explode(";", $User->settings->pingStatus);
 
 # permissions
 $subnet_permission  = $Subnets->check_permission($User->user, $subnet['id']);
@@ -94,7 +94,7 @@ if(sizeof($address)>1) {
     $active = @$_GET['tab']=="permissions" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "permissions")."'>"._("Permissions")."</a></li>";
     }
-    if($User->settings->enableNAT==1) {
+    if($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User::ACCESS_R) {
     $active = @$_GET['tab']=="nat" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "nat")."'>"._("NAT")."</a></li>";
     }

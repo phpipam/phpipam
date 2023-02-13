@@ -23,7 +23,7 @@ $User->check_maintaneance_mode ();
 $User->Crypto->csrf_cookie ("validate", "instructions", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # strip script
-$_POST['instructions'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $_POST['instructions']);
+$_POST['instructions'] = $User->noxss_html($_POST['instructions']);
 
 # validate ID
 if ($_POST['id']=="1" || $_POST['id']=="2") {
@@ -33,7 +33,7 @@ if ($_POST['id']=="1" || $_POST['id']=="2") {
         try { $Database->updateObject("instructions", array("id"=>$_POST['id'], "instructions"=>$_POST['instructions']), "id"); }
         catch (Exception $e) {
         	$Result->show("danger", _("Error: ").$e->getMessage(), false);
-        	$Log->write( "Instructions updated", "Failed to update instructions<hr>".$e->getMessage(), 1);
+            $Log->write( _("Instructions updated"), _("Failed to update instructions")."<hr>".$e->getMessage(), 1);
         }
      }
     // create new
@@ -41,13 +41,13 @@ if ($_POST['id']=="1" || $_POST['id']=="2") {
         try { $Database->insertObject("instructions", array("id"=>$_POST['id'], "instructions"=>$_POST['instructions']), false, true, false); }
         catch (Exception $e) {
         	$Result->show("danger", _("Error: ").$e->getMessage(), false);
-        	$Log->write( "Instructions updated", "Failed to update instructions<hr>".$e->getMessage(), 1);
+            $Log->write( _("Instructions updated"), _("Failed to update instructions")."<hr>".$e->getMessage(), 1);
         }
     }
     // success
     if (!isset($e)) {
         # ok
-        $Log->write( "Instructions updated", "Instructions updated succesfully", 0);
+        $Log->write( _("Instructions updated"), _("Instructions updated succesfully"), 0);
         $Result->show("success", _("Instructions updated successfully"), true);
     }
 }

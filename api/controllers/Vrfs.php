@@ -8,64 +8,6 @@
 
 class Vrfs_controller extends Common_api_functions {
 
-
-	/**
-	 * _params [provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
-	/**
-	 * Custom address fields
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $custom_fields;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Master Sections object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Sections;
-
-	/**
-	 * Master Subnets object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Subnets;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-	/**
-	 * Master  Admin object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Admin;
-
-
 	/**
 	 * __construct function
 	 *
@@ -127,6 +69,7 @@ class Vrfs_controller extends Common_api_functions {
 	 *		- /custom_fields/		// returns all VRF custom fields
 	 *		- /{id}/				// returns VRF by id
 	 *		- /{id}/subnets/		// subnets inside vrf
+	 *		- /all/			        // returns all VRFs
 	 *
 	 *
 	 * @access public
@@ -134,16 +77,16 @@ class Vrfs_controller extends Common_api_functions {
 	 */
 	public function GET () {
 		// all
-		if (!isset($this->_params->id)) {
+		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ("vrf", 'vrfId');
 			// check result
-			if($result===false)						{ $this->Response->throw_exception(200, 'No vrfs configured'); }
+			if($result===false)						{ $this->Response->throw_exception(404, 'No vrfs configured'); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 		// custom fields
 		if($this->_params->id=="custom_fields") {
 			// check result
-			if(sizeof($this->custom_fields)==0)			{ $this->Response->throw_exception(200, 'No custom fields defined'); }
+			if(sizeof($this->custom_fields)==0)			{ $this->Response->throw_exception(404, 'No custom fields defined'); }
 			else										{ return array("code"=>200, "data"=>$this->custom_fields); }
 		}
 		// subnets
@@ -165,7 +108,7 @@ class Vrfs_controller extends Common_api_functions {
     			}
 
 				// check result
-				if($result===false)					{ $this->Response->throw_exception(200, 'No subnets belonging to this vrf'); }
+				if($result===false)					{ $this->Response->throw_exception(404, 'No subnets belonging to this vrf'); }
 				else {
 					$this->custom_fields = $this->Tools->fetch_custom_fields('subnets');
 					return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true));
@@ -186,20 +129,6 @@ class Vrfs_controller extends Common_api_functions {
 			if($result===false)						{ $this->Response->throw_exception(404, "VRF not found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
-	}
-
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 
@@ -330,7 +259,7 @@ class Vrfs_controller extends Common_api_functions {
 		// check for POST method
 		if($_SERVER['REQUEST_METHOD']=="POST") {
 			// check name
-			if(strlen($this->_params->name)==0)												{ $this->Response->throw_exception(400, "VRF name is required"); }
+			if(is_blank($this->_params->name))												{ $this->Response->throw_exception(400, "VRF name is required"); }
 			// check that it exists
 			if($this->Tools->fetch_object ("vrf", "name", $this->_params->name) !== false )	{ $this->Response->throw_exception(409, "VRF with that name already exists"); }
 		}
@@ -346,16 +275,4 @@ class Vrfs_controller extends Common_api_functions {
 			}
 		}
 	}
-
-	/**
-	 * Returns id of subnet gateay
-	 *
-	 * @access private
-	 * @params mixed $subnetId
-	 * @return void
-	 */
-	private function read_subnet_gateway ($subnetId) {
-    	return $this->Subnets->find_gateway ($subnetId);
-	}
-
 }

@@ -56,7 +56,7 @@ if(sizeof($result_pstn) > 0) {
 		print " <td><dd>$pstn->name</dd></td>";
 		print " <td><dd>".$pstn->prefix.$pstn->start." - ".$pstn->prefix.$pstn->stop."</dd></td>";
 		//device										{
-		if(strlen($pstn->deviceId)>0 && $pstn->deviceId!="0") {
+		if(!is_blank($pstn->deviceId) && $pstn->deviceId!="0") {
 			$switch = $Tools->fetch_object("devices", "id", $pstn->deviceId);
 			$pstn->deviceId = $switch===false ? "/" : "<a href='".create_link("tools", "devices", $switch->id)."'>".$switch->hostname."</a>";
 		}
@@ -70,7 +70,7 @@ if(sizeof($result_pstn) > 0) {
 		if(sizeof($custom_pstn_fields) > 0) {
 			foreach($custom_pstn_fields as $field) {
 				if(!in_array($field['name'], $hidden_pstn_fields)) {
-					$pstn->{$field['name']} = $Result->create_links ($pstn->{$field['name']}, $field['type']);
+					$pstn->{$field['name']} = $Tools->create_links ($pstn->{$field['name']}, $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>".$pstn->{$field['name']}."</td>";
 				}
 			}
@@ -136,7 +136,7 @@ if(sizeof($result_pstnn) > 0) {
 		print " <td><dd>$pstnn->name</dd></td>";
 		print " <td><dd>$pstnn->owner</dd></td>";
 		//device										{
-		if(strlen($pstnn->deviceId)>0 && $pstnn->deviceId!="0") {
+		if(!is_blank($pstnn->deviceId) && $pstnn->deviceId!="0") {
 			$switch = $Tools->fetch_object("devices", "id", $pstnn->deviceId);
 			$pstnn->deviceId = $switch===false ? "/" : "<a href='".create_link("tools", "devices", $switch->id)."'>".$switch->hostname."</a>";
 		}
@@ -149,7 +149,7 @@ if(sizeof($result_pstnn) > 0) {
 		if(sizeof($custom_pstnn_fields) > 0) {
 			foreach($custom_pstnn_fields as $field) {
 				if(!in_array($field['name'], $hidden_pstnn_fields)) {
-					$pstnn->{$field['name']} = $Result->create_links ($pstnn->{$field['name']}, $field['type']);
+					$pstnn->{$field['name']} = $Tools->create_links ($pstnn->{$field['name']}, $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>".$pstnn->{$field['name']}."</td>";
 				}
 			}

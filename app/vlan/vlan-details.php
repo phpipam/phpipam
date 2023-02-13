@@ -6,6 +6,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# perm check
+$User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
+
 # to array
 $vlan = (array) $vlan;
 
@@ -55,7 +58,7 @@ $cfields = $Tools->fetch_custom_fields ('vlans');
 		foreach($cfields as $key=>$field) {
 			$vlan[$key] = str_replace("\n", "<br>",$vlan[$key]);
 			// create links
-			$vlan[$key] = $Result->create_links($vlan[$key]);
+			$vlan[$key] = $Tools->create_links($vlan[$key]);
 			print "<tr>";
 			print "	<th>$key</th>";
 			print "	<td style='vertical-align:top;align:left;'>$vlan[$key]</td>";
@@ -67,22 +70,19 @@ $cfields = $Tools->fetch_custom_fields ('vlans');
 
 	# action button groups
 	print "<tr>";
-	print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
-	print "	<td style='vertical-align:bottom;align:left;'>";
-
-	print "	<div class='btn-toolbar' style='margin-bottom:0px'>";
-	print "	<div class='btn-group'>";
-
-	# permissions
-	if($User->is_admin (false)) {
-		print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$vlan[vlanId]'><i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$vlan[vlanId]'><i class='fa fa-times'></i></button>";
-	}
-
-	print "	</div>";
-	print "	</div>";
-
-	print "	</td>";
+    print "<td class='actions'>";
+    $links = [];
+    if($User->get_module_permissions ("vlan")>=User::ACCESS_RW) {
+        $links[] = ["type"=>"header", "text"=>_("Manage")];
+        $links[] = ["type"=>"link", "text"=>_("Edit VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$vlan[vlanId]'", "icon"=>"pencil"];
+    }
+    if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) {
+        $links[] = ["type"=>"link", "text"=>_("Delete VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$vlan[vlanId]'", "icon"=>"times"];
+    }
+    // print links
+    print $User->print_actions($User->user->compress_actions, $links);
+    print "</td>";
+	print '</tr>'. "\n";
 	print "</tr>";
 
 	?>

@@ -45,8 +45,8 @@ $address = $_POST;
 
 
 // set selected address and required addresses fields array
-$selected_ip_fields = explode(";", $User->settings->IPfilter);
-$required_ip_fields = explode(";", $User->settings->IPrequired);
+$selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);
+$required_ip_fields = $Tools->explode_filtered(";", $User->settings->IPrequired);
 // append one missing from selected
 $selected_ip_fields[] = "description";
 $selected_ip_fields[] = "hostname";
@@ -59,26 +59,26 @@ foreach ($required_ip_fields as $k=>$f) {
 // checks
 if(is_array($required_ip_fields) && $action!="delete") {
 	// remove modules not enabled from required fields
-	if($User->settings->enableLocations=="0") { unset($required_ip_fields['location_item']); }
+	if($User->settings->enableLocations=="0") { unset($required_ip_fields['location']); }
 
 	// set default array
 	$required_field_errors = array();
 	// Check that all required fields are present
 	foreach ($required_ip_fields as $required_field) {
-		if (!isset($address[$required_field]) || strlen($address[$required_field])==0) {
+		if (!isset($address[$required_field]) || is_blank($address[$required_field])) {
 			$required_field_errors[] = ucwords($required_field)." "._("is required");
 		}
 	}
 	// check
 	if(sizeof($required_field_errors)>0) {
-		array_unshift($required_field_errors, "Please fix following errors:");
+		array_unshift($required_field_errors, _("Please fix following errors:"));
 		$Result->show("danger", implode("<br> - ", $required_field_errors), true);
 	}
 }
 
 
 # remove all spaces in hostname
-if (strlen($address['hostname'])>0) { $address['hostname'] = str_replace(" ", "", $address['hostname']); }
+if (!is_blank($address['hostname'])) { $address['hostname'] = str_replace(" ", "", $address['hostname']); }
 
 # required fields
 isset($address['action']) ?:		$Result->show("danger", _("Missing required fields"). " action", true);
@@ -90,7 +90,7 @@ isset($address['id']) ?:			$Result->show("danger", _("Missing required fields").
 if(!isset($address['PTRignore']))	$address['PTRignore']=0;
 
 # generate firewall address object name
-$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings,true);
 if ($firewallZoneSettings->autogen == 'on') {
 	if ($address['action'] == 'add' ) {
 		$address['firewallAddressObject'] = $Zones->generate_address_object($address['subnetId'],$address['hostname']);
@@ -130,8 +130,8 @@ if(sizeof($custom_fields) > 0 && $action!="delete") {
 			}
 		}
 		# null custom fields not permitted
-		if($field['Null']=="NO" && strlen($address[$field['name']])==0) {
-			$Result->show("danger", $field['name']._(" can not be empty!"), true);
+		if($field['Null']=="NO" && is_blank($address[$field['name']])) {
+			$Result->show("danger", $field['name']." "._("can not be empty!"), true);
 		}
 	}
 }
@@ -143,15 +143,13 @@ if($action=="edit" || $action=="delete" || $action=="move") {
 
 # set excludePing value
 $address['excludePing'] = @$address['excludePing']==1 ? 1 : 0;
-
-# no strict checks flag - for range networks and /31, /32
-$not_strict = @$address['nostrict']=="yes" ? true : false;
+$address['is_gateway'] = @$address['is_gateway']==1 ? 1 : 0;
 
 # check if subnet is multicast
 $subnet_is_multicast = $Subnets->is_multicast ($subnet['subnet']);
 
 # are we adding/editing range?
-if (strlen(strstr($address['ip_addr'],"-")) > 0) {
+if (!is_blank(strstr($address['ip_addr'],"-"))) {
 
 	# set flag for updating
 	$address['type'] = "series";
@@ -160,7 +158,7 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 	$address['ip_addr'] = str_replace(" ", "", $address['ip_addr']);
 
 	# get start and stop of range
-	$range		 = explode("-", $address['ip_addr']);
+	$range		 = pf_explode("-", $address['ip_addr']);
 	$address['start'] = $range[0];
 	$address['stop']  = $range[1];
 
@@ -170,9 +168,9 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
     	if($Addresses->validate_ip( $address['stop'])===false)      { $Result->show("danger", _("Invalid IP address")."!", true); }
 	}
 	else {
-    	$Addresses->verify_address( $address['start'], "$subnet[ip]/$subnet[mask]", $not_strict );
-    	$Addresses->verify_address( $address['stop'] , "$subnet[ip]/$subnet[mask]", $not_strict );
-    }
+		$Addresses->address_within_subnet($address['start'], $subnet, true);
+		$Addresses->address_within_subnet($address['stop'],  $subnet, true);
+	}
 
 	# go from start to stop and insert / update / delete IPs
 	$start = $Subnets->transform_to_decimal($address['start']);
@@ -235,7 +233,7 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 
         	# validate and normalize MAC address
         	if($action!=="delete") {
-            	if(strlen(@$address['mac'])>0) {
+            	if(!is_blank(@$address['mac'])) {
                 	if($User->validate_mac ($address['mac'])===false) {
                     	$errors[] = _('Invalid MAC address')."!";
                 	}
@@ -264,24 +262,24 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 
 		# print errors if they exist
 		if(isset($errors)) {
-			$log = $Result->array_to_log ($errors);
+			$log = $Log->array_to_log ($errors);
 			$Result->show("danger", $log, false);
-			$Log->write( "IP address modification", "'Error $action range $address[start] - $address[stop]<br> $log", 2);
+			$Log->write( _("IP address modification"), _("Error")." ".$action." "._("range")." ".$address["start"]." - ".$address["stop"]."<br> $log", 2);
 		}
 		else {
 			# reset IP for mailing
 			$address['ip_addr'] = $address['start'] .' - '. $address['stop'];
 			# log and changelog
-			$Result->show("success", _("Range")." $address[start] - $address[stop] "._($action)." "._("successfull")."!", false);
-			$Log->write( "IP address modification", "Range $address[start] - $address[stop] $action successfull!", 0);
+			$Result->show("success", _("Range")." $address[start] - $address[stop] "._($action)." "._("successful")."!", false);
+			$Log->write( _("IP address modification"), _("Range")." ".$address["start"]." - ".$address["stop"]." ".$action." "._("successful")."!", 0);
 
 			# send changelog mail
 			$Log->object_action = $action;
-			$Log->object_type   = "address range";
-			$Log->object_result = "success";
+			$Log->object_type   = _("address range");
+			$Log->object_result = _("success");
 			$Log->user 			= $User->user;
 
-			$Log->changelog_send_mail ("Address range $address[start] - $address[stop] $action");
+			$Log->changelog_send_mail ( _("Address range")." ".$address["start"]." - "."$address[stop] $action");
 		}
 	}
 }
@@ -290,7 +288,7 @@ else {
 
 	# unique hostname requested?
 	if(isset($address['unique'])) {
-		if($address['unique'] == 1 && strlen($address['hostname'])>0) {
+		if($address['unique'] == 1 && !is_blank($address['hostname'])) {
 			# check if unique
 			if(!$Addresses->is_hostname_unique($address['hostname'])) 						{ $Result->show("danger", _('Hostname is not unique')."!", true); }
 		}
@@ -298,7 +296,7 @@ else {
 
 	# validate and normalize MAC address
 	if($action!=="delete") {
-    	if(strlen(@$address['mac'])>0) {
+    	if(!is_blank(@$address['mac'])) {
     		$address['mac'] = trim($address['mac']);
         	if($User->validate_mac ($address['mac'])===false) {
             	$Result->show("danger", _('Invalid MAC address')."!", true);
@@ -315,14 +313,6 @@ else {
 		$subnet = (array) $Subnets->fetch_subnet(null, $address['newSubnet']);
 		$address['ip_addr'] = $address_old['ip'];
 	}
-	# verify address
-	if($action!=="delete" && $subnet['isFolder']!="1") {
-		$verify = $Addresses->verify_address( $address['ip_addr'], "$subnet[ip]/$subnet[mask]", $not_strict );
-	}
-	elseif ($action!=="delete" && $subnet['isFolder']=="1") {
-		$verify = $Addresses->verify_address( $address['ip_addr'], "0.0.0.0/0", $not_strict );
-	}
-
 	# if errors are present print them, else execute query!
 	if($verify) 				{ $Result->show("danger", _('Error').": $verify ($address[ip_addr])", true); }
 	else {

@@ -22,13 +22,13 @@ $User->check_maintaneance_mode ();
 $User->Crypto->csrf_cookie ("validate", "pdns_defaults", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 // validations
-if(strlen($_POST['ttl'])==0)	{ $_POST['ttl'] = $PowerDNS->defaults->ttl; }
+if(is_blank($_POST['ttl']))	{ $_POST['ttl'] = $PowerDNS->defaults->ttl; }
 
 // formulate json
 $values = new StdClass ();
 
 // get old settings for defaults
-$old_values = json_decode($User->settings->powerDNS);
+$old_values = pf_json_decode($User->settings->powerDNS);
 
 $values->host 		= $old_values->host;
 $values->name 		= $old_values->name;
@@ -53,4 +53,3 @@ $values = array("id"=>1,
 				);
 if(!$Admin->object_modify("settings", "edit", "id", $values))	{ $Result->show("danger",  _("Cannot update settings"), true); }
 else															{ $Result->show("success", _("Settings updated successfully"), true); }
-?>

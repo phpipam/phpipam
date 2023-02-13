@@ -51,7 +51,7 @@ $permitted_domains = array_filter($out);
 			//add
 			print "<option value='Add' data-domain='".$d['domain']->id."'>"._('+ Add new VLAN')."</option>";
 
-			if($d['vlans'][0]!==null) {
+			if(is_array($d['vlans']) && $d['vlans'][0]!==null) {
 				foreach($d['vlans'] as $v) {
 					// set print
 					$printVLAN = $v->number;

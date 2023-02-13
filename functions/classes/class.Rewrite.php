@@ -77,10 +77,12 @@ class Rewrite {
 	 * @method __construct
 	 */
 	public function __construct () {
-		// process request URI
-		$this->process_request_uri ();
-		// formulate GET request
-		$this->create_get_params ();
+		if (php_sapi_name() !== "cli") {
+			// process request URI
+			$this->process_request_uri();
+			// formulate GET request
+			$this->create_get_params();
+		}
 	}
 
 	/**
@@ -91,7 +93,7 @@ class Rewrite {
 	 * @return void
 	 */
 	private function set_api_flag () {
-		if($this->uri_parts[0]=="api") {
+		if(@$this->uri_parts[0]=="api") {
 			$this->is_api = true;
 		}
 	}
@@ -131,10 +133,10 @@ class Rewrite {
 		// ignore for direct access
 		if(strpos($_SERVER['REQUEST_URI'], "index.php")===false) {
 			if(BASE!="/") {
-				$this->uri_parts = array_values(array_filter(explode("/", str_replace(BASE, "", $_SERVER['REQUEST_URI']))));
+				$this->uri_parts = array_values(array_filter(pf_explode("/", str_replace(BASE, "", $_SERVER['REQUEST_URI']))));
 			}
 			else {
-				$this->uri_parts = array_values(array_filter(explode("/", $_SERVER['REQUEST_URI'])));
+				$this->uri_parts = array_values(array_filter(pf_explode("/", $_SERVER['REQUEST_URI'])));
 			}
 
 			// urldecode uri_parts
@@ -176,6 +178,7 @@ class Rewrite {
 				$this->get_params = $_GET;
 			} else {
 				foreach ($this->uri_parts as $k=>$l) {
+					if (strncmp($l, '?', 1) == 0) continue; //skip qsa
 					switch ($k) {
 						case 0  : $this->get_params['page'] 	= $l;	break;
 						case 1  : $this->get_params['section']  = $l;	break;
@@ -205,7 +208,7 @@ class Rewrite {
 	 */
 	private function append_qsa () {
 		if(strpos($_SERVER['REQUEST_URI'], "?")!==false) {
-			$parts = explode("?", $_SERVER['REQUEST_URI']);
+			$parts = pf_explode("?", $_SERVER['REQUEST_URI']);
 			$parts = $parts[1];
 			// parse
 			parse_str ($parts, $out);
@@ -237,7 +240,6 @@ class Rewrite {
 				if (isset($this->get_params['section']) && isset($this->get_params['subnetId'])) {
 					if ($this->get_params['section']=="search") {
 						$this->get_params['ip'] = $this->get_params['subnetId'];
-						$this->get_params['ip'] = $this->get_params['ip'];
 						unset($this->get_params['subnetId']);
 					}
 				}
@@ -258,6 +260,7 @@ class Rewrite {
 		// create
 		if(sizeof($this->uri_parts)>0) {
 			foreach ($this->uri_parts as $k=>$l) {
+				if (strncmp($l, '?', 1) == 0) continue; //skip qsa
 				switch ($k) {
 					case 0  : $this->get_params['app_id']     = $l;	break;
 					case 1  : $this->get_params['controller'] = $l;	break;

@@ -3,7 +3,7 @@
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
 
 # fetch settings
-$settings = $Tools->fetch_object("settings", "id", 1);
+$settings = $Tools->get_settings();
 ?>
 
 <!DOCTYPE HTML>
@@ -33,17 +33,20 @@ $settings = $Tools->fetch_object("settings", "id", 1);
 	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css?v=<?php print SCRIPT_PREFIX; ?>">
 	<link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css?v=<?php print SCRIPT_PREFIX; ?>">
 	<link rel="shortcut icon" href="css/images/favicon.png">
+	<?php if ($User->user->ui_theme!="white") { ?>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->user->ui_theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<?php } ?>
 
 	<!-- js -->
-	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-	<script type="text/javascript">
+	<script src="js/jquery-3.5.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script>
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script type="text/javascript" src="js/dieIE.js"></script>
+	<script src="js/dieIE.js"></script>
 	<![endif]-->
 </head>
 
@@ -73,7 +76,7 @@ $settings = $Tools->fetch_object("settings", "id", 1);
 	<nav class="navbar navbar-default" id="menu-navbar" role="navigation">
 	<div class="collapse navbar-collapse" id="menu-collapse">
 		<ul class="nav navbar-nav sections pull-right">
-			<li><a href="<?php print create_link("login"); ?>"><i class='fa fa-user'></i> Login</a></li>
+			<li><a href="<?php print create_link("login"); ?>"><i class='fa fa-user'></i> <?php print _("Login"); ?></a></li>
 		</ul>
 	</div>
 	</nav>
@@ -83,7 +86,7 @@ $settings = $Tools->fetch_object("settings", "id", 1);
 
 <?php
 # decode objects
-$temp_objects = json_decode($settings->tempAccess);
+$temp_objects = pf_json_decode($settings->tempAccess);
 # check
 $temp_objects = !is_null($temp_objects) ? (array) $temp_objects : array();
 # set width
@@ -98,16 +101,16 @@ $max_width = (@$temp_objects[$_GET['section']]->type=="ipaddresses" || isset($_G
 	# disbled
 	if($settings->tempShare!=1)										{ $Result->show("danger", _("Temporary sharing disabled"), false); }
 	# none
-	elseif(sizeof($temp_objects)==0)								{ $Log->write( "Tempory share access", $_GET['section'], 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
+	elseif(sizeof($temp_objects)==0)								{ $Log->write( _("Tempory share access"), $_GET['section'], 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
 	# try to fetch object
-	elseif(!array_key_exists($_GET['section'], $temp_objects))		{ $Log->write( "Tempory share access", $_GET['section'], 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
+	elseif(!array_key_exists($_GET['section'], $temp_objects))		{ $Log->write( _("Tempory share access"), $_GET['section'], 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
 	# ok, include script
 	else {
 		//check if expired
-		if(time()>$temp_objects[$_GET['section']]->validity)		{ $Log->write( "Tempory share access", $_GET['section'], 2); $Result->show("danger", _("Share expired")."!", false); }
+		if(time()>$temp_objects[$_GET['section']]->validity)		{ $Log->write( _("Tempory share access"), $_GET['section'], 2); $Result->show("danger", _("Share expired")."!", false); }
 		else {
 			//log
-			$Log->write( "Tempory share access", $_GET['section'], 0);
+			$Log->write( _("Tempory share access"), $_GET['section'], 0);
 
 			if($temp_objects[$_GET['section']]->type=="subnets") 		{
 				# address?

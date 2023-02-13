@@ -5,7 +5,7 @@
  ********************************************/
 
 # get usage
-$details = $Subnets->calculate_subnet_usage ($subnet, true);
+$details = $Subnets->calculate_subnet_usage ($subnet);
 
 # set free color
 $unused_color = $User->user->ui_theme=="dark" ? "rgba(0,0,0,0.1)" : "white";
@@ -17,12 +17,12 @@ $unused_color = $User->user->ui_theme=="dark" ? "rgba(0,0,0,0.1)" : "white";
 <div id="pieChart" style="height:220px;width:100%;"></div>
 
 <!-- charts -->
-<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js"></script>
-<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.pie.js"></script>
-<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot/excanvas.min.js"></script><![endif]-->
+<script src="js/flot/jquery.flot.js"></script>
+<script src="js/flot/jquery.flot.pie.js"></script>
+<!--[if lte IE 8]><script src="js/flot/excanvas.min.js"></script><![endif]-->
 
 
-<script type="text/javascript">
+<script>
 $(function () {
 	//data
     var data = [
@@ -34,10 +34,11 @@ $(function () {
     	}
     	# than all other percentages
     	foreach($Subnets->address_types as $t) {
-	    if($details[$t['type']."_percent"]>0) {
-    		$details[$t['type']."_percent"] = str_replace(",", ".", $details[$t['type']."_percent"]);
-    		print "{ label: '"._($t['type'])."', data: ".$details[$t["type"]."_percent"].", color: '".$t['bgcolor']."' }, ";
-	    }
+			$type_percent = $t['type']."_percent";
+			if(isset($details[$type_percent]) && $details[$type_percent]>0) {
+				$details[$type_percent] = str_replace(",", ".", $details[$type_percent]);
+				print "{ label: '"._($t['type'])."', data: ".$details[$t["type"]."_percent"].", color: '".$t['bgcolor']."' }, ";
+			}
     	}
     	?>
 	];

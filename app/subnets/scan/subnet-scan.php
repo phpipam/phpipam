@@ -17,12 +17,17 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "scan");
 
 # ID must be numeric
 if(!is_numeric($_POST['subnetId']))										{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # verify that user has write permissionss for subnet
 if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
+
+# Check if scanning has been disabled
+if($User->settings->scanPingType=="none") { $Result->show("danger", _('Scanning disabled').' (scanPingType=None)', true, true); }
 
 # fetch subnet details
 $subnet = $Subnets->fetch_subnet (null, $_POST['subnetId']);
@@ -32,7 +37,7 @@ $subnet!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 if ( $Subnets->identify_address($subnet->subnet) == "IPv6") 			{ $Result->show("danger", _('IPv6 scanning is not supported').'!', true, true); }
 
 # fix description
-$subnet->description = strlen($subnet->description)>0 ? "(".$subnet->description.")" : "";
+$subnet->description = !is_blank($subnet->description) ? "(".$subnet->description.")" : "";
 ?>
 
 <!-- header -->
@@ -41,6 +46,12 @@ $subnet->description = strlen($subnet->description)>0 ? "(".$subnet->description
 
 <!-- content -->
 <div class="pContent">
+	<?php
+	// verify date.timezone
+	if (is_blank(ini_get('date.timezone'))) {
+		$Result->show("warning", _("Online & offline results may be unreliable: date.timezone not set in ").php_ini_loaded_file());
+	}
+	?>
 	<table class="table table-noborder table-condensed table-scan">
     <!-- subnet -->
     <tr>
@@ -57,7 +68,7 @@ $subnet->description = strlen($subnet->description)>0 ? "(".$subnet->description
 		    		<option value="scan-icmp"   <?php if(@$_COOKIE['scantype']=="scan-icmp") print "selected"; ?>><?php print _('Discovery scans');?>: Ping <?php print _('scan');?></option>
 		    		<option value="scan-telnet" <?php if(@$_COOKIE['scantype']=="scan-telnet") print "selected"; ?>><?php print _('Discovery scans');?>: Telnet <?php print _('scan');?></option>
 		    		<option value="snmp-route-all"    <?php if(@$_COOKIE['scantype']=="snmp-route-all") print "selected"; ?>><?php print _('Discovery scans');?>: SNMP nested subnets <?php print _('scan');?></option>
-		    		<option value="snmp-arp"    <?php if(@$_COOKIE['scantype']=="snmp-arp") print "selected"; ?>><?php print _('Discovery scans');?>: SNMP ARP <?php print _('scan');?></option>
+		    		<option value="scan-snmp-arp"     <?php if(@$_COOKIE['scantype']=="scan-snmp-arp") print "selected"; ?>><?php print _('Discovery scans');?>: SNMP ARP <?php print _('scan');?></option>
 		    		<option value="snmp-mac"    <?php if(@$_COOKIE['scantype']=="snmp-mac") print "selected"; ?>><?php print _('Discovery scans');?>: SNMP MAC address <?php print _('scan');?></option>
 	    		</optgroup>
     			<!-- Status update scans -->
@@ -104,7 +115,7 @@ $subnet->description = strlen($subnet->description)>0 ? "(".$subnet->description
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default btn-success" id="subnetScanSubmit" data-subnetId='<?php print $_POST['subnetId']; ?>'><i class="fa fa-gears"></i> <?php print _('Scan subnet'); ?></button>
+		<button class="btn btn-sm btn-default btn-success" id="subnetScanSubmit" data-subnetId='<?php print $_POST['subnetId']; ?>' data-csrf-cookie='<?php print $csrf; ?>'><i class="fa fa-gears"></i> <?php print _('Scan subnet'); ?></button>
 	</div>
 
 	<div class="subnetTruncateResult"></div>

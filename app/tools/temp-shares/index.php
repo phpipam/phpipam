@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # fetch all shares
-$temp_shares = json_decode($User->settings->tempAccess);
+$temp_shares = pf_json_decode($User->settings->tempAccess);
 ?>
 
 <h4><?php print _("List of temporary shared objects"); ?></h4>
@@ -58,11 +58,11 @@ foreach($temp_shares as $s) {
 		//set details
 		unset($tmp);
 		if($s->type=="subnets") {
-			$tmp[] = "Share type: subnet<hr>"."<a href='".create_link("subnets", $object->sectionId, $object->id)."'>".$Subnets->transform_to_dotted($object->subnet)."/$object->mask</a>";
+			$tmp[] = _("Share type: subnet")."<hr>"."<a href='".create_link("subnets", $object->sectionId, $object->id)."'>".$Subnets->transform_to_dotted($object->subnet)."/$object->mask</a>";
 			$tmp[] = $object->description;
 		}
 		else {
-			$tmp[] = "Share type: IP address<hr>".$Subnets->transform_to_dotted($object->ip_addr);
+			$tmp[] = _("Share type: IP address")."<hr>".$Subnets->transform_to_dotted($object->ip_addr);
 			$tmp[] = $object->description;
 		}
 		$s->details = implode("<br>", $tmp);
@@ -84,7 +84,7 @@ foreach($temp_shares as $s) {
 		print "<tr class='text-top'>";
 		print "	<td>$s->type_text</td>";
 		print "	<td>$s->details</td>";
-		print "	<td><a href='".$Result->createURL().BASE."temp_share/$s->code/'>$s->code</a></td>";
+		print "	<td><a href='".$Tools->createURL().BASE."temp_share/$s->code/'>$s->code</a></td>";
 		print "	<td class='$class'>".date("Y-m-d H:i:s", $s->validity)."</td>";
 		print "	<td>$user->real_name ($user->username)</td>";
 		print "	<td>$logText</td>";

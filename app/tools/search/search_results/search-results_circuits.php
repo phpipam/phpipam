@@ -35,6 +35,7 @@ $result_circuits_p = $Tools->search_circuit_providers ($searchTerm, $custom_circ
 	<th><?php print _('Type');?></th>
 	<th><?php print _('Capacity');?></th>
 	<th><?php print _('Status');?></th>
+	<th><?php print _('Comment');?></th>
 	<?php
 	if(sizeof($custom_circuit_fields) > 0) {
 		foreach($custom_circuit_fields as $field) {
@@ -59,11 +60,12 @@ if(sizeof($result_circuits) > 0) {
 		print " <td><dd>$circuit->type</dd></td>";
 		print " <td><dd>$circuit->capacity</dd></td>";
 		print " <td><dd>$circuit->status</dd></td>";
+		print " <td><dd>$circuit->comment</dd></td>";
 		# custom fields
 		if(sizeof($custom_circuit_fields) > 0) {
 			foreach($custom_circuit_fields as $field) {
 				if(!in_array($field['name'], $hidden_circuit_fields)) {
-					$circuit->{$field['name']} = $Result->create_links ($circuit->{$field['name']}, $field['type']);
+					$circuit->{$field['name']} = $Tools->create_links ($circuit->{$field['name']}, $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>".$circuit->{$field['name']}."</td>";
 				}
 			}
@@ -130,7 +132,7 @@ if(sizeof($result_circuits_p) > 0) {
 		if(sizeof($custom_circuit_p_fields) > 0) {
 			foreach($custom_circuit_p_fields as $field) {
 				if(!in_array($field['name'], $hidden_circuit_p_fields)) {
-					$provider->{$field['name']} = $Result->create_links ($provider->{$field['name']}, $field['type']);
+					$provider->{$field['name']} = $Tools->create_links ($provider->{$field['name']}, $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>".$provider->{$field['name']}."</td>";
 				}
 			}

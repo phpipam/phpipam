@@ -8,8 +8,11 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->Crypto->csrf_cookie ("create", "user-menu");
+
 ?>
-<script type="text/javascript">
+<script>
 //show clock
 $(function($) {
 	$('span.jclock').jclock();
@@ -61,7 +64,7 @@ $(document).ready(function() {
 		}).get().join(';');
 
 		//save user widgets
-		$.post('app/tools/user-menu/user-widgets-set.php', {widgets:widgets}, function(data) {});
+		$.post('app/tools/user-menu/user-widgets-set.php', {widgets:widgets, csrf_cookie:"<?php print $csrf; ?>"}, function(data) {});
 
 		//remove sortable class
 		$('#dashboard .row-fluid').sortable("destroy");
@@ -74,9 +77,9 @@ $(document).ready(function() {
 
 
 <!-- charts -->
-<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.categories.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot/excanvas.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script><![endif]-->
+<script src="js/flot/jquery.flot.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<script src="js/flot/jquery.flot.categories.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<!--[if lte IE 8]><script src="js/flot/excanvas.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script><![endif]-->
 
 
 <div class="welcome" style="text-align:right">
@@ -90,10 +93,10 @@ $widgets = $Tools->fetch_widgets ($User->is_admin(false), false);
 $widgets = (array) $widgets;
 
 # show user-selected widgets
-$uwidgets = array_filter(explode(";",$User->user->widgets));
+$uwidgets = array_filter(pf_explode(";",$User->user->widgets));
 
 # if user has no groups and is not admin print warning
-if ($User->is_admin(false)!==true && (strlen($User->user->groups)==0 || $User->user->groups==="null") ) {
+if ($User->is_admin(false)!==true && (is_blank($User->user->groups) || $User->user->groups==="null") ) {
 	print '<div class="row-fluid">';
 	print "	<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='min-height:10px'>";
 	print "	<div class='inner' style='min-height:10px'>";
@@ -117,7 +120,7 @@ $m=0;							//to calculate chunk index
 foreach($uwidgets as $uk=>$uv) {
 	//get fetails
 	$wdet = (array) $widgets[$uv];
-	if(strlen($wdet['wsize'])==0)	{ $wsize = 6; }
+	if(is_blank($wdet['wsize']))	{ $wsize = 6; }
 	else							{ $wsize = $wdet['wsize']; }
 
 	//calculate current size
@@ -150,7 +153,7 @@ if(sizeof($uwidgets)>1) {
 			$wdet = (array) $widgets[$c];
 			if(array_key_exists($c, $widgets)) {
 				//reset size if not set
-				if(strlen($wdet['wsize'])==0)	{ $wdet['wsize'] = 6; }
+				if(is_blank($wdet['wsize']))	{ $wdet['wsize'] = 6; }
 
 				print "	<div class='col-xs-12 col-sm-12 col-md-12 col-lg-$wdet[wsize] widget-dash' id='w-$wdet[wfile]'>";
 				print "	<div class='inner'><i class='fa fa-times remove-widget icon-action fa-gray pull-right'></i>";

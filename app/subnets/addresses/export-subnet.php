@@ -6,6 +6,10 @@
 
 # include required scripts
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # initialize required objects
@@ -19,21 +23,22 @@ $Addresses	= new Addresses ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
-# we dont need any errors!
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
-
 # fetch subnet details
-$subnet = (array) $Tools->fetch_object ("subnets", "id", $_GET['subnetId']);
+$subnet = $Tools->fetch_object("subnets", "id", $_GET['subnetId']);
+if (!is_object($subnet) || $Subnets->check_permission($User->user, $_GET['subnetId'], $subnet) == User::ACCESS_NONE) {
+	$Result->fatal_http_error(404, _("Subnet not found"));
+}
+$subnet = (array) $subnet;
+
 # fetch all IP addresses in subnet
-$addresses = $Addresses->fetch_subnet_addresses ($_GET['subnetId'], "ip_addr", "asc");
+$addresses = $Addresses->fetch_subnet_addresses ($_GET['subnetId'], "ip_addr", "asc") ? : [];
+
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 
 
 # Create a workbook
-$filename = isset($_GET['filename'])&&strlen(@$_GET['filename'])>0 ? $_GET['filename'] : "phpipam_subnet_export.xls";
+$filename = isset($_GET['filename'])&&!is_blank(@$_GET['filename']) ? $_GET['filename'] : "phpipam_subnet_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
 $workbook->setVersion(8);
 
@@ -84,7 +89,7 @@ $lineCount++;
 $vlan = $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
 if($vlan!=false) {
 	$vlan = (array) $vlan;
-	$vlan_text = strlen($vlan['name'])>0 ? "vlan: $vlan[number] - $vlan[name]" : "vlan: $vlan[number]";
+	$vlan_text = !is_blank($vlan['name']) ? "vlan: $vlan[number] - $vlan[name]" : "vlan: $vlan[number]";
 
 	$worksheet->write($lineCount, $rowCount, $vlan_text, $format_vlan );
 	$lineCount++;
@@ -191,8 +196,8 @@ foreach ($addresses as $ip) {
 	$rowCount = 0;
 
 	//change switch ID to name
-	$ip['switch']   = is_null($ip['switch'])||strlen($ip['switch'])==0||$ip['switch']==0||!isset($devices_indexed[$ip['switch']]) ? "" : $devices_indexed[$ip['switch']]->hostname;
-	$ip['location'] = is_null($ip['location'])||strlen($ip['location'])==0||$ip['location']==0||!isset($locations_indexed[$ip['location']]) ? "" : $locations_indexed[$ip['location']]->name;
+	$ip['switch']   = is_null($ip['switch'])||is_blank($ip['switch'])||$ip['switch']==0||!isset($devices_indexed[$ip['switch']]) ? "" : $devices_indexed[$ip['switch']]->hostname;
+	$ip['location'] = is_null($ip['location'])||is_blank($ip['location'])||$ip['location']==0||!isset($locations_indexed[$ip['location']]) ? "" : $locations_indexed[$ip['location']]->name;
 
 	if( (isset($_GET['ip_addr'])) && ($_GET['ip_addr'] == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $Subnets->transform_address($ip['ip_addr'],"dotted"), $format_left);

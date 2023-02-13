@@ -31,7 +31,7 @@ if ($auth_methods!==false) {
 $custom = $Tools->fetch_custom_fields('userGroups');
 
 /* check customfields */
-$ffields = json_decode($User->settings->hiddenCustomFields, true);
+$ffields = pf_json_decode($User->settings->hiddenCustomFields, true);
 $ffields = is_array(@$ffields['userGroups']) ? $ffields['userGroups'] : array();
 
 $colspanCustom = 0;
@@ -87,7 +87,7 @@ $colspanCustom = 0;
 	}
 	?>
 	</td>
-	<td><?php print _('All sections :'); ?> <span class="badge badge1 badge5">Read / Write</span></td>
+	<td><?php print _('All sections:'); ?> <span class="badge badge1 badge5"><?php print _("Read / Write"); ?></span></td>
 	<td colspan="<?php print 2+$colspanCustom; ?>"></td>
 </tr>
 

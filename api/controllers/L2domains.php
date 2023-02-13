@@ -8,56 +8,6 @@
 
 class L2domains_controller extends Common_api_functions {
 
-
-	/**
-	 * _params provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
-	/**
-	 * custom_fields
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	public $custom_fields;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * master Sections object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Sections;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-	/**
-	 * Master Admin object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Admin;
-
-
 	/**
 	 * __construct function
 	 *
@@ -118,23 +68,24 @@ class L2domains_controller extends Common_api_functions {
 	 *		- /{id}/
 	 *		- /{id}/vlans/
 	 *		- /custom_fields/
+	 *		- /all/				// will return all domains
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function GET () {
 		// all domains
-		if(!isset($this->_params->id)) {
+		if(!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ("vlanDomains", 'id', true);
 			// check result
-			if($result===false)						{ $this->Response->throw_exception(200, 'No domains configured'); }
+			if($result===false)						{ $this->Response->throw_exception(404, 'No domains configured'); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 		// set
 		else {
 			// custom fields
 			if($this->_params->id=="custom_fields") {
-				if(sizeof($this->custom_fields)==0)	{ $this->Response->throw_exception(200, 'No custom fields defined'); }
+				if(sizeof($this->custom_fields)==0)	{ $this->Response->throw_exception(404, 'No custom fields defined'); }
 				else								{ return array("code"=>200, "data"=>$this->custom_fields); }
 			}
 			// vlans
@@ -144,7 +95,7 @@ class L2domains_controller extends Common_api_functions {
 				// save result
 				$result = $this->Tools->fetch_multiple_objects ("vlans", "domainId", $this->_params->id, 'vlanId', true);
 				// check result
-				if($result==NULL)					{ $this->Response->throw_exception(200, "No vlans belonging to this domain"); }
+				if($result==NULL)					{ $this->Response->throw_exception(404, "No vlans belonging to this domain"); }
 				else								{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
 			// id
@@ -159,19 +110,6 @@ class L2domains_controller extends Common_api_functions {
 			}
 
 		}
-	}
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 
@@ -323,5 +261,3 @@ class L2domains_controller extends Common_api_functions {
 
 	}
 }
-
-?>

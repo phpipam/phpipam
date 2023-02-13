@@ -31,7 +31,7 @@ $Tools->validate_action ($_POST['action']);
 
 # validate post
 is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid ID"), true);
-is_numeric($_POST['id']) || strlen($_POST['id'])==0 ?:	$Result->show("danger", _("Invalid ID"), true);
+is_numeric($_POST['id']) || is_blank($_POST['id']) ?:	$Result->show("danger", _("Invalid ID"), true);
 
 # fetch address and subnet
 $address = (array) $Addresses->fetch_address(null, $_POST['id']);
@@ -72,13 +72,13 @@ $Subnets->fetch_subnet_slaves_recursive ($subnet['id']);
 	<!-- description -->
 	<tr>
 		<td><?php print _('Description'); ?></td>
-		<td><?php print strlen(@$address['description'])>0 ? $address['description'] : "/"; ?></td>
+		<td><?php print !is_blank(@$address['description']) ? $address['description'] : "/"; ?></td>
 	</tr>
 
 	<!-- DNS name -->
 	<tr>
 		<td><?php print _('DNS name'); ?></td>
-		<td><?php print strlen(@$address['hostname'])>0 ? $address['hostname'] : "/"; ?></td>
+		<td><?php print !is_blank(@$address['hostname']) ? $address['hostname'] : "/"; ?></td>
 	</tr>
 
 	<!-- divider -->

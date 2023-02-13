@@ -30,10 +30,10 @@ $admin_items["vlans"] = array (
                         );
 // VRF
 if($User->settings->enableVRF == 1) {
-$admin_items["vrfs"] = array(
+$admin_items["vrf"] = array(
                         "name"=>"VRF",
-                        "href"=>array("administration", "vrfs"),
-                        "title"=>"VRF managements",
+                        "href"=>array("administration", "vrf"),
+                        "title"=>"VRF management",
                         "icon"=>"fa-cloud"
                        );
 }
@@ -89,11 +89,20 @@ $admin_items["circuits"] = array (
                         "icon"=>"fa-random"
                         );
 }
+// BGP
+if($User->settings->enableRouting == 1) {
+$admin_items["routing"] = array (
+                        "name"=>"Routing",
+                        "href"=>array("administration", "routing"),
+                        "title"=>"Show Routing",
+                        "icon"=>"fa-exchange"
+                        );
+}
 // locations
 if($User->settings->enableLocations == 1) {
 $admin_items["locations"] = array (
                         "name"=>"Locations",
-                        "href"=>array("tools", "locations"),
+                        "href"=>array("administration", "locations"),
                         "title"=>"Show locations",
                         "icon"=>"fa-map"
                         );
@@ -104,6 +113,12 @@ $admin_items["locations"] = array (
 <ul class="nav navbar-nav sections icons">
 
     <?php
+
+    # dashboard
+    print "<li class='first-item administration'>";
+    print " <a href='".create_link("dashboard")."'><i class='fa fa-home'></i></a>";
+    print "</li>";
+
     print "<li class='first-item administration'>";
     print "<a href='".create_link("administration")."'><i class='fa fa-angle-right'></i> "._('Administration')."</a>";
     print "</li>";
@@ -166,7 +181,7 @@ $admin_items["locations"] = array (
     ?>
 
     <!-- all tools -->
-    <li class='<?php if($_GET['page']=="administration" && (!isset($_GET['section']) || strlen($_GET['section'])==0)) print "active"; ?>'>
+    <li class='<?php if($_GET['page']=="administration" && (!isset($_GET['section']) || is_blank($_GET['section']))) print "active"; ?>'>
          <a href='<?php print create_link("administration"); ?>'><i class='fa fa-list'></i> <?php print _('All items'); ?></a>
     </li>
 </ul>

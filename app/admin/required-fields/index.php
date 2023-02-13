@@ -14,7 +14,7 @@ foreach($Tools->fetch_standard_fields("ipaddresses") as $s) {
 }
 
 // get all selected fields and put them to array
-$selected_fields = explode(";", $User->settings->IPrequired);
+$selected_fields = $Tools->explode_filtered(";", $User->settings->IPrequired);
 
 // unset fields that are excluded
 unset($standard_fields['id'],
@@ -27,11 +27,9 @@ unset($standard_fields['id'],
       $standard_fields['PTR'],
       $standard_fields['PTRignore'],
       $standard_fields['state'],
-      $standard_fields['firewallAddressObject'],
-      $standard_fields['location']
+      $standard_fields['firewallAddressObject']
       );
 // append extra
-$standard_fields['location'] = "location_item";
 ?>
 
 

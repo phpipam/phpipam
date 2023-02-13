@@ -5,26 +5,7 @@
  * Class to handle exceptions
  *
  */
-class Responses {
-
-
-	/**
-	 * error code handler
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $errors;
-
-	/**
-	 * result handler
-	 *
-	 * (default value: null)
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $result = null;
+class Responses extends Result {
 
 	/**
 	 * Sets result type
@@ -33,16 +14,6 @@ class Responses {
 	 * @access private
 	 */
 	private $result_type;
-
-	/**
-	 * is exception set?
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $exception = false;
 
 	/**
 	 * Execution time
@@ -55,93 +26,13 @@ class Responses {
 	public $time = false;
 
 
-
-
-
 	/**
 	 * __construct function
 	 *
 	 * @access public
 	 */
 	public function __construct() {
-		# set error codes
-		$this->set_error_codes ();
-	}
-
-	/**
-	 * Sets error code object
-	 *
-	 *	http://www.restapitutorial.com/httpstatuscodes.html
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function set_error_codes () {
-		// OK
-		$this->errors[200] = "OK";
-		$this->errors[201] = "Created";
-		$this->errors[202] = "Accepted";
-		$this->errors[204] = "No Content";
-		// Client errors
-		$this->errors[400] = "Bad Request";
-		$this->errors[401] = "Unauthorized";
-		$this->errors[403] = "Forbidden";
-		$this->errors[404] = "Not Found";
-		$this->errors[405] = "Method Not Allowed";
-		$this->errors[409] = "Conflict";
-		$this->errors[415] = "Unsupported Media Type";
-		// Server errors
-		$this->errors[500] = "Internal Server Error";
-		$this->errors[501] = "Not Implemented";
-		$this->errors[503] = "Service Unavailable";
-		$this->errors[505] = "HTTP Version Not Supported";
-		//$this->errors[511] = "Network Authentication Required";
-	}
-
-	/**
-	 * Sets new header and throws exception
-	 *
-	 * @access public
-	 * @param int $code (default: 400)
-	 * @param mixed $exception
-	 * @return void
-	 */
-	public function throw_exception ($code = 400, $exception) {
-		// set failed
-		$this->exception = true;
-
-		// set success
-		$this->result['success'] = 0;
-		// set exit code
-		$this->result['code'] 	 = $code;
-		// set message
-		$this->result['message'] = $exception;
-
-		// set header
-		$this->set_header ();
-		// throw exception
-		throw new Exception($exception);
-	}
-
-	/**
-	 * Sets header based on provided HTTP code
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function set_header () {
-		// wrong code
-		if(!isset($this->exception))		                 { $this->throw_exception (500, "Invalid result code"); }
-		// wrong code
-		elseif(!isset($this->errors[$this->result['code']])) { $this->throw_exception (500, "Invalid result code"); }
-		// ok
-		else								                 { header("HTTP/1.1 ".$this->result['code']." ".$this->errors[$this->result['code']]); }
-
-		// 401 - add location
-		if ($this->result['code']==401) {
-			$this->set_location_header ("/api/".$_REQUEST['app_id']."/user/");
-			header("HTTP/1.1 ".$this->result['code']." ".$this->errors[$this->result['code']]);
-		}
+		parent::__construct();
 	}
 
 	/**
@@ -191,7 +82,7 @@ class Responses {
 	public function validate_content_type () {
     	// remove charset if provided
     	if(isset($_SERVER['CONTENT_TYPE']))
-    	$_SERVER['CONTENT_TYPE'] = array_shift(explode(";", $_SERVER['CONTENT_TYPE']));
+    	$_SERVER['CONTENT_TYPE'] = array_shift(pf_explode(";", $_SERVER['CONTENT_TYPE']));
 		// not set, presume json
 		if( !isset($_SERVER['CONTENT_TYPE']) || strlen(@$_SERVER['CONTENT_TYPE']==0) ) {}
 		// post
@@ -209,7 +100,7 @@ class Responses {
 	 * @return void
 	 */
 	private function get_request_content_type () {
-		$this->result_type = $_SERVER['CONTENT_TYPE']=="application/xml" ? "xml" : "json";
+		$this->result_type = (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE']=="application/xml") ? "xml" : "json";
 	}
 
 	/**
@@ -262,22 +153,6 @@ class Responses {
 	}
 
 	/**
-	 * Sets location header for newly created objects
-	 *
-	 * @access private
-	 * @param mixed $location
-	 * @return void
-	 */
-	private function set_location_header ($location) {
-    	# validate location header
-    	if(!preg_match('/^[a-zA-Z0-9\-\_\/.]+$/i',$location)) {
-        	$this->throw_exception (500, "Invalid location header");
-    	}
-    	# set
-		header("Location: ".$location);
-	}
-
-	/**
 	 * Function to formulate custom fields as separate item
 	 *
 	 * @method nest_custom_fields
@@ -285,6 +160,9 @@ class Responses {
 	 * @return void
 	 */
 	private function nest_custom_fields ($custom_fields = array()) {
+		// make sure custom_fields is array
+		if(!is_array($custom_fields)) { $custom_fields = []; }
+
 		// Nest all fields in an array result.  Guard against arrays
 		// with string keys to ensure we don't mistakenly assume a
 		// simple associative array is an array of objects.
@@ -430,7 +308,7 @@ class Responses {
 	 *
 	 * @access private
 	 * @param mixed $obj
-	 * @return void
+	 * @return array
 	 */
 	private function object_to_array ($obj) {
 		// object to array
@@ -457,5 +335,3 @@ class Responses {
 
 
 }
-
-?>

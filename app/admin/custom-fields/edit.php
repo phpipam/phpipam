@@ -79,7 +79,7 @@ function check_name_whitespace () {
 		<td>
 			<input type="text" name="name" class="form-control input-sm" value="<?php print $Tools->print_custom_field_name ($_POST['fieldName']); ?>" placeholder="<?php print _('Select field name'); ?>" <?php if($_POST['action'] == "delete") { print 'readonly'; } ?>>
 
-			<input type="hidden" name="oldname" value="<?php print $_POST['oldname']; ?>">
+			<input type="hidden" name="oldname" value="<?php print @$_POST['oldname']; ?>">
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 			<input type="hidden" name="table" value="<?php print $_POST['table']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
@@ -102,16 +102,7 @@ function check_name_whitespace () {
 		<td><?php print _('Type'); ?></td>
 		<?php
 		// define supported types
-		$mTypes = array(
-						"varchar"  =>"varchar",
-						"integer"  =>"int",
-						"boolean"  =>"bool",
-						"text"     =>"text",
-						"date"     =>"date",
-						"datetime" =>"datetime",
-						"set"      =>"set",
-						"enum"     =>"enum"
-		                );
+		$mTypes = $Admin->valid_custom_field_types();
 		//reformat old type
 		$oldMType = strstr(@$fieldval['Type'], "(", true);
 		$oldMSize = str_replace(array("(",")"), "",strstr(@$fieldval['Type'], "(", false));

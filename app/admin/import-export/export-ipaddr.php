@@ -160,13 +160,13 @@ if($all_sections!==false) {
 	foreach ($all_sections as $section) {
 		//cast
 		$section = (array) $section;
-		$section['url_name'] = urlencode($section['name']);
+		$section['url_name'] = urlencode($section['id']);
 
 		if( (isset($_GET['exportSection__'.$section['url_name']])) && ($_GET['exportSection__'.$section['url_name']] == "on") ) {
 			// get all subnets in section
 			$section_subnets = $Subnets->fetch_section_subnets($section['id']);
 
-			if (sizeof($section_subnets)==0) { continue; }
+			if (!is_array($section_subnets)) { continue; }
 
 			foreach ($section_subnets as $subnet) {
 
@@ -178,7 +178,7 @@ if($all_sections!==false) {
 				// grab IP addresses
 				$ipaddresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
 
-				if (sizeof($ipaddresses)==0) { continue; }
+				if (!is_array($ipaddresses) || sizeof($ipaddresses)==0) { continue; }
 
 				foreach ($ipaddresses as $ip) {
 
@@ -233,7 +233,7 @@ if($all_sections!==false) {
 
 					if( (isset($_GET['device'])) && ($_GET['device'] == "on") ) {
 						//change device to name
-						$ip['device'] = is_null($ip['switch'])||strlen($ip['switch'])==0||$ip['switch']==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
+						$ip['device'] = is_null($ip['switch'])||is_blank($ip['switch'])||$ip['switch']==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
 						$worksheet->write($curRow, $curColumn, $ip['device'], $format_text);
 						$curColumn++;
 					}
@@ -302,7 +302,7 @@ if( (isset($_GET['exportSections'])) && ($_GET['exportSections'] == "on") ) {
 	foreach ($sections_sorted as $section) {
 		//cast
 		$section = (array) $section;
-		$section['url_name'] = urlencode($section['name']);
+		$section['url_name'] = urlencode($section['id']);
 
 		if( (isset($_GET['exportSection__'.$section['url_name']])) && ($_GET['exportSection__'.$section['url_name']] == "on") ) {
 			$worksheet_sections->write($curRow, $curColumn, $section['name'], $format_text);

@@ -16,12 +16,13 @@ if($_POST['action']!="add") {
 
 	# feth method settings
 	$method_settings = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['id']);
-	$method_settings->params = json_decode($method_settings->params);
+	$method_settings->params = pf_json_decode($method_settings->params);
 }
 else {
 	$method_settings = new StdClass ();
 	# set default values
-   @$method_settings->params->hostname = "localhost";
+    $method_settings->params = new StdClass ();
+    $method_settings->params->hostname = "localhost";
 	$method_settings->params->port = 1812;
 	$method_settings->params->timeout = 2;
 
@@ -127,7 +128,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 	<?php
 	# check for socket support !
 	if(!in_array("sockets", get_loaded_extensions())) {
-		$Log->write( "Radius login", "php Socket extension missing!", 2 );
+		$Log->write( _("Radius login"), _("php Socket extension missing!"), 2 );
 		$Result->show("danger", _("php Socket extension missing!"), false);
 	}
 	?>

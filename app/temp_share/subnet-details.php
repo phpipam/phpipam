@@ -101,12 +101,22 @@
 		print "</tr>";
 	}
 	?>
+	<tr>
+		<th></th>
+		<td class="isFull">
+		<?php
+		if ($subnet['isFull'])
+		 	print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as full"), false, false, true);
+		if ($subnet['isPool'])
+			print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as pool"), false, false, true);
+		?></td>
+	</tr>
 
 	<?php
 	# custom subnet fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $key=>$field) {
-			if(strlen($subnet[$key])>0) {
+			if(!is_blank($subnet[$key])) {
 				$subnet[$key] = str_replace(array("\n", "\r\n"), "<br>",$subnet[$key]);
 				$html_custom[] = "<tr>";
 				$html_custom[] = "	<th>".$Tools->print_custom_field_name ($key)."</th>";

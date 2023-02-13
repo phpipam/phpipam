@@ -33,22 +33,6 @@
 class Prefix_controller extends Common_api_functions {
 
     /**
-     * _params provided
-     *
-     * @var mixed
-     * @access public
-     */
-    public $_params;
-
-    /**
-     * custom_fields
-     *
-     * @var mixed
-     * @access protected
-     */
-    public $custom_fields;
-
-    /**
      * Custom field selector
      *
      *  This will be used to search for subnets that have {$custom_field_name = customer_type}
@@ -137,7 +121,7 @@ class Prefix_controller extends Common_api_functions {
      *
      * (default value: array("IPv4", "IPv6", "v4", "v6", "4", "6"))
      *
-     * @var string
+     * @var array
      * @access private
      */
     private $valid_address_types = array("IPv4", "IPv6", "v4", "v6", "4", "6");
@@ -234,26 +218,10 @@ class Prefix_controller extends Common_api_functions {
      *
      * (default value: false)
      *
-     * @var bool
+     * @var object
      * @access private
      */
     private $master_subnet = false;
-
-    /**
-     * Database object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Database;
-
-    /**
-     *  Response handler
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Response;
 
     /**
      * Subnets controller
@@ -270,38 +238,6 @@ class Prefix_controller extends Common_api_functions {
      * @access protected
      */
     protected $Addresses_controller;
-
-    /**
-     * Master Subnets object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Subnets;
-
-    /**
-     * Master Addresses object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Addresses;
-
-    /**
-     * Master Sections object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Sections;
-
-    /**
-     * Master Tools object
-     *
-     * @var mixed
-     * @access protected
-     */
-    protected $Tools;
 
 
     /**
@@ -464,7 +400,7 @@ class Prefix_controller extends Common_api_functions {
                 $addresses = $this->prepare_result ($addresses, "addresses", $this->use_links, true);
             }
             // result
-            if($subnets===false && $addresses===false)  { $this->Response->throw_exception(200, "No objects found"); }
+            if($subnets===false && $addresses===false)  { $this->Response->throw_exception(404, "No objects found"); }
             elseif($addresses===false)                  { return array("code"=>200, "data"=>array("subnets"=>$subnets)); }
             elseif($subnets===false)                    { return array("code"=>200, "data"=>array("addresses"=>$addresses)); }
             else                                        { return array("code"=>200, "data"=>array("subnets"=>$subnets, "addresses"=>$addresses)); }
@@ -483,7 +419,7 @@ class Prefix_controller extends Common_api_functions {
             $subnets = $this->search_custom_field_name_subnets ();
 
             // check result
-            if($subnets===false)        { $this->Response->throw_exception(200, "No master subnets found"); }
+            if($subnets===false)        { $this->Response->throw_exception(404, "No master subnets found"); }
             else {
                 // filter
                 foreach ($subnets as $k=>$s) {
@@ -513,22 +449,9 @@ class Prefix_controller extends Common_api_functions {
             }
 
             // response
-            if($available===false)      { $this->Response->throw_exception(200, "No $this->query_type found"); }
+            if($available===false)      { $this->Response->throw_exception(404, "No $this->query_type found"); }
             else                        { return array("code"=>200, "data"=>$available); }
         }
-    }
-
-
-
-
-    /**
-     * HEAD, no response
-     *
-     * @access public
-     * @return void
-     */
-    public function HEAD () {
-        return $this->GET ();
     }
 
 
@@ -569,10 +492,10 @@ class Prefix_controller extends Common_api_functions {
         $available = $this->find_first_available_subnet ($subnets);
 
         // found any
-        if($available===false)          { $this->Response->throw_exception(200, "No subnets found"); }
+        if($available===false)          { $this->Response->throw_exception(404, "No subnets found"); }
         else {
             // parse avilable
-    		$subnet_tmp = explode("/", $available);
+    		$subnet_tmp = pf_explode("/", $available);
             // set params
     		$this->_params->subnet          = $subnet_tmp[0];
     		$this->_params->mask            = $subnet_tmp[1];
@@ -619,7 +542,7 @@ class Prefix_controller extends Common_api_functions {
 		$this->remap_keys ();
 
         // found any
-        if($available===false)          { $this->Response->throw_exception(200, "No addresses found"); }
+        if($available===false)          { $this->Response->throw_exception(404, "No addresses found"); }
         else {
             // set params
     		$this->_params->ip_addr         = $this->Tools->transform_address ($available, "dotted");
@@ -647,33 +570,6 @@ class Prefix_controller extends Common_api_functions {
     		//set result
             return array("code"=>201, "message"=>"Address created", "id"=>$this->Addresses->lastId, "subnetId"=>$this->master_subnet->id, "data"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted"), "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
 		}
-    }
-
-
-
-
-    /**
-     * PATCH method
-     *
-     *  Not needed
-     *
-     * @access public
-     * @return void
-     */
-    public function PATCH () {
-        $this->Response->throw_exception(501, "Method not imeplemented");
-    }
-
-    /**
-     * DELETE method
-     *
-     *  Not needed
-     *
-     * @access public
-     * @return void
-     */
-    public function DELETE () {
-        $this->Response->throw_exception(501, "Method not imeplemented");
     }
 
 
@@ -834,7 +730,7 @@ class Prefix_controller extends Common_api_functions {
 		if($subnet===false)
 														{ $this->Response->throw_exception(404, "Subnet does not exist"); }
         # get usage
-		$subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet, true);
+		$subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet);
 
 		# return
 		return $subnet_usage;
@@ -915,7 +811,7 @@ class Prefix_controller extends Common_api_functions {
      */
     public function search_first_available_address ($master_subnet_id) {
         // fetch
-        $first = $this->Addresses->get_first_available_address ($master_subnet_id, $this->Subnets);
+        $first = $this->Addresses->get_first_available_address ($master_subnet_id);
         // return result
         return $first===false ? false : $this->Tools->transform_address ($first, "dotted");
     }
@@ -960,5 +856,3 @@ class Prefix_controller extends Common_api_functions {
         }
     }
 }
-
-?>

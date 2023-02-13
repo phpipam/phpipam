@@ -45,11 +45,12 @@ $n = 2;		# step
 $m = 0;		# array id
 
 //set mask options
+$split_subnet = clone $subnet;
 for($mask=($subnet->mask+1); $mask<=$max_new_mask; $mask++) {
 	# set vars
-	$opts[$m]['mask']   = $mask;
+	$opts[$m]['mask']   = $split_subnet->mask = $mask;
 	$opts[$m]['number'] = $n;
-	$opts[$m]['max']    = $Subnets->get_max_hosts ($mask, $Subnets->identify_address($Subnets->transform_to_dotted($subnet->subnet)));
+	$opts[$m]['max']    = $Subnets->max_hosts($split_subnet);
 
 	# next
 	$m++;
@@ -102,14 +103,6 @@ for($mask=($subnet->mask+1); $mask<=$max_new_mask; $mask++) {
         </td>
     </tr>
 
-    <!-- strict mode -->
-    <tr>
-    	<td><?php print _('Strict mode'); ?></td>
-    	<td>
-	    	<input type="checkbox" name="strict" value="yes" checked="checked">
-    	</td>
-    </tr>
-
     <!-- Custom fields -->
     <tr>
         <td><?php print _('Copy custom field values'); ?></td>
@@ -135,7 +128,7 @@ for($mask=($subnet->mask+1); $mask<=$max_new_mask; $mask++) {
     <ul>
     	<li><?php print _('Existing IP addresses will be assigned to new subnets'); ?></li>
     	<li><?php print _('Group under current will create new nested subnets under current one'); ?></li>
-    	<li><?php print _('If existing IP will fall to subnet/broadcast of new subnets split will fail, except if strict mode is disabled'); ?></li>
+    	<li><?php print _('If existing IP will fall to subnet/broadcast of new subnets split will fail, except if subnet isPool is enabled'); ?></li>
     </ul>
     </div>
 

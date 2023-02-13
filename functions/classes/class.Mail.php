@@ -10,17 +10,6 @@
 
 class phpipam_mail extends Common_functions {
 
-
-	/**
-	 * phpipam settings
-	 *
-	 * (default value: null)
-	 *
-	 * @var object|bool
-	 * @access public
-	 */
-	public $settings = null;
-
 	/**
 	 * (obj) mail settings
 	 *
@@ -54,22 +43,25 @@ class phpipam_mail extends Common_functions {
 		# set settings and mailsettings
 		$this->settings = $settings;
 		$this->mail_settings = $mail_settings;
-	}
 
-
-
-	/**
-	 * Initializes mailer object.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function initialize_mailer () {
 		# we need phpmailer
-		require_once( dirname(__FILE__).'/../PHPMailer/PHPMailerAutoload.php');
+		if(file_exists(dirname(__FILE__).'/../PHPMailer/PHPMailerAutoload.php')) {
+			// legacy versions
+			require_once( dirname(__FILE__).'/../PHPMailer/PHPMailerAutoload.php');
 
-		# initialize object
-		$this->Php_mailer = new PHPMailer(true);			//localhost by default
+			# initialize object
+			$this->Php_mailer = new PHPMailer(true);			//localhost by default
+		}
+		elseif (file_exists(dirname(__FILE__).'/../PHPMailer/src/Exception.php')) {
+			require_once( dirname(__FILE__).'/../PHPMailer/src/Exception.php');
+			require_once( dirname(__FILE__).'/../PHPMailer/src/PHPMailer.php');
+			require_once( dirname(__FILE__).'/../PHPMailer/src/SMTP.php');
+
+			$this->Php_mailer = new PHPMailer\PHPMailer\PHPMailer();
+		} else {
+			throw new Exception(_('PHPMailer submodule is missing.'));
+		}
+
 		$this->Php_mailer->CharSet="UTF-8";					//set utf8
 		$this->Php_mailer->SMTPDebug = 0;					//default no debugging
 
@@ -211,7 +203,7 @@ class phpipam_mail extends Common_functions {
 	 */
 	private function set_body_start () {
 		# read config
-		require_once( dirname(__FILE__).'/../../config.php');
+		$config = Config::ValueOf('config');
 
 		// set width
 		$logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
@@ -263,7 +255,7 @@ class phpipam_mail extends Common_functions {
     	$html = array();
 		$html[] = "<hr style='margin-left:10px;width:300px;height:0px;margin-top:40px;margin-left:0px;border-top:0px;border-bottom:1px solid #ddd;'>";
 		$html[] = "<div class='padding-left:10px;'>";
-		$html[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $this->mail_font_style_light This email was automatically generated. You can change your notification settings in account details!</font><br>";
+		$html[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $this->mail_font_style_light "._("This email was automatically generated. You can change your notification settings in account details")."!</font><br>";
 		$html[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href='".$this->settings->siteURL."' font-size:'11px;'>$this->mail_font_style_href ".$this->settings->siteURL."</font></a><br>";
 		$html[] = "</div>";
 
@@ -282,5 +274,3 @@ class phpipam_mail extends Common_functions {
 	}
 
 }
-
-?>

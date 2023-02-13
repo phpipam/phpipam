@@ -6,11 +6,15 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("devices", User::ACCESS_R, true, false);
+# perm check
+$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('circuits');
 # get hidden fields */
-$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['circuits']) ? $hidden_fields['circuits'] : array();
 
 # check
@@ -45,8 +49,10 @@ else {
         print " <th>"._('Type').'</th>';
         print " <th>"._('Capacity').'</th>';
         print " <th>"._('Status').'</th>';
+        if($User->get_module_permissions ("locations")>=User::ACCESS_R) {
         print " <th>"._('Point A').'</th>';
         print " <th>"._('Point B').'</th>';
+        }
         print '</tr>';
         print "</thead>";
 
@@ -72,8 +78,10 @@ else {
             print " <td>$circuit->type</td>";
             print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";
             print " <td class='hidden-xs hidden-sm'>$circuit->status</td>";
+            if($User->get_module_permissions ("locations")>=User::ACCESS_R) {
             print " <td class='hidden-xs hidden-sm'>$locationA_html</td>";
             print " <td class='hidden-xs hidden-sm'>$locationB_html</td>";
+            }
             print '</tr>'. "\n";
         }
         print "</tbody>";

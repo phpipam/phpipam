@@ -1,15 +1,12 @@
 <h4><?php print _('List of all locations'); ?></h4>
 <hr>
 
-<div class="btn-group">
-    <?php if($_GET['page']=="administration") { ?>
-	<a href="" class='btn btn-sm btn-default editLocation' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add location'); ?></a>
-	<?php } else { ?>
-	<a href="<?php print create_link("administration", "locations") ?>" class='btn btn-sm btn-default' style='margin-bottom:10px;'><i class='fa fa-pencil'></i> <?php print _('Manage'); ?></a>
-	<?php } ?>
-	<a href="<?php print create_link("tools", "locations", "map") ?>" class='btn btn-sm btn-default' style='margin-bottom:10px;'><i class='fa fa-map'></i> <?php print _('Map'); ?></a>
-</div>
-<br>
+<?php
+if($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
+include('menu.php');
+}
+?>
+
 
 <?php
 
@@ -20,15 +17,19 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# perm check
+if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
+    $Result->show("danger", _("You do not have permissions to access this module"), false);
+}
 # check that location support isenabled
-if ($User->settings->enableLocations!="1") {
+elseif ($User->settings->enableLocations!="1") {
     $Result->show("danger", _("Locations module disabled."), false);
 }
 else {
     # fetch all locations
     $all_locations = $Tools->fetch_all_objects("locations", "name");
 
-    $colspan = $admin ? 5 : 4;
+    $colspan = 4;
 
     // table
     print "<table class='table sorted table-striped table-top table-td-top' data-cookie-id-table='all_locations'>";
@@ -48,7 +49,7 @@ else {
 			}
 		}
 	}
-    if($admin)
+    if($User->get_module_permissions ("locations")>=User::ACCESS_RW)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -58,7 +59,7 @@ else {
     # if none than print
     if($all_locations===false) {
         print "<tr>";
-        print " <td colspan='$colspan'>".$Result->show("info","No Locations configured", false, false, true)."</td>";
+        print " <td colspan='$colspan'>".$Result->show("info",_("No Locations configured"), false, false, true)."</td>";
         print "</tr>";
     }
     else {
@@ -73,13 +74,13 @@ else {
             print " <td><a class='btn btn-xs btn-default' href='".create_link("tools", "locations", $l->id)."'><i class='fa fa-map prefix'></i> $l->name</a></td>";
             print " <td><span class='badge badge1 badge5'>$cnt "._('objects')."</span></td>";
             // description
-            $l->description = strlen($l->description)==0 ? "/" : $l->description;
+            $l->description = is_blank($l->description) ? "/" : $l->description;
             print " <td><span class='text-muted'>$l->description</span></td>";
             // address
-            $l->address = strlen($l->address)==0 ? "/" : $l->address;
+            $l->address = is_blank($l->address) ? "/" : $l->address;
             print "<td>$l->address</td>";
             // coordinates
-            if(strlen($l->lat)>0 || strlen($l->long)==0) { print "<td><span class='text-muted'>$l->lat / $l->long</span></td>"; }
+            if(!is_blank($l->lat) || is_blank($l->long)) { print "<td><span class='text-muted'>$l->lat / $l->long</span></td>"; }
             else                                         { print "<td>".$Result->show("warning", _("Location not set"), false, false, true)."</td>"; }
     		//custom
     		if(sizeof($custom) > 0) {
@@ -92,14 +93,24 @@ else {
     			}
     		}
             // actions
-            if($admin) {
-    		print "	<td class='actions'>";
-    		print "	<div class='btn-group'>";
-    		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='edit'   data-id='$l->id'><i class='fa fa-pencil'></i></a>";
-    		print "		<a href='".create_link("tools", "locations", $l->id)."' class='btn btn-xs btn-default' ><i class='fa fa-eye'></i></a>";
-    		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='delete' data-id='$l->id'><i class='fa fa-times'></i></a>";
-    		print "	</div>";
-    		print " </td>";
+            if($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
+            print "<td class='actions'>";
+            $links = [];
+            $links[] = ["type"=>"header", "text"=>_("Show")];
+            $links[] = ["type"=>"link", "text"=>_("Show location"), "href"=>create_link($_GET['page'], "locations", $l->id), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"divider"];
+
+            $links[] = ["type"=>"header", "text"=>_("Manage")];
+            $links[] = ["type"=>"link", "text"=>_("Edit location"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='edit'  data-id='$l->id'", "icon"=>"pencil"];
+
+            if($User->get_module_permissions ("locations")>=User::ACCESS_RWA) {
+                $links[] = ["type"=>"link", "text"=>_("Delete location"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='delete'  data-id='$l->id'", "icon"=>"times"];
+                $links[] = ["type"=>"divider"];
+            }
+            // print links
+            print $User->print_actions($User->user->compress_actions, $links);
+            print "</td>";
+
     		}
 
             print "</tr>";

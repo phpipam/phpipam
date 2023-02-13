@@ -79,7 +79,7 @@ foreach ($all_sections as $section) {
 		# grab IP addresses
 		$ipaddresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
 
-		if (sizeof($ipaddresses)==0) { continue; }
+		if (!is_array($ipaddresses) || sizeof($ipaddresses)==0) { continue; }
 
 		foreach ($ipaddresses as $ip) {
 
@@ -102,7 +102,7 @@ $devices = $Tools->fetch_all_objects("devices", "hostname");
 if ($devices!==false) {
 	foreach($devices as $c_dev) {
 		$c_dev = (array) $c_dev;
-		$c_dev_sections=explode(";", $c_dev['sections']);
+		$c_dev_sections=pf_explode(";", $c_dev['sections']);
 		# Populate each section with the devices it has
 		foreach($c_dev_sections as $c_dev_sect) { $device_data[$c_dev_sect][$c_dev['hostname']] = $c_dev;}
 	}
@@ -124,7 +124,7 @@ foreach ($data as &$cdata) {
 	# if the subnet contains "/", split it in network and mask
 	if ($action != "error") {
 		if (preg_match("/\//", $cdata['subnet'])) {
-			list($caddr,$cmask) = explode("/",$cdata['subnet'],2);
+			list($caddr,$cmask) = pf_explode("/",$cdata['subnet'],2);
 			$cdata['mask'] = $cmask;
 			$cdata['subnet'] = $caddr;
 		}
@@ -253,6 +253,8 @@ foreach ($data as &$cdata) {
 			if ($cdata['switch'] != $cedata['switch']) { $msg.= "Device will be updated."; $action = "edit"; }
 			if ($cdata['note'] != $cedata['note']) { $msg.= "Address note will be updated."; $action = "edit"; }
 			if ($cdata['state'] != $cedata['state']) { $msg.= "Address tag (state) will be updated."; $action = "edit"; }
+			if ($cdata['port'] != $cedata['port']) { $msg.= "Port will be updated."; $action = "edit"; }
+			if ($cdata['location'] != $cedata['location']) { $msg.= "Location will be updated."; $action = "edit"; }
 
 			# Check if the values of the custom fields have changed
 			if(sizeof($custom_fields) > 0) {

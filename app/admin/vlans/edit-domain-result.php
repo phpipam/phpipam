@@ -10,7 +10,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -18,6 +18,13 @@ $Result 	= new Result ();
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("l2dom", User::ACCESS_RW, true, false);
+}
+else {
+    $User->check_module_permissions ("l2dom", User::ACCESS_RWA, true, false);
+}
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
@@ -35,8 +42,9 @@ if(@$_POST['name'] == "") 												{ $Result->show("danger", _('Name is manda
 
 // set sections
 if(@$_POST['id']!=1) {
+	$temp = [];
 	foreach($_POST as $key=>$line) {
-		if (strlen(strstr($key,"section-"))>0) {
+		if (!is_blank(strstr($key,"section-"))) {
 			$key2 = str_replace("section-", "", $key);
 			$temp[] = $key2;
 			unset($_POST[$key]);
@@ -50,19 +58,18 @@ else {
 }
 
 # set update values
-$values = array("id"=>@$_POST['id'],
-				"name"=>@$_POST['name'],
-				"description"=>@$_POST['description'],
-				"permissions"=>@$_POST['permissions']
+$values = array(
+				"id"          =>@$_POST['id'],
+				"name"        =>@$_POST['name'],
+				"description" =>@$_POST['description'],
+				"permissions" =>@$_POST['permissions']
 				);
 
 # update domain
 if(!$Admin->object_modify("vlanDomains", $_POST['action'], "id", $values))	{}
-else																		{ $Result->show("success", _("Domain $_POST[action] successfull").'!', false); }
+else { $Result->show("success", _("Domain")." ".$_POST["action"]." "._("successful").'!', false); }
 
 # if delete move all vlans to default domain!
 if($_POST['action']=="delete") {
 	$Admin->update_object_references ("vlans", "domainId", $_POST['id'], 1);
 }
-
-?>

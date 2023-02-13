@@ -50,7 +50,7 @@ if ($_POST['action'] != "add") {
 # we are adding new folder - get folder details
 else {
 	# for selecting master subnet if added from subnet details!
-	if(strlen($_POST['subnetId']) > 0) {
+	if(!is_blank($_POST['subnetId'])) {
     	$subnet_old_temp = (array) $Subnets->fetch_subnet(null, $_POST['subnetId']);
     	$subnet_old_details['masterSubnetId'] 	= @$subnet_old_temp['id'];			// same master subnet ID for nested
     	$subnet_old_details['vlanId'] 		 	= @$subnet_old_temp['vlanId'];		// same default vlan for nested
@@ -139,9 +139,6 @@ $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : fals
     	print "	<td colspan='3' class='hr'><hr></td>";
     	print "</tr>";
 	    foreach($custom_fields as $field) {
-
-	    	# replace spaces
-	    	$field['nameNew'] = str_replace(" ", "___", $field['name']);
 	    	# retain newlines
 	    	$folder_old_details[$field['name']] = str_replace("\n", "\\n", @$folder_old_details[$field['name']]);
 
@@ -149,9 +146,8 @@ $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : fals
 			if ($_POST['action']=="add")	{ $folder_old_details[$field['name']] = $field['Default']; }
 
             // create input > result is array (required, input(html), timepicker_index)
-            $custom_input = $Tools->create_custom_field_input ($field, $folder_old_details, $_POST['action'], $timepicker_index);
-            // add datepicker index
-            $timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+            $custom_input = $Tools->create_custom_field_input ($field, $folder_old_details, $timepicker_index);
+            $timepicker_index = $custom_input['timepicker_index'];
 
             // print
             print "<tr>";

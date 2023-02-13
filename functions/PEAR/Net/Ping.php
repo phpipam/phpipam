@@ -34,7 +34,7 @@ define('NET_PING_RESULT_UNSUPPORTED_BACKEND_MSG', 'Backend not Supported'       
 define('NET_PING_FAILED',                     0);
 define('NET_PING_HOST_NOT_FOUND',             1);
 define('NET_PING_INVALID_ARGUMENTS',          2);
-define('NET_PING_CANT_LOCATE_PING_BINARY',    3);
+define('NET_PING_CANT_LOCATE_PING_BINARY',    1000);
 define('NET_PING_RESULT_UNSUPPORTED_BACKEND', 4);
 
 
@@ -1227,4 +1227,3 @@ exit;
     } /* function getLoss() */
 
 } /* class Net_Ping_Result */
-?>

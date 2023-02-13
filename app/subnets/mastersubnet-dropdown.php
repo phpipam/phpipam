@@ -10,8 +10,6 @@ $User     = new User ($Database);
 // $Admin    = new Admin ($Database, false);
 $Sections = new Sections ($Database);
 $Subnets  = new Subnets ($Database);
-// $Tools    = new Tools ($Database);
-// $Result   = new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
@@ -28,7 +26,7 @@ function get_strict_subnets($Subnets, $sectionId, $cidr, $result_fields="*") {
 	$strict_subnets = $Subnets->fetch_overlapping_subnets($cidr, 'sectionId', $sectionId, $result_fields);
 	if (!is_array($strict_subnets)) return array();
 
-	list(,$cidr_mask) = explode('/', $cidr);
+	list(,$cidr_mask) = pf_explode('/', $cidr);
 
 	foreach ($strict_subnets as $i => $subnet) {
 		if ($subnet->mask >= $cidr_mask) unset($strict_subnets[$i]); else break;

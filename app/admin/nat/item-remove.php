@@ -10,12 +10,14 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# validate permissions
+$User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
@@ -31,7 +33,6 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 $link = $readonly ? false : true;
 ?>
 
-
 <!-- header -->
 <div class="pHeader"><?php print _('Remove NAT item'); ?></div>
 
@@ -39,8 +40,8 @@ $link = $readonly ? false : true;
 <div class="pContent">
     <?php
     # remove item from nat
-    $s = json_decode($nat->src, true);
-    $d = json_decode($nat->dst, true);
+    $s = pf_json_decode($nat->src, true);
+    $d = pf_json_decode($nat->dst, true);
 
     if(is_array($s[$_POST['type']]))
     $s[$_POST['type']] = array_diff($s[$_POST['type']], array($_POST['item_id']));
@@ -56,7 +57,6 @@ $link = $readonly ? false : true;
     }
     ?>
 </div>
-
 
 <!-- footer -->
 <div class="pFooter">

@@ -1,7 +1,214 @@
+== 1.6.0
+
+    Enhancements, changes:
+    ----------------------------
+    + php8.1 compatibility (php8.x support is work-in-progress);
+
+    Security Fixes:
+    ----------------------------
+    + XSS (reflected) in 'bw-calulator-result.php';
+    + XSS (reflected) by invalid email address response;
+    + XSS (reflected) by /app/tools/subnet-masks/popup.php (#3738);
+    + XSS and LDAP injection in ad-search-result.php;
+    + XSS and LDAP injection in ad-search-group-result.php;
+    + Restrict find_full_subnets.php to CLI;
+    + Ensure confidentiality of database password;
+
+== 1.5.0
+
+    New features:
+    ------------
+    + Mark subnet as isPool to allocate network and broadcast addresses;
+    + Optionally hide section subnet menus;
+    + L2 Domains user permissions;
+    + Add scanPingType=="none" option to disable scanning;
+    + Custom fields on IP request forms (#2956);
+    + Added subnet free space map for each possible subnet mask;
+    + Added Vaults (Certificate andf password storing);
+    + Added Tools->Duplicate subnets & IP page;
+    + Added config.php offline_mode to disable server-side Internet lookups (#3462);
+    + Added MAC vendor lookup widget;
+
+    Enhancements, changes:
+    ----------------------------
+    + php7.4 compatibility;
+    + SameSite attribute enabled for site cookies;
+    + SAML2
+        + php-saml updated to 3.4.1 (#3055);
+        + Removal of php-mcrypt dependancy;
+        + Drop support for idpcertfingerprint;
+        + MAP_SAML_USER and SAML_USERNAME config.php configuration moved to db;
+        + php-saml protocol debugging;
+        + Support for signed assertions;
+        + SAML usernames can be extracted from assertion attributes (#2948);
+        + JIT auto-provisioning of accounts (#3389);
+    + Selectable mask for number of subnets/hosts in subnet masks;
+    + Switch from Google Maps to OpenStreeMap and Nominatim;
+
+    Bugfixes:
+    ----------------------------
+    + Fixed upgrade queries issues from 1.3.x to 1.4+ (#3130);
+    + Fixed boolean printout in footer (#2625);
+    + Fixed BGP Admin isn't working (#2631);
+    + do not show statistics in dashboard widget for disabled modules (#2602);
+    + MySQL 8.0 compatibility. (#2646,#2239,#3036);
+    + MariaDB Galera Cluster compatibility (#2498,#3413);
+    + Permit non-numeric postcodes for customers (#2393);
+    + Bandwidth calculator - 400 Bad Request (#1807,#2648);
+    + Table layout not aligned (#2656,#3105,#3113);
+    + Improve scanning requirement checks (#1183);
+    + Date picker hidden (#2673);
+    + PDNS Add/Edit DNS record not working for normal users (#2686);
+    + Unable to save settings with link addresses = text custom field (#2702);
+    + Kea MAC address display issue (#2704);
+    + Returned custom fields to devices table (#2572);
+    + Invalid scan agent key warning;
+    + Subnet filter issue when IP contains 0 octet. (#2748);
+    + Add VLAN button not working (#2741);
+    + Incorrect subnet links in /tools/vrf/ view. (#2774);
+    + Location data missing in exports. (#2833);
+    + Check mysqldump path when exporting database;
+    + Current rack position missing when editing a device. (#2545);
+    + Permit colon in firewall zone interface names (#2737);
+    + Fixed PowerDNS txt SPF editing (#1641);
+    + Blank 'MAC' on SNMP-ARP and SNMP-MAC scans (#2911);
+    + Incorrect network/broadcast calculation for IPv6 (#2879);
+    + Increase allowed email and password lengths (#3021);
+    + Wrong unit location for dual-sided racks (#3086);
+    + Linked ip_addr shows integer notation (#3100);
+    + Invalid scan type () error (#2785);
+    + Invalid CSRF cookie editing rack items (#2556);
+    + FPing discovery marks all addresses as alive (#2888);
+    + Subnet usage calculation updated for nested subnets;
+    + SNMP, number of discovered hosts exceed maximum warning (#3279);
+    + Exclude IPv6 from Ping and Discovery scans (#3354);
+    + Fix for SAML/2FA/login redirections (#3492, #3435, #3517);
+    + php_sessions table doesn't exist error when upgrading (#3417);
+    + Changelog data too long for column errors (#3376,#3398);
+    + RFC 6265 compliant cookies (#3452);
+    + Require unique subnets not working as intended (#3529);
+    + API:
+        + Fixed /user/ calls for SSL with app code (static app code);
+        + Address IP field not displayed when using filter_by (#2934);
+        + Addresses first_free & Subnets first/last_subnet thread safety (#2960);
+
+    Security Fixes:
+    ----------------------------
+    + SQL injections processing `tableName` (#2738);
+    + SQL injections processing `ftype` (#2751);
+    + All circuits map, PHP object injection (#2937);
+    + Upgraded jQuery to 3.5.1 (#3119);
+    + Stored XSS in instructions widgets (#3025, #3360);
+    + PHP session ID fixation (#3342);
+    + XSS (reflected) in IP calculator (#3351);
+    + XSS in pass-change/result.php (#3373);
+    + SQL injection in edit-bgp-mapping-search.php;
+    + Stored XSS in the "Site title" parameter;
+    + XSS while uploading CVS files;
+    + XSS (reflected) in 'find subnets';
+    + Incorrect privilege assignments (#3506);
+    + XXS (reflected) in ripe-arin-query;
+    + XSS (reflected) in import previews;
+
+    Translations:
+    ----------------------------
+    + Update Traditional Chinese support to version 1.5 (#2658);
+    + Update Simplified Chinese Translation (#2725);
+    + Italian (it_IT) translation added (#2813);
+    + Updated German translation (#2970, #3065);
+    + Updated Russian translation (#3028, #3367);
+
+== 1.4.0
+
+    New features:
+    ------------
+    + Configurable password policy;
+    + Sessions can be now stored in database (#516);
+    + Two-factor authentication - otp (Google Authenticator);
+    + Customers module (#694);
+    + Routing module (BGP) (#2135);
+    + Search for free subnet inside whole section;
+
+    Enhancements, changes:
+    ----------------------------
+    + Circuits enhancements (Virtual Circuits);
+    + Dropped support for 32bit systems;
+    + PHP 5.4 is now required;
+    + Added compressed actions dropdown;
+    + SNMP module no longer requires MIB files;
+    + Performance enhancements running under Azure/Amazon;
+    + Added option to disable user (#1327);
+    + Added policy NAT option;
+    + Added custom NAT fields;
+    + Rack module enhancements (#1325):
+        + Dynamic rack sizes;
+        + Top-down / Bottom-up racks;
+        + Custom rack devices independent of devices (power, patch panel);
+    + Customized user permissions for modules:
+        + VLAN module;
+        + VRF module;
+        + PowerDNS module;
+        + Circuits module;
+        + Customers module;
+        + Devices module;
+        + Rack module;
+        + NAT module;
+        + PSTN module;
+        + Locations module;
+    + API:
+        + New API security type - SSL with app code (static app code);
+        + New config.php option $api_allow_unsafe to allow non-SSL API queries;
+        + Added last access field to api;
+        + Add Mac Search for Addresses controller (#2005);
+        + New overlapping API call;
+        + New global API parameter filter_match = full,partial,regex;
+        + Add Tools API customers submodule;
+        + Fix filtered results to always return data as array (#2558);
+    + Widgets:
+        + New user instruction widget (#2383);
+
+    Translations:
+    ----------------------------
+    + Japanese (ja_JP) translation added;
+    + Traditional Chinese (zh_TW) translation added;
+
+    Bugfixes:
+    ----------------------------
+    + Fix appended " U" in Rack description (#2046);
+    + Fix Bandwidth calculator - 400 Bad Request. (#1807);
+    + Fix bad DNS reverse zone for /23 subnet (#666);
+    + Fix Add missing standard field (#2153);
+    + Fix Consistency of VARCHAR Size on 'owner' column across tables (#2136);
+    + Fix Subnet details - Filter button missing when compressed range is used (#2353);
+    + Fix slow page load times with linked addresses (#2324);
+    + Fix " - is required" error when adding IPs with an empty IP filter set (#2334);
+    + Fix column 'masterSubnetId' cannot be null error when adding subnets (#1977);
+    + Fix logical circuits add/delete errors (#2381);
+    + Fix adding new VLANs to an empty L2Domain (#2400);
+    + Fix Nested child subnets with "na" permissions visible (#2223);
+    + Fix translations containing apostrophes break functionality (#2504);
+    + Set requestedAuthnContext to false for SAML (#2457);
+    + API:
+        + Fix inconsistent API success value returned (#2045);
+        + Fix filter_by functionality (#2392);
+        + Fix PATCH functionality (#2470, #2481);
+
+    Security Fixes:
+    ----------------------------
+    + Hide SNMP community (#2197);
+    + Hide LDAP/AD/Radius username / password and secret from logs and syslog (#2006);
+    + XSS in phpipamredirect cookie (#2338);
+    + XSS in print-user.php, CSRF in user-edit.php (#2326);
+    + Possible SQL injection in nat/item-add-submit.php (#2344);
+    + Fixed possible file inclusion in editing authentication methods;
+    + XSS in subnet-scan-telnet.php, CSRF in subnet-scan-execute.php (#2327);
+
 == 1.3.2
 
     Enhancements, changes:
     ----------------------------
+    + Dark theme added;
+    + Full php7.2 compatibility;
     + url_rewrite has changed, please use new rewrite scheme (https://phpipam.net/news/new_rewrite_scheme/);
     + Search for matching subnet in all VRFs feature enabled when importing addresses;
     + Added new config option to show custom fields separated from standard fields when editing IP address;
@@ -120,7 +327,7 @@
     ----------------------------
     + Fixed XSS issues (#1403, #1521, #1500);
 
-== 1.3
+== 1.3.0
 
     New features:
     ------------

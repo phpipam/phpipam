@@ -273,6 +273,11 @@ html {
             font-weight: normal;
         }
     }
+    .dropdown-menu {
+        .divider {
+            background-color: #333 !important;
+        }
+    }
     ul.dropdown-menu{
         background: url("../images/bg-light.png") no-repeat center center fixed;
         -webkit-background-size: cover;
@@ -439,7 +444,6 @@ html {
         color: white;
         border: 1px solid $color_gray_5;
     }
-
     .breadcrumb {
         .active {
             color: $color_gray_4;
@@ -458,6 +462,12 @@ html {
                 border: none;
             }
         }
+
+        .btn.btn-danger {
+            color: #fff;
+            background-color: #d9534f !important;
+            border-color: #d43f3a;
+        }
     }
     .btn-default.active,
     .btn-default:active,
@@ -465,7 +475,9 @@ html {
         background: rgba(0,0,0,0.2) !important;
         color: white !important;
     }
-
+.btn:focus {
+  background-position: 0 -14px;
+}
 
     ul#subnets li.folder i,
     ul.submenu li i.fa-folder-close-o,
@@ -536,6 +548,22 @@ html {
     table#userModSelf.table {
         td {
             border: none !important;
+        }
+    }
+
+    table.table-certificates {
+        tr.warning td {
+            color: #FFC47B !important;
+
+            a {
+                color: #FFC47B !important;
+            }
+        }
+        tr.danger td {
+            color: #EA6C85 !important;
+            a {
+                color: #EA6C85 !important;
+            }
         }
     }
 
@@ -695,6 +723,9 @@ html {
                 border-color: $color_gray_4;
                 color: $color_gray_3 !important;
 
+            }
+            &.ip-0 {
+                color: white !important;
             }
             &.ip-1 {
                 border-color: $alert_red_2;
@@ -1229,4 +1260,41 @@ html {
     #searchSelect {
         background: $color_gray_8 !important;
     }
+}
+
+
+.subnet_map_found {
+    border-color: #d6e9c6;
+    background: rgba(0,255,0,0.15) !important;
+    color: white !important;
+}
+.subnet_map_found:hover {
+    background: rgba(0,255,0,0.2) !important;
+}
+.subnet_map_notfound {
+    background-color: rgba(255,0,0,0.15) !important;
+    color: white !important;
+}
+.subnet_map_found  a {
+    color: white !important;
+}
+.ip_vis_subnet span {
+    box-shadow: 0px 0px 1px #777;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 3px;
+    padding-top: 7px;
+    text-align: center;
+    font-size: 12px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    width: 120px;
+    height: 30px;
+    float: left;
+    border-left: none;
+}
+.clearfix1 {
+    border-left: 1px solid rgba(255,255,255,0.2);
+}
+.ip_vis_subnet span a {
+    font-size: 12px;
 }

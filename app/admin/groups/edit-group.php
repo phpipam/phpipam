@@ -66,7 +66,7 @@ if($_POST['action']=="add") {
     	<td>
     		<input type="text" name="g_desc" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$group['g_desc']); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 
-    		<input type="hidden" name="g_id" value="<?php print $_POST['id']; ?>">
+    		<input type="hidden" name="g_id" value="<?php print @$_POST['id']; ?>">
     		<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	</td>
@@ -87,9 +87,8 @@ if($_POST['action']=="add") {
         # all my fields
         foreach($custom as $field) {
             // create input > result is array (required, input(html), timepicker_index)
-            $custom_input = $Tools->create_custom_field_input ($field, $group, $_POST['action'], $timepicker_index);
-            // add datepicker index
-            $timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+            $custom_input = $Tools->create_custom_field_input ($field, $group, $timepicker_index);
+            $timepicker_index = $custom_input['timepicker_index'];
             // print
             print "<tr>";
             print " <td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";

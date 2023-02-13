@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 
 # fetch all subnets in VLAN in this section
 $slaves = $Subnets->fetch_vlan_subnets ($_GET['subnetId'], $_GET['section']);
@@ -13,7 +15,7 @@ $slaves = $Subnets->fetch_vlan_subnets ($_GET['subnetId'], $_GET['section']);
 # no subnets
 if(!$slaves) {
 	print "<hr>";
-	print "<h4>"._('VLAN')." $vlan[number] (".$vlan[name].") "._('has no belonging subnets')."</h4>";
+	print "<h4>"._('VLAN')." $vlan[number] (".$vlan["name"].") "._('has no belonging subnets')."</h4>";
 }
 else {
 	# cast
@@ -56,25 +58,6 @@ else {
 			# host check
 			if($subnet['pingSubnet'] == 1) 				{ print '<td class="allowRequests small hidden-xs hidden-sm">'._('enabled').'</td>'; }
 			else 										{ print '<td class="allowRequests small hidden-xs hidden-sm"></td>'; }
-
-			# increase IP count
-			$ipCount = 0;
-			if(!$Subnets->has_slaves ($subnet['id']))	{ $ipCount = $Addresses->count_subnet_addresses ($subnet['id']); }			//ip count - no slaves
-			else 										{
-				# fix for subnet and broadcast free space calculation
-				$ipCount = 0;															//initial count
-				$Subnets->reset_subnet_slaves_recursive ();
-				$Subnets->fetch_subnet_slaves_recursive ($subnet['id']);		//fetch all slaves
-				if(is_array($Subnets->slaves)) {
-					foreach($Subnets->slaves as $s) {
-						$ipCount = $ipCount + $Addresses->count_subnet_addresses ($s);
-						# subnet and broadcast add used
-						if($Subnets->get_ip_version ($subnet['subnet'])=="IPv4" && $subnet['mask']<31) {
-							$ipCount = $ipCount+2;
-						}
-					}
-				}
-			}
 
 			# print usage
 			$calculate = $Subnets->calculate_subnet_usage ($subnet);
@@ -120,4 +103,3 @@ else {
 	}
 	print '</table>'. "\n";
 }
-?>

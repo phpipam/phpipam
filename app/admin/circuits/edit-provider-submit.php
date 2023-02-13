@@ -18,8 +18,13 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
-# check permissions
-if(!($User->is_admin(false) || $User->user->editCircuits=="Yes")) { $Result->show("danger", _("You are not allowed to modify Circuit Provider details"), true); }
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("circuits", User::ACCESS_RW, true, false);
+}
+else {
+    $User->check_module_permissions ("circuits", User::ACCESS_RWA, true, false);
+}
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "provider", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
@@ -50,7 +55,7 @@ if(sizeof($custom) > 0) {
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && strlen($provider[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+		if($myField['Null']=="NO" && is_blank($provider[$myField['name']])) { $Result->show("danger", $myField['name']." "._("can not be empty").'!', true); }
 
 		# save to update array
 		$update[$myField['name']] = $provider[$myField['nameTest']];
@@ -71,7 +76,7 @@ if(isset($update)) {
 
 # update device
 if(!$Admin->object_modify("circuitProviders", $provider['action'], "id", $values))	{}
-else																	{ $Result->show("success", _("Provider $provider[action] successfull").'!', false); }
+else																	{ $Result->show("success", _("Provider")." ".$provider["action"]." "._("successful").'!', false); }
 
 if($provider['action']=="delete"){
 	# remove all references

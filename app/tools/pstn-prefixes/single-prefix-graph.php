@@ -1,18 +1,20 @@
 <?php
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("pstn", User::ACCESS_R, true, false);
 ?>
 
 
 <div id="pieChart" style="height:220px;width:100%;"></div>
 
 <!-- charts -->
-<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js"></script>
-<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.pie.js"></script>
-<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot/excanvas.min.js"></script><![endif]-->
+<script src="js/flot/jquery.flot.js"></script>
+<script src="js/flot/jquery.flot.pie.js"></script>
+<!--[if lte IE 8]><script src="js/flot/excanvas.min.js"></script><![endif]-->
 
 
-<script type="text/javascript">
+<script>
 $(function () {
 	//data
     var data = [
@@ -23,8 +25,8 @@ $(function () {
     		print "{ label: '"._('Free')."',     data: $details[freehosts_percent], color: '#ffffff' }, ";		# free hosts
     	}
     	# than all other percentages
-    	if(isset($Tools->address_types)) {
-    	foreach($Tools->address_types as $t) {
+    	if(isset($Subnets->address_types)) {
+    	foreach($Subnets->address_types as $t) {
 	    if($details[$t['type']."_percent"]>0) {
     		$details[$t['type']."_percent"] = str_replace(",", ".", $details[$t['type']."_percent"]);
     		print "{ label: '"._($t['type'])."', data: ".$details[$t["type"]."_percent"].", color: '".$t['bgcolor']."' }, ";

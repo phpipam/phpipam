@@ -112,7 +112,7 @@ if ($_POST['operation'] == 'checkMapping') {
 		$firewallZones = $Zones->get_zones();
 
 		# fetch settings
-		$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings,true);
 
 		# fetch all devices
 		$devices = $Tools->fetch_multiple_objects ("devices", "type", $firewallZoneSettings['deviceType']);

@@ -51,11 +51,10 @@ $values = array("id"=>@$_POST['id'],
 				);
 
 # execute
-if(!$Admin->object_modify("ipTags", $_POST['action'], "id", $values)) 	{ $Result->show("danger",  _("Tag $_POST[action] error"), true); }
-else 																	{ $Result->show("success", _("Tag $_POST[action] success"), false); }
+if(!$Admin->object_modify("ipTags", $_POST['action'], "id", $values)) 	{ $Result->show("danger", _("Tag")." ".$_POST["action"]._(" error"), true); }
+else 																	{ $Result->show("success", _("Tag")." ".$_POST["action"]._(" success"), false); }
 
 # reset if delete to online
 if($_POST['action']=="delete") {
 	$Admin->update_object_references ("ipaddresses", "state", $old_tag->id, 0);
 }
-?>

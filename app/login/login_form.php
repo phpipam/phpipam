@@ -8,7 +8,7 @@
 		<legend style="margin-top:10px;"><?php print _('Please login'); ?></legend>
 	</div>
 
-	<?php if(strlen(@$User->settings->siteLoginText)>0) { ?>
+	<?php if(!is_blank(@$User->settings->siteLoginText)) { ?>
     <!-- login text -->
     <div class="col-xs-12 text-muted text-right" style="margin-bottom:1em;"><?php print $User->settings->siteLoginText; ?></div>
 	<?php } ?>
@@ -24,12 +24,10 @@
 	<div class="col-xs-12">
 	    <input type="password" id="password" name="ipampassword" class="login form-control input-sm" placeholder="<?php print _('Password'); ?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></input>
 	    <?php
-	    // add requested var for redirect
-	    if(isset($_COOKIE['phpipamredirect'])) {
-		    //ignore login, logout
-		    if(strpos($_COOKIE['phpipamredirect'],"login")==0 && strpos($_COOKIE['phpipamredirect'],"logout")==0)
-	        print "<input type='hidden' name='phpipamredirect' id='phpipamredirect' value='".@$_COOKIE['phpipamredirect']."'>";
-	    }
+		// add requested var for redirect
+		if ($redirect = $User->get_redirect_cookie()) {
+			print "<input type='hidden' name='phpipamredirect' id='phpipamredirect' value='" . escape_input($redirect) . "'>";
+		}
 	    ?>
 	</div>
 
@@ -44,7 +42,7 @@
 		<input id="validate_captcha" type="text" name="captcha" class="login form-control input-sm col-xs-12">
 	</div>
 	<div class="col-xs-12">
-		<img src="<?php print $url.BASE; ?>app/login/captchashow.php" class="imgcaptcha" align="captcha">
+		<img src="<?php print $url.BASE; ?>app/login/captchashow.php" alt="<?php print _("CAPTCHA image"); ?>" class="imgcaptcha" align="captcha">
 	</div>
 	<?php } ?>
 

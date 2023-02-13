@@ -6,7 +6,7 @@
 
 /* functions */
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-require( dirname(__FILE__) . "/../../../functions/adLDAP/src/adLDAP.php");
+require_once( dirname(__FILE__) . "/../../../functions/adLDAP/src/adLDAP.php");
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -24,10 +24,10 @@ $server = $Admin->fetch_object("usersAuthMethod", "id", $_POST['server']);
 $server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
 
 //parse parameters
-$params = json_decode($server->params);
+$params = pf_json_decode($server->params);
 
 //no login parameters
-if(strlen(@$params->adminUsername)==0 || strlen(@$params->adminPassword)==0)	{ $Result->show("danger", _("Missing credentials"), true); }
+if(is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword))	{ $Result->show("danger", _("Missing credentials"), true); }
 //at least 2 chars
 if(strlen($_POST['dname'])<2) 													{ $Result->show("danger", _('Please enter at least 2 characters'), true); }
 
@@ -39,7 +39,7 @@ try {
 	$options = array(
 			'base_dn'=>$params->base_dn,
 			'account_suffix'=>$params->account_suffix,
-			'domain_controllers'=>explode(";",$params->domain_controllers),
+			'domain_controllers'=>pf_explode(";", str_replace(" ", "", $params->domain_controllers)),
 			'use_ssl'=>$params->use_ssl,
 			'use_tls'=>$params->use_tls,
 			'ad_port'=>$params->ad_port
@@ -47,17 +47,18 @@ try {
 	//AD
 	$adldap = new adLDAP($options);
 
-	//try to login with higher credentials for search
-	$authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
-	if ($authUser == false) {
-		$Result->show("danger", _("Invalid credentials"), true);
-	}
-
 	// set OpenLDAP flag
 	if($server->type == "LDAP") { $adldap->setUseOpenLDAP(true); }
 
+	//try to login with higher credentials for search
+	$authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
+	if (!$authUser) {
+		$Result->show("danger", _("Invalid credentials")."<br>".$adldap->getLastError(), true);
+	}
+
 	//search for domain user!
-	$userinfo = $adldap->user()->info("$_POST[dname]*", array("*"),false,$server->type);
+	$esc_dname = ldap_escape($_POST["dname"], null, LDAP_ESCAPE_FILTER);
+	$userinfo = $adldap->user()->info("*$esc_dname*", array("*"), false, $server->type);
 
 	//echo $adldap->getLastError();
 }
@@ -86,18 +87,15 @@ if(!isset($userinfo['count'])) {
 		// loop
 		foreach($userinfo as $u) {
 			print "<tr>";
-			print "	<td>".$u['displayname'][0];
-			print "</td>";
-			print "	<td>".$u['samaccountname'][0]."</td>";
-			print "	<td>".$u['mail'][0]."</td>";
+			print "	<td>".escape_input($u['displayname'][0])."</td>";
+			print "	<td>".escape_input($u['samaccountname'][0])."</td>";
+			print "	<td>".escape_input($u['mail'][0])."</td>";
 			//actions
 			print " <td style='width:10px;'>";
-			print "		<a href='' class='btn btn-sm btn-default btn-success userselect' data-uname='".$u['displayname'][0]."' data-username='".$u['samaccountname'][0]."' data-email='".$u['mail'][0]."' data-server='".$_POST['server']."' data-server-type='".$server->type."'>"._('Select')."</a>";
+			print "		<a href='' class='btn btn-sm btn-default btn-success userselect' data-uname='".escape_input($u['displayname'][0])."' data-username='".escape_input($u['samaccountname'][0])."' data-email='".escape_input($u['mail'][0])."' data-server='".escape_input($_POST['server'])."' data-server-type='".$server->type."'>"._('Select')."</a>";
 			print "	</td>";
 			print "</tr>";
 		}
 	}
 	print "</table>";
 }
-
-?>

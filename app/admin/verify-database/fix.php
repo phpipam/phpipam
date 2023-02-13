@@ -20,7 +20,7 @@ $User->check_user_session();
 $User->is_admin(true);
 
 /* verifications */
-if(!isset($_POST['tableid']) || strlen(@$_POST['tableid'])<1 ) {
+if(!isset($_POST['tableid']) || is_blank(@$_POST['tableid']) ) {
 		$Result->show("danger", _("Wrong parameters"), true);
 }
 else {

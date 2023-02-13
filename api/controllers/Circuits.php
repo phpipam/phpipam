@@ -7,23 +7,6 @@
  */
 class Circuits_controller extends Common_api_functions {
 
-
-	/**
-	 * _params provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
-	/**
-	 * custom_fields
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	public $custom_fields;
-
 	/**
 	 * Request type - circuits or circuitProviders
 	 *
@@ -37,30 +20,6 @@ class Circuits_controller extends Common_api_functions {
 	 * @var string
 	 */
 	protected $type_text = "circuit";
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-	/**
-	 * Master Admin object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Admin;
 
 
 	/**
@@ -163,6 +122,7 @@ class Circuits_controller extends Common_api_functions {
 	 *		- /{id}/                        returns circuit details
 	 *		- /id/{id}/                     returns circuit details by cid
 	 *		- /circuit_id/{id}/             returns circuit details by cid
+	 * 		- /all/							returns all circuits
 	 *
 	 *
 	 * parameters (providers):
@@ -175,10 +135,10 @@ class Circuits_controller extends Common_api_functions {
 	 */
 	public function GET () {
 		// all
-		if (!isset($this->_params->id)) {
+		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ($this->type, 'id');
 			// check result
-			if($result===false)						{ $this->Response->throw_exception(200, "No {$this->type_text}s configured"); }
+			if($result===false)						{ $this->Response->throw_exception(404, "No {$this->type_text}s configured"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 		// provider circuits
@@ -186,7 +146,7 @@ class Circuits_controller extends Common_api_functions {
 			if ($this->_params->id2=="circuits") {
 				$result = $this->Tools->fetch_multiple_objects ("circuits", "provider", $this->_params->id);
 				// check result
-				if($result==NULL)						{ $this->Response->throw_exception(200, "No circuits belonging to provider"); }
+				if($result==NULL)						{ $this->Response->throw_exception(404, "No circuits belonging to provider"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
 			else {
@@ -197,7 +157,7 @@ class Circuits_controller extends Common_api_functions {
 		elseif($this->type==="circuits" && ($this->_params->id=="circuit_id" || $this->_params->id=="id")) {
 			$result = $this->Tools->fetch_object ($this->type, "cid", $this->_params->id2);
 			// check result
-			if($result==NULL)						{ $this->Response->throw_exception(200, "{$this->type_text} not found"); }
+			if($result==NULL)						{ $this->Response->throw_exception(404, "{$this->type_text} not found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 		// read details
@@ -207,22 +167,9 @@ class Circuits_controller extends Common_api_functions {
 			// fetch
 			$result = $this->Tools->fetch_object ($this->type, "id", $this->_params->id);
 			// check result
-			if($result==NULL)						{ $this->Response->throw_exception(200, "{$this->type_text} not found"); }
+			if($result==NULL)						{ $this->Response->throw_exception(404, "{$this->type_text} not found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
-	}
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 
@@ -419,7 +366,7 @@ class Circuits_controller extends Common_api_functions {
 	private function validate_provider_name ($action) {
 		if($action=="add") {
 			if (!isset($this->_params->name)) 		 { $this->Response->throw_exception(404, "Name is mandatory"); }
-			elseif (strlen($this->_params->name)==0) { $this->Response->throw_exception(404, "Name is mandatory"); }
+			elseif (is_blank($this->_params->name)) { $this->Response->throw_exception(404, "Name is mandatory"); }
 		}
 	}
 
@@ -447,7 +394,7 @@ class Circuits_controller extends Common_api_functions {
 	 * @method validate_cid
 	 *
 	 * @param  string $action
-	 * @param  object $old_object
+	 * @param  object|null $old_object
 	 *
 	 * @return void
 	 */
@@ -481,7 +428,7 @@ class Circuits_controller extends Common_api_functions {
 	private function validate_circuit_type ($action="add") {
 		if(isset($this->_params->type)) {
 			$type_desc = $this->Database->getFieldInfo ("circuits", "type");
-			$all_types = explode(",", str_replace(array("enum","(",")","'"), "",$type_desc->Type));
+			$all_types = pf_explode(",", str_replace(array("enum","(",")","'"), "",$type_desc->Type));
 			if(!in_array($this->_params->type, $all_types))									{ $this->Response->throw_exception(400, "Invalid circuit type"); }
 		}
 		else {
@@ -503,7 +450,7 @@ class Circuits_controller extends Common_api_functions {
 	private function validate_circuit_status ($action="add") {
 		if (isset($this->_params->status)) {
 			$statuses = array ("Active", "Inactive", "Reserved");
-			if(!in_array($this->_params->status, $statuses))								{ $this->Response->throw_exception(400, "Invalid status"); }
+			if(!in_array($this->_params->status, $statuses))								{ $this->Response->throw_exception(400, _("Invalid status")); }
 		}
 		else {
 			if ($action=="add") {
@@ -524,20 +471,20 @@ class Circuits_controller extends Common_api_functions {
 	private function validate_circuit_devices_locations ($action="add") {
 		// check
 		for($m=1; $m<3; $m++) {
-			if(!isset($this->_params->{device.$m}) && !isset($this->_params->{location.$m})) {
+			if(!isset($this->_params->{'device'.$m}) && !isset($this->_params->{'location'.$m})) {
 				if($action=="add") {
-					$this->_params->{device.$m}   = 0;
-					$this->_params->{location.$m} = 0;
+					$this->_params->{'device'.$m}   = 0;
+					$this->_params->{'location'.$m} = 0;
 				}
 			}
 			else {
-				if ($this->_params->{device.$m}!==null) {
-					if($this->Tools->fetch_object("devices","id",$this->_params->{device.$m})===false) 	{ $this->Response->throw_exception(400, "Invalid device $m"); }
-					$this->_params->{location.$m} = 0;
+				if ($this->_params->{'device'.$m}!==null) {
+					if($this->Tools->fetch_object("devices","id",$this->_params->{'device'.$m})===false) 	{ $this->Response->throw_exception(400, "Invalid device $m"); }
+					$this->_params->{'location'.$m} = 0;
 				}
 				else {
-					if($this->Tools->fetch_object("locations","id",$this->_params->{location.$m})===false) 	{ $this->Response->throw_exception(400, "Invalid location $m"); }
-					$this->_params->{device.$m} = 0;
+					if($this->Tools->fetch_object("locations","id",$this->_params->{'location'.$m})===false) 	{ $this->Response->throw_exception(400, "Invalid location $m"); }
+					$this->_params->{'device'.$m} = 0;
 				}
 			}
 		}

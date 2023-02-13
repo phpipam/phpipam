@@ -4,35 +4,34 @@
  *
  * Script to check if all required extensions are compiled and loaded in PHP
  *
- *
- * We need the following mudules:
- *      - session
- *      - gmp
- *		- json
- *		- gettext
- *		- PDO
- *		- pdo_mysql
- *
- ************************************/
-
+ */
 
 # Required extensions
-$requiredExt  = array("session", "sockets", "filter", "openssl", "gmp", "json", "gettext", "PDO", "pdo_mysql", "mbstring", "gd");
+$requiredExt  = array("session", "sockets", "filter", "openssl", "gmp", "json", "gettext", "PDO", "pdo_mysql", "mbstring", "gd", "iconv", "ctype", "curl", "dom", "pcre", "libxml");
+# Required functions (included in php-xml or php-simplexml package)
+$requiredFns  = array("simplexml_load_string");
 
-# Available extensions
+if(!defined('PHPIPAM_PHP_MIN'))
+define('PHPIPAM_PHP_MIN', "5.4");
+
+if(!defined('PHPIPAM_PHP_UNTESTED'))
+define('PHPIPAM_PHP_UNTESTED', "8.2");  // PHP 8.2 or greater is untested & unsupported
+
+
+# Empty missing arrays to prevent errors
+$missingExt = [];
+$missingFns = [];
+
+# Check for missing modules
 $availableExt = get_loaded_extensions();
 
-# Empty missing array to prevent errors
-$missingExt[0] = "";
-
-# if not all are present create array of missing ones
 foreach ($requiredExt as $extension) {
     if (!in_array($extension, $availableExt)) {
         $missingExt[] = $extension;
     }
 }
 
-# check if mod_rewrite is enabled in apache
+# Check if mod_rewrite is enabled in apache
 if (function_exists("apache_get_modules")) {
     $modules = apache_get_modules();
     if(!in_array("mod_rewrite", $modules)) {
@@ -40,51 +39,78 @@ if (function_exists("apache_get_modules")) {
     }
 }
 
-# check for PEAR functions
-if ((@include_once 'PEAR.php') != true) {
-	$missingExt[] = "php PEAR support";
+# Check for missing functions
+foreach ($requiredFns as $fn) {
+    if (!function_exists($fn)) {
+        $missingFns[] = $fn;
+    }
 }
 
-# if any extension is missing print error and die!
-if (sizeof($missingExt) != 1 || (phpversion() < "5.4" && $allow_older_version!==true)) {
+# Check for PEAR functions
+if (!@include_once 'PEAR.php') {
+    $missingExt[] = "php PEAR support";
+}
 
-    /* remove dummy 0 line */
-    unset($missingExt[0]);
+/* headers */
+$error   = [];
+$error[] = "<html>";
+$error[] = "<head>";
+$error[] = "<base href='$url".BASE."' />";
+$error[] = '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">';
+$error[] = '<link rel="stylesheet" type="text/css" href="css//bootstrap/bootstrap-custom.css">';
+$error[] = "</head>";
+$error[] = "<body style='margin:0px;'>";
+$error[] = '<div class="row header-install" id="header"><div class="col-xs-12">';
+$error[] = '<div class="hero-unit" style="padding:20px;margin-bottom:10px;">'._('phpIPAM requirements error').'</div>';
+$error[] = '</div></div>';
+$error[] = "<div class='alert alert-danger' style='margin:auto;margin-top:20px;width:60%'>";
 
-    /* headers */
-    $error   = "<html>";
-    $error  .= "<head>";
-    $error  .= "<base href='$url".BASE."' />";
-    $error  .= '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">';
-	$error  .= '<link rel="stylesheet" type="text/css" href="css//bootstrap/bootstrap-custom.css">';
-	$error  .= "</head>";
-    $error  .= "<body style='margin:0px;'>";
-	$error  .= '<div class="row header-install" id="header"><div class="col-xs-12">';
-	$error  .= '<div class="hero-unit" style="padding:20px;margin-bottom:10px;">';
-	$error  .= '<a href="'.create_link(null,null,null,null,null,true).'">phpipam requirements error</a>';
-	$error  .= '</div>';
-	$error  .= '</div></div>';
+if ( PHP_INT_SIZE == 4 ) {
+    /* 32-bit systems */
+    $error[] = "<strong>"._('Not 64-bit system')."!</strong><br><hr>";
+    $error[] = _('From release 1.4 on 64bit system is required!');
+}
+elseif ( phpversion() < PHPIPAM_PHP_MIN ) {
+    $error[] = "<strong>"._('Unsupported PHP version')."!</strong><br><hr>";
+    $error[] = _('Minimum PHP version required').": ".PHPIPAM_PHP_MIN."<br>";
+    $error[] = _("Detected PHP version: ").phpversion();
 
-    /* Extensions error */
-    if(sizeof($missingExt)>0) {
-        $error  .= "<div class='alert alert-danger' style='margin:auto;margin-top:20px;width:500px;'><strong>"._('The following required PHP extensions are missing').":</strong><br><hr>";
-        $error  .= '<ul>' . "\n";
-        foreach ($missingExt as $missing) {
-            $error .= '<li>'. $missing .'</li>' . "\n";
-        }
-        $error  .= '</ul><hr>' . "\n";
-        $error  .= _('Please recompile PHP to include missing extensions and restart Apache.') . "\n";
+}
+elseif ( phpversion() >= PHPIPAM_PHP_UNTESTED && !Config::ValueOf('allow_untested_php_versions', false) ) {
+    $error[] = "<strong>"._('Unsupported PHP version')."!</strong><br><hr>";
+    $error[] = _("Detected PHP version: ").phpversion()." >= ".PHPIPAM_PHP_UNTESTED."<br><br>";
+    $error[] = _('phpIPAM is not yet compatible with this version of php.')." "._('You may encounter issues & errors.')."<br><br>";
+    $error[] = _('Please set <q>$allow_untested_php_versions=true;</q> in config.php to continue at your own risk.');
+}
+elseif ( !empty($missingExt) ) {
+    $error[] = "<strong>"._('The following required PHP extensions are missing').":</strong><br><hr>";
+    $error[] = '<ul>' . "\n";
+    foreach ($missingExt as $missing) {
+        $error[] = '<li>'. $missing .'</li>' . "\n";
     }
-    /* php version error */
-    else {
-        $error  .= "<div class='alert alert-danger' style='margin:auto;margin-top:20px;width:500px;'><strong>"._('Unsupported PHP version')."!</strong><br><hr>";
-        $error  .= _('From release 1.3.2 on at least PHP version 5.4 is required!')."<br>"._('You can override this by setting $allow_older_version=true in config.php.')."<br>";
-        $error  .= _("Detected PHP version: ").phpversion(). "<br><br>\n";
-        $error  .= _("Last development version can be downloaded ")." <a href='https://github.com/phpipam/phpipam/tree/9ca731d475d5830ca421bac12da31d5023f02636' target='_blank'>here</a>.";
+    $error[] = '</ul><hr>' . "\n";
+    $error[] = _('Please recompile PHP to include missing extensions and restart Apache.');
+}
+elseif ( !empty($missingFns) ) {
+    $error[] = "<strong>"._('The following required PHP functions are missing').":</strong><br><hr>";
+    $error[] = '<ul>' . "\n";
+    foreach ($missingFns as $missing) {
+        $error[] = '<li>'. $missing .'</li>' . "\n";
     }
+    $error[] = '</ul><hr>' . "\n";
+    $error[] = _('Please recompile PHP to include missing functions and restart Apache.');
+}
+else {
+    /* No issues, delete $error */
+    unset($error);
+}
 
-    $error  .= "</body>";
-    $error  .= "</html>";
+if ( isset($error) ) {
+    $error[] = "<br><br>\n";
+    $error[] = _("Lastest version can be downloaded from ")." <a href='https://github.com/phpipam/phpipam/releases' target='_blank'>GitHub</a>.";
+    $error[] = "</div>";
+    $error[] = "</body>";
+    $error[] = "</html>";
 
-    die($error);
+    die(implode("\n", $error));
 }

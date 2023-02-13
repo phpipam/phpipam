@@ -10,13 +10,20 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Racks      = new phpipam_rack ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("racks", User::ACCESS_RW, true, true);
+}
+else {
+    $User->check_module_permissions ("racks", User::ACCESS_RWA, true, true);
+}
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "rack");
@@ -37,6 +44,7 @@ if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 else {
     $rack = new StdClass ();
     $rack->size = 42;
+    $rack->topDown = 1;
 }
 
 # fetch all racks
@@ -50,7 +58,7 @@ $locations = $Tools->fetch_all_objects ("locations", "name");
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 
@@ -109,8 +117,19 @@ $(document).ready(function(){
 		</td>
 	</tr>
 
+    <!-- Orientation -->
+    <tr>
+        <td><?php print _('Orientation'); ?></td>
+        <td>
+            <select name="topDown" class="form-control input-sm input-w-auto">
+                <option value="1"<?php if ($rack->topDown) print " selected" ?>><?php print _("Top-down (unit 1 at the top)"); ?></option>
+                <option value="0"<?php if (!$rack->topDown) print " selected" ?>><?php print _("Bottom-up (unit 1 at the bottom)"); ?></option>
+            </select>
+        </td>
+    </tr>
+
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1") { ?>
+	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
 	<tr>
 		<td><?php print _('Location'); ?></td>
 		<td>
@@ -128,6 +147,34 @@ $(document).ready(function(){
 		</td>
 	</tr>
 	<?php } ?>
+
+	<?php
+    // customers
+    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+        // fetch customers
+        $customers = $Tools->fetch_all_objects ("customers", "title");
+        // print
+        print '<tr>' . "\n";
+        print ' <td class="middle">'._('Customer').'</td>' . "\n";
+        print ' <td>' . "\n";
+        print ' <select name="customer_id" class="form-control input-sm input-w-auto">'. "\n";
+
+        //blank
+        print '<option disabled="disabled">'._('Select Customer').'</option>';
+        print '<option value="0">'._('None').'</option>';
+
+        if($customers!=false) {
+            foreach($customers as $customer) {
+                if ($customer->id == $rack->customer_id)    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
+                else                                        { print '<option value="'. $customer->id .'">'.$customer->title.'</option>'; }
+            }
+        }
+
+        print ' </select>'. "\n";
+        print ' </td>' . "\n";
+        print '</tr>' . "\n";
+    }
+	?>
 
 	<!-- Description -->
 	<tr>
@@ -157,9 +204,8 @@ $(document).ready(function(){
 		# all my fields
 		foreach($custom as $field) {
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $rack, $_POST['action'], $timepicker_index);
-    		// add datepicker index
-    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+    		$custom_input = $Tools->create_custom_field_input ($field, $rack, $timepicker_index);
+    		$timepicker_index = $custom_input['timepicker_index'];
             // print
 			print "<tr>";
 			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";

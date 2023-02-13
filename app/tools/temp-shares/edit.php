@@ -31,30 +31,30 @@ $object = $Tools->fetch_object ($_POST['type'], "id", $_POST['id']);
 $share = new StdClass;
 //set details
 if($_POST['type']=="subnets") {
-	$tmp[] = "Share type: subnet";
+	$tmp[] = _("Share type: subnet");
 	$tmp[] = $Subnets->transform_to_dotted($object->subnet)."/$object->mask";
 	$tmp[] = $object->description;
 }
 else {
-	$tmp[] = "Share type: IP address";
+	$tmp[] = _("Share type: IP address");
 	$tmp[] = $Subnets->transform_to_dotted($object->ip_addr);
 	$tmp[] = $object->description;
 }
 $share->details = implode("<br>", $tmp);
 
 //set code and timeframe
-$share->code = $User->Crypto->generate_token();
+$share->code = $User->Crypto->generate_html_safe_token(32);
 $share->validity = date("Y-m-d H:i:s", strtotime("+1 day"));
 
 # set url for printing
-$url = $Result->createURL().create_link("temp_share",$share->code);
+$url = $Tools->createURL().create_link("temp_share",$share->code);
 
 ?>
 
 
-<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">
-<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript">
+<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css?v=<?php print SCRIPT_PREFIX; ?>">
+<script src="js/bootstrap-datetimepicker.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<script>
 $(document).ready(function() {
 $(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );
 })

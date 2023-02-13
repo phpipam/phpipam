@@ -1,5 +1,3 @@
-<div class="pHeader"><?php print _("Remove temporary share"); ?></div>
-<div class="pContent">
 <?php
 
 /**
@@ -19,12 +17,15 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+print '<div class="pHeader">'._("Remove temporary share").'</div>';
+print '<div class="pContent">';
+
 /* checks */
 if($User->settings->tempShare!=1)									{ $Result->show("danger", _("Temporary sharing disabled"), true); }
 if(strlen($_POST['code'])!=32) 										{ $Result->show("danger", _("Invalid code"), true); }
 
 # remove object
-$old_access = json_decode($User->settings->tempAccess, true);
+$old_access = pf_json_decode($User->settings->tempAccess, true);
 //check that it exists
 if(!isset($old_access[$_POST['code']]))								{ $Result->show("danger", _("Code does not exist"), true); }
 //remove

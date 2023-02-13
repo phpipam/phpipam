@@ -21,6 +21,8 @@ $PowerDNS 	= new PowerDNS ($Database);
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
+# perm check
+$User->check_module_permissions ("pdns", User::ACCESS_RW, true, false);
 
 # fetch subnet
 $subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
@@ -36,7 +38,7 @@ $zone = $PowerDNS->get_ptr_zone_name ($subnet->ip, $subnet->mask);
 // try to fetch domain
 $domain = $PowerDNS->fetch_domain_by_name ($zone);
 // default values
-$values = json_decode($User->settings->powerDNS, true);
+$values = pf_json_decode($User->settings->powerDNS, true);
 $values['name'] = $zone;
 
 // domain missing, create it and default records
@@ -58,11 +60,11 @@ $Addresses->ptr_unlink_subnet_addresses ($subnet->id);
 $hosts   = $Addresses->fetch_subnet_addresses ($subnet->id, "ip_addr", "asc");
 
 // create PTR records
-if (sizeof($hosts)>0) {
+if (is_array($hosts) && sizeof($hosts)>0) {
 	foreach ($hosts as $h) {
     	// set default hostname for PTR if set
-    	if (strlen($h->hostname)==0) {
-        	if (strlen($values['def_ptr_domain'])>0) {
+    	if (is_blank($h->hostname)) {
+        	if (!is_blank($values['def_ptr_domain'])) {
             	$h->hostname = $values['def_ptr_domain'];
         	}
     	}
@@ -71,7 +73,7 @@ if (sizeof($hosts)>0) {
 			$ignored[] = $h;
 		}
 		// validate hostname, we only add valid hostnames
-		elseif ($Result->validate_hostname ($h->hostname) !== false) {
+		elseif ($PowerDNS->validate_hostname ($h->hostname) !== false) {
 			// formulate new record
 			$record = $PowerDNS->formulate_new_record ($domain->id, $PowerDNS->get_ip_ptr_name ($h->ip), "PTR", $h->hostname, $values['ttl']);
 			// insert record
@@ -100,14 +102,14 @@ if (sizeof(@$success)>0) {
 	}
 	$print[] = "</div>";
 }
-if (sizeof(@$failures)>0) {
+if (is_array($failures) && sizeof($failures)>0) {
 	$print[] = "<div class='alert alert-danger'><h4>Invalid PTR hostnames:</h4>";
 	foreach ($failures as $s) {
 		$print[] = "&middot; $s->hostname ($s->ip)";
 	}
 	$print[] = "</div>";
 }
-if (sizeof(@$ignored)>0) {
+if (is_array($ignored) && sizeof($ignored)>0) {
 	$print[] = "<div class='alert alert-info'><h4>Ignored records:</h4>";
 	foreach ($ignored as $s) {
 		$print[] = "&middot; $s->hostname ($s->ip)";

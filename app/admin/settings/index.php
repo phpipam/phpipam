@@ -17,7 +17,7 @@ $languages = $Admin->fetch_all_objects("lang", "l_id");
 $settings = (array) $User->settings;
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 	/* bootstrap switch */
 	var switch_options = {
@@ -153,7 +153,15 @@ $(document).ready(function() {
 	<td>
 		<select name="inactivityTimeout" class="form-control input-sm input-w-auto">
 		<?php
-		$durations = array("900"=>"15 minutes","1800"=>"30 minutes", "3600"=>"1 hour", "7200"=>"2 hours", "21600"=>"6 hours", "43200"=>"12 hours", "86400"=>"24 hours");
+		$durations = [
+			"900"  =>"15 "._("minutes"),
+			"1800" =>"30 "._("minutes"),
+			"3600" =>"60 "._("minutes"),
+			"7200" =>"2 "._("hours"),
+			"21600"=>"6 "._("hours"),
+			"43200"=>"12 "._("hours"),
+			"86400"=>"24 "._("hours")
+		];
 		//default
 		foreach($durations as $k=>$d) {
 			if($k==$settings['inactivityTimeout']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
@@ -413,6 +421,31 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+
+<!-- customers -->
+<tr>
+	<td class="title"><?php print _('Customers module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableCustomers" <?php if($settings['enableCustomers'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable customers module for customer management'); ?>
+	</td>
+</tr>
+
+
+<!-- Routing -->
+<tr>
+	<td class="title"><?php print _('Routing module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableRouting" <?php if($settings['enableRouting'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable Routing module for routing management'); ?>
+	</td>
+</tr>
+
+
 <!-- Link fields -->
 <tr>
 	<td class="title"><?php print _('Link addresses'); ?></td>
@@ -449,7 +482,7 @@ $(document).ready(function() {
 	<td>
 		<select name="log" class="form-control input-sm input-w-auto">
 		<?php
-		$types = array("Database"=>"Database", "syslog"=>"Syslog", "both"=>"Syslog and local Database");
+		$types = array("Database"=>_("Database"), "syslog"=>_("Syslog"), "both"=>_("Syslog and local Database"));
 		//default
 		foreach($types as $k=>$d) {
 			if($k==$settings['log']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
@@ -508,6 +541,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Vaults -->
+<tr>
+	<td class="title"><?php print _("Enable Vaults"); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableVaults" <?php if($settings['enableVaults'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable Vaults for storing encrypted information'); ?>
+	</td>
+</tr>
+
 
 <!-- ICPM -->
 <tr class="settings-title">
@@ -520,7 +564,7 @@ $(document).ready(function() {
 	<td>
 		<select name="scanPingType" class="form-control input-sm input-w-auto">
 		<?php
-		$types = array("ping"=>"ping", "pear"=>"pear ping", "fping"=>"fping");
+		$types = ["none"=>"none (disabled)", "ping"=>"ping", "pear"=>"pear ping", "fping"=>"fping"];
 		//default
 		foreach($types as $k=>$d) {
 			if($k==$settings['scanPingType']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
@@ -536,12 +580,7 @@ $(document).ready(function() {
 <!-- Ping path -->
 <tr>
 	<td class="title"><?php print _('Ping path'); ?></td>
-	<?php
-	//verify that ping file exists!
-	if(!file_exists($settings['scanPingPath'])&&$settings['scanFPingType']=="ping")		{ $class="danger"; }
-	else																				{ $class=""; }
-	?>
-	<td class="<?php print $class; ?>">
+	<td class="<?php print !file_exists($settings['scanPingPath']) ? 'danger' : ''; ?>">
 		<input type="text" class="form-control input-sm" name="scanPingPath" value="<?php print $settings['scanPingPath']; ?>">
 	</td>
 	<td class="info2">
@@ -552,12 +591,7 @@ $(document).ready(function() {
 <!-- fping path -->
 <tr>
 	<td class="title"><?php print _('FPing path'); ?></td>
-	<?php
-	//verify that ping file exists!
-	if(!file_exists($settings['scanFPingPath'])&&$settings['scanFPingType']=="fping")	{ $class="danger"; }
-	else																				{ $class=""; }
-	?>
-	<td class="<?php print $class; ?>">
+	<td class="<?php print !file_exists($settings['scanFPingPath']) ? 'danger' : ''; ?>">
 		<input type="text" class="form-control input-sm" name="scanFPingPath" value="<?php print $settings['scanFPingPath']; ?>">
 	</td>
 	<td class="info2">
@@ -670,8 +704,8 @@ $(document).ready(function() {
 			<?php
 			$opts = array(
 				"0"=>_("Subnet Network Only"),
-				"1"=>"Description Only",
-				"2"=>"Subnet Network and Description"
+				"1"=>_("Description Only"),
+				"2"=>_("Subnet Network and Description")
 			);
 			foreach($opts as $key=>$line) {
 				if($settings['subnetView'] == $key) { print "<option value='$key' selected>$line</option>"; }

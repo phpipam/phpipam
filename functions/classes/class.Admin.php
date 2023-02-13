@@ -10,7 +10,7 @@ class Admin extends Common_functions {
 	/**
 	 * (array of objects) to store users, user id is array index
 	 *
-	 * @var mixed
+	 * @var array
 	 * @access public
 	 */
 	public $users;
@@ -18,7 +18,7 @@ class Admin extends Common_functions {
 	/**
 	 * (array of objects) to store groups, group id is array index
 	 *
-	 * @var mixed
+	 * @var array
 	 * @access public
 	 */
 	public $groups;
@@ -44,46 +44,14 @@ class Admin extends Common_functions {
 	private $admin_required = true;
 
 	/**
-	 * Result
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
 	 * User
 	 *
-	 * @var mixed
+	 * @var User
 	 * @access protected
 	 */
 	protected $User;
 
-	/**
-	 * Database
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
 
-	/**
-	 * debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access protected
-	 */
-	protected $debugging = false;
-
-	/**
-	 * Log
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
 
 
 
@@ -96,12 +64,12 @@ class Admin extends Common_functions {
 	 * @param bool $admin_required (default: true)
 	 */
 	public function __construct (Database_PDO $database, $admin_required = true) {
+		parent::__construct();
+
 		# initialize database object
 		$this->Database = $database;
 		# initialize Result
 		$this->Result = new Result ();
-		# set debugging
-		$this->set_debugging ();
 		# set admin flag
 		$this->set_admin_required ($admin_required);
 		# verify that user is admin
@@ -139,17 +107,15 @@ class Admin extends Common_functions {
 	 */
 	public function is_admin () {
 		// user not required for cli
-		if (php_sapi_name()!="cli") {
+		if (php_sapi_name() != "cli") {
 			# initialize user class
-			$this->User = new User ($this->Database);
-    		# save settings
-    		$this->settings = $this->User->settings;
-    		# if required die !
-    		if($this->User->is_admin(false)!==true && $this->admin_required===true) {
-    			// popup ?
-    			if(@$_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest") 	{ $this->Result->show("danger", _("Administrative privileges required"),true, true); }
-    			else 														{ $this->Result->show("danger", _("Administrative privileges required"),true); }
-    		}
+			$this->User = new User($this->Database);
+			# save settings
+			$this->settings = $this->User->settings;
+			# if required die !
+			if ($this->User->is_admin(false) !== true && $this->admin_required === true) {
+				$this->Result->fatal_http_error(403, _("Administrative privileges required"));
+			}
 		}
 	}
 
@@ -177,15 +143,21 @@ class Admin extends Common_functions {
 	 * @param string $action
 	 * @param string|array $field
 	 * @param array $values
+	 * @param array $values_log
 	 * @return void
 	 */
-	public function object_modify ($table, $action=null, $field="id", $values = array ()) {
+	public function object_modify ($table, $action=null, $field="id", $values = [], $values_log = []) {
+		if (!is_string($table) || is_blank($table)) return false;
 		# strip tags
-		$values = $this->strip_input_tags ($values);
+		$values     = $this->strip_input_tags ($values);
+		$values_log = $this->strip_input_tags ($values_log);
+
+		# if empty values_log inherit from values to preserve old functionality
+		if(sizeof($values_log)==0)	{ $values_log = $values; }
 
 		# execute based on action
-		if($action=="add")					{ return $this->object_add ($table, $values); }
-		elseif($action=="edit")				{ return $this->object_edit ($table, $field, $values); }
+		if($action=="add")					{ return $this->object_add ($table, $values, $values_log); }
+		elseif($action=="edit")				{ return $this->object_edit ($table, $field, $values, $values_log); }
 		elseif($action=="edit-multiple")	{ return $this->object_edit_multiple ($table, $field, $values); }		//$field = array of ids
 		elseif($action=="delete")			{ return $this->object_delete ($table, $field, $values[$field]); }
 		else								{ return $this->Result->show("danger", _("Invalid action"), true); }
@@ -199,9 +171,10 @@ class Admin extends Common_functions {
 	 * @access private
 	 * @param mixed $table
 	 * @param mixed $values
+	 * @param array $values_log		//log variables
 	 * @return boolean
 	 */
-	private function object_add ($table, $values) {
+	private function object_add ($table, $values, $values_log) {
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
 
@@ -209,13 +182,13 @@ class Admin extends Common_functions {
 		try { $this->Database->insertObject($table, $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "$table object creation", "Failed to create new $table database object<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 2);
+			$this->Log->write( $table." "._("object creation"), _("Failed to create new")." ".$table." "._("database object").".<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values_log, "NULL")), 2);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		$this->Log->write( "$table object creation", "New $table database object created<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
+		$this->Log->write( $table." "._("Object creation"), _("A new")." ".$table." "._("database object created").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values_log, "NULL")), 0);
 		return true;
 	}
 
@@ -227,10 +200,12 @@ class Admin extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $table			//name of table to update
+	 * @param mixed $key
 	 * @param array $values			//update variables
+	 * @param array $values_log		//log variables
 	 * @return boolean
 	 */
-	private function object_edit ($table, $key="id", $values) {
+	private function object_edit ($table, $key, $values, $values_log = []) {
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
 
@@ -238,13 +213,13 @@ class Admin extends Common_functions {
 		try { $this->Database->updateObject($table, $values, $key); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "$table object $values[$key] edit", "Failed to edit object $key=$values[$key] in $table<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 2);
+			$this->Log->write( $table." "._("object")." ".$values[$key]." "._("edit"), _("Failed to edit object")." ".$key=$values[$key]." "._("in")." $table.<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values_log, "NULL")), 2);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		$this->Log->write( "$table object $values[$key] edit", "Object $key=$values[$key] in $table edited<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
+		$this->Log->write( $table." "._("object")." ".$values[$key]." "._("edit"), _("Object")." ".$key=$values[$key]." "._("in")." ".$table." "._("edited").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values_log, "NULL")), 0);
 		return true;
 	}
 
@@ -268,13 +243,13 @@ class Admin extends Common_functions {
 		try { $this->Database->updateMultipleObjects($table, $ids, $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "$table multiple objects edit", "Failed to edit multiple objects in $table<hr>".$e->getMessage()."<hr>".$this->array_to_log($ids)."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 2);
+			$this->Log->write( $table." "._("multiple objects edit"), _("Failed to edit multiple objects in")." $table.<hr>".$e->getMessage()."<hr>".$this->array_to_log($ids)."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 2);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		$this->Log->write( "$table multiple objects edit", "Multiple objects in $table edited<hr>".$this->array_to_log($ids)."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
+		$this->Log->write( $table." "._("multiple objects edit"), _("Multiple objects in")." ".$table." "._("edited").".<hr>".$this->array_to_log($ids)."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		return true;
 	}
 
@@ -287,18 +262,18 @@ class Admin extends Common_functions {
 	 * @param mixed $id			//field identifier
 	 * @return boolean
 	 */
-	private function object_delete ($table, $field="id", $id) {
+	private function object_delete ($table, $field, $id) {
 		# execute
 		try { $this->Database->deleteRow($table, $field, $id); }
 		catch (Exception $e) {
-			$this->Log->write( "$table object $id delete", "Failed to delete object $field=$id in $table<hr>".$e->getMessage(), 2);
+			$this->Log->write( $table." "._("object")." ".$id." "._("delete"), _("Failed to delete object")." ".$field=$id." "._("in")." ".$table.".<hr>".$e->getMessage(), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		$this->Log->write( "$table object $id edit", "Object $field=$id in $table deleted.", 0);
+		$this->Log->write( $table." "._("object")." ".$id." "._("edit"), _("Object")." ".$field=$id." "._("in")." ".$table." "._("deleted").".", 0);
 		return true;
 	}
 
@@ -313,6 +288,9 @@ class Admin extends Common_functions {
 	 * @return null|false
 	 */
 	public function remove_object_references ($table, $field, $old_value, $new_value = NULL) {
+		$table = $this->Database->escape($table);
+		$field = $this->Database->escape($field);
+
 		try { $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", array($new_value, $old_value)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
@@ -331,6 +309,9 @@ class Admin extends Common_functions {
 	 * @return null|false
 	 */
 	public function update_object_references ($table, $field, $old_value, $new_value) {
+		$table = $this->Database->escape($table);
+		$field = $this->Database->escape($field);
+
 		try { $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", array($new_value, $old_value)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
@@ -347,7 +328,7 @@ class Admin extends Common_functions {
 	 */
 	public function truncate_table ($table = null) {
 		# null table
-		if(is_null($table)||strlen($table)==0) return false;
+		if(is_null($table)||is_blank($table)) return false;
 		else {
 			try { $this->Database->emptyTable($table); }
 			catch (Exception $e) {
@@ -377,7 +358,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $group_ids
-	 * @return void
+	 * @return array
 	 */
 	public function groups_parse ($group_ids) {
 		$out = array ();
@@ -403,7 +384,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $group_ids
-	 * @return void
+	 * @return array
 	 */
 	public function groups_parse_ids ($group_ids) {
 		$out = array ();
@@ -433,7 +414,7 @@ class Admin extends Common_functions {
 		# check if $gid in array
 		if($users!==false) {
 			foreach($users as $u) {
-				$group_array = json_decode($u->groups, true);
+				$group_array = pf_json_decode($u->groups, true);
 				$group_array = $this->groups_parse($group_array);
 
 				if(sizeof($group_array)>0) {
@@ -465,7 +446,7 @@ class Admin extends Common_functions {
 		if($users!==false) {
 			foreach($users as $u) {
 				if($u->role != "Administrator") {
-					$g = json_decode($u->groups, true);
+					$g = pf_json_decode($u->groups, true);
 					if(!@in_array($group_id, $g)) { $out[] = $u->id; }
 				}
 			}
@@ -487,7 +468,7 @@ class Admin extends Common_functions {
 		$user = $this->fetch_object ("users", "id", $uid);
 
 		# append new group
-		$g = json_decode($user->groups, true);
+		$g = pf_json_decode($user->groups, true);
 		$g[$gid] = $gid;
 		$g = json_encode($g);
 
@@ -509,7 +490,7 @@ class Admin extends Common_functions {
 		$user = $this->fetch_object ("users", "id", $uid);
 
 		# remove group
-		$g = json_decode($user->groups, true);
+		$g = pf_json_decode($user->groups, true);
 		unset($g[$gid]);
 		$g = json_encode($g);
 
@@ -556,7 +537,7 @@ class Admin extends Common_functions {
 		# check if $gid in array
 		if($users!==false) {
 			foreach($users as $u) {
-				$g  = json_decode($u->groups, true);
+				$g  = pf_json_decode($u->groups, true);
 				$go = $g;
 				$g  = $this->groups_parse($g);
 				# check
@@ -586,13 +567,15 @@ class Admin extends Common_functions {
 		$sections = $this->fetch_all_objects ("sections", "id");
 		# check if $gid in array
 		foreach($sections as $s) {
-			$g = json_decode($s->permissions, true);
+			$g = pf_json_decode($s->permissions, true);
 
-			if(sizeof($g)>0) {
-				if(array_key_exists($gid, $g)) {
-					unset($g[$gid]);
-					$ng = json_encode($g);
-					$this->update_section_groups($s->id,$ng);
+			if(is_array($g)) {
+				if(sizeof($g)>0) {
+					if(array_key_exists($gid, $g)) {
+						unset($g[$gid]);
+						$ng = json_encode($g);
+						$this->update_section_groups($s->id,$ng);
+					}
 				}
 			}
 		}
@@ -625,6 +608,8 @@ class Admin extends Common_functions {
 	 * @return void
 	 */
 	public function replace_fields ($field, $search, $replace) {
+		$field = $this->Database->escape($field);
+
 		# check number of items
 		$count = $this->count_database_objects ("ipaddresses", $field, "%$search%", true);
 		# if some exist update
@@ -635,10 +620,10 @@ class Admin extends Common_functions {
 			    $this->Result->show("danger alert-absolute", _("Error: ").$e->getMessage(), true);
 		    }
 		    # ok, print count
-		    $this->Result->show("success alert-absolute", _('Replaced').' '. $count .' '._('items successfully').'!', false);
+		    $this->Result->show("success alert-absolute", $count .' '._('items replaced successfully').'!', false);
 		}
 		else {
-			$this->Result->show("info alert-absolute", _("No records found to replace"), false);
+			$this->Result->show("info alert-absolute", _("No records found to replace."), false);
 		}
 	}
 
@@ -659,6 +644,21 @@ class Admin extends Common_functions {
 	 */
 
 	/**
+	 * Valid custom field database types
+	 * @return array
+	 */
+	public function valid_custom_field_types() {
+		return ["varchar"  =>"varchar",
+				"integer"  =>"int",
+				"boolean"  =>"bool",
+				"text"     =>"text",
+				"date"     =>"date",
+				"datetime" =>"datetime",
+				"set"      =>"set",
+				"enum"     =>"enum"];
+	}
+
+	/**
 	 * Updates custom field definition
 	 *
 	 * @access public
@@ -666,13 +666,17 @@ class Admin extends Common_functions {
 	 * @return bool
 	 */
 	public function update_custom_field_definition ($field) {
+		if (!in_array($field['fieldType'], $this->valid_custom_field_types())) {
+			$this->Result->show("danger", _("Error: ")._("Invalid custom field type"));
+			return false;
+		}
 
 	    # set type definition and size of needed
 	    if($field['fieldType']=="bool" || $field['fieldType']=="text" || $field['fieldType']=="date" || $field['fieldType']=="datetime")	{ $field['ftype'] = $field['fieldType']; }
 	    else																																{ $field['ftype'] = $field['fieldType']."(".$field['fieldSize'].")"; }
 
 	    # default value null
-	    $field['fieldDefault'] = strlen($field['fieldDefault'])==0 ? NULL : $field['fieldDefault'];
+	    $field['fieldDefault'] = is_blank($field['fieldDefault']) ? NULL : $field['fieldDefault'];
 
 	    # character set if needed
 	    if($field['fieldType']=="varchar" || $field['fieldType']=="text" || $field['fieldType']=="set" || $field['fieldType']=="enum")	{ $charset = "CHARACTER SET utf8"; }
@@ -693,7 +697,7 @@ class Admin extends Common_functions {
 
 	    # set update query
 	    if($field['action']=="delete") 								{ $query  = "ALTER TABLE `$field[table]` DROP `$field[oldname]`;"; }
-	    else if ($field['action']=="edit"&&@$field['NULL']=="NO") 	{ $query  = "ALTER IGNORE TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT :default NOT NULL COMMENT :comment;"; }
+	    else if ($field['action']=="edit"&&@$field['NULL']=="NO") 	{ $query  = "ALTER TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT :default NOT NULL COMMENT :comment;"; }
 	    else if ($field['action']=="edit") 							{ $query  = "ALTER TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT :default COMMENT :comment;"; }
 	    else if ($field['action']=="add"&&@$field['NULL']=="NO") 	{ $query  = "ALTER TABLE `$field[table]` ADD COLUMN 	`$field[name]` 					$field[ftype] $charset DEFAULT :default NOT NULL COMMENT :comment;"; }
 	    else if ($field['action']=="add")							{ $query  = "ALTER TABLE `$field[table]` ADD COLUMN 	`$field[name]` 					$field[ftype] $charset DEFAULT :default NULL COMMENT :comment;"; }
@@ -710,11 +714,11 @@ class Admin extends Common_functions {
 		try { $res = $this->Database->runQuery($query, $params); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-	        $this->Log->write( "Custom field $field[action]", "Custom Field $field[action] failed ($field[name])<hr>".$this->array_to_log($field), 2);
+	        $this->Log->write( _("Custom field")." ".$field["action"], _("Custom field")." ".$field["action"]." "._("failed")." (".$field["name"].").<hr>".$this->array_to_log($field), 2);
 			return false;
 		}
 		# field updated
-        $this->Log->write( "Custom field $field[action]", "Custom Field $field[action] success ($field[name])<hr>".$this->array_to_log($field), 0);
+        $this->Log->write( _("Custom field")." ".$field["action"], _("Custom field")." ".$field["action"]." "._("success")." (".$field["name"].").<hr>".$this->array_to_log($field), 0);
 	    return true;
 	}
 
@@ -728,7 +732,7 @@ class Admin extends Common_functions {
 	 */
 	public function save_custom_fields_filter ($table, $filtered_fields) {
 		# old custom fields, save them to array
-		$hidden_array = strlen($this->settings->hiddenCustomFields)>0 ? json_decode($this->settings->hiddenCustomFields, true) : array();
+		$hidden_array = !is_blank($this->settings->hiddenCustomFields) ? pf_json_decode($this->settings->hiddenCustomFields, true) : array();
 
 		# set new array for table
 		if(is_null($filtered_fields))	{ unset($hidden_array[$table]); }
@@ -756,6 +760,9 @@ class Admin extends Common_functions {
 	 * @return boolean
 	 */
 	public function reorder_custom_fields ($table, $next, $current) {
+	    $table = $this->Database->escape($table);
+	    $next = $this->Database->escape($next);
+	    $current = $this->Database->escape($current);
 	    # get current field details
 	    $Tools = new Tools ($this->Database);
 	    $old = (array) $Tools->fetch_full_field_definition ($table, $current);

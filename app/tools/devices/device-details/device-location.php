@@ -1,12 +1,12 @@
 <?php
 
 # location
-if ($User->settings->enableLocations=="1") {
+if ($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
 
     print "<h4>"._('Location')."</h4><hr>";
 
     // set?
-    if ($device->location!=0 && strlen($device->location)>0) {
+    if ($device->location!=0 && !is_blank($device->location)) {
         // array
         $device = (array) $device;
         // fake data

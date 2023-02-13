@@ -8,23 +8,6 @@
 
 class Vlans_controller extends Common_api_functions {
 
-
-	/**
-	 * _params provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
-	/**
-	 * custom_fields
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	public $custom_fields;
-
 	/**
 	 * settings
 	 *
@@ -32,38 +15,6 @@ class Vlans_controller extends Common_api_functions {
 	 * @access protected
 	 */
 	protected $settings;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Master Sections object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Sections;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-	/**
-	 * Master Admin object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Admin;
 
 
 	/**
@@ -128,16 +79,17 @@ class Vlans_controller extends Common_api_functions {
 	 *		- /{id}/subnets/{sectionId}/	returns subnets belonging to this VLAN inside one section
 	 *		- /custom_fields/			    returns custom fields
 	 *		- /search/{number}/			    returns all vlans with specified number
+	 *      - /all/                         returns all vlans
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function GET () {
 		// all
-		if (!isset($this->_params->id)) {
+		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ("vlans", 'vlanId');
 			// check result
-			if($result===false)						{ $this->Response->throw_exception(200, 'No vlans configured'); }
+			if($result===false)						{ $this->Response->throw_exception(404, 'No vlans configured'); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 		// check weather to read belonging subnets
@@ -169,7 +121,7 @@ class Vlans_controller extends Common_api_functions {
 			}
 
 			// check result
-			if($result==NULL)						{ $this->Response->throw_exception(200, "No subnets found"); }
+			if($result==NULL)						{ $this->Response->throw_exception(404, "No subnets found"); }
 			else {
 				$this->custom_fields = $this->Tools->fetch_custom_fields('subnets');
 				return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true));
@@ -178,36 +130,23 @@ class Vlans_controller extends Common_api_functions {
 		// custom fields
 		elseif (@$this->_params->id=="custom_fields") {
 			// check result
-			if(sizeof($this->custom_fields)==0)		{ $this->Response->throw_exception(200, 'No custom fields defined'); }
+			if(sizeof($this->custom_fields)==0)		{ $this->Response->throw_exception(404, 'No custom fields defined'); }
 			else									{ return array("code"=>200, "data"=>$this->custom_fields); }
 		}
 		// search
 		elseif (@$this->_params->id=="search") {
 			$result = $this->Tools->fetch_multiple_objects ("vlans", "number", $this->_params->id2, "vlanId");
 			// check result
-			if($result==NULL)						{ $this->Response->throw_exception(200, "Vlans not found"); }
+			if($result==NULL)						{ $this->Response->throw_exception(404, "Vlans not found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 		// read vlan details
 		else {
 			$result = $this->Tools->fetch_object ("vlans", "vlanId", $this->_params->id);
 			// check result
-			if($result==NULL)						{ $this->Response->throw_exception(200, "Vlan not found"); }
+			if($result==NULL)						{ $this->Response->throw_exception(404, "Vlan not found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
-	}
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 
@@ -338,7 +277,11 @@ class Vlans_controller extends Common_api_functions {
 	 */
 	private function validate_vlan_edit () {
 		# get settings
-		$this->settings = $this->Admin->fetch_object ("settings", "id", 1);
+		$this->settings = $this->Admin->get_settings();
+
+		# Check vlan number
+		if ( $this->_params->number > $this->settings->vlanMax )
+			$this->Response->throw_exception(500, _('Highest possible VLAN number is ').$this->settings->vlanMax.'!');
 
 		//if it already exist die
 		if($this->settings->vlanDuplicate==0 && $_SERVER['REQUEST_METHOD']=="POST") {
@@ -359,7 +302,7 @@ class Vlans_controller extends Common_api_functions {
 			if($this->_params->number<0)													{ $this->Response->throw_exception(400, "Vlan number cannot be negative"); }
 			elseif(!is_numeric($this->_params->number))										{ $this->Response->throw_exception(400, "Vlan number must be number"); }
 		}
-		if(strlen($this->_params->name)==0)													{ $this->Response->throw_exception(400, "Vlan name is required"); }
+		if(is_blank($this->_params->name))													{ $this->Response->throw_exception(400, "Vlan name is required"); }
 	}
 
 	/**
@@ -377,17 +320,4 @@ class Vlans_controller extends Common_api_functions {
 		if($this->Tools->fetch_object ("vlanDomains", "id", $this->_params->domainId) === false )
 																							{ $this->Response->throw_exception(400, "Invalid domain id"); }
 	}
-
-	/**
-	 * Returns id of subnet gateay
-	 *
-	 * @access private
-	 * @params mixed $subnetId
-	 * @return void
-	 */
-	private function read_subnet_gateway ($subnetId) {
-    	return $this->Subnets->find_gateway ($subnetId);
-	}
 }
-
-?>

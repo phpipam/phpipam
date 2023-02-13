@@ -10,7 +10,7 @@
  */
 
 # show only for numeric (set) rackid
-if($_POST['rackid']>0 || @$device['rack']>0) {
+if(@$_POST['rackid']>0 || @$device['rack']>0) {
 	# load objects for ajax-loaded stuff
 	if(!isset($User) || !is_object($User)) {
 		/* functions */
@@ -27,69 +27,37 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 
 		# validate in inputs
 		if(!is_numeric($_POST['rackid'])) 	{ print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid ID"), false, false, true)."</td></tr>"; die(); }
-		if($_POST['action']!=="add") {
-			if(!is_numeric($_POST['deviceid'])) { print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid ID"), false, false, true)."</td></tr>"; die(); }
-		}
 		# fetch rack
 		$rack = $User->fetch_object ("racks", "id", $_POST['rackid']);
 		if($rack===false) 					{ print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid rack"), false, false, true)."</td></tr>"; die(); }
 
-		# fetch device
-		if($_POST['action']!=="add") {
+		if (isset($_POST['deviceid'])) {
+			if(!is_numeric($_POST['deviceid'])) { print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid ID"), false, false, true)."</td></tr>"; die(); }
+			# fetch device
 			$device = $User->fetch_object ("devices", "id", $_POST['deviceid']);
 			if($device===false) 				{ print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid device"), false, false, true)."</td></tr>"; die(); }
 			$device = (array) $device;
-		}
-		else {
+		} else {
 			$device = [];
 		}
 	}
 	# fetch rack details if set on edit
 	else {
+
 		if (@$device['rack']>0) {
 			$rack = $User->fetch_object ("racks", "id", $device['rack']);
 		}
 	}
 
+	# check permissions
+	$User->check_module_permissions ("racks", User::ACCESS_R, true, false);
+
 	# rack devices
 	$rack_devices = $Racks->fetch_rack_devices($rack->id);
+	$rack_contents = $Racks->fetch_rack_contents($rack->id);
 
 	// available spaces
-	$available = array();
-	$available_back = array ();
-
-	for($m=1; $m<=$rack->size; $m++) {
-	    $available[$m] = $m;
-	}
-	// available back
-	if($rack->hasBack!="0") {
-	for($m=1; $m<=$rack->size; $m++) {
-	    $available_back[$m+$rack->size] = $m;
-	}
-	}
-
-	if($rack_devices!==false) {
-	    // front side
-	    foreach ($rack_devices as $d) {
-	        for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
-	            if(array_key_exists($m, $available)) {
-	            	if($m!=@$device['rack_start']) {
-	                	unset($available[$m]);
-		            }
-	            }
-	        }
-	    }
-	    // back side
-	    foreach ($rack_devices as $d) {
-	        for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
-	            if(array_key_exists($m, $available_back)) {
-	            	if($m!=@$device['rack_start']) {
-		                unset($available_back[$m]);
-					}
-	            }
-	        }
-	    }
-	}
+	list($available, $available_back) = $Racks->free_u($rack, $rack_devices, $rack_contents, $device);
 	?>
 
 	<tr>

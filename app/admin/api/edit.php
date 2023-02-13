@@ -36,7 +36,7 @@ if($_POST['action']!="add") {
 } else {
 	# generate new code
 	$api = new StdClass;
-	$api->app_code = $User->Crypto->generate_token();
+	$api->app_code = $User->Crypto->generate_html_safe_token(32);
 	# title
 	$title = _('Add new api key');
 }
@@ -44,7 +44,7 @@ if($_POST['action']!="add") {
 
 
 <!-- header -->
-<div class="pHeader"><?php print $title; ?></div>
+<div class="pHeader"><?php print $title.$User->print_doc_link("API"); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -77,10 +77,10 @@ if($_POST['action']!="add") {
 	    <td>
 	    	<select name="app_permissions" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>"Disabled",1=>"Read",2=>"Read / Write",3=>"Read / Write / Admin");
+	    	$perms = array(0=>_("Disabled"),1=>_("Read"),2=>_("Read / Write"),3=>_("Read / Write / Admin"));
 	    	foreach($perms as $k=>$p) {
-		    	if($k==$api->app_permissions)	{ print "<option value='$k' selected='selected'>"._($p)."</option>"; }
-		    	else							{ print "<option value='$k' 				   >"._($p)."</option>"; }
+		    	if($k==$api->app_permissions)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
+		    	else							{ print "<option value='$k' 				   >".$p."</option>"; }
 	    	}
 	    	?>
 	    	</select>
@@ -94,14 +94,11 @@ if($_POST['action']!="add") {
 	    <td>
 	    	<select name="app_security" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>"crypt",1=>"ssl",2=>"none",3=>"user");
-
-	    	// user not yet supported
-	    	unset($perms[3]);
+	    	$perms = array("ssl_token"=>_("SSL with User token"), "ssl_code"=>_("SSL with App code token"), "crypt"=>_("Encrypted"), "none"=>_("User token"));
 
 	    	foreach($perms as $k=>$p) {
-		    	if($p==$api->app_security)		{ print "<option value='$p' selected='selected'>"._($p)."</option>"; }
-		    	else							{ print "<option value='$p' 				   >"._($p)."</option>"; }
+		    	if($k==$api->app_security)		{ print "<option value='$k' selected='selected'>$p</option>"; }
+		    	else							{ print "<option value='$k' 				   >$p</option>"; }
 	    	}
 	    	?>
 	    	</select>
@@ -115,10 +112,10 @@ if($_POST['action']!="add") {
 	    <td>
 	    	<select name="app_lock" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>"No",1=>"Yes");
+	    	$perms = array(0=>_("No"),1=>_("Yes"));
 	    	foreach($perms as $k=>$p) {
-		    	if($k==$api->app_lock)	{ print "<option value='$k' selected='selected'>"._($p)."</option>"; }
-		    	else					{ print "<option value='$k' 				   >"._($p)."</option>"; }
+		    	if($k==$api->app_lock)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
+		    	else					{ print "<option value='$k' 				   >".$p."</option>"; }
 	    	}
 	    	?>
 	    	</select>
@@ -130,7 +127,7 @@ if($_POST['action']!="add") {
 	<tr>
 	    <td><?php print _('Lock timeout'); ?></td>
 	    <td>
-	    	<input name="app_lock_wait" class="form-control input-sm input-w-auto" value="<?php print $Admin->strip_xss($api->app_lock_wait); ?>">
+	    	<input name="app_lock_wait" class="form-control input-sm input-w-auto" value="<?php print $Admin->strip_xss(@$api->app_lock_wait); ?>">
 	    </td>
        	<td class="info2"><?php print _('Seconds to wait for transaction lock to clear'); ?></td>
     </tr>
@@ -141,10 +138,10 @@ if($_POST['action']!="add") {
 	    <td>
 	    	<select name="app_nest_custom_fields" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>"No",1=>"Yes");
+	    	$perms = array(0=>_("No"),1=>_("Yes"));
 	    	foreach($perms as $k=>$p) {
-		    	if($k==$api->app_nest_custom_fields)	{ print "<option value='$k' selected='selected'>"._($p)."</option>"; }
-		    	else									{ print "<option value='$k' 				   >"._($p)."</option>"; }
+		    	if($k==$api->app_nest_custom_fields)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
+		    	else									{ print "<option value='$k' 				   >".$p."</option>"; }
 	    	}
 	    	?>
 	    	</select>
@@ -158,10 +155,10 @@ if($_POST['action']!="add") {
 	    <td>
 	    	<select name="app_show_links" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>"No",1=>"Yes");
+	    	$perms = array(0=>_("No"),1=>_("Yes"));
 	    	foreach($perms as $k=>$p) {
-		    	if($k==$api->app_show_links)	{ print "<option value='$k' selected='selected'>"._($p)."</option>"; }
-		    	else							{ print "<option value='$k' 				   >"._($p)."</option>"; }
+		    	if($k==$api->app_show_links)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
+		    	else							{ print "<option value='$k' 				   >".$p."</option>"; }
 	    	}
 	    	?>
 	    	</select>

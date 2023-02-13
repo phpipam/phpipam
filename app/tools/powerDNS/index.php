@@ -9,7 +9,7 @@ $User->check_user_session();
 
 <?php
 # check permissions
-if ($User->is_admin(false) || $User->user->pdns=="Yes") {
+if ($User->get_module_permissions ("pdns")>=User::ACCESS_R) {
 ?>
     <div class="powerDNS">
 
@@ -26,7 +26,7 @@ if ($User->is_admin(false) || $User->user->pdns=="Yes") {
 
         // check if TTL is set
         if ($test!==false) {
-            $test_ttl = json_decode($User->settings->powerDNS);
+            $test_ttl = pf_json_decode($User->settings->powerDNS);
             if ($test_ttl->ttl==NULL) {
                 $Result->show("warning", "Please set <a href='".create_link("administration", "powerDNS", "defaults")."'>default powerDNS values</a>!", false);
             }
@@ -81,6 +81,5 @@ if ($User->is_admin(false) || $User->user->pdns=="Yes") {
     <?php
 }
 else {
-    $Result->show("danger alert-absolute", _('You do not have permission to manage DNS. Please contact administrator!'), false);
+    $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
-?>

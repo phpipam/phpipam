@@ -8,15 +8,6 @@
 
 class Tools_controller extends Common_api_functions {
 
-
-	/**
-	 * _params provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
 	/**
 	 * subcontrollers
 	 *
@@ -41,45 +32,6 @@ class Tools_controller extends Common_api_functions {
 	 */
 	protected $identifiers;
 
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Response
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Response;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-	/**
-	 * Main Admin class
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Admin;
-
-	/**
-	 * Main Subnets class
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Subnets;
 
 	/**
 	 * __construct function
@@ -135,7 +87,8 @@ class Tools_controller extends Common_api_functions {
 										"scanAgents"  => "scanagents",
 										"locations"   => "locations",
 										"racks"       => "racks",
-										"nat"         => "nat"
+										"nat"         => "nat",
+										"customers"   => "customers"
 									  );
 	}
 
@@ -156,7 +109,8 @@ class Tools_controller extends Common_api_functions {
 								"scanAgents"  => array("id2"),
 								"locations"   => array("id2", "id3"),
 								"racks"       => array("id2", "id3"),
-								"nat"         => array("id2", "id3")
+								"nat"         => array("id2", "id3"),
+								"customers"   => array("id2")
 								);
 	}
 
@@ -257,7 +211,7 @@ class Tools_controller extends Common_api_functions {
 		if (!isset($this->_params->id2)) {
 			$result = $this->Tools->fetch_all_objects ($this->_params->id,  $this->sort_key);
 			// result
-			if($result===false)							{ $this->Response->throw_exception(200, 'No objects found'); }
+			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, false)); }
 		}
 		# by parameter
@@ -280,7 +234,7 @@ class Tools_controller extends Common_api_functions {
                     		$result[$k]->gatewayId = $gateway->id;
                 		}
                     	//nameservers
-                		$ns = $this->read_subnet_nameserver ($r);
+                		$ns = $this->read_subnet_nameserver ($r->nameserverId);
                         if ($ns!==false) {
                             $result[$k]->nameservers = $ns;
                         }
@@ -353,7 +307,7 @@ class Tools_controller extends Common_api_functions {
 				$result = $this->Tools->fetch_multiple_objects ("ipaddresses", $field, $this->_params->id2, $this->sort_key, true);
 			}
 			// result
-			if($result===false)							{ $this->Response->throw_exception(200, 'No objects found'); }
+			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, true)); }
 
 		}
@@ -364,7 +318,7 @@ class Tools_controller extends Common_api_functions {
 
 			$result = $this->Tools->fetch_object ($this->_params->id, $this->sort_key, $this->_params->id2);
 			// result
-			if($result===false)							{ $this->Response->throw_exception(200, 'No objects found'); }
+			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, false)); }
 		}
 	}
@@ -385,17 +339,12 @@ class Tools_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function POST () {
-		# vlans, vrfs
-		if ($this->_params->id=="vlans" || $this->_params->id=="vrf")
-													{ $this->Response->throw_exception(400, 'Please use '.$this->_params->id.' controller'); }
+		# rewrite tool controller _params
+		$table_name = $this->rewrite_tool_input_params ();
 
-		# remap keys
-		$this->remap_keys ();
-
-		# Get coordinates if locations
-		if($this->_params->id=="locations") {
-			$values = $this->format_location ();
-		}
+		# Get coordinates if address is set
+		if(property_exists($this->_params, 'address') && in_array('lat', $this->valid_keys))
+			$this->format_location ();
 
 		# check for valid keys
 		$values = $this->validate_keys ();
@@ -403,32 +352,16 @@ class Tools_controller extends Common_api_functions {
 		# validations
 		$this->validate_post_patch ();
 
-		# only 1 parameter ?
-		if (sizeof($values)==1)						{ $this->Response->throw_exception(400, 'No parameters'); }
+		# Need at least 1 parameter
+		if (sizeof($values)==0)
+			$this->Response->throw_exception(400, 'No parameters');
 
 		# execute update
-		if(!$this->Admin->object_modify ($this->_params->id, "add", "", $values))
-													{ $this->Response->throw_exception(500, $this->_params->id." object creation failed"); }
-		else {
-			//set result
-			return array("code"=>201, "data"=>$this->_params->id." object created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/tools/".$this->_params->id."/".$this->Admin->lastId."/");
-		}
+		if(!$this->Admin->object_modify ($table_name, "add", "", $values))
+			$this->Response->throw_exception(500, $table_name." object creation failed");
 
-	}
-
-
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function HEAD () {
-		return $this->GET ();
+		//set result
+		return array("code"=>201, "data"=>$table_name." object created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/tools/".$table_name."/".$this->Admin->lastId."/");
 	}
 
 
@@ -442,36 +375,32 @@ class Tools_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function PATCH () {
-		# vlans, vrfs
-		if ($this->_params->id=="vlans" || $this->_params->id=="vrf")
-													{ $this->Response->throw_exception(400, 'Please use '.$this->_params->id.' controller'); }
-		# remap keys
-		$this->remap_keys ();
+		# rewrite tool controller _params
+		$table_name = $this->rewrite_tool_input_params();
 
-		# verify object
-		$this->validate_tools_object ();
-
-		# validations
-		$this->validate_post_patch ();
-
-		# rewrite keys - id2 must become id and unset
-		$table_name = $this->_params->id;
-		$this->_params->id = $this->_params->id2;
-		unset($this->_params->id2);
+		# Get coordinates if address is changed
+		if(property_exists($this->_params, 'address') && in_array('lat', $this->valid_keys))
+			$this->format_location ();
 
 		# validate and prepare keys
 		$values = $this->validate_keys ();
 
-		# only 1 parameter ?
-		if (sizeof($values)==1)						{ $this->Response->throw_exception(400, 'No parameters'); }
+		# validations
+		$this->validate_post_patch ();
+
+		# verify object
+		$this->validate_tools_object ($table_name);
+
+		# Need at least 2 parameter (id + patch field)
+		if (sizeof($values)<=1)
+			$this->Response->throw_exception(400, 'No parameters');
 
 		# execute update
-		if(!$this->Admin->object_modify ($table_name, "edit",  $this->sort_key, $values))
-													{ $this->Response->throw_exception(500, $table_name." object edit failed"); }
-		else {
-			//set result
-			return array("code"=>200, "message"=>$table_name." object updated");
-		}
+		if(!$this->Admin->object_modify ($table_name, "edit", $this->sort_key, $values))
+			$this->Response->throw_exception(500, $table_name." object edit failed");
+
+		//set result
+		return array("code"=>200, "message"=>$table_name." object updated");
 	}
 
 
@@ -485,34 +414,59 @@ class Tools_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function DELETE () {
-		# vlans, vrfs
-		if ($this->_params->id=="vlans" || $this->_params->id=="vrf")
-													{ $this->Response->throw_exception(400, 'Please use '.$this->_params->id.' controller'); }
+		# rewrite tool controller _params
+		$table_name = $this->rewrite_tool_input_params();
 
 		# verify object
-		$this->validate_tools_object ();
+		$this->validate_tools_object ($table_name);
 
 		# set variables for delete
 		$values = array();
-		$values[$this->sort_key] = $this->_params->id2;
+		$values[$this->sort_key] = $this->_params->{$this->sort_key};
 
 		# execute delete
-		if(!$this->Admin->object_modify ($this->_params->id, "delete",  $this->sort_key, $values))
-													{ $this->Response->throw_exception(500, $this->_params->id." object delete failed"); }
-		else {
-			// set update field
-			if ($this->_params->id == "devices")	{ $update_field = "switch"; }
-			elseif ($this->_params->id == "ipTags")	{ $update_field = "state"; }
+		if(!$this->Admin->object_modify ($table_name, "delete", $this->sort_key, $values))
+			$this->Response->throw_exception(500, $table_name." object delete failed");
 
-			// delete all references
-			if (isset($update_field))
-			$this->Admin->remove_object_references ("ipaddresses", $update_field, $this->_params->id2);
+		// set update field
+		if ($table_name == "devices")	{ $update_field = "switch"; }
+		if ($table_name == "ipTags")	{ $update_field = "state"; }
 
-			// set result
-			return array("code"=>200, "message"=>$this->_params->id." object deleted");
-		}
+		// delete all references
+		if (isset($update_field))
+			$this->Admin->remove_object_references ("ipaddresses", $update_field, $this->_params->{$this->sort_key});
+
+		// set result
+		return array("code"=>200, "message"=>$table_name." object deleted");
 	}
 
+	/**
+	 * Remap _Params and record re table name
+	 * @return mixed
+	 */
+	private function rewrite_tool_input_params() {
+		$table_name = $this->_params->id;
+
+		# vlans, vrfs
+		if (in_array($table_name, ["vlans", "vrf"]))
+			$this->Response->throw_exception(400, 'Please use '.$table_name.' controller');
+
+		# remove table_name and rewrite _params
+		unset($this->_params->id);
+		if (isset($this->_params->id2)) {
+			$this->_params->id = $this->_params->id2;
+			unset($this->_params->id2);
+		}
+		if (isset($this->_params->id3)) {
+			$this->_params->id2 = $this->_params->id3;
+			unset($this->_params->id3);
+		}
+
+		# remap remaining keys
+		$this->remap_keys (null, null, $table_name);
+
+		return $table_name;
+	}
 
 
 
@@ -570,9 +524,10 @@ class Tools_controller extends Common_api_functions {
 	 * @access private
 	 * @return void
 	 */
-	private function validate_tools_object () {
-		if ($this->Tools->fetch_object ($this->_params->id, $this->sort_key, $this->_params->id2)===false)
-																			{ $this->Response->throw_exception(400, "Invalid identifier"); }
+	private function validate_tools_object ($table_name) {
+		$obj = $this->Tools->fetch_object ($table_name, $this->sort_key, $this->_params->{$this->sort_key});
+		if (!is_object($obj))
+			$this->Response->throw_exception(400, "Invalid identifier");
 	}
 
 	/**
@@ -618,36 +573,15 @@ class Tools_controller extends Common_api_functions {
 	}
 
 	/**
-	 * Returns id of subnet gateay
-	 *
-	 * @access private
-	 * @params mixed $subnetId
-	 * @return void
-	 */
-	private function read_subnet_gateway ($subnetId) {
-    	return $this->Subnets->find_gateway ($subnetId);
-	}
-
-	/**
-	 * Returns nameserver details
-	 *
-	 * @param result $obj
-	 * @return void
-	 */
-	private function read_subnet_nameserver ($result) {
-    	return $this->Tools->fetch_object ("nameservers", "id", $result->nameserverId);
-	}
-
-	/**
 	 * Parses NAT objects into array.
 	 *
 	 * @access private
-	 * @param json $obj
+	 * @param string $obj
 	 * @return array
 	 */
 	private function parse_nat_objects ($obj) {
     	if($this->Tools->validate_json_string($obj)!==false) {
-        	return(json_decode($obj, true));
+        	return(pf_json_decode($obj, true));
     	}
     	else {
         	return array ();
@@ -655,14 +589,15 @@ class Tools_controller extends Common_api_functions {
 	}
 
 	/**
-	 * Get latlng from Google
+	 * Get latlng from Nominatim
 	 *
 	 * @method format_location
-	 * @return [type]          [description]
+	 * @return void
 	 */
 	private function format_location () {
-		if((strlen(@$this->_params->lat)==0 || strlen(@$this->_params->long)==0) && strlen(@$this->_params->address)>0) {
-            $latlng = $this->Tools->get_latlng_from_address ($this->_params->address);
+		if((is_blank(@$this->_params->lat) || is_blank(@$this->_params->long)) && !is_blank(@$this->_params->address)) {
+            $OSM = new OpenStreetMap($this->Database);
+            $latlng = $OSM->get_latlng_from_address ($this->_params->address);
             if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
                 $this->_params->lat  = $latlng['lat'];
                 $this->_params->long = $latlng['lng'];

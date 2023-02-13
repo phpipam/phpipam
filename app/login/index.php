@@ -8,8 +8,8 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
     // try to authenticate
 	$User->authenticate ($_SERVER['PHP_AUTH_USER'], '');
 	// Redirect user where he came from, if unknown go to dashboard.
-	if( isset($_COOKIE['phpipamredirect']) )    { header("Location: ".$_COOKIE['phpipamredirect']); }
-	else                                        { header("Location: ".create_link("dashboard")); }
+	if ($redirect = $User->get_redirect_cookie()) { header("Location: " . $redirect); }
+	else                                          { header("Location: " . create_link("dashboard")); }
 	exit();
 }
 // disable requests module for public
@@ -50,16 +50,16 @@ if(@$config['requests_public']===false) {
 	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/jquery-3.1.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-	<script type="text/javascript" src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-	<script type="text/javascript">
+	<script src="js/jquery-3.5.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script>
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script type="text/javascript" src="js/dieIE.js"></script>
+	<script src="js/dieIE.js"></script>
 	<![endif]-->
 </head>
 
@@ -115,19 +115,20 @@ if(@$config['requests_public']===false) {
 	<?php
 	# set default language
 	if(isset($User->settings->defaultLang) && !is_null($User->settings->defaultLang) ) {
-		# get language
+		# get global default language
 		$lang = $User->get_default_lang();
-
-		putenv("LC_ALL=".$lang->l_code);
-		setlocale(LC_ALL, $lang->l_code);					// set language
-		bindtextdomain("phpipam", "./functions/locale");	// Specify location of translation tables
-		textdomain("phpipam");								// Choose domain
+		if (is_object($lang))
+			set_ui_language($lang->l_code);
 	}
 	?>
 
 	<?php
 	# include proper subpage
-	if($_GET['page'] == "login") 				{ include_once('login_form.php'); }
+	if($_GET['page'] == "login") 				{
+		# disable main login form if you want use another authentification method by default (SAML, LDAP, etc.)
+		$include_main_login_form = !isset($config['disable_main_login_form']) || !$config['disable_main_login_form'];
+		if ($include_main_login_form) include_once('login_form.php');
+	}
 	else if ($_GET['page'] == "request_ip") 	{ include_once('request_ip_form.php'); }
 	else 										{ $_GET['subnetId'] = "404"; print "<div id='error'>"; include_once('app/error.php'); print "</div>"; }
 	?>
@@ -138,11 +139,13 @@ if(@$config['requests_public']===false) {
 		# deauthenticate user
 		if ( $User->is_authenticated()===true ) {
 			# print result
-			if($_GET['section']=="timeout")		{ $Result->show("success", _('You session has timed out')); }
-			else								{ $Result->show("success", _('You have logged out')); }
+			if(isset($_GET['section']) && $_GET['section']=="timeout")
+				$Result->show("success", _('You session has timed out'));
+			else
+				$Result->show("success", _('You have logged out'));
 
 			# write log
-			$Log->write( "User logged out", "User $User->username has logged out", 0, $User->username );
+			$Log->write( _("User logged out"), _("User")." ".$User->username." "._("has logged out"), 0, $User->username );
 
 			# destroy session
 			$User->destroy_session();
@@ -150,8 +153,16 @@ if(@$config['requests_public']===false) {
 
 		//check if SAML2 login is possible
 		$saml2settings=$Tools->fetch_object("usersAuthMethod", "type", "SAML2");
-		if($saml2settings!=false){
-			$Result->show("success", _('You can login with SAML2 <a href="'.create_link('saml2').'">here</a>'));
+
+		if ($saml2settings!=false) {
+			$version = pf_json_decode(@file_get_contents(dirname(__FILE__).'/../../functions/php-saml/src/Saml2/version.json'), true);
+			$version = $version['php-saml']['version'];
+
+			if ($version < 3.4) {
+				$Result->show("danger", _('php-saml library missing, please update submodules'));
+			} else {
+				$Result->show("success", _('You can login with SAML2').' <a href="'.create_link('saml2').'">'._('here').'</a>!');
+			}
 		}
 
 		?>

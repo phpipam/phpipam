@@ -10,13 +10,20 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Sections	= new Sections ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("l2dom", User::ACCESS_RW, true, true);
+}
+else {
+    $User->check_module_permissions ("l2dom", User::ACCESS_RWA, true, true);
+}
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "vlan_domain");
@@ -33,7 +40,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });
@@ -76,7 +83,7 @@ $(document).ready(function(){
 		# select sections
 		$sections = $Sections->fetch_all_sections();
 		# reformat domains sections to array
-		$domain_sections = explode(";", @$l2_domain['permissions']);
+		$domain_sections = pf_explode(";", @$l2_domain['permissions']);
 		$domain_sections = is_array($domain_sections) ? $domain_sections : array();
 		// loop
 		if($sections!==false) {

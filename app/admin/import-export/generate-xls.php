@@ -16,6 +16,7 @@ $Sections	= new Sections ($Database);
 $Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 $Tools		= new Tools ($Database);
+$Admin		= new Admin ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
@@ -96,9 +97,9 @@ foreach ($sections as $section) {
 		if($subnet['isFolder']!="1") {
 			//vlan details
 			$vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
-			if(strlen($vlan['number']) > 0) {
+			if(!is_blank($vlan['number'])) {
 				$vlanText = " (vlan: " . $vlan['number'];
-				if(strlen($vlan['name']) > 0) {
+				if(!is_blank($vlan['name'])) {
 					$vlanText .= ' - '. $vlan['name'] . ')';
 				}
 				else {
@@ -138,7 +139,7 @@ foreach ($sections as $section) {
 
 			$lineCount++;
 
-			if(sizeof($ipaddresses) > 0) {
+			if(is_array($ipaddresses) && sizeof($ipaddresses) > 0) {
 
 			foreach ($ipaddresses as $ip) {
 				//cast
@@ -149,7 +150,7 @@ foreach ($sections as $section) {
 				else										{ $ip['state'] = ""; }
 
 				//change switch ID to name
-				$ip['switch'] = is_null($ip['switch'])||strlen($ip['switch'])==0||$ip['switch']==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
+				$ip['switch'] = is_null($ip['switch'])||is_blank($ip['switch'])||$ip['switch']==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
 
 				$worksheet->write($lineCount, 0, $Subnets->transform_to_dotted($ip['ip_addr']), $format_left);
 				$worksheet->write($lineCount, 1, $ip['state']);

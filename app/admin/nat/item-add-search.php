@@ -10,18 +10,20 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# validate permissions
+$User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "nat_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # length
-if(strlen($_POST['ip'])==0)   { $Result->show("danger", _("Please enter IP address"), true); }
+if(is_blank($_POST['ip']))   { $Result->show("danger", _("Please enter IP address"), true); }
 # id
 if(!is_numeric($_POST['id'])) { $Result->show("danger", _("Invalid NAT item ID"), true); }
 # type
@@ -43,8 +45,8 @@ $search_term = str_replace("*", "%", $search_term);
 
 # fetch old details
 $nat = $Tools->fetch_object("nat", "id", $_POST['id']);
-$nat->src = json_decode($nat->src, true);
-$nat->dst = json_decode($nat->dst, true);
+$nat->src = pf_json_decode($nat->src, true);
+$nat->dst = pf_json_decode($nat->dst, true);
 
 // identify
 $type = $Admin->identify_address( $search_term ); //identify address type
@@ -59,7 +61,12 @@ $result_addresses = $Tools->search_addresses($search_term, $search_term_edited['
 $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip']. array());
 
 # if some found print
-if(sizeof($result_addresses)>0 && sizeof($result_subnets)>0) {
+if(sizeof($result_addresses)>0 || sizeof($result_subnets)>0) {
+
+    // init arrays
+    $html1 = [];
+    $html2 = [];
+
     if(sizeof($result_subnets)>0) {
         $html1[] = "<h4>Subnets</h4>";
         foreach ($result_subnets as $s) {
@@ -83,4 +90,3 @@ if(sizeof($result_addresses)>0 && sizeof($result_subnets)>0) {
 else {
     $Result->show("info", _("No results found"), false);
 }
-?>

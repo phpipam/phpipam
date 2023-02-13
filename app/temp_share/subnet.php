@@ -35,7 +35,7 @@ if($slaves) {
 } else {
 	$addresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
 }
-$subnet_usage  = $Subnets->calculate_subnet_usage ($subnet, true);		//Calculate free/used etc
+$subnet_usage  = $Subnets->calculate_subnet_usage ($subnet);		//Calculate free/used etc
 
 ?>
 

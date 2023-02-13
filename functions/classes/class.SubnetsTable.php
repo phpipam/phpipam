@@ -47,7 +47,7 @@ class SubnetsTable {
 
 		$this->Tools->get_Settings();
 
-		$hiddenCustomFields = json_decode($this->Tools->settings->hiddenCustomFields, true);
+		$hiddenCustomFields = pf_json_decode($this->Tools->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
 		$this->hidden_fields = is_array($hiddenCustomFields['subnets']) ? $hiddenCustomFields['subnets'] : array();
 
 		# fetch all vlans and domains and reindex
@@ -69,7 +69,7 @@ class SubnetsTable {
 		if (!isset($subnet->ip)) {
 			$subnet->ip = $this->Tools->transform_to_dotted($subnet->subnet);
 		}
-		if (is_object($subnet->masterSubnet) && !isset($subnet->masterSubnet->ip)) {
+		if (is_object($subnet->masterSubnet) && $subnet->masterSubnet->isFolder!=1 && !isset($subnet->masterSubnet->ip)) {
 			$subnet->masterSubnet->ip = $this->Tools->transform_to_dotted($subnet->masterSubnet->subnet);
 		}
 
@@ -83,7 +83,7 @@ class SubnetsTable {
 
 		$tr = array();
 		# description
-		$description = strlen($subnet->description)==0 ? "/" : $subnet->description;
+		$description = is_blank($subnet->description) ? "/" : $subnet->description;
 
 		if ($subnet->isFolder == 1) {
 			$tr['subnet'] = "<span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-sfolder fa-pad-right-3 fa-folder-open'></i> <a href='".create_link("folder",$subnet->sectionId,$subnet->id)."'> $subnet->description</a>";
@@ -104,8 +104,11 @@ class SubnetsTable {
 		}
 
 		//vlan
-		$tr['vlan'] = $this->all_vlans[$subnet->vlanId]->domainId==1 ? $this->all_vlans[$subnet->vlanId]->number : $this->all_vlans[$subnet->vlanId]->number." <span class='badge badge1 badge5' rel='tooltip' title='VLAN is in domain ".$this->all_vlans[$subnet->vlanId]->domainName."'>".$this->all_vlans[$subnet->vlanId]->domainName."</span>";
-
+		if (isset($this->all_vlans[$subnet->vlanId]->number)) {
+			$tr['vlan'] = $this->all_vlans[$subnet->vlanId]->domainId==1 ? $this->all_vlans[$subnet->vlanId]->number : $this->all_vlans[$subnet->vlanId]->number." <span class='badge badge1 badge5' rel='tooltip' title='"._('VLAN is in domain'). ".$this->all_vlans[$subnet->vlanId]->domainName.'>".$this->all_vlans[$subnet->vlanId]->domainName."</span>";
+		} else {
+			$tr['vlan'] = _('Default');
+		}
 		//vrf
 		if($this->Tools->settings->enableVRF == 1) {
 			# fetch vrf
@@ -141,9 +144,10 @@ class SubnetsTable {
 			}
 		}
 
-		//requests
-		if ($this->Tools->settings->enableIPrequests == 1) {
-			$tr['requests'] = $subnet->allowRequests==1 ? "<i class='fa fa-gray fa-check'></i>" : "/";
+		// customer
+		if ($this->Tools->settings->enableCustomers == 1) {
+			$customer = $this->Tools->fetch_object ("customers", "id", $subnet->customer_id);
+			$tr['customer'] = $customer===false ? "/" : $customer->title." <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a>";
 		}
 
 		//custom
@@ -162,12 +166,12 @@ class SubnetsTable {
 					}
 					//text
 					elseif($field['type']=="text") {
-						if(strlen($subnet->{$field['name']})>0)
-							$tr[$field_name] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='". htmlentities($subnet->{$field['name']}) ."'>";
+						if(!is_blank($subnet->{$field['name']}))
+							$tr[$field_name] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='". ($subnet->{$field['name']}) ."'>";
 						else
 							$tr[$field_name] = '';
 					} else {
-						$tr[$field_name] = htmlentities($subnet->{$field['name']});
+						$tr[$field_name] = ($subnet->{$field['name']});
 					}
 				}
 			}

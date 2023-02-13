@@ -49,7 +49,7 @@ $Database = new Database_PDO;
 $Tools = new Tools($Database);
 
 # fetch module settings
-$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings,true);
 
 # check if subnetPatternValues are already available, if not set them
 if (!$firewallZoneSettings['subnetPatternValues']) {
@@ -72,7 +72,7 @@ $namePattern = array (	'patternIndicator' 	=> '<span class="label label-default"
 						'patternSeparator' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternSeparator">'.$firewallZoneSettings['separator'].'</span>');
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 	/* bootstrap switch */
 	var switch_options = {
@@ -143,7 +143,7 @@ $(function() {
 			</select>
 		</td>
 		<td>
-			<span class="text-muted"><?php print _("Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot."); ?></span>
+			<span class="text-muted"><?php print _("Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot;."); ?></span>
 		</td>
 	</tr>
 	<!-- zone name padding / zero fill -->
@@ -248,7 +248,7 @@ $(function() {
 		<td>
 		</td>
 		<td colspan="2" style="padding-top:15px;">
-			<span class="text-muted"><?php print _('To organize the order of the firewall IP addres object name pattern simply drag and drop the different parts in the lower field.<br>It\'s also possible to reorganize them to fit your needs.'); ?></span>
+			<span class="text-muted"><?php print _('To organize the order of the firewall IP address object name pattern simply drag and drop the different parts in the lower field.<br>It\'s also possible to reorganize them to fit your needs.'); ?></span>
 		</td>
 	</tr>
 	<tr>

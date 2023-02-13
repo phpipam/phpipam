@@ -30,7 +30,7 @@ else {
 
             if ($linked_subnet !== false) {
                 // desc fix
-                $linked_subnet->description = strlen($linked_subnet->description)>0 ? "($linked_subnet->description)" : "";
+                $linked_subnet->description = !is_blank($linked_subnet->description) ? "($linked_subnet->description)" : "";
 
                 print "<tr>";
                 print " <th style='font-weight:normal'>";
@@ -61,7 +61,7 @@ else {
                 print " <ul class='submenu-linked'>";
                 foreach ($is_linked_subnets as $k=>$linked_subnet) {
                     // desc fix
-                    $linked_subnet->description = strlen($linked_subnet->description)>0 ? "($linked_subnet->description)" : "";
+                    $linked_subnet->description = !is_blank($linked_subnet->description) ? "($linked_subnet->description)" : "";
 
                     print "<li style='font-size:13px;'>";
                     print "<i class='icon-gray fa fa-gray fa-angle-right'></i> ";
@@ -114,13 +114,14 @@ else {
 
 	<?php } ?>
 
-	<?php if(@array_key_exists($subnet['id'], $all_nats_per_object['subnets'])) { ?>
+	<?php if(@is_array($all_nats_per_object['subnets'])) { if(@array_key_exists($subnet['id'], $all_nats_per_object['subnets'])) { ?>
 	<tr>
 		<th><?php print _('NAT'); ?></th>
 		<td><?php $Addresses->print_nat_link($all_nats, $all_nats_per_object, $subnet, false, "subnet"); ?> <?php print _("Subnet is natted"); ?></a></td>
 	</tr>
-	<?php } ?>
+	<?php }} ?>
 
+	<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_R) { ?>
 	<tr>
 		<th><?php print _('VLAN'); ?></th>
 		<td>
@@ -131,45 +132,38 @@ else {
 		if(!empty($vlan['name'])) 		 { print ' - '.$vlan['name']; }					//Print name if provided
 		if(!empty($vlan['description'])) { print ' ['. $vlan['description'] .']'; }		//Print description if provided
 		// domain
+		if (isset($vlan['domainId'])) {
     		$l2domain = $Tools->fetch_object("vlanDomains", "id", $vlan['domainId']);
-    		if($l2domain!==false)       { print " <span class='badge badge1 badge5' rel='tooltip' title='VLAN is in domain $l2domain->name'>$l2domain->name "._('Domain')." </span>"; }
+    		if($l2domain!==false)       { print " <span class='badge badge1 badge5' rel='tooltip' title='"._('VLAN is in domain')." $l2domain->name'>$l2domain->name "._('Domain')." </span>"; }
+        }
 		?>
 		</td>
 	</tr>
+	<?php } ?>
 
-	<!-- devices -->
-	<tr>
-		<th><?php print _('Device'); ?></th>
-		<td>
-		<?php
-
-		// Only show device if defined for subnet
-		if(!empty($subnet['device'])) {
-			# fetch recursive nameserver details
-			$device = $Tools->fetch_object("devices", "id", $subnet['device']);
-			if ($device!==false) {
-    			# rack
-    			if ($User->settings->enableRACK=="1" && strlen($device->rack)>0) {
-        			$rack = $Tools->fetch_object("racks", "id", $device->rack);
-        			$rack_text = $rack===false ? "" : "<br><span class='badge badge1 badge5' style='padding-top:4px;'>$rack->name / "._('Position').": $device->rack_start "._("Size").": $device->rack_size U <i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackId='$rack->id' data-deviceId='$device->id'></i></span>";
-    			}
-				print "<a href='".create_link("tools","devices",$device->id)."'>".$device->hostname."</a>";
-				if (strlen($device->description)>0) {
-					print ' ('.$device->description.')';
-				}
-				print $rack_text;
-			}
-			else {
-				print "<span class='text-muted'>/</span>";
-			}
+	<?php
+	# VRF
+	if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
+		# get vrf details
+		$vrf = $Tools->fetch_object("vrf", "vrfId" ,$subnet['vrfId']);
+		# null
+		if($vrf===false) {
+			$vrfText = "<span class='text-muted'>"._("None")."</span>";
 		}
 		else {
-			print "<span class='text-muted'>/</span>";
+			# set text
+			$vrfText = "<a href='".create_link("tools","vrf",$vrf->vrfId)."' target='_blank'>".$vrf->name."</a>";
+			if(!empty($vrf->description)) { $vrfText .= " [$vrf->description]";}
 		}
-		?>
-		</td>
-	</tr>
 
+		print "<tr>";
+		print "	<th>"._('VRF')."</th>";
+		print "	<td>$vrfText</td>";
+		print "</tr>";
+
+		$vrf = (array) $vrf;
+	}
+	?>
 
 	<!-- nameservers -->
 	<tr>
@@ -193,8 +187,70 @@ else {
 		</td>
 	</tr>
 
+	<!-- Customers -->
+	<?php if($User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
+	<tr>
+		<th><?php print _('Customer'); ?></th>
+		<td>
+		<?php
+
+		if(!empty($subnet['customer_id'])) {
+			# fetch recursive nameserver details
+			$customer = $Tools->fetch_object("customers", "id", $subnet['customer_id']);
+			if ($customer!==false) {
+				print $customer->title." <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a>";
+			}
+			else {
+				print "<span class='text-muted'>/</span>";
+			}
+		}
+		else {
+			print "<span class='text-muted'>/</span>";
+		}
+		?>
+		</td>
+	</tr>
+	<?php } ?>
+
+	<?php if($User->get_module_permissions ("devices")>=User::ACCESS_R) { ?>
+	<!-- devices -->
+	<tr>
+		<th><?php print _('Device'); ?></th>
+		<td>
+		<?php
+
+		// Only show device if defined for subnet
+		if(!empty($subnet['device'])) {
+			# fetch recursive nameserver details
+			$device = $Tools->fetch_object("devices", "id", $subnet['device']);
+			if (is_object($device)) {
+				# rack
+				if ($User->settings->enableRACK=="1" && !is_blank($device->rack) && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
+					if (!is_object($Racks)) $Racks = new phpipam_rack ($Database);
+					$Racks->add_rack_start_print($device);
+					$rack = $Tools->fetch_object("racks", "id", $device->rack);
+					$rack_text = !is_object($rack) ? "" : "<br><span class='badge badge1 badge5' style='padding-top:4px;'>$rack->name / "._('Position').": $device->rack_start_print "._("Size").": $device->rack_size U <i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackId='$rack->id' data-deviceId='$device->id'></i></span>";
+				}
+				print "<a href='".create_link("tools","devices",$device->id)."'>".$device->hostname."</a>";
+				if (!is_blank($device->description)) {
+					print ' ('.$device->description.')';
+				}
+				print $rack_text;
+			}
+			else {
+				print "<span class='text-muted'>/</span>";
+			}
+		}
+		else {
+			print "<span class='text-muted'>/</span>";
+		}
+		?>
+		</td>
+	</tr>
+	<?php } ?>
+
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1") { ?>
+	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
 	<tr>
 		<th><?php print _('Location'); ?></th>
 		<td>
@@ -217,27 +273,35 @@ else {
 	</tr>
     <?php } ?>
 
-    <?php if(@$subnet['isFull']=="1") { ?>
+    <?php if(@$subnet['isFull'] || @$subnet['isPool']) { ?>
     <tr>
         <td colspan="2"><hr></td>
     </tr>
     <tr>
         <th></th>
-        <td class="isFull"><?php print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as used"), false, false, true); ?></td>
+        <td class="isFull">
+        <?php
+        if ($subnet['isFull'])
+        print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as full"), false, false, true);
+        if ($subnet['isPool'])
+        print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as pool"), false, false, true);
+        ?></td>
     </tr>
     <?php } ?>
 
+	<?php if($subnet_permission==3) { ?>
     <tr>
     	<th><?php print _("Last edited"); ?></th>
     	<td>
     		<span class="text-muted">
     		<?php
-    		if(strlen($subnet['editDate'])>1)  	{ print $subnet['editDate']; }
-    		else 								{ print "Never"; }
+    		if(!is_blank($subnet['editDate']))  	{ print $subnet['editDate']; }
+    		else 								{ print _("Never"); }
     		?>
     		</span>
     	</td>
     </tr>
+    <?php } ?>
 
     <?php if($User->settings->enableThreshold=="1" && $subnet['threshold']>0) { ?>
     <tr>
@@ -259,31 +323,6 @@ else {
     <?php } ?>
 
 	<?php
-	# VRF
-	if($User->settings->enableVRF==1) {
-		# get vrf details
-		$vrf = $Tools->fetch_object("vrf", "vrfId" ,$subnet['vrfId']);
-		# null
-		if($vrf===false) {
-			$vrfText = "<span class='text-muted'>"._("None")."</span>";
-		}
-		else {
-			# set text
-			$vrfText = $vrf->name;
-			if(!empty($vrf->description)) { $vrfText .= " [$vrf->description]";}
-		}
-
-        print "<tr>";
-        print "<td colspan='2'><hr></td>";
-        print "</tr>";
-		print "<tr>";
-		print "	<th>"._('VRF')."</th>";
-		print "	<td>$vrfText</td>";
-		print "</tr>";
-
-		$vrf = (array) $vrf;
-	}
-
 	# FW zone info
 	if($User->settings->enableFirewallZones==1) {
 		# class
@@ -292,9 +331,9 @@ else {
 
 		if ($fwZone!==false) {
 			// alias fix
-			$fwZone->alias 		= strlen($fwZone->alias)>0 ? "(".$fwZone->alias.")" : "";
-			$fwZone->description 	= strlen($fwZone->description)>0 ? " - ".$fwZone->description : "";
-			$fwZone->interface 	= strlen($fwZone->interface)>0 ? "(".$fwZone->interface.")" : "";
+			$fwZone->alias 		= !is_blank($fwZone->alias) ? "(".$fwZone->alias.")" : "";
+			$fwZone->description 	= !is_blank($fwZone->description) ? " - ".$fwZone->description : "";
+			$fwZone->interface 	= !is_blank($fwZone->interface) ? "(".$fwZone->interface.")" : "";
 
 			# divider
 			print "<tr>";
@@ -329,7 +368,7 @@ else {
 	if(!$slaves) {
 
 		# Are IP requests allowed?
-		if ($User->settings->enableIPrequests==1) {
+		if ($User->settings->enableIPrequests==1 && $subnet_permission==3) {
 			# divider
 			print "<tr>";
 			print "	<td colspan='2'><hr></td>";
@@ -343,52 +382,55 @@ else {
 			print "</tr>";
 		}
 
-		# divider
-		print "<tr>";
-		print "	<td colspan='2'><hr></td>";
-		print "</tr>";
+		# admin only
+		if($subnet_permission==3) {
+			# divider
+			print "<tr>";
+			print "	<td colspan='2'><hr></td>";
+			print "</tr>";
 
-		# agent
-		if ($subnet['pingSubnet']==1 || $subnet['discoverSubnet']==1) {
-		print "<tr>";
-		print "	<th>"._('Scan agent')."</th>";
-		print "	<td>";
-		// fetch
-		$agent = $Tools->fetch_object ("scanAgents", "id", $subnet['scanAgent']);
-		if ($agent===false)		{ print _("Invalid scan agent"); }
-		else					{
-			$last_check = is_null($agent->last_access)||$agent->last_access=="0000-00-00 00:00:00"||$agent->last_access=="1970-01-01 00:00:01" ? "Never" : $agent->last_access;
-			print "<strong>".$agent->name ."</strong> (".$agent->description.") <br> <span class='text-muted'>"._("Last check")." $last_check</span>";
+			# agent
+			if ($subnet['pingSubnet']==1 || $subnet['discoverSubnet']==1) {
+			print "<tr>";
+			print "	<th>"._('Scan agent')."</th>";
+			print "	<td>";
+			// fetch
+			$agent = $Tools->fetch_object ("scanAgents", "id", $subnet['scanAgent']);
+			if ($agent===false)		{ print _("Invalid scan agent"); }
+			else					{
+				$last_check = is_null($agent->last_access)||$agent->last_access=="0000-00-00 00:00:00"||$agent->last_access=="1970-01-01 00:00:01" ? "Never" : $agent->last_access;
+				print "<strong>".$agent->name ."</strong> (".$agent->description.") <br> <span class='text-muted'>"._("Last check")." $last_check</span>";
+			}
+			print "	</td>";
+			print "</tr>";
+			}
+
+			# ping-check hosts inside subnet
+			$last_check_s = is_null($subnet['lastScan'])||$subnet['lastScan']==""||$subnet['lastScan']=="0000-00-00 00:00:00" ? "" : " <span class='text-muted'>"._("Last scan")." ".$subnet['lastScan']."</div>";
+			$last_check_d = is_null($subnet['lastDiscovery'])||$subnet['lastDiscovery']==""||$subnet['lastDiscovery']=="0000-00-00 00:00:00" ? "" : " <span class='text-muted'>"._("Last scan")." ".$subnet['lastDiscovery']."</div>";
+
+			print "<tr>";
+			print "	<th>"._('Hosts check')."</th>";
+			if($subnet['pingSubnet'] == 1) 				{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $last_check_s</td>"; }		# yes
+			else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
+			print "</tr>";
+			# scan subnet for new hosts *
+			print "<tr>";
+			print "	<th>"._('Discover new hosts')."</th>";
+			if($subnet['discoverSubnet'] == 1) 			{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $last_check_d</td>"; }		# yes
+			else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
+			print "</tr>";
+			# resolve DNS names
+			print "<tr>";
+			print "	<th>"._('Resolve DNS names')."</th>";
+			if($subnet['resolveDNS'] == 1) 			    { print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
+			else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
+			print "</tr>";
 		}
-		print "	</td>";
-		print "</tr>";
-		}
-
-		# ping-check hosts inside subnet
-		$last_check_s = is_null($subnet['lastScan'])||$subnet['lastScan']==""||$subnet['lastScan']=="0000-00-00 00:00:00" ? "" : " <span class='text-muted'>"._("Last scan")." ".$subnet['lastScan']."</div>";
-		$last_check_d = is_null($subnet['lastDiscovery'])||$subnet['lastDiscovery']==""||$subnet['lastDiscovery']=="0000-00-00 00:00:00" ? "" : " <span class='text-muted'>"._("Last scan")." ".$subnet['lastDiscovery']."</div>";
-
-		print "<tr>";
-		print "	<th>"._('Hosts check')."</th>";
-		if($subnet['pingSubnet'] == 1) 				{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $last_check_s</td>"; }		# yes
-		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
-		print "</tr>";
-		# scan subnet for new hosts *
-		print "<tr>";
-		print "	<th>"._('Discover new hosts')."</th>";
-		if($subnet['discoverSubnet'] == 1) 			{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $last_check_d</td>"; }		# yes
-		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
-		print "</tr>";
-		# resolve DNS names
-		print "<tr>";
-		print "	<th>"._('Resolve DNS names')."</th>";
-		if($subnet['resolveDNS'] == 1) 			    { print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
-		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
-		print "</tr>";
 	}
 
 	# autocreate PTR records
-	if($User->settings->enablePowerDNS==1) {
+	if($User->settings->enablePowerDNS==1 && $subnet_permission==3 && $User->get_module_permissions ("pdns")>=User::ACCESS_R) {
 		// initialize class
 		if ($subnet['DNSrecursive'] == 1 || $subnet['DNSrecords']==1) {
 			# powerDNS class
@@ -402,7 +444,7 @@ else {
 			$domain = $PowerDNS->fetch_domain_by_name ($zone);
 			// count PTR records
 			if ($domain!==false) {
-				if ($User->is_admin (false) || $User->user->pdns=="Yes") {
+				if ($User->check_module_permissions ("pdns", User::ACCESS_RWA, false, false)) {
 				$btns[] = "<div class='btn-group'>";
             if (preg_match("/^.*ip6.arpa$/", $domain->name)) {
 				   $btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("tools", "powerDNS", "reverse_v6", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
@@ -421,7 +463,7 @@ else {
 				$zone = "<span class='text-muted'>(domain $zone)</span> <span class='badge badge1 badge5'>".$PowerDNS->count_domain_records_by_type ($domain->id, "PTR")." records</span>";
 			}
 			else {
-				if ($User->is_admin () || $User->user->pdns=="Yes") {
+				if ($User->check_module_permissions ("pdns", User::ACCESS_RWA, false, false)) {
 				$btns[] = "<div class='btn-group'>";
 				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
 				$btns[] = "</div>";
@@ -458,7 +500,7 @@ else {
 	# custom subnet fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $key=>$field) {
-			if(strlen($subnet[$key])>0) {
+			if(!is_blank($subnet[$key])) {
 				$subnet[$key] = str_replace(array("\n", "\r\n"), "<br>",$subnet[$key]);
 				$html_custom[] = "<tr>";
 				$html_custom[] = "	<th>".$Tools->print_custom_field_name ($key)."</th>";
@@ -469,7 +511,7 @@ else {
 					elseif($subnet[$key] == "1")	{ $html_custom[] = _("Yes"); }
 				}
 				else {
-					$html_custom[] = $Result->create_links($subnet[$key]);
+					$html_custom[] = $Tools->create_links($subnet[$key]);
 				}
 				$html_custom[] = "	</td>";
 				$html_custom[] = "</tr>";
@@ -481,7 +523,7 @@ else {
 			# divider
 			print "<tr>";
 			print "	<th><hr></th>";
-			print "	<td></td>";
+			print "	<td><hr></td>";
 			print "</tr>";
 
 			print implode("\n", $html_custom);
@@ -490,8 +532,8 @@ else {
 
 	# check for temporary shares!
 	if($User->settings->tempShare==1) {
-		if (is_array(json_decode($User->settings->tempAccess, true))) {
-			foreach(json_decode($User->settings->tempAccess) as $s) {
+		if (is_array(pf_json_decode($User->settings->tempAccess, true))) {
+			foreach(pf_json_decode($User->settings->tempAccess) as $s) {
 				if($s->type=="subnets" && $s->id==$subnet['id']) {
 					if(time()<$s->validity) {
 						$active_shares[] = $s;
@@ -657,11 +699,11 @@ else {
 		if($subnet_permission>1 && $User->settings->tempShare==1) {
         print "<a class='btn btn-xs btn-default open_popup' data-script='app/tools/temp-shares/edit.php' data-class='700' data-action='edit' data-id='$subnet[id]' data-type='subnets' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."'><i class='fa fa-share-alt'></i></a>";
 		}
-        print "<a class='mail_subnet btn btn-xs btn-default' href='#' data-id='$subnet[id]' rel='tooltip' data-container='body' title='' data-original-title='Send mail notification'>          <i class='fa fa-gray fa-envelope-o'></i></a>";
+        print "<a class='mail_subnet btn btn-xs btn-default' href='#' data-id='$subnet[id]' rel='tooltip' data-container='body' title='' data-original-title='"._('Send mail notification')."'>          <i class='fa fa-gray fa-envelope-o'></i></a>";
 	print "</div>";
 
 		# firewall address object actions
-		$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings,true);
 		if ( $User->settings->enableFirewallZones == 1 && $subnet_permission > 1) {
 			print "<div class='btn-group'>";
 			print "<a class='subnet_to_zone btn btn-xs btn-default".(($fwZone == false) ? '':' disabled')."' href='' data-container='body' rel='tooltip' title='"._('Map subnet to firewall zone')."' data-subnetId='$subnet[id]' data-operation='subnet2zone'><i class='fa fa-fire'></i></a>";

@@ -10,16 +10,6 @@
 class phpipamSNMP extends Common_functions {
 
 	/**
-	 * Settings
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $settings = false;
-
-	/**
 	 * Saves last result value
 	 *
 	 * (default value: false)
@@ -34,7 +24,7 @@ class phpipamSNMP extends Common_functions {
      *
      * (default value: false)
      *
-     * @var bool
+     * @var SNMP|bool
      * @access private
      */
     private $snmp_session = false;
@@ -90,14 +80,24 @@ class phpipamSNMP extends Common_functions {
 	private $snmp_port = '161';
 
 	/**
-	 * Default snmp timeut in ms
+	 * Default snmp timeout in ms
 	 *
-	 * (default value: '500')
+	 * (default value: '1000')
 	 *
 	 * @var string
 	 * @access private
 	 */
-	private $snmp_timeout = '500';
+	private $snmp_timeout = '1000';
+
+	/**
+	 * Default snmp retries
+	 *
+	 * (default value: '3')
+	 *
+	 * @var string
+	 * @access private
+	 */
+	private $snmp_retries = '3';
 
     /**
     * Object containing SNMPv3 Security session parameters
@@ -110,14 +110,34 @@ class phpipamSNMP extends Common_functions {
     private $snmpv3_security = false;
 
 	/**
-	 * array ob objects of SNMP methods
+	 * array of objects of SNMP methods
 	 *
 	 * (default value: false)
 	 *
-	 * @var bool
+	 * @var mixed
 	 * @access public
 	 */
 	public $snmp_queries = false;
+
+	/**
+	 * array of text to numerical oid mappings.
+	 *
+	 * (default value: false)
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $snmp_oids = false;
+
+	/**
+	 * Device sysObjectID.
+	 *
+	 * (default value: "")
+	 *
+	 * @var string
+	 * @access public
+	 */
+	public $snmp_sysObjectID = "";
 
 	/**
 	 * VLAN number for MAC address fetching
@@ -129,13 +149,6 @@ class phpipamSNMP extends Common_functions {
 	 */
 	public $vlan_number = 1;
 
-	/**
-	 * Result object - for result printing
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
 
 
 
@@ -164,51 +177,76 @@ class phpipamSNMP extends Common_functions {
     	// system info
     	$this->snmp_queries['get_system_info'] = new StdClass();
     	$this->snmp_queries['get_system_info']->id  = 1;
-    	$this->snmp_queries['get_system_info']->oid = ".1.3.6.1.2.1.1.1.0";
-    	$this->snmp_queries['get_system_info']->oid = "SNMPv2-MIB::sysDescr.0";
-    	$this->snmp_queries['get_system_info']->description = "Displays device system info";
+    	$this->snmp_queries['get_system_info']->oid = "SNMPv2-MIB::sysDescr";
+    	$this->snmp_queries['get_system_info']->description = _("Displays device system info");
 
     	// arp table
     	$this->snmp_queries['get_arp_table'] = new StdClass();
     	$this->snmp_queries['get_arp_table']->id  = 2;
-    	$this->snmp_queries['get_arp_table']->oid = ".1.3.6.1.2.1.4.22.1";
     	$this->snmp_queries['get_arp_table']->oid = "IP-MIB::ipNetToMediaEntry";
-    	$this->snmp_queries['get_arp_table']->description = "Fetches ARP table";
+    	$this->snmp_queries['get_arp_table']->description = _("Fetches ARP table");
 
     	// mac address table
     	$this->snmp_queries['get_mac_table'] = new StdClass();
     	$this->snmp_queries['get_mac_table']->id  = 3;
-    	$this->snmp_queries['get_mac_table']->oid = ".1.3.6.1.2.1.17.4.3.1";
     	$this->snmp_queries['get_mac_table']->oid = "BRIDGE-MIB::dot1dTpFdbEntry";
-    	$this->snmp_queries['get_mac_table']->description = "Fetches MAC address table";
+    	$this->snmp_queries['get_mac_table']->description = _("Fetches MAC address table");
 
     	// interface ip addresses
     	$this->snmp_queries['get_interfaces_ip'] = new StdClass();
     	$this->snmp_queries['get_interfaces_ip']->id  = 4;
-    	$this->snmp_queries['get_interfaces_ip']->oid = ".1.3.6.1.2.1.4.20.1";
     	$this->snmp_queries['get_interfaces_ip']->oid = "IP-MIB::ipAddrEntry";
-    	$this->snmp_queries['get_interfaces_ip']->description = "Fetches interface ip addresses";
+    	$this->snmp_queries['get_interfaces_ip']->description = _("Fetches interface ip addresses");
 
     	// get_routing_table
     	$this->snmp_queries['get_routing_table'] = new StdClass();
     	$this->snmp_queries['get_routing_table']->id  = 5;
-    	$this->snmp_queries['get_routing_table']->oid = ".1.3.6.1.2.1.4.24.4.1";
     	$this->snmp_queries['get_routing_table']->oid = "IP-FORWARD-MIB::ipCidrRouteEntry";
-    	$this->snmp_queries['get_routing_table']->description = "Fetches routing table";
+    	$this->snmp_queries['get_routing_table']->description = _("Fetches routing table");
 
     	// get vlans
     	$this->snmp_queries['get_vlan_table'] = new StdClass();
     	$this->snmp_queries['get_vlan_table']->id  = 6;
-    	$this->snmp_queries['get_vlan_table']->oid_num = ".1.3.6.1.4.1.9.9.46.1.3.1.1.4";
     	$this->snmp_queries['get_vlan_table']->oid = "CISCO-VTP-MIB::vtpVlanName";
-    	$this->snmp_queries['get_vlan_table']->description = "Fetches VLAN table";
+    	$this->snmp_queries['get_vlan_table']->description = _("Fetches VLAN table");
 
     	// get vrfs
     	$this->snmp_queries['get_vrf_table'] = new StdClass();
     	$this->snmp_queries['get_vrf_table']->id  = 7;
-    	$this->snmp_queries['get_vrf_table']->oid = ".1.3.6.1.3.118.1.2.2.1";
     	$this->snmp_queries['get_vrf_table']->oid = "MPLS-VPN-MIB::mplsVpnVrfDescription";
-    	$this->snmp_queries['get_vrf_table']->description = "Fetches VRF table";
+    	$this->snmp_queries['get_vrf_table']->description = _("Fetches VRF table");
+
+    	// Text to numerical OID conversion table
+    	$this->snmp_oids = [
+    		'SNMPv2-MIB::sysDescr'                => '.1.3.6.1.2.1.1.1',
+    		'SNMPv2-MIB::sysObjectID'             => '.1.3.6.1.2.1.1.2',
+
+    		'IP-MIB::ipNetToMediaEntry'           => '.1.3.6.1.2.1.4.22.1',
+    		'IP-MIB::ipNetToMediaIfIndex'         => '.1.3.6.1.2.1.4.22.1.1',
+    		'IP-MIB::ipNetToMediaPhysAddress'     => '.1.3.6.1.2.1.4.22.1.2',
+    		'IP-MIB::ipNetToMediaNetAddress'      => '.1.3.6.1.2.1.4.22.1.3',
+    		'IP-MIB::ipAddrEntry'                 => '.1.3.6.1.2.1.4.20.1',
+    		'IP-MIB::ipAdEntAddr'                 => '.1.3.6.1.2.1.4.20.1.1',
+    		'IP-MIB::ipAdEntNetMask'              => '.1.3.6.1.2.1.4.20.1.3',
+
+    		'IF-MIB::ifDescr'                     => '.1.3.6.1.2.1.2.2.1.2',
+    		'IF-MIB::ifName'                      => '.1.3.6.1.2.1.31.1.1.1.1',
+    		'IF-MIB::ifAlias'                     => '.1.3.6.1.2.1.31.1.1.1.18',
+
+    		'BRIDGE-MIB::dot1dBasePortIfIndex'    => '.1.3.6.1.2.1.17.1.4.1.2',
+    		'BRIDGE-MIB::dot1dTpFdbEntry'         => '.1.3.6.1.2.1.17.4.3.1',
+    		'BRIDGE-MIB::dot1dTpFdbAddress'       => '.1.3.6.1.2.1.17.4.3.1.1',
+    		'BRIDGE-MIB::dot1dTpFdbPort'          => '.1.3.6.1.2.1.17.4.3.1.2',
+
+    		'IP-FORWARD-MIB::ipCidrRouteEntry'    => '.1.3.6.1.2.1.4.24.4.1',
+    		'IP-FORWARD-MIB::ipCidrRouteDest'     => '.1.3.6.1.2.1.4.24.4.1.1',
+    		'IP-FORWARD-MIB::ipCidrRouteMask'     => '.1.3.6.1.2.1.4.24.4.1.2',
+
+    		'CISCO-VTP-MIB::vtpVlanName'          => '.1.3.6.1.4.1.9.9.46.1.3.1.1.4',
+
+    		'MPLS-VPN-MIB::mplsVpnVrfDescription'        => '.1.3.6.1.3.118.1.2.2.1.2',
+    		'MPLS-VPN-MIB::mplsVpnVrfRouteDistinguisher' => '.1.3.6.1.3.118.1.2.2.1.3'
+    	];
 	}
 
     /**
@@ -222,7 +260,60 @@ class phpipamSNMP extends Common_functions {
         $this->last_result = $result;
     }
 
+	/**
+	 * snmp_get
+	 *
+	 * @access private
+	 * @param string $oid
+	 * @param string $index (default: "")
+	 * @return mixed
+	 */
+	private function snmp_get ($oid, $index = "") {
+		return $this->snmp_poll('get', $oid, $index);
+	}
 
+	/**
+	 * snmp_walk
+	 *
+	 * @access private
+	 * @param string $oid
+	 * @param string $index (default: "")
+	 * @return mixed
+	 */
+	private function snmp_walk ($oid, $index = "") {
+		return $this->snmp_poll('walk', $oid, $index);
+	}
+
+	/**
+	 * snmp_poll
+	 *
+	 * @access private
+	 * @param string $type
+	 * @param string $oid
+	 * @param string $index (default: "")
+	 * @return mixed
+	 */
+	private function snmp_poll ($type, $oid, $index) {
+		// Convert to numerical OIDs.
+		$oid_num   = isset($this->snmp_oids[$oid]) ? $this->snmp_oids[$oid] : $oid;
+		$query     = is_blank($index) ? $oid     : $oid.'.'.$index;
+		$query_num = is_blank($index) ? $oid_num : $oid_num.'.'.$index;
+
+		// try
+		try {
+			$res = $this->snmp_session->{$type} ($query_num);
+		}
+		catch (Exception $e) {
+			throw new Exception ("<strong>$this->snmp_hostname</strong>: ".$e->getMessage(). "<br> oid: ".$query);
+		}
+
+		// check for errors
+		if ($this->snmp_session->getErrno ()!=0)  {
+			throw new Exception ("<strong>$this->snmp_hostname</strong>: ".$this->snmp_session->getError (). "<br> oid: ".$query);
+		}
+
+		return $res;
+	}
 
 
 	/**
@@ -275,7 +366,7 @@ class phpipamSNMP extends Common_functions {
         	$this->snmp_host = $ip;
     	}
     	else {
-        	$this->Result->show("danger", "Invalid device IP address", true, true, false, true);
+        	$this->Result->show("danger", _("Invalid device IP address"), true, true, false, true);
     	}
 	}
 
@@ -287,7 +378,7 @@ class phpipamSNMP extends Common_functions {
 	 * @return void
 	 */
 	private function set_snmp_hostname ($hostname) {
-    	if (strlen($hostname)>0) {
+    	if (!is_blank($hostname)) {
         	$this->snmp_hostname = $hostname;
     	}
 	}
@@ -301,7 +392,7 @@ class phpipamSNMP extends Common_functions {
 	 * @return void
 	 */
 	private function set_snmp_community ($community, $vlan_number) {
-    	if (strlen($community)>0) {
+    	if (!is_blank($community)) {
         	// vlan ?
         	if ($vlan_number!==false && is_numeric($vlan_number)) {
                 $this->snmp_community = $community."@".$vlan_number;
@@ -347,9 +438,11 @@ class phpipamSNMP extends Common_functions {
 	 * @return void
 	 */
 	private function set_snmp_timeout ($timeout) {
-    	if (is_numeric($timeout)) {
-        	$this->snmp_timeout = $timeout;
-        }
+		if (is_numeric($timeout) && $timeout > 0) {
+			$this->snmp_timeout = $timeout < 10000 ? $timeout : 10000;
+		} else {
+			$this->snmp_timeout = 1000;
+		}
 	}
 
     /**
@@ -391,9 +484,9 @@ class phpipamSNMP extends Common_functions {
     private function connection_open () {
         // init connection
         if ($this->snmp_session === false) {
-            if ($this->snmp_version=="1")       { $this->snmp_session = new SNMP(SNMP::VERSION_1,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout); }
-            elseif ($this->snmp_version=="2")   { $this->snmp_session = new SNMP(SNMP::VERSION_2c, $this->snmp_host, $this->snmp_community, $this->snmp_timeout); }
-            elseif ($this->snmp_version=="3")   { $this->snmp_session = new SNMP(SNMP::VERSION_3,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout);
+            if ($this->snmp_version=="1")       { $this->snmp_session = new SNMP(SNMP::VERSION_1,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000, $this->snmp_retries); }
+            elseif ($this->snmp_version=="2")   { $this->snmp_session = new SNMP(SNMP::VERSION_2c, $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000, $this->snmp_retries); }
+            elseif ($this->snmp_version=="3")   { $this->snmp_session = new SNMP(SNMP::VERSION_3,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000, $this->snmp_retries);
                                                   $this->snmp_session->setSecurity(
                                                                                    $this->snmpv3_security->sec_level,
                                                                                    $this->snmpv3_security->auth_proto,
@@ -403,10 +496,13 @@ class phpipamSNMP extends Common_functions {
                                                                                    $this->snmpv3_security->contextName,
                                                                                    $this->snmpv3_security->contextEngineID
                                                                                    );}
-            else                                { throw new Exception ("Invalid SNMP version"); }
+            else                                { throw new Exception (_("Invalid SNMP version")); }
         }
         // set parameters
         $this->snmp_session->oid_output_format = SNMP_OID_OUTPUT_NUMERIC;
+
+		// Fetch device sysObjectID.  TODO: Customise queries based on vendor sysObjectID (HP, FortiGate, ...)
+		// $this->snmp_sysObjectID = $this->snmp_get( 'SNMPv2-MIB::sysObjectID', '0' );
     }
 
     /**
@@ -423,15 +519,6 @@ class phpipamSNMP extends Common_functions {
         $this->snmp_session = false;
     }
 
-    /**
-     * Checks for snmp error and throws exception
-     *
-     * @access private
-     * @return void
-     */
-    private function connection_error_check () {
-        if ($this->snmp_session->getErrno ()!="0")    {  throw new Exception ("<strong>$this->snmp_hostname</strong>: ".$this->snmp_session->getError ()); }
-    }
 
 
 
@@ -454,7 +541,7 @@ class phpipamSNMP extends Common_functions {
      */
     public function get_query ($query) {
         if (method_exists($this, $query))   { return $this->{$query} (); }
-        else                                { throw new Exception ("Invalid query"); }
+        else                                { throw new Exception (_("Invalid query")); }
     }
 
     /**
@@ -466,16 +553,10 @@ class phpipamSNMP extends Common_functions {
     private function get_system_info () {
         // init
         $this->connection_open ();
+
         // try
-        try {
-            $sysdescr = $this->snmp_session->get( "SNMPv2-MIB::sysDescr.0" );
-        }
-		catch (Exception $e) {
-    		throw new Exception ($e->getMessage());
-			return false;
-		}
-        // check for errors
-        $this->connection_error_check ();
+        $sysdescr = $this->snmp_get ( "SNMPv2-MIB::sysDescr", "0" );
+
         // save result
         $this->save_last_result ($sysdescr);
         // return
@@ -491,18 +572,11 @@ class phpipamSNMP extends Common_functions {
     private function get_arp_table () {
         // init
         $this->connection_open ();
-        // fetch
-        try {
-            $res1 = $this->snmp_session->walk( "IP-MIB::ipNetToMediaNetAddress" );      // ip
-            $res2 = $this->snmp_session->walk( "IP-MIB::ipNetToMediaPhysAddress" );     // mac
-            $res3 = $this->snmp_session->walk( "IP-MIB::ipNetToMediaIfIndex" );         // interface index
-		}
-		catch (Exception $e) {
-    		throw new Exception ($e->getMessage());
-		}
 
-        // check for errors
-        $this->connection_error_check ();
+        // fetch
+        $res1 = $this->snmp_walk ( "IP-MIB::ipNetToMediaNetAddress" );      // ip
+        $res2 = $this->snmp_walk ( "IP-MIB::ipNetToMediaPhysAddress" );     // mac
+        $res3 = $this->snmp_walk ( "IP-MIB::ipNetToMediaIfIndex" );         // interface index
 
         // parse IP
         $n=0;
@@ -513,9 +587,7 @@ class phpipamSNMP extends Common_functions {
         // parse MAC
         $n=0;
         foreach ($res2 as $r) {
-            $res[$n]['mac'] = $this->fill_mac_nulls ($r);
-            // validate mac
-            if ($this->validate_mac($res[$n]['mac'])===false) { $res[$n]['mac'] = ""; }
+            $res[$n]['mac'] = $this->format_snmp_mac_value ($r);
             $n++;
         };
 
@@ -530,11 +602,8 @@ class phpipamSNMP extends Common_functions {
             }
             else {
                 try {
-                    //$res1 = $this->snmp_session->get( ".1.3.6.1.2.1.31.1.1.1.1.".$index );  // if description
-                    //$res2 = $this->snmp_session->get( ".1.3.6.1.2.1.2.2.1.2.".$index );     // if port
-
-                    $res1 = $this->snmp_session->get( "IF-MIB::ifName.".$index );  // if description
-                    $res2 = $this->snmp_session->get( "IF-MIB::ifDescr.".$index );     // if port
+                    $res1 = $this->snmp_get ( "IF-MIB::ifName", $index );  // if description
+                    $res2 = $this->snmp_get ( "IF-MIB::ifDescr", $index );     // if port
 
                     //parse and save
                     $res[$n]['port'] = $this->parse_snmp_result_value ($res1);
@@ -573,23 +642,13 @@ class phpipamSNMP extends Common_functions {
         $this->connection_open ();
 
         // fetch
-        try {
-            $res1 = $this->snmp_session->walk( "BRIDGE-MIB::dot1dTpFdbAddress" );    // mac
-            $res2 = $this->snmp_session->walk( "BRIDGE-MIB::dot1dTpFdbPort" );       // bridge port index
-		}
-		catch (Exception $e) {
-    		throw new Exception ($e->getMessage());
-		}
-
-        // check for errors
-        $this->connection_error_check ();
+        $res1 = $this->snmp_walk ( "BRIDGE-MIB::dot1dTpFdbAddress" );    // mac
+        $res2 = $this->snmp_walk ( "BRIDGE-MIB::dot1dTpFdbPort" );       // bridge port index
 
         // parse MAC
         $n=0;
         foreach ($res1 as $r) {
-            $res[$n]['mac'] = $this->fill_mac_nulls ($r);
-            // validate mac
-            if ($this->validate_mac($res[$n]['mac'])===false) { $res[$n]['mac'] = ""; }
+            $res[$n]['mac'] = $this->format_snmp_mac_value ($r);
             $n++;
         };
 
@@ -599,13 +658,9 @@ class phpipamSNMP extends Common_functions {
             $res[$n]['bridgeportindex'] = $this->parse_snmp_result_value ($r);
             // fetch interface
             try {
-                //$res3 = $this->snmp_session->get( ".1.3.6.1.2.1.17.1.4.1.2.".$res[$n]['bridgeportindex'] );         // bridge port to interface index
-                //$res4 = $this->snmp_session->get( ".1.3.6.1.2.1.2.2.1.2.".$this->parse_snmp_result_value ($res3));  // interface description
-                //$res5 = $this->snmp_session->get( ".1.3.6.1.2.1.31.1.1.1.18.".$this->parse_snmp_result_value ($res3) );
-
-                $res3 = $this->snmp_session->get( "BRIDGE-MIB::dot1dBasePortIfIndex.".$res[$n]['bridgeportindex'] );         // bridge port to interface index
-                $res4 = $this->snmp_session->get( "IF-MIB::ifDescr.".$this->parse_snmp_result_value ($res3));  // interface description
-                $res5 = $this->snmp_session->get( "IF-MIB::ifAlias.".$this->parse_snmp_result_value ($res3) );
+                $res3 = $this->snmp_get ( "BRIDGE-MIB::dot1dBasePortIfIndex", $res[$n]['bridgeportindex'] );         // bridge port to interface index
+                $res4 = $this->snmp_get ( "IF-MIB::ifDescr", $this->parse_snmp_result_value ($res3) );  // interface description
+                $res5 = $this->snmp_get ( "IF-MIB::ifAlias", $this->parse_snmp_result_value ($res3) );
 
                 //parse and save
                 $res[$n]['vlan_number'] = $this->vlan_number;
@@ -638,17 +693,10 @@ class phpipamSNMP extends Common_functions {
     private function get_interfaces_ip () {
         // init
         $this->connection_open ();
-        // fetch
-        try {
-            $res1 = $this->snmp_session->walk( "IP-MIB::ipAdEntAddr" );
-            $res2 = $this->snmp_session->walk( "IP-MIB::ipAdEntNetMask" );
-		}
-		catch (Exception $e) {
-    		throw new Exception ($e->getMessage());
-		}
 
-        // check for errors
-        $this->connection_error_check ();
+        // fetch
+        $res1 = $this->snmp_walk ( "IP-MIB::ipAdEntAddr" );
+        $res2 = $this->snmp_walk ( "IP-MIB::ipNetToMediaPhysAddress" );
 
         // parse result
         $n=0;
@@ -658,9 +706,7 @@ class phpipamSNMP extends Common_functions {
         }
         $n=0;
         foreach ($res2 as $r) {
-            $res[$n]['mac'] = $this->fill_mac_nulls ($r);
-            // validate mac
-            if ($this->validate_mac($res[$n]['mac'])===false) { $res[$n]['mac'] = ""; }
+            $res[$n]['mac'] = $this->format_snmp_mac_value ($r);
             $n++;
         };
 
@@ -680,17 +726,10 @@ class phpipamSNMP extends Common_functions {
     private function get_routing_table () {
         // init
         $this->connection_open ();
-        // fetch
-        try {
-            $res1 = $this->snmp_session->walk( "IP-FORWARD-MIB::ipCidrRouteDest" );
-            $res2 = $this->snmp_session->walk( "IP-FORWARD-MIB::ipCidrRouteMask" );
-		}
-		catch (Exception $e) {
-    		throw new Exception ("<strong>$device->hostname</strong>: ".$e->getMessage(). "<br> oid: ".$this->snmp_queries["get_routing_table"]->oid);
-		}
 
-        // check for errors
-        $this->connection_error_check ();
+        // fetch
+        $res1 = $this->snmp_walk ( "IP-FORWARD-MIB::ipCidrRouteDest" );
+        $res2 = $this->snmp_walk ( "IP-FORWARD-MIB::ipCidrRouteMask" );
 
         // parse result
         $n=0;
@@ -720,22 +759,15 @@ class phpipamSNMP extends Common_functions {
     private function get_vlan_table () {
         // init
         $this->connection_open ();
-        // fetch
-        try {
-            $res1 = $this->snmp_session->walk( $this->snmp_queries["get_vlan_table"]->oid.".1" );
-		}
-		catch (Exception $e) {
-    		throw new Exception ("<strong>$device->hostname</strong>: ".$e->getMessage(). "<br> oid: ".$this->snmp_queries["get_vlan_table"]->oid);
-		}
 
-        // check for errors
-        $this->connection_error_check ();
+        // fetch
+        $res1 = $this->snmp_walk ( "CISCO-VTP-MIB::vtpVlanName", "1" );
 
         // parse result
         foreach ($res1 as $k=>$r) {
             // set number
-            $k = str_replace($this->snmp_queries["get_vlan_table"]->oid.".1.", "", $k);
-            $k = array_pop(explode(".", $k));
+            $k = str_replace($this->snmp_oids['CISCO-VTP-MIB::vtpVlanName'].'.1.', "", $k);
+            $k = array_pop(pf_explode(".", $k));
             // set value
             $r  = trim(str_replace("\"","",substr($r, strpos($r, ":")+2)));
             $res[$k] = $r;
@@ -749,6 +781,29 @@ class phpipamSNMP extends Common_functions {
     }
 
     /**
+     * Decode mplsVpnVrfName oid to ASCII
+     * @param  string $oid
+     * @return string
+     */
+    private function decode_mplsVpnVrfName($oid) {
+        // mplsVpnVrfName. When this object is used as an index to a table,
+        // the first octet is the string length, and subsequent octets are
+        // the ASCII codes of each character.
+        // For example, “vpn1” is represented as 4.118.112.110.49.
+        $a = array_values(array_filter(pf_explode('.', $oid)));
+        if (($a[0]+1) != sizeof($a))
+            return $oid;
+
+        $mplsVpnVrfName = "";
+
+        foreach($a as $i=>$v) {
+            if ($i == 0) continue;
+            $mplsVpnVrfName .= chr($v);
+        }
+        return $mplsVpnVrfName;
+    }
+
+    /**
      * Fetch vrf table from device.
      *
      * @access private
@@ -757,28 +812,30 @@ class phpipamSNMP extends Common_functions {
     private function get_vrf_table () {
         // init
         $this->connection_open ();
-        // set parameters
-        $this->snmp_session->oid_output_format = SNMP_OID_OUTPUT_MODULE;
 
         // fetch
-        try {
-            $res1 = $this->snmp_session->walk( $this->snmp_queries["get_vrf_table"]->oid );    // MPLS-VPN-MIB::mplsVpnVrfDescription."OAM" = STRING: 300:1
-		}
-		catch (Exception $e) {
-    		throw new Exception ("<strong>$device->hostname</strong>: ".$e->getMessage(). "<br> oid: ".$this->snmp_queries["get_vrf_table"]->oid);
-		}
+        $res = [];
+        $res1 = $this->snmp_walk ( "MPLS-VPN-MIB::mplsVpnVrfRouteDistinguisher" );
+        $res2 = $this->snmp_walk ( "MPLS-VPN-MIB::mplsVpnVrfDescription" );
 
-        // check for errors
-        $this->connection_error_check ();
-
-        // parse result
+        // parse results
         foreach ($res1 as $k=>$r) {
             // set name
-            $k = str_replace($this->snmp_queries["get_vrf_table"]->oid.".", "", $k);
+            $k = str_replace($this->snmp_oids['MPLS-VPN-MIB::mplsVpnVrfRouteDistinguisher'].'.', "", $k);
             $k = str_replace("\"", "", $k);
+            $k = $this->decode_mplsVpnVrfName($k);
             // set rd
             $r  = $this->parse_snmp_result_value ($r);
-            $res[$k] = $r;
+            $res[$k]['rd'] = $r;
+        }
+        foreach ($res2 as $k=>$r) {
+            // set name
+            $k = str_replace($this->snmp_oids['MPLS-VPN-MIB::mplsVpnVrfDescription'].'.', "", $k);
+            $k = str_replace("\"", "", $k);
+            $k = $this->decode_mplsVpnVrfName($k);
+            // set descr
+            $r  = $this->parse_snmp_result_value ($r);
+            $res[$k]['descr'] = $r;
         }
 
         // save result
@@ -788,34 +845,91 @@ class phpipamSNMP extends Common_functions {
         return isset($res) ? $res : false;
     }
 
-	/**
-	 * Fills mac with nulls -> 0:0:fe >> 00:00:fe
-	 *
-	 * @access private
-	 * @param mixed $mac
-	 * @return void
-	 */
-	private function fill_mac_nulls ($mac) {
-        //make sure MAC has all 0
-        $mac = explode(":", trim(substr($mac, strpos($mac, ":")+2)));
-        foreach ($mac as $km=>$mc) {
-            if (strlen($mc)==1) {
-                $mac[$km] = str_pad($mc, 2, "0", STR_PAD_LEFT);
-            }
-        }
-        // return
-        return implode(":", $mac);
-	}
+    /**
+     * Extract TYPE: VALUE from SNMP output
+     *  IPADDRESS: 1.2.3.4
+     *  STRING:  255.255.255.0
+     *
+     * @param   mixed  $input
+     * @return  array
+     */
+    private function extract_type_and_value($input) {
+        if (!is_string($input))
+            throw new Exception(_('SNMP response is not a valid string'));
 
-	/**
-	 * Parses result - removes STRING:
-	 *
-	 * @access private
-	 * @param mixed $r
-	 * @return void
-	 */
-	private function parse_snmp_result_value ($r) {
-    	return trim(str_replace("\"","",substr($r, strpos($r, ":")+2)));
-	}
+        $input = stripslashes($input);
+
+        // extract "TYPE: VALUE"
+        preg_match('/^"?([^ ]+:)(.*)"?$/', $input, $matches);
+
+        if (sizeof($matches)!=3)
+            throw new Exception(_('Unable to parse "type: value" from SNMP response'));
+
+        // return array($type, $value)
+        return [trim($matches[1]), trim($matches[2])];
+    }
+
+    /**
+     * Standardise SNMP MACs  -> 0:1:fe   >> 00:01:fe
+     *                        -> 0-1-fe   >> 00:01:fe
+     *                        -> 00 01 fe >> 00:01:fe
+     * @access private
+     * @param string $input
+     * @return string
+     */
+    private function format_snmp_mac_value ($input) {
+        try {
+            $mac_parts = [];
+            list($type, $mac) = $this->extract_type_and_value($input);
+
+            if (strlen($mac)==6) {
+                // 6 byte binary string (Cisco bug?), try unpacking to hex string.
+                $mac = unpack('H*mac', $mac)['mac'];
+            }
+
+            if (preg_match('/^[0-9a-fA-F]{12}$/',$mac)) {
+                // hex string "0011223344AA"
+                $mac_parts = str_split($mac, 2);
+
+            } elseif (preg_match('/^([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})$/', $mac, $matches)) {
+                // separated MAC address, 0:1b:c:55:7
+                unset($matches[0]);
+                foreach($matches as $i => $v)
+                    $mac_parts[$i] = str_pad($v, 2, '0', STR_PAD_LEFT);
+            }
+
+            if (sizeof($mac_parts)!=6)
+                throw new Exception(_("Unable to process SNMP value"));
+
+            return strtoupper(implode(':', $mac_parts));
+
+        } catch (Exception $e) {
+            if (Config::ValueOf('debugging'))
+                    $this->Result->show('info', $e->getMessage().': "'.escape_input($input).'"', false);
+
+            return '';
+        }
+    }
+
+    /**
+     * Parses result - removes STRING:
+     *
+     * @access private
+     * @param string input
+     * @return string
+     */
+    private function parse_snmp_result_value ($input) {
+        try {
+            list($type, $value) = $this->extract_type_and_value($input);
+
+            return escape_input($value);
+
+        } catch (Exception $e) {
+            if (Config::ValueOf('debugging'))
+                    $this->Result->show('info', $e->getMessage().': "'.escape_input($input).'"', false);
+
+            return '';
+        }
+    }
 
 }

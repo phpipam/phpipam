@@ -58,7 +58,7 @@ $http_codes = array(
 );
 
 // validate
-if (!array_key_exists($_REQUEST['section'], $http_codes)) { $_REQUEST['section'] = 404; }
+if (!array_key_exists($_GET['section'], $http_codes)) { $_GET['section'] = 404; }
 ?>
 
 <div class="container" style="margin-top:20px;">
@@ -66,7 +66,7 @@ if (!array_key_exists($_REQUEST['section'], $http_codes)) { $_REQUEST['section']
 <div class="col-xs-12 col-md-6 col-md-offset-3 alert alert alert-danger">
 	<strong><h3><?php print _('Oops! Something went wrong!'); ?></h3></strong><hr>
 	<br>
-	<?php print _('Provided http error code is'); ?>: <strong><?php print_r($_REQUEST['section']); ?>: <?php print $http_codes[$_REQUEST['section']]; ?></strong>
+	<?php print _('Provided http error code is'); ?>: <strong><?php print_r($_GET['section']); ?>: <?php print $http_codes[$_GET['section']]; ?></strong>
 </div>
 </div>
 </div>

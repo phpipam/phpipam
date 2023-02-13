@@ -7,6 +7,9 @@
 /* functions */
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
@@ -14,6 +17,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# verify module permissions
+$User->check_module_permissions ("racks", User::ACCESS_R, true);
 
 # init racks object
 $Racks = new phpipam_rack ($Database);
@@ -29,10 +34,13 @@ if (!is_numeric($_GET['deviceId']))   { die(); }
 $rack = $User->fetch_object("racks", "id", $_GET['rackId']);
 if ($rack===false)     				  { die(); }
 
+# permission - dont draw names if user has no access to devices
+$draw_names = $User->get_module_permissions ("devices")>=User::ACCESS_R ? true : false;
+
 # back
 if(@$_GET['is_back']=="1") {
-	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId'], true);
+	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId'], true, $draw_names);
 }
 else {
-	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId']);
+	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId'], false, $draw_names);
 }

@@ -78,7 +78,7 @@ foreach ($data as &$cdata) {
 	} else {
 		$cdata['sections'] = $section_names[strtolower($cdata['section'])]['id'];
 	}
-	
+
 	# Check if deviceType is provided and valid and link it if it is
 	if (!isset($edata['deviceTypes'][strtolower($cdata['deviceType'])])
 	    ) {
@@ -86,16 +86,16 @@ foreach ($data as &$cdata) {
 	} else {
 		$cdata['type'] = $edata['deviceTypes'][strtolower($cdata['deviceType'])]['tid'];
 	}
-	
+
 	if ($action != "error") {
-    	if( 
-    	    isset($cdata['ip_addr']) && 
-    	    strlen ($cdata['ip_addr']) > 0 &&
+    	if(
+    	    isset($cdata['ip_addr']) &&
+    	    !is_blank($cdata['ip_addr']) &&
     	    !$Addresses->validate_ip($cdata['ip_addr'])
-    	) 
-    	    { 
-    	        $msg.="Invalid IP address."; 
-    	        $action = "error"; 
+    	)
+    	    {
+    	        $msg.="Invalid IP address.";
+    	        $action = "error";
     	    }
 		if ((!empty($cdata['hostname'])) and (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
 #       Allow all chars in description ... Why Limit it ?
@@ -114,7 +114,7 @@ foreach ($data as &$cdata) {
 			$cedata = $edata[strtolower($cdata['hostname'])];
 			# Check if we need to change any fields
 			$action = "skip"; # skip duplicate fields if identical, update if different
-			# Should we just let the database decided to update or not?  Nice for UI, but alot of 
+			# Should we just let the database decided to update or not?  Nice for UI, but alot of
 			# code maintaince here.
 			if ($cdata['description'] != $cedata['description']) { $msg.= "Device description will be updated."; $action = "edit"; }
 			if ($cdata['ip_addr'] != $cedata['ip_addr']) { $msg.= "Device ip_addr will be updated."; $action = "edit"; }

@@ -90,7 +90,7 @@ else {
     # fetch old section
     $section_old = $Sections->fetch_section ("id", $_POST['id']);
     // parse old permissions
-    $old_permissions = json_decode($section_old->permissions, true);
+    $old_permissions = pf_json_decode($section_old->permissions, true);
 
 	list($removed_permissions, $changed_permissions, $new_permissions) = $Sections->get_permission_changes ((array) $_POST, $old_permissions);
 
@@ -101,6 +101,7 @@ else {
 					"description"      => @$_POST['description'],
 					"strictMode"       => @$_POST['strictMode'],
 					"subnetOrdering"   => @$_POST['subnetOrdering'],
+					"showSubnet"       => @$_POST['showSubnet'],
 					"showVLAN"         => @$_POST['showVLAN'],
 					"showVRF"          => @$_POST['showVRF'],
 					"showSupernetOnly" => @$_POST['showSupernetOnly'],
@@ -109,8 +110,8 @@ else {
 					);
 
 	# execute update
-	if(!$Sections->modify_section ($_POST['action'], $values, @$_POST['id']))	{ $Result->show("danger",  _("Section $_POST[action] failed"), false); }
-	else																		{ $Result->show("success", _("Section $_POST[action] successful"), false); }
+	if(!$Sections->modify_section ($_POST['action'], $values, @$_POST['id']))	{ $Result->show("danger", _("Section")." ".$_POST["action"]." "._("failed"), false); }
+	else { $Result->show("success", _("Section")." ".$_POST["action"]." "._("successful"), false); }
 
 	# delegate
 	if (@$_POST['delegate']==1) {

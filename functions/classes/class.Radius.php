@@ -598,7 +598,7 @@ class Radius
                     $temp_attribute = chr($type).chr(2 + strlen($value)).$value;
                     break;
                 case 'A': // Address, 32 bit value, most significant octet first.
-                    $ip_array = explode(".", $value);
+                    $ip_array = pf_explode(".", $value);
                     $temp_attribute = chr($type).chr(6).chr($ip_array[0]).chr($ip_array[1]).chr($ip_array[2]).chr($ip_array[3]);
                     break;
                 case 'I': // Integer, 32 bit unsigned value, most significant octet first.
@@ -825,5 +825,3 @@ class Radius
         return (2 == ($this->_radius_packet_received));
     }
 }
-
-?>

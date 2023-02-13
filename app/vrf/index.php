@@ -1,9 +1,15 @@
 <?php
 
-# get VRF details
-$vrf = $Tools->fetch_object ("vrf", "vrfId", $_GET['subnetId']);
+die();
 
-if ($vrf===false) {
+# get VRF details
+$vrf = $Tools->fetch_object ("vrf", "vrfId", $_GET['section']);
+
+# perm check
+if ($User->get_module_permissions ("vrf")==User::ACCESS_NONE) {
+	$Result->show("danger", _("You do not have permissions to access this module"), false);
+}
+elseif ($vrf===false) {
 	print "<div class='subnetDetails'>";
 	print "<h3>"._("Error")."</h3><hr>";
 	$Result->show("danger", _("Invalid VRF id"), false);
@@ -20,4 +26,3 @@ else {
 	include_once('vrf-subnets.php');
 	print '</div>';
 }
-?>

@@ -7,64 +7,6 @@
  */
 class Sections_controller extends Common_api_functions {
 
-
-	/**
-	 * _params provided
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
-	/**
-	 * custom_fields
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	public $custom_fields;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 *  Response handler
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Response;
-
-	/**
-	 * Master Subnets object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Subnets;
-
-	/**
-	 * Master Sections object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Sections;
-
-	/**
-	 * Master Tools object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-
 	/**
 	 * __construct function
 	 *
@@ -172,7 +114,7 @@ class Sections_controller extends Common_api_functions {
 				}
 			}
 			// check result
-			if(sizeof($result)==0) 						{ $this->Response->throw_exception(200, "No subnets found"); }
+			if(empty($result)) 						{ $this->Response->throw_exception(404, "No subnets found"); }
 			else {
 				$this->custom_fields = $this->Tools->fetch_custom_fields('subnets');
 				return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true));
@@ -207,19 +149,6 @@ class Sections_controller extends Common_api_functions {
 				if($result===false) 					{ return array("code"=>200, "message"=>"No sections available"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
-	}
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 
@@ -319,45 +248,21 @@ class Sections_controller extends Common_api_functions {
 	}
 
 	/**
-	 * Returns id of subnet gateay
-	 *
-	 * @access private
-	 * @params mixed $subnetId
-	 * @return void
-	 */
-	private function read_subnet_gateway ($subnetId) {
-    	return $this->Subnets->find_gateway ($subnetId);
-	}
-
-	/**
-	 * Returns nameserver details
-	 *
-	 * @access private
-	 * @param mixed $nsid
-	 * @return void
-	 */
-	private function read_subnet_nameserver ($nsid) {
-    	return $this->Tools->fetch_object ("nameservers", "id", $nsid);
-	}
-
-	/**
  	 * Calculates subnet usage
 	 *
 	 * @access private
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return array
 	 */
 	private function read_subnet_usage ($subnetId) {
 		# check that section exists
 		$subnet = $this->Subnets->fetch_subnet ("id", $subnetId);
 		if($subnet===false)
-														{ $this->Response->throw_exception(200, "Subnet does not exist"); }
+														{ $this->Response->throw_exception(404, "Subnet does not exist"); }
         # calculate
-        $subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet, true);     //Calculate free/used etc
+        $subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet);     //Calculate free/used etc
 
         # return
         return $subnet_usage;
 	 }
 }
-
-?>

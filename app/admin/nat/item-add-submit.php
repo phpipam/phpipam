@@ -10,7 +10,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -18,8 +18,8 @@ $Result 	= new Result ();
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
-# check maintaneance mode
-$User->check_maintaneance_mode ();
+# validate permissions
+$User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 
 # get NAT object
 $nat = $Admin->fetch_object ("nat", "id", $_POST['id']);
@@ -33,18 +33,18 @@ if($nat->type=="static") {
     }
 
     // decode
-    $nat_src = json_decode($nat->src, true);
-    $nat_dst = json_decode($nat->dst, true);
+    $nat_src = pf_json_decode($nat->src, true);
+    $nat_dst = pf_json_decode($nat->dst, true);
 
     // validate all objects
-    if(sizeof(@$nat_src['ipaddresses'])>0) {
+    if(is_array(@$nat_src['ipaddresses'])) {
         foreach ($nat_src['ipaddresses'] as $ik=>$iv) {
             if($Tools->fetch_object("ipaddresses", "id", $iv)===false) {
                 unset($nat_src['ipaddresses'][$ik]);
             }
         }
     }
-    if(sizeof(@$nat_dst['ipaddresses'])>0) {
+    if(is_array(@$nat_dst['ipaddresses'])) {
         foreach ($nat_dst['ipaddresses'] as $ik=>$iv) {
             if($Tools->fetch_object("ipaddresses", "id", $iv)===false) {
                 unset($nat_dst['ipaddresses'][$ik]);
@@ -91,15 +91,21 @@ if(isset($_POST['object_type']) && isset($_POST['object_id'])) {
     $nat_id   = $_POST['id'];               // nat id
     $nat_type = $_POST['type'];             // src, dst
 
+    // validate object type
+    if (!in_array($obj_type, ['subnets', 'ipaddresses'])) { $Result->show("danger", _("Invalid object type"), true); }
+
+    // validate object id
+    if (!is_numeric($obj_id)) { $Result->show("danger", _("Invalid object id"), true); }
+
     // validate object
     $item = $Tools->fetch_object ($obj_type, "id", $obj_id);
     if($item!==false) {
         // update
         if($nat_type=="src") {
-            $nat_array = json_decode($nat->src, true);
+            $nat_array = pf_json_decode($nat->src, true);
         }
         else {
-            $nat_array = json_decode($nat->dst, true);
+            $nat_array = pf_json_decode($nat->dst, true);
         }
 
         if(is_array($nat_array[$obj_type]))
@@ -126,4 +132,3 @@ if(isset($_POST['object_type']) && isset($_POST['object_id'])) {
 else {
      $Result->show("danger", _("Missing object type or id"), true);
 }
-?>

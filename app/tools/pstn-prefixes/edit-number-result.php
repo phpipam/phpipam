@@ -16,8 +16,8 @@ $User->check_user_session();
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
-# check permissions
-if($Tools->check_prefix_permission ($User->user) <2)   { $Result->show("danger", _('You do not have permission to manage PSTN numbers'), true, true); }
+# perm check
+$User->check_module_permissions ("pstn", User::ACCESS_RW, true, false);
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "pstn_number", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
@@ -69,8 +69,8 @@ if(sizeof($custom) > 0) {
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) {
-																		{ $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+		if($myField['Null']=="NO" && is_blank($_POST[$myField['name']])) {
+			{ $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 		}
 		# save to update array
 		$update[$myField['name']] = $_POST[$myField['name']];
@@ -79,15 +79,19 @@ if(sizeof($custom) > 0) {
 
 // set values
 $values = array(
-    "id"=>@$_POST['id'],
-    "name"=>$_POST['name'],
-    "prefix"=>$_POST['prefix'],
-    "number"=>$_POST['number'],
-    "owner"=>$_POST['owner'],
-    "state"=>$_POST['state'],
-    "deviceId"=>$_POST['deviceId'],
-    "description"=>$_POST['description']
+    "id"          =>@$_POST['id'],
+    "name"        =>$_POST['name'],
+    "prefix"      =>$_POST['prefix'],
+    "number"      =>$_POST['number'],
+    "owner"       =>$_POST['owner'],
+    "state"       =>$_POST['state'],
+    "deviceId"    =>$_POST['deviceId'],
+    "description" =>$_POST['description']
     );
+# remove device
+if ($User->get_module_permissions ("devices")<User::ACCESS_RW) {
+    unset ($values['deviceId']);
+}
 
 # custom fields
 if(isset($update)) {
@@ -95,7 +99,9 @@ if(isset($update)) {
 }
 
 # execute update
-if(!$Admin->object_modify ("pstnNumbers", $_POST['action'], "id", $values))    { $Result->show("danger",   _("Number $_POST[action] failed"), false); }
-else																	       { $Result->show("success", _("Number $_POST[action] successful"), false); }
-
-?>
+if(!$Admin->object_modify ("pstnNumbers", $_POST['action'], "id", $values)) {
+    $Result->show("danger", _("Number")." ".$_POST["action"]." "._("failed"), false);
+}
+else {
+    $Result->show("success", _("Number")." ".$_POST["action"]." "._("successful"), false);
+}

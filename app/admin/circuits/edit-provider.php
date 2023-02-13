@@ -17,8 +17,13 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-# check permissions
-if(!($User->is_admin(false) || $User->user->editCircuits=="Yes")) { $Result->show("danger", _("You are not allowed to modify Circuit Provider details"), true, true); }
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("circuits", User::ACCESS_RW, true, true);
+}
+else {
+    $User->check_module_permissions ("circuits", User::ACCESS_RWA, true, true);
+}
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "provider");
@@ -50,7 +55,7 @@ else {
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });
@@ -113,9 +118,8 @@ $(document).ready(function(){
 			// readonly
 			$disabled = $readonly == "readonly" ? true : false;
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $provider, $_POST['action'], $timepicker_index. $disabled);
-    		// add datepicker index
-    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+    		$custom_input = $Tools->create_custom_field_input ($field, $provider, $timepicker_index, $disabled);
+    		$timepicker_index = $custom_input['timepicker_index'];
             // print
 			print "<tr>";
 			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";

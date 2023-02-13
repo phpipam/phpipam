@@ -16,8 +16,8 @@ $User->check_user_session();
 
 /* get extension */
 $filename = $_FILES['file']['name'];
-$expfields = explode("|",$_POST['expfields']);
-$file_exp = explode(".", $filename);
+$expfields = pf_explode("|",$_POST['expfields']);
+$file_exp = pf_explode(".", $filename);
 $filetype = strtolower(end($file_exp));
 
 /* list of permitted file extensions */

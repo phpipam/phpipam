@@ -42,7 +42,7 @@ if ($Admin->validate_ip($device->ip_addr)===false)            { $Result->show("d
 
 # set snmp queries
 foreach($_POST as $key=>$line) {
-	if (strlen(strstr($key,"query-"))>0) {
+	if (!is_blank(strstr($key,"query-"))) {
 		$key2 = str_replace("query-", "", $key);
 		$temp[] = $key2;
 		unset($_POST[$key]);
@@ -70,4 +70,4 @@ $values = array(
 
 # update device
 if(!$Admin->object_modify("devices", "edit", "id", $values))    { $Result->show("danger",  _("SNMP edit failed").'!', false); }
-else														    { $Result->show("success", _("SNMP edit successfull").'!', false); }
+else														    { $Result->show("success", _("SNMP edit successful").'!', false); }

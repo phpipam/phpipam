@@ -16,12 +16,13 @@ if($_POST['action']!="add") {
 
 	# feth method settings
 	$method_settings = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['id']);
-	$method_settings->params = json_decode($method_settings->params);
+	$method_settings->params = pf_json_decode($method_settings->params);
 }
 else {
 	$method_settings = new StdClass ();
 	# set default values
-   @$method_settings->params->domain_controllers = "dc1.domain.local;dc2.domain.local";
+	$method_settings->params = new StdClass ();
+    $method_settings->params->domain_controllers = "dc1.domain.local;dc2.domain.local";
 	$method_settings->params->base_dn = "CN=Users,CN=Company,DC=domain,DC=local";
 	$method_settings->params->account_suffix = "@domain.local";
 	$method_settings->params->ad_port = 389;
@@ -133,7 +134,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<input type="text" name="ad_port" class="form-control input-sm input-w-100" value="<?php print @$method_settings->params->ad_port; ?>" <?php print $delete; ?>>
 		</td>
 		<td class="port info2">
-			<?php print _('The default port for LDAP non-SSL connections'); ?>
+			<?php print _('The default port for LDAP non-SSL connections'); ?>: 389 (SSL=636)
 		</td>
 	</tr>
 

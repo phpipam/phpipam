@@ -5,15 +5,14 @@
 
 /* get extension */
 $filename = $_FILES['file']['name'];
-$filename = end(explode(".", $filename));
+$filename = pf_explode(".", $filename);
+$filename = end($filename);
 
 /* get settings */
 include(dirname(__FILE__)."/../../../../functions/functions.php");
 
-/* No errors */
-error_reporting(0);
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
+# Don't corrupt output with php errors!
+disable_php_errors();
 
 /* list of permitted file extensions */
 $allowed = array('png');

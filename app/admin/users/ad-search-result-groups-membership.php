@@ -22,10 +22,10 @@ $server = $Admin->fetch_object("usersAuthMethod", "id", $_POST['server']);
 $server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
 
 //parse parameters
-$params = json_decode($server->params);
+$params = pf_json_decode($server->params);
 
 //no login parameters
-if(strlen(@$params->adminUsername)==0 || strlen(@$params->adminPassword)==0)	{ $Result->show("danger", _("Missing credentials"), true); }
+if(is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword))	{ $Result->show("danger", _("Missing credentials"), true); }
 
 //open connection
 try {
@@ -34,7 +34,7 @@ try {
 	$options = array(
 			'base_dn'=>$params->base_dn,
 			'account_suffix'=>$params->account_suffix,
-			'domain_controllers'=>explode(";",$params->domain_controllers),
+			'domain_controllers'=>pf_explode(";",$params->domain_controllers),
 			'use_ssl'=>$params->use_ssl,
 			'use_tls'=>$params->use_tls,
 			'ad_port'=>$params->ad_port

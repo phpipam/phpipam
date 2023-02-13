@@ -10,8 +10,8 @@
 # include required scripts
 require_once( dirname(__FILE__) . '/../functions.php' );
 
-# Set php warnign levels
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+# Don't corrupt output with php errors!
+disable_php_errors();
 
 # set debugging
 $debugging = false;
@@ -68,11 +68,6 @@ if ($debugging) {
 // fail
 if ($disable_email_notification) { die(); }
 
-# send mail
-if (!file_exists( dirname(__FILE__) . '/../PHPMailer/PHPMailerAutoload.php' )) {
-	$Result->show_cli("PHPMailer git submodule not installed.", true);
-}
-
 # check for recipients
 foreach($Admin->fetch_multiple_objects ("users", "role", "Administrator") as $admin) {
 	$recepients[] = array("name"=>$admin->real_name, "email"=>$admin->email);
@@ -81,31 +76,30 @@ foreach($Admin->fetch_multiple_objects ("users", "role", "Administrator") as $ad
 if(!isset($recepients))	{ die(); }
 
 // fetch settings
-$settings = $Admin->fetch_object("settings", "id", 1);
-// fetch mailer settings
-$mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
-
-# initialize mailer
-$phpipam_mail = new phpipam_mail($settings, $mail_settings);
-$phpipam_mail->initialize_mailer();
-
-// set subject
-$subject	= "phpIPAM Administrator password updated";
-//html
-$content[] = "<h3>phpIPAM Administrator password updated</h3>";
-$content[] = "<hr>";
-$content[] = "Administrator password was updated via cli script";
-//plain
-$content_plain[] = "phpIPAM Administrator password updated \r\n------------------------------";
-$content_plain[] = "Administrator password was updated via cli script";
-
-
-# set content
-$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-$content_plain 	= implode("\r\n",$content_plain);
+$settings = $Admin->get_settings();
 
 # try to send
 try {
+	// fetch mailer settings
+	$mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
+	# initialize mailer
+	$phpipam_mail = new phpipam_mail($settings, $mail_settings);
+
+	// set subject
+	$subject	= "phpIPAM Administrator password updated";
+	//html
+	$content[] = "<h3>phpIPAM Administrator password updated</h3>";
+	$content[] = "<hr>";
+	$content[] = "Administrator password was updated via cli script";
+	//plain
+	$content_plain[] = "phpIPAM Administrator password updated \r\n------------------------------";
+	$content_plain[] = "Administrator password was updated via cli script";
+
+
+	# set content
+	$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+	$content_plain 	= implode("\r\n",$content_plain);
+
 	$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 	//add all admins to CC
 	foreach($recepients as $admin) {
@@ -116,8 +110,8 @@ try {
 	$phpipam_mail->Php_mailer->AltBody = $content_plain;
 	//send
 	$phpipam_mail->Php_mailer->send();
-} catch (phpmailerException $e) {
+} catch (PHPMailer\PHPMailer\Exception $e) {
 	$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
 } catch (Exception $e) {
-	$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
+	$Result->show_cli("Mailer Error: ".$e->getMessage(), true);
 }

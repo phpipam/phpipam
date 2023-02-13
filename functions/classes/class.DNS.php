@@ -7,17 +7,6 @@
 
 class DNS extends Common_functions {
 
-
-	/**
-	 * settings
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $settings = false;
-
 	/**
 	 * type of record to fetch
 	 *
@@ -27,14 +16,6 @@ class DNS extends Common_functions {
 	 * @access private
 	 */
 	private $type = "A";
-
-	/**
-	 * Result
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
 
 	/**
 	 * Database
@@ -85,6 +66,13 @@ class DNS extends Common_functions {
 	 * @var bool
 	 */
 	public $print_error = false;
+
+	/**
+	 * Resolve error if DNS is not accessible
+	 *
+	 * @var mixed
+	 */
+	private $resolve_error;
 
 
 
@@ -157,12 +145,12 @@ class DNS extends Common_functions {
 			}
 			// ok
 			else {
-				if (strlen($nameservers->namesrv1)==0) {
+				if (is_blank($nameservers->namesrv1)) {
 					return false;
 				}
 				else {
 					// to array
-					$nsarray = explode(";", $nameservers->namesrv1);
+					$nsarray = pf_explode(";", $nameservers->namesrv1);
 					// check against dead NSes
 					foreach ($nsarray as $k=>$nsserv) {
 						trim($nsserv);
@@ -201,7 +189,7 @@ class DNS extends Common_functions {
 		$address = $this->transform_address ($address, "dotted");
 
 		// if both are set ignore
-		if (strlen($hostname)>1 && strlen($address)>0) {
+		if (strlen($hostname)>1 && !is_blank($address)) {
 											{ return array("class"=>"", "address"=>$address, "name"=>$hostname); }
 		}
 		// if settings permits to check or override is set
@@ -211,7 +199,7 @@ class DNS extends Common_functions {
 				return array("class"=>"", 		"address"=>$address, "name"=>$hostname);
 			}
 			// if address is set fetch A record
-			elseif ($address!==false && strlen($address)>0) {
+			elseif ($address!==false && !is_blank($address)) {
 				// set resolve type
 				$this->type = "PTR";
 
@@ -222,7 +210,7 @@ class DNS extends Common_functions {
 				else						{ return array("class"=>"resolved", "address"=>$address, "name"=>$resolved); }
 			}
 			// if hostname is set fetch PTR record
-			elseif($hostname!==false && strlen($hostname)>0) {
+			elseif($hostname!==false && !is_blank($hostname)) {
 				// set resolve type
 				$this->type = "A";
 
@@ -262,7 +250,7 @@ class DNS extends Common_functions {
 						if(strpos($this->resolve_error, "timeout")!==false) {
 							$this->dead_ns[] = $ns;
 							if($this->print_error) {
-								$this->Result->show("warning", _("DNS error ($ns): ".$this->resolve_error));
+								$this->Result->show("warning", _("DNS error")." ($ns): ".$this->resolve_error);
 							}
 							array_unique($this->dead_ns);
 						}
@@ -287,7 +275,7 @@ class DNS extends Common_functions {
 					// loop
 					foreach ($dns_exception_list as $ns=>$val) {
 						if($this->print_error) {
-							$this->Result->show("warning", _("DNS error ($ns): ".$this->resolve_error));
+							$this->Result->show("warning", _("DNS error")." ($ns): ".$this->resolve_error);
 						}
 					}
 				}

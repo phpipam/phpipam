@@ -6,6 +6,10 @@
 
 # include required scripts
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # initialize required objects
@@ -42,14 +46,18 @@ $devtypes =  $Devtype->fetch_all_objects("deviceTypes", "tid");
 $devices = $Devices->fetch_all_objects("devices", "id");
 $all_sections = $Sections->fetch_all_sections();
 
-foreach ($all_sections as $section) {
-	$section = (array) $section;
-	$section_ids[$section['id']] = $section;
+if (is_array($all_sections)) {
+	foreach ($all_sections as $section) {
+		$section = (array) $section;
+		$section_ids[$section['id']] = $section;
+	}
 }
 
-foreach ($deviceTypes as $d) {
-    $d = (array) $d;
-    $deviceTypes[$d['tid']] = $d;
+if (is_array($deviceTypes)) {
+	foreach ($deviceTypes as $d) {
+	    $d = (array) $d;
+	    $deviceTypes[$d['tid']] = $d;
+	}
 }
 
 

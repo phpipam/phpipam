@@ -19,7 +19,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 }
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 	if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 
@@ -46,6 +46,7 @@ else {
 	print "	<th>"._('Object')."</th>";
 	print "	<th>"._('Description')."</th>";
 	print "	<th class='hidden-xs'>"._('Section')."</th>";
+	if($User->get_module_permissions ("vlan")>=User::ACCESS_RW)
 	print "	<th>"._('VLAN')."</th>";
 	print "	<th></th>";
 	print "</tr>";
@@ -74,16 +75,18 @@ else {
 			print "	<td class='hidden-xs'><a href='".create_link("subnets",$f['sectionId'])."'>$f[section]</a></td>";
 
 			# get vlan info
-			if(strlen($f['vlanId'])>0 && $f['vlanId']!=0) {
+			if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
+			if(!is_blank($f['vlanId']) && $f['vlanId']!=0) {
 				$vlan = $Tools->fetch_object("vlans", "vlanId", $f['vlanId']);
 				print "	<td>$vlan->number</td>";
 			} else {
 				print "	<td>/</td>";
 			}
+			}
 
 			# usage
 			if(!$master) {
-	    		$subnet_usage = $Subnets->calculate_subnet_usage ($f, false);
+	    		$subnet_usage = $Subnets->calculate_subnet_usage ($f);
 	    	}
 
 			# add address

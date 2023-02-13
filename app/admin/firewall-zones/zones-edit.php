@@ -29,7 +29,7 @@ if ($_POST['action'] != 'add' && $_POST['action'] != 'edit' && $_POST['action'] 
 
 
 # fetch module settings
-$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings,true);
 
 # fetch old zone
 if ($_POST['action'] != 'add') {
@@ -40,7 +40,7 @@ if ($_POST['action'] != 'add') {
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 	/* bootstrap switch */
 	var switch_options = {

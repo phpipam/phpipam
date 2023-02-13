@@ -47,6 +47,8 @@ foreach ($data as &$cdata) {
 						"switch"      =>$cdata['switch'],
 						"state"       =>$cdata['state'],
 						"note"        =>$cdata['note'],
+						"port"        =>$cdata['port'],
+						"location"    =>$cdata['location'],
 						"is_gateway"  =>$cdata['is_gateway']
 						);
 

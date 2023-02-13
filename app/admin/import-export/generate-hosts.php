@@ -8,6 +8,9 @@
 /* functions */
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
@@ -15,6 +18,7 @@ $Sections	= new Sections ($Database);
 $Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 $Tools		= new Tools ($Database);
+$Admin		= new Admin ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in

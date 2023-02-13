@@ -11,7 +11,7 @@ if (php_sapi_name() != "cli")	{ die("Cli only!"); }
 
 
 // search for all translated words and put them to array
-$untranslated = explode("\n",shell_exec("cd ".dirname(__FILE__)."/../../ && grep -r '_(' * "));
+$untranslated = pf_explode("\n",shell_exec("cd ".dirname(__FILE__)."/../../ && grep -r '_(' * "));
 // loop and search
 foreach ($untranslated as $u) {
 	// find string
@@ -37,7 +37,7 @@ $all_translations = array_unique($all_translations);
 
 
 // search all existing translations
-$untranslated = explode("\n",shell_exec("cd ".dirname(__FILE__)."/../../ && more functions/locale/en/LC_MESSAGES/phpipam.po"));
+$untranslated = pf_explode("\n",shell_exec("cd ".dirname(__FILE__)."/../../ && more functions/locale/en/LC_MESSAGES/phpipam.po"));
 // loop and create
 foreach ($untranslated as $u) {
 	// search for string

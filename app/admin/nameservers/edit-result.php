@@ -47,8 +47,8 @@ if ($_POST['action']!="delete") {
 
 // merge nameservers
 foreach($_POST as $key=>$line) {
-	if (strlen(strstr($key,"namesrv-"))>0) {
-		if (strlen($line)>0) {
+	if (!is_blank(strstr($key,"namesrv-"))) {
+		if (!is_blank($line)) {
 			$all_nameservers[] = trim($line);
 		}
 	}
@@ -57,7 +57,7 @@ $_POST['namesrv1'] = isset($all_nameservers) ? implode(";", $all_nameservers) : 
 
 // set sections
 foreach($_POST as $key=>$line) {
-	if (strlen(strstr($key,"section-"))>0) {
+	if (!is_blank(strstr($key,"section-"))) {
 		$key2 = str_replace("section-", "", $key);
 		$temp[] = $key2;
 		unset($_POST[$key]);
@@ -74,8 +74,8 @@ $values = array("id"=>@$_POST['nameserverid'],
 				"description"=>$_POST['description']
 				);
 # update
-if(!$Admin->object_modify("nameservers", $_POST['action'], "id", $values))	{ $Result->show("danger",  _("Failed to $_POST[action] nameserver set").'!', true); }
-else																		{ $Result->show("success", _("Nameserver set $_POST[action] successfull").'!', false); }
+if(!$Admin->object_modify("nameservers", $_POST['action'], "id", $values))	{ $Result->show("danger", _("Failed to")." ".$_POST["action"]." "._("nameserver set").'!', true); }
+else { $Result->show("success", _("Nameserver set")." ".$_POST["action"]." "._("successful").'!', false); }
 
 
 # remove all references if delete

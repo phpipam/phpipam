@@ -13,7 +13,7 @@ $_GET  = $User->strip_input_tags ($_GET);
 # validate subnetId parameter - meaning cfilter
 if(isset($_GET['subnetId'])) {
     // validate $_GET['subnetId']
-    if(!!preg_match('/[^A-Za-z0-9.#*% <>_ \\-$]/', $_GET['subnetId']))  { $Result->show("danger", _("Invalid search string")."!", true); }
+    if(!preg_match('/^[A-Za-z0-9.#*% <>_ \\-]+$/', $_GET['subnetId']))  { $Result->show("danger", _("Invalid search string")."!", true); }
 }
 
 # change parameters - search string provided
@@ -46,7 +46,7 @@ if(sizeof($clogs)==0) {
 # result
 else {
 	# if more that configured print it!
-	if(sizeof($clogs)==$input_climit) { $Result->show("warning alert-absolute", _("Output has been limited to last $input_climit lines")."!", false); }
+	if(sizeof($clogs)==$input_climit) { $Result->show("warning alert-absolute", _("Output has been limited to last")." ".$input_climit." "._("lines")."!", false); }
 
 	# printout
 	print "<table class='table sorted table-striped table-top table-condensed' data-cookie-id-table='changelog_all'>";
@@ -81,7 +81,7 @@ else {
 			# format diff
     		$changelog = str_replace("\r\n", "<br>",$l['cdiff']);
     		$changelog = str_replace("\n", "<br>",$changelog);
-    		$changelog = array_filter(explode("<br>", $changelog));
+    		$changelog = array_filter(pf_explode("<br>", $changelog));
 
             $diff = array();
 
@@ -102,8 +102,8 @@ else {
         		}
 
         		// field
-        		$field = explode(":", $c);
-        	    $value = explode("=>", $field[1]);
+        		$field = pf_explode(":", $c);
+        	    $value = isset($field[1]) ? pf_explode("=>", $field[1]) : [null];
 
         	    $field = trim(str_replace(array("[","]"), "", $field[0]));
         	    if(is_array(@$Log->changelog_keys[$type])) {
@@ -134,7 +134,7 @@ else {
 			print "	<td>$l[ctype]</td>";
 
 			# subnet, section or ip address
-			if(strlen($l['tid'])==0) {
+			if(is_blank($l['tid'])) {
 				print "<td><span class='badge badge1 badge5 alert-danger'>"._("Deleted")."</span></td>";
 			}
 			elseif($l['ctype']=="IP address")	{

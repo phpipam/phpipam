@@ -23,7 +23,7 @@ $User->check_user_session();
 	</div>
 	</td><td>&nbsp;</td><td align="right">
 	<!-- Download template -->
-	<?php print "<a class=\"csvtemplate btn btn-sm btn-default\" id=\"". $templatetype . "template\">Download template</a>"; ?>
+	<?php print "<a class=\"csvtemplate btn btn-sm btn-default\" id=\"". $templatetype . "template\">"._("Download template")."</a>"; ?>
 	</td></tr></table>
 	<span class="fname" style="display:none"></span>
 	<br>
@@ -36,7 +36,7 @@ $User->check_user_session();
 <script src="js/uploader/jquery.iframe-transport.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 <script src="js/uploader/jquery.fileupload.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
-<script type="text/javascript">
+<script>
 $(function(){
 
 	$('#drop a').click(function(){
@@ -94,8 +94,8 @@ $(function(){
                 var resp = jQuery.parseJSON(e);
             } catch (e) {
                 // error
-            	$('ul.progressUl li.alert').addClass('alert alert-danger');		//add error class
-            	$('li.alert p').append("<br><strong>Error: Error parsing json response</strong>");
+                $('ul.progressUl li.alert').addClass('alert alert-danger');		//add error class
+                $('li.alert p').append('<?php print "<br><strong>"._("Error: Error parsing json response")."</strong>"; ?>');
 
                 return;
             }
@@ -105,7 +105,7 @@ $(function(){
 			//success
 			if(respStat == "success") {
 				$('#uploadResult').addClass('alert alert-success');		//add success class
-				$('#uploadResult').append('<br><strong>Upload successfull</strong>');	//add ok sign
+				$('#uploadResult').append('<?php print "<br><strong>"._("Upload successfull")."</strong>"; ?>');	//add ok sign
 				$('#uploadResult').find('span').remove(); // remove cancel upload button
 
 				if (resp.impfields && resp.expfields) {
@@ -162,7 +162,7 @@ $(function(){
 				//get error message
 				var respErr = resp['error'];
 				$('#uploadResult').addClass('alert alert-danger');		//add error class
-				$('#uploadResult').append("<br><strong>Error: "+respErr+"</strong>");
+				$('#uploadResult').append("<br><strong><?php print _("Error"); ?>: "+respErr+"</strong>");
 				$('#uploadResult').find('span').remove(); // remove cancel upload button
 				// disable preview button
 				$('#dataImportPreview').attr('disabled', 'disabled');

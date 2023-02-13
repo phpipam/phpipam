@@ -15,8 +15,8 @@ if (!isset($Tools)) 	{ $Tools 	= new Tools ($Database); }
 # verify that user is logged in, to guard against direct access of page and possible exploits
 $User->check_user_session();
 
-$expfields = explode("|",$_GET['expfields']);
-$reqfields = explode("|",$_GET['reqfields']);
+$expfields = pf_explode("|",$_GET['expfields']);
+$reqfields = pf_explode("|",$_GET['reqfields']);
 if (isset($_GET['filetype'])) {
 	$filetype = $_GET['filetype'];
 } else {
@@ -65,7 +65,7 @@ if (strtolower($filetype) == "csv") {
 	foreach ($cols as $val) {
 		$col++;
 		# map import columns to expected fields as per previous window
-		$fieldmap[$col] = $impfields[$val];
+		$fieldmap[$col] = escape_input(trim($impfields[$val]));
 		$hcol = $col;
 	}
 
@@ -81,7 +81,7 @@ if (strtolower($filetype) == "csv") {
 				$Result->show('danger', _("Extra column found on line ").$row._(" in CSV file. CSV delimiter used in value field?"), true);
 			} else {
 				# read each row into a dictionary with expected fields as keys
-				$record[$fieldmap[$col]] = trim($val);
+				$record[$fieldmap[$col]] = escape_input(trim($val));
 			}
 		}
 		$data[] = $record;
@@ -97,7 +97,7 @@ elseif(strtolower($filetype) == "xls") {
 
 	# map import columns to expected fields as per previous window
 	for($col=1;$col<=$xls->colcount($sheet);$col++) {
-		$fieldmap[$col] = $impfields[$Tools->convert_encoding_to_UTF8($xls->val($row,$col,$sheet))];
+		$fieldmap[$col] = $impfields[escape_input($Tools->convert_encoding_to_UTF8($xls->val($row,$col,$sheet)))];
 		$hcol = $col;
 	}
 
@@ -105,15 +105,12 @@ elseif(strtolower($filetype) == "xls") {
 	for($row=2;$row<=$xls->rowcount($sheet);$row++) {
 		$record = array();
 		for($col=1;$col<=$xls->colcount($sheet);$col++) {
-			$record++;
 			if ($col > $hcol) {
 					$Result->show('danger', _("Extra column found on line ").$row._(" in XLS file. Please check input file."), true);
 			} else {
-				$record[$fieldmap[$col]] = trim($Tools->convert_encoding_to_UTF8($xls->val($row,$col,$sheet)));
+				$record[$fieldmap[$col]] = escape_input(trim($Tools->convert_encoding_to_UTF8($xls->val($row,$col,$sheet))));
 			}
 		}
 		$data[] = $record;
 	}
 }
-
-?>

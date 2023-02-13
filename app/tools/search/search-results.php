@@ -22,19 +22,19 @@ if (preg_match('/^[a-f0-9.:\/]+$/i', $searchTerm)) {
 }
 
 # set hidden custom fields
-$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);
+$selected_ip_fields = pf_explode(";", $selected_ip_fields);
 
 
 // all are off?
-if(!isset($_GET['addresses']) && !isset($_GET['subnets']) && !isset($_GET['vlans']) && !isset($_GET['vrf']) && !isset($_GET['pstn']) && !isset($_GET['circuits']) ) {
+if(!isset($_GET['addresses']) && !isset($_GET['subnets']) && !isset($_GET['vlans']) && !isset($_GET['vrf']) && !isset($_GET['pstn']) && !isset($_GET['circuits']) && !isset($_GET['customers']) ) {
     include("search-tips.php");
 }
 // empty request
-elseif (strlen($_GET['ip'])==0)  {
+elseif (is_blank($_GET['ip']))  {
     include("search-tips.php");
 }
 // ok, search results print
@@ -50,18 +50,29 @@ else {
 	#
 
 	// subnets
-	if(@$_GET['subnets']=="on" && strlen($_GET['ip'])>0 ) 	{ include(dirname(__FILE__).'/search_results/search-results_subnets.php'); }
+	if(@$_GET['subnets']=="on" && !is_blank($_GET['ip']) ) 	{ include(dirname(__FILE__).'/search_results/search-results_subnets.php'); }
 	// addresses
-	if(@$_GET['addresses']=="on" && strlen($_GET['ip'])>0) 	{ include(dirname(__FILE__).'/search_results/search-results_addresses.php'); }
+	if(@$_GET['addresses']=="on" && !is_blank($_GET['ip'])) 	{ include(dirname(__FILE__).'/search_results/search-results_addresses.php'); }
 	// vlan
-	if(@$_GET['vlans']=="on" && strlen($_GET['ip'])>0) 	    { include(dirname(__FILE__).'/search_results/search-results_vlans.php'); }
+	if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
+	if(@$_GET['vlans']=="on" && !is_blank($_GET['ip'])) 	    { include(dirname(__FILE__).'/search_results/search-results_vlans.php'); }
+	}
 	// vrf
-	if(@$_GET['vrf']=="on" && strlen($_GET['ip'])>0) 	    { include(dirname(__FILE__).'/search_results/search-results_vrfs.php'); }
+	if($User->get_module_permissions ("vrf")>=User::ACCESS_R) {
+	if(@$_GET['vrf']=="on" && !is_blank($_GET['ip'])) 	    { include(dirname(__FILE__).'/search_results/search-results_vrfs.php'); }
+	}
 	// pstn
-	if(@$_GET['pstn']=="on" && strlen($_GET['ip'])>0) 	    { include(dirname(__FILE__).'/search_results/search-results_pstn.php'); }
+	if($User->get_module_permissions ("pstn")>=User::ACCESS_R) {
+	if(@$_GET['pstn']=="on" && !is_blank($_GET['ip'])) 	    { include(dirname(__FILE__).'/search_results/search-results_pstn.php'); }
+	}
 	// circuits
-	if(@$_GET['circuits']=="on" && strlen($_GET['ip'])>0) 	{ include(dirname(__FILE__).'/search_results/search-results_circuits.php'); }
-
+	if($User->get_module_permissions ("circuits")>=User::ACCESS_R) {
+	if(@$_GET['circuits']=="on" && !is_blank($_GET['ip'])) 	{ include(dirname(__FILE__).'/search_results/search-results_circuits.php'); }
+	}
+	// customers
+	if($User->get_module_permissions ("customers")>=User::ACCESS_R) {
+	if(@$_GET['customers']=="on" && !is_blank($_GET['ip'])) 	{ include(dirname(__FILE__).'/search_results/search-results_customers.php'); }
+	}
 
 	// export holder
 	print '<div class="exportDIVSearch"></div>';

@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 /* fix for ajax-loading tooltips */
 $('body').tooltip({ selector: '[rel=tooltip]' });
 </script>
@@ -14,14 +14,14 @@ $DNS = new DNS ($Database, $User->settings);
 # reset custom fields to ip addresses
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
-$hidden_cfields = json_decode($settings->hiddenCustomFields, true);
+$hidden_cfields = pf_json_decode($settings->hiddenCustomFields, true);
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
 $selected_ip_fields = $settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);																			//format to array
+$selected_ip_fields = pf_explode(";", $selected_ip_fields);																			//format to array
 $selected_ip_fields_size = in_array('state', $selected_ip_fields) ? (sizeof($selected_ip_fields)-1) : sizeof($selected_ip_fields);	//set size of selected fields
-if($selected_ip_fields_size==1 && strlen($selected_ip_fields[0])==0) { $selected_ip_fields_size = 0; }								//fix for 0
+if($selected_ip_fields_size==1 && is_blank($selected_ip_fields[0])) { $selected_ip_fields_size = 0; }								//fix for 0
 
 
 /* Addresses and fields manupulations */
@@ -41,7 +41,7 @@ foreach($custom_fields as $field) {
 	if($addresses!==false) {
 		foreach($addresses as $ip) {
 			$ip = (array) $ip;
-			if(strlen($ip[$field['name']]) > 0) {
+			if(!is_blank($ip[$field['name']])) {
 				$sizeMyFields[$field['name']]++;		// +1
 			}
 		}
@@ -61,7 +61,7 @@ foreach($custom_fields as $field) {
 # set page limit for pagination
 $page_limit = 100000000;
 # set ping statuses for warning and offline
-$statuses = explode(";", $settings->pingStatus);
+$statuses = pf_explode(";", $settings->pingStatus);
 ?>
 
 <!-- print title and pagenum -->
@@ -74,7 +74,7 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 
 
 <!-- table -->
-<table class="ipaddresses normalTable table table-striped table-condensed table-hover table-full table-top">
+<table class="ipaddresses sortable sorted normalTable table table-condensed table-full table-top" data-cookie-id-table="ipaddresses">
 
 <!-- headers -->
 <tbody>
@@ -119,7 +119,7 @@ $m = sizeof($addresses) -1;		//last address index
 
 # if no IP is configured only display free subnet!
 if ($addresses===false || sizeof($addresses)==0) {
-   	$unused = $Addresses->find_unused_addresses($Subnets->transform_to_decimal($subnet_detailed['network']), $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'], $empty=true );
+   	$unused = $Subnets->find_unused_addresses ($subnet, false, false);
 	print '<tr class="th"><td colspan="'.$colspan['empty'].'" class="unused">'.$unused['ip'].' (' .$Subnets->reformat_number($unused['hosts']).')</td></tr>'. "\n";
 }
 # print IP address
@@ -130,9 +130,9 @@ else {
        	#
 
        	# check gap between network address and first IP address
-       	if ( $n == 0 ) 																	{ $unused = $Addresses->find_unused_addresses ( $Subnets->transform_to_decimal($subnet_detailed['network']), $addresses[$n]->ip_addr, $subnet['mask']); }
+       	if ( $n == 0 ) 																	{ $unused = $Subnets->find_unused_addresses ($subnet, false, $addresses[$n]->ip_addr); }
        	# check unused space between IP addresses
-       	else 																			{ $unused = $Addresses->find_unused_addresses ( $addresses[$n-1]->ip_addr, $addresses[$n]->ip_addr, $subnet['mask'] );  }
+       	else 																			{ $unused = $Subnets->find_unused_addresses ($subnet, $addresses[$n-1]->ip_addr, $addresses[$n]->ip_addr);  }
 
        	# if there is some result for unused print it - if sort == ip_addr
 	    if ( $unused ) {
@@ -201,7 +201,7 @@ else {
 
        		# print info button for hover
        		if(in_array('note', $selected_ip_fields)) {
-        		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",$addresses[$n]->note)."'></td>"; }
+        		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",$addresses[$n]->note)."'></i></td>"; }
         		else 												{ print "<td class='narrow'></td>"; }
         	}
 
@@ -231,7 +231,7 @@ else {
 						}
 						//text
 						elseif($myField['type']=="text") {
-							if(strlen($addresses[$n]->{$myField['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n][$myField['name']])."'>"; }
+							if(!is_blank($addresses[$n]->{$myField['name']}))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n][$myField['name']])."'>"; }
 							else											{ print ""; }
 						}
 						else {
@@ -250,8 +250,8 @@ else {
 		if ( $n == $m )
 		{
 			# compressed?
-			if(isset($addresses[$n]->stopIP))	{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->stopIP,  $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'] ); }
-			else 								{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->ip_addr, $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'] ); }
+			if(isset($addresses[$n]->stopIP))	{ $unused = $Subnets->find_unused_addresses ($subnet, $addresses[$n]->stopIP,  false); }
+			else 								{ $unused = $Subnets->find_unused_addresses ($subnet, $addresses[$n]->ip_addr, false); }
 
         	if ( $unused  ) {
         		print "<tr class='th'>";

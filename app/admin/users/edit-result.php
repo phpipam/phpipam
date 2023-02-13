@@ -8,11 +8,12 @@
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
-$Tools	 	= new Tools ($Database);
-$Result 	= new Result ();
+$Database       = new Database_PDO;
+$User           = new User ($Database);
+$Admin          = new Admin ($Database);
+$Tools          = new Tools ($Database);
+$Result         = new Result ();
+$Password_check = new Password_check ();
 
 # verify that user is logged in
 $User->check_user_session();
@@ -40,19 +41,24 @@ if($_POST['action']=="edit"||$_POST['action']=="delete") {
 
 # if password changes check and hash passwords
 if($auth_method->type != "local") { $_POST['password1'] = ""; $_POST['password2'] = ""; }
-if((strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add") && $auth_method->type=="local")) {
+if((!is_blank(@$_POST['password1']) || (@$_POST['action']=="add") && $auth_method->type=="local")) {
 	//checks
 	if($_POST['password1']!=$_POST['password2'])						{ $Result->show("danger", _("Passwords do not match"), true); }
 	if(strlen($_POST['password1'])<8)									{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
+
+	//enforce password policy
+	$policy = (pf_json_decode($User->settings->passwordPolicy, true));
+	$Password_check->set_requirements  ($policy, pf_explode(",",$policy['allowedSymbols']));
+	if (!$Password_check->validate ($_POST['password1'])) 				{ $Result->show("danger alert-danger ", _('Password validation errors').":<br> - ".implode("<br> - ", $Password_check->get_errors ()), true); }
 
 	//hash passowrd
 	$_POST['password1'] = $User->crypt_user_pass ($_POST['password1']);
 }
 
 # general checks
-if(strlen(@$_POST['real_name'])==0)										{ $Result->show("danger", _("Real name field is mandatory!"), true); }
+if(is_blank(@$_POST['real_name']))										{ $Result->show("danger", _("Real name field is mandatory!"), true); }
 # email format must be valid
-if (!$Result->validate_email(@$_POST['email'])) 						{ $Result->show("danger", _("Invalid email address!"), true); }
+if (!$Tools->validate_email(@$_POST['email'])) 						{ $Result->show("danger", _("Invalid email address!"), true); }
 
 # username must not already exist (if action is add)
 if ($_POST['action']=="add") {
@@ -60,7 +66,7 @@ if ($_POST['action']=="add") {
 	if ($auth_method->type=="local") {
 		if(strlen($_POST['username'])<3)								{ $Result->show("danger", _("Username must be at least 3 characters long!"), true); }
 	} else {
-		if(strlen($_POST['username'])==0)								{ $Result->show("danger", _("Username must be at least 1 character long!"), true); }
+		if(is_blank($_POST['username']))								{ $Result->show("danger", _("Username must be at least 1 character long!"), true); }
 	}
 	//check duplicate
 	if($Admin->fetch_object("users", "username", $_POST['username'])!==false) {
@@ -68,7 +74,9 @@ if ($_POST['action']=="add") {
 	}
 }
 # admin user cannot be deleted
-if($_POST['action']=="delete" && $_POST['username']=="admin") 			{ $Result->show("danger", _("Admin user cannot be deleted"), true); }
+if($_POST['action']=="delete" && $_POST['userId']==1) 			{ $Result->show("danger", _("Admin user cannot be deleted"), true); }
+# admin user cannot be disabled
+if($_POST['disabled']=="Yes" && $_POST['userId']==1) 			{ $Result->show("danger", _("Admin user cannot be disabled"), true); }
 
 # custom fields check
 $myFields = $Tools->fetch_custom_fields('users');
@@ -86,7 +94,7 @@ if(sizeof($myFields) > 0) {
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", '"'.$myField['name'].'" can not be empty!', true); }
+		if($myField['Null']=="NO" && is_blank($_POST[$myField['name']])) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 	}
 }
 
@@ -94,22 +102,23 @@ if(sizeof($myFields) > 0) {
 /* update */
 
 # formulate update values
+# nothing to do here for l10n, the content of the array goes into the database
 $values = array(
-				"id"            =>@$_POST['userId'],
-				"real_name"     =>$_POST['real_name'],
-				"username"      =>$_POST['username'],
-				"email"         =>$_POST['email'],
-				"role"          =>$_POST['role'],
-				"authMethod"    =>$_POST['authMethod'],
-				"lang"          =>$_POST['lang'],
-				"mailNotify"    =>$_POST['mailNotify'],
-				"mailChangelog" =>$_POST['mailChangelog'],
-				"editVlan"      =>$_POST['editVlan'],
-				"editCircuits"  =>$_POST['editCircuits'],
-				"theme"  		=>$_POST['theme']=="default" ? "" : $_POST['theme'],
-				"pstn"          =>$_POST['pstn'],
-				"pdns"          =>$_POST['pdns']
+				"id"             =>@$_POST['userId'],
+				"real_name"      =>$_POST['real_name'],
+				"username"       =>$_POST['username'],
+				"email"          =>$_POST['email'],
+				"role"           =>$_POST['role'],
+				"authMethod"     =>$_POST['authMethod'],
+				"lang"           =>$_POST['lang'],
+				"mailNotify"     =>$_POST['mailNotify'],
+				"mailChangelog"  =>$_POST['mailChangelog'],
+				"theme"          =>$_POST['theme']=="default" ? "" : $_POST['theme'],
+				"disabled"       =>$_POST['disabled']=="Yes" ? "Yes" : "No"
 				);
+
+
+
 # custom fields
 if (sizeof($myFields)>0) {
     foreach($myFields as $myField) {
@@ -120,7 +129,7 @@ if (sizeof($myFields)>0) {
     }
 }
 # update pass ?
-if(strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add" && $auth_method->type=="local")) {
+if(!is_blank(@$_POST['password1']) || (@$_POST['action']=="add" && $auth_method->type=="local")) {
 	$values['password'] = $_POST['password1'];
 }
 # pass change
@@ -139,9 +148,26 @@ if($_POST['role']=="Administrator") {
 	$values['groups'] = json_encode(@$group);
 }
 
+# permissions
+$permissions = [];
+# check
+foreach ($User->get_modules_with_permissions() as $m) {
+	if (isset($_POST['perm_'.$m])) {
+		if (is_numeric($_POST['perm_'.$m])) {
+			$permissions[$m] = $_POST['perm_'.$m];
+		}
+	}
+}
+# formulate permissions
+$values['module_permissions'] = json_encode($permissions);
+
 # execute
-if(!$Admin->object_modify("users", $_POST['action'], "id", $values))	{ $Result->show("danger",  _("User $_POST[action] failed").'!', true); }
-else																	{ $Result->show("success", _("User $_POST[action] successfull").'!', false); }
+if(!$Admin->object_modify("users", $_POST['action'], "id", $values)) {
+    $Result->show("danger", _("User")." ".$_POST["action"]." "._("failed").'!', true);
+}
+else {
+    $Result->show("success", _("User")." ".$_POST["action"]." "._("successful").'!', false);
+}
 
 # mail user
 if($Admin->verify_checkbox(@$_POST['notifyUser'])!="0") { include("edit-notify.php"); }

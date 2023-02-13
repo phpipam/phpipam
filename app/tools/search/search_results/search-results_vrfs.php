@@ -57,7 +57,7 @@ if(sizeof($result_vrf) > 0) {
 		if(sizeof($custom_vrf_fields) > 0) {
 			foreach($custom_vrf_fields as $field) {
 				if(!in_array($field['name'], $hidden_vrf_fields)) {
-					$vrf[$field['name']] = $Result->create_links ($vrf[$field['name']], $field['type']);
+					$vrf[$field['name']] = $Tools->create_links ($vrf[$field['name']], $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>";
 					$Tools->print_custom_field ($field['type'], $vrf[$field['name']]);
 					print "	</td>";
@@ -68,8 +68,8 @@ if(sizeof($result_vrf) > 0) {
 		print " <td class='actions'>";
 		if($User->is_admin(false)) {
 		print '<div class="btn-group">';
-		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf[vrfId]'><i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf[vrfId]'><i class='fa fa-times'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrf/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf[vrfId]'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrf/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf[vrfId]'><i class='fa fa-times'></i></button>";
 		print '</div>';
 		}
 		print "</td>";

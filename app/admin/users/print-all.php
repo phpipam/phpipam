@@ -13,7 +13,7 @@ $users = $Admin->fetch_all_objects("users", "username");
 $custom = $Tools->fetch_custom_fields('users');
 
 /* check customfields */
-$ffields = json_decode($User->settings->hiddenCustomFields, true);
+$ffields = pf_json_decode($User->settings->hiddenCustomFields, true);
 $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 ?>
 
@@ -26,7 +26,7 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 
 
 <!-- table -->
-<table id="userPrint1" class="table sorted table-striped table-top" data-cookie-id-table="admin_users">
+<table id="userPrint1" class="table sorted table-striped table-top table-td-top" data-cookie-id-table="admin_users">
 
 <!-- Headers -->
 <thead>
@@ -63,16 +63,19 @@ foreach ($users as $user) {
 	print '<tr>' . "\n";
 
 	# set icon based on normal user or admin
-	if($user['role'] == "Administrator") 	{ print '	<td><img src="css/images/userVader.png" rel="tooltip" title="'._('Administrator').'"></td>'. "\n"; }
-	else 									{ print '	<td><img src="css/images/userTrooper.png" rel="tooltip" title="'. _($user['role']) .'"></td>'. "\n";	}
+	if($user['role'] == "Administrator") 	{ print '	<td><img src="css/images/userVader.png" alt="'._("Administrator user icon").'" rel="tooltip" title="'._('Administrator').'"></td>'. "\n"; }
+	else 									{ print '	<td><img src="css/images/userTrooper.png" alt="'._("Standard user icon").'" rel="tooltip" title="'. _($user['role']) .'"></td>'. "\n";	}
 
-	print '	<td><a href="'.create_link("administration","users",$user['id']).'">' . $user['real_name'] . '</a></td>'. "\n";
+	# disabled
+	$disabled = $user['disabled']=="Yes" ? "<span class='badge badge1 badge5 alert-danger'>"._("Disabled")."</span>" : "";
+
+	print '	<td><a href="'.create_link("administration","users",$user['id']).'">' . $user['real_name'] . '</a> '.$disabled.'</td>'. "\n";
 	print '	<td>' . $user['username']  . '</td>'. "\n";
 	print '	<td>' . $user['email']     . '</td>'. "\n";
 	print '	<td>' . $user['role']      . '</td>'. "\n";
 
 	# language
-	if(strlen($user['lang'])>0) {
+	if(!is_blank($user['lang'])) {
 		# get lang name
 		$lname = $Admin->fetch_object("lang", "l_id", $user['lang']);
 		print "<td>$lname->l_name</td>";
@@ -95,31 +98,7 @@ foreach ($users as $user) {
 	}
 	else {
 		print "<td>";
-
-		// pdns
-    	if ($User->settings->enablePowerDNS==1) {
-	    	if(strlen($user['pdns'])==0) $user['pdns'] = "No";
-	    	$user['pdns'] = $user['pdns']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['pdns'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($user['pdns'])."</span>";
-	    	print _("PowerDNS").": ".$user['pdns']."<br>";
-    	}
-
-    	// vlan / VRF
-    	if(strlen($user['editVlan'])==0) $user['editVlan'] = "No";
-    	$user['editVlan'] = $user['editVlan']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['editVlan'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($user['editVlan'])."</span>";
-    	print _("Manage VLANs / VRFs").": ".$user['editVlan']."<br>";
-
-        // pstn
-    	if ($User->settings->enablePSTN==1) {
-	    	$user['pstn'] = $user['pstn']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['pstn'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions ($user['pstn']))."</span>";
-	    	print _("PSTN").": ".$user['pstn']."<br>";
-    	}
-
-        // Circuits
-    	if ($User->settings->enableCircuits==1) {
-	    	$user['editCircuits'] = $user['editCircuits']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['editCircuits'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($user['editCircuits'])."</span>";
-	    	print _("Manage Circuits").": ".$user['editCircuits']."<br>";
-    	}
-
+		include("print_module_permissions.php");
 		print "</td>";
 	}
 
@@ -128,7 +107,7 @@ foreach ($users as $user) {
 	print '	<td>'._('All groups').'</td>'. "\n";
 	}
 	else {
-		$groups = json_decode($user['groups'], true);
+		$groups = pf_json_decode($user['groups'], true);
 		$gr = $Admin->groups_parse($groups);
 
 		print '	<td>';
@@ -145,7 +124,7 @@ foreach ($users as $user) {
 
 	# last login
 	print "<td>";
-	print strlen($user['lastLogin'])>0 ? $user['lastLogin'] : "<span class='text-muted'>"._("Never")."</span>";
+	print !is_blank($user['lastLogin']) ? $user['lastLogin'] : "<span class='text-muted'>"._("Never")."</span>";
 	print "</td>";
 
 	# custom
@@ -160,7 +139,7 @@ foreach ($users as $user) {
 				}
 				//text
 				elseif($field['type']=="text") {
-					if(strlen($user[$field['name']])>0)		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $user[$field['name']])."'>"; }
+					if(!is_blank($user[$field['name']]))		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $user[$field['name']])."'>"; }
 					else									{ print ""; }
 				}
 				else {
@@ -172,16 +151,23 @@ foreach ($users as $user) {
 		}
 	}
 
-	# edit, delete
+
 	print "	<td class='actions'>";
-	print "	<div class='btn-group nowrap'>";
-	print "		<a class='btn btn-xs btn-default' href='".create_link("administration","users",$user['id'])."'><i class='fa fa-eye'></i></a></button>";
-	print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='edit' data-id='$user[id]'><i class='fa fa-pencil'></i></a>";
-	print "		<a class='btn btn-xs btn-default";
-	if(isset($_SESSION['realipamusername'])) { print " disabled";}
-	print "' href='".create_link("administration","users","switch","$user[username]")."'><i class='fa fa-exchange'></i></a></button>";
-	print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='delete' data-id='$user[id]'><i class='fa fa-times'></i></a>";
-	print "	</div>";
+    $links = [];
+    $links[] = ["type"=>"header", "text"=>_("Show user")];
+    $links[] = ["type"=>"link", "text"=>_("Show user"), "href"=>create_link("administration", "users", $user['id']), "icon"=>"eye", "visible"=>"dropdown"];
+    $links[] = ["type"=>"divider"];
+    $links[] = ["type"=>"header", "text"=>_("Manage user")];
+    $links[] = ["type"=>"link", "text"=>_("Edit user"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/users/edit.php' data-class='700' data-action='edit' data-id='$user[id]'", "icon"=>"pencil"];
+    $links[] = ["type"=>"link", "text"=>_("Delete user"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/users/edit.php' data-class='700' data-action='delete' data-id='$user[id]'", "icon"=>"times"];
+    if(!isset($_SESSION['realipamusername'])) {
+        $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>_("Swap user")];
+        $links[] = ["type"=>"link", "text"=>_("Swap user"), "href"=>create_link("administration", "users", "switch", $user['username']), "icon"=>"exchange"];
+    }
+
+    // print links
+    print $User->print_actions($User->user->compress_actions, $links);
 	print "	</td>";
 
 	print '</tr>' . "\n";

@@ -31,7 +31,7 @@ if($permission < 2) 			   $Result->show("danger", _('You cannot write to this su
 is_numeric($_POST['subnetId']) ? : $Result->show("danger", _("Invalid subnet ID") ,true);
 
 # set filetype
-$filetype = explode(".", $_POST['filetype']);
+$filetype = pf_explode(".", $_POST['filetype']);
 $filetype = end($filetype);
 
 # get custom fields
@@ -64,7 +64,7 @@ foreach($outFile as $k=>$line) {
 		$line[1] = $Addresses->address_type_type_to_index($line[1]);
 
 		// reformat device from name to id
-		if(strlen($line[7])>0) {
+		if(!is_blank($line[7])) {
     		if ($devices!==false) {
         		foreach($devices as $d) {
         			if($d->hostname==$line[7])	{ $line[7] = $d->id; }
@@ -79,7 +79,7 @@ foreach($outFile as $k=>$line) {
 		}
 
 		// reformat location from name to id
-		if(strlen($line[10])>0) {
+		if(!is_blank($line[10])) {
     		if ($locations!==false) {
         		foreach($locations as $d) {
         			if($d->name==$line[10])	{ $line[10] = $d->id; }
@@ -111,7 +111,7 @@ foreach($outFile as $k=>$line) {
 								"switch"                => $line[7],
 								"port"                  => $line[8],
 								"note"                  => $line[9],
-								"location_item"         => $line[10]
+								"location"              => $line[10]
 								);
 		// add id
 		if ($action=="edit")	{ $address_insert["id"] = $id; }

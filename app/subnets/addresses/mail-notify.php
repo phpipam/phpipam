@@ -20,7 +20,7 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # id must be numeric
-is_numeric($_POST['id']) || strlen($_POST['id'])==0 ?:	$Result->show("danger", _("Invalid ID"), true);
+is_numeric($_POST['id']) || is_blank($_POST['id']) ?:	$Result->show("danger", _("Invalid ID"), true);
 
 $csrf = $User->Crypto->csrf_cookie ("create", "mail_notify");
 

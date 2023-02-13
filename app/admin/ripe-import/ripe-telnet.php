@@ -95,7 +95,7 @@ else {
 			if(sizeof(@$vlans)>0) {
 				foreach($vlans as $vlan) {
 					# set description
-					$vlan_description = strlen($vlan->description)>0 ? " (".$vlan->description.")" : "";
+					$vlan_description = !is_blank($vlan->description) ? " (".$vlan->description.")" : "";
 					print '<option value="'.$vlan->vlanId.'">'.$vlan->number.$vlan_description.'</option>';
 				}
 			}
@@ -106,7 +106,7 @@ else {
 			if(sizeof(@$vrfs)>0) {
 				foreach($vrfs as $vrf) {
 					# set description
-					$vrf_description = strlen($vrf->description)>0 ? " (".$vrf->description.")" : "";
+					$vrf_description = !is_blank($vrf->description) ? " (".$vrf->description.")" : "";
 					print '<option value="'.$vrf->vrfId.'">'.$vrf->name.$vrf_description.'</option>';
 				}
 			}

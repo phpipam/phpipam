@@ -18,6 +18,8 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# verify module permissions
+$User->check_module_permissions ("racks", User::ACCESS_R, true, true);
 
 # check that rack support isenabled
 if ($User->settings->enableRACK!="1") {
@@ -30,7 +32,6 @@ else {
     $Racks = new phpipam_rack ($Database);
     # fetch all racks
     $rack = $Racks->fetch_rack_details ($_POST['rackid']);
-    $rack_devices = $Racks->fetch_rack_devices ($_POST['rackid']);
 
     // rack check
     if($rack===false)                       { $error =_("Invalid rack Id"); }

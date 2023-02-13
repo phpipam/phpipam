@@ -22,14 +22,14 @@ $res = $Subnets->resolve_ripe_arin ($_POST['subnet']);
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print _(ucwords($res['result'])); ?></div>
+<div class="pHeader"><?php print _(ucwords(escape_input($res['result']))); ?></div>
 
 <!-- content -->
 <div class="pContent">
 	<?php
 	// error ?
 	if ($res['result']=="error") {
-		$Result->show("danger", _(ucwords($res['error'])), false);
+		$Result->show("danger", _(ucwords(escape_input($res['error']))), false);
 	}
 	// ok, print field matching
 	else {
@@ -53,6 +53,8 @@ $res = $Subnets->resolve_ripe_arin ($_POST['subnet']);
 		// loop
 		if (isset($res['data'])) {
 			foreach ($res['data'] as $k=>$d) {
+				$d = escape_input($d);
+
 				print "<tr>";
 				print "<td>";
 				print "	<span class='text-muted'>$k</span>:  $d";
@@ -64,7 +66,7 @@ $res = $Subnets->resolve_ripe_arin ($_POST['subnet']);
 				print "<select name='$d' class='form-control input-sm'>";
 				print "<option value='0'>None</option>";
 				// print custom
-				if (sizeof($custom_fields>0)) {
+				if (is_array($custom_fields)) {
 					foreach ($custom_fields as $f) {
 						// replace descr with description
 						if ($k=="descr")	$k = "description";

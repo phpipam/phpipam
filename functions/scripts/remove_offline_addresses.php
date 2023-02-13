@@ -44,7 +44,7 @@ $query = "select
 			and `su`.`pingSubnet` = 1
 			and (`ip`.`excludePing` IS NULL or `ip`.`excludePing`!=1 )
 			and
-			(`ip`.`lastSeen` < '$beforetime' and `ip`.`lastSeen` != '0000-00-00 00:00:00' and `ip`.`lastSeen` is not NULL);";
+			(`ip`.`lastSeen` < '$beforetime' and `ip`.`lastSeen` != '1970-01-01 00:00:01' and `ip`.`lastSeen` is not NULL);";
 
 # fetch
 try { $offline_addresses = $Database->getObjectsQuery($query); }
@@ -54,7 +54,7 @@ catch (Exception $e) {
 }
 
 # if none die, none to remove
-if (sizeof($offline_addresses)==0) {
+if (!is_array($offline_addresses) || empty($offline_addresses)) {
 	die();
 }
 # remove
@@ -81,65 +81,63 @@ if(sizeof($removed_addresses)>0 && $config['removed_addresses_send_mail']) {
 	# none?
 	if(!isset($recepients))	{ die(); }
 
-	# fetch mailer settings
-	$mail_settings = $Subnets->fetch_object("settingsMail", "id", 1);
 	# fake user object, needed for create_link
-	$User = new StdClass();
-
-	# initialize mailer
-	$phpipam_mail = new phpipam_mail($Subnets->settings, $mail_settings);
-	$phpipam_mail->initialize_mailer();
-
-	// set subject
-	$subject	= "phpipam deleted offline addresses at ".$nowdate;
-
-	//html
-	$content[] = "<p style='margin-left:10px;'>$Subnets->mail_font_style <font style='font-size:16px;size:16px;'>phpipam removed inactive addresses at ".$nowdate."</font></font></p><br>";
-
-	$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;border:1px solid #ccc;'>";
-	$content[] = "<tr>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;white-space:nowrap;'>$Subnets->mail_font_style IP</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Description</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Hostname</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Subnet</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Last seen</font></th>";
-	$content[] = "</tr>";
-
-	//plain
-	$content_plain[] = "phpipam deleted offline addresses at ".$nowdate."\r\n------------------------------";
-
-	//Changes
-	foreach($removed_addresses as $change) {
-		// to array
-		$change = (array) $change;
-		//set subnet
-		$subnet = $Subnets->fetch_subnet(null, $change['subnetId']);
-
-        // desc
-		$change['description'] = strlen($change['description'])>0 ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
-		// subnet desc
-		$subnet->description = strlen($subnet->description)>0 ? "$Subnets->mail_font_style $subnet->description</font>" : "$Subnets->mail_font_style / </font>";
-
-		//content
-		$content[] = "<tr>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style ".$Subnets->transform_to_dotted($change['ip_addr'])."</font></td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $change[description]</font></td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style_href $change[hostname]</font></td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'><a href='".rtrim(str_replace(BASE, "",$Subnets->settings->siteURL), "/")."".create_link("subnets",$subnet->sectionId,$subnet->id)."'>$Subnets->mail_font_style_href ".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask."</font></a>".$subnet->description."</td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $change[lastSeen]</td>";
-		$content[] = "</tr>";
-
-		//plain content
-		$content_plain[] = "\t * ".$Subnets->transform_to_dotted($change['ip_addr'])." (".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask.")\r\n";
-	}
-	$content[] = "</table>";
-
-	# set content
-	$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-	$content_plain 	= implode("\r\n",$content_plain);
-
+	$User = new FakeUser(false);
 	# try to send
 	try {
+		# fetch mailer settings
+		$mail_settings = $Subnets->fetch_object("settingsMail", "id", 1);
+		# initialize mailer
+		$phpipam_mail = new phpipam_mail($Subnets->settings, $mail_settings);
+
+		// set subject
+		$subject	= "phpipam deleted offline addresses at ".$nowdate;
+
+		//html
+		$content[] = "<p style='margin-left:10px;'>$Subnets->mail_font_style <font style='font-size:16px;size:16px;'>phpipam removed inactive addresses at ".$nowdate."</font></font></p><br>";
+
+		$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;border:1px solid #ccc;'>";
+		$content[] = "<tr>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;white-space:nowrap;'>$Subnets->mail_font_style IP</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Description</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Hostname</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Subnet</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Last seen</font></th>";
+		$content[] = "</tr>";
+
+		//plain
+		$content_plain[] = "phpipam deleted offline addresses at ".$nowdate."\r\n------------------------------";
+
+		//Changes
+		foreach($removed_addresses as $change) {
+			// to array
+			$change = (array) $change;
+			//set subnet
+			$subnet = $Subnets->fetch_subnet(null, $change['subnetId']);
+
+	        // desc
+			$change['description'] = !is_blank($change['description']) ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
+			// subnet desc
+			$subnet->description = !is_blank($subnet->description) ? "$Subnets->mail_font_style $subnet->description</font>" : "$Subnets->mail_font_style / </font>";
+
+			//content
+			$content[] = "<tr>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style ".$Subnets->transform_to_dotted($change['ip_addr'])."</font></td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $change[description]</font></td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style_href $change[hostname]</font></td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'><a href='".rtrim(str_replace(BASE, "",$Subnets->settings->siteURL), "/")."".create_link("subnets",$subnet->sectionId,$subnet->id)."'>$Subnets->mail_font_style_href ".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask."</font></a>".$subnet->description."</td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $change[lastSeen]</td>";
+			$content[] = "</tr>";
+
+			//plain content
+			$content_plain[] = "\t * ".$Subnets->transform_to_dotted($change['ip_addr'])." (".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask.")\r\n";
+		}
+		$content[] = "</table>";
+
+		# set content
+		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+		$content_plain 	= implode("\r\n",$content_plain);
+
 		$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 		//add all admins to CC
 		foreach($recepients as $admin) {
@@ -150,10 +148,10 @@ if(sizeof($removed_addresses)>0 && $config['removed_addresses_send_mail']) {
 		$phpipam_mail->Php_mailer->AltBody = $content_plain;
 		//send
 		$phpipam_mail->Php_mailer->send();
-	} catch (phpmailerException $e) {
+	} catch (PHPMailer\PHPMailer\Exception $e) {
 		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
 	} catch (Exception $e) {
-		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
+		$Result->show_cli("Mailer Error: ".$e->getMessage(), true);
 	}
 }
 

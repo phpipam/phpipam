@@ -10,27 +10,34 @@ $User->check_user_session();
 
 /* fetch all custom fields */
 $custom_tables = array(
-						"ipaddresses"      => "IP address",
-						"subnets"          => "subnet",
-						"vlans"            => "VLAN",
-						"vrf"              => "VRF",
-						"users"            => "User",
-						"userGroups"       => "User Group",
-						"devices"          => "Device",
-						"racks"            => "Rack",
-						"locations"        => "Locations",
-						"pstnPrefixes"     => "PSTN Prefixes",
-						"pstnNumbers"      => "PSTN Numbers",
-						"circuitProviders" => "Circuit providers",
-						"circuits" 		   => "Circuits"
+						"ipaddresses"      => _("IP addresses"),
+						"requests"         => _("IP requests"),
+						"subnets"          => _("Subnets"),
+						"vlans"            => _("VLAN"),
+						"vrf"              => _("VRF"),
+						"users"            => _("User"),
+						"userGroups"       => _("User Group"),
+						"devices"          => _("Devices"),
+						"racks"            => _("Rack"),
+						"locations"        => _("Locations"),
+						"pstnPrefixes"     => _("PSTN Prefixes"),
+						"pstnNumbers"      => _("PSTN Numbers"),
+						"circuitProviders" => _("Circuit providers"),
+						"circuits" 		   => _("Circuits"),
+						"customers" 	   => _("Customers"),
+						"nat"			   => _("NAT"),
+						"routing_bgp" 	   => _("BGP Routing"),
+						"vaults" 	       => _("Vaults"),
+						"vaultItems" 	   => _("Vault items"),
+						//"routing_ospf" 	   => _("OSPF Routing")
 						);
 
 # create array
 foreach($custom_tables as $k=>$f) {
 	$custom_fields[$k]				= $Tools->fetch_custom_fields($k);
 	$custom_fields_numeric[$k]		= $Tools->fetch_custom_fields_numeric($k);
-	$custom_fields[$k]['title'] 	= "Custom $f fields";
-	$custom_fields[$k]['tooltip']	= "Add new custom $f field";
+	$custom_fields[$k]['title'] 	= _("Custom")." $f "._("fields");
+	$custom_fields[$k]['tooltip']	= _("Add new custom")." $f "._("field");
 }
 ?>
 
@@ -69,7 +76,7 @@ foreach($custom_fields as $k=>$cf) {
 	$table = $k;
 
 	# get custom fields
-	$ffields = json_decode($User->settings->hiddenCustomFields, true);
+	$ffields = pf_json_decode($User->settings->hiddenCustomFields, true);
 	$ffields = is_array(@$ffields[$table]) ? $ffields[$table] : array();
 
 	print "<tbody id='custom-$k'>";
@@ -102,7 +109,7 @@ foreach($custom_fields as $k=>$cf) {
 			print "<tr class='$class'>";
 
 			# ordering
-			if (( ($m+1) != $size) ) 	{ print "<td style='width:10px;'><button class='btn btn-xs btn-default down' data-direction='down' data-table='$table' rel='tooltip' title='Move down' data-fieldname='".$custom_fields_numeric[$table][$m]['name']."' data-nextfieldname='".$custom_fields_numeric[$table][$m+1]['name']."'><i class='fa fa-chevron-down'></i></button></td>";	}
+			if (( ($m+1) != $size) ) 	{ print "<td style='width:10px;'><button class='btn btn-xs btn-default down' data-direction='down' data-table='$table' rel='tooltip' title='"._("Move down")."' data-fieldname='".$custom_fields_numeric[$table][$m]['name']."' data-nextfieldname='".$custom_fields_numeric[$table][$m+1]['name']."'><i class='fa fa-chevron-down'></i></button></td>";	}
 			else 						{ print "<td style='width:10px;'></td>";}
 
 			print "<td class='name'>".$Tools->print_custom_field_name ($f['name'])."</td>";
