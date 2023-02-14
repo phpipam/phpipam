@@ -508,7 +508,8 @@ class Addresses extends Common_functions {
 	protected function modify_address_delete ($address) {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
-		if (isset($address['section'])) $address_old->section = $address['section'];
+		if (is_object($address_old) && isset($address['section']))
+			$address_old->section = $address['section'];
 
 		# series?
 		if($address['type']=="series") {
@@ -1565,7 +1566,7 @@ class Addresses extends Common_functions {
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {
 			# ignore already comressed range
-			if($addresses[$c]->class!="compressed-range") {
+			if(!property_exists($addresses[$c], 'class') || $addresses[$c]->class!="compressed-range") {
 				# gap between this and previous
 				if(gmp_strval( @gmp_sub($addresses[$c]->ip_addr, $addresses[$c-1]->ip_addr)) != 1) {
 					# remove index flag

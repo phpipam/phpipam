@@ -347,7 +347,7 @@ class Logging extends Common_functions {
 				if (array_key_exists("HTTP_PHPIPAM_TOKEN", $_SERVER)) {
 					$admin = new Admin($this->Database, False);
 					$token = $admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN']);
-					if ($token === False) {
+					if ($token === false) {
 						$this->user_id = null;
 					}
 					else {
@@ -964,14 +964,16 @@ class Logging extends Common_functions {
 			}
 		}
 		// ip address - old needs to be transformed to dotted format
-		$this->object_old['ip_addr'] = $this->Subnets->transform_address($this->object_old['ip_addr'], "dotted");
-		$this->object_new['ip_addr'] = $this->Subnets->transform_address($this->object_new['ip_addr'], "dotted");
+		if (isset($this->object_old['ip_addr']))
+			$this->object_old['ip_addr'] = $this->Subnets->transform_address($this->object_old['ip_addr'], "dotted");
+		if (isset($this->object_new['ip_addr']))
+			$this->object_new['ip_addr'] = $this->Subnets->transform_address($this->object_new['ip_addr'], "dotted");
 
 		$log = [];
 		// check each value
 		foreach($this->object_new as $k=>$v) {
 			//change
-			if($this->object_old[$k]!=$v && ($this->object_old[$k] != str_replace("\'", "'", $v)))	{
+			if($this->object_old[$k]!=$v && ($this->object_old[$k] != str_replace("\'", "'", $v ?: '')))	{
 				//empty
 				if(is_blank(@$this->object_old[$k]))	{ $this->object_old[$k] = "NULL"; }
 				if(is_blank(@$v))						{ $v = "NULL"; }
@@ -1112,7 +1114,7 @@ class Logging extends Common_functions {
 			}
 
 			# if section does not change
-			if($this->object_new['sectionId']==$this->object_new['sectionIdNew']) {
+			if(isset($this->object_new['sectionId']) && $this->object_new['sectionId']==$this->object_new['sectionIdNew']) {
 				unset(	$this->object_new['sectionIdNew']);
 			}
 			else {
@@ -1159,7 +1161,7 @@ class Logging extends Common_functions {
 	 * @access private
 	 * @param string $k
 	 * @param mixed $v
-	 * @return void
+	 * @return mixed
 	 */
 	private function changelog_format_section_diff ($k, $v) {
 		//get old and new device
@@ -1169,7 +1171,8 @@ class Logging extends Common_functions {
 		}
 		if($v != "NULL")	{
 			$section = $this->Sections->fetch_section ("id", $v);
-			$v = $section->name." (id ".$section->id.")";
+			if (is_object($section))
+				$v = $section->name." (id ".$section->id.")";
 		}
 		//result
 		return $v;
@@ -1224,7 +1227,8 @@ class Logging extends Common_functions {
 		}
 		elseif($this->object_old[$k] != "NULL") {
 			$dev = $this->Tools->fetch_object("devices", "id", $this->object_old[$k]);
-			$this->object_old[$k] = $dev->hostname;
+			if (is_object($dev))
+				$this->object_old[$k] = $dev->hostname;
 		}
 		// new none
 		if($v == 0)	{
@@ -1232,7 +1236,8 @@ class Logging extends Common_functions {
 		}
 		if($v != "NULL") {
 			$dev = $this->Tools->fetch_object("devices", "id", $v);
-			$v = $dev->hostname;
+			if (is_object($dev))
+				$v = $dev->hostname;
 		}
 		//result
 		return $v;
@@ -1253,7 +1258,8 @@ class Logging extends Common_functions {
 		}
 		elseif($this->object_old[$k] != "NULL") {
 			$vlan = $this->Tools->fetch_object("vlans", "vlanId", $this->object_old[$k]);
-			$this->object_old[$k] = $vlan->name." [$vlan->number]";
+			if (is_object($vlan))
+				$this->object_old[$k] = $vlan->name." [$vlan->number]";
 		}
 		//new none
 		if($v == 0)	{
@@ -1261,7 +1267,8 @@ class Logging extends Common_functions {
 		}
 		elseif($v != "NULL") {
 			$vlan = $this->Tools->fetch_object("vlans", "vlanId", $v);
-			$v = $vlan->name." [$vlan->number]";
+			if (is_object($vlan))
+				$v = $vlan->name." [$vlan->number]";
 		}
 		//result
 		return $v;
@@ -1282,7 +1289,8 @@ class Logging extends Common_functions {
 		}
 		elseif($this->object_old[$k] != "NULL") {
 			$vrf = $this->Tools->fetch_object("vrf", "vrfId", $this->object_old[$k]);
-			$this->object_old[$k] = $vrf->name." [$vrf->description]";
+			if (is_object($vrf))
+				$this->object_old[$k] = $vrf->name." [$vrf->description]";
 		}
 		// new none
 		if($v == 0)	{
@@ -1290,7 +1298,8 @@ class Logging extends Common_functions {
 		}
 		elseif($v != "NULL") {
 			$vrf = $this->Tools->fetch_object("vrf", "vrfId", $v);
-			$v = $vrf->name." [$vrf->description]";
+			if (is_object($vrf))
+				$v = $vrf->name." [$vrf->description]";
 		}
 		//result
 		return $v;
@@ -1311,7 +1320,8 @@ class Logging extends Common_functions {
 		}
 		elseif($this->object_old[$k] != "NULL") {
 			$ns = $this->Tools->fetch_object("nameservers", "id", $this->object_old[$k]);
-			$this->object_old[$k] = $ns->name." [".$ns->namesrv1."]";
+			if (is_object($ns))
+				$this->object_old[$k] = $ns->name." [".$ns->namesrv1."]";
 		}
 		// new none
 		if($v == 0)	{
@@ -1319,7 +1329,8 @@ class Logging extends Common_functions {
 		}
 		elseif($v != "NULL") {
 			$ns = $this->Tools->fetch_object("nameservers", "id", $v);
-			$v = $ns->name." [".$ns->namesrv1."]";
+			if (is_object($ns))
+				$v = $ns->name." [".$ns->namesrv1."]";
 		}
 		//result
 		return $v;
@@ -1340,7 +1351,8 @@ class Logging extends Common_functions {
 		}
 		elseif($this->object_old[$k] != "NULL") {
 			$location = $this->Tools->fetch_object("locations", "id", $this->object_old[$k]);
-			$this->object_old[$k] = !is_blank($location->description) ? $location->name." [$location->description]" : $location->name;
+			if (is_object($location))
+				$this->object_old[$k] = !is_blank($location->description) ? $location->name." [$location->description]" : $location->name;
 		}
 		// new none
 		if($v == 0)	{
@@ -1348,7 +1360,8 @@ class Logging extends Common_functions {
 		}
 		elseif($v != "NULL") {
 			$location = $this->Tools->fetch_object("locations", "id", $v);
-			$v = !is_blank($location->description) ? $location->name." [$location->description]" : $location->name;
+			if (is_object($location))
+				$v = !is_blank($location->description) ? $location->name." [$location->description]" : $location->name;
 		}
 		//result
 		return $v;

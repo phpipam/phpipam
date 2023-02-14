@@ -882,7 +882,7 @@ class Common_functions  {
 			if ($req == "mac")
 				$req = strtr($req, ':', '-'); # Mac-addresses, replace Colon U+003A with hyphen U+002D
 
-			if (strpos($req, ':')!==false)
+			if (is_string($req) && strpos($req, ':')!==false)
 				$req = strtr($req, ':', '.'); # Default, replace Colon U+003A with Full Stop U+002E.
 
 			$result .= ($changelog===true) ? "[$key]: $req<br>" : " ". $key . ": " . $req . "<br>";
@@ -1089,11 +1089,14 @@ class Common_functions  {
 	 *	source: https://css-tricks.com/snippets/php/find-urls-in-text-make-links/
 	 *
 	 * @access public
-	 * @param mixed $field_type
-	 * @param mixed $text
-	 * @return mixed
+ 	 * @param string $text
+	 * @param string $field_type
+	 * @return string
 	 */
 	public function create_links ($text, $field_type = "varchar") {
+		if (!is_string($text))
+			return '';
+
 		// create links only for varchar fields
 		if (strpos($field_type, "varchar")!==false) {
 			// regular expression

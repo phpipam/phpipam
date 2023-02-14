@@ -189,7 +189,7 @@ class DNS extends Common_functions {
 		$address = $this->transform_address ($address, "dotted");
 
 		// if both are set ignore
-		if (strlen($hostname)>1 && !is_blank($address)) {
+		if (!is_blank($hostname) && !is_blank($address)) {
 											{ return array("class"=>"", "address"=>$address, "name"=>$hostname); }
 		}
 		// if settings permits to check or override is set
