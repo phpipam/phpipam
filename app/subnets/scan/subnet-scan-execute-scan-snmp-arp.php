@@ -14,7 +14,7 @@ disable_php_errors();
 print "<h5>"._('Scan results').":</h5><hr>";
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disabled"), true); }
 # subnet check
 $subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
 if ($subnet===false)                            { $Result->show("danger", _("Invalid subnet Id"), true);  }
