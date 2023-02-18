@@ -15,6 +15,14 @@ class Session_DB {
 	protected $Database;
 
 	/**
+	 * Result
+	 *
+	 * @var Result
+	 * @access public
+	 */
+	public $Result;
+
+	/**
 	 * Construnctor
 	 *
 	 * @method __construct

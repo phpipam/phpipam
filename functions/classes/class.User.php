@@ -1187,7 +1187,7 @@ class User extends Common_functions {
         # debug?
         if($this->debugging) {
             print "<pre style='width:700px;margin:auto;margin-top:10px;'>";
-            print(implode("<br>", $Radius->debug_text));
+            print(escape_input(implode("<br>", $Radius->debug_text)));
             print "</pre>";
         }
 

@@ -1791,7 +1791,10 @@ class Logging extends Common_functions {
 		$this->object_type = str_replace("ip_range", "address range", $this->object_type);
 
 		# folder
-		if ( $this->object_new['isFolder']=="1" || $this->object_old['isFolder']=="1" )	{ $this->object_type = "folder"; }
+		if ((isset($this->object_new['isFolder']) && $this->object_new['isFolder'] == "1") ||
+		    (isset($this->object_old['isFolder']) && $this->object_old['isFolder'] == "1")) {
+			$this->object_type = "folder";
+		}
 
 		# set subject
 		$subject = "";
@@ -1838,7 +1841,7 @@ class Logging extends Common_functions {
 		foreach ($changelog as $c) {
     		// field
     		$field = pf_explode(":", $c);
-    	    $value = pf_explode("=>", $field[1]);
+    	    $value = isset($field[1]) ? pf_explode("=>", $field[1]) : [];
 
     	    // format field
     	    $field = trim(str_replace(array("[","]"), "", $field[0]));

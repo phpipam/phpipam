@@ -204,6 +204,7 @@ class Radius
     var $_attributes_received;    // Radius attributes received
     var $_socket_to_server;       // Socket connection
     var $_debug_mode;             // Debug mode flag
+    var $debug_text = [];         // Debug messages
     var $_attributes_info;        // Attributes info array
     var $_radius_packet_info;     // Radius packet codes info array
     var $_last_error_code;        // Last error code

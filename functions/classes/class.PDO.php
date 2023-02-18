@@ -49,6 +49,13 @@ abstract class DB {
 	protected $pdo = null;
 
 	/**
+	 * SSL attributes
+	 *
+	 * @var array|false
+	 */
+	public $ssl = false;
+
+	/**
 	 * Database name - needed for check
 	 *
 	 * (default value: '')
@@ -100,8 +107,22 @@ abstract class DB {
 	 */
 	private $ctes_enabled = null;
 
+	/**
+	 * Instal flag
+	 * @var bool
+	 * @access protected
+	 */
+	public $install = false;
 
-
+	/**
+	 * Debugging flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access protected
+	 */
+	protected $debug = false;
 
 	/**
 	 * __construct function.
@@ -1067,18 +1088,6 @@ class Database_PDO extends DB {
 	 * @access public
 	 */
 	public $install = false;
-
-	/**
-	 * Debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access protected
-	 */
-	protected $debug = false;
-
-
 
 
 

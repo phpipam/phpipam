@@ -466,7 +466,7 @@ class DHCP_kea extends Common_functions {
 
 
         // first check reservations under subnet > reservations, can be both
-        $this->get_reservations_config_file ($type);
+        $this->get_reservations_config_file ($type, $reservations_database);
 
         // if set in config check also database
         if ($reservations_database!==false) {
@@ -492,9 +492,10 @@ class DHCP_kea extends Common_functions {
      *
      * @access private
      * @param mixed $type
+     * @param array $reservations_database
      * @return void
      */
-    private function get_reservations_config_file ($type) {
+    private function get_reservations_config_file ($type, $reservations_database) {
         // read file
         if($type=="IPv4") {
             // check if set
