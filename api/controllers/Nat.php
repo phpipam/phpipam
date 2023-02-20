@@ -165,23 +165,20 @@ class Nat_controller extends Common_api_functions {
         $out = array();
         foreach ($results as $r) {
             $rr = array(
-                "id"   => $r->id,
-                "type" => $r->type,
-                "name" => $r->name,
                 "src"  => array(),
-                "dst"  => array(),
-                "src_port" =>$r->src_port,
-                "dst_port" =>$r->dst_port,
-                "description" => $r->description
+                "dst"  => array()
             );
-            foreach (array("src","dst") as $k) {
-                #return $k;
-                if ($r->$k) {
-                    $jd = (array) json_decode($r->$k, true);
+            foreach ($r as $k => $v) {
+                if ($k != "src" && $k != "dst") {
+                    $rr[$k] = $v;
+                }
+                else {
+                    # Better source and destination presentation (json decode values from DB)
+                    $jd = (array) json_decode($v, true);
                     if ($jd and $jd["ipaddresses"]) {
                         $rr[$k] = array('ipaddresses' => $jd["ipaddresses"]);
                     }
-                }                
+                }
             }
             array_push($out, $rr);
         }
