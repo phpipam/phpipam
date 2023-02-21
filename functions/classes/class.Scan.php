@@ -701,10 +701,7 @@ class Scan extends Common_functions {
 		foreach($ports as $p) {
 			// open socket
 			$conn = @fsockopen($address, $p, $errno, $errstr, $this->icmp_timeout);
-			//failed
-			if (!$conn) {}
-			//success
-			else 		{
+			if ($conn !== false) {
 				$retval = 0;	//set return as port if alive
 				fclose($conn);
 				break;			//end foreach if success

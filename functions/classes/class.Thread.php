@@ -263,6 +263,8 @@ class PingThread {
                 call_user_func( $this->runnable );
             }
 
+            //and kill the child using posix_kill ( exit(0) duplicates headers!! )
+            posix_kill($this->pid , SIGKILL);
             exit( 0 );
         }
     }
