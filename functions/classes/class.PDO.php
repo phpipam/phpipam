@@ -216,6 +216,7 @@ abstract class DB {
 	 */
 	public function resetConn() {
 		unset($this->pdo);
+		$this->cache = [];
 		$this->install = false;
 	}
 
