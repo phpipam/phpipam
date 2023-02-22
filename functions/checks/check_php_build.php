@@ -100,6 +100,9 @@ elseif ( !empty($missingFns) ) {
     $error[] = '</ul><hr>' . "\n";
     $error[] = _('Please recompile PHP to include missing functions and restart Apache.');
 }
+elseif ( isset($Database) && !$Database->set_names ) {
+    $error[] = "<strong>"._('Your database server does not support utf8mb4').":</strong><br><hr>";
+}
 else {
     /* No issues, delete $error */
     unset($error);

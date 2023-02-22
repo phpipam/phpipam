@@ -36,7 +36,14 @@ abstract class DB {
 	 * @var string
 	 * @access protected
 	 */
-	protected $charset = 'utf8';
+	protected $charset = 'utf8mb4';
+
+	/**
+	 * Database supports $charset
+	 *
+	 * @var bool
+	 */
+	public $set_names = false;
 
 	/**
 	 * pdo
@@ -187,7 +194,12 @@ abstract class DB {
 			throw new Exception ("Could not connect to database! ".$e->getMessage());
 		}
 
-		@$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
+		try {
+			$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
+			$this->set_names = true;
+		} catch (Exception $e) {
+			$this->set_names = false;
+		}
 	}
 
 	/**
@@ -284,7 +296,7 @@ abstract class DB {
 	}
 
 	/**
-	 * MySQL CTE support checks
+	 * MySQL CTE support check
 	 *
 	 * @access public
 	 * @return bool
