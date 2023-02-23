@@ -1,4 +1,6 @@
 <?php
+include(dirname(__FILE__)."/../../../functions/functions.php");
+
 /*
  * CSV import verify + parse data
  *************************************************/
@@ -7,9 +9,6 @@
 $filename = $_FILES['file']['name'];
 $filename = pf_explode(".", $filename);
 $filename = end($filename);
-
-/* get settings */
-include(dirname(__FILE__)."/../../../functions/functions.php");
 
 # Don't corrupt output with php errors!
 disable_php_errors();

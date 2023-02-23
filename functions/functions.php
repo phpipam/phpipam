@@ -1,7 +1,7 @@
 <?php
 
 /* global and missing functions */
-require('global_functions.php');
+require_once('global_functions.php');
 
 /* Enable output buffering */
 require_once( dirname(__FILE__) . '/output_buffering.php' );
@@ -95,4 +95,4 @@ $Rewrite = new Rewrite ();
 $_GET = $Rewrite->get_url_params ();
 
 /* get version */
-include('version.php');
+require_once('version.php');
