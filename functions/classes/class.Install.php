@@ -248,17 +248,28 @@ class Install extends Common_functions {
 	 * Checks if table exists
 	 *
 	 * @access public
-	 * @param mixed $table
-	 * @return void
+	 * @param string $table
+	 * @return bool
 	 */
 	public function check_table ($table, $redirect = false) {
 		# set query
-		$query = "SELECT COUNT(*) AS `cnt` FROM information_schema.tables WHERE table_schema = '".$this->db['name']."' AND table_name = '$table';";
+		$query = "SELECT COUNT(*) AS `cnt` FROM information_schema.tables WHERE table_schema = '" . $this->db['name'] . "' AND table_name = '$table';";
 		# try to fetch count
-		try { $table = $this->Database->getObjectQuery($query); }
-		catch (Exception $e) 	{ if($redirect === true) $this->redirect_to_install ();	else return false; }
+		try {
+			$result = $this->Database->getObjectQuery($query);
+		} catch (Exception $e) {
+			if ($redirect === true) {
+				$this->redirect_to_install();
+			}
+			return false;
+		}
 		# redirect if it is not existing
-		if($table->cnt!=1) 	 	{ if($redirect === true) $this->redirect_to_install ();	else return false; }
+		if (!is_object($result) || $result->cnt != 1) {
+			if ($redirect === true) {
+				$this->redirect_to_install();
+			}
+			return false;
+		}
 		# ok
 		return true;
 	}

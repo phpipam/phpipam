@@ -126,7 +126,7 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 		return BASE;
 
 	# Pretty Links
-	if($User->settings->prettyLinks=="Yes") {
+	if(is_object($User) && $User->settings->prettyLinks=="Yes") {
 		$link = BASE.implode('/', $parts);
 
 		# IP search fix

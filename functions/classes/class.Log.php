@@ -1804,7 +1804,7 @@ class Logging extends Common_functions {
 
 		// if address we need subnet details !
 		$address_subnet = array();
-		if ($this->object_type=="address")		{ $address_subnet = (array) $this->Tools->fetch_object("subnets", "id", $obj_details['subnetId']); }
+		if ($this->object_type=="address")		{ $address_subnet = (array) $this->Tools->fetch_object("subnets", "id", $this->object_orig['subnetId']); }
 
 		# set object details
 		$details = "";
@@ -1841,7 +1841,7 @@ class Logging extends Common_functions {
 		foreach ($changelog as $c) {
     		// field
     		$field = pf_explode(":", $c);
-    	    $value = isset($field[1]) ? pf_explode("=>", $field[1]) : [];
+    	    $value = isset($field[1]) ? pf_explode("=>", $field[1]) : ['', ''];
 
     	    // format field
     	    $field = trim(str_replace(array("[","]"), "", $field[0]));
