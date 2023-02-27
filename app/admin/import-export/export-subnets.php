@@ -169,13 +169,14 @@ if($all_sections!==false) {
 				if( (isset($_GET['VLAN'])) && ($_GET['VLAN'] == "on") ) {
 					// get VLAN
 					$vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
-					/* if(@$vlan[0]===false) 	{ $vlan['number'] = "NA"; $vlan['name'] = "NA"; }			# no VLAN
-					$worksheet->write($curRow, $curColumn, $vlan['number']." [".$vlan['name']."]", $format_text); */
-					if(@$vlan[0]===false) 	{ $vlan['number'] = "NA"; }			# no VLAN
+					$vlan = array_merge(['number' => "NA", 'domainId' => null], $vlan);
+
 					$worksheet->write($curRow, $curColumn, $vlan['number'], $format_text);
 					$curColumn++;
 					// VLAN Domain
 					$vlan_domain = (array) $Tools->fetch_object("vlanDomains", "id", $vlan['domainId']);
+					$vlan_domain = array_merge(['name' => ""], $vlan_domain);
+
 					$worksheet->write($curRow, $curColumn, $vlan_domain['name'], $format_text);
 					$curColumn++;
 				}
