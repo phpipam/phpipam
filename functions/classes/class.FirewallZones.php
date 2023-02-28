@@ -442,7 +442,7 @@ class FirewallZones extends Common_functions {
 	 * Fetches all zones from database
 	 *
 	 * @access public
-	 * @return void
+	 * @return array|false
 	 */
 	public function get_zones () {
 		# try to fetch all zones

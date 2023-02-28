@@ -77,7 +77,7 @@ class PowerDNS extends Common_functions {
     /**
      * ttl value
      *
-     * @var int|string
+     * @var object
      * @access public
      */
     public $ttl;

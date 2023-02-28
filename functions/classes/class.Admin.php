@@ -435,7 +435,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $group_id
-	 * @return void
+	 * @return array
 	 */
 	public function group_fetch_missing_users ($group_id) {
 		$out = array ();
@@ -679,7 +679,7 @@ class Admin extends Common_functions {
 	    $field['fieldDefault'] = is_blank($field['fieldDefault']) ? NULL : $field['fieldDefault'];
 
 	    # character set if needed
-	    if($field['fieldType']=="varchar" || $field['fieldType']=="text" || $field['fieldType']=="set" || $field['fieldType']=="enum")	{ $charset = "CHARACTER SET utf8"; }
+	    if($field['fieldType']=="varchar" || $field['fieldType']=="text" || $field['fieldType']=="set" || $field['fieldType']=="enum")	{ $charset = "CHARACTER SET utf8mb4"; }
 	    else																															{ $charset = ""; }
 
 	    # escape fields

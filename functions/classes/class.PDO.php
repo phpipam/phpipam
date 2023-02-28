@@ -31,7 +31,7 @@ abstract class DB {
 	/**
 	 * charset
 	 *
-	 * (default value: 'utf8')
+	 * (default value: 'utf8mb4')
 	 *
 	 * @var string
 	 * @access protected
