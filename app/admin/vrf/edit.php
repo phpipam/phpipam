@@ -76,7 +76,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) { print '<input type="hidden" name="vrfId" value="'. $_POST['vrfid'] .'">'. "\n";}
 			?>
-			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$vrf['description']); ?>" <?php print $readonly; ?>>
 		</td>
@@ -174,7 +174,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editVRF"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editVRF"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
 	</div>
 	<!-- result -->
 	<div class="vrfManagementEditResult"></div>

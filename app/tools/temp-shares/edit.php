@@ -84,8 +84,8 @@ $(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );
 			?>
 	        <input type="hidden" name="code" value="<?php print $share->code; ?>">
     		<input type="hidden" name="action" value="add">
-    		<input type="hidden" name="type" value="<?php print $_POST['type']; ?>">
-    		<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
+    		<input type="hidden" name="type" value="<?php print escape_input($_POST['type']); ?>">
+    		<input type="hidden" name="id" value="<?php print escape_input($_POST['id']); ?>">
 	    </td>
     </tr>
 

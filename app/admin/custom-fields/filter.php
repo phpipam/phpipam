@@ -59,7 +59,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
 	<form id="editCustomFieldsFilter">
 	<table id="editCustomFields" class="table table-noborder table-condensed">
 
-	<input type="hidden" name="table" value="<?php print $_POST['table']; ?>">
+	<input type="hidden" name="table" value="<?php print escape_input($_POST['table']); ?>">
 
 	<?php
 	foreach($custom as $k=>$c) {

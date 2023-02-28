@@ -175,8 +175,8 @@ $(document).ready(function(){
         		<td>
         			<input type="text" name="rack_size" class="form-control input-sm" placeholder="<?php print _('Device size in U'); ?>">
         			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
-                    <input type="hidden" name="rackid" value="<?php print $_POST['rackid']; ?>">
-                    <input type="hidden" name="devicetype" value="<?php print $_POST['devicetype']; ?>">
+                    <input type="hidden" name="rackid" value="<?php print escape_input($_POST['rackid']); ?>">
+                    <input type="hidden" name="devicetype" value="<?php print escape_input($_POST['devicetype']); ?>">
         		</td>
         	</tr>
 
@@ -201,7 +201,7 @@ $(document).ready(function(){
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<?php if ((!empty($devices)) || ($_POST['devicetype'] != 'device')) { ?>
-		<button class="btn btn-sm btn-default btn-success" id="editRackDevicesubmit"><i class="fa fa-plus"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<button class="btn btn-sm btn-default btn-success" id="editRackDevicesubmit"><i class="fa fa-plus"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
         <?php } ?>
 	</div>
 

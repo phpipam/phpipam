@@ -115,7 +115,7 @@ $subnet->description = strlen($subnet->description)>0 ? "(".$subnet->description
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default btn-success" id="subnetScanSubmit" data-subnetId='<?php print $_POST['subnetId']; ?>' data-csrf-cookie='<?php print $csrf; ?>'><i class="fa fa-gears"></i> <?php print _('Scan subnet'); ?></button>
+		<button class="btn btn-sm btn-default btn-success" id="subnetScanSubmit" data-subnetId='<?php print escape_input($_POST['subnetId']); ?>' data-csrf-cookie='<?php print $csrf; ?>'><i class="fa fa-gears"></i> <?php print _('Scan subnet'); ?></button>
 	</div>
 
 	<div class="subnetTruncateResult"></div>
