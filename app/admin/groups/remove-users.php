@@ -41,7 +41,7 @@ $existing = $Admin->group_fetch_users ($_POST['g_id']);
 
 	<tr>
 		<th>
-			<input type="hidden" name="gid" value="<?php print $_POST['g_id']; ?>">
+			<input type="hidden" name="gid" value="<?php print escape_input($_POST['g_id']); ?>">
 		</th>
 		<th><?php print _('Name'); ?></th>
 		<th><?php print _('Username'); ?></th>

@@ -59,7 +59,7 @@ $Subnets->fetch_subnet_slaves_recursive ($subnet['id']);
 		<td>
 			<strong><?php print $address['ip']; ?></strong>
 
-   			<input type="hidden" name="action" 	 	value="<?php print $_POST['action']; ?>">
+   			<input type="hidden" name="action" 	 	value="<?php print escape_input($_POST['action']); ?>">
 			<input type="hidden" name="id" 		 	value="<?php print $address['id']; ?>">
 			<input type="hidden" name="subnet"   	value="<?php print $subnet['ip']."/$subnet[mask]"; ?>">
 			<input type="hidden" name="subnetId" 	value="<?php print $subnet['id']; ?>">

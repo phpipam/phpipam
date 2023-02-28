@@ -196,7 +196,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 				print '<input type="hidden" name="switchid" value="'. $_POST['switchid'] .'">'. "\n";
 			} ?>
-			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
@@ -265,7 +265,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editSwitchsubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editSwitchsubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
 	</div>
 
 	<!-- result -->
