@@ -63,13 +63,14 @@ class User_controller extends Common_api_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @param mixed $Database
-	 * @param mixed $Tools
-	 * @param mixed $params
-	 * @param mixed $Response
+	 * @param PDO_Database $Database
+	 * @param Tools $Tools
+	 * @param API_params $params
+	 * @param Response $response
 	 */
-	public function __construct ($Database, $Tools=null, $params=null, $Response) {
+	public function __construct ($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
+		$this->Tools = $Tools;
 		$this->Response = $Response;
 		$this->_params = $params;
 		// init required objects
@@ -455,7 +456,7 @@ class User_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function validate_requested_token () {
-		return $this->_params->controller=="user" ? $this->validate_requested_token_user () : $this->validate_requested_token_general ();
+		$this->_params->controller=="user" ? $this->validate_requested_token_user () : $this->validate_requested_token_general ();
 	}
 
 	/**

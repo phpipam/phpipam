@@ -26,7 +26,7 @@ to be able to display javascript quickly and correctly.
 phpIPAM has been developed and tested on the following PHP versions.\
 The use of untested PHP versions is unsupported and may result in compatibility issues.
 
-- MASTER: PHP versions 5.4 to 8.1 (8.x support work-in-progress)
+- MASTER: PHP versions 5.4 to 8.2 (8.x support work-in-progress)
 - 1.5.x: PHP versions 5.4 to 7.4
 - 1.4.x: PHP versions 5.4 to 7.4
 - 1.3.x: PHP versions 5.4 to 7.1

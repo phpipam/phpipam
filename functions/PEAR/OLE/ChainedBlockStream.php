@@ -38,6 +38,7 @@ require_once 'functions/PEAR/OLE.php';
  * @link       http://pear.php.net/package/OLE
  * @since      Class available since Release 0.6.0
  */
+#[AllowDynamicProperties]
 class OLE_ChainedBlockStream extends PEAR
 {
     /**

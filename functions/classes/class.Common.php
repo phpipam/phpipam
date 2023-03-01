@@ -1731,7 +1731,7 @@ class Common_functions  {
 	 */
 	public function print_custom_field ($type, $value, $delimiter = false, $replacement = false) {
 		// escape
-		$value = str_replace("'", "&#39;", $value);
+		$value = str_replace("'", "&#39;", $value ?: '');
 		// create links
 		$value = $this->create_links ($value, $type);
 

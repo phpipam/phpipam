@@ -21,10 +21,10 @@ class Vlans_controller extends Common_api_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @param class $Database
-	 * @param class $Tools
-	 * @param mixed $params		// post/get values
-	 * @param class $Response
+	 * @param PDO_Database $Database
+	 * @param Tools $Tools
+	 * @param API_params $params
+	 * @param Response $response
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;

@@ -47,6 +47,7 @@ $GLOBALS['_OLE_INSTANCES'] = array();
 * @author   Xavier Noguer <xnoguer@php.net>
 * @author   Christian Schmidt <schmidt@php.net>
 */
+#[AllowDynamicProperties]
 class OLE extends PEAR
 {
 

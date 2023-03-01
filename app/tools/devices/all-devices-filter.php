@@ -91,7 +91,7 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 		if($Racks->all_racks!==false) {
 			print "		<li role='separator' class='divider'></li>";
 			foreach ($Racks->all_racks as $r) {
-				$selected = $r->name==$_GET['sPage'] ? "class='active'" : "";
+				$selected = isset($_GET['sPage']) && $r->name==$_GET['sPage'] ? "class='active'" : "";
 				print "   <li $selected><a href='".create_link("tools","devices","rack", $r->name)."'>".$r->name."</a></li>";
 			}
 		}
@@ -111,7 +111,7 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 		if($all_locations!==false) {
 			print "		<li role='separator' class='divider'></li>";
 			foreach ($all_locations as $l) {
-				$selected = $l->name==$_GET['sPage'] ? "class='active'" : "";
+				$selected = isset($_GET['sPage']) && $l->name==$_GET['sPage'] ? "class='active'" : "";
 				print "   <li $selected><a href='".create_link("tools","devices","location", $l->name)."'>".$l->name."</a></li>";
 			}
 		}
