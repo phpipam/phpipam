@@ -671,7 +671,7 @@ class User extends Common_functions {
                 $fsubnets = array();
                 # fetch details for each subnet
                 foreach($subnets as $id) {
-                    $query = "select `su`.`id` as `subnetId`,`se`.`id` as `sectionId`, `subnet`, `mask`,`isFull`,`su`.`description`,`se`.`description` as `section`, `vlanId`, `isFolder`
+                    $query = "select `su`.`id`, `su`.`id` as `subnetId`,`se`.`id` as `sectionId`, `subnet`, `mask`,`isFull`,`su`.`description`,`se`.`description` as `section`, `vlanId`, `isFolder`
                               from `subnets` as `su`, `sections` as `se` where `su`.`id` = ? and `su`.`sectionId` = `se`.`id` limit 1;";
 
                     try { $fsubnet = $this->Database->getObjectQuery($query, array($id)); }

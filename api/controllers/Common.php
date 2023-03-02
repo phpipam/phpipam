@@ -2,16 +2,7 @@
 /**
  *  API Parameter class
  */
-#[AllowDynamicProperties]
-class API_params extends stdClass {
-
-	public $controller = null;
-
-	public $id = null;
-
-	public $id2 = null;
-
-	public $id3 = null;
+class API_params extends Params {
 
 	/**
 	 * Read array of arguments
@@ -21,13 +12,13 @@ class API_params extends stdClass {
 	 */
 	public function read($args)
 	{
-		foreach ($args as $i => $v) {
-			if ($i === "controller") {
-				$this->{$i} = strtolower($v);
-			} else {
-				$this->{$i} = $v;
-			}
-		}
+		if (!is_array($args))
+			return;
+
+		if (isset($args['controller']))
+			$args['controller'] = strtolower($args['controller']);
+
+		parent::read($args);
 	}
 }
 

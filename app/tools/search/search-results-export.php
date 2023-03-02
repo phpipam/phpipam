@@ -117,6 +117,13 @@ $format_title->setFgColor(22);			//light gray
 $format_title->setBottom(2);
 $format_title->setAlign('left');
 
+//formatting content - borders around IP addresses
+$format_right =& $workbook->addFormat();
+$format_right->setRight(1);
+$format_left =& $workbook->addFormat();
+$format_left->setLeft(1);
+$format_top =& $workbook->addFormat();
+$format_top->setTop(1);
 
 $lineCount = 0;		//for line change
 $m = 0;				//for section change

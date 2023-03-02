@@ -4,34 +4,34 @@
  * Display usermenu on top right
  */
 
+ $Params = new Params();
+ $Params->read($_REQUEST);
+
 # filter ip value
-if(isset($_GET['ip'])) {
-	$_GET['ip'] = $Subnets->strip_input_tags(urldecode(trim($_GET['ip'])));
+if(!is_blank($Params->ip)) {
+	$Params->ip = $Subnets->strip_input_tags(urldecode(trim($Params->ip)));
 }
 
 # verify that user is logged in
 $User->check_user_session();
 
 // set parameters form cookie
-if (isset($_COOKIE['search_parameters'])) {
-    $params = pf_json_decode($_COOKIE['search_parameters'], true);
-    if($params) {
-        foreach ($params as $k=>$p) {
-            if ($p=="on") {
-                $_REQUEST[$k] = $p;
-            }
-        }
-    }
+$params = pf_json_decode($Params->search_parameters, true) ?: [];
+foreach ($params as $k => $p) {
+	if ($p == "on") {
+		$Params->{$k} = $p;
+	}
 }
 
 # if all are off print all on!
-if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['vlans']!="on" && @$_REQUEST['vrf']!="on" && @$_REQUEST['pstn']!="on" && @$_REQUEST['circuits']!="on") {
-	$_REQUEST['subnets']="on";
-	$_REQUEST['addresses']="on";
-	$_REQUEST['vlans']="on";
-	$_REQUEST['vrf']="on";
-	$_REQUEST['pstn']="on";
-	$_REQUEST['circuits']="on";
+if($Params->subnets!="on" && $Params->addresses!="on" && $Params->vlans!="on" && $Params->vrf!="on" && $Params->pstn!="on" && $Params->circuits!="on" && $Params->customers!="on") {
+	$Params->subnets="on";
+	$Params->addresses="on";
+	$Params->vlans="on";
+	$Params->vrf="on";
+	$Params->pstn="on";
+	$Params->circuits="on";
+	$Params->customers="on";
 }
 ?>
 
@@ -39,7 +39,7 @@ if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['v
 
 	<div class="input-group" id="searchForm">
 		<form id="userMenuSearch">
-		<input type="text" class="form-control searchInput input-sm" name='ip' placeholder='<?php print _('Search string'); ?>' value='<?php print $Subnets->strip_xss(@$_GET['ip']); ?>'>
+		<input type="text" class="form-control searchInput input-sm" name='ip' placeholder='<?php print _('Search string'); ?>' value='<?php print escape_input($Params->ip); ?>'>
 		</form>
 		<span class="input-group-btn">
         	<button class="btn btn-default btn-sm searchSubmit" type="button"><?php print _('Search'); ?></button>
@@ -47,20 +47,20 @@ if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['v
 	</div>
 
 	<div id="searchSelect" style="text-align: left">
-		<input type="checkbox" name="subnets" 	value="on" <?php if($_REQUEST['subnets']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Subnets'); ?><br>
-		<input type="checkbox" name="addresses" value="on" <?php if($_REQUEST['addresses']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('IP addresses'); ?><br>
-		<input type="checkbox" name="vlans" 	value="on" <?php if($_REQUEST['vlans']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VLANs'); ?><br>
+		<input type="checkbox" name="subnets" 	value="on" <?php if($Params->subnets=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Subnets'); ?><br>
+		<input type="checkbox" name="addresses" value="on" <?php if($Params->addresses=="on") 	{ print "checked='checked'"; } ?>> <?php print _('IP addresses'); ?><br>
+		<input type="checkbox" name="vlans" 	value="on" <?php if($Params->vlans=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VLANs'); ?><br>
 		<?php if($User->settings->enableVRF==1) { ?>
-		<input type="checkbox" name="vrf" 	    value="on" <?php if($_REQUEST['vrf']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VRFs'); ?><br>
+		<input type="checkbox" name="vrf" 	    value="on" <?php if($Params->vrf=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VRFs'); ?><br>
 		<?php } ?>
 		<?php if($User->settings->enablePSTN==1) { ?>
-		<input type="checkbox" name="pstn" 	    value="on" <?php if($_REQUEST['pstn']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('PSTN'); ?><br>
+		<input type="checkbox" name="pstn" 	    value="on" <?php if($Params->pstn=="on") 		{ print "checked='checked'"; } ?>> <?php print _('PSTN'); ?><br>
 		<?php } ?>
 		<?php if($User->settings->enableCircuits==1) { ?>
-		<input type="checkbox" name="circuits" 	    value="on" <?php if($_REQUEST['circuits']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Circuits'); ?><br>
+		<input type="checkbox" name="circuits" 	    value="on" <?php if($Params->circuits=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Circuits'); ?><br>
 		<?php } ?>
 		<?php if($User->settings->enableCustomers==1) { ?>
-		<input type="checkbox" name="customers" 	    value="on" <?php if($_REQUEST['customers']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Customers'); ?><br>
+		<input type="checkbox" name="customers" 	    value="on" <?php if($Params->customers=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Customers'); ?><br>
 		<?php } ?>
 	</div>
 

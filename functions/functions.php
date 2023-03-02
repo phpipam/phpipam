@@ -56,6 +56,7 @@ if(!defined('BASE')) {
 defined('JSON_UNESCAPED_UNICODE') || define('JSON_UNESCAPED_UNICODE', 256);
 
 /* @classes ---------------------- */
+require( dirname(__FILE__) . '/classes/class.Params.php' );		//Paramter handling class
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions
 require( dirname(__FILE__) . '/classes/class.PDO.php' );		//Class PDO - wrapper for database
 require( dirname(__FILE__) . '/classes/class.User.php' );		//Class for active user management

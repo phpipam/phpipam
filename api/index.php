@@ -25,6 +25,9 @@ if(!function_exists("create_link"))
 require_once( dirname(__FILE__) . '/controllers/Common.php');			// common methods
 require_once( dirname(__FILE__) . '/controllers/Responses.php');			// exception, header and response handling
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 # settings
 $time_response         = true;          // adds [time] to response
 $lock_file             = "";            // (optional) file to write lock to
