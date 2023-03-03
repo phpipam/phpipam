@@ -100,8 +100,8 @@ else {
             		}
 
             		// field
-            		$field = pf_explode(":", $c);
-            	    $value = pf_explode("=>", html_entity_decode($field[1]));
+					$field = array_pad(explode(":", $c), 2 , '');
+        	    	$value = array_pad(explode("=>", html_entity_decode($field[1])), 2, '');
 
             	    $field = trim(str_replace(array("[","]"), "", $field[0]));
             	    if(is_array(@$Log->changelog_keys[$type])) {

@@ -15,7 +15,7 @@
 	</tr>
 	<tr>
 		<th><?php print _('Subnet description'); ?></th>
-		<td><?php print html_entity_decode($subnet['description']); ?></td>
+		<td><?php print escape_input($subnet['description']); ?></td>
 	</tr>
 	<tr>
 		<th><?php print _('Permission'); ?></th>

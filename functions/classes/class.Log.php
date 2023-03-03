@@ -1565,7 +1565,7 @@ class Logging extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $id
-	 * @return void
+	 * @return object|false
 	 */
 	public function fetch_changelog ($id) {
     	# limit check
@@ -1811,7 +1811,7 @@ class Logging extends Common_functions {
 		if ($this->object_type=="section") 		{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("subnets",$obj_details['id'])."'>".$obj_details['name'] . "(".$obj_details['description'].") - id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="subnet")	{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("subnets",$this->object_orig['sectionId'],$obj_details['id'])."'>".$this->Subnets->transform_address ($obj_details['subnet'], "dotted")."/".$obj_details['mask']." (".$obj_details['description'].") - id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="folder")	{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("folder",$this->object_orig['sectionId'],$obj_details['id'])."'>".$obj_details['description']." - id ".$obj_details['id']."</a>"; }
-		elseif ($this->object_type=="address")	{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("subnets",$this->object_orig['section'],$this->object_orig['subnetId'],"address-details",$this->object_orig['id'])."'>".$this->Subnets->transform_address ($obj_details['ip_addr'], "dotted")." ( hostname ".$obj_details['hostname'].", subnet: ".$this->Subnets->transform_address ($address_subnet['subnet'], "dotted")."/".$address_subnet['mask'].")- id ".$obj_details['id']."</a>"; }
+		elseif ($this->object_type=="address")	{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("subnets",$address_subnet['sectionId'],$this->object_orig['subnetId'],"address-details",$this->object_orig['id'])."'>".$this->Subnets->transform_address ($obj_details['ip_addr'], "dotted")." ( hostname ".$obj_details['hostname'].", subnet: ".$this->Subnets->transform_address ($address_subnet['subnet'], "dotted")."/".$address_subnet['mask'].")- id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="address range")	{ $details = $changelog; }
 
 		# remove subnet sectionId
@@ -1840,8 +1840,8 @@ class Logging extends Common_functions {
 
 		foreach ($changelog as $c) {
     		// field
-    		$field = pf_explode(":", $c);
-    	    $value = isset($field[1]) ? pf_explode("=>", $field[1]) : ['', ''];
+			$field = array_pad(explode(":", $c), 2 , '');
+        	$value = array_pad(explode("=>", $field[1]), 2, '');
 
     	    // format field
     	    $field = trim(str_replace(array("[","]"), "", $field[0]));

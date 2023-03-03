@@ -1730,8 +1730,6 @@ class Common_functions  {
 	 * @return void
 	 */
 	public function print_custom_field ($type, $value, $delimiter = false, $replacement = false) {
-		// escape
-		$value = str_replace("'", "&#39;", $value ?: '');
 		// create links
 		$value = $this->create_links ($value, $type);
 
@@ -1748,7 +1746,7 @@ class Common_functions  {
 		}
 		//text
 		elseif($type=="text") {
-			if(!is_blank($value))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $value)."'>"; }
+			if(!is_blank($value))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", escape_input($value))."'>"; }
 			else					{ print ""; }
 		}
 		else {

@@ -109,8 +109,8 @@ print "	<td>";
 
 	foreach ($changelog as $c) {
 		// field
-		$field = pf_explode(": ", $c);
-	    $value = pf_explode("=>", @$field[1]);
+		$field = array_pad(explode(":", $c), 2 , '');
+   	    $value = array_pad(explode("=>", $field[1]), 2, '');
 
 	    $field_name = trim(str_replace(array("[","]"), "", $field[0]));
 
