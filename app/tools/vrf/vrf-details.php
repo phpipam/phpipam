@@ -110,7 +110,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 			$vrf->{$key} = $Tools->create_links($vrf->{$key});
 			print "<tr>";
 			print "	<th>$key</th>";
-			print "	<td style='vertical-align:top;align:left;'>".$vrf->{$key}."</td>";
+			print "	<td style='vertical-align:top;align-content:left;'>".$vrf->{$key}."</td>";
 			print "</tr>";
 		}
 		// divider
@@ -121,8 +121,8 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 	if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
 		# action button groups
 		print "<tr>";
-		print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
-		print "	<td style='vertical-align:bottom;align:left;'>";
+		print "	<th style='vertical-align:bottom;align-content:left;'>"._('Actions')."</th>";
+		print "	<td style='vertical-align:bottom;align-content:left;'>";
 
 		// actions
         $links = [];

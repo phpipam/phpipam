@@ -61,7 +61,7 @@ else {
 
 			print "<tr>";
 			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
-			print "	<td style='vertical-align:top;align:left;'>".$vault->{$key}."</td>";
+			print "	<td style='vertical-align:top;align-content:left;'>".$vault->{$key}."</td>";
 			print "</tr>";
 		}
 	}

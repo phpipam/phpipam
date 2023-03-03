@@ -134,7 +134,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
                 $rack->{$key} = $Tools->create_links($rack->{$key});
                 print "<tr>";
                 print " <th>".$Tools->print_custom_field_name ($key)."</th>";
-                print " <td style='vertical-align:top;align:left;'>".$rack->{$key}."</td>";
+                print " <td style='vertical-align:top;align-content:left;'>".$rack->{$key}."</td>";
                 print "</tr>";
             }
             // divider
@@ -144,7 +144,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         # action button groups
         if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
             print "<tr>";
-            print " <th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
+            print " <th style='vertical-align:bottom;align-content:left;'>"._('Actions')."</th>";
             print "<td class='actions'>";
 
 

@@ -61,7 +61,7 @@ $cfields = $Tools->fetch_custom_fields ('vlans');
 			$vlan[$key] = $Tools->create_links($vlan[$key]);
 			print "<tr>";
 			print "	<th>$key</th>";
-			print "	<td style='vertical-align:top;align:left;'>$vlan[$key]</td>";
+			print "	<td style='vertical-align:top;align-content:left;'>$vlan[$key]</td>";
 			print "</tr>";
 		}
 		// divider

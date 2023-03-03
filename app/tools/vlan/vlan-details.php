@@ -96,7 +96,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 
 			print "<tr>";
 			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
-			print "	<td style='vertical-align:top;align:left;'>$vlan[$key]</td>";
+			print "	<td style='vertical-align:top;align-content:left;'>$vlan[$key]</td>";
 			print "</tr>";
 		}
 	}
@@ -110,8 +110,8 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 
 		/* action button groups */
 		print "<tr>";
-		print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
-		print "	<td style='vertical-align:bottom;align:left;'>";
+		print "	<th style='vertical-align:bottom;align-content:left;'>"._('Actions')."</th>";
+		print "	<td style='vertical-align:bottom;align-content:left;'>";
 
         // actions
         $links = [];
