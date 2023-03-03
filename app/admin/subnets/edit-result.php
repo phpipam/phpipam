@@ -50,7 +50,7 @@ $_POST['cidr'] = trim($_POST['subnet']);
 $_POST['id']   = $_POST['subnetId'];
 
 # get mask and subnet
-$temp = pf_explode("/", $_POST['subnet']);
+$temp = $Subnets->cidr_network_and_mask($_POST['subnet']);
 $_POST['mask']   = trim($temp[1]);
 $_POST['subnet'] = trim($temp[0]);
 

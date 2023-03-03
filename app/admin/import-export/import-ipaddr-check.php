@@ -124,7 +124,7 @@ foreach ($data as &$cdata) {
 	# if the subnet contains "/", split it in network and mask
 	if ($action != "error") {
 		if (preg_match("/\//", $cdata['subnet'])) {
-			list($caddr,$cmask) = pf_explode("/",$cdata['subnet'],2);
+			list($caddr,$cmask) = $Subnets->cidr_network_and_mask($cdata['subnet']);
 			$cdata['mask'] = $cmask;
 			$cdata['subnet'] = $caddr;
 		}
