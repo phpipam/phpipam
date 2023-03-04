@@ -14,7 +14,7 @@ $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # make sure it is properly requested
-if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")						{ $Result->show("danger", _("Invalid request"), true); }
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")						{ $Result->show("danger", _("Invalid request"), true); }
 
 # if already installed ignore!
 if($Install->check_table ("widgets", false) && @$_POST['dropdb']!="on") {

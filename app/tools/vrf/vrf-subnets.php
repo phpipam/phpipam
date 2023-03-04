@@ -59,7 +59,7 @@ else {
 
 			print "<tr>";
 			if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
-		    print "	<td><a href='".create_link("tools","vlan", $vlan->domainId, $vlan->vlanId)."'><span class='badge badge1'>$vlan->number</span></a></td>";
+			print is_object($vlan) ? "	<td><a href='".create_link("tools","vlan", $vlan->domainId, $vlan->vlanId)."'><span class='badge badge1'>$vlan->number</span></a></td>" : "<td></td>";
 		    print "	<td class='small description'><a href='".create_link("subnets",$subnet['sectionId'],$subnet['id'])."'>$subnet[description]</a></td>";
 		    print "	<td><a href='".create_link("subnets",$subnet['sectionId'],$subnet['id'])."'>".$Subnets->transform_address($subnet['subnet'], "dotted")."/$subnet[mask] $fullinfo</a></td>";
 

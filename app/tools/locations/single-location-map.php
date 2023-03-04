@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # fetch location
-if(!$location) {
+if(!isset($location)) {
     $location = $Tools->fetch_object("locations", "id", $location_index);
 }
 

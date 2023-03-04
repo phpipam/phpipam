@@ -194,6 +194,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
             reset($rack_contents);
             $prev = false;
             $is_back =  false;
+            $error = "";
             do {
                 if (!($cd = current($rack_devices))) {
                     $cur = current($rack_contents);

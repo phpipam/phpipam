@@ -371,7 +371,7 @@ class User extends Common_functions {
         # not authenticated
         if($this->authenticated===false) {
             # error print for AJAX
-            if(@$_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest") {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest") {
                 # for AJAX always check origin
                 $this->check_referrer ();
                 # kill session
@@ -603,7 +603,7 @@ class User extends Common_functions {
      * @return void
      */
     private function check_referrer () {
-        if ( ($_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest") && ($_SERVER['HTTP_ORIGIN'] != $_SERVER['HTTP_HOST'] ) ) {
+        if ( (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest") && ($_SERVER['HTTP_ORIGIN'] != $_SERVER['HTTP_HOST'] ) ) {
             # write log and die
             $this->Log->write ("referrer_check", _('Page not referred properly'), 0 );
             $this->Result->show ("danger", _('Page not referred properly'), true);

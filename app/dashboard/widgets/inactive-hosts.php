@@ -4,7 +4,7 @@
  **********************************************/
 
 # required functions
-if(!is_object(@$User)) {
+if(!isset($User)) {
 	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
@@ -35,7 +35,7 @@ $m = 0;
 $widget = $Tools->fetch_object ("widgets", "wfile", "inactive-hosts");
 
 # if direct request include plot JS
-if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
 	# get widget details
 	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_GET['section'])) { $Result->show("danger", _("Invalid widget"), true); }
 	# reset size and limit

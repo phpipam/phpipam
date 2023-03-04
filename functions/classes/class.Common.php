@@ -903,7 +903,7 @@ class Common_functions  {
 	    $hms = "";
 
 	    // get the number of hours
-	    $hours = intval(intval($sec) / 3600);
+	    $hours = intval($sec / 3600);
 
 	    // add to $hms, with a leading 0 if asked for
 	    $hms .= ($padHours)
@@ -911,13 +911,13 @@ class Common_functions  {
 	          : $hours. ':';
 
 	    // get the seconds
-	    $minutes = intval(($sec / 60) % 60);
+	    $minutes = intval($sec / 60) % 60;
 
 	    // then add to $hms (with a leading 0 if needed)
 	    $hms .= str_pad($minutes, 2, "0", STR_PAD_LEFT). ':';
 
 	    // seconds
-	    $seconds = intval($sec % 60);
+	    $seconds = intval($sec) % 60;
 
 	    // add to $hms, again with a leading 0 if needed
 	    $hms .= str_pad($seconds, 2, "0", STR_PAD_LEFT);
