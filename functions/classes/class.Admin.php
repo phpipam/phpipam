@@ -671,7 +671,7 @@ class Admin extends Common_functions {
 
 	    # set type definition and size of needed
 	    if($field['fieldType']=="bool" || $field['fieldType']=="text" || $field['fieldType']=="date" || $field['fieldType']=="datetime")	{ $field['ftype'] = $field['fieldType']; }
-	    else																																{ $field['ftype'] = $field['fieldType']."(".$field['fieldSize'].")"; }
+	    else																																{ $field['ftype'] = $field['fieldType']."( :enumset )"; }
 
 	    # default value null
 	    $field['fieldDefault'] = strlen($field['fieldDefault'])==0 ? NULL : $field['fieldDefault'];
@@ -707,6 +707,7 @@ class Admin extends Common_functions {
 	    $params = array();
 	    if (strpos($query, ":default")>0)	$params['default'] = $field['fieldDefault'];
 	    if (strpos($query, ":comment")>0)	$params['comment'] = $field['Comment'];
+	    if (strpos($query, ":enumset")>0)	$params['enumset'] = $field['fieldSize'];
 
 		# execute
 		try { $res = $this->Database->runQuery($query, $params); }
