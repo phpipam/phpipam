@@ -118,8 +118,8 @@ $currSize = 0;					//to calculate size
 $m=0;							//to calculate chunk index
 
 foreach($uwidgets as $uk=>$uv) {
-	//get fetails
-	$wdet = (array) $widgets[$uv];
+	//get details
+	$wdet = isset($widgets[$uv]) ? (array) $widgets[$uv] : ['wsize' => 6];
 	if(is_blank($wdet['wsize']))	{ $wsize = 6; }
 	else							{ $wsize = $wdet['wsize']; }
 
@@ -148,18 +148,18 @@ if(sizeof($uwidgets)>1) {
 	foreach($uwidgetschunk as $w) {
 		# print itams in a row
 		foreach($w as $c) {
-
 			/* print items */
-			$wdet = (array) $widgets[$c];
 			if(array_key_exists($c, $widgets)) {
+				$wdet = (array) $widgets[$c];
+
 				//reset size if not set
 				if(is_blank($wdet['wsize']))	{ $wdet['wsize'] = 6; }
 
-				print "	<div class='col-xs-12 col-sm-12 col-md-12 col-lg-$wdet[wsize] widget-dash' id='w-$wdet[wfile]'>";
+				print "	<div class='col-xs-12 col-sm-12 col-md-12 col-lg-".escape_input($wdet['wsize'])." widget-dash' id='w-".escape_input($wdet['wfile'])."'>";
 				print "	<div class='inner'><i class='fa fa-times remove-widget icon-action fa-gray pull-right'></i>";
 				// href?
-				if($wdet['whref']=="yes")	{ print "<a href='".create_link("widgets",$wdet['wfile'])."'> <h4>"._($wdet['wtitle'])."<i class='fa fa-external-link fa-gray pull-right'></i></h4></a>"; }
-				else						{ print "<h4>"._($wdet['wtitle'])."</h4>"; }
+				if($wdet['whref']=="yes")	{ print "<a href='".create_link("widgets",$wdet['wfile'])."'> <h4>"._(escape_input($wdet['wtitle']))."<i class='fa fa-external-link fa-gray pull-right'></i></h4></a>"; }
+				else						{ print "<h4>"._(escape_input($wdet['wtitle']))."</h4>"; }
 				print "		<div class='hContent'>";
 				print "			<div style='text-align:center;padding-top:50px;'><strong>"._('Loading widget')."</strong><br><i class='fa fa-spinner fa-spin'></i></div>";
 				print "		</div>";
@@ -169,9 +169,9 @@ if(sizeof($uwidgets)>1) {
 			}
 			# invalid widget
 			else {
-				print "	<div class='col-xs-12 col-sm-12 col-md-12 col-lg-6' id='w-$c'>";
+				print "	<div class='col-xs-12 col-sm-12 col-md-12 col-lg-6' id='w-".escape_input($c)."'>";
 				print "	<div class='inner'>";
-				print "		<blockquote style='margin-top:20px;margin-left:20px;'><p>Invalid widget $c</p></blockquote>";
+				print "		<blockquote style='margin-top:20px;margin-left:20px;'><p>Invalid widget ".escape_input($c)."</p></blockquote>";
 				print "	</div>";
 				print "	</div>";
 			}
