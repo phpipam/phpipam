@@ -653,7 +653,10 @@ class Common_functions  {
 	}
 
 	/**
-	 * Remove <script>, <iframe> and JS HTML event attributes from HTML to protect from XSS
+	 * Remove common XSS vectors.
+	 * This function is not and will never be 100% effective.
+	 *
+	 * TODO: Switch user instructions to use markdown. Sanitising raw HTML is impossible.
 	 *
 	 * @param   string  $html
 	 * @return  string
