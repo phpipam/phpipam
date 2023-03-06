@@ -4,6 +4,7 @@
     Security Fixes:
     ----------------------------
     + SQL injection in custom field enum/set types;
+    + Directory traversal possible in RIPE query;
     + XSS (reflected) by /app/tools/subnet-masks/popup.php (#3738);
     + XSS and LDAP injection in ad-search-group-result.php;
 
