@@ -6,6 +6,7 @@
     + SQL injection in custom field enum/set types;
     + Directory traversal possible in RIPE query;
     + XSS (reflected) by /app/tools/subnet-masks/popup.php (#3738);
+    + XSS (stored) in user widget settings;
     + XSS and LDAP injection in ad-search-group-result.php;
 
 == 1.5.1
