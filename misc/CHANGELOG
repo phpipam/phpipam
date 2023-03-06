@@ -1,6 +1,10 @@
 
 == 1.5.2
 
+    Bugfixes:
+    ----------------------------
+    Fixed MySQL server has gone away error (#3759);
+
     Security Fixes:
     ----------------------------
     + SQL injection in custom field enum/set types;
