@@ -3574,7 +3574,7 @@ class Subnets extends Common_functions {
 		// not existings
 		if ($ripe_result['result_code']==404) {
 			// return array
-			return array("result"=>"error", "error"=>$ripe_result['result']->errormessages->errormessage[0]->text);
+			return array("result"=>"error", "error"=>$ripe_result['error_msg']);
 		}
 		// fail
 		if ($ripe_result['result_code']!==200) {
@@ -3657,6 +3657,16 @@ class Subnets extends Common_functions {
 	 * @return array
 	 */
 	private function ripe_arin_fetch ($network, $type, $subnet) {
+		// Validate $subnet
+		$cidr = array_pad(explode("/", $subnet), 2, null);
+		if (
+			(sizeof($cidr) > 2) ||
+			(filter_var($cidr[0], FILTER_VALIDATE_IP) === false) ||
+			(!is_null($cidr[1]) && filter_var($cidr[1], FILTER_VALIDATE_INT) === false)
+		) {
+			return ["result_code" => 404, "error_msg" => _("Invalid request")];
+		}
+
 		// set url
 		$url = $network=="ripe" ? "https://rest.db.ripe.net/ripe/$type/$subnet" : "https://whois.arin.net/rest/nets;q=$subnet?showDetails=true&showARIN=false&showNonArinTopLevelNet=false&ext=netref2";
 
@@ -3677,7 +3687,7 @@ class Subnets extends Common_functions {
 	 */
 	public function ripe_fetch_subnets ($as) {
 		// numeric check
-		if(!is_numeric($as)) {
+		if(filter_var($as, FILTER_VALIDATE_INT) === false) {
 			$this->Result->show("danger", _("Invalid AS"), false);
 		}
 		//open connection

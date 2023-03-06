@@ -8,6 +8,7 @@
     Security Fixes:
     ----------------------------
     + SQL injection in custom field enum/set types;
+    + Directory traversal possible in RIPE query;
     + XSS (reflected) in 'bw-calulator-result.php';
     + XSS (reflected) by invalid email address response;
     + XSS (reflected) by /app/tools/subnet-masks/popup.php (#3738);
