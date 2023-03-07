@@ -464,10 +464,10 @@ if (!empty($address_change) && $config['ping_check_send_mail']) {
 
             //content
             $content[] = "<tr>";
-            $content[] = "  <td style='padding:3px 8px;border:1px solid #ccc;'><a href='" . rtrim(str_replace(BASE, "", $Scan->settings->siteURL), "/") . "" . create_link("subnets", $subnet->sectionId, $subnet->id) . "'>$Subnets->mail_font_style_href " . $Subnets->transform_to_dotted($change['ip_addr']) . "</font></a></td>";
+            $content[] = "  <td style='padding:3px 8px;border:1px solid #ccc;'><a href='" . rtrim(str_replace(BASE, "/", $Scan->settings->siteURL), "/") . "" . create_link("subnets", $subnet->sectionId, $subnet->id) . "'>$Subnets->mail_font_style_href " . $Subnets->transform_to_dotted($change['ip_addr']) . "</font></a></td>";
             $content[] = "  <td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $change[description]</font></td>";
             $content[] = "  <td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style_href $change[hostname]</font></td>";
-            $content[] = "  <td style='padding:3px 8px;border:1px solid #ccc;'><a href='" . rtrim(str_replace(BASE, "", $Scan->settings->siteURL), "/") . "" . create_link("subnets", $subnet->sectionId, $subnet->id) . "'>$Subnets->mail_font_style_href " . $Subnets->transform_to_dotted($subnet->subnet) . "/" . $subnet->mask . "</font></a>" . $subnet->description . "</td>";
+            $content[] = "  <td style='padding:3px 8px;border:1px solid #ccc;'><a href='" . rtrim(str_replace(BASE, "/", $Scan->settings->siteURL), "/") . "" . create_link("subnets", $subnet->sectionId, $subnet->id) . "'>$Subnets->mail_font_style_href " . $Subnets->transform_to_dotted($subnet->subnet) . "/" . $subnet->mask . "</font></a>" . $subnet->description . "</td>";
             $content[] = "  <td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $ago</td>";
             $content[] = "  <td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $oldStatus > $newStatus</td>";
             $content[] = "</tr>";
