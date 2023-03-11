@@ -57,6 +57,7 @@ $config['discovery_check_method']      = false;      // false/ping/pear/fping, r
 # remove_offline_addresses.php script parameters
 $config['removed_addresses_send_mail'] = true;       // true/false, send or not mail on pomoving inactive addresses
 $config['removed_addresses_timelimit'] = 86400 * 7;  // int, after how many seconds of inactivity address will be deleted (7 days)
+$config['removed_addresses_autodiscovered'] = false; // Only remove addresses with -- autodiscovered -- description
 # resolveIPaddresses.php script parameters
 $config['resolve_emptyonly']           = true;       // if true it will only update the ones without DNS entry!
 $config['resolve_verbose']             = true;       // verbose response - prints results, cron will email it to you!

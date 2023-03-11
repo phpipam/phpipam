@@ -34,17 +34,24 @@ $beforetime = date ("Y-m-d H:i:s", (time()-$config['removed_addresses_timelimit'
 
 // set query to fetch addresses and belongign subnets
 $query = "select
-			`ip`.`id`,`ip`.`ip_addr`,`ip`.`lastSeen`,`ip`.`subnetId`,`ip`.`description`,`ip`.`hostname`,`ip`.`lastSeen`,
-			`su`.`subnet`,`su`.`mask`,`su`.`sectionId`,`su`.`description`,
-			'delete' as `action`
-		 from
-		 	`ipaddresses` as `ip`, `subnets` as `su`
-		 where
-			`ip`.`subnetId` = `su`.`id`
-			and `su`.`pingSubnet` = 1
-			and (`ip`.`excludePing` IS NULL or `ip`.`excludePing`!=1 )
-			and
-			(`ip`.`lastSeen` < '$beforetime' and `ip`.`lastSeen` != '1970-01-01 00:00:01' and `ip`.`lastSeen` is not NULL);";
+                        `ip`.`id`,`ip`.`ip_addr`,`ip`.`lastSeen`,`ip`.`subnetId`,`ip`.`description`,`ip`.`hostname`,`ip`.`lastSeen`,
+                        `su`.`subnet`,`su`.`mask`,`su`.`sectionId`,`su`.`description`,
+                        'delete' as `action`
+                 from
+                        `ipaddresses` as `ip`, `subnets` as `su`
+                 where
+                        `ip`.`subnetId` = `su`.`id`
+                        and `su`.`pingSubnet` = 1
+                        and (`ip`.`excludePing` IS NULL or `ip`.`excludePing`!=1)
+                        and (`ip`.`lastSeen` < '$beforetime' and `ip`.`lastSeen` != '1970-01-01 00:00:01' and `ip`.`lastSeen` is not NULL) ";
+
+// Only remove autodiscovered IPs ? (based on description)
+if (isset($config['removed_addresses_autodiscovered']) && $config['removed_addresses_autodiscovered']) {
+        $query.= " and `ip`.`description` = '" .  _('-- autodiscovered --') . "'";
+}
+
+// End the query gracefully
+$query.= ";";
 
 # fetch
 try { $offline_addresses = $Database->getObjectsQuery($query); }
