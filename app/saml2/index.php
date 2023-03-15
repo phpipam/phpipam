@@ -1,126 +1,134 @@
 <?php
 /* @config file ------------------ */
-require_once( dirname(__FILE__) . '/../../functions/classes/class.Config.php' );
+require_once(dirname(__FILE__) . '/../../functions/classes/class.Config.php');
 
 # verify php build
-include('functions/checks/check_php_build.php');		// check for support for PHP modules and database connection
-define("TOOLKIT_PATH", dirname(__FILE__).'/../../functions/php-saml/');
+require_once('functions/checks/check_php_build.php');        // check for support for PHP modules and database connection
+define("TOOLKIT_PATH", dirname(__FILE__) . '/../../functions/php-saml/');
 require_once(TOOLKIT_PATH . '../xmlseclibs/xmlseclibs.php'); // We load the xmlsec libs required by OneLogin's SAML
 require_once(TOOLKIT_PATH . '_toolkit_loader.php');   // We load the SAML2 lib
 
 // get SAML2 settings from db
-$dbobj=$Tools->fetch_object("usersAuthMethod", "type", "SAML2");
-if(!$dbobj){
+$dbobj = $Tools->fetch_object("usersAuthMethod", "type", "SAML2");
+if (!$dbobj) {
     $Result->show("danger", _("SAML settings not found in database"), true);
 }
 
 //decode authentication module params
-$params=pf_json_decode($dbobj->params);
+$params = new Params(pf_json_decode($dbobj->params, true));
 
 if (empty($params->idpx509cert) && !empty($params->idpcertfingerprint)) {
     $Result->show("danger", _("Please login as admin and update SAML authentication settings"), true);
 }
 
-//if using advanced settings, instantiate without db settings
-if(filter_var($params->advanced, FILTER_VALIDATE_BOOLEAN)){
-	$auth = new OneLogin\Saml2\Auth();
-}
-else{
-	// If not set use prior default value for clientId
-	if (!isset($params->clientId)) $params->clientId = $Tools->createURL();
+try {
+    //if using advanced settings, instantiate without db settings
+    if (filter_var($params->advanced, FILTER_VALIDATE_BOOLEAN)) {
+        $auth = new OneLogin\Saml2\Auth();
+    } else {
+        if (!isset($params->clientId))              // If not set use prior default value for clientId
+            $params->clientId = $Tools->createURL();
 
-	$settings = array (
-        'strict' => filter_var($params->strict, FILTER_VALIDATE_BOOLEAN),
-        'debug' => filter_var($params->debugprotocol, FILTER_VALIDATE_BOOLEAN),
-        'sp' => array (
-            'entityId' => $params->clientId,
-            'assertionConsumerService' => array (
-                'url' => $Tools->createURL().create_link('saml2'),
-                'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+        $settings = array(
+            'strict' => filter_var($params->strict, FILTER_VALIDATE_BOOLEAN),
+            'debug' => filter_var($params->debugprotocol, FILTER_VALIDATE_BOOLEAN),
+            'sp' => array(
+                'entityId' => $params->clientId,
+                'assertionConsumerService' => array(
+                    'url' => $Tools->createURL() . create_link('saml2'),
+                    'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+                ),
+                'singleLogoutService' => array(
+                    'url' => $Tools->createURL() . create_link(),
+                    'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                ),
+                'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+                'x509cert' => $params->spx509cert,
+                'privateKey' => $params->spx509key,
             ),
-            'singleLogoutService' => array (
-                'url' => $Tools->createURL().create_link(),
-                'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+            'idp' => array(
+                'entityId' => $params->idpissuer,
+                'singleSignOnService' => array(
+                    'url' => $params->idplogin,
+                    'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                ),
+                'singleLogoutService' => array(
+                    'url' => $params->idplogout,
+                    'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                ),
+                'x509cert' => $params->idpx509cert,
             ),
-            'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
-            'x509cert' => $params->spx509cert,
-            'privateKey' => $params->spx509key,
-        ),
-        'idp' => array (
-            'entityId' => $params->idpissuer,
-            'singleSignOnService' => array (
-                'url' => $params->idplogin,
-                'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+            'security' => array(
+                'requestedAuthnContext' => false,
+                'authnRequestsSigned' => filter_var($params->spsignauthn, FILTER_VALIDATE_BOOLEAN),
             ),
-            'singleLogoutService' => array (
-                'url' => $params->idplogout,
-                'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-            ),
-            'x509cert' => $params->idpx509cert,
-	),
-       'security' => array (
-            'requestedAuthnContext' => false,
-            'authnRequestsSigned' => filter_var($params->spsignauthn, FILTER_VALIDATE_BOOLEAN),
-        ),
-    );
-	OneLogin\Saml2\Utils::setProxyVars(true);
-	$auth = new OneLogin\Saml2\Auth($settings);
+        );
+
+        OneLogin\Saml2\Utils::setProxyVars(true);
+        $auth = new OneLogin\Saml2\Auth($settings);
+    }
+} catch (Exception $e) {
+    print _("Fatal SAML error") . ": ";
+
+    if (!filter_var($params->debugprotocol, FILTER_VALIDATE_BOOLEAN)) {
+        print escape_input($e->getMessage());
+    }
+    exit();
 }
 
 //if SAMLResponse is not in the request, create an authnrequest and send it to the idp
-if(!isset($_POST["SAMLResponse"])){
-	$ssoBuiltUrl = $auth->login(null, array(), false, false, true);
-	$_SESSION['AuthNRequestID'] = $auth->getLastRequestID();
-	header('Pragma: no-cache');
-	header('Cache-Control: no-cache, must-revalidate');
-	header('Location: ' . $ssoBuiltUrl);
-	exit();
-}
-else{
+if (!isset($_POST["SAMLResponse"])) {
+    $ssoBuiltUrl = $auth->login(null, array(), false, false, true);
+    $_SESSION['AuthNRequestID'] = $auth->getLastRequestID();
+    header('Pragma: no-cache');
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Location: ' . $ssoBuiltUrl);
+    exit();
+} else {
     //process the authentication response
-	if (isset($_SESSION) && isset($_SESSION['AuthNRequestID'])) {
-	    $requestID = $_SESSION['AuthNRequestID'];
-	} else {
-	    $requestID = null;
-	}
+    if (isset($_SESSION) && isset($_SESSION['AuthNRequestID'])) {
+        $requestID = $_SESSION['AuthNRequestID'];
+    } else {
+        $requestID = null;
+    }
 
     // process errors and check for errors
-	$auth->processResponse($requestID);
-	$errors = $auth->getErrors();
+    $auth->processResponse($requestID);
+    $errors = $auth->getErrors();
 
     // check if errors are present
-	if (!empty($errors)) {
+    if (!empty($errors)) {
         $Result->show("danger", implode('<br>', $errors), true);
-	    exit();
-	}
+        exit();
+    }
     // is user authenticated
-	if (!$auth->isAuthenticated()) {
+    if (!$auth->isAuthenticated()) {
         $Result->show("danger", "Not authenticated", true);
-	    exit();
-	}
+        exit();
+    }
 
-	// try to authenticate in phpipam
-	if(is_string($params->MappedUser) && !is_blank($params->MappedUser)) {
+    // try to authenticate in phpipam
+    if (is_string($params->MappedUser) && !is_blank($params->MappedUser)) {
         // Map all SAML users to a local account
-		$username = $params->MappedUser;
-	} elseif(is_string($params->UserNameAttr) && !is_blank($params->UserNameAttr)) {
+        $username = $params->MappedUser;
+    } elseif (is_string($params->UserNameAttr) && !is_blank($params->UserNameAttr)) {
         // Extract username from attribute
         $attr = $auth->getAttribute($params->UserNameAttr);
         $username = is_array($attr) ? $attr[0] : '';
-        $username_source = "getAttribute(".escape_input($params->UserNameAttr).")";
-	} else {
+        $username_source = "getAttribute(" . escape_input($params->UserNameAttr) . ")";
+    } else {
         // Extract username from NameId
-		$username = $auth->getNameId();
+        $username = $auth->getNameId();
         $username_source = "getNameId()";
-	}
+    }
 
     // Validate username
     if (!isset($username) || !is_string($username) || is_blank($username)) {
-        $Result->show("danger", _("Could not extract valid username from SAML response")." : ".$username_source, true);
+        $Result->show("danger", _("Could not extract valid username from SAML response") . " : " . $username_source, true);
     }
 
     // Attempt JIT if enabled
-    if(filter_var($params->jit, FILTER_VALIDATE_BOOLEAN)) {
+    if (filter_var($params->jit, FILTER_VALIDATE_BOOLEAN)) {
 
         //
         // Auto provision users via SAML attributes
@@ -147,10 +155,9 @@ else{
         //       "modules" = "*:1,vlan:3"
 
         if (empty($auth->getAttribute("display_name")[0])) {
-            $Result->show("danger", _("Mandatory SAML JIT attribute missing")." : display_name (string)", true);
-        }
-        elseif (!filter_var($auth->getAttribute("email")[0], FILTER_VALIDATE_EMAIL)) {
-            $Result->show("danger", _("Mandatory SAML JIT attribute missing")." : email (string)", true);
+            $Result->show("danger", _("Mandatory SAML JIT attribute missing") . " : display_name (string)", true);
+        } elseif (!filter_var($auth->getAttribute("email")[0], FILTER_VALIDATE_EMAIL)) {
+            $Result->show("danger", _("Mandatory SAML JIT attribute missing") . " : email (string)", true);
         }
 
         $values = [];
@@ -161,13 +168,12 @@ else{
             // User exists in DB. Check this is a SAML account.
 
             if ($existing_user->authMethod != $dbobj->id) {
-                $Result->show("danger", _("Requested SAML user is not configured for SAML authentication")." : ".escape_input($username), true);
+                $Result->show("danger", _("Requested SAML user is not configured for SAML authentication") . " : " . escape_input($username), true);
             }
 
             $action = "edit";
             $values["id"] = $existing_user->id;
-        }
-        else {
+        } else {
             // User does not exist in DB. Auto-provision user.
 
             $action = "add";
@@ -181,7 +187,7 @@ else{
         $values["role"] = filter_var($auth->getAttribute("is_admin")[0], FILTER_VALIDATE_BOOLEAN) ? "Administrator" : "User";
 
         // Parse groups
-        $saml_groups = array_map('trim', pf_explode(',', $auth->getAttribute("groups")[0])) ? : [];
+        $saml_groups = array_map('trim', pf_explode(',', $auth->getAttribute("groups")[0])) ?: [];
 
         $ug = [];
         foreach ($Tools->fetch_all_objects("userGroups", "g_id") as $g) {
@@ -193,15 +199,15 @@ else{
 
         //parse modules
         $saml_modules = [];
-        foreach(pf_explode(',', $auth->getAttribute("modules")[0]) as $entry){
-            if (strpos($entry, ":")!==false) {
-                list($module_name, $module_perm) = array_map('trim', pf_explode(':', $entry)) ? : ['', 0];
-                $saml_modules[$module_name] = filter_var($module_perm, FILTER_VALIDATE_INT, ["options"=>["default"=>0, "min_range"=>0, "max_range"=>3]]);
+        foreach (pf_explode(',', $auth->getAttribute("modules")[0]) as $entry) {
+            if (strpos($entry, ":") !== false) {
+                list($module_name, $module_perm) = array_map('trim', pf_explode(':', $entry)) ?: ['', 0];
+                $saml_modules[$module_name] = filter_var($module_perm, FILTER_VALIDATE_INT, ["options" => ["default" => 0, "min_range" => 0, "max_range" => 3]]);
             }
         }
 
         $um = [];
-        foreach($User->get_modules_with_permissions() as $module) {
+        foreach ($User->get_modules_with_permissions() as $module) {
             // Allow "*" wildcard
             if (array_key_exists('*', $saml_modules)) {
                 $um[$module] = $saml_modules['*'];
@@ -214,12 +220,17 @@ else{
 
         // Construct admin object for helper functions
         $Admin = new Admin($Database, false);
-        if (!$Admin->object_modify("users", $action, "id", $values)) { $Result->show("danger", _("Failed to create/update SAML JIT user")." : ".escape_input($username), true); }
+        if (!$Admin->object_modify("users", $action, "id", $values)) {
+            $Result->show("danger", _("Failed to create/update SAML JIT user") . " : " . escape_input($username), true);
+        }
     }
 
-    $User->authenticate ($username, '', true);
+    $User->authenticate($username, '', true);
 
-	// Redirect user where he came from, if unknown go to dashboard.
-	if ($redirect = $User->get_redirect_cookie()) { header("Location: " . $redirect); }
-	else                                          { header("Location: " . create_link("dashboard")); }
+    // Redirect user where he came from, if unknown go to dashboard.
+    if ($redirect = $User->get_redirect_cookie()) {
+        header("Location: " . $redirect);
+    } else {
+        header("Location: " . create_link("dashboard"));
+    }
 }

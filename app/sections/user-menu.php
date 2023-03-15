@@ -4,19 +4,19 @@
  * Display usermenu on top right
  */
 
- $Params = new Params();
- $Params->read($_REQUEST);
+ $Params = new Params($_GET);
 
 # filter ip value
 if(!is_blank($Params->ip)) {
-	$Params->ip = $Subnets->strip_input_tags(urldecode(trim($Params->ip)));
+	$Params->ip = urldecode(trim($Params->ip));
 }
 
 # verify that user is logged in
 $User->check_user_session();
 
 // set parameters form cookie
-$params = pf_json_decode($Params->search_parameters, true) ?: [];
+$sp = isset($_COOKIE['search_parameters']) ? $_COOKIE['search_parameters'] : '';
+$params = json_decode($sp, true) ?: [];
 foreach ($params as $k => $p) {
 	if ($p == "on") {
 		$Params->{$k} = $p;

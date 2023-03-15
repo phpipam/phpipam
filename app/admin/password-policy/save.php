@@ -12,12 +12,13 @@ $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Result 	= new Result ();
+$Params 	= new Params ($_POST);
 
 # verify that user is logged in
 $User->check_user_session();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "settings", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "settings", $Params->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # valid params
 $passwordPolicy = [
@@ -46,9 +47,9 @@ foreach ($passwordPolicy as $k=>$f) {
 	}
 }
 # symbols
-if (!is_blank($_POST['allowedSymbols'])) {
-	$_POST['passwordPolicy'] = str_replace(" ", "", $_POST['passwordPolicy']);
-	$passwordPolicy['allowedSymbols'] = $_POST['allowedSymbols'];
+if (!is_blank($Params->allowedSymbols)) {
+	$Params->allowedSymbols = str_replace(" ", "", $Params->allowedSymbols);
+	$passwordPolicy['allowedSymbols'] = $Params->allowedSymbols;
 }
 
 # set update values
@@ -58,7 +59,7 @@ if(!$Admin->object_modify("settings", "edit", "id", $values))	{ $Result->show("d
 else															{ $Result->show("success", _("Settings updated successfully"), false); }
 
 # if required check all user sertings and force them to update password
-if(@$_POST['enforce']==1) {
+if($Params->enforce==1) {
 	try { $Database->runQuery("update `users` set `passChange` = 'Yes' where `authMethod` = 1;"); }
 	catch (Exception $e) {
 		$Result->show("danger", _('Error updating users: ').$e->getMessage(), false);

@@ -10,6 +10,7 @@ $User->check_user_session();
 # change * to % for database wildchar
 $searchTerm = trim($searchTerm);
 $searchTerm = str_replace("*", "%", $searchTerm);
+$searchTerm_edited = null;
 
 // IP address low/high reformat
 if (preg_match('/^[a-f0-9.:\/]+$/i', $searchTerm)) {
@@ -32,8 +33,7 @@ $hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
 $selected_ip_fields = $User->settings->IPfilter;
 $selected_ip_fields = pf_explode(";", $selected_ip_fields);
 
-$Params = new Params();
-$Params->read($_GET);
+$Params = new Params($_GET);
 
 // all are off?
 if (is_blank($Params->addresses) && is_blank($Params->subnets) && is_blank($Params->vlans) && is_blank($Params->vrf) && is_blank($Params->pstn) && is_blank($Params->circuits) && is_blank($Params->customers)) {

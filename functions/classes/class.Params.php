@@ -10,8 +10,7 @@
  *
  *        vs
  *
- *    $Params = new Params();
- *    $Params.read($_POST);
+ *    $Params = new Params($_POST);
  *
  *    if ($Params->ip==....)    // No warning if $_POST['ip'] is undefined.
  */
@@ -30,10 +29,12 @@ class Params extends stdClass
     /**
      * Class constructor
      *
+     * @param array $args
      * @param mixed $default
      */
-    public function __construct($default = null)
+    public function __construct($args = [], $default = null)
     {
+        $this->read($args);
         $this->____default = $default;
     }
 
