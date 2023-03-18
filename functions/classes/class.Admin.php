@@ -666,14 +666,40 @@ class Admin extends Common_functions {
 	 * @return bool
 	 */
 	public function update_custom_field_definition ($field) {
-		if (!in_array($field['fieldType'], $this->valid_custom_field_types())) {
+		if (!is_array($field) || !isset($field['fieldType'])) {
 			$this->Result->show("danger", _("Error: ")._("Invalid custom field type"));
 			return false;
 		}
 
-	    # set type definition and size of needed
-	    if($field['fieldType']=="bool" || $field['fieldType']=="text" || $field['fieldType']=="date" || $field['fieldType']=="datetime")	{ $field['ftype'] = $field['fieldType']; }
-	    else																																{ $field['ftype'] = $field['fieldType']."( :enumset )"; }
+		switch ($field['fieldType']) {
+			case "varchar":
+			case "int":
+				if (!isset($field['fieldSize']) || filter_var($field['fieldSize'], FILTER_VALIDATE_INT, [['options' => ['min_range' => 1]]]) === false) {
+					$this->Result->show("danger", _("Error: ") . _("Invalid custom field size"));
+					return false;
+				}
+				$field['ftype'] = $field['fieldType'] . "(" . $field['fieldSize'] . ")";
+				break;
+			case "bool":
+			case "text":
+			case "date":
+			case "datetime":
+				$field['ftype'] = $field['fieldType'];
+				break;
+			case "set":
+				$this->Result->show("danger", _("Error: ") . _("SET functionality not fully implemented, please change to ENUM"));
+				return false;
+			case "enum":
+				$data = str_getcsv($field['fieldSize'], ",", "'", "\\");
+				foreach ($data as $i => $v) {
+					$data[$i] = "'" . $this->Database->escape($v) . "'";
+				}
+				$field['ftype'] = $field['fieldType'] . "(" . implode(",", $data) . ")";
+				break;
+			default:
+				$this->Result->show("danger", _("Error: ") . _("Invalid custom field type"));
+				return false;
+		}
 
 	    # default value null
 	    $field['fieldDefault'] = is_blank($field['fieldDefault']) ? NULL : $field['fieldDefault'];
@@ -709,7 +735,6 @@ class Admin extends Common_functions {
 	    $params = array();
 	    if (strpos($query, ":default")>0)	$params['default'] = $field['fieldDefault'];
 	    if (strpos($query, ":comment")>0)	$params['comment'] = $field['Comment'];
-	    if (strpos($query, ":enumset")>0)	$params['enumset'] = $field['fieldSize'];
 
 		# execute
 		try { $res = $this->Database->runQuery($query, $params); }
