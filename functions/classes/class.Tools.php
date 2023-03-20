@@ -251,6 +251,9 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	private function search_subnets_inside($search_term, $high, $low) {
+		if (is_blank($high) || is_blank($low))
+			return [];
+
 		# subnets class
 		$Subnets = new Subnets($this->Database);
 

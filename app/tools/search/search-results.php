@@ -10,7 +10,7 @@ $User->check_user_session();
 # change * to % for database wildchar
 $searchTerm = trim($searchTerm);
 $searchTerm = str_replace("*", "%", $searchTerm);
-$searchTerm_edited = null;
+$searchTerm_edited = ['high' => '', 'low' => ''];
 
 // IP address low/high reformat
 if (preg_match('/^[a-f0-9.:\/]+$/i', $searchTerm)) {
