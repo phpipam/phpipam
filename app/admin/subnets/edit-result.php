@@ -431,6 +431,7 @@ else {
         if(isset($_POST['showName']))       $values['showName']       = $Admin->verify_checkbox(@$_POST['showName']);
         if(isset($_POST['discoverSubnet'])) $values['discoverSubnet'] = $Admin->verify_checkbox(@$_POST['discoverSubnet']);
         if(isset($_POST['pingSubnet']))     $values['pingSubnet']     = $Admin->verify_checkbox(@$_POST['pingSubnet']);
+	if(isset($_POST['resolveDNS']))     $values['resolveDNS']     = $Admin->verify_checkbox(@$_POST['resolveDNS']);
 
         # propagate changes
 		if(is_array($Subnets->slaves) && sizeof($Subnets->slaves)>0) {
