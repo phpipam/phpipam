@@ -594,6 +594,7 @@ else {
 
 	print "	<div class='btn-toolbar'>";
 
+	$sp = [];
 	# set values for permissions
 	if($subnet_permission == 1) {
 		$sp['editsubnet']= false;		//edit subnet
