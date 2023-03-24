@@ -35,7 +35,7 @@ if($User->is_admin(false)) {
 				if ($href[0]=="autodb") {
 					print "<li class='$active'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($i['name'])."</a></li>";
 				}
-				if ($href[0]=="autotools") {
+				elseif ($href[0]=="autotools") {
 					print "<li class='$active'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($i['name'])."</a></li>";
 				}
 				else {
@@ -84,7 +84,7 @@ if($User->is_admin(false)) {
 						if ($href[0]=="autodb") {
 							print "<li class='$active'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($i['name'])."</a></li>";
 						}
-						if ($href[0]=="autotools") {
+						elseif ($href[0]=="autotools") {
 							print "<li class='$active'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($i['name'])."</a></li>";
 						}
 						else {
