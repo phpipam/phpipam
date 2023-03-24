@@ -35,6 +35,9 @@ if($User->is_admin(false)) {
 				if ($href[0]=="autodb") {
 					print "<li class='$active'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($i['name'])."</a></li>";
 				}
+				if ($href[0]=="autotools") {
+					print "<li class='$active'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($i['name'])."</a></li>";
+				}
 				else {
 					print "<li class='$active'><a href='".create_link("administration",$i['href'])."'>"._($i['name'])."</a></li>";
 				}
@@ -79,6 +82,9 @@ if($User->is_admin(false)) {
 						}
 						$href = explode("/", $i['href']);
 						if ($href[0]=="autodb") {
+							print "<li class='$active'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($i['name'])."</a></li>";
+						}
+						if ($href[0]=="autotools") {
 							print "<li class='$active'><a href='/".$href[0]."/index.php?page=".$href[1]."&section=".$href[2]."'>"._($i['name'])."</a></li>";
 						}
 						else {
@@ -152,6 +158,9 @@ if($User->is_admin(false)) {
 						}
 						list($l0, $l1,$l2) = explode('/', $i['href']);
 						if ($l0=="autodb") {
+							print "<li class='$active'><a href='/".$l0."/index.php?page=".$l1."&section=".$l2."'>"._($i['name'])."</a></li>";
+						}
+						elseif ($l0=="autotools") {
 							print "<li class='$active'><a href='/".$l0."/index.php?page=".$l1."&section=".$l2."'>"._($i['name'])."</a></li>";
 						}
 						else {

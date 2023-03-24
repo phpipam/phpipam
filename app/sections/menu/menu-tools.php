@@ -208,6 +208,9 @@ $tool_items["search"] = array (
 			if ($t['href'][0]=="autodb") {
 				print "	 <a href='/".$t['href'][0]."/index.php?page=".$t['href'][1]."&section=".$t['href'][2]."'><i class='hidden-xs fa $t[icon]'></i><span class='visible-xs'> <i class='fa $t[icon]'></i>"._($t['name'])."</span></a>";
 			}
+			elseif ($t['href'][0]=="autotools") {
+				print "	 <a href='/".$t['href'][0]."/index.php?page=".$t['href'][1]."&section=".$t['href'][2]."'><i class='hidden-xs fa $t[icon]'></i><span class='visible-xs'> <i class='fa $t[icon]'></i>"._($t['name'])."</span></a>";
+			}
 			elseif(sizeof($t['href'])>0) {		
 
 				print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='hidden-xs fa $t[icon]'></i><span class='visible-xs'> <i class='fa $t[icon]'></i>"._($t['name'])."</span></a>";
@@ -215,6 +218,9 @@ $tool_items["search"] = array (
 		}
 		else {
 			if ($t['href'][0]=="autodb") {
+				print " <a href='/".$t['href'][0]."/index.php?page=".$t['href'][1]."&section=".$t['href'][2]."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
+			}
+			elseif ($t['href'][0]=="autotools") {
 				print " <a href='/".$t['href'][0]."/index.php?page=".$t['href'][1]."&section=".$t['href'][2]."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
 			}
 			elseif(sizeof($t['href'])>0) {	
@@ -233,5 +239,8 @@ $tool_items["search"] = array (
 	<!-- automation DB -->
     <li rel='tooltip' title='Automation DB' data-placement='bottom' class='$active'>
 		<a href='/autodb/'><i class='fa fa-database'></i>Automation DB</a>
+	</li>
+    <li rel='tooltip' title='Automation Tools' data-placement='bottom' class='$active'>
+		<a href='/autotools/'><i class='fa fa-database'></i>AutoTools</a>
 	</li>
 </ul>

@@ -80,4 +80,7 @@ $User->check_user_session();
 	<li rel='tooltip' title='Automation DB' data-placement='bottom' class='$active'>
 		<a href='/autodb/'><i class='fa fa-database'></i>Automation DB</a>
 	</li>
+	<li rel='tooltip' title='Automation Tools' data-placement='bottom' class='$active'>
+		<a href='/autotools/'><i class='fa fa-database'></i>AutoTools</a>
+	</li>
 </ul>
