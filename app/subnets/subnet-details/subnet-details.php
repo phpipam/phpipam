@@ -226,7 +226,7 @@ else {
 			if (is_object($device)) {
 				# rack
 				if ($User->settings->enableRACK=="1" && !is_blank($device->rack) && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
-					if (!is_object($Racks)) $Racks = new phpipam_rack ($Database);
+					if (!isset($Racks)) $Racks = new phpipam_rack($Database);
 					$Racks->add_rack_start_print($device);
 					$rack = $Tools->fetch_object("racks", "id", $device->rack);
 					$rack_text = !is_object($rack) ? "" : "<br><span class='badge badge1 badge5' style='padding-top:4px;'>$rack->name / "._('Position').": $device->rack_start_print "._("Size").": $device->rack_size U <i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackId='$rack->id' data-deviceId='$device->id'></i></span>";
