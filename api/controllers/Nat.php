@@ -227,6 +227,11 @@ class Nat_controller extends Common_api_functions {
         $values = $this->validate_keys ();
         # validate input format
         $this->validate_nat_edit();
+        foreach (array("src","dst") as $k) {
+            if ( array_key_exists($k, $values) ) {
+                $values[$k] = json_encode($values[$k]);
+            }
+        }
 
         if (!$this->Admin->object_modify ("nat", "edit", "id", $values)) {
             $this->Response->throw_exception(500, "NAT modification failed"); 
