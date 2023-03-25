@@ -1,5 +1,17 @@
 <?php
-include(dirname(__FILE__)."/../../../functions/functions.php");
+# include required scripts
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+
+# initialize user object, if not already set
+if (!isset($Database)) { $Database 	= new Database_PDO; }
+if (!isset($User)) { $User = new User ($Database); }
+if (!isset($Tools)) { $Tools = new Tools ($Database); }
+
+# verify that user is logged in, to guard against direct access of page and possible exploits
+$User->check_user_session();
+
+# Don't corrupt output with php errors!
+disable_php_errors();
 
 /*
  * CSV import verify + parse data
@@ -9,9 +21,6 @@ include(dirname(__FILE__)."/../../../functions/functions.php");
 $filename = $_FILES['file']['name'];
 $filename = pf_explode(".", $filename);
 $filename = end($filename);
-
-# Don't corrupt output with php errors!
-disable_php_errors();
 
 /* list of permitted file extensions */
 $allowed = array('cer', 'pem', 'crt', 'p12', 'pfx');

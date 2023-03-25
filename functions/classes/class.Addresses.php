@@ -464,7 +464,7 @@ class Addresses extends Common_functions {
 			$this->address_within_subnetId($address['ip_addr'], $subnetId, true);
 
 		# set primary key for update
-		if($address['type']=="series") {
+		if(isset($address['type']) && $address['type']=="series") {
 			$id1 = "subnetId";
 			$id2 = "ip_addr";
 			unset($address['id']);
@@ -474,7 +474,7 @@ class Addresses extends Common_functions {
 		}
 
 		# remove gateway
-		if($address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
+		if(isset($address['is_gateway']) && $address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
 
 		# execute
 		try { $this->Database->updateObject("ipaddresses", $address, $id1, $id2); }
@@ -781,7 +781,7 @@ class Addresses extends Common_functions {
 		}
 		# result
 		if ($cnt===true)	{ return $count->cnt==0 ? false : true; }
-		else				{ return is_null($count->id) ? false : $count->id; }
+		else				{ return is_null($count) ? false : $count->id; }
 	}
 
 	/**

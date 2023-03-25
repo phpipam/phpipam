@@ -1222,7 +1222,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_device_diff ($k, $v) {
 		// old none
-		if($this->object_old[$k] == 0)	{
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
 			$this->object_old[$k] = _("None");
 		}
 		elseif($this->object_old[$k] != "NULL") {
@@ -1253,7 +1253,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_vlan_diff ($k, $v) {
 		//old none
-		if($this->object_old[$k] == 0)	{
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
 			$this->object_old[$k] = _("None");
 		}
 		elseif($this->object_old[$k] != "NULL") {
@@ -1284,7 +1284,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_vrf_diff ($k, $v) {
 		//old none
-		if($this->object_old[$k] == 0)	{
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
 			$this->object_old[$k] = _("None");
 		}
 		elseif($this->object_old[$k] != "NULL") {
@@ -1315,7 +1315,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_ns_diff ($k, $v) {
 		//old none
-		if($this->object_old[$k] == 0)	{
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
 			$this->object_old[$k] = _("None");
 		}
 		elseif($this->object_old[$k] != "NULL") {
@@ -1346,7 +1346,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_location_diff ($k, $v) {
 		//old none
-		if($this->object_old[$k] == 0)	{
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
 			$this->object_old[$k] = _("None");
 		}
 		elseif($this->object_old[$k] != "NULL") {
@@ -1377,7 +1377,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_master_section_diff ($k, $v) {
 		// old root
-		if($this->object_old[$k]==0) {
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k]==0) {
 			$this->object_old[$k] = _("Root");
 		}
 		else {
