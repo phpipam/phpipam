@@ -275,7 +275,7 @@ class FirewallZones extends Common_functions {
 			# add some padding if it is activated and the zone generatore is not text
 			if($mappings[$key]->padding == 1 && $mappings[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
-			# add some padding to reach the maximum zone name lenght
+			# add some padding to reach the maximum zone name length
 			$mappings[$key]->zone = str_pad(ltrim($mappings[$key]->zone,0),$mappings[$key]->length,"0",STR_PAD_LEFT);
 			}
 			# inject network informations
@@ -349,7 +349,7 @@ class FirewallZones extends Common_functions {
 			# add some padding if it is activated and the zone generatore is not text
 			if($mapping[$key]->padding == 1 && $mapping[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
-			# add some padding to reach the maximum zone name lenght
+			# add some padding to reach the maximum zone name length
 			$mapping[$key]->zone = str_pad(ltrim($mapping[$key]->zone,0),$mapping[$key]->length,"0",STR_PAD_LEFT);
 			}
 			# inject network informations
@@ -427,7 +427,7 @@ class FirewallZones extends Common_functions {
 				# add some padding if it is activated and the zone generatore is not text
 				if($info[$key]->padding == 1 && $info[$key]->generator != 2){
 				# remove leading zeros (padding) and raise the value in case of any zone name length changes
-				# add some padding to reach the maximum zone name lenght
+				# add some padding to reach the maximum zone name length
 				$info[$key]->zone = str_pad(ltrim($info[$key]->zone,0),$info[$key]->length,"0",STR_PAD_LEFT);
 				}
 			}
@@ -478,7 +478,7 @@ class FirewallZones extends Common_functions {
 			# add some padding if it is activated and the zone generatore is not text
 			if($zones[$key]->padding == 1 && $zones[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
-			# add some padding to reach the maximum zone name lenght
+			# add some padding to reach the maximum zone name length
 			$zones[$key]->zone = str_pad(ltrim($zones[$key]->zone,0),$zones[$key]->length,"0",STR_PAD_LEFT);
 			}
 			# inject network informations
@@ -538,7 +538,7 @@ class FirewallZones extends Common_functions {
 			# add some padding if it is activated and the zone generatore is not text
 			if($zone[$key]->padding == 1 && $zone[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
-			# add some padding to reach the maximum zone name lenght
+			# add some padding to reach the maximum zone name length
 			$zone[$key]->zone = str_pad(ltrim($zone[$key]->zone,0),$zone[$key]->length,"0",STR_PAD_LEFT);
 			}
 			# inject network informations

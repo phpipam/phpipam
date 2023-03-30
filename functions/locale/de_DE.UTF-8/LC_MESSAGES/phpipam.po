@@ -3817,7 +3817,7 @@ msgstr "Maximale L&auml;nge Zonennamen"
 
 #: app/admin/firewall-zones/settings.php:127
 msgid ""
-"Choose a maximum lenght of the zone name.<br>The default: 3, maximum: 31 "
+"Choose a maximum length of the zone name.<br>The default: 3, maximum: 31 "
 "characters.<br>(keep in mind that your firewall may have a limit for the "
 "length of zone names or address objects )"
 msgstr ""

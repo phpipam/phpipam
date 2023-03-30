@@ -4353,27 +4353,27 @@ msgstr ""
 
 #: functions/functions-common.php
 msgid "Favourite subnets"
-msgstr ""
+msgstr "Favorite subnets"
 
 msgid "No favourite subnets selected"
-msgstr ""
+msgstr "No favorite subnets selected"
 
 msgid "You can add subnets to favourites by clicking star icon in subnet details"
-msgstr ""
+msgstr "You can add subnets to favorites by clicking star icon in subnet details"
 
 msgid "Click to remove from favourites"
-msgstr ""
+msgstr "Click to remove from favorites"
 
 msgid "Click to add to favourites"
-msgstr ""
+msgstr "Click to add to favorites"
 
 #: site/tools/favouriteEdit.php
 msgid "Error editing favourite"
-msgstr ""
+msgstr "Error editing favorite"
 
 #: site/sections.php
 msgid "Favourite networks"
-msgstr ""
+msgstr "Favorite networks"
 
 #: site/ipaddr/ipDetailsChangelog.php
 msgid "Changelog"
@@ -6267,7 +6267,7 @@ msgstr ""
 msgid "Maximum zone name length"
 msgstr ""
 
-msgid "Choose a maximum lenght of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgid "Choose a maximum length of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
 msgstr ""
 
 msgid "IPv4 address type alias"
@@ -7696,9 +7696,6 @@ msgid "Address permissions"
 msgstr ""
 
 msgid "General"
-msgstr ""
-
-msgid "Availability"
 msgstr ""
 
 msgid "Rack details"
