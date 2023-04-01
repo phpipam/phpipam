@@ -27,7 +27,7 @@ $custom_fields = $Tools->fetch_custom_fields('devices');
 $custom_fields_names = "";
 $custom_fields_boxes = "";
 $section_ids = array();
-$fields = array ( 'id', 'hostname', 'ip_addr', 'type', 'description', 'sections', 'rack', 'rack_start', 'rack_size', 'location' );
+$fields = array ( 'id', 'hostname', 'ip_addr', 'type', 'description', 'sections', 'location' );
 
 if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $myField) {
@@ -99,6 +99,20 @@ foreach ($devices as $d) {
 
     foreach ($fields as $k) {
         if( (isset($_GET[$k])) && ($_GET[$k] == "on") ) {
+			switch ($k){
+				case "type":
+					$types = $Tools->fetch_object("devicetypes", "tid",$d[$k]);
+					$d[$k]=$types->tname;
+					break;
+				case "sections":
+					$sections = $Tools->fetch_object("sections", "id",$d[$k]);
+					$d[$k]=$sections->name;
+					break;
+				case "location":
+					$locations = $Tools->fetch_object("locations", "id",$d[$k]);
+					$d[$k]=$locations->name;
+					break;
+			}
             $worksheet->write($curRow, $curColumn, $d[$k], $format_text);
             $curColumn++;
         }

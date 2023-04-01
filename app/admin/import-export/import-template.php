@@ -110,21 +110,6 @@ elseif ($type == 'l2dom'){
     $worksheet->write($lineCount, $curColumn++, _('deviceType'));
     $worksheet->write($lineCount, $curColumn++, _('description'));
     $worksheet->write($lineCount, $curColumn++, _('section'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_community'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_version'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_port'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_timeout'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_queries'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_sec_level'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_auth_protocol'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_auth_pass'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_priv_protocol'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_priv_pass'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_ctx_name'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_ctx_engine_id'));
-    $worksheet->write($lineCount, $curColumn++, _('rack'));
-    $worksheet->write($lineCount, $curColumn++, _('rack_start'));
-    $worksheet->write($lineCount, $curColumn++, _('rack_size'));
     $worksheet->write($lineCount, $curColumn++, _('location'));
 	foreach($custom_address_fields as $k=>$f) {
 		$worksheet->write($lineCount, $curColumn, $k);
