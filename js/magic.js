@@ -2629,10 +2629,11 @@ $('button#XLSdump, button#MySQLdump, button#hostfileDump').click(function () {
 
 //Export Section
 $('button.dataExport').click(function () {
-	var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype"]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype","hardware"]; var popsize = {};
 	popsize["subnets"] = "w700";
 	popsize["ipaddr"] = "w700";
 	popsize["devices"] = "max";
+	popsize["hardware"] = "max";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
     //show popup window
@@ -2704,7 +2705,13 @@ $(document).on("click", "button#dataExportSubmit", function() {
 			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-devtype.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
 			setTimeout(function (){hidePopups();}, 1500);
 			break;
-	}
+            case 'hardware':
+                var exportSections = $('form#selectExportSections').serialize();
+                $("div.dl").remove();    //remove old innerDiv
+                $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-hardware.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+                setTimeout(function (){hidePopups();}, 1500);
+                break;
+        }
     return false;
 });
 // Check/uncheck all
