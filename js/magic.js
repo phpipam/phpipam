@@ -894,6 +894,12 @@ $(document).on("click", "#devtypetemplate", function() {
 	return false;
 });
 
+//download hardware template
+$(document).on("click", "#hardwaretemplate", function() {
+    $("div.dl").remove();    //remove old innerDiv
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=hardware'></iframe></div>");
+	return false;
+});
 
 
 /*    export IP addresses
@@ -2763,10 +2769,11 @@ $(document).on("click", "input#recomputeCVRFSelectAll", function() {
 });
 //Import Section
 $('button.dataImport').click(function () {
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype"]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype","hardware"]; var popsize = {};
 	popsize["subnets"] = "max";
 	popsize["ipaddr"] = "max";
 	popsize["devices"] = "max";
+	popsize["hardware"] = "max";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
     //show popup window, if implemented
@@ -2793,11 +2800,12 @@ $('button.dataImport').click(function () {
 //import buttons
 $(document).on("click", "button#dataImportPreview", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype" ]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype","hardware" ]; var popsize = {};
 	popsize["subnets"] = "max";
 	popsize["recompute"] = "max";
 	popsize["ipaddr"] = "max";
 	popsize["devices"] = "max";
+	popsize["hardware"] = "max";
 
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
@@ -2825,11 +2833,12 @@ $(document).on("click", "button#dataImportPreview", function() {
 });
 $(document).on("click", "button#dataImportSubmit", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype" ]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype","hardware" ]; var popsize = {};
 	popsize["subnets"] = "max";
 	popsize["recompute"] = "max";
 	popsize["ipaddr"] = "max";
 	popsize["devices"] = "max";
+	popsize["hardware"] = "max";
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
 	hidePopups();
