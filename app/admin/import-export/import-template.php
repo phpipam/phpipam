@@ -98,6 +98,7 @@ elseif ($type == 'l2dom'){
 	$worksheet->write($lineCount, 0, _('Name'));
 	$worksheet->write($lineCount, 1, _('Description'));
 	$fc =2 ;
+
 } elseif ($type == 'devices'){
 
     $curColumn=0;
@@ -141,6 +142,37 @@ elseif ($type == 'l2dom'){
 		$worksheet->write($lineCount, $fc, $k);
 		$fc++;
 	}
+
+} elseif ($type == 'hardware'){
+
+    $curColumn=0;
+	// set headers
+    $worksheet->write($lineCount, $curColumn++, _('serialNumber'));
+    $worksheet->write($lineCount, $curColumn++, _('model'));
+    $worksheet->write($lineCount, $curColumn++, _('status'));
+    $worksheet->write($lineCount, $curColumn++, _('dateRecived'));
+    $worksheet->write($lineCount, $curColumn++, _('ownedBy'));
+    $worksheet->write($lineCount, $curColumn++, _('managedBy'));
+    $worksheet->write($lineCount, $curColumn++, _('device'));
+    $worksheet->write($lineCount, $curColumn++, _('deviceMember'));
+    $worksheet->write($lineCount, $curColumn++, _('comment'));
+    $worksheet->write($lineCount, $curColumn++, _('rack'));
+    $worksheet->write($lineCount, $curColumn++, _('rack_start'));
+    $worksheet->write($lineCount, $curColumn++, _('halfUnit'));
+	$lineCount++;
+    $curColumn=0;
+    $worksheet->write($lineCount, $curColumn++, _('<serialNumber>'));
+    $worksheet->write($lineCount, $curColumn++, _('<model name>'));
+    $worksheet->write($lineCount, $curColumn++, _('usually <deployed> or <staged>'));
+    $worksheet->write($lineCount, $curColumn++, _('<YYYY-MM-DD> if not known leave blank'));
+    $worksheet->write($lineCount, $curColumn++, _('usually <UMG>'));
+    $worksheet->write($lineCount, $curColumn++, _('usually <UMG>'));
+    $worksheet->write($lineCount, $curColumn++, _('<device name>'));
+    $worksheet->write($lineCount, $curColumn++, _('<a> - <h>'));
+    $worksheet->write($lineCount, $curColumn++, _('<text>'));
+    $worksheet->write($lineCount, $curColumn++, _('<rack name>'));
+    $worksheet->write($lineCount, $curColumn++, _('<1> - <63>'));
+    $worksheet->write($lineCount, $curColumn++, _('If half rack device <left> or <right> otherwise leave blank'));
 
 }
 

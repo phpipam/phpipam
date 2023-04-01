@@ -40,7 +40,7 @@ foreach ($data as &$cdata) {
 
 		$values = array(
             'id'	    	=>$cdata['id'],
-            'name'	    	=>$cdata['name'],
+            'deviceMember' 	=>$cdata['deviceMember'],
             'model'	    	=>$cdata['model'],
             'serialNumber'	=>$cdata['serialNumber'],
             'dateReceived'	=>$cdata['dateReceived'],

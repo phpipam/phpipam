@@ -44,7 +44,7 @@ $racks = $Tools->fetch_all_objects("racks", "id");
 
 foreach ($hardware as $d) {
     $d = (array) $d;
-    $edata['hardware'][strtolower($d['name'])] = $d;
+    $edata['hardware'][strtolower($d['serialNumber'])] = $d;
 }
 
 foreach ($devices as $d) {
@@ -142,22 +142,24 @@ foreach ($data as &$cdata) {
 
 	# check if existing in database
 	if ($action != "error") {
-		if (isset($edata['hardware'][strtolower($cdata['name'])]) ) {
-    		$cdata['id'] = $edata['hardware'][strtolower($cdata['name'])]['id'];
+		if (isset($edata['hardware'][strtolower($cdata['serialNumber'])]) ) {
+    		$cdata['id'] = $edata['hardware'][strtolower($cdata['serialNumber'])]['id'];
 			# copy content to a variable for easier checks
-			$cedata = $edata[strtolower($cdata['name'])];
+			$cedata = $edata['hardware'][strtolower($cdata['serialNumber'])];
 			# Check if we need to change any fields
 			$action = "skip"; # skip duplicate fields if identical, update if different
 			# Should we just let the database decided to update or not?  Nice for UI, but alot of 
 			# code maintaince here.
-			if ($cdata['model'] != $cedata['model']) { $msg.= "HW Model will be updated."; $action = "edit"; }
-			if ($cdata['status'] != $cedata['status']) { $msg.= "HW Status will be updated."; $action = "edit"; }
-			if ($cdata['ownedBy'] != $cedata['ownedBy']) { $msg.= "OwnedBy will be updated."; $action = "edit"; }
-			if ($cdata['managedBy'] != $cedata['managedBy']) { $msg.= "ManagedBy will be updated."; $action = "edit"; }
-			if ($cdata['rack'] != $cedata['rack']) { $msg.= "rack will be updated."; $action = "edit"; }
-			if ($cdata['rack_start'] != $cedata['rack_start']) { $msg.= "rack_start will be updated."; $action = "edit"; }
-			if ($cdata['halfUnit'] != $cedata['halfUnit']) { $msg.= "halfUnit will be updated."; $action = "edit"; }
-			if ($cdata['device'] != $cedata['device']) { $msg.= "Device will be updated."; $action = "edit"; }
+			if ($cdata['model'] != $cedata['model']) { $msg.= " HW Model will be updated."; $action = "edit"; }
+			if ($cdata['status'] != $cedata['status']) { $msg.= " HW Status will be updated."; $action = "edit"; }
+			if ($cdata['dateReceived'] != $cedata['dateReceived']) { $msg.= " Date Received will be updated."; $action = "edit"; }
+			if ($cdata['ownedBy'] != $cedata['ownedBy']) { $msg.= " OwnedBy will be updated."; $action = "edit"; }
+			if ($cdata['managedBy'] != $cedata['managedBy']) { $msg.= " ManagedBy will be updated."; $action = "edit"; }
+			if ($cdata['rack'] != $cedata['rack']) { $msg.= " rack will be updated."; $action = "edit"; }
+			if ($cdata['rack_start'] != $cedata['rack_start']) { $msg.= " rack_start will be updated."; $action = "edit"; }
+			if ($cdata['halfUnit'] != $cedata['halfUnit']) { $msg.= " halfUnit will be updated."; $action = "edit"; }
+			if ($cdata['device'] != $cedata['device']) { $msg.= " Device will be updated."; $action = "edit"; }
+			if ($cdata['deviceMember'] != $cedata['deviceMember']) { $msg.= " Device Member will be updated."; $action = "edit"; }
 
 
 			if ($action == "skip") { $msg.= "Duplicate, will skip."; }

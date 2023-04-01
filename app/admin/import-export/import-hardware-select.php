@@ -23,7 +23,7 @@ $tpl_field_types = "";
 
 
 # predefine field list
-$expfields = array ("name", "model", "serialNumber", "status", "dateReceived", "ownedBy", "managedBy", "device", "comment", "rack", "rack_start", "halfUnit");
+$expfields = array ("model", "serialNumber", "status", "dateReceived", "ownedBy", "managedBy", "device", "deviceMember", "comment", "rack", "rack_start", "halfUnit");
 $mtable = "hardware"; # main table where to check the fields
 
 // # extra fields
@@ -49,7 +49,7 @@ $extfields["rack"]["table"] = "racks";
 $extfields["rack"]["field"] = "name";
 $extfields["rack"]["pname"] = "rack";
 
-$reqfields = array("name","model","serialNumber","status","ownedBy","managedBy","device");
+$reqfields = array("model","serialNumber","status","ownedBy","managedBy","device");
 
 # manually adjust the standard fields
 foreach($expfields as $std_field) {
@@ -81,7 +81,7 @@ foreach($expfields as $std_field) {
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print _("Select Devices file and fields to import"); ?></div>
+<div class="pHeader"><?php print _("Select Hardware file and fields to import"); ?></div>
 
 <!-- content -->
 <div class="pContent">
