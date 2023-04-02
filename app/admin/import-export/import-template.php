@@ -99,7 +99,8 @@ elseif ($type == 'l2dom'){
 	$worksheet->write($lineCount, 1, _('Description'));
 	$fc =2 ;
 
-} elseif ($type == 'devices'){
+} 
+elseif ($type == 'devices'){
 
     $curColumn=0;
 	//get all custom fields!
@@ -116,7 +117,8 @@ elseif ($type == 'l2dom'){
 		$curColumn++;
 	}
 
-} elseif ($type == 'devtype'){
+} 
+elseif ($type == 'devtype'){
 	//get all custom fields!
 	$custom_address_fields = $Tools->fetch_custom_fields('deviceTypes');
 	// set headers
@@ -128,7 +130,8 @@ elseif ($type == 'l2dom'){
 		$fc++;
 	}
 
-} elseif ($type == 'hardware'){
+} 
+elseif ($type == 'hardware'){
 
     $curColumn=0;
 	// set headers
@@ -158,6 +161,34 @@ elseif ($type == 'l2dom'){
     $worksheet->write($lineCount, $curColumn++, _('<rack name>'));
     $worksheet->write($lineCount, $curColumn++, _('<1> - <63>'));
     $worksheet->write($lineCount, $curColumn++, _('If half rack device <left> or <right> otherwise leave blank'));
+
+}
+elseif ($type == 'schema'){
+
+    $curColumn=0;
+	// set headers
+    $worksheet->write($lineCount, $curColumn++, _('locationSize'));
+    $worksheet->write($lineCount, $curColumn++, _('addressType'));
+    $worksheet->write($lineCount, $curColumn++, _('vrf'));
+    $worksheet->write($lineCount, $curColumn++, _('description'));
+    $worksheet->write($lineCount, $curColumn++, _('isSummary'));
+    $worksheet->write($lineCount, $curColumn++, _('parent'));
+    $worksheet->write($lineCount, $curColumn++, _('mask'));
+    $worksheet->write($lineCount, $curColumn++, _('offset'));
+    $worksheet->write($lineCount, $curColumn++, _('base'));
+    $worksheet->write($lineCount, $curColumn++, _('vlanDef'));
+	$lineCount++;
+    $curColumn=0;
+    $worksheet->write($lineCount, $curColumn++, _('<location size>'));
+    $worksheet->write($lineCount, $curColumn++, _('<address type>'));
+    $worksheet->write($lineCount, $curColumn++, _('<vrf> leave blank if Summary for multiple VRFs'));
+    $worksheet->write($lineCount, $curColumn++, _('<text>'));
+    $worksheet->write($lineCount, $curColumn++, _('<Yes> if Summary otherwise <No>'));
+    $worksheet->write($lineCount, $curColumn++, _('<parent description> or <None> if this is Top Level Summary'));
+    $worksheet->write($lineCount, $curColumn++, _('<##>'));
+    $worksheet->write($lineCount, $curColumn++, _('<0> - <255>'));
+    $worksheet->write($lineCount, $curColumn++, _('<0> - <255>'));
+    $worksheet->write($lineCount, $curColumn++, _('<1>-<4092> leave blank if not a VLAN'));
 
 }
 

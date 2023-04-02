@@ -901,6 +901,13 @@ $(document).on("click", "#hardwaretemplate", function() {
 	return false;
 });
 
+//download schema template
+$(document).on("click", "#schematemplate", function() {
+    $("div.dl").remove();    //remove old innerDiv
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=schema'></iframe></div>");
+	return false;
+});
+
 
 /*    export IP addresses
 *************************/
@@ -2629,11 +2636,12 @@ $('button#XLSdump, button#MySQLdump, button#hostfileDump').click(function () {
 
 //Export Section
 $('button.dataExport').click(function () {
-	var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype","hardware"]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype","hardware","schema"]; var popsize = {};
 	popsize["subnets"] = "w700";
 	popsize["ipaddr"] = "w700";
 	popsize["devices"] = "max";
 	popsize["hardware"] = "max";
+	popsize["schema"] = "max";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
     //show popup window
@@ -2705,12 +2713,18 @@ $(document).on("click", "button#dataExportSubmit", function() {
 			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-devtype.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
 			setTimeout(function (){hidePopups();}, 1500);
 			break;
-            case 'hardware':
-                var exportSections = $('form#selectExportSections').serialize();
-                $("div.dl").remove();    //remove old innerDiv
-                $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-hardware.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
-                setTimeout(function (){hidePopups();}, 1500);
-                break;
+        case 'hardware':
+            var exportSections = $('form#selectExportSections').serialize();
+            $("div.dl").remove();    //remove old innerDiv
+            $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-hardware.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+            setTimeout(function (){hidePopups();}, 1500);
+            break;
+        case 'schema':
+            var exportSections = $('form#selectExportSections').serialize();
+            $("div.dl").remove();    //remove old innerDiv
+            $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-schema.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+            setTimeout(function (){hidePopups();}, 1500);
+            break;
         }
     return false;
 });
@@ -2776,11 +2790,12 @@ $(document).on("click", "input#recomputeCVRFSelectAll", function() {
 });
 //Import Section
 $('button.dataImport').click(function () {
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype","hardware"]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype","hardware","schema"]; var popsize = {};
 	popsize["subnets"] = "max";
 	popsize["ipaddr"] = "max";
 	popsize["devices"] = "max";
 	popsize["hardware"] = "max";
+	popsize["schema"] = "max";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
     //show popup window, if implemented
@@ -2807,12 +2822,13 @@ $('button.dataImport').click(function () {
 //import buttons
 $(document).on("click", "button#dataImportPreview", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype","hardware" ]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype","hardware","schema" ]; var popsize = {};
 	popsize["subnets"] = "max";
 	popsize["recompute"] = "max";
 	popsize["ipaddr"] = "max";
 	popsize["devices"] = "max";
 	popsize["hardware"] = "max";
+	popsize["schema"] = "max";
 
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
@@ -2840,12 +2856,13 @@ $(document).on("click", "button#dataImportPreview", function() {
 });
 $(document).on("click", "button#dataImportSubmit", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype","hardware" ]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype","hardware","schema" ]; var popsize = {};
 	popsize["subnets"] = "max";
 	popsize["recompute"] = "max";
 	popsize["ipaddr"] = "max";
 	popsize["devices"] = "max";
 	popsize["hardware"] = "max";
+	popsize["schema"] = "max";
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
 	hidePopups();
