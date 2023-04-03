@@ -67,6 +67,10 @@ foreach ($all_sections as $section) {
 	foreach ($section_subnets as $subnet) {
 		$subnet = (array) $subnet;
 
+		# NULL vrfId?
+		if (!is_numeric($subnet['vrfId']))
+			$subnet['vrfId'] = 0;
+
 		# ignore folders
 		if($subnet['isFolder']) { continue; }
 
@@ -109,7 +113,7 @@ if ($devices!==false) {
 }
 
 $rows = "";
-$counters = array();
+$counters = ["add" => 0, "edit" => 0, "skip" => 0, "error" => 0];
 $ndata = array(); # store new addresses in a similar format with edata for easier processing
 
 # check the fields
@@ -124,7 +128,7 @@ foreach ($data as &$cdata) {
 	# if the subnet contains "/", split it in network and mask
 	if ($action != "error") {
 		if (preg_match("/\//", $cdata['subnet'])) {
-			list($caddr,$cmask) = pf_explode("/",$cdata['subnet'],2);
+			list($caddr,$cmask) = $Subnets->cidr_network_and_mask($cdata['subnet']);
 			$cdata['mask'] = $cmask;
 			$cdata['subnet'] = $caddr;
 		}
@@ -284,14 +288,16 @@ foreach ($data as &$cdata) {
 		}
 	}
 
-	$cdata['msg'].= $msg;
+	$cdata['msg'] = isset($cdata['msg']) ? $cdata['msg'] . $msg : $msg;
 	$cdata['action'] = $action;
 	$counters[$action]++;
 
 	$cdata['subnet'] = $cdata['subnet']."/".$cdata['mask'];
 
 	$rows.="<tr class='".$colors[$action]."'><td><i class='fa ".$icons[$action]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>";
-	foreach ($expfields as $cfield) { $rows.= "<td>".$cdata[$cfield]."</td>"; }
+	foreach ($expfields as $cfield) {
+		$rows .= "<td>" . (isset($cdata[$cfield]) ? escape_input($cdata[$cfield]) : "") . "</td>";
+	}
 	$rows.= "<td>"._($cdata['msg'])."</td></tr>";
 
 }

@@ -53,7 +53,7 @@ $subnet = (array) $Subnets->fetch_subnet (null, $_POST['subnetId']);
         <td class="middle"><?php print _('New mask'); ?></td>
         <td style="vertical-align:middle">
 	        <span class="pull-left" style='margin-right:5px;'> / </span> <input type="text" class="form-control input-sm input-w-100" name="newMask">
-	        <input type="hidden" name="subnetId" value="<?php print $_POST['subnetId']; ?>">
+	        <input type="hidden" name="subnetId" value="<?php print escape_input($_POST['subnetId']); ?>">
 	        <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
         </td>
     </tr>

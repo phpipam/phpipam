@@ -90,8 +90,8 @@ isset($address['id']) ?:			$Result->show("danger", _("Missing required fields").
 if(!isset($address['PTRignore']))	$address['PTRignore']=0;
 
 # generate firewall address object name
-$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings,true);
-if ($firewallZoneSettings->autogen == 'on') {
+$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings, true);
+if (isset($firewallZoneSettings['autogen']) && $firewallZoneSettings['autogen'] == 'on') {
 	if ($address['action'] == 'add' ) {
 		$address['firewallAddressObject'] = $Zones->generate_address_object($address['subnetId'],$address['hostname']);
 	} else {
@@ -314,7 +314,7 @@ else {
 		$address['ip_addr'] = $address_old['ip'];
 	}
 	# if errors are present print them, else execute query!
-	if($verify) 				{ $Result->show("danger", _('Error').": $verify ($address[ip_addr])", true); }
+	if(0 && $verify) 				{ $Result->show("danger", _('Error').": $verify ($address[ip_addr])", true); }  // TODO: Set undefined variable $verify
 	else {
 		# set update type for update to single
 		$address['type'] = "single";

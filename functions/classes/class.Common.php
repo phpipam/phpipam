@@ -653,7 +653,10 @@ class Common_functions  {
 	}
 
 	/**
-	 * Remove <script>, <iframe> and JS HTML event attributes from HTML to protect from XSS
+	 * Remove common XSS vectors.
+	 * This function is not and will never be 100% effective.
+	 *
+	 * TODO: Switch user instructions to use markdown. Sanitising raw HTML is impossible.
 	 *
 	 * @param   string  $html
 	 * @return  string
@@ -674,7 +677,7 @@ class Common_functions  {
 			if ($dom->loadHTML("<html>".$html."</html>", LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NOERROR) === false)
 				return "";
 
-			$banned_elements = ['script', 'iframe', 'embed'];
+			$banned_elements = ['script', 'iframe', 'embed', 'object'];
 			$remove_elements = [];
 
 			$elements = $dom->getElementsByTagName('*');
@@ -882,7 +885,7 @@ class Common_functions  {
 			if ($req == "mac")
 				$req = strtr($req, ':', '-'); # Mac-addresses, replace Colon U+003A with hyphen U+002D
 
-			if (strpos($req, ':')!==false)
+			if (is_string($req) && strpos($req, ':')!==false)
 				$req = strtr($req, ':', '.'); # Default, replace Colon U+003A with Full Stop U+002E.
 
 			$result .= ($changelog===true) ? "[$key]: $req<br>" : " ". $key . ": " . $req . "<br>";
@@ -903,7 +906,7 @@ class Common_functions  {
 	    $hms = "";
 
 	    // get the number of hours
-	    $hours = intval(intval($sec) / 3600);
+	    $hours = intval($sec / 3600);
 
 	    // add to $hms, with a leading 0 if asked for
 	    $hms .= ($padHours)
@@ -911,13 +914,13 @@ class Common_functions  {
 	          : $hours. ':';
 
 	    // get the seconds
-	    $minutes = intval(($sec / 60) % 60);
+	    $minutes = intval($sec / 60) % 60;
 
 	    // then add to $hms (with a leading 0 if needed)
 	    $hms .= str_pad($minutes, 2, "0", STR_PAD_LEFT). ':';
 
 	    // seconds
-	    $seconds = intval($sec % 60);
+	    $seconds = intval($sec) % 60;
 
 	    // add to $hms, again with a leading 0 if needed
 	    $hms .= str_pad($seconds, 2, "0", STR_PAD_LEFT);
@@ -1089,11 +1092,14 @@ class Common_functions  {
 	 *	source: https://css-tricks.com/snippets/php/find-urls-in-text-make-links/
 	 *
 	 * @access public
-	 * @param mixed $field_type
-	 * @param mixed $text
-	 * @return mixed
+ 	 * @param string $text
+	 * @param string $field_type
+	 * @return string
 	 */
 	public function create_links ($text, $field_type = "varchar") {
+		if (!is_string($text))
+			return '';
+
 		// create links only for varchar fields
 		if (strpos($field_type, "varchar")!==false) {
 			// regular expression
@@ -1727,8 +1733,6 @@ class Common_functions  {
 	 * @return void
 	 */
 	public function print_custom_field ($type, $value, $delimiter = false, $replacement = false) {
-		// escape
-		$value = str_replace("'", "&#39;", $value);
 		// create links
 		$value = $this->create_links ($value, $type);
 
@@ -1745,7 +1749,7 @@ class Common_functions  {
 		}
 		//text
 		elseif($type=="text") {
-			if(!is_blank($value))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $value)."'>"; }
+			if(!is_blank($value))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", escape_input($value))."'>"; }
 			else					{ print ""; }
 		}
 		else {

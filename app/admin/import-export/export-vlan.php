@@ -106,7 +106,7 @@ foreach ($vlan_domains as $vlan_domain) {
 		//write all VLAN entries
 		foreach ($all_vlans as $vlan) {
 			//cast
-			$vlan = (array) $vlan;
+			$vlan = array_merge(['name' => '', 'number' => null, 'description' => ''], (array) $vlan);
 
 			//reset row count
 			$curColumn = 0;

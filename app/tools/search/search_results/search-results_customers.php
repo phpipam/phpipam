@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # get all custom fields
-$custom_customers_fields = $_REQUEST['customers']=="on"     ? $Tools->fetch_custom_fields ("customers") : array();
+$custom_customers_fields = $Params->customers=="on"     ? $Tools->fetch_custom_fields ("customers") : array();
 $hidden_customer_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['customers'] : array();
 
 # search cusotmers
@@ -53,7 +53,7 @@ else {
 	foreach ($result_customers as $customer) {
 		// print details
 		print '<tr>'. "\n";
-		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link($_GET['page'],"customers",$customer->title)."'>$customer->title</a></strong></td>";
+		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link($Params->page,"customers",$customer->title)."'>$customer->title</a></strong></td>";
 		print "	<td>$customer->address, $customer->postcode $customer->city, $customer->state</td>";
 		// contact
 		if(!is_blank($customer->contact_person))
@@ -77,7 +77,7 @@ else {
         $links = [];
         if($User->get_module_permissions ("customers")>=User::ACCESS_R) {
             $links[] = ["type"=>"header", "text"=>_("Show")];
-            $links[] = ["type"=>"link", "text"=>_("Show customer"), "href"=>create_link($_GET['page'], "customers", $customer->title), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"link", "text"=>_("Show customer"), "href"=>create_link($Params->page, "customers", $customer->title), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];
         }
         if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {

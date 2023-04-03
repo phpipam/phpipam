@@ -98,7 +98,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : pf_explode(";", $
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) { print '<input type="hidden" name="nameserverid" value="'. $_POST['nameserverid'] .'">'. "\n";}
 			?>
-			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$nameservers['description']); ?>" <?php print $readonly; ?>>
 		</td>
@@ -143,7 +143,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : pf_explode(";", $
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/nameservers/edit-result.php" data-result_div="nameserverManagementEditResult" data-form='nameserverManagementEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
 		</button>
 	</div>
 	<!-- result -->

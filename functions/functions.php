@@ -1,7 +1,7 @@
 <?php
 
 /* global and missing functions */
-require('global_functions.php');
+require_once('global_functions.php');
 
 /* Enable output buffering */
 require_once( dirname(__FILE__) . '/output_buffering.php' );
@@ -56,6 +56,7 @@ if(!defined('BASE')) {
 defined('JSON_UNESCAPED_UNICODE') || define('JSON_UNESCAPED_UNICODE', 256);
 
 /* @classes ---------------------- */
+require( dirname(__FILE__) . '/classes/class.Params.php' );		//Paramter handling class
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions
 require( dirname(__FILE__) . '/classes/class.PDO.php' );		//Class PDO - wrapper for database
 require( dirname(__FILE__) . '/classes/class.User.php' );		//Class for active user management
@@ -95,4 +96,4 @@ $Rewrite = new Rewrite ();
 $_GET = $Rewrite->get_url_params ();
 
 /* get version */
-include('version.php');
+require_once('version.php');

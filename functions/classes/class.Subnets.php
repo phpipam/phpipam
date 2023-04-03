@@ -718,7 +718,7 @@ class Subnets extends Common_functions {
 
 		$result_fields = $this->Database->escape_result_fields($result_fields);
 
-		list($cidr, $cidr_mask) = pf_explode('/', $cidr);
+		list($cidr, $cidr_mask) = $this->cidr_network_and_mask($cidr);
 		$cidr_decimal = $this->transform_to_decimal($cidr);
 		$cidr_network = $this->decimal_network_address($cidr_decimal, $cidr_mask);
 		$cidr_broadcast = $this->decimal_broadcast_address($cidr_decimal, $cidr_mask);
@@ -1276,9 +1276,9 @@ class Subnets extends Common_functions {
     	if (!is_numeric($sectionId))                        { return false; }
     	if ($this->verify_cidr_address ($cidr) !== true)    { return false; }
     	// set subnet / mask
-    	$tmp = pf_explode("/", $cidr);
+    	$tmp = $this->cidr_network_and_mask($cidr);
     	// search
-		try { $subnet = $this->Database->getObjectQuery("select * from `subnets` where `subnet`=? and `mask`=? and `sectionId`=?;", $values = array($this->transform_address($tmp[0],"decimal"), $tmp[1], $sectionId)); }
+		try { $subnet = $this->Database->getObjectQuery("select * from `subnets` where `subnet`=? and `mask`=? and `sectionId`=?;", array($this->transform_address($tmp[0],"decimal"), $tmp[1], $sectionId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -2044,7 +2044,7 @@ class Subnets extends Common_functions {
         else {
             $subnet = $this->Net_IPv6->getNetmask($cidr);			//validate subnet
             $subnet = $this->Net_IPv6->compress($subnet);			//get subnet part
-            $subnetParse = pf_explode("/", $cidr);
+            $subnetParse = $this->cidr_network_and_mask($cidr);
             # Compress entered IPv4/IPv6 address
             $subnetParse[0] = inet_ntop(inet_pton($subnetParse[0]));
             # validate that subnet is subnet
@@ -2061,7 +2061,7 @@ class Subnets extends Common_functions {
 	 * @return string
 	 */
 	public function verify_cidr ($cidr) {
-		$cidr =  pf_explode("/", $cidr);
+		$cidr =  $this->cidr_network_and_mask($cidr);
 		# verify network part
 	    if(is_blank($cidr[0]) || is_blank($cidr[1])) 				{ return _("Invalid CIDR format!"); }
 	    # verify network part
@@ -2069,6 +2069,32 @@ class Subnets extends Common_functions {
 		# verify mask
 		if(!is_numeric($cidr[1]))									{ return _("Invalid netmask"); }
 		if($this->get_max_netmask ($cidr[0])<$cidr[1])				{ return _("Invalid netmask"); }
+	}
+
+	/**
+	 * Split CIDR into network and mask
+	 *
+	 * @access public
+	 * @param string $cidr (cidr)
+	 * @return array
+	 */
+	public function cidr_network_and_mask($cidr) {
+		$err = [null, null];
+
+		if (!is_string($cidr))
+			return $err;
+
+		$a = explode("/", $cidr, 2);
+
+		if (!is_array($a))
+			return $err;
+
+		$a = array_pad($a, 2, null);
+
+		$a[0] = !is_null($a[0]) ? trim($a[0]) : null;
+		$a[1] = !is_null($a[1]) ? trim($a[1]) : null;
+
+		return $a;
 	}
 
 	/**
@@ -2301,8 +2327,8 @@ class Subnets extends Common_functions {
 	public function verify_overlapping ($cidr1, $cidr2, $check_if_nested = false) {
 		if (empty($cidr1) || empty($cidr2)) return false;
 
-		$c1 = pf_explode('/', $cidr1);
-		$c2 = pf_explode('/', $cidr2);
+		$c1 = $this->cidr_network_and_mask($cidr1);
+		$c2 = $this->cidr_network_and_mask($cidr2);
 
 		if (filter_var($c1[0], FILTER_VALIDATE_IP)===false) return false;
 		if (filter_var($c2[0], FILTER_VALIDATE_IP)===false) return false;
@@ -3548,7 +3574,7 @@ class Subnets extends Common_functions {
 		// not existings
 		if ($ripe_result['result_code']==404) {
 			// return array
-			return array("result"=>"error", "error"=>$ripe_result['result']->errormessages->errormessage[0]->text);
+			return array("result"=>"error", "error"=>$ripe_result['error_msg']);
 		}
 		// fail
 		if ($ripe_result['result_code']!==200) {
@@ -3577,7 +3603,7 @@ class Subnets extends Common_functions {
 	 */
 	private function query_arin ($subnet) {
 		// remove netmask
-		$subnet_arr = pf_explode("/", $subnet);
+		$subnet_arr = $this->cidr_network_and_mask($subnet);
 		$subnet = reset($subnet_arr);
 		// fetch
 		$arin_result = $this->ripe_arin_fetch ("arin", null, $subnet);
@@ -3631,6 +3657,16 @@ class Subnets extends Common_functions {
 	 * @return array
 	 */
 	private function ripe_arin_fetch ($network, $type, $subnet) {
+		// Validate $subnet
+		$cidr = array_pad(explode("/", $subnet), 2, null);
+		if (
+			(sizeof($cidr) > 2) ||
+			(filter_var($cidr[0], FILTER_VALIDATE_IP) === false) ||
+			(!is_null($cidr[1]) && filter_var($cidr[1], FILTER_VALIDATE_INT) === false)
+		) {
+			return ["result_code" => 404, "error_msg" => _("Invalid request")];
+		}
+
 		// set url
 		$url = $network=="ripe" ? "https://rest.db.ripe.net/ripe/$type/$subnet" : "https://whois.arin.net/rest/nets;q=$subnet?showDetails=true&showARIN=false&showNonArinTopLevelNet=false&ext=netref2";
 
@@ -3651,7 +3687,7 @@ class Subnets extends Common_functions {
 	 */
 	public function ripe_fetch_subnets ($as) {
 		// numeric check
-		if(!is_numeric($as)) {
+		if(filter_var($as, FILTER_VALIDATE_INT) === false) {
 			$this->Result->show("danger", _("Invalid AS"), false);
 		}
 		//open connection

@@ -81,7 +81,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 			$vrf->{$key} = $Tools->create_links($vrf->{$key});
 			print "<tr>";
 			print "	<th>$key</th>";
-			print "	<td style='vertical-align:top;align:left;'>".$vrf->{$key}."</td>";
+			print "	<td style='vertical-align:top;align-content:left;'>".$vrf->{$key}."</td>";
 			print "</tr>";
 		}
 		// divider
@@ -90,8 +90,8 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 
 	# action button groups
 	print "<tr>";
-	print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
-	print "	<td style='vertical-align:bottom;align:left;'>";
+	print "	<th style='vertical-align:bottom;align-content:left;'>"._('Actions')."</th>";
+	print "	<td style='vertical-align:bottom;align-content:left;'>";
 
 	print "	<div class='btn-toolbar' style='margin-bottom:0px'>";
 	print "	<div class='btn-group'>";

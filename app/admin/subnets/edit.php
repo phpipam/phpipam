@@ -453,9 +453,9 @@ $("input[name='subnet']").change(function() {
         <td class="middle"><?php print _('Resize'); ?> / <?php print _('split'); ?></td>
         <td>
 	    <div class="btn-group">
-        	<button class="btn btn-xs btn-default"										  id="resize" 	rel="tooltip" data-container='body' title="<?php print _('Resize subnet'); ?>"   data-subnetId="<?php print $_POST['subnetId']; ?>"><i class="fa fa-gray fa-arrows-v"></i></button>
-        	<button class="btn btn-xs btn-default <?php if($slaves) print "disabled"; ?>" id="split"    rel="tooltip" data-container='body' title="<?php print _('Split subnet'); ?>"    data-subnetId="<?php print $_POST['subnetId']; ?>"><i class="fa fa-gray fa-expand"></i></button>
-        	<button class="btn btn-xs btn-default"										  id="truncate" rel="tooltip" data-container='body' title="<?php print _('Truncate subnet'); ?>" data-subnetId="<?php print $_POST['subnetId']; ?>"><i class="fa fa-gray fa-trash-o"></i></button>
+        	<button class="btn btn-xs btn-default"										  id="resize" 	rel="tooltip" data-container='body' title="<?php print _('Resize subnet'); ?>"   data-subnetId="<?php print escape_input($_POST['subnetId']); ?>"><i class="fa fa-gray fa-arrows-v"></i></button>
+        	<button class="btn btn-xs btn-default <?php if($slaves) print "disabled"; ?>" id="split"    rel="tooltip" data-container='body' title="<?php print _('Split subnet'); ?>"    data-subnetId="<?php print escape_input($_POST['subnetId']); ?>"><i class="fa fa-gray fa-expand"></i></button>
+        	<button class="btn btn-xs btn-default"										  id="truncate" rel="tooltip" data-container='body' title="<?php print _('Truncate subnet'); ?>" data-subnetId="<?php print escape_input($_POST['subnetId']); ?>"><i class="fa fa-gray fa-trash-o"></i></button>
 	    </div>
         </td>
         <td class="info2"><?php print _('Resize, split or truncate this subnet'); ?></td>
@@ -554,9 +554,9 @@ $("input[name='subnet']").change(function() {
         //hidden ones
         ?>
             <!-- hidden values -->
-            <input type="hidden" name="sectionId"       value="<?php print $_POST['sectionId']; ?>">
-            <input type="hidden" name="subnetId"        value="<?php print $_POST['subnetId'];  ?>">
-            <input type="hidden" name="action"    		value="<?php print $_POST['action'];    ?>">
+            <input type="hidden" name="sectionId"       value="<?php print escape_input($_POST['sectionId']); ?>">
+            <input type="hidden" name="subnetId"        value="<?php print escape_input($_POST['subnetId']);  ?>">
+            <input type="hidden" name="action"    		value="<?php print escape_input($_POST['action']);    ?>">
             <?php if(isset($_POST['freespaceMSID'])) { ?>
             <input type="hidden" name="freespace"    	value="true">
             <?php } ?>
@@ -660,7 +660,7 @@ $("input[name='subnet']").change(function() {
 			print "<button class='btn btn-sm btn-default btn-danger editSubnetSubmitDelete editSubnetSubmit'><i class='icon-white icon-trash'></i> "._('Delete subnet')."</button>";
 		}
 		?>
-		<button type="submit" class="btn btn-sm btn-default editSubnetSubmit <?php if($_POST['action']=="delete") print "btn-danger"; else print "btn-success"; ?>"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<button type="submit" class="btn btn-sm btn-default editSubnetSubmit <?php if($_POST['action']=="delete") print "btn-danger"; else print "btn-success"; ?>"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
 	</div>
 
 	<div class="manageSubnetEditResult"></div>

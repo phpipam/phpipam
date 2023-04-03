@@ -7,7 +7,7 @@ This is a template for creating new widgets
 */
 
 # required functions
-if(!is_object(@$User)) {
+if(!isset($User)) {
 	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
@@ -19,12 +19,12 @@ if(!is_object(@$User)) {
 $User->check_user_session ();
 
 # if direct request that redirect to tools page
-if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
 	header("Location: ".create_link("administration","logs"));
 }
 
 /* You can check who requested this, to adjust parameters  */
-if($_SERVER['HTTP_X_REQUESTED_WITH']=="XMLHttpRequest")	{ $dashboard = true; }
+if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest")	{ $dashboard = true; }
 else													{ $dashboard = false; }
 
 ?>

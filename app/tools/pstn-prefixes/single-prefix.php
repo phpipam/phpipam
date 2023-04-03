@@ -160,7 +160,7 @@ else {
         			$prefix->{$key} = $Tools->create_links($prefix->{$key});
         			print "<tr>";
         			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
-        			print "	<td style='vertical-align:top;align:left;'>".$prefix->{$key}."</td>";
+        			print "	<td style='vertical-align:top;align-content:left;'>".$prefix->{$key}."</td>";
         			print "</tr>";
         		}
         	}

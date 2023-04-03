@@ -17,6 +17,9 @@ define('PHPIPAM_PHP_MIN', "5.4");
 if(!defined('PHPIPAM_PHP_UNTESTED'))
 define('PHPIPAM_PHP_UNTESTED', "8.2");  // PHP 8.2 or greater is untested & unsupported
 
+if (phpversion() >= PHPIPAM_PHP_UNTESTED) {
+    $_SESSION['footer_warnings']['php_version'] = _('Unsupported PHP version ') . phpversion();
+}
 
 # Empty missing arrays to prevent errors
 $missingExt = [];
@@ -99,6 +102,9 @@ elseif ( !empty($missingFns) ) {
     }
     $error[] = '</ul><hr>' . "\n";
     $error[] = _('Please recompile PHP to include missing functions and restart Apache.');
+}
+elseif ( isset($Database) && !$Database->set_names ) {
+    $error[] = "<strong>"._('Your database server does not support utf8mb4').":</strong><br><hr>";
 }
 else {
     /* No issues, delete $error */

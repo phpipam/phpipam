@@ -49,7 +49,7 @@ if (!$all_vrfs) { $all_vrfs = array(); }
 array_splice($all_vrfs,0,0,(object) array(array('vrfId' => '0', 'name' => 'default', 'rd' => '0:0')));
 foreach ($all_vrfs as $vrf) { $vrf = (array) $vrf; $vrf_name[(int)$vrf['vrfId']] = $vrf['name']; }
 
-$rows = ""; $counters = []; $edata = [];
+$rows = ""; $counters = ['edit' => 0]; $edata = [];
 $recomputeHideUnchanged = ($_GET['recomputeHideUnchanged'] == "on");
 
 foreach ($rlist as $sect_id => $sect_check) {

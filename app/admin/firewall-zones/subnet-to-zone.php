@@ -35,7 +35,7 @@ if(!is_array($firewallZones))                              { $Result->show("dang
 <div class="pContent">
 <!-- form -->
 <form id="subnet-to-zone-edit">
-<input type="hidden" name="subnetId" value="<?php print $_POST['subnetId']; ?>">
+<input type="hidden" name="subnetId" value="<?php print escape_input($_POST['subnetId']); ?>">
 <!-- table -->
 <table class="table table-noborder table-condensed">
 	<!-- zone -->

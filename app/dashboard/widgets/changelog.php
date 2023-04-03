@@ -5,7 +5,7 @@
  *********************************************/
 
 # required functions if requested via AJAX
-if(!is_object(@$User)) {
+if(!isset($User)) {
 	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
@@ -21,7 +21,7 @@ if(!is_object(@$User)) {
 $User->check_user_session ();
 
 # if direct request that redirect to tools page
-if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
 	header("Location: ".create_link("tools","changelog"));
 }
 
@@ -100,8 +100,8 @@ else {
             		}
 
             		// field
-            		$field = pf_explode(":", $c);
-            	    $value = pf_explode("=>", html_entity_decode($field[1]));
+					$field = array_pad(explode(":", $c), 2 , '');
+        	    	$value = array_pad(explode("=>", html_entity_decode($field[1])), 2, '');
 
             	    $field = trim(str_replace(array("[","]"), "", $field[0]));
             	    if(is_array(@$Log->changelog_keys[$type])) {

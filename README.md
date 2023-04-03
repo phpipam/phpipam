@@ -31,6 +31,11 @@ The use of untested PHP versions is unsupported and may result in compatibility 
 - 1.4.x: PHP versions 5.4 to 7.4
 - 1.3.x: PHP versions 5.4 to 7.1
 
+## Supported MySQL / MariaDB versions
+
+As of v1.6.0 support for utf8mb4 is mandatory: MySQL 5.5.3+ \
+For best performance, Common Table Expressions (CTE) query support: MySQL 8.0+ / MariaDB 10.2.1+
+
 ## I forgot my Admin password!?
 Just run `php functions/scripts/reset-admin-password.php` in the cli and enter your new password
 

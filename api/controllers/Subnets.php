@@ -20,9 +20,10 @@ class Subnets_controller extends Common_api_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @param class $Database
-	 * @param class $Tools
-	 * @param mixed $params		// post/get values
+	 * @param PDO_Database $Database
+	 * @param Tools $Tools
+	 * @param API_params $params
+	 * @param Response $response
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
@@ -119,7 +120,7 @@ class Subnets_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function post_find_free_subnet($direction = Subnets::SEARCH_FIND_FIRST) {
-		$subnet_tmp = pf_explode("/", $this->subnet_find_free (1, $direction));
+		$subnet_tmp = $this->Subnets->cidr_network_and_mask($this->subnet_find_free(1, $direction));
 
 		// get master subnet
 		$master = $this->read_subnet ();

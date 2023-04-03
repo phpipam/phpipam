@@ -3,12 +3,16 @@
     Enhancements, changes:
     ----------------------------
     + php8.1 compatibility (php8.x support is work-in-progress);
+    + MySQL 5.5.3+ is now required (support for utf8mb4);
 
     Security Fixes:
     ----------------------------
+    + SQL injection in custom field enum/set types;
+    + Directory traversal possible in RIPE query;
     + XSS (reflected) in 'bw-calulator-result.php';
     + XSS (reflected) by invalid email address response;
     + XSS (reflected) by /app/tools/subnet-masks/popup.php (#3738);
+    + XSS (stored) in user widget settings;
     + XSS and LDAP injection in ad-search-result.php;
     + XSS and LDAP injection in ad-search-group-result.php;
     + Restrict find_full_subnets.php to CLI;

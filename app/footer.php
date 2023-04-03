@@ -11,16 +11,18 @@
 		if (defined("GIT_VCS_REF")) {
 			print " git <a href='https://github.com/phpipam/phpipam/tree/".GIT_VCS_REF."'>".GIT_VCS_REF."</a>";
 		}
-		if (phpversion() >= PHPIPAM_PHP_UNTESTED) {
-			print " "._('is not supported on PHP').phpversion();
-		}
 		?>
 	</td>
 
 	<?php
-	# custom footer message
+	# footer messages
 	if(isset($config['footer_message']) && !is_blank($config['footer_message'])) {
 		print '<td> '.$config['footer_message'].' </td>';
+	}
+	if (isset($_SESSION['footer_warnings'])) {
+		foreach ($_SESSION['footer_warnings'] as $msg) {
+			print '<td><b>' . _('WARNING') . ': ' . $msg . '</b></td>';
+		}
 	}
 
 	# exclude install

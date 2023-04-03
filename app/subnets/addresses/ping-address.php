@@ -100,7 +100,7 @@ if ($Ping->settings->updateTags==1 && $Subnets->address_types[$address['state']]
 <!-- footer -->
 <div class="pFooter">
 	<div class="btn-group">
-		<a class='ping_ipaddress btn btn-sm btn-default' data-subnetId='<?php print $_POST['subnetId']; ?>' data-id='<?php print $_POST['id']; ?>' href='#'><i class='fa fa-gray fa-cogs'></i> <?php print _('Repeat'); ?></a>
+		<a class='ping_ipaddress btn btn-sm btn-default' data-subnetId='<?php print escape_input($_POST['subnetId']); ?>' data-id='<?php print escape_input($_POST['id']); ?>' href='#'><i class='fa fa-gray fa-cogs'></i> <?php print _('Repeat'); ?></a>
 		<button class="btn btn-sm btn-default hidePopup2"><?php print _('Close window'); ?></button>
 	</div>
 </div>

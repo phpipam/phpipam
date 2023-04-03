@@ -77,7 +77,7 @@ class PowerDNS extends Common_functions {
     /**
      * ttl value
      *
-     * @var int|string
+     * @var object
      * @access public
      */
     public $ttl;
@@ -716,7 +716,7 @@ class PowerDNS extends Common_functions {
      * @param mixed $value (default: null)
      * @param string $sortField (default: 'id')
      * @param bool $sortAsc (default: true)
-     * @return void
+     * @return array|false
      */
     public function search_records ($field = "content", $value = null, $sortField = 'id', $sortAsc = true) {
         // fetch

@@ -25,6 +25,9 @@ if(!function_exists("create_link"))
 require_once( dirname(__FILE__) . '/controllers/Common.php');			// common methods
 require_once( dirname(__FILE__) . '/controllers/Responses.php');			// exception, header and response handling
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 # settings
 $time_response         = true;          // adds [time] to response
 $lock_file             = "";            // (optional) file to write lock to
@@ -34,6 +37,7 @@ $Database = new Database_PDO;
 $Tools    = new Tools ($Database);
 $User     = new User ($Database);
 $Response = new Responses ();
+$Params   = new API_params ();
 
 # get phpipam settings
 $settings = $Tools->get_settings();
@@ -63,19 +67,21 @@ try {
 
 
 	/* Check app security and prepare request parameters ---------- */
+	$content_type = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '';
 
 	// crypt check
 	if($app->app_security=="crypt") {
 		$encryption_method = Config::ValueOf('api_crypt_encryption_library', 'openssl-128-cbc');
 
 		// decrypt request - form_encoded
-		if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
+		if(strpos($content_type, "application/x-www-form-urlencoded")!==false) {
 			$decoded = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $encryption_method);
 			if ($decoded === false) $Response->throw_exception(503, 'Invalid enc_request');
 			$decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
 			parse_str($decoded, $encrypted_params);
 			$encrypted_params['app_id'] = $_GET['app_id'];
-			$params = (object) $encrypted_params;
+
+			$Params->read($encrypted_params);
 		}
 		// json_encoded
 		else {
@@ -83,7 +89,8 @@ try {
 			if ($encrypted_params === false) $Response->throw_exception(503, 'Invalid enc_request');
 			$encrypted_params = pf_json_decode($encrypted_params, true);
 			$encrypted_params['app_id'] = $_GET['app_id'];
-			$params = (object) $encrypted_params;
+
+			$Params->read($encrypted_params);
 		}
 	}
 	// SSL checks
@@ -94,7 +101,7 @@ try {
 		}
 
 		// save request parameters
-		$params = (object) $_GET;
+		$Params->read($_GET);
 	}
 	// no security
 	elseif($app->app_security=="none") {
@@ -104,7 +111,7 @@ try {
 		}
 
 		// save request parameters
-		$params = (object) $_GET;
+		$Params->read($_GET);
 	}
 	// error, invalid security
 	else {
@@ -115,33 +122,32 @@ try {
 	// Append Global API parameters / POST parameters if POST,PATCH or DELETE
 	if($_SERVER['REQUEST_METHOD']=="GET" || $_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE") {
 		// if application tupe is JSON (application/json)
-		if(strpos($_SERVER['CONTENT_TYPE'], "application/json")!==false){
+		if(strpos($content_type, "application/json")!==false){
 			$rawPostData = file_get_contents('php://input');
 			if (is_string($rawPostData) && !is_blank($rawPostData)) {
 				$json = pf_json_decode($rawPostData, true);
 				if(!is_array($json)) {
 					$Response->throw_exception(400, 'Invalid JSON: '.json_last_error_msg());
 				}
-				$params = array_merge((array) $params, $json);
+
+				$Params->read($json);
 			}
-			$params = (object) $params;
 		}
 		// if application tupe is XML (application/json)
-		elseif(strpos($_SERVER['CONTENT_TYPE'], "application/xml")!==false){
+		elseif(strpos($content_type, "application/xml")!==false){
 			$rawPostData = file_get_contents('php://input');
 			if (is_string($rawPostData) && !is_blank($rawPostData)) {
 				$xml = $Response->xml_to_array($rawPostData);
 				if(!is_array($xml)) {
 					$Response->throw_exception(400, 'Invalid XML');
 				}
-				$params = array_merge((array) $params, $xml);
+
+				$Params->read($xml);
 			}
-			$params = (object) $params;
 		}
 		//if application type is default (application/x-www-form-urlencoded)
         elseif(sizeof(@$_POST)>0) {
-            $params = array_merge((array) $params, $_POST);
-            $params = (object) $params;
+            $Params->read($_POST);
         }
         //url encoded input
         else {
@@ -150,24 +156,20 @@ try {
             if (!is_blank($input)) {
                 parse_str($input, $out);
                 if(is_array($out)) {
-                    $params = array_merge((array) $params, $out);
-                    $params = (object) $params;
+                    $Params->read($out);
                 }
             }
         }
     }
 
-	/* Sanitise input ---------- (user/User/USER) */
-	if (isset($params->controller)) $params->controller = strtolower($params->controller);
-
 	/* Authentication ---------- */
 
 	// authenticate user if required
-	if (@$params->controller != "user") {
+	if ($Params->controller != "user") {
 		if($app->app_security=="ssl_token" || $app->app_security=="none") {
 			// start auth class and validate connection
 			require_once( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
-			$Authentication = new User_controller ($Database, $Tools, $params, $Response);
+			$Authentication = new User_controller ($Database, $Tools, $Params, $Response);
 			$Authentication->check_auth ();
 		}
 
@@ -175,7 +177,7 @@ try {
 		if($app->app_security=="ssl_code") {
 			// start auth class and validate connection
 			require_once( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
-			$Authentication = new User_controller ($Database, $Tools, $params, $Response);
+			$Authentication = new User_controller ($Database, $Tools, $Params, $Response);
 			$Authentication->check_auth_code ($app->app_id);
 		}
 	}
@@ -185,7 +187,7 @@ try {
 		if($app->app_security=="ssl_code" && $_SERVER['REQUEST_METHOD']!="GET") {
 			// start auth class and validate connection
 			require_once( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
-			$Authentication = new User_controller ($Database, $Tools, $params, $Response);
+			$Authentication = new User_controller ($Database, $Tools, $Params, $Response);
 			$Authentication->check_auth_code ($app->app_id);
 
 			// passwd
@@ -196,11 +198,11 @@ try {
 	/* verify request ---------- */
 
 	// check if the request is valid by checking if it's an array and looking for the controller and action
-	if( $params == false || isset($params->controller) == false ) {
+	if( empty($Params->controller) ) {
 		$Response->throw_exception(400, 'Request is not valid');
 	}
 	// verify permissions for delete/create/edit if controller is not user (needed for auth)
-	if (@$params->controller != "user") {
+	if ($Params->controller != "user") {
     	if( ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH"
     	  || $_SERVER['REQUEST_METHOD']=="PUT"  || $_SERVER['REQUEST_METHOD']=="DELETE"
     	  )
@@ -215,8 +217,8 @@ try {
 	/* Initialize controller ---------- */
 
 	// get the controller and format it correctly
-	$controller 	 = ucfirst(strtolower($params->controller))."_controller";
-	$controller_file = ucfirst(strtolower($params->controller));
+	$controller_name = ucfirst($Params->controller)."_controller";
+	$controller_file = ucfirst($Params->controller);
 
 	// check if the controller exists. if not, throw an exception
 	if( file_exists( dirname(__FILE__) . "/controllers/$controller_file.php") ) {
@@ -232,7 +234,7 @@ try {
 
 	// create a new instance of the controller, and pass
 	// it the parameters from the request and Database object
-	$controller = new $controller($Database, $Tools, $params, $Response);
+	$controller = new $controller_name($Database, $Tools, $Params, $Response);
 
 	// pass app params for links result
 	$controller->app = $app;
@@ -294,7 +296,7 @@ try {
 	}
 
     // remove transaction lock
-    if(is_object($controller) && $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
+    if(isset($controller) && $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
         if($controller->is_transaction_locked ()) {
             $controller->remove_transaction_lock ();
         }
@@ -309,8 +311,9 @@ if($time_response) {
     $time = $stop - $start;
 }
 
+$customFields = isset($controller) ? $controller->custom_fields : [];
 //output result
-echo $Response->formulate_result ($result, $time, $app->app_nest_custom_fields, $controller->custom_fields);
+echo $Response->formulate_result ($result, $time, $app->app_nest_custom_fields, $customFields);
 
 // update access time
 try { $Database->updateObject("api", ["app_id"=>$app->app_id, "app_last_access"=>date("Y-m-d H:i:s")], 'app_id'); }

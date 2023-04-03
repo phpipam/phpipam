@@ -6,7 +6,7 @@ CREATE TABLE `instructions` (
   `id` int(11) NOT NULL,
   `instructions` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `instructions` (`id`, `instructions`)
 VALUES
@@ -33,7 +33,7 @@ CREATE TABLE `customers` (
   `status` set('Active','Reserved','Inactive') DEFAULT 'Active',
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table ipaddresses
@@ -67,7 +67,7 @@ CREATE TABLE `ipaddresses` (
   KEY `location` (`location`),
   KEY `customer_ip` (`customer_id`),
   CONSTRAINT `customer_ip` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `ipaddresses` (`id`, `subnetId`, `ip_addr`, `description`, `hostname`, `state`)
 VALUES
@@ -96,7 +96,7 @@ CREATE TABLE `logs` (
   `command` text DEFAULT NULL,
   `details` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table requests
@@ -118,7 +118,7 @@ CREATE TABLE `requests` (
   `accepted` binary(1) DEFAULT NULL,
   `adminComment` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table sections
@@ -142,7 +142,7 @@ CREATE TABLE `sections` (
   `DNS` VARCHAR(128)  NULL  DEFAULT NULL,
   PRIMARY KEY (`name`),
   UNIQUE KEY `id_2` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `sections` (`id`, `name`, `description`, `permissions`)
 VALUES
@@ -225,7 +225,7 @@ CREATE TABLE `settings` (
   `2fa_length` INT(2)  NULL  DEFAULT '16',
   `2fa_userchange` BOOL  NOT NULL  DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `settings` (`id`, `siteTitle`, `siteAdminName`, `siteAdminMail`, `siteDomain`, `siteURL`, `domainAuth`, `enableIPrequests`, `enableVRF`, `enableDNSresolving`, `version`, `donate`, `IPfilter`, `vlanDuplicate`, `subnetOrdering`, `visualLimit`)
 VALUES
@@ -248,7 +248,7 @@ CREATE TABLE `settingsMail` (
   `mAdminName` varchar(128) DEFAULT NULL,
   `mAdminMail` varchar(254) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `settingsMail` (`id`, `mtype`)
 VALUES
@@ -298,7 +298,7 @@ CREATE TABLE `subnets` (
   KEY `vrfId` (`vrfId`),
   KEY `customer_subnets` (`customer_id`),
   CONSTRAINT `customer_subnets` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `subnets` (`id`, `subnet`, `mask`, `sectionId`, `description`, `vrfId`, `masterSubnetId`, `allowRequests`, `vlanId`, `showName`, `permissions`, `isFolder`)
 VALUES
@@ -341,7 +341,7 @@ CREATE TABLE `devices` (
   PRIMARY KEY (`id`),
   KEY `hostname` (`hostname`),
   KEY `location` (`location`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table userGroups
@@ -354,7 +354,7 @@ CREATE TABLE `userGroups` (
   `g_desc` varchar(1024) DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`g_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `userGroups` (`g_id`, `g_name`, `g_desc`)
 VALUES
@@ -368,13 +368,13 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `username` varchar(255) NOT NULL DEFAULT '',
   `authMethod` INT(2)  NULL  DEFAULT 1,
-  `password` CHAR(128)  COLLATE utf8_bin DEFAULT NULL,
-  `groups` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
-  `role` text CHARACTER SET utf8,
-  `real_name` varchar(128) CHARACTER SET utf8 DEFAULT NULL,
-  `email` varchar(254) CHARACTER SET utf8 DEFAULT NULL,
+  `password` CHAR(128) DEFAULT NULL,
+  `groups` varchar(1024) DEFAULT NULL,
+  `role` text,
+  `real_name` varchar(128) DEFAULT NULL,
+  `email` varchar(254) DEFAULT NULL,
   `domainUser` binary(1) DEFAULT '0',
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',
   `lang` INT(11) UNSIGNED  NULL  DEFAULT '9',
@@ -395,11 +395,11 @@ CREATE TABLE `users` (
   `theme` VARCHAR(32)  NULL  DEFAULT '',
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
-  `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{"vlan":"1","l2dom":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1","locations":"1","devices":"1","routing":"1","vaults":"1"}',
+  `module_permissions` varchar(255) DEFAULT '{"vlan":"1","l2dom":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1","locations":"1","devices":"1","routing":"1","vaults":"1"}',
   `compress_actions` TINYINT(1)  NULL  DEFAULT '1',
   PRIMARY KEY (`username`),
   UNIQUE KEY `id_2` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `users` (`id`, `username`, `password`, `groups`, `role`, `real_name`, `email`, `domainUser`,`widgets`, `passChange`)
 VALUES
@@ -415,7 +415,7 @@ CREATE TABLE `lang` (
   `l_code` varchar(12) NOT NULL DEFAULT '',
   `l_name` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`l_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `lang` (`l_id`, `l_code`, `l_name`)
 VALUES
@@ -450,7 +450,7 @@ CREATE TABLE `vlans` (
   PRIMARY KEY (`vlanId`),
   KEY `customer_vlans` (`customer_id`),
   CONSTRAINT `customer_vlans` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `vlans` (`vlanId`, `name`, `number`, `description`)
 VALUES
@@ -468,7 +468,7 @@ CREATE TABLE `vlanDomains` (
   `description` text,
   `permissions` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `vlanDomains` (`id`, `name`, `description`, `permissions`)
 VALUES
@@ -490,7 +490,7 @@ CREATE TABLE `vrf` (
   PRIMARY KEY (`vrfId`),
   KEY `customer_vrf` (`customer_id`),
   CONSTRAINT `customer_vrf` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 # Dump of table nameservers
 # ------------------------------------------------------------
@@ -504,7 +504,7 @@ CREATE TABLE `nameservers` (
   `permissions` varchar(128) DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `nameservers` (`name`, `namesrv1`, `description`, `permissions`)
 VALUES
@@ -530,7 +530,7 @@ CREATE TABLE `api` (
   `app_last_access` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_id` (`app_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table changelog
@@ -549,7 +549,7 @@ CREATE TABLE `changelog` (
   PRIMARY KEY (`cid`),
   KEY `coid` (`coid`),
   KEY `ctype` (`ctype`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table widgets
@@ -567,7 +567,7 @@ CREATE TABLE `widgets` (
   `wadminonly` enum('yes','no') NOT NULL DEFAULT 'no',
   `wactive` enum('yes','no') NOT NULL DEFAULT 'no',
   PRIMARY KEY (`wid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`)
 VALUES
@@ -602,7 +602,7 @@ CREATE TABLE `deviceTypes` (
   `tname` varchar(128) DEFAULT NULL,
   `tdescription` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`tid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `deviceTypes` (`tid`, `tname`, `tdescription`)
 VALUES
@@ -628,7 +628,7 @@ CREATE TABLE `loginAttempts` (
   `count` int(2) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ip` (`ip`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table usersAuthMethod
@@ -642,7 +642,7 @@ CREATE TABLE `usersAuthMethod` (
   `protected` ENUM('Yes','No') NOT NULL DEFAULT 'Yes',
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `usersAuthMethod` (`id`, `type`, `params`, `protected`, `description`)
 VALUES
@@ -664,7 +664,7 @@ CREATE TABLE `ipTags` (
   `locked` set('No','Yes') NOT NULL DEFAULT 'No',
   `updateTag` TINYINT(1)  NULL  DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `ipTags` (`id`, `type`, `showtag`, `bgcolor`, `fgcolor`, `compress`, `locked`, `updateTag`)
 VALUES
@@ -683,13 +683,13 @@ CREATE TABLE `firewallZones` (
   `generator` tinyint(1) NOT NULL,
   `length` int(2) DEFAULT NULL,
   `padding` tinyint(1) DEFAULT NULL,
-  `zone` varchar(31) COLLATE utf8_unicode_ci NOT NULL,
-  `indicator` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
-  `description` text COLLATE utf8_unicode_ci,
-  `permissions` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zone` varchar(31) NOT NULL,
+  `indicator` varchar(8) NOT NULL,
+  `description` text,
+  `permissions` varchar(1024) DEFAULT NULL,
   `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table firewallZoneMapping
@@ -699,14 +699,14 @@ DROP TABLE IF EXISTS `firewallZoneMapping`;
 CREATE TABLE `firewallZoneMapping` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `zoneId` int(11) unsigned NOT NULL,
-  `alias` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `alias` varchar(255) DEFAULT NULL,
   `deviceId` int(11) unsigned DEFAULT NULL,
-  `interface` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `interface` varchar(255) DEFAULT NULL,
   `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `devId_idx` (`deviceId`),
   CONSTRAINT `devId` FOREIGN KEY (`deviceId`) REFERENCES `devices` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table firewallZoneMapping
@@ -729,7 +729,7 @@ CREATE TABLE `firewallZoneSubnet` (
     REFERENCES `subnets` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table scanAgents
@@ -745,7 +745,7 @@ CREATE TABLE `scanAgents` (
   `last_access` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `scanAgents` (`id`, `name`, `description`, `type`)
 VALUES
@@ -769,7 +769,7 @@ CREATE TABLE `nat` (
   `policy` set('Yes','No') NOT NULL DEFAULT 'No',
   `policy_dst` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 # Dump of table racks
 # ------------------------------------------------------------
@@ -789,7 +789,7 @@ CREATE TABLE `racks` (
   KEY `location` (`location`),
   KEY `customer_racks` (`customer_id`),
   CONSTRAINT `customer_racks` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 # Dump of table rackContents
 # ------------------------------------------------------------
@@ -803,7 +803,7 @@ CREATE TABLE `rackContents` (
   `rack_size` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `rack` (`rack`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table locations
@@ -818,7 +818,7 @@ CREATE TABLE `locations` (
   `lat` varchar(31) DEFAULT NULL,
   `long` varchar(31) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 
@@ -836,7 +836,7 @@ CREATE TABLE `pstnPrefixes` (
   `deviceId` int(11) unsigned DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 
@@ -854,7 +854,7 @@ CREATE TABLE `pstnNumbers` (
   `deviceId` int(11) unsigned DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 
@@ -868,7 +868,7 @@ CREATE TABLE `circuitProviders` (
   `description` text,
   `contact` varchar(128) DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 
@@ -897,7 +897,7 @@ CREATE TABLE `circuits` (
   KEY `location2` (`location2`),
   KEY `customer_circuits` (`customer_id`),
   CONSTRAINT `customer_circuits` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 # Dump of table circuitsLogical
 # ------------------------------------------------------------
@@ -911,7 +911,7 @@ CREATE TABLE `circuitsLogical` (
   `member_count` int(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `circuitsLogical_UN` (`logical_cid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table circuitsLogicalMapping
@@ -923,7 +923,7 @@ CREATE TABLE `circuitsLogicalMapping` (
   `circuit_id` int(11) unsigned NOT NULL,
   `order` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`logicalCircuit_id`, `circuit_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table circuitTypes
@@ -936,7 +936,7 @@ CREATE TABLE `circuitTypes` (
   `ctcolor` varchar(7) DEFAULT '#000000',
   `ctpattern` enum('Solid','Dotted') DEFAULT 'Solid',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `circuitTypes` (`ctname`) VALUES ('Default');
 
@@ -951,7 +951,7 @@ CREATE TABLE `php_sessions` (
   `data` text NOT NULL,
   `remote_ip` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table routing_bgp
@@ -977,7 +977,7 @@ CREATE TABLE `routing_bgp` (
   CONSTRAINT `circuit_id` FOREIGN KEY (`circuit_id`) REFERENCES `circuits` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `cust_id` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `vrf_id` FOREIGN KEY (`vrf_id`) REFERENCES `vrf` (`vrfId`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table routing_subnets
@@ -996,7 +996,7 @@ CREATE TABLE `routing_subnets` (
   KEY `subnet_id` (`subnet_id`),
   CONSTRAINT `bgp_id` FOREIGN KEY (`object_id`) REFERENCES `routing_bgp` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `subnet_id` FOREIGN KEY (`subnet_id`) REFERENCES `subnets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table vaults
@@ -1010,7 +1010,7 @@ CREATE TABLE `vaults` (
   `description` text,
   `test` char(128) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table vaultItems
@@ -1026,7 +1026,7 @@ CREATE TABLE `vaultItems` (
   PRIMARY KEY (`id`),
   KEY `vaultId` (`vaultId`),
   CONSTRAINT `vaultItems_ibfk_1` FOREIGN KEY (`vaultId`) REFERENCES `vaults` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table nominatim
@@ -1037,7 +1037,7 @@ CREATE TABLE `nominatim` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `url` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
 INSERT INTO `nominatim` (`id`, `url`) VALUES (1, 'https://nominatim.openstreetmap.org/search');
 
@@ -1052,7 +1052,7 @@ CREATE TABLE `nominatim_cache` (
   `query` text NOT NULL,
   `lat_lng` text NOT NULL,
   PRIMARY KEY (`sha256`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table -- for autofix comment, leave as it is

@@ -50,7 +50,7 @@ require_once 'PEAR.php';
 * @category FileFormats
 * @package  Spreadsheet_Excel_Writer
 */
-
+#[AllowDynamicProperties]
 class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
 {
     /**

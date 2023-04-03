@@ -12,7 +12,7 @@ $active_requests   = $Tools->fetch_multiple_objects ("requests", "processed", 0,
 $inactive_requests = $Tools->fetch_multiple_objects ("requests", "processed", 1, "id", false);
 # set hidden custom fields
 $hidden_cfields = pf_json_decode($User->settings->hiddenCustomFields, true);
-$hidden_cfields = is_array($hidden_cfields['requests']) ? $hidden_cfields['requests'] : array();
+$hidden_cfields = isset($hidden_cfields['requests']) ? $hidden_cfields['requests'] : array();
 ?>
 
 <h4><?php print _('List of all active IP addresses requests'); ?></h4>

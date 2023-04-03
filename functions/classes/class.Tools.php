@@ -141,7 +141,7 @@ class Tools extends Common_functions {
 
 		# set search query
 		$query[] = "select * from `ipaddresses` ";
-		$query[] = "where `ip_addr` between :low and :high ";	//ip range
+		$query[] = "where (LPAD(`ip_addr`,39,0) >= LPAD(:low,39,0) and LPAD(`ip_addr`,39,0) <= LPAD(:high,39,0))";	//ip range
 		$query[] = "or `hostname` like :search_term ";			//hostname
 		$query[] = "or `owner` like :search_term ";				//owner
 		# custom fields
@@ -219,7 +219,7 @@ class Tools extends Common_functions {
 		# set search query
 		$query[] = "select * from `subnets` where `description` like :search_term ";
 		# search low/high
-		$query[] = " or (`subnet` >=  '$low' and `subnet` <=  '$high')";
+		$query[] = " or (LPAD(`subnet`,39,0) >= LPAD(:low,39,0) and LPAD(`subnet`,39,0) <= LPAD(:high,39,0))";
 		# custom
 	    if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {
@@ -233,7 +233,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $result = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		try { $result = $this->Database->getObjectsQuery($query, ["low"=>$low, "high"=>$high, "search_term"=>"%$search_term%"]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -251,6 +251,9 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	private function search_subnets_inside($search_term, $high, $low) {
+		if (is_blank($high) || is_blank($low))
+			return [];
+
 		# subnets class
 		$Subnets = new Subnets($this->Database);
 

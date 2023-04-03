@@ -244,10 +244,10 @@ class Prefix_controller extends Common_api_functions {
      * __construct function
      *
      * @access public
-     * @param class $Database
-     * @param class $Tools
-     * @param mixed $params
-     * @param mixed $Response
+     * @param PDO_Database $Database
+     * @param Tools $Tools
+     * @param API_params $params
+     * @param Response $Response
      */
     public function __construct($Database, $Tools, $params, $Response) {
         $this->Database  = $Database;
@@ -495,7 +495,7 @@ class Prefix_controller extends Common_api_functions {
         if($available===false)          { $this->Response->throw_exception(404, "No subnets found"); }
         else {
             // parse avilable
-    		$subnet_tmp = pf_explode("/", $available);
+    		$subnet_tmp = $this->Subnets->cidr_network_and_mask($available);
             // set params
     		$this->_params->subnet          = $subnet_tmp[0];
     		$this->_params->mask            = $subnet_tmp[1];

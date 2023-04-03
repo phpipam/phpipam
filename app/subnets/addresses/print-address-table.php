@@ -123,7 +123,7 @@ $statuses = pf_explode(";", $User->settings->pingStatus);
 # Set $zone
 if(in_array('firewallAddressObject', $selected_ip_fields)) {
 	# class
-	if(!is_object($Zones)) $Zones = new FirewallZones ($Database);
+	if (!isset($Zones)) $Zones = new FirewallZones($Database);
 	$zone = $Zones->get_zone_subnet_info($subnet['id']);
 } else {
 	$zone = false;
@@ -444,24 +444,22 @@ else {
 
 	       		# print info button for hover
 	       		if(in_array('note', $selected_ip_fields)) {
-
-	       			$addresses[$n]->note = str_replace("'", "&#39;", $addresses[$n]->note);
-
-	        		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",addslashes($addresses[$n]->note))."'></i></td>"; }
+	        		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", escape_input($addresses[$n]->note))."'></i></td>"; }
 	        		else 												{ print "<td class='narrow'></td>"; }
 	        	}
 
-	        	# print device
-	        	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
-		        	# get device details
-		        	$device = (array) $Tools->fetch_object("devices", "id", $addresses[$n]->switch);
-		        	# set rack
-		        	if ($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
-		        	$rack = $device['rack']>0 ? "<i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackid='$device[rack]' data-deviceid='$device[id]'></i>" : "";
-																		  print "<td class='hidden-xs hidden-sm hidden-md'>$rack <a href='".create_link("tools","devices",@$device['id'])."'>". @$device['hostname'] ."</a></td>";
-					}
-					else {
-						print "<td class='hidden-xs hidden-sm hidden-md'> <a href='".create_link("tools","devices",@$device['id'])."'>". @$device['hostname'] ."</a></td>";
+				# print device
+				if (in_array('switch', $selected_ip_fields) && $User->get_module_permissions("devices") >= User::ACCESS_R) {
+					# get device details
+					$device = $Tools->fetch_object("devices", "id", $addresses[$n]->switch);
+					if (is_object($device)) {
+						$rack = "";
+						if ($User->settings->enableRACK == "1" && $User->get_module_permissions("racks") >= User::ACCESS_R && $device->rack > 0) {
+							$rack = "<i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackid='" . $device->rack . "' data-deviceid='" . $device->id . "'></i>";
+						}
+						print "<td class='hidden-xs hidden-sm hidden-md'>$rack<a href='" . create_link("tools", "devices", $device->id) . "'>" . escape_input($device->hostname) . "</a></td>";
+					} else {
+						print "<td class='hidden-xs hidden-sm hidden-md'></td>";
 					}
 				}
 

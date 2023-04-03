@@ -464,7 +464,7 @@ class Addresses extends Common_functions {
 			$this->address_within_subnetId($address['ip_addr'], $subnetId, true);
 
 		# set primary key for update
-		if($address['type']=="series") {
+		if(isset($address['type']) && $address['type']=="series") {
 			$id1 = "subnetId";
 			$id2 = "ip_addr";
 			unset($address['id']);
@@ -474,7 +474,7 @@ class Addresses extends Common_functions {
 		}
 
 		# remove gateway
-		if($address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
+		if(isset($address['is_gateway']) && $address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
 
 		# execute
 		try { $this->Database->updateObject("ipaddresses", $address, $id1, $id2); }
@@ -508,7 +508,8 @@ class Addresses extends Common_functions {
 	protected function modify_address_delete ($address) {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
-		if (isset($address['section'])) $address_old->section = $address['section'];
+		if (is_object($address_old) && isset($address['section']))
+			$address_old->section = $address['section'];
 
 		# series?
 		if($address['type']=="series") {
@@ -780,7 +781,7 @@ class Addresses extends Common_functions {
 		}
 		# result
 		if ($cnt===true)	{ return $count->cnt==0 ? false : true; }
-		else				{ return is_null($count->id) ? false : $count->id; }
+		else				{ return is_null($count) ? false : $count->id; }
 	}
 
 	/**
@@ -1565,7 +1566,7 @@ class Addresses extends Common_functions {
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {
 			# ignore already comressed range
-			if($addresses[$c]->class!="compressed-range") {
+			if(!property_exists($addresses[$c], 'class') || $addresses[$c]->class!="compressed-range") {
 				# gap between this and previous
 				if(gmp_strval( @gmp_sub($addresses[$c]->ip_addr, $addresses[$c-1]->ip_addr)) != 1) {
 					# remove index flag

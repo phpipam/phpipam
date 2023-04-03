@@ -11,7 +11,7 @@ if (!isset($User)) {
 $User->check_user_session();
 
 # if direct request that redirect to tools page
-if ($_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest") {
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest") {
 	header("Location: " . create_link("tools", "mac-lookup"));
 }
 ?>

@@ -42,13 +42,13 @@ if(is_array($resolved_subnets)) {
 
 # check all subnets
 if(sizeof($config['resolve_subnets']) == 0) {
-	# get ony ip's with empty DNS
+	# get only ip's with empty DNS
 	if($config['resolve_emptyonly'] == 1) 	{ $query = 'select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` where `hostname` = "" or `hostname` is NULL order by `ip_addr` ASC;'; }
 	else 									{ $query = 'select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` order by `ip_addr` ASC;'; }
 }
 # check selected subnets
 else {
-	$query[] = "select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` where ";
+	$query[] = "select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` where (";
 	//go through subnets
 	$m=1;
 	foreach($config['resolve_subnets'] as $k=>$subnetId) {
@@ -57,6 +57,7 @@ else {
 		else										{ $query[] = '`subnetId` = "'. $subnetId .'" or '; }
 		$m++;
 	}
+	$query[] = ")";
 	# get ony ip's with empty DNS
 	if($config['resolve_emptyonly'] == 1) {
 		$query[] = ' and (`hostname` = "" or `hostname` is NULL ) ';

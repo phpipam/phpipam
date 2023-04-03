@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * DNS Library for handling lookups and updates. 
+ * DNS Library for handling lookups and updates.
  *
  * PHP Version 5
  *
@@ -21,8 +21,8 @@
  *     the documentation and/or other materials provided with the
  *     distribution.
  *
- *   * Neither the name of Mike Pultz nor the names of his contributors 
- *     may be used to endorse or promote products derived from this 
+ *   * Neither the name of Mike Pultz nor the names of his contributors
+ *     may be used to endorse or promote products derived from this
  *     software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -81,14 +81,14 @@ class Net_DNS2_Socket_Sockets extends Net_DNS2_Socket
         if (Net_DNS2::isIPv4($this->host) == true) {
 
             $this->sock = @socket_create(
-                AF_INET, $this->type, 
+                AF_INET, $this->type,
                 ($this->type == Net_DNS2_Socket::SOCK_STREAM) ? SOL_TCP : SOL_UDP
             );
 
         } else if (Net_DNS2::isIPv6($this->host) == true) {
-        
+
             $this->sock = @socket_create(
-                AF_INET6, $this->type, 
+                AF_INET6, $this->type,
                 ($this->type == Net_DNS2_Socket::SOCK_STREAM) ? SOL_TCP : SOL_UDP
             );
 
@@ -109,10 +109,10 @@ class Net_DNS2_Socket_Sockets extends Net_DNS2_Socket
         //
         // bind to a local IP/port if it's set
         //
-        if (strlen($this->local_host) > 0) {
+        if (strlen($this->local_host ?: '') > 0) {
 
             $result = @socket_bind(
-                $this->sock, $this->local_host, 
+                $this->sock, $this->local_host,
                 ($this->local_port > 0) ? $this->local_port : null
             );
             if ($result === false) {
@@ -259,7 +259,7 @@ class Net_DNS2_Socket_Sockets extends Net_DNS2_Socket
         // make sure our socket is non-blocking
         //
         if (@socket_set_nonblock($this->sock) === false) {
-    
+
             $this->last_error = socket_strerror(socket_last_error());
             return false;
         }
@@ -284,7 +284,7 @@ class Net_DNS2_Socket_Sockets extends Net_DNS2_Socket
 
         //
         // if it's a TCP socket, then the first two bytes is the length of the DNS
-        // packet- we need to read that off first, then use that value for the 
+        // packet- we need to read that off first, then use that value for the
         // packet read.
         //
         if ($this->type == Net_DNS2_Socket::SOCK_STREAM) {
@@ -310,7 +310,7 @@ class Net_DNS2_Socket_Sockets extends Net_DNS2_Socket
         // wait for the data.
         //
         if (@socket_set_block($this->sock) === false) {
-    
+
             $this->last_error = socket_strerror(socket_last_error());
             return false;
         }
@@ -322,9 +322,9 @@ class Net_DNS2_Socket_Sockets extends Net_DNS2_Socket
         // MSG_WAITALL properly, so they may return with less data than is available.
         //
         // According to M$, XP and below don't support MSG_WAITALL at all; and there
-        // also seems to be some issue in 2003 and 2008 where the MSG_WAITALL is 
-        // defined as 0, but if you actually pass 8 (which is the correct defined 
-        // value), it works as it's supposed to- so in these cases, it's just the 
+        // also seems to be some issue in 2003 and 2008 where the MSG_WAITALL is
+        // defined as 0, but if you actually pass 8 (which is the correct defined
+        // value), it works as it's supposed to- so in these cases, it's just the
         // define that's incorrect- this is likely a PHP issue.
         //
         $data = '';
@@ -361,4 +361,3 @@ class Net_DNS2_Socket_Sockets extends Net_DNS2_Socket
  * c-hanging-comment-ender-p: nil
  * End:
  */
-?>

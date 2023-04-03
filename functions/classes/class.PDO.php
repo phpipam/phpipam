@@ -31,12 +31,19 @@ abstract class DB {
 	/**
 	 * charset
 	 *
-	 * (default value: 'utf8')
+	 * (default value: 'utf8mb4')
 	 *
 	 * @var string
 	 * @access protected
 	 */
-	protected $charset = 'utf8';
+	protected $charset = 'utf8mb4';
+
+	/**
+	 * Database supports $charset
+	 *
+	 * @var bool
+	 */
+	public $set_names = false;
 
 	/**
 	 * pdo
@@ -47,6 +54,13 @@ abstract class DB {
 	 * @access protected
 	 */
 	protected $pdo = null;
+
+	/**
+	 * SSL attributes
+	 *
+	 * @var array|false
+	 */
+	public $ssl = false;
 
 	/**
 	 * Database name - needed for check
@@ -100,8 +114,22 @@ abstract class DB {
 	 */
 	private $ctes_enabled = null;
 
+	/**
+	 * Instal flag
+	 * @var bool
+	 * @access protected
+	 */
+	public $install = false;
 
-
+	/**
+	 * Debugging flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access protected
+	 */
+	protected $debug = false;
 
 	/**
 	 * __construct function.
@@ -166,7 +194,12 @@ abstract class DB {
 			throw new Exception ("Could not connect to database! ".$e->getMessage());
 		}
 
-		@$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
+		try {
+			$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
+			$this->set_names = true;
+		} catch (Exception $e) {
+			$this->set_names = false;
+		}
 	}
 
 	/**
@@ -195,6 +228,7 @@ abstract class DB {
 	 */
 	public function resetConn() {
 		unset($this->pdo);
+		$this->cache = [];
 		$this->install = false;
 	}
 
@@ -262,7 +296,7 @@ abstract class DB {
 	}
 
 	/**
-	 * MySQL CTE support checks
+	 * MySQL CTE support check
 	 *
 	 * @access public
 	 * @return bool
@@ -1067,18 +1101,6 @@ class Database_PDO extends DB {
 	 * @access public
 	 */
 	public $install = false;
-
-	/**
-	 * Debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access protected
-	 */
-	protected $debug = false;
-
-
 
 
 

@@ -10,7 +10,7 @@
 	<br>
 
 	<div class="text-righ2t">
-		<a class="btn btn-default btn-sm refreshPTRsubnetSubmit" data-subnetId=<?php print $_POST['subnetId']; ?>><i class="fa fa-refresh"></i> Regenerate</a>
+		<a class="btn btn-default btn-sm refreshPTRsubnetSubmit" data-subnetId=<?php print escape_input($_POST['subnetId']); ?>><i class="fa fa-refresh"></i> Regenerate</a>
 		<hr>
 	</div>
 

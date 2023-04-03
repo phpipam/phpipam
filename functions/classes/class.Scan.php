@@ -72,6 +72,41 @@ class Scan extends Common_functions {
 	protected $icmp_exit = false;
 
 	/**
+	 * Scan type
+	 *
+	 * @var string
+	 */
+	private $ping_type;
+
+	/**
+	 * ping binary path
+	 *
+	 * @var string
+	 */
+	private $ping_path;
+
+	/**
+	 * fping binary path
+	 *
+	 * @var string
+	 */
+	private $fping_path;
+
+	/**
+	 * last fping result
+	 *
+	 * @var array
+	 */
+	public $fping_result = [];
+
+	/**
+	 * Ping RTT
+	 *
+	 * @var integer
+	 */
+	public $rtt;
+
+	/**
 	 * Database
 	 *
 	 * @var mixed
@@ -421,7 +456,8 @@ class Scan extends Common_functions {
  		$tmp = pf_explode(" ",$line);
 
  		# save rtt
-		@$this->rtt	= "RTT: ".str_replace("(", "", $tmp[7]);
+		if (is_array($tmp) && isset($tmp[7]))
+			$this->rtt	= "RTT: ".str_replace("(", "", $tmp[7]);
 	}
 
 	/**
@@ -665,10 +701,7 @@ class Scan extends Common_functions {
 		foreach($ports as $p) {
 			// open socket
 			$conn = @fsockopen($address, $p, $errno, $errstr, $this->icmp_timeout);
-			//failed
-			if (!$conn) {}
-			//success
-			else 		{
+			if ($conn !== false) {
 				$retval = 0;	//set return as port if alive
 				fclose($conn);
 				break;			//end foreach if success

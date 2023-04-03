@@ -36,7 +36,7 @@ foreach($allSubnets as $subnet) {
 	$m = str_replace("subnet-", "", $subnet);
 
 	//reformat subnet
-	$_temp = pf_explode("/", $_POST['subnet-' . $m]);
+	$_temp = $Subnets->cidr_network_and_mask($_POST['subnet-' . $m]);
 
 	//set subnet details for importing
 	$subnet_import['subnet'] 	   = $Subnets->transform_to_decimal($_temp[0]);

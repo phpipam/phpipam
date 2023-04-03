@@ -11,15 +11,15 @@ $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 # get VLAN details
 $vlan = (array) $Tools->fetch_object("vlans", "vlanId", $_GET['sPage']);
 
+# not existing
+if(!isset($vlan['domainId']))		{ $Result->show("danger", _('Invalid VLAN id'), true); }
+
 # fetch l2 domain
 $vlan_domain = $Tools->fetch_object("vlanDomains", "id", $vlan['domainId']);
 if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true); }
 
 # Check user has read level permission to l2domain (or die with warning)
 $User->check_l2domain_permissions($vlan_domain);
-
-# not existing
-if($vlan[0]===false)				{ $Result->show("danger", _('Invalid VLAN id'), true); }
 
 # get custom VLAN fields
 $custom_fields = $Tools->fetch_custom_fields('vlans');
@@ -60,7 +60,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 	</tr>
 	<tr>
 		<th><?php print _('Description'); ?></th>
-		<td><?php print html_entity_decode($vlan['description']); ?></td>
+		<td><?php print escape_input($vlan['description']); ?></td>
 	</tr>
 
 	<?php if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
@@ -96,7 +96,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 
 			print "<tr>";
 			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
-			print "	<td style='vertical-align:top;align:left;'>$vlan[$key]</td>";
+			print "	<td style='vertical-align:top;align-content:left;'>$vlan[$key]</td>";
 			print "</tr>";
 		}
 	}
@@ -110,8 +110,8 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 
 		/* action button groups */
 		print "<tr>";
-		print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
-		print "	<td style='vertical-align:bottom;align:left;'>";
+		print "	<th style='vertical-align:bottom;align-content:left;'>"._('Actions')."</th>";
+		print "	<td style='vertical-align:bottom;align-content:left;'>";
 
         // actions
         $links = [];

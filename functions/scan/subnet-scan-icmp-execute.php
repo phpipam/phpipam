@@ -107,6 +107,8 @@ else {
 
 	$z = 0;			//scan_addresses array index
 
+	$Database->resetConn(); // Close database, forked processes inherit and close file handles on exit.
+
 	while ($z < sizeof($scan_addresses)) {
 
 		$threads = [];

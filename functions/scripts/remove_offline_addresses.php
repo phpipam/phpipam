@@ -32,9 +32,9 @@ $now     = time();
 $nowdate = date ("Y-m-d H:i:s");
 $beforetime = date ("Y-m-d H:i:s", (time()-$config['removed_addresses_timelimit']));
 
-// set query to fetch addresses and belongign subnets
+// set query to fetch addresses and belonging subnets
 $query = "select
-			`ip`.`id`,`ip`.`ip_addr`,`ip`.`lastSeen`,`ip`.`subnetId`,`ip`.`description`,`ip`.`hostname`,`ip`.`lastSeen`,
+			`ip`.`id`,`ip`.`ip_addr`,`ip`.`lastSeen`,`ip`.`subnetId`,`ip`.`description`,`ip`.`hostname`,
 			`su`.`subnet`,`su`.`mask`,`su`.`sectionId`,`su`.`description`,
 			'delete' as `action`
 		 from

@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # get all custom fields
-$custom_vlan_fields = $_REQUEST['vlans']=="on"     ? $Tools->fetch_custom_fields ("vlans") : array();
+$custom_vlan_fields = $Params->vlans=="on"     ? $Tools->fetch_custom_fields ("vlans") : array();
 $hidden_vlan_fields = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : array();
 
 # search vlans

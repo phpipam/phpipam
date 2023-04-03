@@ -36,7 +36,16 @@ if($_POST['action']!="add") {
 } else {
 	# generate new code
 	$api = new StdClass;
+	$api->id = null;
+	$api->app_id = null;
 	$api->app_code = $User->Crypto->generate_html_safe_token(32);
+	$api->app_permissions = 1;
+	$api->app_security = "ssl_code";
+	$api->app_lock = null;
+	$api->app_nest_custom_fields = null;
+	$api->app_show_links = null;
+	$api->app_lock_wait = null;
+	$api->app_comment = null;
 	# title
 	$title = _('Add new api key');
 }
@@ -56,9 +65,9 @@ if($_POST['action']!="add") {
 	<tr>
 	    <td><?php print _('App id'); ?></td>
 	    <td>
-	    	<input type="text" name="app_id" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$api->app_id); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
-	        <input type="hidden" name="id" value="<?php print $api->id; ?>">
-    		<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+	    	<input type="text" name="app_id" class="form-control input-sm" value="<?php print escape_input($api->app_id); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
+	        <input type="hidden" name="id" value="<?php print escape_input($api->id); ?>">
+    		<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 	    </td>
        	<td class="info2"><?php print _('Enter application identifier'); ?></td>
@@ -67,7 +76,7 @@ if($_POST['action']!="add") {
 	<!-- code -->
 	<tr>
 	    <td><?php print _('App code'); ?></td>
-	    <td><input type="text" id="appcode" name="app_code" class="form-control input-sm"  value="<?php print $Admin->strip_xss(@$api->app_code); ?>"  maxlength='32' <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
+	    <td><input type="text" id="appcode" name="app_code" class="form-control input-sm"  value="<?php print escape_input($api->app_code); ?>"  maxlength='32' <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
        	<td class="info2"><?php print _('Application code'); ?> <button class="btn btn-xs btn-default" id="regApiKey"><i class="fa fa-random"></i> <?php print _('Regenerate'); ?></button></td>
     </tr>
 
@@ -127,7 +136,7 @@ if($_POST['action']!="add") {
 	<tr>
 	    <td><?php print _('Lock timeout'); ?></td>
 	    <td>
-	    	<input name="app_lock_wait" class="form-control input-sm input-w-auto" value="<?php print $Admin->strip_xss(@$api->app_lock_wait); ?>">
+	    	<input name="app_lock_wait" class="form-control input-sm input-w-auto" value="<?php print escape_input($api->app_lock_wait); ?>">
 	    </td>
        	<td class="info2"><?php print _('Seconds to wait for transaction lock to clear'); ?></td>
     </tr>
@@ -170,7 +179,7 @@ if($_POST['action']!="add") {
     <tr>
     	<td><?php print _('Description'); ?></td>
     	<td>
-    		<input type="text" name="app_comment" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$api->app_comment); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
+    		<input type="text" name="app_comment" class="form-control input-sm" value="<?php print escape_input($api->app_comment); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
     	</td>
     	<td class="info2"><?php print _('Enter description'); ?></td>
     </tr>
@@ -186,7 +195,7 @@ if($_POST['action']!="add") {
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/api/edit-result.php" data-result_div="apiEditResult" data-form='apiEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
 		</button>
 
 	</div>

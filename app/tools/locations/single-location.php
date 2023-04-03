@@ -97,7 +97,7 @@ else {
             			$location->{$key} = $Tools->create_links($location->{$key});
             			print "<tr>";
             			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
-            			print "	<td style='vertical-align:top;align:left;'>".$location->{$key}."</td>";
+            			print "	<td style='vertical-align:top;align-content:left;'>".$location->{$key}."</td>";
             			print "</tr>";
             		}
             	}
