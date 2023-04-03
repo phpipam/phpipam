@@ -43,7 +43,7 @@ $extfields["vlanDef"]["table"] = "vlandef";
 $extfields["vlanDef"]["field"] = "vlanName";
 $extfields["vlanDef"]["pname"] = "vlanDef";
 
-$reqfields = array("locationSize", "addressType", "vrf", "description", "isSummary", "parent", "mask", "offset", "base");
+$reqfields = array("locationSize", "addressType", "description", "isSummary", "parent", "mask", "offset", "base");
 
 # manually adjust the standard fields
 foreach($expfields as $std_field) {
