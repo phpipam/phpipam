@@ -88,7 +88,7 @@ foreach ($data as &$cdata) {
 	# Check if vrf is provided and valid and link it if it is
 	if (!isset($edata['vrfs'][strtolower($cdata['vrf'])])
 	    ) {
-		$msg.= "Invalid VRF."; $action = "error";
+		$cdata['vrf']=NULL;
 	} else {
 		$cdata['vrf'] = $edata['vrfs'][strtolower($cdata['vrf'])]['vrfId'];
 	}
