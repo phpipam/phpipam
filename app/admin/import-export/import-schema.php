@@ -36,7 +36,7 @@ $rows = "";
 foreach ($data as &$cdata) {
 	if (($cdata['action'] == "add") || ($cdata['action'] == "edit")) {
 		if ($cdata['action']=="add"){
-			if (strtolower($cdata['parent'])=="none"){$cdata=0;}
+			if (strtolower($cdata['parent'])=="none"){$cdata['parent']=0;}
 			else {
 				$schemas=$Tools->fetch_multiple_objects("schemasubnets","locationSize",$cdata['locationSize']);
 				foreach ($schemas as $schema){
