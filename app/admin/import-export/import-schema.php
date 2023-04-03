@@ -70,10 +70,10 @@ foreach ($data as &$cdata) {
 
 		if ($cdata['result']) {
 			$trc = $colors[$cdata['action']];
-			$msg = "Hardware  ".$cdata['action']." successful.";
+			$msg = "Schema  ".$cdata['action']." successful.";
 		} else {
 			$trc = "danger";
-			$msg = "Hardware  ".$cdata['action']." failed.";
+			$msg = "Schema  ".$cdata['action']." failed.";
 		}
 
 		$rows.="<tr class='".$trc."'><td><i class='fa ".$icons[$action]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>";
