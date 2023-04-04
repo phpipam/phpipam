@@ -30,9 +30,10 @@ spec:
           requests:
             memory: 1024Mi
             cpu: 1000m
+        envFrom:
+          - secretRef:
+              name: phpipam
         env:
-        - name: VAULT_KV_PATH
-          value: VAULT_KV_PATH
         - name: IPAM_BASE
           value: "/phpipam/"
         ports:

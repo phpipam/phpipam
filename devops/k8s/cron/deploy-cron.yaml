@@ -30,11 +30,8 @@ spec:
           requests:
             memory: 1024Mi
             cpu: 1000m
-        env:
-        - name: VAULT_KV_PATH
-          value: VAULT_KV_PATH
-        securityContext:
-          capabilities:
-            add: ["IPC_LOCK"]
+        envFrom:
+          - secretRef:
+              name: phpipam
       imagePullSecrets:
       - name: regcred
