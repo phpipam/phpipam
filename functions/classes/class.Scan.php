@@ -93,6 +93,13 @@ class Scan extends Common_functions {
 	private $fping_path;
 
 	/**
+	 * fping interval
+	 *
+	 * @var int
+	 */
+	private $fping_interval;
+
+	/**
 	 * last fping result
 	 *
 	 * @var array
@@ -153,9 +160,10 @@ class Scan extends Common_functions {
 		# fetch settings
 		$settings = is_null($this->settings) ? $this->get_settings() : (object) $this->settings;
 
-		$this->ping_type   = $settings->scanPingType;
-		$this->ping_path   = $settings->scanPingPath;
-		$this->fping_path  = $settings->scanFPingPath;
+		$this->ping_type      = $settings->scanPingType;
+		$this->ping_path      = $settings->scanPingPath;
+		$this->fping_path     = $settings->scanFPingPath;
+		$this->fping_interval = $settings->scanFPingInterval;
 
 		# set type
 		$this->reset_scan_method ($this->ping_type);
@@ -430,7 +438,7 @@ class Scan extends Common_functions {
 
 		# set command
 		$type = ($this->identify_address ($address)=="IPv6") ? '--ipv6' : '--ipv4';
-		$cmd = $this->fping_path." $type -c $this->icmp_count -t ".($this->icmp_timeout*1000)." $address";
+		$cmd = $this->fping_path." $type -c $this->icmp_count -i $this->fping_interval -t ".($this->icmp_timeout*1000)." $address";
 		# execute command, return $retval
 	    exec($cmd, $output, $retval);
 
@@ -480,7 +488,7 @@ class Scan extends Common_functions {
 		$this->ping_verify_path ($this->fping_path);
 		$out = array();
 		# set command
-		$cmd = $this->fping_path . ' -c ' . $this->icmp_count . ' -t ' . ($this->icmp_timeout * 1000) . ' -Agq ' . $subnet_cidr . ' 2>&1';
+		$cmd = $this->fping_path . ' -c ' . $this->icmp_count . ' -i ' . $this->fping_interval . ' -t ' . ($this->icmp_timeout * 1000) . ' -Agq ' . $subnet_cidr . ' 2>&1';
 		# execute command, return $retval
 		exec($cmd, $output, $retval);
 

@@ -599,6 +599,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- FPing interval -->
+<tr>
+	<td class="title"><?php print _('FPing interval'); ?></td>
+	<td>
+		<input type="text" class="form-control input-sm" name="scanFPingInterval" value="<?php print $settings['scanFPingInterval']; ?>">
+	</td>
+	<td class="info2">
+		<?php print _('FPing interval for IP addresses in miliseconds - (Default: 10)'); ?>
+	</td>
+</tr>
+
 <!-- Ping status intervals -->
 <tr>
 	<td class="title"><?php print _('Ping status intervals'); ?></td>
