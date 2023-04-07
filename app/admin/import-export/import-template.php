@@ -179,7 +179,7 @@ elseif ($type == 'schema'){
     $worksheet->write($lineCount, $curColumn++, _('vlanDef'));
 	$lineCount++;
     $curColumn=0;
-    $worksheet->write($lineCount, $curColumn++, _('<location size>'));
+    $worksheet->write($lineCount, $curColumn++, _('<micro>,<x-small>,<small>,<medium>,<large>,<x-large>'));
     $worksheet->write($lineCount, $curColumn++, _('<address type>'));
     $worksheet->write($lineCount, $curColumn++, _('<vrf> leave blank if Summary for multiple VRFs'));
     $worksheet->write($lineCount, $curColumn++, _('<text>'));
@@ -190,6 +190,51 @@ elseif ($type == 'schema'){
     $worksheet->write($lineCount, $curColumn++, _('<0> - <255>'));
     $worksheet->write($lineCount, $curColumn++, _('<1>-<4092> leave blank if not a VLAN'));
 
+}
+
+elseif ($type == 'schemastudio'){
+
+    $curColumn=0;
+	// set headers
+    $worksheet->write($lineCount, $curColumn++, _('studioType'));
+    $worksheet->write($lineCount, $curColumn++, _('addressType'));
+    $worksheet->write($lineCount, $curColumn++, _('vrf'));
+    $worksheet->write($lineCount, $curColumn++, _('description'));
+    $worksheet->write($lineCount, $curColumn++, _('isSummary'));
+    $worksheet->write($lineCount, $curColumn++, _('parent'));
+    $worksheet->write($lineCount, $curColumn++, _('mask'));
+    $worksheet->write($lineCount, $curColumn++, _('offset'));
+    $worksheet->write($lineCount, $curColumn++, _('base'));
+    $worksheet->write($lineCount, $curColumn++, _('vlanDef'));
+	$lineCount++;
+    $curColumn=0;
+    $worksheet->write($lineCount, $curColumn++, _('<small>,<medium>,<large>'));
+    $worksheet->write($lineCount, $curColumn++, _('<address type>'));
+    $worksheet->write($lineCount, $curColumn++, _('<vrf> leave blank if Summary for multiple VRFs'));
+    $worksheet->write($lineCount, $curColumn++, _('<text>'));
+    $worksheet->write($lineCount, $curColumn++, _('<Yes> if Summary otherwise <No>'));
+    $worksheet->write($lineCount, $curColumn++, _('<parent description> or <None> if this is Top Level Summary'));
+    $worksheet->write($lineCount, $curColumn++, _('<##>'));
+    $worksheet->write($lineCount, $curColumn++, _('<0> - <255>'));
+    $worksheet->write($lineCount, $curColumn++, _('<0> - <255>'));
+    $worksheet->write($lineCount, $curColumn++, _('<1>-<4092> leave blank if not a VLAN'));
+
+}
+
+elseif ($type == 'schemaip'){
+
+    $curColumn=0;
+	// set headers
+    $worksheet->write($lineCount, $curColumn++, _('locationSize'));
+    $worksheet->write($lineCount, $curColumn++, _('deviceType'));
+    $worksheet->write($lineCount, $curColumn++, _('deviceNumber'));
+    $worksheet->write($lineCount, $curColumn++, _('offset'));
+	$lineCount++;
+    $curColumn=0;
+    $worksheet->write($lineCount, $curColumn++, _('<micro>,<x-small>,<small>,<medium>,<large>,<x-large>'));
+    $worksheet->write($lineCount, $curColumn++, _('<XXX> 3 character device type ex: s3c'));
+    $worksheet->write($lineCount, $curColumn++, _('<###> 1-3 digit device instance'));
+    $worksheet->write($lineCount, $curColumn++, _('<##> offset from subnet start'));
 }
 
 // sending HTTP headers
