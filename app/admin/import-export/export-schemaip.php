@@ -73,7 +73,7 @@ foreach ($hardware as $d) {
 					$locsizes = $Tools->fetch_object("locationsizes", "id",$d[$k]);
 					$d[$k]=$locsizes->locationSize;
 					break;
-				case "status":
+				case "deviceType":
 					$devtypes = $Tools->fetch_object("deviceTypes", "tid",$d[$k]);
 					$d[$k]=$devtypes->tname;
 					break;
