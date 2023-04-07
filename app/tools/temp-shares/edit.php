@@ -31,12 +31,12 @@ $object = $Tools->fetch_object ($_POST['type'], "id", $_POST['id']);
 $share = new StdClass;
 //set details
 if($_POST['type']=="subnets") {
-	$tmp[] = "Share type: subnet";
+	$tmp[] = _("Share type: subnet");
 	$tmp[] = $Subnets->transform_to_dotted($object->subnet)."/$object->mask";
 	$tmp[] = $object->description;
 }
 else {
-	$tmp[] = "Share type: IP address";
+	$tmp[] = _("Share type: IP address");
 	$tmp[] = $Subnets->transform_to_dotted($object->ip_addr);
 	$tmp[] = $object->description;
 }

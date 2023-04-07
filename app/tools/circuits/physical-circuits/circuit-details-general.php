@@ -13,9 +13,9 @@ print "<hr>";
 print "<table class='ipaddress_subnet table-condensed table-auto'>";
 
 // inactive status
-$circuit->status = $circuit->status=="Inactive" ? "<span class='badge badge1 badge5 alert-danger'>$circuit->status</span>" : $circuit->status;
-$circuit->status = $circuit->status=="Active" ? "<span class='badge badge1 badge5 alert-success'>$circuit->status</span>" : $circuit->status;
-$circuit->status = $circuit->status=="Reserved" ? "<span class='badge badge1 badge5 alert-default'>$circuit->status</span>" : $circuit->status;
+$circuit->status = $circuit->status=="Inactive" ? "<span class='badge badge1 badge5 alert-danger'>"._("Inactive")."</span>" : $circuit->status;
+$circuit->status = $circuit->status=="Active" ? "<span class='badge badge1 badge5 alert-success'>"._("Active")."</span>" : $circuit->status;
+$circuit->status = $circuit->status=="Reserved" ? "<span class='badge badge1 badge5 alert-default'>"._("Reserved")."</span>" : $circuit->status;
 $circuit_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 $type_hash = [];
 foreach($circuit_types as $t){  $type_hash[$t->id] = $t->ctname; }
