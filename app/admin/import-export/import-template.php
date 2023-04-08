@@ -35,7 +35,8 @@ if ($type == 'subnets'){
 	$worksheet->write($lineCount, 4, _('VLAN'));
 	$worksheet->write($lineCount, 5, _('Domain'));
 	$worksheet->write($lineCount, 6, _('VRF'));
-	$fc =7 ;
+	$worksheet->write($lineCount, 7, _('Location'));
+	$fc =8 ;
 	foreach($custom_address_fields as $k=>$f) {
 		$worksheet->write($lineCount, $fc, $k);
 		$fc++;
@@ -58,7 +59,8 @@ elseif ($type == 'ipaddr'){
 	$worksheet->write($lineCount, 9, _('Note'));
 	$worksheet->write($lineCount, 10, _('Tag'));
 	$worksheet->write($lineCount, 11, _('Is_Gateway'));
-	$fc =12 ;
+	$worksheet->write($lineCount, 12, _('Location'));
+	$fc =13 ;
 	foreach($custom_address_fields as $k=>$f) {
 		$worksheet->write($lineCount, $fc, $k);
 		$fc++;
@@ -96,7 +98,9 @@ elseif ($type == 'l2dom'){
 	$worksheet->write($lineCount, 0, _('Name'));
 	$worksheet->write($lineCount, 1, _('Description'));
 	$fc =2 ;
-} elseif ($type == 'devices'){
+
+} 
+elseif ($type == 'devices'){
 
     $curColumn=0;
 	//get all custom fields!
@@ -107,28 +111,14 @@ elseif ($type == 'l2dom'){
     $worksheet->write($lineCount, $curColumn++, _('deviceType'));
     $worksheet->write($lineCount, $curColumn++, _('description'));
     $worksheet->write($lineCount, $curColumn++, _('section'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_community'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_version'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_port'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_timeout'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_queries'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_sec_level'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_auth_protocol'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_auth_pass'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_priv_protocol'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_priv_pass'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_ctx_name'));
-#    $worksheet->write($lineCount, $curColumn++, _('snmp_v3_ctx_engine_id'));
-    $worksheet->write($lineCount, $curColumn++, _('rack'));
-    $worksheet->write($lineCount, $curColumn++, _('rack_start'));
-    $worksheet->write($lineCount, $curColumn++, _('rack_size'));
     $worksheet->write($lineCount, $curColumn++, _('location'));
 	foreach($custom_address_fields as $k=>$f) {
 		$worksheet->write($lineCount, $curColumn, $k);
 		$curColumn++;
 	}
 
-} elseif ($type == 'devtype'){
+} 
+elseif ($type == 'devtype'){
 	//get all custom fields!
 	$custom_address_fields = $Tools->fetch_custom_fields('deviceTypes');
 	// set headers
@@ -140,6 +130,111 @@ elseif ($type == 'l2dom'){
 		$fc++;
 	}
 
+} 
+elseif ($type == 'hardware'){
+
+    $curColumn=0;
+	// set headers
+    $worksheet->write($lineCount, $curColumn++, _('serialNumber'));
+    $worksheet->write($lineCount, $curColumn++, _('model'));
+    $worksheet->write($lineCount, $curColumn++, _('status'));
+    $worksheet->write($lineCount, $curColumn++, _('dateRecived'));
+    $worksheet->write($lineCount, $curColumn++, _('ownedBy'));
+    $worksheet->write($lineCount, $curColumn++, _('managedBy'));
+    $worksheet->write($lineCount, $curColumn++, _('device'));
+    $worksheet->write($lineCount, $curColumn++, _('deviceMember'));
+    $worksheet->write($lineCount, $curColumn++, _('comment'));
+    $worksheet->write($lineCount, $curColumn++, _('rack'));
+    $worksheet->write($lineCount, $curColumn++, _('rack_start'));
+    $worksheet->write($lineCount, $curColumn++, _('halfUnit'));
+	$lineCount++;
+    $curColumn=0;
+    $worksheet->write($lineCount, $curColumn++, _('<serialNumber>'));
+    $worksheet->write($lineCount, $curColumn++, _('<model name>'));
+    $worksheet->write($lineCount, $curColumn++, _('usually <deployed> or <staged>'));
+    $worksheet->write($lineCount, $curColumn++, _('<YYYY-MM-DD> if not known leave blank'));
+    $worksheet->write($lineCount, $curColumn++, _('usually <UMG>'));
+    $worksheet->write($lineCount, $curColumn++, _('usually <UMG>'));
+    $worksheet->write($lineCount, $curColumn++, _('<device name>'));
+    $worksheet->write($lineCount, $curColumn++, _('<a> - <h>'));
+    $worksheet->write($lineCount, $curColumn++, _('<text>'));
+    $worksheet->write($lineCount, $curColumn++, _('<rack name>'));
+    $worksheet->write($lineCount, $curColumn++, _('<1> - <63>'));
+    $worksheet->write($lineCount, $curColumn++, _('If half rack device <left> or <right> otherwise leave blank'));
+
+}
+elseif ($type == 'schema'){
+
+    $curColumn=0;
+	// set headers
+    $worksheet->write($lineCount, $curColumn++, _('locationSize'));
+    $worksheet->write($lineCount, $curColumn++, _('addressType'));
+    $worksheet->write($lineCount, $curColumn++, _('vrf'));
+    $worksheet->write($lineCount, $curColumn++, _('description'));
+    $worksheet->write($lineCount, $curColumn++, _('isSummary'));
+    $worksheet->write($lineCount, $curColumn++, _('parent'));
+    $worksheet->write($lineCount, $curColumn++, _('mask'));
+    $worksheet->write($lineCount, $curColumn++, _('offset'));
+    $worksheet->write($lineCount, $curColumn++, _('base'));
+    $worksheet->write($lineCount, $curColumn++, _('vlanDef'));
+	$lineCount++;
+    $curColumn=0;
+    $worksheet->write($lineCount, $curColumn++, _('<micro>,<x-small>,<small>,<medium>,<large>,<x-large>'));
+    $worksheet->write($lineCount, $curColumn++, _('<address type>'));
+    $worksheet->write($lineCount, $curColumn++, _('<vrf> leave blank if Summary for multiple VRFs'));
+    $worksheet->write($lineCount, $curColumn++, _('<text>'));
+    $worksheet->write($lineCount, $curColumn++, _('<Yes> if Summary otherwise <No>'));
+    $worksheet->write($lineCount, $curColumn++, _('<parent description> or <None> if this is Top Level Summary'));
+    $worksheet->write($lineCount, $curColumn++, _('<##>'));
+    $worksheet->write($lineCount, $curColumn++, _('<0> - <255>'));
+    $worksheet->write($lineCount, $curColumn++, _('<0> - <255>'));
+    $worksheet->write($lineCount, $curColumn++, _('<1>-<4092> leave blank if not a VLAN'));
+
+}
+
+elseif ($type == 'schemastudio'){
+
+    $curColumn=0;
+	// set headers
+    $worksheet->write($lineCount, $curColumn++, _('studioType'));
+    $worksheet->write($lineCount, $curColumn++, _('addressType'));
+    $worksheet->write($lineCount, $curColumn++, _('vrf'));
+    $worksheet->write($lineCount, $curColumn++, _('description'));
+    $worksheet->write($lineCount, $curColumn++, _('isSummary'));
+    $worksheet->write($lineCount, $curColumn++, _('parent'));
+    $worksheet->write($lineCount, $curColumn++, _('mask'));
+    $worksheet->write($lineCount, $curColumn++, _('offset'));
+    $worksheet->write($lineCount, $curColumn++, _('base'));
+    $worksheet->write($lineCount, $curColumn++, _('vlanDef'));
+	$lineCount++;
+    $curColumn=0;
+    $worksheet->write($lineCount, $curColumn++, _('<small>,<medium>,<large>'));
+    $worksheet->write($lineCount, $curColumn++, _('<address type>'));
+    $worksheet->write($lineCount, $curColumn++, _('<vrf> leave blank if Summary for multiple VRFs'));
+    $worksheet->write($lineCount, $curColumn++, _('<text>'));
+    $worksheet->write($lineCount, $curColumn++, _('<Yes> if Summary otherwise <No>'));
+    $worksheet->write($lineCount, $curColumn++, _('<parent description> or <None> if this is Top Level Summary'));
+    $worksheet->write($lineCount, $curColumn++, _('<##>'));
+    $worksheet->write($lineCount, $curColumn++, _('<0> - <255>'));
+    $worksheet->write($lineCount, $curColumn++, _('<0> - <255>'));
+    $worksheet->write($lineCount, $curColumn++, _('<1>-<4092> leave blank if not a VLAN'));
+
+}
+
+elseif ($type == 'schemaip'){
+
+    $curColumn=0;
+	// set headers
+    $worksheet->write($lineCount, $curColumn++, _('locationSize'));
+    $worksheet->write($lineCount, $curColumn++, _('deviceType'));
+    $worksheet->write($lineCount, $curColumn++, _('deviceNumber'));
+    $worksheet->write($lineCount, $curColumn++, _('offset'));
+	$lineCount++;
+    $curColumn=0;
+    $worksheet->write($lineCount, $curColumn++, _('<micro>,<x-small>,<small>,<medium>,<large>,<x-large>'));
+    $worksheet->write($lineCount, $curColumn++, _('<XXX> 3 character device type ex: s3c'));
+    $worksheet->write($lineCount, $curColumn++, _('<###> 1-3 digit device instance'));
+    $worksheet->write($lineCount, $curColumn++, _('<##> offset from subnet start'));
 }
 
 // sending HTTP headers

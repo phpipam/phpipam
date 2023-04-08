@@ -64,6 +64,19 @@ foreach ($all_vrfs as $vrf) {
 	$vrf_data[$vrf['rd']] = $vrf;	# add also RD as VRF name, will allow matches against both name and RD
 }
 
+# new code - dolgin - 9/15 - testing location import
+# cloned from VRF code above
+# fetch all locations
+$all_locations = $Admin->fetch_all_objects("locations", "id");
+if (!$all_locations) { $all_locations = array(); }
+# process for easier later check
+$location_data = array();
+foreach ($all_locations as $location) {
+	//cast
+	$location = (array) $location;
+	$location_data[$location['name']] = $location;
+}
+
 # fetch all sections and load all subnets
 $all_sections = $Sections->fetch_all_sections();
 
@@ -134,6 +147,19 @@ foreach ($data as &$cdata) {
 	} else {
 		# no VRF provided
 		$cdata['vrfId'] = 0;
+	}
+
+# new code - dolgin 9/15 - testing location import
+# Check if location is provided and valid and link it if it is
+	if (!empty($cdata['location'])) {
+		if (!isset($location_data[$cdata['location']])) {
+			$msg.= "Invalid Location."; $action = "error";
+		} else {
+			$cdata['location'] = $location_data[$cdata['location']]['id'];
+		}
+	} else {
+		# no VRF provided
+		$cdata['location'] = 0;
 	}
 
 	# Check if VLAN Domain and VLAN are valid, and link them if they are

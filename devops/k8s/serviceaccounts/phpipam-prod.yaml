@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: phpipam
+  namespace: phpipam-prod
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::029216723584:role/aws42_phpipam
+  labels:
+    app: phpipam
