@@ -58,6 +58,7 @@
     + Invalid CSRF cookie editing rack items (#2556);
     + FPing discovery marks all addresses as alive (#2888);
     + Subnet usage calculation updated for nested subnets;
+    + SNMP, number of discovered hosts exceed maximum warning (#3279);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
         + Address IP field not displayed when using filter_by (#2934);
