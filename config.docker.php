@@ -55,7 +55,6 @@ $db['webhost'] = file_env('IPAM_DATABASE_WEBHOST', $db['webhost']);
   *  from overview tab, so go to Credentials tab and make an API key for your project.
   ******************************/
 $gmaps_api_key = file_env('IPAM_GMAPS_API_KEY', $gmaps_api_key);
-$gmaps_api_geocode_key = file_env('IPAM_GMAPS_API_KEY', $gmaps_api_geocode_key);
 
 /**
  * proxy connection details

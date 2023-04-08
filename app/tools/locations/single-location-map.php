@@ -25,7 +25,8 @@ elseif (strlen(Config::ValueOf('gmaps_api_key'))==0) {
 }else {
     // recode
     if (strlen($location->long)==0 && strlen($location->lat)==0 && strlen($location->address)>0) {
-        $latlng = $Tools->get_latlng_from_address ($location->address);
+        $OSM = new OpenStreetMap($Database);
+        $latlng = $OSM->get_latlng_from_address ($location->address);
         if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
             // save
             $Tools->update_latlng ($location->id, $latlng['lat'], $latlng['lng']);

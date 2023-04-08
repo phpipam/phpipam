@@ -162,3 +162,26 @@ $upgrade_queries["1.5.36"][] = "CREATE TABLE `vaultItems` (
 $upgrade_queries["1.5.36"][] = "-- Database version bump";
 $upgrade_queries["1.5.36"][] = "UPDATE `settings` set `dbversion` = '36';";
 
+//
+// OpenStreetMap nominatim geocoding service
+//
+$upgrade_queries["1.5.37"][] = "ALTER TABLE `customers` CHANGE `lat`  `lat`  varchar(31) DEFAULT NULL;";
+$upgrade_queries["1.5.37"][] = "ALTER TABLE `customers` CHANGE `long` `long` varchar(31) DEFAULT NULL;";
+$upgrade_queries["1.5.37"][] = "ALTER TABLE `locations` CHANGE `lat`  `lat`  varchar(31) DEFAULT NULL;";
+$upgrade_queries["1.5.37"][] = "ALTER TABLE `locations` CHANGE `long` `long` varchar(31) DEFAULT NULL;";
+$upgrade_queries["1.5.37"][] = "CREATE TABLE `nominatim` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+$upgrade_queries["1.5.37"][] = "INSERT INTO `nominatim` (`id`, `url`) VALUES (1, 'https://nominatim.openstreetmap.org/search');";
+$upgrade_queries["1.5.37"][] = "CREATE TABLE `nominatim_cache` (
+  `sha256` binary(32) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `query` text NOT NULL,
+  `lat_lng` text NOT NULL,
+  PRIMARY KEY (`sha256`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$upgrade_queries["1.5.37"][] = "-- Database version bump";
+$upgrade_queries["1.5.37"][] = "UPDATE `settings` set `dbversion` = '37';";
