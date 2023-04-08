@@ -59,7 +59,7 @@ foreach ($objects['subnets'] as $slave_subnet) {
 	$slave_subnet = (array) $slave_subnet;
 
 	# calculate free / used / percentage
-	$calculate = $Subnets->calculate_subnet_usage ( $slave_subnet, true);
+	$calculate = $Subnets->calculate_subnet_usage ( $slave_subnet );
 
 	# get VLAN details
 	$slave_vlan = (array) $Tools->fetch_object("vlans", "vlanId", $slave_subnet['vlanId']);

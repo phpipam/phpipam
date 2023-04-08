@@ -187,7 +187,7 @@ function randomPass() {
     var pass = "";
     var x;
     var i;
-    for(x=0; x<10; x++) {
+    for(x=0; x<15; x++) {
         i = Math.floor(Math.random() * 70);
         pass += chars.charAt(i);
     }
