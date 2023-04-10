@@ -1,3 +1,7 @@
+<?php
+/* functions */
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+?>
 <!-- header -->
 <div class="pHeader"><?php print _("PTR zone refresh records"); ?></div>
 
