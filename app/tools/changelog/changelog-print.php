@@ -13,7 +13,7 @@ $_GET  = $User->strip_input_tags ($_GET);
 # validate subnetId parameter - meaning cfilter
 if(isset($_GET['subnetId'])) {
     // validate $_GET['subnetId']
-    if(!!preg_match('/[^A-Za-z0-9.#*% <>_ \\-$]/', $_GET['subnetId']))  { $Result->show("danger", _("Invalid search string")."!", true); }
+    if(!preg_match('/^[A-Za-z0-9.#*% <>_ \\-]+$/', $_GET['subnetId']))  { $Result->show("danger", _("Invalid search string")."!", true); }
 }
 
 # change parameters - search string provided
