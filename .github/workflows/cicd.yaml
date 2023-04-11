@@ -1,0 +1,26 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "**" ]
+  workflow_dispatch:
+    inputs:
+      Environment:
+        description: environment to deploy 
+        default: dev
+        required: true
+      Pipeline:
+        description: pipeline to run
+        default: poc-vault
+        required: true
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    - name: deploy
+      run: |
+        bash ./devops/scripts/runpipeline.sh
+      env:
+        ENV: ${{ github.event.inputs.Environment }} 
+        PIPELINE: ${{ github.event.inputs.Pipeline }} 

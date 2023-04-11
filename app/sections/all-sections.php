@@ -46,10 +46,10 @@ $colspan = 8;
     <th><?php print _('Description'); ?></th>
     <th><?php print _('Parent'); ?></th>
     <th><?php print _('Strict mode'); ?></th>
-    <?php if($User->get_module_permissions ("vlan")>=User::ACCESS_R) { ?>
+    <?php if($User->get_module_permissions ("vlan")>0) { ?>
     <th><?php print _('Show VLANs'); ?></th>
     <?php $colspan--;} ?>
-    <?php if ($User->get_module_permissions ("vrf")>=User::ACCESS_R) { ?>
+    <?php if ($User->get_module_permissions ("vrf")>0) { ?>
     <th><?php print _('Show VRFs'); ?></th>
     <?php $colspan--;} ?>
     <th><?php print _('Subnets'); ?></th>
@@ -89,13 +89,13 @@ if(isset($sections_sorted)) {
 		    $mode = $section['strictMode']==0 ? "<span class='badge badge1 badge5 alert-danger'>"._("No") : "<span class='badge badge1 badge5 alert-success'>"._("Yes");
 		    print '	<td>'. $mode .'</span></td>'. "\n";
 		    //Show VLANs
-		    if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
+		    if($User->get_module_permissions ("vlan")>0) {
 		    print " <td>";
 		    print @$section['showVLAN']==1 ? "<span class='badge badge1 badge5 alert-success'>"._("Yes") : "<span class='badge badge1 badge5 alert-danger'>"._("No");
 		    print "	</span></td>";
 			}
 		    //Show VRFs
-		    if($User->get_module_permissions ("vrf")>=User::ACCESS_R) {
+		    if($User->get_module_permissions ("vrf")>0) {
 		    print " <td>";
 		    print @$section['showVRF']==1 ? "<span class='badge badge1 badge5 alert-success'>"._("Yes") : "<span class='badge badge1 badge5 alert-danger'>"._("No");
 		    print "	</span></td>";
@@ -130,14 +130,14 @@ if(isset($sections_sorted)) {
 
 	    	   	print '	<td class="actions">'. "\n";
 
-            // links
-            $links = [];
-            $links[] = ["type"=>"header", "text"=>_("Show")];
-            $links[] = ["type"=>"link", "text"=>_("View section"), "href"=>create_link( "subnets", $section['id']), "icon"=>"eye", "visible"=>"dropdown"];
-            $links[] = ["type"=>"divider"];
-            $links[] = ["type"=>"header", "text"=>_("Manage")];
-            $links[] = ["type"=>"link", "text"=>_("Edit section"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/sections/edit.php' data-class='700' data-action='edit' data-sectionid='$section[id]'", "icon"=>"pencil"];
-            $links[] = ["type"=>"link", "text"=>_("Delete section"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/sections/edit.php' data-class='700' data-action='delete' data-sectionid='$section[id]'", "icon"=>"times"];
+	    	   	// links
+		        $links = [];
+	            $links[] = ["type"=>"header", "text"=>"Show"];
+	            $links[] = ["type"=>"link", "text"=>"View section", "href"=>create_link( "subnets", $section['id']), "icon"=>"eye", "visible"=>"dropdown"];
+	            $links[] = ["type"=>"divider"];
+	            $links[] = ["type"=>"header", "text"=>"Manage"];
+	            $links[] = ["type"=>"link", "text"=>"Edit section", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/sections/edit.php' data-class='700' data-action='edit' data-sectionid='$section[id]'", "icon"=>"pencil"];
+	            $links[] = ["type"=>"link", "text"=>"Delete section", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/sections/edit.php' data-class='700' data-action='delete' data-sectionid='$section[id]'", "icon"=>"times"];
 		        // print links
 		        print $User->print_actions($User->user->compress_actions, $links);
 
