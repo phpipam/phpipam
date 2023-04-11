@@ -1,5 +1,8 @@
 <?php
 
+/* global and missing functions */
+require('global_functions.php');
+
 /* Enable output buffering */
 require_once( dirname(__FILE__) . '/output_buffering.php' );
 
@@ -25,9 +28,6 @@ if (Config::ValueOf('proxy_enabled') == true) {
 	// var_dump(stream_context_get_options(stream_context_get_default()));
 }
 
-/* global and missing functions */
-require('global_functions.php');
-
 /* Set UI language */
 set_ui_language();
 
@@ -39,12 +39,11 @@ if(php_sapi_name()!="cli")
 if(Config::ValueOf('debugging')==true) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
+	error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
 }
 else {
-	ini_set('display_errors', 0);
-	ini_set('display_startup_errors', 0);
-	error_reporting(E_ERROR ^ E_WARNING);
+	disable_php_errors();
+	error_reporting(E_ERROR | E_WARNING);
 }
 
 // auto-set base if not already defined

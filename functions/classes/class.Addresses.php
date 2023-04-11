@@ -15,7 +15,7 @@ class Addresses extends Common_functions {
 	 * @var mixed
 	 * @access public
 	 */
-	public $addresses = array();
+	private $cache = array();
 
 	/**
 	 * Address types array
@@ -205,7 +205,7 @@ class Addresses extends Common_functions {
 	 * Fetches address by specified method
 	 *
 	 * @access public
-	 * @param string $method (default: "id")
+	 * @param string $method
 	 * @param mixed $id
 	 * @return object address
 	 */
@@ -213,8 +213,8 @@ class Addresses extends Common_functions {
 		# null method
 		$method = is_null($method) ? "id" : $method;
 		# check cache first
-		if(isset($this->addresses[$id]))	{
-			return $this->addresses[$id];
+		if(isset($this->cache["$method=>$id"]))	{
+			return $this->cache["$method=>$id"];
 		}
 		else {
 			try { $address = $this->Database->getObjectQuery("SELECT * FROM `ipaddresses` where `$method` = ? limit 1;", array($id)); }
@@ -226,8 +226,8 @@ class Addresses extends Common_functions {
 			if(!is_null($address)) {
 				# add decimal format
 				$address->ip = $this->transform_to_dotted ($address->ip_addr);
-				# save to subnets
-				$this->addresses[$id] = (object) $address;
+				# save to cache
+				$this->cache["$method=>$id"] = (object) $address;
 			}
 			#result
 			return !is_null($address) ? $address : false;
@@ -253,7 +253,7 @@ class Addresses extends Common_functions {
 			# add decimal format
 			$address->ip = $this->transform_to_dotted ($address->ip_addr);
 			# save to subnets
-			$this->addresses[$address->id] = (object) $address;
+			$this->cache["id=>".$address->id] = (object) $address;
 		}
 		#result
 		return !is_null($address) ? $address : false;
@@ -1280,13 +1280,14 @@ class Addresses extends Common_functions {
 			return false;
 		}
 		# save to addresses cache
-		if(sizeof($addresses)>0) {
+		if(is_array($addresses)) {
 			foreach($addresses as $k=>$address) {
 				# add decimal format
 				$address->ip = $this->transform_to_dotted ($address->ip_addr);
-				# save to subnets
-				$this->addresses[$address->id] = (object) $address;
-				$addresses[$k]->ip = $address->ip;
+				if ($fields=="*") {
+					# save complete objects to cache
+					$this->cache["id=>".$address->id] = (object) $address;
+				}
 			}
 		}
 		# result

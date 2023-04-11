@@ -7,10 +7,8 @@
 /* functions */
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
-# we dont need any errors!
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
+# Don't corrupt output with php errors!
+disable_php_errors();
 
 # initialize user object
 $Database 	= new Database_PDO;

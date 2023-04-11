@@ -3,6 +3,9 @@
 # Check we have been included and not called directly
 require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 /*
  * This script finds slave subnets via snmp
  *
@@ -17,9 +20,6 @@ if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP 
 
 # check section permissions
 if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }
-
-// no errors
-error_reporting(E_ERROR);
 
 # fetch devices that use get_routing_table query
 $devices_used = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_routing_table%", "id", true, true);

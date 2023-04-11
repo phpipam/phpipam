@@ -8,6 +8,9 @@
 /* functions */
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);

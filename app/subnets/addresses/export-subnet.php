@@ -6,6 +6,10 @@
 
 # include required scripts
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # initialize required objects
@@ -18,11 +22,6 @@ $Addresses	= new Addresses ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
-
-# we dont need any errors!
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 
 # fetch subnet details
 $subnet = (array) $Tools->fetch_object ("subnets", "id", $_GET['subnetId']);
