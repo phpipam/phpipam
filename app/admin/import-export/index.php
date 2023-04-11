@@ -39,6 +39,10 @@ $(document).on('change', "select#dataType", function() {
 					<option value='ipaddr'><?php print _('IP addresses'); ?></option>
 					<option value='devices' ><?php print _('Devices'); ?></option>
 					<option value='devtype' ><?php print _('Device types'); ?></option>
+					<option value='hardware' ><?php print _('Hardware'); ?></option>
+					<option value='schema' ><?php print _('Schema Subnets'); ?></option>
+					<option value='schemaip' ><?php print _('Schema Mgmt IPs'); ?></option>
+					<option value='schemastudio' ><?php print _('Schema Studio Subnets'); ?></option>
 			</select>
 		</td>
 		<td class="info2"><?php print _('Not all options are available currently.'); ?></td>

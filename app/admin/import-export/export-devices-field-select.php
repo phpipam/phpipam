@@ -19,21 +19,7 @@ $User->check_user_session();
 
 # Won't check per subnet/section rights since this is an admin section, where the admin user has full access
 
-# get all custom fields
-$custom_fields = $Tools->fetch_custom_fields('devices');
-# prepare HTML variables
-$custom_fields_names = "";
-$custom_fields_boxes = "";
 $section_ids = array();
-
-if(sizeof($custom_fields) > 0) {
-	foreach($custom_fields as $myField) {
-		//change spaces to "___" so it can be used as element id
-		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
-		$custom_fields_names.= "	<th>$myField[name]</th>";
-		$custom_fields_boxes.= "	<td><input type='checkbox' name='$myField[nameTemp]' checked> </td>";
-	}
-}
 
 ?>
 
@@ -58,9 +44,6 @@ print "	<th>"._('ip_addr')."</th>";
 print "	<th>"._('type')."</th>";
 print "	<th>"._('description')."</th>";
 print "	<th>"._('sections')."</th>";
-print "	<th>"._('rack')."</th>";
-print "	<th>"._('rack_start')."</th>";
-print "	<th>"._('rack_size')."</th>";
 print "	<th>"._('location')."</th>";
 print $custom_fields_names;
 print "	</tr>";
@@ -72,10 +55,7 @@ print "	<td><input type='checkbox' name='ip_addr' checked > </td>";
 print "	<td><input type='checkbox' name='type' checked> </td>";
 print "	<td><input type='checkbox' name='description' checked></td>";
 print "	<td><input type='checkbox' name='sections' checked></td>";
-print "	<td><input type='checkbox' name='rack'> </td>";
-print "	<td><input type='checkbox' name='rack_start'> </td>";
-print "	<td><input type='checkbox' name='rack_size'> </td>";
-print "	<td><input type='checkbox' name='location'> </td>";
+print "	<td><input type='checkbox' name='location' checked> </td>";
 print $custom_fields_boxes;
 print "	</tr>";
 
