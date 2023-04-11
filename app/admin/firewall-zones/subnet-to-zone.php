@@ -10,6 +10,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize classes
 $Database = new Database_PDO;
+$Admin 	  = new Admin ($Database);
 $User 	  = new User ($Database);
 $Result   = new Result ();
 $Zones    = new FirewallZones($Database);
@@ -23,10 +24,14 @@ if ($_POST['operation'] != 'subnet2zone') 				{ $Result->show("danger", _("Inval
 # validate $_POST['subnetId'] values
 if (!preg_match('/^[0-9]+$/i', $_POST['subnetId'])) 	{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!"), true); }
 
-$firewallZones = $Zones->get_zones();
+//$firewallZones = $Admin->fetch_multiple_objects("firewallZoneMapping","deviceId",$_POST['vr'],"alias");
+$fwtype=$Admin->fetch_object("deviceTypes","tname","fwl");
+$fwinfo=$Database->getObjectsQuery('SELECT * from devices where location='. $_POST[loc].' and type='.$fwtype->tid);
+$fwvsysinfo=$Admin->fetch_multiple_objects("fwvsys","firewall",$_POST['fw'],"name");
+$fwvrinfo=$Admin->fetch_multiple_objects("fwvrs","vfw",$_POST['vsys'],"name");
 
 # no zones
-if(!is_array($firewallZones))                              { $Result->show("danger", _("No zones available"), true, true); }
+if(!is_array($firewallZones) && isset($_POST['vr']))                              { $Result->show("danger", _("No zones available"), true, true); }
 ?>
 
 <!-- header  -->
@@ -36,8 +41,66 @@ if(!is_array($firewallZones))                              { $Result->show("dang
 <!-- form -->
 <form id="subnet-to-zone-edit">
 <input type="hidden" name="subnetId" value="<?php print $_POST['subnetId']; ?>">
+<input type="hidden" name="operation" value="<?php print $_POST['operation'] ?>">
+<input type="hidden" name="loc" value="<?php print $_POST['loc'] ?>">
+
 <!-- table -->
 <table class="table table-noborder table-condensed">
+	<!-- firewall -->
+	<tr>
+		<td style="width:150px;">
+			<?php print _('Firewall'); ?>
+		</td>
+		<td>
+			<select name="fw" id="fwzsubmap" class="form-control input-sm input-w-auto input-max-200">
+			<option disabled selected value="0"><?php print _('Select a FW'); ?></option>
+			<?php
+				foreach ($fwinfo as $fw) {
+					$selected=($fw->id==$_POST['fw'] ? "selected" : "");
+					print '<option '. $selected .' value="'.$fw->id.'">'.$fw->hostname.'</option>';
+				}
+			?>
+			</select>
+		</td>
+	</tr>
+
+	<!-- vsys -->
+	<tr>
+		<td style="width:150px;">
+			<?php print _('vSys'); ?>
+		</td>
+		<td>
+			<select name="vsys" id="fwzsubmap" class="form-control input-sm input-w-auto input-max-200">
+			<option disabled selected value="0"><?php print _('Select a vSys'); ?></option>
+			<?php
+				foreach ($fwvsysinfo as $fw) {
+					$vsysinfo=$Admin->fetch_object("vsysnames","id",$fw->name);
+					$selected=($fw->id==$_POST['vsys'] ? "selected" : "");
+					print '<option '. $selected .' value="'.$fw->id.'">'.$vsysinfo->name.'</option>';
+				}
+			?>
+			</select>
+		</td>
+	</tr>
+
+	<!-- virtual router -->
+	<tr>
+		<td style="width:150px;">
+			<?php print _('FVirtual Router'); ?>
+		</td>
+		<td>
+			<select name="vr" id="fwzsubmap" class="form-control input-sm input-w-auto input-max-200">
+			<option disabled selected value="0"><?php print _('Select a Virtual Router'); ?></option>
+			<?php
+				foreach ($fwvrinfo as $fw) {
+					$selected=($fw->id==$_POST['vr'] ? "selected" : "");
+					print '<option '. $selected .' value="'.$fw->id.'">'.$fw->name.'</option>';
+				}
+			?>
+			</select>
+		</td>
+	</tr>
+
 	<!-- zone -->
 	<tr>
 		<td style="width:150px;">
@@ -48,7 +111,7 @@ if(!is_array($firewallZones))                              { $Result->show("dang
 			<option value="0"><?php print _('Select a Zone'); ?></option>
 			<?php
 				foreach ($firewallZones as $firewallZone) {
-					print '<option value="'.$firewallZone->id.'">'.$firewallZone->zone.' '.(($firewallZone->description) ? ' ('.$firewallZone->description.')' : '' ).'</option>';
+					print '<option value="'.$firewallZone->id.'">'.$firewallZone->alias.'</option>';
 				}
 			?>
 			</select>

@@ -86,7 +86,7 @@ $debugging = false;
  *
  * @var bool
  */
-$api_allow_unsafe = false;
+$api_allow_unsafe = true;
 
 /**
  *  manual set session name for auth
