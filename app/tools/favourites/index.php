@@ -72,7 +72,7 @@ else {
 				print  '<td class="hidden-xs hidden-sm"></td>';
 			}
 			elseif(!$master) {
-	    		$subnet_usage = $Subnets->calculate_subnet_usage ($Subnets->fetch_subnet(null, $f['subnetId']), true);
+	    		$subnet_usage = $Subnets->calculate_subnet_usage ($Subnets->fetch_subnet(null, $f['subnetId']));
 
 	    		print ' <td class="used hidden-xs hidden-sm">'.$Subnets->reformat_number($subnet_usage['used']) .'/'. $Subnets->reformat_number($subnet_usage['maxhosts']) .' ('.$Subnets->reformat_number(100-$subnet_usage['freehosts_percent']) .' %)</td>';
 	    	}

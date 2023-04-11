@@ -86,7 +86,7 @@ else {
 
 			# usage
 			if(!$master) {
-	    		$subnet_usage = $Subnets->calculate_subnet_usage ($f, false);
+	    		$subnet_usage = $Subnets->calculate_subnet_usage ($f);
 	    	}
 
 			# add address

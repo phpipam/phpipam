@@ -56,7 +56,7 @@ else {
 	<div id="drop">
 		<input type="file" name="file" id="csvfile" style="display:none;">
 
-		<?php print _('Select image'); ?>: <a class="btn btn-sm btn-default">Browse</a>
+		<?php print _('Select image'); ?>: <a class="btn btn-sm btn-default"><?php print _("Browse"); ?></a>
 	</div>
 	<span class="fname" style="display:none"></span>
 

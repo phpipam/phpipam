@@ -515,8 +515,7 @@ class Common_functions  {
             'vrf'=>'vrfId',
             'changelog'=>'cid',
             'widgets'=>'wid',
-            'deviceTypes'=>'tid',
-            'nominatim_cache'=>'sha256'];
+            'deviceTypes'=>'tid'];
 
         return isset($mapings[$table]) ? $mapings[$table] : 'id';
     }
@@ -960,24 +959,16 @@ class Common_functions  {
 	* @access public
 	* @return bool
 	*/
-	public function isHttps () {
-		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
-			return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https');
-		}
-
-		if (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+	public function isHttps() {
+		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 			return true;
 		}
-
-		if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+		if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
 			return true;
 		}
-
-		$port = is_numeric($_SERVER['HTTP_X_FORWARDED_PORT']) ? $_SERVER['HTTP_X_FORWARDED_PORT'] : $_SERVER['SERVER_PORT'];
-		if($port == 443) {
+		if (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
 			return true;
 		}
-
 		return false;
 	}
 
@@ -985,37 +976,36 @@ class Common_functions  {
 	 * Create URL for base
 	 *
 	 * @access public
-	 * @return string
+	 * @return mixed
 	 */
 	public function createURL () {
-		$proto = $this->isHttps() ? 'https' : 'http';
-
-		$url = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "localhost";
-
-		if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
-			$url = $_SERVER['HTTP_X_FORWARDED_HOST'];
-		} elseif (isset($_SERVER['SERVER_NAME']) && isset($_SERVER['HTTP_X_SECURE_REQUEST']) && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') {
-			$url = $_SERVER['SERVER_NAME'];
+		// SSL on standard port
+		if(($_SERVER['HTTPS'] == 'on') || ($_SERVER['SERVER_PORT'] == 443)) {
+			$url = "https://".$_SERVER['HTTP_HOST'];
+		}
+		// reverse proxy doing SSL offloading
+		elseif(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+			if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+				$url = "https://".$_SERVER['HTTP_X_FORWARDED_HOST'];
+			}
+			else {
+				$url = "https://".$_SERVER['HTTP_HOST'];
+			}
+		}
+		elseif(isset($_SERVER['HTTP_X_SECURE_REQUEST'])  && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') {
+			$url = "https://".$_SERVER['SERVER_NAME'];
+		}
+		// custom port
+		elseif($_SERVER['SERVER_PORT']!="80" && (isset($_SERVER['HTTP_X_FORWARDED_PORT']) && $_SERVER['HTTP_X_FORWARDED_PORT']!="80")) {
+			$url = "http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'];
+		}
+		// normal http
+		else {
+			$url = "http://".$_SERVER['HTTP_HOST'];
 		}
 
-		$url = preg_replace('/:.*$/', '', $url);
-
-		// If only HTTP_X_FORWARDED_PROTO='https' is set assume port=443. Override if required by setting HTTP_X_FORWARDED_PORT
-		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && !isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
-			$port = ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 443 : 80;
-		} elseif (isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
-			$port = $_SERVER['HTTP_X_FORWARDED_PORT'];
-		} elseif (isset($_SERVER['SERVER_PORT'])) {
-			$port = $_SERVER['SERVER_PORT'];
-		} else {
-			$port = 80;
-		}
-
-		if (($proto == "http" && $port == 80) || ($proto == "https" && $port == 443)) {
-			return "$proto://$url";
-		} else {
-			return "$proto://$url:$port";
-		}
+		//result
+		return $url;
 	}
 
 	/**
@@ -1410,10 +1400,49 @@ class Common_functions  {
 			curl_close ($curl);
 
 		} catch (Exception $e) {
-			$result['error_msg'] = $e->getMessage();
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Fetches latlng from googlemaps by provided address
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @return array
+	 */
+	public function get_latlng_from_address ($address) {
+		$results = array('lat' => null, 'lng' => null, 'error' => null);
+
+		// get geocode API key
+		$gmaps_api_geocode_key = Config::ValueOf('gmaps_api_geocode_key');
+
+		if(empty($gmaps_api_geocode_key)) {
+			$results['info'] = _("Geocode API key not set");
+			return $results;
+		}
+
+		# Geocode address
+		$curl = $this->curl_fetch_url('https://maps.google.com/maps/api/geocode/json?address='.rawurlencode($address).'&sensor=false&key='.rawurlencode($gmaps_api_geocode_key), ["Accept: application/json"]);
+
+		if ($curl['result'] === false) {
+			$results['error'] = _("Geocode lookup failed. Check Internet connectivity.");
+			return $results;
+		}
+
+		$output= json_decode($curl['result']);
+
+		if (isset($output->results[0]->geometry->location->lat))
+			$results['lat'] = str_replace(",", ".", $output->results[0]->geometry->location->lat);
+
+		if (isset($output->results[0]->geometry->location->lng))
+			$results['lng'] = str_replace(",", ".", $output->results[0]->geometry->location->lng);
+
+		if (isset($output->error_message))
+			$results['error'] = $output->error_message;
+
+		return $results;
 	}
 
     /**

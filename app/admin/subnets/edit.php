@@ -200,7 +200,7 @@ $("input[name='subnet']").change(function() {
 				<input type="text" class="form-control input-sm input-w-200" name="subnet" placeholder="<?php print _('subnet in CIDR'); ?>" value="<?php print @$cidr; ?>">
 				<?php if (strlen($dropdown_menu)>0) { ?>
 				<div class="input-group-btn">
-					<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select <span class="caret"></span></button>
+					<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php print _("Select"); ?> <span class="caret"></span></button>
 					<ul class="dropdown-menu dropdown-menu-right dropdown-subnets">
 						<?php print $dropdown_menu; ?>
 					</ul>

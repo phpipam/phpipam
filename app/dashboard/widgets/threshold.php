@@ -94,7 +94,7 @@ else {
     // count usage
     foreach ($out as $k=>$s) {
         // calculate usage
-        $subnet_usage  = $Subnets->calculate_subnet_usage ($s, false);		//Calculate free/used etc
+        $subnet_usage  = $Subnets->calculate_subnet_usage ($s);		//Calculate free/used etc
 
         # set additional threshold parameters
         $subnet_usage['usedhosts_percent'] = gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));

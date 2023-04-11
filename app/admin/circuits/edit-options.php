@@ -55,7 +55,7 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 		<td><?php print  _('Map Color') ?></td>
 		<td>
 
-			<input type="color" name="color" id="color-picker" class="form-control input-sm" placeholder="<?php print _('Hex Color (ex. #000000)'); ?>" value="<?php if(isset($_POST['color'])) print $_POST['color']; ?>" <?php print $readonly; ?>>
+			<input type="color" name="color" id="pick-a-color" class="form-control input-sm" placeholder="<?php print _('Hex Color (ex. #000000)'); ?>" value="<?php if(isset($_POST['color'])) print $_POST['color']; ?>" <?php print $readonly; ?>>
 
 		</td>
 	</tr>

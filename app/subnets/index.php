@@ -37,7 +37,7 @@ if($subnet['sectionId']!=$_GET['section'])	{
 }
 
 // get usage
-$subnet_usage  = $Subnets->calculate_subnet_usage ($subnet, true);
+$subnet_usage  = $Subnets->calculate_subnet_usage ($subnet);
 
 # set title
 $location = "subnets";
@@ -183,5 +183,3 @@ if ($User->settings->enableNAT==1) {
 	<?php } ?>
 
 </div>
-
-

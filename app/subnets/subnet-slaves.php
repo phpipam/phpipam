@@ -85,7 +85,7 @@ foreach ($slave_subnets as $slave_subnet) {
 
 
 	# calculate free / used / percentage
-	$calculate = $Subnets->calculate_subnet_usage ( $slave_subnet, true);
+	$calculate = $Subnets->calculate_subnet_usage ( $slave_subnet );
 
 	# add full information
 	# if usage is 100%, fake isFull to true!
