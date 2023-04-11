@@ -747,6 +747,34 @@ class Subnets extends Common_functions {
 	}
 
 	/**
+	 *  Fetches duplicate subnets
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function fetch_duplicate_subnets() {
+		try {
+			$query = "SELECT s.* FROM subnets AS s
+				INNER JOIN (SELECT subnet,mask,COUNT(*) AS cnt FROM subnets GROUP BY subnet,mask HAVING cnt >1) dups ON s.subnet=dups.subnet AND s.mask=dups.mask
+				ORDER BY s.subnet,s.mask,s.id;";
+
+			$subnets = $this->Database->getObjectsQuery($query);
+
+			# save to subnets cache
+			if(is_array($subnets)) {
+				foreach($subnets as $subnet) {
+					$this->cache_write ("subnets", $subnet);
+				}
+			}
+		}
+		catch (Exception $e) {
+			$subnets = [];
+		}
+
+		return is_array($subnets) ? $subnets : [];
+	}
+
+	/**
 	 * Fetch all subnets marked for ping checks. Needed for pingCheck script
 	 *
 	 * @param  $agentId (default:null)

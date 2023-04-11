@@ -9,6 +9,7 @@
     + Custom fields on IP request forms (#2956);
     + Added subnet free space map for each possible subnet mask;
     + Added Vaults (Certificate andf password storing);
+    + Added Tools->Duplicate subnets & IP page;
 
     Enhancements, changes:
     ----------------------------
