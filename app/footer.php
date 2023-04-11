@@ -1,8 +1,20 @@
 <table class="donate">
 <tr>
 	<td>
-		<?php var_dump(PUBLISHED); ?>
-		<a href="http://phpipam.net">phpIPAM IP address management <?php print '[v'. VERSION_VISIBLE. ']'; ?><?php if(PUBLISHED===false) { print " dbversion".DBVERSION; } ?></a>
+		<a href="http://phpipam.net">phpIPAM IP address management <?php print '[v'. VERSION_VISIBLE. ']'; ?></a>
+		<?php
+		// Display SCHEMA database version in development builds
+		if(PUBLISHED===false) {
+			print " dbversion ".DBVERSION;
+		}
+		// show github tree ref (Docker builds)
+		if (defined("GIT_VCS_REF")) {
+			print " git <a href='https://github.com/phpipam/phpipam/tree/".GIT_VCS_REF."'>".GIT_VCS_REF."</a>";
+		}
+		if (phpversion() >= UNSUPPORTED_PHP_VERSION) {
+			print " "._('UNSUPPORTED_PHP_VERSION').":".phpversion();
+		}
+		?>
 	</td>
 
 	<?php
