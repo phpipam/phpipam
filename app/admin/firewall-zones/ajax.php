@@ -107,7 +107,7 @@ if ($_POST['operation'] == 'autogen') {
 # check if there is any mapping for a specific zone, if not, display inputs
 if ($_POST['operation'] == 'checkMapping') {
 
-	if (!$Zones->check_zone_mapping($_POST['zoneId']) && $_POST['zoneId'] != 0) {
+	if (!isset($_POST['zoneId'])) {
 		# fetch all firewall zones
 		$firewallZones = $Zones->get_zones();
 
@@ -168,7 +168,8 @@ if ($_POST['operation'] == 'checkMapping') {
 		<?php
 	} elseif ($_POST['zoneId'] != 0) {
 		# return the zone details
-		$Zones->get_zone_detail($_POST['zoneId']);
+		$zonemapinfo=$Admin->fetch_object("FirewallZoneMapping","id",$_POST['zoneId']);
+		$Zones->get_zone_detail($zonemapinfo->zoneId);
 	}
 }
 

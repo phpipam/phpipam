@@ -524,7 +524,6 @@ class User_controller extends Common_api_functions {
 				$this->User->user    = $token;
 				$this->token         = $token->token;
 				$this->token_expires = $token->token_valid_until;
-
 				// expired
 				if($this->validate_token_expiration () === true)
 													{  $this->Response->throw_exception(403, "Token expired");  }

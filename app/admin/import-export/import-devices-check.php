@@ -120,9 +120,6 @@ foreach ($data as &$cdata) {
 			if ($cdata['ip_addr'] != $cedata['ip_addr']) { $msg.= "Device ip_addr will be updated."; $action = "edit"; }
 			if ($cdata['type'] != $cedata['type']) { $msg.= "DeviceType will be updated."; $action = "edit"; }
 			if ($cdata['sectionId'] != $cedata['sectionId']) { $msg.= "sectionId will be updated."; $action = "edit"; }
-			if ($cdata['rack'] != $cedata['rack']) { $msg.= "rack will be updated."; $action = "edit"; }
-			if ($cdata['rack_start'] != $cedata['rack_start']) { $msg.= "rack_start will be updated."; $action = "edit"; }
-			if ($cdata['rack_size'] != $cedata['rack_size']) { $msg.= "rack_size will be updated."; $action = "edit"; }
 			if ($cdata['location'] != $cedata['location']) { $msg.= "location will be updated."; $action = "edit"; }
 
 			# Check if the values of the custom fields have changed

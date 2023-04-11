@@ -10,8 +10,8 @@ $icons['skip'] = "fa-times";
 $icons['error'] = "fa-times";
 $colors = array();
 $colors['add'] = "success";
-$colors['edit'] = "info";
-$colors['skip'] = "warning";
+$colors['edit'] = "warning";
+$colors['skip'] = "info";
 $colors['error'] = "danger";
 
 ?>

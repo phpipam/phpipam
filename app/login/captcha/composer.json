@@ -1,0 +1,26 @@
+{
+    "name": "dapphp/securimage",
+    "type": "library",
+    "description": "PHP CAPTCHA Library",
+    "keywords": ["captcha","security","forms","anti-spam"],
+    "homepage": "https://www.phpcaptcha.org",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Drew Phillips",
+            "email": "drew@drew-phillips.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "ext-gd": "*"
+    },
+    "suggest": {
+        "ext-pdo": "For database storage support",
+        "ext-pdo_mysql": "For MySQL database support",
+        "ext-pdo_sqlite": "For SQLite3 database support"
+    },
+    "autoload": {
+        "classmap": ["securimage.php"]
+    }
+}
