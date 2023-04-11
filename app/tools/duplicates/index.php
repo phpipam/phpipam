@@ -55,7 +55,7 @@ else {
         print " <td><span class='status status-error'></span></td>";
 
         # Subnet
-        print " <td><a href='".create_link("subnets", $s->sectionId, $s->id)."'>".$Subnets->transform_address($s->subnet)."/".$s->mask."</a></td>";
+        print " <td><a href='".create_link("subnets", $s->sectionId, $s->id)."'>".$s->ip."/".$s->mask."</a></td>";
 
         # Description
         print " <td>$s->description</td>";
@@ -149,9 +149,9 @@ else {
 
         # IP address
         if ($orphaned) {
-            print " <td><a href='".create_link("subnets", $s->sectionId, $s->id)."'>".$Subnets->transform_address($a->ip_addr).$orphaned."</a></td>";
+            print " <td><a href='".create_link("subnets", $s->sectionId, $s->id)."'>".$a->ip.$orphaned."</a></td>";
         } else {
-            print " <td><a href='".create_link("subnets", $s->sectionId, $s->id,"address-details",$a->id)."'>".$Subnets->transform_address($a->ip_addr).$orphaned."</a></td>";
+            print " <td><a href='".create_link("subnets", $s->sectionId, $s->id,"address-details",$a->id)."'>".$a->ip.$orphaned."</a></td>";
         }
 
         # Hostname
@@ -161,7 +161,7 @@ else {
         print " <td>$a->description</td>";
 
         # Subnet
-        print " <td><a href='".create_link("subnets", $s->sectionId, $s->id)."' >".$Subnets->transform_address($s->subnet)."/".$s->mask."</a></td>";
+        print " <td><a href='".create_link("subnets", $s->sectionId, $s->id)."' >".$s->ip."/".$s->mask."</a></td>";
 
         # Section
         $section = $Tools->fetch_object("sections", "id", $s->sectionId);
