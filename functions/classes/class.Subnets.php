@@ -501,11 +501,11 @@ class Subnets extends Common_functions {
 	 * Fetches subnetd by specified method
 	 *
 	 * @access public
-	 * @param string $method (default: "id")
+	 * @param string $method
 	 * @param mixed $value
 	 * @return array|false
 	 */
-	public function fetch_subnet ($method="id", $value) {
+	public function fetch_subnet ($method, $value) {
 		# null method
 		$method = is_null($method) ? "id" : $method;
 		# fetch
@@ -777,7 +777,7 @@ class Subnets extends Common_functions {
 		// Exclude subnets with children
 		$query = "SELECT s.id, s.subnet, s.sectionId, s.mask, s.resolveDNS, s.nameserverId FROM subnets AS s
 				LEFT JOIN subnets AS child ON child.masterSubnetId = s.id
-				WHERE s.scanAgent = ? AND s.$discoverytype = 1 AND s.isFolder = 0 AND s.mask > 0 AND child.id IS NULL;";
+				WHERE s.scanAgent = ? AND s.$discoverytype = 1 AND s.isFolder = 0 AND s.mask > 0 AND s.subnet < 4294967296 AND child.id IS NULL;";
 		try { $subnets = $this->Database->getObjectsQuery($query, array($agentId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
@@ -3580,12 +3580,12 @@ class Subnets extends Common_functions {
 	 * Fetch details from ripe or arin
 	 *
 	 * @access private
-	 * @param string $network (default: "ripe")
-	 * @param string $type (default: "inetnum")
+	 * @param string $network
+	 * @param string $type
 	 * @param mixed $subnet
 	 * @return array
 	 */
-	private function ripe_arin_fetch ($network = "ripe", $type = "inetnum", $subnet) {
+	private function ripe_arin_fetch ($network, $type, $subnet) {
 		// set url
 		$url = $network=="ripe" ? "http://rest.db.ripe.net/ripe/$type/$subnet" : "http://whois.arin.net/rest/nets;q=$subnet?showDetails=true&showARIN=false&showNonArinTopLevelNet=false&ext=netref2";
 

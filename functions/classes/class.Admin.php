@@ -202,11 +202,12 @@ class Admin extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $table			//name of table to update
+	 * @param mixed $key
 	 * @param array $values			//update variables
 	 * @param array $values_log		//log variables
 	 * @return boolean
 	 */
-	private function object_edit ($table, $key="id", $values, $values_log = []) {
+	private function object_edit ($table, $key, $values, $values_log = []) {
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
 
@@ -263,7 +264,7 @@ class Admin extends Common_functions {
 	 * @param mixed $id			//field identifier
 	 * @return boolean
 	 */
-	private function object_delete ($table, $field="id", $id) {
+	private function object_delete ($table, $field, $id) {
 		# execute
 		try { $this->Database->deleteRow($table, $field, $id); }
 		catch (Exception $e) {

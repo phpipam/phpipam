@@ -1077,7 +1077,7 @@ class PowerDNS extends Common_functions {
      *
      * @access public
      * @param mixed $domain_id
-     * @param mixed $name (default: null)
+     * @param mixed $name
      * @param mixed $type
      * @param mixed $content
      * @param mixed $ttl
@@ -1086,7 +1086,7 @@ class PowerDNS extends Common_functions {
      * @param bool $dont_validate_domain (default: false)
      * @return array
      */
-    public function formulate_new_record ($domain_id, $name=null, $type, $content, $ttl, $prio=null, $disabled = 0, $dont_validate_domain = false) {
+    public function formulate_new_record ($domain_id, $name, $type, $content, $ttl, $prio=null, $disabled = 0, $dont_validate_domain = false) {
         // initiate class
         $record = new StdClass ();
         // set record details

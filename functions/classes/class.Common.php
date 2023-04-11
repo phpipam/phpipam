@@ -225,11 +225,11 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $table
-	 * @param mixed $method (default: null)
+	 * @param mixed $method
 	 * @param mixed $value
 	 * @return false|object
 	 */
-	public function fetch_object ($table=null, $method=null, $value) {
+	public function fetch_object ($table, $method, $value) {
 		// checks
 		if(!is_string($table)) return false;
 		if(strlen($table)==0)  return false;
@@ -640,6 +640,12 @@ class Common_functions  {
 		if (!is_string($html) || strlen($html)==0)
 			return "";
 
+		// Convert encoding to UTF-8
+		$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+
+		// Throw loadHTML() parsing errors
+		$err_mode = libxml_use_internal_errors(false);
+
 		try {
 			$dom = new \DOMDocument();
 
@@ -651,37 +657,38 @@ class Common_functions  {
 
 			$elements = $dom->getElementsByTagName('*');
 
-			if (!is_object($elements) || $elements->length==0)
-				return $html;  // no HTML elements
+			if (is_object($elements) && $elements->length>0) {
+				foreach($elements as $e) {
+					if (in_array($e->nodeName, $banned_elements)) {
+						$remove_elements[] = $e;
+						continue;
+					}
 
-			foreach($elements as $e) {
-				if (in_array($e->nodeName, $banned_elements)) {
-					$remove_elements[] = $e;
-					continue;
+					if (!$e->hasAttributes())
+						continue;
+
+					// remove on* HTML event attributes
+					foreach ($e->attributes as $attr) {
+						if (substr($attr->nodeName,0,2) == "on")
+							$e->removeAttribute($attr->nodeName);
+					}
 				}
 
-				if (!$e->hasAttributes())
-					continue;
+				// Remove banned elements
+				foreach($remove_elements as $e)
+					$e->parentNode->removeChild($e);
 
-				// remove on* HTML event attributes
-				foreach ($e->attributes as $attr) {
-					if (substr($attr->nodeName,0,2) == "on")
-						$e->removeAttribute($attr->nodeName);
-				}
+				// Return sanitised HTML
+				$html = $dom->saveHTML();
 			}
-
-			// Remove banned elements
-			foreach($remove_elements as $e)
-				$e->parentNode->removeChild($e);
-
-			// Return sanitised HTML
-			$html = $dom->saveHTML();
-
-			return is_string($html) ? $html : "";
-
 		} catch (Exception $e) {
-			return "";
+			$html = "";
 		}
+
+		// restore error mode
+		libxml_use_internal_errors($err_mode);
+
+		return is_string($html) ? $html : "";
 	}
 
 	/**

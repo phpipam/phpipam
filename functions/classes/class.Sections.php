@@ -252,11 +252,11 @@ class Sections extends Common_functions {
 	 * fetches section by specified method
 	 *
 	 * @access public
-	 * @param string $method (default: "id")
+	 * @param string $method
 	 * @param mixed $value
 	 * @return object|bool
 	 */
-	public function fetch_section ($method = "id", $value) {
+	public function fetch_section ($method, $value) {
     	if (is_null($method))   $method = "id";
         return $this->fetch_object ("sections", $method, $value);
 	}
