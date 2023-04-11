@@ -956,6 +956,7 @@ class Logging extends Common_functions {
 		$this->object_old['ip_addr'] = $this->Subnets->transform_address($this->object_old['ip_addr'], "dotted");
 		$this->object_new['ip_addr'] = $this->Subnets->transform_address($this->object_new['ip_addr'], "dotted");
 
+		$log = [];
 		// check each value
 		foreach($this->object_new as $k=>$v) {
 			//change
