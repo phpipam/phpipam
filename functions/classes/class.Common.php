@@ -2143,6 +2143,8 @@ class Common_functions  {
 
 	    // loop items
 	    foreach ($items as $i) {
+			$i = array_merge(['class'=>null, 'dataparams'=>null], $i);
+
 	        // visible
 	        if (isset($i['visible'])) {
 	            if ($i['visible']!="dropdown") {

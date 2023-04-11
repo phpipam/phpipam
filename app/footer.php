@@ -6,6 +6,12 @@
 	</td>
 
 	<?php
+
+	# custom footer message
+	if(isset($config['footer_message']) && strlen($config['footer_message'])>0) {
+		print '<td> '.$config['footer_message'].' </td>';
+	}
+
 	# exclude install
 	if($_GET['page']!="install") { ?>
 	<td>

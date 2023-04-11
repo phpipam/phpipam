@@ -103,7 +103,7 @@ else {
 
         		// field
         		$field = explode(":", $c);
-        	    $value = explode("=>", $field[1]);
+        	    $value = isset($field[1]) ? explode("=>", $field[1]) : [null];
 
         	    $field = trim(str_replace(array("[","]"), "", $field[0]));
         	    if(is_array(@$Log->changelog_keys[$type])) {

@@ -176,10 +176,10 @@ class OpenStreetMap extends Common_functions {
     /**
      * Output OpenStreetMap HTML/JS
      *
-     * @param   int  $height
+     * @param   null|int  $height
      * @return  void
      */
-    public function map($height) {
+    public function map($height=null) {
         if (sizeof($this->geodata) == 0) {
             $this->Result->show("info",_("No Locations with coordinates configured"), false);
             return;

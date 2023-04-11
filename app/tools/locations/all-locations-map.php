@@ -3,7 +3,7 @@
 <hr>
 <?php } ?>
 
-<?php if($admin && $User->settings->enableLocations=="1") { ?>
+<?php if(isset($admin) && ($admin && $User->settings->enableLocations=="1")) { ?>
 <?php
 if($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
 include('menu.php');
@@ -39,5 +39,5 @@ else {
     foreach ($all_locations as $l) {
         $OSM->add_location($l);
     }
-    $OSM->map($height);
+    $OSM->map();
 }

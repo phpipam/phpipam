@@ -60,6 +60,7 @@ print "	<th><span class='hidden-sm hidden-xs'>"._('Status').'</span></th>';
 print "	<th><span class='hidden-sm hidden-xs'>"._('Point A').'</span></th>';
 print "	<th><span class='hidden-sm hidden-xs'>"._('Point B').'</span></th>';
 print "	<th><span class='hidden-sm hidden-xs'>"._('Comment').'</span></th>';
+$colspanCustom = 0;
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_circuit_fields)) {
