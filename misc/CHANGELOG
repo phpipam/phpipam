@@ -76,6 +76,7 @@
     + Stored XSS in instructions widgets (#3025, #3360);
     + PHP session ID fixation (#3342);
     + XSS (reflected) in IP calculator (#3351);
+    + XSS in pass-change/result.php (#3373);
 
     Translations:
     ----------------------------
