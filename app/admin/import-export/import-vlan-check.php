@@ -68,7 +68,7 @@ foreach ($data as &$cdata) {
 
 	# check data format
 	if ($action != "error") {
-		if (!preg_match("/^[a-zA-Z0-9-_]+$/", $cdata['name'])) { $msg.="Invalid name format."; $action = "error"; }
+		if (!preg_match("//u", $cdata['name'])) { $msg.="Invalid name format."; $action = "error"; }
 		if (!preg_match("/^[0-9]+$/", $cdata['number'])) { $msg.="Invalid number format."; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 		if (!preg_match("/^[a-zA-Z0-9-_. ]+$/", $cdom)) { $msg.="Invalid domain format."; $action = "error"; }
@@ -118,6 +118,3 @@ foreach ($data as &$cdata) {
 		".$cfieldtds."
 		<td>"._($cdata['msg'])."</td></tr>";
 }
-
-?>
-
