@@ -147,7 +147,7 @@ if(sizeof($address)>1) {
     	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
     	print "<tr>";
     	print "	<th>"._('Device')."</th>";
-    	if(strlen($address['switch'])>0) {
+    	if(is_numeric($address['switch']) && $address['switch']>0) {
     		# get device
     		$device = (array) $Tools->fetch_object("devices", "id", $address['switch']);
     		$device = $Addresses->reformat_empty_array_fields($device, "");
@@ -383,18 +383,17 @@ if(sizeof($address)>1) {
     print "</td>";
 
 	# rack
-	if ($User->settings->enableRACK=="1") {
+	if ($User->settings->enableRACK=="1" && isset($device['rack'])) {
         // validate rack
         $rack = $Tools->fetch_object ("racks", "id", $device['rack']);
-        if ($rack!==false) {
-
-        print " <td style='width:200px;padding-right:20px;vertical-align:top !important;'>";
-            # title
-        	print "<h4>"._('Rack details')."</h4>";
-        	print "<hr>";
-            print "     <img src='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pull-right' style='width:200px;'>";
-        print " </td>";
-        }
+        if (is_object($rack)) {
+			print " <td style='width:200px;padding-right:20px;vertical-align:top !important;'>";
+				# title
+				print "<h4>"._('Rack details')."</h4>";
+				print "<hr>";
+				print "     <img src='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pull-right' style='width:200px;'>";
+			print " </td>";
+			}
     }
 
     print "</table>";

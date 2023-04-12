@@ -6,6 +6,10 @@
 
 # include required scripts
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # initialize required objects
@@ -101,7 +105,7 @@ foreach ($devices as $d) {
         if( (isset($_GET[$k])) && ($_GET[$k] == "on") ) {
 			switch ($k){
 				case "type":
-					$types = $Tools->fetch_object("devicetypes", "tid",$d[$k]);
+					$types = $Tools->fetch_object("deviceTypes", "tid",$d[$k]);
 					$d[$k]=$types->tname;
 					break;
 				case "sections":

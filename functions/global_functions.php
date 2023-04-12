@@ -8,6 +8,16 @@ if(!function_exists('gettext')) {
 	function _($text) 			{ return $text; }
 }
 
+
+/**
+ * Disable php errors on output scripts (json,xml,crt,sql...)
+ */
+function disable_php_errors() {
+	# Don't corrupt json,xml,sql,png... output with php errors!
+	ini_set('display_errors', 0);
+	ini_set('display_startup_errors', 0);
+}
+
 /**
  * Supported in PHP 5 >= 5.6.0
  * A timing safe equals comparison more info here: http://blog.ircmaxell.com/2014/11/its-all-about-time.html.
@@ -77,7 +87,7 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 		$link = BASE.implode('/', $parts);
 
 		# IP search fix
-		if (!is_null($parts[6]) || ($parts[0]=="tools" && $parts[1]=="search" && isset($parts[2])))
+		if ((isset($parts[6]) && !is_null($parts[6])) || (isset($parts[2]) && $parts[0]=="tools" && $parts[1]=="search"))
 			return $link;
 
 		return $link.'/';

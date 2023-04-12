@@ -252,11 +252,11 @@ class Sections extends Common_functions {
 	 * fetches section by specified method
 	 *
 	 * @access public
-	 * @param string $method (default: "id")
+	 * @param string $method
 	 * @param mixed $value
 	 * @return object|bool
 	 */
-	public function fetch_section ($method = "id", $value) {
+	public function fetch_section ($method, $value) {
     	if (is_null($method))   $method = "id";
         return $this->fetch_object ("sections", $method, $value);
 	}
@@ -542,7 +542,7 @@ class Sections extends Common_functions {
 		$custom = $Tools->fetch_custom_fields ("subnets");
 
 		# set hidden fields
-		$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+		$hidden_fields = json_decode($User->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
 		$hidden_fields = is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 
 		# check permission

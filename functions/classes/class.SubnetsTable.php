@@ -47,7 +47,7 @@ class SubnetsTable {
 
 		$this->Tools->get_Settings();
 
-		$hiddenCustomFields = json_decode($this->Tools->settings->hiddenCustomFields, true);
+		$hiddenCustomFields = json_decode($this->Tools->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
 		$this->hidden_fields = is_array($hiddenCustomFields['subnets']) ? $hiddenCustomFields['subnets'] : array();
 
 		# fetch all vlans and domains and reindex

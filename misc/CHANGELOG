@@ -9,10 +9,11 @@
     + Custom fields on IP request forms (#2956);
     + Added subnet free space map for each possible subnet mask;
     + Added Vaults (Certificate andf password storing);
+    + Added Tools->Duplicate subnets & IP page;
 
     Enhancements, changes:
     ----------------------------
-    + Improved php7.4 compatibility;
+    + php7.4 compatibility;
     + SameSite attribute enabled for site cookies;
     + SAML2
         + php-saml updated to 3.4.1 (#3055);
@@ -23,6 +24,7 @@
         + Support for signed assertions;
         + SAML usernames can be extracted from assertion attributes (#2948);
     + Selectable mask for number of subnets/hosts in subnet masks;
+    + Switch from Google Maps to OpenStreeMap and Nominatim;
 
     Bugfixes:
     ----------------------------
@@ -59,6 +61,7 @@
     + FPing discovery marks all addresses as alive (#2888);
     + Subnet usage calculation updated for nested subnets;
     + SNMP, number of discovered hosts exceed maximum warning (#3279);
+    + Exclude IPv6 from Ping and Discovery scans (#3354);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
         + Address IP field not displayed when using filter_by (#2934);
@@ -70,7 +73,9 @@
     + SQL injections processing `ftype` (#2751);
     + All circuits map, PHP object injection (#2937);
     + Upgraded jQuery to 3.5.1 (#3119);
-    + Stored XSS in instructions widgets (#3025);
+    + Stored XSS in instructions widgets (#3025, #3360);
+    + PHP session ID fixation (#3342);
+    + XSS (reflected) in IP calculator (#3351);
 
     Translations:
     ----------------------------
@@ -78,7 +83,7 @@
     + Update Simplified Chinese Translation (#2725);
     + Italian (it_IT) translation added (#2813);
     + Updated German translation (#2970, #3065);
-    + Updated Russian translation (#3028);
+    + Updated Russian translation (#3028, #3367);
 
 == 1.4
 

@@ -58,7 +58,7 @@ else {
                 else {
                     $location = $Tools->fetch_object ("locations", "id", $location_id);
                 }
-                $class = $_GET['sPage']==$location_id ? "active" : "";
+                $class = isset($_GET['sPage']) && $_GET['sPage']==$location_id ? "active" : "";
                 print " <li role='presentation' class='$class'><a href='".create_link("tools", "racks", "map", $location_id)."'>$location->name</a></li>";
 
             }
@@ -70,9 +70,10 @@ else {
 
         $m=1;
         // go through locations and print racks
+        $sPage = isset($_GET['sPage']) ? $_GET['sPage'] : null;
         foreach ($all_rack_locations as $location_id=>$all_racks) {
             // only if match
-            if($location_id==$_GET['sPage']) {
+            if($location_id==$sPage) {
                 // null
                 if($location_id=="0") {
                     $location = new StdClass ();

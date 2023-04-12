@@ -265,6 +265,9 @@ class User extends Common_functions {
     private function write_session_parameters () {
         // not for api
         if ($this->api !== true) {
+            // Avoid session ID fixation attacks
+            session_regenerate_id(true);
+
             $_SESSION['ipamusername'] = $this->user->username;
             $_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
             $_SESSION['lastactive']   = time();
@@ -355,11 +358,11 @@ class User extends Common_functions {
      * @return string|false
      */
     public function check_user_session ($redirect = true, $ignore_2fa = false) {
+        # set url
+        $url = $this->createURL();
+
         # not authenticated
         if($this->authenticated===false) {
-            # set url
-            $url = $this->createURL();
-
             # error print for AJAX
             if(@$_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest") {
                 # for AJAX always check origin
@@ -467,19 +470,29 @@ class User extends Common_functions {
      */
     private function set_redirect_cookie () {
         # save current redirect vaule
-        if( $_SERVER['SCRIPT_URL']=="/login/" ||
-            $_SERVER['SCRIPT_URL']=="logout" ||
-            $_SERVER['SCRIPT_URL']=="?page=login" ||
-            $_SERVER['SCRIPT_URL']=="?page=logout" ||
-            $_SERVER['SCRIPT_URL']=="index.php?page=login" ||
-            $_SERVER['SCRIPT_URL']=="index.php?page=logout" ||
-            $_SERVER['SCRIPT_URL']=="/" ||
-            $_SERVER['SCRIPT_URL']=="%2f")
-        {
-            return;
+        if (isset($_SERVER['SCRIPT_URL'])) {
+            if( $_SERVER['SCRIPT_URL']=="/login/" ||
+                $_SERVER['SCRIPT_URL']=="logout" ||
+                $_SERVER['SCRIPT_URL']=="?page=login" ||
+                $_SERVER['SCRIPT_URL']=="?page=logout" ||
+                $_SERVER['SCRIPT_URL']=="index.php?page=login" ||
+                $_SERVER['SCRIPT_URL']=="index.php?page=logout" ||
+                $_SERVER['SCRIPT_URL']=="/" ||
+                $_SERVER['SCRIPT_URL']=="%2f")
+            {
+                return;
+            }
         }
 
-        $uri = is_string($_SERVER['HTTP_X_FORWARDED_URI']) ? $_SERVER['HTTP_X_FORWARDED_URI'] : $_SERVER['REQUEST_URI'];
+        if (isset($_SERVER['HTTP_X_FORWARDED_URI'])) {
+            $uri = $_SERVER['HTTP_X_FORWARDED_URI'];
+        }
+        elseif (isset($_SERVER['REQUEST_URI'])) {
+            $uri = $_SERVER['REQUEST_URI'];
+        }
+        else {
+            return;
+        }
 
         setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 10, true);
     }

@@ -7,6 +7,9 @@
 /* functions */
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
@@ -37,9 +40,6 @@ if ($existing_vrfs!==false) {
         $ex_vrfs[$v->name] = $v->rd;
     }
 }
-
-// no errors
-error_reporting(E_ERROR);
 
 # set devices
 foreach ($_POST as $k=>$p) {

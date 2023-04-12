@@ -22,11 +22,11 @@
 
 /* functions */
 require_once( dirname(__FILE__) . '/../../functions/functions.php' );
-require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
 
-// Don't pollute the generated JSON output with php notice & deprecation errors (error: Invalid JSON response - JSON_ERROR_SYNTAX).
-// Report simple running errors only.
-error_reporting(E_ERROR | E_WARNING | E_PARSE);
+# Don't corrupt output with php errors!
+disable_php_errors();
+
+require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
 
 # initialize user object
 $Database 	= new Database_PDO;

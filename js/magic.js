@@ -291,6 +291,10 @@ $('table.nopagination')
 $('table.sortable')
                  .attr('data-sortable', 'true')
 
+ $('table.25tall')
+                 .attr('data-page-size', '25')
+                 .attr('data-page-list', '[25,50,100,250,500,All]')
+
 // tooltips, popovers
 $('table.sorted').on('all.bs.table', function () {
     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }

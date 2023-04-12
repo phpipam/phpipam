@@ -14,7 +14,7 @@ $subnets = $Subnets->fetch_multicast_subnets();
 $custom_fields = $Tools->fetch_custom_fields('subnets');
 
 # set hidden fields
-$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
 $hidden_cfields = is_array($hidden_cfields['subnets']) ? $hidden_cfields['subnets'] : array();
 
 # set selected address fields array

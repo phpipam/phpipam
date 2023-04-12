@@ -28,7 +28,7 @@ else {
     print "<ul class='nav nav-tabs' style='margin-bottom:20px;'>";
     $class = !isset($_GET['subnetId']) ? "active" : "";
     print " <li role='presentation' class='$class'><a href='".create_link("tools", "racks")."'>"._('Rack list')."</a></li>";
-    $class = $_GET['subnetId']=="map" ? "active" : "";
+    $class = isset($_GET['subnetId']) && $_GET['subnetId']=="map" ? "active" : "";
     print " <li role='presentation' class='$class'><a href='".create_link("tools", "racks", "map")."'>"._("Rack scheme")."</a></li>";
     print "</ul>";
 
