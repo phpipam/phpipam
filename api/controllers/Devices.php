@@ -8,48 +8,6 @@
 class Devices_controller extends Common_api_functions {
 
     /**
-     * _params provided.
-     *
-     * @var mixed
-     */
-    public $_params;
-
-    /**
-     * Database object.
-     *
-     * @var mixed
-     */
-    protected $Database;
-
-    /**
-     * Response.
-     *
-     * @var mixed
-     */
-    protected $Response;
-
-    /**
-     * Master Tools object.
-     *
-     * @var mixed
-     */
-    protected $Tools;
-
-    /**
-     * Main Admin class.
-     *
-     * @var mixed
-     */
-    protected $Admin;
-
-    /**
-     * Main Subnets class.
-     *
-     * @var mixed
-     */
-    protected $Subnets;
-
-    /**
      * Default fields to search.
      *
      * @var mixed
@@ -209,17 +167,6 @@ class Devices_controller extends Common_api_functions {
                 else                        { return array('code'=>200, 'data'=>$this->prepare_result($result, 'devices', true, false)); }
             }
         }
-    }
-
-
-
-
-
-    /**
-     * HEAD, no response.
-     */
-    public function HEAD () {
-        return $this->GET ();
     }
 
 
