@@ -4,8 +4,6 @@
 # Version 1.2 queries
 #
 $upgrade_queries["1.2.0"]   = [];
-$upgrade_queries["1.2.0"][] = "-- Version update";
-$upgrade_queries["1.2.0"][] = "UPDATE `settings` set `version` = '1.2';";
 $upgrade_queries["1.2.0"][] = "-- add subnetView Setting";
 $upgrade_queries["1.2.0"][] = "ALTER TABLE `settings` ADD `subnetView` TINYINT  NOT NULL  DEFAULT '0'";
 $upgrade_queries["1.2.0"][] = "-- add 'user' to app_security set";
@@ -55,14 +53,13 @@ $upgrade_queries["1.2.0"][] = "-- change mask size";
 $upgrade_queries["1.2.0"][] = "ALTER TABLE `subnets` CHANGE `mask` `mask` VARCHAR(3)  CHARACTER SET utf8  NULL  DEFAULT NULL;";
 $upgrade_queries["1.2.0"][] = "-- add section to vrf";
 $upgrade_queries["1.2.0"][] = "ALTER TABLE `vrf` ADD `sections` VARCHAR(128)  NULL  DEFAULT NULL;";
-
+$upgrade_queries["1.2.0"][] = "-- Version update";
+$upgrade_queries["1.2.0"][] = "UPDATE `settings` set `version` = '1.2';";
 
 #
 # Version 1.21 queries
 #
 $upgrade_queries["1.21.0"]   = [];
-$upgrade_queries["1.21.0"][] = "-- Version update";
-$upgrade_queries["1.21.0"][] = "UPDATE `settings` set `version` = '1.21';";
 // New modules
 $upgrade_queries["1.21.0"][] = "-- Add new modules switch";
 $upgrade_queries["1.21.0"][] = "ALTER TABLE `settings` ADD `enableMulticast` TINYINT(1)  NULL  DEFAULT '0';";
@@ -116,14 +113,13 @@ $upgrade_queries["1.21.0"][] = "ALTER TABLE `subnets` ADD `threshold` int(3)  NU
 $upgrade_queries["1.21.0"][] = "INSERT INTO `widgets` ( `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('Threshold', 'Shows threshold usage for top 5 subnets', 'threshold', NULL, 'yes', '6', 'no', 'yes');";
 $upgrade_queries["1.21.0"][] = "-- Inactive hosts widget";
 $upgrade_queries["1.21.0"][] = "INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES (NULL, 'Inactive hosts', 'Shows list of inactive hosts for defined period', 'inactive-hosts', 86400, 'yes', '6', 'yes', 'yes');";
-
+$upgrade_queries["1.21.0"][] = "-- Version update";
+$upgrade_queries["1.21.0"][] = "UPDATE `settings` set `version` = '1.21';";
 
 #
 # Version 1.22 queries
 #
 $upgrade_queries["1.22.0"]   = [];
-$upgrade_queries["1.22.0"][] = "-- Version update";
-$upgrade_queries["1.22.0"][] = "UPDATE `settings` set `version` = '1.22';";
 // drop unused snmp table
 $upgrade_queries["1.22.0"][] = "-- drop unused snmp table";
 $upgrade_queries["1.22.0"][] = "DROP TABLE IF EXISTS `snmp`;";
@@ -140,14 +136,13 @@ $upgrade_queries["1.22.0"][] = "ALTER TABLE `settings` DROP `permitUserVlanCreat
 // menu type
 $upgrade_queries["1.22.0"][] = "-- add menu type";
 $upgrade_queries["1.22.0"][] = "ALTER TABLE `users` ADD `menuType` SET('Static','Dynamic')  NULL  DEFAULT 'Dynamic';";
-
+$upgrade_queries["1.22.0"][] = "-- Version update";
+$upgrade_queries["1.22.0"][] = "UPDATE `settings` set `version` = '1.22';";
 
 #
 # Version 1.23 queries
 #
 $upgrade_queries["1.23.0"]   = [];
-$upgrade_queries["1.23.0"][] = "-- Version update";
-$upgrade_queries["1.23.0"][] = "UPDATE `settings` set `version` = '1.23';";
 // change default datetime
 $upgrade_queries["1.23.0"][] = "-- Change default datetime";
 $upgrade_queries["1.23.0"][] = "ALTER TABLE `ipaddresses` CHANGE `lastSeen` `lastSeen` DATETIME  NULL  DEFAULT '1970-01-01 00:00:01';";
@@ -186,14 +181,13 @@ CREATE TABLE `locations` (
 $upgrade_queries["1.23.0"][] = "-- NAT changes";
 $upgrade_queries["1.23.0"][] = "ALTER TABLE `nat` CHANGE `port` `src_port` INT(5)  NULL  DEFAULT NULL;";
 $upgrade_queries["1.23.0"][] = "ALTER TABLE `nat` ADD `dst_port` INT(5)  NULL  DEFAULT NULL;)";
-
+$upgrade_queries["1.23.0"][] = "-- Version update";
+$upgrade_queries["1.23.0"][] = "UPDATE `settings` set `version` = '1.23';";
 
 #
 # Version 1.24 queries
 #
 $upgrade_queries["1.24.0"]   = [];
-$upgrade_queries["1.24.0"][] = "-- Version update";
-$upgrade_queries["1.24.0"][] = "UPDATE `settings` set `version` = '1.24';";
 // PSTN
 $upgrade_queries["1.24.0"][] = "-- PSTN module switch and tables";
 $upgrade_queries["1.24.0"][] = "ALTER TABLE `settings` ADD `enablePSTN` TINYINT(1)  NULL  DEFAULT '1';";
@@ -226,14 +220,13 @@ CREATE TABLE `pstnNumbers` (
 // permissions
 $upgrade_queries["1.24.0"][] = "-- User permissions for pstn";
 $upgrade_queries["1.24.0"][] = "ALTER TABLE `users` ADD `pstn` INT(1)  NULL  DEFAULT '1';";
-
+$upgrade_queries["1.24.0"][] = "-- Version update";
+$upgrade_queries["1.24.0"][] = "UPDATE `settings` set `version` = '1.24';";
 
 #
 # Version 1.25 queries
 #
 $upgrade_queries["1.25.0"]   = [];
-$upgrade_queries["1.25.0"][] = "-- Version update";
-$upgrade_queries["1.25.0"][] = "UPDATE `settings` set `version` = '1.25';";
 // update languges
 $upgrade_queries["1.25.0"][] = "-- Update languages";
 $upgrade_queries["1.25.0"][] = "UPDATE `lang` SET `l_code` = 'en_GB.UTF8' WHERE `l_code` = 'en';";
@@ -253,14 +246,13 @@ $upgrade_queries["1.25.0"][] = "INSERT INTO `widgets` (`wid`, `wtitle`, `wdescri
 // remove print limit
 $upgrade_queries["1.25.0"][] = "-- Remove unneeded printlimit";
 $upgrade_queries["1.25.0"][] = "ALTER TABLE `users` DROP `printLimit`;";
-
+$upgrade_queries["1.25.0"][] = "-- Version update";
+$upgrade_queries["1.25.0"][] = "UPDATE `settings` set `version` = '1.25';";
 
 #
 # Version 1.26 queries
 #
 $upgrade_queries["1.26.0"]   = [];
-$upgrade_queries["1.26.0"][] = "-- Version update";
-$upgrade_queries["1.26.0"][] = "UPDATE `settings` set `version` = '1.26';";
 // add http saml2 method
 $upgrade_queries["1.26.0"][] = "-- http saml2 method";
 $upgrade_queries["1.26.0"][] = "ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetIQ','Radius','http','SAML2')  CHARACTER SET utf8  NOT NULL  DEFAULT 'local';";
@@ -268,14 +260,13 @@ $upgrade_queries["1.26.0"][] = "ALTER TABLE `usersAuthMethod` CHANGE `type` `typ
 $upgrade_queries["1.26.0"][] = "-- Add transaction locking";
 $upgrade_queries["1.26.0"][] = "ALTER TABLE `api` ADD `app_lock` INT(1)  NOT NULL  DEFAULT '0';";
 $upgrade_queries["1.26.0"][] = "ALTER TABLE `api` ADD `app_lock_wait` INT(4)  NOT NULL  DEFAULT '30';";
-
+$upgrade_queries["1.26.0"][] = "-- Version update";
+$upgrade_queries["1.26.0"][] = "UPDATE `settings` set `version` = '1.26';";
 
 #
 # Version 1.27 queries
 #
 $upgrade_queries["1.27.0"]   = [];
-$upgrade_queries["1.27.0"][] = "-- Version update";
-$upgrade_queries["1.27.0"][] = "UPDATE `settings` set `version` = '1.27';";
 // add show supernet only
 $upgrade_queries["1.27.0"][] = "-- Add show supernet only";
 $upgrade_queries["1.27.0"][] = "ALTER TABLE `sections` ADD `showSupernetOnly` INT(1)  NULL  DEFAULT '0';";
@@ -283,14 +274,13 @@ $upgrade_queries["1.27.0"][] = "ALTER TABLE `sections` ADD `showSupernetOnly` IN
 $upgrade_queries["1.27.0"][] = "-- Scan and discovery date foir subnets";
 $upgrade_queries["1.27.0"][] = "ALTER TABLE `subnets` ADD `lastScan` TIMESTAMP  NULL;";
 $upgrade_queries["1.27.0"][] = "ALTER TABLE `subnets` ADD `lastDiscovery` TIMESTAMP  NULL;";
-
+$upgrade_queries["1.27.0"][] = "-- Version update";
+$upgrade_queries["1.27.0"][] = "UPDATE `settings` set `version` = '1.27';";
 
 #
 # Version 1.28 queries
 #
 $upgrade_queries["1.28.0"]   = [];
-$upgrade_queries["1.28.0"][] = "-- Version update";
-$upgrade_queries["1.28.0"][] = "UPDATE `settings` set `version` = '1.28';";
 // Extend username to 255 chars for LDAP logins
 $upgrade_queries["1.28.0"][] = "-- Extend username to 255 chars for LDAP logins";
 $upgrade_queries["1.28.0"][] = "ALTER TABLE `users` CHANGE `username` `username` VARCHAR(255)  CHARACTER SET utf8  NOT NULL  DEFAULT '';";
@@ -307,14 +297,13 @@ $upgrade_queries["1.28.0"][] = "UPDATE `ipTags` set `updateTag`=1 where `id`=1;"
 $upgrade_queries["1.28.0"][] = "UPDATE `ipTags` set `updateTag`=1 where `id`=2;";
 $upgrade_queries["1.28.0"][] = "UPDATE `ipTags` set `updateTag`=1 where `id`=3;";
 $upgrade_queries["1.28.0"][] = "UPDATE `ipTags` set `updateTag`=1 where `id`=4;";
-
+$upgrade_queries["1.28.0"][] = "-- Version update";
+$upgrade_queries["1.28.0"][] = "UPDATE `settings` set `version` = '1.28';";
 
 #
 # Version 1.29 queries
 #
 $upgrade_queries["1.29.0"]   = [];
-$upgrade_queries["1.29.0"][] = "-- Version update";
-$upgrade_queries["1.29.0"][] = "UPDATE `settings` set `version` = '1.29';";
 // Add maintaneanceMode identifier
 $upgrade_queries["1.29.0"][] = "-- Add maintaneanceMode";
 $upgrade_queries["1.29.0"][] = "ALTER TABLE `settings` ADD `maintaneanceMode` TINYINT(1)  NULL  DEFAULT '0';";
@@ -322,3 +311,5 @@ $upgrade_queries["1.29.0"][] = "ALTER TABLE `settings` ADD `maintaneanceMode` TI
 $upgrade_queries["1.29.0"][] = "-- Extend pingStatus intervals";
 $upgrade_queries["1.29.0"][] = "ALTER TABLE `settings` CHANGE `pingStatus` `pingStatus` VARCHAR(32)  CHARACTER SET utf8  NOT NULL  DEFAULT '1800;3600';";
 $upgrade_queries["1.29.0"][] = "ALTER TABLE `settings` CHANGE `hiddenCustomFields` `hiddenCustomFields` TEXT  CHARACTER SET utf8  NULL;";
+$upgrade_queries["1.29.0"][] = "-- Version update";
+$upgrade_queries["1.29.0"][] = "UPDATE `settings` set `version` = '1.29';";

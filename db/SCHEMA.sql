@@ -93,8 +93,8 @@ CREATE TABLE `logs` (
   `date` varchar(32) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `ipaddr` varchar(64) DEFAULT NULL,
-  `command` varchar(128) DEFAULT '0',
-  `details` varchar(1024) DEFAULT NULL,
+  `command` text DEFAULT NULL,
+  `details` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -395,7 +395,7 @@ CREATE TABLE `users` (
   `theme` VARCHAR(32)  NULL  DEFAULT '',
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
-  `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{"vlan":"1","l2dom":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1","locations":"1","devices":"1"}',
+  `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{"vlan":"1","l2dom":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1","locations":"1","devices":"1","routing":"1","vaults":"1"}',
   `compress_actions` TINYINT(1)  NULL  DEFAULT '1',
   PRIMARY KEY (`username`),
   UNIQUE KEY `id_2` (`id`)
@@ -542,10 +542,10 @@ CREATE TABLE `changelog` (
   `ctype` set('ip_addr','subnet','section') NOT NULL DEFAULT '',
   `coid` int(11) unsigned NOT NULL,
   `cuser` int(11) unsigned NOT NULL,
-  `caction` set('add','edit','delete','truncate','resize','perm_change') NOT NULL DEFAULT 'edit',
-  `cresult` set('error','success') NOT NULL DEFAULT '',
+  `caction` ENUM('add','edit','delete','truncate','resize','perm_change') NOT NULL DEFAULT 'edit',
+  `cresult` ENUM('error','success') NOT NULL DEFAULT 'success',
   `cdate` datetime NOT NULL,
-  `cdiff` varchar(2048) DEFAULT NULL,
+  `cdiff` text DEFAULT NULL,
   PRIMARY KEY (`cid`),
   KEY `coid` (`coid`),
   KEY `ctype` (`ctype`)
@@ -715,6 +715,7 @@ DROP TABLE IF EXISTS `firewallZoneSubnet`;
 CREATE TABLE `firewallZoneSubnet` (
   `zoneId` INT NOT NULL,
   `subnetId` INT(11) NOT NULL,
+  PRIMARY KEY (`zoneId`,`subnetId`),
   INDEX `fk_zoneId_idx` (`zoneId` ASC),
   INDEX `fk_subnetId_idx` (`subnetId` ASC),
   CONSTRAINT `fk_zoneId`
@@ -919,7 +920,8 @@ DROP TABLE IF EXISTS `circuitsLogicalMapping`;
 CREATE TABLE `circuitsLogicalMapping` (
   `logicalCircuit_id` int(11) unsigned NOT NULL,
   `circuit_id` int(11) unsigned NOT NULL,
-  `order` int(10) unsigned DEFAULT NULL
+  `order` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`logicalCircuit_id`, `circuit_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1035,7 +1037,7 @@ CREATE TABLE `nominatim` (
   `url` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+/* insert default values */
 INSERT INTO `nominatim` (`id`, `url`) VALUES (1, 'https://nominatim.openstreetmap.org/search');
 
 
@@ -1056,4 +1058,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.5";
-UPDATE `settings` SET `dbversion` = 37;
+UPDATE `settings` SET `dbversion` = 38;
