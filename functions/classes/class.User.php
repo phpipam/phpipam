@@ -494,7 +494,7 @@ class User extends Common_functions {
             return;
         }
 
-        setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 10, true);
+        setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 120, true);
     }
 
     /**
