@@ -1,4 +1,4 @@
-== 1.5
+== 1.5.0
 
     New features:
     ------------
@@ -90,7 +90,7 @@
     + Updated German translation (#2970, #3065);
     + Updated Russian translation (#3028, #3367);
 
-== 1.4
+== 1.4.0
 
     New features:
     ------------
@@ -299,7 +299,7 @@
     ----------------------------
     + Fixed XSS issues (#1403, #1521, #1500);
 
-== 1.3
+== 1.3.0
 
     New features:
     ------------
