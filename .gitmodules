@@ -10,8 +10,8 @@
         url = https://github.com/PHPMailer/PHPMailer.git
         ignore = all
 [submodule "app/login/captcha"]
-        path = app/login/captcha
-        url = https://github.com/dapphp/securimage.git
+	path = app/login/captcha
+	url = https://github.com/dapphp/securimage.git
         ignore = all
 [submodule "css/assets/bootstrap-select"]
         path = css/assets/bootstrap-select
