@@ -864,7 +864,7 @@ table#subnetsMenu td#subnetsLeft .menu-tools {
 	margin-top: 6px;
 
 	margin-left: -1px;
-	width: 35px;
+	min-width: 35px;
 	text-align: center;
 
 	-webkit-border-radius: 3px;
