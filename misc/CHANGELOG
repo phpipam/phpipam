@@ -62,6 +62,7 @@
     + Subnet usage calculation updated for nested subnets;
     + SNMP, number of discovered hosts exceed maximum warning (#3279);
     + Exclude IPv6 from Ping and Discovery scans (#3354);
+    + Fix for SAML/2FA login redirection after timeout (#3492);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
         + Address IP field not displayed when using filter_by (#2934);
