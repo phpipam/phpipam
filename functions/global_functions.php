@@ -112,7 +112,23 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
  * @return string
  */
 function escape_input($data) {
-	return (!isset($data) || strlen($data)==0) ? '' : htmlentities($data, ENT_QUOTES);
+	if (!isset($data) || strlen($data)==0)
+		return '';
+	$safe_data = htmlentities($data, ENT_QUOTES);
+	return is_string($safe_data) ? $safe_data : '';
+}
+
+/**
+ * Sanitise URL inputs/outputs
+ *
+ * @param   mixed  $url
+ * @return  string
+ */
+function safeurlencode($url) {
+	if (!isset($url) || strlen($url)==0)
+		return '';
+	$safe_url = rawurlencode(filter_var(trim($url), FILTER_SANITIZE_URL));
+	return is_string($safe_url) ? $safe_url : '';
 }
 
 /**
@@ -223,9 +239,10 @@ function setcookie_samesite($name, $value, $lifetime, $httponly=false) {
 	date_default_timezone_set($tz);
 
 	$samesite = Config::ValueOf("cookie_samesite", "Lax");
-	if (!in_array($samesite, ["None", "Lax", "Secure"])) $samesite="Lax";
+	if (!in_array($samesite, ["None", "Lax", "Strict"])) $samesite="Lax";
 
-	$httponly = ($httponly===true) ? ' HttpOnly;' : '';
+	$secure = ($samesite=="None") ? " Secure;" : '';
+	$httponly = $httponly ? ' HttpOnly;' : '';
 
-	header("Set-Cookie: $name=$value; expires=$expire_date; Max-Age=$lifetime; path=/; SameSite=$samesite;".$httponly);
+	header("Set-Cookie: $name=$value; expires=$expire_date; Max-Age=$lifetime; path=/; SameSite=$samesite;".$secure.$httponly);
 }

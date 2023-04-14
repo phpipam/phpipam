@@ -72,6 +72,6 @@ print "<tr><td>"._("Routing")."</td><td>".$User->print_permission_badge($user['p
 
 // vaults
 if ($User->settings->enableVaults==1)
-print "<tr><td>"._("Routing")."</td><td>".$User->print_permission_badge($user['perm_vaults'])."</td></tr>";
+print "<tr><td>"._("Vaults")."</td><td>".$User->print_permission_badge($user['perm_vaults'])."</td></tr>";
 
 print "</table>";

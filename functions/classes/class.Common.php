@@ -423,6 +423,10 @@ class Common_functions  {
 		if (!is_object($settings))
 			return false;
 
+		// default dbversion for older releases
+		if (!property_exists($settings, 'dbversion'))
+			$settings->dbversion = 0;
+
 		#save
 		$this->settings = $settings;
 

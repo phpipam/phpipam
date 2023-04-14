@@ -95,6 +95,14 @@ class Common_api_functions {
 	protected $keys;
 
 	/**
+	 * Database object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
 	 * Master Tools class
 	 *
 	 * @var mixed
@@ -119,12 +127,36 @@ class Common_api_functions {
 	protected $Subnets;
 
 	/**
+	 * Master Addresses object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Addresses;
+
+	/**
+	 * Master Sections object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Sections;
+
+	/**
 	 * Master user class
 	 *
 	 * @var mixed
 	 * @access protected
 	 */
 	protected $User;
+
+	/**
+	 * Master Admin object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Admin;
 
 	/**
 	 * App object - will be passed by index.php
@@ -135,6 +167,48 @@ class Common_api_functions {
 	public $app = false;
 
 
+
+
+	/**
+	 * Provide default REQUEST_METHODs
+	 *
+	 */
+
+	private function NOT_IMPLEMENTED() {
+		return array("code"=>501, "message"=>"Method not implemented");
+	}
+
+	public function OPTIONS () {
+		return $this->NOT_IMPLEMENTED ();
+	}
+
+	public function GET () {
+		return $this->NOT_IMPLEMENTED ();
+	}
+
+	public function POST () {
+		return $this->NOT_IMPLEMENTED ();
+	}
+
+	public function PATCH () {
+		return $this->NOT_IMPLEMENTED ();
+	}
+
+	public function DELETE () {
+		return $this->NOT_IMPLEMENTED ();
+	}
+
+	/* Alias HEAD to GET */
+
+	public function HEAD () {
+		return $this->GET ();
+	}
+
+	/* Alias PUT to PATCH */
+
+	public function PUT () {
+		return $this->PATCH ();
+	}
 
 
 

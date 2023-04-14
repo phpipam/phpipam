@@ -7,79 +7,6 @@
  */
 class Addresses_controller extends Common_api_functions  {
 
-
-	/**
-	 * Input parameters
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $_params;
-
-	/**
-	 * Custom address fields
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $custom_fields;
-
-	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Sections object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Sections;
-
-	/**
-	 * Response handler
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Response;
-
-	/**
-	 * Tools object from master Tools class
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Tools;
-
-	/**
-	 * Subnets object from master Subnets class
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	public $Subnets;
-
-	/**
-	 * Addresses object from master Addresses class
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Addresses;
-
-	/**
-	 * Admin class form master Admin class
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Admin;
-
 	/**
 	 * Saves details of currnt subnet
 	 *
@@ -347,20 +274,6 @@ class Addresses_controller extends Common_api_functions  {
             else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
 		// false
 		} else											{  $this->Response->throw_exception(400, "Invalid Id"); }
-	}
-
-
-
-
-
-	/**
-	 * HEAD, no response
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function HEAD () {
-		return $this->GET ();
 	}
 
 

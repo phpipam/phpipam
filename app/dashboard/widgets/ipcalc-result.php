@@ -22,7 +22,7 @@ $Tools	    = new Tools ($Database);
 $User->check_user_session();
 
 # get requested IP addresses in CIDR format
-$cidr = $_POST['cidr'];
+$cidr = trim($_POST['cidr']);
 
 # verify input CIDR and die if errors
 $errors = $Subnets->verify_cidr_address ($cidr, false);

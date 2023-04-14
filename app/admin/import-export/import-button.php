@@ -162,7 +162,7 @@ $(function(){
 				//get error message
 				var respErr = resp['error'];
 				$('#uploadResult').addClass('alert alert-danger');		//add error class
-				$('#uploadResult').append('<?php print "<br><strong>"._("Error").": "+respErr+"</strong>"; ?>');
+				$('#uploadResult').append("<br><strong><?php print _("Error"); ?>: "+respErr+"</strong>");
 				$('#uploadResult').find('span').remove(); // remove cancel upload button
 				// disable preview button
 				$('#dataImportPreview').attr('disabled', 'disabled');
