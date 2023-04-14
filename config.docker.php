@@ -67,7 +67,6 @@ $proxy_use_auth = file_env('PROXY_USE_AUTH', $proxy_use_auth);
 $debugging = filter_var(file_env('IPAM_DEBUG', $debugging), FILTER_VALIDATE_BOOLEAN);
 
 /**
-
  * Cookie SameSite settings ("None", "Lax"=Default, "Strict")
  * - "Strict" increases security
  * - "Lax" required for SAML2, some SAML topologies may require "None".
