@@ -93,7 +93,7 @@ class Devices_controller extends Common_api_functions {
             // fetch all devices
             $result = $this->Tools->fetch_all_objects('devices', 'id');
             // result
-            if(!$result)     { return $this->Response->throw_exception(200, "No devices configured"); }
+            if(!$result)     { return $this->Response->throw_exception(404, "No devices configured"); }
             else             { return array('code'=>200, 'data'=>$this->prepare_result($result, 'devices', true, false)); }
         }
         // parameters are set
@@ -128,7 +128,7 @@ class Devices_controller extends Common_api_functions {
                     $result = $this->Database->getObjectsQuery($search_query, $query_params);
 
                     // result
-                    if(!$result)     { return $this->Response->throw_exception(200, "No devices found"); }
+                    if(!$result)     { return $this->Response->throw_exception(404, "No devices found"); }
                     else             { return array('code'=>200, 'data'=>$this->prepare_result($result, 'devices', true, false)); }
                 }
                 else {
@@ -163,7 +163,7 @@ class Devices_controller extends Common_api_functions {
                 }
 
                 // all ok, prepare result
-                if($result === false)       { return $this->Response->throw_exception(200, "No ".$this->_params->id2." found"); }
+                if($result === false)       { return $this->Response->throw_exception(404, "No ".$this->_params->id2." found"); }
                 else                        { return array('code'=>200, 'data'=>$this->prepare_result($result, 'devices', true, false)); }
             }
         }
