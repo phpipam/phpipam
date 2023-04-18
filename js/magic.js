@@ -520,7 +520,7 @@ function update_subnet_structure_cookie (action, cid) {
     // read old cookie
     var s_cookie = readCookie("sstr");
     // defualt - if empty
-     if(typeof s_cookie === 'undefined' || s_cookie==null || s_cookie.length===0)    s_cookie = "|";
+    if(typeof s_cookie === 'undefined' || s_cookie==null || s_cookie.length===0)    s_cookie = "|";
     // add or replace
     if (action == "add") {
         // split to array and check if it already exists
@@ -528,10 +528,10 @@ function update_subnet_structure_cookie (action, cid) {
         var exists = false;
         for(var i=0;i < arr.length;i++) {
             if(arr[i]==cid) {
-                 exists = true;
-        }    }
+                exists = true;
+        }   }
         // new
-        if(exists==false)    s_cookie += cid+"|";
+        if(exists==false)   s_cookie += cid+"|";
     }
     else if (action == "remove")    {
         s_cookie = s_cookie.replace("|"+cid+"|", "|");
