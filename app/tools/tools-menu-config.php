@@ -16,12 +16,12 @@ $tools_menu_icons[_('Devices')]   = "fa-desktop";
 
 # inclusion check
 $tools_menu_items = [
-					"changelog" => _("changelog"),
-					"dhcp" => _("dhcp"),
-					"devices" => _("devices"),
-					"favourites" => _("favourites"),
-					"firewall-zones" => _("firewall-zones"),
-					"instructions" => _("instructions"),
+	"changelog" => _("changelog"),
+	"dhcp" => _("dhcp"),
+	"devices" => _("devices"),
+	"favourites" => _("favourites"),
+	"firewall-zones" => _("firewall-zones"),
+	"instructions" => _("instructions"),
 					"ip-calculator" => _("ip-calculator"),
 					"logs" => _("logs"),
 					"multicast-networks" => _("multicast-networks"),
