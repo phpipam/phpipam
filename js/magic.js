@@ -651,7 +651,7 @@ $(document).on("click", ".ping_ipaddress", function() {
         $('#popupOverlay2 div.popup_w400').html(data);
         showPopup('popup_w400', false, true);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 
 
@@ -717,7 +717,7 @@ $('a.scan_subnet').click(function() {
         $('#popupOverlay div.popup_wmasks').html(data);
         showPopup('popup_wmasks');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 //show telnet port
 $(document).on('change', "table.table-scan select#type", function() {
