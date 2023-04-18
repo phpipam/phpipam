@@ -3,8 +3,15 @@
  *
  * Javascript / jQuery functions
  *
- *
  */
+
+/*jslint
+    browser,for,long,single,this,unordered
+*/
+/*global
+   $
+*/
+
 $(document).ready(function () {
 
 /* @general functions */
@@ -126,7 +133,7 @@ function showPopup(pClass, data, secondary) {
     //disable page scrolling on bottom
     $('body').addClass('stop-scrolling');
     // resize
-    resize_pContent ()
+    resize_pContent ();
 }
 function hidePopup(pClass, secondary) {
     // secondary - load secondary popupoverlay
@@ -195,10 +202,10 @@ function randomPass() {
 }
 
 // on load
-resize_pContent ()
+resize_pContent ();
 // on resize
 $(window).resize(function () {
-    resize_pContent ()
+    resize_pContent ();
 });
 
 function resize_pContent () {
@@ -215,28 +222,32 @@ $(document).on("click", ".selfDestruct", function() {
 
 
 /* @cookies */
-function createCookie(name,value,days) {
+function createCookie(name, value, days) {
     var date;
     var expires;
-
-    if (typeof days !== 'undefined') {
+    if (days === undefined) {
+        expires = "";
+    } else {
         date = new Date();
-        date.setTime(date.getTime()+(days*24*60*60*1000));
-        expires = "; expires="+date.toGMTString();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toGMTString();
     }
-    else {
-        var expires = "";
-    }
-
-    document.cookie = name+"="+value+expires+"; path=/";
+    value = encodeURIComponent(value);
+    document.cookie = name + "=" + value + expires + "; path=/; SameSite=Lax";
 }
 function readCookie(name) {
     var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
+    var ca = document.cookie.split(";");
+    var i;
+    var c;
+    for (i = 0; i < ca.length; i += 1) {
+        c = ca[i];
+        while (c.charAt(0) === " ") {
+            c = c.substring(1, c.length);
+        }
+        if (c.indexOf(nameEQ) === 0) {
+            return decodeURIComponent(c.substring(nameEQ.length, c.length));
+        }
     }
     return null;
 }
@@ -260,7 +271,7 @@ $('table.sorted-new')
                  .attr('data-icons-prefix','fa')
                  .attr('data-icons','icons')
                  .attr('data-cookie','true')
-                 .attr('data-sortable', 'false')
+                 .attr('data-sortable', 'false');
 
 $('table.sorted')
                  .attr("data-toggle", "table")
@@ -279,27 +290,27 @@ $('table.sorted')
                  .attr('onlyInfoPagination', 'true')
                  .attr('smartDisplay', true)
                  .attr('showPaginationSwitch', true)
-                 .attr('minimumCountColumns', true)
+                 .attr('minimumCountColumns', true);
 
 $('table.nosearch')
                  .attr('data-search','false')
-                 .attr('data-show-columns','false')
+                 .attr('data-show-columns','false');
 
 $('table.nopagination')
-                 .attr('data-pagination', 'false')
+                 .attr('data-pagination', 'false');
 
 $('table.sortable')
-                 .attr('data-sortable', 'true')
+                 .attr('data-sortable', 'true');
 
  $('table.25tall')
                  .attr('data-page-size', '25')
-                 .attr('data-page-list', '[25,50,100,250,500,All]')
+                 .attr('data-page-list', '[25,50,100,250,500,All]');
 
 // tooltips, popovers
 $('table.sorted').on('all.bs.table', function () {
     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
     $('.show_popover').popover();
-})
+});
 
 
 // icons - bootstrap table
@@ -402,19 +413,19 @@ $(document).on("click", ".submit_popup", function () {
         }
         // get form parameters
         else if(this.name == "data-form") {
-            post_data = $('form#'+this.value).serialize ()
+            post_data = $('form#'+this.value).serialize ();
         }
     });
     // checks
     if(target_script == "") {
-        showError("Error: Missing target_script")
+        showError("Error: Missing target_script");
     }
     else if (result_div == "") {
-        showError("Error: Missing result div parameter")
+        showError("Error: Missing result div parameter");
     }
     // load popup
     else {
-        submit_popup_data (result_div, target_script, post_data, reload)
+        submit_popup_data (result_div, target_script, post_data, reload);
     }
     // no reload
     return false;
@@ -440,7 +451,7 @@ if($('#dashboard').length>0) {
                 $("#w-"+w+' .hContent').html(data);
             }).fail(function(xhr, textStatus, errorThrown) {
                 $("#w-"+w+' .hContent').html('<blockquote style="margin-top:20px;margin-left:20px;">File not found!</blockquote>');
-            })
+            });
         });
     });
 }
@@ -519,19 +530,20 @@ $('ul#subnets').on("click", ".fa-folder-open", function() {
 function update_subnet_structure_cookie (action, cid) {
     // read old cookie
     var s_cookie = readCookie("sstr");
+    var i;
     // defualt - if empty
-    if(typeof s_cookie === 'undefined' || s_cookie==null || s_cookie.length===0)    s_cookie = "|";
+    if(typeof s_cookie === 'undefined' || s_cookie==null || s_cookie.length===0) { s_cookie = "|"; }
     // add or replace
     if (action == "add") {
         // split to array and check if it already exists
         var arr = s_cookie.split('|');
         var exists = false;
-        for(var i=0;i < arr.length;i++) {
+        for(i=0;i < arr.length;i++) {
             if(arr[i]==cid) {
                 exists = true;
         }   }
         // new
-        if(exists==false)   s_cookie += cid+"|";
+        if(exists==false) { s_cookie += cid+"|"; }
     }
     else if (action == "remove")    {
         s_cookie = s_cookie.replace("|"+cid+"|", "|");
@@ -612,7 +624,7 @@ $(document).on("click", "a.moveIPaddr", function() {
 $(document).on("click", "#refreshHostname", function() {
     showSpinner();
     var ipaddress = $('input.ip_addr').val();
-    var subnetId  = $(this).attr('data-subnetId');;
+    var subnetId  = $(this).attr('data-subnetId');
     $.post('app/subnets/addresses/address-resolve.php', {ipaddress:ipaddress, subnetId: subnetId}, function(data) {
         if(data.length !== 0) {
             $('input[name=hostname]').val(data);
@@ -1069,9 +1081,9 @@ $('form#ipCalc input.reset').click(function () {
 //
 $(document).on("click", "a.create_section_subnet_from_search", function() {
     //get details - we need Section, network and subnet bitmask
-    var sectionId = $(this).attr('data-sectionId')
-    var subnet    = $(this).attr('data-subnet')
-    var bitmask   = $(this).attr('data-bitmask')
+    var sectionId = $(this).attr('data-sectionId');
+    var subnet    = $(this).attr('data-subnet');
+    var bitmask   = $(this).attr('data-bitmask');
 
     // formulate postdata
     var postdata  = "sectionId=" + sectionId + "&subnet=" + subnet + "&bitmask=" + bitmask + "&action=add&location=ipcalc";
@@ -1084,7 +1096,7 @@ $(document).on("click", "a.create_section_subnet_from_search", function() {
     });
 
     return false;
-})
+});
 
 /* search function */
 function search_execute (loc) {
@@ -1290,7 +1302,7 @@ $(document).on("click", "#adsearchusersubmit", function() {
     var dname = $('#dusername').val();
     var server = $('#adserver').find(":selected").val();
     $.post('app/admin/users/ad-search-result.php', {dname:dname, server:server}, function(data) {
-        $('div#adsearchuserresult').html(data)
+        $('div#adsearchuserresult').html(data);
         hideSpinner();
     });
 });
@@ -1343,7 +1355,7 @@ $(document).on("click", "#adsearchgroupsubmit", function() {
     var dfilter = $('#dfilter').val();
     var server = $('#adserver').find(":selected").val();
     $.post('app/admin/groups/ad-search-group-result.php', {dfilter:dfilter, server:server}, function(data) {
-        $('div#adsearchgroupresult').html(data)
+        $('div#adsearchgroupresult').html(data);
         hideSpinner();
     });
 });
@@ -1357,7 +1369,7 @@ $(document).on("click", ".groupselect", function() {
     var csrf_cookie = $(this).attr("data-csrf_cookie");
 
     $.post('app/admin/groups/edit-group-result.php', {action:"add", g_name:gname, g_desc:gdescription, gmembers:gmembers, csrf_cookie:csrf_cookie}, function(data) {
-        $('div.adgroup-'+gid).html(data)
+        $('div.adgroup-'+gid).html(data);
         hideSpinner();
     }); return false;
 });
@@ -1477,8 +1489,8 @@ $('.log-tabs li a').click(function() {
 
 // show changelog details popup
 $(document).on("click", ".openChangelogDetail", function() {
-    open_popup("700", "app/tools/changelog/show-popup.php", {cid:$(this).attr('data-cid')})
-})
+    open_popup("700", "app/tools/changelog/show-popup.php", {cid:$(this).attr('data-cid')});
+});
 
 
 /*    Sections
@@ -1489,7 +1501,7 @@ $(document).on("click", "#editSectionSubmit, .editSectionSubmitDelete", function
     var sectionData = $('form#sectionEdit').serialize();
 
     //append deleteconfirm
-    if($(this).attr('id') == "editSectionSubmitDelete") { sectionData += "&deleteconfirm=yes"; };
+    if($(this).attr('id') == "editSectionSubmitDelete") { sectionData += "&deleteconfirm=yes"; }
 
     $.post('app/admin/sections/edit-result.php', sectionData, function(data) {
         $('div.sectionEditResult').html(data).slideDown('fast');
@@ -1868,7 +1880,7 @@ $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function()
         subnetData = subnetData.replace("action=edit", "action=delete");
     }
     //append deleteconfirm
-    if($(this).attr('id') == "editSubnetSubmitDelete") { subnetData += "&deleteconfirm=yes"; };
+    if($(this).attr('id') == "editSubnetSubmitDelete") { subnetData += "&deleteconfirm=yes"; }
 
     //load results
     $.post("app/admin/subnets/edit-result.php", subnetData, function(data) {
@@ -2171,7 +2183,7 @@ $(document).on("click", ".editFolderSubmitDelete", function() {
     //format posted values
     var postData     = "subnetId="+subnetId+"&description="+description+"&action=delete"+"&csrf_cookie="+csrf_cookie;
     //append deleteconfirm
-    if($(this).attr('id') == "editFolderSubmitDelete") { postData += "&deleteconfirm=yes"; };
+    if($(this).attr('id') == "editFolderSubmitDelete") { postData += "&deleteconfirm=yes"; }
     $.post('app/admin/subnets/edit-folder-result.php', postData, function(data) {
         $('.manageFolderEditResult').html(data);
         //reload after 2 seconds if succeeded!
@@ -2391,7 +2403,7 @@ $(document).on("submit", "form#search_nats", function() {
         hideSpinner();
     });
     return false;
-})
+});
 // search result item select
 $(document).on("click", "a.addNatObjectFromSearch", function() {
     var id = $(this).attr('data-id');
@@ -2412,7 +2424,7 @@ $(document).on("click", "a.addNatObjectFromSearch", function() {
         }
     });
     return false;
-})
+});
 
 
 
@@ -2636,7 +2648,7 @@ $('button#searchReplaceSave').click(function() {
 // dump database
 $('button#XLSdump, button#MySQLdump, button#hostfileDump').click(function () {
     showSpinner();
-    var script = ""
+    var script = "";
     // define script
     if ($(this).attr('id')=="XLSdump")              { script = "generate-xls.php"; }
     else if ($(this).attr('id')=="MySQLdump")       { script = "generate-mysql.php"; }
