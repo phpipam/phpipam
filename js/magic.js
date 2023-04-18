@@ -2785,10 +2785,16 @@ $(document).on("click", "input#recomputeCVRFSelectAll", function() {
 });
 //Import Section
 $('button.dataImport').click(function () {
-    var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype"]; var popsize = {};
+    var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype","hardware","schema","schemaip","schemastudio"]; var popsize = {};
     popsize["subnets"] = "max";
     popsize["ipaddr"] = "max";
     popsize["devices"] = "max";
+    popsize["hardware"] = "max";
+    popsize["schema"] = "max";
+    var dataType = $('select[name=dataType]').find(":selected").val();
+    popsize["schemaip"] = "max";
+    popsize["schemastudio"] = "max";
+
     var dataType = $('select[name=dataType]').find(":selected").val();
     hidePopups();
     //show popup window, if implemented
@@ -2815,12 +2821,15 @@ $('button.dataImport').click(function () {
 //import buttons
 $(document).on("click", "button#dataImportPreview", function() {
     //get data from previous window
-    var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype" ]; var popsize = {};
+    var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype","hardware","schema","schemaip","schemastudio" ]; var popsize = {};
     popsize["subnets"] = "max";
     popsize["recompute"] = "max";
     popsize["ipaddr"] = "max";
     popsize["devices"] = "max";
-
+    popsize["hardware"] = "max";
+    popsize["schema"] = "max";
+    popsize["schemaip"] = "max";
+    popsize["schemastudio"] = "max";
     var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
     hidePopups();
