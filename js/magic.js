@@ -2865,7 +2865,7 @@ $(document).on("click", "button#dataImportSubmit", function() {
     popsize["schema"] = "max";
     popsize["schemaip"] = "max";
     popsize["schemastudio"] = "max";
-    
+
     var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
     hidePopups();
