@@ -74,7 +74,7 @@ function submit_popup_data (result_div, target_script, post_data, reload) {
 
 /* reload window function for ajax error checking */
 function reload_window (data) {
-    if(    data.search("alert-danger")==-1 &&
+    if( data.search("alert-danger")==-1 &&
         data.search("error")==-1 &&
         data.search("alert-warning") == -1 )    { setTimeout(function (){window.location.reload();}, 1500); }
     else                                             { hideSpinner(); }
@@ -102,7 +102,7 @@ $(document).on("click", "#hideError", function() {
     hideError();    return false;
 });
 //disabled links
-$('.disabled a').click(function() {    return false;
+$('.disabled a').click(function() { return false;
 });
 
 /* tooltip hiding fix */
@@ -113,7 +113,7 @@ function showPopup(pClass, data, secondary) {
     showSpinner();
     // secondary - load secondary popupoverlay
     if (secondary === true) { var oclass = "#popupOverlay2";}
-    else                     { var oclass = "#popupOverlay"; }
+    else                    { var oclass = "#popupOverlay"; }
     // show overlay
     $(oclass).fadeIn('fast');
     // load data and show it
@@ -131,7 +131,7 @@ function showPopup(pClass, data, secondary) {
 function hidePopup(pClass, secondary) {
     // secondary - load secondary popupoverlay
     if (secondary === true) { var oclass = "#popupOverlay2";}
-    else                     { var oclass = "#popupOverlay"; }
+    else                    { var oclass = "#popupOverlay"; }
     // hide
     $(oclass+' .'+pClass).fadeOut('fast');
     // IMPORTANT: also empty loaded content to avoid issues on popup reopening
@@ -464,7 +464,7 @@ $(document).on('click', '#sortablePopup li a.widget-add', function() {
         $("#"+wid+' .hContent').html('<blockquote style="margin-top:20px;margin-left:20px;">File not found!</blockquote>');
     });
     //remove item
-    $(this).parent().fadeOut('fast');    return false;
+    $(this).parent().fadeOut('fast');   return false;
 });
 
 
