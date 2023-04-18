@@ -2624,6 +2624,7 @@ $('button.dataExport').click(function () {
     popsize["schema"] = "max";
     popsize["schemaip"] = "max";
     popsize["schemastudio"] = "max";
+
     var dataType = $('select[name=dataType]').find(":selected").val();
     hidePopups();
     //show popup window
@@ -2693,6 +2694,30 @@ $(document).on("click", "button#dataExportSubmit", function() {
             var exportSections = $('form#selectExportSections').serialize();
             $("div.dl").remove();    //remove old innerDiv
             $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-devtype.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+            setTimeout(function (){hidePopups();}, 1500);
+            break;
+        case 'hardware':
+            var exportSections = $('form#selectExportSections').serialize();
+            $("div.dl").remove();    //remove old innerDiv
+            $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-hardware.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+            setTimeout(function (){hidePopups();}, 1500);
+            break;
+        case 'schema':
+            var exportSections = $('form#selectExportSections').serialize();
+            $("div.dl").remove();    //remove old innerDiv
+            $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-schema.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+            setTimeout(function (){hidePopups();}, 1500);
+            break;
+        case 'schemaip':
+            var exportSections = $('form#selectExportSections').serialize();
+            $("div.dl").remove();    //remove old innerDiv
+            $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-schemaip.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+            setTimeout(function (){hidePopups();}, 1500);
+            break;
+        case 'schemastudio':
+            var exportSections = $('form#selectExportSections').serialize();
+            $("div.dl").remove();    //remove old innerDiv
+            $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-schemastudio.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
             setTimeout(function (){hidePopups();}, 1500);
             break;
     }
