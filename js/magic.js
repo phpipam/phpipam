@@ -62,7 +62,7 @@ function submit_popup_data (result_div, target_script, post_data, reload) {
         //reload after 2 seconds if succeeded!
         if(reload) {
             if(data.search("alert-danger")==-1 && data.search("error")==-1 && data.search("alert-warning")==-1 )    { setTimeout(function (){window.location.reload();}, 1500); }
-            else                                                                                                         { hideSpinner(); }
+            else                                                                                                    { hideSpinner(); }
         }
         else {
             hideSpinner();
