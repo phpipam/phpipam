@@ -738,7 +738,7 @@ $(document).on('click','#subnetScanSubmit', function() {
     var subnetId = $(this).attr('data-subnetId');
     var csrf     = $(this).attr('data-csrf-cookie');
     var type     = $('select[name=type]').find(":selected").val();
-    if($('input[name=debug]').is(':checked'))    { var debug = 1; }
+    if($('input[name=debug]').is(':checked'))   { var debug = 1; }
     else                                        { var debug = 0; }
     var port     = $('input[name=telnetports]').val();
     $('#alert-scan').slideUp('fast');
@@ -887,7 +887,7 @@ $(document).on("click", "#ipaddrtemplate", function() {
 //download device template
 $(document).on("click", "#devicestemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=devices'></iframe></div>");    return false;
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=devices'></iframe></div>");   return false;
 });
 
 
@@ -952,7 +952,7 @@ $(document).on("click", "button#exportSubnet", function() {
 });
 
 
-/*    add / remove favourite subnet
+/*  add / remove favourite subnet
 *********************************/
 $(document).on('click', 'a.editFavourite', function() {
     var subnetId = $(this).attr('data-subnetId');
@@ -963,12 +963,12 @@ $(document).on('click', 'a.editFavourite', function() {
     //remove
     $.post('app/tools/favourites/favourite-edit.php', {subnetId:subnetId, action:action, from:from}, function(data) {
         //success - widget - remove item
-        if(data=='success' && from=='widget')     {
+        if(data=='success' && from=='widget')   {
             $('tr.favSubnet-'+subnetId).addClass('error');
             $('tr.favSubnet-'+subnetId).delay(200).fadeOut();
         }
         //success - subnet - toggle star-empty
-        else if (data=='success')                 {
+        else if (data=='success')               {
             $(this).toggleClass('btn-info');
             $('a.favourite-'+subnetId+" i").toggleClass('fa-star-o');
             $(item).toggleClass('btn-info');
