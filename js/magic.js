@@ -723,7 +723,7 @@ $('a.scan_subnet').click(function() {
 $(document).on('change', "table.table-scan select#type", function() {
     var pingType = $('select[name=type]').find(":selected").val();
     if(pingType=="scan-telnet") { $('tbody#telnetPorts').show(); }
-    else                         { $('tbody#telnetPorts').hide(); }
+    else                        { $('tbody#telnetPorts').hide(); }
 });
 //save value to cookie
 $(document).on('change', "table.table-scan select#type", function() {
