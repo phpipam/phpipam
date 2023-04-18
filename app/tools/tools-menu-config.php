@@ -49,7 +49,7 @@ $tools_menu_items = [
 	"customers" => _("customers"),
 	"duplicates" => _("duplicates"),
 	"routing" => _("routing"),
- 	"vaults" => _("vaults"),
+	"vaults" => _("vaults"),
 	];
 
 
