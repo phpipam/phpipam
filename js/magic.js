@@ -2936,12 +2936,12 @@ $('button.dataRecompute').click(function () {
 });
 
 
-/*    Fix database
+/*  Fix database
 ***********************/
 $(document).on('click', '.btn-tablefix', function() {
     var tableid = $(this).attr('data-tableid');
     var fieldid = $(this).attr('data-fieldid');
-    var type     = $(this).attr('data-type');
+    var type    = $(this).attr('data-type');
     $.post('app/admin/verify-database/fix.php', {tableid:tableid, fieldid:fieldid, type:type}, function(data) {
         $('div#fix-result-'+tableid+fieldid).html(data).fadeIn('fast');
         hideSpinner();
