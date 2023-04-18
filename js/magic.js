@@ -2098,7 +2098,7 @@ $(document).on("click", ".vlanManagementEditFromSubnetButton", function() {
         $('div.vlanManagementEditFromSubnetResult').html(data).show();
         // ok
         if(data.search("alert-danger")==-1 && data.search("error")==-1) {
-            var vlanId      = $('#vlanidforonthefly').html();
+            var vlanId    = $('#vlanidforonthefly').html();
             var sectionId = $('#editSubnetDetails input[name=sectionId]').val();
             $.post('app/admin/subnets/edit-vlan-dropdown.php', {vlanId:vlanId, sectionId:sectionId} , function(data) {
                 $('.editSubnetDetails td#vlanDropdown').html(data);
@@ -2118,13 +2118,13 @@ $('.vlansearchsubmit').click(function() {
     var location = $('input.vlanfilter').attr('data-location');
     //go to search page
     var prettyLinks = $('#prettyLinks').html();
-    if(prettyLinks=="Yes")    { setTimeout(function (){window.location = location +search+"/";}, 500); }
+    if(prettyLinks=="Yes")  { setTimeout(function (){window.location = location +search+"/";}, 500); }
     else                    { setTimeout(function (){window.location = location + "&sPage="+search;}, 500); }
 
 
     //go to search page
     var prettyLinks = $('#prettyLinks').html();
-    if(prettyLinks=="Yes")    { setTimeout(function (){window.location = base + "subnets/"+section_id_new+"/"+subnet_id_new+"/";}, 1500); }
+    if(prettyLinks=="Yes")  { setTimeout(function (){window.location = base + "subnets/"+section_id_new+"/"+subnet_id_new+"/";}, 1500); }
     else                    { setTimeout(function (){window.location = base + "index.php?page=subnets&section="+section_id_new+"&subnetId="+subnet_id_new;}, 1500); }    return false;
 });
 
@@ -2133,7 +2133,7 @@ $('.vlansearchsubmit').click(function() {
 
 
 
-/*    Folders
+/*  Folders
 ************************************/
 //create new folder popup
 $(document).on("click", "#add_folder, .add_folder", function() {
@@ -2160,7 +2160,7 @@ $(document).on("click", ".editFolderSubmit", function() {
         $('.manageFolderEditResult').html("").html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 //delete folder
 $(document).on("click", ".editFolderSubmitDelete", function() {
@@ -2176,7 +2176,7 @@ $(document).on("click", ".editFolderSubmitDelete", function() {
         $('.manageFolderEditResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 
 
