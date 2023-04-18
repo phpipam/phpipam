@@ -989,7 +989,7 @@ $(document).on('click', 'a.editFavourite', function() {
             showPopup('popup_w500');
             hideSpinner();
         }
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 
 
@@ -1116,7 +1116,7 @@ function search_execute (loc) {
     var msie = ua.indexOf("MSIE ");
     var edge = ua.indexOf("Edge/");
     //IE
-    if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))     { var base = $('.iebase').html(); }
+    if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))    { var base = $('.iebase').html(); }
     else                                                                 { var base = ""; }
     //go to search page
     var prettyLinks = $('#prettyLinks').html();
@@ -1170,7 +1170,7 @@ $('#hosts').submit(function() {
     var hostname = $('input.hostsFilter').val();
 
     var prettyLinks = $('#prettyLinks').html();
-    if(prettyLinks=="Yes")    { window.location = base + "tools/hosts/" + hostname; }
+    if(prettyLinks=="Yes")  { window.location = base + "tools/hosts/" + hostname; }
     else                    { window.location = base + "index.php?page=tools&section=hosts&ip=" + hostname; }
     return false;
 });
@@ -1206,7 +1206,7 @@ $('form#cform').submit(function () {
     var filter = $('form#cform .cfilter').val();
     //update search page
     var prettyLinks = $('#prettyLinks').html();
-    if(prettyLinks=="Yes")    { window.location = "tools/changelog/"+filter+"/"+limit+"/"; }
+    if(prettyLinks=="Yes")  { window.location = "tools/changelog/"+filter+"/"+limit+"/"; }
     else                    { window.location = "index.php?page=tools&section=changelog&subnetId="+filter+"&sPage="+limit; }
     return false;
 });
@@ -1247,8 +1247,8 @@ $(document).on("click", ".logo-clear", function() {
 $('select#mtype').change(function() {
     var type = $(this).find(":selected").val();
     //if localhost hide, otherwise show
-    if(type === "localhost")     { $('#mailsettingstbl tbody#smtp').hide(); }
-    else                         { $('#mailsettingstbl tbody#smtp').show(); }
+    if(type === "localhost")    { $('#mailsettingstbl tbody#smtp').hide(); }
+    else                        { $('#mailsettingstbl tbody#smtp').show(); }
 });
 
 
