@@ -1557,7 +1557,7 @@ $(document).on("click", "#editDomainSubmit", function() {
 
 // refresh subnet PTR records
 $(document).on("click", ".refreshPTRsubnet", function() {
-    open_popup("700", "app/admin/powerDNS/refresh-ptr-records.php", {subnetId:$(this).attr('data-subnetId')} );  return false;
+    open_popup("700", "app/admin/powerDNS/refresh-ptr-records.php", {subnetId:$(this).attr('data-subnetId')} ); return false;
 });
 $(document).on("click", ".refreshPTRsubnetSubmit", function() {
     submit_popup_data (".refreshPTRsubnetResult", "app/admin/powerDNS/refresh-ptr-records-submit.php", {subnetId:$(this).attr('data-subnetId')} );  return false;
@@ -1855,7 +1855,7 @@ $(document).on("click", "button#subnetTruncateSubmit", function() {
         reload_window (data);
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
-$(document).on("submit", "#editSubnetDetails", function() {    return false;
+$(document).on("submit", "#editSubnetDetails", function() { return false;
 });
 //save edit subnet changes
 $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function() {
@@ -1896,11 +1896,11 @@ $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function()
                         var msie = ua.indexOf("MSIE ");
                         var edge = ua.indexOf("Edge/");
                         //IE
-                        if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))     { var base = $('.iebase').html(); }
-                        else                                                                 { var base = ""; }
+                        if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))    { var base = $('.iebase').html(); }
+                        else                                                                { var base = ""; }
                         //go to search page
                         var prettyLinks = $('#prettyLinks').html();
-                        if(prettyLinks=="Yes")    { setTimeout(function (){window.location = base + "subnets/"+section_id_new+"/"+subnet_id_new+"/";}, 1500); }
+                        if(prettyLinks=="Yes")  { setTimeout(function (){window.location = base + "subnets/"+section_id_new+"/"+subnet_id_new+"/";}, 1500); }
                         else                    { setTimeout(function (){window.location = base + "index.php?page=subnets&section="+section_id_new+"&subnetId="+subnet_id_new;}, 1500); }
                     }
                     else {
