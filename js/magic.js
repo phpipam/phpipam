@@ -1120,7 +1120,7 @@ function search_execute (loc) {
     else                                                                 { var base = ""; }
     //go to search page
     var prettyLinks = $('#prettyLinks').html();
-    if(prettyLinks=="Yes")    { window.location = base + "tools/search/"+ip; }
+    if(prettyLinks=="Yes")  { window.location = base + "tools/search/"+ip; }
     else                    { window.location = base + "index.php?page=tools&section=search&ip="+ip; }
 }
 //submit form - topmenu
@@ -1296,10 +1296,10 @@ $(document).on("click", "#adsearchusersubmit", function() {
 });
 //get user data from result
 $(document).on("click", ".userselect", function() {
-    var uname          = $(this).attr('data-uname');
-    var username     = $(this).attr('data-username');
-    var email          = $(this).attr('data-email');
-    var server          = $(this).attr('data-server');
+    var uname       = $(this).attr('data-uname');
+    var username    = $(this).attr('data-username');
+    var email       = $(this).attr('data-email');
+    var server      = $(this).attr('data-server');
     var server_type = $(this).attr('data-server-type');
 
     //fill
@@ -1323,7 +1323,7 @@ $(document).on("click", ".userselect", function() {
             }
         });
     }
-    hidePopup2();    return false;
+    hidePopup2();   return false;
 });
 
 
