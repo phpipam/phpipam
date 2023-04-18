@@ -1557,10 +1557,10 @@ $(document).on("click", "#editDomainSubmit", function() {
 
 // refresh subnet PTR records
 $(document).on("click", ".refreshPTRsubnet", function() {
-    open_popup("700", "app/admin/powerDNS/refresh-ptr-records.php", {subnetId:$(this).attr('data-subnetId')} );   return false;
+    open_popup("700", "app/admin/powerDNS/refresh-ptr-records.php", {subnetId:$(this).attr('data-subnetId')} );  return false;
 });
 $(document).on("click", ".refreshPTRsubnetSubmit", function() {
-    submit_popup_data (".refreshPTRsubnetResult", "app/admin/powerDNS/refresh-ptr-records-submit.php", {subnetId:$(this).attr('data-subnetId')} );   return false;
+    submit_popup_data (".refreshPTRsubnetResult", "app/admin/powerDNS/refresh-ptr-records-submit.php", {subnetId:$(this).attr('data-subnetId')} );  return false;
 });
 //edit record
 $(document).on("click", ".editRecord", function() {
@@ -1822,7 +1822,7 @@ $(document).on("click", "#resize, #split, #truncate, .subnet-truncate", function
     $.post("app/admin/subnets/"+action+".php", {action:action, subnetId:subnetId}, function(data) {
         showPopup('popup_w500', data, true);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 //resize save
 $(document).on("click", "button#subnetResizeSubmit", function() {
@@ -1832,7 +1832,7 @@ $(document).on("click", "button#subnetResizeSubmit", function() {
         $('div.subnetResizeResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 //split save
 $(document).on("click", "button#subnetSplitSubmit", function() {
@@ -1842,7 +1842,7 @@ $(document).on("click", "button#subnetSplitSubmit", function() {
         $('div.subnetSplitResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 //truncate save
 $(document).on("click", "button#subnetTruncateSubmit", function() {
@@ -1853,7 +1853,7 @@ $(document).on("click", "button#subnetTruncateSubmit", function() {
         $('div.subnetTruncateResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 $(document).on("submit", "#editSubnetDetails", function() {    return false;
 });
