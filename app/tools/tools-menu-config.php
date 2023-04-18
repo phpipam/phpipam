@@ -52,7 +52,9 @@ $tools_menu_items = [
 	"vaults" => _("vaults"),
 	];
 
-	$private_subpages = Config::ValueOf('private_subpages');
+
+#custom
+$private_subpages = Config::ValueOf('private_subpages');
 	if(is_array($private_subpages) && sizeof($private_subpages)>0) {
 		# array and icon
 		$tools_menu[_('Custom tools')] = [];
