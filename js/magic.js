@@ -2125,7 +2125,7 @@ $('.vlansearchsubmit').click(function() {
     //go to search page
     var prettyLinks = $('#prettyLinks').html();
     if(prettyLinks=="Yes")  { setTimeout(function (){window.location = base + "subnets/"+section_id_new+"/"+subnet_id_new+"/";}, 1500); }
-    else                    { setTimeout(function (){window.location = base + "index.php?page=subnets&section="+section_id_new+"&subnetId="+subnet_id_new;}, 1500); }    return false;
+    else                    { setTimeout(function (){window.location = base + "index.php?page=subnets&section="+section_id_new+"&subnetId="+subnet_id_new;}, 1500); }   return false;
 });
 
 
@@ -2193,7 +2193,7 @@ $(document).on("click", "#editSwitchSNMPsubmit", function() {
 });
 //snmp test
 $(document).on("click", "#test-snmp", function() {
-    open_popup ("700", "app/admin/devices/edit-snmp-test.php", $('form#switchSNMPManagementEdit').serialize(), true);    return false;
+    open_popup ("700", "app/admin/devices/edit-snmp-test.php", $('form#switchSNMPManagementEdit').serialize(), true);   return false;
 });
 //snmp route query popup
 $(document).on("click", "#snmp-routing", function() {
@@ -2278,7 +2278,7 @@ $(document).on("click", "#editDevTypeSubmit", function() {
 /* ---- RACKS ----- */
 //load edit form
 $(document).on("click", ".editRack", function() {
-    open_popup("400", "app/admin/racks/edit.php", {rackid:$(this).attr('data-rackid'), action:$(this).attr('data-action')} );    return false;
+    open_popup("400", "app/admin/racks/edit.php", {rackid:$(this).attr('data-rackid'), action:$(this).attr('data-action')} );   return false;
 });
 //load edit rack devices form
 $(document).on("click", ".editRackDevice", function() {
@@ -2290,7 +2290,7 @@ $(document).on("click", "#editRackDevicesubmit", function() {
 });
 //show popup image
 $(document).on("click", ".showRackPopup", function() {
-    open_popup("400", "app/tools/racks/show-rack-popup.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid')}, true );    return false;
+    open_popup("400", "app/tools/racks/show-rack-popup.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid')}, true );  return false;
 });
 
 
