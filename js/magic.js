@@ -1116,8 +1116,8 @@ function search_execute (loc) {
     var msie = ua.indexOf("MSIE ");
     var edge = ua.indexOf("Edge/");
     //IE
-    if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))    { var base = $('.iebase').html(); }
-    else                                                                 { var base = ""; }
+    if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))   { var base = $('.iebase').html(); }
+    else                                                                { var base = ""; }
     //go to search page
     var prettyLinks = $('#prettyLinks').html();
     if(prettyLinks=="Yes")  { window.location = base + "tools/search/"+ip; }
