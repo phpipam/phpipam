@@ -2720,7 +2720,7 @@ $(document).on("click", "button#dataExportSubmit", function() {
             $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-schemastudio.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
             setTimeout(function (){hidePopups();}, 1500);
             break;
-    }
+        }
     return false;
 });
 // Check/uncheck all
@@ -2791,7 +2791,6 @@ $('button.dataImport').click(function () {
     popsize["devices"] = "max";
     popsize["hardware"] = "max";
     popsize["schema"] = "max";
-    var dataType = $('select[name=dataType]').find(":selected").val();
     popsize["schemaip"] = "max";
     popsize["schemastudio"] = "max";
 
