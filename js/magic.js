@@ -2829,6 +2829,7 @@ $(document).on("click", "button#dataImportPreview", function() {
     popsize["schema"] = "max";
     popsize["schemaip"] = "max";
     popsize["schemastudio"] = "max";
+
     var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
     hidePopups();
@@ -2855,11 +2856,16 @@ $(document).on("click", "button#dataImportPreview", function() {
 });
 $(document).on("click", "button#dataImportSubmit", function() {
     //get data from previous window
-    var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype" ]; var popsize = {};
+    var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype","hardware","schema","schemaip","schemastudio" ]; var popsize = {};
     popsize["subnets"] = "max";
     popsize["recompute"] = "max";
     popsize["ipaddr"] = "max";
     popsize["devices"] = "max";
+    popsize["hardware"] = "max";
+    popsize["schema"] = "max";
+    popsize["schemaip"] = "max";
+    popsize["schemastudio"] = "max";
+    
     var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
     hidePopups();
