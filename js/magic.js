@@ -2616,10 +2616,14 @@ $('button#XLSdump, button#MySQLdump, button#hostfileDump').click(function () {
 
 //Export Section
 $('button.dataExport').click(function () {
-    var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype"]; var popsize = {};
+    var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype","hardware","schema","schemaip","schemastudio"]; var popsize = {};
     popsize["subnets"] = "w700";
     popsize["ipaddr"] = "w700";
     popsize["devices"] = "max";
+    popsize["hardware"] = "max";
+    popsize["schema"] = "max";
+    popsize["schemaip"] = "max";
+    popsize["schemastudio"] = "max";
     var dataType = $('select[name=dataType]').find(":selected").val();
     hidePopups();
     //show popup window
