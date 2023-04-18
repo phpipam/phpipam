@@ -1896,7 +1896,7 @@ $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function()
                         var msie = ua.indexOf("MSIE ");
                         var edge = ua.indexOf("Edge/");
                         //IE
-                        if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))    { var base = $('.iebase').html(); }
+                        if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))   { var base = $('.iebase').html(); }
                         else                                                                { var base = ""; }
                         //go to search page
                         var prettyLinks = $('#prettyLinks').html();
@@ -1940,7 +1940,7 @@ $(document).on("click", "#get-ripe", function() {
     $.post("app/admin/subnets/ripe-query.php", {subnet: subnet}, function(data) {
         showPopup('popup_w500', data, true);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 // fill ripe fields
 $(document).on('click', "#ripeMatchSubmit", function() {
@@ -1970,7 +1970,7 @@ $(document).on("click", ".showSubnetPerm", function () {
         $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 //submit permission change
 $(document).on("click", ".editSubnetPermissionsSubmit", function() {
@@ -1980,7 +1980,7 @@ $(document).on("click", ".editSubnetPermissionsSubmit", function() {
         $('.editSubnetPermissionsResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 //auto-suggest possible slaves select
 $(document).on("click", ".dropdown-subnets li a", function() {
@@ -2009,7 +2009,7 @@ $(document).on('click', '.linkSubnetSave', function() {
         $('.linkSubnetSaveResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 
 
