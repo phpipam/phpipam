@@ -2459,7 +2459,7 @@ $(document).on("click", "#add_nameserver", function() {
     num++;
     $(this).attr("data-id", num);
 
-    hideSpinner();    return false;
+    hideSpinner();  return false;
 });
 // remove
 $(document).on("click", "#remove_nameserver", function() {
@@ -2470,7 +2470,7 @@ $(document).on("click", "#remove_nameserver", function() {
     var el = document.getElementById(id);
     el.parentNode.removeChild(el);
 
-    hideSpinner();    return false;
+    hideSpinner();  return false;
 });
 
 /* ---- IP requests ----- */
@@ -2536,7 +2536,7 @@ $(document).on("click", ".edit-custom-field", function() {
     showSpinner();
     var action    = $(this).attr('data-action');
     var fieldName = $(this).attr('data-fieldname');
-    var table      = $(this).attr('data-table');
+    var table     = $(this).attr('data-table');
     $.post('app/admin/custom-fields/edit.php',  {action:action, fieldName:fieldName, table:table}, function(data) {
         $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
@@ -2560,7 +2560,7 @@ $('table.customIP button.down').click(function() {
     showSpinner();
     var current  = $(this).attr('data-fieldname');
     var next     = $(this).attr('data-nextfieldname');
-    var table     = $(this).attr('data-table');
+    var table    = $(this).attr('data-table');
     $.post('app/admin/custom-fields/order.php', {current:current, next:next, table:table}, function(data) {
         $('div.'+table+'-order-result').html(data).slideDown('fast');
         //reload after 2 seconds if succeeded!
