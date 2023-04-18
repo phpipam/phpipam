@@ -1359,7 +1359,7 @@ $(document).on("click", ".groupselect", function() {
     $.post('app/admin/groups/edit-group-result.php', {action:"add", g_name:gname, g_desc:gdescription, gmembers:gmembers, csrf_cookie:csrf_cookie}, function(data) {
         $('div.adgroup-'+gid).html(data)
         hideSpinner();
-    });    return false;
+    }); return false;
 });
 
 
@@ -1376,7 +1376,7 @@ $('#instructionsForm').submit(function () {
     $.post('app/admin/instructions/edit-result.php', {instructions:instructions, csrf_cookie:csrf_cookie, id:id}, function(data) {
         $('div.instructionsResult').html(data).fadeIn('fast');
         if(data.search("alert-danger")==-1 && data.search("error")==-1)         { $('div.instructionsResult').delay(2000).fadeOut('slow'); hideSpinner(); }
-        else                                 { hideSpinner(); }
+        else                                { hideSpinner(); }
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
 });
@@ -1472,7 +1472,7 @@ $('.log-tabs li a').click(function() {
     $(this).parent('li').addClass("active");
     // load
     $('div.log-print').hide();
-    $('div.'+$(this).attr("data-target")).show();    return false;
+    $('div.'+$(this).attr("data-target")).show();   return false;
 });
 
 // show changelog details popup
@@ -1514,7 +1514,7 @@ $(document).on("click", "#sectionOrderSubmit", function() {
         //reload after 2 seconds if succeeded!
         reload_window (data);
 
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 
 
@@ -1557,10 +1557,10 @@ $(document).on("click", "#editDomainSubmit", function() {
 
 // refresh subnet PTR records
 $(document).on("click", ".refreshPTRsubnet", function() {
-    open_popup("700", "app/admin/powerDNS/refresh-ptr-records.php", {subnetId:$(this).attr('data-subnetId')} );    return false;
+    open_popup("700", "app/admin/powerDNS/refresh-ptr-records.php", {subnetId:$(this).attr('data-subnetId')} );   return false;
 });
 $(document).on("click", ".refreshPTRsubnetSubmit", function() {
-    submit_popup_data (".refreshPTRsubnetResult", "app/admin/powerDNS/refresh-ptr-records-submit.php", {subnetId:$(this).attr('data-subnetId')} );    return false;
+    submit_popup_data (".refreshPTRsubnetResult", "app/admin/powerDNS/refresh-ptr-records-submit.php", {subnetId:$(this).attr('data-subnetId')} );   return false;
 });
 //edit record
 $(document).on("click", ".editRecord", function() {
