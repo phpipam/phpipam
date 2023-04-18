@@ -2791,10 +2791,10 @@ $('button.dataImport').click(function () {
     popsize["devices"] = "max";
     popsize["hardware"] = "max";
     popsize["schema"] = "max";
+    var dataType = $('select[name=dataType]').find(":selected").val();
     popsize["schemaip"] = "max";
     popsize["schemastudio"] = "max";
 
-    var dataType = $('select[name=dataType]').find(":selected").val();
     hidePopups();
     //show popup window, if implemented
     if (implemented.indexOf(dataType) > -1) {
