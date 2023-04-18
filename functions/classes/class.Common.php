@@ -666,8 +666,7 @@ class Common_functions  {
 
 		try {
 			$dom = new \DOMDocument();
-
-			if ($dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NOERROR) === false)
+			if ($dom->loadHTML("<html>".$html."</html>", LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NOERROR) === false)
 				return "";
 
 			$banned_elements = ['script', 'iframe', 'embed'];
@@ -697,7 +696,7 @@ class Common_functions  {
 					$e->parentNode->removeChild($e);
 
 				// Return sanitised HTML
-				$html = $dom->saveHTML();
+				$html = str_replace(['<html>', '</html>'], '', $dom->saveHTML());
 			}
 		} catch (Exception $e) {
 			$html = "";
@@ -2014,9 +2013,9 @@ class Common_functions  {
     				print "	<li><a href='".create_link("tools",$req['section'],$parent[0])."'><i class='icon-folder-open icon-gray'></i> $prefix->name</a> <span class='divider'></span></li>";
     			}
 
-		    }
-		    $prefix = $this->fetch_object("pstnPrefixes", "id", $req['subnetId']);
-		    print "	<li class='active'>$prefix->name</li>";
+		    	$prefix = $this->fetch_object("pstnPrefixes", "id", $req['subnetId']);
+		    	print "	<li class='active'>$prefix->name</li>";
+			}
 		}
 		print "</ul>";
 	}

@@ -2,11 +2,11 @@
 
 Here is a short guide on how to create API calls using CURL for a reference. Result will be presented as json and in debug mode.
 
-### Enable API and create new API key
+## Enable API and create new API key
 
 Go to settings in phpipam GUI and enable API module, than go to settings > API and create new API App, set all APP params as desired for you APP.
 
-### Authentication
+## Authentication
 
 First we need to authenticate to API server by providing username/password from some valid phpipam account to receive token:
 
@@ -19,7 +19,7 @@ First we need to authenticate to API server by providing username/password from 
     {"code":200,"success":true,"data":{"token":".J1e9ipFZkPE6EvIRAqEf9hp","expires":"2017-01-05 14:18:43"},"time":0.009}%
 ```
 
-After authentication in succesfull you receive token that you need to include in each following request. In our case the token is `.J1e9ipFZkPE6EvIRAqEf9hp`. We can also see that token expires in 6 hours.
+After authentication is successful you receive token that you need to include in each following request. In our case the token is `.J1e9ipFZkPE6EvIRAqEf9hp`. We can also see that token expires in 6 hours.
 
 To extend token validity make a POST or PATCH request to server with token (or phpipam-token) http header `"token: .J1e9ipFZkPE6EvIRAqEf9hp"`:
 
@@ -31,7 +31,7 @@ To extend token validity make a POST or PATCH request to server with token (or p
     {"code":200,"success":true,"data":{"expires":"2017-01-05 14:56:22"},"time":0.005}%
 ```
 
-### Some example calls
+## Some example calls
 
 Get details for specific subnet (set links=false to hide links):
 
