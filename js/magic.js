@@ -737,7 +737,7 @@ $(document).on('click','#subnetScanSubmit', function() {
     $('#subnetScanResult').slideUp('fast');
     var subnetId = $(this).attr('data-subnetId');
     var csrf     = $(this).attr('data-csrf-cookie');
-    var type      = $('select[name=type]').find(":selected").val();
+    var type     = $('select[name=type]').find(":selected").val();
     if($('input[name=debug]').is(':checked'))    { var debug = 1; }
     else                                        { var debug = 0; }
     var port     = $('input[name=telnetports]').val();
@@ -745,7 +745,7 @@ $(document).on('click','#subnetScanSubmit', function() {
     $.post('app/subnets/scan/subnet-scan-execute.php', {subnetId:subnetId, type:type, debug:debug, port:port, csrf_cookie:csrf}, function(data) {
         $('#subnetScanResult').html(data).slideDown('fast');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 //remove result
 $(document).on('click', '.resultRemove', function() {
@@ -762,7 +762,7 @@ $(document).on('click', '.resultRemove', function() {
     }
     // get target
     var target = $(this).attr('data-target');
-    $('tr.'+target).remove();    return false;
+    $('tr.'+target).remove();   return false;
 });
 //submit scanning result
 $(document).on('click', 'a#saveScanResults', function() {
@@ -779,7 +779,7 @@ $(document).on('click', 'a#saveScanResults', function() {
         //hide if success!
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });    return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
 });
 
 
