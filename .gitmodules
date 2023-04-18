@@ -29,3 +29,6 @@
 [submodule "functions/PHPmailer"]
 	path = functions/PHPmailer
 	url = https://github.com/PHPMailer/PHPMailer.git
+[submodule "functions/parsedown"]
+	path = functions/parsedown
+	url = https://github.com/erusev/parsedown.git
