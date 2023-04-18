@@ -115,21 +115,29 @@ try {
 	// Append Global API parameters / POST parameters if POST,PATCH or DELETE
 	if($_SERVER['REQUEST_METHOD']=="GET" || $_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE") {
 		// if application tupe is JSON (application/json)
-        if(strpos($_SERVER['CONTENT_TYPE'], "application/json")!==false){
-            $rawPostData = file_get_contents('php://input');
-            $json = json_decode($rawPostData,true);
-            if(is_array($json))
-            $params = array_merge((array) $params, $json);
-            $params = (object) $params;
-        }
+		if(strpos($_SERVER['CONTENT_TYPE'], "application/json")!==false){
+			$rawPostData = file_get_contents('php://input');
+			if (is_string($rawPostData) && strlen($rawPostData)>0) {
+				$json = json_decode($rawPostData, true);
+				if(!is_array($json)) {
+					$Response->throw_exception(400, 'Invalid JSON: '.json_last_error_msg());
+				}
+				$params = array_merge((array) $params, $json);
+			}
+			$params = (object) $params;
+		}
 		// if application tupe is XML (application/json)
-        elseif(strpos($_SERVER['CONTENT_TYPE'], "application/xml")!==false){
-            $rawPostData = file_get_contents('php://input');
-            $xml = $Response->xml_to_array($rawPostData);
-            if(is_array($xml))
-            $params = array_merge((array) $params, $xml);
-            $params = (object) $params;
-        }
+		elseif(strpos($_SERVER['CONTENT_TYPE'], "application/xml")!==false){
+			$rawPostData = file_get_contents('php://input');
+			if (is_string($rawPostData) && strlen($rawPostData)>0) {
+				$xml = $Response->xml_to_array($rawPostData);
+				if(!is_array($xml)) {
+					$Response->throw_exception(400, 'Invalid XML');
+				}
+				$params = array_merge((array) $params, $xml);
+			}
+			$params = (object) $params;
+		}
 		//if application type is default (application/x-www-form-urlencoded)
         elseif(sizeof(@$_POST)>0) {
             $params = array_merge((array) $params, $_POST);
