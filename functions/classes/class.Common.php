@@ -173,6 +173,20 @@ class Common_functions  {
 		return 0;
 	}
 
+	/**
+	 * Fetch mysql version info
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function fetch_mysql_version () {
+		# fetch
+		try { $result = $this->Database->getObjectQuery("SELECT VERSION() AS 'version';"); }
+		catch (Exception $e) {
+			return "";
+		}
+		return is_object($result) ? $result->version : "";
+	}
 
 
 

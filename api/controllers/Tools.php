@@ -211,7 +211,7 @@ class Tools_controller extends Common_api_functions {
 		if (!isset($this->_params->id2)) {
 			$result = $this->Tools->fetch_all_objects ($this->_params->id,  $this->sort_key);
 			// result
-			if($result===false)							{ $this->Response->throw_exception(200, 'No objects found'); }
+			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, false)); }
 		}
 		# by parameter
@@ -307,7 +307,7 @@ class Tools_controller extends Common_api_functions {
 				$result = $this->Tools->fetch_multiple_objects ("ipaddresses", $field, $this->_params->id2, $this->sort_key, true);
 			}
 			// result
-			if($result===false)							{ $this->Response->throw_exception(200, 'No objects found'); }
+			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, true)); }
 
 		}
@@ -318,7 +318,7 @@ class Tools_controller extends Common_api_functions {
 
 			$result = $this->Tools->fetch_object ($this->_params->id, $this->sort_key, $this->_params->id2);
 			// result
-			if($result===false)							{ $this->Response->throw_exception(200, 'No objects found'); }
+			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, false)); }
 		}
 	}

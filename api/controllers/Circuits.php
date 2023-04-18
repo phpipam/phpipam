@@ -138,7 +138,7 @@ class Circuits_controller extends Common_api_functions {
 		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ($this->type, 'id');
 			// check result
-			if($result===false)						{ $this->Response->throw_exception(200, "No {$this->type_text}s configured"); }
+			if($result===false)						{ $this->Response->throw_exception(404, "No {$this->type_text}s configured"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 		// provider circuits
@@ -146,7 +146,7 @@ class Circuits_controller extends Common_api_functions {
 			if ($this->_params->id2=="circuits") {
 				$result = $this->Tools->fetch_multiple_objects ("circuits", "provider", $this->_params->id);
 				// check result
-				if($result==NULL)						{ $this->Response->throw_exception(200, "No circuits belonging to provider"); }
+				if($result==NULL)						{ $this->Response->throw_exception(404, "No circuits belonging to provider"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
 			else {
@@ -157,7 +157,7 @@ class Circuits_controller extends Common_api_functions {
 		elseif($this->type==="circuits" && ($this->_params->id=="circuit_id" || $this->_params->id=="id")) {
 			$result = $this->Tools->fetch_object ($this->type, "cid", $this->_params->id2);
 			// check result
-			if($result==NULL)						{ $this->Response->throw_exception(200, "{$this->type_text} not found"); }
+			if($result==NULL)						{ $this->Response->throw_exception(404, "{$this->type_text} not found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 		// read details
@@ -167,7 +167,7 @@ class Circuits_controller extends Common_api_functions {
 			// fetch
 			$result = $this->Tools->fetch_object ($this->type, "id", $this->_params->id);
 			// check result
-			if($result==NULL)						{ $this->Response->throw_exception(200, "{$this->type_text} not found"); }
+			if($result==NULL)						{ $this->Response->throw_exception(404, "{$this->type_text} not found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 	}
