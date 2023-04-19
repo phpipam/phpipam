@@ -109,8 +109,10 @@ $app_perms_text = array( _("SSL with User token")=>"ssl_token", _("SSL with App 
 	<hr>
 
 	<h4><?php print _('API documentation'); ?></h4>
-	<a href="http://phpipam.net/api-documentation/">http://phpipam.net/api-documentation/</a>
-
+	<ul>
+	<li><a target=_ href="<?php print create_link('tools/documentation/API'); ?>"><?php print _("Documentation"); ?> <i class='fa fa-book'></i></a></li>
+	<li><a target=_ href="https://phpipam.net/api-documentation/">https://phpipam.net/api-documentation/</a></li>
+	</ul>
 <?php
 } else {
 	$Result->show("info", _('Please enable API module under server management'), false);

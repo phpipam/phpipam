@@ -59,7 +59,7 @@ $(document).ready(function() {
 });
 </script>
 <!-- header -->
-<div class="pHeader"><?php print _('SAML2 connection settings'); ?></div>
+<div class="pHeader"><?php print _('SAML2 connection settings').$User->print_doc_link('Authentication/SAML2.md'); ?></div>
 
 <!-- content -->
 <div class="pContent">

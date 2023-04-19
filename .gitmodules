@@ -6,7 +6,7 @@
         ignore = all
 	branch = 3.4.1
 [submodule "functions/PHPMailer"]
-        path = functions/PHPMailer
+        path = functions/PHPmailer
         url = https://github.com/PHPMailer/PHPMailer.git
         ignore = all
 [submodule "app/login/captcha"]
@@ -26,6 +26,6 @@
 [submodule "functions/xmlseclibs"]
 	path = functions/xmlseclibs
 	url = https://github.com/robrichards/xmlseclibs.git
-[submodule "functions/PHPmailer"]
-	path = functions/PHPmailer
-	url = https://github.com/PHPMailer/PHPMailer.git
+[submodule "functions/parsedown"]
+	path = functions/parsedown
+	url = https://github.com/erusev/parsedown.git
