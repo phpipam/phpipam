@@ -501,7 +501,7 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 		$phpipam_mail->Php_mailer->AltBody = $content_plain;
 		//send
 		$phpipam_mail->Php_mailer->send();
-	} catch (phpmailerException $e) {
+	} catch (PHPMailer\PHPMailer\Exception $e) {
 		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
 	} catch (Exception $e) {
 		$Result->show_cli("Mailer Error: ".$e->getMessage(), true);

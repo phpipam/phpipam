@@ -1886,7 +1886,7 @@ class Logging extends Common_functions {
 			$phpipam_mail->Php_mailer->AltBody = $content_plain;
 			//send
 			$phpipam_mail->Php_mailer->send();
-		} catch (phpmailerException $e) {
+		} catch (PHPMailer\PHPMailer\Exception $e) {
 			$this->Result->show("danger", _("Mailer Error").": ".$e->errorMessage(), true);
 		} catch (Exception $e) {
 			$this->Result->show("danger", _("Mailer Error").": ".$e->getMessage(), true);
