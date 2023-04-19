@@ -75,25 +75,24 @@ $tools_menu[_('Tools')]     = [];
 $tools_menu[_('User Menu')] = [];
 
 # Tools
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-book",        "href"=>"documentation",               "name"=>_("Documentation"),         "description"=>_("Read phpIPAM documentation")];
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-search",      "href"=>"search",                      "name"=>_("Search"),               "description"=>_("Search database Addresses, subnets and VLANs")];
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-calculator",  "href"=>"ip-calculator",               "name"=>_("IP calculator"),        "description"=>_("IPv4v6 calculator for subnet calculations")];
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-calculator",  "href"=>"ip-calculator/bw-calculator", "name"=>_("Bandwidth calculator"), "description"=>_("Bandwidth calculator")];
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-search", 		"name"=>"Search", 		 		"href"=>"search", 		"description"=>"Search database Addresses, subnets and VLANs");
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-calculator",	"name"=>"IP calculator", 		"href"=>"ip-calculator","description"=>"IPv4v6 calculator for subnet calculations");
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-calculator",	"name"=>"Bandwidth calculator", "href"=>"ip-calculator/bw-calculator","description"=>"Bandwidth calculator");
+>>>>>>> umg-upgrade-1.5.3
 if($User->settings->enableChangelog == 1)
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-clock-o",     "href"=>"changelog",                   "name"=>_("Changelog"),            "description"=>_("Changelog for all network objects")];
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-list",        "href"=>"logs",                        "name"=>_("Log files"),            "description"=>_("Browse phpipam log files")];
-if($User->settings->enableIPrequests==1)
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-plus",        "href"=>"requests",                    "name"=>_("IP requests"),          "description"=>_("Manage IP requests")];
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-info",        "href"=>"instructions",                "name"=>_("Instructions"),         "description"=>_("Instructions for managing IP addresses")];
-if($User->settings->enablePowerDNS==1 && $User->get_module_permissions ("pdns")>=User::ACCESS_R)
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-database",    "href"=>"powerDNS",                    "name"=>_("PowerDNS"),             "description"=>_("PowerDNS")];
-if($User->settings->enableDHCP==1 && $User->get_module_permissions ("dhcp")>=User::ACCESS_R)
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-database",    "href"=>"dhcp",                        "name"=>_("DHCP"),                 "description"=>_("DHCP information")];
-if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>=User::ACCESS_R)
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-phone",       "href"=>"pstn-prefixes",               "name"=>_("PSTN prefixes"),        "description"=>_("PSTN prefixes")];
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-sitemap",     "href"=>"mac-lookup",                  "name"=>_("MAC lookup"),           "description"=>_("Lookup MAC address vendor")];
-if($User->settings->enableVaults == 1 && $User->get_module_permissions ("vaults")>=User::ACCESS_R)
-$tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-key",         "href"=>"vaults",                      "name"=>_("Vaults"),               "description"=>_("Secure information storing")];
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-clock-o", 		"name"=>"Changelog", 	 		"href"=>"changelog", 	"description"=>"Changelog for all network objects");
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-list", 			"name"=>"Log files", 			"href"=>"logs",		 	"description"=>"Browse phpipam log files");
+if($User->settings->enableIPrequests==1) {
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-plus", 			"name"=>"IP requests", 			"href"=>"requests", 	"description"=>"Manage IP requests");
+}
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-info", 	  		"name"=>"Instructions",  		"href"=>"instructions", "description"=>"Instructions for managing IP addresses");
+if($User->settings->enablePowerDNS==1 && $User->get_module_permissions ("pdns")>0)
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-database", 	  	"name"=>"PowerDNS",  		    "href"=>"powerDNS", "description"=>"PowerDNS");
+if($User->settings->enableDHCP==1 && $User->get_module_permissions ("dhcp")>0)
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-database", 	  	"name"=>"DHCP",  		        "href"=>"dhcp", "description"=>"DHCP information");
+if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>0)
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-phone", 	  	"name"=>"PSTN prefixes",  		 "href"=>"pstn-prefixes", "description"=>"PSTN prefixes");
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-sitemap", 	  	"name"=>"MAC lookup",  		 	 "href"=>"mac-lookup", "description"=>"Lookup MAC address vendor");
 
 # Subnets
 if($User->settings->enableCustomers == 1 && $User->get_module_permissions ("customers")>=User::ACCESS_R)
