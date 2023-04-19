@@ -262,7 +262,7 @@ Request:
 
 ```http
     POST /api/myAPP/user/ HTTP/1.1
-    **Authorization: Basic YWgta146c3A0bm1raWE=**
+    **Authorization: Basic __sample auth header removed__
     Host: api.phpipam.net
 ```
 
@@ -277,7 +277,7 @@ Response (success):
     Pragma: no-cache
     Content-Length: 103
     Content-Type: application/json
-    {"code":200,"success":true,"data":{"token":"Z1q=j2bdwx56NR14KFcTi7P$","expires":"2015-07-09 20:05:28"} }
+    {"code":200,"success":true,"data":{"token":"__sample_token_removed_","expires":"2015-07-09 20:05:28"} }
 ```
 
 API Call to get all sections:
