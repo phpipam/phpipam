@@ -16,7 +16,7 @@ First we need to authenticate to API server by providing username/password from 
     Content-Length: 116
     Content-Type: application/json
 
-    {"code":200,"success":true,"data":{"token":".J1e9ipFZkPE6EvIRAqEf9hp","expires":"2017-01-05 14:18:43"},"time":0.009}%
+    {"code":200,"success":true,"data":{"token":"__SAMPLE TOKEN REMOVED__","expires":"2017-01-05 14:18:43"},"time":0.009}%
 ```
 
 After authentication is successful you receive token that you need to include in each following request. In our case the token is `.J1e9ipFZkPE6EvIRAqEf9hp`. We can also see that token expires in 6 hours.
