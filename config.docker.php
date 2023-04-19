@@ -58,6 +58,8 @@ $proxy_user     = file_env('PROXY_USER',     $proxy_user);
 $proxy_pass     = file_env('PROXY_PASS',     $proxy_pass);
 $proxy_use_auth = file_env('PROXY_USE_AUTH', $proxy_use_auth);
 
+$offline_mode   = filter_var(file_env('OFFLINE_MODE', $offline_mode), FILTER_VALIDATE_BOOLEAN);
+
 /**
  * php debugging on/off
  *

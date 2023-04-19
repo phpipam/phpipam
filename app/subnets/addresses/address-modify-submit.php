@@ -143,6 +143,7 @@ if($action=="edit" || $action=="delete" || $action=="move") {
 
 # set excludePing value
 $address['excludePing'] = @$address['excludePing']==1 ? 1 : 0;
+$address['is_gateway'] = @$address['is_gateway']==1 ? 1 : 0;
 
 # check if subnet is multicast
 $subnet_is_multicast = $Subnets->is_multicast ($subnet['subnet']);

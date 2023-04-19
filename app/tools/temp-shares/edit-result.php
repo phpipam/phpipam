@@ -114,7 +114,7 @@ if(strlen($_POST['email'])>0) {
 		$phpipam_mail->Php_mailer->AltBody = $content_plain;
 		//send
 		$phpipam_mail->Php_mailer->send();
-	} catch (phpmailerException $e) {
+	} catch (PHPMailer\PHPMailer\Exception $e) {
 		$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
 	} catch (Exception $e) {
 		$Result->show("danger", "Mailer Error: ".$e->getMessage(), true);

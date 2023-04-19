@@ -437,6 +437,10 @@ class Common_functions  {
 		if (!is_object($settings))
 			return false;
 
+		// Escape ' & " charaters
+		if (property_exists($settings, 'siteTitle'))
+			$settings->siteTitle = escape_input($settings->siteTitle);
+
 		// default dbversion for older releases
 		if (!property_exists($settings, 'dbversion'))
 			$settings->dbversion = 0;
@@ -1418,6 +1422,11 @@ class Common_functions  {
 	 */
 	public function curl_fetch_url($url, $headers=false, $timeout=30) {
 		$result = ['result'=>false, 'result_code'=>503, 'error_msg'=>''];
+
+		if (Config::ValueOf('offline_mode')) {
+			$result['error_msg'] = _('Internet access disabled in config.php');
+			return $result;
+		}
 
 		try {
 			$curl = curl_init();

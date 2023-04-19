@@ -10,6 +10,7 @@
     + Added subnet free space map for each possible subnet mask;
     + Added Vaults (Certificate andf password storing);
     + Added Tools->Duplicate subnets & IP page;
+    + Added config.php offline_mode to disable server-side Internet lookups (#3462);
 
     Enhancements, changes:
     ----------------------------
@@ -83,6 +84,10 @@
     + PHP session ID fixation (#3342);
     + XSS (reflected) in IP calculator (#3351);
     + XSS in pass-change/result.php (#3373);
+    + SQL injection in edit-bgp-mapping-search.php;
+    + Stored XSS in the "Site title" parameter;
+    + XSS while uploading CVS files;
+    + XSS (reflected) in 'find subnets';
 
     Translations:
     ----------------------------
