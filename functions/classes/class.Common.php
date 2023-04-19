@@ -2021,6 +2021,15 @@ class Common_functions  {
 	}
 
 	/**
+	 * Print documentation link
+	 *
+	 * @param   string $doc  document path/file
+	 */
+	public function print_doc_link($doc) {
+		print "<a style='float:right' target=_ href='".create_link("tools/documentation/$doc")."'>"._("Documentation")." <i class='fa fa-book'></i></a>";
+	}
+
+	/**
 	 * Prints site title
 	 *
 	 * @access public
