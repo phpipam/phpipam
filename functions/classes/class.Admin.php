@@ -10,7 +10,7 @@ class Admin extends Common_functions {
 	/**
 	 * (array of objects) to store users, user id is array index
 	 *
-	 * @var mixed
+	 * @var array
 	 * @access public
 	 */
 	public $users;
@@ -18,7 +18,7 @@ class Admin extends Common_functions {
 	/**
 	 * (array of objects) to store groups, group id is array index
 	 *
-	 * @var mixed
+	 * @var array
 	 * @access public
 	 */
 	public $groups;
@@ -46,7 +46,7 @@ class Admin extends Common_functions {
 	/**
 	 * User
 	 *
-	 * @var mixed
+	 * @var User
 	 * @access protected
 	 */
 	protected $User;
@@ -360,7 +360,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $group_ids
-	 * @return void
+	 * @return array
 	 */
 	public function groups_parse ($group_ids) {
 		$out = array ();
@@ -386,7 +386,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $group_ids
-	 * @return void
+	 * @return array
 	 */
 	public function groups_parse_ids ($group_ids) {
 		$out = array ();

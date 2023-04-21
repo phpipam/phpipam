@@ -103,7 +103,7 @@ class DHCP_kea extends Common_functions {
      *
      * (default value: array("memfile", "mysql", "postgresql"))
      *
-     * @var string
+     * @var array
      * @access public
      */
     public $lease_types = array("memfile", "mysql", "postgresql");
@@ -133,7 +133,7 @@ class DHCP_kea extends Common_functions {
      *
      * (default value: array("mysql"))
      *
-     * @var string
+     * @var array
      * @access public
      */
     public $reservation_types = array("file", "mysql");
@@ -154,7 +154,7 @@ class DHCP_kea extends Common_functions {
      *
      * (default value: false)
      *
-     * @var bool
+     * @var Database_PDO
      * @access protected
      */
     protected $Database_kea = false;

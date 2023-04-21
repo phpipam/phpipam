@@ -35,10 +35,12 @@ else {
 
     // check if we have any policy nat !
     $policy_nat_found = false;
-    foreach ($all_nats as $n) {
-        if ($n->policy=="Yes") {
-            $policy_nat_found = true;
-            break;
+    if($all_nats !== false) {
+    	foreach ($all_nats as $n) {
+            if ($n->policy=="Yes") {
+                $policy_nat_found = true;
+                break;
+            }
         }
     }
 

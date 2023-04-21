@@ -6,7 +6,12 @@
 
 class Config {
 
-    private static $config = false;
+    /**
+     * Contents of config.php
+     *
+     * @var object|null
+     */
+    private static $config = null;
 
     /**
      * Read config.php info self::$config
@@ -24,7 +29,7 @@ class Config {
      * @return mixed
      */
     public static function ValueOf($name, $default_value = false) {
-        if (self::$config === false) {
+        if (is_null(self::$config)) {
             self::read_config();
         }
 

@@ -26,7 +26,7 @@ class DHCP extends Common_functions {
      *
      * (default value: array("kea"))
      *
-     * @var string
+     * @var array
      * @access private
      */
     private $dhcp_server_types = array("kea");
@@ -60,7 +60,7 @@ class DHCP extends Common_functions {
      *
      * (default value: false)
      *
-     * @var bool
+     * @var object
      * @access private
      */
     private $DHCP_server = false;

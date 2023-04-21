@@ -1547,7 +1547,7 @@ class User extends Common_functions {
      * From json {"2":"2","3":"1"}, get user list + perm
      *
      * @method get_user_permissions_from_json
-     * @param  json     $json
+     * @param  string     $json
      * @return array
      */
     public function get_user_permissions_from_json ($json) {

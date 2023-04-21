@@ -616,7 +616,7 @@ class Scan extends Common_functions {
 	 * @param  int$address_id
 	 * @param  int $tag_id (default: 2)
 	 * @param  int $old_tag_id (default: null)
-	 * @param  dadtetime $last_seen_date (default: false)
+	 * @param  string $last_seen_date (default: false)
 	 * @return bool
 	 */
 	public function update_address_tag ($address_id, $tag_id = 2, $old_tag_id = null, $last_seen_date = false) {
@@ -751,7 +751,7 @@ class Scan extends Common_functions {
 	 * @access private
 	 * @param mixed $ip				//array of ip addresses in decimal format
 	 * @param mixed $subnetId		//id of subnet
-	 * @return void
+	 * @return array
 	 */
 	private function remove_existing_subnet_addresses ($ip, $subnetId) {
 		# first fetch all addresses

@@ -10,7 +10,7 @@ class Addresses extends Common_functions {
 	/**
 	 * Address types array
 	 *
-	 * @var mixed
+	 * @var array
 	 * @access public
 	 */
 	public $address_types = array();
@@ -38,7 +38,7 @@ class Addresses extends Common_functions {
 	/**
 	 * Subnets object
 	 *
-	 * @var mixed
+	 * @var Subnets
 	 * @access protected
 	 */
 	protected $Subnets;
@@ -46,7 +46,7 @@ class Addresses extends Common_functions {
 	/**
 	 * PowerDNS object
 	 *
-	 * @var mixed
+	 * @var PowerDNS
 	 * @access private
 	 */
 	private $PowerDNS;
@@ -110,7 +110,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $state
-	 * @return mixed tag
+	 * @return string
 	 */
 	public function address_type_format_tag ($state) {
 		# fetch address states
@@ -154,7 +154,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $type
-	 * @return void
+	 * @return mixed
 	 */
 	public function address_type_type_to_index ($type = "Used") {
 		# null of no length
@@ -197,7 +197,7 @@ class Addresses extends Common_functions {
 	 * @access public
 	 * @param string $method
 	 * @param mixed $id
-	 * @return object address
+	 * @return object|false address
 	 */
 	public function fetch_address ($method, $id) {
 		# null method
@@ -230,7 +230,7 @@ class Addresses extends Common_functions {
 	 * @access public
 	 * @param mixed $ip_addr
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return object|false
 	 */
 	public function fetch_address_multiple_criteria ($ip_addr, $subnetId) {
 		try { $address = $this->Database->getObjectQuery("SELECT * FROM `ipaddresses` where `ip_addr` = ? and `subnetId` = ? limit 1;", array($ip_addr, $subnetId)); }
@@ -286,7 +286,7 @@ class Addresses extends Common_functions {
 	 * @param object $address
 	 * @param mixed $linked_field
 	 * @param mixed $value
-	 * @return void
+	 * @return array|false
 	 */
 	private function bulk_fetch_similar_addresses($address, $linked_field, $value) {
 		// Check cache
@@ -731,7 +731,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return bool
 	 */
 	public function remove_gateway ($subnetId) {
 		try { $this->Database->updateObject("ipaddresses", array("subnetId"=>$subnetId, "is_gateway"=>0), "subnetId"); }
@@ -739,6 +739,7 @@ class Addresses extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
+		return true;
 	}
 
 	/**
@@ -964,7 +965,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $subnet_id
-	 * @return array|false
+	 * @return object|false
 	 */
 	private function pdns_fetch_domain ($subnet_id) {
 		# initialize subnets
@@ -1272,7 +1273,7 @@ class Addresses extends Common_functions {
 	 * @param mixed $subnetId
 	 * @param mixed $order (default: null)
 	 * @param mixed $order_direction (default: null)
-	 * @param string $fields (default: "*")
+	 * @param mixed $fields (default: "*")
 	 * @return void
 	 */
 	public function fetch_subnet_addresses ($subnetId, $order=null, $order_direction=null, $fields = "*") {
@@ -1281,7 +1282,7 @@ class Addresses extends Common_functions {
 		else 					{ $order = array("ip_addr", "asc"); }
 
 		# fields
-		if($fields!="*") {
+		if(is_array($fields)) {
     		$fields = implode(",", $fields);
 		}
 
@@ -1878,7 +1879,7 @@ class Addresses extends Common_functions {
      * @param bool|int $nat_id (default: false)
      * @param bool|mixed $object_type (default: false)
      * @param bool $object_id (default: false)
-     * @return void
+     * @return string
      */
     public function print_nat_link_line ($n, $nat_id = false, $object_type = false, $object_id=false) {
         // cast to object to be sure if array provided
@@ -1935,7 +1936,7 @@ class Addresses extends Common_functions {
      * Translates NAT objects to be shown on page
      *
      * @access public
-     * @param json $json_objects
+     * @param string $json_objects
      * @param int|bool $nat_id (default: false)
      * @param bool $json_objects (default: false)
      * @param bool $object_type (default: false) - to bold it (ipaddresses / subnets)
