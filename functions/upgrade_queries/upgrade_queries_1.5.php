@@ -6,6 +6,8 @@
 
 // fix for postcode
 $upgrade_queries["1.5.26"]   = [];
+$upgrade_queries["1.5.26"][] =  "-- Version update";
+$upgrade_queries["1.5.26"][] = "UPDATE `settings` set `version` = '1.5';";
 $upgrade_queries["1.5.26"][] = "ALTER TABLE `customers` CHANGE `postcode` `postcode` VARCHAR(32)  NULL  DEFAULT NULL;";
 $upgrade_queries["1.5.26"][] = "-- Database version bump";
 $upgrade_queries["1.5.26"][] = "UPDATE `settings` set `dbversion` = '26';";
@@ -80,6 +82,8 @@ $upgrade_queries["1.5.32"][] = "UPDATE `settings` set `dbversion` = '32';";
 // Fix SET/ENUM usage in usersAuthMethod
 // Allow for longer json params (e.g. certificates in SAML2)
 $upgrade_queries["1.5.33"]   = [];
+$upgrade_queries["1.5.33"][] = "UPDATE `usersAuthMethod` SET `type` = 'local' WHERE id = 1;"; // Issue #3563
+$upgrade_queries["1.5.33"][] = "UPDATE `usersAuthMethod` SET `type` = 'http'  WHERE id = 2;"; // Issue #3563
 $upgrade_queries["1.5.33"][] = "ALTER TABLE `usersAuthMethod` CHANGE `type` `type` ENUM('local','http','AD','LDAP','NetIQ','Radius','SAML2') NOT NULL DEFAULT 'local';";
 $upgrade_queries["1.5.33"][] = "ALTER TABLE `usersAuthMethod` CHANGE `params` `params` text DEFAULT NULL;";
 $upgrade_queries["1.5.33"][] = "ALTER TABLE `usersAuthMethod` CHANGE `protected` `protected` ENUM('Yes','No') NOT NULL DEFAULT 'Yes';";
@@ -186,3 +190,24 @@ $upgrade_queries["1.5.39"]   = [];
 $upgrade_queries["1.5.39"][] = "INSERT INTO `widgets` (`wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('MAC lookup', 'Shows MAC address vendor', 'mac-lookup', NULL, 'yes', '6', 'no', 'yes');";
 $upgrade_queries["1.5.39"][] = "-- Database version bump";
 $upgrade_queries["1.5.39"][] = "UPDATE `settings` set `dbversion` = '39';";
+
+#
+# Version 1.51.39 queries
+#
+$upgrade_queries["1.51.39"]   = [];
+$upgrade_queries["1.51.39"][] = "-- Version update";
+$upgrade_queries["1.51.39"][] = "UPDATE `settings` set `version` = '1.51';";
+
+#
+# Version 1.52.39 queries
+#
+$upgrade_queries["1.52.39"]   = [];
+$upgrade_queries["1.52.39"][] = "-- Version update";
+$upgrade_queries["1.52.39"][] = "UPDATE `settings` set `version` = '1.52';";
+
+#
+# Version 1.53.39 queries
+#
+$upgrade_queries["1.53.39"]   = [];
+$upgrade_queries["1.53.39"][] = "-- Version update";
+$upgrade_queries["1.53.39"][] = "UPDATE `settings` set `version` = '1.53';";
