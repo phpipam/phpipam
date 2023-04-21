@@ -126,7 +126,7 @@ class FirewallZones extends Common_functions {
 	 * @access private
 	 * @param mixed $zoneLength
 	 * @param mixed $zoneGenerator
-	 * @return void
+	 * @return string|false
 	 */
 	private function generate_numeric_zone_name ($zoneLength,$zoneGenerator) {
 
@@ -147,7 +147,7 @@ class FirewallZones extends Common_functions {
 			} elseif($zoneGenerator == 1) {
 				# the highest convertable integer value for dechex() is 4294967295!
 				if($zoneName > 4294967295) {
-					return $this->Result->show("danger", _("The maximum convertable vlaue is reached. Consider to switch to decimal or text mode and change the zone name length value."), true);
+					return $this->Result->show("danger", _("The maximum convertable value is reached. Consider to switch to decimal or text mode and change the zone name length value."), true);
 				}
 				if(strlen(dechex($zoneName)) > $zoneLength){
 					return $this->Result->show("danger", _("Maximum zone name length reached! Consider to change your settings in order to generate larger zone names."), true);
@@ -160,7 +160,7 @@ class FirewallZones extends Common_functions {
 		}
 
 		# return the values
-		return sizeof($zoneName)>0 ? $zoneName : false;
+		return $zoneName>0 ? $zoneName : false;
 	}
 
 
@@ -192,7 +192,7 @@ class FirewallZones extends Common_functions {
 
 		if ($uniqueZone[0]->zone && $firewallZoneSettings['strictMode'] == 'on') {
 
-			$this->Result->show("danger", _("Error: The zone name ".$uniqueZone[0]->zone." is not unique!"), false);
+			$this->Result->show("danger", _("Error: The zone name")." ".$uniqueZone[0]->zone." "._("is not unique")."!", false);
 
 		} else {
 			# set the initial zone name to "1"
@@ -223,11 +223,12 @@ class FirewallZones extends Common_functions {
 						firewallZoneMapping.alias AS alias,
 						firewallZones.description AS description,
 						firewallZoneMapping.deviceId AS deviceId,
-						fwvrs.name AS deviceName,
-						firewallZoneMapping.id AS fwzid
+						devices.hostname AS deviceName,
+						devices.description AS deviceDescription,
+						firewallZoneMapping.interface AS interface
 						FROM firewallZoneMapping
 						RIGHT JOIN firewallZones ON zoneId = firewallZones.id
-						LEFT JOIN fwvrs ON deviceId = fwvrs.id
+						LEFT JOIN devices ON deviceId = devices.id
 						having  deviceId is not NULL order by firewallZones.id ASC;');}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
@@ -281,7 +282,7 @@ class FirewallZones extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $id
-	 * @return void
+	 * @return object|false
 	 */
 	public function get_zone_mapping ($id) {
 		# try to fetch id specific zone mapping
@@ -296,11 +297,11 @@ class FirewallZones extends Common_functions {
 						firewallZoneMapping.alias AS alias,
 						firewallZones.description AS description,
 						firewallZoneMapping.deviceId AS deviceId,
-						fwvrs.name AS deviceName,
-						firewallZoneMapping.id AS fwzid
+						devices.hostname AS deviceName,
+						firewallZoneMapping.interface AS interface
 						FROM firewallZoneMapping
 						RIGHT JOIN firewallZones ON zoneId = firewallZones.id
-						LEFT JOIN fwvrs ON deviceId = fwvrs.id
+						LEFT JOIN devices ON deviceId = devices.id
 						having  deviceId is not NULL AND mappingId = ?;', $id);}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
@@ -375,32 +376,31 @@ class FirewallZones extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $id
-	 * @return void
+	 * @return object|false
 	 */
 	public function get_zone_subnet_info ($id) {
 		# try to fetch id specific zone information
 		try { $info =  $this->Database->getObjectsQuery('SELECT
-			firewallZones.zone as zone,
-			firewallZones.padding as padding,
-			firewallZones.length as length,
-			firewallZones.indicator as indicator,
-			firewallZones.generator as generator,
-			firewallZoneMapping.alias as alias,
-			firewallZoneSubnet.zoneId as zoneId,
-			firewallZoneSubnet.subnetId as subnetId,
-			subnets.subnet as subnet,
-			subnets.mask as mask,
-			subnets.description as subnetDescription,
-			subnets.firewallAddressObject as firewallAddressObject,
-			fwvrs.name as deviceName,
-			fwvrs.id as fwvrid
-			FROM firewallZoneSubnet
-			inner join subnets ON firewallZoneSubnet.subnetId = subnets.id
-			inner JOIN firewallZoneMapping on firewallZoneMapping.id = firewallZoneSubnet.zoneId
-			inner JOIN firewallZones on firewallZoneMapping.zoneId = firewallZones.id
-			inner JOIN fwvrs ON firewallZoneMapping.deviceId = fwvrs.id
-			HAVING firewallZoneSubnet.subnetId = ?;', $id);}
-
+						firewallZones.zone as zone,
+						firewallZones.padding as padding,
+						firewallZones.length as length,
+						firewallZones.indicator as indicator,
+						firewallZones.generator as generator,
+						firewallZoneMapping.alias as alias,
+						firewallZones.description as description,
+						firewallZoneSubnet.subnetId as subnetId,
+						subnets.subnet as subnet,
+						subnets.mask as mask,
+						subnets.description as subnetDescription,
+						subnets.firewallAddressObject as firewallAddressObject,
+						firewallZoneMapping.interface as interface,
+						devices.hostname as deviceName
+						FROM firewallZoneMapping
+						RIGHT JOIN firewallZones on firewallZoneMapping.zoneId = firewallZones.id
+						LEFT JOIN firewallZoneSubnet on firewallZoneMapping.zoneId = firewallZoneSubnet.zoneId
+						LEFT JOIN devices ON firewallZoneMapping.deviceId = devices.id
+						LEFT JOIN subnets ON firewallZoneSubnet.subnetId = subnets.id
+						HAVING firewallZoneSubnet.subnetId = ?;', $id);}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 		if ($info) {
@@ -432,7 +432,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zones () {
 		# try to fetch all zones
-		try { $zones =  $this->Database->getObjectsQuery('SELECT * FROM firewallZones order by zone;');}
+		try { $zones =  $this->Database->getObjectsQuery('SELECT * FROM firewallZones;');}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
@@ -487,7 +487,7 @@ class FirewallZones extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $id
-	 * @return void
+	 * @return object|false
 	 */
 	public function get_zone ($id) {
 		# try to fetch zone with ID $id
@@ -556,14 +556,14 @@ class FirewallZones extends Common_functions {
 
 		# build html output
 		print '<table class="table table-auto table-condensed" style="margin-bottom:0px;">';
-		print "<tr><td colspan='2'><h4>Zone details</h4><hr></td></tr>";
+		print "<tr><td colspan='2'><h4>"._("Zone details")."</h4><hr></td></tr>";
 		print '<tr>';
 		print '<td style="width:110px;">'._('Zone Name').'</td>';
 		print '<td>'.$zoneInformation->zone.'</td>';
 		print '</tr>';
 		print '<tr>';
 		print '<td>'._('Indicator').'</td>';
-		$title = $zoneInformation->indicator == 0 ? 'Own Zone' : 'Customer Zone';
+		$title = $zoneInformation->indicator == 0 ? _("Own Zone") : _("Customer Zone");
 		print '<td><span class="fa fa-home"  title="'._($title).'"></span></td>';
 		print '</tr>';
 		print '<tr>';
@@ -574,7 +574,7 @@ class FirewallZones extends Common_functions {
 		// networks
 		if ($zoneInformation->network) {
 			print "<table class='table table-condensed' style='margin-bottom:30px;'>";
-			print "<tr><td colspan='2'><br><h4>Subnets</h4><hr></td></tr>";
+			print "<tr><td colspan='2'><br><h4>"._("Subnets")."</h4><hr></td></tr>";
 			print '<tr>';
 			print '<th>'._('Subnet').'</th>';
 			print '<th>'._('VLAN').'</th>';
@@ -638,7 +638,7 @@ class FirewallZones extends Common_functions {
 			print "</a>";
 
 			if ($network->subnetIsFolder == 1) {
-				print 'Folder: '.$network->subnetDescription;
+				print _("Folder").": ".$network->subnetDescription;
 			} else {
 				# display network information with or without description
 				if ($network->subnetDescription) 	{	print $this->Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.' ('.$network->subnetDescription.')</td>';	}
@@ -669,7 +669,7 @@ class FirewallZones extends Common_functions {
 			# return dummy value
 			return 'success';
 		} else {
-			$this->Result->show("danger","<strong>"._('Error').":</strong><br>"._("This network is already bound to this or another zone.<br>The binding must be unique."), false);
+			$this->Result->show("danger","<strong>"._('Error').":</strong><br>"._("This network is already bound to this or another zone.")."<br>"._("The binding must be unique."), false);
 			return false;
 		}
 		# return dummy value
@@ -702,7 +702,7 @@ class FirewallZones extends Common_functions {
 			# throw exception
 			catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 		} else {
-			$this->Result->show("danger","<strong>"._('Error').":</strong><br>"._("This network is already bound to this or another zone.<br>The binding must be unique."), false);
+			$this->Result->show("danger","<strong>"._('Error').":</strong><br>"._("This network is already bound to this or another zone.")."<br>"._("The binding must be unique."), false);
 			return false;
 		}
 		# return dummy value
@@ -783,7 +783,7 @@ class FirewallZones extends Common_functions {
 		try { $this->Database->insertObject("firewallZones", $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "Firewall zone created", "Failed to add new firewall zone<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone create"), _("Failed to add new firewall zone").".<hr>".$e->getMessage(), 2, $this->User->username);
 			return false;
 		}
 
@@ -824,11 +824,11 @@ class FirewallZones extends Common_functions {
 		try { $this->Database->updateObject("firewallZones", $values, "id"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "Firewall zone edited", "Failed to edit firewall zone<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone edit"), _("Failed to edit firewall zone").".<hr>".$e->getMessage(), 2, $this->User->username);
 			return false;
 		}
 		# ok
-		$this->Log->write( "Firewall zone edited", "Firewall zone edited<hr>".$this->array_to_log($values), 0, $this->User->username);
+		$this->Log->write( _("Firewall zone edit"), _("Firewall zone edited").".<hr>".$this->array_to_log($values), 0, $this->User->username);
 		return true;
 	}
 
@@ -847,7 +847,7 @@ class FirewallZones extends Common_functions {
 		# delete mappings
 		try { $this->Database->deleteRow("firewallZoneMapping", "zoneId", $id); }
 		catch (Exception $e) {
-			$this->Log->write( "Firewall zone and mappings delete", "Failed to delete firewall zone mappfings of $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone and mappings delete"), _("Failed to delete firewall zone mappings of")." $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
@@ -855,12 +855,12 @@ class FirewallZones extends Common_functions {
 		# delete zone
 		try { $this->Database->deleteRow("firewallZones", "id", $id); }
 		catch (Exception $e) {
-			$this->Log->write( "Firewall zone delete", "Failed to delete firewall zone $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone delete"), _("Failed to delete firewall zone")." $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 		# ok
-		$this->Log->write( "Firewall zone deleted", "Firewall zone ".$old_zone->zone." deleted<hr>".$this->array_to_log($old_subnet), 0, $this->User->username);
+		$this->Log->write( _("Firewall zone delete"), _("Firewall zone")." ".$old_zone->zone." "._("deleted").".<hr>".$this->array_to_log($old_zone), 0, $this->User->username);
 
 		return true;
 	}
@@ -904,11 +904,11 @@ class FirewallZones extends Common_functions {
 		try { $this->Database->insertObject("firewallZoneMapping", $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "Firewall zone mapping created", "Failed to add new firewall zone mapping<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone mapping create"), _("Failed to add new firewall zone mapping").".<hr>".$e->getMessage(), 2, $this->User->username);
 			return false;
 		}
 		# ok
-		$this->Log->write( "Firewall zone mapping created", "New firewall zone mapping created<hr>".$this->array_to_log($values), 0, $this->User->username);
+		$this->Log->write( _("Firewall zone mapping create"), _("New firewall zone mapping created").".<hr>".$this->array_to_log($values), 0, $this->User->username);
 		return true;
 	}
 
@@ -925,11 +925,11 @@ class FirewallZones extends Common_functions {
 		try { $this->Database->updateObject("firewallZoneMapping", $values, "id"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "Firewall zone mapping edited", "Failed to edit firewall zone mapping<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone mapping edit"), _("Failed to edit firewall zone mapping").".<hr>".$e->getMessage(), 2, $this->User->username);
 			return false;
 		}
 		# ok
-		$this->Log->write( "Firewall zone mapping edited", "Firewall zone mapping edited<hr>".$this->array_to_log($values), 0, $this->User->username);
+		$this->Log->write( _("Firewall zone mapping edit"), _("Firewall zone mapping edited").".<hr>".$this->array_to_log($values), 0, $this->User->username);
 		return true;
 	}
 
@@ -948,12 +948,12 @@ class FirewallZones extends Common_functions {
 		# delete mapping
 		try { $this->Database->deleteRow("firewallZoneMapping", "id", $id); }
 		catch (Exception $e) {
-			$this->Log->write( "Firewall zone mapping delete", "Failed to delete firewall zone mapping $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( _("Firewall zone mapping delete"), _("Failed to delete firewall zone mapping")." ".$old_mapping->zone.".<hr>".$e->getMessage(), 2, $this->User->username);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 		# ok
-		$this->Log->write( "Firewall zone mapping deleted", "Firewall zone mapping ".$old_zone->zone." deleted<hr>".$this->array_to_log($old_subnet), 0, $this->User->username);
+		$this->Log->write( _("Firewall zone mapping delete"), _("Firewall zone mapping")." ".$old_mapping->zone." "._("deleted").".<hr>".$this->array_to_log($old_mapping), 0, $this->User->username);
 
 		return true;
 	}
@@ -963,7 +963,7 @@ class FirewallZones extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $id
-	 * @return void
+	 * @return bool
 	 */
 	public function generate_subnet_object ($id) {
 		# fetch the settings
@@ -971,6 +971,7 @@ class FirewallZones extends Common_functions {
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($id);
+		$firewallAddressObject = "";
 
 		# build the object name prefix
 		foreach ($firewallZoneSettings['pattern'] as $pattern) {
@@ -1027,7 +1028,7 @@ class FirewallZones extends Common_functions {
 			# write changelog
 			$this->Log->write_changelog('subnet', 'edit', 'success', $subnet_old,$subnet);
 
-			return ture;
+			return true;
 		}
 		return false;
 	}
@@ -1046,6 +1047,7 @@ class FirewallZones extends Common_functions {
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($id);
+		$firewallAddressObject = "";
 
 		foreach ($firewallZoneSettings['pattern'] as $pattern) {
 			switch ($pattern) {
@@ -1086,7 +1088,7 @@ class FirewallZones extends Common_functions {
 	 * @param mixed $subnetId
 	 * @param mixed $IPId
 	 * @param mixed $dnsName
-	 * @return void
+	 * @return bool
 	 */
 	public function update_address_object ($subnetId,$IPId,$dnsName) {
 		# Addresses object
@@ -1100,6 +1102,7 @@ class FirewallZones extends Common_functions {
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($subnetId);
+		$firewallAddressObject = "";
 
 		foreach ($firewallZoneSettings['pattern'] as $pattern) {
 			switch ($pattern) {
@@ -1146,7 +1149,7 @@ class FirewallZones extends Common_functions {
 			# write changelog
 			$this->Log->write_changelog('ip_addr', 'edit', 'success', (array)$address_old,(array)$address);
 
-			return ture;
+			return true;
 		}
 
 		return false;
@@ -1157,7 +1160,7 @@ class FirewallZones extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnetId
-	 * @return boolean
+	 * @return bool
 	 */
 	public function update_address_objects ($subnetId) {
 		# Addresses object
@@ -1168,6 +1171,7 @@ class FirewallZones extends Common_functions {
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($subnetId);
+		$firewallAddressObject = "";
 
 		try { $ipaddresses = $this->Database->getObjectsQuery('SELECT id, hostname FROM ipaddresses WHERE subnetId = ? ',$subnetId); }
 		catch (Exception $e) {
