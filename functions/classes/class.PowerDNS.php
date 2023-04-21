@@ -848,7 +848,7 @@ class PowerDNS extends Common_functions {
         if ($this->fetch_domain ($domain_id)===false)    { $this->Result->show("danger", _("Invalid domain id"), true); }
 
         # checks
-        $this->validate_record_content ($record);
+        $this->validate_record_content ($content);
 
         // remove domain_id if set !
         unset($content->domain_id);

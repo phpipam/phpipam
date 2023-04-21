@@ -308,7 +308,7 @@ class Responses extends Result {
 	 *
 	 * @access private
 	 * @param mixed $obj
-	 * @return void
+	 * @return array
 	 */
 	private function object_to_array ($obj) {
 		// object to array

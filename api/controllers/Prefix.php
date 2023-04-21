@@ -121,7 +121,7 @@ class Prefix_controller extends Common_api_functions {
      *
      * (default value: array("IPv4", "IPv6", "v4", "v6", "4", "6"))
      *
-     * @var string
+     * @var array
      * @access private
      */
     private $valid_address_types = array("IPv4", "IPv6", "v4", "v6", "4", "6");
@@ -218,7 +218,7 @@ class Prefix_controller extends Common_api_functions {
      *
      * (default value: false)
      *
-     * @var bool
+     * @var object
      * @access private
      */
     private $master_subnet = false;

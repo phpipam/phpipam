@@ -412,8 +412,7 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 	if(!isset($recepients))	{ die(); }
 
 	# fake user object, needed for create_link
-	$User = new StdClass();
-	@$User->settings->prettyLinks = $Scan->settings->prettyLinks;
+	$User = new FakeUser($Scan->settings->prettyLinks);
 
 	# try to send
 	try {

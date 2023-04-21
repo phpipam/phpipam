@@ -187,12 +187,10 @@ class Tools extends Common_functions {
 		# first search if range provided
 		$result1 = $this->search_subnets_range  ($search_term, $high, $low, $custom_fields);
 		# search inside subnets even if IP does not exist!
-		$result2 = $this->search_subnets_inside ($high, $low);
-		# search inside subnets even if IP does not exist - IPv6
-		$result3 = $this->search_subnets_inside_v6 ($high, $low, $search_req);
+		$result2 = $this->search_subnets_inside ($search_term, $high, $low);
 		# filter results based on id
 		$results = [];
-		foreach (array_merge($result1, $result2, $result3) as $result) {
+		foreach (array_merge($result1, $result2) as $result) {
 			$results[$result->id] = $result;
 		}
 		# result
@@ -215,7 +213,6 @@ class Tools extends Common_functions {
 
 		# set search query
 		$query[] = "select * from `subnets` where `description` like :search_term ";
-		$query[] = "or (`subnet` >= :low and `subnet` <= :high )";
 		# custom
 	    if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {
@@ -229,7 +226,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $result = $this->Database->getObjectsQuery($query, array("low"=>$low, "high"=>$high, "search_term"=>"%$search_term%")); }
+		try { $result = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -246,105 +243,22 @@ class Tools extends Common_functions {
 	 * @param string $low
 	 * @return array
 	 */
-	private function search_subnets_inside ($high, $low) {
-		if($low==$high) {
-			# subnets class
-			$Subnets = new Subnets ($this->Database);
-			# fetch all subnets
-			$subnets = $Subnets->fetch_all_subnets_search();
-			# loop and search
-			$ids = array();
-			foreach($subnets as $s) {
-				# cast
-				$s = (array) $s;
+	private function search_subnets_inside($search_term, $high, $low) {
+		# subnets class
+		$Subnets = new Subnets($this->Database);
 
-				//first verify address type
-				$type = $this->identify_address($s['subnet']);
-
-				if($type == "IPv4") {
-					# Initialize PEAR NET object
-					$this->initialize_pear_net_IPv4 ();
-					# parse address
-					$net = $this->Net_IPv4->parseAddress($this->transform_address($s['subnet']).'/'.$s['mask'], "dotted");
-
-					if($low>=$this->transform_to_decimal(@$net->network) && $low<=$this->transform_address($net->broadcast, "decimal")) {
-						$ids[] = $s['id'];
-					}
-				}
-			}
-			# filter
-			$ids = sizeof(@$ids)>0 ? array_filter($ids) : array();
-
-			$result = array();
-
-			# search
-			if(sizeof($ids)>0) {
-				foreach($ids as $id) {
-					$result[] = $Subnets->fetch_subnet(null, $id);
-				}
-			}
-			# return
-			return sizeof(@$result)>0 ? array_filter($result) : array();
+		if ($low == $high) {
+			$mask = $Subnets->identify_address($low) == "IPv4" ? 32 : 128;
+			$cidr = $Subnets->transform_to_dotted($low) . "/" . $mask;
+		} elseif ($Subnets->verify_cidr_address($search_term) === true) {
+			$cidr = $search_term;
+		} else {
+			return [];
 		}
-		else {
-			return array();
-		}
-	}
 
+		$subnets = $Subnets->fetch_overlapping_subnets($cidr);
 
-	/**
-	 * Search inside subnets if host address is provided! ipv6
-	 *
-	 * @access private
-	 * @param string $high
-	 * @param string $low
-	 * @return array
-	 */
-	private function search_subnets_inside_v6 ($high, $low, $search_req) {
-		// same
-		if($low==$high) {
-			# Initialize PEAR NET object
-			$this->initialize_pear_net_IPv6 ();
-
-			// validate
-			if ($this->Net_IPv6->checkIPv6($search_req)) {
-				# subnets class
-				$Subnets = new Subnets ($this->Database);
-				# fetch all subnets
-				$subnets = $Subnets->fetch_all_subnets_search("IPv6");
-				# loop and search
-				$ids = array();
-				foreach($subnets as $s) {
-					# cast
-					$s = (array) $s;
-					# parse address
-					$net = $this->Net_IPv6->parseAddress($this->transform_address($s['subnet'], "dotted").'/'.$s['mask']);
-
-					if(gmp_cmp($low, $this->transform_address(@$net['start'], "decimal")) == 1 && gmp_cmp($low, $this->transform_address(@$net['end'], "decimal")) == -1) {
-						$ids[] = $s['id'];
-
-					}
-				}
-				# filter
-				$ids = sizeof(@$ids)>0 ? array_filter($ids) : array();
-				# search
-				$result = array();
-				if(sizeof($ids)>0) {
-					foreach($ids as $id) {
-						$result[] = $Subnets->fetch_subnet(null, $id);
-					}
-				}
-				# return
-				return sizeof(@$result)>0 ? array_filter($result) : array();
-			}
-			// empty
-			else {
-				return array();
-			}
-		}
-		else {
-			return array();
-		}
+		return is_array($subnets) ? array_reverse($subnets) : [];
 	}
 
 	/**
@@ -1954,7 +1868,7 @@ class Tools extends Common_functions {
 	 */
 	private function define_ipv6_address_types () {
         $all_types[10] = "NET_IPV6_NO_NETMASK";
-        $all_types[1]  = "NET_IPV6";
+        $all_types[1]  = "NET_IPV6";  				// NET_IPV6_UNASSIGNED
         $all_types[11] = "NET_IPV6_RESERVED";
         $all_types[12] = "NET_IPV6_RESERVED_NSAP";
         $all_types[13] = "NET_IPV6_RESERVED_IPX";
@@ -1964,9 +1878,9 @@ class Tools extends Common_functions {
         $all_types[42] = "NET_IPV6_LOCAL_LINK";
         $all_types[43] = "NET_IPV6_LOCAL_SITE";
         $all_types[51] = "NET_IPV6_IPV4MAPPING";
-        $all_types[51] = "NET_IPV6_UNSPECIFIED";
-        $all_types[51] = "NET_IPV6_LOOPBACK";
-        $all_types[51] = "NET_IPV6_UNKNOWN_TYPE";
+        $all_types[52] = "NET_IPV6_UNSPECIFIED";
+        $all_types[53] = "NET_IPV6_LOOPBACK";
+        $all_types[1001] = "NET_IPV6_UNKNOWN_TYPE";
 		# response
         return $all_types;
 	}
@@ -2675,6 +2589,7 @@ class Tools extends Common_functions {
     	$size = sizeof($numbers);
     	// vars
     	$numbers_formatted = array();
+		$fIndex = null;
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {
@@ -3087,7 +3002,7 @@ class Tools extends Common_functions {
 			// fetch location
 			$location = $this->fetch_object ("locations", "id", $locationId);
 			// check
-			if ($device === false) {
+			if ($location === false) {
 				return false;
 			}
 			else {
@@ -3400,8 +3315,10 @@ class Tools extends Common_functions {
 	 * @param object $subnet
 	 * @return void
 	 */
-	private function parse_validate_file ($outFile = array(), $subnet = object) {
+	private function parse_validate_file ($outFile = array(), $subnet) {
     	$result = array();
+    	$errors = 0;
+
     	# present ?
     	if (sizeof($outFile)>0) {
             foreach($outFile as $k=>$line) {

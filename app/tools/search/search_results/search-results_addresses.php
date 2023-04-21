@@ -110,7 +110,7 @@ if(sizeof($result_addresses) > 0) {
 			if(in_array('mac', $selected_ip_fields)) {
 				print '	<td>'. "\n";
 				if(strlen($line['mac']) > 0) {
-					print '<i class="fa fa-sitemap fa-gray" rel="tooltip" title="MAC: '. $line['mac'] .'"></i>'. "\n";
+					print "<i class='info fa fa-gray fa-sitemap' rel='tooltip' data-container='body' data-html='true' title='".$User->show_mac_and_vendor($line['mac'])."'></i>";
 				}
 				print '	</td>'. "\n";
 			}

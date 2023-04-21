@@ -8,7 +8,7 @@
 class Addresses_controller extends Common_api_functions  {
 
 	/**
-	 * Saves details of currnt subnet
+	 * Saves details of current subnet
 	 *
 	 * @var mixed
 	 * @access private

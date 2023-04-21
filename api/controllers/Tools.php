@@ -234,7 +234,7 @@ class Tools_controller extends Common_api_functions {
                     		$result[$k]->gatewayId = $gateway->id;
                 		}
                     	//nameservers
-                		$ns = $this->read_subnet_nameserver ($r);
+                		$ns = $this->read_subnet_nameserver ($r->nameserverId);
                         if ($ns!==false) {
                             $result[$k]->nameservers = $ns;
                         }
@@ -343,7 +343,7 @@ class Tools_controller extends Common_api_functions {
 		$table_name = $this->rewrite_tool_input_params ();
 
 		# Get coordinates if address is set
-		if(key_exists('address', $this->_params) && in_array('lat', $this->valid_keys))
+		if(property_exists($this->_params, 'address') && in_array('lat', $this->valid_keys))
 			$this->format_location ();
 
 		# check for valid keys
@@ -379,7 +379,7 @@ class Tools_controller extends Common_api_functions {
 		$table_name = $this->rewrite_tool_input_params();
 
 		# Get coordinates if address is changed
-		if(key_exists('address', $this->_params) && in_array('lat', $this->valid_keys))
+		if(property_exists($this->_params, 'address') && in_array('lat', $this->valid_keys))
 			$this->format_location ();
 
 		# validate and prepare keys
@@ -573,31 +573,10 @@ class Tools_controller extends Common_api_functions {
 	}
 
 	/**
-	 * Returns id of subnet gateay
-	 *
-	 * @access private
-	 * @params mixed $subnetId
-	 * @return void
-	 */
-	private function read_subnet_gateway ($subnetId) {
-    	return $this->Subnets->find_gateway ($subnetId);
-	}
-
-	/**
-	 * Returns nameserver details
-	 *
-	 * @param result $obj
-	 * @return void
-	 */
-	private function read_subnet_nameserver ($result) {
-    	return $this->Tools->fetch_object ("nameservers", "id", $result->nameserverId);
-	}
-
-	/**
 	 * Parses NAT objects into array.
 	 *
 	 * @access private
-	 * @param json $obj
+	 * @param string $obj
 	 * @return array
 	 */
 	private function parse_nat_objects ($obj) {
@@ -613,7 +592,7 @@ class Tools_controller extends Common_api_functions {
 	 * Get latlng from Nominatim
 	 *
 	 * @method format_location
-	 * @return [type]          [description]
+	 * @return void
 	 */
 	private function format_location () {
 		if((strlen(@$this->_params->lat)==0 || strlen(@$this->_params->long)==0) && strlen(@$this->_params->address)>0) {

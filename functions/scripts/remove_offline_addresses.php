@@ -82,7 +82,7 @@ if(sizeof($removed_addresses)>0 && $config['removed_addresses_send_mail']) {
 	if(!isset($recepients))	{ die(); }
 
 	# fake user object, needed for create_link
-	$User = new StdClass();
+	$User = new FakeUser(false);
 	# try to send
 	try {
 		# fetch mailer settings

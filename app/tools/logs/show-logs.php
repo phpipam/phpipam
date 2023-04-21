@@ -14,6 +14,7 @@ if(!isset($User) || !is_object($User)) {
 	$Database 	= new Database_PDO;
 	$User 		= new User ($Database);
 	$Tools	 	= new Tools ($Database);
+	$Admin		= new Admin ($Database);
 	$Result 	= new Result ();
 	$Log		= new Logging ($Database);
 

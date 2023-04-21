@@ -667,6 +667,7 @@ class Common_functions  {
 
 		// Throw loadHTML() parsing errors
 		$err_mode = libxml_use_internal_errors(false);
+		$php_reporting = error_reporting(0);
 
 		try {
 			$dom = new \DOMDocument();
@@ -708,6 +709,7 @@ class Common_functions  {
 
 		// restore error mode
 		libxml_use_internal_errors($err_mode);
+		error_reporting($php_reporting);
 
 		return is_string($html) ? $html : "";
 	}
@@ -954,7 +956,7 @@ class Common_functions  {
 	 *      2 : 00-66-23-33-55-66
 	 *      3 : 0066.2333.5566
 	 *      4 : 006623335566
-	 * @return mixed
+	 * @return string
 	 */
 	public function reformat_mac_address ($mac, $format = 1) {
     	// strip al tags first
@@ -1770,48 +1772,61 @@ class Common_functions  {
 	}
 
 	/**
+	 * Show MAC address and vendor details
+	 *
+	 * @param string $mac
+	 * @return string
+	 */
+	public function show_mac_and_vendor($mac) {
+		// Check if MAC decoding is enabled
+		$this->get_settings();
+		if (is_object($this->settings) && $this->settings->decodeMAC) {
+			$vendor = $this->get_mac_address_vendor_details($mac);
+
+			if (!empty($vendor)) {
+				return  _("MAC") . ": " . escape_input($mac) . "<hr>" . _("Vendor") . ": " . escape_input($vendor);
+			}
+		}
+
+		return _("MAC") . ": " . escape_input($mac);
+	}
+
+	/**
 	 * Get MAC address vendor details
 	 *
 	 * https://www.macvendorlookup.com/vendormacs-xml-download
 	 *
 	 * @method get_mac_address_vendor
-	 * @param  mixed $mac
+	 * @param  string $mac
+	 * @param  string &$prefix
 	 * @return string
 	 */
-	public function get_mac_address_vendor_details ($mac) {
-		// set default arrays
-		$matches = array();
-		// validate mac
-		if(strlen($mac)<4)				{ return ""; }
-		if(!$this->validate_mac ($mac))	{ return ""; }
-		// reformat mac address
-		$mac = strtoupper($this->reformat_mac_address ($mac, 1));
-		$mac_partial = explode(":", $mac);
-		// get mac XML database
-
-		if (is_null($this->mac_address_vendors)) {
-			//populate mac vendors array
-			$this->mac_address_vendors = array();
-
-			$data = file_get_contents(dirname(__FILE__)."/../vendormacs.xml");
-
-			if (preg_match_all('/\<VendorMapping\smac_prefix="([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})"\svendor_name="(.*)"\/\>/', $data, $matches, PREG_SET_ORDER)) {
-				if (is_array($matches)) {
-					foreach ($matches as $match) {
-						$mac_vendor = strtoupper($match[1] . ':' . $match[2] . ':' . $match[3]);
-						$this->mac_address_vendors[$mac_vendor] = $match[4];
-					}
-				}
-			}
-		}
-
-		$mac_vendor = strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2]);
-
-		if (isset($this->mac_address_vendors[$mac_vendor])) {
-			return $this->mac_address_vendors[$mac_vendor];
-		} else {
+	public function get_mac_address_vendor_details($mac, &$prefix=null) {
+		if (strlen($mac) < 4 || !$this->validate_mac($mac)) {
 			return "";
 		}
+
+		if (empty($this->mac_address_vendors)) {
+			// Generated from vendorMac.xml
+			// Unique MAC address: 45344
+			// Updated: 12 March 2022
+			$data = file_get_contents(dirname(__FILE__) . "/../vendormacs.json");
+			$this->mac_address_vendors = json_decode($data, true);
+		}
+
+		// Find longest prefix match in $this->mac_address_vendors array (max 9)
+		$search_mac = substr($this->reformat_mac_address($mac, 4), 0, 9);
+
+		while (strlen($search_mac) > 0) {
+			if (isset($this->mac_address_vendors[$search_mac])) {
+				$prefix = implode(":", str_split(strtoupper($search_mac), 2));
+				return $this->mac_address_vendors[$search_mac];
+			}
+
+			$search_mac = substr($search_mac, 0, -1);
+		}
+
+		return "";
 	}
 
 	/**
@@ -2032,7 +2047,8 @@ class Common_functions  {
 	/**
 	 * Print documentation link
 	 *
-	 * @param   string $doc  document path/file
+	 * @param string $doc  document path/file
+	 * @return void
 	 */
 	public function print_doc_link($doc) {
 		print "<a style='float:right' target=_ href='".create_link("tools/documentation/$doc")."'>"._("Documentation")." <i class='fa fa-book'></i></a>";
@@ -2043,7 +2059,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $get
-	 * @return void
+	 * @return string
 	 */
 	public function get_site_title ($get) {
     	// remove html tags

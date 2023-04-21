@@ -11,7 +11,7 @@ class Common_api_functions {
 	/**
 	 * controller_keys
 	 *
-	 * @var mixed
+	 * @var array
 	 * @access protected
 	 */
 	protected $controller_keys;
@@ -19,7 +19,7 @@ class Common_api_functions {
 	/**
 	 * _params provided from request
 	 *
-	 * @var mixed
+	 * @var object
 	 * @access public
 	 */
 	public $_params;
@@ -57,7 +57,7 @@ class Common_api_functions {
     /**
      * Custom fields
      *
-     * @var mixed
+     * @var array
      * @access public
      */
     public $custom_fields;
@@ -65,7 +65,7 @@ class Common_api_functions {
 	/**
 	 * valid_keys
 	 *
-	 * @var mixed
+	 * @var array
 	 * @access protected
 	 */
 	protected $valid_keys;
@@ -73,7 +73,7 @@ class Common_api_functions {
 	/**
 	 * custom_keys
 	 *
-	 * @var mixed
+	 * @var array
 	 * @access protected
 	 */
 	protected $custom_keys;
@@ -81,7 +81,7 @@ class Common_api_functions {
 	/**
 	 * Keys to be removed
 	 *
-	 * @var mixed
+	 * @var array
 	 * @access protected
 	 */
 	protected $remove_keys;
@@ -89,7 +89,7 @@ class Common_api_functions {
 	/**
 	 * keys
 	 *
-	 * @var mixed
+	 * @var array
 	 * @access protected
 	 */
 	protected $keys;
@@ -97,7 +97,7 @@ class Common_api_functions {
 	/**
 	 * Database object
 	 *
-	 * @var mixed
+	 * @var Database_PDO
 	 * @access protected
 	 */
 	protected $Database;
@@ -105,7 +105,7 @@ class Common_api_functions {
 	/**
 	 * Master Tools class
 	 *
-	 * @var mixed
+	 * @var Tools
 	 * @access protected
 	 */
 	protected $Tools;
@@ -113,7 +113,7 @@ class Common_api_functions {
 	/**
 	 * Response class
 	 *
-	 * @var mixed
+	 * @var Responses
 	 * @access protected
 	 */
 	protected $Response;
@@ -121,7 +121,7 @@ class Common_api_functions {
 	/**
 	 * Master subnets class
 	 *
-	 * @var mixed
+	 * @var Subnets
 	 * @access protected
 	 */
 	protected $Subnets;
@@ -129,7 +129,7 @@ class Common_api_functions {
 	/**
 	 * Master Addresses object
 	 *
-	 * @var mixed
+	 * @var Addresses
 	 * @access protected
 	 */
 	protected $Addresses;
@@ -137,7 +137,7 @@ class Common_api_functions {
 	/**
 	 * Master Sections object
 	 *
-	 * @var mixed
+	 * @var Sections
 	 * @access protected
 	 */
 	protected $Sections;
@@ -145,7 +145,7 @@ class Common_api_functions {
 	/**
 	 * Master user class
 	 *
-	 * @var mixed
+	 * @var User
 	 * @access protected
 	 */
 	protected $User;
@@ -153,7 +153,7 @@ class Common_api_functions {
 	/**
 	 * Master Admin object
 	 *
-	 * @var mixed
+	 * @var Admin
 	 * @access protected
 	 */
 	protected $Admin;
@@ -330,7 +330,7 @@ class Common_api_functions {
 	 *
 	 * @access protected
 	 * @param array $result
-	 * @return void
+	 * @return object[]
 	 */
 	protected function filter_result ($result = array ()) {
 		// remap keys before applying filter
@@ -500,7 +500,7 @@ class Common_api_functions {
 	 *
 	 * @access private
 	 * @param mixed $controller
-	 * @return void
+	 * @return array
 	 */
 	private function define_links ($controller) {
     	// init
@@ -652,7 +652,7 @@ class Common_api_functions {
 	 * Validates posted keys and returns proper inset values
 	 *
 	 * @access private
-	 * @return void
+	 * @return array
 	 */
 	protected function validate_keys () {
     	// init values
@@ -692,7 +692,7 @@ class Common_api_functions {
 	 *
 	 * @access public
 	 * @param mixed $mac
-	 * @return void
+	 * @return bool
 	 */
 	public function validate_mac ($mac) {
     	// first put it to common format (1)
@@ -707,13 +707,13 @@ class Common_api_functions {
 	 * Reformats MAC address to requested format
 	 *
 	 * @access public
-	 * @param mixed $mac
-	 * @param string $format (default: 1)
+	 * @param string $mac
+	 * @param int $format (default: 1)
 	 *      1 : 00:66:23:33:55:66
 	 *      2 : 00-66-23-33-55-66
 	 *      3 : 0066.2333.5566
 	 *      4 : 006623335566
-	 * @return void
+	 * @return string
 	 */
 	public function reformat_mac_address ($mac, $format = 1) {
     	// strip al tags first
@@ -745,7 +745,7 @@ class Common_api_functions {
 	 * Returns array of possible permissions
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function get_possible_permissions () {
 		// set
@@ -764,7 +764,7 @@ class Common_api_functions {
 	 *
 	 * @access protected
 	 * @param mixed $result
-	 * @return void
+	 * @return mixed
 	 */
 	protected function remove_folders ($result) {
 		// must be subnets
@@ -792,7 +792,7 @@ class Common_api_functions {
 	 *
 	 * @access protected
 	 * @param mixed $result
-	 * @return void
+	 * @return mixed
 	 */
 	protected function remove_subnets ($result) {
 		// must be subnets
@@ -1090,5 +1090,25 @@ class Common_api_functions {
 			}
 			unset($this->_params->custom_fields);
 		}
+	}
+
+	/**
+	 * Returns subnet gateway
+	 *
+	 * @param int $id
+	 * @return object|false
+	 */
+	protected function read_subnet_gateway($id) {
+		return (is_numeric($id) && $id > 0) ? $this->Subnets->find_gateway($id) : $this->Subnets->find_gateway($this->_params->id);
+	}
+
+	/**
+	 * Returns nameserver details
+	 *
+	 * @param int $nsid
+	 * @return object|false
+	 */
+	protected function read_subnet_nameserver($nsid) {
+		return (is_numeric($nsid) && $nsid > 0) ? $this->Tools->fetch_object("nameservers", "id", $nsid) : false;
 	}
 }
