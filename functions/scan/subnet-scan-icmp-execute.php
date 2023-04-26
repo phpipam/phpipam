@@ -71,37 +71,7 @@ if(!is_numeric($argv[2])) {
 
 
 # fping
-if($Scan->settings->scanPingType=="fping" && $argv[1]=="discovery") {
-	# fetch subnet
-	$subnet = $Subnets->fetch_subnet(null, $argv[2]);
-	$subnet!==false ? : 								  die(json_encode(array("status"=>1, "error"=>"Invalid subnet ID provided")));
-
-	//set exit flag to true
-	$Scan->ping_set_exit(false);
-
-	# set cidr
-	$subnet_cidr = $Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask;
-	# execute
-	$retval = $Scan->ping_address_method_fping_subnet ($subnet_cidr);
-
-	# errors
-	if($retval==3)										{ die(json_encode(array("status"=>1, "error"=>"invalid command line arguments"))); }
-	if($retval==4)										{ die(json_encode(array("status"=>1, "error"=>"system call failure"))); }
-
-	# parse result
-	if(empty($Scan->fping_result))					{ die(json_encode(array("status"=>0, "values"=>array("alive"=>null)))); }
-	else {
-		//check each line
-		foreach($Scan->fping_result as $l) {
-			//split
-			$field = array_filter(explode(" ", $l));
-			//create result
-			$out['alive'][] = $Subnets->transform_to_decimal($field[0]);
-		}
-	}
-}
-# fping - status update
-elseif($Scan->settings->scanPingType=="fping") {
+if($Scan->settings->scanPingType=="fping") {
 	# fetch subnet
 	$subnet = $Subnets->fetch_subnet(null, $argv[2]);
 	$subnet!==false ? : 								  die(json_encode(array("status"=>1, "error"=>"Invalid subnet ID provided")));
@@ -133,41 +103,46 @@ elseif($Scan->settings->scanPingType=="fping") {
 # pear / ping
 else {
 	# Create array of addresses to scan
-	$scan_addresses = $Scan->prepare_addresses_to_scan ($argv[1], $argv[2]);
+	$scan_addresses = $Scan->prepare_addresses_to_scan($argv[1], $argv[2]) ?: [];
 
-	$z = 0;			//addresses array index
+	$z = 0;			//scan_addresses array index
 
-	//run per MAX_THREADS
-	for ($m=0; $m<=sizeof($scan_addresses); $m += $Scan->settings->scanMaxThreads) {
-	    // create threads
-	    $threads = array();
-	    // fork processes
-	    for ($i = 0; $i <= $Scan->settings->scanMaxThreads && $i <= sizeof($scan_addresses); $i++) {
-	    	//only if index exists!
-	    	if(isset($scan_addresses[$z])) {
-				//start new thread
-	            $threads[$z] = new PingThread( "ping_address" );
-	            $threads[$z]->start( $Subnets->transform_to_dotted($scan_addresses[$z], true) );
+	while ($z < sizeof($scan_addresses)) {
 
-	            $z++;				//next index
+		$threads = [];
+
+		try {
+			//run per MAX_THREADS
+			for ($i = 0; $i < $Scan->settings->scanMaxThreads; $i++) {
+				if (isset($scan_addresses[$z])) {
+					$thread = new PingThread("ping_address");
+					$thread->start($Subnets->transform_to_dotted($scan_addresses[$z]));
+					$threads[$z++] = $thread;
+				}
 			}
-	    }
-	    // wait for all the threads to finish
-	    while( !empty( $threads ) ) {
-	        foreach( $threads as $index => $thread ) {
-	            if( ! $thread->isAlive() ) {
-	            	//online, save to array
-	            	if($thread->getExitCode() == 0) 									{ $out['alive'][] = $scan_addresses[$index]; }
-	            	//ok, but offline
-	            	elseif($thread->getExitCode() == 1 || $thread->getExitCode() == 2) 	{ $out['dead'][]  = $scan_addresses[$index];}
-	            	//error
-	            	else 																{ $out['error'][] = $scan_addresses[$index]; }
-	                //remove thread
-	                unset( $threads[$index] );
-	            }
-	        }
-	        usleep(100000);
-	    }
+		} catch (Exception $e) {#
+			// We failed to spawn a scanning process.
+			$result['debug'] .= "Failed to start scanning pool, spawned " . sizeof($threads) . " of " . $Scan->settings->scanMaxThreads . "\n";
+		}
+
+		if (empty($threads)) {
+			die(json_encode(array("status" => 1, "error" => "Unable to spawn scanning pool")));
+		}
+
+		// wait for all the threads to finish
+		foreach ($threads as $index => $thread) {
+			if ($thread->getExitCode() === 0) {
+				//online, save to array
+				$out['alive'][] = $scan_addresses[$index];
+			} elseif ($thread->getExitCode() === 1 || $thread->getExitCode() === 2) {
+				//ok, but offline
+				$out['dead'][]  = $scan_addresses[$index];
+			} else {
+				//error
+				$out['error'][] = $scan_addresses[$index];
+			}
+		}
+		unset($threads);
 	}
 }
 

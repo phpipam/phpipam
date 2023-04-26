@@ -92,6 +92,7 @@
     + XSS (reflected) in 'find subnets';
     + Incorrect privilege assignments (#3506);
     + XXS (reflected) in ripe-arin-query;
+    + XSS (reflected) in import previews;
 
     Translations:
     ----------------------------
