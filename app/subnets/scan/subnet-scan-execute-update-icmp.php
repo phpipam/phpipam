@@ -155,7 +155,7 @@ else {
 		print "</tr>";
 
 		# update ipTag
-		if ($User->settings->updateTags==1 && $Tools->address_types[$r['state']]['updateTag']==1) {
+		if ($User->settings->updateTags==1 && $Subnets->address_types[$r['state']]['updateTag']==1) {
 			// online
 			if ($r['code']==0 && $r['state']!=2) {
 				$Scan->update_address_tag ($r['id'], 2, $r['state'], date("Y-m-d H:i:s"));

@@ -25,8 +25,8 @@ $(function () {
     		print "{ label: '"._('Free')."',     data: $details[freehosts_percent], color: '#ffffff' }, ";		# free hosts
     	}
     	# than all other percentages
-    	if(isset($Tools->address_types)) {
-    	foreach($Tools->address_types as $t) {
+    	if(isset($Subnets->address_types)) {
+    	foreach($Subnets->address_types as $t) {
 	    if($details[$t['type']."_percent"]>0) {
     		$details[$t['type']."_percent"] = str_replace(",", ".", $details[$t['type']."_percent"]);
     		print "{ label: '"._($t['type'])."', data: ".$details[$t["type"]."_percent"].", color: '".$t['bgcolor']."' }, ";
