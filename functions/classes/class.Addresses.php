@@ -418,7 +418,7 @@ class Addresses extends Common_functions {
 		$this->address_within_subnetId($address['ip_addr'], $address['subnetId'], true);
 
 		# remove gateway
-		if($address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
+		if(isset($address['is_gateway']) && $address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
 
 		# execute
 		try { $this->Database->insertObject("ipaddresses", $address); }
