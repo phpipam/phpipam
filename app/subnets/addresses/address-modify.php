@@ -63,7 +63,7 @@ if ($action == "all-add") {
 }
 else if ($action == "add") {
 	# get first available IP address
-	$first = $Addresses->get_first_available_address ($subnetId, $Subnets);
+	$first = $Addresses->get_first_available_address ($subnetId);
 	$first = !$first ? "" : $Subnets->transform_address($first, "dotted");
 
 	$address['ip_addr'] = $first;

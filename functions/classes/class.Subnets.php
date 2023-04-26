@@ -3524,7 +3524,7 @@ class Subnets extends Common_functions {
 	 * Queries ripe for subnet information
 	 *
 	 *	Example:
-	 *		curl -X GET -H "Accept: application/json" "http://rest.db.ripe.net/ripe/inetnum/185.72.140.0/24"
+	 *		curl -X GET -H "Accept: application/json" "https://rest.db.ripe.net/ripe/inetnum/185.72.140.0/24"
 	 *
 	 * @access private
 	 * @param mixed $subnet
@@ -3620,7 +3620,7 @@ class Subnets extends Common_functions {
 	 */
 	private function ripe_arin_fetch ($network, $type, $subnet) {
 		// set url
-		$url = $network=="ripe" ? "http://rest.db.ripe.net/ripe/$type/$subnet" : "http://whois.arin.net/rest/nets;q=$subnet?showDetails=true&showARIN=false&showNonArinTopLevelNet=false&ext=netref2";
+		$url = $network=="ripe" ? "https://rest.db.ripe.net/ripe/$type/$subnet" : "https://whois.arin.net/rest/nets;q=$subnet?showDetails=true&showARIN=false&showNonArinTopLevelNet=false&ext=netref2";
 
 		$result = $this->curl_fetch_url($url, ["Accept: application/json"]);
 

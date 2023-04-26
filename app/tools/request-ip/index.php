@@ -36,7 +36,7 @@ $User->check_user_session();
 				$first = $_POST['ip_addr'];
 			}else{
 				# get first IP address
-				$first  = $Subnets->transform_to_dotted($Addresses->get_first_available_address ($_POST['subnetId'], $Subnets));
+				$first  = $Subnets->transform_to_dotted($Addresses->get_first_available_address ($_POST['subnetId']));
 			}
 			# get subnet details
 			$subnet = (array) $Subnets->fetch_subnet(null, $_POST['subnetId']);

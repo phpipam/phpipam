@@ -801,61 +801,46 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $subnetId
-	 * @param obj $Subnets
-	 * @return int / false
+	 * @return string|false
 	 */
-	public function get_first_available_address ($subnetId, $Subnets) {
+	public function get_first_available_address ($subnetId) {
+		$this->initialize_subnets_object();
+
+		$subnet = $this->Subnets->fetch_subnet(null, $subnetId);
+
+		# Return if not exist, is folder, is full or has slaves
+		if (!is_object($subnet) || $subnet->isFolder || $subnet->isFull || $this->Subnets->has_slaves($subnetId)) {
+			return false;
+		}
 
 		# fetch all addresses in subnet and subnet
-		$addresses = $this->fetch_subnet_addresses ($subnetId, "ip_addr", "asc", array("ip_addr"));
-		if (!is_array($addresses)) { $addresses = array(); }
-		$subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
-
-		# if folder return false
-		if ($subnet['isFolder']=="1")                                                                   { return false; }
-
-		# false if slaves
-		$this->initialize_subnets_object();
-		if($this->Subnets->has_slaves ($subnetId))                                                      { return false; }
-
-	    # get max hosts
-	    $max_hosts = $Subnets->max_hosts ($subnet);
+		$addresses = $this->fetch_subnet_addresses($subnetId, "ip_addr", "asc", array("ip_addr")) ?: [];
 
 		# full subnet?
-		if(sizeof($addresses)>=$max_hosts)																{ return false; } 	//full subnet
+		if (gmp_cmp(sizeof($addresses), $this->Subnets->max_hosts($subnet)) >= 0) {
+			return false;
+		}
 
-		# set type
-		$ip_version = $this->identify_address ($subnet['subnet']);
-	    # get first diff > 1
-	    if(sizeof($addresses)>0) {
-		    foreach($addresses as $k=>$ipaddress) {
-			    # check subnet and first IP
-			    if($k==0) {
-				    # /31 fix
-				    if($subnet['mask']==31)	{
-					    if(gmp_strval(gmp_sub($addresses[$k]->ip_addr, $subnet['subnet']))>0) 			{ return gmp_strval($subnet['subnet']); }
-				    } else {
-					    if(gmp_strval(gmp_sub($addresses[$k]->ip_addr, $subnet['subnet']))>1) 			{ return gmp_strval(gmp_add($subnet['subnet'], 1)); }
-					    elseif($ip_version=="IPv6") {
-						    if(sizeof($addresses)==1) {
-							    if(gmp_strval(gmp_sub($addresses[$k]->ip_addr, $subnet['subnet']))==0)	{ return gmp_strval(gmp_add($subnet['subnet'], 1)); }
-						    }
-					    }
-				    }
-			    }
-			    else {
-				    if(gmp_strval(gmp_sub($addresses[$k]->ip_addr, $addresses[$k-1]->ip_addr))>1) 		{ return gmp_strval(gmp_add($addresses[$k-1]->ip_addr, 1)); }
-			    }
-		    }
-		    # all consecutive, last + 1
-		    																							{ return gmp_strval(gmp_add($addresses[$k]->ip_addr, 1)); }
-	    }
-	    # no addresses
-	    else {
-		    # /32, /31
-		    if($subnet['mask']==32 || $subnet['mask']==31 || $ip_version=="IPv6") 						{ return $subnet['subnet']; }
-		    else																						{ return gmp_strval(gmp_add($subnet['subnet'], 1)); }
-	    }
+		// re-index addresses for fast lookups
+		$address_lookup = [];
+		foreach ($addresses as $a) {
+			$address_lookup[$a->ip_addr] = 1;
+		}
+
+		// Search for first free IP
+		list($lo, $hi) = $this->Subnets->subnet_boundaries($subnet);
+		$cur = gmp_init($lo);
+		$hi  = gmp_init($hi);
+
+		while (gmp_cmp($cur, $hi) <= 0) {
+			if (!isset($address_lookup[gmp_strval($cur)])) {
+				return gmp_strval($cur);
+			}
+			// Check next IP
+			$cur = gmp_add($cur, 1);
+		}
+
+		return false;
 	}
 
 
@@ -1276,7 +1261,7 @@ class Addresses extends Common_functions {
 	 * @param mixed $order (default: null)
 	 * @param mixed $order_direction (default: null)
 	 * @param mixed $fields (default: "*")
-	 * @return array
+	 * @return array|false
 	 */
 	public function fetch_subnet_addresses ($subnetId, $order=null, $order_direction=null, $fields = "*") {
 		# set order
@@ -1304,7 +1289,7 @@ class Addresses extends Common_functions {
 			}
 		}
 		# result
-		return sizeof($addresses)>0 ? $addresses : array();
+		return !empty($addresses) ? $addresses : array();
 	}
 
 	/**

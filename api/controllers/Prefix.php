@@ -811,7 +811,7 @@ class Prefix_controller extends Common_api_functions {
      */
     public function search_first_available_address ($master_subnet_id) {
         // fetch
-        $first = $this->Addresses->get_first_available_address ($master_subnet_id, $this->Subnets);
+        $first = $this->Addresses->get_first_available_address ($master_subnet_id);
         // return result
         return $first===false ? false : $this->Tools->transform_address ($first, "dotted");
     }
