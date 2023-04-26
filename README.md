@@ -21,6 +21,15 @@ to be able to display javascript quickly and correctly.
  - 1.2: Productional branch for 1.2.x release (obsolete)
  - Other branches: Feature testing
 
+## Supported PHP versions
+
+phpIPAM has been developed and tested on the following PHP versions.\
+The use of untested PHP versions may result in compatibility issues and is unsupported.
+
+- 1.5.x: PHP versions 5.4 to 7.4
+- 1.4.x: PHP versions 5.4 to 7.4
+- 1.3.x: PHP versions 5.4 to 7.1
+
 ## I forgot my Admin password!?
 Just run `php functions/scripts/reset-admin-password.php` in the cli and enter your new password
 

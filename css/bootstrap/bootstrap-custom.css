@@ -264,6 +264,9 @@ table#zonesPrint tr.border-top td,
 table#mappingsPrint tr.border-top td {
 	border-bottom: 1px solid #eee;
 }
+html table.table td.danger {
+	background-color: rgba(230, 25, 25, 0.5) !important;
+}
 
 
 
