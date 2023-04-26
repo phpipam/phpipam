@@ -3,7 +3,7 @@
 /**
  * database connection details
  ******************************/
-$db['host'] = 'localhost';
+$db['host'] = '127.0.0.1';
 $db['user'] = 'phpipam';
 $db['pass'] = 'phpipamadmin';
 $db['name'] = 'phpipam';
@@ -32,15 +32,16 @@ $db['webhost'] = '';
 
      php 5.3.7 required
  ******************************/
-$db['ssl']        = false;                           // true/false, enable or disable SSL as a whole
-$db['ssl_key']    = '/path/to/cert.key';             // path to an SSL key file. Only makes sense combined with ssl_cert
-$db['ssl_cert']   = '/path/to/cert.crt';             // path to an SSL certificate file. Only makes sense combined with ssl_key
-$db['ssl_ca']     = '/path/to/ca.crt';               // path to a file containing SSL CA certs
-$db['ssl_capath'] = '/path/to/ca_certs';             // path to a directory containing CA certs
-$db['ssl_cipher'] = 'DHE-RSA-AES256-SHA:AES128-SHA'; // one or more SSL Ciphers
-$db['ssl_verify'] = 'true';                          // Verify Common Name (CN) of server certificate?
-$db['tmptable_engine_type'] = "MEMORY";              // Temporary table type to construct complex queries (MEMORY, InnoDB)
-$db['use_cte']    = 1;                               // Use recursive CTE queries [>=MariaDB 10.2.2, >=MySQL 8.0] (0=disabled, 1=autodetect, 2=force enable)
+$db['ssl']        = false;                             // true/false, enable or disable SSL as a whole
+// $db['ssl_key']    = '/path/to/cert.key';               // path to an SSL key file. Only makes sense combined with ssl_cert
+// $db['ssl_cert']   = '/path/to/cert.crt';               // path to an SSL certificate file. Only makes sense combined with ssl_key
+// $db['ssl_ca']     = '/path/to/ca.crt';                 // path to a file containing SSL CA certs
+// $db['ssl_capath'] = '/path/to/ca_certs';               // path to a directory containing CA certs
+// $db['ssl_cipher'] = 'HIGH:!PSK:!SHA:!MD5:!RC4:!aNULL'; // one or more SSL Ciphers, see openssl ciphers -v '....'
+// $db['ssl_verify'] = 'true';                            // Verify Common Name (CN) of server certificate?
+
+$db['tmptable_engine_type'] = "MEMORY";                // Temporary table type to construct complex queries (MEMORY, InnoDB)
+$db['use_cte'] = 1;                                    // Use recursive CTE queries [>=MariaDB 10.2.2, >=MySQL 8.0] (0=disabled, 1=autodetect, 2=force enable)
 
 
 /**
@@ -108,7 +109,7 @@ $cookie_samesite = "Lax";
  *
  * @var string
  */
-$session_storage = "files";
+$session_storage = "database";
 
 
 /**
