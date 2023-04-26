@@ -603,7 +603,7 @@ class Subnets_controller extends Common_api_functions {
         // slaves
         if($this->Subnets->has_slaves ($this->_params->id)) { $this->Response->throw_exception(409, "Subnet contains subnets"); }
 		// fetch
-		$first = $this->Addresses->get_first_available_address ($this->_params->id, $this->Subnets);
+		$first = $this->Addresses->get_first_available_address ($this->_params->id);
 		// available?
 		if($first===false)	{ $this->Response->throw_exception(404, "No free addresses found"); }
 		else				{ $first = $this->Addresses->transform_to_dotted($first); }
@@ -643,7 +643,7 @@ class Subnets_controller extends Common_api_functions {
 	 * Fetches subnet by id
 	 *
 	 * @access private
-	 * @return array|false
+	 * @return object|false
 	 */
 	private function read_subnet ($subnetId = null) {
 		// null
@@ -657,7 +657,7 @@ class Subnets_controller extends Common_api_functions {
                 $result->nameservers = $ns;
             }
 
-    		$gateway = $this->read_subnet_gateway ();
+    		$gateway = $this->read_subnet_gateway(null);
     		if ( $gateway!== false) {
         		$result->gatewayId = $gateway->id;
         		$gateway = $this->transform_address ($gateway);
@@ -736,28 +736,6 @@ class Subnets_controller extends Common_api_functions {
 		$result = $this->Addresses->fetch_subnet_addresses ($this->_params->id);
 		# result
 		return sizeof($result)==0 ? false : $result;
-	}
-
-	/**
-	 * Returns id of subnet gateay
-	 *
-	 * @access private
-	 * @return int|bool
-	 */
-	private function read_subnet_gateway ($id=NULL) {
-		return $id === NULL ? $this->Subnets->find_gateway ($this->_params->id) : $this->Subnets->find_gateway ($id);
-	}
-
-	/**
-	 * Returns nameserver details
-	 *
-	 * @access private
-	 * @param mixed $nsid
-	 * @return array|false
-	 */
-	private function read_subnet_nameserver ($nsid) {
-		if (!is_numeric($nsid) || $nsid <= 0) return false;
-		return $this->Tools->fetch_object ("nameservers", "id", $nsid);
 	}
 
 	/**

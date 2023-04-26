@@ -43,7 +43,7 @@ abstract class DB {
 	 *
 	 * (default value: null)
 	 *
-	 * @var mixed
+	 * @var PDO
 	 * @access protected
 	 */
 	protected $pdo = null;
@@ -129,7 +129,7 @@ abstract class DB {
 	 * @access public
 	 * @static
 	 * @param mixed $date (default: null)
-	 * @return void
+	 * @return string|false
 	 */
 	public static function toDate($date = null) {
 		if (is_int($date)) {
@@ -181,7 +181,7 @@ abstract class DB {
 	 * makeDsn function.
 	 *
 	 * @access protected
-	 * @return void
+	 * @return string
 	 */
 	protected function makeDsn() {
 		return ':charset=' . $this->charset;
@@ -229,7 +229,7 @@ abstract class DB {
 	 * @access public
 	 * @static
 	 * @param mixed $str
-	 * @return void
+	 * @return string
 	 */
 	public static function unquote_outer($str) {
 		$len = strlen($str);
@@ -255,7 +255,7 @@ abstract class DB {
 	 * Are we currently connected to the database
 	 *
 	 * @access public
-	 * @return void
+	 * @return bool
 	 */
 	public function isConnected() {
 		return ($this->pdo !== null);
@@ -265,7 +265,7 @@ abstract class DB {
 	 * MySQL CTE support checks
 	 *
 	 * @access public
-	 * @return  bool
+	 * @return bool
 	 */
 	public function is_cte_enabled() {
 		// Check cached result
@@ -295,7 +295,7 @@ abstract class DB {
 	 * Returns last insert ID
 	 *
 	 * @access public
-	 * @return void
+	 * @return string|false
 	 */
 	public function lastInsertId() {
 		return $this->pdo->lastInsertId();
@@ -309,7 +309,7 @@ abstract class DB {
 	 * @param mixed $query
 	 * @param array $values (default: array())
 	 * @param integer|null &$rowCount (default: null)
-	 * @return void
+	 * @return bool
 	 */
 	public function runQuery($query, $values = array(), &$rowCount = null) {
 		if (!$this->isConnected()) $this->connect();
@@ -394,7 +394,7 @@ abstract class DB {
 	 *
 	 * @access public
 	 * @param mixed $str
-	 * @return void
+	 * @return string
 	 */
 	public function escape($str) {
 		$str = (string) $str;
@@ -412,7 +412,7 @@ abstract class DB {
 	 *
 	 * @access public
 	 * @param mixed $tableName
-	 * @return void
+	 * @return mixed
 	 */
 	public function numObjects($tableName) {
 		if (!$this->isConnected()) $this->connect();
@@ -435,7 +435,7 @@ abstract class DB {
 	 * @param mixed $method
 	 * @param boolean $like (default: false)
 	 * @param mixed $value
-	 * @return void
+	 * @return mixed
 	 */
 	public function numObjectsFilter($tableName, $method, $value, $like = false) {
 		if (!$this->isConnected()) $this->connect();
@@ -462,7 +462,7 @@ abstract class DB {
 	 * @param mixed $obj
 	 * @param string $primarykey (default: 'id')
 	 * @param mixed $primarykey2 (default: null)
-	 * @return void
+	 * @return bool
 	 */
 	public function updateObject($tableName, $obj, $primarykey = 'id', $primarykey2 = null) {
 		if (!$this->isConnected()) $this->connect();
@@ -527,7 +527,7 @@ abstract class DB {
 	 * @param string $tableName
 	 * @param array $ids
 	 * @param array $values
-	 * @return void
+	 * @return bool
 	 */
 	public function updateMultipleObjects($tableName, $ids, $values) {
 		$tableName = $this->escape($tableName);
@@ -556,7 +556,7 @@ abstract class DB {
 	 * @param bool $raw (default: false)
 	 * @param bool $replace (default: false)
 	 * @param bool $ignoreId (default: true)
-	 * @return void
+	 * @return mixed
 	 */
 	public function insertObject($tableName, $obj, $raw = false, $replace = false, $ignoreId = true) {
 		if (!$this->isConnected()) $this->connect();
@@ -610,7 +610,7 @@ abstract class DB {
 	 * @param string $query (default: null)
 	 * @param array $values (default: array())
 	 * @param mixed $id (default: null)
-	 * @return void
+	 * @return bool
 	 */
 	public function objectExists($tableName, $query = null, $values = array(), $id = null) {
 		return is_object($this->getObject($tableName, $id));
@@ -626,7 +626,7 @@ abstract class DB {
 	 * @param mixed $numRecords (default: null)
 	 * @param int $offset (default: 0)
 	 * @param string $class (default: 'stdClass')
-	 * @return void
+	 * @return array
 	 */
 	public function getObjects($tableName, $sortField = 'id', $sortAsc = true, $numRecords = null, $offset = 0, $class = 'stdClass') {
 		if (!$this->isConnected()) $this->connect();
@@ -669,7 +669,7 @@ abstract class DB {
 	 * @param mixed $query (default: null)
 	 * @param array $values (default: array())
 	 * @param mixed $callback (default: null)
-	 * @return void
+	 * @return bool
 	 */
 	public function getObjectsQueryIncremental($query = null, $values = array(), $callback = null) {
 		if (!$this->isConnected()) $this->connect();
@@ -701,7 +701,7 @@ abstract class DB {
 	 * @param mixed $query (default: null)
 	 * @param array $values (default: array())
 	 * @param string $class (default: 'stdClass')
-	 * @return void
+	 * @return array
 	 */
 	public function getObjectsQuery($query = null, $values = array(), $class = 'stdClass') {
 		if (!$this->isConnected()) $this->connect();
@@ -753,7 +753,7 @@ abstract class DB {
 	 * @param mixed $tableName
 	 * @param mixed $id (default: null)
 	 * @param string $class (default: 'stdClass')
-	 * @return void
+	 * @return object|null
 	 */
 	public function getObject($tableName, $id = null, $class = 'stdClass') {
 		if (!$this->isConnected()) $this->connect();
@@ -791,7 +791,7 @@ abstract class DB {
 	 * @param mixed $query (default: null)
 	 * @param array $values (default: array())
 	 * @param string $class (default: 'stdClass')
-	 * @return void
+	 * @return object|null
 	 */
 	public function getObjectQuery($query = null, $values = array(), $class = 'stdClass') {
 		if (!$this->isConnected()) $this->connect();
@@ -817,7 +817,7 @@ abstract class DB {
 	 * @param mixed $query (default: null)
 	 * @param array $values (default: array())
 	 * @param string $class (default: 'stdClass')
-	 * @return void
+	 * @return mixed
 	 */
 	public function getValueQuery($query = null, $values = array(), $class = 'stdClass') {
 		$obj = $this->getObjectQuery($query, $values, $class);
@@ -859,7 +859,7 @@ abstract class DB {
 	 * @param bool $like (default: false)
 	 * @param bool $negate (default: false)
 	 * @param string|array $result_fields (default: "*")
-	 * @return void
+	 * @return array
 	 */
 	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false, $result_fields = "*") {
 		$table = $this->escape($table);
@@ -889,7 +889,7 @@ abstract class DB {
 	 * @param mixed $table
 	 * @param mixed $field
 	 * @param mixed $value
-	 * @return void
+	 * @return object|null
 	 */
 	public function findObject($table, $field, $value) {
 		$table = $this->escape($table);
@@ -905,7 +905,7 @@ abstract class DB {
 	 * @param mixed $query (default: null)
 	 * @param array $values (default: array())
 	 * @param string $class (default: 'stdClass')
-	 * @return void
+	 * @return array
 	 */
 	public function getList($query = null, $values = array(), $class = 'stdClass') {
 		$objs = $this->getObjectsQuery($query, $values, $class);
@@ -926,9 +926,9 @@ abstract class DB {
 	/**
 	* Delete an object from the database
 	*
-	* @param {string} table name
-	* @param {int} object id
-	* @return {boolean} success
+	* @param string $tableName
+	* @param int $id
+	* @return bool
 	*/
 	public function deleteObject($tableName, $id) {
 		$tableName = $this->escape($tableName);
@@ -939,9 +939,9 @@ abstract class DB {
 	/**
 	* Delete a list of objects from the database
 	*
-	* @param {string} table name
-	* @param {array} list of ids
-	* @return {boolean} success
+	* @param string $tableName
+	* @param array $ids
+	* @return bool
 	*/
 	public function deleteObjects($tableName, $ids) {
 		$tableName = $this->escape($tableName);
@@ -957,7 +957,7 @@ abstract class DB {
 	 * @method deleteObjects
 	 * @param  string $tableName
 	 * @param  string $identifier
-	 * @param  mixed $ids
+	 * @param  mixed $id
 	 * @return bool
 	 */
 	public function deleteObjectsByIdentifier($tableName, $identifier = "id", $id = 0) {
@@ -971,10 +971,12 @@ abstract class DB {
 	 * Delete specified row
 	 *
 	 * @access public
-	 * @param {string} $tableName
-	 * @param {string $field
-	 * @param {string $value
-	 * @return void
+	 * @param string $tableName
+	 * @param string $field
+	 * @param string $value
+	 * @param string $field2
+	 * @param string $value2
+	 * @return bool
 	 */
 	public function deleteRow($tableName, $field, $value, $field2=null, $value2 = null) {
 		$tableName = $this->escape($tableName);
@@ -993,7 +995,7 @@ abstract class DB {
 	 *
 	 * @access public
 	 * @param {string} $tableName
-	 * @return void
+	 * @return bool
 	 */
 	public function emptyTable($tableName) {
 		//escape talbe name
@@ -1135,7 +1137,7 @@ class Database_PDO extends DB {
 			$this->ssl = array();
 
 			if ($db['ssl_verify']===false) {
-				$this->ssl[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
+				$this->ssl[1014] = false;	// PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT=1014 exists as of PHP 7.0.18 and PHP 7.1.4.
 			}
 
 			foreach ($this->pdo_ssl_opts as $key => $pdoopt) {
@@ -1163,7 +1165,7 @@ class Database_PDO extends DB {
 	 * makeDsn function
 	 *
 	 * @access protected
-	 * @return void
+	 * @return string
 	 */
 	protected function makeDsn() {
 		# for installation
@@ -1175,7 +1177,7 @@ class Database_PDO extends DB {
 	 * more generic static useful methods
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function getColumnInfo() {
 		$columns = $this->getObjectsQuery("
@@ -1206,7 +1208,7 @@ class Database_PDO extends DB {
 	 * @access public
 	 * @param bool $tableName (default: false)
 	 * @param bool $field (default: false)
-	 * @return void|object
+	 * @return object|null
 	 */
 	public function getFieldInfo ($tableName = false, $field = false) {
     	//escape
@@ -1221,7 +1223,7 @@ class Database_PDO extends DB {
 	 * getForeignKeyInfo function.
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function getForeignKeyInfo() {
 		$foreignLinks = $this->getObjectsQuery("

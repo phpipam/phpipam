@@ -141,16 +141,18 @@ class User extends Common_functions {
         # initialize Crypto
         $this->Crypto = new Crypto ();
 
-        # register new session
-        $this->register_session ();
-        # check timeut
-        $this->check_timeout ();
-        # set authenticated flag
-        $this->is_authenticated ();
-        # get users IP address
-        $this->block_get_ip ();
-        # set theme
-        $this->set_user_theme ();
+        if (php_sapi_name() !== "cli") {
+            # register new session
+            $this->register_session();
+            # check timeout
+            $this->check_timeout();
+            # set authenticated flag
+            $this->is_authenticated();
+            # get users IP address
+            $this->block_get_ip();
+            # set theme
+            $this->set_user_theme();
+        }
     }
 
 
@@ -195,7 +197,7 @@ class User extends Common_functions {
     private function start_session () {
         // check if database should be set for sessions
         if (Config::ValueOf('session_storage') == "database" && $this->settings->dbversion >= 3) {
-            new Session_db ($this->Database);
+            new Session_DB ($this->Database);
         }
         // local
         else {
@@ -460,6 +462,27 @@ class User extends Common_functions {
         if($this->timeout!==true) {
             $_SESSION['lastactive'] = time();
         }
+    }
+
+    /**
+     * Reads and validates redirect cookie
+     *
+     * @return string|false
+     */
+    public function get_redirect_cookie () {
+        if (!isset($_COOKIE['phpipamredirect']))
+            return false;
+
+        $urlpath = $_COOKIE['phpipamredirect'];
+
+        if (!is_string($urlpath) || strlen($urlpath) == 0 || !filter_var('https://ipam/' . $urlpath, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED))
+            return false;
+
+        // ignore login / logout
+        if (strpos($urlpath, "login") !== false || strpos($urlpath, "logout") !== false)
+            return false;
+
+        return $urlpath;
     }
 
     /**
@@ -1468,9 +1491,7 @@ class User extends Common_functions {
      * @return void
      */
     private function block_get_ip () {
-        # set IP
-        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) { $this->ip = @$_SERVER['HTTP_X_FORWARDED_FOR']; }
-        else                                        { $this->ip = @$_SERVER['REMOTE_ADDR']; }
+        $this->ip = $this->get_user_ip();
     }
 
     /**
@@ -1547,7 +1568,7 @@ class User extends Common_functions {
      * From json {"2":"2","3":"1"}, get user list + perm
      *
      * @method get_user_permissions_from_json
-     * @param  json     $json
+     * @param  string     $json
      * @return array
      */
     public function get_user_permissions_from_json ($json) {
@@ -1731,18 +1752,16 @@ class User extends Common_functions {
      * @return int
      */
     public function get_module_permissions ($module_name = "") {
-        if(in_array($module_name, $this->get_modules_with_permissions())) {
-            // admin
-            if($this->is_admin(false)) {
-                return User::ACCESS_RWA;
-            }
-            else {
-                return $this->user->{'perm_'.$module_name};
-            }
-        }
-        else {
+        if(!in_array($module_name, $this->get_modules_with_permissions()))
             return User::ACCESS_NONE;
-        }
+
+        if($this->is_admin(false))
+            return User::ACCESS_RWA;
+
+        if (!is_object($this->user) || !property_exists($this->user, 'perm_'.$module_name))
+            return USER::ACCESS_NONE;
+
+        return $this->user->{'perm_'.$module_name};
     }
 
     /**
@@ -1804,5 +1823,26 @@ class User extends Common_functions {
         if(is_null($level)) $level = 0;
         // return
         return $level=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._($this->parse_permissions ($level))."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($this->parse_permissions ($level))."</span>";
+    }
+}
+/**
+ * Fake User object for install/scripts
+ */
+class FakeUser {
+    /**
+     * Settings object
+     * @var StdClass
+     */
+    public $settings = null;
+
+    /**
+     * __construct function.
+     *
+     * @param bool $prettyLinks
+     */
+    public function __construct($prettyLinks) {
+        $this->settings = new StdClass();
+        $this->settings->prettyLinks = $prettyLinks ? "Yes" : "No";
+        $this->settings->theme = "dark";
     }
 }

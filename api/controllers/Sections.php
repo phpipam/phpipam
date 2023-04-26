@@ -248,33 +248,11 @@ class Sections_controller extends Common_api_functions {
 	}
 
 	/**
-	 * Returns id of subnet gateay
-	 *
-	 * @access private
-	 * @params mixed $subnetId
-	 * @return void
-	 */
-	private function read_subnet_gateway ($subnetId) {
-    	return $this->Subnets->find_gateway ($subnetId);
-	}
-
-	/**
-	 * Returns nameserver details
-	 *
-	 * @access private
-	 * @param mixed $nsid
-	 * @return void
-	 */
-	private function read_subnet_nameserver ($nsid) {
-    	return $this->Tools->fetch_object ("nameservers", "id", $nsid);
-	}
-
-	/**
  	 * Calculates subnet usage
 	 *
 	 * @access private
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return array
 	 */
 	private function read_subnet_usage ($subnetId) {
 		# check that section exists

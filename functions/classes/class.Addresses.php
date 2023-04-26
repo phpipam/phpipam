@@ -10,7 +10,7 @@ class Addresses extends Common_functions {
 	/**
 	 * Address types array
 	 *
-	 * @var mixed
+	 * @var array
 	 * @access public
 	 */
 	public $address_types = array();
@@ -38,7 +38,7 @@ class Addresses extends Common_functions {
 	/**
 	 * Subnets object
 	 *
-	 * @var mixed
+	 * @var Subnets
 	 * @access protected
 	 */
 	protected $Subnets;
@@ -46,7 +46,7 @@ class Addresses extends Common_functions {
 	/**
 	 * PowerDNS object
 	 *
-	 * @var mixed
+	 * @var PowerDNS
 	 * @access private
 	 */
 	private $PowerDNS;
@@ -110,7 +110,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $state
-	 * @return mixed tag
+	 * @return string
 	 */
 	public function address_type_format_tag ($state) {
 		# fetch address states
@@ -154,7 +154,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $type
-	 * @return void
+	 * @return mixed
 	 */
 	public function address_type_type_to_index ($type = "Used") {
 		# null of no length
@@ -197,7 +197,7 @@ class Addresses extends Common_functions {
 	 * @access public
 	 * @param string $method
 	 * @param mixed $id
-	 * @return object address
+	 * @return object|false address
 	 */
 	public function fetch_address ($method, $id) {
 		# null method
@@ -230,7 +230,7 @@ class Addresses extends Common_functions {
 	 * @access public
 	 * @param mixed $ip_addr
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return object|false
 	 */
 	public function fetch_address_multiple_criteria ($ip_addr, $subnetId) {
 		try { $address = $this->Database->getObjectQuery("SELECT * FROM `ipaddresses` where `ip_addr` = ? and `subnetId` = ? limit 1;", array($ip_addr, $subnetId)); }
@@ -286,7 +286,7 @@ class Addresses extends Common_functions {
 	 * @param object $address
 	 * @param mixed $linked_field
 	 * @param mixed $value
-	 * @return void
+	 * @return array|false
 	 */
 	private function bulk_fetch_similar_addresses($address, $linked_field, $value) {
 		// Check cache
@@ -418,7 +418,7 @@ class Addresses extends Common_functions {
 		$this->address_within_subnetId($address['ip_addr'], $address['subnetId'], true);
 
 		# remove gateway
-		if($address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
+		if(isset($address['is_gateway']) && $address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
 
 		# execute
 		try { $this->Database->insertObject("ipaddresses", $address); }
@@ -731,7 +731,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return bool
 	 */
 	public function remove_gateway ($subnetId) {
 		try { $this->Database->updateObject("ipaddresses", array("subnetId"=>$subnetId, "is_gateway"=>0), "subnetId"); }
@@ -739,6 +739,7 @@ class Addresses extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
+		return true;
 	}
 
 	/**
@@ -800,61 +801,46 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $subnetId
-	 * @param obj $Subnets
-	 * @return int / false
+	 * @return string|false
 	 */
-	public function get_first_available_address ($subnetId, $Subnets) {
+	public function get_first_available_address ($subnetId) {
+		$this->initialize_subnets_object();
+
+		$subnet = $this->Subnets->fetch_subnet(null, $subnetId);
+
+		# Return if not exist, is folder, is full or has slaves
+		if (!is_object($subnet) || $subnet->isFolder || $subnet->isFull || $this->Subnets->has_slaves($subnetId)) {
+			return false;
+		}
 
 		# fetch all addresses in subnet and subnet
-		$addresses = $this->fetch_subnet_addresses ($subnetId, "ip_addr", "asc", array("ip_addr"));
-		if (!is_array($addresses)) { $addresses = array(); }
-		$subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
-
-		# if folder return false
-		if ($subnet['isFolder']=="1")                                                                   { return false; }
-
-		# false if slaves
-		$this->initialize_subnets_object();
-		if($this->Subnets->has_slaves ($subnetId))                                                      { return false; }
-
-	    # get max hosts
-	    $max_hosts = $Subnets->max_hosts ($subnet);
+		$addresses = $this->fetch_subnet_addresses($subnetId, "ip_addr", "asc", array("ip_addr")) ?: [];
 
 		# full subnet?
-		if(sizeof($addresses)>=$max_hosts)																{ return false; } 	//full subnet
+		if (gmp_cmp(sizeof($addresses), $this->Subnets->max_hosts($subnet)) >= 0) {
+			return false;
+		}
 
-		# set type
-		$ip_version = $this->identify_address ($subnet['subnet']);
-	    # get first diff > 1
-	    if(sizeof($addresses)>0) {
-		    foreach($addresses as $k=>$ipaddress) {
-			    # check subnet and first IP
-			    if($k==0) {
-				    # /31 fix
-				    if($subnet['mask']==31)	{
-					    if(gmp_strval(gmp_sub($addresses[$k]->ip_addr, $subnet['subnet']))>0) 			{ return gmp_strval($subnet['subnet']); }
-				    } else {
-					    if(gmp_strval(gmp_sub($addresses[$k]->ip_addr, $subnet['subnet']))>1) 			{ return gmp_strval(gmp_add($subnet['subnet'], 1)); }
-					    elseif($ip_version=="IPv6") {
-						    if(sizeof($addresses)==1) {
-							    if(gmp_strval(gmp_sub($addresses[$k]->ip_addr, $subnet['subnet']))==0)	{ return gmp_strval(gmp_add($subnet['subnet'], 1)); }
-						    }
-					    }
-				    }
-			    }
-			    else {
-				    if(gmp_strval(gmp_sub($addresses[$k]->ip_addr, $addresses[$k-1]->ip_addr))>1) 		{ return gmp_strval(gmp_add($addresses[$k-1]->ip_addr, 1)); }
-			    }
-		    }
-		    # all consecutive, last + 1
-		    																							{ return gmp_strval(gmp_add($addresses[$k]->ip_addr, 1)); }
-	    }
-	    # no addresses
-	    else {
-		    # /32, /31
-		    if($subnet['mask']==32 || $subnet['mask']==31 || $ip_version=="IPv6") 						{ return $subnet['subnet']; }
-		    else																						{ return gmp_strval(gmp_add($subnet['subnet'], 1)); }
-	    }
+		// re-index addresses for fast lookups
+		$address_lookup = [];
+		foreach ($addresses as $a) {
+			$address_lookup[$a->ip_addr] = 1;
+		}
+
+		// Search for first free IP
+		list($lo, $hi) = $this->Subnets->subnet_boundaries($subnet);
+		$cur = gmp_init($lo);
+		$hi  = gmp_init($hi);
+
+		while (gmp_cmp($cur, $hi) <= 0) {
+			if (!isset($address_lookup[gmp_strval($cur)])) {
+				return gmp_strval($cur);
+			}
+			// Check next IP
+			$cur = gmp_add($cur, 1);
+		}
+
+		return false;
 	}
 
 
@@ -964,7 +950,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $subnet_id
-	 * @return array|false
+	 * @return object|false
 	 */
 	private function pdns_fetch_domain ($subnet_id) {
 		# initialize subnets
@@ -1092,7 +1078,7 @@ class Addresses extends Common_functions {
 	 * @access public
 	 * @param mixed $address_id
 	 * @param mixed $ptr_id
-	 * @return void
+	 * @return bool
 	 */
 	public function ptr_link ($address_id, $ptr_id) {
 		# execute
@@ -1101,6 +1087,7 @@ class Addresses extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+		return true;
 	}
 
 	/**
@@ -1108,7 +1095,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $address_id
-	 * @return void
+	 * @return bool
 	 */
 	private function ptr_unlink ($address_id) {
 		# execute
@@ -1117,6 +1104,7 @@ class Addresses extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+		return true;
 	}
 
 	/**
@@ -1124,7 +1112,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnet_id
-	 * @return void
+	 * @return bool
 	 */
 	public function ptr_unlink_subnet_addresses ($subnet_id) {
 		try { $this->Database->runQuery("update `ipaddresses` set `PTR` = 0 where `subnetId` = ?;", array($subnet_id)); }
@@ -1141,7 +1129,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $ptr_id (default: 0)
-	 * @return void
+	 * @return bool
 	 */
 	private function ptr_exists ($ptr_id = 0) {
 		return $this->PowerDNS->record_id_exists ($ptr_id);
@@ -1272,8 +1260,8 @@ class Addresses extends Common_functions {
 	 * @param mixed $subnetId
 	 * @param mixed $order (default: null)
 	 * @param mixed $order_direction (default: null)
-	 * @param string $fields (default: "*")
-	 * @return void
+	 * @param mixed $fields (default: "*")
+	 * @return array|false
 	 */
 	public function fetch_subnet_addresses ($subnetId, $order=null, $order_direction=null, $fields = "*") {
 		# set order
@@ -1281,7 +1269,7 @@ class Addresses extends Common_functions {
 		else 					{ $order = array("ip_addr", "asc"); }
 
 		# fields
-		if($fields!="*") {
+		if(is_array($fields)) {
     		$fields = implode(",", $fields);
 		}
 
@@ -1301,7 +1289,7 @@ class Addresses extends Common_functions {
 			}
 		}
 		# result
-		return sizeof($addresses)>0 ? $addresses : array();
+		return !empty($addresses) ? $addresses : array();
 	}
 
 	/**
@@ -1569,6 +1557,7 @@ class Addresses extends Common_functions {
     	$size = sizeof($addresses);
     	// vars
     	$addresses_formatted = array();
+		$fIndex = null;
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {
@@ -1725,8 +1714,8 @@ class Addresses extends Common_functions {
 		$subnetP = json_decode($subnet->permissions);
 
 		# set section permissions
-		$Section = new Section ($this->Database);
-		$section = $Section->fetch_section ("id", $subnet->sectionId);
+		$Sections = new Sections ($this->Database);
+		$section = $Sections->fetch_section ("id", $subnet->sectionId);
 		$sectionP = json_decode($section->permissions);
 
 		# default permission
@@ -1878,7 +1867,7 @@ class Addresses extends Common_functions {
      * @param bool|int $nat_id (default: false)
      * @param bool|mixed $object_type (default: false)
      * @param bool $object_id (default: false)
-     * @return void
+     * @return string
      */
     public function print_nat_link_line ($n, $nat_id = false, $object_type = false, $object_id=false) {
         // cast to object to be sure if array provided
@@ -1935,7 +1924,7 @@ class Addresses extends Common_functions {
      * Translates NAT objects to be shown on page
      *
      * @access public
-     * @param json $json_objects
+     * @param string $json_objects
      * @param int|bool $nat_id (default: false)
      * @param bool $json_objects (default: false)
      * @param bool $object_type (default: false) - to bold it (ipaddresses / subnets)

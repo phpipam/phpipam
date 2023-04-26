@@ -221,7 +221,7 @@ else {
 
 
 # print change
-if($Scan->get_debugging()==true)				{ "\nDiscovered addresses:\n----------\n"; print_r($scan_subnets); }
+if($Scan->get_debugging()==true)				{ print "\nDiscovered addresses:\n----------\n"; print_r($scan_subnets); }
 
 
 
@@ -286,8 +286,7 @@ if($discovered>0 && $config['discovery_check_send_mail']) {
 	if(!isset($recepients))	{ die(); }
 
 	# fake user object, needed for create_link
-	$User = new StdClass();
-	@$User->settings->prettyLinks = $Scan->settings->prettyLinks;
+	$User = new FakeUser($Scan->settings->prettyLinks);
 
 	# try to send
 	try {

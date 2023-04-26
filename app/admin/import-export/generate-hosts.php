@@ -18,6 +18,7 @@ $Sections	= new Sections ($Database);
 $Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 $Tools		= new Tools ($Database);
+$Admin		= new Admin ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in

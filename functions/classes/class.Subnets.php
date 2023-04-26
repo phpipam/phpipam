@@ -503,7 +503,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param string $method
 	 * @param mixed $value
-	 * @return array|false
+	 * @return object|false
 	 */
 	public function fetch_subnet ($method, $value) {
 		# null method
@@ -714,7 +714,7 @@ class Subnets extends Common_functions {
 	 * @return array|false
 	 */
 	public function fetch_overlapping_subnets ($cidr, $method=null, $value=null, $result_fields = "*") {
-		if ($this->verify_cidr_address($cidr)!==true) return false;
+		if ($this->verify_cidr_address($cidr) !== true) return false;
 
 		$result_fields = $this->Database->escape_result_fields($result_fields);
 
@@ -724,22 +724,27 @@ class Subnets extends Common_functions {
 		$cidr_broadcast = $this->decimal_broadcast_address($cidr_decimal, $cidr_mask);
 
 		$possible_parents = array();
-		for ($mask=0; $mask<=$cidr_mask; $mask++) {
+		for ($mask = 0; $mask <= $cidr_mask; $mask++) {
 			$parent = $this->decimal_network_address($cidr_decimal, $mask);
 			$possible_parents[] = "('$parent','$mask')";
 		}
 		$possible_parents = implode(',', $possible_parents);
 
-		$query = "SELECT $result_fields FROM `subnets` WHERE `isFolder` = 0 AND ";
-		if (!is_null($method)) $query .= " `$method` = '".$this->Database->escape($value)."' AND ";
-		$query .= " (   ( LPAD(`subnet`,39,0) >= LPAD('$cidr_network',39,0) AND LPAD(`subnet`,39,0) <= LPAD('$cidr_broadcast',39,0) )";
-		$query .= "  OR (`subnet`,`mask`) IN ($possible_parents)  ) ";
-		$query .= "ORDER BY CAST(`mask` AS UNSIGNED) DESC, LPAD(`subnet`,39,0);";
+		$query = [];
+		$query[] = "SELECT $result_fields FROM `subnets` WHERE COALESCE(`isFolder`,0) = 0 AND ";
+		if (!is_null($method)) {
+			$query[] = " COALESCE(`$method`,0) = '" . $this->Database->escape($value) . "' AND ";
+		}
+		$query[] = " ( ";
+		$query[] = "   ( LPAD(`subnet`,39,0) >= LPAD('$cidr_network',39,0) AND LPAD(`subnet`,39,0) <= LPAD('$cidr_broadcast',39,0) )";
+		$query[] = "   OR (`subnet`,`mask`) IN ($possible_parents)";
+		$query[] = " ) ";
+		$query[] = "ORDER BY CAST(`mask` AS UNSIGNED) DESC, LPAD(`subnet`,39,0);";
 
 		try {
-			$overlaping_subnets = $this->Database->getObjectsQuery($query);
+			$overlaping_subnets = $this->Database->getObjectsQuery(implode("\n", $query));
 		} catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			$this->Result->show("danger", _("Error: ") . $e->getMessage());
 			return false;
 		}
 
@@ -1741,7 +1746,7 @@ class Subnets extends Common_functions {
 	 */
 	public function decimal_network_address($decimalIP, $mask) {
 		if ($decimalIP === false) return false;
-		$type = ($decimalIP <= 4294967295) ? 'IPv4' : 'IPv6';
+		$type = ($decimalIP <= 4294967295 && $mask <= 32) ? 'IPv4' : 'IPv6';
 		// Calculate network address (decimal) by clearing the /mask bits
 		$network_address = gmp_and($decimalIP, $this->gmp_bitmasks[$type][$mask]['network']);
 		return gmp_strval($network_address);
@@ -1757,7 +1762,7 @@ class Subnets extends Common_functions {
 	 */
 	public function decimal_broadcast_address($decimalIP, $mask) {
 		if ($decimalIP === false) return false;
-		$type = ($decimalIP <= 4294967295) ? 'IPv4' : 'IPv6';
+		$type = ($decimalIP <= 4294967295 && $mask <= 32) ? 'IPv4' : 'IPv6';
 		// Calculate broadcast address (decimal) by setting the /mask bits
 		$network_broadcast = gmp_or($decimalIP, $this->gmp_bitmasks[$type][$mask]['broadcast']);
 		return gmp_strval($network_broadcast);
@@ -1771,7 +1776,7 @@ class Subnets extends Common_functions {
 	private function network_or_broadcast_address_in_use($subnet) {
 		$subnet = (object) $subnet;
 
-		$type = ($subnet->subnet <= 4294967295) ? 'IPv4' : 'IPv6';
+		$type = ($subnet->subnet <= 4294967295 && $subnet->mask <= 32) ? 'IPv4' : 'IPv6';
 
 		if (($type=="IPv4" && $subnet->mask>=31) || $type=="IPv6")
 			return false;
@@ -1937,7 +1942,7 @@ class Subnets extends Common_functions {
 	 */
 	public function get_freespacemap_last_available ($fsm, $mask, $count) {
 		if ($mask < 0 || $mask > $fsm['max_search_mask']) {
-			return array (subnets => array(), truncated => false);
+			return array ('subnets' => array(), 'truncated' => false);
 		}
 
 		$subnets = array();
@@ -3519,7 +3524,7 @@ class Subnets extends Common_functions {
 	 * Queries ripe for subnet information
 	 *
 	 *	Example:
-	 *		curl -X GET -H "Accept: application/json" "http://rest.db.ripe.net/ripe/inetnum/185.72.140.0/24"
+	 *		curl -X GET -H "Accept: application/json" "https://rest.db.ripe.net/ripe/inetnum/185.72.140.0/24"
 	 *
 	 * @access private
 	 * @param mixed $subnet
@@ -3573,7 +3578,7 @@ class Subnets extends Common_functions {
 		// fail
 		if ($arin_result['result_code']!==200) {
 			// return array
-			return array("result"=>"error", "error"=>_("Error connecting to ARIN REST API")." : ".$ripe_result['error_msg']);
+			return array("result"=>"error", "error"=>_("Error connecting to ARIN REST API")." : ".$arin_result['error_msg']);
 		}
 		else {
     		$out = array();
@@ -3615,7 +3620,7 @@ class Subnets extends Common_functions {
 	 */
 	private function ripe_arin_fetch ($network, $type, $subnet) {
 		// set url
-		$url = $network=="ripe" ? "http://rest.db.ripe.net/ripe/$type/$subnet" : "http://whois.arin.net/rest/nets;q=$subnet?showDetails=true&showARIN=false&showNonArinTopLevelNet=false&ext=netref2";
+		$url = $network=="ripe" ? "https://rest.db.ripe.net/ripe/$type/$subnet" : "https://whois.arin.net/rest/nets;q=$subnet?showDetails=true&showARIN=false&showNonArinTopLevelNet=false&ext=netref2";
 
 		$result = $this->curl_fetch_url($url, ["Accept: application/json"]);
 

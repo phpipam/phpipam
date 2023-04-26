@@ -24,12 +24,10 @@
 	<div class="col-xs-12">
 	    <input type="password" id="password" name="ipampassword" class="login form-control input-sm" placeholder="<?php print _('Password'); ?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></input>
 	    <?php
-	    // add requested var for redirect
-	    if(!empty($_COOKIE['phpipamredirect'])) {
-		    //ignore login, logout
-		    if(strpos($_COOKIE['phpipamredirect'],"login")==0 && strpos($_COOKIE['phpipamredirect'],"logout")==0)
-	        print "<input type='hidden' name='phpipamredirect' id='phpipamredirect' value='".escape_input($_COOKIE['phpipamredirect'])."'>";
-	    }
+		// add requested var for redirect
+		if ($redirect = $User->get_redirect_cookie()) {
+			print "<input type='hidden' name='phpipamredirect' id='phpipamredirect' value='" . escape_input($redirect) . "'>";
+		}
 	    ?>
 	</div>
 

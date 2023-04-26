@@ -25,7 +25,7 @@ class Install extends Common_functions {
 	/**
 	 * Database_root - for initial installation
 	 *
-	 * @var mixed
+	 * @var Database_PDO
 	 * @access protected
 	 */
 	protected $Database_root;

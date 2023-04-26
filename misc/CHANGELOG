@@ -11,6 +11,7 @@
     + Added Vaults (Certificate andf password storing);
     + Added Tools->Duplicate subnets & IP page;
     + Added config.php offline_mode to disable server-side Internet lookups (#3462);
+    + Added MAC vendor lookup widget;
 
     Enhancements, changes:
     ----------------------------
@@ -65,10 +66,11 @@
     + Subnet usage calculation updated for nested subnets;
     + SNMP, number of discovered hosts exceed maximum warning (#3279);
     + Exclude IPv6 from Ping and Discovery scans (#3354);
-    + Fix for SAML/2FA login redirection after timeout (#3492);
+    + Fix for SAML/2FA/login redirections (#3492, #3435, #3517);
     + php_sessions table doesn't exist error when upgrading (#3417);
     + Changelog data too long for column errors (#3376,#3398);
     + RFC 6265 compliant cookies (#3452);
+    + Require unique subnets not working as intended (#3529);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
         + Address IP field not displayed when using filter_by (#2934);
@@ -88,6 +90,8 @@
     + Stored XSS in the "Site title" parameter;
     + XSS while uploading CVS files;
     + XSS (reflected) in 'find subnets';
+    + Incorrect privilege assignments (#3506);
+    + XXS (reflected) in ripe-arin-query;
 
     Translations:
     ----------------------------

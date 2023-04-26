@@ -44,7 +44,7 @@ class SubnetsMenu {
 	/**
 	 * Class Constructor
 	 * @param Subnets $Subnets
-	 * @param array $expanded
+	 * @param string $expanded
 	 * @param integer $expandall
 	 * @param integer $selected
 	 */

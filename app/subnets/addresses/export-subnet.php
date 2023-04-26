@@ -24,10 +24,15 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # fetch subnet details
-$subnet = (array) $Tools->fetch_object ("subnets", "id", $_GET['subnetId']);
+$subnet = $Tools->fetch_object("subnets", "id", $_GET['subnetId']);
+if (!is_object($subnet) || $Subnets->check_permission($User->user, $_GET['subnetId'], $subnet) == User::ACCESS_NONE) {
+	$Result->fatal_http_error(404, _("Subnet not found"));
+}
+$subnet = (array) $subnet;
+
 # fetch all IP addresses in subnet
-$addresses = $Addresses->fetch_subnet_addresses ($_GET['subnetId'], "ip_addr", "asc");
-if (!is_array($addresses)) { $addresses = array(); }
+$addresses = $Addresses->fetch_subnet_addresses ($_GET['subnetId'], "ip_addr", "asc") ? : [];
+
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 

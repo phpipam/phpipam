@@ -103,7 +103,7 @@ class PowerDNS extends Common_functions {
     /**
      * Database class - phpipam
      *
-     * @var resource
+     * @var Database_PDO
      * @access protected
      */
     protected $Database;
@@ -111,7 +111,7 @@ class PowerDNS extends Common_functions {
     /**
      * Database class - pdns
      *
-     * @var resource
+     * @var Database_PDO
      * @access protected
      */
     protected $Database_pdns;
@@ -176,7 +176,7 @@ class PowerDNS extends Common_functions {
      * Sets default values for database connection and othern parameters
      *
      * @access private
-     * @return void
+     * @return string
      */
     private function db_set_db_settings () {
         // init
@@ -558,7 +558,7 @@ class PowerDNS extends Common_functions {
      *
      * @access public
      * @param mixed $name
-     * @return array|false
+     * @return object|false
      */
     public function fetch_domain_by_name ($name) {
         # fetch
@@ -569,7 +569,7 @@ class PowerDNS extends Common_functions {
         }
 
         # cache
-        $this->domains_cache[$domain->id] = $domain;
+        $this->domains_cache[$domain[0]->id] = $domain[0];
 
         # result
         return is_object(($domain[0])) ? $domain[0] : false;
@@ -848,7 +848,7 @@ class PowerDNS extends Common_functions {
         if ($this->fetch_domain ($domain_id)===false)    { $this->Result->show("danger", _("Invalid domain id"), true); }
 
         # checks
-        $this->validate_record_content ($record);
+        $this->validate_record_content ($content);
 
         // remove domain_id if set !
         unset($content->domain_id);

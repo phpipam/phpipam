@@ -9,7 +9,7 @@ class Sections extends Common_functions {
 	/**
 	 * (array of objects) to store sections, section ID is array index
 	 *
-	 * @var mixed
+	 * @var array
 	 * @access public
 	 */
 	public $sections;
@@ -19,7 +19,7 @@ class Sections extends Common_functions {
 	 *
 	 * (default value: null)
 	 *
-	 * @var mixed
+	 * @var int
 	 * @access public
 	 */
 	public $lastInsertId = null;

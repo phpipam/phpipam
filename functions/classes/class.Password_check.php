@@ -272,7 +272,7 @@ class Password_check extends Common_functions {
 	 * Get all special characters - symbols
 	 *
 	 * @method get_special_chars
-	 * @return void
+	 * @return string[]|false
 	 */
 	private function get_special_chars () {
 		return preg_split('//u',preg_replace("/[a-z,A-Z,0-9]/u", "", $this->password), -1, PREG_SPLIT_NO_EMPTY);
