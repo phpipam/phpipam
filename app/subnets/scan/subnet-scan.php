@@ -46,6 +46,12 @@ $subnet->description = strlen($subnet->description)>0 ? "(".$subnet->description
 
 <!-- content -->
 <div class="pContent">
+	<?php
+	// verify date.timezone
+	if (strlen(ini_get('date.timezone')) == 0) {
+		$Result->show("warning", _("Online & offline results may be unreliable: date.timezone not set in ").php_ini_loaded_file());
+	}
+	?>
 	<table class="table table-noborder table-condensed table-scan">
     <!-- subnet -->
     <tr>

@@ -51,7 +51,7 @@ if( !PingThread::available($errmsg) ) 								{ die(json_encode(array("status"=>
 /**
  *	Create array of addresses to scan
  */
-$scan_addresses = $Scan->prepare_addresses_to_scan ("discovery", $argv[1]);
+$scan_addresses = $Scan->prepare_addresses_to_scan ("discovery", $argv[1]) ?: [];
 
 
 $z = 0;			//addresses array index
@@ -70,35 +70,39 @@ foreach($scan_addresses as $k=>$v) {
 	}
 }
 
+while ($z < sizeof($scan_addresses)) {
 
-# run per MAX_THREADS
-for ($m=0; $m<=sizeof($addresses); $m += $Scan->settings->scanMaxThreads) {
-    //create threads
-    $threads = array();
-    //fork processes
-    for ($i = 0; $i <= $Scan->settings->scanMaxThreads && $i <= sizeof($addresses); $i++) {
-    	//only if index exists!
-    	if(isset($addresses[$z])) {
-			//start new thread
-            $threads[$z] = new PingThread( 'telnet_address' );
-            $threads[$z]->start( $Subnets->transform_to_dotted($addresses[$z]['ip']), $addresses[$z]['port'], 2);
-            $z++;				//next index
-		}
-    }
-    //wait for all the threads to finish
-    while( !empty( $threads ) ) {
-        foreach( $threads as $index => $thread ) {
-            if( ! $thread->isAlive() ) {
-            	//online, save to array
-            	if($thread->getExitCode() == 0) { $out['alive'][$addresses[$index]['ip']][] = $addresses[$index]['port']; }
-            	//ok, but offline
-            	else 							{ $out['dead'][$addresses[$index]['ip']][]  = $addresses[$index]['port'];}
-                //remove thread
-                unset( $threads[$index] );
+    $threads = [];
+
+    try {
+        //run per MAX_THREADS
+        for ($i = 0; $i < $Scan->settings->scanMaxThreads; $i++) {
+            if (isset($addresses[$z])) {
+                $thread = new PingThread('telnet_address');
+                $thread->start($Subnets->transform_to_dotted($addresses[$z]['ip']), $addresses[$z]['port'], 2);
+                $threads[$z++] = $thread;
             }
         }
-        usleep(100000);
+    } catch (Exception $e) {
+        // We failed to spawn a scanning process.
+        $result['debug'] .= "Failed to start scanning pool, spawned " . sizeof($threads) . " of " . $Scan->settings->scanMaxThreads . "\n";
     }
+
+    if (empty($threads)) {
+        die(json_encode(array("status" => 1, "error" => "Unable to spawn scanning pool")));
+    }
+
+    //wait for all the threads to finish
+    foreach ($threads as $index => $thread) {
+        if ($thread->getExitCode() === 0) {
+            //online, save to array
+            $out['alive'][$addresses[$index]['ip']][] = $addresses[$index]['port'];
+        } else {
+            // offline
+            $out['dead'][$addresses[$index]['ip']][]  = $addresses[$index]['port'];
+        }
+    }
+    unset($threads);
 }
 
 # compose result - ok
@@ -110,4 +114,3 @@ $out = json_encode(@$result);
 
 # print result
 print_r($out);
-?>

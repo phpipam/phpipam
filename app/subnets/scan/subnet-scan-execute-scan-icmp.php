@@ -54,7 +54,7 @@ if($retval!==0) 							{ $Result->show("danger", "Error executing scan! Error co
 # error?
 elseif($script_result->status===1)				{ $Result->show("danger", $script_result->error, false); }
 # empty
-elseif(!isset($script_result->values->alive)) 	{ $Result->show("danger", _("No alive host found")."!", false); }
+elseif(!isset($script_result->values->alive)) 	{ $Result->show("info", _("0 new hosts discovered")."!", false); }
 # ok
 else {
 	// fetch subnet and set nsid
