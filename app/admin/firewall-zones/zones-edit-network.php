@@ -65,7 +65,7 @@ $(document).ready(function() {
 				if ($subnet->description) 	{	$network = $Subnets->transform_to_dotted($subnet->subnet).'/'.$subnet->mask.' ('.$subnet->description.')';	}
 				else 						{	$network = $Subnets->transform_to_dotted($subnet->subnet).'/'.$subnet->mask;	}
 				$Result->show("warning", "<strong>"._('Warning').":</strong><br>"._("You are about to remove the following Network from the firewall zone:<br>".$network), false); ?>
-				<input type="hidden" name="masterSubnetId" value="<?php print $_POST['subnetId']; ?>">
+				<input type="hidden" name="masterSubnetId" value="<?php print escape_input($_POST['subnetId']); ?>">
 			</td>
 	<?php } else {
 		# add a network to the zone
@@ -120,7 +120,7 @@ $(document).ready(function() {
 
 <?php } ?>
 </table>
-<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
 <?php
 if ($_POST['id']) 	{ print '<input type="hidden" name="netZoneId" value="'.$_POST['id'].'">'; }
 else 				{ print '<input type="hidden" name="noZone" value="1">';
@@ -139,7 +139,7 @@ else 				{ print '<input type="hidden" name="noZone" value="1">';
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopup2"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editNetworkSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editNetworkSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
 	</div>
 	<!-- result -->
 	<div class="zones-edit-network-result"></div>

@@ -47,7 +47,7 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 	<tr>
 		<td><?php print _('Option Name'); ?></td>
 		<td>
-			<input type="text" name="option" class="form-control input-sm" placeholder="<?php print _('New Option'); ?>" value="<?php if(isset($_POST['value'])) print $_POST['value']; ?>" <?php print $readonly; ?>>
+			<input type="text" name="option" class="form-control input-sm" placeholder="<?php print _('New Option'); ?>" value="<?php if(isset($_POST['value'])) print escape_input($_POST['value']); ?>" <?php print $readonly; ?>>
 
 		</td>
 	</tr>
@@ -55,7 +55,7 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 		<td><?php print  _('Map Color') ?></td>
 		<td>
 
-			<input type="color" name="color" id="pick-a-color" class="form-control input-sm" placeholder="<?php print _('Hex Color (ex. #000000)'); ?>" value="<?php if(isset($_POST['color'])) print $_POST['color']; ?>" <?php print $readonly; ?>>
+			<input type="color" name="color" id="pick-a-color" class="form-control input-sm" placeholder="<?php print _('Hex Color (ex. #000000)'); ?>" value="<?php if(isset($_POST['color'])) print escape_input($_POST['color']); ?>" <?php print $readonly; ?>>
 
 		</td>
 	</tr>
@@ -69,11 +69,11 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 		</td>
 	</tr>
 	<?php if($_POST['action']=="delete") { ?>
-	<input type="hidden" name="option" value="<?php print $_POST['value']; ?>">
+	<input type="hidden" name="option" value="<?php print escape_input($_POST['value']); ?>">
 	<?php } ?>
-	<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
-	<input type="hidden" name="type" value="<?php print $_POST['type']; ?>">
-	<input type="hidden" name="op_id" value="<?php print $_POST['op_id']; ?>">
+	<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+	<input type="hidden" name="type" value="<?php print escape_input($_POST['type']); ?>">
+	<input type="hidden" name="op_id" value="<?php print escape_input($_POST['op_id']); ?>">
 	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 	</table>
 	</form>
@@ -86,7 +86,7 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<a class="btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" data-script="app/admin/circuits/edit-options-submit.php" data-result_div="circuit-option-edit-result" data-form='circuit-option-edit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
 		</a>
 	</div>
 

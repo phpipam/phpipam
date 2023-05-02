@@ -56,7 +56,7 @@ if ($scan_devices===false)                      { $Result->show("danger", _("No 
             print " <input type='checkbox' name='device-$d->id' checked> $d->hostname ($d->ip_addr) $description<br>";
         }
         ?>
-        <input type="hidden" name="domainId" value="<?php print $_POST['domainId']; ?>">
+        <input type="hidden" name="domainId" value="<?php print escape_input($_POST['domainId']); ?>">
         <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
         </form>
     </div>

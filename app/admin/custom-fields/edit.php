@@ -79,9 +79,9 @@ function check_name_whitespace () {
 		<td>
 			<input type="text" name="name" class="form-control input-sm" value="<?php print $Tools->print_custom_field_name ($_POST['fieldName']); ?>" placeholder="<?php print _('Select field name'); ?>" <?php if($_POST['action'] == "delete") { print 'readonly'; } ?>>
 
-			<input type="hidden" name="oldname" value="<?php print $_POST['oldname']; ?>">
-			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
-			<input type="hidden" name="table" value="<?php print $_POST['table']; ?>">
+			<input type="hidden" name="oldname" value="<?php print escape_input($_POST['oldname']); ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+			<input type="hidden" name="table" value="<?php print escape_input($_POST['table']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
@@ -156,7 +156,7 @@ function check_name_whitespace () {
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Close'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success";} ?>" id="editcustomSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success";} ?>" id="editcustomSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
 	</div>
 	<!-- result -->
 	<div class="customEditResult"></div>

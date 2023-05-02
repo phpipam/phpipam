@@ -50,7 +50,7 @@ if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
 
     	<textarea style="width:100%;" name="instructions" id="instructions" rows="<?php print $rowcount; ?>"><?php print stripslashes($instructions->instructions); ?></textarea>
     	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
-    	<input type="hidden" name="id" value="<?php print $_GET['subnetId']; ?>">
+    	<input type="hidden" name="id" value="<?php print escape_input($_GET['subnetId']); ?>">
 
     	<script src="js/ckeditor/ckeditor.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
     	<script>

@@ -1,8 +1,27 @@
+
+== 1.5.2
+
+    Bugfixes:
+    ----------------------------
+    Fixed MySQL server has gone away error (#3759);
+
+    Security Fixes:
+    ----------------------------
+    + SQL injection in custom field enum/set types;
+    + Directory traversal possible in RIPE query;
+    + XSS (reflected) by /app/tools/subnet-masks/popup.php (#3738);
+    + XSS (stored) in user widget settings;
+    + XSS and LDAP injection in ad-search-group-result.php;
+
 == 1.5.1
 
     Security Fixes:
     ----------------------------
     + XSS (reflected) in 'bw-calulator-result.php';
+    + XSS (reflected) by invalid email address response;
+    + XSS and LDAP injection in ad-search-result.php;
+    + Restrict find_full_subnets.php to CLI;
+    + Ensure confidentiality of database password;
 
 == 1.5.0
 

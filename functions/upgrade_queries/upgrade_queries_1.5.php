@@ -197,3 +197,17 @@ $upgrade_queries["1.5.39"][] = "UPDATE `settings` set `dbversion` = '39';";
 $upgrade_queries["1.51.39"]   = [];
 $upgrade_queries["1.51.39"][] = "-- Version update";
 $upgrade_queries["1.51.39"][] = "UPDATE `settings` set `version` = '1.51';";
+
+#
+# Version 1.52.39 queries
+#
+$upgrade_queries["1.52.39"]   = [];
+$upgrade_queries["1.52.39"][] = "-- Version update";
+$upgrade_queries["1.52.39"][] = "UPDATE `settings` set `version` = '1.52';";
+
+#
+# Version 1.53.39 queries
+#
+$upgrade_queries["1.53.39"]   = [];
+$upgrade_queries["1.53.39"][] = "-- Version update";
+$upgrade_queries["1.53.39"][] = "UPDATE `settings` set `version` = '1.53';";
