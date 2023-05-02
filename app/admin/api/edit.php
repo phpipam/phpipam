@@ -58,7 +58,7 @@ if($_POST['action']!="add") {
 	    <td>
 	    	<input type="text" name="app_id" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$api->app_id); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 	        <input type="hidden" name="id" value="<?php print $api->id; ?>">
-    		<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+    		<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 	    </td>
        	<td class="info2"><?php print _('Enter application identifier'); ?></td>
@@ -186,7 +186,7 @@ if($_POST['action']!="add") {
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/api/edit-result.php" data-result_div="apiEditResult" data-form='apiEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
 		</button>
 
 	</div>

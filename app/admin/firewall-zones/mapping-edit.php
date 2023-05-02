@@ -134,8 +134,8 @@ if ($_POST['action'] != 'add') {
 	</tr>
 	</table>
 	<!-- transmit the action and firewall zone id -->
-	<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
-	<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
+	<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+	<input type="hidden" name="id" value="<?php print escape_input($_POST['id']); ?>">
 	</form>
 
 	<?php
@@ -149,7 +149,7 @@ if ($_POST['action'] != 'add') {
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editMappingSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editMappingSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
 	</div>
 	<!-- result -->
 	<div class="mapping-edit-result"></div>
