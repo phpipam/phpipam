@@ -674,7 +674,7 @@ class Common_functions  {
 			if ($dom->loadHTML("<html>".$html."</html>", LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NOERROR) === false)
 				return "";
 
-			$banned_elements = ['script', 'iframe', 'embed'];
+			$banned_elements = ['script', 'iframe', 'embed', 'object'];
 			$remove_elements = [];
 
 			$elements = $dom->getElementsByTagName('*');
