@@ -70,6 +70,8 @@ foreach($scan_addresses as $k=>$v) {
 	}
 }
 
+$Database->resetConn(); // Close database, forked processes inherit and close file handles on exit.
+
 while ($z < sizeof($scan_addresses)) {
 
     $threads = [];
