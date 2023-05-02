@@ -161,7 +161,7 @@ if(@$config['requests_public']===false) {
 			if ($version < 3.4) {
 				$Result->show("danger", _('php-saml library missing, please update submodules'));
 			} else {
-				$Result->show("success", _('You can login with your UMUSIC e-mail').' <a href="'.create_link('saml2').'">'._('here').'</a>!');
+				//$Result->show("success", _('You can login with your UMUSIC e-mail').' <a href="'.create_link('saml2').'">'._('here').'</a>!');
 				$Result->show("success", _('Local Admin Login').' <a href="'.create_link('login2').'">'._('here').'</a>!');
 			}
 		}
