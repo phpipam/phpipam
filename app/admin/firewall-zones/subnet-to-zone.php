@@ -41,7 +41,6 @@ if(!is_array($firewallZones) && isset($_POST['vr']))                            
 <!-- form -->
 <form id="subnet-to-zone-edit">
 <input type="hidden" name="subnetId" value="<?php print escape_input($_POST['subnetId']); ?>">
-
 <!-- table -->
 <table class="table table-noborder table-condensed">
 	<!-- firewall -->
