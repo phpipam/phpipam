@@ -39,6 +39,7 @@ else {
 	if($_GET['page']=="install")		{ require("app/install/index.php"); }
 	elseif($_GET['page']=="2fa")		{ require("app/login/2fa/index.php"); }
 	elseif($_GET['page']=="upgrade")	{ require("app/upgrade/index.php"); }
+	elseif($_GET['page']=="login2")		{ require("app/login/index2.php"); }
 	elseif($_GET['page']=="login")		{ require("app/login/index.php"); }
 	elseif($_GET['page']=="temp_share")	{ require("app/temp_share/index.php"); }
 	elseif($_GET['page']=="request_ip")	{ require("app/login/index.php"); }

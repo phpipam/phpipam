@@ -124,10 +124,8 @@ if(@$config['requests_public']===false) {
 
 	<?php
 	# include proper subpage
-	if($_GET['page'] == "login") 				{
-		# disable main login form if you want use another authentification method by default (SAML, LDAP, etc.)
-		$include_main_login_form = !isset($config['disable_main_login_form']) || !$config['disable_main_login_form'];
-		if ($include_main_login_form) include_once('login_form.php');
+	if($_GET['page'] == "login2") 				{
+        include_once('login_form.php');
 	}
 	else if ($_GET['page'] == "request_ip") 	{ include_once('request_ip_form.php'); }
 	else 										{ $_GET['subnetId'] = "404"; print "<div id='error'>"; include_once('app/error.php'); print "</div>"; }
@@ -161,8 +159,7 @@ if(@$config['requests_public']===false) {
 			if ($version < 3.4) {
 				$Result->show("danger", _('php-saml library missing, please update submodules'));
 			} else {
-				$Result->show("success", _('You can login with your UMUSIC e-mail').' <a href="'.create_link('saml2').'">'._('here').'</a>!');
-				$Result->show("success", _('Local Admin Login').' <a href="'.create_link('login2').'">'._('here').'</a>!');
+				$Result->show("success", _('You can login with your UMUISC e-mail').' <a href="'.create_link('saml2').'">'._('here').'</a>!');
 			}
 		}
 
