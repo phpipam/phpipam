@@ -159,7 +159,7 @@ if(@$config['requests_public']===false) {
 			if ($version < 3.4) {
 				$Result->show("danger", _('php-saml library missing, please update submodules'));
 			} else {
-				$Result->show("success", '<a href="'.create_link('saml2').'">'._('Standard Login').'</a>');
+				$Result->show("success", '<a href="'.create_link('saml2').'">'._('Standard Login using UMG SSO').'</a>');
 			}
 		}
 
