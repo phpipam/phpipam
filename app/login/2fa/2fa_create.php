@@ -33,13 +33,13 @@ else {
 	$html[] = '		<legend style="margin-top:10px;">'._('Two-factor authentication details').'</legend>';
 	$html[] = '	</div>';
 	$html[] = '	<div>';
-	$html[] = '		'._('Details for your Google Authenticator are below. Please write down your details, otherwise you will not be able to login to phpipam');
+	$html[] = '		'._('Details for your preferred authenticator application are below. Please write down your details, otherwise you will not be able to login to phpipam');
 	$html[] = '		<div style="border: 2px dashed red;margin:20px;padding: 10px" class="text-center row">';
 	$html[] = '			<div class="col-xs-12" style="padding:5px 10px 3px 20px;"><strong>'._('Account').': <span style="color:red; font-size: 16px">'.$username.'</span></strong></div>';
 	$html[] = '			<div class="col-xs-12" style="padding:0px 10px 3px 20px;"><strong>'._('Secret').' : <span style="color:red; font-size: 16px">'.$secret.'</span></strong></div>';
 	$html[] = '		</div>';
 	$html[] = '		<div class="text-center">';
-	$html[] = '		<hr>'._('You can also scan followign QR code with Google Authenticator application').':<br><br>';
+	$html[] = '		<hr>'._('You can also scan following QR code with your preferred authenticator application').':<br><br>';
 	$html[] = '			<div id="qrcode" style="width:200px;margin:auto;"></div>';
 	$html[] = '		</div>';
 	$html[] = '		<div class="text-right" style="margin-top:10px;">';
