@@ -10498,7 +10498,7 @@ msgstr "Benutzerkonto"
 
 #: app/login/2fa/2fa_create.php:42 app/tools/user-menu/2fa.php:72
 msgid ""
-"You can also scan followign QR code with Google Authenticator application"
+"You can also scan following QR code with Google Authenticator application"
 msgstr ""
 "Sie k&ouml;nnen auch folgenden QR-Code mit der Google Authenticator "
 "Anwendung scannen"

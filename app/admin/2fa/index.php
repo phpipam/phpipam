@@ -163,14 +163,16 @@ else {
 <article style='margin-top:50px;' class="text-muted">
 <?php print _("phpIPAM supports two-factor-authentication to add additional security layer for user authentication."); ?>
 <br>
-<?php print _("After user successfully logs in it will be presented with additional screen to enter code from Google authenticator application."); ?>
+<?php print _("After user successfully logs in it will be presented with additional screen to enter code from your preferred authenticator application."); ?>
 <br><br>
-<?php print _("Google Authenticator is available on following links based on your OS:"); ?>
+<?php print _("Authenticator apps are available on following links based on your OS:"); ?>
 <ul>
-	<li> <a href='https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8' target="_self">Apple iOS</a></li>
-	<li> <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_self">Android</a></li>
+	<li> <a href='https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8' target="_self">Google Authenticator - Apple iOS</a></li>
+	<li> <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_self">Google Authenticator - Android</a></li>
+	<li> <a href='https://itunes.apple.com/us/app/microsoft-authenticator/id983156458?mt=8' target="_self">Microsoft Authenticator - Apple iOS</a></li>
+	<li> <a href="https://play.google.com/store/apps/details?id=com.azure.authenticator" target="_self">Microsoft Authenticator - Android</a></li>
 </ul>
-<?php print _("You can also use Microsoft or any other otp provider."); ?>
+<?php print _("You can also use any other OTP provider."); ?>
 </article>
 
 

@@ -5770,7 +5770,7 @@ msgid "Account"
 msgstr "Учётная запись"
 
 #: app/login/2fa/2fa_create.php:42 app/tools/user-menu/2fa.php:72
-msgid "You can also scan followign QR code with Google Authenticator application"
+msgid "You can also scan following QR code with Google Authenticator application"
 msgstr "Вы также можете отсканировать следующий QR код в приложении Google Authenticator"
 
 #: app/login/2fa/2fa_create.php:46 app/login/2fa/2fa_form.php:37

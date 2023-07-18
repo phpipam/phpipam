@@ -26,7 +26,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "2fa_validation");
 	    ?>
 	</div>
 	<div class="col-xs-12">
-	<?php print _("Please enter two-factor authentication code from Google Authenticator"); ?>
+	<?php print _("Please enter two-factor authentication code from your preferred authenticator application"); ?>
 		<hr>
 	</div>
 	<div class="col-xs-12 text-right">
