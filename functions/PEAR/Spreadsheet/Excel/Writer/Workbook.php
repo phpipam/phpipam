@@ -624,7 +624,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
             if ($this->_country_code != -1) {
                 $offset += 8; // adding COUNTRY record
             }
-            // add the lenght of SUPBOOK, EXTERNSHEET and NAME records
+            // add the length of SUPBOOK, EXTERNSHEET and NAME records
             //$offset += 8; // FIXME: calculate real value when storing the records
         }
         $total_worksheets = count($this->_worksheets);

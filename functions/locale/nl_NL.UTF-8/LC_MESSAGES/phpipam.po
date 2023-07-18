@@ -6597,7 +6597,7 @@ msgid "Maximum zone name length"
 msgstr "Maximale lengte van de zonenaam"
 
 msgid ""
-"Choose a maximum lenght of the zone name.<br>The default length is 3, the "
+"Choose a maximum length of the zone name.<br>The default length is 3, the "
 "maximum is 31 characters.<br>(keep in mind that your firewall may have a "
 "limit for the length of zone names or address objects )"
 msgstr ""

@@ -4876,7 +4876,7 @@ msgstr "无效的设备类型"
 msgid "Maximum zone name length"
 msgstr "最大区域名称长度"
 
-msgid "Choose a maximum lenght of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgid "Choose a maximum length of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
 msgstr "选择区域名称的最大长度。<br>默认长度为3，最多为31个字符。<br>（请注意，防火墙可能对区域名称或地址对象的长度有限制）"
 
 msgid "IPv4 address type alias"
@@ -5521,7 +5521,7 @@ msgstr "子网名称无效。 不要操纵POST值！"
 msgid "Zone settings"
 msgstr "区域设置"
 
-msgid "Choose a maximum lenght of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgid "Choose a maximum length of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
 msgstr "选择区域名称的最大长度。<br>默认值：3，最大值：31个字符。<br>（请记住，防火墙可能对区域名称或地址对象的长度有限制）"
 
 msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot."

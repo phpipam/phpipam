@@ -6267,7 +6267,7 @@ msgstr ""
 msgid "Maximum zone name length"
 msgstr ""
 
-msgid "Choose a maximum lenght of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgid "Choose a maximum length of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
 msgstr ""
 
 msgid "IPv4 address type alias"
@@ -7696,9 +7696,6 @@ msgid "Address permissions"
 msgstr ""
 
 msgid "General"
-msgstr ""
-
-msgid "Availability"
 msgstr ""
 
 msgid "Rack details"

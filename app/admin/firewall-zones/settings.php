@@ -124,7 +124,7 @@ $(function() {
 			<input type="text" class="form-control input-sm" name="zoneLength" value="<?php print $firewallZoneSettings['zoneLength']; ?>">
 		</td>
 		<td>
-			<span class="text-muted"><?php print _("Choose a maximum lenght of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"); ?></span>
+			<span class="text-muted"><?php print _("Choose a maximum length of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"); ?></span>
 		</td>
 	</tr>
 

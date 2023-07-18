@@ -5296,7 +5296,7 @@ msgid "Maximum zone name length"
 msgstr "最大ゾーン名の長さ"
 
 #: /var/www/phpipam/app/admin/firewall-zones/settings.php:127
-msgid "Choose a maximum lenght of the zone name.<br>The default: 3, maximum: 31 "
+msgid "Choose a maximum length of the zone name.<br>The default: 3, maximum: 31 "
 "characters.<br>(keep in mind that your firewall may have a limit for the "
 "length of zone names or address objects )"
 msgstr "ゾーン名の最大長を選択します<br>デフォルトの長さは3文字、最大値は31文字です"

@@ -11026,7 +11026,7 @@ msgid "Maximum zone name length"
 msgstr "Максимальная длина имени зоны"
 
 #: app/admin/firewall-zones/settings.php:127
-msgid "Choose a maximum lenght of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgid "Choose a maximum length of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
 msgstr "Выберите максимальную длину имени зоны.<br>Дефолтная длина 3, максимальная - 31 символ.<br>(учтите, что ваш фаервол может иметь лимит длины имени зоны или объекта адреса )"
 
 #: app/admin/firewall-zones/settings.php:206
@@ -12299,7 +12299,7 @@ msgstr "Неверное название подсети. Не манипули�
 msgid "Zone settings"
 msgstr "Установки Зоны"
 
-msgid "Choose a maximum lenght of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgid "Choose a maximum length of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
 msgstr "Выберите максимальную длину имени зоны.<br>По-умолчанию:3, максимум:31 символ. <br>(учтите, что ваш фаервол может иметь ограничение на длину имени зоны или объектов адреса)"
 
 msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot."

@@ -5992,7 +5992,7 @@ msgstr "Tipo dispositivo non valido."
 msgid "Maximum zone name length"
 msgstr "Lunghezza massima nome zona"
 
-msgid "Choose a maximum lenght of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgid "Choose a maximum length of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
 msgstr ""
 "Scegli  una lunghezza massima per il nome della zona.<br>La lunghezza predefinita &egrave; 3, il massimo &egrave; 32 caratteri.<br>(considerare che il firewall potrebbe avere dei limiti per la lunghezza dei nomi zona o "
 "degli address objects)"
