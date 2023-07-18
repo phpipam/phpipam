@@ -687,6 +687,27 @@ class PowerDNS extends Common_functions {
     }
 
     /**
+     * Searches domains referencing a hostname or ip
+     *
+     * @access public
+     * @param mixed $hostname
+     * @param mixed $ip
+     * @return array|boolean
+     */
+    public function search_domains_by_hostname_or_ip ($hostname, $ip) {
+        // query
+        $query = "select DISTINCT(`domain_id`) from `records` where `name` = ? or `content` = ? and `type` != 'NS' and `type` != 'SOA';";
+        // fetch
+        try { $records = $this->Database_pdns->getObjectsQuery($query, array($hostname, $ip)); }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage());
+            return false;
+        }
+        # result
+        return sizeof($records)>0 ? $records : false;
+    }
+
+    /**
      * Searches records for specific domainid for type and name values
      *
      * @access public
@@ -933,17 +954,28 @@ class PowerDNS extends Common_functions {
      * @return void
      */
     public function pdns_remove_ip_and_hostname_records ($hostname, $ip) {
-         // set query
-        $query = "delete from `records` where (`name` = ? or `content` = ?) and `type` != 'NS' and `type` != 'SOA';";
+        // find out which domains are going to need an soa serial update
+        $domains_records = $this->search_domains_by_hostname_or_ip($hostname, $ip);
 
-        // run
-		try { $this->Database_pdns->runQuery($query, array($hostname, $ip)); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		#result
-		return true;
+        // set query
+       $query = "delete from `records` where (`name` = ? or `content` = ?) and `type` != 'NS' and `type` != 'SOA';";
+
+       // run
+       try { $this->Database_pdns->runQuery($query, array($hostname, $ip)); }
+       catch (Exception $e) {
+           $this->Result->show("danger", _("Error: ").$e->getMessage());
+           return false;
+       }
+
+       // update soa serial for impacted domains
+       if($domains_records !== false) {
+           foreach ($domains_records as $d) {
+               $this->update_soa_serial ($d->domain_id);
+           }
+       }
+
+       #result
+       return true;
     }
 
     /**
