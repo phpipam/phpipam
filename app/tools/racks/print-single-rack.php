@@ -151,6 +151,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
             $links = [];
             # permissions
             if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
+                $links[] = ["type"=>"link", "text"=>_("Print rack"), "href"=>create_link('tools', 'racks', $rack->id, 'print'), "icon"=>"print"];
                 $links[] = ["type"=>"header", "text"=>_("Manage")];
                 $links[] = ["type"=>"link", "text"=>_("Edit rack"), "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='edit' data-rackid='$rack->id'", "icon"=>"pencil"];
             }
