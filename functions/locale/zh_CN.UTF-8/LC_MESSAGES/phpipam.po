@@ -1,10 +1,10 @@
 # PHPIPAM translations file - zh_CN
 # Copyright (C) phpipam 2013
 # This file is distributed under the same license as the phpipam package.
-# wxtewx <wxtewx@qq.com>, 2023.
+# wxtewx <181315147@qq.com>, 2023.
 # "Content-Type: text/plain; charset=UTF-8\n"
 # "Content-Transfer-Encoding: 8bit\n"
-# "Last-Translator: wxtewx <wxtewx@qq.com>\n"
+# "Last-Translator: wxtewx <181315147@qq.com>\n"
 # "PO-Revision-Date: 2023-09-03 22:48\n"
 # "Project-Id-Version: 1.50\n"
 # "Language: zh_CN\n"
@@ -3323,7 +3323,7 @@ msgstr "没有可用的错误日志"
 #: functions/classes/class.SubnetsTable.php:164
 #: functions/classes/class.Tools.php:2546
 msgid "No"
-msgstr "无"
+msgstr "否"
 
 msgid "No IPv4 host configured"
 msgstr "未配置 IPv4 主机"
@@ -17351,4 +17351,3 @@ msgstr "文档指南"
 #: app/tools/powerDNS/host_records.php:109
 msgid "DNS records resolving to IP address"
 msgstr "DNS 记录解析为 IP 地址"
-
