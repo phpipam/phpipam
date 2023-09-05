@@ -317,6 +317,7 @@ class phpipam_rack extends Tools {
                                     "name"=>$c->name,
                                     "startLocation"=>$c->rack_start-$rack->size,
                                     "size"=>$c->rack_size,
+                                    "type"=>"content",
                                     "rackName"=>$rack->name
                                     );
                         // if startlocation is not set
@@ -335,6 +336,7 @@ class phpipam_rack extends Tools {
                                     "name"=>$c->name,
                                     "startLocation"=>$c->rack_start,
                                     "size"=>$c->rack_size,
+                                    "type"=>"content",
                                     "rackName"=>$rack->name
                                     );
                         // if startlocation is not set
@@ -359,6 +361,7 @@ class phpipam_rack extends Tools {
                                     "name"=>$d->hostname,
                                     "startLocation"=>$d->rack_start-$rack->size,
                                     "size"=>$d->rack_size,
+                                    "type"=>"device",
                                     "rackName"=>$rack->name
                                     );
                         // if startlocation is not set
@@ -377,6 +380,7 @@ class phpipam_rack extends Tools {
                                     "name"=>$d->hostname,
                                     "startLocation"=>$d->rack_start,
                                     "size"=>$d->rack_size,
+                                    "type"=>"device",
                                     "rackName"=>$rack->name
                                     );
                         // if startlocation is not set
@@ -424,7 +428,7 @@ class phpipam_rack extends Tools {
      */
     public function set_active_rack_device ($id) {
         foreach ($this->Rack->getContent() as $content) {
-            if ($content->getId() == $id) {
+            if ($content->getId() == $id && $content->getType() == "device") {
                 $content->setActive();
             }
         }
@@ -955,6 +959,27 @@ class RackContent extends Model {
      */
     public function setActive($active = true) {
         $this->active = $active;
+    }
+
+    /**
+     * returns type
+     *
+     * @access public
+     * @return string
+     */
+    public function getType() {
+        return $this->type;
+    }
+
+    /**
+     * Sets type
+     *
+     * @access public
+     * @param string $type
+     * @return void
+     */
+    public function setType($type) {
+        $this->type = $type;
     }
 
     /**
