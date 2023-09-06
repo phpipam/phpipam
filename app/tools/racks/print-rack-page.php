@@ -105,7 +105,7 @@ table#deviceListWrapper {
 <h2>Rack <?php print preg_replace('/^' . preg_quote($location->name) . '-/', '', $rack->name); ?></h2>
 <h3><?php print $location->name; ?> <?php print $location->description ?></h3>
 <hr>
-<div style="float: right;">Stand: <?php print date('d.m.Y');?></div>
+<div style="float: right;"><?php print _('Date') . ': ' . date('Y-m-d');?></div>
 <?php print $rack->description; ?>
 <?php
 if(sizeof($cfields) > 0) {
