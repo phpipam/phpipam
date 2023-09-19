@@ -116,16 +116,17 @@ if(sizeof($result_addresses) > 0) {
 			}
 			//device
 			if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
-				if(!is_blank($line['switch']) && $line['switch']!="0") {
-					# get switch
-					$switch = (array) $Tools->fetch_object("devices", "id", $line['switch']);
-					$line['switch'] = $switch['hostname'];
+				# get device details
+				$device = $Tools->fetch_object("devices", "id", $line['switch']);
+				if (is_object($device)) {
+					$rack = "";
+					if ($User->settings->enableRACK == "1" && $User->get_module_permissions("racks") >= User::ACCESS_R && $device->rack > 0) {
+						$rack = "<i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackid='" . $device->rack . "' data-deviceid='" . $device->id . "'></i>";
+					}
+					print "<td class='hidden-xs hidden-sm hidden-md'>$rack<a href='" . create_link("tools", "devices", $device->id) . "'>" . escape_input($device->hostname) . "</a></td>";
+				} else {
+					print "<td class='hidden-xs hidden-sm hidden-md'></td>";
 				}
-				else {
-					$line['switch'] = "/";
-				}
-
-				print ' <td class="hidden-sm hidden-xs">'. $line['switch']  .'</td>' . "\n";
 			}
 			//port
 			if(in_array('port', $selected_ip_fields)) 										{ print ' <td>'. $line['port']  .'</td>' . "\n"; }
