@@ -80,6 +80,7 @@ if($folder['sectionId']!=$_GET['section'])	{
 
 	print "	<div class='btn-toolbar'>";
 
+	$sp = [];
 	/* set values for permissions */
 	if($folder_permission == 1) {
 		$sp['editsubnet']= false;		//edit subnet
