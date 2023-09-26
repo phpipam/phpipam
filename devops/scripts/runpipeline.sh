@@ -6,11 +6,11 @@ ENVIRONMENT=""
 ENV=${ENV:-"dev"}
 case "$ENV" in
     "dev") 
-        export ENVIRONMENT="aws42-istio-networking/phpipam-dev" 
+        export ENVIRONMENT="aws42-istio-networking-v2/phpipam-dev" 
         export VAULT_KV_PATH="network-engineering/phpipam/dev"
         ;;
     "prod") 
-        export ENVIRONMENT="aws42-istio-networking/phpipam-prod" 
+        export ENVIRONMENT="aws42-istio-networking-v2/phpipam-prod" 
         export VAULT_KV_PATH="network-engineering/phpipam/prod"
         ;;
 esac
