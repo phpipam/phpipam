@@ -167,7 +167,7 @@ function is_blank($data) {
 function escape_input($data) {
 	if (is_blank($data))
 		return '';
-	$safe_data = htmlentities($data, ENT_QUOTES);
+	$safe_data = htmlspecialchars($data, ENT_QUOTES);
 	return is_string($safe_data) ? $safe_data : '';
 }
 
