@@ -1,0 +1,69 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [ "**" ]
+  workflow_dispatch:
+    inputs:
+      ENV:
+        description: environment to deploy
+        default: dev
+        required: false
+        type: choice
+        options:
+        - dev
+        - prod
+
+jobs: 
+  set-deployment-environment:
+    runs-on: self-hosted
+    outputs:
+      CLUSTER_NAME: ${{ steps.set-deployment-environment.outputs.CLUSTER_NAME }}
+      NAMESPACE: ${{ steps.set-deployment-environment.outputs.NAMESPACE }}
+    steps:
+    - name: Set deployment environment
+      id: set-deployment-environment
+      run: |
+        #!/bin/bash
+        if [ -z "$ENV" ]; then
+          echo "env is not provided, defaulting to dev"
+          ENV=dev
+        fi
+        envfile=$(mktemp)
+        cat >> $envfile <<EOF
+        {
+          "dev": {
+            "cluster": "aws42-istio-networking-v2",
+            "namespace": "phpipam-dev"
+          },
+          "prod": {
+            "cluster": "aws42-istio-networking-v2",
+            "namespace": "phpipam-prod"
+          }
+        }
+        EOF
+        ENV_META=$(jq -r ".$ENV" $envfile)
+        rm -f $envfile
+        CLUSTER_NAME="$(echo $ENV_META | jq -r '.cluster')"
+        NAMESPACE="$(echo $ENV_META | jq -r '.namespace')"        
+        echo "CLUSTER_NAME=$CLUSTER_NAME" >> $GITHUB_OUTPUT
+        echo "NAMESPACE=$NAMESPACE" >> $GITHUB_OUTPUT
+      env:
+        ENV: "${{ github.event.inputs.ENV }}"
+
+  build-and-deploy:
+    needs: set-deployment-environment
+    uses: umg/devops-github-actions-workflows/.github/workflows/docker-build-and-deploy.yaml@main
+    secrets: inherit
+    with:
+      tag: ${{ github.sha }}
+      cluster: ${{ needs.set-deployment-environment.outputs.CLUSTER_NAME }}
+      namespace: ${{ needs.set-deployment-environment.outputs.NAMESPACE }}
+      # set your image URL below - the tag will be appended automatically based on the git commit SHA
+      image: docker-registry.umusic.com/networking/phpipam
+      context: "."
+      # set the path to your Dockerfile and Kubernetes YAML files below
+      dockerfile: Dockerfile
+      platforms: linux/amd64
+      yamlDir: devops/k8s
+      yamlPath: devops/app.yaml
