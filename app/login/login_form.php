@@ -1,6 +1,6 @@
 <div id="login">
 
-<form name="login" id="login" class="form-inline" method="post">
+<form name="login" id="login" action="<?php $BASE ?>" class="form-inline" method="post">
 <div class="loginForm row">
 
 	<!-- title -->
