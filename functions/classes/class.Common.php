@@ -1098,7 +1098,7 @@ class Common_functions  {
 	 */
 	public function create_links ($text, $field_type = "varchar") {
 		if (!is_string($text))
-			return '';
+			return $text;
 
 		// create links only for varchar fields
 		if (strpos($field_type, "varchar")!==false) {

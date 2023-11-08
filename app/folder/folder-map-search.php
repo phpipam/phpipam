@@ -7,6 +7,9 @@ $biggest_subnet_mask = 32;
 # set type
 $type = "";
 
+// count subnets
+$cnt = [];
+
 foreach($subnets as $id=>$subnet) {
 	if($subnet->isFolder!=1) {
 		// identify address
@@ -20,6 +23,9 @@ foreach($subnets as $id=>$subnet) {
 		else {
 			if($subnet->mask<$biggest_subnet_mask)  { $biggest_subnet_mask = $subnet->mask; }
 		}
+
+		// first ?
+		if(!isset($cnt[$subnet->mask])) { $cnt[$subnet->mask]=0; }
 
 		// size
 		$cnt[$subnet->mask]++;
@@ -36,7 +42,7 @@ $masks = [];
 print "<h4>"._("Select mask").":</h4><hr>";
 for($m=$biggest_subnet_mask+1; $m<=$pow; $m++) {
 	// active
-	$active = $m==$_GET['ipaddrid'] ? "btn-success" : "";
+	$active = $m==@$_GET['ipaddrid'] ? "btn-success" : "";
 
 	// number of subnets
 	$subnet_num = 0;
