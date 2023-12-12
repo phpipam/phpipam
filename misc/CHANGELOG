@@ -2,8 +2,9 @@
 
     Enhancements, changes:
     ----------------------------
-    + php8.4 compatibility;
+    + php8.3 compatibility;
     + MySQL 5.5.3+ is now required (support for utf8mb4);
+    + Reverse-proxy users should review the new config.php $trust_x_forwarded_headers setting;
 
     Security Fixes:
     ----------------------------
