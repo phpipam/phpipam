@@ -29,6 +29,3 @@
 [submodule "functions/parsedown"]
 	path = functions/parsedown
 	url = https://github.com/erusev/parsedown.git
-[submodule "functions/webauthn-php"]
-	path = functions/webauthn-php
-	url = https://github.com/Firehed/webauthn-php.git
