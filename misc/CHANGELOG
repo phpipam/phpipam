@@ -2,7 +2,7 @@
 
     Enhancements, changes:
     ----------------------------
-    + php8.1 compatibility (php8.x support is work-in-progress);
+    + php8.4 compatibility;
     + MySQL 5.5.3+ is now required (support for utf8mb4);
 
     Security Fixes:
