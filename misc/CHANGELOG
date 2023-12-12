@@ -1,3 +1,9 @@
+== 1.7.0
+
+    New features:
+    ------------
+    + support for passkeys / passwordless logins;
+
 == 1.6.0
 
     Enhancements, changes:

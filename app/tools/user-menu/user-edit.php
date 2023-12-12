@@ -43,6 +43,26 @@ if (!empty($_POST['theme'])) {
 	if (!in_array($_POST['theme'], ['default', 'white', 'dark'])) 				{ $Result->show("danger alert-absolute", _('Invalid theme'), true); }
 }
 
+# passkeys
+if ($User->settings->{'passkeys'}=="1") {
+	// fetch passkeys
+	$user_passkeys = $User->get_user_passkeys($User->user->id);
+	// check
+	if(isset($_POST['passkey_only'])) {
+		if(sizeof($user_passkeys)==0) {
+			$Result->show("warning alert-absolute", _('There are no passkeys set for user. Resetting passkey login only to false.'), false);
+			print "<div class='clearfix'></div>";
+			$_POST['passkey_only'] = 0;
+		}
+		else {
+			$_POST['passkey_only'] = 1;
+		}
+	}
+	else {
+		$_POST['passkey_only'] = 0;
+	}
+}
+
 # set override
 $_POST['compressOverride'] = @$_POST['compressOverride']=="Uncompress" ? "Uncompress" : "default";
 

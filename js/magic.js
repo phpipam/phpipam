@@ -2418,6 +2418,10 @@ $(document).on("click", "#editVLANdomainsubmit", function() {
     submit_popup_data (".domainEditResult", "app/admin/vlans/edit-domain-result.php", $('form#editVLANdomain').serialize());
 });
 
+/* ---- Show permissions ----- */
+$(document).on("click", ".toggle-module-permissions", function () {
+    $(this).next('div').toggleClass('hidden');
+})
 
 /* ---- VRF ----- */
 //submit form

@@ -31,7 +31,6 @@ $User->Crypto->csrf_cookie ("validate", "user", $_POST['csrf_cookie']) === false
 $auth_method = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['authMethod']);
 $auth_method!==false ? : $Result->show("danger", _("Invalid authentication method"), true);
 
-
 /* checks */
 
 # ID must be numeric
@@ -106,7 +105,6 @@ if(sizeof($myFields) > 0) {
 $values = array(
 				"id"             =>@$_POST['userId'],
 				"real_name"      =>$_POST['real_name'],
-				"username"       =>$_POST['username'],
 				"email"          =>$_POST['email'],
 				"role"           =>$_POST['role'],
 				"authMethod"     =>$_POST['authMethod'],
@@ -118,6 +116,10 @@ $values = array(
 				);
 
 
+# username only on add
+if($_POST['action']=="add") {
+	$values['username'] = $_POST['username'];
+}
 
 # custom fields
 if (sizeof($myFields)>0) {
@@ -161,12 +163,41 @@ foreach ($User->get_modules_with_permissions() as $m) {
 # formulate permissions
 $values['module_permissions'] = json_encode($permissions);
 
+# 2fa
+if ($User->settings->{'2fa_provider'}!=='none') {
+	if(!isset($_POST['2fa'])) {
+		$values['2fa']        = 0;
+		$values['2fa_secret'] = NULL;
+	}
+}
+
+# passkeys
+$passkeys_to_remove = [];
+foreach($_POST as $key=>$post) {
+	if(substr($key, 0,15) == "delete-passkey-") {
+		$passkeys_to_remove[] = str_replace("delete-passkey-", "", $key);
+	}
+}
+
+# passkey only
+if ($User->settings->{'passkeys'}==1) {
+	$values['passkey_only'] = !isset($_POST['passkey_only']) ? 0 : 1;
+}
+
 # execute
 if(!$Admin->object_modify("users", $_POST['action'], "id", $values)) {
     $Result->show("danger", _("User")." ".$_POST["action"]." "._("failed").'!', true);
 }
 else {
     $Result->show("success", _("User")." ".$_POST["action"]." "._("successful").'!', false);
+}
+
+# remove passkeys if required
+if (sizeof($passkeys_to_remove)>0) {
+	// lalala
+	foreach ($passkeys_to_remove as $pk) {
+		$User->delete_passkey ($pk);
+	}
 }
 
 # mail user

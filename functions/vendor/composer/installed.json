@@ -1,0 +1,113 @@
+{
+    "packages": [
+        {
+            "name": "firehed/cbor",
+            "version": "0.1.0",
+            "version_normalized": "0.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Firehed/cbor-php.git",
+                "reference": "eef67b1b5fdf90a3688fc8d9d13afdaf342c4b80"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Firehed/cbor-php/zipball/eef67b1b5fdf90a3688fc8d9d13afdaf342c4b80",
+                "reference": "eef67b1b5fdf90a3688fc8d9d13afdaf342c4b80",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.1"
+            },
+            "suggest": {
+                "ext-bcmath": "Enables parsing of very large values"
+            },
+            "time": "2019-05-14T06:31:13+00:00",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-4": {
+                    "Firehed\\CBOR\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eric Stern",
+                    "email": "eric@ericstern.com"
+                }
+            ],
+            "description": "CBOR decoder",
+            "homepage": "https://github.com/Firehed/CBOR",
+            "keywords": [
+                "cbor"
+            ],
+            "support": {
+                "issues": "https://github.com/Firehed/cbor-php/issues",
+                "source": "https://github.com/Firehed/cbor-php/tree/master"
+            },
+            "install-path": "../firehed/cbor"
+        },
+        {
+            "name": "firehed/webauthn",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Firehed/webauthn-php.git",
+                "reference": "267d04a6d2926d9ab6d7630fb86a92410eb6b36c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Firehed/webauthn-php/zipball/267d04a6d2926d9ab6d7630fb86a92410eb6b36c",
+                "reference": "267d04a6d2926d9ab6d7630fb86a92410eb6b36c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-hash": "*",
+                "ext-openssl": "*",
+                "firehed/cbor": "^0.1.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "maglnet/composer-require-checker": "^4.1",
+                "mheap/phpunit-github-actions-printer": "^1.5",
+                "nikic/php-parser": "^4.14",
+                "phpstan/phpstan": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpstan/phpstan-strict-rules": "^1.0",
+                "phpunit/phpunit": "^9.3",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "time": "2023-11-16T23:07:44+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-4": {
+                    "Firehed\\WebAuthn\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eric Stern",
+                    "email": "eric@ericstern.com"
+                }
+            ],
+            "description": "Web Authentication",
+            "support": {
+                "issues": "https://github.com/Firehed/webauthn-php/issues",
+                "source": "https://github.com/Firehed/webauthn-php/tree/main"
+            },
+            "install-path": "../firehed/webauthn"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}

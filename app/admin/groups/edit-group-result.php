@@ -94,5 +94,3 @@ if (!is_blank($_POST['gmembers'])) {
 		}
 	}
 }
-
-?>

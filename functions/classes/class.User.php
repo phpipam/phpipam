@@ -819,10 +819,10 @@ class User extends Common_functions {
             $this->Log->write ( _("User login"), _('Error: Invalid authentication method'), 2 );
             $this->Result->show("danger", _("Error: Invalid authentication method"), true);
         }
-        # disabled
-        elseif ($this->user->disabled=="Yes") {
-            $this->Result->show("danger", _("Your account has been disabled").".", true);
-        }
+        # disabled - we made separate check on this, therwise we reveal info before user is authenticated
+        // elseif ($this->user->disabled=="Yes") {
+        //     $this->Result->show("danger", _("Your account has been disabled").".", true);
+        // }
         else {
             # set method name variable
             $authmethodtype = $this->authmethodtype;
@@ -843,12 +843,12 @@ class User extends Common_functions {
     /**
      * tries to fetch user datails from database by username if not already existing locally
      *
-     * @access private
+     * @access public
      * @param string $username
      * @param bool $force
      * @return void
      */
-    private function fetch_user_details ($username, $force = false) {
+    public function fetch_user_details ($username, $force = false) {
         # only if not already active
         if(!is_object($this->user) || $force) {
             try {
@@ -950,6 +950,9 @@ class User extends Common_functions {
     private function auth_local ($username, $password) {
         # auth ok
         if(hash_equals($this->user->password, crypt($password, $this->user->password))) {
+            # check login restrictions for authenticated user
+            $this->check_login_restrictions ($username);
+
             # save to session
             $this->write_session_parameters ();
 
@@ -986,6 +989,9 @@ class User extends Common_functions {
      * @return void
      */
     public function auth_http ($username, $password) {
+        # check login restrictions for authenticated user
+        $this->check_login_restrictions ($username);
+
         # save to session
         $this->write_session_parameters ();
 
@@ -1080,6 +1086,9 @@ class User extends Common_functions {
         # authenticate
         try {
             if ($adldap->authenticate($username, $password)) {
+                # check login restrictions for authenticated user
+                $this->check_login_restrictions ($username);
+
                 # save to session
                 $this->write_session_parameters();
 
@@ -1193,6 +1202,8 @@ class User extends Common_functions {
 
         # authenticate user
         if($auth) {
+            # check login restrictions for authenticated user
+            $this->check_login_restrictions ($username);
             # save to session
             $this->write_session_parameters ();
 
@@ -1222,6 +1233,9 @@ class User extends Common_functions {
      * @return void
      */
     private function auth_SAML2 ($username, $password = null) {
+        # check login restrictions for authenticated user
+        $this->check_login_restrictions ($username);
+
         # save to session
         $this->write_session_parameters ();
 
@@ -1234,6 +1248,246 @@ class User extends Common_functions {
         $this->block_remove_entry ();
     }
 
+    /**
+     * Check for any login restrictions after user has authenticated
+     * @method check_login_restrictions
+     * @param  string $username
+     * @return void
+     */
+    private function check_login_restrictions ($username = "") {
+        // is account disabled ?
+        if ($this->user->disabled=="Yes") {
+            $this->log_failed_access ($username);
+            $this->Log->write( _("login"), _("User account is disabled"), 2, $username );
+            $this->Result->show("danger", _("User account is disabled"), true);
+        }
+        // is passkey login enforced ?
+        elseif ($this->settings->{'passkeys'}=="1") {
+            if ($this->user->passkey_only=="1") {
+                // check passkeys
+                $user_passkeys = $this->get_user_passkeys($this->user->id);
+
+                // make sure it has passkeys configured
+                if (sizeof($user_passkeys)>0) {
+                    $this->log_failed_access ($username);
+                    $this->Log->write( _("Passkey login"), _("Passkey required for login"), 2, $username );
+                    $this->Result->show("danger", _("Only passkey authentication is possible for this account"), true);
+                }
+            }
+        }
+    }
+
+    /**
+     * Process succesfull passkey auth
+     * @method auth_passkey_success
+     * @param  string $encodedCredential
+     * @return bool
+     */
+    public function auth_passkey ($credentialId = "", $encodedCredential = "", $keyId = "") {
+        # save passkey
+        $this->update_passkey ($credentialId, $encodedCredential);
+
+        # get user details from authenticated user_id
+        $this->fetch_passkey_user_details ();
+
+        # failure
+        if(!isset($this->user->username)) {
+            throw new Exception ("Cannot fetch credentials from userid");
+        }
+            header('HTTP/1.1 500 Cannot fetch credentials from userid');
+
+        # set session parameters
+        $_SESSION['ipamusername'] = $this->user->username;
+        $_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
+        $_SESSION['keyId']        = $keyId;
+        $_SESSION['lastactive']   = time();
+
+        # remove passkey temp session user id
+        $this->clear_passkey_user_id ();
+
+        # save to session
+        $this->write_session_parameters ();
+        # log
+        $this->Log->write( _("User login"), _("User")." ".$this->user->real_name." "._("logged in"), 0, $username );
+
+        # write last logintime
+        $this->update_login_time ();
+
+        # remove possible blocked IP
+        $this->block_remove_entry ();
+
+        # ok
+        return true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /* @passkey -------------------- */
+
+
+    /**
+     * Fetch user details based on passkey ID
+     * @method fetch_passkey_user_details
+     * @return obj
+     */
+    private function fetch_passkey_user_details () {
+        try {
+            $user = $this->Database->getObject("users", $this->get_passkey_user_id());
+
+            if(!is_null($user)) {
+                $this->user = $user;
+            }
+            else {
+                header('HTTP/1.1 404 Not found');
+                $this->block_ip ();
+                $this->Log->write ( _("User login"), _('Failed passkey login'), 2, $this->get_passkey_user_id() );
+            }
+        }
+        catch (Exception $e) {
+            header('HTTP/1.1 500 '.$e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Get passkeys for user
+     * @method get_user_passkeys
+     * @param  bool $user_id
+     * @return array
+     */
+    public function get_user_passkeys ($user_id = false) {
+        // set userId
+        $user_id = $user_id===false ? $this->user->id : $user_id;
+        try {
+            return $this->Database->findObjects("passkeys", "user_id", $user_id);
+        }
+        catch (Exception $e) {
+             !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false);
+        }
+    }
+
+    /**
+     * Get passkey for user based on key_id
+     * @method get_user_passkeys
+     * @param  bool $user_id
+     * @return array
+     */
+    public function get_user_passkey_by_keyId ($keyId = false) {
+        try {
+            return $this->Database->findObject("passkeys", "keyId", $keyId);
+        }
+        catch (Exception $e) {
+             !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false);
+        }
+    }
+
+    /**
+     * Save new passkey
+     * @method save_passkey
+     * @param  string $credential
+     * @return bool
+     */
+    public function save_passkey ($credential = "", $credentialId = NULL, $keyId = NULL) {
+        try {
+            $this->Database->insertObject("passkeys", ["user_id"=>$this->user->id, "credentialId"=>$credentialId, "credential"=>$credential, "keyId"=>$keyId, "created"=>date("Y-m-d H:i:s§")]);
+            // ok
+            return true;
+        }
+        catch (Exception $e) {
+            header('HTTP/1.1 500 '.$e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Rename passkey
+     * @method rename_passkey
+     * @param  int $id
+     * @param  string $comment
+     * @return bool
+     */
+    public function rename_passkey ($id = 0, $comment = "") {
+        try {
+            $this->Database->updateObject("passkeys", ["id"=>$id, "comment"=>$comment]);
+            return true;
+        }
+        catch (Exception $e) {
+            $this->debugging ? : $this->Result->show("danger", _("Database error: ").$e->getMessage(), false);
+            return false;
+        }
+    }
+
+    /**
+     * Delete passkey
+     * @method delete_passkey
+     * @param  int $id
+     * @return bool
+     */
+    public function delete_passkey ($id = 0) {
+        try {
+            $this->Database->deleteObject("passkeys", $id);
+            return true;
+        }
+        catch (Exception $e) {
+            $this->debugging ? : $this->Result->show("danger", _("Database error: ").$e->getMessage(), false);
+            return false;
+        }
+    }
+
+    /**
+     * Update passkey on succesfull login
+     * @method save_passkey
+     * @param  string $credential
+     * @return bool
+     */
+    public function update_passkey ($credentialId = "", $updated_credential = "") {
+        try {
+            $this->Database->updateObject("passkeys", ["credentialId"=>$credentialId, "credential"=>$updated_credential, "used"=>date("Y-m-d H:i:s")], "credentialId");
+            // ok
+            return true;
+        }
+        catch (Exception $e) {
+            header('HTTP/1.1 500 '.$e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Save authneitcation user id to session
+     * @method set_passkey_user_id
+     * @param  int $userid
+     */
+    public function set_passkey_user_id ($userid = 0) {
+        $_SESSION['passkey_user_id'] = $userid;
+    }
+
+    /**
+     * Return user id
+     * @method get_passkey_user_id
+     * @return int
+     */
+    public function get_passkey_user_id () {
+        return $_SESSION['passkey_user_id'];
+    }
+
+    /**
+     * Remove temporary clear_passkey_user_id
+     * @method clear_passkey_user_id
+     * @return [type]
+     */
+    public function clear_passkey_user_id () {
+        unset($_SESSION['passkey_user_id']);
+    }
 
 
 
@@ -1355,6 +1609,7 @@ class User extends Common_functions {
                         "menuCompact"      => $this->verify_checkbox(@$post['menuCompact']),
                         "theme"            => $post['theme'],
                         "2fa"              => $this->verify_checkbox(@$post['2fa']),
+                        "passkey_only"     => $this->verify_checkbox(@$post['passkey_only']),
                         );
         if(!is_blank($post['password1'])) {
         $items['password'] = $this->crypt_user_pass ($post['password1']);
@@ -1425,8 +1680,6 @@ class User extends Common_functions {
         try { $this->Database->updateObject("users", array("lastActivity"=>date("Y-m-d H:i:s"), "id"=>$this->user->id)); }
         catch (Exception $e) { }
     }
-
-
 
 
 
@@ -1829,6 +2082,7 @@ class User extends Common_functions {
         // return
         return $level=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._($this->parse_permissions ($level))."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($this->parse_permissions ($level))."</span>";
     }
+
 }
 /**
  * Fake User object for install/scripts
