@@ -304,7 +304,7 @@ class phpipam_rack extends Tools {
         // set orientation
         $this->rack_orientation = $rack->topDown;
         // set name
-        $this->rack_name = $is_back ? "[R] ".$rack->name : "[F] ".$rack->name;
+        $this->rack_name = $is_back ? "[背面] ".$rack->name : "[正面] ".$rack->name;
 
         // set freeform content
         if ($contents!==false) {
@@ -561,7 +561,7 @@ class RackDrawer extends Common_functions {
             imagettftext($this->template, 12, 0,
                 $this->rackInsideXOffset - 4 - abs($textBox[2] - $textBox[0]),
                 $y + abs($textBox[1] - $textBox[7]) + round(($this->unitYSize - ($textBox[1] - $textBox[7])) / 2),
-                $textColor, dirname(__FILE__)."/../../css/fonts/MesloLGS-Regular.ttf", $text);
+                $textColor, dirname(__FILE__)."/../../css/fonts/HarmonyOS_Sans_SC_Regular.ttf", $text);
             imagealphablending($this->template, false);
 
             $y += $this->unitYSize;
@@ -605,7 +605,7 @@ class RackDrawer extends Common_functions {
         $x = imagesx($img) - $width - 8;
         $y = Imagesy($img) +9;
         // imagestring($img, $font, $x/2, $y/2, $text, $color);
-        imagettftext($img, 8, 0, $x/2, $y/2, $color, dirname(__FILE__)."/../../css/fonts/MesloLGS-Regular.ttf", $text );
+        imagettftext($img, 8, 0, $x/2, $y/2, $color, dirname(__FILE__)."/../../css/fonts/HarmonyOS_Sans_SC_Regular.ttf", $text );
     }
 
     /**
