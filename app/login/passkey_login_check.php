@@ -36,7 +36,6 @@ use Firehed\WebAuthn\{
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 
-
 // parser
 $parser = new ResponseParser();
 $getResponse = $parser->parseGetResponse($data);
@@ -47,7 +46,7 @@ $getResponse = $parser->parseGetResponse($data);
 // die();
 
 // Set relaying party
-$rp = new \Firehed\WebAuthn\SingleOriginRelyingParty('https://ipam-dc.ugbb.net');
+$rp = new \Firehed\WebAuthn\SingleOriginRelyingParty($User->createURL ());
 // challange manager
 $challengeManager = new \Firehed\WebAuthn\SessionChallengeManager();
 

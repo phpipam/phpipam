@@ -27,7 +27,7 @@ use Firehed\WebAuthn\{
     RelyingParty,
     SessionChallengeManager,
     SingleOriginRelyingParty,
-    ResponseParser
+    JsonResponseParser
 };
 
 # process request
@@ -35,14 +35,14 @@ $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 
 // parser
-$parser = new ResponseParser();
+$parser = new JsonResponseParser();
 $createResponse = $parser->parseCreateResponse($data);
 
 // escape keyId
 $data['keyId'] =  $User->strip_input_tags ($data['keyId']);
 
 // Relaying party
-$rp = new \Firehed\WebAuthn\SingleOriginRelyingParty('https://ipam-dc.ugbb.net');
+$rp = new \Firehed\WebAuthn\SingleOriginRelyingParty($User->createURL ());
 // challange manager
 $challengeManager = new \Firehed\WebAuthn\SessionChallengeManager();
 

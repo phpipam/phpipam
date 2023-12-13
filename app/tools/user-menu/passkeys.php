@@ -119,7 +119,7 @@ const startRegister = async (e) => {
 	    const createOptions = {
 	        publicKey: {
 	            rp: {
-	                name: 'https://ipam-dc.ugbb.net',
+	                name: '<?php print $User->createURL (); ?>',
 	            },
 	            user: {
 	                name: "<?php print $User->user->username; ?>",
@@ -133,10 +133,10 @@ const startRegister = async (e) => {
 	                    alg: -7, // ES256
 	                    type: "public-key",
 	                },
-				    // {
-				    // 	alg: -257, // Value registered by this specification for "RS256"
-				    // 	type: "public-key",
-				    // }
+				    {
+				    	alg: -257, // Value registered by this specification for "RS256"
+				    	type: "public-key",
+				    }
 	            ]
 	        },
 	        attestation: 'direct',
@@ -145,7 +145,7 @@ const startRegister = async (e) => {
 	    // Call the WebAuthn browser API and get the response. This may throw, which you
 	    // should handle. Example: user cancels or never interacts with the device.
 	    const credential = await navigator.credentials.create(createOptions)
-        // console.log(credential)
+        console.log(Array.from(new Uint8Array(credential.rawId)))
 
 	    // Format the credential to send to the server. This must match the format
 	    // handed by the ResponseParser class. The formatting code below can be used
@@ -195,31 +195,6 @@ const startRegister = async (e) => {
     			$('.jqueryErrorText').html(jqxhr.statusText+"<br>Status: "+textStatus+"<br>Error: "+errorThrown).show();
     			$('div.loading').hide();
     		});
-
-			/* this functions saves popup result */
-			/* --------------------------------- */
-			// function submit_popup_data (result_div, target_script, post_data, reload) {
-			//     // show spinner
-			//     showSpinner();
-			//     // set reload
-			//     reload = typeof reload !== 'undefined' ? reload : true;
-			//     // post
-			//     $.post(target_script, post_data, function(data) {
-			//         $('div'+result_div).html(data).slideDown('fast');
-			//         //reload after 2 seconds if succeeded!
-			//         if(reload) {
-			//             if(data.search("alert-danger")==-1 && data.search("error")==-1 && data.search("alert-warning")==-1 )    { setTimeout(function (){window.location.reload();}, 1500); }
-			//             else                                                                                                    { hideSpinner(); }
-			//         }
-			//         else {
-			//             hideSpinner();
-			//         }
-			//     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-			//     // prevent reload
-			//     return false;
-			// }
-
-
         }
         else {
             $('#loginCheckPasskeys').html("<div class='alert alert-danger'>Failed to register new passkey.</div>");
