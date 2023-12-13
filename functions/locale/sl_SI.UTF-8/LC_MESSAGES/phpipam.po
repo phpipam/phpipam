@@ -6492,7 +6492,7 @@ msgid "Search and replace content in database"
 msgstr "Iskanje in zamenjava vsebine v bazi"
 
 msgid "Dashboard"
-msgstr "Domov"
+msgstr "Nadzorna plošča"
 
 msgid "Invalid CSRF cookie"
 msgstr "Neveljaven CSRF piškotek"
@@ -8549,3 +8549,45 @@ msgstr "Lokalni naslov"
 
 msgid "BGP type"
 msgstr "tip BGP povezave"
+
+msgid "Vaults"
+msgstr "Trezorji"
+
+msgid "Create Vault"
+msgstr "Ustvari trezor"
+
+msgid "Certificates"
+msgstr "Certifikati"
+
+msgid "Passwords"
+msgstr "Gesla"
+
+msgid "Edit Vault Details"
+msgstr "Uredi podatke trezorja"
+
+msgid "Edit Vault"
+msgstr "Uredi podatke trezorja"
+
+msgid "Delete vault"
+msgstr "Izbriši trezor"
+
+msgid "Lock Vault"
+msgstr "Zaklep trezorja"
+
+msgid "Unlock Vault"
+msgstr "Odklep trezorja"
+
+msgid "Remove Vault"
+msgstr "Izbris trezorja"
+
+msgid "Vault name"
+msgstr "Ime trezorja"
+
+msgid "Enter vault name"
+msgstr "Vpišite ime trezorja"
+
+msgid "Certificates vault"
+msgstr "Trezor za certifikate"
+
+msgid "Password vault"
+msgstr "Trezor za gesla"
