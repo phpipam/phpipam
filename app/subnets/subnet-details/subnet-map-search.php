@@ -1,29 +1,14 @@
 <?php
 
-
-# max mask possible
-$biggest_subnet_mask = 32;
-
-# set type
-$type = "";
-
-// ipv6
-if($Tools->identify_address($subnet['subnet'])=="IPv6") {
-	$biggest_subnet_mask = $subnet['mask']+10>128 ? 128 : $subnet['mask'];
-	$pow = 128;
-}
-else {
-	$biggest_subnet_mask = $subnet['mask']+10>32 ? 32 : $subnet['mask'];
-	$pow = 32;
-}
-
+// max mask possible
+$pow = $Tools->identify_address($subnet['subnet'])=="IPv6" ? 128 : 32;
 
 //
 // Select mask
 //
 $masks = [];
 print "<h4>"._("Select mask").":</h4><hr>";
-for($m=$biggest_subnet_mask+1; $m<=$pow; $m++) {
+for($m=$subnet['mask']+1; $m<=$pow; $m++) {
 	// active
 	$active = $m==@$_GET['ipaddrid'] ? "btn-success" : "";
 
@@ -35,12 +20,6 @@ for($m=$biggest_subnet_mask+1; $m<=$pow; $m++) {
 	// save to masks array
 	$masks[] = $m;
 }
-
-
-// validate
-
-
-
 
 //
 // include

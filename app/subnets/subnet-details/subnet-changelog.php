@@ -153,6 +153,7 @@ if($clogsAddresses) {
 	foreach($clogsAddresses as $l) {
 		$l = (array) $l;
 		# format diff
+		if(!is_null($l['cdiff']))
 		$l['cdiff'] = str_replace("\n", "<br>", $l['cdiff']);
 
 		print "<tr>";

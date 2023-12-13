@@ -997,19 +997,20 @@ class Common_functions  {
 	 * @return  int
 	 */
 	private function httpPort() {
-		// If only HTTP_X_FORWARDED_PROTO='https' is set assume port=443. Override if required by setting HTTP_X_FORWARDED_PORT
-		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && !isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
-			return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 443 : 80;
+		if (Config::ValueOf('trust_x_forwarded_headers') === true) {
+			// If only HTTP_X_FORWARDED_PROTO='https' is set assume port=443. Override if required by setting HTTP_X_FORWARDED_PORT
+			if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && !isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
+				return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 443 : 80;
+			}
+			if (isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
+				return $_SERVER['HTTP_X_FORWARDED_PORT'];
+			}
 		}
-		elseif (isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
-			return $_SERVER['HTTP_X_FORWARDED_PORT'];
-		}
-		elseif (isset($_SERVER['SERVER_PORT'])) {
+		if (isset($_SERVER['SERVER_PORT'])) {
 			return $_SERVER['SERVER_PORT'];
 		}
-		else {
-			return 80;
-		}
+
+		return 80;
 	}
 
 	/**
@@ -1019,21 +1020,22 @@ class Common_functions  {
 	* @return bool
 	*/
 	public function isHttps () {
-		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
-			return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https');
+		if (Config::ValueOf('trust_x_forwarded_headers') === true) {
+			if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+				return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https');
+			}
+			if (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+				return true;
+			}
 		}
-		elseif (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 			return true;
 		}
-		elseif(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+		if ($this->httpPort() == 443) {
 			return true;
 		}
-		elseif($this->httpPort() == 443) {
-			return true;
-		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -1045,8 +1047,11 @@ class Common_functions  {
 		if (php_sapi_name() === "cli")
 			return null;
 
-		if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && filter_var($_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP))
-			return $_SERVER['HTTP_X_FORWARDED_FOR'];
+		if (Config::ValueOf('trust_x_forwarded_headers') === true) {
+			if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && filter_var($_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP)) {
+				return $_SERVER['HTTP_X_FORWARDED_FOR'];
+			}
+		}
 
 		if (isset($_SERVER['REMOTE_ADDR']) && filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP))
 			return $_SERVER['REMOTE_ADDR'];
@@ -1063,16 +1068,13 @@ class Common_functions  {
 	public function createURL () {
 		$proto = $this->isHttps() ? 'https' : 'http';
 
-		if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+		if (Config::ValueOf('trust_x_forwarded_headers') === true && isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
 			$url = $_SERVER['HTTP_X_FORWARDED_HOST'];
-		}
-		elseif (isset($_SERVER['HTTP_HOST'])) {
+		} elseif (isset($_SERVER['HTTP_HOST'])) {
 			$url = $_SERVER['HTTP_HOST'];
-		}
-		elseif (isset($_SERVER['SERVER_NAME'])) {
+		} elseif (isset($_SERVER['SERVER_NAME'])) {
 			$url = $_SERVER['SERVER_NAME'];
-		}
-		else {
+		} else {
 			$url = "localhost";
 		}
 		$host = parse_url("$proto://$url", PHP_URL_HOST) ?: "localhost";
@@ -1098,7 +1100,7 @@ class Common_functions  {
 	 */
 	public function create_links ($text, $field_type = "varchar") {
 		if (!is_string($text))
-			return '';
+			return $text;
 
 		// create links only for varchar fields
 		if (strpos($field_type, "varchar")!==false) {
@@ -1168,7 +1170,11 @@ class Common_functions  {
 	 * @param bool $permit_root_domain
 	 * @return bool|mixed
 	 */
-	public function validate_hostname($hostname, $permit_root_domain=true) {
+	public function validate_hostname($hostname = "", $permit_root_domain=true) {
+		// null hostname is invalid
+		if(is_null($hostname)) {
+			return false;
+		}
     	// first validate hostname
     	$valid =  (preg_match("/^([a-z_\d](-*[a-z_\d])*)(\.([a-z_\d](-*[a-z_\d])*))*$/i", $hostname) 	//valid chars check
 	            && preg_match("/^.{1,253}$/", $hostname) 										//overall length check
@@ -1249,8 +1255,8 @@ class Common_functions  {
 		$country = strtolower($country);
 		// set regexes
 		$country_regex = array(
-			'united kingdom' => '/\\A\\b[A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2}\\b\\z/i',
-			'england'        => '/\\A\\b[A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2}\\b\\z/i',
+			'united kingdom' => '/^([A-Z][A-HJ-Y]?[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR ?0A{2})$/i',
+			'england'        => '/^([A-Z][A-HJ-Y]?[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR ?0A{2})$/i',
 			'canada'         => '/\\A\\b[ABCEGHJKLMNPRSTVXY][0-9][A-Z][ ]?[0-9][A-Z][0-9]\\b\\z/i',
 			'italy'          => '/^[0-9]{5}$/i',
 			'deutschland'    => '/^[0-9]{5}$/i',
