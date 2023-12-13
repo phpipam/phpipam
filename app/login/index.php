@@ -5,6 +5,10 @@ include('functions/checks/check_php_build.php');		# check for support for PHP mo
 
 // http auth
 if( !empty($_SERVER['PHP_AUTH_USER']) ) {
+    if (isset($config['httpauth_autocreate_user']) && $config['httpauth_autocreate_user'] === true) {
+        // auto-create guest accounts for http auth
+        $User->check_or_create($_SERVER['PHP_AUTH_USER']);
+    }
     // try to authenticate
 	$User->authenticate ($_SERVER['PHP_AUTH_USER'], '');
 	// Redirect user where he came from, if unknown go to dashboard.
