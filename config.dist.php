@@ -49,11 +49,11 @@ $db['use_cte'] = 1;                                    // Use recursive CTE quer
  *
  * WARNING! These headers shoud be filtered and/or overwritten by the reverse-proxy to avoid potential abuse by end-clients.
  *
- *   X_FORDWARDED_FOR
- *   X_FORDWARDED_HOST
- *   X_FORDWARDED_PORT
- *   X_FORDWARDED_PROTO
- *   X_FORDWARDED_SSL
+ *   X_FORWARDED_FOR
+ *   X_FORWARDED_HOST
+ *   X_FORWARDED_PORT
+ *   X_FORWARDED_PROTO
+ *   X_FORWARDED_SSL
  *   X_FORWARDED_URI
  */
 $trust_x_forwarded_headers = false;
