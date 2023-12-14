@@ -4,6 +4,13 @@
     ------------
     + support for passkeys / passwordless logins;
 
+    Bugfixes:
+    ----------------------------
+
+    Security Fixes:
+    ----------------------------
+    + Upgraded jQuery to 3.7.1;
+
 == 1.6.0
 
     Enhancements, changes:
