@@ -72,9 +72,14 @@ else {
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 
-		<meta name="Description" content="">
 		<meta name="title" content="<?php print $title = $User->get_site_title ($_GET); ?>">
+		<?php if(defined('IS_DEMO')) { ?>
+		<meta name="Description" content="phpIPAM demo page. phpIPAM is an open-source web IP address management application. Its goal is to provide light and simple IP address management application. It is ajax-based using jQuery libraries, it uses php scripts and javascript and some HTML5/CSS3 features. More info on phpipam website.">
+        <meta name="robots" content="index, follow">
+		<?php } else { ?>
 		<meta name="robots" content="noindex, nofollow">
+		<meta name="Description" content="">
+		<?php } ?>
 		<meta http-equiv="X-UA-Compatible" content="IE=9" >
 
 		<meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=1, user-scalable=yes">
@@ -128,6 +133,21 @@ else {
 		<?php }	?>
 		<!-- jQuery UI -->
 		<script src="js/jquery-ui-1.12.1.custom.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+
+		<?php if(defined('IS_DEMO')) { ?>
+        <!-- GA -->
+        <script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-11778671-10']);
+          _gaq.push(['_trackPageview']);
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+
+        </script>
+		<?php } ?>
 
 	</head>
 

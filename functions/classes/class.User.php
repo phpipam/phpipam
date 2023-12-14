@@ -2083,6 +2083,21 @@ class User extends Common_functions {
         return $level=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._($this->parse_permissions ($level))."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($this->parse_permissions ($level))."</span>";
     }
 
+    /**
+     * Stops script execution if demo flag is set.
+     * This is used to simplify updating of phpipam demo page
+     *
+     * Store below to config.php:
+     *     define('IS_DEMO', true);
+     *
+     * @method is_demo
+     * @param  bool $popup
+     * @return bool
+     */
+    public function is_demo ($popup = false) {
+        !defined('IS_DEMO') ? : $this->Result->show("danger", "<h4>Demo website !</h4><hr>This script is disabled in demo page!", true, $popup);
+    }
+
 }
 /**
  * Fake User object for install/scripts

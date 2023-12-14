@@ -3,6 +3,9 @@
 # Check we have been included and not called directly
 require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
+# check if site is demo
+$User->is_demo();
+
 /*
  * Discover new hosts with ping
  *******************************/

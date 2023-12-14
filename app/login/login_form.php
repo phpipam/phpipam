@@ -115,6 +115,30 @@
 	<div id="loginCheckPasskeys" class="col-xs-12 text-center"></div>
 	<?php } ?>
 
+	<?php if(defined('IS_DEMO')) { ?>
+
+	</div>
+
+	<div class="alert alert-warning" style="width:400px;margin:auto;margin-top:30px;">
+	<strong>Demo accounts:</strong>
+	<span class="pull-right">
+	<!-- Place this tag where you want the +1 button to render -->
+	<g:plusone size="medium" class='pull-right'></g:plusone>
+	<!-- Place this render call where appropriate -->
+	<script type="text/javascript">
+	(function() {
+	  var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+	    po.src = 'https://apis.google.com/js/plusone.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+	})();
+	</script>
+	</span>
+	<hr>
+	<strong>Admin demo:</strong> Admin / ipamadmin<br>
+	<strong>Viewer demo:</strong> demo / demo1234<br>
+
+	<?php } ?>
+
 </div>
 
 </form>

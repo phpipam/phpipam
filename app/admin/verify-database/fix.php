@@ -38,4 +38,3 @@ else {
 		$Result->show("danger", _("Wrong parameters"), true);
 	}
 }
-?>
