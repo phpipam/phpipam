@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7bf730768732814406175c12775f3390",
+    "content-hash": "b0a7a5cc1994c275013de9975a5f2675",
     "packages": [
         {
             "name": "firehed/cbor",
@@ -59,12 +59,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Firehed/webauthn-php.git",
-                "reference": "267d04a6d2926d9ab6d7630fb86a92410eb6b36c"
+                "reference": "e263a3553360d63131af707f3e563b151f4661b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Firehed/webauthn-php/zipball/267d04a6d2926d9ab6d7630fb86a92410eb6b36c",
-                "reference": "267d04a6d2926d9ab6d7630fb86a92410eb6b36c",
+                "url": "https://api.github.com/repos/Firehed/webauthn-php/zipball/e263a3553360d63131af707f3e563b151f4661b9",
+                "reference": "e263a3553360d63131af707f3e563b151f4661b9",
                 "shasum": ""
             },
             "require": {
@@ -105,7 +105,7 @@
                 "issues": "https://github.com/Firehed/webauthn-php/issues",
                 "source": "https://github.com/Firehed/webauthn-php/tree/main"
             },
-            "time": "2023-11-16T23:07:44+00:00"
+            "time": "2023-12-10T19:00:08+00:00"
         }
     ],
     "packages-dev": [],

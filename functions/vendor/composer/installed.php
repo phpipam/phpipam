@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'e75387138147905ffd3b12cafffdc10f5388d948',
+        'reference' => '7673d1b4aea9adf767af36a2cf418b7ad9091382',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'e75387138147905ffd3b12cafffdc10f5388d948',
+            'reference' => '7673d1b4aea9adf767af36a2cf418b7ad9091382',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -31,7 +31,7 @@
         'firehed/webauthn' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '267d04a6d2926d9ab6d7630fb86a92410eb6b36c',
+            'reference' => 'e263a3553360d63131af707f3e563b151f4661b9',
             'type' => 'library',
             'install_path' => __DIR__ . '/../firehed/webauthn',
             'aliases' => array(

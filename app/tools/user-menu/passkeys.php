@@ -112,8 +112,7 @@ const startRegister = async (e) => {
     try {
     	// get and parse challenge
 		const challengeReq = await fetch('app/tools/user-menu/passkey_challenge.php')
-		const challengeB64 = await challengeReq.json()
-		const challenge    = atob(challengeB64) // base64-decode
+		const challenge    = await challengeReq.json()
 
 		// create
 	    const createOptions = {
@@ -127,16 +126,13 @@ const startRegister = async (e) => {
 	                id: Uint8Array.from("<?php print $User->user->id; ?>", c => c.charCodeAt(0)),
 	            },
 	            // This base64-decodes the response and translates it into the Webauthn-required format.
-	            challenge: Uint8Array.from(challenge, c => c.charCodeAt(0)),
+	            // challenge: Uint8Array.from(atob(challenge), c => c.charCodeAt(0)),
+	            challenge: Uint8Array.from(atob(challenge), c => c.charCodeAt(0)),
 	            pubKeyCredParams: [
 	                {
 	                    alg: -7, // ES256
 	                    type: "public-key",
-	                },
-				    {
-				    	alg: -257, // Value registered by this specification for "RS256"
-				    	type: "public-key",
-				    }
+	                }
 	            ]
 	        },
 	        attestation: 'direct',
@@ -145,12 +141,12 @@ const startRegister = async (e) => {
 	    // Call the WebAuthn browser API and get the response. This may throw, which you
 	    // should handle. Example: user cancels or never interacts with the device.
 	    const credential = await navigator.credentials.create(createOptions)
-        console.log(Array.from(new Uint8Array(credential.rawId)))
 
 	    // Format the credential to send to the server. This must match the format
 	    // handed by the ResponseParser class. The formatting code below can be used
 	    // without modification.
 	    const dataForResponseParser = {
+	        // rawId: Array.from(new Uint8Array(credential.rawId)),
 	        rawId: Array.from(new Uint8Array(credential.rawId)),
 	        keyId: credential.id,
 	        type: credential.type,
@@ -197,7 +193,7 @@ const startRegister = async (e) => {
     		});
         }
         else {
-            $('#loginCheckPasskeys').html("<div class='alert alert-danger'>Failed to register new passkey.</div>");
+            $('#loginCheckPasskeys').html("<div class='alert alert-danger'>Failed to register new passkey. <strong>Error : </strong>"+result.statusText+"</div>");
             console.log(result)
             $('div.loading').hide();
         }

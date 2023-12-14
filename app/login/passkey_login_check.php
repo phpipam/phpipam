@@ -29,6 +29,7 @@ use Firehed\WebAuthn\{
     SessionChallengeManager,
     SingleOriginRelyingParty,
     ResponseParser,
+    ArrayBufferResponseParser,
     BinaryString
 };
 
@@ -37,13 +38,8 @@ $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 
 // parser
-$parser = new ResponseParser();
+$parser = new ArrayBufferResponseParser();
 $getResponse = $parser->parseGetResponse($data);
-
-// header('HTTP/1.1 201 Created');
-// header('Content-Type: text/html; charset=utf-8');
-// echo(implode('', array_map('chr', $data['keyId'])));
-// die();
 
 // Set relaying party
 $rp = new \Firehed\WebAuthn\SingleOriginRelyingParty($User->createURL ());

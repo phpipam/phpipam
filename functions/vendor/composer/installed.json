@@ -57,12 +57,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Firehed/webauthn-php.git",
-                "reference": "267d04a6d2926d9ab6d7630fb86a92410eb6b36c"
+                "reference": "e263a3553360d63131af707f3e563b151f4661b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Firehed/webauthn-php/zipball/267d04a6d2926d9ab6d7630fb86a92410eb6b36c",
-                "reference": "267d04a6d2926d9ab6d7630fb86a92410eb6b36c",
+                "url": "https://api.github.com/repos/Firehed/webauthn-php/zipball/e263a3553360d63131af707f3e563b151f4661b9",
+                "reference": "e263a3553360d63131af707f3e563b151f4661b9",
                 "shasum": ""
             },
             "require": {
@@ -81,7 +81,7 @@
                 "phpunit/phpunit": "^9.3",
                 "squizlabs/php_codesniffer": "^3.5"
             },
-            "time": "2023-11-16T23:07:44+00:00",
+            "time": "2023-12-10T19:00:08+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "source",

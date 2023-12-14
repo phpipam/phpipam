@@ -27,45 +27,59 @@ use Firehed\WebAuthn\{
     RelyingParty,
     SessionChallengeManager,
     SingleOriginRelyingParty,
-    JsonResponseParser
+    JsonResponseParser,
+    ArrayBufferResponseParser
 };
 
 # process request
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 
-// parser
-$parser = new JsonResponseParser();
-$createResponse = $parser->parseCreateResponse($data);
+//
+// we dont try to catch exceptions, as messages are unclear, check webserver/php-fpm error_logs
+//
 
-// escape keyId
-$data['keyId'] =  $User->strip_input_tags ($data['keyId']);
+// try {
+    // parser
+    $parser = new ArrayBufferResponseParser();
+    $createResponse = $parser->parseCreateResponse($data);
 
-// Relaying party
-$rp = new \Firehed\WebAuthn\SingleOriginRelyingParty($User->createURL ());
-// challange manager
-$challengeManager = new \Firehed\WebAuthn\SessionChallengeManager();
+    // escape keyId
+    $data['keyId'] = $User->strip_input_tags ($data['keyId']);
 
-// Verify credentials, if it fails exit
-try {
-    $credential = $createResponse->verify($challengeManager, $rp);
-} catch (Throwable) {
-    header('HTTP/1.1 403 Unauthorized');
-    return;
-}
+    // Relaying party
+    $rp = new \Firehed\WebAuthn\SingleOriginRelyingParty($User->createURL ());
+    // challange manager
+    $challengeManager = new \Firehed\WebAuthn\SessionChallengeManager();
 
-// encode credentials to store to database
-$codec = new Codecs\Credential();
-$encodedCredential = $codec->encode($credential);
+    // Verify credentials, if it fails exit
+    try {
+        $credential = $createResponse->verify($challengeManager, $rp);
+    } catch (Throwable) {
+        header('HTTP/1.1 403 Unauthorized');
+        return;
+    }
+
+    // encode credentials to store to database
+    $codec = new Codecs\Credential();
+    $encodedCredential = $codec->encode($credential);
 
 
-// save passkey
-$User->save_passkey ($encodedCredential, $credential->getStorageId(), $data['keyId']);
+    // save passkey
+    $User->save_passkey ($encodedCredential, $credential->getStorageId(), $data['keyId']);
 
-// print result
-header('HTTP/1.1 200 OK');
-header('Content-type: application/json');
-echo json_encode([
-        'success' => true,
-        'credentialId' => $credential->getStorageId()
-]);
+    // print result
+    header('HTTP/1.1 200 OK');
+    header('Content-type: application/json');
+    echo json_encode([
+            'success' => true,
+            'credentialId' => $credential->getStorageId()
+    ]);
+// } catch (exception $e) {
+//     header('HTTP/1.1 500 '.$e->getMessage());
+// }
+// catch (Throwable) {
+//     // Verification failed. Send an error to the user?
+//     header('HTTP/1.1 403 Unauthorized');
+//     return;
+// }
