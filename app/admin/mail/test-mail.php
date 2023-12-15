@@ -15,6 +15,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check if site is demo
+$User->is_demo();
 
 # try to send
 try {
@@ -52,4 +54,3 @@ try {
 
 //if error not sent print ok
 $Result->show("success alert-absolute", "Message sent to site admin (".$User->settings->siteAdminMail.")!", true);
-?>

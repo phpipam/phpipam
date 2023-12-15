@@ -16,6 +16,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check if site is demo
+$User->is_demo();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
@@ -38,4 +40,3 @@ $values = array("l_id"=>@$_POST['l_id'],
 # update
 if(!$Admin->object_modify("lang", $_POST['action'], "l_id", $values))	{ $Result->show("danger",  _("Language $_POST[action] error"), true); }
 else																	{ $Result->show("success", _("Language $_POST[action] success"), true); }
-?>

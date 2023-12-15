@@ -35,6 +35,11 @@ print "<hr><br>";
 	$subpages['2fa'] = "Two-factor authentication";
 	}
 
+	// Passkeys
+	if ($User->settings->{'passkeys'}=="1") {
+	$subpages['passkeys'] = "Passwordless authentication";
+	}
+
 	// default tab
 	if(!isset($_GET['subnetId'])) {
 		$_GET['subnetId'] = "account";

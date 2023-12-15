@@ -1,0 +1,6 @@
+{
+    "require": {
+        "firehed/webauthn": "dev-main",
+        "firehed/cbor": "^0.1.0"
+    }
+}

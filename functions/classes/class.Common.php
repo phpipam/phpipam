@@ -1773,7 +1773,7 @@ class Common_functions  {
 	 * @return string
 	 */
 	public function print_custom_field_name ($name) {
-		return strpos($name, "custom_")===0 ? substr($name, 7) : $name;
+		return strpos($name, "custom_")===0 ? _(substr($name, 7)) : _($name);
 	}
 
 	/**

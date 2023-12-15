@@ -16,6 +16,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# check if site is demo
+$User->is_demo(true);
+
 // check id
 if(!is_numeric($_POST['id']))  { $Result->show("danger", _("Invalid id"), true, true); }
 

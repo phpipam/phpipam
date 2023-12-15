@@ -15,6 +15,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check if site is demo
+$User->is_demo();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
@@ -37,4 +39,3 @@ $values = array("id"=>1,
 # update
 if(!$Admin->object_modify("settingsMail", "edit", "id", $values))	{ $Result->show("danger",  _('Cannot update settings').'!', true); }
 else																{ $Result->show("success", _('Settings updated successfully')."!", true); }
-?>

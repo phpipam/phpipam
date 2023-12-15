@@ -51,6 +51,12 @@ else {
 	//set default lang
 	$user['lang']=$User->settings->defaultLang;
 }
+
+# disabled
+$disabled = $_POST['action']=="delete" ? "disabled" : "";
+
+# passkeys
+$user_passkeys = $User->get_user_passkeys($user['id']);
 ?>
 
 <script>
@@ -84,16 +90,18 @@ $(document).ready(function(){
 	<!-- real name -->
 	<tr>
 	    <td><?php print _('Real name'); ?></td>
-	    <td><input type="text" class="form-control input-sm" name="real_name" value="<?php print @$user['real_name']; ?>"></td>
+	    <td><input type="text" class="form-control input-sm" name="real_name" value="<?php print @$user['real_name']; ?>" <?php print $disabled; ?>></td>
        	<td class="info2"><?php print _('Enter users real name'); ?></td>
     </tr>
 
     <!-- username -->
     <tr>
     	<td><?php print _('Username'); ?></td>
-    	<td><input type="text" class="form-control input-sm" name="username" value="<?php print @$user['username']; ?>" <?php if($_POST['action']=="edit"||$_POST['action']=="delete") print 'readonly'; ?>></td>
+    	<td><input type="text" class="form-control input-sm" name="username" value="<?php print @$user['username']; ?>" <?php if($_POST['action']=="edit"||$_POST['action']=="delete") print 'readonly disabled'; ?> <?php print $disabled; ?>></td>
     	<td class="info2">
+    		<?php if($_POST['action']=="add") { ?>
     		<a class='btn btn-xs btn-default adsearchuser' rel='tooltip' title='Search AD for user details'><i class='fa fa-search'></i></a>
+    		<?php } ?>
 			<?php print _('Enter username'); ?>
 		</td>
     </tr>
@@ -101,9 +109,15 @@ $(document).ready(function(){
     <!-- email -->
     <tr>
     	<td><?php print _('e-mail'); ?></td>
-    	<td><input type="text" class="form-control input-sm input-w-250" name="email" value="<?php print @$user['email']; ?>"></td>
+    	<td><input type="text" class="form-control input-sm input-w-250" name="email" value="<?php print @$user['email']; ?>" <?php print $disabled; ?>></td>
     	<td class="info2"><?php print _('Enter users email address'); ?></td>
     </tr>
+
+    <?php if($_POST['action']!="delete") { ?>
+
+	<tr>
+		<td colspan="3"><hr></td>
+	</tr>
 
     <!-- Status -->
     <tr>
@@ -158,6 +172,42 @@ $(document).ready(function(){
 		</td>
 		<td class="info2"><?php print _("Select authentication method for user"); ?></td>
 	</tr>
+
+	<?php if ($User->settings->{'2fa_provider'}!=='none' && $user['2fa'] == "1") { ?>
+
+    <tr>
+    	<td style="padding-top:10px;"><?php print _('2fa enabled'); ?></td>
+    	<td style="padding-top:10px;"><input type="checkbox" value="1" class="input-switch" name="2fa" <?php if($user['2fa'] == "1") { print 'checked'; } else { print "disabled"; } ?>></td>
+    	<td style="padding-top:10px;" class="info2"><?php print _('Disable 2fa for user'); ?></td>
+    </tr>
+	<?php } ?>
+
+
+	<?php if ($User->settings->{'passkeys'}=="1" && sizeof($user_passkeys)>0 && $_POST['action']!=="delete") { ?>
+	<tr>
+		<td colspan="3"><hr></td>
+	    <tr>
+	    	<td style="padding-top:10px;"><?php print _('Passkeys'); ?></td>
+	    	<td style="padding-top:10px;">
+	    	<?php
+	    	foreach ($user_passkeys as $passkey) {
+	    		$passkey->comment = is_null($passkey->comment) ? "-- Unknown --" : $passkey->comment;
+	    		print "<input type='checkbox' name='delete-passkey-".$passkey->id."' value='1'> ";
+	    		print $User->strip_input_tags($passkey->comment)."<br>";
+	    	}
+	    	?>
+	    	</td>
+	    	<td style="padding-top:10px;" class="info2"><?php print _('Check passkey you want to remove'); ?></td>
+	    </tr>
+
+	    <tr>
+	    	<td style="padding-top:10px;"><?php print _('Passkey login only'); ?></td>
+    		<td style="padding-top:10px;"><input type="checkbox" value="1" class="input-switch" name="passkey_only" <?php if($user['passkey_only'] == "1") { print 'checked'; } ?>></td>
+	    	<td style="padding-top:10px;" class="info2"><?php print _('Select to only allow account login with passkey'); ?></td>
+	    </tr>
+	</tr>
+
+	<?php } ?>
 
 	<tr>
 		<td colspan="3"><hr></td>
@@ -407,6 +457,7 @@ $(document).ready(function(){
 	}
 	?>
 
+	<?php } ?>
 
 </table>
 </form>
