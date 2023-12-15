@@ -147,8 +147,10 @@ $(".clearIPrequest").click(function() {
 
 // passkey login
 $('.passkey_login').click(function() {
-    // execute passkey login
-    startLogin();
+    if(!$(this).hasClass('disabled')) {
+        // execute passkey login
+        startLogin();
+    }
     // prevent submit
     return false;
 })

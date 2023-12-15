@@ -2289,4 +2289,51 @@ class Common_functions  {
 	    // result
 	    return implode("\n", $html);
 	}
+
+
+	/**
+	 * Composer check
+	 *
+	 * Checks if composer is installed and if requested checks for composer modules required
+	 *
+	 * @method composer_has_error
+	 * @param  array $composer_packages
+	 * @return bool
+	 */
+	public function composer_has_errors ($composer_packages = []) {
+		// check for autoload file
+        if(!file_exists(__DIR__ . '/../vendor/autoload.php')) {
+        	$this->composer_err = _("Composer autoload not present")." !<hr>"._("Please install composer modules ( cd functions && composer install ).");
+        	return true;
+        }
+
+        // autoload composer files
+        require __DIR__ . '/../vendor/autoload.php';
+        // check if composer is installed
+        if (!class_exists('\Composer\InstalledVersions')) {
+        	$this->composer_err = _("Composer is not installed")."!<hr>"._("Please install composer and composer modules ( cd functions && composer install ).");
+        	return true;
+        }
+
+        // validate all packages if required
+        if(is_array($composer_packages)) {
+        	if(sizeof($composer_packages)>0) {
+        		foreach ($composer_packages as $package) {
+					if(\Composer\InstalledVersions::isInstalled($package)===false) {
+						$this->composer_err .= _("Composer package")." ".$package." "._("is not installed")." !<hr>"._("Please install required modules ( cd functions && composer install ).");
+					}
+        		}
+        		// check
+        		if (isset($this->composer_err)) {
+        			return true;
+        		}
+        	}
+        }
+        // all good
+        return false;
+	}
+
+
 }
+
+

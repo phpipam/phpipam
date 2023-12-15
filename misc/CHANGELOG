@@ -2,10 +2,12 @@
 
     New features:
     ------------
-    + support for passkeys / passwordless logins;
+    + Added support for passkeys / passwordless logins;
 
     Bugfixes:
     ----------------------------
+    + Use UTF-16LE encoding for XLS sheet names, and UTF-8 as input encoding (#3977);
+    + Update login_form.php for installation inside subdir (#3954);
 
     Security Fixes:
     ----------------------------

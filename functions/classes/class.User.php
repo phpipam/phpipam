@@ -1331,8 +1331,7 @@ class User extends Common_functions {
 
 
 
-    /* @passkey -------------------- */
-
+    /* @passkeys -------------------- */
 
     /**
      * Fetch user details based on passkey ID

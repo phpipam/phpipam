@@ -18,12 +18,17 @@ $User->check_user_session();
 
 # tls check
 if (!$Tools->isHttps()) {
-	$Result->show("danger", _("TLS is required for passcode authentication"), false);
+	$Result->show("danger alert-absolute", _("TLS is required for passcode authentication"), false);
 }
 # are passkeys enabled ?
 elseif (!$User->settings->{'passkeys'}=="1") {
-	$Result->show("danger", _("Passkey authentication is disabled"), false);
+	$Result->show("danger alert-absolute", _("Passkey authentication is disabled"), false);
 }
+# is composer present ?
+elseif($User->composer_has_errors(["firehed/webauthn", "firehed/cbor"])) {
+	$Result->show("danger alert-absolute", $User->composer_err, false);
+}
+# is
 else {
 	// get user passkeys
 	$user_passkeys = $User->get_user_passkeys(false);
