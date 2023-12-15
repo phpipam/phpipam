@@ -4,8 +4,8 @@ app/admin/import-export/upload/
 config.php
 css/*/images/logo/logo.png
 functions/scripts/custom/
-functions/assets/
 api/_lock.txt
 app/dashboard/widgets/custom/
+functions/vendor
 .idea
 .vscode
