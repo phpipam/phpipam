@@ -22,6 +22,7 @@ $lineCount = 0;
 
 // Create a worksheet
 $worksheet = $workbook->addWorksheet("template");
+$worksheet->setInputEncoding("utf-8");
 
 
 if ($type == 'subnets'){
