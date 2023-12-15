@@ -30,7 +30,6 @@ $db['webhost'] = '';
      Please update these settings before setting 'ssl' to true.
      All settings can be commented out or set to NULL if not needed
 
-     php 5.3.7 required
  ******************************/
 $db['ssl']        = false;                             // true/false, enable or disable SSL as a whole
 // $db['ssl_key']    = '/path/to/cert.key';               // path to an SSL key file. Only makes sense combined with ssl_cert
@@ -43,6 +42,21 @@ $db['ssl']        = false;                             // true/false, enable or 
 $db['tmptable_engine_type'] = "MEMORY";                // Temporary table type to construct complex queries (MEMORY, InnoDB)
 $db['use_cte'] = 1;                                    // Use recursive CTE queries [>=MariaDB 10.2.2, >=MySQL 8.0] (0=disabled, 1=autodetect, 2=force enable)
 
+/**
+ * Reverse proxy settings
+ *
+ * If operating behind a reverse proxy set $trust_x_forwarded_headers=true; to accept the following headers
+ *
+ * WARNING! These headers shoud be filtered and/or overwritten by the reverse-proxy to avoid potential abuse by end-clients.
+ *
+ *   X_FORWARDED_FOR
+ *   X_FORWARDED_HOST
+ *   X_FORWARDED_PORT
+ *   X_FORWARDED_PROTO
+ *   X_FORWARDED_SSL
+ *   X_FORWARDED_URI
+ */
+$trust_x_forwarded_headers = false;
 
 /**
  * Mail sending and other parameters for pingCheck and DiscoveryCheck scripts

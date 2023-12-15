@@ -511,8 +511,7 @@ class User extends Common_functions {
                 return;
             }
         }
-
-        if (isset($_SERVER['HTTP_X_FORWARDED_URI'])) {
+        if (Config::ValueOf('trust_x_forwarded_headers') === true && isset($_SERVER['HTTP_X_FORWARDED_URI'])) {
             $uri = $_SERVER['HTTP_X_FORWARDED_URI'];
         }
         elseif (isset($_SERVER['REQUEST_URI'])) {

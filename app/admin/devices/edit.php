@@ -13,11 +13,12 @@ $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
+$Params		= new Params ($User->strip_input_tags ($_POST));
 
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($_POST['action']=="edit") {
+if($Params->action=="edit") {
     $User->check_module_permissions ("devices", User::ACCESS_RW, true, true);
 }
 else {
@@ -27,21 +28,19 @@ else {
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "device");
 
-# strip tags - XSS
-$_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action ($Params->action, true);
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('devices');
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['switchid']))		{ $Result->show("danger", _("Invalid ID"), true, true); }
+if($Params->action!="add" && !is_numeric($Params->switchid))		{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch device details
-if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-	$device = (array) $Admin->fetch_object("devices", "id", $_POST['switchid']);
+if( ($Params->action == "edit") || ($Params->action == "delete") ) {
+	$device = (array) $Admin->fetch_object("devices", "id", $Params->switchid);
 	// false
 	if ($device===false)                                            { $Result->show("danger", _("Invalid ID"), true, true);  }
 }
@@ -51,10 +50,12 @@ else {
 	$device['type']       = 9;
 	$device['rack_start'] = 1;
 	$device['rack_size']  = 1;
+	$device['location'] = null;
+	$device['rack'] = null;
 }
 
 # set readonly flag
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $Params->action=="delete" ? "readonly" : "";
 
 
 # all locations
@@ -193,10 +194,10 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 		<td>
 			<textarea name="description" class="form-control input-sm" placeholder="<?php print _('Description'); ?>" <?php print $readonly; ?>><?php if(isset($device['description'])) print $device['description']; ?></textarea>
 			<?php
-			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-				print '<input type="hidden" name="switchid" value="'. $_POST['switchid'] .'">'. "\n";
+			if( ($Params->action == "edit") || ($Params->action == "delete") ) {
+				print '<input type="hidden" name="switchid" value="'. $Params->switchid .'">'. "\n";
 			} ?>
-			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($Params->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
@@ -265,7 +266,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editSwitchsubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
+		<button class="btn btn-sm btn-default <?php if($Params->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editSwitchsubmit"><i class="fa <?php if($Params->action=="add") { print "fa-plus"; } else if ($Params->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($Params->action))); ?></button>
 	</div>
 
 	<!-- result -->

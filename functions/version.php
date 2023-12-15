@@ -8,7 +8,7 @@ define("REVISION", "003");									//increment on static content changes (js/css
 /* set last possible upgrade */
 define("LAST_POSSIBLE", "1.4");							    //minimum required version to be able to upgrade
 /* set published - hide dbversion in footer */
-define("PUBLISHED", false);									//hide dbversion in footer
+define("PUBLISHED", true);									//hide dbversion in footer
 
 // Automatically set DBVERSION as everyone forgets!
 function get_dbversion() {
