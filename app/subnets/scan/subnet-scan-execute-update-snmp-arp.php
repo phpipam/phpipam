@@ -74,8 +74,8 @@ if (sizeof($all_subnet_hosts)>0) {
                            // add to alive
                            $result[$Subnets->transform_address($r['ip'], "decimal")]['code'] = 0;
                            $result[$Subnets->transform_address($r['ip'], "decimal")]['status'] = "Online";
-                           // update alive time
-                           @$Scan->ping_update_lastseen($result[$Subnets->transform_address($r['ip'], "decimal")]['id']);
+                           // update alive time and mac address
+                           @$Scan->ping_update_lastseen($result[$Subnets->transform_address($r['ip'], "decimal")]['id'], null, $r['mac']);
                        }
                    }
                }
