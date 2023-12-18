@@ -34,7 +34,12 @@ if ($test!==false) {
         $Result->show("warning", "Please set <a href='".create_link("administration", "powerDNS", "defaults")."'>default powerDNS values</a>!", false);
     }
 }
-
+// errors
+if(isset($PowerDNS->db_check_error)) {
+	foreach ($PowerDNS->db_check_error as $err) {
+		$Result->show("warning", $err);
+	}
+}
 ?>
 <!-- tabs -->
 <ul class="nav nav-tabs">

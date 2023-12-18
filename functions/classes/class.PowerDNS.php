@@ -168,8 +168,35 @@ class PowerDNS extends Common_functions {
     private function db_set () {
         // decode values form powerDNS
         $this->db_settings = strlen($this->settings->powerDNS)>10 ? pf_json_decode($this->settings->powerDNS) : pf_json_decode($this->db_set_db_settings ());
-        // set connection
-        $this->Database_pdns = new Database_PDO ($this->db_settings->username, $this->db_settings->password, $this->db_settings->host, $this->db_settings->port, $this->db_settings->name);
+
+        // if comma delimited host
+        if (strpos($this->db_settings->host, ";")!==false) {
+            // get all databases
+            $this->db_settings->host = explode(";", $this->db_settings->host);
+            // set active index
+            $this->active_db = false;
+            // check each, use first we are able to connect to
+            foreach ($this->db_settings->host as $key=>$host) {
+                // set connection
+                unset($this->Database_pdns);
+                $this->Database_pdns = new Database_PDO ($this->db_settings->username, $this->db_settings->password, $host, $this->db_settings->port, $this->db_settings->name);
+                // check connection, try untill it fails
+                if(!$this->db_check ()) {
+                    $this->db_check_error[] = $this->error." :: ".$host;
+                }
+                else {
+                    if($this->thisactive_db==false) {
+                        $this->active_db = $key;
+                    }
+                }
+            }
+            // connect to active
+            $this->Database_pdns = new Database_PDO ($this->db_settings->username, $this->db_settings->password, $this->db_settings->host[$active_db], $this->db_settings->port, $this->db_settings->name);
+        }
+        else {
+            // set connection
+            $this->Database_pdns = new Database_PDO ($this->db_settings->username, $this->db_settings->password, $this->db_settings->host, $this->db_settings->port, $this->db_settings->name);
+        }
     }
 
     /**

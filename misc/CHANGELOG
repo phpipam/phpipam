@@ -6,8 +6,15 @@
 
     Bugfixes:
     ----------------------------
-    + Use UTF-16LE encoding for XLS sheet names, and UTF-8 as input encoding (#3977);
-    + Update login_form.php for installation inside subdir (#3954);
+    + Fixed Use UTF-16LE encoding for XLS sheet names, and UTF-8 as input encoding (#3977);
+    + Fixed Update login_form.php for installation inside subdir (#3954);
+    + Fixed php8 constructor fix for radius class (#3985);
+    + Fixed Force mac address update during status update scan (#3791);
+
+
+    Enhancements, changes:
+    ----------------------------
+    + Added support for redundant PowerDNS databases (#3981);
 
     Security Fixes:
     ----------------------------
@@ -17,9 +24,8 @@
 
     Enhancements, changes:
     ----------------------------
-    + php8.3 compatibility;
+    + php8.4 compatibility;;
     + MySQL 5.5.3+ is now required (support for utf8mb4);
-    + Reverse-proxy users should review the new config.php $trust_x_forwarded_headers setting;
 
     Security Fixes:
     ----------------------------
