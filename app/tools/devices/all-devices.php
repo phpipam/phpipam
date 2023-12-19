@@ -60,6 +60,14 @@ print "<div class='btn-group'>";
 	print "<a href='".create_link("administration", "device-types")."' class='btn btn-sm btn-default'><i class='fa fa-tablet'></i> "._('Manage device types')."</a>";
 print "</div>";
 
+if($User->get_module_permissions ("devices")>=User::ACCESS_RW) {
+	print '<div class="btn-group pull-right" style="margin-bottom:10px;">';
+	print '	<div class="hidden"><select name="dataType"><option value="devices" selected="selected">Devices</option></select></div>';
+	print '	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title="Export data entries for the selected type"><i class="fa fa-download"></i> Export</button>';
+	print '</div>';
+	print '<div class="clearfix"></div>';
+}
+
 # filter
 include_once ("all-devices-filter.php");
 

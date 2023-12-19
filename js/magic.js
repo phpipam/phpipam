@@ -2638,10 +2638,14 @@ $('button#XLSdump, button#MySQLdump, button#hostfileDump').click(function () {
 
 //Export Section
 $('button.dataExport').click(function () {
-    var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype"]; var popsize = {};
+    var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype"];
+    var popsize = {};
+    // popup window size definition
     popsize["subnets"] = "w700";
-    popsize["ipaddr"] = "w700";
+    popsize["ipaddr"]  = "w700";
+    popsize["vlan"]    = "w700";
     popsize["devices"] = "max";
+    // get requested datatype
     var dataType = $('select[name=dataType]').find(":selected").val();
     hidePopups();
     //show popup window

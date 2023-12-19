@@ -14,6 +14,7 @@
     Enhancements, changes:
     ----------------------------
     + Added support for redundant PowerDNS databases (#3981);
+    + Added option to export data for VLAN,VRF and Devices directly from tools page;
 
     Security Fixes:
     ----------------------------
