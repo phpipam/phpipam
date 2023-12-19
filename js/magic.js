@@ -32,6 +32,13 @@ $(document).keydown(function(e) {
     }
 });
 
+
+
+$(document).on("click", "a", function() {
+    hideTooltips()
+});
+
+
 // no enter in sortfields
 $(document).on("submit", ".searchFormClass", function() {
     return false;
@@ -1139,7 +1146,6 @@ $(document).on("mouseleave", '#user_menu', function(event){
     var object1 = $("#searchSelect");
     object1.slideUp();
 });
-
 
 //search export
 $(document).on("click", "#exportSearch", function(event){

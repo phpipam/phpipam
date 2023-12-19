@@ -151,7 +151,7 @@ $tool_items["search"] = array (
 	# first item - tools or dashboard
 	if ($_GET['page']=="dashboard") {
         print "<li class='first-item'>";
-        print " <a href='".create_link()."'><i class='fa fa-angle-right'></i> "._('Dashboard')."</a>";
+        print " <a href='".create_link()."'><i class='fa fa-dashboard'></i> "._('Dashboard')."</a>";
         print "</li>";
 	}
 	else {

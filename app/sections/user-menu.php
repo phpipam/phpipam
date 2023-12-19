@@ -25,13 +25,13 @@ foreach ($params as $k => $p) {
 
 # if all are off print all on!
 if($Params->subnets!="on" && $Params->addresses!="on" && $Params->vlans!="on" && $Params->vrf!="on" && $Params->pstn!="on" && $Params->circuits!="on" && $Params->customers!="on") {
-	$Params->subnets="on";
-	$Params->addresses="on";
-	$Params->vlans="on";
-	$Params->vrf="on";
-	$Params->pstn="on";
-	$Params->circuits="on";
-	$Params->customers="on";
+	$Params->subnets   ="on";
+	$Params->addresses ="on";
+	$Params->vlans     ="on";
+	$Params->vrf       ="on";
+	$Params->pstn      ="on";
+	$Params->circuits  ="on";
+	$Params->customers ="on";
 }
 ?>
 

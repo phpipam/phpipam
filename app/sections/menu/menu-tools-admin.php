@@ -15,6 +15,7 @@ if($User->is_admin(false)) {
 	print "		<ul class='dropdown-menu admin'>";
 
 	# all items
+	print "		<li class='nav-header'>"._('Available IPAM tools')."</li>";
 	print "		<li><a href='".create_link("administration")."'>"._('Show all settings')."</a></li>";
 	print "		<li class='divider'></li>";
 	# print admin items
@@ -37,11 +38,9 @@ if($User->is_admin(false)) {
 	}
 
 	print "		</ul>";
-
 	print "	</li>";
 	print "</ul>";
 }
-
 ?>
 
 
