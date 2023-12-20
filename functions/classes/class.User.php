@@ -1174,7 +1174,7 @@ class User extends Common_functions {
      * @param mixed $password
      * @return void
      */
-    private function auth_radius ($username, $password) {
+    private function auth_radius_legacy ($username, $password) {
         # decode radius parameters
         $params = pf_json_decode($this->authmethodparams);
 
@@ -1220,6 +1220,96 @@ class User extends Common_functions {
             $this->log_failed_access ($username);
             $this->Log->write( _("Radius login"), _("Failed to authenticate user on radius server"), 2, $username );
             $this->Result->show("danger", _("Invalid username or password"), true);
+        }
+    }
+
+    /**
+     * Authenticates user on radius server
+     *
+     * GH: https://github.com/dapphp/radius
+     *
+     * @access private
+     * @param mixed $username
+     * @param mixed $password
+     * @return void
+     */
+    private function auth_radius ($username, $password) {
+        # decode radius parameters
+        $params = pf_json_decode($this->authmethodparams);
+
+        # Valdate composer
+        if($this->composer_has_errors(["dapphp/radius"])) {
+            $this->Result->show("danger", $this->composer_err, true);
+        }
+
+        # Composer
+        require __DIR__ . '/../vendor/autoload.php';
+
+        // init client
+        $client = new Radius();
+        // set params
+        $client->setServer($params->hostname)
+               ->setSecret($params->secret)
+               ->setNasIpAddress(gethostbyname(gethostname()))
+               ->setAttribute(32, 'login');
+
+        // fake type for testing
+        $params->authType = "pap";
+
+        // pap
+        if(!isset($params->authType) || @$params->authType=="pap") {
+            $authenticated = $client->accessRequest($username, $password);
+        }
+        // chap-md5
+        elseif ($params->authType == "chap") {
+            $client->setChapPassword($password);
+            $authenticated = $client->accessRequest($username);
+        }
+        // mschapv1
+        elseif ($params->authType == "mschapv1") {
+            $client->setMSChapPassword($password);
+            $authenticated = $client->accessRequest($username);
+        }
+        // mschapv2
+        elseif($params->authType == "mschapv2") {
+            $authenticated = $client->accessRequestEapMsChapV2($username, $password);
+        }
+        // fault
+        else {
+            $this->Result->show("danger", _("Invalid radius authentication method"), true);
+        }
+
+        # debug?
+        if($this->debugging)
+        $client->setDebug(true);
+
+        # authenticate user
+        if($authenticated === true) {
+            # check login restrictions for authenticated user
+            $this->check_login_restrictions ($username);
+            # save to session
+            $this->write_session_parameters ();
+
+            $this->Log->write( _("Radius login"), _("User")." ".$this->user->real_name." "._("logged in via radius"), 0, $username );
+            $this->Result->show("success", _("Radius login successful"));
+
+            # write last logintime
+            $this->update_login_time ();
+            # remove possible blocked IP
+            $this->block_remove_entry ();
+        }
+        else {
+            # add blocked count
+            $this->block_ip ();
+            $this->log_failed_access ($username);
+            $this->Log->write( _("Radius login"), _("Failed to authenticate user on radius server"), 2, $username );
+            $this->Result->show("danger", _("Invalid username or password"), true);
+            # debug ?
+            if($this->debugging) {
+                print "<pre style='width:700px;margin:auto;margin-top:10px;'>";
+                print "Access-Request failed with error ".$client->getErrorMessage()." (".$client->getErrorCode().")";
+                print "</pre>";
+            }
         }
     }
 
