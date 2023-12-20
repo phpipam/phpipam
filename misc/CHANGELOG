@@ -10,6 +10,7 @@
     + Fixed Update login_form.php for installation inside subdir (#3954);
     + Fixed php8 constructor fix for radius class (#3985);
     + Fixed Force mac address update during status update scan (#3791);
+    + Fixed RADIUS authentication fails on 1.6.0 (#3986);
 
     Enhancements, changes:
     ----------------------------
