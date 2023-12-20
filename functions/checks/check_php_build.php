@@ -54,6 +54,8 @@ if (!@include_once 'PEAR.php') {
     $missingExt[] = "php PEAR support";
 }
 
+if(!isset($url)) { $url = ""; }
+
 /* headers */
 $error   = [];
 $error[] = "<html>";

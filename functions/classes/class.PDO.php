@@ -292,7 +292,7 @@ abstract class DB {
 	 * @return bool
 	 */
 	public function isConnected() {
-		return ($this->pdo !== null);
+		return (@$this->pdo !== null);
 	}
 
 	/**
