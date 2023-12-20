@@ -1,3 +1,9 @@
+== 1.6.1
+
+    Bugfixes:
+    ----------------------------
+    + Fixed RADIUS authentication fails on 1.6.0 (#3986);
+
 == 1.6.0
 
     Enhancements, changes:
