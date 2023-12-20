@@ -576,7 +576,7 @@ class Radius
     function SetAttribute($type, $value)
     {
         $attribute_index = -1;
-        $attribute_count = !is_null($this->_attributes_to_send) ? count($this->_attributes_to_send) : 0;
+        $attribute_count = count((array)$this->_attributes_to_send) : 0;
         for ($attributes_loop = 0; $attributes_loop < $attribute_count; $attributes_loop++)
         {
             if ($type == ord(substr($this->_attributes_to_send[$attributes_loop], 0, 1)))
@@ -716,7 +716,7 @@ class Radius
         }
 
         $attributes_content = '';
-        $attribute_count1 = !is_null($this->_attributes_to_send) ? count($this->_attributes_to_send) : 0;
+        $attribute_count1 = count((array)$this->_attributes_to_send) : 0;
 
         for ($attributes_loop = 0; $attributes_loop < $attribute_count1; $attributes_loop++)
         {
