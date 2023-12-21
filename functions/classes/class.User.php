@@ -1256,6 +1256,9 @@ class User extends Common_functions {
         // set params
         $client->setServer($params->hostname)
                ->setSecret($params->secret)
+               ->setRadiusSuffix($params->suffix)
+               ->setAuthenticationPort($params->port)
+               ->setTimeout($params->timeout)
                ->setNasIpAddress(gethostbyname(gethostname()))
                ->setAttribute(32, 'login');
 
