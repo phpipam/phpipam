@@ -78,6 +78,12 @@ foreach($all_methods as $method) {
 	else {
 		print _("no parameters");
 	}
+	// radius - composer validation
+	if($method->type=="Radius") {
+	    if($User->composer_has_errors(["dapphp/radius"])) {
+	        $Result->show("danger", $User->composer_err, false);
+	    }
+	}
 	print "	</span>";
 	print "	</td>";
 	print "	<td class='$protected_class'>$user_num</td>";

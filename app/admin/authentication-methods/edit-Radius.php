@@ -103,11 +103,30 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 		</td>
 	</tr>
 
+	<!-- protocol -->
+	<tr>
+		<td><?php print _('Protocol'); ?></td>
+		<td>
+			<select name="authProtocol" class="form-control input-sm input-w-auto">
+			<?php
+			$values = ["pap","chap","mschapv1"];
+			foreach($values as $v) {
+				if($v==@$method_settings->params->authProtocol)	{ print "<option value='$v' selected=selected>$v</option>"; }
+				else											{ print "<option value='$v'					 >$v</option>"; }
+			}
+			?>
+			</select>
+		</td>
+		<td class="base_dn info2">
+			<?php print _('Set timeout in seconds'); ?>
+		</td>
+	</tr>
+
 	<!-- timeout -->
 	<tr>
 		<td><?php print _('Timeout'); ?></td>
 		<td>
-			<select name="timeout" class="form-control input-w-auto">
+			<select name="timeout" class="form-control input-sm input-w-auto">
 			<?php
 			$values = array(1,2,3,5,10);
 			foreach($values as $v) {

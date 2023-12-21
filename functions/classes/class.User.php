@@ -1244,8 +1244,8 @@ class User extends Common_functions {
         $params = pf_json_decode($this->authmethodparams);
 
         # Valdate composer
-        if($this->composer_has_errors(["dapphp/radius"])) {
-            $this->Result->show("danger", $this->composer_err, true);
+        if($this->composer_has_errors(["dapphp/radius1"])) {
+            $this->Result->show("danger", _("Error in authentication method. Please contact administrator").".", true);
         }
 
         # Composer
@@ -1267,25 +1267,22 @@ class User extends Common_functions {
         if($this->debugging)
         $client->setDebug(true);
 
-        // fake type for testing
-        $params->authType = "chap";
-
         // pap
-        if(!isset($params->authType) || @$params->authType=="pap") {
+        if(!isset($params->authProtocol) || @$params->authProtocol=="pap") {
             $authenticated = $client->accessRequest($username, $password);
         }
         // chap-md5
-        elseif ($params->authType == "chap") {
+        elseif ($params->authProtocol == "chap") {
             $client->setChapPassword($password);
             $authenticated = $client->accessRequest($username);
         }
         // mschapv1
-        elseif ($params->authType == "mschapv1") {
+        elseif ($params->authProtocol == "mschapv1") {
             $client->setMSChapPassword($password);
             $authenticated = $client->accessRequest($username);
         }
         // mschapv2
-        elseif($params->authType == "mschapv2") {
+        elseif($params->authProtocol == "mschapv2") {
             $authenticated = $client->accessRequestEapMsChapV2($username, $password);
         }
         // fault
