@@ -97,7 +97,11 @@ $(document).ready(function(){
     <!-- username -->
     <tr>
     	<td><?php print _('Username'); ?></td>
-    	<td><input type="text" class="form-control input-sm" name="username" value="<?php print @$user['username']; ?>" <?php if($_POST['action']=="edit"||$_POST['action']=="delete") print 'readonly disabled'; ?> <?php print $disabled; ?>></td>
+    	<td>
+    		<input type="text" class="form-control input-sm" name="username" value="<?php print @$user['username']; ?>" <?php if($_POST['action']=="edit"||$_POST['action']=="delete") print 'readonly disabled'; ?> <?php print $disabled; ?>></td>
+    		<input type="hidden" name="userId" value="<?php print @$user['id']; ?>">
+        	<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+        	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	<td class="info2">
     		<?php if($_POST['action']=="add") { ?>
     		<a class='btn btn-xs btn-default adsearchuser' rel='tooltip' title='Search AD for user details'><i class='fa fa-search'></i></a>
@@ -140,11 +144,6 @@ $(document).ready(function(){
             <option value="Administrator"   <?php if (@$user['role'] == "Administrator") print "selected"; ?>><?php print _('Administrator'); ?></option>
             <option value="User" 			<?php if (@$user['role'] == "User" || $_POST['action'] == "add") print "selected"; ?>><?php print _('Normal User'); ?></option>
         </select>
-
-
-        <input type="hidden" name="userId" value="<?php print @$user['id']; ?>">
-        <input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
-        <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 
         </td>
         <td class="info2"><?php print _('Select user role'); ?>
