@@ -1,5 +1,11 @@
 <?php
 
+//
+// needed for radius auth
+//
+use Dapphp\Radius\Radius;
+
+
 /**
 *
 *  User class to work with current user, authentication etc
@@ -1253,8 +1259,13 @@ class User extends Common_functions {
                ->setNasIpAddress(gethostbyname(gethostname()))
                ->setAttribute(32, 'login');
 
+
+        // debug?
+        if($this->debugging)
+        $client->setDebug(true);
+
         // fake type for testing
-        $params->authType = "pap";
+        $params->authType = "chap";
 
         // pap
         if(!isset($params->authType) || @$params->authType=="pap") {
@@ -1278,10 +1289,6 @@ class User extends Common_functions {
         else {
             $this->Result->show("danger", _("Invalid radius authentication method"), true);
         }
-
-        # debug?
-        if($this->debugging)
-        $client->setDebug(true);
 
         # authenticate user
         if($authenticated === true) {
