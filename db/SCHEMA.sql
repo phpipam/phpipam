@@ -1048,7 +1048,7 @@ CREATE TABLE `passkeys` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 # Dump of table nominatim
@@ -1080,5 +1080,5 @@ CREATE TABLE `nominatim_cache` (
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
-UPDATE `settings` SET `version` = "1.6";
-UPDATE `settings` SET `dbversion` = 40;
+UPDATE `settings` SET `version` = "1.7";
+UPDATE `settings` SET `dbversion` = 41;
