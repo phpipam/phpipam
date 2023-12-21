@@ -1,6 +1,6 @@
 <?php
 /* set latest version */
-define("VERSION", "1.61");									//decimal release version e.g 1.32
+define("VERSION", "1.6");									//decimal release version e.g 1.32
 /* set latest version */
 define("VERSION_VISIBLE", "1.6.1");							//visible version in footer e.g 1.3.2
 /* set latest revision */
