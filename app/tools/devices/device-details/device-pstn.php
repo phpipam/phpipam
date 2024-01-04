@@ -102,19 +102,14 @@ else {
     		   		if(!in_array($field['name'], $hidden_fields)) {
 
     		   			$html[] =  "<td class='hidden-xs hidden-sm hidden-md'>";
-    		   			//booleans
-    					if($field['type']=="tinyint(1)")	{
-    						if($sp->{$field['name']} == "0")			{ $html[] = _("No"); }
-    						elseif($sp->{$field['name']} == "1")		{ $html[] = _("Yes"); }
-    					}
-    					//text
-    					elseif($field['type']=="text") {
-    						if(!is_blank($sp->{$field['name']}))		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $sp->{$field['name']})."'>"; }
+						
+						$ff = $Tools->process_field($sp->{$field['name']}, $field['type']);
+						if($field['type']=="text") {
+    						if(!is_blank($sp->{$field['name']}))		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $ff)."'>"; }
     						else										{ print ""; }
     					}
     					else {
-    						$html[] = $sp->{$field['name']};
-
+    						$html[] = $ff;
     					}
     		   			$html[] =  "</td>";
     	   			}

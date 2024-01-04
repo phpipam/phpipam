@@ -59,17 +59,7 @@ else {
 			print "</tr>";
 
 			foreach($custom_fields as $key=>$field) {
-				$vault_item->{$key} = str_replace("\n", "<br>",$vault_item->{$key});
-
-				# fix for boolean
-				if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
-					if($vault_item->{$key}==0)		{ $vault_item->{$key} = "false"; }
-					elseif($vault_item->{$key}==1)	{ $vault_item->{$key} = "true"; }
-					else							{ $vault_item->{$key} = ""; }
-				}
-
-				// create links
-				$vault_item->{$key} = $Tools->create_links($vault_item->{$key});
+				$vault_item->{$key} = $Tools->process_field($vault_item->{$key}, $field['type']);
 
 				print "<tr>";
 				print "	<th>".$Tools->print_custom_field_name ($key)."</th>";

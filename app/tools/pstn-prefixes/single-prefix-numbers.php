@@ -130,15 +130,9 @@ $colspan_dhcp = 4;
 					print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 					// create html links
-					$n->{$myField['name']} = $Tools->create_links($n->{$myField['name']}, $myField['type']);
+					$n->{$myField['name']} = $Tools->process_field($n->{$myField['name']}, $myField['type']);
 
-					//booleans
-					if($myField['type']=="tinyint(1)")	{
-						if($n->{$myField['name']} == "0")		{ print _("No"); }
-						elseif($n->{$myField['name']} == "1")	{ print _("Yes"); }
-					}
-					//text
-					elseif($myField['type']=="text") {
+					if($myField['type']=="text") {
 						if(!is_blank($n->{$myField['name']}))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $n->{$myField['name']})."'>"; }
 						else									{ print ""; }
 					}

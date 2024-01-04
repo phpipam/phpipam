@@ -94,16 +94,7 @@ if(sizeof($custom_bgp) > 0) {
     print "</tr>";
 
     foreach($custom_bgp as $field) {
-
-        # fix for boolean
-        if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
-            if($bgp->{$field['name']}=="0")     { $bgp->{$field['name']} = "false"; }
-            elseif($bgp->{$field['name']}=="1") { $bgp->{$field['name']} = "true"; }
-            else                                { $bgp->{$field['name']} = ""; }
-        }
-
-        # create links
-        $bgp->{$field['name']} = $Tools->create_links ($bgp->{$field['name']});
+        $bgp->{$field['name']} = $Tools->process_field ($bgp->{$field['name']}, $field['type']);
 
         print "<tr>";
         print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

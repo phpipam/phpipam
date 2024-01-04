@@ -65,7 +65,7 @@ if(sizeof($result_circuits) > 0) {
 		if(sizeof($custom_circuit_fields) > 0) {
 			foreach($custom_circuit_fields as $field) {
 				if(!in_array($field['name'], $hidden_circuit_fields)) {
-					$circuit->{$field['name']} = $Tools->create_links ($circuit->{$field['name']}, $field['type']);
+					$circuit->{$field['name']} = $Tools->process_field ($circuit->{$field['name']}, $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>".$circuit->{$field['name']}."</td>";
 				}
 			}
@@ -132,7 +132,7 @@ if(sizeof($result_circuits_p) > 0) {
 		if(sizeof($custom_circuit_p_fields) > 0) {
 			foreach($custom_circuit_p_fields as $field) {
 				if(!in_array($field['name'], $hidden_circuit_p_fields)) {
-					$provider->{$field['name']} = $Tools->create_links ($provider->{$field['name']}, $field['type']);
+					$provider->{$field['name']} = $Tools->process_field ($provider->{$field['name']}, $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>".$provider->{$field['name']}."</td>";
 				}
 			}

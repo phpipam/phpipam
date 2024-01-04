@@ -82,17 +82,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 		print "</tr>";
 
 		foreach($custom_fields as $key=>$field) {
-			$vlan[$key] = str_replace("\n", "<br>",$vlan[$key]);
-
-			# fix for boolean
-			if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
-				if($vlan[$key]==0)		{ $vlan[$key] = "false"; }
-				elseif($vlan[$key]==1)	{ $vlan[$key] = "true"; }
-				else					{ $vlan[$key] = ""; }
-			}
-
-			// create links
-			$vlan[$key] = $Tools->create_links($vlan[$key]);
+			$vlan[$key] = $Tools->process_field($vlan[$key], $field['type']);
 
 			print "<tr>";
 			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";

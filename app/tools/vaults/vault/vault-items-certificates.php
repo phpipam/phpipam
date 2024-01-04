@@ -91,10 +91,6 @@ if($certificates_db!==false) {
 	        if(sizeof(@$custom_fields) > 0) {
 		   		foreach($custom_fields as $field) {
 					print "<td class='hidden-xs hidden-sm hidden-md'>";
-
-					// fix for text
-					if($field['type']=="text") { $field['type'] = "varchar(255)"; }
-
 					$Tools->print_custom_field ($field['type'], $p->{$field['name']}, "\n", "<br>");
 					print "</td>";
 		    	}

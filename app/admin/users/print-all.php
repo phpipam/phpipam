@@ -162,19 +162,15 @@ foreach ($users as $user) {
 		foreach($custom as $field) {
 			if(!in_array($field['name'], $ffields)) {
 				print "<td>";
-				//booleans
-				if($field['type']=="tinyint(1)")	{
-					if($user[$field['name']] == "0")		{ print _("No"); }
-					elseif($user[$field['name']] == "1")	{ print _("Yes"); }
-				}
+				
+				$ff = $Tools->process_field($user[$field['name']], $field['type']);
 				//text
-				elseif($field['type']=="text") {
-					if(!is_blank($user[$field['name']]))		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $user[$field['name']])."'>"; }
+				if($field['type']=="text") {
+					if(!is_blank($user[$field['name']]))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $ff)."'>"; }
 					else									{ print ""; }
 				}
 				else {
-					print $user[$field['name']];
-
+					print $ff;
 				}
 				print "</td>";
 			}

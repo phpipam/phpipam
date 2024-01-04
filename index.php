@@ -97,12 +97,16 @@ else {
 		<link rel="shortcut icon" type="image/png" href="css/images/favicon.png?v=<?php print SCRIPT_PREFIX; ?>">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css?v=<?php print SCRIPT_PREFIX; ?>">
+		<link rel="stylesheet" type="text/css" href="css/markdown/toastui-editor.min.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-switch.min.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-table/bootstrap-table.min.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<?php if ($User->user->ui_theme!="white") { ?>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->user->ui_theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<?php } ?>
+		<style>
+			.js-editor-enabled { display: none; }
+		</style>
 
 		<?php if ($User->settings->enableThreshold=="1") { ?>
 		<link rel="stylesheet" type="text/css" href="css/slider.css?v=<?php print SCRIPT_PREFIX; ?>">
@@ -117,6 +121,7 @@ else {
 		<script src="js/magic.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script src="js/bootstrap-switch.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/markdown/toastui-editor.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 		<!-- bootstrap table -->
 		<script src="js/bootstrap-table/bootstrap-table.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
