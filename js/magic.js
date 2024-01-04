@@ -67,7 +67,11 @@ function init_editors()
         let editor_id = makeUniq(5)+'|'+e.attr('name')+'|md_editor';
         let theme = e.data('theme');
         let old_val = e.val();
-        e.addClass('js-editor-enabled').after('<div id="'+editor_id+'"></div>');
+        let w = 363;
+        if(e.parent().get(0).tagName.toLowerCase() === "td")
+            w = e.parent().width();
+        
+        e.addClass('js-editor-enabled').after('<div style="width: '+w+'px" id="'+editor_id+'"></div>');
         
         
         markdown_editor_list[editor_id] = new toastui.Editor({
