@@ -10125,7 +10125,7 @@ msgstr "Automatische Datenbank"
 msgid "Please provide required inputs in below form for automatic database"
 msgstr ""
 "Bitte geben Sie alle nachfolgend ben&ouml;tigten Angaben ein f&uuml:r eine "
-"automatische Datenebank"
+"automatische Datenbank"
 
 #: app/install/install_automatic.php:17
 msgid "once finished click Install database."
