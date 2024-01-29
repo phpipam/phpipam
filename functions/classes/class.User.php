@@ -824,10 +824,6 @@ class User extends Common_functions {
             $this->Log->write ( _("User login"), _('Error: Invalid authentication method'), 2 );
             $this->Result->show("danger", _("Error: Invalid authentication method"), true);
         }
-        # disabled - we made separate check on this, therwise we reveal info before user is authenticated
-        // elseif ($this->user->disabled=="Yes") {
-        //     $this->Result->show("danger", _("Your account has been disabled").".", true);
-        // }
         else {
             # set method name variable
             $authmethodtype = $this->authmethodtype;
@@ -926,20 +922,14 @@ class User extends Common_functions {
      * @return void
      */
     private function get_auth_method_type () {
-        # for older versions - only local is available!
-        if($this->settings->version=="1.1") {
-            $this->authmethodtype = "auth_local";
+        try { $method = $this->Database->getObject("usersAuthMethod", $this->authmethodid); }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage(), true);
         }
-        else {
-            try { $method = $this->Database->getObject("usersAuthMethod", $this->authmethodid); }
-            catch (Exception $e) {
-                $this->Result->show("danger", _("Error: ").$e->getMessage(), true);
-            }
-            # save method name if existing
-            if($method!==false) {
-                $this->authmethodtype   = "auth_".$method->type;
-                $this->authmethodparams = $method->params;
-            }
+        # save method name if existing
+        if($method!==false) {
+            $this->authmethodtype   = "auth_".$method->type;
+            $this->authmethodparams = $method->params;
         }
     }
 

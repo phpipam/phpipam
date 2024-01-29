@@ -36,6 +36,12 @@ class Common_functions  {
 	 */
 	public $json_error = false;
 
+	/**
+	 * Composer error flag
+	 * @var bool
+	 */
+	public $composer_err = false;
+
     /**
      * Default font
      *
@@ -2324,7 +2330,7 @@ class Common_functions  {
 					}
         		}
         		// check
-        		if (isset($this->composer_err)) {
+        		if ($this->composer_err!==false) {
         			return true;
         		}
         	}
