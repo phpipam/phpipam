@@ -14,14 +14,17 @@ $policy = pf_json_decode($User->settings->passwordPolicy);
 ?>
 
 <!-- title -->
-<h4><?php print _('phpIPAM password policy settings'); ?></h4>
-<span class="text-muted"><?php print _("Here you can set password policy for user authentication."); ?></span>
+<h4><?php print _('phpIPAM password policy settings'); ?></h4><hr>
+
+<br><span class="text-muted"><?php print _("Here you can set password policy for user authentication."); ?></span>
 <br><br>
 
 
+<div class="panel panel-default" style="width:auto;position:absolute;border: 1px solid rgba(255, 255, 255, 0.1) !important;padding-bottom:0px !important">
+<div class="panel-heading"><?php print _("Password policy"); ?></div>
 
 <form name="passpolicy" id="passpolicy">
-<table id="passpolicy" class="table table-hover table-condensed table-auto">
+<table id="passpolicy" class="table table-hover table-condensed table-auto" style="margin-bottom:0px">
 
 
 
@@ -110,11 +113,15 @@ $policy = pf_json_decode($User->settings->passwordPolicy);
 <!-- Submit -->
 <tr class="th">
 	<td class="title"></td>
-	<td class="submit" colspan="2">
-		<input type="submit" class="btn btn-default btn-success btn-sm submit_popup" data-script="app/admin/password-policy/save.php" data-result_div="policyResult" data-form='passpolicy' value="<?php print _("Save"); ?>">
+	<td>
+		<input type="submit" class="btn btn-default btn-success btn-sm submit_popup" style="width:100% !important" data-script="app/admin/password-policy/save.php" data-result_div="policyResult" data-form='passpolicy' value="<?php print _("Save"); ?>">
+	</td>
+	<td>
 		<div id="policyResult"></div>
 	</td>
 </tr>
 
 </table>
 </form>
+
+</div>

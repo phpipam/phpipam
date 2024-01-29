@@ -120,6 +120,9 @@ html .badge {
   background: rgba(0, 0, 0, 0.2) !important;
   border: 1px solid #58606b !important;
 }
+html .badge-white {
+  color: white !important;
+}
 html .badge.alert-success {
   color: #dff0d8 !important;
   border-color: #3c763d !important;

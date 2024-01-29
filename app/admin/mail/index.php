@@ -17,9 +17,12 @@ $csrf = $User->Crypto->csrf_cookie ("create", "mail");
 <!-- title -->
 <h4>phpIPAM <?php print _('Mail settings'); ?></h4>
 <hr>
+<br>
+
+<div class="panel panel-default" style="width:auto;position:absolute;border: 1px solid rgba(255, 255, 255, 0.1) !important;padding-bottom:0px !important">
 
 <form name="mailsettings" id="mailsettings">
-<table id="mailsettingstbl" class="table table-hover table-condensed table-top table-auto">
+<table id="mailsettingstbl" class="table table-condensed table-top table-auto" style="margin-bottom:0px;">
 
 	<!-- Server settings -->
 	<tr class="settings-title">
@@ -153,7 +156,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "mail");
 
 </table>
 </form>
-
+</div>
 
 <!-- Result -->
 <div id="settingsMailEdit"></div>
