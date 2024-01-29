@@ -1234,7 +1234,7 @@ class User extends Common_functions {
         $params = pf_json_decode($this->authmethodparams);
 
         # Valdate composer
-        if($this->composer_has_errors(["dapphp/radius1"])) {
+        if($this->composer_has_errors(["dapphp/radius"])) {
             $this->Result->show("danger", _("Error in authentication method. Please contact administrator").".", true);
         }
 

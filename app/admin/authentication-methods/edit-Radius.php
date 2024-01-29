@@ -150,6 +150,11 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 		$Log->write( _("Radius login"), _("php Socket extension missing!"), 2 );
 		$Result->show("danger", _("php Socket extension missing!"), false);
 	}
+	# check for Composer errors
+	if($User->composer_has_errors (["dapphp/radius"])) {
+		print "<hr>";
+		print_r($Result->show("warning", $User->composer_err));
+	}
 	?>
 </div>
 
