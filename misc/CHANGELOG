@@ -3,6 +3,7 @@
     Bugfixes:
     ----------------------------
     + Fixed RADIUS authentication fails on 1.6.0 (#3986);
+    + Fixed cannot add NAT issue (#3993);
 
 == 1.6.0
 

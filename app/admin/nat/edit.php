@@ -59,9 +59,9 @@ $custom = $Tools->fetch_custom_fields('nat');
     	<tr>
         	<th><?php print _('Name'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss(@$nat->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($nat->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
-            	<input type="hidden" name="id" value="<?php print @$nat->id; ?>">
+            	<input type="hidden" name="id" value="<?php print $nat->id; ?>">
             	<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
         	</td>
         	<td>
@@ -79,7 +79,7 @@ $custom = $Tools->fetch_custom_fields('nat');
             	<select name="type" class="form-control input-sm input-w-auto" <?php print $readonly; ?>>
                 <?php
                 foreach ($nat_types as $t) {
-                    $selected = @$nat->type==$t ? "selected" : "";
+                    $selected = $nat->type==$t ? "selected" : "";
                     print "<option value='$t' $selected>$t NAT</option>";
                 }
                 ?>
@@ -103,7 +103,7 @@ $custom = $Tools->fetch_custom_fields('nat');
                 <?php
                 if($devices !== false) {
                     foreach ($devices as $d) {
-                        $selected = @$nat->device==$d->id ? "selected" : "";
+                        $selected = $nat->device==$d->id ? "selected" : "";
                         print "<option value='$d->id' $selected>$d->hostname</option>";
                     }
                 }
@@ -119,7 +119,7 @@ $custom = $Tools->fetch_custom_fields('nat');
         <tr>
             <th><?php print _('Description'); ?></th>
             <td colspan="2">
-                <textarea class="form-control input-sm" name="description" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>><?php print @$nat->description; ?></textarea>
+                <textarea class="form-control input-sm" name="description" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>><?php print $nat->description; ?></textarea>
             </td>
         </tr>
 
@@ -133,7 +133,7 @@ $custom = $Tools->fetch_custom_fields('nat');
                 <select name="policy" class="form-control input-sm input-w-auto" <?php print $readonly; ?>>
                 <?php
                 foreach (["No", "Yes"] as $d) {
-                    $selected = @$nat->policy==$d ? "selected" : "";
+                    $selected = $nat->policy==$d ? "selected" : "";
                     print "<option value='$d' $selected>$d</option>";
                 }
                 ?>
@@ -144,12 +144,12 @@ $custom = $Tools->fetch_custom_fields('nat');
         </tr>
 
         <tr class='port'>
-            <th><?php print @$nat->type=="source" ? _('Destination address') : _('Source address'); ?></th>
+            <th><?php print $nat->type=="source" ? _('Destination address') : _('Source address'); ?></th>
             <td>
-                <input type="text" class="form-control input-sm" name="policy_dst" value="<?php print @$nat->policy_dst; ?>" placeholder='<?php print _('IP'); ?>' <?php print $readonly; ?>>
+                <input type="text" class="form-control input-sm" name="policy_dst" value="<?php print $nat->policy_dst; ?>" placeholder='<?php print _('IP'); ?>' <?php print $readonly; ?>>
             </td>
             <td>
-                <span class="text-muted"><?php print @$nat->type=="source" ? _('Destination') : _('Source'); print _(" address for policy NAT"); ?></span>
+                <span class="text-muted"><?php print $nat->type=="source" ? _('Destination') : _('Source'); print _(" address for policy NAT"); ?></span>
             </td>
         </tr>
 
@@ -157,11 +157,11 @@ $custom = $Tools->fetch_custom_fields('nat');
         	<td colspan="3"><hr></td>
     	</tr>
     	<tr>
-        	<th><?php print @$nat->type=="destination" ? _('Destination objects') : _('Source objects'); ?></th>
+        	<th><?php print $nat->type=="destination" ? _('Destination objects') : _('Source objects'); ?></th>
         	<td class='nat-src'>
             	<?php
                 // print sources
-                $sources = $Tools->translate_nat_objects_for_display (@$nat->src, @$nat->id, $link);
+                $sources = $Tools->translate_nat_objects_for_display ($nat->src, $nat->id, $link);
                 // sources
                 if($sources!==false) {
                     print implode("<br>", $sources);
@@ -180,7 +180,7 @@ $custom = $Tools->fetch_custom_fields('nat');
         	<th></th>
         	<td>
             	<?php
-                print "<hr><a class='btn btn-xs btn-success addNatItem' data-id='@$nat->id' data-type='src'><i class='fa fa-plus'></i></a> "._('Add new object');
+                print "<hr><a class='btn btn-xs btn-success addNatItem' data-id='$nat->id' data-type='src'><i class='fa fa-plus'></i></a> "._('Add new object');
                 ?>
         	</td>
         	<td>
@@ -198,7 +198,7 @@ $custom = $Tools->fetch_custom_fields('nat');
         	<td class='nat-dst'>
             	<?php
                 // print sources
-                $destinations = $Tools->translate_nat_objects_for_display (@$nat->dst, @$nat->id, $link);
+                $destinations = $Tools->translate_nat_objects_for_display ($nat->dst, $nat->id, $link);
                 // destinations
                 if($destinations!==false) {
                     print implode("<br>", $destinations);
@@ -217,7 +217,7 @@ $custom = $Tools->fetch_custom_fields('nat');
         	<th></th>
         	<td>
             	<?php
-                print "<hr><a class='btn btn-xs btn-success addNatItem' data-id='@$nat->id' data-type='dst'><i class='fa fa-plus'></i></a> "._('Add new object');
+                print "<hr><a class='btn btn-xs btn-success addNatItem' data-id='$nat->id' data-type='dst'><i class='fa fa-plus'></i></a> "._('Add new object');
                 ?>
         	</td>
         	<td>
@@ -233,7 +233,7 @@ $custom = $Tools->fetch_custom_fields('nat');
     	<tr class='port'>
         	<th><?php print _('Src Port'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="src_port" value="<?php print @$nat->src_port; ?>" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="src_port" value="<?php print $nat->src_port; ?>" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Source port"); ?></span>
@@ -242,7 +242,7 @@ $custom = $Tools->fetch_custom_fields('nat');
     	<tr class='port'>
         	<th><?php print _('Dst Port'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="dst_port" value="<?php print @$nat->dst_port; ?>" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="dst_port" value="<?php print $nat->dst_port; ?>" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Destination port"); ?></span>
