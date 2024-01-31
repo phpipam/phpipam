@@ -21,10 +21,12 @@ print "             <ul class='dropdown-menu'>";
                     $m=0;
                     foreach ($all_nats as $n) {
                         // not own
-                        if(!@in_array( $n->id, $all_nats_per_object['subnets'][$subnet['id']] )) {
-                            if($n->type=="source") {
-                                print "<li><a href='' class='mapNat' data-action='edit' data-id='$n->id' data-object-type='subnets' data-object-id='$subnet[id]'>$n->name ($n->type)</a></li>";
-                                $m++;
+                        if(is_array(@$all_nats_per_object['subnets'][$subnet['id']])) {
+                            if(!@in_array( $n->id, $all_nats_per_object['subnets'][$subnet['id']] )) {
+                                if($n->type=="source") {
+                                    print "<li><a href='' class='mapNat' data-action='edit' data-id='$n->id' data-object-type='subnets' data-object-id='$subnet[id]'>$n->name ($n->type)</a></li>";
+                                    $m++;
+                                }
                             }
                         }
                     }
