@@ -1899,8 +1899,15 @@ $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function()
             else if(subnetData.search("freespace") != -1) {
                 setTimeout(function (){window.location.reload();}, 1500);
             }
-            //from ipcalc - ignore
+            //from ipcalc - hide popup and results
             else if (subnetData.search("ipcalc") != -1) {
+                setTimeout(function (){ 
+                    hideSpinner();
+                    hidePopups();
+                    $('#selectSectionfromIPCalc option:first').prop('selected', true);
+                    $('tr#selectSection').hide();
+                    $('div.ipCalcResult').fadeOut('fast');
+                }, 1500);
             }
             //from admin
             else {
@@ -2018,6 +2025,11 @@ $(document).on("change", "select#selectSectionfromIPCalc", function() {
     //load add Subnet form / popup
     $.post('app/admin/subnets/edit.php', postdata , function(data) {
         $('#popupOverlay div.popup_w700').html(data);
+        // hide section selector in ip calc and reset otion to first value (need select)
+        $(document).on("click", ".hidePopups", function() { 
+            $('#selectSectionfromIPCalc option:first').prop('selected', true);
+            $('.ipCalcResult tr#selectSection').hide();
+        });
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
