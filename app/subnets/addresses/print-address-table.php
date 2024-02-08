@@ -632,7 +632,7 @@ else {
         					foreach($custom_fields as $myField) {
         						if(!in_array($myField['name'], $hidden_cfields)) 	{
 									print "<td class='customField hidden-xs hidden-sm hidden-md'>";
-									$Tools->print_custom_field ($myField['type'], $addresses[$n]->{$myField['name']});
+									$Tools->print_custom_field ($myField['type'], $s->{$myField['name']});
 									print "</td>";
         						}
         				    }
