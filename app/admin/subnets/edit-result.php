@@ -88,7 +88,7 @@ if ($_POST['action']=="add") {
     // ID must be numberic value
 	if(!is_numeric($_POST['sectionId']))									{ $Result->show("danger", _("Invalid ID"), true); }
     // verify that user has permissions to add subnet
-    if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true); }
+    if($Sections->check_permission ($User->user, $_POST['sectionId']) < 2 && $Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true); }
 
     //verify cidr
     $cidr_check = $Subnets->verify_cidr_address($_POST['cidr']);
