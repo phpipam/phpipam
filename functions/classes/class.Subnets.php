@@ -257,7 +257,7 @@ class Subnets extends Common_functions {
 
 		# changelog
 		if($mail_changelog)
-		$this->Log->write_changelog('subnet', "edit", 'success', $old_subnet, $values);
+			$this->Log->write_changelog('subnet', "edit", 'success', $old_subnet, $values);
 		# ok
 		$this->Log->write( _("Subnet")." ".$old_subnet->description." "._("edit"), _("Subnet")." ".$old_subnet->description." "._("edited").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		return true;
@@ -520,7 +520,7 @@ class Subnets extends Common_functions {
 	 * @param string|false $field
 	 * @param mixed|false $value
 	 * @param array|string $result_fields   // fields to fetch
-	 * @return array
+	 * @return array|false
 	 */
 	public function fetch_section_subnets ($sectionId, $field = false, $value = false, $result_fields = "*") {
 		# fetch settings and set subnet ordering
