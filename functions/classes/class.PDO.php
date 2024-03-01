@@ -1068,6 +1068,8 @@ abstract class DB {
 	 * @return bool
 	 */
 	public function rollBack() {
+		if (!$this->pdo->inTransaction())
+			return false;
 		return $this->pdo->rollBack();
 	}
 }
