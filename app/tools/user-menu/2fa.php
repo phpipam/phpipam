@@ -24,11 +24,11 @@ if (is_null($User->user->{'2fa_secret'}) && $User->user->{'2fa'}=="1") {
 $username = strtolower($User->user->username)."@".$User->settings->{'2fa_name'};
 
 // passkey only
-if ($User->settings->{'passkeys'}=="1") {
+if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
 	// get user passkeys
 	$user_passkeys = $User->get_user_passkeys($User->user->id);
 	// set passkey_only flag
-	$passkey_only = $User->settings->{'passkeys'}=="1" && sizeof($user_passkeys)>0 && $User->user->passkey_only=="1" ? true : false;
+	$passkey_only = sizeof($user_passkeys)>0 && $User->user->passkey_only=="1" ? true : false;
 }
 ?>
 

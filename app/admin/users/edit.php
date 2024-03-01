@@ -182,7 +182,7 @@ $(document).ready(function(){
 	<?php } ?>
 
 
-	<?php if ($User->settings->{'passkeys'}=="1" && sizeof($user_passkeys)>0 && $_POST['action']!=="delete") { ?>
+	<?php if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1" && sizeof($user_passkeys)>0 && $_POST['action']!=="delete") { ?>
 	<tr>
 		<td colspan="3"><hr></td>
 	    <tr>

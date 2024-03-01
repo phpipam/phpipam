@@ -36,7 +36,7 @@ print "<hr><br>";
 	}
 
 	// Passkeys
-	if ($User->settings->{'passkeys'}=="1") {
+	if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
 	$subpages['passkeys'] = "Passwordless authentication";
 	}
 

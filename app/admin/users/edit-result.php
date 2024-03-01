@@ -190,7 +190,7 @@ foreach($_POST as $key=>$post) {
 }
 
 # passkey only
-if ($User->settings->{'passkeys'}==1) {
+if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}==1) {
 	$values['passkey_only'] = !isset($_POST['passkey_only']) ? 0 : 1;
 }
 

@@ -88,7 +88,7 @@
 	</div>
 
 
-	<?php if($User->settings->{'passkeys'}=="1"){ ?>
+	<?php if($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1"){ ?>
 	<div class="col-xs-12" style="padding-top:20px;">
 
 		<?php
