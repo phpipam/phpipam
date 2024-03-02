@@ -149,16 +149,7 @@ else {
 	    	print "</tr>";
 
 			foreach($custom_fields as $field) {
-
-				# fix for boolean
-				if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
-					if($n->{$field['name']}=="0")		{ $n->{$field['name']} = "false"; }
-					elseif($n->{$field['name']}=="1")	{ $n->{$field['name']} = "true"; }
-					else								{ $n->{$field['name']} = ""; }
-				}
-
-				# create links
-				$n->{$field['name']} = $Tools->create_links ($n->{$field['name']});
+				$n->{$field['name']} = $Tools->process_field ($n->{$field['name']}, $field['type']);
 
 				print "<tr>";
 				print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

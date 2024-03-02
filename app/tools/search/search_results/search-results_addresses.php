@@ -160,7 +160,7 @@ if(sizeof($result_addresses) > 0) {
 			if(sizeof($custom_address_fields) > 0) {
 				foreach($custom_address_fields as $field) {
 					if(!in_array($field['name'], $hidden_address_fields)){
-						$line[$field['name']] = $Tools->create_links ($line[$field['name']], $field['type']);
+						$line[$field['name']] = $Tools->process_field ($line[$field['name']], $field['type']);
 						print '<td class="customField hidden-sm hidden-xs hidden-md">'. $line[$field['name']] .'</td>'. "\n";
 					}
 				}

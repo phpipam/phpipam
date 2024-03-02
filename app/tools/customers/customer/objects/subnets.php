@@ -91,14 +91,7 @@ foreach ($objects['subnets'] as $slave_subnet) {
     # custom
     if(isset($visible_fields)) {
     foreach ($visible_fields as $key=>$field) {
-		#booleans
-		if($field['type']=="tinyint(1)")	{
-			if($slave_subnet[$key] == "0")		{ $html_custom = _("No"); }
-			elseif($slave_subnet[$key] == "1")	{ $html_custom = _("Yes"); }
-		}
-		else {
-			$html_custom = $Tools->create_links($slave_subnet[$key]);
-		}
+		$html_custom = $Tools->process_field($slave_subnet[$key], $field['type']);
 
         print "<td>".$html_custom."</td>";
     }

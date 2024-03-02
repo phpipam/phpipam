@@ -131,7 +131,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
             foreach($cfields as $key=>$field) {
                 $rack->{$key} = str_replace("\n", "<br>",$rack->{$key});
                 // create links
-                $rack->{$key} = $Tools->create_links($rack->{$key});
+                $rack->{$key} = $Tools->process_field($rack->{$key}, $field['type']);
                 print "<tr>";
                 print " <th>".$Tools->print_custom_field_name ($key)."</th>";
                 print " <td style='vertical-align:top;align-content:left;'>".$rack->{$key}."</td>";

@@ -38,14 +38,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
     	print "</tr>";
 
 		foreach($custom_fields as $field) {
-			# fix for boolean
-			if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
-				if($logical_circuit->{$field['name']}=="0")		{ $logical_circuit->{$field['name']} = "false"; }
-				elseif($logical_circuit->{$field['name']}=="1")	{ $logical_circuit->{$field['name']} = "true"; }
-				else									{ $logical_circuit->{$field['name']} = ""; }
-			}
-			# create links
-			$logical_circuit->{$field['name']} = $Tools->create_links ($logical_circuit->{$field['name']});
+			$logical_circuit->{$field['name']} = $Tools->process_field ($logical_circuit->{$field['name']}, $field['type']);
 
 			print "<tr>";
 			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

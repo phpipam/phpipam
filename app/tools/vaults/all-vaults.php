@@ -87,7 +87,6 @@ else {
 
 						// fix for text
 						if($status=="Unlocked") {
-							if($field['type']=="text") { $field['type'] = "varchar(255)"; }
 							$Tools->print_custom_field ($field['type'], $a->{$field['name']}, "\n", "<br>");
 						}
 						else {
