@@ -73,7 +73,7 @@ $format_top->setTop(1);
 
 // Create a worksheet
 $worksheet_name = strlen($subnet['description']) > 30 ? substr($subnet['description'],0,27).'...' : $subnet['description'];
-$worksheet =& $workbook->addWorksheet($worksheet_name);
+$worksheet =& $workbook->addWorksheet();
 $worksheet->setInputEncoding("utf-8");
 
 $lineCount = 0;
