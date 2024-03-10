@@ -125,6 +125,7 @@ else {
                 $links[] = ["type"=>"header", "text"=>_("Show rack")];
                 $links[] = ["type"=>"link", "text"=>_("Show rack"), "href"=>create_link($_GET['page'], "racks", $r->id), "icon"=>"eye", "visible"=>"dropdown"];
                 $links[] = ["type"=>"link", "text"=>_("Show popup"), "href"=>"", "class"=>"showRackPopup", "dataparams"=>"data-rackId='$r->id' data-deviceId='0'", "icon"=>"server"];
+                $links[] = ["type"=>"link", "text"=>_("Print rack"), "href"=>create_link('tools', 'racks', $r->id, 'print'), "icon"=>"print"];
                 $links[] = ["type"=>"divider"];
             }
             if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
