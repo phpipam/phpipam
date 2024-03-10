@@ -202,6 +202,7 @@ CREATE TABLE `settings` (
   `api` BINARY  NOT NULL  DEFAULT '0',
   `scanPingPath` VARCHAR(64)  NULL  DEFAULT '/bin/ping',
   `scanFPingPath` VARCHAR(64)  NULL  DEFAULT '/bin/fping',
+  `scanFpingInterval` INT(12)  NULL  DEFAULT '10',
   `scanPingType` ENUM('none','ping','pear','fping') NOT NULL DEFAULT 'ping',
   `scanMaxThreads` INT(4)  NULL  DEFAULT '128',
   `prettyLinks` ENUM('Yes','No') NOT NULL DEFAULT 'No',
