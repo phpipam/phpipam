@@ -149,6 +149,9 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 	<?php
 	print "<th class='s_ipaddr'>"._('IP address')."</th>";
 	print "<th>"._('Hostname')."</th>";
+	//daienliang添加app name显示
+	print "<th>"._('App Name')."</th>";
+
 	// firewall address object - mandatory if enabled
 	if($zone) {
 		print "<th>"._('FW object')."</th>";
@@ -160,7 +163,6 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
     	                                        { print "<th>"._('MAC')."</th>"; }
     }
 	# note, device, port, owner, location
-	if(in_array('note', $selected_ip_fields)) 	{ print "<th></th>"; }
 	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
 	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Port')."</th>"; }
 	if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Location')."</th>"; }
@@ -172,6 +174,8 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 			print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($myField['name'])."</th>";
 		}
 	}
+	if(in_array('note', $selected_ip_fields)) 	{ print "<th>"._("note")."</th>"; }
+
 	?>
 	<!-- actions -->
 	<th class="actions"></th>
@@ -393,7 +397,11 @@ else {
 					                                                    { print "<td class='fwzone'>".$addresses[$n]->firewallAddressObject."</td>"; }
 				}
 
-				# print description - mandatory
+				# print appname - mandatory
+																			print "<td class='description'>".$addresses[$n]->app_name."</td>";
+			    # print description - mandatory
+
+
 	        													  		  print "<td class='description'>".$addresses[$n]->description."</td>";
 				# Print mac address icon!
 				if(in_array('mac', $selected_ip_fields)) {
@@ -442,14 +450,6 @@ else {
 				}
 
 
-	       		# print info button for hover
-	       		if(in_array('note', $selected_ip_fields)) {
-
-	       			$addresses[$n]->note = str_replace("'", "&#39;", $addresses[$n]->note);
-
-	        		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",addslashes($addresses[$n]->note))."'></i></td>"; }
-	        		else 												{ print "<td class='narrow'></td>"; }
-	        	}
 
 	        	# print device
 	        	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
@@ -516,6 +516,14 @@ else {
 				}
 		    }
 
+	       	# print info button for hover
+	       	if(in_array('note', $selected_ip_fields)) {
+
+					$addresses[$n]->note = str_replace("'", "&#39;", $addresses[$n]->note);
+
+				 if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",addslashes($addresses[$n]->note))."'></i></td>"; }
+				 else 												{ print "<td class='narrow'></td>"; }
+			 }
 			# print action links if user can edit
 			print "<td class='btn-actions'>";
 			print "	<div class='btn-group'>";

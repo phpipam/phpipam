@@ -18,10 +18,16 @@ $User->check_user_session();
 // Create a workbook
 $filename = "phpipam_template_" . $type . ".xls";
 $workbook = new Spreadsheet_Excel_Writer();
+//daienliang 增加version
+$workbook->setVersion(8);
+
 $lineCount = 0;
 
 // Create a worksheet
 $worksheet = $workbook->addWorksheet("template");
+//daienliang增加编码
+$worksheet->setInputEncoding("utf-8");
+
 
 
 if ($type == 'subnets'){
@@ -49,16 +55,18 @@ elseif ($type == 'ipaddr'){
 	$worksheet->write($lineCount, 0, _('Section'));
 	$worksheet->write($lineCount, 1, _('IP address'));
 	$worksheet->write($lineCount, 2, _('Hostname'));
-	$worksheet->write($lineCount, 3, _('Description'));
-	$worksheet->write($lineCount, 4, _('VRF'));
-	$worksheet->write($lineCount, 5, _('Subnet'));
-	$worksheet->write($lineCount, 6, _('MAC'));
-	$worksheet->write($lineCount, 7, _('Owner'));
-	$worksheet->write($lineCount, 8, _('Device'));
-	$worksheet->write($lineCount, 9, _('Note'));
-	$worksheet->write($lineCount, 10, _('Tag'));
-	$worksheet->write($lineCount, 11, _('Is_Gateway'));
-	$fc =12 ;
+	//daienliang 添加app_name
+	$worksheet->write($lineCount, 3, _('App Name'));
+	$worksheet->write($lineCount, 4, _('Description'));
+	$worksheet->write($lineCount, 5, _('VRF'));
+	$worksheet->write($lineCount, 6, _('Subnet'));
+	$worksheet->write($lineCount, 7, _('MAC'));
+	$worksheet->write($lineCount, 8, _('Owner'));
+	$worksheet->write($lineCount, 9, _('Device'));
+	$worksheet->write($lineCount, 10, _('note'));
+	$worksheet->write($lineCount, 11, _('Status'));
+	$worksheet->write($lineCount, 12, _('Is gateway'));
+	$fc =13 ;
 	foreach($custom_address_fields as $k=>$f) {
 		$worksheet->write($lineCount, $fc, $k);
 		$fc++;

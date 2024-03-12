@@ -96,6 +96,8 @@ $values = array(
 				"id"          =>$device['switchid'],
 				"hostname"    =>$device['hostname'],
 				"ip_addr"     =>$device['ip_addr'],
+				//daienliang 添加ower字段，保存
+				"owner"       =>$device['owner'],
 				"type"        =>$device['type'],
 				"description" =>$device['description'],
 				"sections"    =>$device['sections'],

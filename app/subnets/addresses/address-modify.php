@@ -236,6 +236,22 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		print '	</td>'. "\n";
 		print '</tr>'. "\n";
 	?>
+<!-- daienliang增加 业务系统名称-->
+	<!-- app name -->
+	<tr>
+		<td>
+			<?php
+			// set star if field is required
+			$required = in_array("app_name", $required_ip_fields) ? " *" : "";
+			print _('App Name').$required;
+			?>
+		</td>
+		<td>
+			<input type="text" name="app_name" class="ip_addr form-control input-sm" value="<?php if(isset($address['app_name'])) {print $address['app_name'];} ?>" size="30"
+			<?php if ( $act == "delete" ) { print " readonly";} ?>
+			placeholder="<?php print _('App Name'); ?>">
+		</td>
+	</tr>
 
 	<!-- description -->
 	<tr>
@@ -569,7 +585,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		$required = in_array("note", $required_ip_fields) ? " *" : "";
 
 		print '<tr>'. "\n";
-		print '	<td>'._('Note').$required.'</td>'. "\n";
+		print '	<td>'._('note').$required.'</td>'. "\n";
 		print '	<td class="note">'. "\n";
 		print ' <textarea name="note" class="ip_addr form-control input-sm" cols="23" rows="2" placeholder="'._('Additional notes about IP address').'" '.$delete.'>'. $address['note'] . '</textarea>'. "\n";
 		print '	</td>'. "\n";

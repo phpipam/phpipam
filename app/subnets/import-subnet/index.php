@@ -54,7 +54,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	}
 
 	# set standard fields
-	$standard_fields = array ("ip address","ip state","description","hostname","fw_object","mac","owner","device","port","notes", "location");
+	$standard_fields = array (_("IP address"),_("ip state"),_("description"),_("hostname"),_("App Name"),_("fw object"),_("mac"),_("owner"),_("device"),_("port"),_("note"), _("Location"));
 
 	if (!is_writeable( dirname(__FILE__) . '/upload' )) $Result->show("danger", _("'app/subnets/import-subnet/upload' folder is not writeable."), false, false);
 	?>
@@ -79,7 +79,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<div id="drop">
 		<input type="file" name="file" id="csvfile" style="display:none;">
 
-		<?php print _('Select CSV file'); ?>: <a class="btn btn-sm btn-default"><?php print _("Browse"); ?></a>
+		<?php print _('Select XLS/CSV file'); ?>: <a class="btn btn-sm btn-default"><?php print _("Browse"); ?></a>
 	</div>
 	<span class="fname" style="display:none"></span>
 

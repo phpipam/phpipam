@@ -68,6 +68,13 @@ print "	<td>"._('Hostname')."</td>";
 print "	<td><input type='checkbox' name='hostname' checked> </td>";
 print "	</tr>";
 
+#daienliang
+# 增加 application name  字段
+print "	<tr>";
+print "	<td>"._('App Name')."</td>";
+print "	<td><input type='checkbox' name='app_name' checked> </td>";
+print "	</tr>";
+
 # firewallAddressObject - mandatory
 print "	<tr>";
 print "	<td>"._('FW Object')."</td>";
@@ -102,7 +109,7 @@ print "	</tr>";
 
 # note
 print "	<tr>";
-print "	<td>"._('Note')."</td>";
+print "	<td>"._('note')."</td>";
 print "	<td><input type='checkbox' name='note' checked> </td>";
 print "	</tr>";
 

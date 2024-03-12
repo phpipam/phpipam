@@ -116,6 +116,11 @@ if( (isset($_GET['hostname'])) && ($_GET['hostname'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('hostname') ,$format_title);
 	$rowCount++;
 }
+//daienliang  增加app name表头
+if( (isset($_GET['app_name'])) && ($_GET['app_name'] == "on") ) {
+	$worksheet->write($lineCount, $rowCount, _('App Name') ,$format_title);
+	$rowCount++;
+}
 if( (isset($_GET['firewallAddressObject'])) && ($_GET['firewallAddressObject'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('fw object') ,$format_title);
 	$rowCount++;
@@ -141,7 +146,7 @@ if( (isset($_GET['note'])) && ($_GET['note'] == "on") ) {
 	$rowCount++;
 }
 if( (isset($_GET['location'])) && ($_GET['location'] == "on") ) {
-	$worksheet->write($lineCount, $rowCount, _('location') ,$format_title);
+	$worksheet->write($lineCount, $rowCount, _('Location') ,$format_title);
 	$rowCount++;
 }
 
@@ -215,6 +220,11 @@ foreach ($addresses as $ip) {
 	}
 	if( (isset($_GET['hostname'])) && ($_GET['hostname'] == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['hostname']);
+		$rowCount++;
+	}
+	//daienliang增加 app name
+	if( (isset($_GET['app_name'])) && ($_GET['app_name'] == "on") ) {
+		$worksheet->write($lineCount, $rowCount, $ip['app_name']);
 		$rowCount++;
 	}
 	if( (isset($_GET['firewallAddressObject'])) && ($_GET['firewallAddressObject'] == "on") ) {

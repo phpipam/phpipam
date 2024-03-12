@@ -51,12 +51,13 @@ print '	<th>'._('IP').'</th>';
 print '	<th>'._('Status').'</th>';
 print '	<th>'._('Description').'</th>';
 print '	<th>'._('Hostname').'</th>';
+print '	<th>'._('App Name').'</th>';
 print '	<th>'._('FW object').'</th>';
 print '	<th>'._('MAC').'</th>';
 print '	<th>'._('Owner').'</th>';
 print '	<th>'._('Device').'</th>';
 print '	<th>'._('Port').'</th>';
-print '	<th>'._('Note').'</th>';
+print '	<th>'._('note').'</th>';
 print '	<th>'._('Location').'</th>';
 // Add custom fields
 if(sizeof($custom_address_fields) > 0) {

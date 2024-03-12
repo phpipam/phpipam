@@ -73,6 +73,7 @@ print "<thead>";
 print '<tr>';
 print "	<th>"._('Name')."</th>";
 print "	<th>"._('IP address')."</th>";
+print "	<th>"._('Owner')."</th>";
 print "	<th>"._('Description').'</th>';
 if($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
 print '	<th>'._('Rack').'</th>';
@@ -125,6 +126,7 @@ else {
 
 		print "	<td><a class='btn btn-xs btn-default' href='".create_link("tools","devices",$device['id'])."'><i class='fa fa-desktop prefix'></i> ". $device['hostname'] .'</a></td>'. "\n";
 		print "	<td>". $device['ip_addr'] .'</td>'. "\n";
+		print "	<td>". $device['owner'] .'</td>'. "\n";
 		print '	<td class="description">'. $device['description'] .'</td>'. "\n";
 		// rack
 	    if($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
@@ -151,7 +153,7 @@ else {
 			print "</td>";
 		}
 		print '	<td><span class="badge badge1 badge5">'. $cnt .'</span> '._('Objects').'</td>'. "\n";
-		print '	<td class="hidden-sm">'. $device_types_indexed[$device['type']]->tname .'</td>'. "\n";
+		print '	<td class="hidden-sm">'._( $device_types_indexed[$device['type']]->tname) .'</td>'. "\n";
 
         //custom fields - no subnets
         if(sizeof(@$custom_fields) > 0) {

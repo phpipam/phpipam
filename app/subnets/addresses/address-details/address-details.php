@@ -74,7 +74,8 @@ if(sizeof($address)>1) {
         else if ($address['state'] == "2") { $stateClass = _("Reserved"); }
         else if ($address['state'] == "3") { $stateClass = _("DHCP"); }
         else                          { $stateClass = _("Online"); }
-
+		$xx=$Addresses->address_type_index_to_type ($address['state']);
+		$yy=$Addresses->address_type_format_tag ($address['state']);
         print $Addresses->address_type_index_to_type ($address['state']);
         print $Addresses->address_type_format_tag ($address['state']);
 
@@ -97,6 +98,13 @@ if(sizeof($address)>1) {
     	print "<tr>";
     	print "	<th>"._('Hostname')."</th>";
     	print "	<td>$resolve1[name]</td>";
+    	print "</tr>";
+
+		# daienliang app name
+
+    	print "<tr>";
+    	print "	<th>"._('App Name')."</th>";
+    	print "	<td>$address[app_name]</td>";
     	print "</tr>";
 
     	# firewall address object
@@ -138,7 +146,8 @@ if(sizeof($address)>1) {
     	# note
     	if(in_array('note', $selected_ip_fields)) {
     	print "<tr>";
-    	print "	<th>"._('Note')."</th>";
+		//daienliang 修改Note为note
+    	print "	<th>"._('note')."</th>";
     	print "	<td>$address[note]</td>";
     	print "</tr>";
     	}

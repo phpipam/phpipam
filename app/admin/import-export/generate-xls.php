@@ -50,7 +50,7 @@ if ($devices!==false) {
 $myFields = $Tools->fetch_custom_fields('ipaddresses');
 $myFieldsSize = sizeof($myFields);
 
-$colSize = 8 + $myFieldsSize;
+$colSize = 9 + $myFieldsSize;
 
 //formatting headers
 $format_header = $workbook->addFormat();
@@ -123,12 +123,13 @@ foreach ($sections as $section) {
 			$worksheet->write($lineCount, 1, _('ip state' ),$format_title);
 			$worksheet->write($lineCount, 2, _('description' ),$format_title);
 			$worksheet->write($lineCount, 3, _('hostname' ),$format_title);
-			$worksheet->write($lineCount, 4, _('mac' ),$format_title);
-			$worksheet->write($lineCount, 5, _('owner' ),$format_title);
-			$worksheet->write($lineCount, 6, _('device' ),$format_title);
-			$worksheet->write($lineCount, 7, _('port' ),$format_title);
-			$worksheet->write($lineCount, 8, _('note' ),$format_title);
-			$m = 9;
+			$worksheet->write($lineCount, 4, _('App Name' ),$format_title);
+			$worksheet->write($lineCount, 5, _('mac' ),$format_title);
+			$worksheet->write($lineCount, 6, _('owner' ),$format_title);
+			$worksheet->write($lineCount, 7, _('device' ),$format_title);
+			$worksheet->write($lineCount, 8, _('port' ),$format_title);
+			$worksheet->write($lineCount, 9, _('note' ),$format_title);
+			$m = 10;
 			//custom
 			if(sizeof($myFields) > 0) {
 				foreach($myFields as $myField) {
@@ -156,13 +157,14 @@ foreach ($sections as $section) {
 				$worksheet->write($lineCount, 1, $ip['state']);
 				$worksheet->write($lineCount, 2, $ip['description']);
 				$worksheet->write($lineCount, 3, $ip['hostname']);
-				$worksheet->write($lineCount, 4, $ip['mac']);
-				$worksheet->write($lineCount, 5, $ip['owner']);
-				$worksheet->write($lineCount, 6, $ip['switch']);
-				$worksheet->write($lineCount, 7, $ip['port']);
-				$worksheet->write($lineCount, 8, $ip['note']);
+				$worksheet->write($lineCount, 4, $ip['app_name']);
+				$worksheet->write($lineCount, 5, $ip['mac']);
+				$worksheet->write($lineCount, 6, $ip['owner']);
+				$worksheet->write($lineCount, 7, $ip['switch']);
+				$worksheet->write($lineCount, 8, $ip['port']);
+				$worksheet->write($lineCount, 9, $ip['note']);
 				//custom
-				$m = 9;
+				$m = 10;
 				if(sizeof($myFields) > 0) {
 					foreach($myFields as $myField) {
 						$worksheet->write($lineCount, $m, $ip[$myField['name']]);

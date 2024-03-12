@@ -74,9 +74,9 @@ if ($Ping->settings->updateTags==1 && $Subnets->address_types[$address['state']]
 <div class="pContent">
 	<?php
 	# online
-	if($pingRes==0) 					{ $Result->show("success", _("IP address")." $address[ip] "._("is alive"), false);	}
+	if($pingRes==0) 					{ $Result->show("success", _("IP address")." $address[ip] "._("Online"), false);	}
 	# offline
-	elseif ($pingRes==1 || $pingRes==2) { $Result->show("danger",  _("IP address")." $address[ip] "._("is not alive"), false); }
+	elseif ($pingRes==1 || $pingRes==2) { $Result->show("danger",  _("IP address")." $address[ip] "._("Offline"), false); }
 	# error
 	else {
 		# fetch error code

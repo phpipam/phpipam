@@ -41,6 +41,8 @@ foreach ($data as &$cdata) {
 						"ip_addr"     =>$Addresses->transform_address($cdata['ip_addr'],"decimal"),
 						"subnetId"    =>$cdata['subnetId'],
 						"hostname"    =>$cdata['hostname'],
+//daieniang 增加appname
+						"app_name"    =>$cdata['app_name'],
 						"description" =>$cdata['description'],
 						"mac"         =>$cdata['mac'],
 						"owner"       =>$cdata['owner'],
