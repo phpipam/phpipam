@@ -139,6 +139,8 @@ class Tools extends Common_functions {
 		$query[] = "where `ip_addr` between :low and :high ";	//ip range
 		$query[] = "or `hostname` like :search_term ";			//hostname
 		$query[] = "or `owner` like :search_term ";				//owner
+		$query[] = "or `app_name` like :search_term ";				//app_name
+
 		# custom fields
 		if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {

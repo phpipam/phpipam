@@ -85,8 +85,8 @@ if($slaves) {
 		print "	<th class='small'>"._('VLAN')."</th>";
 		if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R)
 		print "	<th class='small'>"._('VRF')."</th>";
-		print "	<th class='small description'>"._('Subnet description')."</th>";
 		print "	<th>"._('Subnet')."</th>";
+		print "	<th class='small description'>"._('Subnet description')."</th>";
 		print "	<th class='small hidden-xs hidden-sm'>"._('Used')."</th>";
 		print "	<th class='small hidden-xs hidden-sm'>% "._('Free')."</th>";
 		print "	<th class='small hidden-xs hidden-sm'>"._('Requests')."</th>";
@@ -133,9 +133,8 @@ if($slaves) {
 			    print "	<td class='small'>".$vlan['number']."</td>";
 			    if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R)
 			    print "	<td class='small'>".$vrf['name']."</td>";
-
-			    print "	<td class='small description'><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[description]</a></td>";
 			    print "	<td><a href='".create_link("subnets",$section->id,$slave['id'])."'>".$Subnets->transform_address($slave['subnet'], "dotted")."/$slave[mask] $fullinfo</a></td>";
+			    print "	<td class='small description'><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[description]</a></td>";
 
 				# print usage
 			    print ' <td class="small hidden-xs hidden-sm">'. $calculate['used'] .'/'. $calculate['maxhosts'] .'</td>'. "\n";

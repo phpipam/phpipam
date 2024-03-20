@@ -284,7 +284,7 @@ $curRow++;
 if( (isset($_GET['exportSections'])) && ($_GET['exportSections'] == "on") ) {
 	// Create a worksheet
 	$worksheet_sections =& $workbook->addWorksheet('Sections');
-
+	$worksheet->setInputEncoding("utf-8");
 	$curRow = 0;
 	$curColumn = 0;
 

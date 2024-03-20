@@ -134,9 +134,10 @@ else {
 	//headers
 	print "<tr>";
 	print "	<th>"._('IP')."</th>";
+	print "	<th>"._('hostname')."</th>";
+	print "	<th>"._('App Name')."</th>";
 	print "	<th>"._('Description')."</th>";
 	print "	<th>"._('status')."</th>";
-	print "	<th>"._('hostname')."</th>";
 	print "</tr>";
 
 	//loop
@@ -148,9 +149,10 @@ else {
 
 		print "<tr class='$class'>";
 		print "	<td>".$Subnets->transform_to_dotted($r['ip_addr'])."</td>";
+		print "	<td>".$r['hostname']."</td>";
+		print "	<td>".$r['app_name']."</td>";
 		print "	<td>".$r['description']."</td>";
 		print "	<td>"._("$r[status]")."</td>";
-		print "	<td>".$r['hostname']."</td>";
 
 		print "</tr>";
 
@@ -158,6 +160,7 @@ else {
 		if ($User->settings->updateTags==1 && $Subnets->address_types[$r['state']]['updateTag']==1) {
 			// online
 			if ($r['code']==0 && $r['state']!=2) {
+				//daienliang 需要研究
 				$Scan->update_address_tag ($r['id'], 2, $r['state'], date("Y-m-d H:i:s"));
 			}
 			// offline

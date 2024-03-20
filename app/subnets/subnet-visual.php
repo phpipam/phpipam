@@ -33,6 +33,9 @@ foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
 
 		# tooltip
 		if(strlen($visual_addresses[$m]['hostname'])>0)		{ $title .= "<br>".$visual_addresses[$m]['hostname']; }
+		//daienliang 增加提示
+		if(strlen($visual_addresses[$m]['app_name'])>0)		{ $title .= "<br>".$visual_addresses[$m]['app_name']; }
+
 		if(strlen($visual_addresses[$m]['description'])>0)	{ $title .= "<br>".$visual_addresses[$m]['description']; }
 
 		# set colors

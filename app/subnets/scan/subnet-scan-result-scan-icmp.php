@@ -30,6 +30,8 @@ foreach($_POST as $key=>$line) {
 	elseif(substr($key, 0,11)=="description") 	{ $res[substr($key, 11)]['description'] = $line; }
 	// dns name
 	elseif(substr($key, 0,8)=="hostname") 		{ $res[substr($key, 8)]['hostname']  	= $line; }
+	elseif(substr($key, 0,8)=="app_name") 		{ $res[substr($key, 8)]['app_name']  	= $line; }
+
 	// custom fields
 	elseif (isset($required_fields)) {
     	foreach ($required_fields as $k=>$f) {
@@ -54,6 +56,7 @@ if(sizeof($res)>0) {
 		# set insert values
 		$values = array("ip_addr"=>$Subnets->transform_to_decimal($r['ip_addr']),
 						"hostname"=>$r['hostname'],
+						"app_name"=>$r['app_name'],
 						"subnetId"=>$_POST['subnetId'],
 						"description"=>$r['description'],
 						"state"=>2,

@@ -25,8 +25,10 @@ $result_addresses = $Tools->search_addresses($searchTerm, $searchTerm_edited['hi
 	$address_span = 4;
 	print '<th>'._('IP address').'</th>'. "\n";
 	# description
-	print '<th>'._('Description').'</th>'. "\n";
 	print '<th>'._('Hostname').'</th>'. "\n";
+	print '<th>'._('App Name').'</th>'. "\n";
+
+	print '<th>'._('Description').'</th>'. "\n";
 	# mac
 	if(in_array('mac', $selected_ip_fields)) 										{ print '<th></th>'. "\n"; $address_span++; }
 	# switch
@@ -102,10 +104,13 @@ if(sizeof($result_addresses) > 0) {
 			//tag
 			print $Addresses->address_type_format_tag($line['state']);
 			print ' </td>' . "\n";
-			//description
-			print ' <td>'. $Addresses->shorten_text($line['description'], $chars = 50) .'</td>' . "\n";
 			//dns
 			print ' <td>'. $line['hostname']  .'</td>' . "\n";
+			//app_name daienliang
+			print ' <td>'. $line['app_name']  .'</td>' . "\n";
+			//description
+			print ' <td>'. $Addresses->shorten_text($line['description'], $chars = 50) .'</td>' . "\n";
+			
 			//mac
 			if(in_array('mac', $selected_ip_fields)) {
 				print '	<td>'. "\n";
