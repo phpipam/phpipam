@@ -85,7 +85,7 @@ print "	<th>"._('Owner')."</th>";
 print "	<th>"._('Device')."</th>";
 //daienliang  修改Note 为note
 print "	<th>"._('note')."</th>";
-print "	<th>"._('Tag')."</th>";
+print "	<th>"._('State')."</th>";
 print "	<th>"._('Gateway')."</th>";
 print $custom_fields_names;
 print "	</tr>";

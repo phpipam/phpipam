@@ -76,7 +76,7 @@ if(sizeof($address)>1) {
         else                          { $stateClass = _("Online"); }
 		$xx=$Addresses->address_type_index_to_type ($address['state']);
 		$yy=$Addresses->address_type_format_tag ($address['state']);
-        print $Addresses->address_type_index_to_type ($address['state']);
+        print _($Addresses->address_type_index_to_type ($address['state']));
         print $Addresses->address_type_format_tag ($address['state']);
 
         print " </td>";

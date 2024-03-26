@@ -125,11 +125,11 @@ if( (isset($_GET['device'])) && ($_GET['device'] == "on") ) {
 	}
 }
 if( (isset($_GET['note'])) && ($_GET['note'] == "on") ) {
-	$worksheet->write($curRow, $curColumn, _('Note') ,$format_header);
+	$worksheet->write($curRow, $curColumn, _('note') ,$format_header);
 	$curColumn++;
 }
 if( (isset($_GET['tag'])) && ($_GET['tag'] == "on") ) {
-	$worksheet->write($curRow, $curColumn, _('Tag') ,$format_header);
+	$worksheet->write($curRow, $curColumn, _('State') ,$format_header);
 	$curColumn++;
 	# get IP address types
 	$ip_types = $Addresses->addresses_types_fetch();
@@ -246,7 +246,7 @@ if($all_sections!==false) {
 					if( (isset($_GET['tag'])) && ($_GET['tag'] == "on") ) {
 						//reformat tag
 						$ip['tag'] = (@$ip_types[$ip['state']]['showtag']) ? $ip_types[$ip['state']]['type'] : "";
-						$worksheet->write($curRow, $curColumn, $ip['tag'], $format_text);
+						$worksheet->write($curRow, $curColumn, _($ip['tag']), $format_text);
 						$curColumn++;
 					}
 

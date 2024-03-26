@@ -154,7 +154,7 @@ foreach ($sections as $section) {
 				$ip['switch'] = is_null($ip['switch'])||strlen($ip['switch'])==0||$ip['switch']==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
 
 				$worksheet->write($lineCount, 0, $Subnets->transform_to_dotted($ip['ip_addr']), $format_left);
-				$worksheet->write($lineCount, 1, $ip['state']);
+				$worksheet->write($lineCount, 1, _($ip['state']));
 				$worksheet->write($lineCount, 2, $ip['description']);
 				$worksheet->write($lineCount, 3, $ip['hostname']);
 				$worksheet->write($lineCount, 4, $ip['app_name']);
