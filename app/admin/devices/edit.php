@@ -34,6 +34,7 @@ $_POST = $User->strip_input_tags ($_POST);
 $Admin->validate_action ($_POST['action'], true);
 
 # fetch custom fields
+//daienliang ，修订/db/SCHEMA.sql，添加 ower字段信息。
 $custom = $Tools->fetch_custom_fields('devices');
 
 # ID must be numeric
@@ -48,7 +49,8 @@ if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 // defaults
 else {
 	$device = array ();
-	$device['type']       = 9;
+//daienliang 默认设备为6 server服务器类型
+	$device['type']       = 6;
 	$device['rack_start'] = 1;
 	$device['rack_size']  = 1;
 }
@@ -114,6 +116,15 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 			<input type="text" name="ip_addr" class="form-control input-sm" placeholder="<?php print _('IP address'); ?>" value="<?php if(isset($device['ip_addr'])) print $Tools->strip_xss($device['ip_addr']); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
+<!--daienliang  增加owner字段	-->
+    <!-- owner -->
+	<tr>
+		<td><?php print _('Owner'); ?></td>
+		<td>
+			<input type="text" name="owner" class="form-control input-sm" placeholder="<?php print _('Owner'); ?>" value="<?php if(isset($device['owner'])) print $Tools->strip_xss($device['owner']); ?>" <?php print $readonly; ?>>
+		</td>
+	</tr>
+
 
 	<!-- Type -->
 	<tr>
@@ -123,8 +134,8 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 			<?php
 			$types = $Admin->fetch_all_objects("deviceTypes", "tid");
 			foreach($types as $name) {
-				if($device['type'] == $name->tid)	{ print "<option value='$name->tid' selected='selected'>$name->tname</option>"; }
-				else								{ print "<option value='$name->tid' >$name->tname</option>"; }
+				if($device['type'] == $name->tid)	{ print "<option value='$name->tid' selected='selected'>"._($name->tname)."</option>"; }
+				else								{ print "<option value='$name->tid' >"._($name->tname)."</option>"; }
 			}
 			?>
 			</select>

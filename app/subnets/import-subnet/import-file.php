@@ -105,13 +105,14 @@ foreach($outFile as $k=>$line) {
 								"state"                 => $Addresses->address_type_type_to_index($line[1]),
 								"description"           => $line[2],
 								"hostname"              => $line[3],
-								"firewallAddressObject" => $line[4],
-								"mac"                   => $line[5],
-								"owner"                 => $line[6],
-								"switch"                => $line[7],
-								"port"                  => $line[8],
-								"note"                  => $line[9],
-								"location"              => $line[10]
+								"app_name"              => $line[4],
+								"firewallAddressObject" => $line[5],
+								"mac"                   => $line[6],
+								"owner"                 => $line[7],
+								"switch"                => $line[8],
+								"port"                  => $line[9],
+								"note"                  => $line[10],
+								"location"              => $line[11]
 								);
 		// add id
 		if ($action=="edit")	{ $address_insert["id"] = $id; }

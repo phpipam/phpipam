@@ -82,6 +82,9 @@ else {
 	print "	<th>"._("IP")."</th>";
 	print "	<th>"._("Description")."</th>";
 	print "	<th>"._("Hostname")."</th>";
+	//daienliang添加app name
+	print "	<th>"._("App Name")."</th>";
+
     // custom
 	if (isset($required_fields)) {
 		foreach ($required_fields as $field) {
@@ -109,6 +112,10 @@ else {
 		print "<td>";
 		print "	<input type='text' class='form-control input-sm' name='hostname$m' value='".@$hostname['name']."'>";
 		print "</td>";
+		//daienliang添加app_name
+		print "<td>";
+		print "	<input type='text' class='form-control input-sm' name='app_name$m'>";
+		print "</td>";
 		// custom
 		if (isset($required_fields)) {
 			$timepicker_index = 0;
@@ -127,7 +134,7 @@ else {
 	}
 
     // calculate colspan
-	$colspan = 4 + sizeof(@$required_fields);
+	$colspan = 5 + sizeof(@$required_fields);
 
 	//result
 	print "<tr>";

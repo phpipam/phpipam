@@ -19,8 +19,8 @@ $User->check_user_session();
 $tpl_field_names = "";
 $tpl_field_types = "";
 
-# predefine field list
-$expfields = array ("section","ip_addr","hostname","description","vrf","subnet","mac","owner","device","note","tag","is_gateway", "port", "location");
+# predefine field list daienliang增加app_name
+$expfields = array ("section","ip_addr","hostname","app_name","description","vrf","subnet","mac","owner","device","note","tag","is_gateway", "port", "location");
 //$disfields = array ("Section","IP Address","Hostname","Description","VRF","Subnet","MAC","owner","device","note","TAG");
 $mtable = "ipaddresses"; # main table where to check the fields
 
@@ -51,6 +51,11 @@ $extfields["ip_addr"]["pname"] = "ip address";
 $extfields["hostname"]["table"] = "ipaddresses";
 $extfields["hostname"]["field"] = "hostname";
 $extfields["hostname"]["pname"] = "hostname";
+##daienliang 增加app_name
+$extfields["app_name"]["table"] = "ipaddresses";
+$extfields["app_name"]["field"] = "app_name";
+$extfields["app_name"]["pname"] = "app_name";
+
 $extfields["gateway"]["table"] = "ipaddresses";
 $extfields["gateway"]["field"] = "is_gateway";
 $extfields["gateway"]["pname"] = "gateway";

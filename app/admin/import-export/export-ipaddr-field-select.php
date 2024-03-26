@@ -83,8 +83,9 @@ print "	<th>"._('Subnet')."</th>";
 print "	<th>"._('MAC')."</th>";
 print "	<th>"._('Owner')."</th>";
 print "	<th>"._('Device')."</th>";
-print "	<th>"._('Note')."</th>";
-print "	<th>"._('Tag')."</th>";
+//daienliang  修改Note 为note
+print "	<th>"._('note')."</th>";
+print "	<th>"._('State')."</th>";
 print "	<th>"._('Gateway')."</th>";
 print $custom_fields_names;
 print "	</tr>";

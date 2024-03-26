@@ -50,6 +50,9 @@ $required_ip_fields = $Tools->explode_filtered(";", $User->settings->IPrequired)
 // append one missing from selected
 $selected_ip_fields[] = "description";
 $selected_ip_fields[] = "hostname";
+//daienliang添加
+$selected_ip_fields[] = "app_name";
+
 // if field is present in required fields but not in selected remove it !
 foreach ($required_ip_fields as $k=>$f) {
 	if (!in_array($f, $selected_ip_fields)) {
@@ -79,6 +82,8 @@ if(is_array($required_ip_fields) && $action!="delete") {
 
 # remove all spaces in hostname
 if (strlen($address['hostname'])>0) { $address['hostname'] = str_replace(" ", "", $address['hostname']); }
+if (strlen($address['app_name'])>0) { $address['app_name'] = str_replace(" ", "", $address['app_name']); }
+if (strlen($address['owner'])>0) { $address['owner'] = str_replace(" ", "", $address['owner']); }
 
 # required fields
 isset($address['action']) ?:		$Result->show("danger", _("Missing required fields"). " action", true);

@@ -139,6 +139,8 @@ class Tools extends Common_functions {
 		$query[] = "where `ip_addr` between :low and :high ";	//ip range
 		$query[] = "or `hostname` like :search_term ";			//hostname
 		$query[] = "or `owner` like :search_term ";				//owner
+		$query[] = "or `app_name` like :search_term ";				//app_name
+
 		# custom fields
 		if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {
@@ -3214,19 +3216,19 @@ class Tools extends Common_functions {
     		//IP must be present!
     		if(filter_var($data->val($m,'A'), FILTER_VALIDATE_IP)) {
         		//for multicast
-        		$mac = $data->val($m,'F');
+        		$mac = $data->val($m,'G');
         		if ($this->settings->enableMulticast=="1") {
-            		if (strlen($data->val($m,'F'))==0 && $this->Subnets->is_multicast($data->val($m,'A')))    {
+            		if (strlen($data->val($m,'G'))==0 && $this->Subnets->is_multicast($data->val($m,'A')))    {
                 		$mac = $this->Subnets->create_multicast_mac ($data->val($m,'A'));
                     }
                 }
 
-    			$outFile[$m]  = $data->val($m,'A').$this->csv_delimiter.$data->val($m,'B').$this->csv_delimiter.$data->val($m,'C').$this->csv_delimiter.$data->val($m,'D').$this->csv_delimiter;
-    			$outFile[$m] .= $data->val($m,'E').$this->csv_delimiter.$mac.$this->csv_delimiter.$data->val($m,'G').$this->csv_delimiter.$data->val($m,'H').$this->csv_delimiter;
-    			$outFile[$m] .= $data->val($m,'I').$this->csv_delimiter.$data->val($m,'J').$this->csv_delimiter.$data->val($m,'K');
+    			$outFile[$m]  = $data->val($m,'A').$this->csv_delimiter.$data->val($m,'B').$this->csv_delimiter.$data->val($m,'C').$this->csv_delimiter.$data->val($m,'D').$this->csv_delimiter.$data->val($m,'E').$this->csv_delimiter;
+    			$outFile[$m] .= $data->val($m,'F').$this->csv_delimiter.$mac.$this->csv_delimiter.$data->val($m,'H').$this->csv_delimiter.$data->val($m,'I').$this->csv_delimiter;
+    			$outFile[$m] .= $data->val($m,'J').$this->csv_delimiter.$data->val($m,'K').$this->csv_delimiter.$data->val($m,'L');
     			//add custom fields
     			if(sizeof($custom_address_fields) > 0) {
-    				$currLett = "L";
+    				$currLett = "M";
     				foreach($custom_address_fields as $field) {
     					$outFile[$m] .= $this->csv_delimiter.$data->val($m,$currLett++);
     				}
@@ -3329,7 +3331,9 @@ class Tools extends Common_functions {
             	$line = $this->convert_encoding_to_UTF8($line);
 
             	//put it to array
-            	$field = str_getcsv ($line, $this->csv_delimiter);
+				//daienliang修改str_getcsv 为 explode;
+				$field = explode($this->csv_delimiter,$line);
+            	//$field = str_getcsv ($line, $this->csv_delimiter);
 
             	//verify IP address
             	if(!filter_var($field[0], FILTER_VALIDATE_IP)) 	{ $class = "danger";	$errors++; }
@@ -3343,9 +3347,10 @@ class Tools extends Common_functions {
                     if ($this->Subnets->is_subnet_inside_subnet ($field[0]."/" . $ipsm, $this->transform_address($subnet->subnet, "dotted")."/".$subnet->mask)==false)    { $class = "danger"; $errors++; }
                 }
             	// make sure mac does not exist
+				//daienliang 调整mac索引
                 if ($this->settings->enableMulticast=="1" && strlen($class)==0) {
-                    if (strlen($field[5])>0 && $this->Subnets->is_multicast($field[0])) {
-                        if($this->Subnets->validate_multicast_mac ($field[5], $subnet->sectionId, $subnet->vlanId, MCUNIQUE)!==true) {
+                    if (strlen($field[6])>0 && $this->Subnets->is_multicast($field[0])) {
+                        if($this->Subnets->validate_multicast_mac ($field[6], $subnet->sectionId, $subnet->vlanId, MCUNIQUE)!==true) {
                             $errors++; $class = "danger";
                         }
                     }
