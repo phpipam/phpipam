@@ -77,6 +77,8 @@ if($script_result->status==0) {
 				$res[$ip]['ip_addr']     = $ip;
 				$res[$ip]['description'] = $ipdet['description'];
 				$res[$ip]['hostname']    = $ipdet['hostname'];
+				$res[$ip]['app_name']    = $ipdet['app_name'];
+
 				$res[$ip]['state']       = $ipdet['state'];
 				$res[$ip]['lastSeen']    = $ipdet['lastSeen'];
 

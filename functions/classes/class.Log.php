@@ -218,6 +218,7 @@ class Logging extends Common_functions {
 						"is_gateway"            => "Address is subnet gateway",
 						"description"           => "Description",
 						"hostname"              => "Hostname",
+						"app_name"              => "App Name",
 						"mac"                   => "MAC address",
 						"owner"                 => "Address owner",
 						"state"                 => "Address state index",
