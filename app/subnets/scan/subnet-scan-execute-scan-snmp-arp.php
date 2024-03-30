@@ -56,6 +56,7 @@ if ($devices_used !== false) {
 // if none set die
 if (!isset($permitted_devices))                 { $Result->show("danger", _("No devices for SNMP ARP query available"), true); }
 
+$found=[];
 // ok, we have devices, connect to each device and do query
 foreach ($permitted_devices as $d) {
     // init
