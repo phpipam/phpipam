@@ -378,7 +378,7 @@ class Addresses_controller extends Common_api_functions  {
 		$this->init_object ("Admin", $this->Database);
 		$this->init_object ("Addresses", $this->Database);
 
-		# append old address details and fill details if not provided - calidate_update_parameters fetches $this->old_address
+		# append old address details and fill details if not provided - validate_update_parameters fetches $this->old_address
 		foreach ($this->old_address as $ok=>$oa) {
 			if (!array_key_exists($ok, $values)) {
 				if(!is_null($oa)) {
