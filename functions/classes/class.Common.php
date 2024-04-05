@@ -1845,10 +1845,12 @@ class Common_functions  {
 
 		if (empty($this->mac_address_vendors)) {
 			// Generated from vendorMac.xml
-			// Unique MAC address: 45344
-			// Updated: 12 March 2022
+			// Unique MAC address: 51316
+			// Updated: 05 April 2024
 			$data = file_get_contents(dirname(__FILE__) . "/../vendormacs.json");
-			$this->mac_address_vendors = pf_json_decode($data, true);
+			if (is_string($data)) {
+				$this->mac_address_vendors = json_decode($data, true);
+			}
 		}
 
 		// Find longest prefix match in $this->mac_address_vendors array (max 9)
