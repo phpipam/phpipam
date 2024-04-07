@@ -1,0 +1,1460 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <base href="http://localhost:8082/">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+
+    <meta name="Description" content="">
+    <meta name="title" content="IP地址管理系统 / 子网 / IPv4 / XXX主数据中心生产网">
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="X-UA-Compatible" content="IE=9">
+
+    <meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=1, user-scalable=yes">
+
+    <!-- chrome frame support -->
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <!-- title -->
+    <title>IP地址管理系统 / 子网 / IPv4 / XXX主数据中心生产网</title>
+
+    <!-- OpenSearch -->
+    <link rel="search" type="application/opensearchdescription+xml" href="/?page=opensearch" title="Search IP地址管理系统">
+
+    <!-- css -->
+    <link rel="shortcut icon" type="image/png" href="css/images/favicon.png?v=1.5.3_r016_v39">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css?v=1.5.3_r016_v39">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css?v=1.5.3_r016_v39">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-switch.min.css?v=1.5.3_r016_v39">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-table/bootstrap-table.min.css?v=1.5.3_r016_v39">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css?v=1.5.3_r016_v39">
+
+
+    <!-- js -->
+    <script src="js/jquery-3.5.1.min.js?v=1.5.3_r016_v39"></script>
+    <script src="js/jclock.jquery.js?v=1.5.3_r016_v39"></script>
+    <script src="js/magic.js?v=1.5.3_r016_v39"></script>
+    <script src="js/bootstrap.min.js?v=1.5.3_r016_v39"></script>
+    <script src="js/bootstrap-switch.min.js?v=1.5.3_r016_v39"></script>
+
+    <!-- bootstrap table -->
+    <script src="js/bootstrap-table/bootstrap-table.min.js?v=1.5.3_r016_v39"></script>
+    <script src="js/bootstrap-table/bootstrap-table-cookie.js?v=1.5.3_r016_v39"></script>
+
+    <!--[if lt IE 9]>
+    <script src="js/dieIE.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="css/leaflet.css" />
+    <script src="js/leaflet.js"></script>
+    <link rel="stylesheet" href="css/leaflet.fullscreen.css" />
+    <script src="js/leaflet.fullscreen.min.js"></script>
+    <!-- jQuery UI -->
+    <script src="js/jquery-ui-1.12.1.custom.min.js?v=1.5.3_r016_v39"></script>
+
+</head>
+
+<!-- body -->
+
+<body>
+
+    <!-- wrapper -->
+    <div class="wrapper">
+
+        <!-- jQuery error -->
+        <div class="jqueryError">
+            <div class='alert alert-danger' style="width:450px;margin:auto">jQuery error!
+                <div class="jqueryErrorText"></div><br>
+                <a href="/" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
+            </div>
+        </div>
+
+        <!-- Popups -->
+        <div id="popupOverlay" class="popupOverlay">
+            <div id="popup" class="popup popup_w400"></div>
+            <div id="popup" class="popup popup_w500"></div>
+            <div id="popup" class="popup popup_w700"></div>
+            <div id="popup" class="popup popup_wmasks"></div>
+            <div id="popup" class="popup popup_max"></div>
+        </div>
+        <div id="popupOverlay2">
+            <div id="popup" class="popup popup_w400"></div>
+            <div id="popup" class="popup popup_w500"></div>
+            <div id="popup" class="popup popup_w700"></div>
+            <div id="popup" class="popup popup_wmasks"></div>
+            <div id="popup" class="popup popup_max"></div>
+        </div>
+
+        <!-- loader -->
+        <div class="loading">加载中...<br><i class="fa fa-spinner fa-spin"></i></div>
+
+        <!-- header -->
+        <div class="row" id="header">
+            <!-- logo -->
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            </div>
+            <!-- title -->
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="hero-pusher hidden-xs hidden-sm"></div>
+                <div class="hero-unit">
+                    <a href="/">IP地址管理系统</a>
+                    <p class="muted">
+                        <span class='divider'>/</span>子网<span class='divider'>/</span>IPv4<span
+                            class='divider'>/</span>XXX主数据中心生产网
+                    </p>
+                </div>
+            </div>
+            <!-- usermenu -->
+            <div class="col-lg-3 col-lg-offset-0 col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-6 col-xs-12 "
+                id="user_menu">
+
+                <div class="container-fluid">
+
+                    <div class="input-group" id="searchForm">
+                        <form id="userMenuSearch">
+                            <input type="text" class="form-control searchInput input-sm" name='ip' placeholder='搜索字符串'
+                                value=''>
+                        </form>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-sm searchSubmit" type="button">搜索</button>
+                        </span>
+                    </div>
+
+                    <div id="searchSelect" style="text-align: left">
+                        <input type="checkbox" name="subnets" value="on" checked='checked'> 子网<br>
+                        <input type="checkbox" name="addresses" value="on" checked='checked'> IP地址<br>
+                        <input type="checkbox" name="vlans" value="on" checked='checked'> VLANs<br>
+                    </div>
+
+                    <!-- settings -->
+
+                    <a href="/index.php?page=tools&section=user-menu">你好, 超级管理员</a><br>
+                    <span class="info">登录权限 &nbsp;管理员</span><br>
+
+                    <!-- logout -->
+                    <a href="/index.php?page=login">退出 <i class="fa fa-pad-left fa-sign-out"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- maintaneance mode -->
+
+        <!-- page sections / menu -->
+        <div class="content">
+            <div id="sections_overlay">
+                <!--[if lt IE 9]>
+<style type="text/css">
+.tooltipBottom,
+.tooltipLeft,
+.tooltipTop,
+.tooltipTopDonate,
+.tooltip,
+.tooltipRightSubnets {
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e61d2429', endColorstr='#b3293339',GradientType=0 );
+}
+.tooltipBottom {
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e61d2429', endColorstr='#b3293339',GradientType=0 );
+}
+</style>
+<![endif]-->
+
+
+
+                <!-- Section nabvigation -->
+                <div class="navbar" id="menu">
+                    <nav class="navbar navbar-default" id="menu-navbar" role="navigation">
+
+                        <!-- Collapsed display for mobile -->
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                                data-target="#menu-collapse">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <span class="navbar-brand visible-xs">子网菜单</span>
+                        </div>
+
+                        <!-- menu -->
+                        <div class="collapse navbar-collapse" id="menu-collapse">
+
+                            <!-- sections -->
+                            <ul class="nav navbar-nav sections">
+
+                                <li class='first-item'> <a href='/index.php?page=dashboard'><i
+                                            class='fa fa-home'></i></a></li>
+                                <li class='first-item'> <a href='/index.php?page=subnets'><i
+                                            class='fa fa-angle-right'></i> 子网</a></li>
+                                <li class='active'> <a href='/index.php?page=subnets&section=1' rel='tooltip'
+                                        data-placement='bottom' title='IPv4地址管理'>IPv4</a></li>
+                                <li> <a href='/index.php?page=subnets&section=2' rel='tooltip' data-placement='bottom'
+                                        title='IPv6地址管理'>IPv6</a></li>
+                            </ul>
+                            <ul class='nav navbar-nav navbar-right'>
+                                <li class='dropdown administration'> <a class='dropdown-toggle btn-danger'
+                                        data-toggle='dropdown' href='/index.php?page=administration' id='admin'
+                                        rel='tooltip' data-placement='bottom' title='显示管理员菜单'><i class='fa fa-cog'></i>
+                                        管理 <b class='caret'></b></a>
+                                    <ul class='dropdown-menu admin'>
+                                        <li><a href='/index.php?page=administration'>显示所有设置</a></li>
+                                        <li class='divider'></li>
+                                        <li class='nav-header'>服务器管理</li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=settings'>phpIPAM设置</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=administration&section=users'>用户</a></li>
+                                        <li class=''><a href='/index.php?page=administration&section=groups'>组</a></li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=authentication-methods'>认证方法</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=administration&section=2fa'>双因素认证</a></li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=password-policy'>密码策略</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=administration&section=mail'>邮箱设置</a></li>
+                                        <li class=''><a href='/index.php?page=administration&section=api'>API</a></li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=scan-agents'>扫描代理</a></li>
+                                        <li class=''><a href='/index.php?page=administration&section=languages'>语言</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=administration&section=widgets'>窗口小部件</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=administration&section=tags'>标签</a></li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=instructions'>编辑说明</a></li>
+                                        <li class='nav-header'>IP相关管理</li>
+                                        <li class=''><a href='/index.php?page=administration&section=sections'>标签</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=administration&section=subnets'>子网</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=administration&section=vlans'>VLAN</a>
+                                        </li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=nameservers'>域名服务器</a></li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=import-export'>导入导出</a>
+                                        </li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=ripe-import'>RIPE输入</a>
+                                        </li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=filter-fields'>IP地址过滤</a>
+                                        </li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=required-fields'>申请IP字段</a>
+                                        </li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=custom-fields'>自定义字段</a>
+                                        </li>
+                                        <li class='nav-header'>设备管理</li>
+                                        <li class=''><a href='/index.php?page=administration&section=devices'>设备</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=administration&section=locations'>位置</a>
+                                        </li>
+                                        <li class='nav-header'>工具</li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=version-check'>版本检查</a>
+                                        </li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=verify-database'>验证数据库</a>
+                                        </li>
+                                        <li class=''><a
+                                                href='/index.php?page=administration&section=replace-fields'>替换字段</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <!-- Tools (for small menu) -->
+                            <ul class="nav navbar-nav visible-xs visible-sm navbar-right">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">工具 <b
+                                            class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href='/index.php?page=tools'>显示所有工具</a></li>
+                                        <li class='divider'></li>
+                                        <li class='nav-header'>子网</li>
+                                        <li class=''><a href='/index.php?page=tools&section=favourites'>网络收藏夹</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=subnets'>子网</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=vlan'>VLAN</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=scanned-networks'>扫描网络</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=tools&section=subnet-masks'>子网掩码</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=inactive-hosts'>非活动主机</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=tools&section=duplicates'>重复性检查</a></li>
+                                        <li class='nav-header'>设备</li>
+                                        <li class=''><a href='/index.php?page=tools&section=devices'>设备</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=locations'>位置</a></li>
+                                        <li class='nav-header'>工具</li>
+                                        <li class=''><a
+                                                href='/index.php?page=tools&section=documentation'>Documentation</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=tools&section=search'>搜索</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=ip-calculator'>IP地址计算器</a>
+                                        </li>
+                                        <li class=''><a
+                                                href='/index.php?page=tools&section=ip-calculator&subnetId=bw-calculator'>带宽计算器</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=tools&section=changelog'>更新日志</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=logs'>日志文件</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=instructions'>操作指南</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=mac-lookup'>MAC查找</a></li>
+                                        <li class='nav-header'>用户管理</li>
+                                        <li class=''><a href='/index.php?page=tools&section=user-menu'>我的账号</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+
+                            <!-- Tools -->
+                            <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm icon-ul">
+
+                                <!-- Dash lock/unlock -->
+
+                                <!-- masks -->
+                                <li>
+                                    <a href="" class="icon-li show-masks" rel='tooltip' data-placement='bottom'
+                                        title="子网掩码" data-closeClass="hidePopups"><i class='fa fa-th-large'></i></a>
+                                </li>
+
+                                <!-- Favourites -->
+                                <li class="">
+                                    <a href="/index.php?page=tools&section=favourites" class="icon-li" rel='tooltip'
+                                        data-placement='bottom' title="网络收藏夹"><i class='fa fa-star-o'></i></a>
+                                </li>
+
+                                <!-- instructions -->
+                                <li class="">
+                                    <a href="/index.php?page=tools&section=instructions" class="icon-li" rel='tooltip'
+                                        data-placement='bottom' title="显示IP地址向导"><i class='fa fa-info'></i></a>
+                                </li>
+
+                                <!-- tools -->
+                                <li class="tools dropdown ">
+                                    <a class="dropdown-toggle icon-li" data-toggle="dropdown" href="" rel='tooltip'
+                                        data-placement='bottom' title='显示工具菜单'><i class="fa fa-wrench"></i></a>
+                                    <ul class="dropdown-menu admin tools_dropdown">
+                                        <!-- public -->
+                                        <li class="nav-header">可用的IPAM工具 </li>
+                                        <!-- private -->
+                                        <li><a href='/index.php?page=tools'>显示所有工具</a></li>
+                                        <li class='divider'></li>
+                                        <li class='nav-header'>子网</li>
+                                        <li class=''><a href='/index.php?page=tools&section=favourites'>网络收藏夹</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=subnets'>子网</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=vlan'>VLAN</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=scanned-networks'>扫描网络</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=tools&section=subnet-masks'>子网掩码</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=inactive-hosts'>非活动主机</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=tools&section=duplicates'>重复性检查</a></li>
+                                        <li class='nav-header'>设备</li>
+                                        <li class=''><a href='/index.php?page=tools&section=devices'>设备</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=locations'>位置</a></li>
+                                        <li class='nav-header'>工具</li>
+                                        <li class=''><a
+                                                href='/index.php?page=tools&section=documentation'>Documentation</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=tools&section=search'>搜索</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=ip-calculator'>IP地址计算器</a>
+                                        </li>
+                                        <li class=''><a
+                                                href='/index.php?page=tools&section=ip-calculator&subnetId=bw-calculator'>带宽计算器</a>
+                                        </li>
+                                        <li class=''><a href='/index.php?page=tools&section=changelog'>更新日志</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=logs'>日志文件</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=instructions'>操作指南</a></li>
+                                        <li class=''><a href='/index.php?page=tools&section=mac-lookup'>MAC查找</a></li>
+                                        <li class='nav-header'>用户管理</li>
+                                        <li class=''><a href='/index.php?page=tools&section=user-menu'>我的账号</a></li>
+                                    </ul>
+                                </li>
+
+                                <!-- DB verification -->
+
+
+                            </ul>
+                        </div> <!-- end menu div -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- content -->
+        <div class="content_overlay">
+            <div class="container-fluid" id="mainContainer">
+                <table id='subnetsMenu'>
+                    <tr>
+                        <td id='subnetsLeft'>
+                            <div id='leftMenu' class='menu-folder'>
+                                <h4>可用的VLAN号 <span class='pull-right' style='margin-right:5px;cursor:pointer;'><i
+                                            class='fa fa-gray fa-sm fa-expand' rel='tooltip' data-placement='bottom'
+                                            title='展开/折叠所有文件夹' id='expandfolders' data-action='close'></i></span></h4>
+                                <hr>
+                                <ul id="subnets">
+                                    <li class="folderF folder-open "><i data-str_id="65"
+                                            class="fa fa-gray fa-folder fa-folder-open" rel="tooltip"
+                                            data-placement="right" data-html="true"
+                                            title="文件夹内包含更多子网<br>点击文件夹来打开/关闭"></i>
+                                        <a href="/index.php?page=folder&section=1&subnetId=65">XXX主数据中心</a>
+                                        <ul class="submenu submenu-open">
+                                            <li class="folderF folder-close "><i data-str_id="21"
+                                                    class="fa fa-gray fa-folder fa-folder" rel="tooltip"
+                                                    data-placement="right" data-html="true"
+                                                    title="文件夹内包含更多子网<br>点击文件夹来打开/关闭"></i>
+                                                <a href="/index.php?page=folder&section=1&subnetId=21">XXX主数据中心测试网</a>
+                                                <ul class="submenu submenu-close" style="display:none">
+                                                    <li class="leaf "><i data-str_id="40"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=40"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="172.18.240.0/24">172.18.240.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="24"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=24"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="172.18.243.0/24">172.18.243.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="25"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=25"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="172.18.244.0/24">172.18.244.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="22"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=22"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="172.18.245.0/24">172.18.245.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="23"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=23"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="172.18.246.0/24">172.18.246.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="26"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=26"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="172.18.247.0/24">172.18.247.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="27"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=27"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="172.18.248.0/24">172.18.248.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="28"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=28"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="172.18.249.0/24">172.18.249.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="29"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=29"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="172.18.250.0/24">172.18.250.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="30"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=30"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="172.18.251.0/24">172.18.251.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="31"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=31"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="172.18.252.0/24">172.18.252.0/24</a>
+                                                    </li>
+                                                </ul>
+                                                </ui>
+                                            <li class="folderF folder-open active"><i data-str_id="7"
+                                                    class="fa fa-gray fa-folder fa-folder-open" rel="tooltip"
+                                                    data-placement="right" data-html="true"
+                                                    title="文件夹内包含更多子网<br>点击文件夹来打开/关闭"></i>
+                                                <a href="/index.php?page=folder&section=1&subnetId=7">XXX主数据中心生产网</a>
+                                                <ul class="submenu submenu-open">
+                                                    <li class="leaf "><i data-str_id="9"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=9"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.1.2.0/24">192.1.2.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="10"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=10"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.1.3.0/24">192.1.3.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="11"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=11"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.1.4.0/24">192.1.4.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="41"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=41"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.1.5.0/24">192.1.5.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="42"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=42"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.1.6.0/24">192.1.6.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="43"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=43"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.1.7.0/24">192.1.7.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="44"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=44"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.1.8.0/24">192.1.8.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="45"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=45"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.1.9.0/24">192.1.9.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="46"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=46"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.1.10.0/24">192.1.10.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="47"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=47"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.1.11.0/24">192.1.11.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="58"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=58"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.16.1.0/24">192.16.1.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="57"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=57"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.18.5.0/24">192.18.5.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="49"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=49"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.100.2.0/24">192.100.2.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="50"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=50"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.100.4.0/24">192.100.4.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="51"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=51"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.100.5.0/24">192.100.5.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="52"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=52"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.100.8.0/24">192.100.8.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="53"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=53"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.100.12.0/24">192.100.12.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="54"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=54"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.100.16.0/24">192.100.16.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="55"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=55"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.100.17.0/24">192.100.17.0/24</a>
+                                                    </li>
+                                                    <li class="leaf "><i data-str_id="56"
+                                                            class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                        <a href="/index.php?page=subnets&section=1&subnetId=56"
+                                                            rel="tooltip" data-placement="right"
+                                                            title="192.100.23.0/24">192.100.23.0/24</a>
+                                                    </li>
+                                                </ul>
+                                                </ui>
+                                        </ul>
+                                        </ui>
+                                    <li class="folderF folder-close "><i data-str_id="34"
+                                            class="fa fa-gray fa-folder fa-folder" rel="tooltip" data-placement="right"
+                                            data-html="true" title="文件夹内包含更多子网<br>点击文件夹来打开/关闭"></i>
+                                        <a href="/index.php?page=folder&section=1&subnetId=34">XXX灾备数据中心</a>
+                                        <ul class="submenu submenu-close" style="display:none">
+                                            <li class="leaf "><i data-str_id="35"
+                                                    class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                <a href="/index.php?page=subnets&section=1&subnetId=35" rel="tooltip"
+                                                    data-placement="right" title="172.20.9.0/24">172.20.9.0/24</a>
+                                            </li>
+                                            <li class="leaf "><i data-str_id="36"
+                                                    class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                <a href="/index.php?page=subnets&section=1&subnetId=36" rel="tooltip"
+                                                    data-placement="right" title="172.20.10.0/24">172.20.10.0/24</a>
+                                            </li>
+                                        </ul>
+                                        </ui>
+                                    <li class="folderF folder-close "><i data-str_id="63"
+                                            class="fa fa-gray fa-folder fa-folder" rel="tooltip" data-placement="right"
+                                            data-html="true" title="文件夹内包含更多子网<br>点击文件夹来打开/关闭"></i>
+                                        <a href="/index.php?page=folder&section=1&subnetId=63">XXX灾备数据中心</a>
+                                        <ul class="submenu submenu-close" style="display:none">
+                                            <li class="leaf "><i data-str_id="61"
+                                                    class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                <a href="/index.php?page=subnets&section=1&subnetId=61" rel="tooltip"
+                                                    data-placement="right" title="193.1.3.0/24">193.1.3.0/24</a>
+                                            </li>
+                                            <li class="leaf "><i data-str_id="59"
+                                                    class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                <a href="/index.php?page=subnets&section=1&subnetId=59" rel="tooltip"
+                                                    data-placement="right" title="193.18.5.0/24">193.18.5.0/24</a>
+                                            </li>
+                                            <li class="leaf "><i data-str_id="62"
+                                                    class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                <a href="/index.php?page=subnets&section=1&subnetId=62" rel="tooltip"
+                                                    data-placement="right" title="193.100.16.0/24">193.100.16.0/24</a>
+                                            </li>
+                                            <li class="leaf "><i data-str_id="66"
+                                                    class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                <a href="/index.php?page=subnets&section=1&subnetId=66" rel="tooltip"
+                                                    data-placement="right" title="193.100.17.0/24">193.100.17.0/24</a>
+                                            </li>
+                                            <li class="leaf "><i data-str_id="67"
+                                                    class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                <a href="/index.php?page=subnets&section=1&subnetId=67" rel="tooltip"
+                                                    data-placement="right" title="193.100.23.0/24">193.100.23.0/24</a>
+                                            </li>
+                                        </ul>
+                                        </ui>
+                                    <li class="folderF folder-close "><i data-str_id="68"
+                                            class="fa fa-gray fa-folder fa-folder" rel="tooltip" data-placement="right"
+                                            data-html="true" title="文件夹内包含更多子网<br>点击文件夹来打开/关闭"></i>
+                                        <a href="/index.php?page=folder&section=1&subnetId=68">办公网段</a>
+                                        <ul class="submenu submenu-close" style="display:none">
+                                            <li class="leaf "><i data-str_id="33"
+                                                    class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                <a href="/index.php?page=subnets&section=1&subnetId=33" rel="tooltip"
+                                                    data-placement="right" title="172.16.253.0/24">172.16.253.0/24</a>
+                                            </li>
+                                            <li class="leaf "><i data-str_id="32"
+                                                    class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                <a href="/index.php?page=subnets&section=1&subnetId=32" rel="tooltip"
+                                                    data-placement="right" title="172.18.253.0/24">172.18.253.0/24</a>
+                                            </li>
+                                            <li class="leaf "><i data-str_id="60"
+                                                    class="icon-gray fa fa-gray fa-angle-right"></i>
+                                                <a href="/index.php?page=subnets&section=1&subnetId=60" rel="tooltip"
+                                                    data-placement="right" title="192.19.1.0/24">192.19.1.0/24</a>
+                                            </li>
+                                        </ul>
+                                </ul>
+                                </ui>
+                                <div class='action'> <button class='btn btn-xs btn-default pull-left' id='hideSubnets'
+                                        rel='tooltip' title='隐藏子网列表' data-placement='right'><i
+                                            class='fa fa-gray fa-sm fa-chevron-left'></i></button> <span>
+                                        <div class='btn-group'> <button id='add_subnet'
+                                                class='btn btn-xs btn-default btn-success' rel='tooltip'
+                                                data-container='body' data-placement='top' title='添加新的子网到 IPv4'
+                                                data-subnetId='' data-sectionId='1' data-action='add'><i
+                                                    class='fa fa-sm fa-plus'></i></button> <button
+                                                class='btn btn-xs btn-default btn-success open_popup'
+                                                data-script='app/admin/subnets/find_free_section_subnets.php'
+                                                data-csrf_cookie='zNcBHShjhmcMG3f2D-MKfnRSHbCd6w63' data-class='700'
+                                                rel='tooltip' data-container='body' data-placement='top'
+                                                title='Search for free subnets in section  IPv4' data-sectionId='1'><i
+                                                    class='fa fa-sm fa-search'></i></button> <button id='add_folder'
+                                                class='btn btn-xs btn-default btn-success' rel='tooltip'
+                                                data-container='body' data-placement='top' title='添加新的文件夹到 IPv4'
+                                                data-subnetId='' data-sectionId='1' data-action='add'><i
+                                                    class='fa fa-sm fa-folder'></i></button> </div>
+                                    </span></div>
+                            </div>
+                        </td>
+                        <td id='subnetsContent'>
+                            <div class='row menu-folder' id='content'>
+                                <div class='subnetDetails'><!-- folder details upper table -->
+                                    <h4>文件夹详细信息</h4>
+                                    <hr>
+
+
+                                    <ul class="nav nav-tabs">
+                                        <li role='presentation' class='active'><a
+                                                href=/index.php?page=folder&section=1&subnetId=7&sPage=details>Folder
+                                                details</a></li>
+                                        <li role='presentation'><a
+                                                href=/index.php?page=folder&section=1&subnetId=7&sPage=map>Space map</a>
+                                        </li>
+                                        <li role='presentation'><a
+                                                href=/index.php?page=folder&section=1&subnetId=7&sPage=mapsearch>Mask
+                                                search</a></li>
+                                    </ul>
+                                    <table class="ipaddress_subnet table-condensed table-auto" style='margin-top:20px;'>
+
+                                        <tr>
+                                            <th>分层</th>
+                                            <td>
+                                                <ul class='breadcrumb'>
+                                                    <li><a href='/index.php?page=subnets&section=1'>IPv4</a> <span
+                                                            class='divider'></span></li>
+                                                    <li>XXX主数据中心生产网</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>文件夹名称</th>
+                                            <td>XXX主数据中心生产网</td>
+                                        </tr>
+                                        <tr>
+                                            <th>许可</th>
+                                            <td>管理</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan='2'>
+                                                <hr>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>动作</th>
+                                            <td class='actions'>
+                                                <div class='btn-toolbar'>
+                                                    <div class='btn-group'><a class='add_folder btn btn-xs btn-default'
+                                                            href='' rel='tooltip' data-container='body' title='编辑文件夹'
+                                                            data-action='edit' data-subnetId='7' data-sectionId='1'><i
+                                                                class='fa fa-pencil'></i></a><a
+                                                            class='showSubnetPerm btn btn-xs btn-default' href=''
+                                                            rel='tooltip' data-container='body' title='管理文件夹权限'
+                                                            data-subnetId='7' data-sectionId='1' data-action='show'> <i
+                                                                class='fa fa-tasks'></i></a><a
+                                                            class='edit_subnet btn btn-xs btn-default ' href=''
+                                                            data-container='body' rel='tooltip' title='添加下一级子网'
+                                                            data-subnetId='7' data-action='add' data-id=''
+                                                            data-sectionId='1'> <i class='fa fa-plus-circle'></i></a> <a
+                                                            class='add_folder btn btn-xs btn-default ' href=''
+                                                            rel='tooltip' data-container='body' title='添加下一级文件夹'
+                                                            data-subnetId='7' data-action='add' data-id=''
+                                                            data-sectionId='1'> <i class='fa fa-folder-close-o'></i></a>
+                                                    </div>
+                                                    <div class='btn-group'><a
+                                                            class='modIPaddr btn btn-xs btn-default btn-success' href=''
+                                                            data-container='body' rel='tooltip' title='添加新的IP地址'
+                                                            data-subnetId='7' data-action='add' data-id=''> <i
+                                                                class='fa fa-plus'></i></a> </div>
+                                                    <div class='btn-group'><a class='csvImport btn btn-xs btn-default'
+                                                            href='' data-container='body' rel='tooltip' title='导入IP地址'
+                                                            data-subnetId='7'> <i class='fa fa-download'></i></a><a
+                                                            class='csvExport btn btn-xs btn-default' href=''
+                                                            data-container='body' rel='tooltip' title='导出IP地址'
+                                                            data-subnetId='7'> <i class='fa fa-upload'></i></a></div>
+                                                    <div class='btn-group'><a
+                                                            class='btn btn-xs btn-default editFavourite favourite-7'
+                                                            href='' data-container='body' rel='tooltip' title='点击加入收藏夹'
+                                                            data-subnetId='7' data-action='add'> <i
+                                                                class='fa fa-star fa-star-o'></i></a> <a
+                                                            class='sChangelog btn btn-xs btn-default'
+                                                            href='/index.php?page=subnets&section=1&subnetId=7&sPage=changelog'
+                                                            data-container='body' rel='tooltip' title='更新日志'><i
+                                                                class='fa fa-clock-o'></i></a></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table> <!-- end subnet table -->
+                                    <br>
+                                    <div class="ipaddresses_overlay">
+                                        <script>
+                                            /* fix for ajax-loading tooltips */
+                                            $('body').tooltip({ selector: '[rel=tooltip]' });
+                                        </script>
+                                        <h4>文件夹 XXX主数据中心生产网 有 20 个直接从属子网:</h4>
+                                        <hr><br>
+                                        <table
+                                            class="slaves table sorted table-striped table-condensed table-hover table-full table-top"
+                                            data-cookie-id-table="folder_subnets_sorted">
+                                            <thead>
+                                                <tr>
+                                                    <th class='small'>VLAN</th>
+                                                    <th>子网</th>
+                                                    <th class='small description'>子网描述</th>
+                                                    <th class='small hidden-xs hidden-sm'>已使用</th>
+                                                    <th class='small hidden-xs hidden-sm'>% 空余</th>
+                                                    <th class='small hidden-xs hidden-sm'>申请</th>
+                                                    <th class='actions'></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=9'>192.1.2.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=9'>192.1.2.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">113/254</td>
+                                                    <td class="small hidden-xs hidden-sm">55.51</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='9'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default btn-info editFavourite favourite-9'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击从收藏夹内移除' data-subnetId='9'
+                                                                data-action='remove'><i
+                                                                    class='fa fa-star></i></a>		<button class=' btn
+                                                                    btn-xs btn-default showSubnetPerm'
+                                                                    data-action='show' data-subnetid='9'
+                                                                    data-sectionid='1'><i
+                                                                        class='fa fa-gray fa fa-tasks'></i></button>
+                                                                    <button class='btn btn-xs btn-default editSubnet'
+                                                                        data-action='delete' data-subnetid='9'
+                                                                        data-sectionid='1'><i
+                                                                            class='fa fa-gray fa fa-times'></i></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=10'>192.1.3.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=10'>192.1.3.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">241/254</td>
+                                                    <td class="small hidden-xs hidden-sm">5.12</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='10'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-10'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='10' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='10'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='10'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=11'>192.1.4.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=11'>192.1.4.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">179/254</td>
+                                                    <td class="small hidden-xs hidden-sm">29.53</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='11'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-11'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='11' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='11'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='11'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=41'>192.1.5.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=41'>192.1.5.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">15/254</td>
+                                                    <td class="small hidden-xs hidden-sm">94.09</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='41'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-41'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='41' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='41'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='41'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=42'>192.1.6.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=42'>192.1.6.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">209/254</td>
+                                                    <td class="small hidden-xs hidden-sm">17.72</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='42'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-42'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='42' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='42'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='42'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=43'>192.1.7.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=43'>192.1.7.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">155/254</td>
+                                                    <td class="small hidden-xs hidden-sm">38.98</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='43'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-43'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='43' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='43'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='43'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=44'>192.1.8.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=44'>192.1.8.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">129/254</td>
+                                                    <td class="small hidden-xs hidden-sm">49.21</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='44'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-44'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='44' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='44'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='44'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=45'>192.1.9.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=45'>192.1.9.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">173/254</td>
+                                                    <td class="small hidden-xs hidden-sm">31.89</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='45'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-45'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='45' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='45'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='45'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=46'>192.1.10.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=46'>192.1.10.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">5/254</td>
+                                                    <td class="small hidden-xs hidden-sm">98.03</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='46'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-46'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='46' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='46'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='46'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=47'>192.1.11.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=47'>192.1.11.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">9/254</td>
+                                                    <td class="small hidden-xs hidden-sm">96.46</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='47'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-47'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='47' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='47'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='47'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=58'>192.16.1.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=58'>为新规划服务器区网段，可用地址范围192.16.1.20-239，VlanID为1000，网关192.16.1.1。</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">79/254</td>
+                                                    <td class="small hidden-xs hidden-sm">68.9</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='58'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-58'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='58' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='58'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='58'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=57'>192.18.5.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=57'>新呼叫中心网段</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">83/254</td>
+                                                    <td class="small hidden-xs hidden-sm">67.32</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='57'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-57'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='57' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='57'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='57'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=49'>192.100.2.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=49'>192.100.2.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">5/254</td>
+                                                    <td class="small hidden-xs hidden-sm">98.03</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='49'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-49'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='49' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='49'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='49'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=50'>192.100.4.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=50'>192.100.4.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">47/254</td>
+                                                    <td class="small hidden-xs hidden-sm">81.5</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='50'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-50'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='50' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='50'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='50'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=51'>192.100.5.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=51'>192.100.5.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">116/254</td>
+                                                    <td class="small hidden-xs hidden-sm">54.33</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='51'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-51'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='51' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='51'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='51'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=52'>192.100.8.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=52'>192.100.8.0/24</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">29/254</td>
+                                                    <td class="small hidden-xs hidden-sm">88.58</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='52'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-52'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='52' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='52'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='52'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=53'>192.100.12.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=53'>新运维网</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">100/254</td>
+                                                    <td class="small hidden-xs hidden-sm">60.63</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='53'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-53'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='53' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='53'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='53'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=54'>192.100.16.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=54'>ESXi管理地址及存储仲裁</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">84/254</td>
+                                                    <td class="small hidden-xs hidden-sm">66.93</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='54'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-54'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='54' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='54'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='54'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=55'>192.100.17.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=55'>ESXi管理地址及存储管理</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">84/254</td>
+                                                    <td class="small hidden-xs hidden-sm">66.93</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='55'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-55'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='55' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='55'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='55'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class='small'>/</td>
+                                                    <td><a href='/index.php?page=subnets&section=1&subnetId=56'>192.100.23.0/24
+                                                        </a></td>
+                                                    <td class='small description'><a
+                                                            href='/index.php?page=subnets&section=1&subnetId=56'>存储之间数据复制专用网段，华为存储、SVC以及netapp</a>
+                                                    </td>
+                                                    <td class="small hidden-xs hidden-sm">14/254</td>
+                                                    <td class="small hidden-xs hidden-sm">94.49</td>
+                                                    <td class="allowRequests small hidden-xs hidden-sm"></td>
+                                                    <td class='actions'>
+                                                        <div class='btn-group'> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='edit' data-subnetid='56'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-pencil'></i></button> <a
+                                                                class='btn btn-xs btn-default editFavourite favourite-56'
+                                                                href='' data-container='body' rel='tooltip'
+                                                                title='点击加入收藏夹' data-subnetId='56' data-action='add'><i
+                                                                    class='fa fa-star fa-star-o'></i></a> <button
+                                                                class='btn btn-xs btn-default showSubnetPerm'
+                                                                data-action='show' data-subnetid='56'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-tasks'></i></button> <button
+                                                                class='btn btn-xs btn-default editSubnet'
+                                                                data-action='delete' data-subnetid='56'
+                                                                data-sectionid='1'><i
+                                                                    class='fa fa-gray fa fa-times'></i></button> </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Base for IE -->
+        <div class="iebase hidden">/</div>
+
+        <!-- pusher -->
+        <div class="pusher"></div>
+
+        <!-- end wrapper -->
+    </div>
+
+    <!-- weather prettyLinks are user, for JS! -->
+    <div id="prettyLinks" style="display:none">No</div>
+
+    <!-- Page footer -->
+    <div class="footer">
+        <table class="donate">
+            <tr>
+                <td>
+                    <a href="http://phpipam.net">phpIPAM IP address management [v1.5.3]</a>
+                </td>
+
+                <td>
+                    如果有问题请联系 <a href="mailto:admin@domain.local">Sysadmin</a> </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- export div -->
+    <div class="exportDIV"></div>
+
+
+    <!-- end body -->
+</body>
+
+</html>

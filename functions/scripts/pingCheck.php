@@ -28,7 +28,7 @@
  *      2 = offline
  *
  */
-
+$TEST_PATTERN="^172";
 # include required scripts
 require_once(dirname(__FILE__) . '/../functions.php');
 require(dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
@@ -120,7 +120,7 @@ foreach ($scan_subnets as $s) {
 
     foreach ($subnet_addresses as $a) {
         //ignore excludePing
-        if ($a->excludePing != 1) {
+        if ($a->excludePing != 1 && preg_match($TEST_PATTERN,$a->ip_addr)) {//不排除且是测试网段
             //create different array for fping
             if ($Scan->icmp_type == "fping") {
                 $addresses2[$s->id][$a->id] = array(
