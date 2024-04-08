@@ -278,8 +278,14 @@ else {
 						 $hStatus = "neutral"; 	
 						 $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address is offline")."<hr>"._("Last seen").": "._("Never")."'";
 						}
-				    elseif($tDiff < $statuses[0])	{ 
-						$hStatus = "success";	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address is alive")."<hr>"._("Last seen").": ".$addresses[$n]->lastSeen."'"; }
+				    elseif($tDiff < $statuses[0])	{
+						if($addresses[$n]->hostname == "" &&$addresses[$n]->app_name =="" &&$addresses[$n]->owner==""&&$addresses[$n]->description=="") {
+							$hStatus = "no-owner";	
+							$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("IP address")._("Online").","._("No Owner")."<hr>"._("Last seen").": ".$addresses[$n]->lastSeen."'";
+						}else{
+						$hStatus = "success";	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address is alive")."<hr>"._("Last seen").": ".$addresses[$n]->lastSeen."'";
+					}
+				}
 				    elseif($tDiff < $statuses[1])	{ $hStatus = "warning"; $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address warning")."<hr>"._("Last seen").": ".$addresses[$n]->lastSeen."'"; }
 				    elseif($tDiff > $statuses[1])	{ 
 						$hStatus = "error"; 	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address is offline")."<hr>"._("Last seen").": ".$addresses[$n]->lastSeen."'";}

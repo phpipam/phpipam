@@ -1529,6 +1529,9 @@ span.status-hidden {
 .status-neutral {
 	background: white;
 }
+.status-no-owner {
+	background: rgb(227, 17, 234);
+}
 .status-success {
 	background: #A9C9A4;
 	border-radius: 50%;
