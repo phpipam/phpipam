@@ -28,7 +28,7 @@ if (!$User->is_admin(false)) {
 }
 elseif (empty($duplicate_subnets)) {
     print "<blockquote style='margin-top:20px;margin-left:20px;'>";
-    print "<p>"._("No duplicate subnets found")."</p>";
+    print "<p>"._("No duplicated subnets found")."</p>";
     print "</blockquote>";
 }
 else {
@@ -104,14 +104,14 @@ else {
 }
 
 
-print "<h4>"._('Duplicated hosts')."</h4>";
+print "<h4>"._('Duplicated addresses')."</h4>";
 
 if (!$User->is_admin(false)) {
     $Result->show("info", _("Administrative privileges required"));
 }
 elseif (empty($duplicate_address)) {
     print "<blockquote style='margin-top:20px;margin-left:20px;'>";
-    print "<p>"._("No duplicate addresses found")."</p>";
+    print "<p>"._("No duplicated addresses found")."</p>";
     print "</blockquote>";
 }
 else {
