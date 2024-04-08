@@ -38,7 +38,7 @@ if($_POST['action']=="add") {
     //false die
     $group!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
-	$title = ucwords($_POST['action']) .' '._('group').' '.$group['g_name'];
+	$title = _(ucwords($_POST['action'])) .' '._('group').' '.$group['g_name'];
 }
 ?>
 

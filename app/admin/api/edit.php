@@ -32,7 +32,7 @@ if($_POST['action']!="add") {
 	# null ?
 	$api===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 	# title
-	$title =  ucwords($_POST['action']) .' '._('api').' '.$api->app_id;
+	$title =  _(ucwords($_POST['action'])) .' '._('api').' '.$api->app_id;
 } else {
 	# generate new code
 	$api = new StdClass;

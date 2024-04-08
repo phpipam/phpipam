@@ -71,7 +71,7 @@ $(document).ready(function(){
 
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords($_POST['action'])." "._('user'); ?></div>
+<div class="pHeader"><?php print _(ucwords($_POST['action']))." "._('user'); ?></div>
 
 
 <!-- content -->
@@ -110,8 +110,8 @@ $(document).ready(function(){
     	<td><?php print _('Status'); ?></td>
     	<td>
         <select name="disabled" class="form-control input-sm input-w-auto">
-            <option value="Yes" <?php if (@$user['disabled'] == "Yes") print "selected"; ?>><?php print _('Disabled'); ?></option>
-            <option value="No" 	<?php if (@$user['disabled'] == "No" || $_POST['action'] == "add") print "selected"; ?>><?php print _('Enabled'); ?></option>
+            <option value="Yes" <?php if (@$user['disabled'] == "Yes") print "selected"; ?>><?php print _('disabled'); ?></option>
+            <option value="No" 	<?php if (@$user['disabled'] == "No" || $_POST['action'] == "add") print "selected"; ?>><?php print _('enabled'); ?></option>
         </select>
 
         </td>
