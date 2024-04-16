@@ -3,6 +3,8 @@
     New features:
     ------------
     + Added support for passkeys / passwordless logins;
+    + API:
+        + Added API changelog;
 
     Bugfixes:
     ----------------------------

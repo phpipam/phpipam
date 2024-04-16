@@ -233,6 +233,11 @@ class Addresses_controller extends Common_api_functions  {
 				if($result['exit_code']==0) 			{ $Scan->ping_update_lastseen ($this->_params->id); }
 				return array("code"=>200, "data"=>$result);
 			}
+			// changelog
+			elseif ($this->_params->id2=="changelog")   {
+				return array("code"=>200, "data"=>$this->address_changelog ());
+			}
+			// default
 			else {
 				// fetch
 				$result = $this->Addresses->fetch_address ("id", $this->_params->id);
@@ -612,5 +617,40 @@ class Addresses_controller extends Common_api_functions  {
 		} else {
 			$this->_params->state = 2;
 		}
+	}
+
+	/**
+	 * Get changelog for subnet
+	 * @method subnet_changelog
+	 * @return [type]
+	 */
+	private function address_changelog () {
+		// Check for id
+		$this->validate_address_id ();
+		// get changelog
+		$Log = new Logging ($this->Database);
+		$clogs = $Log->fetch_changlog_entries("ip_addr", $this->_params->id, true);
+		// reformat
+		$clogs_formatted = [];
+		// loop
+		if (is_array($clogs)) {
+			if (sizeof($clogs)>0) {
+				foreach ($clogs as $l) {
+					// diff to array
+					$l->cdiff = explode("\r\n", str_replace(["[","]"], "", trim($l->cdiff)));
+					// save
+					$clogs_formatted[] = [
+						"user"   => $l->real_name,
+						"action" => $l->caction,
+						"result" => $l->cresult,
+						"date"   => $l->cdate,
+						"diff"   => $l->cdiff,
+					];
+				}
+			}
+		}
+		// result
+		if(sizeof($clogs_formatted)>0) 	{ return $clogs_formatted; }
+		else 							{ $this->Response->throw_exception(404, "No changelogs found"); }
 	}
 }
