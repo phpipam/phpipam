@@ -3164,7 +3164,9 @@ class Subnets extends Common_functions {
 			$subnetsTree->walk(false);
 		}
 
-		$menu = new SubnetsMenu($this, @$_COOKIE['sstr'], @$_COOKIE['expandfolders'], @$_GET['subnetId']);
+		$cookie = new Params($_COOKIE);
+		$get    = new Params($_GET);
+		$menu = new SubnetsMenu($this, $cookie->sstr, $cookie->expandfolders, $get->subnetId);
 		$menu->subnetsTree($subnetsTree);
 
 		return $menu->html();
