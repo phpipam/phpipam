@@ -23,6 +23,7 @@
     Security Fixes:
     ----------------------------
     + Upgraded jQuery to 3.7.1;
+    + Cookies set without Secure attribute;
 
 == 1.6.0
 

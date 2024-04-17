@@ -224,7 +224,7 @@ class User extends Common_functions {
         $session_use_cookies  = ini_get('session.use_cookies');
 
         if ($session_use_cookies && is_string($session_id) && !is_blank($session_id))
-            setcookie_samesite($session_name, $session_id, $session_lifetime, true);
+            setcookie_samesite($session_name, $session_id, $session_lifetime, true, $this->isHttps());
     }
 
     /**
@@ -527,7 +527,7 @@ class User extends Common_functions {
             return;
         }
 
-        setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 120, true);
+        setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 120, true, $this->isHttps());
     }
 
     /**
