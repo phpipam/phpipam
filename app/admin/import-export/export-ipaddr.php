@@ -255,7 +255,7 @@ if($all_sections!==false) {
 
 					if( (isset($_GET['location'])) && ($_GET['location'] == "on") ) {
 						//change location to name
-						$ip['location'] = is_null($ip['location'])||is_blank($ip['location'])||$ip['location']==0 ? "" : $locations_indexed[$ip['switch']]->hostname;
+						$ip['location'] = is_null($ip['location'])||is_blank($ip['location'])||$ip['location']==0 ? "" : $locations_indexed[$ip['switch']]->name;
 						$worksheet->write($curRow, $curColumn, $ip['location'], $format_text);
 						$curColumn++;
 					}
