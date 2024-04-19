@@ -24,4 +24,4 @@ if (is_blank($customer->long) && is_blank($customer->lat) && !is_blank($customer
 }
 
 $OSM->add_customer($customer);
-$OSM->map($height);
+$OSM->map();
