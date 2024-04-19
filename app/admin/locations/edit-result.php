@@ -53,7 +53,7 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
         if(is_blank($_POST['lat']) && is_blank($_POST['long']) && !is_blank($_POST['address'])) {
             $OSM = new OpenStreetMap($Database);
             $latlng = $OSM->get_latlng_from_address ($_POST['address']);
-            if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
+            if(isset($latlng['lat']) && isset($latlng['lng'])) {
                 $_POST['lat'] = $latlng['lat'];
                 $_POST['long'] = $latlng['lng'];
             }

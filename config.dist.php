@@ -162,7 +162,12 @@ $proxy_user     = 'USERNAME';                             // Proxy Username
 $proxy_pass     = 'PASSWORD';                             // Proxy Password
 $proxy_use_auth = false;                                  // Enable/Disable Proxy authentication
 
-$offline_mode   = false;                                  // Offline mode, disable server-side Internet requests (proxy/OpenStreetMap)
+$offline_mode   = false;                                  // Offline mode, disable all server-side Internet requests (proxy/OpenStreetMap)
+
+/**
+ * OpenStreetMap
+ ****************************/
+$disable_geoip_lookups = false;                           // Disable address geoip lookups
 
 /**
  * Failed access

@@ -598,7 +598,7 @@ class Tools_controller extends Common_api_functions {
 		if((is_blank(@$this->_params->lat) || is_blank(@$this->_params->long)) && !is_blank(@$this->_params->address)) {
             $OSM = new OpenStreetMap($this->Database);
             $latlng = $OSM->get_latlng_from_address ($this->_params->address);
-            if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
+            if(isset($latlng['lat']) && isset($latlng['lng'])) {
                 $this->_params->lat  = $latlng['lat'];
                 $this->_params->long = $latlng['lng'];
             }

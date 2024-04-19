@@ -13,11 +13,12 @@ $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
+$Params		= new Params ($Admin->strip_input_tags($_POST));
 
 // verify that user is logged in
 $User->check_user_session();
 // verify module permissions
-if($_POST['action']=="edit") {
+if($Params->action=="edit") {
 	$User->check_module_permissions ("customers", User::ACCESS_RW, true, false);
 }
 else {
@@ -28,11 +29,9 @@ else {
 $User->check_maintaneance_mode ();
 
 // validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "customer", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "customer", $Params->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 // validate action
-$Admin->validate_action ($_POST['action'], true);
-// get modified details
-$customer = $Admin->strip_input_tags($_POST);
+$Admin->validate_action ($Params->action, true);
 
 
 /**
@@ -40,17 +39,17 @@ $customer = $Admin->strip_input_tags($_POST);
  */
 
 // IDs must be numeric
-if($customer['action']!="add" && !is_numeric($customer['id']))					{ $Result->show("danger", _("Invalid ID"), true); }
+if($Params->action!="add" && !is_numeric($Params->id))					{ $Result->show("danger", _("Invalid ID"), true); }
 
 // add / edit validations
-if ($customer['action']!="delete") {
+if ($Params->action!="delete") {
 	// check strings
-	if(strlen($_POST['title'])<3)		{ $Result->show("danger", _("Invalid Title"), true); }
-	if(strlen($_POST['address'])<3)		{ $Result->show("danger", _("Invalid Address"), true); }
-	if(strlen($_POST['city'])<3)		{ $Result->show("danger", _("Invalid City"), true); }
-	if(strlen($_POST['state'])<3)		{ $Result->show("danger", _("Invalid State"), true); }
+	if(strlen($Params->title)<3)		{ $Result->show("danger", _("Invalid Title"), true); }
+	if(strlen($Params->address)<3)		{ $Result->show("danger", _("Invalid Address"), true); }
+	if(strlen($Params->city)<3)			{ $Result->show("danger", _("Invalid City"), true); }
+	if(strlen($Params->state)<3)		{ $Result->show("danger", _("Invalid State"), true); }
 	// validate postcode
-	if(!$Tools->validate_postcode ($_POST['postcode'], $_POST['state'])) { $Result->show("danger", _("Invalid Postcode"), true); }
+	if(!$Tools->validate_postcode ($Params->postcode, $Params->state)) { $Result->show("danger", _("Invalid Postcode"), true); }
 }
 
 // fetch custom fields
@@ -77,16 +76,16 @@ if(sizeof($custom) > 0) {
 
 // set update values
 $values = array(
-				"id"             => $customer["id"],
-				"title"          => $customer["title"],
-				"address"        => $customer["address"],
-				"postcode"       => $customer["postcode"],
-				"city"           => $customer["city"],
-				"state"          => $customer["state"],
-				"contact_person" => $customer["contact_person"],
-				"contact_phone"  => $customer["contact_phone"],
-				"contact_mail"   => $customer["contact_mail"],
-				"note"           => $customer["note"]
+				"id"             => $Params->id,
+				"title"          => $Params->title,
+				"address"        => $Params->address,
+				"postcode"       => $Params->postcode,
+				"city"           => $Params->city,
+				"state"          => $Params->state,
+				"contact_person" => $Params->contact_person,
+				"contact_phone"  => $Params->contact_phone,
+				"contact_mail"   => $Params->contact_mail,
+				"note"           => $Params->note
 				);
 // custom fields
 if(isset($update)) {
@@ -95,19 +94,18 @@ if(isset($update)) {
 
 // set lat lng
 $OSM = new OpenStreetMap($Database);
-$latlng = $OSM->get_latlng_from_address ($_POST['address'].", ".$_POST['postcode']." ".$_POST['city'].", ".$_POST['state']);
-if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
+$latlng = $OSM->get_latlng_from_address ($Params->address.", ".$Params->postcode." ".$Params->city.", ".$Params->state);
+if(isset($latlng['lat']) && isset($latlng['lng'])) {
     $values['lat']  = $latlng['lat'];
     $values['long'] = $latlng['lng'];
 }
 else {
-	if (!Config::ValueOf('offline_mode')) {
+	if (!(Config::ValueOf('offline_mode') || Config::ValueOf('disable_geoip_lookups'))) {
 		$Result->show("warning", _('Failed to update location lat/lng from Nominatim').".<br>".escape_input($latlng['error']), false);
 	}
 }
 
 // update customer
-if(!$Admin->object_modify("customers", $customer['action'], "id", $values))	{}
-else {
-    $Result->show("success", _("Customer")." ".$customer["action"]." "._("successful").'!', false);
+if($Admin->object_modify("customers", $Params->action, "id", $values)) {
+    $Result->show("success", _("Customer")." ".$Params->action." "._("successful").'!', false);
 }

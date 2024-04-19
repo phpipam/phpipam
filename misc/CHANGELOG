@@ -19,6 +19,7 @@
     ----------------------------
     + Added support for redundant PowerDNS databases (#3981);
     + Added option to export data for VLAN,VRF and Devices directly from tools page;
+    + Added option to disable OpenStreetMap address geoip lookups;
 
     Security Fixes:
     ----------------------------
