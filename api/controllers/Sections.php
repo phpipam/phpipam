@@ -179,7 +179,7 @@ class Sections_controller extends Common_api_functions {
 		if(isset($this->_params->masterSection)) {
 			$masterSection = $this->Sections->fetch_section ("id", $this->_params->masterSection);
 			// checks
-			if(sizeof($masterSection)==0)				{ $this->Response->throw_exception(400, 'Invalid masterSection id '.$this->_params->masterSection); }
+			if(!is_object($masterSection))				{ $this->Response->throw_exception(400, 'Invalid masterSection id '.$this->_params->masterSection); }
 			elseif($masterSection->masterSection!="0")	{ $this->Response->throw_exception(400, 'Only 1 level of nesting is permitted for sections');  }
 		}
 
