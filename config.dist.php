@@ -104,6 +104,15 @@ $debugging = false;
 $api_allow_unsafe = false;
 
 /**
+ * PHP8.1 - Integers and floats in result sets will now be returned using native PHP types instead of strings when using emulated prepared statements.
+ * Add option to restore prior behaviour for API consumers.
+ *
+ * Can be overwritten via "api-stringify-results: 0|1" header in API requests.
+ */
+
+$api_stringify_results = false;
+
+/**
  *  manual set session name for auth
  *  increases security
  *  optional
