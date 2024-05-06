@@ -1,4 +1,5 @@
 <?php
+
 /**
  *  API Parameter class
  */
@@ -8,17 +9,17 @@ class API_params extends Params {
 	 * Read array of arguments
 	 *
 	 * @param array $args
+	 * @param bool  $strip_tags
 	 * @return void
 	 */
-	public function read($args)
-	{
+	public function read($args, $strip_tags = false) {
 		if (!is_array($args))
 			return;
 
 		if (isset($args['controller']))
 			$args['controller'] = strtolower($args['controller']);
 
-		parent::read($args);
+		parent::read($args, $strip_tags);
 	}
 }
 
