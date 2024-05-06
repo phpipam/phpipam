@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate action
-$User->validate_action ($_POST['action'], true);
+$User->validate_action();
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "passkeyedit");

@@ -24,7 +24,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "section");
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # fetch all sections for master section
 $sections = $Sections->fetch_all_sections ();

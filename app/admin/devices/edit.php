@@ -30,7 +30,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "device");
 
 
 # validate action
-$Admin->validate_action ($Params->action, true);
+$Admin->validate_action();
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('devices');

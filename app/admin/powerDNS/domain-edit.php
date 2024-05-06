@@ -29,7 +29,7 @@ else {
 $csrf = $User->Crypto->csrf_cookie ("create", "domain");
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # save settings for powerDNS default
 $pdns = $PowerDNS->db_settings;

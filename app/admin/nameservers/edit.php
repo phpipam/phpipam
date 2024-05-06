@@ -25,7 +25,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "ns");
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # get Nameserver sets
 if($_POST['action']!="add") {

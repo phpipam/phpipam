@@ -31,7 +31,7 @@ $User->check_user_session();
 $csrf = $User->Crypto->csrf_cookie ("create", "custom_field");
 
 # validate action
-$Admin->validate_action ($Params->action, true);
+$Admin->validate_action();
 
 /* reset field name for add! */
 if($Params->action == "add") 	{ $Params->fieldName = ""; }

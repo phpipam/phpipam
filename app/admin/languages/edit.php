@@ -23,7 +23,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "languages");
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # get lang details
 if($_POST['action']=="edit" || $_POST['action']=="delete")

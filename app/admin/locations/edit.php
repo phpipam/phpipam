@@ -29,7 +29,7 @@ else {
 $csrf = $User->Crypto->csrf_cookie ("create", "location");
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # get Location object
 if($_POST['action']!="add") {

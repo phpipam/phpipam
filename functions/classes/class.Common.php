@@ -1146,15 +1146,16 @@ class Common_functions  {
 	 * Validate posted action on scripts
 	 *
 	 * @access public
-	 * @param mixed $action
 	 * @param bool $popup
 	 * @return mixed|bool
 	 */
-	public function validate_action ($action, $popup = false) {
-		# get valid actions
-		$valid_actions = $this->get_valid_actions ();
-		# check
-		in_array($action, $valid_actions) ?: $this->Result->show("danger", _("Invalid action!"), true, $popup);
+	public function validate_action($popup = true) {
+		$action = isset($_POST['action']) ? $_POST['action'] : '';
+		$valid_actions = $this->get_valid_actions();
+
+		if (!in_array($action, $valid_actions)) {
+			$this->Result->show("danger", _("Invalid action!"), true, $popup);
+		}
 	}
 
 	/**

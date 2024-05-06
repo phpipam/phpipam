@@ -26,7 +26,7 @@ $csrf = $_POST['action']=="add" ? $User->Crypto->csrf_cookie ("create", "folder_
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric
 if($_POST['action']!="add") {

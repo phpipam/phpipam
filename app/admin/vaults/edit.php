@@ -24,7 +24,7 @@ if ($User->get_module_permissions ("vaults")<User::ACCESS_RWA) { $Result->show("
 $csrf = $User->Crypto->csrf_cookie ("create", "vaults");
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['id'])) { $Result->show("danger", _("Invalid ID"), true, true); }

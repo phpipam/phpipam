@@ -20,7 +20,7 @@ $User->check_user_session();
 $csrf = $User->Crypto->csrf_cookie ("create", "apiedit");
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['appid'])) { $Result->show("danger", _("Invalid ID"), true, true); }

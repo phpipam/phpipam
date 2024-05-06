@@ -29,7 +29,7 @@ else {
 $csrf = $User->Crypto->csrf_cookie ("create", "vrf");
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # get VRF
 if($_POST['action']!="add") {

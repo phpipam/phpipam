@@ -32,7 +32,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "circuit");
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('circuits');

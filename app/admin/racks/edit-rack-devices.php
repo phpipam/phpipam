@@ -25,7 +25,7 @@ $User->check_module_permissions ("devices", User::ACCESS_R, true, true);
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['rackid']))		{ $Result->show("danger", _("Invalid ID"), true, true); }

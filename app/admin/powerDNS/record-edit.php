@@ -35,7 +35,7 @@ $pdns = $PowerDNS->db_settings;
 $post = $_POST;
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # get record
 if($_POST['action']!="add") {

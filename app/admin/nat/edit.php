@@ -28,7 +28,7 @@ else {
 $csrf = $User->Crypto->csrf_cookie ("create", "nat");
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # get NAT object
 if($_POST['action']!="add") {

@@ -25,7 +25,7 @@ $User->check_user_session();
 $csrf = $Params->action=="add" ? $User->Crypto->csrf_cookie ("create", "subnet_add") : $User->Crypto->csrf_cookie ("create", "subnet_".$Params->subnetId);
 
 # validate action
-$Admin->validate_action ($Params->action, true);
+$Admin->validate_action();
 
 # verify that user has permissions to add subnet
 if($Params->action == "add") {

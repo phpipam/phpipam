@@ -28,7 +28,7 @@ else {
 $csrf = $User->Crypto->csrf_cookie ("create", "customer");
 
 # validate action
-$Tools->validate_action ($Params->action, true);
+$Tools->validate_action();
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('customers');
 

@@ -20,7 +20,7 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "group");
 # validate action
-$Admin->validate_action ($_POST['action']);
+$Admin->validate_action(false);
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
 # fetch custom fields

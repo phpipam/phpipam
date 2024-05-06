@@ -31,7 +31,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "vlan");
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # fetch vlan details
 $vlan = $Admin->fetch_object ("vlans", "vlanid", @$_POST['vlanid']);

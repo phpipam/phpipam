@@ -20,7 +20,7 @@ $Zones    = new FirewallZones($Database);
 $User->check_user_session();
 
 # validate action
-$Admin->validate_action ($_POST['action']);
+$Admin->validate_action(false);
 
 # validate $_POST['id'] values
 if (!preg_match('/^[0-9]+$/i', $_POST['id'])) 												 { $Result->show("danger", _("Invalid ID. Do not manipulate the POST values!"), true); }

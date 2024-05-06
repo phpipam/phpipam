@@ -26,7 +26,7 @@ $User->check_user_session();
 $csrf = $Params->action=="add"||$Params->action=="all-add" ? $User->Crypto->csrf_cookie ("create", "address_add") : $User->Crypto->csrf_cookie ("create", "address_".$Params->id);
 
 # validate action
-$Tools->validate_action ($Params->action);
+$Tools->validate_action(false);
 
 # validate post
 is_numeric($Params->subnetId) ?:						$Result->show("danger", _("Invalid subnet ID"), true, true);
