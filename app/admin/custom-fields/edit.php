@@ -63,7 +63,7 @@ function check_name_whitespace () {
 });
 </script>
 
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('custom field'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('custom field'); ?></div>
 
 
 <div class="pContent">
@@ -154,7 +154,7 @@ function check_name_whitespace () {
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Close'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($Params->action=="delete") { print "btn-danger"; } else { print "btn-success";} ?>" id="editcustomSubmit"><i class="fa <?php if($Params->action=="add") { print "fa-plus"; } else if ($Params->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($Params->action))); ?></button>
+		<button class="btn btn-sm btn-default <?php if($Params->action=="delete") { print "btn-danger"; } else { print "btn-success";} ?>" id="editcustomSubmit"><i class="fa <?php if($Params->action=="add") { print "fa-plus"; } else if ($Params->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="customEditResult"></div>

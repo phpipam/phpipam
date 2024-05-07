@@ -160,7 +160,7 @@ $("input[name='subnet']").change(function() {
 </script>
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_($Params->action)); ?> <?php print _('subnet'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('subnet'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -659,7 +659,7 @@ $("input[name='subnet']").change(function() {
 			print "<button class='btn btn-sm btn-default btn-danger editSubnetSubmitDelete editSubnetSubmit'><i class='icon-white icon-trash'></i> "._('Delete subnet')."</button>";
 		}
 		?>
-		<button type="submit" class="btn btn-sm btn-default editSubnetSubmit <?php if($Params->action=="delete") print "btn-danger"; else print "btn-success"; ?>"><i class="fa <?php if($Params->action=="add") { print "fa-plus"; } elseif ($Params->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($Params->action))); ?></button>
+		<button type="submit" class="btn btn-sm btn-default editSubnetSubmit <?php if($Params->action=="delete") print "btn-danger"; else print "btn-success"; ?>"><i class="fa <?php if($Params->action=="add") { print "fa-plus"; } elseif ($Params->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 
 	<div class="manageSubnetEditResult"></div>

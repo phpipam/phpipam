@@ -76,7 +76,7 @@ $(document).ready(function(){
 
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('rack'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('rack'); ?></div>
 
 
 <!-- content -->
@@ -226,7 +226,7 @@ $(document).ready(function(){
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<a class='btn btn-sm btn-default submit_popup' data-script="app/admin/racks/edit-result.php" data-result_div="rackManagementEditResult" data-form='rackManagementEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</a>
 
 	</div>

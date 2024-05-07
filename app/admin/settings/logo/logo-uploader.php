@@ -35,7 +35,7 @@ else {
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('Upload custom logo'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('Upload custom logo'); ?></div>
 
 <!-- content -->
 <div class="pContent">

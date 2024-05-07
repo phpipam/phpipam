@@ -78,7 +78,7 @@ $(document).ready(function(){
 
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('Circuit'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('Circuit'); ?></div>
 
 
 <!-- content -->
@@ -306,7 +306,7 @@ $(document).ready(function(){
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class="btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" data-script="app/admin/circuits/edit-circuit-submit.php" data-result_div="circuitManagementEditResult" data-form='circuitManagementEdit'>
 			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i>
-			<?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<?php print $User->get_post_action(); ?>
 		</button>
 	</div>
 

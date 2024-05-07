@@ -56,7 +56,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print escape_input(ucwords(_($_POST['action']))); ?> <?php print _('BGP peer'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('BGP peer'); ?></div>
 
 
 <!-- content -->
@@ -258,7 +258,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class="btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" data-script="app/admin/routing/edit-bgp-submit.php" data-result_div="BGPEditResult" data-form='BGPEdit'>
 			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i>
-			<?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<?php print $User->get_post_action(); ?>
 		</button>
 	</div>
 

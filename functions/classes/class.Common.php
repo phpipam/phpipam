@@ -1159,6 +1159,24 @@ class Common_functions  {
 	}
 
 	/**
+	 * Safely translate $_POST['action'] for print()
+	 *
+	 * @return string
+	 */
+	public function get_post_action() {
+		if (isset($_POST['action'])) {
+			$action = $_POST['action'];
+			$valid_actions = $this->get_valid_actions();
+
+			if (in_array($action, $valid_actions)) {
+				return escape_input(ucwords(_($action)));
+			}
+		}
+
+		return '';
+	}
+
+	/**
 	 * Validates email address.
 	 *
 	 * @access public

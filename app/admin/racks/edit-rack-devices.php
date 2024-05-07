@@ -104,7 +104,7 @@ $(document).ready(function(){
 </script>
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('device to rack'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('device to rack'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -201,7 +201,7 @@ $(document).ready(function(){
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<?php if ((!empty($devices)) || ($_POST['devicetype'] != 'device')) { ?>
-		<button class="btn btn-sm btn-default btn-success" id="editRackDevicesubmit"><i class="fa fa-plus"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
+		<button class="btn btn-sm btn-default btn-success" id="editRackDevicesubmit"><i class="fa fa-plus"></i> <?php print $User->get_post_action(); ?></button>
         <?php } ?>
 	</div>
 
