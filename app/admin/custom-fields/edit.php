@@ -106,7 +106,7 @@ function check_name_whitespace () {
 		$oldMSize = str_replace(array("(",")"), "",strstr(@$fieldval['Type'] ?: '', "(", false));
 
 		//exceptions
-		if(@$fieldval['Type']=="text" || @$fieldval['Type']=="date" || @$fieldval['Type']=="datetime" || @$fieldval['Type']=="set" || @$fieldval['Type']=="enum")	{ $oldMType = @$fieldval['Type']; }
+		if(@$fieldval['Type']=="longtext" || @$fieldval['Type']=="text" || @$fieldval['Type']=="date" || @$fieldval['Type']=="datetime" || @$fieldval['Type']=="set" || @$fieldval['Type']=="enum")	{ $oldMType = @$fieldval['Type']; }
 		?>
 		<td>
 			<select name="fieldType" class="input-sm input-w-auto form-control">

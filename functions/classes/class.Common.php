@@ -1101,6 +1101,8 @@ class Common_functions  {
 		if (strpos($field_type, "varchar")!==false)
 			return $this->create_links($content);
 		elseif (strpos($field_type, "text")!==false)
+			return $this->create_links($content);
+		elseif (strpos($field_type, "longtext")!==false)
 			return $this->parse_markdown($content);
 		elseif($field_type=="tinyint(1)" || $field_type=="boolean") {
 			return ($content==0 || $content==false || empty($content))?_("No"):_("Yes");
@@ -1589,6 +1591,10 @@ class Common_functions  {
         elseif($field['type'] == "text") {
         	$html = $this->create_custom_field_input_textarea ($field, $object, $disabled_text, $nameSuffix);
         }
+        //longtext
+        elseif($field['type'] == "longtext") {
+        	$html = $this->create_custom_field_input_richtext ($field, $object, $disabled_text, $nameSuffix);
+        }
 		//default - input field
 		else {
             $html = $this->create_custom_field_input_input ($field, $object, $disabled_text, $nameSuffix);
@@ -1725,6 +1731,25 @@ class Common_functions  {
      */
     private function create_custom_field_input_textarea ($field, $object, $disabled_text, $nameSuffix = "") {
     	$html = array ();
+		$html[] = ' <textarea class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. $object->{$field['name']}. '</textarea>'. "\n";
+    	// result
+    	return $html;
+	}
+	
+	/**
+     * Creates form input field for text fields.
+     *
+     * @access private
+     * @param mixed $field
+     * @param mixed $object
+     * @param string $disabled_text
+     * @param string $nameSuffix
+     * @return array
+     */
+    private function create_custom_field_input_richtext ($field, $object, $disabled_text, $nameSuffix = "") {
+		global $User;
+		
+    	$html = array ();
     	$html[] = ' <textarea class="markdown_editor" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" title="'.$field['Comment'].'" '.$disabled_text.' data-theme="'.(($User->user->ui_theme!="white")?"dark":'"white').'">'. $object->{$field['name']}. '</textarea>'. "\n";
     	// result
     	return $html;
@@ -1784,6 +1809,11 @@ class Common_functions  {
 		}
 		//text
 		elseif($type=="text") {
+			if(!is_blank($value))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", escape_input($value))."'>"; }
+			else					{ print ""; }
+		}
+		//longtext
+		elseif($type=="longtext") {
 			if(!is_blank($value))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", escape_input($this->process_field($value)))."'>"; }
 			else					{ print ""; }
 		}

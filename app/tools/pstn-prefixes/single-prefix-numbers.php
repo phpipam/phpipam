@@ -132,7 +132,7 @@ $colspan_dhcp = 4;
 					// create html links
 					$n->{$myField['name']} = $Tools->process_field($n->{$myField['name']}, $myField['type']);
 
-					if($myField['type']=="text") {
+					if($myField['type']=="text" || $myField['type']=="longtext") {
 						if(!is_blank($n->{$myField['name']}))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $n->{$myField['name']})."'>"; }
 						else									{ print ""; }
 					}

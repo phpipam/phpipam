@@ -164,8 +164,8 @@ foreach ($users as $user) {
 				print "<td>";
 				
 				$ff = $Tools->process_field($user[$field['name']], $field['type']);
-				//text
-				if($field['type']=="text") {
+				
+				if($field['type']=="longtext" || $field['type']=="text") {
 					if(!is_blank($user[$field['name']]))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $ff)."'>"; }
 					else									{ print ""; }
 				}

@@ -494,7 +494,7 @@ else {
 							// create html links
 							$addresses[$n]->{$myField['name']} = $Tools->process_field($addresses[$n]->{$myField['name']}, $myField['type']);
 							//text
-							if($myField['type']=="text") {
+							if($myField['type']=="text" || $myField['type']=="longtext") {
 								if(!is_blank($addresses[$n]->{$myField['name']}))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n]->{$myField['name']})."'>"; }
 								else											{ print ""; }
 							}

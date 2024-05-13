@@ -98,6 +98,7 @@ else {
 		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<link rel="stylesheet" type="text/css" href="css/markdown/toastui-editor.min.css?v=<?php print SCRIPT_PREFIX; ?>">
+		<link rel="stylesheet" type="text/css" href="css/markdown/toastui-editor-dark.min.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-switch.min.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-table/bootstrap-table.min.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css?v=<?php print SCRIPT_PREFIX; ?>">
