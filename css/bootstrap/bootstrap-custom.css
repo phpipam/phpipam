@@ -1441,11 +1441,11 @@ table.ipaddresses td.gateway {
 }
 table.ipaddresses td.gateway ul li {
 	font-weight: normal;
-	color: #555;
+	color: #999;
 }
 table.ipaddresses td.gateway a i.fa-gateway {
 	margin-left: 5px;
-	color: #555;
+	color: #999;
 }
 table.ipaddress_subnet .alert {
     margin-bottom: 0px;
