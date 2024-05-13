@@ -155,7 +155,7 @@ class Common_functions  {
 		$this->set_debugging( Config::ValueOf('debugging') );
 		
 		$this->markdown = new \Parsedown();
-		$this->markdown->setSafeMode(true);
+		$this->markdown->setSafeMode(false);
 	}
 
 	/**
@@ -1098,11 +1098,11 @@ class Common_functions  {
 
 	public function process_field($content, $field_type)
 	{
-		if (strpos($field_type, "varchar")!==false)
+		if (str_starts_with($field_type, "varchar"))
 			return $this->create_links($content);
-		elseif (strpos($field_type, "text")!==false)
+		elseif (str_starts_with($field_type, "text"))
 			return $this->create_links($content);
-		elseif (strpos($field_type, "longtext")!==false)
+		elseif (str_starts_with($field_type, "longtext"))
 			return $this->parse_markdown($content);
 		elseif($field_type=="tinyint(1)" || $field_type=="boolean") {
 			return ($content==0 || $content==false || empty($content))?_("No"):_("Yes");
@@ -1794,7 +1794,7 @@ class Common_functions  {
 	 */
 	public function print_custom_field ($type, $value, $delimiter = false, $replacement = false) {
 		// create links
-		$value = $this->create_links ($value, $type);
+		$value = $this->process_field($value, $type);
 
 		// delimiter ?
 		if($delimiter !== false && $replacement !== false) {
@@ -1802,11 +1802,11 @@ class Common_functions  {
 		}
 
 		//booleans
-		if($type=="tinyint(1)")	{
-			if($value == "1")			{ print _("Yes"); }
-			elseif(is_blank($value)) 	{ print "/"; }
-			else						{ print _("No"); }
-		}
+		//if($type=="tinyint(1)")	{
+		//	if($value == "1")			{ print _("Yes"); }
+		//	elseif(is_blank($value)) 	{ print "/"; }
+		//	else						{ print _("No"); }
+		//}
 		//text
 		elseif($type=="text") {
 			if(!is_blank($value))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", escape_input($value))."'>"; }
@@ -1814,7 +1814,7 @@ class Common_functions  {
 		}
 		//longtext
 		elseif($type=="longtext") {
-			if(!is_blank($value))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", escape_input($this->process_field($value)))."'>"; }
+			if(!is_blank($value))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $value)."'>"; }
 			else					{ print ""; }
 		}
 		else {
