@@ -492,15 +492,9 @@ else {
 							print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 							// create html links
-							$addresses[$n]->{$myField['name']} = $Tools->create_links($addresses[$n]->{$myField['name']}, $myField['type']);
-
-							//booleans
-							if($myField['type']=="tinyint(1)")	{
-								if($addresses[$n]->{$myField['name']} == "0")		{ print _("No"); }
-								elseif($addresses[$n]->{$myField['name']} == "1")	{ print _("Yes"); }
-							}
+							$addresses[$n]->{$myField['name']} = $Tools->process_field($addresses[$n]->{$myField['name']}, $myField['type']);
 							//text
-							elseif($myField['type']=="text") {
+							if($myField['type']=="text" || $myField['type']=="longtext") {
 								if(!is_blank($addresses[$n]->{$myField['name']}))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n]->{$myField['name']})."'>"; }
 								else											{ print ""; }
 							}

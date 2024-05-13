@@ -97,7 +97,7 @@ if (isset($objects["circuits"])) {
 				foreach($custom_fields as $field) {
 					if(!in_array($field['name'], $hidden_circuit_fields)) {
 						// create html links
-						$circuit->{$field['name']} = $User->create_links($circuit->{$field['name']}, $field['type']);
+						$circuit->{$field['name']} = $User->process_field($circuit->{$field['name']}, $field['type']);
 
 						print "<td class='hidden-xs hidden-sm hidden-md'>".$circuit->{$field['name']}."</td>";
 					}

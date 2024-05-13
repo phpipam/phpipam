@@ -56,7 +56,7 @@ if(sizeof($result_vlans) > 0) {
 		if(sizeof($custom_vlan_fields) > 0) {
 			foreach($custom_vlan_fields as $field) {
 				if(!in_array($field['name'], $hidden_vlan_fields)) {
-					$vlan[$field['name']] = $Tools->create_links ($vlan[$field['name']], $field['type']);
+					$vlan[$field['name']] = $Tools->process_field ($vlan[$field['name']], $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>";
 					$Tools->print_custom_field ($field['type'], $vlan[$field['name']]);
 					print "</td>";

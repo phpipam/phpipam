@@ -66,18 +66,10 @@ if(sizeof($custom_fields) > 0) {
 	print "<tr>";
 	print "	<td colspan='2'><hr></td>";
 	print "</tr>";
-
+	
 	foreach($custom_fields as $field) {
-
-		# fix for boolean
-		if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
-			if($circuit->{$field['name']}=="0")		{ $circuit->{$field['name']} = "false"; }
-			elseif($circuit->{$field['name']}=="1")	{ $circuit->{$field['name']} = "true"; }
-			else									{ $circuit->{$field['name']} = ""; }
-		}
-
-		# create links
-		$circuit->{$field['name']} = $Tools->create_links ($circuit->{$field['name']});
+		# prcess field
+		$circuit->{$field['name']} = $Tools->process_field ($circuit->{$field['name']}, $field['type']);
 
 		print "<tr>";
 		print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

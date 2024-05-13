@@ -80,16 +80,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
     	print "</tr>";
 
 		foreach($custom_fields as $field) {
-
-			# fix for boolean
-			if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
-				if($customer->{$field['name']}=="0")		{ $customer->{$field['name']} = "false"; }
-				elseif($customer->{$field['name']}=="1")	{ $customer->{$field['name']} = "true"; }
-				else									{ $customer->{$field['name']} = ""; }
-			}
-
-			# create links
-			$customer->{$field['name']} = $Tools->create_links ($customer->{$field['name']});
+			$customer->{$field['name']} = $Tools->process_field ($customer->{$field['name']}, $field['type']);
 
 			print "<tr>";
 			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

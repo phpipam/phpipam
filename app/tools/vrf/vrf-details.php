@@ -107,7 +107,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 		foreach($cfields as $key=>$field) {
 			$vrf->{$key} = str_replace("\n", "<br>",$vrf->{$key});
 			// create links
-			$vrf->{$key} = $Tools->create_links($vrf->{$key});
+			$vrf->{$key} = $Tools->process_field($vrf->{$key}, $field['type']);
 			print "<tr>";
 			print "	<th>$key</th>";
 			print "	<td style='vertical-align:top;align-content:left;'>".$vrf->{$key}."</td>";
