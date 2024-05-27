@@ -57,13 +57,19 @@ $(document).ready(function() {
 <!-- print logs -->
 <?php
 
-//fetch 40 logs at once
-$logCount = 40;
-
 //set severity queries
 $informational = @$_POST['Informational']=="Informational" ? "on" : "off";
 $notice 	   = @$_POST['Notice']=="Notice" ? "on" : "off";
 $warning 	   = @$_POST['Warning']=="Warning" ? "on" : "off";
+$dns           = @$_POST['DNS']=="DNS" ? "on" : "off";
+
+//fetch 40 logs at once
+if ($dns == "off") {
+$logCount = 40;
+}
+else {
+$logCount = 1000;
+}
 
 //get highest lastId */
 $highestId = $Log->log_fetch_highest_id();
@@ -100,19 +106,37 @@ foreach ($logs as $log) {
     }
 
 	/* reformat details */
-	$log['details'] = str_replace("\"", "'", $log['details']);
+    $log['details'] = str_replace("\"", "'", $log['details']);
 
-    print '<tr class="'.$color.' '. $log['severityText'] .'" id="'. $log['id'] .'">'. "\n";
- 	print '	<td class="date">'. $log['date']     .'</td>'. "\n";
-    print '	<td class="severity"><span>'. $log['severity'] .'</span>'. $log['severityText'] .'</td>'. "\n";
-	print '	<td class="username">'. $log['username'] .'</td>'. "\n";
-	print '	<td class="ipaddr">'. $log['ipaddr'] .'</td>'. "\n";
-    print '	<td class="command"><a href="" class="openLogDetail" data-logid="'.$log['id'].'">'. $log['command']  .'</a></td>'. "\n";
-    print '	<td class="detailed">';
-    /* details */
-    if(!empty($log['details'])) { print '	<i class="fa fa-comment fa-gray" rel="tooltip" data-html="true" data-placement="left" title="<b>'._('Event details').'</b>:<hr>'. $log['details'] .'"></i></td>'. "\n"; }
-    print '	</td>'. "\n";
-	print '</tr>'. "\n";
+    if (strpos($log['details'], 'PowerDNS') !== false && strpos($log['details'], 'enablePowerDNS') == false && $dns == "on") {
+        print '<tr class="'.$color.' '. $log['severityText'] .'" id="'. $log['id'] .'">'. "\n";
+         print '	<td class="date">'. $log['date']     .'</td>'. "\n";
+        print '	<td class="severity"><span>'. $log['severity'] .'</span>'. $log['severityText'] .'</td>'. "\n";
+        print '	<td class="username">'. $log['username'] .'</td>'. "\n";
+        print '	<td class="ipaddr">'. $log['ipaddr'] .'</td>'. "\n";
+        print '	<td class="command"><a href="" class="openLogDetail" data-logid="'.$log['id'].'">'. $log['command']  .'</a></td>'. "\n";
+        print '	<td class="detailed">';
+        /* details */
+        if(!empty($log['details'])) { 
+            print '	<i class="fa fa-comment fa-gray" rel="tooltip" data-html="true" data-placement="left" title="<b>'._('Event details').'</b>:<hr>'. $log['details'] .'"></i></td>'. "\n"; 
+        }
+        print '	</td>'. "\n";
+        print '</tr>'. "\n";
+    } else if ($dns == "off") {
+        print '<tr class="'.$color.' '. $log['severityText'] .'" id="'. $log['id'] .'">'. "\n";
+        print '	<td class="date">'. $log['date'] .'</td>'. "\n";
+        print '	<td class="severity"><span>'. $log['severity'] .'</span>'. $log['severityText'] .'</td>'. "\n";
+        print '	<td class="username">'. $log['username'] .'</td>'. "\n";
+        print '	<td class="ipaddr">'. $log['ipaddr'] .'</td>'. "\n";
+        print '	<td class="command"><a href="" class="openLogDetail" data-logid="'.$log['id'].'">'. $log['command'] .'</a></td>'. "\n";
+        print '	<td class="detailed">';
+        /* details */
+        if(!empty($log['details'])) { 
+            print '	<i class="fa fa-comment fa-gray" rel="tooltip" data-html="true" data-placement="left" title="<b>'._('Event details').'</b>:<hr>'. $log['details'] .'"></i></td>'. "\n"; 
+        }
+        print '	</td>'. "\n";
+        print '</tr>'. "\n";
+    }
 }
 ?>
 </tbody>
