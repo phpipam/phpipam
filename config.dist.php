@@ -75,6 +75,7 @@ $config['removed_addresses_timelimit'] = 86400 * 7;  // int, after how many seco
 $config['resolve_emptyonly']           = true;       // if true it will only update the ones without DNS entry!
 $config['resolve_verbose']             = true;       // verbose response - prints results, cron will email it to you!
 $config['disable_main_login_form']     = false;      // disable main login form if you want use another authentification method by default (SAML, LDAP, etc.)
+$config['httpauth_autocreate_user']    = false;      // don't create new user on http auth success first login
 
 
 /**
