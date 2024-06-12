@@ -726,15 +726,45 @@ class adLDAP {
         // Bind as the user
         $ret = true;
 
-        //OpenLDAP?
-        if ($this->openLDAP == true) { $this->ldapBind = @ldap_bind($this->ldapConnection, "uid=".$username.$this->accountSuffix, $password); }
-        else { $this->ldapBind = @ldap_bind($this->ldapConnection, $username.$this->accountSuffix, $password); }
+        // We need to qualify the UID from base DN as the user is
+        // not neccessarily located directly below it.
+        // The "accountSuffix" seems to be too weak here. So bind as
+        // "adminUsername" if given or anonymously and search for uid within
+        // baseDN (baseDn).
 
-        if (!$this->ldapBind) {
+        //OpenLDAP?
+        $_uid  = ($this->openLDAP == true) ? "uid=$username" : $username;
+        $_uid .= $this->accountSuffix;
+
+        // Lookup $username below baseDN
+        $_res = @ldap_search($this->ldapConnection, $this->baseDn, $_uid, array());
+        if (!$_res) { // LDAP problem
+            error_log("Unable to lookup \"$_uid\": " . $this->getLastError(), E_USER_ERROR);
+            return false;
+        }
+
+        // get the entriy
+        $entries = @ldap_get_entries($this->ldapConnection, $_res);
+
+        if ($entries['count'] === 0) { // User not found
+            error_log("UID \"$_uid\" not found", E_USER_NOTICE);
+            return false;
+        }
+
+        if ($entries['count'] > 1) { // more than one entry: panic or not?
+            error_log("Too many \"$_uid\" entries", E_USER_NOTICE);
+            return false;
+        }
+
+        $uid2bind = $entries[0]['dn'];
+        $this->ldapBind = @ldap_bind($this->ldapConnection, $uid2bind, $password);
+
+        if (!$this->ldapBind) { // invalid credentials
+            error_log("Bind($uid2bind) error: " . $this->getLastError(), E_USER_NOTICE);
             $ret = false;
         }
 
-        // Cnce we've checked their details, kick back into admin mode if we have it
+        // Once we've checked their details, kick back into admin mode if we have it
         if ($this->adminUsername !== NULL && !$preventRebind) {
             $this->ldapBind = @ldap_bind($this->ldapConnection, $this->adminUsername.$this->accountSuffix, $this->adminPassword);
             if (!$this->ldapBind) {
