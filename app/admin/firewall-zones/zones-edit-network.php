@@ -124,9 +124,9 @@ $(document).ready(function() {
 <?php
 if ($_POST['id']) 	{ print '<input type="hidden" name="netZoneId" value="'.$_POST['id'].'">'; }
 else 				{ print '<input type="hidden" name="noZone" value="1">';
-						if ($_POST['network']) {
+						if (is_array($_POST['network'])) {
 					  		foreach ($_POST['network'] as $key => $network) {
-					    		print '<input type="hidden" name="network['.$key.']" value="'.$network.'">';
+					    		print '<input type="hidden" name="network['.escape_input($key).']" value="'.escape_input($network).'">';
 					    	}
 					    }
 					}

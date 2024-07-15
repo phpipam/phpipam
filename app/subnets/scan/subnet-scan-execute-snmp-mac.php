@@ -304,7 +304,7 @@ else {
 	print "<tr>";
 	print "	<td colspan='$colspan'>";
 	print "<div id='subnetScanAddResult'></div>";
-	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='snmp-mac' data-subnetId='".$_POST['subnetId']."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
+	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='snmp-mac' data-subnetId='".escape_input($_POST['subnetId'])."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
 	print "	</td>";
 	print "</tr>";
 

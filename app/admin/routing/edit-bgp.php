@@ -71,7 +71,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 			<input type="text" name="peer_name" class="form-control input-sm" placeholder="<?php print _('Peer name'); ?>" value="<?php if(isset($bgp->peer_name)) print $Tools->strip_xss($bgp->peer_name); ?>" <?php print $readonly; ?>>
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-				print '<input type="hidden" name="id" value="'. $_POST['bgpid'] .'">'. "\n";
+				print '<input type="hidden" name="id" value="'. escape_input($_POST['bgpid']) .'">'. "\n";
 			} ?>
 			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">

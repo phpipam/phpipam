@@ -76,10 +76,10 @@ else {
 		if (!is_numeric($_POST['domain_id'])) {
     		# admin?
     		if ($User->is_admin()) {
-    			$Result->show("danger", _("Domain")." <strong>".$_POST['domain_id']."</strong><span class='ip_dns_addr hidden'>".$_POST['id']."</span> "._("does not exist")."!"."<hr><button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0' data-secondary='true'><i class='fa fa-plus'></i> "._('Create domain')."</button>", true, true);
+    			$Result->show("danger", _("Domain")." <strong>".escape_input($_POST['domain_id'])."</strong><span class='ip_dns_addr hidden'>".escape_input($_POST['id'])."</span> "._("does not exist")."!"."<hr><button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0' data-secondary='true'><i class='fa fa-plus'></i> "._('Create domain')."</button>", true, true);
     		}
     		else {
-    			$Result->show("danger", _("Domain")." <strong>".$_POST['domain_id']."</strong> "._("does not exist")."!", true, true);
+    			$Result->show("danger", _("Domain")." <strong>".escape_input($_POST['domain_id'])."</strong> "._("does not exist")."!", true, true);
     		}
 		}
 		else {
@@ -127,8 +127,8 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 		<td>
 			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('www.example.com'); ?>" value="<?php print $record->name; ?>" <?php print $readonly; ?>>
 			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
-			<input type="hidden" name="id" value="<?php print @$_POST['id']; ?>">
-			<input type="hidden" name="domain_id" value="<?php print @$_POST['domain_id']; ?>">
+			<input type="hidden" name="id" value="<?php print escape_input(@$_POST['id']); ?>">
+			<input type="hidden" name="domain_id" value="<?php print escape_input(@$_POST['domain_id']); ?>">
             <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>

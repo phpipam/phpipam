@@ -63,7 +63,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<input type="text" name="hostname" class="form-control input-sm" value="<?php print @$method_settings->params->hostname; ?>" <?php print $delete; ?>>
 			<input type="hidden" name="type" value="Radius">
 			<input type="hidden" name="id" value="<?php print @$method_settings->id; ?>">
-			<input type="hidden" name="action" value="<?php print @$_POST['action']; ?>">
+			<input type="hidden" name="action" value="<?php print escape_input(@$_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 		<td class="info2"><?php print _('Enter Radius server'); ?>
