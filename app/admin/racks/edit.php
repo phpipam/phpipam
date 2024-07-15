@@ -183,7 +183,7 @@ $(document).ready(function(){
 			<textarea name="description" class="form-control input-sm" placeholder="<?php print _('Description'); ?>" <?php print $readonly; ?>><?php if(isset($rack->description)) print $rack->description; ?></textarea>
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-				print '<input type="hidden" name="rackid" value="'. $_POST['rackid'] .'">'. "\n";
+				print '<input type="hidden" name="rackid" value="'. escape_input($_POST['rackid']) .'">'. "\n";
 			} ?>
 			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">

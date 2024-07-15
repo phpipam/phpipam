@@ -139,7 +139,7 @@ $(document).ready(function() {
 			<input type="text" name="idpissuer" class="form-control input-sm" value="<?php print @$method_settings->params->idpissuer; ?>" <?php print $is_disabled; ?> >
 			<input type="hidden" name="type" value="SAML2">
 			<input type="hidden" name="id" value="<?php print @$method_settings->id; ?>">
-			<input type="hidden" name="action" value="<?php print @$_POST['action']; ?>">
+			<input type="hidden" name="action" value="<?php print escape_input(@$_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 		<td class="base_dn info2">

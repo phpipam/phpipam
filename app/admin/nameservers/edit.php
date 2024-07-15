@@ -96,7 +96,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : pf_explode(";", $
 		<td><?php print _('Description'); ?></td>
 		<td>
 			<?php
-			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) { print '<input type="hidden" name="nameserverid" value="'. $_POST['nameserverid'] .'">'. "\n";}
+			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) { print '<input type="hidden" name="nameserverid" value="'. escape_input($_POST['nameserverid']) .'">'. "\n";}
 			?>
 			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">

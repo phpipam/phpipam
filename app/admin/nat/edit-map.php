@@ -120,8 +120,8 @@ $icon =  $n->type=="static" ? "fa-arrows-h" : "fa-long-arrow-right";
     <?php print _("Add new object to NAT as"); ?>:
 	<div class="btns-group">
         <?php
-        print "<a class='btn btn-sm btn-success addNatObjectFromSearch' data-id='".$_POST['id']."' data-object-id='$object->id' data-object-type='".$_POST['object_type']."' data-type='src' data-reload='true'><i class='fa fa-plus'></i> "._('Source')."</a> ";
-        print "<a class='btn btn-sm btn-success addNatObjectFromSearch' data-id='".$_POST['id']."' data-object-id='$object->id' data-object-type='".$_POST['object_type']."' data-type='dst' data-reload='true'><i class='fa fa-plus'></i> "._('Destination')."</a>";
+        print "<a class='btn btn-sm btn-success addNatObjectFromSearch' data-id='".escape_input($_POST['id'])."' data-object-id='$object->id' data-object-type='".escape_input($_POST['object_type'])."' data-type='src' data-reload='true'><i class='fa fa-plus'></i> "._('Source')."</a> ";
+        print "<a class='btn btn-sm btn-success addNatObjectFromSearch' data-id='".escape_input($_POST['id'])."' data-object-id='$object->id' data-object-type='".escape_input($_POST['object_type'])."' data-type='dst' data-reload='true'><i class='fa fa-plus'></i> "._('Destination')."</a>";
         ?>
 	</div>
 

@@ -208,11 +208,11 @@ else {
                     		print " <input type='hidden' name='subnet-$m' value='$ip[subnet]/$ip[bitmask]'>";
                     		print " <input type='hidden' name='subnet_dec-$m' value='".$Subnets->transform_address($ip['subnet'],"decimal")."'>";
                     		print " <input type='hidden' name='mask-$m' value='$ip[bitmask]'>";
-                    		print " <input type='hidden' name='sectionId-$m' value='$_POST[sectionId]'>";
+                    		print " <input type='hidden' name='sectionId-$m' value='".escape_input($_POST['sectionId'])."'>";
                     		print " <input type='hidden' name='action-$m' value='add'>";
                     		print " <input type='hidden' name='device-$m' value='$deviceid'>";
                     		if(isset($_POST['subnetId']))
-                    		print " <input type='hidden' name='masterSubnetId-$m' value='$_POST[subnetId]'>";
+                    		print " <input type='hidden' name='masterSubnetId-$m' value='".escape_input($_POST['subnetId'])."'>";
                             else
                     		print " <input type='hidden' name='masterSubnetId-$m' value='0'>";
                     		print "</td>";

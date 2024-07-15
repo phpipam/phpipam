@@ -67,7 +67,7 @@ $(document).ready(function(){
 		<td><?php print _('Description'); ?></td>
 		<td>
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$l2_domain['description']); ?>" <?php print $readonly; ?>>
-			<input type="hidden" name="id" value="<?php print @$_POST['id']; ?>">
+			<input type="hidden" name="id" value="<?php print escape_input(@$_POST['id']); ?>">
 			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>

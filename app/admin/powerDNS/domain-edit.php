@@ -60,7 +60,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 		<td>
 			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('FQDN domain name'); ?>" value="<?php print $domain->name; ?>" <?php print $readonly; ?> <?php if($_POST['action']!="add") { print "disabled='disabled'"; } ?>>
 			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
-			<input type="hidden" name="id" value="<?php print @$_POST['id']; ?>">
+			<input type="hidden" name="id" value="<?php print escape_input(@$_POST['id']); ?>">
             <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>

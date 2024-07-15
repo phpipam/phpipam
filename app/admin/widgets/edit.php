@@ -55,7 +55,7 @@ if($_POST['action']!="add") {
     	<td>
     		<input class="form-control input-sm input-w-250" type="text" name="wdescription" value="<?php print $Admin->strip_xss(@$w['wdescription']); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 
-    		<input type="hidden" name="wid" value="<?php print @$_POST['wid']; ?>">
+    		<input type="hidden" name="wid" value="<?php print escape_input(@$_POST['wid']); ?>">
     		<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	</td>

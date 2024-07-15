@@ -66,7 +66,7 @@ if($_POST['action']=="add") {
     	<td>
     		<input type="text" name="g_desc" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$group['g_desc']); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 
-    		<input type="hidden" name="g_id" value="<?php print @$_POST['id']; ?>">
+    		<input type="hidden" name="g_id" value="<?php print escape_input(@$_POST['id']); ?>">
     		<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	</td>

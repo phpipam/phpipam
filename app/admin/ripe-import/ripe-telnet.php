@@ -47,7 +47,7 @@ else {
 	print '<table class="asImport table table-striped table-condensed table-top table-auto">';
 	//headers
 	print '<tr>';
-	print '	<th colspan="5">'._('I found the following routes belonging to AS').' '.$_POST['as'].':</th>';
+	print '	<th colspan="5">'._('I found the following routes belonging to AS').' '.escape_input($_POST['as']).':</th>';
 	print '</tr> ';
 
 	print "<tr>";

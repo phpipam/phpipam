@@ -58,7 +58,7 @@ if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-				print '<input type="hidden" name="tid" value="'. $_POST['tid'] .'">'. "\n";
+				print '<input type="hidden" name="tid" value="'. escape_input($_POST['tid']) .'">'. "\n";
 			}
 			?>
 		</td>

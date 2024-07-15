@@ -79,7 +79,7 @@ $(document).ready(function(){
 			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($provider->name)) print $Tools->strip_xss($provider->name); ?>" <?php print $readonly; ?>>
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-				print '<input type="hidden" name="providerid" value="'. $_POST['providerid'] .'">'. "\n";
+				print '<input type="hidden" name="providerid" value="'. escape_input($_POST['providerid']) .'">'. "\n";
 			} ?>
 			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">

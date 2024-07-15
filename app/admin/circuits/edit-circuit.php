@@ -94,7 +94,7 @@ $(document).ready(function(){
 			<input type="text" name="cid" style='width:200px;' class="form-control input-sm" placeholder="<?php print _('ID'); ?>" value="<?php if(isset($circuit->cid)) print $Tools->strip_xss($circuit->cid); ?>" <?php print $readonly; ?>>
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-				print '<input type="hidden" name="id" value="'. $_POST['circuitid'] .'">'. "\n";
+				print '<input type="hidden" name="id" value="'. escape_input($_POST['circuitid']) .'">'. "\n";
 			} ?>
 			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
