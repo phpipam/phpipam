@@ -123,7 +123,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	        	$('ul.progressUl li').remove();
 
 	        	//add name to hidden class for magic.js
-	        	$('.fname').html(data.files[0].name);
+	        	$('.fname').text(data.files[0].name);
 
 	            var tpl = $('<li class="alert"><p></p><span></span></li>');
 
