@@ -5,6 +5,10 @@
     + Fixed RADIUS authentication fails on 1.6.0 (#3986);
     + Fixed cannot add NAT issue (#3993);
 
+    Security Fixes:
+    ----------------------------
+    + HTML DOM XSS injection via filenames when uploading (#4160);
+
 == 1.6.0
 
     Enhancements, changes:
