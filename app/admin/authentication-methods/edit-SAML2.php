@@ -281,7 +281,7 @@ $(document).ready(function() {
 	</div>
 
 	<?php
-	# check for mathing users
+	# check for matching users
 	if($_POST['action']=="delete") {
 		$users = $Admin->fetch_multiple_objects ("users", "authMethod", @$method_settings->id);
 		if($users!==false) {
