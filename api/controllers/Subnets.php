@@ -400,7 +400,7 @@ class Subnets_controller extends Common_api_functions {
 		// Check for id
 		$this->validate_subnet_id ();
 
-		// validate input parmeters
+		// validate input parameters
 		if(!isset($this->_params->mask))				{ $this->Response->throw_exception(400, "Subnet mask not provided"); }
 
 		// fetch old subnet
@@ -964,7 +964,7 @@ class Subnets_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function validate_subnet_id () {
-		// numberic
+		// numeric
 		if(!is_numeric($this->_params->id))															{ $this->Response->throw_exception(400, "Subnet Id must be numeric (".$this->_params->id.")"); }
 		// check subnet
 		if($this->Subnets->fetch_subnet ("id", $this->_params->id)===false) 						{ $this->Response->throw_exception(404, "Invalid subnet Id (".$this->_params->id.")"); }
