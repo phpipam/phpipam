@@ -25,7 +25,7 @@ $User->Crypto->csrf_cookie ("validate", "custom_field", $Params->csrf_cookie) ==
 
 /* checks */
 if($Params->action == "delete") {
-	# no cecks
+	# no checks
 }
 else {
 	# remove spaces
