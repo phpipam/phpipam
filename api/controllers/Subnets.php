@@ -457,7 +457,7 @@ class Subnets_controller extends Common_api_functions {
 		$this->Subnets->subnet_split ($subnet_old, $this->_params->number, $this->_params->prefix, $this->_params->group, $this->_params->copy_custom);
 
 		//set result
-		return array("code"=>200, "message"=>"Subnet splitted");
+		return array("code"=>200, "message"=>"Subnet split");
 	}
 
 
