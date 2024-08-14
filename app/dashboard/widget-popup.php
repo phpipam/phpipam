@@ -29,7 +29,7 @@ $widgets = (array) $widgets;
 <div class="pContent">
 	<?php
 	print "<ul id='sortablePopup' class='sortable'>";
-	# print widghets that are not yet selected
+	# print widgets that are not yet selected
 	$m = 0;
 	foreach($widgets as $k=>$w) {
 		if(!in_array($k, $uwidgets))	{
