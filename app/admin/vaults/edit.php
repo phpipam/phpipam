@@ -92,7 +92,7 @@ $custom = $Tools->fetch_custom_fields('vaults');
 	<tr>
 	    <td><?php print _('Vault secret'); ?></td>
 	    <td><input type="password" id="secret" name="secret" class="form-control input-sm"></td>
-       	<td class="info2"><?php print _('Vault secret. Please store secret as it cannot be retreived if lost!'); ?></td>
+       	<td class="info2"><?php print _('Vault secret. Please store secret as it cannot be retrieved if lost!'); ?></td>
     </tr>
     <?php } ?>
 
