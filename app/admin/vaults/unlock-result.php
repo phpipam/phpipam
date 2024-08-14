@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Script to disaply vault edit result
+ * Script to display vault edit result
  *************************************/
 
 /* functions */
