@@ -41,7 +41,7 @@ if($subnet===false) {
 
 # truncate network
 if(!$Subnets->subnet_truncate($subnet->id))	{ $Result->show("danger",  _("Failed to truncate subnet"), false); }
-else										{ $Result->show("success", _("Subnet truncated succesfully")."!", false); }
+else										{ $Result->show("success", _("Subnet truncated successfully")."!", false); }
 
 # check for DNS PTR records
 if ($User->settings->enablePowerDNS=="1" && $subnet->DNSrecursive=="1") {
