@@ -38,4 +38,4 @@ if($subnetPerm < 3) 						{ $Result->show("danger", _('You do not have permissio
 $Subnets->subnet_split ($subnet_old, $_POST['number'], $_POST['prefix'], @$_POST['group'], @$_POST['custom_fields']);
 
 # all good
-$Result->show("success", _("Subnet splitted successfully")."!", true);
+$Result->show("success", _("Subnet split successfully")."!", true);
