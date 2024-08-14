@@ -20,7 +20,7 @@ disable_php_errors();
 $Snmp       = new phpipamSNMP ();
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disbled", true, $ajax_loaded); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disabled", true, $ajax_loaded); }
 
 # section check
 if (!is_numeric($_POST['sectionId']))           { $Result->show("danger", "Invalid section Id", true, $ajax_loaded); }
