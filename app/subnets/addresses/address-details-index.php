@@ -40,7 +40,7 @@ $subnet_permission  = $Subnets->check_permission($User->user, $subnet['id']);
 $section_permission = $Sections->check_permission ($User->user, $subnet['sectionId']);
 
 # checks
-if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesnt exist
+if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesn't exist
 if($subnet_permission == 0)				{ $Result->show("danger", _('You do not have permission to access this network'), true); }		//not allowed to access
 
  # resolve dns name
