@@ -25,7 +25,7 @@ foreach($circuit_types as $t){
 }
 
 //Fetch all locations and store info hash, same as above.
-//This will elimate the need of looping through circuits the first time
+//This will eliminate the need of looping through circuits the first time
 $locations = $Tools->fetch_all_objects("locations");
 $locations = is_array($locations) ? $locations : [];
 
