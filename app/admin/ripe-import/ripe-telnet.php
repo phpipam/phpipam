@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Search IRPE databse for AS imports
+ * Search IRPE database for AS imports
  *************************************************/
 
 /* functions */
@@ -23,7 +23,7 @@ if(substr($_POST['as'], 0,2)=="AS" || substr($_POST['as'], 0,2)=="as") {
 	$_POST['as'] = substr($_POST['as'], 2);
 };
 
-// numberic
+// numeric
 if(!is_numeric($_POST['as']))       { $Result->show("danger", _("Invalid AS"), true); }
 
 
