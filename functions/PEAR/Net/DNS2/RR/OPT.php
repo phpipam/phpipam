@@ -146,7 +146,7 @@ class Net_DNS2_RR_OPT extends Net_DNS2_RR
 
     /**
      * method to return the rdata portion of the packet as a string. There is no
-     * defintion for returning an OPT RR by string- this is just here to validate
+     * definition for returning an OPT RR by string- this is just here to validate
      * the binary parsing / building routines.
      *
      * @return  string
