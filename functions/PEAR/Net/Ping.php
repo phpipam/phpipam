@@ -696,7 +696,7 @@ class Net_Ping_Result
         //
         //   If you're in this class fixing or extending the parser
         //   please add another file in the 'tests/test_parser_data/'
-        //   directory which exemplafies the problem. And of course
+        //   directory which exemplifies the problem. And of course
         //   you'll want to run the 'tests/test_parser.php' (which
         //   contains easy how-to instructions) to make sure you haven't
         //   broken any existing behaviour.
@@ -732,7 +732,7 @@ class Net_Ping_Result
     } /* function _parseResult() */
 
     /**
-     * determinces the number of bytes sent by ping per ICMP ECHO
+     * determines the number of bytes sent by ping per ICMP ECHO
      *
      * @access private
      */
@@ -794,7 +794,7 @@ class Net_Ping_Result
         // character, a number and then 'ms'. All the "time=" versions
         // of ping will match this methodology, and all the pings which
         // don't show "time=" (that I've seen examples from) also match
-        // this methodolgy.
+        // this methodology.
 
         $results = array();
         for ( $i=1; $i<count($upper); $i++ ) {
@@ -850,7 +850,7 @@ class Net_Ping_Result
     }
 
     /**
-     * determines the mininum, maximum, average and standard deviation
+     * determines the minimum, maximum, average and standard deviation
      * of the round trip times.
      *
      * @access private
@@ -858,7 +858,7 @@ class Net_Ping_Result
     function _parseResultDetailRoundTrip($lower)
     {
         // The first pattern will match a sequence of 3 or 4
-        // alaphabet-char strings separated with slashes without
+        // alphabet-char strings separated with slashes without
         // presuming the order. eg, "min/max/avg" and
         // "min/max/avg/mdev". Some ping flavors don't have the standard
         // deviation value, and some have different names for it when
@@ -922,7 +922,7 @@ class Net_Ping_Result
     }
 
     /**
-     * determinces the target IP address actually used by ping
+     * determines the target IP address actually used by ping
      *
      * @access private
      */
@@ -958,7 +958,7 @@ class Net_Ping_Result
     }
 
     /**
-     * determinces the time to live (TTL) actually used by ping
+     * determines the time to live (TTL) actually used by ping
      *
      * @access private
      */
@@ -979,7 +979,7 @@ class Net_Ping_Result
     }
 
     /**
-    * Modifies the array to temoves leading and trailing blank lines
+    * Modifies the array to remove leading and trailing blank lines
     *
     * @access private
     */
