@@ -160,7 +160,7 @@ class Net_DNS2
      * record in the response and restarts the query at the domain name
      * specified in the data field of the CNAME record.
      *
-     * this can cause "unexpected" behavious, since i'm sure *most* people
+     * this can cause "unexpected" behaviour, since i'm sure *most* people
      * don't know DNS does this; there may be cases where Net_DNS2 returns a
      * positive response, even though the hostname the user looked up did not
      * actually exist.
@@ -223,7 +223,7 @@ class Net_DNS2
     public $dnssec_payload_size = 4000;
 
     /*
-     * the last exeception that was generated
+     * the last exception that was generated
      */
     public $last_exception = null;
 
@@ -389,7 +389,7 @@ class Net_DNS2
             // temporary list of name servers; do it this way rather than just
             // resetting the local nameservers value, just incase an exception
             // is thrown here; this way we might avoid ending up with an empty
-            // namservers list.
+            // nameservers list.
             //
             $ns = array();
 
@@ -736,7 +736,7 @@ class Net_DNS2
      *
      * @param stream $_type the RR type string
      *
-     * @return bool returns true/false if the RR type if cachable
+     * @return bool returns true/false if the RR type if cacheable
      * @access public
      *
      */
@@ -980,7 +980,7 @@ class Net_DNS2
                     $response = $this->sendUDPRequest($ns, $data);
 
                     //
-                    // check the packet header for a trucated bit; if it was truncated,
+                    // check the packet header for a truncated bit; if it was truncated,
                     // then re-send the request as TCP.
                     //
                     if ($response->header->tc == 1) {
