@@ -200,7 +200,7 @@ class OLE_PPS_Root extends OLE_PPS
     }
 
     /**
-    * Helper function for caculating a magic value for block sizes
+    * Helper function for calculating a magic value for block sizes
     *
     * @access private
     * @param integer $i2 The argument
