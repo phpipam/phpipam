@@ -110,7 +110,7 @@ class Net_IPv4
     // {{{ validateIP()
 
     /**
-     * Validate the syntax of the given IP adress
+     * Validate the syntax of the given IP address
      *
      * Using the PHP long2ip() and ip2long() functions, convert the IP
      * address from a string to a long and back.  If the original still
@@ -389,7 +389,7 @@ class Net_IPv4
 
     /**
      * Converts a dot-quad formatted IP address into a hexadecimal string
-     * @param  string $addr IP-adress in dot-quad format
+     * @param  string $addr IP-address in dot-quad format
      * @return mixed        false if invalid IP and hexadecimal representation as string if valid
      */
     function atoh($addr)
@@ -406,7 +406,7 @@ class Net_IPv4
 
     /**
      * Converts a hexadecimal string into a dot-quad formatted IP address
-     * @param  string $addr IP-adress in hexadecimal format
+     * @param  string $addr IP-address in hexadecimal format
      * @return mixed        false if invalid IP and dot-quad formatted IP as string if valid
      */
     function htoa($addr)
@@ -425,8 +425,8 @@ class Net_IPv4
     /**
      * Converts an IP address to a PHP double.  Better than ip2long because
      * a long in PHP is a signed integer.
-     * @param  string $ip  dot-quad formatted IP adress
-     * @return float       IP adress as double - positive value unlike ip2long
+     * @param  string $ip  dot-quad formatted IP address
+     * @return float       IP address as double - positive value unlike ip2long
      */
     function ip2double($ip)
     {
