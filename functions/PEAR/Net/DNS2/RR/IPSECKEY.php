@@ -112,7 +112,7 @@ class Net_DNS2_RR_IPSECKEY extends Net_DNS2_RR
     public $algorithm;
 
     /*
-     * The gatway information 
+     * The gateway information 
      */
     public $gateway;
 
@@ -254,7 +254,7 @@ class Net_DNS2_RR_IPSECKEY extends Net_DNS2_RR
             $offset = 3;
 
             //
-            // extract the gatway based on the type
+            // extract the gateway based on the type
             //
             switch($this->gateway_type) {
             case self::GATEWAY_TYPE_NONE:
