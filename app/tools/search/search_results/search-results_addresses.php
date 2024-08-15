@@ -63,7 +63,7 @@ $result_addresses = $Tools->search_addresses($searchTerm, $searchTerm_edited['hi
 <?php
 
 $m = 0;		//for section change
-$n = 0;		//fpr ermission and result count
+$n = 0;		//fpr permission and result count
 
 /* if no result print nothing found */
 if(is_array($result_addresses)) {
