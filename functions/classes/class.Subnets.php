@@ -3458,8 +3458,8 @@ class Subnets extends Common_functions {
 		# Find the first|last $count available free subnets of size $mask inside the freespacemap array.
 		#   return values =  array (subnets => $available_subnets, truncated => false);
 		$nets = array();
-		$levels_full = 8; # Display all availble subnets for n sections,
-		$level_trunc = 8; # then display the first y availble subnets in the remaining sections
+		$levels_full = 8; # Display all available subnets for n sections,
+		$level_trunc = 8; # then display the first y available subnets in the remaining sections
 
 		for ($mask = $parent->mask + 1; $mask <= $max_mask; $mask++) {
 			// Calculate number of subnets to find at each level
