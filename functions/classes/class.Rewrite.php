@@ -72,7 +72,7 @@ class Rewrite {
 
 
 	/**
-	 * Constructior
+	 * Constructor
 	 *
 	 * @method __construct
 	 */
