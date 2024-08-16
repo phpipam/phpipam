@@ -58,7 +58,7 @@ class User extends Common_functions {
     protected $isadmin = false;
 
     /**
-     * limit for IP block - after how many attampts user is blocked
+     * limit for IP block - after how many attempts user is blocked
      *
      * (default value: 5)
      *
@@ -1838,7 +1838,7 @@ class User extends Common_functions {
     }
 
     /**
-     * purges login attampts more than 5 minutes old (since last attempt)
+     * purges login attempts more than 5 minutes old (since last attempt)
      *
      * @access private
      * @return void
@@ -1853,7 +1853,7 @@ class User extends Common_functions {
     }
 
     /**
-     * updates existing log attampt count
+     * updates existing log attempt count
      *
      * @access private
      * @return void
