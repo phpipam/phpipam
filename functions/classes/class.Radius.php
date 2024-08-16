@@ -190,7 +190,7 @@ class Radius
     var $_radius_suffix;          // Radius suffix (default is '');
     var $_udp_timeout;            // Timeout of the UDP connection in seconds (default value is 5)
     var $_authentication_port;    // Authentication port (default value is 1812)
-    var $_accounting_port;        // Accouting port (default value is 1813)
+    var $_accounting_port;        // Accounting port (default value is 1813)
     var $_nas_ip_address;         // NAS IP address
     var $_nas_port;               // NAS port
     var $_encrypted_password;     // Encrypted password, as described in the RFC 2865
