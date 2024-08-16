@@ -2748,7 +2748,7 @@ class Subnets extends Common_functions {
 		# fetch all subnet ids
 		$res2 = $this->fetch_distinct_multicast_folders ();
 
-		# array chack
+		# array check
 		if($res===false)    $res = array();
 		if($res2===false)   $res2 = array();
 
