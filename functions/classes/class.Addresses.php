@@ -858,7 +858,7 @@ class Addresses extends Common_functions {
 	 */
 
 	/**
-	 * Modifes powerDNS PTR record
+	 * Modifies powerDNS PTR record
 	 *
 	 * @access public
 	 * @param mixed $action
@@ -1863,10 +1863,10 @@ class Addresses extends Common_functions {
         if ($cnt>0) {
             $html[] = "</table>";
             if($type=="subnet") {
-                print  " <a href='".create_link("subnets",$subnet->sectionId, $subnet->id, "nat")."' class='btn btn-xs btn-default show_popover fa fa-exchange' style='font-size:11px;margin-top:-3px;padding:1px 3px;' data-toggle='popover' title='"._('Object is Natted')."' data-trigger='hover' data-html='true' data-content='".implode("\n", $html)."'></a>";
+                print  " <a href='".create_link("subnets",$subnet->sectionId, $subnet->id, "nat")."' class='btn btn-xs btn-default show_popover fa fa-exchange' style='font-size:11px;margin-top:-3px;padding:1px 3px;' data-toggle='popover' title='"._('Object is NATted')."' data-trigger='hover' data-html='true' data-content='".implode("\n", $html)."'></a>";
             }
             else {
-                print  " <a href='".create_link("subnets",$subnet->sectionId, $subnet->id, "address-details", $address->id, "nat")."' class='btn btn-xs btn-default show_popover fa fa-exchange' style='font-size:11px;margin-top:-3px;padding:1px 3px;' data-toggle='popover' title='"._('Object is Natted')."' data-trigger='hover' data-html='true' data-content='".implode("\n", $html)."'></a>";
+                print  " <a href='".create_link("subnets",$subnet->sectionId, $subnet->id, "address-details", $address->id, "nat")."' class='btn btn-xs btn-default show_popover fa fa-exchange' style='font-size:11px;margin-top:-3px;padding:1px 3px;' data-toggle='popover' title='"._('Object is NATted')."' data-trigger='hover' data-html='true' data-content='".implode("\n", $html)."'></a>";
             }
         }
 	}
