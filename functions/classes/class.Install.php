@@ -553,7 +553,7 @@ class Upgrade extends Install {
 			print "<div class='text-right'><a class='btn btn-sm btn-default' href='".create_link('administration', "verify-database")."'>"._("Go to administration and fix")."</a></div><br><hr><br>";
 
 			if(sizeof($queries_ok)>0)
-			$this->Result->show("success", _("Succesfull queries").": <pre>".implode("<br>", $queries_ok)."</pre>", false);
+			$this->Result->show("success", _("Succesful queries").": <pre>".implode("<br>", $queries_ok)."</pre>", false);
 			if(sizeof($queries)>0)
 			$this->Result->show("warning", _("Not executed queries").": <pre>".implode("<br>", $queries)."</pre>", false);
 
