@@ -1,7 +1,7 @@
 <?php
 
 /**
- * phpIPAM password chack class
+ * phpIPAM password check class
  *
  * validates password against password policy
  */
