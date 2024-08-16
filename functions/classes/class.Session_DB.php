@@ -23,7 +23,7 @@ class Session_DB {
 	public $Result;
 
 	/**
-	 * Construnctor
+	 * Constructor
 	 *
 	 * @method __construct
 	 * @param  Database_PDO $database
