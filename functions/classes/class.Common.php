@@ -550,7 +550,7 @@ class Common_functions  {
     }
 
     /**
-     * Checks if object alreay exists in cache..
+     * Checks if object already exists in cache..
      *
      * @access protected
      * @param mixed $table
@@ -887,7 +887,7 @@ class Common_functions  {
 
 			// NOTE The colon character ":" is reserved as it used in array_to_log for implode/explode.
 			// Replace colon (U+003A) with alternative characters.
-			// Using JSON encode/decode would be more appropiate but we need to maintain backwards compatibility with historical changelog/logs data in the database.
+			// Using JSON encode/decode would be more appropriate but we need to maintain backwards compatibility with historical changelog/logs data in the database.
 			if ($req == "mac")
 				$req = strtr($req, ':', '-'); # Mac-addresses, replace Colon U+003A with hyphen U+002D
 
