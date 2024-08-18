@@ -426,7 +426,7 @@ class User extends Common_functions {
      * @return void
      */
     private function set_user_theme () {
-        // set defaukt theme if field is missing
+        // set default theme if field is missing
         if(!isset($this->settings->theme)) {
             $this->settings->theme = "dark";
         }
@@ -464,7 +464,7 @@ class User extends Common_functions {
     }
 
     /**
-     * resets inactivity time after each succesfull login
+     * resets inactivity time after each successful login
      *
      * @access private
      * @return void
@@ -503,7 +503,7 @@ class User extends Common_functions {
      * @return void
      */
     private function set_redirect_cookie () {
-        # save current redirect vaule
+        # save current redirect value
         if (isset($_SERVER['SCRIPT_URL'])) {
             if( $_SERVER['SCRIPT_URL']=="/login/" ||
                 $_SERVER['SCRIPT_URL']=="logout" ||
@@ -597,7 +597,7 @@ class User extends Common_functions {
 
 
     /**
-     * @miscalaneous methods
+     * @miscellaneous methods
      * ------------------------------
      */
 
@@ -842,7 +842,7 @@ class User extends Common_functions {
     }
 
     /**
-     * tries to fetch user datails from database by username if not already existing locally
+     * tries to fetch user details from database by username if not already existing locally
      *
      * @access public
      * @param string $username
@@ -1714,7 +1714,7 @@ class User extends Common_functions {
         $this->update_session_language ();
 
         # ok, update log table
-        $this->Log->write( _("User self update"), _("User self update suceeded")."!", 0 );
+        $this->Log->write( _("User self update"), _("User self update succeeded")."!", 0 );
         return true;
     }
 
@@ -1877,7 +1877,7 @@ class User extends Common_functions {
     }
 
     /**
-     * removes blocked IP entry if it exists on successfull login
+     * removes blocked IP entry if it exists on successful login
      *
      * @access private
      * @return void
