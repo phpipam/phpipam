@@ -287,7 +287,7 @@ class phpipam_rack extends Tools {
      *
      * @param  int $id
      * @param  bool|int $deviceId   // active device id
-     * @param  bool $is_back        // we are drwaing back side
+     * @param  bool $is_back        // we are drawing back side
      * @param  bool $draw_names     // user permission for devices
      *
      * @return void
@@ -416,7 +416,7 @@ class phpipam_rack extends Tools {
     }
 
     /**
-     * Set active rack devide.
+     * Set active rack device.
      *
      * @access public
      * @param mixed $id         // device id
