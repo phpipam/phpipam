@@ -119,7 +119,7 @@
  *       extension=php_sockets.dll in php.ini
  *
  *
- * Other related ressources
+ * Other related resources
  *
  *   FreeRADIUS, a free Radius server implementation for Linux and *nix environments:
  *     http://www.freeradius.org/
