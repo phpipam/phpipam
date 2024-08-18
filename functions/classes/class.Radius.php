@@ -69,7 +69,7 @@
  *     <?php
  *         require_once('radius.class.php');
  *         $radius = new Radius('127.0.0.1', 'secret');
- *         $radius->SetNasIpAddress('1.2.3.4'); // Needed for some devices, and not auto_detected if PHP not runned through a web server
+ *         $radius->SetNasIpAddress('1.2.3.4'); // Needed for some devices, and not auto_detected if PHP not ran through a web server
  *         if ($radius->AccessRequest('user', 'pass'))
  *         {
  *             echo "Authentication accepted.";
@@ -85,7 +85,7 @@
  *         require_once('radius.class.php');
  *         $radius = new Radius('127.0.0.1', 'secret');
  *         $radius->SetNasPort(0);
- *         $radius->SetNasIpAddress('1.2.3.4'); // Needed for some devices, and not auto_detected if PHP not runned through a web server
+ *         $radius->SetNasIpAddress('1.2.3.4'); // Needed for some devices, and not auto_detected if PHP not ran through a web server
  *         if ($radius->AccessRequest('user', 'pass'))
  *         {
  *             echo "Authentication accepted.";
