@@ -2467,7 +2467,7 @@ class Subnets extends Common_functions {
 						//check
 						if(sizeof(@$folder_subnets)>0) {
 							foreach($folder_subnets as $fs) {
-								//dont check against old
+								//don't check against old
 								if($fs->id!=$subnetId) {
 									//verify that all nested are inside its parent
 									if($this->verify_overlapping ( $this->transform_to_dotted($subnet)."/".$mask, $this->transform_to_dotted($fs->subnet)."/".$fs->mask)) {
@@ -2895,7 +2895,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $sectionId
 	 * @param mixed $vlanId
      * @param string $unique_required (default: "vlan")
-     * @param int $address_id (dafault: 0)
+     * @param int $address_id (default: 0)
      * @return bool
      */
     private function multicast_address_exists ($mac, $sectionId, $vlanId, $unique_required = "vlan", $address_id = 0) {
@@ -2935,7 +2935,7 @@ class Subnets extends Common_functions {
                 elseif ($unique_required=="section" && $sectionId==$line->sectionId)      { return true; }
             }
         }
-        // default doesnt exist
+        // default doesn't exist
         return false;
     }
 
@@ -2951,7 +2951,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $sectionId
 	 * @param mixed $vlanId
 	 * @param mixed $unique_required
-	 * @param int $address_id (defaut: 0)
+	 * @param int $address_id (default: 0)
 	 * @return string|true true if ok, else error text to be displayed
 	 */
 	public function validate_multicast_mac ($mac, $sectionId, $vlanId, $unique_required="vlan", $address_id = 0) {
@@ -3109,7 +3109,7 @@ class Subnets extends Common_functions {
 					} else {
 						$name = $s->description;
 					}
-					$this->Result->show("danger",  _("Failed to set subnet permissons for subnet")." $name!", true);
+					$this->Result->show("danger",  _("Failed to set subnet permissions for subnet")." $name!", true);
 					return false;
 				}
 			}
