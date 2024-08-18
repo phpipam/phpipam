@@ -112,7 +112,7 @@ class Session_DB {
 	 * @return bool
 	 */
 	public function _write ($id, $data) {
-		// we need some data otherwise dont save session
+		// we need some data, otherwise don't save session
 		if(is_blank($data)) {
 			//return true;
 		}
