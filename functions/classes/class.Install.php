@@ -424,7 +424,7 @@ class Upgrade extends Install {
 		foreach ($upgrade_queries as $version=>$query_arr) {
 			foreach ($query_arr as $query) {
 				// save query
-				$this->reqister_query ($version, $query);
+				$this->register_query ($version, $query);
 			}
 		}
 	}
@@ -432,12 +432,12 @@ class Upgrade extends Install {
 	/**
 	 * Add new query to upgrade query list
 	 *
-	 * @method reqister_query
+	 * @method register_query
 	 * @param  string $version
 	 * @param  string $query
 	 * @return void
 	 */
-	private function reqister_query ($version, $query) {
+	private function register_query ($version, $query) {
 		// check if version is higher than old version, otherwise skip query
 		if ($this->cmp_version_strings($version, $this->old_version) > 0) {
 			// break
