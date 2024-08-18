@@ -134,7 +134,7 @@ class OpenStreetMap extends Common_functions
         }
         $this->markers["$type-$id"] = 1;
 
-        // Add geoJSON locaiton marker data to map
+        // Add geoJSON location marker data to map
         $popuptxt = "<h5><a href='" . create_link("tools", $type, $id) . "'>" . $title . "</a></h5>";
         $popuptxt .= is_string($desc) ? "<span class=\'text-muted\'>" . $desc . "</span>" : "";
         $popuptxt = str_replace(["\r\n", "\n", "\r"], "<br>", $popuptxt);
