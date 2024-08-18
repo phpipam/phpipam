@@ -332,7 +332,7 @@ class Addresses extends Common_functions {
 
 		$bulk_search = $this->bulk_fetch_similar_addresses($address, $linked_field, $value);
 
-		// Check if similar addresses exist with the specifed $value
+		// Check if similar addresses exist with the specified $value
 		if (!isset($bulk_search[$address->{$linked_field}]))
 			return false;
 
@@ -1145,7 +1145,7 @@ class Addresses extends Common_functions {
 	}
 
 	/**
-	 * Returns array of all ptr indexes in surrent subnet
+	 * Returns array of all ptr indexes in current subnet
 	 *
 	 * @access public
 	 * @param mixed $subnetId
@@ -1573,7 +1573,7 @@ class Addresses extends Common_functions {
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {
-			# ignore already comressed range
+			# ignore already compressed range
 			if(!property_exists($addresses[$c], 'class') || $addresses[$c]->class!="compressed-range") {
 				# gap between this and previous
 				if(gmp_strval( @gmp_sub($addresses[$c]->ip_addr, $addresses[$c-1]->ip_addr)) != 1) {
