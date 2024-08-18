@@ -100,7 +100,7 @@ class Install extends Common_functions {
 
 		# install database
 		if($this->install_database_execute ($migrate) !== false) {
-		    # return true, if some errors occured script already died! */
+		    # return true, if some errors occurred script already died! */
 			sleep(1);
 			$this->Log = new Logging ($this->Database);
 			$this->Log->write( _("Database installation"), _("Database installed successfully.")._(" Version ").VERSION.".".REVISION._(" installed"), 1 );
@@ -286,7 +286,7 @@ class Install extends Common_functions {
 	}
 
 	/**
-	 * Sets DB parmaeters
+	 * Sets DB parameters
 	 *
 	 * @access private
 	 * @return void
@@ -508,7 +508,7 @@ class Upgrade extends Install {
 		# set queries
 		$queries = $this->get_queries ();
 		// create default arrays
-		$queries_ok = array();			// succesfull queries
+		$queries_ok = array();			// succesful queries
 
 		// execute
 		try {
