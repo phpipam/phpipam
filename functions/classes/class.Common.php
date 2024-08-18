@@ -280,7 +280,7 @@ class Common_functions  {
 	/**
 	 * Fetches multiple objects in specified table in database
 	 *
-	 *	doesnt cache
+	 *	doesn't cache
 	 *
 	 * @access public
 	 * @param mixed $table
@@ -443,7 +443,7 @@ class Common_functions  {
 		if (!is_object($settings))
 			return false;
 
-		// Escape ' & " charaters
+		// Escape ' & " characters
 		if (property_exists($settings, 'siteTitle'))
 			$settings->siteTitle = escape_input($settings->siteTitle);
 
@@ -1910,7 +1910,7 @@ class Common_functions  {
 		// calculate diff
 		if(is_array($old_permissions)) {
 			foreach ($old_permissions as $k1=>$p1) {
-				// if there is not permisison in new that remove old
+				// if there is no permission in new, than remove old
 				// if change than save
 				if (!array_key_exists($k1, $new_permissions)) {
 					$removed_permissions[$k1] = 0;
