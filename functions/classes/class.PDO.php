@@ -73,7 +73,7 @@ abstract class DB {
 	public $dbname 	= '';		// needed for DB check
 
 	/**
-	 * hosnamr
+	 * hostname
 	 *
 	 * (default value: 'localhost')
 	 *
@@ -231,7 +231,7 @@ abstract class DB {
 	}
 
 	/**
-	 * resets conection.
+	 * resets connection.
 	 *
 	 * @access public
 	 * @return void
@@ -362,7 +362,7 @@ abstract class DB {
 
 		$statement = $this->pdo->prepare($query);
 
-		//debuq
+		//debug
 		$this->log_query($statement, $values);
 
 		if (is_object($statement)) {
@@ -467,7 +467,7 @@ abstract class DB {
 		$tableName = $this->escape($tableName);
 		$statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'`;');
 
-		//debuq
+		//debug
 		$this->log_query ($statement);
 		$statement->execute();
 
@@ -492,7 +492,7 @@ abstract class DB {
 		$tableName = $this->escape($tableName);
 		$statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'` where `'.$method.'` '.$operator.' ?;');
 
-		//debuq
+		//debug
 		$this->log_query ($statement, (array) $value);
 		$statement->execute(array($value));
 
@@ -524,7 +524,7 @@ abstract class DB {
 
 		$tableName = $this->escape($tableName);
 
-		//get the objects id from the provided object and knock it off from the object so we dont try to update it
+		//get the objects id from the provided object and knock it off from the object so we don't try to update it
 		$objId[] = $obj[$primarykey];
 		unset($obj[$primarykey]);
 
@@ -561,7 +561,7 @@ abstract class DB {
 		//merge the parameters and values
 		$paramValues = array_merge(array_values($obj), $objId);
 
-		//debuq
+		//debug
 		$this->log_query ($statement, $paramValues);
 		//run the update on the object
 		return $statement->execute($paramValues);
@@ -723,7 +723,7 @@ abstract class DB {
 
 		$statement = $this->pdo->prepare($query);
 
-		//debuq
+		//debug
 		$this->log_query ($statement, $values);
 		$statement->execute((array)$values);
 
@@ -817,7 +817,7 @@ abstract class DB {
 			$statement = $this->pdo->prepare('SELECT * FROM `'.$tableName.'` LIMIT 1;');
 		}
 
-		//debuq
+		//debug
 		$this->log_query ($statement, array($id));
 		$statement->execute();
 
@@ -844,7 +844,7 @@ abstract class DB {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
-		//debuq
+		//debug
 		$this->log_query ($statement, $values);
 		$statement->execute((array)$values);
 
@@ -1045,7 +1045,7 @@ abstract class DB {
 	 * @return bool
 	 */
 	public function emptyTable($tableName) {
-		//escape talbe name
+		//escape table name
 		$tableName = $this->escape($tableName);
 		//execute
 		return $this->runQuery('TRUNCATE TABLE `'.$tableName.'`;');
@@ -1105,7 +1105,7 @@ class Database_PDO extends DB {
 	protected $pdo_ssl_opts = array ();
 
 	/**
-	 * flag if installation is happenig!
+	 * flag if installation is happening!
 	 *
 	 * (default value: false)
 	 *
