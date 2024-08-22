@@ -190,3 +190,8 @@ $upgrade_queries["1.5.39"]   = [];
 $upgrade_queries["1.5.39"][] = "INSERT INTO `widgets` (`wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('MAC lookup', 'Shows MAC address vendor', 'mac-lookup', NULL, 'yes', '6', 'no', 'yes');";
 $upgrade_queries["1.5.39"][] = "-- Database version bump";
 $upgrade_queries["1.5.39"][] = "UPDATE `settings` set `dbversion` = '39';";
+
+$upgrade_queries["1.5.40"]   = [];
+$upgrade_queries["1.5.40"][] = "ALTER TABLE `settings` ADD `scanFPingInterval` INT(12) NULL DEFAULT '10';";
+$upgrade_queries["1.5.40"][] = "-- Database version bump";
+$upgrade_queries["1.5.40"][] = "UPDATE `settings` set `dbversion` = '40';";
