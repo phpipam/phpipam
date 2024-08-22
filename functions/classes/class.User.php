@@ -685,10 +685,10 @@ class User extends Common_functions {
                         return false;
                     }
 
-                    # out array
-                    $fsubnets[] = (array) $fsubnet;
+                    # out array if sql was able to retrieve info for the favourite
+                    if (!empty($fsubnet)) $fsubnets[] = (array) $fsubnet;
                 }
-                return $fsubnets;
+                return empty($fsubnets) ? false : $fsubnets;
             } else {
                 return false;
             }
