@@ -761,7 +761,7 @@ class Subnets extends Common_functions {
 		try {
 			$query = "SELECT s.* FROM subnets AS s
 				INNER JOIN (SELECT subnet,mask,COUNT(*) AS cnt FROM subnets GROUP BY subnet,mask HAVING cnt >1) dups ON s.subnet=dups.subnet AND s.mask=dups.mask
-				and.s.isFolder=0 ORDER BY s.subnet,s.mask,s.id;";
+				AND s.isFolder=0 ORDER BY s.subnet,s.mask,s.id;";
 
 			$subnets = $this->Database->getObjectsQuery($query);
 
