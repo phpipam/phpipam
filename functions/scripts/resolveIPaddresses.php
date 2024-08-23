@@ -58,7 +58,7 @@ else {
 		$m++;
 	}
 	$query[] = ")";
-	# get ony ip's with empty DNS
+	# get only ip's with empty DNS
 	if($config['resolve_emptyonly'] == 1) {
 		$query[] = ' and (`hostname` = "" or `hostname` is NULL ) ';
 	}
