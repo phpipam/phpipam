@@ -14,6 +14,8 @@
     + Fixed Force mac address update during status update scan (#3791);
     + Fixed RADIUS authentication fails on 1.6.0 (#3986);
     + Fixed cannot add NAT issue (#3993);
+    + Fixed Ripe import results in jQuery error (#4007);
+    + Fixed Ripe import crashes if too many subnets are found (#4180);
 
     Enhancements, changes:
     ----------------------------
@@ -27,6 +29,7 @@
     + Upgraded jQuery to 3.7.1;
     + Cookies set without Secure attribute;
     + Multiple XSS injections (#4145,#4146,#4147,#4148,#4149.#4150,#4151);
+    + HTML DOM XSS injection via filenames when uploading (#4160);
 
 == 1.6.0
 
