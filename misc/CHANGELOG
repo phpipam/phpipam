@@ -14,6 +14,7 @@
     + Fixed Force mac address update during status update scan (#3791);
     + Fixed RADIUS authentication fails on 1.6.0 (#3986);
     + Fixed cannot add NAT issue (#3993);
+    + Fixed Various Linked Addresses issues (#3275, #4188, #4189, #3274);
 
     Enhancements, changes:
     ----------------------------
