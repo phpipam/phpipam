@@ -580,7 +580,7 @@ else {
 
 					// check permissions on the subnets where each 'similar' is located
 					foreach ($similar as $k=>$s) {
-						if ($Subnets->check_permission($User->user, $s->subnetId, $subnet)==0) unset($similar[$k]);
+						if ($Subnets->check_permission($User->user, $s->subnetId)==0) unset($similar[$k]);
 					}
 					// reindexes the array because there might be gaps now; this is important to make the tree structure look correct
 					$similar = array_values($similar);
