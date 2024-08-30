@@ -793,6 +793,62 @@ class User extends Common_functions {
     */
 
     /**
+     * Check / create automatically the user account without
+     * permissions.
+     * This is interesting for http auth backend/
+     *
+     * @access public
+     * @param string $username
+     * @return void
+     */
+    public function check_or_create ($username) {
+        try {
+            $user = $this->Database->findObject("users", "username", $username);
+        }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage(), true);
+        }
+
+        // if not result return false
+        $usert = (array) $user;
+        if(sizeof($usert)==0) {
+            $Admin = new Admin($this->Database, $admin_required = false);
+
+            // user properties (no group and http auth)
+            $values = array(
+		"id"             => "",
+		"real_name"      => $username,
+		"username"       => $username,
+		"email"          => $username."@example.com", // mandatory for user edit
+		"role"           => "User",
+		"authMethod"     => 2,                       // http
+		"lang"           => 1,
+		"mailNotify"     => "No",
+		"mailChangelog"  => "No",
+		"theme"          => "default",
+		"disabled"       => "No",
+            );
+
+            // no permission
+            foreach ($this->get_modules_with_permissions() as $m) {
+                $permissions[$m] = 0;
+            }
+            $values['module_permissions'] = json_encode($permissions);
+
+            // execute
+            if(!$Admin->object_modify("users", "add", "id", $values)) {
+                $Result->show("danger", _("User")." add "._("failed").'!', true);
+            }
+        } else {
+            // Authorization change (logout maybe)
+            if ($this->user->id != $user->id) {
+                $this->user = null;
+            }
+        }
+    }
+
+
+    /**
      * Main function for authenticating users
      *
      *    > tries to fetch user details from database by username
