@@ -257,7 +257,7 @@ class Subnets extends Common_functions {
 
 		# changelog
 		if($mail_changelog)
-		$this->Log->write_changelog('subnet', "edit", 'success', $old_subnet, $values);
+			$this->Log->write_changelog('subnet', "edit", 'success', $old_subnet, $values);
 		# ok
 		$this->Log->write( _("Subnet")." ".$old_subnet->description." "._("edit"), _("Subnet")." ".$old_subnet->description." "._("edited").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		return true;
@@ -520,7 +520,7 @@ class Subnets extends Common_functions {
 	 * @param string|false $field
 	 * @param mixed|false $value
 	 * @param array|string $result_fields   // fields to fetch
-	 * @return array
+	 * @return array|false
 	 */
 	public function fetch_section_subnets ($sectionId, $field = false, $value = false, $result_fields = "*") {
 		# fetch settings and set subnet ordering
@@ -3164,7 +3164,9 @@ class Subnets extends Common_functions {
 			$subnetsTree->walk(false);
 		}
 
-		$menu = new SubnetsMenu($this, @$_COOKIE['sstr'], @$_COOKIE['expandfolders'], @$_GET['subnetId']);
+		$cookie = new Params($_COOKIE);
+		$get    = new Params($_GET);
+		$menu = new SubnetsMenu($this, $cookie->sstr, $cookie->expandfolders, $get->subnetId);
 		$menu->subnetsTree($subnetsTree);
 
 		return $menu->html();
@@ -3701,15 +3703,15 @@ class Subnets extends Common_functions {
 			fputs ($ripe_connection, '-i origin as'. $as ."\r\n");
 			//save result to var out
 			$out = "";
-		    while (!feof($ripe_connection)) { $out .= fgets($ripe_connection); }
+			while (!feof($ripe_connection)) { $out .= fgets($ripe_connection); }
 
-		    //parse it
-		    $out = pf_explode("\n", $out);
+			//parse it
+			$out = pf_explode("\n", $out);
 
-		    //we only need route
-		    foreach($out as $line) {
-				if (!is_blank(strstr($line,"route"))) {
-    				if(!isset($subnet)) $subnet = array();
+			//we only want lines starting with route or route6
+			$subnet = array();
+			foreach($out as $line) {
+				if (substr($line,0,6)=="route:" || substr($line,0,7)=="route6:") {
 					//replace route6 with route
 					$line = str_replace("route6:", "route:", $line);
 					//only take IP address
@@ -3718,9 +3720,9 @@ class Subnets extends Common_functions {
 					//set result
 					$subnet[] = $line;
 				}
-		    }
-		    //return
-		    return isset($subnet) ? $subnet : array();
+			}
+			//return
+			return $subnet;
 		}
 	}
 

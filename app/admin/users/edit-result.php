@@ -190,16 +190,16 @@ foreach($_POST as $key=>$post) {
 }
 
 # passkey only
-if ($User->settings->{'passkeys'}==1) {
+if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}==1) {
 	$values['passkey_only'] = !isset($_POST['passkey_only']) ? 0 : 1;
 }
 
 # execute
 if(!$Admin->object_modify("users", $_POST['action'], "id", $values)) {
-    $Result->show("danger", _("User")." ".$_POST["action"]." "._("failed").'!', true);
+    $Result->show("danger", _("User")." ".$User->get_post_action()." "._("failed").'!', true);
 }
 else {
-    $Result->show("success", _("User")." ".$_POST["action"]." "._("successful").'!', false);
+    $Result->show("success", _("User")." ".$User->get_post_action()." "._("successful").'!', false);
 }
 
 # remove passkeys if required

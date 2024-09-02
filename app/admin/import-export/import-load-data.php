@@ -42,9 +42,9 @@ foreach ($expfields as $expfield) {
 		$Result->show('danger', _("Internal error: missing import field mapping."), true, true);
 	}
 	# prepare header row for preview table
-	$hrow.="<th>".$expfield."</th>";
+	$hrow.="<th>".escape_input($expfield)."</th>";
 	# prepare select field to transfer to actual import file
-	$hiddenfields.="<input name='importFields__".str_replace(" ", "_",trim($expfield))."' type='hidden' value='".$impfield."' style='display:none;'>";
+	$hiddenfields.="<input name='importFields__".escape_input(str_replace(" ", "_",trim($expfield)))."' type='hidden' value='".escape_input($impfield)."' style='display:none;'>";
 }
 
 $data = array();

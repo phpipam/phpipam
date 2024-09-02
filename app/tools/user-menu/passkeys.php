@@ -21,7 +21,7 @@ if (!$Tools->isHttps()) {
 	$Result->show("danger alert-absolute", _("TLS is required for passcode authentication"), false);
 }
 # are passkeys enabled ?
-elseif (!$User->settings->{'passkeys'}=="1") {
+elseif (!$User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
 	$Result->show("danger alert-absolute", _("Passkey authentication is disabled"), false);
 }
 # is composer present ?

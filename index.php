@@ -15,7 +15,7 @@ else {
 	header("Expires: Sat, 26 Jul 2016 05:00:00 GMT");   //Date in the past
 
 	# if not install fetch settings etc
-	if($_GET['page']!="install" ) {
+	if($GET->page!="install" ) {
 		# database object
 		$Database = new Database_PDO;
 
@@ -36,15 +36,15 @@ else {
 	}
 
 	/** include proper subpage **/
-	if($_GET['page']=="install")		{ require("app/install/index.php"); }
-	elseif($_GET['page']=="2fa")		{ require("app/login/2fa/index.php"); }
-	elseif($_GET['page']=="upgrade")	{ require("app/upgrade/index.php"); }
-	elseif($_GET['page']=="login")		{ require("app/login/index.php"); }
-	elseif($_GET['page']=="temp_share")	{ require("app/temp_share/index.php"); }
-	elseif($_GET['page']=="request_ip")	{ require("app/login/index.php"); }
-	elseif($_GET['page']=="opensearch")	{ require("app/tools/search/opensearch.php"); }
-	elseif($_GET['page']=="saml2")      { require("app/saml2/index.php"); }
-	elseif($_GET['page']=="saml2-idp")  { require("app/saml2/idp.php"); }
+	if($GET->page=="install")			{ require("app/install/index.php"); }
+	elseif($GET->page=="2fa")			{ require("app/login/2fa/index.php"); }
+	elseif($GET->page=="upgrade")		{ require("app/upgrade/index.php"); }
+	elseif($GET->page=="login")			{ require("app/login/index.php"); }
+	elseif($GET->page=="temp_share")	{ require("app/temp_share/index.php"); }
+	elseif($GET->page=="request_ip")	{ require("app/login/index.php"); }
+	elseif($GET->page=="opensearch")	{ require("app/tools/search/opensearch.php"); }
+	elseif($GET->page=="saml2")      	{ require("app/saml2/index.php"); }
+	elseif($GET->page=="saml2-idp")  	{ require("app/saml2/idp.php"); }
 	else {
 		# verify that user is logged in
 		$User->check_user_session();
@@ -52,7 +52,7 @@ else {
 		# make upgrade and php build checks
 		include('functions/checks/check_db_upgrade.php'); 	# check if database needs upgrade
 		include('functions/checks/check_php_build.php');	# check for support for PHP modules and database connection
-		if(@$_GET['switch'] && $_SESSION['realipamusername'] && @$_GET['switch'] == "back"){
+		if($GET->switch && $_SESSION['realipamusername'] && $GET->switch == "back"){
 			$_SESSION['ipamusername'] = $_SESSION['realipamusername'];
 			unset($_SESSION['realipamusername']);
 			print	'<script>window.location.href = "'.create_link(null).'";</script>';
@@ -60,7 +60,7 @@ else {
 
 		# set default pagesize
 		if(!isset($_COOKIE['table-page-size'])) {
-			setcookie_samesite("table-page-size", 50, 2592000, false);
+			setcookie_samesite("table-page-size", 50, 2592000, true, $User->isHttps());
 		}
 	?>
 	<!DOCTYPE HTML>
@@ -111,7 +111,7 @@ else {
 		<!-- js -->
 		<script src="js/jquery-3.7.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-		<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
+		<?php if($GET->page=="login" || $GET->page=="request_ip") { ?>
 		<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php } ?>
 		<script src="js/magic.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
@@ -226,7 +226,7 @@ else {
 	<!-- page sections / menu -->
 	<div class="content">
 	<div id="sections_overlay">
-	    <?php if($_GET['page']!="login" && $_GET['page']!="request_ip" && $_GET['page']!="upgrade" && $_GET['page']!="install" && $User->user->passChange!="Yes")  include('app/sections/index.php');?>
+	    <?php if($GET->page!="login" && $GET->page!="request_ip" && $GET->page!="upgrade" && $GET->page!="install" && $User->user->passChange!="Yes")  include('app/sections/index.php');?>
 	</div>
 	</div>
 
@@ -236,31 +236,31 @@ else {
 	<div class="container-fluid" id="mainContainer">
 			<?php
 			/* error */
-			if($_GET['page'] == "error") {
+			if($GET->page == "error") {
 				print "<div id='error' class='container'>";
 				include_once('app/error.php');
 				print "</div>";
 			}
-			/* password reset required */
-			elseif($User->user->passChange=="Yes") {
+			/* We are not "switched" & password reset required */
+			elseif(!isset($_SESSION['realipamusername']) && $User->user->passChange=="Yes") {
 				print "<div id='dashboard' class='container'>";
 				include_once("app/tools/pass-change/form.php");
 				print "</div>";
 			}
 			/* dashboard */
-			elseif(!isset($_GET['page']) || $_GET['page'] == "dashboard") {
+			elseif(!isset($GET->page) || $GET->page == "dashboard") {
 				print "<div id='dashboard'>";
 				include_once("app/dashboard/index.php");
 				print "</div>";
 			}
 			/* widgets */
-			elseif($_GET['page']=="widgets") {
+			elseif($GET->page=="widgets") {
 				print "<div id='dashboard' class='container'>";
 				include_once("app/dashboard/widgets/index.php");
 				print "</div>";
 			}
 			/* all sections */
-			elseif($_GET['page']=="subnets" && is_blank($_GET['section'])) {
+			elseif($GET->page=="subnets" && is_blank($GET->section)) {
 				print "<div id='dashboard' class='container'>";
 				include_once("app/sections/all-sections.php");
 				print "</div>";
@@ -271,67 +271,67 @@ else {
 				print "<tr>";
 
 				# fix for empty section
-				if( isset($_GET['section']) && (is_blank(@$_GET['section'])) )			{ unset($_GET['section']); }
+				if( isset($GET->section) && (is_blank($GET->section)) )			{ unset($GET->section); }
 
 				# hide left menu
-				if( ($_GET['page']=="tools"||$_GET['page']=="administration") && !isset($_GET['section'])) {
+				if( ($GET->page=="tools"||$GET->page=="administration") && !isset($GET->section)) {
 					//we dont display left menu on empty tools and administration
 				}
 				else {
 					# left menu
 					print "<td id='subnetsLeft'>";
-					print "<div id='leftMenu' class='menu-$_GET[page]'>";
-						if($_GET['page'] == "subnets" || $_GET['page'] == "vlan" ||
-						   $_GET['page'] == "vrf" 	  || $_GET['page'] == "folder")			{ include("app/subnets/subnets-menu.php"); }
-						else if ($_GET['page'] == "tools")									{ include("app/tools/tools-menu.php"); }
-						else if ($_GET['page'] == "administration")							{ include("app/admin/admin-menu.php"); }
+					print "<div id='leftMenu' class='menu-".escape_input($GET->page)."'>";
+						if($GET->page == "subnets" || $GET->page == "vlan" ||
+						   $GET->page == "vrf" 	  || $GET->page == "folder")			{ include("app/subnets/subnets-menu.php"); }
+						elseif ($GET->page == "tools")									{ include("app/tools/tools-menu.php"); }
+						elseif ($GET->page == "administration")							{ include("app/admin/admin-menu.php"); }
 					print "</div>";
 					print "</td>";
 
 				}
 				# content
 				print "<td id='subnetsContent'>";
-				print "<div class='row menu-$_GET[page]' id='content'>";
+				print "<div class='row menu-".escape_input($GET->page)."' id='content'>";
 					# subnets
-					if ($_GET['page']=="subnets") {
-						if(@$_GET['sPage'] == "address-details")							{ include("app/subnets/addresses/address-details-index.php"); }
-						elseif(!isset($_GET['subnetId']))									{ include("app/sections/section-subnets.php"); }
+					if ($GET->page=="subnets") {
+						if($GET->sPage == "address-details")							{ include("app/subnets/addresses/address-details-index.php"); }
+						elseif(!isset($GET->subnetId))									{ include("app/sections/section-subnets.php"); }
 						else																{ include("app/subnets/index.php"); }
 					}
 					# vrf
-					elseif ($_GET['page']=="vrf") 											{ include("app/tools/vrf/index.php"); }
+					elseif ($GET->page=="vrf") 											{ include("app/tools/vrf/index.php"); }
 					# vlan
-					elseif ($_GET['page']=="vlan") 											{ include("app/vlan/index.php"); }
+					elseif ($GET->page=="vlan") 											{ include("app/vlan/index.php"); }
 					# folder
-					elseif ($_GET['page']=="folder") 										{ include("app/folder/index.php"); }
+					elseif ($GET->page=="folder") 										{ include("app/folder/index.php"); }
 					# tools
-					elseif ($_GET['page']=="tools") {
-						if (!isset($_GET['section']))										{ include("app/tools/index.php"); }
+					elseif ($GET->page=="tools") {
+						if (!isset($GET->section))										{ include("app/tools/index.php"); }
 						else {
-	                        if (!isset($tools_menu_items[$_GET['section']]))             { header("Location: ".create_link("error","400")); die(); }
-							elseif (!file_exists("app/tools/$_GET[section]/index.php") && !file_exists("app/tools/custom/$_GET[section]/index.php"))
+	                        if (!isset($tools_menu_items[$GET->section]))             { header("Location: ".create_link("error","400")); die(); }
+							elseif (!file_exists("app/tools/".$GET->section."/index.php") && !file_exists("app/tools/custom/".$GET->section."/index.php"))
 							                                                                { header("Location: ".create_link("error","404")); die(); }
 							else 															{
-	    						if(file_exists("app/tools/$_GET[section]/index.php")) {
-	        						include("app/tools/$_GET[section]/index.php");
+	    						if(file_exists("app/tools/".$GET->section."/index.php")) {
+	        						include("app/tools/".$GET->section."/index.php");
 	    						}
 	    						else {
-	        					    include("app/tools/custom/$_GET[section]/index.php");
+	        					    include("app/tools/custom/".$GET->section."/index.php");
 	    						}
 	                        }
 						}
 					}
 					# admin
-					elseif ($_GET['page']=="administration") {
+					elseif ($GET->page=="administration") {
 						# Admin object
 						$Admin = new Admin ($Database);
 
-						if (!isset($_GET['section']))										{ include("app/admin/index.php"); }
-						elseif (@$_GET['subnetId']=="section-changelog")					{ include("app/sections/section-changelog.php"); }
+						if (!isset($GET->section))										{ include("app/admin/index.php"); }
+						elseif ($GET->subnetId=="section-changelog")					{ include("app/sections/section-changelog.php"); }
 						else {
-	                        if (!isset($admin_menu_items[$_GET['section']]))             { header("Location: ".create_link("error","400")); die(); }
-							elseif(!file_exists("app/admin/$_GET[section]/index.php")) 		{ header("Location: ".create_link("error","404")); die(); }
-							else 															{ include("app/admin/$_GET[section]/index.php"); }
+	                        if (!isset($admin_menu_items[$GET->section]))             { header("Location: ".create_link("error","400")); die(); }
+							elseif(!file_exists("app/admin/".$GET->section."/index.php")) 		{ header("Location: ".create_link("error","404")); die(); }
+							else 															{ include("app/admin/".$GET->section."/index.php"); }
 						}
 					}
 					# default - error

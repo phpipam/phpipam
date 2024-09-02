@@ -115,7 +115,7 @@ $(function(){
         	//remove all old references
         	$('ul.progressUl li').remove();
         	//add name to hidden class for magic.js
-        	$('.fname').html(data.files[0].name);
+        	$('.fname').text(data.files[0].name);
             var tpl = $('<li class="alert"><p></p><span></span></li>');
             // Append the file name and file size
             //--tpl.find('p').text(data.files[0].name).append(' (<i>' + formatFileSize(data.files[0].size) + '</i>)');

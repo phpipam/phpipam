@@ -103,8 +103,8 @@ if (sizeof($available_subnets)>0) {
     print "<div style='padding-left:20px;'>";
     foreach ($available_subnets as $s) {
         print "<div style='padding:1px;'>";
-        print "<a class='btn btn-xs btn-default btn-success create_section_subnet_from_search' data-subnet='".$Subnets->transform_address ($s, "dotted")."' data-bitmask='{$_POST['mask']}' data-sectionId='{$_POST['sectionid']}'><i class='fa fa-plus'></i> Create subnet</a> ";
-        print $Subnets->transform_address ($s, "dotted")."/".$_POST['mask'];
+        print "<a class='btn btn-xs btn-default btn-success create_section_subnet_from_search' data-subnet='".$Subnets->transform_address ($s, "dotted")."' data-bitmask='".escape_input($_POST['mask'])."' data-sectionId='".escape_input($_POST['sectionid'])."'><i class='fa fa-plus'></i> Create subnet</a> ";
+        print $Subnets->transform_address ($s, "dotted")."/".escape_input($_POST['mask']);
         print "</div>";
     }
     print "</div>";

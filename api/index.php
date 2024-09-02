@@ -52,6 +52,14 @@ try {
 	// start measuring
 	$start = microtime(true);
 
+	/***
+	 * PHP8.1 - Integers and floats in result sets will now be returned using native PHP types instead of strings when using emulated prepared statements.
+	 * Add option to restore prior behaviour for API consumers.
+	 */
+	if (isset($_SERVER['HTTP_API_STRINGIFY_RESULTS']) ? filter_var($_SERVER['HTTP_API_STRINGIFY_RESULTS'], FILTER_VALIDATE_BOOLEAN) : Config::ValueOf("api_stringify_results")) {
+		$Database->setStringifyFetches();
+	}
+
 	/* Validate application ---------- */
 
 	// verify that API is enabled on server
@@ -313,11 +321,14 @@ if($time_response) {
 
 $customFields = isset($controller) ? $controller->custom_fields : [];
 //output result
-echo $Response->formulate_result ($result, $time, $app->app_nest_custom_fields, $customFields);
+echo $Response->formulate_result ($result, $time, is_object($app) ? $app->app_nest_custom_fields : null, $customFields);
 
 // update access time
-try { $Database->updateObject("api", ["app_id"=>$app->app_id, "app_last_access"=>date("Y-m-d H:i:s")], 'app_id'); }
-catch (Exception $e) {}
+if (is_object($app)) {
+	try {
+		$Database->updateObject("api", ["app_id" => $app->app_id, "app_last_access" => date("Y-m-d H:i:s")], 'app_id');
+	} catch (Exception $e) {}
+}
 
 // exit
 exit();

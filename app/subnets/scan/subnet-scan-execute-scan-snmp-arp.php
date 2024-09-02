@@ -59,6 +59,7 @@ if ($devices_used !== false) {
 // if none set die
 if (!isset($permitted_devices))                 { $Result->show("danger", _("No devices for SNMP ARP query available"), true); }
 
+$found=[];
 // ok, we have devices, connect to each device and do query
 foreach ($permitted_devices as $d) {
     // init
@@ -212,7 +213,7 @@ else {
 	print "<tr>";
 	print "	<td colspan='$colspan'>";
 	print "<div id='subnetScanAddResult'></div>";
-	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='scan-snmp-arp' data-subnetId='".$_POST['subnetId']."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
+	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='scan-snmp-arp' data-subnetId='".escape_input($_POST['subnetId'])."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
 	print "	</td>";
 	print "</tr>";
 

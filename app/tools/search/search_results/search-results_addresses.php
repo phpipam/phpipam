@@ -41,8 +41,8 @@ $result_addresses = $Tools->search_addresses($searchTerm, $searchTerm_edited['hi
 	}
 	# owner and note
 	if( (in_array('owner', $selected_ip_fields)) && (in_array('note', $selected_ip_fields)) ) { print '<th class="hidden-sm hidden-xs">'._('Owner').'</th><th></th>'. "\n"; $address_span=$address_span+2; }
-	else if (in_array('owner', $selected_ip_fields)) 								{ print '<th class="hidden-sm hidden-xs">'._('Owner').'</th>'. "\n"; $address_span++; }
-	else if (in_array('note', $selected_ip_fields)) 								{ print '<th></th>'. "\n"; $address_span++; }
+	elseif (in_array('owner', $selected_ip_fields)) 								{ print '<th class="hidden-sm hidden-xs">'._('Owner').'</th>'. "\n"; $address_span++; }
+	elseif (in_array('note', $selected_ip_fields)) 								{ print '<th></th>'. "\n"; $address_span++; }
 
 	# custom fields
 	if(sizeof($custom_address_fields) > 0) {
@@ -66,7 +66,7 @@ $m = 0;		//for section change
 $n = 0;		//fpr ermission and result count
 
 /* if no result print nothing found */
-if(sizeof($result_addresses) > 0) {
+if(is_array($result_addresses)) {
 	/* print content */
 	foreach ($result_addresses as $line) {
 		# cast
@@ -133,7 +133,7 @@ if(sizeof($result_addresses) > 0) {
 			//location
 			if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
 				$location_name = $Tools->fetch_object("locations", "id", $line['location']);
-				print ' <td>'. $location_name->name .'</td>' . "\n";
+				print ' <td>' . (is_object($location_name) ? $location_name->name : '') . '</td>' . "\n";
 			}
 			//owner and note
 			if((in_array('owner', $selected_ip_fields)) && (in_array('note', $selected_ip_fields)) ) {
@@ -146,9 +146,9 @@ if(sizeof($result_addresses) > 0) {
 				print '</td>'. "\n";
 			}
 			//owner only
-			else if (in_array('owner', $selected_ip_fields)) 								{ print ' <td class="hidden-sm hidden-xs">'. $line['owner']  .'</td>' . "\n";	}
+			elseif (in_array('owner', $selected_ip_fields)) 								{ print ' <td class="hidden-sm hidden-xs">'. $line['owner']  .'</td>' . "\n";	}
 			//note only
-			else if (in_array('note', $selected_ip_fields)) {
+			elseif (in_array('note', $selected_ip_fields)) {
 				print '<td class="note">' . "\n";
 				if(!empty($line['note'])) {
 					$line['note'] = str_replace("\n", "<br>",$line['note']);

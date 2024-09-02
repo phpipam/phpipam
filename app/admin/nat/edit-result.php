@@ -82,10 +82,10 @@ if(sizeof($custom) > 0) {
 
 # execute update
 if(!$Admin->object_modify ("nat", $_POST['action'], "id", $values)) {
-    $Result->show("danger", _("NAT")." "._($_POST["action"])." "._("failed"), false);
+    $Result->show("danger", _("NAT")." ".$User->get_post_action()." "._("failed"), false);
 }
 else {
-    $Result->show("success", _("NAT")." "._($_POST["action"])." "._("successful"), false);
+    $Result->show("success", _("NAT")." ".$User->get_post_action()." "._("successful"), false);
 }
 # add
 if($_POST['action']=="add") {

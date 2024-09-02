@@ -211,6 +211,16 @@ abstract class DB {
 	}
 
 	/**
+	 * Set PDO stringify fetches, issue #4043
+	 *
+	 * @param boolean $stringify
+	 * @return bool
+	 */
+	public function setStringifyFetches($stringify = true) {
+		return $this->pdo->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, $stringify);
+	}
+
+	/**
 	 * makeDsn function.
 	 *
 	 * @access protected
@@ -1068,6 +1078,8 @@ abstract class DB {
 	 * @return bool
 	 */
 	public function rollBack() {
+		if (!$this->pdo->inTransaction())
+			return false;
 		return $this->pdo->rollBack();
 	}
 }

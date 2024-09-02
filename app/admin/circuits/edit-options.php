@@ -25,7 +25,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "circuit_options");
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action']);
+$Admin->validate_action(false);
 
 # validate type
 if(!in_array($_POST['type'], array("type"))) { $Result->show("danger", _('Invalid type'), true, true); }
@@ -35,7 +35,7 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('Circuit option'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('Circuit option'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -86,7 +86,7 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<a class="btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" data-script="app/admin/circuits/edit-options-submit.php" data-result_div="circuit-option-edit-result" data-form='circuit-option-edit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</a>
 	</div>
 

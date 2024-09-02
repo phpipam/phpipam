@@ -20,7 +20,7 @@ $User->check_user_session();
 $csrf = $User->Crypto->csrf_cookie ("create", "apiedit");
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['appid'])) { $Result->show("danger", _("Invalid ID"), true, true); }
@@ -32,7 +32,7 @@ if($_POST['action']!="add") {
 	# null ?
 	$api===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 	# title
-	$title =  ucwords($_POST['action']) .' '._('api').' '.$api->app_id;
+	$title = $User->get_post_action().' '._('api').' '.$api->app_id;
 } else {
 	# generate new code
 	$api = new StdClass;
@@ -195,7 +195,7 @@ if($_POST['action']!="add") {
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/api/edit-result.php" data-result_div="apiEditResult" data-form='apiEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 
 	</div>

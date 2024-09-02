@@ -46,7 +46,7 @@ if (!empty($_POST['theme'])) {
 }
 
 # passkeys
-if ($User->settings->{'passkeys'}=="1") {
+if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
 	// fetch passkeys
 	$user_passkeys = $User->get_user_passkeys($User->user->id);
 	// check

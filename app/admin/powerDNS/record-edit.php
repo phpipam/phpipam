@@ -35,7 +35,7 @@ $pdns = $PowerDNS->db_settings;
 $post = $_POST;
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # get record
 if($_POST['action']!="add") {
@@ -76,10 +76,10 @@ else {
 		if (!is_numeric($_POST['domain_id'])) {
     		# admin?
     		if ($User->is_admin()) {
-    			$Result->show("danger", _("Domain")." <strong>".$_POST['domain_id']."</strong><span class='ip_dns_addr hidden'>".$_POST['id']."</span> "._("does not exist")."!"."<hr><button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0' data-secondary='true'><i class='fa fa-plus'></i> "._('Create domain')."</button>", true, true);
+    			$Result->show("danger", _("Domain")." <strong>".escape_input($_POST['domain_id'])."</strong><span class='ip_dns_addr hidden'>".escape_input($_POST['id'])."</span> "._("does not exist")."!"."<hr><button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0' data-secondary='true'><i class='fa fa-plus'></i> "._('Create domain')."</button>", true, true);
     		}
     		else {
-    			$Result->show("danger", _("Domain")." <strong>".$_POST['domain_id']."</strong> "._("does not exist")."!", true, true);
+    			$Result->show("danger", _("Domain")." <strong>".escape_input($_POST['domain_id'])."</strong> "._("does not exist")."!", true, true);
     		}
 		}
 		else {
@@ -113,7 +113,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('DNS record'); ?> <?php print _('for domain'); ?> <strong><?php print $domain->name; ?></strong></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('DNS record'); ?> <?php print _('for domain'); ?> <strong><?php print $domain->name; ?></strong></div>
 
 <!-- content -->
 <div class="pContent">
@@ -127,8 +127,8 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 		<td>
 			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('www.example.com'); ?>" value="<?php print $record->name; ?>" <?php print $readonly; ?>>
 			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
-			<input type="hidden" name="id" value="<?php print @$_POST['id']; ?>">
-			<input type="hidden" name="domain_id" value="<?php print @$_POST['domain_id']; ?>">
+			<input type="hidden" name="id" value="<?php print escape_input(@$_POST['id']); ?>">
+			<input type="hidden" name="domain_id" value="<?php print escape_input(@$_POST['domain_id']); ?>">
             <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
@@ -212,7 +212,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 		<?php if($_POST['action']!=="delete" && isset($record->id) && $User->get_module_permissions ("pdns")>=User::ACCESS_RWA) { ?>
 		<button class="btn btn-sm btn-default btn-danger" id="editRecordSubmitDelete"><i class="fa fa-trash-o"></i> <?php print _("Delete"); ?></button>
 		<?php } ?>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editRecordSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
+		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editRecordSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="record-edit-result"></div>

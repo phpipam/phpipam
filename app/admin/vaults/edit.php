@@ -24,7 +24,7 @@ if ($User->get_module_permissions ("vaults")<User::ACCESS_RWA) { $Result->show("
 $csrf = $User->Crypto->csrf_cookie ("create", "vaults");
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['id'])) { $Result->show("danger", _("Invalid ID"), true, true); }
@@ -36,7 +36,7 @@ if($_POST['action']!="add") {
 	# null ?
 	$vault===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 	# title
-	$title =  ucwords($_POST['action']) .' '._('vault').' '.$vault->name;
+	$title = $User->get_post_action().' '._('vault').' '.$vault->name;
 } else {
 	# generate new code
 	$vault = new StdClass;
@@ -142,7 +142,7 @@ $custom = $Tools->fetch_custom_fields('vaults');
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/vaults/edit-result.php" data-result_div="vaultEditResult" data-form='vaultEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 
 	</div>

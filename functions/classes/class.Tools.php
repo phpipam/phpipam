@@ -1104,7 +1104,7 @@ class Tools extends Common_functions {
 				$mail['State'] = $this->Addresses-> address_type_index_to_type ($v);
 			}
 			// description
-			elseif ($k=="descriotion") {
+			elseif ($k=="description") {
 				$mail['Description'] = $v;
 			}
 			// hostname

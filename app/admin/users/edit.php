@@ -25,7 +25,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "user");
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # fetch custom fields
 $custom 	= $Tools->fetch_custom_fields('users');
@@ -77,7 +77,7 @@ $(document).ready(function(){
 
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords($_POST['action'])." "._('user'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action()." "._('user'); ?></div>
 
 
 <!-- content -->
@@ -182,7 +182,7 @@ $(document).ready(function(){
 	<?php } ?>
 
 
-	<?php if ($User->settings->{'passkeys'}=="1" && sizeof($user_passkeys)>0 && $_POST['action']!=="delete") { ?>
+	<?php if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1" && sizeof($user_passkeys)>0 && $_POST['action']!=="delete") { ?>
 	<tr>
 		<td colspan="3"><hr></td>
 	    <tr>
@@ -469,7 +469,7 @@ $(document).ready(function(){
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/users/edit-result.php" data-result_div="usersEditResult" data-form='usersEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 	</div>
 

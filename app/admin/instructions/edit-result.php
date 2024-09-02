@@ -13,6 +13,7 @@ $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Result 	= new Result ();
 $Log 		= new Logging ($Database, $User->settings);
+$Params     = new Params ($_POST);
 
 # verify that user is logged in
 $User->check_user_session();
@@ -20,17 +21,17 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "instructions", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "instructions", $Params->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # strip script
-$_POST['instructions'] = $User->noxss_html($_POST['instructions']);
+$Params->instructions = $User->noxss_html($Params->instructions);
 
 # validate ID
-if ($_POST['id']=="1" || $_POST['id']=="2") {
+if ($Params->id=="1" || $Params->id=="2") {
     // update
-    if($Database->objectExists("instructions", $_POST['id'])) {
+    if($Database->objectExists("instructions", $Params->id)) {
         print "update";
-        try { $Database->updateObject("instructions", array("id"=>$_POST['id'], "instructions"=>$_POST['instructions']), "id"); }
+        try { $Database->updateObject("instructions", array("id"=>$Params->id, "instructions"=>$Params->instructions), "id"); }
         catch (Exception $e) {
         	$Result->show("danger", _("Error: ").$e->getMessage(), false);
             $Log->write( _("Instructions updated"), _("Failed to update instructions")."<hr>".$e->getMessage(), 1);
@@ -38,7 +39,7 @@ if ($_POST['id']=="1" || $_POST['id']=="2") {
      }
     // create new
     else {
-        try { $Database->insertObject("instructions", array("id"=>$_POST['id'], "instructions"=>$_POST['instructions']), false, true, false); }
+        try { $Database->insertObject("instructions", array("id"=>$Params->id, "instructions"=>$Params->instructions), false, true, false); }
         catch (Exception $e) {
         	$Result->show("danger", _("Error: ").$e->getMessage(), false);
             $Log->write( _("Instructions updated"), _("Failed to update instructions")."<hr>".$e->getMessage(), 1);

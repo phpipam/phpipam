@@ -16,8 +16,7 @@
  */
 
 #[AllowDynamicProperties]
-class Params extends stdClass
-{
+class Params extends stdClass {
 
     /**
      * Default value to return for undefined class properties
@@ -31,10 +30,10 @@ class Params extends stdClass
      *
      * @param array $args
      * @param mixed $default
+     * @param bool  $strip_tags
      */
-    public function __construct($args = [], $default = null)
-    {
-        $this->read($args);
+    public function __construct($args = [], $default = null, $strip_tags = false) {
+        $this->read($args, $strip_tags);
         $this->____default = $default;
     }
 
@@ -44,8 +43,7 @@ class Params extends stdClass
      * @param string $name
      * @return mixed
      */
-    public function __get($name)
-    {
+    public function __get($name) {
         if (isset($this->{$name}))
             return $this->{$name};
 
@@ -59,8 +57,7 @@ class Params extends stdClass
      * @param mixed $value
      * @return void
      */
-    public function __set($name, $value)
-    {
+    public function __set($name, $value) {
         $this->{$name} = $value;
     }
 
@@ -68,15 +65,19 @@ class Params extends stdClass
      * Read array of arguments
      *
      * @param array $args
+     * @param bool  $strip_tags
      * @return void
      */
-    public function read($args)
-    {
+    public function read($args, $strip_tags = false) {
         if (!is_array($args))
             return;
 
         foreach ($args as $name => $value) {
-            $this->{$name} = $value;
+            if ($strip_tags && is_string($value)) {
+                $this->{$name} = strip_tags($value);
+            } else {
+                $this->{$name} = $value;
+            }
         }
     }
 }

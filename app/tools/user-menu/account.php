@@ -23,11 +23,11 @@ $User->check_user_session();
 $langs = $User->fetch_langs();
 
 // passkeys
-if ($User->settings->{'passkeys'}=="1") {
+if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
 	// get user passkeys
 	$user_passkeys = $User->get_user_passkeys($User->user->id);
 	// set passkey_only flag
-	$passkey_only = $User->settings->{'passkeys'}=="1" && sizeof($user_passkeys)>0 && $User->user->passkey_only=="1" ? true : false;
+	$passkey_only = sizeof($user_passkeys)>0 && $User->user->passkey_only=="1" ? true : false;
 }
 ?>
 
@@ -84,7 +84,7 @@ if($User->user->authMethod == 1) {
 <?php } ?>
 
 
-<?php if ($User->settings->{'passkeys'}=="1") { ?>
+<?php if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") { ?>
 <!-- passkey login only -->
 <tr>
     <td><?php print _('Passkey login only'); ?></td>

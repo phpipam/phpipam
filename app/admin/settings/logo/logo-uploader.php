@@ -35,7 +35,7 @@ else {
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('Upload custom logo'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('Upload custom logo'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -97,7 +97,7 @@ else {
 	        	$('ul.progressUl li').remove();
 
 	        	//add name to hidden class for magic.js
-	        	$('.fname').html(data.files[0].name);
+	        	$('.fname').text(data.files[0].name);
 
 	            var tpl = $('<li class="alert"><p></p><span></span></li>');
 

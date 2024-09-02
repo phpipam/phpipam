@@ -1146,15 +1146,34 @@ class Common_functions  {
 	 * Validate posted action on scripts
 	 *
 	 * @access public
-	 * @param mixed $action
 	 * @param bool $popup
 	 * @return mixed|bool
 	 */
-	public function validate_action ($action, $popup = false) {
-		# get valid actions
-		$valid_actions = $this->get_valid_actions ();
-		# check
-		in_array($action, $valid_actions) ?: $this->Result->show("danger", _("Invalid action!"), true, $popup);
+	public function validate_action($popup = true) {
+		$action = isset($_POST['action']) ? $_POST['action'] : '';
+		$valid_actions = $this->get_valid_actions();
+
+		if (!in_array($action, $valid_actions)) {
+			$this->Result->show("danger", _("Invalid action!"), true, $popup);
+		}
+	}
+
+	/**
+	 * Safely translate $_POST['action'] for print()
+	 *
+	 * @return string
+	 */
+	public function get_post_action() {
+		if (isset($_POST['action'])) {
+			$action = $_POST['action'];
+			$valid_actions = $this->get_valid_actions();
+
+			if (in_array($action, $valid_actions)) {
+				return escape_input(ucwords(_($action)));
+			}
+		}
+
+		return '';
 	}
 
 	/**
@@ -1845,10 +1864,12 @@ class Common_functions  {
 
 		if (empty($this->mac_address_vendors)) {
 			// Generated from vendorMac.xml
-			// Unique MAC address: 45344
-			// Updated: 12 March 2022
+			// Unique MAC address: 51316
+			// Updated: 05 April 2024
 			$data = file_get_contents(dirname(__FILE__) . "/../vendormacs.json");
-			$this->mac_address_vendors = pf_json_decode($data, true);
+			if (is_string($data)) {
+				$this->mac_address_vendors = json_decode($data, true);
+			}
 		}
 
 		// Find longest prefix match in $this->mac_address_vendors array (max 9)
