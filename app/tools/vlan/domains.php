@@ -16,6 +16,12 @@ $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 <?php } ?>
 </div>
 
+<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) { ?>
+<div class="btn-group pull-right" style="margin-bottom:10px;">
+	<div class="hidden"><select name="dataType"><option value='vlan' selected="selected">VLAN</option></select></div>
+	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title="Export data entries for the selected type"><i class="fa fa-download"></i> Export</button>
+</div>
+<?php } ?>
 
 <table class="table sorted nosearch nopagination table-striped table-top table-condensed table-auto-wide" data-cookie-id-table='tools_l2_all'>
 <!-- headers -->
@@ -56,7 +62,7 @@ foreach($vlan_domains as $domain) {
 	}
 	else {
 		//explode
-		unset($sec);
+		$sec = [];
 		$sections_tmp = pf_explode(";", $domain->permissions);
 		foreach($sections_tmp as $t) {
 			//fetch section

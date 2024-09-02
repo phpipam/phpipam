@@ -127,7 +127,7 @@ else {
                 $policy_dst = $n->policy=="Yes" ? $n->policy_dst : "/";
 
                 // description
-                $n->description = str_replace("\n", "<br>", $n->description);
+                $n->description = is_null($n->description) ? "" : str_replace("\n", "<br>", $n->description);
 
                 // port
                 if(is_blank($n->src_port)) $n->src_port = "/";

@@ -157,6 +157,7 @@ if(
 ) {
 	// Create a worksheet
 	$worksheet_domains =& $workbook->addWorksheet('Domains');
+	$worksheet_domains->setInputEncoding("utf-8");
 
 	$curRow = 0;
 	$curColumn = 0;

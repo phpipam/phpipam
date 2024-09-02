@@ -27,7 +27,7 @@ if($folder_permission == 0)			{ $Result->show("danger", _('You do not have permi
 
 # get all slaves and addresses
 $slaves = $Subnets->fetch_subnet_slaves ($folderId);
-$addresses = $Addresses->fetch_subnet_addresses ($folder['id'], $sort['field'], $sort['direction']);
+$addresses = $Addresses->fetch_subnet_addresses ($folder['id'], @$sort['field'], @$sort['direction']);
 
 # print Folder details
 print "<div class='subnetDetails'>";

@@ -52,7 +52,7 @@ exit</pre>
 				<pre><?php
 					$esc_user = escape_input($db['user']);
 					$esc_pass = escape_input(_("<YOUR SECRET PASSWORD FROM config.php>"));
-					$esc_webhost = is_string($db['webhost']) && strlen($db['webhost']) ? escape_input($db['webhost']) : 'localhost';
+					$esc_webhost = is_string(@$db['webhost']) && strlen(@$db['webhost']) ? escape_input($db['webhost']) : 'localhost';
 					$db_name  = escape_input($db['name']);
 
 					print "# Set permissions for phpipam user <br>";

@@ -146,7 +146,7 @@ class Install extends Common_functions {
 		$esc_user = addcslashes($this->db['user'],"'");
 		$esc_pass = addcslashes($this->db['pass'],"'");
 		$db_name  = $this->db['name'];
-		$webhost  = is_string($this->db['webhost']) && !is_blank($this->db['webhost']) ? addcslashes($this->db['webhost'],"'") : 'localhost';
+		$webhost  = is_string(@$this->db['webhost']) && !is_blank(@$this->db['webhost']) ? addcslashes($this->db['webhost'],"'") : 'localhost';
 
 		try {
 			# Check if user exists;

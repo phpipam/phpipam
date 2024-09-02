@@ -24,7 +24,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "widget");
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # fetch widget
 if($_POST['action']!="add") {
@@ -35,7 +35,7 @@ if($_POST['action']!="add") {
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords($_POST['action'])." widget"; ?></div>
+<div class="pHeader"><?php print $User->get_post_action().' '._('widget'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -55,7 +55,7 @@ if($_POST['action']!="add") {
     	<td>
     		<input class="form-control input-sm input-w-250" type="text" name="wdescription" value="<?php print $Admin->strip_xss(@$w['wdescription']); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 
-    		<input type="hidden" name="wid" value="<?php print @$_POST['wid']; ?>">
+    		<input type="hidden" name="wid" value="<?php print escape_input(@$_POST['wid']); ?>">
     		<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	</td>
@@ -133,7 +133,7 @@ if($_POST['action']!="add") {
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/widgets/edit-result.php" data-result_div="widgetEditResult" data-form='widgetEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 
 	</div>

@@ -14,11 +14,12 @@ $Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Racks      = new phpipam_rack ($Database);
 $Result 	= new Result ();
+$Params		= new Params ($User->strip_input_tags ($_POST));
 
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($_POST['action']=="edit") {
+if($Params->action=="edit") {
     $User->check_module_permissions ("devices", User::ACCESS_RW, true, false);
 }
 else {
@@ -29,13 +30,12 @@ else {
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "device", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-
+$User->Crypto->csrf_cookie ("validate", "device", $Params->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 # get modified details
-$device = $Admin->strip_input_tags($_POST);
+$device = (array) $Params;
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['switchid']))			{ $Result->show("danger", _("Invalid ID"), true); }
+if($Params->action!="add" && !is_numeric($Params->switchid))			{ $Result->show("danger", _("Invalid ID"), true); }
 
 # available devices set
 foreach($device as $key=>$line) {
@@ -62,9 +62,11 @@ if (!is_blank(@$device['rack']) && $User->get_module_permissions ("racks")>=User
         if (!is_numeric($device['rack']))                               { $Result->show("danger", _('Invalid rack identifier').'!', true); }
         if (!is_numeric($device['rack_start']))                         { $Result->show("danger", _('Invalid rack start position').'!', true); }
         if (!is_numeric($device['rack_size']))                          { $Result->show("danger", _('Invalid rack size').'!', true); }
-        # validate rack
-        $rack = $Racks->fetch_rack_details ($device['rack']);
-        if ($rack===false)                                              { $Result->show("danger", _('Rack does not exist').'!', true); }
+		# validate rack
+		$rack = $Racks->fetch_rack_details($device['rack']);
+		if (!is_numeric($device['rack']) || ($rack > 0 && !is_object($rack))) {
+			$Result->show("danger", _('Rack does not exist') . '!', true);
+		}
     }
 }
 
@@ -93,7 +95,7 @@ if(sizeof($custom) > 0) {
 
 # set update values
 $values = array(
-				"id"          =>$device['switchid'],
+				"id"          =>isset($device['switchid']) ? $device['switchid'] : null,
 				"hostname"    =>$device['hostname'],
 				"ip_addr"     =>$device['ip_addr'],
 				"type"        =>$device['type'],
@@ -117,10 +119,10 @@ if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
 }
 
 # update device
-if(!$Admin->object_modify("devices", $_POST['action'], "id", $values))	{}
+if(!$Admin->object_modify("devices", $Params->action, "id", $values))	{}
 else { $Result->show("success", _("Device")." ".$device["action"]." "._("successful").'!', false); }
 
-if($_POST['action']=="delete"){
+if($Params->action=="delete"){
 	# remove all references from subnets and ip addresses
 	$Admin->remove_object_references ("subnets", "device", $values["id"]);
 	$Admin->remove_object_references ("nat", "device", $values["id"]);

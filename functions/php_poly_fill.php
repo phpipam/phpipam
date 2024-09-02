@@ -34,7 +34,7 @@ function pf_json_decode($json, $associative = null, $depth = 512, $flags = 0)
  * @return string[]|false
  */
 function pf_explode($separator, $string) {
-    if (is_blank($string))
+    if (is_blank($string) || empty($separator))
         return [''];
 
     return explode($separator, $string);

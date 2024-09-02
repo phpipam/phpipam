@@ -347,7 +347,7 @@ class OpenStreetMap extends Common_functions
             return $results;
         }
 
-        if (Config::ValueOf('offline_mode')) {
+        if (Config::ValueOf('offline_mode') || Config::ValueOf('disable_geoip_lookups')) {
             $result['error'] = _('Internet access disabled in config.php');
             return $result;
         }

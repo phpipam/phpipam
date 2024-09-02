@@ -6492,7 +6492,7 @@ msgid "Search and replace content in database"
 msgstr "Iskanje in zamenjava vsebine v bazi"
 
 msgid "Dashboard"
-msgstr "Domov"
+msgstr "Nadzorna plošča"
 
 msgid "Invalid CSRF cookie"
 msgstr "Neveljaven CSRF piškotek"
@@ -8361,3 +8361,233 @@ msgstr "Pravice modulov"
 msgid "Scan agents"
 msgstr "Agenti skeniranja"
 
+
+### 1.6.1
+
+msgid "passkey"
+msgstr "prijavni ključ"
+
+msgid "Passkey"
+msgstr "prijavni ključ"
+
+msgid "2fa account status"
+msgstr "Status 2fa"
+
+msgid "2fa disabled"
+msgstr "2fa izklopljena"
+
+msgid "2fa enabled"
+msgstr "2fa vklopljena"
+
+msgid "2fa status"
+msgstr "Status 2fa"
+
+msgid "Account"
+msgstr "Račun"
+
+msgid "Check passkey you want to remove"
+msgstr "Izperite prijavni ključ ki ga želite odstraniti"
+
+msgid "Details for your preferred authenticator application are below. Please write down your details, otherwise you will not be able to login to phpipam"
+msgstr ""
+
+msgid "Disable 2fa for user"
+msgstr "Onemogoči 2fa za uporabnika"
+
+msgid "Enable Passkeys"
+msgstr "Omogočite prijavne ključe"
+
+msgid "Enable Vaults"
+msgstr "Omogoċite trezorje"
+
+msgid "Enable Vaults for storing encrypted information"
+msgstr "Omogočite trezorje za varno hrambo informacij"
+
+msgid "Enable passkeys for passwordless login"
+msgstr "Omogočite prijavo brez gesel z uporabo passkey prijavnimi ključi"
+
+msgid "failed"
+msgstr "nauspešna"
+
+msgid "Failed passkey login"
+msgstr "Napaka pri prijavi s prijavnim ključem"
+
+msgid "has logged out"
+msgstr "se je odjavil"
+
+msgid "Here you can change settings for two-factor authentication and get your 2fa secret."
+msgstr "Tukaj lahko spremenite nastavitve za dvofaktorsko avtentikacijo in pridobite vaš 2fa skrivni ključ."
+
+msgid "Invalid theme"
+msgstr "Neveljavna tema"
+
+msgid "logged in"
+msgstr "prijavljen"
+
+msgid "Login with a passkey"
+msgstr "Prijava s prijavnim ključem"
+
+msgid "Only passkey authentication is possible for this account"
+msgstr "Prijava v ta račun je mogoča samo s prijavnimi ključi passkey"
+
+msgid "Passkey login only"
+msgstr "Prijava samo s prijavnimi ključi"
+
+msgid "Passkey only"
+msgstr "Samo prijavni ključi"
+
+msgid "Passkey required for login"
+msgstr "Prijavni ključ je za zahtevan za prijavo"
+
+msgid "Passkeys"
+msgstr "Prijavni ključi"
+
+msgid "Select to only allow account login with passkey"
+msgstr "Izberite to opcijo, da dovolite prijavo v račun samo s prijavnimi ključi"
+
+msgid "successful"
+msgstr "uspešna"
+
+msgid "There are no passkeys set for user. Resetting passkey login only to false."
+msgstr "Uporabnik nima nastavljenih prijavnih ključev."
+
+msgid "Two-factor authentication"
+msgstr "Dvofaktorska avtentikacija"
+
+msgid "User account is disabled"
+msgstr "Uporabniški račun je onemogočen"
+
+msgid "User permissions for phpipam modules"
+msgstr "Uporabniške pravice za phpipam module"
+
+msgid "You can also scan following QR code with your preferred authenticator application"
+msgstr "Spodnjo QR kodo lahko skenirate s svojo applikacijo za upravljanje avtentikacij"
+
+msgid "You can login to your account with normal authentication method only untill you create passkeys."
+msgstr "V svoj račun se lahko prijavite z običajno metodo, dokler ne ustvarite prijavnih ključev."
+
+msgid "You can only login to your account using passkeys"
+msgstr "V račun se lahko prijavite samo s prijavnimi ključi"
+
+msgid "Passwordless authentication"
+msgstr "Prijava brez gesel"
+
+msgid "Account details"
+msgstr "Podatki o računu"
+
+msgid "You can login to your account with with passkeys only"
+msgstr "V račun se lahko prijavite samo s prijavnimi ključi"
+
+msgid "This can be changed under Account details tab"
+msgstr "To lahko spremenite v zavihku Podatki o računu"
+
+msgid "Your passkeys"
+msgstr "Vaši prijavni ključi"
+
+msgid "Added on"
+msgstr "Dodan"
+
+msgid "Last used"
+msgstr "Zadnjič uporabljen"
+
+msgid "You authenticated with this passkey"
+msgstr "Prijavili ste se s tem ključem"
+
+msgid "Add a passkey"
+msgstr "Dodaj prijavni ključ"
+
+msgid "Rename"
+msgstr "Preimenuj"
+
+msgid "Here you can manage passkey authentication for your account"
+msgstr "Tukaj lahko urejate avtentikacijo s prijavnimi ključi za vaš račun"
+
+msgid "Passkeys are a password replacement that validates your identity using touch, facial recognition, a device password, or a PIN"
+msgstr "Prijavni ključi so zamenjava za gesla, ki preverijo vašo identiteto s pomočjo dotika, prepoznave obraza, PIN naprave ali z geslom naprave"
+
+msgid "Name your passkey"
+msgstr "Poimenujte prijavni ključ"
+
+msgid "Duplicates"
+msgstr "Duplikati"
+
+msgid "Duplicated subnets"
+msgstr "Podvojena omreżja"
+
+msgid "Duplicated hosts"
+msgstr "Podvojeni IP naslovi"
+
+msgid "No duplicate subnets found"
+msgstr "Ni podvojenih omrežij"
+
+msgid "Routing"
+msgstr "Usmerjevalni protokoli"
+
+msgid "BGP routing"
+msgstr "BGP usmerjanje"
+
+msgid "Add peer"
+msgstr "Dodaj povezavo"
+
+msgid "Peer name"
+msgstr "Ime partnerja"
+
+msgid "Peer AS"
+msgstr "AS partnerja"
+
+msgid "Local AS"
+msgstr "Lokalni AS"
+
+msgid "Peer address"
+msgstr "Naslov partnerja"
+
+msgid "Local address"
+msgstr "Lokalni naslov"
+
+msgid "Local Address"
+msgstr "Lokalni naslov"
+
+msgid "BGP type"
+msgstr "tip BGP povezave"
+
+msgid "Vaults"
+msgstr "Trezorji"
+
+msgid "Create Vault"
+msgstr "Ustvari trezor"
+
+msgid "Certificates"
+msgstr "Certifikati"
+
+msgid "Passwords"
+msgstr "Gesla"
+
+msgid "Edit Vault Details"
+msgstr "Uredi podatke trezorja"
+
+msgid "Edit Vault"
+msgstr "Uredi podatke trezorja"
+
+msgid "Delete vault"
+msgstr "Izbriši trezor"
+
+msgid "Lock Vault"
+msgstr "Zaklep trezorja"
+
+msgid "Unlock Vault"
+msgstr "Odklep trezorja"
+
+msgid "Remove Vault"
+msgstr "Izbris trezorja"
+
+msgid "Vault name"
+msgstr "Ime trezorja"
+
+msgid "Enter vault name"
+msgstr "Vpišite ime trezorja"
+
+msgid "Certificates vault"
+msgstr "Trezor za certifikate"
+
+msgid "Password vault"
+msgstr "Trezor za gesla"

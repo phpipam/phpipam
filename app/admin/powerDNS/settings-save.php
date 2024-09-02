@@ -15,6 +15,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check if site is demo
+$User->is_demo();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
@@ -29,7 +31,7 @@ elseif (!is_numeric($_POST['port']))	{ $Result->show("danger", "Invalid port num
 // formulate json
 $values = new StdClass ();
 
-$values->host 		= $_POST['host'];
+$values->host 		= trim(str_replace(",", ";", $_POST['host']));
 $values->name 		= $_POST['name'];
 $values->username 	= $_POST['username'];
 $values->password 	= $_POST['password'];

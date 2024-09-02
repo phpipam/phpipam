@@ -36,6 +36,12 @@ class Common_functions  {
 	 */
 	public $json_error = false;
 
+	/**
+	 * Composer error flag
+	 * @var bool
+	 */
+	public $composer_err = false;
+
     /**
      * Default font
      *
@@ -997,19 +1003,20 @@ class Common_functions  {
 	 * @return  int
 	 */
 	private function httpPort() {
-		// If only HTTP_X_FORWARDED_PROTO='https' is set assume port=443. Override if required by setting HTTP_X_FORWARDED_PORT
-		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && !isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
-			return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 443 : 80;
+		if (Config::ValueOf('trust_x_forwarded_headers') === true) {
+			// If only HTTP_X_FORWARDED_PROTO='https' is set assume port=443. Override if required by setting HTTP_X_FORWARDED_PORT
+			if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && !isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
+				return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 443 : 80;
+			}
+			if (isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
+				return $_SERVER['HTTP_X_FORWARDED_PORT'];
+			}
 		}
-		elseif (isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
-			return $_SERVER['HTTP_X_FORWARDED_PORT'];
-		}
-		elseif (isset($_SERVER['SERVER_PORT'])) {
+		if (isset($_SERVER['SERVER_PORT'])) {
 			return $_SERVER['SERVER_PORT'];
 		}
-		else {
-			return 80;
-		}
+
+		return 80;
 	}
 
 	/**
@@ -1019,21 +1026,22 @@ class Common_functions  {
 	* @return bool
 	*/
 	public function isHttps () {
-		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
-			return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https');
+		if (Config::ValueOf('trust_x_forwarded_headers') === true) {
+			if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+				return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https');
+			}
+			if (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+				return true;
+			}
 		}
-		elseif (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 			return true;
 		}
-		elseif(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+		if ($this->httpPort() == 443) {
 			return true;
 		}
-		elseif($this->httpPort() == 443) {
-			return true;
-		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -1045,8 +1053,11 @@ class Common_functions  {
 		if (php_sapi_name() === "cli")
 			return null;
 
-		if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && filter_var($_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP))
-			return $_SERVER['HTTP_X_FORWARDED_FOR'];
+		if (Config::ValueOf('trust_x_forwarded_headers') === true) {
+			if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && filter_var($_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP)) {
+				return $_SERVER['HTTP_X_FORWARDED_FOR'];
+			}
+		}
 
 		if (isset($_SERVER['REMOTE_ADDR']) && filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP))
 			return $_SERVER['REMOTE_ADDR'];
@@ -1063,16 +1074,13 @@ class Common_functions  {
 	public function createURL () {
 		$proto = $this->isHttps() ? 'https' : 'http';
 
-		if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+		if (Config::ValueOf('trust_x_forwarded_headers') === true && isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
 			$url = $_SERVER['HTTP_X_FORWARDED_HOST'];
-		}
-		elseif (isset($_SERVER['HTTP_HOST'])) {
+		} elseif (isset($_SERVER['HTTP_HOST'])) {
 			$url = $_SERVER['HTTP_HOST'];
-		}
-		elseif (isset($_SERVER['SERVER_NAME'])) {
+		} elseif (isset($_SERVER['SERVER_NAME'])) {
 			$url = $_SERVER['SERVER_NAME'];
-		}
-		else {
+		} else {
 			$url = "localhost";
 		}
 		$host = parse_url("$proto://$url", PHP_URL_HOST) ?: "localhost";
@@ -1098,7 +1106,7 @@ class Common_functions  {
 	 */
 	public function create_links ($text, $field_type = "varchar") {
 		if (!is_string($text))
-			return '';
+			return $text;
 
 		// create links only for varchar fields
 		if (strpos($field_type, "varchar")!==false) {
@@ -1138,15 +1146,34 @@ class Common_functions  {
 	 * Validate posted action on scripts
 	 *
 	 * @access public
-	 * @param mixed $action
 	 * @param bool $popup
 	 * @return mixed|bool
 	 */
-	public function validate_action ($action, $popup = false) {
-		# get valid actions
-		$valid_actions = $this->get_valid_actions ();
-		# check
-		in_array($action, $valid_actions) ?: $this->Result->show("danger", _("Invalid action!"), true, $popup);
+	public function validate_action($popup = true) {
+		$action = isset($_POST['action']) ? $_POST['action'] : '';
+		$valid_actions = $this->get_valid_actions();
+
+		if (!in_array($action, $valid_actions)) {
+			$this->Result->show("danger", _("Invalid action!"), true, $popup);
+		}
+	}
+
+	/**
+	 * Safely translate $_POST['action'] for print()
+	 *
+	 * @return string
+	 */
+	public function get_post_action() {
+		if (isset($_POST['action'])) {
+			$action = $_POST['action'];
+			$valid_actions = $this->get_valid_actions();
+
+			if (in_array($action, $valid_actions)) {
+				return escape_input(ucwords(_($action)));
+			}
+		}
+
+		return '';
 	}
 
 	/**
@@ -1168,7 +1195,11 @@ class Common_functions  {
 	 * @param bool $permit_root_domain
 	 * @return bool|mixed
 	 */
-	public function validate_hostname($hostname, $permit_root_domain=true) {
+	public function validate_hostname($hostname = "", $permit_root_domain=true) {
+		// null hostname is invalid
+		if(is_null($hostname)) {
+			return false;
+		}
     	// first validate hostname
     	$valid =  (preg_match("/^([a-z_\d](-*[a-z_\d])*)(\.([a-z_\d](-*[a-z_\d])*))*$/i", $hostname) 	//valid chars check
 	            && preg_match("/^.{1,253}$/", $hostname) 										//overall length check
@@ -1249,8 +1280,8 @@ class Common_functions  {
 		$country = strtolower($country);
 		// set regexes
 		$country_regex = array(
-			'united kingdom' => '/\\A\\b[A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2}\\b\\z/i',
-			'england'        => '/\\A\\b[A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2}\\b\\z/i',
+			'united kingdom' => '/^([A-Z][A-HJ-Y]?[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR ?0A{2})$/i',
+			'england'        => '/^([A-Z][A-HJ-Y]?[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR ?0A{2})$/i',
 			'canada'         => '/\\A\\b[ABCEGHJKLMNPRSTVXY][0-9][A-Z][ ]?[0-9][A-Z][0-9]\\b\\z/i',
 			'italy'          => '/^[0-9]{5}$/i',
 			'deutschland'    => '/^[0-9]{5}$/i',
@@ -1767,7 +1798,7 @@ class Common_functions  {
 	 * @return string
 	 */
 	public function print_custom_field_name ($name) {
-		return strpos($name, "custom_")===0 ? substr($name, 7) : $name;
+		return strpos($name, "custom_")===0 ? _(substr($name, 7)) : _($name);
 	}
 
 	/**
@@ -1833,10 +1864,12 @@ class Common_functions  {
 
 		if (empty($this->mac_address_vendors)) {
 			// Generated from vendorMac.xml
-			// Unique MAC address: 45344
-			// Updated: 12 March 2022
+			// Unique MAC address: 51316
+			// Updated: 05 April 2024
 			$data = file_get_contents(dirname(__FILE__) . "/../vendormacs.json");
-			$this->mac_address_vendors = pf_json_decode($data, true);
+			if (is_string($data)) {
+				$this->mac_address_vendors = json_decode($data, true);
+			}
 		}
 
 		// Find longest prefix match in $this->mac_address_vendors array (max 9)
@@ -2283,4 +2316,51 @@ class Common_functions  {
 	    // result
 	    return implode("\n", $html);
 	}
+
+
+	/**
+	 * Composer check
+	 *
+	 * Checks if composer is installed and if requested checks for composer modules required
+	 *
+	 * @method composer_has_error
+	 * @param  array $composer_packages
+	 * @return bool
+	 */
+	public function composer_has_errors ($composer_packages = []) {
+		// check for autoload file
+        if(!file_exists(__DIR__ . '/../vendor/autoload.php')) {
+        	$this->composer_err = _("Composer autoload not present")." !<hr>"._("Please install composer modules ( cd functions && composer install ).");
+        	return true;
+        }
+
+        // autoload composer files
+        require __DIR__ . '/../vendor/autoload.php';
+        // check if composer is installed
+        if (!class_exists('\Composer\InstalledVersions')) {
+        	$this->composer_err = _("Composer is not installed")."!<hr>"._("Please install composer and composer modules ( cd functions && composer install ).");
+        	return true;
+        }
+
+        // validate all packages if required
+        if(is_array($composer_packages)) {
+        	if(sizeof($composer_packages)>0) {
+        		foreach ($composer_packages as $package) {
+					if(\Composer\InstalledVersions::isInstalled($package)===false) {
+						$this->composer_err .= _("Composer package")." ".$package." "._("is not installed")." !<hr>"._("Please install required modules ( cd functions && composer install ).");
+					}
+        		}
+        		// check
+        		if ($this->composer_err!==false) {
+        			return true;
+        		}
+        	}
+        }
+        // all good
+        return false;
+	}
+
+
 }
+
+

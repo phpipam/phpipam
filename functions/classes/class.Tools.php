@@ -1104,7 +1104,7 @@ class Tools extends Common_functions {
 				$mail['State'] = $this->Addresses-> address_type_index_to_type ($v);
 			}
 			// description
-			elseif ($k=="descriotion") {
+			elseif ($k=="description") {
 				$mail['Description'] = $v;
 			}
 			// hostname
@@ -1956,7 +1956,9 @@ class Tools extends Common_functions {
                                     // append status
                                     if ($snet->pingSubnet=="1") {
                                         //calculate
-                                        $tDiff = time() - strtotime($item->lastSeen);
+                                    	if(!is_null($item->lastSeen)) {
+	                                        $tDiff = time() - strtotime($item->lastSeen);
+    									}
                                         if($item->excludePing=="1" )    { $hStatus = "padded"; $hTooltip = ""; }
                                         elseif(is_null($item->lastSeen)) { $hStatus = "neutral"; $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address was never online")."'"; }
                                         elseif($item->lastSeen == "0000-00-00 00:00:00") { $hStatus = "neutral"; 	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address is offline")."<hr>"._("Last seen").": "._("Never")."'";}

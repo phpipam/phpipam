@@ -18,6 +18,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check if site is demo
+$User->is_demo();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
@@ -110,8 +112,8 @@ else {
 					);
 
 	# execute update
-	if(!$Sections->modify_section ($_POST['action'], $values, @$_POST['id']))	{ $Result->show("danger", _("Section")." ".$_POST["action"]." "._("failed"), false); }
-	else { $Result->show("success", _("Section")." ".$_POST["action"]." "._("successful"), false); }
+	if(!$Sections->modify_section ($_POST['action'], $values, @$_POST['id']))	{ $Result->show("danger", _("Section")." ".$User->get_post_action()." "._("failed"), false); }
+	else { $Result->show("success", _("Section")." ".$User->get_post_action()." "._("successful"), false); }
 
 	# delegate
 	if (@$_POST['delegate']==1) {

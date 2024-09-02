@@ -552,6 +552,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Passkeys -->
+<tr>
+	<td class="title"><?php print _("Enable Passkeys"); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="passkeys" <?php if($settings['passkeys'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable passkeys for passwordless login'); ?>
+	</td>
+</tr>
+
 
 <!-- ICPM -->
 <tr class="settings-title">

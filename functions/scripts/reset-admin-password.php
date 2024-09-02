@@ -50,7 +50,8 @@ $crypt_type = $User->return_crypt_type ();
 
 // set update array
 $values = array("id"=>1,
-				"password"=>$password_crypted
+				"password"     =>$password_crypted,
+				"passkey_only" =>0
 				);
 
 // update password

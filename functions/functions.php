@@ -39,7 +39,7 @@ if(php_sapi_name()!="cli")
 if(Config::ValueOf('debugging')==true) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
+	error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 }
 else {
 	disable_php_errors();
@@ -94,6 +94,9 @@ require( dirname(__FILE__) . '/classes/class.OpenStreetMap.php' );	    // Class 
 # create default GET parameters
 $Rewrite = new Rewrite ();
 $_GET = $Rewrite->get_url_params ();
+
+$GET  = new Params ($_GET,  null, true); // Run strip_tags() on $_GET
+$POST = new Params ($_POST, null, true); // Run strip_tags() on $_POST
 
 /* get version */
 require_once('version.php');

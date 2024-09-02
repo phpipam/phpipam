@@ -59,6 +59,9 @@ $Addresses->ptr_unlink_subnet_addresses ($subnet->id);
 // fetch all hosts
 $hosts   = $Addresses->fetch_subnet_addresses ($subnet->id, "ip_addr", "asc");
 
+// ignored
+$ignored = [];
+
 // create PTR records
 if (is_array($hosts) && sizeof($hosts)>0) {
 	foreach ($hosts as $h) {

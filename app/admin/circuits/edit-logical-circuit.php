@@ -32,7 +32,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "circuitsLogical");
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('circuitsLogical');
@@ -178,7 +178,7 @@ function update_hidden_input(){
 
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('Logical circuit'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('Logical circuit'); ?></div>
 
 
 <!-- content. Override first div to place to the left of the form -->
@@ -196,7 +196,7 @@ function update_hidden_input(){
 				<input type="text" name="logical_cid" style='width:200px;' class="form-control input-sm" placeholder="<?php print _('ID'); ?>" value="<?php if(isset($logical_circuit->logical_cid)) print $Tools->strip_xss($logical_circuit->logical_cid); ?>" <?php print $readonly; ?>>
 				<?php
 				if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-					print '<input type="hidden" name="id" value="'. $_POST['circuitid'] .'">'. "\n";
+					print '<input type="hidden" name="id" value="'. escape_input($_POST['circuitid']) .'">'. "\n";
 				} ?>
 				<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
 				<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
@@ -379,7 +379,7 @@ function update_hidden_input(){
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class="btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" data-script="app/admin/circuits/edit-logical-circuit-submit.php" data-result_div="circuitManagementEditResult" data-form='circuitManagementEdit'>
 			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i>
-			<?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<?php print $User->get_post_action(); ?>
 		</button>
 	</div>
 

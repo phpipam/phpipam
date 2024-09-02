@@ -137,7 +137,7 @@ if ($_POST['action']=="delete" && !isset($_POST['deleteconfirm'])) {
 	print "<hr><div style='text-align:right'>";
 	print _("Are you sure you want to delete above items?")." ";
 	print "<div class='btn-group'>";
-	print "	<a class='btn btn-sm btn-danger editFolderSubmitDelete' id='editFolderSubmitDelete' data-subnetId='".$_POST['subnetId']."'>"._("Confirm")."</a>";
+	print "	<a class='btn btn-sm btn-danger editFolderSubmitDelete' id='editFolderSubmitDelete' data-subnetId='".escape_input($_POST['subnetId'])."'>"._("Confirm")."</a>";
 	print "</div>";
 	print "</div>";
 	print "</div>";
@@ -218,7 +218,7 @@ else {
 
 		# edit success
 		if($_POST['action']=="delete")	{ $Result->show("success", _('Folder, IP addresses and all belonging subnets deleted successfully').'!', false); }
-		else { $Result->show("success", _("Folder")." ".$_POST["action"]." "._("successful").'!', true); }
+		else { $Result->show("success", _("Folder")." ".$User->get_post_action()." "._("successful").'!', true); }
 	}
 }
 

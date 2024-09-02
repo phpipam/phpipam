@@ -962,8 +962,9 @@ class Addresses extends Common_functions {
 
 		// set PTR zone name from IP/mash
 		$zone = $this->PowerDNS->get_ptr_zone_name ($this->transform_address ($subnet->subnet, "dotted"), $subnet->mask);
+
 		// try to fetch
-		return  $this->PowerDNS->fetch_domain_by_name ($zone);
+		return $this->PowerDNS->fetch_domain_by_name ($zone);
 	}
 
 	/**
@@ -990,18 +991,25 @@ class Addresses extends Common_functions {
 		// fetch domain
 		$domain = $this->pdns_fetch_domain ($address->subnetId);
 
-		// formulate new record
-		$record = $this->PowerDNS->formulate_new_record ($domain->id, $this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), "PTR", $address->hostname, $values->ttl);
-		// insert record
-		$this->PowerDNS->add_domain_record ($record, false);
-		// link to address
-		$id = $id===null ? $this->lastId : $id;
-		$this->ptr_link ($id, $this->PowerDNS->lastId);
-		// ok
-		if ($print_error && php_sapi_name()!="cli")
-		$this->Result->show("success", _("PTR record created"), false);
+		// does domain exist ?
+		if($domain===null) {
+			$this->Result->show("warning", _("Domain does not exist").".", false);
+			return false;
+		}
+		else {
+			// formulate new record
+			$record = $this->PowerDNS->formulate_new_record ($domain->id, $this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), "PTR", $address->hostname, $values->ttl);
+			// insert record
+			$this->PowerDNS->add_domain_record ($record, false);
+			// link to address
+			$id = $id===null ? $this->lastId : $id;
+			$this->ptr_link ($id, $this->PowerDNS->lastId);
+			// ok
+			if ($print_error && php_sapi_name()!="cli")
+			$this->Result->show("success", _("PTR record created"), false);
 
-		return true;
+			return true;
+		}
 	}
 
 	/**

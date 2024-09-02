@@ -32,6 +32,13 @@ $(document).keydown(function(e) {
     }
 });
 
+
+
+$(document).on("click", "a", function() {
+    hideTooltips()
+});
+
+
 // no enter in sortfields
 $(document).on("submit", ".searchFormClass", function() {
     return false;
@@ -1139,7 +1146,6 @@ $(document).on("mouseleave", '#user_menu', function(event){
     var object1 = $("#searchSelect");
     object1.slideUp();
 });
-
 
 //search export
 $(document).on("click", "#exportSearch", function(event){
@@ -2418,6 +2424,10 @@ $(document).on("click", "#editVLANdomainsubmit", function() {
     submit_popup_data (".domainEditResult", "app/admin/vlans/edit-domain-result.php", $('form#editVLANdomain').serialize());
 });
 
+/* ---- Show permissions ----- */
+$(document).on("click", ".toggle-module-permissions", function () {
+    $(this).next('div').toggleClass('hidden');
+})
 
 /* ---- VRF ----- */
 //submit form
@@ -2628,10 +2638,14 @@ $('button#XLSdump, button#MySQLdump, button#hostfileDump').click(function () {
 
 //Export Section
 $('button.dataExport').click(function () {
-    var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype"]; var popsize = {};
+    var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype"];
+    var popsize = {};
+    // popup window size definition
     popsize["subnets"] = "w700";
-    popsize["ipaddr"] = "w700";
+    popsize["ipaddr"]  = "w700";
+    popsize["vlan"]    = "w700";
     popsize["devices"] = "max";
+    // get requested datatype
     var dataType = $('select[name=dataType]').find(":selected").val();
     hidePopups();
     //show popup window

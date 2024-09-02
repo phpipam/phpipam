@@ -20,7 +20,7 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "group");
 # validate action
-$Admin->validate_action ($_POST['action']);
+$Admin->validate_action(false);
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
 # fetch custom fields
@@ -38,7 +38,7 @@ if($_POST['action']=="add") {
     //false die
     $group!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
-	$title = ucwords($_POST['action']) .' '._('group').' '.$group['g_name'];
+	$title = $User->get_post_action().' '._('group').' '.$group['g_name'];
 }
 ?>
 
@@ -66,7 +66,7 @@ if($_POST['action']=="add") {
     	<td>
     		<input type="text" name="g_desc" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$group['g_desc']); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 
-    		<input type="hidden" name="g_id" value="<?php print @$_POST['id']; ?>">
+    		<input type="hidden" name="g_id" value="<?php print escape_input(@$_POST['id']); ?>">
     		<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	</td>
@@ -109,7 +109,7 @@ if($_POST['action']=="add") {
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
         <button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/groups/edit-group-result.php" data-result_div="groupEditResult" data-form='groupEdit'>
-            <i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+            <i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
         </button>
 	</div>
 

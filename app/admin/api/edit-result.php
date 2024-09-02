@@ -15,6 +15,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check if site is demo
+$User->is_demo();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
@@ -70,6 +72,6 @@ else {
 					);
 
 	# execute
-	if(!$Admin->object_modify("api", $_POST['action'], "id", $values)) 	{ $Result->show("danger",  _("API"). $_POST['action'] ._("error"), true); }
-	else 																{ $Result->show("success", _("API"). $_POST['action'] ._("success"), true); }
+	if(!$Admin->object_modify("api", $_POST['action'], "id", $values)) 	{ $Result->show("danger",  _("API"). " ".$_POST['action'] ." "._("error"), true); }
+	else 																{ $Result->show("success", _("API"). " ".$_POST['action'] ." "._("success"), true); }
 }

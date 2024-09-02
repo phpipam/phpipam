@@ -405,7 +405,7 @@ else {
 		# create - for redirect
 		elseif ($_POST['action']=="add") { $Result->show("success", _("Subnet")." ". $_POST["action"]." "._("successful").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
 		#
-		else { $Result->show("success", _("Subnet")." ".$_POST["action"]." "._("successful").'!', false); }
+		else { $Result->show("success", _("Subnet")." ".$User->get_post_action()." "._("successful").'!', false); }
 	}
 
 	# propagate to slaves
@@ -431,6 +431,7 @@ else {
         if(isset($_POST['showName']))       $values['showName']       = $Admin->verify_checkbox(@$_POST['showName']);
         if(isset($_POST['discoverSubnet'])) $values['discoverSubnet'] = $Admin->verify_checkbox(@$_POST['discoverSubnet']);
         if(isset($_POST['pingSubnet']))     $values['pingSubnet']     = $Admin->verify_checkbox(@$_POST['pingSubnet']);
+	if(isset($_POST['resolveDNS']))     $values['resolveDNS']     = $Admin->verify_checkbox(@$_POST['resolveDNS']);
 
         # propagate changes
 		if(is_array($Subnets->slaves) && sizeof($Subnets->slaves)>0) {

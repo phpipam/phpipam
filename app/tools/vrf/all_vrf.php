@@ -33,8 +33,16 @@ $custom_size = sizeof($custom) - sizeof($hidden_fields);
     if($User->is_admin(false)===true && $User->settings->enableSNMP==1) { ?>
 	<button class="btn btn-sm btn-default" id="snmp-vrf" data-action="add"><i class="fa fa-cogs"></i> <?php print _('Scan for VRFs'); ?></button>
 	<?php } ?>
-
 </div>
+
+<?php if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) { ?>
+<div class="btn-group pull-right" style="margin-bottom:10px;">
+	<div class="hidden"><select name="dataType"><option value='vrf' selected="selected">VRF</option></select></div>
+	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title="Export data entries for the selected type"><i class="fa fa-download"></i> Export</button>
+</div>
+<div class="clearfix"></div>
+<?php } ?>
+
 
 <!-- vrfs -->
 <?php

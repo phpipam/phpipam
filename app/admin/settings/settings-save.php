@@ -16,6 +16,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check if site is demo
+$User->is_demo();
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "settings", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
@@ -87,6 +89,7 @@ $values = array("id"=>1,
 				"enforceUnique"       =>$Admin->verify_checkbox(@$_POST['enforceUnique']),
 				"enableRouting"       =>$Admin->verify_checkbox(@$_POST['enableRouting']),
 				"enableVaults"        =>$Admin->verify_checkbox(@$_POST['enableVaults']),
+				"passkeys"            =>$Admin->verify_checkbox(@$_POST['passkeys']),
 				//"enableDHCP"        =>$Admin->verify_checkbox(@$_POST['enableDHCP']),
 				"enableFirewallZones" =>$Admin->verify_checkbox(@$_POST['enableFirewallZones']),
 				"maintaneanceMode" 	  =>$Admin->verify_checkbox(@$_POST['maintaneanceMode']),

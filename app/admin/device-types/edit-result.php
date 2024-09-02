@@ -37,10 +37,10 @@ $values = array("tid"=>@$_POST['tid'],
 
 # update
 if(!$Admin->object_modify("deviceTypes", $_POST['action'], "tid", $values)) {
-    $Result->show("danger", _("Failed to")." "._($_POST["action"])." "._("device type").'!', false);
+    $Result->show("danger", _("Failed to")." ".$User->get_post_action()." "._("device type").'!', false);
 }
 else {
-    $Result->show("success", _("Device type")." "._($_POST["action"])." "._("successful").'!', false);
+    $Result->show("success", _("Device type")." ".$User->get_post_action()." "._("successful").'!', false);
 }
 
 if($_POST['action']=="delete") {

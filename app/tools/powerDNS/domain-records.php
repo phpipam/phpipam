@@ -30,12 +30,12 @@ if ($domain === false) {
             // SOA, NS
             if ($r->type == "SOA") {
                 $r->order = 1;
-                $records_default[] = $r;
+                $records_default[] = (array) $r;
                 unset($records[$k]);
             }
             if ($r->type == "NS") {
                 $r->order = 2;
-                $records_default[] = $r;
+                $records_default[] = (array) $r;
                 unset($records[$k]);
             }
             // split to $origins ?
@@ -46,7 +46,7 @@ if ($domain === false) {
         $order = array();
         if(isset($records_default)) {
             foreach ($records_default as $key => $row) {
-                $order[$key] = $row->order;
+                $order[$key] = $row['order'];
             }
             array_multisort($records_default, SORT_ASC, SORT_NUMERIC, $order);
         }
@@ -178,7 +178,7 @@ if (isset($records_default)) {
 
     // defaults
     foreach ($records_default as $r) {
-        print_record($r);
+        print_record((object) $r);
     }
 }
 

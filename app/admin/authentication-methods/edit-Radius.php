@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric */
 if($_POST['action']!="add") {
@@ -63,7 +63,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<input type="text" name="hostname" class="form-control input-sm" value="<?php print @$method_settings->params->hostname; ?>" <?php print $delete; ?>>
 			<input type="hidden" name="type" value="Radius">
 			<input type="hidden" name="id" value="<?php print @$method_settings->id; ?>">
-			<input type="hidden" name="action" value="<?php print @$_POST['action']; ?>">
+			<input type="hidden" name="action" value="<?php print escape_input(@$_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 		<td class="info2"><?php print _('Enter Radius server'); ?>
@@ -103,11 +103,30 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 		</td>
 	</tr>
 
+	<!-- protocol -->
+	<tr>
+		<td><?php print _('Protocol'); ?></td>
+		<td>
+			<select name="authProtocol" class="form-control input-sm input-w-auto">
+			<?php
+			$values = ["pap","chap","mschapv1"];
+			foreach($values as $v) {
+				if($v==@$method_settings->params->authProtocol)	{ print "<option value='$v' selected=selected>$v</option>"; }
+				else											{ print "<option value='$v'					 >$v</option>"; }
+			}
+			?>
+			</select>
+		</td>
+		<td class="base_dn info2">
+			<?php print _('Set timeout in seconds'); ?>
+		</td>
+	</tr>
+
 	<!-- timeout -->
 	<tr>
 		<td><?php print _('Timeout'); ?></td>
 		<td>
-			<select name="timeout" class="form-control input-w-auto">
+			<select name="timeout" class="form-control input-sm input-w-auto">
 			<?php
 			$values = array(1,2,3,5,10);
 			foreach($values as $v) {
@@ -131,6 +150,11 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 		$Log->write( _("Radius login"), _("php Socket extension missing!"), 2 );
 		$Result->show("danger", _("php Socket extension missing!"), false);
 	}
+	# check for Composer errors
+	if($User->composer_has_errors (["dapphp/radius"])) {
+		print "<hr>";
+		print_r($Result->show("warning", $User->composer_err));
+	}
 	?>
 </div>
 
@@ -140,7 +164,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/authentication-methods/edit-result.php" data-result_div="editAuthMethodResult" data-form='editAuthMethod'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>	</div>
 
 	<?php

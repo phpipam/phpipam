@@ -224,6 +224,7 @@ CREATE TABLE `settings` (
   `2fa_name` VARCHAR(32)  NULL  DEFAULT 'phpipam',
   `2fa_length` INT(2)  NULL  DEFAULT '16',
   `2fa_userchange` BOOL  NOT NULL  DEFAULT '1',
+  `passkeys` TINYINT(1)  NULL  DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
@@ -370,6 +371,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL DEFAULT '',
   `authMethod` INT(2)  NULL  DEFAULT 1,
+  `passkey_only` TINYINT(1)  NOT NULL  DEFAULT '0',
   `password` CHAR(128) DEFAULT NULL,
   `groups` varchar(1024) DEFAULT NULL,
   `role` text,
@@ -1029,6 +1031,26 @@ CREATE TABLE `vaultItems` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+# Dump of table passkeys
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `passkeys`;
+
+-- passkey table
+CREATE TABLE `passkeys` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `credentialId` text NOT NULL,
+  `keyId` text NOT NULL,
+  `credential` text NOT NULL,
+  `comment` text,
+  `created` timestamp NULL DEFAULT NULL,
+  `used` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 # Dump of table nominatim
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `nominatim`;
@@ -1058,5 +1080,5 @@ CREATE TABLE `nominatim_cache` (
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
-UPDATE `settings` SET `version` = "1.6";
-UPDATE `settings` SET `dbversion` = 39;
+UPDATE `settings` SET `version` = "1.7";
+UPDATE `settings` SET `dbversion` = 41;

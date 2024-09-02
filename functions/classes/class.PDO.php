@@ -211,6 +211,16 @@ abstract class DB {
 	}
 
 	/**
+	 * Set PDO stringify fetches, issue #4043
+	 *
+	 * @param boolean $stringify
+	 * @return bool
+	 */
+	public function setStringifyFetches($stringify = true) {
+		return $this->pdo->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, $stringify);
+	}
+
+	/**
 	 * makeDsn function.
 	 *
 	 * @access protected
@@ -292,7 +302,7 @@ abstract class DB {
 	 * @return bool
 	 */
 	public function isConnected() {
-		return ($this->pdo !== null);
+		return (@$this->pdo !== null);
 	}
 
 	/**
@@ -307,7 +317,7 @@ abstract class DB {
 			return $this->ctes_enabled;
 
 		$db = Config::ValueOf("db");
-		$ctes_enabled = filter_var($db['use_cte'], FILTER_VALIDATE_INT, ['options'=>['default' => 1, 'min_range' => 0, 'max_range' => 2]]);
+		$ctes_enabled = filter_var(@$db['use_cte'], FILTER_VALIDATE_INT, ['options'=>['default' => 1, 'min_range' => 0, 'max_range' => 2]]);
 
 		if ($ctes_enabled===0) {	            // Disable CTE Support
 			$this->ctes_enabled = false;
@@ -380,7 +390,7 @@ abstract class DB {
 		 * Reset engine type if set in config.php (MEMORY or InnoDB)
 		 */
 		$db = Config::ValueOf('db');
-		$tmptable_engine_type = ($db['tmptable_engine_type']=="InnoDB") ? "InnoDB" : "MEMORY";
+		$tmptable_engine_type = (@$db['tmptable_engine_type']=="InnoDB") ? "InnoDB" : "MEMORY";
 
 		try {
 			// Emulate SQL CTE query using temporary tables.
@@ -1068,6 +1078,8 @@ abstract class DB {
 	 * @return bool
 	 */
 	public function rollBack() {
+		if (!$this->pdo->inTransaction())
+			return false;
 		return $this->pdo->rollBack();
 	}
 }

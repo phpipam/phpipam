@@ -21,7 +21,7 @@ $User->check_maintaneance_mode ();
 # perm check popup
 $User->check_module_permissions ("vlan", User::ACCESS_RWA, true, true);
 # validate csrf cookie
-$csrf = $User->Crypto->csrf_cookie ("create", "scan");
+$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "scan");
 
 # scan disabled
 if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true, true); }
