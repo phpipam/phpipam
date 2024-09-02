@@ -100,8 +100,8 @@ if(isset($update)) {
 
 # execute update
 if(!$Admin->object_modify ("pstnNumbers", $_POST['action'], "id", $values)) {
-    $Result->show("danger", _("Number")." ".$_POST["action"]." "._("failed"), false);
+    $Result->show("danger", _("Number")." ".$User->get_post_action()." "._("failed"), false);
 }
 else {
-    $Result->show("success", _("Number")." ".$_POST["action"]." "._("successful"), false);
+    $Result->show("success", _("Number")." ".$User->get_post_action()." "._("successful"), false);
 }

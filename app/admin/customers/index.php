@@ -1,4 +1,5 @@
 <?php
+if (!isset($User)) { exit(); }
 
 /**
  * Based on GET parameter we load:

@@ -405,7 +405,7 @@ else {
 		# create - for redirect
 		elseif ($_POST['action']=="add") { $Result->show("success", _("Subnet")." ". $_POST["action"]." "._("successful").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
 		#
-		else { $Result->show("success", _("Subnet")." ".$_POST["action"]." "._("successful").'!', false); }
+		else { $Result->show("success", _("Subnet")." ".$User->get_post_action()." "._("successful").'!', false); }
 	}
 
 	# propagate to slaves

@@ -1,4 +1,5 @@
 <?php
+if (!isset($User)) { exit(); }
 
 /**
  * Script to display customer details

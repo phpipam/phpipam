@@ -26,7 +26,7 @@
 	}
 
 	# exclude install
-	if($_GET['page']!="install") { ?>
+	if($GET->page!="install") { ?>
 	<td>
 		<?php print _('In case of problems please contact').' <a href="mailto:'. $User->settings->siteAdminMail .'">'. $User->settings->siteAdminName .'</a>'; ?>
 	</td>

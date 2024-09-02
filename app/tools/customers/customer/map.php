@@ -15,7 +15,7 @@ $OSM = new OpenStreetMap($Database);
 if (is_blank($customer->long) && is_blank($customer->lat) && !is_blank($customer->address)) {
 
     $latlng = $OSM->get_latlng_from_address ($customer->address);
-    if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
+    if(isset($latlng['lat']) && isset($latlng['lng'])) {
         // save
         $Tools->update_latlng ($customer->id, $latlng['lat'], $latlng['lng']);
         $customer->lat = $latlng['lat'];
@@ -24,4 +24,4 @@ if (is_blank($customer->long) && is_blank($customer->lat) && !is_blank($customer
 }
 
 $OSM->add_customer($customer);
-$OSM->map($height);
+$OSM->map();

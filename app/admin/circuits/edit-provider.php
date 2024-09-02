@@ -32,7 +32,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "provider");
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('circuitProviders');
@@ -63,7 +63,7 @@ $(document).ready(function(){
 
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('Circuit provider'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('Circuit provider'); ?></div>
 
 
 <!-- content -->
@@ -79,7 +79,7 @@ $(document).ready(function(){
 			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($provider->name)) print $Tools->strip_xss($provider->name); ?>" <?php print $readonly; ?>>
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-				print '<input type="hidden" name="providerid" value="'. $_POST['providerid'] .'">'. "\n";
+				print '<input type="hidden" name="providerid" value="'. escape_input($_POST['providerid']) .'">'. "\n";
 			} ?>
 			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
@@ -140,7 +140,7 @@ $(document).ready(function(){
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class="btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" data-script="app/admin/circuits/edit-provider-submit.php" data-result_div="providerManagementEditResult" data-form='providerManagementEdit'>
 			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i>
-			<?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<?php print $User->get_post_action(); ?>
 		</button>
 	</div>
 

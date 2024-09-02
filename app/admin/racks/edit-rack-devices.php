@@ -25,7 +25,7 @@ $User->check_module_permissions ("devices", User::ACCESS_R, true, true);
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['rackid']))		{ $Result->show("danger", _("Invalid ID"), true, true); }
@@ -104,7 +104,7 @@ $(document).ready(function(){
 </script>
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('device to rack'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('device to rack'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -201,7 +201,7 @@ $(document).ready(function(){
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<?php if ((!empty($devices)) || ($_POST['devicetype'] != 'device')) { ?>
-		<button class="btn btn-sm btn-default btn-success" id="editRackDevicesubmit"><i class="fa fa-plus"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
+		<button class="btn btn-sm btn-default btn-success" id="editRackDevicesubmit"><i class="fa fa-plus"></i> <?php print $User->get_post_action(); ?></button>
         <?php } ?>
 	</div>
 

@@ -144,7 +144,7 @@ else {
 		print "<td>";
 		print "	<input type='text' class='form-control input-sm' name='name$m' value='$name'>";
 		print "	<input type='hidden' name='number$m' value='$number'>";
-		print "	<input type='hidden' name='domainId$m' value='$_POST[domainId]'>";
+		print "	<input type='hidden' name='domainId$m' value='".escape_input($_POST['domainId'])."'>";
 
 		print "</td>";
 		//description
@@ -172,12 +172,12 @@ else {
 	print "<tr>";
 	print "	<td colspan='$colspan'>";
 	print " <div id='vlanScanAddResult'></div>";
-	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveVlanScanResults' data-script='vlans-scan' data-subnetId='".$_POST['subnetId']."'><i class='fa fa-plus'></i> "._("Add discovered VLANS")."</a>";
+	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveVlanScanResults' data-script='vlans-scan' data-subnetId='".escape_input($_POST['subnetId'])."'><i class='fa fa-plus'></i> "._("Add discovered VLANS")."</a>";
 	print "	</td>";
 	print "</tr>";
 
 	print "</table>";
-	print '<input type="hidden" name="csrf_cookie" value="'.$_POST['csrf_cookie'].'">';
+	print '<input type="hidden" name="csrf_cookie" value="'.escape_input($_POST['csrf_cookie']).'">';
 	print "</form>";
 
     // print errors

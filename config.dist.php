@@ -104,6 +104,15 @@ $debugging = false;
 $api_allow_unsafe = false;
 
 /**
+ * PHP8.1 - Integers and floats in result sets will now be returned using native PHP types instead of strings when using emulated prepared statements.
+ * Add option to restore prior behaviour for API consumers.
+ *
+ * Can be overwritten via "api-stringify-results: 0|1" header in API requests.
+ */
+
+$api_stringify_results = false;
+
+/**
  *  manual set session name for auth
  *  increases security
  *  optional
@@ -162,7 +171,12 @@ $proxy_user     = 'USERNAME';                             // Proxy Username
 $proxy_pass     = 'PASSWORD';                             // Proxy Password
 $proxy_use_auth = false;                                  // Enable/Disable Proxy authentication
 
-$offline_mode   = false;                                  // Offline mode, disable server-side Internet requests (proxy/OpenStreetMap)
+$offline_mode   = false;                                  // Offline mode, disable all server-side Internet requests (proxy/OpenStreetMap)
+
+/**
+ * OpenStreetMap
+ ****************************/
+$disable_geoip_lookups = false;                           // Disable address geoip lookups
 
 /**
  * Failed access

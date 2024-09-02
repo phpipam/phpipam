@@ -182,9 +182,10 @@ function set_ui_language($default_lang = null) {
  * @param   mixed $value
  * @param   int $lifetime
  * @param   bool $httponly
+ * @param   bool $secure
  * @return  void
  */
-function setcookie_samesite($name, $value, $lifetime, $httponly=false) {
+function setcookie_samesite($name, $value, $lifetime, $httponly=false, $secure=false) {
 
 	$lifetime = (int) $lifetime;
 
@@ -201,10 +202,10 @@ function setcookie_samesite($name, $value, $lifetime, $httponly=false) {
 	$samesite = Config::ValueOf("cookie_samesite", "Lax");
 	if (!in_array($samesite, ["None", "Lax", "Strict"])) $samesite="Lax";
 
-	$secure = ($samesite=="None") ? " Secure;" : '';
-	$httponly = $httponly ? ' HttpOnly;' : '';
+	$Secure = ($secure || $samesite=="None") ? " Secure;" : '';
+	$HttpOnly = $httponly ? ' HttpOnly;' : '';
 
-	header("Set-Cookie: $name=$value; expires=$expire_date; Max-Age=$lifetime; path=/; SameSite=$samesite;".$secure.$httponly);
+	header("Set-Cookie: $name=$value; expires=$expire_date; Max-Age=$lifetime; path=/; SameSite=$samesite;".$Secure.$HttpOnly);
 }
 
 // Include backwards compatibility wrapper functions.

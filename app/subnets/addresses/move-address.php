@@ -27,7 +27,7 @@ $User->check_maintaneance_mode ();
 $csrf = $User->Crypto->csrf_cookie ("create", "address_".$_POST['id']);
 
 # validate action
-$Tools->validate_action ($_POST['action']);
+$Tools->validate_action(false);
 
 # validate post
 is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid ID"), true);

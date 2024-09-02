@@ -31,7 +31,7 @@ else {
 $User->Crypto->csrf_cookie ("validate", "circuit", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 # get modified details
 $circuit = $Admin->strip_input_tags($_POST);
 

@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate action
-$User->validate_action ($_POST['action'], true);
+$User->validate_action();
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "passkeyedit");
@@ -81,7 +81,7 @@ $Result->show("danger", _("Passkey not found"), true, true);
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/tools/user-menu/passkey_edit_result.php" data-result_div="passkeyEditResult" data-form='passkeyEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 
 	</div>

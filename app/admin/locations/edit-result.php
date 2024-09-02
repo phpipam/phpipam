@@ -53,7 +53,7 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
         if(is_blank($_POST['lat']) && is_blank($_POST['long']) && !is_blank($_POST['address'])) {
             $OSM = new OpenStreetMap($Database);
             $latlng = $OSM->get_latlng_from_address ($_POST['address']);
-            if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
+            if(isset($latlng['lat']) && isset($latlng['lng'])) {
                 $_POST['lat'] = $latlng['lat'];
                 $_POST['long'] = $latlng['lng'];
             }
@@ -103,10 +103,10 @@ if(isset($update)) {
 
 # execute update
 if(!$Admin->object_modify ("locations", $_POST['action'], "id", $values)) {
-    $Result->show("danger", _("Location")." ".$_POST["action"]." "._("failed"), false);
+    $Result->show("danger", _("Location")." ".$User->get_post_action()." "._("failed"), false);
 }
 else {
-    $Result->show("success", _("Location")." ".$_POST["action"]." "._("successful"), false);
+    $Result->show("success", _("Location")." ".$User->get_post_action()." "._("successful"), false);
 }
 
 // remove all references

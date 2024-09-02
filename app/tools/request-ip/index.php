@@ -41,7 +41,7 @@ $User->check_user_session();
 			# get subnet details
 			$subnet = (array) $Subnets->fetch_subnet(null, $_POST['subnetId']);
 			?>
-			<input type="text" name="ip_addr" class="ip_addr form-control" size="30" value="<?php print $first; ?>">
+			<input type="text" name="ip_addr" class="ip_addr form-control" size="30" value="<?php print escape_input($first); ?>">
 
 			<input type="hidden" name="subnetId" value="<?php print $subnet['id']; ?>">
 		</td>

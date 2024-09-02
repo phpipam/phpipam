@@ -33,7 +33,7 @@ else {
 }
 
 # validate action
-$Tools->validate_action ($_POST['action']);
+$Tools->validate_action(false);
 $action = $_POST['action'];
 //reset delete action form visual visual
 if(isset($_POST['action-visual'])) {
