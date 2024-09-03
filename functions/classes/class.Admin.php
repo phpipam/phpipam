@@ -447,6 +447,11 @@ class Admin extends Common_functions {
 			foreach($users as $u) {
 				if($u->role != "Administrator") {
 					$g = pf_json_decode($u->groups, true);
+					# if json failed to decode, then this user is eligible to be added
+					if (!$g) {
+						$out[] = $u->id;
+						continue;
+					}
 					if(!@in_array($group_id, $g)) { $out[] = $u->id; }
 				}
 			}
