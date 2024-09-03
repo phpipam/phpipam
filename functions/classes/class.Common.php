@@ -2174,7 +2174,11 @@ class Common_functions  {
 	            	$title[] = ucwords(escape_input($get['page']));
 	            	// subpage
 	            	if (isset($get['section'])) {
-	                	$title[] = ucwords(escape_input($get['section']));
+	                        if(in_array($get['section'], ["vlan", "vlans", "vrf"])) {
+	                                $title[] = strtoupper(escape_input($get['section']));
+	                        } else {
+	                                $title[] = ucwords(escape_input($get['section']));
+	                        }
 	            	}
 	            	if (isset($get['subnetId'])) {
 	                	// vland domain
@@ -2188,6 +2192,12 @@ class Common_functions  {
 		                        	$title[] = $se->name;
 		                    	}
 	                	}
+				elseif($get['section']=="vrf") {
+	                                $se = $this->fetch_object ("vrf", "vrfId", escape_input($get['subnetId']));
+	                                if($se!==false) {
+	                                        $title[] = $se->name;
+	                                }
+	                        }
 	                	else {
 	                    		$title[] = ucwords(escape_input($get['subnetId']));
 	                    	}
