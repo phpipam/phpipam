@@ -18,6 +18,7 @@
     + Fixed Password validation errors (#4099,#2423);
     + Fixed Ripe import results in jQuery error (#4007);
     + Fixed Ripe import crashes if too many subnets are found (#4180);
+    + Fixed Devices with height 0 crash Rack image generation (#4193);
 
     Enhancements, changes:
     ----------------------------
