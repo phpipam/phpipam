@@ -565,17 +565,17 @@ $('#expandfolders').click(function() {
     var action = $(this).attr('data-action');
     //open
     if(action == 'close') {
-        $('.subnets ul#subnets li.folder > i').removeClass('fa-folder-close-o').addClass('fa-folder-open-o');
-        $('.subnets ul#subnets li.folderF > i').removeClass('fa-folder').addClass('fa-folder-open');
-        $('.subnets ul#subnets ul.submenu').removeClass('submenu-close').addClass('submenu-open').slideDown('fast');
+        $('ul#subnets li.folder > i').removeClass('fa-folder-close-o').addClass('fa-folder-open-o');
+        $('ul#subnets li.folderF > i').removeClass('fa-folder').addClass('fa-folder-open');
+        $('ul#subnets ul.submenu').removeClass('submenu-close').addClass('submenu-open').slideDown('fast');
         $(this).attr('data-action','open');
         createCookie('expandfolders','1','365');
         $(this).removeClass('fa-expand').addClass('fa-compress');
     }
     else {
-        $('.subnets ul#subnets li.folder > i').addClass('fa-folder-close-o').removeClass('fa-folder-open-o');
-        $('.subnets ul#subnets li.folderF > i').addClass('fa-folder').removeClass('fa-folder-open');
-        $('.subnets ul#subnets ul.submenu').addClass('submenu-close').removeClass('submenu-open').slideUp('fast');
+        $('ul#subnets li.folder > i').addClass('fa-folder-close-o').removeClass('fa-folder-open-o');
+        $('ul#subnets li.folderF > i').addClass('fa-folder').removeClass('fa-folder-open');
+        $('ul#subnets ul.submenu').addClass('submenu-close').removeClass('submenu-open').slideUp('fast');
         $(this).attr('data-action','close');
         createCookie('expandfolders','0','365');
         $(this).removeClass('fa-compress').addClass('fa-expand');
