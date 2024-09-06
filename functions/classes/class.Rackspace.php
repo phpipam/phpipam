@@ -617,7 +617,7 @@ class RackDrawer extends Common_functions {
     private function drawContents() {
         foreach ($this->rack->getContent() as $content)
         {
-            $pixelSize = $this->unitYSize * $content->getSize();
+            $pixelSize = $this->unitYSize * max($content->getSize(), 1);
 
             $img = imagecreate($this->rackInsideXSize - 2, $pixelSize);
             $this->drawContent($content, $img, $content->getName());

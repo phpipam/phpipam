@@ -61,7 +61,7 @@ if (!is_blank(@$device['rack']) && $User->get_module_permissions ("racks")>=User
         # validate position and size
         if (!is_numeric($device['rack']))                               { $Result->show("danger", _('Invalid rack identifier').'!', true); }
         if (!is_numeric($device['rack_start']))                         { $Result->show("danger", _('Invalid rack start position').'!', true); }
-        if (!is_numeric($device['rack_size']))                          { $Result->show("danger", _('Invalid rack size').'!', true); }
+        if (intval($device['rack_size']) === 0)                         { $Result->show("danger", _('Invalid rack size').'!', true); }
 		# validate rack
 		$rack = $Racks->fetch_rack_details($device['rack']);
 		if (!is_numeric($device['rack']) || ($rack > 0 && !is_object($rack))) {
