@@ -95,5 +95,8 @@ require( dirname(__FILE__) . '/classes/class.OpenStreetMap.php' );	    // Class 
 $Rewrite = new Rewrite ();
 $_GET = $Rewrite->get_url_params ();
 
+$GET  = new Params ($_GET,  null, true); // Run strip_tags() on $_GET
+$POST = new Params ($_POST, null, true); // Run strip_tags() on $_POST
+
 /* get version */
 require_once('version.php');

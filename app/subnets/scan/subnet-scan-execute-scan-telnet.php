@@ -53,7 +53,7 @@ else {
 	$subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
 	$nsid = $subnet===false ? false : $subnet->nameserverId;
 
-	print "<form name='".$_POST['type']."-form' class='".$_POST['type']."-form'>";
+	print "<form name='".escape_input($_POST['type'])."-form' class='".escape_input($_POST['type'])."-form'>";
 	print "<input type='hidden' name='csrf_cookie' value='$csrf'>";
 	print "<table class='table table-striped table-top table-condensed'>";
 
@@ -100,7 +100,7 @@ else {
 	//submit
 	print "<tr>";
 	print "	<td colspan='4'>";
-	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='".$_POST['type']."' data-subnetId='".$_POST['subnetId']."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
+	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='".escape_input($_POST['type'])."' data-subnetId='".escape_input($_POST['subnetId'])."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
 	print "	</td>";
 	print "</tr>";
 

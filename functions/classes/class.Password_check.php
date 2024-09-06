@@ -229,7 +229,7 @@ class Password_check extends Common_functions {
 	private function validate_maxSymbols () {
 		$cnt = $this->count_symbols ();
 		// check
-		if ($cnt < $this->requirements['maxSymbols']) {
+		if ($cnt > $this->requirements['maxSymbols']) {
 			$this->save_error (_("Too many symbols")." ("._("maximum")." {$this->requirements['maxSymbols']}).");
 		}
 	}

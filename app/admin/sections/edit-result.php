@@ -112,8 +112,8 @@ else {
 					);
 
 	# execute update
-	if(!$Sections->modify_section ($_POST['action'], $values, @$_POST['id']))	{ $Result->show("danger", _("Section")." ".$_POST["action"]." "._("failed"), false); }
-	else { $Result->show("success", _("Section")." ".$_POST["action"]." "._("successful"), false); }
+	if(!$Sections->modify_section ($_POST['action'], $values, @$_POST['id']))	{ $Result->show("danger", _("Section")." ".$User->get_post_action()." "._("failed"), false); }
+	else { $Result->show("success", _("Section")." ".$User->get_post_action()." "._("successful"), false); }
 
 	# delegate
 	if (@$_POST['delegate']==1) {

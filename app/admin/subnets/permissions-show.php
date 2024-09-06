@@ -98,7 +98,7 @@ $('.input-switch').on('switchChange.bootstrapSwitch', function (e, data) {
 			print "</span>";
 
 			# hidden
-			print "<input type='hidden' name='subnetId' value='$_POST[subnetId]'>";
+			print "<input type='hidden' name='subnetId' value='".escape_input($_POST['subnetId'])."'>";
 
 			print "	</td>";
 			print "</tr>";

@@ -32,7 +32,7 @@ else {
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('routing_bgp');
@@ -56,7 +56,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print escape_input(ucwords(_($_POST['action']))); ?> <?php print _('BGP peer'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('BGP peer'); ?></div>
 
 
 <!-- content -->
@@ -71,7 +71,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 			<input type="text" name="peer_name" class="form-control input-sm" placeholder="<?php print _('Peer name'); ?>" value="<?php if(isset($bgp->peer_name)) print $Tools->strip_xss($bgp->peer_name); ?>" <?php print $readonly; ?>>
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-				print '<input type="hidden" name="id" value="'. $_POST['bgpid'] .'">'. "\n";
+				print '<input type="hidden" name="id" value="'. escape_input($_POST['bgpid']) .'">'. "\n";
 			} ?>
 			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
@@ -258,7 +258,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class="btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" data-script="app/admin/routing/edit-bgp-submit.php" data-result_div="BGPEditResult" data-form='BGPEdit'>
 			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i>
-			<?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<?php print $User->get_post_action(); ?>
 		</button>
 	</div>
 

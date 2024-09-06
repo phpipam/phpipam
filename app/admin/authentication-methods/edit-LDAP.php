@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric */
 if($_POST['action']!="add") {
@@ -78,7 +78,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<input type="text" name="domain_controllers" class="form-control input-sm" value="<?php print @$method_settings->params->domain_controllers; ?>" <?php print $delete; ?>>
 			<input type="hidden" name="type" value="LDAP">
 			<input type="hidden" name="id" value="<?php print @$method_settings->id; ?>">
-			<input type="hidden" name="action" value="<?php print @$_POST['action']; ?>">
+			<input type="hidden" name="action" value="<?php print escape_input(@$_POST['action']); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 		<td class="info2"><?php print _('LDAP hosts, separated by a semicolon (;)'); ?>
@@ -179,7 +179,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/authentication-methods/edit-result.php" data-result_div="editAuthMethodResult" data-form='editAuthMethod'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 	</div>
 

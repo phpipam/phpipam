@@ -35,7 +35,7 @@ The use of untested PHP versions is unsupported and may result in compatibility 
 
 ## Supported MySQL / MariaDB versions
 
-As of v1.6.0 support for utf8mb4 is mandatory: MySQL 5.5.3+ \
+As of v1.6.0 support for utf8mb4 is mandatory: MySQL 5.7.7+ \
 For best performance, Common Table Expressions (CTE) query support: MySQL 8.0+ / MariaDB 10.2.1+
 
 ## I forgot my Admin password!?

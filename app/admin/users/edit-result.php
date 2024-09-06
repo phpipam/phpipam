@@ -48,7 +48,6 @@ if($_POST['action']!="delete") {
 	if((!is_blank(@$_POST['password1']) || (@$_POST['action']=="add") && $auth_method->type=="local")) {
 		//checks
 		if($_POST['password1']!=$_POST['password2'])						{ $Result->show("danger", _("Passwords do not match"), true); }
-		if(strlen($_POST['password1'])<8)									{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
 
 		//enforce password policy
 		$policy = (pf_json_decode($User->settings->passwordPolicy, true));
@@ -196,10 +195,10 @@ if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}==1) {
 
 # execute
 if(!$Admin->object_modify("users", $_POST['action'], "id", $values)) {
-    $Result->show("danger", _("User")." ".$_POST["action"]." "._("failed").'!', true);
+    $Result->show("danger", _("User")." ".$User->get_post_action()." "._("failed").'!', true);
 }
 else {
-    $Result->show("success", _("User")." ".$_POST["action"]." "._("successful").'!', false);
+    $Result->show("success", _("User")." ".$User->get_post_action()." "._("successful").'!', false);
 }
 
 # remove passkeys if required

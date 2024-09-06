@@ -103,10 +103,10 @@ if(isset($update)) {
 
 # execute update
 if(!$Admin->object_modify ("locations", $_POST['action'], "id", $values)) {
-    $Result->show("danger", _("Location")." ".$_POST["action"]." "._("failed"), false);
+    $Result->show("danger", _("Location")." ".$User->get_post_action()." "._("failed"), false);
 }
 else {
-    $Result->show("success", _("Location")." ".$_POST["action"]." "._("successful"), false);
+    $Result->show("success", _("Location")." ".$User->get_post_action()." "._("successful"), false);
 }
 
 // remove all references

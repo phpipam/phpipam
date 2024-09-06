@@ -23,7 +23,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "agent");
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['id'])) { $Result->show("danger", _("Invalid ID"), true, true); }
@@ -35,7 +35,7 @@ if($_POST['action']!="add") {
 	# null ?
 	$agent===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 	# title
-	$title =  ucwords($_POST['action']) .' '._('agent').' '.$agent->name;
+	$title = $User->get_post_action().' '._('agent').' '.$agent->name;
 } else {
 	# generate new code
 	$agent = new StdClass;
@@ -120,7 +120,7 @@ if (@$agent->type=="direct" && $_POST['action']=="delete") {
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?> submit_popup' data-script="app/admin/scan-agents/edit-result.php" data-result_div="agentEditResult" data-form='agentEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 
 	</div>

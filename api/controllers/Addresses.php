@@ -430,7 +430,7 @@ class Addresses_controller extends Common_api_functions  {
         	$result = $this->Tools->fetch_multiple_objects ("ipaddresses", "ip_addr", $this->Tools->transform_address($this->_params->id, "decimal"));
         	if($result!==false) {
             	foreach ($result as $k=>$r) {
-                	if($r->subnetId !== $this->_params->id2) {
+                	if($r->subnetId != $this->_params->id2) {
                     	unset($result[$k]);
                 	}
             	}

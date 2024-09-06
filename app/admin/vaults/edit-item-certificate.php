@@ -24,7 +24,7 @@ if ($User->get_module_permissions ("vaults")<User::ACCESS_RW) { $Result->show("d
 $csrf = $User->Crypto->csrf_cookie ("create", "vaultitem");
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['id'])) { $Result->show("danger", _("Invalid ID"), true, true); }
@@ -38,7 +38,7 @@ if($_POST['action']!="add") {
 	# to json and decode
 	$item_objects = pf_json_decode($User->Crypto->decrypt($item->values, $_SESSION['vault'.$item->vaultId]));
 	# title
-	$title =  ucwords($_POST['action']) .' '._('certificate');
+	$title = $User->get_post_action().' '._('certificate');
 } else {
 	# generate new code
 	$item = new StdClass;
@@ -156,7 +156,7 @@ $custom = $Tools->fetch_custom_fields('vaultItems');
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/vaults/edit-item-certificate-result.php" data-result_div="vaultItemEditResult" data-form='vaultItemEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 
 	</div>

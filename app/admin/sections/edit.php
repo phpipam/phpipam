@@ -24,7 +24,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "section");
 $_POST = $User->strip_input_tags ($_POST);
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # fetch all sections for master section
 $sections = $Sections->fetch_all_sections ();
@@ -35,7 +35,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print escape_input(ucwords(_($_POST['action']))); ?> <?php print _('Section'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('Section'); ?></div>
 
 
 <!-- content -->
@@ -54,7 +54,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="name" value="<?php print $Admin->strip_xss(@$section['name']); ?>" size="30" <?php if ($_POST['action'] == "delete" ) { print ' readonly '; } ?> placeholder="<?php print _('Section name'); ?>">
 				<!-- hidden -->
 				<input type="hidden" name="action" 	value="<?php print escape_input($_POST['action']); ?>">
-				<input type="hidden" name="id" 		value="<?php print @$_POST['sectionid']; ?>">
+				<input type="hidden" name="id" 		value="<?php print escape_input(@$_POST['sectionid']); ?>">
 				<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			</td>
 		</tr>
@@ -258,7 +258,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup' <?php if($_POST['action']=="delete") { print "btn-danger";} else { print "btn-success"; } ?> data-script="app/admin/sections/edit-result.php" data-result_div="sectionEditResult" data-form='sectionEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 
 	</div>

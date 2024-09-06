@@ -31,7 +31,7 @@ $User->check_maintaneance_mode ();
 // validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "customer", $Params->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 // validate action
-$Admin->validate_action ($Params->action, true);
+$Admin->validate_action();
 
 
 /**
@@ -107,5 +107,5 @@ else {
 
 // update customer
 if($Admin->object_modify("customers", $Params->action, "id", $values)) {
-    $Result->show("success", _("Customer")." ".$Params->action." "._("successful").'!', false);
+    $Result->show("success", _("Customer")." ".$User->get_post_action()." "._("successful").'!', false);
 }
