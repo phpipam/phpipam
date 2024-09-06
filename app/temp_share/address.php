@@ -24,7 +24,7 @@ if($selected_ip_fields_size==1 && is_blank($selected_ip_fields[0])) { $selected_
 $statuses = pf_explode(";", $settings->pingStatus);
 
 # checks
-if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesnt exist
+if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesn't exist
 
  # resolve dns name
 $DNS = new DNS ($Database);
@@ -185,7 +185,7 @@ if(sizeof($address)>1) {
 	# custom fields
 	if(sizeof($custom_fields) > 0) {
 		print "<tr>";
-		print "	<td colsapn='2'><hr></td>";
+		print "	<td colspan='2'><hr></td>";
 		print "</tr>";
 
 		foreach($custom_fields as $key=>$field) {

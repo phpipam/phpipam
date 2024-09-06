@@ -1,7 +1,7 @@
 <?php
 
 /**
- * phpIPAM password chack class
+ * phpIPAM password check class
  *
  * validates password against password policy
  */
@@ -112,7 +112,7 @@ class Password_check extends Common_functions {
 	}
 
 	/**
-	 * Saves valdation error to string
+	 * Saves validation error to string
 	 *
 	 * @method save_error
 	 * @param  string $string
@@ -184,7 +184,7 @@ class Password_check extends Common_functions {
 	}
 
 	/**
-	 * Validate minumun number of lowercase numbers
+	 * Validate minimum number of lowercase numbers
 	 *
 	 * @method validate_minLowerCase
 	 * @return void

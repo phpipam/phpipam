@@ -22,7 +22,7 @@ $User->check_user_session ();
 
 # set size parameters
 $height = 200;
-$slimit = 10;			//we dont need this, we will recalculate
+$slimit = 10;			//we don't need this, we will recalculate
 
 # if direct request include plot JS
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{

@@ -145,7 +145,7 @@ function set_ui_language($default_lang = null) {
 	// remove ;q= (q-factor weighting)
 	$http_accept_langs = preg_replace("/;.*$/", "", $http_accept_langs);
 
-	// Try each langage in order of preference
+	// Try each language in order of preference
 	$langs = array_merge([$user_lang, $default_lang, $sys_lang], $http_accept_langs);
 
 	foreach($langs as $lang) {

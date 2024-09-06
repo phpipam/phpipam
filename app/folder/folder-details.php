@@ -4,7 +4,7 @@
  * display folder content
  *************************/
 
-# ferify that user is logged in
+# verify that user is logged in
 $User->check_user_session();
 
 # must be numeric

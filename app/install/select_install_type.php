@@ -44,7 +44,7 @@ $text_prefix  = @$_GET['subnetId']=="migrate" ? _("migrate") : _("install");
 			<br>
 		</li>
 
-		<!-- Mysql inport -->
+		<!-- Mysql import -->
 		<li>
 			<a href="<?php print create_link("install","install_mysqlimport", @$_GET['subnetId']); ?>" class="btn btn-sm btn-default"><?php print _("MySQL/MariaDB import instructions"); ?></a>
 			<br>

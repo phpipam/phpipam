@@ -429,7 +429,7 @@ class Logging extends Common_functions {
 	 *		*.*                                             /var/log/phpipam-changelog.log
 	 *		!*
 	 *
-	 *		# > rysylog example
+	 *		# > rsyslog example
 	 *		auth.alert;auth.warning;auth.debug              /var/log/auth.log
 	 *		if $programname == 'phpipam' then /var/log/phpipam.log
 	 *		if $programname == 'phpipam-changelog' then /var/log/phpipam-changelog.log
@@ -810,7 +810,7 @@ class Logging extends Common_functions {
 		# null and from cli, set admin user
 		if ($this->user===null && php_sapi_name()=="cli") { $this->user_id = 1; }
 
-        # if user is not specify dont write changelog
+        # if user is not specified, don't write changelog
         if (!isset($this->user) || $this->user == false || $this->user == null) {
             return true;
         }
@@ -822,7 +822,7 @@ class Logging extends Common_functions {
 		# set object type
 		$object_type = $this->object_type=="folder" ? "subnet" : $this->object_type;
 
-		# if required values are missing dont save changelog
+		# if required values are missing, don't save changelog
 		if(is_null($obj_id) || $obj_id=="NULL")	{ return false; }
 
 	    # set values
@@ -946,7 +946,7 @@ class Logging extends Common_functions {
 	}
 
 	/**
-	 * Calculate possible chages on edit
+	 * Calculate possible changes on edit
 	 *
 	 * @access private
 	 * @return array

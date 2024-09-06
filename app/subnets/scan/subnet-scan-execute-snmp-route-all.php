@@ -20,7 +20,7 @@ disable_php_errors();
 $Snmp       = new phpipamSNMP ();
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disbled", true, $ajax_loaded); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disabled", true, $ajax_loaded); }
 
 # section check
 if (!is_numeric($_POST['sectionId']))           { $Result->show("danger", "Invalid section Id", true, $ajax_loaded); }
@@ -35,7 +35,7 @@ if($Subnets->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result
 # fetch devices that use get_routing_table query
 $devices_used = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_routing_table%", "id", true, true);
 
-# recolaculate ids for info
+# recalculate ids for info
 foreach ($devices_used as $d) {
     $devices_info[$d->id] = $d;
 }
