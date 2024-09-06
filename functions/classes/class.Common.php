@@ -2171,27 +2171,41 @@ class Common_functions  {
         	}
         	// tools, admin
         	elseif ($get['page']=="tools" || $get['page']=="administration") {
-            	$title[] = ucwords(escape_input($get['page']));
-            	// subpage
-            	if (isset($get['section'])) {
-                	$title[] = ucwords(escape_input($get['section']));
-            	}
-            	if (isset($get['subnetId'])) {
-                	// vland domain
-                	if($get['section']=="vlan") {
-                     	$se = $this->fetch_object ("vlanDomains", "id", escape_input($get['subnetId']));
-                    	if($se!==false) {
-                        	$title[] = $se->name." domain";
-                    	}
-                	}
-                	else {
-                    	$title[] = ucwords(escape_input($get['subnetId']));
-                    }
-            	}
+	            	$title[] = ucwords(escape_input($get['page']));
+	            	// subpage
+	            	if (isset($get['section'])) {
+	                        if(in_array($get['section'], ["vlan", "vlans", "vrf"])) {
+	                                $title[] = strtoupper(escape_input($get['section']));
+	                        } else {
+	                                $title[] = ucwords(escape_input($get['section']));
+	                        }
+	            	}
+	            	if (isset($get['subnetId'])) {
+	                	// vland domain
+	                	if($get['section']=="vlan" || $get['section']=="vlans") {
+		                     	$se = $this->fetch_object ("vlanDomains", "id", escape_input($get['subnetId']));
+		                    	if($se!==false) {
+		                        	$title[] = $se->name." domain";
+		                    	}
+					$se = $this->fetch_object ("vlans", "vlanId", escape_input($get['sPage']));
+		                    	if($se!==false) {
+		                        	$title[] = $se->name;
+		                    	}
+	                	}
+				elseif($get['section']=="vrf") {
+	                                $se = $this->fetch_object ("vrf", "vrfId", escape_input($get['subnetId']));
+	                                if($se!==false) {
+	                                        $title[] = $se->name;
+	                                }
+	                        }
+	                	else {
+	                    		$title[] = ucwords(escape_input($get['subnetId']));
+	                    	}
+	            	}
         	}
         	else {
-            	$title[] = ucwords(escape_input($get['page']));
-            }
+            		$title[] = ucwords(escape_input($get['page']));
+            	}
     	}
         // return title
     	return implode(" / ", $title);
