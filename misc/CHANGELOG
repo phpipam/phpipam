@@ -15,6 +15,9 @@
     + Fixed RADIUS authentication fails on 1.6.0 (#3986);
     + Fixed cannot add NAT issue (#3993);
     + Fixed Bug when adding a user to a group (#4137);
+    + Fixed Password validation errors (#4099,#2423);
+    + Fixed Ripe import results in jQuery error (#4007);
+    + Fixed Ripe import crashes if too many subnets are found (#4180);
 
     Enhancements, changes:
     ----------------------------
