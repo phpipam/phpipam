@@ -679,7 +679,7 @@ class Admin extends Common_functions {
 		switch ($field['fieldType']) {
 			case "varchar":
 			case "int":
-				if (!isset($field['fieldSize']) || filter_var($field['fieldSize'], FILTER_VALIDATE_INT, [['options' => ['min_range' => 1]]]) === false) {
+				if (!isset($field['fieldSize']) || filter_var($field['fieldSize'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) === false) {
 					$this->Result->show("danger", _("Error: ") . _("Invalid custom field size"));
 					return false;
 				}

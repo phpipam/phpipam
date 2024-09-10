@@ -13,6 +13,7 @@ $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Result 	= new Result ();
 $Params		= new Params ($User->strip_input_tags ($_POST));
+$Tools		= new Tools ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
@@ -30,6 +31,13 @@ if($Params->action == "delete") {
 else {
 	# remove spaces
 	$Params->name = trim($Params->name);
+
+	if($Params->action == "add") {
+		# check if name is taken
+		$custom_fields = $Tools->fetch_custom_fields($Params->table);
+		$custom_field_names = array_map('strtolower', array_keys($custom_fields));
+		if (in_array("custom_" . strtolower($Params->name),$custom_field_names))	$errors[] = _('Field') . " " . $Params->name . " " . _('already exists!');
+	}
 
 	# length > 4 and < 12
 	if( (mb_strlen($Params->name) < 2) || (mb_strlen($Params->name) > 24) ) 	{ $errors[] = _('Name must be between 4 and 24 characters'); }
@@ -59,7 +67,7 @@ else {
 	}
 	//number
 	elseif($Params->fieldType=="int") {
-		if(!is_numeric($Params->fieldSize))								{ $errors[] = _('Integer values must be numeric'); }
+		if(!is_numeric($Params->fieldSize))								{ $errors[] = _('Fieldsize must be numeric'); }
 
 	}
 }
