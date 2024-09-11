@@ -58,7 +58,7 @@ print "	<th>"._('Comment').'</th>';
 $colspanCustom = 0;
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
-		if(!in_array($field['name'], $hidden_circuit_fields)) {
+		if(!in_array($field['name'], $hidden_logical_fields)) {
 			print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			$colspanCustom++;
 		}
@@ -99,7 +99,7 @@ else {
 		//custom
 		if(sizeof(@$custom_fields) > 0) {
 			foreach($custom_fields as $field) {
-				if(!in_array($field['name'], $hidden_circuit_fields)) {
+				if(!in_array($field['name'], $hidden_logical_fields)) {
 					// create html links
 					$circuit->{$field['name']} = $User->create_links($circuit->{$field['name']}, $field['type']);
 

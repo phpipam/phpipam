@@ -63,7 +63,7 @@ $result_addresses = $Tools->search_addresses($searchTerm, $searchTerm_edited['hi
 <?php
 
 $m = 0;		//for section change
-$n = 0;		//fpr permission and result count
+$n = 0;		//for permission and result count
 
 /* if no result print nothing found */
 if(is_array($result_addresses)) {
@@ -93,7 +93,6 @@ if(is_array($result_addresses)) {
 				}
 				print '</tr>';
 			}
-			$m++;
 
 			//print table
 			print '<tr class="ipSearch" id="'. $line['id'] .'" subnetId="'. $line['subnetId'] .'" sectionId="'. $subnet['sectionId'] .'" link="'. $section['name'] .'|'. $subnet['id'] .'">'. "\n";
@@ -184,8 +183,9 @@ if(is_array($result_addresses)) {
 			print "	</div>";
 			print "</td>";
 
-		print '</tr>' . "\n";
-	}
+			print '</tr>' . "\n";
+		}
+		$m++;
 	}
 }
 ?>
