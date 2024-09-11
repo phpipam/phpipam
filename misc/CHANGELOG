@@ -14,6 +14,7 @@
     + Fixed Force mac address update during status update scan (#3791);
     + Fixed RADIUS authentication fails on 1.6.0 (#3986);
     + Fixed cannot add NAT issue (#3993);
+    + Fixed Various Linked Addresses issues (#3275, #4188, #4189, #3274);
     + Fixed Duplicates tool not finding ALL duplicates (#4161);
     + Fixes fetch_favourite_subnets function returns empty array instead of false (#4182);
     + Fixed Dashboard widget widths are not correct percentage (#4176);
