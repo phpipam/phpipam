@@ -69,7 +69,7 @@ print "</thead>";
 
 // no circuits
 if($circuit_providers===false) {
-	$colspan = 3 + $colspanCustom;
+	$colspan = 5 + $colspanCustom;
 	print "<tr>";
 	print "	<td colspan='$colspan'>".$Result->show('info', _('No results')."!", false, false, true)."</td>";
 	print "</tr>";
