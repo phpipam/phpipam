@@ -63,10 +63,12 @@ if($User->settings->enableChangelog == 1) {
 		<button id="clearChangeLogs" class="btn btn-sm btn-default pull-left"><i class="fa fa-trash-o"></i> <?php print _('Clear logs'); ?></button>
 	</div>
 
+	<div class="normalTable logs" style="clear:both;">
 	<?php
 	# printout
 	include_once('changelog-print.php');
 }
 else {
 	$Result->show("info",_("Change logging is disabled. You can enable it under administration")."!", false);
-}
+} ?>
+	</div>		<!-- end normalTable logs div -->
