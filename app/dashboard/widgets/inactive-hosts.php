@@ -86,6 +86,7 @@ if ($inactive_hosts!==false) {
     }
 }
 
+print "<div" . (isset($height) ? " style=\"height:{$height}px;overflow:scroll;width:98%;margin-left:1%;\"" : "") . ">";
 # error - none found but not permitted
 if ($inactive_hosts===false) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
@@ -101,7 +102,6 @@ elseif (!isset($out)) {
 # found
 else {
     // table
-	print "<div" . (isset($height) ? " style=\"height:{$height}px;overflow:scroll;width:98%;margin-left:1%;\"" : "") . ">";
     print "<table class='table table-top table-threshold table-condensed table-hover'>";
 
     print "<tr>";
@@ -126,5 +126,5 @@ else {
     }
 
     print "</table>";
-	print "</div>";
 }
+print "</div>";

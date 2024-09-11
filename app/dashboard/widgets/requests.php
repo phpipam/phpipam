@@ -43,10 +43,14 @@ else {
 		if (@is_numeric($p['max'])) {
 			$max = intval($p['max']);
 		}
+		if (@is_numeric($p['height'])) {
+			$height = strval(intval($p['height']));
+		}
 		unset($p);
 	}
 ?>
 
+<div class="container-fluid" style="<?php print isset($height) ? "height:{$height}px;overflow:scroll;" : ""; ?>padding-top:5px">
 <table id="requestedIPaddresses" class="table table-condensed table-hover table-top">
 
 <!-- headers -->
@@ -80,6 +84,6 @@ else {
 	}
 
 	print "</table>";
-
+	print "</div>";
 }
 ?>

@@ -11,7 +11,8 @@ $upgrade_queries["1.7.41"][] = "UPDATE `settings` set `dbversion` = '41';";
 
 // widget improvements
 $upgrade_queries["1.7.42"][] = "-- update widget parameteres for stock widgets";
-$upgrade_queries["1.7.42"][] = "UPDATE `widgets` SET `wparams`='height=x&max=x' WHERE `wfile` in ('statistics','favourite_subnets','top10_hosts_v4','top10_hosts_v6','top10_percentage','changelog','requests','access_logs','error_logs','tools','ipcalc','iprequest','threshold','locations','bw_calculator','customers','mac-lookup','instructions') AND `wparams` IS NULL;";
+$upgrade_queries["1.7.42"][] = "UPDATE `widgets` SET `wparams`='height=x&max=x' WHERE `wfile` in ('favourite_subnets','top10_hosts_v4','top10_hosts_v6','top10_percentage','changelog','requests','access_logs','error_logs','threshold',) AND `wparams` IS NULL;";
+$upgrade_queries["1.7.42"][] = "UPDATE `widgets` SET `wparams`='height=x' WHERE `wfile` in ('statistics','locations','customers') AND `wparams` IS NULL;";
 $upgrade_queries["1.7.42"][] = "UPDATE `widgets` SET `wparams`='height=x&days=30' WHERE `wfile`='inactive-hosts';";
 $upgrade_queries["1.7.42"][] = "-- remove numbers from titles and descriptions";
 $upgrade_queries["1.7.42"][] = "UPDATE `widgets` SET `wtitle`='Top IPv4 subnets by number of hosts',`wdescription`='Shows graph of top IPv4 subnets by number of hosts' WHERE `wfile`='top10_hosts_v4' AND `wtitle`='Top 10 IPv4 subnets by number of hosts' AND `wdescription`='Shows graph of top 10 IPv4 subnets by number of hosts';";
