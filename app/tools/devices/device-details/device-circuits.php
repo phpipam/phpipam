@@ -13,6 +13,10 @@ $User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('circuits');
+# fetch circuit types
+$circuit_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
+$type_hash = [];
+foreach($circuit_types as $t){ $type_hash[$t->id] = $t->ctname; }
 # get hidden fields */
 $hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['circuits']) ? $hidden_fields['circuits'] : array();
@@ -75,7 +79,7 @@ else {
             print '<tr>'. "\n";
             print " <td><a class='btn btn-xs btn-default' href='".create_link("tools","circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
             print " <td><a href='".create_link("tools","circuits","providers",$circuit->pid)."'>$circuit->name</a></td>";
-            print " <td>$circuit->type</td>";
+            print " <td>{$type_hash[$circuit->type]}</td>";
             print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";
             print " <td class='hidden-xs hidden-sm'>$circuit->status</td>";
             if($User->get_module_permissions ("locations")>=User::ACCESS_R) {

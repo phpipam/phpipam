@@ -472,8 +472,9 @@ $(document).on('click', '#sortablePopup li a.widget-add', function() {
     var wsize = $(this).attr('data-size');
     var wtitle= $(this).attr('data-htitle');
     //create
-    var data = '<div class="row-fluid"><div class="span'+wsize+' widget-dash" id="'+wid+'"><div class="inner movable"><h4>'+wtitle+'</h4><div class="hContent"></div></div></div></div>';
-    $('#dashboard').append(data);
+    var data = '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-'+wsize+' widget-dash" id="'+wid+'"><div class="inner movable"><h4>'+wtitle+'</h4><div class="hContent"></div></div></div>';
+    $('#widget-container').append(data);
+    $('#dashboard .row-fluid').sortable('refresh');
     //load
     w = wid.replace("w-", "");
     $.post('app/dashboard/widgets/'+w+'.php', function(data) {

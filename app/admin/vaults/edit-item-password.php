@@ -112,8 +112,10 @@ $custom = $Tools->fetch_custom_fields('vaultItems');
 
 		# all my fields
 		foreach($custom as $field) {
+    		// disabled
+    		$cust_disabled = $_POST['action'] == "delete" ? true : false;
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $item, $timepicker_index);
+    		$custom_input = $Tools->create_custom_field_input ($field, $item, $timepicker_index, $disabled);
     		// add datepicker index
     		$timepicker_index++;
             // print

@@ -14,13 +14,21 @@
     + Fixed Force mac address update during status update scan (#3791);
     + Fixed RADIUS authentication fails on 1.6.0 (#3986);
     + Fixed cannot add NAT issue (#3993);
+    + Fixed Various Linked Addresses issues (#3275, #4188, #4189, #3274);
+    + Fixed Duplicates tool not finding ALL duplicates (#4161);
+    + Fixes fetch_favourite_subnets function returns empty array instead of false (#4182);
+    + Fixed Dashboard widget widths are not correct percentage (#4176);
+    + Fixed remove_offline_addresses.php can't execute (#4173);
+    + Fixed Searches do not properly organize results (#3917)
     + Fixed Expand/compress all folders not working properly (#3583);
     + Fixed Bug when adding a user to a group (#4137);
     + Fixed Password validation errors (#4099,#2423);
     + Fixed Ripe import results in jQuery error (#4007);
     + Fixed Ripe import crashes if too many subnets are found (#4180);
     + Fixed Devices with height 0 crash Rack image generation (#4193);
-    + Fixed Issue Vault Item 2 Last Custom Field not writable (#4058);
+    + Fixed Custom field not working in Routing module (#4174);
+    + Fixed Circuit Type showing differently in two windows (#4104);
+    + Fixed Vault Item Custom Field not writable (#4058);
 
     Enhancements, changes:
     ----------------------------
@@ -28,6 +36,7 @@
     + Added option to export data for VLAN,VRF and Devices directly from tools page;
     + Added option to disable OpenStreetMap address geoip lookups;
     + Added $api_stringify_results config.php option for <PHP81 API backwards compatibility;
+    + Added support for newly added widgets to be sortable with jQuery (#4711);
 
     Security Fixes:
     ----------------------------

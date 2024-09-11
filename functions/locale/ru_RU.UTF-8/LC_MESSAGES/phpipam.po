@@ -4511,7 +4511,7 @@ msgid "Cannot update request"
 msgstr "Не могу обновить запрос"
 
 #: app/admin/requests/edit-result.php:53
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr "Запрос был отклонен"
 
 msgid "already in use"
@@ -4570,7 +4570,7 @@ msgid "Errors occured when importing to database!"
 msgstr "Произошла ошибка при импортировании в базу!"
 
 #: app/subnets/import-subnet/import-file.php:142
-msgid "Import successfull"
+msgid "Import successful"
 msgstr "Импорт прошёл успешно"
 
 msgid "Cannot upload - Return Code:"
@@ -4992,7 +4992,7 @@ msgid "If group does not have access to section it will not be able to access su
 msgstr "Если группа не имеет доступа в секцию, она не будет иметь доступ к подсети, даже если <br>были установлены права подсети"
 
 #: app/admin/custom-fields/order.php:21
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr "Поля не могут быть пустыми"
 
 #: app/admin/custom-fields/order.php:25
@@ -5440,7 +5440,7 @@ msgid "Truncating network will remove all IP addresses, that belong to selected 
 msgstr "Обрезка сети удалит все IP адреса, которые принадлежат выбранной подсети!"
 
 #: app/admin/subnets/truncate-save.php:44
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr "Подсеть обрезана успешно"
 
 #: app/admin/users/edit-notify.php:32
@@ -5720,7 +5720,7 @@ msgid "Make sure user defined in config.php has access to database."
 msgstr "Убедитесь, что указанный в config.php пользователь, имеет доступ к базе."
 
 #: app/install/sql_error.php:31
-msgid "Database connection succesfull"
+msgid "Database connection successful"
 msgstr "Успешное соединение с базой данных"
 
 #: app/install/welcome.php:9
@@ -9144,7 +9144,7 @@ msgstr "Домены не найдены!"
 #: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:14
 #: app/subnets/scan/subnet-scan-execute-snmp-mac.php:18
 #: app/subnets/scan/subnet-scan-result-snmp-route-all.php:23
-msgid "SNMP module disbled"
+msgid "SNMP module disabled"
 msgstr "SNMP модуль отключён"
 
 #: app/admin/vlans/move-vlan-result.php:54
@@ -9645,11 +9645,11 @@ msgid "Manage permissions for folder"
 msgstr "Управление настройками для папки"
 
 #: app/admin/subnets/split.php:35
-msgid "Only subnets that have no nested subnets can be splitted"
+msgid "Only subnets that have no nested subnets can be split"
 msgstr "Может быть разбита только подсеть, которая не имеет вложенных подсетей"
 
 #: app/admin/subnets/split.php:42
-msgid "Subnet too small to be splitted"
+msgid "Subnet too small to be split"
 msgstr "Подсеть слишком мала для разбивки"
 
 #: app/admin/subnets/split.php:116
@@ -10294,7 +10294,7 @@ msgid "User self update failed"
 msgstr "Ошибка самообновления пользователя"
 
 #: functions/classes/class.User.php:1336
-msgid "User self update suceeded"
+msgid "User self update succeeded"
 msgstr "Успешное самообновление пользователя"
 
 #: functions/classes/class.User.php:1672
@@ -11066,7 +11066,7 @@ msgid "Zone generator method"
 msgstr "Метод генератора зоны"
 
 #: app/admin/firewall-zones/settings.php:146
-msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own unique zone names you can choose the option &quot;text&quot."
+msgid "Generate zone names automatically with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own unique zone names you can choose the option &quot;text&quot."
 msgstr "Генерировать имя зоны автоматически с установкой &quot;decimal&quot; или &quot;hex&quot;.<br>Для использования вашего уникального названия зоны, вы можете выбрать опцию &quot;text&quot."
 
 #: app/admin/firewall-zones/settings.php:151
@@ -12302,7 +12302,7 @@ msgstr "Установки Зоны"
 msgid "Choose a maximum length of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
 msgstr "Выберите максимальную длину имени зоны.<br>По-умолчанию:3, максимум:31 символ. <br>(учтите, что ваш фаервол может иметь ограничение на длину имени зоны или объектов адреса)"
 
-msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot."
+msgid "Generate zone names automatically with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot."
 msgstr "Сгенерировать имя зоны автоматически с установками &quot;decimal&quot; или &quot;hex&quot;.<br>Максимальное значение зоны в hex режиме может быть ffffffff (4294967295 зон).<br>Для использования вашего личного уникального имени зоны, вы можете выбрать опцию &quot;text&quot."
 
 #: app/admin/firewall-zones/settings.php:190
@@ -12314,11 +12314,11 @@ msgid "Autogenerate address objects"
 msgstr "Автогенерация объектов адреса"
 
 #: app/admin/firewall-zones/settings.php:201
-msgid "Automaticaly generate firewall address objects as an additional information of an IP address.<br>(Works only for subnets which are bound to a firewall zone.)"
+msgid "Automatically generate firewall address objects as an additional information of an IP address.<br>(Works only for subnets which are bound to a firewall zone.)"
 msgstr "Автоматическая генерация объектов адреса фаервола в качестве дополнительной информации об IP-адресе.<br>(Работает только для подсетей, которые связаны с зоной фаервола.)"
 
 #: app/admin/firewall-zones/settings.php:146
-msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot;."
+msgid "Generate zone names automatically with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot;."
 msgstr "Автоматическая генерация названия зоны с установками &quot;decimal&quot; или &quot;hex&quot;.<br>Максимальное значение для зоны в режиме hex может быть ffffffff (4294967295 зон).<br>Для использования собственных уникальных названий, можете выбрать &quot;text&quot;."
 
 #: app/admin/firewall-zones/settings.php:222
@@ -12338,7 +12338,7 @@ msgid "Subnet name"
 msgstr "Имя подсети"
 
 #: app/admin/firewall-zones/settings.php:316
-msgid "Firewall address objects for subnets will contain this information instead of FQDN or hostname.<br>By choosing \"description\" spaces and other characters but hiven or underline will be replaced by the separator value."
+msgid "Firewall address objects for subnets will contain this information instead of FQDN or hostname.<br>By choosing \"description\" spaces and other characters but hyphen or underline will be replaced by the separator value."
 msgstr "Объекты адреса фаервола для подсетей будут содержать эту информацию вместо FQDN или имени хоста. <br>При выборе \"описание\" пробелы и другие символы, кроме hiven и подчеркивания, будет заменено на значение разделителя."
 
 #: app/admin/firewall-zones/subnet-to-zone-save.php:21
@@ -13397,7 +13397,7 @@ msgid "Require unique subnets"
 msgstr "Требуются уникальные подсети"
 
 #: app/admin/settings/index.php:518
-msgid "Require unique subnets accross all sections"
+msgid "Require unique subnets across all sections"
 msgstr "Требуются уникальные подсети во всех секциях"
 
 #: app/admin/users/print-all.php:181
@@ -13526,7 +13526,7 @@ msgid "Set subnet alert threshold"
 msgstr "Установить порог предупреждения подсети"
 
 #: functions/classes/class.Subnets.php:3104
-msgid "Failed to set subnet permissons for subnet"
+msgid "Failed to set subnet permissions for subnet"
 msgstr "Ошибка установки разрешений для подсети"
 
 #: app/admin/subnets/ripe-query.php:82
@@ -13534,7 +13534,7 @@ msgid "No result"
 msgstr "Результата нет"
 
 #: app/admin/subnets/split-save.php:41
-msgid "Subnet splitted successfully"
+msgid "Subnet split successfully"
 msgstr "Подсеть разбита успешно"
 
 #: app/admin/subnets/split.php:108
@@ -13926,7 +13926,7 @@ msgid "Vault secret"
 msgstr "Секрет хранилища"
 
 #: app/admin/vaults/edit.php:95
-msgid "Vault secret. Please store secret as it cannot be retreived if lost!"
+msgid "Vault secret. Please store secret as it cannot be retrieved if lost!"
 msgstr "Секрет хранилища. Пожалуйста запомните секрет, так как его не восстановить при потере!"
 
 #: app/admin/vaults/fetch_website_certificate.php:38
@@ -15769,7 +15769,7 @@ msgstr "База данных успешно обновлена!"
 
 #: functions/classes/class.Addresses.php:1854
 #: functions/classes/class.Addresses.php:1857
-msgid "Object is Natted"
+msgid "Object is NATted"
 msgstr "Объект включён в NAT"
 
 #: functions/classes/class.Admin.php:187
@@ -16026,7 +16026,7 @@ msgid "Go to administration and fix"
 msgstr "Перейдите в раздел администрирования и исправьте"
 
 #: functions/classes/class.Install.php:549
-msgid "Succesfull queries"
+msgid "Succesful queries"
 msgstr "Успешные запросы"
 
 #: functions/classes/class.Install.php:551
@@ -16552,7 +16552,7 @@ msgid "Minimum numbers"
 msgstr "Минимум цифр"
 
 #: app/admin/password-policy/index.php:50
-msgid "Minumum number of numbers"
+msgid "Minimum number of numbers"
 msgstr "Минимальное количество цифр"
 
 #: app/admin/password-policy/index.php:54
@@ -16560,7 +16560,7 @@ msgid "Minimum letters"
 msgstr "Минимум букв"
 
 #: app/admin/password-policy/index.php:58
-msgid "Minumum number of letters"
+msgid "Minimum number of letters"
 msgstr "Минимальное количество букв"
 
 #: app/admin/password-policy/index.php:58
@@ -16568,7 +16568,7 @@ msgid "Minimum lowercase letter"
 msgstr "Минимум строчных букв"
 
 #: app/admin/password-policy/index.php:66
-msgid "Minumum number of lowercase letters"
+msgid "Minimum number of lowercase letters"
 msgstr "Минимальное количество строчных букв"
 
 #: app/admin/password-policy/index.php:70
@@ -16576,7 +16576,7 @@ msgid "Minimum uppercase letter"
 msgstr "Минимум заглавных букв"
 
 #: app/admin/password-policy/index.php:74
-msgid "Minumum number of uppercase letters"
+msgid "Minimum number of uppercase letters"
 msgstr "Минимальное количество заглавных букв"
 
 #: app/admin/password-policy/index.php:74
@@ -16584,7 +16584,7 @@ msgid "Minimum symbols"
 msgstr "Минимум символов"
 
 #: app/admin/password-policy/index.php:82
-msgid "Minumum number of symbols"
+msgid "Minimum number of symbols"
 msgstr "Минимальное количество символов"
 
 #: app/admin/password-policy/index.php:86
