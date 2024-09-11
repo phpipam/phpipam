@@ -769,7 +769,7 @@ msgstr "ブロードキャストはIPアドレスとして追加できません!
 
 #: /var/www/phpipam/functions/classes/class.Addresses.php:2072
 #: /var/www/phpipam/functions/classes/class.Addresses.php:2075
-msgid "Object is Natted"
+msgid "Object is NATted"
 msgstr "オブジェクトはナットされています"
 
 #: /var/www/phpipam/functions/classes/class.Log.php:388
@@ -1173,7 +1173,7 @@ msgid "error"
 msgstr "エラー"
 
 #: /var/www/phpipam/functions/classes/class.Subnets.php:2944
-msgid "Failed to set subnet permissons for subnet"
+msgid "Failed to set subnet permissions for subnet"
 msgstr "サブネットのサブネット権限を設定できませんでした"
 
 #: /var/www/phpipam/functions/classes/class.Subnets.php:2957
@@ -4661,7 +4661,7 @@ msgid "No devices configured"
 msgstr "デバイスが設定されなかった"
 
 #: /var/www/phpipam/app/admin/custom-fields/order.php:21
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr "フィールドを空にすることはできません"
 
 #: /var/www/phpipam/app/admin/custom-fields/order.php:25
@@ -5308,7 +5308,7 @@ msgid "Zone generator method"
 msgstr "ゾーン作成メソッド"
 
 #: /var/www/phpipam/app/admin/firewall-zones/settings.php:146
-msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or "
+msgid "Generate zone names automatically with the setting &quot;decimal&quot; or "
 "&quot;hex&quot;.<br>The maximum value for a zone in hex mode would be "
 "ffffffff (4294967295 zones).<br>To use your own unique zone names you can "
 "choose the option &quot;text&quot."
@@ -5355,7 +5355,7 @@ msgid "Autogenerate address objects"
 msgstr "アドレスオブジェクト"
 
 #: /var/www/phpipam/app/admin/firewall-zones/settings.php:201
-msgid "Automaticaly generate firewall address objects as an additional information "
+msgid "Automatically generate firewall address objects as an additional information "
 "of an IP address.<br>(Works only for subnets which are bound to a firewall "
 "zone.)"
 msgstr "ファイアウォールのアドレスオブジェクトを、IPアドレスの追加情報として自動生成"
@@ -6287,7 +6287,7 @@ msgstr "デフォルトのドメインは削除できません"
 #: /var/www/phpipam/app/subnets/scan/subnet-scan-snmp-mac.php:21
 #: /var/www/phpipam/app/subnets/scan/subnet-scan-snmp-arp.php:17
 #: /var/www/phpipam/app/subnets/scan/subnet-scan-snmp-route-all-result.php:41
-msgid "SNMP module disbled"
+msgid "SNMP module disabled"
 msgstr "SNMPモジュールを無効にする"
 
 #: /var/www/phpipam/app/admin/vlans/vlans-scan.php:23
@@ -7370,7 +7370,7 @@ msgid "Require unique subnets"
 msgstr "固有のサブネットが必要です"
 
 #: /var/www/phpipam/app/admin/settings/index.php:485
-msgid "Require unique subnets accross all sections"
+msgid "Require unique subnets across all sections"
 msgstr "すべてのセクションで一意のサブネットが必要です"
 
 #: /var/www/phpipam/app/admin/settings/index.php:491
@@ -8135,7 +8135,7 @@ msgid "Failed to reject IP request"
 msgstr "IP要求を拒否できませんでした"
 
 #: /var/www/phpipam/app/admin/requests/edit-result.php:53
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr "リクエストが拒否されました"
 
 #: /var/www/phpipam/app/admin/requests/edit-result.php:83
@@ -8240,7 +8240,7 @@ msgstr "サブネットのインポートに失敗しました"
 
 #: /var/www/phpipam/app/admin/ripe-import/import-subnets.php:95
 #: /var/www/phpipam/app/subnets/import-subnet/import-file.php:142
-msgid "Import successfull"
+msgid "Import successful"
 msgstr "インポート成功"
 
 #: /var/www/phpipam/app/admin/version-check/index.php:12
@@ -8462,11 +8462,11 @@ msgid "fill"
 msgstr "入力"
 
 #: /var/www/phpipam/app/admin/subnets/split.php:35
-msgid "Only subnets that have no nested subnets can be splitted"
+msgid "Only subnets that have no nested subnets can be split"
 msgstr "ネストされたサブネットを持たないサブネットのみが分割できます"
 
 #: /var/www/phpipam/app/admin/subnets/split.php:42
-msgid "Subnet too small to be splitted"
+msgid "Subnet too small to be split"
 msgstr "サブネットが小さすぎて分割できません"
 
 #: /var/www/phpipam/app/admin/subnets/split.php:66
@@ -8730,7 +8730,7 @@ msgid "Available subnets in section"
 msgstr "セクションの利用できるサブネット"
 
 #: /var/www/phpipam/app/admin/subnets/split-save.php:41
-msgid "Subnet splitted successfully"
+msgid "Subnet split successfully"
 msgstr "サブネットが正常に分割されました"
 
 #: /var/www/phpipam/app/admin/subnets/truncate.php:64
@@ -8748,7 +8748,7 @@ msgid "Failed to truncate subnet"
 msgstr "サブネットを切り捨てることができませんでした"
 
 #: /var/www/phpipam/app/admin/subnets/truncate-save.php:44
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr "サブネットが正常に切り捨てられました"
 
 #: /var/www/phpipam/app/admin/subnets/edit-vlan-dropdown.php:45
