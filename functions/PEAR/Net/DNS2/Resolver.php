@@ -95,7 +95,7 @@ class Net_DNS2_Resolver extends Net_DNS2
         $this->checkServers(Net_DNS2::RESOLV_CONF);
 
         //
-        // we dont' support incremental zone tranfers; so if it's requested, a full
+        // we don't support incremental zone tranfers; so if it's requested, a full
         // zone transfer can be returned
         //
         if ($type == 'IXFR') {

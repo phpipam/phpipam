@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	phpIPAM DNS class to manage DNS-related dunctions
+ *	phpIPAM DNS class to manage DNS-related functions
  *
  */
 
@@ -221,7 +221,7 @@ class DNS extends Common_functions {
 				else						{ return array("class"=>"resolved", "address"=>$resolved, "name"=>$hostname); }
 			}
 		}
-		// dont check
+		// don't check
 		else 								{ return array("class"=>"",			"address"=>$address, "name"=>$hostname); }
 	}
 

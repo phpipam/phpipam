@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Script to disaply api edit result
+ * Script to display api edit result
  *************************************/
 
 /* functions */
@@ -30,11 +30,11 @@ $User->Crypto->csrf_cookie ("validate", "apiedit", $_POST['csrf_cookie']) === fa
 $error = array();
 
 if($_POST['action']!="delete") {
-	# code must be exactly 32 chars long and alfanumeric if app_security = crypt
+	# code must be exactly 32 chars long and alphanumeric if app_security = crypt
 	if($_POST['app_security']=="crypt") {
 	if(strlen($_POST['app_code'])!=32 || !preg_match("#^[a-zA-Z0-9-_=]+$#", $_POST['app_code']))								{ $error[] = "Invalid application code"; }
 	}
-	# name must be more than 2 and alphanumberic
+	# name must be more than 2 and alphanumeric
 	if(strlen($_POST['app_id'])<3 || strlen($_POST['app_id'])>12 || !preg_match("#^[a-zA-Z0-9-_=]+$#",$_POST['app_id']))			{ $error[] = "Invalid application id"; }
 	# permissions must be 0,1,2
 	if($_POST['app_security']!="user") {

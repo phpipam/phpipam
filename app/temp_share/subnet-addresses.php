@@ -24,7 +24,7 @@ $selected_ip_fields_size = in_array('state', $selected_ip_fields) ? (sizeof($sel
 if($selected_ip_fields_size==1 && is_blank($selected_ip_fields[0])) { $selected_ip_fields_size = 0; }								//fix for 0
 
 
-/* Addresses and fields manupulations */
+/* Addresses and fields manipulations */
 
 # save for visual display !
 $addresses_visual = $addresses;

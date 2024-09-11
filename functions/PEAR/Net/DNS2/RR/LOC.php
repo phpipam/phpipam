@@ -336,7 +336,7 @@ class Net_DNS2_RR_LOC extends Net_DNS2_RR
 
     /**
      * takes an XeY precision/size value, returns a string representation.
-     * shamlessly stolen from RFC1876 Appendix A
+     * shamelessly stolen from RFC1876 Appendix A
      *
      * @param integer $prec the value to convert
      *
@@ -354,7 +354,7 @@ class Net_DNS2_RR_LOC extends Net_DNS2_RR
 
     /**
      * converts ascii size/precision X * 10**Y(cm) to 0xXY.
-     * shamlessly stolen from RFC1876 Appendix A
+     * shamelessly stolen from RFC1876 Appendix A
      *
      * @param string $prec the value to convert
      *
@@ -382,7 +382,7 @@ class Net_DNS2_RR_LOC extends Net_DNS2_RR
      * @param integer $sec the seconds value
      * @param string  $hem the hemisphere (N/E/S/W)
      *
-     * @return float the decinmal value
+     * @return float the decimal value
      * @access private
      *
      */

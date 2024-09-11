@@ -50,7 +50,7 @@ if($_POST['action'] == "reject") {
 					"adminComment"=>@$_POST['adminComment']
 					);
 	if(!$Admin->object_modify("requests", "edit", "id", $values))		{ $Result->show("danger",  _("Failed to reject IP request"), true); }
-	else																{ $Result->show("success", _("Request has beed rejected"), false); }
+	else																{ $Result->show("success", _("Request has been rejected"), false); }
 
 	# send mail
 	$Tools->ip_request_send_mail ("reject", $_POST);
@@ -114,7 +114,7 @@ else {
 
 	# send mail
 
-	//save subnt
+	//save subnet
 	$tmp['subnetId'] = $_POST['subnetId'];
 	unset($_POST['subnetId']);
 	// gateway

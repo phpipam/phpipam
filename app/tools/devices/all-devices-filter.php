@@ -6,7 +6,7 @@
 if (isset($_GET['subnetId']) && @isset($_GET['sPage'])) {
 	// no devices ?
 	if($devices===false) { $devices = []; }
-	// set filter and dont print not specified;
+	// set filter and don't print not specified;
 	$filter = true;
 	// filter by devicetype
 	if ($_GET['subnetId']=="type") {

@@ -272,7 +272,7 @@ class FirewallZones extends Common_functions {
 			if($mappings[$key]->generator == 1 ){
 				$mappings[$key]->zone = dechex($mappings[$key]->zone);
 			}
-			# add some padding if it is activated and the zone generatore is not text
+			# add some padding if it is activated and the zone generator is not text
 			if($mappings[$key]->padding == 1 && $mappings[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name length
@@ -346,7 +346,7 @@ class FirewallZones extends Common_functions {
 			if($mapping[$key]->generator == 1 ){
 				$mapping[$key]->zone = dechex($mapping[$key]->zone);
 			}
-			# add some padding if it is activated and the zone generatore is not text
+			# add some padding if it is activated and the zone generator is not text
 			if($mapping[$key]->padding == 1 && $mapping[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name length
@@ -386,7 +386,7 @@ class FirewallZones extends Common_functions {
 
 
 	/**
-	 * Fetches zone mapping informations for subnet detaul from database, depending on id
+	 * Fetches zone mapping informations for subnet detail from database, depending on id
 	 *
 	 * @access public
 	 * @param mixed $id
@@ -424,7 +424,7 @@ class FirewallZones extends Common_functions {
 				if($info[$key]->generator == 1 ){
 					$info[$key]->zone = dechex($info[$key]->zone);
 				}
-				# add some padding if it is activated and the zone generatore is not text
+				# add some padding if it is activated and the zone generator is not text
 				if($info[$key]->padding == 1 && $info[$key]->generator != 2){
 				# remove leading zeros (padding) and raise the value in case of any zone name length changes
 				# add some padding to reach the maximum zone name length
@@ -475,7 +475,7 @@ class FirewallZones extends Common_functions {
 			if($zones[$key]->generator == 1 ){
 				$zones[$key]->zone = dechex($zones[$key]->zone);
 			}
-			# add some padding if it is activated and the zone generatore is not text
+			# add some padding if it is activated and the zone generator is not text
 			if($zones[$key]->padding == 1 && $zones[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name length
@@ -535,7 +535,7 @@ class FirewallZones extends Common_functions {
 			if($zone[$key]->generator == 1 ){
 				$zone[$key]->zone = dechex($zone[$key]->zone);
 			}
-			# add some padding if it is activated and the zone generatore is not text
+			# add some padding if it is activated and the zone generator is not text
 			if($zone[$key]->padding == 1 && $zone[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name length
@@ -558,7 +558,7 @@ class FirewallZones extends Common_functions {
 
 
 	/**
-	 * display formated zone data
+	 * display formatted zone data
 	 *
 	 * @access public
 	 * @param mixed $id
@@ -612,7 +612,7 @@ class FirewallZones extends Common_functions {
 
 
 	/**
-	 * display formated zone network(s)
+	 * display formatted zone network(s)
 	 *
 	 * @access public
 	 * @param mixed $id

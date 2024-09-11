@@ -75,7 +75,7 @@ class Net_DNS2_RR_RT extends Net_DNS2_RR
     public $preference;
 
     /*
-      * host which will servce as an intermediate in reaching the owner host
+      * host which will service as an intermediate in reaching the owner host
      */
     public $intermediatehost;
 

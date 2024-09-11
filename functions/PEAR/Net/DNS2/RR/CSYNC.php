@@ -50,7 +50,7 @@
  */
 
 /**
- * CSYNC Resource Record - RFC 7477 seciond 2.1.1
+ * CSYNC Resource Record - RFC 7477 section 2.1.1
  *
  *    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
  *    |                  SOA Serial                   |

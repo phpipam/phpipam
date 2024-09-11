@@ -151,7 +151,7 @@ class Net_DNS2_RR_HIP extends Net_DNS2_RR
         $this->public_key       = array_shift($rdata);
 
         //
-        // anything left on the array, must be one or more rendezevous servers. add
+        // anything left on the array, must be one or more rendezvous servers. add
         // them and strip off the trailing dot
         //
         if (count($rdata) > 0) {

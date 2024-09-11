@@ -167,7 +167,7 @@ class Net_DNS2_RR_NSAP extends Net_DNS2_RR
             $this->afi = dechex(ord($this->rdata[0]));
 
             //
-            // we only support AFI 47- there arent' any others defined.
+            // we only support AFI 47- there aren't any others defined.
             //
             if ($this->afi == '47') {
 
