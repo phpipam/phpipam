@@ -98,7 +98,7 @@ $max_width = (@$temp_objects[$_GET['section']]->type=="ipaddresses" || isset($_G
 <div class="container" id="mainContainer" style="margin-top: 15px; <?php print $max_width; ?>">
 
 	<?php
-	# disbled
+	# disabled
 	if($settings->tempShare!=1)										{ $Result->show("danger", _("Temporary sharing disabled"), false); }
 	# none
 	elseif(sizeof($temp_objects)==0)								{ $Log->write( _("Tempory share access"), $_GET['section'], 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }

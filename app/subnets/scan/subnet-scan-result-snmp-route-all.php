@@ -20,7 +20,7 @@ foreach ($_POST as $k=>$p) {
 }
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")                           { $Result->show("danger", _("SNMP module disbled"), true); }
+if ($User->settings->enableSNMP!="1")                           { $Result->show("danger", _("SNMP module disabled"), true); }
 
 # check section permissions
 if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true); }

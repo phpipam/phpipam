@@ -50,7 +50,7 @@
  */
 
 /**
- * This class handles parsing and constructing the question sectino of DNS
+ * This class handles parsing and constructing the question section of DNS
  * packets.
  *
  * This is referred to as the "zone" for update per RFC2136
@@ -87,7 +87,7 @@ class Net_DNS2_Question
     public $qname;
 
     /*
-     * The RR type for the questino
+     * The RR type for the question
      *
      * referred to as "ztype" for updates per RFC2136
      *
@@ -95,7 +95,7 @@ class Net_DNS2_Question
     public $qtype;
     
     /*
-     * The RR class for the questino
+     * The RR class for the question
      *
      * referred to as "zclass" for updates per RFC2136
      *

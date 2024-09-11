@@ -24,7 +24,7 @@ $User->check_module_permissions ("vlan", User::ACCESS_RWA, true, true);
 $csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "scan");
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true, true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disabled"), true, true); }
 
 # domain Id must be int
 if (!is_numeric($_POST['domainId']))            { $Result->show("danger", _("Invalid domain Id"), true, true); }

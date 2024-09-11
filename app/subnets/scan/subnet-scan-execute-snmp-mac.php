@@ -21,7 +21,7 @@ if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result
 
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disabled"), true); }
 # subnet check
 $subnet = $Subnets->fetch_object ("subnets", "id", $_POST['subnetId']);
 if ($subnet===false)                            { $Result->show("danger", _("Invalid subnet Id"), true);  }

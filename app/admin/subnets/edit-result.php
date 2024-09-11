@@ -85,7 +85,7 @@ if ($_POST['action']=="add") {
 
 	# Generic checks
 
-    // ID must be numberic value
+    // ID must be numeric value
 	if(!is_numeric($_POST['sectionId']))									{ $Result->show("danger", _("Invalid ID"), true); }
     // verify that user has permissions to add subnet
     if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true); }
@@ -124,7 +124,7 @@ if ($_POST['action']=="add") {
     	        }
 	        }
         }
-	    // root subnet, check overlapping against other root subnetss
+	    // root subnet, check overlapping against other root subnets
 	    else {
 	       $overlap = $Subnets->verify_subnet_overlapping($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId']);
 	    	if($overlap!==false) {

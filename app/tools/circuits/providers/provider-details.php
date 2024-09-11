@@ -17,6 +17,9 @@ is_numeric($_GET['sPage']) ? : $Result->show("danger", _("Invalid ID"), true);
 
 # fetch provider
 $provider = $Tools->fetch_object ("circuitProviders", "id", $_GET['sPage']);
+$circuit_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
+$type_hash = [];
+foreach($circuit_types as $t){ $type_hash[$t->id] = $t->ctname; }
 
 // print back link
 print "<div class='btn-group'>";
@@ -163,7 +166,7 @@ if($provider!==false) {
 			print '<tr>'. "\n";
 			print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
 			print "	<td>$circuit->name</td>";
-			print "	<td>$circuit->type</td>";
+			print "	<td>{$type_hash[$circuit->type]}</td>";
 			print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";
 			print " <td class='hidden-xs hidden-sm'>$circuit->status</td>";
 			print "	<td class='hidden-xs hidden-sm'>$locationA_html</td>";

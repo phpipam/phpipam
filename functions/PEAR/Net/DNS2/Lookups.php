@@ -50,7 +50,7 @@
  */
 
 //
-// initalize the packet id value
+// initialize the packet id value
 //
 Net_DNS2_Lookups::$next_packet_id   = mt_rand(0, 65535);
 
@@ -477,7 +477,7 @@ class Net_DNS2_Lookups
     );
 
     /*
-     * maps DNS SEC alrorithms to their mnemonics
+     * maps DNS SEC algorithms to their mnemonics
      */
     public static $algorithm_name_to_id = array();
     public static $algorithm_id_to_name = array(

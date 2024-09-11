@@ -40,7 +40,7 @@ else {
 	print "<tbody>";
 	# logs
 	foreach($favourite_subnets as $f) {
-		# if subnet already removed (doesnt exist) dont print it!
+		# if subnet already removed (doesn't exist) don't print it!
 		if(sizeof($f)>0) {
 			print "<tr class='favSubnet-$f[subnetId]'>";
 

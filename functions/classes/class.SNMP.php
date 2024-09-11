@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	phpIPAM SNMP class to manage SNMP-related dunctions
+ *	phpIPAM SNMP class to manage SNMP-related functions
  *
  *      http://php.net/manual/en/class.snmp.php
  *
@@ -718,7 +718,7 @@ class phpipamSNMP extends Common_functions {
     }
 
     /**
-     * Fetch routung table from device.
+     * Fetch routing table from device.
      *
      * @access private
      * @return void

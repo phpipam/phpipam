@@ -75,7 +75,8 @@ print "</thead>";
 
 // no circuits
 if($circuits===false) {
-	$colspan = 6 + $colspanCustom;
+	$colspan = 9 + $colspanCustom;
+	if($User->settings->enableCustomers=="1") $colspan++;
 	print "<tr>";
 	print "	<td colspan='$colspan'>".$Result->show('info', _('No results')."!", false, false, true)."</td>";
 	print "</tr>";

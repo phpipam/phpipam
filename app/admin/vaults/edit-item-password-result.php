@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Script to disaply vault edit result
+ * Script to display vault edit result
  *************************************/
 
 /* functions */
@@ -42,7 +42,7 @@ $error = array();
 
 # add, edit
 if($_POST['action']!="delete") {
-	# name must be more than 2 and alphanumberic
+	# name must be more than 2 and alphanumeric
 	if(strlen($_POST['name'])<3 || strlen($_POST['name'])>64)			{ $error[] = "Invalid name"; }
 	if(strlen($_POST['username'])<3 || strlen($_POST['username'])>64)	{ $error[] = "Invalid username"; }
 	if(strlen($_POST['password'])<3 || strlen($_POST['password'])>64)	{ $error[] = "Invalid password"; }
