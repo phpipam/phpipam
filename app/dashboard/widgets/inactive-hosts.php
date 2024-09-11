@@ -30,9 +30,6 @@ $User->is_admin(true);
 $height = 200;
 $slimit = 5;			//we don't need this, we will recalculate
 
-# count
-$m = 0;
-
 // fetch widget
 $widget = $Tools->fetch_object ("widgets", "wfile", "inactive-hosts");
 # set max and then overwrite max from wparams
@@ -84,11 +81,6 @@ if ($inactive_hosts!==false) {
                 $h->subnet = $subnet->subnet;
                 $h->mask = $subnet->mask;
                 $out[] = $h;
-            }
-            $m++;
-            # break after limit
-            if ($m>$slimit) {
-                break;
             }
         }
     }
