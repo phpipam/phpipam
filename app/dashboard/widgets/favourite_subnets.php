@@ -31,27 +31,20 @@ $(document).ready(function() {
 # fetch favourite subnets with details
 $fsubnets = $User->fetch_favourite_subnets ();
 
-# print if none
-if(!$fsubnets) {
-	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
-	print "<p>"._("No favourite subnets selected")."</p><br>";
-	print "<small>"._("You can add subnets to favourites by clicking star icon in subnet details")."!</small><br>";
-	print "</blockquote>";
-}
-else {
-	print "<table class='table table-condensed table-hover table-top favs'>";
+print "<table class='table table-condensed table-hover table-top favs'>";
 
-	# headers
-	print "<tr>";
-	print "	<th>"._('Object')."</th>";
-	print "	<th>"._('Description')."</th>";
-	print "	<th class='hidden-xs'>"._('Section')."</th>";
-	if($User->get_module_permissions ("vlan")>=User::ACCESS_RW)
-	print "	<th>"._('VLAN')."</th>";
-	print "	<th></th>";
-	print "</tr>";
+# headers
+print "<tr>";
+print "	<th>"._('Object')."</th>";
+print "	<th>"._('Description')."</th>";
+print "	<th class='hidden-xs'>"._('Section')."</th>";
+if($User->get_module_permissions ("vlan")>=User::ACCESS_RW)
+print "	<th>"._('VLAN')."</th>";
+print "	<th></th>";
+print "</tr>";
 
-	# subnets
+# subnets
+if ($fsubnets) {
 	foreach($fsubnets as $f) {
 
 		# must be either subnet or folder
@@ -104,7 +97,14 @@ else {
 			print "</tr>";
 		}
 	}
+}
 
-	print "</table>";
+print "</table>";
+
+if(!$fsubnets) {
+	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
+	print "<p>"._("No favourite subnets selected")."</p>";
+	print "<small>"._("You can add subnets to favourites by clicking star icon in subnet details")."!</small>";
+	print "</blockquote>";
 }
 ?>

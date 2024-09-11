@@ -29,7 +29,7 @@ $requests = $Tools->requests_fetch (false);
 <?php
 if($requests===false) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
-	print "<small>"._("No IP address requests available")."!</small><br>";
+	print "<p>"._("No IP address requests available")."!</p>";
 	print "</blockquote>";
 }
 # print
@@ -63,8 +63,8 @@ else {
 		print '	<td>'. $request['requester'] .'</td>'. "\n";
 		print '</tr>'. "\n";
 	}
+
+	print "</table>";
+
+}
 ?>
-
-</table>
-
-<?php } ?>

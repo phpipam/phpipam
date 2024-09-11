@@ -62,8 +62,6 @@ if ($User->settings->enableThreshold=="1") {
 
 # disabled
 if ($User->settings->enableThreshold!="1") {
-	print "<hr>";
-
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("Threshold module disabled")."</p>";
 	print "<small>"._("You can enable threshold module under settings")."</small>";
@@ -71,8 +69,6 @@ if ($User->settings->enableThreshold!="1") {
 }
 # error - none found but not permitted
 elseif ($threshold_subnets===false) {
-	print "<hr>";
-
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No subnet is selected for threshold check")."</p>";
 	print "<small>"._("You can set threshold for subnets under subnet settings")."</small>";
@@ -80,8 +76,6 @@ elseif ($threshold_subnets===false) {
 }
 # error - found but not permitted
 elseif (!isset($out)) {
-	print "<hr>";
-
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No subnet selected for threshold check available")."</p>";
 	print "<small>"._("No subnet with threshold check available")."</small>";

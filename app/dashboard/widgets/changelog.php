@@ -36,13 +36,6 @@ if ($User->settings->log!="syslog") {
 if ($User->settings->log=="syslog") {
 	$Result->show("warning", _("Changelog files are sent to syslog"), false);
 }
-# none
-elseif(sizeof($clogs)==0) {
-	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
-	print "<p>"._("No changelogs available")."</p>";
-	print "<small>"._("No changelog entries are available")."</small>";
-	print "</blockquote>";
-}
 # print
 else {
 
@@ -160,5 +153,13 @@ else {
 	}
 
 	print "</table>";
+
+	if(sizeof($clogs)==0) {
+		print "<blockquote style='margin-top:20px;margin-left:20px;'>";
+		print "<p>"._("No changelogs available")."</p>";
+//		print "<small>"._("No changelog entries are available")."</small>";
+		print "</blockquote>";
+	}
+
 }
 ?>
