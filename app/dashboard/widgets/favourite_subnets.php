@@ -31,6 +31,22 @@ $(document).ready(function() {
 # fetch favourite subnets with details
 $fsubnets = $User->fetch_favourite_subnets ();
 
+# fetch widget parameters
+$widget = $Tools->fetch_object ("widgets", "wfile", "favourite_subnets");
+# set max and then overwrite max from wparams
+$max = 100;
+if(isset($widget->wparams)) {
+	parse_str($widget->wparams, $p);
+	if (@is_numeric($p['max'])) {
+		$max = intval($p['max']);
+	}
+	if (@is_numeric($p['height'])) {
+		$height = intval($p['height']);
+	}
+	unset($p);
+}
+
+print "<div style=\"width:98%;margin-left:1%;" . (isset($height) ? "height:{$height}px;overflow:scroll;" : "") . "\">";
 print "<table class='table table-condensed table-hover table-top favs'>";
 
 # headers
@@ -45,10 +61,14 @@ print "</tr>";
 
 # subnets
 if ($fsubnets) {
+	$m = 1;  // counter
 	foreach($fsubnets as $f) {
 
 		# must be either subnet or folder
 		if(sizeof($f)>0) {
+
+			# stop processing if we've hit the max
+			if ($m > $max) break;
 
             # add full information
             $fullinfo = $f['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
@@ -95,6 +115,7 @@ if ($fsubnets) {
 			print " </td>";
 
 			print "</tr>";
+			$m++;
 		}
 	}
 }
@@ -107,4 +128,6 @@ if(!$fsubnets) {
 	print "<small>"._("You can add subnets to favourites by clicking star icon in subnet details")."!</small>";
 	print "</blockquote>";
 }
+
+print "</div>";
 ?>

@@ -34,6 +34,17 @@ if($requests===false) {
 }
 # print
 else {
+	# fetch widget parameters
+	$widget = $Tools->fetch_object ("widgets", "wfile", "requests");
+	# set max and then overwrite max from wparams
+	$max = 50;
+	if(isset($widget->wparams)) {
+		parse_str($widget->wparams, $p);
+		if (@is_numeric($p['max'])) {
+			$max = intval($p['max']);
+		}
+		unset($p);
+	}
 ?>
 
 <table id="requestedIPaddresses" class="table table-condensed table-hover table-top">
@@ -49,7 +60,10 @@ else {
 
 <?php
 	# print requests
+	$m = 1;  // counter
 	foreach($requests as $request) {
+		if ($m > $max) break;
+
 		# cast
 		$request = (array) $request;
 		# get subnet details
@@ -62,6 +76,7 @@ else {
 		print '	<td>'. $request['description'] .'</td>'. "\n";
 		print '	<td>'. $request['requester'] .'</td>'. "\n";
 		print '</tr>'. "\n";
+		$m++;
 	}
 
 	print "</table>";

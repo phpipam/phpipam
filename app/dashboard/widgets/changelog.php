@@ -38,8 +38,23 @@ if ($User->settings->log=="syslog") {
 }
 # print
 else {
+	# fetch widget parameters
+	$widget = $Tools->fetch_object ("widgets", "wfile", "changelog");
+	# set max and then overwrite max from wparams
+	$max = 5;
+	if(isset($widget->wparams)) {
+		parse_str($widget->wparams, $p);
+		if (@is_numeric($p['max'])) {
+			$max = intval($p['max']);
+		}
+		if (@is_numeric($p['height'])) {
+			$height = intval($p['height']);
+		}
+		unset($p);
+	}
 
 	# printout
+	print "<div" . (isset($height) ? " style=\"height:{$height}px;overflow:scroll;width:98%;margin-left:1%;\"" : "") . ">";
 	print "<table class='table changelog table-hover table-top table-condensed'>";
 
 	# headers
@@ -58,7 +73,7 @@ else {
 		# cast
 		$l = (array) $l;
 
-		if($pc < 5) {
+		if($pc < $max) {
 			# permissions
 			if($l['ctype']=="subnet")		{ $permission = $Subnets->check_permission ($User->user, $l['tid']); }
 			elseif($l['ctype']=="ip_addr")	{ $permission = $Subnets->check_permission ($User->user, $l['subnetId']); }
@@ -161,5 +176,6 @@ else {
 		print "</blockquote>";
 	}
 
+	print "</div>";
 }
 ?>

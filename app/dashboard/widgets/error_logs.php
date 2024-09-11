@@ -26,10 +26,26 @@ if ($User->settings->log=="syslog") {
 	$Result->show("warning", _("Log files are sent to syslog"));
 }
 else {
-	# print last 5 access logs
-	$logs = $Log->fetch_logs(5, NULL, NULL, NULL, "off", "on", "on");
+	# fetch widget parameters
+	$widget = $Tools->fetch_object ("widgets", "wfile", "error_logs");
+	# set max and then overwrite max from wparams
+	$max = 5;
+	if(isset($widget->wparams)) {
+		parse_str($widget->wparams, $p);
+		if (@is_numeric($p['max'])) {
+			$max = intval($p['max']);
+		}
+		if (@is_numeric($p['height'])) {
+			$height = intval($p['height']);
+		}
+		unset($p);
+	}
+
+	# print last N access logs
+	$logs = $Log->fetch_logs($max, NULL, NULL, NULL, "off", "on", "on");
 	if (!is_array($logs)) { $logs = array(); }
 
+	print "<div" . (isset($height) ? " style=\"height:{$height}px;overflow:scroll;width:98%;margin-left:1%;\"" : "") . ">";
 	print "<table class='table table-condensed table-hover table-top'>";
 
 	# headers
@@ -66,5 +82,7 @@ else {
 		print "<p>"._("No logs available")."</p>";
 		print "</blockquote>";
 	}
+
+	print "</div>";
 }
 ?>
