@@ -31,15 +31,16 @@ if(!isset($config['removed_addresses_timelimit'])) { die("Please set timelimit f
 $now     = time();
 $nowdate = date ("Y-m-d H:i:s");
 $beforetime = date ("Y-m-d H:i:s", (time()-$config['removed_addresses_timelimit']));
+print "Looking for addresses offline since ".$beforetime.".  ";
 
 // set query to fetch addresses and belonging subnets
 $query = "select
 			`ip`.`id`,`ip`.`ip_addr`,`ip`.`lastSeen`,`ip`.`subnetId`,`ip`.`description`,`ip`.`hostname`,
 			`su`.`subnet`,`su`.`mask`,`su`.`sectionId`,`su`.`description`,
-			'delete' as `action`
-		 from
-		 	`ipaddresses` as `ip`, `subnets` as `su`
-		 where
+			'delete' as `action`,'single' as `type`
+		from
+			`ipaddresses` as `ip`, `subnets` as `su`
+		where
 			`ip`.`subnetId` = `su`.`id`
 			and `su`.`pingSubnet` = 1
 			and (`ip`.`excludePing` IS NULL or `ip`.`excludePing`!=1 )
@@ -52,6 +53,7 @@ catch (Exception $e) {
 	$Result->show("danger", _("Error: ").$e->getMessage());
 	die();
 }
+print "Found ".count($offline_addresses).".\n";
 
 # if none die, none to remove
 if (!is_array($offline_addresses) || empty($offline_addresses)) {
