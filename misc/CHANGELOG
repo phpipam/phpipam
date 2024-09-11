@@ -25,6 +25,7 @@
     + Fixed Ripe import results in jQuery error (#4007);
     + Fixed Ripe import crashes if too many subnets are found (#4180);
     + Fixed Devices with height 0 crash Rack image generation (#4193);
+    + Fixed Custom field not working in Routing module (#4174);
     + Fixed Circuit Type showing differently in two windows (#4104);
     + Fixed Vault Item Custom Field not writable (#4058);
 
