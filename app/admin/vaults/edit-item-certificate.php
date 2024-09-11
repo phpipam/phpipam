@@ -97,7 +97,7 @@ $custom = $Tools->fetch_custom_fields('vaultItems');
 		# all my fields
 		foreach($custom as $field) {
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $item, $_POST['action'], $timepicker_index);
+    		$custom_input = $Tools->create_custom_field_input ($field, $item, $timepicker_index);
     		// add datepicker index
     		$timepicker_index++;
             // print
