@@ -5,7 +5,7 @@ if (!file_exists("config.php"))	{ die("<br><hr>-- config.php file missing! Pleas
 /* site functions */
 require_once( 'functions/functions.php' );
 
-/* API check - pricess API if requested */
+/* API check - process API if requested */
 if ($Rewrite->is_api ()) {
 	require ("api/index.php");
 }
@@ -217,7 +217,7 @@ else {
 		</div>
 	</div>
 
-	<!-- maintaneance mode -->
+	<!-- maintenance mode -->
 	<?php
 	$text_append_maint = $User->is_admin(false) ? "<a class='btn btn-xs btn-default open_popup' data-script='app/admin/settings/remove-maintaneance.php' data-class='400' data-action='edit'>"._("Remove")."</a>" : "";
 	if($User->settings->maintaneanceMode == "1") { $Result->show("warning text-center nomargin", "<i class='fa fa-info'></i> "._("System is running in maintenance mode")." !".$text_append_maint, false); }
@@ -275,7 +275,7 @@ else {
 
 				# hide left menu
 				if( ($GET->page=="tools"||$GET->page=="administration") && !isset($GET->section)) {
-					//we dont display left menu on empty tools and administration
+					//we don't display left menu on empty tools and administration
 				}
 				else {
 					# left menu

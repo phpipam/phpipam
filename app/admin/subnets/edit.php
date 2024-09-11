@@ -93,7 +93,7 @@ $custom_fields = $Tools->fetch_custom_fields('subnets');
 # fetch vrfs
 if($User->settings->enableVRF==1)
 $vrfs  = $Tools->fetch_all_objects("vrf", "name");
-# check if it has slaves - if yes it cannot be splitted!
+# check if it has slaves - if yes it cannot be split!
 $slaves = $Subnets->has_slaves($Params->subnetId);
 # fetch all sections
 $sections = $Sections->fetch_all_sections();

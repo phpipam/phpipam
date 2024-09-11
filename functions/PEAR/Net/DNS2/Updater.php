@@ -52,14 +52,14 @@
 /**
  * The main dynamic DNS updater class.
  *
- * This class provices functions to handle all defined dynamic DNS update 
+ * This class provides functions to handle all defined dynamic DNS update 
  * requests as defined by RFC 2136.
  *
  * This is separate from the Net_DNS2_Resolver class, as while the underlying
  * protocol is the same, the functionality is completely different.
  *
  * Generally, query (recursive) lookups are done against caching server, while
- * update requests are done against authoratative servers.
+ * update requests are done against authoritative servers.
  * 
  * @category Networking
  * @package  Net_DNS2
@@ -580,7 +580,7 @@ class Net_DNS2_Updater extends Net_DNS2
     }
 
     /**
-     * executes the update request with the object informaton
+     * executes the update request with the object information
      *
      * @param Net_DNS2_Packet_Response &$response ref to the response object
      *
@@ -637,7 +637,7 @@ class Net_DNS2_Updater extends Net_DNS2
         $this->_packet->reset();
 
         //
-        // for updates, we just need to know it worked- we don't actualy need to
+        // for updates, we just need to know it worked- we don't actually need to
         // return the response object
         //
         return true;

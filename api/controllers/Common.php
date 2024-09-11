@@ -183,7 +183,7 @@ class Common_api_functions {
 
 	/**
 	 * App object - will be passed by index.php
-	 * to provide app detauls
+	 * to provide app details
 	 *
 	 * @var false|object
 	 */
@@ -1033,7 +1033,7 @@ class Common_api_functions {
 	}
 
 	/**
-	 * Sets translaction lock
+	 * Sets transaction lock
 	 *
 	 * @access public
 	 * @return void

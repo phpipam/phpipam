@@ -22,8 +22,8 @@ $upgrade_queries["1.3.0"][] = "UPDATE `lang` SET `l_code` = 'pt_BR.UTF-8' WHERE 
 $upgrade_queries["1.3.0"][] = "UPDATE `lang` SET `l_code` = 'es_ES.UTF-8' WHERE `l_code` = 'es_ES.UTF8';";
 $upgrade_queries["1.3.0"][] = "UPDATE `lang` SET `l_code` = 'cs_CZ.UTF-8' WHERE `l_code` = 'cs_CZ.UTF8';";
 $upgrade_queries["1.3.0"][] = "UPDATE `lang` SET `l_code` = 'en_US.UTF-8' WHERE `l_code` = 'en_US.UTF8';";
-// Russian traslation
-$upgrade_queries["1.3.0"][] = "-- Add russian and Chinese translations";
+// Russian translation
+$upgrade_queries["1.3.0"][] = "-- Add Russian and Chinese translations";
 $upgrade_queries["1.3.0"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Russian', 'ru_RU.UTF-8');";
 $upgrade_queries["1.3.0"][] = "INSERT INTO `lang` (`l_code`, `l_name`) VALUES ('zh_CN.UTF-8', 'Chinese');";
 // fix scanAgents typo

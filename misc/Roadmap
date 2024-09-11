@@ -6,7 +6,7 @@ Features:
     - LDAP group authentication without local user (group with adldap2 migration)
     - Webhooks support - send data via json to external URL / script
     - Display free subnet ranges joined for each section
-    - API - permit IP/subnet as identifier insteaad of index (GET /api/test/subnets/1/ > /api/test/subnets/10.10.10.0_24/) and name for other objects
+    - API - permit IP/subnet as identifier instead of index (GET /api/test/subnets/1/ > /api/test/subnets/10.10.10.0_24/) and name for other objects
 
 
 Optional:

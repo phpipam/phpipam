@@ -142,7 +142,7 @@ class PowerDNS extends Common_functions {
         $this->set_domain_types ();
         // set record types
         $this->set_record_types ();
-        // set uery values
+        // set query values
         $this->set_query_values ();
         // set ttl values
         $this->set_ttl_values ();
@@ -200,7 +200,7 @@ class PowerDNS extends Common_functions {
     }
 
     /**
-     * Sets default values for database connection and othern parameters
+     * Sets default values for database connection and other parameters
      *
      * @access private
      * @return string
@@ -563,7 +563,7 @@ class PowerDNS extends Common_functions {
      * @return bool|array|object
      */
     public function fetch_domain_by_id ($id) {
-        # chcek cache
+        # check cache
         if (array_key_exists($id, $this->domains_cache)) { return $this->domains_cache[$id]; }
 
         # fetch
@@ -1277,7 +1277,7 @@ class PowerDNS extends Common_functions {
      * @return void
      */
     private function validate_record_type ($type) {
-        // if set check, otherwise ognore
+        // if set check, otherwise ignore
         if(isset($type)) {
             // check record type
             if(!in_array($type, (array) $this->record_types))    { $this->Result->show("danger", _("Invalid record type"), true); }
@@ -1579,7 +1579,7 @@ class PowerDNS extends Common_functions {
      * @return bool
      */
     public function record_id_exists ($ptr_id = 0) {
-        # 0 or dalse
+        # 0 or false
         if (@$ptr_id==0 || $ptr_id===false)    { return false; }
 
         # fetch
@@ -1601,7 +1601,7 @@ class PowerDNS extends Common_functions {
      * @return bool
      */
     public function remove_all_ptr_records ($domain_id, $indexes = array()) {
-        // if false return ok and dont execute
+        // if false return ok and don't execute
         if (sizeof($indexes)==0 || !is_array($indexes)) {
             return true;
         }

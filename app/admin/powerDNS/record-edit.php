@@ -102,7 +102,7 @@ if (!isset($record)) {
 	$record->name = $domain->name;
 }
 
-// if IPv6 automaticall add AAAA record!
+// if IPv6 automatically add AAAA record!
 if ($User->identify_address($record->content)=="IPv6" && $User->validate_ip($record->content)) {
     $record->type = "AAAA";
 }

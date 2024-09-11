@@ -115,12 +115,12 @@ class Net_DNS2_Packet
     public $authority = array();
 
     /*
-     * array of Net_DNS2_RR Objects for Addtitional
+     * array of Net_DNS2_RR Objects for Additional
      */
     public $additional = array();
 
     /*
-     * array of compressed labeles
+     * array of compressed labels
      */
     private $_compressed = array();
 

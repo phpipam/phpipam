@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Search IRPE databse for AS imports
+ * Search IRPE database for AS imports
  *************************************************/
 
 /* functions */
@@ -23,7 +23,7 @@ if(substr($_POST['as'], 0,2)=="AS" || substr($_POST['as'], 0,2)=="as") {
 	$_POST['as'] = substr($_POST['as'], 2);
 };
 
-// numberic
+// numeric
 if(!is_numeric($_POST['as']))       { $Result->show("danger", _("Invalid AS"), true); }
 
 
@@ -41,8 +41,12 @@ if(sizeof(@$subnet) == 0) {
 	$Result->show("danger alert-absolute", _('No subnets found').'!', true);
 }
 else {
+	if (sizeof(@$subnet) > 1000) {
+		$Result->show("danger alert-absolute", _('Limiting results to 1000 subnets').'!', false);
+	}
+
 	//form
-	print '<form name="asImport" id="asImport">';
+	print '<form name="asImport" id="asImport" style="clear:both;">';
 	//table
 	print '<table class="asImport table table-striped table-condensed table-top table-auto">';
 	//headers
@@ -64,6 +68,9 @@ else {
 	//print found subnets
 	$m = 0;
 	foreach ($subnet as $route) {
+		# break if we reach 1000 routes
+		if ($m > 999) break;
+
 		# only not empty
 		if(strlen($route)>2) {
 			print '<tr>'. "\n";
@@ -103,7 +110,7 @@ else {
 			print '<td>'. "\n";
 			print '<select name="vrf-'. $m .'" class="form-control input-sm input-w-auto">'. "\n";
 			print '<option value="0">No VRF</option>';
-			if(sizeof(@$vrfs)>0) {
+			if($vrfs && sizeof($vrfs)>0) {
 				foreach($vrfs as $vrf) {
 					# set description
 					$vrf_description = !is_blank($vrf->description) ? " (".$vrf->description.")" : "";

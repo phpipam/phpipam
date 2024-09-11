@@ -151,7 +151,7 @@ class Net_DNS2_Packet_Request extends Net_DNS2_Packet
             // if it's a PTR request for an IP address, then make sure we tack on
             // the arpa domain.
             //
-            // there are other types of PTR requests, so if an IP adress doesn't match,
+            // there are other types of PTR requests, so if an IP adresss doesn't match,
             // then just let it flow through and assume it's a hostname
             //
             if (Net_DNS2::isIPv4($name) == true) {

@@ -239,7 +239,7 @@ $upgrade_queries["1.25.0"][] = "UPDATE `lang` SET `l_code` = 'es_ES.UTF8' WHERE 
 $upgrade_queries["1.25.0"][] = "UPDATE `lang` SET `l_code` = 'cs_CZ.UTF8' WHERE `l_code` = 'cs_CZ';";
 $upgrade_queries["1.25.0"][] = "UPDATE `lang` SET `l_code` = 'en_US.UTF8' WHERE `l_code` = 'en_US';";
 // location to addresses
-$upgrade_queries["1.25.0"][] = "-- Add location to addresses abd kication widget";
+$upgrade_queries["1.25.0"][] = "-- Add location to addresses and location widget";
 $upgrade_queries["1.25.0"][] = "ALTER TABLE `ipaddresses` ADD `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL;";
 // location widget
 $upgrade_queries["1.25.0"][] = "INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES (NULL, 'Locations', 'Shows map of locations', 'locations', NULL, 'yes', '6', 'no', 'yes');";
@@ -271,7 +271,7 @@ $upgrade_queries["1.27.0"]   = [];
 $upgrade_queries["1.27.0"][] = "-- Add show supernet only";
 $upgrade_queries["1.27.0"][] = "ALTER TABLE `sections` ADD `showSupernetOnly` INT(1)  NULL  DEFAULT '0';";
 // add scan and discovery check time to database
-$upgrade_queries["1.27.0"][] = "-- Scan and discovery date foir subnets";
+$upgrade_queries["1.27.0"][] = "-- Scan and discovery date for subnets";
 $upgrade_queries["1.27.0"][] = "ALTER TABLE `subnets` ADD `lastScan` TIMESTAMP  NULL;";
 $upgrade_queries["1.27.0"][] = "ALTER TABLE `subnets` ADD `lastDiscovery` TIMESTAMP  NULL;";
 $upgrade_queries["1.27.0"][] = "-- Version update";
@@ -285,8 +285,8 @@ $upgrade_queries["1.28.0"]   = [];
 $upgrade_queries["1.28.0"][] = "-- Extend username to 255 chars for LDAP logins";
 $upgrade_queries["1.28.0"][] = "ALTER TABLE `users` CHANGE `username` `username` VARCHAR(255)  CHARACTER SET utf8  NOT NULL  DEFAULT '';";
 $upgrade_queries["1.28.0"][] = "ALTER TABLE `logs` CHANGE `username` `username` VARCHAR(255)  CHARACTER SET utf8  NULL  DEFAULT NULL;";
-// expand hostname valude in IP requests to match ipaddresses table
-$upgrade_queries["1.28.0"][] = "-- Expand hostname valude in IP requests to match ipaddresses table";
+// expand hostname value in IP requests to match ipaddresses table
+$upgrade_queries["1.28.0"][] = "-- Expand hostname value in IP requests to match ipaddresses table";
 $upgrade_queries["1.28.0"][] = "ALTER TABLE `requests` CHANGE `dns_name` `dns_name` VARCHAR(100)  CHARACTER SET utf8  NULL  DEFAULT NULL;";
 $upgrade_queries["1.28.0"][] = "ALTER TABLE `requests` CHANGE `description` `description` VARCHAR(64)  CHARACTER SET utf8  NULL  DEFAULT NULL;";
 // update Tags when state change occurs

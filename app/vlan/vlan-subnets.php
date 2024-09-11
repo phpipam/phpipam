@@ -79,7 +79,7 @@ else {
 				print " </td>";
 			}
 			else {
-				print "	<td class='actionsl'>";
+				print "	<td class='actions'>";
 				print "	<div class='btn-group'>";
 				print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-pencil'></i></button>";
 				print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-tasks'></i></button>";

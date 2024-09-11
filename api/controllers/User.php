@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	phpIPAM API class to authneticate users
+ *	phpIPAM API class to authenticate users
  *
  *
  */
@@ -286,7 +286,7 @@ class User_controller extends Common_api_functions {
 			// get count
 			$cnt = $this->User->block_check_ip ();
 			// failure
-			if ($cnt > $this->max_failures) 		{ $this->Response->throw_exception(500, "Your IP has been blocked for 5 minutes because of excesive login failures"); }
+			if ($cnt > $this->max_failures) 		{ $this->Response->throw_exception(500, "Your IP has been blocked for 5 minutes because of excessive login failures"); }
 		}
 	}
 
@@ -351,7 +351,7 @@ class User_controller extends Common_api_functions {
 
 
 	/**
-	 * Sets default validiy for token (default 12 hours)
+	 * Sets default validity for token (default 12 hours)
 	 *
 	 * @access public
 	 * @param int $token_valid_time (default: null)
@@ -550,7 +550,7 @@ class User_controller extends Common_api_functions {
 	}
 
 	/**
-	 * Refreshes token expireation date in database
+	 * Refreshes token expiration date in database
 	 *
 	 * @access private
 	 * @return void

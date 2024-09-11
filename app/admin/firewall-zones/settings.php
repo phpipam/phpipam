@@ -24,7 +24,7 @@ $User->check_user_session();
 #		"0":"0",
 #		"1":"1"
 #		},
-#	/* to automaticaly generate firewall zone names you may choose between "decimal" and "hex" (see "zoneGeneratorType" below). to define free text zone names choose "text" */
+#	/* to automatically generate firewall zone names you may choose between "decimal" and "hex" (see "zoneGeneratorType" below). to define free text zone names choose "text" */
 #	"zoneGenerator":"0",
 #	"zoneGeneratorType":{
 #		"0":"decimal",
@@ -39,7 +39,7 @@ $User->check_user_session();
 #	"pattern":{"0":"patternFQDN"}
 #	/* Adds some padding to the zone name (decimal or hex) to generate zone names of equal length */
 #	"padding":"on"
-#	/* use the network and subnetmask or the network description to genereate firewall address objects for subnets */
+#	/* use the network and subnetmask or the network description to generate firewall address objects for subnets */
 # 	"subnetPatternValues":{"0":"network","1":"description"}
 # 	"subnetPattern":"0"
 # }
@@ -143,7 +143,7 @@ $(function() {
 			</select>
 		</td>
 		<td>
-			<span class="text-muted"><?php print _("Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot;."); ?></span>
+			<span class="text-muted"><?php print _("Generate zone names automatically with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot;."); ?></span>
 		</td>
 	</tr>
 	<!-- zone name padding / zero fill -->
@@ -198,7 +198,7 @@ $(function() {
 			<input type="checkbox" class="input-switch" name="autogen" value="on" <?php if($firewallZoneSettings['autogen'] == 'on'){ print 'value="'.$firewallZoneSettings['autogen'].'" checked';} ?>>
 		</td>
 		<td>
-			<span class="text-muted"><?php print _("Automaticaly generate firewall address objects as an additional information of an IP address.<br>(Works only for subnets which are bound to a firewall zone.)"); ?></span>
+			<span class="text-muted"><?php print _("Automatically generate firewall address objects as an additional information of an IP address.<br>(Works only for subnets which are bound to a firewall zone.)"); ?></span>
 		</td>
 	</tr>
 	<!-- ipType -->
@@ -313,7 +313,7 @@ $(function() {
 			</select>
 		</td>
 		<td>
-			<span class="text-muted"><?php print _("Firewall address objects for subnets will contain this information instead of FQDN or hostname.<br>By choosing \"description\" spaces and other characters but hiven or underline will be replaced by the separator value."); ?></span>
+			<span class="text-muted"><?php print _("Firewall address objects for subnets will contain this information instead of FQDN or hostname.<br>By choosing \"description\" spaces and other characters but hyphen or underline will be replaced by the separator value."); ?></span>
 		</td>
 	</tr>
 	<!-- submit -->
