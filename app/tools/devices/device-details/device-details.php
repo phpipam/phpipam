@@ -234,16 +234,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
 
     	if(sizeof($custom_fields) > 0) {
     		foreach($custom_fields as $field) {
-
-    			# fix for boolean
-    			if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
-    				if($device[$field['name']]=="0")		{ $device[$field['name']] = "false"; }
-    				elseif($device[$field['name']]=="1")	{ $device[$field['name']] = "true"; }
-    				else									{ $device[$field['name']] = ""; }
-    			}
-
-    			# create links
-    			$device[$field['name']] = $Tools->create_links ($device[$field['name']]);
+    			$device[$field['name']] = $Tools->process_field ($device[$field['name']], $field['type']);
 
     			print "<tr>";
     			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

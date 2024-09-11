@@ -143,9 +143,14 @@ class Common_functions  {
 	 * @var array|null
 	 */
 	private $mac_address_vendors = null;
+	
+	/**
+	 * Markdown parser object
+	 * @var Parsedown
+	 */
+	private $markdown;
 
-
-
+	
 	/**
 	 * __construct function
 	 *
@@ -154,6 +159,9 @@ class Common_functions  {
 	public function __construct () {
 		# debugging
 		$this->set_debugging( Config::ValueOf('debugging') );
+		
+		$this->markdown = new \Parsedown();
+		$this->markdown->setSafeMode(false);
 	}
 
 	/**
@@ -1094,6 +1102,21 @@ class Common_functions  {
 		}
 	}
 
+	public function process_field($content, $field_type)
+	{
+		if (str_starts_with($field_type, "varchar"))
+			return $this->create_links($content);
+		elseif (str_starts_with($field_type, "text"))
+			return $this->create_links($content);
+		elseif (str_starts_with($field_type, "longtext"))
+			return $this->parse_markdown($content);
+		elseif($field_type=="tinyint(1)" || $field_type=="boolean") {
+			return ($content==0 || $content==false || empty($content))?_("No"):_("Yes");
+		}
+		
+		return $content;
+	}
+	
 	/**
 	 * Creates links from text fields if link is present
 	 *
@@ -1107,7 +1130,7 @@ class Common_functions  {
 	public function create_links ($text, $field_type = "varchar") {
 		if (!is_string($text))
 			return $text;
-
+		
 		// create links only for varchar fields
 		if (strpos($field_type, "varchar")!==false) {
 			// regular expression
@@ -1118,6 +1141,14 @@ class Common_functions  {
 		}
 		// return text
 		return $text;
+	}
+	
+	public function parse_markdown($text)
+	{
+		if (!is_string($text))
+			return $text;
+		
+		return $this->markdown->text($text);
 	}
 
 	/**
@@ -1585,6 +1616,10 @@ class Common_functions  {
         elseif($field['type'] == "text") {
         	$html = $this->create_custom_field_input_textarea ($field, $object, $disabled_text, $nameSuffix);
         }
+        //longtext
+        elseif($field['type'] == "longtext") {
+        	$html = $this->create_custom_field_input_richtext ($field, $object, $disabled_text, $nameSuffix);
+        }
 		//default - input field
 		else {
             $html = $this->create_custom_field_input_input ($field, $object, $disabled_text, $nameSuffix);
@@ -1721,7 +1756,26 @@ class Common_functions  {
      */
     private function create_custom_field_input_textarea ($field, $object, $disabled_text, $nameSuffix = "") {
     	$html = array ();
-    	$html[] = ' <textarea class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. $object->{$field['name']}. '</textarea>'. "\n";
+		$html[] = ' <textarea class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. $object->{$field['name']}. '</textarea>'. "\n";
+    	// result
+    	return $html;
+	}
+	
+	/**
+     * Creates form input field for text fields.
+     *
+     * @access private
+     * @param mixed $field
+     * @param mixed $object
+     * @param string $disabled_text
+     * @param string $nameSuffix
+     * @return array
+     */
+    private function create_custom_field_input_richtext ($field, $object, $disabled_text, $nameSuffix = "") {
+		global $User;
+		
+    	$html = array ();
+    	$html[] = ' <textarea class="markdown_editor" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" title="'.$field['Comment'].'" '.$disabled_text.' data-theme="'.(($User->user->ui_theme!="white")?"dark":'"white').'">'. $object->{$field['name']}. '</textarea>'. "\n";
     	// result
     	return $html;
 	}
@@ -1765,7 +1819,7 @@ class Common_functions  {
 	 */
 	public function print_custom_field ($type, $value, $delimiter = false, $replacement = false) {
 		// create links
-		$value = $this->create_links ($value, $type);
+		$value = $this->process_field($value, $type);
 
 		// delimiter ?
 		if($delimiter !== false && $replacement !== false) {
@@ -1773,14 +1827,19 @@ class Common_functions  {
 		}
 
 		//booleans
-		if($type=="tinyint(1)")	{
-			if($value == "1")			{ print _("Yes"); }
-			elseif(is_blank($value)) 	{ print "/"; }
-			else						{ print _("No"); }
-		}
+		//if($type=="tinyint(1)")	{
+		//	if($value == "1")			{ print _("Yes"); }
+		//	elseif(is_blank($value)) 	{ print "/"; }
+		//	else						{ print _("No"); }
+		//}
 		//text
 		elseif($type=="text") {
 			if(!is_blank($value))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", escape_input($value))."'>"; }
+			else					{ print ""; }
+		}
+		//longtext
+		elseif($type=="longtext") {
+			if(!is_blank($value))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $value)."'>"; }
 			else					{ print ""; }
 		}
 		else {

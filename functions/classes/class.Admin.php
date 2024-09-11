@@ -657,6 +657,7 @@ class Admin extends Common_functions {
 				"integer"  =>"int",
 				"boolean"  =>"bool",
 				"text"     =>"text",
+				"richtext" =>"longtext",
 				"date"     =>"date",
 				"datetime" =>"datetime",
 				"set"      =>"set",
@@ -687,6 +688,7 @@ class Admin extends Common_functions {
 				break;
 			case "bool":
 			case "text":
+			case "longtext":
 			case "date":
 			case "datetime":
 				$field['ftype'] = $field['fieldType'];

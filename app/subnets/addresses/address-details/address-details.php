@@ -255,14 +255,7 @@ if(sizeof($address)>1) {
     			print "<tr>";
     			print "	<th>$key</th>";
     			print "	<td>";
-    			#booleans
-    			if($field['type']=="tinyint(1)")	{
-    				if($address[$key] == 0)		{ print _("No"); }
-    				elseif($address[$key] == 1)	{ print _("Yes"); }
-    			}
-    			else {
-    				print $Tools->create_links($address[$key]);
-    			}
+    			print $Tools->process_field($address[$key], $field['type']);
     			print "	</td>";
     			print "</tr>";
     			}

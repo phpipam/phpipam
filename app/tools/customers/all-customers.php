@@ -85,7 +85,7 @@ else {
 			foreach($custom_fields as $field) {
 				if(!in_array($field['name'], $hidden_fields)) {
 					// create html links
-					$customer->{$field['name']} = $User->create_links($customer->{$field['name']}, $field['type']);
+					$customer->{$field['name']} = $User->process_field($customer->{$field['name']}, $field['type']);
 
 					print "<td class='hidden-sm hidden-xs hidden-md'>".$customer->{$field['name']}."</td>";
 				}

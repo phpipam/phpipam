@@ -92,9 +92,7 @@ else {
             		print "<tr><td colspan='2'><hr></td></tr>";
             		// fields
             		foreach($cfields as $key=>$field) {
-            			$location->{$key} = str_replace("\n", "<br>",$location->{$key});
-            			// create links
-            			$location->{$key} = $Tools->create_links($location->{$key});
+            			$location->{$key} = $Tools->process_field($location->{$key}, $field['type']);
             			print "<tr>";
             			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
             			print "	<td style='vertical-align:top;align-content:left;'>".$location->{$key}."</td>";

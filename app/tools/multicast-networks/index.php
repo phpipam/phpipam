@@ -221,21 +221,14 @@ if ($subnets!==false) {
 								print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 								// create html links
-								$address->{$myField['name']} = $Tools->create_links($address->{$myField['name']}, $myField['type']);
+								$address->{$myField['name']} = $Tools->process_field($address->{$myField['name']}, $myField['type']);
 
-								//booleans
-								if($myField['type']=="tinyint(1)")	{
-									if($address->{$myField['name']} == "0")		{ print _("No"); }
-									elseif($address->{$myField['name']} == "1")	{ print _("Yes"); }
-								}
-								//text
-								elseif($myField['type']=="text") {
+								if($myField['type']=="text" || $myField['type']=="longtext") {
 									if(!is_blank($address->{$myField['name']}))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $address->{$myField['name']})."'>"; }
 									else											{ print ""; }
 								}
 								else {
 									print $address->{$myField['name']};
-
 								}
 								print "</td>";
 							}

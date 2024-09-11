@@ -89,7 +89,12 @@ require( dirname(__FILE__) . '/classes/class.Session_DB.php' );	    // Class for
 require( dirname(__FILE__) . '/classes/class.LockForUpdate.php' );	    // Class for MySQL row locking
 require( dirname(__FILE__) . '/classes/class.OpenStreetMap.php' );	    // Class for OSM
 
-
+/* @library ---------------------- */
+$parse_down_class = dirname(__FILE__).'/parsedown/Parsedown.php';
+if(!file_exists($parse_down_class))
+	throw new Exception(_('parsedown library missing, please update submodules'));
+else
+	require_once($parse_down_class);
 
 # create default GET parameters
 $Rewrite = new Rewrite ();

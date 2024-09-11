@@ -505,14 +505,7 @@ else {
 				$html_custom[] = "<tr>";
 				$html_custom[] = "	<th>".$Tools->print_custom_field_name ($key)."</th>";
 				$html_custom[] = "	<td>";
-				#booleans
-				if($field['type']=="tinyint(1)")	{
-					if($subnet[$key] == "0")		{ $html_custom[] = _("No"); }
-					elseif($subnet[$key] == "1")	{ $html_custom[] = _("Yes"); }
-				}
-				else {
-					$html_custom[] = $Tools->create_links($subnet[$key]);
-				}
+				$html_custom[] = $Tools->process_field($subnet[$key], $field['type']);
 				$html_custom[] = "	</td>";
 				$html_custom[] = "</tr>";
 			}
