@@ -14,6 +14,7 @@
     + Fixed Force mac address update during status update scan (#3791);
     + Fixed RADIUS authentication fails on 1.6.0 (#3986);
     + Fixed cannot add NAT issue (#3993);
+    + Fixes fetch_favourite_subnets function returns empty array instead of false (#4182);
     + Fixed Dashboard widget widths are not correct percentage (#4176);
     + Fixed remove_offline_addresses.php can't execute (#4173);
     + Fixed Searches do not properly organize results (#3917)
