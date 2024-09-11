@@ -20,6 +20,8 @@ else {
 
 # user must be authenticated
 $User->check_user_session ();
+# user must be admin
+$User->is_admin(true);
 
 # no errors!
 //ini_set('display_errors', 0);
