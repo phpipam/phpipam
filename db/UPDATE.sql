@@ -8,7 +8,7 @@
  *
  * where 1.3.2 is version you are currently using.
  *
- * To save it to file create output edirection:
+ * To save it to file create output redirection:
  *
  *              php functions/upgrade_queries.php 1.3.2 > UPDATE.sql
  */

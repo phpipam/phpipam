@@ -19,7 +19,7 @@ disable_php_errors();
 $Snmp       = new phpipamSNMP ();
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disbled", true, true, false, true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disabled", true, true, false, true); }
 
 # check section permissions
 if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }

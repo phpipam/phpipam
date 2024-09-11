@@ -100,7 +100,7 @@ class Install extends Common_functions {
 
 		# install database
 		if($this->install_database_execute ($migrate) !== false) {
-		    # return true, if some errors occured script already died! */
+		    # return true, if some errors occurred script already died! */
 			sleep(1);
 			$this->Log = new Logging ($this->Database);
 			$this->Log->write( _("Database installation"), _("Database installed successfully.")._(" Version ").VERSION.".".REVISION._(" installed"), 1 );
@@ -286,7 +286,7 @@ class Install extends Common_functions {
 	}
 
 	/**
-	 * Sets DB parmaeters
+	 * Sets DB parameters
 	 *
 	 * @access private
 	 * @return void
@@ -424,7 +424,7 @@ class Upgrade extends Install {
 		foreach ($upgrade_queries as $version=>$query_arr) {
 			foreach ($query_arr as $query) {
 				// save query
-				$this->reqister_query ($version, $query);
+				$this->register_query ($version, $query);
 			}
 		}
 	}
@@ -432,12 +432,12 @@ class Upgrade extends Install {
 	/**
 	 * Add new query to upgrade query list
 	 *
-	 * @method reqister_query
+	 * @method register_query
 	 * @param  string $version
 	 * @param  string $query
 	 * @return void
 	 */
-	private function reqister_query ($version, $query) {
+	private function register_query ($version, $query) {
 		// check if version is higher than old version, otherwise skip query
 		if ($this->cmp_version_strings($version, $this->old_version) > 0) {
 			// break
@@ -508,7 +508,7 @@ class Upgrade extends Install {
 		# set queries
 		$queries = $this->get_queries ();
 		// create default arrays
-		$queries_ok = array();			// succesfull queries
+		$queries_ok = array();			// succesful queries
 
 		// execute
 		try {
@@ -553,7 +553,7 @@ class Upgrade extends Install {
 			print "<div class='text-right'><a class='btn btn-sm btn-default' href='".create_link('administration', "verify-database")."'>"._("Go to administration and fix")."</a></div><br><hr><br>";
 
 			if(sizeof($queries_ok)>0)
-			$this->Result->show("success", _("Succesfull queries").": <pre>".implode("<br>", $queries_ok)."</pre>", false);
+			$this->Result->show("success", _("Succesful queries").": <pre>".implode("<br>", $queries_ok)."</pre>", false);
 			if(sizeof($queries)>0)
 			$this->Result->show("warning", _("Not executed queries").": <pre>".implode("<br>", $queries)."</pre>", false);
 

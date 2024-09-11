@@ -79,7 +79,7 @@ if ($subnets!==false) {
 	foreach ($subnets as $subnet) {
 		# check permission
 		$permission = $Subnets->check_permission ($User->user, $subnet->id);
-		//if it has slaves dont print it, slaves will be printed automatically
+		//if it has slaves don't print it, slaves will be printed automatically
 		if($permission > 0 && ($Subnets->has_slaves($subnet->id)===false || $subnet->isFolder=="1")) {
     		// add to count
     		$subnet_count++;

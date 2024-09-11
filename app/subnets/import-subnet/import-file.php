@@ -139,7 +139,7 @@ foreach($outFile as $k=>$line) {
 
 # print success if no errors
 if($errors==0)	{
-	$Result->show("success", _('Import successfull'), false);
+	$Result->show("success", _('Import successful'), false);
 	# erase file on success
 	unlink('upload/import.'.$filetype);
 }
