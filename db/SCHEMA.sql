@@ -573,7 +573,7 @@ CREATE TABLE `widgets` (
 /* insert default values */
 INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`)
 VALUES
-	( 1,'Statistics', 'Shows some statistics on number of hosts, subnets', 'statistics', 'height=x&max=x', 'no', '4', 'no', 'yes'),
+	( 1,'Statistics', 'Shows some statistics on number of hosts, subnets', 'statistics', 'height=x', 'no', '4', 'no', 'yes'),
 	( 2,'Favourite subnets', 'Shows favourite subnets', 'favourite_subnets', 'height=x&max=x', 'yes', '8', 'no', 'yes'),
 	( 3,'Top IPv4 subnets by number of hosts', 'Shows graph of top IPv4 subnets by number of hosts', 'top10_hosts_v4', 'height=x&max=x', 'yes', '6', 'no', 'yes'),
 	( 4,'Top IPv6 subnets by number of hosts', 'Shows graph of top IPv6 subnets by number of hosts', 'top10_hosts_v6', 'height=x&max=x', 'yes', '6', 'no', 'yes'),
@@ -582,16 +582,16 @@ VALUES
 	( 7,'Active IP addresses requests', 'Shows list of active IP address request', 'requests', 'height=x&max=x', 'yes', '6', 'yes', 'yes'),
 	( 8,'Most recent informational logs', 'Shows list of most recent informational logs', 'access_logs', 'height=x&max=x', 'yes', '6', 'yes', 'yes'),
 	( 9,'Most recent warning / error logs', 'Shows list of most recent warning and error logs', 'error_logs', 'height=x&max=x', 'yes', '6', 'yes', 'yes'),
-	(10,'Tools menu', 'Shows quick access to tools menu', 'tools', 'height=x&max=x', 'yes', '6', 'no', 'yes'),
-	(11,'IP Calculator', 'Shows IP calculator as widget', 'ipcalc', 'height=x&max=x', 'yes', '6', 'no', 'yes'),
-	(12,'IP Request', 'IP Request widget', 'iprequest', 'height=x&max=x', 'no', '6', 'no', 'yes'),
+	(10,'Tools menu', 'Shows quick access to tools menu', 'tools', NULL, 'yes', '6', 'no', 'yes'),
+	(11,'IP Calculator', 'Shows IP calculator as widget', 'ipcalc', NULL, 'yes', '6', 'no', 'yes'),
+	(12,'IP Request', 'IP Request widget', 'iprequest', NULL, 'no', '6', 'no', 'yes'),
 	(13,'Threshold', 'Shows threshold usage for most consumed subnets', 'threshold', 'height=x&max=x', 'yes', '6', 'no', 'yes'),
 	(14,'Inactive hosts', 'Shows list of inactive hosts for defined period', 'inactive-hosts', 'height=x&days=30', 'yes', '6', 'yes', 'yes'),
-	(15,'Locations', 'Shows map of locations', 'locations', 'height=x&max=x', 'yes', '6', 'no', 'yes'),
-	(16,'Bandwidth calculator', 'Calculate bandwidth', 'bw_calculator', 'height=x&max=x', 'no', '6', 'no', 'yes'),
-	(17,'Customers', 'Shows customer list', 'customers', 'height=x&max=x', 'yes', '6', 'no', 'yes'),
-	(18,'User Instructions', 'Shows user instructions', 'instructions', 'height=x&max=x', 'yes', '6', 'no', 'yes'),
-	(19,'MAC lookup', 'Shows MAC address vendor', 'mac-lookup', 'height=x&max=x', 'yes', '6', 'no', 'yes'),
+	(15,'Locations', 'Shows map of locations', 'locations', 'height=x', 'yes', '6', 'no', 'yes'),
+	(16,'Bandwidth calculator', 'Calculate bandwidth', 'bw_calculator', NULL, 'no', '6', 'no', 'yes'),
+	(17,'Customers', 'Shows customer list', 'customers', 'height=x', 'yes', '6', 'no', 'yes'),
+	(18,'User Instructions', 'Shows user instructions', 'instructions', NULL, 'yes', '6', 'no', 'yes'),
+	(19,'MAC lookup', 'Shows MAC address vendor', 'mac-lookup', NULL, 'yes', '6', 'no', 'yes'),
 	(20,'Recent Logins', 'Shows most recent user logins', 'recent_logins', 'max=5&height=x', 'no', '4', 'yes', 'yes');
 
 
