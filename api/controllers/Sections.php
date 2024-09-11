@@ -78,7 +78,7 @@ class Sections_controller extends Common_api_functions {
 	public function GET () {
 		// fetch subnets in section
 		if(@$this->_params->id2=="subnets" && is_numeric($this->_params->id)) {
-			// we dont need id2 anymore
+			// we don't need id2 anymore
 			unset($this->_params->id2);
 			// init required objects
 			$this->init_object ("Subnets", $this->Database);

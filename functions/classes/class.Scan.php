@@ -181,7 +181,7 @@ class Scan extends Common_functions {
 	}
 
 	/**
-	 * This functin resets the scan method, for cron scripts
+	 * This function resets the scan method, for cron scripts
 	 *
 	 * @access public
 	 * @param mixed $method
@@ -313,7 +313,7 @@ class Scan extends Common_functions {
 	/**
 	 * Ping selected address and return response
 	 *
-	 *	timeout value: for miliseconds multiplyy by 1000
+	 *	timeout value: for miliseconds multiply by 1000
 	 *
 	 * @access protected
 	 * @param ip $address
@@ -666,7 +666,7 @@ class Scan extends Common_functions {
 		if (is_numeric($address_id)) {
 			// don't update statuses for never seen addresses !
 			if ($last_seen_date!==false && !is_null($last_seen_date) && strlen($last_seen_date)>2 && $last_seen_date!="0000-00-00 00:00:00" && $last_seen_date!="1970-01-01 00:00:01" && $last_seen_date!="1970-01-01 01:00:00") {
-				// dont update reserved to offline
+				// don't update reserved to offline
 				if (!($tag_id==1 && $old_tag_id==3)) {
 					try { $this->Database->updateObject("ipaddresses", array("id"=>$address_id, "state"=>$tag_id), "id"); }
 					catch (Exception $e) {
@@ -701,7 +701,7 @@ class Scan extends Common_functions {
 		$ports = pf_explode(",", str_replace(";",",",$port));
 		# default response is dead
 		$retval = 1;
-		//try each port untill one is alive
+		//try each port until one is alive
 		foreach($ports as $p) {
 			// open socket
 			$conn = @fsockopen($address, $p, $errno, $errstr, $this->icmp_timeout);

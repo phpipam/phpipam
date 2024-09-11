@@ -27,7 +27,7 @@ unset($_POST['table']);
 # fetch custom fields
 $fields = $Tools->fetch_custom_fields($table);
 
-/* enthing to write? */
+/* anything to write? */
 if(sizeof($_POST)>0) {
 	foreach($_POST as $k=>$v) {
 		$kTest = str_replace("___", " ", $k);

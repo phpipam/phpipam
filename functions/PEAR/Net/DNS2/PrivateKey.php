@@ -406,7 +406,7 @@ class Net_DNS2_PrivateKey
         }
 
         //
-        // store the filename incase we need it for something
+        // store the filename in case we need it for something
         //
         $this->filename = $file;
 

@@ -26,7 +26,7 @@ $User->check_user_session ();
 
 # set size parameters
 $height = 200;
-$slimit = 5;			//we dont need this, we will recalculate
+$slimit = 5;			//we don't need this, we will recalculate
 
 # count
 $m = 0;

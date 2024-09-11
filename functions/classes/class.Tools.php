@@ -954,7 +954,7 @@ class Tools extends Common_functions {
 			# add requester to cc
 			$recipients_requester = $values['requester'];
 
-			# reformat key / vaues
+			# reformat key / values
 			$values = $this->ip_request_reformat_mail_values ($values);
 			#reformat empty
 			$values = $this->reformat_empty_array_fields ($values, "/");
@@ -1196,7 +1196,7 @@ class Tools extends Common_functions {
 			//check for each field
 			else {
 				foreach($fields[$table] as $field) {
-					//if it doesnt exist store error
+					//if it doesn't exist, store error
 					if(!$this->field_exists($table, $field)) {
 						$error['fieldError'][$table][] = $field;
 					}
@@ -1219,7 +1219,7 @@ class Tools extends Common_functions {
 	 * Checks if specified table exists in database
 	 *
 	 *	true = exists
-	 *	false = doesnt exist
+	 *	false = doesn't exist
 	 *
 	 * @access public
 	 * @param mixed $tablename
@@ -1239,7 +1239,7 @@ class Tools extends Common_functions {
 	 * Checks if specified field exists in table
 	 *
 	 *	true = exists
-	 *	false = doesnt exist
+	 *	false = doesn't exist
 	 *
 	 * @access public
 	 * @param mixed $fieldname
@@ -2605,7 +2605,7 @@ class Tools extends Common_functions {
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {
-			# ignore already comressed range
+			# ignore already compressed range
 			if($numbers[$c]->class!="compressed-range") {
 				# gap between this and previous
 				if(gmp_strval( @gmp_sub($numbers[$c]->number, $numbers[$c-1]->number)) != 1) {
@@ -3035,7 +3035,7 @@ class Tools extends Common_functions {
 	}
 
 	/**
-	 * Fetch all l2 domans and vlans
+	 * Fetch all l2 domains and vlans
 	 *
 	 * @access public
 	 * @param string $search (default: false)
@@ -3306,7 +3306,7 @@ class Tools extends Common_functions {
 	public function set_csv_delimiter ($outFile) {
 		// must be string
 		if(is_string($outFile)) {
-			// count occurences
+			// count occurrences
 			$cnt_coma  = substr_count($outFile, ",");
 			$cnt_colon = substr_count($outFile, ";");
 			// set higher

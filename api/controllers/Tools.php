@@ -54,7 +54,7 @@ class Tools_controller extends Common_api_functions {
 		$this->define_tools_controllers ();
 		$this->define_available_identifiers ();
 
-		// fist validate subcontroller
+		// first validate subcontroller
 		$this->validate_subcontroller ();
 		// rewrite subcontroller
 		$this->rewrite_subcontroller ();
