@@ -4,7 +4,7 @@
  *
  * Script to verify userentered input and verify it against database
  *
- * If successfull write values to session and go to main page!
+ * If successful write values to session and go to main page!
  *
  */
 

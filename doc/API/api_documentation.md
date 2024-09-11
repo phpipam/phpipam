@@ -603,7 +603,7 @@ Parameter                       | Type    | Methods            | Description
 **id**                          | number  | GET, PATCH, DELETE | Device identifier
 **hostname**                    | varchar | POST, PATCH        | Device hostname
 **ip_addr**                     | varchar | POST, PATCH        | Device ip address
-**descriptuion**                | varchar | POST, PATCH        | Device description
+**description**                 | varchar | POST, PATCH        | Device description
 **sections**                    | varchar | POST, PATCH        | List of section id's device belongs to (e.g. 3;4;5)
 **rack, rack_start, rack_size** | varchar | POST, PATCH        | Device rack index, start position and size in U
 **location**                    | varchar | POST, PATCH        | Device location index

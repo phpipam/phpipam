@@ -15,6 +15,17 @@
     + Fixed RADIUS authentication fails on 1.6.0 (#3986);
     + Fixed cannot add NAT issue (#3993);
     + Fixed Duplicates tool not finding ALL duplicates (#4161);
+    + Fixes fetch_favourite_subnets function returns empty array instead of false (#4182);
+    + Fixed Dashboard widget widths are not correct percentage (#4176);
+    + Fixed remove_offline_addresses.php can't execute (#4173);
+    + Fixed Searches do not properly organize results (#3917)
+    + Fixed Expand/compress all folders not working properly (#3583);
+    + Fixed Bug when adding a user to a group (#4137);
+    + Fixed Password validation errors (#4099,#2423);
+    + Fixed Ripe import results in jQuery error (#4007);
+    + Fixed Ripe import crashes if too many subnets are found (#4180);
+    + Fixed Devices with height 0 crash Rack image generation (#4193);
+    + Fixed Vault Item Custom Field not writable (#4058);
 
     Enhancements, changes:
     ----------------------------
@@ -22,6 +33,7 @@
     + Added option to export data for VLAN,VRF and Devices directly from tools page;
     + Added option to disable OpenStreetMap address geoip lookups;
     + Added $api_stringify_results config.php option for <PHP81 API backwards compatibility;
+    + Added support for newly added widgets to be sortable with jQuery (#4711);
 
     Security Fixes:
     ----------------------------
@@ -41,7 +53,7 @@
     ----------------------------
     + SQL injection in custom field enum/set types;
     + Directory traversal possible in RIPE query;
-    + XSS (reflected) in 'bw-calulator-result.php';
+    + XSS (reflected) in 'bw-calculator-result.php';
     + XSS (reflected) by invalid email address response;
     + XSS (reflected) by /app/tools/subnet-masks/popup.php (#3738);
     + XSS (stored) in user widget settings;
@@ -60,7 +72,7 @@
     + Add scanPingType=="none" option to disable scanning;
     + Custom fields on IP request forms (#2956);
     + Added subnet free space map for each possible subnet mask;
-    + Added Vaults (Certificate andf password storing);
+    + Added Vaults (Certificate and password storing);
     + Added Tools->Duplicate subnets & IP page;
     + Added config.php offline_mode to disable server-side Internet lookups (#3462);
     + Added MAC vendor lookup widget;
@@ -71,7 +83,7 @@
     + SameSite attribute enabled for site cookies;
     + SAML2
         + php-saml updated to 3.4.1 (#3055);
-        + Removal of php-mcrypt dependancy;
+        + Removal of php-mcrypt dependency;
         + Drop support for idpcertfingerprint;
         + MAP_SAML_USER and SAML_USERNAME config.php configuration moved to db;
         + php-saml protocol debugging;
@@ -258,7 +270,7 @@
 
     Translations:
     ----------------------------
-    + German translation updated to verson 1.3.1;
+    + German translation updated to version 1.3.1;
     + French translations updated. (#1881);
 
     Bugfixes:
@@ -338,8 +350,8 @@
 
     Translations:
     ----------------------------
-    + French translation updated to verson 1.3;
-    + German translation updated to verson 1.3;
+    + French translation updated to version 1.3;
+    + German translation updated to version 1.3;
 
     Bugfixes:
     ----------------------------
@@ -348,7 +360,7 @@
     + Fixed JSON_UNESCAPED_UNICODE for PHP 5.3 (#1135, #1245);
     + Rename class Thread to PingThread to avoid naming conflict with pthreads Thread class (#1254);
     + Fixed custom fields integer on subnet (#1266);
-    + Fixed Import Ip-adress doesnt update location (#1284);
+    + Fixed Import IP-address doesn't update location (#1284);
     + Fixed json_error for logo upload (#1256);
     + Fixed CSRF error when moving orphaned addresses (#1303);
     + Fixed VRF fetching via API by Id;
@@ -450,15 +462,15 @@
     + Permission delegation now only delegates changes not whole permission set;
     + Users with RWA permission can manage IP requests and receive IP request mails + changelog mails for subnet;
     + IPv4 subnet link to IPv6 for dual-stack info;
-    + Removed inacessible DNS servers if timeout to prevent page load timeouts;
+    + Removed inaccessible DNS servers if timeout to prevent page load timeouts;
     + Added option to only show supernets to limit pageload [#844 #816 #736];
     + Added last scan info to subnet details;
     + Added option to update address tags when address state change occurs (pingCheck) [#840];
-    + Added mantaneance mode;
+    + Added maintenance mode;
     + Added inactive addresses removal script;
-    + Subnet overlapping now checked also inside folders to prevernt duplicates;
+    + Subnet overlapping now checked also inside folders to prevent duplicates;
     + Subnet overlapping now checked also between sections if VRF defined;
-    + Added new settings directive that requires unique subnets accross sections;
+    + Added new settings directive that requires unique subnets across sections;
     + Added index check in verify database to detect and fix possible missing DB indexes;
     + Added MAC address vendor display option;
 
@@ -481,8 +493,8 @@
 
     Translations:
     ----------------------------
-    + French translation updated to verson 1.2;
-    + German translation updated to verson 1.2;
+    + French translation updated to version 1.2;
+    + German translation updated to version 1.2;
 
     Bugfixes:
     ----------------------------
@@ -491,7 +503,7 @@
     + Fixed PowerDNS Slave with multiple masters delimiter error;
     + Fixed PowerDNS PTR records not being updated automatically;
     + Fixed csrf cookie bug when editing folder;
-    + Fixed csrf cookie bug when truncationg subnet;
+    + Fixed csrf cookie bug when truncating subnet;
     + Fixed invalid code for API crypt method;
     + Fixed strange headings font display in Firefox;
     + Fixed invalid proxy settings in config.dist.php;
@@ -535,7 +547,7 @@
     + All tables are now InnoDB by default;
     + Upgraded jQuery to 2.1.3;
     + All functions rewritten to classes/methods;
-    + Parametized all SQL queries, moved from MySQLI to PDO;
+    + Parameterized all SQL queries, moved from MySQLI to PDO;
     + Added VLAN/VRF to search and to search results export;
     + Redesigned admin and tools menu;
     + Added scanned/discovered subnets to tools for faster overview;
@@ -558,7 +570,7 @@
 
     Security Fixes:
     ----------------------------
-    + Parametized all MySQL querries;
+    + Parameterized all MySQL querries;
     + Fixed plainpass being logged on user update;
     + Fixed XSS exploit on /error/;
     + Added CSRF protection to forms;
@@ -612,7 +624,7 @@
     + Added inactivity timeout to settings;
     + Changed install procedure and updated install scripts;
     + Added PEAR check for installation;
-    + Added free range disaply for VLANs;
+    + Added free range display for VLANs;
     + Addes SSL/TLS option for SMTP mail;
     + API:
         + Bugfixes;
@@ -639,16 +651,16 @@
     Bugfixes:
     ----------------------------
     + Fixed top 10 widgets not escaping strings;
-    + Fixed section parent can be set to self that caused section to disapear;
+    + Fixed section parent can be set to self that caused section to disappear;
     + Fixed username instead of password being sent to smtp server;
     + Fixed IE search bug with workaround;
     + Fixed subnet and bcast not showing on strict mode disabled;
     + Fixed top subnets missing on dashboard for non-admin users;
-    + Fixed bug when installation was silently failing bacause pf missing _() function (missing gettext extension)
+    + Fixed bug when installation was silently failing because pf missing _() function (missing gettext extension)
     + Fixed device custom field not populated on adding device;
     + Fixed XLS export silently failed when description longer than 31 characters;
     + Fixed overlapping check not working;
-    + Fixed subnet free space calcultation;
+    + Fixed subnet free space calculation;
     + Fixed visual subnet display not showing on /31 and /32 networks;
     + Fixed custom fields display on folder edit;
     + Fixed unable to edit IP addresses when fields are sorted;
@@ -684,7 +696,7 @@
     + Tools > devices redone;
     + DeviceTypes can now be edited/set/added;
     + Ping subnet enhancements;
-    + Custom field types are now defineable (int/varchar/date/datetime/text/bool/set);
+    + Custom field types are now definable (int/varchar/date/datetime/text/bool/set);
     + Date and timepicker popups if type = date/datetime;
     + For `set` and boolean custom fields dropdown is presented that users can pick;
 
@@ -704,11 +716,11 @@
     + Fixed subnet displaying as 0.0.0.0/0 in details;
     + Fixed links to subnets form vlans and vrfs;
     + Fixed search result showing all folders if searched item is not IP address;
-    + Fixed disapearing section when L2 section was selected as master section;
+    + Fixed disappearing section when L2 section was selected as master section;
     + Fixed device ID showing in mail notification instead of hostname;
     + Fixed device ID showing in search results and export instead of hostname;
     + Fixed search for subnet name returned no results;
-    + Fixed apostophe in IP address description throws SQL error for scan results and XLS import;
+    + Fixed apostrophe in IP address description throws SQL error for scan results and XLS import;
     + Fixed requester email gets cut if longer than 32 chars;
     + Fixed admin folder edit appearing as subnet;
     + Fixed missing device/port in import;
@@ -739,7 +751,7 @@
     + Subnets can now be edited directly from nested subnets list;
     + When adding nested subnets default vlan/vrf is selected from parent;
     + Added Section ordering;
-    + Added per/section subnet ordering (overrides dafault form settings);
+    + Added per/section subnet ordering (overrides default form settings);
     + Clicking on section now shows all subnets and belonging details;
     + If session timeouts after re-login last requested page will be opened;
     + Searh for IP address now returns also subnet, even if IP is not existing;
@@ -761,7 +773,7 @@
     + Fixed subnet/section links from VLANS if base not /;
     + Fixed warning in apache log on subnet editing if no VRFs are configured;
     + Fixed admin menu off-screen overflow;
-    + Fixed firefox error when selectiong rights for section/subnets was not possible;
+    + Fixed firefox error when selecting rights for section/subnets was not possible;
     + Fixed subnet description in Cyrillic problem;
     + Fixed errors on no permissions for user;
     + Fixed Inaccurate Free Space Calculation (and Chart);
@@ -813,14 +825,14 @@
     + Fixed wrong maximum on dashboard top10 percentage;
     + Fixed Adding a vlan while editing a subnet resets the edit subnet form;
     + Fixed wrong free space calculation for nested subnets;
-    + Fixed IP use statistics not cumulative up the hierarchy if subnes has slaves;
+    + Fixed IP use statistics not cumulative up the hierarchy if subnets has slaves;
 
 == 0.7
 
     New features:
     ----------------------------
     + Completely rewritten UI using twitter's bootstrap as base;
-    + Using mod_rewrite apache module to handle GET requests (new install requitements!);
+    + Using mod_rewrite apache module to handle GET requests (new install requirements!);
     + Unlimited number of subnetting levels;
     + OpenLDAP authentication support;
     + New URL structure;
@@ -829,7 +841,7 @@
     + Custom VLAN fields and admin option to allow duplicate VLAN names (metro area VLANs);
     + Script to automatically update IP <-> hostname, run via cron (functions/scripts/resolveIPaddresses.php);
     + Show Subnet name instead of subnet IP address option;
-    + Strict mode option in config files that controlls overlapping checks;
+    + Strict mode option in config files that controls overlapping checks;
     + New subnet menu;
     + Added printLimit feature to break IP addresses into pages;
 
@@ -849,7 +861,7 @@
     + Search via GET;
     + Support for range networks (allows use of subnet and broadcast as IP);
     + Import of custom IP fields;
-    + Abiility to move subnets between sections;
+    + Ability to move subnets between sections;
     + Improved display of nested subnets now shows all IP addresses from nested subnets and orphaned IPs;
     + Hides display of custom fields in subnet if none is filled in whole subnet;
     + Replaced Highcharts with Flot because of licencing issues;
@@ -857,7 +869,7 @@
     Bugfixes:
     ------------------------
     + Fixed error with missing custom IP fields when adding new IP address;
-    + Fixed bug when deleteing root subnet only deleted directly nested subnets (now whole tree);
+    + Fixed bug when deleting root subnet only deleted directly nested subnets (now whole tree);
     + Fixed checkboxes not working in various browsers;
     + Fixed change in switch details causing IP address associations to switch to be lost;
     + Fixed subnet description display in under subnet administration;
@@ -868,7 +880,7 @@
     + Search available also to viewer user types;
     + Fixed /127 and /128 IPv6 subnets;
     + Fixed /31 and /32 IPv4 subnets;
-    + Significally reduced php processing for dashboard statistics;
+    + Significantly reduced php processing for dashboard statistics;
     + Fixed importing of if quote is present;
 
 == 0.6
@@ -901,7 +913,7 @@
     + Fixed issues where external attacker might get information about internal hosts through resolvedns script;
     + Fixed wrong subnet nesting under administration/manage subnets;
     + Fixed editing subnet can be outside of its own root subnet;
-    + Fixed errors when adding new switch auto-adds itselt to all hosts without no switch defined;
+    + Fixed errors when adding new switch auto-adds itself to all hosts without no switch defined;
     + Fixed removing switch not removed in ip address list;
     + Vlan1 can now be used;
     + Fixed mail sending settings with missing information;
@@ -964,7 +976,7 @@
     + Various code enhancements + improved error handling;
     + Fixed URL links not updating after few clicks;
     + If loading slave subnet directly the subnet menu drops down and shows active slave subnet;
-    + Clicking on master shubnet shows all nested subnets and statistics;
+    + Clicking on master subnet shows all nested subnets and statistics;
     + Redesigned log table;
     + Fixed search;
 
@@ -979,7 +991,7 @@
     + Admin dashboard notification of new requests;
     + Autocomplete of owner and Switch name from all available when adding/editing IP address;
     + New settings quick access on button hover;
-    + Option to export each subnet indivudually;
+    + Option to export each subnet individually;
 
     Bugfixes / enhancements:
     ------------------------
@@ -1002,11 +1014,11 @@
     + now also works with php 5.2;
     + fixed empty fields in xls import;
     + passwords are now stored in md5 hash;
-    + high numbers for free/used IP addresses (mainly IPv6) are now represented in k/m/G values to improve readibility;
+    + high numbers for free/used IP addresses (mainly IPv6) are now represented in k/m/G values to improve readability;
     + fixed log search bug;
     + cursor not displayed as link on images and non-href links;
     + same add image on all pages;
-    + fixed IP mail notification apperance;
+    + fixed IP mail notification appearance;
     + UI enhancements and bugfixes;
     + Fixed some javascript bugs;
     + Minified javascript to make loading faster;
@@ -1015,7 +1027,7 @@
     New features:
     -------------
     + added switch / port fields to IP addresses;
-    + hide subets on request to get better view;
+    + hide subnets on request to get better view;
     + Informational tooltips added + option to disable them in config file if someone finds them annoying;
     + export whole IP address database to XLS file from admin menu;
     + create MySQL database dump from admin menu;

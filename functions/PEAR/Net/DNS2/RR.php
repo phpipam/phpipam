@@ -102,7 +102,7 @@ abstract class Net_DNS2_RR
     public $type;
 
     /*
-     * The resouce record class
+     * The resource record class
      */
     public $class;
 

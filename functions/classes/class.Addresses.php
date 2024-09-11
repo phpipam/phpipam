@@ -332,7 +332,7 @@ class Addresses extends Common_functions {
 
 		$bulk_search = $this->bulk_fetch_similar_addresses($address, $linked_field, $value);
 
-		// Check if similar addresses exist with the specifed $value
+		// Check if similar addresses exist with the specified $value
 		if (!isset($bulk_search[$address->{$linked_field}]))
 			return false;
 
@@ -858,7 +858,7 @@ class Addresses extends Common_functions {
 	 */
 
 	/**
-	 * Modifes powerDNS PTR record
+	 * Modifies powerDNS PTR record
 	 *
 	 * @access public
 	 * @param mixed $action
@@ -1145,7 +1145,7 @@ class Addresses extends Common_functions {
 	}
 
 	/**
-	 * Returns array of all ptr indexes in surrent subnet
+	 * Returns array of all ptr indexes in current subnet
 	 *
 	 * @access public
 	 * @param mixed $subnetId
@@ -1573,7 +1573,7 @@ class Addresses extends Common_functions {
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {
-			# ignore already comressed range
+			# ignore already compressed range
 			if(!property_exists($addresses[$c], 'class') || $addresses[$c]->class!="compressed-range") {
 				# gap between this and previous
 				if(gmp_strval( @gmp_sub($addresses[$c]->ip_addr, $addresses[$c-1]->ip_addr)) != 1) {
@@ -1863,10 +1863,10 @@ class Addresses extends Common_functions {
         if ($cnt>0) {
             $html[] = "</table>";
             if($type=="subnet") {
-                print  " <a href='".create_link("subnets",$subnet->sectionId, $subnet->id, "nat")."' class='btn btn-xs btn-default show_popover fa fa-exchange' style='font-size:11px;margin-top:-3px;padding:1px 3px;' data-toggle='popover' title='"._('Object is Natted')."' data-trigger='hover' data-html='true' data-content='".implode("\n", $html)."'></a>";
+                print  " <a href='".create_link("subnets",$subnet->sectionId, $subnet->id, "nat")."' class='btn btn-xs btn-default show_popover fa fa-exchange' style='font-size:11px;margin-top:-3px;padding:1px 3px;' data-toggle='popover' title='"._('Object is NATted')."' data-trigger='hover' data-html='true' data-content='".implode("\n", $html)."'></a>";
             }
             else {
-                print  " <a href='".create_link("subnets",$subnet->sectionId, $subnet->id, "address-details", $address->id, "nat")."' class='btn btn-xs btn-default show_popover fa fa-exchange' style='font-size:11px;margin-top:-3px;padding:1px 3px;' data-toggle='popover' title='"._('Object is Natted')."' data-trigger='hover' data-html='true' data-content='".implode("\n", $html)."'></a>";
+                print  " <a href='".create_link("subnets",$subnet->sectionId, $subnet->id, "address-details", $address->id, "nat")."' class='btn btn-xs btn-default show_popover fa fa-exchange' style='font-size:11px;margin-top:-3px;padding:1px 3px;' data-toggle='popover' title='"._('Object is NATted')."' data-trigger='hover' data-html='true' data-content='".implode("\n", $html)."'></a>";
             }
         }
 	}

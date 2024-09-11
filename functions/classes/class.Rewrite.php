@@ -55,7 +55,7 @@ class Rewrite {
 	/**
 	 * URI parts from $_SERVER['REQUEST_URI']
 	 *
-	 * [0=>subnets, 1=>7, 2=>detals]
+	 * [0=>subnets, 1=>7, 2=>details]
 	 *
 	 * @var array
 	 */
@@ -72,7 +72,7 @@ class Rewrite {
 
 
 	/**
-	 * Constructior
+	 * Constructor
 	 *
 	 * @method __construct
 	 */

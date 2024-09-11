@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Script to disaply api edit result
+ * Script to display api edit result
  *************************************/
 
 /* functions */

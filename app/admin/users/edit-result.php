@@ -48,7 +48,6 @@ if($_POST['action']!="delete") {
 	if((!is_blank(@$_POST['password1']) || (@$_POST['action']=="add") && $auth_method->type=="local")) {
 		//checks
 		if($_POST['password1']!=$_POST['password2'])						{ $Result->show("danger", _("Passwords do not match"), true); }
-		if(strlen($_POST['password1'])<8)									{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
 
 		//enforce password policy
 		$policy = (pf_json_decode($User->settings->passwordPolicy, true));

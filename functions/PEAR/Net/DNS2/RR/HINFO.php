@@ -69,7 +69,7 @@
 class Net_DNS2_RR_HINFO extends Net_DNS2_RR
 {
     /*
-     * computer informatino
+     * computer information
      */
     public $cpu;
 

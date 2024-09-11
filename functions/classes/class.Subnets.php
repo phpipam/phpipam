@@ -2467,7 +2467,7 @@ class Subnets extends Common_functions {
 						//check
 						if(sizeof(@$folder_subnets)>0) {
 							foreach($folder_subnets as $fs) {
-								//dont check against old
+								//don't check against old
 								if($fs->id!=$subnetId) {
 									//verify that all nested are inside its parent
 									if($this->verify_overlapping ( $this->transform_to_dotted($subnet)."/".$mask, $this->transform_to_dotted($fs->subnet)."/".$fs->mask)) {
@@ -2748,7 +2748,7 @@ class Subnets extends Common_functions {
 		# fetch all subnet ids
 		$res2 = $this->fetch_distinct_multicast_folders ();
 
-		# array chack
+		# array check
 		if($res===false)    $res = array();
 		if($res2===false)   $res2 = array();
 
@@ -2895,7 +2895,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $sectionId
 	 * @param mixed $vlanId
      * @param string $unique_required (default: "vlan")
-     * @param int $address_id (dafault: 0)
+     * @param int $address_id (default: 0)
      * @return bool
      */
     private function multicast_address_exists ($mac, $sectionId, $vlanId, $unique_required = "vlan", $address_id = 0) {
@@ -2935,7 +2935,7 @@ class Subnets extends Common_functions {
                 elseif ($unique_required=="section" && $sectionId==$line->sectionId)      { return true; }
             }
         }
-        // default doesnt exist
+        // default doesn't exist
         return false;
     }
 
@@ -2951,7 +2951,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $sectionId
 	 * @param mixed $vlanId
 	 * @param mixed $unique_required
-	 * @param int $address_id (defaut: 0)
+	 * @param int $address_id (default: 0)
 	 * @return string|true true if ok, else error text to be displayed
 	 */
 	public function validate_multicast_mac ($mac, $sectionId, $vlanId, $unique_required="vlan", $address_id = 0) {
@@ -3109,7 +3109,7 @@ class Subnets extends Common_functions {
 					} else {
 						$name = $s->description;
 					}
-					$this->Result->show("danger",  _("Failed to set subnet permissons for subnet")." $name!", true);
+					$this->Result->show("danger",  _("Failed to set subnet permissions for subnet")." $name!", true);
 					return false;
 				}
 			}
@@ -3458,8 +3458,8 @@ class Subnets extends Common_functions {
 		# Find the first|last $count available free subnets of size $mask inside the freespacemap array.
 		#   return values =  array (subnets => $available_subnets, truncated => false);
 		$nets = array();
-		$levels_full = 8; # Display all availble subnets for n sections,
-		$level_trunc = 8; # then display the first y availble subnets in the remaining sections
+		$levels_full = 8; # Display all available subnets for n sections,
+		$level_trunc = 8; # then display the first y available subnets in the remaining sections
 
 		for ($mask = $parent->mask + 1; $mask <= $max_mask; $mask++) {
 			// Calculate number of subnets to find at each level
@@ -3703,15 +3703,15 @@ class Subnets extends Common_functions {
 			fputs ($ripe_connection, '-i origin as'. $as ."\r\n");
 			//save result to var out
 			$out = "";
-		    while (!feof($ripe_connection)) { $out .= fgets($ripe_connection); }
+			while (!feof($ripe_connection)) { $out .= fgets($ripe_connection); }
 
-		    //parse it
-		    $out = pf_explode("\n", $out);
+			//parse it
+			$out = pf_explode("\n", $out);
 
-		    //we only need route
-		    foreach($out as $line) {
-				if (!is_blank(strstr($line,"route"))) {
-    				if(!isset($subnet)) $subnet = array();
+			//we only want lines starting with route or route6
+			$subnet = array();
+			foreach($out as $line) {
+				if (substr($line,0,6)=="route:" || substr($line,0,7)=="route6:") {
 					//replace route6 with route
 					$line = str_replace("route6:", "route:", $line);
 					//only take IP address
@@ -3720,9 +3720,9 @@ class Subnets extends Common_functions {
 					//set result
 					$subnet[] = $line;
 				}
-		    }
-		    //return
-		    return isset($subnet) ? $subnet : array();
+			}
+			//return
+			return $subnet;
 		}
 	}
 

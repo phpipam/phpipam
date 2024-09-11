@@ -280,7 +280,7 @@ class Common_functions  {
 	/**
 	 * Fetches multiple objects in specified table in database
 	 *
-	 *	doesnt cache
+	 *	doesn't cache
 	 *
 	 * @access public
 	 * @param mixed $table
@@ -443,7 +443,7 @@ class Common_functions  {
 		if (!is_object($settings))
 			return false;
 
-		// Escape ' & " charaters
+		// Escape ' & " characters
 		if (property_exists($settings, 'siteTitle'))
 			$settings->siteTitle = escape_input($settings->siteTitle);
 
@@ -550,7 +550,7 @@ class Common_functions  {
     }
 
     /**
-     * Checks if object alreay exists in cache..
+     * Checks if object already exists in cache..
      *
      * @access protected
      * @param mixed $table
@@ -887,7 +887,7 @@ class Common_functions  {
 
 			// NOTE The colon character ":" is reserved as it used in array_to_log for implode/explode.
 			// Replace colon (U+003A) with alternative characters.
-			// Using JSON encode/decode would be more appropiate but we need to maintain backwards compatibility with historical changelog/logs data in the database.
+			// Using JSON encode/decode would be more appropriate but we need to maintain backwards compatibility with historical changelog/logs data in the database.
 			if ($req == "mac")
 				$req = strtr($req, ':', '-'); # Mac-addresses, replace Colon U+003A with hyphen U+002D
 
@@ -1910,7 +1910,7 @@ class Common_functions  {
 		// calculate diff
 		if(is_array($old_permissions)) {
 			foreach ($old_permissions as $k1=>$p1) {
-				// if there is not permisison in new that remove old
+				// if there is no permission in new, than remove old
 				// if change than save
 				if (!array_key_exists($k1, $new_permissions)) {
 					$removed_permissions[$k1] = 0;
@@ -2171,27 +2171,41 @@ class Common_functions  {
         	}
         	// tools, admin
         	elseif ($get['page']=="tools" || $get['page']=="administration") {
-            	$title[] = ucwords(escape_input($get['page']));
-            	// subpage
-            	if (isset($get['section'])) {
-                	$title[] = ucwords(escape_input($get['section']));
-            	}
-            	if (isset($get['subnetId'])) {
-                	// vland domain
-                	if($get['section']=="vlan") {
-                     	$se = $this->fetch_object ("vlanDomains", "id", escape_input($get['subnetId']));
-                    	if($se!==false) {
-                        	$title[] = $se->name." domain";
-                    	}
-                	}
-                	else {
-                    	$title[] = ucwords(escape_input($get['subnetId']));
-                    }
-            	}
+	            	$title[] = ucwords(escape_input($get['page']));
+	            	// subpage
+	            	if (isset($get['section'])) {
+	                        if(in_array($get['section'], ["vlan", "vlans", "vrf"])) {
+	                                $title[] = strtoupper(escape_input($get['section']));
+	                        } else {
+	                                $title[] = ucwords(escape_input($get['section']));
+	                        }
+	            	}
+	            	if (isset($get['subnetId'])) {
+	                	// vland domain
+	                	if($get['section']=="vlan" || $get['section']=="vlans") {
+		                     	$se = $this->fetch_object ("vlanDomains", "id", escape_input($get['subnetId']));
+		                    	if($se!==false) {
+		                        	$title[] = $se->name." domain";
+		                    	}
+					$se = $this->fetch_object ("vlans", "vlanId", escape_input($get['sPage']));
+		                    	if($se!==false) {
+		                        	$title[] = $se->name;
+		                    	}
+	                	}
+				elseif($get['section']=="vrf") {
+	                                $se = $this->fetch_object ("vrf", "vrfId", escape_input($get['subnetId']));
+	                                if($se!==false) {
+	                                        $title[] = $se->name;
+	                                }
+	                        }
+	                	else {
+	                    		$title[] = ucwords(escape_input($get['subnetId']));
+	                    	}
+	            	}
         	}
         	else {
-            	$title[] = ucwords(escape_input($get['page']));
-            }
+            		$title[] = ucwords(escape_input($get['page']));
+            	}
     	}
         // return title
     	return implode(" / ", $title);

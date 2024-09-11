@@ -24,7 +24,7 @@ $hidden_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['custom
 # structure and include details
 print "<div class='row'>";
 
-// invlid ?
+// invalid ?
 if ($customer===false) {
 	$Result->show ("danger", _("Invalid customer"), false);
 }

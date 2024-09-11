@@ -48,7 +48,7 @@
 		<th><?php print _('VLAN'); ?></th>
 		<td>
 		<?php
-		if(empty($vlan['number']) || $vlan['number'] == 0) { $vlan['number'] = "<span class='text-muted'>/</span>"; }	//Display fix for emprt VLAN
+		if(empty($vlan['number']) || $vlan['number'] == 0) { $vlan['number'] = "<span class='text-muted'>/</span>"; }	//Display fix for empty VLAN
 		print $vlan['number'];
 
 		if(!empty($vlan['name'])) 		 { print ' - '.$vlan['name']; }					//Print name if provided

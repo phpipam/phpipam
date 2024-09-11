@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # some verifications
-if( (empty($_POST['current'])) || (empty($_POST['next'])) ) 							{ $Result->show("danger", _('Fileds cannot be empty')."!", true); }
+if( (empty($_POST['current'])) || (empty($_POST['next'])) ) 							{ $Result->show("danger", _('Fields cannot be empty')."!", true); }
 
 
 /* reorder */

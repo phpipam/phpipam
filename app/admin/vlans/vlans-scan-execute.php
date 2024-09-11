@@ -30,7 +30,7 @@ $User->Crypto->csrf_cookie ("validate", "scan", $_POST['csrf_cookie']) === false
 print "<div class='alert-danger hidden'></div>";
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disabled"), true); }
 # admin check
 if($User->is_admin()!==true) 	                { $Result->show("danger", _('Admin privileges required'), true); }
 

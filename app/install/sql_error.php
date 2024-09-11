@@ -29,7 +29,7 @@
 				print '</div>';
 			}
 			if ($error === false) {
-				$Result->show("success", _("Database connection succesfull"), false);
+				$Result->show("success", _("Database connection successful"), false);
 			}
 			?>
 		</div>

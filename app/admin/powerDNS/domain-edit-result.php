@@ -42,7 +42,7 @@ if ($_POST['action']!="delete") {
 	if($Tools->validate_hostname($_POST['name'])===false)			{ $Result->show("danger", _("Invalid domain name"), true); }
 	// master
 	if (!is_blank($_POST['master'])) {
-    	// if multilpe masters
+    	// if multiple masters
     	if (strpos($_POST['master'], ",")!==false) {
         	// to array and trim, check each
         	$masters = array_filter(pf_explode(",", $_POST['master']));
