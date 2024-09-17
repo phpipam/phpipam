@@ -336,6 +336,7 @@ class Admin extends Common_functions {
 				return false;
 			}
 			# result
+			$this->Log->write( _("Database table cleared").": ".$table, NULL, 0);
 			return true;
 		}
 	}
