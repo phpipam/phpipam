@@ -27,8 +27,22 @@ $User->check_user_session ();
 //ini_set('display_errors', 0);
 
 # set size parameters
-$height = 200;
+$height = null;
 $slimit = 5;			//we don't need this, we will recalculate
+
+# fetch widget parameters
+$widget = $Tools->fetch_object ("widgets", "wfile", "threshold");
+# now overwrite height and slimit from wparams
+if(isset($widget->wparams)) {
+	parse_str($widget->wparams, $p);
+	if (@is_numeric($p['max'])) {
+		$slimit = intval($p['max']);
+	}
+	if (@is_numeric($p['height'])) {
+		$height = intval($p['height']);
+	}
+	unset($p);
+}
 
 # if direct request include plot JS
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
@@ -62,8 +76,6 @@ if ($User->settings->enableThreshold=="1") {
 
 # disabled
 if ($User->settings->enableThreshold!="1") {
-	print "<hr>";
-
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("Threshold module disabled")."</p>";
 	print "<small>"._("You can enable threshold module under settings")."</small>";
@@ -71,8 +83,6 @@ if ($User->settings->enableThreshold!="1") {
 }
 # error - none found but not permitted
 elseif ($threshold_subnets===false) {
-	print "<hr>";
-
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No subnet is selected for threshold check")."</p>";
 	print "<small>"._("You can set threshold for subnets under subnet settings")."</small>";
@@ -80,8 +90,6 @@ elseif ($threshold_subnets===false) {
 }
 # error - found but not permitted
 elseif (!isset($out)) {
-	print "<hr>";
-
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No subnet selected for threshold check available")."</p>";
 	print "<small>"._("No subnet with threshold check available")."</small>";
@@ -89,7 +97,7 @@ elseif (!isset($out)) {
 }
 # found
 else {
-    print "<div class='hContent' style='padding:10px;'>";
+    print '<div class="hContent" style="padding:5px 10px;border-top:0px;' . (isset($height) ? "height:{$height}px;overflow:scroll;" : "") . '">';
 
     // count usage
     foreach ($out as $k=>$s) {

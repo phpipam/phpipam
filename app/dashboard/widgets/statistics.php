@@ -11,11 +11,21 @@ if(!isset($User)) {
 
 # user must be authenticated
 $User->check_user_session ();
+
+# fetch widget parameters
+$widget = $Tools->fetch_object ("widgets", "wfile", "statistics");
+if(isset($widget->wparams)) {
+	parse_str($widget->wparams, $p);
+	if (@is_numeric($p['height'])) {
+		$height = intval($p['height']);
+	}
+	unset($p);
+}
 ?>
 
 
 <!-- stats table -->
-<div class="container-fluid" style='padding-top:5px'>
+<div class="container-fluid" style='<?php print isset($height) ? "height:{$height}px;overflow:scroll;" : ""; ?>padding-top:5px'>
 <table class="table table-condensed table-hover statistics">
 
 	<!-- sections -->

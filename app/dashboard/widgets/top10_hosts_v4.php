@@ -23,8 +23,22 @@ $User->check_user_session ();
 //ini_set('display_errors', 0);
 
 # set size parameters
-$height = 200;
+$height = 210;
 $slimit = 10;			//we don't need this, we will recalculate
+
+# fetch widget parameters
+$widget = $Tools->fetch_object ("widgets", "wfile", "top10_hosts_v4");
+# set max and then overwrite max from wparams
+if(isset($widget->wparams)) {
+	parse_str($widget->wparams, $p);
+	if (@is_numeric($p['max'])) {
+		$slimit = intval($p['max']);
+	}
+	if (@is_numeric($p['height'])) {
+		$height = intval($p['height']);
+	}
+	unset($p);
+}
 
 # if direct request include plot JS
 if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{

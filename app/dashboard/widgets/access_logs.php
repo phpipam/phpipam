@@ -8,12 +8,13 @@ if(!isset($User)) {
 	$User 		= new User ($Database);
 	$Tools 		= new Tools ($Database);
 	$Log		= new Logging ($Database);
-	$Admin		= new Admin ($Database);
 	$Result		= new Result ();
 }
 
 # user must be authenticated
 $User->check_user_session ();
+# user must be admin
+$User->is_admin(true);
 
 # if direct request that redirect to tools page
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
@@ -25,10 +26,26 @@ if ($User->settings->log=="syslog") {
 	$Result->show("warning", _("Log files are sent to syslog"));
 }
 else {
-	# print last 5 access logs
-	$logs = $Log->fetch_logs(5, NULL, NULL, NULL, "on", "off", "off");
+	# fetch widget parameters
+	$widget = $Tools->fetch_object ("widgets", "wfile", "access_logs");
+	# set max and then overwrite max from wparams
+	$max = 5;
+	if(isset($widget->wparams)) {
+		parse_str($widget->wparams, $p);
+		if (@is_numeric($p['max'])) {
+			$max = intval($p['max']);
+		}
+		if (@is_numeric($p['height'])) {
+			$height = intval($p['height']);
+		}
+		unset($p);
+	}
+
+	# print last N access logs
+	$logs = $Log->fetch_logs($max, NULL, NULL, NULL, "on", "off", "off");
 	if (!is_array($logs)) { $logs = array(); }
 
+	print "<div" . (isset($height) ? " style=\"height:{$height}px;overflow:scroll;width:98%;margin-left:1%;\"" : "") . ">";
 	print "<table class='table table-condensed table-hover table-top'>";
 
 	# headers
@@ -65,5 +82,7 @@ else {
 		print "<p>"._("No logs available")."</p>";
 		print "</blockquote>";
 	}
+
+	print "</div>";
 }
 ?>

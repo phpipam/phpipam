@@ -20,6 +20,8 @@ else {
 
 # user must be authenticated
 $User->check_user_session ();
+# user must be admin
+$User->is_admin(true);
 
 # no errors!
 //ini_set('display_errors', 0);
@@ -28,11 +30,24 @@ $User->check_user_session ();
 $height = 200;
 $slimit = 5;			//we don't need this, we will recalculate
 
-# count
-$m = 0;
-
 // fetch widget
 $widget = $Tools->fetch_object ("widgets", "wfile", "inactive-hosts");
+# set max and then overwrite max from wparams
+$max = 5;
+$days = 30;
+if(isset($widget->wparams)) {
+	parse_str($widget->wparams, $p);
+	if (@is_numeric($p['max'])) {
+		$max = intval($p['max']);
+	}
+	if (@is_numeric($p['days'])) {
+		$days = intval($p['days']);
+	}
+	if (@is_numeric($p['height'])) {
+		$height = intval($p['height']);
+	}
+	unset($p);
+}
 
 # if direct request include plot JS
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
@@ -47,11 +62,11 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	print "</div>";
 }
 
-// time_range - 30 days
-$seconds = 86400 * 30;
+// time_range - N days
+$seconds = 86400 * $days;
 
 # Find inactive hosts
-$inactive_hosts = $Subnets->find_inactive_hosts ($seconds, $slimit);
+$inactive_hosts = $Subnets->find_inactive_hosts ($seconds, $max);
 
 # check permissions
 if ($inactive_hosts!==false) {
@@ -67,15 +82,11 @@ if ($inactive_hosts!==false) {
                 $h->mask = $subnet->mask;
                 $out[] = $h;
             }
-            $m++;
-            # break after limit
-            if ($m>$slimit) {
-                break;
-            }
         }
     }
 }
 
+print "<div" . (isset($height) ? " style=\"height:{$height}px;overflow:scroll;width:98%;margin-left:1%;\"" : "") . ">";
 # error - none found but not permitted
 if ($inactive_hosts===false) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
@@ -91,7 +102,7 @@ elseif (!isset($out)) {
 # found
 else {
     // table
-    print "<table class='table table-top table-threshold table-condensed'>";
+    print "<table class='table table-top table-threshold table-condensed table-hover'>";
 
     print "<tr>";
     print " <th></th>";
@@ -116,3 +127,4 @@ else {
 
     print "</table>";
 }
+print "</div>";

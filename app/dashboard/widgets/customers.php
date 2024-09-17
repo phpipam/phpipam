@@ -27,7 +27,19 @@ $User->check_module_permissions ("customers", User::ACCESS_R, true);
 # filter customers or fetch print all?
 $customers = $Tools->fetch_all_objects("customers", "title");
 
+# fetch widget parameters
+$widget = $Tools->fetch_object ("widgets", "wfile", "customers");
+# overwrite height from wparams
+if(isset($widget->wparams)) {
+	parse_str($widget->wparams, $p);
+	if (@is_numeric($p['height'])) {
+		$height = intval($p['height']);
+	}
+	unset($p);
+}
+
 # table
+print '<div style="width:98%;margin-left:1%;' . (isset($height) ? "height:{$height}px;overflow:scroll;" : "") . '">';
 print '<table id="customers" class="table sorted table-striped table-top" data-cookie-id-table="customers">';
 
 #headers
@@ -57,4 +69,5 @@ else {
 	}
 }
 print '</table>';
+print '</div>';
 ?>
