@@ -39,20 +39,27 @@ else {
 		// title
 		print "<h4 style='margin-top:30px;'>"._(ucwords($key))."</h4><hr>";
 
-		print '<table id="userPrint" class="table sorted table-striped sorted tab1le-auto" data-cookie-id-table="admin_vaults">';
+		print '<table id="userPrint" class="table sortable sorted table-striped tab1le-auto" data-cookie-id-table="admin_vaults">';
 		# headers
 		print "<thead>";
 		print '<tr>';
-	    print "<th data-width='300' data-width-unit='px'>"._('Name').'</th>';
+	    print "<th data-width='300' data-width-unit='px' data-sortable='true' data-sorter='alphaSort'>"._('Name').'</th>';
 	    print "<th data-width='120' data-width-unit='px'>"._('Status').'</th>';
-		print "<th>"._('Description').'</th>';
+		print "<th data-sortable='true'>"._('Description').'</th>';
 		// custom
 		if(sizeof(@$custom_fields_v) > 0) {
 			foreach($custom_fields_v as $field) {
-				print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+				if (substr($field['type'],0,3)=="int") {
+					$sort_function=" data-sorter='numberSort'";
+				} elseif (substr($field['type'],0,3)=="dat") {
+					$sort_function=" data-sorter='dateSort'";
+				} else {
+					$sort_function="";
+				}
+				print "	<th class='hidden-xs hidden-sm hidden-md' data-sortable='true'{$sort_function}>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
-	    print '<th></th>';
+	    print '<th data-switchable="false"></th>';
 		print '</tr>';
 		print "</thead>";
 

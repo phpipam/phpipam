@@ -22,16 +22,16 @@ print "<h4>"._("Belonging subnets")."</h4><hr>";
 $subnets = $Tools->fetch_multiple_objects ("subnets", "device", $device['id']);
 
 # Hosts table
-print "<table id='switchMainTable' class='devices table sorted table-striped table-top table-condensed' data-cookie-id-table='device_subnets'>";
+print "<table id='switchMainTable' class='devices table sortable sorted table-striped table-top table-condensed' data-cookie-id-table='device_subnets'>";
 
 # headers
 print "<thead>";
 print "<tr>";
-print "	<th>"._('Subnet')."</th>";
-print "	<th>"._('Section')."</th>";
-print "	<th>"._('Description')."</th>";
+print "	<th data-sortable='true' data-sorter='ipSort'>"._('Subnet')."</th>";
+print "	<th data-sortable='true' data-sorter='alphaSort'>"._('Section')."</th>";
+print "	<th data-sortable='true'>"._('Description')."</th>";
 if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
-print "	<th>"._('VLAN')."</th>";
+print "	<th data-sortable='true' data-sorter='numberSort'>"._('VLAN')."</th>";
 }
 print "</tr>";
 print "</thead>";

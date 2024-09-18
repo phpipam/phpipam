@@ -38,24 +38,24 @@ $colspan = 8;
 
 <!-- show sections -->
 <?php if($sections!==false) { ?>
-<table class="table sorted table-striped table-condensed table-top table-td-top" data-cookie-id-table="all_sections">
+<table class="table sortable sorted table-striped table-condensed table-top table-td-top" data-cookie-id-table="all_sections">
 <!-- headers -->
 <thead>
 <tr>
-    <th><?php print _('Name'); ?></th>
-    <th><?php print _('Description'); ?></th>
-    <th><?php print _('Parent'); ?></th>
-    <th><?php print _('Strict mode'); ?></th>
+    <th data-sortable='true' data-sorter='alphaSort'><?php print _('Name'); ?></th>
+    <th data-sortable='true'><?php print _('Description'); ?></th>
+    <th data-sortable='true'><?php print _('Parent'); ?></th>
+    <th data-sortable='true'><?php print _('Strict mode'); ?></th>
     <?php if($User->get_module_permissions ("vlan")>=User::ACCESS_R) { ?>
-    <th><?php print _('Show VLANs'); ?></th>
+    <th data-sortable='true'><?php print _('Show VLANs'); ?></th>
     <?php $colspan--;} ?>
     <?php if ($User->get_module_permissions ("vrf")>=User::ACCESS_R) { ?>
-    <th><?php print _('Show VRFs'); ?></th>
+    <th data-sortable='true'><?php print _('Show VRFs'); ?></th>
     <?php $colspan--;} ?>
-    <th><?php print _('Subnets'); ?></th>
+    <th data-sortable='true' data-sorter='numberSort'><?php print _('Subnets'); ?></th>
     <?php if($User->is_admin(false)) { ?>
-    <th><?php print _('Group Permissions'); ?></th>
-    <th></th>
+    <th data-sortable='true'><?php print _('Group Permissions'); ?></th>
+    <th data-switchable='false'></th>
     <?php $colspan--;} ?>
 </tr>
 </thead>

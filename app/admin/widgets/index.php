@@ -23,7 +23,7 @@ print "</p>";
 <!-- Add new -->
 <button class='btn btn-sm btn-default open_popup' style="margin-bottom:10px;" data-script='app/admin/widgets/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create new widget'); ?></button>
 
-<table class="table sorted table-striped table-top" style="min-width:400px;" data-cookie-id-table="widgets">
+<table class="table sortable sorted table-striped table-top" style="min-width:400px;" data-cookie-id-table="widgets">
 
 	<!-- Language list -->
 	<?php
@@ -36,14 +36,14 @@ print "</p>";
 		# headers
 		print "<thead>";
 		print "<tr>";
-		print "	<th>"._('Title')."</th>";
-		print "	<th>"._('Description')."</th>";
-		print "	<th>"._('File')."</th>";
-		print "	<th>"._('Admin')."</th>";
-		print "	<th>"._('Active')."</th>";
+		print "	<th data-sortable='true'>"._('Title')."</th>";
+		print "	<th data-sortable='true'>"._('Description')."</th>";
+		print "	<th data-sortable='true'>"._('File')."</th>";
+		print "	<th data-sortable='true'>"._('Admin')."</th>";
+		print "	<th data-sortable='true'>"._('Active')."</th>";
 		print "	<th>"._('Parameters')."</th>";
 		print "	<th>"._('Validity')."</th>";
-		print "	<th></th>";
+		print "	<th data-switchable='false'></th>";
 		print "</tr>";
 		print "</thead>";
 

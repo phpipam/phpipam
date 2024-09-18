@@ -31,20 +31,20 @@ $selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);
 print "<h4>"._("Belonging addresses")."</h4><hr>";
 
 # Hosts table
-print "<table id='switchMainTable' class='devices table sorted table-striped table-top table-condensed' data-cookie-id-table='device_addresses'>";
+print "<table id='switchMainTable' class='devices table sortable sorted table-striped table-top table-condensed' data-cookie-id-table='device_addresses'>";
 
 # headers
 print "<thead>";
 print "<tr>";
-print "	<th>"._('IP address')."</th>";
+print "	<th data-sortable='true' data-sorter='ipSort'>"._('IP address')."</th>";
 if(in_array("port", $selected_ip_fields)) {
-print "	<th>"._('Port')."</th>";
+print "	<th data-sortable='true'>"._('Port')."</th>";
 }
-print "	<th>"._('Subnet')."</th>";
-print "	<th>"._('Description')."</th>";
-print "	<th></th>";
-print "	<th class='hidden-xs'>"._('Hostname')."</th>";
-print "	<th class='hidden-xs hidden-sm'>"._('Owner')."</th>";
+print "	<th data-sortable='true' data-sorter='ipSort'>"._('Subnet')."</th>";
+print "	<th data-sortable='true'>"._('Description')."</th>";
+print "	<th data-switchable='false'></th>";
+print "	<th class='hidden-xs' data-sortable='true' data-sorter='alphaSort'>"._('Hostname')."</th>";
+print "	<th class='hidden-xs hidden-sm' data-sortable='true'>"._('Owner')."</th>";
 print "</tr>";
 print "</thead>";
 

@@ -24,15 +24,15 @@ else {
     $User->settings->enableLocations=="1" ? $Racks->fetch_all_racks(true) : $Racks->fetch_all_racks(false);
 
     // table
-    print "<table class='table sorted table-striped table-top table-td-top' data-cookie-id-table='rack_list'>";
+    print "<table class='table sortable sorted table-striped table-top table-td-top' data-cookie-id-table='rack_list'>";
     // headers
     print "<thead>";
     print "<tr>";
-    print " <th>"._('Name')."</th>";
-    print " <th>"._('Size')."</th>";
-    print " <th>"._('Back side')."</th>";
-    print " <th>"._('Devices')."</th>";
-    print " <th>"._('Description')."</th>";
+    print " <th data-sortable='true' data-sorter='alphaSort'>"._('Name')."</th>";
+    print " <th data-sortable='true' data-sorter='numberSort'>"._('Size')."</th>";
+    print " <th data-sortable='true'>"._('Back side')."</th>";
+    print " <th data-sortable='true' data-sorter='numberSort'>"._('Devices')."</th>";
+    print " <th data-sortable='true'>"._('Description')."</th>";
 
     $colspan = 6;
     if($User->settings->enableCustomers=="1") {
@@ -42,12 +42,12 @@ else {
 	if(sizeof($custom) > 0) {
 		foreach($custom as $field) {
 			if(!in_array($field['name'], $hidden_custom_fields)) {
-				print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+				print "<th class='hidden-xs hidden-sm hidden-md' data-sortable='true'>".$Tools->print_custom_field_name ($field['name'])."</th>";
                 $colspan++;
 			}
 		}
 	}
-    print " <th style='width:80px'></th>";
+    print " <th style='width:80px' data-switchable='false'></th>";
     print "</tr>";
     print "</thead>";
 

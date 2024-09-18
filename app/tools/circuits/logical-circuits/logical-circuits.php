@@ -45,26 +45,33 @@ print "<div class='btn-group'>";
 print "</div>";
 
 # table
-print '<table id="userPrint" class="table sorted table-striped table-top" data-cookie-id-table="all_logical_circuits">';
+print '<table id="userPrint" class="table sortable sorted table-striped table-top" data-cookie-id-table="all_logical_circuits">';
 
 # headers
 print "<thead>";
 print '<tr>';
-print "	<th>"._('Circuit ID')."</th>";
-print "	<th>"._('Purpose').'</th>';
-print "	<th>"._('Circuit Count').'</th>';
-print "	<th>"._('Members').'</th>';
-print "	<th>"._('Comment').'</th>';
+print "	<th data-sortable='true' data-sorter='alphaSort'>"._('Circuit ID')."</th>";
+print "	<th data-sortable='true'>"._('Purpose').'</th>';
+print "	<th data-sortable='true' data-sorter='numberSort'>"._('Circuit Count').'</th>';
+print "	<th data-sortable='true' data-sorter='alphaSort'>"._('Members').'</th>';
+print "	<th data-sortable='true'>"._('Comment').'</th>';
 $colspanCustom = 0;
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_logical_fields)) {
-			print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			if (substr($field['type'],0,3)=="int") {
+				$sort_function=" data-sorter='numberSort'";
+			} elseif (substr($field['type'],0,3)=="dat") {
+				$sort_function=" data-sorter='dateSort'";
+			} else {
+				$sort_function="";
+			}
+			print "<th class='hidden-sm hidden-xs hidden-md' data-sortable='true'{$sort_function}>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			$colspanCustom++;
 		}
 	}
 }
-print '	<th class="actions"></th>';
+print '	<th class="actions" data-switchable="false"></th>';
 print '</tr>';
 print "</thead>";
 

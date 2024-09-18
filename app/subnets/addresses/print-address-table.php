@@ -147,34 +147,41 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 <thead>
 <tr class="th">
 	<?php
-	print "<th class='s_ipaddr'>"._('IP address')."</th>";
-	print "<th>"._('Hostname')."</th>";
+	print "<th class='s_ipaddr' data-sortable='true' data-sorter='ipSort'>"._('IP address')."</th>";
+	print "<th data-sortable='true'>"._('Hostname')."</th>";
 	// firewall address object - mandatory if enabled
 	if($zone) {
-		print "<th>"._('FW object')."</th>";
+		print "<th data-sortable='true'>"._('FW object')."</th>";
 	}
 	// description
-	print "<th>"._('Description')."</th>";
+	print "<th data-sortable='true'>"._('Description')."</th>";
 	// mac
 	if(in_array('mac', $selected_ip_fields)) 	{
-    	                                        { print "<th>"._('MAC')."</th>"; }
+    	                                        { print "<th data-sortable='true'>"._('MAC')."</th>"; }
     }
 	# note, device, port, owner, location
-	if(in_array('note', $selected_ip_fields)) 	{ print "<th></th>"; }
-	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
-	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Port')."</th>"; }
-	if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Location')."</th>"; }
-	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'>"._('Owner')."</th>"; }
-	if($User->settings->enableCustomers=="1" && @$cnt_obj["customer_id"]>0 && $User->get_module_permissions ("customers")>=User::ACCESS_R)	{ print "<th class='hidden-xs hidden-sm'>"._('Customer')."</th>"; }
+	if(in_array('note', $selected_ip_fields)) 	{ print "<th data-switchable='false'></th>"; }
+	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) { print "<th class='hidden-xs hidden-sm hidden-md' data-sortable='true' data-sorter='alphaSort'>"._('Device')."</th>"; }
+	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md' data-sortable='true'>"._('Port')."</th>"; }
+	if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) 	{ print "<th class='hidden-xs hidden-sm hidden-md' data-sortable='true' data-sorter='alphaSort'>"._('Location')."</th>"; }
+	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm' data-sortable='true'>"._('Owner')."</th>"; }
+	if($User->settings->enableCustomers=="1" && @$cnt_obj["customer_id"]>0 && $User->get_module_permissions ("customers")>=User::ACCESS_R)	{ print "<th class='hidden-xs hidden-sm' data-sortable='true' data-sorter='alphaSort'>"._('Customer')."</th>"; }
 	// custom fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) 	{
-			print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($myField['name'])."</th>";
+			if (substr($myField['type'],0,3)=="int") {
+				$sort_function=" data-sorter='numberSort'";
+			} elseif (substr($myField['type'],0,3)=="dat") {
+				$sort_function=" data-sorter='dateSort'";
+			} else {
+				$sort_function="";
+			}
+			print "<th class='hidden-xs hidden-sm hidden-md' data-sortable='true'{$sort_function}>".$Tools->print_custom_field_name ($myField['name'])."</th>";
 		}
 	}
 	?>
 	<!-- actions -->
-	<th class="actions"></th>
+	<th class="actions" data-switchable="false"></th>
 </tr>
 </thead>
 

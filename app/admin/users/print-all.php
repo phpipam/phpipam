@@ -26,31 +26,31 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 
 
 <!-- table -->
-<table id="userPrint1" class="table sorted table-striped table-top table-td-top" data-cookie-id-table="admin_users">
+<table id="userPrint1" class="table sortable sorted table-striped table-top table-td-top" data-cookie-id-table="admin_users">
 
 <!-- Headers -->
 <thead>
 <tr>
-	<th></th>
-    <th><?php print _('Real Name'); ?></th>
-    <th><?php print _('Username'); ?></th>
-    <th><?php print _('E-mail'); ?></th>
-    <th><?php print _('Role'); ?></th>
-    <th><?php print _('Language'); ?></th>
-    <th><?php print _('Authentication'); ?></th>
+	<th data-switchable='false'></th>
+    <th data-sortable='true' data-sorter='alphaSort'><?php print _('Real Name'); ?></th>
+    <th data-sortable='true'><?php print _('Username'); ?></th>
+    <th data-sortable='true'><?php print _('E-mail'); ?></th>
+    <th data-sortable='true'><?php print _('Role'); ?></th>
+    <th data-sortable='true'><?php print _('Language'); ?></th>
+    <th data-sortable='true'><?php print _('Authentication'); ?></th>
     <th><?php print _('Module permissions'); ?></th>
-    <th><?php print _('Groups'); ?></th>
-    <th><?php print _('Last login'); ?></th>
+    <th data-sortable='true'><?php print _('Groups'); ?></th>
+    <th data-sortable='true'><?php print _('Last login'); ?></th>
 	<?php
 	if(sizeof(@$custom) > 0) {
 		foreach($custom as $field) {
 			if(!in_array($field['name'], $ffields)) {
-				print "<th>$field[name]</th>";
+				print "<th data-sortable='true'>$field[name]</th>";
 			}
 		}
 	}
 	?>
-    <th class="actions"></th>
+    <th class="actions" data-switchable='false'></th>
 </tr>
 </thead>
 
