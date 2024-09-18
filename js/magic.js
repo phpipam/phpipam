@@ -2946,3 +2946,46 @@ $('table#manageSubnets').on('click','button.add_folder', function() {
 
 return false;
 });
+/* parses a string and strips out html tags */
+function stripTags(a) {/* the jQuery .text() method does not work how i want if a plain string is not wrapped in something, so this is a workaround */ a='<div>'+a+'</div>'; return $(a).text().trim();}
+/* takes two arguments and returns -1, 0, or 1 based upon which argument should be "first" */
+function alphaSort(a,b) { a=(a===undefined)?"":a=stripTags(a).toLowerCase(); b=(b===undefined)?"":b=stripTags(b).toLowerCase(); if (a>b) {return 1;} else if (a<b) {return -1;} else {return 0;}}
+/* takes two arguments and returns -1, 0, or 1 based upon which argument should be "first" */
+function numberSort(a,b) { a=(a===undefined)?"":stripTags(a); a=a.match(/^\d+/); a=(a==null)?null:Number(a[0]); b=(b===undefined)?"":b=stripTags(b); b=b.match(/^\d+/); b=(b==null)?null:Number(b[0]); if (a==null && b==null) {return 0} else if (a==null) {return 1} else if (b==null) {return -1} else {if(a>b) {return 1} else if (a<b) {return -1} else {return 0}}}
+/* takes two arguments and returns -1, 0, or 1 based upon which argument should be "first" */
+function ipSort(a,b) {
+ a=(a===undefined)?"":a=stripTags(a);
+ c=a.match(/^\d+\.\d+\.\d+\.\d+/);
+ b=(b===undefined)?"":b=stripTags(b);
+ d=b.match(/^\d+\.\d+\.\d+\.\d+/);
+ if (c==null && d==null) {
+  if (a.length==0 && b.length==0) {return 0}
+  else if (a.length==0) {return 1}
+  else if (b.length==0) {return -1}
+  else {
+   if(a<b) {return -1;} else if (a>b) {return 1;} else {return 0;}
+  }}
+ else if (c==null) {return 1}
+ else if (d==null) {return -1}
+ else {
+  i=c[0].split(".");
+  ii=d[0].split(".");
+  for (let idx=0; idx<i.length; ++idx) {
+   if (Number(i[idx])<Number(ii[idx])) {return -1}
+   else if (Number(i[idx])>Number(ii[idx])) {return 1}
+  }
+  return 0;
+ }
+}
+function dateSort(a,b) {
+ a=new Date(a);
+ a=a.getTime();
+ b=new Date(b);
+ b=b.getTime();
+ if (isNaN(a) && isNaN(b)) {return 0;}
+ else if (isNaN(a)) {return 1}
+ else if (isNaN(b)) {return -1}
+ else {
+  if (a<b) {return -1} else if (a>b) {return 1} else {return 0}
+ }
+}
