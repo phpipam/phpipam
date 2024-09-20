@@ -35,19 +35,9 @@ if($requests===false) {
 # print
 else {
 	# fetch widget parameters
-	$widget = $Tools->fetch_object ("widgets", "wfile", "requests");
-	# set max and then overwrite max from wparams
-	$max = 50;
-	if(isset($widget->wparams)) {
-		parse_str($widget->wparams, $p);
-		if (@is_numeric($p['max'])) {
-			$max = intval($p['max']);
-		}
-		if (@is_numeric($p['height'])) {
-			$height = strval(intval($p['height']));
-		}
-		unset($p);
-	}
+	$wparam = $Tools->get_widget_params("requests");
+	$max    = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 50,   'min_range' => 1, 'max_range' => 256]]);
+	$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 ?>
 
 <div class="container-fluid" style="<?php print isset($height) ? "height:{$height}px;overflow:scroll;" : ""; ?>padding-top:5px">

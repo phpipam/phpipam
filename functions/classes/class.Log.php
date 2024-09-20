@@ -606,7 +606,7 @@ class Logging extends Common_functions {
 	 * @param mixed $informational (default: Off)
 	 * @param mixed $notice (default: Off)
 	 * @param mixed $warning (default: Off)
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_logs ($logCount, $direction = NULL, $lastId = NULL, $highestId = NULL, $informational = "off", $notice = "off", $warning = "off") {
 
@@ -1502,7 +1502,7 @@ class Logging extends Common_functions {
 	 * @param bool $filter
 	 * @param mixed $expr
 	 * @param int $limit (default: 100)
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_all_changelogs ($filter, $expr, $limit = 100) {
     	# limit check

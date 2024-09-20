@@ -27,27 +27,13 @@ $User->is_admin(true);
 //ini_set('display_errors', 0);
 
 # set size parameters
-$height = 200;
-$slimit = 5;			//we don't need this, we will recalculate
+$slimit = 5;            //we don't need this, we will recalculate
 
 // fetch widget
-$widget = $Tools->fetch_object ("widgets", "wfile", "inactive-hosts");
-# set max and then overwrite max from wparams
-$max = 5;
-$days = 30;
-if(isset($widget->wparams)) {
-	parse_str($widget->wparams, $p);
-	if (@is_numeric($p['max'])) {
-		$max = intval($p['max']);
-	}
-	if (@is_numeric($p['days'])) {
-		$days = intval($p['days']);
-	}
-	if (@is_numeric($p['height'])) {
-		$height = intval($p['height']);
-	}
-	unset($p);
-}
+$wparam = $Tools->get_widget_params("inactive-hosts");
+$max    = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 5,    'min_range' => 1, 'max_range' => 256]]);
+$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
+$days   = filter_var($wparam->days,   FILTER_VALIDATE_INT, ['options' => ['default' => 30,   'min_range' => 1, 'max_range' => 365]]);
 
 # if direct request include plot JS
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{

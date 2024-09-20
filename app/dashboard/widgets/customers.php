@@ -28,15 +28,8 @@ $User->check_module_permissions ("customers", User::ACCESS_R, true);
 $customers = $Tools->fetch_all_objects("customers", "title");
 
 # fetch widget parameters
-$widget = $Tools->fetch_object ("widgets", "wfile", "customers");
-# overwrite height from wparams
-if(isset($widget->wparams)) {
-	parse_str($widget->wparams, $p);
-	if (@is_numeric($p['height'])) {
-		$height = intval($p['height']);
-	}
-	unset($p);
-}
+$wparam = $Tools->get_widget_params("customers");
+$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 
 # table
 print '<div style="width:98%;margin-left:1%;' . (isset($height) ? "height:{$height}px;overflow:scroll;" : "") . '">';
@@ -70,4 +63,3 @@ else {
 }
 print '</table>';
 print '</div>';
-?>

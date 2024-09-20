@@ -32,19 +32,9 @@ $(document).ready(function() {
 $fsubnets = $User->fetch_favourite_subnets ();
 
 # fetch widget parameters
-$widget = $Tools->fetch_object ("widgets", "wfile", "favourite_subnets");
-# set max and then overwrite max from wparams
-$max = 100;
-if(isset($widget->wparams)) {
-	parse_str($widget->wparams, $p);
-	if (@is_numeric($p['max'])) {
-		$max = intval($p['max']);
-	}
-	if (@is_numeric($p['height'])) {
-		$height = intval($p['height']);
-	}
-	unset($p);
-}
+$wparam = $Tools->get_widget_params("favourite_subnets");
+$max    = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 100,  'min_range' => 1, 'max_range' => 256]]);
+$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 
 print "<div style=\"width:98%;margin-left:1%;" . (isset($height) ? "height:{$height}px;overflow:scroll;" : "") . "\">";
 print "<table class='table table-condensed table-hover table-top favs'>";

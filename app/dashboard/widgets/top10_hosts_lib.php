@@ -177,7 +177,7 @@ function top10_widget($type_ip, $type_percentage, $height, $slimit) {
 					show: true
 				},
 				yaxis: {
-					<?php if ($type_percentage) print "max: ".str_replace(",", ".", $top_subnets[0]->percentage); ?>
+					<?php if ($type_percentage) print "max: ".str_replace(",", ".", $top_subnets[0]->percentage); ?>,
 				},
 
 				margin: {

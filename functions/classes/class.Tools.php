@@ -714,8 +714,7 @@ class Tools extends Common_functions {
 	 */
 	private function read_db_schema() {
 		$fh = fopen(dirname(__FILE__) . '/../../db/SCHEMA.sql', 'r');
-		$schema = str_replace("\r\n", "\n", fread($fh, 100000));
-		return $schema;
+		return str_replace("\r\n", "\n", fread($fh, 100000));
 	}
 
 	/**
@@ -863,6 +862,22 @@ class Tools extends Common_functions {
 		return file_exists(dirname(__FILE__)."/../../app/dashboard/widgets/$file.php")||file_exists(dirname(__FILE__)."/../../app/dashboard/widgets/custom/$file.php") ? true : false;
 	}
 
+	/**
+	 * Fetch widget parameters
+	 *
+	 * @param string $file
+	 * @return Params
+	 */
+	public function get_widget_params($file) {
+		$widget = $this->fetch_object("widgets", "wfile", $file);
+
+		if (is_object($widget) && is_string($widget->wparams)) {
+			parse_str($widget->wparams, $p);
+			return new Params($p);
+		}
+		return new Params();
+	}
+
 
 
 
@@ -925,7 +940,7 @@ class Tools extends Common_functions {
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return NULL; }
 
 		# save
-		return sizeof($subnets)>0 ? (array) $subnets : NULL;
+		return sizeof($subnets)>0 ? (array) $subnets : null;
 	}
 
 	/**
@@ -2162,7 +2177,6 @@ class Tools extends Common_functions {
      * Returns all prefixes in correct order
      *
      * @access public
-     * @return void
      * @param bool|int $master (default: false)
      * @param bool $recursive (default: false)
      * @return array|bool
@@ -2654,9 +2668,7 @@ class Tools extends Common_functions {
 			}
 		}
 		# overrwrite ipaddresses and rekey
-		$addresses = @array_values($numbers_formatted);
-		# return
-		return $addresses;
+		return  @array_values($numbers_formatted);
 	}
 
 	/**
@@ -3018,7 +3030,7 @@ class Tools extends Common_functions {
 				return false;
 			}
 			else {
-				$array = array (
+				return array (
 								"type"     => "locations",
 								"id"       => $location->id,
 								"name"     => $location->name,
@@ -3026,7 +3038,6 @@ class Tools extends Common_functions {
 								"location" => $location->id,
 								"rack"     => NULL
 				                );
-				return $array;
 			}
 		}
 		else {

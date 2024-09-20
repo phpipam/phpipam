@@ -24,20 +24,12 @@ $User->check_user_session ();
 # no errors!
 //ini_set('display_errors', 0);
 
-$height = '600px';
 $title = false;
 
 # fetch widget parameters
-$widget = $Tools->fetch_object ("widgets", "wfile", "locations");
-# overwrite height from wparams
-if(isset($widget->wparams)) {
-	parse_str($widget->wparams, $p);
-	if (@is_numeric($p['height'])) {
-		$height = strval(intval($p['height'])) . "px";
-	}
-	unset($p);
-}
+$wparam = $Tools->get_widget_params("locations");
+$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => 600, 'min_range' => 1, 'max_range' => 800]]) . "px";
 
 # open maps
 include(dirname(__FILE__)."/../../tools/locations/all-locations-map.php");
-?>
+

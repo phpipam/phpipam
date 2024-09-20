@@ -21,19 +21,9 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 }
 
 # fetch widget parameters
-$widget = $Tools->fetch_object ("widgets", "wfile", "recent_logins");
-# set max and then overwrite max from wparams
-$max = 5;
-if(isset($widget->wparams)) {
-	parse_str($widget->wparams, $p);
-	if (@is_numeric($p['max'])) {
-		$max = intval($p['max']);
-	}
-	if (@is_numeric($p['height'])) {
-		$height = intval($p['height']);
-	}
-	unset($p);
-}
+$wparam = $Tools->get_widget_params("recent_logins");
+$max    = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 5,    'min_range' => 1, 'max_range' => 256]]);
+$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 
 # fetch all requests
 $requests = $Tools->requests_fetch (false);

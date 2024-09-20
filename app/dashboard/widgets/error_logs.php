@@ -27,19 +27,9 @@ if ($User->settings->log=="syslog") {
 }
 else {
 	# fetch widget parameters
-	$widget = $Tools->fetch_object ("widgets", "wfile", "error_logs");
-	# set max and then overwrite max from wparams
-	$max = 5;
-	if(isset($widget->wparams)) {
-		parse_str($widget->wparams, $p);
-		if (@is_numeric($p['max'])) {
-			$max = intval($p['max']);
-		}
-		if (@is_numeric($p['height'])) {
-			$height = intval($p['height']);
-		}
-		unset($p);
-	}
+	$wparam = $Tools->get_widget_params("error_logs");
+	$max    = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 5,    'min_range' => 1, 'max_range' => 256]]);
+	$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 
 	# print last N access logs
 	$logs = $Log->fetch_logs($max, NULL, NULL, NULL, "off", "on", "on");
@@ -62,8 +52,8 @@ else {
 		$log = (array) $log;
 		# reformat severity
 		if($log['severity'] == 0)		{ $log['severityText'] = _("Info"); }
-		else if($log['severity'] == 1)	{ $log['severityText'] = _("Warn"); }
-		else if($log['severity'] == 2)	{ $log['severityText'] = _("Err"); }
+		elseif($log['severity'] == 1)	{ $log['severityText'] = _("Warn"); }
+		elseif($log['severity'] == 2)	{ $log['severityText'] = _("Err"); }
 
 		print "<tr>";
 		print "	<td><span class='severity$log[severity]'>$log[severityText]</span></td>";

@@ -39,19 +39,9 @@ if ($User->settings->log=="syslog") {
 # print
 else {
 	# fetch widget parameters
-	$widget = $Tools->fetch_object ("widgets", "wfile", "changelog");
-	# set max and then overwrite max from wparams
-	$max = 5;
-	if(isset($widget->wparams)) {
-		parse_str($widget->wparams, $p);
-		if (@is_numeric($p['max'])) {
-			$max = intval($p['max']);
-		}
-		if (@is_numeric($p['height'])) {
-			$height = intval($p['height']);
-		}
-		unset($p);
-	}
+	$wparam = $Tools->get_widget_params("changelog");
+	$max    = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 5,    'min_range' => 1, 'max_range' => 256]]);
+	$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 
 	# printout
 	print "<div" . (isset($height) ? " style=\"height:{$height}px;overflow:scroll;width:98%;margin-left:1%;\"" : "") . ">";
@@ -178,4 +168,3 @@ else {
 
 	print "</div>";
 }
-?>
