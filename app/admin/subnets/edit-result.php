@@ -483,7 +483,7 @@ else {
 			// if zone exists do nothing, otherwise create zone
 			if ($domain===false) {
 				// use default values
-				$values = pf_json_decode($User->settings->powerDNS, true);
+				$values = db_json_decode($User->settings->powerDNS, true);
 				$values['name'] = $zone;
 				// create domain
 				$PowerDNS->domain_edit ("add", array("name"=>$zone,"type"=>"NATIVE"));
@@ -512,7 +512,7 @@ else {
 			// create domain
 			elseif (isset($_POST['DNSrecursive']) && $domain===false) {
 				// use default values
-				$values = pf_json_decode($User->settings->powerDNS, true);
+				$values = db_json_decode($User->settings->powerDNS, true);
 				$values['name'] = $zone;
 				// create domain
 				$PowerDNS->domain_edit ("add", array("name"=>$zone,"type"=>"NATIVE"));
@@ -552,4 +552,3 @@ else {
 		}
 	}
 }
-?>

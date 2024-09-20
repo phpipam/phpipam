@@ -532,8 +532,8 @@ else {
 
 	# check for temporary shares!
 	if($User->settings->tempShare==1) {
-		if (is_array(pf_json_decode($User->settings->tempAccess, true))) {
-			foreach(pf_json_decode($User->settings->tempAccess) as $s) {
+		if (is_array(db_json_decode($User->settings->tempAccess, true))) {
+			foreach(db_json_decode($User->settings->tempAccess) as $s) {
 				if($s->type=="subnets" && $s->id==$subnet['id']) {
 					if(time()<$s->validity) {
 						$active_shares[] = $s;
@@ -704,7 +704,7 @@ else {
 	print "</div>";
 
 		# firewall address object actions
-		$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = db_json_decode($User->settings->firewallZoneSettings,true);
 		if ( $User->settings->enableFirewallZones == 1 && $subnet_permission > 1) {
 			print "<div class='btn-group'>";
 			print "<a class='subnet_to_zone btn btn-xs btn-default".(($fwZone == false) ? '':' disabled')."' href='' data-container='body' rel='tooltip' title='"._('Map subnet to firewall zone')."' data-subnetId='$subnet[id]' data-operation='subnet2zone'><i class='fa fa-fire'></i></a>";

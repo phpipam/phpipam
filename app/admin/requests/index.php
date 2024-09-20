@@ -11,7 +11,7 @@ $User->check_user_session();
 $active_requests   = $Tools->fetch_multiple_objects ("requests", "processed", 0, "id", false);
 $inactive_requests = $Tools->fetch_multiple_objects ("requests", "processed", 1, "id", false);
 # set hidden custom fields
-$hidden_cfields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_cfields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_cfields = isset($hidden_cfields['requests']) ? $hidden_cfields['requests'] : array();
 ?>
 

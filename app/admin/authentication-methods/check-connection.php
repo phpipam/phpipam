@@ -22,7 +22,7 @@ $User->check_user_session();
 $auth_settings = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['id']);
 if($auth_settings===false)	{ $Result->show("danger", _("Invalid ID"), true, true); }
 //set params
-$parameters = pf_json_decode($auth_settings->params);
+$parameters = db_json_decode($auth_settings->params);
 
 # AD?
 if($auth_settings->type=="AD" || $auth_settings->type=="LDAP" || $auth_settings->type=="NetIQ") {

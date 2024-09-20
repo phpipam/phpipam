@@ -36,7 +36,7 @@ $firewallZones = $Zones->get_zones();
 if (!is_array($firewallZones)) { $firewallZones = array(); }
 
 # fetch settings
-$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings,true);
+$firewallZoneSettings = db_json_decode($User->settings->firewallZoneSettings,true);
 
 # fetch all devices
 $devices = $Tools->fetch_multiple_objects ("devices", "type", $firewallZoneSettings['deviceType']);

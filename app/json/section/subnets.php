@@ -78,7 +78,7 @@ if ($permission == 0 ) { return; }
 $custom_fields = $Tools->fetch_custom_fields ('subnets');
 
 # set hidden fields
-$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = isset($hidden_fields['subnets']) && is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 
 $subnetsTree = new SubnetsTree($Subnets, $User->user);

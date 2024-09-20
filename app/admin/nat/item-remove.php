@@ -40,8 +40,8 @@ $link = $readonly ? false : true;
 <div class="pContent">
     <?php
     # remove item from nat
-    $s = pf_json_decode($nat->src, true);
-    $d = pf_json_decode($nat->dst, true);
+    $s = db_json_decode($nat->src, true);
+    $d = db_json_decode($nat->dst, true);
 
     if(is_array($s[$_POST['type']]))
     $s[$_POST['type']] = array_diff($s[$_POST['type']], array($_POST['item_id']));

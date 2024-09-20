@@ -1255,7 +1255,7 @@ class Common_functions  {
      */
     public function validate_json_string($string) {
         // try to decode
-        pf_json_decode($string);
+        db_json_decode($string);
         // check for error
         $parse_result = json_last_error_msg();
         // save possible error

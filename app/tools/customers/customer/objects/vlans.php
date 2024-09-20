@@ -20,7 +20,7 @@ if (isset($objects["vlans"])) {
 	$custom_fields = (array) $Tools->fetch_custom_fields('vlans');
 
 	# set hidden fields
-	$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+	$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 	$hidden_fields = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : array();
 
 	# size of custom fields

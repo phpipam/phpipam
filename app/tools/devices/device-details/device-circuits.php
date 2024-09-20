@@ -18,7 +18,7 @@ $circuit_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 $type_hash = [];
 foreach($circuit_types as $t){ $type_hash[$t->id] = $t->ctname; }
 # get hidden fields */
-$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['circuits']) ? $hidden_fields['circuits'] : array();
 
 # check

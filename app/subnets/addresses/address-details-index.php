@@ -22,7 +22,7 @@ $subnet  = (array) $Subnets->fetch_subnet(null, $address['subnetId']);
 # fetch all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
-$hidden_cfields = pf_json_decode($User->settings->hiddenCustomFields, true) ? : ['ipaddresses' => null];
+$hidden_cfields = db_json_decode($User->settings->hiddenCustomFields, true) ? : ['ipaddresses' => null];
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
@@ -149,4 +149,3 @@ if(sizeof($address)>1) {
 else {
 	$Result->show("danger", _("IP address not existing in database")."!", true);
 }
-?>

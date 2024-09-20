@@ -208,5 +208,26 @@ function setcookie_samesite($name, $value, $lifetime, $httponly=false, $secure=f
 	header("Set-Cookie: $name=$value; expires=$expire_date; Max-Age=$lifetime; path=/; SameSite=$samesite;".$Secure.$HttpOnly);
 }
 
+/**
+ * Decodes a JSON string
+ *
+ * @param string $json
+ * @param bool $associative
+ * @param integer $depth
+ * @param integer $flags
+ * @return mixed
+ */
+function db_json_decode($json, $associative = null, $depth = 512, $flags = 0) {
+    if (!is_string($json) || strlen($json) < 2)
+        return null;
+
+    // class.PDO runs html_entity_encode() on strings, revert and decode
+    if (substr($json, 1, 6) == '&quot;') {
+        $json = html_entity_decode($json, ENT_QUOTES);
+    }
+
+    return json_decode($json, $associative, $depth, $flags);
+}
+
 // Include backwards compatibility wrapper functions.
 require_once('php_poly_fill.php');

@@ -167,7 +167,7 @@ class PowerDNS extends Common_functions {
      */
     private function db_set () {
         // decode values form powerDNS
-        $this->db_settings = strlen($this->settings->powerDNS)>10 ? pf_json_decode($this->settings->powerDNS) : pf_json_decode($this->db_set_db_settings ());
+        $this->db_settings = strlen($this->settings->powerDNS)>10 ? db_json_decode($this->settings->powerDNS) : db_json_decode($this->db_set_db_settings ());
 
         // if comma delimited host
         if (strpos($this->db_settings->host, ";")!==false) {

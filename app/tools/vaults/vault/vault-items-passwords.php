@@ -46,7 +46,7 @@ if($passwords!==false) {
 			$trclass = "alert-danger";
 		}
 		else {
-			$values = pf_json_decode($values, true);
+			$values = db_json_decode($values, true);
 			$trclass = "";
 		}
 

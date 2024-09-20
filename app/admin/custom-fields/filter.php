@@ -27,7 +27,7 @@ $User->check_user_session();
 $_POST = $User->strip_input_tags ($_POST);
 
 # get hidden custom fields from settings
-$filters = pf_json_decode($User->settings->hiddenCustomFields, true);
+$filters = db_json_decode($User->settings->hiddenCustomFields, true);
 isset($filters[$_POST['table']]) ? : $filters[$_POST['table']] = array();
 
 # fetch custom fields

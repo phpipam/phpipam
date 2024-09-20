@@ -272,7 +272,7 @@ if(sizeof($address)>1) {
     	# check for temporary shares!
     	if($User->settings->tempShare==1) {
     		if (!is_blank($User->settings->tempAccess)) {
-    			foreach(pf_json_decode($User->settings->tempAccess) as $s) {
+    			foreach(db_json_decode($User->settings->tempAccess) as $s) {
     				if($s->type=="ipaddresses" && $s->id==$address['id']) {
     					if(time()<$s->validity) {
     						$active_shares[] = $s;

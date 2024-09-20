@@ -32,7 +32,7 @@ $cmd = $Scan->php_exec." ".dirname(__FILE__) . "/../../../functions/scan/subnet-
 exec($cmd, $output, $retval);
 
 # format result back to object
-$script_result = pf_json_decode($output[0]);
+$script_result = db_json_decode($output[0]);
 
 # json error
 if(json_last_error() !== JSON_ERROR_NONE)

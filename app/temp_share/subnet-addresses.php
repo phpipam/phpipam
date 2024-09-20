@@ -14,7 +14,7 @@ $DNS = new DNS ($Database, $User->settings);
 # reset custom fields to ip addresses
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
-$hidden_cfields = pf_json_decode($settings->hiddenCustomFields, true);
+$hidden_cfields = db_json_decode($settings->hiddenCustomFields, true);
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array

@@ -923,6 +923,22 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 *  Fetch sanitised HTML instructions
+	 *  @param int $name
+	 *  @return string
+	 */
+	public function fetch_instructions($id) {
+		$instructions = $this->fetch_object("instructions", "id", $id);
+		$html = is_object($instructions) && is_string($instructions->instructions) ? html_entity_decode($instructions->instructions, ENT_QUOTES) : '';
+
+		/* format line breaks */
+		$html = stripslashes($html);
+
+		/* prevent <script> */ #
+		return $this->noxss_html($html);
+	}
+
+	/**
 	 * Fetches all subnets that are set to allow requests
 	 *
 	 * @access public
@@ -1628,7 +1644,7 @@ class Tools extends Common_functions {
 		// if ok
 		if ($xml!==false) {
 			// encode to json
-			$json = pf_json_decode(json_encode($xml));
+			$json = db_json_decode(json_encode($xml));
 			// save all releases
 			$this->phpipam_releases = $json->entry;
 			// check for latest release
@@ -1941,7 +1957,7 @@ class Tools extends Common_functions {
      */
     public function translate_nat_objects_for_display ($json_objects, $nat_id = false, $admin = false, $object_type = false, $object_id=false) {
         // to array "subnets"=>array(1,2,3)
-        $objects = pf_json_decode($json_objects, true);
+        $objects = db_json_decode($json_objects, true);
         // init out array
         $out = array();
         // set ping statuses for warning and offline
@@ -2027,8 +2043,8 @@ class Tools extends Common_functions {
         if(is_array($all_nats)) {
             if (sizeof($all_nats)>0) {
                 foreach ($all_nats as $n) {
-                    $src = pf_json_decode($n->src, true);
-                    $dst = pf_json_decode($n->dst, true);
+                    $src = db_json_decode($n->src, true);
+                    $dst = db_json_decode($n->dst, true);
 
                     // src
                     if(is_array($src)) {
@@ -2352,7 +2368,7 @@ class Tools extends Common_functions {
 
 		# set hidden fields
 		$this->get_settings ();
-		$hidden_fields = pf_json_decode($this->settings->hiddenCustomFields, true);
+		$hidden_fields = db_json_decode($this->settings->hiddenCustomFields, true);
 		$hidden_fields = is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 
 		# set html array

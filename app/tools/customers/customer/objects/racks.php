@@ -20,7 +20,7 @@ if (isset($objects["racks"])) {
 	$custom = $Tools->fetch_custom_fields('racks');
 
 	# get hidden fields
-	$hidden_custom_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+	$hidden_custom_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 	$hidden_custom_fields = is_array(@$hidden_custom_fields['racks']) ? $hidden_custom_fields['racks'] : array();
 
     // table

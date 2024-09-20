@@ -39,7 +39,7 @@ $values->port 		= $_POST['port'];
 $values->autoserial = isset($_POST['autoserial']) ? "Yes" : "No";
 
 // get old settings for defaults
-$old_values = pf_json_decode($User->settings->powerDNS);
+$old_values = db_json_decode($User->settings->powerDNS);
 
 $values->ns			= $old_values->ns;
 $values->hostmaster	= $old_values->hostmaster;

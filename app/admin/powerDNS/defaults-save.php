@@ -30,7 +30,7 @@ if(is_blank($_POST['ttl']))	{ $_POST['ttl'] = $PowerDNS->defaults->ttl; }
 $values = new StdClass ();
 
 // get old settings for defaults
-$old_values = pf_json_decode($User->settings->powerDNS);
+$old_values = db_json_decode($User->settings->powerDNS);
 
 $values->host 		= $old_values->host;
 $values->name 		= $old_values->name;

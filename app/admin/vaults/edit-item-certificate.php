@@ -36,7 +36,7 @@ if($_POST['action']!="add") {
 	# null ?
 	$item===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 	# to json and decode
-	$item_objects = pf_json_decode($User->Crypto->decrypt($item->values, $_SESSION['vault'.$item->vaultId]));
+	$item_objects = db_json_decode($User->Crypto->decrypt($item->values, $_SESSION['vault'.$item->vaultId]));
 	# title
 	$title = $User->get_post_action().' '._('certificate');
 } else {

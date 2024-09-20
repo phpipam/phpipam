@@ -24,7 +24,7 @@ $server = $Admin->fetch_object("usersAuthMethod", "id", $_POST['server']);
 $server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
 
 //parse parameters
-$params = pf_json_decode($server->params);
+$params = db_json_decode($server->params);
 
 //no login parameters
 if(is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword))	{ $Result->show("danger", _("Missing credentials"), true); }

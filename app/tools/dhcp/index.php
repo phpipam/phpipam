@@ -21,7 +21,7 @@ $tabs = array("subnets", "leases", "reservations");
     }
     else {
         # parse and verify settings
-        $dhcp_db = pf_json_decode($User->settings->DHCP, true);
+        $dhcp_db = db_json_decode($User->settings->DHCP, true);
 
         # DHCP wrapper class
         $DHCP	= new DHCP ($dhcp_db['type'], $dhcp_db['settings']);

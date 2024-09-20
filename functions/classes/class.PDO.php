@@ -369,7 +369,7 @@ abstract class DB {
 			$result = $statement->execute((array)$values); //this array cast allows single values to be used as the parameter
 			$rowCount = $statement->rowCount();
 		}
-		return $result;
+		return $this->html_escape_strings($result);
 	}
 
 	/**
@@ -663,6 +663,38 @@ abstract class DB {
 		return is_object($this->getObject($tableName, $id));
 	}
 
+
+	/**
+	 * Anti stored-XSS: Safe by default strategy
+	 *
+	 * Call htmlentities() on all string data returned from the database to ensure it is safe to pass to print().
+	 * Areas of code that require unsafe HTML symbols will be updated to explicitly call html_entity_decode().
+	 *
+	 * @param mixed $data
+	 * @return mixed
+	 */
+	private function html_escape_strings(&$data) {
+		if (is_array($data)) {
+			foreach ($data as $i => $v) {
+				if (is_array($v) || is_object($v)) {
+					$data[$i] = $this->html_escape_strings($v);
+				}
+			}
+			return $data;
+		}
+
+		if (is_object($data)) {
+			foreach ($data as $k => $v) {
+				if (is_string($v)) {
+					$data->{$k} = htmlentities($v, ENT_QUOTES);
+				}
+			}
+			return $data;
+		}
+
+		return $data;
+	}
+
 	/**
 	 * Get a filtered list of objects from the database.
 	 *
@@ -705,7 +737,7 @@ abstract class DB {
 			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
 		}
 
-		return $results;
+		return $this->html_escape_strings($results);
 	}
 
 
@@ -730,7 +762,7 @@ abstract class DB {
 		if (is_object($statement)) {
 			if ($callback) {
 				while ($newObj = $statement->fetchObject('stdClass')) {
-					if ($callback($newObj)===false) {
+					if ($callback($this->html_escape_strings($newObj))===false) {
 						return false;
 					}
 				}
@@ -765,7 +797,7 @@ abstract class DB {
 			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
 		}
 
-		return $results;
+		return $this->html_escape_strings($results);
 	}
 
 	/**
@@ -790,7 +822,7 @@ abstract class DB {
 			$results = $statement->fetchAll(PDO::FETCH_KEY_PAIR);
 		}
 
-		return $results;
+		return $this->html_escape_strings($results);
 	}
 
 	/**
@@ -827,7 +859,7 @@ abstract class DB {
 		if ($resultObj === false) {
 			return null;
 		} else {
-			return $resultObj;
+			return $this->html_escape_strings($resultObj);
 		}
 	}
 
@@ -853,7 +885,7 @@ abstract class DB {
 		if ($resultObj === false) {
 			return null;
 		} else {
-			return $resultObj;
+			return $this->html_escape_strings($resultObj);
 		}
 	}
 
@@ -871,7 +903,7 @@ abstract class DB {
 
 		if (is_object($obj)) {
 			$obj = (array)$obj;
-			return reset($obj);
+			return $this->html_escape_strings(reset($obj));
 		} else {
 			return null;
 		}
@@ -891,7 +923,7 @@ abstract class DB {
 			foreach ($result_fields as $i => $f) $result_fields[$i] = "`$f`";
 			$result_fields = implode(',', $result_fields);
 		}
-		return $result_fields;
+		return $this->html_escape_strings($result_fields);
 	}
 
 	/**

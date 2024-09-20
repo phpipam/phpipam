@@ -1406,8 +1406,8 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_permission_diff ($k, $v) {
 		// get old and compare
-		$this->object_new['permissions'] = pf_json_decode(str_replace("\\", "", $this->object_new['permissions']), true);		//Remove /
-		$this->object_old['permissions'] = pf_json_decode(str_replace("\\", "", $this->object_old['permissions']), true);		//Remove /
+		$this->object_new['permissions'] = db_json_decode(str_replace("\\", "", $this->object_new['permissions']), true);		//Remove /
+		$this->object_old['permissions'] = db_json_decode(str_replace("\\", "", $this->object_old['permissions']), true);		//Remove /
 
 		# Get all groups:
 		$groups = (array) $this->Tools->fetch_all_objects("userGroups", "g_id");
@@ -1470,7 +1470,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_permission_change () {
 		# get old and compare
-		$this->object_new['permissions_change'] = pf_json_decode(str_replace("\\", "", $this->object_new['permissions_change']), true);		//Remove /
+		$this->object_new['permissions_change'] = db_json_decode(str_replace("\\", "", $this->object_new['permissions_change']), true);		//Remove /
 
 		# Get all groups:
 		$groups = (array) $this->Tools->fetch_all_objects("userGroups", "g_id");
@@ -1486,7 +1486,7 @@ class Logging extends Common_functions {
 
 		# reformat
 		if($this->object_new['permissions_change']!="null") {
-			$new_permissions = pf_json_decode($this->object_new['permissions_change']);
+			$new_permissions = db_json_decode($this->object_new['permissions_change']);
 			foreach($new_permissions as $group_id=>$p) {
 				$log['Permissions'] .= "<br>". $groups[$group_id]['g_name'] ." : ".$this->Subnets->parse_permissions($p);
 			}

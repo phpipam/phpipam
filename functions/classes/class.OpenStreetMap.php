@@ -361,7 +361,7 @@ class OpenStreetMap extends Common_functions
             // Check cached results from the last 24h
             $cached_result = $this->search_geo_cache($address, true);
             if ($cached_result) {
-                $json = pf_json_decode($cached_result->lat_lng, true);
+                $json = db_json_decode($cached_result->lat_lng, true);
                 if (is_array($json)) {
                     return $json;
                 }
@@ -381,7 +381,7 @@ class OpenStreetMap extends Common_functions
                 // Lookup failed - Check cache again with no time limit.
                 $cached_result = $this->search_geo_cache($address, false);
                 if ($cached_result) {
-                    $json = pf_json_decode($cached_result->lat_lng, true);
+                    $json = db_json_decode($cached_result->lat_lng, true);
                     if (is_array($json)) {
                         return $json;
                     }
@@ -390,7 +390,7 @@ class OpenStreetMap extends Common_functions
                 throw new \Exception($lookup['error_msg']);
             }
 
-            $geo = pf_json_decode($lookup['result'], true);
+            $geo = db_json_decode($lookup['result'], true);
 
             if (!is_array($geo)) {
                 throw new \Exception(_('Invalid json response from nominatim'));

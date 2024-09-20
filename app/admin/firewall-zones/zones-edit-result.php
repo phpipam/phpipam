@@ -18,7 +18,7 @@ $Zones 	  = new FirewallZones($Database);
 $User->check_user_session();
 
 # fetch module settings
-$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings,true);
+$firewallZoneSettings = db_json_decode($User->settings->firewallZoneSettings,true);
 
 # validations
 # validate the action type

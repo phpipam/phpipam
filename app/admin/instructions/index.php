@@ -20,7 +20,7 @@ if(!isset($Params1->subnetId)) { $Params1->subnetId = 1; }
 // validate
 if($Params1->subnetId==1 || $Params1->subnetId==2)  {
     # fetch instructions
-    $instructions = new Params($Admin->fetch_object("instructions", "id", $Params1->subnetId));
+    $instructions = $Tools->fetch_instructions($Params1->subnetId);
 
     # set params
     if($Params1->subnetId==1)  {
@@ -30,7 +30,7 @@ if($Params1->subnetId==1 || $Params1->subnetId==2)  {
     }
 
     //count rows
-    $rowcount = substr_count($instructions->instructions, "\n");
+    $rowcount = substr_count($instructions, "\n");
     $rowcount++;
 
     // max rowcount
@@ -50,7 +50,7 @@ if($Params1->subnetId==1 || $Params1->subnetId==2)  {
     <!-- form -->
     <form name="instructions" id="instructionsForm">
 
-    	<textarea style="width:100%;" name="instructions" id="instructions" rows="<?php print $rowcount; ?>"><?php print stripslashes($instructions->instructions); ?></textarea>
+    	<textarea style="width:100%;" name="instructions" id="instructions" rows="<?php print $rowcount; ?>"><?php print $instructions; ?></textarea>
     	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	<input type="hidden" name="id" value="<?php print escape_input($Params1->subnetId); ?>">
 

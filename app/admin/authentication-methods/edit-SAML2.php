@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 
-$version = pf_json_decode(@file_get_contents(dirname(__FILE__).'/../../../functions/php-saml/src/Saml2/version.json'), true);
+$version = db_json_decode(@file_get_contents(dirname(__FILE__).'/../../../functions/php-saml/src/Saml2/version.json'), true);
 $version = @$version['php-saml']['version'];
 
 if ($version < 3.4) {
@@ -23,7 +23,7 @@ if($_POST['action']!="add") {
 
 	# fetch method settings
 	$method_settings = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['id']);
-	$method_settings->params = pf_json_decode($method_settings->params);
+	$method_settings->params = db_json_decode($method_settings->params);
 }
 else {
 	$method_settings = new StdClass ();

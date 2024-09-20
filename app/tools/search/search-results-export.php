@@ -39,7 +39,7 @@ $search_term = str_replace("*", "%", $search_term);
 
 # parse parameters from cookie
 if (isset($_COOKIE['search_parameters'])) {
-    $params = pf_json_decode($_COOKIE['search_parameters'], true);
+    $params = db_json_decode($_COOKIE['search_parameters'], true);
     if($params) {
         foreach ($params as $k=>$p) {
             if ($p=="on") {

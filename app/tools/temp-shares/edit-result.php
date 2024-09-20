@@ -54,7 +54,7 @@ $new_access[$_POST['code']] = array("id"=>$_POST['id'],
 									);
 
 # create array of values for modification
-$old_access = pf_json_decode($User->settings->tempAccess, true);
+$old_access = db_json_decode($User->settings->tempAccess, true);
 if(!is_array($old_access)) {
 	$old_access = array();
 } else {
@@ -123,4 +123,3 @@ if(!is_blank($_POST['email'])) {
 	# all good
 	$Result->show("success", _('Sending mail succeeded')."!" , true);
 }
-?>
