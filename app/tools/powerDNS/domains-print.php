@@ -10,7 +10,7 @@ $User->check_user_session();
 $admin = $User->is_admin(false);
 
 // fetch domains
-$type = $_GET['subnetId'];
+$type = $GET->subnetId;
 
 // fetch required domains
 switch ($type) {
@@ -36,16 +36,16 @@ switch ($type) {
 }
 
 // if serach blank unset
-if (is_blank(@$_POST['domain-filter'])) {unset($_POST['domain-filter']);}
+if (is_blank($POST->{'domain-filter'})) {unset($POST->{'domain-filter'});}
 
 // if search filter out hits
-if (@$_GET['sPage'] == "search" && !is_blank(@$_POST['domain-filter'])) {
+if ($GET->sPage == "search" && !is_blank($POST->{'domain-filter'})) {
     // loop domains
     foreach ($domains as $k => $d) {
         // search through records, if no hits unset
         $hit = false;
         foreach ($d as $dd) {
-            if (preg_match("/" . $_POST['domain-filter'] . "/", $dd)) {
+            if (preg_match("/" . $POST->{'domain-filter'} . "/", $dd)) {
                 $hit = true;
                 break;
             }
@@ -68,8 +68,8 @@ if (@$_GET['sPage'] == "search" && !is_blank(@$_POST['domain-filter'])) {
 
 <!-- Back -->
 <div class="btn-group">
-    <?php if ($domains === false && isset($_POST['domain-filter'])) {?>
-    <a class='btn btn-sm btn-default btn-default'  href="<?php print create_link("tools", "powerDNS", $_GET['subnetId']);?>"><i class='fa fa-angle-left'></i> <?php print _('Back');?></a>
+    <?php if ($domains === false && isset($POST->{'domain-filter'})) {?>
+    <a class='btn btn-sm btn-default btn-default'  href="<?php print create_link("tools", "powerDNS", $GET->subnetId);?>"><i class='fa fa-angle-left'></i> <?php print _('Back');?></a>
     <?php }?>
     <?php if ($User->get_module_permissions ("pdns")>=User::ACCESS_RWA) {?>
     <!-- Create -->
@@ -84,7 +84,7 @@ if (@$_GET['sPage'] == "search" && !is_blank(@$_POST['domain-filter'])) {
 
 <?php
 // none - filtered
-if ($domains === false && isset($_POST['domain-filter'])) {$Result->show("info alert-absolute", _("No records found for filter ") . "'" . $_POST['domain-filter'] . "'", false);}
+if ($domains === false && isset($POST->{'domain-filter'})) {$Result->show("info alert-absolute", _("No records found for filter ") . "'" . $POST->{'domain-filter'} . "'", false);}
 // none
 elseif ($domains === false) {$Result->show("info alert-absolute", _("No domains configured"), false);} else {
 
@@ -139,7 +139,7 @@ foreach ($domains as $d) {
     }
 
     // content
-    print "	<td><a href='" . create_link("tools", "powerDNS", $_GET['subnetId'], "records", $d->name) . "'>$d->name</a></td>";
+    print "	<td><a href='" . create_link("tools", "powerDNS", $GET->subnetId, "records", $d->name) . "'>$d->name</a></td>";
     print "	<td><span class='badge badge1'>$d->type</span></td>";
     print "	<td>$d->master</td>";
     print "	<td><span class='badge'>$cnt</span></td>";

@@ -4,7 +4,7 @@
 $User->check_user_session();
 
 # fetch items
-$passwords = $Tools->fetch_multiple_objects ("vaultItems", "vaultId", $_GET['subnetId']);
+$passwords = $Tools->fetch_multiple_objects ("vaultItems", "vaultId", $GET->subnetId);
 
 // create new item
 if ($User->get_module_permissions ("vaults")>=User::ACCESS_RW) {

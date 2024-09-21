@@ -1465,7 +1465,7 @@ class User extends Common_functions {
      * Get passkey for user based on key_id
      * @method get_user_passkeys
      * @param  bool $user_id
-     * @return array
+     * @return object|null
      */
     public function get_user_passkey_by_keyId ($keyId = false) {
         try {

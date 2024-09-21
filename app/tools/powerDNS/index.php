@@ -52,17 +52,17 @@ if ($User->get_module_permissions ("pdns")>=User::ACCESS_R) {
         	$tabs = array("domains", "host_records", "reverse_v4", "reverse_v6");
 
         	// default tab
-        	if(!isset($_GET['subnetId'])) {
-        		$_GET['subnetId'] = "domains";
+        	if(!isset($GET->subnetId)) {
+        		$GET->subnetId = "domains";
         	}
 
         	// check
-        	if(!in_array($_GET['subnetId'], $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
+        	if(!in_array($GET->subnetId, $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
 
         	// print
         	foreach($tabs as $t) {
         		$title = str_replace('_', ' ', $t);
-        		$class = $_GET['subnetId']==$t ? "class='active'" : "";
+        		$class = $GET->subnetId==$t ? "class='active'" : "";
         		print "<li role='presentation' $class><a href=".create_link("tools", "powerDNS", "$t").">". _(ucwords($title))."</a></li>";
         	}
         	?>
@@ -71,11 +71,11 @@ if ($User->get_module_permissions ("pdns")>=User::ACCESS_R) {
         <div>
         <?php
         // include content
-        $pdns_section = $_GET['subnetId'];
+        $pdns_section = $GET->subnetId;
         if (preg_match("/reverse_/", $pdns_section)) {
         	$filename = 'domains.php';
         } else {
-        	$filename = "$_GET[subnetId].php";
+        	$filename = $GET->subnetId.".php";
         }
 
         // include file

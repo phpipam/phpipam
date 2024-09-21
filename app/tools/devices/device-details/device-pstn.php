@@ -14,7 +14,7 @@ $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['pstnPrefixes']) ? $hidden_fields['pstnPrefixes'] : array();
 
 # check
-is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true);
+is_numeric($GET->subnetId) ? : $Result->show("danger", _("Invalid ID"), true);
 
 # title - subnets
 print "<h4>"._("Belonging PSTN prefixes")."</h4><hr>";
@@ -57,7 +57,7 @@ else {
 			}
 		}
 	}
-    if($admin)
+    if($User->is_admin(false))
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -77,7 +77,7 @@ else {
 
     		print "<tr>";
     		//prefix, name
-    		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"pstn-prefixes",$sp->id)."'>  ".$sp->prefix."</a></td>";
+    		print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page,"pstn-prefixes",$sp->id)."'>  ".$sp->prefix."</a></td>";
     		print "	<td><strong>$sp->name</strong></td>";
     		// range
     		print " <td>".$sp->prefix.$sp->start."<br>".$sp->prefix.$sp->stop."</td>";

@@ -17,14 +17,11 @@ $User           = new User ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
-# strip input tags
-$_POST = $User->strip_input_tags($_POST);
-
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "passkeyedit", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "passkeyedit", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fetch passkey
-$passkey = $User->get_user_passkey_by_keyId ($_POST['keyid']);
+$passkey = $User->get_user_passkey_by_keyId ($POST->keyid);
 
 # validate
 if(is_null($passkey)) {
@@ -34,8 +31,8 @@ elseif ($passkey->user_id!=$User->user->id) {
 	$Result->show("danger", _("Passkey not found"), true);
 }
 else {
-	if($_POST['action']=="edit" || $_POST['action']=="add") {
-		if($User->rename_passkey ($passkey->id, $_POST['comment'])) { $Result->show("success", _("Passkey renamed"), false); }
+	if($POST->action=="edit" || $POST->action=="add") {
+		if($User->rename_passkey ($passkey->id, $POST->comment)) { $Result->show("success", _("Passkey renamed"), false); }
 		else 														{ $Result->show("success", _("Failed to rename passkey"), false); }
 	}
 	else {

@@ -135,7 +135,7 @@ else {
 
                 // print
                 print "<tr>";
-                print " <td><strong><a href='".create_link($_GET['page'], "nat", $n->id)."'>$n->name</a></strong></td>";
+                print " <td><strong><a href='".create_link($GET->page, "nat", $n->id)."'>$n->name</a></strong></td>";
                 print " <td><span class='badge badge1 badge5'>".ucwords($n->type)."</span></td>";
                 print " <td>".implode("<br>", $sources)."</td>";
                 print " <td style='width:10px;'><i class='fa $icon'></i></td>";

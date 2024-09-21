@@ -56,7 +56,7 @@ if (isset($objects["vrf"])) {
 
 		// start - VLAN details
 		print "<tr class='$class change'>";
-		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], "vrf", $vrf->vrfId)."'><i class='fa fa-cloud prefix'></i> ".$vrf->name."</a></td>";
+		print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, "vrf", $vrf->vrfId)."'><i class='fa fa-cloud prefix'></i> ".$vrf->name."</a></td>";
 		print "	<td>".$vrf->description."</td>";
         // custom fields - no subnets
         if(sizeof(@$custom_fields) > 0) {
@@ -74,7 +74,7 @@ if (isset($objects["vrf"])) {
         print "<td class='actions'>";
         $links = [];
         $links[] = ["type"=>"header", "text"=>_("Show")];
-        $links[] = ["type"=>"link", "text"=>_("Show VRF"), "href"=>create_link($_GET['page'], "vrf", $vrf->vrfId), "icon"=>"eye", "visible"=>"dropdown"];
+        $links[] = ["type"=>"link", "text"=>_("Show VRF"), "href"=>create_link($GET->page, "vrf", $vrf->vrfId), "icon"=>"eye", "visible"=>"dropdown"];
         $links[] = ["type"=>"divider"];
         if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>_("Manage")];

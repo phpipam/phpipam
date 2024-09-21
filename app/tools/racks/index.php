@@ -22,9 +22,9 @@ if($User->check_module_permissions ("racks", User::ACCESS_R, false)===false) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 # all racks or one ?
-elseif (isset($_GET['subnetId'])) {
+elseif (isset($GET->subnetId)) {
 	# map
-	if($_GET['subnetId']=="map") { include("print-racks.php"); }
+	if($GET->subnetId=="map") { include("print-racks.php"); }
 	else 						 { include("print-single-rack.php"); }
 }
 else                             { include("print-racks.php"); }

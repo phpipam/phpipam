@@ -2075,28 +2075,27 @@ class Common_functions  {
 	 * @param mixed $req
 	 * @return void
 	 */
-	private function print_tools_breadcrumbs ($req) {
+	private function print_tools_breadcrumbs($req) {
 		print "<ul class='breadcrumb'>";
-		print "	<li><a href='".create_link("tools")."'>"._('Tools')."</a> <span class='divider'></span></li>";
-		if(!isset($req['subnetId'])) {
-		    print "	<li class='active'>$req[section]</li>";
-		}
-		else {
-		    print "	<li class='active'><a href='".create_link("tools", $req['section'])."'>$req[section]</a> <span class='divider'></span></li>";
+		print "	<li><a href='" . create_link("tools") . "'>" . _('Tools') . "</a> <span class='divider'></span></li>";
+		if (!isset($req['subnetId'])) {
+			print "	<li class='active'>$req[section]</li>";
+		} else {
+			print "	<li class='active'><a href='" . create_link("tools", $req['section']) . "'>$req[section]</a> <span class='divider'></span></li>";
 
-		    # pstn
-		    if ($_GET['section']=="pstn-prefixes") {
-    			# get all parents
-    			$Tools = new Tools ($this->Database);
-    			$parents = $Tools->fetch_prefix_parents_recursive ($req['subnetId']);
-    			# all parents
-    			foreach($parents as $parent) {
-    				$prefix = $this->fetch_object("pstnPrefixes", "id", $parent[0]);
-    				print "	<li><a href='".create_link("tools",$req['section'],$parent[0])."'><i class='icon-folder-open icon-gray'></i> $prefix->name</a> <span class='divider'></span></li>";
-    			}
+			# pstn
+			if ($_GET['section'] == "pstn-prefixes") {
+				# get all parents
+				$Tools = new Tools($this->Database);
+				$parents = $Tools->fetch_prefix_parents_recursive($req['subnetId']);
+				# all parents
+				foreach ($parents as $parent) {
+					$prefix = $this->fetch_object("pstnPrefixes", "id", $parent);
+					print "	<li><a href='" . create_link("tools", $req['section'], $parent) . "'><i class='icon-folder-open icon-gray'></i> $prefix->name</a> <span class='divider'></span></li>";
+				}
 
-		    	$prefix = $this->fetch_object("pstnPrefixes", "id", $req['subnetId']);
-		    	print "	<li class='active'>$prefix->name</li>";
+				$prefix = $this->fetch_object("pstnPrefixes", "id", $req['subnetId']);
+				print "	<li class='active'>$prefix->name</li>";
 			}
 		}
 		print "</ul>";
@@ -2186,9 +2185,11 @@ class Common_functions  {
 						if (is_object($vd)) {
 							$title[] = $vd->name . _(" domain");
 						}
-						$vlan = $this->fetch_object("vlans", "vlanId", $get['sPage']);
-						if (is_object($vlan)) {
-							$title[] = $vlan->name;
+						if (isset($get['sPage'])) {
+							$vlan = $this->fetch_object("vlans", "vlanId", $get['sPage']);
+							if (is_object($vlan)) {
+								$title[] = $vlan->name;
+							}
 						}
 					} elseif ($get['section'] == "vrf") {
 						$vrf = $this->fetch_object("vrf", "vrfId", $get['subnetId']);

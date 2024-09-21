@@ -29,9 +29,6 @@ if (isset($objects["circuits"])) {
 	$type_hash = [];
 	foreach($circuit_types as $t){  $type_hash[$t->id] = $t->ctname; }
 
-	# strip tags - XSS
-	$_GET = $User->strip_input_tags ($_GET);
-
 	# table
 	print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="all_circuits">';
 
@@ -71,13 +68,13 @@ if (isset($objects["circuits"])) {
 			$locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
 			$locationA_html = "<span class='text-muted'>Not set</span>";
 			if($locationA!==false) {
-				$locationA_html = "<a href='".create_link($_GET['page'],$locationA['type'],$locationA['id'])."'>$locationA[name]</a> <i class='fa fa-gray $locationA[icon]'></i>";
+				$locationA_html = "<a href='".create_link($GET->page,$locationA['type'],$locationA['id'])."'>$locationA[name]</a> <i class='fa fa-gray $locationA[icon]'></i>";
 			}
 
 			$locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
 			$locationB_html = "<span class='text-muted'>Not set</span>";
 			if($locationB!==false) {
-				$locationB_html = "<a href='".create_link($_GET['page'],$locationB['type'],$locationB['id'])."'>$locationB[name]</a> <i class='fa fa-gray $locationB[icon]'></i>";
+				$locationB_html = "<a href='".create_link($GET->page,$locationB['type'],$locationB['id'])."'>$locationB[name]</a> <i class='fa fa-gray $locationB[icon]'></i>";
 			}
 
 			// provider
@@ -85,8 +82,8 @@ if (isset($objects["circuits"])) {
 
 			//print details
 			print '<tr>'. "\n";
-			print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
-			print "	<td class='description'><a href='".create_link($_GET['page'],"circuits","providers",$circuit->provider)."'>$provider->name</a></td>";
+			print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page,"circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
+			print "	<td class='description'><a href='".create_link($GET->page,"circuits","providers",$circuit->provider)."'>$provider->name</a></td>";
 			print "	<td>".$type_hash[$circuit->type]."</td>";
 			print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";
 			print " <td class='hidden-xs hidden-sm'>$circuit->status</td>";
@@ -109,7 +106,7 @@ if (isset($objects["circuits"])) {
 	        $links = [];
 	        if($User->get_module_permissions ("circuits")>=User::ACCESS_R) {
 	            $links[] = ["type"=>"header", "text"=>_("Show circuit")];
-	            $links[] = ["type"=>"link", "text"=>_("View"), "href"=>create_link($_GET['page'], "circuits", $circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
+	            $links[] = ["type"=>"link", "text"=>_("View"), "href"=>create_link($GET->page, "circuits", $circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
 	        }
 	        if($User->get_module_permissions ("circuits")>=User::ACCESS_RW) {
 	            $links[] = ["type"=>"divider"];

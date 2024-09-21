@@ -519,7 +519,6 @@ abstract class DB {
 		//we cannot update an object without an id specified so quit
 		if (!isset($obj[$primarykey])) {
 			throw new Exception('Missing primary key');
-			return false;
 		}
 
 		$tableName = $this->escape($tableName);

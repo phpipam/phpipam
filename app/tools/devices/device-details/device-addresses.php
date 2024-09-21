@@ -10,13 +10,10 @@ $User->check_user_session();
 $User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 
 # check
-is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true);
+is_numeric($GET->subnetId) ? : $Result->show("danger", _("Invalid ID"), true);
 
 # fetch device
-$device = (array) $Tools->fetch_object ("devices", "id", $_GET['subnetId']);
-
-# strip tags - XSS
-$_GET = $User->strip_input_tags ($_GET);
+$device = (array) $Tools->fetch_object ("devices", "id", $GET->subnetId);
 
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('devices');

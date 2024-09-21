@@ -12,7 +12,7 @@
 $User->check_user_session();
 
 // validate
-if(!is_numeric($_GET['subnetId'])) {
+if(!is_numeric($GET->subnetId)) {
     $Result->show("danger", _("Invalid Id"), true);
 }
 else {
@@ -26,7 +26,7 @@ else {
     }
     else {
         # fetch all locations
-        $location = $Tools->fetch_object("locations", "id", $_GET['subnetId']);
+        $location = $Tools->fetch_object("locations", "id", $GET->subnetId);
 
         // get custom fields
         $cfields = $Tools->fetch_custom_fields ('locations');

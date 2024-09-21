@@ -16,10 +16,10 @@ $Result   = new Result ();
 $User->check_user_session();
 
 # validate numeric id
-if(!is_numeric($_POST['cid']))	{ $Result->show("danger", _("Invalid ID"), true, true); }
+if(!is_numeric($POST->cid))	{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch item
-$clog = $Log->fetch_changelog ($_POST['cid']);
+$clog = $Log->fetch_changelog ($POST->cid);
 if($clog==false)				{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # validate permissions

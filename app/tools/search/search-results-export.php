@@ -25,9 +25,9 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # get requested params
-if(isset($_GET['ip'])) {
+if(isset($GET->ip)) {
     // remove chars
-    $search_term =  htmlspecialchars(trim($_GET['ip']));
+    $search_term =  htmlspecialchars(trim($GET->ip));
 }
 else {
     $search_term = "";

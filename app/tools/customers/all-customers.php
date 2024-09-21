@@ -17,9 +17,6 @@ $User->check_module_permissions ("customers", User::ACCESS_R, true);
 # filter customers or fetch print all?
 $customers = $Tools->fetch_all_objects("customers", "title");
 
-# strip tags - XSS
-$_GET = $User->strip_input_tags ($_GET);
-
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('customers');
 # get hidden fields */
@@ -73,7 +70,7 @@ else {
 	foreach ($customers as $customer) {
 		// print details
 		print '<tr>'. "\n";
-		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link($_GET['page'],"customers",$customer->title)."'>$customer->title</a></strong></td>";
+		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link($GET->page,"customers",$customer->title)."'>$customer->title</a></strong></td>";
 		print "	<td>$customer->address, $customer->postcode $customer->city, $customer->state</td>";
 		// contact
 		if(!is_blank($customer->contact_person))
@@ -97,7 +94,7 @@ else {
         $links = [];
         if($User->get_module_permissions ("customers")>=User::ACCESS_R) {
             $links[] = ["type"=>"header", "text"=>_("Show")];
-            $links[] = ["type"=>"link", "text"=>_("Show customer"), "href"=>create_link($_GET['page'], "customers", $customer->title), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"link", "text"=>_("Show customer"), "href"=>create_link($GET->page, "customers", $customer->title), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];
         }
         if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {

@@ -17,7 +17,7 @@ else {
 	print "<br>";
 
 	// back
-	print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], "vaults")."'><i class='fa fa-angle-left'></i> "._("All vaults")."</a><br><br>";
+	print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, "vaults")."'><i class='fa fa-angle-left'></i> "._("All vaults")."</a><br><br>";
 
 	print "<table class='ipaddress_subnet table-condensed table-auto'>";
 

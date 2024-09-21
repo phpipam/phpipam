@@ -43,9 +43,6 @@ if (isset($device_types)) {
 	}
 }
 
-# strip tags - XSS
-$_GET = $User->strip_input_tags ($_GET);
-
 # title
 print "<h4>"._('List of devices')."</h4>";
 print "<hr>";

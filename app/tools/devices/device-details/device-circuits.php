@@ -22,7 +22,7 @@ $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['circuits']) ? $hidden_fields['circuits'] : array();
 
 # check
-is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true);
+is_numeric($GET->subnetId) ? : $Result->show("danger", _("Invalid ID"), true);
 
 # title - subnets
 print "<h4>"._("Belonging Circuits")."</h4><hr>";
@@ -66,13 +66,13 @@ else {
             $locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
             $locationA_html = "<span class='text-muted'>Not set";
             if($locationA!==false) {
-                $locationA_html = "<a href='".create_link($_GET['page'],$locationA['type'],$locationA['id'])."'>$locationA[name]</a> <i class='fa fa-gray $locationA[icon]'></i>";
+                $locationA_html = "<a href='".create_link($GET->page,$locationA['type'],$locationA['id'])."'>$locationA[name]</a> <i class='fa fa-gray $locationA[icon]'></i>";
             }
 
             $locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
             $locationB_html = "<span class='text-muted'>Not set";
             if($locationB!==false) {
-                $locationB_html = "<a href='".create_link($_GET['page'],$locationB['type'],$locationB['id'])."'>$locationB[name]</a> <i class='fa fa-gray $locationB[icon]'></i>";
+                $locationB_html = "<a href='".create_link($GET->page,$locationB['type'],$locationB['id'])."'>$locationB[name]</a> <i class='fa fa-gray $locationB[icon]'></i>";
             }
 
             //print details

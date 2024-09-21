@@ -10,10 +10,10 @@ $User->check_user_session();
 $User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 
 # check
-is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true);
+is_numeric($GET->subnetId) ? : $Result->show("danger", _("Invalid ID"), true);
 
 # fetch device
-$device = (array) $Tools->fetch_object ("devices", "id", $_GET['subnetId']);
+$device = (array) $Tools->fetch_object ("devices", "id", $GET->subnetId);
 
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('devices');
@@ -23,7 +23,7 @@ print "<h4>"._('Device details')."</h4>";
 print "<hr>";
 
 # print
-if($_GET['subnetId']!=0 && sizeof($device)>0) {
+if($GET->subnetId!=0 && sizeof($device)>0) {
 
     print "<table class='table table-noborder'>";
     print "<tr>";

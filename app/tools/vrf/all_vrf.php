@@ -100,7 +100,7 @@ else {
     	}
 		//print details
 		print '<tr class="text-top">'. "\n";
-		print '	<td class="name"><a class="btn btn-xs btn-default" href="'.create_link($_GET['page'],"vrf",$vrf['vrfId']).'"><i class="fa fa-cloud prefix"></i>'. $vrf['name'] .'</a></td>'. "\n";
+		print '	<td class="name"><a class="btn btn-xs btn-default" href="'.create_link($GET->page,"vrf",$vrf['vrfId']).'"><i class="fa fa-cloud prefix"></i>'. $vrf['name'] .'</a></td>'. "\n";
 		print '	<td class="rd">'. $vrf['rd'] .'</td>'. "\n";
 		print "	<td><span class='text-muted'>$sections</span></td>";
 		print '	<td class="description">'. $vrf['description'] .'</td>'. "\n";
@@ -126,7 +126,7 @@ else {
         print "<td class='actions'>";
         $links = [];
         $links[] = ["type"=>"header", "text"=>_("Show")];
-        $links[] = ["type"=>"link", "text"=>_("Show VRF"), "href"=>create_link($_GET['page'], "vrf", $vrf['vrfId']), "icon"=>"eye", "visible"=>"dropdown"];
+        $links[] = ["type"=>"link", "text"=>_("Show VRF"), "href"=>create_link($GET->page, "vrf", $vrf['vrfId']), "icon"=>"eye", "visible"=>"dropdown"];
         $links[] = ["type"=>"divider"];
         if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>_("Manage")];

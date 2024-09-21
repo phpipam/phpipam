@@ -31,23 +31,23 @@ elseif ($User->settings->enableRouting!="1") {
 }
 else {
     # specific entry details
-    if (isset($_GET['sPage'])) {
+    if (isset($GET->sPage)) {
         # menu
         include(dirname(__FILE__)."/menu.php");
         # include
-        if($_GET['subnetId']=="bgp")      { include(dirname(__FILE__)."/bgp/details.php"); }
-        elseif($_GET['subnetId']=="ospf") { include(dirname(__FILE__)."/ospf/details.php"); }
+        if($GET->subnetId=="bgp")      { include(dirname(__FILE__)."/bgp/details.php"); }
+        elseif($GET->subnetId=="ospf") { include(dirname(__FILE__)."/ospf/details.php"); }
         else                              { $Result->show("danger", _("Invalid routing module."), false); }
     }
     # all entries
     else {
         # default
-        if (!isset($_GET['subnetId']))    { $_GET['subnetId'] = "bgp"; }
+        if (!isset($GET->subnetId))    { $GET->subnetId = "bgp"; }
         # menu
         include(dirname(__FILE__)."/menu.php");
         # include
-        if($_GET['subnetId']=="bgp")      { include(dirname(__FILE__)."/bgp/all.php"); }
-        elseif($_GET['subnetId']=="ospf") { include(dirname(__FILE__)."/ospf/all.php"); }
+        if($GET->subnetId=="bgp")      { include(dirname(__FILE__)."/bgp/all.php"); }
+        elseif($GET->subnetId=="ospf") { include(dirname(__FILE__)."/ospf/all.php"); }
         else                              { $Result->show("danger", _("Invalid routing module."), false); }
     }
 }

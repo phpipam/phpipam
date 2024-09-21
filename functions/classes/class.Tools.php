@@ -2361,15 +2361,15 @@ class Tools extends Common_functions {
 	 * @param mixed $custom_fields
 	 * @return mixed
 	 */
-	public function print_menu_prefixes ( $user, $prefixes, $custom_fields ) {
+	public function print_menu_prefixes($user, $prefixes, $custom_fields) {
 
 		# user class for permissions
-		$User = new User ($this->Database);
+		$User = new User($this->Database);
 
 		# set hidden fields
-		$this->get_settings ();
+		$this->get_settings();
 		$hidden_fields = db_json_decode($this->settings->hiddenCustomFields, true);
-		$hidden_fields = is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
+		$hidden_fields = isset($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 
 		# set html array
 		$html = array();
@@ -2377,173 +2377,169 @@ class Tools extends Common_functions {
 		$rootId = 0;
 
 		# remove all not permitted!
-		if(sizeof($prefixes)>0) {
-		foreach($prefixes as $k=>$s) {
-			if($User->get_module_permissions ("pstn")==User::ACCESS_NONE) { unset($prefixes[$k]); }
-		}
-		}
+		if (sizeof($prefixes) > 0) {
+			foreach ($prefixes as $k => $s) {
+				if ($User->get_module_permissions("pstn") == User::ACCESS_NONE) {
+					unset($prefixes[$k]);
+				}
+			}
 
-		# create loop array
-		if(sizeof($prefixes) > 0) {
-        $children_prefixes = array();
-		foreach ( $prefixes as $item ) {
-			$item = (array) $item;
-			$children_prefixes[$item['master']][] = $item;
-		}
-		}
-		else {
+			# create loop array
+			$children_prefixes = array();
+			foreach ($prefixes as $item) {
+				$item = (array) $item;
+				$children_prefixes[(int) $item['master']][] = $item;
+			}
+		} else {
 			return false;
 		}
 
 		# loop will be false if the root has no children (i.e., an empty menu!)
-		$loop = !empty( $children_prefixes[$rootId] );
+		$loop = !empty($children_prefixes[$rootId]);
 
 		# initializing $parent as the root
 		$parent = $rootId;
 		$parent_stack = array();
 
-		# old count
-		$old_count = 0;
-
 		# return table content (tr and td's)
-		reset( $children_prefixes[$parent] );
-		while ( $loop && ( ( $option = current( $children_prefixes[$parent] ) ) || ( $parent > $rootId ) ) )
-		{
-			next( $children_prefixes[$parent] );
+		if (is_array($children_prefixes[$parent]))
+			reset($children_prefixes[$parent]);
+		while ($loop && (($option = current($children_prefixes[(int) $parent])) || ($parent > $rootId))) {
+			next($children_prefixes[$parent]);
 
-			if(count($parent_stack) == 0) {
+			if (count($parent_stack) == 0) {
 				$margin = "0px";
 				$padding = "0px";
-			}
-			else {
+			} else {
 				# padding
 				$padding = "10px";
 
 				# margin
-				$margin  = (count($parent_stack) * 10) -10;
-				$margin  = $margin *1.5;
-				$margin  = $margin."px";
+				$margin  = (count($parent_stack) * 10) - 10;
+				$margin  = $margin * 1.5;
+				$margin  = $margin . "px";
 			}
 
 			# count levels
-			$count = count( $parent_stack ) + 1;
+			$count = count($parent_stack) + 1;
 
 			# description
-			$name = is_blank($option['name']) ? "/" : $option['name'];
+			$name = !is_array($option) ? "/" : $option['name'];
 
 			# print table line
-			if(!is_blank($option['prefix'])) {
-    			# count change?
+			if (is_array($option) && !is_blank($option['prefix'])) {
+				# count change?
 				$html[] = "<tr class='level$count'>";
 
 				//which level?
-				if($count==1) {
+				if ($count == 1) {
 					# last?
-					if(!empty( $children_prefixes[$option['id']])) {
-						$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i><a href='".create_link($_GET['page'],"pstn-prefixes",$option['id'])."'>".$option['prefix']." </a></td>";
+					if (!empty($children_prefixes[$option['id']])) {
+						$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i><a href='" . create_link($_GET['page'], "pstn-prefixes", $option['id']) . "'>" . $option['prefix'] . " </a></td>";
 						$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <strong>$name</strong></td>";
 					} else {
-						$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i><a href='".create_link($_GET['page'],"pstn-prefixes",$option['id'])."'>".$option['prefix']." </a></td>";
+						$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i><a href='" . create_link($_GET['page'], "pstn-prefixes", $option['id']) . "'>" . $option['prefix'] . " </a></td>";
 						$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <strong>$name</strong></td>";
 					}
-				}
-				else {
+				} else {
 					# last?
-					if(!empty( $children_prefixes[$option['id']])) {
-						$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <a href='".create_link($_GET['page'],"pstn-prefixes",$option['id'])."'>  ".$option['prefix']."</a></td>";
+					if (!empty($children_prefixes[$option['id']])) {
+						$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <a href='" . create_link($_GET['page'], "pstn-prefixes", $option['id']) . "'>  " . $option['prefix'] . "</a></td>";
 						$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <strong>$name</strong></td>";
-					}
-					else {
-						$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <a href='".create_link($_GET['page'],"pstn-prefixes",$option['id'])."'>  ".$option['prefix']."</a></td>";
+					} else {
+						$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <a href='" . create_link($_GET['page'], "pstn-prefixes", $option['id']) . "'>  " . $option['prefix'] . "</a></td>";
 						$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <strong>$name</strong></td>";
 					}
 				}
 
 				// range
-				$html[] = " <td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> ".$option['prefix'].$option['start']." ".$option['prefix'].$option['stop']."</td>";
+				$html[] = " <td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> " . $option['prefix'] . $option['start'] . " " . $option['prefix'] . $option['stop'] . "</td>";
 
 				//start/stop
-				$html[] = "	<td>".$option['start']."</td>";
-				$html[] = "	<td>".$option['stop']."</td>";
+				$html[] = "	<td>" . $option['start'] . "</td>";
+				$html[] = "	<td>" . $option['stop'] . "</td>";
 
 				//count
-                $cnt = $this->count_database_objects("pstnNumbers", "prefix", $option['id']);
+				$cnt = $this->count_database_objects("pstnNumbers", "prefix", $option['id']);
 
-                $html[] = "	<td><span class='badge badge1 badge5'>".$cnt."</span></td>";
+				$html[] = "	<td><span class='badge badge1 badge5'>" . $cnt . "</span></td>";
 
 				//device
-				if($User->get_module_permissions ("devices")>=User::ACCESS_RW) {
-					$device = ( $option['deviceId']==0 || empty($option['deviceId']) ) ? false : true;
+				if ($User->get_module_permissions("devices") >= User::ACCESS_RW) {
+					$device = ($option['deviceId'] == 0 || empty($option['deviceId'])) ? false : true;
 
-					if($device===false) { $html[] ='	<td>/</td>' . "\n"; }
-					else {
-						$device = $this->fetch_object ("devices", "id", $option['deviceId']);
-						if ($device!==false) {
-							$html[] = "	<td><a href='".create_link("tools","devices",$device->id)."'>".$device->hostname .'</a></td>' . "\n";
-						}
-						else {
-							$html[] ='	<td>/</td>' . "\n";
+					if ($device === false) {
+						$html[] = '	<td>/</td>' . "\n";
+					} else {
+						$device = $this->fetch_object("devices", "id", $option['deviceId']);
+						if ($device !== false) {
+							$html[] = "	<td><a href='" . create_link("tools", "devices", $device->id) . "'>" . $device->hostname . '</a></td>' . "\n";
+						} else {
+							$html[] = '	<td>/</td>' . "\n";
 						}
 					}
 				}
 
 				//custom
-				if(sizeof($custom_fields) > 0) {
-			   		foreach($custom_fields as $field) {
-				   		# hidden?
-				   		if(!in_array($field['name'], $hidden_fields)) {
+				if (sizeof($custom_fields) > 0) {
+					foreach ($custom_fields as $field) {
+						# hidden?
+						if (!in_array($field['name'], $hidden_fields)) {
 
-				   			$html[] =  "<td class='hidden-xs hidden-sm hidden-md'>";
+							$html[] =  "<td class='hidden-xs hidden-sm hidden-md'>";
 
-				   			//booleans
-							if($field['type']=="tinyint(1)")	{
-								if($option[$field['name']] == "0")			{ $html[] = _("No"); }
-								elseif($option[$field['name']] == "1")		{ $html[] = _("Yes"); }
+							//booleans
+							if ($field['type'] == "tinyint(1)") {
+								if ($option[$field['name']] == "0") {
+									$html[] = _("No");
+								} elseif ($option[$field['name']] == "1") {
+									$html[] = _("Yes");
+								}
 							}
 							//text
-							elseif($field['type']=="text") {
-								if(!is_blank($option[$field['name']]))		{ $html[] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $option[$field['name']])."'>"; }
-								else												{ $html[] = ""; }
-							}
-							else {
+							elseif ($field['type'] == "text") {
+								if (!is_blank($option[$field['name']])) {
+									$html[] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='" . str_replace("\n", "<br>", $option[$field['name']]) . "'>";
+								} else {
+									$html[] = "";
+								}
+							} else {
 								$html[] = $option[$field['name']];
-
 							}
 
-				   			$html[] =  "</td>";
-			   			}
-			    	}
-			    }
+							$html[] =  "</td>";
+						}
+					}
+				}
 
-			    // actions
-				if($User->get_module_permissions ("pstn")>=User::ACCESS_R) {
+				// actions
+				if ($User->get_module_permissions("pstn") >= User::ACCESS_R) {
 					$html[] = "	<td class='actions' style='padding:0px;'>";
 					$links = [];
-			        $links[] = ["type"=>"header", "text"=>_("Show")];
-			        $links[] = ["type"=>"link", "text"=>_("View prefix"), "href"=>create_link($_GET['page'], "pstn-prefixes", $option['id']), "icon"=>"eye", "visible"=>"dropdown"];
+					$links[] = ["type" => "header", "text" => _("Show")];
+					$links[] = ["type" => "link", "text" => _("View prefix"), "href" => create_link($_GET['page'], "pstn-prefixes", $option['id']), "icon" => "eye", "visible" => "dropdown"];
 
-			        if($User->get_module_permissions ("pstn")>=User::ACCESS_RW) {
-			            $links[] = ["type"=>"divider"];
-			            $links[] = ["type"=>"header", "text"=>_("Manage")];
-			            $links[] = ["type"=>"link", "text"=>_("Edit prefix"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='edit' data-id='$option[id]'", "icon"=>"pencil"];
-			        }
-			        if($User->get_module_permissions ("pstn")>=User::ACCESS_RWA) {
-			            $links[] = ["type"=>"link", "text"=>_("Delete prefix"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='delete' data-id='$option[id]'", "icon"=>"times"];
-			        }
-			        $html[] = $User->print_actions($User->user->compress_actions, $links);
+					if ($User->get_module_permissions("pstn") >= User::ACCESS_RW) {
+						$links[] = ["type" => "divider"];
+						$links[] = ["type" => "header", "text" => _("Manage")];
+						$links[] = ["type" => "link", "text" => _("Edit prefix"), "href" => "", "class" => "open_popup", "dataparams" => " data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='edit' data-id='$option[id]'", "icon" => "pencil"];
+					}
+					if ($User->get_module_permissions("pstn") >= User::ACCESS_RWA) {
+						$links[] = ["type" => "link", "text" => _("Delete prefix"), "href" => "", "class" => "open_popup", "dataparams" => " data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='delete' data-id='$option[id]'", "icon" => "times"];
+					}
+					$html[] = $User->print_actions($User->user->compress_actions, $links);
 					$html[] = "	</td>";
 				}
 
 				$html[] = "</tr>";
-
-                # save old level count
-                $old_count = $count;
 			}
 
-			if ( $option === false ) { $parent = array_pop( $parent_stack ); }
+			if ($option === false) {
+				$parent = array_pop($parent_stack);
+			}
 			# Has slave subnets
-			elseif ( !empty( $children_prefixes[$option['id']] ) ) {
-				array_push( $parent_stack, $option['master'] );
+			elseif (!empty($children_prefixes[$option['id']])) {
+				array_push($parent_stack, $option['master']);
 				$parent = $option['id'];
 			}
 		}
@@ -2561,7 +2557,7 @@ class Tools extends Common_functions {
 	 * @param bool $prefixId (default: false)
 	 * @return mixed
 	 */
-	public function print_masterprefix_dropdown_menu ($prefixId = false) {
+	public function print_masterprefix_dropdown_menu($prefixId = false) {
 
 		# initialize vars
 		$children_prefixes = array();
@@ -2571,46 +2567,50 @@ class Tools extends Common_functions {
 		$parent = $rootId;      // initializing $parent as the root
 
 		# fetch all prefixes in section
-		$all_prefixes = $this->fetch_all_prefixes ();
+		$all_prefixes = $this->fetch_all_prefixes();
 		if (!is_array($all_prefixes)) $all_prefixes = array();
 		# folder or subnet?
-		foreach($all_prefixes as $s) {
-			$children_prefixes[$s->master][] = (array) $s;
+		foreach ($all_prefixes as $s) {
+			$children_prefixes[(int) $s->master][] = (array) $s;
 		}
 
 		# loop will be false if the root has no children (i.e., an empty menu!)
-		$loop  = !empty( $children_prefixes[$rootId] );
+		$loop  = !empty($children_prefixes[$rootId]);
 
 		# structure
 		$html[] = "<select name='master' class='form-control input-sm input-w-auto input-max-200'>";
 
 		# root subnet
-		$html[] = "<option value='0'>"._("Root subnet")."</option>";
+		$html[] = "<option value='0'>" . _("Root subnet") . "</option>";
 
 		# return table content (tr and td's) - subnets
-		if(sizeof($children_prefixes)>0) {
-		reset( $children_prefixes[$parent] );
-		while ( $loop && ( ( $option = current( $children_prefixes[$parent] ) ) || ( $parent > $rootId ) ) )
-		{
-			next( $children_prefixes[$parent] );
-			# repeat
-			$repeat  = str_repeat( " &nbsp;&nbsp; ", ( count($parent_stack_prefixes)) );
+		if (sizeof($children_prefixes) > 0) {
+			if (is_array($children_prefixes[$parent]))
+				reset($children_prefixes[$parent]);
+			while ($loop && (($option = current($children_prefixes[$parent])) || ($parent > $rootId))) {
+				next($children_prefixes[$parent]);
+				# repeat
+				$repeat  = str_repeat(" &nbsp;&nbsp; ", (count($parent_stack_prefixes)));
 
-			# selected
-			$selected = $option['id'] == $prefixId ? "selected='selected'" : "";
-			if($option['id'])
-            $html[] = "<option value='".$option['id']."' $selected>$repeat ".$option['prefix']." (".$option['name'].")</option>";
-
-			if ( $option === false ) { $parent = array_pop( $parent_stack_prefixes ); }
-			# Has slave subnets
-			elseif ( !empty( $children_prefixes[$option['id']] ) ) {
-				array_push( $parent_stack_prefixes, $option['master'] );
-				$parent = $option['id'];
-			}		}
+				if ($option === false) {
+					$parent = array_pop($parent_stack_prefixes);
+					continue;
+				}
+				# selected
+				$selected = $option['id'] == $prefixId ? "selected='selected'" : "";
+				if ($option['id']) {
+					$html[] = "<option value='" . $option['id'] . "' $selected>$repeat " . $option['prefix'] . " (" . $option['name'] . ")</option>";
+				}
+				# Has slave subnets
+				elseif (!empty($children_prefixes[$option['id']])) {
+					array_push($parent_stack_prefixes, $option['master']);
+					$parent = $option['id'];
+				}
+			}
 		}
 		$html[] = "</select>";
 		# join and print
-		print implode( "\n", $html );
+		print implode("\n", $html);
 	}
 
 
@@ -2626,19 +2626,20 @@ class Tools extends Common_functions {
 	 * @param array $numbers
 	 * @return array
 	 */
-	public function compress_pstn_ranges ($numbers, $state=4) {
-    	# set size
-    	$size = sizeof($numbers);
-    	// vars
-    	$numbers_formatted = array();
+	public function compress_pstn_ranges($numbers, $state = 4) {
+		# set size
+		$size = sizeof($numbers);
+		// vars
+		$numbers_formatted = array();
 		$fIndex = null;
 
 		# loop through IP addresses
-		for($c=0; $c<$size; $c++) {
+		for ($c = 0; $c < $size; $c++) {
 			# ignore already compressed range
-			if($numbers[$c]->class!="compressed-range") {
+
+			if (property_exists($numbers[$c], 'class') && $numbers[$c]->class != "compressed-range") {
 				# gap between this and previous
-				if(gmp_strval( @gmp_sub($numbers[$c]->number, $numbers[$c-1]->number)) != 1) {
+				if (gmp_strval(@gmp_sub($numbers[$c]->number, $numbers[$c - 1]->number)) != 1) {
 					# remove index flag
 					unset($fIndex);
 					# save IP address
@@ -2646,9 +2647,9 @@ class Tools extends Common_functions {
 					$numbers_formatted[$c]->class = "ip";
 
 					# no gap this -> next
-					if(gmp_strval( @gmp_sub($numbers[$c]->number, $numbers[$c+1]->number)) == -1 && $numbers[$c]->state==$state) {
+					if (gmp_strval(@gmp_sub($numbers[$c]->number, $numbers[$c + 1]->number)) == -1 && $numbers[$c]->state == $state) {
 						//is state the same?
-						if($numbers[$c]->state==$numbers[$c+1]->state) {
+						if ($numbers[$c]->state == $numbers[$c + 1]->state) {
 							$fIndex = $c;
 							$numbers_formatted[$fIndex]->startIP = $numbers[$c]->number;
 							$numbers_formatted[$c]->class = "compressed-range";
@@ -2658,9 +2659,9 @@ class Tools extends Common_functions {
 				# no gap between this and previous
 				else {
 					# is state same as previous?
-					if($numbers[$c]->state==$numbers[$c-1]->state && $numbers[$c]->state==$state) {
+					if ($numbers[$c]->state == $numbers[$c - 1]->state && $numbers[$c]->state == $state) {
 						$numbers_formatted[$fIndex]->stopIP = $numbers[$c]->number;	//adds dhcp state
-						$numbers_formatted[$fIndex]->numHosts = gmp_strval( gmp_add(@gmp_sub($numbers[$c]->number, $numbers_formatted[$fIndex]->number),1));	//add number of hosts
+						$numbers_formatted[$fIndex]->numHosts = gmp_strval(gmp_add(@gmp_sub($numbers[$c]->number, $numbers_formatted[$fIndex]->number), 1));	//add number of hosts
 					}
 					# different state
 					else {
@@ -2670,15 +2671,14 @@ class Tools extends Common_functions {
 						$numbers_formatted[$c] = $numbers[$c];
 						$numbers_formatted[$c]->class = "ip";
 						# check if state is same as next to start range
-						if($numbers[$c]->state==@$numbers[$c+1]->state &&  gmp_strval( @gmp_sub($numbers[$c]->number, $numbers[$c+1]->number)) == -1 && $numbers[$c]->state==$state) {
+						if ($numbers[$c]->state == @$numbers[$c + 1]->state &&  gmp_strval(@gmp_sub($numbers[$c]->number, $numbers[$c + 1]->number)) == -1 && $numbers[$c]->state == $state) {
 							$fIndex = $c;
 							$numbers_formatted[$fIndex]->startIP = $numbers[$c]->number;
 							$numbers_formatted[$c]->class = "compressed-range";
 						}
 					}
 				}
-			}
-			else {
+			} else {
 				# save already compressed
 				$numbers_formatted[$c] = $numbers[$c];
 			}
@@ -3008,7 +3008,7 @@ class Tools extends Common_functions {
 	 * @param  int $deviceId
 	 * @param  int $locationId
 	 *
-	 * @return false|array
+	 * @return array|false
 	 */
 	public function reformat_circuit_location ($deviceId = null, $locationId = null) {
 		// check device

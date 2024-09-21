@@ -27,11 +27,11 @@ elseif ($User->settings->enableLocations!="1") {
 }
 else {
     # all locations
-    if(!isset($_GET['subnetId'])) {
+    if(!isset($GET->subnetId)) {
         include("all-locations-list.php");
     }
     # map
-    elseif ($_GET['subnetId']=="map") {
+    elseif ($GET->subnetId=="map") {
         include("all-locations-map.php");
     }
     # single location
