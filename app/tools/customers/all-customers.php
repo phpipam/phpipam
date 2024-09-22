@@ -38,23 +38,30 @@ print "<div class='btn-group'>";
 print "</div>";
 
 # table
-print '<table id="customers" class="table sorted table-striped table-top" data-cookie-id-table="customers">';
+print '<table id="customers" class="table sortable sorted table-striped table-top" data-cookie-id-table="customers">';
 
 # headers
 print "<thead>";
 print '<tr>';
-print "	<th>"._('Title')."</th>";
-print "	<th>"._('Address').'</th>';
-print "	<th>"._('Contact').'</th>';
+print "	<th data-sortable='true' data-sorter='alphaSort'>"._('Title')."</th>";
+print "	<th data-sortable='true'>"._('Address').'</th>';
+print "	<th data-sortable='true'>"._('Contact').'</th>';
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_fields)) {
-			print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			if (substr($field['type'],0,3)=="int") {
+				$sort_function=" data-sorter='numberSort'";
+			} elseif (substr($field['type'],0,3)=="dat") {
+				$sort_function=" data-sorter='dateSort'";
+			} else {
+				$sort_function="";
+			}
+			print "<th class='hidden-sm hidden-xs hidden-md' data-sortable='true'{$sort_function}>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			$colspanCustom++;
 		}
 	}
 }
-print '	<th class="actions"></th>';
+print '	<th class="actions" data-switchable="false"></th>';
 print '</tr>';
 print "</thead>";
 

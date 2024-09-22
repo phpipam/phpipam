@@ -76,30 +76,30 @@ $colspanCustom = sizeof($custom_fields) - sizeof($hidden_fields);;
 #headers
 print "<thead>";
 print '<tr>';
-print "	<th>"._('Name')."</th>";
-print "	<th>"._('IP address')."</th>";
-print "	<th>"._('Description').'</th>';
+print "	<th data-sortable='true' data-sorter='alphaSort'>"._('Name')."</th>";
+print "	<th data-sortable='true' data-sorter='ipSort'>"._('IP address')."</th>";
+print "	<th data-sortable='true'>"._('Description').'</th>';
 if($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
-print '	<th>'._('Rack').'</th>';
+print '	<th data-sortable="true" data-sorter="alphaSort">'._('Rack').'</th>';
 $colspanCustom++;
 }
 if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
-print "	<th>"._('Location').'</th>';
+print "	<th data-sortable='true' data-sorter='alphaSort'>"._('Location').'</th>';
 $colspanCustom++;
 }
-print "	<th style='color:#428bca'>"._('Number of hosts').'</th>';
-print "	<th class='hidden-sm'>". _('Type').'</th>';
+print "	<th style='color:#428bca' data-sortable='true' data-sorter='numberSort'>"._('Number of hosts').'</th>';
+print "	<th class='hidden-sm' data-sortable='true'>". _('Type').'</th>';
 
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_fields)) {
-			print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			print "	<th class='hidden-xs hidden-sm hidden-md' data-sortable='true'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 		}
 	}
 }
 
 if($User->get_module_permissions ("devices")>=User::ACCESS_RW)
-print '	<th class="actions"></th>';
+print '	<th class="actions" data-switchable="false"></th>';
 print '</tr>';
 print "</thead>";
 

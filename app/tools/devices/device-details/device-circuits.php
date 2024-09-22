@@ -43,19 +43,19 @@ else {
     }
     else {
         # table
-        print '<table id="circuitManagement" class="table sorted table-condensed table-striped table-top" data-cookie-id-table="device_circuits">';
+        print '<table id="circuitManagement" class="table sortable sorted table-condensed table-striped table-top" data-cookie-id-table="device_circuits">';
 
         # headers
         print "<thead>";
         print '<tr>';
-        print " <th>"._('Circuit ID')."</th>";
-        print " <th>"._('Provider')."</th>";
-        print " <th>"._('Type').'</th>';
-        print " <th>"._('Capacity').'</th>';
-        print " <th>"._('Status').'</th>';
+        print " <th data-sortable='true' data-sorter='alphaSort'>"._('Circuit ID')."</th>";
+        print " <th data-sortable='true' data-sorter='alphaSort'>"._('Provider')."</th>";
+        print " <th data-sortable='true' data-sorter='alphaSort'>"._('Type').'</th>';
+        print " <th data-sortable='true' data-sorter='numberSort'>"._('Capacity').'</th>';
+        print " <th data-sortable='true'>"._('Status').'</th>';
         if($User->get_module_permissions ("locations")>=User::ACCESS_R) {
-        print " <th>"._('Point A').'</th>';
-        print " <th>"._('Point B').'</th>';
+        print " <th data-sortable='true' data-sorter='alphaSort'>"._('Point A').'</th>';
+        print " <th data-sortable='true' data-sorter='alphaSort'>"._('Point B').'</th>';
         }
         print '</tr>';
         print "</thead>";

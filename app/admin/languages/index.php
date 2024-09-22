@@ -20,7 +20,7 @@ $languages = $Admin->fetch_all_objects("lang", "l_id");
 <button class='btn btn-sm btn-default open_popup' style="margin-bottom:10px;" data-script='app/admin/languages/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create new language'); ?></button>
 
 
-<table class="table sorted nosearch nopagination table-striped table-auto table-top" data-cookie-id-table="admin_lang" style="min-width:400px;">
+<table class="table sortable sorted nosearch nopagination table-striped table-auto table-top" data-cookie-id-table="admin_lang" style="min-width:400px;">
 	<!-- Language list -->
 	<?php
 	/* no results */
@@ -32,9 +32,9 @@ $languages = $Admin->fetch_all_objects("lang", "l_id");
 		# headers
 		print "<thead>";
 		print "<tr>";
-		print "	<th>"._('Language code')."</th>";
-		print "	<th>"._('Language name')."</th>";
-		print "	<th>"._('Validity')."</th>";
+		print "	<th data-sortable='true'>"._('Language code')."</th>";
+		print "	<th data-sortable='true'>"._('Language name')."</th>";
+		print "	<th data-sortable='true'>"._('Validity')."</th>";
 		print "	<th>"._('Version')."</th>";
 		print "	<th></th>";
 		print "</tr>";

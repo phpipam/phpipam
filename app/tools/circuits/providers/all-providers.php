@@ -42,25 +42,32 @@ print "<div class='btn-group'>";
 print "</div>";
 
 # table
-print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="circuit_providers">';
+print '<table id="circuitManagement" class="table sortable sorted table-striped table-top" data-cookie-id-table="circuit_providers">';
 
 #headers
 print "<thead>";
 print '<tr>';
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Name')."'>"._('Name')."</span></th>";
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Description')."'>"._('Description').'</span></th>';
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Circuits')."'>"._('Circuits').'</span></th>';
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Contact')."'>"._('Contact').'</span></th>';
+print "	<th data-sortable='true' data-sorter='alphaSort'><span rel='tooltip' data-container='body' title='"._('Sort by Name')."'>"._('Name')."</span></th>";
+print "	<th data-sortable='true'><span rel='tooltip' data-container='body' title='"._('Sort by Description')."'>"._('Description').'</span></th>';
+print "	<th data-sortable='true' data-sorter='numberSort'><span rel='tooltip' data-container='body' title='"._('Sort by Circuits')."'>"._('Circuits').'</span></th>';
+print "	<th data-sortable='true'><span rel='tooltip' data-container='body' title='"._('Sort by Contact')."'>"._('Contact').'</span></th>';
 $colspanCustom = 0;
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_fields)) {
-			print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." ".$Tools->print_custom_field_name ($field['name'])."'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			if (substr($field['type'],0,3)=="int") {
+				$sort_function=" data-sorter='numberSort'";
+			} elseif (substr($field['type'],0,3)=="dat") {
+				$sort_function=" data-sorter='dateSort'";
+			} else {
+				$sort_function="";
+			}
+			print "<th class='hidden-sm hidden-xs hidden-md' data-sortable='true'{$sort_function}><span rel='tooltip' data-container='body' title='"._('Sort by')." ".$Tools->print_custom_field_name ($field['name'])."'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			$colspanCustom++;
 		}
 	}
 }
-print '	<th class="actions"></th>';
+print '	<th class="actions" data-switchable="false"></th>';
 print '</tr>';
 print "</thead>";
 

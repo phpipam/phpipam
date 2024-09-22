@@ -42,20 +42,20 @@ if ($sections !== false) {
 
 <!-- show sections -->
 <?php if($sections!==false) { ?>
-<table class="table sorted table-striped table-condensed table-top" data-cookie-id-table="admin_sections">
+<table class="table sortable sorted table-striped table-condensed table-top" data-cookie-id-table="admin_sections">
 <!-- headers -->
 <thead>
 <tr>
-    <th><?php print _('Name'); ?></th>
-    <th><?php print _('Description'); ?></th>
-    <th><?php print _('Parent'); ?></th>
-    <th><?php print _('Strict mode'); ?></th>
-    <th><?php print _('Show subnet menu'); ?></th>
-    <th><?php print _('Show VLAN menu'); ?></th>
-    <th><?php print _('Show VRF menu'); ?></th>
-    <th><?php print _('Show only supernets'); ?></th>
-    <th><?php print _('Group Permissions'); ?></th>
-    <th></th>
+    <th data-sortable='true' data-sorter='alphaSort'><?php print _('Name'); ?></th>
+    <th data-sortable='true'><?php print _('Description'); ?></th>
+    <th data-sortable='true'><?php print _('Parent'); ?></th>
+    <th data-sortable='true'><?php print _('Strict mode'); ?></th>
+    <th data-sortable='true'><?php print _('Show subnet menu'); ?></th>
+    <th data-sortable='true'><?php print _('Show VLAN menu'); ?></th>
+    <th data-sortable='true'><?php print _('Show VRF menu'); ?></th>
+    <th data-sortable='true'><?php print _('Show only supernets'); ?></th>
+    <th data-sortable='true'><?php print _('Group Permissions'); ?></th>
+    <th data-switchable='false'></th>
 </tr>
 </thead>
 

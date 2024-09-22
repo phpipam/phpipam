@@ -42,31 +42,38 @@ print "<div class='btn-group'>";
 print "</div>";
 
 # table
-print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="all_circuits">';
+print '<table id="circuitManagement" class="table sortable sorted table-striped table-top" data-cookie-id-table="all_circuits">';
 
 # headers
 print "<thead>";
 print '<tr>';
-print "	<th>"._('Circuit ID')."</th>";
-print "	<th>"._('Provider')."</th>";
+print "	<th data-sortable='true' data-sorter='alphaSort'>"._('Circuit ID')."</th>";
+print "	<th data-sortable='true' data-sorter='alphaSort'>"._('Provider')."</th>";
 if($User->settings->enableCustomers=="1")
-print "	<th>"._('Customer').'</th>';
-print "	<th>"._('Type').'</th>';
-print "	<th><span class='hidden-sm hidden-xs'>"._('Capacity').'</span></th>';
-print "	<th><span class='hidden-sm hidden-xs'>"._('Status').'</span></th>';
-print "	<th><span class='hidden-sm hidden-xs'>"._('Point A').'</span></th>';
-print "	<th><span class='hidden-sm hidden-xs'>"._('Point B').'</span></th>';
-print "	<th><span class='hidden-sm hidden-xs'>"._('Comment').'</span></th>';
+print "	<th data-sortable='true'>"._('Customer').'</th>';
+print "	<th data-sortable='true'>"._('Type').'</th>';
+print "	<th data-sortable='true'><span class='hidden-sm hidden-xs'>"._('Capacity').'</span></th>';
+print "	<th data-sortable='true'><span class='hidden-sm hidden-xs'>"._('Status').'</span></th>';
+print "	<th data-sortable='true' data-sorter='alphaSort'><span class='hidden-sm hidden-xs'>"._('Point A').'</span></th>';
+print "	<th data-sortable='true' data-sorter='alphaSort'><span class='hidden-sm hidden-xs'>"._('Point B').'</span></th>';
+print "	<th data-sortable='true'><span class='hidden-sm hidden-xs'>"._('Comment').'</span></th>';
 $colspanCustom = 0;
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_circuit_fields)) {
-			print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." ".$Tools->print_custom_field_name ($field['name'])."'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			if (substr($field['type'],0,3)=="int") {
+				$sort_function=" data-sorter='numberSort'";
+			} elseif (substr($field['type'],0,3)=="dat") {
+				$sort_function=" data-sorter='dateSort'";
+			} else {
+				$sort_function="";
+			}
+			print "<th class='hidden-sm hidden-xs hidden-md' data-sortable='true'{$sort_function}><span rel='tooltip' data-container='body' title='"._('Sort by')." ".$Tools->print_custom_field_name ($field['name'])."'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			$colspanCustom++;
 		}
 	}
 }
-print '	<th class="actions"></th>';
+print '	<th class="actions" data-switchable="false"></th>';
 print '</tr>';
 print "</thead>";
 

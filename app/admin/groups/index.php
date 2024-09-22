@@ -51,26 +51,26 @@ $colspanCustom = 0;
 </div>
 
 <!-- table -->
-<table id="userPrint" class="table sorted table-striped table-top" data-cookie-id-table="admin_groups">
+<table id="userPrint" class="table sortable sorted table-striped table-top" data-cookie-id-table="admin_groups">
 
 <!-- Headers -->
 <thead>
 <tr>
-    <th><?php print _('Group'); ?></th>
-    <th><?php print _('Belonging users'); ?></th>
+    <th data-sortable='true' data-sorter='alphaSort'><?php print _('Group'); ?></th>
+    <th data-sortable='true' data-sorter='alphaSort'><?php print _('Belonging users'); ?></th>
     <th><?php print _('Section permissions'); ?></th>
 	<?php
 	if(sizeof(@$custom) > 0) {
 		foreach($custom as $field) {
 			if(!in_array($field['name'], $ffields)) {
 				$colspanCustom++;
-				print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
+				print "<th data-sortable='true' data-sorter='alphaSort'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
 	}
 	?>
-    <th></th>
-    <th></th>
+    <th data-switchable='false'></th>
+    <th data-switchable='false'></th>
 </tr>
 </thead>
 
