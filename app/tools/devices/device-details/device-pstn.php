@@ -101,11 +101,11 @@ else {
     		   		# hidden?
     		   		if(!in_array($field['name'], $hidden_fields)) {
 
-    		   			$html[] =  "<td class='hidden-xs hidden-sm hidden-md'>";
+    		   			print "<td class='hidden-xs hidden-sm hidden-md'>";
     		   			//booleans
     					if($field['type']=="tinyint(1)")	{
-    						if($sp->{$field['name']} == "0")			{ $html[] = _("No"); }
-    						elseif($sp->{$field['name']} == "1")		{ $html[] = _("Yes"); }
+    						if($sp->{$field['name']} == "0")			{ print _("No"); }
+    						elseif($sp->{$field['name']} == "1")		{ print _("Yes"); }
     					}
     					//text
     					elseif($field['type']=="text") {
@@ -113,10 +113,10 @@ else {
     						else										{ print ""; }
     					}
     					else {
-    						$html[] = $sp->{$field['name']};
+    						print $sp->{$field['name']};
 
     					}
-    		   			$html[] =  "</td>";
+    		   			print "</td>";
     	   			}
     	    	}
     	    }

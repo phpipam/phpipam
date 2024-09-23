@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # get all custom fields
-$custom_customers_fields = $Params->customers=="on"     ? $Tools->fetch_custom_fields ("customers") : array();
+$custom_customers_fields = $GET->customers=="on"     ? $Tools->fetch_custom_fields ("customers") : array();
 $hidden_customer_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['customers'] : array();
 
 # search cusotmers

@@ -185,7 +185,7 @@ class PowerDNS extends Common_functions {
                     $this->db_check_error[] = $this->error." :: ".$host;
                 }
                 else {
-                    if($this->thisactive_db==false) {
+                    if($this->active_db==false) {
                         $this->active_db = $key;
                     }
                 }
@@ -782,7 +782,7 @@ class PowerDNS extends Common_functions {
      *
      * @access public
      * @param mixed $hostname
-     * @return void
+     * @return array|false
      */
     public function seach_aliases ($hostname) {
         // fetch

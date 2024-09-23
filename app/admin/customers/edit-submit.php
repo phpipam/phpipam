@@ -13,12 +13,11 @@ $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
-$Params		= new Params ($Admin->strip_input_tags($_POST));
 
 // verify that user is logged in
 $User->check_user_session();
 // verify module permissions
-if($Params->action=="edit") {
+if($POST->action=="edit") {
 	$User->check_module_permissions ("customers", User::ACCESS_RW, true, false);
 }
 else {
@@ -29,7 +28,7 @@ else {
 $User->check_maintaneance_mode ();
 
 // validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "customer", $Params->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "customer", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 // validate action
 $Admin->validate_action();
 
@@ -39,17 +38,17 @@ $Admin->validate_action();
  */
 
 // IDs must be numeric
-if($Params->action!="add" && !is_numeric($Params->id))					{ $Result->show("danger", _("Invalid ID"), true); }
+if($POST->action!="add" && !is_numeric($POST->id))					{ $Result->show("danger", _("Invalid ID"), true); }
 
 // add / edit validations
-if ($Params->action!="delete") {
+if ($POST->action!="delete") {
 	// check strings
-	if(strlen($Params->title)<3)		{ $Result->show("danger", _("Invalid Title"), true); }
-	if(strlen($Params->address)<3)		{ $Result->show("danger", _("Invalid Address"), true); }
-	if(strlen($Params->city)<3)			{ $Result->show("danger", _("Invalid City"), true); }
-	if(strlen($Params->state)<3)		{ $Result->show("danger", _("Invalid State"), true); }
+	if(strlen($POST->title)<3)		{ $Result->show("danger", _("Invalid Title"), true); }
+	if(strlen($POST->address)<3)		{ $Result->show("danger", _("Invalid Address"), true); }
+	if(strlen($POST->city)<3)			{ $Result->show("danger", _("Invalid City"), true); }
+	if(strlen($POST->state)<3)		{ $Result->show("danger", _("Invalid State"), true); }
 	// validate postcode
-	if(!$Tools->validate_postcode ($Params->postcode, $Params->state)) { $Result->show("danger", _("Invalid Postcode"), true); }
+	if(!$Tools->validate_postcode ($POST->postcode, $POST->state)) { $Result->show("danger", _("Invalid Postcode"), true); }
 }
 
 // fetch custom fields
@@ -76,16 +75,16 @@ if(sizeof($custom) > 0) {
 
 // set update values
 $values = array(
-				"id"             => $Params->id,
-				"title"          => $Params->title,
-				"address"        => $Params->address,
-				"postcode"       => $Params->postcode,
-				"city"           => $Params->city,
-				"state"          => $Params->state,
-				"contact_person" => $Params->contact_person,
-				"contact_phone"  => $Params->contact_phone,
-				"contact_mail"   => $Params->contact_mail,
-				"note"           => $Params->note
+				"id"             => $POST->id,
+				"title"          => $POST->title,
+				"address"        => $POST->address,
+				"postcode"       => $POST->postcode,
+				"city"           => $POST->city,
+				"state"          => $POST->state,
+				"contact_person" => $POST->contact_person,
+				"contact_phone"  => $POST->contact_phone,
+				"contact_mail"   => $POST->contact_mail,
+				"note"           => $POST->note
 				);
 // custom fields
 if(isset($update)) {
@@ -94,7 +93,7 @@ if(isset($update)) {
 
 // set lat lng
 $OSM = new OpenStreetMap($Database);
-$latlng = $OSM->get_latlng_from_address ($Params->address.", ".$Params->postcode." ".$Params->city.", ".$Params->state);
+$latlng = $OSM->get_latlng_from_address ($POST->address.", ".$POST->postcode." ".$POST->city.", ".$POST->state);
 if(isset($latlng['lat']) && isset($latlng['lng'])) {
     $values['lat']  = $latlng['lat'];
     $values['long'] = $latlng['lng'];
@@ -106,6 +105,6 @@ else {
 }
 
 // update customer
-if($Admin->object_modify("customers", $Params->action, "id", $values)) {
+if($Admin->object_modify("customers", $POST->action, "id", $values)) {
     $Result->show("success", _("Customer")." ".$User->get_post_action()." "._("successful").'!', false);
 }

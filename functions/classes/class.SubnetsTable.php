@@ -104,16 +104,19 @@ class SubnetsTable {
 		}
 
 		//vlan
-		if (isset($this->all_vlans[$subnet->vlanId]->number)) {
-			$tr['vlan'] = $this->all_vlans[$subnet->vlanId]->domainId == 1 ? $this->all_vlans[$subnet->vlanId]->number : $this->all_vlans[$subnet->vlanId]->number . " <span class='badge badge1 badge5' rel='tooltip' title='" . _('VLAN is in domain') . escape_input($this->all_vlans[$subnet->vlanId]->domainName) . "'>" . escape_input($this->all_vlans[$subnet->vlanId]->domainName) . "</span>";
+		if (is_numeric($subnet->vlanId) && isset($this->all_vlans[$subnet->vlanId]->number)) {
+			$tr['vlan'] = $this->all_vlans[$subnet->vlanId]->domainId == 1 ? $this->all_vlans[$subnet->vlanId]->number : $this->all_vlans[$subnet->vlanId]->number . " <span class='badge badge1 badge5' rel='tooltip' title='" . _('VLAN is in domain') . $this->all_vlans[$subnet->vlanId]->domainName . "'>" . $this->all_vlans[$subnet->vlanId]->domainName . "</span>";
 		} else {
 			$tr['vlan'] = _('Default');
 		}
 		//vrf
 		if($this->Tools->settings->enableVRF == 1) {
 			# fetch vrf
-			$vrf = $this->Tools->fetch_object("vrf", "vrfId", $subnet->vrfId);
-			$tr['vrf'] = !$vrf ? "" : $vrf->name;
+			$vrf = null;
+			if (is_numeric($subnet->vlanId)) {
+				$vrf = $this->Tools->fetch_object("vrf", "vrfId", $subnet->vrfId);
+			}
+			$tr['vrf'] = is_object($vrf) ? $vrf->name : _('Default');
 		}
 
 		//masterSubnet
