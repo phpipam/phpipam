@@ -57,8 +57,8 @@ else {
 
 	//boolean
 	if($Params->fieldType=="bool")	{
-		if($Params->fieldSize!=0 && $Params->fieldSize!=1)				{ $errors[] = _('Boolean values can only be 0 or 1'); }
-		if($Params->fieldDefault!=0 && $Params->fieldDefault!=1)			{ $errors[] = _('Default boolean values can only be 0 or 1'); }
+		if($Params->fieldSize!="" && $Params->fieldSize!=0 && $Params->fieldSize!=1)				{ $errors[] = _('Boolean values can only be 0 or 1'); }
+		if($Params->fieldDefault!="" && $Params->fieldDefault!=0 && $Params->fieldDefault!=1)			{ $errors[] = _('Default boolean values can only be 0 or 1'); }
 	}
 	//varchar
 	elseif($Params->fieldType=="varchar") {
