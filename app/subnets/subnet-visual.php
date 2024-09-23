@@ -13,7 +13,7 @@ if($addresses_visual) {
 	}
 }
 
-$alpha = ($User->user->theme == "dark") ? "50" : "";
+$alpha = ($User->user->theme == "dark") ? "cc" : "";
 
 # print
 foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {

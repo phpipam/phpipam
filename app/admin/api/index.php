@@ -111,7 +111,7 @@ $app_perms_text = array("SSL with User token"=>"ssl_token","SSL with App code to
 	?>
 
 	<h4><?php print _('API documentation'); ?></h4>
-	<a href="http://phpipam.net/api-documentation/">http://phpipam.net/api-documentation/</a>
+	<a href="http://phpipam.net/api-documentation/" target="_blank">http://phpipam.net/api-documentation/</a>
 
 <?php
 } else {
