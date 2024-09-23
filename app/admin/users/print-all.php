@@ -162,22 +162,6 @@ foreach ($users as $user) {
 		foreach($custom as $field) {
 			if(!in_array($field['name'], $ffields)) {
 				print "<td class='hidden-xs hidden-sm hidden-md'>";
-/*
-				//booleans
-				if($field['type']=="tinyint(1)")	{
-					if($user[$field['name']] == "0")		{ print _("No"); }
-					elseif($user[$field['name']] == "1")	{ print _("Yes"); }
-				}
-				//text
-				elseif($field['type']=="text") {
-					if(!is_blank($user[$field['name']]))		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $user[$field['name']])."'>"; }
-					else									{ print ""; }
-				}
-				else {
-					print $user[$field['name']];
-
-				}
-*/
 				$Tools->print_custom_field ($field['type'], $user[$field['name']]);
 				print "</td>";
 			}
