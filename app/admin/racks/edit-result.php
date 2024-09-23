@@ -95,7 +95,7 @@ if(sizeof($custom) > 0) {
 		//booleans can be only 0 and 1!
 		if($myField['type']=="tinyint(1)") {
 			if($rack[$myField['name']]>1) {
-				$rack[$myField['name']] = 0;
+				$rack[$myField['name']] = "";
 			}
 		}
 		//not null!
