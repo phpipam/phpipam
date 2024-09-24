@@ -20,36 +20,34 @@ $User->check_user_session();
 $User->check_module_permissions ("circuits", User::ACCESS_RWA, true, false);
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "circuit_options", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "circuit_options", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # empty
-if(is_blank($_POST['option']))                           { $Result->show("danger", _('Value cannot be empty'), true); }
-# strip tags - XSS
-$_POST = $User->strip_input_tags ($_POST);
+if(is_blank($POST->option))                           { $Result->show("danger", _('Value cannot be empty'), true); }
 
 # validate action
-if($_POST['action']!="add" && $_POST['action']!="delete") { $Result->show("danger", _('Invalid action'), true); }
+if($POST->action!="add" && $POST->action!="delete") { $Result->show("danger", _('Invalid action'), true); }
 
 # validate type
-if(!in_array($_POST['type'], array("type"))) { $Result->show("danger", _('Invalid type'), true); }
+if(!in_array($POST->type, array("type"))) { $Result->show("danger", _('Invalid type'), true); }
 
 # defaults must be present
-if($_POST['type']=="type") {
-    if ($_POST['option']=="Default") { $Result->show("danger", _('Default value cannot be deleted'), true); }
+if($POST->type=="type") {
+    if ($POST->option=="Default") { $Result->show("danger", _('Default value cannot be deleted'), true); }
 }
 
 # set values
 $values = array (
-                 "id"        => $_POST['op_id'],
-                 "ctname"    => $_POST['option'],
-                 "ctcolor"   => $_POST['color'],
-                 "ctpattern" => $_POST['pattern']
+                 "id"        => $POST->op_id,
+                 "ctname"    => $POST->option,
+                 "ctcolor"   => $POST->color,
+                 "ctpattern" => $POST->pattern
                  );
 # execute
-if(!$Admin->object_modify("circuitTypes", $_POST['action'], "id", $values))  { $Result->show("danger",  _("Option $_POST[action] error"), true); }
-else                                                                         { $Result->show("success", _("Option $_POST[action] success"), false); }
+if(!$Admin->object_modify("circuitTypes", $POST->action, "id", $values))  { $Result->show("danger",  _("Option ".$POST->action." error"), true); }
+else                                                                         { $Result->show("success", _("Option ".$POST->action." success"), false); }
 
 # updates values to default
-if (is_numeric($_POST['op_id'])) {
-  $Admin->update_object_references ("circuits", "type", $_POST['op_id'], 1);
+if (is_numeric($POST->op_id)) {
+  $Admin->update_object_references ("circuits", "type", $POST->op_id, 1);
 }

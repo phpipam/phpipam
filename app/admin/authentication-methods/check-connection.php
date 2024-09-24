@@ -19,7 +19,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # feth settings
-$auth_settings = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['id']);
+$auth_settings = $Admin->fetch_object ("usersAuthMethod", "id", $POST->id);
 if($auth_settings===false)	{ $Result->show("danger", _("Invalid ID"), true, true); }
 //set params
 $parameters = db_json_decode($auth_settings->params);

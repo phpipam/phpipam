@@ -100,23 +100,9 @@ else {
     	   		foreach($custom_fields as $field) {
     		   		# hidden?
     		   		if(!in_array($field['name'], $hidden_fields)) {
-
-    		   			print "<td class='hidden-xs hidden-sm hidden-md'>";
-    		   			//booleans
-    					if($field['type']=="tinyint(1)")	{
-    						if($sp->{$field['name']} == "0")			{ print _("No"); }
-    						elseif($sp->{$field['name']} == "1")		{ print _("Yes"); }
-    					}
-    					//text
-    					elseif($field['type']=="text") {
-    						if(!is_blank($sp->{$field['name']}))		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $sp->{$field['name']})."'>"; }
-    						else										{ print ""; }
-    					}
-    					else {
-    						print $sp->{$field['name']};
-
-    					}
-    		   			print "</td>";
+						print "<td class='hidden-xs hidden-sm hidden-md'>";
+						$Tools->print_custom_field ($field['type'], $user[$field['name']]);
+						print "</td>";
     	   			}
     	    	}
     	    }
