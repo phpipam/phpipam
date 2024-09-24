@@ -380,7 +380,7 @@ class Sections extends Common_functions {
 	public function fetch_section_nameserver_sets ($sectionId) {
 		# first fetch all nameserver sets
 		$Admin = new Admin ($this->Database, false);
-		$nameservers = $Admin->fetch_all_objects ("nameservers");
+		$nameservers = $Admin->fetch_all_objects ("nameservers","name");
 		# loop and check
 		if ($nameservers!==false) {
     		$permitted = array();

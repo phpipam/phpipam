@@ -56,6 +56,7 @@ foreach($_POST as $key=>$line) {
 $_POST['namesrv1'] = isset($all_nameservers) ? implode(";", $all_nameservers) : "";
 
 // set sections
+$temp = array();
 foreach($_POST as $key=>$line) {
 	if (!is_blank(strstr($key,"section-"))) {
 		$key2 = str_replace("section-", "", $key);

@@ -108,7 +108,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : pf_explode(";", $
 	<!-- sections -->
 	<tr>
 		<td style="vertical-align: top !important"><?php print _('Sections to display nameserver set in'); ?>:</td>
-		<td>
+		<td style="padding-left:20px">
 		<?php
 		# select sections
 		$sections = $Sections->fetch_all_sections();
