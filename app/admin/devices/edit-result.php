@@ -30,40 +30,38 @@ $User->check_maintaneance_mode ();
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "device", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-# get modified details
-$device = (array) $POST;
 
 # ID must be numeric
 if($POST->action!="add" && !is_numeric($POST->switchid))			{ $Result->show("danger", _("Invalid ID"), true); }
 
 # available devices set
-foreach($device as $key=>$line) {
+foreach($POST as $key=>$line) {
 	if (!is_blank(strstr($key,"section-"))) {
 		$key2 = str_replace("section-", "", $key);
 		$temp[] = $key2;
 
-		unset($device[$key]);
+		unset($POST->{$key});
 	}
 }
 # glue sections together
-$device['sections'] = !empty($temp) ? implode(";", $temp) : null;
+$POST->sections = !empty($temp) ? implode(";", $temp) : null;
 
 # Hostname must be present
-if($device['hostname'] == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }
+if($POST->hostname == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }
 
 # rack checks
-if (!is_blank(@$device['rack']) && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
+if (!is_blank($POST->rack) && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
     if ($User->settings->enableRACK!="1") {
-        unset($device['rack']);
+        unset($POST->rack);
     }
     else {
         # validate position and size
-        if (!is_numeric($device['rack']))                               { $Result->show("danger", _('Invalid rack identifier').'!', true); }
-        if (!is_numeric($device['rack_start']))                         { $Result->show("danger", _('Invalid rack start position').'!', true); }
-        if (intval($device['rack_size']) === 0)                         { $Result->show("danger", _('Invalid rack size').'!', true); }
+        if (!is_numeric($POST->rack))                               { $Result->show("danger", _('Invalid rack identifier').'!', true); }
+        if (!is_numeric($POST->rack_start))                         { $Result->show("danger", _('Invalid rack start position').'!', true); }
+        if (intval($POST->rack_size) === 0)                         { $Result->show("danger", _('Invalid rack size').'!', true); }
 		# validate rack
-		$rack = $Racks->fetch_rack_details($device['rack']);
-		if (!is_numeric($device['rack']) || ($rack > 0 && !is_object($rack))) {
+		$rack = $Racks->fetch_rack_details($POST->rack);
+		if (!is_numeric($POST->rack) || ($rack > 0 && !is_object($rack))) {
 			$Result->show("danger", _('Rack does not exist') . '!', true);
 		}
     }
@@ -76,41 +74,41 @@ if(sizeof($custom) > 0) {
 
 		//replace possible ___ back to spaces
 		$myField['nameTest'] = str_replace(" ", "___", $myField['name']);
-		if(isset($_POST[$myField['nameTest']])) { $_POST[$myField['name']] = $_POST[$myField['nameTest']];}
+		if(isset($POST->{$myField['nameTest']})) { $POST->{$myField['name']} = $POST->{$myField['nameTest']};}
 
 		//booleans can be only 0 and 1!
 		if($myField['type']=="tinyint(1)") {
-			if($device[$myField['name']]>1) {
-				$device[$myField['name']] = 0;
+			if($POST->{$myField['name']}>1) {
+				$POST->{$myField['name']} = 0;
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && is_blank($device[$myField['name']])) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
+		if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 
 		# save to update array
-		$update[$myField['name']] = $device[$myField['nameTest']];
+		$update[$myField['name']] = $POST->{$myField['nameTest']};
 	}
 }
 
 # set update values
 $values = array(
-				"id"          =>isset($device['switchid']) ? $device['switchid'] : null,
-				"hostname"    =>$device['hostname'],
-				"ip_addr"     =>$device['ip_addr'],
-				"type"        =>$device['type'],
-				"description" =>$device['description'],
-				"sections"    =>$device['sections'],
-				"location"    =>@$device['location']
+				"id"          =>$POST->switchid,
+				"hostname"    =>$POST->hostname,
+				"ip_addr"     =>$POST->ip_addr,
+				"type"        =>$POST->type,
+				"description" =>$POST->description,
+				"sections"    =>$POST->sections,
+				"location"    =>$POST->location
 				);
 # custom fields
 if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 # rack
-if (!is_blank(@$device['rack']) && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
-	$values['rack']       = $device['rack'];
-	$values['rack_start'] = $device['rack_start'];
-	$values['rack_size']  = $device['rack_size'];
+if (!is_blank($POST->rack) && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
+	$values['rack']       = $POST->rack;
+	$values['rack_start'] = $POST->rack_start;
+	$values['rack_size']  = $POST->rack_size;
 }
 # perms
 if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
@@ -118,8 +116,9 @@ if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
 }
 
 # update device
-if(!$Admin->object_modify("devices", $POST->action, "id", $values))	{}
-else { $Result->show("success", _("Device")." ".$device["action"]." "._("successful").'!', false); }
+if ($Admin->object_modify("devices", $POST->action, "id", $values)) {
+	$Result->show("success", _("Device") . " " . $POST->action . " " . _("successful") . '!', false);
+}
 
 if($POST->action=="delete"){
 	# remove all references from subnets and ip addresses

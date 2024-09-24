@@ -64,7 +64,7 @@ if (isset($POST->type) && $POST->type=="SAML2") {
 
 # remove processed params
 unset($POST->id, $POST->type, $POST->description, $POST->action);
-$values["params"]=json_encode((array) $POST);
+$values["params"]=json_encode($POST);
 
 $secure_keys=[
 	'adminUsername',
@@ -80,7 +80,7 @@ $values_log = $values;
 foreach($POST as $key => $value) {
 	if(in_array($key, $secure_keys)){ $POST->{$key} = "********"; }
 }
-$values_log["params"]=json_encode((array) $POST);
+$values_log["params"]=json_encode($POST);
 
 # add - set protected
 if($action=="add") {

@@ -82,6 +82,6 @@ if(!empty($errors)) {
 	print '</div>'. "\n";
 }
 else {
-	if(!$Admin->update_custom_field_definition($_POST)) { $Result->show("danger",  _("Failed to $_POST[action] field"), true); }
-	else 												{ $Result->show("success", _("Field $_POST[action] success"), true); }
+	if(!$Admin->update_custom_field_definition($POST->as_array())) { $Result->show("danger",  _("Failed to ".$POST->action." field"), true); }
+	else 												{ $Result->show("success", _("Field ".$POST->action." success"), true); }
 }
