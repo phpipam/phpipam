@@ -985,7 +985,7 @@ class RackContent extends Model {
      * @return int
      */
     public function getSize() {
-        return $this->size;
+        return max(1, $this->size);
     }
 
     /**
