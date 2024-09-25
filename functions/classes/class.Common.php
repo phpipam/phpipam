@@ -2220,6 +2220,26 @@ class Common_functions  {
 						if (is_object($circuit)) {
 							$title[] = $circuit->cid;
 						}
+					} elseif ($get['section'] == "pstn-prefixes") {
+						$prefix = $this->fetch_object("pstnPrefixes", "id", $get['subnetId']);
+						if (is_object($prefix)) {
+							$title[] = $prefix->name;
+						}
+					} elseif ($get['section'] == "vaults") {
+						$vault = $this->fetch_object("vaults", "id", $get['subnetId']);
+						if (is_object($vault)) {
+							$title[] = $vault->name;
+						}
+					} elseif ($get['section'] == "routing") {
+						$title[] = ucwords(escape_input($get['subnetId']));
+						if ($get['subnetId'] == "bgp") {
+							if (isset($get['sPage'])) {
+								$peer = $this->fetch_object("routing_bgp", "id", $get['sPage']);
+								if (is_object($peer)) {
+									$title[] = $peer->peer_name;
+								}
+							}
+						}
 					} else {
 						$title[] = ucwords(escape_input($get['subnetId']));
 					}
