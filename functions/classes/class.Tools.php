@@ -872,7 +872,8 @@ class Tools extends Common_functions {
 		$widget = $this->fetch_object("widgets", "wfile", $file);
 
 		if (is_object($widget) && is_string($widget->wparams)) {
-			parse_str($widget->wparams, $p);
+			// String data returned by PDO layer is protected by htmlentities()
+			parse_str(html_entity_decode($widget->wparams, ENT_QUOTES) , $p);
 			return new Params($p);
 		}
 		return new Params();
