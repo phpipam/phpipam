@@ -70,7 +70,7 @@ if($_POST['action']!="add") {
 	<!-- params -->
 	<tr>
 	    <td><?php print _('Parameters'); ?></td>
-	    <td><input class="form-control input-sm input-w-250" type="text" name="wparams" value="<?php print $Admin->strip_xss(@$w['wparams']); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
+	    <td><input class="form-control input-sm input-w-250" type="text" name="wparams" value="<?php print str_replace('&amp;','&',$Admin->strip_xss(@$w['wparams'])); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
     </tr>
 
 	<!-- Admin -->
