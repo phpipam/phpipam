@@ -14,8 +14,6 @@ $Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
-print "<!-- jrh " . print_r($POST,true) . " -->\n";
-
 // verify that user is logged in
 $User->check_user_session();
 // verify module permissions
