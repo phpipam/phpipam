@@ -53,8 +53,7 @@ $firewallZoneSettings = new Params(db_json_decode($User->settings->firewallZoneS
 
 # check if subnetPatternValues are already available, if not set them
 if (!$firewallZoneSettings->subnetPatternValues) {
-	$firewallZoneSettings->subnetPatternValues[0] = 'network';
-	$firewallZoneSettings->subnetPatternValues[1] = 'description';
+	$firewallZoneSettings->subnetPatternValues = ['network', 'description'];
 }
 
 # fetch device types and rekey
@@ -260,7 +259,7 @@ $(function() {
 					<?php
 					$patternCount = 0;
 					foreach ($namePattern as $key => $pattern) {
-						if (preg_match('/patternSeparator/i',$settingsPattern)) {
+						if (preg_match('/patternSeparator/i', $pattern)) {
 							$patternCount++;
 
 						} elseif (!$firewallZoneSettings->pattern) {
