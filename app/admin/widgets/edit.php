@@ -51,8 +51,8 @@ if($POST->action!="add") {
     	<td>
     		<input class="form-control input-sm input-w-250" type="text" name="wdescription" value="<?php print $w->wdescription; ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
 
-    		<input type="hidden" name="wid" value="<?php print $POST->wid; ?>">
-    		<input type="hidden" name="action" value="<?php print $POST->action; ?>">
+    		<input type="hidden" name="wid" value="<?php print escape_input($POST->wid); ?>">
+    		<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	</td>
     </tr>

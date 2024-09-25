@@ -17,7 +17,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("locations", User::ACCESS_RW, true, true);
 }
 else {
@@ -32,13 +32,13 @@ $csrf = $User->Crypto->csrf_cookie ("create", "location");
 $Admin->validate_action();
 
 # get Location object
-if($_POST['action']!="add") {
-	$location = $Admin->fetch_object ("locations", "id", $_POST['id']);
+if($POST->action!="add") {
+	$location = $Admin->fetch_object ("locations", "id", $POST->id);
 	$location!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 }
 
 # disable edit on delete
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 $link = $readonly ? false : true;
 
 # fetch custom fields
@@ -64,7 +64,7 @@ $custom = $Tools->fetch_custom_fields('locations');
             	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($location->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print $location->id; ?>">
-            	<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+            	<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
         	</td>
         </tr>
 
@@ -150,7 +150,7 @@ $custom = $Tools->fetch_custom_fields('locations');
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopupsReload"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editLocationSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editLocationSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="editLocationResult"></div>
