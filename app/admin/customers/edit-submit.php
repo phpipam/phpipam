@@ -14,6 +14,8 @@ $Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
+print "<!-- jrh " . print_r($POST,true) . " -->\n";
+
 // verify that user is logged in
 $User->check_user_session();
 // verify module permissions
@@ -57,14 +59,14 @@ if(sizeof($custom) > 0) {
 	foreach($custom as $myField) {
 		//booleans can be only 0 and 1!
 		if($myField['type']=="tinyint(1)") {
-			if($customer[$myField['name']]>1) {
-				$customer[$myField['name']] = 0;
+			if($POST->{$myField['name']}>1) {
+				$POST->{$myField['name']} = 0;
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && is_blank($customer[$myField['name']])) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
+		if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 		// save to update array
-		$update[$myField['name']] = $customer[$myField['name']];
+		$update[$myField['name']] = $POST->{$myField['name']};
 	}
 }
 
