@@ -2240,6 +2240,11 @@ class Common_functions  {
 								}
 							}
 						}
+					} elseif ($get['section'] == "nat") {
+						$nat = $this->fetch_object("nat", "id", $get['subnetId']);
+						if (is_object($nat)) {
+							$title[] = $nat->name;
+						}
 					} else {
 						$title[] = ucwords(escape_input($get['subnetId']));
 					}
