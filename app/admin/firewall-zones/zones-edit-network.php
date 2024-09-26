@@ -122,7 +122,7 @@ $(document).ready(function() {
 </table>
 <input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 <?php
-if ($POST->id) 	{ print '<input type="hidden" name="netZoneId" value="'.$POST->id.'">'; }
+if ($POST->id) 	{ print '<input type="hidden" name="netZoneId" value="'.escape_input($POST->id).'">'; }
 else 				{ print '<input type="hidden" name="noZone" value="1">';
 						if (is_array($POST->network)) {
 					  		foreach ($POST->network as $key => $network) {

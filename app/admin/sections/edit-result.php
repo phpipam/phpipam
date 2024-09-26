@@ -22,28 +22,24 @@ $User->check_user_session();
 $User->is_demo();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
-
-# strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
-
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "section", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "section", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 
 # If confirm is not set print delete warning
-if ($_POST['action']=="delete" && !isset($_POST['deleteconfirm'])) {
+if ($POST->action=="delete" && !isset($POST->deleteconfirm)) {
 	//for ajax to prevent reload
 	print "<div style='display:none'>alert alert-danger</div>";
 	//result
 	print "<div class='alert alert-warning'>";
 
 	//fetch all subsections
-	$subsections = $Sections->fetch_subsections ($_POST['id']);
+	$subsections = $Sections->fetch_subsections ($POST->id);
 
 	//print what will be deleted
 	if(sizeof($subsections)>0) {
-		$subnets  = $Subnets->fetch_section_subnets($_POST['id']);				//fetch all subnets in section
+		$subnets  = $Subnets->fetch_section_subnets($POST->id);				//fetch all subnets in section
 		$num_subnets = sizeof($subnets);										//number of subnets to be deleted
 		if(sizeof($subnets)>0) {
 			foreach($subnets as $s) {
@@ -65,7 +61,7 @@ if ($_POST['action']=="delete" && !isset($_POST['deleteconfirm'])) {
 	}
 	# no subsections
 	else {
-		$subnets  = $Subnets->fetch_section_subnets ($_POST['id']);			//fetch all subnets in section
+		$subnets  = $Subnets->fetch_section_subnets ($POST->id);			//fetch all subnets in section
 		$num_subnets = is_array($subnets) ? sizeof($subnets) : 0;
 		$ipcnt = $Addresses->count_addresses_in_multiple_subnets($subnets);
 	}
@@ -90,35 +86,35 @@ if ($_POST['action']=="delete" && !isset($_POST['deleteconfirm'])) {
 else {
 
     # fetch old section
-    $section_old = $Sections->fetch_section ("id", $_POST['id']);
+    $section_old = $Sections->fetch_section ("id", $POST->id);
     // parse old permissions
     $old_permissions = db_json_decode($section_old->permissions, true);
 
-	list($removed_permissions, $changed_permissions, $new_permissions) = $Sections->get_permission_changes ((array) $_POST, $old_permissions);
+	list($removed_permissions, $changed_permissions, $new_permissions) = $Sections->get_permission_changes ($POST->as_array(), $old_permissions);
 
 	# set variables for update
 	$values = array(
-					"id"               => @$_POST['id'],
-					"name"             => @$_POST['name'],
-					"description"      => @$_POST['description'],
-					"strictMode"       => @$_POST['strictMode'],
-					"subnetOrdering"   => @$_POST['subnetOrdering'],
-					"showSubnet"       => @$_POST['showSubnet'],
-					"showVLAN"         => @$_POST['showVLAN'],
-					"showVRF"          => @$_POST['showVRF'],
-					"showSupernetOnly" => @$_POST['showSupernetOnly'],
-					"masterSection"    => @$_POST['masterSection'],
+					"id"               => $POST->id,
+					"name"             => $POST->name,
+					"description"      => $POST->description,
+					"strictMode"       => $POST->strictMode,
+					"subnetOrdering"   => $POST->subnetOrdering,
+					"showSubnet"       => $POST->showSubnet,
+					"showVLAN"         => $POST->showVLAN,
+					"showVRF"          => $POST->showVRF,
+					"showSupernetOnly" => $POST->showSupernetOnly,
+					"masterSection"    => $POST->masterSection,
 					"permissions"      => json_encode($new_permissions)
 					);
 
 	# execute update
-	if(!$Sections->modify_section ($_POST['action'], $values, @$_POST['id']))	{ $Result->show("danger", _("Section")." ".$User->get_post_action()." "._("failed"), false); }
+	if(!$Sections->modify_section ($POST->action, $values, $POST->id))	{ $Result->show("danger", _("Section")." ".$User->get_post_action()." "._("failed"), false); }
 	else { $Result->show("success", _("Section")." ".$User->get_post_action()." "._("successful"), false); }
 
 	# delegate
-	if (@$_POST['delegate']==1) {
+	if ($POST->delegate==1) {
 		// fetch section subnets (use $subnets object to prime its cache)
-		$section_subnets = $Subnets->fetch_multiple_objects ("subnets", "sectionId", $_POST['id']);
+		$section_subnets = $Subnets->fetch_multiple_objects ("subnets", "sectionId", $POST->id);
 		if (!is_array($section_subnets)) $section_subnets = array();
 
 		// apply permission changes

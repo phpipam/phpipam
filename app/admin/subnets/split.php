@@ -22,10 +22,10 @@ $csrf = $User->Crypto->csrf_cookie ("create", "split");
 
 
 # ID must be numeric
-if(!is_numeric($_POST['subnetId']))		{ $Result->show("danger", _("Invalid ID"), true, true); }
+if(!is_numeric($POST->subnetId))		{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # get subnet details
-$subnet = $Subnets->fetch_subnet (null, $_POST['subnetId']);
+$subnet = $Subnets->fetch_subnet (null, $POST->subnetId);
 
 # verify that user has write permissions for subnet
 $subnetPerm = $Subnets->check_permission ($User->user, $subnet->id);

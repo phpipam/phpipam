@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # try to fetch
-$res = $Subnets->resolve_ripe_arin ($_POST['subnet']);
+$res = $Subnets->resolve_ripe_arin ($POST->subnet);
 ?>
 
 <!-- header -->

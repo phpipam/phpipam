@@ -20,9 +20,6 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "section");
 
-# strip tags - XSS
-$_POST = $User->strip_input_tags ($_POST);
-
 # validate action
 $Admin->validate_action();
 
@@ -31,7 +28,7 @@ $sections = $Sections->fetch_all_sections ();
 # fetch groups
 $groups   = $Admin->fetch_all_objects("userGroups", "g_id");
 # fetch section
-$section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
+$section  = (array) $Sections->fetch_section (null, $POST->sectionid);
 ?>
 
 <!-- header -->
@@ -51,10 +48,10 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 		<tr>
 			<td><?php print _('Name'); ?></td>
 			<td colspan="2">
-				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="name" value="<?php print $Admin->strip_xss(@$section['name']); ?>" size="30" <?php if ($_POST['action'] == "delete" ) { print ' readonly '; } ?> placeholder="<?php print _('Section name'); ?>">
+				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="name" value="<?php print $Admin->strip_xss(@$section['name']); ?>" size="30" <?php if ($POST->action == "delete" ) { print ' readonly '; } ?> placeholder="<?php print _('Section name'); ?>">
 				<!-- hidden -->
-				<input type="hidden" name="action" 	value="<?php print escape_input($_POST['action']); ?>">
-				<input type="hidden" name="id" 		value="<?php print escape_input(@$_POST['sectionid']); ?>">
+				<input type="hidden" name="action" 	value="<?php print escape_input($POST->action); ?>">
+				<input type="hidden" name="id" 		value="<?php print escape_input($POST->sectionid); ?>">
 				<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			</td>
 		</tr>
@@ -62,20 +59,20 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 		<tr>
 			<td><?php print _('Description'); ?></td>
 			<td colspan="2">
-				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="description" value="<?php print $Admin->strip_xss(@$section['description']); ?>" size="30" <?php if ($_POST['action'] == "delete") { print " readonly ";}?> placeholder="<?php print _('Section description'); ?>">
+				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="description" value="<?php print $Admin->strip_xss(@$section['description']); ?>" size="30" <?php if ($POST->action == "delete") { print " readonly ";}?> placeholder="<?php print _('Section description'); ?>">
 			</td>
 		</tr>
 		<!-- Master Subnet -->
 		<tr>
 			<td><?php print _('Parent'); ?></td>
 			<td colspan="2">
-				<select name="masterSection" class="form-control input-sm input-w-auto pull-left" <?php if($_POST['action']=="delete") print 'disabled="disabled"'; ?>>
+				<select name="masterSection" class="form-control input-sm input-w-auto pull-left" <?php if($POST->action=="delete") print 'disabled="disabled"'; ?>>
 					<option value="0">Root</option>
 					<?php
 					if($sections!==false) {
 						foreach($sections as $s) {
 							# show only roots and ignore self
-							if($s->masterSection==0 && $s->id!=$_POST['sectionid']) {
+							if($s->masterSection==0 && $s->id!=$POST->sectionid) {
 								if($s->id==$section['masterSection'])	{ print "<option value='$s->id' selected='selected'>$s->name</option>"; }
 								else									{ print "<option value='$s->id'>$s->name</option>"; }
 							}
@@ -91,7 +88,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 		<tr>
 			<td><?php print _('Strict Mode'); ?></td>
 			<td colspan="2">
-				<select name="strictMode" class="input-small form-control input-sm input-w-auto pull-left" <?php if($_POST['action']=="delete") print 'disabled="disabled"'; ?>>
+				<select name="strictMode" class="input-small form-control input-sm input-w-auto pull-left" <?php if($POST->action=="delete") print 'disabled="disabled"'; ?>>
 					<option value="1"><?php print _('Yes'); ?></option>
 					<option value="0" <?php if(@$section['strictMode'] == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
 				</select>
@@ -103,7 +100,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 		<tr>
 			<td><?php print _('Show subnet menu'); ?></td>
 			<td colspan="2">
-				<select name="showSubnet" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($_POST['action']=="delete") print 'disabled="disabled"'; ?>>
+				<select name="showSubnet" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($POST->action=="delete") print 'disabled="disabled"'; ?>>
 					<option value="1"><?php print _('Yes'); ?></option>
 					<option value="0" <?php if(@$section['showSubnet'] == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
 				</select>
@@ -115,7 +112,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 		<tr>
 			<td><?php print _('Show VLAN menu'); ?></td>
 			<td colspan="2">
-				<select name="showVLAN" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($_POST['action']=="delete") print 'disabled="disabled"'; ?>>
+				<select name="showVLAN" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($POST->action=="delete") print 'disabled="disabled"'; ?>>
 					<option value="1"><?php print _('Yes'); ?></option>
 					<option value="0" <?php if(@$section['showVLAN'] == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
 				</select>
@@ -127,7 +124,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 		<tr>
 			<td><?php print _('Show VRF menu'); ?></td>
 			<td colspan="2">
-				<select name="showVRF" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($_POST['action']=="delete") print 'disabled="disabled"'; ?>>
+				<select name="showVRF" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($POST->action=="delete") print 'disabled="disabled"'; ?>>
 					<option value="1"><?php print _('Yes'); ?></option>
 					<option value="0" <?php if(@$section['showVRF'] == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
 				</select>
@@ -139,7 +136,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 		<tr>
 			<td><?php print _('Show only supernets'); ?></td>
 			<td colspan="2">
-				<select name="showSupernetOnly" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($_POST['action']=="delete") print 'disabled="disabled"'; ?>>
+				<select name="showSupernetOnly" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($POST->action=="delete") print 'disabled="disabled"'; ?>>
 					<option value="1"><?php print _('Yes'); ?></option>
 					<option value="0" <?php if(@$section['showSupernetOnly'] == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
 				</select>
@@ -225,7 +222,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 		?>
 
 		<?php
-		if($_POST['action'] == "edit") { ?>
+		if($POST->action == "edit") { ?>
 		<!-- Apply to subnets -->
 		<tr>
 			<td colspan="3">
@@ -257,8 +254,8 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class='btn btn-sm btn-default submit_popup' <?php if($_POST['action']=="delete") { print "btn-danger";} else { print "btn-success"; } ?> data-script="app/admin/sections/edit-result.php" data-result_div="sectionEditResult" data-form='sectionEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
+		<button class='btn btn-sm btn-default submit_popup' <?php if($POST->action=="delete") { print "btn-danger";} else { print "btn-success"; } ?> data-script="app/admin/sections/edit-result.php" data-result_div="sectionEditResult" data-form='sectionEdit'>
+			<i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 
 	</div>

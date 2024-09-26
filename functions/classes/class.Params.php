@@ -42,7 +42,7 @@ class Params extends stdClass implements Countable {
      *
      * @return int
      */
-    public function count() {
+    public function count() : int {
         return count($this->as_array());
     }
 

@@ -18,7 +18,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("racks", User::ACCESS_RW, true, true);
 }
 else {
@@ -29,13 +29,10 @@ else {
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "rack", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-
-# get modified details
-$rack = $Tools->strip_input_tags($_POST);
+$User->Crypto->csrf_cookie ("validate", "rack", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['rackid']))			{ $Result->show("danger", _("Invalid ID"), true); }
+if($POST->action!="add" && !is_numeric($POST->rackid))			{ $Result->show("danger", _("Invalid ID"), true); }
 
 # Hostname must be present
 if($rack['name'] == "") 											    { $Result->show("danger", _('Name is mandatory').'!', true); }
@@ -54,7 +51,7 @@ elseif($rack['action']=="delete") {
 }
 
 # check if rack shrinks that no overflow of devices ocur
-if($_POST['action']=="edit" && @$rack['hasBack']=="1" && $rack['size'] < $rack_details->size ) {
+if($POST->action=="edit" && @$rack['hasBack']=="1" && $rack['size'] < $rack_details->size ) {
 	// fetch all devices
 	$rack_devices = $Racks->fetch_rack_devices ($rack_details->id);
 	// split to front / back
@@ -123,23 +120,23 @@ if(isset($update)) {
 
 # append location
 if ($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_RW) {
-    if (is_numeric($_POST['location'])) {
-        $values['location'] = $_POST['location'] > 0 ? $_POST['location'] : NULL;
+    if (is_numeric($POST->location)) {
+        $values['location'] = $POST->location > 0 ? $POST->location : NULL;
     }
 }
 
 # append customerId
 if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_RW) {
-    if (is_numeric($_POST['customer_id'])) {
-        $values['customer_id'] = $_POST['customer_id'] > 0 ? $_POST['customer_id'] : NULL;
+    if (is_numeric($POST->customer_id)) {
+        $values['customer_id'] = $POST->customer_id > 0 ? $POST->customer_id : NULL;
     }
 }
 
 # update rack
-if(!$Admin->object_modify("racks", $_POST['action'], "id", $values))	{}
+if(!$Admin->object_modify("racks", $POST->action, "id", $values))	{}
 else { $Result->show("success", _("Rack")." ".$rack["action"]." "._("successful").'!', false); }
 
-if($_POST['action']=="delete"){
+if($POST->action=="delete"){
 	# remove all references from subnets and ip addresses
 	$Admin->remove_object_references ("devices", "rack", $values["id"], NULL);
     # remove all custom devices for the rack
@@ -147,14 +144,14 @@ if($_POST['action']=="delete"){
     catch (Exception $e) {}
 }
 # remove all devices if back is removed
-if($_POST['action']=="edit" && @$rack['hasBack']!="1") {
+if($POST->action=="edit" && @$rack['hasBack']!="1") {
     try { $Database->runQuery("update devices set `rack` = 0 where `rack` = ? and rack_start > ?;", array($rack['rackid'], $rack['size'])); }
     catch (Exception $e) {}
     try { $Database->runQuery("delete from rackContents where `rack` = ? and rack_start > ?;", array($rack['rackid'], $rack['size'])); }
     catch (Exception $e) {}
 }
 # update positions of rack devices when rack size changes
-if($_POST['action']=="edit" && @$rack['hasBack']=="1" && $rack_details->size!=$rack['size'] ) {
+if($POST->action=="edit" && @$rack['hasBack']=="1" && $rack_details->size!=$rack['size'] ) {
 	$values = array (
 						"rackid"   => $rack_details->id,
 						"new_size" => $rack['size'],
