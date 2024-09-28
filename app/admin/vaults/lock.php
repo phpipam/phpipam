@@ -18,11 +18,8 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
-# strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
-
 // fetch vault
-$vault = $Admin->fetch_object("vaults", "id", $_POST['id']);
+$vault = $Admin->fetch_object("vaults", "id", $POST->id);
 // validate vault id
 $vault===false ? $Result->show("danger", _("Invalid ID"), true, true) : null;
 

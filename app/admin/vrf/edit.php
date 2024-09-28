@@ -18,7 +18,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("vrf", User::ACCESS_RW, true, true);
 }
 else {
@@ -32,14 +32,14 @@ $csrf = $User->Crypto->csrf_cookie ("create", "vrf");
 $Admin->validate_action();
 
 # get VRF
-if($_POST['action']!="add") {
-	$vrf = $Admin->fetch_object ("vrf", "vrfid", $_POST['vrfid']);
+if($POST->action!="add") {
+	$vrf = $Admin->fetch_object ("vrf", "vrfid", $POST->vrfid);
 	$vrf!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 	$vrf = (array) $vrf;
 }
 
 # disable edit on delete
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('vrf');
@@ -74,9 +74,9 @@ $custom = $Tools->fetch_custom_fields('vrf');
 		<td><?php print _('Description'); ?></td>
 		<td>
 			<?php
-			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) { print '<input type="hidden" name="vrfId" value="'. escape_input($_POST['vrfid']) .'">'. "\n";}
+			if( ($POST->action == "edit") || ($POST->action == "delete") ) { print '<input type="hidden" name="vrfId" value="'. escape_input($POST->vrfid) .'">'. "\n";}
 			?>
-			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$vrf['description']); ?>" <?php print $readonly; ?>>
 		</td>
@@ -165,7 +165,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
 
 	<?php
 	//print delete warning
-	if($_POST['action'] == "delete")	{ $Result->show("warning", "<strong>"._('Warning').":</strong> "._("removing VRF will also remove VRF reference from belonging subnets!"), false);}
+	if($POST->action == "delete")	{ $Result->show("warning", "<strong>"._('Warning').":</strong> "._("removing VRF will also remove VRF reference from belonging subnets!"), false);}
 	?>
 </div>
 
@@ -174,7 +174,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editVRF"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editVRF"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="vrfManagementEditResult"></div>
