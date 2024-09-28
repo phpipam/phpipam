@@ -25,7 +25,7 @@ $User->check_maintaneance_mode ();
 $User->check_module_permissions ("pdns", User::ACCESS_RW, true, false);
 
 # fetch subnet
-$subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
+$subnet = $Subnets->fetch_subnet ("id", $POST->subnetId);
 
 # checks
 if ($subnet===false)					{ $Result->show("danger", _("Invalid subnet"), true); }

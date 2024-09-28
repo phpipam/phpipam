@@ -17,7 +17,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 }
 else {
@@ -31,13 +31,13 @@ $csrf = $User->Crypto->csrf_cookie ("create", "nat");
 $Admin->validate_action();
 
 # get NAT object
-if($_POST['action']!="add") {
-	$nat = $Admin->fetch_object ("nat", "id", $_POST['id']);
+if($POST->action!="add") {
+	$nat = $Admin->fetch_object ("nat", "id", $POST->id);
 	$nat!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 }
 
 # disable edit on delete
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 $link = $readonly ? false : true;
 
 # fetch custom fields
@@ -62,7 +62,7 @@ $custom = $Tools->fetch_custom_fields('nat');
             	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($nat->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print $nat->id; ?>">
-            	<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+            	<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Select NAT name"); ?></span>
@@ -124,7 +124,7 @@ $custom = $Tools->fetch_custom_fields('nat');
         </tr>
 
     	<!-- Source -->
-    	<?php if($_POST['action']!=="add") { ?>
+    	<?php if($POST->action!=="add") { ?>
 
         <!-- Policy nat -->
         <tr class='port'>
@@ -175,7 +175,7 @@ $custom = $Tools->fetch_custom_fields('nat');
             	<span class="text-muted"></span>
         	</td>
         </tr>
-        <?php if($_POST['action']!=="delete") { ?>
+        <?php if($POST->action!=="delete") { ?>
     	<tr>
         	<th></th>
         	<td>
@@ -212,7 +212,7 @@ $custom = $Tools->fetch_custom_fields('nat');
             	<span class="text-muted"></span>
         	</td>
         </tr>
-        <?php if($_POST['action']!=="delete") { ?>
+        <?php if($POST->action!=="delete") { ?>
     	<tr>
         	<th></th>
         	<td>
@@ -288,7 +288,7 @@ $custom = $Tools->fetch_custom_fields('nat');
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopupsReload"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editNatSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editNatSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="editNatResult"></div>

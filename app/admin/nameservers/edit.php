@@ -21,21 +21,18 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "ns");
 
-# strip tags - XSS
-$_POST = $User->strip_input_tags ($_POST);
-
 # validate action
 $Admin->validate_action();
 
 # get Nameserver sets
-if($_POST['action']!="add") {
-	$nameservers = $Admin->fetch_object ("nameservers", "id", $_POST['nameserverid']);
+if($POST->action!="add") {
+	$nameservers = $Admin->fetch_object ("nameservers", "id", $POST->nameserverid);
 	$nameservers!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 	$nameservers = (array) $nameservers;
 }
 
 # disable edit on delete
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 
 # set nameservers
 $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : pf_explode(";", $nameservers['namesrv1']);
@@ -96,9 +93,9 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : pf_explode(";", $
 		<td><?php print _('Description'); ?></td>
 		<td>
 			<?php
-			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) { print '<input type="hidden" name="nameserverid" value="'. escape_input($_POST['nameserverid']) .'">'. "\n";}
+			if( ($POST->action == "edit") || ($POST->action == "delete") ) { print '<input type="hidden" name="nameserverid" value="'. escape_input($POST->nameserverid) .'">'. "\n";}
 			?>
-			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$nameservers['description']); ?>" <?php print $readonly; ?>>
 		</td>
@@ -133,7 +130,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : pf_explode(";", $
 
 	<?php
 	//print delete warning
-	if($_POST['action'] == "delete")	{ $Result->show("warning", "<strong>"._('Warning').":</strong> "._("removing nameserver set will also remove all references from belonging subnets!"), false);}
+	if($POST->action == "delete")	{ $Result->show("warning", "<strong>"._('Warning').":</strong> "._("removing nameserver set will also remove all references from belonging subnets!"), false);}
 	?>
 </div>
 
@@ -142,8 +139,8 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : pf_explode(";", $
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/nameservers/edit-result.php" data-result_div="nameserverManagementEditResult" data-form='nameserverManagementEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
+		<button class='btn btn-sm btn-default submit_popup <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/nameservers/edit-result.php" data-result_div="nameserverManagementEditResult" data-form='nameserverManagementEdit'>
+			<i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 	</div>
 	<!-- result -->

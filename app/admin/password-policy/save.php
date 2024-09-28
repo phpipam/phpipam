@@ -35,15 +35,15 @@ $passwordPolicy = [
 
 # check for numbers and set parameters
 foreach ($passwordPolicy as $k=>$f) {
-	if (isset($_POST[$k])) {
-		if (is_blank($_POST[$k])) {
+	if (isset($POST->{$k})) {
+		if (is_blank($POST->{$k})) {
 			$passwordPolicy[$k] = 0;
 		}
-		elseif (!is_numeric($_POST[$k])) {
+		elseif (!is_numeric($POST->{$k})) {
 			$Result->show ("danger", _("Values must be numeric"), true);
 		}
 		else {
-			$passwordPolicy[$k] = $_POST[$k];
+			$passwordPolicy[$k] = $POST->{$k};
 		}
 	}
 }
