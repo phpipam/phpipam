@@ -222,7 +222,7 @@ CREATE TABLE `settings` (
   `passwordPolicy` VARCHAR(1024)  NULL  DEFAULT '{\"minLength\":8,\"maxLength\":0,\"minNumbers\":0,\"minLetters\":0,\"minLowerCase\":0,\"minUpperCase\":0,\"minSymbols\":0,\"maxSymbols\":0,\"allowedSymbols\":\"#,_,-,!,[,],=,~\"}',
   `2fa_provider` ENUM('none','Google_Authenticator') NULL DEFAULT 'none',
   `2fa_name` VARCHAR(32)  NULL  DEFAULT 'phpipam',
-  `2fa_length` INT(2)  NULL  DEFAULT '16',
+  `2fa_length` INT(2)  NULL  DEFAULT '26',
   `2fa_userchange` BOOL  NOT NULL  DEFAULT '1',
   `passkeys` TINYINT(1)  NULL  DEFAULT '1',
   PRIMARY KEY (`id`)
@@ -1082,4 +1082,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.7";
-UPDATE `settings` SET `dbversion` = 42;
+UPDATE `settings` SET `dbversion` = 43;

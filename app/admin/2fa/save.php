@@ -31,7 +31,7 @@ if(strlen($POST->{'2fa_name'})>32 || is_blank($POST->{'2fa_name'}))			{ $Result-
 
 // verify length
 if(!is_numeric($POST->{'2fa_length'}))										{ $Result->show("danger", _("Invalid value for length"), true); }
-if($POST->{'2fa_length'}>32 || $POST->{'2fa_length'}<16)						{ $Result->show("danger", _("Invalid length"), true); }
+if($POST->{'2fa_length'}>32 || $POST->{'2fa_length'}<26)						{ $Result->show("danger", _("Invalid length"), true); }
 
 // make sure all git submodules are included
 if (!file_exists(dirname(__FILE__)."/../../../functions/GoogleAuthenticator/PHPGangsta/GoogleAuthenticator.php"))	{ $Result->show("danger", _("GoogleAuthenticator submodule missing."), true); }

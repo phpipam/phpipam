@@ -47,6 +47,7 @@
     + Multiple XSS injections (#4145,#4146,#4147,#4148,#4149.#4150,#4151);
     + HTML DOM XSS injection via filenames when uploading (#4160);
     + Escape loaded database strings by default, stored XSS defense;
+    + Increase minimum 2FA secret length to 26 (128bit);
 
 == 1.6.0
 

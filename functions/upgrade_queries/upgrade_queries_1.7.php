@@ -28,3 +28,7 @@ $upgrade_queries["1.7.42"][] = "INSERT INTO `widgets` (`wtitle`,`wdescription`,`
 $upgrade_queries["1.7.42"][] = "-- Database version bump";
 $upgrade_queries["1.7.42"][] = "UPDATE `settings` set `dbversion` = '42';";
 
+$upgrade_queries["1.7.43"][] = "-- Increase 2fa_length minimum value to 26 (128bit);";
+$upgrade_queries["1.7.43"][] = "UPDATE `settings` SET `2fa_length`=26 WHERE `2fa_length`<26;";
+$upgrade_queries["1.7.43"][] = "-- Database version bump";
+$upgrade_queries["1.7.43"][] = "UPDATE `settings` SET `dbversion` = '43';";
