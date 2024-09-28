@@ -35,23 +35,23 @@ $User->Crypto->csrf_cookie ("validate", "rack", $POST->csrf_cookie) === false ? 
 if($POST->action!="add" && !is_numeric($POST->rackid))			{ $Result->show("danger", _("Invalid ID"), true); }
 
 # Hostname must be present
-if($rack['name'] == "") 											    { $Result->show("danger", _('Name is mandatory').'!', true); }
+if($POST->name == "") 											    { $Result->show("danger", _('Name is mandatory').'!', true); }
 
 # rack checks
 # validate position and size
-if (!is_numeric($rack['size']))                                         { $Result->show("danger", _('Invalid rack size').'!', true); }
+if (!is_numeric($POST->size))                                         { $Result->show("danger", _('Invalid rack size').'!', true); }
 # validate rack
-if ($rack['action']=="edit") {
-    if (!is_numeric($rack['rackid']))                                   { $Result->show("danger", _('Invalid rack identifier').'!', true); }
-    $rack_details = $Racks->fetch_rack_details ($rack['rackid']);
+if ($POST->action=="edit") {
+    if (!is_numeric($POST->rackid))                                   { $Result->show("danger", _('Invalid rack identifier').'!', true); }
+    $rack_details = $Racks->fetch_rack_details ($POST->rackid);
     if ($rack_details===false)                                          { $Result->show("danger", _('Rack does not exist').'!', true); }
 }
-elseif($rack['action']=="delete") {
-    if (!is_numeric($rack['rackid']))                                   { $Result->show("danger", _('Invalid rack identifier').'!', true); }
+elseif($POST->action=="delete") {
+    if (!is_numeric($POST->rackid))                                   { $Result->show("danger", _('Invalid rack identifier').'!', true); }
 }
 
 # check if rack shrinks that no overflow of devices ocur
-if($POST->action=="edit" && @$rack['hasBack']=="1" && $rack['size'] < $rack_details->size ) {
+if($POST->action=="edit" && $POST->hasBack=="1" && $POST->size < $rack_details->size ) {
 	// fetch all devices
 	$rack_devices = $Racks->fetch_rack_devices ($rack_details->id);
 	// split to front / back
@@ -59,11 +59,11 @@ if($POST->action=="edit" && @$rack['hasBack']=="1" && $rack['size'] < $rack_deta
 		foreach ($rack_devices as $d) {
 			// front devices
 			if($d->rack_start <= $rack_details->size) {
-				if (($d->rack_start + $d->rack_size -1) > $rack['size']) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
+				if (($d->rack_start + $d->rack_size -1) > $POST->size) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
 			}
 			// back devices
 			else {
-				if (($d->rack_start - $rack_details->size + $d->rack_size -1) > $rack['size']) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
+				if (($d->rack_start - $rack_details->size + $d->rack_size -1) > $POST->size) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
 			}
 		}
 	}
@@ -75,11 +75,11 @@ if($POST->action=="edit" && @$rack['hasBack']=="1" && $rack['size'] < $rack_deta
         foreach ($rack_content as $d) {
             // front devices
             if($d->rack_start <= $rack_details->size) {
-                if (($d->rack_start + $d->rack_size -1) > $rack['size']) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
+                if (($d->rack_start + $d->rack_size -1) > $POST->size) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
             }
             // back devices
             else {
-                if (($d->rack_start - $rack_details->size + $d->rack_size -1) > $rack['size']) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
+                if (($d->rack_start - $rack_details->size + $d->rack_size -1) > $POST->size) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
             }
         }
     }
@@ -91,27 +91,27 @@ if(sizeof($custom) > 0) {
 	foreach($custom as $myField) {
 		//booleans can be only 0 and 1!
 		if($myField['type']=="tinyint(1)") {
-			if($rack[$myField['name']]>1) {
-				$rack[$myField['name']] = "";
+			if($POST->{$myField['name']}>1) {
+				$POST->{$myField['name']} = "";
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && is_blank($rack[$myField['name']])) {
+		if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) {
 			{ $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 		}
 		# save to update array
-		$update[$myField['name']] = $rack[$myField['name']];
+		$update[$myField['name']] = $POST->{$myField['name']};
 	}
 }
 
 # set update values
 $values = array(
-				"id"          => @$rack['rackid'],
-				"name"        => @$rack['name'],
-				"size"        => @$rack['size'],
-				"hasBack"     => $Admin->verify_checkbox(@$rack['hasBack']),
-                "topDown"     => @$rack['topDown'],
-				"description" => @$rack['description']
+				"id"          => $POST->rackid,
+				"name"        => $POST->name,
+				"size"        => $POST->size,
+				"hasBack"     => $Admin->verify_checkbox($POST->hasBack),
+                "topDown"     => $POST->topDown,
+				"description" => $POST->description
 				);
 # custom fields
 if(isset($update)) {
@@ -134,7 +134,7 @@ if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cust
 
 # update rack
 if(!$Admin->object_modify("racks", $POST->action, "id", $values))	{}
-else { $Result->show("success", _("Rack")." ".$rack["action"]." "._("successful").'!', false); }
+else { $Result->show("success", _("Rack")." ".$POST->action." "._("successful").'!', false); }
 
 if($POST->action=="delete"){
 	# remove all references from subnets and ip addresses
@@ -144,17 +144,17 @@ if($POST->action=="delete"){
     catch (Exception $e) {}
 }
 # remove all devices if back is removed
-if($POST->action=="edit" && @$rack['hasBack']!="1") {
-    try { $Database->runQuery("update devices set `rack` = 0 where `rack` = ? and rack_start > ?;", array($rack['rackid'], $rack['size'])); }
+if($POST->action=="edit" && $POST->hasBack!="1") {
+    try { $Database->runQuery("update devices set `rack` = 0 where `rack` = ? and rack_start > ?;", array($POST->rackid, $POST->size)); }
     catch (Exception $e) {}
-    try { $Database->runQuery("delete from rackContents where `rack` = ? and rack_start > ?;", array($rack['rackid'], $rack['size'])); }
+    try { $Database->runQuery("delete from rackContents where `rack` = ? and rack_start > ?;", array($POST->rackid, $POST->size)); }
     catch (Exception $e) {}
 }
 # update positions of rack devices when rack size changes
-if($POST->action=="edit" && @$rack['hasBack']=="1" && $rack_details->size!=$rack['size'] ) {
+if($POST->action=="edit" && $POST->hasBack=="1" && $rack_details->size!=$POST->size ) {
 	$values = array (
 						"rackid"   => $rack_details->id,
-						"new_size" => $rack['size'],
+						"new_size" => $POST->size,
 						"old_size" => $rack_details->size
 	                 );
     try { $Database->runQuery("UPDATE `devices` set `rack_start` = `rack_start` + :new_size - :old_size where `rack` = :rackid and rack_start > :old_size", $values); }
