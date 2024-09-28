@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # fetch server
-$server = $Admin->fetch_object("usersAuthMethod", "id", $_POST['server']);
+$server = $Admin->fetch_object("usersAuthMethod", "id", $POST->server);
 $server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
 
 //parse parameters
@@ -60,7 +60,7 @@ try {
 			//false
 			if($domain_group_members!==false) {
 				foreach($domain_group_members as $m) {
-					if($m==$_POST['username']) {
+					if($m==$POST->username) {
 						$membership[] = $g->g_id;
 					}
 				}

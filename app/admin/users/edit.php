@@ -21,9 +21,6 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "user");
 
-# strip tags - XSS
-$_POST = $User->strip_input_tags ($_POST);
-
 # validate action
 $Admin->validate_action();
 
@@ -38,8 +35,8 @@ $groups		= $Admin->fetch_all_objects ("userGroups", "g_id");
 
 
 # set header parameters and fetch user
-if($_POST['action']!="add") {
-	$user = $Admin->fetch_object ("users", "id", $_POST['id']);
+if($POST->action!="add") {
+	$user = $Admin->fetch_object ("users", "id", $POST->id);
 	//false
 	if($user===false)		{ $Result->show("danger", _("Invalid ID"), true, true); }
 	else {
@@ -53,7 +50,7 @@ else {
 }
 
 # disabled
-$disabled = $_POST['action']=="delete" ? "disabled" : "";
+$disabled = $POST->action=="delete" ? "disabled" : "";
 
 # passkeys
 $user_passkeys = $User->get_user_passkeys($user['id']);
@@ -98,12 +95,12 @@ $(document).ready(function(){
     <tr>
     	<td><?php print _('Username'); ?></td>
     	<td>
-    		<input type="text" class="form-control input-sm" name="username" value="<?php print @$user['username']; ?>" <?php if($_POST['action']=="edit"||$_POST['action']=="delete") print 'readonly disabled'; ?> <?php print $disabled; ?>></td>
+    		<input type="text" class="form-control input-sm" name="username" value="<?php print @$user['username']; ?>" <?php if($POST->action=="edit"||$POST->action=="delete") print 'readonly disabled'; ?> <?php print $disabled; ?>></td>
     		<input type="hidden" name="userId" value="<?php print @$user['id']; ?>">
-        	<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+        	<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
         	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	<td class="info2">
-    		<?php if($_POST['action']=="add") { ?>
+    		<?php if($POST->action=="add") { ?>
     		<a class='btn btn-xs btn-default adsearchuser' rel='tooltip' title='Search AD for user details'><i class='fa fa-search'></i></a>
     		<?php } ?>
 			<?php print _('Enter username'); ?>
@@ -117,7 +114,7 @@ $(document).ready(function(){
     	<td class="info2"><?php print _('Enter users email address'); ?></td>
     </tr>
 
-    <?php if($_POST['action']!="delete") { ?>
+    <?php if($POST->action!="delete") { ?>
 
 	<tr>
 		<td colspan="3"><hr></td>
@@ -129,7 +126,7 @@ $(document).ready(function(){
     	<td>
         <select name="disabled" class="form-control input-sm input-w-auto">
             <option value="Yes" <?php if (@$user['disabled'] == "Yes") print "selected"; ?>><?php print _('Disabled'); ?></option>
-            <option value="No" 	<?php if (@$user['disabled'] == "No" || $_POST['action'] == "add") print "selected"; ?>><?php print _('Enabled'); ?></option>
+            <option value="No" 	<?php if (@$user['disabled'] == "No" || $POST->action == "add") print "selected"; ?>><?php print _('Enabled'); ?></option>
         </select>
 
         </td>
@@ -142,7 +139,7 @@ $(document).ready(function(){
     	<td>
         <select name="role" class="form-control input-sm input-w-auto">
             <option value="Administrator"   <?php if (@$user['role'] == "Administrator") print "selected"; ?>><?php print _('Administrator'); ?></option>
-            <option value="User" 			<?php if (@$user['role'] == "User" || $_POST['action'] == "add") print "selected"; ?>><?php print _('Normal User'); ?></option>
+            <option value="User" 			<?php if (@$user['role'] == "User" || $POST->action == "add") print "selected"; ?>><?php print _('Normal User'); ?></option>
         </select>
 
         </td>
@@ -182,7 +179,7 @@ $(document).ready(function(){
 	<?php } ?>
 
 
-	<?php if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1" && sizeof($user_passkeys)>0 && $_POST['action']!=="delete") { ?>
+	<?php if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1" && sizeof($user_passkeys)>0 && $POST->action!=="delete") { ?>
 	<tr>
 		<td colspan="3"><hr></td>
 	    <tr>
@@ -231,7 +228,7 @@ $(document).ready(function(){
     </tr>
 
     <!-- password change request -->
-    <?php if($_POST['action']=="add") { ?>
+    <?php if($POST->action=="add") { ?>
     <tr class="password">
     	<td></td>
     	<td class="info2" colspan="2">
@@ -282,7 +279,7 @@ $(document).ready(function(){
     <!-- send notification mail -->
     <tr>
     	<td><?php print _('Notification'); ?></td>
-    	<td><input type="checkbox" name="notifyUser" value="on" <?php if($_POST['action'] == "add") { print 'checked'; } else if($_POST['action'] == "delete") { print 'disabled="disabled"';} ?>></td>
+    	<td><input type="checkbox" name="notifyUser" value="on" <?php if($POST->action == "add") { print 'checked'; } elseif($POST->action == "delete") { print 'disabled="disabled"';} ?>></td>
     	<td class="info2"><?php print _('Send notification email to user with account details'); ?></td>
     </tr>
 	</tbody>
@@ -468,8 +465,8 @@ $(document).ready(function(){
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/users/edit-result.php" data-result_div="usersEditResult" data-form='usersEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
+		<button class='btn btn-sm btn-default submit_popup <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/users/edit-result.php" data-result_div="usersEditResult" data-form='usersEdit'>
+			<i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 	</div>
 

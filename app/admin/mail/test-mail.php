@@ -31,7 +31,7 @@ try {
 	# initialize mailer
 	$phpipam_mail = new phpipam_mail($User->settings, $mail_settings);
 	//override settings
-	$phpipam_mail->override_settings($_POST);
+	$phpipam_mail->override_settings($POST->as_array());
 	//debugging
 	$phpipam_mail->set_debugging(2);
 

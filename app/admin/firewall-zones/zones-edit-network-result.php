@@ -17,43 +17,42 @@ $Zones 	  = new FirewallZones($Database);
 $User->check_user_session();
 
 # validate the action type
-if($_POST['action'] != 'add' && $_POST['action'] != 'delete'){
+if($POST->action != 'add' && $POST->action != 'delete'){
 	$Result->show("danger", _("Invalid action."), true);
 }
 # check the mastersubnet  ID. valid value: integer
-if($_POST['masterSubnetId'] && !preg_match('/^[0-9]+$/i',$_POST['masterSubnetId'])) {
+if($POST->masterSubnetId && !preg_match('/^[0-9]+$/i',$POST->masterSubnetId)) {
 	$Result->show("danger", _("Invalid subnet ID."), true);
-} elseif (!$_POST['masterSubnetId']) {
+} elseif (!$POST->masterSubnetId) {
 	$Result->show("danger", _("Please choose a appropriate network to bind to the firewall zone."), true);
 }
 
 # validate network ID informations
-if($_POST['network']) {
-	foreach ($_POST['network'] as $network) {
+if($POST->network) {
+	foreach ($POST->network as $network) {
 		if(!preg_match('/^[0-9]+$/i',$network)) {
-			$Result->show("danger", _("Invalid network ID."), true);			
+			$Result->show("danger", _("Invalid network ID."), true);
 		}
 	}
 }
 
 # check if the network information should be delivered as form data
-if($_POST['noZone'] == 1) {
+if($POST->noZone == 1) {
 	# update
-	if(!$Zones->check_zone_network($_POST['masterSubnetId']))							{ $Result->show("danger",  _("Cannot add the network to the zone."), true); }
+	if(!$Zones->check_zone_network($POST->masterSubnetId))							{ $Result->show("danger",  _("Cannot add the network to the zone."), true); }
 	else 																				{ $Result->show("success", _("Network successfully added."), true);  }
 }
 
 # check the zone ID. valid value: integer
-if($_POST['netZoneId'] && !preg_match('/^[0-9]+$/i',$_POST['netZoneId'])) {
+if($POST->netZoneId && !preg_match('/^[0-9]+$/i',$POST->netZoneId)) {
 	$Result->show("danger", _("Invalid zone ID."), true);
 } else {
 	# update
-	if ($_POST['action'] == 'add') {
-		if(!$Zones->add_zone_network($_POST['netZoneId'],$_POST['masterSubnetId']))		{ $Result->show("danger",  _("Cannot add the network to the zone."), true); }
+	if ($POST->action == 'add') {
+		if(!$Zones->add_zone_network($POST->netZoneId,$POST->masterSubnetId))		{ $Result->show("danger",  _("Cannot add the network to the zone."), true); }
 		else 																			{ $Result->show("success", _("Network successfully added."), true);  }
-	} elseif ($_POST['action'] == 'delete') {
-		if(!$Zones->delete_zone_network($_POST['netZoneId'],$_POST['masterSubnetId']))	{ $Result->show("danger",  _("Cannot delete the network mapping."), true); }
+	} elseif ($POST->action == 'delete') {
+		if(!$Zones->delete_zone_network($POST->netZoneId,$POST->masterSubnetId))	{ $Result->show("danger",  _("Cannot delete the network mapping."), true); }
 		else 																			{ $Result->show("success", _("Successfully deleted the network mapping."), true);  }
 	}
 }
-?>
