@@ -57,7 +57,7 @@ if ($POST->netZoneId) {
 # deliver networkinformations about a specific zone
 if ($POST->noZone == 1) {
 	if($POST->masterSubnetId) {
-		$POST->network[] = $POST->masterSubnetId;
+		$POST->network = [$POST->masterSubnetId];
 	}
 	if ($POST->network) {
 		$rowspan = count($POST->network);

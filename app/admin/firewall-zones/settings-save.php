@@ -25,13 +25,14 @@ if (($POST->zoneLength < 1) || ($POST->zoneLength > 31)) {
 	$Result->show("danger", _("Invalid zone name length parameter. A valid valid value is between 1 and 31."), true);
 }
 
+$ipType = $POST->ipType;
 # validate the IPv4 type alias.
-if (!preg_match('/^[a-z0-9\-\_.]+$/i', $POST->ipType[0])) {
+if (!is_array($ipType) || sizeof($ipType) < 2 || !preg_match('/^[a-z0-9\-\_.]+$/i', $ipType[0])) {
 	$Result->show("danger", _("Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."), true);
 }
 
 # validate the IPv6 type alias.
-if (!preg_match('/^[a-z0-9\-\_.]+$/i', $POST->ipType[1])) {
+if (!is_array($ipType) || sizeof($ipType) < 2 || !preg_match('/^[a-z0-9\-\_.]+$/i', $ipType[1])) {
 	$Result->show("danger", _("Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."), true);
 }
 
@@ -40,13 +41,14 @@ if (!preg_match('/^[\-\_.]+$/i', $POST->separator)) {
 	$Result->show("danger", _("Invalid separator. Only &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."), true);
 }
 
+$indicator = $POST->indicator;
 # validate the indicator for own firewall zones.
-if (!preg_match('/^[a-z0-9\-\_.]+$/i', $POST->indicator[0])) {
+if (!is_array($indicator) || sizeof($indicator)<2 || !preg_match('/^[a-z0-9\-\_.]+$/i', $indicator[0])) {
 	$Result->show("danger", _("Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."), true);
 }
 
 # validate the IPv6 type alias.
-if (!preg_match('/^[a-z0-9\-\_.]+$/i', $POST->indicator[1])) {
+if (!is_array($indicator) || sizeof($indicator)<2 || !preg_match('/^[a-z0-9\-\_.]+$/i', $indicator[1])) {
 	$Result->show("danger", _("Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."), true);
 }
 
@@ -56,14 +58,8 @@ if (!preg_match('/^[0-3]$/i', $POST->zoneGenerator)) {
 }
 
 # validate the hidden values (zoneGeneratorType).
-if ($POST->zoneGeneratorType[0] != 'decimal') {
-	$Result->show("danger", _("Invalid zone generator types [decimal]. Do not manipulate the POST values!"), true);
-}
-if ($POST->zoneGeneratorType[1] != 'hex') {
-	$Result->show("danger", _("Invalid zone generator types [hex]. Do not manipulate the POST values!"), true);
-}
-if ($POST->zoneGeneratorType[2] != 'text') {
-	$Result->show("danger", _("Invalid zone generator types [text]. Do not manipulate the POST values!"), true);
+if (!is_array($POST->zoneGeneratorType) || $POST->zoneGeneratorType !== ['decimal', 'hex', 'text']) {
+	$Result->show("danger", _("Invalid zone generator types. Do not manipulate the POST values!"), true);
 }
 
 # validate the padding checkbox value
@@ -110,11 +106,8 @@ if (!preg_match('/^[0-9]+$/i', $POST->deviceType)) {
 }
 
 # validate the hidden values (subnetPatternValues).
-if ($POST->subnetPatternValues[0] != 'network') {
-	$Result->show("danger", _("Invalid subnet name type [network]. Do not manipulate the POST values!"), true);
-}
-if ($POST->subnetPatternValues[1] != 'description') {
-	$Result->show("danger", _("Invalid subnet name type [description]. Do not manipulate the POST values!"), true);
+if (!is_array($POST->subnetPatternValues) || $POST->subnetPatternValues !== ['network', 'description']) {
+	$Result->show("danger", _("Invalid subnet name types. Do not manipulate the POST values!"), true);
 }
 
 # validate the subnetPattern value.
@@ -157,4 +150,3 @@ $values = array('id' => 1,
 # update the settings, alert or reply the success message.
 if(!$Admin->object_modify("settings", "edit", "id", $values)) 	{ $Result->show("danger",  _("Cannot update settings"), true); }
 else 															{ $Result->show("success", _("Settings updated successfully"), true);  }
-

@@ -100,9 +100,9 @@ $(document).ready(function() {
 		</td>
 			<?php
 			# display the subnet if already configured
-			if ($firewallZone->sectionId) {
+			if ($POST->sectionId) {
 				print '<td><div class="sectionSubnets">';
-				print $Subnets->print_mastersubnet_dropdown_menu($firewallZone->sectionId,$firewallZone->subnetId);
+				print $Subnets->print_mastersubnet_dropdown_menu($POST->sectionId,$POST->subnetId);
 				print '</div></td>';
 			} else {
 				# if there is only one section, fetch the subnets of that section
@@ -139,7 +139,7 @@ else 				{ print '<input type="hidden" name="noZone" value="1">';
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopup2"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editNetworkSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } else if ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editNetworkSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="zones-edit-network-result"></div>

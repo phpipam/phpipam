@@ -84,7 +84,7 @@ if ($POST->generator == 2 ) {
 if($POST->generator != 2 && $POST->action == 'edit') {
 	$values = array('id' => $POST->id,
 					'indicator' => $POST->indicator,
-					'padding' => $padding,
+					'padding' => $padding ?? 0,
 					'description' => $description,
 					'network' => $POST->network
 					);
@@ -94,7 +94,7 @@ else {
 					'generator' => $POST->generator,
 					'zone' => $zone,
 					'indicator' => $POST->indicator,
-					'padding' => $padding,
+					'padding' => $padding ?? 0,
 					'description' => $description,
 					'network' => $POST->network
 					);

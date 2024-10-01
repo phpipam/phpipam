@@ -35,6 +35,9 @@ $firewallZoneSettings = db_json_decode($User->settings->firewallZoneSettings,tru
 if ($POST->action != 'add') {
 	$firewallZone = $Zones->get_zone($POST->id);
 }
+if (!isset($firewallZone) || !is_object($firewallZone)) {
+	$firewallZone = new Params();
+}
 
 # disable edit on delete
 $readonly = $POST->action=="delete" ? "readonly" : "";
@@ -144,7 +147,7 @@ $(document).ready(function() {
 <div class="zoneNetwork">
 <table class="table table-noborder table-condensed" style="padding-bottom:20px;">
 <?php
-if ($firewallZone->network) {
+if (isset($firewallZone->network)) {
 	print "<tr><td colspan='2'><hr></tr>";
 	$rowspan = count($firewallZone->network);
 	$i = 1;

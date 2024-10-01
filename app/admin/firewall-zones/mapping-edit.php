@@ -45,6 +45,9 @@ $devices = $Tools->fetch_multiple_objects ("devices", "type", $firewallZoneSetti
 if ($POST->action != 'add') {
 	$mapping = $Zones->get_zone_mapping($POST->id);
 }
+if (!isset($mapping) || !is_object($mapping)) {
+	$mapping = new Params();
+}
 ?>
 <!-- header  -->
 <div class="pHeader"><?php print _('Add a mapping between a firewall device and a firewall zone'); ?></div>
@@ -83,7 +86,7 @@ if ($POST->action != 'add') {
 		<td>
 			<div class="zoneInformation">
 				<?php
-				if ($mapping->zoneId) {
+				if ($mapping->id) {
 					# return the zone details
 					$Zones->get_zone_detail($mapping->id);
 				}

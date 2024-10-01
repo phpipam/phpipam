@@ -1394,7 +1394,7 @@ class User extends Common_functions {
         # save to session
         $this->write_session_parameters ();
         # log
-        $this->Log->write( _("User login"), _("User")." ".$this->user->real_name." "._("logged in"), 0, $username );
+        $this->Log->write( _("User login"), _("User")." ".$this->user->real_name." "._("logged in"), 0, null);
 
         # write last logintime
         $this->update_login_time ();
