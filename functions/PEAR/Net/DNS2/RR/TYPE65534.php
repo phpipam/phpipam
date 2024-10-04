@@ -13,24 +13,24 @@
  * @copyright 2020 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      https://netdns2.com/
- * @since     File available since Release 0.6.0
+ * @since     File available since Release 1.2.5
  *
  */
 
 /**
- * A Resource Record - RFC1035 section 3.4.1
+ * TYPE65534 - Private space
  *
- *    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
- *    |                    ADDRESS                    |
- *    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ * Since Bind 9.8 beta, it use a private recode as documented
+ * in the Bind ARM, chapter 4, "Private-type records. 
+ * Basically they store signing process state.
  *
  */
-class Net_DNS2_RR_A extends Net_DNS2_RR
+class Net_DNS2_RR_TYPE65534 extends Net_DNS2_RR
 {
     /*
-     * The IPv4 address in quad-dotted notation
+     * The Private data field
      */
-    public $address;
+    public $private_data;
 
     /**
      * method to return the rdata portion of the packet as a string
@@ -41,7 +41,7 @@ class Net_DNS2_RR_A extends Net_DNS2_RR
      */
     protected function rrToString()
     {
-        return $this->address;
+        return base64_encode($this->private_data);
     }
 
     /**
@@ -55,15 +55,9 @@ class Net_DNS2_RR_A extends Net_DNS2_RR
      */
     protected function rrFromString(array $rdata)
     {
-        $value = array_shift($rdata);
+        $this->private_data = base64_decode(implode('', $rdata));
 
-        if (Net_DNS2::isIPv4($value) == true) {
-            
-            $this->address = $value;
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     /**
@@ -73,17 +67,14 @@ class Net_DNS2_RR_A extends Net_DNS2_RR
      *
      * @return boolean
      * @access protected
-     * 
+     *
      */
     protected function rrSet(Net_DNS2_Packet &$packet)
     {
         if ($this->rdlength > 0) {
+            $this->private_data  = $this->rdata;
 
-            $this->address = inet_ntop($this->rdata);
-            if ($this->address !== false) {
-            
-                return true;
-            }
+            return true;
         }
 
         return false;
@@ -91,18 +82,26 @@ class Net_DNS2_RR_A extends Net_DNS2_RR
 
     /**
      * returns the rdata portion of the DNS packet
-     * 
+     *
      * @param Net_DNS2_Packet &$packet a Net_DNS2_Packet packet use for
      *                                 compressed names
      *
-     * @return mixed                   either returns a binary packed 
+     * @return mixed                   either returns a binary packed
      *                                 string or null on failure
      * @access protected
-     * 
+     *
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        $packet->offset += 4;
-        return inet_pton($this->address);
+        if (strlen($this->private_data) > 0) {
+
+            $data = $this->private_data;
+
+            $packet->offset += strlen($data);
+
+            return $data;
+        }
+
+        return null;
     }
 }
