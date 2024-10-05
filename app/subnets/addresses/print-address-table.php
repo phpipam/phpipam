@@ -28,7 +28,7 @@ function unset_array_value(&$array, $value) {
 }
 
 # direct call, set default direction for sorting
-if(!isset($_POST['direction'])) {
+if(!isset($POST->direction)) {
 
 	# verify that user is logged in
 	$User->check_user_session();

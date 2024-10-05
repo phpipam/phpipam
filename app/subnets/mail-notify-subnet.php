@@ -19,15 +19,15 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # id must be numeric
-is_numeric($_POST['id']) || is_blank($_POST['id']) ?:	$Result->show("danger", _("Invalid ID"), true);
+is_numeric($POST->id) || is_blank($POST->id) ?:	$Result->show("danger", _("Invalid ID"), true);
 
 $csrf = $User->Crypto->csrf_cookie ("create", "mail_notify");
 
 # get IP address id
-$id = $_POST['id'];
+$id = $POST->id;
 
 # fetch subnet, vlan and nameservers
-$subnet  = (array) $Subnets->fetch_subnet (null, $_POST['id']);
+$subnet  = (array) $Subnets->fetch_subnet (null, $POST->id);
 $vlan    = (array) $Tools->fetch_object ("vlans", "vlanId", $subnet['vlanId']);
 $vrf     = (array) $Tools->fetch_object ("vrf", "vrfId", $subnet['vrfId']);
 $nameservers    = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
@@ -62,7 +62,7 @@ empty($subnet['vlanId']) ? : 			$content[] = "&bull; "._('VRF').": \t\t\t $vrf[n
 if ( !empty( $subnet['nameserverId'] ) ) {
 	$nslist = str_replace(";", ", ", $nameservers['namesrv1']);
 
-						$content[] = "&bull; "._('Nameservers').": \t $nslist (${nameservers['name']})";
+						$content[] = "&bull; "._('Nameservers').": \t $nslist ({$nameservers['name']})";
 }
 
 # custom

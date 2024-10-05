@@ -25,29 +25,29 @@ $User->check_maintaneance_mode (true);
 $tagChange = false;
 
 # validate post
-is_numeric($_POST['subnetId']) ?:							$Result->show("danger", _("Invalid ID"), true, true, false, true);
-if(is_numeric($_POST['id'])) {
-	!is_blank($_POST['id']) ?:								$Result->show("danger", _("Invalid ID"), true, true, false, true);
+is_numeric($POST->subnetId) ?:							$Result->show("danger", _("Invalid ID"), true, true, false, true);
+if(is_numeric($POST->id)) {
+	!is_blank($POST->id) ?:								$Result->show("danger", _("Invalid ID"), true, true, false, true);
 	# fetch address
-	$address = (array) $Addresses->fetch_address(null, $_POST['id']);
+	$address = (array) $Addresses->fetch_address(null, $POST->id);
 }
 // from adding new IP, validate
 else {
-	$validate = $Subnets->identify_address ($_POST['id'])=="IPv4" ? filter_var($_POST['id'], FILTER_VALIDATE_IP) : filter_var($_POST['id'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+	$validate = $Subnets->identify_address ($POST->id)=="IPv4" ? filter_var($POST->id, FILTER_VALIDATE_IP) : filter_var($POST->id, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
 	if ($validate===false)									{ $Result->show("danger", _("Invalid IP address"), true, true, false, true); }
 	else {
-		$address['ip'] = $_POST['id'];
+		$address['ip'] = $POST->id;
 	}
 }
 # set and check permissions
-$subnet_permission = $Subnets->check_permission($User->user, $_POST['subnetId']);
+$subnet_permission = $Subnets->check_permission($User->user, $POST->subnetId);
 $subnet_permission > 1 ?:								$Result->show("danger", _('Cannot edit IP address details').'! <br>'._('You do not have write access for this network'), true, true);
 
 # try to ping it
 $pingRes = $Ping->ping_address($address['ip']);
 
 # update last seen if success
-if($pingRes==0 && is_numeric($_POST['id'])) { @$Ping->ping_update_lastseen($address['id']); }
+if($pingRes==0 && is_numeric($POST->id)) { @$Ping->ping_update_lastseen($address['id']); }
 
 # update ipTag
 if ($Ping->settings->updateTags==1 && $Subnets->address_types[$address['state']]['updateTag']==1) {
@@ -100,7 +100,7 @@ if ($Ping->settings->updateTags==1 && $Subnets->address_types[$address['state']]
 <!-- footer -->
 <div class="pFooter">
 	<div class="btn-group">
-		<a class='ping_ipaddress btn btn-sm btn-default' data-subnetId='<?php print escape_input($_POST['subnetId']); ?>' data-id='<?php print escape_input($_POST['id']); ?>' href='#'><i class='fa fa-gray fa-cogs'></i> <?php print _('Repeat'); ?></a>
+		<a class='ping_ipaddress btn btn-sm btn-default' data-subnetId='<?php print escape_input($POST->subnetId); ?>' data-id='<?php print escape_input($POST->id); ?>' href='#'><i class='fa fa-gray fa-cogs'></i> <?php print _('Repeat'); ?></a>
 		<button class="btn btn-sm btn-default hidePopup2"><?php print _('Close window'); ?></button>
 	</div>
 </div>

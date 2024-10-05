@@ -23,14 +23,14 @@ $Snmp       = new phpipamSNMP ();
 if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disabled", true, $ajax_loaded); }
 
 # section check
-if (!is_numeric($_POST['sectionId']))           { $Result->show("danger", "Invalid section Id", true, $ajax_loaded); }
-if (!is_numeric($_POST['subnetId']))            { $Result->show("danger", "Invalid subnet Id", true, $ajax_loaded); }
+if (!is_numeric($POST->sectionId))           { $Result->show("danger", "Invalid section Id", true, $ajax_loaded); }
+if (!is_numeric($POST->subnetId))            { $Result->show("danger", "Invalid subnet Id", true, $ajax_loaded); }
 
-$section = $Subnets->fetch_object("sections", "id", $_POST['sectionId']);
+$section = $Subnets->fetch_object("sections", "id", $POST->sectionId);
 if ($section===false)                           { $Result->show("danger", "Invalid section Id", true, $ajax_loaded); }
 
 # check section permissions
-if($Subnets->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, $ajax_loaded); }
+if($Subnets->check_permission ($User->user, $POST->sectionId) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, $ajax_loaded); }
 
 # fetch devices that use get_routing_table query
 $devices_used = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_routing_table%", "id", true, true);
@@ -72,7 +72,7 @@ elseif(sizeof($found)==0) 	                     { $Result->show("info", _("No ne
 # ok
 else {
     # fetch all permitted domains
-    $permitted_domains = $Sections->fetch_section_domains ($_POST['sectionId']);
+    $permitted_domains = $Sections->fetch_section_domains ($POST->sectionId);
     # fetch all belonging vlans
     $cnt = 0;
     foreach($permitted_domains as $k=>$d) {
@@ -91,7 +91,7 @@ else {
 
 
     # fetch all permitted domains
-    $permitted_nameservers = $Sections->fetch_section_nameserver_sets ($_POST['sectionId']);
+    $permitted_nameservers = $Sections->fetch_section_nameserver_sets ($POST->sectionId);
 
     # fetch all belonging nameserver set
     $cnt = 0;
@@ -153,8 +153,8 @@ else {
     	$m=0;
     	foreach($found as $deviceid=>$device) {
         	// we need to check if subnetId != 0 and isFolder!=1 for overlapping
-        	if($_POST['subnetId']!=="0") {
-            	$subnet = $Tools->fetch_object("subnets", "id", $_POST['subnetId']);
+        	if($POST->subnetId!=="0") {
+            	$subnet = $Tools->fetch_object("subnets", "id", $POST->subnetId);
             	if ($subnet===false)                { $Result->show("info", _("Invalid subnet ID")."!", true, true, false, true); }
         	}
         	// fetch device
@@ -208,11 +208,11 @@ else {
                     		print " <input type='hidden' name='subnet-$m' value='$ip[subnet]/$ip[bitmask]'>";
                     		print " <input type='hidden' name='subnet_dec-$m' value='".$Subnets->transform_address($ip['subnet'],"decimal")."'>";
                     		print " <input type='hidden' name='mask-$m' value='$ip[bitmask]'>";
-                    		print " <input type='hidden' name='sectionId-$m' value='".escape_input($_POST['sectionId'])."'>";
+                    		print " <input type='hidden' name='sectionId-$m' value='".escape_input($POST->sectionId)."'>";
                     		print " <input type='hidden' name='action-$m' value='add'>";
                     		print " <input type='hidden' name='device-$m' value='$deviceid'>";
-                    		if(isset($_POST['subnetId']))
-                    		print " <input type='hidden' name='masterSubnetId-$m' value='".escape_input($_POST['subnetId'])."'>";
+                    		if(isset($POST->subnetId))
+                    		print " <input type='hidden' name='masterSubnetId-$m' value='".escape_input($POST->subnetId)."'>";
                             else
                     		print " <input type='hidden' name='masterSubnetId-$m' value='0'>";
                     		print "</td>";
@@ -253,7 +253,7 @@ else {
                         	        // set permitted
                         	        $permitted_sections = pf_explode(";", $vrf->sections);
                         	        // section must be in array
-                        	        if (is_blank($vrf->sections) || in_array(@$_POST['sectionId'], $permitted_sections)) {
+                        	        if (is_blank($vrf->sections) || in_array($POST->sectionId, $permitted_sections)) {
                         				//cast
                         				$vrf = (array) $vrf;
                         				// set description if present
@@ -332,7 +332,7 @@ else {
     print "</div>";
 
     # show debug?
-    if($_POST['debug']==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }
+    if($POST->debug==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }
 
     ?>
 

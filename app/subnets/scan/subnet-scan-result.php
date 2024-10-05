@@ -16,16 +16,16 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-# check if $_POST input data has been truncated (canary=true input dropped)
-if(!isset($_POST['canary']))
+# check if $POST input data has been truncated (canary=true input dropped)
+if(!isset($POST->canary))
 	$Result->show("danger", _("phpIPAM received truncated POST data")."<br>"._("Please check your webserver and/or php.ini setting:"). " `max_input_vars` = ".ini_get('max_input_vars'), true);
 else
-	unset($_POST['canary']);
+	unset($POST->canary);
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "scan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "scan", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
-$type = $_POST['type'];
+$type = $POST->type;
 
 switch ($type) {
     case "scan-icmp":
