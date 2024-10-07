@@ -22,18 +22,17 @@ if($admin->password!='$6$rounds=3000$JQEE6dL9NpvjeFs4$RK5X3oa28.Uzt/h5VAfdrsvlVe
 # update
 else {
 	# check lengths
-	if(strlen($_POST['password1'])<8)				{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
-	if(strlen($_POST['password2'])<8)				{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
+	if(strlen($POST->password1)<8)				{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
+	if(strlen($POST->password2)<8)				{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
 
 	# check password match
-	if($_POST['password1']!=$_POST['password2'])	{ $Result->show("danger", _("Passwords do not match"), true); }
+	if($POST->password1!=$POST->password2)	{ $Result->show("danger", _("Passwords do not match"), true); }
 
 	# Crypt password
-	$_POST['password1'] = $User->crypt_user_pass ($_POST['password1']);
+	$POST->password1 = $User->crypt_user_pass ($POST->password1);
 
 	# all good, update password!
-	$Install->postauth_update($_POST['password1'], $_POST['siteTitle'], $_POST['siteURL']);
+	$Install->postauth_update($POST->password1, $POST->siteTitle, $POST->siteURL);
 	# ok
 													{ $Result->show( "success", _("Settings updated, installation complete!")."<hr><a class='btn btn-sm btn-default' href='".create_link("login")."'>"._("Proceed to login.")."</a>", false); }
 }
-?>

@@ -2204,7 +2204,7 @@ msgstr ""
 msgid "Removing subnets will delete ALL underlaying subnets and belonging IP "
 "addresses"
 msgstr ""
-"naslove"
+""
 
 #: site/admin/manageSubnetEdit.php:324
 msgid "Delete subnet"

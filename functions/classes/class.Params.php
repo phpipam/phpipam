@@ -92,8 +92,25 @@ class Params extends stdClass implements Countable {
         if (!is_array($args))
             return;
 
+        // Don't run strip_tags() on passwords and usernames
+        // "<a>" can occur inside a valid password
+        $strip_exceptions = [
+            'ipampassword1',
+            'ipampassword2',
+            'ipamusername',
+            'muser',
+            'mysqlrootpass',
+            'mysqlrootuser',
+            'oldpassword',
+            'password',
+            'password1',
+            'password2',
+            'secret',
+            'username',
+        ];
+
         foreach ($args as $name => $value) {
-            if ($strip_tags && is_string($value)) {
+            if ($strip_tags && is_string($value) && !in_array($name, $strip_exceptions, true)) {
                 $this->{$name} = strip_tags($value);
             } else {
                 $this->{$name} = $value;
