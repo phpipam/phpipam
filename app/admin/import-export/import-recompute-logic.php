@@ -22,7 +22,7 @@ $rlist = array();
 $pass_inputs = ""; # Pass fields from one page to another
 
 # Read selected fields and pass them to the save form
-foreach($_GET as $key => $value) {
+foreach($GET as $key => $value) {
 	if (preg_match("/recomputeSection_(\d+)$/",$key,$matches) && ($value == "on")) {
 		# Grab provided values
 		$rlist[$matches[1]]["IPv4"] = ($GET->{'recomputeSectionIPv4_'.$matches[1]} == "on" ? true : false);

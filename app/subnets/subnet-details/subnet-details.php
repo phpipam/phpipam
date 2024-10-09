@@ -78,7 +78,7 @@ else {
 	<tr>
 		<th><?php print _('Hierarchy'); ?></th>
 		<td>
-			<?php $Subnets->print_breadcrumbs($Sections, $Subnets, $_GET); ?>
+			<?php $Subnets->print_breadcrumbs($Sections, $Subnets, $GET->as_array()); ?>
 		</td>
 	</tr>
 	<tr>
@@ -605,7 +605,7 @@ else {
 		$sp['changelog'] = false;		//changelog view
 		$sp['import'] 	 = false;		//import
 	}
-	else if ($subnet_permission == 2) {
+	elseif ($subnet_permission == 2) {
 		$sp['editsubnet']= false;		//edit subnet
 		$sp['editperm']  = false;		//edit permissions
 
@@ -614,7 +614,7 @@ else {
 		$sp['changelog'] = true;		//changelog view
 		$sp['import'] 	 = true;		//import
 	}
-	else if ($subnet_permission == 3) {
+	elseif ($subnet_permission == 3) {
 		$sp['editsubnet']= true;		//edit subnet
 		$sp['editperm']  = true;		//edit permissions
 

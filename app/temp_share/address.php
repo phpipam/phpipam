@@ -6,7 +6,7 @@
 
 # get IP and subnet details (for subnet request)
 if(!isset($address)) {
-	$address = (array) $Addresses-> fetch_address(null, $_GET['subnetId']);
+	$address = (array) $Addresses-> fetch_address(null, $GET->subnetId);
 	$subnet  = (array) $Subnets->fetch_subnet(null, $address['subnetId']);
 }
 
@@ -37,8 +37,8 @@ $address = $Addresses->reformat_empty_array_fields($address, "<span class='text-
 print "<h4>"._('IP address details')."</h4><hr>";
 
 # back
-if(@$temp_objects[$_GET['section']]->type=="subnets") {
-print "<a class='btn btn-default btn-sm btn-default' href='".create_link("temp_share",$_GET['section'])."'><i class='fa fa-chevron-left'></i> "._('Back to subnet')."</a>";
+if(@$temp_objects[$GET->section]->type=="subnets") {
+print "<a class='btn btn-default btn-sm btn-default' href='".create_link("temp_share",$GET->section)."'><i class='fa fa-chevron-left'></i> "._('Back to subnet')."</a>";
 }
 
 # check if it exists, otherwise print error
@@ -79,8 +79,8 @@ if(sizeof($address)>1) {
 	print "	<td>";
 
 	if ($address['state'] == "0") 	  { $stateClass = _("Offline"); }
-	else if ($address['state'] == "2") { $stateClass = _("Reserved"); }
-	else if ($address['state'] == "3") { $stateClass = _("DHCP"); }
+	elseif ($address['state'] == "2") { $stateClass = _("Reserved"); }
+	elseif ($address['state'] == "3") { $stateClass = _("DHCP"); }
 	else						  { $stateClass = _("Online"); }
 
 	print $Addresses->address_type_index_to_type ($address['state']);

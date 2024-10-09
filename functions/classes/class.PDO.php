@@ -162,7 +162,7 @@ abstract class DB {
 	public static function toDate($date = null) {
 		if (is_int($date)) {
 			return date('Y-m-d H:i:s', $date);
-		} else if (is_string($date)) {
+		} elseif (is_string($date)) {
 			return date('Y-m-d H:i:s', strtotime($date));
 		} else {
 			return date('Y-m-d H:i:s');
@@ -281,12 +281,12 @@ abstract class DB {
 		if ($len>1) {
 			if ($str[0] == "'" && $str[$len-1] == "'") {
 				return substr($str, 1, -1);
-			} else if ($str[0] == "'") {
+			} elseif ($str[0] == "'") {
 				return substr($str, 1);
-			} else if ($str[$len-1] == "'") {
+			} elseif ($str[$len-1] == "'") {
 				return substr($str, 0, -1);
 			}
-		} else if ($len>0) {
+		} elseif ($len>0) {
 			if ($str[0] == "'") {
 				return '';
 			}
@@ -685,7 +685,10 @@ abstract class DB {
 		if (is_object($data)) {
 			foreach ($data as $k => $v) {
 				if (is_string($v)) {
-					$data->{$k} = htmlentities($v, ENT_QUOTES);
+					if (json_decode($v, true) === null) {
+						// String is not valid json, encode for safe print()'s
+						$data->{$k} = htmlentities($v, ENT_QUOTES);
+					}
 				}
 			}
 			return $data;

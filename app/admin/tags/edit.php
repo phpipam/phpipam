@@ -31,6 +31,8 @@ if($POST->action!="add") {
 	$tag = $Admin->fetch_object ("ipTags", "id", $POST->id);
 	# null ?
 	$tag===false ? $Result->show("danger", _("Invalid ID"), true, true) : null;
+} else {
+    $tag = new Params();
 }
 ?>
 
@@ -60,8 +62,8 @@ $(function(){
 	<tr>
 	    <td style="width:120px;"><?php print _('Type'); ?></td>
 	    <td>
-		    <input type="text" name="type" class="form-control input-sm"  value="<?php print $Admin->strip_xss(@$tag->type); ?>"  maxlength='32' <?php if($POST->action == "delete") print "readonly"; ?>>
-			<input type="hidden" name="id" value="<?php print @$tag->id; ?>">
+		    <input type="text" name="type" class="form-control input-sm"  value="<?php print $tag->type; ?>"  maxlength='32' <?php if($POST->action == "delete") print "readonly"; ?>>
+			<input type="hidden" name="id" value="<?php print $tag->id; ?>">
 			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
@@ -73,7 +75,7 @@ $(function(){
 	    <td>
 		    <select name="showtag" class="form-control input-sm input-w-auto">
 			    <option value="0"><?php print _("No"); ?></option>
-			    <option value="1" <?php if(@$tag->showtag==1) { print "selected='selected'"; } ?>><?php print _("Yes"); ?></option>
+			    <option value="1" <?php if($tag->showtag==1) { print "selected='selected'"; } ?>><?php print _("Yes"); ?></option>
 		    </select>
 		</td>
     </tr>
@@ -83,7 +85,7 @@ $(function(){
 	    <td><?php print _('Bg color'); ?></td>
 	    <td>
 		    <div class="input-group select-bgcolor">
-				<input type="text" name="bgcolor" class="form-control input-xs"  value="<?php print $Admin->strip_xss(@$tag->bgcolor); ?>"  maxlength='32' <?php if($POST->action == "delete") print "readonly"; ?>><span class="input-group-addon"><i></i></span>
+				<input type="text" name="bgcolor" class="form-control input-xs"  value="<?php print $tag->bgcolor; ?>"  maxlength='32' <?php if($POST->action == "delete") print "readonly"; ?>><span class="input-group-addon"><i></i></span>
 		    </div>
 		</td>
     </tr>
@@ -93,7 +95,7 @@ $(function(){
 	    <td><?php print _('Fg color'); ?></td>
 	    <td>
 		    <div class="input-group select-fgcolor">
-			    <input type="text" name="fgcolor" class="form-control input-sm"  value="<?php print $Admin->strip_xss(@$tag->fgcolor); ?>"  maxlength='32' <?php if($POST->action == "delete") print "readonly"; ?>><span class="input-group-addon"><i></i></span>
+			    <input type="text" name="fgcolor" class="form-control input-sm"  value="<?php print $tag->fgcolor; ?>"  maxlength='32' <?php if($POST->action == "delete") print "readonly"; ?>><span class="input-group-addon"><i></i></span>
 		    </div>
 		</td>
     </tr>
@@ -104,7 +106,7 @@ $(function(){
 	    <td>
 		    <select name="compress" class="form-control input-sm input-w-auto">
 			    <option value="No"><?php print _("No"); ?></option>
-			    <option value="Yes" <?php if(@$tag->compress=="Yes") { print "selected='selected'"; } ?>><?php print _("Yes"); ?></option>
+			    <option value="Yes" <?php if($tag->compress=="Yes") { print "selected='selected'"; } ?>><?php print _("Yes"); ?></option>
 		    </select>
 		</td>
     </tr>
@@ -115,7 +117,7 @@ $(function(){
 	    <td>
 		    <select name="updateTag" class="form-control input-sm input-w-auto">
 			    <option value="0"><?php print _("No"); ?></option>
-			    <option value="1" <?php if(@$tag->updateTag=="1") { print "selected='selected'"; } ?>><?php print _("Yes"); ?></option>
+			    <option value="1" <?php if($tag->updateTag=="1") { print "selected='selected'"; } ?>><?php print _("Yes"); ?></option>
 		    </select>
 		</td>
     </tr>

@@ -30,13 +30,13 @@ if(!is_numeric($POST->id)) { $Result->show("danger", _("Invalid NAT item ID"), t
 if($POST->type!=="src" && $POST->type!=="dst" ) { $Result->show("danger", _("Invalid NAT direction"), true); }
 
 # set searchterm
-if(isset($_REQUEST['ip'])) {
+if(isset($POST->ip)) {
 	// trim
-	$_REQUEST['ip'] = trim($_REQUEST['ip']);
+	$POST->ip = trim($POST->ip);
 	// escape
-	$_REQUEST['ip'] = htmlspecialchars($_REQUEST['ip']);
+	$POST->ip = htmlspecialchars($POST->ip);
 
-	$search_term = @$search_term=="search" ? "" : $_REQUEST['ip'];
+	$search_term = @$search_term=="search" ? "" : $POST->ip;
 }
 
 # change * to % for database wildchar
@@ -58,7 +58,7 @@ elseif($type == "IPv6") 	{ $search_term_edited = $Tools->reformat_IPv6_for_searc
 # search addresses
 $result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low'], array());
 # search subnets
-$result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip'], array());
+$result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $POST->ip, array());
 
 # if some found print
 if(sizeof($result_addresses)>0 || sizeof($result_subnets)>0) {
@@ -71,7 +71,7 @@ if(sizeof($result_addresses)>0 || sizeof($result_subnets)>0) {
     if(sizeof($result_subnets)>0) {
         $html1[] = "<h4>Subnets</h4>";
         foreach ($result_subnets as $s) {
-            if(is_array($nat->src['subnets']) && is_array($nat->dst['subnets'])) {
+            if(isset($nat->src) && isset($nat->dst) && is_array($nat->src['subnets']) && is_array($nat->dst['subnets'])) {
                 if(!in_array($s->id, $nat->src['subnets']) && !in_array($s->id, $nat->dst['subnets'])) {
                     $html1[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='$s->id' data-object-type='subnets' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($s->subnet, "dotted")."/".$s->mask."<br>";
                 }
@@ -84,7 +84,7 @@ if(sizeof($result_addresses)>0 || sizeof($result_subnets)>0) {
     if(sizeof($result_addresses)>0) {
         $html2[] = "<h4>Addresses</h4>";
         foreach ($result_addresses as $a) {
-            if(is_array($nat->src['ipaddresses']) && is_array($nat->dst['ipaddresses'])) {
+            if(isset($nat->src) && isset($nat->dst) && is_array($nat->src['ipaddresses']) && is_array($nat->dst['ipaddresses'])) {
                 if(!in_array($a->id, $nat->src['ipaddresses']) && !in_array($a->id, $nat->dst['ipaddresses'])) {
                     $html2[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='$a->id' data-object-type='ipaddresses' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($a->ip_addr, "dotted")."<br>";
                 }

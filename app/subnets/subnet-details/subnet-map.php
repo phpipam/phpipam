@@ -17,8 +17,8 @@ else {
 
 # reset if search
 if(@$from_search===true) {
-	$maxmask = $_GET['ipaddrid']+1;
-	$subnetmask = $_GET['ipaddrid']-1;
+	$maxmask = $GET->ipaddrid+1;
+	$subnetmask = $GET->ipaddrid-1;
 }
 else {
 	$subnetmask = $subnet['mask'];

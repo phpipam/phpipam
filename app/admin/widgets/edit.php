@@ -27,6 +27,8 @@ $Admin->validate_action();
 if($POST->action!="add") {
 	$w = $Admin->fetch_object ("widgets", "wid", $POST->wid);
 	$w!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
+} else {
+	$w = new Params();
 }
 ?>
 

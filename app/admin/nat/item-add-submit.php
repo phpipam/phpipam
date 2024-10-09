@@ -108,14 +108,19 @@ if(isset($POST->object_type) && isset($POST->object_id)) {
             $nat_array = db_json_decode($nat->dst, true);
         }
 
-        if(is_array($nat_array[$obj_type]))
+        if(is_array($nat_array) && is_array($nat_array[$obj_type]))
         $nat_array[$obj_type] = array_merge($nat_array[$obj_type], array($obj_id));
         else
         $nat_array[$obj_type] = array($obj_id);
 
         // to json
-        if ($nat_type=="src")   { $nat->src = json_encode($nat_array); }
-        else                    { $nat->dst = json_encode($nat_array); }
+        if ($nat_type=="src") {
+            $nat->src = json_encode($nat_array);
+            $nat->dst = json_encode(db_json_decode($nat->dst));
+        } else {
+            $nat->src = json_encode(db_json_decode($nat->src));
+            $nat->dst = json_encode($nat_array);
+        }
 
         // update
         if ($Admin->object_modify ("nat", "edit", "id", array("id"=>$nat_id, "src"=>$nat->src, "dst"=>$nat->dst))) {

@@ -27,6 +27,20 @@ class PowerDNS extends Common_functions {
     public $db_settings;
 
     /**
+     * Array of DB errors
+     *
+     * @var array|null
+     */
+    public $db_check_error = null;
+
+    /**
+     * Active DB connection
+     *
+     * @var mixed
+     */
+    public $active_db = false;
+
+    /**
      * Default settings
      *
      * @var object
@@ -191,7 +205,7 @@ class PowerDNS extends Common_functions {
                 }
             }
             // connect to active
-            $this->Database_pdns = new Database_PDO ($this->db_settings->username, $this->db_settings->password, $this->db_settings->host[$active_db], $this->db_settings->port, $this->db_settings->name);
+            $this->Database_pdns = new Database_PDO ($this->db_settings->username, $this->db_settings->password, $this->db_settings->host[$this->active_db], $this->db_settings->port, $this->db_settings->name);
         }
         else {
             // set connection

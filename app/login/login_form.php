@@ -58,7 +58,7 @@
 		# deauthenticate user
 		if ( $User->is_authenticated()===true ) {
 			# print result
-			if(isset($_GET['section']) && $_GET['section']=="timeout")
+			if(isset($GET->section) && $GET->section=="timeout")
 				$Result->show("success", _('You session has timed out'));
 			else
 				$Result->show("success", _('You have logged out'));

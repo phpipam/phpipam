@@ -35,14 +35,14 @@ if($POST->action!="add") {
 	$title = $User->get_post_action().' '._('agent').' '.$agent->name;
 } else {
 	# generate new code
-	$agent = new StdClass;
+	$agent = new Params();
 	$agent->code = $User->Crypto->generate_html_safe_token(32);
 	# title
 	$title = _('Create new scan agent');
 }
 
 # die if direct and delete
-if (@$agent->type=="direct" && $POST->action=="delete") {
+if ($agent->type=="direct" && $POST->action=="delete") {
 	$Result->show("danger", _("Cannot remove localhost scan agent"),true, true);
 }
 ?>
@@ -61,7 +61,7 @@ if (@$agent->type=="direct" && $POST->action=="delete") {
 	<tr>
 	    <td><?php print _('Name'); ?></td>
 	    <td>
-	    	<input type="text" name="name" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$agent->name); ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
+	    	<input type="text" name="name" class="form-control input-sm" value="<?php print $agent->name; ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
 	        <input type="hidden" name="id" value="<?php print $agent->id; ?>">
     		<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
@@ -72,16 +72,16 @@ if (@$agent->type=="direct" && $POST->action=="delete") {
 	<!-- description -->
 	<tr>
 	    <td><?php print _('Description'); ?></td>
-	    <td><input type="text" id="description" name="description" class="form-control input-sm"  value="<?php print $Admin->strip_xss(@$agent->description); ?>"  <?php if($POST->action == "delete") print "readonly"; ?>></td>
+	    <td><input type="text" id="description" name="description" class="form-control input-sm"  value="<?php print $agent->description; ?>"  <?php if($POST->action == "delete") print "readonly"; ?>></td>
        	<td class="info2"><?php print _('Agent description'); ?></td>
     </tr>
 
-	<?php if(@$agent->type!=="direct") { ?>
+	<?php if($agent->type!=="direct") { ?>
 	<!-- code -->
 	<tr>
 	    <td><?php print _('Code'); ?></td>
-	    <td><input type="text" id="code" name="code" class="form-control input-sm"  value="<?php print $Admin->strip_xss(@$agent->code); ?>"  maxlength='32' <?php if(@$agent->type=="direct"||$POST->action == "delete") print "readonly"; ?>></td>
-       	<td class="info2"><?php print _('Agent code'); ?><?php if(@$agent->type!="direct") { ?>
+	    <td><input type="text" id="code" name="code" class="form-control input-sm"  value="<?php print $agent->code; ?>"  maxlength='32' <?php if($agent->type=="direct"||$POST->action == "delete") print "readonly"; ?>></td>
+       	<td class="info2"><?php print _('Agent code'); ?><?php if($agent->type!="direct") { ?>
        		<button class="btn btn-xs btn-default" id="regAgentKey"><i class="fa fa-random"></i> <?php print _('Regenerate'); ?></button><?php } ?>
 
        	</td>
@@ -91,7 +91,7 @@ if (@$agent->type=="direct" && $POST->action=="delete") {
 	<tr>
 	    <td><?php print _('Agent type'); ?></td>
 	    <td>
-	    	<select name="type" class="form-control input-sm input-w-auto" <?php if(@$agent->type=="direct"||$POST->action == "delete") print "readonly"; ?>>
+	    	<select name="type" class="form-control input-sm input-w-auto" <?php if($agent->type=="direct"||$POST->action == "delete") print "readonly"; ?>>
 	    	<?php
 	    	//$types = array("mysql"=>"MySQL", "api"=>"Api");
 	    	$types = array("mysql"=>"MySQL");

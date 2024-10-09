@@ -4,18 +4,18 @@
 $User->check_user_session();
 
 # must be numeric
-if(!is_numeric($_GET['subnetId']))	{ $Result->show("danger", _("Invalid ID"), true); }
-if(!is_numeric($_GET['section']))	{ $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($GET->subnetId))	{ $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($GET->section))	{ $Result->show("danger", _("Invalid ID"), true); }
 
 # save folder ID
-$folderId = $_GET['subnetId'];
+$folderId = $GET->subnetId;
 
 # get custom subnet fields
 $cfields = $Tools->fetch_custom_fields ('subnets');
 
 # fetch subnet details!
 $folder	= $Subnets->fetch_subnet ("id", $folderId);
-if($folder==false) 				{ header("Location: ".create_link("subnets", $_GET['section'])); die(); }	//redirect if false
+if($folder==false) 				{ header("Location: ".create_link("subnets", $GET->section)); die(); }	//redirect if false
 
 // to array
 $folder = (array) $folder;

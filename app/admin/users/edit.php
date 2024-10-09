@@ -38,22 +38,17 @@ $groups		= $Admin->fetch_all_objects ("userGroups", "g_id");
 if($POST->action!="add") {
 	$user = $Admin->fetch_object ("users", "id", $POST->id);
 	//false
-	if($user===false)		{ $Result->show("danger", _("Invalid ID"), true, true); }
-	else {
-		$user = (array) $user;
-	}
-}
-else {
-	$user = array();
-	//set default lang
-	$user['lang']=$User->settings->defaultLang;
+	if($user===false) { $Result->show("danger", _("Invalid ID"), true, true); }
+} else {
+	$user = new Params();
+	$user->lang=$User->settings->defaultLang;
 }
 
 # disabled
 $disabled = $POST->action=="delete" ? "disabled" : "";
 
 # passkeys
-$user_passkeys = $User->get_user_passkeys($user['id']);
+$user_passkeys = $User->get_user_passkeys($user->id);
 ?>
 
 <script>
@@ -87,7 +82,7 @@ $(document).ready(function(){
 	<!-- real name -->
 	<tr>
 	    <td><?php print _('Real name'); ?></td>
-	    <td><input type="text" class="form-control input-sm" name="real_name" value="<?php print @$user['real_name']; ?>" <?php print $disabled; ?>></td>
+	    <td><input type="text" class="form-control input-sm" name="real_name" value="<?php print $user->real_name; ?>" <?php print $disabled; ?>></td>
        	<td class="info2"><?php print _('Enter users real name'); ?></td>
     </tr>
 
@@ -95,8 +90,8 @@ $(document).ready(function(){
     <tr>
     	<td><?php print _('Username'); ?></td>
     	<td>
-    		<input type="text" class="form-control input-sm" name="username" value="<?php print @$user['username']; ?>" <?php if($POST->action=="edit"||$POST->action=="delete") print 'readonly disabled'; ?> <?php print $disabled; ?>></td>
-    		<input type="hidden" name="userId" value="<?php print @$user['id']; ?>">
+    		<input type="text" class="form-control input-sm" name="username" value="<?php print $user->username; ?>" <?php if($POST->action=="edit"||$POST->action=="delete") print 'readonly disabled'; ?> <?php print $disabled; ?>></td>
+    		<input type="hidden" name="userId" value="<?php print $user->id; ?>">
         	<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
         	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	<td class="info2">
@@ -110,7 +105,7 @@ $(document).ready(function(){
     <!-- email -->
     <tr>
     	<td><?php print _('e-mail'); ?></td>
-    	<td><input type="text" class="form-control input-sm input-w-250" name="email" value="<?php print @$user['email']; ?>" <?php print $disabled; ?>></td>
+    	<td><input type="text" class="form-control input-sm input-w-250" name="email" value="<?php print $user->email; ?>" <?php print $disabled; ?>></td>
     	<td class="info2"><?php print _('Enter users email address'); ?></td>
     </tr>
 
@@ -125,8 +120,8 @@ $(document).ready(function(){
     	<td><?php print _('Status'); ?></td>
     	<td>
         <select name="disabled" class="form-control input-sm input-w-auto">
-            <option value="Yes" <?php if (@$user['disabled'] == "Yes") print "selected"; ?>><?php print _('Disabled'); ?></option>
-            <option value="No" 	<?php if (@$user['disabled'] == "No" || $POST->action == "add") print "selected"; ?>><?php print _('Enabled'); ?></option>
+            <option value="Yes" <?php if ($user->disabled == "Yes") print "selected"; ?>><?php print _('Disabled'); ?></option>
+            <option value="No" 	<?php if ($user->disabled == "No" || $POST->action == "add") print "selected"; ?>><?php print _('Enabled'); ?></option>
         </select>
 
         </td>
@@ -138,8 +133,8 @@ $(document).ready(function(){
     	<td><?php print _('User role'); ?></td>
     	<td>
         <select name="role" class="form-control input-sm input-w-auto">
-            <option value="Administrator"   <?php if (@$user['role'] == "Administrator") print "selected"; ?>><?php print _('Administrator'); ?></option>
-            <option value="User" 			<?php if (@$user['role'] == "User" || $POST->action == "add") print "selected"; ?>><?php print _('Normal User'); ?></option>
+            <option value="Administrator"   <?php if ($user->role == "Administrator") print "selected"; ?>><?php print _('Administrator'); ?></option>
+            <option value="User" 			<?php if ($user->role == "User" || $POST->action == "add") print "selected"; ?>><?php print _('Normal User'); ?></option>
         </select>
 
         </td>
@@ -160,7 +155,7 @@ $(document).ready(function(){
 			<?php
 			foreach($auth_types as $type) {
 				# match
-				if($type->id==@$user['authMethod'])	{ print "<option value='$type->id' selected>$type->type ($type->description)</option>"; }
+				if($type->id==$user->authMethod)	{ print "<option value='$type->id' selected>$type->type ($type->description)</option>"; }
 				else								{ print "<option value='$type->id'         >$type->type ($type->description)</option>"; }
 			}
 			?>
@@ -169,11 +164,11 @@ $(document).ready(function(){
 		<td class="info2"><?php print _("Select authentication method for user"); ?></td>
 	</tr>
 
-	<?php if ($User->settings->{'2fa_provider'}!=='none' && $user['2fa'] == "1") { ?>
+	<?php if ($User->settings->{'2fa_provider'}!=='none' && $user->{'2fa'} == "1") { ?>
 
     <tr>
     	<td style="padding-top:10px;"><?php print _('2fa enabled'); ?></td>
-    	<td style="padding-top:10px;"><input type="checkbox" value="1" class="input-switch" name="2fa" <?php if($user['2fa'] == "1") { print 'checked'; } else { print "disabled"; } ?>></td>
+    	<td style="padding-top:10px;"><input type="checkbox" value="1" class="input-switch" name="2fa" <?php if($user->{'2fa'} == "1") { print 'checked'; } else { print "disabled"; } ?>></td>
     	<td style="padding-top:10px;" class="info2"><?php print _('Disable 2fa for user'); ?></td>
     </tr>
 	<?php } ?>
@@ -198,7 +193,7 @@ $(document).ready(function(){
 
 	    <tr>
 	    	<td style="padding-top:10px;"><?php print _('Passkey login only'); ?></td>
-    		<td style="padding-top:10px;"><input type="checkbox" value="1" class="input-switch" name="passkey_only" <?php if($user['passkey_only'] == "1") { print 'checked'; } ?>></td>
+    		<td style="padding-top:10px;"><input type="checkbox" value="1" class="input-switch" name="passkey_only" <?php if($user->passkey_only == "1") { print 'checked'; } ?>></td>
 	    	<td style="padding-top:10px;" class="info2"><?php print _('Select to only allow account login with passkey'); ?></td>
 	    </tr>
 	</tr>
@@ -212,7 +207,7 @@ $(document).ready(function(){
 	</tbody>
 
     <!-- password -->
-	<tbody id="user_password" <?php if(@$user['authMethod']!="1" && isset($user['authMethod'])) print "style='display:none'"; ?>>
+	<tbody id="user_password" <?php if($user->authMethod!="1" && isset($user->authMethod)) print "style='display:none'"; ?>>
 
     <tr class="password">
     	<td><?php print _('Password'); ?></td>
@@ -250,7 +245,7 @@ $(document).ready(function(){
 			<select name="lang" class="form-control input-sm input-w-auto">
 				<?php
 				foreach($langs as $lang) {
-					if($lang->l_id==$user['lang'])	{ print "<option value='$lang->l_id' selected>$lang->l_name ($lang->l_code)</option>"; }
+					if($lang->l_id==$user->lang)	{ print "<option value='$lang->l_id' selected>$lang->l_name ($lang->l_code)</option>"; }
 					else							{ print "<option value='$lang->l_id'		 >$lang->l_name ($lang->l_code)</option>"; }
 				}
 				?>
@@ -267,7 +262,7 @@ $(document).ready(function(){
 				<option value="default"><?php print _("Default"); ?></option>
 				<?php
 				foreach($User->themes as $theme) {
-					if($theme==$user['theme'])	{ print "<option value='$theme' selected>$theme</option>"; }
+					if($theme==$user->theme)	{ print "<option value='$theme' selected>$theme</option>"; }
 					else						{ print "<option value='$theme'		    >$theme</option>"; }
 				}
 				?>
@@ -291,7 +286,7 @@ $(document).ready(function(){
     	<td>
         <select name="mailNotify" class="form-control input-sm input-w-auto">
             <option value="No"><?php print _('No'); ?></option>
-            <option value="Yes"  <?php if (@$user['mailNotify'] == "Yes") print "selected='selected'"; ?>><?php print _('Yes'); ?></option>
+            <option value="Yes"  <?php if ($user->mailNotify == "Yes") print "selected='selected'"; ?>><?php print _('Yes'); ?></option>
         </select>
 
 
@@ -305,7 +300,7 @@ $(document).ready(function(){
     	<td>
         <select name="mailChangelog" class="form-control input-sm input-w-auto">
             <option value="No"><?php print _('No'); ?></option>
-            <option value="Yes" <?php if (@$user['mailChangelog'] == "Yes") print "selected='selected'"; ?>><?php print _('Yes'); ?></option>
+            <option value="Yes" <?php if ($user->mailChangelog == "Yes") print "selected='selected'"; ?>><?php print _('Yes'); ?></option>
         </select>
 
 
@@ -320,7 +315,7 @@ $(document).ready(function(){
 
 	<!-- groups -->
 	<?php
-	print $user['role']=="Administrator" ?  "<tbody class='module_permissions' style='display:none'>" : "<tbody class='module_permissions'>";
+	print $user->role=="Administrator" ?  "<tbody class='module_permissions' style='display:none'>" : "<tbody class='module_permissions'>";
 	?>
 	<tr>
 		<td colspan="3"><hr><h5><strong><?php print _('Groups'); ?>:</strong></h5></td>
@@ -332,7 +327,7 @@ $(document).ready(function(){
 		//print groups
 		if($groups!==false) {
 			//set groups
-			$ugroups = db_json_decode(@$user['groups'], true);
+			$ugroups = db_json_decode($user->groups, true);
 			$ugroups = $Admin->groups_parse_ids($ugroups);
 
 			foreach($groups as $g) {
@@ -361,7 +356,7 @@ $(document).ready(function(){
 
 	<?php
 
-	print $user['role']=="Administrator" ?  "<tbody class='module_permissions' style='display:none'>" : "<tbody class='module_permissions'>";
+	print $user->role=="Administrator" ?  "<tbody class='module_permissions' style='display:none'>" : "<tbody class='module_permissions'>";
 
 	// Divider
 	print '<tr>';
@@ -407,7 +402,7 @@ $(document).ready(function(){
 	$perm_modules["perm_vaults"] = "Vaults";
 
 	// get permissions
-	$module_permissions = db_json_decode($user['module_permissions'], true);
+	$module_permissions = db_json_decode($user->module_permissions, true);
 
 	// loop
 	foreach ($perm_modules as $key=>$name) {
@@ -442,7 +437,7 @@ $(document).ready(function(){
 		# all my fields
 		foreach($custom as $field) {
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $user, $timepicker_index);
+    		$custom_input = $Tools->create_custom_field_input ($field, (array) $user, $timepicker_index);
     		$timepicker_index = $custom_input['timepicker_index'];
             // print
 			print "<tr>";

@@ -45,7 +45,7 @@ $values = array(
 				);
 
 # Validate input
-if (isset($POST->type) && $POST->type=="SAML2") {
+if ($POST->type=="SAML2") {
 	# The JIT & SAML mapped user options are mutually exclusive.
 	if (filter_var($POST->jit, FILTER_VALIDATE_BOOLEAN) && !empty($POST->MappedUser)) {
 		$Result->show("danger",  _("The JIT and mapped user options are mutually exclusive"), true);

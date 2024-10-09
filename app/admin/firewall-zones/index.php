@@ -24,16 +24,16 @@ if($User->settings->enableFirewallZones==1) {
 	$tabs = array("mapping", "zones", "settings");
 
 	# default tab
-	if(!isset($_GET['subnetId'])) {
-		$_GET['subnetId'] = "mapping";
+	if(!isset($GET->subnetId)) {
+		$GET->subnetId = "mapping";
 	}
 
 	# check
-	if(!in_array($_GET['subnetId'], $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
+	if(!in_array($GET->subnetId, $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
 
 	# print
 	foreach($tabs as $t) {
-		$class = $_GET['subnetId']==$t ? "class='active'" : "";
+		$class = $GET->subnetId==$t ? "class='active'" : "";
 		print "<li role='presentation' $class><a href=".create_link("administration", "firewall-zones", "$t").">". _(ucwords($t))."</a></li>";
 	}
 	?>
@@ -42,8 +42,8 @@ if($User->settings->enableFirewallZones==1) {
 <div>
 <?php
 # include content
-if(!file_exists(dirname(__FILE__) . '/'.$_GET['subnetId'].".php")) 	{ $Result->show("danger", "Invalid request", true); }
-else																{ include(dirname(__FILE__) . '/'.$_GET['subnetId'].".php"); }
+if(!file_exists(dirname(__FILE__) . '/'.$GET->subnetId.".php")) 	{ $Result->show("danger", "Invalid request", true); }
+else																{ include(dirname(__FILE__) . '/'.$GET->subnetId.".php"); }
 ?>
 </div>
 

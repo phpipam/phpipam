@@ -5,7 +5,7 @@
  ***********************************************************************/
 
 # set object
-$subnet = $Tools->fetch_object("subnets", "id", $temp_objects[$_GET['section']]->id);
+$subnet = $Tools->fetch_object("subnets", "id", $temp_objects[$GET->section]->id);
 
 # subnet id must be numeric
 if(!is_numeric($subnet->id)) 		{ $Result->show("danger", _('Invalid ID'), true); }

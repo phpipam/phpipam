@@ -41,7 +41,7 @@ if(sizeof($address)>1) {
         print "<tr>";
         print " <th>"._('Hierarchy')."</th>";
         print " <td>";
-        $Subnets->print_breadcrumbs ($Sections, $Subnets, $_GET, $Addresses);
+        $Subnets->print_breadcrumbs ($Sections, $Subnets, $GET->as_array(), $Addresses);
         print "</td>";
         print "</tr>";
 
@@ -71,8 +71,8 @@ if(sizeof($address)>1) {
         print " <td>";
 
         if ($address['state'] == "0")     { $stateClass = _("Offline"); }
-        else if ($address['state'] == "2") { $stateClass = _("Reserved"); }
-        else if ($address['state'] == "3") { $stateClass = _("DHCP"); }
+        elseif ($address['state'] == "2") { $stateClass = _("Reserved"); }
+        elseif ($address['state'] == "3") { $stateClass = _("DHCP"); }
         else                          { $stateClass = _("Online"); }
 
         print $Addresses->address_type_index_to_type ($address['state']);

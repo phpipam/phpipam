@@ -95,7 +95,7 @@ else {
         	print "<tr>";
         	print "<th>"._('Hierarchy')."</th>";
         	print "<td>";
-        	print $Subnets->print_breadcrumbs($Sections, $Subnets, $_GET);
+        	print $Subnets->print_breadcrumbs($Sections, $Subnets, $GET->as_array());
         	print "</td>";
         	print "</tr>";
 

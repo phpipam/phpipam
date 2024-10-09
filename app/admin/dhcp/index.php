@@ -59,9 +59,9 @@ elseif($User->settings->enableDHCP==1) { ?>
         <div>
         <?php
         // include file
-        if(!file_exists(dirname(__FILE__) . "/$_GET[subnetId].php")) 	{ $Result->show("danger", "Invalid request", true); }
+        if(!file_exists(dirname(__FILE__) . "/".$GET->subnetId.".php")) 	{ $Result->show("danger", "Invalid request", true); }
         elseif (!in_array($GET->subnetId, $tabs))                    { $Result->show("danger", "Invalid request", true); }
-        else													        { include(dirname(__FILE__) . "/$_GET[subnetId].php"); }
+        else													        { include(dirname(__FILE__) . "/".$GET->subnetId.".php"); }
         ?>
         </div>
 <?php

@@ -35,7 +35,8 @@ $Admin->validate_action();
 if($POST->action!="add") {
 	$vrf = $Admin->fetch_object ("vrf", "vrfid", $POST->vrfid);
 	$vrf!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
-	$vrf = (array) $vrf;
+ }else {
+	$vrf = new Params();
 }
 
 # disable edit on delete
@@ -59,14 +60,14 @@ $custom = $Tools->fetch_custom_fields('vrf');
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('VRF name'); ?>" value="<?php print $Tools->strip_xss(@$vrf['name']); ?>" <?php print $readonly; ?>>
+			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('VRF name'); ?>" value="<?php print $vrf->name; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 	<!-- RD -->
 	<tr>
 		<td><?php print _('RD'); ?></td>
 		<td>
-			<input type="text" class="rd form-control input-sm" name="rd" placeholder="<?php print _('Route distinguisher'); ?>" value="<?php print $Tools->strip_xss(@$vrf['rd']); ?>" <?php print $readonly; ?>>
+			<input type="text" class="rd form-control input-sm" name="rd" placeholder="<?php print _('Route distinguisher'); ?>" value="<?php print $vrf->rd; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 	<!-- Description -->
@@ -78,7 +79,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
 			?>
 			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
-			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$vrf['description']); ?>" <?php print $readonly; ?>>
+			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $vrf->description; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -99,7 +100,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
 
         if($customers!=false) {
             foreach($customers as $customer) {
-                if ($customer->id == $vrf['customer_id'])    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
+                if ($customer->id == $vrf->customer_id)    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
                 else                                         { print '<option value="'. $customer->id .'">'.$customer->title.'</option>'; }
             }
         }
@@ -121,7 +122,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
 		# select sections
 		$sections = $Sections->fetch_all_sections();
 		# reformat domains sections to array
-		$vrf_sections = pf_explode(";", @$vrf['sections']);
+		$vrf_sections = pf_explode(";", $vrf->sections);
 		$vrf_sections = is_array($vrf_sections) ? $vrf_sections : array();
 		// loop
 		if($sections!==false) {

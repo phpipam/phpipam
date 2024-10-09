@@ -34,6 +34,8 @@ $Admin->validate_action();
 if($POST->action!="add") {
 	$nat = $Admin->fetch_object ("nat", "id", $POST->id);
 	$nat!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
+} else {
+    $nat = new Params();
 }
 
 # disable edit on delete
@@ -59,7 +61,7 @@ $custom = $Tools->fetch_custom_fields('nat');
     	<tr>
         	<th><?php print _('Name'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($nat->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="name" value="<?php print $nat->name; ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print $nat->id; ?>">
             	<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">

@@ -18,5 +18,5 @@ $hidden_custom_fields = is_array(@$hidden_custom_fields['racks']) ? $hidden_cust
 if ($User->get_module_permissions ("racks")==User::ACCESS_NONE) {
 	$Result->show("danger", _("You do not have permissions to access this module"), false);
 }
-elseif (isset($_GET['subnetId']))   { include("print-single-rack.php"); }
+elseif (isset($GET->subnetId))   { include("print-single-rack.php"); }
 else                            { include("print-racks.php"); }

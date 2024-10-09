@@ -39,7 +39,7 @@ if($POST->action!="add") {
 	$title = $User->get_post_action().' '._('vault').' '.$vault->name;
 } else {
 	# generate new code
-	$vault = new StdClass;
+	$vault = new Params();
 	$vault->Vault_code = $User->Crypto->generate_html_safe_token(32);
 	# title
 	$title = _('Create new vault');
@@ -63,7 +63,7 @@ $custom = $Tools->fetch_custom_fields('vaults');
 	<tr>
 	    <td><?php print _('Vault name'); ?></td>
 	    <td>
-	    	<input type="text" name="name" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$vault->name); ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
+	    	<input type="text" name="name" class="form-control input-sm" value="<?php print $vault->name; ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
 	        <input type="hidden" name="id" value="<?php print $vault->id; ?>">
     		<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
@@ -100,7 +100,7 @@ $custom = $Tools->fetch_custom_fields('vaults');
     <tr>
     	<td><?php print _('Description'); ?></td>
     	<td>
-    		<input type="text" name="description" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$vault->description); ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
+    		<input type="text" name="description" class="form-control input-sm" value="<?php print $vault->description; ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
     	</td>
     	<td class="info2"><?php print _('Enter description'); ?></td>
     </tr>

@@ -106,6 +106,6 @@ else {
     $Result->show("danger", _('Invalid request'), true);
 }
 
-print $Subnets->print_breadcrumbs($Sections, $Subnets, $_GET);
+print $Subnets->print_breadcrumbs($Sections, $Subnets, $GET->as_array());
 print "<hr><br><br>";
 print "<div class='markdown-body'>".$html."</div>";

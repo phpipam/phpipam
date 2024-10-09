@@ -47,15 +47,15 @@ $curRow = 0;
 $curColumn = 0;
 
 //write headers
-if( (isset($_GET['tid'])) && ($_GET['tid'] == "on") ) {
+if ($GET->tid == "on") {
 	$worksheet->write($curRow, $curColumn, _('id') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['tname'])) && ($_GET['tname'] == "on") ) {
+if ($GET->tname == "on") {
 	$worksheet->write($curRow, $curColumn, _('Name') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['tdescription'])) && ($_GET['tdescription'] == "on") ) {
+if ($GET->tdescription == "on") {
 	$worksheet->write($curRow, $curColumn, _('Description') ,$format_header);
 	$curColumn++;
 }
@@ -67,15 +67,15 @@ foreach ($devtypes as $dt) {
 	//cast
 	$dt = (array) $dt;
 
-	if( (isset($_GET['tid'])) && ($_GET['tid'] == "on") ) {
+	if ($GET->tid == "on") {
 		$worksheet->write($curRow, $curColumn, $dt['tid'], $format_text);
 		$curColumn++;
 	}
-	if( (isset($_GET['tname'])) && ($_GET['tname'] == "on") ) {
+	if ($GET->tname == "on") {
 		$worksheet->write($curRow, $curColumn, $dt['tname'], $format_text);
 		$curColumn++;
 	}
-	if( (isset($_GET['tdescription'])) && ($_GET['tdescription'] == "on") ) {
+	if ($GET->tdescription == "on") {
 		$worksheet->write($curRow, $curColumn, $dt['tdescription'], $format_text);
 		$curColumn++;
 	}
@@ -90,5 +90,3 @@ $workbook->send($filename);
 
 // Let's send the file
 $workbook->close();
-
-?>

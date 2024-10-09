@@ -4,7 +4,7 @@
 $User->check_user_session();
 
 # fetch user details
-$user = $Admin->fetch_object("users", "id", $_GET['subnetId']);
+$user = $Admin->fetch_object("users", "id", $GET->subnetId);
 
 # invalid?
 if($user===false) { $Result->show("danger", _("Invalid ID"), true); }
@@ -38,17 +38,17 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 	];
 
 	// default tab
-	if(!isset($_GET['sPage'])) {
-		$_GET['sPage'] = "account";
+	if(!isset($GET->sPage)) {
+		$GET->sPage = "account";
 	}
 
 	// check
-	if(!array_key_exists($_GET['sPage'], $subpages)) 	{ $Result->show("danger", "Invalid request", true); }
+	if(!array_key_exists($GET->sPage, $subpages)) 	{ $Result->show("danger", "Invalid request", true); }
 
 	// print
 	foreach($subpages as $href=>$t) {
-		$class = $_GET['sPage']==$href ? "class='active'" : "";
-		print "<li role='presentation' $class><a href=".create_link("administration", "users", $_GET['subnetId'], $href).">". _($t)."</a></li>";
+		$class = $GET->sPage==$href ? "class='active'" : "";
+		print "<li role='presentation' $class><a href=".create_link("administration", "users", $GET->subnetId, $href).">". _($t)."</a></li>";
 	}
 	?>
 </ul>
@@ -57,7 +57,7 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 <table id="userPrint" class="table table-hover table-auto table-condensed table-noborder">
 	<?php
 	// include
-	include ($_GET['sPage'].".php");
+	include ($GET->sPage.".php");
 	?>
 </table>
 </div>

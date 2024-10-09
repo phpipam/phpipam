@@ -28,14 +28,16 @@ $Admin->validate_action();
 if($POST->action!="add") {
 	$nameservers = $Admin->fetch_object ("nameservers", "id", $POST->nameserverid);
 	$nameservers!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
-	$nameservers = (array) $nameservers;
+} else {
+	$nameservers = new Params();
 }
+
 
 # disable edit on delete
 $readonly = $POST->action=="delete" ? "readonly" : "";
 
 # set nameservers
-$nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : pf_explode(";", $nameservers['namesrv1']);
+$nameservers->namesrv1 = !is_string($nameservers->namesrv1) ? [" "] : pf_explode(";", $nameservers->namesrv1);
 ?>
 
 
@@ -53,7 +55,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : pf_explode(";", $
 	<tr>
 		<td style="width: 200px;"><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('Nameserver set'); ?>" value="<?php print @$nameservers['name']; ?>" <?php print $readonly; ?>>
+			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('Nameserver set'); ?>" value="<?php print $nameservers->name; ?>" <?php print $readonly; ?>>
 		</td>
 		<td></td>
 	</tr>
@@ -64,7 +66,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : pf_explode(";", $
 	<?php
 	//loop
 	$m=1;
-	foreach ($nameservers['namesrv1'] as $ns) {
+	foreach ($nameservers->namesrv1 as $ns) {
 		print "<tr id='namesrv-$m'>";
 		print "	<td>"._("Nameserver")." $m</td>";
 		print "	<td>";
@@ -97,7 +99,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : pf_explode(";", $
 			?>
 			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
-			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$nameservers['description']); ?>" <?php print $readonly; ?>>
+			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $nameservers->description; ?>" <?php print $readonly; ?>>
 		</td>
 		<td></td>
 	</tr>
@@ -110,7 +112,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : pf_explode(";", $
 		# select sections
 		$sections = $Sections->fetch_all_sections();
 		# reformat domains sections to array
-		$nameservers_sections = pf_explode(";", @$nameservers['permissions']);
+		$nameservers_sections = pf_explode(";", $nameservers->permissions);
 		$nameservers_sections = is_array($nameservers_sections) ? $nameservers_sections : array();
 		// loop
 		if ($sections !== false) {

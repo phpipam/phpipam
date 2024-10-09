@@ -43,14 +43,14 @@ $link = $readonly ? false : true;
     $s = db_json_decode($nat->src, true);
     $d = db_json_decode($nat->dst, true);
 
-    if(is_array($s[$POST->type]))
+    if(is_array($s) && isset($s[$POST->type]))
     $s[$POST->type] = array_diff($s[$POST->type], array($POST->item_id));
-    if(is_array($d[$POST->type]))
+    if(is_array($d) && isset($d[$POST->type]))
     $d[$POST->type] = array_diff($d[$POST->type], array($POST->item_id));
 
     # save back and update
-    $src_new = json_encode(array_filter($s));
-    $dst_new = json_encode(array_filter($d));
+    $src_new = json_encode(array_filter($s ?? []));
+    $dst_new = json_encode(array_filter($d ?? []));
 
     if($Admin->object_modify ("nat", "edit", "id", array("id"=>$POST->id, "src"=>$src_new, "dst"=>$dst_new))!==false) {
         $Result->show("success", "Object removed", false);
