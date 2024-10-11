@@ -253,7 +253,7 @@ if(sizeof($address)>1) {
     			if(!is_blank($address[$key])) {
     			$address[$key] = str_replace(array("\n", "\r\n"), "<br>",$address[$key]);
     			print "<tr>";
-    			print "	<th>$key</th>";
+    			print "	<th>" . $Tools->print_custom_field_name($key) . "</th>";
     			print "	<td>";
     			#booleans
     			if($field['type']=="tinyint(1)")	{
