@@ -106,7 +106,7 @@ else {
     foreach ($nats_reordered as $k=>$nats) {
         # header
         $colspan = $policy_nat_found ? 11 :10;
-        $colspan += sizeof($csize);
+        $colspan += $csize;
         print "<tr>";
         print " <td colspan='$colspan' class='th'><i class='fa fa-exchange'></i> "._(ucwords($k)." NAT")."</td>";
         print "</tr>";
