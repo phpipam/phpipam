@@ -402,7 +402,9 @@ $(document).ready(function(){
 	$perm_modules["perm_vaults"] = "Vaults";
 
 	// get permissions
-	$module_permissions = db_json_decode($user->module_permissions, true);
+	$module_permissions = str_replace("perm_", "", array_keys($perm_modules));
+	$module_permissions = array_fill_keys($module_permissions, "0");
+	$module_permissions = array_merge($module_permissions, db_json_decode($user->module_permissions, true));
 
 	// loop
 	foreach ($perm_modules as $key=>$name) {

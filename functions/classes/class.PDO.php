@@ -782,9 +782,10 @@ abstract class DB {
 	 * @param mixed $query (default: null)
 	 * @param array $values (default: array())
 	 * @param string $class (default: 'stdClass')
+	 * @param bool $html_esc (default: true)
 	 * @return array
 	 */
-	public function getObjectsQuery($query = null, $values = array(), $class = 'stdClass') {
+	public function getObjectsQuery($query = null, $values = array(), $class = 'stdClass', $html_esc = true) {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
@@ -799,7 +800,7 @@ abstract class DB {
 			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
 		}
 
-		return $this->html_escape_strings($results);
+		return $html_esc ? $this->html_escape_strings($results) : $results;
 	}
 
 	/**
@@ -872,9 +873,10 @@ abstract class DB {
 	 * @param mixed $query (default: null)
 	 * @param array $values (default: array())
 	 * @param string $class (default: 'stdClass')
+	 * @param bool $html_esc (default: true)
 	 * @return object|null
 	 */
-	public function getObjectQuery($query = null, $values = array(), $class = 'stdClass') {
+	public function getObjectQuery($query = null, $values = array(), $class = 'stdClass', $html_esc = true) {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
@@ -887,7 +889,7 @@ abstract class DB {
 		if ($resultObj === false) {
 			return null;
 		} else {
-			return $this->html_escape_strings($resultObj);
+			return $html_esc ? $this->html_escape_strings($resultObj) : $resultObj;
 		}
 	}
 

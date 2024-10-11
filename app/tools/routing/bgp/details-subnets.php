@@ -10,6 +10,9 @@ $subnets = $Tools->fetch_routing_subnets ("bgp", $bgp->id, false);
 print "<h4>"._('Mapped subnets')."</h4>";
 print "<hr>";
 
+if (!isset($colspan))
+	$colspan = 0;
+
 // check
 if($subnets===false) {
 	$Result->show("info", _("BGP has no mapped subnets")."!", false);
@@ -52,6 +55,9 @@ else {
             # fetch vlan, vrf
             $vlan = $Tools->fetch_object ("vlans", "vlanId", $subnet['vlanId']);
             $vrf  = $Tools->fetch_object ("vrf", "vrfId", $subnet['vrfId']);
+			
+			is_object($vlan) ? : $vlan = new Params();
+			is_object($vrf) ? : $vrf = new Params();
 
             # icon
             $icon = $subnet['direction'] == "advertised" ? "<i class='fa fa-arrow-up'></i>" : "<i class='fa fa-arrow-down'></i>";

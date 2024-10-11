@@ -700,8 +700,12 @@ class Tools extends Common_functions {
     	# fetch columns
 		$query    = "show full columns from `$table`;";
 		# fetch
-	    try { $fields = $this->Database->getObjectsQuery($query); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
+		try {
+			$fields = $this->Database->getObjectsQuery($query, [], 'stdClass', false);
+		} catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), false);
+			return false;
+		}
 
 		return (array) $fields;
 	}
@@ -1457,9 +1461,10 @@ class Tools extends Common_functions {
 	 * @return mixed
 	 */
 	private function get_table_indexes($table) {
-		try { return $indexes = $this->Database->getObjectsQuery("SHOW INDEX from `$table` where `Key_name` != 'PRIMARY';"); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Invalid query for")." `.$table.` "._("database index check : ").$e->getMessage(), true);
+		try {
+			return $this->Database->getObjectsQuery("SHOW INDEX from `$table` where `Key_name` != 'PRIMARY';", [], 'StdClass', false);
+		} catch (Exception $e) {
+			$this->Result->show("danger", _("Invalid query for") . " `.$table.` " . _("database index check : ") . $e->getMessage(), true);
 		}
 	}
 

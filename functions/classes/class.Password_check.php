@@ -42,7 +42,7 @@ class Password_check extends Common_functions {
 
 	/**
 	 * Error text if some
-	 * @var string
+	 * @var array
 	 */
 	private $errors = [];
 
@@ -275,6 +275,6 @@ class Password_check extends Common_functions {
 	 * @return string[]|false
 	 */
 	private function get_special_chars () {
-		return preg_split('//u',preg_replace("/[a-z,A-Z,0-9]/u", "", $this->password), -1, PREG_SPLIT_NO_EMPTY);
+		return preg_split('//u',preg_replace("/[a-zA-Z,0-9]/u", "", $this->password), -1, PREG_SPLIT_NO_EMPTY);
 	}
 }
