@@ -6,9 +6,9 @@
 $User->check_user_session();
 
 # get posted search term
-if(isset($_GET['ip'])) {
+if(isset($GET->ip)) {
     // remove chars
-	$searchTerm = $Subnets->strip_input_tags(urldecode(trim(@$_GET['ip'])));
+	$searchTerm = $Subnets->strip_input_tags(urldecode(trim($GET->ip)));
 }
 else {
     $searchTerm = "";
@@ -16,11 +16,11 @@ else {
 
 // set parameters
 if (isset($_COOKIE['search_parameters'])) {
-    $params = pf_json_decode($_COOKIE['search_parameters'], true);
+    $params = db_json_decode($_COOKIE['search_parameters'], true);
     if($params) {
         foreach ($params as $k=>$p) {
             if ($p=="on") {
-                $_GET[$k] = $p;
+                $GET->$k = $p;
             }
         }
     }
@@ -42,22 +42,22 @@ if (isset($_COOKIE['search_parameters'])) {
 	</div>
 
 	<div style="margin:5px;">
-		<input type="checkbox" name="subnets" 	value="on" <?php if(@$_GET['subnets']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Subnets'); ?>
-		<input type="checkbox" name="addresses" value="on" <?php if(@$_GET['addresses']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('IP addresses'); ?>
+		<input type="checkbox" name="subnets" 	value="on" <?php if($GET->subnets=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Subnets'); ?>
+		<input type="checkbox" name="addresses" value="on" <?php if($GET->addresses=="on") 	{ print "checked='checked'"; } ?>> <?php print _('IP addresses'); ?>
 		<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_R) { ?>
-		<input type="checkbox" name="vlans" 	value="on" <?php if(@$_GET['vlans']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VLANs'); ?>
+		<input type="checkbox" name="vlans" 	value="on" <?php if($GET->vlans=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VLANs'); ?>
 		<?php } ?>
 		<?php if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) { ?>
-		<input type="checkbox" name="vrf" 	    value="on" <?php if(@$_GET['vrf']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VRFs'); ?>
+		<input type="checkbox" name="vrf" 	    value="on" <?php if($GET->vrf=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VRFs'); ?>
 		<?php } ?>
 		<?php if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>=User::ACCESS_R) { ?>
-		<input type="checkbox" name="pstn" 	    value="on" <?php if(@$_GET['pstn']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('PSTN'); ?>
+		<input type="checkbox" name="pstn" 	    value="on" <?php if($GET->pstn=="on") 		{ print "checked='checked'"; } ?>> <?php print _('PSTN'); ?>
 		<?php } ?>
 		<?php if($User->settings->enableCircuits==1 && $User->get_module_permissions ("circuits")>=User::ACCESS_R) { ?>
-		<input type="checkbox" name="circuits" 	    value="on" <?php if(@$_GET['circuits']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Circuits'); ?>
+		<input type="checkbox" name="circuits" 	    value="on" <?php if($GET->circuits=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Circuits'); ?>
 		<?php } ?>
 		<?php if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
-		<input type="checkbox" name="customers" 	    value="on" <?php if(@$_GET['customers']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Customers'); ?>
+		<input type="checkbox" name="customers" 	    value="on" <?php if($GET->customers=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Customers'); ?>
 		<?php } ?>
 	</div>
 </form>

@@ -18,14 +18,14 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # fetch server
-$server = $Admin->fetch_object("usersAuthMethod", "id", $_POST['server']);
+$server = $Admin->fetch_object("usersAuthMethod", "id", $POST->server);
 $server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "group");
 
 //parse parameters
-$params = pf_json_decode($server->params);
+$params = db_json_decode($server->params);
 
 if ($server->type == "LDAP") {
 
@@ -38,7 +38,7 @@ if ($server->type == "LDAP") {
 //no login parameters
 if(is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword))	{ $Result->show("danger", _("Missing credentials"), true); }
 //at least 2 chars
-if(strlen($_POST['dfilter'])<2) 												{ $Result->show("danger", _('Please enter at least 2 characters'), true); }
+if(strlen($POST->dfilter)<2) 												{ $Result->show("danger", _('Please enter at least 2 characters'), true); }
 
 
 //open connection
@@ -65,7 +65,7 @@ try {
 	}
 
 	//search groups
-	$esc_dfilter = ldap_escape($_POST["dfilter"], null, LDAP_ESCAPE_FILTER);
+	$esc_dfilter = ldap_escape($POST->dfilter, '', LDAP_ESCAPE_FILTER);
 	$groups = $adldap->group()->search(adLDAP::ADLDAP_SECURITY_GLOBAL_GROUP, true, "*$esc_dfilter*");
 
 	//echo $adldap->getLastError();

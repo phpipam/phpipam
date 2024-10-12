@@ -41,16 +41,16 @@ print "<hr><br>";
 	}
 
 	// default tab
-	if(!isset($_GET['subnetId'])) {
-		$_GET['subnetId'] = "account";
+	if(!isset($GET->subnetId)) {
+		$GET->subnetId = "account";
 	}
 
 	// check
-	if(!array_key_exists($_GET['subnetId'], $subpages)) 	{ $Result->show("danger", "Invalid request", true); }
+	if(!array_key_exists($GET->subnetId, $subpages)) 	{ $Result->show("danger", "Invalid request", true); }
 
 	// print
 	foreach($subpages as $href=>$t) {
-		$class = $_GET['subnetId']==$href ? "class='active'" : "";
+		$class = $GET->subnetId==$href ? "class='active'" : "";
 		print "<li role='presentation' $class><a href=".create_link("tools", "user-menu", "$href").">". _($t)."</a></li>";
 	}
 	?>
@@ -59,6 +59,6 @@ print "<hr><br>";
 <div class="container-fluid" style="margin-top: 10px;">
 	<?php
 	// include
-	include ($_GET['subnetId'].".php");
+	include ($GET->subnetId.".php");
 	?>
 </div>

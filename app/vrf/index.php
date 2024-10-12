@@ -3,7 +3,7 @@
 die();
 
 # get VRF details
-$vrf = $Tools->fetch_object ("vrf", "vrfId", $_GET['section']);
+$vrf = $Tools->fetch_object ("vrf", "vrfId", $GET->section);
 
 # perm check
 if ($User->get_module_permissions ("vrf")==User::ACCESS_NONE) {

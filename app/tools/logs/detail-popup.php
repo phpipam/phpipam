@@ -18,7 +18,7 @@ $User->check_user_session();
 
 
 # fetch log
-$log = $Admin->fetch_object("logs", "id", $_POST['id']);
+$log = $Admin->fetch_object("logs", "id", $POST->id);
 if($log==false)	{ $Result->show("danger", _("Invalid ID"), true, true); }
 else			{ $log = (array) $log; }
 

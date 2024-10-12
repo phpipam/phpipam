@@ -537,7 +537,7 @@ class phpipamSNMP extends Common_functions {
      *
      * @access public
      * @param mixed $query
-     * @return void
+     * @return mixed
      */
     public function get_query ($query) {
         if (method_exists($this, $query))   { return $this->{$query} (); }

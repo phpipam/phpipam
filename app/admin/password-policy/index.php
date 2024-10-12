@@ -10,7 +10,7 @@ $User->check_user_session();
 $csrf = $User->Crypto->csrf_cookie ("create", "settings");
 
 # current policy
-$policy = pf_json_decode($User->settings->passwordPolicy);
+$policy = db_json_decode($User->settings->passwordPolicy);
 ?>
 
 <!-- title -->

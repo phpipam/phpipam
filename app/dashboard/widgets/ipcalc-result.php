@@ -22,20 +22,20 @@ $Tools	    = new Tools ($Database);
 $User->check_user_session();
 
 # get requested IP addresses in CIDR format
-$cidr = trim($_POST['cidr']);
+$POST->cidr = trim($POST->cidr);
 
 # verify input CIDR and die if errors
-$errors = $Subnets->verify_cidr_address ($cidr, false);
+$errors = $Subnets->verify_cidr_address ($POST->cidr, false);
 $errors===true ? : $Result->show("danger", _('Invalid input').': '.$errors,true);
 
 # fetch all sections
 $Sections->fetch_sections();
 
 # calculate results
-$calc_results = $Tools->calculate_ip_calc_results($cidr);
+$calc_results = $Tools->calculate_ip_calc_results($POST->cidr);
 ?>
 
-<h4><?php print _('Subnetting details for');?> <?php print escape_input($cidr); ?>:</h4>
+<h4><?php print _('Subnetting details for');?> <?php print escape_input($POST->cidr); ?>:</h4>
 
 <!-- IPcalc result table -->
 <table class="table table-condensed">

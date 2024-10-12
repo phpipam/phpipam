@@ -27,6 +27,20 @@ class PowerDNS extends Common_functions {
     public $db_settings;
 
     /**
+     * Array of DB errors
+     *
+     * @var array|null
+     */
+    public $db_check_error = null;
+
+    /**
+     * Active DB connection
+     *
+     * @var mixed
+     */
+    public $active_db = false;
+
+    /**
      * Default settings
      *
      * @var object
@@ -167,7 +181,7 @@ class PowerDNS extends Common_functions {
      */
     private function db_set () {
         // decode values form powerDNS
-        $this->db_settings = strlen($this->settings->powerDNS)>10 ? pf_json_decode($this->settings->powerDNS) : pf_json_decode($this->db_set_db_settings ());
+        $this->db_settings = strlen($this->settings->powerDNS)>10 ? db_json_decode($this->settings->powerDNS) : db_json_decode($this->db_set_db_settings ());
 
         // if comma delimited host
         if (strpos($this->db_settings->host, ";")!==false) {
@@ -185,13 +199,13 @@ class PowerDNS extends Common_functions {
                     $this->db_check_error[] = $this->error." :: ".$host;
                 }
                 else {
-                    if($this->thisactive_db==false) {
+                    if($this->active_db==false) {
                         $this->active_db = $key;
                     }
                 }
             }
             // connect to active
-            $this->Database_pdns = new Database_PDO ($this->db_settings->username, $this->db_settings->password, $this->db_settings->host[$active_db], $this->db_settings->port, $this->db_settings->name);
+            $this->Database_pdns = new Database_PDO ($this->db_settings->username, $this->db_settings->password, $this->db_settings->host[$this->active_db], $this->db_settings->port, $this->db_settings->name);
         }
         else {
             // set connection
@@ -782,7 +796,7 @@ class PowerDNS extends Common_functions {
      *
      * @access public
      * @param mixed $hostname
-     * @return void
+     * @return array|false
      */
     public function seach_aliases ($hostname) {
         // fetch

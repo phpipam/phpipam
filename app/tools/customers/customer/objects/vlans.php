@@ -20,7 +20,7 @@ if (isset($objects["vlans"])) {
 	$custom_fields = (array) $Tools->fetch_custom_fields('vlans');
 
 	# set hidden fields
-	$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+	$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 	$hidden_fields = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : array();
 
 	# size of custom fields
@@ -65,8 +65,8 @@ if (isset($objects["vlans"])) {
 
 		// start - VLAN details
 		print "<tr class='$class change'>";
-		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], "vlan", $vlan->domainId, $vlan->vlanId)."'><i class='fa fa-cloud prefix'></i> ".$vlan->number."</a></td>";
-		print "	<td><a href='".create_link($_GET['page'], "vlan", $vlan->domainId, $vlan->vlanId)."'>".$vlan->name."</a>".$vlan->description."</td>";
+		print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, "vlan", $vlan->domainId, $vlan->vlanId)."'><i class='fa fa-cloud prefix'></i> ".$vlan->number."</a></td>";
+		print "	<td><a href='".create_link($GET->page, "vlan", $vlan->domainId, $vlan->vlanId)."'>".$vlan->name."</a>".$vlan->description."</td>";
 		print "	<td>".$domain_text."</td>";
         // custom fields - no subnets
         if(sizeof(@$custom_fields) > 0) {

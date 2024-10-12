@@ -95,7 +95,7 @@ try {
 		else {
 			$encrypted_params = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $encryption_method);
 			if ($encrypted_params === false) $Response->throw_exception(503, 'Invalid enc_request');
-			$encrypted_params = pf_json_decode($encrypted_params, true);
+			$encrypted_params = db_json_decode($encrypted_params, true);
 			$encrypted_params['app_id'] = $_GET['app_id'];
 
 			$Params->read($encrypted_params);
@@ -133,7 +133,7 @@ try {
 		if(strpos($content_type, "application/json")!==false){
 			$rawPostData = file_get_contents('php://input');
 			if (is_string($rawPostData) && !is_blank($rawPostData)) {
-				$json = pf_json_decode($rawPostData, true);
+				$json = db_json_decode($rawPostData, true);
 				if(!is_array($json)) {
 					$Response->throw_exception(400, 'Invalid JSON: '.json_last_error_msg());
 				}

@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # get all custom fields
-$custom_vrf_fields = $Params->vrf=="on"       ? $Tools->fetch_custom_fields ("vrf") : array();
+$custom_vrf_fields = $GET->vrf=="on"       ? $Tools->fetch_custom_fields ("vrf") : array();
 $hidden_vrf_fields = is_array(@$hidden_fields['vrf']) ? $hidden_fields['vrf'] : array();
 
 # search vrfs

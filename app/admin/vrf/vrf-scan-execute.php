@@ -42,7 +42,7 @@ if ($existing_vrfs!==false) {
 }
 
 # set devices
-foreach ($_POST as $k=>$p) {
+foreach ($POST as $k=>$p) {
     if (strpos($k, "device-")!==false) {
         # fetch device
         $device = $Tools->fetch_object ("devices", "id", str_replace("device-", "", $k));
@@ -189,4 +189,4 @@ print "</span>";
 print "</div>";
 
 # show debug?
-if($_POST['debug']==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }
+if($POST->debug==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }

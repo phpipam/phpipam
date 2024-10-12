@@ -10,7 +10,7 @@ $User->check_user_session();
 $User->check_module_permissions ("vrf", User::ACCESS_R, true, false);
 
 # fetch all subnets in vrf in this section
-$slaves = $Subnets->fetch_vrf_subnets ($_GET['subnetId'], NULL);
+$slaves = $Subnets->fetch_vrf_subnets ($GET->subnetId, NULL);
 
 # no subnets
 if(!$slaves) {

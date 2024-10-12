@@ -56,11 +56,11 @@ function complete_search_cidr($search_cidr) {
 
 
 # Validate inputs
-$search           = isset($_GET['search']) ? $_GET['search'] : null;
-$sectionId        = filter_var($_GET['sectionId'], FILTER_VALIDATE_INT);
-$showSupernetOnly = filter_var($_GET['showSupernetOnly'], FILTER_VALIDATE_BOOLEAN);
-$offset           = filter_var($_GET['offset'], FILTER_VALIDATE_INT);
-$limit            = filter_var($_GET['limit'], FILTER_VALIDATE_INT);
+$search           = $GET->search;
+$sectionId        = filter_var($GET->sectionId, FILTER_VALIDATE_INT);
+$showSupernetOnly = filter_var($GET->showSupernetOnly, FILTER_VALIDATE_BOOLEAN);
+$offset           = filter_var($GET->offset, FILTER_VALIDATE_INT);
+$limit            = filter_var($GET->limit, FILTER_VALIDATE_INT);
 
 if ($sectionId===false || $offset===false || $limit===false) { return; }
 
@@ -78,7 +78,7 @@ if ($permission == 0 ) { return; }
 $custom_fields = $Tools->fetch_custom_fields ('subnets');
 
 # set hidden fields
-$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = isset($hidden_fields['subnets']) && is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 
 $subnetsTree = new SubnetsTree($Subnets, $User->user);

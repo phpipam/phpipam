@@ -153,7 +153,7 @@ class DNS extends Common_functions {
 					$nsarray = pf_explode(";", $nameservers->namesrv1);
 					// check against dead NSes
 					foreach ($nsarray as $k=>$nsserv) {
-						trim($nsserv);
+						$nsserv = trim($nsserv);
 						if(in_array($nsserv, $this->dead_ns)) {
 							unset($nsarray[$k]);
 						}
@@ -236,7 +236,7 @@ class DNS extends Common_functions {
 		// set nameservers
 		if (sizeof($this->ns)>0) {
 			// check each , if dead remove it !
-			foreach ($this->ns as $nk=>$ns) {
+			foreach ($this->ns as $ns) {
 				if (!in_array($ns, $this->dead_ns)) {
 					$this->DNS2->setServers (array($ns));
 
@@ -252,7 +252,7 @@ class DNS extends Common_functions {
 							if($this->print_error) {
 								$this->Result->show("warning", _("DNS error")." ($ns): ".$this->resolve_error);
 							}
-							array_unique($this->dead_ns);
+							$this->dead_ns = array_unique($this->dead_ns);
 						}
 					}
 				}

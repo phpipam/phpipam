@@ -24,7 +24,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 
 
 <div class="btn-group" style='margin-bottom:10px;'>
-    <a href='<?php print create_link($_GET['page'], "vrf"); ?>' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> <?php print _("All VRFs"); ?></a>
+    <a href='<?php print create_link($GET->page, "vrf"); ?>' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> <?php print _("All VRFs"); ?></a>
 </div>
 
 <table class="ipaddress_subnet table-condensed table-full">

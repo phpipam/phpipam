@@ -6,18 +6,18 @@
 $User->check_user_session();
 
 # subnet id must be numeric
-if(!is_numeric($_GET['subnetId'])) 	{ $Result->show("danger", _('Invalid ID'), true); }
+if(!is_numeric($GET->subnetId)) 	{ $Result->show("danger", _('Invalid ID'), true); }
 
 # fetch subnet related stuff
 $custom_fields = $Tools->fetch_custom_fields ('subnets');											//custom fields
-$subnet  = $Subnets->fetch_subnet(null, $_GET['subnetId']);									//subnet details
-if($subnet===false) 				{ header("Location: ".create_link("subnets", $_GET['section'])); die(); }	//redirect if false
+$subnet  = $Subnets->fetch_subnet(null, $GET->subnetId);									//subnet details
+if($subnet===false) 				{ header("Location: ".create_link("subnets", $GET->section)); die(); }	//redirect if false
 else { $subnet = (array) $subnet; }
 $subnet_detailed = $Subnets->get_network_boundaries ($subnet['subnet'], $subnet['mask']);			//set network boundaries
 $slaves = $Subnets->has_slaves ($subnet['id']) ? true : false;										//check if subnet has slaves and set slaves flag true/false
 
 # if subnet is requested but is folder redirect
-if ($subnet['isFolder']==1) { header("Location: ".create_link("folder", $_GET['section'], $_GET['subnetId'])); }
+if ($subnet['isFolder']==1) { header("Location: ".create_link("folder", $GET->section, $GET->subnetId)); }
 
 # permissions
 $subnet_permission  = $Subnets->check_permission($User->user, $subnet['id']);						//subnet permission
@@ -31,7 +31,7 @@ $vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
 $nameservers = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
 
 # verify that is it displayed in proper section, otherwise warn!
-if($subnet['sectionId']!=$_GET['section'])	{
+if($subnet['sectionId']!=$GET->section)	{
 	$sd = (array) $Sections->fetch_section(null,$subnet['sectionId']);
 	$Result->show("warning", _("Subnet is in section")." <a href='".create_link("subnets",$sd['id'],$subnet['id'])."'>$sd[name]</a>!", false);
 }
@@ -67,7 +67,7 @@ if ($User->settings->enableNAT==1) {
 <div class="row" style="margin-bottom: 40px;">
 
 	<!-- subnet details -->
-	<div class="col-sm-12 col-xs-12 <?php if(@$_GET['sPage']=="changelog" || @$_GET['sPage']=="location") { print "col-lg-12 col-md-12";} else { print "col-lg-8 col-md-8"; } ?>">
+	<div class="col-sm-12 col-xs-12 <?php if($GET->sPage=="changelog" || $GET->sPage=="location") { print "col-lg-12 col-md-12";} else { print "col-lg-8 col-md-8"; } ?>">
 		<!-- for adding IP address! -->
 		<div id="subnetId" style="display:none;"><?php print $subnet['id']; ?></div>
 
@@ -77,52 +77,52 @@ if ($User->settings->enableNAT==1) {
 
         <!-- tabs -->
         <ul class='nav nav-tabs ip-det-switcher' style='margin-bottom:20px;'>
-            <li role='presentation' <?php if(!isset($_GET['sPage'])) print " class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id']); ?>'><?php print _("Subnet details"); ?></a></li>
-            <li role='presentation' <?php if(@$_GET['sPage']=="map") print " class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "map"); ?>'><?php print _("Space map"); ?></a></li>
-            <li role='presentation' <?php if(@$_GET['sPage']=="mapsearch") print " class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "mapsearch"); ?>'><?php print _("Mask search"); ?></a></li>
+            <li role='presentation' <?php if(!isset($GET->sPage)) print " class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id']); ?>'><?php print _("Subnet details"); ?></a></li>
+            <li role='presentation' <?php if($GET->sPage=="map") print " class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "map"); ?>'><?php print _("Space map"); ?></a></li>
+            <li role='presentation' <?php if($GET->sPage=="mapsearch") print " class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "mapsearch"); ?>'><?php print _("Mask search"); ?></a></li>
             <?php if($User->is_admin(false)) { ?>
-            <li role='presentation' <?php if(@$_GET['sPage']=="permissions") print "class='active'"; ?>><a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "permissions"); ?>'><?php print _("Permissions"); ?></a></li>
+            <li role='presentation' <?php if($GET->sPage=="permissions") print "class='active'"; ?>><a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "permissions"); ?>'><?php print _("Permissions"); ?></a></li>
             <?php } ?>
             <?php if($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User::ACCESS_R) { ?>
-            <li role='presentation' <?php if(@$_GET['sPage']=="nat") print "class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "nat"); ?>'><?php print _("NAT"); ?></a></li>
+            <li role='presentation' <?php if($GET->sPage=="nat") print "class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "nat"); ?>'><?php print _("NAT"); ?></a></li>
             <?php } ?>
             <?php if($User->settings->enableLocations==1 && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
-            <li role='presentation' <?php if(@$_GET['sPage']=="location") print "class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "location"); ?>'><?php print _("Location"); ?></a></li>
+            <li role='presentation' <?php if($GET->sPage=="location") print "class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "location"); ?>'><?php print _("Location"); ?></a></li>
             <?php } ?>
-            <li role='presentation' <?php if(@$_GET['sPage']=="changelog") print " class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "changelog"); ?>'><?php print _("Changelog"); ?></a></li>
+            <li role='presentation' <?php if($GET->sPage=="changelog") print " class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "changelog"); ?>'><?php print _("Changelog"); ?></a></li>
         </ul>
 
         <!-- details -->
         <?php
-        if(!isset($_GET['sPage'])) {
+        if(!isset($GET->sPage)) {
         	include("subnet-details/subnet-details.php");
         }
-        if(@$_GET['sPage']=="permissions") {
+        if($GET->sPage=="permissions") {
             include("subnet-details/subnet-permissions.php");
         }
-        if($User->settings->enableNAT==1 && @$_GET['sPage']=="nat") {
+        if($User->settings->enableNAT==1 && $GET->sPage=="nat") {
             include("subnet-details/subnet-nat.php");
         }
-        if(@$_GET['sPage']=="changelog") {
+        if($GET->sPage=="changelog") {
             include("subnet-details/subnet-changelog.php");
         }
-        if(@$_GET['sPage']=="location") {
+        if($GET->sPage=="location") {
             include("subnet-details/subnet-location.php");
         }
-        if(@$_GET['sPage']=="map") {
+        if($GET->sPage=="map") {
             include("subnet-details/subnet-map.php");
         }
-        if(@$_GET['sPage']=="mapsearch") {
+        if($GET->sPage=="mapsearch") {
             include("subnet-details/subnet-map-search.php");
         }
         ?>
 
 	</div>
 
-    <?php if(@$_GET['sPage']!="changelog") { ?>
+    <?php if($GET->sPage!="changelog") { ?>
 
 	<!-- subnet graph -->
-	<?php if(@$_GET['sPage']!="location") { ?>
+	<?php if($GET->sPage!="location") { ?>
 	<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 		<?php include('subnet-details/subnet-graph.php'); ?>
 	</div>

@@ -11,7 +11,7 @@ $User->check_user_session();
 $clogs = $Log->fetch_changlog_entries("ip_addr", $address['id']);
 
 # permissions
-$permission = $Subnets->check_permission ($User->user, $_GET['subnetId']);
+$permission = $Subnets->check_permission ($User->user, $GET->subnetId);
 if($permission == 0)	{ $Result->show("danger", _('You do not have permission to access this network'), true); }
 
 # header
@@ -55,4 +55,3 @@ else {
 	}
 	print "</table>";
 }
-?>

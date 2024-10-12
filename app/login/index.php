@@ -124,13 +124,13 @@ if(@$config['requests_public']===false) {
 
 	<?php
 	# include proper subpage
-	if($_GET['page'] == "login") 				{
+	if($GET->page == "login") 				{
 		# disable main login form if you want use another authentification method by default (SAML, LDAP, etc.)
 		$include_main_login_form = !isset($config['disable_main_login_form']) || !$config['disable_main_login_form'];
 		if ($include_main_login_form) include_once('login_form.php');
 	}
-	else if ($_GET['page'] == "request_ip") 	{ include_once('request_ip_form.php'); }
-	else 										{ $_GET['subnetId'] = "404"; print "<div id='error'>"; include_once('app/error.php'); print "</div>"; }
+	elseif ($GET->page == "request_ip") 	{ include_once('request_ip_form.php'); }
+	else 										{ $GET->subnetId = "404"; print "<div id='error'>"; include_once('app/error.php'); print "</div>"; }
 	?>
 
 </div>

@@ -14,7 +14,7 @@ else {
 	print "<br>";
 
 	// back
-	print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], "vaults", $_GET['subnetId'])."'><i class='fa fa-angle-left'></i> "._("All vault items")."</a><br><br>";
+	print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, "vaults", $GET->subnetId)."'><i class='fa fa-angle-left'></i> "._("All vault items")."</a><br><br>";
 
 	// test
 	if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])!="test") {
@@ -24,8 +24,8 @@ else {
 	else {
 
 		// fetch item
-		$vault_item = $Tools->fetch_object("vaultItems", "id", $_GET['sPage']);
-		$vault_item_values = pf_json_decode($User->Crypto->decrypt($vault_item->values, $_SESSION[$vault_id]));
+		$vault_item = $Tools->fetch_object("vaultItems", "id", $GET->sPage);
+		$vault_item_values = db_json_decode($User->Crypto->decrypt($vault_item->values, $_SESSION[$vault_id]));
 
 		// get custom fields
 		$custom_fields = $Tools->fetch_custom_fields('vaultItems');

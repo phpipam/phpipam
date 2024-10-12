@@ -23,7 +23,7 @@ $User->validate_action();
 $csrf = $User->Crypto->csrf_cookie ("create", "passkeyedit");
 
 # fetch passkey
-$passkey = $User->get_user_passkey_by_keyId ($_POST['keyid']);
+$passkey = $User->get_user_passkey_by_keyId ($POST->keyid);
 
 # validate
 if(is_null($passkey))
@@ -38,7 +38,7 @@ $Result->show("danger", _("Passkey not found"), true, true);
 <div class="pContent">
 
 	<?php
-	if($_POST['action']=="add") {
+	if($POST->action=="add") {
 		$Result->show("success", _("New passkey succesfully registered!"));
 		print "<hr>";
 	}
@@ -46,28 +46,28 @@ $Result->show("danger", _("Passkey not found"), true, true);
 
 	<form id="passkeyEdit" name="passkeyEdit">
 
-	<?php if ($_POST['action']!="delete") { ?>
+	<?php if ($POST->action!="delete") { ?>
 	<table class="groupEdit table table-noborder table-condensed">
 	<!-- name -->
 	<tr>
 	    <td><?php print _('Name your passkey'); ?>:</td>
 	    <td>
 
-	    	<input type="text" name="comment" class="form-control input-sm" value="<?php print escape_input(@$passkey->comment); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
-	        <input type="hidden" name="keyid" value="<?php print escape_input($_POST['keyid']); ?>">
-    		<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+	    	<input type="text" name="comment" class="form-control input-sm" value="<?php print escape_input(@$passkey->comment); ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
+	        <input type="hidden" name="keyid" value="<?php print escape_input($POST->keyid); ?>">
+    		<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 	    </td>
     </tr>
 	</table>
     <?php } else { ?>
-	        <input type="hidden" name="keyid" value="<?php print escape_input($_POST['keyid']); ?>">
-    		<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+	        <input type="hidden" name="keyid" value="<?php print escape_input($POST->keyid); ?>">
+    		<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     <?php } ?>
 
     <?php
-	if($_POST['action']=="delete") {
+	if($POST->action=="delete") {
 		$Result->show("danger", _("You are about to delete your passkey ").escape_input($passkey->comment)."!", false);
 	}
 	?>
@@ -80,8 +80,8 @@ $Result->show("danger", _("Passkey not found"), true, true);
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/tools/user-menu/passkey_edit_result.php" data-result_div="passkeyEditResult" data-form='passkeyEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
+		<button class='btn btn-sm btn-default submit_popup <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/tools/user-menu/passkey_edit_result.php" data-result_div="passkeyEditResult" data-form='passkeyEdit'>
+			<i class="fa <?php if($POST->action=="add") { print "fa-plus"; } else if ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 
 	</div>

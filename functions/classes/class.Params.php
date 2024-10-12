@@ -16,7 +16,7 @@
  */
 
 #[AllowDynamicProperties]
-class Params extends stdClass {
+class Params extends stdClass implements Countable {
 
     /**
      * Default value to return for undefined class properties
@@ -35,6 +35,26 @@ class Params extends stdClass {
     public function __construct($args = [], $default = null, $strip_tags = false) {
         $this->read($args, $strip_tags);
         $this->____default = $default;
+    }
+
+    /**
+     * Params class is countable
+     *
+     * @return int
+     */
+    public function count() : int {
+        return count($this->as_array());
+    }
+
+    /**
+     * Return public object variables as array
+     *
+     * @return array
+     */
+    public function as_array() {
+        $values = get_object_vars($this);
+        unset($values['____default']);
+        return $values;
     }
 
     /**
@@ -72,8 +92,25 @@ class Params extends stdClass {
         if (!is_array($args))
             return;
 
+        // Don't run strip_tags() on passwords and usernames
+        // "<a>" can occur inside a valid password
+        $strip_exceptions = [
+            'ipampassword1',
+            'ipampassword2',
+            'ipamusername',
+            'muser',
+            'mysqlrootpass',
+            'mysqlrootuser',
+            'oldpassword',
+            'password',
+            'password1',
+            'password2',
+            'secret',
+            'username',
+        ];
+
         foreach ($args as $name => $value) {
-            if ($strip_tags && is_string($value)) {
+            if ($strip_tags && is_string($value) && !in_array($name, $strip_exceptions, true)) {
                 $this->{$name} = strip_tags($value);
             } else {
                 $this->{$name} = $value;

@@ -21,28 +21,25 @@ if(!$User->is_authenticated() && @$config['requests_public']===false) {
 
 # requests must be enabled!
 if($Tools->settings->enableIPrequests==1) {
-	# strip input tags
-	$_POST = $Admin->strip_input_tags($_POST);
-
 	# verify MAC Address
-	if(!$Tools->validate_mac($_POST['mac']) ) 		{ $Result->show("danger", _('Please provide valid mac address').'! ('._('mac').': '.$Tools->strip_xss($_POST['mac']).')', true); }
+	if(!$Tools->validate_mac($POST->mac) ) 		{ $Result->show("danger", _('Please provide valid mac address').'! ('._('mac').': '.$Tools->strip_xss($POST->mac).')', true); }
 	# verify hostname
-	if(!$Tools->validate_hostname($_POST['hostname']) )		{ $Result->show("danger", _('Please provide valid hostname').'! ('._('hostname').': '.$Tools->strip_xss($_POST['hostname']).')', true); }
+	if(!$Tools->validate_hostname($POST->hostname) )		{ $Result->show("danger", _('Please provide valid hostname').'! ('._('hostname').': '.$Tools->strip_xss($POST->hostname).')', true); }
 
 	# verify email
-	if(!$Tools->validate_email($_POST['requester']) )		{ $Result->show("danger", _('Please provide valid email address').'! ('._('requester').': '.$Tools->strip_xss($_POST['requester']).')', true); }
+	if(!$Tools->validate_email($POST->requester) )		{ $Result->show("danger", _('Please provide valid email address').'! ('._('requester').': '.$Tools->strip_xss($POST->requester).')', true); }
 
 	# formulate insert values
 	$values = array(
-					"subnetId"    => $_POST['subnetId'],
-					"ip_addr"     => @$_POST['ip_addr'],
-					"description" => @$_POST['description'],
-					"mac" 		  => @$_POST['mac'],
-					"hostname"    => @$_POST['hostname'],
-					"state"       => $_POST['state'],
-					"owner"       => $_POST['owner'],
-					"requester"   => $_POST['requester'],
-					"comment"     => @$_POST['comment'],
+					"subnetId"    => $POST->subnetId,
+					"ip_addr"     => $POST->ip_addr,
+					"description" => $POST->description,
+					"mac" 		  => $POST->mac,
+					"hostname"    => $POST->hostname,
+					"state"       => $POST->state,
+					"owner"       => $POST->owner,
+					"requester"   => $POST->requester,
+					"comment"     => $POST->comment,
 					"processed"   => 0
 	    			);
 
@@ -53,19 +50,19 @@ if($Tools->settings->enableIPrequests==1) {
 
 			# replace possible ___ back to spaces
 			$myField['nameTest'] = str_replace(" ", "___", $myField['name']);
-			if(isset($_POST[$myField['nameTest']])) { $_POST[$myField['name']] = $_POST[$myField['nameTest']];}
+			if(isset($POST->{$myField['nameTest']})) { $POST->{$myField['name']} = $POST->{$myField['nameTest']};}
 
 			# booleans can be only 0 and 1!
 			if($myField['type']=="tinyint(1)") {
-				if($_POST[$myField['name']]>1) {
-					$_POST[$myField['name']] = 0;
+				if($POST->{$myField['name']}>1) {
+					$POST->{$myField['name']} = 0;
 				}
 			}
 			# not null!
-			if($myField['Null']=="NO" && is_blank($_POST[$myField['name']])) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+			if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
 
 			# save to update array
-			$values[$myField['name']] = $_POST[$myField['name']];
+			$values[$myField['name']] = $POST->{$myField['name']};
 		}
 	}
 

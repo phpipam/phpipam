@@ -18,12 +18,12 @@ $User->check_user_session();
 
 
 # id must be numeric
-if(!is_numeric($_POST['g_id']))		{ $Result->show("danger", _("Invalid ID"), true, true); }
+if(!is_numeric($POST->g_id))		{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # get group details
-$group   = $Admin->fetch_object("userGroups", "g_id", $_POST['g_id']);
+$group   = $Admin->fetch_object("userGroups", "g_id", $POST->g_id);
 # not in group - array of ids
-$missing = $Admin->group_fetch_missing_users ($_POST['g_id']);
+$missing = $Admin->group_fetch_missing_users ($POST->g_id);
 ?>
 
 
@@ -41,7 +41,7 @@ $missing = $Admin->group_fetch_missing_users ($_POST['g_id']);
 
 	<tr>
 		<th>
-			<input type="hidden" name="gid" value="<?php print escape_input($_POST['g_id']); ?>">
+			<input type="hidden" name="gid" value="<?php print escape_input($POST->g_id); ?>">
 		</th>
 		<th><?php print _('Name'); ?></th>
 		<th><?php print _('Username'); ?></th>

@@ -18,9 +18,9 @@ $User->check_module_permissions ("routing", User::ACCESS_RW, true, true);
 # values
 $values = [
 			"type"      => "bgp",
-			"direction" => $_POST['direction'],
-			"object_id" => $_POST['bgp_id'],
-			"subnet_id" => $_POST['subnet_id']
+			"direction" => $POST->direction,
+			"object_id" => $POST->bgp_id,
+			"subnet_id" => $POST->subnet_id
 			];
 
 # submit

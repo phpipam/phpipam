@@ -6,7 +6,7 @@
 # "Content-Transfer-Encoding: 8bit\n"
 # "Last-Translator: wxtewx <wxtewx@qq.com>\n"
 # "PO-Revision-Date: 2023-09-03 22:48\n"
-# "Project-Id-Version: 1.50\n"
+e# "Project-Id-Version: 1.70\n"
 # "Language: zh_CN\n"
 # "MIME-Version: 1.0\n"
 # "Content-Type: text/plain; charset=UTF-8\n"
@@ -5188,10 +5188,6 @@ msgstr "日志清除成功"
 #: app/admin/ripe-import/import-subnets.php:90
 msgid "Failed to import subnet"
 msgstr "导入子网失败"
-
-#: app/admin/ripe-import/import-subnets.php:95
-msgid "Import successful"
-msgstr "导入成功"
 
 #: app/admin/ripe-import/import-subnets.php:67
 msgid "Please fix the following errors before inserting"
@@ -11648,10 +11644,6 @@ msgstr "没有可用于 SNMP 路由表查询的设备"
 msgid "No new subnets found"
 msgstr "未找到新的子网"
 
-#: app/admin/snmp/index.php:38
-msgid "SNMP module disabled"
-msgstr "SNMP 模块已禁用"
-
 #: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:57
 #: app/subnets/scan/subnet-scan-execute-snmp-mac.php:74
 msgid "No devices for SNMP ARP query available"
@@ -16531,8 +16523,8 @@ msgid "2FA length"
 msgstr "2FA 长度"
 
 #: app/admin/2fa/index.php:53
-msgid "Length of 2FA secret (16 to 32)"
-msgstr "2FA 密码的长度（16 到 32）"
+msgid "Length of 2FA secret (26 to 32)"
+msgstr "2FA 密码的长度（26 到 32）"
 
 #: app/admin/2fa/index.php:58
 msgid "2FA user change"

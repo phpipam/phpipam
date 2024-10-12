@@ -14,8 +14,8 @@ $User		= new User ($Database);
 $User->check_user_session();
 
 # checks
-is_numeric($_POST['subnetId']) ? : $Result->show("danger", _('Invalid ID'),false, true);
+is_numeric($POST->subnetId) ? : $Result->show("danger", _('Invalid ID'),false, true);
 
 # execute action
-if(!$User->edit_favourite($_POST['action'], $_POST['subnetId'])) 	{ $Result->show("danger", _('Error editing favourite'),false, true); }
+if(!$User->edit_favourite($POST->action, $POST->subnetId)) 	{ $Result->show("danger", _('Error editing favourite'),false, true); }
 else 																{ print "success"; }

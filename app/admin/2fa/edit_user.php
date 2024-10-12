@@ -20,11 +20,11 @@ $User->check_user_session();
 $User->is_demo(true);
 
 // check id
-if(!is_numeric($_POST['id']))  { $Result->show("danger", _("Invalid id"), true, true); }
+if(!is_numeric($POST->id))  { $Result->show("danger", _("Invalid id"), true, true); }
 
 // activate
-if ($_POST['action']=="activate") {
-	if($Admin->object_modify ("users", "edit", "id", ["id"=>$_POST['id'], "2fa"=>"1"])===false) {
+if ($POST->action=="activate") {
+	if($Admin->object_modify ("users", "edit", "id", ["id"=>$POST->id, "2fa"=>"1"])===false) {
 		$Result->show("danger", _("Failed to activate 2fa for user"), true, true, false, false, true );
 	}
 	else {
@@ -32,8 +32,8 @@ if ($_POST['action']=="activate") {
 	}
 }
 // deactivate
-elseif ($_POST['action']=="deactivate") {
-	if($Admin->object_modify ("users", "edit", "id", ["id"=>$_POST['id'], "2fa"=>"0"])===false) {
+elseif ($POST->action=="deactivate") {
+	if($Admin->object_modify ("users", "edit", "id", ["id"=>$POST->id, "2fa"=>"0"])===false) {
 		$Result->show("danger", _("Failed to deactivate 2fa for user"), true, true, false, false, true);
 	}
 	else {
@@ -41,8 +41,8 @@ elseif ($_POST['action']=="deactivate") {
 	}
 }
 // remove secret
-elseif ($_POST['action']=="remove_secret") {
-	if($Admin->object_modify ("users", "edit", "id", ["id"=>$_POST['id'], "2fa_secret"=>NULL])===false) {
+elseif ($POST->action=="remove_secret") {
+	if($Admin->object_modify ("users", "edit", "id", ["id"=>$POST->id, "2fa_secret"=>NULL])===false) {
 		$Result->show("danger", _("Failed to remove 2fa secret for user"), true, true, false, false, true);
 	}
 	else {

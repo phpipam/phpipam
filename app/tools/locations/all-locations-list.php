@@ -97,7 +97,7 @@ else {
             print "<td class='actions'>";
             $links = [];
             $links[] = ["type"=>"header", "text"=>_("Show")];
-            $links[] = ["type"=>"link", "text"=>_("Show location"), "href"=>create_link($_GET['page'], "locations", $l->id), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"link", "text"=>_("Show location"), "href"=>create_link($GET->page, "locations", $l->id), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];
 
             $links[] = ["type"=>"header", "text"=>_("Manage")];

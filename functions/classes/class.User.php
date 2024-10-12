@@ -1120,7 +1120,7 @@ class User extends Common_functions {
      */
     private function auth_AD ($username, $password) {
         // parse settings for LDAP connection and store them to array
-        $authparams = pf_json_decode($this->authmethodparams, true);
+        $authparams = db_json_decode($this->authmethodparams, true);
         // authenticate
         $this->directory_authenticate($authparams, $username, $password);
     }
@@ -1136,7 +1136,7 @@ class User extends Common_functions {
      */
     private function auth_LDAP ($username, $password) {
         // parse settings for LDAP connection and store them to array
-        $authparams = pf_json_decode($this->authmethodparams, true);
+        $authparams = db_json_decode($this->authmethodparams, true);
         $this->ldap = true;                            //set ldap flag
 
         // set uid
@@ -1172,7 +1172,7 @@ class User extends Common_functions {
      */
     private function auth_radius_legacy ($username, $password) {
         # decode radius parameters
-        $params = pf_json_decode($this->authmethodparams);
+        $params = db_json_decode($this->authmethodparams);
 
         # check for socket support !
         if(!in_array("sockets", get_loaded_extensions())) {
@@ -1231,7 +1231,7 @@ class User extends Common_functions {
      */
     private function auth_radius ($username, $password) {
         # decode radius parameters
-        $params = pf_json_decode($this->authmethodparams);
+        $params = db_json_decode($this->authmethodparams);
 
         # Valdate composer
         if($this->composer_has_errors(["dapphp/radius"])) {
@@ -1394,7 +1394,7 @@ class User extends Common_functions {
         # save to session
         $this->write_session_parameters ();
         # log
-        $this->Log->write( _("User login"), _("User")." ".$this->user->real_name." "._("logged in"), 0, $username );
+        $this->Log->write( _("User login"), _("User")." ".$this->user->real_name." "._("logged in"), 0, null);
 
         # write last logintime
         $this->update_login_time ();
@@ -1465,7 +1465,7 @@ class User extends Common_functions {
      * Get passkey for user based on key_id
      * @method get_user_passkeys
      * @param  bool $user_id
-     * @return array
+     * @return object|null
      */
     public function get_user_passkey_by_keyId ($keyId = false) {
         try {
@@ -1920,7 +1920,7 @@ class User extends Common_functions {
         if(is_object($cached_item)) return $cached_item->result;
 
         $groups = array();
-        foreach((array) pf_json_decode($json, true) as $group_id => $perm) {
+        foreach((array) db_json_decode($json, true) as $group_id => $perm) {
             $group_details = $this->groups_parse (array($group_id));
 
             $tmp = array();
@@ -2008,13 +2008,13 @@ class User extends Common_functions {
             if (!is_object($section)) continue;
 
             # Get Section permissions
-            $sectionP = pf_json_decode($section->permissions, true);
+            $sectionP = db_json_decode($section->permissions, true);
 
             # ok, user has section access, check also for any higher access from subnet
             if(!is_array($sectionP)) continue;
 
             # get all user groups
-            $groups = pf_json_decode($this->user->groups, true);
+            $groups = db_json_decode($this->user->groups, true);
 
             foreach($sectionP as $sk=>$sp) {
                 # check each group if user is in it and if so check for permissions for that group
@@ -2061,7 +2061,7 @@ class User extends Common_functions {
      */
     private function register_user_module_permissions () {
         // decode
-        $permissions = pf_json_decode($this->user->module_permissions, true);
+        $permissions = db_json_decode($this->user->module_permissions, true);
         // check for each module
         foreach ($this->get_modules_with_permissions() as $m) {
             if (!is_array($permissions)) {

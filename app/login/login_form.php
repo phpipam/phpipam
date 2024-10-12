@@ -58,7 +58,7 @@
 		# deauthenticate user
 		if ( $User->is_authenticated()===true ) {
 			# print result
-			if(isset($_GET['section']) && $_GET['section']=="timeout")
+			if(isset($GET->section) && $GET->section=="timeout")
 				$Result->show("success", _('You session has timed out'));
 			else
 				$Result->show("success", _('You have logged out'));
@@ -74,7 +74,7 @@
 		$saml2settings=$Tools->fetch_object("usersAuthMethod", "type", "SAML2");
 
 		if ($saml2settings!=false) {
-			$version = pf_json_decode(@file_get_contents(dirname(__FILE__).'/../../functions/php-saml/src/Saml2/version.json'), true);
+			$version = db_json_decode(@file_get_contents(dirname(__FILE__).'/../../functions/php-saml/src/Saml2/version.json'), true);
 			$version = $version['php-saml']['version'];
 
 			if ($version < 3.4) {

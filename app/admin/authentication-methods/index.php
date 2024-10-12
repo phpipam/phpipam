@@ -69,7 +69,7 @@ foreach($all_methods as $method) {
 			'secret',
 			'spx509key'
 		];
-		$params = pf_json_decode($method->params);
+		$params = db_json_decode($method->params);
 		foreach($params as $key=>$parameter) {
 			// mask secure keys
 			if(in_array($key, $secure_keys) && !is_blank($parameter) ) { $parameter = "********"; }

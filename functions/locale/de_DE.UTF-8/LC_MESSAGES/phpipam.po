@@ -2,7 +2,7 @@
 # Copyright (C) phpipam 2021
 # This file is distributed under the same license as the phpipam package.
 # miha petkovsek <miha.petkovsek@gmail.com>, 2021.
-# "Project-Id-Version: 1.50\n"
+# "Project-Id-Version: 1.70\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2021-02-10 17:32+0100\n"
 # "PO-Creation-Date: 2021-02-10 17:32+0100\n"
@@ -145,8 +145,8 @@ msgid "2FA length"
 msgstr "2FA L&auml;nge"
 
 #: app/admin/2fa/index.php:53
-msgid "Length of 2FA secret (16 to 32)"
-msgstr "L&auml;nge des 2FA Secrets (16 bis zu 32)"
+msgid "Length of 2FA secret (26 to 32)"
+msgstr "L&auml;nge des 2FA Secrets (26 bis zu 32)"
 
 #: app/admin/2fa/index.php:58
 msgid "2FA user change"
@@ -9313,14 +9313,6 @@ msgstr "Neue Dom&auml;ne"
 msgid "No domains available!"
 msgstr "Keine Dom&auml;nen verf&uuml;gbar!"
 
-#: app/admin/vlans/vlans-scan-execute.php:30 app/admin/vlans/vlans-scan.php:27
-#: app/admin/vrf/vrf-scan-execute.php:26 app/admin/vrf/vrf-scan.php:21
-#: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:14
-#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:18
-#: app/subnets/scan/subnet-scan-result-snmp-route-all.php:23
-msgid "SNMP module disabled"
-msgstr "Modul SNMP ist deaktiviert"
-
 #: app/admin/vlans/vlans-scan-execute.php:32
 #: app/admin/vrf/vrf-scan-execute.php:28
 msgid "Admin privileges required"
@@ -11627,10 +11619,6 @@ msgstr ""
 #: app/subnets/import-subnet/index.php:25
 msgid "You cannot write to this subnet"
 msgstr "Sie haben keine Schreibberechtigung f&uuml;r das Subnetz"
-
-#: app/subnets/import-subnet/import-file.php:142
-msgid "Import successful"
-msgstr "Import erfolgreich"
 
 #: app/subnets/import-subnet/import-template.php:42
 msgid "fw_object"

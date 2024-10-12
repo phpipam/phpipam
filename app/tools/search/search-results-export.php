@@ -25,9 +25,9 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # get requested params
-if(isset($_GET['ip'])) {
+if(isset($GET->ip)) {
     // remove chars
-    $search_term =  htmlspecialchars(trim($_GET['ip']));
+    $search_term =  htmlspecialchars(trim($GET->ip));
 }
 else {
     $search_term = "";
@@ -39,7 +39,7 @@ $search_term = str_replace("*", "%", $search_term);
 
 # parse parameters from cookie
 if (isset($_COOKIE['search_parameters'])) {
-    $params = pf_json_decode($_COOKIE['search_parameters'], true);
+    $params = db_json_decode($_COOKIE['search_parameters'], true);
     if($params) {
         foreach ($params as $k=>$p) {
             if ($p=="on") {

@@ -21,17 +21,17 @@ $User->check_user_session();
 if ($User->get_module_permissions ("vaults")<User::ACCESS_RW) { $Result->show("danger", _("Insufficient privileges").".", true, true); }
 
 // set vaultx pass variable
-$vault_id = "vault".$_POST['vaultid'];
+$vault_id = "vault".$POST->vaultid;
 // fetch vault
-$vault = $Tools->fetch_object("vaults", "id", $_POST['vaultid']);
+$vault = $Tools->fetch_object("vaults", "id", $POST->vaultid);
 // test pass
 if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])!="test") {
     $Result->show("danger", _("Cannot unlock vault"), true, true);
 }
 
 // fetch item
-$vault_item = $Tools->fetch_object("vaultItems", "id", $_POST['id']);
-$vault_item_values = pf_json_decode($User->Crypto->decrypt($vault_item->values, $_SESSION[$vault_id]));
+$vault_item = $Tools->fetch_object("vaultItems", "id", $POST->id);
+$vault_item_values = db_json_decode($User->Crypto->decrypt($vault_item->values, $_SESSION[$vault_id]));
 ?>
 
 <!-- header -->

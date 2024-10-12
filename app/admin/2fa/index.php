@@ -50,7 +50,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "2fa");
 	<td>
 		<input type="text" class="form-control input-sm" name="2fa_length" value="<?php print @$settings->{'2fa_length'}; ?>">
 	</td>
-	<td class="info2"><?php print _('Length of 2FA secret (16 to 32)'); ?></td>
+	<td class="info2"><?php print _('Length of 2FA secret (26 to 32)'); ?></td>
 </tr>
 
 <!-- Length-->

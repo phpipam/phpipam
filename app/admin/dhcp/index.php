@@ -28,7 +28,7 @@ elseif($User->settings->enableDHCP==1) { ?>
     }
     else {
         # parse and verify settings
-        $dhcp_db = pf_json_decode($User->settings->DHCP, true);
+        $dhcp_db = db_json_decode($User->settings->DHCP, true);
 
         # DHCP wrapper class
         $DHCP	= new DHCP ($dhcp_db['type'], $dhcp_db['settings']);
@@ -40,17 +40,17 @@ elseif($User->settings->enableDHCP==1) { ?>
         <ul class="nav nav-tabs">
         	<?php
         	// default tab
-        	if(!isset($_GET['subnetId'])) {
-        		$_GET['subnetId'] = "subnets";
+        	if(!isset($GET->subnetId)) {
+        		$GET->subnetId = "subnets";
         	}
 
         	// check
-        	if(!in_array($_GET['subnetId'], $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
+        	if(!in_array($GET->subnetId, $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
 
         	// print
         	foreach($tabs as $t) {
         		$title = str_replace('_', ' ', $t);
-        		$class = $_GET['subnetId']==$t ? "class='active'" : "";
+        		$class = $GET->subnetId==$t ? "class='active'" : "";
         		print "<li role='presentation' $class><a href=".create_link("administration", "dhcp", "$t").">". _(ucwords(str_replace("_", " ", $title)))."</a></li>";
         	}
         	?>
@@ -59,9 +59,9 @@ elseif($User->settings->enableDHCP==1) { ?>
         <div>
         <?php
         // include file
-        if(!file_exists(dirname(__FILE__) . "/$_GET[subnetId].php")) 	{ $Result->show("danger", "Invalid request", true); }
-        elseif (!in_array($_GET['subnetId'], $tabs))                    { $Result->show("danger", "Invalid request", true); }
-        else													        { include(dirname(__FILE__) . "/$_GET[subnetId].php"); }
+        if(!file_exists(dirname(__FILE__) . "/".$GET->subnetId.".php")) 	{ $Result->show("danger", "Invalid request", true); }
+        elseif (!in_array($GET->subnetId, $tabs))                    { $Result->show("danger", "Invalid request", true); }
+        else													        { include(dirname(__FILE__) . "/".$GET->subnetId.".php"); }
         ?>
         </div>
 <?php

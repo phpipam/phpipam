@@ -21,10 +21,10 @@ $User->is_demo();
 $User->check_maintaneance_mode ();
 
 # id must be numeric
-if(!is_numeric($_POST['gid']))		{ $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($POST->gid))		{ $Result->show("danger", _("Invalid ID"), true); }
 
 # parse result
-foreach($_POST as $k=>$p) {
+foreach($POST as $k=>$p) {
 	if(substr($k, 0,4) == "user") {
 		$users[substr($k, 4)] = substr($k, 4);
 	}
@@ -33,7 +33,7 @@ foreach($_POST as $k=>$p) {
 # remove each user from group
 if(sizeof($users)>0) {
 	foreach($users as $key=>$u) {
-		if(!$Admin->remove_group_from_user($_POST['gid'], $u)) {
+		if(!$Admin->remove_group_from_user($POST->gid, $u)) {
 			# get user details
 			$user = $Admin->fetch_object("users", "id", $u);
 			$errors[] = $user->real_name;

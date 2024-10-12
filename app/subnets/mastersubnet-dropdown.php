@@ -7,7 +7,6 @@ require_once( dirname(__FILE__) . '/../../functions/functions.php' );
 # initialize user object
 $Database = new Database_PDO;
 $User     = new User ($Database);
-// $Admin    = new Admin ($Database, false);
 $Sections = new Sections ($Database);
 $Subnets  = new Subnets ($Database);
 
@@ -35,9 +34,9 @@ function get_strict_subnets($Subnets, $sectionId, $cidr, $result_fields="*") {
 }
 
 
-$sectionId = isset($_GET['section']) ? (int) $_GET['section'] : 0;
-$cidr = isset($_GET['cidr']) ? $_GET['cidr'] : '';
-$previously_selected =  isset($_GET['prev']) ? (int) $_GET['prev'] : -1;
+$sectionId = isset($GET->section) ? (int) $GET->section : 0;
+$cidr = isset($GET->cidr) ? $GET->cidr : '';
+$previously_selected =  isset($GET->prev) ? (int) $GET->prev : -1;
 
 $section = $Sections->fetch_section('id', $sectionId);
 if (!is_object($section)) { return ''; }

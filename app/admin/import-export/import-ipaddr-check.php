@@ -122,7 +122,7 @@ foreach ($data as &$cdata) {
 
 	# check if required fields are present and not empty
 	foreach($reqfields as $creq) {
-		if ((!isset($cdata[$creq]) or ($cdata[$creq] == ""))) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
+		if (!isset($cdata[$creq]) || ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
 	}
 
 	# if the subnet contains "/", split it in network and mask
@@ -162,12 +162,12 @@ foreach ($data as &$cdata) {
 
 
 	# Check Subnet and mask are defined
-	if (empty($cdata['subnet']) or empty($cdata['mask'])) {
+	if (empty($cdata['subnet']) || empty($cdata['mask'])) {
 		$msg.= "Subnet/Mask not provided."; $action = "error";
 	}
 
 	# If provided VRF doesn't match then search for Subnet in all VRFs
-	if ($action != "error" && isset($_GET['searchallvrfs']) && $_GET['searchallvrfs'] == 'on') {
+	if ($action != "error" && $GET->searchallvrfs == 'on') {
 		if (!isset($subnet_data[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']])) {
 			# We didn't match a Subnet using the provided VRF. Check search array for a single match.
 			if (isset($subnet_search[$cdata['sectionId']][$cdata['subnet']][$cdata['mask']])) {
@@ -220,7 +220,7 @@ foreach ($data as &$cdata) {
 
 	if ($action != "error") {
     	if(!$Addresses->validate_ip($cdata['ip_addr'])) { $msg.="Invalid IP address."; $action = "error"; }
-		if ((!empty($cdata['hostname'])) and (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
+		if ((!empty($cdata['hostname'])) && (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 		if ($cdata['mac']) {
 			if (!preg_match("/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/", $cdata['mac'])) { $msg.="Invalid MAC address."; $action = "error"; }

@@ -25,10 +25,10 @@ $csrf = $User->Crypto->csrf_cookie ("create", "device_snmp");
 $custom = $Tools->fetch_custom_fields('devices');
 
 # ID must be numeric
-if(!is_numeric($_POST['switchid']))		     { $Result->show("danger", _("Invalid ID"), true, true); }
+if(!is_numeric($POST->switchid))		     { $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch device details
-$device = $Admin->fetch_object("devices", "id", $_POST['switchid']);
+$device = $Admin->fetch_object("devices", "id", $POST->switchid);
 if ($device===false)                         { $Result->show("danger", _("Invalid ID"), true, true);  }
 
 // set show

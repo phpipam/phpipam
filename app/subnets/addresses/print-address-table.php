@@ -28,7 +28,7 @@ function unset_array_value(&$array, $value) {
 }
 
 # direct call, set default direction for sorting
-if(!isset($_POST['direction'])) {
+if(!isset($POST->direction)) {
 
 	# verify that user is logged in
 	$User->check_user_session();
@@ -42,7 +42,7 @@ $DNS = new DNS ($Database, $User->settings, true);
 if ($location!=="customers") {
 if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesn't exist
 if($subnet_permission == 0)				{ $Result->show("danger", _('You do not have permission to access this network'), true); }		//not allowed to access
-if(!is_numeric($_GET['subnetId'])) 		{ $Result->show("danger", _('Invalid ID'), true); }												//subnet id must be numeric
+if(!is_numeric($GET->subnetId)) 		{ $Result->show("danger", _('Invalid ID'), true); }												//subnet id must be numeric
 }
 
 /* selected and hidden fields */
@@ -50,7 +50,7 @@ if(!is_numeric($_GET['subnetId'])) 		{ $Result->show("danger", _('Invalid ID'), 
 # reset custom fields to ip addresses
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
-$hidden_cfields = pf_json_decode($User->settings->hiddenCustomFields, true) ? : ['ipaddresses'=>null];
+$hidden_cfields = db_json_decode($User->settings->hiddenCustomFields, true) ? : ['ipaddresses'=>null];
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
@@ -368,7 +368,7 @@ else {
 			    // gateway
 			    $gw = $addresses[$n]->is_gateway==1 ? "gateway" : "";
 
-			    print "	<td class='ipaddress $gw'><span class='status status-$hStatus' $hTooltip></span><a href='".create_link("subnets",$subnet['sectionId'],$_GET['subnetId'],"address-details",$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr)."</a>";
+			    print "	<td class='ipaddress $gw'><span class='status status-$hStatus' $hTooltip></span><a href='".create_link("subnets",$subnet['sectionId'],$GET->subnetId,"address-details",$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr)."</a>";
 			    if($addresses[$n]->is_gateway==1)						{ print " <i class='fa fa-info-circle fa-gateway' rel='tooltip' title='"._('Address is marked as gateway')."'></i>"; }
 			    print $Addresses->address_type_format_tag($addresses[$n]->state);
 

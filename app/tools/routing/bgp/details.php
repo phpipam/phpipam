@@ -4,17 +4,17 @@
 $User->check_module_permissions ("routing", User::ACCESS_R, true, false);
 
 # check
-is_numeric($_GET['sPage']) ? : $Result->show("danger", _("Invalid ID"), true);
+is_numeric($GET->sPage) ? : $Result->show("danger", _("Invalid ID"), true);
 
 
 // back link
 print "<div'>";
-print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'],"routing","bgp")."' style='margin-bottom:10px;'><i class='fa fa-angle-left'></i> ". _('BGP table')."</a>";
+print "<a class='btn btn-sm btn-default' href='".create_link($GET->page,"routing","bgp")."' style='margin-bottom:10px;'><i class='fa fa-angle-left'></i> ". _('BGP table')."</a>";
 print "</div>";
 
 
 # fetch bgp details
-$bgp = $Tools->fetch_object ("routing_bgp", "id", $_GET['sPage']);
+$bgp = $Tools->fetch_object ("routing_bgp", "id", $GET->sPage);
 if($bgp===false) {
     $Result->show("danger", _("Invalid ID"), true);
 }

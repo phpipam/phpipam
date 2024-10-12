@@ -19,16 +19,16 @@ $User->check_user_session();
 
 
 //strip AS if provided, to get just the number
-if(substr($_POST['as'], 0,2)=="AS" || substr($_POST['as'], 0,2)=="as") {
-	$_POST['as'] = substr($_POST['as'], 2);
+if(substr($POST->as, 0,2)=="AS" || substr($POST->as, 0,2)=="as") {
+	$POST->as = substr($POST->as, 2);
 };
 
 // numeric
-if(!is_numeric($_POST['as']))       { $Result->show("danger", _("Invalid AS"), true); }
+if(!is_numeric($POST->as))       { $Result->show("danger", _("Invalid AS"), true); }
 
 
 # fetch subnets form ripe
-$subnet   = $Subnets->ripe_fetch_subnets ($_POST['as']);
+$subnet   = $Subnets->ripe_fetch_subnets ($POST->as);
 
 # fetch all sections
 $sections = $Admin->fetch_all_objects ("sections", "id");
@@ -51,7 +51,7 @@ else {
 	print '<table class="asImport table table-striped table-condensed table-top table-auto">';
 	//headers
 	print '<tr>';
-	print '	<th colspan="5">'._('I found the following routes belonging to AS').' '.escape_input($_POST['as']).':</th>';
+	print '	<th colspan="5">'._('I found the following routes belonging to AS').' '.escape_input($POST->as).':</th>';
 	print '</tr> ';
 
 	print "<tr>";

@@ -31,26 +31,26 @@ $address_ids = array ();
 # decode and save ids for each item to array
 foreach ($all_nat as $nat) {
     # remove item from nat
-    $s = pf_json_decode($nat->src, true);
-    $d = pf_json_decode($nat->dst, true);
+    $nat_src = db_json_decode($nat->src, true);
+    $nat_dst = db_json_decode($nat->dst, true);
 
-    if(is_array(@$s['subnets'])) {
-        foreach ($s['subnets'] as $s) {
+    if(is_array(@$nat_src['subnets'])) {
+        foreach ($nat_src['subnets'] as $s) {
             $subnet_ids[] = $s;
         }
     }
-    if(is_array(@$d['subnets'])) {
-        foreach ($d['subnets'] as $s) {
+    if(is_array(@$nat_dst['subnets'])) {
+        foreach ($nat_dst['subnets'] as $s) {
             $subnet_ids[] = $s;
         }
     }
-    if(is_array(@$s['ipaddresses'])) {
-        foreach ($s['ipaddresses'] as $s) {
+    if(is_array(@$nat_src['ipaddresses'])) {
+        foreach ($nat_src['ipaddresses'] as $s) {
             $address_ids[] = $s;
         }
     }
-    if(is_array(@$d['ipaddresses'])) {
-        foreach ($d['ipaddresses'] as $s) {
+    if(is_array(@$nat_dst['ipaddresses'])) {
+        foreach ($nat_dst['ipaddresses'] as $s) {
             $address_ids[] = $s;
         }
     }
@@ -74,7 +74,7 @@ $address_ids = array_unique($address_ids);
     $removed_addresses = array ();
 
     # first subnets
-    if(sizeof($subnet_ids) > 0) {
+    if(!empty($subnet_ids)) {
         foreach ($subnet_ids as $id) {
             if ($Tools->fetch_object("subnets", "id", $id)===false) {
                 $cnt = $Subnets->remove_subnet_nat_items ($id, false);
@@ -86,7 +86,7 @@ $address_ids = array_unique($address_ids);
     }
 
     # second addresses
-    if(sizeof($address_ids) > 0) {
+    if(!empty($address_ids)) {
         foreach ($address_ids as $id) {
             if ($Tools->fetch_object("ipaddresses", "id", $id)===false) {
                 $cnt = $Addresses->remove_address_nat_items ($id, false);
@@ -98,14 +98,14 @@ $address_ids = array_unique($address_ids);
     }
 
     # Results
-    if(sizeof($removed_subnets)>0) {
+    if(!empty($removed_subnets)) {
         $Result->show("info", _("Removed")." ".sizeof($removed_subnets)." "._("subnets")."<hr>Ids: ".implode("; ", $removed_subnets));
     }
     else {
         $Result->show("info", _("No subnets removed from NAT"));
     }
 
-    if(sizeof($removed_addresses)>0) {
+    if(!empty($removed_addresses)) {
         $Result->show("info", _("Removed")." ".sizeof($removed_addresses)." "._("addresses")."<hr>Ids: ".implode("; ", $removed_addresses));
     }
     else {

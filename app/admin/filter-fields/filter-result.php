@@ -21,7 +21,7 @@ $User->check_maintaneance_mode ();
 
 # set fields to update
 $values = array("id"=>1,
-				"IPfilter"=>implode(';', $_POST));
+				"IPfilter"=>implode(';', $POST->as_array()));
 
 # update
 if(!$Admin->object_modify("settings", "edit", "id", $values)) {
@@ -29,5 +29,3 @@ if(!$Admin->object_modify("settings", "edit", "id", $values)) {
 else {
     $Result->show("success alert-absolute", _('Update successful'), true);
 }
-
-?>

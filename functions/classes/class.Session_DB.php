@@ -95,7 +95,7 @@ class Session_DB {
 			if (!is_object($session) || empty($session->data))
 				return "";
 
-			return $session->data;
+			return html_entity_decode($session->data, ENT_QUOTES);
 		}
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), false);

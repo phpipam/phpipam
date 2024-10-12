@@ -29,6 +29,7 @@
     + Fixed Custom field not working in Routing module (#4174);
     + Fixed Circuit Type showing differently in two windows (#4104);
     + Fixed Vault Item Custom Field not writable (#4058);
+    + Fixed Undefined variable when adding nameserver (#4230);
     + Fixed Tag Management Color Picker (#3629);
     + Fixed Arrows for linked addresses do not match between themes (#4216);
 
@@ -39,6 +40,7 @@
     + Added option to disable OpenStreetMap address geoip lookups;
     + Added $api_stringify_results config.php option for <PHP81 API backwards compatibility;
     + Added support for newly added widgets to be sortable with jQuery (#4711);
+    + Added support for using widget parameters; added recent_logins widget (#4184);
 
     Security Fixes:
     ----------------------------
@@ -46,6 +48,8 @@
     + Cookies set without Secure attribute;
     + Multiple XSS injections (#4145,#4146,#4147,#4148,#4149.#4150,#4151);
     + HTML DOM XSS injection via filenames when uploading (#4160);
+    + Escape loaded database strings by default, stored XSS defense;
+    + Increase minimum 2FA secret length to 26 (128bit);
 
 == 1.6.0
 

@@ -22,15 +22,15 @@ $User->check_maintaneance_mode ();
 $User->check_module_permissions ("vlan", User::ACCESS_RW, true, false);
 
 // checks
-if(!is_numeric($_POST['newDomainId']))			$Result->show("danger", _("Invalid ID"), true);
-if(!is_numeric($_POST['vlanid']))				$Result->show("danger", _("Invalid ID"), true);
+if(!is_numeric($POST->newDomainId))			$Result->show("danger", _("Invalid ID"), true);
+if(!is_numeric($POST->vlanid))				$Result->show("danger", _("Invalid ID"), true);
 
 // verify that new exists
-$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $_POST['newDomainId']);
+$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $POST->newDomainId);
 if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true); }
 
 //fetch vlan
-$vlan = $Admin->fetch_object("vlans", "vlanid", $_POST['vlanid']);
+$vlan = $Admin->fetch_object("vlans", "vlanid", $POST->vlanid);
 if($vlan===false)					{ $Result->show("danger", _("Invalid ID"), true); }
 
 // check that it is not already set !
@@ -47,7 +47,7 @@ if($User->settings->vlanDuplicate==0) {
 
 # formulate update query
 $values = array(
-				"vlanid"   =>@$_POST['vlanid'],
+				"vlanid"   =>$POST->vlanid,
 				"domainId" =>$vlan_domain->id
 				);
 # update

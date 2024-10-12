@@ -16,7 +16,7 @@ $all_vrfs = $User->fetch_all_objects("vrf", "name");
 $custom = $Tools->fetch_custom_fields('vrf');
 
 # set hidden fields
-$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['vrf']) ? $hidden_fields['vrf'] : array();
 
 # set size of custom fields
@@ -100,7 +100,7 @@ else {
     	}
 		//print details
 		print '<tr class="text-top">'. "\n";
-		print '	<td class="name"><a class="btn btn-xs btn-default" href="'.create_link($_GET['page'],"vrf",$vrf['vrfId']).'"><i class="fa fa-cloud prefix"></i>'. $vrf['name'] .'</a></td>'. "\n";
+		print '	<td class="name"><a class="btn btn-xs btn-default" href="'.create_link($GET->page,"vrf",$vrf['vrfId']).'"><i class="fa fa-cloud prefix"></i>'. $vrf['name'] .'</a></td>'. "\n";
 		print '	<td class="rd">'. $vrf['rd'] .'</td>'. "\n";
 		print "	<td><span class='text-muted'>$sections</span></td>";
 		print '	<td class="description">'. $vrf['description'] .'</td>'. "\n";
@@ -126,7 +126,7 @@ else {
         print "<td class='actions'>";
         $links = [];
         $links[] = ["type"=>"header", "text"=>_("Show")];
-        $links[] = ["type"=>"link", "text"=>_("Show VRF"), "href"=>create_link($_GET['page'], "vrf", $vrf['vrfId']), "icon"=>"eye", "visible"=>"dropdown"];
+        $links[] = ["type"=>"link", "text"=>_("Show VRF"), "href"=>create_link($GET->page, "vrf", $vrf['vrfId']), "icon"=>"eye", "visible"=>"dropdown"];
         $links[] = ["type"=>"divider"];
         if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>_("Manage")];

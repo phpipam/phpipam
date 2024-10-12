@@ -380,7 +380,7 @@ class Sections extends Common_functions {
 	public function fetch_section_nameserver_sets ($sectionId) {
 		# first fetch all nameserver sets
 		$Admin = new Admin ($this->Database, false);
-		$nameservers = $Admin->fetch_all_objects ("nameservers");
+		$nameservers = $Admin->fetch_all_objects ("nameservers","name");
 		# loop and check
 		if ($nameservers!==false) {
     		$permitted = array();
@@ -422,7 +422,7 @@ class Sections extends Common_functions {
 	 */
 	public function parse_section_permissions($permissions) {
 		# save to array
-		$permissions = pf_json_decode($permissions, true);
+		$permissions = db_json_decode($permissions, true);
 		# start Tools object
 		$Tools = new Tools ($this->Database);
 		if(sizeof($permissions)>0) {
@@ -450,14 +450,14 @@ class Sections extends Common_functions {
 	 */
 	public function check_permission ($user, $sectionid) {
 		# decode groups user belongs to
-		$groups = pf_json_decode($user->groups, true);
+		$groups = db_json_decode($user->groups, true);
 
 		# admins always has permission rwa
 		if($user->role == "Administrator")		{ return 3; }
 		else {
 			# fetch section details and check permissions
 			$section  = $this->fetch_section ("id", $sectionid);
-			$sectionP = pf_json_decode($section->permissions, true);
+			$sectionP = db_json_decode($section->permissions, true);
 
 			# default permission is no access
 			$out = 0;
@@ -498,7 +498,7 @@ class Sections extends Common_functions {
 		# loop through sections and check if group_id in permissions
         if ($sections !== false) {
     		foreach($sections as $section) {
-    			$p = pf_json_decode($section->permissions, true);
+    			$p = db_json_decode($section->permissions, true);
     			$p = is_array($p) ? $p : [];
     			if(sizeof($p)>0) {
     				if($name) {
@@ -546,7 +546,7 @@ class Sections extends Common_functions {
 		$custom = $Tools->fetch_custom_fields ("subnets");
 
 		# set hidden fields
-		$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
+		$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
 		$hidden_fields = is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 
 		# check permission

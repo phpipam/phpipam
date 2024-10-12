@@ -28,9 +28,9 @@ $filename = "";
 if ($User->get_module_permissions ("vaults")<User::ACCESS_RW) { $content = "Insufficient privileges"; }
 
 // set vaultx pass variable
-$vault_id = "vault".$_GET['vaultid'];
+$vault_id = "vault".$GET->vaultid;
 // fetch vault
-$vault = $Tools->fetch_object("vaults", "id", $_GET['vaultid']);
+$vault = $Tools->fetch_object("vaults", "id", $GET->vaultid);
 // test pass
 if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])!="test") {
     // content
@@ -38,8 +38,8 @@ if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])!="test") {
 }
 
 // fetch item
-$vault_item = $Tools->fetch_object("vaultItems", "id", $_GET['id']);
-$vault_item_values = pf_json_decode($User->Crypto->decrypt($vault_item->values, $_SESSION[$vault_id]));
+$vault_item = $Tools->fetch_object("vaultItems", "id", $GET->id);
+$vault_item_values = db_json_decode($User->Crypto->decrypt($vault_item->values, $_SESSION[$vault_id]));
 
 // check
 if($vault_item_values===false || $vault_item_values===NULL || !isset($vault_item_values)) {
@@ -51,7 +51,7 @@ else {
 }
 
 // no key
-if(is_blank(@$_GET['key'])) { $_GET['key'] = ""; }
+if(is_blank($GET->key)) { $GET->key = ""; }
 
 // all ok, proceed
 try {
@@ -72,15 +72,15 @@ try {
         //  The .pem file can include the server certificate, the intermediate certificate and the private key in a single file.
         //  The server certificate and intermediate certificate can also be in a separate .crt or .cer file. The private key can be in a .key file.
         //
-        if ($_GET['certtype']=="crt" || $_GET['certtype']=="pem") {
+        if ($GET->certtype=="crt" || $GET->certtype=="pem") {
             // CRT - strip pkey
-            if ($_GET['certtype']=="crt") {
+            if ($GET->certtype=="crt") {
                 openssl_x509_export ($cert_res_pub, $content);
             }
             else {
                 // encrypt private ky
-                if ($_GET['key']!="" && $_GET['key']!=="null") {
-                    openssl_pkey_export ($cert_res_pri, $exported_pri, $_GET['key']);
+                if ($GET->key!="" && $GET->key!=="null") {
+                    openssl_pkey_export ($cert_res_pri, $exported_pri, $GET->key);
                     openssl_x509_export ($cert_res_pub, $exported_pub);
 
                     $content = $exported_pub.$exported_pri;
@@ -95,7 +95,7 @@ try {
         //
         //  The DER certificates are in binary form, contained in .der or .cer files. These certificates are mainly used in Java-based web servers.
         //
-        elseif ($_GET['certtype']=="cer" || $_GET['certtype']=="der") {
+        elseif ($GET->certtype=="cer" || $GET->certtype=="der") {
             // get PEM pubkey
             openssl_x509_export ($cert_res_pub, $exported_pub);
             // remove BEGIN / END Certificate
@@ -111,12 +111,12 @@ try {
         //  The PKCS#12 certificates are in binary form, contained in .pfx or .p12 files.
         //  The PKCS#12 can store the server certificate, the intermediate certificate and the private key in a single .pfx file with password protection.
         //
-        elseif ($_GET['certtype']=="p12") {
+        elseif ($GET->certtype=="p12") {
             // parse
-            openssl_pkey_export ($cert_res_pri, $exported_pri, $_GET['key']);
+            openssl_pkey_export ($cert_res_pri, $exported_pri, $GET->key);
             openssl_x509_export ($cert_res_pub, $exported_pub);
             // export to p12
-            openssl_pkcs12_export($cert_res_pub, $content, $cert_res_pri, $_GET['key']);
+            openssl_pkcs12_export($cert_res_pub, $content, $cert_res_pri, $GET->key);
         }
         // error
         else {
@@ -132,6 +132,6 @@ catch (Exception $e) {
 header("Cache-Control: private");
 header("Content-Description: File Transfer");
 header('Content-type: application/octet-stream');
-header('Content-Disposition: attachment; filename="'.$vault_item_values->name.'.'.$_GET['certtype'].'"');
+header('Content-Disposition: attachment; filename="'.$vault_item_values->name.'.'.$GET->certtype.'"');
 
 print($content);

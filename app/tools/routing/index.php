@@ -10,11 +10,11 @@ $User->check_user_session();
 
 # fetch custom fields
 $custom_bgp = $Tools->fetch_custom_fields('routing_bgp');
-$hidden_custom_fields_bgp = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_custom_fields_bgp = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_custom_fields_bgp = is_array(@$hidden_custom_fields['routing_bgp']) ? $hidden_custom_fields['routing_bgp'] : array();
 
 // $custom_ospf = $Tools->fetch_custom_fields('routing_ospf');
-// $hidden_custom_fields_ospf = pf_json_decode($User->settings->hiddenCustomFields, true);
+// $hidden_custom_fields_ospf = db_json_decode($User->settings->hiddenCustomFields, true);
 // $hidden_custom_fields_ospf = is_array(@$hidden_custom_fields['routing_ospf']) ? $hidden_custom_fields['routing_ospf'] : array();
 
 
@@ -31,23 +31,23 @@ elseif ($User->settings->enableRouting!="1") {
 }
 else {
     # specific entry details
-    if (isset($_GET['sPage'])) {
+    if (isset($GET->sPage)) {
         # menu
         include(dirname(__FILE__)."/menu.php");
         # include
-        if($_GET['subnetId']=="bgp")      { include(dirname(__FILE__)."/bgp/details.php"); }
-        elseif($_GET['subnetId']=="ospf") { include(dirname(__FILE__)."/ospf/details.php"); }
+        if($GET->subnetId=="bgp")      { include(dirname(__FILE__)."/bgp/details.php"); }
+        elseif($GET->subnetId=="ospf") { include(dirname(__FILE__)."/ospf/details.php"); }
         else                              { $Result->show("danger", _("Invalid routing module."), false); }
     }
     # all entries
     else {
         # default
-        if (!isset($_GET['subnetId']))    { $_GET['subnetId'] = "bgp"; }
+        if (!isset($GET->subnetId))    { $GET->subnetId = "bgp"; }
         # menu
         include(dirname(__FILE__)."/menu.php");
         # include
-        if($_GET['subnetId']=="bgp")      { include(dirname(__FILE__)."/bgp/all.php"); }
-        elseif($_GET['subnetId']=="ospf") { include(dirname(__FILE__)."/ospf/all.php"); }
+        if($GET->subnetId=="bgp")      { include(dirname(__FILE__)."/bgp/all.php"); }
+        elseif($GET->subnetId=="ospf") { include(dirname(__FILE__)."/ospf/all.php"); }
         else                              { $Result->show("danger", _("Invalid routing module."), false); }
     }
 }

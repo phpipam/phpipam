@@ -27,7 +27,7 @@ $device_types = $Tools->fetch_all_objects ("deviceTypes", "tid");
 $custom_fields = (array) $Tools->fetch_custom_fields('devices');
 
 # set hidden fields
-$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['devices']) ? $hidden_fields['devices'] : array();
 
 # size of custom fields
@@ -42,9 +42,6 @@ if (isset($device_types)) {
 		$device_types_indexed[$dt->tid] = $dt;
 	}
 }
-
-# strip tags - XSS
-$_GET = $User->strip_input_tags ($_GET);
 
 # title
 print "<h4>"._('List of devices')."</h4>";

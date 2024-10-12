@@ -23,10 +23,10 @@ $User->check_user_session();
 $User->is_demo();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "user-menu", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "user-menu", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # change ?
-if(@$_POST['2fa']=="1" && $User->user->{'2fa'}=="1") {
+if($POST->{'2fa'}=="1" && $User->user->{'2fa'}=="1") {
 	$Result->show("info", _("No change"), true);
 }
 
@@ -40,7 +40,7 @@ $values       = [];
 $values['id'] = $User->user->id;
 
 # 2fa and 2fa_secret
-if(@$_POST['2fa']=="1") {
+if($POST->{'2fa'}=="1") {
 	$values['2fa'] = "1";
 	# create
 	$values['2fa_secret'] = $ga->createSecret($User->settings->{'2fa_length'});
