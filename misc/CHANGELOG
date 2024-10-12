@@ -30,6 +30,8 @@
     + Fixed Circuit Type showing differently in two windows (#4104);
     + Fixed Vault Item Custom Field not writable (#4058);
     + Fixed Undefined variable when adding nameserver (#4230);
+    + Fixed Tag Management Color Picker (#3629);
+    + Fixed Arrows for linked addresses do not match between themes (#4216);
 
     Enhancements, changes:
     ----------------------------
