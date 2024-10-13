@@ -72,7 +72,7 @@ if ($inactive_hosts!==false) {
     }
 }
 
-print "<div" . (isset($height) ? " style=\"height:{$height}px;overflow:scroll;width:98%;margin-left:1%;\"" : "") . ">";
+print '<div style="width:98%;margin-left:1%;' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 # error - none found but not permitted
 if ($inactive_hosts===false) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";

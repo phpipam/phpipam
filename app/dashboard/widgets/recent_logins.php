@@ -33,7 +33,7 @@ $recent_logins = $Database->getObjectsQuery($query);
 
 ?>
 
-<div style="width:98%;margin-left:1%;<?php print (isset($height)) ? "height:{$height}px;overflow:scroll;" : ""; ?>">
+<div style="width:98%;margin-left:1%;<?php print (isset($height) ? "height:{$height}px;overflow-y:auto;" : ""); ?>">
 <table id="recentlogins" class="table table-condensed table-hover table-top">
 
 <!-- headers -->
