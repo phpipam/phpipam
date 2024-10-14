@@ -11266,7 +11266,7 @@ msgstr "IP-Adressen &Auml;nderung"
 #: app/subnets/addresses/print-address-table.php:248
 #: app/tools/pstn-prefixes/single-prefix-numbers.php:99
 msgid "range"
-msgstr "Reichweite"
+msgstr "bereich"
 
 #: app/subnets/addresses/address-modify-submit.php:272
 #: app/subnets/addresses/address-modify-submit.php:273
@@ -11364,7 +11364,7 @@ msgid ""
 "You can add,edit or delete multiple IP addresses<br>by specifying IP range "
 "(e.g. 10.10.0.0-10.10.0.25)"
 msgstr ""
-"Sie k&ouml;nnen nicht mehrere IP-Adressen modifizieren (Bsp. "
+"Sie k&ouml;nnen mehrere IP-Adressen modifizieren (Bsp. "
 "10.10.0.0-10.10.0.25)"
 
 #: app/subnets/addresses/address-modify.php:233

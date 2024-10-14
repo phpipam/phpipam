@@ -41,7 +41,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	<form id="mac_lookup" name="search" class='form-inline' style="margin-bottom:20px;" method="post">
 		<div class='input-group'>
 			<div class='form-group'>
-				<input class="search input-md form-control" name="mac" placeholder="<?php print _('MAC address'); ?>" value='<?php print escape_input($POST->mac); ?>' type="text" autofocus="autofocus" style='width:250px;'>
+				<input class="search input-md form-control" name="mac" placeholder="<?php print _('MAC address'); ?>" value='<?php print escape_input($POST->mac); ?>' type="text" style='width:250px;'>
 				<span class="input-group-btn">
 					<button type="submit" class="btn btn-md btn-default"><?php print _('search'); ?></button>
 				</span>

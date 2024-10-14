@@ -84,7 +84,7 @@ elseif (!isset($out)) {
 }
 # found
 else {
-    print '<div class="hContent" style="padding:5px 10px;border-top:0px;' . (isset($height) ? "height:{$height}px;overflow:scroll;" : "") . '">';
+    print '<div class="hContent" style="padding:5px 10px;border-top:0px;' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 
     // count usage
     foreach ($out as $k=>$s) {
