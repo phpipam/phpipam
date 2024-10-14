@@ -4,7 +4,7 @@ define("VERSION", "1.7");									//decimal release version e.g 1.32
 /* set latest version */
 define("VERSION_VISIBLE", "1.7.0");							//visible version in footer e.g 1.3.2
 /* set latest revision */
-define("REVISION", "004");									//increment on static content changes (js/css) or point releases to avoid caching issues
+define("REVISION", "005");									//increment on static content changes (js/css) or point releases to avoid caching issues
 /* set last possible upgrade */
 define("LAST_POSSIBLE", "1.4");							    //minimum required version to be able to upgrade
 /* set published - hide dbversion in footer */
