@@ -58,7 +58,9 @@ if (!is_blank($POST->rack) && $User->get_module_permissions ("racks")>=User::ACC
         # validate position and size
         if (!is_numeric($POST->rack))                               { $Result->show("danger", _('Invalid rack identifier').'!', true); }
         if (!is_numeric($POST->rack_start))                         { $Result->show("danger", _('Invalid rack start position').'!', true); }
-        if ($POST->rack_size == 0)                         { $Result->show("danger", _('Invalid rack size').'!', true); }
+        if ($POST->rack_size == 0) {
+			if ($POST->rack!=0) { $Result->show("danger", _('Invalid rack size').'!', true); }
+		}
 		# validate rack
 		$rack = $Racks->fetch_rack_details($POST->rack);
 		if (!is_numeric($POST->rack) || ($rack > 0 && !is_object($rack))) {

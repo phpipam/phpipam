@@ -9,13 +9,13 @@
  *
  */
 
+/* functions */
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+
 # show only for numeric (set) rackid
 if($POST->rackid>0 || @$device['rack']>0) {
 	# load objects for ajax-loaded stuff
 	if(!isset($User) || !is_object($User)) {
-		/* functions */
-		require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-
 		# initialize user object
 		$Database 	= new Database_PDO;
 		$User 		= new User ($Database);
