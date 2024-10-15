@@ -28,7 +28,7 @@ if ($POST->action=="activate") {
 		$Result->show("danger", _("Failed to activate 2fa for user"), true, true, false, false, true );
 	}
 	else {
-		$Result->show("success", _("2fa activated"), true, true);
+		$Result->show("success", _("2fa activated"), true, true, false, false, true);
 	}
 }
 // deactivate
