@@ -97,7 +97,7 @@ if($User->is_admin(false)) {
 	<!-- Favourites -->
 	<?php
 	//check if user has favourite subnets
-	if(!is_blank(trim($User->user->favourite_subnets ?: ''))) {
+	if(!is_blank(trim((string) $User->user->favourite_subnets))) {
 	?>
 	<li class="<?php if($GET->section=="favourites") print " active"; ?>">
 		<a href="<?php print create_link("tools","favourites"); ?>" class="icon-li" rel='tooltip' data-placement='bottom' title="<?php print _('Favourite networks'); ?>"><i class='fa fa-star-o'></i></a>

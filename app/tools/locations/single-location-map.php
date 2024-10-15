@@ -39,6 +39,6 @@ elseif(!is_object($location)) {
     # no long/lat
     if( (!is_blank($location->long) && !is_blank($location->lat))) {
         $OSM->add_location($location);
-        $OSM->map($height);
+        $OSM->map($height ?? null);
     }
 }

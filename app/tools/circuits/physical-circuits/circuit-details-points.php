@@ -20,7 +20,7 @@ $locationB = new Params($Tools->reformat_circuit_location ($circuit->device2, $c
 if($locationA->type=="devices") {
 	$deviceA = $Tools->fetch_object ("devices", "id", $locationA->id);
 	if ($deviceA===false) {
-		$deviceA = new Stdclass ();
+		$deviceA = new Params ();
 		$deviceA->hostname = "/";
 		$deviceA->id       = 0;
 	}
@@ -29,7 +29,7 @@ if($locationA->type=="devices") {
 	}
 }
 else {
-	$deviceA = new Stdclass ();
+	$deviceA = new Params ();
 	$deviceA->hostname = "/";
 	$deviceA->id 	   = 0;
 }
@@ -37,7 +37,7 @@ else {
 if($locationB->type=="devices") {
 	$deviceB = $Tools->fetch_object ("devices", "id", $locationB->id);
 	if ($deviceB===false) {
-		$deviceB = new Stdclass ();
+		$deviceB = new Params ();
 		$deviceB->hostname = "/";
 		$deviceB->id       = 0;
 	}
@@ -46,7 +46,7 @@ if($locationB->type=="devices") {
 	}
 }
 else {
-	$deviceB = new Stdclass ();
+	$deviceB = new Params ();
 	$deviceB->hostname = "/";
 	$deviceB->id 	   = 0;
 }
@@ -58,7 +58,7 @@ if($User->settings->enableRACK==1) {
 	if($locationA->rack!="") {
 		$rackA = $Tools->fetch_object ("racks", "id", $locationA->rack);
 		if ($rackA===false) {
-			$rackA = new Stdclass ();
+			$rackA = new Params ();
 			$rackA->name = "/";
 		}
 		else {
@@ -66,14 +66,14 @@ if($User->settings->enableRACK==1) {
 		}
 	}
 	else {
-		$rackA = new StdClass ();
+		$rackA = new Params ();
 		$rackA->name = "/";
 	}
 
 	if($locationB->rack!="") {
 		$rackB = $Tools->fetch_object ("racks", "id", $locationB->rack);
 		if ($rackB===false) {
-			$rackB = new Stdclass ();
+			$rackB = new Params ();
 			$rackB->name = "/";
 		}
 		else {
@@ -81,7 +81,7 @@ if($User->settings->enableRACK==1) {
 		}
 	}
 	else {
-		$rackB = new StdClass ();
+		$rackB = new Params ();
 		$rackB->name = "/";
 	}
 }
@@ -94,7 +94,7 @@ if($User->settings->enableLocations==1) {
 	if($locationA->location!="") {
 		$locA = $Tools->fetch_object ("locations", "id", $locationA->location);
 		if ($locA===false) {
-			$locA = new Stdclass ();
+			$locA = new Params ();
 			$locA->name_print = "/";
 		}
 		else {
@@ -102,7 +102,7 @@ if($User->settings->enableLocations==1) {
 		}
 	}
 	else {
-		$locA = new StdClass ();
+		$locA = new Params ();
 		$locA->name_print = "/";
 	}
 
@@ -117,7 +117,7 @@ if($User->settings->enableLocations==1) {
 		}
 	}
 	else {
-		$locB = new StdClass ();
+		$locB = new Params ();
 		$locB->name_print = "/";
 	}
 }

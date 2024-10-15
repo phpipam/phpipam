@@ -973,7 +973,7 @@ class Logging extends Common_functions {
 		// check each value
 		foreach($this->object_new as $k=>$v) {
 			//change
-			if($this->object_old[$k]!=$v && ($this->object_old[$k] != str_replace("\'", "'", $v ?: '')))	{
+			if($this->object_old[$k]!=$v && ($this->object_old[$k] != str_replace("\'", "'", (string) $v)))	{
 				//empty
 				if(is_blank(@$this->object_old[$k]))	{ $this->object_old[$k] = "NULL"; }
 				if(is_blank(@$v))						{ $v = "NULL"; }

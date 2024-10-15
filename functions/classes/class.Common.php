@@ -784,7 +784,7 @@ class Common_functions  {
 	 * @return string
 	 */
 	public function strip_xss ($input) {
-		return htmlspecialchars($input ?: '', ENT_QUOTES, 'UTF-8');
+		return escape_input($input);
 	}
 
 	/**

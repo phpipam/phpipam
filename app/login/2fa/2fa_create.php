@@ -57,7 +57,7 @@ else {
 <script src="functions/qrcodejs/qrcode.min.js"></script>
 <script>
 var qrcode = new QRCode(document.getElementById("qrcode"), {
-	text: "otpauth://totp/<?php print $username."?secret=".$secret; ?>",
+	text: "otpauth://totp/<?php print $username."?secret=".$secret."&issuer=phpIPAM"; ?>",
 	width: 200,
 	height: 200,
 	colorDark : "#000000",
