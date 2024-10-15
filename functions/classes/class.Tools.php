@@ -1462,7 +1462,7 @@ class Tools extends Common_functions {
 	 */
 	private function get_table_indexes($table) {
 		try {
-			return $this->Database->getObjectsQuery("SHOW INDEX from `$table` where `Key_name` != 'PRIMARY';", [], 'StdClass', false);
+			return $this->Database->getObjectsQuery("SHOW INDEX from `$table` where `Key_name` != 'PRIMARY';", [], 'stdClass', false);
 		} catch (Exception $e) {
 			$this->Result->show("danger", _("Invalid query for") . " `.$table.` " . _("database index check : ") . $e->getMessage(), true);
 		}
