@@ -39,7 +39,11 @@ if( !empty($POST->ipamusername) && !empty($POST->ipampassword) )  {
 	# captcha check
 	else {
 		# check captcha
-		if(strtolower($POST->captcha)!=strtolower($_SESSION['securimage_code_value']['default'])) {
+		$captcha_code = isset($_SESSION['securimage_code_value']) ? $_SESSION['securimage_code_value']['default'] : '';
+		if ($captcha_code == '') {
+			$Result->show("danger", _("Missing security code"), true);
+		}
+		if(strtolower($POST->captcha)!=strtolower($captcha_code)) {
 			$Result->show("danger", _("Invalid security code"), true);
 		}
 	}

@@ -1795,19 +1795,21 @@ class User extends Common_functions {
      * @param none
      * @return int|false
      */
-    public function block_check_ip () {
+    public function block_check_ip() {
         # first purge
-        $this->purge_blocked_entries ();
-        $this->block_get_ip ();
+        $this->purge_blocked_entries();
+        $this->block_get_ip();
         # set date and query
-        $now = date("Y-m-d H:i:s", time() - 5*60);
-        $query = "select count from `loginAttempts` where `ip` = ? and `datetime` > ?;";
+        $query = "SELECT count FROM `loginAttempts` WHERE `ip` = ? AND `datetime` > DATE_SUB(NOW(), INTERVAL 5 MINUTE); ";
         # fetch
-        try { $cnt = $this->Database->getObjectQuery($query, array($this->ip, $now)); }
-        catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
+        try {
+            $cnt = $this->Database->getObjectQuery($query, [$this->ip]);
+        } catch (Exception $e) {
+            !$this->debugging ?: $this->Result->show("danger", $e->getMessage(), false);
+        }
 
         # verify
-        return @$cnt->count>0 ? $cnt->count : false;
+        return (is_object($cnt) && $cnt->count) > 0 ? $cnt->count : false;
     }
 
     /**
@@ -1816,14 +1818,19 @@ class User extends Common_functions {
      * @access public
      * @return bool
      */
-    public function block_ip () {
+    public function block_ip() {
         # validate IP
-        if(!filter_var($this->ip, FILTER_VALIDATE_IP))    { return false; }
-
+        if (!filter_var($this->ip, FILTER_VALIDATE_IP)) {
+            return false;
+        }
         # first check if already in
-        if($this->block_check_ip ())         { $this->block_update_count(); }
+        if ($this->block_check_ip()) {
+            $this->block_update_count();
+        }
         # if not in add first entry
-        else                                 { $this->block_add_entry(); }
+        else {
+            $this->block_add_entry();
+        }
     }
 
     /**
@@ -1833,7 +1840,7 @@ class User extends Common_functions {
      * @access private
      * @return void
      */
-    private function block_get_ip () {
+    private function block_get_ip() {
         $this->ip = $this->get_user_ip();
     }
 
@@ -1843,13 +1850,14 @@ class User extends Common_functions {
      * @access private
      * @return void
      */
-    private function purge_blocked_entries () {
+    private function purge_blocked_entries() {
         # set date 5 min ago and query
-        $ago = date("Y-m-d H:i:s", time() - 5*60);
-        $query = "delete from `loginAttempts` where `datetime` < ?; ";
-
-        try { $this->Database->runQuery($query, array($ago)); }
-        catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
+        $query = "DELETE FROM `loginAttempts` WHERE `datetime` < DATE_SUB(NOW(), INTERVAL 5 MINUTE); ";
+        try {
+            $this->Database->runQuery($query);
+        } catch (Exception $e) {
+            !$this->debugging ?: $this->Result->show("danger", $e->getMessage(), false);
+        }
     }
 
     /**
@@ -1860,9 +1868,12 @@ class User extends Common_functions {
      */
     private function block_update_count() {
         # query
-        $query = "update `loginAttempts` set `count`=`count`+1 where `ip` = ?; ";
-        try { $this->Database->runQuery($query, array($this->ip)); }
-        catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
+        $query = "UPDATE `loginAttempts` SET `count`=`count`+1 WHERE `ip` = ?; ";
+        try {
+            $this->Database->runQuery($query, [$this->ip]);
+        } catch (Exception $e) {
+            !$this->debugging ?: $this->Result->show("danger", $e->getMessage(), false);
+        }
     }
 
     /**
@@ -1872,8 +1883,11 @@ class User extends Common_functions {
      * @return void
      */
     private function block_add_entry() {
-        try { $this->Database->insertObject("loginAttempts", array("ip"=>$this->ip, "count"=>1)); }
-        catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
+        try {
+            $this->Database->insertObject("loginAttempts", ["ip" => $this->ip, "count" => 1]);
+        } catch (Exception $e) {
+            !$this->debugging ?: $this->Result->show("danger", $e->getMessage(), false);
+        }
     }
 
     /**
@@ -1883,8 +1897,11 @@ class User extends Common_functions {
      * @return void
      */
     private function block_remove_entry() {
-        try { $this->Database->deleteRow("loginAttempts", "ip", $this->ip); }
-        catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
+        try {
+            $this->Database->deleteRow("loginAttempts", "ip", $this->ip);
+        } catch (Exception $e) {
+            !$this->debugging ?: $this->Result->show("danger", $e->getMessage(), false);
+        }
     }
 
     /**
