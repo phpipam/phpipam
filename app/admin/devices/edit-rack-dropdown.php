@@ -1,4 +1,5 @@
 <?php
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 /**
  * Print dropdown menu for rack selection of device
@@ -13,9 +14,6 @@
 if($POST->rackid>0 || @$device['rack']>0) {
 	# load objects for ajax-loaded stuff
 	if(!isset($User) || !is_object($User)) {
-		/* functions */
-		require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-
 		# initialize user object
 		$Database 	= new Database_PDO;
 		$User 		= new User ($Database);

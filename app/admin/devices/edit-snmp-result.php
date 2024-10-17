@@ -42,7 +42,7 @@ foreach($POST as $key=>$line) {
 	if (!is_blank(strstr($key,"query-"))) {
 		$key2 = str_replace("query-", "", $key);
 		$temp[] = $key2;
-		unset($POST[$key]);
+		unset($POST->$key);
 	}
 }
 # glue sections together

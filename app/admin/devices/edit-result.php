@@ -50,7 +50,7 @@ $POST->sections = !empty($temp) ? implode(";", $temp) : null;
 if($POST->hostname == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }
 
 # rack checks
-if (!is_blank($POST->rack) && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
+if ($POST->rack !== "0" && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
     if ($User->settings->enableRACK!="1") {
         unset($POST->rack);
     }

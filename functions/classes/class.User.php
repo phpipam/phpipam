@@ -189,7 +189,7 @@ class User extends Common_functions {
     private function register_session () {
         // not for api
         if ($this->api !== true) {
-            if (@$_SESSION===NULL && !isset($_SESSION)) {
+            if (!isset($_SESSION)) {
                 //set session name
                 $this->set_session_name();
                 //set default params
@@ -315,7 +315,7 @@ class User extends Common_functions {
     public function is_authenticated () {
         # if checked for subpages first check if $user is array
         if(!is_array($this->user)) {
-            if( !is_blank(@$_SESSION['ipamusername']) ) {
+            if(isset($_SESSION['ipamusername']) && !is_blank($_SESSION['ipamusername'])) {
                 # save username
                 $this->username = $_SESSION['ipamusername'];
                 # check for timeout

@@ -43,6 +43,7 @@ foreach ($devices_used as $d) {
 // if none set die
 if ($devices_used===false)                      { $Result->show("danger", "No devices for SNMP route table query available"."!", true, $ajax_loaded); }
 
+$found = [];
 // ok, we have devices, connect to each device and do query
 foreach ($devices_used as $d) {
     // init
@@ -60,7 +61,7 @@ foreach ($devices_used as $d) {
         }
     } catch (Exception $e) {
        // save for debug
-       $debug[$d->hostname]["get_vlan_table"] = $res;
+       $debug[$d->hostname]["get_vlan_table"] = $res ?? null;
 
        $errors[] = $e->getMessage();
 	}
