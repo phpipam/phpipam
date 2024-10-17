@@ -52,9 +52,6 @@ if(!defined('BASE')) {
 	define('BASE', substr(str_replace($root, "", dirname(__FILE__)),0,-9));
 }
 
-// Fix JSON_UNESCAPED_UNICODE for PHP 5.3
-defined('JSON_UNESCAPED_UNICODE') || define('JSON_UNESCAPED_UNICODE', 256);
-
 /* @classes ---------------------- */
 require( dirname(__FILE__) . '/classes/class.Params.php' );		//Paramter handling class
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions

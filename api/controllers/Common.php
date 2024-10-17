@@ -847,7 +847,7 @@ class Common_api_functions {
 	 * @param mixed $result (default: null)
 	 * @param mixed $controller (default: null)
 	 * @param mixed $tools_table (default: null)
-	 * @return void
+	 * @return mixed
 	 */
 	protected function remap_keys ($result = null, $controller = null, $tools_table = null) {
 		// define keys array
@@ -897,7 +897,7 @@ class Common_api_functions {
 	 *
 	 * @access private
 	 * @param mixed $result
-	 * @return void
+	 * @return mixed
 	 */
 	private function remap_result_keys ($result) {
 		# single
