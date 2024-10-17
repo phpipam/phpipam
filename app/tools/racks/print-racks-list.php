@@ -36,14 +36,14 @@ else {
 
     $colspan = 6;
     if($User->settings->enableCustomers=="1") {
-    print ' <th data-field="customer" data-sortable="true">'._('Customer').'</th>' . "\n";
-    $colspan++;
+        print ' <th data-field="customer" data-sortable="true">'._('Customer').'</th>' . "\n";
+        $colspan++;
     }
 	if(sizeof($custom) > 0) {
 		foreach($custom as $field) {
 			if(!in_array($field['name'], $hidden_custom_fields)) {
 				print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
-                $colspan++;
+				$colspan++;
 			}
 		}
 	}
@@ -55,7 +55,7 @@ else {
     # none
     if ($Racks->all_racks === false) {
         print "<tr>";
-        print " <td colspan='5'>".$Result->show("info", _("No racks available"), false, false, true)."</td>";
+        print " <td colspan='".$colspan."'>".$Result->show("info", _("No racks available"), false, false, true)."</td>";
         print "</tr>";
     }
     # print

@@ -29,7 +29,7 @@ else {
     # fetch all locations
     $all_locations = $Tools->fetch_all_objects("locations", "name");
 
-    $colspan = 4;
+    $colspan = 6;
 
     // table
     print "<table class='table sorted table-striped table-top table-td-top' data-cookie-id-table='all_locations'>";
