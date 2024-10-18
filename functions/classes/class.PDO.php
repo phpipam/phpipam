@@ -115,6 +115,13 @@ abstract class DB {
 	private $ctes_enabled = null;
 
 	/**
+	 * Guard against XSS attacks by html escaping strings by default
+	 *
+	 * @var boolean
+	 */
+	public $html_escape_results = true;
+
+	/**
 	 * Instal flag
 	 * @var bool
 	 * @access protected
@@ -673,6 +680,11 @@ abstract class DB {
 	 * @return mixed
 	 */
 	private function html_escape_strings(&$data) {
+		// Disabled globally?
+		if (!$this->html_escape_results) {
+			return $data;
+		}
+
 		if (is_array($data)) {
 			foreach ($data as $i => $v) {
 				if (is_array($v) || is_object($v)) {

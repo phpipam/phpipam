@@ -40,5 +40,5 @@ else {
         $OSM->add_location($l);
     }
 	$height = isset($height) ? $height : null;
-	$OSM->map($height);
+	$OSM->map($height ?? null);
 }

@@ -39,6 +39,9 @@ $User     = new User ($Database);
 $Response = new Responses ();
 $Params   = new API_params ();
 
+# Disable automatic HTML escaping of strings for API calls
+$Database->html_escape_results = false;
+
 # get phpipam settings
 $settings = $Tools->get_settings();
 

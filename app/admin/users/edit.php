@@ -401,10 +401,15 @@ $(document).ready(function(){
 	if ($User->settings->enableVaults==1)
 	$perm_modules["perm_vaults"] = "Vaults";
 
-	// get permissions
-	$module_permissions = str_replace("perm_", "", array_keys($perm_modules));
-	$module_permissions = array_fill_keys($module_permissions, "0");
-	$module_permissions = array_merge($module_permissions, db_json_decode($user->module_permissions, true));
+	// Set default module permissions
+	foreach ($perm_modules as $key => $name) {
+		$module_permissions[str_replace("perm_", "", $key)] = "0";
+	}
+	// Merge with user module permissions
+	$user_module_permissions = db_json_decode($user->module_permissions, true);
+	if (is_array($user_module_permissions)) {
+		$module_permissions = array_merge($module_permissions, $user_module_permissions);
+	}
 
 	// loop
 	foreach ($perm_modules as $key=>$name) {

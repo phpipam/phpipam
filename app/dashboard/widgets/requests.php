@@ -40,7 +40,7 @@ else {
 	$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 ?>
 
-<div class="container-fluid" style="<?php print isset($height) ? "height:{$height}px;overflow:scroll;" : ""; ?>padding-top:5px">
+<div class="container-fluid" style="<?php print (isset($height) ? "height:{$height}px;overflow-y:auto;" : ""); ?>padding-top:5px">
 <table id="requestedIPaddresses" class="table table-condensed table-hover table-top">
 
 <!-- headers -->

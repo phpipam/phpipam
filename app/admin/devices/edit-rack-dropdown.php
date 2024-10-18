@@ -1,4 +1,5 @@
 <?php
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 /**
  * Print dropdown menu for rack selection of device

@@ -518,7 +518,7 @@ class Upgrade extends Install {
 			# execute all queries
 			foreach($queries as $k=>$query) {
 				// execute
-				if(strpos($query, "--")!==0 && !is_blank(trim($query ?: ''))) {
+				if(strpos($query, "--")!==0 && !is_blank(trim((string) $query))) {
 					$ignore_on_failure = (strpos($query, '-- IGNORE_ON_FAILURE')!== false);
 
 					if ($ignore_on_failure) $this->Database->setErrMode(\PDO::ERRMODE_SILENT);

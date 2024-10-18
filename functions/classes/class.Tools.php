@@ -1462,7 +1462,7 @@ class Tools extends Common_functions {
 	 */
 	private function get_table_indexes($table) {
 		try {
-			return $this->Database->getObjectsQuery("SHOW INDEX from `$table` where `Key_name` != 'PRIMARY';", [], 'StdClass', false);
+			return $this->Database->getObjectsQuery("SHOW INDEX from `$table` where `Key_name` != 'PRIMARY';", [], 'stdClass', false);
 		} catch (Exception $e) {
 			$this->Result->show("danger", _("Invalid query for") . " `.$table.` " . _("database index check : ") . $e->getMessage(), true);
 		}
@@ -2054,12 +2054,12 @@ class Tools extends Common_functions {
 
                     // src
                     if(is_array($src)) {
-                        if(is_array(@$src['subnets'])) {
+                        if(isset($src['subnets']) && is_array($src['subnets'])) {
                             foreach ($src['subnets'] as $s) {
                                 $out['subnets'][$s][] = $n->id;
                             }
                         }
-                        if(is_array(@$src['ipaddresses'])) {
+                        if(isset($src['ipaddresses']) && is_array($src['ipaddresses'])) {
                             foreach ($src['ipaddresses'] as $s) {
                                 $out['ipaddresses'][$s][] = $n->id;
                             }
@@ -2067,12 +2067,12 @@ class Tools extends Common_functions {
                     }
                     // dst
                     if(is_array($dst)) {
-                        if(is_array(@$dst['subnets'])) {
+                        if(isset($dst['subnets']) && is_array($dst['subnets'])) {
                             foreach ($dst['subnets'] as $s) {
                                 $out['subnets'][$s][] = $n->id;
                             }
                         }
-                        if(is_array(@$dst['ipaddresses'])) {
+                        if(isset($dst['ipaddresses']) && is_array($dst['ipaddresses'])) {
                             foreach ($dst['ipaddresses'] as $s) {
                                 $out['ipaddresses'][$s][] = $n->id;
                             }

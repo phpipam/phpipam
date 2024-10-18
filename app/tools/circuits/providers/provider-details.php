@@ -31,7 +31,8 @@ if($provider!==false) {
 	// get custom fields
 	$custom_fields = $Tools->fetch_custom_fields('circuitProviders');
 	$custom_fields_circuits = $Tools->fetch_custom_fields('circuits');
-
+	$colspanCustom = 0;
+	
 	// details
 	print "<div class='col-xs-12'>";
 

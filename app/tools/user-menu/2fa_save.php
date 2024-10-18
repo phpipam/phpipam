@@ -43,7 +43,7 @@ $values['id'] = $User->user->id;
 if($POST->{'2fa'}=="1") {
 	$values['2fa'] = "1";
 	# create
-	$values['2fa_secret'] = $ga->createSecret($User->settings->{'2fa_length'});
+	$values['2fa_secret'] = $ga->createSecret(32); // Override $User->settings->{'2fa_length'}. Only lengths 16 and 32 produce reliable results. See #3724
 }
 # remove 2fa
 else {

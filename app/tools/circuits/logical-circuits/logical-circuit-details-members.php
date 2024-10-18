@@ -66,7 +66,7 @@ if($member_circuits != false){
 				}
 			}
 			else {
-				$rackA = new StdClass ();
+				$rackA = new Params ();
 				$rackA->name = "/";
 			}
 
@@ -81,7 +81,7 @@ if($member_circuits != false){
 				}
 			}
 			else {
-				$rackB = new StdClass ();
+				$rackB = new Params ();
 				$rackB->name = "/";
 			}
 		}
@@ -94,7 +94,7 @@ if($member_circuits != false){
 			if($locationA->location!="") {
 				$locA = $Tools->fetch_object ("locations", "id", $locationA->location);
 				if ($locA===false) {
-					$locA = new Stdclass ();
+					$locA = new Params ();
 					$locA->name_print = "/";
 				}
 				else {
@@ -102,7 +102,7 @@ if($member_circuits != false){
 				}
 			}
 			else {
-				$locA = new StdClass ();
+				$locA = new Params ();
 				$locA->name_print = "/";
 			}
 
@@ -117,7 +117,7 @@ if($member_circuits != false){
 				}
 			}
 			else {
-				$locB = new StdClass ();
+				$locB = new Params ();
 				$locB->name_print = "/";
 			}
 		}

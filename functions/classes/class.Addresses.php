@@ -1909,8 +1909,8 @@ class Addresses extends Common_functions {
 
         // append ports
         if(($n->type=="static" || $n->type=="destination") && (!is_blank($n->src_port) && !is_blank($n->dst_port))) {
-            $sources      = implode("<br>", $sources)." /".$n->src_port;
-            $destinations = implode("<br>", $destinations)." /".$n->dst_port;
+            $sources      = implode("<br>", $sources)." :".$n->src_port;
+            $destinations = implode("<br>", $destinations)." :".$n->dst_port;
         }
         else {
             $sources      = implode("<br>", $sources);
