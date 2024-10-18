@@ -33,6 +33,7 @@
     + Fixed Tag Management Color Picker (#3629);
     + Fixed Arrows for linked addresses do not match between themes (#4216);
     * Fixed Captcha and invalid login checks (#3480, #4198);
+    + Fixed 2FA TOTP validation issue #3724
 
     Enhancements, changes:
     ----------------------------
