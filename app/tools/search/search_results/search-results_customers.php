@@ -9,7 +9,7 @@ $User->check_user_session();
 
 # get all custom fields
 $custom_customers_fields = $GET->customers=="on"     ? $Tools->fetch_custom_fields ("customers") : array();
-$hidden_customer_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['customers'] : array();
+$hidden_customers_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['customers'] : array();
 
 # search cusotmers
 $result_customers = $Tools->search_customers ($searchTerm, $custom_customers_fields);
@@ -19,37 +19,32 @@ $result_customers = $Tools->search_customers ($searchTerm, $custom_customers_fie
 <h4><?php print _('Search results (Customers)');?>:</h4>
 <hr>
 
+<table class="searchTable table sorted table-striped table-top" data-cookie-id-table="customers">
 
-<?php
-
-// no customers
-if($result_customers===false) {
-	$Result->show("info", _("No results"), false);
-}
-// result
-else {
-
-	# table
-	print '<table class="searchTable table sorted table-striped table-top" data-cookie-id-table="customers">';
-
-	# headers
-	print "<thead>";
-	print '<tr>';
-	print "	<th>"._('Title')."</th>";
-	print "	<th>"._('Address').'</th>';
-	print "	<th>"._('Contact').'</th>';
+<!-- headers -->
+<thead>
+<tr>
+	<th><?php print _('Title');?></th>
+	<th><?php print _('Address');?></th>
+	<th><?php print _('Contact');?></th>
+	<?php
 	if(sizeof(@$custom_customers_fields) > 0) {
 		foreach($custom_customers_fields as $field) {
-			if(!in_array($field['name'], $hidden_fields)) {
+			if(!in_array($field['name'], $hidden_customers_fields)) {
 				print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
-				$colspanCustom++;
 			}
 		}
 	}
-	print '	<th class="actions"></th>';
-	print '</tr>';
-	print "</thead>";
+	?>
+	<th class="actions"></th>
+</tr>
+</thead>
+<tbody>
 
+<?php
+
+// result
+if(sizeof($result_customers) > 0) {
 	foreach ($result_customers as $customer) {
 		// print details
 		print '<tr>'. "\n";
@@ -63,11 +58,11 @@ else {
 		// custom
 		if(sizeof(@$custom_customers_fields) > 0) {
 			foreach($custom_customers_fields as $field) {
-				if(!in_array($field['name'], $hidden_fields)) {
+				if(!in_array($field['name'], $hidden_customers_fields)) {
 					// create html links
 					$customer->{$field['name']} = $User->create_links($customer->{$field['name']}, $field['type']);
 
-					print "<td class='hidden-sm hidden-xs hidden-md'>".$customer->{$field['name']}."</td>";
+					print "<td class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field($field['type'],$customer->{$field['name']})."</td>";
 				}
 			}
 		}
@@ -93,6 +88,13 @@ else {
 
 		print '</tr>';
 	}
+}
+?>
+</tbody>
+</table>
 
-	print '</table>';
+<?php
+// no customers
+if(sizeof($result_customers) == 0) {
+	$Result->show("info", _("No results"), false);
 }

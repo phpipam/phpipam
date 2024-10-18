@@ -73,10 +73,10 @@ if(sizeof($result_addresses)>0 || sizeof($result_subnets)>0) {
         foreach ($result_subnets as $s) {
             if(isset($nat->src) && isset($nat->dst) && is_array($nat->src['subnets']) && is_array($nat->dst['subnets'])) {
                 if(!in_array($s->id, $nat->src['subnets']) && !in_array($s->id, $nat->dst['subnets'])) {
-                    $html1[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='$s->id' data-object-type='subnets' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($s->subnet, "dotted")."/".$s->mask."<br>";
+                    $html1[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='".$s->id."' data-object-type='subnets' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($s->subnet, "dotted")."/".$s->mask." (".$s->description.")<br>";
                 }
             }
-            $html1[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='$s->id' data-object-type='subnets' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($s->subnet, "dotted")."/".$s->mask."<br>";
+            $html1[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='".$s->id."' data-object-type='subnets' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($s->subnet, "dotted")."/".$s->mask." (".$s->description.")<br>";
 
         }
         if(sizeof($html1)==1) { $html1 = []; }
@@ -86,10 +86,10 @@ if(sizeof($result_addresses)>0 || sizeof($result_subnets)>0) {
         foreach ($result_addresses as $a) {
             if(isset($nat->src) && isset($nat->dst) && is_array($nat->src['ipaddresses']) && is_array($nat->dst['ipaddresses'])) {
                 if(!in_array($a->id, $nat->src['ipaddresses']) && !in_array($a->id, $nat->dst['ipaddresses'])) {
-                    $html2[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='$a->id' data-object-type='ipaddresses' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($a->ip_addr, "dotted")."<br>";
+                    $html2[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='".$a->id."' data-object-type='ipaddresses' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($a->ip_addr, "dotted")." (".$a->description.")<br>";
                 }
             }
-            $html2[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='$a->id' data-object-type='ipaddresses' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($a->ip_addr, "dotted")."<br>";
+            $html2[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='".$a->id."' data-object-type='ipaddresses' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($a->ip_addr, "dotted")." (".$a->description.")<br>";
         }
         if(sizeof($html2)==1) { $html2 = []; }
     }
