@@ -10,9 +10,6 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
  *
  */
 
-/* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-
 # show only for numeric (set) rackid
 if($POST->rackid>0 || @$device['rack']>0) {
 	# load objects for ajax-loaded stuff
