@@ -1658,7 +1658,7 @@ class Addresses extends Common_functions {
 	 * Finds all unique master subnet ids
 	 *
 	 * @access private
-	 * @return void
+	 * @return array|false
 	 */
 	private function find_unique_subnetids () {
 		try { $res = $this->Database->getObjectsQuery("select distinct(`subnetId`) from `ipaddresses` order by `subnetId` asc;"); }

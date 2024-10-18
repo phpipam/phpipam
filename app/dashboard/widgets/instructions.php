@@ -5,7 +5,7 @@
 
 # required functions
 if(!isset($User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
+	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);

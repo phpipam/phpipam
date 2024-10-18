@@ -48,7 +48,7 @@ if(sizeof($result_customers) > 0) {
 	foreach ($result_customers as $customer) {
 		// print details
 		print '<tr>'. "\n";
-		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link("tools","customers",$customer->title)."'>$customer->title</a></strong></td>";
+		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link($GET->page,"customers",$customer->title)."'>$customer->title</a></strong></td>";
 		print "	<td>$customer->address, $customer->postcode $customer->city, $customer->state</td>";
 		// contact
 		if(!is_blank($customer->contact_person))
@@ -72,7 +72,7 @@ if(sizeof($result_customers) > 0) {
         $links = [];
         if($User->get_module_permissions ("customers")>=User::ACCESS_R) {
             $links[] = ["type"=>"header", "text"=>_("Show")];
-            $links[] = ["type"=>"link", "text"=>_("Show customer"), "href"=>create_link($Params->page, "customers", $customer->title), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"link", "text"=>_("Show customer"), "href"=>create_link($GET->page, "customers", $customer->title), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];
         }
         if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {

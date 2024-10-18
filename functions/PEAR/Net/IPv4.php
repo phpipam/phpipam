@@ -367,13 +367,13 @@ class Net_IPv4
 	{
 		if (! is_object($ip1) || strcasecmp(get_class($ip1), 'net_ipv4') <> 0) {
 			$ipobj1 = Net_IPv4::parseAddress($ip1);
-			if (PEAR::isError($ipobj)) {
+			if (PEAR::isError($ipobj1)) {
                 return $this->pear->raiseError("IP addresses must be an understood format or a Net_IPv4 object");
 			}
 		}
 		if (! is_object($ip2) || strcasecmp(get_class($ip2), 'net_ipv4') <> 0) {
 			$ipobj2 = Net_IPv4::parseAddress($ip2);
-			if (PEAR::isError($ipobj)) {
+			if (PEAR::isError($ipobj2)) {
                 return $this->pear->raiseError("IP addresses must be an understood format or a Net_IPv4 object");
 			}
 		}
