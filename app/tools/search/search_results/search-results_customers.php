@@ -62,7 +62,9 @@ if(sizeof($result_customers) > 0) {
 					// create html links
 					$customer->{$field['name']} = $User->create_links($customer->{$field['name']}, $field['type']);
 
-					print "<td class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field($field['type'],$customer->{$field['name']})."</td>";
+					print "<td class='hidden-sm hidden-xs hidden-md'>";
+					$Tools->print_custom_field($field['type'],$customer->{$field['name']});
+					print "</td>";
 				}
 			}
 		}
