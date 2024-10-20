@@ -37,7 +37,7 @@ foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
 
 		# set colors
 		$background = $Subnets->address_types[$visual_addresses[$m]['state']]['bgcolor'].$alpha." !important";
-		$foreground = $Subnets->address_types[$visual_addresses[$m]['state']]['fgcolor'];
+		$foreground = $Subnets->address_types[$visual_addresses[$m]['state']]['fgcolor']." !important";
 	}
 	else {
 		# print add new
