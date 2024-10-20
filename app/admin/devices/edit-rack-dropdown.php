@@ -88,7 +88,7 @@ if($POST->rackid>0 || @$device['rack']>0) {
 			}
 			else {
 			    foreach ($available as $a) {
-                    		$selected = $a==$device['rack_start'] ? "selected" : "";
+                    		$selected = $a==@$device['rack_start'] ? "selected" : "";
 			        print "<option value='$a' $selected>$a</option>";
 			    }
 			}

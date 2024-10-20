@@ -220,7 +220,7 @@ class phpipam_rack extends Tools {
      * @return array
      */
     public function free_u($rack, $rack_devices, $rack_contents, $current_device = null) {
-        $current_device      = (object) $current_device;
+        $current_device      = new Params($current_device);
         $current_device_size = isset($current_device->rack_size) ? $current_device->rack_size-1 : 0;
 
         // available spaces

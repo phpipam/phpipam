@@ -28,7 +28,7 @@ class Params extends stdClass implements Countable {
     /**
      * Class constructor
      *
-     * @param array $args
+     * @param array|object $args
      * @param mixed $default
      * @param bool  $strip_tags
      */
@@ -84,13 +84,14 @@ class Params extends stdClass implements Countable {
     /**
      * Read array of arguments
      *
-     * @param array $args
+     * @param array|object $args
      * @param bool  $strip_tags
      * @return void
      */
     public function read($args, $strip_tags = false) {
-        if (!is_array($args))
+        if (!is_array($args) && !is_object($args)) {
             return;
+        }
 
         // Don't run strip_tags() on passwords and usernames
         // "<a>" can occur inside a valid password
