@@ -66,10 +66,10 @@ class SubnetsMenu {
 	 * @return string
 	 */
 	private function get_subnet_description($subnet) {
-		$subnet->description = $this->Subnets->shorten_text($subnet->description, 34);
+		$description_short = $this->Subnets->shorten_text($subnet->description, 34);
 
 		if ($subnet->isFolder == 1) {
-			return $subnet->description;
+			return $description_short;
 		}
 
 		// Make use of $subnet->ip if already set by cache/previous call
@@ -86,13 +86,13 @@ class SubnetsMenu {
 				break;
 
 			case 1:	// Description Only
-				$description = empty($subnet->description) ?  $subnet->ip.'/'.$subnet->mask : $subnet->description; // fix for empty
+				$description = empty($description_short) ?  $subnet->ip.'/'.$subnet->mask : $description_short; // fix for empty
 				break;
 
 			case 2:	// Subnet Network & Description
 				$description = $subnet->ip.'/'.$subnet->mask;
-				if (!empty($subnet->description)) {
-					$description = $description . ' ('.$subnet->description.')';
+				if (!empty($description_short)) {
+					$description = $description . ' ('.$description_short.')';
 				}
 				break;
 		}
@@ -157,12 +157,13 @@ class SubnetsMenu {
 			// print name
 			elseif($subnet->showName == 1) {
 				$this->html[] = '<li class="folder folder-'.$style_open.' '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="fa fa-gray fa-folder-'.$style_open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
-				$this->html[] = '<a href="'.create_link("subnets", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->ip.'/'.$subnet->mask.'">'.$subnet->description.'</a>';
+				$suffix = empty($subnet->description) ? "" : " (".$subnet->description.")";
+				$this->html[] = '<a href="'.create_link("subnets", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->ip.'/'.$subnet->mask.$suffix.'">'.$this->Subnets->shorten_text($subnet->description, 50).'</a>';
 			}
 			// print subnet
 			else {
 				$this->html[] = '<li class="folder folder-'.$style_open.' '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="fa fa-gray fa-folder-'.$style_open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
-				$this->html[] = '<a href="'.create_link("subnets", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$description.'">'.$description.'</a>';
+				$this->html[] = '<a href="'.create_link("subnets", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->description.'">'.$description.'</a>';
 			}
 
 		} else {
@@ -175,12 +176,13 @@ class SubnetsMenu {
 			// print name
 			elseif($subnet->showName == 1) {
 				$this->html[] = '<li class="leaf '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="'.$style_leafClass.' fa fa-gray fa-angle-right"></i>';
-				$this->html[] = '<a href="'.create_link("subnets", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->ip.'/'.$subnet->mask.'">'.$subnet->description.'</a></li>';
+				$suffix = empty($subnet->description) ? "" : " (".$subnet->description.")";
+				$this->html[] = '<a href="'.create_link("subnets", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->ip.'/'.$subnet->mask.$suffix.'">'.$this->Subnets->shorten_text($subnet->description, 50).'</a></li>';
 			}
 			// print subnet
 			else {
 				$this->html[] = '<li class="leaf '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="'.$style_leafClass.' fa fa-gray fa-angle-right"></i>';
-				$this->html[] = '<a href="'.create_link("subnets",  $subnet->sectionId,$subnet->id).'" rel="tooltip" data-placement="right" title="'.$description.'">'.$description.'</a></li>';
+				$this->html[] = '<a href="'.create_link("subnets",  $subnet->sectionId,$subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->description.'">'.$description.'</a></li>';
 			}
 		}
 	}
