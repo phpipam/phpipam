@@ -2,6 +2,7 @@
 
     New features:
     ------------
+    + Full php8.3 compatibility;
     + Added support for passkeys / passwordless logins;
     + API:
         + Added API changelog;
@@ -33,6 +34,7 @@
     + Fixed Tag Management Color Picker (#3629);
     + Fixed Arrows for linked addresses do not match between themes (#4216);
     * Fixed Captcha and invalid login checks (#3480, #4198);
+    + Fixed 2FA TOTP validation issues (#3724);
 
     Enhancements, changes:
     ----------------------------
@@ -52,14 +54,14 @@
     + Multiple XSS injections (#4145,#4146,#4147,#4148,#4149.#4150,#4151);
     + HTML DOM XSS injection via filenames when uploading (#4160);
     + Escape loaded database strings by default, stored XSS defense;
-    + Increase minimum 2FA secret length to 26 (128bit);
+    + Increase minimum 2FA secret length to 32 (160bit);
 
 == 1.6.0
 
     Enhancements, changes:
     ----------------------------
-    + php8.4 compatibility;;
-    + MySQL 5.5.3+ is now required (support for utf8mb4);
+    + Partial php8.3 compatibility;
+    + MySQL 5.7.7+ is now required (support for utf8mb4);
 
     Security Fixes:
     ----------------------------

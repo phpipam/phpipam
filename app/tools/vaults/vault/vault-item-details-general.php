@@ -17,7 +17,7 @@ else {
 	print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, "vaults", $GET->subnetId)."'><i class='fa fa-angle-left'></i> "._("All vault items")."</a><br><br>";
 
 	// test
-	if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])!="test") {
+	if(isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) === false) {
 	    $Result->show("danger", _("Cannot unlock vault"), false);
 
 	}
@@ -79,7 +79,7 @@ else {
 		}
 
 		// actions
-		if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])=="test") {
+		if(isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) !== false) {
 			// divider
 			print "<tr>";
 			print "	<td colspan='2'><hr></td>";

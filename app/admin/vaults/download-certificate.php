@@ -25,7 +25,7 @@ $vault_id = "vault".$POST->vaultid;
 // fetch vault
 $vault = $Tools->fetch_object("vaults", "id", $POST->vaultid);
 // test pass
-if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])!="test") {
+if(isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) === false) {
     $Result->show("danger", _("Cannot unlock vault"), true, true);
 }
 

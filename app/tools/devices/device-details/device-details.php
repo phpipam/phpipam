@@ -112,6 +112,9 @@ if($GET->subnetId!=0 && sizeof($device)>0) {
     		$section_ids = pf_explode(";", $device['sections']);
     		foreach($section_ids as $k=>$id) {
     			$section = $Sections->fetch_section(null, $id);
+                if (!is_object($section)) {
+                    $section = new Params();
+                }
     			$section_print[$k]  = "&middot; ".$section->name;
     			$section_print[$k] .= !is_blank($section->description) ? " <span class='text-muted'>($section->description)</span>" : "";
     		}

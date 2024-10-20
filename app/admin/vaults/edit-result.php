@@ -70,7 +70,7 @@ else {
 
 	# add test
 	if($POST->action=="add") {
-		$values['test'] = $User->Crypto->encrypt("test", $POST->secret);
+		$values['test'] = $User->Crypto->encrypt($User->Crypto->random_pseudo_bytes(32), $POST->secret);
 		$values['type'] = $POST->type;
 	}
 

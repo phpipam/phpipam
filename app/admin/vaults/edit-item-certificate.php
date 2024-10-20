@@ -41,7 +41,7 @@ if($POST->action!="add") {
 	$title = $User->get_post_action().' '._('certificate');
 } else {
 	# generate new code
-	$item = new StdClass;
+	$item = new Params();
 	$item->vaultId = $POST->vaultid;
 	# title
 	$title = _('Add new certificate');

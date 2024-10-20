@@ -31,7 +31,7 @@ $vault = $Admin->fetch_object("vaults", "id", $POST->vaultId);
 $vault===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 
 // test
-if($User->Crypto->decrypt($vault->test, $POST->vaultpass)!="test") {
+if($User->Crypto->decrypt($vault->test, $POST->vaultpass) === false) {
 	$Result->show("danger", _("Invalid master password"), true);
 }
 else {

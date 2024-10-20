@@ -32,7 +32,7 @@ $vault_id = "vault".$GET->vaultid;
 // fetch vault
 $vault = $Tools->fetch_object("vaults", "id", $GET->vaultid);
 // test pass
-if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])!="test") {
+if(isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) === false) {
     // content
     $content = "Cannot unlock vault";
 }

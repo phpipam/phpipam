@@ -74,7 +74,7 @@ else {
 	print "	<th>"._("Status")."</th>";
 	print "	<td>";
 	if(isset($_SESSION[$vault_id])) {
-		if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])=="test") {
+		if(isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) !== false) {
 			print "<span class='text-success'>"._("Unlocked")."</span>";
 		}
 		else {
@@ -93,7 +93,7 @@ else {
 	print "	<td colspan='2'><hr></td>";
 	print "</tr>";
 
-	if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])=="test") {
+	if(isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) !== false) {
 
 	print "<tr>";
 	print "	<td></td>";
@@ -132,7 +132,7 @@ else {
 	print "</table>";
 
 	// vault items
-	if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])=="test") {
+	if(isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) !== false) {
 	include ("vault-items.php");
 	}
 }
