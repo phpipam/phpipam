@@ -359,7 +359,7 @@ class Logging extends Common_functions {
 				}
 			}
 			else {
-				try { $user_id = $this->Database->getObjectQuery("select * from `users` where `username` = ? limit 1", array($_SESSION['ipamusername'])); }
+				try { $user_id = $this->Database->getObjectQuery("users", "select * from `users` where `username` = ? limit 1", array($_SESSION['ipamusername'])); }
 				catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
 			}
 			# save id
@@ -655,7 +655,7 @@ class Logging extends Common_functions {
         $query[] = "order by `id` desc limit $logCount ;";
 
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery(implode("\n", $query), $params); }
+	    try { $logs = $this->Database->getObjectsQuery('logs', implode("\n", $query), $params); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 	    # return results
@@ -670,7 +670,7 @@ class Logging extends Common_functions {
 	 */
 	public function log_fetch_highest_id () {
 		# fetch
-	    try { $id = $this->Database->getObjectQuery("select id from logs order by id desc limit 1;"); }
+	    try { $id = $this->Database->getObjectQuery('logs', "select id from logs order by id desc limit 1;"); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 		# return result
 		return $id->id;
@@ -1557,7 +1557,7 @@ class Logging extends Common_functions {
 					) as `ips` order by `cid` desc limit $limit;";
 
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query, $filter ? array("expr"=>$expr) : null); }
+	    try { $logs = $this->Database->getObjectsQuery('changelog', $query, $filter ? array("expr"=>$expr) : null); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 	    # return results
@@ -1601,7 +1601,7 @@ class Logging extends Common_functions {
 					where `changelog`.`ctype` = 'section' and `changelog`.`cid` = :id
 				) as `ips`  order by `cid` desc limit 1;";
 	    # fetch
-	    try { $logs = $this->Database->getObjectQuery($query, array("id"=>$id)); }
+	    try { $logs = $this->Database->getObjectQuery('changelog', $query, array("id"=>$id)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), false);
 			return false;
@@ -1644,7 +1644,7 @@ class Logging extends Common_functions {
 			$query .= ") and `c`.`ctype` = 'ip_addr' order by `c`.`cid` desc limit $limit;";
 
 			# fetch
-		    try { $logs = $this->Database->getObjectsQuery($query, array_filter($args)); }
+		    try { $logs = $this->Database->getObjectsQuery('changelog', $query, array_filter($args)); }
 			catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 		    # return result
@@ -1700,7 +1700,7 @@ class Logging extends Common_functions {
 						and `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
 		}
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query, array($coid, $object_type)); }
+	    try { $logs = $this->Database->getObjectsQuery('changelog', $query, array($coid, $object_type)); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false); return false; }
 
 	    # return result
@@ -1747,7 +1747,7 @@ class Logging extends Common_functions {
 				$query .= ") and `c`.`ctype` = 'subnet' order by `c`.`cid` desc limit $limit;";
 
 				# fetch
-			    try { $logs = $this->Database->getObjectsQuery($query, $args); }
+			    try { $logs = $this->Database->getObjectsQuery('changelog', $query, $args); }
 				catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 			    # return result

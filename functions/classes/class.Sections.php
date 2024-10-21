@@ -269,7 +269,7 @@ class Sections extends Common_functions {
 	 * @return array
 	 */
 	public function fetch_subsections ($sectionId) {
-		try { $subsections = $this->Database->getObjectsQuery("SELECT * FROM `sections` where `masterSection` = ?;", array($sectionId)); }
+		try { $subsections = $this->Database->getObjectsQuery('sections', "SELECT * FROM `sections` where `masterSection` = ?;", array($sectionId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -311,7 +311,7 @@ class Sections extends Common_functions {
 		# set query
 		$query = "select distinct(`v`.`vlanId`),`v`.`name`,`v`.`number`,`v`.`domainId`, `v`.`description` from `subnets` as `s`,`vlans` as `v` where `s`.`sectionId` = ? and `s`.`vlanId`=`v`.`vlanId` order by `v`.`number` asc;";
 		# fetch
-		try { $vlans = $this->Database->getObjectsQuery($query, array($sectionId)); }
+		try { $vlans = $this->Database->getObjectsQuery('subnets', $query, array($sectionId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -331,7 +331,7 @@ class Sections extends Common_functions {
 		# set query
 		$query = "select distinct(`v`.`vrfId`),`v`.`name`,`v`.`description` from `subnets` as `s`,`vrf` as `v` where `s`.`sectionId` = ? and `s`.`vrfId`=`v`.`vrfId` order by `v`.`name` asc;";
 		# fetch
-		try { $vrfs = $this->Database->getObjectsQuery($query, array($sectionId)); }
+		try { $vrfs = $this->Database->getObjectsQuery('subnets', $query, array($sectionId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;

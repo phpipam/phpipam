@@ -91,7 +91,7 @@ class Tools extends Common_functions {
 	    # set query
 	    $query = 'SELECT vlans.vlanId,vlans.number,vlans.name,vlans.description,vlans.customer_id,subnets.subnet,subnets.mask,subnets.id AS subnetId,subnets.sectionId'.@$custom_fields_query.' FROM vlans LEFT JOIN subnets ON subnets.vlanId = vlans.vlanId where vlans.`domainId` = ? ORDER BY vlans.number ASC;';
 		# fetch
-		try { $vlans = $this->Database->getObjectsQuery($query, array($domainId)); }
+		try { $vlans = $this->Database->getObjectsQuery("vlans", $query, array($domainId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -165,7 +165,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $result = $this->Database->getObjectsQuery($query, array("low"=>$low, "high"=>$high, "search_term"=>"%$search_term%", "tags"=>$tags)); }
+		try { $result = $this->Database->getObjectsQuery('ipaddresses', $query, array("low"=>$low, "high"=>$high, "search_term"=>"%$search_term%", "tags"=>$tags)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -233,7 +233,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $result = $this->Database->getObjectsQuery($query, ["low"=>$low, "high"=>$high, "search_term"=>"%$search_term%"]); }
+		try { $result = $this->Database->getObjectsQuery('subnets', $query, ["low"=>$low, "high"=>$high, "search_term"=>"%$search_term%"]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -294,7 +294,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery('vlans', $query, array("search_term"=>"%$search_term%")); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -328,7 +328,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery('vrf', $query, array("search_term"=>"%$search_term%")); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -361,7 +361,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery('pstnPrefixes', $query, array("search_term"=>"%$search_term%")); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -394,7 +394,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery('pstnNumbers', $query, array("search_term"=>"%$search_term%")); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -431,7 +431,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery("circuits", $query, array("search_term"=>"%$search_term%")); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -465,7 +465,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery("circuitProviders", $query, array("search_term"=>"%$search_term%")); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -498,7 +498,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery('customers', $query, array("search_term"=>"%$search_term%")); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -701,7 +701,7 @@ class Tools extends Common_functions {
 		$query    = "show full columns from `$table`;";
 		# fetch
 		try {
-			$fields = $this->Database->getObjectsQuery($query, [], 'stdClass', false);
+			$fields = $this->Database->getObjectsQuery("no_html_escape", $query, []);
 		} catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), false);
 			return false;
@@ -803,7 +803,7 @@ class Tools extends Common_functions {
 		# escape field
 		$table = $this->Database->escape($table);
 		# fetch
-	    try { $field_data = $this->Database->getObjectQuery("show full columns from `$table` where `Field` = ?;", array($field)); }
+	    try { $field_data = $this->Database->getObjectQuery("no_html_escape", "show full columns from `$table` where `Field` = ?;", array($field)); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 		# result
 	    return($field_data);
@@ -843,7 +843,7 @@ class Tools extends Common_functions {
 			else				{ $query = "select * from `widgets` where `wadminonly` = 'no' and `wactive` = 'yes'; "; }
 		}
 	    # fetch
-	    try { $widgets = $this->Database->getObjectsQuery($query); }
+	    try { $widgets = $this->Database->getObjectsQuery('widgets', $query); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 	    # reindex
@@ -957,7 +957,7 @@ class Tools extends Common_functions {
 			AND s1.isFull!=1
 			AND s2.masterSubnetId IS NULL
 			ORDER BY LPAD(s1.subnet,39,0);";
-		try { $subnets = $this->Database->getObjectsQuery($query); }
+		try { $subnets = $this->Database->getObjectsQuery('subnets', $query); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return NULL; }
 
 		# save
@@ -1265,7 +1265,7 @@ class Tools extends Common_functions {
 	public function table_exists ($tablename, $quit = false) {
 	    # query
 	    $query = 'SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = "'.$this->Database->dbname.'" AND table_name = ?;';
-		try { $count = $this->Database->getObjectQuery($query, array($tablename)); }
+		try { $count = $this->Database->getObjectQuery("no_html_escape", $query, array($tablename)); }
 		catch (Exception $e) { !$quit ? : $this->Result->show("danger", $e->getMessage(), true);	return false; }
 		# return
 		return $count->count ==1 ? true : false;
@@ -1286,7 +1286,7 @@ class Tools extends Common_functions {
 	    $tablename = $this->Database->escape($tablename);
 		# check
 	    $query = "DESCRIBE `$tablename` `$fieldname`;";
-		try { $count = $this->Database->getObjectQuery($query); }
+		try { $count = $this->Database->getObjectQuery("no_html_escape", $query); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true);	return false; }
 		# return true if it exists
 		return $count!== null ? true : false;
@@ -1462,7 +1462,7 @@ class Tools extends Common_functions {
 	 */
 	private function get_table_indexes($table) {
 		try {
-			return $this->Database->getObjectsQuery("SHOW INDEX from `$table` where `Key_name` != 'PRIMARY';", [], 'stdClass', false);
+			return $this->Database->getObjectsQuery("no_html_escape", "SHOW INDEX from `$table` where `Key_name` != 'PRIMARY';", []);
 		} catch (Exception $e) {
 			$this->Result->show("danger", _("Invalid query for") . " `.$table.` " . _("database index check : ") . $e->getMessage(), true);
 		}
@@ -2213,7 +2213,7 @@ class Tools extends Common_functions {
     	    $params = array();
         }
 		# fetch
-		try { $prefixes = $this->Database->getObjectsQuery($query, $params); }
+		try { $prefixes = $this->Database->getObjectsQuery('pstnPrefixes', $query, $params); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -2348,7 +2348,7 @@ class Tools extends Common_functions {
     	else {
         	$query = "select count(*) as cnt from pstnNumbers where prefix = ? and number = ?;";
     		# fetch
-    		try { $cnt = $this->Database->getObjectQuery($query, array($prefix, $number)); }
+    		try { $cnt = $this->Database->getObjectQuery('pstnNumbers', $query, array($prefix, $number)); }
     		catch (Exception $e) {
     			$this->Result->show("danger", _("Error: ").$e->getMessage());
     			return false;
@@ -2840,7 +2840,7 @@ class Tools extends Common_functions {
                         as linked;";
 
      		// fetch
-    		try { $objects = $this->Database->getObjectsQuery($query); }
+    		try { $objects = $this->Database->getObjectsQuery('devices', $query); }
     		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
 
     		// return
@@ -2882,7 +2882,7 @@ class Tools extends Common_functions {
 		$query[] = "from circuits as c, circuitProviders as p where c.provider = p.id";
 		$query[] = "order by c.cid asc;";
 		// fetch
-		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query), array()); }
+		try { $circuits = $this->Database->getObjectsQuery('circuits', implode("\n", $query), array()); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
@@ -2906,7 +2906,7 @@ class Tools extends Common_functions {
 		$query[] = "WHERE mapping.circuit_id = ?";
 		$query[] = "order by lc.logical_cid asc;";
 		// fetch
-		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query), [$circuit_id]); }
+		try { $circuits = $this->Database->getObjectsQuery('circuitsLogical', implode("\n", $query), [$circuit_id]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
@@ -2930,7 +2930,7 @@ class Tools extends Common_functions {
 		$query2[] = "where mapping.logicalCircuit_id = ?";
 		$query2[] = "order by mapping.`order`;";
 		// fetch
-		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query2), $logical_circuit_id); }
+		try { $circuits = $this->Database->getObjectsQuery('circuits', implode("\n", $query2), $logical_circuit_id); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
@@ -2962,7 +2962,7 @@ class Tools extends Common_functions {
 		$query[] = "from circuits as c, circuitProviders as p where c.provider = p.id and c.provider = ?";
 		$query[] = "order by c.cid asc;";
 		// fetch
-		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query), array($provider_id)); }
+		try { $circuits = $this->Database->getObjectsQuery('circuits', implode("\n", $query), array($provider_id)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
@@ -2987,7 +2987,7 @@ class Tools extends Common_functions {
 					from circuits as c, circuitProviders as p where c.provider = p.id and (c.device1 = :deviceid or c.device2 = :deviceid)
 					order by c.cid asc;";
 		// fetch
-		try { $circuits = $this->Database->getObjectsQuery($query, array("deviceid"=>$device_id)); }
+		try { $circuits = $this->Database->getObjectsQuery('circuits', $query, array("deviceid"=>$device_id)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
@@ -3100,7 +3100,7 @@ class Tools extends Common_functions {
 		$query[] = "	order by `v`.`number` asc;";
 
 		// fetch
-		try { $domains = $this->Database->getObjectsQuery(implode("\n",$query)); }
+		try { $domains = $this->Database->getObjectsQuery('vlans', implode("\n",$query)); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
 		// filter if requested
 		if ($search !== false && sizeof($domains)>0) {
@@ -3157,7 +3157,7 @@ class Tools extends Common_functions {
 					where r.type = ? and r.object_id = ? and r.subnet_id = s.id
 					order by r.direction asc, s.subnet asc;";
 		// fetch
-		try { $subnets = $this->Database->getObjectsQuery($query, [$type, $id]); }
+		try { $subnets = $this->Database->getObjectsQuery('subnets', $query, [$type, $id]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
@@ -3418,7 +3418,7 @@ class Tools extends Common_functions {
 		if($type=="IPv4")		{ $query = 'select count(*) as count from `ipaddresses` where cast(`ip_addr` as UNSIGNED) <= 4294967295;'; }
 		elseif($type=="IPv6")	{ $query = 'select count(*) as count from `ipaddresses` where cast(`ip_addr` as UNSIGNED) >  4294967295;'; }
 
-		try { $count = $this->Database->getObjectQuery($query); }
+		try { $count = $this->Database->getObjectQuery('ipaddresses', $query); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
 
 		/* return true if it exists */
@@ -3457,7 +3457,7 @@ class Tools extends Common_functions {
 					ORDER BY `usage` DESC $limit;";
 		}
 
-		try { $stats = $this->Database->getObjectsQuery($query); }
+		try { $stats = $this->Database->getObjectsQuery('subnets', $query); }
 		catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), true);	return false; }
 
 		# return subnets array
@@ -3472,7 +3472,7 @@ class Tools extends Common_functions {
 	 */
 	public function fetch_addresses_for_export () {
 		# fetch
-	    try { $addresses = $this->Database->getObjectsQuery("select `id`,`subnetId`,`ip_addr`,`hostname` from `ipaddresses` where length(`hostname`)>1 order by `subnetId` asc;"); }
+	    try { $addresses = $this->Database->getObjectsQuery('ipaddresses', "select `id`,`subnetId`,`ip_addr`,`hostname` from `ipaddresses` where length(`hostname`)>1 order by `subnetId` asc;"); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 		# return result
 		return $addresses;

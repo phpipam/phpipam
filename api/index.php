@@ -40,7 +40,7 @@ $Response = new Responses ();
 $Params   = new API_params ();
 
 # Disable automatic HTML escaping of strings for API calls
-$Database->html_escape_results = false;
+$Database->html_escape_enabled = false;
 
 # get phpipam settings
 $settings = $Tools->get_settings();

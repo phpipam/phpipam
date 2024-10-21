@@ -29,7 +29,7 @@ $height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['defau
 $requests = $Tools->requests_fetch (false);
 
 $query = "select `username`,`lastLogin`,`lastActivity` from `users` order by `lastLogin` DESC limit $max;";
-$recent_logins = $Database->getObjectsQuery($query);
+$recent_logins = $Database->getObjectsQuery('users', $query);
 
 ?>
 

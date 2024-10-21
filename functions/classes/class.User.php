@@ -679,7 +679,7 @@ class User extends Common_functions {
                     $query = "select `su`.`id`, `su`.`id` as `subnetId`,`se`.`id` as `sectionId`, `subnet`, `mask`,`isFull`,`su`.`description`,`se`.`description` as `section`, `vlanId`, `isFolder`
                               from `subnets` as `su`, `sections` as `se` where `su`.`id` = ? and `su`.`sectionId` = `se`.`id` limit 1;";
 
-                    try { $fsubnet = $this->Database->getObjectQuery($query, array($id)); }
+                    try { $fsubnet = $this->Database->getObjectQuery('subnets', $query, array($id)); }
                     catch (Exception $e) {
                         $this->Result->show("danger", _("Error: ").$e->getMessage());
                         return false;
@@ -1803,7 +1803,7 @@ class User extends Common_functions {
         $query = "SELECT count FROM `loginAttempts` WHERE `ip` = ? AND `datetime` > DATE_SUB(NOW(), INTERVAL 5 MINUTE); ";
         # fetch
         try {
-            $cnt = $this->Database->getObjectQuery($query, [$this->ip]);
+            $cnt = $this->Database->getObjectQuery('loginAttempts', $query, [$this->ip]);
         } catch (Exception $e) {
             !$this->debugging ?: $this->Result->show("danger", $e->getMessage(), false);
         }

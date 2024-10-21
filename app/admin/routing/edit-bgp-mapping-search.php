@@ -25,7 +25,7 @@ if(strlen($search_txt) < 2)	{ $Result->show("danger", _("Please enter at least 2
 
 $query = 'SELECT INET_NTOA(`subnet`) AS `subnet`,`id`,`mask`,`description` FROM `subnets` WHERE (INET_NTOA(`subnet`) LIKE ? OR `description` LIKE ?) AND `subnet` > 1 AND `isFolder` = 0;';
 
-try { $subnets = $Database->getObjectsQuery($query, ["$search_txt%", "%$search_txt%"]); }
+try { $subnets = $Database->getObjectsQuery('subnets', $query, ["$search_txt%", "%$search_txt%"]); }
 catch (Exception $e) {
 	print $Result->show("danger", $e->getMessage(), true);
 }

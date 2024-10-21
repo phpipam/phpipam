@@ -13,7 +13,7 @@
 			$error = false;
 			// try to fetch
 			try {
-				$Database->getObjectsQuery("SELECT * FROM settings LIMIT 1;");
+				$Database->getObjectsQuery("settings", "SELECT * FROM settings LIMIT 1;");
 			} catch (Exception $e) {
 				$Result->show("danger", _("Error") . ":<hr>" . $e->getMessage(), false);
 				$error = true;
