@@ -87,6 +87,9 @@ else {
 
     # fetch old section
     $section_old = $Sections->fetch_section ("id", $POST->id);
+	if (!is_object($section_old)) {
+		$section_old = new Params();
+	}
     // parse old permissions
     $old_permissions = db_json_decode($section_old->permissions, true);
 

@@ -1406,8 +1406,12 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_permission_diff ($k, $v) {
 		// get old and compare
-		$this->object_new['permissions'] = db_json_decode(str_replace("\\", "", $this->object_new['permissions']), true);		//Remove /
-		$this->object_old['permissions'] = db_json_decode(str_replace("\\", "", $this->object_old['permissions']), true);		//Remove /
+		if (isset($this->object_new['permissions'])) {
+			$this->object_new['permissions'] = db_json_decode(str_replace("\\", "", $this->object_new['permissions']), true);		//Remove /
+		}
+		if (isset($this->object_old['permissions'])) {
+			$this->object_old['permissions'] = db_json_decode(str_replace("\\", "", $this->object_old['permissions']), true);		//Remove /
+		}
 
 		# Get all groups:
 		$groups = (array) $this->Tools->fetch_all_objects("userGroups", "g_id");

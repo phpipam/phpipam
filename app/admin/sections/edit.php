@@ -28,7 +28,10 @@ $sections = $Sections->fetch_all_sections ();
 # fetch groups
 $groups   = $Admin->fetch_all_objects("userGroups", "g_id");
 # fetch section
-$section  = (array) $Sections->fetch_section (null, $POST->sectionid);
+$section  = $Sections->fetch_section (null, $POST->sectionid);
+if (!is_object($section)) {
+	$section = new Params();
+}
 ?>
 
 <!-- header -->
@@ -48,7 +51,7 @@ $section  = (array) $Sections->fetch_section (null, $POST->sectionid);
 		<tr>
 			<td><?php print _('Name'); ?></td>
 			<td colspan="2">
-				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="name" value="<?php print $Admin->strip_xss(@$section['name']); ?>" size="30" <?php if ($POST->action == "delete" ) { print ' readonly '; } ?> placeholder="<?php print _('Section name'); ?>">
+				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="name" value="<?php print $section->name; ?>" size="30" <?php if ($POST->action == "delete" ) { print ' readonly '; } ?> placeholder="<?php print _('Section name'); ?>">
 				<!-- hidden -->
 				<input type="hidden" name="action" 	value="<?php print escape_input($POST->action); ?>">
 				<input type="hidden" name="id" 		value="<?php print escape_input($POST->sectionid); ?>">
@@ -59,7 +62,7 @@ $section  = (array) $Sections->fetch_section (null, $POST->sectionid);
 		<tr>
 			<td><?php print _('Description'); ?></td>
 			<td colspan="2">
-				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="description" value="<?php print $Admin->strip_xss(@$section['description']); ?>" size="30" <?php if ($POST->action == "delete") { print " readonly ";}?> placeholder="<?php print _('Section description'); ?>">
+				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="description" value="<?php print $section->description; ?>" size="30" <?php if ($POST->action == "delete") { print " readonly ";}?> placeholder="<?php print _('Section description'); ?>">
 			</td>
 		</tr>
 		<!-- Master Subnet -->
@@ -73,7 +76,7 @@ $section  = (array) $Sections->fetch_section (null, $POST->sectionid);
 						foreach($sections as $s) {
 							# show only roots and ignore self
 							if($s->masterSection==0 && $s->id!=$POST->sectionid) {
-								if($s->id==$section['masterSection'])	{ print "<option value='$s->id' selected='selected'>$s->name</option>"; }
+								if($s->id==$section->masterSection)	{ print "<option value='$s->id' selected='selected'>$s->name</option>"; }
 								else									{ print "<option value='$s->id'>$s->name</option>"; }
 							}
 						}
@@ -90,7 +93,7 @@ $section  = (array) $Sections->fetch_section (null, $POST->sectionid);
 			<td colspan="2">
 				<select name="strictMode" class="input-small form-control input-sm input-w-auto pull-left" <?php if($POST->action=="delete") print 'disabled="disabled"'; ?>>
 					<option value="1"><?php print _('Yes'); ?></option>
-					<option value="0" <?php if(@$section['strictMode'] == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
+					<option value="0" <?php if($section->strictMode == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
 				</select>
 				<span class="help-inline info2"><?php print _('No disables overlapping subnet checks. Subnets can be nested/created randomly. Anarchy.'); ?></span>
 			</td>
@@ -102,7 +105,7 @@ $section  = (array) $Sections->fetch_section (null, $POST->sectionid);
 			<td colspan="2">
 				<select name="showSubnet" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($POST->action=="delete") print 'disabled="disabled"'; ?>>
 					<option value="1"><?php print _('Yes'); ?></option>
-					<option value="0" <?php if(@$section['showSubnet'] == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
+					<option value="0" <?php if($section->showSubnet == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
 				</select>
 				<span class="help-inline info2"><?php print _('Show list of section subnets in subnet list'); ?></span>
 			</td>
@@ -114,7 +117,7 @@ $section  = (array) $Sections->fetch_section (null, $POST->sectionid);
 			<td colspan="2">
 				<select name="showVLAN" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($POST->action=="delete") print 'disabled="disabled"'; ?>>
 					<option value="1"><?php print _('Yes'); ?></option>
-					<option value="0" <?php if(@$section['showVLAN'] == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
+					<option value="0" <?php if($section->showVLAN == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
 				</select>
 				<span class="help-inline info2"><?php print _('Show list of VLANs and belonging subnets in subnet list'); ?></span>
 			</td>
@@ -126,7 +129,7 @@ $section  = (array) $Sections->fetch_section (null, $POST->sectionid);
 			<td colspan="2">
 				<select name="showVRF" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($POST->action=="delete") print 'disabled="disabled"'; ?>>
 					<option value="1"><?php print _('Yes'); ?></option>
-					<option value="0" <?php if(@$section['showVRF'] == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
+					<option value="0" <?php if($section->showVRF == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
 				</select>
 				<span class="help-inline info2"><?php print _('Show list of VRFs and belonging subnets in subnet list'); ?></span>
 			</td>
@@ -138,7 +141,7 @@ $section  = (array) $Sections->fetch_section (null, $POST->sectionid);
 			<td colspan="2">
 				<select name="showSupernetOnly" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($POST->action=="delete") print 'disabled="disabled"'; ?>>
 					<option value="1"><?php print _('Yes'); ?></option>
-					<option value="0" <?php if(@$section['showSupernetOnly'] == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
+					<option value="0" <?php if($section->showSupernetOnly == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
 				</select>
 				<span class="help-inline info2"><?php print _('Show only supernets in list of subnets in section'); ?></span>
 			</td>
@@ -159,7 +162,7 @@ $section  = (array) $Sections->fetch_section (null, $POST->sectionid);
 					);
 
 					foreach($opts as $key=>$line) {
-						if($section['subnetOrdering'] == $key) 	{ print "<option value='$key' selected>$line</option>"; }
+						if($section->subnetOrdering == $key) 	{ print "<option value='$key' selected>$line</option>"; }
 						else 									{ print "<option value='$key'>$line</option>"; }
 					}
 
@@ -176,7 +179,7 @@ $section  = (array) $Sections->fetch_section (null, $POST->sectionid);
 		</tr>
 		<!-- permissions -->
 		<?php
-		$permissions = strlen(@$section['permissions'])>1 ? $Sections->parse_section_permissions($section['permissions']) : "";
+		$permissions = strlen($section->permissions)>1 ? $Sections->parse_section_permissions($section->permissions) : "";
 
 		# print for each group
 		$m=0;

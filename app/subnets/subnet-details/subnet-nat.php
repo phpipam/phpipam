@@ -59,7 +59,7 @@ elseif(isset($all_nats_per_object['subnets'][$subnet['id']])) {
             $links[] = ["type"=>"link", "text"=>_("Delete NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
         };
         // print
-        print $Tools->print_nat_table ($n, $User->is_admin(false), false, false, "subnets", $address['id'], $User->print_actions($User->user->compress_actions, $links, true));
+        print $Tools->print_nat_table ($n, $User->is_admin(false), false, false, "subnets", $subnet['id'], $User->print_actions($User->user->compress_actions, $links, true));
     }
 }
 else {

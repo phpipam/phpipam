@@ -375,7 +375,7 @@ $("input[name='subnet']").change(function() {
 
         if(is_array($customers)) {
             foreach($customers as $customer) {
-                if ($customer->id == $subnet_old_details['customer_id'])    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
+                if (isset($subnet_old_details['customer_id']) && $customer->id == $subnet_old_details['customer_id'])    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
                 else                                                        { print '<option value="'. $customer->id .'">'.$customer->title.'</option>'; }
             }
         }

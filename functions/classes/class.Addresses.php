@@ -1828,8 +1828,8 @@ class Addresses extends Common_functions {
 	 */
 	public function print_nat_link ($all_nats, $all_nats_per_object, $subnet, $address, $type="ipaddress") {
     	// cast
-    	$subnet = (object) $subnet;
-    	$address = (object) $address;
+    	$subnet = new Params($subnet);
+    	$address = new Params($address);
 
     	// cnt
     	$html = array();

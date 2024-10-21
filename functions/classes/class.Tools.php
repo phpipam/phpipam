@@ -1575,7 +1575,7 @@ class Tools extends Common_functions {
 			}
 
 			// Remove un-necessary linked_field indexes.
-			try { $this->Database->runQuery("ALTER TABLE `ipaddresses` DROP INDEX $i->Key_name;"); }
+			try { $this->Database->runQuery("ALTER TABLE `ipaddresses` DROP INDEX `$i->Key_name`;"); }
 			catch (Exception $e) {
 				$this->Result->show("danger", $e->getMessage(), true);
 			}
@@ -1603,7 +1603,7 @@ class Tools extends Common_functions {
 		}
 
 		// Create selected linked_field index if not exists.
-		try { $this->Database->runQuery("ALTER TABLE `ipaddresses` ADD INDEX ($linked_field);"); }
+		try { $this->Database->runQuery("ALTER TABLE `ipaddresses` ADD INDEX (`$linked_field`);"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}

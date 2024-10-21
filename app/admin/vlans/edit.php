@@ -32,7 +32,9 @@ $Admin->validate_action();
 
 # fetch vlan details
 $vlan = $Admin->fetch_object ("vlans", "vlanid", $POST->vlanid);
-$vlan = $vlan!==false ? (array) $vlan : array();
+if (!is_object($vlan)) {
+	$vlan  = new Params;
+}
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('vlans');
 
@@ -54,10 +56,14 @@ if($POST->action=="add") {
 	} else {
 		$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $POST->domain);
 	}
-	if(isset($POST->number))
-	$vlan['number'] = $POST->number;
+	if(isset($POST->number)) {
+		if (!is_numeric($POST->number)) {
+			$Result->show("danger", _("Invalid ID"), true, true);
+		}
+		$vlan->number = $POST->number;
+	}
 } else {
-		$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $vlan['domainId']);
+		$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $vlan->domainId);
 }
 if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true, true); }
 ?>
@@ -102,7 +108,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Number'); ?></td>
 		<td>
-			<input type="text" class="number form-control input-sm" name="number" placeholder="<?php print _('VLAN number'); ?>" value="<?php print $Tools->strip_xss(@$vlan['number']); ?><?php print escape_input($POST->vlanNum); ?>" <?php print $readonly; ?>>
+			<input type="text" class="number form-control input-sm" name="number" placeholder="<?php print _('VLAN number'); ?>" value="<?php print $vlan->number; ?><?php print escape_input($POST->vlanNum); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -110,7 +116,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('VLAN name'); ?>" value="<?php print $Tools->strip_xss(@$vlan['name']); ?>" <?php print $readonly; ?>>
+			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('VLAN name'); ?>" value="<?php print $vlan->name; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -118,7 +124,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Description'); ?></td>
 		<td>
-			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$vlan['description']); ?>" <?php print $readonly; ?>>
+			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $vlan->description; ?>" <?php print $readonly; ?>>
 			<input type="hidden" name="vlanid" value="<?php print escape_input($POST->vlanid); ?>">
 			<?php if($POST->domain!=="all") { ?>
 			<input type="hidden" name="domainid" value="<?php print $vlan_domain->id; ?>">
@@ -146,7 +152,7 @@ $(document).ready(function(){
 
         if($customers!=false) {
             foreach($customers as $customer) {
-                if ($customer->id == $vlan['customer_id'])    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
+                if ($customer->id == $vlan->customer_id)    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
                 else                                          { print '<option value="'. $customer->id .'">'.$customer->title.'</option>'; }
             }
         }
