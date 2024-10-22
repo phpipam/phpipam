@@ -8,7 +8,7 @@
  */
 
 # include required scripts
-require_once( dirname(__FILE__) . '/../functions.php' );
+require_once(dirname(__FILE__) . '/../functions.php');
 
 # Don't corrupt output with php errors!
 disable_php_errors();
@@ -19,62 +19,81 @@ $disable_email_notification = false;
 
 # initialize objects
 $Database 	= new Database_PDO;
-$Admin		= new Admin ($Database, false);
-$User		= new User ($Database, true);
+$Admin		= new Admin($Database, false);
+$User		= new User($Database, true);
 $Result		= new Result();
 
-
 // script can only be run from cli
-if(php_sapi_name()!="cli") 									{ $Result->show_cli("This script can only be run from cli", true); }
+if (php_sapi_name() != "cli") {
+	$Result->show_cli("This script can only be run from cli", true);
+}
 
 // check if argv[1] provided, if not check readline support and wait for user pass
-if (isset($argv[1]))	{ $password = $argv[1]; }
-else {
+if (isset($argv[1])) {
+	$password = $argv[1];
+} else {
 	// get available extensions
 	$available_extensions = get_loaded_extensions();
 	// not in array
-	if (!in_array("readline", $available_extensions)) 		{ $Result->show_cli("readline php extension is required.\nOr provide password as first argument", true); }
-	else {
+	if (!in_array("readline", $available_extensions)) {
+		$Result->show_cli("readline php extension is required.\nOr provide password as first argument", true);
+	} else {
 		// read password
-		$password = trim( readline("Enter new admin password: ") );
+		$password = trim(readline("Enter new admin password: "));
 	}
 }
 
 // validate password
-if(strlen($password)<8)										{ $Result->show_cli("Password must be at least 8 characters long", true); }
+if (strlen($password) < 8) {
+	$Result->show_cli("Password must be at least 8 characters long", true);
+}
 
 // hash password
-$password_crypted = $User->crypt_user_pass ($password);
+$password_crypted = $User->crypt_user_pass($password);
 // save type
-$crypt_type = $User->return_crypt_type ();
+$crypt_type = $User->return_crypt_type();
 
 // set update array
-$values = array("id"=>1,
-				"password"     =>$password_crypted,
-				"passkey_only" =>0
-				);
+$values = ["id" => 1, "password" => $password_crypted];
+
+// Disable 2FA
+if ($User->settings->dbversion >= 4) {
+	$values["2fa"] = 0;
+}
+
+// Disable passkeys
+if ($User->settings->dbversion >= 40) {
+	$values["passkey_only"] = 0;
+}
 
 // update password
-if(!$Admin->object_modify("users", "edit", "id", $values))	{ $Result->show_cli("Failed to update Admin password", false); }
-else														{ $Result->show_cli("Admin password updated", false); }
+if (!$Admin->object_modify("users", "edit", "id", $values)) {
+	$Result->show_cli("Failed to update Admin password", false);
+} else {
+	$Result->show_cli("Admin password updated", false);
+}
 
 // debug ?
 if ($debugging) {
 	$Result->show_cli("---------");
-	$Result->show_cli("Crypt type: ".$crypt_type);
-	$Result->show_cli("Password: ".$password_crypted);
+	$Result->show_cli("Crypt type: " . $crypt_type);
+	$Result->show_cli("Password: " . $password_crypted);
 	$Result->show_cli("---------");
 }
 
 // fail
-if ($disable_email_notification) { die(); }
+if ($disable_email_notification) {
+	die();
+}
 
 # check for recipients
-foreach($Admin->fetch_multiple_objects ("users", "role", "Administrator") as $admin) {
-	$recepients[] = array("name"=>$admin->real_name, "email"=>$admin->email);
+foreach ($Admin->fetch_multiple_objects("users", "role", "Administrator") as $admin) {
+	$recepients[] = array("name" => $admin->real_name, "email" => $admin->email);
 }
 # none?
-if(!isset($recepients))	{ die(); }
+if (!isset($recepients)) {
+	die();
+}
 
 // fetch settings
 $settings = $Admin->get_settings();
@@ -96,14 +115,13 @@ try {
 	$content_plain[] = "phpIPAM Administrator password updated \r\n------------------------------";
 	$content_plain[] = "Administrator password was updated via cli script";
 
-
 	# set content
-	$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-	$content_plain 	= implode("\r\n",$content_plain);
+	$content 		= $phpipam_mail->generate_message(implode("\r\n", $content));
+	$content_plain 	= implode("\r\n", $content_plain);
 
 	$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 	//add all admins to CC
-	foreach($recepients as $admin) {
+	foreach ($recepients as $admin) {
 		$phpipam_mail->Php_mailer->addAddress(addslashes($admin['email']), addslashes($admin['name']));
 	}
 	$phpipam_mail->Php_mailer->Subject = $subject;
@@ -112,7 +130,7 @@ try {
 	//send
 	$phpipam_mail->Php_mailer->send();
 } catch (PHPMailer\PHPMailer\Exception $e) {
-	$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
+	$Result->show_cli("Mailer Error: " . $e->errorMessage(), true);
 } catch (Exception $e) {
-	$Result->show_cli("Mailer Error: ".$e->getMessage(), true);
+	$Result->show_cli("Mailer Error: " . $e->getMessage(), true);
 }
