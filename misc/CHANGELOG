@@ -44,6 +44,7 @@
     + Added $api_stringify_results config.php option for <PHP81 API backwards compatibility;
     + Added support for newly added widgets to be sortable with jQuery (#4711);
     + Added support for using widget parameters; added recent_logins widget (#4184);
+    + Modified the text shortening of subnet descriptions (#4279, #4280);
 
     Security Fixes:
     ----------------------------
