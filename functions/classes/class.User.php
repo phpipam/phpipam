@@ -1039,7 +1039,7 @@ class User extends Common_functions {
             // TODO: remove legacy support at some point
             if ($authparams['ldap_security'] == 'tls' || $authparams['use_tls'] == 1)         { $dirparams['use_tls'] = true; }
             elseif ($authparams['ldap_security'] == 'ssl' || $authparams['use_ssl'] == 1)     { $dirparams['use_ssl'] = true; }
-            if (isset($authparams['admin_username']) && isset($authparams['admin_password'])) {
+            if (isset($authparams['adminUsername']) && isset($authparams['adminPassword'])) {
                 $dirparams['admin_username'] = $authparams['adminUsername'];
                 $dirparams['admin_password'] = $authparams['adminPassword'];
             }
@@ -1047,6 +1047,10 @@ class User extends Common_functions {
         else {
             $dirparams['use_ssl'] = @$authparams['use_ssl'];
             $dirparams['use_tls'] = @$authparams['use_tls'];
+            if (isset($authparams['adminUsername']) && isset($authparams['adminPassword'])) {
+                $dirparams['admin_username'] = $authparams['adminUsername'];
+                $dirparams['admin_password'] = $authparams['adminPassword'];
+            }
         }
         # open connection
         try {
@@ -1070,9 +1074,10 @@ class User extends Common_functions {
      * @param array $authparams
      * @param string $username
      * @param string $password
+     * @param boolean $search
      * @return void
      */
-    private function directory_authenticate ($authparams, $username, $password) {
+    private function directory_authenticate ($authparams, $username, $password, $search) {
         // set method
         $method = $this->ldap ? "LDAP" : "AD";
         // connect
@@ -1080,6 +1085,21 @@ class User extends Common_functions {
 
         # authenticate
         try {
+
+            if ($search && isset($authparams['adminUsername']) && isset($authparams['adminPassword'])) {
+                // bind with settings user
+                $adldap->authenticate($authparams->adminUsername, $authparams->adminPassword);
+
+                // search the user to get it's DN
+                $userinfo = $adldap->user()->info($username, array("*"), false);
+                if ($userinfo !== false) {
+                    // found so lets replace the user by the DN
+                    $username = $userinfo[0]['distinguishedname'][0];
+                } else {
+                    $this->Log->write($method . " login", "Unable to get user info for " . $username, 1, $username);
+                }
+            }
+
             if ($adldap->authenticate($username, $password)) {
                 # check login restrictions for authenticated user
                 $this->check_login_restrictions ($username);
@@ -1122,7 +1142,7 @@ class User extends Common_functions {
         // parse settings for LDAP connection and store them to array
         $authparams = db_json_decode($this->authmethodparams, true);
         // authenticate
-        $this->directory_authenticate($authparams, $username, $password);
+        $this->directory_authenticate($authparams, $username, $password, true);
     }
 
     /**
@@ -1146,7 +1166,7 @@ class User extends Common_functions {
         if (!empty($authparams['users_base_dn'])) { $udn = $udn . "," . $authparams['users_base_dn']; }
         else                                      { $udn = $udn . "," . $authparams['base_dn']; }
         // authenticate
-        $this->directory_authenticate($authparams, $udn, $password);
+        $this->directory_authenticate($authparams, $udn, $password, false);
     }
 
     /**
