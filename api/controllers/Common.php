@@ -10,16 +10,15 @@ class API_params extends Params {
 	 *
 	 * @param array $args
 	 * @param bool  $strip_tags
+	 * @param bool	$html_escape
 	 * @return void
 	 */
-	public function read($args, $strip_tags = false) {
-		if (!is_array($args))
-			return;
-
-		if (isset($args['controller']))
+	public function read($args, $strip_tags = false, $html_escape = false) {
+		if (is_array($args) && isset($args['controller'])) {
 			$args['controller'] = strtolower($args['controller']);
+		}
 
-		parent::read($args, $strip_tags);
+		parent::read($args, $strip_tags, $html_escape);
 	}
 }
 
