@@ -505,7 +505,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone ($id) {
 		# try to fetch zone with ID $id
-		try { $zone = $this->Database->getObjectsQuery('SELECT * FROM firewallZones WHERE id = ?;', $id);}
+		try { $zone = $this->Database->getObjectsQuery('firewallZones', 'SELECT * FROM firewallZones WHERE id = ?;', $id);}
 
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}

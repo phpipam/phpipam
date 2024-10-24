@@ -441,7 +441,7 @@ class Subnets extends Common_functions {
 		# set found flag for returns
 		$found = 0;
 		# fetch all nats
-		try { $all_nats = $this->Database->getObjectsQuery ("select * from `nat` where `src` like :id or `dst` like :id", array ("id"=>'%"'.$obj_id.'"%')); }
+		try { $all_nats = $this->Database->getObjectsQuery ("nat", "select * from `nat` where `src` like :id or `dst` like :id", array ("id"=>'%"'.$obj_id.'"%')); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
