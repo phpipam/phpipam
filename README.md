@@ -15,13 +15,13 @@ to be able to display javascript quickly and correctly.
 
 ## Branches
  - MASTER: Latest stable release
- - DEVELOP: Current development release
- - 1.7: Productional branch for 1.7.x release
- - 1.6: Productional branch for 1.6.x release (obsolete)
- - 1.5: Productional branch for 1.5.x release (obsolete)
- - 1.4: Productional branch for 1.4.x release (obsolete)
- - 1.3: Productional branch for 1.3.x release (obsolete)
- - 1.2: Productional branch for 1.2.x release (obsolete)
+ - DEVELOP: Current development branch
+ - 1.7: Maintenance branch for 1.7.x releases
+ - 1.6: Maintenance branch for 1.6.x releases (obsolete)
+ - 1.5: Maintenance branch for 1.5.x releases (obsolete)
+ - 1.4: Maintenance branch for 1.4.x releases (obsolete)
+ - 1.3: Maintenance branch for 1.3.x releases (obsolete)
+ - 1.2: Maintenance branch for 1.2.x releases (obsolete)
  - Other branches: Feature testing
 
 ## Supported PHP versions
