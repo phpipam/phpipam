@@ -190,7 +190,7 @@ function update_hidden_input(){
 		<tr>
 			<td><?php print _('Circuit ID'); ?></td>
 			<td>
-				<input type="text" name="logical_cid" style='width:200px;' class="form-control input-sm" placeholder="<?php print _('ID'); ?>" value="<?php if(isset($logical_circuit->logical_cid)) print $Tools->strip_xss($logical_circuit->logical_cid); ?>" <?php print $readonly; ?>>
+				<input type="text" name="logical_cid" style='width:200px;' class="form-control input-sm" placeholder="<?php print _('ID'); ?>" value="<?php if(isset($logical_circuit->logical_cid)) print $logical_circuit->logical_cid; ?>" <?php print $readonly; ?>>
 				<?php
 				if( ($POST->action == "edit") || ($POST->action == "delete") ) {
 					print '<input type="hidden" name="id" value="'. escape_input($POST->circuitid) .'">'. "\n";
@@ -205,7 +205,7 @@ function update_hidden_input(){
 		<tr>
 			<td><?php print _('Purpose'); ?></td>
 			<td>
-				<input type="text" name="purpose" style='width:200px;'  class="form-control input-sm" placeholder="<?php print _('Purpose'); ?>" value="<?php if(isset($logical_circuit->purpose)) print $Tools->strip_xss($logical_circuit->purpose); ?>" <?php print $readonly; ?>>
+				<input type="text" name="purpose" style='width:200px;'  class="form-control input-sm" placeholder="<?php print _('Purpose'); ?>" value="<?php if(isset($logical_circuit->purpose)) print $logical_circuit->purpose; ?>" <?php print $readonly; ?>>
 			</td>
 		</tr>
 

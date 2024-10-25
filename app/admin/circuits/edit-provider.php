@@ -73,7 +73,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($provider->name)) print $Tools->strip_xss($provider->name); ?>" <?php print $readonly; ?>>
+			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($provider->name)) print $provider->name; ?>" <?php print $readonly; ?>>
 			<?php
 			if( ($POST->action == "edit") || ($POST->action == "delete") ) {
 				print '<input type="hidden" name="providerid" value="'. escape_input($POST->providerid) .'">'. "\n";
@@ -87,7 +87,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Description'); ?></td>
 		<td>
-			<input type="text" name="description" class="form-control input-sm" placeholder="<?php print _('Description'); ?>" value="<?php if(isset($provider->description)) print $Tools->strip_xss($provider->description); ?>" <?php print $readonly; ?>>
+			<input type="text" name="description" class="form-control input-sm" placeholder="<?php print _('Description'); ?>" value="<?php if(isset($provider->description)) print $provider->description; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -95,7 +95,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Contact'); ?></td>
 		<td>
-			<input type="text" name="contact" class="form-control input-sm" placeholder="<?php print _('Contact'); ?>" value="<?php if(isset($provider->contact)) print $Tools->strip_xss($provider->contact); ?>" <?php print $readonly; ?>>
+			<input type="text" name="contact" class="form-control input-sm" placeholder="<?php print _('Contact'); ?>" value="<?php if(isset($provider->contact)) print $provider->contact; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 

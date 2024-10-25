@@ -849,36 +849,31 @@ class User extends Common_functions {
      * @param bool $force
      * @return void
      */
-    public function fetch_user_details ($username, $force = false) {
+    public function fetch_user_details($username, $force = false) {
         # only if not already active
-        if(!is_object($this->user) || $force) {
+        if (!is_object($this->user) || $force) {
             try {
                 $user = $this->Database->findObject("users", "username", $username);
-            }
-            catch (Exception $e) {
-                $this->Result->show("danger", _("Error: ").$e->getMessage(), true);
+            } catch (Exception $e) {
+                $this->Result->show("danger", _("Error: ") . $e->getMessage(), true);
             }
 
-            # if not result return false
-            $usert = (array) $user;
+            if (!is_object($user)) {
+                $this->block_ip();
+                $this->log_failed_access($username);
+                $this->Log->write(_("User login"), _('Invalid username'), 2, $username);
+                $this->Result->show("danger", _("Invalid username or password"), true);
+            }
 
             # admin?
-            if($user->role == "Administrator") {
+            if ($user->role == "Administrator") {
                 $this->isadmin = true;
             }
 
-            if(sizeof($usert)==0) {
-                $this->block_ip ();
-                $this->log_failed_access ($username);
-                $this->Log->write ( _("User login"), _('Invalid username'), 2, $username );
-                $this->Result->show("danger", _("Invalid username or password"), true);
-            }
-            else {
-                $this->user = $user;
-            }
+            $this->user = $user;
 
             // register permissions
-            $this->register_user_module_permissions ();
+            $this->register_user_module_permissions();
         }
     }
 

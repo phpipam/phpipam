@@ -175,7 +175,7 @@ if($GET->subnetId!=0 && sizeof($device)>0) {
                 // pass
                 print '<tr>';
                 print " <th>". _('Password').'</th>';
-                $User->is_admin(false) ? print " <td>$device[snmp_v3_auth_pass]</td>" : " <td>********</td>";
+                $User->is_admin(false) ? print " <td>".escape_input($device['snmp_v3_auth_pass'])."</td>" : " <td>********</td>";
                 print "</tr>";
                 // privacy proto
                 print '<tr>';
@@ -185,7 +185,7 @@ if($GET->subnetId!=0 && sizeof($device)>0) {
                 // privacy pass
                 print '<tr>';
                 print " <th>". _('Privacy passphrase').'</th>';
-                $User->is_admin(false) ? print " <td>$device[snmp_v3_priv_pass]</td>" : " <td>********</td>";
+                $User->is_admin(false) ? print " <td>".escape_input($device['snmp_v3_priv_pass'])."</td>" : " <td>********</td>";
                 print "</tr>";
                 // context name
                 print '<tr>';

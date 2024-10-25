@@ -65,7 +65,7 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
 	<tr>
 		<td style='width:130px;'><?php print _('Peer name'); ?></td>
 		<td>
-			<input type="text" name="peer_name" class="form-control input-sm" placeholder="<?php print _('Peer name'); ?>" value="<?php if(isset($bgp->peer_name)) print $Tools->strip_xss($bgp->peer_name); ?>" <?php print $readonly; ?>>
+			<input type="text" name="peer_name" class="form-control input-sm" placeholder="<?php print _('Peer name'); ?>" value="<?php if(isset($bgp->peer_name)) print $bgp->peer_name; ?>" <?php print $readonly; ?>>
 			<?php
 			if( ($POST->action == "edit") || ($POST->action == "delete") ) {
 				print '<input type="hidden" name="id" value="'. escape_input($POST->bgpid) .'">'. "\n";
@@ -177,13 +177,13 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
 	<tr>
 		<td><?php print _('Peer Address'); ?></td>
 		<td>
-			<input type="text" name="peer_address" class="form-control input-sm" placeholder="<?php print _('Peer address'); ?>" value="<?php if(isset($bgp->peer_address)) print $Tools->strip_xss($bgp->peer_address); ?>" <?php print $readonly; ?>>
+			<input type="text" name="peer_address" class="form-control input-sm" placeholder="<?php print _('Peer address'); ?>" value="<?php if(isset($bgp->peer_address)) print $bgp->peer_address; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 	<tr>
 		<td><?php print _('Peer AS'); ?></td>
 		<td>
-			<input type="text" name="peer_as" class="form-control input-sm" placeholder="<?php print _('Peer AS'); ?>" value="<?php if(isset($bgp->peer_as)) print $Tools->strip_xss($bgp->peer_as); ?>" <?php print $readonly; ?>>
+			<input type="text" name="peer_as" class="form-control input-sm" placeholder="<?php print _('Peer AS'); ?>" value="<?php if(isset($bgp->peer_as)) print $bgp->peer_as; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -194,13 +194,13 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
 	<tr>
 		<td><?php print _('Local Address'); ?></td>
 		<td>
-			<input type="text" name="local_address" class="form-control input-sm" placeholder="<?php print _('Local address'); ?>" value="<?php if(isset($bgp->local_address)) print $Tools->strip_xss($bgp->local_address); ?>" <?php print $readonly; ?>>
+			<input type="text" name="local_address" class="form-control input-sm" placeholder="<?php print _('Local address'); ?>" value="<?php if(isset($bgp->local_address)) print $bgp->local_address; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 	<tr>
 		<td><?php print _('Local AS'); ?></td>
 		<td>
-			<input type="text" name="local_as" class="form-control input-sm" placeholder="<?php print _('Local AS'); ?>" value="<?php if(isset($bgp->local_as)) print $Tools->strip_xss($bgp->local_as); ?>" <?php print $readonly; ?>>
+			<input type="text" name="local_as" class="form-control input-sm" placeholder="<?php print _('Local AS'); ?>" value="<?php if(isset($bgp->local_as)) print $bgp->local_as; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 

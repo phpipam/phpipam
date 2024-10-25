@@ -89,7 +89,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($rack->name)) print $Tools->strip_xss($rack->name); ?>" <?php print $readonly; ?>>
+			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($rack->name)) print $rack->name; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 

@@ -88,7 +88,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Circuit ID'); ?></td>
 		<td>
-			<input type="text" name="cid" style='width:200px;' class="form-control input-sm" placeholder="<?php print _('ID'); ?>" value="<?php if(isset($circuit->cid)) print $Tools->strip_xss($circuit->cid); ?>" <?php print $readonly; ?>>
+			<input type="text" name="cid" style='width:200px;' class="form-control input-sm" placeholder="<?php print _('ID'); ?>" value="<?php if(isset($circuit->cid)) print $circuit->cid; ?>" <?php print $readonly; ?>>
 			<?php
 			if( ($POST->action == "edit") || ($POST->action == "delete") ) {
 				print '<input type="hidden" name="id" value="'. escape_input($POST->circuitid) .'">'. "\n";
@@ -134,7 +134,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Capacity'); ?></td>
 		<td>
-			<input type="text" name="capacity" style='width:200px;'  class="form-control input-sm" placeholder="<?php print _('Capacity'); ?>" value="<?php if(isset($circuit->capacity)) print $Tools->strip_xss($circuit->capacity); ?>" <?php print $readonly; ?>>
+			<input type="text" name="capacity" style='width:200px;'  class="form-control input-sm" placeholder="<?php print _('Capacity'); ?>" value="<?php if(isset($circuit->capacity)) print $circuit->capacity; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 

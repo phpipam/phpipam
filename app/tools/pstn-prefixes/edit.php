@@ -102,7 +102,7 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
     	<tr>
         	<th><?php print _('Name'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss(@$prefix->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="name" value="<?php print @$prefix->name; ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print @$prefix->id; ?>">
             	<input type="hidden" name="master" value="<?php print @$prefix->master; ?>">
@@ -117,7 +117,7 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
     	<tr>
         	<th><?php print _('Prefix'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="prefix" value="<?php print $Tools->strip_xss(@$prefix->prefix); ?>" placeholder='<?php print _('Prefix'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="prefix" value="<?php print @$prefix->prefix; ?>" placeholder='<?php print _('Prefix'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Prefix"); ?></span>

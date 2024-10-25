@@ -775,19 +775,6 @@ class Common_functions  {
 	}
 
 	/**
-	 * Strip XSS on value print
-	 *
-	 * @method strip_xss
-	 *
-	 * @param  string $input
-	 *
-	 * @return string
-	 */
-	public function strip_xss ($input) {
-		return escape_input($input);
-	}
-
-	/**
 	 * Detect the encoding used for a string and convert to UTF-8
 	 *
 	 * @method convert_encoding_to_UTF8
@@ -1653,7 +1640,7 @@ class Common_functions  {
 
     	//field
     	if(!isset($object->{$field['name']}))	{ $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'].$nameSuffix .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
-    	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'].$nameSuffix .'" maxlength="'.$size.'" value="'. $this->strip_xss($object->{$field['name']}). '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
+    	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'].$nameSuffix .'" maxlength="'.$size.'" value="'. $object->{$field['name']}. '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
 
     	// result
 		return $html;
@@ -1724,7 +1711,7 @@ class Common_functions  {
             $maxlength = str_replace(array("int","(",")"),"", $field['type']);
         }
         // print
-		$html[] = ' <input type="text" class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" value="'. $this->strip_xss($object->{$field['name']}). '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
+		$html[] = ' <input type="text" class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" value="'. $object->{$field['name']}. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
     	// result
     	return $html;
 	}
