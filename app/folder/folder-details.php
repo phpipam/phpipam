@@ -24,7 +24,7 @@ $rowSpan = 10 + sizeof($cfields);
 # verify that is it displayed in proper section, otherwise warn!
 if($folder['sectionId']!=$GET->section)	{
 	$sd = $Sections->fetch_section ("id", $folder['sectionId']);
-									{ $Result->show("warning", "Folder is in section <a href='".create_link("folder",$sd->id,$folder['id'])."'>$sd->name</a>!", false); }
+									{ $Result->show("warning", "Folder is in section <a href='".create_link("folder",$sd->id,$folder['id'])."'>".escape_input($sd->name)."</a>!", false, false, false, false, false, false); }
 }
 ?>
 

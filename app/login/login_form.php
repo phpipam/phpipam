@@ -80,7 +80,7 @@
 			if ($version < 3.4) {
 				$Result->show("danger", _('php-saml library missing, please update submodules'));
 			} else {
-				$Result->show("success", _('You can login with SAML2').' <a href="'.create_link('saml2').'">'._('here').'</a>!');
+				$Result->show("success", _('You can login with SAML2').' <a href="'.create_link('saml2').'">'._('here').'</a>!',false, false, false, false, false, false);
 			}
 		}
 

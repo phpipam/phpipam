@@ -34,5 +34,5 @@ else {
 	# all good, update password!
 	$Install->postauth_update($POST->password1, $POST->siteTitle, $POST->siteURL);
 	# ok
-													{ $Result->show( "success", _("Settings updated, installation complete!")."<hr><a class='btn btn-sm btn-default' href='".create_link("login")."'>"._("Proceed to login.")."</a>", false); }
+													{ $Result->show( "success", _("Settings updated, installation complete!")."<hr><a class='btn btn-sm btn-default' href='".create_link("login")."'>"._("Proceed to login.")."</a>",  false, false, false, false, false, false); }
 }

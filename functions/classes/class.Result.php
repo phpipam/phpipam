@@ -111,9 +111,10 @@ class Result {
 	 * @param bool $inline (default: false)					return, not print
 	 * @param bool $popup2 (default: false)					close for JS for popup2
 	 * @param bool $reload (default: false)					reload
+	 * @param bool $html_escape (default:tue)				HTML escape text
 	 * @return void
 	 */
-	public function show($class="muted", $text="No value provided", $die=false, $popup=false, $inline = false, $popup2 = false, $reload = false) {
+	public function show($class="muted", $text="No value provided", $die=false, $popup=false, $inline = false, $popup2 = false, $reload = false, $html_escape=true) {
 
 		# set die
 		$this->die = $die;
@@ -129,8 +130,8 @@ class Result {
 			if (php_sapi_name()=="cli") { print $this->show_cli_message ($text); }
 			else {
 				# return or print
-				if ($inline) 			{ return $this->show_message ($class, $text, $popup, $popup2, $reload); }
-				else					{ print  $this->show_message ($class, $text, $popup, $popup2, $reload); }
+				if ($inline) 			{ return $this->show_message ($class, $text, $popup, $popup2, $reload, $html_escape); }
+				else					{ print  $this->show_message ($class, $text, $popup, $popup2, $reload, $html_escape); }
 			}
 
 			# die
@@ -200,9 +201,10 @@ class Result {
 	 * @param mixed $popup
 	 * @param mixed $popup2
 	 * @param bool $reload
+	 * @param bool $html_escape
 	 * @return void
 	 */
-	public function show_message ($class, $text, $popup, $popup2, $reload) {
+	public function show_message ($class, $text, $popup, $popup2, $reload, $html_escape) {
 		// to array if object
 		if (is_object($text))   { $text = (array) $text; }
 		// format if array
@@ -221,6 +223,10 @@ class Result {
 			$text = implode("\n", $out);
 		}
 
+		if ($html_escape) {
+			$text = escape_input($text);
+		}
+
 		# print popup or normal
 		if($popup===false) {
 			return "<div class='alert alert-".$class."'>".$text."</div>";
@@ -229,7 +235,7 @@ class Result {
 			// set close class for JS
 			$pclass = $popup2===false ? "hidePopups" : "hidePopup2";
 			// change danger to error for popup
-			$htext = $class==="danger" ? "error" : $class;
+			$htext = $class==="danger" ? "error" : escape_input($class);
 
 			$out[] = '<div class="pHeader">'._(ucwords($htext)).'</div>';
 			$out[] = '<div class="pContent">';

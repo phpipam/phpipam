@@ -160,7 +160,7 @@ try {
                 // User exists in DB. Check this is a SAML account.
 
                 if ($existing_user->authMethod != $dbobj->id) {
-                    $Result->show("danger", _("Requested SAML user is not configured for SAML authentication") . " : " . escape_input($username), true);
+                    $Result->show("danger", _("Requested SAML user is not configured for SAML authentication") . " : " . $username, true);
                 }
 
                 $action = "edit";
@@ -213,7 +213,7 @@ try {
             // Construct admin object for helper functions
             $Admin = new Admin($Database, false);
             if (!$Admin->object_modify("users", $action, "id", $values)) {
-                $Result->show("danger", _("Failed to create/update SAML JIT user") . " : " . escape_input($username), true);
+                $Result->show("danger", _("Failed to create/update SAML JIT user") . " : " . $username, true);
             }
         }
 

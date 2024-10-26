@@ -443,10 +443,6 @@ class Common_functions  {
 		if (!is_object($settings))
 			return false;
 
-		// Escape ' & " characters
-		if (property_exists($settings, 'siteTitle'))
-			$settings->siteTitle = escape_input($settings->siteTitle);
-
 		// default dbversion for older releases
 		if (!property_exists($settings, 'dbversion'))
 			$settings->dbversion = 0;

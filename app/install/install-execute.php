@@ -34,7 +34,7 @@ $migrate = $POST->install_type==="migrate" ? true : false;
 # try to install new database */
 if($Install->install_database ($POST->mysqlrootuser, $POST->mysqlrootpass, $dropdb, $createdb, $creategrants, $migrate)) {
 	if($migrate) {
-	 	$Result->show("success alert-block", _("Database installed successfully!").' <a href="'.create_link().'" class="btn btn-sm btn-default">'._("Continue").'</a>', true);
+	 	$Result->show("success alert-block", _("Database installed successfully!").' <a href="'.create_link().'" class="btn btn-sm btn-default">'._("Continue").'</a>', true, false, false, false, false, false);
 	}
 	else {
 	 	$Result->show("success alert-block", _("Database installed successfully!").' <a href="index.php?page=install&section=install_automatic&subnetId=configure" class="btn btn-sm btn-default">'._("Continue").'</a>', true);

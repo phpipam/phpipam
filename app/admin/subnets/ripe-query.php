@@ -29,7 +29,7 @@ $res = $Subnets->resolve_ripe_arin ($POST->subnet);
 	<?php
 	// error ?
 	if ($res['result']=="error") {
-		$Result->show("danger", _(ucwords(escape_input($res['error']))), false);
+		$Result->show("danger", _(ucwords($res['error'])), false);
 	}
 	// ok, print field matching
 	else {

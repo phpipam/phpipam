@@ -59,8 +59,8 @@ $app_perms_text = array("SSL with User token"=>"ssl_token","SSL with App code to
 
 			print '<tr class="'.$class.'">' . "\n";
 
-			print '	<td>' . escape_input($a['app_id']) . '</td>'. "\n";
-			print '	<td>' . escape_input($a['app_code']) . '</td>'. "\n";
+			print '	<td>' . $a['app_id'] . '</td>'. "\n";
+			print '	<td>' . $a['app_code'] . '</td>'. "\n";
 
 			# reformat permissions
 			if($a['app_permissions']==0)		{ $a['app_permissions'] = _("Disabled"); }

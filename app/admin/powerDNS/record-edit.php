@@ -73,10 +73,10 @@ else {
 		if (!is_numeric($POST->domain_id)) {
     		# admin?
     		if ($User->is_admin()) {
-    			$Result->show("danger", _("Domain")." <strong>".escape_input($POST->domain_id)."</strong><span class='ip_dns_addr hidden'>".escape_input($POST->id)."</span> "._("does not exist")."!"."<hr><button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0' data-secondary='true'><i class='fa fa-plus'></i> "._('Create domain')."</button>", true, true);
+    			$Result->show("danger", _("Domain")." <strong>".$POST->domain_id."</strong><span class='ip_dns_addr hidden'>".$POST->id."</span> "._("does not exist")."!"."<hr><button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0' data-secondary='true'><i class='fa fa-plus'></i> "._('Create domain')."</button>", true, true);
     		}
     		else {
-    			$Result->show("danger", _("Domain")." <strong>".escape_input($POST->domain_id)."</strong> "._("does not exist")."!", true, true);
+    			$Result->show("danger", _("Domain")." <strong>".$POST->domain_id."</strong> "._("does not exist")."!", true, true);
     		}
 		}
 		else {
@@ -209,7 +209,7 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
 		<?php if($POST->action!=="delete" && isset($record->id) && $User->get_module_permissions ("pdns")>=User::ACCESS_RWA) { ?>
 		<button class="btn btn-sm btn-default btn-danger" id="editRecordSubmitDelete"><i class="fa fa-trash-o"></i> <?php print _("Delete"); ?></button>
 		<?php } ?>
-		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editRecordSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } else if ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editRecordSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="record-edit-result"></div>

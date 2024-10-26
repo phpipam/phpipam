@@ -17,7 +17,7 @@ if(empty($POST->port)) 	  { $Result->show("danger", _('Please enter ports to sca
 $pcheck = pf_explode(";", str_replace(",",";",$POST->port));
 foreach($pcheck as $p) {
 	if(!is_numeric($p)) {
-		$Result->show("danger", _("Invalid port").' ('.escape_input($p).')', true);
+		$Result->show("danger", _("Invalid port").' ('.$p.')', true);
 	}
 }
 $POST->port = str_replace(";",",",$POST->port);
@@ -36,7 +36,7 @@ $script_result = db_json_decode($output[0]);
 
 # json error
 if(json_last_error() !== JSON_ERROR_NONE)
-	$Result->show("danger", "Invalid JSON response"." - ".$Scan->json_error_decode(json_last_error())." - ".escape_input($output[0]), true);
+	$Result->show("danger", "Invalid JSON response"." - ".$Scan->json_error_decode(json_last_error())." - ".$output[0], true);
 
 //title
 print "<h5>"._('Scan results').":</h5><hr>";
