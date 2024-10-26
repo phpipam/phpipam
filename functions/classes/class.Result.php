@@ -224,7 +224,9 @@ class Result {
 		}
 
 		if ($html_escape) {
+			$text = str_replace('<hr>', '\n', $text);
 			$text = escape_input($text);
+			$text = str_replace('\n', '<hr>', $text);
 		}
 
 		# print popup or normal
