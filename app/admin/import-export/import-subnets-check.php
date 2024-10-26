@@ -19,8 +19,8 @@ if (!isset($Subnets)) { $Subnets	= new Subnets ($Database); }
 $User->check_user_session();
 
 # Get mask check
-#automated $cidrformat = isset($_GET['cidrformat']) ? $_GET['cidrformat'] : "off";
-#separate option $rebuildmnr = isset($_GET['rebuildmnr']) ? $_GET['rebuildmnr'] : "off";
+#automated $cidrformat = isset($GET->cidrformat) ? $GET->cidrformat : "off";
+#separate option $rebuildmnr = isset($GET->rebuildmnr) ? $GET->rebuildmnr : "off";
 
 # read again the custom fields, if any
 if (!isset($custom_fields)) { $custom_fields = $Tools->fetch_custom_fields("subnets"); }

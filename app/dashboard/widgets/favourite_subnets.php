@@ -31,31 +31,34 @@ $(document).ready(function() {
 # fetch favourite subnets with details
 $fsubnets = $User->fetch_favourite_subnets ();
 
-# print if none
-if(!$fsubnets) {
-	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
-	print "<p>"._("No favourite subnets selected")."</p><br>";
-	print "<small>"._("You can add subnets to favourites by clicking star icon in subnet details")."!</small><br>";
-	print "</blockquote>";
-}
-else {
-	print "<table class='table table-condensed table-hover table-top favs'>";
+# fetch widget parameters
+$wparam = $Tools->get_widget_params("favourite_subnets");
+$max    = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 100,  'min_range' => 1, 'max_range' => 256]]);
+$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 
-	# headers
-	print "<tr>";
-	print "	<th>"._('Object')."</th>";
-	print "	<th>"._('Description')."</th>";
-	print "	<th class='hidden-xs'>"._('Section')."</th>";
-	if($User->get_module_permissions ("vlan")>=User::ACCESS_RW)
-	print "	<th>"._('VLAN')."</th>";
-	print "	<th></th>";
-	print "</tr>";
+print '<div style="width:98%;margin-left:1%;' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
+print "<table class='table table-condensed table-hover table-top favs'>";
 
-	# subnets
+# headers
+print "<tr>";
+print "	<th>"._('Object')."</th>";
+print "	<th>"._('Description')."</th>";
+print "	<th class='hidden-xs'>"._('Section')."</th>";
+if($User->get_module_permissions ("vlan")>=User::ACCESS_RW)
+print "	<th>"._('VLAN')."</th>";
+print "	<th></th>";
+print "</tr>";
+
+# subnets
+if ($fsubnets) {
+	$m = 1;  // counter
 	foreach($fsubnets as $f) {
 
 		# must be either subnet or folder
 		if(sizeof($f)>0) {
+
+			# stop processing if we've hit the max
+			if ($m > $max) break;
 
             # add full information
             $fullinfo = $f['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
@@ -102,9 +105,19 @@ else {
 			print " </td>";
 
 			print "</tr>";
+			$m++;
 		}
 	}
-
-	print "</table>";
 }
+
+print "</table>";
+
+if(!$fsubnets) {
+	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
+	print "<p>"._("No favourite subnets selected")."</p>";
+	print "<small>"._("You can add subnets to favourites by clicking star icon in subnet details")."!</small>";
+	print "</blockquote>";
+}
+
+print "</div>";
 ?>

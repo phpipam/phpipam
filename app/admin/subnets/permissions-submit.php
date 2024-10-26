@@ -21,21 +21,21 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "permissions", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "permissions", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 # fetch old subnet
-$subnet_old = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
+$subnet_old = $Subnets->fetch_subnet ("id", $POST->subnetId);
 // parse old permissions
-$old_permissions = pf_json_decode($subnet_old->permissions, true);
+$old_permissions = db_json_decode($subnet_old->permissions, true);
 
-list($removed_permissions, $changed_permissions) = $Subnets->get_permission_changes ((array) $_POST, $old_permissions);
+list($removed_permissions, $changed_permissions) = $Subnets->get_permission_changes ($POST->as_array(), $old_permissions);
 
 $subnet_list = array();
 # propagate ?
-if (@$_POST['set_inheritance']=="Yes") {
+if ($POST->set_inheritance=="Yes") {
     // fetch all possible slaves + master
-    $Subnets->fetch_subnet_slaves_recursive($_POST['subnetId']);
+    $Subnets->fetch_subnet_slaves_recursive($POST->subnetId);
 
 	if (is_array($Subnets->slaves_full))
 		$subnet_list = $Subnets->slaves_full;

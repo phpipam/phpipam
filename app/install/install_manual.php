@@ -2,8 +2,8 @@
 $db = Config::ValueOf('db');
 
 // add prefix - install or migrate
-$title_prefix = @$_GET['subnetId']=="migrate" ? _("migration") : _("installation");
-$filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
+$title_prefix = $GET->subnetId=="migrate" ? _("migration") : _("installation");
+$filename	  = $GET->subnetId=="migrate" ? "MIGRATE" : "SCHEMA";
 ?>
 
 <div class="widget-dash col-xs-12 col-md-8 col-md-offset-2">
@@ -35,7 +35,7 @@ $filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
 
 		<?php
 		// file check
-		if(@$_GET['subnetId']=="migrate") {
+		if($GET->subnetId=="migrate") {
 			if(!file_exists(dirname(__FILE__)."/../../db/MIGRATE.sql")) {
 				print "<div class='alert alert-danger'>Cannot access file db/MIGRATE.sql!</div>";
 			}
@@ -72,7 +72,7 @@ $file .= "USE `$db_name`;\n\n\n";
 $file .= "# Create tables and import data\n";
 $file .= "# ------------------------------------------------------------\n\n\n\n";
 
-if(@$_GET['subnetId']=="migrate") {
+if($GET->subnetId=="migrate") {
 	if(file_exists(dirname(__FILE__)."/../../db/MIGRATE.sql")) {
 		$file .= file_get_contents(dirname(__FILE__)."/../../db/MIGRATE.sql");
 	}

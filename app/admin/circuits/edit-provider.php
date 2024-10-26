@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("circuits", User::ACCESS_RW, true, true);
 }
 else {
@@ -28,9 +28,6 @@ else {
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "provider");
 
-# strip tags - XSS
-$_POST = $User->strip_input_tags ($_POST);
-
 # validate action
 $Admin->validate_action();
 
@@ -38,21 +35,21 @@ $Admin->validate_action();
 $custom = $Tools->fetch_custom_fields('circuitProviders');
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['providerid']))	{ $Result->show("danger", _("Invalid ID"), true, true); }
+if($POST->action!="add" && !is_numeric($POST->providerid))	{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch provider details
-if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-	$provider = $Admin->fetch_object("circuitProviders", "id", $_POST['providerid']);
+if( ($POST->action == "edit") || ($POST->action == "delete") ) {
+	$provider = $Admin->fetch_object("circuitProviders", "id", $POST->providerid);
 	// false
 	if ($provider===false)                                          { $Result->show("danger", _("Invalid ID"), true, true);  }
 }
 // defaults
 else {
-	$provider = new StdClass ();
+	$provider = new Params ();
 }
 
 # set readonly flag
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 ?>
 
 <script>
@@ -76,12 +73,12 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($provider->name)) print $Tools->strip_xss($provider->name); ?>" <?php print $readonly; ?>>
+			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($provider->name)) print $provider->name; ?>" <?php print $readonly; ?>>
 			<?php
-			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-				print '<input type="hidden" name="providerid" value="'. $_POST['providerid'] .'">'. "\n";
+			if( ($POST->action == "edit") || ($POST->action == "delete") ) {
+				print '<input type="hidden" name="providerid" value="'. escape_input($POST->providerid) .'">'. "\n";
 			} ?>
-			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
@@ -90,7 +87,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Description'); ?></td>
 		<td>
-			<input type="text" name="description" class="form-control input-sm" placeholder="<?php print _('Description'); ?>" value="<?php if(isset($provider->description)) print $Tools->strip_xss($provider->description); ?>" <?php print $readonly; ?>>
+			<input type="text" name="description" class="form-control input-sm" placeholder="<?php print _('Description'); ?>" value="<?php if(isset($provider->description)) print $provider->description; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -98,7 +95,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Contact'); ?></td>
 		<td>
-			<input type="text" name="contact" class="form-control input-sm" placeholder="<?php print _('Contact'); ?>" value="<?php if(isset($provider->contact)) print $Tools->strip_xss($provider->contact); ?>" <?php print $readonly; ?>>
+			<input type="text" name="contact" class="form-control input-sm" placeholder="<?php print _('Contact'); ?>" value="<?php if(isset($provider->contact)) print $provider->contact; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -138,8 +135,8 @@ $(document).ready(function(){
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" data-script="app/admin/circuits/edit-provider-submit.php" data-result_div="providerManagementEditResult" data-form='providerManagementEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i>
+		<button class="btn btn-sm btn-default submit_popup <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" data-script="app/admin/circuits/edit-provider-submit.php" data-result_div="providerManagementEditResult" data-form='providerManagementEdit'>
+			<i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i>
 			<?php print $User->get_post_action(); ?>
 		</button>
 	</div>

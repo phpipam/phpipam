@@ -10,16 +10,15 @@ class API_params extends Params {
 	 *
 	 * @param array $args
 	 * @param bool  $strip_tags
+	 * @param bool	$html_escape
 	 * @return void
 	 */
-	public function read($args, $strip_tags = false) {
-		if (!is_array($args))
-			return;
-
-		if (isset($args['controller']))
+	public function read($args, $strip_tags = false, $html_escape = false) {
+		if (is_array($args) && isset($args['controller'])) {
 			$args['controller'] = strtolower($args['controller']);
+		}
 
-		parent::read($args, $strip_tags);
+		parent::read($args, $strip_tags, $html_escape);
 	}
 }
 
@@ -183,7 +182,7 @@ class Common_api_functions {
 
 	/**
 	 * App object - will be passed by index.php
-	 * to provide app detauls
+	 * to provide app details
 	 *
 	 * @var false|object
 	 */
@@ -847,7 +846,7 @@ class Common_api_functions {
 	 * @param mixed $result (default: null)
 	 * @param mixed $controller (default: null)
 	 * @param mixed $tools_table (default: null)
-	 * @return void
+	 * @return mixed
 	 */
 	protected function remap_keys ($result = null, $controller = null, $tools_table = null) {
 		// define keys array
@@ -897,7 +896,7 @@ class Common_api_functions {
 	 *
 	 * @access private
 	 * @param mixed $result
-	 * @return void
+	 * @return mixed
 	 */
 	private function remap_result_keys ($result) {
 		# single
@@ -1033,7 +1032,7 @@ class Common_api_functions {
 	}
 
 	/**
-	 * Sets translaction lock
+	 * Sets transaction lock
 	 *
 	 * @access public
 	 * @return void

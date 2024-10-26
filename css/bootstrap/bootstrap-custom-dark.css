@@ -1016,3 +1016,6 @@ html #searchSelect {
 .ip_vis_subnet span a {
   font-size: 12px;
 }
+html table tr.similar-title td:nth-child(1) {
+  background: none !important;
+}

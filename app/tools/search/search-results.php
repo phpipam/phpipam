@@ -27,20 +27,18 @@ if (preg_match('/^[a-f0-9.:\/]+$/i', $searchTerm)) {
 }
 
 # set hidden custom fields
-$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
 $selected_ip_fields = pf_explode(";", $selected_ip_fields);
 
-$Params = new Params($_GET);
-
 // all are off?
-if (is_blank($Params->addresses) && is_blank($Params->subnets) && is_blank($Params->vlans) && is_blank($Params->vrf) && is_blank($Params->pstn) && is_blank($Params->circuits) && is_blank($Params->customers)) {
+if (is_blank($GET->addresses) && is_blank($GET->subnets) && is_blank($GET->vlans) && is_blank($GET->vrf) && is_blank($GET->pstn) && is_blank($GET->circuits) && is_blank($GET->customers)) {
 	require("search-tips.php");
 }
 // empty request
-elseif (is_blank($Params->ip)) {
+elseif (is_blank($GET->ip)) {
 	require("search-tips.php");
 }
 // ok, search results print
@@ -55,33 +53,33 @@ else {
 	# Search and display
 	#
 
-	if (!is_blank($Params->ip)) {
+	if (!is_blank($GET->ip)) {
 		// subnets
-		if ($Params->subnets == "on") {
+		if ($GET->subnets == "on") {
 			require(dirname(__FILE__) . '/search_results/search-results_subnets.php');
 		}
 		// addresses
-		if ($Params->addresses == "on") {
+		if ($GET->addresses == "on") {
 			require(dirname(__FILE__) . '/search_results/search-results_addresses.php');
 		}
 		// vlan
-		if ($Params->vlans == "on" && $User->get_module_permissions("vlan") >= User::ACCESS_R) {
+		if ($GET->vlans == "on" && $User->get_module_permissions("vlan") >= User::ACCESS_R) {
 			require(dirname(__FILE__) . '/search_results/search-results_vlans.php');
 		}
 		// vrf
-		if ($Params->vrf == "on" && $User->get_module_permissions("vrf") >= User::ACCESS_R) {
+		if ($GET->vrf == "on" && $User->get_module_permissions("vrf") >= User::ACCESS_R) {
 			require(dirname(__FILE__) . '/search_results/search-results_vrfs.php');
 		}
 		// pstn
-		if ($Params->pstn == "on" && $User->get_module_permissions("pstn") >= User::ACCESS_R) {
+		if ($GET->pstn == "on" && $User->get_module_permissions("pstn") >= User::ACCESS_R) {
 			require(dirname(__FILE__) . '/search_results/search-results_pstn.php');
 		}
 		// circuits
-		if ($Params->circuits == "on" && $User->get_module_permissions("circuits") >= User::ACCESS_R) {
+		if ($GET->circuits == "on" && $User->get_module_permissions("circuits") >= User::ACCESS_R) {
 			require(dirname(__FILE__) . '/search_results/search-results_circuits.php');
 		}
 		// customers
-		if ($Params->customers == "on" && $User->get_module_permissions("customers") >= User::ACCESS_R) {
+		if ($GET->customers == "on" && $User->get_module_permissions("customers") >= User::ACCESS_R) {
 			require(dirname(__FILE__) . '/search_results/search-results_customers.php');
 		}
 	}

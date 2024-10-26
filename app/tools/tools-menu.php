@@ -20,7 +20,7 @@ foreach($tools_menu as $k=>$tool) {
 	print "<ul class='list-group'>";
 	foreach($tool as $t) {
 		# active?
-		$active = $_GET['section']==$t['href'] ? "active" : "";
+		$active = $GET->section==$t['href'] ? "active" : "";
 		# print
 		print "<li class='list-group-item $active'>";
 		# multiple hrefs ?

@@ -30,7 +30,7 @@ class Nat_controller extends Common_api_functions {
      */
     protected $Database;
 
-    
+
     /**
      * Addresses object from master Addresses class
      *
@@ -174,8 +174,8 @@ class Nat_controller extends Common_api_functions {
                 }
                 else {
                     # Better source and destination presentation (json decode values from DB)
-                    $jd = (array) json_decode($v, true);
-                    if ($jd and $jd["ipaddresses"]) {
+                    $jd = (array) db_json_decode($v, true);
+                    if ($jd && $jd["ipaddresses"]) {
                         $rr[$k] = array('ipaddresses' => $jd["ipaddresses"]);
                     }
                 }
@@ -210,7 +210,7 @@ class Nat_controller extends Common_api_functions {
             $values[$k] = json_encode($values[$k]);
         #$this->Response->throw_exception(500, "AAA".json_encode($values['src']));
         if (!$this->Admin->object_modify ("nat", "add", "id", $values)) {
-            $this->Response->throw_exception(500, "NAT creation failed"); 
+            $this->Response->throw_exception(500, "NAT creation failed");
         }
         return array("code"=>201, "message"=>"NAT created", "id"=>$this->Admin->lastId, "location"=>"/api".$this->_params->app_id."/nat/".$this->Admin->lastId."/");
     }
@@ -234,14 +234,14 @@ class Nat_controller extends Common_api_functions {
         }
 
         if (!$this->Admin->object_modify ("nat", "edit", "id", $values)) {
-            $this->Response->throw_exception(500, "NAT modification failed"); 
+            $this->Response->throw_exception(500, "NAT modification failed");
         }
         return array("code"=>200, "message"=>"NAT modified", "id"=>$this->_params->id, "location"=>"/api".$this->_params->app_id."/nat/".$this->Admin->lastId."/");
     }
 
     /**
      * Validates request's fields. Throw exception including error message if failing.
-     * 
+     *
      * @access private
      * @return void
      **/
@@ -253,7 +253,7 @@ class Nat_controller extends Common_api_functions {
             if (! $this->Tools->fetch_multiple_objects ("nat", "id", $this->_params->id, 'id', true)) {
                 $this->Response->throw_exception(404, "ID not found");
             }
-        }        
+        }
         if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH") {
             # Check optional fields format
             # TBD: subnets for src & dst ?
@@ -266,18 +266,18 @@ class Nat_controller extends Common_api_functions {
                 $this->verify_src_dst($k);
             }
             $this->verify_device();
-            
+
         }
         if ($_SERVER['REQUEST_METHOD']=="POST") {
-            if (!isset($this->_params->name)) 
+            if (!isset($this->_params->name))
                 $this->Response->throw_exception(400, "Missing NAT name"); # Seems to be mandatory in the GUI
-            if (!isset($this->_params->type)) 
+            if (!isset($this->_params->type))
                 $this->Response->throw_exception(400, "Missing NAT type");
             elseif (!in_array($this->_params->type, $this->valid_types))
                 $this->Response->throw_exception(400, "Invalid type");
             if (isset($this->_params->id) )
                 $this->Response->throw_exception(400, "ID should not be set for creation");
-        }        
+        }
     }
 
     /**
@@ -290,7 +290,7 @@ class Nat_controller extends Common_api_functions {
         if (isset($this->_params->device)) {
             if (is_numeric($this->_params->device)) {
                 $result = $this->Tools->fetch_object('devices', 'id', $this->_params->device);
-                if (!$result) 
+                if (!$result)
                     $this->Response->throw_exception(400, "Device ID not found");
             }
             else {
@@ -301,15 +301,15 @@ class Nat_controller extends Common_api_functions {
 
     /**
      * Verify user-provided "src" or "dst" parameters. Checking format is valid and the provided IDs are actually real.
-     * 
+     *
      * @access private
      * @param String $k
      * @return boolean
      **/
     private function verify_src_dst($k) {
         if ($this->_params->$k) {
-            #$input_param = (array) json_decode($this->_params->$k);
-            $input_param = $this->_params->$k; 
+            #$input_param = (array) db_json_decode($this->_params->$k);
+            $input_param = $this->_params->$k;
             if (!is_array($input_param)) {
                 $this->Response->throw_exception(400, "Invalid $k format (Must be an array");
             }
@@ -327,7 +327,7 @@ class Nat_controller extends Common_api_functions {
                         $this->Response->throw_exception(400, "Invalid value $v (must be an integer)");
                     }
                     else {
-                        # Validate IDs ! 
+                        # Validate IDs !
                         $func   = $this->validation_data[$pk]["function"];
                         $object = $this->validation_data[$pk]["object"]->$func("id", $v);
                         if ($object) {
@@ -344,7 +344,7 @@ class Nat_controller extends Common_api_functions {
     }
 
     /**
-     * Deletes existing NAT 
+     * Deletes existing NAT
      *
      * @access public
      * @return void
@@ -356,7 +356,7 @@ class Nat_controller extends Common_api_functions {
             // $values = array();
             // $values['id'] = $this->_params->id;
             if(!$this->Admin->object_modify ("nat", "delete", "id", $values)){
-                $this->Response->throw_exception(500, "NAT delete failed"); 
+                $this->Response->throw_exception(500, "NAT delete failed");
             }
             else {
                 return array("code"=>200, "message"=>"NAT deleted");
@@ -367,5 +367,3 @@ class Nat_controller extends Common_api_functions {
         }
     }
 }
-
-?>

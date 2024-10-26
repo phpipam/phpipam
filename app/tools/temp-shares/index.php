@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # fetch all shares
-$temp_shares = pf_json_decode($User->settings->tempAccess);
+$temp_shares = db_json_decode($User->settings->tempAccess);
 ?>
 
 <h4><?php print _("List of temporary shared objects"); ?></h4>

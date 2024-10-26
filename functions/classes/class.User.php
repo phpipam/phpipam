@@ -58,7 +58,7 @@ class User extends Common_functions {
     protected $isadmin = false;
 
     /**
-     * limit for IP block - after how many attampts user is blocked
+     * limit for IP block - after how many attempts user is blocked
      *
      * (default value: 5)
      *
@@ -189,7 +189,7 @@ class User extends Common_functions {
     private function register_session () {
         // not for api
         if ($this->api !== true) {
-            if (@$_SESSION===NULL && !isset($_SESSION)) {
+            if (!isset($_SESSION)) {
                 //set session name
                 $this->set_session_name();
                 //set default params
@@ -315,7 +315,7 @@ class User extends Common_functions {
     public function is_authenticated () {
         # if checked for subpages first check if $user is array
         if(!is_array($this->user)) {
-            if( !is_blank(@$_SESSION['ipamusername']) ) {
+            if(isset($_SESSION['ipamusername']) && !is_blank($_SESSION['ipamusername'])) {
                 # save username
                 $this->username = $_SESSION['ipamusername'];
                 # check for timeout
@@ -426,7 +426,7 @@ class User extends Common_functions {
      * @return void
      */
     private function set_user_theme () {
-        // set defaukt theme if field is missing
+        // set default theme if field is missing
         if(!isset($this->settings->theme)) {
             $this->settings->theme = "dark";
         }
@@ -464,7 +464,7 @@ class User extends Common_functions {
     }
 
     /**
-     * resets inactivity time after each succesfull login
+     * resets inactivity time after each successful login
      *
      * @access private
      * @return void
@@ -503,7 +503,7 @@ class User extends Common_functions {
      * @return void
      */
     private function set_redirect_cookie () {
-        # save current redirect vaule
+        # save current redirect value
         if (isset($_SERVER['SCRIPT_URL'])) {
             if( $_SERVER['SCRIPT_URL']=="/login/" ||
                 $_SERVER['SCRIPT_URL']=="logout" ||
@@ -597,7 +597,7 @@ class User extends Common_functions {
 
 
     /**
-     * @miscalaneous methods
+     * @miscellaneous methods
      * ------------------------------
      */
 
@@ -679,16 +679,16 @@ class User extends Common_functions {
                     $query = "select `su`.`id`, `su`.`id` as `subnetId`,`se`.`id` as `sectionId`, `subnet`, `mask`,`isFull`,`su`.`description`,`se`.`description` as `section`, `vlanId`, `isFolder`
                               from `subnets` as `su`, `sections` as `se` where `su`.`id` = ? and `su`.`sectionId` = `se`.`id` limit 1;";
 
-                    try { $fsubnet = $this->Database->getObjectQuery($query, array($id)); }
+                    try { $fsubnet = $this->Database->getObjectQuery('subnets', $query, array($id)); }
                     catch (Exception $e) {
                         $this->Result->show("danger", _("Error: ").$e->getMessage());
                         return false;
                     }
 
-                    # out array
-                    $fsubnets[] = (array) $fsubnet;
+                    # out array if sql was able to retrieve info for the favourite
+                    if (!empty($fsubnet)) $fsubnets[] = (array) $fsubnet;
                 }
-                return $fsubnets;
+                return empty($fsubnets) ? false : $fsubnets;
             } else {
                 return false;
             }
@@ -842,43 +842,38 @@ class User extends Common_functions {
     }
 
     /**
-     * tries to fetch user datails from database by username if not already existing locally
+     * tries to fetch user details from database by username if not already existing locally
      *
      * @access public
      * @param string $username
      * @param bool $force
      * @return void
      */
-    public function fetch_user_details ($username, $force = false) {
+    public function fetch_user_details($username, $force = false) {
         # only if not already active
-        if(!is_object($this->user) || $force) {
+        if (!is_object($this->user) || $force) {
             try {
                 $user = $this->Database->findObject("users", "username", $username);
-            }
-            catch (Exception $e) {
-                $this->Result->show("danger", _("Error: ").$e->getMessage(), true);
+            } catch (Exception $e) {
+                $this->Result->show("danger", _("Error: ") . $e->getMessage(), true);
             }
 
-            # if not result return false
-            $usert = (array) $user;
+            if (!is_object($user)) {
+                $this->block_ip();
+                $this->log_failed_access($username);
+                $this->Log->write(_("User login"), _('Invalid username'), 2, $username);
+                $this->Result->show("danger", _("Invalid username or password"), true);
+            }
 
             # admin?
-            if($user->role == "Administrator") {
+            if ($user->role == "Administrator") {
                 $this->isadmin = true;
             }
 
-            if(sizeof($usert)==0) {
-                $this->block_ip ();
-                $this->log_failed_access ($username);
-                $this->Log->write ( _("User login"), _('Invalid username'), 2, $username );
-                $this->Result->show("danger", _("Invalid username or password"), true);
-            }
-            else {
-                $this->user = $user;
-            }
+            $this->user = $user;
 
             // register permissions
-            $this->register_user_module_permissions ();
+            $this->register_user_module_permissions();
         }
     }
 
@@ -1120,7 +1115,7 @@ class User extends Common_functions {
      */
     private function auth_AD ($username, $password) {
         // parse settings for LDAP connection and store them to array
-        $authparams = pf_json_decode($this->authmethodparams, true);
+        $authparams = db_json_decode($this->authmethodparams, true);
         // authenticate
         $this->directory_authenticate($authparams, $username, $password);
     }
@@ -1136,7 +1131,7 @@ class User extends Common_functions {
      */
     private function auth_LDAP ($username, $password) {
         // parse settings for LDAP connection and store them to array
-        $authparams = pf_json_decode($this->authmethodparams, true);
+        $authparams = db_json_decode($this->authmethodparams, true);
         $this->ldap = true;                            //set ldap flag
 
         // set uid
@@ -1172,7 +1167,7 @@ class User extends Common_functions {
      */
     private function auth_radius_legacy ($username, $password) {
         # decode radius parameters
-        $params = pf_json_decode($this->authmethodparams);
+        $params = db_json_decode($this->authmethodparams);
 
         # check for socket support !
         if(!in_array("sockets", get_loaded_extensions())) {
@@ -1231,7 +1226,7 @@ class User extends Common_functions {
      */
     private function auth_radius ($username, $password) {
         # decode radius parameters
-        $params = pf_json_decode($this->authmethodparams);
+        $params = db_json_decode($this->authmethodparams);
 
         # Valdate composer
         if($this->composer_has_errors(["dapphp/radius"])) {
@@ -1394,7 +1389,7 @@ class User extends Common_functions {
         # save to session
         $this->write_session_parameters ();
         # log
-        $this->Log->write( _("User login"), _("User")." ".$this->user->real_name." "._("logged in"), 0, $username );
+        $this->Log->write( _("User login"), _("User")." ".$this->user->real_name." "._("logged in"), 0, null);
 
         # write last logintime
         $this->update_login_time ();
@@ -1465,7 +1460,7 @@ class User extends Common_functions {
      * Get passkey for user based on key_id
      * @method get_user_passkeys
      * @param  bool $user_id
-     * @return array
+     * @return object|null
      */
     public function get_user_passkey_by_keyId ($keyId = false) {
         try {
@@ -1714,7 +1709,7 @@ class User extends Common_functions {
         $this->update_session_language ();
 
         # ok, update log table
-        $this->Log->write( _("User self update"), _("User self update suceeded")."!", 0 );
+        $this->Log->write( _("User self update"), _("User self update succeeded")."!", 0 );
         return true;
     }
 
@@ -1795,19 +1790,21 @@ class User extends Common_functions {
      * @param none
      * @return int|false
      */
-    public function block_check_ip () {
+    public function block_check_ip() {
         # first purge
-        $this->purge_blocked_entries ();
-        $this->block_get_ip ();
+        $this->purge_blocked_entries();
+        $this->block_get_ip();
         # set date and query
-        $now = date("Y-m-d H:i:s", time() - 5*60);
-        $query = "select count from `loginAttempts` where `ip` = ? and `datetime` > ?;";
+        $query = "SELECT count FROM `loginAttempts` WHERE `ip` = ? AND `datetime` > DATE_SUB(NOW(), INTERVAL 5 MINUTE); ";
         # fetch
-        try { $cnt = $this->Database->getObjectQuery($query, array($this->ip, $now)); }
-        catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
+        try {
+            $cnt = $this->Database->getObjectQuery('loginAttempts', $query, [$this->ip]);
+        } catch (Exception $e) {
+            !$this->debugging ?: $this->Result->show("danger", $e->getMessage(), false);
+        }
 
         # verify
-        return @$cnt->count>0 ? $cnt->count : false;
+        return (is_object($cnt) && $cnt->count) > 0 ? $cnt->count : false;
     }
 
     /**
@@ -1816,14 +1813,19 @@ class User extends Common_functions {
      * @access public
      * @return bool
      */
-    public function block_ip () {
+    public function block_ip() {
         # validate IP
-        if(!filter_var($this->ip, FILTER_VALIDATE_IP))    { return false; }
-
+        if (!filter_var($this->ip, FILTER_VALIDATE_IP)) {
+            return false;
+        }
         # first check if already in
-        if($this->block_check_ip ())         { $this->block_update_count(); }
+        if ($this->block_check_ip()) {
+            $this->block_update_count();
+        }
         # if not in add first entry
-        else                                 { $this->block_add_entry(); }
+        else {
+            $this->block_add_entry();
+        }
     }
 
     /**
@@ -1833,36 +1835,40 @@ class User extends Common_functions {
      * @access private
      * @return void
      */
-    private function block_get_ip () {
+    private function block_get_ip() {
         $this->ip = $this->get_user_ip();
     }
 
     /**
-     * purges login attampts more than 5 minutes old (since last attempt)
+     * purges login attempts more than 5 minutes old (since last attempt)
      *
      * @access private
      * @return void
      */
-    private function purge_blocked_entries () {
+    private function purge_blocked_entries() {
         # set date 5 min ago and query
-        $ago = date("Y-m-d H:i:s", time() - 5*60);
-        $query = "delete from `loginAttempts` where `datetime` < ?; ";
-
-        try { $this->Database->runQuery($query, array($ago)); }
-        catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
+        $query = "DELETE FROM `loginAttempts` WHERE `datetime` < DATE_SUB(NOW(), INTERVAL 5 MINUTE); ";
+        try {
+            $this->Database->runQuery($query);
+        } catch (Exception $e) {
+            !$this->debugging ?: $this->Result->show("danger", $e->getMessage(), false);
+        }
     }
 
     /**
-     * updates existing log attampt count
+     * updates existing log attempt count
      *
      * @access private
      * @return void
      */
     private function block_update_count() {
         # query
-        $query = "update `loginAttempts` set `count`=`count`+1 where `ip` = ?; ";
-        try { $this->Database->runQuery($query, array($this->ip)); }
-        catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
+        $query = "UPDATE `loginAttempts` SET `count`=`count`+1 WHERE `ip` = ?; ";
+        try {
+            $this->Database->runQuery($query, [$this->ip]);
+        } catch (Exception $e) {
+            !$this->debugging ?: $this->Result->show("danger", $e->getMessage(), false);
+        }
     }
 
     /**
@@ -1872,19 +1878,25 @@ class User extends Common_functions {
      * @return void
      */
     private function block_add_entry() {
-        try { $this->Database->insertObject("loginAttempts", array("ip"=>$this->ip, "count"=>1)); }
-        catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
+        try {
+            $this->Database->insertObject("loginAttempts", ["ip" => $this->ip, "count" => 1]);
+        } catch (Exception $e) {
+            !$this->debugging ?: $this->Result->show("danger", $e->getMessage(), false);
+        }
     }
 
     /**
-     * removes blocked IP entry if it exists on successfull login
+     * removes blocked IP entry if it exists on successful login
      *
      * @access private
      * @return void
      */
     private function block_remove_entry() {
-        try { $this->Database->deleteRow("loginAttempts", "ip", $this->ip); }
-        catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
+        try {
+            $this->Database->deleteRow("loginAttempts", "ip", $this->ip);
+        } catch (Exception $e) {
+            !$this->debugging ?: $this->Result->show("danger", $e->getMessage(), false);
+        }
     }
 
     /**
@@ -1920,7 +1932,7 @@ class User extends Common_functions {
         if(is_object($cached_item)) return $cached_item->result;
 
         $groups = array();
-        foreach((array) pf_json_decode($json, true) as $group_id => $perm) {
+        foreach((array) db_json_decode($json, true) as $group_id => $perm) {
             $group_details = $this->groups_parse (array($group_id));
 
             $tmp = array();
@@ -2008,13 +2020,13 @@ class User extends Common_functions {
             if (!is_object($section)) continue;
 
             # Get Section permissions
-            $sectionP = pf_json_decode($section->permissions, true);
+            $sectionP = db_json_decode($section->permissions, true);
 
             # ok, user has section access, check also for any higher access from subnet
             if(!is_array($sectionP)) continue;
 
             # get all user groups
-            $groups = pf_json_decode($this->user->groups, true);
+            $groups = db_json_decode($this->user->groups, true);
 
             foreach($sectionP as $sk=>$sp) {
                 # check each group if user is in it and if so check for permissions for that group
@@ -2061,7 +2073,7 @@ class User extends Common_functions {
      */
     private function register_user_module_permissions () {
         // decode
-        $permissions = pf_json_decode($this->user->module_permissions, true);
+        $permissions = db_json_decode($this->user->module_permissions, true);
         // check for each module
         foreach ($this->get_modules_with_permissions() as $m) {
             if (!is_array($permissions)) {

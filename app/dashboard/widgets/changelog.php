@@ -36,17 +36,15 @@ if ($User->settings->log!="syslog") {
 if ($User->settings->log=="syslog") {
 	$Result->show("warning", _("Changelog files are sent to syslog"), false);
 }
-# none
-elseif(sizeof($clogs)==0) {
-	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
-	print "<p>"._("No changelogs available")."</p>";
-	print "<small>"._("No changelog entries are available")."</small>";
-	print "</blockquote>";
-}
 # print
 else {
+	# fetch widget parameters
+	$wparam = $Tools->get_widget_params("changelog");
+	$max    = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 5,    'min_range' => 1, 'max_range' => 256]]);
+	$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 
 	# printout
+	print '<div style="width:98%;margin-left:1%;' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 	print "<table class='table changelog table-hover table-top table-condensed'>";
 
 	# headers
@@ -65,7 +63,7 @@ else {
 		# cast
 		$l = (array) $l;
 
-		if($pc < 5) {
+		if($pc < $max) {
 			# permissions
 			if($l['ctype']=="subnet")		{ $permission = $Subnets->check_permission ($User->user, $l['tid']); }
 			elseif($l['ctype']=="ip_addr")	{ $permission = $Subnets->check_permission ($User->user, $l['subnetId']); }
@@ -160,5 +158,13 @@ else {
 	}
 
 	print "</table>";
+
+	if(sizeof($clogs)==0) {
+		print "<blockquote style='margin-top:20px;margin-left:20px;'>";
+		print "<p>"._("No changelogs available")."</p>";
+//		print "<small>"._("No changelog entries are available")."</small>";
+		print "</blockquote>";
+	}
+
+	print "</div>";
 }
-?>

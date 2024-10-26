@@ -221,7 +221,7 @@ class DHCP_kea extends Common_functions {
             throw new exception ("Cannot access config file ".$this->kea_config_file);
         }
 
-        // loop and remove comments (contains #) and replace multilpe spaces
+        // loop and remove comments (contains #) and replace multiple spaces
         $out   = array();
         foreach ($config as $k=>$f) {
             if (strpos($f, "#")!==false || is_blank($f)) {}
@@ -241,7 +241,7 @@ class DHCP_kea extends Common_functions {
 		}
 
         // save config
-        $this->config = pf_json_decode($config, true);
+        $this->config = db_json_decode($config, true);
         // save IPv4 / IPv6 flags
         if(isset($this->config['Dhcp4']))   { $this->ipv4_used = true; }
         if(isset($this->config['Dhcp6']))   { $this->ipv6_used = true; }
@@ -387,7 +387,7 @@ class DHCP_kea extends Common_functions {
             throw new Exception("IPv6 leases not yet!");
         }
         // fetch leases
-		try { $leases = $this->Database_kea->getObjectsQuery($query); }
+		try { $leases = $this->Database_kea->getObjectsQuery("lease4", $query); }
 		catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}
@@ -570,7 +570,7 @@ class DHCP_kea extends Common_functions {
             $query = "select * from `hosts`;";
         }
         // fetch leases
-		try { $reservations = $this->Database_kea->getObjectsQuery($query); }
+		try { $reservations = $this->Database_kea->getObjectsQuery("hosts", $query); }
 		catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}

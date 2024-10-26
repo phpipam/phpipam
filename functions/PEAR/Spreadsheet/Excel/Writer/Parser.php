@@ -630,7 +630,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
     */
     function _convertString($string)
     {
-        // chop away beggining and ending quotes
+        // chop away beginning and ending quotes
         $string = substr($string, 1, strlen($string) - 2);
         if (strlen($string) > 255) {
             return $this->raiseError("String is too long");
@@ -649,7 +649,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
     * args that it takes.
     *
     * @access private
-    * @param string  $token    The name of the function for convertion to ptg value.
+    * @param string  $token    The name of the function for conversion to ptg value.
     * @param integer $num_args The number of arguments the function receives.
     * @return string The packed ptg for the function
     */
@@ -1046,7 +1046,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
         // Convert 1-index to zero-index
         $row1--;
         $row2--;
-        // Trick poor inocent Excel
+        // Trick poor innocent Excel
         $col1 = 0;
         $col2 = 16383; // FIXME: maximum possible value for Excel 5 (change this!!!)
 

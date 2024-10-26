@@ -20,14 +20,14 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "truncate", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "truncate", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 # id must be numeric
-if(!is_numeric($_POST['subnetId']))			{ $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($POST->subnetId))			{ $Result->show("danger", _("Invalid ID"), true); }
 
 # get subnet details
-$subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
+$subnet = $Subnets->fetch_subnet ("id", $POST->subnetId);
 
 # verify that user has write permissions for subnet
 $subnetPerm = $Subnets->check_permission ($User->user, $subnet->id);
@@ -36,12 +36,12 @@ if($subnetPerm < 3) 						{ $Result->show("danger", _('You do not have permissio
 # for orphaned
 if($subnet===false) {
     $subnet = new StdClass ();
-    $subnet->id = $_POST['subnetId'];
+    $subnet->id = $POST->subnetId;
 }
 
 # truncate network
 if(!$Subnets->subnet_truncate($subnet->id))	{ $Result->show("danger",  _("Failed to truncate subnet"), false); }
-else										{ $Result->show("success", _("Subnet truncated succesfully")."!", false); }
+else										{ $Result->show("success", _("Subnet truncated successfully")."!", false); }
 
 # check for DNS PTR records
 if ($User->settings->enablePowerDNS=="1" && $subnet->DNSrecursive=="1") {
@@ -67,4 +67,3 @@ if ($User->settings->enablePowerDNS=="1" && $subnet->DNSrecursive=="1") {
 		$Result->show("danger", "Cannot connect to powerDNS database", false);
 	}
 }
-?>

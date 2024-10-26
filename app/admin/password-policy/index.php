@@ -10,7 +10,7 @@ $User->check_user_session();
 $csrf = $User->Crypto->csrf_cookie ("create", "settings");
 
 # current policy
-$policy = pf_json_decode($User->settings->passwordPolicy);
+$policy = db_json_decode($User->settings->passwordPolicy);
 ?>
 
 <!-- title -->
@@ -50,7 +50,7 @@ $policy = pf_json_decode($User->settings->passwordPolicy);
 	<td>
 		<input type="text" class="form-control input-sm" name="minNumbers" maxlength="3" value="<?php print $policy->minNumbers; ?>">
 	</td>
-	<td class="info2"><?php print _('Minumum number of numbers'); ?></td>
+	<td class="info2"><?php print _('Minimum number of numbers'); ?></td>
 </tr>
 
 <tr>
@@ -58,7 +58,7 @@ $policy = pf_json_decode($User->settings->passwordPolicy);
 	<td>
 		<input type="text" class="form-control input-sm" name="minLetters" maxlength="3" value="<?php print $policy->minLetters; ?>">
 	</td>
-	<td class="info2"><?php print _('Minumum number of letters'); ?></td>
+	<td class="info2"><?php print _('Minimum number of letters'); ?></td>
 </tr>
 
 <tr>
@@ -66,7 +66,7 @@ $policy = pf_json_decode($User->settings->passwordPolicy);
 	<td>
 		<input type="text" class="form-control input-sm" name="minLowerCase" maxlength="3" value="<?php print $policy->minLowerCase; ?>">
 	</td>
-	<td class="info2"><?php print _('Minumum number of lowercase letters'); ?></td>
+	<td class="info2"><?php print _('Minimum number of lowercase letters'); ?></td>
 </tr>
 
 <tr>
@@ -74,7 +74,7 @@ $policy = pf_json_decode($User->settings->passwordPolicy);
 	<td>
 		<input type="text" class="form-control input-sm" name="minUpperCase" maxlength="3" value="<?php print $policy->minUpperCase; ?>">
 	</td>
-	<td class="info2"><?php print _('Minumum number of uppercase letters'); ?></td>
+	<td class="info2"><?php print _('Minimum number of uppercase letters'); ?></td>
 </tr>
 
 <tr>
@@ -82,7 +82,7 @@ $policy = pf_json_decode($User->settings->passwordPolicy);
 	<td>
 		<input type="text" class="form-control input-sm" name="minSymbols" maxlength="3" value="<?php print $policy->minSymbols; ?>">
 	</td>
-	<td class="info2"><?php print _('Minumum number of symbols'); ?></td>
+	<td class="info2"><?php print _('Minimum number of symbols'); ?></td>
 </tr>
 
 <tr>

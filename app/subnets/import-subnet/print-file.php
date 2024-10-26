@@ -19,11 +19,11 @@ $Result 	= new Result;
 $User->check_user_session();
 
 # set filetype
-$filetype = pf_explode(".", $_POST['filetype']);
+$filetype = pf_explode(".", $POST->filetype);
 $filetype = end($filetype);
 
 # check integer
-is_numeric($_POST['subnetId']) ? : $Result->show("danger", _("Invalid subnet ID") ,true);
+is_numeric($POST->subnetId) ? : $Result->show("danger", _("Invalid subnet ID") ,true);
 
 $csrf = $User->Crypto->csrf_cookie ("create", "import_file");
 
@@ -31,7 +31,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "import_file");
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 # fetch subnet
-$subnet = $Subnets->fetch_subnet("id",$_POST['subnetId']);
+$subnet = $Subnets->fetch_subnet("id",$POST->subnetId);
 
 if($subnet===false)                $Result->show("danger", _("Invalid subnet ID") ,true);
 

@@ -8,12 +8,13 @@ if(!isset($User)) {
 	$User 		= new User ($Database);
 	$Tools 		= new Tools ($Database);
 	$Log		= new Logging ($Database);
-	$Admin		= new Admin ($Database);
 	$Result		= new Result ();
 }
 
 # user must be authenticated
 $User->check_user_session ();
+# user must be admin
+$User->is_admin(true);
 
 # if direct request that redirect to tools page
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
@@ -25,10 +26,16 @@ if ($User->settings->log=="syslog") {
 	$Result->show("warning", _("Log files are sent to syslog"));
 }
 else {
-	# print last 5 access logs
-	$logs = $Log->fetch_logs(5, NULL, NULL, NULL, "off", "on", "on");
+	# fetch widget parameters
+	$wparam = $Tools->get_widget_params("error_logs");
+	$max    = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 5,    'min_range' => 1, 'max_range' => 256]]);
+	$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
+
+	# print last N access logs
+	$logs = $Log->fetch_logs($max, NULL, NULL, NULL, "off", "on", "on");
 	if (!is_array($logs)) { $logs = array(); }
 
+	print '<div style="width:98%;margin-left:1%;' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 	print "<table class='table table-condensed table-hover table-top'>";
 
 	# headers
@@ -45,8 +52,8 @@ else {
 		$log = (array) $log;
 		# reformat severity
 		if($log['severity'] == 0)		{ $log['severityText'] = _("Info"); }
-		else if($log['severity'] == 1)	{ $log['severityText'] = _("Warn"); }
-		else if($log['severity'] == 2)	{ $log['severityText'] = _("Err"); }
+		elseif($log['severity'] == 1)	{ $log['severityText'] = _("Warn"); }
+		elseif($log['severity'] == 2)	{ $log['severityText'] = _("Err"); }
 
 		print "<tr>";
 		print "	<td><span class='severity$log[severity]'>$log[severityText]</span></td>";
@@ -65,5 +72,7 @@ else {
 		print "<p>"._("No logs available")."</p>";
 		print "</blockquote>";
 	}
+
+	print "</div>";
 }
 ?>

@@ -29,9 +29,6 @@ $circuit_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 $type_hash = [];
 foreach($circuit_types as $t){  $type_hash[$t->id] = $t->ctname; }
 
-# strip tags - XSS
-$_GET = $User->strip_input_tags ($_GET);
-
 # title
 print "<h4>"._('List of logical circuits')."</h4>";
 print "<hr>";
@@ -58,7 +55,7 @@ print "	<th>"._('Comment').'</th>';
 $colspanCustom = 0;
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
-		if(!in_array($field['name'], $hidden_circuit_fields)) {
+		if(!in_array($field['name'], $hidden_logical_fields)) {
 			print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			$colspanCustom++;
 		}
@@ -80,7 +77,7 @@ else {
 	foreach ($circuits as $circuit) {
 		//print details
 		print "<tr>";
-		print "	<td style='vertical-align:top !important;'><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",'logical',$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->logical_cid</a></td>";
+		print "	<td style='vertical-align:top !important;'><a class='btn btn-xs btn-default' href='".create_link($GET->page,"circuits",'logical',$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->logical_cid</a></td>";
 		print "	<td>".$circuit->purpose."</td>";
 		print "	<td>".$circuit->member_count."</td>";
 		// members
@@ -88,7 +85,7 @@ else {
 		$member_circuits = $Tools->fetch_all_logical_circuit_members ($circuit->id);
 		if($member_circuits!==false) {
 			foreach ($member_circuits as $mc) {
-				print "<a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$mc->id)."'><i class='fa fa-random prefix' style='border:none;'></i> $mc->cid</a><br>";
+				print "<a class='btn btn-xs btn-default' href='".create_link($GET->page,"circuits",$mc->id)."'><i class='fa fa-random prefix' style='border:none;'></i> $mc->cid</a><br>";
 			}
 		}
 		else {
@@ -99,7 +96,7 @@ else {
 		//custom
 		if(sizeof(@$custom_fields) > 0) {
 			foreach($custom_fields as $field) {
-				if(!in_array($field['name'], $hidden_circuit_fields)) {
+				if(!in_array($field['name'], $hidden_logical_fields)) {
 					// create html links
 					$circuit->{$field['name']} = $User->create_links($circuit->{$field['name']}, $field['type']);
 
@@ -113,7 +110,7 @@ else {
         $links = [];
         if($User->get_module_permissions ("circuits")>=User::ACCESS_R) {
             $links[] = ["type"=>"header", "text"=>_("Show circuit")];
-            $links[] = ["type"=>"link", "text"=>_("View"), "href"=>create_link($_GET['page'],"circuits","logical",$circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"link", "text"=>_("View"), "href"=>create_link($GET->page,"circuits","logical",$circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];
         }
         if($User->get_module_permissions ("circuits")>=User::ACCESS_RW) {

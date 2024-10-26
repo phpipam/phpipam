@@ -20,24 +20,25 @@ else {
 
 # user must be authenticated
 $User->check_user_session ();
+# user must be admin
+$User->is_admin(true);
 
 # no errors!
 //ini_set('display_errors', 0);
 
 # set size parameters
-$height = 200;
-$slimit = 5;			//we dont need this, we will recalculate
-
-# count
-$m = 0;
+$slimit = 5;            //we don't need this, we will recalculate
 
 // fetch widget
-$widget = $Tools->fetch_object ("widgets", "wfile", "inactive-hosts");
+$wparam = $Tools->get_widget_params("inactive-hosts");
+$max    = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 5,    'min_range' => 1, 'max_range' => 256]]);
+$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
+$days   = filter_var($wparam->days,   FILTER_VALIDATE_INT, ['options' => ['default' => 30,   'min_range' => 1, 'max_range' => 365]]);
 
 # if direct request include plot JS
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
 	# get widget details
-	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_GET['section'])) { $Result->show("danger", _("Invalid widget"), true); }
+	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $GET->section)) { $Result->show("danger", _("Invalid widget"), true); }
 	# reset size and limit
 	$height = 350;
 	$slimit = 100;
@@ -47,11 +48,11 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	print "</div>";
 }
 
-// time_range - 30 days
-$seconds = 86400 * 30;
+// time_range - N days
+$seconds = 86400 * $days;
 
 # Find inactive hosts
-$inactive_hosts = $Subnets->find_inactive_hosts ($seconds, $slimit);
+$inactive_hosts = $Subnets->find_inactive_hosts ($seconds, $max);
 
 # check permissions
 if ($inactive_hosts!==false) {
@@ -67,15 +68,11 @@ if ($inactive_hosts!==false) {
                 $h->mask = $subnet->mask;
                 $out[] = $h;
             }
-            $m++;
-            # break after limit
-            if ($m>$slimit) {
-                break;
-            }
         }
     }
 }
 
+print '<div style="width:98%;margin-left:1%;' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 # error - none found but not permitted
 if ($inactive_hosts===false) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
@@ -91,7 +88,7 @@ elseif (!isset($out)) {
 # found
 else {
     // table
-    print "<table class='table table-top table-threshold table-condensed'>";
+    print "<table class='table table-top table-threshold table-condensed table-hover'>";
 
     print "<tr>";
     print " <th></th>";
@@ -116,3 +113,4 @@ else {
 
     print "</table>";
 }
+print "</div>";

@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("circuits", User::ACCESS_RW, true, true);
 }
 else {
@@ -28,9 +28,6 @@ else {
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "circuit");
 
-# strip tags - XSS
-$_POST = $User->strip_input_tags ($_POST);
-
 # validate action
 $Admin->validate_action();
 
@@ -38,17 +35,17 @@ $Admin->validate_action();
 $custom = $Tools->fetch_custom_fields('circuits');
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['circuitid']))	{ $Result->show("danger", _("Invalid ID"), true, true); }
+if($POST->action!="add" && !is_numeric($POST->circuitid))	{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch circuit details
-if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-	$circuit = $Admin->fetch_object("circuits", "id", $_POST['circuitid']);
+if( ($POST->action == "edit") || ($POST->action == "delete") ) {
+	$circuit = $Admin->fetch_object("circuits", "id", $POST->circuitid);
 	// false
 	if ($circuit===false)                                          { $Result->show("danger", _("Invalid ID"), true, true);  }
 }
 // defaults
 else {
-	$circuit = new StdClass ();
+	$circuit = new Params ();
 	$circuit->provider = 0;
 }
 
@@ -67,7 +64,7 @@ if($circuit_providers===false) 	{
 $all_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 
 # set readonly flag
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 ?>
 
 <script>
@@ -91,12 +88,12 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Circuit ID'); ?></td>
 		<td>
-			<input type="text" name="cid" style='width:200px;' class="form-control input-sm" placeholder="<?php print _('ID'); ?>" value="<?php if(isset($circuit->cid)) print $Tools->strip_xss($circuit->cid); ?>" <?php print $readonly; ?>>
+			<input type="text" name="cid" style='width:200px;' class="form-control input-sm" placeholder="<?php print _('ID'); ?>" value="<?php if(isset($circuit->cid)) print $circuit->cid; ?>" <?php print $readonly; ?>>
 			<?php
-			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-				print '<input type="hidden" name="id" value="'. $_POST['circuitid'] .'">'. "\n";
+			if( ($POST->action == "edit") || ($POST->action == "delete") ) {
+				print '<input type="hidden" name="id" value="'. escape_input($POST->circuitid) .'">'. "\n";
 			} ?>
-			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
@@ -137,7 +134,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Capacity'); ?></td>
 		<td>
-			<input type="text" name="capacity" style='width:200px;'  class="form-control input-sm" placeholder="<?php print _('Capacity'); ?>" value="<?php if(isset($circuit->capacity)) print $Tools->strip_xss($circuit->capacity); ?>" <?php print $readonly; ?>>
+			<input type="text" name="capacity" style='width:200px;'  class="form-control input-sm" placeholder="<?php print _('Capacity'); ?>" value="<?php if(isset($circuit->capacity)) print $circuit->capacity; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -174,7 +171,7 @@ $(document).ready(function(){
         print '<option disabled="disabled">'._('Select Customer').'</option>';
         print '<option value="0">'._('None').'</option>';
 
-        if($customers!=false) {
+        if(is_array($customers)) {
             foreach($customers as $customer) {
                 if ($customer->id == $circuit->customer_id)    	{ print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
                 else                                         	{ print '<option value="'. $customer->id .'">'.$customer->title.'</option>'; }
@@ -304,8 +301,8 @@ $(document).ready(function(){
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" data-script="app/admin/circuits/edit-circuit-submit.php" data-result_div="circuitManagementEditResult" data-form='circuitManagementEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i>
+		<button class="btn btn-sm btn-default submit_popup <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" data-script="app/admin/circuits/edit-circuit-submit.php" data-result_div="circuitManagementEditResult" data-form='circuitManagementEdit'>
+			<i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i>
 			<?php print $User->get_post_action(); ?>
 		</button>
 	</div>

@@ -25,10 +25,10 @@ $csrf = $User->Crypto->csrf_cookie ("create", "device_snmp");
 $custom = $Tools->fetch_custom_fields('devices');
 
 # ID must be numeric
-if(!is_numeric($_POST['switchid']))		     { $Result->show("danger", _("Invalid ID"), true, true); }
+if(!is_numeric($POST->switchid))		     { $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch device details
-$device = $Admin->fetch_object("devices", "id", $_POST['switchid']);
+$device = $Admin->fetch_object("devices", "id", $POST->switchid);
 if ($device===false)                         { $Result->show("danger", _("Invalid ID"), true, true);  }
 
 // set show
@@ -136,7 +136,7 @@ $('#switchSNMPManagementEdit').change(function() {
 	<tr class="details3" style="<?php print $display_v3; ?>">
 		<td><?php print _('Password'); ?></td>
 		<td>
-    		<input type='text' name="snmp_v3_auth_pass" class="form-control" placeholder="SNMPv3 <?php print _('Password'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_auth_pass); ?>'>
+    		<input type='text' name="snmp_v3_auth_pass" class="form-control" placeholder="SNMPv3 <?php print _('Password'); ?>" value='<?php print escape_input($device->snmp_v3_auth_pass); ?>'>
 		</td>
 	</tr>
 
@@ -156,7 +156,7 @@ $('#switchSNMPManagementEdit').change(function() {
 	<tr class="details3" style="<?php print $display_v3; ?>">
 		<td><?php print _('Privacy passphrase'); ?></td>
 		<td>
-    		<input type='text' name="snmp_v3_priv_pass" class="form-control" placeholder="SNMP <?php print _('Privacy passphrase'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_priv_pass); ?>'>
+    		<input type='text' name="snmp_v3_priv_pass" class="form-control" placeholder="SNMP <?php print _('Privacy passphrase'); ?>" value='<?php print escape_input($device->snmp_v3_priv_pass); ?>'>
 		</td>
 	</tr>
 
@@ -164,7 +164,7 @@ $('#switchSNMPManagementEdit').change(function() {
 	<tr class="details3" style="<?php print $display_v3; ?>">
 		<td><?php print _('Context name'); ?></td>
 		<td>
-    		<input type='text' name="snmp_v3_ctx_name" class="form-control" placeholder="SNMP <?php print _('Context name'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_ctx_name); ?>'>
+    		<input type='text' name="snmp_v3_ctx_name" class="form-control" placeholder="SNMP <?php print _('Context name'); ?>" value='<?php print $device->snmp_v3_ctx_name; ?>'>
 		</td>
 	</tr>
 
@@ -172,7 +172,7 @@ $('#switchSNMPManagementEdit').change(function() {
 	<tr class="details3" style="<?php print $display_v3; ?>">
 		<td><?php print _('Context engine ID'); ?></td>
 		<td>
-    		<input type='text' name="snmp_v3_ctx_engine_id" class="form-control" placeholder="SNMP <?php print _('Context engine ID'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_ctx_engine_id); ?>'>
+    		<input type='text' name="snmp_v3_ctx_engine_id" class="form-control" placeholder="SNMP <?php print _('Context engine ID'); ?>" value='<?php print $device->snmp_v3_ctx_engine_id; ?>'>
 		</td>
 	</tr>
 
@@ -186,7 +186,7 @@ $('#switchSNMPManagementEdit').change(function() {
 	<tr>
 		<td><?php print _('Port'); ?></td>
 		<td>
-    		<input type="number" name="snmp_port" class="form-control" placeholder="161" value='<?php print $Tools->strip_xss($device->snmp_port); ?>'>
+    		<input type="number" name="snmp_port" class="form-control" placeholder="161" value='<?php print $device->snmp_port; ?>'>
 		</td>
 	</tr>
 
@@ -194,7 +194,7 @@ $('#switchSNMPManagementEdit').change(function() {
 	<tr>
 		<td><?php print _('Timeout'); ?> [ms]</td>
 		<td>
-    		<input type="number" name="snmp_timeout" class="form-control" placeholder="500000" value='<?php print $Tools->strip_xss($device->snmp_timeout); ?>'>
+    		<input type="number" name="snmp_timeout" class="form-control" placeholder="500000" value='<?php print $device->snmp_timeout; ?>'>
 		</td>
 	</tr>
 

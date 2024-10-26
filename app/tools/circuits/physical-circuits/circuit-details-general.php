@@ -53,7 +53,7 @@ print "</tr>";
 if ($User->settings->enableCustomers=="1") {
 	$customer = $Tools->fetch_object ("customers", "id", $circuit->customer_id);
 	if($customer===false) {
-		$customer = new StdClass ();
+		$customer = new Params ();
 		$customer->title = "/";
 	}
 print "	<th>". _('Customer').'</th>';

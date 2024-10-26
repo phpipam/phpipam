@@ -9,7 +9,7 @@ $User->check_user_session();
 $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 
 # get VLAN details
-$vlan = (array) $Tools->fetch_object("vlans", "vlanId", $_GET['sPage']);
+$vlan = (array) $Tools->fetch_object("vlans", "vlanId", $GET->sPage);
 
 # not existing
 if(!isset($vlan['domainId']))		{ $Result->show("danger", _('Invalid VLAN id'), true); }
@@ -40,7 +40,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
 <hr>
 
 <?php
-print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GET['section'], $vlan_domain->id)."' data-action='add'  data-switchid='' style='margin-bottom:10px;'><i class='fa fa-chevron-left'></i> ". _('Back')."</a>";
+print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, $GET->section, $vlan_domain->id)."' data-action='add'  data-switchid='' style='margin-bottom:10px;'><i class='fa fa-chevron-left'></i> ". _('Back')."</a>";
 ?>
 
 <table class="ipaddress_subnet table-condensed">

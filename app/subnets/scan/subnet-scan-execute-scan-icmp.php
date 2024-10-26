@@ -11,19 +11,19 @@ $User->is_demo();
  *******************************/
 
 # validate subnetId and type
-if(!is_numeric($_POST['subnetId']))                        { $Result->show("danger", "Invalid subnet Id", true); die(); }
-if(!preg_match('/[^A-Za-z0-9-]*$/', $_POST['type']))       { $Result->show("danger", "Invalid scan type", true); die(); }
+if(!is_numeric($POST->subnetId))                        { $Result->show("danger", "Invalid subnet Id", true); die(); }
+if(!preg_match('/[^A-Za-z0-9-]*$/', $POST->type))       { $Result->show("danger", "Invalid scan type", true); die(); }
 
 
 # invoke CLI with threading support
-$cmd = $Scan->php_exec." ".dirname(__FILE__) . '/../../../functions/scan/subnet-scan-icmp-execute.php'." 'discovery' ".$_POST['subnetId'];
+$cmd = $Scan->php_exec." ".dirname(__FILE__) . '/../../../functions/scan/subnet-scan-icmp-execute.php'." 'discovery' ".$POST->subnetId;
 
 # save result to $output
 exec($cmd, $output, $retval);
 
 # format result back to object
 $output = array_values(array_filter($output));
-$script_result = pf_json_decode($output[0]);
+$script_result = db_json_decode($output[0]);
 
 # json error
 if(json_last_error() !== JSON_ERROR_NONE)
@@ -32,7 +32,7 @@ if(json_last_error() !== JSON_ERROR_NONE)
 # if method is fping we need to check against existing hosts because it produces list of all ips !
 if ($User->settings->scanPingType=="fping" && isset($script_result->values->alive)) {
 	// fetch all hosts to be scanned
-	$to_scan_hosts = $Scan->prepare_addresses_to_scan ("discovery", $_POST['subnetId']);
+	$to_scan_hosts = $Scan->prepare_addresses_to_scan ("discovery", $POST->subnetId);
 	// loop check
 	foreach($script_result->values->alive as $rk=>$result) {
 		if(!in_array($Subnets->transform_address($result, "decimal"), $to_scan_hosts)) {
@@ -61,7 +61,7 @@ elseif(!isset($script_result->values->alive)) 	{ $Result->show("info", _("0 new 
 # ok
 else {
 	// fetch subnet and set nsid
-	$subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
+	$subnet = $Subnets->fetch_subnet ("id", $POST->subnetId);
 	$nsid = $subnet===false ? false : $subnet->nameserverId;
 
     // fetch custom fields and check for required
@@ -76,7 +76,7 @@ else {
     }
 
 	//form
-	print "<form name='".$_POST['type']."-form' class='".$_POST['type']."-form'>";
+	print "<form name='".escape_input($POST->type)."-form' class='".escape_input($POST->type)."-form'>";
 	print "<input type='hidden' name='csrf_cookie' value='$csrf'>";
 	print "<table class='table table-striped table-top table-condensed'>";
 
@@ -142,7 +142,7 @@ else {
 	//submit
 	print "<tr>";
 	print "	<td colspan='$colspan'>";
-	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='".$_POST['type']."' data-subnetId='".$_POST['subnetId']."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
+	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='".escape_input($POST->type)."' data-subnetId='".escape_input($POST->subnetId)."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
 	print "	</td>";
 	print "</tr>";
 
@@ -153,4 +153,4 @@ else {
 print "<div class='text-right' style='margin-top:7px;'><span class='muted'>Scan method: ".$Scan->settings->scanPingType."</span></dov>";
 
 # show debug?
-if($_POST['debug']==1) 				{ print "<pre>"; print_r($output[0]); print "</pre>"; }
+if($POST->debug==1) 				{ print "<pre>"; print_r($output[0]); print "</pre>"; }

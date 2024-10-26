@@ -14,7 +14,7 @@ $subnets = $Subnets->fetch_multicast_subnets();
 $custom_fields = $Tools->fetch_custom_fields('subnets');
 
 # set hidden fields
-$hidden_cfields = pf_json_decode($User->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
+$hidden_cfields = db_json_decode($User->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
 $hidden_cfields = is_array($hidden_cfields['subnets']) ? $hidden_cfields['subnets'] : array();
 
 # set selected address fields array
@@ -79,7 +79,7 @@ if ($subnets!==false) {
 	foreach ($subnets as $subnet) {
 		# check permission
 		$permission = $Subnets->check_permission ($User->user, $subnet->id);
-		//if it has slaves dont print it, slaves will be printed automatically
+		//if it has slaves don't print it, slaves will be printed automatically
 		if($permission > 0 && ($Subnets->has_slaves($subnet->id)===false || $subnet->isFolder=="1")) {
     		// add to count
     		$subnet_count++;

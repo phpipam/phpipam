@@ -4,7 +4,7 @@
 $User->check_user_session();
 
 # fetch items
-$certificates_db = $Tools->fetch_multiple_objects ("vaultItems", "vaultId", $_GET['subnetId'], 'id', false);
+$certificates_db = $Tools->fetch_multiple_objects ("vaultItems", "vaultId", $GET->subnetId, 'id', false);
 
 
 // create new item
@@ -52,7 +52,7 @@ if($certificates_db!==false) {
 			print "</tr>";
 		}
 		else {
-			$values = pf_json_decode($values, true);
+			$values = db_json_decode($values, true);
 			$trclass = "";
 			// parse certificate
 			$certificate = openssl_x509_parse(base64_decode($values['certificate']));

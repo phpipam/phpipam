@@ -13,11 +13,11 @@ $User->check_user_session();
 $User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
 
 # check
-is_numeric($_GET['sPage']) ? : $Result->show("danger", _("Invalid ID"), true);
+is_numeric($GET->sPage) ? : $Result->show("danger", _("Invalid ID"), true);
 
 # fetch circuit
-$logical_circuit = $Tools->fetch_object ("circuitsLogical", "id", $_GET['sPage']);
-$member_circuits = $Tools->fetch_all_logical_circuit_members($_GET['sPage']);
+$logical_circuit = $Tools->fetch_object ("circuitsLogical", "id", $GET->sPage);
+$member_circuits = $Tools->fetch_all_logical_circuit_members($GET->sPage);
 
 // back link
 print "<div'>";

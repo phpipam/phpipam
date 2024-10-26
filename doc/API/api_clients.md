@@ -49,8 +49,8 @@ For call execution following parameters are needed:
 
 * **method** : HTTP method to use (OPTIONS, GET, POST, DELETE, PATCH, PUT) - - REQUIRED
 * **controller** : Which controller to use (sections, subnets, vlans, ...) - REQUIRED
-* **identifiers** : array of identifiers to add to URL request. (/api/myfistapi/sections/identifier1/identifier2/...)
-* **parameters** : key/value array of GET/POST parameters to add to URL request. (POST /api/myfistapi/sections/1/?name=test)
+* **identifiers** : array of identifiers to add to URL request. (/api/myfirstapi/sections/identifier1/identifier2/...)
+* **parameters** : key/value array of GET/POST parameters to add to URL request. (POST /api/myfirstapi/sections/1/?name=test)
 * **Token file** : if this is set to false than for each query first authorisation query will be made to obtain access token, meaning 1 additional request. If you specify filename here the token will be saved to this file, so no additional queries will be required as long as token is valid.
 
 This is an output from terminal with debug mode :

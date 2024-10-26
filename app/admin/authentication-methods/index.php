@@ -69,7 +69,7 @@ foreach($all_methods as $method) {
 			'secret',
 			'spx509key'
 		];
-		$params = pf_json_decode($method->params);
+		$params = db_json_decode($method->params);
 		foreach($params as $key=>$parameter) {
 			// mask secure keys
 			if(in_array($key, $secure_keys) && !is_blank($parameter) ) { $parameter = "********"; }
@@ -128,5 +128,5 @@ foreach($all_methods as $method) {
 	</ul>
 	<br>
 	<?php print _("For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation please check ")."<a href='http://adldap.sourceforge.net/'>adLDAP</a><br><br>"; ?>
-	<?php print _('First create new user under user management with <u>same username as on AD</u> and set authention type to one of available methods.')."<br>"._('Also set proper permissions - group membership for new user'); ?>
+	<?php print _('First create new user under user management with <u>same username as on AD</u> and set authentication type to one of available methods.')."<br>"._('Also set proper permissions - group membership for new user'); ?>
 </div>

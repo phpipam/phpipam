@@ -21,7 +21,7 @@ if(!is_object($User)) {
 $User->check_user_session();
 
 # fetch all permitted domains
-$permitted_nameservers = $Sections->fetch_section_nameserver_sets ($_POST['sectionId']);
+$permitted_nameservers = $Sections->fetch_section_nameserver_sets ($POST->sectionId);
 
 # fetch all belonging nameserver set
 $cnt = 0;
@@ -61,7 +61,7 @@ if($permitted_nameservers != false) {
 
 					/* selected? */
 					if(@$subnet_old_details['nameserverId']==$ns->id) 	{ print '<option value="'. $ns->id .'" selected>'. $printNS .'</option>'. "\n"; }
-					elseif(@$_POST['nameserverId'] == $ns->id) 			{ print '<option value="'. $ns->id .'" selected>'. $printNS .'</option>'. "\n"; }
+					elseif($POST->nameserverId == $ns->id) 			{ print '<option value="'. $ns->id .'" selected>'. $printNS .'</option>'. "\n"; }
 					else 												{ print '<option value="'. $ns->id .'">'. $printNS .'</option>'. "\n"; }
 				}
 			}

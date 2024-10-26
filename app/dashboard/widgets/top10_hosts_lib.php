@@ -54,12 +54,12 @@ function top10_widget($type_ip, $type_percentage, $height, $slimit) {
 	# only print if some hosts exist
 	if($valid_subnets==0) {
 		$msg = $type_percentage ? _("Add some hosts to subnets to calculate usage percentage") : _("Add some hosts to subnets to show graph of used hosts per subnet");
-		print "<hr>";
-
+		print '<div style="width:98%;margin-left:1%;' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 		print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 		print "<p>"._("No $type_ip hosts configured")."</p>";
 		print "<small>".$msg."</small>";
 		print "</blockquote>";
+		print "</div>";
 		#remove loading
 		?>
 		<script>

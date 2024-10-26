@@ -17,11 +17,11 @@ if (!file_exists($parse_down_class)) {
 $Parsedown = new \Parsedown();
 $dom = new \DOMDocument();
 
-if (isset($_GET['sPage'])) {
-    $document = rawurldecode($_GET['subnetId']) . "/" . rawurldecode($_GET['sPage']);
+if (isset($GET->sPage)) {
+    $document = rawurldecode($GET->subnetId) . "/" . rawurldecode($GET->sPage);
 }
-elseif (isset($_GET['subnetId'])) {
-    $document = rawurldecode($_GET['subnetId']);
+elseif (isset($GET->subnetId)) {
+    $document = rawurldecode($GET->subnetId);
 }
 else {
     $document = "";
@@ -106,6 +106,6 @@ else {
     $Result->show("danger", _('Invalid request'), true);
 }
 
-print $Subnets->print_breadcrumbs($Sections, $Subnets, $_GET);
+print $Subnets->print_breadcrumbs($Sections, $Subnets, $GET->as_array());
 print "<hr><br><br>";
 print "<div class='markdown-body'>".$html."</div>";

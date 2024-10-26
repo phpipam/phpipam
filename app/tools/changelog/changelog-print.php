@@ -7,23 +7,20 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# strip tags - XSS
-$_GET  = $User->strip_input_tags ($_GET);
-
 # validate subnetId parameter - meaning cfilter
-if(isset($_GET['subnetId'])) {
-    // validate $_GET['subnetId']
-    if(!preg_match('/^[A-Za-z0-9.#*% <>_ \\-]+$/', $_GET['subnetId']))  { $Result->show("danger", _("Invalid search string")."!", true); }
+if(isset($GET->subnetId)) {
+    // validate $GET->subnetId
+    if(!preg_match('/^[A-Za-z0-9.#*%<>_ \\-]+$/', $GET->subnetId))  { $Result->show("danger", _("Invalid search string")."!", true); }
 }
 
 # change parameters - search string provided
 $input_cfilter = '';
-if(isset($_GET['sPage'])) {
-    $input_cfilter = escape_input(urldecode($_GET['subnetId']));
-    $input_climit  = (int) $_GET['sPage'];
+if(isset($GET->sPage)) {
+    $input_cfilter = escape_input(urldecode($GET->subnetId));
+    $input_climit  = (int) $GET->sPage;
 }
-elseif(isset($_GET['subnetId'])) {
-    $input_climit  = (int) $_GET['subnetId'];
+elseif(isset($GET->subnetId)) {
+    $input_climit  = (int) $GET->subnetId;
 }
 else {
     $input_climit  = 50;
@@ -163,4 +160,3 @@ else {
 	print "</tbody>";
 	print "</table>";
 }
-?>

@@ -15,7 +15,7 @@ if (!$dbobj) {
 }
 
 //decode authentication module params
-$params = new Params(pf_json_decode($dbobj->params, true));
+$params = new Params(db_json_decode($dbobj->params, true));
 
 if (empty($params->idpx509cert) && !empty($params->idpcertfingerprint)) {
     $Result->show("danger", _("Please login as admin and update SAML authentication settings"), true);

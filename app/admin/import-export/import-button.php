@@ -65,7 +65,7 @@ $(function(){
 			$('#bottommsg').removeClass('alert alert-success alert-warning');
 
 			//add name to hidden class for magic.js
-			$('.fname').html(data.files[0].name);
+			$('.fname').text(data.files[0].name);
 
 			// Append the file name and file size
 			$('#uploadResult').append(data.files[0].name + ' (<i>' + formatFileSize(data.files[0].size) + '</i>)');

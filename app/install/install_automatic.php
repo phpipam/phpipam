@@ -2,9 +2,9 @@
 $db = Config::ValueOf('db');
 
 // add prefix - install or migrate
-$title_prefix = @$_GET['subnetId']=="migrate" ? _("migration") : _("installation");
-$text_prefix  = @$_GET['subnetId']=="migrate" ? _("migrate") : _("install");
-$filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
+$title_prefix = $GET->subnetId=="migrate" ? _("migration") : _("installation");
+$text_prefix  = $GET->subnetId=="migrate" ? _("migrate") : _("install");
+$filename	  = $GET->subnetId=="migrate" ? "MIGRATE" : "SCHEMA";
 ?>
 
 <div class="widget-dash col-xs-12 col-md-8 col-md-offset-2">
@@ -81,7 +81,7 @@ $filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
 
 			<?php
 			// file check
-			if(@$_GET['subnetId']=="migrate") {
+			if($GET->subnetId=="migrate") {
 				if(!file_exists(dirname(__FILE__)."/../../db/MIGRATE.sql")) { ?>
 					<div class="col-xs-12"><hr><div class='alert alert-danger'><?php print _("Cannot access file db/MIGRATE.sql!"); ?></div></div>
 			<?php }

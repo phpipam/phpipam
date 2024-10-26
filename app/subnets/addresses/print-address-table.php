@@ -28,7 +28,7 @@ function unset_array_value(&$array, $value) {
 }
 
 # direct call, set default direction for sorting
-if(!isset($_POST['direction'])) {
+if(!isset($POST->direction)) {
 
 	# verify that user is logged in
 	$User->check_user_session();
@@ -40,9 +40,9 @@ $DNS = new DNS ($Database, $User->settings, true);
 /* verifications */
 # checks
 if ($location!=="customers") {
-if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesnt exist
+if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesn't exist
 if($subnet_permission == 0)				{ $Result->show("danger", _('You do not have permission to access this network'), true); }		//not allowed to access
-if(!is_numeric($_GET['subnetId'])) 		{ $Result->show("danger", _('Invalid ID'), true); }												//subnet id must be numeric
+if(!is_numeric($GET->subnetId)) 		{ $Result->show("danger", _('Invalid ID'), true); }												//subnet id must be numeric
 }
 
 /* selected and hidden fields */
@@ -50,7 +50,7 @@ if(!is_numeric($_GET['subnetId'])) 		{ $Result->show("danger", _('Invalid ID'), 
 # reset custom fields to ip addresses
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
-$hidden_cfields = pf_json_decode($User->settings->hiddenCustomFields, true) ? : ['ipaddresses'=>null];
+$hidden_cfields = db_json_decode($User->settings->hiddenCustomFields, true) ? : ['ipaddresses'=>null];
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
@@ -368,7 +368,7 @@ else {
 			    // gateway
 			    $gw = $addresses[$n]->is_gateway==1 ? "gateway" : "";
 
-			    print "	<td class='ipaddress $gw'><span class='status status-$hStatus' $hTooltip></span><a href='".create_link("subnets",$subnet['sectionId'],$_GET['subnetId'],"address-details",$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr)."</a>";
+			    print "	<td class='ipaddress $gw'><span class='status status-$hStatus' $hTooltip></span><a href='".create_link("subnets",$subnet['sectionId'],$GET->subnetId,"address-details",$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr)."</a>";
 			    if($addresses[$n]->is_gateway==1)						{ print " <i class='fa fa-info-circle fa-gateway' rel='tooltip' title='"._('Address is marked as gateway')."'></i>"; }
 			    print $Addresses->address_type_format_tag($addresses[$n]->state);
 
@@ -568,82 +568,88 @@ else {
 
 			// now search for similar addresses if chosen
 			if (!is_blank($User->settings->link_field)) {
-    			// search
-    			$similar = $Addresses->search_similar_addresses ($addresses[$n], $User->settings->link_field, $addresses[$n]->{$User->settings->link_field});
+				// search
+				$similar = $Addresses->search_similar_addresses ($addresses[$n], $User->settings->link_field, $addresses[$n]->{$User->settings->link_field});
 
-    			if($similar!==false) {
-        			$link_field_print = $User->settings->link_field == "ip_addr" ? $Subnets->transform_to_dotted($addresses[$n]->{$User->settings->link_field}) : $addresses[$n]->{$User->settings->link_field};
+				if($similar!==false) {
+					$link_field_print = $User->settings->link_field == "ip_addr" ? $Subnets->transform_to_dotted($addresses[$n]->{$User->settings->link_field}) : $addresses[$n]->{$User->settings->link_field};
 
-        			print "<tr class='similar similar-title'>";
-        			print " <td colspan='$colspan[unused]'>"._('Addresses linked with')." ".$User->settings->link_field." <strong>".$link_field_print."</strong>:</td>";
-        			print "</tr>";
+					print "<tr class='similar similar-title'>";
+					print " <td colspan='$colspan[empty]'>"._('Addresses linked with')." ".$User->settings->link_field." <strong>".$link_field_print."</strong>:</td>";
+					print "</tr>";
 
-                    foreach ($similar as $k=>$s) {
+					// check permissions on the subnets where each 'similar' is located
+					foreach ($similar as $k=>$s) {
+						if ($Subnets->check_permission($User->user, $s->subnetId)==0) unset($similar[$k]);
+					}
+					// reindexes the array because there might be gaps now; this is important to make the tree structure look correct
+					$similar = array_values($similar);
 
-                        $last = sizeof($similar)-1 == $k ? "similar-last" : "";
+					foreach ($similar as $k=>$s) {
 
-                        // fetch subnet
-                        $sn = $Subnets->fetch_subnet("id", $s->subnetId);
+						$last = sizeof($similar)-1 == $k ? "similar-last" : "" ;
 
-        		 		print "<tr class='similar $last'>";
-        			    print "	<td class='ipaddress'><i class='fa fa-angle-right'></i> <a href='".create_link("subnets", $sn->sectionId, $sn->id)."'>".$Subnets->transform_to_dotted( $s->ip_addr)."</a>";
-        			    print $Addresses->address_type_format_tag($s->state);
-        			    print "</td>";
+						// fetch subnet
+						$sn = $Subnets->fetch_subnet("id", $s->subnetId);
 
-        			    # resolve dns name
-        			    $resolve = $DNS->resolve_address($s->ip_addr, $s->hostname, false, $sn->nameserverId);
-        																		{ print "<td class='$resolve[class] hostname'>$resolve[name]</td>"; }
-        				# print firewall address object - mandatory if enabled
-        				if($zone) {
-        					                                                    { print "<td class='fwzone'>".$s->firewallAddressObject."</td>"; }
-        				}
-        				# print description - mandatory
-        	        													  		  print "<td class='description'>".$s->description."</td>";
-        				# Print mac address icon!
-        				if(in_array('mac', $selected_ip_fields)) {
-                            if(!empty($s->mac)) 				                { print "<td class='narrow'><i class='info fa fa-gray fa-sitemap' rel='tooltip' data-container='body' title='"._('MAC').": ".$s->mac."'></i></td>"; }
-        					else 												{ print "<td class='narrow'></td>"; }
-        				}
-        	       		# print info button for hover
-        	       		if(in_array('note', $selected_ip_fields)) {
-        	        		if(!empty($s->note)) 					            { print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",$s->note)."'></i></td>"; }
-        	        		else 												{ print "<td class='narrow'></td>"; }
-        	        	}
-        	        	# print device
-        	        	if(in_array('switch', $selected_ip_fields)) {
-        		        	# get device details
-        		        	$device = (array) $Tools->fetch_object("devices", "id", $s->switch);
-        		        	# set rack
-        		        	if ($User->settings->enableRACK=="1")
-        		        	$rack = $device['rack']>0 ? "<i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackid='$device[rack]' data-deviceid='$device[id]'></i>" : "";
-        																		  print "<td class='hidden-xs hidden-sm hidden-md'>$rack <a href='".create_link("tools","devices",@$device['id'])."'>". @$device['hostname'] ."</a></td>";
-        				}
-        				# print port
-        				if(in_array('port', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$s->port."</td>"; }
-        				# print location
+						print "<tr class='similar $last'>";
+						print "	<td class='ipaddress'><i class='fa fa-angle-right'></i> <a href='".create_link("subnets", $sn->sectionId, $sn->id)."'>".$Subnets->transform_to_dotted( $s->ip_addr)."</a>";
+						print $Addresses->address_type_format_tag($s->state);
+						print "</td>";
+
+						# resolve dns name
+						$resolve = $DNS->resolve_address($s->ip_addr, $s->hostname, false, $sn->nameserverId);
+																				{ print "<td class='$resolve[class] hostname'>$resolve[name]</td>"; }
+						# print firewall address object - mandatory if enabled
+						if($zone) {
+																				{ print "<td class='fwzone'>".$s->firewallAddressObject."</td>"; }
+						}
+						# print description - mandatory
+						print "<td class='description'>".$s->description."</td>";
+						# Print mac address icon!
+						if(in_array('mac', $selected_ip_fields)) {
+							if(!empty($s->mac)) 								{ print "<td class='narrow'><i class='info fa fa-gray fa-sitemap' rel='tooltip' data-container='body' title='"._('MAC').": ".$s->mac."'></i></td>"; }
+							else 												{ print "<td class='narrow'></td>"; }
+						}
+						# print info button for hover
+						if(in_array('note', $selected_ip_fields)) {
+							if(!empty($s->note)) 								{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",$s->note)."'></i></td>"; }
+							else 												{ print "<td class='narrow'></td>"; }
+						}
+						# print device
+						if(in_array('switch', $selected_ip_fields)) {
+							# get device details
+							$device = (array) $Tools->fetch_object("devices", "id", $s->switch);
+							# set rack
+							if ($User->settings->enableRACK=="1")
+								$rack = $device['rack']>0 ? "<i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackid='$device[rack]' data-deviceid='$device[id]'></i>" : "";
+							print "<td class='hidden-xs hidden-sm hidden-md'>$rack <a href='".create_link("tools","devices",@$device['id'])."'>". @$device['hostname'] ."</a></td>";
+						}
+						# print port
+						if(in_array('port', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$s->port."</td>"; }
+						# print location
 						if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
 							$location_name = $Tools->fetch_object("locations", "id", $s->location);
 							print "<td class='hidden-xs hidden-sm hidden-md'>".$location_name->name."</td>";
 						}
-			    		# print owner
-        				if(in_array('owner', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm'>".$s->owner."</td>"; }
-        				# print custom fields
-        				if(sizeof($custom_fields) > 0) {
-        					foreach($custom_fields as $myField) {
-        						if(!in_array($myField['name'], $hidden_cfields)) 	{
+						# print owner
+						if(in_array('owner', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm'>".$s->owner."</td>"; }
+						# print custom fields
+						if(sizeof($custom_fields) > 0) {
+							foreach($custom_fields as $myField) {
+								if(!in_array($myField['name'], $hidden_cfields)) 	{
 									print "<td class='customField hidden-xs hidden-sm hidden-md'>";
-									$Tools->print_custom_field ($myField['type'], $addresses[$n]->{$myField['name']});
+									$Tools->print_custom_field ($myField['type'], $s->{$myField['name']});
 									print "</td>";
-        						}
-        				    }
-                        }
-        				# actions
-        				print " <td></td>";
-                        print "</tr>";
+								}
+							}
+						}
+						# actions
+						print " <td></td>";
+						print "</tr>";
 
-
-                    }
-    			}
+					}
+				}
 			}
 
 			/*	if last one return ip address and broadcast IP

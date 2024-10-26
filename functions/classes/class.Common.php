@@ -187,7 +187,7 @@ class Common_functions  {
 	 */
 	public function fetch_mysql_version () {
 		# fetch
-		try { $result = $this->Database->getObjectQuery("SELECT VERSION() AS 'version';"); }
+		try { $result = $this->Database->getObjectQuery("no_html_escape", "SELECT VERSION() AS 'version';"); }
 		catch (Exception $e) {
 			return "";
 		}
@@ -265,7 +265,7 @@ class Common_functions  {
 		# null method
 		$method = is_null($method) ? "id" : $this->Database->escape($method);
 
-		try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
+		try { $res = $this->Database->getObjectQuery($table, "SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -280,7 +280,7 @@ class Common_functions  {
 	/**
 	 * Fetches multiple objects in specified table in database
 	 *
-	 *	doesnt cache
+	 *	doesn't cache
 	 *
 	 * @access public
 	 * @param mixed $table
@@ -366,7 +366,7 @@ class Common_functions  {
 
 		try {
 			$query = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?;";
-			$schema = $this->Database->getObjectsQuery($query, [$this->Database->dbname, $tableName]);
+			$schema = $this->Database->getObjectsQuery("no_html_escape", $query, [$this->Database->dbname, $tableName]);
 		} catch (\Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return $results;
@@ -443,7 +443,7 @@ class Common_functions  {
 		if (!is_object($settings))
 			return false;
 
-		// Escape ' & " charaters
+		// Escape ' & " characters
 		if (property_exists($settings, 'siteTitle'))
 			$settings->siteTitle = escape_input($settings->siteTitle);
 
@@ -550,7 +550,7 @@ class Common_functions  {
     }
 
     /**
-     * Checks if object alreay exists in cache..
+     * Checks if object already exists in cache..
      *
      * @access protected
      * @param mixed $table
@@ -775,42 +775,6 @@ class Common_functions  {
 	}
 
 	/**
-	 * Trim whitespace form array objects
-	 *
-	 * @method trim_array_objects
-	 * @param  string|array $fields
-	 * @return string|array
-	 */
-	public function trim_array_objects ($fields) {
-		if(is_array($fields)) {
-	    	// init
-	    	$out = array();
-	    	// loop
-			foreach($fields as $k=>$v) {
-				$out[$k] = trim($v);
-			}
-		}
-		else {
-			$out = trim($fields);
-		}
-		# result
-		return $out;
-	}
-
-	/**
-	 * Strip XSS on value print
-	 *
-	 * @method strip_xss
-	 *
-	 * @param  string $input
-	 *
-	 * @return string
-	 */
-	public function strip_xss ($input) {
-		return htmlspecialchars($input ?: '', ENT_QUOTES, 'UTF-8');
-	}
-
-	/**
 	 * Detect the encoding used for a string and convert to UTF-8
 	 *
 	 * @method convert_encoding_to_UTF8
@@ -887,7 +851,7 @@ class Common_functions  {
 
 			// NOTE The colon character ":" is reserved as it used in array_to_log for implode/explode.
 			// Replace colon (U+003A) with alternative characters.
-			// Using JSON encode/decode would be more appropiate but we need to maintain backwards compatibility with historical changelog/logs data in the database.
+			// Using JSON encode/decode would be more appropriate but we need to maintain backwards compatibility with historical changelog/logs data in the database.
 			if ($req == "mac")
 				$req = strtr($req, ':', '-'); # Mac-addresses, replace Colon U+003A with hyphen U+002D
 
@@ -1255,7 +1219,7 @@ class Common_functions  {
      */
     public function validate_json_string($string) {
         // try to decode
-        pf_json_decode($string);
+        db_json_decode($string);
         // check for error
         $parse_result = json_last_error_msg();
         // save possible error
@@ -1676,7 +1640,7 @@ class Common_functions  {
 
     	//field
     	if(!isset($object->{$field['name']}))	{ $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'].$nameSuffix .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
-    	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'].$nameSuffix .'" maxlength="'.$size.'" value="'. $this->strip_xss($object->{$field['name']}). '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
+    	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'].$nameSuffix .'" maxlength="'.$size.'" value="'. $object->{$field['name']}. '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
 
     	// result
 		return $html;
@@ -1747,7 +1711,7 @@ class Common_functions  {
             $maxlength = str_replace(array("int","(",")"),"", $field['type']);
         }
         // print
-		$html[] = ' <input type="text" class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" value="'. $this->strip_xss($object->{$field['name']}). '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
+		$html[] = ' <input type="text" class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" value="'. $object->{$field['name']}. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
     	// result
     	return $html;
 	}
@@ -1910,7 +1874,7 @@ class Common_functions  {
 		// calculate diff
 		if(is_array($old_permissions)) {
 			foreach ($old_permissions as $k1=>$p1) {
-				// if there is not permisison in new that remove old
+				// if there is no permission in new, than remove old
 				// if change than save
 				if (!array_key_exists($k1, $new_permissions)) {
 					$removed_permissions[$k1] = 0;
@@ -2075,28 +2039,27 @@ class Common_functions  {
 	 * @param mixed $req
 	 * @return void
 	 */
-	private function print_tools_breadcrumbs ($req) {
+	private function print_tools_breadcrumbs($req) {
 		print "<ul class='breadcrumb'>";
-		print "	<li><a href='".create_link("tools")."'>"._('Tools')."</a> <span class='divider'></span></li>";
-		if(!isset($req['subnetId'])) {
-		    print "	<li class='active'>$req[section]</li>";
-		}
-		else {
-		    print "	<li class='active'><a href='".create_link("tools", $req['section'])."'>$req[section]</a> <span class='divider'></span></li>";
+		print "	<li><a href='" . create_link("tools") . "'>" . _('Tools') . "</a> <span class='divider'></span></li>";
+		if (!isset($req['subnetId'])) {
+			print "	<li class='active'>$req[section]</li>";
+		} else {
+			print "	<li class='active'><a href='" . create_link("tools", $req['section']) . "'>$req[section]</a> <span class='divider'></span></li>";
 
-		    # pstn
-		    if ($_GET['section']=="pstn-prefixes") {
-    			# get all parents
-    			$Tools = new Tools ($this->Database);
-    			$parents = $Tools->fetch_prefix_parents_recursive ($req['subnetId']);
-    			# all parents
-    			foreach($parents as $parent) {
-    				$prefix = $this->fetch_object("pstnPrefixes", "id", $parent[0]);
-    				print "	<li><a href='".create_link("tools",$req['section'],$parent[0])."'><i class='icon-folder-open icon-gray'></i> $prefix->name</a> <span class='divider'></span></li>";
-    			}
+			# pstn
+			if ($_GET['section'] == "pstn-prefixes") {
+				# get all parents
+				$Tools = new Tools($this->Database);
+				$parents = $Tools->fetch_prefix_parents_recursive($req['subnetId']);
+				# all parents
+				foreach ($parents as $parent) {
+					$prefix = $this->fetch_object("pstnPrefixes", "id", $parent);
+					print "	<li><a href='" . create_link("tools", $req['section'], $parent) . "'><i class='icon-folder-open icon-gray'></i> $prefix->name</a> <span class='divider'></span></li>";
+				}
 
-		    	$prefix = $this->fetch_object("pstnPrefixes", "id", $req['subnetId']);
-		    	print "	<li class='active'>$prefix->name</li>";
+				$prefix = $this->fetch_object("pstnPrefixes", "id", $req['subnetId']);
+				print "	<li class='active'>$prefix->name</li>";
 			}
 		}
 		print "</ul>";
@@ -2120,81 +2083,142 @@ class Common_functions  {
 	 * @return string
 	 */
 	public function get_site_title ($get) {
-    	// remove html tags
-    	$get = $this->strip_input_tags ($get);
-    	// init
-    	$title = array ();
-    	$title[] = $this->settings->siteTitle;
+		// remove html tags
+		$get = $this->strip_input_tags($get);
+		// init
+		$title = array();
+		$title[] = $this->settings->siteTitle;
 
-    	// page
-    	if (isset($get['page'])) {
-        	// dashboard
-        	if ($get['page']=="dashboard") {
-            	return $this->settings->siteTitle." "._("Dashboard");
-        	}
-        	// install, upgrade
-        	elseif ($get['page']=="temp_share" || $get['page']=="request_ip" || $get['page']=="opensearch") {
-            	$title[] = ucwords(escape_input($get['page']));
-        	}
-        	// sections, subnets
-        	elseif ($get['page']=="subnets" || $get['page']=="folder") {
-            	// subnets
-            	$title[] = _("Subnets");
+		// page
+		if (isset($get['page'])) {
+			// dashboard
+			if ($get['page'] == "dashboard") {
+				return $this->settings->siteTitle . " " . _("Dashboard");
+			}
+			// install, upgrade
+			elseif ($get['page'] == "temp_share" || $get['page'] == "request_ip" || $get['page'] == "opensearch") {
+				$title[] = ucwords(escape_input($get['page']));
+			}
+			// sections, subnets
+			elseif ($get['page'] == "subnets" || $get['page'] == "folder") {
+				// subnets
+				$title[] = _("Subnets");
 
-            	// section
-            	if (isset($get['section'])) {
-                 	$se = $this->fetch_object ("sections", "id", escape_input($get['section']));
-                	if($se!==false) {
-                    	$title[] = $se->name;
-                	}
-            	}
-            	// subnet
-            	if (isset($get['subnetId'])) {
-                 	$sn = $this->fetch_object ("subnets", "id", escape_input($get['subnetId']));
-                	if($sn!==false) {
-                    	if($sn->isFolder) {
-                        	$title[] = $sn->description;
-                    	}
-                    	else {
-                        	$sn->description = !is_blank($sn->description) ? " (".$sn->description.")" : "";
-                        	$title[] = $this->transform_address($sn->subnet, "dotted")."/".$sn->mask.$sn->description;
-                        }
-                	}
-            	}
-            	// ip address
-            	if (isset($get['ipaddrid'])) {
-                    $ip = $this->fetch_object ("ipaddresses", "id", escape_input($get['ipaddrid']));
-                    if($ip!==false) {
-                        $title[] = $this->transform_address($ip->ip_addr, "dotted");
-                    }
-            	}
-        	}
-        	// tools, admin
-        	elseif ($get['page']=="tools" || $get['page']=="administration") {
-            	$title[] = ucwords(escape_input($get['page']));
-            	// subpage
-            	if (isset($get['section'])) {
-                	$title[] = ucwords(escape_input($get['section']));
-            	}
-            	if (isset($get['subnetId'])) {
-                	// vland domain
-                	if($get['section']=="vlan") {
-                     	$se = $this->fetch_object ("vlanDomains", "id", escape_input($get['subnetId']));
-                    	if($se!==false) {
-                        	$title[] = $se->name." domain";
-                    	}
-                	}
-                	else {
-                    	$title[] = ucwords(escape_input($get['subnetId']));
-                    }
-            	}
-        	}
-        	else {
-            	$title[] = ucwords(escape_input($get['page']));
-            }
-    	}
-        // return title
-    	return implode(" / ", $title);
+				// section
+				if (isset($get['section'])) {
+					$se = $this->fetch_object("sections", "id", $get['section']);
+					if ($se !== false) {
+						$title[] = $se->name;
+					}
+				}
+				// subnet
+				if (isset($get['subnetId'])) {
+					$sn = $this->fetch_object("subnets", "id", $get['subnetId']);
+					if ($sn !== false) {
+						if ($sn->isFolder) {
+							$title[] = $sn->description;
+						} else {
+							$sn->description = !is_blank($sn->description) ? " (" . $sn->description . ")" : "";
+							$title[] = $this->transform_address($sn->subnet, "dotted") . "/" . $sn->mask . $sn->description;
+						}
+					}
+				}
+				// ip address
+				if (isset($get['ipaddrid'])) {
+					$ip = $this->fetch_object("ipaddresses", "id", $get['ipaddrid']);
+					if ($ip !== false) {
+						$title[] = $this->transform_address($ip->ip_addr, "dotted");
+					}
+				}
+			}
+			// tools, admin
+			elseif ($get['page'] == "tools" || $get['page'] == "administration") {
+				$title[] = ucwords(escape_input($get['page']));
+				// subpage
+				if (isset($get['section'])) {
+					if (in_array($get['section'], ["vlan", "vlans", "vrf"])) {
+						$title[] = strtoupper(escape_input($get['section']));
+					} else {
+						$title[] = ucwords(escape_input($get['section']));
+					}
+				}
+				if (isset($get['subnetId'])) {
+					// vlan domain
+					if ($get['section'] == "vlan" || $get['section'] == "vlans") {
+						$vd = $this->fetch_object("vlanDomains", "id", $get['subnetId']);
+						if (is_object($vd)) {
+							$title[] = $vd->name . _(" domain");
+						}
+						if (isset($get['sPage'])) {
+							$vlan = $this->fetch_object("vlans", "vlanId", $get['sPage']);
+							if (is_object($vlan)) {
+								$title[] = $vlan->name;
+							}
+						}
+					} elseif ($get['section'] == "vrf") {
+						$vrf = $this->fetch_object("vrf", "vrfId", $get['subnetId']);
+						if (is_object($vrf)) {
+							$title[] = $vrf->name;
+						}
+					} elseif ($get['section'] == "devices") {
+						$sec = $this->fetch_object("devices", "id", $get['subnetId']);
+						if (is_object($sec)) {
+							$title[] = $sec->hostname;
+						}
+					} elseif ($get['section'] == "racks") {
+						$rack = $this->fetch_object("racks", "id", $get['subnetId']);
+						if (is_object($rack)) {
+							$location = $this->fetch_object("locations", "id", $rack->location);
+							if (is_object($location)) {
+								$title[] = $location->name;
+							}
+							$title[] = $rack->name;
+						}
+					} elseif ($get['section'] == "locations") {
+						$location = $this->fetch_object("locations", "id", $get['subnetId']);
+						if (is_object($location)) {
+							$title[] = $location->name;
+						}
+					} elseif ($get['section'] == "circuits") {
+						$circuit = $this->fetch_object("circuits", "id", $get['subnetId']);
+						if (is_object($circuit)) {
+							$title[] = $circuit->cid;
+						}
+					} elseif ($get['section'] == "pstn-prefixes") {
+						$prefix = $this->fetch_object("pstnPrefixes", "id", $get['subnetId']);
+						if (is_object($prefix)) {
+							$title[] = $prefix->name;
+						}
+					} elseif ($get['section'] == "vaults") {
+						$vault = $this->fetch_object("vaults", "id", $get['subnetId']);
+						if (is_object($vault)) {
+							$title[] = $vault->name;
+						}
+					} elseif ($get['section'] == "routing") {
+						$title[] = ucwords(escape_input($get['subnetId']));
+						if ($get['subnetId'] == "bgp") {
+							if (isset($get['sPage'])) {
+								$peer = $this->fetch_object("routing_bgp", "id", $get['sPage']);
+								if (is_object($peer)) {
+									$title[] = $peer->peer_name;
+								}
+							}
+						}
+					} elseif ($get['section'] == "nat") {
+						$nat = $this->fetch_object("nat", "id", $get['subnetId']);
+						if (is_object($nat)) {
+							$title[] = $nat->name;
+						}
+					} else {
+						$title[] = ucwords(escape_input($get['subnetId']));
+					}
+				}
+			} else {
+				$title[] = ucwords(escape_input($get['page']));
+			}
+		}
+		// return title
+		return implode(" / ", $title);
 	}
 
 

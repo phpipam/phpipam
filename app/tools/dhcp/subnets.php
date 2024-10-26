@@ -76,7 +76,7 @@ function print_subnets ($s) {
 
 <!-- Manage -->
 <?php if ($User->is_admin(false)) { ?>
-<?php if ($_GET['page']=="administration") { ?>
+<?php if ($GET->page=="administration") { ?>
     <a class='btn btn-sm btn-default btn-default btn-success dhcp-subnet' data-action='add' data-id=''><i class='fa fa-plus'></i> <?php print _('Add'); ?></a>
 <?php } else { ?>
     <a class='btn btn-sm btn-default btn-default btn-success'  href="<?php print create_link ("administration", "dhcp"); ?>"><i class='fa fa-pencil'></i> <?php print _('Manage'); ?></a>

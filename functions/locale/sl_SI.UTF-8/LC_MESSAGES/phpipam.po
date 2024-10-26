@@ -4,7 +4,7 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
 
-# "Project-Id-Version: 1.40\n"
+# "Project-Id-Version: 1.70\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
 # "PO-Revision-Date: 2017-02-21 14:33+0200\n"
@@ -2335,7 +2335,7 @@ msgid "Cannot update request"
 msgstr "Ne morem posodobiti zahteve"
 
 #: site/admin/manageRequestResult.php:33
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr "Zahteva je bila zavrnjena"
 
 #: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
@@ -2383,7 +2383,7 @@ msgid "Errors occured when importing to database!"
 msgstr "Pri uvozu v podatkovno bazo je prišlo do napak"
 
 #: site/admin/CSVimportSubmit.php:95 site/admin/RIPE / ARINImportResult.php:72
-msgid "Import successfull"
+msgid "Import successful"
 msgstr "Uvoz uspešen"
 
 #: site/admin/CSVimportVerify.php:25
@@ -2825,7 +2825,7 @@ msgstr "Če skupina nima dostopa do razdelka, potem ne bo mogla dostopati do omr
 #: site/admin/customIPFieldsOrder.php:15
 #: site/admin/customVLANFieldsOrder.php:15
 #: site/admin/customUserFieldsOrder.php:15
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr "Polja ne morejo biti prazna"
 
 #: site/admin/customSubnetFieldsOrder.php:19
@@ -3226,7 +3226,7 @@ msgid "Truncating network will remove all IP addresses, that belong to selected 
 msgstr "Izpraznitev omrežja bo pobrisalo vse IP naslove, ki temu omrežju pripadajo!"
 
 #: site/admin/manageSubnetTruncateSave.php:23
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr "Omrežje izpraznjeno"
 
 #: site/admin/usersEditEmailNotif.php:23
@@ -5679,10 +5679,10 @@ msgstr "Napaka pri nastavitvi pravic za omrežje"
 msgid "Manage permissions for folder"
 msgstr "Upravljaj pravice za mapo"
 
-msgid "Only subnets that have no nested subnets can be splitted"
+msgid "Only subnets that have no nested subnets can be split"
 msgstr "Samo omrežja, ki nimajo nestenih omrežij se lahko razdelijo"
 
-msgid "Subnet too small to be splitted"
+msgid "Subnet too small to be split"
 msgstr "Omrežje je premajno za delitev"
 
 msgid "Name prefix"
@@ -6314,7 +6314,7 @@ msgstr "Ni naprav za snmp poizvedbe"
 msgid "No new subnets found"
 msgstr "Ni novih omrežij"
 
-msgid "SNMP module disbled"
+msgid "SNMP module disabled"
 msgstr "SNMP modul onemogočen"
 
 msgid "No devices for SNMP ARP query available"
@@ -7106,7 +7106,7 @@ msgstr "Posodobitev oznak IP naslovov ko se spremeni sprememba stanja"
 msgid "Require unique subnets"
 msgstr "Zahtevaj unikatna omrežja"
 
-msgid "Require unique subnets accross all sections"
+msgid "Require unique subnets across all sections"
 msgstr "Zahtevaj unikatna omrežja tudi med razdelki"
 
 msgid "Set maximum number of concurrent ICMP checks (default 128)"
@@ -7172,13 +7172,13 @@ msgstr "Označi omrežje kot zasedeno"
 msgid "Set subnet alert threshold"
 msgstr "Nastavi prag za obvestila o zasedenosti"
 
-msgid "Failed to set subnet permissons for subnet"
+msgid "Failed to set subnet permissions for subnet"
 msgstr "Napaka pri nastavitvi pravic za omrežje"
 
 msgid "No result"
 msgstr "Ni rezultatov"
 
-msgid "Subnet splitted successfully"
+msgid "Subnet split successfully"
 msgstr "Omrežje razdeljeno"
 
 msgid "Copy custom field values"
@@ -8000,7 +8000,7 @@ msgstr "Možnosti posodobljene"
 msgid "Upgrade"
 msgstr "Nadgradnja"
 
-msgid "Object is Natted"
+msgid "Object is NATted"
 msgstr "Objekt je natiran"
 
 msgid "Invalid generator ID"
@@ -8154,8 +8154,8 @@ msgstr "Ime za dvofaktorsko avtentikacijo, ki bo prikazana na zaslonu"
 msgid "2FA length"
 msgstr "Dolžina ključa"
 
-msgid "Length of 2FA secret (16 to 32)"
-msgstr "Dolžina 2fa ključa (16 do 32)"
+msgid "Length of 2FA secret (26 to 32)"
+msgstr "Dolžina 2fa ključa (26 do 32)"
 
 msgid "2FA user change"
 msgstr "Dovoli spremembe uporabnikom"
@@ -8198,31 +8198,31 @@ msgstr "Maksimalna dolžina znakov v geslu"
 msgid "Minimum numbers"
 msgstr "Min število števil"
 
-msgid "Minumum number of numbers"
+msgid "Minimum number of numbers"
 msgstr "Minimalno število števil"
 
 msgid "Minimum letters"
 msgstr "Min število črk"
 
-msgid "Minumum number of letters"
+msgid "Minimum number of letters"
 msgstr "Minimalno število črk v geslu"
 
 msgid "Minimum lowercase letter"
 msgstr "Min malih črk"
 
-msgid "Minumum number of lowercase letters"
+msgid "Minimum number of lowercase letters"
 msgstr "Minimalno število malih črk v geslu"
 
 msgid "Minimum uppercase letter"
 msgstr "Min velikih črk"
 
-msgid "Minumum number of uppercase letters"
+msgid "Minimum number of uppercase letters"
 msgstr "Minimalno število velikih črk v geslu"
 
 msgid "Minimum symbols"
 msgstr "Min simbolov"
 
-msgid "Minumum number of symbols"
+msgid "Minimum number of symbols"
 msgstr "Minimalno število simbolov v geslu"
 
 msgid "Maximum symbols"

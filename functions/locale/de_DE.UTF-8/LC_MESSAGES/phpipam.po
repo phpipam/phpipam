@@ -2,7 +2,7 @@
 # Copyright (C) phpipam 2021
 # This file is distributed under the same license as the phpipam package.
 # miha petkovsek <miha.petkovsek@gmail.com>, 2021.
-# "Project-Id-Version: 1.50\n"
+# "Project-Id-Version: 1.70\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2021-02-10 17:32+0100\n"
 # "PO-Creation-Date: 2021-02-10 17:32+0100\n"
@@ -145,8 +145,8 @@ msgid "2FA length"
 msgstr "2FA L&auml;nge"
 
 #: app/admin/2fa/index.php:53
-msgid "Length of 2FA secret (16 to 32)"
-msgstr "L&auml;nge des 2FA Secrets (16 bis zu 32)"
+msgid "Length of 2FA secret (26 to 32)"
+msgstr "L&auml;nge des 2FA Secrets (26 bis zu 32)"
 
 #: app/admin/2fa/index.php:58
 msgid "2FA user change"
@@ -2997,7 +2997,7 @@ msgid "Set which field to display in table"
 msgstr "Festlegen welche Felder in der Tabelle angezeigt werden"
 
 #: app/admin/custom-fields/order.php:21
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr "Felder k&ouml;nnen nicht leer sein"
 
 #: app/admin/custom-fields/order.php:25
@@ -3832,7 +3832,7 @@ msgstr "Verfahren Zonen Generator"
 
 #: app/admin/firewall-zones/settings.php:146
 msgid ""
-"Generate zone names automaticaly with the setting &quot;decimal&quot; or "
+"Generate zone names automatically with the setting &quot;decimal&quot; or "
 "&quot;hex&quot;.<br>The maximum value for a zone in hex mode would be "
 "ffffffff (4294967295 zones).<br>To use your own unique zone names you can "
 "choose the option &quot;text&quot;."
@@ -3890,7 +3890,7 @@ msgstr "Autogenerierung Adressobjekte"
 
 #: app/admin/firewall-zones/settings.php:201
 msgid ""
-"Automaticaly generate firewall address objects as an additional information "
+"Automatically generate firewall address objects as an additional information "
 "of an IP address.<br>(Works only for subnets which are bound to a firewall "
 "zone.)"
 msgstr ""
@@ -6139,7 +6139,7 @@ msgid "Minimum numbers"
 msgstr "Minimalanzahl Zahlen"
 
 #: app/admin/password-policy/index.php:50
-msgid "Minumum number of numbers"
+msgid "Minimum number of numbers"
 msgstr "Mindestanzahl von zu benutzenden Zahlen"
 
 #: app/admin/password-policy/index.php:54
@@ -6147,7 +6147,7 @@ msgid "Minimum letters"
 msgstr "Minimalanzahl Buchstaben"
 
 #: app/admin/password-policy/index.php:58
-msgid "Minumum number of letters"
+msgid "Minimum number of letters"
 msgstr "Mindestanzahl von zu benutzenden Buchstaben"
 
 #: app/admin/password-policy/index.php:62
@@ -6155,7 +6155,7 @@ msgid "Minimum lowercase letter"
 msgstr "Minimalanzahl kleine Buchstaben"
 
 #: app/admin/password-policy/index.php:66
-msgid "Minumum number of lowercase letters"
+msgid "Minimum number of lowercase letters"
 msgstr "Mindestanzahl von klein geschriebenen Buchstaben"
 
 #: app/admin/password-policy/index.php:70
@@ -6163,7 +6163,7 @@ msgid "Minimum uppercase letter"
 msgstr "Minimalanzahl große Buchstaben"
 
 #: app/admin/password-policy/index.php:74
-msgid "Minumum number of uppercase letters"
+msgid "Minimum number of uppercase letters"
 msgstr "Mindestanzahl von groß geschriebenen Buchstaben"
 
 #: app/admin/password-policy/index.php:78
@@ -6171,7 +6171,7 @@ msgid "Minimum symbols"
 msgstr "Minimalanzahl Sondersymbole"
 
 #: app/admin/password-policy/index.php:82
-msgid "Minumum number of symbols"
+msgid "Minimum number of symbols"
 msgstr "Mindestanzahl von zu benutzenden Sondersymbolen"
 
 #: app/admin/password-policy/index.php:86
@@ -6627,7 +6627,7 @@ msgid "Failed to reject IP request"
 msgstr "IP-Antrag ablehnen fehlgeschlagen"
 
 #: app/admin/requests/edit-result.php:53
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr "Anfrage wurde zur&uuml;ckgewiesen"
 
 #: app/admin/requests/edit-result.php:64
@@ -7625,7 +7625,7 @@ msgid "Require unique subnets"
 msgstr "Einfordern von eindeutigen Subnetzen"
 
 #: app/admin/settings/index.php:518
-msgid "Require unique subnets accross all sections"
+msgid "Require unique subnets across all sections"
 msgstr "Fordere eindeutige Subnetze &uuml;ber alle Bereiche"
 
 #: app/admin/settings/index.php:524
@@ -8374,17 +8374,17 @@ msgid "fill"
 msgstr "F&uuml;llen"
 
 #: app/admin/subnets/split-save.php:41
-msgid "Subnet splitted successfully"
+msgid "Subnet split successfully"
 msgstr "Aufsplitten des Subnetzes erfolgreich"
 
 #: app/admin/subnets/split.php:35
-msgid "Only subnets that have no nested subnets can be splitted"
+msgid "Only subnets that have no nested subnets can be split"
 msgstr ""
 "Nur Subnetze die keine untergeordneten Subnetze haben k&ouml;nnen geteilt "
 "werden."
 
 #: app/admin/subnets/split.php:42
-msgid "Subnet too small to be splitted"
+msgid "Subnet too small to be split"
 msgstr "Subnetz zu klein zum Splitten"
 
 #: app/admin/subnets/split.php:84
@@ -8436,7 +8436,7 @@ msgid "Failed to truncate subnet"
 msgstr "Subnetz verkleinern fehlgeschlagen"
 
 #: app/admin/subnets/truncate-save.php:44
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr "Subnetz Verkleinerung erfolgreich!"
 
 #: app/admin/subnets/truncate.php:64
@@ -9068,7 +9068,7 @@ msgid "Vault secret"
 msgstr "Secret vom Tresor"
 
 #: app/admin/vaults/edit.php:95
-msgid "Vault secret. Please store secret as it cannot be retreived if lost!"
+msgid "Vault secret. Please store secret as it cannot be retrieved if lost!"
 msgstr ""
 "Secret des Tresors, bitte das Secret sicher verwahren, es kann nicht wieder "
 "hergestellt werden!"
@@ -9312,14 +9312,6 @@ msgstr "Neue Dom&auml;ne"
 #: app/admin/vlans/move-vlan.php:82
 msgid "No domains available!"
 msgstr "Keine Dom&auml;nen verf&uuml;gbar!"
-
-#: app/admin/vlans/vlans-scan-execute.php:30 app/admin/vlans/vlans-scan.php:27
-#: app/admin/vrf/vrf-scan-execute.php:26 app/admin/vrf/vrf-scan.php:21
-#: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:14
-#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:18
-#: app/subnets/scan/subnet-scan-result-snmp-route-all.php:23
-msgid "SNMP module disbled"
-msgstr "Modul SNMP ist deaktiviert"
 
 #: app/admin/vlans/vlans-scan-execute.php:32
 #: app/admin/vrf/vrf-scan-execute.php:28
@@ -10428,7 +10420,7 @@ msgstr ""
 "Datenbankbenutzers in der Datei config.php."
 
 #: app/install/sql_error.php:31
-msgid "Database connection succesfull"
+msgid "Database connection successful"
 msgstr "Datenbankverbindung erfolgreich"
 
 #: app/install/welcome.php:9
@@ -11274,7 +11266,7 @@ msgstr "IP-Adressen &Auml;nderung"
 #: app/subnets/addresses/print-address-table.php:248
 #: app/tools/pstn-prefixes/single-prefix-numbers.php:99
 msgid "range"
-msgstr "Reichweite"
+msgstr "bereich"
 
 #: app/subnets/addresses/address-modify-submit.php:272
 #: app/subnets/addresses/address-modify-submit.php:273
@@ -11372,7 +11364,7 @@ msgid ""
 "You can add,edit or delete multiple IP addresses<br>by specifying IP range "
 "(e.g. 10.10.0.0-10.10.0.25)"
 msgstr ""
-"Sie k&ouml;nnen nicht mehrere IP-Adressen modifizieren (Bsp. "
+"Sie k&ouml;nnen mehrere IP-Adressen modifizieren (Bsp. "
 "10.10.0.0-10.10.0.25)"
 
 #: app/subnets/addresses/address-modify.php:233
@@ -11627,10 +11619,6 @@ msgstr ""
 #: app/subnets/import-subnet/index.php:25
 msgid "You cannot write to this subnet"
 msgstr "Sie haben keine Schreibberechtigung f&uuml;r das Subnetz"
-
-#: app/subnets/import-subnet/import-file.php:142
-msgid "Import successfull"
-msgstr "Import erfolgreich"
 
 #: app/subnets/import-subnet/import-template.php:42
 msgid "fw_object"
@@ -15038,7 +15026,7 @@ msgstr " ist keine g&uuml;ltige Adresse f&uuml;r Subnetz "
 
 #: functions/classes/class.Addresses.php:1854
 #: functions/classes/class.Addresses.php:1857
-msgid "Object is Natted"
+msgid "Object is NATted"
 msgstr "Objekt ist NAT'ed"
 
 #: functions/classes/class.Admin.php:187
@@ -15387,7 +15375,7 @@ msgid "Go to administration and fix"
 msgstr "Zum Administrations Men&uuml; gehen und korrigieren"
 
 #: functions/classes/class.Install.php:549
-msgid "Succesfull queries"
+msgid "Succesful queries"
 msgstr "Erfolgreiche Abfragen"
 
 #: functions/classes/class.Install.php:551
@@ -16032,7 +16020,7 @@ msgid "MAC address already exists"
 msgstr "MAC-Adresse existiert bereits"
 
 #: functions/classes/class.Subnets.php:3104
-msgid "Failed to set subnet permissons for subnet"
+msgid "Failed to set subnet permissions for subnet"
 msgstr "&Auml;ndern der Berechtigung f&uuml;r das Subnetz fehlgeschlagen"
 
 #: functions/classes/class.Subnets.php:3117
@@ -16338,7 +16326,7 @@ msgid "User self update failed"
 msgstr "Aktualisierung durch Benutzer fehlgeschlagen"
 
 #: functions/classes/class.User.php:1336
-msgid "User self update suceeded"
+msgid "User self update succeeded"
 msgstr "Aktualisierung durch Benutzer erfolgreich"
 
 #: functions/classes/class.User.php:1672

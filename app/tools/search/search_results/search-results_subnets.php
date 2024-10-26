@@ -8,11 +8,11 @@
 $User->check_user_session();
 
 # get all custom fields
-$custom_subnet_fields = $Params->subnets=="on"   ? $Tools->fetch_custom_fields ("subnets") : array();
+$custom_subnet_fields = $GET->subnets=="on"   ? $Tools->fetch_custom_fields ("subnets") : array();
 $hidden_subnet_fields = isset($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 
 # search subnets
-$result_subnets = $Tools->search_subnets($searchTerm, $searchTerm_edited['high'], $searchTerm_edited['low'], $Params->ip, $custom_subnet_fields);
+$result_subnets = $Tools->search_subnets($searchTerm, $searchTerm_edited['high'], $searchTerm_edited['low'], $GET->ip, $custom_subnet_fields);
 ?>
 
 <!-- !subnets -->

@@ -14,7 +14,7 @@ $DNS = new DNS ($Database, $User->settings);
 # reset custom fields to ip addresses
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
-$hidden_cfields = pf_json_decode($settings->hiddenCustomFields, true);
+$hidden_cfields = db_json_decode($settings->hiddenCustomFields, true);
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
@@ -24,7 +24,7 @@ $selected_ip_fields_size = in_array('state', $selected_ip_fields) ? (sizeof($sel
 if($selected_ip_fields_size==1 && is_blank($selected_ip_fields[0])) { $selected_ip_fields_size = 0; }								//fix for 0
 
 
-/* Addresses and fields manupulations */
+/* Addresses and fields manipulations */
 
 # save for visual display !
 $addresses_visual = $addresses;
@@ -172,8 +172,8 @@ else {
 		    $stateClass = "";
 	        if(in_array('state', $selected_ip_fields)) {
 		        if ($addresses[$n]->state == 0) 	 	{ $stateClass = _("Offline"); }
-		        else if ($addresses[$n]->state == 2) 	{ $stateClass = _("Reserved"); }
-		        else if ($addresses[$n]->state == 3) 	{ $stateClass = _("DHCP"); }
+		        elseif ($addresses[$n]->state == 2) 	{ $stateClass = _("Reserved"); }
+		        elseif ($addresses[$n]->state == 3) 	{ $stateClass = _("DHCP"); }
 		    }
 
 	 		print "<tr class='$stateClass'>";
@@ -181,7 +181,7 @@ else {
 		    // gateway
 		    $gw = $addresses[$n]->is_gateway==1 ? "gateway" : "";
 
-		    print "	<td class='ipaddress $gw'><a href='".create_link("temp_share",$_GET['section'],$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr)."</a>";
+		    print "	<td class='ipaddress $gw'><a href='".create_link("temp_share",$GET->section,$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr)."</a>";
 		    if($addresses[$n]->is_gateway==1)						{ print " <i class='fa fa-info-circle fa-gateway' rel='tooltip' title='"._('Address is marked as gateway')."'></i>"; }
 		    if(in_array('state', $selected_ip_fields)) 				{ print $Addresses->address_type_format_tag($addresses[$n]->state); }
 		    print "</td>";

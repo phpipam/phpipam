@@ -7,8 +7,12 @@
  */
 
 // defines Securimage class
-require_once 'captcha/securimage.php';
 require_once '../../functions/functions.php';
+require_once 'captcha/securimage.php';
+
+// Create a user $_SESSION to store captcha code
+$Database = new Database_PDO;
+$User     = new User ($Database);
 
 // options
 $options = array (

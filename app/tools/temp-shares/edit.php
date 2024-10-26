@@ -19,18 +19,18 @@ $User->check_user_session();
 
 # checks
 if($User->settings->tempShare!=1)								{ $Result->show("danger", _("Temporary sharing disabled"), true, true); }
-if($_POST['type']!="subnets"&&$_POST['type']!="ipaddresses") 	{ $Result->show("danger", _("Invalid type"), true, true); }
-if(!is_numeric($_POST['id'])) 									{ $Result->show("danger", _("Invalid ID"), true, true); }
+if($POST->type!="subnets"&&$POST->type!="ipaddresses") 	{ $Result->show("danger", _("Invalid type"), true, true); }
+if(!is_numeric($POST->id)) 									{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 
 //fetch object details
-$object = $Tools->fetch_object ($_POST['type'], "id", $_POST['id']);
+$object = $Tools->fetch_object ($POST->type, "id", $POST->id);
 
 
 # set share details
 $share = new StdClass;
 //set details
-if($_POST['type']=="subnets") {
+if($POST->type=="subnets") {
 	$tmp[] = _("Share type: subnet");
 	$tmp[] = $Subnets->transform_to_dotted($object->subnet)."/$object->mask";
 	$tmp[] = $object->description;
@@ -84,8 +84,8 @@ $(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );
 			?>
 	        <input type="hidden" name="code" value="<?php print $share->code; ?>">
     		<input type="hidden" name="action" value="add">
-    		<input type="hidden" name="type" value="<?php print escape_input($_POST['type']); ?>">
-    		<input type="hidden" name="id" value="<?php print escape_input($_POST['id']); ?>">
+    		<input type="hidden" name="type" value="<?php print escape_input($POST->type); ?>">
+    		<input type="hidden" name="id" value="<?php print escape_input($POST->id); ?>">
 	    </td>
     </tr>
 

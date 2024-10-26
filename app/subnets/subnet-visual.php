@@ -13,7 +13,7 @@ if($addresses_visual) {
 	}
 }
 
-$alpha = ($User->user->theme == "dark") ? "50" : "";
+$alpha = ($User->user->theme == "dark") ? "cc" : "";
 
 # print
 foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
@@ -58,6 +58,7 @@ foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
 	} else {
 		print "<span class='ip-$class '  			style='background:$background;color:$foreground' data-action='$action' data-subnetId='".$subnet['id']."' data-id='$id'>".$shortname."</span>";
 	}
+	print "\n";
 }
 print "</div>";
 print "<div class='clearfix' style='padding-bottom:20px;'></div>";	# clear float

@@ -17,19 +17,19 @@ disable_php_errors();
 print "<h5>"._('Scan results').":</h5><hr>";
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disabled"), true); }
 # subnet check
-$subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
+$subnet = $Subnets->fetch_subnet ("id", $POST->subnetId);
 if ($subnet===false)                            { $Result->show("danger", _("Invalid subnet Id"), true);  }
 
 # verify that user has write permissionss for subnet
-if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
+if($Subnets->check_permission ($User->user, $POST->subnetId) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
 
 # set class
 $Snmp = new phpipamSNMP ();
 
 // fetch all existing hosts
-$all_subnet_hosts = (array) $Addresses->fetch_subnet_addresses ($_POST['subnetId']);
+$all_subnet_hosts = (array) $Addresses->fetch_subnet_addresses ($POST->subnetId);
 // reindex
 if (sizeof($all_subnet_hosts)>0) {
     foreach ($all_subnet_hosts as $h) {
@@ -213,7 +213,7 @@ else {
 	print "<tr>";
 	print "	<td colspan='$colspan'>";
 	print "<div id='subnetScanAddResult'></div>";
-	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='scan-snmp-arp' data-subnetId='".$_POST['subnetId']."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
+	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='scan-snmp-arp' data-subnetId='".escape_input($POST->subnetId)."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
 	print "	</td>";
 	print "</tr>";
 
@@ -241,4 +241,4 @@ print "</span>";
 print "</div>";
 
 # show debug?
-if($_POST['debug']==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }
+if($POST->debug==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }

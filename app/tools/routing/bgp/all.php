@@ -75,7 +75,7 @@ else {
             // print
             print "<tr>";
 
-            print " <td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], "routing", "bgp", $bgp->id)."'><i class='fa fa-exchange prefix'></i> $bgp->peer_name</a></td>";
+            print " <td><a class='btn btn-xs btn-default' href='".create_link($GET->page, "routing", "bgp", $bgp->id)."'><i class='fa fa-exchange prefix'></i> $bgp->peer_name</a></td>";
             print " <td>$bgp->peer_as</td>";
             print " <td>$bgp->local_as</td>";
             print " <td>$bgp->peer_address</td>";
@@ -100,7 +100,7 @@ else {
             $links = [];
             if($User->get_module_permissions ("routing")>=User::ACCESS_R) {
                 $links[] = ["type"=>"header", "text"=>_("Show BGP")];
-                $links[] = ["type"=>"link", "text"=>_("Show BGP"), "href"=>create_link($_GET['page'], "routing", "bgp", $bgp->id), "icon"=>"eye", "visible"=>"dropdown"];
+                $links[] = ["type"=>"link", "text"=>_("Show BGP"), "href"=>create_link($GET->page, "routing", "bgp", $bgp->id), "icon"=>"eye", "visible"=>"dropdown"];
                 $links[] = ["type"=>"divider"];
             }
             if($User->get_module_permissions ("routing")>=User::ACCESS_RW) {

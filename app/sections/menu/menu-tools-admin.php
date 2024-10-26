@@ -5,7 +5,7 @@ $User->check_user_session();
 # print admin menu for admin users
 if($User->is_admin(false)) {
 	# if section is not set
-	if(!isset($_GET['section'])) { $_GET['section'] = ""; }
+	if(!isset($GET->section)) { $GET->section = ""; }
 
 	print "<ul class='nav navbar-nav navbar-right'>";
 	print "	<li class='dropdown administration'>";
@@ -27,8 +27,8 @@ if($User->is_admin(false)) {
 			# only selected
 			if($i['show']) {
 				# active?
-				if($_GET['page']=="administration") {
-					$active = $_GET['section']==$i['href'] ? "active" : "";
+				if($GET->page=="administration") {
+					$active = $GET->section==$i['href'] ? "active" : "";
 				} else {
 					$active = "";
 				}
@@ -64,8 +64,8 @@ if($User->is_admin(false)) {
 					# only active
 					if($i['show']) {
 						# active?
-						if($_GET['page']=="tools") {
-							$active = $_GET['section']==$i['href'] ? "active" : "";
+						if($GET->page=="tools") {
+							$active = $GET->section==$i['href'] ? "active" : "";
 						} else {
 							$active = "";
 						}
@@ -83,7 +83,7 @@ if($User->is_admin(false)) {
 <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm icon-ul">
 
 	<!-- Dash lock/unlock -->
-	<?php if($_GET['page']=="dashboard" && !($User->is_admin(false)!==true && (is_blank($User->user->groups) || $User->user->groups==="null") ) ) { ?>
+	<?php if($GET->page=="dashboard" && !($User->is_admin(false)!==true && (is_blank($User->user->groups) || $User->user->groups==="null") ) ) { ?>
 		<li class="w-lock">
 			<a href="#" rel='tooltip' class="icon-li" data-placement='bottom' title="<?php print _('Click to reorder widgets'); ?>"><i class='fa fa-dashboard'></i></a>
 		</li>
@@ -97,20 +97,20 @@ if($User->is_admin(false)) {
 	<!-- Favourites -->
 	<?php
 	//check if user has favourite subnets
-	if(!is_blank(trim($User->user->favourite_subnets ?: ''))) {
+	if(!is_blank(trim((string) $User->user->favourite_subnets))) {
 	?>
-	<li class="<?php if($_GET['section']=="favourites") print " active"; ?>">
+	<li class="<?php if($GET->section=="favourites") print " active"; ?>">
 		<a href="<?php print create_link("tools","favourites"); ?>" class="icon-li" rel='tooltip' data-placement='bottom' title="<?php print _('Favourite networks'); ?>"><i class='fa fa-star-o'></i></a>
 	</li>
 	<?php } ?>
 
 	<!-- instructions -->
-	<li class="<?php if($_GET['section']=="instructions") print " active"; ?>">
+	<li class="<?php if($GET->section=="instructions") print " active"; ?>">
 		<a href="<?php print create_link("tools","instructions"); ?>" class="icon-li" rel='tooltip' data-placement='bottom' title="<?php print _('Show IP addressing guide'); ?>"><i class='fa fa-info'></i></a>
 	</li>
 
 	<!-- tools -->
-	<li class="tools dropdown <?php if(@$_GET['page']=="tools") { print " ac1tive"; } ?>">
+	<li class="tools dropdown <?php if($GET->page=="tools") { print " ac1tive"; } ?>">
 		<a class="dropdown-toggle icon-li" data-toggle="dropdown" href="" rel='tooltip' data-placement='bottom' title='<?php print _('Show tools menu'); ?>'><i class="fa fa-wrench"></i></a>
 		<ul class="dropdown-menu admin tools_dropdown">
 			<!-- public -->
@@ -130,8 +130,8 @@ if($User->is_admin(false)) {
 					# only selected
 					if($i['show']) {
 						# active?
-						if($_GET['page']=="tools") {
-							$active = $_GET['section']==$i['href'] ? "active" : "";
+						if($GET->page=="tools") {
+							$active = $GET->section==$i['href'] ? "active" : "";
 						} else {
 							$active = "";
 						}

@@ -23,10 +23,10 @@ if(!isset($User) || !is_object($User)) {
 }
 
 # if nothing is provided display all
-if ( empty($_POST['Informational']) && empty($_POST['Notice']) && empty($_POST['Warning']) ) {
-    $_POST['Informational'] = "Informational";
-    $_POST['Notice']        = "Notice";
-    $_POST['Warning']       = "Warning";
+if ( empty($POST->Informational) && empty($POST->Notice) && empty($POST->Warning) ) {
+    $POST->Informational = "Informational";
+    $POST->Notice        = "Notice";
+    $POST->Warning       = "Warning";
 }
 ?>
 
@@ -61,19 +61,19 @@ $(document).ready(function() {
 $logCount = 40;
 
 //set severity queries
-$informational = @$_POST['Informational']=="Informational" ? "on" : "off";
-$notice 	   = @$_POST['Notice']=="Notice" ? "on" : "off";
-$warning 	   = @$_POST['Warning']=="Warning" ? "on" : "off";
+$informational = $POST->Informational=="Informational" ? "on" : "off";
+$notice 	   = $POST->Notice=="Notice" ? "on" : "off";
+$warning 	   = $POST->Warning=="Warning" ? "on" : "off";
 
 //get highest lastId */
 $highestId = $Log->log_fetch_highest_id();
-if(empty($_POST['lastId']) || ($_POST['lastId'] == "undefined")) 	{ $_POST['lastId'] = $highestId; }
+if(empty($POST->lastId) || ($POST->lastId == "undefined")) 	{ $POST->lastId = $highestId; }
 
 //set empty direction
-if(!isset($_POST['direction'])) 									{ $_POST['direction'] = ""; }
+if(!isset($POST->direction)) 									{ $POST->direction = ""; }
 
 /* get requested logs */
-$logs = $Log->fetch_logs($logCount, $_POST['direction'], $_POST['lastId'], $highestId, $informational, $notice, $warning);
+$logs = $Log->fetch_logs($logCount, $POST->direction, $POST->lastId, $highestId, $informational, $notice, $warning);
 if (!is_array($logs)) { $logs = array(); }
 
 $x = 0;

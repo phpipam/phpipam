@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "settings", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
+$User->Crypto->csrf_cookie ("validate", "settings", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
 
 # clear identifier
 $clear = true;
@@ -97,7 +97,7 @@ else {
 	        	$('ul.progressUl li').remove();
 
 	        	//add name to hidden class for magic.js
-	        	$('.fname').html(data.files[0].name);
+	        	$('.fname').text(data.files[0].name);
 
 	            var tpl = $('<li class="alert"><p></p><span></span></li>');
 

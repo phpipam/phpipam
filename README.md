@@ -14,12 +14,14 @@ to be able to display javascript quickly and correctly.
  - [Demo page](http://demo.phpipam.net) (Login: `Admin / ipamadmin`)
 
 ## Branches
- - MASTER: Current development release
- - 1.6: Productional branch for 1.6.x release
- - 1.5: Productional branch for 1.5.x release (obsolete)
- - 1.4: Productional branch for 1.4.x release (obsolete)
- - 1.3: Productional branch for 1.3.x release (obsolete)
- - 1.2: Productional branch for 1.2.x release (obsolete)
+ - MASTER: Latest stable release
+ - DEVELOP: Current development branch
+ - 1.7: Maintenance branch for 1.7.x releases
+ - 1.6: Maintenance branch for 1.6.x releases (obsolete)
+ - 1.5: Maintenance branch for 1.5.x releases (obsolete)
+ - 1.4: Maintenance branch for 1.4.x releases (obsolete)
+ - 1.3: Maintenance branch for 1.3.x releases (obsolete)
+ - 1.2: Maintenance branch for 1.2.x releases (obsolete)
  - Other branches: Feature testing
 
 ## Supported PHP versions
@@ -27,7 +29,9 @@ to be able to display javascript quickly and correctly.
 phpIPAM has been developed and tested on the following PHP versions.\
 The use of untested PHP versions is unsupported and may result in compatibility issues.
 
-- MASTER: PHP versions 7.2 to 8.3
+- MASTER: See latest 1.x.y release version
+- DEVELOP: PHP versions 7.2 to 8.4
+- 1.7.x: PHP versions 7.2 to 8.3
 - 1.6.x: PHP versions 7.2 to 8.3
 - 1.5.x: PHP versions 5.4 to 7.4
 - 1.4.x: PHP versions 5.4 to 7.4
@@ -35,11 +39,23 @@ The use of untested PHP versions is unsupported and may result in compatibility 
 
 ## Supported MySQL / MariaDB versions
 
-As of v1.6.0 support for utf8mb4 is mandatory: MySQL 5.7.7+ \
-For best performance, Common Table Expressions (CTE) query support: MySQL 8.0+ / MariaDB 10.2.1+
+Common Table Expressions (CTE) query support highly recommended : MySQL 8.0+ / MariaDB 10.2.1+ \
+As of v1.6.0 support for utf8mb4 is mandatory: MySQL 5.7.7+
 
 ## I forgot my Admin password!?
 Just run `php functions/scripts/reset-admin-password.php` in the cli and enter your new password
+
+## Reverse-Proxy (Infinite login loops)
+As of v1.6.0 when deployed behind a reverse-proxy, set config.php `$trust_x_forwarded_headers = true;` or Docker image environment variable `IPAM_TRUST_X_FORWARDED=true` to accept HTTP X_FORWARDED_ headers.
+
+**WARNING!** The following HTTP headers shoud be filtered and/or overwritten by the reverse-proxy to avoid potential abuse by end-clients.
+
+- X_FORWARDED_FOR
+- X_FORWARDED_HOST
+- X_FORWARDED_PORT
+- X_FORWARDED_PROTO
+- X_FORWARDED_SSL
+- X_FORWARDED_URI
 
 ## What are the credentials for a fresh install?
 The Default credentials for a new instance of phpIPAM are the same as the credentials for
