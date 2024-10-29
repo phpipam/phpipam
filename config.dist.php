@@ -1,6 +1,11 @@
 <?php
 
 /**
+ *  Disable installation helper scripts /app/install/ after initial setup
+ */
+$disable_installer = false;
+
+/**
  * database connection details
  ******************************/
 $db['host'] = '127.0.0.1';

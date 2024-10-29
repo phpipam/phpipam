@@ -1,4 +1,6 @@
 <?php
+if (!defined('VERSION_VISIBLE') || Config::ValueOf('disable_installer')) { print _("Install scripts disabled"); exit(0); }
+
 // add prefix - install or migrate
 $title_prefix = @$_GET['subnetId']=="migrate" ? _("migration") : _("installation");
 $text_prefix  = @$_GET['subnetId']=="migrate" ? _("migrate") : _("install");

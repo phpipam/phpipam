@@ -1,4 +1,5 @@
 <?php
+if (!defined('VERSION_VISIBLE') || Config::ValueOf('disable_installer')) { print _("Install scripts disabled"); exit(0); }
 
 /**
  *	phpipam installation page!
