@@ -1669,47 +1669,51 @@ class User extends Common_functions {
      * User self update method
      *
      * @access public
-     * @param array|object $post //posted user details
+     * @param Params $post
      * @return bool
      */
-    public function self_update($post) {
+    public function self_update(Params $post): bool {
         # remove theme
-        if($post['theme'] == "default") { $post['theme'] = ""; }
+        if ($post->theme == "default") {
+            $post->theme = "";
+        }
         # set items to update
-        $items  = array("real_name"        => escape_input(strip_tags($post['real_name'])),
-                        "mailNotify"       => $post['mailNotify'] == "Yes" ? "Yes" : "No",
-                        "mailChangelog"    => $post['mailChangelog'] == "Yes" ? "Yes" : "No",
-                        "email"            => $this->validate_email($post['email']) ? escape_input($post['email']) : '',
-                        "lang"             => escape_input(strip_tags($post['lang'])),
-                        "id"               => $this->user->id,
-                        //display
-                        "compressOverride" => escape_input(strip_tags($post['compressOverride'])),
-                        "hideFreeRange"    => $this->verify_checkbox(@$post['hideFreeRange']),
-                        "menuType"         => $this->verify_checkbox(@$post['menuType']),
-                        "menuCompact"      => $this->verify_checkbox(@$post['menuCompact']),
-                        "theme"            => $post['theme'],
-                        "2fa"              => $this->verify_checkbox(@$post['2fa']),
-                        "passkey_only"     => $this->verify_checkbox(@$post['passkey_only']),
-                        );
-        if(!is_blank($post['password1'])) {
-        $items['password'] = $this->crypt_user_pass ($post['password1']);
+        $items  = [
+            "real_name"        => $post->real_name,
+            "mailNotify"       => $post->mailNotify == "Yes" ? "Yes" : "No",
+            "mailChangelog"    => $post->mailChangelog == "Yes" ? "Yes" : "No",
+            "email"            => $this->validate_email($post->email) ? $post->email : '',
+            "lang"             => $post->lang,
+            "id"               => $this->user->id,
+            //display
+            "compressOverride" => $post->compressOverride,
+            "hideFreeRange"    => $this->verify_checkbox($post->hideFreeRange),
+            "menuType"         => $this->verify_checkbox($post->menuType),
+            "menuCompact"      => $this->verify_checkbox($post->menuCompact),
+            "theme"            => $post->theme,
+            "2fa"              => $this->verify_checkbox($post->{'2fa'}),
+            "passkey_only"     => $this->verify_checkbox($post->passkey_only),
+        ];
+        if (!is_blank($post->password1)) {
+            $items['password'] = $this->crypt_user_pass($post->password1);
         }
 
         # prepare log file
-        $log = $this->array_to_log ($post);
+        $log = $this->array_to_log($post->as_array());
 
         # update
-        try { $this->Database->updateObject("users", $items); }
-        catch (Exception $e) {
-            $this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-            $this->Log->write( _("User self update"), _("User self update failed")."!<br>".$log, 2 );
+        try {
+            $this->Database->updateObject("users", $items);
+        } catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ") . $e->getMessage(), false);
+            $this->Log->write(_("User self update"), _("User self update failed") . "!<br>" . $log, 2);
             return false;
         }
         # update language
-        $this->update_session_language ();
+        $this->update_session_language();
 
         # ok, update log table
-        $this->Log->write( _("User self update"), _("User self update succeeded")."!", 0 );
+        $this->Log->write(_("User self update"), _("User self update succeeded") . "!", 0);
         return true;
     }
 
