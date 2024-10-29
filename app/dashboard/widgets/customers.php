@@ -32,7 +32,7 @@ $wparam = $Tools->get_widget_params("customers");
 $height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 
 # table
-print '<div style="width:98%;margin-left:1%;' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
+print '<div style="' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 print '<table id="customers" class="table sorted table-striped table-top" data-cookie-id-table="customers">';
 
 #headers
