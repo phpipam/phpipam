@@ -55,6 +55,7 @@
     + HTML DOM XSS injection via filenames when uploading (#4160);
     + Escape loaded database strings by default, stored XSS defense;
     + Increase minimum 2FA secret length to 32 (160bit);
+    + Disable /app/install/ helper scripts via config.php $disable_installer;
 
 == 1.6.0
 

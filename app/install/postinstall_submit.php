@@ -7,6 +7,8 @@
 # functions
 require_once( dirname(__FILE__) . '/../../functions/functions.php' );
 
+if (!defined('VERSION_VISIBLE') || Config::ValueOf('disable_installer')) { print _("Install scripts disabled"); exit(0); }
+
 # objects
 $Database 	= new Database_PDO;
 $Admin 		= new Admin ($Database, false);

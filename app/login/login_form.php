@@ -145,6 +145,11 @@
 	<?php } ?>
 
 </div>
+<?php if(!Config::ValueOf('disable_installer')) { ?>
+	<div class="alert alert-warning" style="width:400px;margin:auto;margin-top:30px;">
+	<strong><?php print _("Please disable installaion scripts in config.php<br>\$disable_installer=true;"); ?></strong>
+	</div>
+<?php } ?>
 
 </form>
 
