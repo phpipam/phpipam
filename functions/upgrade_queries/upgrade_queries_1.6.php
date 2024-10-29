@@ -6,3 +6,7 @@
 $upgrade_queries["1.6.39"]   = [];
 $upgrade_queries["1.6.39"][] = "-- Version update";
 $upgrade_queries["1.6.39"][] = "UPDATE `settings` set `version` = '1.6';";
+
+$upgrade_queries["1.61.39"]   = [];
+$upgrade_queries["1.61.39"][] = "-- Version update";
+$upgrade_queries["1.61.39"][] = "UPDATE `settings` set `version` = '1.61';";
