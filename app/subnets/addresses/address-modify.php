@@ -64,7 +64,7 @@ if ($action == "all-add") {
 	$address['location'] = null;
 	$address['customer_id'] = null;
 }
-else if ($action == "add") {
+elseif ($action == "add") {
 	# get first available IP address
 	$first = $Addresses->get_first_available_address ($subnetId);
 	$first = !$first ? "" : $Subnets->transform_address($first, "dotted");
@@ -73,6 +73,7 @@ else if ($action == "add") {
 	$address['id'] = 0;
 	$address['PTR'] = null;
 	$address['location'] = null;
+	$address['customer_id'] = null;
 }
 else {
 	$address = (array) $Addresses->fetch_address(null, $id);

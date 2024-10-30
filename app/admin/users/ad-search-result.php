@@ -24,10 +24,10 @@ $server = $Admin->fetch_object("usersAuthMethod", "id", $POST->server);
 $server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
 
 //parse parameters
-$params = db_json_decode($server->params);
+$params = new Params( db_json_decode($server->params) );
 
 //no login parameters
-if(is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword))	{ $Result->show("danger", _("Missing credentials"), true); }
+if(is_blank($params->adminUsername) || is_blank($params->adminPassword))	{ $Result->show("danger", _("Missing credentials"), true); }
 //at least 2 chars
 if(strlen($POST->dname)<2) 													{ $Result->show("danger", _('Please enter at least 2 characters'), true); }
 
@@ -40,10 +40,18 @@ try {
 			'base_dn'=>$params->base_dn,
 			'account_suffix'=>$params->account_suffix,
 			'domain_controllers'=>pf_explode(";", str_replace(" ", "", $params->domain_controllers)),
-			'use_ssl'=>$params->use_ssl,
-			'use_tls'=>$params->use_tls,
 			'ad_port'=>$params->ad_port
 			);
+
+	// Set security
+	if($server->type == "LDAP") {
+		$options['use_ssl'] = $params->ldap_security=="ssl" ? true : false;
+		$options['use_tls'] = $params->ldap_security=="tls" ? true : false;
+	} else {
+		$options['use_ssl'] = $params->use_ssl ? true : false;
+		$options['use_tls'] = $params->use_tls ? true : false;
+	}
+
 	//AD
 	$adldap = new adLDAP($options);
 
