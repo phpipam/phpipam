@@ -84,7 +84,7 @@ if ($GET->sPage == "search" && !is_blank($POST->{'domain-filter'})) {
 
 <?php
 // none - filtered
-if ($domains === false && isset($POST->{'domain-filter'})) {$Result->show("info alert-absolute", _("No records found for filter ") . "'" . $POST->{'domain-filter'} . "'", false);}
+if ($domains === false && isset($POST->{'domain-filter'})) {$Result->show("info alert-absolute", _("No records found for filter ") . "'" . escape_input($POST->{'domain-filter'}) . "'", false);}
 // none
 elseif ($domains === false) {$Result->show("info alert-absolute", _("No domains configured"), false);} else {
 

@@ -111,10 +111,9 @@ class Result {
 	 * @param bool $inline (default: false)					return, not print
 	 * @param bool $popup2 (default: false)					close for JS for popup2
 	 * @param bool $reload (default: false)					reload
-	 * @param bool $html_escape (default:tue)				HTML escape text
 	 * @return void
 	 */
-	public function show($class="muted", $text="No value provided", $die=false, $popup=false, $inline = false, $popup2 = false, $reload = false, $html_escape=true) {
+	public function show($class="muted", $text="No value provided", $die=false, $popup=false, $inline = false, $popup2 = false, $reload = false) {
 
 		# set die
 		$this->die = $die;
@@ -130,8 +129,8 @@ class Result {
 			if (php_sapi_name()=="cli") { print $this->show_cli_message ($text); }
 			else {
 				# return or print
-				if ($inline) 			{ return $this->show_message ($class, $text, $popup, $popup2, $reload, $html_escape); }
-				else					{ print  $this->show_message ($class, $text, $popup, $popup2, $reload, $html_escape); }
+				if ($inline) 			{ return $this->show_message ($class, $text, $popup, $popup2, $reload); }
+				else					{ print  $this->show_message ($class, $text, $popup, $popup2, $reload); }
 			}
 
 			# die
@@ -201,10 +200,9 @@ class Result {
 	 * @param mixed $popup
 	 * @param mixed $popup2
 	 * @param bool $reload
-	 * @param bool $html_escape
 	 * @return void
 	 */
-	public function show_message ($class, $text, $popup, $popup2, $reload, $html_escape) {
+	public function show_message ($class, $text, $popup, $popup2, $reload) {
 		// to array if object
 		if (is_object($text))   { $text = (array) $text; }
 		// format if array
@@ -221,12 +219,6 @@ class Result {
 			}
 			// join
 			$text = implode("\n", $out);
-		}
-
-		if ($html_escape) {
-			$text = str_replace('<hr>', '\n', $text);
-			$text = escape_input($text);
-			$text = str_replace('\n', '<hr>', $text);
 		}
 
 		# print popup or normal

@@ -399,7 +399,7 @@ else {
 		# edit success
 		if($POST->action=="delete")	{ $Result->show("success", _('Subnet, IP addresses and all belonging subnets deleted successfully').'!', false); }
 		# create - for redirect
-		elseif ($POST->action=="add") { $Result->show("success", _("Subnet")." ". $POST->action." "._("successful").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
+		elseif ($POST->action=="add") { $Result->show("success", _("Subnet")." " . $User->get_post_action() . " "._("successful").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
 		#
 		else { $Result->show("success", _("Subnet")." ".$User->get_post_action()." "._("successful").'!', false); }
 	}

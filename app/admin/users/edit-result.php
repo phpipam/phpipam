@@ -76,7 +76,7 @@ if($POST->action!="delete") {
 		}
 		//check duplicate
 		if($Admin->fetch_object("users", "username", $POST->username)!==false) {
-																			{ $Result->show("danger", _("User")." ".$POST->username." "._("already exists!"), true); }
+																			{ $Result->show("danger", _("User")." ".escape_input($POST->username)." "._("already exists!"), true); }
 		}
 	}
 

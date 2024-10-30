@@ -101,6 +101,6 @@ else {
 	}
 
 	# execute
-	if(!$Admin->object_modify("vaultItems", $POST->action, "id", $values)) 	{ $Result->show("danger",  _("Vault item")." ".$POST->action." "._("error"), true); }
-	else 																		{ $Result->show("success", _("Vault item")." ".$POST->action." "._("success"), true); }
+	if(!$Admin->object_modify("vaultItems", $POST->action, "id", $values)) 	{ $Result->show("danger",  _("Vault item")." ".$User->get_post_action()." "._("error"), true); }
+	else 																		{ $Result->show("success", _("Vault item")." ".$User->get_post_action()." "._("success"), true); }
 }

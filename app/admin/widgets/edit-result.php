@@ -46,5 +46,5 @@ $values = array("wid"=>$POST->wid,
 				"wsize"=>$POST->wsize
 				);
 # update
-if(!$Admin->object_modify("widgets", $POST->action, "wid", $values))	{ $Result->show("danger",  _("Widget ".$POST->action." error")."!", true); }
-else																	{ $Result->show("success", _("Widget ".$POST->action." success")."!", true); }
+if(!$Admin->object_modify("widgets", $POST->action, "wid", $values))	{ $Result->show("danger",  _("Widget ".$User->get_post_action()." error")."!", true); }
+else																	{ $Result->show("success", _("Widget ".$User->get_post_action()." success")."!", true); }

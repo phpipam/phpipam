@@ -28,14 +28,14 @@ if ($User->get_module_permissions ("pdns")>=User::ACCESS_R) {
         if ($test!==false) {
             $test_ttl = db_json_decode($User->settings->powerDNS);
             if ($test_ttl->ttl==NULL) {
-                $Result->show("warning", "Please set <a href='".create_link("administration", "powerDNS", "defaults")."'>default powerDNS values</a>!", false, false, false, false, false, false);
+                $Result->show("warning", "Please set <a href='".create_link("administration", "powerDNS", "defaults")."'>default powerDNS values</a>!", false);
             }
         }
         // check if TTL is set
         if ($test!==false) {
             $test_ttl = db_json_decode($User->settings->powerDNS);
             if ($test_ttl->ttl==NULL) {
-                $Result->show("warning", "Please set <a href='".create_link("administration", "powerDNS", "defaults")."'>default powerDNS values</a>!", false, false, false, false, false, false);
+                $Result->show("warning", "Please set <a href='".create_link("administration", "powerDNS", "defaults")."'>default powerDNS values</a>!", false);
             }
         }
         // errors

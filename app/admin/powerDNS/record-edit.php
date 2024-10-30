@@ -73,10 +73,10 @@ else {
 		if (!is_numeric($POST->domain_id)) {
     		# admin?
     		if ($User->is_admin()) {
-    			$Result->show("danger", _("Domain")." <strong>".$POST->domain_id."</strong><span class='ip_dns_addr hidden'>".$POST->id."</span> "._("does not exist")."!"."<hr><button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0' data-secondary='true'><i class='fa fa-plus'></i> "._('Create domain')."</button>", true, true);
+    			$Result->show("danger", _("Domain")." <strong>".escape_input($POST->domain_id)."</strong><span class='ip_dns_addr hidden'>".escape_input($POST->id)."</span> "._("does not exist")."!"."<hr><button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0' data-secondary='true'><i class='fa fa-plus'></i> "._('Create domain')."</button>", true, true);
     		}
     		else {
-    			$Result->show("danger", _("Domain")." <strong>".$POST->domain_id."</strong> "._("does not exist")."!", true, true);
+    			$Result->show("danger", _("Domain")." <strong>".escape_input($POST->domain_id)."</strong> "._("does not exist")."!", true, true);
     		}
 		}
 		else {

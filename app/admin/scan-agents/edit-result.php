@@ -69,8 +69,8 @@ else {
 	$values = $Admin->remove_empty_array_fields ($values);
 
 	# execute
-	if(!$Admin->object_modify("scanAgents", $POST->action, "id", $values)) 	{ $Result->show("danger",  _("Agent ".$POST->action." error"), true); }
-	else 																		{ $Result->show("success", _("Agent ".$POST->action." success"), false); }
+	if(!$Admin->object_modify("scanAgents", $POST->action, "id", $values)) 	{ $Result->show("danger",  _("Agent " . $User->get_post_action() . " error"), true); }
+	else 																		{ $Result->show("success", _("Agent " . $User->get_post_action() . " success"), false); }
 
 	# delete - unset scanning in all subnets
 	if ($POST->action=="delete") {

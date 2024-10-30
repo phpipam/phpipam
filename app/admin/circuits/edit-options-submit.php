@@ -44,8 +44,8 @@ $values = array (
                  "ctpattern" => $POST->pattern
                  );
 # execute
-if(!$Admin->object_modify("circuitTypes", $POST->action, "id", $values))  { $Result->show("danger",  _("Option ".$POST->action." error"), true); }
-else                                                                         { $Result->show("success", _("Option ".$POST->action." success"), false); }
+if(!$Admin->object_modify("circuitTypes", $POST->action, "id", $values))  { $Result->show("danger",  _("Option " . $User->get_post_action() . " error"), true); }
+else                                                                         { $Result->show("success", _("Option " . $User->get_post_action() . " success"), false); }
 
 # updates values to default
 if (is_numeric($POST->op_id)) {

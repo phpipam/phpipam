@@ -1130,6 +1130,8 @@ class Common_functions  {
 
 			if (in_array($action, $valid_actions)) {
 				return escape_input(ucwords(_($action)));
+			} else {
+				return _('Invalid $_POST action');
 			}
 		}
 
