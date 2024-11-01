@@ -1374,8 +1374,8 @@ class User extends Common_functions {
         # failure
         if(!isset($this->user->username)) {
             throw new Exception ("Cannot fetch credentials from userid");
-        }
             header('HTTP/1.1 500 Cannot fetch credentials from userid');
+        }
 
         # set session parameters
         $_SESSION['ipamusername'] = $this->user->username;
@@ -1485,7 +1485,7 @@ class User extends Common_functions {
         }
         catch (Exception $e) {
             header('HTTP/1.1 500 '.$e->getMessage());
-            return false;
+            throw $e;
         }
     }
 
