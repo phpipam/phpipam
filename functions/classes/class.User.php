@@ -1479,7 +1479,7 @@ class User extends Common_functions {
      */
     public function save_passkey ($credential = "", $credentialId = NULL, $keyId = NULL) {
         try {
-            $this->Database->insertObject("passkeys", ["user_id"=>$this->user->id, "credentialId"=>$credentialId, "credential"=>$credential, "keyId"=>$keyId, "created"=>date("Y-m-d H:i:s§")]);
+            $this->Database->insertObject("passkeys", ["user_id"=>$this->user->id, "credentialId"=>$credentialId, "credential"=>$credential, "keyId"=>$keyId, "created"=>date("Y-m-d H:i:s")]);
             // ok
             return true;
         }
