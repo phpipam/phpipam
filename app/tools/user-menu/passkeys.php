@@ -177,7 +177,7 @@ const startRegister = async (e) => {
             // open popup to name passkey
 		    $('div.loading').show();
 		    // post
-		    $.post("/app/tools/user-menu/passkey_edit.php", {"keyid":credential.id, "action":"add"}, function(data) {
+		    $.post("app/tools/user-menu/passkey_edit.php", {"keyid":credential.id, "action":"add"}, function(data) {
 		        // set content
 		        $('#popupOverlay .popup_w500').html(data).show();
 		        // show overlay
