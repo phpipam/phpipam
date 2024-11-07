@@ -1343,7 +1343,7 @@ class User extends Common_functions {
             $this->Result->show("danger", _("User account is disabled"), true);
         }
         // is passkey login enforced ?
-        elseif ($this->settings->{'passkeys'}=="1") {
+        elseif ($this->settings->dbversion >= 40 && $this->settings->{'passkeys'}=="1") {
             if ($this->user->passkey_only=="1") {
                 // check passkeys
                 $user_passkeys = $this->get_user_passkeys($this->user->id);
