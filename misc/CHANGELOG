@@ -1,3 +1,10 @@
+== 1.7.1
+
+    Bugfixes:
+    ----------------------------
+    + Backported PHP8 compatibility fixes;
+    + Fixed passkeys upgrade queries;
+
 == 1.7.0
 
     New features:
