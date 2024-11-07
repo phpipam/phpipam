@@ -225,6 +225,7 @@ else {
 			$device = $Tools->fetch_object("devices", "id", $subnet['device']);
 			if (is_object($device)) {
 				# rack
+				$rack_text = "";
 				if ($User->settings->enableRACK=="1" && !is_blank($device->rack) && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
 					if (!isset($Racks)) $Racks = new phpipam_rack($Database);
 					$Racks->add_rack_start_print($device);
