@@ -4,6 +4,8 @@
     ----------------------------
     + Backported PHP8 compatibility fixes;
     + Fixed passkeys upgrade queries;
+    + MySQL no active transaction error during upgrades (#4319);
+    + $config['disable_main_login_form'] shows blank page (#4317);
 
 == 1.7.0
 
