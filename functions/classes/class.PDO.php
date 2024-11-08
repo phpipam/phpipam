@@ -1093,6 +1093,8 @@ abstract class DB {
 	 * @return bool
 	 */
 	public function commit() {
+		if (!$this->pdo->inTransaction())
+			return false;
 		return $this->pdo->commit();
 	}
 
