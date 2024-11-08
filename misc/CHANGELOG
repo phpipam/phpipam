@@ -7,6 +7,10 @@
     + MySQL no active transaction error during upgrades (#4319);
     + $config['disable_main_login_form'] shows blank page (#4317);
 
+    Enhancements, changes:
+    ----------------------------
+    + Added Isle of Man postcodes (#4318);
+
 == 1.7.0
 
     New features:
