@@ -719,11 +719,10 @@ class Logging extends Common_functions {
 			return true;
 		}
 
-		// folder
-		if($this->object_type == "subnet") {
-			if ($this->object_old['isFolder'] || $this->object_new['isFolder']) {
-				$this->object_type = "folder";
-			}
+		# folder
+		if ((isset($this->object_new['isFolder']) && $this->object_new['isFolder'] == "1") ||
+		    (isset($this->object_old['isFolder']) && $this->object_old['isFolder'] == "1")) {
+			$this->object_type = "folder";
 		}
 
 		// make sure we have settings
@@ -1114,16 +1113,16 @@ class Logging extends Common_functions {
 			}
 
 			# if section does not change
-			if(isset($this->object_new['sectionId']) && $this->object_new['sectionId']==$this->object_new['sectionIdNew']) {
+			if(isset($this->object_new['sectionId']) && isset($this->object_new['sectionIdNew']) && $this->object_new['sectionId']==$this->object_new['sectionIdNew']) {
 				unset(	$this->object_new['sectionIdNew']);
 			}
 			else {
-				$this->object_old['sectionIdNew'] = $this->object_old['sectionId'];
+				$this->object_old['sectionIdNew'] = isset($this->object_old['sectionId']) ? $this->object_old['sectionId'] : null;
 			}
 
 			//transform subnet to IP address format
-			if(!is_blank($this->object_new['subnet'])) 	{ $this->object_new['subnet'] = $this->Subnets->transform_address ($this->object_new['subnet'], "dotted");}
-			if(!is_blank($this->object_old['subnet'])) 	{ $this->object_old['subnet'] = $this->Subnets->transform_address ($this->object_old['subnet'], "dotted");}
+			if(isset($this->object_new['subnet']) && !is_blank($this->object_new['subnet'])) 	{ $this->object_new['subnet'] = $this->Subnets->transform_address ($this->object_new['subnet'], "dotted");}
+			if(isset($this->object_old['subnet']) && !is_blank($this->object_old['subnet'])) 	{ $this->object_old['subnet'] = $this->Subnets->transform_address ($this->object_old['subnet'], "dotted");}
 
 			//remove subnet/mask for folders
 			if (@$this->object_new['isFolder']=="1")	{ unset($this->object_new['subnet'], $this->object_new['mask']); }
@@ -1165,7 +1164,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_section_diff ($k, $v) {
 		//get old and new device
-		if($this->object_old[$k] != "NULL") {
+		if(isset($this->object_old[$k]) && $this->object_old[$k] != "NULL") {
 			$section = $this->Sections->fetch_section ("id", $this->object_old[$k]);
 			$this->object_old[$k] = $section->name." (id ".$section->id.")";
 		}

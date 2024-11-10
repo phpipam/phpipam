@@ -73,7 +73,7 @@ if(isset($update)) {
 
 # update device
 if ($Admin->object_modify("circuitProviders", $POST->action, "id", $values)) {
-	$Result->show("success", _("Provider") . " " . $POST->action . " " . _("successful") . '!', false);
+	$Result->show("success", _("Provider") . " " . $User->get_post_action() . " " . _("successful") . '!', false);
 }
 
 if($POST->action=="delete"){

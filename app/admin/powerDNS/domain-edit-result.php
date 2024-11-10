@@ -48,7 +48,7 @@ if ($POST->action!="delete") {
         	}
     	}
     	else {
-          if(!filter_var($POST->master, FILTER_VALIDATE_IP))	{ $Result->show("danger", _("Master must be an IP address"). " - ". $POST->master, true); }
+          if(!filter_var($POST->master, FILTER_VALIDATE_IP))	{ $Result->show("danger", _("Master must be an IP address"). " - ". escape_input($POST->master), true); }
     	}
 	}
 	// type
@@ -71,7 +71,7 @@ if ($POST->action!="delete") {
             	}
         	}
         	else {
-              if(!filter_var($POST->master, FILTER_VALIDATE_IP))	{ $Result->show("danger", _("Master must be an IP address"). " - ". $POST->master, true); }
+              if(!filter_var($POST->master, FILTER_VALIDATE_IP))	{ $Result->show("danger", _("Master must be an IP address"). " - ". escape_input($POST->master), true); }
         	}
     	}
 	}

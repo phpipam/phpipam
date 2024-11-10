@@ -80,7 +80,7 @@
 			if ($version < 3.4) {
 				$Result->show("danger", _('php-saml library missing, please update submodules'));
 			} else {
-				$Result->show("success", _('You can login with SAML2').' <a href="'.create_link('saml2').'">'._('here').'</a>!');
+				$Result->show("success", _('You can login with SAML2') . ' <a href="' . create_link('saml2') . '">' . _('here') . '</a>!', false);
 			}
 		}
 
@@ -145,6 +145,11 @@
 	<?php } ?>
 
 </div>
+<?php if(!Config::ValueOf('disable_installer')) { ?>
+	<div class="alert alert-warning" style="width:400px;margin:auto;margin-top:30px;">
+	<strong><?php print _("Please disable installaion scripts in config.php<br>\$disable_installer=true;"); ?></strong>
+	</div>
+<?php } ?>
 
 </form>
 

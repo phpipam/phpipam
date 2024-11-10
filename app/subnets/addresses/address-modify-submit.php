@@ -272,7 +272,7 @@ if (!is_blank(strstr($POST->ip_addr,"-"))) {
 			# reset IP for mailing
 			$POST->ip_addr = $POST->start .' - '. $POST->stop;
 			# log and changelog
-			$Result->show("success", _("Range")." ".$POST->start." - ".$POST->stop." "._($action)." "._("successful")."!", false);
+			$Result->show("success", _("Range") . " " . escape_input($POST->start) . " - " . escape_input($POST->stop) . " " . $User->get_post_action() . " " . _("successful") . "!", false);
 			$Log->write( _("IP address modification"), _("Range")." ".$POST->start." - ".$POST->stop." ".$action." "._("successful")."!", 0);
 
 			# send changelog mail
@@ -316,26 +316,26 @@ else {
 		$POST->ip_addr = $address_old['ip'];
 	}
 	# if errors are present print them, else execute query!
-	if(0 && $verify) 				{ $Result->show("danger", _('Error').": $verify (".$POST->ip_addr.")", true); }  // TODO: Set undefined variable $verify
+	if(0 && $verify) 				{ $Result->show("danger", _('Error').": $verify (".escape_input($POST->ip_addr).")", true); }  // TODO: Set undefined variable $verify
 	else {
 		# set update type for update to single
 		$POST->type = "single";
 
 		# check for duplicate entryon adding new address
 	    if ($action == "add") {
-	        if ($Addresses->address_exists ($POST->ip_addr, $POST->subnetId)) 	{ $Result->show("danger", _('IP address')." ".$POST->ip_addr." "._('already existing in selected network').'!', true); }
+	        if ($Addresses->address_exists ($POST->ip_addr, $POST->subnetId)) 	{ $Result->show("danger", _('IP address')." ".escape_input($POST->ip_addr)." "._('already existing in selected network').'!', true); }
 	    }
 
 		# check for duplicate entry on edit!
 	    if ($action == "edit") {	    	# if IP is the same than it can already exist!
 	    	if($Addresses->transform_address($POST->ip_addr,"decimal") != $POST->ip_addr_old) {
-	        	if ($Addresses->address_exists ($POST->ip_addr, $POST->subnetId)) { $Result->show("danger", _('IP address')." ".$POST->ip_addr." "._('already existing in selected network').'!', true); }
+	        	if ($Addresses->address_exists ($POST->ip_addr, $POST->subnetId)) { $Result->show("danger", _('IP address')." ".escape_input($POST->ip_addr)." "._('already existing in selected network').'!', true); }
 	    	}
 	    }
 	    # move checks
 	    if($action == "move") {
 		    # check if not already used in new subnet
-	        if ($Addresses->address_exists ($POST->ip_addr, $POST->newSubnet)) 	{ $Result->show("danger", _('IP address')." ".$POST->ip_addr." "._('already existing in selected network').'!', true); }
+	        if ($Addresses->address_exists ($POST->ip_addr, $POST->newSubnet)) 	{ $Result->show("danger", _('IP address')." ".escape_input($POST->ip_addr)." "._('already existing in selected network').'!', true); }
 	    }
 	    # multicast check
 	    if ($User->settings->enableMulticast==1 && $subnet_is_multicast) {

@@ -3,7 +3,7 @@
 </tr>
 <tr>
 	<td><?php print _('Theme'); ?></td>
-	<td><?php print $user->theme=="" ? _("Default") : escape_input($user->theme) ?></td>
+	<td><?php print $user->theme=="" ? _("Default") : $user->theme ?></td>
 </tr>
 <tr>
 	<td><?php print _('Compress override'); ?></td>

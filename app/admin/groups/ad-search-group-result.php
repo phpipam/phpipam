@@ -82,8 +82,8 @@ if(sizeof($groups)==0) {
 	print _('No groups found')."!<hr>";
 	print _('Possible reasons').":";
 	print "<ul>";
-	print "<li>"._('Invalid baseDN setting for ') . escape_input($server->type)."</li>";
-	print "<li>".escape_input($server->type). ' '. _('account does not have enough privileges for search')."</li>";
+	print "<li>"._('Invalid baseDN setting for ') . $server->type."</li>";
+	print "<li>".$server->type. ' '. _('account does not have enough privileges for search')."</li>";
 	print "</div>";
 } else {
 	print _(" Following groups were found").": (".sizeof($groups)."):<hr>";

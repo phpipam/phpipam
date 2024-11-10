@@ -153,5 +153,5 @@ if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cust
 
 # update
 if ($Admin->object_modify("circuits", $POST->action, "id", $values)) {
-	$Result->show("success", _("Circuit") . " " . $POST->action . " " . _("successful") . "!", false);
+	$Result->show("success", _("Circuit") . " " .  $User->get_post_action() . " " . _("successful") . "!", false);
 }

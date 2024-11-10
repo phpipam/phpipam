@@ -119,7 +119,7 @@ if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
 
 # update device
 if ($Admin->object_modify("devices", $POST->action, "id", $values)) {
-	$Result->show("success", _("Device") . " " . $POST->action . " " . _("successful") . '!', false);
+	$Result->show("success", _("Device") . " " . $User->get_post_action() . " " . _("successful") . '!', false);
 }
 
 if($POST->action=="delete"){

@@ -57,7 +57,7 @@ if($POST->action=="add" || $POST->action=="edit") {
             }
             else {
                 if (!Config::ValueOf('offline_mode')) {
-                    $Result->show("warning", _("Failed to update location lat/lng from Nominatim").".<br>".escape_input($latlng['error']), false);
+                    $Result->show("warning", _("Failed to update location lat/lng from Nominatim").".<br>".$latlng['error'], false);
                 }
             }
         }

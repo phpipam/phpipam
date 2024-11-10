@@ -22,9 +22,12 @@ $vlan = $Tools->fetch_object("vlans", "vlanId", @$vlanId);
 $rowSpan = 10 + sizeof($cfields);
 
 # verify that is it displayed in proper section, otherwise warn!
-if($folder['sectionId']!=$GET->section)	{
-	$sd = $Sections->fetch_section ("id", $folder['sectionId']);
-									{ $Result->show("warning", "Folder is in section <a href='".create_link("folder",$sd->id,$folder['id'])."'>$sd->name</a>!", false); }
+if ($folder['sectionId'] != $GET->section) {
+	$sd = $Sections->fetch_section("id", $folder['sectionId']);
+	if (!is_object($sd)) {
+		$sd = new Params();
+	}
+	$Result->show("warning", "Folder is in section <a href='" . create_link("folder", $sd->id, $folder['id']) . "'>" . $sd->name . "</a>!", false);
 }
 ?>
 

@@ -31,7 +31,7 @@ $pdns = $PowerDNS->db_settings;
 if ($test!==false) {
     $test_ttl = db_json_decode($User->settings->powerDNS);
     if (is_null($test_ttl->ttl)) {
-        $Result->show("warning", "Please set <a href='".create_link("administration", "powerDNS", "defaults")."'>default powerDNS values</a>!", false);
+		$Result->show("warning", "Please set <a href='" . create_link("administration", "powerDNS", "defaults") . "'>default powerDNS values</a>!", false);
     }
 }
 // errors

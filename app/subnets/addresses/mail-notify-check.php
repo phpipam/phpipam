@@ -21,7 +21,7 @@ $User->check_user_session();
 # verify each recipient
 foreach (pf_explode(",", $POST->recipients) as $rec) {
 	if(!filter_var(trim($rec), FILTER_VALIDATE_EMAIL)) {
-		$Result->show("danger", _("Invalid email address")." - ".escape_input($rec), true);
+		$Result->show("danger", _("Invalid email address")." - ".$rec, true);
 	}
 }
 
@@ -70,4 +70,3 @@ try {
 
 # all good
 $Result->show("success", _('Sending mail succeeded')."!" , true);
-?>

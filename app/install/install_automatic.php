@@ -1,5 +1,14 @@
 <?php
+if (!defined('VERSION_VISIBLE') || Config::ValueOf('disable_installer')) { print _("Install scripts disabled"); exit(0); }
+
+require_once(dirname(__FILE__) . '/../../functions/classes/class.Crypto.php');
 $db = Config::ValueOf('db');
+
+// Manually start session as we do not have $User.
+session_start();
+
+$Crypto = new Crypto();
+$csrf = $Crypto->csrf_cookie("create", "install_execute");
 
 // add prefix - install or migrate
 $title_prefix = $GET->subnetId=="migrate" ? _("migration") : _("installation");
@@ -104,6 +113,7 @@ $filename	  = $GET->subnetId=="migrate" ? "MIGRATE" : "SCHEMA";
 			</div>
 
 		</div>
+		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</form>
 
 

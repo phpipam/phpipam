@@ -120,11 +120,11 @@ if($Admin->object_modify("circuitsLogical", $POST->action, "id", $values))
 			$order++;
 		}
 		// all ok
-		$Result->show("success", _("Logical Circuit")." ".$POST->action." "._("successful")."!", false);
+		$Result->show("success", _("Logical Circuit")." ". $User->get_post_action()." "._("successful")."!", false);
 	}
 	else {
 		if($POST->action == "delete"){
-        $Result->show("success", _("Logical Circuit")." ".$POST->action." "._("successful")."!", false);
+        $Result->show("success", _("Logical Circuit")." ". $User->get_post_action()." "._("successful")."!", false);
 		}
 		else{
         $Result->show("warning", _("No circuits selected")."!", false);

@@ -44,7 +44,7 @@ else {
 	$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 
 	# printout
-	print '<div style="width:98%;margin-left:1%;' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
+	print '<div style="' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 	print "<table class='table changelog table-hover table-top table-condensed'>";
 
 	# headers

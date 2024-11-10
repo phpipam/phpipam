@@ -25,8 +25,8 @@ $User->Crypto->csrf_cookie ("validate", "replace_fields", $POST->csrf_cookie) ==
 if(empty($POST->search)) { $Result->show("danger", _('Please enter something in search field').'!', true); }
 //if device verify that it exists
 if($POST->field == "switch") {
-	if(!$device1 = $Admin->fetch_object("devices", "hostname", $POST->search))	{ $Result->show("danger  alert-absolute", _('Switch').' "<i>'. $POST->search  .'</i>" '._('does not exist, first create switch under admin menu').'!', true); }
-	if(!$device2 = $Admin->fetch_object("devices", "hostname", $POST->replace))	{ $Result->show("danger  alert-absolute", _('Switch').' "<i>'. $POST->search  .'</i>" '._('does not exist, first create switch under admin menu').'!', true); }
+	if(!$device1 = $Admin->fetch_object("devices", "hostname", $POST->search))	{ $Result->show("danger  alert-absolute", _('Switch').' "<i>'. escape_input($POST->search) . '</i>" '._('does not exist, first create switch under admin menu').'!', true); }
+	if(!$device2 = $Admin->fetch_object("devices", "hostname", $POST->replace))	{ $Result->show("danger  alert-absolute", _('Switch').' "<i>'. escape_input($POST->search) . '</i>" '._('does not exist, first create switch under admin menu').'!', true); }
 
 	//replace posts
 	$POST->search  = $device1->id;
