@@ -1373,9 +1373,9 @@ class User extends Common_functions {
 
         # failure
         if(!isset($this->user->username)) {
+            header('HTTP/1.1 500 Cannot fetch credentials from userid');
             throw new Exception ("Cannot fetch credentials from userid");
         }
-            header('HTTP/1.1 500 Cannot fetch credentials from userid');
 
         # set session parameters
         $_SESSION['ipamusername'] = $this->user->username;
@@ -1479,13 +1479,13 @@ class User extends Common_functions {
      */
     public function save_passkey ($credential = "", $credentialId = NULL, $keyId = NULL) {
         try {
-            $this->Database->insertObject("passkeys", ["user_id"=>$this->user->id, "credentialId"=>$credentialId, "credential"=>$credential, "keyId"=>$keyId, "created"=>date("Y-m-d H:i:s§")]);
+            $this->Database->insertObject("passkeys", ["user_id"=>$this->user->id, "credentialId"=>$credentialId, "credential"=>$credential, "keyId"=>$keyId, "created"=>date("Y-m-d H:i:s")]);
             // ok
             return true;
         }
         catch (Exception $e) {
             header('HTTP/1.1 500 '.$e->getMessage());
-            return false;
+            throw $e;
         }
     }
 
