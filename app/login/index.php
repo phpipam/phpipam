@@ -151,7 +151,7 @@ if(@$config['requests_public']===false) {
 
 						if(!Config::ValueOf('disable_installer')) {
 							print '<div class="alert alert-warning" style="width:400px;margin:auto;margin-top:30px;">';
-							print '<strong>' . _("Please disable installaion scripts in config.php<br>\$disable_installer = true;") . '</strong>';
+							print '<strong>' . _("Please disable installation scripts:<br>&emsp; config.php: \$disable_installer = true;<br>&emsp; docker: env IPAM_DISABLE_INSTALLER=1") . '</strong>';
 							print '</div>';
 						}
 
