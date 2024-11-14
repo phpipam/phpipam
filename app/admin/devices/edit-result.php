@@ -69,29 +69,6 @@ if ($POST->rack !== "0" && $User->get_module_permissions ("racks")>=User::ACCESS
     }
 }
 
-# fetch custom fields
-$custom = $Tools->fetch_custom_fields('devices');
-if(sizeof($custom) > 0) {
-	foreach($custom as $myField) {
-
-		//replace possible ___ back to spaces
-		$myField['nameTest'] = str_replace(" ", "___", $myField['name']);
-		if(isset($POST->{$myField['nameTest']})) { $POST->{$myField['name']} = $POST->{$myField['nameTest']};}
-
-		//booleans can be only 0 and 1!
-		if($myField['type']=="tinyint(1)") {
-			if($POST->{$myField['name']}>1) {
-				$POST->{$myField['name']} = 0;
-			}
-		}
-		//not null!
-		if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
-
-		# save to update array
-		$update[$myField['name']] = $POST->{$myField['nameTest']};
-	}
-}
-
 # set update values
 $values = array(
 				"id"          =>$POST->switchid,
@@ -102,10 +79,11 @@ $values = array(
 				"sections"    =>$POST->sections,
 				"location"    =>$POST->location
 				);
-# custom fields
-if(isset($update)) {
-	$values = array_merge($values, $update);
-}
+
+# fetch custom fields
+$update = $Tools->update_POST_custom_fields('devices', $POST->action, $POST);
+$values = array_merge($values, $update);
+
 # rack
 if (!is_blank($POST->rack) && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
 	$values['rack']       = $POST->rack;

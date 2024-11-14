@@ -85,25 +85,6 @@ if($POST->action=="edit" && $POST->hasBack=="1" && $POST->size < $rack_details->
     }
 }
 
-# fetch custom fields
-$custom = $Tools->fetch_custom_fields('racks');
-if(sizeof($custom) > 0) {
-	foreach($custom as $myField) {
-		//booleans can be only 0 and 1!
-		if($myField['type']=="tinyint(1)") {
-			if($POST->{$myField['name']}>1) {
-				$POST->{$myField['name']} = "";
-			}
-		}
-		//not null!
-		if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) {
-			{ $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
-		}
-		# save to update array
-		$update[$myField['name']] = $POST->{$myField['name']};
-	}
-}
-
 # set update values
 $values = array(
 				"id"          => $POST->rackid,
@@ -113,10 +94,10 @@ $values = array(
                 "topDown"     => $POST->topDown,
 				"description" => $POST->description
 				);
-# custom fields
-if(isset($update)) {
-	$values = array_merge($values, $update);
-}
+
+# fetch custom fields
+$update = $Tools->update_POST_custom_fields('racks', $POST->action, $POST);
+$values = array_merge($values, $update);
 
 # append location
 if ($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_RW) {

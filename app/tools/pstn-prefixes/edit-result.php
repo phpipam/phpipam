@@ -108,25 +108,6 @@ if($POST->action=="add" && $POST->master==0) {
     }
 }
 
-# fetch custom fields
-$custom = $Tools->fetch_custom_fields('pstnPrefixes');
-if(sizeof($custom) > 0) {
-	foreach($custom as $myField) {
-		//booleans can be only 0 and 1!
-		if($myField['type']=="tinyint(1)") {
-			if($POST->{$myField['name']}>1) {
-				$POST->{$myField['name']} = 0;
-			}
-		}
-		//not null!
-		if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) {
-			{ $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
-		}
-		# save to update array
-		$update[$myField['name']] = $POST->{$myField['name']};
-	}
-}
-
 // set values
 $values = array(
     "id"          =>$POST->id,
@@ -145,9 +126,8 @@ if ($User->get_module_permissions ("devices")==User::ACCESS_NONE) {
 }
 
 # custom fields
-if(isset($update)) {
-	$values = array_merge($values, $update);
-}
+$update = $Tools->update_POST_custom_fields('pstnPrefixes', $POST->action, $POST);
+$values = array_merge($values, $update);
 
 # execute update
 if(!$Admin->object_modify ("pstnPrefixes", $POST->action, "id", $values)) {
