@@ -44,14 +44,14 @@ else 									{ $title = 'Add new language'; }
 	<!-- name -->
 	<tr>
 	    <td><?php print _('Language code'); ?></td>
-	    <td><input type="text" name="l_code" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$lang['l_code']); ?>" <?php if($POST->action == "delete") print "readonly"; ?>></td>
+	    <td><input type="text" name="l_code" class="form-control input-sm" value="<?php print @$lang['l_code']; ?>" <?php if($POST->action == "delete") print "readonly"; ?>></td>
     </tr>
 
     <!-- description -->
     <tr>
     	<td><?php print _('Language name'); ?></td>
     	<td>
-    		<input type="text" name="l_name" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$lang['l_name']); ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
+    		<input type="text" name="l_name" class="form-control input-sm" value="<?php print @$lang['l_name']; ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
 
     		<input type="hidden" name="l_id" value="<?php print escape_input($POST->langid); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">

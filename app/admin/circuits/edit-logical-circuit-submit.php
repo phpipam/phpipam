@@ -45,26 +45,6 @@ $id_list = $POST->circuit_list!=="" ? pf_explode("." , rtrim($POST->circuit_list
 if(sizeof($id_list ) != sizeof(array_unique($id_list))){  $Result->show("danger", _('Remove duplicates of circuit').'!', true); }
 if($POST->action == "add" && sizeof($id_list) == 0){  $Result->show("danger", _('No circuits selected').'!', true); }
 
-# fetch custom fields
-$custom = $Tools->fetch_custom_fields('circuitsLogical');
-if(sizeof($custom) > 0) {
-	foreach($custom as $myField) {
-		//replace possible ___ back to spaces
-		$myField['nameTest'] = str_replace(" ", "___", $myField['name']);
-		if(isset($POST->{$myField['nameTest']})) { $POST->{$myField['name']} = $POST->{$myField['nameTest']};}
-		//booleans can be only 0 and 1!
-		if($myField['type']=="tinyint(1)") {
-			if($POST->{$myField['name']}>1) {
-				$POST->{$myField['name']} = 0;
-			}
-		}
-		//not null!
-		if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) { $Result->show("danger", $myField['name']." "._("can not be empty").'!', true); }
-		# save to update array
-		$update[$myField['name']] = $POST->{$myField['nameTest']};
-	}
-}
-
 # set update values
 $values = array(
 				"id"           => $POST->id,
@@ -74,10 +54,9 @@ $values = array(
 				"member_count" => sizeof($id_list)
 				);
 
-# custom fields
-if(isset($update)) {
-	$values = array_merge($values, $update);
-}
+# fetch custom fields
+$update = $Tools->update_POST_custom_fields('circuitsLogical', $POST->action, $POST);
+$values = array_merge($values, $update);
 
 # update circuit
 if($Admin->object_modify("circuitsLogical", $POST->action, "id", $values))
@@ -120,11 +99,11 @@ if($Admin->object_modify("circuitsLogical", $POST->action, "id", $values))
 			$order++;
 		}
 		// all ok
-		$Result->show("success", _("Logical Circuit")." ".$POST->action." "._("successful")."!", false);
+		$Result->show("success", _("Logical Circuit")." ". $User->get_post_action()." "._("successful")."!", false);
 	}
 	else {
 		if($POST->action == "delete"){
-        $Result->show("success", _("Logical Circuit")." ".$POST->action." "._("successful")."!", false);
+        $Result->show("success", _("Logical Circuit")." ". $User->get_post_action()." "._("successful")."!", false);
 		}
 		else{
         $Result->show("warning", _("No circuits selected")."!", false);

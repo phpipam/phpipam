@@ -145,7 +145,7 @@ class FirewallZones extends Common_functions {
 	private function generate_numeric_zone_name ($zoneLength,$zoneGenerator) {
 
 		# execute
-		try { $maxZone = $this->Database->getObjectsQuery('SELECT MAX(CAST(zone as UNSIGNED)) as zone FROM firewallZones WHERE generator NOT LIKE 2;');}
+		try { $maxZone = $this->Database->getObjectsQuery('firewallZones', 'SELECT MAX(CAST(zone as UNSIGNED)) as zone FROM firewallZones WHERE generator NOT LIKE 2;');}
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
@@ -198,7 +198,7 @@ class FirewallZones extends Common_functions {
 		}
 
 		# execute
-		try { $uniqueZone = $this->Database->getObjectsQuery($query,$params);}
+		try { $uniqueZone = $this->Database->getObjectsQuery('firewallZones', $query,$params);}
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
@@ -226,7 +226,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone_mappings () {
 		# try to fetch all zone mappings
-		try { $mappings =  $this->Database->getObjectsQuery('SELECT
+		try { $mappings =  $this->Database->getObjectsQuery('firewallZoneMapping', 'SELECT
 						firewallZones.id AS id,
 						firewallZones.generator AS generator,
 						firewallZones.length AS length,
@@ -248,7 +248,7 @@ class FirewallZones extends Common_functions {
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
 		# try to fetch all subnet and vlan informations for all zones
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT
 						firewallZoneSubnet.zoneId AS zoneId,
 						firewallZoneSubnet.subnetId AS subnetId,
 						subnets.sectionId AS sectionId,
@@ -300,7 +300,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone_mapping ($id) {
 		# try to fetch id specific zone mapping
-		try { $mapping =  $this->Database->getObjectsQuery('SELECT
+		try { $mapping =  $this->Database->getObjectsQuery('firewallZoneMapping', 'SELECT
 						firewallZones.id AS id,
 						firewallZones.generator AS generator,
 						firewallZones.length AS length,
@@ -321,7 +321,7 @@ class FirewallZones extends Common_functions {
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
 		# try to fetch all subnet and vlan informations for all zones
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT
 						firewallZoneSubnet.zoneId AS zoneId,
 						firewallZoneSubnet.subnetId AS subnetId,
 						subnets.sectionId AS sectionId,
@@ -375,7 +375,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function check_zone_mapping ($zoneId) {
 		# try to fetch id specific zone mapping
-		try { $mapping =  $this->Database->getObjectsQuery('SELECT id FROM firewallZoneMapping WHERE zoneId = ?;', $zoneId);}
+		try { $mapping =  $this->Database->getObjectsQuery('firewallZoneMapping', 'SELECT id FROM firewallZoneMapping WHERE zoneId = ?;', $zoneId);}
 
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
@@ -394,7 +394,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone_subnet_info ($id) {
 		# try to fetch id specific zone information
-		try { $info =  $this->Database->getObjectsQuery('SELECT
+		try { $info =  $this->Database->getObjectsQuery('firewallZoneMapping', 'SELECT
 						firewallZones.zone as zone,
 						firewallZones.padding as padding,
 						firewallZones.length as length,
@@ -446,12 +446,12 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zones () {
 		# try to fetch all zones
-		try { $zones =  $this->Database->getObjectsQuery('SELECT * FROM firewallZones;');}
+		try { $zones =  $this->Database->getObjectsQuery('firewallZones', 'SELECT * FROM firewallZones;');}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
 		# try to fetch all subnet and vlan informations for all zones
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT
 						firewallZoneSubnet.zoneId AS zoneId,
 						firewallZoneSubnet.subnetId AS subnetId,
 						subnets.sectionId AS sectionId,
@@ -505,13 +505,13 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone ($id) {
 		# try to fetch zone with ID $id
-		try { $zone = $this->Database->getObjectsQuery('SELECT * FROM firewallZones WHERE id = ?;', $id);}
+		try { $zone = $this->Database->getObjectsQuery('firewallZones', 'SELECT * FROM firewallZones WHERE id = ?;', $id);}
 
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
 		# try to fetch all subnet and vlan informations for this zone
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT
 						firewallZoneSubnet.zoneId AS zoneId,
 						firewallZoneSubnet.subnetId AS subnetId,
 						subnets.sectionId AS sectionId,
@@ -620,7 +620,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone_network ($id) {
 		# try to fetch all subnet and vlan informations for this zone
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT
 						firewallZoneSubnet.zoneId AS zoneId,
 						firewallZoneSubnet.subnetId AS subnetId,
 						subnets.sectionId AS sectionId,
@@ -674,7 +674,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function check_zone_network ($subnetId) {
 		# check if the subnet is already bound to this or any other zone
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT * FROM firewallZoneSubnet WHERE subnetId = ?;', $subnetId);}
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT * FROM firewallZoneSubnet WHERE subnetId = ?;', $subnetId);}
 
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
@@ -699,7 +699,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function add_zone_network ($zoneId,$subnetId) {
 		# check if the subnet is already bound to this or any other zone
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT * FROM firewallZoneSubnet WHERE subnetId = ?;', $subnetId);}
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT * FROM firewallZoneSubnet WHERE subnetId = ?;', $subnetId);}
 
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
@@ -799,7 +799,7 @@ class FirewallZones extends Common_functions {
 		}
 
 		# fetch the highest inserted id, matching the zone name
-		try { $lastId=$this->Database->getObjectsQuery("SELECT MAX(id) AS id FROM firewallZones WHERE zone = ? ;", $values['zone']);}
+		try { $lastId=$this->Database->getObjectsQuery('firewallZones', "SELECT MAX(id) AS id FROM firewallZones WHERE zone = ? ;", $values['zone']);}
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
@@ -1055,6 +1055,9 @@ class FirewallZones extends Common_functions {
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($id);
+		if (!is_object($zone)) {
+			$zone = new Params();
+		}
 		$firewallAddressObject = "";
 
 		foreach ($firewallZoneSettings['pattern'] as $pattern) {
@@ -1181,7 +1184,7 @@ class FirewallZones extends Common_functions {
 		$zone = $this->get_zone_subnet_info($subnetId);
 		$firewallAddressObject = "";
 
-		try { $ipaddresses = $this->Database->getObjectsQuery('SELECT id, hostname FROM ipaddresses WHERE subnetId = ? ',$subnetId); }
+		try { $ipaddresses = $this->Database->getObjectsQuery('ipaddresses', 'SELECT id, hostname FROM ipaddresses WHERE subnetId = ? ',$subnetId); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;

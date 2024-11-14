@@ -36,5 +36,5 @@ switch ($type) {
         require("subnet-scan-result-$type.php");
         break;
     default:
-        $Result->show("danger", _("Invalid scan type").' ('.escape_input($type).')', true);
+        $Result->show("danger", _("Invalid scan type").' ('.$type.')', true);
 }

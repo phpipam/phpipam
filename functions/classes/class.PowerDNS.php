@@ -627,7 +627,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = 'SELECT COUNT(*) AS `cnt` FROM `records` WHERE `domain_id` = ? AND `type` IS NOT NULL;';
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery($query, array($domain_id)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($domain_id)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -648,7 +648,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = "select count(*) as `cnt` from `records` where `domain_id` = ? and `type` = ?;";
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery($query, array($domain_id, $type)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($domain_id, $type)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -677,7 +677,7 @@ class PowerDNS extends Common_functions {
     public function fetch_all_domain_records ($domain_id) {
         $query = "SELECT * FROM `records` WHERE `domain_id` = ? AND `type` IS NOT NULL ORDER BY $this->orderby $this->orderdir LIMIT $this->limit;";
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery($query, array($domain_id)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($domain_id)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -698,7 +698,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = "select * from `records` where `domain_id` = ? and `type` = ? order by $this->orderby $this->orderdir limit $this->limit;";
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery($query, array($domain_id, $type)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($domain_id, $type)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -739,7 +739,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = "select DISTINCT(`domain_id`) from `records` where `name` = ? or `content` = ? and `type` != 'NS' and `type` != 'SOA';";
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery($query, array($hostname, $ip)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($hostname, $ip)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -761,7 +761,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = "select * from `records` where `domain_id` = ? and `type` = ? and `name` = ? limit 1;";
         // fetch
-        try { $records = $this->Database_pdns->getObjectQuery($query, array($domain_id, $type, $name)); }
+        try { $records = $this->Database_pdns->getObjectQuery("records", $query, array($domain_id, $type, $name)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -827,7 +827,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = "select DISTINCT(`content`) from records WHERE INET_ATON(`content`) IS NOT NULL or `content` LIKE '%:%';";
          // search
-        try { $records = $this->Database_pdns->getObjectsQuery($query); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -1576,7 +1576,7 @@ class PowerDNS extends Common_functions {
      */
     public function record_exists ($domain_id, $name, $type, $content) {
         // execute
-        try { $res = $this->Database_pdns->getObjectQuery("select count(*) as `cnt` from `records` where `domain_id` = ? and `name`=? and `type`=? and `content`=?;", array($domain_id, $name, $type, $content)); }
+        try { $res = $this->Database_pdns->getObjectQuery("records", "select count(*) as `cnt` from `records` where `domain_id` = ? and `name`=? and `type`=? and `content`=?;", array($domain_id, $name, $type, $content)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;

@@ -31,7 +31,7 @@ class LockForUpdate {
      * @param string  $tableName
      * @param integer $id
      */
-    function __construct(Database_PDO $Database, $tableName, $id) {
+    public function __construct(Database_PDO $Database, $tableName, $id) {
         if (!is_string($tableName) || is_blank($tableName)) {
             throw new Exception(_('Invalid table name'));
         }
@@ -44,13 +44,13 @@ class LockForUpdate {
             throw new Exception(_('Unable to start transaction'));
         }
 
-        $this->locked_row = $this->Database->getObjectQuery("SELECT * FROM `$tableName` WHERE `id`=? FOR UPDATE;", [$id]);
+        $this->locked_row = $this->Database->getObjectQuery($tableName, "SELECT * FROM `$tableName` WHERE `id`=? FOR UPDATE;", [$id]);
     }
 
     /**
      * Commit transaction and release MySQL row lock
      */
-    function __destruct() {
+    public function __destruct() {
         $this->Database->commit();
     }
 }

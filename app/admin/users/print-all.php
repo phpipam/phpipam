@@ -62,6 +62,7 @@ foreach ($users as $user) {
 	$user = (array) $user;
 
 	// passkeys
+	$passkey_only = false;
 	if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
 		// get user passkeys
 		$user_passkeys = $User->get_user_passkeys($user['id']);

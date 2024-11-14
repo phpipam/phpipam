@@ -686,7 +686,7 @@ class Prefix_controller extends Common_api_functions {
         $query = "select * from `subnets` where `".$this->custom_field_name."` = ? $limit order by `".$this->custom_field_orderby."` ".$this->custom_field_order_direction.";";
         $params = array($this->_params->id);
         // search
-        try { $subnets = $this->Database->getObjectsQuery($query, $params); }
+        try { $subnets = $this->Database->getObjectsQuery('subnets', $query, $params); }
         catch (Exception $e) { $this->Response->throw_exception(500, "Error: ".$e->getMessage()); }
         // remove if they have slaves for addresses query
         if ($this->query_type=="address") {

@@ -11,7 +11,7 @@ if (isset($GET->subnetId) && @isset($GET->sPage)) {
 	// filter by devicetype
 	if ($GET->subnetId=="type") {
 		// fetch type
-		$devtype = $Database->getObjectQuery("select tid,tname from `deviceTypes` where `tname` = ?", [$GET->sPage]);
+		$devtype = $Database->getObjectQuery("deviceTypes", "select tid,tname from `deviceTypes` where `tname` = ?", [$GET->sPage]);
 		// type
 		foreach ($devices as $k=>$d) {
 			if ($d->type!=$devtype->tid) {
@@ -22,7 +22,7 @@ if (isset($GET->subnetId) && @isset($GET->sPage)) {
 	// section
 	elseif ($GET->subnetId=="section") {
 		// fetch section
-		$section = $Database->getObjectQuery("select id,name from `sections` where `name` = ?", [$GET->sPage]);
+		$section = $Database->getObjectQuery("sections", "select id,name from `sections` where `name` = ?", [$GET->sPage]);
 		// check in which section device can be
 		foreach ($devices as $k=>$d) {
 			$device_section_ids = pf_explode(";", $d->sections);
@@ -35,7 +35,7 @@ if (isset($GET->subnetId) && @isset($GET->sPage)) {
 	// rack
 	elseif ($GET->subnetId=="rack") {
 		// fetch rack
-		$rack = $Database->getObjectQuery("select id,name from `racks` where `name` = ?", [$GET->sPage]);
+		$rack = $Database->getObjectQuery("racks", "select id,name from `racks` where `name` = ?", [$GET->sPage]);
 		// check in which section device can be
 		foreach ($devices as $k=>$d) {
 			if ($d->rack!=$rack->id) {
@@ -46,7 +46,7 @@ if (isset($GET->subnetId) && @isset($GET->sPage)) {
 	// location
 	elseif ($GET->subnetId=="location") {
 		// fetch rack
-		$location = $Database->getObjectQuery("select id,name from `locations` where `name` = ?", [$GET->sPage]);
+		$location = $Database->getObjectQuery("locations", "select id,name from `locations` where `name` = ?", [$GET->sPage]);
 		// check in which section device can be
 		foreach ($devices as $k=>$d) {
 			if ($d->location!=$location->id) {
@@ -72,8 +72,8 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 	print "   <li><a href='".create_link("tools","devices")."'>"._("All types")."</a></li>";
 	print "		<li role='separator' class='divider'></li>";
 	foreach ($device_types_indexed as $d) {
-		$selected = $d->tname==$GET->sPage ? "class='active'" : "";
-		print "   <li $selected><a href='".create_link("tools","devices","type",$d->tname)."'>".$d->tname."</a></li>";
+		$selected = $d==$GET->sPage ? "class='active'" : "";
+		print "   <li $selected><a href='".create_link("tools","devices","type",$d)."'>".$d."</a></li>";
 	}
 	print " </ul>";
 	print "</div>";

@@ -1,17 +1,17 @@
-== 1.7.1
-
-    New features:
-    ------------
+== 1.8.0
 
     Bugfixes:
     ----------------------------
+    + PHP8 compatibility fixes;
+    + Fixed passkeys upgrade queries;
+    + MySQL no active transaction error during upgrades (#4319);
+    + $config['disable_main_login_form'] shows blank page (#4317);
+    + Unable to clear custom fields (#4313);
+    + Modified the text shortening of subnet descriptions (#4279, #4280);
 
     Enhancements, changes:
     ----------------------------
-    + Modified the text shortening of subnet descriptions (#4279, #4280);
-
-    Security Fixes:
-    ----------------------------
+    + Added Isle of Man postcodes (#4318);
 
 == 1.7.0
 
@@ -70,6 +70,8 @@
     + HTML DOM XSS injection via filenames when uploading (#4160);
     + Escape loaded database strings by default, stored XSS defense;
     + Increase minimum 2FA secret length to 32 (160bit);
+    + Disable /app/install/ helper scripts via config.php $disable_installer;
+    + LDAP user searches sent without ssl/tls;
 
 == 1.6.0
 

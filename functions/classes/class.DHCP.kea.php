@@ -387,7 +387,7 @@ class DHCP_kea extends Common_functions {
             throw new Exception("IPv6 leases not yet!");
         }
         // fetch leases
-		try { $leases = $this->Database_kea->getObjectsQuery($query); }
+		try { $leases = $this->Database_kea->getObjectsQuery("lease4", $query); }
 		catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}
@@ -570,7 +570,7 @@ class DHCP_kea extends Common_functions {
             $query = "select * from `hosts`;";
         }
         // fetch leases
-		try { $reservations = $this->Database_kea->getObjectsQuery($query); }
+		try { $reservations = $this->Database_kea->getObjectsQuery("hosts", $query); }
 		catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}

@@ -76,6 +76,7 @@ if ($subnets!==false) {
 
     print "<tbody>";
     //loop
+	$sp = [];
 	foreach ($subnets as $subnet) {
 		# check permission
 		$permission = $Subnets->check_permission ($User->user, $subnet->id);

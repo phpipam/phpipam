@@ -115,7 +115,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<tr>
 		<th><?php print _('IP address'); ?></th>
 		<td>
-			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print $Tools->strip_xss($ip_address); ?>" size="30">
+			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print $ip_address; ?>" size="30">
 			<input type="hidden" name="requestId" value="<?php print $request['id']; ?>">
 			<input type="hidden" name="requester" value="<?php print $request['requester']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
@@ -125,21 +125,21 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<tr>
 		<th><?php print _('Description'); ?></th>
 		<td>
-			<input type="text" name="description" class="form-control input-sm" value="<?php print $Tools->strip_xss(@$request['description']); ?>" size="30" placeholder="<?php print _('Enter IP description'); ?>">
+			<input type="text" name="description" class="form-control input-sm" value="<?php print @$request['description']; ?>" size="30" placeholder="<?php print _('Enter IP description'); ?>">
 		</td>
 	</tr>
 	<!-- MAC Address -->
 	<tr>
 		<th><?php print _('MAC Address'); ?></th>
 		<td>
-			<input type="text" name="mac" class="form-control input-sm" value="<?php print $Tools->strip_xss(@$request['mac']); ?>" size="30" placeholder="<?php print _('Enter MAC Address'); ?>">
+			<input type="text" name="mac" class="form-control input-sm" value="<?php print @$request['mac']; ?>" size="30" placeholder="<?php print _('Enter MAC Address'); ?>">
 		</td>
 	</tr>
 	<!-- DNS name -->
 	<tr>
 		<th><?php print _('Hostname'); ?></th>
 		<td>
-			<input type="text" name="hostname" class="form-control input-sm" value="<?php print $Tools->strip_xss(@$request['hostname']); ?>" size="30" placeholder="<?php print _('Enter hostname'); ?>">
+			<input type="text" name="hostname" class="form-control input-sm" value="<?php print @$request['hostname']; ?>" size="30" placeholder="<?php print _('Enter hostname'); ?>">
 		</td>
 	</tr>
 
@@ -168,7 +168,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<tr>
 		<th><?php print _('Owner'); ?></th>
 		<td>
-			<input type="text" name="owner" class="form-control input-sm" id="owner" value="<?php print $Tools->strip_xss(@$request['owner']); ?>" size="30" placeholder="<?php print _('Enter IP owner'); ?>">
+			<input type="text" name="owner" class="form-control input-sm" id="owner" value="<?php print @$request['owner']; ?>" size="30" placeholder="<?php print _('Enter IP owner'); ?>">
 		</td>
 	</tr>
 	<?php } ?>
@@ -197,7 +197,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 			</select>
 			<?php if(in_array('port', $selected_ip_fields)) { ?>
 			/
-			<input type="text" name="port" class="form-control input-sm input-w-100" value="<?php print $Tools->strip_xss(@$request['port']); ?>"  placeholder="<?php print _('Port'); ?>">
+			<input type="text" name="port" class="form-control input-sm input-w-100" value="<?php print @$request['port']; ?>"  placeholder="<?php print _('Port'); ?>">
 		</td>
 	</tr>
 	<?php } ?>
@@ -244,15 +244,15 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<tr>
 		<th><?php print _('Requester email'); ?></th>
 		<td>
-			<input type="text" disabled="disabled" class="form-control" value="<?php print $Tools->strip_xss(@$request['requester']); ?>">
+			<input type="text" disabled="disabled" class="form-control" value="<?php print @$request['requester']; ?>">
 		</td>
 	</tr>
 	<!-- comment -->
 	<tr>
 		<th><?php print _('Requester comment'); ?></th>
 		<td>
-			<input type="text" disabled="disabled" class="form-control" value="<?php print $Tools->strip_xss(@$request['comment']); ?>">
-			<?php print "<input type='hidden' name='comment' value='".$Tools->strip_xss(@$request['comment'])."'>"; ?></i></td>
+			<input type="text" disabled="disabled" class="form-control" value="<?php print @$request['comment']; ?>">
+			<?php print "<input type='hidden' name='comment' value='".@$request['comment']."'>"; ?></i></td>
 	</tr>
 	<!-- Admin comment -->
 	<tr>

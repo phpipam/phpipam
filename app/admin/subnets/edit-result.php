@@ -60,8 +60,6 @@ if(!is_numeric($POST->vrfId))						{ $POST->vrfId = 0; }
 
 # get section details
 $section = (array) $Sections->fetch_section(null, $POST->sectionId);
-# fetch custom fields
-$custom = $Tools->fetch_custom_fields('subnets');
 
 # get master subnet details for folder overrides
 if($POST->masterSubnetId!=0)	{
@@ -226,28 +224,8 @@ else {
     if($Subnets->check_permission ($User->user, $POST->subnetId) != 3) 	{ $Result->show("danger", _('You do not have permissions to add edit/delete this subnet')."!", true); }
 }
 
-
-
-//custom fields check
-if(sizeof($custom) > 0) {
-	foreach($custom as $myField) {
-		//booleans can be only 0 and 1!
-		if($myField['type']=="tinyint(1)") {
-			if($POST->{$myField['name']}>1) {
-				$POST->{$myField['name']} = "";
-			}
-		}
-		//not empty
-		if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) {
-			$errors[] = "Field \"$myField[name]\" cannot be empty!";
-		}
-	}
-}
-
-
-
 /* If no errors are present execute request */
-if (sizeof($errors)>0) {
+if (!empty($errors)) {
 	//unique
 	$errors = array_unique($errors);
     print '<div class="alert alert-danger"><strong>'._('Please fix following problems').'</strong>:';
@@ -356,28 +334,10 @@ else {
 			$values['vrfId']=$POST->vrfId;
 		}
 	}
-	# append custom fields
-	$custom = $Tools->fetch_custom_fields('subnets');
-	if(sizeof($custom) > 0) {
-		foreach($custom as $myField) {
 
-			//replace possible ___ back to spaces
-			$myField['nameTest'] = str_replace(" ", "___", $myField['name']);
-			if(isset($POST->{$myField['nameTest']})) { $POST->{$myField['name']} = $POST->{$myField['nameTest']};}
-
-			//booleans can be only 0 and 1!
-			if($myField['type']=="tinyint(1)") {
-				if($POST->{$myField['name']}>1) {
-					$POST->{$myField['name']} = 0;
-				}
-			}
-			//not null!
-			if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
-
-			# save to update array
-			$values[$myField['name']] = $POST->{$myField['name']};
-		}
-	}
+	# fetch custom fields
+	$update = $Tools->update_POST_custom_fields('subnets', $POST->action, $POST);
+	$values = array_merge($values, $update);
 
 	# execute
 	if (!$Subnets->modify_subnet ($POST->action, $values))	{ $Result->show("danger", _('Error editing subnet'), true); }
@@ -399,7 +359,7 @@ else {
 		# edit success
 		if($POST->action=="delete")	{ $Result->show("success", _('Subnet, IP addresses and all belonging subnets deleted successfully').'!', false); }
 		# create - for redirect
-		elseif ($POST->action=="add") { $Result->show("success", _("Subnet")." ". $POST->action." "._("successful").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
+		elseif ($POST->action=="add") { $Result->show("success", _("Subnet")." " . $User->get_post_action() . " "._("successful").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
 		#
 		else { $Result->show("success", _("Subnet")." ".$User->get_post_action()." "._("successful").'!', false); }
 	}
@@ -407,7 +367,7 @@ else {
 	# propagate to slaves
 	if ($POST->set_inheritance=="Yes" && $POST->action=="edit") {
         # reset slaves
-        if ($Subnets->slaves===NULL) {
+        if ($Subnets->slaves===null) {
     		$Subnets->reset_subnet_slaves_recursive();
     		$Subnets->fetch_subnet_slaves_recursive($POST->subnetId);
     		$Subnets->remove_subnet_slaves_master($POST->subnetId);

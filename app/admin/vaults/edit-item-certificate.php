@@ -65,7 +65,7 @@ $custom = $Tools->fetch_custom_fields('vaultItems');
 	<tr>
 	    <td><?php print _('Name'); ?></td>
 	    <td class='td-items'>
-	    	<input type="text" name="name" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$item_objects->name); ?>" <?php if($POST->action == "delete") print "readonly"; ?> autocomplete="off">
+	    	<input type="text" name="name" class="form-control input-sm" value="<?php print escape_input(@$item_objects->name); ?>" <?php if($POST->action == "delete") print "readonly"; ?> autocomplete="off">
 	        <input type="hidden" name="id" value="<?php print $item->id; ?>">
 	        <input type="hidden" name="vaultId" value="<?php print $item->vaultId; ?>">
     		<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
@@ -78,7 +78,7 @@ $custom = $Tools->fetch_custom_fields('vaultItems');
     <tr>
     	<td><?php print _('Description'); ?></td>
     	<td>
-    		<input type="text" name="description" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$item_objects->description); ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
+    		<input type="text" name="description" class="form-control input-sm" value="<?php print escape_input(@$item_objects->description); ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
     	</td>
     	<td class="info2"><?php print _('Enter description'); ?></td>
     </tr>

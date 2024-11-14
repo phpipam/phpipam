@@ -69,7 +69,7 @@ else {
 }
 
 # fetch records
-$ipaddresses = $Database->getObjectsQuery($query);
+$ipaddresses = $Database->getObjectsQuery('ipaddresses', $query);
 
 # try to update dns records
 if (is_array($ipaddresses)) {

@@ -118,25 +118,7 @@ foreach ($POST as $k => $v) {
 }
 
 # custom fields and checks
-$custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
-if(sizeof($custom_fields) > 0 && $action!="delete") {
-	foreach($custom_fields as $field) {
-		# replace possible ___ back to spaces!
-		$field['nameTest']      = str_replace(" ", "___", $field['name']);
-
-		if(isset($POST->{$field['nameTest']})) { $POST->{$field['name']} = $POST->{$field['nameTest']};}
-		# booleans can be only 0 and 1
-		if($field['type']=="tinyint(1)") {
-			if($POST->{$field['name']}>1) {
-				$POST->{$field['name']} = "";
-			}
-		}
-		# null custom fields not permitted
-		if($field['Null']=="NO" && is_blank($POST->{$field['name']})) {
-			$Result->show("danger", $field['name']." "._("can not be empty!"), true);
-		}
-	}
-}
+$Tools->update_POST_custom_fields('ipaddresses', $action, $POST);
 
 # we need old address details for mailing or if we are editing address
 if($action=="edit" || $action=="delete" || $action=="move") {
@@ -272,7 +254,7 @@ if (!is_blank(strstr($POST->ip_addr,"-"))) {
 			# reset IP for mailing
 			$POST->ip_addr = $POST->start .' - '. $POST->stop;
 			# log and changelog
-			$Result->show("success", _("Range")." ".$POST->start." - ".$POST->stop." "._($action)." "._("successful")."!", false);
+			$Result->show("success", _("Range") . " " . escape_input($POST->start) . " - " . escape_input($POST->stop) . " " . $User->get_post_action() . " " . _("successful") . "!", false);
 			$Log->write( _("IP address modification"), _("Range")." ".$POST->start." - ".$POST->stop." ".$action." "._("successful")."!", 0);
 
 			# send changelog mail
@@ -316,26 +298,26 @@ else {
 		$POST->ip_addr = $address_old['ip'];
 	}
 	# if errors are present print them, else execute query!
-	if(0 && $verify) 				{ $Result->show("danger", _('Error').": $verify (".$POST->ip_addr.")", true); }  // TODO: Set undefined variable $verify
+	if(0 && $verify) 				{ $Result->show("danger", _('Error').": $verify (".escape_input($POST->ip_addr).")", true); }  // TODO: Set undefined variable $verify
 	else {
 		# set update type for update to single
 		$POST->type = "single";
 
 		# check for duplicate entryon adding new address
 	    if ($action == "add") {
-	        if ($Addresses->address_exists ($POST->ip_addr, $POST->subnetId)) 	{ $Result->show("danger", _('IP address')." ".$POST->ip_addr." "._('already existing in selected network').'!', true); }
+	        if ($Addresses->address_exists ($POST->ip_addr, $POST->subnetId)) 	{ $Result->show("danger", _('IP address')." ".escape_input($POST->ip_addr)." "._('already existing in selected network').'!', true); }
 	    }
 
 		# check for duplicate entry on edit!
 	    if ($action == "edit") {	    	# if IP is the same than it can already exist!
 	    	if($Addresses->transform_address($POST->ip_addr,"decimal") != $POST->ip_addr_old) {
-	        	if ($Addresses->address_exists ($POST->ip_addr, $POST->subnetId)) { $Result->show("danger", _('IP address')." ".$POST->ip_addr." "._('already existing in selected network').'!', true); }
+	        	if ($Addresses->address_exists ($POST->ip_addr, $POST->subnetId)) { $Result->show("danger", _('IP address')." ".escape_input($POST->ip_addr)." "._('already existing in selected network').'!', true); }
 	    	}
 	    }
 	    # move checks
 	    if($action == "move") {
 		    # check if not already used in new subnet
-	        if ($Addresses->address_exists ($POST->ip_addr, $POST->newSubnet)) 	{ $Result->show("danger", _('IP address')." ".$POST->ip_addr." "._('already existing in selected network').'!', true); }
+	        if ($Addresses->address_exists ($POST->ip_addr, $POST->newSubnet)) 	{ $Result->show("danger", _('IP address')." ".escape_input($POST->ip_addr)." "._('already existing in selected network').'!', true); }
 	    }
 	    # multicast check
 	    if ($User->settings->enableMulticast==1 && $subnet_is_multicast) {

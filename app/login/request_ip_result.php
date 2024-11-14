@@ -22,12 +22,18 @@ if(!$User->is_authenticated() && @$config['requests_public']===false) {
 # requests must be enabled!
 if($Tools->settings->enableIPrequests==1) {
 	# verify MAC Address
-	if(!$Tools->validate_mac($POST->mac) ) 		{ $Result->show("danger", _('Please provide valid mac address').'! ('._('mac').': '.$Tools->strip_xss($POST->mac).')', true); }
+	if (!$Tools->validate_mac($POST->mac)) {
+		$Result->show("danger", _('Please provide valid mac address') . '! (' . _('mac') . ': ' . escape_input($POST->mac) . ')', true);
+	}
 	# verify hostname
-	if(!$Tools->validate_hostname($POST->hostname) )		{ $Result->show("danger", _('Please provide valid hostname').'! ('._('hostname').': '.$Tools->strip_xss($POST->hostname).')', true); }
+	if (!$Tools->validate_hostname($POST->hostname)) {
+		$Result->show("danger", _('Please provide valid hostname') . '! (' . _('hostname') . ': ' . escape_input($POST->hostname) . ')', true);
+	}
 
 	# verify email
-	if(!$Tools->validate_email($POST->requester) )		{ $Result->show("danger", _('Please provide valid email address').'! ('._('requester').': '.$Tools->strip_xss($POST->requester).')', true); }
+	if (!$Tools->validate_email($POST->requester)) {
+		$Result->show("danger", _('Please provide valid email address') . '! (' . _('requester') . ': ' . escape_input($POST->requester) . ')', true);
+	}
 
 	# formulate insert values
 	$values = array(
@@ -43,28 +49,9 @@ if($Tools->settings->enableIPrequests==1) {
 					"processed"   => 0
 	    			);
 
-	# custom fields
-	$custom = $Tools->fetch_custom_fields('requests');
-	if(sizeof($custom) > 0) {
-		foreach($custom as $myField) {
-
-			# replace possible ___ back to spaces
-			$myField['nameTest'] = str_replace(" ", "___", $myField['name']);
-			if(isset($POST->{$myField['nameTest']})) { $POST->{$myField['name']} = $POST->{$myField['nameTest']};}
-
-			# booleans can be only 0 and 1!
-			if($myField['type']=="tinyint(1)") {
-				if($POST->{$myField['name']}>1) {
-					$POST->{$myField['name']} = 0;
-				}
-			}
-			# not null!
-			if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
-
-			# save to update array
-			$values[$myField['name']] = $POST->{$myField['name']};
-		}
-	}
+	# fetch custom fields
+	$update = $Tools->update_POST_custom_fields('requests', $POST->action, $POST);
+	$values = array_merge($values, $update);
 
 	if(!$Admin->object_modify("requests", "add", "id", $values))	{ $Result->show("danger",  _('Error submitting new IP address request'), true); }
 	else {

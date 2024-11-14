@@ -105,8 +105,6 @@ if (isset($objects["vlans"])) {
         print "</td>";
 		print '</tr>'. "\n";
 
-        print "</tr>";
-
 		# next index
 		$m++;
 	}

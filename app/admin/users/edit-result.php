@@ -76,27 +76,7 @@ if($POST->action!="delete") {
 		}
 		//check duplicate
 		if($Admin->fetch_object("users", "username", $POST->username)!==false) {
-																			{ $Result->show("danger", _("User")." ".$POST->username." "._("already exists!"), true); }
-		}
-	}
-
-	# custom fields check
-	$myFields = $Tools->fetch_custom_fields('users');
-	if(sizeof($myFields) > 0) {
-		foreach($myFields as $myField) {
-			# replace possible ___ back to spaces!
-			$myField['nameTest']      = str_replace(" ", "___", $myField['name']);
-
-			if(isset($POST->{$myField['nameTest']})) { $POST->{$myField['name']} = $POST->{$myField['nameTest']};}
-
-			//booleans can be only 0 and 1!
-			if($myField['type']=="tinyint(1)") {
-				if($POST->{$myField['name']}>1) {
-					$POST->{$myField['name']} = "";
-				}
-			}
-			//not null!
-			if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
+																			{ $Result->show("danger", _("User")." ".escape_input($POST->username)." "._("already exists!"), true); }
 		}
 	}
 }
@@ -105,10 +85,6 @@ if($POST->action!="delete") {
 if($POST->action=="delete" && $POST->userId==1) 			{ $Result->show("danger", _("Admin user cannot be deleted"), true); }
 # admin user cannot be disabled
 if($POST->disabled=="Yes" && $POST->userId==1) 			{ $Result->show("danger", _("Admin user cannot be disabled"), true); }
-
-
-
-/* update */
 
 # formulate update values
 # nothing to do here for l10n, the content of the array goes into the database
@@ -131,17 +107,10 @@ if($POST->action=="add") {
 	$values['username'] = $POST->username;
 }
 
-# custom fields
-if(isset($myFields)) {
-	if (sizeof($myFields)>0) {
-	    foreach($myFields as $myField) {
-			# replace possible ___ back to spaces!
-			$myField['nameTest']      = str_replace(" ", "___", $myField['name']);
+# custom fields check
+$update = $Tools->update_POST_custom_fields('users', $POST->action, $POST);
+$values = array_merge($values, $update);
 
-			if(isset($POST->{$myField['nameTest']})) { $values[$myField['name']] = $POST->{$myField['nameTest']};}
-	    }
-	}
-}
 # update pass ?
 if(!is_blank($POST->password1) || ($POST->action=="add" && $auth_method->type=="local")) {
 	$values['password'] = $POST->password1;

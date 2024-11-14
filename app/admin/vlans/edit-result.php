@@ -93,8 +93,8 @@ if($User->settings->enableCustomers=="1") {
 
 
 # update
-if(!$Admin->object_modify("vlans", $POST->action, "vlanId", $values))	{ $Result->show("danger",  _("Failed to ".$POST->action." VLAN").'!', true); }
-else																		{ $Result->show("success", _("VLAN ".$POST->action." successful").'!', false); }
+if(!$Admin->object_modify("vlans", $POST->action, "vlanId", $values))	{ $Result->show("danger",  _("Failed to ".$User->get_post_action()." VLAN").'!', true); }
+else																		{ $Result->show("success", _("VLAN ".$User->get_post_action()." successful").'!', false); }
 
 # remove all references if delete
 if($POST->action=="delete") { $Admin->remove_object_references ("subnets", "vlanId", $POST->vlanid); }

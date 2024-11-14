@@ -210,7 +210,7 @@ class Addresses extends Common_functions {
 			return $cached;
 		}
 		else {
-			try { $address = $this->Database->getObjectQuery("SELECT * FROM `ipaddresses` where `$method` = ? limit 1;", array($id)); }
+			try { $address = $this->Database->getObjectQuery("ipaddresses", "SELECT * FROM `ipaddresses` where `$method` = ? limit 1;", array($id)); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
 				return false;
@@ -233,7 +233,7 @@ class Addresses extends Common_functions {
 	 * @return object|false
 	 */
 	public function fetch_address_multiple_criteria ($ip_addr, $subnetId) {
-		try { $address = $this->Database->getObjectQuery("SELECT * FROM `ipaddresses` where `ip_addr` = ? and `subnetId` = ? limit 1;", array($ip_addr, $subnetId)); }
+		try { $address = $this->Database->getObjectQuery("ipaddresses", "SELECT * FROM `ipaddresses` where `ip_addr` = ? and `subnetId` = ? limit 1;", array($ip_addr, $subnetId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -258,7 +258,7 @@ class Addresses extends Common_functions {
 				INNER JOIN (SELECT ip_addr,COUNT(*) AS cnt FROM ipaddresses GROUP BY ip_addr HAVING cnt >1) dups ON a.ip_addr=dups.ip_addr
 				ORDER BY a.ip_addr,a.subnetId,a.id;";
 
-			$addresses = $this->Database->getObjectsQuery($query);
+			$addresses = $this->Database->getObjectsQuery('ipaddresses', $query);
 
 			# save to addresses cache
 			if(is_array($addresses)) {
@@ -297,7 +297,7 @@ class Addresses extends Common_functions {
 		// Fetch all similar addresses for entire subnet.
 		try {
 			$query = "SELECT * FROM `ipaddresses` WHERE `state`<>4 AND `$linked_field` IN (SELECT `$linked_field` FROM `ipaddresses` WHERE `subnetId`=? AND LENGTH(`$linked_field`)>0) ORDER BY LPAD(ip_addr,39,0)";
-			$linked_subnet_addrs = $this->Database->getObjectsQuery($query, array($address->subnetId));
+			$linked_subnet_addrs = $this->Database->getObjectsQuery('ipaddresses', $query, array($address->subnetId));
 		} catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -576,7 +576,7 @@ class Addresses extends Common_functions {
 		# set found flag for returns
 		$found = 0;
 		# fetch all nats
-		try { $all_nats = $this->Database->getObjectsQuery ("select * from `nat` where `src` like :id or `dst` like :id", array ("id"=>'%"'.$obj_id.'"%')); }
+		try { $all_nats = $this->Database->getObjectsQuery ('nat', "select * from `nat` where `src` like :id or `dst` like :id", array ("id"=>'%"'.$obj_id.'"%')); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -774,7 +774,7 @@ class Addresses extends Common_functions {
 		if($cnt===true) { $query = "select count(*) as `cnt` from `ipaddresses` where `subnetId`=? and `ip_addr`=?;"; }
 		else			{ $query = "select `id` from `ipaddresses` where `subnetId`=? and `ip_addr`=?;";  }
 		# fetch
-		try { $count = $this->Database->getObjectQuery($query, array($subnetId, $address)); }
+		try { $count = $this->Database->getObjectQuery("ipaddresses", $query, array($subnetId, $address)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -1152,7 +1152,7 @@ class Addresses extends Common_functions {
 	 * @return void
 	 */
 	public function ptr_get_subnet_indexes ($subnetId) {
-		try { $indexes = $this->Database->getObjectsQuery("select `PTR` from `ipaddresses` where `PTR` != 0 and `subnetId` = ?;", array($subnetId)); }
+		try { $indexes = $this->Database->getObjectsQuery('ipaddresses', "select `PTR` from `ipaddresses` where `PTR` != 0 and `subnetId` = ?;", array($subnetId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -1286,7 +1286,7 @@ class Addresses extends Common_functions {
 		$order[0] = $this->Database->escape ($order[0]);
 		$order[1] = $this->Database->escape ($order[1]);
 
-		try { $addresses = $this->Database->getObjectsQuery("SELECT $fields FROM `ipaddresses` where `subnetId` = ? order by `$order[0]` $order[1];", array($subnetId)); }
+		try { $addresses = $this->Database->getObjectsQuery('ipaddresses', "SELECT $fields FROM `ipaddresses` where `subnetId` = ? order by `$order[0]` $order[1];", array($subnetId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -1342,7 +1342,7 @@ class Addresses extends Common_functions {
 		$query  = "select count(*) as `cnt` from `ipaddresses` where ".implode("or", $tmp).";";
 
 		# fetch
-		try { $addresses = $this->Database->getObjectsQuery($query); }
+		try { $addresses = $this->Database->getObjectsQuery('ipaddresses', $query); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -1396,7 +1396,7 @@ class Addresses extends Common_functions {
 
 	    $query      .= "order by `$order_addr[0]` $order_addr[1];";
 		# fetch
-		try { $addresses = $this->Database->getObjectsQuery($query, $ids); }
+		try { $addresses = $this->Database->getObjectsQuery('ipaddresses', $query, $ids); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -1661,7 +1661,7 @@ class Addresses extends Common_functions {
 	 * @return array|false
 	 */
 	private function find_unique_subnetids () {
-		try { $res = $this->Database->getObjectsQuery("select distinct(`subnetId`) from `ipaddresses` order by `subnetId` asc;"); }
+		try { $res = $this->Database->getObjectsQuery('ipaddresses', "select distinct(`subnetId`) from `ipaddresses` order by `subnetId` asc;"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;

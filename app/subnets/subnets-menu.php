@@ -100,7 +100,7 @@ else {
 				# title
 				print "<hr><h4>"._('Associated VLANs')."</h4><hr>";
 				# create and print menu
-				if (!is_array($section_subnets))
+				if (!isset($section_subnets) || !is_array($section_subnets))
 					$section_subnets = (array) $Subnets->fetch_section_subnets($GET->section, false, false, []);
 				print $Subnets->print_vlan_menu($User->user, $vlans, $section_subnets, $GET->section);
 			print "</div>";

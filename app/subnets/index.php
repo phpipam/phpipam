@@ -32,8 +32,11 @@ $nameservers = (array) $Tools->fetch_object("nameservers", "id", $subnet['namese
 
 # verify that is it displayed in proper section, otherwise warn!
 if($subnet['sectionId']!=$GET->section)	{
-	$sd = (array) $Sections->fetch_section(null,$subnet['sectionId']);
-	$Result->show("warning", _("Subnet is in section")." <a href='".create_link("subnets",$sd['id'],$subnet['id'])."'>$sd[name]</a>!", false);
+	$sd = $Sections->fetch_section("id", $subnet['sectionId']);
+	if (!is_object($sd)) {
+		$sd = new Params();
+	}
+	$Result->show("warning", _("Subnet is in section") . " <a href='" . create_link("subnets", $sd->id, $subnet['id']) . "'>" . $sd->name . "</a>!", false);
 }
 
 // get usage

@@ -1,3 +1,5 @@
+<?php if (!defined('VERSION_VISIBLE') || Config::ValueOf('disable_installer')) { print _("Install scripts disabled"); exit(0); } ?>
+
 <div class="widget-dash col-xs-12 col-md-8 col-md-offset-2">
 	<div class="inner install" style="min-height:auto;">
 		<h4><?php print _("Database connection check"); ?></h4>
@@ -13,7 +15,7 @@
 			$error = false;
 			// try to fetch
 			try {
-				$Database->getObjectsQuery("SELECT * FROM settings LIMIT 1;");
+				$Database->getObjectsQuery("settings", "SELECT * FROM settings LIMIT 1;");
 			} catch (Exception $e) {
 				$Result->show("danger", _("Error") . ":<hr>" . $e->getMessage(), false);
 				$error = true;

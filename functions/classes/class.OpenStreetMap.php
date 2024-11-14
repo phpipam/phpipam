@@ -301,11 +301,11 @@ class OpenStreetMap extends Common_functions
         $hash = $this->hash_from_address($address);
 
         if ($only_recent) {
-            $query = 'SELECT * FROM nominatim_cache WHERE sha256=? AND date > DATE_SUB(NOW(), INTERVAL 1 DAY);';
+            $query = 'SELECT * FROM `nominatim_cache` WHERE `sha256`=? AND date > DATE_SUB(NOW(), INTERVAL 1 DAY);';
         } else {
-            $query = 'SELECT * FROM nominatim_cache WHERE sha256=?;';
+            $query = 'SELECT * FROM `nominatim_cache` WHERE `sha256`=?;';
         }
-        $cached_result = $this->Database->getObjectQuery($query, [$hash]);
+        $cached_result = $this->Database->getObjectQuery("nominatim_cache", $query, [$hash]);
 
         return is_object($cached_result) ? $cached_result : false;
     }

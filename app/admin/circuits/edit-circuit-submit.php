@@ -102,30 +102,6 @@ else {
 	$POST->location2 = $locationId;
 }
 
-
-# fetch custom fields
-$custom = $Tools->fetch_custom_fields('circuits');
-if(sizeof($custom) > 0) {
-	foreach($custom as $myField) {
-
-		//replace possible ___ back to spaces
-		$myField['nameTest'] = str_replace(" ", "___", $myField['name']);
-		if(isset($POST->{$myField['nameTest']})) { $POST->{$myField['name']} = $POST->{$myField['nameTest']};}
-
-		//booleans can be only 0 and 1!
-		if($myField['type']=="tinyint(1)") {
-			if($POST->{$myField['name']}>1) {
-				$POST->{$myField['name']} = 0;
-			}
-		}
-		//not null!
-		if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) { $Result->show("danger", $myField['name']." "._("can not be empty")."!", true); }
-
-		# save to update array
-		$update[$myField['name']] = $POST->{$myField['nameTest']};
-	}
-}
-
 # set update values
 $values = array(
 				"id"        => $POST->id,
@@ -140,10 +116,11 @@ $values = array(
   				"location2" => $POST->location2,
   				"comment"   => $POST->comment
 				);
-# custom fields
-if(isset($update)) {
-	$values = array_merge($values, $update);
-}
+
+# fetch custom fields
+$update = $Tools->update_POST_custom_fields('circuits', $POST->action, $POST);
+$values = array_merge($values, $update);
+
 # append customerId
 if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_RW) {
 	if (is_numeric($POST->customer_id)) {
@@ -153,5 +130,5 @@ if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cust
 
 # update
 if ($Admin->object_modify("circuits", $POST->action, "id", $values)) {
-	$Result->show("success", _("Circuit") . " " . $POST->action . " " . _("successful") . "!", false);
+	$Result->show("success", _("Circuit") . " " .  $User->get_post_action() . " " . _("successful") . "!", false);
 }

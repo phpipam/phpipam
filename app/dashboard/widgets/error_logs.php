@@ -35,7 +35,7 @@ else {
 	$logs = $Log->fetch_logs($max, NULL, NULL, NULL, "off", "on", "on");
 	if (!is_array($logs)) { $logs = array(); }
 
-	print '<div style="width:98%;margin-left:1%;' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
+	print '<div style="' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 	print "<table class='table table-condensed table-hover table-top'>";
 
 	# headers

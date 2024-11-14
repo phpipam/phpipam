@@ -39,6 +39,11 @@ getenv('IPAM_BASE') ? define('BASE', getenv('IPAM_BASE')) : false;
 require('config.dist.php');
 
 /**
+ * Disable installation helper scripts /app/install/ after initial setup
+ */
+$disable_installer = filter_var(file_env('IPAM_DISABLE_INSTALLER', $disable_installer), FILTER_VALIDATE_BOOLEAN);
+
+/**
  * database connection details
  ******************************/
 $db['host']    = file_env('IPAM_DATABASE_HOST',    $db['host']);

@@ -98,8 +98,8 @@ foreach ($tables as $table) {
 		// set id
 		$identifier = array_key_exists($table, $special_identifiers) ? $special_identifiers[$table] : "id";
 		// fetch old and new
-		$highest_id     = $Database->getObjectQuery     ("SELECT `$identifier` FROM `$table` ORDER BY `$identifier` DESC LIMIT 0, 1;");
-		$lowest_id_old  = $Database_old->getObjectQuery ("SELECT `$identifier` FROM `$table` ORDER BY `$identifier` ASC LIMIT 0, 1;");
+		$highest_id     = $Database->getObjectQuery     ($table, "SELECT `$identifier` FROM `$table` ORDER BY `$identifier` DESC LIMIT 0, 1;");
+		$lowest_id_old  = $Database_old->getObjectQuery ($table, "SELECT `$identifier` FROM `$table` ORDER BY `$identifier` ASC LIMIT 0, 1;");
 
 		// only if something is present in merging table, otherwise no need to import !
 		if($lowest_id_old->{$identifier} != "") {
@@ -108,8 +108,8 @@ foreach ($tables as $table) {
 			$highest_ids_append[$table] = $highest_id->{$identifier} +1 - $lowest_id_old->{$identifier};
 
 			// fetch and save all data
-			$old_data[$table] = $Database_old->getObjectsQuery ("SELECT * FROM `$table` ORDER BY `$identifier` ASC;");
-			$new_data[$table] = $Database_old->getObjectsQuery ("SELECT * FROM `$table` ORDER BY `$identifier` ASC;");
+			$old_data[$table] = $Database_old->getObjectsQuery ($table, "SELECT * FROM `$table` ORDER BY `$identifier` ASC;");
+			$new_data[$table] = $Database_old->getObjectsQuery ($table, "SELECT * FROM `$table` ORDER BY `$identifier` ASC;");
 		}
 
 		// fetch custom fields

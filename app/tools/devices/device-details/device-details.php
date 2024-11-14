@@ -95,7 +95,7 @@ if($GET->subnetId!=0 && sizeof($device)>0) {
             }
             if($User->settings->enableSNMP=="1" && $User->is_admin(false)) {
                 $links[] = ["type"=>"header", "text"=>_("SNMP")];
-                $links[] = ["type"=>"link", "text"=>_("Manage SNMP"), "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='delete' data-switchId='$device[id]''", "icon"=>"cogs"];
+                $links[] = ["type"=>"link", "text"=>_("Manage SNMP"), "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='delete' data-switchId='$device[id]'", "icon"=>"cogs"];
             }
             // print links
             print $User->print_actions($User->user->compress_actions, $links, true, true);
@@ -175,7 +175,7 @@ if($GET->subnetId!=0 && sizeof($device)>0) {
                 // pass
                 print '<tr>';
                 print " <th>". _('Password').'</th>';
-                $User->is_admin(false) ? print " <td>$device[snmp_v3_auth_pass]</td>" : " <td>********</td>";
+                $User->is_admin(false) ? print " <td>".escape_input($device['snmp_v3_auth_pass'])."</td>" : " <td>********</td>";
                 print "</tr>";
                 // privacy proto
                 print '<tr>';
@@ -185,7 +185,7 @@ if($GET->subnetId!=0 && sizeof($device)>0) {
                 // privacy pass
                 print '<tr>';
                 print " <th>". _('Privacy passphrase').'</th>';
-                $User->is_admin(false) ? print " <td>$device[snmp_v3_priv_pass]</td>" : " <td>********</td>";
+                $User->is_admin(false) ? print " <td>".escape_input($device['snmp_v3_priv_pass'])."</td>" : " <td>********</td>";
                 print "</tr>";
                 // context name
                 print '<tr>';

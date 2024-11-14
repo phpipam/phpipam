@@ -52,7 +52,7 @@ if($POST->action=="add") {
 	<!-- name -->
 	<tr>
 	    <td><?php print _('Group name'); ?></td>
-	    <td><input type="text" name="g_name" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$group['g_name']); ?>" <?php if($POST->action == "delete") print "readonly"; ?>></td>
+	    <td><input type="text" name="g_name" class="form-control input-sm" value="<?php print @$group['g_name']; ?>" <?php if($POST->action == "delete") print "readonly"; ?>></td>
        	<td class="info2">
 	   		<?php print _('Enter group name'); ?>
        	</td>
@@ -62,7 +62,7 @@ if($POST->action=="add") {
     <tr>
     	<td><?php print _('Description'); ?></td>
     	<td>
-    		<input type="text" name="g_desc" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$group['g_desc']); ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
+    		<input type="text" name="g_desc" class="form-control input-sm" value="<?php print @$group['g_desc']; ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
 
     		<input type="hidden" name="g_id" value="<?php print escape_input($POST->id); ?>">
     		<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">

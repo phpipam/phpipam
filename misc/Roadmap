@@ -1,40 +1,53 @@
-Feature candidates for 1.5:
+Feature candidates for 1.8:
 ---------------------------
 
-Features:
+Prio1 features / enhancements:
 
-    - LDAP group authentication without local user (group with adldap2 migration)
-    - Webhooks support - send data via json to external URL / script
-    - Display free subnet ranges joined for each section
-    - API - permit IP/subnet as identifier instead of index (GET /api/test/subnets/1/ > /api/test/subnets/10.10.10.0_24/) and name for other objects
+    - LDAP enhancements:
+        - adldap > ldaprecord backend migration
+        - Rewrite of separate class for AD/LDAP auth
+        - group authentication without local user
+    - 2FA enhancements
+        - After code saved require confirmation with TOTP
+        - Other enhancements based on Jeff reported bugs
+    - Composer:
+        - Move requirements from gitmodules to composer
+        - new requirements via composer
+        - Add checks etc
+    - Webhooks support
+        - send data via json to external URL / script
+    - API
+        - permit IP/subnet as identifier instead of index (GET /api/test/subnets/1/ > /api/test/subnets/10.10.10.0_24/) and name for other objects
+        - More granular API permissions - per-user permissions (as GUI) if user auth selected
+    - Inventory management enhancements
+        - General DCIM improvements and enhanced logic
+    - Move cron to UI / database to simplify scripts;
+    - Import / export enhancements
+        - Import via textarea field
+        - Recheck export scripts
 
-
-Optional:
-    - User PowerDNS API instead of direct DB entries;
-    - KEA management via API
-    - DCIM improvements
+Prio2 enhancements:
+    - PowerDNS:
+        - Use PowerDNS API instead of direct DB entries;
+        - Auto-create A records if selected (like PTR currently)
+    - KEA DHCP:
+        - management via API :: currently module not functional (works direct reading from SQL)
     - NTP Server addresses
+    - Update from bootstrap 3 to bootstrap 5
+    - Update all UI dependancies (bootstrap, ...)
+    - Wirelless LAN list
+    - IPSec module
+
+Feature removal:
+    - SNMP module removal (incomplete, not maintained, propose removal)
 
 
-    New modules
-        #769  Enhancement in Inventory management
-        #653  interactive racks and DCIM improvements
-        #696  Password management
-        #545  Wirelless LAN list
-
-
-
-Ideas for next releases:
----------------------------
-
-    + User
-        + IP address owner (from internal users - suggestions);
-        + Autocomplete mail addresses and owners from users table;
-
-    + Configurable cron from UI;
-
-    + Tools enhancements
-        + Changelog for VLANs, l2-domains, devices or vrf's, nameservers and firewallzones;
-
-    + Subnet, addresses
-    	+ assign a state to a subnet, vlan;
+Misc Enhancements:
+    - Display free subnet ranges joined for each section
+    - User
+        - IP address owner (from internal users - suggestions);
+        - Autocomplete mail addresses and owners from users table;
+    - Tools enhancements
+        - Changelog for VLANs, l2-domains, devices or vrf's, nameservers and firewallzones;
+    - Subnet, addresses
+        - assign a state to a subnet, vlan;

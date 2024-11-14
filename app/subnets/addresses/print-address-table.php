@@ -569,7 +569,8 @@ else {
 			// now search for similar addresses if chosen
 			if (!is_blank($User->settings->link_field)) {
 				// search
-				$similar = $Addresses->search_similar_addresses ($addresses[$n], $User->settings->link_field, $addresses[$n]->{$User->settings->link_field});
+				$link_field = property_exists($addresses[$n],$User->settings->link_field) ? $addresses[$n]->{$User->settings->link_field} : null;
+				$similar = $Addresses->search_similar_addresses ($addresses[$n], $User->settings->link_field, $link_field);
 
 				if($similar!==false) {
 					$link_field_print = $User->settings->link_field == "ip_addr" ? $Subnets->transform_to_dotted($addresses[$n]->{$User->settings->link_field}) : $addresses[$n]->{$User->settings->link_field};

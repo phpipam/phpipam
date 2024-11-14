@@ -187,7 +187,7 @@ class Common_functions  {
 	 */
 	public function fetch_mysql_version () {
 		# fetch
-		try { $result = $this->Database->getObjectQuery("SELECT VERSION() AS 'version';"); }
+		try { $result = $this->Database->getObjectQuery("no_html_escape", "SELECT VERSION() AS 'version';"); }
 		catch (Exception $e) {
 			return "";
 		}
@@ -265,7 +265,7 @@ class Common_functions  {
 		# null method
 		$method = is_null($method) ? "id" : $this->Database->escape($method);
 
-		try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
+		try { $res = $this->Database->getObjectQuery($table, "SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -366,7 +366,7 @@ class Common_functions  {
 
 		try {
 			$query = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?;";
-			$schema = $this->Database->getObjectsQuery($query, [$this->Database->dbname, $tableName]);
+			$schema = $this->Database->getObjectsQuery("no_html_escape", $query, [$this->Database->dbname, $tableName]);
 		} catch (\Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return $results;
@@ -442,10 +442,6 @@ class Common_functions  {
 
 		if (!is_object($settings))
 			return false;
-
-		// Escape ' & " characters
-		if (property_exists($settings, 'siteTitle'))
-			$settings->siteTitle = escape_input($settings->siteTitle);
 
 		// default dbversion for older releases
 		if (!property_exists($settings, 'dbversion'))
@@ -772,19 +768,6 @@ class Common_functions  {
 		}
 		# result
 		return $out;
-	}
-
-	/**
-	 * Strip XSS on value print
-	 *
-	 * @method strip_xss
-	 *
-	 * @param  string $input
-	 *
-	 * @return string
-	 */
-	public function strip_xss ($input) {
-		return escape_input($input);
 	}
 
 	/**
@@ -1147,6 +1130,8 @@ class Common_functions  {
 
 			if (in_array($action, $valid_actions)) {
 				return escape_input(ucwords(_($action)));
+			} else {
+				return _('Invalid $_POST action');
 			}
 		}
 
@@ -1258,6 +1243,7 @@ class Common_functions  {
 		// set regexes
 		$country_regex = array(
 			'united kingdom' => '/^([A-Z][A-HJ-Y]?[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR ?0A{2})$/i',
+			'isle of man'    => '/\\A\\bIM[0-9][0-9]? [0-9][A-Z][A-Z]\\b\\z/i',
 			'england'        => '/^([A-Z][A-HJ-Y]?[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR ?0A{2})$/i',
 			'canada'         => '/\\A\\b[ABCEGHJKLMNPRSTVXY][0-9][A-Z][ ]?[0-9][A-Z][0-9]\\b\\z/i',
 			'italy'          => '/^[0-9]{5}$/i',
@@ -1653,7 +1639,7 @@ class Common_functions  {
 
     	//field
     	if(!isset($object->{$field['name']}))	{ $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'].$nameSuffix .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
-    	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'].$nameSuffix .'" maxlength="'.$size.'" value="'. $this->strip_xss($object->{$field['name']}). '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
+    	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'].$nameSuffix .'" maxlength="'.$size.'" value="'. $object->{$field['name']}. '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
 
     	// result
 		return $html;
@@ -1724,7 +1710,7 @@ class Common_functions  {
             $maxlength = str_replace(array("int","(",")"),"", $field['type']);
         }
         // print
-		$html[] = ' <input type="text" class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" value="'. $this->strip_xss($object->{$field['name']}). '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
+		$html[] = ' <input type="text" class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" value="'. $object->{$field['name']}. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
     	// result
     	return $html;
 	}

@@ -53,7 +53,7 @@ $Result->show("danger", _("Passkey not found"), true, true);
 	    <td><?php print _('Name your passkey'); ?>:</td>
 	    <td>
 
-	    	<input type="text" name="comment" class="form-control input-sm" value="<?php print escape_input(@$passkey->comment); ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
+	    	<input type="text" name="comment" class="form-control input-sm" value="<?php print @$passkey->comment; ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
 	        <input type="hidden" name="keyid" value="<?php print escape_input($POST->keyid); ?>">
     		<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
@@ -68,7 +68,7 @@ $Result->show("danger", _("Passkey not found"), true, true);
 
     <?php
 	if($POST->action=="delete") {
-		$Result->show("danger", _("You are about to delete your passkey ").escape_input($passkey->comment)."!", false);
+		$Result->show("danger", _("You are about to delete your passkey ").$passkey->comment."!", false);
 	}
 	?>
 </form>
@@ -81,7 +81,7 @@ $Result->show("danger", _("Passkey not found"), true, true);
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/tools/user-menu/passkey_edit_result.php" data-result_div="passkeyEditResult" data-form='passkeyEdit'>
-			<i class="fa <?php if($POST->action=="add") { print "fa-plus"; } else if ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
+			<i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 
 	</div>

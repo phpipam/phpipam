@@ -150,7 +150,7 @@ class Install extends Common_functions {
 
 		try {
 			# Check if user exists;
-			$result = $this->Database_root->getObjectQuery("SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$esc_user' AND host = '$webhost') AS user_exists;");
+			$result = $this->Database_root->getObjectQuery("no_html_escape", "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$esc_user' AND host = '$webhost') AS user_exists;");
 
 			# create user if not exists and set permissions
 			if ($result->user_exists == 0) {
@@ -256,7 +256,7 @@ class Install extends Common_functions {
 		$query = "SELECT COUNT(*) AS `cnt` FROM information_schema.tables WHERE table_schema = '" . $this->db['name'] . "' AND table_name = '$table';";
 		# try to fetch count
 		try {
-			$result = $this->Database->getObjectQuery($query);
+			$result = $this->Database->getObjectQuery("no_html_escape", $query);
 		} catch (Exception $e) {
 			if ($redirect === true) {
 				$this->redirect_to_install();

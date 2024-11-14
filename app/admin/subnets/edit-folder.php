@@ -81,7 +81,7 @@ $readonly = $POST->action=="edit" || $POST->action=="delete" ? true : false;
     <tr>
         <td class="middle"><?php print _('Name'); ?></td>
         <td>
-            <input type="text" class="form-control input-sm input-w-250" id="field-description" name="description" value="<?php print $Tools->strip_xss(@$folder_old_details['description']); ?>">
+            <input type="text" class="form-control input-sm input-w-250" id="field-description" name="description" value="<?php print @$folder_old_details['description']; ?>">
         </td>
         <td class="info2"><?php print _('Enter folder name'); ?></td>
     </tr>

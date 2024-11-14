@@ -48,7 +48,7 @@ $query = "select
 			(`ip`.`lastSeen` < '$beforetime' and `ip`.`lastSeen` != '1970-01-01 00:00:01' and `ip`.`lastSeen` is not NULL);";
 
 # fetch
-try { $offline_addresses = $Database->getObjectsQuery($query); }
+try { $offline_addresses = $Database->getObjectsQuery('ipaddresses', $query); }
 catch (Exception $e) {
 	$Result->show("danger", _("Error: ").$e->getMessage());
 	die();

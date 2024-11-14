@@ -60,7 +60,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, $GET->s
 	</tr>
 	<tr>
 		<th><?php print _('Description'); ?></th>
-		<td><?php print escape_input($vlan['description']); ?></td>
+		<td><?php print $vlan['description']; ?></td>
 	</tr>
 
 	<?php if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>

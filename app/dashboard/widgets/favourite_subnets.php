@@ -36,7 +36,7 @@ $wparam = $Tools->get_widget_params("favourite_subnets");
 $max    = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 100,  'min_range' => 1, 'max_range' => 256]]);
 $height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 
-print '<div style="width:98%;margin-left:1%;' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
+print '<div style="' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 print "<table class='table table-condensed table-hover table-top favs'>";
 
 # headers

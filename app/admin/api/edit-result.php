@@ -69,6 +69,6 @@ else {
 					);
 
 	# execute
-	if(!$Admin->object_modify("api", $POST->action, "id", $values)) 	{ $Result->show("danger",  _("API"). " ".$POST->action ." "._("error"), true); }
-	else 																{ $Result->show("success", _("API"). " ".$POST->action ." "._("success"), true); }
+	if(!$Admin->object_modify("api", $POST->action, "id", $values)) 	{ $Result->show("danger",  _("API"). " " . $User->get_post_action() ." "._("error"), true); }
+	else 																{ $Result->show("success", _("API"). " " . $User->get_post_action() ." "._("success"), true); }
 }

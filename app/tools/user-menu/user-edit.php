@@ -69,7 +69,7 @@ if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
 $POST->compressOverride = $POST->compressOverride=="Uncompress" ? "Uncompress" : "default";
 
 # Update user
-if (!$User->self_update($POST->as_array())) 												{ $Result->show("danger alert-absolute",  _('Error updating user account!'), true); }
+if (!$User->self_update($POST)) 												{ $Result->show("danger alert-absolute",  _('Error updating user account!'), true); }
 else 																			{ $Result->show("success alert-absolute", _('Account updated successfully'), false); }
 
 # update language

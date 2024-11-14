@@ -56,14 +56,14 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" class="number form-control input-sm" name="name" placeholder="<?php print _('domain name'); ?>" value="<?php print $Tools->strip_xss(@$l2_domain['name']); ?>" <?php print $readonly; ?>>
+			<input type="text" class="number form-control input-sm" name="name" placeholder="<?php print _('domain name'); ?>" value="<?php print @$l2_domain['name']; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 	<!-- Description -->
 	<tr>
 		<td><?php print _('Description'); ?></td>
 		<td>
-			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$l2_domain['description']); ?>" <?php print $readonly; ?>>
+			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print @$l2_domain['description']; ?>" <?php print $readonly; ?>>
 			<input type="hidden" name="id" value="<?php print escape_input($POST->id); ?>">
 			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">

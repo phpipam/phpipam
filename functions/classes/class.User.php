@@ -679,7 +679,7 @@ class User extends Common_functions {
                     $query = "select `su`.`id`, `su`.`id` as `subnetId`,`se`.`id` as `sectionId`, `subnet`, `mask`,`isFull`,`su`.`description`,`se`.`description` as `section`, `vlanId`, `isFolder`
                               from `subnets` as `su`, `sections` as `se` where `su`.`id` = ? and `su`.`sectionId` = `se`.`id` limit 1;";
 
-                    try { $fsubnet = $this->Database->getObjectQuery($query, array($id)); }
+                    try { $fsubnet = $this->Database->getObjectQuery('subnets', $query, array($id)); }
                     catch (Exception $e) {
                         $this->Result->show("danger", _("Error: ").$e->getMessage());
                         return false;
@@ -849,36 +849,31 @@ class User extends Common_functions {
      * @param bool $force
      * @return void
      */
-    public function fetch_user_details ($username, $force = false) {
+    public function fetch_user_details($username, $force = false) {
         # only if not already active
-        if(!is_object($this->user) || $force) {
+        if (!is_object($this->user) || $force) {
             try {
                 $user = $this->Database->findObject("users", "username", $username);
-            }
-            catch (Exception $e) {
-                $this->Result->show("danger", _("Error: ").$e->getMessage(), true);
+            } catch (Exception $e) {
+                $this->Result->show("danger", _("Error: ") . $e->getMessage(), true);
             }
 
-            # if not result return false
-            $usert = (array) $user;
+            if (!is_object($user)) {
+                $this->block_ip();
+                $this->log_failed_access($username);
+                $this->Log->write(_("User login"), _('Invalid username'), 2, $username);
+                $this->Result->show("danger", _("Invalid username or password"), true);
+            }
 
             # admin?
-            if($user->role == "Administrator") {
+            if ($user->role == "Administrator") {
                 $this->isadmin = true;
             }
 
-            if(sizeof($usert)==0) {
-                $this->block_ip ();
-                $this->log_failed_access ($username);
-                $this->Log->write ( _("User login"), _('Invalid username'), 2, $username );
-                $this->Result->show("danger", _("Invalid username or password"), true);
-            }
-            else {
-                $this->user = $user;
-            }
+            $this->user = $user;
 
             // register permissions
-            $this->register_user_module_permissions ();
+            $this->register_user_module_permissions();
         }
     }
 
@@ -1348,7 +1343,7 @@ class User extends Common_functions {
             $this->Result->show("danger", _("User account is disabled"), true);
         }
         // is passkey login enforced ?
-        elseif ($this->settings->{'passkeys'}=="1") {
+        elseif ($this->settings->dbversion >= 40 && $this->settings->{'passkeys'}=="1") {
             if ($this->user->passkey_only=="1") {
                 // check passkeys
                 $user_passkeys = $this->get_user_passkeys($this->user->id);
@@ -1378,9 +1373,9 @@ class User extends Common_functions {
 
         # failure
         if(!isset($this->user->username)) {
+            header('HTTP/1.1 500 Cannot fetch credentials from userid');
             throw new Exception ("Cannot fetch credentials from userid");
         }
-            header('HTTP/1.1 500 Cannot fetch credentials from userid');
 
         # set session parameters
         $_SESSION['ipamusername'] = $this->user->username;
@@ -1484,13 +1479,13 @@ class User extends Common_functions {
      */
     public function save_passkey ($credential = "", $credentialId = NULL, $keyId = NULL) {
         try {
-            $this->Database->insertObject("passkeys", ["user_id"=>$this->user->id, "credentialId"=>$credentialId, "credential"=>$credential, "keyId"=>$keyId, "created"=>date("Y-m-d H:i:s§")]);
+            $this->Database->insertObject("passkeys", ["user_id"=>$this->user->id, "credentialId"=>$credentialId, "credential"=>$credential, "keyId"=>$keyId, "created"=>date("Y-m-d H:i:s")]);
             // ok
             return true;
         }
         catch (Exception $e) {
             header('HTTP/1.1 500 '.$e->getMessage());
-            return false;
+            throw $e;
         }
     }
 
@@ -1674,47 +1669,51 @@ class User extends Common_functions {
      * User self update method
      *
      * @access public
-     * @param array|object $post //posted user details
+     * @param Params $post
      * @return bool
      */
-    public function self_update($post) {
+    public function self_update(Params $post): bool {
         # remove theme
-        if($post['theme'] == "default") { $post['theme'] = ""; }
+        if ($post->theme == "default") {
+            $post->theme = "";
+        }
         # set items to update
-        $items  = array("real_name"        => escape_input(strip_tags($post['real_name'])),
-                        "mailNotify"       => $post['mailNotify'] == "Yes" ? "Yes" : "No",
-                        "mailChangelog"    => $post['mailChangelog'] == "Yes" ? "Yes" : "No",
-                        "email"            => $this->validate_email($post['email']) ? escape_input($post['email']) : '',
-                        "lang"             => escape_input(strip_tags($post['lang'])),
-                        "id"               => $this->user->id,
-                        //display
-                        "compressOverride" => escape_input(strip_tags($post['compressOverride'])),
-                        "hideFreeRange"    => $this->verify_checkbox(@$post['hideFreeRange']),
-                        "menuType"         => $this->verify_checkbox(@$post['menuType']),
-                        "menuCompact"      => $this->verify_checkbox(@$post['menuCompact']),
-                        "theme"            => $post['theme'],
-                        "2fa"              => $this->verify_checkbox(@$post['2fa']),
-                        "passkey_only"     => $this->verify_checkbox(@$post['passkey_only']),
-                        );
-        if(!is_blank($post['password1'])) {
-        $items['password'] = $this->crypt_user_pass ($post['password1']);
+        $items  = [
+            "real_name"        => $post->real_name,
+            "mailNotify"       => $post->mailNotify == "Yes" ? "Yes" : "No",
+            "mailChangelog"    => $post->mailChangelog == "Yes" ? "Yes" : "No",
+            "email"            => $this->validate_email($post->email) ? $post->email : '',
+            "lang"             => $post->lang,
+            "id"               => $this->user->id,
+            //display
+            "compressOverride" => $post->compressOverride,
+            "hideFreeRange"    => $this->verify_checkbox($post->hideFreeRange),
+            "menuType"         => $this->verify_checkbox($post->menuType),
+            "menuCompact"      => $this->verify_checkbox($post->menuCompact),
+            "theme"            => $post->theme,
+            "2fa"              => $this->verify_checkbox($post->{'2fa'}),
+            "passkey_only"     => $this->verify_checkbox($post->passkey_only),
+        ];
+        if (!is_blank($post->password1)) {
+            $items['password'] = $this->crypt_user_pass($post->password1);
         }
 
         # prepare log file
-        $log = $this->array_to_log ($post);
+        $log = $this->array_to_log($post->as_array());
 
         # update
-        try { $this->Database->updateObject("users", $items); }
-        catch (Exception $e) {
-            $this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-            $this->Log->write( _("User self update"), _("User self update failed")."!<br>".$log, 2 );
+        try {
+            $this->Database->updateObject("users", $items);
+        } catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ") . $e->getMessage(), false);
+            $this->Log->write(_("User self update"), _("User self update failed") . "!<br>" . $log, 2);
             return false;
         }
         # update language
-        $this->update_session_language ();
+        $this->update_session_language();
 
         # ok, update log table
-        $this->Log->write( _("User self update"), _("User self update succeeded")."!", 0 );
+        $this->Log->write(_("User self update"), _("User self update succeeded") . "!", 0);
         return true;
     }
 
@@ -1803,7 +1802,7 @@ class User extends Common_functions {
         $query = "SELECT count FROM `loginAttempts` WHERE `ip` = ? AND `datetime` > DATE_SUB(NOW(), INTERVAL 5 MINUTE); ";
         # fetch
         try {
-            $cnt = $this->Database->getObjectQuery($query, [$this->ip]);
+            $cnt = $this->Database->getObjectQuery('loginAttempts', $query, [$this->ip]);
         } catch (Exception $e) {
             !$this->debugging ?: $this->Result->show("danger", $e->getMessage(), false);
         }
