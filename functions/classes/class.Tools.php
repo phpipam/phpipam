@@ -688,6 +688,45 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Process custom field inputs in $POST
+	 *
+	 * @param string $table
+	 * @param string $action
+	 * @param Params $POST
+	 * @return array
+	 */
+	public function update_POST_custom_fields(string $table, string $action, Params &$POST): array {
+		$custom_fields = $this->fetch_custom_fields($table);
+		$update = [];
+
+		if (!empty($custom_fields) && $action != "delete") {
+			foreach ($custom_fields as $field) {
+				# replace possible ___ back to spaces!
+				$field['nameTest'] = str_replace(" ", "___", $field['name']);
+				if (isset($POST->{$field['nameTest']})) {
+					$POST->{$field['name']} = $POST->{$field['nameTest']};
+				} else {
+					$POST->{$field['name']} = null;
+				}
+
+				# booleans can be only 0 and 1
+				if ($field['type'] == "tinyint(1)") {
+					if ($POST->{$field['name']} > 1) {
+						$POST->{$field['name']} = "";
+					}
+				}
+				# null custom fields not permitted
+				if ($field['Null'] == "NO" && is_blank($POST->{$field['name']})) {
+					$this->Result->show("danger", $field['name'] . " " . _("can not be empty!"), true);
+				}
+
+				$update[$field['name']] = $POST->{$field['name']};
+			}
+		}
+		return $update;
+	}
+
+	/**
 	 * Fetch all fields configured in table - standard + custom
 	 *
 	 * @access private

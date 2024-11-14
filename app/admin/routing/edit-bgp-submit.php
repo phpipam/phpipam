@@ -48,29 +48,6 @@ if(isset($POST->customer_id)) {
 	if(!is_numeric($POST->customer_id))  								{ $Result->show("danger",  _("Invalid Customer ID"), true); }
 }
 
-# fetch custom fields
-$custom = $Tools->fetch_custom_fields('routing_bgp');
-if(sizeof($custom) > 0) {
-	foreach($custom as $myField) {
-
-		//replace possible ___ back to spaces
-		$myField['nameTest'] = str_replace(" ", "___", $myField['name']);
-		if(isset($POST->{$myField['nameTest']})) { $POST->{$myField['name']} = $POST->{$myField['nameTest']};}
-
-		//booleans can be only 0 and 1!
-		if($myField['type']=="tinyint(1)") {
-			if($POST->{$myField['name']}>1) {
-				$POST->{$myField['name']} = 0;
-			}
-		}
-		//not null!
-		if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
-
-		# save to update array
-		$update[$myField['name']] = $POST->{$myField['nameTest']};
-	}
-}
-
 # create update array
 $values = [
 			"id"			=> isset($POST->id) ? $POST->id : null,
@@ -92,10 +69,10 @@ if(isset($POST->circuit_id)) {
 if(isset($POST->customer_id)) {
 	$values['customer_id'] = $POST->customer_id!=0 ? $POST->customer_id : NULL;
 }
-# custom fields
-if(isset($update)) {
-	$values = array_merge($values, $update);
-}
+
+# fetch custom fields
+$update = $Tools->update_POST_custom_fields('routing_bgp', $POST->action, $POST);
+$values = array_merge($values, $update);
 
 # execute update
 if(!$Admin->object_modify ("routing_bgp", $POST->action, "id", $values)) {
