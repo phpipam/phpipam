@@ -169,7 +169,7 @@ $("input[name='subnet']").change(function() {
 
     <!-- name -->
     <tr>
-        <td class="middle"><?php print _('Subnet'); ?></td>
+        <td class="middle"><?php print _('Subnet') . " *"; ?></td>
         <td>
         	<?php
             $showDropMenuFull = (($POST->subnetId||$POST->subnet) && $POST->action == "add") ? 1 : 0;

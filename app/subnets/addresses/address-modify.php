@@ -47,7 +47,7 @@ $subnet_permission > 1 ?:		$Result->show("danger", _('Cannot edit IP address det
 
 // set selected address and required addresses fields array
 $selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);
-$required_ip_fields = $Tools->explode_filtered(";", $User->settings->IPrequired);																			//format to array
+$required_ip_fields = $Tools->explode_filtered(";", $User->settings->IPrequired);		//format to array
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
@@ -265,7 +265,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		if(!isset($address['mac'])) {$address['mac'] = "";}
 
 		// set star if field is required
-		$required = in_array("description", $required_ip_fields) ? " *" : "";
+		$required = in_array("mac", $required_ip_fields) ? " *" : "";
 
 		print '<tr class="text-top">'. "\n";
 		print '	<td style="padding-top:7px;">'._('MAC address').$required.'</td>'. "\n";
@@ -440,14 +440,18 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	print "</tr>";
 
 	// customer
-	if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+	if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R && in_array('customer_id', $selected_ip_fields)) {
+
+		// set star if field is required
+		$required = in_array("customer_id", $required_ip_fields) ? " *" : "";
 
 		print '<tr>'. "\n";
-		print '	<td>'._('Customer').'</td>'. "\n";
+		print '	<td>'._('Customer').$required.'</td>'. "\n";
 		print '	<td>'. "\n";
 
 		print '<select name="customer_id" class="ip_addr form-control input-sm input-xs input-w-auto" '.$delete.'>'. "\n";
 		print '<option disabled>'._('Select customer').':</option>'. "\n";
+		if($required=="" || $address['customer_id']==null)
 		print '<option value="0" selected>'._('None').'</option>'. "\n";
 
 		// fetch devices
@@ -496,7 +500,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 		print '<select name="switch" class="ip_addr form-control input-sm input-w-auto" '.$delete.'>'. "\n";
 		print '<option disabled>'._('Select device').':</option>'. "\n";
-		if($required=="")
+		if($required=="" || $address['switch']==null)
 		print '<option value="0" selected>'._('None').'</option>'. "\n";
 
 		// fetch devices
@@ -538,7 +542,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 
     // location
-    if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
+    if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R && in_array('location', $selected_ip_fields)) { ?>
 	<tr>
 		<td>
 			<?php
@@ -549,10 +553,10 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 			</td>
 		<td>
 			<select name="location" class="form-control input-sm input-w-auto">
-				<?php if($required=="") { ?>
-    			<option value="0"><?php print _("None"); ?></option>
-    			<?php } ?>
-    			<?php
+				<?php
+				print '<option disabled>'._('Select customer').':</option>'. "\n";
+				if($required=="" || $address['location']==null)
+				print '<option value="0">' . _("None") . '</option>';
                 if(is_array($locations)) {
         			foreach($locations as $l) {
         				if($address['location'] == $l->id)	{ print "<option value='$l->id' selected='selected'>$l->name</option>"; }
