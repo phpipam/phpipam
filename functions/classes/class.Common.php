@@ -968,11 +968,11 @@ class Common_functions  {
 			if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && !isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
 				return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 443 : 80;
 			}
-			if (isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
+			if (isset($_SERVER['HTTP_X_FORWARDED_PORT']) && is_numeric($_SERVER['HTTP_X_FORWARDED_PORT'])) {
 				return $_SERVER['HTTP_X_FORWARDED_PORT'];
 			}
 		}
-		if (isset($_SERVER['SERVER_PORT'])) {
+		if (isset($_SERVER['SERVER_PORT']) && is_numeric($_SERVER['SERVER_PORT'])) {
 			return $_SERVER['SERVER_PORT'];
 		}
 
@@ -1044,6 +1044,7 @@ class Common_functions  {
 			$url = "localhost";
 		}
 		$host = parse_url("$proto://$url", PHP_URL_HOST) ?: "localhost";
+		$host = urlencode($host);
 
 		$port = $this->httpPort();
 

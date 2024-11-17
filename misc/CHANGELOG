@@ -13,6 +13,10 @@
     ----------------------------
     + Added Isle of Man postcodes (#4318);
 
+    Security Fixes:
+    ----------------------------
+    + XSS - reflected via HTTP_X_FORWARDED_PORT;
+
 == 1.7.0
 
     New features:
