@@ -13,18 +13,18 @@ $User->check_user_session();
 $csrf_ffss = $User->Crypto->csrf_cookie ("create-if-not-exists", "find_free_section_subnets");
 
 # ID must be numeric
-if(!is_numeric($_GET['section'])) { $Result->show("danger",_('Invalid ID'), true); }
+if(!is_numeric($GET->section)) { $Result->show("danger",_('Invalid ID'), true); }
 
 
 # Admin check, otherwise load requested subnets
-if ($_GET['section'] == 'Administration') {
+if ($GET->section == 'Administration') {
     if (!$User->is_admin()) { $Result->show("danger",_('Sorry, must be admin'), true); }
     else 					{ include('admin/admin-menu.php'); }
 }
 # load subnets
 else {
 	#  check for possible subsection
-	$subsections = $Sections->fetch_subsections ($_GET['section']);
+	$subsections = $Sections->fetch_subsections ($GET->section);
 
 	# permissions
 	foreach($subsections as $k=>$ss) {
@@ -52,10 +52,10 @@ else {
 	/* print Subnets */
 
     # get section details
-    $section = (array) $Sections->fetch_section("id", $_GET['section']);
+    $section = (array) $Sections->fetch_section("id", $GET->section);
 
     # verify permissions
-	$section_permission = $Sections->check_permission ($User->user, $_GET['section']);
+	$section_permission = $Sections->check_permission ($User->user, $GET->section);
 
 	# no access
 	if($section_permission == 0) 	{ $Result->show("danger",_('You do not have access to this section'), true); }
@@ -71,7 +71,7 @@ else {
     else 										{ $iconClass='fa-expand';  	$action = 'close';}
 
     # Check if it has parent, and if so print back link
-    if($section['masterSection']!=0 && $section['masterSection']!=NULL)	{
+    if($section['masterSection']!=0 && $section['masterSection']!=null)	{
     	# get details
     	$master_section = (array) $Sections->fetch_section ("id", $section['masterSection']);
 
@@ -86,13 +86,13 @@ else {
         print "<h4>"._('Available subnets')." <span class='pull-right' style='margin-right:5px;cursor:pointer;'><i class='fa fa-gray fa-sm $iconClass' rel='tooltip' data-placement='bottom' title='"._('Expand/compress all folders')."' id='expandfolders' data-action='$action'></i></span></h4>";
         print "<hr>";
 
-        if (!@is_array($section_subnets))
-            $section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section'], false, false, []);
+        if (!isset($section_subnets)|| !is_array($section_subnets))
+            $section_subnets = (array) $Subnets->fetch_section_subnets($GET->section, false, false, []);
         print $Subnets->print_subnets_menu($User->user, $section_subnets);
     }
 	/* print VLAN menu ---------- */
 	if($section['showVLAN'] == 1 && $User->get_module_permissions ("vlan")>=User::ACCESS_R) {
-		$vlans = $Sections->fetch_section_vlans($_GET['section']);
+		$vlans = $Sections->fetch_section_vlans($GET->section);
 
 		# if some is present
 		if($vlans) {
@@ -100,9 +100,9 @@ else {
 				# title
 				print "<hr><h4>"._('Associated VLANs')."</h4><hr>";
 				# create and print menu
-				if (!is_array($section_subnets))
-					$section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section'], false, false, []);
-				print $Subnets->print_vlan_menu($User->user, $vlans, $section_subnets, $_GET['section']);
+				if (!isset($section_subnets) || !is_array($section_subnets))
+					$section_subnets = (array) $Subnets->fetch_section_subnets($GET->section, false, false, []);
+				print $Subnets->print_vlan_menu($User->user, $vlans, $section_subnets, $GET->section);
 			print "</div>";
 		}
 	}
@@ -110,7 +110,7 @@ else {
 
 	/* print VRF menu ---------- */
 	if($User->settings->enableVRF==1 && $section['showVRF']==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
-		$vrfs = $Sections->fetch_section_vrfs($_GET['section']);
+		$vrfs = $Sections->fetch_section_vrfs($GET->section);
 
 		# if some is present
 		if($vrfs) {
@@ -119,18 +119,18 @@ else {
 				print "<hr><h4>"._('Associated VRFs')."</h4><hr>";
 				# create and print menu
 				if (!is_array($section_subnets))
-					$section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section'], false, false, []);
-				print $Subnets->print_vrf_menu($User->user, $vrfs, $section_subnets, $_GET['section']);
+					$section_subnets = (array) $Subnets->fetch_section_subnets($GET->section, false, false, []);
+				print $Subnets->print_vrf_menu($User->user, $vrfs, $section_subnets, $GET->section);
 			print "</div>";
 		}
 	}
 }
 
 # add new subnet if permitted
-$section_permission = $Sections->check_permission ($User->user, $_GET['section']);
+$section_permission = $Sections->check_permission ($User->user, $GET->section);
 if($section_permission == 3) {
 	print "<div class='action'>";
-	if(isset($_GET['subnetId'])) {
+	if(isset($GET->subnetId)) {
 	print "	<button class='btn btn-xs btn-default pull-left' id='hideSubnets' rel='tooltip' title='"._('Hide subnet list')."' data-placement='right'><i class='fa fa-gray fa-sm fa-chevron-left'></i></button>";
 	}
 	print "	<span>";

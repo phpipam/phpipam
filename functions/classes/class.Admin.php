@@ -336,6 +336,7 @@ class Admin extends Common_functions {
 				return false;
 			}
 			# result
+			$this->Log->write( _("Database table cleared").": ".$table, NULL, 0);
 			return true;
 		}
 	}
@@ -414,7 +415,7 @@ class Admin extends Common_functions {
 		# check if $gid in array
 		if($users!==false) {
 			foreach($users as $u) {
-				$group_array = pf_json_decode($u->groups, true);
+				$group_array = db_json_decode($u->groups, true);
 				$group_array = $this->groups_parse($group_array);
 
 				if(sizeof($group_array)>0) {
@@ -446,7 +447,12 @@ class Admin extends Common_functions {
 		if($users!==false) {
 			foreach($users as $u) {
 				if($u->role != "Administrator") {
-					$g = pf_json_decode($u->groups, true);
+					$g = db_json_decode($u->groups, true);
+					# if json failed to decode, then this user is eligible to be added
+					if (!$g) {
+						$out[] = $u->id;
+						continue;
+					}
 					if(!@in_array($group_id, $g)) { $out[] = $u->id; }
 				}
 			}
@@ -468,7 +474,7 @@ class Admin extends Common_functions {
 		$user = $this->fetch_object ("users", "id", $uid);
 
 		# append new group
-		$g = pf_json_decode($user->groups, true);
+		$g = db_json_decode($user->groups, true);
 		$g[$gid] = $gid;
 		$g = json_encode($g);
 
@@ -490,7 +496,7 @@ class Admin extends Common_functions {
 		$user = $this->fetch_object ("users", "id", $uid);
 
 		# remove group
-		$g = pf_json_decode($user->groups, true);
+		$g = db_json_decode($user->groups, true);
 		unset($g[$gid]);
 		$g = json_encode($g);
 
@@ -537,7 +543,7 @@ class Admin extends Common_functions {
 		# check if $gid in array
 		if($users!==false) {
 			foreach($users as $u) {
-				$g  = pf_json_decode($u->groups, true);
+				$g  = db_json_decode($u->groups, true);
 				$go = $g;
 				$g  = $this->groups_parse($g);
 				# check
@@ -567,7 +573,7 @@ class Admin extends Common_functions {
 		$sections = $this->fetch_all_objects ("sections", "id");
 		# check if $gid in array
 		foreach($sections as $s) {
-			$g = pf_json_decode($s->permissions, true);
+			$g = db_json_decode($s->permissions, true);
 
 			if(is_array($g)) {
 				if(sizeof($g)>0) {
@@ -674,7 +680,7 @@ class Admin extends Common_functions {
 		switch ($field['fieldType']) {
 			case "varchar":
 			case "int":
-				if (!isset($field['fieldSize']) || filter_var($field['fieldSize'], FILTER_VALIDATE_INT, [['options' => ['min_range' => 1]]]) === false) {
+				if (!isset($field['fieldSize']) || filter_var($field['fieldSize'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) === false) {
 					$this->Result->show("danger", _("Error: ") . _("Invalid custom field size"));
 					return false;
 				}
@@ -758,7 +764,7 @@ class Admin extends Common_functions {
 	 */
 	public function save_custom_fields_filter ($table, $filtered_fields) {
 		# old custom fields, save them to array
-		$hidden_array = !is_blank($this->settings->hiddenCustomFields) ? pf_json_decode($this->settings->hiddenCustomFields, true) : array();
+		$hidden_array = !is_blank($this->settings->hiddenCustomFields) ? db_json_decode($this->settings->hiddenCustomFields, true) : array();
 
 		# set new array for table
 		if(is_null($filtered_fields))	{ unset($hidden_array[$table]); }

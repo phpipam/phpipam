@@ -11,7 +11,7 @@ $User->check_user_session();
 $all_apis = $Admin->fetch_all_objects("api");
 
 # app security texts
-$app_perms_text = array( _("SSL with User token")=>"ssl_token", _("SSL with App code token")=>"ssl_code", _("Encrypted")=>"crypt", _("User token")=>"none");
+$app_perms_text = array("SSL with User token"=>"ssl_token","SSL with App code token"=>"ssl_code","Encrypted"=>"crypt", "User token"=>"none");
 
 ?>
 
@@ -19,7 +19,7 @@ $app_perms_text = array( _("SSL with User token")=>"ssl_token", _("SSL with App 
 <h4><?php print _('API management'); ?></h4>
 <hr><br>
 
-<!-- only if API enabled -->
+<!-- only IF aPI enabled -->
 <?php if($User->settings->api==1) { ?>
 	<!-- Add new -->
 	<button class='btn btn-sm btn-default open_popup' style="margin-bottom:10px;" data-script='app/admin/api/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create API key'); ?></button>
@@ -28,21 +28,23 @@ $app_perms_text = array( _("SSL with User token")=>"ssl_token", _("SSL with App 
 	/* print existing APIs */
 	if($all_apis!==false) {
 
-		print '<table id="userPrint" class="table nosearch sorted table-striped table-top table-auto" data-cookie-id-table="admin_api">';
+		print "<div class='clearfix'></div>";
+		print '<div class="panel panel-default" style="width:auto;border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;float:left">';
+		print '<table id="userPrint" class="table nosearch sor2ted table-striped table-top table-auto" data-cookie-id-table="admin_api">';
 		# headers
 		print "<thead>";
 		print '<tr>';
-		print "<th>"._('App id').'</th>';
+	    print "<th>"._('App id').'</th>';
 		print "<th>"._('App code').'</th>';
-		print "<th>"._('App permissions').'</th>';
-		print "<th>"._('App security').'</th>';
-		print "<th>"._('Transaction locking').'</th>';
-		print "<th>"._('Lock timeout').'</th>';
-		print "<th>"._('Nest custom fields').'</th>';
-		print "<th>"._('Show links').'</th>';
-		print "<th>"._('Comment').'</th>';
-		print "<th>"._('Last access').'</th>';
-		print '<th></th>';
+	    print "<th>"._('App permissions').'</th>';
+	    print "<th>"._('App security').'</th>';
+	    print "<th>"._('Transaction locking').'</th>';
+	    print "<th>"._('Lock timeout').'</th>';
+	    print "<th>"._('Nest custom fields').'</th>';
+	    print "<th>"._('Show links').'</th>';
+	    print "<th>"._('Comment').'</th>';
+	    print "<th>"._('Last access').'</th>';
+	    print '<th></th>';
 		print '</tr>';
 		print "</thead>";
 
@@ -57,8 +59,8 @@ $app_perms_text = array( _("SSL with User token")=>"ssl_token", _("SSL with App 
 
 			print '<tr class="'.$class.'">' . "\n";
 
-			print '	<td>' . escape_input($a['app_id']) . '</td>'. "\n";
-			print '	<td>' . escape_input($a['app_code']) . '</td>'. "\n";
+			print '	<td>' . $a['app_id'] . '</td>'. "\n";
+			print '	<td>' . $a['app_code'] . '</td>'. "\n";
 
 			# reformat permissions
 			if($a['app_permissions']==0)		{ $a['app_permissions'] = _("Disabled"); }
@@ -67,7 +69,7 @@ $app_perms_text = array( _("SSL with User token")=>"ssl_token", _("SSL with App 
 			elseif($a['app_permissions']==3)	{ $a['app_permissions'] = _("Read / Write / Admin"); }
 
 			# wait update
-			$a['app_lock_wait'] = $a['app_lock']==1 ? $a['app_lock_wait']." "._("sec") : "/";
+			$a['app_lock_wait'] = $a['app_lock']==1 ? $a['app_lock_wait']." sec" : "/";
 
 			# reformat lock and nesting
 			$a['app_lock']               = $a['app_lock']==1 ? _("Yes") : _("No");
@@ -77,7 +79,7 @@ $app_perms_text = array( _("SSL with User token")=>"ssl_token", _("SSL with App 
 
 			$a['app_security'] = array_search($a['app_security'], $app_perms_text);
 
-			$a['app_last_access'] = is_blank($a['app_last_access']) ? _("Never") : $a['app_last_access'];
+			$a['app_last_access'] = strlen($a['app_last_access'])==0 ? "Never" : $a['app_last_access'];
 
 			print '	<td>' . $a['app_permissions'] . '</td>'. "\n";
 			print '	<td>' . $a['app_security'] . '</td>'. "\n";
@@ -100,19 +102,17 @@ $app_perms_text = array( _("SSL with User token")=>"ssl_token", _("SSL with App 
 		}
 		print "</tbody>";
 		print "</table>";
+		print "</div>";
+		print "<div class='clearfix'></div>";
 	}
 	else {
 		$Result->show("info alert-nomargin", _("No Apps available")."!", false);
 	}
 	?>
 
-	<hr>
-
 	<h4><?php print _('API documentation'); ?></h4>
-	<ul>
-	<li><a target=_ href="<?php print create_link('tools/documentation/API'); ?>"><?php print _("Documentation"); ?> <i class='fa fa-book'></i></a></li>
-	<li><a target=_ href="https://phpipam.net/api-documentation/">https://phpipam.net/api-documentation/</a></li>
-	</ul>
+	<a href="http://phpipam.net/api-documentation/" target="_blank">http://phpipam.net/api-documentation/</a>
+
 <?php
 } else {
 	$Result->show("info", _('Please enable API module under server management'), false);

@@ -54,7 +54,7 @@ class Tools_controller extends Common_api_functions {
 		$this->define_tools_controllers ();
 		$this->define_available_identifiers ();
 
-		// fist validate subcontroller
+		// first validate subcontroller
 		$this->validate_subcontroller ();
 		// rewrite subcontroller
 		$this->rewrite_subcontroller ();
@@ -581,7 +581,7 @@ class Tools_controller extends Common_api_functions {
 	 */
 	private function parse_nat_objects ($obj) {
     	if($this->Tools->validate_json_string($obj)!==false) {
-        	return(pf_json_decode($obj, true));
+        	return(db_json_decode($obj, true));
     	}
     	else {
         	return array ();
@@ -598,7 +598,7 @@ class Tools_controller extends Common_api_functions {
 		if((is_blank(@$this->_params->lat) || is_blank(@$this->_params->long)) && !is_blank(@$this->_params->address)) {
             $OSM = new OpenStreetMap($this->Database);
             $latlng = $OSM->get_latlng_from_address ($this->_params->address);
-            if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
+            if(isset($latlng['lat']) && isset($latlng['lng'])) {
                 $this->_params->lat  = $latlng['lat'];
                 $this->_params->long = $latlng['lng'];
             }

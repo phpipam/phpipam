@@ -17,73 +17,48 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check if site is demo
+$User->is_demo();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
-# strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
-
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "group", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "group", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 # remove users from this group if delete and remove group from sections
-if($_POST['action'] == "delete") {
-	$Admin->remove_group_from_users($_POST['g_id']);
-	$Admin->remove_group_from_sections($_POST['g_id']);
+if($POST->action == "delete") {
+	$Admin->remove_group_from_users($POST->g_id);
+	$Admin->remove_group_from_sections($POST->g_id);
 }
 else {
-	if(strlen($_POST['g_name']) < 2)										{ $Result->show("danger", _('Name must be at least 2 characters long')."!", true); }
+	if(strlen($POST->g_name) < 2)										{ $Result->show("danger", _('Name must be at least 2 characters long')."!", true); }
 }
 
 # unique name
-if($_POST['action']=="add") {
-if($Admin->fetch_object("userGroups", "g_name", $_POST['g_name'])!==false)	{ $Result->show("danger", _('Group already exists')."!", true); }
-}
-
-# fetch custom fields
-$custom = $Tools->fetch_custom_fields('userGroups');
-if(sizeof($custom) > 0) {
-	foreach($custom as $myField) {
-
-		//replace possible ___ back to spaces
-		$myField['nameTest'] = str_replace(" ", "___", $myField['name']);
-		if(isset($_POST[$myField['nameTest']])) { $_POST[$myField['name']] = $_POST[$myField['nameTest']];}
-
-		//booleans can be only 0 and 1!
-		if($myField['type']=="tinyint(1)") {
-			if($_POST[$myField['name']]>1) {
-				$_POST[$myField['name']] = 0;
-			}
-		}
-		//not null!
-		if($myField['Null']=="NO" && is_blank($_POST[$myField['name']])) { $Result->show("danger", $myField['name']." can not be empty!", true); }
-
-		# save to update array
-		$update[$myField['name']] = $_POST[$myField['nameTest']];
-	}
+if($POST->action=="add") {
+if($Admin->fetch_object("userGroups", "g_name", $POST->g_name)!==false)	{ $Result->show("danger", _('Group already exists')."!", true); }
 }
 
 # create array of values for modification
-$values = array("g_id"=>@$_POST['g_id'],
-				"g_name"=>$_POST['g_name'],
-				"g_desc"=>@$_POST['g_desc']);
+$values = array("g_id"=>$POST->g_id,
+				"g_name"=>$POST->g_name,
+				"g_desc"=>$POST->g_desc);
 
-# custom fields
-if(isset($update)) {
-	$values = array_merge($values, $update);
-}
+# fetch custom fields
+$update = $Tools->update_POST_custom_fields('userGroups', $POST->action, $POST);
+$values = array_merge($values, $update);
 
 /* try to execute */
-if(!$Admin->object_modify("userGroups", $_POST['action'], "g_id", $values)) { $Result->show("danger",  _("Group")." ".$_POST["action"]." "._("error")."!", false); }
-else 					 													{ $Result->show("success", _("Group")." ".$_POST["action"]." "._("success")."!", false); }
+if(!$Admin->object_modify("userGroups", $POST->action, "g_id", $values)) { $Result->show("danger",  _("Group")." ".$User->get_post_action()." "._("error")."!", false); }
+else 					 													{ $Result->show("success", _("Group")." ".$User->get_post_action()." "._("success")."!", false); }
 
 # from list of usernames provided from AD result if some user matches add him to group
-if (!is_blank($_POST['gmembers'])) {
+if (!is_blank($POST->gmembers)) {
 	// save id
 	$gid = $Admin->lastId;
 	// to array
-	$gmembers = pf_explode(";", $_POST['gmembers']);
+	$gmembers = pf_explode(";", $POST->gmembers);
 	// check
 	foreach ($gmembers as $gm) {
 		// check if user exists
@@ -94,5 +69,3 @@ if (!is_blank($_POST['gmembers'])) {
 		}
 	}
 }
-
-?>

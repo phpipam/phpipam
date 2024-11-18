@@ -22,19 +22,19 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # create csrf token
-$csrf = $_POST['action']=="add"||$_POST['action']=="all-add" ? $User->Crypto->csrf_cookie ("create", "address_add") : $User->Crypto->csrf_cookie ("create", "address_".$_POST['id']);
+$csrf = $POST->action=="add"||$POST->action=="all-add" ? $User->Crypto->csrf_cookie ("create", "address_add") : $User->Crypto->csrf_cookie ("create", "address_".$POST->id);
 
 # validate action
-$Tools->validate_action ($_POST['action']);
+$Tools->validate_action(false);
 
 # validate post
-is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid subnet ID"), true, true);
-is_numeric($_POST['id']) || is_blank($_POST['id']) ?:	$Result->show("danger", _("Invalid ID"), true, true);
+is_numeric($POST->subnetId) ?:						$Result->show("danger", _("Invalid subnet ID"), true, true);
+is_numeric($POST->id) || is_blank($POST->id) ?:	$Result->show("danger", _("Invalid ID"), true, true);
 
 # get posted values
-$subnetId= escape_input($_POST['subnetId']);
-$action  = escape_input($_POST['action']);
-$id      = escape_input($_POST['id']);
+$subnetId= escape_input($POST->subnetId);
+$action  = escape_input($POST->action);
+$id      = escape_input($POST->id);
 
 # fetch subnet
 $subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
@@ -60,14 +60,20 @@ if (($action=="add" || $action=="all-add") && ($subnet['isFull']==1 && $subnet['
 if ($action == "all-add") {
 	$address['ip_addr'] = $Subnets->transform_address($id, "dotted");
 	$address['id'] = 0;
+	$address['PTR'] = null;
+	$address['location'] = null;
+	$address['customer_id'] = null;
 }
-else if ($action == "add") {
+elseif ($action == "add") {
 	# get first available IP address
 	$first = $Addresses->get_first_available_address ($subnetId);
 	$first = !$first ? "" : $Subnets->transform_address($first, "dotted");
 
 	$address['ip_addr'] = $first;
 	$address['id'] = 0;
+	$address['PTR'] = null;
+	$address['location'] = null;
+	$address['customer_id'] = null;
 }
 else {
 	$address = (array) $Addresses->fetch_address(null, $id);
@@ -189,7 +195,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		<td><?php print _('IP address'); ?> *</td>
 		<td>
 		<div class="input-group">
-			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print $Subnets->transform_address($address['ip_addr'], "dotted");; if(is_numeric($_POST['stopIP'])>0) print "-".$Subnets->transform_address($_POST['stopIP'],"dotted"); ?>" placeholder="<?php print _('IP address'); ?>">
+			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print $Subnets->transform_address($address['ip_addr'], "dotted");; if(is_numeric($POST->stopIP)>0) print "-".$Subnets->transform_address($POST->stopIP,"dotted"); ?>" placeholder="<?php print _('IP address'); ?>">
     		<span class="input-group-addon" style="border-left:none;">
     			<a class="ping_ipaddress ping_ipaddress_new" data-subnetid="<?php print $subnetId; ?>" data-id="" href="#" rel="tooltip" data-container="body" title="" data-original-title="<?php print _('Check availability'); ?>">
  					<i class="fa fa-gray fa-cogs"></i>
@@ -351,7 +357,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	 	print '</tr>';
 
 		//remove all associated queries if delete
-		if ($_POST['action']=="delete" || $_POST['action']=="all-edit") {
+		if ($POST->action=="delete" || $POST->action=="all-edit") {
     		// check
     		$PowerDNS = new PowerDNS ($Database);
     		$records  = $PowerDNS->search_records ("name", $address['hostname'], 'name', true);
@@ -547,7 +553,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
     			<option value="0"><?php print _("None"); ?></option>
     			<?php } ?>
     			<?php
-                if($locations!==false) {
+                if(is_array($locations)) {
         			foreach($locations as $l) {
         				if($address['location'] == $l->id)	{ print "<option value='$l->id' selected='selected'>$l->name</option>"; }
         				else					            { print "<option value='$l->id'>$l->name</option>"; }

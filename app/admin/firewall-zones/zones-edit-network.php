@@ -20,13 +20,13 @@ $Zones    = new FirewallZones($Database);
 # validate session parameters
 $User->check_user_session();
 
-# validate $_POST['action'] values
-if ($_POST['action'] != 'add' && $_POST['action'] != 'delete') 	{ $Result->show("danger", _("Invalid action. Do not manipulate the POST values!").'<button class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true); }
-# validate $_POST['id'] values
-if ($_POST['id'] && !preg_match('/^[0-9]+$/i', $_POST['id'])) 	{ $Result->show("danger", _("Invalid ID. Do not manipulate the POST values!").'<button style="margin-left:50px;" class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true); }
-# validate $_POST['sectionId'] values
-if ($_POST['id'] && $_POST['subnetId'] != '') {
-	if (!preg_match('/^[0-9]+$/i', $_POST['subnetId'])) 		{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!").'<button class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true); }
+# validate $POST->action values
+if ($POST->action != 'add' && $POST->action != 'delete') 	{ $Result->show("danger", _("Invalid action. Do not manipulate the POST values!").'<button class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true); }
+# validate $POST->id values
+if ($POST->id && !preg_match('/^[0-9]+$/i', $POST->id)) 	{ $Result->show("danger", _("Invalid ID. Do not manipulate the POST values!").'<button style="margin-left:50px;" class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true); }
+# validate $POST->sectionId values
+if ($POST->id && $POST->subnetId != '') {
+	if (!preg_match('/^[0-9]+$/i', $POST->subnetId)) 		{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!").'<button class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true); }
 }
 
 # fetch all sections
@@ -47,7 +47,7 @@ $(document).ready(function() {
 </script>
 
 <!-- header  -->
-<div class="pHeader"><?php print _(ucwords($_POST['action']).' network mapping'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action().' '._('network mapping'); ?></div>
 <!-- content -->
 <div class="pContent">
 <!-- form -->
@@ -55,17 +55,17 @@ $(document).ready(function() {
 <!-- table -->
 <table class="table table-noborder table-condensed">
 <?php
-	if ($_POST['action'] == 'delete') { ?>
+	if ($POST->action == 'delete') { ?>
 		<!-- delete warning and network information-->
 		<tr>
 			<td style="width:150px;">
 				<?php
-				$subnet = $Subnets->fetch_subnet('id',$_POST['subnetId']);
+				$subnet = $Subnets->fetch_subnet('id',$POST->subnetId);
 				# display network information with or without description
 				if ($subnet->description) 	{	$network = $Subnets->transform_to_dotted($subnet->subnet).'/'.$subnet->mask.' ('.$subnet->description.')';	}
 				else 						{	$network = $Subnets->transform_to_dotted($subnet->subnet).'/'.$subnet->mask;	}
 				$Result->show("warning", "<strong>"._('Warning').":</strong><br>"._("You are about to remove the following Network from the firewall zone:<br>".$network), false); ?>
-				<input type="hidden" name="masterSubnetId" value="<?php print escape_input($_POST['subnetId']); ?>">
+				<input type="hidden" name="masterSubnetId" value="<?php print escape_input($POST->subnetId); ?>">
 			</td>
 	<?php } else {
 		# add a network to the zone
@@ -100,9 +100,9 @@ $(document).ready(function() {
 		</td>
 			<?php
 			# display the subnet if already configured
-			if ($firewallZone->sectionId) {
+			if ($POST->sectionId) {
 				print '<td><div class="sectionSubnets">';
-				print $Subnets->print_mastersubnet_dropdown_menu($firewallZone->sectionId,$firewallZone->subnetId);
+				print $Subnets->print_mastersubnet_dropdown_menu($POST->sectionId,$POST->subnetId);
 				print '</div></td>';
 			} else {
 				# if there is only one section, fetch the subnets of that section
@@ -120,13 +120,13 @@ $(document).ready(function() {
 
 <?php } ?>
 </table>
-<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 <?php
-if ($_POST['id']) 	{ print '<input type="hidden" name="netZoneId" value="'.$_POST['id'].'">'; }
+if ($POST->id) 	{ print '<input type="hidden" name="netZoneId" value="'.escape_input($POST->id).'">'; }
 else 				{ print '<input type="hidden" name="noZone" value="1">';
-						if ($_POST['network']) {
-					  		foreach ($_POST['network'] as $key => $network) {
-					    		print '<input type="hidden" name="network['.$key.']" value="'.$network.'">';
+						if (is_array($POST->network)) {
+					  		foreach ($POST->network as $key => $network) {
+					    		print '<input type="hidden" name="network['.escape_input($key).']" value="'.escape_input($network).'">';
 					    	}
 					    }
 					}
@@ -139,7 +139,7 @@ else 				{ print '<input type="hidden" name="noZone" value="1">';
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopup2"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editNetworkSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editNetworkSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="zones-edit-network-result"></div>

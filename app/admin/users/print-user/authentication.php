@@ -31,7 +31,7 @@
 	print _('All groups');
 	}
 	else {
-		$groups = pf_json_decode($user->groups, true);
+		$groups = db_json_decode($user->groups, true);
 		$gr = $Admin->groups_parse($groups);
 		if(sizeof($gr)>0) {
 			foreach($gr as $group) {

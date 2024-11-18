@@ -2219,7 +2219,7 @@ msgid "Cannot update request"
 msgstr "Impossible de mettre à jour la requête"
 
 #: site/admin/manageRequestResult.php:33
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr "Requête refusée"
 
 #: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
@@ -2267,7 +2267,7 @@ msgid "Errors occured when importing to database!"
 msgstr "Erreurs pendant l’importation dans la base de données"
 
 #: site/admin/CSVimportSubmit.php:95 site/admin/ripeImportResult.php:72
-msgid "Import successfull"
+msgid "Import successful"
 msgstr "Importation réussie"
 
 #: site/admin/CSVimportVerify.php:25
@@ -2713,7 +2713,7 @@ msgstr ""
 
 #: site/admin/customSubnetFieldsOrder.php:15 site/admin/customIPFieldsOrder.php:15
 #: site/admin/customVLANFieldsOrder.php:15 site/admin/customUserFieldsOrder.php:15
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr "Champs ne pouvant être vides"
 
 #: site/admin/customSubnetFieldsOrder.php:19 site/admin/customIPFieldsOrder.php:19
@@ -3109,7 +3109,7 @@ msgid "Truncating network will remove all IP addresses, that belong to selected 
 msgstr "Tronquer un réseau va supprimer toutes ses adresse IP !"
 
 #: site/admin/manageSubnetTruncateSave.php:23
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr "Sous-réseau tronqué avec succès"
 
 #: site/admin/usersEditEmailNotif.php:23
@@ -5565,10 +5565,10 @@ msgstr "Echec de modification des permissions de sous-réseau"
 msgid "Manage permissions for folder"
 msgstr "Gérer les premissions pour le dossier"
 
-msgid "Only subnets that have no nested subnets can be splitted"
+msgid "Only subnets that have no nested subnets can be split"
 msgstr "Seuls les sous-réseaux sans sous-réseaux rattachés peuvent être splités"
 
-msgid "Subnet too small to be splitted"
+msgid "Subnet too small to be split"
 msgstr "Sous-réseau trop petit pour être splité"
 
 msgid "Name prefix"
@@ -6130,7 +6130,7 @@ msgid "Maximum zone name length"
 msgstr "Longeur maximum de nom de zone"
 
 msgid ""
-"Choose a maximum lenght of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep "
+"Choose a maximum length of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep "
 "in mind that your firewall may have a limit for the length of zone names or address objects )"
 msgstr ""
 "Choisissez une longueur maximale pour les noms de zone. <br> la longueur par défaut est 3, le maximum est de "
@@ -6166,7 +6166,7 @@ msgid "Zone generator method"
 msgstr "Méthode de génération de zone"
 
 msgid ""
-"Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own "
+"Generate zone names automatically with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own "
 "unique zone names you can choose the option &quot;text&quot."
 msgstr ""
 "Génére des noms de zone automatiquement avec le paramètre &quot;decimal&quot; or &quot;hex&quot;.<b> Pour "
@@ -6461,7 +6461,7 @@ msgstr "Aucun équipement disponible pour la table de routage SNMP"
 msgid "No new subnets found"
 msgstr "Aucun nouveau sous-réseau trouvé"
 
-msgid "SNMP module disbled"
+msgid "SNMP module disabled"
 msgstr "Module SNMP désactivé"
 
 msgid "No devices for SNMP ARP query available"
@@ -7246,7 +7246,7 @@ msgstr "Mettre à jour les labels d’adresses quand un changement d’état d�
 msgid "Require unique subnets"
 msgstr "Requiert sous-réseau unique"
 
-msgid "Require unique subnets accross all sections"
+msgid "Require unique subnets across all sections"
 msgstr "Requiert l’unicité des sous-réseaux dans l’ensemble des sections"
 
 msgid "Set maximum number of concurrent ICMP checks (default 128)"
@@ -7312,13 +7312,13 @@ msgstr "Marquer sous-réseau comme utilisé"
 msgid "Set subnet alert threshold"
 msgstr "choisir le seul d’alerte de sous-réseau"
 
-msgid "Failed to set subnet permissons for subnet"
+msgid "Failed to set subnet permissions for subnet"
 msgstr "Echec de paramétrage des droits pour le sous-réseau"
 
 msgid "No result"
 msgstr "Aucun résultat"
 
-msgid "Subnet splitted successfully"
+msgid "Subnet split successfully"
 msgstr "Sous-réseau divisé avec succés"
 
 msgid "Copy custom field values"
@@ -8147,7 +8147,7 @@ msgstr "Options mises à jour"
 msgid "Upgrade"
 msgstr "Mettre à jour"
 
-msgid "Object is Natted"
+msgid "Object is NATted"
 msgstr "Obet naté"
 
 msgid "Invalid generator ID"

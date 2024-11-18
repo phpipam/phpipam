@@ -14,7 +14,7 @@ $admin = $User->is_admin(false);
 $custom = $Tools->fetch_custom_fields('locations');
 
 # get hidden fields
-$hidden_custom_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_custom_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_custom_fields = is_array(@$hidden_custom_fields['locations']) ? $hidden_custom_fields['locations'] : array();
 
 # perm check
@@ -27,11 +27,11 @@ elseif ($User->settings->enableLocations!="1") {
 }
 else {
     # all locations
-    if(!isset($_GET['subnetId'])) {
+    if(!isset($GET->subnetId)) {
         include("all-locations-list.php");
     }
     # map
-    elseif ($_GET['subnetId']=="map") {
+    elseif ($GET->subnetId=="map") {
         include("all-locations-map.php");
     }
     # single location

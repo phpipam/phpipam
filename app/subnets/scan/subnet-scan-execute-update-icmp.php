@@ -3,26 +3,29 @@
 # Check we have been included and not called directly
 require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
+# check if site is demo
+$User->is_demo();
+
 /*
  * Update alive status of all hosts in subnet
  ***************************/
 
 # validate subnetId and type
-if(!is_numeric($_POST['subnetId']))                        { $Result->show("danger", "Invalid subnet Id", true); die(); }
+if(!is_numeric($POST->subnetId))                        { $Result->show("danger", "Invalid subnet Id", true); die(); }
 
 # invoke CLI with threading support
-$cmd = $Scan->php_exec." ".dirname(__FILE__) . '/../../../functions/scan/subnet-scan-icmp-execute.php'." 'update' ".$_POST['subnetId'];
+$cmd = $Scan->php_exec." ".dirname(__FILE__) . '/../../../functions/scan/subnet-scan-icmp-execute.php'." 'update' ".$POST->subnetId;
 
 # save result to $output
 exec($cmd, $output, $retval);
 
 # format result back to object
 $output = array_values(array_filter($output));
-$script_result = pf_json_decode($output[0]);
+$script_result = db_json_decode($output[0]);
 
 # json error
 if(json_last_error() !== JSON_ERROR_NONE)
-	$Result->show("danger", "Invalid JSON response"." - ".$Scan->json_error_decode(json_last_error())." - ".escape_input($output[0]), true);
+	$Result->show("danger", "Invalid JSON response"." - ".$Scan->json_error_decode(json_last_error())." - ".$output[0], true);
 
 # set blank values
 if (!isset($script_result->values->alive) || is_null($script_result->values->alive) )	{ $script_result->values->alive = array(); }
@@ -31,7 +34,7 @@ if (!isset($script_result->values->dead)  || is_null($script_result->values->dea
 # if method is fping we need to check against existing hosts because it produces list of all ips !
 if ($User->settings->scanPingType=="fping" && isset($script_result->values->alive)) {
 	// fetch all hosts to be scanned
-	$all_subnet_hosts = $Scan->prepare_addresses_to_scan ("update", $_POST['subnetId']);
+	$all_subnet_hosts = $Scan->prepare_addresses_to_scan ("update", $POST->subnetId);
 	// loop check
 	foreach ($all_subnet_hosts as $k=>$h) {
 		// alive ?
@@ -70,7 +73,7 @@ if($script_result->status==0) {
 			//loop addresses in type
 			foreach($r as $ip) {
 				# get details
-				$ipdet = (array) $Addresses->fetch_address_multiple_criteria ($ip, $_POST['subnetId']);
+				$ipdet = (array) $Addresses->fetch_address_multiple_criteria ($ip, $POST->subnetId);
 
 				# format output
 				$res[$ip]['id']          = $ipdet['id'];;
@@ -173,4 +176,4 @@ else {
 print "<div class='text-right' style='margin-top:7px;'><span class='muted'>Scan method: ".$Scan->settings->scanPingType."</span></dov>";
 
 # show debug?
-if($_POST['debug']==1) 				{ print "<pre>"; print_r($output[0]); print "</pre>"; }
+if($POST->debug==1) 				{ print "<pre>"; print_r($output[0]); print "</pre>"; }

@@ -2391,7 +2391,7 @@ msgid "Cannot update request"
 msgstr "No se puede actualizar la solicitud"
 
 #: site/admin/manageRequestResult.php:33
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr "La solicitud ha sido rechazada"
 
 #: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
@@ -2439,7 +2439,7 @@ msgid "Errors occured when importing to database!"
 msgstr "Errores durante la importación a la BBDD"
 
 #: site/admin/CSVimportSubmit.php:95 site/admin/RIPE / ARINImportResult.php:72
-msgid "Import successfull"
+msgid "Import successful"
 msgstr "Importación correcta"
 
 #: site/admin/CSVimportVerify.php:25
@@ -2881,7 +2881,7 @@ msgstr "Si el grupo no tiene acceso a la sección no podrá acceder a la subred,
 #: site/admin/customIPFieldsOrder.php:15
 #: site/admin/customVLANFieldsOrder.php:15
 #: site/admin/customUserFieldsOrder.php:15
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr "Los campos no pueden estar vacíos"
 
 #: site/admin/customSubnetFieldsOrder.php:19
@@ -3285,7 +3285,7 @@ msgstr "¡Truncando la red se eliminarán todas las IPs que pertenezcan a la sub
 "seleccionada!"
 
 #: site/admin/manageSubnetTruncateSave.php:23
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr "Subred truncada correctamente"
 
 #: site/admin/usersEditEmailNotif.php:23

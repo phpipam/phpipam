@@ -12,13 +12,14 @@ $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Result 	= new Result ();
-$Params 	= new Params ($_POST);
 
 # verify that user is logged in
 $User->check_user_session();
+# check if site is demo
+$User->is_demo();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "settings", $Params->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "settings", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # valid params
 $passwordPolicy = [
@@ -34,22 +35,22 @@ $passwordPolicy = [
 
 # check for numbers and set parameters
 foreach ($passwordPolicy as $k=>$f) {
-	if (isset($_POST[$k])) {
-		if (is_blank($_POST[$k])) {
+	if (isset($POST->{$k})) {
+		if (is_blank($POST->{$k})) {
 			$passwordPolicy[$k] = 0;
 		}
-		elseif (!is_numeric($_POST[$k])) {
+		elseif (!is_numeric($POST->{$k})) {
 			$Result->show ("danger", _("Values must be numeric"), true);
 		}
 		else {
-			$passwordPolicy[$k] = $_POST[$k];
+			$passwordPolicy[$k] = $POST->{$k};
 		}
 	}
 }
 # symbols
-if (!is_blank($Params->allowedSymbols)) {
-	$Params->allowedSymbols = str_replace(" ", "", $Params->allowedSymbols);
-	$passwordPolicy['allowedSymbols'] = $Params->allowedSymbols;
+if (!is_blank($POST->allowedSymbols)) {
+	$POST->allowedSymbols = str_replace(" ", "", $POST->allowedSymbols);
+	$passwordPolicy['allowedSymbols'] = $POST->allowedSymbols;
 }
 
 # set update values
@@ -59,7 +60,7 @@ if(!$Admin->object_modify("settings", "edit", "id", $values))	{ $Result->show("d
 else															{ $Result->show("success", _("Settings updated successfully"), false); }
 
 # if required check all user sertings and force them to update password
-if($Params->enforce==1) {
+if($POST->enforce==1) {
 	try { $Database->runQuery("update `users` set `passChange` = 'Yes' where `authMethod` = 1;"); }
 	catch (Exception $e) {
 		$Result->show("danger", _('Error updating users: ').$e->getMessage(), false);

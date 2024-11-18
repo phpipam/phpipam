@@ -18,10 +18,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $_POST['action']=="add" ? $User->Crypto->csrf_cookie ("create", "pstn_add") : $User->Crypto->csrf_cookie ("create", "pstn_".$_POST['id']);
+$csrf = $POST->action=="add" ? $User->Crypto->csrf_cookie ("create", "pstn_add") : $User->Crypto->csrf_cookie ("create", "pstn_".$POST->id);
 
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("pstn", User::ACCESS_RW, true, true);
 }
 else {
@@ -30,25 +30,24 @@ else {
 
 
 # get Location object
-if($_POST['action']!="add") {
-	$prefix = $Admin->fetch_object ("pstnPrefixes", "id", $_POST['id']);
+if($POST->action!="add") {
+	$prefix = $Admin->fetch_object ("pstnPrefixes", "id", $POST->id);
 	$prefix!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
 	$master_prefix = $Admin->fetch_object ("pstnPrefixes", "id", $prefix->master);
 }
 else {
     # init object
-    $prefix = new StdClass ();
-    $prefix->master = 0;
+    $prefix = new Params ();
 
-    $master_prefix = new StdClass ();
+    $master_prefix = new Params ();
     $master_prefix->name = 'root';
     $master_prefix->prefix = "/";
 
     # if id is set we are adding slave prefix
-    if (isset($_POST['id'])) {
-        if($_POST['id']!=0) {
-        	$master_prefix = $Admin->fetch_object ("pstnPrefixes", "id", $_POST['id']);
+    if (isset($POST->id)) {
+        if($POST->id!=0) {
+        	$master_prefix = $Admin->fetch_object ("pstnPrefixes", "id", $POST->id);
         	$master_prefix!==false ? : $Result->show("danger", _("Invalid master ID"), true, true);
 
             $prefix->master = $master_prefix->id;
@@ -60,7 +59,7 @@ else {
 }
 
 # disable edit on delete
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 $link = $readonly ? false : true;
 
 # fetch custom fields
@@ -70,7 +69,7 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
 
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('PSTN prefix'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('PSTN prefix'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -103,11 +102,11 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
     	<tr>
         	<th><?php print _('Name'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss(@$prefix->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="name" value="<?php print @$prefix->name; ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print @$prefix->id; ?>">
             	<input type="hidden" name="master" value="<?php print @$prefix->master; ?>">
-            	<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+            	<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Set Prefix name"); ?></span>
@@ -118,7 +117,7 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
     	<tr>
         	<th><?php print _('Prefix'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="prefix" value="<?php print $Tools->strip_xss(@$prefix->prefix); ?>" placeholder='<?php print _('Prefix'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="prefix" value="<?php print @$prefix->prefix; ?>" placeholder='<?php print _('Prefix'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Prefix"); ?></span>
@@ -153,7 +152,6 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
         </tr>
 
         <!-- Master prefix -->
-<!--
         <tr>
             <th><?php print _('Master prefix'); ?></th>
             <td>
@@ -163,7 +161,6 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
                 <span class='text-muted'><?php print _('Enter master prefix if you want to nest it under existing subnet, or select root to create root prefix'); ?></span>
             </td>
         </tr>
--->
 
 
     	<!-- Device -->
@@ -180,8 +177,11 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
     				if ($devices!==false) {
     					foreach($devices as $device) {
 							//if same
-							if($device->id == $prefix->deviceId) 	{ print '<option value="'. $device->id .'" selected>'. $device->hostname .'</option>'. "\n"; }
-							else 									{ print '<option value="'. $device->id .'">'. $device->hostname .'</option>'. "\n";			 }
+							if(is_object($prefix) && $device->id == $prefix->deviceId) 	{
+								print '<option value="'. $device->id .'" selected>'. $device->hostname .'</option>'. "\n";
+							} else {
+								print '<option value="'. $device->id .'">'. $device->hostname .'</option>'. "\n";
+							}
     					}
     				}
     				?>
@@ -235,7 +235,7 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editPSTNSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editPSTNSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } else if ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="editPSTNResult"></div>

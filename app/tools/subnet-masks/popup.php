@@ -16,9 +16,6 @@ $Subnets	= new Subnets ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
-
-# strip tags - XSS
-$_POST = $User->strip_input_tags ($_POST);
 ?>
 
 <!-- header -->
@@ -37,6 +34,6 @@ $_POST = $User->strip_input_tags ($_POST);
 <!-- footer -->
 <div class="pFooter">
 	<div class="btn-group">
-		<button class="btn btn-sm btn-default <?php escape_input(print @$_REQUEST['closeClass']); ?>"><?php print _('Close'); ?></button>
+		<button class="btn btn-sm btn-default <?php print escape_input(@$_REQUEST['closeClass']); ?>"><?php print _('Close'); ?></button>
 	</div>
 </div>

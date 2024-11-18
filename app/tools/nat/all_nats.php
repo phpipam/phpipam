@@ -33,6 +33,16 @@ else {
     # fetch all nats
     $all_nats = $Tools->fetch_all_objects("nat", "name");
 
+	# get custom device fields
+	$custom_fields = (array) $Tools->fetch_custom_fields('nat');
+
+	# set hidden fields
+	$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
+	$hidden_fields = is_array(@$hidden_fields['nat']) ? $hidden_fields['nat'] : array();
+
+	# size of custom fields
+	$csize = sizeof($custom_fields) - sizeof($hidden_fields);
+
     // check if we have any policy nat !
     $policy_nat_found = false;
     if($all_nats !== false) {
@@ -60,6 +70,15 @@ else {
     print " <th>"._('Src Port')."</th>";
     print " <th>"._('Dst Port')."</th>";
     print " <th>"._('Description')."</th>";
+
+	if(sizeof(@$custom_fields) > 0) {
+		foreach($custom_fields as $field) {
+			if(!in_array($field['name'], $hidden_fields)) {
+				print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			}
+		}
+	}
+
     if($User->get_module_permissions ("nat")>=User::ACCESS_RW)
     print " <th style='width:80px'></th>";
     print "</tr>";
@@ -87,6 +106,7 @@ else {
     foreach ($nats_reordered as $k=>$nats) {
         # header
         $colspan = $policy_nat_found ? 11 :10;
+        $colspan += $csize;
         print "<tr>";
         print " <td colspan='$colspan' class='th'><i class='fa fa-exchange'></i> "._(ucwords($k)." NAT")."</td>";
         print "</tr>";
@@ -127,7 +147,7 @@ else {
                 $policy_dst = $n->policy=="Yes" ? $n->policy_dst : "/";
 
                 // description
-                $n->description = str_replace("\n", "<br>", $n->description);
+                $n->description = is_null($n->description) ? "" : str_replace("\n", "<br>", $n->description);
 
                 // port
                 if(is_blank($n->src_port)) $n->src_port = "/";
@@ -135,7 +155,7 @@ else {
 
                 // print
                 print "<tr>";
-                print " <td><strong><a href='".create_link($_GET['page'], "nat", $n->id)."'>$n->name</a></strong></td>";
+                print " <td><strong><a href='".create_link($GET->page, "nat", $n->id)."'>$n->name</a></strong></td>";
                 print " <td><span class='badge badge1 badge5'>".ucwords($n->type)."</span></td>";
                 print " <td>".implode("<br>", $sources)."</td>";
                 print " <td style='width:10px;'><i class='fa $icon'></i></td>";
@@ -146,6 +166,17 @@ else {
                 print " <td>$n->src_port</td>";
                 print " <td>$n->dst_port</td>";
                 print " <td><span class='text-muted'>$n->description</span></td>";
+                //custom fields
+                if(sizeof(@$custom_fields) > 0) {
+                	foreach($custom_fields as $field) {
+                		# hidden
+                		if(!in_array($field['name'], $hidden_fields)) {
+                			print "<td class='hidden-xs hidden-sm hidden-md'>";
+                			$Tools->print_custom_field ($field['type'], $n->{$field['name']});
+                			print "</td>";
+                		}
+                	}
+                }
                 // actions
                 if($User->get_module_permissions ("nat")>=User::ACCESS_RW) {
         		print "	<td class='actions'>";

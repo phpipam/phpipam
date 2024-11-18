@@ -18,7 +18,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("l2dom", User::ACCESS_RW, true, true);
 }
 else {
@@ -28,15 +28,12 @@ else {
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "vlan_domain");
 
-# strip tags - XSS
-$_POST = $User->strip_input_tags ($_POST);
-
 # fetch vlan details
-$l2_domain = $Admin->fetch_object ("vlanDomains", "id", @$_POST['id']);
+$l2_domain = $Admin->fetch_object ("vlanDomains", "id", $POST->id);
 $l2_domain = $l2_domain!==false ? (array) $l2_domain : array();
 
 # set readonly flag
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 
 ?>
 
@@ -48,7 +45,7 @@ $(document).ready(function(){
 
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('l2 domain'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('l2 domain'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -59,16 +56,16 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" class="number form-control input-sm" name="name" placeholder="<?php print _('domain name'); ?>" value="<?php print $Tools->strip_xss(@$l2_domain['name']); ?>" <?php print $readonly; ?>>
+			<input type="text" class="number form-control input-sm" name="name" placeholder="<?php print _('domain name'); ?>" value="<?php print @$l2_domain['name']; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 	<!-- Description -->
 	<tr>
 		<td><?php print _('Description'); ?></td>
 		<td>
-			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$l2_domain['description']); ?>" <?php print $readonly; ?>>
-			<input type="hidden" name="id" value="<?php print @$_POST['id']; ?>">
-			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print @$l2_domain['description']; ?>" <?php print $readonly; ?>>
+			<input type="hidden" name="id" value="<?php print escape_input($POST->id); ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
@@ -101,7 +98,7 @@ $(document).ready(function(){
 
 	<?php
 	//print delete warning
-	if($_POST['action'] == "delete")	{ $Result->show("warning", _('Warning').':</strong> '._('removing vlan domain will move all belonging vlans to default domain')."!", false);  }
+	if($POST->action == "delete")	{ $Result->show("warning", _('Warning').':</strong> '._('removing vlan domain will move all belonging vlans to default domain')."!", false);  }
 	?>
 </div>
 
@@ -110,7 +107,7 @@ $(document).ready(function(){
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?> editVLANdomainsubmit" id="editVLANdomainsubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?> editVLANdomainsubmit" id="editVLANdomainsubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 
 	<!-- result -->

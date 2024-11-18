@@ -25,7 +25,7 @@ elseif(!is_object($location)) {
     // recode
     if (is_blank($location->long) && is_blank($location->lat) && !is_blank($location->address)) {
         $latlng = $OSM->get_latlng_from_address ($location->address);
-        if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
+        if(isset($latlng['lat']) && isset($latlng['lng'])) {
             // save
             $Tools->update_latlng ($location->id, $latlng['lat'], $latlng['lng']);
             $location->lat = $latlng['lat'];
@@ -39,6 +39,6 @@ elseif(!is_object($location)) {
     # no long/lat
     if( (!is_blank($location->long) && !is_blank($location->lat))) {
         $OSM->add_location($location);
-        $OSM->map($height);
+        $OSM->map($height ?? null);
     }
 }

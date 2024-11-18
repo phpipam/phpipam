@@ -25,19 +25,19 @@ $csrf = $User->Crypto->csrf_cookie ("create", "pstn_number");
 $User->check_module_permissions ("pstn", User::ACCESS_RW, true, true);
 
 # get Location object
-if($_POST['action']!="add") {
-	$number = $Admin->fetch_object ("pstnNumbers", "id", $_POST['id']);
+if($POST->action!="add") {
+	$number = $Admin->fetch_object ("pstnNumbers", "id", $POST->id);
 	$number!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
 	$prefix = $Admin->fetch_object ("pstnPrefixes", "id", $number->prefix);
 }
 else {
     # id is required
-    if (isset($_POST['id'])) {
-    	$prefix = $Admin->fetch_object ("pstnPrefixes", "id", $_POST['id']);
+    if (isset($POST->id)) {
+    	$prefix = $Admin->fetch_object ("pstnPrefixes", "id", $POST->id);
     	$prefix!==false ? : $Result->show("danger", _("Invalid prefix ID"), true, true);
 
-        $number = new StdClass ();
+        $number = new Params ();
 
         $number->id = 0;
         $number->prefix = $prefix->id;
@@ -50,7 +50,7 @@ else {
 }
 
 # disable edit on delete
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 $link = $readonly ? false : true;
 
 # fetch custom fields
@@ -60,7 +60,7 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
 
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('PSTN number'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('PSTN number'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -101,11 +101,11 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     	<tr>
         	<th><?php print _('Name'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($number->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="name" value="<?php print $number->name; ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print $number->id; ?>">
             	<input type="hidden" name="prefix" value="<?php print $number->prefix; ?>">
-            	<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+            	<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Number Name"); ?></span>
@@ -116,7 +116,7 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     	<tr>
         	<th><?php print _('Owner'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="owner" value="<?php print $Tools->strip_xss($number->owner); ?>" placeholder='<?php print _('Owner'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="owner" value="<?php print $number->owner; ?>" placeholder='<?php print _('Owner'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Address owner"); ?></span>
@@ -133,7 +133,7 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     	print '<tr>';
     	print '	<th>'._('Tag').'</th>';
     	print '	<td>';
-    	print '		<select name="state" '.$delete.' class="ip_addr form-control input-sm input-w-auto">';
+    	print '		<select name="state" '.$readonly.' class="ip_addr form-control input-sm input-w-auto">';
     	# printout
     	foreach($ip_types as $k=>$type) {
     		if($number->state==$k)				{ print "<option value='$k' selected>"._($type['type'])."</option>"; }
@@ -219,7 +219,7 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editPSTNnumberSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editPSTNnumberSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="editPSTNnumberResult"></div>

@@ -157,6 +157,7 @@ class Subnets_controller extends Common_api_functions {
 	 *      - /{id}/first_subnet/{mask}/    // returns first available subnets with specified mask
 	 *      - /{id}/last_subnet/{mask}/     // returns last available subnets with specified mask
 	 *      - /{id}/all_subnets/{mask}/     // returns all available subnets with specified mask
+	 *      - /{id}/changelog/     			// returns changelog
 	 *		- /all/							// returns all subnets in all sections
 	 *
 	 * @access public
@@ -235,6 +236,8 @@ class Subnets_controller extends Common_api_functions {
 			elseif ($this->_params->id2=="first_subnet"){ return array("code"=>200, "data"=>$this->subnet_find_free (1, Subnets::SEARCH_FIND_FIRST));  }
 			// search for new free subnet
 			elseif ($this->_params->id2=="last_subnet") { return array("code"=>200, "data"=>$this->subnet_find_free (1, Subnets::SEARCH_FIND_LAST));  }
+			// return changelog
+			elseif ($this->_params->id2=="changelog")   { return array("code"=>200, "data"=>$this->subnet_changelog ());  }
 			// fail
 			else										{ $this->Response->throw_exception(400, 'Invalid request'); }
 		}
@@ -397,7 +400,7 @@ class Subnets_controller extends Common_api_functions {
 		// Check for id
 		$this->validate_subnet_id ();
 
-		// validate input parmeters
+		// validate input parameters
 		if(!isset($this->_params->mask))				{ $this->Response->throw_exception(400, "Subnet mask not provided"); }
 
 		// fetch old subnet
@@ -454,7 +457,7 @@ class Subnets_controller extends Common_api_functions {
 		$this->Subnets->subnet_split ($subnet_old, $this->_params->number, $this->_params->prefix, $this->_params->group, $this->_params->copy_custom);
 
 		//set result
-		return array("code"=>200, "message"=>"Subnet splitted");
+		return array("code"=>200, "message"=>"Subnet split");
 	}
 
 
@@ -632,6 +635,41 @@ class Subnets_controller extends Common_api_functions {
 		}
 
 		return ($count == 1) ?  $found[0] : $found;
+	}
+
+	/**
+	 * Get changelog for subnet
+	 * @method subnet_changelog
+	 * @return [type]
+	 */
+	private function subnet_changelog () {
+		// Check for id
+		$this->validate_subnet_id ();
+		// get changelog
+		$Log = new Logging ($this->Database);
+		$clogs = $Log->fetch_changlog_entries("subnet", $this->_params->id, true);
+		// reformat
+		$clogs_formatted = [];
+		// loop
+		if (is_array($clogs)) {
+			if (sizeof($clogs)>0) {
+				foreach ($clogs as $l) {
+					// diff to array
+					$l->cdiff = explode("\r\n", str_replace(["[","]"], "", trim($l->cdiff)));
+					// save
+					$clogs_formatted[] = [
+						"user"   => $l->real_name,
+						"action" => $l->caction,
+						"result" => $l->cresult,
+						"date"   => $l->cdate,
+						"diff"   => $l->cdiff,
+					];
+				}
+			}
+		}
+		// result
+		if(sizeof($clogs_formatted)>0) 	{ return $clogs_formatted; }
+		else 							{ $this->Response->throw_exception(404, "No changelogs found"); }
 	}
 
 
@@ -926,7 +964,7 @@ class Subnets_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function validate_subnet_id () {
-		// numberic
+		// numeric
 		if(!is_numeric($this->_params->id))															{ $this->Response->throw_exception(400, "Subnet Id must be numeric (".$this->_params->id.")"); }
 		// check subnet
 		if($this->Subnets->fetch_subnet ("id", $this->_params->id)===false) 						{ $this->Response->throw_exception(404, "Invalid subnet Id (".$this->_params->id.")"); }

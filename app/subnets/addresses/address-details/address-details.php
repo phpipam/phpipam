@@ -41,7 +41,7 @@ if(sizeof($address)>1) {
         print "<tr>";
         print " <th>"._('Hierarchy')."</th>";
         print " <td>";
-        $Subnets->print_breadcrumbs ($Sections, $Subnets, $_GET, $Addresses);
+        $Subnets->print_breadcrumbs ($Sections, $Subnets, $GET->as_array(), $Addresses);
         print "</td>";
         print "</tr>";
 
@@ -71,8 +71,8 @@ if(sizeof($address)>1) {
         print " <td>";
 
         if ($address['state'] == "0")     { $stateClass = _("Offline"); }
-        else if ($address['state'] == "2") { $stateClass = _("Reserved"); }
-        else if ($address['state'] == "3") { $stateClass = _("DHCP"); }
+        elseif ($address['state'] == "2") { $stateClass = _("Reserved"); }
+        elseif ($address['state'] == "3") { $stateClass = _("DHCP"); }
         else                          { $stateClass = _("Online"); }
 
         print $Addresses->address_type_index_to_type ($address['state']);
@@ -253,7 +253,7 @@ if(sizeof($address)>1) {
     			if(!is_blank($address[$key])) {
     			$address[$key] = str_replace(array("\n", "\r\n"), "<br>",$address[$key]);
     			print "<tr>";
-    			print "	<th>$key</th>";
+    			print "	<th>" . $Tools->print_custom_field_name($key) . "</th>";
     			print "	<td>";
     			#booleans
     			if($field['type']=="tinyint(1)")	{
@@ -272,7 +272,7 @@ if(sizeof($address)>1) {
     	# check for temporary shares!
     	if($User->settings->tempShare==1) {
     		if (!is_blank($User->settings->tempAccess)) {
-    			foreach(pf_json_decode($User->settings->tempAccess) as $s) {
+    			foreach(db_json_decode($User->settings->tempAccess) as $s) {
     				if($s->type=="ipaddresses" && $s->id==$address['id']) {
     					if(time()<$s->validity) {
     						$active_shares[] = $s;
@@ -345,7 +345,7 @@ if(sizeof($address)>1) {
     			print "		<a class='ping_ipaddress   btn btn-default btn-xs' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' 						   													rel='tooltip' data-container='body' title='"._('Check availability')."'>							<i class='fa fa-gray fa-cogs'></i></a>";
     			print "		<a class='search_ipaddress btn btn-default btn-xs         "; if(is_blank($resolve['name'])) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(!is_blank($resolve['name']))   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
     			print "		<a class='mail_ipaddress   btn btn-default btn-xs          ' href='#' data-id='".$address['id']."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																<i class='fa fa-gray fa-envelope-o'></i></a>";
-    			if($zone) {
+    			if(isset($zone)) {
     			print "		<a class='fw_autogen	   btn btn-default btn-xs          ' href='#' data-subnetid='".$subnet['id']."' data-action='adr' data-ipid='".$address['id']."' data-dnsname='".((preg_match('/\//i',$address['hostname'])) ? '':$address['hostname'])."' rel='tooltip' data-container='body' title='"._('Regenerate firewall address object.')."'><i class='fa fa-gray fa-fire'></i></a>";
     			}
     			print "		<a class='delete_ipaddress btn btn-default btn-xs modIPaddr' data-action='delete' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' id2='$address[ip]' rel='tooltip' data-container='body' title='"._('Delete IP address')."'>													<i class='fa fa-gray fa-times'></i></a>";

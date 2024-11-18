@@ -2,7 +2,7 @@
 # Copyright (C) phpipam 2013
 # This file is distributed under the same license as the phpipam package.
 # Jason Cheng <sanyu3u@gmail.com>
-# "Project-Id-Version: 1.0\n"
+# "Project-Id-Version: 1.7\n"
 # "Report-Msgid-Bugs-To: Jason Cheng <sanyu3u@gmail.com>\n"
 # "Last-Translator: 2019-07-24\n"
 # "Language: zh_TW\n"
@@ -2404,7 +2404,7 @@ msgid "Cannot update request"
 msgstr "無法更新申請"
 
 #: site/admin/manageRequestResult.php:33
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr "申請被拒絕"
 
 #: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
@@ -2452,7 +2452,7 @@ msgid "Errors occured when importing to database!"
 msgstr "匯入資料庫時出錯。"
 
 #: site/admin/CSVimportSubmit.php:95 site/admin/ripeImportResult.php:72
-msgid "Import successfull"
+msgid "Import successful"
 msgstr "匯入成功"
 
 #: site/admin/CSVimportVerify.php:25
@@ -2906,7 +2906,7 @@ msgstr "如果群組沒有區段權限，即使設定為子網路設定了權限
 #: site/admin/customIPFieldsOrder.php:15
 #: site/admin/customVLANFieldsOrder.php:15
 #: site/admin/customUserFieldsOrder.php:15
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr "欄位不能是空值"
 
 #: site/admin/customSubnetFieldsOrder.php:19
@@ -3319,7 +3319,7 @@ msgid ""
 msgstr "分割子網路將會移除所選擇子網路的所有IP位址"
 
 #: site/admin/manageSubnetTruncateSave.php:23
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr "子網路分割成功"
 
 #: site/admin/usersEditEmailNotif.php:23
@@ -5802,10 +5802,10 @@ msgstr "未能設定子網路的存取權限"
 msgid "Manage permissions for folder"
 msgstr "管理資料夾權限"
 
-msgid "Only subnets that have no nested subnets can be splitted"
+msgid "Only subnets that have no nested subnets can be split"
 msgstr "只有沒有所屬的子網路的子網路可以分割"
 
-msgid "Subnet too small to be splitted"
+msgid "Subnet too small to be split"
 msgstr "子網路太小不能分割"
 
 msgid "Name prefix"
@@ -6376,7 +6376,7 @@ msgid "Maximum zone name length"
 msgstr "區域名稱最大長度"
 
 msgid ""
-"Choose a maximum lenght of the zone name.<br>The default length is 3, the "
+"Choose a maximum length of the zone name.<br>The default length is 3, the "
 "maximum is 31 characters.<br>(keep in mind that your firewall may have a "
 "limit for the length of zone names or address objects )"
 msgstr ""
@@ -6414,7 +6414,7 @@ msgid "Zone generator method"
 msgstr "區域產生方法"
 
 msgid ""
-"Generate zone names automaticaly with the setting &quot;decimal&quot; or "
+"Generate zone names automatically with the setting &quot;decimal&quot; or "
 "&quot;hex&quot;.<br>To use your own unique zone names you can choose the "
 "option &quot;text&quot."
 msgstr ""
@@ -6716,7 +6716,7 @@ msgstr "沒有可用於 SNMP 路由表查詢的裝置"
 msgid "No new subnets found"
 msgstr "沒有找到新的子網路"
 
-msgid "SNMP module disbled"
+msgid "SNMP module disabled"
 msgstr "SNMP 模組已停用"
 
 msgid "No devices for SNMP ARP query available"
@@ -7058,7 +7058,7 @@ msgid "Zone settings"
 msgstr "區域設定"
 
 msgid ""
-"Choose a maximum lenght of the zone name.<br>The default: 3, maximum: 31 "
+"Choose a maximum length of the zone name.<br>The default: 3, maximum: 31 "
 "characters.<br>(keep in mind that your firewall may have a limit for the "
 "length of zone names or address objects )"
 msgstr ""
@@ -7066,7 +7066,7 @@ msgstr ""
 "可能對區域名稱或位址物件的長度有限制) "
 
 msgid ""
-"Generate zone names automaticaly with the setting &quot;decimal&quot; or "
+"Generate zone names automatically with the setting &quot;decimal&quot; or "
 "&quot;hex&quot;.<br>The maximum value for a zone in hex mode would be "
 "ffffffff (4294967295 zones).<br>To use your own unique zone names you can "
 "choose the option &quot;text&quot."
@@ -7082,7 +7082,7 @@ msgid "Autogenerate address objects"
 msgstr "自動產生位址物件"
 
 msgid ""
-"Automaticaly generate firewall address objects as an additional information "
+"Automatically generate firewall address objects as an additional information "
 "of an IP address.<br>(Works only for subnets which are bound to a firewall "
 "zone.)"
 msgstr ""
@@ -7690,7 +7690,7 @@ msgstr "發生位址狀態變更時更新位址標籤"
 msgid "Require uniques subnets"
 msgstr "需要唯一子網路"
 
-msgid "Require unique subnets accross all sections"
+msgid "Require unique subnets across all sections"
 msgstr "要求所有區段只能有唯一的子網路"
 
 msgid "Set maximum number of concurrent ICMP checks (default 128)"
@@ -7759,13 +7759,13 @@ msgstr "標記子網路已被使用完畢"
 msgid "Set subnet alert threshold"
 msgstr "設定子網路警報臨界值"
 
-msgid "Failed to set subnet permissons for subnet"
+msgid "Failed to set subnet permissions for subnet"
 msgstr "無法設定子網路的子網路權限"
 
 msgid "No result"
 msgstr "沒有結果"
 
-msgid "Subnet splitted successfully"
+msgid "Subnet split successfully"
 msgstr "子網路分割成功"
 
 msgid "Copy custom field values"
@@ -8712,7 +8712,7 @@ msgstr "選項已更新"
 msgid "Upgrade"
 msgstr "升級"
 
-msgid "Object is Natted"
+msgid "Object is NATted"
 msgstr "物件已經被NAT"
 
 msgid "Invalid generator ID"
@@ -8934,8 +8934,8 @@ msgstr "用來顯示在雙因素驗證應用程式的名稱"
 msgid "2FA length"
 msgstr "雙因素驗證長度"
 
-msgid "Length of 2FA secret (16 to 32)"
-msgstr "雙因素驗證金鑰長度 (16 至 32)"
+msgid "Length of 2FA secret (26 to 32)"
+msgstr "雙因素驗證金鑰長度 (26 至 32)"
 
 msgid "2FA user change"
 msgstr "雙因素驗證使用者變更"
@@ -8970,31 +8970,31 @@ msgstr "最大密碼長度"
 msgid "Minimum numbers"
 msgstr "數字最少"
 
-msgid "Minumum number of numbers"
+msgid "Minimum number of numbers"
 msgstr "最少的數字數目"
 
 msgid "Minimum letters"
 msgstr "字元最少"
 
-msgid "Minumum number of letters"
+msgid "Minimum number of letters"
 msgstr "最少的字元數目"
 
 msgid "Minimum lowercase letter"
 msgstr "小寫字母最少"
 
-msgid "Minumum number of lowercase letters"
+msgid "Minimum number of lowercase letters"
 msgstr "最少的小寫字母數目"
 
 msgid "Minimum uppercase letter"
 msgstr "大寫字母最多"
 
-msgid "Minumum number of uppercase letters"
+msgid "Minimum number of uppercase letters"
 msgstr "最少的大寫字母數目"
 
 msgid "Minimum symbols"
 msgstr "符號最少"
 
-msgid "Minumum number of symbols"
+msgid "Minimum number of symbols"
 msgstr "最少的符號字數"
 
 msgid "Maximum symbols"

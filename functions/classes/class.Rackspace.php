@@ -132,7 +132,7 @@ class phpipam_rack extends Tools {
     public function fetch_all_racks ($locations = false) {
         // set query and fetch racks
         $query = $locations ? "select * from `racks` order by `location` asc, `name` asc;" : "select * from `racks` order by `name` asc;";
-        $all_racks = $this->Database->getObjectsQuery($query);
+        $all_racks = $this->Database->getObjectsQuery('racks', $query);
         // reorder
         if ($all_racks==false) {
             $this->all_racks = false;
@@ -220,7 +220,7 @@ class phpipam_rack extends Tools {
      * @return array
      */
     public function free_u($rack, $rack_devices, $rack_contents, $current_device = null) {
-        $current_device      = (object) $current_device;
+        $current_device      = new Params($current_device);
         $current_device_size = isset($current_device->rack_size) ? $current_device->rack_size-1 : 0;
 
         // available spaces
@@ -287,7 +287,7 @@ class phpipam_rack extends Tools {
      *
      * @param  int $id
      * @param  bool|int $deviceId   // active device id
-     * @param  bool $is_back        // we are drwaing back side
+     * @param  bool $is_back        // we are drawing back side
      * @param  bool $draw_names     // user permission for devices
      *
      * @return void
@@ -416,7 +416,7 @@ class phpipam_rack extends Tools {
     }
 
     /**
-     * Set active rack devide.
+     * Set active rack device.
      *
      * @access public
      * @param mixed $id         // device id
@@ -617,7 +617,7 @@ class RackDrawer extends Common_functions {
     private function drawContents() {
         foreach ($this->rack->getContent() as $content)
         {
-            $pixelSize = $this->unitYSize * $content->getSize();
+            $pixelSize = $this->unitYSize * max($content->getSize(), 1);
 
             $img = imagecreate($this->rackInsideXSize - 2, $pixelSize);
             $this->drawContent($content, $img, $content->getName());

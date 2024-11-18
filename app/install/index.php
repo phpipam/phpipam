@@ -1,4 +1,5 @@
 <?php
+if (!defined('VERSION_VISIBLE') || Config::ValueOf('disable_installer')) { print _("Install scripts disabled"); exit(0); }
 
 /**
  *	phpipam installation page!
@@ -66,7 +67,7 @@ if($Install->check_db_connection(false) && $Install->check_table("vrf", false)) 
 	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script src="js/jquery-3.5.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/jquery-3.7.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/install.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script>
@@ -114,24 +115,24 @@ if($Install->check_db_connection(false) && $Install->check_table("vrf", false)) 
 <?php
 
 # select install type
-if(!isset($_GET['section']))										{ include(dirname(__FILE__)."/welcome.php"); }
+if(!isset($GET->section))										{ include(dirname(__FILE__)."/welcome.php"); }
 # open subpage
 else {
 	// open initial installation page
-	if(@$_GET['section']=="select_type")							{ include(dirname(__FILE__)."/select_install_type.php"); }
+	if($GET->section=="select_type")							{ include(dirname(__FILE__)."/select_install_type.php"); }
 	// section error
-	elseif(@$_GET['section']=="sql_error")							{ include(dirname(__FILE__)."/sql_error.php"); }
+	elseif($GET->section=="sql_error")							{ include(dirname(__FILE__)."/sql_error.php"); }
 	// check if subnetId == configure than already installed
-	elseif(@$_GET['subnetId']=="configure")							{ include(dirname(__FILE__)."/postinstall_configure.php"); }
+	elseif($GET->subnetId=="configure")							{ include(dirname(__FILE__)."/postinstall_configure.php"); }
 	// set installation type
 	else {
     	// validate install type
     	$install_types = array("install_automatic", "install_manual", "install_mysqlimport");
-        if(!in_array($_GET['section'], $install_types)) 	        { $Result->show("danger", "Invalid request", false); }
+        if(!in_array($GET->section, $install_types)) 	        { $Result->show("danger", "Invalid request", false); }
         else {
 			// verify that page exists
-			if(!file_exists(dirname(__FILE__)."/$_GET[section].php"))	{ include("invalid_install_type.php"); }
-			else														{ include(dirname(__FILE__)."/$_GET[section].php"); }
+			if(!file_exists(dirname(__FILE__)."/".$GET->section.".php"))	{ include("invalid_install_type.php"); }
+			else														{ include(dirname(__FILE__)."/".$GET->section.".php"); }
 		}
 	}
 }

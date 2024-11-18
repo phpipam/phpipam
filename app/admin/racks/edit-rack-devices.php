@@ -21,28 +21,25 @@ $User->check_user_session();
 $User->check_module_permissions ("racks", User::ACCESS_RW, true, true);
 $User->check_module_permissions ("devices", User::ACCESS_R, true, true);
 
-# strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
-
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['rackid']))		{ $Result->show("danger", _("Invalid ID"), true, true); }
+if($POST->action!="add" && !is_numeric($POST->rackid))		{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # device type?
-if (!isset($_POST['devicetype']) || (($_POST['devicetype'] != 'device') && ($_POST['devicetype'] != 'content'))) { $Result->show("danger", _("Invalid device type"), true, true); }
+if (!isset($POST->devicetype) || (($POST->devicetype != 'device') && ($POST->devicetype != 'content'))) { $Result->show("danger", _("Invalid device type"), true, true); }
 
 # remove or add ?
-if ($_POST['action']=="remove") {
+if ($POST->action=="remove") {
     # fetch rack details
-    $rack = $Admin->fetch_object("racks", "id", $_POST['rackid']);
+    $rack = $Admin->fetch_object("racks", "id", $POST->rackid);
     # validate csrf cookie
-    $User->Crypto->csrf_cookie ("validate", "rack_devices_".$rack->id."_device_".$_POST['deviceid'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
-    switch ($_POST['devicetype']) {
+    $User->Crypto->csrf_cookie ("validate", "rack_devices_".$rack->id."_device_".$POST->deviceid, $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
+    switch ($POST->devicetype) {
         case 'device':
         # set values
-        $values = array("id"=>$_POST['deviceid'],
+        $values = array("id"=>$POST->deviceid,
                         "rack"=>"",
                         "rack_start"=>"",
                         "rack_size"=>""
@@ -53,7 +50,7 @@ if ($_POST['action']=="remove") {
         break;
 
         case 'content':
-        if (!$Admin->object_modify('rackContents', 'delete', 'id', ['id' => $_POST['deviceid']])) { $Result->show("success", _("Failed to remove device from rack").'!', true, true); }
+        if (!$Admin->object_modify('rackContents', 'delete', 'id', ['id' => $POST->deviceid])) { $Result->show("success", _("Failed to remove device from rack").'!', true, true); }
         else                                                                                      { $Result->show("success", _("Device removed from rack").'!', false, true); }
         break;
     }
@@ -77,14 +74,14 @@ else {
     # create csrf token
     $csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "rack_devices");
     # fetch rack details
-    $rack = $Admin->fetch_object("racks", "id", $_POST['rackid']);
+    $rack = $Admin->fetch_object("racks", "id", $POST->rackid);
     # check
     if ($rack===false)                                              { $Result->show("danger", _("Invalid ID"), true, true); }
     # fetch existing devices
     $rack_devices = $Racks->fetch_rack_devices($rack->id);
     $rack_contents = $Racks->fetch_rack_contents($rack->id);
 
-    if ($_POST['devicetype'] == 'device') {
+    if ($POST->devicetype == 'device') {
         # all devices
 	    $devices = $Admin->fetch_all_objects("devices", "id");
 	    if ($devices!==false) {
@@ -104,13 +101,13 @@ $(document).ready(function(){
 </script>
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('device to rack'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('device to rack'); ?></div>
 
 <!-- content -->
 <div class="pContent">
     <?php
     // no devides
-    if ((!isset($devices)||sizeof($devices)==0) && ($_POST['devicetype'] == 'device')) {
+    if ((!isset($devices)||sizeof($devices)==0) && ($POST->devicetype == 'device')) {
         $Result->show("info", _("No devices available"), false);
     }
     else {
@@ -123,7 +120,7 @@ $(document).ready(function(){
         	<tr>
         		<td><?php print _('Device'); ?></td>
         		<td>
-                    <?php if ($_POST['devicetype'] == 'device') { ?>
+                    <?php if ($POST->devicetype == 'device') { ?>
         			<select name="deviceid" class="form-control input-sm input-w-auto">
         			<?php
             			foreach($devices as $d) {
@@ -175,13 +172,13 @@ $(document).ready(function(){
         		<td>
         			<input type="text" name="rack_size" class="form-control input-sm" placeholder="<?php print _('Device size in U'); ?>">
         			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
-                    <input type="hidden" name="rackid" value="<?php print escape_input($_POST['rackid']); ?>">
-                    <input type="hidden" name="devicetype" value="<?php print escape_input($_POST['devicetype']); ?>">
+                    <input type="hidden" name="rackid" value="<?php print escape_input($POST->rackid); ?>">
+                    <input type="hidden" name="devicetype" value="<?php print escape_input($POST->devicetype); ?>">
         		</td>
         	</tr>
 
             <!-- Location override -->
-            <?php if($User->settings->enableLocations=="1" && ($rack->location!="0" && !is_null($rack->location)) && ($_POST['devicetype'] == 'device')) { ?>
+            <?php if($User->settings->enableLocations=="1" && ($rack->location!="0" && !is_null($rack->location)) && ($POST->devicetype == 'device')) { ?>
             <tr>
                 <td colspan="2">
                 <hr>
@@ -200,8 +197,8 @@ $(document).ready(function(){
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<?php if ((!empty($devices)) || ($_POST['devicetype'] != 'device')) { ?>
-		<button class="btn btn-sm btn-default btn-success" id="editRackDevicesubmit"><i class="fa fa-plus"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
+		<?php if ((!empty($devices)) || ($POST->devicetype != 'device')) { ?>
+		<button class="btn btn-sm btn-default btn-success" id="editRackDevicesubmit"><i class="fa fa-plus"></i> <?php print $User->get_post_action(); ?></button>
         <?php } ?>
 	</div>
 

@@ -15,20 +15,22 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check if site is demo
+$User->is_demo();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "pdns_defaults", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "pdns_defaults", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 // validations
-if(is_blank($_POST['ttl']))	{ $_POST['ttl'] = $PowerDNS->defaults->ttl; }
+if(is_blank($POST->ttl))	{ $POST->ttl = $PowerDNS->defaults->ttl; }
 
 // formulate json
 $values = new StdClass ();
 
 // get old settings for defaults
-$old_values = pf_json_decode($User->settings->powerDNS);
+$old_values = db_json_decode($User->settings->powerDNS);
 
 $values->host 		= $old_values->host;
 $values->name 		= $old_values->name;
@@ -38,14 +40,14 @@ $values->port 		= $old_values->port;
 $values->autoserial = @$old_values->autoserial;
 
 // defaults
-$values->ns 		= $_POST['ns'];
-$values->hostmaster = $_POST['hostmaster'];
-$values->def_ptr_domain = $_POST['def_ptr_domain'];
-$values->refresh 	= $_POST['refresh'];
-$values->retry 		= $_POST['retry'];
-$values->expire 	= $_POST['expire'];
-$values->nxdomain_ttl = $_POST['nxdomain_ttl'];
-$values->ttl 		= $_POST['ttl'];
+$values->ns 		= $POST->ns;
+$values->hostmaster = $POST->hostmaster;
+$values->def_ptr_domain = $POST->def_ptr_domain;
+$values->refresh 	= $POST->refresh;
+$values->retry 		= $POST->retry;
+$values->expire 	= $POST->expire;
+$values->nxdomain_ttl = $POST->nxdomain_ttl;
+$values->ttl 		= $POST->ttl;
 
 # set update values
 $values = array("id"=>1,

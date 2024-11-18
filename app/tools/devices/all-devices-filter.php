@@ -3,15 +3,15 @@
 <?php
 
 # filter if requested
-if (isset($_GET['subnetId']) && @isset($_GET['sPage'])) {
+if (isset($GET->subnetId) && @isset($GET->sPage)) {
 	// no devices ?
 	if($devices===false) { $devices = []; }
-	// set filter and dont print not specified;
+	// set filter and don't print not specified;
 	$filter = true;
 	// filter by devicetype
-	if ($_GET['subnetId']=="type") {
+	if ($GET->subnetId=="type") {
 		// fetch type
-		$devtype = $Database->getObjectQuery("select tid,tname from `deviceTypes` where `tname` = ?", [$_GET['sPage']]);
+		$devtype = $Database->getObjectQuery("deviceTypes", "select tid,tname from `deviceTypes` where `tname` = ?", [$GET->sPage]);
 		// type
 		foreach ($devices as $k=>$d) {
 			if ($d->type!=$devtype->tid) {
@@ -20,9 +20,9 @@ if (isset($_GET['subnetId']) && @isset($_GET['sPage'])) {
 		}
 	}
 	// section
-	elseif ($_GET['subnetId']=="section") {
+	elseif ($GET->subnetId=="section") {
 		// fetch section
-		$section = $Database->getObjectQuery("select id,name from `sections` where `name` = ?", [$_GET['sPage']]);
+		$section = $Database->getObjectQuery("sections", "select id,name from `sections` where `name` = ?", [$GET->sPage]);
 		// check in which section device can be
 		foreach ($devices as $k=>$d) {
 			$device_section_ids = pf_explode(";", $d->sections);
@@ -33,9 +33,9 @@ if (isset($_GET['subnetId']) && @isset($_GET['sPage'])) {
     	}
 	}
 	// rack
-	elseif ($_GET['subnetId']=="rack") {
+	elseif ($GET->subnetId=="rack") {
 		// fetch rack
-		$rack = $Database->getObjectQuery("select id,name from `racks` where `name` = ?", [$_GET['sPage']]);
+		$rack = $Database->getObjectQuery("racks", "select id,name from `racks` where `name` = ?", [$GET->sPage]);
 		// check in which section device can be
 		foreach ($devices as $k=>$d) {
 			if ($d->rack!=$rack->id) {
@@ -44,9 +44,9 @@ if (isset($_GET['subnetId']) && @isset($_GET['sPage'])) {
     	}
 	}
 	// location
-	elseif ($_GET['subnetId']=="location") {
+	elseif ($GET->subnetId=="location") {
 		// fetch rack
-		$location = $Database->getObjectQuery("select id,name from `locations` where `name` = ?", [$_GET['sPage']]);
+		$location = $Database->getObjectQuery("locations", "select id,name from `locations` where `name` = ?", [$GET->sPage]);
 		// check in which section device can be
 		foreach ($devices as $k=>$d) {
 			if ($d->location!=$location->id) {
@@ -72,8 +72,8 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 	print "   <li><a href='".create_link("tools","devices")."'>"._("All types")."</a></li>";
 	print "		<li role='separator' class='divider'></li>";
 	foreach ($device_types_indexed as $d) {
-		$selected = $d->tname==@$_GET['sPage'] ? "class='active'" : "";
-		print "   <li $selected><a href='".create_link("tools","devices","type",$d->tname)."'>".$d->tname."</a></li>";
+		$selected = $d==$GET->sPage ? "class='active'" : "";
+		print "   <li $selected><a href='".create_link("tools","devices","type",$d)."'>".$d."</a></li>";
 	}
 	print " </ul>";
 	print "</div>";
@@ -91,7 +91,7 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 		if($Racks->all_racks!==false) {
 			print "		<li role='separator' class='divider'></li>";
 			foreach ($Racks->all_racks as $r) {
-				$selected = isset($_GET['sPage']) && $r->name==$_GET['sPage'] ? "class='active'" : "";
+				$selected = isset($GET->sPage) && $r->name==$GET->sPage ? "class='active'" : "";
 				print "   <li $selected><a href='".create_link("tools","devices","rack", $r->name)."'>".$r->name."</a></li>";
 			}
 		}
@@ -111,7 +111,7 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 		if($all_locations!==false) {
 			print "		<li role='separator' class='divider'></li>";
 			foreach ($all_locations as $l) {
-				$selected = isset($_GET['sPage']) && $l->name==$_GET['sPage'] ? "class='active'" : "";
+				$selected = isset($GET->sPage) && $l->name==$GET->sPage ? "class='active'" : "";
 				print "   <li $selected><a href='".create_link("tools","devices","location", $l->name)."'>".$l->name."</a></li>";
 			}
 		}
@@ -127,7 +127,7 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 	print "		<li role='separator' class='divider'></li>";
 	if($sections!==false) {
 		foreach ($sections as $s) {
-			$selected = $s->name==@$_GET['sPage'] ? "class='active'" : "";
+			$selected = $s->name==$GET->sPage ? "class='active'" : "";
 			print "   <li $selected><a href='".create_link("tools","devices","section", $s->name)."'>".$s->name."</a></li>";
 		}
 	}
@@ -135,7 +135,7 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 	print "</div>";
 
 	// Clear
-	if (isset($_GET['subnetId']) && isset($_GET['sPage'])) {
+	if (isset($GET->subnetId) && isset($GET->sPage)) {
 		print "<div class='btn-group'>";
 		print "	<a href='".create_link("tools","devices")."'><button class='btn btn-sm btn-default btn-danger' type='button' rel='tooltip' title='"._("Clear filter")."'><i class='fa fa-times'></i></button></a>";
 		print "</div>";
@@ -144,17 +144,17 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 print "</div>";
 
 # filter info
-if(isset($_GET['subnetId'])) {
-	if($_GET['subnetId']=="type") {
+if(isset($GET->subnetId)) {
+	if($GET->subnetId=="type") {
 		$Result->show("warning alert-block", _("Filter applied: Device Type = ".@$devtype->tname), false);
 	}
-	elseif($_GET['subnetId']=="rack") {
+	elseif($GET->subnetId=="rack") {
 		$Result->show("warning alert-block", _("Filter applied: Rack = ".@$rack->name), false);
 	}
-	elseif($_GET['subnetId']=="location") {
+	elseif($GET->subnetId=="location") {
 		$Result->show("warning alert-block", _("Filter applied: Location = ".@$location->name), false);
 	}
-	elseif($_GET['subnetId']=="section") {
+	elseif($GET->subnetId=="section") {
 		$Result->show("warning alert-block", _("Filter applied: Section = ".@$section->name), false);
 	}
 }

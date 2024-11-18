@@ -26,7 +26,7 @@ $User->check_module_permissions ("vrf", User::ACCESS_RWA, true, false);
 print "<div class='alert-danger hidden'></div>";
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disabled"), true); }
 # admin check
 if($User->is_admin()!==true) 	                { $Result->show("danger", _('Admin privileges required'), true); }
 
@@ -42,7 +42,7 @@ if ($existing_vrfs!==false) {
 }
 
 # set devices
-foreach ($_POST as $k=>$p) {
+foreach ($POST as $k=>$p) {
     if (strpos($k, "device-")!==false) {
         # fetch device
         $device = $Tools->fetch_object ("devices", "id", str_replace("device-", "", $k));
@@ -189,4 +189,4 @@ print "</span>";
 print "</div>";
 
 # show debug?
-if($_POST['debug']==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }
+if($POST->debug==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }

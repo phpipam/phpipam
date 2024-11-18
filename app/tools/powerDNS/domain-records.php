@@ -10,10 +10,10 @@ $User->check_user_session();
 $User->check_module_permissions ("pdns", User::ACCESS_R, true, false);
 
 // Determines where we link back to
-$link_section = $_GET['page'] == "administration" ? 'administration' : "tools";
+$link_section = $GET->page == "administration" ? 'administration' : "tools";
 
 // validate domain
-$domain = $PowerDNS->fetch_domain($_GET['ipaddrid']);
+$domain = $PowerDNS->fetch_domain($GET->ipaddrid);
 
 // validate
 if ($domain === false) {
@@ -30,12 +30,12 @@ if ($domain === false) {
             // SOA, NS
             if ($r->type == "SOA") {
                 $r->order = 1;
-                $records_default[] = $r;
+                $records_default[] = (array) $r;
                 unset($records[$k]);
             }
             if ($r->type == "NS") {
                 $r->order = 2;
-                $records_default[] = $r;
+                $records_default[] = (array) $r;
                 unset($records[$k]);
             }
             // split to $origins ?
@@ -46,7 +46,7 @@ if ($domain === false) {
         $order = array();
         if(isset($records_default)) {
             foreach ($records_default as $key => $row) {
-                $order[$key] = $row->order;
+                $order[$key] = $row['order'];
             }
             array_multisort($records_default, SORT_ASC, SORT_NUMERIC, $order);
         }
@@ -103,7 +103,7 @@ if ($domain === false) {
 
 <!-- Add new -->
 <div class="btn-group" style="margin-bottom:10px;margin-top: 25px;">
-	<a href="<?php print create_link($link_section, "powerDNS", $_GET['subnetId']);?>" class='btn btn-sm btn-default'>
+	<a href="<?php print create_link($link_section, "powerDNS", $GET->subnetId);?>" class='btn btn-sm btn-default'>
 		<i class='fa fa-angle-left'></i> <?php print _('Domains');?>
 	</a>
     <?php if($User->get_module_permissions ("pdns")>=User::ACCESS_RW) { ?>
@@ -178,7 +178,7 @@ if (isset($records_default)) {
 
     // defaults
     foreach ($records_default as $r) {
-        print_record($r);
+        print_record((object) $r);
     }
 }
 

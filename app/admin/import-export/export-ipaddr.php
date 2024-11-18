@@ -74,23 +74,23 @@ $curRow = 0;
 $curColumn = 0;
 
 //write headers
-if( (isset($_GET['section'])) && ($_GET['section'] == "on") ) {
+if ($GET->section == "on") {
 	$worksheet->write($curRow, $curColumn, _('Section') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['ip_addr'])) && ($_GET['ip_addr'] == "on") ) {
+if ($GET->ip_addr == "on") {
 	$worksheet->write($curRow, $curColumn, _('IP Address') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['hostname'])) && ($_GET['hostname'] == "on") ) {
+if ($GET->hostname == "on") {
 	$worksheet->write($curRow, $curColumn, _('Hostname') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+if ($GET->description == "on") {
 	$worksheet->write($curRow, $curColumn, _('Description') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['vrf'])) && ($_GET['vrf'] == "on") ) {
+if ($GET->vrf == "on") {
 	$worksheet->write($curRow, $curColumn, _('VRF') ,$format_header);
 	$curColumn++;
 	# fetch all VRFs
@@ -100,19 +100,19 @@ if( (isset($_GET['vrf'])) && ($_GET['vrf'] == "on") ) {
 	$vrfs = array(); $vrfs[0] = "default";
 	foreach ($all_vrfs as $vrf) { $vrf = (array) $vrf; $vrfs[$vrf['vrfId']] = $vrf['name']; }
 }
-if( (isset($_GET['subnet'])) && ($_GET['subnet'] == "on") ) {
+if ($GET->subnet == "on") {
 	$worksheet->write($curRow, $curColumn, _('Subnet') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['mac'])) && ($_GET['mac'] == "on") ) {
+if ($GET->mac == "on") {
 	$worksheet->write($curRow, $curColumn, _('MAC') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['owner'])) && ($_GET['owner'] == "on") ) {
+if ($GET->owner == "on") {
 	$worksheet->write($curRow, $curColumn, _('Owner') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['device'])) && ($_GET['device'] == "on") ) {
+if ($GET->device == "on") {
 	$worksheet->write($curRow, $curColumn, _('Device') ,$format_header);
 	$curColumn++;
 	# get Devices and reorder
@@ -124,17 +124,17 @@ if( (isset($_GET['device'])) && ($_GET['device'] == "on") ) {
     	}
 	}
 }
-if( (isset($_GET['note'])) && ($_GET['note'] == "on") ) {
+if ($GET->note == "on") {
 	$worksheet->write($curRow, $curColumn, _('Note') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['tag'])) && ($_GET['tag'] == "on") ) {
+if ($GET->tag == "on") {
 	$worksheet->write($curRow, $curColumn, _('Tag') ,$format_header);
 	$curColumn++;
 	# get IP address types
 	$ip_types = $Addresses->addresses_types_fetch();
 }
-if( (isset($_GET['gateway'])) && ($_GET['gateway'] == "on") ) {
+if ($GET->gateway == "on") {
 	$worksheet->write($curRow, $curColumn, _('Gateway') ,$format_header);
 	$curColumn++;
 }
@@ -145,7 +145,7 @@ if(sizeof($custom_fields) > 0) {
 		//set temp name - replace space with three ___
 		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
 
-		if( (isset($_GET[$myField['nameTemp']])) && ($_GET[$myField['nameTemp']] == "on") ) {
+		if( $GET->{$myField['nameTemp']} == "on" ) {
 			$worksheet->write($curRow, $curColumn, $myField['name'] ,$format_header);
 			$curColumn++;
 		}
@@ -162,7 +162,7 @@ if($all_sections!==false) {
 		$section = (array) $section;
 		$section['url_name'] = urlencode($section['id']);
 
-		if( (isset($_GET['exportSection__'.$section['url_name']])) && ($_GET['exportSection__'.$section['url_name']] == "on") ) {
+		if( $GET->{'exportSection__'.$section['url_name']} == "on" ) {
 			// get all subnets in section
 			$section_subnets = $Subnets->fetch_section_subnets($section['id']);
 
@@ -186,27 +186,27 @@ if($all_sections!==false) {
 					$ip = (array) $ip;
 
 
-					if( (isset($_GET['section'])) && ($_GET['section'] == "on") ) {
+					if ($GET->section == "on") {
 						$worksheet->write($curRow, $curColumn, $section['name'], $format_text);
 						$curColumn++;
 					}
 
-					if( (isset($_GET['ip_addr'])) && ($_GET['ip_addr'] == "on") ) {
+					if ($GET->ip_addr == "on") {
 						$worksheet->write($curRow, $curColumn, $Subnets->transform_to_dotted($ip['ip_addr']), $format_text);
 						$curColumn++;
 					}
 
-					if( (isset($_GET['hostname'])) && ($_GET['hostname'] == "on") ) {
+					if ($GET->hostname == "on") {
 						$worksheet->write($curRow, $curColumn, $ip['hostname'], $format_text);
 						$curColumn++;
 					}
 
-					if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+					if ($GET->description == "on") {
 						$worksheet->write($curRow, $curColumn, $ip['description'], $format_text);
 						$curColumn++;
 					}
 
-					if( (isset($_GET['vrf'])) && ($_GET['vrf'] == "on") ) {
+					if ($GET->vrf == "on") {
 						if (!isset($vrfs[$subnet['vrfId']])) {
 							$vrfs[$subnet['vrfId']] = "";
 						}
@@ -214,46 +214,46 @@ if($all_sections!==false) {
 						$curColumn++;
 					}
 
-					if( (isset($_GET['subnet'])) && ($_GET['subnet'] == "on") ) {
+					if ($GET->subnet == "on") {
 						$worksheet->write($curRow, $curColumn, $subnet['ip']."/".$subnet['mask'], $format_text);
 						$curColumn++;
 					}
 
-					if( (isset($_GET['state'])) && ($_GET['state'] == "on") ) {
+					if ($GET->state == "on") {
 						$worksheet->write($curRow, $curColumn, $ip['state'], $format_text);
 						$curColumn++;
 					}
 
-					if( (isset($_GET['mac'])) && ($_GET['mac'] == "on") ) {
+					if ($GET->mac == "on") {
 						$worksheet->write($curRow, $curColumn, $ip['mac'], $format_text);
 						$curColumn++;
 					}
 
-					if( (isset($_GET['owner'])) && ($_GET['owner'] == "on") ) {
+					if ($GET->owner == "on") {
 						$worksheet->write($curRow, $curColumn, $ip['owner'], $format_text);
 						$curColumn++;
 					}
 
-					if( (isset($_GET['device'])) && ($_GET['device'] == "on") ) {
+					if ($GET->device == "on") {
 						//change device to name
 						$ip['device'] = is_null($ip['switch'])||is_blank($ip['switch'])||$ip['switch']==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
 						$worksheet->write($curRow, $curColumn, $ip['device'], $format_text);
 						$curColumn++;
 					}
 
-					if( (isset($_GET['note'])) && ($_GET['note'] == "on") ) {
+					if ($GET->note == "on") {
 						$worksheet->write($curRow, $curColumn, $ip['note'], $format_text);
 						$curColumn++;
 					}
 
-					if( (isset($_GET['tag'])) && ($_GET['tag'] == "on") ) {
+					if ($GET->tag == "on") {
 						//reformat tag
 						$ip['tag'] = (@$ip_types[$ip['state']]['showtag']) ? $ip_types[$ip['state']]['type'] : "";
 						$worksheet->write($curRow, $curColumn, $ip['tag'], $format_text);
 						$curColumn++;
 					}
 
-					if( (isset($_GET['gateway'])) && ($_GET['gateway'] == "on") ) {
+					if ($GET->gateway == "on") {
 						$ip['gateway'] = ($ip['is_gateway']) ? _("Yes") : _("No");
 						$worksheet->write($curRow, $curColumn, $ip['gateway'], $format_text);
 						$curColumn++;
@@ -265,7 +265,7 @@ if($all_sections!==false) {
 							//set temp name - replace space with three ___
 							$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
 
-							if( (isset($_GET[$myField['nameTemp']])) && ($_GET[$myField['nameTemp']] == "on") ) {
+							if( $GET->{$myField['nameTemp']} == "on") {
 								$worksheet->write($curRow, $curColumn, $ip[$myField['name']], $format_text);
 								$curColumn++;
 							}
@@ -284,9 +284,10 @@ if($all_sections!==false) {
 $curRow++;
 
 //write section sheet
-if( (isset($_GET['exportSections'])) && ($_GET['exportSections'] == "on") ) {
+if ($GET->exportSections == "on") {
 	// Create a worksheet
 	$worksheet_sections =& $workbook->addWorksheet('Sections');
+	$worksheet_sections->setInputEncoding("utf-8");
 
 	$curRow = 0;
 	$curColumn = 0;
@@ -307,7 +308,7 @@ if( (isset($_GET['exportSections'])) && ($_GET['exportSections'] == "on") ) {
 		$section = (array) $section;
 		$section['url_name'] = urlencode($section['id']);
 
-		if( (isset($_GET['exportSection__'.$section['url_name']])) && ($_GET['exportSection__'.$section['url_name']] == "on") ) {
+		if( $GET->{'exportSection__'.$section['url_name']} == "on") {
 			$worksheet_sections->write($curRow, $curColumn, $section['name'], $format_text);
 			$curColumn++;
 			$worksheet_sections->write($curRow, $curColumn, $section['description'], $format_text);

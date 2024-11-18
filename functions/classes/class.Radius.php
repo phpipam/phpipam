@@ -44,15 +44,16 @@
  *
  *
  * @author: SysCo/al
+ * @updated: https://github.com/flaviojunior1995
  * @since CreationDate: 2008-01-04
  * @copyright (c) 2008 by SysCo systemes de communication sa
- * @version $LastChangedRevision: 1.2.2 $
- * @version $LastChangedDate: 2009-01-05 $
- * @version $LastChangedBy: SysCo/al $
+ * @version $LastChangedRevision: 1.2.3 $
+ * @version $LastChangedDate: 2023-20-12 $
+ * @version $LastChangedBy: https://github.com/flaviojunior1995 $
  * @link $HeadURL: radius.class.php $
  * @link http://developer.sysco.ch/php/
  * @link developer@sysco.ch
- * Language: PHP 4.0.7 or higher
+ * Language: PHP 7.2 or higher
  *
  *
  * Usage
@@ -68,7 +69,7 @@
  *     <?php
  *         require_once('radius.class.php');
  *         $radius = new Radius('127.0.0.1', 'secret');
- *         $radius->SetNasIpAddress('1.2.3.4'); // Needed for some devices, and not auto_detected if PHP not runned through a web server
+ *         $radius->SetNasIpAddress('1.2.3.4'); // Needed for some devices, and not auto_detected if PHP not ran through a web server
  *         if ($radius->AccessRequest('user', 'pass'))
  *         {
  *             echo "Authentication accepted.";
@@ -84,7 +85,7 @@
  *         require_once('radius.class.php');
  *         $radius = new Radius('127.0.0.1', 'secret');
  *         $radius->SetNasPort(0);
- *         $radius->SetNasIpAddress('1.2.3.4'); // Needed for some devices, and not auto_detected if PHP not runned through a web server
+ *         $radius->SetNasIpAddress('1.2.3.4'); // Needed for some devices, and not auto_detected if PHP not ran through a web server
  *         if ($radius->AccessRequest('user', 'pass'))
  *         {
  *             echo "Authentication accepted.";
@@ -118,7 +119,7 @@
  *       extension=php_sockets.dll in php.ini
  *
  *
- * Other related ressources
+ * Other related resources
  *
  *   FreeRADIUS, a free Radius server implementation for Linux and *nix environments:
  *     http://www.freeradius.org/
@@ -151,6 +152,7 @@
  *
  * Change Log
  *
+ *   2023-12-20 1.2.3 https://github.com/flaviojunior1995 Updated to work with php8 and fix deprecated errors
  *   2009-01-05 1.2.2 SysCo/al Added Robert Svensson feedback, Mideye RADIUS server is supported
  *   2008-11-11 1.2.1 SysCo/al Added Carlo Ferrari resolution in examples (add NAS IP Address for a VASCO Middleware server)
  *   2008-07-07 1.2   SysCo/al Added Pim Koeman (Parantion) contribution
@@ -174,10 +176,11 @@
  * Pure PHP radius class
  *
  * Creation 2008-01-04
- * Update 2009-01-05
+ * Update 2023-12-20
  * @package radius
- * @version v.1.2.2
+ * @version v.1.2.3
  * @author SysCo/al
+ * @updated https://github.com/flaviojunior1995
  *
  *********************************************************************/
 class Radius
@@ -187,7 +190,7 @@ class Radius
     var $_radius_suffix;          // Radius suffix (default is '');
     var $_udp_timeout;            // Timeout of the UDP connection in seconds (default value is 5)
     var $_authentication_port;    // Authentication port (default value is 1812)
-    var $_accounting_port;        // Accouting port (default value is 1813)
+    var $_accounting_port;        // Accounting port (default value is 1813)
     var $_nas_ip_address;         // NAS IP address
     var $_nas_port;               // NAS port
     var $_encrypted_password;     // Encrypted password, as described in the RFC 2865
@@ -217,9 +220,10 @@ class Radius
      * short description: Radius class constructor
      *
      * Creation 2008-01-04
-     * Update 2009-01-05
-     * @version v.1.2.2
+     * Update 2023-12-20
+     * @version v.1.2.3
      * @author SysCo/al
+     * @updated https://github.com/flaviojunior1995
      * @param string ip address of the radius server
      * @param string shared secret with the radius server
      * @param string radius domain name suffix (default is empty)
@@ -228,7 +232,7 @@ class Radius
      * @param integer accounting port
      * @return NULL
      *********************************************************************/
-    public function Radius($ip_radius_server = '127.0.0.1', $shared_secret = '', $radius_suffix = '', $udp_timeout = 5, $authentication_port = 1812, $accounting_port = 1813)
+    public function __construct($ip_radius_server = '127.0.0.1', $shared_secret = '', $radius_suffix = '', $udp_timeout = 5, $authentication_port = 1812, $accounting_port = 1813)
     {
         $this->_radius_packet_info[1] = 'Access-Request';
         $this->_radius_packet_info[2] = 'Access-Accept';
@@ -576,7 +580,7 @@ class Radius
     function SetAttribute($type, $value)
     {
         $attribute_index = -1;
-        $attribute_count = count($this->_attributes_to_send);
+        $attribute_count = count((array)$this->_attributes_to_send);
         for ($attributes_loop = 0; $attributes_loop < $attribute_count; $attributes_loop++)
         {
             if ($type == ord(substr($this->_attributes_to_send[$attributes_loop], 0, 1)))
@@ -603,7 +607,7 @@ class Radius
                     $temp_attribute = chr($type).chr(6).chr($ip_array[0]).chr($ip_array[1]).chr($ip_array[2]).chr($ip_array[3]);
                     break;
                 case 'I': // Integer, 32 bit unsigned value, most significant octet first.
-                    $temp_attribute = chr($type).chr(6).chr(($value / (256 * 256 * 256)) % 256).chr(($value / (256 * 256)) % 256).chr(($value / (256)) % 256).chr($value % 256);
+		    $temp_attribute = chr($type).chr(6).chr($value / 256 * 256 * 256 % 256).chr($value / 256 * 256 % 256). chr($value * 256 / 256 % 256 ) .chr($value % 256);
                     break;
                 case 'D': // Time, 32 bit unsigned value, most significant octet first -- seconds since 00:00:00 UTC, January 1, 1970. (not used in this RFC)
                     $temp_attribute = NULL;
@@ -716,7 +720,7 @@ class Radius
         }
 
         $attributes_content = '';
-        $attribute_count1 = count($this->_attributes_to_send);
+        $attribute_count1 = count((array)$this->_attributes_to_send);
         for ($attributes_loop = 0; $attributes_loop < $attribute_count1; $attributes_loop++)
         {
             $attributes_content .= $this->_attributes_to_send[$attributes_loop];

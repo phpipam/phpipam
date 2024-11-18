@@ -38,7 +38,7 @@ $settings = $Tools->get_settings();
 	<?php } ?>
 
 	<!-- js -->
-	<script src="js/jquery-3.5.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/jquery-3.7.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script>
 	$(document).ready(function(){
@@ -63,7 +63,7 @@ $settings = $Tools->get_settings();
 <div class="row" id="header">
 	<div class="col-xs-12">
 		<div class="hero-unit" style="padding:20px;margin-bottom:10px;">
-			<a href="<?php print create_link($_GET['page'], $_GET['section']); ?>"><?php print $settings->siteTitle;?></a>
+			<a href="<?php print create_link($GET->page, $GET->section); ?>"><?php print $settings->siteTitle;?></a>
             <p class="muted"><?php print _("Temporary share"); ?></p>
 		</div>
 	</div>
@@ -86,11 +86,11 @@ $settings = $Tools->get_settings();
 
 <?php
 # decode objects
-$temp_objects = pf_json_decode($settings->tempAccess);
+$temp_objects = db_json_decode($settings->tempAccess);
 # check
 $temp_objects = !is_null($temp_objects) ? (array) $temp_objects : array();
 # set width
-$max_width = (@$temp_objects[$_GET['section']]->type=="ipaddresses" || isset($_GET['subnetId'])) ? "max-width:700px" : "";
+$max_width = (@$temp_objects[$GET->section]->type=="ipaddresses" || isset($GET->subnetId)) ? "max-width:700px" : "";
 ?>
 
 <!-- content -->
@@ -98,28 +98,28 @@ $max_width = (@$temp_objects[$_GET['section']]->type=="ipaddresses" || isset($_G
 <div class="container" id="mainContainer" style="margin-top: 15px; <?php print $max_width; ?>">
 
 	<?php
-	# disbled
+	# disabled
 	if($settings->tempShare!=1)										{ $Result->show("danger", _("Temporary sharing disabled"), false); }
 	# none
-	elseif(sizeof($temp_objects)==0)								{ $Log->write( _("Tempory share access"), $_GET['section'], 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
+	elseif(sizeof($temp_objects)==0)								{ $Log->write( _("Tempory share access"), $GET->section, 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
 	# try to fetch object
-	elseif(!array_key_exists($_GET['section'], $temp_objects))		{ $Log->write( _("Tempory share access"), $_GET['section'], 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
+	elseif(!array_key_exists($GET->section, $temp_objects))		{ $Log->write( _("Tempory share access"), $GET->section, 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
 	# ok, include script
 	else {
 		//check if expired
-		if(time()>$temp_objects[$_GET['section']]->validity)		{ $Log->write( _("Tempory share access"), $_GET['section'], 2); $Result->show("danger", _("Share expired")."!", false); }
+		if(time()>$temp_objects[$GET->section]->validity)		{ $Log->write( _("Tempory share access"), $GET->section, 2); $Result->show("danger", _("Share expired")."!", false); }
 		else {
 			//log
-			$Log->write( _("Tempory share access"), $_GET['section'], 0);
+			$Log->write( _("Tempory share access"), $GET->section, 0);
 
-			if($temp_objects[$_GET['section']]->type=="subnets") 		{
+			if($temp_objects[$GET->section]->type=="subnets") 		{
 				# address?
-				if(isset($_GET['subnetId']))							{ include("address.php"); }
+				if(isset($GET->subnetId))							{ include("address.php"); }
 				else													{ include("subnet.php"); }
 			}
 			else														{
 				# set object
-				$object = $temp_objects[$_GET['section']];
+				$object = $temp_objects[$GET->section];
 
 				// fetch address
 				$address = (array) $Addresses->fetch_address(null, $object->id);
@@ -132,7 +132,7 @@ $max_width = (@$temp_objects[$_GET['section']]->type=="ipaddresses" || isset($_G
 
 		# write validity
 		print "<hr>";
-		$Result->show("info", "<strong>Notification</strong><hr>"._("Share expires on ").date("Y-m-d H:i:s", $temp_objects[$_GET['section']]->validity), false);
+		$Result->show("info", "<strong>Notification</strong><hr>"._("Share expires on ").date("Y-m-d H:i:s", $temp_objects[$GET->section]->validity), false);
 	}
 	?>
 

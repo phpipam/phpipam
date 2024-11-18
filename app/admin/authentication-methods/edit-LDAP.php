@@ -8,15 +8,15 @@
 $User->check_user_session();
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric */
-if($_POST['action']!="add") {
-	if(!is_numeric($_POST['id']))	{ $Result->show("danger", _("Invalid ID"), true, true); }
+if($POST->action!="add") {
+	if(!is_numeric($POST->id))	{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 	# feth method settings
-	$method_settings = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['id']);
-	$method_settings->params = pf_json_decode($method_settings->params);
+	$method_settings = $Admin->fetch_object ("usersAuthMethod", "id", $POST->id);
+	$method_settings->params = db_json_decode($method_settings->params);
 }
 else {
 	$method_settings = new StdClass ();
@@ -29,7 +29,7 @@ else {
 }
 
 # set delete flag
-$delete = $_POST['action']=="delete" ? "disabled" : "";
+$delete = $POST->action=="delete" ? "disabled" : "";
 ?>
 
 <!-- header -->
@@ -78,7 +78,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<input type="text" name="domain_controllers" class="form-control input-sm" value="<?php print @$method_settings->params->domain_controllers; ?>" <?php print $delete; ?>>
 			<input type="hidden" name="type" value="LDAP">
 			<input type="hidden" name="id" value="<?php print @$method_settings->id; ?>">
-			<input type="hidden" name="action" value="<?php print @$_POST['action']; ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 		<td class="info2"><?php print _('LDAP hosts, separated by a semicolon (;)'); ?>
@@ -178,14 +178,14 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/authentication-methods/edit-result.php" data-result_div="editAuthMethodResult" data-form='editAuthMethod'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+		<button class='btn btn-sm btn-default submit_popup <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/authentication-methods/edit-result.php" data-result_div="editAuthMethodResult" data-form='editAuthMethod'>
+			<i class="fa <?php if($POST->action=="add") { print "fa-plus"; } else if ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 	</div>
 
 	<?php
-	if($_POST['action']=="delete") {
-		# check for mathing users
+	if($POST->action=="delete") {
+		# check for matching users
 		$users = $Admin->fetch_multiple_objects ("users", "authMethod", @$method_settings->id);
 		if($users!==false) {
 			$Result->show("warning", sizeof($users)._(" users have this method for logging in. They will be reset to local auth!"), false);

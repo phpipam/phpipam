@@ -1,6 +1,11 @@
 <?php
 
 /**
+ *  Disable installation helper scripts /app/install/ after initial setup
+ */
+$disable_installer = false;
+
+/**
  * database connection details
  ******************************/
 $db['host'] = '127.0.0.1';
@@ -30,7 +35,6 @@ $db['webhost'] = '';
      Please update these settings before setting 'ssl' to true.
      All settings can be commented out or set to NULL if not needed
 
-     php 5.3.7 required
  ******************************/
 $db['ssl']        = false;                             // true/false, enable or disable SSL as a whole
 // $db['ssl_key']    = '/path/to/cert.key';               // path to an SSL key file. Only makes sense combined with ssl_cert
@@ -38,11 +42,26 @@ $db['ssl']        = false;                             // true/false, enable or 
 // $db['ssl_ca']     = '/path/to/ca.crt';                 // path to a file containing SSL CA certs
 // $db['ssl_capath'] = '/path/to/ca_certs';               // path to a directory containing CA certs
 // $db['ssl_cipher'] = 'HIGH:!PSK:!SHA:!MD5:!RC4:!aNULL'; // one or more SSL Ciphers, see openssl ciphers -v '....'
-// $db['ssl_verify'] = 'true';                            // Verify Common Name (CN) of server certificate?
+// $db['ssl_verify'] = true;                            // Verify Common Name (CN) of server certificate?
 
 $db['tmptable_engine_type'] = "MEMORY";                // Temporary table type to construct complex queries (MEMORY, InnoDB)
 $db['use_cte'] = 1;                                    // Use recursive CTE queries [>=MariaDB 10.2.2, >=MySQL 8.0] (0=disabled, 1=autodetect, 2=force enable)
 
+/**
+ * Reverse proxy settings
+ *
+ * If operating behind a reverse proxy set $trust_x_forwarded_headers=true; to accept the following headers
+ *
+ * WARNING! These headers shoud be filtered and/or overwritten by the reverse-proxy to avoid potential abuse by end-clients.
+ *
+ *   X_FORWARDED_FOR
+ *   X_FORWARDED_HOST
+ *   X_FORWARDED_PORT
+ *   X_FORWARDED_PROTO
+ *   X_FORWARDED_SSL
+ *   X_FORWARDED_URI
+ */
+$trust_x_forwarded_headers = false;
 
 /**
  * Mail sending and other parameters for pingCheck and DiscoveryCheck scripts
@@ -55,7 +74,7 @@ $config['ping_check_method']           = false;      // false/ping/pear/fping, r
 $config['discovery_check_send_mail']   = true;       // true/false, send or not mail on discovery check
 $config['discovery_check_method']      = false;      // false/ping/pear/fping, reset scan method
 # remove_offline_addresses.php script parameters
-$config['removed_addresses_send_mail'] = true;       // true/false, send or not mail on pomoving inactive addresses
+$config['removed_addresses_send_mail'] = true;       // true/false, send mail or not on removing inactive addresses
 $config['removed_addresses_timelimit'] = 86400 * 7;  // int, after how many seconds of inactivity address will be deleted (7 days)
 # resolveIPaddresses.php script parameters
 $config['resolve_emptyonly']           = true;       // if true it will only update the ones without DNS entry!
@@ -88,6 +107,15 @@ $debugging = false;
  * @var bool
  */
 $api_allow_unsafe = false;
+
+/**
+ * PHP8.1 - Integers and floats in result sets will now be returned using native PHP types instead of strings when using emulated prepared statements.
+ * Add option to restore prior behaviour for API consumers.
+ *
+ * Can be overwritten via "api-stringify-results: 0|1" header in API requests.
+ */
+
+$api_stringify_results = false;
 
 /**
  *  manual set session name for auth
@@ -148,7 +176,12 @@ $proxy_user     = 'USERNAME';                             // Proxy Username
 $proxy_pass     = 'PASSWORD';                             // Proxy Password
 $proxy_use_auth = false;                                  // Enable/Disable Proxy authentication
 
-$offline_mode   = false;                                  // Offline mode, disable server-side Internet requests (proxy/OpenStreetMap)
+$offline_mode   = false;                                  // Offline mode, disable all server-side Internet requests (proxy/OpenStreetMap)
+
+/**
+ * OpenStreetMap
+ ****************************/
+$disable_geoip_lookups = false;                           // Disable address geoip lookups
 
 /**
  * Failed access

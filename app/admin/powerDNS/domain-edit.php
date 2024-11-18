@@ -18,7 +18,7 @@ $PowerDNS 	= new PowerDNS ($Database);
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("pdns", User::ACCESS_RW, true, true);
 }
 else {
@@ -29,24 +29,24 @@ else {
 $csrf = $User->Crypto->csrf_cookie ("create", "domain");
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # save settings for powerDNS default
 $pdns = $PowerDNS->db_settings;
 
 # get VRF
-if($_POST['action']!="add") {
-	$domain = $PowerDNS->fetch_domain ($_POST['id']);
+if($POST->action!="add") {
+	$domain = $PowerDNS->fetch_domain ($POST->id);
 	$domain!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 }
 
 # disable edit on delete
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 ?>
 
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('domain'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('domain'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -58,9 +58,9 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 	<tr>
 		<td style="width:150px;"><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('FQDN domain name'); ?>" value="<?php print $domain->name; ?>" <?php print $readonly; ?> <?php if($_POST['action']!="add") { print "disabled='disabled'"; } ?>>
-			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
-			<input type="hidden" name="id" value="<?php print @$_POST['id']; ?>">
+			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('FQDN domain name'); ?>" value="<?php print $domain->name; ?>" <?php print $readonly; ?> <?php if($POST->action!="add") { print "disabled='disabled'"; } ?>>
+			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
+			<input type="hidden" name="id" value="<?php print escape_input($POST->id); ?>">
             <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
@@ -94,7 +94,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
 	<?php
 	// we need default parameters only if we create new domain !
-	if($_POST['action']=="add") {
+	if($POST->action=="add") {
 	?>
 
 	<tbody class="defaults">
@@ -229,7 +229,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
 	<?php
 	//print delete warning
-	if($_POST['action'] == "delete")	{ $Result->show("warning", "<strong>"._('Warning').":</strong> "._("removing Domain will also remove all referenced entries!"), false);}
+	if($POST->action == "delete")	{ $Result->show("warning", "<strong>"._('Warning').":</strong> "._("removing Domain will also remove all referenced entries!"), false);}
 	?>
 </div>
 
@@ -237,8 +237,8 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 <!-- footer -->
 <div class="pFooter">
 	<div class="btn-group">
-		<button class="btn btn-sm btn-default <?php if(@$_POST['secondary']=="true") { print "hidePopup2"; } else { print "hidePopups"; } ?>"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?> <?php if(@$_POST['secondary']=="true") { print "editDomainSubmit2"; } ?>" id="editDomainSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->secondary=="true") { print "hidePopup2"; } else { print "hidePopups"; } ?>"><?php print _('Cancel'); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?> <?php if($POST->secondary=="true") { print "editDomainSubmit2"; } ?>" id="editDomainSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="domain-edit-result"></div>

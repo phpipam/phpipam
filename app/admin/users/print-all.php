@@ -12,8 +12,8 @@ $users = $Admin->fetch_all_objects("users", "username");
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('users');
 
-/* check customfields */
-$ffields = pf_json_decode($User->settings->hiddenCustomFields, true);
+// check customfields
+$ffields = db_json_decode($User->settings->hiddenCustomFields, true);
 $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 ?>
 
@@ -45,7 +45,7 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 	if(sizeof(@$custom) > 0) {
 		foreach($custom as $field) {
 			if(!in_array($field['name'], $ffields)) {
-				print "<th>$field[name]</th>";
+				print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
 	}
@@ -60,6 +60,16 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 foreach ($users as $user) {
 	//cast
 	$user = (array) $user;
+
+	// passkeys
+	$passkey_only = false;
+	if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
+		// get user passkeys
+		$user_passkeys = $User->get_user_passkeys($user['id']);
+		// set passkey_only flag
+		$passkey_only = sizeof($user_passkeys)>0 && $user['passkey_only']=="1" ? true : false;
+	}
+
 	print '<tr>' . "\n";
 
 	# set icon based on normal user or admin
@@ -88,8 +98,27 @@ foreach ($users as $user) {
 	$auth_method = $Admin->fetch_object("usersAuthMethod", "id", $user['authMethod']);
 	//false
 	print "<td>";
-	if($auth_method===false) { print "<span class='text-muted'>No auth method</span>"; }
-	else 					 { print $auth_method->type." <span class='text-muted'>(".$auth_method->description."</a>)"; }
+	if($auth_method===false) 	{ print "<span class='text-muted'>No auth method</span>"; }
+	elseif($passkey_only)   	{ print "<span class='badge badge1 badge5 alert-success'>"._("Passkey only")."</span>"; }
+	else 					 	{ print "<span class='badge badge1 badge5 alert-success'>".$auth_method->type."</span> <span class='text-muted'>(".$auth_method->description."</a>)"; }
+	// 2fa
+	if ($User->settings->{'2fa_provider'}!=='none' && $passkey_only!==true) {
+		if (!is_null($user['2fa_secret']) && $user['2fa']=="1") {
+			print "<br><span class='badge badge1 badge5 alert-success'>"._("2fa enabled")."</span>";
+		}
+		else {
+			print "<br><span class='badge badge1 badge5 alert-warning'>"._("2fa disabled")."</span>";
+		}
+	}
+
+	// passkeys
+	if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
+		// get user passkeys
+		$user_passkeys = $User->get_user_passkeys($user['id']);
+		if (sizeof($user_passkeys)>0) {
+			print "<br><span class='badge badge1 badge5 alert-success'>".sizeof($user_passkeys)." "._("Passkeys")."</span>";
+		}
+	}
 	print "</span></td>";
 
 	# Module permisisons
@@ -98,7 +127,9 @@ foreach ($users as $user) {
 	}
 	else {
 		print "<td>";
+		print "<btn class='btn btn-xs btn-default toggle-module-permissions'>Show <i class='fa fa-angle-down'></i></btn><div class='hidden module-permissions'>";
 		include("print_module_permissions.php");
+		print "</div>";
 		print "</td>";
 	}
 
@@ -107,7 +138,7 @@ foreach ($users as $user) {
 	print '	<td>'._('All groups').'</td>'. "\n";
 	}
 	else {
-		$groups = pf_json_decode($user['groups'], true);
+		$groups = db_json_decode($user['groups'], true);
 		$gr = $Admin->groups_parse($groups);
 
 		print '	<td>';
@@ -131,21 +162,8 @@ foreach ($users as $user) {
 	if(sizeof($custom) > 0) {
 		foreach($custom as $field) {
 			if(!in_array($field['name'], $ffields)) {
-				print "<td>";
-				//booleans
-				if($field['type']=="tinyint(1)")	{
-					if($user[$field['name']] == "0")		{ print _("No"); }
-					elseif($user[$field['name']] == "1")	{ print _("Yes"); }
-				}
-				//text
-				elseif($field['type']=="text") {
-					if(!is_blank($user[$field['name']]))		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $user[$field['name']])."'>"; }
-					else									{ print ""; }
-				}
-				else {
-					print $user[$field['name']];
-
-				}
+				print "<td class='hidden-xs hidden-sm hidden-md'>";
+				$Tools->print_custom_field ($field['type'], $user[$field['name']]);
 				print "</td>";
 			}
 		}

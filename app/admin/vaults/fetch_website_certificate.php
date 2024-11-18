@@ -30,16 +30,13 @@ if ($User->get_module_permissions("vaults")<User::ACCESS_RWA) {
 	die_with_error(_("Insufficient privileges"));
 }
 
-# strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
-
 // check posted url
-if (!filter_var($_POST['website'], FILTER_VALIDATE_URL)) {
+if (!filter_var($POST->website, FILTER_VALIDATE_URL)) {
 	die_with_error(_("Invalid URL"));
 }
 
 // replace https
-$website = str_replace(["https://", "http://"], "ssl://", $_POST['website']);
+$website = str_replace(["https://", "http://"], "ssl://", $POST->website);
 if (!preg_match('/:\d+$/',$website)) {
 	$website.= ":443";
 }
@@ -47,7 +44,7 @@ if (!preg_match('/:\d+$/',$website)) {
 // create context
 $options = [
 	"ssl"=>['capture_peer_cert_chain' => true,
-			'verify_peer'=>filter_var($_POST['verify_peer'], FILTER_VALIDATE_BOOLEAN)
+			'verify_peer'=>filter_var($POST->verify_peer, FILTER_VALIDATE_BOOLEAN)
 			]
 ];
 $g = stream_context_create ($options);

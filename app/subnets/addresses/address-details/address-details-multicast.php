@@ -53,7 +53,7 @@ if ($mtest !== true) {
             // section
             print "<tr>";
             print " <th>"._("Section")."</th>";
-            print " <td><a href='".create_link("subnets", $sn->sectionId)."'>$se->name</a> $se_descriptionn</td>";
+            print " <td><a href='".create_link("subnets", $sn->sectionId)."'>$se->name</a> $se_description</td>";
             print "</tr>";
 
             // subnet

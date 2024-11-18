@@ -5,7 +5,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 <?php
 
 # set which custom fields to display
-$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $visible_fields = array();
 # set visible fields
 foreach ($custom_fields as $k=>$f) {

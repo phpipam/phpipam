@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Script to disaply vault edit result
+ * Script to display vault edit result
  *************************************/
 
 /* functions */
@@ -23,11 +23,8 @@ $User->check_maintaneance_mode ();
 # make sure user has access
 if ($User->get_module_permissions ("vaults")<User::ACCESS_RWA) { $Result->show("danger", _("Insufficient privileges").".", true); }
 
-# strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
-
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "vaults", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "vaults", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('vaults');
@@ -36,18 +33,18 @@ $custom = $Tools->fetch_custom_fields('vaults');
 $error = array();
 
 # add, edit
-if($_POST['action']!="delete") {
-	# name must be more than 2 and alphanumberic
-	if(strlen($_POST['name'])<3 || strlen($_POST['name'])>64)			{ $error[] = "Invalid name"; }
+if($POST->action!="delete") {
+	# name must be more than 2 and alphanumeric
+	if(strlen($POST->name)<3 || strlen($POST->name)>64)			{ $error[] = "Invalid name"; }
 }
 # ad - check secret length
-if($_POST['action']=="add") {
-	if(strlen($_POST['secret'])<8)									{ $Result->show("danger", _("Secret must be at least 8 characters long!"), true); }
+if($POST->action=="add") {
+	if(strlen($POST->secret)<8)									{ $Result->show("danger", _("Secret must be at least 8 characters long!"), true); }
 
 	//enforce password policy
-	$policy = (pf_json_decode($User->settings->passwordPolicy, true));
+	$policy = (db_json_decode($User->settings->passwordPolicy, true));
 	$Password_check->set_requirements  ($policy, pf_explode(",",$policy['allowedSymbols']));
-	if (!$Password_check->validate ($_POST['secret'])) 				{ $Result->show("danger alert-danger ", _('Secret validation errors').":<br> - ".implode("<br> - ", $Password_check->get_errors ()), true); }
+	if (!$Password_check->validate ($POST->secret)) 				{ $Result->show("danger alert-danger ", _('Secret validation errors').":<br> - ".implode("<br> - ", $Password_check->get_errors ()), true); }
 }
 
 # die if errors
@@ -57,9 +54,9 @@ if(sizeof($error) > 0) {
 else {
 	# create array of values for modification
 	$values = array(
-					"id"                     =>@$_POST['id'],
-					"name"                   =>@$_POST['name'],
-					"description"            =>$_POST['description']
+					"id"                     =>$POST->id,
+					"name"                   =>$POST->name,
+					"description"            =>$POST->description
 					);
 
 	# append custom
@@ -67,17 +64,17 @@ else {
 		foreach($custom as $myField) {
 			# replace possible ___ back to spaces!
 			$myField['nameTest']      = str_replace(" ", "___", $myField['name']);
-			if(isset($_POST[$myField['nameTest']])) { $values[$myField['name']] = @$_POST[$myField['nameTest']];}
+			if(isset($POST->{$myField['nameTest']})) { $values[$myField['name']] = $POST->{$myField['nameTest']};}
 		}
 	}
 
 	# add test
-	if($_POST['action']=="add") {
-		$values['test'] = $User->Crypto->encrypt("test", $_POST['secret']);
-		$values['type'] = $_POST['type'];
+	if($POST->action=="add") {
+		$values['test'] = $User->Crypto->encrypt($User->Crypto->random_pseudo_bytes(32), $POST->secret);
+		$values['type'] = $POST->type;
 	}
 
 	# execute
-	if(!$Admin->object_modify("vaults", $_POST['action'], "id", $values)) 	{ $Result->show("danger",  _("Vault")." $_POST[action] "._("error"), true); }
-	else 																	{ $Result->show("success", _("Vault")." $_POST[action] "._("success"), true); }
+	if(!$Admin->object_modify("vaults", $POST->action, "id", $values)) 	{ $Result->show("danger",  _("Vault")." ".$User->get_post_action()." "._("error"), true); }
+	else 																	{ $Result->show("success", _("Vault")." ".$User->get_post_action()." "._("success"), true); }
 }

@@ -32,16 +32,16 @@ $User->check_user_session();
 		<td>
 			<?php
 			require_once('../../../functions/functions.php');
-			if(isset($_POST['ip_addr'])){
-				$first = $_POST['ip_addr'];
+			if(isset($POST->ip_addr)){
+				$first = $POST->ip_addr;
 			}else{
 				# get first IP address
-				$first  = $Subnets->transform_to_dotted($Addresses->get_first_available_address ($_POST['subnetId']));
+				$first  = $Subnets->transform_to_dotted($Addresses->get_first_available_address ($POST->subnetId));
 			}
 			# get subnet details
-			$subnet = (array) $Subnets->fetch_subnet(null, $_POST['subnetId']);
+			$subnet = (array) $Subnets->fetch_subnet(null, $POST->subnetId);
 			?>
-			<input type="text" name="ip_addr" class="ip_addr form-control" size="30" value="<?php print $first; ?>">
+			<input type="text" name="ip_addr" class="ip_addr form-control" size="30" value="<?php print escape_input($first); ?>">
 
 			<input type="hidden" name="subnetId" value="<?php print $subnet['id']; ?>">
 		</td>

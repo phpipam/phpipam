@@ -17,7 +17,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("locations", User::ACCESS_RW, true, true);
 }
 else {
@@ -29,16 +29,18 @@ else {
 $csrf = $User->Crypto->csrf_cookie ("create", "location");
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # get Location object
-if($_POST['action']!="add") {
-	$location = $Admin->fetch_object ("locations", "id", $_POST['id']);
+if($POST->action!="add") {
+	$location = $Admin->fetch_object ("locations", "id", $POST->id);
 	$location!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
+} else {
+	$location = new Params();
 }
 
 # disable edit on delete
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 $link = $readonly ? false : true;
 
 # fetch custom fields
@@ -48,7 +50,7 @@ $custom = $Tools->fetch_custom_fields('locations');
 
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('Location'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('Location'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -61,10 +63,10 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Name'); ?></th>
         	<td colspan="2">
-            	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($location->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="name" value="<?php print $location->name; ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print $location->id; ?>">
-            	<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+            	<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
         	</td>
         </tr>
 
@@ -83,7 +85,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Address'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="address" value="<?php print $Tools->strip_xss($location->address); ?>" placeholder='<?php print _('Address'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="address" value="<?php print $location->address; ?>" placeholder='<?php print _('Address'); ?>' <?php print $readonly; ?>>
             	<?php print _('or'); ?>
         	</td>
         	<td>
@@ -94,7 +96,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Latitude'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="lat" value="<?php print $Tools->strip_xss($location->lat); ?>" placeholder='<?php print _('Latitude'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="lat" value="<?php print $location->lat; ?>" placeholder='<?php print _('Latitude'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("latitude"); ?></span>
@@ -104,7 +106,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Longitude'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="long" value="<?php print $Tools->strip_xss($location->long); ?>" placeholder='<?php print _('Longitude'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="long" value="<?php print $location->long; ?>" placeholder='<?php print _('Longitude'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Longitude"); ?></span>
@@ -150,7 +152,7 @@ $custom = $Tools->fetch_custom_fields('locations');
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopupsReload"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editLocationSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editLocationSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="editLocationResult"></div>

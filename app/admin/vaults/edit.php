@@ -24,22 +24,22 @@ if ($User->get_module_permissions ("vaults")<User::ACCESS_RWA) { $Result->show("
 $csrf = $User->Crypto->csrf_cookie ("create", "vaults");
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['id'])) { $Result->show("danger", _("Invalid ID"), true, true); }
+if($POST->action!="add" && !is_numeric($POST->id)) { $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch vault for edit / add
-if($_POST['action']!="add") {
+if($POST->action!="add") {
 	# fetch vault details
-	$vault = $Admin->fetch_object ("vaults", "id", $_POST['id']);
+	$vault = $Admin->fetch_object ("vaults", "id", $POST->id);
 	# null ?
 	$vault===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 	# title
-	$title =  ucwords($_POST['action']) .' '._('vault').' '.$vault->name;
+	$title = $User->get_post_action().' '._('vault').' '.$vault->name;
 } else {
 	# generate new code
-	$vault = new StdClass;
+	$vault = new Params();
 	$vault->Vault_code = $User->Crypto->generate_html_safe_token(32);
 	# title
 	$title = _('Create new vault');
@@ -63,9 +63,9 @@ $custom = $Tools->fetch_custom_fields('vaults');
 	<tr>
 	    <td><?php print _('Vault name'); ?></td>
 	    <td>
-	    	<input type="text" name="name" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$vault->name); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
+	    	<input type="text" name="name" class="form-control input-sm" value="<?php print $vault->name; ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
 	        <input type="hidden" name="id" value="<?php print $vault->id; ?>">
-    		<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+    		<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 	    </td>
        	<td class="info2"><?php print _('Enter vault name'); ?></td>
@@ -88,11 +88,11 @@ $custom = $Tools->fetch_custom_fields('vaults');
     </tr>
 
 	<!-- secret -->
-	<?php if($_POST['action'] === "add") { ?>
+	<?php if($POST->action === "add") { ?>
 	<tr>
 	    <td><?php print _('Vault secret'); ?></td>
 	    <td><input type="password" id="secret" name="secret" class="form-control input-sm"></td>
-       	<td class="info2"><?php print _('Vault secret. Please store secret as it cannot be retreived if lost!'); ?></td>
+       	<td class="info2"><?php print _('Vault secret. Please store secret as it cannot be retrieved if lost!'); ?></td>
     </tr>
     <?php } ?>
 
@@ -100,7 +100,7 @@ $custom = $Tools->fetch_custom_fields('vaults');
     <tr>
     	<td><?php print _('Description'); ?></td>
     	<td>
-    		<input type="text" name="description" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$vault->description); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
+    		<input type="text" name="description" class="form-control input-sm" value="<?php print $vault->description; ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
     	</td>
     	<td class="info2"><?php print _('Enter description'); ?></td>
     </tr>
@@ -118,9 +118,9 @@ $custom = $Tools->fetch_custom_fields('vaults');
 		# all my fields
 		foreach($custom as $field) {
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $vault, $_POST['action'], $timepicker_index);
+    		$custom_input = $Tools->create_custom_field_input ($field, $vault, $timepicker_index);
     		// add datepicker index
-    		$timepicker_index = $timepicker_index++;
+    		$timepicker_index++;
             // print
 			print "<tr>";
 			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
@@ -141,8 +141,8 @@ $custom = $Tools->fetch_custom_fields('vaults');
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/vaults/edit-result.php" data-result_div="vaultEditResult" data-form='vaultEdit'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+		<button class='btn btn-sm btn-default submit_popup <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/vaults/edit-result.php" data-result_div="vaultEditResult" data-form='vaultEdit'>
+			<i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 
 	</div>

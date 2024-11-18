@@ -22,14 +22,14 @@ $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "nat", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
+$User->Crypto->csrf_cookie ("validate", "nat", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
 
 # get NAT object
-$nat = $Admin->fetch_object ("nat", "id", $_POST['id']);
+$nat = $Admin->fetch_object ("nat", "id", $POST->id);
 $nat!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
 # disable edit on delete
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 $link = $readonly ? false : true;
 ?>
 
@@ -40,19 +40,19 @@ $link = $readonly ? false : true;
 <div class="pContent">
     <?php
     # remove item from nat
-    $s = pf_json_decode($nat->src, true);
-    $d = pf_json_decode($nat->dst, true);
+    $s = db_json_decode($nat->src, true);
+    $d = db_json_decode($nat->dst, true);
 
-    if(is_array($s[$_POST['type']]))
-    $s[$_POST['type']] = array_diff($s[$_POST['type']], array($_POST['item_id']));
-    if(is_array($d[$_POST['type']]))
-    $d[$_POST['type']] = array_diff($d[$_POST['type']], array($_POST['item_id']));
+    if(is_array($s) && isset($s[$POST->type]))
+    $s[$POST->type] = array_diff($s[$POST->type], array($POST->item_id));
+    if(is_array($d) && isset($d[$POST->type]))
+    $d[$POST->type] = array_diff($d[$POST->type], array($POST->item_id));
 
     # save back and update
-    $src_new = json_encode(array_filter($s));
-    $dst_new = json_encode(array_filter($d));
+    $src_new = json_encode(array_filter($s ?? []));
+    $dst_new = json_encode(array_filter($d ?? []));
 
-    if($Admin->object_modify ("nat", "edit", "id", array("id"=>$_POST['id'], "src"=>$src_new, "dst"=>$dst_new))!==false) {
+    if($Admin->object_modify ("nat", "edit", "id", array("id"=>$POST->id, "src"=>$src_new, "dst"=>$dst_new))!==false) {
         $Result->show("success", "Object removed", false);
     }
     ?>

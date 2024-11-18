@@ -5,6 +5,24 @@
  *
  */
 
+/*  loading spinner functions
+*******************************/
+function showSpinner(hide_res = true) {
+    $('div.loading').show();
+    $('input[type=submit]').addClass("disabled");
+    $('button.passkey_login').addClass("disabled");
+    if (hide_res) {
+        $('#loginCheckPasskeys').fadeOut('fast');
+        $('#loginCheck').fadeOut('fast');
+    }
+}
+function hideSpinner() {
+    $('div.loading').fadeOut('fast');
+    $('input[type=submit]').removeClass("disabled");
+    $('button.passkey_login').removeClass("disabled");
+}
+
+
 
 $(document).ready(function() {
 
@@ -14,14 +32,7 @@ $('div.jqueryError').hide();
 $('div.loading').hide();
 
 
-/*	loading spinner functions
-*******************************/
-function showSpinner() {
-    $('div.loading').show();
-}
-function hideSpinner() {
-    $('div.loading').fadeOut('fast');
-}
+
 
 /*	Login redirect function if success
 ****************************************/
@@ -40,13 +51,12 @@ $('form#login').submit(function() {
 
     var logindata = $(this).serialize();
 
-    $('div#loginCheck').hide();
-    //post to check form
+    // post to check form
     $.post('app/login/login_check.php', logindata, function(data) {
         $('div#loginCheck').html(data).fadeIn('fast');
         //reload after 2 seconds if succeeded!
         if(data.search("alert alert-success") != -1) {
-            showSpinner();
+            showSpinner(false);
             //search for redirect
             if($('form#login input#phpipamredirect').length > 0) { setTimeout(function (){window.location=$('form#login input#phpipamredirect').val();}, 1000); }
             else 												 { setTimeout(loginRedirect, 1000);	}
@@ -134,6 +144,95 @@ $(".clearIPrequest").click(function() {
 
 });
 
+
+// passkey login
+$('.passkey_login').click(function() {
+    if(!$(this).hasClass('disabled')) {
+        // execute passkey login
+        startLogin();
+    }
+    // prevent submit
+    return false;
+})
+
 });
 
 
+
+function loginRedirect2() {
+    var base = $('.iebase').html();
+    window.location=base;
+}
+
+
+const startLogin = async (e) => {
+
+    // check if browser supports webauthn
+    if (!window.PublicKeyCredential) {
+        return
+    }
+
+    // show login window
+    showSpinner();
+
+    try {
+        // get and parse challenge
+        const challengeReq = await fetch('app/tools/user-menu/passkey_challenge.php')
+        const challengeB64 = await challengeReq.json()
+        const challenge    = atob(challengeB64) // base64-decode
+
+        // Format for WebAuthn API
+        const getOptions = {
+            publicKey: {
+                challenge: Uint8Array.from(challenge, c => c.charCodeAt(0)),
+                allowCredentials: [],
+                mediation: 'conditional',
+            },
+        }
+
+        // Call the WebAuthn browser API and get the response. This may throw, which you
+        // should handle. Example: user cancels or never interacts with the device.
+        const credential = await navigator.credentials.get(getOptions)
+        // console.log(credential)
+
+        // Format the credential to send to the server. This must match the format
+        // handed by the ResponseParser class. The formatting code below can be used
+        // without modification.
+        const dataForResponseParser = {
+            rawId: Array.from(new Uint8Array(credential.rawId)),
+            keyId: credential.id,
+            type: credential.type,
+            authenticatorData: Array.from(new Uint8Array(credential.response.authenticatorData)),
+            clientDataJSON: Array.from(new Uint8Array(credential.response.clientDataJSON)),
+            signature: Array.from(new Uint8Array(credential.response.signature)),
+            userHandle: Array.from(new Uint8Array(credential.response.userHandle)),
+        }
+
+        // Send this to your endpoint - adjust to your needs.
+        const request = new Request('app/login/passkey_login_check.php', {
+            body: JSON.stringify(dataForResponseParser),
+            headers: {
+                'Content-type': 'application/json',
+            },
+            method: 'POST',
+        })
+        const result = await fetch(request)
+
+        // process result by http status returned from passkey_login_check
+        if(result.status==200) {
+            $('#loginCheckPasskeys').html("<div class='alert alert-success'>Passkey authentication successfull</div>").show();
+            setTimeout(loginRedirect2, 1000)
+        }
+        else {
+            $('#loginCheckPasskeys').html("<div class='alert alert-danger'>Passkey authentication failed!</div>").show();
+            console.log(result)
+            hideSpinner()
+        }
+    }
+    // handle throwable error
+    catch(err) {
+        $('#loginCheckPasskeys').html("<div class='alert alert-danger'>Passkey authentication failed!</div>").show();
+        console.log(err)
+        hideSpinner();
+    }
+}

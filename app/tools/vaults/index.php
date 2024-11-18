@@ -13,7 +13,7 @@ elseif ($User->get_module_permissions ("vaults")==User::ACCESS_NONE) {
 }
 else {
 	// all vaults
-	if(!isset($_GET['subnetId'])) {
+	if(!isset($GET->subnetId)) {
 		include('all-vaults.php');
 	}
 	// vault

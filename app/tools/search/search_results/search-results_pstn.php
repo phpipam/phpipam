@@ -8,8 +8,8 @@
 $User->check_user_session();
 
 # get all custom fields
-$custom_pstn_fields  = $Params->pstn=="on"      ? $Tools->fetch_custom_fields ("pstnPrefixes") : array();
-$custom_pstnn_fields = $Params->pstn=="on"      ? $Tools->fetch_custom_fields ("pstnNumbers") : array();
+$custom_pstn_fields  = $GET->pstn=="on"      ? $Tools->fetch_custom_fields ("pstnPrefixes") : array();
+$custom_pstnn_fields = $GET->pstn=="on"      ? $Tools->fetch_custom_fields ("pstnNumbers") : array();
 
 $hidden_pstn_fields  = is_array(@$hidden_fields['pstnPrefixes']) ? $hidden_fields['pstnPrefixes'] : array();
 $hidden_pstnn_fields = is_array(@$hidden_fields['pstnNumbers']) ? $hidden_fields['pstnNumbers'] : array();

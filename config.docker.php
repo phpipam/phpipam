@@ -39,6 +39,11 @@ getenv('IPAM_BASE') ? define('BASE', getenv('IPAM_BASE')) : false;
 require('config.dist.php');
 
 /**
+ * Disable installation helper scripts /app/install/ after initial setup
+ */
+$disable_installer = filter_var(file_env('IPAM_DISABLE_INSTALLER', $disable_installer), FILTER_VALIDATE_BOOLEAN);
+
+/**
  * database connection details
  ******************************/
 $db['host']    = file_env('IPAM_DATABASE_HOST',    $db['host']);
@@ -47,6 +52,22 @@ $db['pass']    = file_env('IPAM_DATABASE_PASS',    $db['pass']);
 $db['name']    = file_env('IPAM_DATABASE_NAME',    $db['name']);
 $db['port']    = file_env('IPAM_DATABASE_PORT',    $db['port']);
 $db['webhost'] = file_env('IPAM_DATABASE_WEBHOST', $db['webhost']);
+
+/**
+ * Reverse proxy settings
+ *
+ * If operating behind a reverse proxy set IPAM_TRUST_X_FORWARDED=true to accept the following headers
+ *
+ * WARNING! These headers shoud be filtered and/or overwritten by the reverse-proxy to avoid potential abuse by end-clients.
+ *
+ *   X_FORWARDED_FOR
+ *   X_FORWARDED_HOST
+ *   X_FORWARDED_PORT
+ *   X_FORWARDED_PROTO
+ *   X_FORWARDED_SSL
+ *   X_FORWARDED_URI
+ */
+$trust_x_forwarded_headers = filter_var(file_env('IPAM_TRUST_X_FORWARDED', $trust_x_forwarded_headers), FILTER_VALIDATE_BOOLEAN);
 
 /**
  * proxy connection details
@@ -82,3 +103,9 @@ $cookie_samesite = file_env('COOKIE_SAMESITE', $cookie_samesite);
  * @var string
  */
 $session_storage = "database";
+
+
+/**
+ * General tweaks
+ ******************************/
+$config['footer_message'] = file_env('IPAM_FOOTER_MESSAGE', $config['footer_message']);

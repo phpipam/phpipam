@@ -3,37 +3,40 @@
 # Check we have been included and not called directly
 require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
+# check if site is demo
+$User->is_demo();
+
 /*
  * Discover new hosts with telnet scan
  *******************************/
 
 # get ports
-if(empty($_POST['port'])) 	  { $Result->show("danger", _('Please enter ports to scan').'!', true); }
+if(empty($POST->port)) 	  { $Result->show("danger", _('Please enter ports to scan').'!', true); }
 
 //verify ports
-$pcheck = pf_explode(";", str_replace(",",";",$_POST['port']));
+$pcheck = pf_explode(";", str_replace(",",";",$POST->port));
 foreach($pcheck as $p) {
 	if(!is_numeric($p)) {
-		$Result->show("danger", _("Invalid port").' ('.escape_input($p).')', true);
+		$Result->show("danger", _("Invalid port").' ('.$p.')', true);
 	}
 }
-$_POST['port'] = str_replace(";",",",$_POST['port']);
+$POST->port = str_replace(";",",",$POST->port);
 
 // verify subnetId
-if(!is_numeric($_POST['subnetId'])) { $Result->show("danger", _('Invalid subnet Identifier').'!', true); }
+if(!is_numeric($POST->subnetId)) { $Result->show("danger", _('Invalid subnet Identifier').'!', true); }
 
 # invoke CLI with threading support
-$cmd = $Scan->php_exec." ".dirname(__FILE__) . "/../../../functions/scan/subnet-scan-telnet-execute.php $_POST[subnetId] '$_POST[port]'";
+$cmd = $Scan->php_exec." ".dirname(__FILE__) . "/../../../functions/scan/subnet-scan-telnet-execute.php ".$POST->subnetId." '".$POST->port."'";
 
 # save result to $output
 exec($cmd, $output, $retval);
 
 # format result back to object
-$script_result = pf_json_decode($output[0]);
+$script_result = db_json_decode($output[0]);
 
 # json error
 if(json_last_error() !== JSON_ERROR_NONE)
-	$Result->show("danger", "Invalid JSON response"." - ".$Scan->json_error_decode(json_last_error())." - ".escape_input($output[0]), true);
+	$Result->show("danger", "Invalid JSON response"." - ".$Scan->json_error_decode(json_last_error())." - ".$output[0], true);
 
 //title
 print "<h5>"._('Scan results').":</h5><hr>";
@@ -47,10 +50,10 @@ elseif(!isset($script_result->values->alive)) 	{ $Result->show("danger", _("No a
 # ok
 else {
 	// fetch subnet and set nsid
-	$subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
+	$subnet = $Subnets->fetch_subnet ("id", $POST->subnetId);
 	$nsid = $subnet===false ? false : $subnet->nameserverId;
 
-	print "<form name='".$_POST['type']."-form' class='".$_POST['type']."-form'>";
+	print "<form name='".escape_input($POST->type)."-form' class='".escape_input($POST->type)."-form'>";
 	print "<input type='hidden' name='csrf_cookie' value='$csrf'>";
 	print "<table class='table table-striped table-top table-condensed'>";
 
@@ -97,7 +100,7 @@ else {
 	//submit
 	print "<tr>";
 	print "	<td colspan='4'>";
-	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='".$_POST['type']."' data-subnetId='".$_POST['subnetId']."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
+	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='".escape_input($POST->type)."' data-subnetId='".escape_input($POST->subnetId)."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
 	print "	</td>";
 	print "</tr>";
 
@@ -109,4 +112,4 @@ else {
 print "<div class='text-right' style='margin-top:7px;'><span class='muted'>Scan method: telnet</span></dov>";
 
 # show debug?
-if($_POST['debug']==1) 				{ print "<pre>"; print_r($output[0]); print "</pre>"; }
+if($POST->debug==1) 				{ print "<pre>"; print_r($output[0]); print "</pre>"; }

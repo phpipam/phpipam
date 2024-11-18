@@ -208,7 +208,6 @@ class SubnetsMenu {
 		# Close required number of existing levels
 		while ($this->nestedlevel > $level) {
 			$this->html[] = '</ul>';
-			$this->html[] = '</ui>';
 			$this->nestedlevel--;
 		}
 	}

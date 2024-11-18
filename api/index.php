@@ -39,6 +39,9 @@ $User     = new User ($Database);
 $Response = new Responses ();
 $Params   = new API_params ();
 
+# Disable automatic HTML escaping of strings for API calls
+$Database->html_escape_enabled = false;
+
 # get phpipam settings
 $settings = $Tools->get_settings();
 
@@ -51,6 +54,14 @@ if($_SERVER['REQUEST_METHOD']=="OPTIONS") {
 try {
 	// start measuring
 	$start = microtime(true);
+
+	/***
+	 * PHP8.1 - Integers and floats in result sets will now be returned using native PHP types instead of strings when using emulated prepared statements.
+	 * Add option to restore prior behaviour for API consumers.
+	 */
+	if (isset($_SERVER['HTTP_API_STRINGIFY_RESULTS']) ? filter_var($_SERVER['HTTP_API_STRINGIFY_RESULTS'], FILTER_VALIDATE_BOOLEAN) : Config::ValueOf("api_stringify_results")) {
+		$Database->setStringifyFetches();
+	}
 
 	/* Validate application ---------- */
 
@@ -87,7 +98,7 @@ try {
 		else {
 			$encrypted_params = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $encryption_method);
 			if ($encrypted_params === false) $Response->throw_exception(503, 'Invalid enc_request');
-			$encrypted_params = pf_json_decode($encrypted_params, true);
+			$encrypted_params = db_json_decode($encrypted_params, true);
 			$encrypted_params['app_id'] = $_GET['app_id'];
 
 			$Params->read($encrypted_params);
@@ -125,7 +136,7 @@ try {
 		if(strpos($content_type, "application/json")!==false){
 			$rawPostData = file_get_contents('php://input');
 			if (is_string($rawPostData) && !is_blank($rawPostData)) {
-				$json = pf_json_decode($rawPostData, true);
+				$json = db_json_decode($rawPostData, true);
 				if(!is_array($json)) {
 					$Response->throw_exception(400, 'Invalid JSON: '.json_last_error_msg());
 				}
@@ -313,11 +324,14 @@ if($time_response) {
 
 $customFields = isset($controller) ? $controller->custom_fields : [];
 //output result
-echo $Response->formulate_result ($result, $time, $app->app_nest_custom_fields, $customFields);
+echo $Response->formulate_result ($result, $time, is_object($app) ? $app->app_nest_custom_fields : null, $customFields);
 
 // update access time
-try { $Database->updateObject("api", ["app_id"=>$app->app_id, "app_last_access"=>date("Y-m-d H:i:s")], 'app_id'); }
-catch (Exception $e) {}
+if (is_object($app)) {
+	try {
+		$Database->updateObject("api", ["app_id" => $app->app_id, "app_last_access" => date("Y-m-d H:i:s")], 'app_id');
+	} catch (Exception $e) {}
+}
 
 // exit
 exit();

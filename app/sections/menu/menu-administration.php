@@ -3,7 +3,7 @@
 $User->check_user_session();
 
 # if section is not set
-if(!isset($_GET['section'])) { $_GET['section'] = ""; }
+if(!isset($GET->section)) { $GET->section = ""; }
 
 # admin items
 $admin_items = array();
@@ -145,7 +145,7 @@ $admin_items["locations"] = array (
     			if($perm > 0 ) {
     				# print only masters!
     				if($section->masterSection=="0" || empty($section->masterSection)) {
-    					if( ($section->name == $_GET['section']) || ($section->id == $_GET['section']) ) 	{ print "<li class='active'>"; }
+    					if( ($section->name == $GET->section) || ($section->id == $GET->section) ) 	{ print "<li class='active'>"; }
     					else 																				{ print "<li>"; }
 
     					print "	<a href='".create_link("subnets",$section->id)."' rel='tooltip' data-placement='bottom' title='$section->description'>$section->name</a>";
@@ -167,7 +167,7 @@ $admin_items["locations"] = array (
     <?php
     foreach ($admin_items as $k=>$t) {
         // active
-        $active = $_GET['section']==$k ? "active" : "";
+        $active = $GET->section==$k ? "active" : "";
 
         // clear name if set
         if($User->user->menuCompact=="1") {
@@ -181,7 +181,7 @@ $admin_items["locations"] = array (
     ?>
 
     <!-- all tools -->
-    <li class='<?php if($_GET['page']=="administration" && (!isset($_GET['section']) || is_blank($_GET['section']))) print "active"; ?>'>
+    <li class='<?php if($GET->page=="administration" && (!isset($GET->section) || is_blank($GET->section))) print "active"; ?>'>
          <a href='<?php print create_link("administration"); ?>'><i class='fa fa-list'></i> <?php print _('All items'); ?></a>
     </li>
 </ul>

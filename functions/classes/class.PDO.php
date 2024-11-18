@@ -73,7 +73,7 @@ abstract class DB {
 	public $dbname 	= '';		// needed for DB check
 
 	/**
-	 * hosnamr
+	 * hostname
 	 *
 	 * (default value: 'localhost')
 	 *
@@ -115,6 +115,20 @@ abstract class DB {
 	private $ctes_enabled = null;
 
 	/**
+	 * Guard against XSS attacks by html escaping strings by default
+	 *
+	 * @var boolean
+	 */
+	public $html_escape_enabled = true;
+
+	/**
+	 * List of tables and columns to exclude from html_escaping
+	 *
+	 * @var array
+	 */
+	private $html_escape_exceptions = [];
+
+	/**
 	 * Instal flag
 	 * @var bool
 	 * @access protected
@@ -149,6 +163,47 @@ abstract class DB {
 		if ($ssl) {
 			$this->ssl = $ssl;
 		}
+		$this->load_schema_exceptions();
+	}
+
+	/**
+	 * Process /db/SCHEMA and load columns commented with "__no_html_escape__"
+	 *
+	 * @return void
+	 */
+	private function load_schema_exceptions() {
+		$fh = fopen(dirname(__FILE__) . '/../../db/SCHEMA.sql', 'r');
+		if ($fh === false) {
+			return;
+		}
+
+		$lines = explode("\n", str_replace("\r\n", "\n", fread($fh, 100000)));
+		fclose($fh);
+
+		$current_table = "";
+
+		foreach ($lines as $line) {
+			if (strpos($line, 'CREATE TABLE') === 0) {
+				$tbl_name = explode('`', $line);
+				if (sizeof($tbl_name) >= 3) {
+					$current_table = $tbl_name[1];
+				}
+				continue;
+			}
+			if (!is_string($current_table)) {
+				continue;
+			}
+			if (strpos($line, ') ENGINE=') ===  0) {
+				$current_table = null;
+				continue;
+			}
+			if (strpos($line, '__no_html_escape__') !== false) {
+				$col_name = explode('`', $line);
+				if (sizeof($col_name) >= 3) {
+					$this->html_escape_exceptions[$current_table][$col_name[1]] = 1;
+				}
+			}
+		}
 	}
 
 	/**
@@ -162,7 +217,7 @@ abstract class DB {
 	public static function toDate($date = null) {
 		if (is_int($date)) {
 			return date('Y-m-d H:i:s', $date);
-		} else if (is_string($date)) {
+		} elseif (is_string($date)) {
 			return date('Y-m-d H:i:s', strtotime($date));
 		} else {
 			return date('Y-m-d H:i:s');
@@ -211,6 +266,16 @@ abstract class DB {
 	}
 
 	/**
+	 * Set PDO stringify fetches, issue #4043
+	 *
+	 * @param boolean $stringify
+	 * @return bool
+	 */
+	public function setStringifyFetches($stringify = true) {
+		return $this->pdo->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, $stringify);
+	}
+
+	/**
 	 * makeDsn function.
 	 *
 	 * @access protected
@@ -221,7 +286,7 @@ abstract class DB {
 	}
 
 	/**
-	 * resets conection.
+	 * resets connection.
 	 *
 	 * @access public
 	 * @return void
@@ -271,12 +336,12 @@ abstract class DB {
 		if ($len>1) {
 			if ($str[0] == "'" && $str[$len-1] == "'") {
 				return substr($str, 1, -1);
-			} else if ($str[0] == "'") {
+			} elseif ($str[0] == "'") {
 				return substr($str, 1);
-			} else if ($str[$len-1] == "'") {
+			} elseif ($str[$len-1] == "'") {
 				return substr($str, 0, -1);
 			}
-		} else if ($len>0) {
+		} elseif ($len>0) {
 			if ($str[0] == "'") {
 				return '';
 			}
@@ -292,7 +357,7 @@ abstract class DB {
 	 * @return bool
 	 */
 	public function isConnected() {
-		return ($this->pdo !== null);
+		return (@$this->pdo !== null);
 	}
 
 	/**
@@ -307,7 +372,7 @@ abstract class DB {
 			return $this->ctes_enabled;
 
 		$db = Config::ValueOf("db");
-		$ctes_enabled = filter_var($db['use_cte'], FILTER_VALIDATE_INT, ['options'=>['default' => 1, 'min_range' => 0, 'max_range' => 2]]);
+		$ctes_enabled = filter_var(@$db['use_cte'], FILTER_VALIDATE_INT, ['options'=>['default' => 1, 'min_range' => 0, 'max_range' => 2]]);
 
 		if ($ctes_enabled===0) {	            // Disable CTE Support
 			$this->ctes_enabled = false;
@@ -352,7 +417,7 @@ abstract class DB {
 
 		$statement = $this->pdo->prepare($query);
 
-		//debuq
+		//debug
 		$this->log_query($statement, $values);
 
 		if (is_object($statement)) {
@@ -365,6 +430,7 @@ abstract class DB {
 	/**
 	 * Emulate a SQL CTE query using temporary tables
 	 *
+	 * @param   string  $tableName        Database table name
 	 * @param   string  $schema           Temporary table schema e.g (int(11))
 	 * @param   string  $anchor_query     CTE Anchor query (may contain ?)
 	 * @param   array   $anchor_args      CTE Anchor args
@@ -373,14 +439,14 @@ abstract class DB {
 	 *
 	 * @return  mixed
 	 */
-	public function emulate_cte_query($schema, $anchor_query, $anchor_args, $recursive_query, $results_query, $cleanup=true) {
+	public function emulate_cte_query($tableName, $schema, $anchor_query, $anchor_args, $recursive_query, $results_query, $cleanup=true) {
 		$results = false;
 
 		/**
 		 * Reset engine type if set in config.php (MEMORY or InnoDB)
 		 */
 		$db = Config::ValueOf('db');
-		$tmptable_engine_type = ($db['tmptable_engine_type']=="InnoDB") ? "InnoDB" : "MEMORY";
+		$tmptable_engine_type = (@$db['tmptable_engine_type']=="InnoDB") ? "InnoDB" : "MEMORY";
 
 		try {
 			// Emulate SQL CTE query using temporary tables.
@@ -411,7 +477,7 @@ abstract class DB {
 			} while ($result == 1 && $rowCount > 0);
 
 			// Run $result_query using cte temporary table results
-			$results = $this->getObjectsQuery($results_query);
+			$results = $this->getObjectsQuery($tableName, $results_query);
 
 		} catch (Exception $e) {
 			if ($cleanup)
@@ -457,7 +523,7 @@ abstract class DB {
 		$tableName = $this->escape($tableName);
 		$statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'`;');
 
-		//debuq
+		//debug
 		$this->log_query ($statement);
 		$statement->execute();
 
@@ -482,7 +548,7 @@ abstract class DB {
 		$tableName = $this->escape($tableName);
 		$statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'` where `'.$method.'` '.$operator.' ?;');
 
-		//debuq
+		//debug
 		$this->log_query ($statement, (array) $value);
 		$statement->execute(array($value));
 
@@ -509,12 +575,11 @@ abstract class DB {
 		//we cannot update an object without an id specified so quit
 		if (!isset($obj[$primarykey])) {
 			throw new Exception('Missing primary key');
-			return false;
 		}
 
 		$tableName = $this->escape($tableName);
 
-		//get the objects id from the provided object and knock it off from the object so we dont try to update it
+		//get the objects id from the provided object and knock it off from the object so we don't try to update it
 		$objId[] = $obj[$primarykey];
 		unset($obj[$primarykey]);
 
@@ -551,7 +616,7 @@ abstract class DB {
 		//merge the parameters and values
 		$paramValues = array_merge(array_values($obj), $objId);
 
-		//debuq
+		//debug
 		$this->log_query ($statement, $paramValues);
 		//run the update on the object
 		return $statement->execute($paramValues);
@@ -653,6 +718,52 @@ abstract class DB {
 		return is_object($this->getObject($tableName, $id));
 	}
 
+
+	/**
+	 * Anti stored-XSS: Safe by default strategy
+	 *
+	 * Call htmlentities() on all string data returned from the database to ensure it is safe to pass to print().
+	 * Areas of code that require unsafe HTML symbols will be updated to explicitly call html_entity_decode().
+	 *
+	 * @param string $tableName
+	 * @param mixed $data
+	 * @return mixed
+	 */
+	private function html_escape_strings($tableName, &$data) {
+		// Disabled globally?
+		if (!$this->html_escape_enabled) {
+			return $data;
+		}
+
+		if (is_array($data)) {
+			foreach ($data as $i => $v) {
+				if (is_array($v) || is_object($v)) {
+					$data[$i] = $this->html_escape_strings($tableName, $v);
+				}
+			}
+			return $data;
+		}
+
+		if (is_object($data)) {
+			foreach ($data as $k => $v) {
+				if ($tableName === "no_html_escape" || !is_string($v)) {
+					continue;
+				}
+				if (isset($this->html_escape_exceptions[$tableName]) && isset($this->html_escape_exceptions[$tableName][$k])) {
+					continue;
+				}
+				$data->{$k} = htmlentities($v, ENT_QUOTES, 'UTF-8');
+			}
+			return $data;
+		}
+
+		if (is_string($data)) {
+			return htmlentities($data, ENT_QUOTES, 'UTF-8');
+		}
+
+		return $data;
+	}
+
 	/**
 	 * Get a filtered list of objects from the database.
 	 *
@@ -695,52 +806,20 @@ abstract class DB {
 			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
 		}
 
-		return $results;
+		return $this->html_escape_strings($tableName, $results);
 	}
-
-
-	/**
-	 * use this function to conserve memory and read rows one by one rather than reading all of them
-	 *
-	 * @access public
-	 * @param mixed $query (default: null)
-	 * @param array $values (default: array())
-	 * @param mixed $callback (default: null)
-	 * @return bool
-	 */
-	public function getObjectsQueryIncremental($query = null, $values = array(), $callback = null) {
-		if (!$this->isConnected()) $this->connect();
-
-		$statement = $this->pdo->prepare($query);
-
-		//debuq
-		$this->log_query ($statement, $values);
-		$statement->execute((array)$values);
-
-		if (is_object($statement)) {
-			if ($callback) {
-				while ($newObj = $statement->fetchObject('stdClass')) {
-					if ($callback($newObj)===false) {
-						return false;
-					}
-				}
-			}
-		}
-
-		return true;
-	}
-
 
 	/**
 	 * Get all objects matching values
 	 *
 	 * @access public
+	 * @param string $tableName
 	 * @param mixed $query (default: null)
 	 * @param array $values (default: array())
 	 * @param string $class (default: 'stdClass')
 	 * @return array
 	 */
-	public function getObjectsQuery($query = null, $values = array(), $class = 'stdClass') {
+	public function getObjectsQuery($tableName, $query = null, $values = array(), $class = 'stdClass') {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
@@ -755,7 +834,7 @@ abstract class DB {
 			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
 		}
 
-		return $results;
+		return $this->html_escape_strings($tableName, $results);
 	}
 
 	/**
@@ -780,7 +859,7 @@ abstract class DB {
 			$results = $statement->fetchAll(PDO::FETCH_KEY_PAIR);
 		}
 
-		return $results;
+		return $this->html_escape_strings($tableName, $results);
 	}
 
 	/**
@@ -807,7 +886,7 @@ abstract class DB {
 			$statement = $this->pdo->prepare('SELECT * FROM `'.$tableName.'` LIMIT 1;');
 		}
 
-		//debuq
+		//debug
 		$this->log_query ($statement, array($id));
 		$statement->execute();
 
@@ -817,7 +896,7 @@ abstract class DB {
 		if ($resultObj === false) {
 			return null;
 		} else {
-			return $resultObj;
+			return $this->html_escape_strings($tableName, $resultObj);
 		}
 	}
 
@@ -825,16 +904,17 @@ abstract class DB {
 	 * Fetches single object from provided query
 	 *
 	 * @access public
+	 * @param string $tableName
 	 * @param mixed $query (default: null)
 	 * @param array $values (default: array())
 	 * @param string $class (default: 'stdClass')
 	 * @return object|null
 	 */
-	public function getObjectQuery($query = null, $values = array(), $class = 'stdClass') {
+	public function getObjectQuery($tableName, $query = null, $values = array(), $class = 'stdClass') {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
-		//debuq
+		//debug
 		$this->log_query ($statement, $values);
 		$statement->execute((array)$values);
 
@@ -843,27 +923,7 @@ abstract class DB {
 		if ($resultObj === false) {
 			return null;
 		} else {
-			return $resultObj;
-		}
-	}
-
-	/**
-	 * Get single value
-	 *
-	 * @access public
-	 * @param mixed $query (default: null)
-	 * @param array $values (default: array())
-	 * @param string $class (default: 'stdClass')
-	 * @return mixed
-	 */
-	public function getValueQuery($query = null, $values = array(), $class = 'stdClass') {
-		$obj = $this->getObjectQuery($query, $values, $class);
-
-		if (is_object($obj)) {
-			$obj = (array)$obj;
-			return reset($obj);
-		} else {
-			return null;
+			return $this->html_escape_strings($tableName, $resultObj);
 		}
 	}
 
@@ -888,7 +948,7 @@ abstract class DB {
 	 * Searches for object in database
 	 *
 	 * @access public
-	 * @param mixed $table
+	 * @param string $table
 	 * @param mixed $field
 	 * @param mixed $value
 	 * @param string $sortField (default: 'id')
@@ -913,9 +973,9 @@ abstract class DB {
 
 	    // subnets
 	    if ($table=='subnets' && $sortField=='subnet') {
-	        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY LPAD(`subnet`,39,0) ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+	        return $this->getObjectsQuery($table, 'SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY LPAD(`subnet`,39,0) ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
 	    } else {
-	        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+	        return $this->getObjectsQuery($table, 'SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
 	    }
 	}
 
@@ -923,7 +983,7 @@ abstract class DB {
 	 * Searches for single object.
 	 *
 	 * @access public
-	 * @param mixed $table
+	 * @param string $table
 	 * @param mixed $field
 	 * @param mixed $value
 	 * @return object|null
@@ -932,32 +992,7 @@ abstract class DB {
 		$table = $this->escape($table);
 		$field = $this->escape($field);
 
-		return $this->getObjectQuery('SELECT * FROM `' . $table . '` WHERE `' . $field . '` = ? LIMIT 1;', array($value));
-	}
-
-	/**
-	 * Get list of items.
-	 *
-	 * @access public
-	 * @param mixed $query (default: null)
-	 * @param array $values (default: array())
-	 * @param string $class (default: 'stdClass')
-	 * @return array
-	 */
-	public function getList($query = null, $values = array(), $class = 'stdClass') {
-		$objs = $this->getObjectsQuery($query, $values, $class);
-
-		$list = array();
-
-		if (!is_array($objs))
-			return $list;
-
-		foreach ($objs as $obj) {
-			$columns = array_values((array)$obj);
-			$list[] = $columns[0];
-		}
-
-		return $list;
+		return $this->getObjectQuery($table, 'SELECT * FROM `' . $table . '` WHERE `' . $field . '` = ? LIMIT 1;', array($value));
 	}
 
 	/**
@@ -1035,7 +1070,7 @@ abstract class DB {
 	 * @return bool
 	 */
 	public function emptyTable($tableName) {
-		//escape talbe name
+		//escape table name
 		$tableName = $this->escape($tableName);
 		//execute
 		return $this->runQuery('TRUNCATE TABLE `'.$tableName.'`;');
@@ -1058,6 +1093,8 @@ abstract class DB {
 	 * @return bool
 	 */
 	public function commit() {
+		if (!$this->pdo->inTransaction())
+			return false;
 		return $this->pdo->commit();
 	}
 
@@ -1068,6 +1105,8 @@ abstract class DB {
 	 * @return bool
 	 */
 	public function rollBack() {
+		if (!$this->pdo->inTransaction())
+			return false;
 		return $this->pdo->rollBack();
 	}
 }
@@ -1093,7 +1132,7 @@ class Database_PDO extends DB {
 	protected $pdo_ssl_opts = array ();
 
 	/**
-	 * flag if installation is happenig!
+	 * flag if installation is happening!
 	 *
 	 * (default value: false)
 	 *
@@ -1205,8 +1244,8 @@ class Database_PDO extends DB {
 	 * @return array
 	 */
 	public function getColumnInfo() {
-		$columns = $this->getObjectsQuery("
-			SELECT `table_name`, `column_name`, `column_default`, `is_nullable`, `data_type`,`column_key`, `extra`
+		$columns = $this->getObjectsQuery("no_html_escape",
+			"SELECT `table_name`, `column_name`, `column_default`, `is_nullable`, `data_type`,`column_key`, `extra`
 			FROM `columns`
 			WHERE `table_schema`='" . $this->dbname . "';
 		");
@@ -1240,8 +1279,7 @@ class Database_PDO extends DB {
     	$tableName = $this->escape($tableName);
     	$field = $this->escape($field);
     	// fetch and return
-    	return $this->getObjectQuery("SHOW FIELDS FROM `$tableName` where Field = ?", array($field));
-
+    	return $this->getObjectQuery("no_html_escape", "SHOW FIELDS FROM `$tableName` where Field = ?", array($field));
 	}
 
 	/**
@@ -1251,12 +1289,12 @@ class Database_PDO extends DB {
 	 * @return array
 	 */
 	public function getForeignKeyInfo() {
-		$foreignLinks = $this->getObjectsQuery("
-			SELECT i.`table_name`, k.`column_name`, i.`constraint_type`, i.`constraint_name`, k.`referenced_table_name`, k.`referenced_column_name`
+		$foreignLinks = $this->getObjectsQuery("no_html_escape",
+			"SELECT i.`table_name`, k.`column_name`, i.`constraint_type`, i.`constraint_name`, k.`referenced_table_name`, k.`referenced_column_name`
 			FROM `table_constraints` i
 			LEFT JOIN `key_column_usage` k ON i.`constraint_name` = k.`constraint_name`
 			WHERE i.`constraint_type` = 'FOREIGN KEY' AND i.`table_schema`='" . $this->dbname . "';
-		");
+			");
 
 		$foreignLinksByTable = array();
 		$foreignLinksByRefTable = array();

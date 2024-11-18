@@ -17,7 +17,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("vlan", User::ACCESS_RW, true, true);
 }
 else {
@@ -27,40 +27,43 @@ else {
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "vlan");
 
-# strip tags - XSS
-$_POST = $User->strip_input_tags ($_POST);
-
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # fetch vlan details
-$vlan = $Admin->fetch_object ("vlans", "vlanid", @$_POST['vlanid']);
-$vlan = $vlan!==false ? (array) $vlan : array();
+$vlan = $Admin->fetch_object ("vlans", "vlanid", $POST->vlanid);
+if (!is_object($vlan)) {
+	$vlan  = new Params;
+}
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('vlans');
 
 # set readonly flag
-$readonly = $_POST['action']=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 
 # set form name!
-if(isset($_POST['fromSubnet'])) { $formId = "vlanManagementEditFromSubnet"; }
+if(isset($POST->fromSubnet)) { $formId = "vlanManagementEditFromSubnet"; }
 else 							{ $formId = "vlanManagementEdit"; }
 
 # domain
-if(!isset($_POST['domain'])) 	{ $_POST['domain']=1; }
+if(!isset($POST->domain)) 	{ $POST->domain=1; }
 
 # fetch l2 domain
-if($_POST['action']=="add") {
+if($POST->action=="add") {
 	# all
-	if (@$_POST['domain']=="all") {
+	if ($POST->domain=="all") {
 		$vlan_domains = $Admin->fetch_all_objects("vlanDomains");
 	} else {
-		$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $_POST['domain']);
+		$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $POST->domain);
 	}
-	if(isset($_POST['number']))
-	$vlan['number'] = $_POST['number'];
+	if(isset($POST->number)) {
+		if (!is_numeric($POST->number)) {
+			$Result->show("danger", _("Invalid ID"), true, true);
+		}
+		$vlan->number = $POST->number;
+	}
 } else {
-		$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $vlan['domainId']);
+		$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $vlan->domainId);
 }
 if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true, true); }
 ?>
@@ -73,7 +76,7 @@ $(document).ready(function(){
 
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('VLAN'); ?></div>
+<div class="pHeader"><?php print $User->get_post_action(); ?> <?php print _('VLAN'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -86,7 +89,7 @@ $(document).ready(function(){
 		<th>
 		<?php
 		# not all
-		if (@$_POST['domain']!="all") {
+		if ($POST->domain!="all") {
 			print $vlan_domain->name." (".$vlan_domain->description.")";
 		} else {
 			print "<select name='domainid' class='form-control input-sm'>";
@@ -105,7 +108,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Number'); ?></td>
 		<td>
-			<input type="text" class="number form-control input-sm" name="number" placeholder="<?php print _('VLAN number'); ?>" value="<?php print $Tools->strip_xss(@$vlan['number']); ?><?php print @$_POST['vlanNum']; ?>" <?php print $readonly; ?>>
+			<input type="text" class="number form-control input-sm" name="number" placeholder="<?php print _('VLAN number'); ?>" value="<?php print $vlan->number; ?><?php print escape_input($POST->vlanNum); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -113,7 +116,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('VLAN name'); ?>" value="<?php print $Tools->strip_xss(@$vlan['name']); ?>" <?php print $readonly; ?>>
+			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('VLAN name'); ?>" value="<?php print $vlan->name; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -121,12 +124,12 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Description'); ?></td>
 		<td>
-			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$vlan['description']); ?>" <?php print $readonly; ?>>
-			<input type="hidden" name="vlanid" value="<?php print @$_POST['vlanid']; ?>">
-			<?php if(@$_POST['domain']!=="all") { ?>
+			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $vlan->description; ?>" <?php print $readonly; ?>>
+			<input type="hidden" name="vlanid" value="<?php print escape_input($POST->vlanid); ?>">
+			<?php if($POST->domain!=="all") { ?>
 			<input type="hidden" name="domainid" value="<?php print $vlan_domain->id; ?>">
 			<?php } ?>
-			<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
@@ -149,7 +152,7 @@ $(document).ready(function(){
 
         if($customers!=false) {
             foreach($customers as $customer) {
-                if ($customer->id == $vlan['customer_id'])    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
+                if ($customer->id == $vlan->customer_id)    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
                 else                                          { print '<option value="'. $customer->id .'">'.$customer->title.'</option>'; }
             }
         }
@@ -161,7 +164,7 @@ $(document).ready(function(){
 	?>
 
 
-	<?php if($_POST['action']=="add" || $_POST['action']=="edit") { ?>
+	<?php if($POST->action=="add" || $POST->action=="edit") { ?>
     <!-- require unique -->
     <tr>
 	    <td colspan="2"><hr></td>
@@ -206,7 +209,7 @@ $(document).ready(function(){
 
 	<?php
 	//print delete warning
-	if($_POST['action'] == "delete")	{ $Result->show("warning", _('Warning').':</strong> '._('removing VLAN will also remove VLAN reference from belonging subnets')."!", false);  }
+	if($POST->action == "delete")	{ $Result->show("warning", _('Warning').':</strong> '._('removing VLAN will also remove VLAN reference from belonging subnets')."!", false);  }
 	?>
 </div>
 
@@ -214,8 +217,8 @@ $(document).ready(function(){
 <!-- footer -->
 <div class="pFooter">
 	<div class="btn-group">
-		<button class="btn btn-sm btn-default <?php if(isset($_POST['fromSubnet'])) { print "hidePopup2"; } else { print "hidePopups"; } ?>"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?> vlanManagementEditFromSubnetButton" id="editVLANsubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
+		<button class="btn btn-sm btn-default <?php if(isset($POST->fromSubnet)) { print "hidePopup2"; } else { print "hidePopups"; } ?>"><?php print _('Cancel'); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?> vlanManagementEditFromSubnetButton" id="editVLANsubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 
 	<!-- result -->

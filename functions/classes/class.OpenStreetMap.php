@@ -134,7 +134,7 @@ class OpenStreetMap extends Common_functions
         }
         $this->markers["$type-$id"] = 1;
 
-        // Add geoJSON locaiton marker data to map
+        // Add geoJSON location marker data to map
         $popuptxt = "<h5><a href='" . create_link("tools", $type, $id) . "'>" . $title . "</a></h5>";
         $popuptxt .= is_string($desc) ? "<span class=\'text-muted\'>" . $desc . "</span>" : "";
         $popuptxt = str_replace(["\r\n", "\n", "\r"], "<br>", $popuptxt);
@@ -301,11 +301,11 @@ class OpenStreetMap extends Common_functions
         $hash = $this->hash_from_address($address);
 
         if ($only_recent) {
-            $query = 'SELECT * FROM nominatim_cache WHERE sha256=? AND date > DATE_SUB(NOW(), INTERVAL 1 DAY);';
+            $query = 'SELECT * FROM `nominatim_cache` WHERE `sha256`=? AND date > DATE_SUB(NOW(), INTERVAL 1 DAY);';
         } else {
-            $query = 'SELECT * FROM nominatim_cache WHERE sha256=?;';
+            $query = 'SELECT * FROM `nominatim_cache` WHERE `sha256`=?;';
         }
-        $cached_result = $this->Database->getObjectQuery($query, [$hash]);
+        $cached_result = $this->Database->getObjectQuery("nominatim_cache", $query, [$hash]);
 
         return is_object($cached_result) ? $cached_result : false;
     }
@@ -347,7 +347,7 @@ class OpenStreetMap extends Common_functions
             return $results;
         }
 
-        if (Config::ValueOf('offline_mode')) {
+        if (Config::ValueOf('offline_mode') || Config::ValueOf('disable_geoip_lookups')) {
             $result['error'] = _('Internet access disabled in config.php');
             return $result;
         }
@@ -361,7 +361,7 @@ class OpenStreetMap extends Common_functions
             // Check cached results from the last 24h
             $cached_result = $this->search_geo_cache($address, true);
             if ($cached_result) {
-                $json = pf_json_decode($cached_result->lat_lng, true);
+                $json = db_json_decode($cached_result->lat_lng, true);
                 if (is_array($json)) {
                     return $json;
                 }
@@ -381,7 +381,7 @@ class OpenStreetMap extends Common_functions
                 // Lookup failed - Check cache again with no time limit.
                 $cached_result = $this->search_geo_cache($address, false);
                 if ($cached_result) {
-                    $json = pf_json_decode($cached_result->lat_lng, true);
+                    $json = db_json_decode($cached_result->lat_lng, true);
                     if (is_array($json)) {
                         return $json;
                     }
@@ -390,7 +390,7 @@ class OpenStreetMap extends Common_functions
                 throw new \Exception($lookup['error_msg']);
             }
 
-            $geo = pf_json_decode($lookup['result'], true);
+            $geo = db_json_decode($lookup['result'], true);
 
             if (!is_array($geo)) {
                 throw new \Exception(_('Invalid json response from nominatim'));

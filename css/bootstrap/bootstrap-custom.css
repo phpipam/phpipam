@@ -2070,10 +2070,19 @@ div#login .login th {
 div#login .login td {
 	text-align: right;
 }
-div#loginCheck .alert {
-	margin: auto;
+div#loginCheck .alert,
+div#loginCheckPasskeys .alert {
+/* 	margin: auto; */
 	margin-top: 10px;
-	width: 500px;
+	padding: 5px;
+/* 	width: 500px; */
+}
+div#loginCheck .alert-danger:before,
+div#loginCheckPasskeys .alert-danger:before {
+   font-family: "FontAwesome";
+   content: "\f071";
+   padding-right: 8px;
+   color: #a94442;
 }
 .iprequest {
 	background: #F1FAFE;
@@ -2628,7 +2637,7 @@ div.jqueryError a {
     font-size: 14px;
 }
 .dropdown-menu {
-	z-index: 50 !important;
+	z-index: 100 !important;
 }
 #popup .dropdown-menu {
 	z-index: 1000 !important;

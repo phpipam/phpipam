@@ -11,18 +11,18 @@ $User->check_user_session();
 $PowerDNS = new PowerDNS ($Database);
 
 # checks
-if(!is_numeric($_GET['subnetId']))		{ $Result->show("danger", _("Invalid ID"), true); }
-if(!is_numeric($_GET['section']))		{ $Result->show("danger", _("Invalid ID"), true); }
-if(!is_numeric($_GET['ipaddrid']))		{ $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($GET->subnetId))		{ $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($GET->section))		{ $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($GET->ipaddrid))		{ $Result->show("danger", _("Invalid ID"), true); }
 
 # get IP a nd subnet details
-$address = (array) $Addresses-> fetch_address(null, $_GET['ipaddrid']);
+$address = (array) $Addresses-> fetch_address(null, $GET->ipaddrid);
 $subnet  = (array) $Subnets->fetch_subnet(null, $address['subnetId']);
 
 # fetch all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
-$hidden_cfields = pf_json_decode($User->settings->hiddenCustomFields, true) ? : ['ipaddresses' => null];
+$hidden_cfields = db_json_decode($User->settings->hiddenCustomFields, true) ? : ['ipaddresses' => null];
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
@@ -40,7 +40,7 @@ $subnet_permission  = $Subnets->check_permission($User->user, $subnet['id']);
 $section_permission = $Sections->check_permission ($User->user, $subnet['sectionId']);
 
 # checks
-if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesnt exist
+if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesn't exist
 if($subnet_permission == 0)				{ $Result->show("danger", _('You do not have permission to access this network'), true); }		//not allowed to access
 
  # resolve dns name
@@ -88,65 +88,64 @@ if(sizeof($address)>1) {
 
     // print tabs
     print "<ul class='nav nav-tabs ip-det-switcher' style='margin-bottom:20px;'>";
-    $active = !isset($_GET['tab']) ? "active" : "";
+    $active = !isset($GET->tab) ? "active" : "";
     print " <li role='presentation' class='$active' data-target='div_details'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'])."'>"._("IP address details")."</a></li>";
     if($User->is_admin(false)) {
-    $active = @$_GET['tab']=="permissions" ? "active" : "";
+    $active = $GET->tab=="permissions" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "permissions")."'>"._("Permissions")."</a></li>";
     }
     if($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User::ACCESS_R) {
-    $active = @$_GET['tab']=="nat" ? "active" : "";
+    $active = $GET->tab=="nat" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "nat")."'>"._("NAT")."</a></li>";
     }
-    $active = @$_GET['tab']=="linked" ? "active" : "";
+    $active = $GET->tab=="linked" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "linked")."'>"._("Linked addresses")."</a></li>";
     if($mcast) {
-    $active = @$_GET['tab']=="multicast" ? "active" : "";
+    $active = $GET->tab=="multicast" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "multicast")."'>"._("Multicast")."</a></li>";
     }
     if($User->settings->enableLocations==1) {
-    $active = @$_GET['tab']=="location" ? "active" : "";
+    $active = $GET->tab=="location" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "location")."'>"._("Location")."</a></li>";
     }
-    $active = @$_GET['tab']=="changelog" ? "active" : "";
+    $active = $GET->tab=="changelog" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "changelog")."'>"._("Changelog")."</a></li>";
     print "</ul>";
 
     // address details
-    if(!isset($_GET['tab']))
+    if(!isset($GET->tab))
 	include("address-details/address-details.php");
 
     // address details
     if($User->is_admin(false)) {
-    if(@$_GET['tab']=="permissions")
+    if($GET->tab=="permissions")
 	include("address-details/address-details-permissions.php");
     }
 
     //nat
     if($User->settings->enableNAT==1) {
-    if(@$_GET['tab']=="nat")
+    if($GET->tab=="nat")
 	include("address-details/address-details-nat.php");
     }
 
     // Linked addresses
-    if(@$_GET['tab']=="linked")
+    if($GET->tab=="linked")
 	include("address-details/address-details-linked.php");
 
     // Multicast addresses
     if($mcast) {
-    if(@$_GET['tab']=="multicast")
+    if($GET->tab=="multicast")
 	include("address-details/address-details-multicast.php");
     }
 
-    if(@$_GET['tab']=="location")
+    if($GET->tab=="location")
     include("address-details/address-details-location.php");
 
     // changelog
-    if(@$_GET['tab']=="changelog")
+    if($GET->tab=="changelog")
 	include("address-details/address-changelog.php");
 }
 # not exisitng
 else {
 	$Result->show("danger", _("IP address not existing in database")."!", true);
 }
-?>

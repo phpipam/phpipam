@@ -18,32 +18,35 @@ $Zones 	  = new FirewallZones($Database);
 # validate session parameters
 $User->check_user_session();
 
-# validate $_POST['id'] values
-if (!preg_match('/^[0-9]+$/i', $_POST['id'])) {
+# validate $POST->id values
+if (!preg_match('/^[0-9]+$/i', $POST->id)) {
 	$Result->show("danger", _("Invalid ID. Do not manipulate the POST values!"), true);
 }
 
-# validate $_POST['action'] values
-if ($_POST['action'] != 'add' && $_POST['action'] != 'edit' && $_POST['action'] != 'delete') {
+# validate $POST->action values
+if ($POST->action != 'add' && $POST->action != 'edit' && $POST->action != 'delete') {
 	$Result->show("danger", _("Invalid action. Do not manipulate the POST values!"), true);
 }
 
 # disable edit on delete
-$readonly = $_POST['action']=="delete" ? "disabled" : "";
+$readonly = $POST->action=="delete" ? "disabled" : "";
 
 # fetch all firewall zones
 $firewallZones = $Zones->get_zones();
 if (!is_array($firewallZones)) { $firewallZones = array(); }
 
 # fetch settings
-$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings,true);
+$firewallZoneSettings = db_json_decode($User->settings->firewallZoneSettings,true);
 
 # fetch all devices
 $devices = $Tools->fetch_multiple_objects ("devices", "type", $firewallZoneSettings['deviceType']);
 
 # fetch old mapping
-if ($_POST['action'] != 'add') {
-	$mapping = $Zones->get_zone_mapping($_POST['id']);
+if ($POST->action != 'add') {
+	$mapping = $Zones->get_zone_mapping($POST->id);
+}
+if (!isset($mapping) || !is_object($mapping)) {
+	$mapping = new Params();
 }
 ?>
 <!-- header  -->
@@ -83,7 +86,7 @@ if ($_POST['action'] != 'add') {
 		<td>
 			<div class="zoneInformation">
 				<?php
-				if ($mapping->zoneId) {
+				if ($mapping->id) {
 					# return the zone details
 					$Zones->get_zone_detail($mapping->id);
 				}
@@ -134,13 +137,13 @@ if ($_POST['action'] != 'add') {
 	</tr>
 	</table>
 	<!-- transmit the action and firewall zone id -->
-	<input type="hidden" name="action" value="<?php print escape_input($_POST['action']); ?>">
-	<input type="hidden" name="id" value="<?php print escape_input($_POST['id']); ?>">
+	<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
+	<input type="hidden" name="id" value="<?php print escape_input($POST->id); ?>">
 	</form>
 
 	<?php
 	# print delete warning
-	if($_POST['action'] == "delete"){
+	if($POST->action == "delete"){
 		$Result->show("warning", "<strong>"._('Warning').":</strong> "._("You are about to remove the firewall to zone mapping!"), false);
 	}
 	?>
@@ -149,7 +152,7 @@ if ($_POST['action'] != 'add') {
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editMappingSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editMappingSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="mapping-edit-result"></div>

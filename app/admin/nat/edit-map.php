@@ -13,10 +13,8 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-# strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 }
 else {
@@ -24,13 +22,13 @@ else {
 }
 
 # validations
-if($_POST['object_type']!=="subnets" && $_POST['object_type']!=="ipaddresses")
+if($POST->object_type!=="subnets" && $POST->object_type!=="ipaddresses")
                                 { $Result->show("danger", _("Invalid type"), true, true); }
 
-$nat = $Admin->fetch_object("nat", "id", $_POST['id']);
+$nat = $Admin->fetch_object("nat", "id", $POST->id);
 if($nat===false)                { $Result->show("danger", _("Invalid Id"), true, true); }
 
-$object = $Admin->fetch_object($_POST['object_type'], "id", $_POST['object_id']);
+$object = $Admin->fetch_object($POST->object_type, "id", $POST->object_id);
 if($object===false)             { $Result->show("danger", _("Invalid object Id"), true, true); }
 
 
@@ -111,7 +109,7 @@ $icon =  $n->type=="static" ? "fa-arrows-h" : "fa-long-arrow-right";
 
     <h4><?php print _("New object"); ?>
     <?php
-    if($_POST['object_type']=="subnets")    { print $Tools->transform_address($object->subnet,"dotted")."/".$object->mask; }
+    if($POST->object_type=="subnets")    { print $Tools->transform_address($object->subnet,"dotted")."/".$object->mask; }
     else                                    { print $Tools->transform_address($object->ip_addr,"dotted"); }
     ?>
     </h4>
@@ -120,8 +118,8 @@ $icon =  $n->type=="static" ? "fa-arrows-h" : "fa-long-arrow-right";
     <?php print _("Add new object to NAT as"); ?>:
 	<div class="btns-group">
         <?php
-        print "<a class='btn btn-sm btn-success addNatObjectFromSearch' data-id='".$_POST['id']."' data-object-id='$object->id' data-object-type='".$_POST['object_type']."' data-type='src' data-reload='true'><i class='fa fa-plus'></i> "._('Source')."</a> ";
-        print "<a class='btn btn-sm btn-success addNatObjectFromSearch' data-id='".$_POST['id']."' data-object-id='$object->id' data-object-type='".$_POST['object_type']."' data-type='dst' data-reload='true'><i class='fa fa-plus'></i> "._('Destination')."</a>";
+        print "<a class='btn btn-sm btn-success addNatObjectFromSearch' data-id='".escape_input($POST->id)."' data-object-id='$object->id' data-object-type='".escape_input($POST->object_type)."' data-type='src' data-reload='true'><i class='fa fa-plus'></i> "._('Source')."</a> ";
+        print "<a class='btn btn-sm btn-success addNatObjectFromSearch' data-id='".escape_input($POST->id)."' data-object-id='$object->id' data-object-type='".escape_input($POST->object_type)."' data-type='dst' data-reload='true'><i class='fa fa-plus'></i> "._('Destination')."</a>";
         ?>
 	</div>
 

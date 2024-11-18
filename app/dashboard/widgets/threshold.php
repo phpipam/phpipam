@@ -26,14 +26,15 @@ $User->check_user_session ();
 # no errors!
 //ini_set('display_errors', 0);
 
-# set size parameters
-$height = 200;
-$slimit = 5;			//we dont need this, we will recalculate
+# fetch widget parameters
+$wparam = $Tools->get_widget_params("threshold");
+$slimit = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 5,    'min_range' => 1, 'max_range' => 256]]);
+$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 
 # if direct request include plot JS
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
 	# get widget details
-	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_GET['section'])) { $Result->show("danger", _("Invalid widget"), true); }
+	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $GET->section)) { $Result->show("danger", _("Invalid widget"), true); }
 	# reset size and limit
 	$height = 350;
 	$slimit = 5;
@@ -62,8 +63,6 @@ if ($User->settings->enableThreshold=="1") {
 
 # disabled
 if ($User->settings->enableThreshold!="1") {
-	print "<hr>";
-
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("Threshold module disabled")."</p>";
 	print "<small>"._("You can enable threshold module under settings")."</small>";
@@ -71,8 +70,6 @@ if ($User->settings->enableThreshold!="1") {
 }
 # error - none found but not permitted
 elseif ($threshold_subnets===false) {
-	print "<hr>";
-
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No subnet is selected for threshold check")."</p>";
 	print "<small>"._("You can set threshold for subnets under subnet settings")."</small>";
@@ -80,8 +77,6 @@ elseif ($threshold_subnets===false) {
 }
 # error - found but not permitted
 elseif (!isset($out)) {
-	print "<hr>";
-
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No subnet selected for threshold check available")."</p>";
 	print "<small>"._("No subnet with threshold check available")."</small>";
@@ -89,7 +84,7 @@ elseif (!isset($out)) {
 }
 # found
 else {
-    print "<div class='hContent' style='padding:10px;'>";
+    print '<div class="hContent" style="padding:5px 10px;border-top:0px;' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 
     // count usage
     foreach ($out as $k=>$s) {
@@ -143,4 +138,3 @@ else {
     print "</table>";
     print "</div>";
 }
-?>

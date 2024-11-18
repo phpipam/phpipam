@@ -19,71 +19,68 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("vrf", User::ACCESS_RW, true, true);
 }
 else {
     $User->check_module_permissions ("vrf", User::ACCESS_RWA, true, true);
 }
 
-# strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
-
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "vrf", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "vrf", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('vrf');
 
 
 # Hostname must be present!
-if($_POST['name'] == "") { $Result->show("danger", _("Name is mandatory"), true); }
+if($POST->name == "") { $Result->show("danger", _("Name is mandatory"), true); }
 
 // set sections
-foreach($_POST as $key=>$line) {
+foreach($POST as $key=>$line) {
 	if (!is_blank(strstr($key,"section-"))) {
 		$key2 = str_replace("section-", "", $key);
 		$temp[] = $key2;
-		unset($_POST[$key]);
+		unset($POST->{$key});
 	}
 }
 # glue sections together
-$_POST['sections'] = isset($temp) ? implode(";", $temp) : null;
+$POST->sections = isset($temp) ? implode(";", $temp) : null;
 
 # set update array
 $values = array(
-				"vrfId"       =>@$_POST['vrfId'],
-				"name"        =>$_POST['name'],
-				"rd"          =>$_POST['rd'],
-				"sections"    =>$_POST['sections'],
-				"description" =>$_POST['description']
+				"vrfId"       =>$POST->vrfId,
+				"name"        =>$POST->name,
+				"rd"          =>$POST->rd,
+				"sections"    =>$POST->sections,
+				"description" =>$POST->description
 				);
 # append custom
 if(sizeof($custom) > 0) {
 	foreach($custom as $myField) {
 		# replace possible ___ back to spaces!
 		$myField['nameTest']      = str_replace(" ", "___", $myField['name']);
-		if(isset($_POST[$myField['nameTest']])) { $values[$myField['name']] = @$_POST[$myField['nameTest']];}
+		if(isset($POST->{$myField['nameTest']})) { $values[$myField['name']] = $POST->{$myField['nameTest']};}
 	}
 }
 # append customerId
 if($User->settings->enableCustomers=="1") {
-	if (is_numeric($_POST['customer_id'])) {
-		if ($_POST['customer_id']>0) {
-			$values['customer_id'] = $_POST['customer_id'];
+	if (is_numeric($POST->customer_id)) {
+		if ($POST->customer_id>0) {
+			$values['customer_id'] = $POST->customer_id;
 		}
 		else {
-			$values['customer_id'] = NULL;
+			$values['customer_id'] = null;
 		}
 	}
 }
 # update
-if(!$Admin->object_modify("vrf", $_POST['action'], "vrfId", $values)) {
-    $Result->show("danger", _("Failed to")." ".$_POST["action"]." "._("VRF").'!', true);
+if(!$Admin->object_modify("vrf", $POST->action, "vrfId", $values)) {
+    $Result->show("danger", _("Failed to")." ".$User->get_post_action()." "._("VRF").'!', true);
 }
 else {
-    $Result->show("success", _("VRF")." ".$_POST["action"]." "._("successful").'!', false);
+    $Result->show("success", _("VRF")." ".$User->get_post_action()." "._("successful").'!', false);
 }
 
 # remove all references if delete
-if($_POST['action']=="delete") { $Admin->remove_object_references ("subnets", "vrfId", $_POST['vrfId']); }
+if($POST->action=="delete") { $Admin->remove_object_references ("subnets", "vrfId", $POST->vrfId); }

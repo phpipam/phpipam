@@ -3,7 +3,7 @@
 $User->check_user_session();
 
 # if section is not set
-if(!isset($_GET['section'])) { $_GET['section'] = ""; }
+if(!isset($GET->section)) { $GET->section = ""; }
 
 # tool items
 $tool_items = array();
@@ -149,9 +149,9 @@ $tool_items["search"] = array (
 
     <?php
 	# first item - tools or dashboard
-	if ($_GET['page']=="dashboard") {
+	if ($GET->page=="dashboard") {
         print "<li class='first-item'>";
-        print " <a href='".create_link()."'><i class='fa fa-angle-right'></i> "._('Dashboard')."</a>";
+        print " <a href='".create_link()."'><i class='fa fa-dashboard'></i> "._('Dashboard')."</a>";
         print "</li>";
 	}
 	else {
@@ -189,7 +189,7 @@ $tool_items["search"] = array (
     			if($perm > 0 ) {
     				# print only masters!
     				if($section->masterSection=="0" || empty($section->masterSection)) {
-    					if( ($section->name == $_GET['section']) || ($section->id == $_GET['section']) ) 	{ print "<li class='active'>"; }
+    					if( ($section->name == $GET->section) || ($section->id == $GET->section) ) 	{ print "<li class='active'>"; }
     					else 																				{ print "<li>"; }
 
     					print "	<a href='".create_link("subnets",$section->id)."' rel='tooltip' data-placement='bottom' title='$section->description'>$section->name</a>";
@@ -211,7 +211,7 @@ $tool_items["search"] = array (
     <?php
     foreach ($tool_items as $k=>$t) {
         // active
-        $active = $_GET['section']==$k ? "active" : "";
+        $active = $GET->section==$k ? "active" : "";
 
         print "<li rel='tooltip' title='"._($t['title'])."' data-placement='bottom' class='$active'>";
         // compact menu
@@ -226,7 +226,7 @@ $tool_items["search"] = array (
     ?>
 
     <!-- all tools -->
-    <li class='<?php if($_GET['page']=="tools" && (!isset($_GET['section']) || is_blank($_GET['section']))) print "active"; ?>'>
+    <li class='<?php if($GET->page=="tools" && (!isset($GET->section) || is_blank($GET->section))) print "active"; ?>'>
          <a href='<?php print create_link("tools"); ?>'><i class='fa fa-list'></i> <?php print _('All tools'); ?></a>
     </li>
 </ul>

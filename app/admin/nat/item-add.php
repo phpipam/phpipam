@@ -20,12 +20,12 @@ $User->check_user_session();
 $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 
 # validate id
-if(!is_numeric($_POST['id']))                           { $Result->show("danger", _("Invalid ID"), true, true); }
+if(!is_numeric($POST->id))                           { $Result->show("danger", _("Invalid ID"), true, true); }
 # validate type
-if(!in_array($_POST['type'], array("src", "dst")))      { $Result->show("danger", _("Invalid NAT direction"), true, true); }
+if(!in_array($POST->type, array("src", "dst")))      { $Result->show("danger", _("Invalid NAT direction"), true, true); }
 
 # get NAT object
-$nat = $Admin->fetch_object ("nat", "id", $_POST['id']);
+$nat = $Admin->fetch_object ("nat", "id", $POST->id);
 $nat!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
 // new cookie
@@ -44,7 +44,7 @@ $csrf_cookie = $User->Crypto->csrf_cookie ("create", "nat_add");
     <form id="search_nats" style="margin-bottom: 10px;" class="form-inline">
             <input type="hidden" name="csrf_cookie" value="<?php print $csrf_cookie; ?>">
             <input type="hidden" name="id" value="<?php print $nat->id; ?>">
-            <input type="hidden" name="type" value="<?php print escape_input($_POST['type']); ?>">
+            <input type="hidden" name="type" value="<?php print escape_input($POST->type); ?>">
             <input type="text" class='form-control input-sm' name="ip" placeholder="<?php print _('Enter subnet/IP'); ?>" style='width:60%;margin:0px;'>
             <input type="submit" class="form-control input-sm" value="Search" style="width:20%">
     </form>

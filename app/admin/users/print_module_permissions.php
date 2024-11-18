@@ -1,7 +1,7 @@
 <?php
 
 // process permissions
-$permissions = pf_json_decode($user['module_permissions'], true);
+$permissions = db_json_decode($user['module_permissions'], true);
 // loop
 if (is_array($permissions)) {
     if (sizeof($permissions)>0) {
@@ -23,55 +23,76 @@ foreach ($User->get_modules_with_permissions() as $m) {
     }
 }
 
-print "<table class='table-noborder popover_table'>";
-
 
 // VLAN
-print "<tr><td>"._("VLAN")."</td><td>".$User->print_permission_badge($user['perm_vlan'])."</td></tr>";
-
+$perm_names['perm_vlan'] = "VLAN";
 // L2Domains
-print "<tr><td>"._("L2Domains")."</td><td>".$User->print_permission_badge($user['perm_l2dom'])."</td></tr>";
-
+$perm_names['perm_l2dom'] = "L2 Domains";
 // VRF
-print "<tr><td>"._("VRF")."</td><td>".$User->print_permission_badge($user['perm_vrf'])."</td></tr>";
-
+$perm_names['perm_vrf'] = "VRF";
 // PDNS
 if ($User->settings->enablePowerDNS==1)
-print "<tr><td>"._("PowerDNS")."</td><td>".$User->print_permission_badge($user['perm_pdns'])."</td></tr>";
-
+$perm_names['perm_pdns'] = "PowerDNS";
 // Devices
-print "<tr><td>"._("Devices")."</td><td>".$User->print_permission_badge($user['perm_devices'])."</td></tr>";
-
+$perm_names['perm_devices'] = "Devices";
 // Racks
 if ($User->settings->enableRACK==1)
-print "<tr><td>"._("Racks")."</td><td>".$User->print_permission_badge($user['perm_racks'])."</td></tr>";
-
+$perm_names['perm_racks'] = "Racks";
 // Circuits
 if ($User->settings->enableCircuits==1)
-print "<tr><td>"._("Circuits")."</td><td>".$User->print_permission_badge($user['perm_circuits'])."</td></tr>";
-
+$perm_names['perm_circuits'] = "Circuits";
 // NAT
 if ($User->settings->enableNAT==1)
-print "<tr><td>"._("NAT")."</td><td>".$User->print_permission_badge($user['perm_nat'])."</td></tr>";
-
+$perm_names['perm_nat'] = "NAT";
 // Customers
 if ($User->settings->enableCustomers==1)
-print "<tr><td>"._("Customers")."</td><td>".$User->print_permission_badge($user['perm_customers'])."</td></tr>";
-
+$perm_names['perm_customers'] = "Customers";
 // Locations
 if ($User->settings->enableLocations==1)
-print "<tr><td>"._("Locations")."</td><td>".$User->print_permission_badge($user['perm_locations'])."</td></tr>";
-
+$perm_names['perm_locations'] = "Locations";
 // pstn
 if ($User->settings->enablePSTN==1)
-print "<tr><td>"._("PSTN")."</td><td>".$User->print_permission_badge($user['perm_pstn'])."</td></tr>";
-
+$perm_names['perm_pstn'] = "PSTN";
 // routing
 if ($User->settings->enableRouting==1)
-print "<tr><td>"._("Routing")."</td><td>".$User->print_permission_badge($user['perm_routing'])."</td></tr>";
-
+$perm_names['perm_routing'] = "Routing";
 // vaults
 if ($User->settings->enableVaults==1)
-print "<tr><td>"._("Vaults")."</td><td>".$User->print_permission_badge($user['perm_vaults'])."</td></tr>";
+$perm_names['perm_vaults'] = "Vaults";
 
-print "</table>";
+
+// user page
+if(($GET->page=="administration" && $GET->section=="users" && $GET->sPage=="modules") || ($GET->section=="user-menu")) {
+
+    print '<div class="panel panel-default" style="max-width:600px;min-width:350px;">';
+    print '<div class="panel-heading">'._("User permissions for phpipam modules").'</div>';
+    print ' <ul class="list-group">';
+
+    foreach ($user as $key=>$u) {
+        if(strpos($key, "perm_")!==false && array_key_exists($key, $perm_names)) {
+            print '<li class="list-group-item">';
+            // title
+            print "<span style='padding-top:8px;' class='pull-l1eft'>";
+            print "<strong>"._($perm_names[$key])."</strong>";
+            print "</span>";
+            // perms
+            print ' <strong class="btn-group pull-right">';
+            print $User->print_permission_badge($user[$key]);
+            print ' </strong>';
+            print '</li>';
+
+            print "<div class='clearfix'></div>";
+        }
+    }
+    print ' </ul>';
+    print '</div>';
+}
+else {
+    print "<table class='table-noborder popover_table'>";
+    foreach ($user as $key=>$u) {
+        if(strpos($key, "perm_")!==false && array_key_exists($key, $perm_names)) {
+            print "<tr><td>"._($perm_names[$key])."</td><td>".$User->print_permission_badge($user[$key])."</td></tr>";
+        }
+    }
+    print "</table>";
+}

@@ -23,6 +23,7 @@ $custom_tables = array(
 						"pstnPrefixes"     => _("PSTN Prefixes"),
 						"pstnNumbers"      => _("PSTN Numbers"),
 						"circuitProviders" => _("Circuit providers"),
+						"circuitsLogical"  => _("Logical circuits"),
 						"circuits" 		   => _("Circuits"),
 						"customers" 	   => _("Customers"),
 						"nat"			   => _("NAT"),
@@ -76,7 +77,7 @@ foreach($custom_fields as $k=>$cf) {
 	$table = $k;
 
 	# get custom fields
-	$ffields = pf_json_decode($User->settings->hiddenCustomFields, true);
+	$ffields = db_json_decode($User->settings->hiddenCustomFields, true);
 	$ffields = is_array(@$ffields[$table]) ? $ffields[$table] : array();
 
 	print "<tbody id='custom-$k'>";

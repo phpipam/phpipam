@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 
-$version = pf_json_decode(@file_get_contents(dirname(__FILE__).'/../../../functions/php-saml/src/Saml2/version.json'), true);
+$version = db_json_decode(@file_get_contents(dirname(__FILE__).'/../../../functions/php-saml/src/Saml2/version.json'), true);
 $version = @$version['php-saml']['version'];
 
 if ($version < 3.4) {
@@ -15,15 +15,15 @@ if ($version < 3.4) {
 }
 
 # validate action
-$Admin->validate_action ($_POST['action'], true);
+$Admin->validate_action();
 
 # ID must be numeric */
-if($_POST['action']!="add") {
-	if(!is_numeric($_POST['id']))	{ $Result->show("danger", _("Invalid ID"), true, true); }
+if($POST->action!="add") {
+	if(!is_numeric($POST->id))	{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 	# fetch method settings
-	$method_settings = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['id']);
-	$method_settings->params = pf_json_decode($method_settings->params);
+	$method_settings = $Admin->fetch_object ("usersAuthMethod", "id", $POST->id);
+	$method_settings->params = db_json_decode($method_settings->params);
 }
 else {
 	$method_settings = new StdClass ();
@@ -44,7 +44,7 @@ else {
 }
 
 # set delete flag
-$is_disabled = $_POST['action']=="delete" ? "disabled" : "";
+$is_disabled = $POST->action=="delete" ? "disabled" : "";
 ?>
 
 <script>
@@ -139,7 +139,7 @@ $(document).ready(function() {
 			<input type="text" name="idpissuer" class="form-control input-sm" value="<?php print @$method_settings->params->idpissuer; ?>" <?php print $is_disabled; ?> >
 			<input type="hidden" name="type" value="SAML2">
 			<input type="hidden" name="id" value="<?php print @$method_settings->id; ?>">
-			<input type="hidden" name="action" value="<?php print @$_POST['action']; ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 		<td class="base_dn info2">
@@ -275,14 +275,14 @@ $(document).ready(function() {
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/authentication-methods/edit-result.php" data-result_div="editAuthMethodResult" data-form='editAuthMethod'>
-			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print escape_input(ucwords(_($_POST['action']))); ?>
+		<button class='btn btn-sm btn-default submit_popup <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/authentication-methods/edit-result.php" data-result_div="editAuthMethodResult" data-form='editAuthMethod'>
+			<i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 	</div>
 
 	<?php
-	# check for mathing users
-	if($_POST['action']=="delete") {
+	# check for matching users
+	if($POST->action=="delete") {
 		$users = $Admin->fetch_multiple_objects ("users", "authMethod", @$method_settings->id);
 		if($users!==false) {
 			$Result->show("warning", sizeof($users)._(" users have this method for logging in. They will be reset to local auth!"), false);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *  API Parameter class
  */
@@ -8,17 +9,16 @@ class API_params extends Params {
 	 * Read array of arguments
 	 *
 	 * @param array $args
+	 * @param bool  $strip_tags
+	 * @param bool	$html_escape
 	 * @return void
 	 */
-	public function read($args)
-	{
-		if (!is_array($args))
-			return;
-
-		if (isset($args['controller']))
+	public function read($args, $strip_tags = false, $html_escape = false) {
+		if (is_array($args) && isset($args['controller'])) {
 			$args['controller'] = strtolower($args['controller']);
+		}
 
-		parent::read($args);
+		parent::read($args, $strip_tags, $html_escape);
 	}
 }
 
@@ -182,7 +182,7 @@ class Common_api_functions {
 
 	/**
 	 * App object - will be passed by index.php
-	 * to provide app detauls
+	 * to provide app details
 	 *
 	 * @var false|object
 	 */
@@ -394,9 +394,7 @@ class Common_api_functions {
 			$this->Response->throw_exception(404, _('No results (filter applied)'));
 
 		# reindex filtered result
-		$result = array_values($result2);
-
-		return $result;
+		return array_values($result2);
 	}
 
 	/**
@@ -770,16 +768,13 @@ class Common_api_functions {
 	 * @access public
 	 * @return array
 	 */
-	public function get_possible_permissions () {
-		// set
-		$permissions = array(
-    		            "na"=>0,
-    		            "ro"=>1,
-    		            "rw"=>2,
-    		            "rwa"=>3
-                        );
-        // return
-		return $permissions;
+	public function get_possible_permissions() {
+		return array(
+			"na" => 0,
+			"ro" => 1,
+			"rw" => 2,
+			"rwa" => 3
+		);
 	}
 
 	/**
@@ -789,27 +784,30 @@ class Common_api_functions {
 	 * @param mixed $result
 	 * @return mixed
 	 */
-	protected function remove_folders ($result) {
+	protected function remove_folders($result) {
 		// must be subnets
-		if($this->_params->controller!="subnets") {
+		if ($this->_params->controller != "subnets") {
 			return $result;
 		}
-		else {
-			// multiple options
-			if (is_array($result)) {
-				foreach($result as $k=>$r) {
-					// remove
-					if($r->isFolder=="1")				{ unset($result[$k]); }
-			}	}
-			// single item
-			else {
-					// remove
-					if($result->isFolder=="1")			{ unset($result); }
+
+		if (is_array($result)) {
+			foreach ($result as $k => $r) {
+				if (isset($r->isFolder) && $r->isFolder == "1") {
+					unset($result[$k]);
+				}
 			}
-			# return
-			if(empty($result))	{ $this->Response->throw_exception(404, "No subnets found"); }
-			else				{ return $result; }
-	}	}
+		} else {
+			if (isset($result->isFolder) && $result->isFolder == "1") {
+				unset($result);
+			}
+		}
+
+		if (empty($result)) {
+			$this->Response->throw_exception(404, "No subnets found");
+		}
+		return $result;
+	}
+
 	/**
 	 * This method removes all subnets if controller is subnets
 	 *
@@ -817,30 +815,29 @@ class Common_api_functions {
 	 * @param mixed $result
 	 * @return mixed
 	 */
-	protected function remove_subnets ($result) {
+	protected function remove_subnets($result) {
 		// must be subnets
-		if($this->_params->controller!="folders") {
+		if ($this->_params->controller != "folders") {
 			return $result;
 		}
-		else {
-			// multiple options
-			if (is_array($result)) {
-				foreach($result as $k=>$r) {
-					// remove
-					if($r->isFolder!="1")				{ unset($result[$k]); }
-			}	}
-			// single item
-			else {
-					// remove
-					if($result->isFolder!="1")			{ unset($result); }
+
+		if (is_array($result)) {
+			foreach ($result as $k => $r) {
+				if (isset($r->isFolder) && $r->isFolder != "1") {
+					unset($result[$k]);
+				}
 			}
-			# return
-			if($result===null)	{ $this->Response->throw_exception(404, "No folders found"); }
-			else				{ return $result; }
-	}	}
+		} else {
+			if (isset($result->isFolder) && $result->isFolder != "1") {
+				unset($result);
+			}
+		}
 
-
-
+		if (empty($result)) {
+			$this->Response->throw_exception(404, "No folders found");
+		}
+		return $result;
+	}
 
 	/**
 	 * Remaps keys based on request type
@@ -849,7 +846,7 @@ class Common_api_functions {
 	 * @param mixed $result (default: null)
 	 * @param mixed $controller (default: null)
 	 * @param mixed $tools_table (default: null)
-	 * @return void
+	 * @return mixed
 	 */
 	protected function remap_keys ($result = null, $controller = null, $tools_table = null) {
 		// define keys array
@@ -899,7 +896,7 @@ class Common_api_functions {
 	 *
 	 * @access private
 	 * @param mixed $result
-	 * @return void
+	 * @return mixed
 	 */
 	private function remap_result_keys ($result) {
 		# single
@@ -1035,7 +1032,7 @@ class Common_api_functions {
 	}
 
 	/**
-	 * Sets translaction lock
+	 * Sets transaction lock
 	 *
 	 * @access public
 	 * @return void

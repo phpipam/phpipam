@@ -78,7 +78,7 @@ class Sections_controller extends Common_api_functions {
 	public function GET () {
 		// fetch subnets in section
 		if(@$this->_params->id2=="subnets" && is_numeric($this->_params->id)) {
-			// we dont need id2 anymore
+			// we don't need id2 anymore
 			unset($this->_params->id2);
 			// init required objects
 			$this->init_object ("Subnets", $this->Database);
@@ -122,8 +122,12 @@ class Sections_controller extends Common_api_functions {
 		}
 		// verify ID
 		elseif(isset($this->_params->id)) {
+			# changelog
+			if($this->_params->id2=="changelog") 		{
+				return array("code"=>200, "data"=>$this->section_changelog ());
+			}
 			# fetch by id
-			if(is_numeric($this->_params->id)) {
+			elseif(is_numeric($this->_params->id)) {
 				$result = $this->Sections->fetch_section ("id", $this->_params->id);
 				// check result
 				if($result===false) 					{ $this->Response->throw_exception(404, "Section does not exist"); }
@@ -175,7 +179,7 @@ class Sections_controller extends Common_api_functions {
 		if(isset($this->_params->masterSection)) {
 			$masterSection = $this->Sections->fetch_section ("id", $this->_params->masterSection);
 			// checks
-			if(sizeof($masterSection)==0)				{ $this->Response->throw_exception(400, 'Invalid masterSection id '.$this->_params->masterSection); }
+			if(!is_object($masterSection))				{ $this->Response->throw_exception(400, 'Invalid masterSection id '.$this->_params->masterSection); }
 			elseif($masterSection->masterSection!="0")	{ $this->Response->throw_exception(400, 'Only 1 level of nesting is permitted for sections');  }
 		}
 
@@ -265,4 +269,37 @@ class Sections_controller extends Common_api_functions {
         # return
         return $subnet_usage;
 	 }
+
+	/**
+	 * Get changelog for subnet
+	 * @method subnet_changelog
+	 * @return [type]
+	 */
+	private function section_changelog () {
+		// get changelog
+		$Log = new Logging ($this->Database);
+		$clogs = $Log->fetch_changlog_entries("section", $this->_params->id, true);
+		// reformat
+		$clogs_formatted = [];
+		// loop
+		if (is_array($clogs)) {
+			if (sizeof($clogs)>0) {
+				foreach ($clogs as $l) {
+					// diff to array
+					$l->cdiff = explode("\r\n", str_replace(["[","]"], "", trim($l->cdiff)));
+					// save
+					$clogs_formatted[] = [
+						"user"   => $l->real_name,
+						"action" => $l->caction,
+						"result" => $l->cresult,
+						"date"   => $l->cdate,
+						"diff"   => $l->cdiff,
+					];
+				}
+			}
+		}
+		// result
+		if(sizeof($clogs_formatted)>0) 	{ return $clogs_formatted; }
+		else 							{ $this->Response->throw_exception(404, "No changelogs found"); }
+	}
 }

@@ -12,10 +12,10 @@ $requiredExt  = array("session", "sockets", "filter", "openssl", "gmp", "json", 
 $requiredFns  = array("simplexml_load_string");
 
 if(!defined('PHPIPAM_PHP_MIN'))
-define('PHPIPAM_PHP_MIN', "5.4");
+define('PHPIPAM_PHP_MIN', "7.2");
 
 if(!defined('PHPIPAM_PHP_UNTESTED'))
-define('PHPIPAM_PHP_UNTESTED', "8.2");  // PHP 8.2 or greater is untested & unsupported
+define('PHPIPAM_PHP_UNTESTED', "8.4");  // PHP 8.4 or greater is untested, use at own risk and expect issues
 
 if (phpversion() >= PHPIPAM_PHP_UNTESTED) {
     $_SESSION['footer_warnings']['php_version'] = _('Unsupported PHP version ') . phpversion();
@@ -53,6 +53,8 @@ foreach ($requiredFns as $fn) {
 if (!@include_once 'PEAR.php') {
     $missingExt[] = "php PEAR support";
 }
+
+if(!isset($url)) { $url = ""; }
 
 /* headers */
 $error   = [];

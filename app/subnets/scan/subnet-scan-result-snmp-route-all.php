@@ -7,12 +7,9 @@ require( dirname(__FILE__) . '/../../../functions/include-only.php' );
  * Discover newsubnetshosts with snmp
  *******************************/
 
-# strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
-
 # section
 $section_search = false;
-foreach ($_POST as $k=>$p) {
+foreach ($POST as $k=>$p) {
     if (strpos($k, "sectionId")!==false) {
         $section = $Sections->fetch_section("id", $p);
         if ($section===false)                                           { $Result->show("danger", _("Invalid section Id"), true, false, false, true); }
@@ -20,13 +17,13 @@ foreach ($_POST as $k=>$p) {
 }
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")                           { $Result->show("danger", _("SNMP module disbled"), true); }
+if ($User->settings->enableSNMP!="1")                           { $Result->show("danger", _("SNMP module disabled"), true); }
 
 # check section permissions
-if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true); }
+if($Sections->check_permission ($User->user, $POST->sectionId) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true); }
 
 # loop
-foreach ($_POST as $k=>$p) {
+foreach ($POST as $k=>$p) {
     # explode
     $k = pf_explode("-", $k);
     # numeric
@@ -59,9 +56,9 @@ foreach ($subnets_all as $k=>$s) {
 if (isset($subnets_all)) {
     foreach ($subnets_all as $s) {
         # set new POST
-        $_POST = $s;
+        $POST = new Params($s);
         # create csrf token
-        $_POST['csrf_cookie'] = $User->Crypto->csrf_cookie ("create", "subnet_add");
+        $POST->csrf_cookie = $User->Crypto->csrf_cookie ("create", "subnet_add");
         # permissions
         $subnet['permissions'] = $section->permissions;
         # check for master
@@ -69,7 +66,7 @@ if (isset($subnets_all)) {
             // find id
             $master = $Subnets->find_subnet ($s['sectionId'], $s['master']);
             if ($master!==false) {
-                $_POST['masterSubnetId'] = $master->id;
+                $POST->masterSubnetId = $master->id;
             }
         }
         # include edit script

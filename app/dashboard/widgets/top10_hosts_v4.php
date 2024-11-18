@@ -22,14 +22,15 @@ $User->check_user_session ();
 # no errors!
 //ini_set('display_errors', 0);
 
-# set size parameters
-$height = 200;
-$slimit = 10;			//we dont need this, we will recalculate
+# fetch widget parameters
+$wparam = $Tools->get_widget_params("top10_hosts_v4");
+$slimit = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 10,  'min_range' => 1, 'max_range' => 256]]);
+$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => 210, 'min_range' => 1, 'max_range' => 800]]);
 
 # if direct request include plot JS
 if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	# get widget details
-	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_GET['section'])) { $Result->show("danger", _("Invalid widget"), true); }
+	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $GET->section)) { $Result->show("danger", _("Invalid widget"), true); }
 	# reset size and limit
 	$height = 350;
 	$slimit = 20;

@@ -22,17 +22,17 @@ $rlist = array();
 $pass_inputs = ""; # Pass fields from one page to another
 
 # Read selected fields and pass them to the save form
-foreach($_GET as $key => $value) {
+foreach($GET as $key => $value) {
 	if (preg_match("/recomputeSection_(\d+)$/",$key,$matches) && ($value == "on")) {
 		# Grab provided values
-		$rlist[$matches[1]]["IPv4"] = ($_GET['recomputeSectionIPv4_'.$matches[1]] == "on" ? true : false);
-		$rlist[$matches[1]]["IPv6"] = ($_GET['recomputeSectionIPv6_'.$matches[1]] == "on" ? true : false);
-		$rlist[$matches[1]]["CVRF"] = ($_GET['recomputeSectionCVRF_'.$matches[1]] == "on" ? true : false);
+		$rlist[$matches[1]]["IPv4"] = ($GET->{'recomputeSectionIPv4_'.$matches[1]} == "on" ? true : false);
+		$rlist[$matches[1]]["IPv6"] = ($GET->{'recomputeSectionIPv6_'.$matches[1]} == "on" ? true : false);
+		$rlist[$matches[1]]["CVRF"] = ($GET->{'recomputeSectionCVRF_'.$matches[1]} == "on" ? true : false);
 		# Build hidden form inputs
 		$pass_inputs.="<input name='".$key."' type='hidden' value='".$value."' style='display:none;'>";
-		$pass_inputs.="<input name='recomputeSectionIPv4_".$matches[1]."' type='hidden' value='".$_GET['recomputeSectionIPv4_'.$matches[1]]."' style='display:none;'>";
-		$pass_inputs.="<input name='recomputeSectionIPv6_".$matches[1]."' type='hidden' value='".$_GET['recomputeSectionIPv6_'.$matches[1]]."' style='display:none;'>";
-		$pass_inputs.="<input name='recomputeSectionCVRF_".$matches[1]."' type='hidden' value='".$_GET['recomputeSectionCVRF_'.$matches[1]]."' style='display:none;'>";
+		$pass_inputs.="<input name='recomputeSectionIPv4_".$matches[1]."' type='hidden' value='".$GET->{'recomputeSectionIPv4_'.$matches[1]}."' style='display:none;'>";
+		$pass_inputs.="<input name='recomputeSectionIPv6_".$matches[1]."' type='hidden' value='".$GET->{'recomputeSectionIPv6_'.$matches[1]}."' style='display:none;'>";
+		$pass_inputs.="<input name='recomputeSectionCVRF_".$matches[1]."' type='hidden' value='".$GET->{'recomputeSectionCVRF_'.$matches[1]}."' style='display:none;'>";
 	}
 }
 
@@ -49,8 +49,8 @@ if (!$all_vrfs) { $all_vrfs = array(); }
 array_splice($all_vrfs,0,0,(object) array(array('vrfId' => '0', 'name' => 'default', 'rd' => '0:0')));
 foreach ($all_vrfs as $vrf) { $vrf = (array) $vrf; $vrf_name[(int)$vrf['vrfId']] = $vrf['name']; }
 
-$rows = ""; $counters = ['edit' => 0]; $edata = [];
-$recomputeHideUnchanged = ($_GET['recomputeHideUnchanged'] == "on");
+$rows = ""; $counters = ['edit' => 0, 'skip' => 0]; $edata = [];
+$recomputeHideUnchanged = ($GET->recomputeHideUnchanged == "on");
 
 foreach ($rlist as $sect_id => $sect_check) {
 	$compute_results = $Subnets->recompute_masterIds($sect_id, $sect_check);

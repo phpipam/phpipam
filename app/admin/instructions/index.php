@@ -1,4 +1,5 @@
 <?php
+if (!isset($User)) { exit(); }
 
 /**
  *	Script to write instructions for users
@@ -9,26 +10,25 @@
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "instructions");
+$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "instructions");
 
 // default
-if(!isset($_GET['subnetId'])) { $_GET['subnetId'] = 1; }
+if(!isset($GET->subnetId)) { $GET->subnetId = 1; }
 
 // validate
-if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
+if($GET->subnetId==1 || $GET->subnetId==2)  {
     # fetch instructions
-    $instructions = $Admin->fetch_object("instructions", "id", $_GET['subnetId']);
+    $instructions = $Tools->fetch_instructions($GET->subnetId);
 
     # set params
-    if($_GET['subnetId']=="1")  {
+    if($GET->subnetId==1)  {
         $title = _("Edit user instructions");
-    }
-    else {
+    } else {
         $title = _("Edit IP request instructions");
     }
 
     //count rows
-    $rowcount = substr_count($instructions->instructions, "\n");
+    $rowcount = substr_count($instructions, "\n");
     $rowcount++;
 
     // max rowcount
@@ -36,8 +36,8 @@ if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
     ?>
 
     <ul class="nav nav-tabs" style="margin-bottom: 30px;">
-        <li role="presentation" <?php if($_GET['subnetId']==1) { print "class='active'"; } ?>><a href="<?php print create_link("administration", "instructions", 1); ?>"><?php print _("User instructions"); ?></a></li>
-        <li role="presentation" <?php if($_GET['subnetId']==2) { print "class='active'"; } ?>><a href="<?php print create_link("administration", "instructions", 2); ?>"><?php print _("IP request instructions"); ?></a></li>
+        <li role="presentation" <?php if($GET->subnetId==1) { print "class='active'"; } ?>><a href="<?php print create_link("administration", "instructions", 1); ?>"><?php print _("User instructions"); ?></a></li>
+        <li role="presentation" <?php if($GET->subnetId==2) { print "class='active'"; } ?>><a href="<?php print create_link("administration", "instructions", 2); ?>"><?php print _("IP request instructions"); ?></a></li>
     </ul>
 
     <!-- title -->
@@ -48,9 +48,9 @@ if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
     <!-- form -->
     <form name="instructions" id="instructionsForm">
 
-    	<textarea style="width:100%;" name="instructions" id="instructions" rows="<?php print $rowcount; ?>"><?php print stripslashes($instructions->instructions); ?></textarea>
+    	<textarea style="width:100%;" name="instructions" id="instructions" rows="<?php print $rowcount; ?>"><?php print $instructions; ?></textarea>
     	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
-    	<input type="hidden" name="id" value="<?php print escape_input($_GET['subnetId']); ?>">
+    	<input type="hidden" name="id" value="<?php print escape_input($GET->subnetId); ?>">
 
     	<script src="js/ckeditor/ckeditor.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
     	<script>

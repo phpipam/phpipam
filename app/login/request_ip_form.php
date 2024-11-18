@@ -176,27 +176,15 @@ if(sizeof($custom_fields) > 0) {
 </form>
 </div>
 
-
-
 <?php
-# check for requests guide
-$instructions = $Database->getObject("instructions", 2);
+	# check for requests guide
+	$instructions = $Tools->fetch_instructions(2);
 
-if(is_object($instructions)) {
-    if(!is_blank($instructions->instructions)) {
-
-        /* format line breaks */
-        $instructions->instructions = stripslashes($instructions->instructions);		//show html
-
-        /* prevent <script> */
-        $instructions->instructions = $User->noxss_html($instructions->instructions);
-
-        print "<div id='login' class='request'>";
-        print "<div class='requestIP'>";
-        print $instructions->instructions;
-        print "</div>";
-        print "</div>";
-    }
+	if (strlen($instructions) > 0) {
+		print "<div id='login' class='request'>";
+		print "<div class='requestIP'>";
+		print $instructions;
+		print "</div>";
+		print "</div>";
+	}
 }
-}
-?>

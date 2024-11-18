@@ -16,8 +16,7 @@
  */
 
 #[AllowDynamicProperties]
-class Params extends stdClass
-{
+class Params extends stdClass implements Countable {
 
     /**
      * Default value to return for undefined class properties
@@ -29,13 +28,34 @@ class Params extends stdClass
     /**
      * Class constructor
      *
-     * @param array $args
+     * @param array|object $args
      * @param mixed $default
+     * @param bool  $strip_tags
+     * @param bool  $html_escape
      */
-    public function __construct($args = [], $default = null)
-    {
-        $this->read($args);
+    public function __construct($args = [], $default = null, $strip_tags = false, $html_escape = false) {
+        $this->read($args, $strip_tags, $html_escape);
         $this->____default = $default;
+    }
+
+    /**
+     * Params class is countable
+     *
+     * @return int
+     */
+    public function count() : int {
+        return count($this->as_array());
+    }
+
+    /**
+     * Return public object variables as array
+     *
+     * @return array
+     */
+    public function as_array() {
+        $values = get_object_vars($this);
+        unset($values['____default']);
+        return $values;
     }
 
     /**
@@ -44,8 +64,7 @@ class Params extends stdClass
      * @param string $name
      * @return mixed
      */
-    public function __get($name)
-    {
+    public function __get($name) {
         if (isset($this->{$name}))
             return $this->{$name};
 
@@ -59,23 +78,49 @@ class Params extends stdClass
      * @param mixed $value
      * @return void
      */
-    public function __set($name, $value)
-    {
+    public function __set($name, $value) {
         $this->{$name} = $value;
     }
 
     /**
      * Read array of arguments
      *
-     * @param array $args
+     * @param array|object $args
+     * @param bool $strip_tags
+     * @param bool $html_escape
      * @return void
      */
-    public function read($args)
-    {
-        if (!is_array($args))
+    public function read($args, $strip_tags = false, $html_escape = false) {
+        if (!is_array($args) && !is_object($args)) {
             return;
+        }
+
+        // Don't run strip_tags() on passwords and usernames
+        // "<a>" can occur inside a valid password
+        $strip_exceptions = [
+            'ipampassword1',
+            'ipampassword2',
+            'ipamusername',
+            'muser',
+            'mysqlrootpass',
+            'mysqlrootuser',
+            'oldpassword',
+            'password',
+            'password1',
+            'password2',
+            'secret',
+            'username',
+        ];
 
         foreach ($args as $name => $value) {
+            if (is_string($value)) {
+                if ($strip_tags && !in_array($name, $strip_exceptions, true)) {
+                    $value = strip_tags($value);
+                }
+                if ($html_escape) {
+                    $value = htmlentities($value, ENT_QUOTES, 'UTF-8');
+                }
+            }
             $this->{$name} = $value;
         }
     }

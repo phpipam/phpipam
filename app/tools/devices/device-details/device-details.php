@@ -10,10 +10,10 @@ $User->check_user_session();
 $User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 
 # check
-is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true);
+is_numeric($GET->subnetId) ? : $Result->show("danger", _("Invalid ID"), true);
 
 # fetch device
-$device = (array) $Tools->fetch_object ("devices", "id", $_GET['subnetId']);
+$device = (array) $Tools->fetch_object ("devices", "id", $GET->subnetId);
 
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('devices');
@@ -23,7 +23,7 @@ print "<h4>"._('Device details')."</h4>";
 print "<hr>";
 
 # print
-if($_GET['subnetId']!=0 && sizeof($device)>0) {
+if($GET->subnetId!=0 && sizeof($device)>0) {
 
     print "<table class='table table-noborder'>";
     print "<tr>";
@@ -31,6 +31,9 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
 
 	# set type
 	$device_type = $Tools->fetch_object("deviceTypes", "tid", $device['type']);
+    if (!is_object($device_type)) {
+        $device_type = new Params();
+    }
 
     # device
 	print "<table class='ipaddress_subnet table-condensed table-auto'>";
@@ -92,7 +95,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
             }
             if($User->settings->enableSNMP=="1" && $User->is_admin(false)) {
                 $links[] = ["type"=>"header", "text"=>_("SNMP")];
-                $links[] = ["type"=>"link", "text"=>_("Manage SNMP"), "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='delete' data-switchId='$device[id]''", "icon"=>"cogs"];
+                $links[] = ["type"=>"link", "text"=>_("Manage SNMP"), "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='delete' data-switchId='$device[id]'", "icon"=>"cogs"];
             }
             // print links
             print $User->print_actions($User->user->compress_actions, $links, true, true);
@@ -112,6 +115,9 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     		$section_ids = pf_explode(";", $device['sections']);
     		foreach($section_ids as $k=>$id) {
     			$section = $Sections->fetch_section(null, $id);
+                if (!is_object($section)) {
+                    $section = new Params();
+                }
     			$section_print[$k]  = "&middot; ".$section->name;
     			$section_print[$k] .= !is_blank($section->description) ? " <span class='text-muted'>($section->description)</span>" : "";
     		}
@@ -169,7 +175,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
                 // pass
                 print '<tr>';
                 print " <th>". _('Password').'</th>';
-                $User->is_admin(false) ? print " <td>$device[snmp_v3_auth_pass]</td>" : " <td>********</td>";
+                $User->is_admin(false) ? print " <td>".escape_input($device['snmp_v3_auth_pass'])."</td>" : " <td>********</td>";
                 print "</tr>";
                 // privacy proto
                 print '<tr>';
@@ -179,7 +185,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
                 // privacy pass
                 print '<tr>';
                 print " <th>". _('Privacy passphrase').'</th>';
-                $User->is_admin(false) ? print " <td>$device[snmp_v3_priv_pass]</td>" : " <td>********</td>";
+                $User->is_admin(false) ? print " <td>".escape_input($device['snmp_v3_priv_pass'])."</td>" : " <td>********</td>";
                 print "</tr>";
                 // context name
                 print '<tr>';
@@ -281,10 +287,10 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
         $rack = $Tools->fetch_object ("racks", "id", $device['rack']);
         if ($rack!==false) {
             // front
-            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pul1l-right' style='width:180px;'>";
+            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pull-right' style='width:180px;'>";
             // back
             if($rack->hasBack!="0") {
-            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'], true)."' class='pull-r1ight' style='width:180px;margin-left:5px;'>";
+            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'], true)."' class='pull-right' style='width:180px;margin-left:5px;'>";
             }
         }
         print "</td>";

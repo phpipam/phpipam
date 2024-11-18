@@ -15,29 +15,31 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check if site is demo
+$User->is_demo();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "pdns_settings", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "pdns_settings", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 // validations
-if(is_blank($_POST['name']))			{ $Result->show("danger", "Invalid database name", true); }
-if(is_blank($_POST['port']))			{ $_POST['port'] = 3306; }
-elseif (!is_numeric($_POST['port']))	{ $Result->show("danger", "Invalid port number", true); }
+if(is_blank($POST->name))			{ $Result->show("danger", "Invalid database name", true); }
+if(is_blank($POST->port))			{ $POST->port = 3306; }
+elseif (!is_numeric($POST->port))	{ $Result->show("danger", "Invalid port number", true); }
 
 // formulate json
 $values = new StdClass ();
 
-$values->host 		= $_POST['host'];
-$values->name 		= $_POST['name'];
-$values->username 	= $_POST['username'];
-$values->password 	= $_POST['password'];
-$values->port 		= $_POST['port'];
-$values->autoserial = isset($_POST['autoserial']) ? "Yes" : "No";
+$values->host 		= trim(str_replace(",", ";", $POST->host));
+$values->name 		= $POST->name;
+$values->username 	= $POST->username;
+$values->password 	= $POST->password;
+$values->port 		= $POST->port;
+$values->autoserial = isset($POST->autoserial) ? "Yes" : "No";
 
 // get old settings for defaults
-$old_values = pf_json_decode($User->settings->powerDNS);
+$old_values = db_json_decode($User->settings->powerDNS);
 
 $values->ns			= $old_values->ns;
 $values->hostmaster	= $old_values->hostmaster;
