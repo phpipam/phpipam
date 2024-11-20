@@ -8,6 +8,7 @@
     + $config['disable_main_login_form'] shows blank page (#4317);
     + Unable to clear custom fields (#4313);
     + Modified the text shortening of subnet descriptions (#4279, #4280);
+    + Slow UI performance with bootstrap v3.4.1 (#4311);
 
     Enhancements, changes:
     ----------------------------
