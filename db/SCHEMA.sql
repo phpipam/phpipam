@@ -415,7 +415,7 @@ DROP TABLE IF EXISTS `lang`;
 CREATE TABLE `lang` (
   `l_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `l_code` varchar(12) NOT NULL DEFAULT '',
-  `l_name` varchar(32) DEFAULT NULL,
+  `l_name` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`l_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
@@ -1082,4 +1082,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.8";
-UPDATE `settings` SET `dbversion` = 43;
+UPDATE `settings` SET `dbversion` = 44;
