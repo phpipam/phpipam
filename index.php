@@ -116,6 +116,7 @@ else {
 		<?php } ?>
 		<script src="js/magic.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/bootstrap.custom.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script src="js/bootstrap-switch.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 		<!-- bootstrap table -->

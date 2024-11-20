@@ -1,3 +1,9 @@
+== 1.7.2
+
+    Bugfixes:
+    ----------------------------
+    + Slow UI performance with bootstrap v3.4.1 (#4311);
+
 == 1.7.1
 
     Bugfixes:
