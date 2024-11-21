@@ -265,7 +265,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		if(!isset($address['mac'])) {$address['mac'] = "";}
 
 		// set star if field is required
-		$required = in_array("description", $required_ip_fields) ? " *" : "";
+		$required = in_array("mac", $required_ip_fields) ? " *" : "";
 
 		print '<tr class="text-top">'. "\n";
 		print '	<td style="padding-top:7px;">'._('MAC address').$required.'</td>'. "\n";
