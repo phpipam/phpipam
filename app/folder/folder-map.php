@@ -125,7 +125,7 @@ if($slaves) {
 				// arr
 				$subnet = (array) $slaves[$subnet_id];
 				// max
-				$max_subnets = floor(gmp_strval(gmp_pow(2, ($free_mask-$subnet['mask']))));
+				$max_subnets = floor(gmp_strval(gmp_pow2(($free_mask-$subnet['mask']))));
 
 				// if possible
 				if($max_subnets>0) {
@@ -145,7 +145,7 @@ if($slaves) {
 						}
 
 						// next subnet
-						$subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow(2, ($pow-$free_mask-1))));
+						$subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow2(($pow-$free_mask-1))));
 
 					}
 					print "</div>";
