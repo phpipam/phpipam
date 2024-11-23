@@ -109,7 +109,7 @@ if (sizeof($free_subnets)>0) {
 				}
 
 				// next subnet
-				$subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow(2, ($pow-$array_key))));
+				$subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow2(($pow-$array_key))));
 
 
 				// rowspan
@@ -143,7 +143,7 @@ if (sizeof($free_subnets)>0) {
 
 			// next subnet
 			// $subnet_start = $subnet_start + pow(2,($pow-$free_mask));
-			$subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow(2, ($pow-$free_mask))));
+			$subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow2(($pow-$free_mask))));
 
 		}
 	}

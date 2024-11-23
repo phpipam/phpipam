@@ -1723,7 +1723,7 @@ class Subnets extends Common_functions {
 		//   [network]   = AND bitmask to clear subnet /mask bits to calculate network addresses
 		$bmask = array();
 		for ($x=0; $x <= 128; $x++) {
-			$pwr = gmp_pow(2, 128-$x);
+			$pwr = gmp_pow2(128-$x);
 			$bmask['IPv6'][$x]['size']      = $pwr;
 			$bmask['IPv6'][$x]['broadcast'] = gmp_sub($pwr, 1);
 			$bmask['IPv6'][$x]['network']   = gmp_xor($bmask['IPv6'][0]['broadcast'], $bmask['IPv6'][$x]['broadcast']);
