@@ -276,20 +276,13 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
     		# initial mcast validation
     		if (isset($mcast_err))  { $mcast_class='has-error'; $mcast_help_block = "<span id='helpBlock2' class='help-block'>$mcast_err</span>"; }
     		else                    { $mcast_class=""; $mcast_help_block = ""; }
-
-     		if ($User->is_admin (false)) {
-        		print ' <div class="form-group '.$mcast_class.'" style="margin-bottom:0px;">';
+			# MAC is multicast
+     			print ' <div class="form-group '.$mcast_class.'" style="margin-bottom:0px;">';
         		print ' <input type="text" name="mac" class="ip_addr form-control input-sm" placeholder="'._('MAC address').'" value="'. $address['mac']. '" size="30" '.$delete.'>'.$mcast_help_block;
         		print ' </div>';
-    		}
-    		else {
-         		print ' <div class="form-group '.$mcast_class.'" style="margin-bottom:0px;">';
-        		print ' <input type="text" name="mac" class="ip_addr form-control input-sm" placeholder="'._('MAC address').'" value="'. $address['mac']. '" size="30" '.$delete.' disabled="disabled">'.$mcast_help_block;
-        		print ' <input type="hidden" name="mac" value="'. $address['mac']. '">';
-        		print ' </div>';
-    		}
 		}
 		else {
+			# MAC is not multicast
         		print ' <div class="form-group" style="margin-bottom:0px;">';
         		print ' <input type="text" name="mac" class="ip_addr form-control input-sm" placeholder="'._('MAC address').'" value="'. $address['mac']. '" size="30" '.$delete.'>'. "\n";
         		print ' </div>';
