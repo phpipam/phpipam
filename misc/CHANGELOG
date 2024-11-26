@@ -10,6 +10,7 @@
     + Modified the text shortening of subnet descriptions (#4279, #4280);
     + Slow UI performance with bootstrap v3.4.1 (#4311);
     + Workaround PHP bug GH-16870 (#4339);
+    + Request new IP hangs (#4346);
 
     Enhancements, changes:
     ----------------------------
