@@ -3,6 +3,7 @@
     Bugfixes:
     ----------------------------
     + Workaround PHP bug GH-16870 (#4339);
+    + Request new IP hangs (#4346);
 
 == 1.7.2
 

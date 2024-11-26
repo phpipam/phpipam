@@ -691,11 +691,11 @@ class Tools extends Common_functions {
 	 * Process custom field inputs in $POST
 	 *
 	 * @param string $table
-	 * @param string $action
+	 * @param string|null $action
 	 * @param Params $POST
 	 * @return array
 	 */
-	public function update_POST_custom_fields(string $table, string $action, Params &$POST): array {
+	public function update_POST_custom_fields(string $table, ?string $action, Params &$POST): array {
 		$custom_fields = $this->fetch_custom_fields($table);
 		$update = [];
 
