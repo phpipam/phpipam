@@ -2340,6 +2340,20 @@ class Common_functions  {
 	    return implode("\n", $html);
 	}
 
+	/**
+	 * Composer auto-load error-handler.
+	 *
+	 * @param int $errno
+	 * @param string $errstr
+	 * @param string $errfile
+	 * @param int $errline
+	 * @return bool
+	 */
+	static function composer_autoload_error_handler($errno, $errstr, $errfile, $errline) {
+		$Result = new Result();
+		$Result->show($errno >128 ? 'danger' : 'warning', "<h5>" . escape_input($errfile) . ":" . escape_input($errline) . "</h5>" . escape_input($errstr));
+		return true;
+	}
 
 	/**
 	 * Composer check
@@ -2357,8 +2371,11 @@ class Common_functions  {
         	return true;
         }
 
-        // autoload composer files
+        // autoload composer files - catch and display errors.
+		$old_handler = set_error_handler("Common_functions::composer_autoload_error_handler", E_ALL);
         require __DIR__ . '/../vendor/autoload.php';
+		set_error_handler($old_handler, E_ALL);
+
         // check if composer is installed
         if (!class_exists('\Composer\InstalledVersions')) {
         	$this->composer_err = _("Composer is not installed")."!<hr>"._("Please install composer and composer modules ( cd functions && composer install ).");
