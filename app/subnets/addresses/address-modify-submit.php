@@ -43,7 +43,7 @@ if(isset($POST->{'action-visual'})) {
 // set selected address and required addresses fields array
 $selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);
 $required_ip_fields = $Tools->explode_filtered(";", $User->settings->IPrequired);
-// append one missing from selected
+// append mandatory fields to selected
 $selected_ip_fields[] = "description";
 $selected_ip_fields[] = "hostname";
 // if field is present in required fields but not in selected remove it !
@@ -63,6 +63,14 @@ if(is_array($required_ip_fields) && $action!="delete") {
 	foreach ($required_ip_fields as $required_field) {
 		if (!isset($POST->{$required_field}) || is_blank($POST->{$required_field})) {
 			$required_field_errors[] = ucwords($required_field)." "._("is required");
+		}
+	}
+	// Check that certain required fields are not zero
+	foreach (array("customer_id","switch","location") as $drop_down_field) {
+		if (in_array($drop_down_field,$required_ip_fields)) {
+			if ($POST->{$drop_down_field} == "0") {
+				$required_field_errors[] = ucwords($drop_down_field)." "._("is required");
+			}
 		}
 	}
 	// check

@@ -11,6 +11,7 @@
     + Slow UI performance with bootstrap v3.4.1 (#4311);
     + Workaround PHP bug GH-16870 (#4339);
     + Request new IP hangs (#4346);
+    + Fixed required fields validation (#4328);
 
     Enhancements, changes:
     ----------------------------
