@@ -2,6 +2,7 @@
 
     Bugfixes:
     ----------------------------
+    + Backported PHP8 compatibility fixes;
     + Workaround PHP bug GH-16870 (#4339);
     + Request new IP hangs (#4346);
 
