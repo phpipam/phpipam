@@ -1069,8 +1069,7 @@ class PowerDNS extends Common_functions {
         // set update content
         $content = array(
                         "id"=>$soa->id,
-                        "content"=>implode(" ", $soa_serial),
-                        "change_date"=>$this->set_default_change_date()
+                        "content"=>implode(" ", $soa_serial)
                         );
         // update
         $this->update_domain_record_content ($content);
@@ -1172,7 +1171,6 @@ class PowerDNS extends Common_functions {
         $record->content     = $content;                                                                                // record content
         $record->ttl         = $this->validate_ttl ($ttl);                                                              // ttl validation
         $record->prio        = $this->validate_prio ($prio);                                                            // priority, default NULL
-        $record->change_date = $this->set_default_change_date ();                                                       // sets default change date
         $record->disabled    = $disabled;                                                                               // enables of disables record
         // return record
         return (array) $record;
@@ -1200,7 +1198,6 @@ class PowerDNS extends Common_functions {
         if (!is_null($content)) $record->content     = $content;                                          // record content
         if (!is_null($ttl))     $record->ttl         = $this->validate_ttl ($ttl);                        // ttl validation
         if (!is_null($prio))    $record->prio        = $this->validate_prio ($prio);                      // priority, default NULL
-                                $record->change_date = $this->update_record_change_date ($old_date);      // updates change date
         if (!is_null($disabled))$record->disabled    = $disabled;                                         // enables of disables record
         // return record
         return (array) $record;
@@ -1386,37 +1383,6 @@ class PowerDNS extends Common_functions {
         }
         // ok
         return $int;
-    }
-
-    /**
-     * Sets default change date for record
-     *
-     *    - 2015032701
-     *
-     * @access private
-     * @return void
-     */
-    private function set_default_change_date () {
-        return date("Y-m-d")." 0000";
-    }
-
-    /**
-     * Updates change date for record
-     *
-     * @access private
-     * @param mixed $current_date (default: null)
-     * @return void
-     */
-    private function update_record_change_date ($current_date=null) {
-        // not set
-        if (is_null($current_date))        { return $this->set_default_change_date (); }
-
-        // split to date / sequence
-        $date = substr($current_date, 0,8);
-
-        // date same ++, otherwise default
-        if ($date==date('Ymd'))            { return $current_date+1; }
-        else                               { return $this->set_default_change_date (); }
     }
 
     /**
