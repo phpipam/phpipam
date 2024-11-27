@@ -2,9 +2,25 @@
 
     Bugfixes:
     ----------------------------
+    + PHP8 compatibility fixes;
+    + Fixed passkeys upgrade queries;
+    + MySQL no active transaction error during upgrades (#4319);
+    + $config['disable_main_login_form'] shows blank page (#4317);
+    + Unable to clear custom fields (#4313);
+    + Modified the text shortening of subnet descriptions (#4279, #4280);
+    + Slow UI performance with bootstrap v3.4.1 (#4311);
+    + Workaround PHP bug GH-16870 (#4339);
+    + Request new IP hangs (#4346);
     + Fixed required fields validation (#4328);
 
+    Enhancements, changes:
+    ----------------------------
+    + Don't update PowerDNS `change_date` removed in v2.1.9;
+    + Added Isle of Man postcodes (#4318);
 
+    Security Fixes:
+    ----------------------------
+    + XSS - reflected via HTTP_X_FORWARDED_PORT;
 
 == 1.7.0
 

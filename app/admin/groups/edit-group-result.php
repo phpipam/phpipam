@@ -40,38 +40,14 @@ if($POST->action=="add") {
 if($Admin->fetch_object("userGroups", "g_name", $POST->g_name)!==false)	{ $Result->show("danger", _('Group already exists')."!", true); }
 }
 
-# fetch custom fields
-$custom = $Tools->fetch_custom_fields('userGroups');
-if(sizeof($custom) > 0) {
-	foreach($custom as $myField) {
-
-		//replace possible ___ back to spaces
-		$myField['nameTest'] = str_replace(" ", "___", $myField['name']);
-		if(isset($POST->{$myField['nameTest']})) { $POST->{$myField['name']} = $POST->{$myField['nameTest']};}
-
-		//booleans can be only 0 and 1!
-		if($myField['type']=="tinyint(1)") {
-			if($POST->{$myField['name']}>1) {
-				$POST->{$myField['name']} = 0;
-			}
-		}
-		//not null!
-		if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) { $Result->show("danger", $myField['name']." can not be empty!", true); }
-
-		# save to update array
-		$update[$myField['name']] = $POST->{$myField['nameTest']};
-	}
-}
-
 # create array of values for modification
 $values = array("g_id"=>$POST->g_id,
 				"g_name"=>$POST->g_name,
 				"g_desc"=>$POST->g_desc);
 
-# custom fields
-if(isset($update)) {
-	$values = array_merge($values, $update);
-}
+# fetch custom fields
+$update = $Tools->update_POST_custom_fields('userGroups', $POST->action, $POST);
+$values = array_merge($values, $update);
 
 /* try to execute */
 if(!$Admin->object_modify("userGroups", $POST->action, "g_id", $values)) { $Result->show("danger",  _("Group")." ".$User->get_post_action()." "._("error")."!", false); }

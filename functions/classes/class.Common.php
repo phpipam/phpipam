@@ -968,11 +968,11 @@ class Common_functions  {
 			if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && !isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
 				return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 443 : 80;
 			}
-			if (isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
+			if (isset($_SERVER['HTTP_X_FORWARDED_PORT']) && is_numeric($_SERVER['HTTP_X_FORWARDED_PORT'])) {
 				return $_SERVER['HTTP_X_FORWARDED_PORT'];
 			}
 		}
-		if (isset($_SERVER['SERVER_PORT'])) {
+		if (isset($_SERVER['SERVER_PORT']) && is_numeric($_SERVER['SERVER_PORT'])) {
 			return $_SERVER['SERVER_PORT'];
 		}
 
@@ -1044,6 +1044,7 @@ class Common_functions  {
 			$url = "localhost";
 		}
 		$host = parse_url("$proto://$url", PHP_URL_HOST) ?: "localhost";
+		$host = urlencode($host);
 
 		$port = $this->httpPort();
 
@@ -1243,6 +1244,7 @@ class Common_functions  {
 		// set regexes
 		$country_regex = array(
 			'united kingdom' => '/^([A-Z][A-HJ-Y]?[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR ?0A{2})$/i',
+			'isle of man'    => '/\\A\\bIM[0-9][0-9]? [0-9][A-Z][A-Z]\\b\\z/i',
 			'england'        => '/^([A-Z][A-HJ-Y]?[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR ?0A{2})$/i',
 			'canada'         => '/\\A\\b[ABCEGHJKLMNPRSTVXY][0-9][A-Z][ ]?[0-9][A-Z][0-9]\\b\\z/i',
 			'italy'          => '/^[0-9]{5}$/i',
@@ -2339,6 +2341,20 @@ class Common_functions  {
 	    return implode("\n", $html);
 	}
 
+	/**
+	 * Composer auto-load error-handler.
+	 *
+	 * @param int $errno
+	 * @param string $errstr
+	 * @param string $errfile
+	 * @param int $errline
+	 * @return bool
+	 */
+	static function composer_autoload_error_handler($errno, $errstr, $errfile, $errline) {
+		$Result = new Result();
+		$Result->show($errno >128 ? 'danger' : 'warning', "<h5>" . escape_input($errfile) . ":" . escape_input($errline) . "</h5>" . escape_input($errstr));
+		return true;
+	}
 
 	/**
 	 * Composer check
@@ -2356,8 +2372,11 @@ class Common_functions  {
         	return true;
         }
 
-        // autoload composer files
+        // autoload composer files - catch and display errors.
+		$old_handler = set_error_handler("Common_functions::composer_autoload_error_handler", E_ALL);
         require __DIR__ . '/../vendor/autoload.php';
+		set_error_handler($old_handler, E_ALL);
+
         // check if composer is installed
         if (!class_exists('\Composer\InstalledVersions')) {
         	$this->composer_err = _("Composer is not installed")."!<hr>"._("Please install composer and composer modules ( cd functions && composer install ).");

@@ -123,8 +123,12 @@ foreach ($domains as $d) {
     $cnt = $PowerDNS->count_domain_records($d->id);
     // get SOA record
     $soa = $PowerDNS->fetch_domain_records_by_type($d->id, "SOA");
-    $serial = pf_explode(" ", $soa[0]->content);
-    $serial = $serial[2];
+    if (is_object($soa)) {
+        $serial = pf_explode(" ", $soa[0]->content);
+        $serial = $serial[2];
+    } else {
+        $serial = '';
+    }
 
     print "<tr>";
     if ($User->get_module_permissions ("pdns")>=User::ACCESS_RW) {

@@ -10,6 +10,7 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "pdns_defaults");
 
+$readonly = $POST->action=="delete" ? "readonly" : "";
 ?>
 <!-- database settings -->
 <form name="pdns" id="pdns-defaults">

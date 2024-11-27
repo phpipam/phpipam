@@ -53,6 +53,7 @@ if(@$config['requests_public']===false) {
 	<script src="js/jquery-3.7.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/bootstrap.custom.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script>
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
@@ -123,14 +124,46 @@ if(@$config['requests_public']===false) {
 	?>
 
 	<?php
-	# include proper subpage
-	if($GET->page == "login") 				{
-		# disable main login form if you want use another authentification method by default (SAML, LDAP, etc.)
-		$include_main_login_form = !isset($config['disable_main_login_form']) || !$config['disable_main_login_form'];
-		if ($include_main_login_form) include_once('login_form.php');
-	}
-	elseif ($GET->page == "request_ip") 	{ include_once('request_ip_form.php'); }
-	else 										{ $GET->subnetId = "404"; print "<div id='error'>"; include_once('app/error.php'); print "</div>"; }
+					# include proper subpage
+					if ($GET->page == "login") {
+						# disable main login form if you want use another authentification method by default (SAML, LDAP, etc.)
+						$include_main_login_form = !isset($config['disable_main_login_form']) || !$config['disable_main_login_form'];
+
+						print '<div id="login">';
+						print '<form name="login" id="login" action="'. BASE .'" class="form-inline" method="post">';
+						print '<div class="loginForm row">';
+
+						if ($include_main_login_form) {
+							include_once('login_form.php');
+						} else {
+							include_once('login_form_sso.php');
+						}
+
+						/* show request module if enabled in config file */
+						if($User->settings->enableIPrequests == 1) {
+							print '<div class="iprequest">';
+							print '<a href="' . create_link("request_ip") . '">';
+							print '<i class="fa fa-plus fa-pad-right"></i>'. _('Request new IP address');
+							print '</a></div>';
+						}
+
+						print '</div></form></div>';
+						print '</div>';
+
+						if(!Config::ValueOf('disable_installer')) {
+							print '<div class="alert alert-warning" style="width:400px;margin:auto;margin-top:30px;">';
+							print '<strong>' . _("Please disable installation scripts:<br>&emsp; config.php: \$disable_installer = true;<br>&emsp; docker: env IPAM_DISABLE_INSTALLER=1") . '</strong>';
+							print '</div>';
+						}
+
+					} elseif ($GET->page == "request_ip") {
+						include_once('request_ip_form.php');
+					} else {
+						$GET->subnetId = "404";
+						print "<div id='error'>";
+						include_once('app/error.php');
+						print "</div>";
+					}
 	?>
 
 </div>

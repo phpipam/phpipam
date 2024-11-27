@@ -13,7 +13,7 @@ for($m=$subnet['mask']+1; $m<=$pow; $m++) {
 	$active = $m==$GET->ipaddrid ? "btn-success" : "";
 
 	// number of subnets
-	$subnet_num = @gmp_strval(gmp_pow(2, ($m-$subnet['mask'])));
+	$subnet_num = @gmp_strval(gmp_pow2(($m-$subnet['mask'])));
 
 	// print link
 	print "<a class='btn btn-sm btn-default $active' href='".create_link("subnets",$GET->section,$GET->subnetId,"mapsearch",$m)."'>/$m ($subnet_num "._("Subnets").")</a><br>";

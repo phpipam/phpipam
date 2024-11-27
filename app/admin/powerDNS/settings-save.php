@@ -40,6 +40,9 @@ $values->autoserial = isset($POST->autoserial) ? "Yes" : "No";
 
 // get old settings for defaults
 $old_values = db_json_decode($User->settings->powerDNS);
+if (!is_object($old_values)) {
+    $old_values = new Params();
+}
 
 $values->ns			= $old_values->ns;
 $values->hostmaster	= $old_values->hostmaster;

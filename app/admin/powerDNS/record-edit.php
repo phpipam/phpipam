@@ -61,6 +61,7 @@ else {
 			}
 			// match found ?
 			if (isset($matches)) {
+				$max = 0;
 				foreach($matches as $k=>$m){
 					$length = strlen($m->name);
 					if($length > $max){ $max = $length; $element_id = $k; }
@@ -80,9 +81,8 @@ else {
     		}
 		}
 		else {
-			$record = new StdClass ();
+			$record = new Params ();
 			$record->ttl = (isset($pdns->ttl) && $pdns->ttl > 0) ? $pdns->ttl : 3600;
-			$record->name = $POST->domain_id;
 			$record->content = $POST->id;
 		}
 	}

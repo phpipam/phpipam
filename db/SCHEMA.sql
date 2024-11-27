@@ -169,7 +169,7 @@ CREATE TABLE `settings` (
   `enableFirewallZones` TINYINT(1) NOT NULL DEFAULT '0',
   `firewallZoneSettings` VARCHAR(1024) NOT NULL DEFAULT '{"zoneLength":3,"ipType":{"0":"v4","1":"v6"},"separator":"_","indicator":{"0":"own","1":"customer"},"zoneGenerator":"2","zoneGeneratorType":{"0":"decimal","1":"hex","2":"text"},"deviceType":"3","padding":"on","strictMode":"on","pattern":{"0":"patternFQDN"}}', /* __no_html_escape__ */
   `enablePowerDNS` TINYINT(1)  NULL  DEFAULT '0',
-  `powerDNS` TEXT  NULL,
+  `powerDNS` TEXT  NULL, /* __no_html_escape__ */
   `enableDHCP` TINYINT(1)  NULL  DEFAULT '0',
   `DHCP` VARCHAR(256) NULL default '{"type":"kea","settings":{"file":"\/etc\/kea\/kea.conf"}}', /* __no_html_escape__ */
   `enableMulticast` TINYINT(1)  NULL  DEFAULT '0',
@@ -415,7 +415,7 @@ DROP TABLE IF EXISTS `lang`;
 CREATE TABLE `lang` (
   `l_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `l_code` varchar(12) NOT NULL DEFAULT '',
-  `l_name` varchar(32) DEFAULT NULL,
+  `l_name` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`l_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
@@ -1081,5 +1081,5 @@ CREATE TABLE `nominatim_cache` (
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
-UPDATE `settings` SET `version` = "1.7";
-UPDATE `settings` SET `dbversion` = 43;
+UPDATE `settings` SET `version` = "1.8";
+UPDATE `settings` SET `dbversion` = 44;

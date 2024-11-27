@@ -38,6 +38,8 @@ $pdns = $PowerDNS->db_settings;
 if($POST->action!="add") {
 	$domain = $PowerDNS->fetch_domain ($POST->id);
 	$domain!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
+} else {
+	$domain = new Params();
 }
 
 # disable edit on delete
