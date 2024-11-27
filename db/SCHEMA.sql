@@ -169,7 +169,7 @@ CREATE TABLE `settings` (
   `enableFirewallZones` TINYINT(1) NOT NULL DEFAULT '0',
   `firewallZoneSettings` VARCHAR(1024) NOT NULL DEFAULT '{"zoneLength":3,"ipType":{"0":"v4","1":"v6"},"separator":"_","indicator":{"0":"own","1":"customer"},"zoneGenerator":"2","zoneGeneratorType":{"0":"decimal","1":"hex","2":"text"},"deviceType":"3","padding":"on","strictMode":"on","pattern":{"0":"patternFQDN"}}', /* __no_html_escape__ */
   `enablePowerDNS` TINYINT(1)  NULL  DEFAULT '0',
-  `powerDNS` TEXT  NULL,
+  `powerDNS` TEXT  NULL, /* __no_html_escape__ */
   `enableDHCP` TINYINT(1)  NULL  DEFAULT '0',
   `DHCP` VARCHAR(256) NULL default '{"type":"kea","settings":{"file":"\/etc\/kea\/kea.conf"}}', /* __no_html_escape__ */
   `enableMulticast` TINYINT(1)  NULL  DEFAULT '0',
