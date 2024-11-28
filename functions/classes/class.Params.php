@@ -98,6 +98,7 @@ class Params extends stdClass implements Countable {
         // Don't run strip_tags() on passwords and usernames
         // "<a>" can occur inside a valid password
         $strip_exceptions = [
+            'ipampassword',
             'ipampassword1',
             'ipampassword2',
             'ipamusername',
