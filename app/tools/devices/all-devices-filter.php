@@ -72,8 +72,8 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 	print "   <li><a href='".create_link("tools","devices")."'>"._("All types")."</a></li>";
 	print "		<li role='separator' class='divider'></li>";
 	foreach ($device_types_indexed as $d) {
-		$selected = $d->tname==$GET->sPage ? "class='active'" : "";
-		print "   <li $selected><a href='".create_link("tools","devices","type",$d->tname)."'>".$d->tname."</a></li>";
+		$selected = $d==$GET->sPage ? "class='active'" : "";
+		print "   <li $selected><a href='".create_link("tools","devices","type",$d)."'>".$d."</a></li>";
 	}
 	print " </ul>";
 	print "</div>";

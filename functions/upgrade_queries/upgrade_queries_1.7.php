@@ -1,11 +1,35 @@
 <?php
 
 #
-# Version 1.71 queries
+# Version 1.7 queries
 #
+$upgrade_queries["1.7.40"]   = [];
+$upgrade_queries["1.7.40"][] = "-- Version update";
+$upgrade_queries["1.7.40"][] = "UPDATE `settings` set `version` = '1.7';";
+
+// add passkey support to settings
+$upgrade_queries["1.7.40"][] = "ALTER TABLE `settings` ADD `passkeys` TINYINT(1)  NULL  DEFAULT '0'  AFTER `2fa_userchange`;";
+// allow passkey login only
+$upgrade_queries["1.7.40"][] = "ALTER TABLE `users` ADD `passkey_only` TINYINT(1)  NOT NULL  DEFAULT '0'  AFTER `authMethod`;";
+// passkey table
+$upgrade_queries["1.7.40"][] = "CREATE TABLE `passkeys` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `credentialId` text NOT NULL,
+  `keyId` text NOT NULL,
+  `credential` text NOT NULL,
+  `comment` text,
+  `created` timestamp NULL DEFAULT NULL,
+  `used` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+
+$upgrade_queries["1.7.40"][] = "-- Database version bump";
+$upgrade_queries["1.7.40"][] = "UPDATE `settings` set `dbversion` = '40';";
+
 $upgrade_queries["1.7.41"]   = [];
-$upgrade_queries["1.7.41"][] = "-- Version update";
-$upgrade_queries["1.7.41"][] = "UPDATE `settings` set `version` = '1.7';";
 $upgrade_queries["1.7.41"][] = "-- Database version bump";
 $upgrade_queries["1.7.41"][] = "UPDATE `settings` set `dbversion` = '41';";
 
@@ -32,3 +56,15 @@ $upgrade_queries["1.7.43"][] = "-- Increase 2fa_length minimum value to 26 (128b
 $upgrade_queries["1.7.43"][] = "UPDATE `settings` SET `2fa_length`=26 WHERE `2fa_length`<26;";
 $upgrade_queries["1.7.43"][] = "-- Database version bump";
 $upgrade_queries["1.7.43"][] = "UPDATE `settings` SET `dbversion` = '43';";
+
+$upgrade_queries["1.71.43"]   = [];
+$upgrade_queries["1.71.43"][] = "-- Version update";
+$upgrade_queries["1.71.43"][] = "UPDATE `settings` set `version` = '1.71';";
+
+$upgrade_queries["1.72.43"]   = [];
+$upgrade_queries["1.72.43"][] = "-- Version update";
+$upgrade_queries["1.72.43"][] = "UPDATE `settings` set `version` = '1.72';";
+
+$upgrade_queries["1.73.43"]   = [];
+$upgrade_queries["1.73.43"][] = "-- Version update";
+$upgrade_queries["1.73.43"][] = "UPDATE `settings` set `version` = '1.73';";

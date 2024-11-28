@@ -48,7 +48,7 @@ for($m=$biggest_subnet_mask+1; $m<=$pow; $m++) {
 	$subnet_num = 0;
 	foreach ($cnt as $mask=>$repeats) {
 		if($mask<$m) {
-			$subnet_num = @gmp_strval(gmp_mul($repeats,gmp_add($subnet_num, gmp_pow(2, ($m-$mask)))));
+			$subnet_num = @gmp_strval(gmp_mul($repeats,gmp_add($subnet_num, gmp_pow2(($m-$mask)))));
 		}
 	}
 

@@ -51,24 +51,6 @@ if ($POST->action!="delete") {
 	if(!$Tools->validate_postcode ($POST->postcode, $POST->state)) { $Result->show("danger", _("Invalid Postcode"), true); }
 }
 
-// fetch custom fields
-$custom = $Tools->fetch_custom_fields('customers');
-if(sizeof($custom) > 0) {
-	foreach($custom as $myField) {
-		//booleans can be only 0 and 1!
-		if($myField['type']=="tinyint(1)") {
-			if($POST->{$myField['name']}>1) {
-				$POST->{$myField['name']} = 0;
-			}
-		}
-		//not null!
-		if($myField['Null']=="NO" && is_blank($POST->{$myField['name']})) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
-		// save to update array
-		$update[$myField['name']] = $POST->{$myField['name']};
-	}
-}
-
-
 /**
  * Update database
  */
@@ -86,10 +68,10 @@ $values = array(
 				"contact_mail"   => $POST->contact_mail,
 				"note"           => $POST->note
 				);
-// custom fields
-if(isset($update)) {
-	$values = array_merge($values, $update);
-}
+
+// fetch custom fields
+$update = $Tools->update_POST_custom_fields('customers', $POST->action, $POST);
+$values = array_merge($values, $update);
 
 // set lat lng
 $OSM = new OpenStreetMap($Database);

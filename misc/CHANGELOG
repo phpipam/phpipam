@@ -1,3 +1,31 @@
+== 1.7.3
+
+    Bugfixes:
+    ----------------------------
+    + Backported PHP8 compatibility fixes;
+    + Workaround PHP bug GH-16870 (#4339);
+    + Request new IP hangs (#4346);
+
+== 1.7.2
+
+    Bugfixes:
+    ----------------------------
+    + Slow UI performance with bootstrap v3.4.1 (#4311);
+
+== 1.7.1
+
+    Bugfixes:
+    ----------------------------
+    + Backported PHP8 compatibility fixes;
+    + Fixed passkeys upgrade queries;
+    + MySQL no active transaction error during upgrades (#4319);
+    + $config['disable_main_login_form'] shows blank page (#4317);
+    + Unable to clear custom fields (#4313);
+
+    Security Fixes:
+    ----------------------------
+    + XSS - reflected via HTTP_X_FORWARDED_PORT;
+
 == 1.7.0
 
     New features:

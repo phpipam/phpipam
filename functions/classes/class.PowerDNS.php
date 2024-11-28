@@ -601,19 +601,22 @@ class PowerDNS extends Common_functions {
      * @param mixed $name
      * @return object|false
      */
-    public function fetch_domain_by_name ($name) {
+    public function fetch_domain_by_name($name) {
         # fetch
-        try { $domain = $this->Database_pdns->findObjects("domains", "name", $name); }
-        catch (Exception $e) {
-            $this->Result->show("danger", _("Error: ").$e->getMessage());
+        try {
+            $domain = $this->Database_pdns->findObjects("domains", "name", $name);
+        } catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ") . $e->getMessage());
+            return false;
+        }
+
+        if (!is_array($domain) || empty($domain)) {
             return false;
         }
 
         # cache
         $this->domains_cache[$domain[0]->id] = $domain[0];
-
-        # result
-        return is_object(($domain[0])) ? $domain[0] : false;
+        return $domain[0];
     }
 
     /**
@@ -1067,7 +1070,7 @@ class PowerDNS extends Common_functions {
         $content = array(
                         "id"=>$soa->id,
                         "content"=>implode(" ", $soa_serial),
-                        "change_date"=>$soa_serial[2]
+                        "change_date"=>$this->set_default_change_date()
                         );
         // update
         $this->update_domain_record_content ($content);
@@ -1114,7 +1117,7 @@ class PowerDNS extends Common_functions {
         $soa   = array();
         $soa[] = array_shift(pf_explode(";", $values['ns']));
         $soa[] = str_replace ("@", ".", $values['hostmaster']);
-        $soa[] = $this->set_default_change_date ();
+        $soa[] = date("Ymd")."00";
         $soa[] = $this->validate_refresh ($values['refresh']);
         $soa[] = $this->validate_integer ($values['retry']);
         $soa[] = $this->validate_integer ($values['expire']);
@@ -1394,7 +1397,7 @@ class PowerDNS extends Common_functions {
      * @return void
      */
     private function set_default_change_date () {
-        return date("Ymd")."00";
+        return date("Y-m-d")." 0000";
     }
 
     /**

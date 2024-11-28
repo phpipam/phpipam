@@ -36,7 +36,7 @@ if($subnet['sectionId']!=$GET->section)	{
 	if (!is_object($sd)) {
 		$sd = new Params();
 	}
-	$Result->show("warning", _("Subnet is in section") . " <a href='" . create_link("subnets", $sd['id'], $subnet['id']) . "'>" . $sd->name . "</a>!", false);
+	$Result->show("warning", _("Subnet is in section") . " <a href='" . create_link("subnets", $sd->id, $subnet['id']) . "'>" . $sd->name . "</a>!", false);
 }
 
 // get usage

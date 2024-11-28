@@ -1055,6 +1055,9 @@ class FirewallZones extends Common_functions {
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($id);
+		if (!is_object($zone)) {
+			$zone = new Params();
+		}
 		$firewallAddressObject = "";
 
 		foreach ($firewallZoneSettings['pattern'] as $pattern) {
