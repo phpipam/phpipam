@@ -1397,7 +1397,7 @@ class PowerDNS extends Common_functions {
      * @return void
      */
     private function set_default_change_date () {
-        return date("Y-m-d")." 0000";
+        return date("Ymd")."00";
     }
 
     /**
