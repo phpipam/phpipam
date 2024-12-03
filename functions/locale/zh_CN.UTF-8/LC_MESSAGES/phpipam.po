@@ -2833,7 +2833,7 @@ msgstr "子网详细信息"
 
 #: app/subnets/index.php:80
 msgid "Space map"
-msgstr "地图空间"
+msgstr "子网资源"
 
 #: app/subnets/index.php:81
 msgid "Mask search"
@@ -3606,7 +3606,7 @@ msgstr "关闭窗口"
 
 #: app/subnets/addresses/print-address-table.php:137
 msgid "IP addresses in"
-msgstr "IP 地址位于"
+msgstr "IP 地址在"
 
 #: app/admin/filter-fields/index.php:36
 msgid "Filter which fields to display in IP list"
@@ -12602,6 +12602,10 @@ msgstr "浏览/拖放"
 msgid "Cancel upload"
 msgstr "取消上传"
 
+#: app/admin/import-export/import-button.php:108
+msgid "Upload successfull"
+msgstr "上传成功"
+
 #: app/admin/import-export/import-button.php:116
 msgid "Match fields"
 msgstr "匹配字段"
@@ -13681,6 +13685,22 @@ msgstr "下载"
 msgid "Invalid certificate"
 msgstr "证书无效"
 
+#: app/admin/vaults/download-certificate.php:50
+msgid "Download PEM encoded public certificate (ASCII) - crt"
+msgstr "下载 PEM 编码的公共证书 (ASCII) - crt"
+
+#: app/admin/vaults/download-certificate.php:55
+msgid "Download PEM encoded certificate (ASCII) with private key - pem"
+msgstr "下载带有私钥的 PEM 编码证书（ASCII）- pem"
+
+#: app/admin/vaults/download-certificate.php:57
+msgid "Download PKCS#12 encoded certificate (Binary) with private key - p12"
+msgstr "下载带有私钥的 PKCS#12 编码证书（二进制）-p12"
+
+#: app/admin/vaults/download-certificate.php:98
+msgid "Enter password for private key export"
+msgstr "输入导出私钥的密码"
+
 #: app/admin/vaults/edit-item-certificate-result.php:107
 #: app/admin/vaults/edit-item-certificate-result.php:108
 #: app/admin/vaults/edit-item-password-result.php:89
@@ -13736,6 +13756,22 @@ msgstr "输入名称"
 #: app/admin/vaults/edit-item-certificate.php:119
 msgid "Certificate type"
 msgstr "证书类别"
+
+#: app/admin/vaults/edit-item-certificate.php:125
+msgid "Fetch website certificate"
+msgstr "获取网站证书"
+
+#: app/admin/vaults/edit-item-certificate.php:126
+msgid "证书（.cer、.pem、.crt）"
+msgstr "证书类别"
+
+#: app/admin/vaults/edit-item-certificate.php:127
+msgid "PKCS12 Certificate with key file (.p12, .pfx)"
+msgstr "带有密钥文件的 PKCS12 证书（.p12、.pfx）"
+
+#: app/admin/vaults/edit-item-certificate.php:216
+msgid "Certificate fetched."
+msgstr "已获取证书。"
 
 #: app/admin/vaults/edit-item-password.php:41
 msgid "password"
@@ -13808,6 +13844,10 @@ msgstr "解锁"
 #: app/tools/vaults/vault/vault-details-general.php:108
 msgid "Edit Vault"
 msgstr "编辑保管库"
+
+#: app/tools/vaults/vault/vault-details-general.php:111
+msgid "Delete Vault"
+msgstr "删除保管库"
 
 #: app/tools/vaults/vault/vault-item-details-general.php:12
 #: app/tools/vaults/vault/vault-item-details-general.php:147
