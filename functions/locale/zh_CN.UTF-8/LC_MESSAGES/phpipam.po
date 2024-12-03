@@ -5,7 +5,7 @@
 # "Content-Type: text/plain; charset=UTF-8\n"
 # "Content-Transfer-Encoding: 8bit\n"
 # "Last-Translator: wxtewx <wxtewx@qq.com>\n"
-# "PO-Revision-Date: 2024-11-28 15:04\n"
+# "PO-Revision-Date: 2024-12-03 13:28\n"
 # "Project-Id-Version: 1.70\n"
 # "Language: zh_CN\n"
 # "MIME-Version: 1.0\n"
@@ -17625,3 +17625,11 @@ msgstr "过滤字符串"
 #: app/tools/devices/all-devices-filter.php:106
 msgid "All locations"
 msgstr "所有位置"
+
+#: app/subnets/scan/subnet-scan-execute-scan-icmp.php:56
+msgid "Error executing scan! Error code - $retval"
+msgstr "执行扫描时出错！错误代码 - $retval"
+
+#: app/subnets/scan/subnet-scan-execute-scan-icmp.php:60
+msgid "0 new hosts discovered"
+msgstr "发现 0 个新主机"
