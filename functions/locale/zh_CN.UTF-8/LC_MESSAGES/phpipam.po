@@ -121,7 +121,7 @@ msgstr "用户成功登录后，将显示额外的屏幕，用于从 Google 身�
 
 #: app/admin/2fa/index.php:168
 msgid "Google Authenticator is available on following links based on your OS:"
-msgstr "根据您的操作系统，可通过以下链接获取 Google 身份验证器：:"
+msgstr "根据您的操作系统，可通过以下链接获取 Google 身份验证器："
 
 #: app/admin/2fa/index.php:173
 msgid "You can also use Microsoft or any other otp provider."
@@ -823,8 +823,7 @@ msgstr "数据库"
 msgid "Failed to connect to database:<hr> "
 msgstr "无法连接到数据库：<hr> "
 
-#: app/admin/powerDNS/settings.php:117
-#: app/admin/powerDNS/settings.php:133
+#: app/admin/powerDNS/settings.php:117 app/admin/powerDNS/settings.php:133
 msgid "Database connection ok"
 msgstr "数据库连接正常"
 
@@ -1002,7 +1001,7 @@ msgstr "从版本 1.3.2 开始，至少需要 PHP 版本 5.4！!"
 
 #: functions/checks/check_php_build.php:83
 msgid "Detected PHP version: "
-msgstr "检测到的 PHP 版本：: "
+msgstr "检测到的 PHP 版本： "
 
 #: functions/checks/check_php_build.php:84
 #: functions/checks/check_php_build.php:90
@@ -1933,7 +1932,7 @@ msgid "Port"
 msgstr "端口"
 
 msgid "Available VLANs:"
-msgstr "可用的 VLAN：:"
+msgstr "可用的 VLAN："
 
 #: app/admin/import-export/export-vlan-field-select.php:56
 #: app/admin/import-export/export-vlan.php:60
@@ -2254,7 +2253,7 @@ msgstr "MAC 搜索提示"
 
 #: app/tools/search/search-tips.php:64
 msgid "You can search by MAC address list entering MAC in 00:1cd:d4:78:ec:46 or 001dd478ec46 format, or search multiple with 00:1c:c4:"
-msgstr "您可以按 MAC 地址列表搜索，以 00:1cd:d4:78:ec:46 或 001dd478ec46 格式输入 MAC，或使用 00:1c:c4 搜索多个：:"
+msgstr "您可以按 MAC 地址列表搜索，以 00:1cd:d4:78:ec:46 或 001dd478ec46 格式输入 MAC，或使用 00:1c:c4 搜索多个："
 
 #: app/tools/search/search-tips.php:71
 msgid "Custom field search tips"
@@ -4569,7 +4568,7 @@ msgstr "RD"
 
 #: app/admin/import-export/generate-mysql.php:22
 msgid "Unable to locate executable: "
-msgstr "无法找到可执行文件：: "
+msgstr "无法找到可执行文件： "
 
 #: app/admin/import-export/generate-mysql.php:23
 msgid "Please configure $mysqldump_cli_binary in config.php\n"
@@ -4583,7 +4582,7 @@ msgid "Import successful"
 msgstr "导入成功"
 
 msgid "Cannot upload - Return Code:"
-msgstr "无法上传 - 返回代码：:"
+msgstr "无法上传 - 返回代码："
 
 msgid "Cannot move file to upload dir"
 msgstr "无法将文件移动到上传目录"
@@ -5302,7 +5301,7 @@ msgstr "管理员级别用户"
 
 #: app/admin/groups/index.php:90
 msgid "All sections:"
-msgstr "所有区域：:"
+msgstr "所有区域："
 
 msgid "All sections : Read / Write"
 msgstr "所有区域：读/写"
@@ -5406,7 +5405,7 @@ msgstr "当前组"
 
 #: app/admin/subnets/split.php:127
 msgid "You can split subnet to smaller subnets by specifying new subnets. Please note:"
-msgstr "您可以通过指定新子网将子网拆分为更小的子网。 请注意：:"
+msgstr "您可以通过指定新子网将子网拆分为更小的子网。 请注意："
 
 #: app/admin/subnets/split.php:129
 msgid "Existing IP addresses will be assigned to new subnets"
@@ -5630,7 +5629,7 @@ msgstr "请按照以下步骤操作"
 
 #: app/install/install_mysqlimport.php:21
 msgid "with mysqlimport:"
-msgstr "使用 mysqlimport：:"
+msgstr "使用 mysqlimport："
 
 #: app/install/install_mysqlimport.php:24
 msgid "Open mysql connection"
@@ -5706,7 +5705,7 @@ msgstr "我们很高兴您决定使用 phpipam"
 
 #: app/install/select_install_type.php:15
 msgid "Before you can start to process please:"
-msgstr "在开始处理之前，请：:"
+msgstr "在开始处理之前，请："
 
 #: app/install/select_install_type.php:17
 msgid "Edit settings in config.php file"
@@ -5762,7 +5761,7 @@ msgstr "数据库连接检查"
 
 #: app/install/sql_error.php:22
 msgid "Troubleshooting:"
-msgstr "故障排除：:"
+msgstr "故障排除："
 
 #: app/install/sql_error.php:24
 msgid "Make sure all settings in config.php are correct."
@@ -5786,7 +5785,7 @@ msgstr "欢迎使用 phpipam 安装向导！!"
 
 #: app/install/welcome.php:9
 msgid "Please select one of the options below:"
-msgstr "请选择以下选项之一：:"
+msgstr "请选择以下选项之一："
 
 #: app/install/welcome.php:18
 msgid "New phpipam installation"
@@ -6140,7 +6139,7 @@ msgstr "仅找到一个子网"
 
 #: app/admin/subnets/find_free_section_subnets_result.php:102
 msgid "Following available subnets found for selected mask in this section:"
-msgstr "本区域为所选掩码找到了以下可用子网：:"
+msgstr "本区域为所选掩码找到了以下可用子网："
 
 #: app/admin/subnets/find_free_section_subnets_result.php:113
 msgid "No available subnets found selected for mask"
@@ -8321,7 +8320,7 @@ msgid "Filter"
 msgstr "过滤器"
 
 msgid "Filter applied:"
-msgstr "应用过滤器：:"
+msgstr "应用过滤器："
 
 #: app/tools/customers/customer/objects/circuits.php:43
 msgid "Sort by type"
@@ -8513,7 +8512,7 @@ msgstr "手动数据库"
 
 #: app/install/install_manual.php:20
 msgid "For importing database file with mysqlimport tool please follow below instructions:"
-msgstr "要使用 mysqlimport 工具导入数据库文件，请按照以下说明操作：:"
+msgstr "要使用 mysqlimport 工具导入数据库文件，请按照以下说明操作："
 
 #: app/install/install_manual.php:22 app/install/install_mysqlimport.php:23
 msgid "Set variables for database connection in config.php"
@@ -9501,7 +9500,7 @@ msgstr "在这里您可以为您的用户设置不同的身份验证方法."
 
 #: app/admin/authentication-methods/index.php:107
 msgid "phpIPAM currently supports 7 methods for authentication:"
-msgstr "phpIPAM 目前支持7种认证方法：:"
+msgstr "phpIPAM 目前支持7种认证方法："
 
 #: app/admin/authentication-methods/index.php:109
 msgid "Local authentication"
@@ -9884,7 +9883,7 @@ msgstr "无域名服务器"
 #: functions/scripts/merge_databases.php:514
 #: functions/scripts/remove_offline_addresses.php:52
 msgid "Error: "
-msgstr "错误：: "
+msgstr "错误： "
 
 #: app/admin/instructions/edit-result.php:36
 #: app/admin/instructions/edit-result.php:44
@@ -10264,7 +10263,7 @@ msgstr "无效动作"
 #: functions/classes/class.FirewallZones.php:726
 #: functions/classes/class.Log.php:352 functions/classes/class.User.php:580
 msgid "Database error: "
-msgstr "数据库错误：: "
+msgstr "数据库错误： "
 
 #: functions/classes/class.FirewallZones.php:559
 msgid "Zone details"
@@ -10310,7 +10309,7 @@ msgstr "认证失败"
 
 #: functions/classes/class.User.php:1062
 msgid "Something went wrong during auth: "
-msgstr "认证期间出现问题：: "
+msgstr "认证期间出现问题： "
 
 #: functions/classes/class.User.php:1134 functions/classes/class.User.php:1135
 msgid "php Socket extension missing"
@@ -10362,7 +10361,7 @@ msgstr "您没有访问该对象的权限"
 
 #: functions/global_functions.php:121
 msgid "Required PHP extension not installed: "
-msgstr "未安装所需的 PHP 扩展：: "
+msgstr "未安装所需的 PHP 扩展： "
 
 #: functions/global_functions.php:133
 msgid "Required function disabled"
@@ -10370,7 +10369,7 @@ msgstr "所需功能已禁用"
 
 #: functions/global_functions.php:135
 msgid "Required function not found: "
-msgstr "未找到所需功能：: "
+msgstr "未找到所需功能： "
 
 #: functions/scripts/clear_logs.php:27
 msgid "Error clearing changelogs"
@@ -10413,7 +10412,7 @@ msgstr "未找到可以替换的记录"
 #: functions/classes/class.Tools.php:1407
 #: functions/classes/class.Tools.php:1433
 msgid "Update: "
-msgstr "更新：: "
+msgstr "更新： "
 
 #: functions/classes/class.Tools.php:1407
 #: functions/classes/class.Tools.php:1433
@@ -10430,7 +10429,7 @@ msgstr "数据库索引检查： : "
 
 #: functions/classes/class.Tools.php:1575
 msgid "Creating index failed: "
-msgstr "创建索引失败：: "
+msgstr "创建索引失败： "
 
 #: functions/classes/class.Tools.php:1579
 msgid "Created index for table"
@@ -10446,7 +10445,7 @@ msgstr "删除链接地址索引： : "
 
 #: functions/classes/class.Tools.php:1637
 msgid "Warning: "
-msgstr "警告：: "
+msgstr "警告： "
 
 #: functions/classes/class.Tools.php:1637
 msgid "Unable to create index for MySQL TEXT/BLOB data types."
@@ -11303,7 +11302,7 @@ msgstr "LDAP 帐户没有足够的搜索权限"
 # ## 1.19.021
 #: app/admin/subnets/ripe-query.php:49
 msgid "Please select fields to populate:"
-msgstr "请选择要填充的字段：:"
+msgstr "请选择要填充的字段："
 
 #: app/admin/subnets/ripe-query.php:97
 msgid "fill"
@@ -12112,7 +12111,7 @@ msgstr "NetIQ 连接设置"
 
 #: app/admin/authentication-methods/index.php:18
 msgid "Create new:"
-msgstr "创建新的：:"
+msgstr "创建新的："
 
 #: app/admin/authentication-methods/index.php:24
 msgid "Create new "
@@ -12463,7 +12462,7 @@ msgstr " 网络映射"
 
 #: app/admin/firewall-zones/zones-edit-network.php:67
 msgid "You are about to remove the following Network from the firewall zone:"
-msgstr "您即将从防火墙区域中删除以下网络：:"
+msgstr "您即将从防火墙区域中删除以下网络："
 
 #: app/admin/firewall-zones/zones-edit-network.php:75
 msgid "First select a section to choose a subnet afterwards."
@@ -12516,7 +12515,7 @@ msgstr "发现以下组"
 
 #: app/admin/groups/ad-search-group-result.php:104
 msgid "Members:"
-msgstr "成员：:"
+msgstr "成员："
 
 msgid "Group $_POST[action] error"
 msgstr "组 $_POST[action] 错误"
@@ -12609,7 +12608,7 @@ msgstr "匹配字段"
 
 #: app/admin/import-export/import-button.php:116
 msgid "Please match the DB fields with the uploaded fields:"
-msgstr "请将数据库字段与上传的字段匹配：:"
+msgstr "请将数据库字段与上传的字段匹配："
 
 #: app/admin/import-export/import-button.php:122
 msgid "Pick import colum for"
@@ -12710,7 +12709,7 @@ msgstr "将被忽略."
 #: app/admin/import-export/import-vlan-preview.php:37
 #: app/admin/import-export/import-vrf-preview.php:37
 msgid "Summary: "
-msgstr "概括：: "
+msgstr "概括： "
 
 #: app/admin/import-export/import-devices-preview.php:38
 #: app/admin/import-export/import-devtype-preview.php:37
@@ -12825,7 +12824,7 @@ msgstr "模板"
 #: app/admin/import-export/import-vlan-select.php:86
 #: app/admin/import-export/import-vrf-select.php:73
 msgid "The import XLS/CSV should have the following fields and a <b>header row</b> for a succesful import:"
-msgstr "导入 XLS/CSV 应具有以下字段和 <b>标题行</b> 才能成功导入：:"
+msgstr "导入 XLS/CSV 应具有以下字段和 <b>标题行</b> 才能成功导入："
 
 #: app/admin/import-export/import-devices-select.php:130
 #: app/admin/import-export/import-ipaddr-select.php:126
@@ -12938,7 +12937,7 @@ msgstr "区域和 IP 版本"
 
 #: app/admin/import-export/import-recompute-select.php:86
 msgid "Please choose which section and IP version to recompute:"
-msgstr "请选择要重新计算的区域和 IP 版本：:"
+msgstr "请选择要重新计算的区域和 IP 版本："
 
 #: app/admin/import-export/import-recompute-select.php:97
 msgid "Hide unchanged subnets"
@@ -14409,7 +14408,7 @@ msgstr "删除 DNS 记录"
 
 #: app/subnets/addresses/address-modify.php:365
 msgid "Remove all associated DNS records:"
-msgstr "删除所有关联的 DNS 记录：:"
+msgstr "删除所有关联的 DNS 记录："
 
 #: app/subnets/addresses/address-details/address-details-linked.php:13
 #: app/subnets/addresses/print-address-table.php:588
@@ -14530,7 +14529,7 @@ msgstr "是必须的"
 
 #: app/subnets/addresses/address-modify-submit.php:74
 msgid "Please fix following errors:"
-msgstr "请修正以下错误：:"
+msgstr "请修正以下错误："
 
 #: app/subnets/addresses/export-field-select.php:73
 msgid "FW Object"
@@ -14696,7 +14695,7 @@ msgstr "发现的主机数量超过 php.ini 定义的最大可能数量"
 
 #: app/subnets/scan/subnet-scan-result.php:21
 msgid "Please increase your php.ini setting:"
-msgstr "请增加您的 php.ini 设置：:"
+msgstr "请增加您的 php.ini 设置："
 
 #: app/subnets/scan/subnet-scan.php:30 functions/classes/class.Scan.php:535
 #: functions/scripts/discoveryCheck.php:47 functions/scripts/pingCheck.php:57
@@ -14868,7 +14867,7 @@ msgstr "方法"
 
 #: functions/classes/class.Crypto.php:130
 msgid "PHP extension not installed: "
-msgstr "PHP 扩展未安装：: "
+msgstr "PHP 扩展未安装： "
 
 #: functions/classes/class.Crypto.php:248
 msgid "Invalid CSRF cookie action"
@@ -14964,7 +14963,7 @@ msgstr "未知"
 
 #: app/tools/powerDNS/domain-records.php:66
 msgid "Domain type:"
-msgstr "域名类型：:"
+msgstr "域名类型："
 
 #: app/tools/powerDNS/domain-records.php:75
 msgid "Master servers"
@@ -14972,11 +14971,11 @@ msgstr "主服务器"
 
 #: app/tools/powerDNS/domain-records.php:88
 msgid "Notified serial:"
-msgstr "通知序列号：:"
+msgstr "通知序列号："
 
 #: app/tools/powerDNS/domain-records.php:94
 msgid "Last check:"
-msgstr "最后一次检查：:"
+msgstr "最后一次检查："
 
 #: app/tools/powerDNS/domains-print.php:87
 msgid "No records found for filter "
@@ -15664,6 +15663,10 @@ msgstr "无可用机柜"
 msgid "No location"
 msgstr "没有位置"
 
+#: app/tools/racks/print-racks-list.php:82
+msgid "Location not set for this racks."
+msgstr "未设置此机架的位置。"
+
 #: app/tools/racks/print-racks-list.php:91
 msgid "Invalid location"
 msgstr "位置无效"
@@ -16038,7 +16041,7 @@ msgstr " 已安装"
 
 #: functions/classes/class.Install.php:201
 msgid "Cannot drop database: "
-msgstr "无法删除数据库：: "
+msgstr "无法删除数据库： "
 
 #: functions/classes/class.Install.php:204
 msgid "Cannot install sql SCHEMA file"
@@ -16067,7 +16070,7 @@ msgstr "数据库升级"
 
 #: functions/classes/class.Install.php:539
 msgid "query: "
-msgstr "查询：: "
+msgstr "查询： "
 
 #: functions/classes/class.Install.php:541
 msgid "Upgrade failed"
@@ -16322,7 +16325,7 @@ msgid "Missing class file"
 msgstr "缺少类文件"
 
 msgid "User attributes:"
-msgstr "用户属性：:"
+msgstr "用户属性："
 
 msgid "No attributes found."
 msgstr "未找到属性."
@@ -16693,7 +16696,7 @@ msgstr "值必须是数字"
 
 #: app/admin/password-policy/save.php:64
 msgid "Error updating users: "
-msgstr "更新用户时出错：: "
+msgstr "更新用户时出错： "
 
 # ## Circuits ####
 #: app/admin/admin-menu-config.php:64 app/admin/custom-fields/index.php:26
@@ -16911,7 +16914,7 @@ msgstr "添加了逻辑通信线路，但创建映射失败"
 
 #: app/admin/circuits/edit-logical-circuit-submit.php:101
 msgid "Error dropping mapping: "
-msgstr "删除映射时出错：: "
+msgstr "删除映射时出错： "
 
 #: app/admin/circuits/edit-logical-circuit-submit.php:120
 msgid "Error inserting mapping."
@@ -17293,7 +17296,7 @@ msgstr "解码提示"
 
 #: app/tools/mac-lookup/tips.php:12
 msgid "Enter MAC address in one of the following formats:"
-msgstr "使用以下格式之一输入 MAC 地址：:"
+msgstr "使用以下格式之一输入 MAC 地址："
 
 msgid "Show multicast subnets and mapping"
 msgstr "显示组播子网和映射"
@@ -17366,6 +17369,9 @@ msgstr "静态 NAT"
 msgid "Documentation"
 msgstr "文档指南"
 
+msgid "Protocol"
+msgstr "协议"
+
 #: app/tools/powerDNS/host_records.php:109
 msgid "DNS records resolving to IP address"
 msgstr "DNS 记录解析为 IP 地址"
@@ -17374,13 +17380,11 @@ msgstr "DNS 记录解析为 IP 地址"
 msgid "Login with a passkey"
 msgstr "使用通行密钥登录"
 
-#: app/admin/users/edit.php:195
-#: app/tools/user-menu/account.php:90
+#: app/admin/users/edit.php:195 app/tools/user-menu/account.php:90
 msgid "Passkey login only"
 msgstr "仅通过通行密钥登录"
 
-#: app/admin/users/edit.php:197
-#: app/tools/user-menu/account.php:94
+#: app/admin/users/edit.php:197 app/tools/user-menu/account.php:94
 msgid "Select to only allow account login with passkey"
 msgstr "选择仅允许使用通行密钥登录帐户"
 
@@ -17388,8 +17392,7 @@ msgstr "选择仅允许使用通行密钥登录帐户"
 msgid "User permissions for phpipam modules"
 msgstr "phpipam 模块的用户权限"
 
-#: app/tools/user-menu/index.php:40
-#: app/tools/user-menu/passkeys.php:12
+#: app/tools/user-menu/index.php:40 app/tools/user-menu/passkeys.php:12
 msgid "Passwordless authentication"
 msgstr "无密码身份验证"
 
@@ -17421,8 +17424,7 @@ msgstr "您可以在帐户详细信息选项卡下更改此设置"
 msgid "You can login to your account with normal authentication method only untill you create passkeys"
 msgstr "您只能在创建通行密钥之前使用常规身份验证方法登录您的帐户"
 
-#: app/tools/user-menu/passkeys.php:42
-#: app/tools/user-menu/passkeys.php:45
+#: app/tools/user-menu/passkeys.php:42 app/tools/user-menu/passkeys.php:45
 msgid "This can be changed under Account details tab."
 msgstr "这可以在帐户详细信息选项卡下更改。"
 
@@ -17498,8 +17500,7 @@ msgstr "启用通行密钥"
 msgid "Enable passkeys for passwordless login"
 msgstr "启用通行密钥以实现无密码登录"
 
-#: app/admin/powerDNS/settings.php:110
-#: app/admin/powerDNS/settings.php:122
+#: app/admin/powerDNS/settings.php:110 app/admin/powerDNS/settings.php:122
 msgid "All database connections failed"
 msgstr "所有数据库连接失败"
 
@@ -17551,6 +17552,10 @@ msgstr "未为用户设置通行密钥。将仅密钥登录重置为 false。"
 msgid "Check not implemented"
 msgstr "检查未实施"
 
+#: app/admin/authentication-methods/edit-SAML2.php:87
+msgid "Enable JIT"
+msgstr "启用 JIT"
+
 #: app/admin/authentication-methods/edit-SAML2.php:92
 msgid "Provision new users automatically"
 msgstr "自动配置新用户"
@@ -17571,6 +17576,52 @@ msgstr "您还可以使用您喜欢的身份验证应用程序扫描以下二维
 msgid "Fields"
 msgstr "字段"
 
+#: app/tools/user-menu/passkey_edit_result.php:28
+#: app/tools/user-menu/passkey_edit_result.php:31
+#: app/tools/user-menu/passkey_edit.php:30
+msgid "Passkey not found"
+msgstr "未找到通行密钥"
+
+#: app/tools/user-menu/passkey_edit_result.php:35
+msgid "Passkey renamed"
+msgstr "通行密钥已重命名"
+
+#: app/tools/user-menu/passkey_edit_result.php:36
+msgid "Failed to rename passkey"
+msgstr "无法重命名通行密钥"
+
+#: app/tools/user-menu/passkey_edit_result.php:39
+msgid "Passkey removed"
+msgstr "通行密钥已移除"
+
+#: app/tools/user-menu/passkey_edit_result.php:40
+msgid "Failed to remove passkey"
+msgstr "无法删除通行密钥"
+
+#: app/tools/user-menu/passkey_edit.php:35
+msgid "passkey"
+msgstr "通行密钥"
+
+#: app/tools/user-menu/passkey_edit.php:42
+msgid "New passkey succesfully registered!"
+msgstr "新通行密钥已成功注册！"
+
 #: app/tools/user-menu/passkey_edit.php:53
 msgid "Name your passkey"
 msgstr "命名您的通行密钥"
+
+#: app/tools/user-menu/passkey_edit.php:72
+msgid "You are about to delete your passkey "
+msgstr "您即将删除您的通行密钥 "
+
+#: app/admin/firewall-zones/settings.php:127
+msgid "Choose a maximum length of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgstr "选择区域名称的最大长度。<br>默认值：3，最大值：31 个字符。<br>（请记住，您的防火墙可能对区域名称或地址对象的长度有限制）"
+
+#: app/admin/index.php:8
+msgid "Filter string"
+msgstr "过滤字符串"
+
+#: app/tools/devices/all-devices-filter.php:106
+msgid "All locations"
+msgstr "所有位置"
