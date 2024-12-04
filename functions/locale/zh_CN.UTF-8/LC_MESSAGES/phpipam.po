@@ -17673,3 +17673,7 @@ msgstr "执行扫描时出错！错误代码 - $retval"
 #: app/subnets/scan/subnet-scan-execute-scan-icmp.php:60
 msgid "0 new hosts discovered"
 msgstr "发现 0 个新主机"
+
+#: app/subnets/addresses/address-details/address-details.php:349
+msgid "Regenerate firewall address object."
+msgstr "重新生成防火墙地址对象。"
