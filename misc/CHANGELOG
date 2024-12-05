@@ -1,3 +1,10 @@
+== 1.7.4
+
+    Bugfixes:
+    ----------------------------
+    + Backported PHP8 compatibility fixes;
+    + Can not empty address fields (#4322);
+
 == 1.7.3
 
     Bugfixes:
