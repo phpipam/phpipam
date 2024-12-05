@@ -12,6 +12,7 @@
     + Workaround PHP bug GH-16870 (#4339);
     + Request new IP hangs (#4346);
     + Fixed required fields validation (#4328);
+    + Can not empty address fields (#4322);
 
     Enhancements, changes:
     ----------------------------

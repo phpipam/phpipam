@@ -121,7 +121,7 @@ foreach ($POST as $k => $v) {
 		continue;
 
 	if (is_null($v) || is_blank($v)) {
-		unset($POST->{$k});
+		$POST->{$k} = null;
 	}
 }
 
