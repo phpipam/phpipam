@@ -5,8 +5,8 @@
 # "Content-Type: text/plain; charset=UTF-8\n"
 # "Content-Transfer-Encoding: 8bit\n"
 # "Last-Translator: wxtewx <wxtewx@qq.com>\n"
-# "PO-Revision-Date: 2023-09-03 22:48\n"
-e# "Project-Id-Version: 1.70\n"
+# "PO-Revision-Date: 2024-12-03 13:28\n"
+# "Project-Id-Version: 1.70\n"
 # "Language: zh_CN\n"
 # "MIME-Version: 1.0\n"
 # "Content-Type: text/plain; charset=UTF-8\n"
@@ -121,7 +121,7 @@ msgstr "用户成功登录后，将显示额外的屏幕，用于从 Google 身�
 
 #: app/admin/2fa/index.php:168
 msgid "Google Authenticator is available on following links based on your OS:"
-msgstr "根据您的操作系统，可通过以下链接获取 Google 身份验证器：:"
+msgstr "根据您的操作系统，可通过以下链接获取 Google 身份验证器："
 
 #: app/admin/2fa/index.php:173
 msgid "You can also use Microsoft or any other otp provider."
@@ -153,7 +153,7 @@ msgstr "QRCode 子模块缺失."
 
 #: app/admin/2fa/save.php:58
 msgid "Failed to update all users!"
-msgstr "无法更新所有用户！!"
+msgstr "无法更新所有用户！"
 
 #: app/admin/admin-menu-config.php:14
 msgid "phpIPAM settings"
@@ -299,7 +299,7 @@ msgstr "扫描代理"
 #: app/admin/admin-menu-config.php:99
 #: app/admin/import-export/export-devices-field-select.php:60
 msgid "sections"
-msgstr "部门"
+msgstr "区域"
 
 #: app/admin/admin-menu-config.php:100
 msgid "settings"
@@ -407,7 +407,7 @@ msgstr "秒"
 #: app/admin/authentication-methods/edit-Radius.php:150
 #: app/admin/authentication-methods/edit-SAML2.php:279
 msgid " users have this method for logging in. They will be reset to local auth!"
-msgstr " 用户使用此方法登录。他们将切换到本地授权！!"
+msgstr " 用户使用此方法登录。他们将切换到本地授权！"
 
 #: app/admin/authentication-methods/edit-SAML2.php:14 app/login/index.php:162
 msgid "php-saml library missing, please update submodules"
@@ -625,7 +625,7 @@ msgstr "没有已配置坐标的位置"
 #: app/tools/pstn-prefixes/edit-number-result.php:73
 #: app/tools/pstn-prefixes/edit-result.php:126
 msgid "can not be empty!"
-msgstr "不能为空！!"
+msgstr "不能为空！"
 
 #: functions/functions-install.php:85 functions/functions-install.php:133
 #: functions/functions-install.php:150 functions/functions-install.php:182
@@ -687,6 +687,9 @@ msgstr "不能为空！!"
 msgid "Error"
 msgstr "错误"
 
+msgid "Error :"
+msgstr "错误 :"
+
 #: functions/classes/class.User.php:956 functions/classes/class.User.php:992
 #: functions/classes/class.User.php:1087
 msgid "Login successful"
@@ -731,12 +734,12 @@ msgstr "需要管理员级别权限才能访问此站点"
 
 #: app/admin/users/edit-result.php:59
 msgid "Real name field is mandatory!"
-msgstr "实名字段为必填项！!"
+msgstr "实名字段为必填项！"
 
 #: app/admin/users/edit-result.php:46 app/install/postinstall_submit.php:29
 #: app/tools/pass-change/result.php:16 app/tools/user-menu/user-edit.php:34
 msgid "Passwords do not match!"
-msgstr "密码不匹配！!"
+msgstr "密码不匹配！"
 
 #: app/tools/user-menu/user-edit.php:43
 msgid "Invalid theme"
@@ -745,7 +748,7 @@ msgstr "主题无效"
 #: app/admin/users/edit-result.php:47 app/install/postinstall_submit.php:25
 #: app/install/postinstall_submit.php:26
 msgid "Password must be at least 8 characters long!"
-msgstr "密码长度必须至少为 8 个字符！!"
+msgstr "密码长度必须至少为 8 个字符！"
 
 #: app/admin/users/edit-result.php:52 app/tools/user-menu/user-edit.php:38
 msgid "Password validation errors"
@@ -753,11 +756,11 @@ msgstr "密码验证错误"
 
 #: app/admin/users/edit-result.php:61
 msgid "Invalid email address!"
-msgstr "无效的邮件地址！!"
+msgstr "无效的邮件地址！"
 
 #: app/admin/users/edit-result.php:67
 msgid "Username must be at least 3 characters long!"
-msgstr "用户名长度必须至少为 3 个字符！!"
+msgstr "用户名长度必须至少为 3 个字符！"
 
 #: app/admin/custom-fields/index.php:18 app/admin/users/edit-result.php:73
 #: app/admin/users/edit-result.php:166 app/admin/users/edit-result.php:169
@@ -777,7 +780,7 @@ msgstr "用户"
 
 #: app/admin/users/edit-result.php:73
 msgid "already exists!"
-msgstr "已经存在！!"
+msgstr "已经存在！"
 
 #: functions/functions-admin.php:73 site/admin/usersEditResult.php:43
 msgid "Cannot delete user"
@@ -819,11 +822,11 @@ msgstr "设置"
 msgid "Database"
 msgstr "数据库"
 
-#: app/admin/powerDNS/settings.php:97
+#: app/admin/powerDNS/settings.php:132
 msgid "Failed to connect to database:<hr> "
 msgstr "无法连接到数据库：<hr> "
 
-#: app/admin/powerDNS/settings.php:98
+#: app/admin/powerDNS/settings.php:117 app/admin/powerDNS/settings.php:133
 msgid "Database connection ok"
 msgstr "数据库连接正常"
 
@@ -924,7 +927,7 @@ msgstr "DHCP"
 
 #: functions/functions-network.php:177
 msgid "VLAN must be numeric value!"
-msgstr "VLAN 必须由数字组成！!"
+msgstr "VLAN 必须由数字组成！"
 
 #: functions/functions-network.php:178
 msgid "Vlan number can be max 4094"
@@ -953,20 +956,20 @@ msgstr "IP 地址不在所选子网中"
 
 #: functions/functions-network.php:1798 functions/functions-network.php:1819
 msgid "Cannot add subnet as IP address!"
-msgstr "无法添加子网作为 IP 地址！!"
+msgstr "无法添加子网作为 IP 地址！"
 
 #: functions/functions-network.php:1799
 msgid "Cannot add broadcast as IP address!"
-msgstr "无法将广播添加为 IP 地址！!"
+msgstr "无法将广播添加为 IP 地址！"
 
 #: functions/classes/class.Subnets.php:2056
 #: functions/classes/class.Subnets.php:2096
 msgid "Invalid CIDR format!"
-msgstr "CIDR 格式无效！!"
+msgstr "CIDR 格式无效！"
 
 #: functions/classes/class.Subnets.php:2051
 msgid "Invalid IP address!"
-msgstr "IP 地址无效！!"
+msgstr "IP 地址无效！"
 
 #: functions/classes/class.Subnets.php:2052
 #: functions/classes/class.Subnets.php:2081
@@ -981,7 +984,7 @@ msgstr "网络掩码无效"
 
 #: functions/classes/class.Subnets.php:2073
 msgid "Invalid IPv6 address!"
-msgstr "IPv6 地址无效！!"
+msgstr "IPv6 地址无效！"
 
 #: functions/checks/check_php_build.php:71
 msgid "The following required PHP extensions are missing"
@@ -997,11 +1000,11 @@ msgstr "不支持的 PHP 版本"
 
 #: functions/checks/check_php_build.php:82
 msgid "From release 1.3.2 on at least PHP version 5.4 is required!"
-msgstr "从版本 1.3.2 开始，至少需要 PHP 版本 5.4！!"
+msgstr "从版本 1.3.2 开始，至少需要 PHP 版本 5.4！"
 
 #: functions/checks/check_php_build.php:83
 msgid "Detected PHP version: "
-msgstr "检测到的 PHP 版本：: "
+msgstr "检测到的 PHP 版本： "
 
 #: functions/checks/check_php_build.php:84
 #: functions/checks/check_php_build.php:90
@@ -1014,7 +1017,7 @@ msgstr "不是64位系统"
 
 #: functions/checks/check_php_build.php:89
 msgid "From release 1.4 on 64bit system is required!"
-msgstr "从 1.4 版开始需要 64 位系统！!"
+msgstr "从 1.4 版开始需要 64 位系统！"
 
 #: functions/classes/class.Addresses.php:411
 #: functions/classes/class.Addresses.php:420
@@ -1294,7 +1297,7 @@ msgstr "子网中的新 IP 地址申请"
 #: functions/classes/class.Sections.php:190
 #: functions/scripts/discoveryCheck.php:309
 msgid "Section"
-msgstr "部门"
+msgstr "区域"
 
 #: app/admin/firewall-zones/zones-edit-network.php:99
 #: app/admin/firewall-zones/zones.php:32
@@ -1589,11 +1592,11 @@ msgstr "请从左侧菜单中选择子网"
 
 #: index.php:185 site/tools/showAll.php:4
 msgid "Please select tool from left menu!"
-msgstr "请从左侧菜单中选择工具！!"
+msgstr "请从左侧菜单中选择工具！"
 
 #: index.php:188
 msgid "Please select setting from left menu!"
-msgstr "请从左侧菜单中选择设置！!"
+msgstr "请从左侧菜单中选择设置！"
 
 #: app/tools/search/search-results-export.php:110
 msgid "phpipam_search_export_"
@@ -1755,7 +1758,7 @@ msgstr "根据结果创建子网"
 
 #: app/tools/ip-calculator/result.php:66
 msgid "Select Section"
-msgstr "选择部门"
+msgstr "选择区域"
 
 #: app/tools/ip-calculator/result.php:69
 msgid "Please select"
@@ -1932,7 +1935,7 @@ msgid "Port"
 msgstr "端口"
 
 msgid "Available VLANs:"
-msgstr "可用的 VLAN：:"
+msgstr "可用的 VLAN："
 
 #: app/admin/import-export/export-vlan-field-select.php:56
 #: app/admin/import-export/export-vlan.php:60
@@ -1951,7 +1954,7 @@ msgstr "可用的 VLAN：:"
 #: app/tools/vlan/domain-vlans-all.php:54 app/tools/vlan/domain-vlans.php:75
 #: app/tools/vlan/vlan-details.php:48 app/vlan/vlan-details.php:28
 msgid "Number"
-msgstr "编号"
+msgstr "号码"
 
 #: app/tools/devices/device-details/device-subnets.php:19
 #: app/tools/vlan/domain-vlans.php:89
@@ -2253,7 +2256,7 @@ msgstr "MAC 搜索提示"
 
 #: app/tools/search/search-tips.php:64
 msgid "You can search by MAC address list entering MAC in 00:1cd:d4:78:ec:46 or 001dd478ec46 format, or search multiple with 00:1c:c4:"
-msgstr "您可以按 MAC 地址列表搜索，以 00:1cd:d4:78:ec:46 或 001dd478ec46 格式输入 MAC，或使用 00:1c:c4 搜索多个：:"
+msgstr "您可以按 MAC 地址列表搜索，以 00:1cd:d4:78:ec:46 或 001dd478ec46 格式输入 MAC，或使用 00:1c:c4 搜索多个："
 
 #: app/tools/search/search-tips.php:71
 msgid "Custom field search tips"
@@ -2471,7 +2474,7 @@ msgstr "phpIPAM 工具"
 
 #: app/error.php:67
 msgid "Oops! Something went wrong!"
-msgstr "哎呀！ 出了些问题！!"
+msgstr "哎呀！ 出了些问题！"
 
 #: app/error.php:69
 msgid "Provided http error code is"
@@ -2682,6 +2685,10 @@ msgid "Orphaned IP addresses for subnet"
 msgstr "子网的孤立 IP 地址"
 
 #: app/subnets/addresses/print-address-table.php:138
+msgid "orphaned"
+msgstr "孤立"
+
+#: app/subnets/addresses/print-address-table.php:138
 msgid "This happens if subnet contained IP addresses when new child subnet was created"
 msgstr "当创建新的从属子网时，但子网包含 IP 地址时，会发生这种情况"
 
@@ -2833,7 +2840,7 @@ msgstr "子网详细信息"
 
 #: app/subnets/index.php:80
 msgid "Space map"
-msgstr "地图空间"
+msgstr "子网资源"
 
 #: app/subnets/index.php:81
 msgid "Mask search"
@@ -3003,12 +3010,9 @@ msgstr "设备"
 msgid "Select device"
 msgstr "选择设备"
 
-#: app/admin/circuits/edit-circuit.php:174
-#: app/admin/racks/edit.php:163
-#: app/admin/routing/edit-bgp.php:108
-#: app/admin/subnets/edit.php:375
-#: app/admin/vlans/edit.php:147
-#: app/admin/vrf/edit.php:97
+#: app/admin/circuits/edit-circuit.php:174 app/admin/racks/edit.php:163
+#: app/admin/routing/edit-bgp.php:108 app/admin/subnets/edit.php:375
+#: app/admin/vlans/edit.php:147 app/admin/vrf/edit.php:97
 msgid "Select Customer"
 msgstr "选择客户"
 
@@ -3196,8 +3200,8 @@ msgstr "IP 状态"
 #: app/admin/import-export/index.php:51
 #: app/subnets/addresses/export-field-select.php:154
 #: app/tools/routing/bgp/all.php:29
-msgid "Export"
-msgstr "输出"
+msgid " Export"
+msgstr " 导出"
 
 #: app/admin/import-export/export-devtype-field-select.php:26
 msgid "Select types fields to export"
@@ -3221,7 +3225,7 @@ msgstr "捐赠按钮"
 
 #: app/dashboard/widgets/statistics.php:23
 msgid "Number of Sections"
-msgstr "部门数量"
+msgstr "区域数量"
 
 #: app/dashboard/widgets/statistics.php:29
 msgid "Number of Subnets"
@@ -3352,26 +3356,185 @@ msgstr "申请"
 msgid "for IP address waiting for your approval"
 msgstr "等待您批准的 IP 地址"
 
+#: db/SCHEMA.sql:577
 msgid "Statistics"
 msgstr "统计"
 
-msgid "Top 10 IPv4 subnets by usage percentage"
-msgstr "按使用率排名前 10名 的 IPv4 子网"
+#: db/SCHEMA.sql:577
+msgid "Shows some statistics on number of hosts, subnets"
+msgstr "显示主机、子网数量的一些统计信息"
 
-msgid "Top 10 IPv4 subnets by number of hosts"
-msgstr "按主机数量排名前 10 位的 IPv4 子网"
+#: db/SCHEMA.sql:578
+msgid "Favourite subnets"
+msgstr "收藏的子网"
 
-msgid "Top 10 IPv6 subnets by number of hosts"
-msgstr "按主机数量排名前 10 位的 IPv6 子网"
+#: db/SCHEMA.sql:578
+msgid "Shows favourite subnets"
+msgstr "显示收藏的子网"
 
+#: db/SCHEMA.sql:579
+msgid "Top IPv4 subnets by number of hosts"
+msgstr "按主机数量排名靠前的 IPv4 子网"
+
+#: db/SCHEMA.sql:579
+msgid "Shows graph of top IPv4 subnets by number of hosts"
+msgstr "显示按主机数量排列靠前的 IPv4 子网图表"
+
+#: db/SCHEMA.sql:580
+msgid "Top IPv6 subnets by number of hosts"
+msgstr "按主机数量排名靠前的 IPv6 子网"
+
+#: db/SCHEMA.sql:580
+msgid "Shows graph of top IPv6 subnets by number of hosts"
+msgstr "显示按主机数量排列靠前的 IPv6 子网图表"
+
+#: db/SCHEMA.sql:581
+msgid "Top IPv4 subnets by usage percentage"
+msgstr "按使用率百分比排名靠前的 IPv4 子网"
+
+#: db/SCHEMA.sql:581
+msgid "Shows graph of top IPv4 subnets by usage percentage"
+msgstr "按使用率百分比显示排名靠前的 IPv4 子网图表"
+
+#: db/SCHEMA.sql:582
+msgid "Most recent change log entries"
+msgstr "最近的更改日志条目"
+
+#: db/SCHEMA.sql:582
+msgid "Shows list of most recent change log entries"
+msgstr "显示最新更改日志条目列表"
+
+#: db/SCHEMA.sql:583
 msgid "Active IP addresses requests"
 msgstr "活跃 IP 地址申请"
 
-msgid "Last 5 informational logs"
-msgstr "最后 5 条信息日志"
+#: db/SCHEMA.sql:583
+msgid "Shows list of active IP address request"
+msgstr "显示活跃 IP 地址请求列表"
 
-msgid "Last 5 warning / error logs"
-msgstr "最近 5 条警告/错误日志"
+#: db/SCHEMA.sql:584
+msgid "Most recent informational logs"
+msgstr "最近的信息日志"
+
+#: db/SCHEMA.sql:584
+msgid "Shows list of most recent informational logs"
+msgstr "显示最新信息日志列表"
+
+#: db/SCHEMA.sql:585
+msgid "Most recent warning / error logs"
+msgstr "最近的警告/错误日志"
+
+#: db/SCHEMA.sql:585
+msgid "Shows list of most recent warning and error logs"
+msgstr "显示最近的警告和错误日志列表"
+
+#: db/SCHEMA.sql:586
+msgid "Tools menu"
+msgstr "工具菜单"
+
+#: db/SCHEMA.sql:586
+msgid "Shows quick access to tools menu"
+msgstr "显示快速访问工具菜单"
+
+#: db/SCHEMA.sql:587
+#: app/dashboard/widgets/tools.php:24 app/tools/ip-calculator/index.php:16
+#: app/tools/tools-menu-config.php:78
+msgid "IP Calculator"
+msgstr "IP 计算器"
+
+#: db/SCHEMA.sql:587
+msgid "Shows IP calculator as widget"
+msgstr "显示 IP 计算器作为小部件"
+
+#: db/SCHEMA.sql:588
+msgid "IP Request"
+msgstr "IP 请求"
+
+#: db/SCHEMA.sql:588
+msgid "IP Request widget"
+msgstr "IP 请求小部件"
+
+#: db/SCHEMA.sql:589
+#: app/admin/subnets/edit.php:434 app/dashboard/widgets/threshold.php:133
+#: app/subnets/subnet-details/subnet-details.php:319
+#: app/tools/threshold/index.php:16 app/tools/threshold/index.php:105
+#: app/tools/tools-menu-config.php:120
+msgid "Threshold"
+msgstr "阈值"
+
+#: db/SCHEMA.sql:589
+msgid "Shows threshold usage for most consumed subnets"
+msgstr "显示大多数消耗的子网的阈值使用情况"
+
+#: db/SCHEMA.sql:590
+#: app/tools/inactive-hosts/index.php:41
+msgid "Inactive hosts"
+msgstr "非活动主机"
+
+#: db/SCHEMA.sql:590
+msgid "Shows list of inactive hosts for defined period"
+msgstr "显示指定时间段内不活动的主机列表"
+
+#: db/SCHEMA.sql:591
+#: app/admin/admin-menu-config.php:68 app/admin/custom-fields/index.php:22
+#: app/admin/users/print_module_permissions.php:63
+#: app/tools/locations/single-location.php:46
+#: app/tools/locations/single-location.php:48
+#: app/tools/tools-menu-config.php:130
+msgid "Locations"
+msgstr "位置"
+
+#: db/SCHEMA.sql:591
+msgid "Shows map of locations"
+msgstr "显示位置地图"
+
+#: db/SCHEMA.sql:592
+#: app/tools/ip-calculator/bw-calculator.php:246
+#: app/tools/ip-calculator/index.php:17 app/tools/tools-menu-config.php:79
+msgid "Bandwidth calculator"
+msgstr "带宽计算器"
+
+#: db/SCHEMA.sql:592
+msgid "Calculate bandwidth"
+msgstr "计算带宽"
+
+#: db/SCHEMA.sql:593
+#: app/admin/admin-menu-config.php:36 app/admin/custom-fields/index.php:27
+#: app/admin/users/print_module_permissions.php:59
+#: app/sections/user-menu.php:63 app/tools/search/index.php:60
+#: app/tools/search/search-results-export.php:583
+#: app/tools/tools-menu-config.php:98
+msgid "Customers"
+msgstr "客户"
+
+#: db/SCHEMA.sql:593
+msgid "Shows customer list"
+msgstr "显示客户列表"
+
+#: db/SCHEMA.sql:594
+msgid "User Instructions"
+msgstr "用户说明"
+
+#: db/SCHEMA.sql:594
+msgid "Shows user instructions"
+msgstr "显示用户说明"
+
+#: db/SCHEMA.sql:595
+#: app/tools/mac-lookup/index.php:7 app/tools/tools-menu-config.php:92
+msgid "MAC lookup"
+msgstr "MAC 查找"
+
+#: db/SCHEMA.sql:595
+msgid "Shows MAC address vendor"
+msgstr "显示 MAC 地址供应商"
+
+#: db/SCHEMA.sql:596
+msgid "Recent Logins"
+msgstr "最近登录"
+
+#: db/SCHEMA.sql:596
+msgid "Shows most recent user logins"
+msgstr "显示最近的用户登录"
 
 #: app/admin/verify-database/index.php:11
 msgid "Database structure verification"
@@ -3444,7 +3607,7 @@ msgid "Here you can set parameters for connecting to AD for authenticating users
 msgstr "此处可以设置连接 AD 的参数，用于对以验证 users.phpIPAM 的使用"
 
 msgid "to authenticate users. If you need additional settings please take a look at functions/adLDAP or check online documentation!"
-msgstr "对用户进行身份验证。 如果您需要其他设置，请查看 functions/adLDAP 或查看在线文档！!"
+msgstr "对用户进行身份验证。 如果您需要其他设置，请查看 functions/adLDAP 或查看在线文档！"
 
 #: app/admin/authentication-methods/index.php:119
 msgid "First create new user under user management with <u>same username as on AD</u> and set usertype to domain user. Also set proper permissions - group membership for new user."
@@ -3474,9 +3637,11 @@ msgstr "输入域控制器，用 ; 分隔 （默认：dc1.domain.local；dc2.dom
 msgid "Base DN"
 msgstr "基础 DN"
 
-msgid "Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)<br>\n"
+msgid ""
+"Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)<br>\n"
 "\t\tIf this is set to null then adLDAP will attempt to obtain this automatically from the rootDSE"
-msgstr "输入 LDAP 的基本 DN（默认值：CN=用户、CN=公司、DC=域、DC=本地）<br>\n"
+msgstr ""
+"输入 LDAP 的基本 DN（默认值：CN=用户、CN=公司、DC=域、DC=本地）<br>\n"
 "\t\t如果将此设置为 null，则 adLDAP 将尝试自动从 rootDSE 获取此值"
 
 #: app/admin/authentication-methods/edit-AD.php:90
@@ -3608,6 +3773,10 @@ msgstr "关闭窗口"
 #: app/subnets/addresses/print-address-table.php:137
 msgid "IP addresses in"
 msgstr "IP 地址位于"
+
+#: app/subnets/addresses/print-address-table.php:137
+msgid " subnets"
+msgstr "子网中"
 
 #: app/admin/filter-fields/index.php:36
 msgid "Filter which fields to display in IP list"
@@ -3767,11 +3936,11 @@ msgstr "管理用户"
 
 #: app/admin/users/print-all.php:181
 msgid "Administrator users will be able to view and edit all all sections and subnets"
-msgstr "管理员用户将能够查看和编辑所有部门和子网"
+msgstr "管理员用户将能够查看和编辑所有区域和子网"
 
 #: app/admin/users/print-all.php:182
 msgid "Normal users will have permissions set based on group access to sections and subnets"
-msgstr "普通用户将拥有基于组对部门和子网的访问权限设置的权限"
+msgstr "普通用户将拥有基于组对区域和子网的访问权限设置的权限"
 
 #: app/admin/admin-menu-config.php:38 app/admin/subnets/index.php:14
 msgid "Subnet management"
@@ -3785,7 +3954,7 @@ msgstr "点击以显示/隐藏所属子网"
 
 #: functions/classes/class.Sections.php:558
 msgid "Add new subnet to section"
-msgstr "将新子网添加到部门"
+msgstr "将新子网添加到区域"
 
 #: functions/classes/class.Sections.php:558
 msgid "Add subnet"
@@ -3796,7 +3965,13 @@ msgid "Find subnet"
 msgstr "查找子网"
 
 msgid "Section has no subnets"
-msgstr "部门没有子网"
+msgstr "区域没有子网"
+
+msgid "FirewallAddressObject"
+msgstr "防火墙地址对象"
+
+msgid "Customer_id"
+msgstr "客户 ID"
 
 #: app/admin/admin-menu-config.php:8 app/admin/admin-menu-config.php:14
 #: app/admin/admin-menu-config.php:15 app/admin/admin-menu-config.php:16
@@ -3841,7 +4016,7 @@ msgstr "IP 相关管理"
 
 #: app/admin/admin-menu-config.php:37 app/admin/sections/index.php:34
 msgid "Section management"
-msgstr "部门管理"
+msgstr "区域管理"
 
 #: app/admin/admin-menu-config.php:10 app/admin/admin-menu-config.php:60
 #: app/admin/admin-menu-config.php:62 app/admin/admin-menu-config.php:64
@@ -4017,7 +4192,7 @@ msgstr "准备主机文件转储"
 #: app/subnets/scan/subnet-scan-execute-snmp-route.php:19
 #: app/subnets/scan/subnet-scan-result-snmp-route-all.php:26
 msgid "You do not have permissions to add new subnet in this section"
-msgstr "您无权在此部门添加新子网"
+msgstr "您无权在此区域添加新子网"
 
 #: app/admin/subnets/edit-folder-result.php:50
 #: app/admin/subnets/edit-folder.php:42 app/admin/subnets/edit-result.php:170
@@ -4050,7 +4225,7 @@ msgid "Enter subnet description"
 msgstr "输入子网描述"
 
 msgid "Move to different section"
-msgstr "移至不同部门"
+msgstr "移至不同区域"
 
 #: app/admin/subnets/edit-vlan-dropdown.php:44 app/admin/subnets/edit.php:262
 #: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:220
@@ -4569,21 +4744,21 @@ msgstr "RD"
 
 #: app/admin/import-export/generate-mysql.php:22
 msgid "Unable to locate executable: "
-msgstr "无法找到可执行文件：: "
+msgstr "无法找到可执行文件： "
 
 #: app/admin/import-export/generate-mysql.php:23
 msgid "Please configure $mysqldump_cli_binary in config.php\n"
 msgstr "请在 config.php 中配置 $mysqldump_cli_binary\n"
 
 msgid "Errors occured when importing to database!"
-msgstr "导入数据库时出现错误！!"
+msgstr "导入数据库时出现错误！"
 
 #: app/subnets/import-subnet/import-file.php:142
 msgid "Import successful"
 msgstr "导入成功"
 
 msgid "Cannot upload - Return Code:"
-msgstr "无法上传 - 返回代码：:"
+msgstr "无法上传 - 返回代码："
 
 msgid "Cannot move file to upload dir"
 msgstr "无法将文件移动到上传目录"
@@ -4620,7 +4795,7 @@ msgstr "软件版本"
 
 #: app/admin/devices/edit.php:236
 msgid "Sections to display device in"
-msgstr "显示设备的部门"
+msgstr "显示设备的区域"
 
 #: app/admin/devices/edit-result.php:53
 msgid "Hostname is mandatory"
@@ -4636,11 +4811,11 @@ msgstr "路由标识"
 
 #: app/admin/subnets/edit-result.php:117 app/admin/subnets/edit-result.php:199
 msgid "Nested subnet not in root subnet!"
-msgstr "嵌套子网不在根子网中！!"
+msgstr "嵌套子网不在根子网中！"
 
 #: app/admin/subnets/edit-result.php:174
 msgid "Subnet cannot nest behind itself!"
-msgstr "子网不能嵌套在其自身后面！!"
+msgstr "子网不能嵌套在其自身后面！"
 
 #: app/admin/subnets/edit-result.php:257
 msgid "Please fix following problems"
@@ -4929,7 +5104,7 @@ msgstr "删除该子网"
 
 #: app/admin/ripe-import/ripe-telnet.php:56
 msgid "select section"
-msgstr "选择部门"
+msgstr "选择区域"
 
 #: app/admin/2fa/save.php:49 app/admin/firewall-zones/settings-save.php:158
 #: app/admin/mail/edit.php:38 app/admin/password-policy/save.php:57
@@ -4950,7 +5125,7 @@ msgstr "设置更新成功"
 
 #: app/admin/sections/index.php:39
 msgid "Add section"
-msgstr "添加部门"
+msgstr "添加区域"
 
 #: app/admin/authentication-methods/edit-SAML2.php:117
 #: app/admin/sections/index.php:52 app/sections/all-sections.php:48
@@ -4974,7 +5149,7 @@ msgstr "所有组：无访问权限"
 
 #: app/admin/sections/index.php:141 app/sections/all-sections.php:162
 msgid "No sections configured"
-msgstr "没有配置任何部门"
+msgstr "没有配置任何区域"
 
 #: app/admin/sections/index.php:147
 msgid "Permissions info"
@@ -5009,7 +5184,7 @@ msgid "Reordering failed"
 msgstr "重新排序失败"
 
 msgid "Fields reordered successfully!"
-msgstr "字段重新排序成功！!"
+msgstr "字段重新排序成功！"
 
 #: app/admin/settings/index.php:33
 msgid "phpIPAM server settings"
@@ -5069,8 +5244,7 @@ msgstr "GitHub"
 msgid "archive"
 msgstr "存档"
 
-#: app/admin/version-check/index.php:21
-#: app/admin/version-check/index.php:31
+#: app/admin/version-check/index.php:21 app/admin/version-check/index.php:31
 msgid "Version check failed"
 msgstr "版本检查失败"
 
@@ -5118,6 +5292,10 @@ msgstr "提交日志（本地）"
 msgid "Download (GitHub)"
 msgstr "下载（GitHub）"
 
+#: app/admin/version-check/index.php:73
+msgid "Released on"
+msgstr "发布日期"
+
 #: app/admin/version-check/index.php:95
 msgid "Commit log (local) [Last 100]"
 msgstr "提交日志（本地）[最后 100]"
@@ -5128,11 +5306,11 @@ msgstr "这里"
 
 #: app/admin/sections/edit.php:54
 msgid "Section name"
-msgstr "部门名称"
+msgstr "区域名称"
 
 #: app/admin/sections/edit.php:65
 msgid "Section description"
-msgstr "部门描述"
+msgstr "区域描述"
 
 #: app/admin/sections/edit.php:92
 msgid "Strict Mode"
@@ -5169,7 +5347,7 @@ msgid "Check to delegate permissions to all subnets in section"
 msgstr "检查以将权限委派给部分中的所有子网"
 
 msgid "Deleting Section will delete all belonging subnets and IP addresses"
-msgstr "删除部门将删除所有所属子网和 IP 地址"
+msgstr "删除区域将删除所有所属子网和 IP 地址"
 
 #: app/admin/custom-fields/order.php:26
 msgid "Fields reordered successfully"
@@ -5291,7 +5469,7 @@ msgstr "所属用户"
 
 #: app/admin/groups/index.php:62
 msgid "Section permissions"
-msgstr "部门权限"
+msgstr "区域权限"
 
 #: app/admin/groups/index.php:81
 msgid "Administrators"
@@ -5303,10 +5481,10 @@ msgstr "管理员级别用户"
 
 #: app/admin/groups/index.php:90
 msgid "All sections:"
-msgstr "所有部门：:"
+msgstr "所有区域："
 
 msgid "All sections : Read / Write"
-msgstr "所有部门：读/写"
+msgstr "所有区域：读/写"
 
 #: app/admin/groups/index.php:144
 msgid "add users to this group"
@@ -5407,7 +5585,7 @@ msgstr "当前组"
 
 #: app/admin/subnets/split.php:127
 msgid "You can split subnet to smaller subnets by specifying new subnets. Please note:"
-msgstr "您可以通过指定新子网将子网拆分为更小的子网。 请注意：:"
+msgstr "您可以通过指定新子网将子网拆分为更小的子网。 请注意："
 
 #: app/admin/subnets/split.php:129
 msgid "Existing IP addresses will be assigned to new subnets"
@@ -5473,7 +5651,7 @@ msgstr "显示设备在哪些部分可见以供选择"
 #: app/tools/vlan/domains.php:27 app/tools/vrf/all_vrf.php:54
 #: app/tools/vrf/vrf-details.php:51 app/vrf/vrf-details.php:46
 msgid "Sections"
-msgstr "部门"
+msgstr "区域"
 
 msgid "Wrong IP addresses (subnet or broadcast)"
 msgstr "IP 地址错误（子网或广播）"
@@ -5495,7 +5673,7 @@ msgstr "IP 地址数量"
 
 #: app/admin/subnets/truncate.php:71
 msgid "Truncating network will remove all IP addresses, that belong to selected subnet!"
-msgstr "截断网络将删除属于所选子网的所有 IP 地址！!"
+msgstr "截断网络将删除属于所选子网的所有 IP 地址！"
 
 #: app/admin/subnets/truncate-save.php:44
 msgid "Subnet truncated successfully"
@@ -5555,7 +5733,7 @@ msgstr "错误 - 没有组 ID"
 
 #: app/admin/groups/add-users-result.php:46
 msgid "Please select user(s) to add to selected group!"
-msgstr "请选择要添加到所选组的用户！!"
+msgstr "请选择要添加到所选组的用户！"
 
 #: app/admin/groups/add-users-result.php:52
 msgid "Failed to add users"
@@ -5579,7 +5757,7 @@ msgstr "删除选定的用户"
 
 #: app/admin/groups/remove-users-result.php:42
 msgid "Please select user(s) to remove from group!"
-msgstr "请选择要从组中删除的用户！!"
+msgstr "请选择要从组中删除的用户！"
 
 #: app/admin/groups/remove-users-result.php:48
 msgid "Failed to remove users"
@@ -5631,7 +5809,7 @@ msgstr "请按照以下步骤操作"
 
 #: app/install/install_mysqlimport.php:21
 msgid "with mysqlimport:"
-msgstr "使用 mysqlimport：:"
+msgstr "使用 mysqlimport："
 
 #: app/install/install_mysqlimport.php:24
 msgid "Open mysql connection"
@@ -5643,7 +5821,7 @@ msgstr "导入 SQL 文件"
 
 #: app/install/install_mysqlimport.php:46
 msgid "Cannot access file db/SCHEMA.sql!"
-msgstr "无法访问文件 db/SCHEMA.sql！!"
+msgstr "无法访问文件 db/SCHEMA.sql！"
 
 #: app/install/install_mysqlimport.php:51
 msgid "Set permissions for phpipam user"
@@ -5655,7 +5833,7 @@ msgstr "安装类型无效"
 
 #: app/install/invalid_install_type.php:7
 msgid "This installation type does not exist. Please select valid installation method!"
-msgstr "此安装类型不存在。 请选择有效的安装方法！!"
+msgstr "此安装类型不存在。 请选择有效的安装方法！"
 
 #: app/install/postinstall_configure.php:3
 msgid "Postinstall configuration"
@@ -5663,7 +5841,7 @@ msgstr "安装后配置"
 
 #: app/install/postinstall_configure.php:8
 msgid "Hi, almost set, lets just set some basic settings. You can change all settings under administration once logged in!"
-msgstr "你好，差不多设置好了，我们只需要设置一些基本设置即可。 登录后，您可以更改管理下的所有设置！!"
+msgstr "您好，差不多设置好了，我们只需要设置一些基本设置即可。 登录后，您可以更改管理下的所有设置！"
 
 #: app/install/postinstall_configure.php:20
 msgid "Some tables or fields are missing in database"
@@ -5691,7 +5869,7 @@ msgstr "设置管理员用户的密码"
 
 #: app/install/postinstall_submit.php:37
 msgid "Settings updated, installation complete!"
-msgstr "设置已更新，安装完成！!"
+msgstr "设置已更新，安装完成！"
 
 #: app/install/postinstall_submit.php:37
 msgid "Proceed to login."
@@ -5707,7 +5885,7 @@ msgstr "我们很高兴您决定使用 phpipam"
 
 #: app/install/select_install_type.php:15
 msgid "Before you can start to process please:"
-msgstr "在开始处理之前，请：:"
+msgstr "在开始处理之前，请："
 
 #: app/install/select_install_type.php:17
 msgid "Edit settings in config.php file"
@@ -5763,7 +5941,7 @@ msgstr "数据库连接检查"
 
 #: app/install/sql_error.php:22
 msgid "Troubleshooting:"
-msgstr "故障排除：:"
+msgstr "故障排除："
 
 #: app/install/sql_error.php:24
 msgid "Make sure all settings in config.php are correct."
@@ -5783,11 +5961,11 @@ msgstr "数据库连接成功"
 
 #: app/install/welcome.php:9
 msgid "Welcome to phpipam installation wizard!"
-msgstr "欢迎使用 phpipam 安装向导！!"
+msgstr "欢迎使用 phpipam 安装向导！"
 
 #: app/install/welcome.php:9
 msgid "Please select one of the options below:"
-msgstr "请选择以下选项之一：:"
+msgstr "请选择以下选项之一："
 
 #: app/install/welcome.php:18
 msgid "New phpipam installation"
@@ -5810,9 +5988,11 @@ msgid "Working installation"
 msgstr "工作安装"
 
 #: app/install/welcome.php:36
-msgid "Select this option if you have a working phpipam installation and this screen occured. Generally it means\n"
+msgid ""
+"Select this option if you have a working phpipam installation and this screen occured. Generally it means\n"
 "\t\t\t\t\tphpipam was unable to connnect to the database. This will check for connection errors."
-msgstr "如果您已正常安装 phpipam 并且出现此窗口，请选择此选项。 这通常意味着\n"
+msgstr ""
+"如果您已正常安装 phpipam 并且出现此窗口，请选择此选项。 这通常意味着\n"
 "\t\t\t\t\tphpipam 无法连接到数据库。 这将检查连接错误."
 
 #: app/login/2fa/2fa_create.php:33
@@ -5925,10 +6105,6 @@ msgstr "请提供有效的 MAC 地址"
 msgid "Please provide valid hostname"
 msgstr "请提供有效的主机名"
 
-#: app/login/login_check.php:55
-msgid "Please enter your username and password"
-msgstr "请输入您的用户名和密码"
-
 #: app/login/index.php:145
 msgid "You have logged out"
 msgstr "您已退出"
@@ -5951,11 +6127,11 @@ msgstr "抱歉，必须是管理员"
 
 #: app/subnets/subnets-menu.php:58
 msgid "You do not have access to this section"
-msgstr "您无权访问此部门"
+msgstr "您无权访问此区域"
 
 #: app/subnets/subnets-menu.php:61
 msgid "Section does not exist"
-msgstr "部门不存在"
+msgstr "区域不存在"
 
 #: app/subnets/subnets-menu.php:83
 msgid "Expand/compress all folders"
@@ -5974,7 +6150,7 @@ msgstr "添加新子网到"
 
 #: app/subnets/subnets-menu.php:136 functions/classes/class.Sections.php:559
 msgid "Search for free subnets in section "
-msgstr "在部门中搜索空闲子网 "
+msgstr "在区域中搜索空闲子网 "
 
 #: app/sections/user-menu.php:42
 msgid "Search string"
@@ -5983,7 +6159,7 @@ msgstr "搜索字符串"
 #: app/sections/user-menu.php:73 app/sections/user-menu.php:82
 #: functions/classes/class.User.php:1276
 msgid "Hi"
-msgstr "你好"
+msgstr "您好"
 
 #: app/sections/user-menu.php:75 app/sections/user-menu.php:83
 msgid "Logged in as"
@@ -5994,11 +6170,11 @@ msgid "Logout"
 msgstr "登出"
 
 msgid "Show all subnets in section"
-msgstr "显示部门中的所有子网"
+msgstr "显示区域中的所有子网"
 
 #: app/admin/import-export/import-template.php:109
 msgid "section"
-msgstr "部门"
+msgstr "区域"
 
 #: app/admin/import-export/import-template.php:135
 msgid "tName"
@@ -6054,13 +6230,13 @@ msgid "User add successfull"
 msgstr "用户添加成功"
 
 msgid "Section edit successful"
-msgstr "部门编辑成功"
+msgstr "区域编辑成功"
 
 msgid "Section add successful"
-msgstr "部门添加成功"
+msgstr "区域添加成功"
 
 msgid "Section delete successful"
-msgstr "部门删除成功"
+msgstr "区域删除成功"
 
 #: app/sections/menu/menu-tools-admin.php:115
 msgid "Show tools menu"
@@ -6139,7 +6315,7 @@ msgstr "仅找到一个子网"
 
 #: app/admin/subnets/find_free_section_subnets_result.php:102
 msgid "Following available subnets found for selected mask in this section:"
-msgstr "本部门为所选掩码找到了以下可用子网：:"
+msgstr "本区域为所选掩码找到了以下可用子网："
 
 #: app/admin/subnets/find_free_section_subnets_result.php:113
 msgid "No available subnets found selected for mask"
@@ -6147,7 +6323,7 @@ msgstr "未发现为掩码选择的可用子网"
 
 #: app/admin/subnets/index.php:22
 msgid "Available subnets in section"
-msgstr "部门中的可用子网"
+msgstr "区域中的可用子网"
 
 msgid "Subnet wildcard"
 msgstr "子网通配符"
@@ -6445,7 +6621,7 @@ msgstr "Ping 状态间隔"
 
 #: app/admin/settings/index.php:619
 msgid "Ping status intervals for IP addresses in seconds - warning;offline (Default: 1800;3600)"
-msgstr "IP 地址的 Ping 状态间隔（以秒为单位）- 警告；离线（默认值：1800；3600）"
+msgstr "IP 地址的 Ping 状态间隔（以秒为单位）- 警告；离线（默认值：1800;3600）"
 
 #: app/admin/settings/settings-save.php:33
 #: app/admin/settings/settings-save.php:34
@@ -6604,21 +6780,21 @@ msgstr "选择默认语言"
 
 #: app/admin/sections/edit-order.php:43 app/admin/sections/index.php:40
 msgid "Section order"
-msgstr "部门排序"
+msgstr "区域排序"
 
 #: app/admin/sections/edit-order.php:49
 msgid "You can manually set order in which sections are displayed in. Default is creation date."
-msgstr "您可以手动设置部门的显示排序。默认为创建日期."
+msgstr "您可以手动设置区域的显示排序。默认为创建日期."
 
 msgid "Order"
 msgstr "排序"
 
 #: app/admin/sections/edit-order-result.php:31
 msgid "Section reordering successful"
-msgstr "部门重新排序成功"
+msgstr "区域重新排序成功"
 
 msgid "Cannot reorder sections"
-msgstr "无法对部门重新排序"
+msgstr "无法对区域重新排序"
 
 #: app/admin/custom-fields/index.php:58 app/admin/sections/edit.php:157
 #: app/admin/users/edit.php:221 app/admin/users/print-user/display.php:6
@@ -6667,32 +6843,32 @@ msgstr "提供的子网 ID 无效."
 
 #: functions/classes/class.Scan.php:727
 msgid "Scanning from GUI is only available for subnets up to /20 or 4096 hosts!"
-msgstr "从 GUI 进行扫描仅适用于最多 /20 或 4096 主机的子网！!"
+msgstr "从 GUI 进行扫描仅适用于最多 /20 或 4096 主机的子网！"
 
 #: functions/classes/class.Scan.php:788
 msgid "Didn't find any address to scan!"
-msgstr "没有找到可以扫描的地址！!"
+msgstr "没有找到可以扫描的地址！"
 
 #: functions/classes/class.Sections.php:110
 #: functions/classes/class.Sections.php:117
 msgid "Sections create"
-msgstr "部门创建"
+msgstr "区域创建"
 
 #: functions/classes/class.Sections.php:110
 msgid "Failed to create new section"
-msgstr "无法创建新部门"
+msgstr "无法创建新区域"
 
 #: functions/classes/class.Sections.php:117
 msgid "New section created"
-msgstr "已创建新部门"
+msgstr "已创建新区域"
 
 #: functions/classes/class.Sections.php:141
 msgid "Failed to edit section"
-msgstr "无法编辑部门"
+msgstr "无法编辑区域"
 
 #: functions/classes/class.Sections.php:181
 msgid "Failed to delete section"
-msgstr "删除部门失败"
+msgstr "删除区域失败"
 
 #: app/admin/settings/index.php:640 app/admin/users/print-user/display.php:2
 #: app/tools/user-menu/account.php:150
@@ -6886,7 +7062,7 @@ msgstr "显示"
 
 #: app/sections/all-sections.php:136
 msgid "View section"
-msgstr "查看部门"
+msgstr "查看区域"
 
 #: app/admin/sections/edit.php:122
 msgid "Show list of VLANs and belonging subnets in subnet list"
@@ -6961,6 +7137,14 @@ msgstr "BGP"
 msgid "BGP peer"
 msgstr "BGP 对等体"
 
+#: app/admin/routing/edit-bgp.php:86
+msgid "internal"
+msgstr "内部"
+
+#: app/admin/routing/edit-bgp.php:86
+msgid "external"
+msgstr "外部"
+
 #: app/admin/routing/edit-bgp.php:134
 msgid "Select Circuit"
 msgstr "选择通信线路"
@@ -6975,10 +7159,10 @@ msgid "Parent"
 msgstr "位置"
 
 msgid "SubSections in"
-msgstr "子部门在"
+msgstr "子区域在"
 
 msgid "Select parent section to create subsection"
-msgstr "选择父部门以创建子部门"
+msgstr "选择父区域以创建子区域"
 
 #: app/admin/admin-menu-config.php:28 app/admin/widgets/index.php:15
 #: app/tools/user-menu/widgets.php:2
@@ -7018,7 +7202,7 @@ msgstr "添加新的自定义设备字段"
 
 #: app/subnets/subnets-menu.php:36
 msgid "Belonging subsections"
-msgstr "所属子部门"
+msgstr "所属子区域"
 
 #: app/subnets/subnets-menu.php:76
 msgid "Back to"
@@ -7140,10 +7324,6 @@ msgstr "发现以下用户"
 #: app/subnets/scan/subnet-scan-execute-snmp-route.php:110
 msgid "Select"
 msgstr "选择"
-
-#: app/tools/favourites/index.php:14
-msgid "Favourite subnets"
-msgstr "收藏的子网"
 
 #: app/tools/firewall-zones/index.php:31
 msgid " Firewall Zones"
@@ -7290,7 +7470,7 @@ msgstr "该子网没有可用的变更日志条目"
 
 #: app/sections/section-changelog.php:23
 msgid "No changelog entries are available for this section"
-msgstr "此部门没有可用的变更日志条目"
+msgstr "此区域没有可用的变更日志条目"
 
 #: app/subnets/addresses/address-details/address-details.php:204
 #: app/subnets/addresses/address-details/address-details.php:217
@@ -7647,6 +7827,10 @@ msgstr "保存密码"
 msgid "You have been blocked for 5 minutes due to authentication failures"
 msgstr "由于身份验证失败，您已被屏蔽 5 分钟"
 
+#: app/login/login_check.php:44
+msgid "Missing security code"
+msgstr "缺少安全码"
+
 #: app/admin/settings/index.php:92
 msgid "Use nicer URL structure"
 msgstr "使用更好的 URL 结构"
@@ -7696,7 +7880,7 @@ msgstr "将要删除"
 #: app/admin/subnets/edit-folder-result.php:138
 #: app/admin/subnets/edit-result.php:286
 msgid "Are you sure you want to delete above items?"
-msgstr "您确定要删除以上项目吗？?"
+msgstr "您确定要删除以上项目吗？"
 
 #: app/subnets/addresses/address-modify-submit.php:351
 msgid "Are you sure you want to delete IP address"
@@ -7933,6 +8117,7 @@ msgstr "IP 地址申请被拒绝"
 msgid "Discover"
 msgstr "发现"
 
+# Надо разнести Back с Back Side(шкафы)
 #: app/admin/devices/edit-rack-dropdown.php:84
 #: app/admin/racks/edit-rack-devices.php:156
 #: app/install/install_automatic.php:96 app/install/install_manual.php:17
@@ -7940,7 +8125,6 @@ msgstr "发现"
 #: app/install/invalid_install_type.php:9
 #: app/install/postinstall_configure.php:89
 #: app/tools/powerDNS/domains-print.php:72 app/tools/vlan/vlan-details.php:43
-# Надо разнести Back с Back Side(шкафы)
 msgid "Back"
 msgstr "后退"
 
@@ -8042,7 +8226,7 @@ msgstr "IP 地址"
 
 #: app/tools/user-menu/user-edit.php:50
 msgid "Error updating user account!"
-msgstr "更新用户帐户时出错！!"
+msgstr "更新用户帐户时出错！"
 
 #: app/admin/users/print-user/mail.php:5 app/tools/user-menu/account.php:113
 msgid "Mail notifications"
@@ -8096,11 +8280,11 @@ msgstr "管理"
 
 #: app/sections/all-sections.php:139
 msgid "Edit section"
-msgstr "编辑部门"
+msgstr "编辑区域"
 
 #: app/sections/all-sections.php:140
 msgid "Delete section"
-msgstr "删除部门"
+msgstr "删除区域"
 
 #: app/tools/pass-change/form.php:31
 msgid "Password repeat"
@@ -8320,7 +8504,7 @@ msgid "Filter"
 msgstr "过滤器"
 
 msgid "Filter applied:"
-msgstr "应用过滤器：:"
+msgstr "应用过滤器："
 
 #: app/tools/customers/customer/objects/circuits.php:43
 msgid "Sort by type"
@@ -8404,7 +8588,7 @@ msgstr "数据库已安装"
 
 #: app/install/install-execute.php:37 app/install/install-execute.php:40
 msgid "Database installed successfully!"
-msgstr "数据库安装成功！!"
+msgstr "数据库安装成功！"
 
 #: app/install/install-execute.php:37 app/install/install-execute.php:40
 msgid "Continue"
@@ -8448,7 +8632,7 @@ msgstr "在您继续之前"
 
 #: app/install/install_automatic.php:19
 msgid "please fill in all settings in <strong>config.php</strong> file!"
-msgstr "请填写<strong>config.php</strong>文件中的所有设置！!"
+msgstr "请填写<strong>config.php</strong>文件中的所有设置！"
 
 #: app/install/install_automatic.php:27
 msgid "MySQL/MariaDB username"
@@ -8500,7 +8684,7 @@ msgstr "创建权限"
 
 #: app/install/install_automatic.php:86 app/install/install_mysqlimport.php:42
 msgid "Cannot access file db/MIGRATE.sql!"
-msgstr "无法访问文件 db/MIGRATE.sql！!"
+msgstr "无法访问文件 db/MIGRATE.sql！"
 
 #: app/install/install_automatic.php:97
 msgid "phpipam database"
@@ -8512,7 +8696,7 @@ msgstr "手动数据库"
 
 #: app/install/install_manual.php:20
 msgid "For importing database file with mysqlimport tool please follow below instructions:"
-msgstr "要使用 mysqlimport 工具导入数据库文件，请按照以下说明操作：:"
+msgstr "要使用 mysqlimport 工具导入数据库文件，请按照以下说明操作："
 
 #: app/install/install_manual.php:22 app/install/install_mysqlimport.php:23
 msgid "Set variables for database connection in config.php"
@@ -8560,7 +8744,7 @@ msgstr "升级"
 
 #: app/upgrade/index.php:68
 msgid "jQuery error!"
-msgstr "jQuery 错误！!"
+msgstr "jQuery 错误！"
 
 #: app/upgrade/index.php:70
 msgid "Hide"
@@ -8873,7 +9057,7 @@ msgstr "不创建默认记录 (SOA、NS)"
 
 #: app/admin/powerDNS/domain-edit.php:232
 msgid "removing Domain will also remove all referenced entries!"
-msgstr "删除域也会删除所有引用的条目！!"
+msgstr "删除域也会删除所有引用的条目！"
 
 #: app/tools/powerDNS/domain-records.php:20
 msgid "Invalid domain"
@@ -9017,7 +9201,7 @@ msgstr "PowerDNS 未启用"
 msgid "PTR zone refresh records"
 msgstr "PTR 专区刷新记录"
 
-#: app/admin/powerDNS/refresh-ptr-records.php:9
+#: app/admin/powerDNS/refresh-ptr-records.php:13
 msgid "Clicking on regenerate will remove all PTR records for subnet and recreate new."
 msgstr "单击“重新生成”将删除子网的所有 PTR 记录并重新创建新记录."
 
@@ -9080,11 +9264,11 @@ msgstr "第三级域名服务器"
 
 #: app/admin/nameservers/edit.php:110
 msgid "Sections to display nameserver set in"
-msgstr "显示域名服务器设置的部门"
+msgstr "显示域名服务器设置的区域"
 
 #: app/admin/nameservers/edit.php:136
 msgid "removing nameserver set will also remove all references from belonging subnets!"
-msgstr "删除域名服务器设置还将删除所属子网中的所有引用！!"
+msgstr "删除域名服务器设置还将删除所属子网中的所有引用！"
 
 #: app/admin/nameservers/index.php:14
 msgid "Manage Nameserver sets"
@@ -9144,17 +9328,17 @@ msgid "Confirm"
 msgstr "确认"
 
 msgid "Section add failed"
-msgstr "部门添加失败"
+msgstr "区域添加失败"
 
 msgid "Section edit failed"
-msgstr "部门编辑失败"
+msgstr "区域编辑失败"
 
 msgid "Section delete failed"
-msgstr "部门删除失败"
+msgstr "区域删除失败"
 
 #: app/admin/sections/edit-order-result.php:30
 msgid "Section reordering failed"
-msgstr "部门重新排序失败"
+msgstr "区域重新排序失败"
 
 #: app/admin/sections/edit.php:222 app/admin/subnets/permissions-show.php:108
 #: app/subnets/addresses/address-details/address-details-permissions.php:41
@@ -9179,7 +9363,7 @@ msgstr "域名"
 
 #: app/admin/vlans/edit-domain.php:80
 msgid "Sections to display domain in"
-msgstr "显示域的部分"
+msgstr "显示域的区域"
 
 #: app/admin/vlans/edit-domain.php:104
 msgid "removing vlan domain will move all belonging vlans to default domain"
@@ -9195,7 +9379,7 @@ msgstr "新域名"
 
 #: app/admin/vlans/move-vlan.php:82
 msgid "No domains available!"
-msgstr "无可用域名！!"
+msgstr "无可用域名！"
 
 #: app/admin/vlans/vlans-scan-execute.php:30 app/admin/vlans/vlans-scan.php:27
 #: app/admin/vrf/vrf-scan-execute.php:26 app/admin/vrf/vrf-scan.php:21
@@ -9215,7 +9399,7 @@ msgstr "VLAN 成功移至新域"
 
 #: app/admin/vrf/edit.php:168
 msgid "removing VRF will also remove VRF reference from belonging subnets!"
-msgstr "删除 VRF 也会从所属子网中删除 VRF 引用！!"
+msgstr "删除 VRF 也会从所属子网中删除 VRF 引用！"
 
 #: app/admin/ripe-import/ripe-telnet.php:60
 msgid "Show name"
@@ -9325,6 +9509,10 @@ msgstr "可见"
 msgid "Set which field to display in table"
 msgstr "设置表中显示哪个字段"
 
+#: app/tools/circuits/options.php:179
+msgid " Filter"
+msgstr " 筛选"
+
 #: app/admin/verify-database/index.php:53
 msgid "Cannot get fix for table field "
 msgstr "无法修复表字段 "
@@ -9397,7 +9585,7 @@ msgid "Invalid authentication method"
 msgstr "验证方法无效"
 
 msgid "Username must be at least 6 characters long!"
-msgstr "用户名长度必须至少6个字符！!"
+msgstr "用户名长度必须至少6个字符！"
 
 #: app/admin/groups/ad-search-group-form.php:28
 #: app/admin/users/ad-search-form.php:28
@@ -9500,7 +9688,7 @@ msgstr "在这里您可以为您的用户设置不同的身份验证方法."
 
 #: app/admin/authentication-methods/index.php:107
 msgid "phpIPAM currently supports 7 methods for authentication:"
-msgstr "phpIPAM 目前支持7种认证方法：:"
+msgstr "phpIPAM 目前支持7种认证方法："
 
 #: app/admin/authentication-methods/index.php:109
 msgid "Local authentication"
@@ -9615,7 +9803,7 @@ msgstr "设置超时时间（以秒为单位）"
 #: app/admin/authentication-methods/edit-Radius.php:130
 #: app/admin/authentication-methods/edit-Radius.php:131
 msgid "php Socket extension missing!"
-msgstr "php Socket 扩展丢失！!"
+msgstr "php Socket 扩展丢失！"
 
 #: app/admin/authentication-methods/check-connection.php:65
 msgid "Check for  not implemented"
@@ -9668,7 +9856,7 @@ msgstr "无 VLAN"
 
 #: app/admin/subnets/edit-result.php:40
 msgid "Please enter subnet description to show as name!"
-msgstr "请输入子网描述以显示为名称！!"
+msgstr "请输入子网描述以显示为名称！"
 
 #: app/admin/subnets/edit-result.php:387
 msgid "Error editing subnet"
@@ -9883,7 +10071,7 @@ msgstr "无域名服务器"
 #: functions/scripts/merge_databases.php:514
 #: functions/scripts/remove_offline_addresses.php:52
 msgid "Error: "
-msgstr "错误：: "
+msgstr "错误： "
 
 #: app/admin/instructions/edit-result.php:36
 #: app/admin/instructions/edit-result.php:44
@@ -9902,6 +10090,10 @@ msgstr "验证码图像"
 #: app/login/login_check.php:46
 msgid "Invalid security code"
 msgstr "安全码无效"
+
+#: app/login/login_check.php:56
+msgid "Please enter your username and password"
+msgstr "请输入您的用户名和密码"
 
 #: app/login/request_ip_result.php:79
 msgid "IP requests disabled"
@@ -10033,7 +10225,7 @@ msgstr "状态更新扫描更新整个子网的活动状态"
 
 #: app/subnets/index.php:36
 msgid "Subnet is in section"
-msgstr "子网位于部门"
+msgstr "子网位于区域"
 
 #: app/subnets/subnet-details/subnet-changelog.php:93
 msgid "Slave subnets"
@@ -10092,7 +10284,7 @@ msgid "Missing required fields"
 msgstr "缺少必填字段"
 
 msgid " can not be empty!"
-msgstr " 不能为空！!"
+msgstr " 不能为空！"
 
 #: app/subnets/addresses/address-modify-submit.php:179
 msgid "Invalid address range"
@@ -10207,7 +10399,7 @@ msgstr "子网菜单"
 #: app/sections/menu/menu-sections.php:75 app/sections/menu/menu-static.php:64
 #: app/sections/menu/menu-tools.php:202
 msgid "No sections available!"
-msgstr "无可用部分！!"
+msgstr "无可用部分！"
 
 #: app/sections/menu/menu-tools-admin.php:89
 msgid "Click to reorder widgets"
@@ -10228,7 +10420,7 @@ msgstr "仪表板"
 
 #: app/sections/section-changelog.php:16
 msgid "Back to section"
-msgstr "返回部门"
+msgstr "返回区域"
 
 #: app/sections/section-subnets.php:23
 msgid "Available subnets in subsection"
@@ -10263,7 +10455,7 @@ msgstr "无效动作"
 #: functions/classes/class.FirewallZones.php:726
 #: functions/classes/class.Log.php:352 functions/classes/class.User.php:580
 msgid "Database error: "
-msgstr "数据库错误：: "
+msgstr "数据库错误： "
 
 #: functions/classes/class.FirewallZones.php:559
 msgid "Zone details"
@@ -10309,7 +10501,7 @@ msgstr "认证失败"
 
 #: functions/classes/class.User.php:1062
 msgid "Something went wrong during auth: "
-msgstr "认证期间出现问题：: "
+msgstr "认证期间出现问题： "
 
 #: functions/classes/class.User.php:1134 functions/classes/class.User.php:1135
 msgid "php Socket extension missing"
@@ -10361,7 +10553,7 @@ msgstr "您没有访问该对象的权限"
 
 #: functions/global_functions.php:121
 msgid "Required PHP extension not installed: "
-msgstr "未安装所需的 PHP 扩展：: "
+msgstr "未安装所需的 PHP 扩展： "
 
 #: functions/global_functions.php:133
 msgid "Required function disabled"
@@ -10369,7 +10561,7 @@ msgstr "所需功能已禁用"
 
 #: functions/global_functions.php:135
 msgid "Required function not found: "
-msgstr "未找到所需功能：: "
+msgstr "未找到所需功能： "
 
 #: functions/scripts/clear_logs.php:27
 msgid "Error clearing changelogs"
@@ -10412,7 +10604,7 @@ msgstr "未找到可以替换的记录"
 #: functions/classes/class.Tools.php:1407
 #: functions/classes/class.Tools.php:1433
 msgid "Update: "
-msgstr "更新：: "
+msgstr "更新： "
 
 #: functions/classes/class.Tools.php:1407
 #: functions/classes/class.Tools.php:1433
@@ -10429,7 +10621,7 @@ msgstr "数据库索引检查： : "
 
 #: functions/classes/class.Tools.php:1575
 msgid "Creating index failed: "
-msgstr "创建索引失败：: "
+msgstr "创建索引失败： "
 
 #: functions/classes/class.Tools.php:1579
 msgid "Created index for table"
@@ -10445,7 +10637,7 @@ msgstr "删除链接地址索引： : "
 
 #: functions/classes/class.Tools.php:1637
 msgid "Warning: "
-msgstr "警告：: "
+msgstr "警告： "
 
 #: functions/classes/class.Tools.php:1637
 msgid "Unable to create index for MySQL TEXT/BLOB data types."
@@ -10469,7 +10661,7 @@ msgstr "无法获取 https://github.com/phpipam/phpipam/releases.atom : "
 
 #: functions/classes/class.Common.php:1068
 msgid "Invalid action!"
-msgstr "无效动作！!"
+msgstr "无效动作！"
 
 msgid "Failed to update address status"
 msgstr "无法更新地址状态"
@@ -10486,7 +10678,7 @@ msgstr "移动 IP 地址失败"
 
 #: functions/classes/class.Subnets.php:2098
 msgid "Invalid Network!"
-msgstr "网络无效！!"
+msgstr "网络无效！"
 
 #: functions/classes/class.Subnets.php:2134
 #: functions/classes/class.Subnets.php:2181
@@ -10499,7 +10691,7 @@ msgstr "重叠"
 #: functions/classes/class.Subnets.php:2134
 #: functions/classes/class.Subnets.php:2221
 msgid "in section"
-msgstr "在部门"
+msgstr "在区域"
 
 #: functions/classes/class.Subnets.php:2298
 #: functions/classes/class.Subnets.php:2448
@@ -10777,9 +10969,9 @@ msgstr "所属主机"
 msgid "No subnets belong to this device"
 msgstr "没有子网属于该设备"
 
+# 1.19
 #: app/dashboard/widgets/access_logs.php:24
 #: app/dashboard/widgets/error_logs.php:24 app/tools/logs/index.php:23
-# 1.19
 msgid "Log files are sent to syslog"
 msgstr "日志文件发送到系统日志"
 
@@ -10796,7 +10988,7 @@ msgstr "发现的主机数量超过 php.ini 定义的最大可能数量 - 设置
 msgid "Please adjust your php.ini settings for value `max_input_vars`"
 msgstr "请调整您的 php.ini 设置值“max_input_vars”"
 
-#: app/admin/authentication-methods/index.php:118
+#: app/admin/authentication-methods/index.php:130
 msgid "For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation please check "
 msgstr "对于 AD/LDAP/NetIQ 连接，phpipam 使用 adLDAP，有关文档，请查看 "
 
@@ -10907,8 +11099,8 @@ msgstr "无法删除本地主机扫描代理"
 msgid "Scan agent references removed"
 msgstr "扫描代理引用已删除"
 
-#: app/admin/settings/index.php:304
 # ## 1.19.002 ###
+#: app/admin/settings/index.php:304
 msgid "Enable Firewall Zones"
 msgstr "启用防火墙区域"
 
@@ -10954,13 +11146,13 @@ msgstr "映射修改成功"
 #: app/admin/firewall-zones/zones-edit-network.php:26
 #: app/admin/firewall-zones/zones-edit.php:26
 msgid "Invalid ID. Do not manipulate the POST values!"
-msgstr "ID 无效。 请勿操纵 POST 值！!"
+msgstr "ID 无效。 请勿操纵 POST 值！"
 
 #: app/admin/firewall-zones/mapping-edit.php:28
 #: app/admin/firewall-zones/zones-edit-network.php:24
 #: app/admin/firewall-zones/zones-edit.php:28
 msgid "Invalid action. Do not manipulate the POST values!"
-msgstr "无效动作。 请勿操纵 POST 值！!"
+msgstr "无效动作。 请勿操纵 POST 值！"
 
 #: app/admin/firewall-zones/mapping-edit.php:50
 msgid "Add a mapping between a firewall device and a firewall zone"
@@ -11012,7 +11204,7 @@ msgstr "本地区域别名"
 
 #: app/admin/firewall-zones/mapping-edit.php:144
 msgid "You are about to remove the firewall to zone mapping!"
-msgstr "您即将删除防火墙进行区域映射！!"
+msgstr "您即将删除防火墙进行区域映射！"
 
 #: app/admin/firewall-zones/mapping.php:42
 #: app/admin/firewall-zones/zones.php:30 app/tools/firewall-zones/index.php:45
@@ -11056,19 +11248,35 @@ msgstr "无效区域指示器。 仅限字母数字字符, &quot;-&quot;, &quot;
 
 #: app/admin/firewall-zones/settings-save.php:55
 msgid "Invalid zone generator method. Do not manipulate the POST values!"
-msgstr "区域生成器类型无效。 请勿操纵 POST 值！!"
+msgstr "区域生成器类型无效。 请勿操纵 POST 值！"
+
+#: app/admin/firewall-zones/settings-save.php:56
+msgid "network"
+msgstr "网络"
 
 #: app/admin/firewall-zones/settings-save.php:60
+msgid "decimal"
+msgstr "十进制"
+
+#: app/admin/firewall-zones/settings-save.php:60
+msgid "hex"
+msgstr "十六进制"
+
+#: app/admin/firewall-zones/settings-save.php:60
+msgid "text"
+msgstr "文本"
+
+#: app/admin/firewall-zones/settings-save.php:61
 msgid "Invalid zone generator types [decimal]. Do not manipulate the POST values!"
-msgstr "区域生成器类型无效 [十进制]。 请勿操纵 POST 值！!"
+msgstr "区域生成器类型无效 [十进制]。 请勿操纵 POST 值！"
 
 #: app/admin/firewall-zones/settings-save.php:63
 msgid "Invalid zone generator types [hex]. Do not manipulate the POST values!"
-msgstr "区域生成器类型无效 [十六进制]。 请勿操纵 POST 值！!"
+msgstr "区域生成器类型无效 [十六进制]。 请勿操纵 POST 值！"
 
 #: app/admin/firewall-zones/settings-save.php:66
 msgid "Invalid zone generator types [text]. Do not manipulate the POST values!"
-msgstr "区域生成器类型无效 [文本]。 请勿操纵 POST 值！!"
+msgstr "区域生成器类型无效 [文本]。 请勿操纵 POST 值！"
 
 #: app/admin/firewall-zones/settings-save.php:72
 #: app/admin/firewall-zones/settings-save.php:79
@@ -11160,7 +11368,7 @@ msgid "Invalid indicator ID."
 msgstr "指标 ID 无效."
 
 msgid "Invalid section ID."
-msgstr "部门 ID 无效."
+msgstr "区域 ID 无效."
 
 #: app/admin/firewall-zones/zones-edit-network-result.php:25
 msgid "Invalid subnet ID."
@@ -11237,7 +11445,7 @@ msgstr "客户区域"
 
 #: app/admin/firewall-zones/zones-edit.php:182
 msgid "Removing this firewall zone will also remove all referenced mappings!"
-msgstr "删除此防火墙区域还将删除所有引用的映射！!"
+msgstr "删除此防火墙区域还将删除所有引用的映射！"
 
 #: app/admin/firewall-zones/zones.php:17
 msgid "Create Firewall zone"
@@ -11299,17 +11507,17 @@ msgstr "LDAP 的基本DN 设置无效"
 msgid "LDAP account does not have enough privileges for search"
 msgstr "LDAP 帐户没有足够的搜索权限"
 
-#: app/admin/subnets/ripe-query.php:49
 # ## 1.19.021
+#: app/admin/subnets/ripe-query.php:49
 msgid "Please select fields to populate:"
-msgstr "请选择要填充的字段：:"
+msgstr "请选择要填充的字段："
 
 #: app/admin/subnets/ripe-query.php:97
 msgid "fill"
 msgstr "填写"
 
-#: app/admin/subnets/edit.php:627 app/admin/subnets/permissions-show.php:120
 # ## 1.19.040
+#: app/admin/subnets/edit.php:627 app/admin/subnets/permissions-show.php:120
 msgid "Propagate changes"
 msgstr "传播变化"
 
@@ -11317,8 +11525,8 @@ msgstr "传播变化"
 msgid "Apply changes to underlying subnets"
 msgstr "将更改应用到底层子网"
 
-#: app/admin/settings/index.php:403
 # ## 1.21.001
+#: app/admin/settings/index.php:403
 msgid "SNMP module"
 msgstr "SNMP 模块"
 
@@ -11664,10 +11872,6 @@ msgstr "管理您的帐户"
 msgid "Number of VRFs"
 msgstr "VRF 数量"
 
-#: app/tools/inactive-hosts/index.php:41
-msgid "Inactive hosts"
-msgstr "非活动主机"
-
 #: app/tools/tools-menu-config.php:117
 msgid "Inactive Hosts"
 msgstr "非活动主机"
@@ -11681,13 +11885,6 @@ msgstr "非活动主机列表"
 #: app/tools/inactive-hosts/index.php:46 app/tools/inactive-hosts/index.php:52
 msgid "No inactive hosts found"
 msgstr "未找到非活动的主机"
-
-#: app/admin/subnets/edit.php:434 app/dashboard/widgets/threshold.php:133
-#: app/subnets/subnet-details/subnet-details.php:319
-#: app/tools/threshold/index.php:16 app/tools/threshold/index.php:105
-#: app/tools/tools-menu-config.php:120
-msgid "Threshold"
-msgstr "阈值"
 
 #: app/tools/threshold/index.php:88 functions/classes/class.Addresses.php:668
 #: functions/classes/class.Addresses.php:673
@@ -11755,7 +11952,7 @@ msgstr "PowerDNS 管理"
 
 #: app/tools/nat/all_nats.php:11 app/tools/tools-menu-config.php:106
 msgid "NAT translations"
-msgstr "NAT 翻译"
+msgstr "NAT 转换"
 
 #: app/admin/nat/edit.php:160
 msgid "Source objects"
@@ -11837,14 +12034,6 @@ msgstr "位置"
 #: app/subnets/import-subnet/import-template.php:48
 #: app/tools/search/search-results-export.php:152
 msgid "location"
-msgstr "位置"
-
-#: app/admin/admin-menu-config.php:68 app/admin/custom-fields/index.php:22
-#: app/admin/users/print_module_permissions.php:63
-#: app/tools/locations/single-location.php:46
-#: app/tools/locations/single-location.php:48
-#: app/tools/tools-menu-config.php:130
-msgid "Locations"
 msgstr "位置"
 
 #: app/tools/locations/all-locations-list.php:1
@@ -12111,7 +12300,7 @@ msgstr "NetIQ 连接设置"
 
 #: app/admin/authentication-methods/index.php:18
 msgid "Create new:"
-msgstr "创建新的：:"
+msgstr "创建新的："
 
 #: app/admin/authentication-methods/index.php:24
 msgid "Create new "
@@ -12239,22 +12428,22 @@ msgid "Enter IDP X509 certificate algorithm"
 msgstr "输入IDP X509证书算法"
 
 msgid "php XML extension missing!"
-msgstr "PHP XML 扩展丢失！!"
+msgstr "PHP XML 扩展丢失！"
 
 msgid "php Date extension missing!"
-msgstr "PHP 日期扩展丢失！!"
+msgstr "PHP 日期扩展丢失！"
 
 msgid "php zlib extension missing!"
-msgstr "PHP zlib 扩展丢失！!"
+msgstr "PHP zlib 扩展丢失！"
 
 msgid "php openssl extension missing!"
-msgstr "PHP Openssl 扩展丢失！!"
+msgstr "PHP Openssl 扩展丢失！"
 
 msgid "php mcrypt extension missing!"
-msgstr "PHP mcrypt 扩展丢失！!"
+msgstr "PHP mcrypt 扩展丢失！"
 
 msgid "php gettext extension missing!"
-msgstr "PHP gettext 扩展丢失！!"
+msgstr "PHP gettext 扩展丢失！"
 
 #: app/admin/device-types/index.php:18 app/admin/snmp/index.php:32
 msgid "Manage devices"
@@ -12339,15 +12528,15 @@ msgstr "请至少选择一项才能生成有效的名称模式."
 
 #: app/admin/firewall-zones/settings-save.php:114
 msgid "Invalid subnet name type [network]. Do not manipulate the POST values!"
-msgstr "子网名称类型 [网络] 无效。 请勿操纵 POST 值！!"
+msgstr "子网名称类型 [网络] 无效。 请勿操纵 POST 值！"
 
 #: app/admin/firewall-zones/settings-save.php:117
 msgid "Invalid subnet name type [description]. Do not manipulate the POST values!"
-msgstr "子网名称类型 [描述] 无效。 请勿操纵 POST 值！!"
+msgstr "子网名称类型 [描述] 无效。 请勿操纵 POST 值！"
 
 #: app/admin/firewall-zones/settings-save.php:122
 msgid "Invalid subnet name. Do not manipulate the POST values!"
-msgstr "子网名称无效。 请勿操纵 POST 值！!"
+msgstr "子网名称无效。 请勿操纵 POST 值！"
 
 #: app/admin/firewall-zones/settings.php:117
 msgid "Zone settings"
@@ -12399,7 +12588,7 @@ msgstr "子网的防火墙地址对象将包含此信息，而不是 FQDN 或主
 #: app/admin/firewall-zones/subnet-to-zone.php:24
 #: app/admin/firewall-zones/zones-edit-network.php:29
 msgid "Invalid subnet ID. Do not manipulate the POST values!"
-msgstr "子网 ID 无效。 请勿操纵 POST 值！!"
+msgstr "子网 ID 无效。 请勿操纵 POST 值！"
 
 #: app/admin/firewall-zones/subnet-to-zone-save.php:23
 msgid "Invalid or no zone ID. "
@@ -12407,7 +12596,7 @@ msgstr "区域 ID 无效或没有. "
 
 #: app/admin/firewall-zones/subnet-to-zone-save.php:26
 msgid "Invalid device ID. Do not manipulate the POST values!"
-msgstr "设备 ID 无效。 请勿操纵 POST 值！!"
+msgstr "设备 ID 无效。 请勿操纵 POST 值！"
 
 #: app/admin/firewall-zones/subnet-to-zone-save.php:51
 msgid "Cannot add this network to a zone."
@@ -12415,7 +12604,7 @@ msgstr "无法将此网络添加到区域."
 
 #: app/admin/firewall-zones/subnet-to-zone.php:21
 msgid "Invalid operation. Do not manipulate the POST values!"
-msgstr "无效操作。 请勿操纵 POST 值！!"
+msgstr "无效操作。 请勿操纵 POST 值！"
 
 #: app/admin/firewall-zones/subnet-to-zone.php:29
 msgid "No zones available"
@@ -12457,12 +12646,12 @@ msgid "Successfully deleted the networt mapping."
 msgstr "成功删除网络映射."
 
 #: app/admin/firewall-zones/zones-edit-network.php:50
-msgid " network mapping"
-msgstr " 网络映射"
+msgid "network mapping"
+msgstr "网络映射"
 
 #: app/admin/firewall-zones/zones-edit-network.php:67
 msgid "You are about to remove the following Network from the firewall zone:"
-msgstr "您即将从防火墙区域中删除以下网络：:"
+msgstr "您即将从防火墙区域中删除以下网络："
 
 #: app/admin/firewall-zones/zones-edit-network.php:75
 msgid "First select a section to choose a subnet afterwards."
@@ -12470,7 +12659,7 @@ msgstr "首先选择一个部分，然后选择子网."
 
 #: app/admin/firewall-zones/zones-edit-network.php:87
 msgid "No section selected"
-msgstr "未选择任何部门"
+msgstr "未选择任何区域"
 
 #: app/admin/firewall-zones/zones-edit-result.php:36
 msgid "Invalid zone name length."
@@ -12492,6 +12681,10 @@ msgstr "区域说明"
 #: app/admin/firewall-zones/zones-edit.php:142
 msgid "Add a network to the Zone"
 msgstr "将网络添加到区域"
+
+#: app/admin/firewall-zones/zones-edit.php:157
+msgid "Networks"
+msgstr "网络"
 
 #: app/admin/groups/ad-search-group-form.php:33
 msgid "Search domains in AD"
@@ -12515,7 +12708,7 @@ msgstr "发现以下组"
 
 #: app/admin/groups/ad-search-group-result.php:104
 msgid "Members:"
-msgstr "成员：:"
+msgstr "成员："
 
 msgid "Group $_POST[action] error"
 msgstr "组 $_POST[action] 错误"
@@ -12530,11 +12723,11 @@ msgid "Invalid Id"
 msgstr "无效 ID"
 
 msgid "All sections :"
-msgstr "所有部门： :"
+msgstr "所有区域："
 
 #: app/admin/import-export/export-ipaddr-field-select.php:63
 msgid "Select sections and IP address fields to export"
-msgstr "选择要导出的部门和 IP 地址字段"
+msgstr "选择要导出的区域和 IP 地址字段"
 
 #: app/admin/import-export/export-ipaddr-field-select.php:78
 #: app/admin/import-export/export-ipaddr.php:82
@@ -12557,10 +12750,10 @@ msgstr "必填项"
 #: app/admin/import-export/export-ipaddr-field-select.php:146
 #: app/admin/import-export/export-subnets-field-select.php:140
 msgid "Include the sections in a separate sheet."
-msgstr "将这些部门包含在单独的工作表中."
+msgstr "将这些区域包含在单独的工作表中."
 
 msgid "Export each section in a separate sheet."
-msgstr "将每个部门导出到单独的工作表中."
+msgstr "将每个区域导出到单独的工作表中."
 
 #: app/admin/import-export/export-l2dom-field-select.php:26
 msgid "Select L2 Domain fields to export"
@@ -12568,7 +12761,7 @@ msgstr "选择要导出的 L2 域字段"
 
 #: app/admin/import-export/export-subnets-field-select.php:63
 msgid "Select sections and subnets fields to export"
-msgstr "选择要导出的部门和子网字段"
+msgstr "选择要导出的区域和子网字段"
 
 #: app/admin/import-export/export-subnets.php:91
 msgid "VLAN Domain"
@@ -12602,13 +12795,17 @@ msgstr "浏览/拖放"
 msgid "Cancel upload"
 msgstr "取消上传"
 
+#: app/admin/import-export/import-button.php:108
+msgid "Upload successfull"
+msgstr "上传成功"
+
 #: app/admin/import-export/import-button.php:116
 msgid "Match fields"
 msgstr "匹配字段"
 
 #: app/admin/import-export/import-button.php:116
 msgid "Please match the DB fields with the uploaded fields:"
-msgstr "请将数据库字段与上传的字段匹配：:"
+msgstr "请将数据库字段与上传的字段匹配："
 
 #: app/admin/import-export/import-button.php:122
 msgid "Pick import colum for"
@@ -12616,7 +12813,7 @@ msgstr "选择导入列"
 
 #: app/admin/import-export/import-button.php:136
 msgid "No fields were automatically matched. The import file needs to have a header row!"
-msgstr "没有字段被自动匹配。 导入文件需要有标题行！!"
+msgstr "没有字段被自动匹配。 导入文件需要有标题行！"
 
 #: app/admin/import-export/import-button.php:141
 msgid "Not all the fields were automatically matched. Please check manually."
@@ -12670,9 +12867,11 @@ msgstr "条目标记为 "
 #: app/admin/import-export/import-subnets-preview.php:33
 #: app/admin/import-export/import-vlan-preview.php:33
 #: app/admin/import-export/import-vrf-preview.php:33
-msgid "will be added,\n"
+msgid ""
+"will be added,\n"
 "\tthe ones marked with "
-msgstr "将被添加，\n"
+msgstr ""
+"将被添加，\n"
 "\t标记为 "
 
 #: app/admin/import-export/import-devices-preview.php:35
@@ -12682,9 +12881,11 @@ msgstr "将被添加，\n"
 #: app/admin/import-export/import-subnets-preview.php:34
 #: app/admin/import-export/import-vlan-preview.php:34
 #: app/admin/import-export/import-vrf-preview.php:34
-msgid "will be updated\n"
+msgid ""
+"will be updated\n"
 "\tand the ones marked with "
-msgstr "将更新\n"
+msgstr ""
+"将更新\n"
 "\t并标记为 "
 
 #: app/admin/import-export/import-devices-preview.php:36
@@ -12705,7 +12906,7 @@ msgstr "将被忽略."
 #: app/admin/import-export/import-vlan-preview.php:37
 #: app/admin/import-export/import-vrf-preview.php:37
 msgid "Summary: "
-msgstr "概括：: "
+msgstr "概括： "
 
 #: app/admin/import-export/import-devices-preview.php:38
 #: app/admin/import-export/import-devtype-preview.php:37
@@ -12714,9 +12915,11 @@ msgstr "概括：: "
 #: app/admin/import-export/import-subnets-preview.php:37
 #: app/admin/import-export/import-vlan-preview.php:37
 #: app/admin/import-export/import-vrf-preview.php:37
-msgid " new entries.\n"
+msgid ""
+" new entries.\n"
 "\t\t"
-msgstr " 新条目.\n"
+msgstr ""
+" 新条目.\n"
 "\t\t"
 
 #: app/admin/import-export/import-devices-preview.php:39
@@ -12726,9 +12929,11 @@ msgstr " 新条目.\n"
 #: app/admin/import-export/import-subnets-preview.php:38
 #: app/admin/import-export/import-vlan-preview.php:38
 #: app/admin/import-export/import-vrf-preview.php:38
-msgid " updated entries.\n"
+msgid ""
+" updated entries.\n"
 "\t\t"
-msgstr " 已更新条目.\n"
+msgstr ""
+" 已更新条目.\n"
 "\t\t"
 
 #: app/admin/import-export/import-devices-preview.php:40
@@ -12738,9 +12943,11 @@ msgstr " 已更新条目.\n"
 #: app/admin/import-export/import-subnets-preview.php:39
 #: app/admin/import-export/import-vlan-preview.php:39
 #: app/admin/import-export/import-vrf-preview.php:39
-msgid " entries skipped due to errors.\n"
+msgid ""
+" entries skipped due to errors.\n"
 "\t\t"
-msgstr " 因错误而跳过的条目.\n"
+msgstr ""
+" 因错误而跳过的条目.\n"
 "\t\t"
 
 #: app/admin/import-export/import-devices-preview.php:41
@@ -12750,9 +12957,11 @@ msgstr " 因错误而跳过的条目.\n"
 #: app/admin/import-export/import-subnets-preview.php:40
 #: app/admin/import-export/import-vlan-preview.php:40
 #: app/admin/import-export/import-vrf-preview.php:40
-msgid " duplicate entries.\n"
+msgid ""
+" duplicate entries.\n"
 "\t\t"
-msgstr " 重复条目.\n"
+msgstr ""
+" 重复条目.\n"
 "\t\t"
 
 #: app/admin/import-export/import-devices-preview.php:42
@@ -12812,7 +13021,7 @@ msgstr "模板"
 #: app/admin/import-export/import-vlan-select.php:86
 #: app/admin/import-export/import-vrf-select.php:73
 msgid "The import XLS/CSV should have the following fields and a <b>header row</b> for a succesful import:"
-msgstr "导入 XLS/CSV 应具有以下字段和 <b>标题行</b> 才能成功导入：:"
+msgstr "导入 XLS/CSV 应具有以下字段和 <b>标题行</b> 才能成功导入："
 
 #: app/admin/import-export/import-devices-select.php:130
 #: app/admin/import-export/import-ipaddr-select.php:126
@@ -12853,7 +13062,7 @@ msgstr "选择要导入的字段"
 
 #: app/admin/import-export/import-load-data.php:23
 msgid "Error: could not read the uploaded file type!"
-msgstr "错误：无法读取上传的文件类型！!"
+msgstr "错误：无法读取上传的文件类型！"
 
 #: app/admin/import-export/import-load-data.php:37
 msgid "Error: missing required field mapping for expected field"
@@ -12874,7 +13083,7 @@ msgstr "在一行中发现了额外的一列 "
 
 #: app/admin/import-export/import-load-data.php:81
 msgid " in CSV file. CSV delimiter used in value field?"
-msgstr " 在 CSV 文件中。 值字段中使用了 CSV 分隔符吗？?"
+msgstr " 在 CSV 文件中。 值字段中使用了 CSV 分隔符吗？"
 
 #: app/admin/import-export/import-load-data.php:110
 msgid " in XLS file. Please check input file."
@@ -12904,9 +13113,11 @@ msgid "Recomputed data"
 msgstr "重新计算的数据"
 
 #: app/admin/import-export/import-recompute-preview.php:32
-msgid "have new masters and will be updated,\n"
+msgid ""
+"have new masters and will be updated,\n"
 "\tthe ones marked with "
-msgstr "有一个新的主分支并将被更新，\n"
+msgstr ""
+"有一个新的主分支并将被更新，\n"
 "\t被标记的 "
 
 #: app/admin/import-export/import-recompute-preview.php:33
@@ -12915,15 +13126,15 @@ msgstr "没有换主分支."
 
 #: app/admin/import-export/import-recompute-select.php:77
 msgid "Select Subnet sections, VRFs and IP version to recompute"
-msgstr "选择要重新计算的子网部门、VRF 和 IP 版本"
+msgstr "选择要重新计算的子网区域、VRF 和 IP 版本"
 
 #: app/admin/import-export/import-recompute-select.php:85
 msgid "Sections and IP versions"
-msgstr "部门和 IP 版本"
+msgstr "区域和 IP 版本"
 
 #: app/admin/import-export/import-recompute-select.php:86
 msgid "Please choose which section and IP version to recompute:"
-msgstr "请选择要重新计算的部门和 IP 版本：:"
+msgstr "请选择要重新计算的区域和 IP 版本："
 
 #: app/admin/import-export/import-recompute-select.php:97
 msgid "Hide unchanged subnets"
@@ -13070,7 +13281,7 @@ msgstr "IP 地址导入"
 
 #: app/admin/mail/test-mail.php:26
 msgid "Mail settings are missing. Please set admin mail and name!"
-msgstr "邮件设置丢失。 请设置管理员邮件和名称！!"
+msgstr "邮件设置丢失。 请设置管理员邮件和名称！"
 
 msgid "Failed to $_POST[action] nameserver set"
 msgstr "无法设置 $_POST[action] 域名服务器"
@@ -13176,7 +13387,7 @@ msgstr "只显示大型网络"
 
 #: app/admin/sections/edit.php:146
 msgid "Show only supernets in list of subnets in section"
-msgstr "仅显示部门子网列表中的大型网络"
+msgstr "仅显示区域子网列表中的大型网络"
 
 #: app/admin/sections/edit.php:247 app/admin/subnets/permissions-show.php:128
 msgid "Permission changes will be propagated to all nested subnets"
@@ -13208,7 +13419,7 @@ msgstr "源"
 
 #: app/admin/nat/edit-map.php:124 app/admin/nat/edit.php:152
 msgid "Destination"
-msgstr "目的地"
+msgstr "目的"
 
 #: app/admin/nat/edit-result.php:38
 msgid "Invalid NAT object identifier"
@@ -13315,7 +13526,15 @@ msgstr "静态 NAT 只能有 1 个源地址"
 msgid "Static NAT can only have 1 destination address"
 msgstr "静态 NAT 只能有 1 个目标地址"
 
-#: app/admin/nat/item-add-submit.php:129
+#: app/admin/nat/item-add-submit.php:127
+msgid "Object added"
+msgstr "已添加对象"
+
+#: app/admin/nat/item-add-submit.php:130
+msgid "Failed to add object"
+msgstr "添加对象失败"
+
+#: app/admin/nat/item-add-submit.php:134
 msgid "Invalid object identifier"
 msgstr "无效的对象标识符"
 
@@ -13323,7 +13542,7 @@ msgstr "无效的对象标识符"
 msgid "Invalid object type"
 msgstr "对象类型无效"
 
-#: app/admin/nat/item-add-submit.php:133
+#: app/admin/nat/item-add-submit.php:138
 msgid "Missing object type or id"
 msgstr "缺少对象类型或 ID"
 
@@ -13424,6 +13643,10 @@ msgstr "设置系统日志发送到的位置"
 msgid "Update Tags"
 msgstr "更新标签"
 
+#: app/admin/tags/index.php:33
+msgid "Example"
+msgstr "示例"
+
 #: app/admin/settings/index.php:507
 msgid "Update address tags when address state change occurs"
 msgstr "地址状态发生变化时更新地址标签"
@@ -13437,12 +13660,12 @@ msgid "Require unique subnets"
 msgstr "需要唯一的子网"
 
 #: app/admin/settings/index.php:518
-msgid "Require unique subnets across all sections"
-msgstr "所有部门都需要唯一的子网"
+msgid "Require unique subnets accross all sections"
+msgstr "所有区域都需要唯一的子网"
 
 #: app/admin/users/print-all.php:181
 msgid "Administrator users will be able to view and edit all sections and subnets"
-msgstr "管理员用户将能够查看和编辑所有部门和子网"
+msgstr "管理员用户将能够查看和编辑所有区域和子网"
 
 msgid "Set maximum number of concurrent ICMP checks (default 128)"
 msgstr "设置并发 ICMP 检查的最大数量（默认 128）"
@@ -13519,7 +13742,7 @@ msgstr "维护模式已移除"
 
 #: app/admin/subnets/edit-folder-result.php:92
 msgid "Folder cannot nest behind itself!"
-msgstr "文件夹不能嵌套在其自身后面！!"
+msgstr "文件夹不能嵌套在其自身后面！"
 
 msgid "Folder $_POST[action] successfull"
 msgstr "文件夹 $_POST[action] 成功"
@@ -13611,7 +13834,7 @@ msgstr "无法发送邮件，邮件设置丢失。 请在管理 > 邮件设置�
 
 #: app/admin/users/edit-result.php:69
 msgid "Username must be at least 1 character long!"
-msgstr "用户名长度必须至少为 1 个字符！!"
+msgstr "用户名长度必须至少为 1 个字符！"
 
 msgid "VLANs / VRFs"
 msgstr "VLAN / VRF"
@@ -13666,6 +13889,22 @@ msgstr "下载"
 #: app/admin/vaults/edit-item-certificate-result.php:77
 msgid "Invalid certificate"
 msgstr "证书无效"
+
+#: app/admin/vaults/download-certificate.php:50
+msgid "Download PEM encoded public certificate (ASCII) - crt"
+msgstr "下载 PEM 编码的公共证书 (ASCII) - crt"
+
+#: app/admin/vaults/download-certificate.php:55
+msgid "Download PEM encoded certificate (ASCII) with private key - pem"
+msgstr "下载带有私钥的 PEM 编码证书（ASCII）- pem"
+
+#: app/admin/vaults/download-certificate.php:57
+msgid "Download PKCS#12 encoded certificate (Binary) with private key - p12"
+msgstr "下载带有私钥的 PKCS#12 编码证书（二进制）-p12"
+
+#: app/admin/vaults/download-certificate.php:98
+msgid "Enter password for private key export"
+msgstr "输入导出私钥的密码"
 
 #: app/admin/vaults/edit-item-certificate-result.php:107
 #: app/admin/vaults/edit-item-certificate-result.php:108
@@ -13723,6 +13962,22 @@ msgstr "输入名称"
 msgid "Certificate type"
 msgstr "证书类别"
 
+#: app/admin/vaults/edit-item-certificate.php:125
+msgid "Fetch website certificate"
+msgstr "获取网站证书"
+
+#: app/admin/vaults/edit-item-certificate.php:126
+msgid "Certificate (.cer, .pem, .crt)"
+msgstr "证书（.cer、.pem、.crt）"
+
+#: app/admin/vaults/edit-item-certificate.php:127
+msgid "PKCS12 Certificate with key file (.p12, .pfx)"
+msgstr "带有密钥文件的 PKCS12 证书（.p12、.pfx）"
+
+#: app/admin/vaults/edit-item-certificate.php:216
+msgid "Certificate fetched."
+msgstr "已获取证书。"
+
 #: app/admin/vaults/edit-item-password.php:41
 msgid "password"
 msgstr "密码"
@@ -13733,7 +13988,7 @@ msgstr "添加新密码"
 
 #: app/admin/vaults/edit-result.php:45
 msgid "Secret must be at least 8 characters long!"
-msgstr "密码长度必须至少为 8 个字符！!"
+msgstr "密码长度必须至少为 8 个字符！"
 
 #: app/admin/vaults/edit-result.php:50
 msgid "Secret validation errors"
@@ -13749,6 +14004,14 @@ msgstr "保管库"
 #: app/tools/vaults/all-vaults.php:24
 msgid "Create Vault"
 msgstr "创建保管库"
+
+#: app/tools/vaults/all-vaults.php:29
+msgid "certificates"
+msgstr "证书"
+
+#: app/tools/vaults/all-vaults.php:29
+msgid "passwords"
+msgstr "密码"
 
 #: app/tools/vaults/all-vaults.php:104
 #: app/tools/vaults/vault/vault-details-general.php:104
@@ -13794,6 +14057,10 @@ msgstr "解锁"
 #: app/tools/vaults/vault/vault-details-general.php:108
 msgid "Edit Vault"
 msgstr "编辑保管库"
+
+#: app/tools/vaults/vault/vault-details-general.php:111
+msgid "Delete Vault"
+msgstr "删除保管库"
 
 #: app/tools/vaults/vault/vault-item-details-general.php:12
 #: app/tools/vaults/vault/vault-item-details-general.php:147
@@ -13937,6 +14204,14 @@ msgstr "删除密码"
 msgid "No items"
 msgstr "无项目"
 
+#: app/tools/vaults/vault/vault-items-passwords.php:61
+msgid "Show password"
+msgstr "显示密码"
+
+#: app/tools/vaults/vault/vault-items-passwords.php:106
+msgid "Hide password"
+msgstr "隐藏密码"
+
 #: app/admin/vaults/edit.php:45
 msgid "Create new vault"
 msgstr "创建新的保管库"
@@ -13967,7 +14242,7 @@ msgstr "保管库密码"
 
 #: app/admin/vaults/edit.php:95
 msgid "Vault secret. Please store secret as it cannot be retrieved if lost!"
-msgstr "保管库密码。 请妥善保管，一旦丢失将无法找回！!"
+msgstr "保管库密码。 请妥善保管，一旦丢失将无法找回！"
 
 #: app/admin/vaults/fetch_website_certificate.php:38
 msgid "Invalid URL"
@@ -14043,7 +14318,7 @@ msgstr "不允许更改 VLAN"
 
 #: app/admin/vlans/edit-result.php:55
 msgid "VLAN already exists in another domain!"
-msgstr "VLAN 已存在于另一个域中！!"
+msgstr "VLAN 已存在于另一个域中！"
 
 #: app/admin/vlans/edit.php:170
 msgid "Unique VLAN"
@@ -14176,7 +14451,8 @@ msgstr "纬度无效"
 msgid "Invalid Longitude"
 msgstr "经度无效"
 
-#: app/admin/customers/edit-submit.php:105 app/admin/locations/edit-result.php:62
+#: app/admin/customers/edit-submit.php:105
+#: app/admin/locations/edit-result.php:62
 msgid "Failed to update location lat/lng from Nominatim"
 msgstr "无法从 Nominatim 更新位置纬度/经度"
 
@@ -14238,7 +14514,7 @@ msgstr "没有组"
 
 #: app/dashboard/index.php:105
 msgid "You are not member of any group. Please contact system administrator!"
-msgstr "您不属于任何组。 请联系系统管理员！!"
+msgstr "您不属于任何组。 请联系系统管理员！"
 
 #: app/dashboard/widgets/changelog.php:37
 msgid "Changelog files are sent to syslog"
@@ -14362,22 +14638,22 @@ msgstr "切换回用户"
 
 #: app/sections/all-sections.php:35
 msgid "Available sections"
-msgstr "可用部门"
+msgstr "可用区域"
 
 #: app/sections/all-sections.php:152
 msgid "No sections available"
-msgstr "无可用部门"
+msgstr "无可用区域"
 
 #: app/sections/menu/menu-administration.php:136
 #: app/sections/menu/menu-tools.php:180
 #: app/tools/devices/all-devices-filter.php:120 app/tools/vlan/domains.php:39
 msgid "All sections"
-msgstr "所有部门"
+msgstr "所有区域"
 
 #: app/sections/menu/menu-administration.php:136
 #: app/sections/menu/menu-tools.php:180
 msgid "Show all sections"
-msgstr "显示所有部门"
+msgstr "显示所有区域"
 
 #: app/sections/menu/menu-administration.php:185
 msgid "All items"
@@ -14393,7 +14669,7 @@ msgstr "删除 DNS 记录"
 
 #: app/subnets/addresses/address-modify.php:365
 msgid "Remove all associated DNS records:"
-msgstr "删除所有关联的 DNS 记录：:"
+msgstr "删除所有关联的 DNS 记录："
 
 #: app/subnets/addresses/address-details/address-details-linked.php:13
 #: app/subnets/addresses/print-address-table.php:588
@@ -14514,7 +14790,7 @@ msgstr "是必须的"
 
 #: app/subnets/addresses/address-modify-submit.php:74
 msgid "Please fix following errors:"
-msgstr "请修正以下错误：:"
+msgstr "请修正以下错误："
 
 #: app/subnets/addresses/export-field-select.php:73
 msgid "FW Object"
@@ -14532,10 +14808,7 @@ msgstr "防火墙对象"
 #: app/subnets/addresses/address-modify-submit.php:167
 #: app/subnets/addresses/ping-address.php:37
 msgid "Invalid IP address"
-msgstr "IP 地址无效！"
-
-msgid "IP addresses in $location "
-msgstr "$location 中的 IP 地址 "
+msgstr "IP 地址无效"
 
 #: app/subnets/addresses/print-address-table.php:138
 msgid "Remove all"
@@ -14672,7 +14945,7 @@ msgstr "通过 MAC 地址扫描未找到 MAC 地址"
 
 #: app/subnets/scan/subnet-scan-result-snmp-route-all.php:18
 msgid "Invalid section Id"
-msgstr "部门 ID 无效"
+msgstr "区域 ID 无效"
 
 #: app/subnets/scan/subnet-scan-result.php:21
 msgid "Number of discovered hosts exceed maximum possible defined by php.ini"
@@ -14680,7 +14953,7 @@ msgstr "发现的主机数量超过 php.ini 定义的最大可能数量"
 
 #: app/subnets/scan/subnet-scan-result.php:21
 msgid "Please increase your php.ini setting:"
-msgstr "请增加您的 php.ini 设置：:"
+msgstr "请增加您的 php.ini 设置："
 
 #: app/subnets/scan/subnet-scan.php:30 functions/classes/class.Scan.php:535
 #: functions/scripts/discoveryCheck.php:47 functions/scripts/pingCheck.php:57
@@ -14689,7 +14962,7 @@ msgstr "扫描已禁用"
 
 #: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:309
 msgid "Add subnets to section"
-msgstr "将子网添加到部门"
+msgstr "将子网添加到区域"
 
 #: app/subnets/subnets-menu.php:98
 msgid "Associated VLANs"
@@ -14852,7 +15125,7 @@ msgstr "方法"
 
 #: functions/classes/class.Crypto.php:130
 msgid "PHP extension not installed: "
-msgstr "PHP 扩展未安装：: "
+msgstr "PHP 扩展未安装： "
 
 #: functions/classes/class.Crypto.php:248
 msgid "Invalid CSRF cookie action"
@@ -14940,7 +15213,7 @@ msgstr "管理区域"
 
 #: app/tools/logs/index.php:61
 msgid "Administrative privileges required!"
-msgstr "需要管理权限！!"
+msgstr "需要管理权限！"
 
 #: app/tools/logs/show-logs.php:97
 msgid "Unknown"
@@ -14948,7 +15221,7 @@ msgstr "未知"
 
 #: app/tools/powerDNS/domain-records.php:66
 msgid "Domain type:"
-msgstr "域名类型：:"
+msgstr "域名类型："
 
 #: app/tools/powerDNS/domain-records.php:75
 msgid "Master servers"
@@ -14956,18 +15229,18 @@ msgstr "主服务器"
 
 #: app/tools/powerDNS/domain-records.php:88
 msgid "Notified serial:"
-msgstr "通知序列号：:"
+msgstr "通知序列号："
 
 #: app/tools/powerDNS/domain-records.php:94
 msgid "Last check:"
-msgstr "最后一次检查：:"
+msgstr "最后一次检查："
 
 #: app/tools/powerDNS/domains-print.php:87
 msgid "No records found for filter "
 msgstr "没有找到过滤器的记录 "
 
 msgid "You do not have permission to manage DNS. Please contact administrator!"
-msgstr "您没有管理 DNS 的权限。 请联系管理员！!"
+msgstr "您没有管理 DNS 的权限。 请联系管理员！"
 
 #: app/tools/powerDNS/host_records.php:14
 msgid "No host records available"
@@ -15040,7 +15313,7 @@ msgstr "选择要显示的菜单类型"
 
 #: app/tools/user-menu/user-edit.php:30
 msgid "Invalid language!"
-msgstr "无效语言！!"
+msgstr "无效语言！"
 
 #: app/tools/vlan/domain-vlans-all.php:33
 msgid "VLANs in all domains"
@@ -15129,7 +15402,7 @@ msgstr "应用过滤器：位置 = "
 
 #: app/tools/devices/all-devices-filter.php:150
 msgid "Filter applied: Section = "
-msgstr "应用过滤器：部门 = "
+msgstr "应用过滤器：区域 = "
 
 #: app/tools/vlan/domain-vlans.php:56
 msgid "Scan for VLANs"
@@ -15168,7 +15441,7 @@ msgid "Delete domain"
 msgstr "删除域名"
 
 msgid "Available in sections"
-msgstr "部门提供"
+msgstr "区域提供"
 
 #: app/tools/dhcp/index.php:12 app/tools/tools-menu-config.php:89
 msgid "DHCP information"
@@ -15350,7 +15623,7 @@ msgstr "NAT 模块已禁用."
 
 #: app/tools/nat/all_nats.php:52
 msgid "Translation"
-msgstr "翻译"
+msgstr "转换"
 
 #: app/tools/nat/all_nats.php:56
 msgid "Policy SRC/DST IP"
@@ -15360,9 +15633,37 @@ msgstr "SRC/DST IP 策略"
 msgid " NAT"
 msgstr " NAT"
 
+#: app/tools/nat/all_nats.php:89
+msgid "destination"
+msgstr "目的"
+
+#: app/tools/nat/all_nats.php:89
+msgid "source"
+msgstr "源"
+
+#: app/tools/nat/all_nats.php:89
+msgid "static"
+msgstr "静态"
+
 #: app/tools/nat/all_nats.php:95
 msgid "NAT configured"
 msgstr "NAT 配置"
+
+#: app/tools/nat/all_nats.php:95
+msgid " destination "
+msgstr " 目的 "
+
+#: app/tools/nat/all_nats.php:95
+msgid " source "
+msgstr " 源 "
+
+#: app/tools/nat/all_nats.php:95
+msgid " static "
+msgstr " 静态 "
+
+#: app/tools/nat/all_nats.php:96
+msgid " policy"
+msgstr " 策略"
 
 #: app/tools/nat/all_nats.php:151 app/tools/nat/nat_details.php:179
 msgid "Manage NAT"
@@ -15472,7 +15773,7 @@ msgstr "PSTN 对象标识符无效"
 
 #: app/tools/pstn-prefixes/edit-result.php:48
 msgid "Prefix can not be empty!"
-msgstr "前缀不能为空！!"
+msgstr "前缀不能为空！"
 
 #: app/tools/pstn-prefixes/edit-result.php:51
 msgid "Start must be numeric"
@@ -15535,11 +15836,11 @@ msgstr "设置前缀名称"
 
 #: app/tools/pstn-prefixes/edit.php:135
 msgid "Set start number"
-msgstr "设置起始编号"
+msgstr "设置起始号码"
 
 #: app/tools/pstn-prefixes/edit.php:146
 msgid "Set stop number"
-msgstr "设置结束编号"
+msgstr "设置结束号码"
 
 #: app/tools/pstn-prefixes/edit.php:163
 msgid "Enter master prefix if you want to nest it under existing subnet, or select root to create root prefix"
@@ -15648,6 +15949,10 @@ msgstr "无可用机柜"
 msgid "No location"
 msgstr "没有位置"
 
+#: app/tools/racks/print-racks-list.php:82
+msgid "Location not set for this racks."
+msgstr "未设置此机架的位置。"
+
 #: app/tools/racks/print-racks-list.php:91
 msgid "Invalid location"
 msgstr "位置无效"
@@ -15729,7 +16034,7 @@ msgstr "数据库升级检查"
 
 #: app/upgrade/index.php:134
 msgid "Database seems up to date and doesn't need to be upgraded!"
-msgstr "数据库似乎是最新的，不需要升级！!"
+msgstr "数据库似乎是最新的，不需要升级！"
 
 #: app/upgrade/index.php:135
 msgid "Go to dashboard"
@@ -15789,7 +16094,7 @@ msgstr "升级脚本可能未完成。 请在升级前考虑增加 max_execution
 
 #: app/upgrade/index.php:160
 msgid "Clicking on upgrade button will automatically update database to newest version!"
-msgstr "点击升级按钮将自动更新数据库到最新版本！!"
+msgstr "点击升级按钮将自动更新数据库到最新版本！"
 
 #: app/upgrade/index.php:161
 msgid "Upgrade phpIPAM database"
@@ -15805,11 +16110,11 @@ msgstr "显示指南"
 
 #: app/upgrade/index.php:170
 msgid "Copy and paste below commands to mysql directly!"
-msgstr "直接复制以下命令粘贴到 Mysql 即可！!"
+msgstr "直接复制以下命令粘贴到 Mysql 即可！"
 
 #: app/upgrade/upgrade-execute.php:27
 msgid "Database upgraded successfully!"
-msgstr "数据库升级成功！!"
+msgstr "数据库升级成功！"
 
 #: functions/classes/class.Addresses.php:1854
 #: functions/classes/class.Addresses.php:1857
@@ -16022,7 +16327,7 @@ msgstr " 已安装"
 
 #: functions/classes/class.Install.php:201
 msgid "Cannot drop database: "
-msgstr "无法删除数据库：: "
+msgstr "无法删除数据库： "
 
 #: functions/classes/class.Install.php:204
 msgid "Cannot install sql SCHEMA file"
@@ -16051,7 +16356,7 @@ msgstr "数据库升级"
 
 #: functions/classes/class.Install.php:539
 msgid "query: "
-msgstr "查询：: "
+msgstr "查询： "
 
 #: functions/classes/class.Install.php:541
 msgid "Upgrade failed"
@@ -16063,7 +16368,7 @@ msgstr "查询失败"
 
 #: functions/classes/class.Install.php:545
 msgid "Failed to upgrade database!"
-msgstr "升级数据库失败！!"
+msgstr "升级数据库失败！"
 
 #: functions/classes/class.Install.php:546
 msgid "Go to administration and fix"
@@ -16181,7 +16486,7 @@ msgstr "无效字符"
 
 #: functions/classes/class.PDO.php:194
 msgid "Could not connect to database! "
-msgstr "无法连接到数据库！! "
+msgstr "无法连接到数据库！ "
 
 #: functions/classes/class.PDO.php:410
 msgid "Recursion limit reached."
@@ -16306,7 +16611,7 @@ msgid "Missing class file"
 msgstr "缺少类文件"
 
 msgid "User attributes:"
-msgstr "用户属性：:"
+msgstr "用户属性："
 
 msgid "No attributes found."
 msgstr "未找到属性."
@@ -16314,9 +16619,9 @@ msgstr "未找到属性."
 msgid "Attributes not found"
 msgstr "未找到属性"
 
+# ## Customers module ###
 #: app/tools/customers/all-customers.php:30
 #: app/tools/customers/customer/details.php:19
-# ## Customers module ###
 msgid "All customers"
 msgstr "所有客户"
 
@@ -16356,14 +16661,6 @@ msgstr "客户"
 #: app/admin/customers/edit.php:50
 msgid "Add new customer"
 msgstr "添加新客户"
-
-#: app/admin/admin-menu-config.php:36 app/admin/custom-fields/index.php:27
-#: app/admin/users/print_module_permissions.php:59
-#: app/sections/user-menu.php:63 app/tools/search/index.php:60
-#: app/tools/search/search-results-export.php:583
-#: app/tools/tools-menu-config.php:98
-msgid "Customers"
-msgstr "客户"
 
 #: app/subnets/addresses/address-modify.php:444
 msgid "Select customer"
@@ -16405,6 +16702,10 @@ msgstr "客户对象"
 #: app/tools/search/search_results/search-results_customers.php:40
 msgid "Contact"
 msgstr "联系"
+
+#: app/admin/circuits/edit-provider.php:99
+msgid "Circuit provider"
+msgstr "线路提供商"
 
 #: app/admin/customers/edit.php:73
 msgid "Customer title"
@@ -16466,8 +16767,8 @@ msgstr "路由模块"
 msgid "Enable or disable Routing module for routing management"
 msgstr "启用或禁用路由模块进行路由管理"
 
-#: app/admin/admin-menu-config.php:18
 # ## 2FA ###
+#: app/admin/admin-menu-config.php:18
 msgid "2FA"
 msgstr "2FA"
 
@@ -16578,8 +16879,8 @@ msgstr "2FA 更新错误"
 msgid "2fa update success"
 msgstr "2FA 更新成功"
 
-#: app/admin/admin-menu-config.php:19
 # ## Password policy ###
+#: app/admin/admin-menu-config.php:19
 msgid "Password policy"
 msgstr "密码策略"
 
@@ -16677,8 +16978,9 @@ msgstr "值必须是数字"
 
 #: app/admin/password-policy/save.php:64
 msgid "Error updating users: "
-msgstr "更新用户时出错：: "
+msgstr "更新用户时出错： "
 
+# ## Circuits ####
 #: app/admin/admin-menu-config.php:64 app/admin/custom-fields/index.php:26
 #: app/admin/users/print_module_permissions.php:51
 #: app/sections/user-menu.php:60 app/tools/circuits/options.php:50
@@ -16690,7 +16992,6 @@ msgstr "更新用户时出错：: "
 #: app/tools/devices/index.php:66 app/tools/search/index.php:57
 #: app/tools/search/search-results-export.php:479
 #: app/tools/tools-menu-config.php:128 functions/classes/class.Tools.php:3218
-# ## Circuits ####
 msgid "Circuits"
 msgstr "通信线路"
 
@@ -16812,6 +17113,11 @@ msgstr "逻辑通信线路列表"
 msgid "Add logical circuit"
 msgstr "添加逻辑通信线路"
 
+#: app/tools/circuits/logical-circuits/logical-circuits.php:52
+#: app/tools/circuits/physical-circuits/circuit-details-logical-parents.php:24
+msgid "Circuit Count"
+msgstr "线路数量"
+
 #: app/admin/custom-fields/index.php:25 app/tools/circuits/menu.php:15
 #: app/tools/circuits/options.php:49
 #: app/tools/search/search-results-export.php:535
@@ -16895,7 +17201,7 @@ msgstr "添加了逻辑通信线路，但创建映射失败"
 
 #: app/admin/circuits/edit-logical-circuit-submit.php:101
 msgid "Error dropping mapping: "
-msgstr "删除映射时出错：: "
+msgstr "删除映射时出错： "
 
 #: app/admin/circuits/edit-logical-circuit-submit.php:120
 msgid "Error inserting mapping."
@@ -17006,9 +17312,9 @@ msgstr "十六进制颜色（例如#000000）"
 msgid "Map Pattern"
 msgstr "地图图案"
 
+# ## Misc 1.4 ###
 #: app/admin/users/edit.php:218 app/admin/users/print-user/display.php:5
 #: app/tools/user-menu/account.php:80
-# ## Misc 1.4 ###
 msgid "Theme"
 msgstr "主题"
 
@@ -17029,11 +17335,6 @@ msgstr "压缩顶部菜单中的文本"
 #: app/tools/user-menu/account.php:182
 msgid "Do not show text next to menu items in dynamic menu"
 msgstr "动态菜单中的菜单项旁边不显示文本"
-
-#: app/tools/ip-calculator/bw-calculator.php:246
-#: app/tools/ip-calculator/index.php:17 app/tools/tools-menu-config.php:79
-msgid "Bandwidth calculator"
-msgstr "带宽计算器"
 
 #: app/tools/ip-calculator/bw-calculator.php:248
 msgid "Select TCP window size, delay and file size to calculate how long file transfer will take."
@@ -17079,9 +17380,6 @@ msgstr "文件大小"
 
 msgid "Transfer time"
 msgstr "传输时间"
-
-msgid "IP Request"
-msgstr "IP 申请"
 
 #: app/admin/settings/index.php:524
 msgid "Allow duplicate vlans"
@@ -17216,14 +17514,28 @@ msgstr "重复的主机"
 msgid "No duplicate subnets found"
 msgstr "未找到重复的子网"
 
+#: app/tools/duplicates/index.php:143
+msgid "Orphaned"
+msgstr "孤立"
+
+#: app/tools/duplicates/index.php:114
+msgid "No duplicate addresses found"
+msgstr "未找到重复的地址"
+
+#: app/sections/menu/menu-administration.php:79
+#: app/sections/menu/menu-tools.php:86
 msgid "Show racks"
 msgstr "显示机柜"
 
-msgid "Show locations"
-msgstr "显示位置"
-
+#: app/sections/menu/menu-administration.php:88
+#: app/sections/menu/menu-tools.php:95
 msgid "Show circuits"
 msgstr "显示通信线路"
+
+#: app/sections/menu/menu-administration.php:106
+#: app/sections/menu/menu-tools.php:69
+msgid "Show locations"
+msgstr "显示位置"
 
 #: app/sections/menu/menu-tools.php:104
 msgid "Show routing"
@@ -17241,18 +17553,6 @@ msgstr "通信线路信息"
 msgid "First IP Address available"
 msgstr "第一个可用的 IP 地址"
 
-msgid "Tools menu"
-msgstr "工具菜单"
-
-#: app/dashboard/widgets/tools.php:24 app/tools/ip-calculator/index.php:16
-#: app/tools/tools-menu-config.php:78
-msgid "IP Calculator"
-msgstr "IP 计算器"
-
-#: app/tools/mac-lookup/index.php:7 app/tools/tools-menu-config.php:92
-msgid "MAC lookup"
-msgstr "MAC 查找"
-
 #: app/tools/tools-menu-config.php:92
 msgid "Lookup MAC address vendor"
 msgstr "查找 MAC 地址供应商"
@@ -17267,7 +17567,7 @@ msgstr "解码提示"
 
 #: app/tools/mac-lookup/tips.php:12
 msgid "Enter MAC address in one of the following formats:"
-msgstr "使用以下格式之一输入 MAC 地址：:"
+msgstr "使用以下格式之一输入 MAC 地址："
 
 msgid "Show multicast subnets and mapping"
 msgstr "显示组播子网和映射"
@@ -17340,6 +17640,288 @@ msgstr "静态 NAT"
 msgid "Documentation"
 msgstr "文档指南"
 
+msgid "Protocol"
+msgstr "协议"
+
 #: app/tools/powerDNS/host_records.php:109
 msgid "DNS records resolving to IP address"
 msgstr "DNS 记录解析为 IP 地址"
+
+#: app/login/login_form_sso.php:60
+msgid "Login with a passkey"
+msgstr "使用通行密钥登录"
+
+#: app/admin/users/edit.php:195 app/tools/user-menu/account.php:90
+msgid "Passkey login only"
+msgstr "仅通过通行密钥登录"
+
+#: app/admin/users/edit.php:197 app/tools/user-menu/account.php:94
+msgid "Select to only allow account login with passkey"
+msgstr "选择仅允许使用通行密钥登录帐户"
+
+#: app/admin/users/print_module_permissions.php:68
+msgid "User permissions for phpipam modules"
+msgstr "phpipam 模块的用户权限"
+
+#: app/tools/user-menu/index.php:40 app/tools/user-menu/passkeys.php:12
+msgid "Passwordless authentication"
+msgstr "无密码身份验证"
+
+#: app/tools/user-menu/passkeys.php:14
+msgid "Here you can manage passkey authentication for your account"
+msgstr "您可以在此处管理帐户的通行密钥验证"
+
+#: app/tools/user-menu/passkeys.php:14
+msgid "Passkeys are a password replacement that validates your identity using touch, facial recognition, a device password, or a PIN"
+msgstr "通行密钥是一种密码替代品，它使用触摸、面部识别、设备密码或 PIN 来验证您的身份"
+
+#: app/tools/user-menu/passkeys.php:21
+msgid "TLS is required for passcode authentication"
+msgstr "密码验证需要 TLS"
+
+#: app/tools/user-menu/passkeys.php:25
+msgid "Passkey authentication is disabled"
+msgstr "通行密钥验证已禁用"
+
+#: app/tools/user-menu/passkeys.php:39
+msgid "You can login to your account with with passkeys only"
+msgstr "您只能使用通行密钥登录您的帐户"
+
+#: app/tools/user-menu/passkeys.php:39
+msgid "This can be changed under Account details tab"
+msgstr "您可以在帐户详细信息选项卡下更改此设置"
+
+#: app/tools/user-menu/passkeys.php:42
+msgid "You can login to your account with normal authentication method only untill you create passkeys"
+msgstr "您只能在创建通行密钥之前使用常规身份验证方法登录您的帐户"
+
+#: app/tools/user-menu/passkeys.php:42 app/tools/user-menu/passkeys.php:45
+msgid "This can be changed under Account details tab."
+msgstr "这可以在帐户详细信息选项卡下更改。"
+
+#: app/tools/user-menu/passkeys.php:45
+msgid "You can login to your account with normal authentication method or with passkeys"
+msgstr "您可以使用常规身份验证方法或通行密钥登录您的帐户"
+
+#: app/tools/user-menu/passkeys.php:52
+msgid "Your passkeys"
+msgstr "您的通行密钥"
+
+#: app/tools/user-menu/passkeys.php:60
+msgid "-- Unknown --"
+msgstr "-- 未知 --"
+
+#: app/tools/user-menu/passkeys.php:61
+msgid "You authenticated with this passkey"
+msgstr "您已使用此密钥进行身份验证"
+
+#: app/tools/user-menu/passkeys.php:79
+msgid "Rename"
+msgstr "重命名"
+
+#: app/tools/user-menu/passkeys.php:85
+msgid "Added on"
+msgstr "已添加"
+
+#: app/tools/user-menu/passkeys.php:85
+msgid "Last used"
+msgstr "最后使用"
+
+#: app/tools/user-menu/passkeys.php:98
+msgid "Add a passkey"
+msgstr "添加通行密钥"
+
+#: app/tools/user-menu/passkeys.php:207
+msgid "Failed to register new passkey."
+msgstr "无法注册新通行密钥。"
+
+#: app/admin/authentication-methods/index.php:118
+msgid "phpIPAM currently supports following authentication methods:"
+msgstr "phpIPAM 目前支持以下身份验证方法："
+
+#: app/admin/authentication-methods/index.php:130
+msgid "Passkey authentication"
+msgstr "通行密钥认证"
+
+#: app/admin/authentication-methods/index.php:130
+msgid "First create new user under user management with <u>same username as on AD</u> and set authentication type to one of available methods."
+msgstr "首先在用户管理下创建<u>与 AD 上相同的用户名</u>的新用户，并将身份验证类型设置为可用方法之一。"
+
+#: app/admin/authentication-methods/index.php:166
+msgid "After user successfully logs in it will be presented with additional screen to enter code from your preferred authenticator application."
+msgstr "用户成功登录后，将显示额外的屏幕来输入您首选的身份验证器应用程序的代码。"
+
+#: app/admin/authentication-methods/index.php:168
+msgid "Authenticator apps are available on following links based on your OS:"
+msgstr "根据您的操作系统，可以通过以下链接获取身份验证器应用："
+
+#: app/admin/authentication-methods/index.php:175
+msgid "You can also use any other OTP provider."
+msgstr "您也可以使用任何其他 OTP 提供商。"
+
+#: app/admin/settings/index.php:518
+msgid "Require unique subnets across all sections"
+msgstr "要求所有部分都有唯一的子网"
+
+#: app/admin/settings/index.php:557
+msgid "Enable Passkeys"
+msgstr "启用通行密钥"
+
+#: app/admin/settings/index.php:562
+msgid "Enable passkeys for passwordless login"
+msgstr "启用通行密钥以实现无密码登录"
+
+#: app/admin/powerDNS/settings.php:110 app/admin/powerDNS/settings.php:122
+msgid "All database connections failed"
+msgstr "所有数据库连接失败"
+
+#: app/admin/powerDNS/settings.php:117
+msgid "Active database"
+msgstr "活动数据库"
+
+#: app/admin/powerDNS/settings.php:127
+msgid "All database connections ok"
+msgstr "所有数据库连接正常"
+
+#: app/admin/admin-menu-config.php:18
+msgid "Two-factor authentication with TOTP provider"
+msgstr "使用 TOTP 提供商进行双因素身份验证"
+
+#: functions/classes/class.Common.php:2356
+msgid "Composer autoload not present"
+msgstr "Composer 自动加载不存在"
+
+#: functions/classes/class.Common.php:2356
+msgid "Please install composer modules ( cd functions && composer install )."
+msgstr "请安装 Composer 模块（cd functions && composer install）。"
+
+#: functions/classes/class.Common.php:2364
+msgid "Composer is not installed"
+msgstr "未安装 Composer"
+
+#: functions/classes/class.Common.php:2364
+msgid "Please install composer and composer modules ( cd functions && composer install )."
+msgstr "请安装 Composer 和 Composer 模块 ( cd functions && composer install )。"
+
+#: functions/classes/class.Common.php:2373
+msgid "Composer package"
+msgstr "Composer 包"
+
+#: functions/classes/class.Common.php:2373
+msgid "is not installed"
+msgstr "未安装"
+
+#: functions/classes/class.Common.php:2373
+msgid "Please install required modules ( cd functions && composer install )."
+msgstr "请安装所需的模块（cd functions && composer install）。"
+
+#: app/tools/user-menu/user-edit.php:55
+msgid "There are no passkeys set for user. Resetting passkey login only to false."
+msgstr "未为用户设置通行密钥。将仅密钥登录重置为 false。"
+
+#: app/admin/authentication-methods/check-connection.php:65
+msgid "Check not implemented"
+msgstr "检查未实施"
+
+#: app/admin/authentication-methods/edit-SAML2.php:87
+msgid "Enable JIT"
+msgstr "启用 JIT"
+
+#: app/admin/authentication-methods/edit-SAML2.php:92
+msgid "Provision new users automatically"
+msgstr "自动配置新用户"
+
+#: app/login/2fa/2fa_form.php:29
+msgid "Please enter two-factor authentication code from your preferred authenticator application"
+msgstr "请输入您首选身份验证器应用程序中的双重身份验证代码"
+
+#: app/login/2fa/2fa_create.php:36
+msgid "Details for your preferred authenticator application are below. Please write down your details, otherwise you will not be able to login to phpipam"
+msgstr "您首选的身份验证器应用程序的详细信息如下。请写下您的详细信息，否则您将无法登录 phpipam"
+
+#: app/login/2fa/2fa_create.php:42
+msgid "You can also scan following QR code with your preferred authenticator application"
+msgstr "您还可以使用您喜欢的身份验证应用程序扫描以下二维码"
+
+#: app/admin/import-export/export-devices-field-select.php:50
+msgid "Fields"
+msgstr "字段"
+
+#: app/tools/user-menu/passkey_edit_result.php:28
+#: app/tools/user-menu/passkey_edit_result.php:31
+#: app/tools/user-menu/passkey_edit.php:30
+msgid "Passkey not found"
+msgstr "未找到通行密钥"
+
+#: app/tools/user-menu/passkey_edit_result.php:35
+msgid "Passkey renamed"
+msgstr "通行密钥已重命名"
+
+#: app/tools/user-menu/passkey_edit_result.php:36
+msgid "Failed to rename passkey"
+msgstr "无法重命名通行密钥"
+
+#: app/tools/user-menu/passkey_edit_result.php:39
+msgid "Passkey removed"
+msgstr "通行密钥已移除"
+
+#: app/tools/user-menu/passkey_edit_result.php:40
+msgid "Failed to remove passkey"
+msgstr "无法删除通行密钥"
+
+#: app/tools/user-menu/passkey_edit.php:35
+msgid "passkey"
+msgstr "通行密钥"
+
+#: app/tools/user-menu/passkey_edit.php:42
+msgid "New passkey succesfully registered!"
+msgstr "新通行密钥已成功注册！"
+
+#: app/tools/user-menu/passkey_edit.php:53
+msgid "Name your passkey"
+msgstr "命名您的通行密钥"
+
+#: app/tools/user-menu/passkey_edit.php:72
+msgid "You are about to delete your passkey "
+msgstr "您即将删除您的通行密钥 "
+
+#: app/admin/firewall-zones/settings.php:127
+msgid "Choose a maximum length of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgstr "选择区域名称的最大长度。<br>默认值：3，最大值：31 个字符。<br>（请记住，您的防火墙可能对区域名称或地址对象的长度有限制）"
+
+#: app/admin/index.php:8
+msgid "Filter string"
+msgstr "过滤字符串"
+
+#: app/tools/devices/all-devices-filter.php:106
+msgid "All locations"
+msgstr "所有位置"
+
+#: app/subnets/scan/subnet-scan-execute-scan-icmp.php:56
+msgid "Error executing scan! Error code - $retval"
+msgstr "执行扫描时出错！错误代码 - $retval"
+
+#: app/subnets/scan/subnet-scan-execute-scan-icmp.php:60
+msgid "0 new hosts discovered"
+msgstr "发现 0 个新主机"
+
+#: app/subnets/addresses/address-details/address-details.php:349
+msgid "Regenerate firewall address object."
+msgstr "重新生成防火墙地址对象。"
+
+#: app/admin/devices/edit-snmp-test.php:124
+msgid "Query result"
+msgstr "查询结果"
+
+#: app/admin/devices/edit-snmp-test.php:117
+msgid "Toggle debug"
+msgstr "切换调试"
+
+#: app/admin/devices/edit-snmp-result.php:70
+msgid "SNMP edit successful"
+msgstr "SNMP 编辑成功"
+
+#: app/subnets/subnet-details/subnet-details.php:464
+msgid "records"
+msgstr "条目"
+

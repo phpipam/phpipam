@@ -83,7 +83,7 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
 				<?php
 				foreach (["internal", "external"] as $type) {
 					$selected = isset($bgp->bgp_type) && $bgp->bgp_type == $type ? "selected" : "";
-					print "<option value='$type' $selected>$type</option>";
+					print "<option value='$type' $selected>"._($type)."</option>";
 				}
 				?>
 			</select>

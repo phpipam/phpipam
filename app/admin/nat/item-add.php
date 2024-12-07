@@ -46,7 +46,7 @@ $csrf_cookie = $User->Crypto->csrf_cookie ("create", "nat_add");
             <input type="hidden" name="id" value="<?php print $nat->id; ?>">
             <input type="hidden" name="type" value="<?php print escape_input($POST->type); ?>">
             <input type="text" class='form-control input-sm' name="ip" placeholder="<?php print _('Enter subnet/IP'); ?>" style='width:60%;margin:0px;'>
-            <input type="submit" class="form-control input-sm" value="Search" style="width:20%">
+            <input type="submit" class="form-control input-sm" value="<?php print _("Search");?>" style="width:20%">
     </form>
 
     <div id="nat_search_results" style="max-height: 300px;overflow-y: scroll;"></div>

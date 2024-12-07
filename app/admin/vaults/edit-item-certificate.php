@@ -178,7 +178,7 @@ $(document).ready(function () {
     if($('select[name=type]').length) {
         // no change
         if($('input[name=action]').val()=="edit") {
-            $('select[name=type]').prepend("<option value='' selected disabled>No change</option>");
+            $('select[name=type]').prepend("<option value='' selected disabled><?php print _("No change");?></option>");
         }
         else {
             // load
@@ -213,7 +213,7 @@ $(document).ready(function () {
                 // add
                 append_cert_field (data)
                 // print ok
-                $('div.fetch-result').html("<div class='alert alert-success'>Certificate fetched.</div>")
+                $('div.fetch-result').html("<div class='alert alert-success'><?php print _("Certificate fetched.");?></div>")
             }
         })
 

@@ -106,7 +106,7 @@ print "</tr>";
 // defaults
 if (sizeof($out)>0) {
 	foreach ($out as $k=>$r) {
-    	print "<tr><th colspan='7' style='padding-top:40px;'>".('DNS records resolving to IP address')." ".$r[0]->content."</th></tr>";
+    	print "<tr><th colspan='7' style='padding-top:40px;'>"._('DNS records resolving to IP address')." ".$r[0]->content."</th></tr>";
     	// records
     	foreach ($r as $re) {
     		print_record ($re);
