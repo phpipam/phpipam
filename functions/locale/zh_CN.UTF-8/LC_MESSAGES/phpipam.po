@@ -687,6 +687,9 @@ msgstr "不能为空！!"
 msgid "Error"
 msgstr "错误"
 
+msgid "Error :"
+msgstr "错误 :"
+
 #: functions/classes/class.User.php:956 functions/classes/class.User.php:992
 #: functions/classes/class.User.php:1087
 msgid "Login successful"
@@ -3193,8 +3196,8 @@ msgstr "IP 状态"
 #: app/admin/import-export/index.php:51
 #: app/subnets/addresses/export-field-select.php:154
 #: app/tools/routing/bgp/all.php:29
-msgid "Export"
-msgstr "导出"
+msgid " Export"
+msgstr " 导出"
 
 #: app/admin/import-export/export-devtype-field-select.php:26
 msgid "Select types fields to export"
@@ -3349,26 +3352,185 @@ msgstr "申请"
 msgid "for IP address waiting for your approval"
 msgstr "等待您批准的 IP 地址"
 
+#: db/SCHEMA.sql:577
 msgid "Statistics"
 msgstr "统计"
 
-msgid "Top 10 IPv4 subnets by usage percentage"
-msgstr "按使用率排名前 10名 的 IPv4 子网"
+#: db/SCHEMA.sql:577
+msgid "Shows some statistics on number of hosts, subnets"
+msgstr "显示主机、子网数量的一些统计信息"
 
-msgid "Top 10 IPv4 subnets by number of hosts"
-msgstr "按主机数量排名前 10 位的 IPv4 子网"
+#: db/SCHEMA.sql:578
+msgid "Favourite subnets"
+msgstr "收藏的子网"
 
-msgid "Top 10 IPv6 subnets by number of hosts"
-msgstr "按主机数量排名前 10 位的 IPv6 子网"
+#: db/SCHEMA.sql:578
+msgid "Shows favourite subnets"
+msgstr "显示收藏的子网"
 
+#: db/SCHEMA.sql:579
+msgid "Top IPv4 subnets by number of hosts"
+msgstr "按主机数量排名靠前的 IPv4 子网"
+
+#: db/SCHEMA.sql:579
+msgid "Shows graph of top IPv4 subnets by number of hosts"
+msgstr "显示按主机数量排列靠前的 IPv4 子网图表"
+
+#: db/SCHEMA.sql:580
+msgid "Top IPv6 subnets by number of hosts"
+msgstr "按主机数量排名靠前的 IPv6 子网"
+
+#: db/SCHEMA.sql:580
+msgid "Shows graph of top IPv6 subnets by number of hosts"
+msgstr "显示按主机数量排列靠前的 IPv6 子网图表"
+
+#: db/SCHEMA.sql:581
+msgid "Top IPv4 subnets by usage percentage"
+msgstr "按使用率百分比排名靠前的 IPv4 子网"
+
+#: db/SCHEMA.sql:581
+msgid "Shows graph of top IPv4 subnets by usage percentage"
+msgstr "按使用率百分比显示排名靠前的 IPv4 子网图表"
+
+#: db/SCHEMA.sql:582
+msgid "Most recent change log entries"
+msgstr "最近的更改日志条目"
+
+#: db/SCHEMA.sql:582
+msgid "Shows list of most recent change log entries"
+msgstr "显示最新更改日志条目列表"
+
+#: db/SCHEMA.sql:583
 msgid "Active IP addresses requests"
 msgstr "活跃 IP 地址申请"
 
-msgid "Last 5 informational logs"
-msgstr "最后 5 条信息日志"
+#: db/SCHEMA.sql:583
+msgid "Shows list of active IP address request"
+msgstr "显示活跃 IP 地址请求列表"
 
-msgid "Last 5 warning / error logs"
-msgstr "最近 5 条警告/错误日志"
+#: db/SCHEMA.sql:584
+msgid "Most recent informational logs"
+msgstr "最近的信息日志"
+
+#: db/SCHEMA.sql:584
+msgid "Shows list of most recent informational logs"
+msgstr "显示最新信息日志列表"
+
+#: db/SCHEMA.sql:585
+msgid "Most recent warning / error logs"
+msgstr "最近的警告/错误日志"
+
+#: db/SCHEMA.sql:585
+msgid "Shows list of most recent warning and error logs"
+msgstr "显示最近的警告和错误日志列表"
+
+#: db/SCHEMA.sql:586
+msgid "Tools menu"
+msgstr "工具菜单"
+
+#: db/SCHEMA.sql:586
+msgid "Shows quick access to tools menu"
+msgstr "显示快速访问工具菜单"
+
+#: db/SCHEMA.sql:587
+#: app/dashboard/widgets/tools.php:24 app/tools/ip-calculator/index.php:16
+#: app/tools/tools-menu-config.php:78
+msgid "IP Calculator"
+msgstr "IP 计算器"
+
+#: db/SCHEMA.sql:587
+msgid "Shows IP calculator as widget"
+msgstr "显示 IP 计算器作为小部件"
+
+#: db/SCHEMA.sql:588
+msgid "IP Request"
+msgstr "IP 请求"
+
+#: db/SCHEMA.sql:588
+msgid "IP Request widget"
+msgstr "IP 请求小部件"
+
+#: db/SCHEMA.sql:589
+#: app/admin/subnets/edit.php:434 app/dashboard/widgets/threshold.php:133
+#: app/subnets/subnet-details/subnet-details.php:319
+#: app/tools/threshold/index.php:16 app/tools/threshold/index.php:105
+#: app/tools/tools-menu-config.php:120
+msgid "Threshold"
+msgstr "阈值"
+
+#: db/SCHEMA.sql:589
+msgid "Shows threshold usage for most consumed subnets"
+msgstr "显示大多数消耗的子网的阈值使用情况"
+
+#: db/SCHEMA.sql:590
+#: app/tools/inactive-hosts/index.php:41
+msgid "Inactive hosts"
+msgstr "非活动主机"
+
+#: db/SCHEMA.sql:590
+msgid "Shows list of inactive hosts for defined period"
+msgstr "显示指定时间段内不活动的主机列表"
+
+#: db/SCHEMA.sql:591
+#: app/admin/admin-menu-config.php:68 app/admin/custom-fields/index.php:22
+#: app/admin/users/print_module_permissions.php:63
+#: app/tools/locations/single-location.php:46
+#: app/tools/locations/single-location.php:48
+#: app/tools/tools-menu-config.php:130
+msgid "Locations"
+msgstr "位置"
+
+#: db/SCHEMA.sql:591
+msgid "Shows map of locations"
+msgstr "显示位置地图"
+
+#: db/SCHEMA.sql:592
+#: app/tools/ip-calculator/bw-calculator.php:246
+#: app/tools/ip-calculator/index.php:17 app/tools/tools-menu-config.php:79
+msgid "Bandwidth calculator"
+msgstr "带宽计算器"
+
+#: db/SCHEMA.sql:592
+msgid "Calculate bandwidth"
+msgstr "计算带宽"
+
+#: db/SCHEMA.sql:593
+#: app/admin/admin-menu-config.php:36 app/admin/custom-fields/index.php:27
+#: app/admin/users/print_module_permissions.php:59
+#: app/sections/user-menu.php:63 app/tools/search/index.php:60
+#: app/tools/search/search-results-export.php:583
+#: app/tools/tools-menu-config.php:98
+msgid "Customers"
+msgstr "客户"
+
+#: db/SCHEMA.sql:593
+msgid "Shows customer list"
+msgstr "显示客户列表"
+
+#: db/SCHEMA.sql:594
+msgid "User Instructions"
+msgstr "用户说明"
+
+#: db/SCHEMA.sql:594
+msgid "Shows user instructions"
+msgstr "显示用户说明"
+
+#: db/SCHEMA.sql:595
+#: app/tools/mac-lookup/index.php:7 app/tools/tools-menu-config.php:92
+msgid "MAC lookup"
+msgstr "MAC 查找"
+
+#: db/SCHEMA.sql:595
+msgid "Shows MAC address vendor"
+msgstr "显示 MAC 地址供应商"
+
+#: db/SCHEMA.sql:596
+msgid "Recent Logins"
+msgstr "最近登录"
+
+#: db/SCHEMA.sql:596
+msgid "Shows most recent user logins"
+msgstr "显示最近的用户登录"
 
 #: app/admin/verify-database/index.php:11
 msgid "Database structure verification"
@@ -3606,7 +3768,11 @@ msgstr "关闭窗口"
 
 #: app/subnets/addresses/print-address-table.php:137
 msgid "IP addresses in"
-msgstr "IP 地址在"
+msgstr "IP 地址位于"
+
+#: app/subnets/addresses/print-address-table.php:137
+msgid " subnets"
+msgstr "子网中"
 
 #: app/admin/filter-fields/index.php:36
 msgid "Filter which fields to display in IP list"
@@ -3796,6 +3962,12 @@ msgstr "查找子网"
 
 msgid "Section has no subnets"
 msgstr "区域没有子网"
+
+msgid "FirewallAddressObject"
+msgstr "防火墙地址对象"
+
+msgid "Customer_id"
+msgstr "客户 ID"
 
 #: app/admin/admin-menu-config.php:8 app/admin/admin-menu-config.php:14
 #: app/admin/admin-menu-config.php:15 app/admin/admin-menu-config.php:16
@@ -5116,6 +5288,10 @@ msgstr "提交日志（本地）"
 msgid "Download (GitHub)"
 msgstr "下载（GitHub）"
 
+#: app/admin/version-check/index.php:73
+msgid "Released on"
+msgstr "发布日期"
+
 #: app/admin/version-check/index.php:95
 msgid "Commit log (local) [Last 100]"
 msgstr "提交日志（本地）[最后 100]"
@@ -5925,10 +6101,6 @@ msgstr "请提供有效的 MAC 地址"
 msgid "Please provide valid hostname"
 msgstr "请提供有效的主机名"
 
-#: app/login/login_check.php:55
-msgid "Please enter your username and password"
-msgstr "请输入您的用户名和密码"
-
 #: app/login/index.php:145
 msgid "You have logged out"
 msgstr "您已退出"
@@ -6445,7 +6617,7 @@ msgstr "Ping 状态间隔"
 
 #: app/admin/settings/index.php:619
 msgid "Ping status intervals for IP addresses in seconds - warning;offline (Default: 1800;3600)"
-msgstr "IP 地址的 Ping 状态间隔（以秒为单位）- 警告；离线（默认值：1800；3600）"
+msgstr "IP 地址的 Ping 状态间隔（以秒为单位）- 警告；离线（默认值：1800;3600）"
 
 #: app/admin/settings/settings-save.php:33
 #: app/admin/settings/settings-save.php:34
@@ -6961,6 +7133,14 @@ msgstr "BGP"
 msgid "BGP peer"
 msgstr "BGP 对等体"
 
+#: app/admin/routing/edit-bgp.php:86
+msgid "internal"
+msgstr "内部"
+
+#: app/admin/routing/edit-bgp.php:86
+msgid "external"
+msgstr "外部"
+
 #: app/admin/routing/edit-bgp.php:134
 msgid "Select Circuit"
 msgstr "选择通信线路"
@@ -7140,10 +7320,6 @@ msgstr "发现以下用户"
 #: app/subnets/scan/subnet-scan-execute-snmp-route.php:110
 msgid "Select"
 msgstr "选择"
-
-#: app/tools/favourites/index.php:14
-msgid "Favourite subnets"
-msgstr "收藏的子网"
 
 #: app/tools/firewall-zones/index.php:31
 msgid " Firewall Zones"
@@ -7646,6 +7822,10 @@ msgstr "保存密码"
 #: app/login/login_check.php:40
 msgid "You have been blocked for 5 minutes due to authentication failures"
 msgstr "由于身份验证失败，您已被屏蔽 5 分钟"
+
+#: app/login/login_check.php:44
+msgid "Missing security code"
+msgstr "缺少安全码"
 
 #: app/admin/settings/index.php:92
 msgid "Use nicer URL structure"
@@ -9017,7 +9197,7 @@ msgstr "PowerDNS 未启用"
 msgid "PTR zone refresh records"
 msgstr "PTR 专区刷新记录"
 
-#: app/admin/powerDNS/refresh-ptr-records.php:9
+#: app/admin/powerDNS/refresh-ptr-records.php:13
 msgid "Clicking on regenerate will remove all PTR records for subnet and recreate new."
 msgstr "单击“重新生成”将删除子网的所有 PTR 记录并重新创建新记录."
 
@@ -9324,6 +9504,10 @@ msgstr "可见"
 #: app/admin/custom-fields/index.php:163 app/tools/circuits/options.php:179
 msgid "Set which field to display in table"
 msgstr "设置表中显示哪个字段"
+
+#: app/tools/circuits/options.php:179
+msgid " Filter"
+msgstr " 筛选"
 
 #: app/admin/verify-database/index.php:53
 msgid "Cannot get fix for table field "
@@ -9902,6 +10086,10 @@ msgstr "验证码图像"
 #: app/login/login_check.php:46
 msgid "Invalid security code"
 msgstr "安全码无效"
+
+#: app/login/login_check.php:56
+msgid "Please enter your username and password"
+msgstr "请输入您的用户名和密码"
 
 #: app/login/request_ip_result.php:79
 msgid "IP requests disabled"
@@ -11664,10 +11852,6 @@ msgstr "管理您的帐户"
 msgid "Number of VRFs"
 msgstr "VRF 数量"
 
-#: app/tools/inactive-hosts/index.php:41
-msgid "Inactive hosts"
-msgstr "非活动主机"
-
 #: app/tools/tools-menu-config.php:117
 msgid "Inactive Hosts"
 msgstr "非活动主机"
@@ -11681,13 +11865,6 @@ msgstr "非活动主机列表"
 #: app/tools/inactive-hosts/index.php:46 app/tools/inactive-hosts/index.php:52
 msgid "No inactive hosts found"
 msgstr "未找到非活动的主机"
-
-#: app/admin/subnets/edit.php:434 app/dashboard/widgets/threshold.php:133
-#: app/subnets/subnet-details/subnet-details.php:319
-#: app/tools/threshold/index.php:16 app/tools/threshold/index.php:105
-#: app/tools/tools-menu-config.php:120
-msgid "Threshold"
-msgstr "阈值"
 
 #: app/tools/threshold/index.php:88 functions/classes/class.Addresses.php:668
 #: functions/classes/class.Addresses.php:673
@@ -11755,7 +11932,7 @@ msgstr "PowerDNS 管理"
 
 #: app/tools/nat/all_nats.php:11 app/tools/tools-menu-config.php:106
 msgid "NAT translations"
-msgstr "NAT 翻译"
+msgstr "NAT 转换"
 
 #: app/admin/nat/edit.php:160
 msgid "Source objects"
@@ -11837,14 +12014,6 @@ msgstr "位置"
 #: app/subnets/import-subnet/import-template.php:48
 #: app/tools/search/search-results-export.php:152
 msgid "location"
-msgstr "位置"
-
-#: app/admin/admin-menu-config.php:68 app/admin/custom-fields/index.php:22
-#: app/admin/users/print_module_permissions.php:63
-#: app/tools/locations/single-location.php:46
-#: app/tools/locations/single-location.php:48
-#: app/tools/tools-menu-config.php:130
-msgid "Locations"
 msgstr "位置"
 
 #: app/tools/locations/all-locations-list.php:1
@@ -13226,7 +13395,7 @@ msgstr "源"
 
 #: app/admin/nat/edit-map.php:124 app/admin/nat/edit.php:152
 msgid "Destination"
-msgstr "目的地"
+msgstr "目的"
 
 #: app/admin/nat/edit-result.php:38
 msgid "Invalid NAT object identifier"
@@ -13333,7 +13502,15 @@ msgstr "静态 NAT 只能有 1 个源地址"
 msgid "Static NAT can only have 1 destination address"
 msgstr "静态 NAT 只能有 1 个目标地址"
 
-#: app/admin/nat/item-add-submit.php:129
+#: app/admin/nat/item-add-submit.php:127
+msgid "Object added"
+msgstr "已添加对象"
+
+#: app/admin/nat/item-add-submit.php:130
+msgid "Failed to add object"
+msgstr "添加对象失败"
+
+#: app/admin/nat/item-add-submit.php:134
 msgid "Invalid object identifier"
 msgstr "无效的对象标识符"
 
@@ -13341,7 +13518,7 @@ msgstr "无效的对象标识符"
 msgid "Invalid object type"
 msgstr "对象类型无效"
 
-#: app/admin/nat/item-add-submit.php:133
+#: app/admin/nat/item-add-submit.php:138
 msgid "Missing object type or id"
 msgstr "缺少对象类型或 ID"
 
@@ -13441,6 +13618,10 @@ msgstr "设置系统日志发送到的位置"
 #: app/admin/tags/index.php:32
 msgid "Update Tags"
 msgstr "更新标签"
+
+#: app/admin/tags/index.php:33
+msgid "Example"
+msgstr "示例"
 
 #: app/admin/settings/index.php:507
 msgid "Update address tags when address state change occurs"
@@ -13762,8 +13943,8 @@ msgid "Fetch website certificate"
 msgstr "获取网站证书"
 
 #: app/admin/vaults/edit-item-certificate.php:126
-msgid "证书（.cer、.pem、.crt）"
-msgstr "证书类别"
+msgid "Certificate (.cer, .pem, .crt)"
+msgstr "证书（.cer、.pem、.crt）"
 
 #: app/admin/vaults/edit-item-certificate.php:127
 msgid "PKCS12 Certificate with key file (.p12, .pfx)"
@@ -13799,6 +13980,14 @@ msgstr "保管库"
 #: app/tools/vaults/all-vaults.php:24
 msgid "Create Vault"
 msgstr "创建保管库"
+
+#: app/tools/vaults/all-vaults.php:29
+msgid "certificates"
+msgstr "证书"
+
+#: app/tools/vaults/all-vaults.php:29
+msgid "passwords"
+msgstr "密码"
 
 #: app/tools/vaults/all-vaults.php:104
 #: app/tools/vaults/vault/vault-details-general.php:104
@@ -13990,6 +14179,14 @@ msgstr "删除密码"
 #: app/tools/vaults/vault/vault-items-passwords.php:92
 msgid "No items"
 msgstr "无项目"
+
+#: app/tools/vaults/vault/vault-items-passwords.php:61
+msgid "Show password"
+msgstr "显示密码"
+
+#: app/tools/vaults/vault/vault-items-passwords.php:106
+msgid "Hide password"
+msgstr "隐藏密码"
 
 #: app/admin/vaults/edit.php:45
 msgid "Create new vault"
@@ -14588,9 +14785,6 @@ msgstr "防火墙对象"
 #: app/subnets/addresses/ping-address.php:37
 msgid "Invalid IP address"
 msgstr "IP 地址无效"
-
-msgid "IP addresses in $location "
-msgstr "$location 中的 IP 地址 "
 
 #: app/subnets/addresses/print-address-table.php:138
 msgid "Remove all"
@@ -15405,7 +15599,7 @@ msgstr "NAT 模块已禁用."
 
 #: app/tools/nat/all_nats.php:52
 msgid "Translation"
-msgstr "翻译"
+msgstr "转换"
 
 #: app/tools/nat/all_nats.php:56
 msgid "Policy SRC/DST IP"
@@ -15415,9 +15609,37 @@ msgstr "SRC/DST IP 策略"
 msgid " NAT"
 msgstr " NAT"
 
+#: app/tools/nat/all_nats.php:89
+msgid "destination"
+msgstr "目的"
+
+#: app/tools/nat/all_nats.php:89
+msgid "source"
+msgstr "源"
+
+#: app/tools/nat/all_nats.php:89
+msgid "static"
+msgstr "静态"
+
 #: app/tools/nat/all_nats.php:95
 msgid "NAT configured"
 msgstr "NAT 配置"
+
+#: app/tools/nat/all_nats.php:95
+msgid " destination "
+msgstr " 目的 "
+
+#: app/tools/nat/all_nats.php:95
+msgid " source "
+msgstr " 源 "
+
+#: app/tools/nat/all_nats.php:95
+msgid " static "
+msgstr " 静态 "
+
+#: app/tools/nat/all_nats.php:96
+msgid " policy"
+msgstr " 策略"
 
 #: app/tools/nat/all_nats.php:151 app/tools/nat/nat_details.php:179
 msgid "Manage NAT"
@@ -16416,14 +16638,6 @@ msgstr "客户"
 msgid "Add new customer"
 msgstr "添加新客户"
 
-#: app/admin/admin-menu-config.php:36 app/admin/custom-fields/index.php:27
-#: app/admin/users/print_module_permissions.php:59
-#: app/sections/user-menu.php:63 app/tools/search/index.php:60
-#: app/tools/search/search-results-export.php:583
-#: app/tools/tools-menu-config.php:98
-msgid "Customers"
-msgstr "客户"
-
 #: app/subnets/addresses/address-modify.php:444
 msgid "Select customer"
 msgstr "选择客户"
@@ -16464,6 +16678,10 @@ msgstr "客户对象"
 #: app/tools/search/search_results/search-results_customers.php:40
 msgid "Contact"
 msgstr "联系"
+
+#: app/admin/circuits/edit-provider.php:99
+msgid "Circuit provider"
+msgstr "线路提供商"
 
 #: app/admin/customers/edit.php:73
 msgid "Customer title"
@@ -16871,6 +17089,11 @@ msgstr "逻辑通信线路列表"
 msgid "Add logical circuit"
 msgstr "添加逻辑通信线路"
 
+#: app/tools/circuits/logical-circuits/logical-circuits.php:52
+#: app/tools/circuits/physical-circuits/circuit-details-logical-parents.php:24
+msgid "Circuit Count"
+msgstr "线路数量"
+
 #: app/admin/custom-fields/index.php:25 app/tools/circuits/menu.php:15
 #: app/tools/circuits/options.php:49
 #: app/tools/search/search-results-export.php:535
@@ -17089,11 +17312,6 @@ msgstr "压缩顶部菜单中的文本"
 msgid "Do not show text next to menu items in dynamic menu"
 msgstr "动态菜单中的菜单项旁边不显示文本"
 
-#: app/tools/ip-calculator/bw-calculator.php:246
-#: app/tools/ip-calculator/index.php:17 app/tools/tools-menu-config.php:79
-msgid "Bandwidth calculator"
-msgstr "带宽计算器"
-
 #: app/tools/ip-calculator/bw-calculator.php:248
 msgid "Select TCP window size, delay and file size to calculate how long file transfer will take."
 msgstr "选择 TCP 窗口大小、延迟和文件大小来计算文件传输需要多长时间."
@@ -17138,9 +17356,6 @@ msgstr "文件大小"
 
 msgid "Transfer time"
 msgstr "传输时间"
-
-msgid "IP Request"
-msgstr "IP 申请"
 
 #: app/admin/settings/index.php:524
 msgid "Allow duplicate vlans"
@@ -17309,18 +17524,6 @@ msgstr "通信线路信息"
 #: app/dashboard/widgets/iprequest.php:63
 msgid "First IP Address available"
 msgstr "第一个可用的 IP 地址"
-
-msgid "Tools menu"
-msgstr "工具菜单"
-
-#: app/dashboard/widgets/tools.php:24 app/tools/ip-calculator/index.php:16
-#: app/tools/tools-menu-config.php:78
-msgid "IP Calculator"
-msgstr "IP 计算器"
-
-#: app/tools/mac-lookup/index.php:7 app/tools/tools-menu-config.php:92
-msgid "MAC lookup"
-msgstr "MAC 查找"
 
 #: app/tools/tools-menu-config.php:92
 msgid "Lookup MAC address vendor"
@@ -17677,3 +17880,20 @@ msgstr "发现 0 个新主机"
 #: app/subnets/addresses/address-details/address-details.php:349
 msgid "Regenerate firewall address object."
 msgstr "重新生成防火墙地址对象。"
+
+#: app/admin/devices/edit-snmp-test.php:124
+msgid "Query result"
+msgstr "查询结果"
+
+#: app/admin/devices/edit-snmp-test.php:117
+msgid "Toggle debug"
+msgstr "切换调试"
+
+#: app/admin/devices/edit-snmp-result.php:70
+msgid "SNMP edit successful"
+msgstr "SNMP 编辑成功"
+
+#: app/subnets/subnet-details/subnet-details.php:464
+msgid "records"
+msgstr "条目"
+
