@@ -38,7 +38,7 @@ $custom_size = sizeof($custom) - sizeof($hidden_fields);
 <?php if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) { ?>
 <div class="btn-group pull-right" style="margin-bottom:10px;">
 	<div class="hidden"><select name="dataType"><option value='vrf' selected="selected">VRF</option></select></div>
-	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title="Export data entries for the selected type"><i class="fa fa-download"></i> Export</button>
+	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title=<?php print _("Export data entries for the selected type");?>><i class="fa fa-download"></i><?php print _(" Export");?></button>
 </div>
 <div class="clearfix"></div>
 <?php } ?>
@@ -82,7 +82,7 @@ else {
 
     	// format sections
     	if(is_blank($vrf['sections'])) {
-    		$sections = "All sections";
+    		$sections = _("All sections");
     	}
     	else {
     		//explode

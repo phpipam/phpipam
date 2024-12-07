@@ -54,7 +54,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
         <?php
         	// format sections
         	if(is_blank($vrf->sections)) {
-        		$sections = "All sections";
+        		$sections = _("All sections");
         	}
         	else {
         		//explode
