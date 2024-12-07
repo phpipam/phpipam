@@ -93,7 +93,7 @@ else {
     if($all_nats !== false) {
         foreach ($all_nats as $n) {
             # policy
-            if($n->policy=="Yes") { $n->type = $n->type . " policy"; }
+            if($n->policy=="Yes") { $n->type = _($n->type) . _(" policy"); }
             # save
             $nats_reordered[$n->type][] = $n;
         }
@@ -114,7 +114,7 @@ else {
         # if none than print
         if(sizeof($nats)==0) {
             print "<tr>";
-            print " <td colspan='$colspan'>".$Result->show("info",_("No")." $k "._("NAT configured"), false, false, true)."</td>";
+            print " <td colspan='$colspan'>".$Result->show("info",_("No")._(" $k ")._("NAT configured"), false, false, true)."</td>";
             print "</tr>";
         }
         else {
@@ -156,7 +156,7 @@ else {
                 // print
                 print "<tr>";
                 print " <td><strong><a href='".create_link($GET->page, "nat", $n->id)."'>$n->name</a></strong></td>";
-                print " <td><span class='badge badge1 badge5'>".ucwords($n->type)."</span></td>";
+                print " <td><span class='badge badge1 badge5'>"._(ucwords($n->type))."</span></td>";
                 print " <td>".implode("<br>", $sources)."</td>";
                 print " <td style='width:10px;'><i class='fa $icon'></i></td>";
                 print " <td>".implode("<br>", $destinations)."</td>";

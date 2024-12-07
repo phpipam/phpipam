@@ -461,7 +461,7 @@ else {
 				$btns = "";
 				}
 
-				$zone = "<span class='text-muted'>(domain $zone)</span> <span class='badge badge1 badge5'>".$PowerDNS->count_domain_records_by_type ($domain->id, "PTR")." records</span>";
+				$zone = "<span class='text-muted'>("._("domain")." $zone)</span> <span class='badge badge1 badge5'>" .$PowerDNS->count_domain_records_by_type($domain->id, "PTR") . " " ._("records") . "</span>";
 			}
 			else {
 				if ($User->check_module_permissions ("pdns", User::ACCESS_RWA, false, false)) {

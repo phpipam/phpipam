@@ -123,8 +123,8 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 			<?php
 			$types = $Admin->fetch_all_objects("deviceTypes", "tid");
 			foreach($types as $name) {
-				if($device['type'] == $name->tid)	{ print "<option value='$name->tid' selected='selected'>$name->tname</option>"; }
-				else								{ print "<option value='$name->tid' >$name->tname</option>"; }
+				if($device['type'] == $name->tid)	{ print "<option value='$name->tid' selected='selected'>"._($name->tname)."</option>"; }
+				else								{ print "<option value='$name->tid' >"._($name->tname)."</option>"; }
 			}
 			?>
 			</select>

@@ -53,14 +53,14 @@ else 									{ $widgets = $Tools->fetch_widgets(false, false); }
 # first selected widgets already in user database
 if(sizeof($user_widgets)>0) {
 	foreach($user_widgets as $k) {
-		print "<li id='$k'><i class='icon icon-move'></i><input type='checkbox' name='widget-".$widgets[$k]->wfile."' value='on' checked> ".$widgets[$k]->wtitle."</li>";
+		print "<li id='$k'><i class='icon icon-move'></i><input type='checkbox' name='widget-".$widgets[$k]->wfile."' value='on' checked> "._($widgets[$k]->wtitle)."</li>";
 	}
 }
 # than others, based on admin or normal user
 foreach($widgets as $k=>$w) {
 	if(!in_array($k, $user_widgets))	{
 	$wtmp = $widgets[$k];
-		print "<li id='$k'><i class='icon icon-move'></i><input type='checkbox' name='widget-".$widgets[$k]->wfile."' value='on'> ".$widgets[$k]->wtitle."</li>";
+		print "<li id='$k'><i class='icon icon-move'></i><input type='checkbox' name='widget-".$widgets[$k]->wfile."' value='on'> "._($widgets[$k]->wtitle)."</li>";
 	}
 }
 

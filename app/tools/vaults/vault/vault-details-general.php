@@ -36,7 +36,7 @@ else {
 	// type
 	print "<tr>";
 	print "	<th>"._("Type")."</th>";
-	print "	<td>".$vault->type."</td>";
+	print "	<td>"._("$vault->type")."</td>";
 	print "</tr>";
 
 	// print custom fields

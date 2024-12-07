@@ -123,7 +123,7 @@ if($certificates_db!==false) {
 else {
 	print "<tr>";
 	print "	<td colspan='$csize'>";
-	$Result->show('info', "No items");
+	$Result->show('info', _("No items"));
 	print "	</td>";
 	print "</tr>";
 }

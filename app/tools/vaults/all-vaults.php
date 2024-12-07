@@ -26,10 +26,10 @@ else {
 
 
 	// group by type
-	$all_vault_types = ["certificates"=>[], "passwords"=>[]];
+	$all_vault_types = [_("certificates")=>[], _("passwords")=>[]];
 	if(is_array($all_vaults)) {
 		foreach ($all_vaults as $v) {
-			$all_vault_types[$v->type][] = $v;
+			$all_vault_types[_("$v->type")][] = $v;
 		}
 	}
 
@@ -57,7 +57,7 @@ else {
 		print "</thead>";
 
 		// icon
-		if($key=="passwords")   { $icon = "fa fa-key"; }
+		if($key==_("passwords"))   { $icon = "fa fa-key"; }
 		else 					{ $icon = "fa fa-certificate"; }
 
 		# loop

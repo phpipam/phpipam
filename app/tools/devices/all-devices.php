@@ -61,7 +61,7 @@ print "</div>";
 if($User->get_module_permissions ("devices")>=User::ACCESS_RW) {
 	print '<div class="btn-group pull-right" style="margin-bottom:10px;">';
 	print '	<div class="hidden"><select name="dataType"><option value="devices" selected="selected">Devices</option></select></div>';
-	print '	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title="Export data entries for the selected type"><i class="fa fa-download"></i> Export</button>';
+	print '	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title="' ._("Export data entries for the selected type").'"><i class="fa fa-download"></i>'. _(" Export").'</button>';
 	print '</div>';
 	print '<div class="clearfix"></div>';
 }
@@ -157,7 +157,7 @@ else {
 			print "</td>";
 		}
 		print '	<td><span class="badge badge1 badge5">'. $cnt .'</span> '._('Objects').'</td>'. "\n";
-		print '	<td class="hidden-sm">'. (isset($device_types_indexed[$device['type']]) ? $device_types_indexed[$device['type']] : '') .'</td>'. "\n";
+		print '	<td class="hidden-sm">'. (isset($device_types_indexed[$device['type']]) ? _($device_types_indexed[$device['type']]) : '') .'</td>'. "\n";
 
         //custom fields - no subnets
         if(sizeof(@$custom_fields) > 0) {

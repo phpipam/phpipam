@@ -90,9 +90,9 @@ if($Install->check_db_connection(false) && $Install->check_table("vrf", false)) 
 
 <!-- jQuery error -->
 <div class="jqueryError">
-	<div class='alert alert-danger' style="width:400px;margin:auto">jQuery error!</div>
+	<div class='alert alert-danger' style="width:400px;margin:auto"><?php print _('jQuery error!');?></div>
 	<div class="jqueryErrorText"></div><br>
-	<a href="<?php print create_link(null,null,null,null,null,true); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
+	<a href="<?php print create_link(null,null,null,null,null,true); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;"><?php print _('Hide');?></a>
 </div>
 
 <!-- loader -->

@@ -148,7 +148,7 @@ else {
 				}
 
 				print "	<td>$l[cdate]</td>";
-				print "	<td class='hidden-xs'><btn class='btn btn-xs btn-default openChangelogDetail' data-cid='$l[cid]' rel='tooltip' data-html='true' title='".implode("<br>",$diff)."'>View</a></td>";
+				print "	<td class='hidden-xs'><btn class='btn btn-xs btn-default openChangelogDetail' data-cid='$l[cid]' rel='tooltip' data-html='true' title='".implode("<br>",$diff)."'>"._('View')."</a></td>";
 				print "</tr>";
 
 				// next item

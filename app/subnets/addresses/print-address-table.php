@@ -134,7 +134,7 @@ if(in_array('firewallAddressObject', $selected_ip_fields)) {
 <h4 style="margin-top:40px;">
 <?php
 if($location==="customers") {}
-elseif(!$slaves)		{ print _("IP addresses in")." $location "; }
+elseif(!$slaves)		{ print _("IP addresses in"). _(" $location"); }
 elseif(@$orphaned)	{ print "<div class='alert alert-warning alert-block'>"._('Orphaned IP addresses for subnet')." <strong>$subnet[description]</strong> (".sizeof($addresses)." orphaned) <br><span class='text-muted' style='font-size:12px;margin-top:10px;'>"._('This happens if subnet contained IP addresses when new child subnet was created')."'<span><hr><a class='btn btn-sm btn-default' id='truncate' href='' data-subnetid='".$subnet['id']."'><i class='fa fa-times'></i> "._("Remove all")."</a></div>"; }
 else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 ?>

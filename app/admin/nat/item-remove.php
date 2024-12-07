@@ -53,7 +53,7 @@ $link = $readonly ? false : true;
     $dst_new = json_encode(array_filter($d ?? []));
 
     if($Admin->object_modify ("nat", "edit", "id", array("id"=>$POST->id, "src"=>$src_new, "dst"=>$dst_new))!==false) {
-        $Result->show("success", "Object removed", false);
+        $Result->show("success", _("Object removed"), false);
     }
     ?>
 </div>
