@@ -198,13 +198,13 @@ const startRegister = async (e) => {
     		});
         }
         else {
-            $('#loginCheckPasskeys').html("<div class='alert alert-danger'>'<?php print _("Failed to register new passkey.");?>' <strong>'<?php print _("Error :");?> '</strong>"+result.statusText+"</div>");
+            $('#loginCheckPasskeys').html("<div class='alert alert-danger'><?php print _("Failed to register new passkey.");?><strong>'<?php print _("Error :");?> '</strong>"+result.statusText+"</div>");
             console.log(result)
             $('div.loading').hide();
         }
 	}
 	catch(err) {
-		$('#loginCheckPasskeys').html("<div class='alert alert-danger'>'<?php print _("Failed to register new passkey.");?>'</div>");
+		$('#loginCheckPasskeys').html("<div class='alert alert-danger'><?php print _("Failed to register new passkey.");?></div>");
 		console.log(err);
 	}
 }
