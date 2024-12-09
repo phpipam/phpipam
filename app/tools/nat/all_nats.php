@@ -108,13 +108,13 @@ else {
         $colspan = $policy_nat_found ? 11 :10;
         $colspan += $csize;
         print "<tr>";
-        print " <td colspan='$colspan' class='th'><i class='fa fa-exchange'></i> "._(ucwords($k)." NAT")."</td>";
+        print " <td colspan='$colspan' class='th'><i class='fa fa-exchange'></i> "._(ucwords($k))." NAT"."</td>";
         print "</tr>";
 
         # if none than print
         if(sizeof($nats)==0) {
             print "<tr>";
-            print " <td colspan='$colspan'>".$Result->show("info",_("No")._(" $k ")._("NAT configured"), false, false, true)."</td>";
+            print " <td colspan='$colspan'>".$Result->show("info",translate("No %s NAT configured",_($k)), false, false, true)."</td>";
             print "</tr>";
         }
         else {
