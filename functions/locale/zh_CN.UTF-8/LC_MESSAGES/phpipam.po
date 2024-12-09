@@ -3771,12 +3771,8 @@ msgid "Close window"
 msgstr "关闭窗口"
 
 #: app/subnets/addresses/print-address-table.php:137
-msgid "IP addresses in"
-msgstr "IP 地址位于"
-
-#: app/subnets/addresses/print-address-table.php:137
-msgid " subnets"
-msgstr "子网中"
+msgid "IP addresses in %s"
+msgstr "在 %s 中的 IP 地址"
 
 #: app/admin/filter-fields/index.php:36
 msgid "Filter which fields to display in IP list"
@@ -10576,8 +10572,8 @@ msgid "-- autodiscovered --"
 msgstr "-- 自动发现 --"
 
 #: functions/scripts/discoveryCheck.php:257
-msgid "This host was autodiscovered on"
-msgstr "该主机的自动发现时间为"
+msgid "This host was autodiscovered on %s"
+msgstr "该主机的自动发现时间为 %s"
 
 #: functions/scripts/discoveryCheck.php:300
 msgid "phpIPAM new addresses detected"
@@ -10617,7 +10613,7 @@ msgstr "无效查询"
 
 #: functions/classes/class.Tools.php:1506
 msgid "database index check : "
-msgstr "数据库索引检查： : "
+msgstr "数据库索引检查："
 
 #: functions/classes/class.Tools.php:1575
 msgid "Creating index failed: "
@@ -10633,7 +10629,7 @@ msgstr "被命名"
 
 #: functions/classes/class.Tools.php:1621
 msgid "Removing link addresses index : "
-msgstr "删除链接地址索引： : "
+msgstr "删除链接地址索引："
 
 #: functions/classes/class.Tools.php:1637
 msgid "Warning: "
@@ -10653,7 +10649,7 @@ msgstr "将自定义字段数据类型更改为 VARCHAR 并重新保存以启用
 
 #: functions/classes/class.Tools.php:1649
 msgid "Adding link addresses index : "
-msgstr "添加链接地址索引： : "
+msgstr "添加链接地址索引："
 
 #: functions/classes/class.Tools.php:1682
 msgid "Cannot fetch https://github.com/phpipam/phpipam/releases.atom : "
@@ -15646,20 +15642,8 @@ msgid "static"
 msgstr "静态"
 
 #: app/tools/nat/all_nats.php:95
-msgid "NAT configured"
-msgstr "NAT 配置"
-
-#: app/tools/nat/all_nats.php:95
-msgid " destination "
-msgstr " 目的 "
-
-#: app/tools/nat/all_nats.php:95
-msgid " source "
-msgstr " 源 "
-
-#: app/tools/nat/all_nats.php:95
-msgid " static "
-msgstr " 静态 "
+msgid "msgid "No %s NAT configured"
+msgstr "没有 %s NAT 配置""
 
 #: app/tools/nat/all_nats.php:96
 msgid " policy"
