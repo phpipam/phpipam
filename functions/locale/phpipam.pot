@@ -15840,7 +15840,7 @@ msgid "static"
 msgstr ""
 
 #: app/tools/nat/all_nats.php:95
-msgid "msgid \"No %s NAT configured"
+msgid "No %s NAT configured"
 msgstr ""
 
 #: app/tools/nat/all_nats.php:96
