@@ -67,7 +67,7 @@ if ($POST->noZone == 1) {
 			$network = $Subnets->fetch_subnet(null,$network);
 			print '<tr>';
 			if ($i === 1) {
-				print '<td rowspan="'.$rowspan.'" style="width:150px;">Network</td>';
+				print '<td rowspan="'.$rowspan.'" style="width:150px;">'._("Network").'</td>';
 			}
 			print '<td>';
 			print '<span alt="'._('Delete Network').'" title="'._('Delete Network').'" class="deleteTempNetwork" style="color:red;margin-bottom:10px;margin-top: 10px;margin-right:15px;" data-action="delete" data-subnetArrayKey="'.$key.'"><i class="fa fa-close"></i></span>';

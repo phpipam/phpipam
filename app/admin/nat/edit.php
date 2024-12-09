@@ -82,7 +82,7 @@ $custom = $Tools->fetch_custom_fields('nat');
                 <?php
                 foreach ($nat_types as $t) {
                     $selected = $nat->type==$t ? "selected" : "";
-                    print "<option value='$t' $selected>$t NAT</option>";
+                    print "<option value='$t' $selected>"._($t)." NAT</option>";
                 }
                 ?>
             	</select>

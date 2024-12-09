@@ -17,7 +17,7 @@ if(!array_key_exists($GET->sPage, $tabs)) 	{ $Result->show("danger", "Invalid re
 // print
 foreach($tabs as $k=>$t) {
 	$class = $GET->sPage==$k ? "class='active'" : "";
-	print "<li role='presentation' $class><a href=".create_link("folder", $section['id'], $folder['id'], $k).">$t</a></li>";
+	print "<li role='presentation' $class><a href=".create_link("folder", $section['id'], $folder['id'], $k).">"._($t)."</a></li>";
 }
 print "</ul>";
 

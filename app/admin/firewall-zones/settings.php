@@ -134,9 +134,9 @@ $(function() {
 			<select name="zoneGenerator" class="form-control input-w-auto input-sm" style="width:110px;">
 				<?php foreach ($firewallZoneSettings->zoneGeneratorType as $key => $generator) {
 					if ($firewallZoneSettings->zoneGenerator == $key) {
-						print '<option value='.$key.' selected>'.$generator.'</option>';
+						print '<option value='.$key.' selected>'._($generator).'</option>';
 					} else {
-						print '<option value='.$key.'>'.$generator.'</option>';
+						print '<option value='.$key.'>'._($generator).'</option>';
 					}
 				}?>
 			</select>
@@ -172,9 +172,9 @@ $(function() {
 			<select name="deviceType" class="form-control input-w-auto input-sm" style="width:110px;">
 				<?php foreach ($deviceTypes as $deviceType) {
 					if ($firewallZoneSettings->deviceType == $deviceType->tid) {
-						print '<option value='.$deviceType->tid.' selected>'.$deviceType->tname.'</option>';
+						print '<option value='.$deviceType->tid.' selected>'._($deviceType->tname).'</option>';
 					} else {
-						print '<option value='.$deviceType->tid.'>'.$deviceType->tname.'</option>';
+						print '<option value='.$deviceType->tid.'>'._($deviceType->tname).'</option>';
 					}
 				}?>
 			</select>
@@ -305,9 +305,9 @@ $(function() {
 				<?php
 						foreach ($firewallZoneSettings->subnetPatternValues ?? [] as $key => $subnetObjectPattern) {
 						if ($firewallZoneSettings->subnetPattern == $key) {
-							print '<option value='.$key.' selected>'.$subnetObjectPattern.'</option>';
+							print '<option value='.$key.' selected>'._($subnetObjectPattern).'</option>';
 						} else {
-							print '<option value='.$key.'>'.$subnetObjectPattern.'</option>';
+							print '<option value='.$key.'>'._($subnetObjectPattern).'</option>';
 						}
 				}?>
 			</select>

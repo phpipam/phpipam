@@ -3,11 +3,23 @@
 /**
  * Detect missing gettext and fake function
  */
-if(!function_exists('gettext')) {
-	function gettext ($text) 	{ return $text; }
-	function _($text) 			{ return $text; }
+if (!function_exists('gettext')) {
+    function gettext($text) { return $text; }
+    function _($text) { return $text; }
 }
 
+// International translation function, supports variable replacement
+function translate ($text, ...$vars) {
+    $translated = gettext($text); // or gettext($text), both are equivalent
+    foreach ($vars as &$value) {
+        if ($value instanceof DateTime) {
+            $value = $value->format('Y-m-d H:i:s'); // Formatting Dates
+        } elseif (is_array($value)) {
+            $value = implode(', ', $value); // Array to string
+        }
+    }
+    return vsprintf($translated, $vars); // Replaces %s or %d placeholders
+}
 
 /**
  * Disable php errors on output scripts (json,xml,crt,sql...)

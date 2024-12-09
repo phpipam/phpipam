@@ -80,7 +80,7 @@ $icon =  $n->type=="static" ? "fa-arrows-h" : "fa-long-arrow-right";
     // print
     print "<tr>";
     print " <td colspan='4'>";
-    print " <span class='badge badge1 badge5'>".ucwords($n->type)."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
+    print " <span class='badge badge1 badge5'>"._(ucwords($n->type))."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
     print "</td>";
     print "</tr>";
 

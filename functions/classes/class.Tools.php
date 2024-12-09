@@ -2174,7 +2174,7 @@ class Tools extends Common_functions {
         $html = array();
         $html[] = "<tr>";
         $html[] = "<td colspan='4'>";
-        $html[] = "<span class='badge badge1 badge5'>".ucwords($n->type)."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
+        $html[] = "<span class='badge badge1 badge5'>"._(ucwords($n->type))."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
         $html[] = "<span class='pull-right'>";
         $html[] = $actions_menu;
         $html[] = "</span>";
