@@ -2050,7 +2050,7 @@ msgstr "重新输入密码"
 msgid "Save changes"
 msgstr "保存更改"
 
-#: app/tools/instructions/index.php:21 app/tools/tools-menu-config.php:85
+#: app/tools/instructions/index.php:15 app/tools/tools-menu-config.php:85
 msgid "Instructions for managing IP addresses"
 msgstr "IP 地址管理指南"
 
@@ -15642,8 +15642,8 @@ msgid "static"
 msgstr "静态"
 
 #: app/tools/nat/all_nats.php:95
-msgid "msgid "No %s NAT configured"
-msgstr "没有 %s NAT 配置""
+msgid "No %s NAT configured"
+msgstr "没有 %s NAT 配置"
 
 #: app/tools/nat/all_nats.php:96
 msgid " policy"
