@@ -823,8 +823,8 @@ msgid "Database"
 msgstr "数据库"
 
 #: app/admin/powerDNS/settings.php:132
-msgid "Failed to connect to database:<hr> "
-msgstr "无法连接到数据库：<hr> "
+msgid "Failed to connect to database:<hr> %s"
+msgstr "无法连接到数据库：<hr> %s"
 
 #: app/admin/powerDNS/settings.php:117 app/admin/powerDNS/settings.php:133
 msgid "Database connection ok"
@@ -4753,12 +4753,6 @@ msgstr "导入数据库时出现错误！"
 msgid "Import successful"
 msgstr "导入成功"
 
-msgid "Cannot upload - Return Code:"
-msgstr "无法上传 - 返回代码："
-
-msgid "Cannot move file to upload dir"
-msgstr "无法将文件移动到上传目录"
-
 msgid "Success"
 msgstr "成功"
 
@@ -6406,32 +6400,13 @@ msgstr "代码长度必须至少为 2 个字符"
 msgid "Name must be at least 2 characters long"
 msgstr "名称长度必须至少为 2 个字符"
 
-msgid "Language edit error"
-msgstr "语言编辑错误"
+#: app/admin/languages/edit-result.php:38
+msgid "Language %s error"
+msgstr "语言 %s 错误"
 
-msgid "Language edit success"
-msgstr "语言编辑成功"
-
-msgid "Language add error"
-msgstr "语言添加错误"
-
-msgid "Language add success"
-msgstr "语言添加成功"
-
-msgid "Language delete error"
-msgstr "语言删除错误"
-
-msgid "Language delete success"
-msgstr "语言删除成功"
-
-msgid "Subnet edit successfull"
-msgstr "子网编辑成功"
-
-msgid "Subnet add successfull"
-msgstr "子网添加成功"
-
-msgid "Subnet delete successfull"
-msgstr "子网删除成功"
+#: app/admin/languages/edit-result.php:39
+msgid "Language %s success"
+msgstr "语言 %s 成功"
 
 #: app/admin/api/edit.php:80 app/admin/api/index.php:67
 msgid "Read / Write / Admin"
@@ -9001,7 +8976,7 @@ msgstr "域名主机管理员无效"
 
 #: app/admin/powerDNS/domain-edit-result.php:67
 msgid "Please set master server(s) if domain type is SLAVE"
-msgstr "如果域类型为 SLAVE，请设置主服务器"
+msgstr "如果域类型为 从，请设置主服务器"
 
 msgid "Failed to add domain"
 msgstr "添加域名失败"
@@ -9138,6 +9113,16 @@ msgstr "IPv6 反向域名"
 #: app/admin/powerDNS/index.php:16 app/tools/powerDNS/index.php:7
 msgid "PowerDNS management"
 msgstr "PowerDNS 管理"
+
+#: app/admin/powerDNS/index.php:31
+#: app/admin/powerDNS/index.php:38
+msgid "Please set <a href='%s'> default powerDNS values </a>!"
+msgstr "请设置 <a href='%s'> 默认的 powerDNS 值 </a>！"
+
+#: app/admin/powerDNS/index.php:31
+#: app/admin/powerDNS/index.php:38
+msgid "default powerDNS values"
+msgstr "默认的 powerDNS 值"
 
 #: app/admin/powerDNS/index.php:81 app/tools/powerDNS/index.php:77
 msgid "Please enable powerDNS module under server management"
@@ -11057,9 +11042,21 @@ msgstr "代理指南"
 msgid "Agent type"
 msgstr "代理类型"
 
+#: app/admin/scan-agents/edit-result.php:36
+msgid "direct"
+msgstr "直接"
+
 #: app/admin/scan-agents/edit-result.php:51
 msgid "Invalid agent code"
 msgstr "代理代码无效"
+
+#: app/admin/scan-agents/edit-result.php:72
+msgid "Agent %s error"
+msgstr "代理 %s 错误"
+
+#: app/admin/scan-agents/edit-result.php:73
+msgid "Agent %s success"
+msgstr "代理 %s 成功"
 
 #: app/admin/scan-agents/edit-result.php:54
 msgid "Invalid agent name"
@@ -12787,6 +12784,10 @@ msgstr "选择文件"
 msgid "Browse / Drag & Drop"
 msgstr "浏览/拖放"
 
+#: app/admin/import-export/import-button.php:26
+msgid "Download template"
+msgstr "下载模板"
+
 #: app/admin/import-export/import-button.php:72
 msgid "Cancel upload"
 msgstr "取消上传"
@@ -13033,6 +13034,14 @@ msgstr "标有 * 的字段为必填字段"
 msgid "DeviceType import"
 msgstr "设备类型导入"
 
+#: app/admin/import-export/import-devtype.php:48
+msgid "DeviceTypes %s successful."
+msgstr "设备类型 %s 成功"
+
+#: app/admin/import-export/import-devtype.php:51
+msgid "DeviceTypes %s failed."
+msgstr "设备类型 %s 失败"
+
 #: app/admin/import-export/import-devices-select.php:152
 #: app/admin/import-export/import-devtype-select.php:94
 #: app/admin/import-export/import-ipaddr-select.php:148
@@ -13047,6 +13056,22 @@ msgstr "预览"
 #: app/admin/import-export/import-devices.php:24
 msgid "Devices Addresses import"
 msgstr "设备地址导入"
+
+#: app/admin/import-export/import-devices.php:80
+msgid "Devices %s successful."
+msgstr "设备 %s 成功。"
+
+#: app/admin/import-export/import-devices.php:83
+msgid "Devices %s  failed."
+msgstr "设备 %s 失败。"
+
+#: app/admin/import-export/import-devtype-select.php:22
+msgid "tname"
+msgstr "名称"
+
+#: app/admin/import-export/import-devtype-select.php:22
+msgid "tdescription"
+msgstr "描述"
 
 #: app/admin/import-export/import-devtype-preview.php:26
 msgid "DeviceType import data preview"
@@ -15380,25 +15405,25 @@ msgstr "所有机柜"
 msgid "Clear filter"
 msgstr "清除过滤器"
 
-#: app/tools/devices/all-devices-filter.php:141
-msgid "Filter applied: Device Type = "
-msgstr "应用过滤器：设备类型 = "
+#: app/tools/devices/all-devices-filter.php:149
+msgid "Filter applied: Device Type = %s"
+msgstr "应用过滤器：设备类型 = %s"
 
 #: app/tools/devices/all-devices.php:50
 msgid "List of devices"
 msgstr "设备列表"
 
-#: app/tools/devices/all-devices-filter.php:144
-msgid "Filter applied: Rack = "
-msgstr "应用过滤器：机柜 = "
+#: app/tools/devices/all-devices-filter.php:152
+msgid "Filter applied: Rack = %s"
+msgstr "应用过滤器：机柜 = %s"
 
-#: app/tools/devices/all-devices-filter.php:147
-msgid "Filter applied: Location = "
-msgstr "应用过滤器：位置 = "
+#: app/tools/devices/all-devices-filter.php:155
+msgid "Filter applied: Location = %s"
+msgstr "应用过滤器：位置 = %s"
 
-#: app/tools/devices/all-devices-filter.php:150
-msgid "Filter applied: Section = "
-msgstr "应用过滤器：区域 = "
+#: app/tools/devices/all-devices-filter.php:158
+msgid "Filter applied: Section = %s"
+msgstr "应用过滤器：区域 = %s"
 
 #: app/tools/vlan/domain-vlans.php:56
 msgid "Scan for VLANs"
@@ -16543,6 +16568,78 @@ msgstr "记录必须是 IP 地址"
 #: functions/classes/class.PowerDNS.php:1153
 msgid "AAAA record must be an IP address"
 msgstr "AAAA 记录必须是 IP 地址"
+
+#: functions/classes/class.PowerDNS.php:344
+msgid "1 minute"
+msgstr "1 分钟"
+
+#: functions/classes/class.PowerDNS.php:345
+msgid "3 minutes"
+msgstr "3 分钟"
+
+#: functions/classes/class.PowerDNS.php:346
+msgid "5 minutes"
+msgstr "5 分钟"
+
+#: functions/classes/class.PowerDNS.php:347
+msgid "10 minutes"
+msgstr "10 分钟"
+
+#: functions/classes/class.PowerDNS.php:348
+msgid "15 minutes"
+msgstr "15 分钟"
+
+#: functions/classes/class.PowerDNS.php:349
+msgid "30 minutes"
+msgstr "30 分钟"
+
+#: functions/classes/class.PowerDNS.php:350
+msgid "45 minutes"
+msgstr "45 分钟"
+
+#: functions/classes/class.PowerDNS.php:351
+msgid "1 hour"
+msgstr "1 小时"
+
+#: functions/classes/class.PowerDNS.php:352
+msgid "2 hours"
+msgstr "2 小时"
+
+#: functions/classes/class.PowerDNS.php:353
+msgid "3 hours"
+msgstr "3 小时"
+
+#: functions/classes/class.PowerDNS.php:354
+msgid "6 hours"
+msgstr "6 小时"
+
+#: functions/classes/class.PowerDNS.php:355
+msgid "12 hours"
+msgstr "12 小时"
+
+#: functions/classes/class.PowerDNS.php:356
+msgid "24 hours"
+msgstr "24 小时"
+
+#: functions/classes/class.PowerDNS.php:357
+msgid "1 week"
+msgstr "1 周"
+
+#: functions/classes/class.PowerDNS.php:279
+msgid "NATIVE"
+msgstr "本地"
+
+#: functions/classes/class.PowerDNS.php:280
+msgid "MASTER"
+msgstr "主"
+
+#: functions/classes/class.PowerDNS.php:281
+msgid "SLAVE"
+msgstr "从"
+
+#: functions/classes/class.PowerDNS.php:282
+msgid "SUPERSLAVE"
+msgstr "高级从"
 
 #: functions/classes/class.Subnets.php:3117
 msgid "Subnet permissions recursively set"
@@ -17909,3 +18006,30 @@ msgstr "SNMP 编辑成功"
 msgid "records"
 msgstr "条目"
 
+#: app/admin/import-export/import-verify.php:34
+msgid "Upload directory is not writable, or does not exist."
+msgstr "上传目录不可写，或者不存在。"
+
+#: app/admin/import-export/import-verify.php:42
+msgid "Invalid document type"
+msgstr "文档类型无效"
+
+#: app/admin/import-export/import-verify.php:47
+msgid "Cannot move file to upload dir"
+msgstr "无法将文件移动到上传目录"
+
+#: app/admin/import-export/import-verify.php:52
+msgid "Error: %s"
+msgstr "错误：%s"
+
+#: app/admin/import-export/import-verify.php:100
+msgid "Empty or too big file (limit %s"
+msgstr "文件为空或者太大（限制 %s"
+
+#: app/admin/import-export/import-devices-check.php:137
+msgid "Duplicate, will skip."
+msgstr "重复，将跳过。"
+
+#: app/admin/import-export/import-devices-check.php:139
+msgid "New entry, will be added."
+msgstr "新条目，将被添加。"
