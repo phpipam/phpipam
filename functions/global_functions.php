@@ -3,11 +3,34 @@
 /**
  * Detect missing gettext and fake function
  */
-if(!function_exists('gettext')) {
-	function gettext ($text) 	{ return $text; }
-	function _($text) 			{ return $text; }
+if (!function_exists('gettext')) {
+    function gettext($text) { return $text; }
+    function _($text) { return $text; }
 }
 
+// International translation function, supports variable replacement
+function tr_($text, ...$vars) {
+    $translated = gettext($text); // or gettext($text), both are equivalent
+	// Support variable replacement, including date and array processing
+	foreach ($vars as &$value) {
+		if ($value instanceof DateTime) {
+			// Handles DateTime objects, the default format is 'Y-m-d H:i:s'
+			$value = $value->format('Y-m-d H:i:s');
+		} elseif (is_array($value)) {
+			// Convert an array to a string
+			$value = implode(', ', $value);
+		} elseif (is_callable($value)) {
+			// If it is a PHP function, call it and get its result
+			$value = $value();
+		}
+	}
+    // Replace placeholder
+	 // Replace the placeholder %s or %d
+	 $translated = vsprintf($translated, $vars);
+
+	 // Return the processed result
+	 return $translated;
+}
 
 /**
  * Disable php errors on output scripts (json,xml,crt,sql...)

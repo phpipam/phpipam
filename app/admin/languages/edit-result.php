@@ -35,5 +35,5 @@ $values = array("l_id"=>$POST->l_id,
 				);
 
 # update
-if(!$Admin->object_modify("lang", $POST->action, "l_id", $values))	{ $Result->show("danger",  _("Language " . $User->get_post_action() . " error"), true); }
-else																	{ $Result->show("success", _("Language " . $User->get_post_action() . " success"), true); }
+if(!$Admin->object_modify("lang", $POST->action, "l_id", $values))	{ $Result->show("danger",  tr_("Language %s error", _($User->get_post_action()) ), true); }
+else																	{ $Result->show("success", tr_("Language %s success", _($User->get_post_action())), true); }

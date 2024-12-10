@@ -64,7 +64,7 @@ if ($domain === false) {
     <table class="table table-pdns-details table-auto table-condensed">
     <tr>
         <td><?php print _("Domain type:");?></td>
-        <td><span class="badge badge1"><?php print $domain->type;?></span></td>
+        <td><span class="badge badge1"><?php print _($domain->type);?></span></td>
     </tr>
     <?php
     // slave check

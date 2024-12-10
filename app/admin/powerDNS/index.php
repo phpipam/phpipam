@@ -30,9 +30,12 @@ $pdns = $PowerDNS->db_settings;
 // check if TTL is set
 if ($test!==false) {
     $test_ttl = db_json_decode($User->settings->powerDNS);
-    if (is_null($test_ttl->ttl)) {
-		$Result->show("warning", "Please set <a href='" . create_link("administration", "powerDNS", "defaults") . "'>default powerDNS values</a>!", false);
-    }
+    if ($test_ttl->ttl==NULL) {
+		$link = function() {
+			return create_link("administration", "powerDNS", "defaults");
+		};
+		$Result->show("warning", tr_("Please set <a href='%s'> default powerDNS values </a>!", $link), false);
+	}
 }
 // errors
 if(isset($PowerDNS->db_check_error)) {
