@@ -5,7 +5,7 @@
 # "Content-Type: text/plain; charset=UTF-8\n"
 # "Content-Transfer-Encoding: 8bit\n"
 # "Last-Translator: wxtewx <wxtewx@qq.com>\n"
-# "PO-Revision-Date: 2024-12-03 13:28\n"
+# "PO-Revision-Date: 2024-12-10 13:28\n"
 # "Project-Id-Version: 1.70\n"
 # "Language: zh_CN\n"
 # "MIME-Version: 1.0\n"
@@ -829,7 +829,7 @@ msgid "Database"
 msgstr ""
 
 #: app/admin/powerDNS/settings.php:132
-msgid "Failed to connect to database:<hr> "
+msgid "Failed to connect to database:<hr> %s"
 msgstr ""
 
 #: app/admin/powerDNS/settings.php:117 app/admin/powerDNS/settings.php:133
@@ -2056,7 +2056,7 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: app/tools/instructions/index.php:21 app/tools/tools-menu-config.php:85
+#: app/tools/instructions/index.php:15 app/tools/tools-menu-config.php:85
 msgid "Instructions for managing IP addresses"
 msgstr ""
 
@@ -4801,12 +4801,6 @@ msgstr ""
 msgid "Import successful"
 msgstr ""
 
-msgid "Cannot upload - Return Code:"
-msgstr ""
-
-msgid "Cannot move file to upload dir"
-msgstr ""
-
 msgid "Success"
 msgstr ""
 
@@ -6506,31 +6500,12 @@ msgstr ""
 msgid "Name must be at least 2 characters long"
 msgstr ""
 
-msgid "Language edit error"
+#: app/admin/languages/edit-result.php:38
+msgid "Language %s error"
 msgstr ""
 
-msgid "Language edit success"
-msgstr ""
-
-msgid "Language add error"
-msgstr ""
-
-msgid "Language add success"
-msgstr ""
-
-msgid "Language delete error"
-msgstr ""
-
-msgid "Language delete success"
-msgstr ""
-
-msgid "Subnet edit successfull"
-msgstr ""
-
-msgid "Subnet add successfull"
-msgstr ""
-
-msgid "Subnet delete successfull"
+#: app/admin/languages/edit-result.php:39
+msgid "Language %s success"
 msgstr ""
 
 #: app/admin/api/edit.php:80 app/admin/api/index.php:67
@@ -9262,6 +9237,14 @@ msgstr ""
 msgid "PowerDNS management"
 msgstr ""
 
+#: app/admin/powerDNS/index.php:31 app/admin/powerDNS/index.php:38
+msgid "Please set <a href='%s'> default powerDNS values </a>!"
+msgstr ""
+
+#: app/admin/powerDNS/index.php:31 app/admin/powerDNS/index.php:38
+msgid "default powerDNS values"
+msgstr ""
+
 #: app/admin/powerDNS/index.php:81 app/tools/powerDNS/index.php:77
 msgid "Please enable powerDNS module under server management"
 msgstr ""
@@ -11194,8 +11177,20 @@ msgstr ""
 msgid "Agent type"
 msgstr ""
 
+#: app/admin/scan-agents/edit-result.php:36
+msgid "direct"
+msgstr ""
+
 #: app/admin/scan-agents/edit-result.php:51
 msgid "Invalid agent code"
+msgstr ""
+
+#: app/admin/scan-agents/edit-result.php:72
+msgid "Agent %s error"
+msgstr ""
+
+#: app/admin/scan-agents/edit-result.php:73
+msgid "Agent %s success"
 msgstr ""
 
 #: app/admin/scan-agents/edit-result.php:54
@@ -12974,6 +12969,10 @@ msgstr ""
 msgid "Browse / Drag & Drop"
 msgstr ""
 
+#: app/admin/import-export/import-button.php:26
+msgid "Download template"
+msgstr ""
+
 #: app/admin/import-export/import-button.php:72
 msgid "Cancel upload"
 msgstr ""
@@ -13212,6 +13211,14 @@ msgstr ""
 msgid "DeviceType import"
 msgstr ""
 
+#: app/admin/import-export/import-devtype.php:48
+msgid "DeviceTypes %s successful."
+msgstr ""
+
+#: app/admin/import-export/import-devtype.php:51
+msgid "DeviceTypes %s failed."
+msgstr ""
+
 #: app/admin/import-export/import-devices-select.php:152
 #: app/admin/import-export/import-devtype-select.php:94
 #: app/admin/import-export/import-ipaddr-select.php:148
@@ -13225,6 +13232,22 @@ msgstr ""
 
 #: app/admin/import-export/import-devices.php:24
 msgid "Devices Addresses import"
+msgstr ""
+
+#: app/admin/import-export/import-devices.php:80
+msgid "Devices %s successful."
+msgstr ""
+
+#: app/admin/import-export/import-devices.php:83
+msgid "Devices %s  failed."
+msgstr ""
+
+#: app/admin/import-export/import-devtype-select.php:22
+msgid "tname"
+msgstr ""
+
+#: app/admin/import-export/import-devtype-select.php:22
+msgid "tdescription"
 msgstr ""
 
 #: app/admin/import-export/import-devtype-preview.php:26
@@ -15578,24 +15601,24 @@ msgstr ""
 msgid "Clear filter"
 msgstr ""
 
-#: app/tools/devices/all-devices-filter.php:141
-msgid "Filter applied: Device Type = "
+#: app/tools/devices/all-devices-filter.php:149
+msgid "Filter applied: Device Type = %s"
 msgstr ""
 
 #: app/tools/devices/all-devices.php:50
 msgid "List of devices"
 msgstr ""
 
-#: app/tools/devices/all-devices-filter.php:144
-msgid "Filter applied: Rack = "
+#: app/tools/devices/all-devices-filter.php:152
+msgid "Filter applied: Rack = %s"
 msgstr ""
 
-#: app/tools/devices/all-devices-filter.php:147
-msgid "Filter applied: Location = "
+#: app/tools/devices/all-devices-filter.php:155
+msgid "Filter applied: Location = %s"
 msgstr ""
 
-#: app/tools/devices/all-devices-filter.php:150
-msgid "Filter applied: Section = "
+#: app/tools/devices/all-devices-filter.php:158
+msgid "Filter applied: Section = %s"
 msgstr ""
 
 #: app/tools/vlan/domain-vlans.php:56
@@ -16755,6 +16778,78 @@ msgstr ""
 
 #: functions/classes/class.PowerDNS.php:1153
 msgid "AAAA record must be an IP address"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:344
+msgid "1 minute"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:345
+msgid "3 minutes"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:346
+msgid "5 minutes"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:347
+msgid "10 minutes"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:348
+msgid "15 minutes"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:349
+msgid "30 minutes"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:350
+msgid "45 minutes"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:351
+msgid "1 hour"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:352
+msgid "2 hours"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:353
+msgid "3 hours"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:354
+msgid "6 hours"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:355
+msgid "12 hours"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:356
+msgid "24 hours"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:357
+msgid "1 week"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:279
+msgid "NATIVE"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:280
+msgid "MASTER"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:281
+msgid "SLAVE"
+msgstr ""
+
+#: functions/classes/class.PowerDNS.php:282
+msgid "SUPERSLAVE"
 msgstr ""
 
 #: functions/classes/class.Subnets.php:3117
@@ -18148,4 +18243,32 @@ msgstr ""
 
 #: app/subnets/subnet-details/subnet-details.php:464
 msgid "records"
+msgstr ""
+
+#: app/admin/import-export/import-verify.php:34
+msgid "Upload directory is not writable, or does not exist."
+msgstr ""
+
+#: app/admin/import-export/import-verify.php:42
+msgid "Invalid document type"
+msgstr ""
+
+#: app/admin/import-export/import-verify.php:47
+msgid "Cannot move file to upload dir"
+msgstr ""
+
+#: app/admin/import-export/import-verify.php:52
+msgid "Error: %s"
+msgstr ""
+
+#: app/admin/import-export/import-verify.php:100
+msgid "Empty or too big file (limit %s"
+msgstr ""
+
+#: app/admin/import-export/import-devices-check.php:137
+msgid "Duplicate, will skip."
+msgstr ""
+
+#: app/admin/import-export/import-devices-check.php:139
+msgid "New entry, will be added."
 msgstr ""
