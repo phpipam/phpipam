@@ -134,7 +134,7 @@ if(in_array('firewallAddressObject', $selected_ip_fields)) {
 <h4 style="margin-top:40px;">
 <?php
 if($location==="customers") {}
-elseif(!$slaves)		{ print translate("IP addresses in %s" ,_($location)); }
+elseif(!$slaves)		{ print tr_("IP addresses in %s" ,_($location)); }
 elseif(@$orphaned)	{ print "<div class='alert alert-warning alert-block'>"._('Orphaned IP addresses for subnet')." <strong>$subnet[description]</strong> (".sizeof($addresses)." "._("orphaned").") <br><span class='text-muted' style='font-size:12px;margin-top:10px;'>"._('This happens if subnet contained IP addresses when new child subnet was created')."'<span><hr><a class='btn btn-sm btn-default' id='truncate' href='' data-subnetid='".$subnet['id']."'><i class='fa fa-times'></i> "._("Remove all")."</a></div>"; }
 else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 ?>
@@ -451,7 +451,7 @@ else {
 							$timestamp = $matches[2]; // Get the timestamp part
 				
 							// Internationalization of static parts
-							$translated_static_part = translate("This host was autodiscovered on %s",$timestamp);
+							$translated_static_part = tr_("This host was autodiscovered on %s",$timestamp);
 							$formatted_note = str_replace("\n", "<br>", escape_input($translated_static_part));
 							
 							// Output

@@ -146,15 +146,15 @@ print "</div>";
 # filter info
 if(isset($GET->subnetId)) {
 	if($GET->subnetId=="type") {
-		$Result->show("warning alert-block", _("Filter applied: Device Type = ".@$devtype->tname), false);
+		$Result->show("warning alert-block", tr_("Filter applied: Device Type = %s", _(@$devtype->tname)), false);
 	}
 	elseif($GET->subnetId=="rack") {
-		$Result->show("warning alert-block", _("Filter applied: Rack = ".@$rack->name), false);
+		$Result->show("warning alert-block", tr_("Filter applied: Rack = %s",_(@$rack->name)), false);
 	}
 	elseif($GET->subnetId=="location") {
-		$Result->show("warning alert-block", _("Filter applied: Location = ".@$location->name), false);
+		$Result->show("warning alert-block", tr_("Filter applied: Location = %s",_(@$location->name)), false);
 	}
 	elseif($GET->subnetId=="section") {
-		$Result->show("warning alert-block", _("Filter applied: Section = ".@$section->name), false);
+		$Result->show("warning alert-block", tr_("Filter applied: Section = %s",_(@$section->name)), false);
 	}
 }

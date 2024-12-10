@@ -47,7 +47,7 @@ if(sizeof($custom_fields) > 0) {
 
 # print
 print '<form id="selectExportFields">';
-print '<h4>Fields</h4>';
+print '<h4>'._('Fields').'</h4>';
 # table
 print "	<table class='table table-striped table-condensed'>";
 

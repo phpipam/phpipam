@@ -114,7 +114,7 @@ else {
         # if none than print
         if(sizeof($nats)==0) {
             print "<tr>";
-            print " <td colspan='$colspan'>".$Result->show("info",translate("No %s NAT configured",_($k)), false, false, true)."</td>";
+            print " <td colspan='$colspan'>".$Result->show("info",tr_("No %s NAT configured",_($k)), false, false, true)."</td>";
             print "</tr>";
         }
         else {

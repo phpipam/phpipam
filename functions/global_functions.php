@@ -9,16 +9,27 @@ if (!function_exists('gettext')) {
 }
 
 // International translation function, supports variable replacement
-function translate ($text, ...$vars) {
+function tr_($text, ...$vars) {
     $translated = gettext($text); // or gettext($text), both are equivalent
-    foreach ($vars as &$value) {
-        if ($value instanceof DateTime) {
-            $value = $value->format('Y-m-d H:i:s'); // Formatting Dates
-        } elseif (is_array($value)) {
-            $value = implode(', ', $value); // Array to string
-        }
-    }
-    return vsprintf($translated, $vars); // Replaces %s or %d placeholders
+	// Support variable replacement, including date and array processing
+	foreach ($vars as &$value) {
+		if ($value instanceof DateTime) {
+			// Handles DateTime objects, the default format is 'Y-m-d H:i:s'
+			$value = $value->format('Y-m-d H:i:s');
+		} elseif (is_array($value)) {
+			// Convert an array to a string
+			$value = implode(', ', $value);
+		} elseif (is_callable($value)) {
+			// If it is a PHP function, call it and get its result
+			$value = $value();
+		}
+	}
+    // Replace placeholder
+	 // Replace the placeholder %s or %d
+	 $translated = vsprintf($translated, $vars);
+
+	 // Return the processed result
+	 return $translated;
 }
 
 /**
