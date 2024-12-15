@@ -155,8 +155,8 @@ $(document).ready(function(){
 			<?php
 			foreach($auth_types as $type) {
 				# match
-				if($type->id==$user->authMethod)	{ print "<option value='$type->id' selected>$type->type ($type->description)</option>"; }
-				else								{ print "<option value='$type->id'         >$type->type ($type->description)</option>"; }
+				if($type->id==$user->authMethod)	{ print "<option value='$type->id' selected>"._($type->type)." "._(($type->description))."</option>"; }
+				else								{ print "<option value='$type->id'         >"._($type->type)." "._(($type->description))."</option>"; }
 			}
 			?>
 			</select>
