@@ -40,6 +40,8 @@ $Upgrade = new Upgrade ($Database);
 
 	<!-- js -->
 	<script src="js/jquery-3.7.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="functions/js-translations.php"></script>
+	<script src="functions/js-translations.php"></script>
 	<script src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/install.js?v=<?php print SCRIPT_PREFIX; ?>"></script>

@@ -11,21 +11,21 @@ $admin_items = array();
 $admin_items["users"] = array (
                         "name"=>"Users",
                         "href"=>array("administration", "users"),
-                        "title"=>"User management",
+                        "title"=>_("User management"),
                         "icon"=>"fa-user"
                         );
 // sections
 $admin_items["sections"] = array(
                         "name"=>"Sections",
                         "href"=>array("administration", "sections"),
-                        "title"=>"Section management",
+                        "title"=>_("Section management"),
                         "icon"=>"fa-server"
                        );
 // vlans
 $admin_items["vlans"] = array (
                         "name"=>"VLAN",
                         "href"=>array("administration", "vlans"),
-                        "title"=>"VLAN management",
+                        "title"=>_("VLAN management"),
                         "icon"=>"fa-cloud"
                         );
 // VRF
@@ -33,7 +33,7 @@ if($User->settings->enableVRF == 1) {
 $admin_items["vrf"] = array(
                         "name"=>"VRF",
                         "href"=>array("administration", "vrf"),
-                        "title"=>"VRF management",
+                        "title"=>_("VRF management"),
                         "icon"=>"fa-cloud"
                        );
 }
@@ -42,7 +42,7 @@ if($User->settings->enableNAT==1) {
 $admin_items["nat"] = array (
                         "name"=>"NAT",
                         "href"=>array("administration", "nat"),
-                        "title"=>"NAT management",
+                        "title"=>_("NAT management"),
                         "icon"=>"fa-exchange"
                         );
 }
@@ -51,7 +51,7 @@ if($User->settings->enablePowerDNS==1) {
 $admin_items["powerDNS"] = array (
                         "name"=>"PowerDNS",
                         "href"=>array("administration", "powerDNS"),
-                        "title"=>"powerDNS management",
+                        "title"=>_("powerDNS management"),
                         "icon"=>"fa-database"
                         );
 }
@@ -60,7 +60,7 @@ if($User->settings->enableDHCP==1) {
 $admin_items["dhcp"] = array (
                         "name"=>"DHCP",
                         "href"=>array("administration", "dhcp"),
-                        "title"=>"DHCP information",
+                        "title"=>_("DHCP information"),
                         "icon"=>"fa-database"
                         );
 }
@@ -68,7 +68,7 @@ $admin_items["dhcp"] = array (
 $admin_items["devices"] = array (
                         "name"=>"Devices",
                         "href"=>array("administration", "devices"),
-                        "title"=>"Show all configured devices",
+                        "title"=>_("Show all configured devices"),
                         "icon"=>"fa-desktop"
                         );
 // rack
@@ -76,7 +76,7 @@ if($User->settings->enableRACK == 1) {
 $admin_items["racks"] = array (
                         "name"=>"Racks",
                         "href"=>array("administration", "racks"),
-                        "title"=>"Show racks",
+                        "title"=>_("Show racks"),
                         "icon"=>"fa-bars"
                         );
 }
@@ -85,7 +85,7 @@ if($User->settings->enableCircuits == 1) {
 $admin_items["circuits"] = array (
                         "name"=>"Circuits",
                         "href"=>array("administration", "circuits"),
-                        "title"=>"Show circuits",
+                        "title"=>_("Show circuits"),
                         "icon"=>"fa-random"
                         );
 }
@@ -94,7 +94,7 @@ if($User->settings->enableRouting == 1) {
 $admin_items["routing"] = array (
                         "name"=>"Routing",
                         "href"=>array("administration", "routing"),
-                        "title"=>"Show Routing",
+                        "title"=>_("Show Routing"),
                         "icon"=>"fa-exchange"
                         );
 }
@@ -103,7 +103,7 @@ if($User->settings->enableLocations == 1) {
 $admin_items["locations"] = array (
                         "name"=>"Locations",
                         "href"=>array("administration", "locations"),
-                        "title"=>"Show locations",
+                        "title"=>_("Show locations"),
                         "icon"=>"fa-map"
                         );
 }

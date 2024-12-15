@@ -114,11 +114,12 @@ $readonly = $POST->action=="edit" || $POST->action=="delete" ? true : false;
 <script src="js/bootstrap-slider.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 <?php } ?>
 <script>
+
 $(document).ready(function() {
 /* bootstrap switch */
 var switch_options = {
-	onText: "Yes",
-	offText: "No",
+	onText: <?php print json_encode(_("Yes")); ?>,
+	offText: <?php print json_encode(_("No")); ?>,
     onColor: 'default',
     offColor: 'default',
     size: "mini"
@@ -478,8 +479,8 @@ $("input[name='subnet']").change(function() {
 		print "<td>";
 		print "<select name='scanAgent' class='form-control input-sm'>";
 		foreach ($agents as $a) {
-			if ($a->id==@$subnet_old_details['scanAgent'])	{ print "<option value='".$a->id."' selected='selected'>".$a->name." (".$a->description.")</option>"; }
-			else											{ print "<option value='".$a->id."'>".$a->name." (".$a->description.")</option>"; }
+			if ($a->id==@$subnet_old_details['scanAgent'])	{ print "<option value='".$a->id."' selected='selected'>"._($a->name)." ("._($a->description).")</option>"; }
+			else											{ print "<option value='".$a->id."'>"._($a->name)." ("._($a->description).")</option>"; }
 		}
 		print "</select>";
 		print "</td>";

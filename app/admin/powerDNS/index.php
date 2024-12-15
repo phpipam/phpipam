@@ -57,7 +57,7 @@ if(isset($PowerDNS->db_check_error)) {
 	}
 
 	// check
-	if(!in_array($GET->subnetId, $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
+	if(!in_array($GET->subnetId, $tabs)) 	{ $Result->show("danger", _("Invalid request"), true); }
 
 	// print
 	foreach($tabs as $t) {
@@ -79,7 +79,7 @@ if (preg_match("/reverse_/", $pdns_section)) {
 }
 
 // include file
-if(!file_exists(dirname(__FILE__) . '/'.$filename)) 	{ $Result->show("danger", "Invalid request", true); }
+if(!file_exists(dirname(__FILE__) . '/'.$filename)) 	{ $Result->show("danger", _("Invalid request"), true); }
 else													{ include(dirname(__FILE__) . '/'.$filename); }
 ?>
 </div>

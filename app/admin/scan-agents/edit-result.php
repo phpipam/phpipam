@@ -33,7 +33,7 @@ if ($POST->action=="edit" || $POST->action=="delete") {
 	// invalid id
 	if($agent_old===false)	{ $error[] = _("Invalid agent Id"); }
 	// remove type and code if direct
-	if (@$agent_old->type=="direct") {
+	if (@$agent_old->type==_("direct")) {
 		unset($POST->type, $POST->code);
 	}
 }

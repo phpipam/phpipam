@@ -12,7 +12,7 @@ print '<ul class="nav nav-tabs">';
 // default tab
 if(!isset($GET->sPage)) { $GET->sPage = "details"; }
 // check
-if(!array_key_exists($GET->sPage, $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
+if(!array_key_exists($GET->sPage, $tabs)) 	{ $Result->show("danger", _("Invalid request"), true); }
 
 // print
 foreach($tabs as $k=>$t) {

@@ -69,7 +69,7 @@ if(sizeof($custom_fields) > 0) {
 
 # print
 print '<form id="selectExportFields">';
-print '<h4>Fields</h4>';
+print '<h4>'._("Fields").'</h4>';
 # table
 print "	<table class='table table-striped table-condensed'>";
 
@@ -107,7 +107,7 @@ print '<form id="selectExportSections">';
 
 # show sections
 if($all_sections!==false) {
-	print '<h4>Sections</h4>';
+	print '<h4>'._("Sections").'</h4>';
 	print "	<table class='table table-striped table-condensed'>";
 	print "	<tr>";
     print '	<th><input type="checkbox" id="exportSelectAll" checked> '._('Name').'</th>';

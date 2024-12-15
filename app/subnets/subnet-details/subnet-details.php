@@ -399,8 +399,8 @@ else {
 			$agent = $Tools->fetch_object ("scanAgents", "id", $subnet['scanAgent']);
 			if ($agent===false)		{ print _("Invalid scan agent"); }
 			else					{
-				$last_check = is_null($agent->last_access)||$agent->last_access=="0000-00-00 00:00:00"||$agent->last_access=="1970-01-01 00:00:01" ? "Never" : $agent->last_access;
-				print "<strong>".$agent->name ."</strong> (".$agent->description.") <br> <span class='text-muted'>"._("Last check")." $last_check</span>";
+				$last_check = is_null($agent->last_access)||$agent->last_access=="0000-00-00 00:00:00"||$agent->last_access=="1970-01-01 00:00:01" ? _("Never") : $agent->last_access;
+				print "<strong>"._($agent->name) ."</strong> ("._($agent->description).") <br> <span class='text-muted'>"._("Last check")." $last_check</span>";
 			}
 			print "	</td>";
 			print "</tr>";
@@ -471,11 +471,11 @@ else {
 				$btns = implode("\n", $btns);
 				}
 
-				$zone = "<span class='badge alert-danger'>Zone $zone missing</span>";
+				$zone = "<span class='badge alert-danger'>".tr_("Zone %s missing",$zone)."</span>";
 			}
 		}
 		else {
-			$zone = "<span class='badge alert-danger'>Cannot connect to powerDNS database!</span>";
+			$zone = "<span class='badge alert-danger'>"._("Cannot connect to powerDNS database!")."</span>";
 		}
 		}
 		# divider

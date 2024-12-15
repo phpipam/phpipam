@@ -46,7 +46,7 @@ print "<hr><br>";
 	}
 
 	// check
-	if(!array_key_exists($GET->subnetId, $subpages)) 	{ $Result->show("danger", "Invalid request", true); }
+	if(!array_key_exists($GET->subnetId, $subpages)) 	{ $Result->show("danger", _("Invalid request"), true); }
 
 	// print
 	foreach($subpages as $href=>$t) {

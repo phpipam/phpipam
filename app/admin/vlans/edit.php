@@ -90,7 +90,7 @@ $(document).ready(function(){
 		<?php
 		# not all
 		if ($POST->domain!="all") {
-			print $vlan_domain->name." (".$vlan_domain->description.")";
+			print _($vlan_domain->name)." ("._($vlan_domain->description).")";
 		} else {
 			print "<select name='domainid' class='form-control input-sm'>";
 			foreach ($vlan_domains as $d) {

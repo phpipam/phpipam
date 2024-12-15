@@ -43,7 +43,7 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 	}
 
 	// check
-	if(!array_key_exists($GET->sPage, $subpages)) 	{ $Result->show("danger", "Invalid request", true); }
+	if(!array_key_exists($GET->sPage, $subpages)) 	{ $Result->show("danger", _("Invalid request"), true); }
 
 	// print
 	foreach($subpages as $href=>$t) {

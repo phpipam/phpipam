@@ -129,7 +129,7 @@ else {
 	else {
     	// validate install type
     	$install_types = array("install_automatic", "install_manual", "install_mysqlimport");
-        if(!in_array($GET->section, $install_types)) 	        { $Result->show("danger", "Invalid request", false); }
+        if(!in_array($GET->section, $install_types)) 	        { $Result->show("danger", _("Invalid request"), false); }
         else {
 			// verify that page exists
 			if(!file_exists(dirname(__FILE__)."/".$GET->section.".php"))	{ include("invalid_install_type.php"); }

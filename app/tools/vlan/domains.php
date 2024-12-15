@@ -80,8 +80,8 @@ foreach($vlan_domains as $domain) {
 
 	// print
 	print "<tr class='text-top'>";
-	print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, $GET->section, $domain->id)."'><i class='fa fa-cloud prefix'></i> $domain->name</a></strong></td>";
-	print "	<td>$domain->description</td>";
+	print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, $GET->section, $domain->id)."'><i class='fa fa-cloud prefix'></i> "._($domain->name)."</a></strong></td>";
+	print "	<td>"._($domain->description)."</td>";
 	print "	<td>$cnt "._("VLANs")."</td>";
 	print "	<td><span class='text-muted'>$sections</span></td>";
 	print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, $GET->section, $domain->id)."'>"._("Show VLANs")."</a></td>";

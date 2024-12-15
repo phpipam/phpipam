@@ -76,7 +76,7 @@ $custom = $Tools->fetch_custom_fields('nat');
         	<th><?php print _('Type'); ?></th>
         	<td>
             	<?php
-                $nat_types = array("source", "static", "destination");
+                $nat_types = array(_("source"), _("static"), _("destination"));
                 ?>
             	<select name="type" class="form-control input-sm input-w-auto" <?php print $readonly; ?>>
                 <?php
@@ -136,7 +136,7 @@ $custom = $Tools->fetch_custom_fields('nat');
                 <?php
                 foreach (["No", "Yes"] as $d) {
                     $selected = $nat->policy==$d ? "selected" : "";
-                    print "<option value='$d' $selected>$d</option>";
+                    print "<option value='$d' $selected>"._($d)."</option>";
                 }
                 ?>
             </td>

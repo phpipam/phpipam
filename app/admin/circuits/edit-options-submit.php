@@ -33,7 +33,7 @@ if(!in_array($POST->type, array("type"))) { $Result->show("danger", _('Invalid t
 
 # defaults must be present
 if($POST->type=="type") {
-    if ($POST->option=="Default") { $Result->show("danger", _('Default value cannot be deleted'), true); }
+    if ($POST->option==_("Default")) { $Result->show("danger", _('Default value cannot be deleted'), true); }
 }
 
 # set values

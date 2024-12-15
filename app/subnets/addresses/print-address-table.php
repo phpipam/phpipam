@@ -443,27 +443,22 @@ else {
 
 
 	       		# print info button for hover
-	       		if (in_array('note', $selected_ip_fields)) {
-					if (!empty($addresses[$n]->note)) {
-						// Use regular expressions to extract internationalized parts and timestamps
-						if (preg_match('/^(.*?)(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/', $addresses[$n]->note, $matches)) {
-							$static_part = $matches[1]; // Get the internationalization part
-							$timestamp = $matches[2]; // Get the timestamp part
-				
-							// Internationalization of static parts
-							$translated_static_part = tr_("This host was autodiscovered on %s",$timestamp);
-							$formatted_note = str_replace("\n", "<br>", escape_input($translated_static_part));
-							
-							// Output
-							print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='{$formatted_note}'></i></td>";
-						} else {
-							// If no match is found, the output is blank.
-							print "<td class='narrow'></td>";
+	       		if(in_array('note', $selected_ip_fields)) {
+	        		if(!empty($addresses[$n]->note)) {
+						// Process autodiscovered note localization
+						$autodiscover_string = 'This host was autodiscovered on';
+						if (strpos($addresses[$n]->note, $autodiscover_string) === 0) {
+							// Extract datetime part
+							$datetime = substr($addresses[$n]->note, strlen($autodiscover_string));
+							// Combine localized text with original datetime
+							$addresses[$n]->note = tr_($autodiscover_string) . $datetime;
 						}
-					} else {
+						print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", escape_input($addresses[$n]->note))."'></i></td>";
+					}
+	        		else {
 						print "<td class='narrow'></td>";
 					}
-				}
+	        	}
 
 				# print device
 				if (in_array('switch', $selected_ip_fields) && $User->get_module_permissions("devices") >= User::ACCESS_R) {

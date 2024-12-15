@@ -31,8 +31,8 @@ $hiddenfields="";
 
 # read field mapping from previous window
 foreach ($expfields as $expfield) {
-	if (isset($GET->{'importFields__'.str_replace(" ", "_",trim($expfield))})) {
-		$impfield = $GET->{'importFields__'.str_replace(" ", "_",trim($expfield))};
+	if (isset($GET->{'importFields__'.str_replace(" ", "_",trim(_($expfield)))})) {
+		$impfield = $GET->{'importFields__'.str_replace(" ", "_",trim(_($expfield)))};
 		if (in_array($expfield,$reqfields) && ($impfield == "-")) {
 			$Result->show('danger', _("Error: missing required field mapping for expected field")." <b>".$expfield."</b>."._("Please check field matching in previous window."), true, true);
 		} else {
@@ -44,7 +44,7 @@ foreach ($expfields as $expfield) {
 	# prepare header row for preview table
 	$hrow.="<th>".escape_input(_($expfield))."</th>";
 	# prepare select field to transfer to actual import file
-	$hiddenfields.="<input name='importFields__".escape_input(str_replace(" ", "_",trim($expfield)))."' type='hidden' value='".escape_input($impfield)."' style='display:none;'>";
+	$hiddenfields.="<input name='importFields__".escape_input(str_replace(" ", "_",trim(_($expfield))))."' type='hidden' value='".escape_input($impfield)."' style='display:none;'>";
 }
 
 $data = array();

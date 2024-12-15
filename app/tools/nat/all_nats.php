@@ -87,7 +87,7 @@ else {
     print "<tbody>";
 
     // init array
-    $nats_reordered = array("source"=>array(), "static"=>array(), "destination"=>array());
+    $nats_reordered = array(_("source")=>array(), _("static")=>array(), _("destination")=>array());
 
     # rearrange based on type
     if($all_nats !== false) {
@@ -95,7 +95,7 @@ else {
             # policy
             if($n->policy=="Yes") { $n->type = _($n->type) . _(" policy"); }
             # save
-            $nats_reordered[$n->type][] = $n;
+            $nats_reordered[_($n->type)][] = $n;
         }
     }
 

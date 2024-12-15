@@ -81,7 +81,7 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
 		<td>
 			<select name="bgp_type" class="form-control input-w-auto input-sm">
 				<?php
-				foreach (["internal", "external"] as $type) {
+				foreach ([_("internal"), _("external")] as $type) {
 					$selected = isset($bgp->bgp_type) && $bgp->bgp_type == $type ? "selected" : "";
 					print "<option value='$type' $selected>"._($type)."</option>";
 				}

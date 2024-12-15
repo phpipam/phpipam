@@ -60,8 +60,8 @@ $(document).ready(function(){
 	    onColor: 'default',
 	    offColor: 'default',
 	    size: "mini",
-	    onText: "Yes",
-	    offText: "No"
+		onText: <?php print json_encode(_("Yes")); ?>,
+		offText: <?php print json_encode(_("No")); ?>
 	};
 	$(".input-switch").bootstrapSwitch(switch_options);
 });
@@ -337,7 +337,7 @@ $(document).ready(function(){
 					else 								{ print "<input type='checkbox' name='group$g->g_id'		>$g->g_name<br>"; }
 				}
 				else {
-														{ print "<input type='checkbox' name='group$g->g_id'>$g->g_name<br>"; }
+														{ print "<input type='checkbox' name='group$g->g_id'>"._($g->g_name)."<br>"; }
 				}
 			}
 		}

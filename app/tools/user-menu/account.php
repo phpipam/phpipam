@@ -106,8 +106,8 @@ if($User->user->authMethod == 1) {
 			<option value="default"><?php print _("Default"); ?></option>
 			<?php
 			foreach($User->themes as $theme) {
-				if($theme==$User->user->theme)	{ print "<option value='$theme' selected>$theme</option>"; }
-				else							{ print "<option value='$theme'		    >$theme</option>"; }
+				if($theme==$User->user->theme)	{ print "<option value='$theme' selected>"._($theme)."</option>"; }
+				else							{ print "<option value='$theme'		    >"._($theme)."</option>"; }
 			}
 			?>
 		</select>

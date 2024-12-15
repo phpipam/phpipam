@@ -31,7 +31,7 @@ switch ($type) {
         break;
     // error
     default:
-        $Result->show("danger", "Invalid request", true);
+        $Result->show("danger", _("Invalid request"), true);
         break;
 }
 

@@ -32,7 +32,7 @@ if($POST->action!="add") {
 	# null ?
 	$agent===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 	# title
-	$title = $User->get_post_action().' '._('agent').' '.$agent->name;
+	$title = $User->get_post_action().' '._('agent').' '._($agent->name);
 } else {
 	# generate new code
 	$agent = new Params();
@@ -61,7 +61,7 @@ if ($agent->type=="direct" && $POST->action=="delete") {
 	<tr>
 	    <td><?php print _('Name'); ?></td>
 	    <td>
-	    	<input type="text" name="name" class="form-control input-sm" value="<?php print $agent->name; ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
+	    	<input type="text" name="name" class="form-control input-sm" value="<?php print _($agent->name); ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
 	        <input type="hidden" name="id" value="<?php print $agent->id; ?>">
     		<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
@@ -72,7 +72,7 @@ if ($agent->type=="direct" && $POST->action=="delete") {
 	<!-- description -->
 	<tr>
 	    <td><?php print _('Description'); ?></td>
-	    <td><input type="text" id="description" name="description" class="form-control input-sm"  value="<?php print $agent->description; ?>"  <?php if($POST->action == "delete") print "readonly"; ?>></td>
+	    <td><input type="text" id="description" name="description" class="form-control input-sm"  value="<?php print _($agent->description); ?>"  <?php if($POST->action == "delete") print "readonly"; ?>></td>
        	<td class="info2"><?php print _('Agent description'); ?></td>
     </tr>
 

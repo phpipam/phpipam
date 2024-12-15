@@ -55,4 +55,4 @@ else {
     <?php } ?>
 </div>
 
-<div class="pFooter"><button class="btn btn-sm btn-default hidePopup2">Close</button></div>
+<div class="pFooter"><button class="btn btn-sm btn-default hidePopup2"><?php print _("Close");?></button></div>

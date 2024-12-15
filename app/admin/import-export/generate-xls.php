@@ -55,8 +55,8 @@ $colSize = 8 + $myFieldsSize;
 //formatting headers
 $format_header = $workbook->addFormat();
 $format_header->setBold();
-$format_header->setColor('white');
-$format_header->setFgColor('black');
+$format_header->setColor(_('white'));
+$format_header->setFgColor(_('black'));
 
 //formatting titles
 $format_title = $workbook->addFormat();

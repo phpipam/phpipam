@@ -45,7 +45,7 @@ else {
 		$ac++;	// for ids
 
 		print "<tr>";
-		print "	<td colspan='7' class='th'>$ac.) $a->name ($a->description) :: $a->type</td>";
+		print "	<td colspan='7' class='th'>$ac.) "._($a->name)." "._($a->description)." :: "._($a->type)."</td>";
 		print "</tr>";
 
 		# fetch all scanned subnets

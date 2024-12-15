@@ -53,7 +53,7 @@ if ($User->get_module_permissions ("pdns")>=User::ACCESS_R) {
         	}
 
         	// check
-        	if(!in_array($GET->subnetId, $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
+        	if(!in_array($GET->subnetId, $tabs)) 	{ $Result->show("danger", _("Invalid request"), true); }
 
         	// print
         	foreach($tabs as $t) {
@@ -75,7 +75,7 @@ if ($User->get_module_permissions ("pdns")>=User::ACCESS_R) {
         }
 
         // include file
-        if(!file_exists(dirname(__FILE__) . '/'.$filename)) 	{ $Result->show("danger", "Invalid request", true); }
+        if(!file_exists(dirname(__FILE__) . '/'.$filename)) 	{ $Result->show("danger", _("Invalid request"), true); }
         else													{ include(dirname(__FILE__) . '/'.$filename); }
         ?>
         </div>

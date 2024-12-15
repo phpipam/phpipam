@@ -76,6 +76,6 @@ print "<hr>";
 print "<div class='text-right'>";
 print "<h5>"._('Circuit Type Legend')."</h5>";
 foreach($circuit_types as $t){
-    print "<span class='badge badge1'  style='color:white;background:$t->ctcolor !important'></i>$t->ctname ($t->ctpattern Line)</span>";
+    print "<span class='badge badge1'  style='color:white;background:$t->ctcolor !important'></i>"._($t->ctname)." ".tr_("(%s Line)",_($t->ctpattern ))."</span>";
 }
 print "</div>";

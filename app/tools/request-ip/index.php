@@ -18,7 +18,16 @@ $User->check_user_session();
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print _('IP request form');?></div>
+<div class="pHeader">
+    <?php 
+    // 在标题下方显示调试信息
+    print "<div style='font-size:10px;color:#666;'>";
+    print "Accept-Language: " . $_SERVER['HTTP_ACCEPT_LANGUAGE'] . "<br>";
+    print "Current locale: " . setlocale(LC_ALL, 0) . "<br>";
+    print "</div>";
+    print _('IP request form');
+    ?>
+</div>
 
 <!-- content -->
 <div class="pContent editIPAddress">
@@ -75,8 +84,8 @@ $User->check_user_session();
 			# default tag
 			$request['state'] = "2";
 			foreach($states as $s) {
-				if ($request['state']==$s['id'])	{ print "<option value='$s[id]' selected='selected'>$s[type]</option>"; }
-				else								{ print "<option value='$s[id]'>$s[type]</option>"; }
+				if ($request['state']==$s['id'])	{ print "<option value='$s[id]' selected='selected'>"._($s['type'])."</option>"; }
+				else								{ print "<option value='$s[id]'>"._($s['type'])."</option>"; }
 			}
 			?>
 			</select>
@@ -136,4 +145,11 @@ $User->check_user_session();
 	<button class="btn btn-sm btn-default" id="requestIPAddressSubmit"><?php print _('Request IP');?></button>
 	<!-- result  -->
 	<div id="requestIPresult"></div>
+	<!-- debug info -->
+	<div style="margin-top:10px;font-size:10px;color:#666;">
+	<?php
+	print "Accept-Language: " . $_SERVER['HTTP_ACCEPT_LANGUAGE'] . "<br>";
+	print "Current locale: " . setlocale(LC_ALL, 0) . "<br>";
+	?>
+	</div>
 </div>

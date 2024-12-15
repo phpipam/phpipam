@@ -123,7 +123,7 @@ $(document).ready(function(){
 				<?php
 				foreach ($all_types as $type) {
 					$selected = $circuit->type == $type->id ? "selected" : "";
-					print "<option value='$type->id' $selected>$type->ctname</option>";
+					print "<option value='$type->id' $selected>"._($type->ctname)."</option>";
 				}
 				?>
 			</select>
@@ -145,7 +145,7 @@ $(document).ready(function(){
 			<select name="status" class="form-control input-w-auto input-sm">
 				<?php
 				// statuses array
-				$statuses = array ("Active", "Inactive", "Reserved");
+				$statuses = array (_("Active"), _("Inactive"), _("Reserved"));
 
 				foreach ($statuses as $v) {
 					$selected = $circuit->status == $v ? "selected" : "";
