@@ -12,6 +12,7 @@
 # "Content-Type: text/plain; charset=UTF-8\n"
 # "Content-Transfer-Encoding: 8bit\n"
 
+
 #: /var/www/phpipam/js/bootstrap-switch.min.js:10
 msgid "ON"
 msgstr "开"
@@ -1321,7 +1322,7 @@ msgstr "子网权限设置"
 #: /var/www/phpipam/app/admin/powerDNS/record-edit.php:40
 #: /var/www/phpipam/app/admin/powerDNS/record-edit.php:93
 #: /var/www/phpipam/app/admin/powerDNS/domain-edit.php:40
-#: /var/www/phpipam/app/admin/instructions/index.php:80
+#: /var/www/phpipam/app/admin/instructions/index.php:106
 #: /var/www/phpipam/app/admin/instructions/edit-result.php:55
 #: /var/www/phpipam/app/admin/nat/item-add-submit.php:26
 #: /var/www/phpipam/app/admin/nat/item-remove.php:29
@@ -5107,6 +5108,7 @@ msgstr "PSTN"
 #: /var/www/phpipam/app/tools/search/index.php:60
 #: /var/www/phpipam/app/tools/search/search-results-export.php:589
 #: /var/www/phpipam/app/tools/tools-menu-config.php:100
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:15
 #: /var/www/phpipam/app/sections/user-menu.php:61
 #: /var/www/phpipam/app/admin/custom-fields/index.php:28
 #: /var/www/phpipam/app/admin/admin-menu-config.php:36
@@ -6674,6 +6676,7 @@ msgstr "NAT"
 
 #: /var/www/phpipam/app/tools/devices/index.php:63
 #: /var/www/phpipam/app/tools/tools-menu-config.php:93
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:113
 #: /var/www/phpipam/app/admin/admin-menu-config.php:31
 msgid "PSTN prefixes"
 msgstr "PSTN 前缀"
@@ -7509,6 +7512,7 @@ msgstr "无 IPv6 租用"
 
 #: /var/www/phpipam/app/tools/dhcp/index.php:12
 #: /var/www/phpipam/app/tools/tools-menu-config.php:91
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:60
 #: /var/www/phpipam/app/sections/menu/menu-administration.php:63
 msgid "DHCP information"
 msgstr "DHCP 信息"
@@ -7832,6 +7836,7 @@ msgstr "模块已禁用"
 
 #: /var/www/phpipam/app/tools/vaults/all-vaults.php:13
 #: /var/www/phpipam/app/tools/tools-menu-config.php:96
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:133
 #: /var/www/phpipam/app/admin/custom-fields/index.php:31
 msgid "Vaults"
 msgstr "保管库"
@@ -8557,6 +8562,7 @@ msgstr "阅读 phpIPAM 文档"
 
 #: /var/www/phpipam/app/tools/tools-menu-config.php:79
 #: /var/www/phpipam/app/dashboard/widgets/tools.php:23
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:142
 msgid "Search database Addresses, subnets and VLANs"
 msgstr "搜索数据库地址、子网和 VLAN"
 
@@ -10489,14 +10495,17 @@ msgid "Show all subnets"
 msgstr "显示所有子网"
 
 #: /var/www/phpipam/app/dashboard/widgets/tools.php:28
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:24
 msgid "Show VLANs and belonging subnets"
 msgstr "显示 VLAN 和所属子网"
 
 #: /var/www/phpipam/app/dashboard/widgets/tools.php:30
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:33
 msgid "Show VRFs and belonging networks"
 msgstr "显示 VRF 和所属网络"
 
 #: /var/www/phpipam/app/dashboard/widgets/tools.php:32
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:78
 #: /var/www/phpipam/app/sections/menu/menu-administration.php:71
 msgid "Show all configured devices"
 msgstr "显示所有配置的设备"
@@ -11383,6 +11392,38 @@ msgstr "子网菜单"
 msgid "No sections available!"
 msgstr "无可用部分！"
 
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:42
+msgid "Nat translations"
+msgstr "NAT 转换"
+
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:51
+#: /var/www/phpipam/app/sections/menu/menu-administration.php:54
+msgid "powerDNS management"
+msgstr "PowerDNS 管理"
+
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:69
+#: /var/www/phpipam/app/sections/menu/menu-administration.php:106
+msgid "Show locations"
+msgstr "显示位置"
+
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:86
+#: /var/www/phpipam/app/sections/menu/menu-administration.php:79
+msgid "Show racks"
+msgstr "显示机柜"
+
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:95
+#: /var/www/phpipam/app/sections/menu/menu-administration.php:88
+msgid "Show circuits"
+msgstr "显示通信线路"
+
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:104
+msgid "Show routing"
+msgstr "显示路由"
+
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:123
+msgid "Show multicast subnets and mapping"
+msgstr "显示组播子网和映射"
+
 #: /var/www/phpipam/app/sections/menu/menu-tools.php:180
 #: /var/www/phpipam/app/sections/menu/menu-administration.php:136
 msgid "Show all sections"
@@ -11418,25 +11459,9 @@ msgstr "VRF 管理"
 msgid "NAT management"
 msgstr "NAT 管理"
 
-#: /var/www/phpipam/app/sections/menu/menu-administration.php:54
-msgid "powerDNS management"
-msgstr "PowerDNS 管理"
-
-#: /var/www/phpipam/app/sections/menu/menu-administration.php:79
-msgid "Show racks"
-msgstr "显示机柜"
-
-#: /var/www/phpipam/app/sections/menu/menu-administration.php:88
-msgid "Show circuits"
-msgstr "显示通信线路"
-
 #: /var/www/phpipam/app/sections/menu/menu-administration.php:97
 msgid "Show Routing"
 msgstr "显示路由"
-
-#: /var/www/phpipam/app/sections/menu/menu-administration.php:106
-msgid "Show locations"
-msgstr "显示位置"
 
 #: /var/www/phpipam/app/sections/menu/menu-administration.php:123
 #: /var/www/phpipam/app/sections/menu/menu-tools-admin.php:13
@@ -18111,11 +18136,11 @@ msgstr "用户指南"
 msgid "IP request instructions"
 msgstr "IP 申请指南"
 
-#: /var/www/phpipam/app/admin/instructions/index.php:66
+#: /var/www/phpipam/app/admin/instructions/index.php:92
 msgid "preview"
 msgstr "预览"
 
-#: /var/www/phpipam/app/admin/instructions/index.php:67
+#: /var/www/phpipam/app/admin/instructions/index.php:93
 msgid "Save instructions"
 msgstr "保存说明"
 
@@ -18861,14 +18886,5 @@ msgstr "否"
 msgid "yes"
 msgstr "是"
 
-#~ msgid "readonly"
-#~ msgstr "只读"
-
-#~ msgid "Nat translations"
-#~ msgstr "NAT 转换"
-
-#~ msgid "Show routing"
-#~ msgstr "显示路由"
-
-#~ msgid "Show multicast subnets and mapping"
-#~ msgstr "显示组播子网和映射"
+#~ msgid "You can write instructions under admin menu!"
+#~ msgstr "您可以在管理菜单下编写说明！"
