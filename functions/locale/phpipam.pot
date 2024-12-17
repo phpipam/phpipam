@@ -1308,7 +1308,7 @@ msgstr ""
 #: /var/www/phpipam/app/admin/powerDNS/record-edit.php:40
 #: /var/www/phpipam/app/admin/powerDNS/record-edit.php:93
 #: /var/www/phpipam/app/admin/powerDNS/domain-edit.php:40
-#: /var/www/phpipam/app/admin/instructions/index.php:80
+#: /var/www/phpipam/app/admin/instructions/index.php:106
 #: /var/www/phpipam/app/admin/instructions/edit-result.php:55
 #: /var/www/phpipam/app/admin/nat/item-add-submit.php:26
 #: /var/www/phpipam/app/admin/nat/item-remove.php:29
@@ -5088,6 +5088,7 @@ msgstr ""
 #: /var/www/phpipam/app/tools/search/index.php:60
 #: /var/www/phpipam/app/tools/search/search-results-export.php:589
 #: /var/www/phpipam/app/tools/tools-menu-config.php:100
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:15
 #: /var/www/phpipam/app/sections/user-menu.php:61
 #: /var/www/phpipam/app/admin/custom-fields/index.php:28
 #: /var/www/phpipam/app/admin/admin-menu-config.php:36
@@ -6644,6 +6645,7 @@ msgstr ""
 
 #: /var/www/phpipam/app/tools/devices/index.php:63
 #: /var/www/phpipam/app/tools/tools-menu-config.php:93
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:113
 #: /var/www/phpipam/app/admin/admin-menu-config.php:31
 msgid "PSTN prefixes"
 msgstr ""
@@ -7479,6 +7481,7 @@ msgstr ""
 
 #: /var/www/phpipam/app/tools/dhcp/index.php:12
 #: /var/www/phpipam/app/tools/tools-menu-config.php:91
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:60
 #: /var/www/phpipam/app/sections/menu/menu-administration.php:63
 msgid "DHCP information"
 msgstr ""
@@ -7802,6 +7805,7 @@ msgstr ""
 
 #: /var/www/phpipam/app/tools/vaults/all-vaults.php:13
 #: /var/www/phpipam/app/tools/tools-menu-config.php:96
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:133
 #: /var/www/phpipam/app/admin/custom-fields/index.php:31
 msgid "Vaults"
 msgstr ""
@@ -8526,6 +8530,7 @@ msgstr ""
 
 #: /var/www/phpipam/app/tools/tools-menu-config.php:79
 #: /var/www/phpipam/app/dashboard/widgets/tools.php:23
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:142
 msgid "Search database Addresses, subnets and VLANs"
 msgstr ""
 
@@ -10455,14 +10460,17 @@ msgid "Show all subnets"
 msgstr ""
 
 #: /var/www/phpipam/app/dashboard/widgets/tools.php:28
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:24
 msgid "Show VLANs and belonging subnets"
 msgstr ""
 
 #: /var/www/phpipam/app/dashboard/widgets/tools.php:30
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:33
 msgid "Show VRFs and belonging networks"
 msgstr ""
 
 #: /var/www/phpipam/app/dashboard/widgets/tools.php:32
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:78
 #: /var/www/phpipam/app/sections/menu/menu-administration.php:71
 msgid "Show all configured devices"
 msgstr ""
@@ -11339,6 +11347,38 @@ msgstr ""
 msgid "No sections available!"
 msgstr ""
 
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:42
+msgid "Nat translations"
+msgstr ""
+
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:51
+#: /var/www/phpipam/app/sections/menu/menu-administration.php:54
+msgid "powerDNS management"
+msgstr ""
+
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:69
+#: /var/www/phpipam/app/sections/menu/menu-administration.php:106
+msgid "Show locations"
+msgstr ""
+
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:86
+#: /var/www/phpipam/app/sections/menu/menu-administration.php:79
+msgid "Show racks"
+msgstr ""
+
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:95
+#: /var/www/phpipam/app/sections/menu/menu-administration.php:88
+msgid "Show circuits"
+msgstr ""
+
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:104
+msgid "Show routing"
+msgstr ""
+
+#: /var/www/phpipam/app/sections/menu/menu-tools.php:123
+msgid "Show multicast subnets and mapping"
+msgstr ""
+
 #: /var/www/phpipam/app/sections/menu/menu-tools.php:180
 #: /var/www/phpipam/app/sections/menu/menu-administration.php:136
 msgid "Show all sections"
@@ -11374,24 +11414,8 @@ msgstr ""
 msgid "NAT management"
 msgstr ""
 
-#: /var/www/phpipam/app/sections/menu/menu-administration.php:54
-msgid "powerDNS management"
-msgstr ""
-
-#: /var/www/phpipam/app/sections/menu/menu-administration.php:79
-msgid "Show racks"
-msgstr ""
-
-#: /var/www/phpipam/app/sections/menu/menu-administration.php:88
-msgid "Show circuits"
-msgstr ""
-
 #: /var/www/phpipam/app/sections/menu/menu-administration.php:97
 msgid "Show Routing"
-msgstr ""
-
-#: /var/www/phpipam/app/sections/menu/menu-administration.php:106
-msgid "Show locations"
 msgstr ""
 
 #: /var/www/phpipam/app/sections/menu/menu-administration.php:123
@@ -18014,11 +18038,11 @@ msgstr ""
 msgid "IP request instructions"
 msgstr ""
 
-#: /var/www/phpipam/app/admin/instructions/index.php:66
+#: /var/www/phpipam/app/admin/instructions/index.php:92
 msgid "preview"
 msgstr ""
 
-#: /var/www/phpipam/app/admin/instructions/index.php:67
+#: /var/www/phpipam/app/admin/instructions/index.php:93
 msgid "Save instructions"
 msgstr ""
 
