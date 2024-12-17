@@ -12,9 +12,18 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 	else                                          { header("Location: " . create_link("dashboard")); }
 	exit();
 }
+
 // disable requests module for public
 if(@$config['requests_public']===false) {
 	$User->settings->enableIPrequests = 0;
+}
+
+# set default language
+if(isset($User->settings->defaultLang) && !is_null($User->settings->defaultLang) ) {
+	# get global default language
+	$lang = $User->get_default_lang();
+	if (is_object($lang))
+		set_ui_language($lang->l_code);
 }
 ?>
 
@@ -51,6 +60,7 @@ if(@$config['requests_public']===false) {
 
 	<!-- js -->
 	<script src="js/jquery-3.7.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="functions/js-translations.php"></script>
 	<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/bootstrap.custom.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
@@ -72,9 +82,9 @@ if(@$config['requests_public']===false) {
 
 <!-- jQuery error -->
 <div class="jqueryError">
-	<div class='alert alert-danger' style="width:400px;margin:auto">jQuery error!</div>
+	<div class='alert alert-danger' style="width:400px;margin:auto"><?php print _('jQuery error!');?></div>
 	<div class="jqueryErrorText"></div><br>
-	<a href="<?php print create_link(null); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
+	<a href="<?php print create_link(null); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;"><?php print _('Hide');?></a>
 </div>
 
 <!-- Popups -->
@@ -84,7 +94,7 @@ if(@$config['requests_public']===false) {
 <div id="popup" class="popup popup_w700"></div>
 
 <!-- loader -->
-<div class="loading"><?php print _('Loading');?>...<br><i class="fa fa-spinner fa-spin"></i></div>
+<div class="loading"><?php print _("Loading");?>...<br><i class="fa fa-spinner fa-spin"></i></div>
 
 <!-- header -->
 <div class="row header-install" id="header">
@@ -112,16 +122,6 @@ if(@$config['requests_public']===false) {
 <!-- content -->
 <div class="content_overlay">
 <div class="container-fluid" id="mainContainer">
-
-	<?php
-	# set default language
-	if(isset($User->settings->defaultLang) && !is_null($User->settings->defaultLang) ) {
-		# get global default language
-		$lang = $User->get_default_lang();
-		if (is_object($lang))
-			set_ui_language($lang->l_code);
-	}
-	?>
 
 	<?php
 					# include proper subpage

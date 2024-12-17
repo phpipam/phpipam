@@ -154,7 +154,7 @@ if (isset($firewallZone->network)) {
 	foreach ($firewallZone->network as $network) {
 		print '<tr>';
 		if ($i === 1) {
-			print '<td rowspan="'.$rowspan.'" style="width:150px;vertical-align:top">Networks</td>';
+			print '<td rowspan="'.$rowspan.'" style="width:150px;vertical-align:top">'._("Networks").'</td>';
 		}
 		print '<td>';
 		print '<a class="btn btn-xs btn-danger editNetwork" style="margin-right:5px;" alt="'._('Delete Network').'" title="'._('Delete Network').'" data-action="delete" data-zoneId="'.$firewallZone->id.'" data-subnetId="'.$network->subnetId.'">';

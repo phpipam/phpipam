@@ -3474,7 +3474,7 @@ class Subnets extends Common_functions {
 			$truncated = $net['truncated'];
 
 			if (count($subnets) == 0) continue;
-			$html[] = "<li class='disabled'>Subnet Mask: $prefix</li>";
+			$html[] = "<li class='disabled'>"._("Subnet Mask").": $prefix</li>";
 			foreach ($subnets as $cidr) {
 				$html[] = "<li><a href='' data-cidr='$cidr'>- $cidr</a></li>";
 			}

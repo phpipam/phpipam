@@ -64,7 +64,7 @@ $values = array(
 
 # update domain
 if(!$Admin->object_modify("vlanDomains", $POST->action, "id", $values))	{}
-else { $Result->show("success", _("Domain")." ".$User->get_post_action()." "._("successful").'!', false); }
+else { $Result->show("success", tr_("Domain %s successful !",_($User->get_post_action())), false); }
 
 # if delete move all vlans to default domain!
 if($POST->action=="delete") {

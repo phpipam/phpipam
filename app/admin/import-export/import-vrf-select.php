@@ -41,7 +41,7 @@ foreach($expfields as $std_field) {
 	$res[$field['Field']]['Default'] = $field['Default'];
 
 	#prebuild template table rows to avoid useless foreach loops
-	$tpl_field_names.= "<th>".$field['Field'].$msgr."</th>";
+	$tpl_field_names.= "<th>"._($field['Field']).$msgr."</th>";
 	$tpl_field_types.= "<td><small>". wordwrap($field['Type'],18,"<br>\n",true) ."</small></td>";
 }
 

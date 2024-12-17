@@ -2086,7 +2086,7 @@ class Common_functions  {
 		$get = $this->strip_input_tags($get);
 		// init
 		$title = array();
-		$title[] = $this->settings->siteTitle;
+		$title[] = _($this->settings->siteTitle);
 
 		// page
 		if (isset($get['page'])) {
@@ -2096,7 +2096,7 @@ class Common_functions  {
 			}
 			// install, upgrade
 			elseif ($get['page'] == "temp_share" || $get['page'] == "request_ip" || $get['page'] == "opensearch") {
-				$title[] = ucwords(escape_input($get['page']));
+				$title[] = ucwords(escape_input(_($get['page'])));
 			}
 			// sections, subnets
 			elseif ($get['page'] == "subnets" || $get['page'] == "folder") {
@@ -2107,7 +2107,7 @@ class Common_functions  {
 				if (isset($get['section'])) {
 					$se = $this->fetch_object("sections", "id", $get['section']);
 					if ($se !== false) {
-						$title[] = $se->name;
+						$title[] = _($se->name);
 					}
 				}
 				// subnet
@@ -2115,9 +2115,9 @@ class Common_functions  {
 					$sn = $this->fetch_object("subnets", "id", $get['subnetId']);
 					if ($sn !== false) {
 						if ($sn->isFolder) {
-							$title[] = $sn->description;
+							$title[] = _($sn->description);
 						} else {
-							$sn->description = !is_blank($sn->description) ? " (" . $sn->description . ")" : "";
+							$sn->description = !is_blank($sn->description) ? " (" . _($sn->description) . ")" : "";
 							$title[] = $this->transform_address($sn->subnet, "dotted") . "/" . $sn->mask . $sn->description;
 						}
 					}
@@ -2132,13 +2132,13 @@ class Common_functions  {
 			}
 			// tools, admin
 			elseif ($get['page'] == "tools" || $get['page'] == "administration") {
-				$title[] = ucwords(escape_input($get['page']));
+				$title[] = _(ucwords(escape_input($get['page'])));
 				// subpage
 				if (isset($get['section'])) {
 					if (in_array($get['section'], ["vlan", "vlans", "vrf"])) {
-						$title[] = strtoupper(escape_input($get['section']));
+						$title[] = strtoupper(escape_input(_($get['section'])));
 					} else {
-						$title[] = ucwords(escape_input($get['section']));
+						$title[] = ucwords(escape_input(_($get['section'])));
 					}
 				}
 				if (isset($get['subnetId'])) {
@@ -2194,7 +2194,7 @@ class Common_functions  {
 							$title[] = $vault->name;
 						}
 					} elseif ($get['section'] == "routing") {
-						$title[] = ucwords(escape_input($get['subnetId']));
+						$title[] = ucwords(escape_input(_($get['subnetId'])));
 						if ($get['subnetId'] == "bgp") {
 							if (isset($get['sPage'])) {
 								$peer = $this->fetch_object("routing_bgp", "id", $get['sPage']);
@@ -2209,11 +2209,11 @@ class Common_functions  {
 							$title[] = $nat->name;
 						}
 					} else {
-						$title[] = ucwords(escape_input($get['subnetId']));
+						$title[] = ucwords(escape_input(_($get['subnetId'])));
 					}
 				}
 			} else {
-				$title[] = ucwords(escape_input($get['page']));
+				$title[] = ucwords(escape_input(_($get['page'])));
 			}
 		}
 		// return title

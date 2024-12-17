@@ -48,7 +48,7 @@ $(document).on('change', "select#dataType", function() {
 		<td colspan="2">
 			<div class="btn-group">
 				<button class='dataImport btn btn-sm btn-default' rel='tooltip' data-placement='bottom' title='<?php print _('Import data entries for the selected type'); ?>'><i class='fa fa-download'></i> <?php print _('Import'); ?></button>
-				<button class='dataExport btn btn-sm btn-default' rel='tooltip' data-placement='bottom' title='<?php print _('Export data entries for the selected type'); ?>'><i class='fa fa-upload'></i> <?php print _('Export'); ?></button>
+				<button class='dataExport btn btn-sm btn-default' rel='tooltip' data-placement='bottom' title='<?php print _('Export data entries for the selected type'); ?>'><i class='fa fa-upload'></i> <?php print _(' Export'); ?></button>
 			</div>
 			<button class="dataRecompute btn btn-sm btn-default" id="dataRecompute" style="display: none;" rel='tooltip' data-placement='bottom' title='<?php print _('Recompute master/nested subnet relations.'); ?>'><i class="fa fa-magic"></i> <?php print _('Recompute'); ?></button>
 		</td>

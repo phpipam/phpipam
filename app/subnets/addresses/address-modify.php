@@ -119,15 +119,15 @@ $locations = $Tools->fetch_all_objects ("locations", "name");
 $(document).ready(function() {
 /* bootstrap switch */
 var switch_options = {
-	onText: "Yes",
-	offText: "No",
+	onText: <?php print json_encode(_("Yes")); ?>,
+	offText: <?php print json_encode(_("No")); ?>,
     onColor: 'default',
     offColor: 'default',
     size: "mini"
 };
 var switch_options_danger = {
-	onText: "Yes",
-	offText: "No",
+	onText: <?php print json_encode(_("Yes")); ?>,
+	offText: <?php print json_encode(_("No")); ?>,
     onColor: 'danger',
     offColor: 'default',
     size: "mini"
@@ -253,7 +253,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 			?>
 		</td>
 		<td>
-			<input type="text" name="description" class="ip_addr form-control input-sm" value="<?php if(isset($address['description'])) {print $address['description'];} ?>" size="30"
+			<input type="text" name="description" class="ip_addr form-control input-sm" value="<?php if(isset($address['description'])) {print _($address['description']);} ?>" size="30"
 			<?php if ( $act == "delete" ) { print " readonly";} ?>
 			placeholder="<?php print _('Description'); ?>">
 		</td>
@@ -571,13 +571,22 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 		if(!isset($address['note'])) {$address['note'] = "";}
 
+		// Process autodiscovered note localization
+		$autodiscover_string = 'This host was autodiscovered on';
+		if (strpos($address['note'], $autodiscover_string) === 0) {
+			// Extract datetime part
+			$datetime = substr($address['note'], strlen($autodiscover_string));
+			// Combine localized text with original datetime
+			$address['note'] = _($autodiscover_string) . $datetime;
+		}
+
 		// set star if field is required
 		$required = in_array("note", $required_ip_fields) ? " *" : "";
 
 		print '<tr>'. "\n";
 		print '	<td>'._('Note').$required.'</td>'. "\n";
 		print '	<td class="note">'. "\n";
-		print ' <textarea name="note" class="ip_addr form-control input-sm" cols="23" rows="2" placeholder="'._('Additional notes about IP address').'" '.$delete.'>'. $address['note'] . '</textarea>'. "\n";
+		print ' <textarea name="note" class="ip_addr form-control input-sm" cols="23" rows="2" placeholder="'.tr_('Additional notes about IP address').'" '.$delete.'>'. _($address['note']) . '</textarea>'. "\n";
 		print '	</td>'. "\n";
 		print '</tr>'. "\n";
 	}

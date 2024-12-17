@@ -52,22 +52,22 @@ foreach ($data as &$cdata) {
 
 		if ($cdata['result']) {
 			$trc = $colors[$cdata['action']];
-			$msg = "VRF ".$cdata['action']." successful.";
+			$msg = tr_("VRF %s successful.",_($cdata['action']));
 		} else {
 			$trc = "danger";
-			$msg = "VRF ".$cdata['action']." failed.";
+			$msg = tr_("VRF %s failed.",_($cdata['action']));
 		}
-		$rows.="<tr class='".$trc."'><td><i class='fa ".$icons[$cdata['action']]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>
+		$rows.="<tr class='".$trc."'><td><i class='fa ".$icons[$cdata['action']]."' rel='tooltip' data-placement='bottom' title='".$msg."'></i></td>
 			<td>".$cdata['name']."</td>
 			<td>".$cdata['rd']."</td>
 			<td>".$cdata['description']."</td>
 			".$cfieldtds."
-			<td>"._($msg)."</td></tr>";
+			<td>".$msg."</td></tr>";
 	}
 }
 
 print "<table class='table table-condensed table-hover' id='resultstable'><tbody>";
-print "<tr class='active'>".$hrow."<th>Result</th></tr>";
+print "<tr class='active'>".$hrow."<th>"._("Result")."</th></tr>";
 print $rows;
 print "</tbody></table><br>";
 ?>

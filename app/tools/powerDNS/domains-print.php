@@ -31,7 +31,7 @@ switch ($type) {
         break;
     // error
     default:
-        $Result->show("danger", "Invalid request", true);
+        $Result->show("danger", _("Invalid request"), true);
         break;
 }
 
@@ -144,7 +144,7 @@ foreach ($domains as $d) {
 
     // content
     print "	<td><a href='" . create_link("tools", "powerDNS", $GET->subnetId, "records", $d->name) . "'>$d->name</a></td>";
-    print "	<td><span class='badge badge1'>$d->type</span></td>";
+    print "	<td><span class='badge badge1'>"._($d->type)."</span></td>";
     print "	<td>$d->master</td>";
     print "	<td><span class='badge'>$cnt</span></td>";
     print "	<td>$serial</td>";

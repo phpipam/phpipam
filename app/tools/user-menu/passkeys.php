@@ -39,10 +39,10 @@ else {
 		$Result->show("warning alert-absolute", _("You can login to your account with with passkeys only").".<hr>"._("This can be changed under Account details tab").".");
 	}
 	elseif($User->user->passkey_only=="1") {
-		$Result->show("warning alert-absolute", _("You can login to your account with normal authentication method only untill you create passkeys".".<hr>"._("This can be changed under Account details tab.")));
+		$Result->show("warning alert-absolute", _("You can login to your account with normal authentication method only untill you create passkeys").".<hr>"._("This can be changed under Account details tab."));
 	}
 	else {
-		$Result->show("warning alert-absolute", _("You can login to your account with normal authentication method or with passkeys".".<hr>"._("This can be changed under Account details tab.")));
+		$Result->show("warning alert-absolute", _("You can login to your account with normal authentication method or with passkeys").".<hr>"._("This can be changed under Account details tab."));
 	}
 	print "<div class='clearfix'></div>";
 
@@ -55,9 +55,9 @@ else {
 		foreach ($user_passkeys as $passkey) {
 
 			// format last used and created
-			$created          = date("M d, Y", strtotime($passkey->created));
-			$last_used        = is_null($passkey->used) ? _("Never") : date("M d, Y", strtotime($passkey->used));
-			$passkey->comment = is_null($passkey->comment) ? "-- Unknown --" : $passkey->comment;
+			$created          = date("Y-m-d", strtotime($passkey->created));
+			$last_used        = is_null($passkey->used) ? _("Never") : date("Y-m-d", strtotime($passkey->used));
+			$passkey->comment = is_null($passkey->comment) ? _("-- Unknown --") : $passkey->comment;
 			$this_browser	  = $passkey->keyId == @$_SESSION['keyId'] ? "<span class='badge' style='margin-bottom:2px;margin-left:10px;'>"._("You authenticated with this passkey")."</span>" : "";
 
 			print '<li class="list-group-item">';
@@ -198,13 +198,13 @@ const startRegister = async (e) => {
     		});
         }
         else {
-            $('#loginCheckPasskeys').html("<div class='alert alert-danger'>Failed to register new passkey. <strong>Error : </strong>"+result.statusText+"</div>");
+            $('#loginCheckPasskeys').html("<div class='alert alert-danger'><?php print _("Failed to register new passkey.");?><strong>'<?php print _("Error :");?> '</strong>"+result.statusText+"</div>");
             console.log(result)
             $('div.loading').hide();
         }
 	}
 	catch(err) {
-		$('#loginCheckPasskeys').html("<div class='alert alert-danger'>Failed to register new passkey.</div>");
+		$('#loginCheckPasskeys').html("<div class='alert alert-danger'><?php print _("Failed to register new passkey.");?></div>");
 		console.log(err);
 	}
 }

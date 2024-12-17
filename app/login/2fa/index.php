@@ -46,6 +46,7 @@ if ($User->twofa_required()===false || $User->user->{'2fa'}==0) {
 
 	<!-- js -->
 	<script src="js/jquery-3.7.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="functions/js-translations.php"></script>
 	<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/bootstrap.custom.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
@@ -67,9 +68,9 @@ if ($User->twofa_required()===false || $User->user->{'2fa'}==0) {
 
 <!-- jQuery error -->
 <div class="jqueryError">
-	<div class='alert alert-danger' style="width:400px;margin:auto">jQuery error!</div>
+	<div class='alert alert-danger' style="width:400px;margin:auto"><?php print _('jQuery error!');?></div>
 	<div class="jqueryErrorText"></div><br>
-	<a href="<?php print create_link(null); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
+	<a href="<?php print create_link(null); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;"><?php print _('Hide');?></a>
 </div>
 
 <!-- Popups -->

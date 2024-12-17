@@ -134,8 +134,8 @@ if(in_array('firewallAddressObject', $selected_ip_fields)) {
 <h4 style="margin-top:40px;">
 <?php
 if($location==="customers") {}
-elseif(!$slaves)		{ print _("IP addresses in")." $location "; }
-elseif(@$orphaned)	{ print "<div class='alert alert-warning alert-block'>"._('Orphaned IP addresses for subnet')." <strong>$subnet[description]</strong> (".sizeof($addresses)." orphaned) <br><span class='text-muted' style='font-size:12px;margin-top:10px;'>"._('This happens if subnet contained IP addresses when new child subnet was created')."'<span><hr><a class='btn btn-sm btn-default' id='truncate' href='' data-subnetid='".$subnet['id']."'><i class='fa fa-times'></i> "._("Remove all")."</a></div>"; }
+elseif(!$slaves)		{ print tr_("IP addresses in %s" ,_($location)); }
+elseif(@$orphaned)	{ print "<div class='alert alert-warning alert-block'>"._('Orphaned IP addresses for subnet')." <strong>$subnet[description]</strong> (".sizeof($addresses)." "._("orphaned").") <br><span class='text-muted' style='font-size:12px;margin-top:10px;'>"._('This happens if subnet contained IP addresses when new child subnet was created')."'<span><hr><a class='btn btn-sm btn-default' id='truncate' href='' data-subnetid='".$subnet['id']."'><i class='fa fa-times'></i> "._("Remove all")."</a></div>"; }
 else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 ?>
 </h4>
@@ -249,7 +249,7 @@ else {
         		if($zone) {
         			print "	<td class=fw'>".$addresses[$n]->firewallAddressObject."</td>";
         		}
-        		print "	<td>".$addresses[$n]->description."</td>";
+        		print "	<td>"._($addresses[$n]->description)."</td>";
         		if($colspan['dhcp']!=0)
         		print "	<td colspan='$colspan[dhcp]' class='unused'></td>";
 			    // tr ends after!
@@ -394,7 +394,7 @@ else {
 				}
 
 				# print description - mandatory
-	        													  		  print "<td class='description'>".$addresses[$n]->description."</td>";
+	        													  		  print "<td class='description'>"._($addresses[$n]->description)."</td>";
 				# Print mac address icon!
 				if(in_array('mac', $selected_ip_fields)) {
                     # normalize MAC address
@@ -444,8 +444,20 @@ else {
 
 	       		# print info button for hover
 	       		if(in_array('note', $selected_ip_fields)) {
-	        		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", escape_input($addresses[$n]->note))."'></i></td>"; }
-	        		else 												{ print "<td class='narrow'></td>"; }
+	        		if(!empty($addresses[$n]->note)) {
+						// Process autodiscovered note localization
+						$autodiscover_string = 'This host was autodiscovered on';
+						if (strpos($addresses[$n]->note, $autodiscover_string) === 0) {
+							// Extract datetime part
+							$datetime = substr($addresses[$n]->note, strlen($autodiscover_string));
+							// Combine localized text with original datetime
+							$addresses[$n]->note = tr_($autodiscover_string) . $datetime;
+						}
+						print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", escape_input($addresses[$n]->note))."'></i></td>";
+					}
+	        		else {
+						print "<td class='narrow'></td>";
+					}
 	        	}
 
 				# print device

@@ -60,8 +60,8 @@ $(document).ready(function(){
 	    onColor: 'default',
 	    offColor: 'default',
 	    size: "mini",
-	    onText: "Yes",
-	    offText: "No"
+		onText: <?php print json_encode(_("Yes")); ?>,
+		offText: <?php print json_encode(_("No")); ?>
 	};
 	$(".input-switch").bootstrapSwitch(switch_options);
 });
@@ -155,8 +155,8 @@ $(document).ready(function(){
 			<?php
 			foreach($auth_types as $type) {
 				# match
-				if($type->id==$user->authMethod)	{ print "<option value='$type->id' selected>$type->type ($type->description)</option>"; }
-				else								{ print "<option value='$type->id'         >$type->type ($type->description)</option>"; }
+				if($type->id==$user->authMethod)	{ print "<option value='$type->id' selected>"._($type->type)." "._(($type->description))."</option>"; }
+				else								{ print "<option value='$type->id'         >"._($type->type)." "._(($type->description))."</option>"; }
 			}
 			?>
 			</select>
@@ -337,7 +337,7 @@ $(document).ready(function(){
 					else 								{ print "<input type='checkbox' name='group$g->g_id'		>$g->g_name<br>"; }
 				}
 				else {
-														{ print "<input type='checkbox' name='group$g->g_id'>$g->g_name<br>"; }
+														{ print "<input type='checkbox' name='group$g->g_id'>"._($g->g_name)."<br>"; }
 				}
 			}
 		}

@@ -53,10 +53,10 @@ foreach ($data as &$cdata) {
 
 		if ($cdata['result']) {
 			$trc = $colors[$cdata['action']];
-			$msg = "VLAN ".$cdata['action']." successful.";
+			$msg = tr_("VLAN %s successful.",_($cdata['action']));
 		} else {
 			$trc = "danger";
-			$msg = "VLAN ".$cdata['action']." failed.";
+			$msg = tr_("VLAN %s failed.",_($cdata['action']));
 		}
 		$rows.="<tr class='".$trc."'><td><i class='fa ".$icons[$cdata['action']]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>
 			<td>".$cdata['name']."</td>
@@ -69,7 +69,7 @@ foreach ($data as &$cdata) {
 }
 
 print "<table class='table table-condensed table-hover' id='resultstable'><tbody>";
-print "<tr class='active'>".$hrow."<th>Result</th></tr>";
+print "<tr class='active'>".$hrow."<th>"._("Result")."</th></tr>";
 print $rows;
 print "</tbody></table><br>";
 ?>

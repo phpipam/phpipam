@@ -52,7 +52,7 @@ if($GET->subnetId!=0 && sizeof($device)>0) {
     	print "</tr>";
     	print '<tr>';
     	print "	<th>". _('Type').'</th>';
-    	print "	<td>$device_type->tname</td>";
+    	print "	<td>". _($device_type->tname).'</td>';
     	print "</tr>";
 
         if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>

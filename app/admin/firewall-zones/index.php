@@ -21,7 +21,7 @@ if($User->settings->enableFirewallZones==1) {
 <ul class="nav nav-tabs">
 	<?php
 	# tabs
-	$tabs = array("mapping", "zones", "settings");
+	$tabs = array("mapping", _("zones"), "settings");
 
 	# default tab
 	if(!isset($GET->subnetId)) {
@@ -29,7 +29,7 @@ if($User->settings->enableFirewallZones==1) {
 	}
 
 	# check
-	if(!in_array($GET->subnetId, $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
+	if(!in_array($GET->subnetId, $tabs)) 	{ $Result->show("danger", _("Invalid request"), true); }
 
 	# print
 	foreach($tabs as $t) {
@@ -42,7 +42,7 @@ if($User->settings->enableFirewallZones==1) {
 <div>
 <?php
 # include content
-if(!file_exists(dirname(__FILE__) . '/'.$GET->subnetId.".php")) 	{ $Result->show("danger", "Invalid request", true); }
+if(!file_exists(dirname(__FILE__) . '/'.$GET->subnetId.".php")) 	{ $Result->show("danger", _("Invalid request"), true); }
 else																{ include(dirname(__FILE__) . '/'.$GET->subnetId.".php"); }
 ?>
 </div>

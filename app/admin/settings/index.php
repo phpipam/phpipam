@@ -125,8 +125,8 @@ $(document).ready(function() {
 		<?php
 		//default
 		foreach($User->themes as $theme) {
-			if($theme==$settings['theme']) 	{ print "<option value='$theme' selected='selected'>$theme</option>"; }
-			else							{ print "<option value='$theme' 				   >$theme</option>"; }
+			if($theme==$settings['theme']) 	{ print "<option value='$theme' selected='selected'>"._($theme)."</option>"; }
+			else							{ print "<option value='$theme' 				   >"._($theme)."</option>"; }
 		}
 		?>
 		</select>

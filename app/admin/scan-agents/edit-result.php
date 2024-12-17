@@ -33,7 +33,7 @@ if ($POST->action=="edit" || $POST->action=="delete") {
 	// invalid id
 	if($agent_old===false)	{ $error[] = _("Invalid agent Id"); }
 	// remove type and code if direct
-	if (@$agent_old->type=="direct") {
+	if (@$agent_old->type==_("direct")) {
 		unset($POST->type, $POST->code);
 	}
 }
@@ -69,8 +69,8 @@ else {
 	$values = $Admin->remove_empty_array_fields ($values);
 
 	# execute
-	if(!$Admin->object_modify("scanAgents", $POST->action, "id", $values)) 	{ $Result->show("danger",  _("Agent " . $User->get_post_action() . " error"), true); }
-	else 																		{ $Result->show("success", _("Agent " . $User->get_post_action() . " success"), false); }
+	if(!$Admin->object_modify("scanAgents", $POST->action, "id", $values)) 	{ $Result->show("danger",  tr_("Agent %s error", _($User->get_post_action())), true); }
+	else 																		{ $Result->show("success", tr_("Agent %s success" , _($User->get_post_action())), false); }
 
 	# delete - unset scanning in all subnets
 	if ($POST->action=="delete") {

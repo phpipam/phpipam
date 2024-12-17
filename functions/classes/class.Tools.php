@@ -1768,29 +1768,29 @@ class Tools extends Common_functions {
         $out['Type']            = 'IPv4';
 
         # calculate network details
-        $out['IP address']      = $net->ip;        // 192.168.0.50
-        $out['Network']         = $net->network;   // 192.168.0.0
-        $out['Broadcast']       = $net->broadcast; // 192.168.255.255
-        $out['Subnet bitmask']  = $net->bitmask;   // 16
-        $out['Subnet netmask']  = $net->netmask;   // 255.255.0.0
-        $out['Subnet wildcard'] = long2ip(~ip2long($net->netmask));	//0.0.255.255
+        $out[_('IP address')]      = $net->ip;        // 192.168.0.50
+        $out[_('Network')]         = $net->network;   // 192.168.0.0
+        $out[_('Broadcast')]       = $net->broadcast; // 192.168.255.255
+        $out[_('Subnet bitmask')]  = $net->bitmask;   // 16
+        $out[_('Subnet netmask')]  = $net->netmask;   // 255.255.0.0
+        $out[_('Subnet wildcard')] = long2ip(~ip2long($net->netmask));	//0.0.255.255
 
         # calculate min/max IP address
-        $out['Min host IP']     = long2ip(ip2long($net->network) + 1);
-        $out['Max host IP']     = long2ip(ip2long($net->broadcast) - 1);
-        $out['Number of hosts'] = $Subnets->max_hosts(['subnet'=>$net->network, 'mask'=>$net->bitmask]);
+        $out[_('Min host IP')]     = long2ip(ip2long($net->network) + 1);
+        $out[_('Max host IP')]     = long2ip(ip2long($net->broadcast) - 1);
+        $out[_('Number of hosts')] = $Subnets->max_hosts(['subnet'=>$net->network, 'mask'=>$net->bitmask]);
 
         # subnet class
-        $out['Subnet Class']    = $this->get_ipv4_address_type($net->network, $net->broadcast);
+        $out[_('Subnet Class')]    = $this->get_ipv4_address_type($net->network, $net->broadcast);
 
         # if IP == subnet clear the Host fields
-        if ($out['IP address'] == $out['Network']) {
-            $out['IP address'] = "/";
+        if ($out[_('IP address')] == $out[_('Network')]) {
+            $out[_('IP address')] = "/";
         }
         # /32 and /32 fixes
         if($net->bitmask==31 || $net->bitmask==32) {
-			$out['Min host IP'] = $out['Network'];
-			$out['Max host IP'] = $out['Broadcast'];
+			$out[_('Min host IP')] = $out[_('Network')];
+			$out[_('Max host IP')] = $out[_('Broadcast')];
         }
 		# result
 		return $out;
@@ -1830,19 +1830,19 @@ class Tools extends Common_functions {
 	private function define_ipv4_address_types () {
 	    # define classes
 	    $classes = array();
-	    $classes['private A']          = '10.0.0.0/8';
-	    $classes['private B']          = '172.16.0.0/12';
-	    $classes['private C']          = '192.168.0.0/16';
-	    $classes['Loopback']           = '127.0.0.0/8';
-	    $classes['Link-local']         = '169.254.0.0/16';
-	    $classes['Reserved (IANA)']    = '192.0.0.0/24';
+	    $classes[_('private A')]          = '10.0.0.0/8';
+	    $classes[_('private B')]          = '172.16.0.0/12';
+	    $classes[_('private C')]          = '192.168.0.0/16';
+	    $classes[_('Loopback')]           = '127.0.0.0/8';
+	    $classes[_('Link-local')]         = '169.254.0.0/16';
+	    $classes[_('Reserved (IANA)')]    = '192.0.0.0/24';
 	    $classes['TEST-NET-1']         = '192.0.2.0/24';
-	    $classes['IPv6 to IPv4 relay'] = '192.88.99.0/24';
-	    $classes['Network benchmark']  = '198.18.0.0/15';
+	    $classes[_('IPv6 to IPv4 relay')] = '192.88.99.0/24';
+	    $classes[_('Network benchmark')]  = '198.18.0.0/15';
 	    $classes['TEST-NET-2']         = '198.51.100.0/24';
 	    $classes['TEST-NET-3']         = '203.0.113.0/24';
-	    $classes['Multicast']          = '224.0.0.0/4';
-	    $classes['Reserved']           = '240.0.0.0/4';
+	    $classes[_('Multicast')]          = '224.0.0.0/4';
+	    $classes[_('Reserved')]           = '240.0.0.0/4';
 	    # result
 	    return $classes;
 	}
@@ -1865,24 +1865,24 @@ class Tools extends Common_functions {
         $out['Type']                      = 'IPv6';
 
         # calculate network details
-        $out['Host address']              = $cidr;
+        $out[_('Host address')]              = $cidr;
         $out['Host address']              = $this->Net_IPv6->compress ( $out['Host address'], 1 );
-        $out['Host address (uncompressed)'] = $this->Net_IPv6->uncompress ( $out['Host address'] );
+        $out[_('Host address (uncompressed)')] = $this->Net_IPv6->uncompress ( $out['Host address'] );
 
         $mask                             = $this->Net_IPv6->getNetmaskSpec( $cidr );
         $subnet                           = $this->Net_IPv6->getNetmask( $cidr );
-        $out['Subnet prefix']             = $this->Net_IPv6->compress ( $subnet ) .'/'. $mask;
-        $out['Prefix length']             = $this->Net_IPv6->getNetmaskSpec( $cidr );
+        $out[_('Subnet prefix')]             = $this->Net_IPv6->compress ( $subnet ) .'/'. $mask;
+        $out[_('Prefix length')]             = $this->Net_IPv6->getNetmaskSpec( $cidr );
 
         # get reverse DNS entries
-        $out['Host Reverse DNS']   = $this->reverse_IPv6($out['Host address (uncompressed)']);
-        $out['Subnet Reverse DNS'] = $this->reverse_IPv6($subnet, $mask);
+        $out[_('Host Reverse DNS')]   = $this->reverse_IPv6($out[_('Host address (uncompressed)')]);
+        $out[_('Subnet Reverse DNS')] = $this->reverse_IPv6($subnet, $mask);
 
         # if IP == subnet clear the Host fields and Host Reverse DNS
-         if ($out['Host address'] == $out['Subnet prefix']) {
-             $out['Host address']                = '/';
-             $out['Host address (uncompressed)'] = '/';
-             unset($out['Host Reverse DNS']);
+         if ($out[_('Host address')] == $out[_('Subnet prefix')]) {
+             $out[_('Host address')]                = '/';
+             $out[_('Host address (uncompressed)')] = '/';
+             unset($out[_('Host Reverse DNS')]);
         }
 
         # /min / max hosts
@@ -1890,12 +1890,12 @@ class Tools extends Common_functions {
         $minIp = $Subnets->decimal_network_address($longIp, $mask);
         $maxIp = $Subnets->decimal_broadcast_address($longIp, $mask);
 
-        $out['Min host IP']               = $this->transform_to_dotted ($minIp);
-        $out['Max host IP']               = $this->transform_to_dotted ($maxIp);
-        $out['Number of hosts']           = $Subnets->max_hosts(['subnet'=>$subnet, 'mask'=>$mask]);
+        $out[_('Min host IP')]               = $this->transform_to_dotted ($minIp);
+        $out[_('Max host IP')]               = $this->transform_to_dotted ($maxIp);
+        $out[_('Number of hosts')]           = $Subnets->max_hosts(['subnet'=>$subnet, 'mask'=>$mask]);
 
         # set address type
-        $out['Address type']              = $this->get_ipv6_address_type( $cidr );
+        $out[_('Address type')]              = $this->get_ipv6_address_type( $cidr );
 		# result
 		return $out;
 	}
@@ -2174,7 +2174,7 @@ class Tools extends Common_functions {
         $html = array();
         $html[] = "<tr>";
         $html[] = "<td colspan='4'>";
-        $html[] = "<span class='badge badge1 badge5'>".ucwords($n->type)."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
+        $html[] = "<span class='badge badge1 badge5'>"._(ucwords($n->type))."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
         $html[] = "<span class='pull-right'>";
         $html[] = $actions_menu;
         $html[] = "</span>";

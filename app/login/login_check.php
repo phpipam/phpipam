@@ -12,11 +12,20 @@
 /* functions */
 require_once( dirname(__FILE__) . '/../../functions/functions.php' );
 
+
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Result 	= new Result ();
 $Log 		= new Logging ($Database);
+
+# set default language
+if(isset($User->settings->defaultLang) && !is_null($User->settings->defaultLang) ) {
+    # get global default language
+    $lang = $User->get_default_lang();
+    if (is_object($lang))
+        set_ui_language($lang->l_code);
+}
 
 # Authenticate
 if( !empty($POST->ipamusername) && !empty($POST->ipampassword) )  {

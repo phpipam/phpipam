@@ -71,6 +71,6 @@ print '</form>';
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="vrf"><i class="fa fa-upload"></i> <?php print _('Export'); ?></button>
+		<button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="vrf"><i class="fa fa-upload"></i> <?php print _(' Export'); ?></button>
 	</div>
 </div>

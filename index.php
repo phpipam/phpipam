@@ -55,7 +55,7 @@ else {
 		if($GET->switch && $_SESSION['realipamusername'] && $GET->switch == "back"){
 			$_SESSION['ipamusername'] = $_SESSION['realipamusername'];
 			unset($_SESSION['realipamusername']);
-			print	'<script>window.location.href = "'.create_link(null).'";</script>';
+			print	'<script>window.location.href = "'._create_link(null).'";</script>';
 		}
 
 		# set default pagesize
@@ -91,7 +91,7 @@ else {
 		<title><?php print $title; ?></title>
 
 		<!-- OpenSearch -->
-		<link rel="search" type="application/opensearchdescription+xml" href="/?page=opensearch" title="Search <?php print $User->settings->siteTitle; ?>">
+		<link rel="search" type="application/opensearchdescription+xml" href="/?page=opensearch" title="<?php print _('Search'); print $User->settings->siteTitle; ?>">
 
 		<!-- css -->
 		<link rel="shortcut icon" type="image/png" href="css/images/favicon.png?v=<?php print SCRIPT_PREFIX; ?>">
@@ -110,6 +110,7 @@ else {
 
 		<!-- js -->
 		<script src="js/jquery-3.7.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="functions/js-translations.php"></script>
 		<script src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php if($GET->page=="login" || $GET->page=="request_ip") { ?>
 		<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
@@ -160,9 +161,9 @@ else {
 
 	<!-- jQuery error -->
 	<div class="jqueryError">
-		<div class='alert alert-danger' style="width:450px;margin:auto">jQuery error!
+		<div class='alert alert-danger' style="width:450px;margin:auto"><?php print _('jQuery error!');?>
 		<div class="jqueryErrorText"></div><br>
-		<a href="<?php print create_link(null); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
+		<a href="<?php print create_link(null); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;"><?php print _('Hide');?></a>
 		</div>
 	</div>
 

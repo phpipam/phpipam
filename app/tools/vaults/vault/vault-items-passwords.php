@@ -58,7 +58,7 @@ if($passwords!==false) {
 		print "	<td><i class='fa fa-warning' style='width:20px;'></i> <span>********</span></td>";
 		}
 		else {
-		print "	<td><i class='fa fa-eye passShow' style='width:20px;' rel='tooltip' title='Show password' data-pass='".$values['password']."'></i> <span>********</span></td>";
+		print "	<td><i class='fa fa-eye passShow' style='width:20px;' rel='tooltip' title='"._("Show password")."' data-pass='".$values['password']."'></i> <span>********</span></td>";
 		}
 		print "	<td class='hidden-sm'>".$values['description']."</td>";
 
@@ -103,14 +103,14 @@ $(document).ready(function () {
 //show pass
 $(document).on("click", ".fa-eye.passShow", function () {
 	$(this).removeClass('fa-eye').addClass('fa-lock');
-	$(this).attr('data-original-title', "Hide password");
+	$(this).attr('data-original-title', <?php print json_encode(_("Hide password"));?>);
 	$(this).next().next().html($(this).attr("data-pass"))
 })
 
 // hide pass
 $(document).on("click", ".fa-lock.passShow", function () {
 	$(this).removeClass('fa-lock').addClass('fa-eye');
-	$(this).attr('data-original-title', "Show password");
+	$(this).attr('data-original-title', <?php print json_encode(_("Show password"));?>);
 	$(this).next().next().html("********")
 })
 

@@ -101,8 +101,8 @@ if($groups) {
 
 		print '<tr>' . "\n";
 		print '	<td>';
-		print '		<span class="badge badge1 badge-white">' . $g['g_name'] . '</span><br>'. "\n";
-		print '		<span class="muted">' . $g['g_desc'] . '</span></td>'. "\n";
+		print '		<span class="badge badge1 badge-white">' . _($g['g_name']) . '</span><br>'. "\n";
+		print '		<span class="muted">' . _($g['g_desc']) . '</span></td>'. "\n";
 		# users in group
 		print "	<td>";
 		$u = $Admin->group_fetch_users($g['g_id']);

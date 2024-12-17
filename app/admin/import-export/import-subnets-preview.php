@@ -48,7 +48,7 @@ print "<input name='filetype' id='filetype' type='hidden' value='".$filetype."' 
 #print "<input name='rebuildmnr' id='rebuildmnr' type='hidden' value='".$rebuildmnr."' style='display:none;'>";
 print "</form>";
 print "<table class='table table-condensed table-hover' id='previewtable'><tbody>";
-print "<tr class='active'>".$hrow."<th>Action</th></tr>";
+print "<tr class='active'>".$hrow."<th>"._("Action")."</th></tr>";
 print $rows;
 print "</tbody></table><br>";
 # add some spaces so we make pContent div larger and not overlap with the absolute pFooter div
