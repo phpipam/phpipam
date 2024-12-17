@@ -55,8 +55,8 @@ else {
 		foreach ($user_passkeys as $passkey) {
 
 			// format last used and created
-			$created          = date("M d, Y", strtotime($passkey->created));
-			$last_used        = is_null($passkey->used) ? _("Never") : date("M d, Y", strtotime($passkey->used));
+			$created          = date("Y-m-d", strtotime($passkey->created));
+			$last_used        = is_null($passkey->used) ? _("Never") : date("Y-m-d", strtotime($passkey->used));
 			$passkey->comment = is_null($passkey->comment) ? _("-- Unknown --") : $passkey->comment;
 			$this_browser	  = $passkey->keyId == @$_SESSION['keyId'] ? "<span class='badge' style='margin-bottom:2px;margin-left:10px;'>"._("You authenticated with this passkey")."</span>" : "";
 
