@@ -3944,6 +3944,10 @@ msgstr "清除变更日志时出错"
 msgid "Changelogs cleared successfully"
 msgstr "更改日志已成功清除"
 
+#: /var/www/phpipam/app/footer.php:4
+msgid "phpIPAM IP address management"
+msgstr "phpIPAM IP 地址管理"
+
 #: /var/www/phpipam/app/footer.php:24
 msgid "WARNING"
 msgstr "警告"
