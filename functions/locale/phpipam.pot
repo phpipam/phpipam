@@ -3925,6 +3925,10 @@ msgstr ""
 msgid "Changelogs cleared successfully"
 msgstr ""
 
+#: /var/www/phpipam/app/footer.php:4
+msgid "phpIPAM IP address management"
+msgstr ""
+
 #: /var/www/phpipam/app/footer.php:24
 msgid "WARNING"
 msgstr ""
