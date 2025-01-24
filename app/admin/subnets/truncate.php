@@ -23,10 +23,10 @@ $csrf = $User->Crypto->csrf_cookie ("create", "truncate");
 
 
 # id must be numeric
-if(!is_numeric($_POST['subnetId']))			{ $Result->show("danger", _("Invalid ID"), true, true); }
+if(!is_numeric($POST->subnetId))			{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # get subnet details
-$subnet = $Subnets->fetch_subnet (null, $_POST['subnetId']);
+$subnet = $Subnets->fetch_subnet (null, $POST->subnetId);
 
 # verify that user has write permissions for subnet
 $subnetPerm = $Subnets->check_permission ($User->user, $subnet->id);
@@ -35,7 +35,7 @@ if($subnetPerm < 3) 						{ $Result->show("danger", _('You do not have permissio
 # on empty subnet it means it came from database validity check, fake id !
 if($subnet===false) {
     $subnet = new StdClass ();
-    $subnet->id = $_POST['subnetId'];
+    $subnet->id = $POST->subnetId;
 }
 
 # set prefix - folder or subnet

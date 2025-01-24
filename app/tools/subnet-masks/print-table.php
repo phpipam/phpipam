@@ -8,13 +8,13 @@
 $posted_mask = "10";
 
 # get masks
-if(isset($_GET['mask'])) {
-	if($_GET['mask']<10 || $_GET['mask']>32) {
+if(isset($GET->mask)) {
+	if($GET->mask<10 || $GET->mask>32) {
 		$masks = $Subnets->get_ipv4_masks ();
 	}
 	else {
-		$masks = $Subnets->get_ipv4_masks_for_subnet ($_GET['mask']);
-		$posted_mask = $_GET['mask'];
+		$masks = $Subnets->get_ipv4_masks_for_subnet ($GET->mask);
+		$posted_mask = $GET->mask;
 	}
 }
 else {

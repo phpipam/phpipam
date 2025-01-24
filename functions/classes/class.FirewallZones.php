@@ -103,7 +103,7 @@ class FirewallZones extends Common_functions {
 	 * @return string
 	 */
 	public function zone2hex ($zone) {
-		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = db_json_decode($this->settings->firewallZoneSettings,true);
 		if ($firewallZoneSettings['padding'] == 'on') {
 			return str_pad(dechex($zone),$firewallZoneSettings['zoneLength'],"0",STR_PAD_LEFT);
 		} else {
@@ -120,9 +120,9 @@ class FirewallZones extends Common_functions {
 	 * @param mixed $values
 	 * @return void
 	 */
-	public function generate_zone_name ($values = NULL) {
+	public function generate_zone_name ($values = null) {
 		# get settings
-		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = db_json_decode($this->settings->firewallZoneSettings,true);
 		# execute based on action
 		if($firewallZoneSettings['zoneGenerator'] == 0 || $firewallZoneSettings['zoneGenerator'] == 1 ) {
 			return $this->generate_numeric_zone_name ($firewallZoneSettings['zoneLength'],$firewallZoneSettings['zoneGenerator']);
@@ -145,7 +145,7 @@ class FirewallZones extends Common_functions {
 	private function generate_numeric_zone_name ($zoneLength,$zoneGenerator) {
 
 		# execute
-		try { $maxZone = $this->Database->getObjectsQuery('SELECT MAX(CAST(zone as UNSIGNED)) as zone FROM firewallZones WHERE generator NOT LIKE 2;');}
+		try { $maxZone = $this->Database->getObjectsQuery('firewallZones', 'SELECT MAX(CAST(zone as UNSIGNED)) as zone FROM firewallZones WHERE generator NOT LIKE 2;');}
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
@@ -187,7 +187,7 @@ class FirewallZones extends Common_functions {
 	 */
 	private function validate_text_zone_name ($values) {
 		# get settings
-		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = db_json_decode($this->settings->firewallZoneSettings,true);
 
 		if($values[1]){
 			$query = 'SELECT zone FROM firewallZones WHERE zone = ? AND id NOT LIKE ?;';
@@ -198,13 +198,13 @@ class FirewallZones extends Common_functions {
 		}
 
 		# execute
-		try { $uniqueZone = $this->Database->getObjectsQuery($query,$params);}
+		try { $uniqueZone = $this->Database->getObjectsQuery('firewallZones', $query,$params);}
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 
-		if ($uniqueZone[0]->zone && $firewallZoneSettings['strictMode'] == 'on') {
+		if (!empty($uniqueZone) && $uniqueZone[0]->zone && $firewallZoneSettings['strictMode'] == 'on') {
 
 			$this->Result->show("danger", _("Error: The zone name")." ".$uniqueZone[0]->zone." "._("is not unique")."!", false);
 
@@ -226,7 +226,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone_mappings () {
 		# try to fetch all zone mappings
-		try { $mappings =  $this->Database->getObjectsQuery('SELECT
+		try { $mappings =  $this->Database->getObjectsQuery('firewallZoneMapping', 'SELECT
 						firewallZones.id AS id,
 						firewallZones.generator AS generator,
 						firewallZones.length AS length,
@@ -248,7 +248,7 @@ class FirewallZones extends Common_functions {
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
 		# try to fetch all subnet and vlan informations for all zones
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT
 						firewallZoneSubnet.zoneId AS zoneId,
 						firewallZoneSubnet.subnetId AS subnetId,
 						subnets.sectionId AS sectionId,
@@ -272,7 +272,7 @@ class FirewallZones extends Common_functions {
 			if($mappings[$key]->generator == 1 ){
 				$mappings[$key]->zone = dechex($mappings[$key]->zone);
 			}
-			# add some padding if it is activated and the zone generatore is not text
+			# add some padding if it is activated and the zone generator is not text
 			if($mappings[$key]->padding == 1 && $mappings[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name length
@@ -300,7 +300,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone_mapping ($id) {
 		# try to fetch id specific zone mapping
-		try { $mapping =  $this->Database->getObjectsQuery('SELECT
+		try { $mapping =  $this->Database->getObjectsQuery('firewallZoneMapping', 'SELECT
 						firewallZones.id AS id,
 						firewallZones.generator AS generator,
 						firewallZones.length AS length,
@@ -321,7 +321,7 @@ class FirewallZones extends Common_functions {
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
 		# try to fetch all subnet and vlan informations for all zones
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT
 						firewallZoneSubnet.zoneId AS zoneId,
 						firewallZoneSubnet.subnetId AS subnetId,
 						subnets.sectionId AS sectionId,
@@ -346,7 +346,7 @@ class FirewallZones extends Common_functions {
 			if($mapping[$key]->generator == 1 ){
 				$mapping[$key]->zone = dechex($mapping[$key]->zone);
 			}
-			# add some padding if it is activated and the zone generatore is not text
+			# add some padding if it is activated and the zone generator is not text
 			if($mapping[$key]->padding == 1 && $mapping[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name length
@@ -375,7 +375,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function check_zone_mapping ($zoneId) {
 		# try to fetch id specific zone mapping
-		try { $mapping =  $this->Database->getObjectsQuery('SELECT id FROM firewallZoneMapping WHERE zoneId = ?;', $zoneId);}
+		try { $mapping =  $this->Database->getObjectsQuery('firewallZoneMapping', 'SELECT id FROM firewallZoneMapping WHERE zoneId = ?;', $zoneId);}
 
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
@@ -386,7 +386,7 @@ class FirewallZones extends Common_functions {
 
 
 	/**
-	 * Fetches zone mapping informations for subnet detaul from database, depending on id
+	 * Fetches zone mapping informations for subnet detail from database, depending on id
 	 *
 	 * @access public
 	 * @param mixed $id
@@ -394,7 +394,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone_subnet_info ($id) {
 		# try to fetch id specific zone information
-		try { $info =  $this->Database->getObjectsQuery('SELECT
+		try { $info =  $this->Database->getObjectsQuery('firewallZoneMapping', 'SELECT
 						firewallZones.zone as zone,
 						firewallZones.padding as padding,
 						firewallZones.length as length,
@@ -424,7 +424,7 @@ class FirewallZones extends Common_functions {
 				if($info[$key]->generator == 1 ){
 					$info[$key]->zone = dechex($info[$key]->zone);
 				}
-				# add some padding if it is activated and the zone generatore is not text
+				# add some padding if it is activated and the zone generator is not text
 				if($info[$key]->padding == 1 && $info[$key]->generator != 2){
 				# remove leading zeros (padding) and raise the value in case of any zone name length changes
 				# add some padding to reach the maximum zone name length
@@ -446,12 +446,12 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zones () {
 		# try to fetch all zones
-		try { $zones =  $this->Database->getObjectsQuery('SELECT * FROM firewallZones;');}
+		try { $zones =  $this->Database->getObjectsQuery('firewallZones', 'SELECT * FROM firewallZones;');}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
 		# try to fetch all subnet and vlan informations for all zones
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT
 						firewallZoneSubnet.zoneId AS zoneId,
 						firewallZoneSubnet.subnetId AS subnetId,
 						subnets.sectionId AS sectionId,
@@ -475,7 +475,7 @@ class FirewallZones extends Common_functions {
 			if($zones[$key]->generator == 1 ){
 				$zones[$key]->zone = dechex($zones[$key]->zone);
 			}
-			# add some padding if it is activated and the zone generatore is not text
+			# add some padding if it is activated and the zone generator is not text
 			if($zones[$key]->padding == 1 && $zones[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name length
@@ -505,13 +505,13 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone ($id) {
 		# try to fetch zone with ID $id
-		try { $zone = $this->Database->getObjectsQuery('SELECT * FROM firewallZones WHERE id = ?;', $id);}
+		try { $zone = $this->Database->getObjectsQuery('firewallZones', 'SELECT * FROM firewallZones WHERE id = ?;', $id);}
 
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
 		# try to fetch all subnet and vlan informations for this zone
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT
 						firewallZoneSubnet.zoneId AS zoneId,
 						firewallZoneSubnet.subnetId AS subnetId,
 						subnets.sectionId AS sectionId,
@@ -535,7 +535,7 @@ class FirewallZones extends Common_functions {
 			if($zone[$key]->generator == 1 ){
 				$zone[$key]->zone = dechex($zone[$key]->zone);
 			}
-			# add some padding if it is activated and the zone generatore is not text
+			# add some padding if it is activated and the zone generator is not text
 			if($zone[$key]->padding == 1 && $zone[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name length
@@ -558,7 +558,7 @@ class FirewallZones extends Common_functions {
 
 
 	/**
-	 * display formated zone data
+	 * display formatted zone data
 	 *
 	 * @access public
 	 * @param mixed $id
@@ -612,7 +612,7 @@ class FirewallZones extends Common_functions {
 
 
 	/**
-	 * display formated zone network(s)
+	 * display formatted zone network(s)
 	 *
 	 * @access public
 	 * @param mixed $id
@@ -620,7 +620,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone_network ($id) {
 		# try to fetch all subnet and vlan informations for this zone
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT
 						firewallZoneSubnet.zoneId AS zoneId,
 						firewallZoneSubnet.subnetId AS subnetId,
 						subnets.sectionId AS sectionId,
@@ -670,11 +670,11 @@ class FirewallZones extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return bool
 	 */
 	public function check_zone_network ($subnetId) {
 		# check if the subnet is already bound to this or any other zone
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT * FROM firewallZoneSubnet WHERE subnetId = ?;', $subnetId);}
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT * FROM firewallZoneSubnet WHERE subnetId = ?;', $subnetId);}
 
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
@@ -682,12 +682,10 @@ class FirewallZones extends Common_functions {
 		if(!sizeof($networkInformation)>0 ) {
 			# return dummy value
 			return 'success';
-		} else {
-			$this->Result->show("danger","<strong>"._('Error').":</strong><br>"._("This network is already bound to this or another zone.")."<br>"._("The binding must be unique."), false);
-			return false;
 		}
-		# return dummy value
-		return 'success';
+
+		$this->Result->show("danger","<strong>"._('Error').":</strong><br>"._("This network is already bound to this or another zone.")."<br>"._("The binding must be unique."), false);
+		return false;
 	}
 
 
@@ -701,17 +699,16 @@ class FirewallZones extends Common_functions {
 	 */
 	public function add_zone_network ($zoneId,$subnetId) {
 		# check if the subnet is already bound to this or any other zone
-		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT * FROM firewallZoneSubnet WHERE subnetId = ?;', $subnetId);}
+		try { $networkInformation =  $this->Database->getObjectsQuery('firewallZoneSubnet', 'SELECT * FROM firewallZoneSubnet WHERE subnetId = ?;', $subnetId);}
 
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
 		if(!sizeof($networkInformation)>0 ) {
-			$query = 'INSERT INTO firewallZoneSubnet (zoneId, subnetId) VALUES (?,?);';
 			$params = array('zoneId' => $zoneId, 'subnetId' => $subnetId);
 
 			# try to fetch all subnet and vlan informations for this zone
-			try { $addRow =  $this->Database->insertObject("firewallZoneSubnet", $params);}
+			try { $this->Database->insertObject("firewallZoneSubnet", $params);}
 
 			# throw exception
 			catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
@@ -788,7 +785,7 @@ class FirewallZones extends Common_functions {
 	 */
 	private function zone_add ($values,$network) {
 		# get the settings
-		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = db_json_decode($this->settings->firewallZoneSettings,true);
 
 		# push the zone name length into the values array
 		$values['length'] = $firewallZoneSettings['zoneLength'];
@@ -802,7 +799,7 @@ class FirewallZones extends Common_functions {
 		}
 
 		# fetch the highest inserted id, matching the zone name
-		try { $lastId=$this->Database->getObjectsQuery("SELECT MAX(id) AS id FROM firewallZones WHERE zone = ? ;", $values['zone']);}
+		try { $lastId=$this->Database->getObjectsQuery('firewallZones', "SELECT MAX(id) AS id FROM firewallZones WHERE zone = ? ;", $values['zone']);}
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
@@ -911,9 +908,6 @@ class FirewallZones extends Common_functions {
 	 * @return boolean
 	 */
 	private function mapping_add ($values) {
-		# get the settings
-		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
-
 		# execute
 		try { $this->Database->insertObject("firewallZoneMapping", $values); }
 		catch (Exception $e) {
@@ -981,7 +975,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function generate_subnet_object ($id) {
 		# fetch the settings
-		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = db_json_decode($this->settings->firewallZoneSettings,true);
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($id);
@@ -1057,10 +1051,13 @@ class FirewallZones extends Common_functions {
 	 */
 	public function generate_address_object ($id,$dnsName) {
 		# fetch the settings
-		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = db_json_decode($this->settings->firewallZoneSettings,true);
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($id);
+		if (!is_object($zone)) {
+			$zone = new Params();
+		}
 		$firewallAddressObject = "";
 
 		foreach ($firewallZoneSettings['pattern'] as $pattern) {
@@ -1112,7 +1109,7 @@ class FirewallZones extends Common_functions {
 		$address_old = $this->Addresses->fetch_address (null, $IPId);
 
 		# fetch the settings
-		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = db_json_decode($this->settings->firewallZoneSettings,true);
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($subnetId);
@@ -1181,13 +1178,13 @@ class FirewallZones extends Common_functions {
 		$this->Addresses = new Addresses ($this->Database);
 
 		# fetch the settings
-		$firewallZoneSettings = pf_json_decode($this->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = db_json_decode($this->settings->firewallZoneSettings,true);
 
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($subnetId);
 		$firewallAddressObject = "";
 
-		try { $ipaddresses = $this->Database->getObjectsQuery('SELECT id, hostname FROM ipaddresses WHERE subnetId = ? ',$subnetId); }
+		try { $ipaddresses = $this->Database->getObjectsQuery('ipaddresses', 'SELECT id, hostname FROM ipaddresses WHERE subnetId = ? ',$subnetId); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
@@ -1196,7 +1193,7 @@ class FirewallZones extends Common_functions {
 			# fetch old details for logging
 			$address_old = $this->Addresses->fetch_address (null, $ipaddress->id);
 
-			foreach ($firewallZoneSettings['pattern'] as $key => $pattern) {
+			foreach ($firewallZoneSettings['pattern'] as $pattern) {
 				switch ($pattern) {
 					case 'patternIndicator':
 						if ($zone->indicator == 0 ) {	$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][0]; }

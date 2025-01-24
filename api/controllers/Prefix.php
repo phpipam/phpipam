@@ -494,7 +494,7 @@ class Prefix_controller extends Common_api_functions {
         // found any
         if($available===false)          { $this->Response->throw_exception(404, "No subnets found"); }
         else {
-            // parse avilable
+            // parse available
     		$subnet_tmp = $this->Subnets->cidr_network_and_mask($available);
             // set params
     		$this->_params->subnet          = $subnet_tmp[0];
@@ -672,7 +672,7 @@ class Prefix_controller extends Common_api_functions {
         return $result;
     }
     /**
-     * Searches for avaialble master subnets
+     * Searches for available master subnets
      *
      * @access private
      * @return array|false
@@ -686,7 +686,7 @@ class Prefix_controller extends Common_api_functions {
         $query = "select * from `subnets` where `".$this->custom_field_name."` = ? $limit order by `".$this->custom_field_orderby."` ".$this->custom_field_order_direction.";";
         $params = array($this->_params->id);
         // search
-        try { $subnets = $this->Database->getObjectsQuery($query, $params); }
+        try { $subnets = $this->Database->getObjectsQuery('subnets', $query, $params); }
         catch (Exception $e) { $this->Response->throw_exception(500, "Error: ".$e->getMessage()); }
         // remove if they have slaves for addresses query
         if ($this->query_type=="address") {

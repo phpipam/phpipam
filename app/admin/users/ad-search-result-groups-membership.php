@@ -18,11 +18,11 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # fetch server
-$server = $Admin->fetch_object("usersAuthMethod", "id", $_POST['server']);
+$server = $Admin->fetch_object("usersAuthMethod", "id", $POST->server);
 $server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
 
 //parse parameters
-$params = pf_json_decode($server->params);
+$params = db_json_decode($server->params);
 
 //no login parameters
 if(is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword))	{ $Result->show("danger", _("Missing credentials"), true); }
@@ -60,7 +60,7 @@ try {
 			//false
 			if($domain_group_members!==false) {
 				foreach($domain_group_members as $m) {
-					if($m==$_POST['username']) {
+					if($m==$POST->username) {
 						$membership[] = $g->g_id;
 					}
 				}
@@ -77,4 +77,3 @@ try {
 catch (adLDAPException $e) {
 	$Result->show("danger", $e->getMessage(), true);
 }
-?>

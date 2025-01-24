@@ -11,7 +11,7 @@ if (!isset($User)) {
 $User->check_user_session();
 
 // trim and escape
-$mac = isset($_POST['mac']) ? escape_input(trim($_POST['mac'])) : "";
+$mac = isset($POST->mac) ? escape_input(trim($POST->mac)) : "";
 
 // validate
 if ($User->validate_mac($mac) === false) {

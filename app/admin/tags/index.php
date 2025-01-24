@@ -7,6 +7,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# if the user's theme is dark, we make the BG parly transparent
+$alpha = ($User->user->theme == "dark") ? "cc" : "";
+
 # fetch all vrfs
 $all_types = $Admin->fetch_all_objects("ipTags");
 ?>
@@ -23,10 +26,11 @@ print '<table class="table table-striped table-top table-auto" data-cookie-id-ta
 # headers
 print "<thead>";
 print '<tr>'. "\n";
-print '	<th>'._('type').'</th>'. "\n";
+print '	<th>'._('Type').'</th>'. "\n";
 print '	<th>'._('Show Tag').'</th>'. "\n";
 print '	<th>'._('BG color').'</th>'. "\n";
 print '	<th>'._('FG color').'</th>'. "\n";
+print '	<th>'._('Example').'</th>'. "\n";
 print '	<th>'._('Compress range').'</th>'. "\n";
 print '	<th>'._('Locked').'</th>'. "\n";
 print '	<th>'._('Update Tags').'</th>'. "\n";
@@ -52,8 +56,9 @@ if ($all_types!==false) {
 		print '<tr>'. "\n";
 		print '	<td>'. $type['type'] .'</td>'. "\n";
 		print '	<td>'.$showtag.'</td>'. "\n";
-		print '	<td style="background-color:'.$type['bgcolor'].'">'. $type['bgcolor'] .'</td>'. "\n";
-		print '	<td style="background-color:'.$type['fgcolor'].'">'. $type['fgcolor'] .'</td>'. "\n";
+		print '	<td style="background-color:'.$type['bgcolor'].' !important">'. $type['bgcolor'] .'</td>'. "\n";
+		print '	<td style="background-color:'.$type['fgcolor'].' !important">'. $type['fgcolor'] .'</td>'. "\n";
+		print '	<td><div class="ip_vis"><span class="ip-'.$type['id'].'" style="cursor:default;margin:0;background-color:'.$type['bgcolor'].$alpha.';color:'.$type['fgcolor'].';">.12</span></div></td>' . "\n";
 		print '	<td>'. $type['compress'] .'</td>'. "\n";
 		print '	<td>'. $type['locked'] .'</td>'. "\n";
 		print '	<td>'. $updatetag .'</td>'. "\n";

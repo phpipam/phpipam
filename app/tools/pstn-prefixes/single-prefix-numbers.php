@@ -45,7 +45,7 @@ $colspan_dhcp = 4;
     <tbody>
     <?php
     # none
-    if ($numbers===false) {
+    if (!is_array($numbers)) {
         print "<tr>";
         print " <td colspan='$colspan'>".$Result->show("info", _("No numbers"), false, false, true)."</td>";
         print "</tr>";
@@ -61,7 +61,7 @@ $colspan_dhcp = 4;
         $Addresses->addresses_types_fetch();
         foreach($Addresses->address_types as $t) {
         	if($t['compress']=="Yes" && $User->user->compressOverride!="Uncompress") {
-        		if(sizeof($numbers)>0 && $numbers!==false) {
+        		if(!empty($numbers)) {
         			$numbers = $Tools->compress_pstn_ranges ($numbers, $t['id']);
         		}
         	}
@@ -90,7 +90,7 @@ $colspan_dhcp = 4;
 
 
 
-		    if($n->class=="compressed-range") {
+            if (property_exists($n, "class") && $n->class == "compressed-range") {
 		    	print "<tr class='dhcp'>";
 			    print "	<td>";
 			    print 		"(".$prefix->prefix.$n->number.' - '.($n->number + $n->numHosts).")";

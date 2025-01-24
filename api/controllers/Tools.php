@@ -54,7 +54,7 @@ class Tools_controller extends Common_api_functions {
 		$this->define_tools_controllers ();
 		$this->define_available_identifiers ();
 
-		// fist validate subcontroller
+		// first validate subcontroller
 		$this->validate_subcontroller ();
 		// rewrite subcontroller
 		$this->rewrite_subcontroller ();
@@ -581,7 +581,7 @@ class Tools_controller extends Common_api_functions {
 	 */
 	private function parse_nat_objects ($obj) {
     	if($this->Tools->validate_json_string($obj)!==false) {
-        	return(pf_json_decode($obj, true));
+        	return(db_json_decode($obj, true));
     	}
     	else {
         	return array ();

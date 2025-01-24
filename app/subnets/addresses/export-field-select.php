@@ -20,7 +20,7 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # set and check permissions
-$subnet_permission = $Subnets->check_permission($User->user, $_POST['subnetId']);
+$subnet_permission = $Subnets->check_permission($User->user, $POST->subnetId);
 $subnet_permission > 0 ? :		$Result->show("danger", _('You do not have access to this network'), true);
 
 ?>

@@ -15,10 +15,10 @@ if (!isset($Tools)) 	{ $Tools 	= new Tools ($Database); }
 # verify that user is logged in, to guard against direct access of page and possible exploits
 $User->check_user_session();
 
-$expfields = pf_explode("|",$_GET['expfields']);
-$reqfields = pf_explode("|",$_GET['reqfields']);
-if (isset($_GET['filetype'])) {
-	$filetype = $_GET['filetype'];
+$expfields = pf_explode("|",$GET->expfields);
+$reqfields = pf_explode("|",$GET->reqfields);
+if (isset($GET->filetype)) {
+	$filetype = $GET->filetype;
 } else {
 	$Result->show('danger', _("Error: could not read the uploaded file type!"), true, true);
 }
@@ -31,8 +31,8 @@ $hiddenfields="";
 
 # read field mapping from previous window
 foreach ($expfields as $expfield) {
-	if (isset($_GET['importFields__'.str_replace(" ", "_",trim($expfield))])) {
-		$impfield = $_GET['importFields__'.str_replace(" ", "_",trim($expfield))];
+	if (isset($GET->{'importFields__'.str_replace(" ", "_",trim($expfield))})) {
+		$impfield = $GET->{'importFields__'.str_replace(" ", "_",trim($expfield))};
 		if (in_array($expfield,$reqfields) && ($impfield == "-")) {
 			$Result->show('danger', _("Error: missing required field mapping for expected field")." <b>".$expfield."</b>."._("Please check field matching in previous window."), true, true);
 		} else {

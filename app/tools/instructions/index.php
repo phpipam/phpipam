@@ -1,18 +1,12 @@
 <?php
+if (!isset($User)) { exit(); }
 
 /**
  *	print instructions
  **********************************************/
 
 /* fetch instructions and print them in instructions div */
-$instructions = $Tools->fetch_object("instructions", "id", 1);
-$instructions = $instructions->instructions;
-
-/* format line breaks */
-$instructions = stripslashes($instructions);		//show html
-
-/* prevent <script> */
-$instructions = $Tools->noxss_html($instructions);
+$instructions = $Tools->fetch_instructions(1);
 
 // HSS header
 header('X-XSS-Protection:1; mode=block');

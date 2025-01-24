@@ -73,41 +73,41 @@ $curRow = 0;
 $curColumn = 0;
 
 //write headers
-if( (isset($_GET['section'])) && ($_GET['section'] == "on") ) {
+if ($GET->section == "on") {
 	$worksheet->write($curRow, $curColumn, _('Section') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['subnet'])) && ($_GET['subnet'] == "on") ) {
+if ($GET->subnet == "on") {
 	$worksheet->write($curRow, $curColumn, _('Subnet') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+if ($GET->description == "on") {
 	$worksheet->write($curRow, $curColumn, _('Description') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['VLAN'])) && ($_GET['VLAN'] == "on") ) {
+if ($GET->VLAN == "on") {
 	$worksheet->write($curRow, $curColumn, _('VLAN') ,$format_header);
 	$curColumn++;
 	$worksheet->write($curRow, $curColumn, _('VLAN Domain') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['VRF'])) && ($_GET['VRF'] == "on") ) {
+if ($GET->VRF == "on") {
 	$worksheet->write($curRow, $curColumn, _('VRF') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['master'])) && ($_GET['master'] == "on") ) {
+if ($GET->master == "on") {
 	$worksheet->write($curRow, $curColumn, _('Master Subnet') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['requests'])) && ($_GET['requests'] == "on") ) {
+if ($GET->requests == "on") {
 	$worksheet->write($curRow, $curColumn, _('Requests') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['hostscheck'])) && ($_GET['hostscheck'] == "on") ) {
+if ($GET->hostscheck == "on") {
 	$worksheet->write($curRow, $curColumn, _('Host check') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['discover'])) && ($_GET['discover'] == "on") ) {
+if ($GET->discover == "on") {
 	$worksheet->write($curRow, $curColumn, _('Discover') ,$format_header);
 	$curColumn++;
 }
@@ -118,7 +118,7 @@ if(sizeof($custom_fields) > 0) {
 		//set temp name - replace space with three ___
 		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
 
-		if( (isset($_GET[$myField['nameTemp']])) && ($_GET[$myField['nameTemp']] == "on") ) {
+		if( $GET->{$myField['nameTemp']} == "on" ) {
 			$worksheet->write($curRow, $curColumn, $myField['name'] ,$format_header);
 			$curColumn++;
 		}
@@ -135,7 +135,7 @@ if($all_sections!==false) {
 		$section = (array) $section;
 		$section['url_name'] = urlencode($section['id']);
 
-		if( (isset($_GET['exportSection__'.$section['url_name']])) && ($_GET['exportSection__'.$section['url_name']] == "on") ) {
+		if( $GET->{'exportSection__'.$section['url_name']} == "on") {
 			// get all subnets in section
 			$section_subnets = $Subnets->fetch_section_subnets($section['id']);
 
@@ -145,12 +145,12 @@ if($all_sections!==false) {
 
 				$subnet = (array) $subnet;
 
-				if( (isset($_GET['section'])) && ($_GET['section'] == "on") ) {
+				if ($GET->section == "on") {
 					$worksheet->write($curRow, $curColumn, $section['name'], $format_text);
 					$curColumn++;
 				}
 
-				if( (isset($_GET['subnet'])) && ($_GET['subnet'] == "on") ) {
+				if ($GET->subnet == "on") {
 					$subnet_text = '';
                                         if ($subnet['isFolder']) {
 						$subnet_text = $subnet['description']." (folder)";
@@ -161,12 +161,12 @@ if($all_sections!==false) {
 					$curColumn++;
 				}
 
-				if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+				if ($GET->description == "on") {
 					$worksheet->write($curRow, $curColumn, $subnet['description'], $format_text);
 					$curColumn++;
 				}
 
-				if( (isset($_GET['VLAN'])) && ($_GET['VLAN'] == "on") ) {
+				if ($GET->VLAN == "on") {
 					// get VLAN
 					$vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
 					$vlan = array_merge(['number' => "NA", 'domainId' => null], $vlan);
@@ -181,7 +181,7 @@ if($all_sections!==false) {
 					$curColumn++;
 				}
 
-				if( (isset($_GET['VRF'])) && ($_GET['VRF'] == "on") ) {
+				if ($GET->VRF == "on") {
 					// get vrf
 					if (!empty($subnet['vrfId'])) {
 						$vrf = (array) $Tools->fetch_object("vrf", "vrfId", $subnet['vrfId']);
@@ -192,7 +192,7 @@ if($all_sections!==false) {
 					$curColumn++;
 				}
 
-				if( (isset($_GET['master'])) && ($_GET['master'] == "on") ) {
+				if ($GET->master == "on") {
 					// get master subnet
 					// zet - could optimize here and reference the already loaded subnets, with the help of a dictionary variable
 					$masterSubnet = ( $subnet['masterSubnetId']==0 || empty($subnet['masterSubnetId']) ) ? false : true;
@@ -209,17 +209,17 @@ if($all_sections!==false) {
 					$curColumn++;
 				}
 
-				if( (isset($_GET['requests'])) && ($_GET['requests'] == "on") ) {
+				if ($GET->requests == "on") {
 					$worksheet->write($curRow, $curColumn, $subnet['allowRequests'], $format_text);
 					$curColumn++;
 				}
 
-				if( (isset($_GET['hostscheck'])) && ($_GET['hostscheck'] == "on") ) {
+				if ($GET->hostscheck == "on") {
 					$worksheet->write($curRow, $curColumn, $subnet['pingSubnet'], $format_text);
 					$curColumn++;
 				}
 
-				if( (isset($_GET['discover'])) && ($_GET['discover'] == "on") ) {
+				if ($GET->discover == "on") {
 					$worksheet->write($curRow, $curColumn, $subnet['discoverSubnet'], $format_text);
 					$curColumn++;
 				}
@@ -230,7 +230,7 @@ if($all_sections!==false) {
 						//set temp name - replace space with three ___
 						$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
 
-						if( (isset($_GET[$myField['nameTemp']])) && ($_GET[$myField['nameTemp']] == "on") ) {
+						if( $GET->{$myField['nameTemp']} == "on" ) {
 							$worksheet->write($curRow, $curColumn, $subnet[$myField['name']], $format_text);
 							$curColumn++;
 						}
@@ -249,7 +249,7 @@ if($all_sections!==false) {
 $curRow++;
 
 //write section sheet
-if( (isset($_GET['exportSections'])) && ($_GET['exportSections'] == "on") ) {
+if ($GET->exportSections == "on") {
 	// Create a worksheet
 	$worksheet_sections =& $workbook->addWorksheet('Sections');
 	$worksheet_sections->setInputEncoding("utf-8");
@@ -273,7 +273,7 @@ if( (isset($_GET['exportSections'])) && ($_GET['exportSections'] == "on") ) {
 		$section = (array) $section;
 		$section['url_name'] = urlencode($section['id']);
 
-		if( (isset($_GET['exportSection__'.$section['url_name']])) && ($_GET['exportSection__'.$section['url_name']] == "on") ) {
+		if( $GET->{'exportSection__'.$section['url_name']} == "on") {
 			$worksheet_sections->write($curRow, $curColumn, $section['name'], $format_text);
 			$curColumn++;
 			$worksheet_sections->write($curRow, $curColumn, $section['description'], $format_text);

@@ -41,7 +41,7 @@ if(sizeof($address)>1) {
         print "<tr>";
         print " <th>"._('Hierarchy')."</th>";
         print " <td>";
-        $Subnets->print_breadcrumbs ($Sections, $Subnets, $_GET, $Addresses);
+        $Subnets->print_breadcrumbs ($Sections, $Subnets, $GET->as_array(), $Addresses);
         print "</td>";
         print "</tr>";
 
@@ -71,8 +71,8 @@ if(sizeof($address)>1) {
         print " <td>";
 
         if ($address['state'] == "0")     { $stateClass = _("Offline"); }
-        else if ($address['state'] == "2") { $stateClass = _("Reserved"); }
-        else if ($address['state'] == "3") { $stateClass = _("DHCP"); }
+        elseif ($address['state'] == "2") { $stateClass = _("Reserved"); }
+        elseif ($address['state'] == "3") { $stateClass = _("DHCP"); }
         else                          { $stateClass = _("Online"); }
 
         print $Addresses->address_type_index_to_type ($address['state']);
@@ -253,7 +253,7 @@ if(sizeof($address)>1) {
     			if(!is_blank($address[$key])) {
     			$address[$key] = str_replace(array("\n", "\r\n"), "<br>",$address[$key]);
     			print "<tr>";
-    			print "	<th>$key</th>";
+    			print "	<th>" . $Tools->print_custom_field_name($key) . "</th>";
     			print "	<td>";
     			#booleans
     			if($field['type']=="tinyint(1)")	{
@@ -272,7 +272,7 @@ if(sizeof($address)>1) {
     	# check for temporary shares!
     	if($User->settings->tempShare==1) {
     		if (!is_blank($User->settings->tempAccess)) {
-    			foreach(pf_json_decode($User->settings->tempAccess) as $s) {
+    			foreach(db_json_decode($User->settings->tempAccess) as $s) {
     				if($s->type=="ipaddresses" && $s->id==$address['id']) {
     					if(time()<$s->validity) {
     						$active_shares[] = $s;

@@ -19,7 +19,7 @@ disable_php_errors();
 
 /* get extension */
 $filename = $_FILES['file']['name'];
-$expfields = pf_explode("|",$_POST['expfields']);
+$expfields = pf_explode("|",$POST->expfields);
 $file_exp = pf_explode(".", $filename);
 $filetype = strtolower(end($file_exp));
 

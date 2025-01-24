@@ -20,7 +20,7 @@ $User->check_user_session();
 $User->check_module_permissions ("vlan", User::ACCESS_RW, true, true);
 
 # fetch vlan details
-$vlan = $Admin->fetch_object ("vlans", "vlanid", @$_POST['vlanid']);
+$vlan = $Admin->fetch_object ("vlans", "vlanid", $POST->vlanid);
 if($vlan===false)					{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch current domain

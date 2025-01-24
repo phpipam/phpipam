@@ -507,7 +507,7 @@ class OLE extends PEAR
         // factor used for separating numbers into 4 bytes parts
         $factor = pow(2, 32);
 
-        // days from 1-1-1601 until the beggining of UNIX era
+        // days from 1-1-1601 until the beginning of UNIX era
         $days = 134774;
         // calculate seconds
         $big_date = $days * 24 * 3600 +
@@ -569,10 +569,10 @@ class OLE extends PEAR
         // translate to seconds
         $big_date /= 10000000;
 
-        // days from 1-1-1601 until the beggining of UNIX era
+        // days from 1-1-1601 until the beginning of UNIX era
         $days = 134774;
 
-        // translate to seconds from beggining of UNIX era
+        // translate to seconds from beginning of UNIX era
         $big_date -= $days * 24 * 3600;
         return floor($big_date);
     }

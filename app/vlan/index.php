@@ -1,7 +1,7 @@
 <?php
 
 # fetch vlan
-$vlan = $Tools->fetch_object("vlans", "vlanId", $_GET['subnetId']);
+$vlan = $Tools->fetch_object("vlans", "vlanId", $GET->subnetId);
 
 # perm check
 if ($User->get_module_permissions ("vlan")==User::ACCESS_NONE) {

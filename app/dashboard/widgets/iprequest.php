@@ -10,7 +10,6 @@ if(!isset($User)) {
 	$Sections	= new Sections ($Database);
 	$Subnets 	= new Subnets ($Database);
 	$Result	    = new Result ();
-
 }
 
 # user must be authenticated
@@ -38,11 +37,13 @@ if (is_array($subnets)) {
 
 
 <?php
-// if no subnets exist print it!
-if (!isset($html)) {
-    $Result->show("info", _("No subnets available"), false);
-}
-else {
+# detect if IPrequests module is enabled
+if ($User->settings->enableIPrequests==1) {
+	// if no subnets exist print it!
+	if (!isset($html)) {
+		$Result->show("info", _("No subnets available"), false);
+	}
+	else {
 ?>
 
 <!-- select section -->
@@ -85,4 +86,11 @@ else {
 	});
 </script>
 
-<?php } ?>
+<?php
+	}
+} else {
+	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
+	print "<p>"._("IP requests disabled")."</p>";
+	print "</blockquote>";
+}
+?>

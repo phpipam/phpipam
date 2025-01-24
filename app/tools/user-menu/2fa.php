@@ -11,7 +11,7 @@ $ga = new PHPGangsta_GoogleAuthenticator();
 # secret
 if (is_null($User->user->{'2fa_secret'}) && $User->user->{'2fa'}=="1") {
 	// create secret
-	$User->user->{'2fa_secret'} = $ga->createSecret($User->settings->{'2fa_length'});
+	$User->user->{'2fa_secret'} = $ga->createSecret(32); // Override $User->settings->{'2fa_length'}. Only lengths 16 and 32 produce reliable results. See #3724
 	// admin class
 	$Admin = new Admin ($Database, false);
 	// update user

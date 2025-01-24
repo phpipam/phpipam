@@ -20,10 +20,10 @@ $Tools	  = new Tools($Database);
 $User->check_user_session();
 
 # generate a dropdown list for all subnets within a section
-if ($_POST['operation'] == 'fetchSectionSubnets') {
-	if($_POST['sectionId']) {
-		if(preg_match('/^[0-9]+$/i',$_POST['sectionId'])) {
-			$sectionId = $_POST['sectionId'];
+if ($POST->operation == 'fetchSectionSubnets') {
+	if($POST->sectionId) {
+		if(preg_match('/^[0-9]+$/i',$POST->sectionId)) {
+			$sectionId = $POST->sectionId;
 			print $Subnets->print_mastersubnet_dropdown_menu($sectionId);
 		} else {
 			$Result->show('danger', _('Invalid ID.'), true);
@@ -32,11 +32,11 @@ if ($_POST['operation'] == 'fetchSectionSubnets') {
 }
 
 # deliver zone details
-if ($_POST['operation'] == 'deliverZoneDetail') {
-	if ($_POST['zoneId']) {
-		if(preg_match('/^[0-9]+$/i',$_POST['zoneId'])) {
+if ($POST->operation == 'deliverZoneDetail') {
+	if ($POST->zoneId) {
+		if(preg_match('/^[0-9]+$/i',$POST->zoneId)) {
 			# return the zone details
-			$Zones->get_zone_detail($_POST['zoneId']);
+			$Zones->get_zone_detail($POST->zoneId);
 
 		} else {
 			$Result->show('danger', _('Invalid zone ID.'), true);
@@ -45,25 +45,25 @@ if ($_POST['operation'] == 'deliverZoneDetail') {
 }
 
 # deliver networkinformations about a specific zone
-if ($_POST['netZoneId']) {
-	if(preg_match('/^[0-9]+$/i',$_POST['netZoneId'])) {
+if ($POST->netZoneId) {
+	if(preg_match('/^[0-9]+$/i',$POST->netZoneId)) {
 		# return the zone details
-		$Zones->get_zone_network($_POST['netZoneId']);
+		$Zones->get_zone_network($POST->netZoneId);
 	} else {
 		$Result->show('danger', _('Invalid netZone ID.'), true);
 	}
 }
 
 # deliver networkinformations about a specific zone
-if ($_POST['noZone'] == 1) {
-	if($_POST['masterSubnetId']) {
-		$_POST['network'][] = $_POST['masterSubnetId'];
+if ($POST->noZone == 1) {
+	if($POST->masterSubnetId) {
+		$POST->network = [$POST->masterSubnetId];
 	}
-	if ($_POST['network']) {
-		$rowspan = count($_POST['network']);
+	if ($POST->network) {
+		$rowspan = count($POST->network);
 		$i = 1;
 		print '<table class="table table-noborder table-condensed" style="padding-bottom:20px;">';
-		foreach ($_POST['network'] as $key => $network) {
+		foreach ($POST->network as $key => $network) {
 			$network = $Subnets->fetch_subnet(null,$network);
 			print '<tr>';
 			if ($i === 1) {
@@ -88,31 +88,31 @@ if ($_POST['noZone'] == 1) {
 
 
 # generate a new firewall address object on request
-if ($_POST['operation'] == 'autogen') {
-	if ($_POST['action'] == 'net') {
-		if (preg_match('/^[0-9]+$/i',$_POST['subnetId'])){
-			$Zones->update_address_objects($_POST['subnetId']);
+if ($POST->operation == 'autogen') {
+	if ($POST->action == 'net') {
+		if (preg_match('/^[0-9]+$/i',$POST->subnetId)){
+			$Zones->update_address_objects($POST->subnetId);
 		}
-	} elseif ($_POST['action'] == 'adr') {
-		if (preg_match('/^[0-9]+$/i',$_POST['subnetId']) && preg_match('/^[0-9a-zA-Z-.]+$/i',$_POST['dnsName']) && preg_match('/^[0-9]+$/i',$_POST['IPId'])) {
-			$Zones->update_address_object($_POST['subnetId'],$_POST['IPId'],$_POST['dnsName']);
+	} elseif ($POST->action == 'adr') {
+		if (preg_match('/^[0-9]+$/i',$POST->subnetId) && preg_match('/^[0-9a-z-.]+$/i',$POST->dnsName) && preg_match('/^[0-9]+$/i',$POST->IPId)) {
+			$Zones->update_address_object($POST->subnetId,$POST->IPId,$POST->dnsName);
 		}
-	} elseif ($_POST['action'] == 'subnet') {
-		if (preg_match('/^[0-9]+$/i',$_POST['subnetId'])) {
-			$Zones->generate_subnet_object ($_POST['subnetId']);
+	} elseif ($POST->action == 'subnet') {
+		if (preg_match('/^[0-9]+$/i',$POST->subnetId)) {
+			$Zones->generate_subnet_object ($POST->subnetId);
 		}
 	}
 }
 
 # check if there is any mapping for a specific zone, if not, display inputs
-if ($_POST['operation'] == 'checkMapping') {
+if ($POST->operation == 'checkMapping') {
 
-	if (!$Zones->check_zone_mapping($_POST['zoneId']) && $_POST['zoneId'] != 0) {
+	if (!$Zones->check_zone_mapping($POST->zoneId) && $POST->zoneId != 0) {
 		# fetch all firewall zones
 		$firewallZones = $Zones->get_zones();
 
 		# fetch settings
-		$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = db_json_decode($User->settings->firewallZoneSettings,true);
 
 		# fetch all devices
 		$devices = $Tools->fetch_multiple_objects ("devices", "type", $firewallZoneSettings['deviceType']);
@@ -166,9 +166,9 @@ if ($_POST['operation'] == 'checkMapping') {
 			</tr>
 		</table>
 		<?php
-	} elseif ($_POST['zoneId'] != 0) {
+	} elseif ($POST->zoneId != 0) {
 		# return the zone details
-		$Zones->get_zone_detail($_POST['zoneId']);
+		$Zones->get_zone_detail($POST->zoneId);
 	}
 }
 

@@ -2452,7 +2452,7 @@ msgid "Cannot update request"
 msgstr "Kan aanvraag niet bijwerken"
 
 #: site/admin/manageRequestResult.php:33
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr "Aanvraag is afgewezen"
 
 #: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
@@ -2500,7 +2500,7 @@ msgid "Errors occured when importing to database!"
 msgstr "Er is een fout opgetreden bij het importeren naar de database"
 
 #: site/admin/CSVimportSubmit.php:95 site/admin/ripeImportResult.php:72
-msgid "Import successfull"
+msgid "Import successful"
 msgstr "Import geslaagd"
 
 #: site/admin/CSVimportVerify.php:25
@@ -2970,7 +2970,7 @@ msgstr ""
 #: site/admin/customIPFieldsOrder.php:15
 #: site/admin/customVLANFieldsOrder.php:15
 #: site/admin/customUserFieldsOrder.php:15
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr "Velden kunnen niet leeg zijn"
 
 #: site/admin/customSubnetFieldsOrder.php:19
@@ -3405,7 +3405,7 @@ msgstr ""
 "subnet zitten!"
 
 #: site/admin/manageSubnetTruncateSave.php:23
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr "Subnetverkleining geslaagd"
 
 #: site/admin/usersEditEmailNotif.php:23
@@ -6028,12 +6028,12 @@ msgstr "Fout bij het instellen van de rechten voor subnet"
 msgid "Manage permissions for folder"
 msgstr "Beheer rechten van de map"
 
-msgid "Only subnets that have no nested subnets can be splitted"
+msgid "Only subnets that have no nested subnets can be split"
 msgstr ""
 "Alleen subnetten die geen onderliggende subnetten hebben kunnen worden "
 "gesplitst"
 
-msgid "Subnet too small to be splitted"
+msgid "Subnet too small to be split"
 msgstr "Het subnet is te klein om gesplitst te worden"
 
 msgid "Name prefix"
@@ -6641,7 +6641,7 @@ msgid "Zone generator method"
 msgstr "Methode van zone-generatie"
 
 msgid ""
-"Generate zone names automaticaly with the setting &quot;decimal&quot; or "
+"Generate zone names automatically with the setting &quot;decimal&quot; or "
 "&quot;hex&quot;.<br>To use your own unique zone names you can choose the "
 "option &quot;text&quot."
 msgstr ""
@@ -6955,7 +6955,7 @@ msgstr "Geen apparaten voor de SNMP routetabel query beschikbaar"
 msgid "No new subnets found"
 msgstr "Geen nieuwe subnetten gevonden"
 
-msgid "SNMP module disbled"
+msgid "SNMP module disabled"
 msgstr "SNMP-module uitgeschakeld"
 
 msgid "No devices for SNMP ARP query available"

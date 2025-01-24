@@ -640,7 +640,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
 
     /**
     * Retrieve the worksheet name.
-    * This is usefull when creating worksheets without a name.
+    * This is useful when creating worksheets without a name.
     *
     * @access public
     * @return string The worksheet's name
@@ -758,7 +758,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     * @param integer $lastcol  last column on the range
     * @param integer $width    width to set
     * @param mixed   $format   The optional XF format to apply to the columns
-    * @param integer $hidden   The optional hidden atribute
+    * @param integer $hidden   The optional hidden attribute
     * @param integer $level    The optional outline level
     */
     function setColumn($firstcol, $lastcol, $width, $format = null, $hidden = 0, $level = 0)
@@ -888,7 +888,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     }
 
     /**
-    * Center the page horinzontally.
+    * Center the page horizontally.
     *
     * @access public
     * @param integer $center the optional value for centering. Defaults to 1 (center).
@@ -1158,7 +1158,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     }
 
     /**
-    * Map to the appropriate write method acording to the token recieved.
+    * Map to the appropriate write method according to the token received.
     *
     * @access public
     * @param integer $row    The row of the cell we are writing to

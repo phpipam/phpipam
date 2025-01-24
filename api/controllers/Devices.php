@@ -126,7 +126,7 @@ class Devices_controller extends Common_api_functions {
                     $search_query = $base_query . $extended_query;
 
                     # Search query
-                    $result = $this->Database->getObjectsQuery($search_query, $query_params);
+                    $result = $this->Database->getObjectsQuery('devices', $search_query, $query_params);
 
                     // result
                     if(!$result)     { return $this->Response->throw_exception(404, "No devices found"); }

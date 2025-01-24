@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	This script takes 2 argumets from argv:
+ *	This script takes 2 arguments from argv:
  *		* subnetId
  *		* ports
  *

@@ -44,6 +44,7 @@ $Upgrade = new Upgrade ($Database);
 	<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/install.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/bootstrap.custom.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<?php if ($User->settings->theme!="white") { ?>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->settings->theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?>">
 	<?php } ?>

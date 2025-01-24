@@ -108,7 +108,7 @@ if ($version_delta > 0) {
 				if     (strpos($l, "Author: ")===0)	{ $out['author'] = substr($l, 7);	unset($lines[$k]); }
 				elseif (strpos($l, "Date: ")===0)	{ $out['date'] = substr($l, 7);     unset($lines[$k]); }
 				elseif (strpos($l, "Merge: ")===0)	{ $out['pr'] = $l;	unset($lines[$k]); }
-				elseif (is_blank(trim($l ?: '')))	{ unset($lines[$k]); }
+				elseif (is_blank(trim((string) $l)))	{ unset($lines[$k]); }
 				unset($lines[0]);
 			}
 			// merge

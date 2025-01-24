@@ -143,13 +143,13 @@ print "</div>";
 
 if(sizeof($uwidgets)>1) {
 
-	print '<div class="row-fluid">';
+	print '<div id="widget-container" class="row-fluid">';
 
 	if(defined('IS_DEMO'))
 	print '<div class="alert alert-info" style="margin:auto;text-align:center;margin:10px;"><i class="fa fa-info fa-pad-right"></i> You can download latest phpIPAM version <a href="https://phpipam.net/download/" target="_blank">here</a>!</div>';
 
 	foreach($uwidgetschunk as $w) {
-		# print itams in a row
+		# print items in a row
 		foreach($w as $c) {
 			/* print items */
 			if(array_key_exists($c, $widgets)) {

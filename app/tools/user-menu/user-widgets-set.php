@@ -20,8 +20,8 @@ $User->check_user_session();
 $User->is_demo();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "user-menu", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "user-menu", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 /* save widgets */
-if (!$User->self_update_widgets ($_POST['widgets'])) 	{ $Result->show("danger", _('Error updating'),true); }
+if (!$User->self_update_widgets ($POST->widgets)) 	{ $Result->show("danger", _('Error updating'),true); }
 else 													{ $Result->show("success", _('Widgets updated'),true); }

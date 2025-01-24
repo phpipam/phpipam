@@ -2482,7 +2482,7 @@ msgid "Cannot update request"
 msgstr "N&atilde;o foi poss&iacute;vel atualiza&ccedil;&atilde;o solicitada"
 
 #: site/admin/manageRequestResult.php:33
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr "Sua solicita&ccedil;&atilde;o foi rejeitada"
 
 #: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
@@ -2533,7 +2533,7 @@ msgstr ""
 "Erros ocorreram no momento da importa&ccedil;&atilde;o do banco de dados"
 
 #: site/admin/CSVimportSubmit.php:95 site/admin/RIPE / ARINImportResult.php:72
-msgid "Import successfull"
+msgid "Import successful"
 msgstr "Importa&ccedil;&atilde;o feita com sucesso"
 
 #: site/admin/CSVimportVerify.php:25
@@ -3023,7 +3023,7 @@ msgstr ""
 #: site/admin/customIPFieldsOrder.php:15
 #: site/admin/customVLANFieldsOrder.php:15
 #: site/admin/customUserFieldsOrder.php:15
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr "Os campos n&atilde;o podem ficar vazios"
 
 #: site/admin/customSubnetFieldsOrder.php:19
@@ -3465,7 +3465,7 @@ msgstr ""
 "a sub-rede selecionada"
 
 #: site/admin/manageSubnetTruncateSave.php:23
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr "Sub-rede truncada com sucesso"
 
 #: site/admin/usersEditEmailNotif.php:23

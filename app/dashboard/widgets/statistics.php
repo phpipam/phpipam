@@ -11,11 +11,15 @@ if(!isset($User)) {
 
 # user must be authenticated
 $User->check_user_session ();
+
+# fetch widget parameters
+$wparam = $Tools->get_widget_params("statistics");
+$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 ?>
 
 
 <!-- stats table -->
-<div class="container-fluid" style='padding-top:5px'>
+<div class="container-fluid" style='<?php print isset($height) ? "height:{$height}px;overflow-y:auto;" : ""; ?>padding-top:5px'>
 <table class="table table-condensed table-hover statistics">
 
 	<!-- sections -->
@@ -27,14 +31,14 @@ $User->check_user_session ();
 	<!-- subnets -->
 	<tr>
 		<td class="title"><?php print _('Number of Subnets'); ?></td>
-		<td class='stats-badge'><span class='badge badge1 badge5'><?php print $Database->numObjects ("subnets");; ?></span></td>
+		<td class='stats-badge'><span class='badge badge1 badge5'><?php print $Database->numObjects ("subnets"); ?></span></td>
 	</tr>
 
 	<!-- VLAN -->
 	<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_R) { ?>
 	<tr>
 		<td class="title"><?php print _('Number of VLANs'); ?></td>
-		<td class='stats-badge'><span class='badge badge1 badge5'><?php print $Database->numObjects ("vlans");; ?></span></td>
+		<td class='stats-badge'><span class='badge badge1 badge5'><?php print $Database->numObjects ("vlans"); ?></span></td>
 	</tr>
 	<?php } ?>
 
@@ -42,7 +46,7 @@ $User->check_user_session ();
 	<?php if($User->get_module_permissions ("vrf")>=User::ACCESS_R && $User->settings->enableVRF==1) { ?>
 	<tr>
 		<td class="title"><?php print _('Number of VRFs'); ?></td>
-		<td class='stats-badge'><span class='badge badge1 badge5'><?php print $Database->numObjects ("vrf");; ?></span></td>
+		<td class='stats-badge'><span class='badge badge1 badge5'><?php print $Database->numObjects ("vrf"); ?></span></td>
 	</tr>
 	<?php } ?>
 

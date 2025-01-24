@@ -26,7 +26,7 @@ $cfields = $Tools->fetch_custom_fields ('vlans');
 <table class="ipaddress_subnet table-condensed table-full">
 	<tr>
 		<th><?php print _('Number'); ?></th>
-		<td><?php print '<b>'. $vlan['number']; ?></td>
+		<td><?php print '<b>'. $vlan['number']; ?></b></td>
 	</tr>
 	<tr>
 		<th><?php print _('Name'); ?></th>
@@ -83,7 +83,6 @@ $cfields = $Tools->fetch_custom_fields ('vlans');
     print $User->print_actions($User->user->compress_actions, $links);
     print "</td>";
 	print '</tr>'. "\n";
-	print "</tr>";
 
 	?>
 

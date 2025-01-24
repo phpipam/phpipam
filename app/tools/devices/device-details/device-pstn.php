@@ -10,11 +10,11 @@ $User->check_user_session();
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('pstnPrefixes');
 # get hidden fields */
-$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['pstnPrefixes']) ? $hidden_fields['pstnPrefixes'] : array();
 
 # check
-is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true);
+is_numeric($GET->subnetId) ? : $Result->show("danger", _("Invalid ID"), true);
 
 # title - subnets
 print "<h4>"._("Belonging PSTN prefixes")."</h4><hr>";
@@ -57,7 +57,7 @@ else {
 			}
 		}
 	}
-    if($admin)
+    if($User->is_admin(false))
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -77,7 +77,7 @@ else {
 
     		print "<tr>";
     		//prefix, name
-    		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"pstn-prefixes",$sp->id)."'>  ".$sp->prefix."</a></td>";
+    		print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page,"pstn-prefixes",$sp->id)."'>  ".$sp->prefix."</a></td>";
     		print "	<td><strong>$sp->name</strong></td>";
     		// range
     		print " <td>".$sp->prefix.$sp->start."<br>".$sp->prefix.$sp->stop."</td>";
@@ -100,23 +100,9 @@ else {
     	   		foreach($custom_fields as $field) {
     		   		# hidden?
     		   		if(!in_array($field['name'], $hidden_fields)) {
-
-    		   			$html[] =  "<td class='hidden-xs hidden-sm hidden-md'>";
-    		   			//booleans
-    					if($field['type']=="tinyint(1)")	{
-    						if($sp->{$field['name']} == "0")			{ $html[] = _("No"); }
-    						elseif($sp->{$field['name']} == "1")		{ $html[] = _("Yes"); }
-    					}
-    					//text
-    					elseif($field['type']=="text") {
-    						if(!is_blank($sp->{$field['name']}))		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $sp->{$field['name']})."'>"; }
-    						else										{ print ""; }
-    					}
-    					else {
-    						$html[] = $sp->{$field['name']};
-
-    					}
-    		   			$html[] =  "</td>";
+						print "<td class='hidden-xs hidden-sm hidden-md'>";
+						$Tools->print_custom_field ($field['type'], $user[$field['name']]);
+						print "</td>";
     	   			}
     	    	}
     	    }

@@ -8,13 +8,13 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 <!-- content -->
 <div class="pContent">
 	<?php
-	if(is_numeric($_POST['subnetId'])) {
+	if(is_numeric($POST->subnetId)) {
 	?>
 	<?php print _('Clicking on regenerate will remove all PTR records for subnet and recreate new.'); ?>
 	<br>
 
 	<div class="text-righ2t">
-		<a class="btn btn-default btn-sm refreshPTRsubnetSubmit" data-subnetId=<?php print escape_input($_POST['subnetId']); ?>><i class="fa fa-refresh"></i> Regenerate</a>
+		<a class="btn btn-default btn-sm refreshPTRsubnetSubmit" data-subnetId=<?php print escape_input($POST->subnetId); ?>><i class="fa fa-refresh"></i> Regenerate</a>
 		<hr>
 	</div>
 

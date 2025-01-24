@@ -6,7 +6,7 @@
 # "Content-Transfer-Encoding: 8bit\n"
 # "Last-Translator: wxtewx <wxtewx@qq.com>\n"
 # "PO-Revision-Date: 2023-09-03 22:48\n"
-# "Project-Id-Version: 1.50\n"
+e# "Project-Id-Version: 1.70\n"
 # "Language: zh_CN\n"
 # "MIME-Version: 1.0\n"
 # "Content-Type: text/plain; charset=UTF-8\n"
@@ -4520,7 +4520,7 @@ msgid "Cannot update request"
 msgstr "无法更新申请"
 
 #: app/admin/requests/edit-result.php:53
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr "申请已被拒绝"
 
 msgid "already in use"
@@ -4579,7 +4579,7 @@ msgid "Errors occured when importing to database!"
 msgstr "导入数据库时出现错误！!"
 
 #: app/subnets/import-subnet/import-file.php:142
-msgid "Import successfull"
+msgid "Import successful"
 msgstr "导入成功"
 
 msgid "Cannot upload - Return Code:"
@@ -5001,7 +5001,7 @@ msgid "If group does not have access to section it will not be able to access su
 msgstr "如果组无权访问该部分，则即使设置了<br>子网权限，也将无法访问子网"
 
 #: app/admin/custom-fields/order.php:21
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr "字段不能为空"
 
 #: app/admin/custom-fields/order.php:25
@@ -5188,10 +5188,6 @@ msgstr "日志清除成功"
 #: app/admin/ripe-import/import-subnets.php:90
 msgid "Failed to import subnet"
 msgstr "导入子网失败"
-
-#: app/admin/ripe-import/import-subnets.php:95
-msgid "Import successful"
-msgstr "导入成功"
 
 #: app/admin/ripe-import/import-subnets.php:67
 msgid "Please fix the following errors before inserting"
@@ -5502,7 +5498,7 @@ msgid "Truncating network will remove all IP addresses, that belong to selected 
 msgstr "截断网络将删除属于所选子网的所有 IP 地址！!"
 
 #: app/admin/subnets/truncate-save.php:44
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr "子网截断成功"
 
 #: app/admin/users/edit-notify.php:32
@@ -5782,7 +5778,7 @@ msgid "Make sure user defined in config.php has access to database."
 msgstr "确保 config.php 中定义的用户有权访问数据库."
 
 #: app/install/sql_error.php:31
-msgid "Database connection succesfull"
+msgid "Database connection successful"
 msgstr "数据库连接成功"
 
 #: app/install/welcome.php:9
@@ -9206,7 +9202,7 @@ msgstr "无可用域名！!"
 #: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:14
 #: app/subnets/scan/subnet-scan-execute-snmp-mac.php:18
 #: app/subnets/scan/subnet-scan-result-snmp-route-all.php:23
-msgid "SNMP module disbled"
+msgid "SNMP module disabled"
 msgstr "SNMP 模块已禁用"
 
 #: app/admin/vlans/move-vlan-result.php:54
@@ -9707,11 +9703,11 @@ msgid "Manage permissions for folder"
 msgstr "管理文件夹的权限"
 
 #: app/admin/subnets/split.php:35
-msgid "Only subnets that have no nested subnets can be splitted"
+msgid "Only subnets that have no nested subnets can be split"
 msgstr "仅可以分割没有嵌套子网的子网"
 
 #: app/admin/subnets/split.php:42
-msgid "Subnet too small to be splitted"
+msgid "Subnet too small to be split"
 msgstr "子网太小，无法分割"
 
 #: app/admin/subnets/split.php:116
@@ -10356,7 +10352,7 @@ msgid "User self update failed"
 msgstr "用户自行更新失败"
 
 #: functions/classes/class.User.php:1336
-msgid "User self update suceeded"
+msgid "User self update succeeded"
 msgstr "用户自行更新成功"
 
 #: functions/classes/class.User.php:1672
@@ -11128,7 +11124,7 @@ msgid "Zone generator method"
 msgstr "区域生成器方法"
 
 #: app/admin/firewall-zones/settings.php:146
-msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own unique zone names you can choose the option &quot;text&quot."
+msgid "Generate zone names automatically with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own unique zone names you can choose the option &quot;text&quot."
 msgstr "使用设置 &quot;十进制&quot;自动生成区域名称 或 &quot;十六进制&quot;。<br>要使用您自己的唯一区域名称，您可以选择 &quot;文本&quot选项."
 
 #: app/admin/firewall-zones/settings.php:151
@@ -11647,10 +11643,6 @@ msgstr "没有可用于 SNMP 路由表查询的设备"
 
 msgid "No new subnets found"
 msgstr "未找到新的子网"
-
-#: app/admin/snmp/index.php:38
-msgid "SNMP module disabled"
-msgstr "SNMP 模块已禁用"
 
 #: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:57
 #: app/subnets/scan/subnet-scan-execute-snmp-mac.php:74
@@ -12364,7 +12356,7 @@ msgstr "区域设置"
 msgid "Choose a maximum lenght of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
 msgstr "选择区域名称的最大长度。<br>默认值：3，最大：31 个字符。<br>（请记住，您的防火墙可能对区域名称或地址对象的长度有限制）"
 
-msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot."
+msgid "Generate zone names automatically with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot."
 msgstr "使用设置 &quot;十进制&quot; 自动生成区域名称或&quot;十六进制&quot;。<br>十六进制模式下区域的最大值为 ffffffff（4294967295 个区域）。<br>要使用您自己的唯一区域名称，您可以选择 &quot;文本&quot.选项."
 
 #: app/admin/firewall-zones/settings.php:190
@@ -12376,11 +12368,11 @@ msgid "Autogenerate address objects"
 msgstr "自动生成地址对象"
 
 #: app/admin/firewall-zones/settings.php:201
-msgid "Automaticaly generate firewall address objects as an additional information of an IP address.<br>(Works only for subnets which are bound to a firewall zone.)"
+msgid "Automatically generate firewall address objects as an additional information of an IP address.<br>(Works only for subnets which are bound to a firewall zone.)"
 msgstr "自动生成防火墙地址对象作为 IP 地址的附加信息。<br>（仅适用于绑定到防火墙区域的子网。）"
 
 #: app/admin/firewall-zones/settings.php:146
-msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot;."
+msgid "Generate zone names automatically with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot;."
 msgstr "使用设置 &quot;十进制&quot; 自动生成区域名称 或&quot;十六进制&quot;。<br>十六进制模式下区域的最大值为 ffffffff（4294967295 个区域）。<br>要使用您自己的唯一区域名称，您可以选择 &quot;文本&quot.选项."
 
 #: app/admin/firewall-zones/settings.php:222
@@ -12400,7 +12392,7 @@ msgid "Subnet name"
 msgstr "子网名称"
 
 #: app/admin/firewall-zones/settings.php:316
-msgid "Firewall address objects for subnets will contain this information instead of FQDN or hostname.<br>By choosing \"description\" spaces and other characters but hiven or underline will be replaced by the separator value."
+msgid "Firewall address objects for subnets will contain this information instead of FQDN or hostname.<br>By choosing \"description\" spaces and other characters but hyphen or underline will be replaced by the separator value."
 msgstr "子网的防火墙地址对象将包含此信息，而不是 FQDN 或主机名。<br>通过选择“描述”空格和其他字符（但配置单元或下划线）将被分隔符值替换."
 
 #: app/admin/firewall-zones/subnet-to-zone-save.php:21
@@ -13445,7 +13437,7 @@ msgid "Require unique subnets"
 msgstr "需要唯一的子网"
 
 #: app/admin/settings/index.php:518
-msgid "Require unique subnets accross all sections"
+msgid "Require unique subnets across all sections"
 msgstr "所有部门都需要唯一的子网"
 
 #: app/admin/users/print-all.php:181
@@ -13574,7 +13566,7 @@ msgid "Set subnet alert threshold"
 msgstr "设置子网警报阈值"
 
 #: functions/classes/class.Subnets.php:3104
-msgid "Failed to set subnet permissons for subnet"
+msgid "Failed to set subnet permissions for subnet"
 msgstr "无法设置子网的子网权限"
 
 #: app/admin/subnets/ripe-query.php:82
@@ -13582,7 +13574,7 @@ msgid "No result"
 msgstr "无结果"
 
 #: app/admin/subnets/split-save.php:41
-msgid "Subnet splitted successfully"
+msgid "Subnet split successfully"
 msgstr "子网分割成功"
 
 #: app/admin/subnets/split.php:108
@@ -13974,7 +13966,7 @@ msgid "Vault secret"
 msgstr "保管库密码"
 
 #: app/admin/vaults/edit.php:95
-msgid "Vault secret. Please store secret as it cannot be retreived if lost!"
+msgid "Vault secret. Please store secret as it cannot be retrieved if lost!"
 msgstr "保管库密码。 请妥善保管，一旦丢失将无法找回！!"
 
 #: app/admin/vaults/fetch_website_certificate.php:38
@@ -15821,7 +15813,7 @@ msgstr "数据库升级成功！!"
 
 #: functions/classes/class.Addresses.php:1854
 #: functions/classes/class.Addresses.php:1857
-msgid "Object is Natted"
+msgid "Object is NATted"
 msgstr "对象已被解析"
 
 #: functions/classes/class.Admin.php:187
@@ -16078,7 +16070,7 @@ msgid "Go to administration and fix"
 msgstr "转到管理并修复"
 
 #: functions/classes/class.Install.php:549
-msgid "Succesfull queries"
+msgid "Succesful queries"
 msgstr "查询成功"
 
 #: functions/classes/class.Install.php:551
@@ -16531,8 +16523,8 @@ msgid "2FA length"
 msgstr "2FA 长度"
 
 #: app/admin/2fa/index.php:53
-msgid "Length of 2FA secret (16 to 32)"
-msgstr "2FA 密码的长度（16 到 32）"
+msgid "Length of 2FA secret (26 to 32)"
+msgstr "2FA 密码的长度（26 到 32）"
 
 #: app/admin/2fa/index.php:58
 msgid "2FA user change"
@@ -16620,7 +16612,7 @@ msgid "Minimum numbers"
 msgstr "最少数字"
 
 #: app/admin/password-policy/index.php:50
-msgid "Minumum number of numbers"
+msgid "Minimum number of numbers"
 msgstr "数字最少数量"
 
 #: app/admin/password-policy/index.php:54
@@ -16628,7 +16620,7 @@ msgid "Minimum letters"
 msgstr "最少字母"
 
 #: app/admin/password-policy/index.php:58
-msgid "Minumum number of letters"
+msgid "Minimum number of letters"
 msgstr "字母最少数量"
 
 #: app/admin/password-policy/index.php:58
@@ -16636,7 +16628,7 @@ msgid "Minimum lowercase letter"
 msgstr "最少小写字母"
 
 #: app/admin/password-policy/index.php:66
-msgid "Minumum number of lowercase letters"
+msgid "Minimum number of lowercase letters"
 msgstr "小写字母最少数量"
 
 #: app/admin/password-policy/index.php:70
@@ -16644,7 +16636,7 @@ msgid "Minimum uppercase letter"
 msgstr "最少大写字母"
 
 #: app/admin/password-policy/index.php:74
-msgid "Minumum number of uppercase letters"
+msgid "Minimum number of uppercase letters"
 msgstr "大写字母的最少数量"
 
 #: app/admin/password-policy/index.php:74
@@ -16652,7 +16644,7 @@ msgid "Minimum symbols"
 msgstr "最少符号"
 
 #: app/admin/password-policy/index.php:82
-msgid "Minumum number of symbols"
+msgid "Minimum number of symbols"
 msgstr "符号最少数量"
 
 #: app/admin/password-policy/index.php:86

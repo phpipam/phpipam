@@ -25,7 +25,7 @@ $User->check_maintaneance_mode ();
 $User->check_module_permissions ("pdns", User::ACCESS_RW, true, false);
 
 # fetch subnet
-$subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
+$subnet = $Subnets->fetch_subnet ("id", $POST->subnetId);
 
 # checks
 if ($subnet===false)					{ $Result->show("danger", _("Invalid subnet"), true); }
@@ -38,7 +38,7 @@ $zone = $PowerDNS->get_ptr_zone_name ($subnet->ip, $subnet->mask);
 // try to fetch domain
 $domain = $PowerDNS->fetch_domain_by_name ($zone);
 // default values
-$values = pf_json_decode($User->settings->powerDNS, true);
+$values = db_json_decode($User->settings->powerDNS, true);
 $values['name'] = $zone;
 
 // domain missing, create it and default records
