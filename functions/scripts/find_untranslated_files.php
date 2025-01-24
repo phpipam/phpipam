@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Script to fund untraslated files
+ * Script to find untranslated files
  *
  *	only for development
  */
@@ -18,7 +18,7 @@ foreach ($untranslated as $u) {
 	$str = get_string_between($u, "_('", "')");
 	// remove "" and '
 	$str = trim($str, "',\"");
-	// search for invalud content and remove
+	// search for invalid content and remove
 	if (substr($str, 0, 1)!="$") {
 		$all_translations[] = $str;
 	}
@@ -27,7 +27,7 @@ foreach ($untranslated as $u) {
 	$str = get_string_between($u, '_("', '")');
 	// remove "" and '
 	$str = trim($str, "',\"");
-	// search for invalud content and remove
+	// search for invalid content and remove
 	if (substr($str, 0, 1)!="$") {
 		$all_translations[] = $str;
 	}

@@ -25,7 +25,7 @@ $User->check_user_session();
 
 
 // Create a workbook
-$filename = "phpipam_IP_adress_export_". date("Y-m-d") .".xls";
+$filename = "phpipam_IP_address_export_". date("Y-m-d") .".xls";
 $workbook = new Spreadsheet_Excel_Writer();
 $workbook->setVersion(8);
 

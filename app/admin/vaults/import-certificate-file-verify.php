@@ -56,7 +56,7 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 		}
 		// process p12
 		elseif ($filename=="p12" || $filename=="pfx") {
-			$password = $_POST['pkey_pass'];
+			$password = $POST->pkey_pass;
 			$convert = openssl_pkcs12_read (file_get_contents($_FILES["file"]["tmp_name"]), $results, $password);
 			if (!$convert) {
 				echo '{"status":"error","error":"'.openssl_error_string().'"}';

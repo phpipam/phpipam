@@ -115,7 +115,7 @@ foreach ($data as &$cdata) {
 			# Check if we need to change any fields
 			$action = "skip"; # skip duplicate fields if identical, update if different
 			# Should we just let the database decided to update or not?  Nice for UI, but alot of
-			# code maintaince here.
+			# code maintenance here.
 			if ($cdata['description'] != $cedata['description']) { $msg.= "Device description will be updated."; $action = "edit"; }
 			if ($cdata['ip_addr'] != $cedata['ip_addr']) { $msg.= "Device ip_addr will be updated."; $action = "edit"; }
 			if ($cdata['type'] != $cedata['type']) { $msg.= "DeviceType will be updated."; $action = "edit"; }

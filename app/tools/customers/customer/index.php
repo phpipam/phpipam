@@ -10,21 +10,19 @@ $User->check_user_session();
 # verify module permissions
 $User->check_module_permissions ("customers", User::ACCESS_R, true);
 
-# strip tags - XSS
-$_GET = $User->strip_input_tags ($_GET);
 # fetch customer
-$customer = $Tools->fetch_object("customers", "title", urldecode($_GET['subnetId']));
+$customer = $Tools->fetch_object("customers", "title", urldecode($GET->subnetId));
 
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('customers');
 # get hidden fields */
-$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['customers'] : array();
 
 # structure and include details
 print "<div class='row'>";
 
-// invlid ?
+// invalid ?
 if ($customer===false) {
 	$Result->show ("danger", _("Invalid customer"), false);
 }

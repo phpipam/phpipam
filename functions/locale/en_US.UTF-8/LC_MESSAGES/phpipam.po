@@ -2369,7 +2369,7 @@ msgid "Cannot update request"
 msgstr ""
 
 #: site/admin/manageRequestResult.php:33
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr ""
 
 #: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
@@ -2417,7 +2417,7 @@ msgid "Errors occured when importing to database!"
 msgstr ""
 
 #: site/admin/CSVimportSubmit.php:95 site/admin/ripeImportResult.php:72
-msgid "Import successfull"
+msgid "Import successful"
 msgstr ""
 
 #: site/admin/CSVimportVerify.php:25
@@ -2853,7 +2853,7 @@ msgstr ""
 #: site/admin/customIPFieldsOrder.php:15
 #: site/admin/customVLANFieldsOrder.php:15
 #: site/admin/customUserFieldsOrder.php:15
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr ""
 
 #: site/admin/customSubnetFieldsOrder.php:19
@@ -3248,7 +3248,7 @@ msgid "Truncating network will remove all IP addresses, that belong to selected 
 msgstr ""
 
 #: site/admin/manageSubnetTruncateSave.php:23
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr ""
 
 #: site/admin/usersEditEmailNotif.php:23
@@ -5712,10 +5712,10 @@ msgstr ""
 msgid "Manage permissions for folder"
 msgstr ""
 
-msgid "Only subnets that have no nested subnets can be splitted"
+msgid "Only subnets that have no nested subnets can be split"
 msgstr ""
 
-msgid "Subnet too small to be splitted"
+msgid "Subnet too small to be split"
 msgstr ""
 
 msgid "Name prefix"
@@ -6294,7 +6294,7 @@ msgstr ""
 msgid "Zone generator method"
 msgstr ""
 
-msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own unique zone names you can choose the option &quot;text&quot."
+msgid "Generate zone names automatically with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own unique zone names you can choose the option &quot;text&quot."
 msgstr ""
 
 msgid "Zone name padding"
@@ -6576,7 +6576,7 @@ msgstr ""
 msgid "No new subnets found"
 msgstr ""
 
-msgid "SNMP module disbled"
+msgid "SNMP module disabled"
 msgstr ""
 
 msgid "No devices for SNMP ARP query available"
@@ -7359,7 +7359,7 @@ msgstr ""
 msgid "Require unique subnets"
 msgstr ""
 
-msgid "Require unique subnets accross all sections"
+msgid "Require unique subnets across all sections"
 msgstr ""
 
 msgid "Set maximum number of concurrent ICMP checks (default 128)"
@@ -7425,13 +7425,13 @@ msgstr ""
 msgid "Set subnet alert threshold"
 msgstr ""
 
-msgid "Failed to set subnet permissons for subnet"
+msgid "Failed to set subnet permissions for subnet"
 msgstr ""
 
 msgid "No result"
 msgstr ""
 
-msgid "Subnet splitted successfully"
+msgid "Subnet split successfully"
 msgstr ""
 
 msgid "Copy custom field values"
@@ -8253,7 +8253,7 @@ msgstr ""
 msgid "Upgrade"
 msgstr ""
 
-msgid "Object is Natted"
+msgid "Object is NATted"
 msgstr ""
 
 msgid "Invalid generator ID"

@@ -359,7 +359,7 @@ class Logging extends Common_functions {
 				}
 			}
 			else {
-				try { $user_id = $this->Database->getObjectQuery("select * from `users` where `username` = ? limit 1", array($_SESSION['ipamusername'])); }
+				try { $user_id = $this->Database->getObjectQuery("users", "select * from `users` where `username` = ? limit 1", array($_SESSION['ipamusername'])); }
 				catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
 			}
 			# save id
@@ -429,7 +429,7 @@ class Logging extends Common_functions {
 	 *		*.*                                             /var/log/phpipam-changelog.log
 	 *		!*
 	 *
-	 *		# > rysylog example
+	 *		# > rsyslog example
 	 *		auth.alert;auth.warning;auth.debug              /var/log/auth.log
 	 *		if $programname == 'phpipam' then /var/log/phpipam.log
 	 *		if $programname == 'phpipam-changelog' then /var/log/phpipam-changelog.log
@@ -606,7 +606,7 @@ class Logging extends Common_functions {
 	 * @param mixed $informational (default: Off)
 	 * @param mixed $notice (default: Off)
 	 * @param mixed $warning (default: Off)
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_logs ($logCount, $direction = NULL, $lastId = NULL, $highestId = NULL, $informational = "off", $notice = "off", $warning = "off") {
 
@@ -655,7 +655,7 @@ class Logging extends Common_functions {
         $query[] = "order by `id` desc limit $logCount ;";
 
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery(implode("\n", $query), $params); }
+	    try { $logs = $this->Database->getObjectsQuery('logs', implode("\n", $query), $params); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 	    # return results
@@ -670,7 +670,7 @@ class Logging extends Common_functions {
 	 */
 	public function log_fetch_highest_id () {
 		# fetch
-	    try { $id = $this->Database->getObjectQuery("select id from logs order by id desc limit 1;"); }
+	    try { $id = $this->Database->getObjectQuery('logs', "select id from logs order by id desc limit 1;"); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 		# return result
 		return $id->id;
@@ -719,11 +719,10 @@ class Logging extends Common_functions {
 			return true;
 		}
 
-		// folder
-		if($this->object_type == "subnet") {
-			if ($this->object_old['isFolder'] || $this->object_new['isFolder']) {
-				$this->object_type = "folder";
-			}
+		# folder
+		if ((isset($this->object_new['isFolder']) && $this->object_new['isFolder'] == "1") ||
+		    (isset($this->object_old['isFolder']) && $this->object_old['isFolder'] == "1")) {
+			$this->object_type = "folder";
 		}
 
 		// make sure we have settings
@@ -810,7 +809,7 @@ class Logging extends Common_functions {
 		# null and from cli, set admin user
 		if ($this->user===null && php_sapi_name()=="cli") { $this->user_id = 1; }
 
-        # if user is not specify dont write changelog
+        # if user is not specified, don't write changelog
         if (!isset($this->user) || $this->user == false || $this->user == null) {
             return true;
         }
@@ -822,7 +821,7 @@ class Logging extends Common_functions {
 		# set object type
 		$object_type = $this->object_type=="folder" ? "subnet" : $this->object_type;
 
-		# if required values are missing dont save changelog
+		# if required values are missing, don't save changelog
 		if(is_null($obj_id) || $obj_id=="NULL")	{ return false; }
 
 	    # set values
@@ -946,7 +945,7 @@ class Logging extends Common_functions {
 	}
 
 	/**
-	 * Calculate possible chages on edit
+	 * Calculate possible changes on edit
 	 *
 	 * @access private
 	 * @return array
@@ -973,7 +972,7 @@ class Logging extends Common_functions {
 		// check each value
 		foreach($this->object_new as $k=>$v) {
 			//change
-			if($this->object_old[$k]!=$v && ($this->object_old[$k] != str_replace("\'", "'", $v ?: '')))	{
+			if($this->object_old[$k]!=$v && ($this->object_old[$k] != str_replace("\'", "'", (string) $v)))	{
 				//empty
 				if(is_blank(@$this->object_old[$k]))	{ $this->object_old[$k] = "NULL"; }
 				if(is_blank(@$v))						{ $v = "NULL"; }
@@ -1114,16 +1113,16 @@ class Logging extends Common_functions {
 			}
 
 			# if section does not change
-			if(isset($this->object_new['sectionId']) && $this->object_new['sectionId']==$this->object_new['sectionIdNew']) {
+			if(isset($this->object_new['sectionId']) && isset($this->object_new['sectionIdNew']) && $this->object_new['sectionId']==$this->object_new['sectionIdNew']) {
 				unset(	$this->object_new['sectionIdNew']);
 			}
 			else {
-				$this->object_old['sectionIdNew'] = $this->object_old['sectionId'];
+				$this->object_old['sectionIdNew'] = isset($this->object_old['sectionId']) ? $this->object_old['sectionId'] : null;
 			}
 
 			//transform subnet to IP address format
-			if(!is_blank($this->object_new['subnet'])) 	{ $this->object_new['subnet'] = $this->Subnets->transform_address ($this->object_new['subnet'], "dotted");}
-			if(!is_blank($this->object_old['subnet'])) 	{ $this->object_old['subnet'] = $this->Subnets->transform_address ($this->object_old['subnet'], "dotted");}
+			if(isset($this->object_new['subnet']) && !is_blank($this->object_new['subnet'])) 	{ $this->object_new['subnet'] = $this->Subnets->transform_address ($this->object_new['subnet'], "dotted");}
+			if(isset($this->object_old['subnet']) && !is_blank($this->object_old['subnet'])) 	{ $this->object_old['subnet'] = $this->Subnets->transform_address ($this->object_old['subnet'], "dotted");}
 
 			//remove subnet/mask for folders
 			if (@$this->object_new['isFolder']=="1")	{ unset($this->object_new['subnet'], $this->object_new['mask']); }
@@ -1165,7 +1164,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_section_diff ($k, $v) {
 		//get old and new device
-		if($this->object_old[$k] != "NULL") {
+		if(isset($this->object_old[$k]) && $this->object_old[$k] != "NULL") {
 			$section = $this->Sections->fetch_section ("id", $this->object_old[$k]);
 			$this->object_old[$k] = $section->name." (id ".$section->id.")";
 		}
@@ -1406,8 +1405,12 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_permission_diff ($k, $v) {
 		// get old and compare
-		$this->object_new['permissions'] = pf_json_decode(str_replace("\\", "", $this->object_new['permissions']), true);		//Remove /
-		$this->object_old['permissions'] = pf_json_decode(str_replace("\\", "", $this->object_old['permissions']), true);		//Remove /
+		if (isset($this->object_new['permissions'])) {
+			$this->object_new['permissions'] = db_json_decode(str_replace("\\", "", $this->object_new['permissions']), true);		//Remove /
+		}
+		if (isset($this->object_old['permissions'])) {
+			$this->object_old['permissions'] = db_json_decode(str_replace("\\", "", $this->object_old['permissions']), true);		//Remove /
+		}
 
 		# Get all groups:
 		$groups = (array) $this->Tools->fetch_all_objects("userGroups", "g_id");
@@ -1470,7 +1473,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_permission_change () {
 		# get old and compare
-		$this->object_new['permissions_change'] = pf_json_decode(str_replace("\\", "", $this->object_new['permissions_change']), true);		//Remove /
+		$this->object_new['permissions_change'] = db_json_decode(str_replace("\\", "", $this->object_new['permissions_change']), true);		//Remove /
 
 		# Get all groups:
 		$groups = (array) $this->Tools->fetch_all_objects("userGroups", "g_id");
@@ -1486,7 +1489,7 @@ class Logging extends Common_functions {
 
 		# reformat
 		if($this->object_new['permissions_change']!="null") {
-			$new_permissions = pf_json_decode($this->object_new['permissions_change']);
+			$new_permissions = db_json_decode($this->object_new['permissions_change']);
 			foreach($new_permissions as $group_id=>$p) {
 				$log['Permissions'] .= "<br>". $groups[$group_id]['g_name'] ." : ".$this->Subnets->parse_permissions($p);
 			}
@@ -1502,7 +1505,7 @@ class Logging extends Common_functions {
 	 * @param bool $filter
 	 * @param mixed $expr
 	 * @param int $limit (default: 100)
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_all_changelogs ($filter, $expr, $limit = 100) {
     	# limit check
@@ -1553,7 +1556,7 @@ class Logging extends Common_functions {
 					) as `ips` order by `cid` desc limit $limit;";
 
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query, $filter ? array("expr"=>$expr) : null); }
+	    try { $logs = $this->Database->getObjectsQuery('changelog', $query, $filter ? array("expr"=>$expr) : null); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 	    # return results
@@ -1597,7 +1600,7 @@ class Logging extends Common_functions {
 					where `changelog`.`ctype` = 'section' and `changelog`.`cid` = :id
 				) as `ips`  order by `cid` desc limit 1;";
 	    # fetch
-	    try { $logs = $this->Database->getObjectQuery($query, array("id"=>$id)); }
+	    try { $logs = $this->Database->getObjectQuery('changelog', $query, array("id"=>$id)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), false);
 			return false;
@@ -1640,7 +1643,7 @@ class Logging extends Common_functions {
 			$query .= ") and `c`.`ctype` = 'ip_addr' order by `c`.`cid` desc limit $limit;";
 
 			# fetch
-		    try { $logs = $this->Database->getObjectsQuery($query, array_filter($args)); }
+		    try { $logs = $this->Database->getObjectsQuery('changelog', $query, array_filter($args)); }
 			catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 		    # return result
@@ -1696,7 +1699,7 @@ class Logging extends Common_functions {
 						and `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
 		}
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query, array($coid, $object_type)); }
+	    try { $logs = $this->Database->getObjectsQuery('changelog', $query, array($coid, $object_type)); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false); return false; }
 
 	    # return result
@@ -1743,7 +1746,7 @@ class Logging extends Common_functions {
 				$query .= ") and `c`.`ctype` = 'subnet' order by `c`.`cid` desc limit $limit;";
 
 				# fetch
-			    try { $logs = $this->Database->getObjectsQuery($query, $args); }
+			    try { $logs = $this->Database->getObjectsQuery('changelog', $query, $args); }
 				catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 			    # return result
@@ -1785,6 +1788,7 @@ class Logging extends Common_functions {
 
 		# set object
 		$obj_details = $this->object_action == "add" ? $this->object_new : $this->object_old;
+		$obj_details = array_merge(['id' => null, 'name' => null, 'description' => null, 'subnet' => null, 'ip_addr' => null, 'mask' => null, 'hostname' => null], $obj_details);
 
 		# change ip_addr
 		$this->object_type = str_replace("ip_addr", "address", $this->object_type);

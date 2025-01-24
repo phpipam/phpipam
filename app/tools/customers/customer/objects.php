@@ -22,17 +22,17 @@ $User->check_module_permissions ("customers", User::ACCESS_R, true);
 $objects = $Tools->fetch_customer_objects ($customer->id);
 
 # default page
-if(!isset($_GET['sPage'])) {
-	$_GET['sPage'] = "subnets";
+if(!isset($GET->sPage)) {
+	$GET->sPage = "subnets";
 }
 
 # menu
 include("objects/menu.php");
 
 # item or error
-if(array_key_exists($_GET['sPage'], $Tools->get_customer_object_types())) {
-	if (file_exists(dirname(__FILE__)."/objects/".$_GET['sPage'].".php")) {
-		include("objects/".$_GET['sPage'].".php");
+if(array_key_exists($GET->sPage, $Tools->get_customer_object_types())) {
+	if (file_exists(dirname(__FILE__)."/objects/".$GET->sPage.".php")) {
+		include("objects/".$GET->sPage.".php");
 	}
 	else {
 		$Result->show ("danger", _("Invalid subpage"), false);

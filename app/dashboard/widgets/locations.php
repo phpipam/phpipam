@@ -24,9 +24,12 @@ $User->check_user_session ();
 # no errors!
 //ini_set('display_errors', 0);
 
-$height = '210px';
 $title = false;
+
+# fetch widget parameters
+$wparam = $Tools->get_widget_params("locations");
+$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => 600, 'min_range' => 1, 'max_range' => 800]]) . "px";
 
 # open maps
 include(dirname(__FILE__)."/../../tools/locations/all-locations-map.php");
-?>
+

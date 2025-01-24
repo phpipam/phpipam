@@ -20,22 +20,22 @@ $User->check_user_session();
 if ($User->settings->enableMulticast!="1")          { die("True"); }
 
 # default vlan/id if not set
-if (is_blank($_POST['vlanId']))                    { $_POST['vlanId'] = 0; }
-if (is_blank($_POST['id']))                        { $_POST['id'] = 0; }
+if (is_blank($POST->vlanId))                    { $POST->vlanId = 0; }
+if (is_blank($POST->id))                        { $POST->id = 0; }
 
 # validations
-if (strlen($_POST['mac'])>21)                       { die("True"); }
-if (!is_numeric($_POST['sectionId']))               { die("True"); }
-if (!is_numeric($_POST['vlanId']))                  { die("True"); }
-if (!is_numeric($_POST['id']))                      { die("True"); }
+if (strlen($POST->mac)>21)                       { die("True"); }
+if (!is_numeric($POST->sectionId))               { die("True"); }
+if (!is_numeric($POST->vlanId))                  { die("True"); }
+if (!is_numeric($POST->id))                      { die("True"); }
 
 # if address is not multicast return true
-if ($Subnets->validate_ip ($_POST['ip'])===false)   { die("True"); }
-if ($Subnets->is_multicast ($_POST['ip'])===false)  { die("True"); }
+if ($Subnets->validate_ip ($POST->ip)===false)   { die("True"); }
+if ($Subnets->is_multicast ($POST->ip)===false)  { die("True"); }
 
 # validate
 # change last parameter to section / vlan
-$text = $Subnets->validate_multicast_mac($_POST['mac'], $_POST['sectionId'], $_POST['vlanId'], MCUNIQUE, $_POST['id']);
+$text = $Subnets->validate_multicast_mac($POST->mac, $POST->sectionId, $POST->vlanId, MCUNIQUE, $POST->id);
 
 # validate mac
 if ($text===true)  { die("True"); }

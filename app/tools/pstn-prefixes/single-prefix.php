@@ -17,7 +17,7 @@ if ($User->get_module_permissions ("pstn")==User::ACCESS_NONE) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 // validate
-elseif(!is_numeric($_GET['subnetId'])) {
+elseif(!is_numeric($GET->subnetId)) {
     $Result->show("danger", _("Invalid Id"), true);
 }
 else {
@@ -27,7 +27,7 @@ else {
     }
     else {
         # fetch all prefixes
-        $prefix = $Tools->fetch_object("pstnPrefixes", "id", $_GET['subnetId']);
+        $prefix = $Tools->fetch_object("pstnPrefixes", "id", $GET->subnetId);
 
         // get custom fields
         $cfields = $Tools->fetch_custom_fields ('pstnPrefixes');
@@ -67,9 +67,9 @@ else {
 
             print "<div class='btn-group'>";
             if($prefix->master > 0)
-                print "<a href='".create_link($_GET['page'], "pstn-prefixes", $isMaster ? $back_link : $prefix->master)."' style='margin-bottom:20px;' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> ". _('Master prefix')."</a>";
+                print "<a href='".create_link($GET->page, "pstn-prefixes", $isMaster ? $back_link : $prefix->master)."' style='margin-bottom:20px;' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> ". _('Master prefix')."</a>";
             else
-                print "<a href='".create_link($_GET['page'], "pstn-prefixes")."' style='margin-bottom:20px;' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> ". _('All prefixes')."</a>";
+                print "<a href='".create_link($GET->page, "pstn-prefixes")."' style='margin-bottom:20px;' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> ". _('All prefixes')."</a>";
             print "</div>";
             print "<br>";
 
@@ -95,7 +95,7 @@ else {
         	print "<tr>";
         	print "<th>"._('Hierarchy')."</th>";
         	print "<td>";
-        	print $Subnets->print_breadcrumbs($Sections, $Subnets, $_GET);
+        	print $Subnets->print_breadcrumbs($Sections, $Subnets, $GET->as_array());
         	print "</td>";
         	print "</tr>";
 

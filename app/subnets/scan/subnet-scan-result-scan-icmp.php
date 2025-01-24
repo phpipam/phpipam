@@ -8,9 +8,9 @@ require( dirname(__FILE__) . '/../../../functions/include-only.php' );
  *******************************/
 
 # subnet Id must be a integer
-if(!is_numeric($_POST['subnetId']) || $_POST['subnetId']==0)			{ $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($POST->subnetId) || $POST->subnetId==0)			{ $Result->show("danger", _("Invalid ID"), true); }
 # verify that user has write permissionss for subnet
-if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true); }
+if($Subnets->check_permission ($User->user, $POST->subnetId) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true); }
 
 // fetch custom fields and check for required
 $required_fields = $Tools->fetch_custom_fields ('ipaddresses');
@@ -23,7 +23,7 @@ if($required_fields!==false) {
 }
 
 # ok, lets get results form post array!
-foreach($_POST as $key=>$line) {
+foreach($POST as $key=>$line) {
 	// IP address
 	if(substr($key, 0,2)=="ip") 			    { $res[substr($key, 2)]['ip_addr']  	= $line; }
 	// description
@@ -41,7 +41,7 @@ foreach($_POST as $key=>$line) {
 
 	//verify that it is not already in table!
 	if(substr($key, 0,2)=="ip") {
-		if($Addresses->address_exists ($line, $_POST['subnetId']) === true) {
+		if($Addresses->address_exists ($line, $POST->subnetId) === true) {
 			$Result->show("danger", "IP address $line already exists!", true);
 		}
 	}
@@ -54,7 +54,7 @@ if(sizeof($res)>0) {
 		# set insert values
 		$values = array("ip_addr"=>$Subnets->transform_to_decimal($r['ip_addr']),
 						"hostname"=>$r['hostname'],
-						"subnetId"=>$_POST['subnetId'],
+						"subnetId"=>$POST->subnetId,
 						"description"=>$r['description'],
 						"state"=>2,
 						"lastSeen"=>date("Y-m-d H:i:s"),

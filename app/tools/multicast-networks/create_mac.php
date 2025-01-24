@@ -20,11 +20,11 @@ $User->check_user_session();
 if ($User->settings->enableMulticast!="1")          { die("False"); }
 
 # validations
-if ($Subnets->verify_cidr ($_POST['ip'])===false)   { die("False"); }
-if ($Subnets->is_multicast ($_POST['ip'])===false)  { die("False"); }
+if ($Subnets->verify_cidr ($POST->ip)===false)   { die("False"); }
+if ($Subnets->is_multicast ($POST->ip)===false)  { die("False"); }
 
 # get mac
-$text = $Subnets->create_multicast_mac ($_POST['ip']);
+$text = $Subnets->create_multicast_mac ($POST->ip);
 
 # print mas
 if ($text===false)  { die("False"); }

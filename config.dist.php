@@ -1,6 +1,11 @@
 <?php
 
 /**
+ *  Disable installation helper scripts /app/install/ after initial setup
+ */
+$disable_installer = false;
+
+/**
  * database connection details
  ******************************/
 $db['host'] = '127.0.0.1';
@@ -69,7 +74,7 @@ $config['ping_check_method']           = false;      // false/ping/pear/fping, r
 $config['discovery_check_send_mail']   = true;       // true/false, send or not mail on discovery check
 $config['discovery_check_method']      = false;      // false/ping/pear/fping, reset scan method
 # remove_offline_addresses.php script parameters
-$config['removed_addresses_send_mail'] = true;       // true/false, send or not mail on pomoving inactive addresses
+$config['removed_addresses_send_mail'] = true;       // true/false, send mail or not on removing inactive addresses
 $config['removed_addresses_timelimit'] = 86400 * 7;  // int, after how many seconds of inactivity address will be deleted (7 days)
 # resolveIPaddresses.php script parameters
 $config['resolve_emptyonly']           = true;       // if true it will only update the ones without DNS entry!

@@ -89,7 +89,7 @@ $curColumn = 0;
 
 
 foreach ($fields as $k) {
-	if ((!isset($_GET[$k])) || ($_GET[$k] != "on"))
+	if ((!isset($GET->{$k})) || ($GET->{$k} != "on"))
 		continue;
 
 	$worksheet->write($curRow, $curColumn, _($k), $format_header);
@@ -104,7 +104,7 @@ foreach ($devices as $d) {
 	$d = (array) $d;
 
     foreach ($fields as $k) {
-		if ((!isset($_GET[$k])) || ($_GET[$k] != "on"))
+		if ((!isset($GET->{$k})) || ($GET->{$k} != "on"))
 			continue;
 
 		if (!isset($d[$k])) {

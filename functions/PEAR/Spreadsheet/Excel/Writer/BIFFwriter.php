@@ -78,7 +78,7 @@ class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
     var $_datasize;
 
     /**
-    * The maximun length for a BIFF record. See _addContinue()
+    * The maximum length for a BIFF record. See _addContinue()
     * @var integer
     * @see _addContinue()
     */

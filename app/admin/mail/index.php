@@ -105,7 +105,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "mail");
 	<tr>
 		<td><?php print _('Password'); ?></th>
 		<td>
-			<input type="password" name="mpass" maxlength="128" class='smtp form-control input-sm' value="<?php print $mail_settings->mpass; ?>">
+			<input type="password" name="mpass" maxlength="128" class='smtp form-control input-sm' value="<?php print escape_input($mail_settings->mpass); ?>">
 		</td>
 		<td class="info2"><?php print _('Set password for SMTP authentication'); ?></td>
 	</tr>

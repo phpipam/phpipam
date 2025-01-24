@@ -4,7 +4,7 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
 
-# "Project-Id-Version: 1.40\n"
+# "Project-Id-Version: 1.70\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
 # "PO-Revision-Date: 2017-02-21 14:33+0200\n"
@@ -15,7 +15,7 @@
 # "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: functions/functions-install.php:252
 msgid "Login successful"
@@ -824,7 +824,6 @@ msgstr ""
 msgid  "You can get all IP addresses some host uses and all ports it is connected to "
 "by entering hostname in search field"
 msgstr ""
-"iščeš po DNS imenu"
 
 #: site/tools/searchTips.php:53
 msgid "Device search tips"
@@ -834,7 +833,6 @@ msgstr ""
 msgid "You can get all used / available ports and connected IP's / hostnames in "
 "some device by entering device name in search field"
 msgstr ""
-"v iskalnik vpiši ime naprave"
 
 #: site/tools/searchTips.php:62
 msgid "MAC search tips"
@@ -844,7 +842,6 @@ msgstr ""
 msgid "You can search by MAC address list entering MAC in 00:1cd:d4:78:ec:46 or "
 "001dd478ec46 format, or search multiple with 00:1c:c4:"
 msgstr ""
-"001dd478ec46 formatu, ali pa poišči vec mac adres z iskanjem npr. 00:1c:c4:"
 
 #: site/tools/searchTips.php:71
 msgid "Custom field search tips"
@@ -1087,7 +1084,6 @@ msgstr ""
 #: site/ipaddr/ipAddressPrintTableOrphaned.php:69
 msgid  "This happens if subnet had IP addresses<br>when new nested subnet was added"
 msgstr ""
-"Do tega pride, če se z izbrisom omrežja<br>niso pobrisali tudi IP naslovi"
 
 #: site/ipaddr/ipAddressPrintTableOrphaned.php:171
 msgid "Move to different subnet"
@@ -1256,7 +1252,6 @@ msgstr ""
 msgid "You can add,edit or delete multiple IP addresses<br>by specifying IP range "
 "(e.g. 10.10.0.0-10.10.0.25)"
 msgstr ""
-"(npr.: 10.10.0.0-10.10.0.25)"
 
 #: site/ipaddr/modifyIpAddress.php:147
 msgid "Click to check for hostname"
@@ -1390,7 +1385,6 @@ msgstr ""
 msgid "If you like the software you can donate by clicking this button to support "
 "further development"
 msgstr ""
-"tem podprete nadaljnji razvoj projekta"
 
 #: site/dashboard/statistics.php:27
 msgid "Number of Sections"
@@ -1528,7 +1522,6 @@ msgstr ""
 msgid "This script imports subnets from RIPE / ARIN database for specific AS. Enter "
 "desired AS to search for subnets"
 msgstr ""
-"Vnesite žljeni AS za iskanje pripadajočih omrežij"
 
 #: site/admin/RIPE / ARINImport.php:19
 msgid "AS number"
@@ -1600,21 +1593,17 @@ msgstr ""
 msgid "Here you can set parameters for connecting to AD for authenticating users. "
 "phpIPAM uses"
 msgstr ""
-"phpIPAM uporablja"
 
 #: site/admin/manageAD_AD.php:17 site/admin/manageAD_LDAP.php:17
 msgid "to authenticate users. If you need additional settings please take a look at "
 "functions/adLDAP or check online documentation!"
 msgstr ""
-"v functions/adLDAP, ali pa preverite dokumentacijo"
 
 #: site/admin/manageAD_AD.php:20
 msgid "First create new user under user management with <u>same username as on AD</u>"
 " and set usertype to domain user. Also set proper permissions - group membership "
 "for new user."
 msgstr ""
-" in za tip uporabnika izberite domenski uporabnik. Nastavite tudi pravilne pravice dostopa - "
-"pripadnost skupinam"
 
 #: site/admin/manageAD_AD.php:29 site/admin/manageAD_LDAP.php:29
 msgid "ldap extension not enabled in php"
@@ -1628,7 +1617,6 @@ msgstr ""
 msgid "Enter domain controllers, separated by ; (default: dc1.domain.local;dc2."
 "domain.local)"
 msgstr ""
-"domain.local)"
 
 #: site/admin/manageAD_AD.php:49 site/admin/manageAD_LDAP.php:48
 msgid "Base DN"
@@ -1640,9 +1628,6 @@ msgid "Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)"
 "\t\tIf this is set to null then adLDAP will attempt to obtain this "
 "automatically from the rootDSE"
 msgstr ""
-"<br>\n"
-"\t\tČe je to polje prazno bo adLDAP poizkušal avtomatsko pridobiti to informacijo "
-"iz korenskega DSE"
 
 #: site/admin/manageAD_AD.php:61
 msgid "Account suffix"
@@ -1678,7 +1663,6 @@ msgstr ""
 msgid "If you wish to use TLS you should ensure that useSSL is set to false and "
 "vice-versa (default: false)"
 msgstr ""
-"(privzeto: ne)"
 
 #: site/admin/manageAD_AD.php:102
 msgid "AD port"
@@ -1763,7 +1747,6 @@ msgid "You can select which fields are actually being used for IP management, so
 "you dont show any overhead if not used. IP, hostname and description are "
 "mandatory"
 msgstr ""
-"manj pomembna ostanejo skrita. IP naslov, dns ime in opis so obvezna polja."
 
 #: site/admin/filterIPFields.php:44
 msgid "Check which fields to use for IP addresses"
@@ -1874,7 +1857,6 @@ msgstr ""
 msgid "Normal users will have permissions set based on group access to sections and "
 "subnets"
 msgstr ""
-"in pravice skupin"
 
 #: site/admin/manageSubnet.php:11 site/admin/adminMenu.php:53
 msgid "Subnet management"
@@ -2008,7 +1990,6 @@ msgstr ""
 msgid "Domain authenticates on AD, but still needs to be setup here for permissions "
 "etc."
 msgstr ""
-"pravic dostopa ipd."
 
 #: site/admin/usersEditPrint.php:116
 msgid "User's password"
@@ -2045,7 +2026,6 @@ msgstr ""
 #: site/admin/usersEditPrint.php:150
 msgid "Users have access defined based on groups"
 msgstr ""
-"skupin, katerim pripadajo"
 
 #: site/admin/usersEditPrint.php:177
 msgid "No groups configured"
@@ -2147,7 +2127,6 @@ msgstr ""
 msgid "Enter master subnet if you want to nest it under existing subnet, or select "
 "root to create root subnet"
 msgstr ""
-"korensko omrežje za izdelavo novega"
 
 #: site/admin/manageSubnetEdit.php:188
 msgid "Select VRF"
@@ -2204,7 +2183,6 @@ msgstr ""
 msgid "Removing subnets will delete ALL underlaying subnets and belonging IP "
 "addresses"
 msgstr ""
-"naslove"
 
 #: site/admin/manageSubnetEdit.php:324
 msgid "Delete subnet"
@@ -2335,7 +2313,7 @@ msgid "Cannot update request"
 msgstr ""
 
 #: site/admin/manageRequestResult.php:33
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr ""
 
 #: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
@@ -2383,7 +2361,7 @@ msgid "Errors occured when importing to database!"
 msgstr ""
 
 #: site/admin/CSVimportSubmit.php:95 site/admin/RIPE / ARINImportResult.php:72
-msgid "Import successfull"
+msgid "Import successful"
 msgstr ""
 
 #: site/admin/CSVimportVerify.php:25
@@ -2597,7 +2575,6 @@ msgstr ""
 msgid "Set authentication type for users. Requires php LDAP support. Set connection "
 "settings in admin menu"
 msgstr ""
-"za php. Nastavite nastavitve povezave v administracijskem meniju"
 
 #: site/admin/settings.php:105
 msgid "Tooltips"
@@ -2632,7 +2609,6 @@ msgid "Check reverse dns lookups for IP addresses that do not have hostname in "
 "database. (Activating this feature can significantly increase ip address "
 "pages loading time!)"
 msgstr ""
-"podatkovni bazi. (Aktivacija te funkcije lahko povzroči precej daljše nalaganje strani!)"
 
 #: site/admin/settings.php:149
 msgid "Duplicate VLANs"
@@ -2666,7 +2642,6 @@ msgstr ""
 msgid "Select netmask limit for visual display of IP addresses (mask equal or "
 "bigger than - more then /22 not recommended)"
 msgstr ""
-" - večja od /22 ni priporočena)"
 
 #: site/admin/settings.php:212
 msgid "IP address print limit"
@@ -2799,7 +2774,6 @@ msgstr ""
 #: site/admin/manageSection.php:92
 msgid "If group is not set in permissions then it will not have access to subnet"
 msgstr ""
-"dostopa do omrežja"
 
 #: site/admin/manageSection.php:93
 msgid "Groups with RO permissions will not be able to create new subnets"
@@ -2809,7 +2783,6 @@ msgstr ""
 msgid "Subnet permissions must be set separately. By default if group has access to "
 "section<br>it will have same permission on subnets"
 msgstr ""
-"do razdelka<br>, potem bo imela enake pravice v pripadajočih omrežjih"
 
 #: site/admin/manageSection.php:95
 msgid "You can choose to delegate section permissions to all underlying subnets"
@@ -2819,13 +2792,12 @@ msgstr ""
 msgid "If group does not have access to section it will not be able to access "
 "subnet, even if<br>subnet permissions are set"
 msgstr ""
-"tudi če so pravice za to omrežje določene"
 
 #: site/admin/customSubnetFieldsOrder.php:15
 #: site/admin/customIPFieldsOrder.php:15
 #: site/admin/customVLANFieldsOrder.php:15
 #: site/admin/customUserFieldsOrder.php:15
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr ""
 
 #: site/admin/customSubnetFieldsOrder.php:19
@@ -2911,7 +2883,6 @@ msgstr ""
 msgid "No disables overlapping subnet checks. Subnets can be nested/created "
 "randomly. Anarchy."
 msgstr ""
-"poljubno. Anarhija."
 
 #: site/admin/manageSectionEdit.php:90
 msgid "Permissions"
@@ -2971,13 +2942,11 @@ msgstr ""
 msgid "Here you can set parameters for connecting to OpenLDAP for authenticating "
 "users. phpIPAM uses"
 msgstr ""
-"uporabnikov. phpIPAM uporablja "
 
 #: site/admin/manageAD_LDAP.php:20
 msgid "First create new user under user management with <u>same username as on "
 "LDAP</u> and set usertype to domain user. Also set proper groups (premissions) for this user."
 msgstr ""
-"LDAPu</u> in izberite tip uporabnika domenski uporabnik. Nastavite tudi ustrezne skupine za uporabnika"
 
 #: site/admin/manageAD_LDAP.php:38
 msgid "LDAP servers"
@@ -3083,7 +3052,6 @@ msgstr ""
 msgid "To successfully import data please use the following XLS/CSV structure:<br>"
 "( ip | State | Description | hostname | MAC | Owner | Device | Port | Note "
 msgstr ""
-"( ip | State | Opis | DNS ime | MAC | Lastnik | Naprava | Port | Note "
 
 #: site/admin/CSVimport.php:48
 msgid "Upload file"
@@ -3161,7 +3129,6 @@ msgstr ""
 msgid "If existing IP will fall to subnet/broadcast of new subnets split will fail, "
 "except if strict mode is disabled"
 msgstr ""
-"ne bo uspela, razen če je strog način izklopljen"
 
 #: site/admin/manageSubnetresize.php:41
 msgid "Current mask"
@@ -3184,7 +3151,6 @@ msgstr ""
 msgid "If strict mode is enabled check will be made to ensure it is still inside "
 "master subnet"
 msgstr ""
-"še vedno znotraj nadrejenega omrežja"
 
 #: site/admin/manageDevices.php:17
 msgid "Add device"
@@ -3226,7 +3192,7 @@ msgid "Truncating network will remove all IP addresses, that belong to selected 
 msgstr ""
 
 #: site/admin/manageSubnetTruncateSave.php:23
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr ""
 
 #: site/admin/usersEditEmailNotif.php:23
@@ -3244,7 +3210,6 @@ msgstr ""
 #: site/admin/usersEditEmailNotif.php:28
 msgid "Sending notification mail for new account failed"
 msgstr ""
-"računu ni uspelo"
 
 #: site/admin/usersEditEmailNotif.php:29
 msgid "Notification mail for new account sent"
@@ -5679,10 +5644,10 @@ msgstr ""
 msgid "Manage permissions for folder"
 msgstr ""
 
-msgid "Only subnets that have no nested subnets can be splitted"
+msgid "Only subnets that have no nested subnets can be split"
 msgstr ""
 
-msgid "Subnet too small to be splitted"
+msgid "Subnet too small to be split"
 msgstr ""
 
 msgid "Name prefix"
@@ -6314,7 +6279,7 @@ msgstr ""
 msgid "No new subnets found"
 msgstr ""
 
-msgid "SNMP module disbled"
+msgid "SNMP module disabled"
 msgstr ""
 
 msgid "No devices for SNMP ARP query available"
@@ -7106,7 +7071,7 @@ msgstr ""
 msgid "Require unique subnets"
 msgstr ""
 
-msgid "Require unique subnets accross all sections"
+msgid "Require unique subnets across all sections"
 msgstr ""
 
 msgid "Set maximum number of concurrent ICMP checks (default 128)"
@@ -7172,13 +7137,13 @@ msgstr ""
 msgid "Set subnet alert threshold"
 msgstr ""
 
-msgid "Failed to set subnet permissons for subnet"
+msgid "Failed to set subnet permissions for subnet"
 msgstr ""
 
 msgid "No result"
 msgstr ""
 
-msgid "Subnet splitted successfully"
+msgid "Subnet split successfully"
 msgstr ""
 
 msgid "Copy custom field values"
@@ -8000,7 +7965,7 @@ msgstr ""
 msgid "Upgrade"
 msgstr ""
 
-msgid "Object is Natted"
+msgid "Object is NATted"
 msgstr ""
 
 msgid "Invalid generator ID"
@@ -8154,7 +8119,7 @@ msgstr ""
 msgid "2FA length"
 msgstr ""
 
-msgid "Length of 2FA secret (16 to 32)"
+msgid "Length of 2FA secret (26 to 32)"
 msgstr ""
 
 msgid "2FA user change"
@@ -8198,31 +8163,31 @@ msgstr ""
 msgid "Minimum numbers"
 msgstr ""
 
-msgid "Minumum number of numbers"
+msgid "Minimum number of numbers"
 msgstr ""
 
 msgid "Minimum letters"
 msgstr ""
 
-msgid "Minumum number of letters"
+msgid "Minimum number of letters"
 msgstr ""
 
 msgid "Minimum lowercase letter"
 msgstr ""
 
-msgid "Minumum number of lowercase letters"
+msgid "Minimum number of lowercase letters"
 msgstr ""
 
 msgid "Minimum uppercase letter"
 msgstr ""
 
-msgid "Minumum number of uppercase letters"
+msgid "Minimum number of uppercase letters"
 msgstr ""
 
 msgid "Minimum symbols"
 msgstr ""
 
-msgid "Minumum number of symbols"
+msgid "Minimum number of symbols"
 msgstr ""
 
 msgid "Maximum symbols"

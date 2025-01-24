@@ -1,7 +1,7 @@
 <?php
 
 // process permissions
-$permissions = pf_json_decode($user['module_permissions'], true);
+$permissions = db_json_decode($user['module_permissions'], true);
 // loop
 if (is_array($permissions)) {
     if (sizeof($permissions)>0) {
@@ -62,7 +62,7 @@ $perm_names['perm_vaults'] = "Vaults";
 
 
 // user page
-if((@$_GET['page']=="administration" && @$_GET['section']=="users" && @$_GET['sPage']=="modules") || ($_GET['section']=="user-menu")) {
+if(($GET->page=="administration" && $GET->section=="users" && $GET->sPage=="modules") || ($GET->section=="user-menu")) {
 
     print '<div class="panel panel-default" style="max-width:600px;min-width:350px;">';
     print '<div class="panel-heading">'._("User permissions for phpipam modules").'</div>';

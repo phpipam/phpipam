@@ -22,12 +22,12 @@ $csrf = $User->Crypto->csrf_cookie ("create", "resize");
 
 
 # ID must be numeric
-if(!is_numeric($_POST['subnetId']))									{ $Result->show("danger", _("Invalid ID"), true, true); }
+if(!is_numeric($POST->subnetId))									{ $Result->show("danger", _("Invalid ID"), true, true); }
 # verify that user has write permissions for subnet
-if($Subnets->check_permission ($User->user, $_POST['subnetId'])<3)	{ $Result->show("danger", _('You do not have permissions to resize subnet').'!', true, true); }
+if($Subnets->check_permission ($User->user, $POST->subnetId)<3)	{ $Result->show("danger", _('You do not have permissions to resize subnet').'!', true, true); }
 
 # fetch subnet details
-$subnet = (array) $Subnets->fetch_subnet (null, $_POST['subnetId']);
+$subnet = (array) $Subnets->fetch_subnet (null, $POST->subnetId);
 ?>
 
 <!-- header -->
@@ -53,7 +53,7 @@ $subnet = (array) $Subnets->fetch_subnet (null, $_POST['subnetId']);
         <td class="middle"><?php print _('New mask'); ?></td>
         <td style="vertical-align:middle">
 	        <span class="pull-left" style='margin-right:5px;'> / </span> <input type="text" class="form-control input-sm input-w-100" name="newMask">
-	        <input type="hidden" name="subnetId" value="<?php print escape_input($_POST['subnetId']); ?>">
+	        <input type="hidden" name="subnetId" value="<?php print escape_input($POST->subnetId); ?>">
 	        <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
         </td>
     </tr>

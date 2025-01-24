@@ -21,13 +21,13 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "find_free_section_subnets", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "find_free_section_subnets", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # verify that user has permissions to add subnet
-if($Sections->check_permission ($User->user, $_POST['sectionid']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }
+if($Sections->check_permission ($User->user, $POST->sectionid) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }
 
 // fetch all section subnets
-$section_subnets = $Subnets->fetch_multiple_objects ("subnets", "sectionId", $_POST['sectionid'], "subnet", true, false, ["id","subnet","mask","isFolder", "masterSubnetId"]);
+$section_subnets = $Subnets->fetch_multiple_objects ("subnets", "sectionId", $POST->sectionid, "subnet", true, false, ["id","subnet","mask","isFolder", "masterSubnetId"]);
 
 // result array
 $all_subnets = [];              // all existing subnets
@@ -95,7 +95,7 @@ $(document).ready(function() {
         <td>
             <div class="input-group">
                 <input type="text" class="form-control input-sm input-w-auto" name="results" value='50'>
-                <input type="hidden" name="sectionid" value='<?php print escape_input($_POST['sectionid']); ?>'>
+                <input type="hidden" name="sectionid" value='<?php print escape_input($POST->sectionid); ?>'>
             </div>
 
         </td>

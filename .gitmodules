@@ -33,3 +33,6 @@
 	path = functions/parsedown
 	url = https://github.com/erusev/parsedown.git
 	ignore = all
+[submodule "functions/LdapRecord"]
+	path = functions/LdapRecord
+	url = https://github.com/DirectoryTree/LdapRecord.git

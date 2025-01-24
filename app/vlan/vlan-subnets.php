@@ -10,7 +10,7 @@ $User->check_user_session();
 $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 
 # fetch all subnets in VLAN in this section
-$slaves = $Subnets->fetch_vlan_subnets ($_GET['subnetId'], $_GET['section']);
+$slaves = $Subnets->fetch_vlan_subnets ($GET->subnetId, $GET->section);
 
 # no subnets
 if(!$slaves) {
@@ -52,8 +52,8 @@ else {
             $fullinfo = $subnet['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
 
 			print "<tr>";
-		    print "	<td class='small description'><a href='".create_link("subnets",$_GET['section'],$subnet['id'])."'>$subnet[description]</a></td>";
-		    print "	<td><a href='".create_link("subnets",$_GET['section'],$subnet['id'])."'>".$Subnets->transform_address($subnet['subnet'], "dotted")."/$subnet[mask] $fullinfo</a></td>";
+		    print "	<td class='small description'><a href='".create_link("subnets",$GET->section,$subnet['id'])."'>$subnet[description]</a></td>";
+		    print "	<td><a href='".create_link("subnets",$GET->section,$subnet['id'])."'>".$Subnets->transform_address($subnet['subnet'], "dotted")."/$subnet[mask] $fullinfo</a></td>";
 
 			# host check
 			if($subnet['pingSubnet'] == 1) 				{ print '<td class="allowRequests small hidden-xs hidden-sm">'._('enabled').'</td>'; }
@@ -79,7 +79,7 @@ else {
 				print " </td>";
 			}
 			else {
-				print "	<td class='actionsl'>";
+				print "	<td class='actions'>";
 				print "	<div class='btn-group'>";
 				print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-pencil'></i></button>";
 				print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-tasks'></i></button>";

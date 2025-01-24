@@ -12,7 +12,7 @@
 $User->check_user_session();
 
 // validate
-if(!is_numeric($_GET['subnetId'])) {
+if(!is_numeric($GET->subnetId)) {
     $Result->show("danger", _("Invalid Id"), true);
 }
 else {
@@ -26,7 +26,7 @@ else {
     }
     else {
         # fetch all locations
-        $location = $Tools->fetch_object("locations", "id", $_GET['subnetId']);
+        $location = $Tools->fetch_object("locations", "id", $GET->subnetId);
 
         // get custom fields
         $cfields = $Tools->fetch_custom_fields ('locations');
@@ -55,21 +55,21 @@ else {
             	# name
             	print "<tr>";
             	print "	<th>"._('Name')."</th>";
-            	print "	<td><strong>".escape_input($location->name)."</strong></td>";
+            	print "	<td><strong>".$location->name."</strong></td>";
             	print "</tr>";
 
             	# address
             	print "<tr>";
             	print "	<th>"._('Address')."</th>";
             	print "	<td>";
-            	print !is_blank($location->address) ? escape_input($location->address) : "/";
+            	print !is_blank($location->address) ? $location->address : "/";
             	print "</td>";
             	print "</tr>";
 
             	print "<tr>";
             	print "	<th>"._('Coordinates')."</th>";
             	print "	<td>";
-            	print !is_blank($location->lat) && !is_blank($location->long) ? "<span class='text-muted'>".escape_input($location->lat)." / ".escape_input($location->long)."</span> <a href='https://www.google.com/maps/@?api=1&map_action=map&center=".escape_input($location->lat)."%2C".escape_input($location->long). "&zoom=20&basemap=satellite' target='_blank'><i class='fa fa-gray fa-google' rel='tooltip' title='"._("Google Maps Satellite View")."'></i></a>" : "/";
+            	print !is_blank($location->lat) && !is_blank($location->long) ? "<span class='text-muted'>".$location->lat." / ".$location->long."</span> <a href='https://www.google.com/maps/@?api=1&map_action=map&center=".$location->lat."%2C".$location->long. "&zoom=20&basemap=satellite' target='_blank'><i class='fa fa-gray fa-google' rel='tooltip' title='"._("Google Maps Satellite View")."'></i></a>" : "/";
             	print "</td>";
             	print "</tr>";
 
@@ -83,7 +83,7 @@ else {
             	# description
             	print "<tr>";
             	print "	<th>"._('Description')."</th>";
-            	print "	<td>". escape_input($location->description) ."</td>";
+            	print "	<td>". $location->description ."</td>";
             	print "</tr>";
 
             	# print custom subnet fields if any

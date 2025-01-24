@@ -12,7 +12,7 @@ $User->check_user_session();
 <form id="mac_lookup" name="search" class='form-inline' role="form" style="margin-bottom:20px;" method="post">
 	<div class='input-group'>
 	<div class='form-group'>
-		<input class="search input-md form-control" name="mac" placeholder="<?php print _('MAC address'); ?>" value='<?php print @escape_input($_POST['mac']); ?>' type="text" autofocus="autofocus" style='width:250px;'>
+		<input class="search input-md form-control" name="mac" placeholder="<?php print _('MAC address'); ?>" value='<?php print @escape_input($POST->mac); ?>' type="text" autofocus="autofocus" style='width:250px;'>
 		<span class="input-group-btn">
 			<button type="submit" class="btn btn-md btn-default"><?php print _('search');?></button>
 		</span>
@@ -27,7 +27,7 @@ $User->check_user_session();
 <div class="searchResult">
 <?php
 /* include results if IP address is posted */
-if (!is_blank(@$_POST['mac'])) 	{ include('results.php'); }
+if (!is_blank($POST->mac)) 	{ include('results.php'); }
 else 							{ include('tips.php');}
 ?>
 </div>

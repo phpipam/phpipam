@@ -46,11 +46,11 @@ $curRow = 0;
 $curColumn = 0;
 
 //write headers
-if( (isset($_GET['name'])) && ($_GET['name'] == "on") ) {
+if ($GET->name == "on") {
 	$worksheet->write($curRow, $curColumn, _('Name') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+if ($GET->description == "on") {
 	$worksheet->write($curRow, $curColumn, _('Description') ,$format_header);
 	$curColumn++;
 }
@@ -62,11 +62,11 @@ foreach ($vlan_domains as $vlan_domain) {
 	//cast
 	$vlan_domain = (array) $vlan_domain;
 
-	if( (isset($_GET['name'])) && ($_GET['name'] == "on") ) {
+	if ($GET->name == "on") {
 		$worksheet->write($curRow, $curColumn, $vlan_domain['name'], $format_text);
 		$curColumn++;
 	}
-	if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+	if ($GET->description == "on") {
 		$worksheet->write($curRow, $curColumn, $vlan_domain['description'], $format_text);
 		$curColumn++;
 	}
@@ -81,5 +81,3 @@ $workbook->send($filename);
 
 // Let's send the file
 $workbook->close();
-
-?>

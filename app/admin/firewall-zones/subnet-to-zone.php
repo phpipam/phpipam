@@ -17,11 +17,11 @@ $Zones    = new FirewallZones($Database);
 # validate session parameters
 $User->check_user_session();
 
-# validate $_POST['operation'] values
-if ($_POST['operation'] != 'subnet2zone') 				{ $Result->show("danger", _("Invalid operation. Do not manipulate the POST values!"), true); }
+# validate $POST->operation values
+if ($POST->operation != 'subnet2zone') 				{ $Result->show("danger", _("Invalid operation. Do not manipulate the POST values!"), true); }
 
-# validate $_POST['subnetId'] values
-if (!preg_match('/^[0-9]+$/i', $_POST['subnetId'])) 	{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!"), true); }
+# validate $POST->subnetId values
+if (!preg_match('/^[0-9]+$/i', $POST->subnetId)) 	{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!"), true); }
 
 $firewallZones = $Zones->get_zones();
 
@@ -35,7 +35,7 @@ if(!is_array($firewallZones))                              { $Result->show("dang
 <div class="pContent">
 <!-- form -->
 <form id="subnet-to-zone-edit">
-<input type="hidden" name="subnetId" value="<?php print escape_input($_POST['subnetId']); ?>">
+<input type="hidden" name="subnetId" value="<?php print escape_input($POST->subnetId); ?>">
 <!-- table -->
 <table class="table table-noborder table-condensed">
 	<!-- zone -->

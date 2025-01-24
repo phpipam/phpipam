@@ -2637,7 +2637,7 @@ div.jqueryError a {
     font-size: 14px;
 }
 .dropdown-menu {
-	z-index: 50 !important;
+	z-index: 100 !important;
 }
 #popup .dropdown-menu {
 	z-index: 1000 !important;

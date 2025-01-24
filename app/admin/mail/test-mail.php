@@ -31,7 +31,7 @@ try {
 	# initialize mailer
 	$phpipam_mail = new phpipam_mail($User->settings, $mail_settings);
 	//override settings
-	$phpipam_mail->override_settings($_POST);
+	$phpipam_mail->override_settings($POST->as_array());
 	//debugging
 	$phpipam_mail->set_debugging(2);
 
@@ -39,7 +39,7 @@ try {
 	$content 		= $phpipam_mail->generate_message ("phpIPAM test HTML message");
 	$content_plain 	= "phpIPAM test text message";
 
-	$phpipam_mail->Php_mailer->setFrom($_POST['mAdminMail'], $_POST['mAdminName']);
+	$phpipam_mail->Php_mailer->setFrom($POST->mAdminMail, $POST->mAdminName);
 	$phpipam_mail->Php_mailer->addAddress($User->settings->siteAdminMail, $User->settings->siteAdminName);
 	$phpipam_mail->Php_mailer->Subject = 'phpIPAM localhost mail test';
 	$phpipam_mail->Php_mailer->msgHTML($content);

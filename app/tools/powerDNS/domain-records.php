@@ -10,10 +10,10 @@ $User->check_user_session();
 $User->check_module_permissions ("pdns", User::ACCESS_R, true, false);
 
 // Determines where we link back to
-$link_section = $_GET['page'] == "administration" ? 'administration' : "tools";
+$link_section = $GET->page == "administration" ? 'administration' : "tools";
 
 // validate domain
-$domain = $PowerDNS->fetch_domain($_GET['ipaddrid']);
+$domain = $PowerDNS->fetch_domain($GET->ipaddrid);
 
 // validate
 if ($domain === false) {
@@ -103,7 +103,7 @@ if ($domain === false) {
 
 <!-- Add new -->
 <div class="btn-group" style="margin-bottom:10px;margin-top: 25px;">
-	<a href="<?php print create_link($link_section, "powerDNS", $_GET['subnetId']);?>" class='btn btn-sm btn-default'>
+	<a href="<?php print create_link($link_section, "powerDNS", $GET->subnetId);?>" class='btn btn-sm btn-default'>
 		<i class='fa fa-angle-left'></i> <?php print _('Domains');?>
 	</a>
     <?php if($User->get_module_permissions ("pdns")>=User::ACCESS_RW) { ?>

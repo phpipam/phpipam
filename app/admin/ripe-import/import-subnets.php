@@ -20,11 +20,11 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
-//get size of subnets - $_POST/4
-$size = sizeof($_POST) / 4;
+//get size of subnets - $POST/4
+$size = sizeof($POST) / 4;
 
 //get unique keys for subnets because they are not sequential if deleted!!!
-foreach($_POST as $key=>$line) {
+foreach($POST as $key=>$line) {
 	if (!is_blank(strstr($key,"subnet"))) {
 		$allSubnets[] = $key;
 	}
@@ -36,23 +36,23 @@ foreach($allSubnets as $subnet) {
 	$m = str_replace("subnet-", "", $subnet);
 
 	//reformat subnet
-	$_temp = $Subnets->cidr_network_and_mask($_POST['subnet-' . $m]);
+	$_temp = $Subnets->cidr_network_and_mask($POST->{'subnet-' . $m});
 
 	//set subnet details for importing
 	$subnet_import['subnet'] 	   = $Subnets->transform_to_decimal($_temp[0]);
 	$subnet_import['mask'] 	   	   = $_temp[1];
-	$subnet_import['sectionId']    = $_POST['section-' . $m];
-	$subnet_import['description']  = $_POST['description-' . $m];
-	$subnet_import['vlanId'] 	   = $_POST['vlan-' . $m];
-	$subnet_import['vrfId'] 	   = $_POST['vrf-' . $m];
-	$subnet_import['showName']	   = $_POST['showName-' . $m];
+	$subnet_import['sectionId']    = $POST->{'section-' . $m};
+	$subnet_import['description']  = $POST->{'description-' . $m};
+	$subnet_import['vlanId'] 	   = $POST->{'vlan-' . $m};
+	$subnet_import['vrfId'] 	   = $POST->{'vrf-' . $m};
+	$subnet_import['showName']	   = $POST->{'showName-' . $m};
 
 	//cidr
 	if(strlen($err=$Subnets->verify_cidr($Subnets->transform_to_dotted($subnet_import['subnet'])."/".$subnet_import['mask']))>5) {
 		$errors[] = $err;
 	}
 	//overlapping, only root !
-	else if (strlen($err=$Subnets->verify_subnet_overlapping ($subnet_import['sectionId'], $Subnets->transform_to_dotted($subnet_import['subnet'])."/".$subnet_import['mask'], $subnet_import['vrfId']))>5) {
+	elseif (strlen($err=$Subnets->verify_subnet_overlapping ($subnet_import['sectionId'], $Subnets->transform_to_dotted($subnet_import['subnet'])."/".$subnet_import['mask'], $subnet_import['vrfId']))>5) {
 		$errors[] = $err;
 	}
 	//set insert
@@ -94,4 +94,3 @@ else {
 	//check if all is ok and print it!
 	if($errors_import_failed == 0) 	{ $Result->show("success", _("Import successful")."!", false); }
 }
-?>

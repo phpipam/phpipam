@@ -4,7 +4,7 @@
 $User->check_user_session();
 
 # get all custom fields
-$custom_address_fields = $Params->addresses=="on" ? $Tools->fetch_custom_fields ("ipaddresses") : array();
+$custom_address_fields = $GET->addresses=="on" ? $Tools->fetch_custom_fields ("ipaddresses") : array();
 $hidden_address_fields = isset($hidden_fields['ipaddresses']) ? $hidden_fields['ipaddresses'] : array();
 
 # search addresses
@@ -63,7 +63,7 @@ $result_addresses = $Tools->search_addresses($searchTerm, $searchTerm_edited['hi
 <?php
 
 $m = 0;		//for section change
-$n = 0;		//fpr ermission and result count
+$n = 0;		//for permission and result count
 
 /* if no result print nothing found */
 if(is_array($result_addresses)) {
@@ -93,7 +93,6 @@ if(is_array($result_addresses)) {
 				}
 				print '</tr>';
 			}
-			$m++;
 
 			//print table
 			print '<tr class="ipSearch" id="'. $line['id'] .'" subnetId="'. $line['subnetId'] .'" sectionId="'. $subnet['sectionId'] .'" link="'. $section['name'] .'|'. $subnet['id'] .'">'. "\n";
@@ -123,7 +122,7 @@ if(is_array($result_addresses)) {
 					if ($User->settings->enableRACK == "1" && $User->get_module_permissions("racks") >= User::ACCESS_R && $device->rack > 0) {
 						$rack = "<i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackid='" . $device->rack . "' data-deviceid='" . $device->id . "'></i>";
 					}
-					print "<td class='hidden-xs hidden-sm hidden-md'>$rack<a href='" . create_link("tools", "devices", $device->id) . "'>" . escape_input($device->hostname) . "</a></td>";
+					print "<td class='hidden-xs hidden-sm hidden-md'>$rack<a href='" . create_link("tools", "devices", $device->id) . "'>" . $device->hostname . "</a></td>";
 				} else {
 					print "<td class='hidden-xs hidden-sm hidden-md'></td>";
 				}
@@ -184,8 +183,9 @@ if(is_array($result_addresses)) {
 			print "	</div>";
 			print "</td>";
 
-		print '</tr>' . "\n";
-	}
+			print '</tr>' . "\n";
+		}
+		$m++;
 	}
 }
 ?>

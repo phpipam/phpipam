@@ -13,12 +13,11 @@ $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
-$Params		= new Params ($User->strip_input_tags ($_POST));
 
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($Params->action=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("devices", User::ACCESS_RW, true, true);
 }
 else {
@@ -36,11 +35,11 @@ $Admin->validate_action();
 $custom = $Tools->fetch_custom_fields('devices');
 
 # ID must be numeric
-if($Params->action!="add" && !is_numeric($Params->switchid))		{ $Result->show("danger", _("Invalid ID"), true, true); }
+if($POST->action!="add" && !is_numeric($POST->switchid))		{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch device details
-if( ($Params->action == "edit") || ($Params->action == "delete") ) {
-	$device = (array) $Admin->fetch_object("devices", "id", $Params->switchid);
+if( ($POST->action == "edit") || ($POST->action == "delete") ) {
+	$device = (array) $Admin->fetch_object("devices", "id", $POST->switchid);
 	// false
 	if ($device===false)                                            { $Result->show("danger", _("Invalid ID"), true, true);  }
 }
@@ -55,7 +54,7 @@ else {
 }
 
 # set readonly flag
-$readonly = $Params->action=="delete" ? "readonly" : "";
+$readonly = $POST->action=="delete" ? "readonly" : "";
 
 
 # all locations
@@ -104,7 +103,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" name="hostname" class="form-control input-sm" placeholder="<?php print _('Hostname'); ?>" value="<?php if(isset($device['hostname'])) print $Tools->strip_xss($device['hostname']); ?>" <?php print $readonly; ?>>
+			<input type="text" name="hostname" class="form-control input-sm" placeholder="<?php print _('Hostname'); ?>" value="<?php if(isset($device['hostname'])) print $device['hostname']; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -112,7 +111,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	<tr>
 		<td><?php print _('IP address'); ?></td>
 		<td>
-			<input type="text" name="ip_addr" class="form-control input-sm" placeholder="<?php print _('IP address'); ?>" value="<?php if(isset($device['ip_addr'])) print $Tools->strip_xss($device['ip_addr']); ?>" <?php print $readonly; ?>>
+			<input type="text" name="ip_addr" class="form-control input-sm" placeholder="<?php print _('IP address'); ?>" value="<?php if(isset($device['ip_addr'])) print $device['ip_addr']; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -194,10 +193,10 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 		<td>
 			<textarea name="description" class="form-control input-sm" placeholder="<?php print _('Description'); ?>" <?php print $readonly; ?>><?php if(isset($device['description'])) print $device['description']; ?></textarea>
 			<?php
-			if( ($Params->action == "edit") || ($Params->action == "delete") ) {
-				print '<input type="hidden" name="switchid" value="'. $Params->switchid .'">'. "\n";
+			if( ($POST->action == "edit") || ($POST->action == "delete") ) {
+				print '<input type="hidden" name="switchid" value="'. escape_input($POST->switchid) .'">'. "\n";
 			} ?>
-			<input type="hidden" name="action" value="<?php print escape_input($Params->action); ?>">
+			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
@@ -266,7 +265,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($Params->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editSwitchsubmit"><i class="fa <?php if($Params->action=="add") { print "fa-plus"; } else if ($Params->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editSwitchsubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 
 	<!-- result -->

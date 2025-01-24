@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true, true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disabled"), true, true); }
 # perm check
 $User->check_module_permissions ("vrf", User::ACCESS_RWA, true, false);
 

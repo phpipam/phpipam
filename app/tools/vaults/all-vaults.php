@@ -66,7 +66,7 @@ else {
 		if(sizeof($all_vaults_grouped)>0) {
 			foreach ($all_vaults_grouped as $a) {
 				// set link
-				if($User->Crypto->decrypt($a->test, $_SESSION['vault'.$a->id]) == "test") {
+				if(isset($_SESSION['vault'.$a->id])&& $User->Crypto->decrypt($a->test, $_SESSION['vault'.$a->id]) !== false) {
 					$href = '<a class="btn btn-xs btn-success" href="'.create_link("tools", "vaults", $a->id).'">'.$a->name.'</a>';
 					$status = "Unlocked";
 				}
@@ -100,7 +100,7 @@ else {
 				// add/remove vaults
 				print "	<td class='actions'>";
 				print "	<div class='btn-group'>";
-				if($User->Crypto->decrypt($a->test, $_SESSION['vault'.$a->id]) == "test") {
+				if(isset($_SESSION['vault'.$a->id]) && $User->Crypto->decrypt($a->test, $_SESSION['vault'.$a->id]) !== false) {
 					print "		<button class='btn btn-xs btn-success open_popup' data-script='app/admin/vaults/lock.php' data-class='500' data-id='{$a->id}' rel='tooltip' title='"._('Lock Vault')."'><i class='fa fa-lock'></i></button>";
 				}
 				else {

@@ -145,7 +145,7 @@ class PingThread {
 		fclose($this->sockets[0]);
 		$response = fgets($this->sockets[1]);
 		if (is_string($response) && !is_blank($response)) {
-			$response = pf_json_decode($response);
+			$response = db_json_decode($response);
 		} else {
 			$response = null;
 		}

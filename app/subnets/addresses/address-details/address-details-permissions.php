@@ -9,7 +9,7 @@ $User->is_admin();
 $groups = $Tools->fetch_all_objects ("userGroups", "g_name");
 
 # parse permissions
-$s_permissions = pf_json_decode($subnet['permissions']);
+$s_permissions = db_json_decode($subnet['permissions']);
 
 // title
 print "<h4>"._('Address permissions').":</h4><hr>";
@@ -40,4 +40,3 @@ if ($groups!==false) {
 else {
     $Result->show("info", _('No groups available'));
 }
-?>

@@ -472,8 +472,9 @@ $(document).on('click', '#sortablePopup li a.widget-add', function() {
     var wsize = $(this).attr('data-size');
     var wtitle= $(this).attr('data-htitle');
     //create
-    var data = '<div class="row-fluid"><div class="span'+wsize+' widget-dash" id="'+wid+'"><div class="inner movable"><h4>'+wtitle+'</h4><div class="hContent"></div></div></div></div>';
-    $('#dashboard').append(data);
+    var data = '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-'+wsize+' widget-dash" id="'+wid+'"><div class="inner movable"><h4>'+wtitle+'</h4><div class="hContent"></div></div></div>';
+    $('#widget-container').append(data);
+    $('#dashboard .row-fluid').sortable('refresh');
     //load
     w = wid.replace("w-", "");
     $.post('app/dashboard/widgets/'+w+'.php', function(data) {
@@ -565,17 +566,17 @@ $('#expandfolders').click(function() {
     var action = $(this).attr('data-action');
     //open
     if(action == 'close') {
-        $('.subnets ul#subnets li.folder > i').removeClass('fa-folder-close-o').addClass('fa-folder-open-o');
-        $('.subnets ul#subnets li.folderF > i').removeClass('fa-folder').addClass('fa-folder-open');
-        $('.subnets ul#subnets ul.submenu').removeClass('submenu-close').addClass('submenu-open').slideDown('fast');
+        $('ul#subnets li.folder > i').removeClass('fa-folder-close-o').addClass('fa-folder-open-o');
+        $('ul#subnets li.folderF > i').removeClass('fa-folder').addClass('fa-folder-open');
+        $('ul#subnets ul.submenu').removeClass('submenu-close').addClass('submenu-open').slideDown('fast');
         $(this).attr('data-action','open');
         createCookie('expandfolders','1','365');
         $(this).removeClass('fa-expand').addClass('fa-compress');
     }
     else {
-        $('.subnets ul#subnets li.folder > i').addClass('fa-folder-close-o').removeClass('fa-folder-open-o');
-        $('.subnets ul#subnets li.folderF > i').addClass('fa-folder').removeClass('fa-folder-open');
-        $('.subnets ul#subnets ul.submenu').addClass('submenu-close').removeClass('submenu-open').slideUp('fast');
+        $('ul#subnets li.folder > i').addClass('fa-folder-close-o').removeClass('fa-folder-open-o');
+        $('ul#subnets li.folderF > i').addClass('fa-folder').removeClass('fa-folder-open');
+        $('ul#subnets ul.submenu').addClass('submenu-close').removeClass('submenu-open').slideUp('fast');
         $(this).attr('data-action','close');
         createCookie('expandfolders','0','365');
         $(this).removeClass('fa-compress').addClass('fa-expand');

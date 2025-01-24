@@ -20,25 +20,25 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
-$User->Crypto->csrf_cookie ("validate", "import_file", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "import_file", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # permissions
-$permission = $Subnets->check_permission ($User->user, $_POST['subnetId']);
+$permission = $Subnets->check_permission ($User->user, $POST->subnetId);
 
 # die if write not permitted
 if($permission < 2) 			   $Result->show("danger", _('You cannot write to this subnet'), true);
 # check integer
-is_numeric($_POST['subnetId']) ? : $Result->show("danger", _("Invalid subnet ID") ,true);
+is_numeric($POST->subnetId) ? : $Result->show("danger", _("Invalid subnet ID") ,true);
 
 # set filetype
-$filetype = pf_explode(".", $_POST['filetype']);
+$filetype = pf_explode(".", $POST->filetype);
 $filetype = end($filetype);
 
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 # fetch subnet
-$subnet = $Subnets->fetch_subnet("id",$_POST['subnetId']);
+$subnet = $Subnets->fetch_subnet("id",$POST->subnetId);
 if($subnet===false)                $Result->show("danger", _("Invalid subnet ID") ,true);
 
 # Parse file
@@ -58,7 +58,7 @@ $errors = 0;
 foreach($outFile as $k=>$line) {
 
     // if not error
-    if ($line['class']!="danger" || ($line['class']=="danger" && @$_POST['ignoreError']=="1")) {
+    if ($line['class']!="danger" || ($line['class']=="danger" && $POST->ignoreError=="1")) {
 
 		// reformat IP state from name to id
 		$line[1] = $Addresses->address_type_type_to_index($line[1]);
@@ -94,13 +94,13 @@ foreach($outFile as $k=>$line) {
 		}
 
 		// set action
-		if($id = $Addresses->address_exists ($line[0], $_POST['subnetId'], false))	{ $action = "edit"; }
+		if($id = $Addresses->address_exists ($line[0], $POST->subnetId, false))	{ $action = "edit"; }
 		else																		{ $action = "add"; }
 
 		// set insert / update values
 		$address_insert = array(
 								"action"                => $action,
-								"subnetId"              => $_POST['subnetId'],
+								"subnetId"              => $POST->subnetId,
 								"ip_addr"               => $line[0],
 								"state"                 => $Addresses->address_type_type_to_index($line[1]),
 								"description"           => $line[2],
@@ -139,7 +139,7 @@ foreach($outFile as $k=>$line) {
 
 # print success if no errors
 if($errors==0)	{
-	$Result->show("success", _('Import successfull'), false);
+	$Result->show("success", _('Import successful'), false);
 	# erase file on success
 	unlink('upload/import.'.$filetype);
 }

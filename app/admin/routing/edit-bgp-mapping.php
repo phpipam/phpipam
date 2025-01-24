@@ -15,7 +15,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # fetch BGP details
-$bgp = $Admin->fetch_object("routing_bgp", "id", $_POST['bgpid']);
+$bgp = $Admin->fetch_object("routing_bgp", "id", $POST->bgpid);
 // false
 if ($bgp===false)                                            { $Result->show("danger", _("Invalid ID"), true, true);  }
 

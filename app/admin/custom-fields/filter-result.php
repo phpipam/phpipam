@@ -21,15 +21,15 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # set table name
-$table = $_POST['table'];
-unset($_POST['table']);
+$table = $POST->table;
+unset($POST->table);
 
 # fetch custom fields
 $fields = $Tools->fetch_custom_fields($table);
 
-/* enthing to write? */
-if(sizeof($_POST)>0) {
-	foreach($_POST as $k=>$v) {
+/* anything to write? */
+if(sizeof($POST)>0) {
+	foreach($POST as $k=>$v) {
 		$kTest = str_replace("___", " ", $k);
 		$filtered_fields[] = array_key_exists($kTest, $fields) ? $kTest : $k;
 	}
@@ -39,5 +39,6 @@ else {
 }
 
 /* save */
-if(!$Admin->save_custom_fields_filter($table, $filtered_fields))	{  }
-else																{ $Result->show("success", _('Filter saved')); }
+if ($Admin->save_custom_fields_filter($table, $filtered_fields)) {
+	$Result->show("success", _('Filter saved'));
+}

@@ -10,7 +10,7 @@ $User->check_user_session();
 $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 
 # fetch l2 domain
-$vlan_domain = $Tools->fetch_object("vlanDomains", "id", $_GET['subnetId']);
+$vlan_domain = $Tools->fetch_object("vlanDomains", "id", $GET->subnetId);
 if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true); }
 
 # Check user has read level permission to l2domain (or die with warning)
@@ -23,7 +23,7 @@ $vlans = $Tools->fetch_vlans_and_subnets ($vlan_domain->id);
 $custom_fields = (array) $Tools->fetch_custom_fields('vlans');
 
 # set hidden fields
-$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : array();
 
 # size of custom fields
@@ -39,7 +39,7 @@ print "<div class='text-muted' style='padding-left:10px;'>".$vlan_domain->descri
     <?php
     // back
     if(sizeof($vlan_domains)>1) {
-    print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GET['section'])."'><i class='fa fa-angle-left'></i> "._('L2 Domains')."</a>";
+    print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, $GET->section)."'><i class='fa fa-angle-left'></i> "._('L2 Domains')."</a>";
     if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) {
     print "<a class='btn btn-sm btn-default open_popup' data-script='app/admin/vlans/edit.php' data-class='500' data-action='add' data-domain='".$vlan_domain->id."' data-number='1'><i class='fa fa-plus'></i>"._('Add VLAN')."</a>";
     }
@@ -149,8 +149,8 @@ else {
 					$class = $n==0 ? "odd" : "even";
 					//start - VLAN details
 					print "<tr class='$class change'>";
-					print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $vlan_domain->id, $vlan[0]->vlanId)."'><i class='fa fa-cloud prefix'></i> ".$vlan[0]->number."</a></td>";
-					print "	<td><a href='".create_link($_GET['page'], $_GET['section'], $vlan_domain->id, $vlan[0]->vlanId)."'>".$vlan[0]->name."</a></td>";
+					print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, $GET->section, $vlan_domain->id, $vlan[0]->vlanId)."'><i class='fa fa-cloud prefix'></i> ".$vlan[0]->number."</a></td>";
+					print "	<td><a href='".create_link($GET->page, $GET->section, $vlan_domain->id, $vlan[0]->vlanId)."'>".$vlan[0]->name."</a></td>";
 					print "	<td>".$vlan[0]->description."</td>";
 					if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 						 $customer = $Tools->fetch_object ("customers", "id", $vlan[0]->customer_id);

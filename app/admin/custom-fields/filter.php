@@ -23,15 +23,12 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-# strip tags - XSS
-$_POST = $User->strip_input_tags ($_POST);
-
 # get hidden custom fields from settings
-$filters = pf_json_decode($User->settings->hiddenCustomFields, true);
-isset($filters[$_POST['table']]) ? : $filters[$_POST['table']] = array();
+$filters = db_json_decode($User->settings->hiddenCustomFields, true);
+isset($filters[$POST->table]) ? : $filters[$POST->table] = array();
 
 # fetch custom fields
-$custom = $Tools->fetch_custom_fields($_POST['table']);
+$custom = $Tools->fetch_custom_fields($POST->table);
 ?>
 
 <script>
@@ -59,7 +56,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
 	<form id="editCustomFieldsFilter">
 	<table id="editCustomFields" class="table table-noborder table-condensed">
 
-	<input type="hidden" name="table" value="<?php print escape_input($_POST['table']); ?>">
+	<input type="hidden" name="table" value="<?php print escape_input($POST->table); ?>">
 
 	<?php
 	foreach($custom as $k=>$c) {
@@ -67,7 +64,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		print "<tr>";
 		# select
 		print "	<td style='width:20px;'>";
-		if(in_array($k, $filters[$_POST['table']]))	{ print "<input type='checkbox' class='input-switch' name='$kNew' checked>"; }
+		if(in_array($k, $filters[$POST->table]))	{ print "<input type='checkbox' class='input-switch' name='$kNew' checked>"; }
 		else										{ print "<input type='checkbox' class='input-switch' name='$kNew'>"; }
 		print "	</td>";
 		# remove custom_

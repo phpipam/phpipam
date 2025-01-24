@@ -515,7 +515,7 @@ $(document).ready(function() {
 		<input type="checkbox" class="input-switch" value="1" name="enforceUnique" <?php if($settings['enforceUnique'] == 1) print 'checked'; ?>>
 	</td>
 	<td class="info2">
-		<?php print _('Require unique subnets accross all sections'); ?>
+		<?php print _('Require unique subnets across all sections'); ?>
 	</td>
 </tr>
 
@@ -564,7 +564,7 @@ $(document).ready(function() {
 </tr>
 
 
-<!-- ICPM -->
+<!-- ICMP -->
 <tr class="settings-title">
 	<th colspan="3"><h4><?php print _('ICMP settings'); ?></h4></th>
 </tr>

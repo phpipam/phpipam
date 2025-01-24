@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # fetch all vrfs
-$all_nameservers = $Admin->fetch_all_objects("nameservers", "id");
+$all_nameservers = $Admin->fetch_all_objects("nameservers", "name");
 ?>
 
 <h4><?php print _('Manage Nameserver sets'); ?></h4>

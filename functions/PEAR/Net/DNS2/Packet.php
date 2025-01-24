@@ -1,60 +1,27 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * DNS Library for handling lookups and updates. 
  *
- * PHP Version 5
+ * Copyright (c) 2020, Mike Pultz <mike@mikepultz.com>. All rights reserved.
  *
- * Copyright (c) 2010, Mike Pultz <mike@mikepultz.com>.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
- *
- *   * Neither the name of Mike Pultz nor the names of his contributors 
- *     may be used to endorse or promote products derived from this 
- *     software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRIC
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * See LICENSE for more details.
  *
  * @category  Networking
  * @package   Net_DNS2
  * @author    Mike Pultz <mike@mikepultz.com>
- * @copyright 2010 Mike Pultz <mike@mikepultz.com>
+ * @copyright 2020 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id$
- * @link      http://pear.php.net/package/Net_DNS2
+ * @link      https://netdns2.com/
  * @since     File available since Release 0.6.0
  *
- * This file contains code based off the Net::DNS Perl module by
- * Michael Fuhr.
+ * This file contains code based off the Net::DNS Perl module by Michael Fuhr.
  *
  * This is the copyright notice from the PERL Net::DNS module:
  *
- * Copyright (c) 1997-2000 Michael Fuhr.  All rights reserved.  This
- * program is free software; you can redistribute it and/or modify it
- * under the same terms as Perl itself.
+ * Copyright (c) 1997-2000 Michael Fuhr.  All rights reserved.  This program is 
+ * free software; you can redistribute it and/or modify it under the same terms 
+ * as Perl itself.
  *
  */
 
@@ -63,13 +30,6 @@
  *
  * The Net_DNS2_Packet_Request and Net_DNS2_Packet_Response classes extend this
  * class.
- *
- * @category Networking
- * @package  Net_DNS2
- * @author   Mike Pultz <mike@mikepultz.com>
- * @license  http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link     http://pear.php.net/package/Net_DNS2
- * @see      Net_DNS2_Packet_Request, Net_DNS2_Packet_Response
  *
  */
 class Net_DNS2_Packet
@@ -96,7 +56,7 @@ class Net_DNS2_Packet
      * used as "zone" for updates per RFC2136
      *
      */
-    public $question = array();
+    public $question = [];
 
     /*
      * array of Net_DNS2_RR Objects for Answers
@@ -104,7 +64,7 @@ class Net_DNS2_Packet
      * used as "prerequisite" for updates per RFC2136
      *
      */
-    public $answer = array();
+    public $answer = [];
 
     /*
      * array of Net_DNS2_RR Objects for Authority
@@ -112,17 +72,17 @@ class Net_DNS2_Packet
      * used as "update" for updates per RFC2136
      *
      */
-    public $authority = array();
+    public $authority = [];
 
     /*
      * array of Net_DNS2_RR Objects for Addtitional
      */
-    public $additional = array();
+    public $additional = [];
 
     /*
      * array of compressed labeles
      */
-    private $_compressed = array();
+    private $_compressed = [];
 
     /**
      * magic __toString() method to return the Net_DNS2_Packet as a string
@@ -202,8 +162,14 @@ class Net_DNS2_Packet
      */
     public function compress($name, &$offset)
     {
-        $names    = explode('.', $name);
-        $compname = '';
+        //
+        // we're using preg_split() rather than explode() so that we can use the negative lookbehind,
+        // to catch cases where we have escaped dots in strings.
+        //
+        // there's only a few cases like this- the rname in SOA for example
+        //
+        $names      = str_replace('\.', '.', preg_split('/(?<!\\\)\./', $name));
+        $compname   = '';
 
         while (!empty($names)) {
 
@@ -218,6 +184,7 @@ class Net_DNS2_Packet
             }
 
             $this->_compressed[$dname] = $offset;
+
             $first = array_shift($names);
 
             $length = strlen($first);
@@ -288,12 +255,13 @@ class Net_DNS2_Packet
      *
      * @param Net_DNS2_Packet &$packet the DNS packet to look in for the domain name
      * @param integer         &$offset the offset into the given packet object
+     * @param boolean         $escape_dot_literals if we should escape periods in names
      *
      * @return mixed either the domain name or null if it's not found.
      * @access public
      *
      */
-    public static function expand(Net_DNS2_Packet &$packet, &$offset)
+    public static function expand(Net_DNS2_Packet &$packet, &$offset, $escape_dot_literals = false)
     {
         $name = '';
 
@@ -314,8 +282,7 @@ class Net_DNS2_Packet
                     return null;
                 }
 
-                $ptr = ord($packet->rdata[$offset]) << 8 | 
-                    ord($packet->rdata[$offset+1]);
+                $ptr = ord($packet->rdata[$offset]) << 8 | ord($packet->rdata[$offset+1]);
                 $ptr = $ptr & 0x3fff;
 
                 $name2 = Net_DNS2_Packet::expand($packet, $ptr);
@@ -338,6 +305,15 @@ class Net_DNS2_Packet
 
                 $elem = '';
                 $elem = substr($packet->rdata, $offset, $xlen);
+
+                //
+                // escape literal dots in certain cases (SOA rname)
+                //
+                if ( ($escape_dot_literals == true) && (strpos($elem, '.') !== false) ) {
+
+                    $elem = str_replace('.', '\.', $elem);
+                }
+
                 $name .= $elem . '.';
                 $offset += $xlen;
             }
@@ -415,20 +391,11 @@ class Net_DNS2_Packet
         $this->rdata        = '';
         $this->rdlength     = 0;
         $this->offset       = 0;
-        $this->answer       = array();
-        $this->authority    = array();
-        $this->additional   = array();
-        $this->_compressed  = array();
+        $this->answer       = [];
+        $this->authority    = [];
+        $this->additional   = [];
+        $this->_compressed  = [];
     
         return true;
     }
 }
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * c-hanging-comment-ender-p: nil
- * End:
- */
-?>

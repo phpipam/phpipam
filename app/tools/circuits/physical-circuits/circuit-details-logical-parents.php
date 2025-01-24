@@ -29,7 +29,7 @@ if($logical_circuits!==false){
 	foreach ($logical_circuits as $circuit) {
 		//print details
 		print '<tr>'. "\n";
-		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",'logical',$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->logical_cid</a></td>";
+		print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page,"circuits",'logical',$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->logical_cid</a></td>";
 		print "	<td>".$circuit->purpose."</td>";
 		print "	<td>".$circuit->member_count."</td>";
 		print '</tr>'. "\n";
