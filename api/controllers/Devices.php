@@ -258,7 +258,7 @@ class Devices_controller extends Common_api_functions {
         $values = array();
         $values['id'] = $this->_params->id;
 
-        # check that section exists
+        # check that device exists
         if($this->Admin->fetch_object ("devices", "id", $this->_params->id)===false)
                                                         { $this->Response->throw_exception(404, "Device does not exist"); }
 
