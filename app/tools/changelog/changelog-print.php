@@ -70,22 +70,34 @@ else {
 		if($l['ctype']=="subnet")		{ $permission = $Subnets->check_permission ($User->user, $l['tid']); }
 		elseif($l['ctype']=="ip_addr")	{ $permission = $Subnets->check_permission ($User->user, $l['subnetId']); }
 		elseif($l['ctype']=="section")	{ $permission = $Sections->check_permission ($User->user, $l['sectionId']); }
+		elseif($l['ctype']=="devices")	{ $permission = $User->check_module_permissions ("devices", User::ACCESS_R, false, false); }
+		elseif($l['ctype']=="vrf")		{ $permission = $User->check_module_permissions ("vrf", User::ACCESS_R, false, false); }
+		elseif($l['ctype']=="vlans")	{ $permission = $User->check_module_permissions ("vlan", User::ACCESS_R, false, false); }
 		else							{ $permission = 0; }
 
 		# printout
 		if($permission > 0)	{
 			# format diff
-    		$l['cdiff'] = str_replace("\n", "<br>",$l['cdiff']);
-    		$l['cdiff'] = str_replace("[", "[<strong>", $l['cdiff']);
-    		$l['cdiff'] = str_replace("]", "</strong>]", $l['cdiff']);
-
+			$l['cdiff'] = str_replace("\n\n", "\n",$l['cdiff']);
+			$l['cdiff'] = str_replace("\r\n\r\n", "\r\n",$l['cdiff']);
+			$l['cdiff'] = str_replace("\n", "<br>",$l['cdiff']);
+			$l['cdiff'] = str_replace("[", "[<strong>", $l['cdiff']);
+			$l['cdiff'] = str_replace("]", "</strong>]", $l['cdiff']);
 			# format type
 			switch($l['ctype']) {
-				case "ip_addr":	$l['ctype'] = "IP address";	break;
+				case "ip_addr":	$l['ctype'] = "IP address";
+				break;
 				case "subnet":  if($l['isFolder']==1) 	{ $l['ctype'] = "Folder"; }
 								else 					{ $l['ctype'] = "Subnet"; }
 				break;
-				case "section":	$l['ctype'] = "Section";	break;
+				case "section":	$l['ctype'] = "Section";
+				break;
+				case "devices":	$l['ctype'] = "Device";
+				break;
+				case "vrf":	$l['ctype'] = "VRF";
+				break;
+				case "vlans":	$l['ctype'] = "Vlans";
+				break;
 			}
 
 			# set class for badge
@@ -97,7 +109,7 @@ else {
 
 			# subnet, section or ip address
 			if(is_blank($l['tid'])) {
-				print "<td><span class='badge badge1 badge5 alert-danger'>"._("Deleted")."</span></td>";
+				print "<td><span class='badge badge1 badge5 alert-danger'>"._("Deleted")."</span><br><span class='text-muted'>$l[ctype]</span></td>";
 			}
 			elseif($l['ctype']=="IP address")	{
 				print "	<td><a href='".create_link("subnets",$l['sectionId'],$l['subnetId'],"address-details",$l['tid'])."'>".$Subnets->transform_address($l['ip_addr'],"dotted")."</a><br><span class='text-muted'>$l[ctype]</span></td>";
@@ -110,6 +122,15 @@ else {
 			}
 			elseif($l['ctype']=="Section")   {
 				print "	<td><a href='".create_link("subnets",$l['tid'])."'>".$l['ip_addr']."</a><br><span class='text-muted'>$l[ctype]</span></td>";
+			}
+			elseif($l['ctype']=="Device")   {
+				print "	<td><a href='".create_link("tools","devices",$l['tid'])."'>".$l['ip_addr']."</a><br><span class='text-muted'>$l[ctype]</span></td>";
+			}
+			elseif($l['ctype']=="VRF")   {
+				print "	<td><a href='".create_link("tools","vrf",$l['tid'])."'>".$l['ip_addr']."</a><br><span class='text-muted'>$l[ctype]</span></td>";
+			}
+			elseif($l['ctype']=="Vlans")   {
+				print "	<td><a href='".create_link("administration","vlans",$l['sectionId'],$l['tid'])."'>".$l['ip_addr']."</a><br><span class='text-muted'>$l[ctype]</span></td>";
 			}
 			else {
 				print "	<td></td>";

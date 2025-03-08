@@ -1082,4 +1082,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.8";
-UPDATE `settings` SET `dbversion` = 44;
+UPDATE `settings` SET `dbversion` = 45;

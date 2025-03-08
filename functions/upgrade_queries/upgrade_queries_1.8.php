@@ -11,3 +11,8 @@ $upgrade_queries["1.8.44"]   = [];
 $upgrade_queries["1.8.44"][] = "ALTER TABLE `lang` CHANGE `l_name` `l_name` VARCHAR(64) NULL DEFAULT NULL;";
 $upgrade_queries["1.8.44"][] = "-- Database version bump";
 $upgrade_queries["1.8.44"][] = "UPDATE `settings` SET `dbversion` = '44';";
+
+$upgrade_queries["1.8.45"]   = [];
+$upgrade_queries["1.8.45"][] = "ALTER TABLE `changelog` CHANGE `ctype` `ctype` SET('ip_addr','subnet','section','devices','vrf','vlans') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '';";
+$upgrade_queries["1.8.45"][] = "-- Database version bump";
+$upgrade_queries["1.8.45"][] = "UPDATE `settings` SET `dbversion` = '45';";
