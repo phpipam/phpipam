@@ -189,7 +189,7 @@ class Admin extends Common_functions {
 		$this->save_last_insert_id ();
 		# ok
 		$this->Log->write( $table." "._("Object creation"), _("A new")." ".$table." "._("database object created").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values_log, "NULL")), 0);
-		$values[cache_set_identifier($table)] = $this->lastId;
+		$values[$this->cache_set_identifier($table)] = $this->lastId;
 		$this->Log->write_changelog($table, "add", 'success', array(), $values);
 		return true;
 	}
