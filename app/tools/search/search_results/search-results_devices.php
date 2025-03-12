@@ -78,10 +78,10 @@ if(sizeof($result_devices) > 0) {
 		}
 		if($User->get_module_permissions ("devices")>=User::ACCESS_RW) {
 			$links[] = ["type"=>"header", "text"=>_("Manage")];
-			$links[] = ["type"=>"link", "text"=>_("Edit Device"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-action='edit' data-vlanid='{$device['id']}'", "icon"=>"pencil"];
+			$links[] = ["type"=>"link", "text"=>_("Edit Device"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-action='edit' data-switchid='{$device['id']}'", "icon"=>"pencil"];
 		}
 		if($User->get_module_permissions ("devices")>=User::ACCESS_RWA) {
-			$links[] = ["type"=>"link", "text"=>_("Delete Device"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-action='delete' data-vlanid='{$device['id']}'", "icon"=>"times"];
+			$links[] = ["type"=>"link", "text"=>_("Delete Device"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-action='delete' data-switchid='{$device['id']}'", "icon"=>"times"];
 		}
 		// print links
 		print $User->print_actions($User->user->compress_actions, $links);
