@@ -177,6 +177,8 @@ CREATE TABLE `settings` (
   `enableSNMP` TINYINT(1)  NULL  DEFAULT '0',
   `enableThreshold` TINYINT(1)  NULL  DEFAULT '1',
   `enableRACK` TINYINT(1)  NULL  DEFAULT '1',
+  `rackImageFormat` ENUM('png','svg') NOT NULL DEFAULT 'svg',
+  `rackAllowOverlap` INT(1) NOT NULL DEFAULT 0,
   `enableLocations` TINYINT(1)  NULL  DEFAULT '1',
   `enablePSTN` TINYINT(1)  NULL  DEFAULT '0',
   `enableChangelog` TINYINT(1)  NOT NULL  DEFAULT '1',
@@ -1082,4 +1084,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.8";
-UPDATE `settings` SET `dbversion` = 44;
+UPDATE `settings` SET `dbversion` = 46;

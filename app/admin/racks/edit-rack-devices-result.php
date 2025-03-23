@@ -12,6 +12,7 @@ $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database, false);
 $Result 	= new Result ();
+$Racks 		= new phpipam_rack ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
@@ -29,24 +30,26 @@ $User->Crypto->csrf_cookie ("validate", "rack_devices", $POST->csrf_cookie) === 
 if (!isset($POST->devicetype) || (($POST->devicetype != 'device') && ($POST->devicetype != 'content'))) { $Result->show("danger", _("Invalid device type"), true, true); }
 
 # ID must be numeric
-if(!is_numeric($POST->rackid))			                              { $Result->show("danger", _("Invalid ID"), true); }
-if(($POST->devicetype == 'device') && !is_numeric($POST->deviceid)) { $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($POST->rackid))			                              { $Result->show("danger", _("Invalid rack identifier"), true); }
+if(($POST->devicetype == 'device') && !is_numeric($POST->deviceid)) { $Result->show("danger", _("Invalid device identifier"), true); }
 if(!is_numeric($POST->rack_start))			                          { $Result->show("danger", _("Invalid start value"), true); }
 if(!is_numeric($POST->rack_size))			                          { $Result->show("danger", _("Invalid size value"), true); }
+if($POST->rack_size < 1)											{ $Result->show("danger", _('Invalid size value').'!', true); }
 
 # name
 if (($POST->devicetype == 'content') && (!isset($POST->name) || (trim($POST->name === '')))) { $Result->show("danger", _("Invalid device name"), true); }
 
 # validate rack
 $rack = $Admin->fetch_object("racks", "id", $POST->rackid);
-if ($rack===false)                                                     { $Result->show("danger", _("Invalid ID"), true); }
+if ($rack===false)                                                     { $Result->show("danger", _("Rack does not exist"), true); }
 
-# check size
-if($rack->hasBack!="0") {
-	if($POST->rack_start+($POST->rack_size-1)>(2*$rack->size))   { $Result->show("danger", _("Invalid rack position (overflow)"), true); }
-}
-else {
-	if($POST->rack_start+($POST->rack_size-1)>$rack->size)       { $Result->show("danger", _("Invalid rack position (overflow)"), true); }
+# check overflow
+if ($Racks->check_device_overflow($POST->rackid,$POST->rack_start,$POST->rack_size))
+															{ $Result->show("danger", _('Invalid rack position (overflow)').'!', true); }
+# check overlaps
+if ($User->settings->rackAllowOverlap!="1") {
+	if ($Racks->check_device_overlap($POST->rackid,$POST->rack_start,$POST->rack_size))
+															{ $Result->show("danger", _('Overlaps with existing rack item').'!', true); };
 }
 
 switch ($POST->devicetype) {

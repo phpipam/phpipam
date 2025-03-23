@@ -286,11 +286,18 @@ if($GET->subnetId!=0 && sizeof($device)>0) {
         // validate rack
         $rack = $Tools->fetch_object ("racks", "id", $device['rack']);
         if ($rack!==false) {
-            // front
-            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pull-right' style='width:180px;'>";
-            // back
-            if($rack->hasBack!="0") {
-            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'], true)."' class='pull-right' style='width:180px;margin-left:5px;'>";
+            if ($User->settings->rackImageFormat=='svg') {
+	            // back
+	            if($rack->hasBack!="0") 
+	            print " <object data='".$Tools->create_rack_link ($device['rack'], $device['id'], true)."' class='pull-right' style='width:auto;height:auto;margin-left:5px;'></object>";
+	            // front
+	            print " <object data='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pull-right' style='width:auto;height:auto;'></object>";
+            } else {
+	            // back
+	            if($rack->hasBack!="0") 
+	            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'], true)."' class='pull-right' style='width:180px;margin-left:5px;'>";
+	            // front
+	            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pull-right' style='width:180px;'>";
             }
         }
         print "</td>";

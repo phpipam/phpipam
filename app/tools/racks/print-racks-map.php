@@ -95,10 +95,16 @@ else {
                     // racks
                     print "<div style='margin-bottom:30px;'>";
                     foreach ($all_racks as $r) {
-                        print "<img src='".$Tools->create_rack_link ($r->id)."'' style='width:180px;margin-right:5px;vertical-align:bottom'>";
-                        // back side?
-                        if($r->hasBack!="0") {
-                        print "<img src='".$Tools->create_rack_link ($r->id, NULL, true)."'' style='width:180px;margin-left:-5px;vertical-align:bottom'>";
+                        if ($User->settings->rackImageFormat=='svg') {
+                            print "<object data='".$Tools->create_rack_link ($r->id)."'' style='width:auto;height:auto;margin-right:5px;vertical-align:bottom'></object>";
+                            // back side?
+                            if($r->hasBack!="0") 
+                            print "<object data='".$Tools->create_rack_link ($r->id, NULL, true)."'' style='width:auto;height:auto;margin-left:-5px;margin-right:5px;vertical-align:bottom'></object>";
+                        } else {
+                            print "<img src='".$Tools->create_rack_link ($r->id)."'' style='width:180px;margin-right:5px;vertical-align:bottom'>";
+                            // back side?
+                            if($r->hasBack!="0") 
+                            print "<img src='".$Tools->create_rack_link ($r->id, NULL, true)."'' style='width:180px;margin-left:-5px;margin-right:5px;vertical-align:bottom'>";
                         }
                     }
                     print "</div>";

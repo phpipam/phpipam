@@ -138,7 +138,7 @@ $(document).ready(function(){
         	<tr>
         		<td><?php print _('Start position'); ?></td>
         		<td>
-                    <select name="rack_start" class="form-control input-sm input-w-auto">
+                    <select name="rack_start" class="form-control input-sm input-w-auto" style="min-width:70px">
             		<?php
                     list($available, $available_back) = $Racks->free_u($rack, $rack_devices, $rack_contents);
 

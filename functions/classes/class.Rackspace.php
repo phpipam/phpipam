@@ -97,7 +97,9 @@ class phpipam_rack extends Tools {
 		# set racksizes
 		$this->define_rack_sizes ();
 		# initialize rack
-        $this->Drawer = new RackDrawer();
+		$this->get_settings();
+		if ($this->settings->rackImageFormat=="svg") { $this->Drawer = new RackDrawer_SVG(); }
+		else { $this->Drawer = new RackDrawer(); }
 	}
 
 
@@ -221,7 +223,8 @@ class phpipam_rack extends Tools {
      */
     public function free_u($rack, $rack_devices, $rack_contents, $current_device = null) {
         $current_device      = new Params($current_device);
-        $current_device_size = isset($current_device->rack_size) ? $current_device->rack_size-1 : 0;
+        $current_device_size = isset($current_device->rack_size) ? $current_device->rack_size : 0;
+        $current_device_size = ($current_device->rack_size > 0) ? $current_device->rack_size-1 : 0;
 
         // available spaces
         $available_front = [];
@@ -237,36 +240,54 @@ class phpipam_rack extends Tools {
             }
         }
 
-        $devices = [];
-        if (is_array($rack_devices))  $devices = array_merge($devices, $rack_devices);
-        if (is_array($rack_contents)) $devices = array_merge($devices, $rack_contents);
+        if (!$this->settings->rackAllowOverlap) {
+            $devices = [];
+            if (is_array($rack_devices))  $devices = array_merge($devices, $rack_devices);
+            if (is_array($rack_contents)) $devices = array_merge($devices, $rack_contents);
 
-        // remove units used by devices
-        foreach ($devices as $d) {
-            if (property_exists($current_device, 'hostname') == property_exists($d, 'hostname')) {
-                // $current_device and $d are of the same type = device or rack_content item
-                // Skip current device/rack_content
-                if ($current_device->id == $d->id)
-                    continue;
-            }
+            // remove units used by devices
+            foreach ($devices as $d) {
+                if (property_exists($current_device, 'hostname') == property_exists($d, 'hostname')) {
+                    // $current_device and $d are of the same type = device or rack_content item
+                    // Skip current device/rack_content
+                    if ($current_device->id == $d->id)
+                        continue;
+                }
 
-            // Remove U positions blocked by other devices
-            for($m=$d->rack_start-$current_device_size; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
-                $pos = $m > $rack->size ? $m - $rack->size : $m;
-                if ($pos<1) $pos = 1;
-                if ($pos>$rack->size) $pos = $rack->size;
-
-                if ($d->rack_start < $rack->size)
-                    unset($available_front[$pos]);
-                else
-                    unset($available_back[$rack->size+$pos]);
+                // Remove U positions blocked by other devices
+                // U positions that preceed existing devices must be excluded too if the proposed device is >1 RU
+                foreach(range($d->rack_start-$current_device_size,$d->rack_start+$d->rack_size-1) as $m) {
+                    if ($rack->hasBack && $d->rack_start > $rack->size)
+                        unset($available_back[$m]);
+                    else
+                        unset($available_front[$m]);
+                }
             }
         }
 
         // Top of Rack
+        // this section here seems redundant because the arrays aren't populated that high in the first place??
         for($m=$rack->size-$current_device_size+1; $m<=$rack->size; $m++) {
             unset($available_front[$m]);
             unset($available_back[$rack->size+$m]);
+        }
+
+        /* if the current device rackStart is not valid because of a prior bug, then it will not be included 
+         * in the result. this is bad because the GUI will not have that option included in the dropdown menu, 
+         * which will mean the user could accidentally submit the form and move the device to a different 
+         * position without realizing. therefore, let us ensure the current position is included even if it's 
+         * invalid. we will then try to catch the invalid position upon form submission.
+         */
+        if (property_exists($current_device, 'rack_start')) {
+            if ($current_device->rack_start>$rack->size && $rack->hasBack) {
+                if (!isset($available_back[$current_device->rack_start])) {
+                    $available_back[$current_device->rack_start] = $current_device->rack_start - $rack->size;
+                }
+            } else {
+                if (!isset($available_front[$current_device->rack_start])) {
+                    $available_front[$current_device->rack_start] = $current_device->rack_start;
+                }
+            }
         }
 
         return [$available_front, $available_back];
@@ -317,7 +338,8 @@ class phpipam_rack extends Tools {
                                     "name"=>$c->name,
                                     "startLocation"=>$c->rack_start-$rack->size,
                                     "size"=>$c->rack_size,
-                                    "rackName"=>$rack->name
+                                    "rackName"=>$rack->name,
+                                    "itemType"=>"content"
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
@@ -335,7 +357,8 @@ class phpipam_rack extends Tools {
                                     "name"=>$c->name,
                                     "startLocation"=>$c->rack_start,
                                     "size"=>$c->rack_size,
-                                    "rackName"=>$rack->name
+                                    "rackName"=>$rack->name,
+                                    "itemType"=>"content"
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
@@ -359,7 +382,8 @@ class phpipam_rack extends Tools {
                                     "name"=>$d->hostname,
                                     "startLocation"=>$d->rack_start-$rack->size,
                                     "size"=>$d->rack_size,
-                                    "rackName"=>$rack->name
+                                    "rackName"=>$rack->name,
+                                    "itemType"=>"device"
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
@@ -377,7 +401,8 @@ class phpipam_rack extends Tools {
                                     "name"=>$d->hostname,
                                     "startLocation"=>$d->rack_start,
                                     "size"=>$d->rack_size,
-                                    "rackName"=>$rack->name
+                                    "rackName"=>$rack->name,
+                                    "itemType"=>"device"
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
@@ -392,6 +417,7 @@ class phpipam_rack extends Tools {
 
         // create rack
         $this->set_rack ();
+        $this->Rack->setId($id);
         // set active device
         if ($deviceId!==false) {
             $this->set_active_rack_device ($deviceId);
@@ -439,6 +465,57 @@ class phpipam_rack extends Tools {
     private function set_draw_rack () {
         $this->Drawer->draw ($this->Rack);
     }
+
+	/**
+	 * Check device overflow. Checks if a new device will exceed the boundaries of the rack.
+	 *
+	 * @access public
+	 * @param int $rack_id        // rack id
+	 * @param int $device_start   // device position in rack
+	 * @param int $device_size    // device size in rack
+
+	 * @return bool               // True means overflow, False means OK
+	 */
+	public function check_device_overflow ($rack_id, $device_start, $device_size) {
+		$rack = $this->fetch_rack_details($rack_id);
+		if (!is_object($rack)) return True;
+
+		if ($device_start > $rack->size && $rack->hasBack) {
+			if ($device_start + $device_size > 2 * $rack->size) return True;
+			return False;
+		}
+		if ($device_start + $device_size > $rack->size) return True;
+		if ($device_start < 1) return True;
+		return False;
+	}
+
+	/**
+	 * Check device overlap. Checks if a new device will overlap with existing devices.
+	 *
+	 * @access public
+	 * @param int $rack_id        // rack id
+	 * @param int $device_start   // device position in rack
+	 * @param int $device_size    // device size in rack
+
+	 * @return bool               // True means overlap, False means OK
+	 */
+	public function check_device_overlap ($rack_id, $device_start, $device_size) {
+		$rack = $this->fetch_rack_details($rack_id);
+		if (!is_object($rack)) return True;
+
+		$request = range($device_start, $device_start + $device_size - 1);
+		foreach ($this->fetch_rack_devices ($rack->id) as $d) {
+			foreach (range($d->device_start,$d->device_start + $d->device_size - 1) as $ru) {
+				if (in_array($ru,$request)) return True;
+			}
+		}
+		foreach ($this->fetch_rack_contents ($rack->id) as $c) {
+			foreach (range($c->rack_start,$c->rack_start + $c->rack_size - 1) as $ru) {
+				if (in_array($ru,$request)) return True;
+			}
+		}
+		return False;
+	}
 }
 
 
@@ -684,6 +761,267 @@ class Model {
 }
 
 /**
+ * RackDrawer_SVG
+ */
+class RackDrawer_SVG extends Common_functions {
+
+	/**
+	 * Output image height
+	 * @var integer
+	 * @access private
+	 */
+	private $imgYSize;
+
+	/**
+	 * Output image width
+	 * @var integer
+	 * @access private
+	 */
+	private $imgXSize = 250;
+
+	/**
+	 * Output height of 1 RU
+	 * @var integer
+	 * @access private
+	 */
+	private $unitYSize = 20;
+
+	/**
+	 * Output width to the left and right of a rack device or content
+	 * @var integer
+	 * @access private
+	 */
+	private $marginSides = 28;	// pixels from edge to content
+
+	/**
+	 * Output height of header
+	 * @var integer
+	 * @access private
+	 */
+	private $marginTop = 20;	// pixels from edge to content
+
+	/**
+	 * Output height of footer
+	 * @var integer
+	 * @access private
+	 */
+	private $marginBottom = 20;	// pixels from edge to content
+
+	/**
+	 * Output height of wheels and feet
+	 * @var integer
+	 * @access private
+	 */
+	private $marginFeet = 15;	// pixels from edge to content
+
+	/**
+	 * Output width of that decorative border on the sides
+	 * @var integer
+	 * @access private
+	 */
+	private $marginDecorative = 10;	// pixels from edge to content
+
+	/**
+	 * Output SVG text lines
+	 * @var mixed
+	 * @access private
+	 */
+	private $svgData = array();
+
+
+	/**
+	 * Draws svg definitions
+	 *
+	 * @access public
+	 * @return void
+	 */
+	private function drawDefs() {
+		$this->svgData[] = "<defs>";
+		$this->svgData[] = "  <linearGradient id='Gradient1'>";
+		$this->svgData[] = "    <stop class='stop1' offset='0%' />";
+		$this->svgData[] = "    <stop class='stop2' offset='50%' />";
+		$this->svgData[] = "    <stop class='stop3' offset='100%' />";
+		$this->svgData[] = "  </linearGradient>";
+		$this->svgData[] = "</defs>";
+	}
+
+	/**
+	 * Draws svg styles
+	 *
+	 * @access public
+	 * @return void
+	 */
+	private function drawStyles() {
+		$this->svgData[] = "<style>";
+		$this->svgData[] = "  @font-face {";
+		$this->svgData[] = "    font-family: 'MesloLGS';";
+		$this->svgData[] = "    src: url('".BASE."css/fonts/MesloLGS-Regular.ttf') format('woff');";
+		$this->svgData[] = "  }";
+		$this->svgData[] = "  #outer {";
+		$this->svgData[] = "    fill:url(#Gradient1); stroke:black; stroke-width:1;";
+		$this->svgData[] = "  }";
+		$this->svgData[] = "  .stop1 {";
+		$this->svgData[] = "    stop-color: #313438;";
+		$this->svgData[] = "  }";
+		$this->svgData[] = "  .stop2 {";
+		$this->svgData[] = "    stop-color: #9D9E9C;";
+		$this->svgData[] = "  }";
+		$this->svgData[] = "  .stop3 {";
+		$this->svgData[] = "    stop-color: #313438;";
+		$this->svgData[] = "  }";
+		$this->svgData[] = "  .ru {";
+		$this->svgData[] = "    font-family: 'MesloLGS', sans-serif;";
+		$this->svgData[] = "    stroke-width:.1; stroke:white; fill:white;";
+		$this->svgData[] = "    font-size:15px; text-anchor:end;";
+		$this->svgData[] = "  }";
+		$this->svgData[] = "  .device {";
+		$this->svgData[] = "    font-family: 'MesloLGS', sans-serif;";
+		$this->svgData[] = "    stroke-width:.1; stroke:black; fill:black;";
+		$this->svgData[] = "    font-size:12px; text-anchor:middle;";
+		$this->svgData[] = "  }";
+		$this->svgData[] = "  .nameplate {";
+		$this->svgData[] = "    font-family: 'MesloLGS', sans-serif;";
+		$this->svgData[] = "    stroke-width:.1; stroke:black; fill:black;";
+		$this->svgData[] = "    font-size:12px; text-anchor:middle;";
+		$this->svgData[] = "  }";
+		$this->svgData[] = "</style>";
+	}
+
+	/**
+	 * Draws rack frame 
+	 *
+	 * @access public
+	 * @return void
+	 */
+	private function drawFrame() {
+		$this->svgData[] = "<!-- wheels -->";
+		$this->svgData[] = "<ellipse cx='" . (1.5 * $this->marginSides) . "' cy='" . ($this->imgYSize - $this->marginSides) . "' rx='" . ($this->marginSides / 2) . "' ry='" . ($this->marginSides * 1.4) . "' style='fill:black;' />";
+		$this->svgData[] = "<ellipse cx='" . ($this->imgXSize - (1.5 * $this->marginSides)) . "' cy='" . ($this->imgYSize - $this->marginSides) . "' rx='" . ($this->marginSides / 2) . "' ry='" . ($this->marginSides * 1.4) . "' style='fill:black;' />";
+		$this->svgData[] = "<!-- feet -->";
+		$x = 9;
+		$y = $this->imgYSize - $this->marginFeet + 8;
+		$this->svgData[] = "<path d='M {$x} {$y} V ".($y-3) ." H ".($x+6)." H ".($x+4)." V ".($y-7)." H ".($x+6)." V ".($y-3)." H ".($x+10)." V {$y}' style='fill:lightgrey;stroke:black;stroke-width:1;' />";
+		$this->svgData[] = "<path d='M ".($x+2)." {$y} H ".($x+8)."' style='stroke:grey;stroke-width:1' />";
+		$x = $this->imgXSize - $this->marginSides + 9;
+		$this->svgData[] = "<path d='M {$x} {$y} V ".($y-3) ." H ".($x+6)." H ".($x+4)." V ".($y-7)." H ".($x+6)." V ".($y-3)." H ".($x+10)." V {$y}' style='fill:none;stroke:black;stroke-width:1;' />";
+		$this->svgData[] = "<path d='M ".($x+2)." {$y} H ".($x+8)."' style='stroke:grey;stroke-width:1' />";
+
+		$this->svgData[] = "<!-- frame -->";
+		$w = $this->imgXSize;
+		$h = $this->imgYSize - $this->marginFeet;
+		$this->svgData[] = "<rect id='outer' width='{$w}' height='{$h}' x='1' y='1' rx='0' ry='0' />";
+
+		$this->svgData[] = "<!-- subframe -->";
+		$w = $this->imgXSize - $this->marginDecorative * 2;
+		$h = $this->marginDecorative;
+		$this->svgData[] = "<rect width='{$w}' height='{$h}' x='{$this->marginDecorative}' y='0' rx='0' ry='0' style='fill:none;stroke:black;stroke-width:1' />";
+		$h = $this->imgYSize - $this->marginFeet - $this->marginDecorative * 2;
+		$this->svgData[] = "<rect width='{$w}' height='{$h}' x='{$this->marginDecorative}' y='{$this->marginDecorative}' rx='0' ry='0' style='fill:none;stroke:black;stroke-width:1' />";
+		$h = $this->marginDecorative;
+		$this->svgData[] = "<rect width='{$w}' height='{$h}' x='{$this->marginDecorative}' y='" . ($this->imgYSize - $this->marginFeet - $this->marginDecorative) . "' rx='0' ry='0' style='fill:none;stroke:black;stroke-width:1' />";
+
+		$this->svgData[] = "<!-- space for equipment -->";
+		$w = $this->imgXSize - $this->marginSides * 2;
+		$h = $this->imgYSize - $this->marginTop - $this->marginBottom - $this->marginFeet;
+		$this->svgData[] = "<rect width='{$w}' height='{$h}' x='{$this->marginSides}' y='{$this->marginTop}' rx='0' ry='0' fill='white' />";
+
+		$this->svgData[] = "<!-- the rails -->";
+		$w = 7;
+		$h = $this->imgYSize - $this->marginTop - $this->marginBottom - $this->marginFeet;
+		$this->svgData[] = "<rect width='{$w}' height='{$h}' x='{$this->marginSides}' y='{$this->marginTop}' rx='0' ry='0' fill='#9D9E9C' />";
+		$this->svgData[] = "<rect width='{$w}' height='{$h}' x='" . ($this->imgXSize - $this->marginSides - $w) . "' y='{$this->marginTop}' rx='0' ry='0' fill='#9D9E9C' />";
+
+		$this->svgData[] = "<!-- draw screwholes -->";
+		for ($i=0;$i<$this->rack->getSpace();$i++) {
+			// the 3 left holes
+			$ref_y = $this->marginTop + ($i * $this->unitYSize) + 3;
+			$ref_x = $this->marginSides + 3;
+			$this->svgData[] = "<circle r='1' cx='{$ref_x}' cy='" . $ref_y . "' stroke='black' stroke-width='1' fill='white' />";
+			$this->svgData[] = "<circle r='1' cx='{$ref_x}' cy='" . ($ref_y + 7) . "' stroke='black' stroke-width='1' fill='white' />";
+			$this->svgData[] = "<circle r='1' cx='{$ref_x}' cy='" . ($ref_y + 14) . "' stroke='black' stroke-width='1' fill='white' />";
+			// the 3 right holes
+			$ref_x = $this->imgXSize - $this->marginSides - 3;
+			$this->svgData[] = "<circle r='1' cx='{$ref_x}' cy='" . $ref_y . "' stroke='black' stroke-width='1' fill='white' />";
+			$this->svgData[] = "<circle r='1' cx='{$ref_x}' cy='" . ($ref_y + 7) . "' stroke='black' stroke-width='1' fill='white' />";
+			$this->svgData[] = "<circle r='1' cx='{$ref_x}' cy='" . ($ref_y + 14) . "' stroke='black' stroke-width='1' fill='white' />";
+		}
+
+		$this->svgData[] = "<!-- RU number labels -->";
+		for ($i=0;$i<$this->rack->getSpace();$i++) {
+			$x = $this->marginSides - 5;
+			$yPos = ($this->rack->getOrientation()) ?
+				(2 * $this->marginTop) + ($i * $this->unitYSize) - 4 :
+				($this->imgYSize) - $this->marginFeet - $this->marginBottom - ($i * $this->unitYSize) - 4;
+			$this->svgData[] = "<text class='ru' x='{$x}' y='{$yPos}'>" . ($i + 1) . "</text>";
+		}
+	}
+
+	/**
+	 * Draws rack name title bar
+	 *
+	 * @access public
+	 * @return void
+	 */
+	private function drawNameplate() {
+		$w = $this->imgXSize - ($this->marginSides * 2) - 14;
+		$h = $this->unitYSize - 2;
+		$this->svgData[] = "<!-- nameplate -->";
+		$this->svgData[] = "<a href='".htmlentities(create_link("tools", "racks", $this->rack->getId()))."' target='_parent'>";
+		$this->svgData[] = "<rect width='{$w}' height='{$h}' x='".($this->marginSides + 7)."' y='1' style='fill:white;stroke:none;' />";
+		$this->svgData[] = "<text class='nameplate' x='".($this->imgXSize / 2)."' y='".($this->marginTop - 6)."'>{$this->rack->getName()}</text>";
+		$this->svgData[] = "</a>";
+	}
+
+	/**
+	 * Draws all the things in the rack
+	 *
+	 * @access public
+	 * @return void
+	 */
+	private function drawContents() {
+		$this->svgData[] = "<!-- contents -->";
+		$w = $this->imgXSize - ($this->marginSides * 2);
+		foreach ($this->rack->getContent() as $content) {
+			$size = max($content->getSize(), 1);
+			$h = $this->unitYSize * $size;
+			$yPos = ($this->rack->getOrientation()) ?
+				$this->marginTop + ($this->unitYSize * $content->getStartLocation()) :
+				$this->marginTop + ($this->unitYSize * $this->rack->getSpace()) - ($this->unitYSize * ($content->getStartLocation() + $size));
+			if ($content->getItemType()=="device") $this->svgData[] = "<a href='".htmlentities(create_link("tools", "devices", $content->getId()))."' target='_parent'>";
+			$color = ($content->isActive()) ? "#CFE8FF" : "#E6E6E6";
+			$this->svgData[] = "<rect width='{$w}' height='{$h}' x='{$this->marginSides}' y='{$yPos}' style='fill:{$color};stroke:#7A8996;' />";
+			$y = $yPos + $this->unitYSize - 6; // the height of the rect plus one RU and reduced by 6
+			$y = $y + (($size - 1) * $this->unitYSize / 2); // increase the height by .5RU for each device whose size exceeds 1 RU
+			$this->svgData[] = "<text class='device' x='".($this->imgXSize / 2)."' y='{$y}'>{$content->getName()}</text>";
+			if ($content->getItemType()=="device") $this->svgData[] = "</a>";
+		}
+	}
+
+	/**
+	 * Draws the rack
+	 *
+	 * @access public
+	 * @param mixed $rack   // the rack object
+	 * @return void
+	 */
+	public function draw(Rack $rack) {
+		$this->rack = $rack;
+		$this->imgYSize = $this->marginTop + $this->marginBottom + $this->marginFeet + ($this->unitYSize * $this->rack->getSpace());
+		$this->svgData[] = "<svg width='{$this->imgXSize}' height='{$this->imgYSize}' xmlns='http://www.w3.org/2000/svg'>";
+		$this->drawDefs();
+		$this->drawStyles();
+		$this->drawFrame();
+		$this->drawContents();
+		$this->drawNameplate();
+		$this->svgData[] = '</svg>';
+		header("Content-type: image/svg+xml");
+		print implode("\n",$this->svgData);
+	}
+}
+
+
+
+/**
  * Rack class.
  *
  * @package GlasOperator\Rack
@@ -691,6 +1029,14 @@ class Model {
  * @extends Model
  */
 class Rack extends Model {
+
+    /**
+     * id
+     *
+     * @var int
+     * @access private
+     */
+    private $id;
 
     /**
      * Name
@@ -738,6 +1084,27 @@ class Rack extends Model {
      */
     private $active = false;
 
+
+    /**
+     * returns id.
+     *
+     * @access public
+     * @return int
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * Set rack id.
+     *
+     * @access public
+     * @param mixed $name
+     * @return void
+     */
+    public function setId($id) {
+        $this->id = $id;
+    }
 
     /**
      * returns name.
@@ -891,6 +1258,13 @@ class RackContent extends Model {
      */
     private $size;
 
+    /**
+     * item type
+     *
+     * @var string
+     * @access private
+     */
+    private $itemType;
 
 
 
@@ -997,5 +1371,26 @@ class RackContent extends Model {
      */
     public function setSize($size) {
         $this->size = $size;
+    }
+
+    /**
+     * Returns item type
+     *
+     * @access public
+     * @return string
+     */
+    public function getItemType() {
+        return $this->itemType;
+    }
+
+    /**
+     * Sets item type
+     *
+     * @access public
+     * @param mixed $name
+     * @return void
+     */
+    public function setItemType($type) {
+        $this->itemType = $type;
     }
 }

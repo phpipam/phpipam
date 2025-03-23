@@ -13,11 +13,14 @@
     + Request new IP hangs (#4346);
     + Fixed required fields validation (#4328);
     + Can not empty address fields (#4322);
+    + Rack module allows devices to exceed rack boundaries (#4423);
 
     Enhancements, changes:
     ----------------------------
     + Don't update PowerDNS `change_date` removed in v2.1.9;
     + Added Isle of Man postcodes (#4318);
+    + Make Rack View Devices Clickable (#2372);
+    + Setting to enable or disable devices overlapping in rack (#4424);
 
     Security Fixes:
     ----------------------------

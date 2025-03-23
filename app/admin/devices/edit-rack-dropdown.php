@@ -68,7 +68,7 @@ if($POST->rackid>0 || @$device['rack']>0) {
 	<tr>
 	    <td><?php print _('Start position'); ?></td>
 	    <td>
-			<select name="rack_start" class="form-control input-sm input-w-auto">
+			<select name="rack_start" class="form-control input-sm input-w-auto" style="min-width:70px">
 			<?php
 			// print available spaces
 			if($rack->hasBack!="0") {
