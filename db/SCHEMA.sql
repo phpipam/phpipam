@@ -541,7 +541,7 @@ DROP TABLE IF EXISTS `changelog`;
 
 CREATE TABLE `changelog` (
   `cid` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `ctype` set('ip_addr','subnet','section') NOT NULL DEFAULT '',
+  `ctype` set('ip_addr','subnet','section','devices','vrf','vlans') NOT NULL DEFAULT '',
   `coid` int(11) unsigned NOT NULL,
   `cuser` int(11) unsigned NOT NULL,
   `caction` ENUM('add','edit','delete','truncate','resize','perm_change') NOT NULL DEFAULT 'edit',
