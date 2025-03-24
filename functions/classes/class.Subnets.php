@@ -3025,14 +3025,17 @@ class Subnets extends Common_functions {
 		if(is_object($cached_item)) return $cached_item->result;
 
 		$subnetP = db_json_decode(@$subnet->permissions, true);
+		$subnetP = is_array($subnetP) ? $subnetP : [];
 
 		# set section permissions
 		$Section = new Sections ($this->Database);
 		$section = $Section->fetch_section ("id", $subnet->sectionId);
 		$sectionP = db_json_decode($section->permissions, true);
+		$sectionP = is_array($sectionP) ? $sectionP : [];
 
 		# get all user groups
 		$groups = db_json_decode($user->groups, true);
+		$groups = is_array($groups) ? $groups : [];
 
 		# default permission
 		$out = 0;
@@ -3089,6 +3092,7 @@ class Subnets extends Common_functions {
 			foreach ($subnets as $s) {
 				// to array
 				$s_old_perm = db_json_decode($s->permissions, true);
+				$s_old_perm = is_array($s_old_perm) ? $s_old_perm : [];
 				// removed
 				if (is_array($removed_permissions)) {
 					foreach ($removed_permissions as $k=>$p) unset($s_old_perm[$k]);
