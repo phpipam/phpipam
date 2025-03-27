@@ -35,9 +35,10 @@ if(($POST->devicetype == 'device') && !is_numeric($POST->deviceid)) { $Result->s
 if(!is_numeric($POST->rack_start))			                          { $Result->show("danger", _("Invalid start value"), true); }
 if(!is_numeric($POST->rack_size))			                          { $Result->show("danger", _("Invalid size value"), true); }
 if($POST->rack_size < 1)											{ $Result->show("danger", _('Invalid size value').'!', true); }
+$POST->rack_deep = (@$POST->rack_deep=="1") ? "1" : "0";
 
 # name
-if (($POST->devicetype == 'content') && (!isset($POST->name) || (trim($POST->name === '')))) { $Result->show("danger", _("Invalid device name"), true); }
+if ($POST->devicetype == 'content' && (!isset($POST->name) || trim($POST->name === ''))) { $Result->show("danger", _("Invalid device name"), true); }
 
 # validate rack
 $rack = $Admin->fetch_object("racks", "id", $POST->rackid);
@@ -48,7 +49,7 @@ if ($Racks->check_device_overflow($POST->rackid,$POST->rack_start,$POST->rack_si
 															{ $Result->show("danger", _('Invalid rack position (overflow)').'!', true); }
 # check overlaps
 if ($User->settings->rackAllowOverlap!="1") {
-	if ($Racks->check_device_overlap($POST->rackid,$POST->rack_start,$POST->rack_size))
+	if ($Racks->check_device_overlap($POST->rackid,$POST->rack_start,$POST->rack_size,$POST->rack_deep))
 															{ $Result->show("danger", _('Overlaps with existing rack item').'!', true); };
 }
 
@@ -63,6 +64,7 @@ switch ($POST->devicetype) {
 				    "rack"=>$POST->rackid,
 				    "rack_start"=>$POST->rack_start,
 				    "rack_size"=>$POST->rack_size,
+					"rack_deep"=>$POST->rack_deep,
 				    );
 
     # inherit location if it is not already set

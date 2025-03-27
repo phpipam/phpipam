@@ -190,6 +190,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
             if ($rack_devices===false) $rack_devices = array();
             if ($rack_contents===false) $rack_contents = array();
 
+			// let's make an array where the RU position is the lookup key
 			$all_contents = array();
 			foreach ($rack_devices as $this_device) {
 				if (!isset($all_contents[$this_device->rack_start])) {
@@ -207,6 +208,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
 			$loops = array();
 			$loops[] = ($rack->topDown) ? array("values"=>range(1,$rack->size),"label"=>"Front side") : array("values"=>range($rack->size,1),"label"=>"Front side");
 			if ($rack->hasBack) $loops[] = ($rack->topDown) ? array("values"=>range($rack->size + 1,2 * $rack->size),"label"=>"Back side") : array("values"=>range(2 * $rack->size,$rack->size+1),"label"=>"Back side");
+
 			// find contents that are in invalid positions
 			$invalid = array();
 			foreach (array_keys($all_contents) as $key) {
@@ -221,35 +223,37 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
 			$outputCount = 0;
 			foreach ($loops as $loop) {
 				$prev = false;
-				$error = "";
 				foreach ($loop['values'] as $i) {
 					if (isset($all_contents[$i])) {
 						foreach ($all_contents[$i] as $cur) {
-						// detect whether device or content
-						$itemType = (property_exists($cur,'hostname')) ? "device" : "content";
-						// validate diff
-						if ($prev!==false) {
-							if ($rack->topDown) {
-								$error = ($cur->rack_start < (int) $prev->rack_start + (int) $prev->rack_size) ? "alert-danger" : "";
-							} else {
-								$error = ($cur->rack_start + $cur->rack_size > (int) $prev->rack_start) ? "alert-danger" : "";
+							$error = "";
+							// detect whether device or content
+							$itemType = (property_exists($cur,'hostname')) ? "device" : "content";
+							// check for collisions, overflows, invalid sizes, invalid locations, etc
+							if (property_exists($cur,'hostname')) {
+								// if it has a hostname, then it's a device
+								$error = ($Racks->check_device_overlap($rack->id,$cur->rack_start,$cur->rack_size,$cur->rack_deep,$cur->id)) ? "alert-danger" : $error;
+							} elseif (property_exists($cur,'name')) {
+								// if it has a name, then it's a content
+								$error = ($Racks->check_device_overlap($rack->id,$cur->rack_start,$cur->rack_size,"0",null,$cur->id)) ? "alert-danger" : $error;
 							}
-						}
-						$error = ($loop['label']=="Invalid") ? "alert-danger" : $error;
-						$error = (!is_numeric($cur->rack_size)) ? "alert-danger" : $error;
-						$error = ($cur->rack_size<1) ? "alert-danger" : $error;
-						if ($prev===false) { if ($outputCount>0) print "<hr>"; print _($loop['label']).":<br>"; }
-						if ($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
-							print "<a href='' class='btn btn-xs btn-default btn-danger editRackDevice' data-action='remove' rel='tooltip' data-html='true' data-placement='left' title='"._("Remove")."' data-action='remove' style='margin-bottom:2px;margin-right:5px;' data-rackid='$rack->id' data-deviceid='$cur->id' data-devicetype='{$itemType}' data-csrf='".$User->Crypto->csrf_cookie ("create-if-not-exists", "rack_devices_".$rack->id."_device_".$cur->id)."'><i class='fa fa-times'></i></a> ";
-						}
-						print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $cur->rack_start_print, "._("Size").": $cur->rack_size U</span>";
-						if (isset($cur->hostname)) {
-							print " <a href='".create_link("tools", "devices", $cur->id)."'>$cur->hostname</a><br>";
-						} else {
-							print " $cur->name<br>";
-						}
-						$prev = $cur;
-						$outputCount+=1;
+							$error = ($Racks->check_device_overflow($rack->id,$cur->rack_start,$cur->rack_size)) ? "alert-danger" : $error;
+							$error = ($loop['label']=="Invalid") ? "alert-danger" : $error;
+							$error = (!is_numeric($cur->rack_size)) ? "alert-danger" : $error;
+							$error = ($cur->rack_size<1) ? "alert-danger" : $error;
+
+							if ($prev===false) { if ($outputCount>0) print "<hr>"; print _($loop['label']).":<br>"; }
+							if ($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
+								print "<a href='' class='btn btn-xs btn-default btn-danger editRackDevice' data-action='remove' rel='tooltip' data-html='true' data-placement='left' title='"._("Remove")."' data-action='remove' style='margin-bottom:2px;margin-right:5px;' data-rackid='$rack->id' data-deviceid='$cur->id' data-devicetype='{$itemType}' data-csrf='".$User->Crypto->csrf_cookie ("create-if-not-exists", "rack_devices_".$rack->id."_device_".$cur->id)."'><i class='fa fa-times'></i></a> ";
+							}
+							print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $cur->rack_start_print, "._("Size").": $cur->rack_size U</span>";
+							if (isset($cur->hostname)) {
+								print " <a href='".create_link("tools", "devices", $cur->id)."'>$cur->hostname</a><br>";
+							} else {
+								print " $cur->name<br>";
+							}
+							$prev = $cur;
+							$outputCount+=1;
 						}
 						unset($all_contents[$i]);
 					}

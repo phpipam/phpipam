@@ -102,6 +102,12 @@ if($POST->rackid>0 || @$device['rack']>0) {
 	        <input type="text" name="rack_size" size="2" class="form-control input-w-auto input-sm" style="width:100px;" placeholder="1" value="<?php print @$device['rack_size']; ?>">
 	    </td>
 	</tr>
+	<tr>
+		<td><?php print _('Full Depth'); ?></td>
+		<td>
+			<input type="checkbox" class="input-switch" name="rack_deep" value="1" <?php if(@$device['rack_deep'] == 1) print 'checked'; ?>>
+		</td>
+	</tr>
 <?php
 }
 # set hidden values

@@ -19,8 +19,9 @@
     ----------------------------
     + Don't update PowerDNS `change_date` removed in v2.1.9;
     + Added Isle of Man postcodes (#4318);
-    + Make Rack View Devices Clickable (#2372);
-    + Setting to enable or disable devices overlapping in rack (#4424);
+    + Make Rack Devices Clickable from picture (#2372);
+    + Setting to enable/disable devices overlapping in racks (#4424);
+    + Colorization of rack devices; devices that are full-depth in a rack (#4431);
 
     Security Fixes:
     ----------------------------

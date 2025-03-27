@@ -179,6 +179,7 @@ class phpipam_rack extends Tools {
 
     /**
      * Calculate and add rack_start_print
+     * this is the friendly rack_start that gets printed by several different GUI pages
      *
      * @param   array|object  $devices
      * @return  void
@@ -325,7 +326,7 @@ class phpipam_rack extends Tools {
         // set orientation
         $this->rack_orientation = $rack->topDown;
         // set name
-        $this->rack_name = $is_back ? "[R] ".$rack->name : "[F] ".$rack->name;
+        $this->rack_name = $is_back ? "["._('R')."] ".$rack->name : "["._('F')."] ".$rack->name;
 
         // set freeform content
         if ($contents!==false) {
@@ -339,7 +340,6 @@ class phpipam_rack extends Tools {
                                     "startLocation"=>$c->rack_start-$rack->size,
                                     "size"=>$c->rack_size,
                                     "rackName"=>$rack->name,
-                                    "itemType"=>"content"
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
@@ -358,7 +358,6 @@ class phpipam_rack extends Tools {
                                     "startLocation"=>$c->rack_start,
                                     "size"=>$c->rack_size,
                                     "rackName"=>$rack->name,
-                                    "itemType"=>"content"
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
@@ -374,7 +373,11 @@ class phpipam_rack extends Tools {
         // set devices content
         if ($devices!==false) {
             foreach ($devices as $d) {
-                // back side devices
+                // retrieve color values
+                $devType = $this->fetch_object("deviceTypes", "tid", $d->type);
+                $bg = ($devType === false) ? "#E6E6E6" : $devType->bgcolor;
+                $fg = ($devType === false) ? "#black" : $devType->fgcolor;
+                // back side drawing
                 if($is_back) {
                     if($d->rack_start > $rack->size) {
                         // add initial location
@@ -383,17 +386,40 @@ class phpipam_rack extends Tools {
                                     "startLocation"=>$d->rack_start-$rack->size,
                                     "size"=>$d->rack_size,
                                     "rackName"=>$rack->name,
-                                    "itemType"=>"device"
+                                    "url"=>htmlentities(create_link("tools", "devices", $d->id)),
+                                    "bgcolor"=>$bg,
+                                    "fgcolor"=>$fg,
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
+                        // prepend name if full depth
+                        if($d->rack_deep) { $rd['name'] = "["._('F')."] " . $rd['name']; }
                         // remove name if not permitted
                         if(!$draw_names) { unset ($rd['name']); }
                         // save content
                         $this->rack_content[] = new RackContent ($rd);
+                    } else {
+                        if ($d->rack_deep) {
+                            // add initial location
+                            $rd = array("id"=>$d->id,
+                                        "name"=>"["._('R')."] ".$d->hostname,
+                                        "startLocation"=>$d->rack_start,
+                                        "size"=>$d->rack_size,
+                                        "rackName"=>$rack->name,
+                                        "url"=>htmlentities(create_link("tools", "devices", $d->id)),
+                                        "bgcolor"=>$bg,
+                                        "fgcolor"=>$fg,
+                                        );
+                            // if startlocation is not set
+                            $rd['startLocation'] -= 1;
+                            // remove name if not permitted
+                            if(!$draw_names) { unset ($rd['name']); }
+                            // save content
+                            $this->rack_content[] = new RackContent ($rd);
+                        }
                     }
                 }
-                // front side devices
+                // front side drawing
                 else {
                     if($d->rack_start <= $rack->size) {
                         // add initial location
@@ -402,14 +428,37 @@ class phpipam_rack extends Tools {
                                     "startLocation"=>$d->rack_start,
                                     "size"=>$d->rack_size,
                                     "rackName"=>$rack->name,
-                                    "itemType"=>"device"
+                                    "url"=>htmlentities(create_link("tools", "devices", $d->id)),
+                                    "bgcolor"=>$bg,
+                                    "fgcolor"=>$fg,
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
+                        // prepend name if full depth
+                        if($d->rack_deep) { $rd['name'] = "["._('F')."] " . $rd['name']; }
                         // remove name if not permitted
                         if(!$draw_names) { unset ($rd['name']); }
                         // save content
                         $this->rack_content[] = new RackContent ($rd);
+                    } else {
+                        if ($d->rack_deep) {
+                            // add initial location
+                            $rd = array("id"=>$d->id,
+                                        "name"=>"["._('R')."] " . $d->hostname,
+                                        "startLocation"=>$d->rack_start-$rack->size,
+                                        "size"=>$d->rack_size,
+                                        "rackName"=>$rack->name,
+                                        "url"=>htmlentities(create_link("tools", "devices", $d->id)),
+                                        "bgcolor"=>$bg,
+                                        "fgcolor"=>$fg,
+                                        );
+                            // if startlocation is not set
+                            $rd['startLocation'] -= 1;
+                            // remove name if not permitted
+                            if(!$draw_names) { unset ($rd['name']); }
+                            // save content
+                            $this->rack_content[] = new RackContent ($rd);
+                        }
                     }
                 }
             }
@@ -493,23 +542,44 @@ class phpipam_rack extends Tools {
 	 * Check device overlap. Checks if a new device will overlap with existing devices.
 	 *
 	 * @access public
-	 * @param int $rack_id        // rack id
-	 * @param int $device_start   // device position in rack
-	 * @param int $device_size    // device size in rack
+	 * @param int $rack_id				// rack id
+	 * @param int $device_start			// device position in rack
+	 * @param int $device_size			// device size in rack
+	 * @param int $device_deep			// device uses both size of the rack
+	 * @param int $current_device_id	// the id of the current device, so it can be excluded when being edited
+	 * @param int $current_content_id	// the id of the current content, so it can be excluded when being edited
 
-	 * @return bool               // True means overlap, False means OK
+	 * @return bool						// True means overlap, False means OK
 	 */
-	public function check_device_overlap ($rack_id, $device_start, $device_size) {
+	public function check_device_overlap ($rack_id, $device_start, $device_size, $device_deep = 0, $current_device_id = null, $current_content_id = null) {
 		$rack = $this->fetch_rack_details($rack_id);
 		if (!is_object($rack)) return True;
 
 		$request = range($device_start, $device_start + $device_size - 1);
+		if ($device_deep) {
+			if ($device_start>$rack->size) $request = array_merge($request,range($device_start-$rack->size,$device_start-$rack->size+$device_size-1));
+			else $request = array_merge($request,range($device_start+$rack->size,$device_start+$rack->size+$device_size-1));
+		}
 		foreach ($this->fetch_rack_devices ($rack->id) as $d) {
-			foreach (range($d->device_start,$d->device_start + $d->device_size - 1) as $ru) {
+			# bypass comparison if it's the current device
+			if ($d->id==$current_device_id) continue;
+			foreach (range($d->rack_start,$d->rack_start + $d->rack_size - 1) as $ru) {
 				if (in_array($ru,$request)) return True;
+			}
+			// if the device is deep, then check the other side of the device
+			if ($d->rack_deep && $d->rack_start>$rack->size) {
+				foreach (range($d->rack_start - $rack->size,$d->rack_start - $rack->size + $d->rack_size - 1) as $ru) {
+					if (in_array($ru,$request)) return True;
+				}
+			} elseif ($d->rack_deep) {
+				foreach (range($d->rack_start + $rack->size,$d->rack_start + $rack->size + $d->rack_size - 1) as $ru) {
+					if (in_array($ru,$request)) return True;
+				}
 			}
 		}
 		foreach ($this->fetch_rack_contents ($rack->id) as $c) {
+			# bypass comparison if it's the current content
+			if ($c->id==$current_content_id) continue;
 			foreach (range($c->rack_start,$c->rack_start + $c->rack_size - 1) as $ru) {
 				if (in_array($ru,$request)) return True;
 			}
@@ -842,6 +912,23 @@ class RackDrawer_SVG extends Common_functions {
 		$this->svgData[] = "    <stop class='stop2' offset='50%' />";
 		$this->svgData[] = "    <stop class='stop3' offset='100%' />";
 		$this->svgData[] = "  </linearGradient>";
+		$this->svgData[] = "  <filter id='glow' height='140%' width='140%' x='-20%' y='-20%'>";
+		$this->svgData[] = "    <feMorphology operator='dilate' radius='8' in='SourceAlpha' result='thicken' />";
+		$this->svgData[] = "    <feGaussianBlur in='thicken' stdDeviation='10' result='blurred' />";
+		$this->svgData[] = "    <feFlood flood-color='rgb(255,0,0,.5)' result='glowColor' />";
+		$this->svgData[] = "    <feComposite in='glowColor' in2='blurred' operator='in' result='softGlow_colored' />";
+		$this->svgData[] = "    <feMerge>";
+		$this->svgData[] = "      <feMergeNode in='softGlow_colored'/>";
+		$this->svgData[] = "      <feMergeNode in='SourceGraphic'/>";
+		$this->svgData[] = "    </feMerge>";
+		$this->svgData[] = "  </filter>";
+		$this->svgData[] = "  <filter id='glow2'>";
+		$this->svgData[] = "    <feGaussianBlur stdDeviation='2.5' result='coloredBlur'/>";
+		$this->svgData[] = "    <feMerge>";
+		$this->svgData[] = "      <feMergeNode in='coloredBlur'/>";
+		$this->svgData[] = "      <feMergeNode in='SourceGraphic'/>";
+		$this->svgData[] = "    </feMerge>";
+		$this->svgData[] = "  </filter>";
 		$this->svgData[] = "</defs>";
 	}
 
@@ -883,6 +970,13 @@ class RackDrawer_SVG extends Common_functions {
 		$this->svgData[] = "    font-family: 'MesloLGS', sans-serif;";
 		$this->svgData[] = "    stroke-width:.1; stroke:black; fill:black;";
 		$this->svgData[] = "    font-size:12px; text-anchor:middle;";
+		$this->svgData[] = "  }";
+		$this->svgData[] = "  rect.active {";
+		$this->svgData[] = "    stroke-width:1.2; stroke:#ff0000;";
+		$this->svgData[] = "    filter:url(#glow);";
+		$this->svgData[] = "  }";
+		$this->svgData[] = "  rect.inactive {";
+		$this->svgData[] = "    stroke:#7A8996;";
 		$this->svgData[] = "  }";
 		$this->svgData[] = "</style>";
 	}
@@ -979,22 +1073,30 @@ class RackDrawer_SVG extends Common_functions {
 	 * @return void
 	 */
 	private function drawContents() {
-		$this->svgData[] = "<!-- contents -->";
+		$output = array();
+		$keepOnTop = array();
+		$output[] = "<!-- contents -->";
 		$w = $this->imgXSize - ($this->marginSides * 2);
 		foreach ($this->rack->getContent() as $content) {
+			$queue = array();
 			$size = max($content->getSize(), 1);
 			$h = $this->unitYSize * $size;
 			$yPos = ($this->rack->getOrientation()) ?
 				$this->marginTop + ($this->unitYSize * $content->getStartLocation()) :
 				$this->marginTop + ($this->unitYSize * $this->rack->getSpace()) - ($this->unitYSize * ($content->getStartLocation() + $size));
-			if ($content->getItemType()=="device") $this->svgData[] = "<a href='".htmlentities(create_link("tools", "devices", $content->getId()))."' target='_parent'>";
-			$color = ($content->isActive()) ? "#CFE8FF" : "#E6E6E6";
-			$this->svgData[] = "<rect width='{$w}' height='{$h}' x='{$this->marginSides}' y='{$yPos}' style='fill:{$color};stroke:#7A8996;' />";
+			if ($content->getUrl()) $queue[] = "<a href='{$content->getUrl()}' target='_parent'>";
+			$class = ($content->isActive()) ? "active" : "inactive";
+			$queue[] = "<rect class='{$class}' width='{$w}' height='{$h}' x='{$this->marginSides}' y='{$yPos}' style='fill:{$content->getBgcolor()};' />";
 			$y = $yPos + $this->unitYSize - 6; // the height of the rect plus one RU and reduced by 6
 			$y = $y + (($size - 1) * $this->unitYSize / 2); // increase the height by .5RU for each device whose size exceeds 1 RU
-			$this->svgData[] = "<text class='device' x='".($this->imgXSize / 2)."' y='{$y}'>{$content->getName()}</text>";
-			if ($content->getItemType()=="device") $this->svgData[] = "</a>";
+			$queue[] = "<text class='device' x='".($this->imgXSize / 2)."' y='{$y}' style='fill:{$content->getFgcolor()};stroke:{$content->getFgcolor()}'>{$content->getName()}</text>";
+			if ($content->getUrl()) $queue[] = "</a>";
+			// place the queue onto the stack
+			if ($content->isActive()) $keepOnTop = $queue;
+			else $output = array_merge($output,$queue);
 		}
+		$output = array_merge($output,$keepOnTop);
+		$this->svgData = array_merge($this->svgData,$output);
 	}
 
 	/**
@@ -1259,12 +1361,28 @@ class RackContent extends Model {
     private $size;
 
     /**
-     * item type
+     * hyperlink to the device
      *
      * @var string
      * @access private
      */
-    private $itemType;
+    private $url = "";
+
+	/**
+	 * background color
+	 *
+	 * @var string
+	 * @access private
+	 */
+	private $bgcolor = "#E6E6E6";
+
+	/**
+	 * foreground color
+	 *
+	 * @var string
+	 * @access private
+	 */
+	private $fgcolor = "black";
 
 
 
@@ -1374,23 +1492,65 @@ class RackContent extends Model {
     }
 
     /**
-     * Returns item type
+     * Returns url
      *
      * @access public
      * @return string
      */
-    public function getItemType() {
-        return $this->itemType;
+    public function getUrl() {
+        return $this->url;
     }
 
     /**
-     * Sets item type
+     * Sets url
      *
      * @access public
      * @param mixed $name
      * @return void
      */
-    public function setItemType($type) {
-        $this->itemType = $type;
+    public function setUrl($url) {
+        $this->url = $url;
     }
+
+	/**
+	 * Returns bgcolor
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getBgcolor() {
+		return $this->bgcolor;
+	}
+
+	/**
+	 * Sets bgcolor
+	 *
+	 * @access public
+	 * @param mixed $name
+	 * @return void
+	 */
+	public function setBgcolor($color) {
+		$this->bgcolor = $color;
+	}
+
+	/**
+	 * Returns fgcolor
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getFgcolor() {
+		return $this->fgcolor;
+	}
+
+	/**
+	 * Sets fgcolor
+	 *
+	 * @access public
+	 * @param mixed $name
+	 * @return void
+	 */
+	public function setFgcolor($color) {
+		$this->fgcolor = $color;
+	}
 }

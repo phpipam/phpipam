@@ -339,6 +339,7 @@ CREATE TABLE `devices` (
   `rack` int(11) unsigned DEFAULT NULL,
   `rack_start` int(11) unsigned DEFAULT NULL,
   `rack_size` int(11) unsigned DEFAULT NULL,
+  `rack_deep` int(1) NOT NULL DEFAULT 0,
   `location` int(11) unsigned DEFAULT NULL,
   `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -606,6 +607,8 @@ CREATE TABLE `deviceTypes` (
   `tid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `tname` varchar(128) DEFAULT NULL,
   `tdescription` varchar(128) DEFAULT NULL,
+  `bgcolor` varchar(7) DEFAULT '#E6E6E6',
+  `fgcolor` varchar(7) DEFAULT '#000',
   PRIMARY KEY (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
@@ -1084,4 +1087,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.8";
-UPDATE `settings` SET `dbversion` = 46;
+UPDATE `settings` SET `dbversion` = 47;

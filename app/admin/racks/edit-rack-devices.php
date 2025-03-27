@@ -140,12 +140,12 @@ $(document).ready(function(){
         		<td>
                     <select name="rack_start" class="form-control input-sm input-w-auto" style="min-width:70px">
             		<?php
-                    list($available, $available_back) = $Racks->free_u($rack, $rack_devices, $rack_contents);
+                    list($available_front, $available_back) = $Racks->free_u($rack, $rack_devices, $rack_contents);
 
                     // print available spaces
                     if($rack->hasBack!="0") {
                         print "<optgroup label='"._("Front")."'>";
-                        foreach ($available as $a) {
+                        foreach ($available_front as $a) {
                             print "<option value='$a'>$a</option>";
                         }
                         print "</optgroup>";
@@ -157,7 +157,7 @@ $(document).ready(function(){
                         print "</optgroup>";
                     }
                     else {
-                        foreach ($available as $a) {
+                        foreach ($available_front as $a) {
                             print "<option value='$a'>$a</option>";
                         }
                     }
@@ -177,12 +177,21 @@ $(document).ready(function(){
         		</td>
         	</tr>
 
+			<?php if ($POST->devicetype=='device') { ?>
+			<tr>
+				<td><?php print _('Full Depth'); ?></td>
+				<td>
+					<input type="checkbox" class="input-switch" name="rack_deep" value="1" >
+				</td>
+			</tr>
+			<?php } ?>
+
             <!-- Location override -->
             <?php if($User->settings->enableLocations=="1" && ($rack->location!="0" && !is_null($rack->location)) && ($POST->devicetype == 'device')) { ?>
             <tr>
                 <td colspan="2">
                 <hr>
-                    <input type="checkbox" class="input-switch" value="1" name="no_location"> <span class="text-muted"><?php print _("Don't update device location from rack"); ?></span>
+                    <input type="checkbox" class="input-switch" value="1" name="no_location"> <span title="Prevent overwriting the device's Location with the value of the rack's Location" class="text-muted"><?php print _("Don't update device location from rack"); ?></span>
                 </td>
             </tr>
             <?php } ?>

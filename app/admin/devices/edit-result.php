@@ -50,6 +50,7 @@ $POST->sections = !empty($temp) ? implode(";", $temp) : null;
 if($POST->hostname == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }
 
 # rack checks
+$POST->rack_deep = (@$POST->rack_deep=="1") ? "1" : "0";
 if ($POST->rack !== "0" && $User->get_module_permissions ("racks")>User::ACCESS_R) {
     if ($User->settings->enableRACK!="1") {
         unset($POST->rack);
@@ -59,6 +60,7 @@ if ($POST->rack !== "0" && $User->get_module_permissions ("racks")>User::ACCESS_
         if (!is_numeric($POST->rack))                               { $Result->show("danger", _('Invalid rack identifier').'!', true); }
         if (!is_numeric($POST->rack_start))                         { $Result->show("danger", _('Invalid rack start position').'!', true); }
 		if (!is_numeric($POST->rack_size)) 							{ $Result->show("danger", _('Invalid rack size').'!', true); }
+		$POST->rack_deep = (isset($POST->rack_deep) && $POST->rack_deep=="1") ? "1" : "0";
 		if ($POST->rack != 0 && $POST->rack_size < 1) 				{ $Result->show("danger", _('Invalid rack size').'!', true); }
 		# validate rack
 		$rack = $Racks->fetch_rack_details($POST->rack);
@@ -68,7 +70,7 @@ if ($POST->rack !== "0" && $User->get_module_permissions ("racks")>User::ACCESS_
 																	{ $Result->show("danger", _('Invalid rack position (overflow)').'!', true); }
 		# check overlaps
 		if ($User->settings->rackAllowOverlap!="1") {
-			if ($Racks->check_device_overlap($POST->rack,$POST->rack_start,$POST->rack_size)) 
+			if ($Racks->check_device_overlap($POST->rack,$POST->rack_start,$POST->rack_size,$POST->rack_deep,$POST->switchid)) 
 																	{ $Result->show("danger", _('Overlaps with existing rack item').'!', true); };
 		}
     }
@@ -94,6 +96,7 @@ if (!is_blank($POST->rack) && $User->get_module_permissions ("racks")>User::ACCE
 	$values['rack']       = $POST->rack;
 	$values['rack_start'] = $POST->rack_start;
 	$values['rack_size']  = $POST->rack_size;
+	$values['rack_deep']  = $POST->rack_deep;
 }
 # perms
 if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {

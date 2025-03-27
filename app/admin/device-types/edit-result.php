@@ -27,10 +27,19 @@ if($POST->action!="add" && !is_numeric($POST->tid)) 	{ $Result->show("danger", _
 # name must be present! */
 if($POST->tname == "") 									{ $Result->show("danger", _('Name is mandatory').'!', false); }
 
+# checks
+if($POST->action!="delete") {
+	if(strlen($POST->bgcolor)<4)		{ $Result->show("danger", _("Invalid bg color"), true); }
+	if(strlen($POST->fgcolor)<4)		{ $Result->show("danger", _("Invalid fg color"), true); }
+}
+
 # create array of values for modification
 $values = array("tid"=>$POST->tid,
 				"tname"=>$POST->tname,
-				"tdescription"=>$POST->tdescription);
+				"tdescription"=>$POST->tdescription,
+				"bgcolor"=>$POST->bgcolor,
+				"fgcolor"=>$POST->fgcolor,
+				);
 
 # update
 if(!$Admin->object_modify("deviceTypes", $POST->action, "tid", $values)) {
