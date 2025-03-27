@@ -71,6 +71,16 @@ else                            { $display=''; }
 <script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    onText: 'Yes',
+	    offText: 'No',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
 });
 // form change
 $('#switchManagementEdit select[name=rack]').change(function() {
