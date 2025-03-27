@@ -326,9 +326,9 @@ class phpipam_rack extends Tools {
         // set orientation
         $this->rack_orientation = $rack->topDown;
         // set name
-        if ($is_back) 			{ $this->rack_name = "["._('R')."] ".$rack->name; }
-        elseif ($has_back)		{ "["._('F')."] ".$rack->name; }
-        else 					{ $this->rack_name = $rack->name; }
+        if ($is_back) 				{ $this->rack_name = "["._('R')."] ".$rack->name; }
+        elseif ($rack->hasBack) 	{ $this->rack_name = "["._('F')."] ".$rack->name; }
+        else 						{ $this->rack_name = $rack->name; }
 
         // set freeform content
         if ($contents!==false) {
