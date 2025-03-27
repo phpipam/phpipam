@@ -133,7 +133,7 @@ class phpipam_rack extends Tools {
      */
     public function fetch_all_racks ($locations = false) {
         // set query and fetch racks
-        $query = $locations ? "select * from `racks` order by `location` asc, `name` asc;" : "select * from `racks` order by `name` asc;";
+        $query = $locations ? "select * from `racks` order by `location` asc, `row` asc, `name` asc;" : "select * from `racks` order by `row` asc, `name` asc;";
         $all_racks = $this->Database->getObjectsQuery('racks', $query);
         // reorder
         if ($all_racks==false) {

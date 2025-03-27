@@ -22,6 +22,7 @@
     + Make Rack Devices Clickable from picture (#2372);
     + Setting to enable/disable devices overlapping in racks (#4424);
     + Colorization of rack devices; devices can be deep (front & back) of a rack (#4431);
+    + Organize racks in a location using rows or rooms (#4433);
 
     Security Fixes:
     ----------------------------

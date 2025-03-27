@@ -40,6 +40,9 @@ if($POST->name == "") 											    { $Result->show("danger", _('Name is mandat
 # rack checks
 # validate position and size
 if (!is_numeric($POST->size))                                         { $Result->show("danger", _('Invalid rack size').'!', true); }
+if (isset($POST->row) && strlen($POST->row)==0) 					{ unset($POST->row); }
+if (isset($POST->row) && !is_numeric($POST->row)) 					{ $Result->show("danger", _('Row')." "._('must be numeric').'!', true); }
+
 # validate rack
 if ($POST->action=="edit") {
     if (!is_numeric($POST->rackid))                                   { $Result->show("danger", _('Invalid rack identifier').'!', true); }
@@ -91,9 +94,10 @@ $values = array(
 				"name"        => $POST->name,
 				"size"        => $POST->size,
 				"hasBack"     => $Admin->verify_checkbox($POST->hasBack),
-                "topDown"     => $POST->topDown,
+				"topDown"     => $POST->topDown,
 				"description" => $POST->description
 				);
+if (isset($POST->row)) $values['row'] = $POST->row;
 
 # fetch custom fields
 $update = $Tools->update_POST_custom_fields('racks', $POST->action, $POST);

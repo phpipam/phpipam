@@ -107,6 +107,12 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         </tr>
         <?php } ?>
 
+		<!-- row -->
+		<tr>
+			<th><?php print _("Row"); ?></th>
+			<td><?php print $rack->row; ?></td>
+		</tr>
+
         <?php if ($User->settings->enableCustomers=="1" &&  $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
         <tr>
             <td colspan='2'><hr></td>

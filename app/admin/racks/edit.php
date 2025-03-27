@@ -148,6 +148,15 @@ $(document).ready(function(){
 	</tr>
 	<?php } ?>
 
+	<!-- row  -->
+	<tr>
+		<td><?php print _('Row'); ?></td>
+		<td>
+			<input type="text" name="row" class="form-control input-sm" placeholder="<?php print _('Row'); ?>" value="<?php if(isset($rack->row)) print $rack->row; ?>" style="width:100px" <?php print $readonly; ?>>
+		</td>
+	</tr>
+
+	<!-- customers -->
 	<?php
     // customers
     if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
