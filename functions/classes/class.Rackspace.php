@@ -248,6 +248,8 @@ class phpipam_rack extends Tools {
 
             // remove units used by devices
             foreach ($devices as $d) {
+                // some devices have null for a size, so minimum size is 1
+                if (!is_numeric($d->rack_size) || $d->rack_size==0) $d->rack_size = 1;
                 if (property_exists($current_device, 'hostname') == property_exists($d, 'hostname')) {
                     // $current_device and $d are of the same type = device or rack_content item
                     // Skip current device/rack_content
@@ -258,10 +260,15 @@ class phpipam_rack extends Tools {
                 // Remove U positions blocked by other devices
                 // U positions that preceed existing devices must be excluded too if the proposed device is >1 RU
                 foreach(range($d->rack_start-$current_device_size,$d->rack_start+$d->rack_size-1) as $m) {
-                    if ($rack->hasBack && $d->rack_start > $rack->size)
+                    if ($rack->hasBack && $d->rack_start > $rack->size) {
                         unset($available_back[$m]);
-                    else
+                        if ($d->rack_deep || $current_device->rack_deep) unset($available_front[$m-$rack->size]);
+                    } elseif ($rack->hasBack) {
                         unset($available_front[$m]);
+                        if ($d->rack_deep || $current_device->rack_deep) unset($available_back[$m+$rack->size]);
+                    } else {
+                        unset($available_front[$m]);
+                    }
                 }
             }
         }
@@ -530,6 +537,7 @@ class phpipam_rack extends Tools {
 	public function check_device_overflow ($rack_id, $device_start, $device_size) {
 		$rack = $this->fetch_rack_details($rack_id);
 		if (!is_object($rack)) return True;
+		$device_size = ($device_size>0) ? $device_size - 1 : 0;
 
 		if ($device_start > $rack->size && $rack->hasBack) {
 			if ($device_start + $device_size > 2 * $rack->size) return True;
