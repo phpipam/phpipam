@@ -787,6 +787,7 @@ CREATE TABLE `racks` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL DEFAULT '',
   `size` int(2) DEFAULT NULL,
+  `subrack` tinyint(1) NOT NULL DEFAULT 0,
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `row` INT(11)  NOT NULL  DEFAULT '1',
   `hasBack` TINYINT(1)  NOT NULL  DEFAULT '0',
@@ -809,6 +810,8 @@ CREATE TABLE `rackContents` (
   `rack` int(11) unsigned DEFAULT NULL,
   `rack_start` int(11) unsigned DEFAULT NULL,
   `rack_size` int(11) unsigned DEFAULT NULL,
+  `rack_deep` tinyint(1) NOT NULL DEFAULT 0,
+  `subrackId` INT(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `rack` (`rack`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1087,4 +1090,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.8";
-UPDATE `settings` SET `dbversion` = 47;
+UPDATE `settings` SET `dbversion` = 48;

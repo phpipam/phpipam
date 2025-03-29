@@ -113,6 +113,15 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
 			<td><?php print $rack->row; ?></td>
 		</tr>
 
+		<?php if ($rack->subrack) {
+		print "<tr>";
+		print " <th>"._('Subrack')."</th>";
+		$parent = $Racks->find_subrack_parent($rack->id);
+		if ($parent===false) print " <td>"._('Orphaned')."</td>";
+		else print " <td>"._('Inside')." <a href='".create_link("tools", "racks", $parent->id)."'>".$parent->name."</a></td>";
+		print "</tr>";
+		} ?>
+
         <?php if ($User->settings->enableCustomers=="1" &&  $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
         <tr>
             <td colspan='2'><hr></td>
@@ -185,12 +194,6 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         // devices
         if ($rack_devices===false && $rack_contents===false) {
             print " <span class='text-muted'>"._("Rack is empty")."</span>";
-            if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
-                print " <hr>";
-                print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
-                print "<br>";
-                print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='content'><i class='fa fa-plus'></i></a> "._("Add custom equipment");
-            }
         }
         else {
             if ($rack_devices===false) $rack_devices = array();
@@ -326,13 +329,15 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
             } while ($cur);
 */
 
-            //add / remove device from rack
-            if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
-                print "<hr>";
-                print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
-                print "<br>";
-                print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='content'><i class='fa fa-plus'></i></a> "._("Add custom equipment");
-            }
+        }
+        //add / remove device from rack
+        if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
+            print "<hr>";
+            print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
+            print "<br>";
+            print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='content'><i class='fa fa-plus'></i></a> "._("Add custom equipment");
+            print "<br>";
+            print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='subrack'><i class='fa fa-plus'></i></a> "._("Add subrack");
         }
         print "</td>";
         print "</tr>";

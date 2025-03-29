@@ -108,6 +108,15 @@ $(document).ready(function(){
 		</td>
 	</tr>
 
+	<!-- subrack -->
+	<tr>
+		<td><?php print _('Subrack'); ?></td>
+		<td>
+			<?php $checked = @$rack->subrack=="1" ? "checked" : ""; ?>
+			<input type="checkbox" name="subrack" class="input-switch" value="1" <?php print $checked; ?>>
+		</td>
+	</tr>
+
 	<!-- Front -->
 	<tr>
 		<td><?php print _('Back side'); ?></td>

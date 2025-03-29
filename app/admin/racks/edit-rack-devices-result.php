@@ -27,7 +27,7 @@ $User->check_maintaneance_mode ();
 $User->Crypto->csrf_cookie ("validate", "rack_devices", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # device type?
-if (!isset($POST->devicetype) || (($POST->devicetype != 'device') && ($POST->devicetype != 'content'))) { $Result->show("danger", _("Invalid device type"), true, true); }
+if (!isset($POST->devicetype) || ($POST->devicetype != 'device' && $POST->devicetype != 'content' && $POST->devicetype != 'subrack')) { $Result->show("danger", _("Invalid device type"), true, true); }
 
 # ID must be numeric
 if(!is_numeric($POST->rackid))			                              { $Result->show("danger", _("Invalid rack identifier"), true); }
@@ -36,6 +36,7 @@ if(!is_numeric($POST->rack_start))			                          { $Result->show("
 if(!is_numeric($POST->rack_size))			                          { $Result->show("danger", _("Invalid size value"), true); }
 if($POST->rack_size < 1)											{ $Result->show("danger", _('Invalid size value').'!', true); }
 $POST->rack_deep = (@$POST->rack_deep=="1") ? "1" : "0";
+if($POST->devicetype == 'subrack' && !is_numeric($POST->subrackid))	{ $Result->show("danger", _("Invalid rack identifier"), true); }
 
 # name
 if ($POST->devicetype == 'content' && (!isset($POST->name) || trim($POST->name === ''))) { $Result->show("danger", _("Invalid device name"), true); }
@@ -43,6 +44,9 @@ if ($POST->devicetype == 'content' && (!isset($POST->name) || trim($POST->name =
 # validate rack
 $rack = $Admin->fetch_object("racks", "id", $POST->rackid);
 if ($rack===false)                                                     { $Result->show("danger", _("Rack does not exist"), true); }
+
+# prevent nesting subracks
+if($POST->devicetype == 'subrack' && $rack->subrack)				{ $Result->show("danger", _('Nesting subracks is not allowed').'!', true); }
 
 # check overflow
 if ($Racks->check_device_overflow($POST->rackid,$POST->rack_start,$POST->rack_size))
@@ -75,7 +79,7 @@ switch ($POST->devicetype) {
     }
 
     # update rack
-    if(!$Admin->object_modify("devices", "edit", "id", $values))	        { $Result->show("success", _("Failed to add device to rack").'!', false); }
+    if(!$Admin->object_modify("devices", "edit", "id", $values))	        { $Result->show("danger", _("Failed to add device to rack").'!', false); }
     else																	{ $Result->show("success", _("Device added to rack").'!', false); }
     break;
 
@@ -85,10 +89,30 @@ switch ($POST->devicetype) {
                     "rack"=>$POST->rackid,
                     "rack_start"=>$POST->rack_start,
                     "rack_size"=>$POST->rack_size,
+					"rack_deep"=>$POST->rack_deep,
                     );
 
     # add content
-    if (!$Admin->object_modify('rackContents', 'add', null, $values))       { $Result->show("success", _("Failed to add device to rack").'!', false); }
+    if (!$Admin->object_modify('rackContents', 'add', null, $values))       { $Result->show("danger", _("Failed to add device to rack").'!', false); }
     else                                                                    { $Result->show("success", _("Device added to rack").'!', false); }
     break;
+
+	case 'subrack':
+	# validate the subrack
+	$subrack = $Admin->fetch_object("racks", "id", $POST->subrackid);
+	if ($subrack===false)			{ $Result->show("danger", _("Subrack")." "._("does not exist"), true); }
+	if (!$subrack->subrack)			{ $Result->show("danger", _("Rack is not designated as a subrack"), true); }
+	# is that subrack already placed somewhere?
+	if ($Database->getObjectQuery("rackContents", "SELECT * from `rackContents` where `subrackId` = ? limit 1;", [$POST->subrackid]))
+																			{ $Result->show("danger", _("Subrack is already in a rack"), true); }
+	$values = array("name"=>$subrack->name,
+					"rack"=>$POST->rackid,
+					"rack_start"=>$POST->rack_start,
+					"rack_size"=>$POST->rack_size,
+					"rack_deep"=>$POST->rack_deep,
+					"subrackId"=>$subrack->id,
+					);
+	if (!$Admin->object_modify('rackContents', 'add', null, $values))		{ $Result->show("danger", _("Failed to add subrack to rack").'!', false); }
+	else 																	{ $Result->show("success", _("Subrack")." "._("added to rack"), false); }
+	break;
 }

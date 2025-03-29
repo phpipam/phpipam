@@ -42,6 +42,7 @@ if($POST->name == "") 											    { $Result->show("danger", _('Name is mandat
 if (!is_numeric($POST->size))                                         { $Result->show("danger", _('Invalid rack size').'!', true); }
 if (isset($POST->row) && strlen($POST->row)==0) 					{ unset($POST->row); }
 if (isset($POST->row) && !is_numeric($POST->row)) 					{ $Result->show("danger", _('Row')." "._('must be numeric').'!', true); }
+if (isset($POST->subrack) && $POST->subrack!="1") 					{ $POST->subrack="0"; }
 
 # validate rack
 if ($POST->action=="edit") {
@@ -51,6 +52,14 @@ if ($POST->action=="edit") {
 }
 elseif($POST->action=="delete") {
     if (!is_numeric($POST->rackid))                                   { $Result->show("danger", _('Invalid rack identifier').'!', true); }
+}
+
+# if subrack is being enabled, prevent nesting subracks
+if ($POST->subrack=="1") {
+	$rack_content = $Racks->fetch_rack_contents ($rack_details->id);
+	foreach ($rack_content as $c) {
+		if ($c->subrackId>0) 	{ $Result->show("danger", _('Nesting subracks is not allowed').'!', true); }
+	}
 }
 
 # check if rack shrinks that no overflow of devices ocur
@@ -93,6 +102,7 @@ $values = array(
 				"id"          => $POST->rackid,
 				"name"        => $POST->name,
 				"size"        => $POST->size,
+				"subrack"     => $Admin->verify_checkbox($POST->subrack),
 				"hasBack"     => $Admin->verify_checkbox($POST->hasBack),
 				"topDown"     => $POST->topDown,
 				"description" => $POST->description

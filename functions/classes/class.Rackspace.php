@@ -18,24 +18,6 @@ class phpipam_rack extends Tools {
     public $rack_sizes = array();
 
     /**
-     * Current rack size
-     * @var integer
-     */
-    public $rack_size = 0;
-
-    /**
-     * Current rack orientation
-     * @var integer
-     */
-    public $rack_orientation = 0;
-
-    /**
-     * Current rack name
-     * @var string
-     */
-    public $rack_name = "";
-
-    /**
      * List of all racks
      *
      * (default value: false)
@@ -322,20 +304,34 @@ class phpipam_rack extends Tools {
      * @return void
      */
     public function draw_rack ($id, $deviceId = false, $is_back = false, $draw_names = true) {
+        $this->Rack = $this->compile_rack_contents($id, $deviceId, $is_back, $draw_names);
+        // draw rack drawer
+        $this->set_draw_rack ();
+    }
+
+    /**
+     * captures the contents from a rack in a form that the RackDrawer class can parse
+     *
+     * @param  int $id				// the id of the rack whose contents you desire
+     * @param  bool|int $deviceId   // active device id
+     * @param  bool $is_back        // we are asking for the back side
+     * @param  bool $recursion		// a kill switch to make sure we don't loop infinitely
+     *
+     * @access private
+     * @return void
+     */
+    private function compile_rack_contents ($id, $deviceId = false, $is_back = false, $draw_names = true, $recursion = true) {
         // fetch rack details
         $rack = $this->fetch_rack_details ($id);
         // fetch rack devices
         $devices = $this->fetch_rack_devices ($id);
         // fetch freeform rack contents
         $contents = $this->fetch_rack_contents ($id);
-        // set size
-        $this->rack_size = $rack->size;
-        // set orientation
-        $this->rack_orientation = $rack->topDown;
         // set name
-        if ($is_back) 				{ $this->rack_name = "["._('R')."] ".$rack->name; }
-        elseif ($rack->hasBack) 	{ $this->rack_name = "["._('F')."] ".$rack->name; }
-        else 						{ $this->rack_name = $rack->name; }
+        if ($is_back) 				{ $rack_name = "["._('R')."] ".$rack->name; }
+        elseif ($rack->hasBack) 	{ $rack_name = "["._('F')."] ".$rack->name; }
+        else 						{ $rack_name = $rack->name; }
+        $rack_content = array();
 
         // set freeform content
         if ($contents!==false) {
@@ -344,7 +340,7 @@ class phpipam_rack extends Tools {
                 if ($is_back) {
                     if ($c->rack_start > $rack->size) {
                         // add initial location
-                        $rd = array("id"=>$c->id,
+                        $rd = array("id"=>"none",
                                     "name"=>$c->name,
                                     "startLocation"=>$c->rack_start-$rack->size,
                                     "size"=>$c->rack_size,
@@ -352,17 +348,47 @@ class phpipam_rack extends Tools {
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
+                        // prepend name if full depth
+                        if($c->rack_deep) { $rd['name'] = "["._('F')."] " . $rd['name']; }
                         // remove name if not permitted
                         if(!$draw_names) { unset ($rd['name']); }
+                        // populate the subrack data
+                        if ($c->subrackId) {
+                            $rd['url'] = htmlentities(create_link("tools", "racks", $c->subrackId));
+                            if ($recursion) $rd['subrack'] = $this->compile_rack_contents ($c->subrackId, $deviceId, !$is_back, $draw_names, false);
+                            if (sizeof($rd['subrack']->getContent())==0) unset($rd['subrack']);
+                        }
                         // save content
-                        $this->rack_content[] = new RackContent ($rd);
+                        $rack_content[] = new RackContent ($rd);
+                    } else {
+                        if ($c->rack_deep) {
+                            // add initial location
+                            $rd = array("id"=>"none",
+                                        "name"=>"["._('R')."] ".$c->name,
+                                        "startLocation"=>$c->rack_start,
+                                        "size"=>$c->rack_size,
+                                        "rackName"=>$rack->name,
+                                        );
+                            // if startlocation is not set
+                            $rd['startLocation'] -= 1;
+                            // remove name if not permitted
+                            if(!$draw_names) { unset ($rd['name']); }
+                            // populate the subrack data
+                            if ($c->subrackId) {
+                                $rd['url'] = htmlentities(create_link("tools", "racks", $c->subrackId));
+                                if ($recursion) $rd['subrack'] = $this->compile_rack_contents ($c->subrackId, $deviceId, $is_back, $draw_names, false);
+                            if (sizeof($rd['subrack']->getContent())==0) unset($rd['subrack']);
+                            }
+                            // save content
+                            $rack_content[] = new RackContent ($rd);
+                        }
                     }
                 }
                 // front side
                 else {
                     if($c->rack_start <= $rack->size) {
                         // add initial location
-                        $rd = array("id"=>$c->id,
+                        $rd = array("id"=>"none",
                                     "name"=>$c->name,
                                     "startLocation"=>$c->rack_start,
                                     "size"=>$c->rack_size,
@@ -370,10 +396,38 @@ class phpipam_rack extends Tools {
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
+                        // prepend name if full depth
+                        if($c->rack_deep) { $rd['name'] = "["._('F')."] " . $rd['name']; }
                         // remove name if not permitted
                         if(!$draw_names) { unset ($rd['name']); }
+                        if ($c->subrackId) {
+                            $rd['url'] = htmlentities(create_link("tools", "racks", $c->subrackId));
+                            if ($recursion) $rd['subrack'] = $this->compile_rack_contents ($c->subrackId, $deviceId, $is_back, $draw_names, false);
+                            if (sizeof($rd['subrack']->getContent())==0) unset($rd['subrack']);
+                        }
                         // save content
-                        $this->rack_content[] = new RackContent ($rd);
+                        $rack_content[] = new RackContent ($rd);
+                    } else {
+                        if ($c->rack_deep) {
+                            // add initial location
+                            $rd = array("id"=>"none",
+                                        "name"=>"["._('R')."] ".$c->name,
+                                        "startLocation"=>$c->rack_start-$rack->size,
+                                        "size"=>$c->rack_size,
+                                        "rackName"=>$rack->name,
+                                        );
+                            // if startlocation is not set
+                            $rd['startLocation'] -= 1;
+                            // remove name if not permitted
+                            if(!$draw_names) { unset ($rd['name']); }
+                            if ($c->subrackId) {
+                                $rd['url'] = htmlentities(create_link("tools", "racks", $c->subrackId));
+                                if ($recursion) $rd['subrack'] = $this->compile_rack_contents ($c->subrackId, $deviceId, !$is_back, $draw_names, false);
+                            if (sizeof($rd['subrack']->getContent())==0) unset($rd['subrack']);
+                            }
+                            // save content
+                            $rack_content[] = new RackContent ($rd);
+                        }
                     }
                 }
             }
@@ -406,7 +460,7 @@ class phpipam_rack extends Tools {
                         // remove name if not permitted
                         if(!$draw_names) { unset ($rd['name']); }
                         // save content
-                        $this->rack_content[] = new RackContent ($rd);
+                        $rack_content[] = new RackContent ($rd);
                     } else {
                         if ($d->rack_deep) {
                             // add initial location
@@ -424,7 +478,7 @@ class phpipam_rack extends Tools {
                             // remove name if not permitted
                             if(!$draw_names) { unset ($rd['name']); }
                             // save content
-                            $this->rack_content[] = new RackContent ($rd);
+                            $rack_content[] = new RackContent ($rd);
                         }
                     }
                 }
@@ -448,7 +502,7 @@ class phpipam_rack extends Tools {
                         // remove name if not permitted
                         if(!$draw_names) { unset ($rd['name']); }
                         // save content
-                        $this->rack_content[] = new RackContent ($rd);
+                        $rack_content[] = new RackContent ($rd);
                     } else {
                         if ($d->rack_deep) {
                             // add initial location
@@ -466,7 +520,7 @@ class phpipam_rack extends Tools {
                             // remove name if not permitted
                             if(!$draw_names) { unset ($rd['name']); }
                             // save content
-                            $this->rack_content[] = new RackContent ($rd);
+                            $rack_content[] = new RackContent ($rd);
                         }
                     }
                 }
@@ -474,45 +528,56 @@ class phpipam_rack extends Tools {
         }
 
         // create rack
-        $this->set_rack ();
-        $this->Rack->setId($id);
+        $result = new Rack (array("id"=>$id, "name"=>$rack_name, "content"=>$rack_content,
+							"space"=>$rack->size, "orientation"=>$rack->topDown));
+
         // set active device
         if ($deviceId!==false) {
-            $this->set_active_rack_device ($deviceId);
+            $result->set_active_rack_device ($deviceId);
         }
-        // draw rack drawer
-        $this->set_draw_rack ();
+        return $result;
     }
 
-    /**
-     * Sets new rack with details
-     *
-     * @access private
-     * @return void
-     */
-    private function set_rack () {
-        // initialize
-        $this->Rack = new Rack (array("name"=>$this->rack_name, "content"=>$this->rack_content));
-        // set rack size
-        $this->Rack->setSpace($this->rack_size);
-        // set rack orientation
-        $this->Rack->setOrientation($this->rack_orientation);
-    }
+	/**
+	 * Finds the rack that a subrack is located within
+	 *
+	 * @access public
+	 * @param  mixed $id    // the id of the subrack we're looking for
+	 * @return array|false
+	 */
+	public function find_subrack_parent ($id) {
+		foreach ($this->fetch_all_objects("rackContents") as $c) {
+			if ($c->subrackId == $id) {
+				return $this->fetch_rack_details($c->rack);
+			}
+		}
+		return false;
+	}
 
-    /**
-     * Set active rack device.
-     *
-     * @access public
-     * @param mixed $id         // device id
-     * @return void
-     */
-    public function set_active_rack_device ($id) {
-        foreach ($this->Rack->getContent() as $content) {
-            if ($content->getId() == $id) {
-                $content->setActive();
-            }
-        }
-    }
+	/**
+	 * Fetch subracks that are not mounted anywhere
+	 *
+	 * @access public
+	 * @return array|false
+	 */
+	public function fetch_orphan_subracks () {
+		$out = array();
+		$racks = $this->fetch_all_objects("racks", "id");
+		if ($racks!==false) {
+			$all_content = $this->fetch_all_objects("rackContents");
+			foreach($racks as $r) {
+				if ($r->subrack) {
+					foreach ($all_content as $c) {
+						if ($c->subrackId == $r->id) {
+							continue 2;
+						}
+					}
+					$out[] = $r;
+				}
+			}
+		}
+		return (sizeof($out)>0) ? $out : false;
+	}
 
     /**
      * Draw rack
@@ -1087,6 +1152,7 @@ class RackDrawer_SVG extends Common_functions {
 		$keepOnTop = array();
 		$output[] = "<!-- contents -->";
 		$w = $this->imgXSize - ($this->marginSides * 2);
+		$x_center = $this->imgXSize / 2;
 		foreach ($this->rack->getContent() as $content) {
 			$queue = array();
 			$size = max($content->getSize(), 1);
@@ -1098,8 +1164,37 @@ class RackDrawer_SVG extends Common_functions {
 			$class = ($content->isActive()) ? "active" : "inactive";
 			$queue[] = "<rect class='{$class}' width='{$w}' height='{$h}' x='{$this->marginSides}' y='{$yPos}' style='fill:{$content->getBgcolor()};' />";
 			$y = $yPos + $this->unitYSize - 6; // the height of the rect plus one RU and reduced by 6
-			$y = $y + (($size - 1) * $this->unitYSize / 2); // increase the height by .5RU for each device whose size exceeds 1 RU
-			$queue[] = "<text class='device' x='".($this->imgXSize / 2)."' y='{$y}' style='fill:{$content->getFgcolor()};stroke:{$content->getFgcolor()}'>{$content->getName()}</text>";
+			if ($content->getSubrack()) {
+				$subrack_margin = 3;
+				$outer_ru = $size;
+				$inner_ru = $content->getSubrack()->getSpace();
+				if ($inner_ru<$outer_ru) {
+					// horizontal linecards
+					$blade_w = $w - (2 * $subrack_margin);
+					$blade_h = ($h - $this->unitYSize - $subrack_margin) / $inner_ru - $subrack_margin;
+					$transform = " transform='translate(0,-{$h})'";
+				} else {
+					// vertical linecards
+					$blade_w = $h - (2 * $subrack_margin);
+					$blade_h = (($w - $subrack_margin - $this->unitYSize) / $inner_ru) - $subrack_margin;
+					$transform = " transform='rotate(270,{$this->marginSides},".($yPos+$h).")'";
+				}
+				$cornerstone_x = $this->marginSides + $subrack_margin;
+				$cornerstone_y = $yPos + $h + $this->unitYSize;
+				if (strlen($content->getName())>0) $queue[] = "<text class='device' x='".($cornerstone_x + ($blade_w / 2))."' y='".($cornerstone_y - 6)."' style='fill:{$content->getFgcolor()};stroke:{$content->getFgcolor()}' {$transform}>{$content->getName()}</text>";
+				foreach ($content->getSubrack()->getContent() as $blade) {
+					$this_y = $cornerstone_y + (($blade->getStartLocation() - 0) * ($blade_h + $subrack_margin));
+					$this_h = ($blade_h * $blade->getSize()) + ($subrack_margin * ($blade->getSize() - 1));
+					$class = ($blade->isActive()) ? "active" : "inactive";
+					if ($blade->getUrl()) $queue[] = "<a href='{$blade->getUrl()}' target='_parent'>";
+					$queue[] = "<rect class='{$class}' width='{$blade_w}' height='{$this_h}' x='{$cornerstone_x}' y='{$this_y}' style='fill:{$blade->getBgcolor()};' {$transform} />";
+					if (strlen($content->getName())>0) $queue[] = "<text class='device' x='".($this->marginSides + ($blade_w / 2))."' y='".($this_y + (.7 * $blade_h * $blade->getSize()))."' style='fill:{$blade->getFgcolor()};stroke:{$blade->getFgcolor()};font-size:10px;' {$transform}>{$blade->getName()}</text>";
+					if ($blade->getUrl()) $queue[] = "</a>";
+				}
+			} else {
+				$y = $y + (($size - 1) * $this->unitYSize / 2); // increase the height by .5RU for each device whose size exceeds 1 RU
+				if (strlen($content->getName())>0) $queue[] = "<text class='device' x='".($x_center)."' y='{$y}' style='fill:{$content->getFgcolor()};stroke:{$content->getFgcolor()}'>{$content->getName()}</text>";
+			}
 			if ($content->getUrl()) $queue[] = "</a>";
 			// place the queue onto the stack
 			if ($content->isActive()) $keepOnTop = $queue;
@@ -1322,6 +1417,22 @@ class Rack extends Model {
     public function setActive($active) {
         $this->active = $active;
     }
+
+    /**
+     * Set active rack device.
+     *
+     * @access public
+     * @param mixed $id         // device id
+     * @return void
+     */
+    public function set_active_rack_device ($id) {
+        foreach ($this->getContent() as $content) {
+            if ($content->getId() == $id) {
+                $content->setActive();
+                return;
+            }
+        }
+    }
 }
 
 /**
@@ -1370,13 +1481,21 @@ class RackContent extends Model {
      */
     private $size;
 
-    /**
-     * hyperlink to the device
-     *
-     * @var string
-     * @access private
-     */
-    private $url = "";
+	/**
+	 * hyperlink to the device
+	 *
+	 * @var string
+	 * @access private
+	 */
+	private $url = "";
+
+	/**
+	 * subrack
+	 *
+	 * @var mixed
+	 * @access private
+	 */
+	private $subrack;
 
 	/**
 	 * background color
@@ -1501,26 +1620,47 @@ class RackContent extends Model {
         $this->size = $size;
     }
 
-    /**
-     * Returns url
-     *
-     * @access public
-     * @return string
-     */
-    public function getUrl() {
-        return $this->url;
-    }
+	/**
+	 * Returns url
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getUrl() {
+	    return $this->url;
+	}
 
-    /**
-     * Sets url
-     *
-     * @access public
-     * @param mixed $name
-     * @return void
-     */
-    public function setUrl($url) {
-        $this->url = $url;
-    }
+	/**
+	 * Sets url
+	 *
+	 * @access public
+	 * @param mixed $url
+	 * @return void
+	 */
+	public function setUrl($url) {
+	    $this->url = $url;
+	}
+
+	/**
+	 * Returns subrack
+	 *
+	 * @access public
+	 * @return mixed
+	 */
+	public function getSubrack() {
+	    return $this->subrack;
+	}
+
+	/**
+	 * Sets subrack
+	 *
+	 * @access public
+	 * @param mixed $subrack
+	 * @return void
+	 */
+	public function setSubrack($subrack) {
+	    $this->subrack = $subrack;
+	}
 
 	/**
 	 * Returns bgcolor

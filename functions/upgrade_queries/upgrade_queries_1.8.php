@@ -19,8 +19,15 @@ $upgrade_queries["1.8.46"][] = "-- Database version bump";
 $upgrade_queries["1.8.46"][] = "UPDATE `settings` SET `dbversion` = '46';";
 
 $upgrade_queries["1.8.47"]   = [];
-$upgrade_queries["1.8.47"][] = "ALTER TABLE `devices` ADD `rack_deep` INT(1) NOT NULL DEFAULT 0 AFTER `rack_size`;";
+$upgrade_queries["1.8.47"][] = "ALTER TABLE `devices` ADD `rack_deep` TINYINT(1) NOT NULL DEFAULT 0 AFTER `rack_size`;";
 $upgrade_queries["1.8.47"][] = "ALTER TABLE `deviceTypes` ADD `fgcolor` varchar(7) NULL DEFAULT '#000' AFTER `tdescription`;";
 $upgrade_queries["1.8.47"][] = "ALTER TABLE `deviceTypes` ADD `bgcolor` varchar(7) NULL DEFAULT '#E6E6E6' AFTER `tdescription`;";
 $upgrade_queries["1.8.47"][] = "-- Database version bump";$
 $upgrade_queries["1.8.47"][] = "UPDATE `settings` SET `dbversion` = '47';";
+
+$upgrade_queries["1.8.48"]   = [];
+$upgrade_queries["1.8.48"][] = "ALTER TABLE `racks` ADD `subrack` TINYINT(1) NOT NULL DEFAULT 0 AFTER `size`;";
+$upgrade_queries["1.8.48"][] = "ALTER TABLE `rackContents` ADD `subrackId` INT(11) NOT NULL DEFAULT 0 AFTER `rack_size`;";
+$upgrade_queries["1.8.48"][] = "ALTER TABLE `rackContents` ADD `rack_deep` TINYINT(11) NOT NULL DEFAULT 0 AFTER `rack_size`;";
+$upgrade_queries["1.8.48"][] = "-- Database version bump";
+$upgrade_queries["1.8.48"][] = "UPDATE `settings` SET `dbversion` = '48';";
