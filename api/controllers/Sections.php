@@ -183,9 +183,9 @@ class Sections_controller extends Common_api_functions {
 			elseif($masterSection->masterSection!="0")	{ $this->Response->throw_exception(400, 'Only 1 level of nesting is permitted for sections');  }
 		}
 
-		# Check that permissions is a valid json array
-		if (isset($this->_params->permissions)) {
-			$this->validatePermissions($this->_params->permissions);
+		# Check that permissions is a valid json array - Fixes #4376
+		if (!is_array(db_json_decode($this->_params->permissions,true))) { 
+			$this->Response->throw_exception(400, "Permissions must be a valid JSON array");
 		}
 
 		# execute update
@@ -210,9 +210,9 @@ class Sections_controller extends Common_api_functions {
 	public function PATCH () {
 		# Check for id
 		if(!isset($this->_params->id))					{ $this->Response->throw_exception(400, "Section Id required"); }
-		# Check that permissions is a valid json array
-		if (isset($this->_params->permissions)) {
-			$this->validatePermissions($this->_params->permissions);
+		# Check that permissions is a valid json array - Fixes #4376
+		if (!is_array(db_json_decode($this->_params->permissions,true))) { 
+			$this->Response->throw_exception(400, "Permissions must be a valid JSON array");
 		}
 		# check that section exists
 		if($this->Sections->fetch_section ("id", $this->_params->id)===false)
@@ -310,18 +310,5 @@ class Sections_controller extends Common_api_functions {
 		// result
 		if(sizeof($clogs_formatted)>0) 	{ return $clogs_formatted; }
 		else 							{ $this->Response->throw_exception(404, "No changelogs found"); }
-	}
-
-	/**
-	 * Validate that permissions is a valid JSON array
-	 * Fixes #4376
-	 * @method validatePermissions
-	 * @return void
-	 */
-	private function validatePermission($permissions)
-	{
-		if (!json_validate($permissions)) {
-			$this->Response->throw_exception(400, "Permissions must be a valid JSON array");
-		}
 	}
 }
