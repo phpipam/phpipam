@@ -1,2 +1,1021 @@
-html{min-height:100% !important}html body{background:url("../images/bg-light.png") no-repeat center center fixed;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;background-repeat:repeat;height:100% !important;min-height:100% !important;color:#e5e5e5;background-color:transparent}html #header{background:rgba(0,0,0,0.4)}html .hero-unit a{text-shadow:none}html .hero-unit a:hover{color:white;text-decoration:none}html blockquote{border-left-color:#58606b}html .content_overlay{padding-bottom:50px}html h1,html h2,html h3,html h4,html h5{color:white !important;text-shadow:none}html a,html a:hover{color:#58ACFA}html .wrapper{background:transparent url("../images/noise.png");height:100% !important}html .subtitle{background:rgba(0,0,0,0.2);border-bottom:1px solid rgba(0,0,0,0.4)}html pre{background:rgba(0,0,0,0.1);border:1px solid #58606b;color:#ccc}html .text-muted{color:#999}html hr{border-top:none;border-bottom:1px solid rgba(255,255,255,0.1)}html hr.title{border-top:none;border-bottom:none;margin-bottom:10px}html .alert.alert-info{background:rgba(0,0,0,0.2);border-color:#58ACFA;color:#58ACFA}html .alert.alert-warning{background:rgba(0,0,0,0.2);color:#faebcc;border-color:#8a6d3b}html .alert.alert-success{background:rgba(0,0,0,0.2);color:#d6e9c6;border-color:#d6e9c6}html .alert.alert-danger{background:rgba(0,0,0,0.2);color:#f2dede;border-color:#a94442}html .alert.alert-muted{background:transparent;color:#999}html span.text-success,html span.text-danger{border:1px solid #58606b;background:rgba(0,0,0,0.2);padding:2px 5px;border-radius:3px}html span.text-success{color:#d6e9c6;border:1px solid #d6e9c6}html span.text-danger{color:#ebccd1;border:1px solid #a94442}html table td.info2,html .info2,html .muted{text-shadow:none;color:#999}html .form-control{border:1px solid #58606b}html .form-inline{border-bottom:1px solid #58606b}html input{color:#58606b !important}html .badge{background:rgba(0,0,0,0.2) !important;border:1px solid #58606b !important}html .badge.alert-success{color:#dff0d8 !important;border-color:#3c763d !important}html .badge.alert-danger{background:rgba(0,0,0,0.2);color:#ebccd1 !important;border-color:#a94442 !important}html .badge.alert-warning{background:rgba(0,0,0,0.2);color:#faebcc !important;border-color:#8a6d3b !important}html .badge.alert-info{background:rgba(0,0,0,0.2);color:#e3eaf2 !important;border-color:#436587 !important}html span.status{border-color:rgba(0,0,0,0.6)}html span.status.status-neutral{background:rgba(0,0,0,0.1)}html span.status.status-error{background:#a94442}html span.status.status-success{background:#3c763d}html i.fa-Offline{color:#a94442 !important}html .navbar .navbar-nav.sections li.active a{background:rgba(0,0,0,0.4) !important}html .navbar .navbar-nav.sections li.dropdown ul.dropdown-menu li:hover active{background:rgba(0,0,0,0.4) !important}html .navbar .navbar-nav li{min-width:10px}html .navbar .navbar-nav li a{color:white}html .navbar a span.badge{margin-left:7px;padding:2px 5px;color:#58606b}html .navbar.navbar-default{border-top:1px solid rgba(255,255,255,0.3) !important;border-bottom:1px solid rgba(255,255,255,0.3) !important}html .navbar .navbar-nav li{min-width:10px}html .navbar#menu-navbar{background:rgba(0,0,0,0.3)}html .navbar#menu-navbar a{font-weight:normal}html .dropdown-menu .divider{background-color:#333 !important}html ul.dropdown-menu{background:url("../images/bg-light.png") no-repeat center center fixed;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;background-repeat:repeat}html ul.dropdown-menu li.disabled{background:rgba(0,0,0,0.1);border-color:#58606b}html .navbar#menu-navbar .navbar-nav li.administration a{background:#a94442 !important}html .navbar#menu-navbar .navbar-nav li.administration li a{background:#40454a !important}html .navbar#menu-navbar .navbar-nav ul.dropdown-menu{border:none;border-radius:none;box-shadow:none;padding-top:0px !important;margin-top:5px}html .navbar#menu-navbar .navbar-nav ul.dropdown-menu li{background:transparent url("../images/noise.png") !important}html .navbar#menu-navbar .navbar-nav ul.dropdown-menu li a{border-left:1px solid #58606b;border-left:none}html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li{border-left:1px solid #58606b}html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li:first-child{border-top:1px solid #58606b !important}html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li:last-child{border-bottom:1px solid #58606b !important}html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li.active{border-left:2px solid #d43f3a !important}html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li.active a{background:#272b30 !important}html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li.nav-header{background:rgba(0,0,0,0.2) !important;border-bottom:1px solid #58606b}html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li.nav-header:hover{background:rgba(0,0,0,0.2) !important}html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.tools_dropdown li{border-radius:0px !important}html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.tools_dropdown li a{border-radius:0px !important}html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.tools_dropdown li.active{border-left:2px solid #58ACFA !important}html .nav-tabs{border-bottom:1px solid #999}html .nav-tabs>li.active>a,html .nav-tabs>li.active>a:focus,html .nav-tabs>li.active>a:hover{background:rgba(0,0,0,0.3);border:1px solid #999 !important;border-bottom:none !important;color:white !important}html .nav-tabs>li>a:hover{background:rgba(0,0,0,0.1);border:1px solid transparent !important;border-bottom:0px solid #999 !important;color:white !important}html .nav-tabs li a{border-bottom:none !important}html .btn:hover i.prefix{color:white}html ul.dropdown-menu{border:1px solid rgba(0,0,0,0.5)}html ul.dropdown-menu li a{color:white !important}html ul.dropdown-menu li a:hover{background:rgba(0,0,0,0.2)}html .btn{color:#58ACFA;border:1px solid #58606b}html .btn:hover{background:#58ACFA;color:white}html .btn[disabled]:hover{color:#58ACFA;border-color:#58ACFA}html .btn.btn-success{border:1px solid transparent !important;background:rgba(0,255,0,0.2) !important}html .btn.btn-success:hover{background:#3c763d;color:white;border-color:#adadad !important}html .btn{background:rgba(0,0,0,0.2);color:white}html .btn:hover{background:rgba(0,0,0,0.4)}html .input-group-addon{background:rgba(0,0,0,0.2);color:white;border:1px solid #58606b}html .breadcrumb .active{color:#999}html div.btn-group{border:1px solid #58606b;border:none;border-radius:4px}html div.btn-group.noborder{border:none}html div.btn-group.noborder .btn-group{border:none}html div.btn-group .btn.btn-danger{color:#fff;background-color:#d9534f !important;border-color:#d43f3a}html .btn-default.active,html .btn-default:active,html .open>.dropdown-toggle.btn-default{background:rgba(0,0,0,0.2) !important;color:white !important}html .btn:focus{background-position:0 -14px}html ul#subnets li.folder i,html ul.submenu li i.fa-folder-close-o,html ul.submenu li i.fa-folder-open-o,html ul.submenu li i.fa-folder{background:transparent;color:white !important}html .fa-gray{color:white !important}html .fa-folder-open{color:white !important}html .action{text-shadow:none;background:transparent;border-top:1px solid #58606b;border-bottom:1px solid #58606b}html .action .btn-success{background:#3c763d;border:1px solid #58606b !important}html .tooltip{font-size:12px}html .popover{background:url("../images/bg-light.png") no-repeat center center fixed;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;background-repeat:repeat;color:#e5e5e5;background-color:transparent;border:2px solid rgba(0,0,0,0.2)}html .popover .popover-title{background:rgba(0,0,0,0.3);border-bottom:1px solid #999}html .popover .popover-content table{background:transparent !important}html .popover.right>.arrow:after{border-right-color:rgba(0,0,0,0.1) !important}html .table.ipaddresses tbody tr:hover td table.popover_table tbody td{background:transparent !important;border:none !important}html table#userModSelf.table td{border:none !important}html table.table-certificates tr.warning td{color:#FFC47B !important}html table.table-certificates tr.warning td a{color:#FFC47B !important}html table.table-certificates tr.danger td{color:#EA6C85 !important}html table.table-certificates tr.danger td a{color:#EA6C85 !important}html .legend .legendLabel{color:#999}html ul[class*="submenu-"] li{padding-left:20px !important;background:url("../images/li-dark.png") no-repeat 4px -3px}html ul[class*="submenu-"] li:last-child{background:url("../images/ul-li-bg-dark.png") no-repeat 3px 0px}html li.active ul[class*="submenu-"] li:last-child{background:url("../images/ul-li-bg-active-dark.png") no-repeat 3px 0px !important}html ul#subnets li.folder li.leaf.active{background:#F1FAFE url("../images/li-dark.png") no-repeat 4px -3px !important}html ul[class*="submenu-"] li.folder.active{background:#F1FAFE url("../images/ul-li-bg-dark.png") no-repeat 3px 0px !important}html ul#subnets li.folder li.leaf.active:last-of-type{background:#F1FAFE url("../images/ul-li-bg-active-dark.png") no-repeat 3px 0px !important}html table#manageSubnets tr td:nth-child(1) a{color:white}html table#manageSubnets .structure{background:url("../images/sn-bg-dark.png") 0px 7px}html table#manageSubnets .structure-last{background:url("../images/sn-bg-last-dark.png") no-repeat 1px 0px}html ul.submenu-dns li{background:url("../images/li-dns-dark.png") no-repeat 4px -3px !important;font-size:10px}html ul.submenu-dns li:last-child{background:url("../images/li-dns-last-dark.png") no-repeat 4px -3px !important}html table#manageSubnets>tbody>tr:last-child .structure{background:url("../images/sn-bg-last-dark.png") no-repeat 1px 0px !important}html ul.submenu-linked li{background:url("../images/li-dns-dark.png") no-repeat 4px -1px !important}html ul.submenu-linked li:last-child{background:url("../images/li-dns-last-dark.png") no-repeat 4px -1px !important}html table tr.similar td:nth-child(1){background:url("../images/li-dns-dark.png") no-repeat 17px -5px !important}html table tr.similar-last td:nth-child(1){background:url("../images/li-dns-last-dark.png") no-repeat 17px -5px !important}html table tr.similar-last td:nth-child(1){background:url("../images/li-dns-last-dark.png") no-repeat 17px -5px !important}html .ipaddress_subnet .subnet_badge{background:rgba(0,0,0,0.3) !important}html .table.ipaddresses tbody tr:hover td,html .table.slaves tbody tr:hover td,html .table-striped tbody tr:hover td{background:rgba(0,0,0,0.1) !important}html .table-striped tbody tr:nth-child(even) td.th{background:transparent !important}html table.table.ipaddresses .unused{text-shadow:none !important;color:white;background:rgba(0,255,0,0.1) !important}html table.table.ipaddresses tr.dhcp td{text-shadow:none !important;color:white;background:rgba(0,0,0,0.1) !important}html table.table.ipaddresses tr:hover td.unused{background:rgba(0,255,0,0.1) !important}html table.table.ipaddresses td{border-bottom:none !important;border-top:1px solid #58606b !important}html table.table.address_details td{border:none !important}html table#logs tr td.severity span{color:#272b30}html table#logs tr.success td a{border:none}html table#logs tr.danger td{background:#a94442 !important}html table.table-threshold td{border-bottom:none !important}html .ip_vis span{background:rgba(0,0,0,0.2) !important}html .ip_vis span.ip-unused{border-color:#999;color:#ccc !important}html .ip_vis span.ip-0{color:white !important}html .ip_vis span.ip-1{border-color:#a94442;background-color:rgba(255,0,0,0.05) !important;color:white !important}html .ip_vis span.ip-2{border-color:#d6e9c6;background:rgba(0,255,0,0.05) !important;color:white !important}html .ip_vis span.ip-4{border-color:#58ACFA;color:#e3eaf2 !important}html #popupOverlay{background:rgba(0,0,0,0.6) !important}html #popup{background:url("../images/bg-light.png") no-repeat center center fixed;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;background-repeat:repeat;color:#e5e5e5;background-color:transparent;border:2px solid rgba(0,0,0,0.2)}html #popup div.pHeader{background:rgba(0,0,0,0.3);border-bottom:1px solid #999}html #popup div.pContent{background:transparent url("../images/noise.png")}html #popup div.pFooter{background:rgba(0,0,0,0.3);border-top:1px solid #999 !important;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none}html #popup div.pFooter .btn{border:1px solid #58606b !important}html #popup div.col-xs-12.col-md-6{border-right-color:#58606b !important}html #popup .sortable li{background:rgba(0,0,0,0.2);border:1px solid #58606b !important}html .bootstrap-switch{border-color:#999}html .bootstrap-switch .bootstrap-switch-label{background:transparent}html .bootstrap-switch .bootstrap-switch-handle-off,html .bootstrap-switch .bootstrap-switch-handle-on{color:white !important;background:rgba(0,0,0,0.2) !important}html table.table.table-top th{background:white;margin:0px}html table.table.table{background:transparent}html table.table.table-noborder th,html table.table.table-noborder td{border:none}html table.table.statistics td{border:none !important;padding-top:2px;padding-bottom:2px}html table.table td{font-size:13px}html table.table td.th{padding-top:25px !important;border-bottom:1px solid #999 !important}html table.table td.border-bottom{border-bottom:1px solid #999 !important}html table.table tr.success td{text-shadow:none !important;color:white;background:rgba(0,255,0,0.1) !important;border-bottom:none !important;border-bottom:none !important}html table.table tr.success td btn,html table.table tr.success td a{border:1px solid #999}html table.table tr.success:hover td{background:rgba(0,255,0,0.1) !important}html table.vlans tr td{border:none !important}html table.vlans tr.change td{border-top:1px solid #58606b !important}html .bootstrap-table .table{border-bottom:1px solid #58606b}html table.table th,html table.table tr,html table.table td{background:transparent !important}html table.table td.ip a,html table.table td.ipaddress a{color:white !important}html table.table th{background:rgba(0,0,0,0.2) !important;border-bottom:1px solid #272b30 !important;border-top:none !important}html table.table th i.fa{background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.4)}html table.table tr:hover td{background:rgba(0,0,0,0.1) !important}html table.table tr.weeknumber th{border-top:none}html table.table tr.today{background:rgba(88,172,250,0.1) !important}html table.table tr.pw-status-V_teku{background:#3c763d !important}html table.table tr.pw-status-V_teku a{color:white}html table.table tr.pw-status-V_teku span.badge-warning{border:1px solid white;color:white !important}html table.table td{border-top:1px solid #58606b !important}html table.table td.izpad{color:white}html table.table.table-noborder tr th,html table.table.table-noborder tr td{background:transparent !important;border:none !important}html input,html textarea,html select{background:rgba(0,0,0,0.2) !important;color:white !important}html input.btn.btn-success,html textarea.btn.btn-success,html select.btn.btn-success{border:1px solid #58606b !important}html select{background:rgba(255,255,255,0.2) !important}html input[type=submit]{background:rgba(0,0,0,0.2) !important}html select{line-height:24px}html select optgroup{color:#58606b}html select option{color:#999}html table#subnetsMenu td#subnetsLeft{border-right:1px solid #58606b}html table#subnetsMenu td#subnetsLeft #leftMenu{margin-top:0px}html table#subnetsMenu td#subnetsLeft h4{padding:10px;margin:0px;background:rgba(0,0,0,0.3);border-bottom:1px solid #58606b}html table#subnetsMenu td#subnetsLeft hr{display:none}html table#subnetsMenu td#subnetsLeft a{color:white}html table#subnetsMenu td#subnetsLeft li.leaf i{color:#999 !important}html table#subnetsMenu td#subnetsLeft li.active{background-color:rgba(0,0,0,0.4) !important;background-color:#4b7387 !important;text-shadow:none;border-top:1px solid #58606b;border-bottom:1px solid #58606b}html table#subnetsMenu td#subnetsLeft li.active i{background:transparent}html .adminMenu,html .toolsMenu{background:transparent !important}html .adminMenu .panel-heading,html .toolsMenu .panel-heading{background:transparent !important;border-bottom:1px solid rgba(0,0,0,0.5)}html .adminMenu ul.list-group,html .toolsMenu ul.list-group{background:transparent !important}html .adminMenu ul.list-group li,html .toolsMenu ul.list-group li{background:rgba(0,0,0,0.2) !important;border-left-color:#58606b !important}html .adminMenu ul.list-group li.list-group-item,html .toolsMenu ul.list-group li.list-group-item{border:none}html .adminMenu ul.list-group li.active,html .toolsMenu ul.list-group li.active{background:rgba(0,0,0,0.6) !important;border:1px solid #58606b}html .adminMenu ul.list-group li:hover,html .toolsMenu ul.list-group li:hover{background:rgba(0,0,0,0.3) !important}html #dashboard .inner{background:rgba(0,0,0,0.2) !important;border:1px solid #58606b}html #dashboard .inner h4{background:rgba(0,0,0,0.35) !important;text-shadow:none}html #dashboard .inner .hContent{border-top:1px solid #58606b !important}html #dashboard .inner .hContent .icon{border-right:1px solid #58606b !important}html #dashboard .widget-dash .inner{box-shadow:none !important}html #dashboard #w-access_logs a,html #dashboard #w-error_logs a{color:white}html #dashboard span.severity0{border:1px solid #58606b;background:rgba(0,0,0,0.2);padding:2px 5px;border-radius:4px}html #dashboard span.severity1{border:1px solid #58606b;background:rgba(0,0,0,0.2);padding:2px 5px;border-radius:4px}html #dashboard span.severity2{border:1px solid #58606b;background:rgba(0,0,0,0.2);padding:2px 5px;border-radius:4px}html .menu-tools #dashboard .inner .hContent,html .menu-admin #dashboard .inner .hContent{border-top:none !important}html .adminMenu ul.list-group li.active{border-left-color:#a94442 !important}html .menu-tools ul.list-group li.active{border-left-color:#58ACFA !important}html .footer{border-top:1px solid #58606b}html .pagination ul li a{background:transparent;border:1px solid #999}html .pagination ul li a:hover{background:rgba(0,0,0,0.2);border:1px solid #999}html .pagination ul li.active a,html .pagination ul li.active a:hover{background:rgba(0,0,0,0.5)}html .res_val{background:rgba(0,0,0,0.2) !important}html .ui-slider-handle,html .slider-handle{background:#58606b !important}html .ui-slider,html .slider-track,html .slider-selection{background:#999 !important}html .progress{background:rgba(0,0,0,0.1) !important}html .progress .progress-limit-negative{background:transparent !important;border-color:rgba(0,0,0,0.1) !important}html .progress .progress-bar-info{background:rgba(0,255,0,0.15);border-color:rgba(0,0,0,0.1) !important;color:white}html table#switchMainTable tr.switch-title,html table#vrf tr.vrf-title,html table#subnets tr.subnets-title,html table#settings tr.settings-title,html table#settings{background:transparent !important}html table#switchMainTable tr.switch-title th,html table#vrf tr.vrf-title th,html table#subnets tr.subnets-title th,html table#settings tr.settings-title th,html table#settings th{background:transparent !important;border-bottom:none !important}html table#switchMainTable tr.switch-title th h4,html table#vrf tr.vrf-title th h4,html table#subnets tr.subnets-title th h4,html table#settings tr.settings-title th h4,html table#settings th h4{background:transparent !important}html table#switchMainTable tr.switch-title td,html table#switchMainTable tr.switch-title th,html table#vrf tr.vrf-title td,html table#vrf tr.vrf-title th,html table#subnets tr.subnets-title td,html table#subnets tr.subnets-title th,html table#settings tr.settings-title td,html table#settings tr.settings-title th,html table#settings td,html table#settings th{border:none !important}html table#settings tr.settings-title{border-bottom:1px solid #58606b}html #gmap{border-color:rgba(0,0,0,0.2)}html ul#sortable{max-width:500px}html ul#sortable li{background:rgba(0,0,0,0.2);border-color:#999 !important}html .instructions{background:transparent;border:1px solid #999}html ul.icon-ul>li{border:1px solid rgba(0,0,0,0.4) !important}html .ipreqMenu{background:rgba(0,0,0,0.2);border:1px solid #58606b;right:5px}html .fixed-table-loading{background:rgba(0,0,0,0.3)}html div#login{background:rgba(0,0,0,0.2);border:1px solid #999 !important}html div#login legend{color:white}html div#login form{border-bottom:none}html div#login .iprequest{background:rgba(0,0,0,0.1);border-color:#58606b;text-shadow:none}html .install h4{border-bottom:none !important}html #searchSelect{background:#40454a !important}.subnet_map_found{border-color:#d6e9c6;background:rgba(0,255,0,0.15) !important;color:white !important}.subnet_map_found:hover{background:rgba(0,255,0,0.2) !important}.subnet_map_notfound{background-color:rgba(255,0,0,0.15) !important;color:white !important}.subnet_map_found a{color:white !important}.ip_vis_subnet span{box-shadow:0px 0px 1px #777;border:1px solid rgba(255,255,255,0.2);padding:3px;padding-top:7px;text-align:center;font-size:12px;margin-right:0px;margin-bottom:0px;width:120px;height:30px;float:left;border-left:none}.clearfix1{border-left:1px solid rgba(255,255,255,0.2)}.ip_vis_subnet span a{font-size:12px}
-/*# sourceMappingURL=bootstrap-custom-dark.css.map */
+html {
+  min-height: 100% !important;
+  /* active leaf */
+  /* active submenu background */
+}
+html body {
+  background: url("../images/bg-light.png") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: repeat;
+  height: 100% !important;
+  min-height: 100% !important;
+  color: #e5e5e5;
+  background-color: rgba(0, 0, 0, 0);
+}
+html #header {
+  background: rgba(0, 0, 0, 0.4);
+}
+html .hero-unit a {
+  text-shadow: none;
+}
+html .hero-unit a:hover {
+  color: white;
+  text-decoration: none;
+}
+html blockquote {
+  border-left-color: #58606b;
+}
+html .content_overlay {
+  padding-bottom: 50px;
+}
+html h1, html h2, html h3, html h4, html h5 {
+  color: white !important;
+  text-shadow: none;
+}
+html a, html a:hover {
+  color: #58ACFA;
+}
+html .wrapper {
+  background: transparent url("../images/noise.png");
+  height: 100% !important;
+}
+html .subtitle {
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+html pre {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #58606b;
+  color: #ccc;
+}
+html .text-muted {
+  color: #999;
+}
+html hr {
+  border-top: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+html hr.title {
+  border-top: none;
+  border-bottom: none;
+  margin-bottom: 10px;
+}
+html .alert.alert-info {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: #58ACFA;
+  color: #58ACFA;
+}
+html .alert.alert-warning {
+  background: rgba(0, 0, 0, 0.2);
+  color: #faebcc;
+  border-color: #8a6d3b;
+}
+html .alert.alert-success {
+  background: rgba(0, 0, 0, 0.2);
+  color: #d6e9c6;
+  border-color: #d6e9c6;
+}
+html .alert.alert-danger {
+  background: rgba(0, 0, 0, 0.2);
+  color: #f2dede;
+  border-color: #a94442;
+}
+html .alert.alert-muted {
+  background: transparent;
+  color: #999;
+}
+html span.text-success, html span.text-danger {
+  border: 1px solid #58606b;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+html span.text-success {
+  color: #d6e9c6;
+  border: 1px solid #d6e9c6;
+}
+html span.text-danger {
+  color: #ebccd1;
+  border: 1px solid #a94442;
+}
+html table td.info2,
+html .info2,
+html .muted {
+  text-shadow: none;
+  color: #999;
+}
+html .form-control {
+  border: 1px solid #58606b;
+}
+html .form-inline {
+  border-bottom: 1px solid #58606b;
+}
+html input {
+  color: #58606b !important;
+}
+html .badge {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid #58606b !important;
+}
+html .badge-white {
+  color: white !important;
+}
+html .badge.alert-success {
+  color: #dff0d8 !important;
+  border-color: #3c763d !important;
+}
+html .badge.alert-danger {
+  background: rgba(0, 0, 0, 0.2);
+  color: #ebccd1 !important;
+  border-color: #a94442 !important;
+}
+html .badge.alert-warning {
+  background: rgba(0, 0, 0, 0.2);
+  color: #faebcc !important;
+  border-color: #8a6d3b !important;
+}
+html .badge.alert-info {
+  background: rgba(0, 0, 0, 0.2);
+  color: #e3eaf2 !important;
+  border-color: #436587 !important;
+}
+html span.status {
+  border-color: rgba(0, 0, 0, 0.6);
+}
+html span.status.status-neutral {
+  background: rgba(0, 0, 0, 0.1);
+}
+html span.status.status-error {
+  background: #a94442;
+}
+html span.status.status-success {
+  background: #3c763d;
+}
+html i.fa-Offline {
+  color: #a94442 !important;
+}
+html .navbar .navbar-nav.sections li.active a {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+html .navbar .navbar-nav.sections li.dropdown ul.dropdown-menu li:hover active {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+html .navbar .navbar-nav li {
+  min-width: 10px;
+}
+html .navbar .navbar-nav li a {
+  color: white;
+}
+html .navbar a span.badge {
+  margin-left: 7px;
+  padding: 2px 5px;
+  color: #58606b;
+}
+html .navbar.navbar-default {
+  border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+html .navbar .navbar-nav li {
+  min-width: 10px;
+}
+html .navbar#menu-navbar {
+  background: rgba(0, 0, 0, 0.3);
+}
+html .navbar#menu-navbar a {
+  font-weight: normal;
+}
+html .dropdown-menu .divider {
+  background-color: #333 !important;
+}
+html ul.dropdown-menu {
+  background: url("../images/bg-light.png") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: repeat;
+}
+html ul.dropdown-menu li.disabled {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: #58606b;
+}
+html .navbar#menu-navbar .navbar-nav li.administration a {
+  background: #a94442 !important;
+}
+html .navbar#menu-navbar .navbar-nav li.administration li a {
+  background: #40454a !important;
+}
+html .navbar#menu-navbar .navbar-nav ul.dropdown-menu {
+  border: none;
+  border-radius: none;
+  box-shadow: none;
+  padding-top: 0px !important;
+  margin-top: 5px;
+}
+html .navbar#menu-navbar .navbar-nav ul.dropdown-menu li {
+  background: transparent url("../images/noise.png") !important;
+}
+html .navbar#menu-navbar .navbar-nav ul.dropdown-menu li a {
+  border-left: 1px solid #58606b;
+  border-left: none;
+}
+html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li {
+  border-left: 1px solid #58606b;
+}
+html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li:first-child {
+  border-top: 1px solid #58606b !important;
+}
+html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li:last-child {
+  border-bottom: 1px solid #58606b !important;
+}
+html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li.active {
+  border-left: 2px solid #d43f3a !important;
+}
+html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li.active a {
+  background: #272b30 !important;
+}
+html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li.nav-header {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border-bottom: 1px solid #58606b;
+}
+html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.admin li.nav-header:hover {
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.tools_dropdown li {
+  border-radius: 0px !important;
+}
+html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.tools_dropdown li a {
+  border-radius: 0px !important;
+}
+html .navbar#menu-navbar .navbar-nav ul.dropdown-menu.tools_dropdown li.active {
+  border-left: 2px solid #58ACFA !important;
+}
+html .nav-tabs {
+  border-bottom: 1px solid #999;
+}
+html .nav-tabs > li.active > a, html .nav-tabs > li.active > a:focus, html .nav-tabs > li.active > a:hover {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #999 !important;
+  border-bottom: none !important;
+  color: white !important;
+}
+html .nav-tabs > li > a:hover {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid transparent !important;
+  border-bottom: 0px solid #999 !important;
+  color: white !important;
+}
+html .nav-tabs li a {
+  border-bottom: none !important;
+}
+html .btn:hover i.prefix {
+  color: white;
+}
+html ul.dropdown-menu {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+html ul.dropdown-menu li a {
+  color: white !important;
+}
+html ul.dropdown-menu li a:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+html .btn {
+  color: #58ACFA;
+  border: 1px solid #58606b;
+}
+html .btn:hover {
+  background: #58ACFA;
+  color: white;
+}
+html .btn[disabled]:hover {
+  color: #58ACFA;
+  border-color: #58ACFA;
+}
+html .btn.btn-success {
+  border: 1px solid transparent !important;
+  background: rgba(0, 255, 0, 0.2) !important;
+}
+html .btn.btn-success:hover {
+  background: #3c763d;
+  color: white;
+  border-color: #adadad !important;
+}
+html .btn {
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+}
+html .btn:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+html .input-group-addon {
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  border: 1px solid #58606b;
+}
+html .breadcrumb .active {
+  color: #999;
+}
+html div.btn-group {
+  border: 1px solid #58606b;
+  border: none;
+  border-radius: 4px;
+}
+html div.btn-group.noborder {
+  border: none;
+}
+html div.btn-group.noborder .btn-group {
+  border: none;
+}
+html div.btn-group .btn.btn-danger {
+  color: #fff;
+  background-color: #d9534f !important;
+  border-color: #d43f3a;
+}
+html .btn-default.active,
+html .btn-default:active,
+html .open > .dropdown-toggle.btn-default {
+  background: rgba(0, 0, 0, 0.2) !important;
+  color: white !important;
+}
+html .btn:focus {
+  background-position: 0 -14px;
+}
+html ul#subnets li.folder i,
+html ul.submenu li i.fa-folder-close-o,
+html ul.submenu li i.fa-folder-open-o,
+html ul.submenu li i.fa-folder {
+  background: transparent;
+  color: white !important;
+}
+html .fa-gray {
+  color: white !important;
+}
+html .fa-folder-open {
+  color: white !important;
+}
+html .action {
+  text-shadow: none;
+  background: transparent;
+  border-top: 1px solid #58606b;
+  border-bottom: 1px solid #58606b;
+}
+html .action .btn-success {
+  background: #3c763d;
+  border: 1px solid #58606b !important;
+}
+html .tooltip {
+  font-size: 12px;
+}
+html .popover {
+  background: url("../images/bg-light.png") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: repeat;
+  color: #e5e5e5;
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+html .popover .popover-title {
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid #999;
+}
+html .popover .popover-content table {
+  background: transparent !important;
+}
+html .popover.right > .arrow:after {
+  border-right-color: rgba(0, 0, 0, 0.1) !important;
+}
+html .table.ipaddresses tbody tr:hover td table.popover_table tbody td {
+  background: transparent !important;
+  border: none !important;
+}
+html table#userModSelf.table td {
+  border: none !important;
+}
+html table.table-certificates tr.warning td {
+  color: #FFC47B !important;
+}
+html table.table-certificates tr.warning td a {
+  color: #FFC47B !important;
+}
+html table.table-certificates tr.danger td {
+  color: #EA6C85 !important;
+}
+html table.table-certificates tr.danger td a {
+  color: #EA6C85 !important;
+}
+html .legend .legendLabel {
+  color: #999;
+}
+html ul[class*=submenu-] li {
+  /* horizontal ul lines */
+  padding-left: 20px !important;
+  background: url("../images/li-dark.png") no-repeat 4px -3px;
+}
+html ul[class*=submenu-] li:last-child {
+  /* last child in inactive line  */
+  background: url("../images/ul-li-bg-dark.png") no-repeat 3px 0px;
+}
+html li.active ul[class*=submenu-] li:last-child {
+  /* last child in active line  */
+  background: url("../images/ul-li-bg-active-dark.png") no-repeat 3px 0px !important;
+}
+html ul#subnets li.folder li.leaf.active {
+  background: #F1FAFE url("../images/li-dark.png") no-repeat 4px -3px !important;
+}
+html ul[class*=submenu-] li.folder.active {
+  background: #F1FAFE url("../images/ul-li-bg-dark.png") no-repeat 3px 0px !important;
+}
+html ul#subnets li.folder li.leaf.active:last-of-type {
+  background: #F1FAFE url("../images/ul-li-bg-active-dark.png") no-repeat 3px 0px !important;
+}
+html table#manageSubnets tr td:nth-child(1) a {
+  color: white;
+}
+html table#manageSubnets .structure {
+  background: url("../images/sn-bg-dark.png") 0px 7px;
+}
+html table#manageSubnets .structure-last {
+  background: url("../images/sn-bg-last-dark.png") no-repeat 1px 0px;
+}
+html ul.submenu-dns li {
+  background: url("../images/li-dns-dark.png") no-repeat 4px -3px !important;
+  font-size: 10px;
+}
+html ul.submenu-dns li:last-child {
+  background: url("../images/li-dns-last-dark.png") no-repeat 4px -3px !important;
+}
+html table#manageSubnets > tbody > tr:last-child .structure {
+  background: url("../images/sn-bg-last-dark.png") no-repeat 1px 0px !important;
+}
+html ul.submenu-linked li {
+  background: url("../images/li-dns-dark.png") no-repeat 4px -1px !important;
+}
+html ul.submenu-linked li:last-child {
+  background: url("../images/li-dns-last-dark.png") no-repeat 4px -1px !important;
+}
+html table tr.similar td:nth-child(1) {
+  background: url("../images/li-dns-dark.png") no-repeat 17px -5px !important;
+}
+html table tr.similar-last td:nth-child(1) {
+  background: url("../images/li-dns-last-dark.png") no-repeat 17px -5px !important;
+}
+html table tr.similar-last td:nth-child(1) {
+  background: url("../images/li-dns-last-dark.png") no-repeat 17px -5px !important;
+}
+html .ipaddress_subnet .subnet_badge {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+html .table.ipaddresses tbody tr:hover td,
+html .table.slaves tbody tr:hover td,
+html .table-striped tbody tr:hover td {
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+html .table-striped tbody tr:nth-child(even) td.th {
+  background: transparent !important;
+}
+html table.table.ipaddresses .unused {
+  text-shadow: none !important;
+  color: white;
+  background: rgba(0, 255, 0, 0.1) !important;
+}
+html table.table.ipaddresses tr.dhcp td {
+  text-shadow: none !important;
+  color: white;
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+html table.table.ipaddresses tr:hover td.unused {
+  background: rgba(0, 255, 0, 0.1) !important;
+}
+html table.table.ipaddresses td {
+  border-bottom: none !important;
+  border-top: 1px solid #58606b !important;
+}
+html table.table.address_details td {
+  border: none !important;
+}
+html table#logs tr td.severity span {
+  color: #272b30;
+}
+html table#logs tr.success td a {
+  border: none;
+}
+html table#logs tr.danger td {
+  background: #a94442 !important;
+}
+html table.table-threshold td {
+  border-bottom: none !important;
+}
+html .ip_vis span {
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+html .ip_vis span.ip-unused {
+  border-color: #999;
+  color: #ccc !important;
+}
+html .ip_vis span.ip-0 {
+  color: white !important;
+}
+html .ip_vis span.ip-1 {
+  border-color: #a94442;
+  background-color: rgba(255, 0, 0, 0.05) !important;
+  color: white !important;
+}
+html .ip_vis span.ip-2 {
+  border-color: #d6e9c6;
+  background: rgba(0, 255, 0, 0.05) !important;
+  color: white !important;
+}
+html .ip_vis span.ip-4 {
+  border-color: #58ACFA;
+  color: #e3eaf2 !important;
+}
+html #popupOverlay {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+html #popup {
+  background: url("../images/bg-light.png") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: repeat;
+  color: #e5e5e5;
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+html #popup div.pHeader {
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid #999;
+}
+html #popup div.pContent {
+  background: transparent url("../images/noise.png");
+}
+html #popup div.pFooter {
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid #999 !important;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+html #popup div.pFooter .btn {
+  border: 1px solid #58606b !important;
+}
+html #popup div.col-xs-12.col-md-6 {
+  border-right-color: #58606b !important;
+}
+html #popup .sortable li {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #58606b !important;
+}
+html .bootstrap-switch {
+  border-color: #999;
+}
+html .bootstrap-switch .bootstrap-switch-label {
+  background: transparent;
+}
+html .bootstrap-switch .bootstrap-switch-handle-off,
+html .bootstrap-switch .bootstrap-switch-handle-on {
+  color: white !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+html table.table.table-top th {
+  background: white;
+  margin: 0px;
+}
+html table.table.table {
+  background: transparent;
+}
+html table.table.table-noborder th,
+html table.table.table-noborder td {
+  border: none;
+}
+html table.table.statistics td {
+  border: none !important;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+html table.table td {
+  font-size: 13px;
+}
+html table.table td.th {
+  padding-top: 25px !important;
+  border-bottom: 1px solid #999 !important;
+}
+html table.table td.border-bottom {
+  border-bottom: 1px solid #999 !important;
+}
+html table.table tr.success td {
+  text-shadow: none !important;
+  color: white;
+  background: rgba(0, 255, 0, 0.1) !important;
+  border-bottom: none !important;
+  border-bottom: none !important;
+}
+html table.table tr.success td btn, html table.table tr.success td a {
+  border: 1px solid #999;
+}
+html table.table tr.success:hover td {
+  background: rgba(0, 255, 0, 0.1) !important;
+}
+html table.vlans tr td {
+  border: none !important;
+}
+html table.vlans tr.change td {
+  border-top: 1px solid #58606b !important;
+}
+html .bootstrap-table .table {
+  border-bottom: 1px solid #58606b;
+}
+html table.table th, html table.table tr, html table.table td {
+  background: transparent !important;
+}
+html table.table td.ip a,
+html table.table td.ipaddress a {
+  color: white !important;
+}
+html table.table th {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border-bottom: 1px solid #272b30 !important;
+  border-top: none !important;
+}
+html table.table th i.fa {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+html table.table tr:hover td {
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+html table.table tr.weeknumber th {
+  border-top: none;
+}
+html table.table tr.today {
+  background: rgba(88, 172, 250, 0.1) !important;
+}
+html table.table tr.pw-status-V_teku {
+  background: #3c763d !important;
+}
+html table.table tr.pw-status-V_teku a {
+  color: white;
+}
+html table.table tr.pw-status-V_teku span.badge-warning {
+  border: 1px solid white;
+  color: white !important;
+}
+html table.table td {
+  border-top: 1px solid #58606b !important;
+}
+html table.table td.izpad {
+  color: white;
+}
+html table.table.table-noborder tr th, html table.table.table-noborder tr td {
+  background: transparent !important;
+  border: none !important;
+}
+html input,
+html textarea,
+html select {
+  background: rgba(0, 0, 0, 0.2) !important;
+  color: white !important;
+}
+html input.btn.btn-success,
+html textarea.btn.btn-success,
+html select.btn.btn-success {
+  border: 1px solid #58606b !important;
+}
+html select {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+html input[type=submit] {
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+html select {
+  line-height: 24px;
+}
+html select optgroup {
+  color: #58606b;
+}
+html select option {
+  color: #999;
+}
+html table#subnetsMenu td#subnetsLeft {
+  border-right: 1px solid #58606b;
+}
+html table#subnetsMenu td#subnetsLeft #leftMenu {
+  margin-top: 0px;
+}
+html table#subnetsMenu td#subnetsLeft h4 {
+  padding: 10px;
+  margin: 0px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid #58606b;
+}
+html table#subnetsMenu td#subnetsLeft hr {
+  display: none;
+}
+html table#subnetsMenu td#subnetsLeft a {
+  color: white;
+}
+html table#subnetsMenu td#subnetsLeft li.leaf i {
+  color: #999 !important;
+}
+html table#subnetsMenu td#subnetsLeft li.active {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  background-color: #4b7387 !important;
+  text-shadow: none;
+  border-top: 1px solid #58606b;
+  border-bottom: 1px solid #58606b;
+}
+html table#subnetsMenu td#subnetsLeft li.active i {
+  background: transparent;
+}
+html .adminMenu,
+html .toolsMenu {
+  background: transparent !important;
+}
+html .adminMenu .panel-heading,
+html .toolsMenu .panel-heading {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+html .adminMenu ul.list-group,
+html .toolsMenu ul.list-group {
+  background: transparent !important;
+}
+html .adminMenu ul.list-group li,
+html .toolsMenu ul.list-group li {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border-left-color: #58606b !important;
+}
+html .adminMenu ul.list-group li.list-group-item,
+html .toolsMenu ul.list-group li.list-group-item {
+  border: none;
+}
+html .adminMenu ul.list-group li.active,
+html .toolsMenu ul.list-group li.active {
+  background: rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid #58606b;
+}
+html .adminMenu ul.list-group li:hover,
+html .toolsMenu ul.list-group li:hover {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+html #dashboard .inner {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid #58606b;
+}
+html #dashboard .inner h4 {
+  background: rgba(0, 0, 0, 0.35) !important;
+  text-shadow: none;
+}
+html #dashboard .inner .hContent {
+  border-top: 1px solid #58606b !important;
+}
+html #dashboard .inner .hContent .icon {
+  border-right: 1px solid #58606b !important;
+}
+html #dashboard .widget-dash .inner {
+  box-shadow: none !important;
+}
+html #dashboard #w-access_logs a,
+html #dashboard #w-error_logs a {
+  color: white;
+}
+html #dashboard span.severity0 {
+  border: 1px solid #58606b;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+html #dashboard span.severity1 {
+  border: 1px solid #58606b;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+html #dashboard span.severity2 {
+  border: 1px solid #58606b;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+html .menu-tools #dashboard .inner .hContent,
+html .menu-admin #dashboard .inner .hContent {
+  border-top: none !important;
+}
+html .adminMenu ul.list-group li.active {
+  border-left-color: #a94442 !important;
+}
+html .menu-tools ul.list-group li.active {
+  border-left-color: #58ACFA !important;
+}
+html .footer {
+  border-top: 1px solid #58606b;
+}
+html .pagination ul li a {
+  background: transparent;
+  border: 1px solid #999;
+}
+html .pagination ul li a:hover {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #999;
+}
+html .pagination ul li.active a,
+html .pagination ul li.active a:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+html .res_val {
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+html .ui-slider-handle,
+html .slider-handle {
+  background: #58606b !important;
+}
+html .ui-slider,
+html .slider-track,
+html .slider-selection {
+  background: #999 !important;
+}
+html .progress {
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+html .progress .progress-limit-negative {
+  background: transparent !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+html .progress .progress-bar-info {
+  background: rgba(0, 255, 0, 0.15);
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: white;
+}
+html table#switchMainTable tr.switch-title,
+html table#vrf tr.vrf-title,
+html table#subnets tr.subnets-title,
+html table#settings tr.settings-title,
+html table#settings {
+  background: transparent !important;
+}
+html table#switchMainTable tr.switch-title th,
+html table#vrf tr.vrf-title th,
+html table#subnets tr.subnets-title th,
+html table#settings tr.settings-title th,
+html table#settings th {
+  background: transparent !important;
+  border-bottom: none !important;
+}
+html table#switchMainTable tr.switch-title th h4,
+html table#vrf tr.vrf-title th h4,
+html table#subnets tr.subnets-title th h4,
+html table#settings tr.settings-title th h4,
+html table#settings th h4 {
+  background: transparent !important;
+}
+html table#switchMainTable tr.switch-title td, html table#switchMainTable tr.switch-title th,
+html table#vrf tr.vrf-title td,
+html table#vrf tr.vrf-title th,
+html table#subnets tr.subnets-title td,
+html table#subnets tr.subnets-title th,
+html table#settings tr.settings-title td,
+html table#settings tr.settings-title th,
+html table#settings td,
+html table#settings th {
+  border: none !important;
+}
+html table#settings tr.settings-title {
+  border-bottom: 1px solid #58606b;
+}
+html #gmap {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+html ul#sortable {
+  max-width: 500px;
+}
+html ul#sortable li {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: #999 !important;
+}
+html .instructions {
+  background: transparent;
+  border: 1px solid #999;
+}
+html ul.icon-ul > li {
+  border: 1px solid rgba(0, 0, 0, 0.4) !important;
+}
+html .ipreqMenu {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #58606b;
+  right: 5px;
+}
+html .fixed-table-loading {
+  background: rgba(0, 0, 0, 0.3);
+}
+html div#login {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #999 !important;
+}
+html div#login legend {
+  color: white;
+  border-bottom: 1px solid #58606b !important;
+}
+html div#login form {
+  border-bottom: none;
+}
+html div#login .iprequest {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: #58606b;
+  text-shadow: none;
+}
+html .install h4 {
+  border-bottom: none !important;
+}
+html #searchSelect {
+  background: #40454a !important;
+}
+
+.panel.panel-default {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.panel.panel-default .panel-heading {
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+  color: white;
+}
+.panel.panel-default .list-group-item {
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.panel.panel-default .list-group-item:last-child {
+  border-bottom: none;
+}
+.panel.panel-default:last-child {
+  border-bottom: none !important;
+}
+
+.octicon-passkey-fill {
+  fill: #ccc;
+}
+
+.list-group-item {
+  border: none;
+}
+
+.btn-default.disabled.focus,
+.btn-default.disabled:focus,
+.btn-default.disabled:hover,
+.btn-default[disabled].focus,
+.btn-default[disabled]:focus,
+.btn-default[disabled]:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+
+.subnet_map_found {
+  border-color: #d6e9c6;
+  background: rgba(0, 255, 0, 0.15) !important;
+  color: white !important;
+}
+
+.subnet_map_found:hover {
+  background: rgba(0, 255, 0, 0.2) !important;
+}
+
+.subnet_map_notfound {
+  background-color: rgba(255, 0, 0, 0.15) !important;
+  color: white !important;
+}
+
+.subnet_map_found a {
+  color: white !important;
+}
+
+.ip_vis_subnet span {
+  box-shadow: 0px 0px 1px #777;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 3px;
+  padding-top: 7px;
+  text-align: center;
+  font-size: 12px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  width: 120px;
+  height: 30px;
+  float: left;
+  border-left: none;
+}
+
+.clearfix1 {
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ip_vis_subnet span a {
+  font-size: 12px;
+}
+html table tr.similar-title td:nth-child(1) {
+  background: none !important;
+}

@@ -24,10 +24,10 @@ $csrf = $User->Crypto->csrf_cookie ("create", "vaultunlock");
 if ($User->get_module_permissions ("vaults")==User::ACCESS_NONE) { $Result->show("danger", _("Insufficient privileges").".", true, true); }
 
 # ID must be numeric
-if(!is_numeric($_POST['id'])) { $Result->show("danger", _("Invalid ID"), true, true); }
+if(!is_numeric($POST->id)) { $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch vault details
-$vault = $Admin->fetch_object ("vaults", "id", $_POST['id']);
+$vault = $Admin->fetch_object ("vaults", "id", $POST->id);
 # null ?
 $vault===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 

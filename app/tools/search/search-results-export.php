@@ -25,9 +25,9 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # get requested params
-if(isset($_GET['ip'])) {
+if(isset($GET->ip)) {
     // remove chars
-    $search_term =  htmlspecialchars(trim($_GET['ip']));
+    $search_term =  htmlspecialchars(trim($GET->ip));
 }
 else {
     $search_term = "";
@@ -39,7 +39,7 @@ $search_term = str_replace("*", "%", $search_term);
 
 # parse parameters from cookie
 if (isset($_COOKIE['search_parameters'])) {
-    $params = json_decode($_COOKIE['search_parameters'], true);
+    $params = db_json_decode($_COOKIE['search_parameters'], true);
     if($params) {
         foreach ($params as $k=>$p) {
             if ($p=="on") {
@@ -71,7 +71,7 @@ $custom_customer_fields  = $_REQUEST['customers']=="on" ? $Tools->fetch_custom_f
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);
+$selected_ip_fields = pf_explode(";", $selected_ip_fields);
 
 # set col size
 $fieldSize 	= sizeof($selected_ip_fields);
@@ -117,6 +117,13 @@ $format_title->setFgColor(22);			//light gray
 $format_title->setBottom(2);
 $format_title->setAlign('left');
 
+//formatting content - borders around IP addresses
+$format_right =& $workbook->addFormat();
+$format_right->setRight(1);
+$format_left =& $workbook->addFormat();
+$format_left->setLeft(1);
+$format_top =& $workbook->addFormat();
+$format_top->setTop(1);
 
 $lineCount = 0;		//for line change
 $m = 0;				//for section change
@@ -189,9 +196,9 @@ if(is_array($result_addresses) && sizeof($result_addresses)>0) {
 			$vlan 	 = (array) (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
 			//format vlan
 			if(sizeof($vlan)>0) {
-				if(strlen($vlan['number']) > 0) {
+				if(!is_blank($vlan['number'])) {
 					$vlanText = " (vlan: " . $vlan['number'];
-					if(strlen($vlan['name']) > 0) {
+					if(!is_blank($vlan['name'])) {
 						$vlanText .= ' - '. $vlan['name'] . ')';
 					}
 					else {
@@ -227,7 +234,7 @@ if(is_array($result_addresses) && sizeof($result_addresses)>0) {
 			$worksheet->write($lineCount, $x, $ip['hostname']);						$x++;
 			# switch
 			if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
-				if(strlen($ip['switch'])>0 && $ip['switch']!=0) {
+				if(!is_blank($ip['switch']) && $ip['switch']!=0) {
 					$device = (array) $Tools->fetch_object("devices", "id", $ip['switch']);
 					$ip['switch'] = $device!=0 ? $device['hostname'] : "";
 				}
@@ -284,7 +291,7 @@ if(is_array($result_subnets) && sizeof($result_subnets)>0) {
 	$rc = 0;
 	$worksheet->write($lineCount, $rc, _('Section') ,$format_title);
 	$rc++;
-	$worksheet->write($lineCount, $rc, _('Subet') ,$format_title);
+	$worksheet->write($lineCount, $rc, _('Subnet') ,$format_title);
 	$rc++;
 	$worksheet->write($lineCount, $rc, _('Mask') ,$format_title);
 	$rc++;
@@ -605,7 +612,7 @@ if(is_array($result_customers) && sizeof($result_customers)>0) {
 		//print details
 		$worksheet->write($lineCount, 0, $line['title'], $format_left);
 		$worksheet->write($lineCount, 1, $line['address'].", ".$line['postcode']." ".$line['city'].", ".$line['state']);
-		if(strlen($line['contact_person'])>0)
+		if(!is_blank($line['contact_person']))
 		$worksheet->write($lineCount, 2, $line['contact_person']." - ".$line['contact_mail']." (".$line['contact_phone'].")");
 		else
 		$worksheet->write($lineCount, 2, "");

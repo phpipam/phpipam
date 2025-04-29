@@ -29,7 +29,7 @@ else {
     # fetch all locations
     $all_locations = $Tools->fetch_all_objects("locations", "name");
 
-    $colspan = 4;
+    $colspan = 6;
 
     // table
     print "<table class='table sorted table-striped table-top table-td-top' data-cookie-id-table='all_locations'>";
@@ -74,13 +74,13 @@ else {
             print " <td><a class='btn btn-xs btn-default' href='".create_link("tools", "locations", $l->id)."'><i class='fa fa-map prefix'></i> $l->name</a></td>";
             print " <td><span class='badge badge1 badge5'>$cnt "._('objects')."</span></td>";
             // description
-            $l->description = strlen($l->description)==0 ? "/" : $l->description;
+            $l->description = is_blank($l->description) ? "/" : $l->description;
             print " <td><span class='text-muted'>$l->description</span></td>";
             // address
-            $l->address = strlen($l->address)==0 ? "/" : $l->address;
+            $l->address = is_blank($l->address) ? "/" : $l->address;
             print "<td>$l->address</td>";
             // coordinates
-            if(strlen($l->lat)>0 || strlen($l->long)==0) { print "<td><span class='text-muted'>$l->lat / $l->long</span></td>"; }
+            if(!is_blank($l->lat) || is_blank($l->long)) { print "<td><span class='text-muted'>$l->lat / $l->long</span></td>"; }
             else                                         { print "<td>".$Result->show("warning", _("Location not set"), false, false, true)."</td>"; }
     		//custom
     		if(sizeof($custom) > 0) {
@@ -97,7 +97,7 @@ else {
             print "<td class='actions'>";
             $links = [];
             $links[] = ["type"=>"header", "text"=>_("Show")];
-            $links[] = ["type"=>"link", "text"=>_("Show location"), "href"=>create_link($_GET['page'], "locations", $l->id), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"link", "text"=>_("Show location"), "href"=>create_link($GET->page, "locations", $l->id), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];
 
             $links[] = ["type"=>"header", "text"=>_("Manage")];

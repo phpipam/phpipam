@@ -20,7 +20,7 @@ if (isset($objects["vlans"])) {
 	$custom_fields = (array) $Tools->fetch_custom_fields('vlans');
 
 	# set hidden fields
-	$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+	$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 	$hidden_fields = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : array();
 
 	# size of custom fields
@@ -56,8 +56,8 @@ if (isset($objects["vlans"])) {
 	foreach ($vlans as $vlan) {
 
 		// fixes
-		$vlan->description = strlen($vlan->description)>0 ? " <span class='text-muted'>( ".$vlan->description." )</span>" : "";
-		$vlan->domainDescription = strlen($vlan->domainDescription)>0 ? " <span class='text-muted'>( ".$vlan->domainDescription." )</span>" : "";
+		$vlan->description = !is_blank($vlan->description) ? " <span class='text-muted'>( ".$vlan->description." )</span>" : "";
+		$vlan->domainDescription = !is_blank($vlan->domainDescription) ? " <span class='text-muted'>( ".$vlan->domainDescription." )</span>" : "";
 
 		// l2 domain
 		$domain = $Tools->fetch_object ("vlanDomains", "id", $vlan->domainId);
@@ -65,8 +65,8 @@ if (isset($objects["vlans"])) {
 
 		// start - VLAN details
 		print "<tr class='$class change'>";
-		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], "vlan", $vlan->domainId, $vlan->vlanId)."'><i class='fa fa-cloud prefix'></i> ".$vlan->number."</a></td>";
-		print "	<td><a href='".create_link($_GET['page'], "vlan", $vlan->domainId, $vlan->vlanId)."'>".$vlan->name."</a>".$vlan->description."</td>";
+		print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, "vlan", $vlan->domainId, $vlan->vlanId)."'><i class='fa fa-cloud prefix'></i> ".$vlan->number."</a></td>";
+		print "	<td><a href='".create_link($GET->page, "vlan", $vlan->domainId, $vlan->vlanId)."'>".$vlan->name."</a>".$vlan->description."</td>";
 		print "	<td>".$domain_text."</td>";
         // custom fields - no subnets
         if(sizeof(@$custom_fields) > 0) {
@@ -104,8 +104,6 @@ if (isset($objects["vlans"])) {
         print $User->print_actions($User->user->compress_actions, $links);
         print "</td>";
 		print '</tr>'. "\n";
-
-        print "</tr>";
 
 		# next index
 		$m++;

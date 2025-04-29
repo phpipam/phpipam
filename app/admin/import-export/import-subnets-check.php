@@ -19,8 +19,8 @@ if (!isset($Subnets)) { $Subnets	= new Subnets ($Database); }
 $User->check_user_session();
 
 # Get mask check
-#automated $cidrformat = isset($_GET['cidrformat']) ? $_GET['cidrformat'] : "off";
-#separate option $rebuildmnr = isset($_GET['rebuildmnr']) ? $_GET['rebuildmnr'] : "off";
+#automated $cidrformat = isset($GET->cidrformat) ? $GET->cidrformat : "off";
+#separate option $rebuildmnr = isset($GET->rebuildmnr) ? $GET->rebuildmnr : "off";
 
 # read again the custom fields, if any
 if (!isset($custom_fields)) { $custom_fields = $Tools->fetch_custom_fields("subnets"); }
@@ -75,13 +75,13 @@ foreach ($all_sections as $section) {
 	$section_names[$section['name']] = $section;
 	$section_subnets = $Subnets->fetch_section_subnets($section['id']);
 	# skip empty sections
-	if (sizeof($section_subnets)==0) { continue; }
-
-	foreach ($section_subnets as $subnet) {
-		$subnet = (array) $subnet;
-		# load whole record in array
-		$edata[$section['id']][$subnet['vrfId']][$subnet['ip']][$subnet['mask']] = $subnet;
-		$edata[$section['id']][$subnet['vrfId']][$subnet['ip']][$subnet['mask']]['type'] = $Subnets->identify_address($subnet['ip']);
+	if (is_array($section_subnets)) {
+		foreach ($section_subnets as $subnet) {
+			$subnet = (array) $subnet;
+			# load whole record in array
+			$edata[$section['id']][$subnet['vrfId']][$subnet['ip']][$subnet['mask']] = $subnet;
+			$edata[$section['id']][$subnet['vrfId']][$subnet['ip']][$subnet['mask']]['type'] = $Subnets->identify_address($subnet['ip']);
+		}
 	}
 }
 
@@ -97,17 +97,17 @@ foreach ($data as &$cdata) {
 
 	# check if required fields are present and not empty
 	foreach($reqfields as $creq) {
-		if ((!isset($cdata[$creq])) or ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
+		if ((!isset($cdata[$creq])) || ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
 	}
 
 	# if the subnet contains "/", split it in network and mask
 	if ($action != "error") {
 		if (preg_match("/\//", $cdata['subnet'])) {
-			list($caddr,$cmask) = explode("/",$cdata['subnet'],2);
+			list($caddr,$cmask) = $Subnets->cidr_network_and_mask($cdata['subnet']);
 			$cdata['mask'] = $cmask;
 			$cdata['subnet'] = $caddr;
 		} else { # check that mask is provided
-			if ((!isset($cdata['mask'])) or ($cdata['mask'] == "")) { $msg.= "Required field mask missing or empty."; $action = "error"; }
+			if ((!isset($cdata['mask'])) || ($cdata['mask'] == "")) { $msg.= "Required field mask missing or empty."; $action = "error"; }
 		}
 		if ((!empty($cdata['mask'])) && (!preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", $cdata['mask']))) {
 			$msg.="Invalid network mask format."; $action = "error";
@@ -167,7 +167,7 @@ foreach ($data as &$cdata) {
 		} else { $msg.=$net['message']; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 		if ((!empty($cdata['vrf'])) && (!preg_match("/^[a-zA-Z0-9-_]+$/", $cdata['vrf']))) { $msg.="Invalid VRF name format."; $action = "error"; }
-# Allow VLAN to be the string now.		
+# Allow VLAN to be the string now.
 #		if ((!empty($cdata['vlan'])) && (!preg_match("/^[0-9]+$/", $cdata['vlan']))) { $msg.="Invalid VLAN number format."; $action = "error"; }
 		if ((!empty($cdata['domain'])) && (!preg_match("/^[a-zA-Z0-9-_. ]+$/", $cdata['domain']))) { $msg.="Invalid VLAN domain format."; $action = "error"; }
 	}
@@ -231,5 +231,3 @@ foreach ($data as &$cdata) {
 	$rows.= "<td>"._($cdata['msg'])."</td></tr>";
 
 }
-
-?>

@@ -17,8 +17,8 @@ else {
 
 # reset if search
 if(@$from_search===true) {
-	$maxmask = $_GET['ipaddrid']+1;
-	$subnetmask = $_GET['ipaddrid']-1;
+	$maxmask = $GET->ipaddrid+1;
+	$subnetmask = $GET->ipaddrid-1;
 }
 else {
 	$subnetmask = $subnet['mask'];
@@ -39,7 +39,7 @@ for($searchmask=$subnetmask+1; $searchmask<$maxmask; $searchmask++) {
 			// remove found subnets with hosts !
 			foreach($found as $k=>$f) {
 				// parse
-				$parsed = explode("/", $f);
+				$parsed = $Subnets->cidr_network_and_mask($f);
 				// boundaries
 				$boundaries = $Subnets->get_network_boundaries ($parsed[0], $searchmask);
 				// broadcast to int
@@ -94,7 +94,7 @@ if (sizeof($free_subnets)>0) {
 
 			// next subnet
 			// $subnet_start = $subnet_start + pow(2,($pow-$free_mask));
-			$subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow(2, ($pow-$free_mask))));
+			$subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow2(($pow-$free_mask))));
 
 		}
 		print "</div>";

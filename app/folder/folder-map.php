@@ -60,7 +60,7 @@ if($slaves) {
 				# create free objects
 				for($searchmask=$subnet['mask']+1; $searchmask<$smallest_subnet_mask+1; $searchmask++) {
 					// search ?
-					if((@$from_search==true && $searchmask==$from_search_mask) ||  $from_search==false) {
+					if((@$from_search==true && $searchmask==$from_search_mask) ||  @$from_search==false) {
 						// search
 						$found = $Subnets->search_available_subnets ($subnet['id'], $searchmask, $count = Subnets::SEARCH_FIND_ALL, $direction = Subnets::SEARCH_FIND_FIRST);
 
@@ -72,7 +72,7 @@ if($slaves) {
 								// remove found subnets with hosts !
 								foreach($found as $k=>$f) {
 									// parse
-									$parsed = explode("/", $f);
+									$parsed = $Subnets->cidr_network_and_mask($f);
 									// boundaries
 									$boundaries = $Subnets->get_network_boundaries ($parsed[0], $searchmask);
 									// broadcast to int
@@ -125,7 +125,7 @@ if($slaves) {
 				// arr
 				$subnet = (array) $slaves[$subnet_id];
 				// max
-				$max_subnets = floor(gmp_strval(gmp_pow(2, ($free_mask-$subnet['mask']))));
+				$max_subnets = floor(gmp_strval(gmp_pow2(($free_mask-$subnet['mask']))));
 
 				// if possible
 				if($max_subnets>0) {
@@ -138,14 +138,14 @@ if($slaves) {
 					print "<div class='ip_vis_subnet'>";
 					for($m=1; $m<=$max_subnets;$m++) {
 						if(in_array($Subnets->transform_address($subnet_start, "dotted")."/".$free_mask, $items)) {
-							print "<span class='subnet_map subnet_map_$pow subnet_map_found'><a href='' data-sectionid='{$section->id}' data-mastersubnetid='{$subnet[id]}' class='createfromfree' data-cidr='".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."' rel='tooltip' title='"._("Create subnet")."'>".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."</a></span>";
+							print "<span class='subnet_map subnet_map_$pow subnet_map_found'><a href='' data-sectionid='{$section->id}' data-mastersubnetid='".$subnet['id']."' class='createfromfree' data-cidr='".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."' rel='tooltip' title='"._("Create subnet")."'>".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."</a></span>";
 						}
 						else {
 							print "<span class='subnet_map subnet_map_$pow subnet_map_notfound'>".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."</span>";
 						}
 
 						// next subnet
-						$subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow(2, ($pow-$free_mask-1))));
+						$subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow2(($pow-$free_mask-1))));
 
 					}
 					print "</div>";

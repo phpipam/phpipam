@@ -1,18 +1,26 @@
 <?php
+# include required scripts
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+
+# initialize user object, if not already set
+if (!isset($Database)) { $Database 	= new Database_PDO; }
+if (!isset($User)) { $User = new User ($Database); }
+if (!isset($Tools)) { $Tools = new Tools ($Database); }
+
+# verify that user is logged in, to guard against direct access of page and possible exploits
+$User->check_user_session();
+
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 /*
  * CSV import verify + parse data
  *************************************************/
 
 /* get extension */
 $filename = $_FILES['file']['name'];
-$filename = explode(".", $filename);
+$filename = pf_explode(".", $filename);
 $filename = end($filename);
-
-/* get settings */
-include(dirname(__FILE__)."/../../../functions/functions.php");
-
-# Don't corrupt output with php errors!
-disable_php_errors();
 
 /* list of permitted file extensions */
 $allowed = array('cer', 'pem', 'crt', 'p12', 'pfx');
@@ -48,7 +56,7 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 		}
 		// process p12
 		elseif ($filename=="p12" || $filename=="pfx") {
-			$password = $_POST['pkey_pass'];
+			$password = $POST->pkey_pass;
 			$convert = openssl_pkcs12_read (file_get_contents($_FILES["file"]["tmp_name"]), $results, $password);
 			if (!$convert) {
 				echo '{"status":"error","error":"'.openssl_error_string().'"}';

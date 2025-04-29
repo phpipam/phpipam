@@ -16,7 +16,7 @@ $User->check_user_session();
 $User->check_module_permissions ("routing", User::ACCESS_RW, true, true);
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['bgpid']))		{ $Result->show("danger", _("Invalid ID"), true, true); }
+if($POST->action!="add" && !is_numeric($POST->bgpid))		{ $Result->show("danger", _("Invalid ID"), true, true); }
 ?>
 
 <!-- header -->
@@ -26,7 +26,7 @@ if($_POST['action']!="add" && !is_numeric($_POST['bgpid']))		{ $Result->show("da
 <div class="pContent">
 	<?php
 	# submit
-	if(!$Admin->object_modify ("routing_subnets", "delete", "id", ["id"=>$_POST['bgpid']]))  { $Result->show("danger",  _("Mapping removal failed"), false); }
+	if(!$Admin->object_modify ("routing_subnets", "delete", "id", ["id"=>$POST->bgpid]))  { $Result->show("danger",  _("Mapping removal failed"), false); }
 	else																  			   { $Result->show("success", _("Mapping removed"), false); }
 	?>
 

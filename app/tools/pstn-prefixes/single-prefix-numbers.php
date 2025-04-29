@@ -45,7 +45,7 @@ $colspan_dhcp = 4;
     <tbody>
     <?php
     # none
-    if ($numbers===false) {
+    if (!is_array($numbers)) {
         print "<tr>";
         print " <td colspan='$colspan'>".$Result->show("info", _("No numbers"), false, false, true)."</td>";
         print "</tr>";
@@ -61,7 +61,7 @@ $colspan_dhcp = 4;
         $Addresses->addresses_types_fetch();
         foreach($Addresses->address_types as $t) {
         	if($t['compress']=="Yes" && $User->user->compressOverride!="Uncompress") {
-        		if(sizeof($numbers)>0 && $numbers!==false) {
+        		if(!empty($numbers)) {
         			$numbers = $Tools->compress_pstn_ranges ($numbers, $t['id']);
         		}
         	}
@@ -75,7 +75,7 @@ $colspan_dhcp = 4;
             $device = $device===false ? "/" : "<a href='".create_link("tools", "devices", $device->id)."'>$device->hostname</a>";
 
             # format description
-            $description = strlen($n->description)==0 ? "" : "<i class='fa fa-comment-o' rel='tooltip' title='$n->description'></i>";
+            $description = is_blank($n->description) ? "" : "<i class='fa fa-comment-o' rel='tooltip' title='$n->description'></i>";
 
             # search for free numbers at beginning
             if($User->user->hideFreeRange!=1) {
@@ -90,7 +90,7 @@ $colspan_dhcp = 4;
 
 
 
-		    if($n->class=="compressed-range") {
+            if (property_exists($n, "class") && $n->class == "compressed-range") {
 		    	print "<tr class='dhcp'>";
 			    print "	<td>";
 			    print 		"(".$prefix->prefix.$n->number.' - '.($n->number + $n->numHosts).")";
@@ -139,7 +139,7 @@ $colspan_dhcp = 4;
 					}
 					//text
 					elseif($myField['type']=="text") {
-						if(strlen($n->{$myField['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $n->{$myField['name']})."'>"; }
+						if(!is_blank($n->{$myField['name']}))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $n->{$myField['name']})."'>"; }
 						else									{ print ""; }
 					}
 					else {

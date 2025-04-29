@@ -1,7 +1,9 @@
 <?php
+if (!defined('VERSION_VISIBLE') || Config::ValueOf('disable_installer')) { print _("Install scripts disabled"); exit(0); }
+
 // add prefix - install or migrate
-$title_prefix = @$_GET['subnetId']=="migrate" ? _("migration") : _("installation");
-$text_prefix  = @$_GET['subnetId']=="migrate" ? _("migrate") : _("install");
+$title_prefix = $GET->subnetId=="migrate" ? _("migration") : _("installation");
+$text_prefix  = $GET->subnetId=="migrate" ? _("migrate") : _("install");
 ?>
 
 <div class="widget-dash col-xs-12 col-md-8 col-md-offset-2">
@@ -12,7 +14,7 @@ $text_prefix  = @$_GET['subnetId']=="migrate" ? _("migrate") : _("install");
 	<div style="padding:10px;">
 
 		<div class="text-mute2d" style="margin:10px;">
-			<?php print _("We are glad you decided phpipam to")." ".$text_prefix.". "._("Before you can start to process please:"); ?><br><br>
+			<?php print _("We are glad you decided to")." ".$text_prefix." phpipam. "._("Before you can start to process please:"); ?><br><br>
 			<ul>
 				<li><?php print _("Edit settings in config.php file"); ?></li>
 				<li><?php print _("Create a MySQL/MariaDB database for phpipam, you can do this three ways (select below)"); ?></li>
@@ -23,7 +25,7 @@ $text_prefix  = @$_GET['subnetId']=="migrate" ? _("migrate") : _("install");
 
 			<?php
 			// migrate
-			if($_GET['subnetId']=="migrate") { ?>
+			if($GET->subnetId=="migrate") { ?>
 				<hr>
 				<div class="alert alert-warning">
 				<?php print _("You selected option to migrate from old database.")."<br>"._("Please put SQL dump file from old phpipam installation to db/MIGRATE.sql file !"); ?>
@@ -38,15 +40,15 @@ $text_prefix  = @$_GET['subnetId']=="migrate" ? _("migrate") : _("install");
 		<ol style="margin-top:20px;">
 		<!-- automatic -->
 		<li>
-			<a href="<?php print create_link("install","install_automatic", $_GET['subnetId']); ?>" class="btn btn-sm btn-default"><?php print _("Automatic database")." ".$title_prefix; ?></a>
+			<a href="<?php print create_link("install","install_automatic", $GET->subnetId); ?>" class="btn btn-sm btn-default"><?php print _("Automatic database")." ".$title_prefix; ?></a>
 			<br>
 			<div class="text-muted"><?php print _("phpipam installer will create database for you automatically."); ?></div>
 			<br>
 		</li>
 
-		<!-- Mysql inport -->
+		<!-- Mysql import -->
 		<li>
-			<a href="<?php print create_link("install","install_mysqlimport", $_GET['subnetId']); ?>" class="btn btn-sm btn-default"><?php print _("MySQL/MariaDB import instructions"); ?></a>
+			<a href="<?php print create_link("install","install_mysqlimport", $GET->subnetId); ?>" class="btn btn-sm btn-default"><?php print _("MySQL/MariaDB import instructions"); ?></a>
 			<br>
 			<div class="text-muted"><?php print _("Install DB files with mysqlimport tool."); ?></div>
 			<br>
@@ -54,7 +56,7 @@ $text_prefix  = @$_GET['subnetId']=="migrate" ? _("migrate") : _("install");
 
 		<!-- Manual install -->
 		<li>
-			<a href="<?php print create_link("install","install_manual", $_GET['subnetId']); ?>" class="btn btn-sm btn-default"><?php print _("Manual database")." ".$title_prefix; ?></a>
+			<a href="<?php print create_link("install","install_manual", $GET->subnetId); ?>" class="btn btn-sm btn-default"><?php print _("Manual database")." ".$title_prefix; ?></a>
 			<br>
 			<div class="text-muted"><?php print _("Install database manually with SQL queries."); ?></div>
 			<br>

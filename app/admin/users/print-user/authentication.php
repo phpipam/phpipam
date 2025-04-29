@@ -17,11 +17,11 @@
 </tr>
 <tr>
 	<td><?php print _('Last login'); ?></td>
-	<td><?php print strlen($user->lastLogin)>0 ? $user->lastLogin : "<span class='text-muted'>"._("Never")."</span>"; ?></td>
+	<td><?php print !is_blank($user->lastLogin) ? $user->lastLogin : "<span class='text-muted'>"._("Never")."</span>"; ?></td>
 </tr>
 <tr>
 	<td><?php print _('Last activity'); ?></td>
-	<td><?php print strlen($user->lastActivity)>0 ? $user->lastActivity : "<span class='text-muted'>"._("Never")."</span>"; ?></td>
+	<td><?php print !is_blank($user->lastActivity) ? $user->lastActivity : "<span class='text-muted'>"._("Never")."</span>"; ?></td>
 </tr>
 <tr>
 	<td><?php print _('Groups'); ?></td>
@@ -31,7 +31,7 @@
 	print _('All groups');
 	}
 	else {
-		$groups = json_decode($user->groups, true);
+		$groups = db_json_decode($user->groups, true);
 		$gr = $Admin->groups_parse($groups);
 		if(sizeof($gr)>0) {
 			foreach($gr as $group) {

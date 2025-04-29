@@ -15,7 +15,7 @@
 	</tr>
 	<tr>
 		<th><?php print _('Subnet description'); ?></th>
-		<td><?php print html_entity_decode($subnet['description']); ?></td>
+		<td><?php print $subnet['description']; ?></td>
 	</tr>
 	<tr>
 		<th><?php print _('Permission'); ?></th>
@@ -48,7 +48,7 @@
 		<th><?php print _('VLAN'); ?></th>
 		<td>
 		<?php
-		if(empty($vlan['number']) || $vlan['number'] == 0) { $vlan['number'] = "<span class='text-muted'>/</span>"; }	//Display fix for emprt VLAN
+		if(empty($vlan['number']) || $vlan['number'] == 0) { $vlan['number'] = "<span class='text-muted'>/</span>"; }	//Display fix for empty VLAN
 		print $vlan['number'];
 
 		if(!empty($vlan['name'])) 		 { print ' - '.$vlan['name']; }					//Print name if provided
@@ -116,7 +116,7 @@
 	# custom subnet fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $key=>$field) {
-			if(strlen($subnet[$key])>0) {
+			if(!is_blank($subnet[$key])) {
 				$subnet[$key] = str_replace(array("\n", "\r\n"), "<br>",$subnet[$key]);
 				$html_custom[] = "<tr>";
 				$html_custom[] = "	<th>".$Tools->print_custom_field_name ($key)."</th>";

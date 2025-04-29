@@ -23,8 +23,8 @@ if ($mtest !== true) {
             $sn = $Subnets->fetch_subnet("id", $s->subnetId);
             $se = $Sections->fetch_section ("id", $sn->sectionId);
 
-            $se_description = strlen($se->description)>0 ? "(".$se->description.")" : "";
-            $sn_description = strlen($sn->description)>0 ? "(".$sn->description.")" : "";
+            $se_description = !is_blank($se->description) ? "(".$se->description.")" : "";
+            $sn_description = !is_blank($sn->description) ? "(".$sn->description.")" : "";
 
             // address
             print "<tr>";
@@ -53,7 +53,7 @@ if ($mtest !== true) {
             // section
             print "<tr>";
             print " <th>"._("Section")."</th>";
-            print " <td><a href='".create_link("subnets", $sn->sectionId)."'>$se->name</a> $se_descriptionn</td>";
+            print " <td><a href='".create_link("subnets", $sn->sectionId)."'>$se->name</a> $se_description</td>";
             print "</tr>";
 
             // subnet

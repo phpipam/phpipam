@@ -18,10 +18,11 @@ class Devices_controller extends Common_api_functions {
     /**
      * __construct function.
      *
-     * @param class $Database
-     * @param class $Tools
-     * @param mixed $params   // post/get values
-     * @param class $Response
+	 * @access public
+	 * @param PDO_Database $Database
+	 * @param Tools $Tools
+	 * @param API_params $params
+	 * @param Response $response
      */
     public function __construct($Database, $Tools, $params, $Response) {
         $this->Database = $Database;
@@ -125,7 +126,7 @@ class Devices_controller extends Common_api_functions {
                     $search_query = $base_query . $extended_query;
 
                     # Search query
-                    $result = $this->Database->getObjectsQuery($search_query, $query_params);
+                    $result = $this->Database->getObjectsQuery('devices', $search_query, $query_params);
 
                     // result
                     if(!$result)     { return $this->Response->throw_exception(404, "No devices found"); }

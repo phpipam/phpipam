@@ -24,7 +24,7 @@ if (isset($objects["ipaddresses"])) {
 # reset custom fields to ip addresses
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
-$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_cfields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
@@ -32,10 +32,10 @@ $selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter); 
 
 // set size
 $selected_ip_fields_size = in_array('state', $selected_ip_fields) ? sizeof($selected_ip_fields)-1 : sizeof($selected_ip_fields);	//set size of selected fields
-if($selected_ip_fields_size==1 && strlen($selected_ip_fields[0])==0) { $selected_ip_fields_size = 0; }								//fix for 0
+if($selected_ip_fields_size==1 && is_blank($selected_ip_fields[0])) { $selected_ip_fields_size = 0; }								//fix for 0
 
 # set ping statuses for warning and offline
-$statuses = explode(";", $User->settings->pingStatus);
+$statuses = pf_explode(";", $User->settings->pingStatus);
 ?>
 
 <!-- table -->
@@ -115,7 +115,7 @@ foreach($addresses as $dummy) {
 	// Print mac address icon
 	if(in_array('mac', $selected_ip_fields)) {
         # normalize MAC address
-    	if(strlen(@$addresses[$n]->mac)>0) {
+    	if(!is_blank(@$addresses[$n]->mac)) {
         	if($User->validate_mac ($addresses[$n]->mac)!==false) {
             	$addresses[$n]->mac = $User->reformat_mac_address ($addresses[$n]->mac, 1);
         	}
@@ -126,7 +126,7 @@ foreach($addresses as $dummy) {
 
 	// print info button for hover
 	if(in_array('note', $selected_ip_fields)) {
-		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", addslashes(str_replace("'", "&#39;", $addresses[$n]->note)))."'></i></td>"; }
+		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n]->note)."'></i></td>"; }
 		else 												{ print "<td class='narrow'></td>"; }
 	}
 

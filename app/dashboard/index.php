@@ -93,10 +93,10 @@ $widgets = $Tools->fetch_widgets ($User->is_admin(false), false);
 $widgets = (array) $widgets;
 
 # show user-selected widgets
-$uwidgets = array_filter(explode(";",$User->user->widgets));
+$uwidgets = array_filter(pf_explode(";",$User->user->widgets));
 
 # if user has no groups and is not admin print warning
-if ($User->is_admin(false)!==true && (strlen($User->user->groups)==0 || $User->user->groups==="null") ) {
+if ($User->is_admin(false)!==true && (is_blank($User->user->groups) || $User->user->groups==="null") ) {
 	print '<div class="row-fluid">';
 	print "	<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='min-height:10px'>";
 	print "	<div class='inner' style='min-height:10px'>";
@@ -118,9 +118,9 @@ $currSize = 0;					//to calculate size
 $m=0;							//to calculate chunk index
 
 foreach($uwidgets as $uk=>$uv) {
-	//get fetails
-	$wdet = (array) $widgets[$uv];
-	if(strlen($wdet['wsize'])==0)	{ $wsize = 6; }
+	//get details
+	$wdet = isset($widgets[$uv]) ? (array) $widgets[$uv] : ['wsize' => 6];
+	if(is_blank($wdet['wsize']))	{ $wsize = 6; }
 	else							{ $wsize = $wdet['wsize']; }
 
 	//calculate current size
@@ -143,23 +143,26 @@ print "</div>";
 
 if(sizeof($uwidgets)>1) {
 
-	print '<div class="row-fluid">';
+	print '<div id="widget-container" class="row-fluid">';
+
+	if(defined('IS_DEMO'))
+	print '<div class="alert alert-info" style="margin:auto;text-align:center;margin:10px;"><i class="fa fa-info fa-pad-right"></i> You can download latest phpIPAM version <a href="https://phpipam.net/download/" target="_blank">here</a>!</div>';
 
 	foreach($uwidgetschunk as $w) {
-		# print itams in a row
+		# print items in a row
 		foreach($w as $c) {
-
 			/* print items */
-			$wdet = (array) $widgets[$c];
 			if(array_key_exists($c, $widgets)) {
-				//reset size if not set
-				if(strlen($wdet['wsize'])==0)	{ $wdet['wsize'] = 6; }
+				$wdet = (array) $widgets[$c];
 
-				print "	<div class='col-xs-12 col-sm-12 col-md-12 col-lg-$wdet[wsize] widget-dash' id='w-$wdet[wfile]'>";
+				//reset size if not set
+				if(is_blank($wdet['wsize']))	{ $wdet['wsize'] = 6; }
+
+				print "	<div class='col-xs-12 col-sm-12 col-md-12 col-lg-".escape_input($wdet['wsize'])." widget-dash' id='w-".escape_input($wdet['wfile'])."'>";
 				print "	<div class='inner'><i class='fa fa-times remove-widget icon-action fa-gray pull-right'></i>";
 				// href?
-				if($wdet['whref']=="yes")	{ print "<a href='".create_link("widgets",$wdet['wfile'])."'> <h4>"._($wdet['wtitle'])."<i class='fa fa-external-link fa-gray pull-right'></i></h4></a>"; }
-				else						{ print "<h4>"._($wdet['wtitle'])."</h4>"; }
+				if($wdet['whref']=="yes")	{ print "<a href='".create_link("widgets",$wdet['wfile'])."'> <h4>"._(escape_input($wdet['wtitle']))."<i class='fa fa-external-link fa-gray pull-right'></i></h4></a>"; }
+				else						{ print "<h4>"._(escape_input($wdet['wtitle']))."</h4>"; }
 				print "		<div class='hContent'>";
 				print "			<div style='text-align:center;padding-top:50px;'><strong>"._('Loading widget')."</strong><br><i class='fa fa-spinner fa-spin'></i></div>";
 				print "		</div>";
@@ -169,9 +172,9 @@ if(sizeof($uwidgets)>1) {
 			}
 			# invalid widget
 			else {
-				print "	<div class='col-xs-12 col-sm-12 col-md-12 col-lg-6' id='w-$c'>";
+				print "	<div class='col-xs-12 col-sm-12 col-md-12 col-lg-6' id='w-".escape_input($c)."'>";
 				print "	<div class='inner'>";
-				print "		<blockquote style='margin-top:20px;margin-left:20px;'><p>Invalid widget $c</p></blockquote>";
+				print "		<blockquote style='margin-top:20px;margin-left:20px;'><p>Invalid widget ".escape_input($c)."</p></blockquote>";
 				print "	</div>";
 				print "	</div>";
 			}

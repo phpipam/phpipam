@@ -1,9 +1,11 @@
 <?php
+if (!defined('VERSION_VISIBLE') || Config::ValueOf('disable_installer')) { print _("Install scripts disabled"); exit(0); }
+
 $db = Config::ValueOf('db');
 
 // add prefix - install or migrate
-$title_prefix = @$_GET['subnetId']=="migrate" ? _("migration") : _("installation");
-$filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
+$title_prefix = $GET->subnetId=="migrate" ? _("migration") : _("installation");
+$filename	  = $GET->subnetId=="migrate" ? "MIGRATE" : "SCHEMA";
 ?>
 
 <div class="widget-dash col-xs-12 col-md-8 col-md-offset-2">
@@ -17,16 +19,16 @@ $filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
 		<a href="<?php print create_link("install"); ?>" class="btn btn-sm btn-default"><i class='fa fa-angle-left'></i> <?php print _("Back"); ?></a>
 		<!-- Instructions -->
 		<div style="margin-top:10px;padding:30px 20px;">
-			<?php print _("For importing database file with mysqlimport tool please follow below instructions:"); ?><hr>
+			<?php print _("For importing database file with mysqlimport tool please follow the instructions below:"); ?><hr>
 			<ol>
 				<li><?php print _("Set variables for database connection in config.php"); ?></li>
 				<li><?php print _("Open mysql connection, create database"); ?>
 					<pre>mysql -u root -p</pre>
 				</li>
 				<li>
-					<?php print _("Copy below SQL queries and paste them to mysql"); ?>
+					<?php print _("Copy the SQL queries below and paste them into mysql"); ?>
 				</li>
-				<li><?php print _("Finished ! Now login with <strong>Admin/ipamadmin</strong> to webpage."); ?><br>
+				<li><?php print _("Finished ! Now log in with <strong>Admin/ipamadmin</strong> to web page."); ?><br>
 				<a href="<?php print create_link(null,null,null,null,null,true); ?>" class="btn btn-sm btn-info"><?php print _("Login"); ?></a>
 				</li>
 			</ol>
@@ -35,7 +37,7 @@ $filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
 
 		<?php
 		// file check
-		if(@$_GET['subnetId']=="migrate") {
+		if($GET->subnetId=="migrate") {
 			if(!file_exists(dirname(__FILE__)."/../../db/MIGRATE.sql")) {
 				print "<div class='alert alert-danger'>Cannot access file db/MIGRATE.sql!</div>";
 			}
@@ -50,28 +52,29 @@ $filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
 		<pre>
 <?php
 
-$esc_user = addcslashes($db['user'],"'");
-$esc_pass = addcslashes($db['pass'],"'");
-$webhost  = is_string($db['webhost']) && strlen($db['webhost']) ? addcslashes($db['webhost'],"'") : 'localhost';
+$esc_user = escape_input($db['user']);
+$esc_pass = escape_input(_("<YOUR SECRET PASSWORD FROM config.php>"));
+$esc_webhost = is_string($db['webhost']) && strlen($db['webhost']) ? escape_input($db['webhost']) : 'localhost';
+$db_name  = escape_input($db['name']);
 
 $file  = "# Create phpipam database\n";
 $file .= "# ------------------------------------------------------------\n";
-$file .= "CREATE DATABASE $db[name];\n\n";
+$file .= "CREATE DATABASE $db_name;\n\n";
 
 $file .= "# Set permissions for phpipam user\n";
 $file .= "# ------------------------------------------------------------\n";
-$file .= "CREATE USER '$esc_user'@'$webhost' IDENTIFIED BY '$esc_pass';\n";
-$file .= "GRANT ALL ON $db[name].* TO '$esc_user'@'$webhost';\n";
+$file .= "CREATE USER '$esc_user'@'$esc_webhost' IDENTIFIED BY '$esc_pass';\n";
+$file .= "GRANT ALL ON $db_name.* TO '$esc_user'@'$esc_webhost';\n";
 $file .= "FLUSH PRIVILEGES;\n\n";
 
 $file .= "# Select created database\n";
 $file .= "# ------------------------------------------------------------\n";
-$file .= "USE `$db[name]`;\n\n\n";
+$file .= "USE `$db_name`;\n\n\n";
 
 $file .= "# Create tables and import data\n";
 $file .= "# ------------------------------------------------------------\n\n\n\n";
 
-if(@$_GET['subnetId']=="migrate") {
+if($GET->subnetId=="migrate") {
 	if(file_exists(dirname(__FILE__)."/../../db/MIGRATE.sql")) {
 		$file .= file_get_contents(dirname(__FILE__)."/../../db/MIGRATE.sql");
 	}

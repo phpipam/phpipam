@@ -49,7 +49,7 @@ if(sizeof($custom_fields) > 0) {
 		print "	<td>$key</td>";
 		print "	<td>";
 		//no length
-		if(strlen($user->{$key})==0) {
+		if(is_blank($user->{$key})) {
 			print "/";
 		}
 		//booleans

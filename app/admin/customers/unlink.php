@@ -20,24 +20,22 @@ $User->check_user_session();
 $User->check_module_permissions ("customers", User::ACCESS_RW, true, true);
 // check maintaneance mode
 $User->check_maintaneance_mode ();
-// get modified details
-$_POST = $Admin->strip_input_tags($_POST);
 
 // make sure correct object is applied
-if(!array_key_exists($_POST['object'], $Tools->get_customer_object_types())) {
+if(!array_key_exists($POST->object, $Tools->get_customer_object_types())) {
 	$Result->show ("danger", _("Invalid object"), true, true);
 }
 // ID must be numeric
-if (!is_numeric($_POST['id'])) {
+if (!is_numeric($POST->id)) {
 	$Result->show ("danger", _("Invalid object ID"), true, true);
 }
 
 // set field
 $field = "id";
-if($_POST['object']=="vlans")	{ $field = "vlanId"; }
-elseif($_POST['object']=="vrf")	{ $field = "vrfId"; }
+if($POST->object=="vlans")	{ $field = "vlanId"; }
+elseif($POST->object=="vrf")	{ $field = "vrfId"; }
 
 // unlink
-if ($Admin->object_modify ($_POST['object'], "edit", $field, [$field=>$_POST['id'], "customer_id"=>NULL])!==false) {
+if ($Admin->object_modify ($POST->object, "edit", $field, [$field=>$POST->id, "customer_id"=>null])!==false) {
 	$Result->show ("success", _("Object removed"), true, true, false, false, true);
 }

@@ -20,12 +20,19 @@
 [submodule "functions/GoogleAuthenticator"]
 	path = functions/GoogleAuthenticator
 	url = https://github.com/PHPGangsta/GoogleAuthenticator
+	ignore = all
 [submodule "functions/qrcodejs"]
 	path = functions/qrcodejs
 	url = https://github.com/davidshimjs/qrcodejs
+	ignore = all
 [submodule "functions/xmlseclibs"]
 	path = functions/xmlseclibs
 	url = https://github.com/robrichards/xmlseclibs.git
+	ignore = all
 [submodule "functions/parsedown"]
 	path = functions/parsedown
 	url = https://github.com/erusev/parsedown.git
+	ignore = all
+[submodule "functions/LdapRecord"]
+	path = functions/LdapRecord
+	url = https://github.com/DirectoryTree/LdapRecord.git

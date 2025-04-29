@@ -55,7 +55,7 @@ if(is_array($firewallZoneMappings)) {
 		<!-- header -->
 		<tr>
 		<?php
-		$devices[$k][0]->deviceDescription = strlen($devices[$k][0]->deviceDescription)<1 ? "" : "(".$devices[$k][0]->deviceDescription.")";
+		$devices[$k][0]->deviceDescription = is_blank($devices[$k][0]->deviceDescription) ? "" : "(".$devices[$k][0]->deviceDescription.")";
 		print '<th colspan="8" style="background:white"><h4>'.$devices[$k][0]->deviceName.$devices[$k][0]->deviceDescription	.'</h4></th>';
 		?>
 		</tr>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	phpIPAM DNS class to manage DNS-related dunctions
+ *	phpIPAM DNS class to manage DNS-related functions
  *
  */
 
@@ -145,15 +145,15 @@ class DNS extends Common_functions {
 			}
 			// ok
 			else {
-				if (strlen($nameservers->namesrv1)==0) {
+				if (is_blank($nameservers->namesrv1)) {
 					return false;
 				}
 				else {
 					// to array
-					$nsarray = explode(";", $nameservers->namesrv1);
+					$nsarray = pf_explode(";", $nameservers->namesrv1);
 					// check against dead NSes
 					foreach ($nsarray as $k=>$nsserv) {
-						trim($nsserv);
+						$nsserv = trim($nsserv);
 						if(in_array($nsserv, $this->dead_ns)) {
 							unset($nsarray[$k]);
 						}
@@ -189,7 +189,7 @@ class DNS extends Common_functions {
 		$address = $this->transform_address ($address, "dotted");
 
 		// if both are set ignore
-		if (strlen($hostname)>1 && strlen($address)>0) {
+		if (!is_blank($hostname) && !is_blank($address)) {
 											{ return array("class"=>"", "address"=>$address, "name"=>$hostname); }
 		}
 		// if settings permits to check or override is set
@@ -199,7 +199,7 @@ class DNS extends Common_functions {
 				return array("class"=>"", 		"address"=>$address, "name"=>$hostname);
 			}
 			// if address is set fetch A record
-			elseif ($address!==false && strlen($address)>0) {
+			elseif ($address!==false && !is_blank($address)) {
 				// set resolve type
 				$this->type = "PTR";
 
@@ -210,7 +210,7 @@ class DNS extends Common_functions {
 				else						{ return array("class"=>"resolved", "address"=>$address, "name"=>$resolved); }
 			}
 			// if hostname is set fetch PTR record
-			elseif($hostname!==false && strlen($hostname)>0) {
+			elseif($hostname!==false && !is_blank($hostname)) {
 				// set resolve type
 				$this->type = "A";
 
@@ -221,7 +221,7 @@ class DNS extends Common_functions {
 				else						{ return array("class"=>"resolved", "address"=>$resolved, "name"=>$hostname); }
 			}
 		}
-		// dont check
+		// don't check
 		else 								{ return array("class"=>"",			"address"=>$address, "name"=>$hostname); }
 	}
 
@@ -236,7 +236,7 @@ class DNS extends Common_functions {
 		// set nameservers
 		if (sizeof($this->ns)>0) {
 			// check each , if dead remove it !
-			foreach ($this->ns as $nk=>$ns) {
+			foreach ($this->ns as $ns) {
 				if (!in_array($ns, $this->dead_ns)) {
 					$this->DNS2->setServers (array($ns));
 
@@ -252,7 +252,7 @@ class DNS extends Common_functions {
 							if($this->print_error) {
 								$this->Result->show("warning", _("DNS error")." ($ns): ".$this->resolve_error);
 							}
-							array_unique($this->dead_ns);
+							$this->dead_ns = array_unique($this->dead_ns);
 						}
 					}
 				}

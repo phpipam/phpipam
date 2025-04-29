@@ -110,7 +110,7 @@ class adLDAP {
     protected $openLDAP = false;
 
     /**
-     * Array of domain controllers. Specifiy multiple controllers if you
+     * Array of domain controllers. Specify multiple controllers if you
      * would like the class to balance the LDAP queries amongst multiple servers
      *
      * @var array
@@ -155,7 +155,7 @@ class adLDAP {
 
     /**
      * Use SSO
-     * To indicate to adLDAP to reuse password set by the brower through NTLM or Kerberos
+     * To indicate to adLDAP to reuse password set by the browser through NTLM or Kerberos
      *
      * @var bool
      */
@@ -412,7 +412,7 @@ class adLDAP {
     }
 
     /**
-    * Set the username of an account with higher priviledges
+    * Set the username of an account with higher privileges
     *
     * @param string $adminUsername
     * @return void
@@ -423,7 +423,7 @@ class adLDAP {
     }
 
     /**
-    * Get the username of the account with higher priviledges
+    * Get the username of the account with higher privileges
     *
     * This will throw an exception for security reasons
     */
@@ -433,7 +433,7 @@ class adLDAP {
     }
 
     /**
-    * Set the password of an account with higher priviledges
+    * Set the password of an account with higher privileges
     *
     * @param string $adminPassword
     * @return void
@@ -444,7 +444,7 @@ class adLDAP {
     }
 
     /**
-    * Get the password of the account with higher priviledges
+    * Get the password of the account with higher privileges
     *
     * This will throw an exception for security reasons
     */

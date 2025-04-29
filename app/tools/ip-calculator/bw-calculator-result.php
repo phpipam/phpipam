@@ -10,12 +10,12 @@ $User		= new User ($Database);
 $User->check_user_session();
 
 // process input values
-$tcp   = $_POST['wsize'];
-$delay = $_POST['delay'];
-$fsize = $_POST['fsize'];
+$tcp   = filter_var($POST->wsize, FILTER_VALIDATE_INT,   ["options" => ["min_range"=>1024, "max_range"=>65536]]) ?: die(_("Invalid input"));
+$delay = filter_var($POST->delay, FILTER_VALIDATE_FLOAT, ["options" => ["min_range"=>0.1,  "max_range"=>1000]])  ?: die(_("Invalid input"));
+$fsize = filter_var($POST->fsize, FILTER_VALIDATE_FLOAT, ["options" => ["min_range"=>100,  "max_range"=>4096]])  ?: die(_("Invalid input"));
 
 // get mbps values from config
-$mbps = round($tcp/($delay/1000)/(1024*1024),2);
+$mbps = round($tcp/($delay/1000)/(1024*1024), 4);
 
 // Calculate transfer time
 $time = round(($fsize / $mbps), 2);
@@ -32,7 +32,7 @@ else 				{ $type = "WAN"; }
 <strong><?php print _("Transfer time (h:m:s)"); ?>:</strong>
 <div class='res_val'><?php print $User->sec2hms($time); ?></div>
 
-<?php if(!isset($_POST['widget'])) { ?>
+<?php if(!isset($POST->widget)) { ?>
 <div class="clearfix"></div>
 
 <br><br>

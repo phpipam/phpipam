@@ -52,7 +52,7 @@ class SubnetsMenu {
 		$this->Subnets = $Subnets;
 		$this->Subnets->get_Settings();
 		if (isset($expanded)) {
-			$expanded = array_filter(explode("|", $expanded));
+			$expanded = array_filter(pf_explode("|", $expanded));
 			// Store expanded subnets/folders to allow fast index lookups.
 			foreach($expanded as $e) $this->expanded[$e] = 1;
 		}
@@ -208,7 +208,6 @@ class SubnetsMenu {
 		# Close required number of existing levels
 		while ($this->nestedlevel > $level) {
 			$this->html[] = '</ul>';
-			$this->html[] = '</ui>';
 			$this->nestedlevel--;
 		}
 	}

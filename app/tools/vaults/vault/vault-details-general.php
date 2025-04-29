@@ -17,7 +17,7 @@ else {
 	print "<br>";
 
 	// back
-	print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], "vaults")."'><i class='fa fa-angle-left'></i> "._("All vaults")."</a><br><br>";
+	print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, "vaults")."'><i class='fa fa-angle-left'></i> "._("All vaults")."</a><br><br>";
 
 	print "<table class='ipaddress_subnet table-condensed table-auto'>";
 
@@ -61,7 +61,7 @@ else {
 
 			print "<tr>";
 			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
-			print "	<td style='vertical-align:top;align:left;'>".$vault->{$key}."</td>";
+			print "	<td style='vertical-align:top;align-content:left;'>".$vault->{$key}."</td>";
 			print "</tr>";
 		}
 	}
@@ -74,7 +74,7 @@ else {
 	print "	<th>"._("Status")."</th>";
 	print "	<td>";
 	if(isset($_SESSION[$vault_id])) {
-		if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])=="test") {
+		if(isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) !== false) {
 			print "<span class='text-success'>"._("Unlocked")."</span>";
 		}
 		else {
@@ -93,7 +93,7 @@ else {
 	print "	<td colspan='2'><hr></td>";
 	print "</tr>";
 
-	if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])=="test") {
+	if(isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) !== false) {
 
 	print "<tr>";
 	print "	<td></td>";
@@ -132,7 +132,7 @@ else {
 	print "</table>";
 
 	// vault items
-	if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])=="test") {
+	if(isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) !== false) {
 	include ("vault-items.php");
 	}
 }

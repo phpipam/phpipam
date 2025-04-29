@@ -26,10 +26,10 @@ class Circuits_controller extends Common_api_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @param class $Database
-	 * @param class $Tools
-	 * @param mixed $params		// post/get values
-	 * @param class $Response
+	 * @param PDO_Database $Database
+	 * @param Tools $Tools
+	 * @param API_params $params
+	 * @param Response $response
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
@@ -314,7 +314,7 @@ class Circuits_controller extends Common_api_functions {
 	private function validate_object ($action="edit", $old_object = null) {
 		# circuits validation
 		if($this->type=="circuits") {
-			// chech that id doesnt already exist
+			// check that id doesnt already exist
 			$this->validate_cid ($action, $old_object);
 			// validate provider
 			$this->validate_circuit_provider ($action);
@@ -366,7 +366,7 @@ class Circuits_controller extends Common_api_functions {
 	private function validate_provider_name ($action) {
 		if($action=="add") {
 			if (!isset($this->_params->name)) 		 { $this->Response->throw_exception(404, "Name is mandatory"); }
-			elseif (strlen($this->_params->name)==0) { $this->Response->throw_exception(404, "Name is mandatory"); }
+			elseif (is_blank($this->_params->name)) { $this->Response->throw_exception(404, "Name is mandatory"); }
 		}
 	}
 
@@ -428,7 +428,7 @@ class Circuits_controller extends Common_api_functions {
 	private function validate_circuit_type ($action="add") {
 		if(isset($this->_params->type)) {
 			$type_desc = $this->Database->getFieldInfo ("circuits", "type");
-			$all_types = explode(",", str_replace(array("enum","(",")","'"), "",$type_desc->Type));
+			$all_types = pf_explode(",", str_replace(array("enum","(",")","'"), "",$type_desc->Type));
 			if(!in_array($this->_params->type, $all_types))									{ $this->Response->throw_exception(400, "Invalid circuit type"); }
 		}
 		else {
@@ -460,7 +460,7 @@ class Circuits_controller extends Common_api_functions {
 	}
 
 	/**
-	 * Validate circuit devide and location
+	 * Validate circuit divide and location
 	 *
 	 * @method validate_circuit_devices_locations
 	 *

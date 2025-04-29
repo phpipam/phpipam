@@ -24,12 +24,12 @@ $all_locations = [$locA, $locB];
 
 // get all
 foreach ($all_locations as $k=>$l) {
-    if(strlen($l->long)==0 && strlen($l->lat)==0 && strlen($l->address)==0 ) {
+    if(is_blank($l->long) && is_blank($l->lat) && is_blank($l->address) ) {
         // map not used
         unset($all_locations[$k]);
     }
     // recode
-    elseif (strlen($l->long)==0 && strlen($l->lat)==0 && strlen($l->address)>0) {
+    elseif (is_blank($l->long) && is_blank($l->lat) && !is_blank($l->address)) {
         $latlng = $OSM->get_latlng_from_address ($l->address);
         if($latlng['lat']==NULL || $latlng['lng']==NULL) {
             unset($all_locations[$k]);
@@ -51,4 +51,4 @@ if (sizeof($all_locations) == 1) {
 } elseif (sizeof($all_locations) == 2) {
     $OSM->add_circuit($all_locations[0], $all_locations[1], $type_hash[$circuit->type]);
 }
-$OSM->map($height);
+$OSM->map($height ?? null);

@@ -67,6 +67,10 @@ foreach ($all_sections as $section) {
 	foreach ($section_subnets as $subnet) {
 		$subnet = (array) $subnet;
 
+		# NULL vrfId?
+		if (!is_numeric($subnet['vrfId']))
+			$subnet['vrfId'] = 0;
+
 		# ignore folders
 		if($subnet['isFolder']) { continue; }
 
@@ -102,14 +106,14 @@ $devices = $Tools->fetch_all_objects("devices", "hostname");
 if ($devices!==false) {
 	foreach($devices as $c_dev) {
 		$c_dev = (array) $c_dev;
-		$c_dev_sections=explode(";", $c_dev['sections']);
+		$c_dev_sections=pf_explode(";", $c_dev['sections']);
 		# Populate each section with the devices it has
 		foreach($c_dev_sections as $c_dev_sect) { $device_data[$c_dev_sect][$c_dev['hostname']] = $c_dev;}
 	}
 }
 
 $rows = "";
-$counters = array();
+$counters = ["add" => 0, "edit" => 0, "skip" => 0, "error" => 0];
 $ndata = array(); # store new addresses in a similar format with edata for easier processing
 
 # check the fields
@@ -118,13 +122,13 @@ foreach ($data as &$cdata) {
 
 	# check if required fields are present and not empty
 	foreach($reqfields as $creq) {
-		if ((!isset($cdata[$creq]) or ($cdata[$creq] == ""))) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
+		if (!isset($cdata[$creq]) || ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
 	}
 
 	# if the subnet contains "/", split it in network and mask
 	if ($action != "error") {
 		if (preg_match("/\//", $cdata['subnet'])) {
-			list($caddr,$cmask) = explode("/",$cdata['subnet'],2);
+			list($caddr,$cmask) = $Subnets->cidr_network_and_mask($cdata['subnet']);
 			$cdata['mask'] = $cmask;
 			$cdata['subnet'] = $caddr;
 		}
@@ -158,12 +162,12 @@ foreach ($data as &$cdata) {
 
 
 	# Check Subnet and mask are defined
-	if (empty($cdata['subnet']) or empty($cdata['mask'])) {
+	if (empty($cdata['subnet']) || empty($cdata['mask'])) {
 		$msg.= "Subnet/Mask not provided."; $action = "error";
 	}
 
 	# If provided VRF doesn't match then search for Subnet in all VRFs
-	if ($action != "error" && isset($_GET['searchallvrfs']) && $_GET['searchallvrfs'] == 'on') {
+	if ($action != "error" && $GET->searchallvrfs == 'on') {
 		if (!isset($subnet_data[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']])) {
 			# We didn't match a Subnet using the provided VRF. Check search array for a single match.
 			if (isset($subnet_search[$cdata['sectionId']][$cdata['subnet']][$cdata['mask']])) {
@@ -216,7 +220,7 @@ foreach ($data as &$cdata) {
 
 	if ($action != "error") {
     	if(!$Addresses->validate_ip($cdata['ip_addr'])) { $msg.="Invalid IP address."; $action = "error"; }
-		if ((!empty($cdata['hostname'])) and (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
+		if ((!empty($cdata['hostname'])) && (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 		if ($cdata['mac']) {
 			if (!preg_match("/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/", $cdata['mac'])) { $msg.="Invalid MAC address."; $action = "error"; }
@@ -284,14 +288,16 @@ foreach ($data as &$cdata) {
 		}
 	}
 
-	$cdata['msg'].= $msg;
+	$cdata['msg'] = isset($cdata['msg']) ? $cdata['msg'] . $msg : $msg;
 	$cdata['action'] = $action;
 	$counters[$action]++;
 
 	$cdata['subnet'] = $cdata['subnet']."/".$cdata['mask'];
 
 	$rows.="<tr class='".$colors[$action]."'><td><i class='fa ".$icons[$action]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>";
-	foreach ($expfields as $cfield) { $rows.= "<td>".$cdata[$cfield]."</td>"; }
+	foreach ($expfields as $cfield) {
+		$rows .= "<td>" . (isset($cdata[$cfield]) ? escape_input($cdata[$cfield]) : "") . "</td>";
+	}
 	$rows.= "<td>"._($cdata['msg'])."</td></tr>";
 
 }

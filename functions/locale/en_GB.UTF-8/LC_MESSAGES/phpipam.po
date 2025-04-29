@@ -1,80 +1,21 @@
-# PHPIPAM translations file - template
+# PHPIPAM translations file - English
 # Copyright (C) phpipam 2013
 # This file is distributed under the same license as the phpipam package.
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
 
-# "Project-Id-Version: 1.40\n"
+# "Project-Id-Version: 1.70\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
-# "PO-Revision-Date: 2015-10-07 14:33+0200\n"
-# "Last-Translator: \n"
-# "Language: English\n"
+# "PO-Revision-Date: 2017-02-21 14:33+0200\n"
+# "Last-Translator: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
+# "Language: Slovenian (sl_SI)\n"
 # "MIME-Version: 1.0\n"
 # "Content-Type: text/plain; charset=UTF-8\n"
 # "Content-Transfer-Encoding: 8bit\n"
 
-#: functions/functions-install.php:85 functions/functions-install.php:133
-#: functions/functions-install.php:150 functions/functions-install.php:182
-#: functions/functions-install.php:199 functions/functions-install.php:236
-#: functions/functions-install.php:272 functions/functions-install.php:379
-#: functions/functions-install.php:453 functions/functions-install.php:495
-#: functions/functions-install.php:524 functions/functions-install.php:549
-#: functions/functions-install.php:576 functions/functions-admin.php:41
-#: functions/functions-admin.php:73 functions/functions-admin.php:147
-#: functions/functions-admin.php:185 functions/functions-admin.php:217
-#: functions/functions-admin.php:241 functions/functions-admin.php:387
-#: functions/functions-admin.php:507 functions/functions-admin.php:533
-#: functions/functions-admin.php:887 functions/functions-admin.php:1124
-#: functions/functions-admin.php:1204 functions/functions-admin.php:1238
-#: functions/functions-admin.php:1283 functions/functions-admin.php:1374
-#: functions/functions-admin.php:1493 functions/functions-admin.php:1633
-#: functions/functions-admin.php:1661 functions/functions-admin.php:1717
-#: functions/functions-admin.php:1750 functions/functions-admin.php:1848
-#: functions/functions-admin.php:1881 functions/functions-admin.php:1980
-#: functions/functions-admin.php:2012 functions/functions-admin.php:2106
-#: functions/functions-admin.php:2138 functions/functions-common.php:105
-#: functions/functions-common.php:154 functions/functions-common.php:177
-#: functions/functions-common.php:200 functions/functions-common.php:223
-#: functions/functions-common.php:246 functions/functions-common.php:396
-#: functions/functions-common.php:420 functions/functions-common.php:453
-#: functions/functions-common.php:709 functions/functions-network.php:90
-#: functions/functions-network.php:116 functions/functions-network.php:142
-#: functions/functions-network.php:197 functions/functions-network.php:231
-#: functions/functions-network.php:255 functions/functions-network.php:289
-#: functions/functions-network.php:313 functions/functions-network.php:337
-#: functions/functions-network.php:361 functions/functions-network.php:396
-#: functions/functions-network.php:420 functions/functions-network.php:454
-#: functions/functions-network.php:478 functions/functions-network.php:502
-#: functions/functions-network.php:526 functions/functions-network.php:550
-#: functions/functions-network.php:586 functions/functions-network.php:610
-#: functions/functions-network.php:641 functions/functions-network.php:670
-#: functions/functions-network.php:694 functions/functions-network.php:802
-#: functions/functions-network.php:873 functions/functions-network.php:956
-#: functions/functions-network.php:1252 functions/functions-network.php:1289
-#: functions/functions-network.php:1313 functions/functions-network.php:1366
-#: functions/functions-network.php:1417 functions/functions-network.php:1460
-#: functions/functions-network.php:1487 functions/functions-network.php:1512
-#: functions/functions-network.php:1536 functions/functions-network.php:1562
-#: functions/functions-network.php:1590 functions/functions-network.php:1620
-#: functions/functions-network.php:1729 functions/functions-network.php:1754
-#: functions/functions-network.php:2072 functions/functions-network.php:2181
-#: functions/functions-network.php:2251 functions/functions-tools.php:220
-#: functions/functions-tools.php:241 functions/functions-tools.php:284
-#: functions/functions-tools.php:311 functions/functions-tools.php:333
-#: functions/functions-tools.php:355 functions/functions-tools.php:398
-#: functions/functions-tools.php:429 functions/functions-tools.php:453
-#: functions/functions-tools.php:478 functions/functions-tools.php:620
-#: functions/functions-tools.php:644 functions/functions-tools.php:666
-#: functions/functions-tools.php:688 functions/functions-tools.php:711
-#: functions/functions-tools.php:740 functions/functions-tools.php:766
-#: functions/functions-tools.php:817 functions/functions-tools.php:856
-#: functions/functions-tools.php:880 functions/functions-tools.php:905
-#: functions/functions-tools.php:941 site/ipaddr/modifyIpAddressCheck.php:102
-#: site/ipaddr/modifyIpAddressCheck.php:103
-#: site/ipaddr/modifyIpAddressCheck.php:179
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: functions/functions-install.php:252
 msgid "Login successful"
@@ -416,7 +357,7 @@ msgstr ""
 #: site/ipaddr/ipAddressPrintTableSlaves.php:34 site/admin/manageSubnet.php:76
 #: site/admin/manageSubnetEdit.php:76
 #: site/admin/manageSubnetEditResult.php:169 site/admin/manageRequests.php:24
-#: site/admin/ripeImportTelnet.php:74 site/admin/manageSubnetsplit.php:64
+#: site/admin/RIPE / ARINImportTelnet.php:74 site/admin/manageSubnetsplit.php:64
 #: site/admin/manageSubnetresize.php:35 site/admin/manageSubnettruncate.php:37
 msgid "Subnet"
 msgstr ""
@@ -437,7 +378,7 @@ msgstr ""
 #: site/admin/manageVRFEdit.php:51 site/admin/manageVRFEdit.php:57
 #: site/admin/manageVLANEdit.php:58 site/admin/manageVLANEdit.php:60
 #: site/admin/manageRequests.php:26 site/admin/replaceFields.php:27
-#: site/admin/ripeImportTelnet.php:90 site/admin/manageSection.php:28
+#: site/admin/RIPE / ARINImportTelnet.php:90 site/admin/manageSection.php:28
 #: site/admin/manageSectionEdit.php:51 site/admin/manageVLANs.php:36
 #: site/admin/manageDevices.php:37 site/admin/groupEditPrint.php:57
 #: site/login/requestIPform.php:82
@@ -597,7 +538,7 @@ msgstr ""
 #: site/ipaddr/mailNotifyIP.php:58 site/ipaddr/subnetDetailsSlaves.php:85
 #: site/ipaddr/subnetDetails.php:96 site/admin/manageSubnet.php:78
 #: site/admin/manageSubnetEdit.php:125 site/admin/manageVLANEdit.php:32
-#: site/admin/ripeImportTelnet.php:95 site/admin/manageVLANEditResult.php:47
+#: site/admin/RIPE / ARINImportTelnet.php:95 site/admin/manageVLANEditResult.php:47
 #: site/admin/manageVLANEditResult.php:48
 msgid "VLAN"
 msgstr ""
@@ -694,6 +635,8 @@ msgstr ""
 #: site/tools/vrf.php:104 site/tools/subnets.php:104
 #: site/ipaddr/subnetDetails.php:126
 msgid "enabled"
+msgstr ""
+msgid "Enabled"
 msgstr ""
 
 #: site/tools/vrf.php:114
@@ -878,7 +821,7 @@ msgid "Hostname search tips"
 msgstr ""
 
 #: site/tools/searchTips.php:46
-msgid "You can get all IP addresses some host uses and all ports it is connected to "
+msgid  "You can get all IP addresses some host uses and all ports it is connected to "
 "by entering hostname in search field"
 msgstr ""
 
@@ -937,7 +880,7 @@ msgstr ""
 msgid "Instructions"
 msgstr ""
 
-#: site/tools/toolsMenu.php:31 site/admin/ripeImport.php:19
+#: site/tools/toolsMenu.php:31 site/admin/RIPE / ARINImport.php:19
 #: site/userMenu.php:22 site/sections.php:104
 msgid "Search"
 msgstr ""
@@ -1003,6 +946,7 @@ msgstr ""
 #: site/tools/searchResults.php:251
 msgid "Search results (Subnet list)"
 msgstr ""
+
 
 #: site/tools/searchResults.php:312
 msgid "Edit subnet details"
@@ -1138,7 +1082,7 @@ msgid "Orphaned IP addresses for subnet"
 msgstr ""
 
 #: site/ipaddr/ipAddressPrintTableOrphaned.php:69
-msgid "This happens if subnet had IP addresses<br>when new nested subnet was added"
+msgid  "This happens if subnet had IP addresses<br>when new nested subnet was added"
 msgstr ""
 
 #: site/ipaddr/ipAddressPrintTableOrphaned.php:171
@@ -1285,11 +1229,11 @@ msgid "Move IP address"
 msgstr ""
 
 #: site/ipaddr/modifyIpAddress.php:31
-msgid "Cannot edit IP address details"
+msgid "You do not have write access for this network'"
 msgstr ""
 
 #: site/ipaddr/modifyIpAddress.php:31
-msgid "You do not have write access for this network'"
+msgid "Cannot edit IP address details"
 msgstr ""
 
 #: site/ipaddr/modifyIpAddress.php:79 site/ipaddr/modifyIpAddress.php:80
@@ -1442,7 +1386,7 @@ msgid "If you like the software you can donate by clicking this button to suppor
 "further development"
 msgstr ""
 
-#: site/dashboard/widgets/statistics.php:27
+#: site/dashboard/statistics.php:27
 msgid "Number of Sections"
 msgstr ""
 
@@ -1506,7 +1450,7 @@ msgstr ""
 msgid "No IPv4 host configured"
 msgstr ""
 
-#: site/dashboard/top10_hosts.php:153
+#: site/dashboard/top10_percentage.php:189
 msgid "No IPv6 host configured"
 msgstr ""
 
@@ -1570,16 +1514,16 @@ msgstr ""
 msgid "Missing fields"
 msgstr ""
 
-#: site/admin/ripeImport.php:12
-msgid "Import subnets from RIPE"
+#: site/admin/RIPE / ARINImport.php:12
+msgid "Import subnets from RIPE / ARIN"
 msgstr ""
 
-#: site/admin/ripeImport.php:15
-msgid "This script imports subnets from RIPE database for specific AS. Enter "
+#: site/admin/RIPE / ARINImport.php:15
+msgid "This script imports subnets from RIPE / ARIN database for specific AS. Enter "
 "desired AS to search for subnets"
 msgstr ""
 
-#: site/admin/ripeImport.php:19
+#: site/admin/RIPE / ARINImport.php:19
 msgid "AS number"
 msgstr ""
 
@@ -1983,7 +1927,7 @@ msgid "VRF management"
 msgstr ""
 
 #: site/admin/adminMenu.php:68
-msgid "RIPE import"
+msgid "RIPE / ARIN import"
 msgstr ""
 
 #: site/admin/adminMenu.php:77
@@ -2140,7 +2084,7 @@ msgid "subnet in CIDR"
 msgstr ""
 
 #: site/admin/manageSubnetEdit.php:86
-msgid "Get information from RIPE database"
+msgid "Get information from RIPE / ARIN database"
 msgstr ""
 
 #: site/admin/manageSubnetEdit.php:87
@@ -2264,7 +2208,7 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: site/admin/CSVimportShowFile.php:100 site/admin/ripeImportTelnet.php:108
+#: site/admin/CSVimportShowFile.php:100 site/admin/RIPE / ARINImportTelnet.php:108
 msgid "Import to database"
 msgstr ""
 
@@ -2369,7 +2313,7 @@ msgid "Cannot update request"
 msgstr ""
 
 #: site/admin/manageRequestResult.php:33
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr ""
 
 #: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
@@ -2416,8 +2360,8 @@ msgstr ""
 msgid "Errors occured when importing to database!"
 msgstr ""
 
-#: site/admin/CSVimportSubmit.php:95 site/admin/ripeImportResult.php:72
-msgid "Import successfull"
+#: site/admin/CSVimportSubmit.php:95 site/admin/RIPE / ARINImportResult.php:72
+msgid "Import successful"
 msgstr ""
 
 #: site/admin/CSVimportVerify.php:25
@@ -2771,19 +2715,19 @@ msgstr ""
 msgid "Instructions updated successfully"
 msgstr ""
 
-#: site/admin/ripeImportTelnet.php:48
+#: site/admin/RIPE / ARINImportTelnet.php:48
 msgid "No subnets found"
 msgstr ""
 
-#: site/admin/ripeImportTelnet.php:56
+#: site/admin/RIPE / ARINImportTelnet.php:56
 msgid "I found the following routes belonging to AS"
 msgstr ""
 
-#: site/admin/ripeImportTelnet.php:69
+#: site/admin/RIPE / ARINImportTelnet.php:69
 msgid "Remove this subnet"
 msgstr ""
 
-#: site/admin/ripeImportTelnet.php:79
+#: site/admin/RIPE / ARINImportTelnet.php:79
 msgid "select section"
 msgstr ""
 
@@ -2853,7 +2797,7 @@ msgstr ""
 #: site/admin/customIPFieldsOrder.php:15
 #: site/admin/customVLANFieldsOrder.php:15
 #: site/admin/customUserFieldsOrder.php:15
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr ""
 
 #: site/admin/customSubnetFieldsOrder.php:19
@@ -2970,11 +2914,11 @@ msgstr ""
 msgid "Logs cleared successfully"
 msgstr ""
 
-#: site/admin/ripeImportResult.php:66
+#: site/admin/RIPE / ARINImportResult.php:66
 msgid "Failed to import subnet"
 msgstr ""
 
-#: site/admin/ripeImportResult.php:76
+#: site/admin/RIPE / ARINImportResult.php:76
 msgid "Please fix the following errors before inserting"
 msgstr ""
 
@@ -3248,7 +3192,7 @@ msgid "Truncating network will remove all IP addresses, that belong to selected 
 msgstr ""
 
 #: site/admin/manageSubnetTruncateSave.php:23
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr ""
 
 #: site/admin/usersEditEmailNotif.php:23
@@ -3592,7 +3536,7 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
-#: site/admin/languages.php
+#: site/admin/languages
 msgid "Manage translations"
 msgstr ""
 
@@ -3704,31 +3648,31 @@ msgstr ""
 msgid "IP delete successful"
 msgstr ""
 
-#: site/admin/subnetDetailsSlaves.php
+#: site/admin/subnetDetailsSlaves.php:134
 msgid "You do not have permissions to truncate subnet"
 msgstr ""
 
-#: site/admin/manageDevicesEditResult.php
+#: site/admin/manageDevicesEditResult
 msgid "Failed to add device"
 msgstr ""
 
-#: site/admin/manageDevicesEditResult.php
+#: site/admin/manageDevicesEditResult
 msgid "Failed to edit device"
 msgstr ""
 
-#: site/admin/manageDevicesEditResult.php
+#: site/admin/manageDevicesEditResult
 msgid "Failed to delete device"
 msgstr ""
 
-#: site/admin/manageDevicesEditResult.php
+#: site/admin/manageDevicesEditResult
 msgid "Device add successfull"
 msgstr ""
 
-#: site/admin/manageDevicesEditResult.php
+#: site/admin/manageDevicesEditResult
 msgid "Device edit successfull"
 msgstr ""
 
-#: site/admin/manageDevicesEditResult.php
+#: site/admin/manageDevicesEditResult
 msgid "Device delete successfull"
 msgstr ""
 
@@ -3858,7 +3802,7 @@ msgstr ""
 msgid "Ping hosts inside subnet to check availability"
 msgstr ""
 
-#: site/ipaddr/subnetDetials.php
+#: site/ipaddr/subnetDetails.php
 msgid "Hosts check"
 msgstr ""
 
@@ -4009,6 +3953,11 @@ msgstr ""
 #: site/ipaddr/subnetScan.php
 msgid "Invalid ping path"
 msgstr ""
+
+
+
+
+
 
 #: site/admin/settings.php
 msgid "Display settings"
@@ -4248,7 +4197,7 @@ msgstr ""
 msgid "Required field"
 msgstr ""
 
-#: site/admin/custopmIPFields.php
+#: site/admin/customIPFields.php
 msgid "Required"
 msgstr ""
 
@@ -4341,7 +4290,10 @@ msgstr ""
 msgid "Delete folder"
 msgstr ""
 
-#: site/admin/userADsearchForm.php
+#: site/admin/CSVimportSubmit.php
+msgid "Errors marked with red will be ignored from importing"
+msgstr ""
+
 msgid "Search user in AD"
 msgstr ""
 
@@ -4389,6 +4341,9 @@ msgid "No changelog entries are available for this subnet"
 msgstr ""
 
 msgid "No changelog entries are available for this section"
+msgstr ""
+
+msgid "No changelog entries are available"
 msgstr ""
 
 #: site/ipaddr/ipDetails.php
@@ -4587,11 +4542,11 @@ msgstr ""
 msgid "Sender mail"
 msgstr ""
 
-#: site/admin/settings.php
+#: site/admin.settings.php
 msgid "Set administrator name"
 msgstr ""
 
-msgid "Set administrator email"
+msgid "Set administrator e-mail"
 msgstr ""
 
 #: site/admin/verifyDatabase.php
@@ -4628,17 +4583,14 @@ msgstr ""
 msgid "Sort by vendor"
 msgstr ""
 
+msgid "Select yes to receive notification change mail for"
+msgstr ""
+
+msgid "IP edited, Subnet edited, State change"
+msgstr ""
+
 #: site/admin/userEditPrint.php
 msgid "Mail State changes"
-msgstr ""
-
-msgid "Select yes to receive notification change mail for State change"
-msgstr ""
-
-msgid "Mail Changelog"
-msgstr ""
-
-msgid "Select yes to receive notification change mail for changelog"
 msgstr ""
 
 #: site/admin/usersEditPrint.php
@@ -4719,17 +4671,6 @@ msgstr ""
 
 msgid "Discover new hosts in this subnet"
 msgstr ""
-
-
-## 1.18.00
-
-
-
-
-
-
-### 1.18.006 ###
-
 
 msgid "Invalid ID"
 msgstr ""
@@ -4941,9 +4882,6 @@ msgstr ""
 msgid "No subnets"
 msgstr ""
 
-msgid "No changelog entries are available"
-msgstr ""
-
 msgid "Device details"
 msgstr ""
 
@@ -4972,9 +4910,6 @@ msgid "Number of VLANs"
 msgstr ""
 
 msgid "Invalid widget"
-msgstr ""
-
-msgid "No $type hosts configured"
 msgstr ""
 
 msgid "Loading statistics"
@@ -5173,9 +5108,6 @@ msgid "FQDN domain name"
 msgstr ""
 
 msgid "Master NS"
-msgstr ""
-
-msgid "NULL"
 msgstr ""
 
 msgid "Domain type"
@@ -5610,7 +5542,7 @@ msgstr ""
 msgid "For AD/LDAP connection phpipam is using adLDAP, for documentation please check "
 msgstr ""
 
-msgid "First create new user under user management with <u>same username as on AD</u> and set authention type to one of available methods."
+msgid "First create new user under user management with <u>same username as on AD</u> and set authention typeto one of available methods."
 msgstr ""
 
 msgid "Failed to edit authentication method"
@@ -5712,10 +5644,10 @@ msgstr ""
 msgid "Manage permissions for folder"
 msgstr ""
 
-msgid "Only subnets that have no nested subnets can be splitted"
+msgid "Only subnets that have no nested subnets can be split"
 msgstr ""
 
-msgid "Subnet too small to be splitted"
+msgid "Subnet too small to be split"
 msgstr ""
 
 msgid "Name prefix"
@@ -5910,9 +5842,6 @@ msgstr ""
 msgid "Invalid file type"
 msgstr ""
 
-msgid "Errors marked with red will be ignored from importing"
-msgstr ""
-
 msgid "Invalid subnet ID"
 msgstr ""
 
@@ -6009,9 +5938,6 @@ msgstr ""
 msgid "Invalid Network!"
 msgstr ""
 
-msgid "Subnet $new_subnet overlaps with"
-msgstr ""
-
 msgid "Mask must be an integer"
 msgstr ""
 
@@ -6057,7 +5983,8 @@ msgstr ""
 msgid "No subnets belong to this device"
 msgstr ""
 
-# 1.19
+### 1.19.000 ###
+
 msgid "Log files are sent to syslog"
 msgstr ""
 
@@ -6115,7 +6042,7 @@ msgstr ""
 msgid "Enter scan agent name"
 msgstr ""
 
-msgid "Agent description"
+msgid "Agent description'"
 msgstr ""
 
 msgid "Agent type"
@@ -6152,230 +6079,6 @@ msgid "Cannot remove localhost scan agent"
 msgstr ""
 
 msgid "Scan agent references removed"
-msgstr ""
-
-### 1.19.002 ###
-
-msgid "Enable Firewall Zones"
-msgstr ""
-
-msgid "Enable or disable firewall zone management module"
-msgstr ""
-
-msgid "Firewall zone management"
-msgstr ""
-
-msgid "Invalid zone alias value."
-msgstr ""
-
-msgid "Invalid interface."
-msgstr ""
-
-msgid "Invalid zone ID."
-msgstr ""
-
-msgid "Invalid mapping ID."
-msgstr ""
-
-msgid "Cannot add mapping"
-msgstr ""
-
-msgid "Mapping modified successfully"
-msgstr ""
-
-msgid "Invalid ID. Do not manipulate the POST values!"
-msgstr ""
-
-msgid "Invalid action. Do not manipulate the POST values!"
-msgstr ""
-
-msgid "Add a mapping between a firewall device and a firewall zone"
-msgstr ""
-
-msgid "Zone to map"
-msgstr ""
-
-msgid "Select a firewall zone"
-msgstr ""
-
-msgid "Firewall to map"
-msgstr ""
-
-msgid "Select firewall"
-msgstr ""
-
-msgid "Interface"
-msgstr ""
-
-msgid "Create Firewall zone mapping"
-msgstr ""
-
-msgid "Firewall interface"
-msgstr ""
-
-msgid "Zone alias"
-msgstr ""
-
-msgid "Local zone alias"
-msgstr ""
-
-msgid "You are about to remove the firewall to zone mapping!"
-msgstr ""
-
-msgid "Zone"
-msgstr ""
-
-msgid "Alias"
-msgstr ""
-
-msgid "Devicename"
-msgstr ""
-
-msgid "No firewall zones configured"
-msgstr ""
-
-msgid "Invalid zone name length parameter. A valid valid value is between 3 and 31"
-msgstr ""
-
-msgid "Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
-msgstr ""
-
-msgid "Invalid separator. Only &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
-msgstr ""
-
-msgid "Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
-msgstr ""
-
-msgid "Invalid zone generator method. Do not manipulate the POST values!"
-msgstr ""
-
-msgid "Invalid zone generator types [decimal]. Do not manipulate the POST values!"
-msgstr ""
-
-msgid "Invalid zone generator types [hex]. Do not manipulate the POST values!"
-msgstr ""
-
-msgid "Invalid zone generator types [text]. Do not manipulate the POST values!"
-msgstr ""
-
-msgid "Invalid padding value. Use the checkbox to set the padding value to on or off."
-msgstr ""
-
-msgid "Invalid device type."
-msgstr ""
-
-msgid "Maximum zone name length"
-msgstr ""
-
-msgid "Choose a maximum lenght of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
-msgstr ""
-
-msgid "IPv4 address type alias"
-msgstr ""
-
-msgid "IPv6 address type alias"
-msgstr ""
-
-msgid "Address type aliases are used to indicate a IPv4 or IPv6 address object."
-msgstr ""
-
-msgid "The separator is used to keep the name of address objects tidy."
-msgstr ""
-
-msgid "Own zone indicator"
-msgstr ""
-
-msgid "The indicator is used to indicate a zone wether is owned by the company or by a customer.<br>It is the leading character of the zone name but will be separated from the zone name in the database."
-msgstr ""
-
-msgid "Customer zone indicator"
-msgstr ""
-
-msgid "Zone generator method"
-msgstr ""
-
-msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own unique zone names you can choose the option &quot;text&quot."
-msgstr ""
-
-msgid "Zone name padding"
-msgstr ""
-
-msgid "Insert leading zeros into the zone name if you want to have a constant length of your zone name.<br>This setting will be ignored if you use the \"text\" zone name generator."
-msgstr ""
-
-msgid "Zone name strict mode"
-msgstr ""
-
-msgid "Zone name strict mode is enabled by default.<br>If you like to use your own zone names with the &quot;text&quot; mode you may uncheck this to have not unique zone names."
-msgstr ""
-
-msgid "Firewall device Type"
-msgstr ""
-
-msgid "Select the appropriate device type to match firewall devices."
-msgstr ""
-
-msgid "Invalid zone name value."
-msgstr ""
-
-msgid "Invalid indicator ID."
-msgstr ""
-
-msgid "Invalid section ID."
-msgstr ""
-
-msgid "Invalid subnet ID."
-msgstr ""
-
-msgid "Invalid L2 domain ID."
-msgstr ""
-
-msgid "Invalid VLAN ID."
-msgstr ""
-
-msgid "Invalid generator ID."
-msgstr ""
-
-msgid "Invalid padding setting."
-msgstr ""
-
-msgid "Cannot generate zone name"
-msgstr ""
-
-msgid "Cannot validate zone name"
-msgstr ""
-
-msgid "Cannot add zone"
-msgstr ""
-
-msgid "Zone modified successfully"
-msgstr ""
-
-msgid "Add a firewall zone"
-msgstr ""
-
-msgid "Zone name (Only alphanumeric and special characters like .-_ and space.)"
-msgstr ""
-
-msgid "The zone name will be automatically generated"
-msgstr ""
-
-msgid "Zone name"
-msgstr ""
-
-msgid "Own zone"
-msgstr ""
-
-msgid "Customer zone"
-msgstr ""
-
-msgid "Removing this firewall zone will also remove all referenced mappings!"
-msgstr ""
-
-msgid "Create Firewall zone"
-msgstr ""
-
-msgid "Firewall zone and device mappings"
 msgstr ""
 
 msgid "Base DN for your directory"
@@ -6576,7 +6279,7 @@ msgstr ""
 msgid "No new subnets found"
 msgstr ""
 
-msgid "SNMP module disbled"
+msgid "SNMP module disabled"
 msgstr ""
 
 msgid "No devices for SNMP ARP query available"
@@ -6730,6 +6433,12 @@ msgid "Set phpipam instructions for end users"
 msgstr ""
 
 msgid "NAT settings"
+msgstr ""
+
+msgid "RIPE import"
+msgstr ""
+
+msgid "Import subnets from RIPE"
 msgstr ""
 
 msgid "Select which default address fields to display"
@@ -7170,6 +6879,9 @@ msgstr ""
 msgid "Automatic"
 msgstr ""
 
+msgid "This script imports subnets from RIPE database for specific AS. Enter desired AS to search for subnets"
+msgstr ""
+
 msgid "Invalid AS"
 msgstr ""
 
@@ -7359,7 +7071,7 @@ msgstr ""
 msgid "Require unique subnets"
 msgstr ""
 
-msgid "Require unique subnets accross all sections"
+msgid "Require unique subnets across all sections"
 msgstr ""
 
 msgid "Set maximum number of concurrent ICMP checks (default 128)"
@@ -7425,13 +7137,13 @@ msgstr ""
 msgid "Set subnet alert threshold"
 msgstr ""
 
-msgid "Failed to set subnet permissons for subnet"
+msgid "Failed to set subnet permissions for subnet"
 msgstr ""
 
 msgid "No result"
 msgstr ""
 
-msgid "Subnet splitted successfully"
+msgid "Subnet split successfully"
 msgstr ""
 
 msgid "Copy custom field values"
@@ -7696,9 +7408,6 @@ msgid "Address permissions"
 msgstr ""
 
 msgid "General"
-msgstr ""
-
-msgid "Availability"
 msgstr ""
 
 msgid "Rack details"
@@ -8256,7 +7965,7 @@ msgstr ""
 msgid "Upgrade"
 msgstr ""
 
-msgid "Object is Natted"
+msgid "Object is NATted"
 msgstr ""
 
 msgid "Invalid generator ID"
@@ -8305,4 +8014,503 @@ msgid "Attributes not found"
 msgstr ""
 
 msgid "phpIPAM settings"
+msgstr ""
+
+
+### Customers module ###
+
+msgid "All customers"
+msgstr ""
+
+msgid "Add customer"
+msgstr ""
+
+msgid "Customer"
+msgstr ""
+
+msgid "Customers"
+msgstr ""
+
+msgid "Select customer"
+msgstr ""
+
+msgid "Edit customer"
+msgstr ""
+
+msgid "Delete customer"
+msgstr ""
+
+msgid "Contact"
+msgstr ""
+
+msgid "Customer title"
+msgstr ""
+
+msgid "Customer address"
+msgstr ""
+
+msgid "Contact details"
+msgstr ""
+
+msgid "Customer contact details"
+msgstr ""
+
+msgid "Postcode"
+msgstr ""
+
+msgid "City"
+msgstr ""
+
+msgid "Contact person"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "Random notes"
+msgstr ""
+
+msgid "Customers module"
+msgstr ""
+
+msgid "Enable or disable customers module for customer management"
+msgstr ""
+
+
+
+### 2FA ###
+
+msgid "2FA authentication"
+msgstr ""
+
+msgid "2FA provider"
+msgstr ""
+
+msgid "Current 2FA provider"
+msgstr ""
+
+msgid "2FA users"
+msgstr ""
+
+msgid "2FA status"
+msgstr ""
+
+msgid "2FA status legend"
+msgstr ""
+
+msgid "2FA is enabled"
+msgstr ""
+
+msgid "2FA disabled"
+msgstr ""
+
+msgid "2fa is enabled, but secret is not set. User will be given new secret upon first login"
+msgstr ""
+
+msgid "Reset secret"
+msgstr ""
+
+msgid "2FA name"
+msgstr ""
+
+msgid "Name for 2fa application that will be displayed"
+msgstr ""
+
+msgid "2FA length"
+msgstr ""
+
+msgid "Length of 2FA secret (26 to 32)"
+msgstr ""
+
+msgid "2FA user change"
+msgstr ""
+
+msgid "Enabled, not activated"
+msgstr ""
+
+msgid "Can users change 2fa settings for their account"
+msgstr ""
+
+msgid "Apply to all users"
+msgstr ""
+
+msgid "Force all users to use 2fa on next login or disable 2fa for all users"
+msgstr ""
+
+
+
+
+### Password policy ###
+
+msgid "phpIPAM password policy settings"
+msgstr ""
+
+msgid "Here you can set password policy for user authentication"
+msgstr ""
+
+msgid "Minimum length"
+msgstr ""
+
+msgid "Minimum password length"
+msgstr ""
+
+msgid "Maximum length"
+msgstr ""
+
+msgid "Maximum password length"
+msgstr ""
+
+msgid "Minimum numbers"
+msgstr ""
+
+msgid "Minimum number of numbers"
+msgstr ""
+
+msgid "Minimum letters"
+msgstr ""
+
+msgid "Minimum number of letters"
+msgstr ""
+
+msgid "Minimum lowercase letter"
+msgstr ""
+
+msgid "Minimum number of lowercase letters"
+msgstr ""
+
+msgid "Minimum uppercase letter"
+msgstr ""
+
+msgid "Minimum number of uppercase letters"
+msgstr ""
+
+msgid "Minimum symbols"
+msgstr ""
+
+msgid "Minimum number of symbols"
+msgstr ""
+
+msgid "Maximum symbols"
+msgstr ""
+
+msgid "Maximum number of symbols"
+msgstr ""
+
+msgid "Symbols"
+msgstr ""
+
+msgid "List of allowed symbols. csv separated."
+msgstr ""
+
+msgid "Enforce"
+msgstr ""
+
+msgid "Require all users to change password upon next login."
+msgstr ""
+
+
+
+
+
+### Circuits ####
+
+msgid "Circuit options"
+msgstr ""
+
+msgid "Physical Circuits"
+msgstr ""
+
+msgid "Logical Circuits"
+msgstr ""
+
+msgid "Circuit providers"
+msgstr ""
+
+msgid "Circuit map"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Point A"
+msgstr ""
+
+msgid "Point B"
+msgstr ""
+
+msgid "Provider"
+msgstr ""
+
+msgid "Circuit type"
+msgstr ""
+
+msgid "Capacity"
+msgstr ""
+
+msgid "Purpose"
+msgstr ""
+
+msgid "Circuit count"
+msgstr ""
+
+msgid "Members"
+msgstr ""
+
+msgid "Logical circuit physical members"
+msgstr ""
+
+msgid "Available physical circuits"
+msgstr ""
+
+
+
+### Misc 1.4 ###
+
+msgid "Theme"
+msgstr ""
+
+msgid "Select UI theme"
+msgstr ""
+
+msgid "dark"
+msgstr ""
+
+msgid "white"
+msgstr ""
+
+msgid "Compress text in top menu"
+msgstr ""
+
+msgid "Bandwidth calculator"
+msgstr ""
+
+msgid "TCP Window size"
+msgstr ""
+
+msgid "Delay"
+msgstr ""
+
+msgid "Filesize"
+msgstr ""
+
+msgid "Transfer time"
+msgstr ""
+
+msgid "IP Request"
+msgstr ""
+
+msgid "Active IP address requests."
+msgstr ""
+
+msgid "Enable Firewall Zones"
+msgstr ""
+
+msgid "Enable or disable firewall zone management module"
+msgstr ""
+
+msgid "Allow duplicate vlans"
+msgstr ""
+
+msgid "Allow duplicated vlans inside L2 domain"
+msgstr ""
+
+msgid "Decode MAC vendor"
+msgstr ""
+
+msgid "Decode MAC address vendor for addresses"
+msgstr ""
+
+msgid "Module permissions"
+msgstr ""
+
+msgid "Scan agents"
+msgstr ""
+
+
+### 1.6.1
+
+msgid "passkey"
+msgstr ""
+
+msgid "Passkey"
+msgstr ""
+
+msgid "2fa account status"
+msgstr ""
+
+msgid "2fa disabled"
+msgstr ""
+
+msgid "2fa enabled"
+msgstr ""
+
+msgid "2fa status"
+msgstr ""
+
+msgid "Account"
+msgstr ""
+
+msgid "Check passkey you want to remove"
+msgstr ""
+
+msgid "Details for your preferred authenticator application are below. Please write down your details, otherwise you will not be able to login to phpipam"
+msgstr ""
+
+msgid "Disable 2fa for user"
+msgstr ""
+
+msgid "Enable Passkeys"
+msgstr ""
+
+msgid "Enable Vaults"
+msgstr ""
+
+msgid "Enable Vaults for storing encrypted information"
+msgstr ""
+
+msgid "Enable passkeys for passwordless login"
+msgstr ""
+
+msgid "failed"
+msgstr ""
+
+msgid "Failed passkey login"
+msgstr ""
+
+msgid "has logged out"
+msgstr ""
+
+msgid "Here you can change settings for two-factor authentication and get your 2fa secret."
+msgstr ""
+
+msgid "Invalid theme"
+msgstr ""
+
+msgid "logged in"
+msgstr ""
+
+msgid "Login with a passkey"
+msgstr ""
+
+msgid "Only passkey authentication is possible for this account"
+msgstr ""
+
+msgid "Passkey login only"
+msgstr ""
+
+msgid "Passkey only"
+msgstr ""
+
+msgid "Passkey required for login"
+msgstr ""
+
+msgid "Passkeys"
+msgstr ""
+
+msgid "Select to only allow account login with passkey"
+msgstr ""
+
+msgid "successful"
+msgstr ""
+
+msgid "There are no passkeys set for user. Resetting passkey login only to false."
+msgstr ""
+
+msgid "Two-factor authentication"
+msgstr ""
+
+msgid "User account is disabled"
+msgstr ""
+
+msgid "User permissions for phpipam modules"
+msgstr ""
+
+msgid "You can also scan following QR code with your preferred authenticator application"
+msgstr ""
+
+msgid "You can login to your account with normal authentication method only untill you create passkeys."
+msgstr ""
+
+msgid "You can only login to your account using passkeys"
+msgstr ""
+
+msgid "Passwordless authentication"
+msgstr ""
+
+msgid "Account details"
+msgstr ""
+
+msgid "You can login to your account with with passkeys only"
+msgstr ""
+
+msgid "This can be changed under Account details tab"
+msgstr ""
+
+msgid "Your passkeys"
+msgstr ""
+
+msgid "Added on"
+msgstr ""
+
+msgid "Last used"
+msgstr ""
+
+msgid "You authenticated with this passkey"
+msgstr ""
+
+msgid "Add a passkey"
+msgstr ""
+
+msgid "Rename"
+msgstr ""
+
+msgid "Here you can manage passkey authentication for your account"
+msgstr ""
+
+msgid "Passkeys are a password replacement that validates your identity using touch, facial recognition, a device password, or a PIN"
+msgstr ""
+
+msgid "Name your passkey"
+msgstr ""
+
+msgid "Duplicates"
+msgstr ""
+
+msgid "Duplicated subnets"
+msgstr ""
+
+msgid "Duplicated hosts"
+msgstr ""
+
+msgid "No duplicate subnets found"
+msgstr ""
+
+msgid "Routing"
+msgstr ""
+
+msgid "BGP routing"
+msgstr ""
+
+msgid "Add peer"
+msgstr ""
+
+msgid "Peer name"
+msgstr ""
+
+msgid "Peer AS"
+msgstr ""
+
+msgid "Local AS"
+msgstr ""
+
+msgid "Peer address"
+msgstr ""
+
+msgid "Local address"
+msgstr ""
+
+msgid "Local Address"
+msgstr ""
+
+msgid "BGP type"
 msgstr ""

@@ -16,6 +16,12 @@ $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 <?php } ?>
 </div>
 
+<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) { ?>
+<div class="btn-group pull-right" style="margin-bottom:10px;">
+	<div class="hidden"><select name="dataType"><option value='vlan' selected="selected">VLAN</option></select></div>
+	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title="Export data entries for the selected type"><i class="fa fa-download"></i> Export</button>
+</div>
+<?php } ?>
 
 <table class="table sorted nosearch nopagination table-striped table-top table-condensed table-auto-wide" data-cookie-id-table='tools_l2_all'>
 <!-- headers -->
@@ -33,11 +39,11 @@ $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 <tbody>
 <!-- all domains -->
 <tr>
-	<td class='border-bottom'><strong><a href="<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>"> <?php print _('All domains'); ?></a></strong></td>
+	<td class='border-bottom'><strong><a href="<?php print create_link($GET->page, $GET->section, "all"); ?>"> <?php print _('All domains'); ?></a></strong></td>
 	<td class='border-bottom'><?php print _('List of all VLANs in all domains'); ?></td>
 	<td class='border-bottom'></td>
 	<td class='border-bottom'><span class='text-muted'><?php print _('All sections'); ?></span></td>
-	<td class='border-bottom'><a class='btn btn-xs btn-default' href='<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>'>Show VLANs</a></td>
+	<td class='border-bottom'><a class='btn btn-xs btn-default' href='<?php print create_link($GET->page, $GET->section, "all"); ?>'>Show VLANs</a></td>
 	<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_RW) { ?><td class='border-bottom'></td><?php } ?>
 </tr>
 
@@ -51,13 +57,13 @@ foreach($vlan_domains as $domain) {
 	if($domain->id==1) {
 		$sections = "All sections";
 	}
-	elseif(strlen(@$domain->permissions==0)) {
+	elseif(is_blank(@$domain->permissions)) {
 		$sections = "None";
 	}
 	else {
 		//explode
-		unset($sec);
-		$sections_tmp = explode(";", $domain->permissions);
+		$sec = [];
+		$sections_tmp = pf_explode(";", $domain->permissions);
 		foreach($sections_tmp as $t) {
 			//fetch section
 			$tmp_section = $Sections->fetch_section(null, $t);
@@ -74,18 +80,18 @@ foreach($vlan_domains as $domain) {
 
 	// print
 	print "<tr class='text-top'>";
-	print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $domain->id)."'><i class='fa fa-cloud prefix'></i> $domain->name</a></strong></td>";
+	print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, $GET->section, $domain->id)."'><i class='fa fa-cloud prefix'></i> $domain->name</a></strong></td>";
 	print "	<td>$domain->description</td>";
 	print "	<td>$cnt "._("VLANs")."</td>";
 	print "	<td><span class='text-muted'>$sections</span></td>";
-	print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $domain->id)."'>Show VLANs</a></td>";
+	print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, $GET->section, $domain->id)."'>Show VLANs</a></td>";
 
     // links
     print "<td class='actions'>";
     $links = [];
     if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
         $links[] = ["type"=>"header", "text"=>_("Show")];
-        $links[] = ["type"=>"link", "text"=>_("Show domain VLANs"), "href"=>create_link($_GET['page'], "vlan", $domain->id), "icon"=>"eye", "visible"=>"dropdown"];
+        $links[] = ["type"=>"link", "text"=>_("Show domain VLANs"), "href"=>create_link($GET->page, "vlan", $domain->id), "icon"=>"eye", "visible"=>"dropdown"];
         $links[] = ["type"=>"divider"];
     }
     if($User->get_module_permissions ("vlan")>=User::ACCESS_RW) {

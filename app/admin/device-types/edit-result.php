@@ -18,31 +18,28 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
-# strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
-
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "device_types", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "device_types", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['tid'])) 	{ $Result->show("danger", _("Invalid ID"), true); }
+if($POST->action!="add" && !is_numeric($POST->tid)) 	{ $Result->show("danger", _("Invalid ID"), true); }
 
 # name must be present! */
-if($_POST['tname'] == "") 									{ $Result->show("danger", _('Name is mandatory').'!', false); }
+if($POST->tname == "") 									{ $Result->show("danger", _('Name is mandatory').'!', false); }
 
 # create array of values for modification
-$values = array("tid"=>@$_POST['tid'],
-				"tname"=>$_POST['tname'],
-				"tdescription"=>@$_POST['tdescription']);
+$values = array("tid"=>$POST->tid,
+				"tname"=>$POST->tname,
+				"tdescription"=>$POST->tdescription);
 
 # update
-if(!$Admin->object_modify("deviceTypes", $_POST['action'], "tid", $values)) {
-    $Result->show("danger", _("Failed to")." "._($_POST["action"])." "._("device type").'!', false);
+if(!$Admin->object_modify("deviceTypes", $POST->action, "tid", $values)) {
+    $Result->show("danger", _("Failed to")." ".$User->get_post_action()." "._("device type").'!', false);
 }
 else {
-    $Result->show("success", _("Device type")." "._($_POST["action"])." "._("successful").'!', false);
+    $Result->show("success", _("Device type")." ".$User->get_post_action()." "._("successful").'!', false);
 }
 
-if($_POST['action']=="delete") {
+if($POST->action=="delete") {
     $Admin->remove_object_references ("devices", "type", $values["tid"]);
 }

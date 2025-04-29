@@ -3,6 +3,9 @@
 # Check we have been included and not called directly
 require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
+# check if site is demo
+$User->is_demo();
+
 # Don't corrupt output with php errors!
 disable_php_errors();
 
@@ -14,13 +17,13 @@ disable_php_errors();
 print "<h5>"._('Scan results').":</h5><hr>";
 
 # verify that user has write permissionss for subnet
-if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
+if($Subnets->check_permission ($User->user, $POST->subnetId) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
 
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disabled"), true); }
 # subnet check
-$subnet = $Subnets->fetch_object ("subnets", "id", $_POST['subnetId']);
+$subnet = $Subnets->fetch_object ("subnets", "id", $POST->subnetId);
 if ($subnet===false)                            { $Result->show("danger", _("Invalid subnet Id"), true);  }
 
 # fetch vlan
@@ -41,7 +44,7 @@ if (sizeof($all_subnet_hosts)>0) {
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);
+$selected_ip_fields = pf_explode(";", $selected_ip_fields);
 
 # fetch devices that use get_routing_table query
 $devices_used_arp = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_arp_table%", "id", true, true);
@@ -51,7 +54,7 @@ $devices_used_mac = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "
 if ($devices_used_arp !== false) {
     foreach ($devices_used_arp as $d) {
         // get possible sections
-        $permitted_sections = explode(";", $d->sections);
+        $permitted_sections = pf_explode(";", $d->sections);
         // check
         if (in_array($subnet->sectionId, $permitted_sections)) {
             $permitted_devices_arp[] = $d;
@@ -62,7 +65,7 @@ if ($devices_used_arp !== false) {
 if ($devices_used_mac !== false) {
     foreach ($devices_used_mac as $d) {
         // get possible sections
-        $permitted_sections = explode(";", $d->sections);
+        $permitted_sections = pf_explode(";", $d->sections);
         // check
         if (in_array($subnet->sectionId, $permitted_sections)) {
             $permitted_devices_mac[] = $d;
@@ -280,7 +283,7 @@ else {
     		print "</td>";
     		// info
     		print "<td>";
-    		if(strlen(@$ip['port_alias'])>0)
+    		if(!is_blank(@$ip['port_alias']))
     		print "	<i class='fa fa-info-circle' rel='tooltip' title='Interface description: $ip[port_alias]'></i>";
     		print "</td>";
 			// custom
@@ -304,7 +307,7 @@ else {
 	print "<tr>";
 	print "	<td colspan='$colspan'>";
 	print "<div id='subnetScanAddResult'></div>";
-	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='snmp-mac' data-subnetId='".$_POST['subnetId']."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
+	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveScanResults' data-script='snmp-mac' data-subnetId='".escape_input($POST->subnetId)."'><i class='fa fa-plus'></i> "._("Add discovered hosts")."</a>";
 	print "	</td>";
 	print "</tr>";
 
@@ -332,6 +335,6 @@ print "</span>";
 print "</div>";
 
 # show debug?
-if($_POST['debug']==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }
+if($POST->debug==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }
 
 ?>

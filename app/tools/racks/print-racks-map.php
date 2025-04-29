@@ -58,19 +58,19 @@ else {
                 else {
                     $location = $Tools->fetch_object ("locations", "id", $location_id);
                 }
-                $class = isset($_GET['sPage']) && $_GET['sPage']==$location_id ? "active" : "";
+                $class = isset($GET->sPage) && $GET->sPage==$location_id ? "active" : "";
                 print " <li role='presentation' class='$class'><a href='".create_link("tools", "racks", "map", $location_id)."'>$location->name</a></li>";
 
             }
             print "</ul>";
         }
         else {
-            $_GET['sPage'] = 0;
+            $GET->sPage = 0;
         }
 
         $m=1;
         // go through locations and print racks
-        $sPage = isset($_GET['sPage']) ? $_GET['sPage'] : null;
+        $sPage = isset($GET->sPage) ? $GET->sPage : null;
         foreach ($all_rack_locations as $location_id=>$all_racks) {
             // only if match
             if($location_id==$sPage) {
@@ -91,7 +91,7 @@ else {
                     print "<h4>$m.) ".$location->name."</h4><hr>";
                     else
                     print "<h4><a href='".create_link("tools", "locations", $location_id)."'>$m.) ".$location->name."</a></h4><hr>";
-                    print strlen($location->description)>0 ? "<span class='text-muted'>$location->description</span>" : "";
+                    print !is_blank($location->description) ? "<span class='text-muted'>$location->description</span>" : "";
                     // racks
                     print "<div style='margin-bottom:30px;'>";
                     foreach ($all_racks as $r) {

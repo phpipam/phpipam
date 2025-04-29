@@ -45,7 +45,7 @@ if($firewallZones) {
 		}
 		# set the loop counter
 		$i = 1;
-		if ($zoneObject->network) {
+		if (isset($zoneObject->network)) {
 			foreach ($zoneObject->network as $key => $network) {
 				print '<tr class="border-top">';
 				if ($i === 1) {
@@ -120,4 +120,3 @@ if($firewallZones) {
 	# print an info if there are no zones in the database
 	$Result->show("info", _("No firewall zones configured"), false);
 }
-?>

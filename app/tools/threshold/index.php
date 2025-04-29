@@ -93,7 +93,7 @@ else {
         # set class
         $aclass = $s->usage->usedhosts_percent > $s->threshold ? "progress-bar-danger" : "progress-bar-info";
         # limit description
-        $s->description = strlen($s->description)>0  ? " (".$s->description.")" : "";
+        $s->description = !is_blank($s->description)  ? " (".$s->description.")" : "";
         # limit class
         $limit_class = $s->usage->until_threshold<0 ? "progress-limit-negative" : "progress-limit";
 

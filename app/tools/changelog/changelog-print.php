@@ -7,23 +7,20 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# strip tags - XSS
-$_GET  = $User->strip_input_tags ($_GET);
-
 # validate subnetId parameter - meaning cfilter
-if(isset($_GET['subnetId'])) {
-    // validate $_GET['subnetId']
-    if(!preg_match('/^[A-Za-z0-9.#*% <>_ \\-]+$/', $_GET['subnetId']))  { $Result->show("danger", _("Invalid search string")."!", true); }
+if(isset($GET->subnetId)) {
+    // validate $GET->subnetId
+    if(!preg_match('/^[A-Za-z0-9.#*%<>_ \\-]+$/', $GET->subnetId))  { $Result->show("danger", _("Invalid search string")."!", true); }
 }
 
 # change parameters - search string provided
 $input_cfilter = '';
-if(isset($_GET['sPage'])) {
-    $input_cfilter = escape_input(urldecode($_GET['subnetId']));
-    $input_climit  = (int) $_GET['sPage'];
+if(isset($GET->sPage)) {
+    $input_cfilter = escape_input(urldecode($GET->subnetId));
+    $input_climit  = (int) $GET->sPage;
 }
-elseif(isset($_GET['subnetId'])) {
-    $input_climit  = (int) $_GET['subnetId'];
+elseif(isset($GET->subnetId)) {
+    $input_climit  = (int) $GET->subnetId;
 }
 else {
     $input_climit  = 50;
@@ -81,7 +78,7 @@ else {
 			# format diff
     		$changelog = str_replace("\r\n", "<br>",$l['cdiff']);
     		$changelog = str_replace("\n", "<br>",$changelog);
-    		$changelog = array_filter(explode("<br>", $changelog));
+    		$changelog = array_filter(pf_explode("<br>", $changelog));
 
             $diff = array();
 
@@ -102,8 +99,8 @@ else {
         		}
 
         		// field
-        		$field = explode(":", $c);
-        	    $value = isset($field[1]) ? explode("=>", $field[1]) : [null];
+        		$field = array_pad(explode(":", $c), 2 , '');
+        	    $value = array_pad(explode("=>", $field[1]), 2, '');
 
         	    $field = trim(str_replace(array("[","]"), "", $field[0]));
         	    if(is_array(@$Log->changelog_keys[$type])) {
@@ -134,7 +131,7 @@ else {
 			print "	<td>$l[ctype]</td>";
 
 			# subnet, section or ip address
-			if(strlen($l['tid'])==0) {
+			if(is_blank($l['tid'])) {
 				print "<td><span class='badge badge1 badge5 alert-danger'>"._("Deleted")."</span></td>";
 			}
 			elseif($l['ctype']=="IP address")	{
@@ -163,4 +160,3 @@ else {
 	print "</tbody>";
 	print "</table>";
 }
-?>

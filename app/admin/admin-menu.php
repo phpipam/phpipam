@@ -18,10 +18,10 @@ foreach($admin_menu as $k=>$tool) {
 	print "<ul class='list-group'>";
 	foreach($tool as $t) {
 		# active?
-		$active = $_GET['section']==$t['href'] ? "active" : "";
+		$active = $GET->section==$t['href'] ? "active" : "";
 		# exception
 		if ($t['href']=="devices") {
-    		if ($_GET['section']=="device-types") {
+    		if ($GET->section=="device-types") {
         		$active = "active";
     		}
         }

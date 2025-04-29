@@ -352,7 +352,7 @@ $upgrade_queries["1.4.19"][] = "UPDATE `settings` set `dbversion` = '19';";
 #
 # Subversion 1.4.20 queries
 #
-// japanese translation
+// Japanese translation
 $upgrade_queries["1.4.20"]   = [];
 $upgrade_queries["1.4.20"][] = "-- Add Japanese translation";
 $upgrade_queries["1.4.20"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Japanese', 'ja_JP.UTF-8');";
@@ -444,9 +444,9 @@ $upgrade_queries["1.4.24"][] = "UPDATE `settings` set `dbversion` = '24';";
 #
 # Subversion 1.4.25 queries
 #
-// Traditional chinese traslation
+// Traditional Chinese translation
 $upgrade_queries["1.4.25"]   = [];
-$upgrade_queries["1.4.25"][] = "-- Add russian and Chinese translations";
+$upgrade_queries["1.4.25"][] = "-- Add Russian and Chinese translations";
 $upgrade_queries["1.4.25"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Chinese traditional (繁體中文)', 'zh_TW.UTF-8');";
 $upgrade_queries["1.4.25"][] = "-- Database version bump";
 $upgrade_queries["1.4.25"][] = "UPDATE `settings` set `dbversion` = '25';";

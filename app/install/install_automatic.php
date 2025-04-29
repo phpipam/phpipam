@@ -1,10 +1,19 @@
 <?php
+if (!defined('VERSION_VISIBLE') || Config::ValueOf('disable_installer')) { print _("Install scripts disabled"); exit(0); }
+
+require_once(dirname(__FILE__) . '/../../functions/classes/class.Crypto.php');
 $db = Config::ValueOf('db');
 
+// Manually start session as we do not have $User.
+session_start();
+
+$Crypto = new Crypto();
+$csrf = $Crypto->csrf_cookie("create", "install_execute");
+
 // add prefix - install or migrate
-$title_prefix = @$_GET['subnetId']=="migrate" ? _("migration") : _("installation");
-$text_prefix  = @$_GET['subnetId']=="migrate" ? _("migrate") : _("install");
-$filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
+$title_prefix = $GET->subnetId=="migrate" ? _("migration") : _("installation");
+$text_prefix  = $GET->subnetId=="migrate" ? _("migrate") : _("install");
+$filename	  = $GET->subnetId=="migrate" ? "MIGRATE" : "SCHEMA";
 ?>
 
 <div class="widget-dash col-xs-12 col-md-8 col-md-offset-2">
@@ -81,7 +90,7 @@ $filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
 
 			<?php
 			// file check
-			if(@$_GET['subnetId']=="migrate") {
+			if($GET->subnetId=="migrate") {
 				if(!file_exists(dirname(__FILE__)."/../../db/MIGRATE.sql")) { ?>
 					<div class="col-xs-12"><hr><div class='alert alert-danger'><?php print _("Cannot access file db/MIGRATE.sql!"); ?></div></div>
 			<?php }
@@ -104,6 +113,7 @@ $filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
 			</div>
 
 		</div>
+		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</form>
 
 

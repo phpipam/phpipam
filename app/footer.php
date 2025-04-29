@@ -11,20 +11,22 @@
 		if (defined("GIT_VCS_REF")) {
 			print " git <a href='https://github.com/phpipam/phpipam/tree/".GIT_VCS_REF."'>".GIT_VCS_REF."</a>";
 		}
-		if (phpversion() >= UNSUPPORTED_PHP_VERSION) {
-			print " "._('UNSUPPORTED_PHP_VERSION').":".phpversion();
-		}
 		?>
 	</td>
 
 	<?php
-	# custom footer message
-	if(isset($config['footer_message']) && strlen($config['footer_message'])>0) {
+	# footer messages
+	if(isset($config['footer_message']) && !is_blank($config['footer_message'])) {
 		print '<td> '.$config['footer_message'].' </td>';
+	}
+	if (isset($_SESSION['footer_warnings'])) {
+		foreach ($_SESSION['footer_warnings'] as $msg) {
+			print '<td><b>' . _('WARNING') . ': ' . $msg . '</b></td>';
+		}
 	}
 
 	# exclude install
-	if($_GET['page']!="install") { ?>
+	if($GET->page!="install") { ?>
 	<td>
 		<?php print _('In case of problems please contact').' <a href="mailto:'. $User->settings->siteAdminMail .'">'. $User->settings->siteAdminName .'</a>'; ?>
 	</td>

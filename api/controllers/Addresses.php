@@ -28,9 +28,10 @@ class Addresses_controller extends Common_api_functions  {
 	 * __construct function
 	 *
 	 * @access public
-	 * @param class $Database
-	 * @param class $Tools
-	 * @param mixed $params		// post/get values
+	 * @param PDO_Database $Database
+	 * @param Tools $Tools
+	 * @param API_params $params
+	 * @param Response $response
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
@@ -232,6 +233,11 @@ class Addresses_controller extends Common_api_functions  {
 				if($result['exit_code']==0) 			{ $Scan->ping_update_lastseen ($this->_params->id); }
 				return array("code"=>200, "data"=>$result);
 			}
+			// changelog
+			elseif ($this->_params->id2=="changelog")   {
+				return array("code"=>200, "data"=>$this->address_changelog ());
+			}
+			// default
 			else {
 				// fetch
 				$result = $this->Addresses->fetch_address ("id", $this->_params->id);
@@ -377,7 +383,7 @@ class Addresses_controller extends Common_api_functions  {
 		$this->init_object ("Admin", $this->Database);
 		$this->init_object ("Addresses", $this->Database);
 
-		# append old address details and fill details if not provided - calidate_update_parameters fetches $this->old_address
+		# append old address details and fill details if not provided - validate_update_parameters fetches $this->old_address
 		foreach ($this->old_address as $ok=>$oa) {
 			if (!array_key_exists($ok, $values)) {
 				if(!is_null($oa)) {
@@ -424,7 +430,7 @@ class Addresses_controller extends Common_api_functions  {
         	$result = $this->Tools->fetch_multiple_objects ("ipaddresses", "ip_addr", $this->Tools->transform_address($this->_params->id, "decimal"));
         	if($result!==false) {
             	foreach ($result as $k=>$r) {
-                	if($r->subnetId !== $this->_params->id2) {
+                	if($r->subnetId != $this->_params->id2) {
                     	unset($result[$k]);
                 	}
             	}
@@ -586,7 +592,7 @@ class Addresses_controller extends Common_api_functions  {
 	 */
 	private function validate_create_update_common () {
 		//validate and normalize MAC address
-		if(strlen($this->_params->mac)>0) {
+		if(!is_blank($this->_params->mac)) {
 			if($this->validate_mac ($this->_params->mac)===false)
 				$this->Response->throw_exception(400, "Invalid MAC address");
 			// normalize
@@ -611,5 +617,40 @@ class Addresses_controller extends Common_api_functions  {
 		} else {
 			$this->_params->state = 2;
 		}
+	}
+
+	/**
+	 * Get changelog for subnet
+	 * @method subnet_changelog
+	 * @return [type]
+	 */
+	private function address_changelog () {
+		// Check for id
+		$this->validate_address_id ();
+		// get changelog
+		$Log = new Logging ($this->Database);
+		$clogs = $Log->fetch_changlog_entries("ip_addr", $this->_params->id, true);
+		// reformat
+		$clogs_formatted = [];
+		// loop
+		if (is_array($clogs)) {
+			if (sizeof($clogs)>0) {
+				foreach ($clogs as $l) {
+					// diff to array
+					$l->cdiff = explode("\r\n", str_replace(["[","]"], "", trim($l->cdiff)));
+					// save
+					$clogs_formatted[] = [
+						"user"   => $l->real_name,
+						"action" => $l->caction,
+						"result" => $l->cresult,
+						"date"   => $l->cdate,
+						"diff"   => $l->cdiff,
+					];
+				}
+			}
+		}
+		// result
+		if(sizeof($clogs_formatted)>0) 	{ return $clogs_formatted; }
+		else 							{ $this->Response->throw_exception(404, "No changelogs found"); }
 	}
 }

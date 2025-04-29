@@ -1,4 +1,5 @@
 <?php
+if (!isset($User)) { exit(); }
 
 /**
  * Script to display customer details
@@ -16,7 +17,7 @@ print "<hr>";
 print "<br>";
 
 // back
-print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], "customers")."'><i class='fa fa-angle-left'></i> "._("All customers")."</a><br><br>";
+print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, "customers")."'><i class='fa fa-angle-left'></i> "._("All customers")."</a><br><br>";
 
 # circuit
 print "<table class='ipaddress_subnet table-condensed table-auto'>";
@@ -54,17 +55,17 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 	print " </th>";
 	print "	<td><br>";
 
-	if(strlen($customer->contact_person)>0)
+	if(!is_blank($customer->contact_person))
 	print $customer->contact_person."<br>";
 	else
 	print "/"."<br>";
 
-	if(strlen($customer->contact_mail)>0)
+	if(!is_blank($customer->contact_mail))
 	print $customer->contact_mail."<br>";
 	else
 	print "/"."<br>";
 
-	if(strlen($customer->contact_phone)>0)
+	if(!is_blank($customer->contact_phone))
 	print $customer->contact_phone."<br>";
 	else
 	print "/"."<br>";

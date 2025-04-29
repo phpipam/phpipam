@@ -5,7 +5,7 @@
  *********************************************/
 
 # required functions if requested via AJAX
-if(!is_object(@$User)) {
+if(!isset($User)) {
 	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
@@ -21,7 +21,7 @@ if(!is_object(@$User)) {
 $User->check_user_session ();
 
 # if direct request that redirect to tools page
-if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
 	header("Location: ".create_link("tools","changelog"));
 }
 
@@ -36,17 +36,15 @@ if ($User->settings->log!="syslog") {
 if ($User->settings->log=="syslog") {
 	$Result->show("warning", _("Changelog files are sent to syslog"), false);
 }
-# none
-elseif(sizeof($clogs)==0) {
-	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
-	print "<p>"._("No changelogs available")."</p>";
-	print "<small>"._("No changelog entries are available")."</small>";
-	print "</blockquote>";
-}
 # print
 else {
+	# fetch widget parameters
+	$wparam = $Tools->get_widget_params("changelog");
+	$max    = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 5,    'min_range' => 1, 'max_range' => 256]]);
+	$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 
 	# printout
+	print '<div style="' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 	print "<table class='table changelog table-hover table-top table-condensed'>";
 
 	# headers
@@ -65,7 +63,7 @@ else {
 		# cast
 		$l = (array) $l;
 
-		if($pc < 5) {
+		if($pc < $max) {
 			# permissions
 			if($l['ctype']=="subnet")		{ $permission = $Subnets->check_permission ($User->user, $l['tid']); }
 			elseif($l['ctype']=="ip_addr")	{ $permission = $Subnets->check_permission ($User->user, $l['subnetId']); }
@@ -79,7 +77,7 @@ else {
         		$changelog = str_replace("\r\n", "<br>",$l['cdiff']);
         		$changelog = str_replace("\n", "<br>",$changelog);
         		$changelog = htmlentities($changelog);
-        		$changelog = array_filter(explode("<br>", $changelog));
+        		$changelog = array_filter(pf_explode("<br>", $changelog));
 
                 $diff = array();
 
@@ -100,8 +98,8 @@ else {
             		}
 
             		// field
-            		$field = explode(":", $c);
-            	    $value = explode("=>", html_entity_decode($field[1]));
+					$field = array_pad(explode(":", $c), 2 , '');
+        	    	$value = array_pad(explode("=>", html_entity_decode($field[1])), 2, '');
 
             	    $field = trim(str_replace(array("[","]"), "", $field[0]));
             	    if(is_array(@$Log->changelog_keys[$type])) {
@@ -133,7 +131,7 @@ else {
 				print "	<td>$l[ctype] / $l[caction] $l[cresult]</td>";
 
 				# subnet, section or ip address
-				if(strlen($l['tid'])==0) {
+				if(is_blank($l['tid'])) {
 					print "<td><span class='badge badge1 badge5 alert-danger'>"._("Deleted")."</span></td>";
 				}
 				elseif($l['ctype']=="IP address")	{
@@ -160,5 +158,13 @@ else {
 	}
 
 	print "</table>";
+
+	if(sizeof($clogs)==0) {
+		print "<blockquote style='margin-top:20px;margin-left:20px;'>";
+		print "<p>"._("No changelogs available")."</p>";
+//		print "<small>"._("No changelog entries are available")."</small>";
+		print "</blockquote>";
+	}
+
+	print "</div>";
 }
-?>

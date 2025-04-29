@@ -9,6 +9,9 @@ $User->check_user_session();
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "pdns_settings");
+
+# if hostname is array implode to ; separated values
+if(is_array($pdns->host)) { $pdns->host = implode(";", $pdns->host); }
 ?>
 
 <script>
@@ -92,9 +95,43 @@ $(document).ready(function() {
 <div id="settingsEdit"></div>
 
 <!-- check -->
-<div class="check" style="height:60px;">
+<div class="check" style="height:60px;width:auto;position:absolute;">
+	<hr>
 	<?php
-	if ($test==false)		{ $Result->show("danger alert-absolute", "Failed to connect to database:<hr> ".$PowerDNS->error); }
-	else					{ $Result->show("success alert-absolute", "Database connection ok"); }
+	// multiple databases
+	if(strpos($pdns->host, ";")!==false) {
+		// multiple ?
+		if(isset($PowerDNS->db_check_error)) {
+			foreach ($PowerDNS->db_check_error as $err) {
+				$Result->show("warning", $err);
+			}
+			// none
+			if ($PowerDNS->active_db===false) {
+				$Result->show("danger", "All database connections failed", false);
+			}
+			// print active
+			else {
+				// set to array
+				$active_db = explode(";", $PowerDNS->db_settings->host);
+				// print
+				$Result->show("success ", "Database connection ok".". "._("Active database").": ".$active_db[$PowerDNS->active_db]);
+			}
+		}
+		// none selected
+		elseif ($PowerDNS->active_db===false) {
+			$Result->show("danger", "All database connections failed",false);
+		}
+		// else
+		else {
+			print "<div class='clearfix'></div>";
+			$Result->show("success ", "All database connections ok");
+		}
+	}
+	else {
+		// connection to selected database
+		if ($test==false)		{ $Result->show("danger ", "Failed to connect to database:<hr> ".$PowerDNS->error, false); }
+		else					{ $Result->show("success ", "Database connection ok"."."); }
+	}
+
 	?>
 </div>

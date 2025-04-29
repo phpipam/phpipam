@@ -1,7 +1,7 @@
 <?php
 
 /* global and missing functions */
-require('global_functions.php');
+require_once('global_functions.php');
 
 /* Enable output buffering */
 require_once( dirname(__FILE__) . '/output_buffering.php' );
@@ -39,7 +39,7 @@ if(php_sapi_name()!="cli")
 if(Config::ValueOf('debugging')==true) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
+	error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 }
 else {
 	disable_php_errors();
@@ -52,10 +52,8 @@ if(!defined('BASE')) {
 	define('BASE', substr(str_replace($root, "", dirname(__FILE__)),0,-9));
 }
 
-// Fix JSON_UNESCAPED_UNICODE for PHP 5.3
-defined('JSON_UNESCAPED_UNICODE') || define('JSON_UNESCAPED_UNICODE', 256);
-
 /* @classes ---------------------- */
+require( dirname(__FILE__) . '/classes/class.Params.php' );		//Paramter handling class
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions
 require( dirname(__FILE__) . '/classes/class.PDO.php' );		//Class PDO - wrapper for database
 require( dirname(__FILE__) . '/classes/class.User.php' );		//Class for active user management
@@ -94,5 +92,8 @@ require( dirname(__FILE__) . '/classes/class.OpenStreetMap.php' );	    // Class 
 $Rewrite = new Rewrite ();
 $_GET = $Rewrite->get_url_params ();
 
+$GET  = new Params ($_GET,  null, true); // Run strip_tags() on $_GET
+$POST = new Params ($_POST, null, true); // Run strip_tags() on $_POST
+
 /* get version */
-include('version.php');
+require_once('version.php');

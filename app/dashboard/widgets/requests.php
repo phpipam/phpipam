@@ -1,7 +1,7 @@
 <?php
 
 # required functions
-if(!is_object(@$User)) {
+if(!isset($User)) {
 	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
@@ -12,9 +12,11 @@ if(!is_object(@$User)) {
 
 # user must be authenticated
 $User->check_user_session ();
+# user must be admin
+$User->is_admin(true);
 
 # if direct request that redirect to tools page
-if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
 	header("Location: ".create_link("administration","requests"));
 }
 
@@ -27,13 +29,18 @@ $requests = $Tools->requests_fetch (false);
 <?php
 if($requests===false) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
-	print "<small>"._("No IP address requests available")."!</small><br>";
+	print "<p>"._("No IP address requests available")."!</p>";
 	print "</blockquote>";
 }
 # print
 else {
+	# fetch widget parameters
+	$wparam = $Tools->get_widget_params("requests");
+	$max    = filter_var($wparam->max,    FILTER_VALIDATE_INT, ['options' => ['default' => 50,   'min_range' => 1, 'max_range' => 256]]);
+	$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
 ?>
 
+<div class="container-fluid" style="<?php print (isset($height) ? "height:{$height}px;overflow-y:auto;" : ""); ?>padding-top:5px">
 <table id="requestedIPaddresses" class="table table-condensed table-hover table-top">
 
 <!-- headers -->
@@ -47,7 +54,10 @@ else {
 
 <?php
 	# print requests
+	$m = 1;  // counter
 	foreach($requests as $request) {
+		if ($m > $max) break;
+
 		# cast
 		$request = (array) $request;
 		# get subnet details
@@ -60,9 +70,10 @@ else {
 		print '	<td>'. $request['description'] .'</td>'. "\n";
 		print '	<td>'. $request['requester'] .'</td>'. "\n";
 		print '</tr>'. "\n";
+		$m++;
 	}
+
+	print "</table>";
+	print "</div>";
+}
 ?>
-
-</table>
-
-<?php } ?>

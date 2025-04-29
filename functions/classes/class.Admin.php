@@ -147,7 +147,7 @@ class Admin extends Common_functions {
 	 * @return void
 	 */
 	public function object_modify ($table, $action=null, $field="id", $values = [], $values_log = []) {
-		if (!is_string($table) || strlen($table) == 0) return false;
+		if (!is_string($table) || is_blank($table)) return false;
 		# strip tags
 		$values     = $this->strip_input_tags ($values);
 		$values_log = $this->strip_input_tags ($values_log);
@@ -328,7 +328,7 @@ class Admin extends Common_functions {
 	 */
 	public function truncate_table ($table = null) {
 		# null table
-		if(is_null($table)||strlen($table)==0) return false;
+		if(is_null($table)||is_blank($table)) return false;
 		else {
 			try { $this->Database->emptyTable($table); }
 			catch (Exception $e) {
@@ -336,6 +336,7 @@ class Admin extends Common_functions {
 				return false;
 			}
 			# result
+			$this->Log->write( _("Database table cleared").": ".$table, NULL, 0);
 			return true;
 		}
 	}
@@ -414,7 +415,7 @@ class Admin extends Common_functions {
 		# check if $gid in array
 		if($users!==false) {
 			foreach($users as $u) {
-				$group_array = json_decode($u->groups, true);
+				$group_array = db_json_decode($u->groups, true);
 				$group_array = $this->groups_parse($group_array);
 
 				if(sizeof($group_array)>0) {
@@ -435,7 +436,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $group_id
-	 * @return void
+	 * @return array
 	 */
 	public function group_fetch_missing_users ($group_id) {
 		$out = array ();
@@ -446,7 +447,12 @@ class Admin extends Common_functions {
 		if($users!==false) {
 			foreach($users as $u) {
 				if($u->role != "Administrator") {
-					$g = json_decode($u->groups, true);
+					$g = db_json_decode($u->groups, true);
+					# if json failed to decode, then this user is eligible to be added
+					if (!$g) {
+						$out[] = $u->id;
+						continue;
+					}
 					if(!@in_array($group_id, $g)) { $out[] = $u->id; }
 				}
 			}
@@ -468,7 +474,7 @@ class Admin extends Common_functions {
 		$user = $this->fetch_object ("users", "id", $uid);
 
 		# append new group
-		$g = json_decode($user->groups, true);
+		$g = db_json_decode($user->groups, true);
 		$g[$gid] = $gid;
 		$g = json_encode($g);
 
@@ -490,7 +496,7 @@ class Admin extends Common_functions {
 		$user = $this->fetch_object ("users", "id", $uid);
 
 		# remove group
-		$g = json_decode($user->groups, true);
+		$g = db_json_decode($user->groups, true);
 		unset($g[$gid]);
 		$g = json_encode($g);
 
@@ -537,7 +543,7 @@ class Admin extends Common_functions {
 		# check if $gid in array
 		if($users!==false) {
 			foreach($users as $u) {
-				$g  = json_decode($u->groups, true);
+				$g  = db_json_decode($u->groups, true);
 				$go = $g;
 				$g  = $this->groups_parse($g);
 				# check
@@ -567,13 +573,15 @@ class Admin extends Common_functions {
 		$sections = $this->fetch_all_objects ("sections", "id");
 		# check if $gid in array
 		foreach($sections as $s) {
-			$g = json_decode($s->permissions, true);
+			$g = db_json_decode($s->permissions, true);
 
-			if(sizeof($g)>0) {
-				if(array_key_exists($gid, $g)) {
-					unset($g[$gid]);
-					$ng = json_encode($g);
-					$this->update_section_groups($s->id,$ng);
+			if(is_array($g)) {
+				if(sizeof($g)>0) {
+					if(array_key_exists($gid, $g)) {
+						unset($g[$gid]);
+						$ng = json_encode($g);
+						$this->update_section_groups($s->id,$ng);
+					}
 				}
 			}
 		}
@@ -664,20 +672,46 @@ class Admin extends Common_functions {
 	 * @return bool
 	 */
 	public function update_custom_field_definition ($field) {
-		if (!in_array($field['fieldType'], $this->valid_custom_field_types())) {
+		if (!is_array($field) || !isset($field['fieldType'])) {
 			$this->Result->show("danger", _("Error: ")._("Invalid custom field type"));
 			return false;
 		}
 
-	    # set type definition and size of needed
-	    if($field['fieldType']=="bool" || $field['fieldType']=="text" || $field['fieldType']=="date" || $field['fieldType']=="datetime")	{ $field['ftype'] = $field['fieldType']; }
-	    else																																{ $field['ftype'] = $field['fieldType']."(".$field['fieldSize'].")"; }
+		switch ($field['fieldType']) {
+			case "varchar":
+			case "int":
+				if (!isset($field['fieldSize']) || filter_var($field['fieldSize'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) === false) {
+					$this->Result->show("danger", _("Error: ") . _("Invalid custom field size"));
+					return false;
+				}
+				$field['ftype'] = $field['fieldType'] . "(" . $field['fieldSize'] . ")";
+				break;
+			case "bool":
+			case "text":
+			case "date":
+			case "datetime":
+				$field['ftype'] = $field['fieldType'];
+				break;
+			case "set":
+				$this->Result->show("danger", _("Error: ") . _("SET functionality not fully implemented, please change to ENUM"));
+				return false;
+			case "enum":
+				$data = str_getcsv($field['fieldSize'], ",", "'", "\\");
+				foreach ($data as $i => $v) {
+					$data[$i] = "'" . $this->Database->escape($v) . "'";
+				}
+				$field['ftype'] = $field['fieldType'] . "(" . implode(",", $data) . ")";
+				break;
+			default:
+				$this->Result->show("danger", _("Error: ") . _("Invalid custom field type"));
+				return false;
+		}
 
 	    # default value null
-	    $field['fieldDefault'] = strlen($field['fieldDefault'])==0 ? NULL : $field['fieldDefault'];
+	    $field['fieldDefault'] = is_blank($field['fieldDefault']) ? NULL : $field['fieldDefault'];
 
 	    # character set if needed
-	    if($field['fieldType']=="varchar" || $field['fieldType']=="text" || $field['fieldType']=="set" || $field['fieldType']=="enum")	{ $charset = "CHARACTER SET utf8"; }
+	    if($field['fieldType']=="varchar" || $field['fieldType']=="text" || $field['fieldType']=="set" || $field['fieldType']=="enum")	{ $charset = "CHARACTER SET utf8mb4"; }
 	    else																															{ $charset = ""; }
 
 	    # escape fields
@@ -730,7 +764,7 @@ class Admin extends Common_functions {
 	 */
 	public function save_custom_fields_filter ($table, $filtered_fields) {
 		# old custom fields, save them to array
-		$hidden_array = strlen($this->settings->hiddenCustomFields)>0 ? json_decode($this->settings->hiddenCustomFields, true) : array();
+		$hidden_array = !is_blank($this->settings->hiddenCustomFields) ? db_json_decode($this->settings->hiddenCustomFields, true) : array();
 
 		# set new array for table
 		if(is_null($filtered_fields))	{ unset($hidden_array[$table]); }

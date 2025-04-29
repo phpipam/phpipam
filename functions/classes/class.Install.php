@@ -100,7 +100,7 @@ class Install extends Common_functions {
 
 		# install database
 		if($this->install_database_execute ($migrate) !== false) {
-		    # return true, if some errors occured script already died! */
+		    # return true, if some errors occurred script already died! */
 			sleep(1);
 			$this->Log = new Logging ($this->Database);
 			$this->Log->write( _("Database installation"), _("Database installed successfully.")._(" Version ").VERSION.".".REVISION._(" installed"), 1 );
@@ -146,11 +146,11 @@ class Install extends Common_functions {
 		$esc_user = addcslashes($this->db['user'],"'");
 		$esc_pass = addcslashes($this->db['pass'],"'");
 		$db_name  = $this->db['name'];
-		$webhost  = is_string($this->db['webhost']) && strlen($this->db['webhost']) > 0 ? addcslashes($this->db['webhost'],"'") : 'localhost';
+		$webhost  = is_string(@$this->db['webhost']) && !is_blank(@$this->db['webhost']) ? addcslashes($this->db['webhost'],"'") : 'localhost';
 
 		try {
 			# Check if user exists;
-			$result = $this->Database_root->getObjectQuery("SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$esc_user' AND host = '$webhost') AS user_exists;");
+			$result = $this->Database_root->getObjectQuery("no_html_escape", "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$esc_user' AND host = '$webhost') AS user_exists;");
 
 			# create user if not exists and set permissions
 			if ($result->user_exists == 0) {
@@ -179,7 +179,7 @@ class Install extends Common_functions {
 		}
 
 	    # formulate queries
-	    $queries = array_filter(explode(";\n", $query));
+	    $queries = array_filter(pf_explode(";\n", $query));
 
 	    # append version
 		$queries[] = "UPDATE `settings` SET `version` = '".VERSION."'";
@@ -189,7 +189,7 @@ class Install extends Common_functions {
 	    # execute
 	    foreach($queries as $q) {
 		    //length check
-		    if (strlen($q)>0) {
+		    if (!is_blank($q)) {
 				try { $this->Database_root->runQuery($q.";"); }
 				catch (Exception $e) {
 					//unlock tables
@@ -248,17 +248,28 @@ class Install extends Common_functions {
 	 * Checks if table exists
 	 *
 	 * @access public
-	 * @param mixed $table
-	 * @return void
+	 * @param string $table
+	 * @return bool
 	 */
 	public function check_table ($table, $redirect = false) {
 		# set query
-		$query = "SELECT COUNT(*) AS `cnt` FROM information_schema.tables WHERE table_schema = '".$this->db['name']."' AND table_name = '$table';";
+		$query = "SELECT COUNT(*) AS `cnt` FROM information_schema.tables WHERE table_schema = '" . $this->db['name'] . "' AND table_name = '$table';";
 		# try to fetch count
-		try { $table = $this->Database->getObjectQuery($query); }
-		catch (Exception $e) 	{ if($redirect === true) $this->redirect_to_install ();	else return false; }
+		try {
+			$result = $this->Database->getObjectQuery("no_html_escape", $query);
+		} catch (Exception $e) {
+			if ($redirect === true) {
+				$this->redirect_to_install();
+			}
+			return false;
+		}
 		# redirect if it is not existing
-		if($table->cnt!=1) 	 	{ if($redirect === true) $this->redirect_to_install ();	else return false; }
+		if (!is_object($result) || $result->cnt != 1) {
+			if ($redirect === true) {
+				$this->redirect_to_install();
+			}
+			return false;
+		}
 		# ok
 		return true;
 	}
@@ -275,7 +286,7 @@ class Install extends Common_functions {
 	}
 
 	/**
-	 * Sets DB parmaeters
+	 * Sets DB parameters
 	 *
 	 * @access private
 	 * @return void
@@ -413,7 +424,7 @@ class Upgrade extends Install {
 		foreach ($upgrade_queries as $version=>$query_arr) {
 			foreach ($query_arr as $query) {
 				// save query
-				$this->reqister_query ($version, $query);
+				$this->register_query ($version, $query);
 			}
 		}
 	}
@@ -421,12 +432,12 @@ class Upgrade extends Install {
 	/**
 	 * Add new query to upgrade query list
 	 *
-	 * @method reqister_query
+	 * @method register_query
 	 * @param  string $version
 	 * @param  string $query
 	 * @return void
 	 */
-	private function reqister_query ($version, $query) {
+	private function register_query ($version, $query) {
 		// check if version is higher than old version, otherwise skip query
 		if ($this->cmp_version_strings($version, $this->old_version) > 0) {
 			// break
@@ -497,7 +508,7 @@ class Upgrade extends Install {
 		# set queries
 		$queries = $this->get_queries ();
 		// create default arrays
-		$queries_ok = array();			// succesfull queries
+		$queries_ok = array();			// succesful queries
 
 		// execute
 		try {
@@ -507,7 +518,7 @@ class Upgrade extends Install {
 			# execute all queries
 			foreach($queries as $k=>$query) {
 				// execute
-				if(strpos($query, "--")!==0 && strlen(trim($query))>0) {
+				if(strpos($query, "--")!==0 && !is_blank(trim((string) $query))) {
 					$ignore_on_failure = (strpos($query, '-- IGNORE_ON_FAILURE')!== false);
 
 					if ($ignore_on_failure) $this->Database->setErrMode(\PDO::ERRMODE_SILENT);
@@ -542,7 +553,7 @@ class Upgrade extends Install {
 			print "<div class='text-right'><a class='btn btn-sm btn-default' href='".create_link('administration', "verify-database")."'>"._("Go to administration and fix")."</a></div><br><hr><br>";
 
 			if(sizeof($queries_ok)>0)
-			$this->Result->show("success", _("Succesfull queries").": <pre>".implode("<br>", $queries_ok)."</pre>", false);
+			$this->Result->show("success", _("Succesful queries").": <pre>".implode("<br>", $queries_ok)."</pre>", false);
 			if(sizeof($queries)>0)
 			$this->Result->show("warning", _("Not executed queries").": <pre>".implode("<br>", $queries)."</pre>", false);
 

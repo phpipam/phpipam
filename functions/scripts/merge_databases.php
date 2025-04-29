@@ -98,8 +98,8 @@ foreach ($tables as $table) {
 		// set id
 		$identifier = array_key_exists($table, $special_identifiers) ? $special_identifiers[$table] : "id";
 		// fetch old and new
-		$highest_id     = $Database->getObjectQuery     ("SELECT `$identifier` FROM `$table` ORDER BY `$identifier` DESC LIMIT 0, 1;");
-		$lowest_id_old  = $Database_old->getObjectQuery ("SELECT `$identifier` FROM `$table` ORDER BY `$identifier` ASC LIMIT 0, 1;");
+		$highest_id     = $Database->getObjectQuery     ($table, "SELECT `$identifier` FROM `$table` ORDER BY `$identifier` DESC LIMIT 0, 1;");
+		$lowest_id_old  = $Database_old->getObjectQuery ($table, "SELECT `$identifier` FROM `$table` ORDER BY `$identifier` ASC LIMIT 0, 1;");
 
 		// only if something is present in merging table, otherwise no need to import !
 		if($lowest_id_old->{$identifier} != "") {
@@ -108,8 +108,8 @@ foreach ($tables as $table) {
 			$highest_ids_append[$table] = $highest_id->{$identifier} +1 - $lowest_id_old->{$identifier};
 
 			// fetch and save all data
-			$old_data[$table] = $Database_old->getObjectsQuery ("SELECT * FROM `$table` ORDER BY `$identifier` ASC;");
-			$new_data[$table] = $Database_old->getObjectsQuery ("SELECT * FROM `$table` ORDER BY `$identifier` ASC;");
+			$old_data[$table] = $Database_old->getObjectsQuery ($table, "SELECT * FROM `$table` ORDER BY `$identifier` ASC;");
+			$new_data[$table] = $Database_old->getObjectsQuery ($table, "SELECT * FROM `$table` ORDER BY `$identifier` ASC;");
 		}
 
 		// fetch custom fields
@@ -139,8 +139,8 @@ foreach ($old_data as $table => $table_content) {
 				$new_data[$table][$lk]->masterSection = $highest_ids_append["sections"] + $value_obj->masterSection;
 			}
 			// permissions
-			if(strlen($value_obj->permissions)>0 && $value_obj->permissions!="null") {
-				$permissions = json_decode($value_obj->permissions);
+			if(!is_blank($value_obj->permissions) && $value_obj->permissions!="null") {
+				$permissions = db_json_decode($value_obj->permissions);
 				$permissions_new = new StdClass ();
 				foreach ($permissions as $k=>$v) {
 					$permissions_new->{$highest_ids_append["userGroups"] + $k} = $v;
@@ -188,8 +188,8 @@ foreach ($old_data as $table => $table_content) {
 				$new_data[$table][$lk]->scanAgent = $highest_ids_append["scanAgents"] + $value_obj->scanAgent;
 			}
 			// permissions
-			if(strlen($value_obj->permissions)>0 && $value_obj->permissions!="null") {
-				$permissions = json_decode($value_obj->permissions);
+			if(!is_blank($value_obj->permissions) && $value_obj->permissions!="null") {
+				$permissions = db_json_decode($value_obj->permissions);
 				$permissions_new = new StdClass ();
 				foreach ($permissions as $k=>$v) {
 					$permissions_new->{$highest_ids_append["userGroups"] + $k} = $v;
@@ -225,7 +225,7 @@ foreach ($old_data as $table => $table_content) {
 			}
 			// sections
 			if(strlen($value_obj->sections)>1) {
-				$sections     = explode(";", $value_obj->sections);
+				$sections     = pf_explode(";", $value_obj->sections);
 				$sections_new = array();
 				foreach ($sections as $k=>$v) {
 					$sections_new[$highest_ids_append["sections"] + $k] = $v;
@@ -253,7 +253,7 @@ foreach ($old_data as $table => $table_content) {
 	elseif ($table == "users") {
 		// go through each table and update
 		foreach ($table_content as $lk=>$value_obj) {
-			// make sure it doesnt exist already !
+			// make sure it doesn't exist already !
 			if($Database->numObjectsFilter("users", "username", $value_obj->username)==0 && $Database->numObjectsFilter("users", "email", $value_obj->email)==0) {
 				$new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
 				// authmethod
@@ -262,7 +262,7 @@ foreach ($old_data as $table => $table_content) {
 				}
 				// groups
 				if($value_obj->role!="Administrator") {
-					$groups_tmp = json_decode($value_obj->groups, true);
+					$groups_tmp = db_json_decode($value_obj->groups, true);
 					$groups_new = array();
 					foreach ($groups_tmp as $gid=>$gid2) {
 						$groups_new[$gid+$highest_ids_append["userGroups"]] = $gid+$highest_ids_append["userGroups"];
@@ -270,8 +270,8 @@ foreach ($old_data as $table => $table_content) {
 					$new_data[$table][$lk]->groups = json_encode($groups_new);
 				}
 				// favourite subnets
-				if(strlen($value_obj->favourite_subnets)>0) {
-					$fs_tmp = explode(";", $value_obj->favourite_subnets);
+				if(!is_blank($value_obj->favourite_subnets)) {
+					$fs_tmp = pf_explode(";", $value_obj->favourite_subnets);
 					$fs_new = array();
 					foreach ($fs_tmp as $gid) {
 						$fs_new[] = $gid+$highest_ids_append["subnets"];
@@ -298,8 +298,8 @@ foreach ($old_data as $table => $table_content) {
 		foreach ($table_content as $lk=>$value_obj) {
 			$new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
 			// permissions
-			if(strlen($value_obj->permissions)>0) {
-				$fs_tmp = explode(";", $value_obj->permissions);
+			if(!is_blank($value_obj->permissions)) {
+				$fs_tmp = pf_explode(";", $value_obj->permissions);
 				$fs_new = array();
 				foreach ($fs_tmp as $gid) {
 					$fs_new[] = $gid+$highest_ids_append["sections"];
@@ -314,8 +314,8 @@ foreach ($old_data as $table => $table_content) {
 		foreach ($table_content as $lk=>$value_obj) {
 			$new_data[$table][$lk]->vrfId = $highest_ids_append[$table] + $value_obj->vrfId;
 			// sections
-			if(strlen($value_obj->sections)>0) {
-				$fs_tmp = explode(";", $value_obj->sections);
+			if(!is_blank($value_obj->sections)) {
+				$fs_tmp = pf_explode(";", $value_obj->sections);
 				$fs_new = array();
 				foreach ($fs_tmp as $gid) {
 					$fs_new[] = $gid+$highest_ids_append["sections"];
@@ -330,8 +330,8 @@ foreach ($old_data as $table => $table_content) {
 		foreach ($table_content as $lk=>$value_obj) {
 			$new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
 			// permissions
-			if(strlen($value_obj->permissions)>0) {
-				$fs_tmp = explode(";", $value_obj->permissions);
+			if(!is_blank($value_obj->permissions)) {
+				$fs_tmp = pf_explode(";", $value_obj->permissions);
 				$fs_new = array();
 				foreach ($fs_tmp as $gid) {
 					$fs_new[] = $gid+$highest_ids_append["sections"];
@@ -412,7 +412,7 @@ foreach ($old_data as $table => $table_content) {
 		foreach ($table_content as $lk=>$value_obj) {
 			$new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
 			// src
-			if (strlen($value_obj->src) > 0) {
+			if (!is_blank($value_obj->src)) {
 				$arr     = json_encode($value_obj->src, true);
 				$arr_new = array();
 				if (is_array($arr)) {
@@ -428,7 +428,7 @@ foreach ($old_data as $table => $table_content) {
 				$new_data[$table][$lk]->src = json_encode($arr_new);
 			}
 			// dst
-			if (strlen($value_obj->dst) > 0) {
+			if (!is_blank($value_obj->dst)) {
 				$arr     = json_encode($value_obj->dst, true);
 				$arr_new = array();
 				if (is_array($arr)) {
@@ -490,8 +490,8 @@ if(isset($new_custom_fields)) {
 		// each field
 		foreach ($field as $fname=>$fval) {
 			$null = $fval['Null']=="YES" ? "" : "NOT NULL";
-			$default = strlen($fval['Default'])>0 ? "DEFAULT '$fval[Default]'" : "";
-			// update teable definition
+			$default = !is_blank($fval['Default']) ? "DEFAULT '$fval[Default]'" : "";
+			// update table definition
 			$query = "ALTER TABLE `$table` ADD COLUMN `$fval[name]` $fval[type] $default $null COMMENT '$fval[Comment]';";
 			// update
 			try {
@@ -515,5 +515,3 @@ foreach ($new_data as $table=>$field) {
 		}
 	}
 }
-
-?>

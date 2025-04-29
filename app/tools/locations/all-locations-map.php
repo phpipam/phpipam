@@ -39,5 +39,6 @@ else {
     foreach ($all_locations as $l) {
         $OSM->add_location($l);
     }
-    $OSM->map();
+	$height = isset($height) ? $height : null;
+	$OSM->map($height ?? null);
 }

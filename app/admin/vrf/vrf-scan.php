@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true, true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disabled"), true, true); }
 # perm check
 $User->check_module_permissions ("vrf", User::ACCESS_RWA, true, false);
 
@@ -42,7 +42,7 @@ if ($scan_devices===false)                      { $Result->show("danger", _("No 
         <?php
         // loop
         foreach ($scan_devices as $d) {
-            $description = strlen($d->description)>0 ? "<span class='text-muted'>$d->description</span>" : "";
+            $description = !is_blank($d->description) ? "<span class='text-muted'>$d->description</span>" : "";
             print " <input type='checkbox' name='device-$d->id' checked> $d->hostname ($d->ip_addr) $description<br>";
         }
         ?>

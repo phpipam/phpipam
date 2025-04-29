@@ -7,7 +7,7 @@ $User->check_user_session();
 <ul class="nav navbar-nav sections">
 	<?php
 	# if section is not set
-	if(!isset($_GET['section'])) { $_GET['section'] = ""; }
+	if(!isset($GET->section)) { $GET->section = ""; }
 
 	# printout
 	if($sections!==false) {
@@ -34,14 +34,14 @@ $User->check_user_session();
 						print "	<ul class='dropdown-menu tools'>";
 
 						# section
-						if($_GET['section']==$section->id)		{ print "<li class='active'><a href='".create_link("subnets",$section->id)."'>$section->name</a></li>"; }
+						if($GET->section==$section->id)		{ print "<li class='active'><a href='".create_link("subnets",$section->id)."'>$section->name</a></li>"; }
 						else									{ print "<li>				<a href='".create_link("subnets",$section->id)."'>$section->name</a></li>"; }
 
 						print "	<li class='divider'></li>";
 
 						# subsections
 						foreach($sves as $sl) {
-							if($_GET['section']==$sl->id) 		{ print "<li class='active'><a href='".create_link("subnets",$sl->id)."'><i class='fa fa-angle-right'></i> $sl->name</a></li>"; }
+							if($GET->section==$sl->id) 		{ print "<li class='active'><a href='".create_link("subnets",$sl->id)."'><i class='fa fa-angle-right'></i> $sl->name</a></li>"; }
 							else								{ print "<li>				<a href='".create_link("subnets",$sl->id)."'><i class='fa fa-angle-right'></i> $sl->name</a></li>"; }
 						}
 
@@ -50,7 +50,7 @@ $User->check_user_session();
 					}
 					# no slaves
 					else {
-						if( ($section->name == $_GET['section']) || ($section->id == $_GET['section']) ) 	{ print "<li class='active'>"; }
+						if( ($section->name == $GET->section) || ($section->id == $GET->section) ) 	{ print "<li class='active'>"; }
 						else 																				{ print "<li>"; }
 
 						print "	<a href='".create_link("subnets",$section->id)."' rel='tooltip' data-placement='bottom' title='$section->description'>$section->name</a>";

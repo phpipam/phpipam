@@ -11,7 +11,7 @@ $User 		= new User ($Database);
 $Tools	 	= new Tools ($Database);
 $Addresses	= new Addresses ($Database);
 $Result 	= new Result;
-$type = $_GET['type'];
+$type = $GET->type;
 
 # verify that user is logged in
 $User->check_user_session();
@@ -22,6 +22,7 @@ $lineCount = 0;
 
 // Create a worksheet
 $worksheet = $workbook->addWorksheet("template");
+$worksheet->setInputEncoding("utf-8");
 
 
 if ($type == 'subnets'){
@@ -146,4 +147,3 @@ elseif ($type == 'l2dom'){
 $workbook->send($filename);
 // Let's send the file
 $workbook->close();
-?>

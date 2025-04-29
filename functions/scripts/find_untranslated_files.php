@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Script to fund untraslated files
+ * Script to find untranslated files
  *
  *	only for development
  */
@@ -11,14 +11,14 @@ if (php_sapi_name() != "cli")	{ die("Cli only!"); }
 
 
 // search for all translated words and put them to array
-$untranslated = explode("\n",shell_exec("cd ".dirname(__FILE__)."/../../ && grep -r '_(' * "));
+$untranslated = pf_explode("\n",shell_exec("cd ".dirname(__FILE__)."/../../ && grep -r '_(' * "));
 // loop and search
 foreach ($untranslated as $u) {
 	// find string
 	$str = get_string_between($u, "_('", "')");
 	// remove "" and '
 	$str = trim($str, "',\"");
-	// search for invalud content and remove
+	// search for invalid content and remove
 	if (substr($str, 0, 1)!="$") {
 		$all_translations[] = $str;
 	}
@@ -27,7 +27,7 @@ foreach ($untranslated as $u) {
 	$str = get_string_between($u, '_("', '")');
 	// remove "" and '
 	$str = trim($str, "',\"");
-	// search for invalud content and remove
+	// search for invalid content and remove
 	if (substr($str, 0, 1)!="$") {
 		$all_translations[] = $str;
 	}
@@ -37,7 +37,7 @@ $all_translations = array_unique($all_translations);
 
 
 // search all existing translations
-$untranslated = explode("\n",shell_exec("cd ".dirname(__FILE__)."/../../ && more functions/locale/en/LC_MESSAGES/phpipam.po"));
+$untranslated = pf_explode("\n",shell_exec("cd ".dirname(__FILE__)."/../../ && more functions/locale/en/LC_MESSAGES/phpipam.po"));
 // loop and create
 foreach ($untranslated as $u) {
 	// search for string

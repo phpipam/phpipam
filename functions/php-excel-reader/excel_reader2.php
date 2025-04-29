@@ -92,7 +92,8 @@ function v($data,$pos) {
 	return ord($data[$pos]) | ord($data[$pos+1])<<8;
 }
 
-class OLERead {
+#[AllowDynamicProperties]
+class OLERead extends stdClass {
 	var $data = '';
 	function __construct(){	}
 
@@ -309,7 +310,8 @@ define('SPREADSHEET_EXCEL_READER_DEF_NUM_FORMAT',	"%s");
 /*
 * Main Class
 */
-class Spreadsheet_Excel_Reader {
+#[AllowDynamicProperties]
+class Spreadsheet_Excel_Reader extends stdClass {
 
 	// MK: Added to make data retrieval easier
 	var $colnames = array();
@@ -542,7 +544,7 @@ class Spreadsheet_Excel_Reader {
 		}
 		return null;
 	}
-	function fontProperty($row,$col,$sheet=0,$prop) {
+	function fontProperty($row,$col,$sheet=0,$prop=null) {
 		$font = $this->fontRecord($row,$col,$sheet);
 		if ($font!=null) {
 			return $font[$prop];
@@ -919,7 +921,7 @@ class Spreadsheet_Excel_Reader {
 			$this->setOutputEncoding($outputEncoding);
 		}
 		for ($i=1; $i<245; $i++) {
-			$name = strtolower(( (($i-1)/26>=1)?chr(($i-1)/26+64):'') . chr(($i-1)%26+65));
+			$name = strtolower(((($i - 1) / 26 >= 1) ? chr(intval(($i - 1) / 26) + 64) : '') . chr(($i - 1) % 26 + 65));
 			$this->colnames[$name] = $i;
 			$this->colindexes[$i] = $name;
 		}
@@ -1338,6 +1340,8 @@ class Spreadsheet_Excel_Reader {
 			return -2;
 		}
 		$spos += $length + 4;
+		$previousRow = null;
+		$previousCol = null;
 		while($cont) {
 			$lowcode = ord($data[$spos]);
 			if ($lowcode == SPREADSHEET_EXCEL_READER_TYPE_EOF) break;

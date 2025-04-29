@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	phpIPAM API class to authneticate users
+ *	phpIPAM API class to authenticate users
  *
  *
  */
@@ -63,13 +63,14 @@ class User_controller extends Common_api_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @param mixed $Database
-	 * @param mixed $Tools
-	 * @param mixed $params
-	 * @param mixed $Response
+	 * @param PDO_Database $Database
+	 * @param Tools $Tools
+	 * @param API_params $params
+	 * @param Response $response
 	 */
-	public function __construct ($Database, $Tools=null, $params=null, $Response) {
+	public function __construct ($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
+		$this->Tools = $Tools;
 		$this->Response = $Response;
 		$this->_params = $params;
 		// init required objects
@@ -133,7 +134,7 @@ class User_controller extends Common_api_functions {
 	 */
 	public function GET () {
 		// token_expires
-		if ($this->_params->id=="token_expires" || $this->_params->id=="expires" || !isset($this->_params->id) || $this->_params->id=="all" || $this->_params->id=="admins") {
+		if ($this->_params->id=="token_expires" || $this->_params->id=="token" || !isset($this->_params->id) || $this->_params->id=="all" || $this->_params->id=="admins") {
 			// block IP
 			$this->validate_block ();
 			// validate token
@@ -285,7 +286,7 @@ class User_controller extends Common_api_functions {
 			// get count
 			$cnt = $this->User->block_check_ip ();
 			// failure
-			if ($cnt > $this->max_failures) 		{ $this->Response->throw_exception(500, "Your IP has been blocked for 5 minutes because of excesive login failures"); }
+			if ($cnt > $this->max_failures) 		{ $this->Response->throw_exception(500, "Your IP has been blocked for 5 minutes because of excessive login failures"); }
 		}
 	}
 
@@ -350,7 +351,7 @@ class User_controller extends Common_api_functions {
 
 
 	/**
-	 * Sets default validiy for token (default 12 hours)
+	 * Sets default validity for token (default 12 hours)
 	 *
 	 * @access public
 	 * @param int $token_valid_time (default: null)
@@ -438,9 +439,9 @@ class User_controller extends Common_api_functions {
 	 */
 	private function validate_user_token () {
 		// is set
-		if (strlen($this->User->user->token)==0)							{ return false; }
+		if (is_blank($this->User->user->token))							{ return false; }
 		// date not set
-		elseif (strlen($this->User->user->token_valid_until)==0)			{ return false; }
+		elseif (is_blank($this->User->user->token_valid_until))			{ return false; }
 		// expired
 		elseif ($this->User->user->token_valid_until < date("Y-m-d H:is:"))	{ return false; }
 		// ok
@@ -455,7 +456,7 @@ class User_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function validate_requested_token () {
-		return $this->_params->controller=="user" ? $this->validate_requested_token_user () : $this->validate_requested_token_general ();
+		$this->_params->controller=="user" ? $this->validate_requested_token_user () : $this->validate_requested_token_general ();
 	}
 
 	/**
@@ -549,7 +550,7 @@ class User_controller extends Common_api_functions {
 	}
 
 	/**
-	 * Refreshes token expireation date in database
+	 * Refreshes token expiration date in database
 	 *
 	 * @access private
 	 * @return void

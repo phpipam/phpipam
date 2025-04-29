@@ -21,15 +21,15 @@ $User->check_maintaneance_mode ();
 # perm check popup
 $User->check_module_permissions ("vlan", User::ACCESS_RWA, true, true);
 # validate csrf cookie
-$csrf = $User->Crypto->csrf_cookie ("create", "scan");
+$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "scan");
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true, true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disabled"), true, true); }
 
 # domain Id must be int
-if (!is_numeric($_POST['domainId']))            { $Result->show("danger", _("Invalid domain Id"), true, true); }
+if (!is_numeric($POST->domainId))            { $Result->show("danger", _("Invalid domain Id"), true, true); }
 # fetch domain
-$domain = $Tools->fetch_object ("vlanDomains", "id", $_POST['domainId']);
+$domain = $Tools->fetch_object ("vlanDomains", "id", $POST->domainId);
 if ($domain===false)                            { $Result->show("danger", _("Invalid domain Id"), true, true); }
 
 # fetch devices that use get_routing_table query
@@ -52,11 +52,11 @@ if ($scan_devices===false)                      { $Result->show("danger", _("No 
         <?php
         // loop
         foreach ($scan_devices as $d) {
-            $description = strlen($d->description)>0 ? "<span class='text-muted'>$d->description</span>" : "";
+            $description = !is_blank($d->description) ? "<span class='text-muted'>$d->description</span>" : "";
             print " <input type='checkbox' name='device-$d->id' checked> $d->hostname ($d->ip_addr) $description<br>";
         }
         ?>
-        <input type="hidden" name="domainId" value="<?php print $_POST['domainId']; ?>">
+        <input type="hidden" name="domainId" value="<?php print escape_input($POST->domainId); ?>">
         <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
         </form>
     </div>

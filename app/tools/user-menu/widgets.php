@@ -41,7 +41,7 @@ $(document).ready(function() {
 # show all widgets, sortable
 
 //user widgets form database
-$user_widgets = explode(";",$User->user->widgets);	//selected
+$user_widgets = pf_explode(";",$User->user->widgets);	//selected
 $user_widgets = array_filter($user_widgets);
 
 print "<ul id='sortable' class='sortable'>";

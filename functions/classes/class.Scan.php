@@ -72,6 +72,41 @@ class Scan extends Common_functions {
 	protected $icmp_exit = false;
 
 	/**
+	 * Scan type
+	 *
+	 * @var string
+	 */
+	private $ping_type;
+
+	/**
+	 * ping binary path
+	 *
+	 * @var string
+	 */
+	private $ping_path;
+
+	/**
+	 * fping binary path
+	 *
+	 * @var string
+	 */
+	private $fping_path;
+
+	/**
+	 * last fping result
+	 *
+	 * @var array
+	 */
+	public $fping_result = [];
+
+	/**
+	 * Ping RTT
+	 *
+	 * @var integer
+	 */
+	public $rtt;
+
+	/**
 	 * Database
 	 *
 	 * @var mixed
@@ -146,7 +181,7 @@ class Scan extends Common_functions {
 	}
 
 	/**
-	 * This functin resets the scan method, for cron scripts
+	 * This function resets the scan method, for cron scripts
 	 *
 	 * @access public
 	 * @param mixed $method
@@ -278,7 +313,7 @@ class Scan extends Common_functions {
 	/**
 	 * Ping selected address and return response
 	 *
-	 *	timeout value: for miliseconds multiplyy by 1000
+	 *	timeout value: for miliseconds multiply by 1000
 	 *
 	 * @access protected
 	 * @param ip $address
@@ -299,7 +334,7 @@ class Scan extends Common_functions {
 
         # for IPv6 remove wait
         if ($this->identify_address ($address)=="IPv6") {
-            $cmd = explode(" ", $cmd);
+            $cmd = pf_explode(" ", $cmd);
             unset($cmd[3], $cmd[4]);
             $cmd = implode(" ", $cmd);
         }
@@ -418,10 +453,11 @@ class Scan extends Common_functions {
 	 */
 	private function save_fping_rtt ($line) {
 		// 173.192.112.30 : xmt/rcv/%loss = 1/1/0%, min/avg/max = 160/160/160
- 		$tmp = explode(" ",$line);
+ 		$tmp = pf_explode(" ",$line);
 
  		# save rtt
-		@$this->rtt	= "RTT: ".str_replace("(", "", $tmp[7]);
+		if (is_array($tmp) && isset($tmp[7]))
+			$this->rtt	= "RTT: ".str_replace("(", "", $tmp[7]);
 	}
 
 	/**
@@ -457,7 +493,7 @@ class Scan extends Common_functions {
 				if (!$match || $matches[1] == 100)
 					continue;
 
-				$tmp = explode(" ", $line);
+				$tmp = pf_explode(" ", $line);
 				$out[] = $tmp[0];
 			}
 		}
@@ -551,11 +587,15 @@ class Scan extends Common_functions {
 	 * @param datetime $datetime
 	 * @return void
 	 */
-	public function ping_update_lastseen ($id, $datetime = null) {
+	public function ping_update_lastseen ($id, $datetime = null, $mac = null) {
     	# set datetime
     	$datetime = is_null($datetime) ? date("Y-m-d H:i:s") : $datetime;
 		# execute
-		try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "lastSeen"=>$datetime), "id"); }
+		$update_ipaddress = array("id"=>$id, "lastSeen"=>$datetime);
+		if (!is_null($mac)) {
+			$update_ipaddress["mac"] = $mac;
+		}
+		try { $this->Database->updateObject("ipaddresses", $update_ipaddress, "id"); }
 		catch (Exception $e) {
 			!$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false);
 			# log
@@ -626,7 +666,7 @@ class Scan extends Common_functions {
 		if (is_numeric($address_id)) {
 			// don't update statuses for never seen addresses !
 			if ($last_seen_date!==false && !is_null($last_seen_date) && strlen($last_seen_date)>2 && $last_seen_date!="0000-00-00 00:00:00" && $last_seen_date!="1970-01-01 00:00:01" && $last_seen_date!="1970-01-01 01:00:00") {
-				// dont update reserved to offline
+				// don't update reserved to offline
 				if (!($tag_id==1 && $old_tag_id==3)) {
 					try { $this->Database->updateObject("ipaddresses", array("id"=>$address_id, "state"=>$tag_id), "id"); }
 					catch (Exception $e) {
@@ -658,17 +698,14 @@ class Scan extends Common_functions {
 	 */
 	public function telnet_address ($address, $port) {
 		# set all ports
-		$ports = explode(",", str_replace(";",",",$port));
+		$ports = pf_explode(",", str_replace(";",",",$port));
 		# default response is dead
 		$retval = 1;
-		//try each port untill one is alive
+		//try each port until one is alive
 		foreach($ports as $p) {
 			// open socket
 			$conn = @fsockopen($address, $p, $errno, $errstr, $this->icmp_timeout);
-			//failed
-			if (!$conn) {}
-			//success
-			else 		{
+			if ($conn !== false) {
 				$retval = 0;	//set return as port if alive
 				fclose($conn);
 				break;			//end foreach if success

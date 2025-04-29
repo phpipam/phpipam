@@ -5,7 +5,7 @@
  ***********************************************************************/
 
 # set object
-$subnet = $Tools->fetch_object("subnets", "id", $temp_objects[$_GET['section']]->id);
+$subnet = $Tools->fetch_object("subnets", "id", $temp_objects[$GET->section]->id);
 
 # subnet id must be numeric
 if(!is_numeric($subnet->id)) 		{ $Result->show("danger", _('Invalid ID'), true); }
@@ -76,7 +76,7 @@ $subnet_usage  = $Subnets->calculate_subnet_usage ($subnet);		//Calculate free/u
 	<!-- orphaned addresses -->
 	<div class="col-xs-12">
 		<?php
-		# if subnet has slaves check if also has addresses - if so they are orphaed, print them!
+		# if subnet has slaves check if also has addresses - if so they are orphaned, print them!
 		if($slaves) {
 			$addresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
 			if(sizeof($addresses)>0) {

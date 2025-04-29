@@ -59,7 +59,7 @@ if ($Scan->icmp_type == "none") {
 }
 
 // set ping statuses
-$statuses = explode(";", $Scan->settings->pingStatus);
+$statuses = pf_explode(";", $Scan->settings->pingStatus);
 // set mail override flag
 if (!isset($config['ping_check_send_mail'])) {
     $config['ping_check_send_mail'] = true;
@@ -89,7 +89,7 @@ if ($Scan->icmp_type == "fping" && !file_exists($Scan->settings->scanFPingPath))
     die("pingCheck-Fatal-Error: Invalid ping path!\n");
 }
 // verify date.timezone
-if (strlen(ini_get('date.timezone')) == 0) {
+if (is_blank(ini_get('date.timezone'))) {
     print("pingCheck-Warning: date.timezone is not set in ".php_ini_loaded_file()."\n");
     print("pingCheck-Warning: Online/Offline calculations may be unreliable due to incorrect local time.\n\n");
 }
@@ -173,6 +173,8 @@ $z = 0;         //addresses array index
 if ($Scan->icmp_type == "fping") {
     print "pingCheck: Scan start, " . sizeof($subnets) . " subnets\n";
 
+    $Database->resetConn(); // Close database, forked processes inherit and close file handles on exit.
+
     //different scan for fping
     while ($z < sizeof($subnets)) {
 
@@ -202,6 +204,8 @@ if ($Scan->icmp_type == "fping") {
         }
         unset($threads);
     }
+
+    $Database->connect();
 
     //now we must remove all non-existing hosts
     foreach ($subnets as $sk => $s) {
@@ -242,6 +246,8 @@ if ($Scan->icmp_type == "fping") {
 } else {
     //ping, pear
     print "pingCheck: Scan start, " . sizeof($addresses) . " IPs\n";
+
+    $Database->resetConn(); // Close database, forked processes inherit and close file handles on exit.
 
     while ($z < sizeof($addresses)) {
 
@@ -284,15 +290,7 @@ if ($Scan->icmp_type == "fping") {
         unset($threads);
     }
 
-    //update statuses for online
-
-    # re-initialize classes
-    $Database  = new Database_PDO;
-    $Scan      = new Scan($Database, $Subnets->settings);
-    $Addresses = new Addresses($Database);
-
-    // reset debugging
-    $Scan->set_debugging(false);
+    $Database->connect();
 
     # update all active statuses
     foreach ($addresses as $k => $a) {
@@ -396,22 +394,6 @@ if ($Scan->get_debugging()) {
 # all done, mail diff?
 if (!empty($address_change) && $config['ping_check_send_mail']) {
 
-    # remove old classes
-    unset($Database, $Subnets, $Addresses, $Tools, $Scan, $Result);
-
-    $Database   = new Database_PDO;
-    $Subnets    = new Subnets($Database);
-    $Addresses  = new Addresses($Database);
-    $Tools      = new Tools($Database);
-    $Scan       = new Scan($Database);
-    $Result     = new Result();
-
-    // set exit flag to true
-    $Scan->ping_set_exit(true);
-    // set debugging
-    $Scan->set_debugging(false);
-
-
     # check for recipients
     foreach ($Tools->fetch_multiple_objects("users", "role", "Administrator") as $admin) {
         if ($admin->mailNotify == "Yes") {
@@ -476,9 +458,9 @@ if (!empty($address_change) && $config['ping_check_send_mail']) {
                 $ago      = $lastSeen . " (" . $Tools->sec2hms($timeDiff) . " ago)";
             }
             // desc
-            $change['description'] = strlen($change['description']) > 0 ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
+            $change['description'] = !is_blank($change['description']) ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
             // subnet desc
-            $subnet->description = strlen($subnet->description) > 0 ? "$Subnets->mail_font_style $subnet->description</font>" : "$Subnets->mail_font_style / </font>";
+            $subnet->description = !is_blank($subnet->description) ? "$Subnets->mail_font_style $subnet->description</font>" : "$Subnets->mail_font_style / </font>";
 
             //content
             $content[] = "<tr>";

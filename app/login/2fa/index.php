@@ -45,9 +45,10 @@ if ($User->twofa_required()===false || $User->user->{'2fa'}==0) {
 	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script src="js/jquery-3.5.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/jquery-3.7.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/bootstrap.custom.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script>
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
@@ -109,7 +110,7 @@ if ($User->twofa_required()===false || $User->user->{'2fa'}==0) {
 
 	<?php
 	// if user did not receive code yet print it out !
-	if (strlen($User->user->{'2fa_secret'})==0) {
+	if (is_blank($User->user->{'2fa_secret'})) {
 		include ('2fa_create.php');
 	}
 	// print form

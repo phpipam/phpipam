@@ -14,10 +14,13 @@ if (!isset($Tools)) { $Tools = new Tools ($Database); }
 # verify that user is logged in, to guard against direct access of page and possible exploits
 $User->check_user_session();
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 /* get extension */
 $filename = $_FILES['file']['name'];
-$expfields = explode("|",$_POST['expfields']);
-$file_exp = explode(".", $filename);
+$expfields = pf_explode("|",$POST->expfields);
+$file_exp = pf_explode(".", $filename);
 $filetype = strtolower(end($file_exp));
 
 /* list of permitted file extensions */

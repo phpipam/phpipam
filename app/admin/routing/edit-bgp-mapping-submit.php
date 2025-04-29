@@ -18,15 +18,15 @@ $User->check_module_permissions ("routing", User::ACCESS_RW, true, true);
 # values
 $values = [
 			"type"      => "bgp",
-			"direction" => $_POST['direction'],
-			"object_id" => $_POST['bgp_id'],
-			"subnet_id" => $_POST['subnet_id']
+			"direction" => $POST->direction,
+			"object_id" => $POST->bgp_id,
+			"subnet_id" => $POST->subnet_id
 			];
 
 # submit
 if(!$Admin->object_modify ("routing_subnets", "add", "id", $values)) {
-    $Result->show("danger", _("Mapping")." ".$_POST["action"]." "._("failed"), false);
+    $Result->show("danger", _("Mapping")." ".$User->get_post_action()." "._("failed"), false);
 }
 else {
-    $Result->show("success", _("Mapping")." ".$_POST["action"]." "._("successful"), false);
+    $Result->show("success", _("Mapping")." ".$User->get_post_action()." "._("successful"), false);
 }

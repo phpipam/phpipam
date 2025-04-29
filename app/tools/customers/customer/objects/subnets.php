@@ -14,7 +14,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 if (isset($objects["subnets"])) {
 
 # set which custom fields to display
-$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $visible_fields = array();
 # set visible fields
 foreach ($custom_fields as $k=>$f) {
@@ -77,7 +77,7 @@ foreach ($objects['subnets'] as $slave_subnet) {
 
 	# description
 	$has_slaves_ind = $has_slaves ? " <i class='fa fa-folder'></i> ":"";
-	$slave_subnet['description'] = strlen($slave_subnet['description'])>0 ? $slave_subnet['description'] : " / ";
+	$slave_subnet['description'] = !is_blank($slave_subnet['description']) ? $slave_subnet['description'] : " / ";
 	$slave_subnet['description'] = $has_slaves_ind . $slave_subnet['description'];
 
 	# section

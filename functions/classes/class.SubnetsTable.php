@@ -47,7 +47,7 @@ class SubnetsTable {
 
 		$this->Tools->get_Settings();
 
-		$hiddenCustomFields = json_decode($this->Tools->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
+		$hiddenCustomFields = db_json_decode($this->Tools->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
 		$this->hidden_fields = is_array($hiddenCustomFields['subnets']) ? $hiddenCustomFields['subnets'] : array();
 
 		# fetch all vlans and domains and reindex
@@ -83,7 +83,7 @@ class SubnetsTable {
 
 		$tr = array();
 		# description
-		$description = strlen($subnet->description)==0 ? "/" : $subnet->description;
+		$description = is_blank($subnet->description) ? "/" : $subnet->description;
 
 		if ($subnet->isFolder == 1) {
 			$tr['subnet'] = "<span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-sfolder fa-pad-right-3 fa-folder-open'></i> <a href='".create_link("folder",$subnet->sectionId,$subnet->id)."'> $subnet->description</a>";
@@ -104,16 +104,19 @@ class SubnetsTable {
 		}
 
 		//vlan
-		if (isset($this->all_vlans[$subnet->vlanId]->number)) {
-			$tr['vlan'] = $this->all_vlans[$subnet->vlanId]->domainId==1 ? $this->all_vlans[$subnet->vlanId]->number : $this->all_vlans[$subnet->vlanId]->number." <span class='badge badge1 badge5' rel='tooltip' title='"._('VLAN is in domain'). ".$this->all_vlans[$subnet->vlanId]->domainName.'>".$this->all_vlans[$subnet->vlanId]->domainName."</span>";
+		if (is_numeric($subnet->vlanId) && isset($this->all_vlans[$subnet->vlanId]->number)) {
+			$tr['vlan'] = $this->all_vlans[$subnet->vlanId]->domainId == 1 ? $this->all_vlans[$subnet->vlanId]->number : $this->all_vlans[$subnet->vlanId]->number . " <span class='badge badge1 badge5' rel='tooltip' title='" . _('VLAN is in domain') . $this->all_vlans[$subnet->vlanId]->domainName . "'>" . $this->all_vlans[$subnet->vlanId]->domainName . "</span>";
 		} else {
 			$tr['vlan'] = _('Default');
 		}
 		//vrf
 		if($this->Tools->settings->enableVRF == 1) {
 			# fetch vrf
-			$vrf = $this->Tools->fetch_object("vrf", "vrfId", $subnet->vrfId);
-			$tr['vrf'] = !$vrf ? "" : $vrf->name;
+			$vrf = null;
+			if (is_numeric($subnet->vlanId)) {
+				$vrf = $this->Tools->fetch_object("vrf", "vrfId", $subnet->vrfId);
+			}
+			$tr['vrf'] = is_object($vrf) ? $vrf->name : _('Default');
 		}
 
 		//masterSubnet
@@ -166,7 +169,7 @@ class SubnetsTable {
 					}
 					//text
 					elseif($field['type']=="text") {
-						if(strlen($subnet->{$field['name']})>0)
+						if(!is_blank($subnet->{$field['name']}))
 							$tr[$field_name] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='". ($subnet->{$field['name']}) ."'>";
 						else
 							$tr[$field_name] = '';

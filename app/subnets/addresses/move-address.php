@@ -24,18 +24,18 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "address_".$_POST['id']);
+$csrf = $User->Crypto->csrf_cookie ("create", "address_".$POST->id);
 
 # validate action
-$Tools->validate_action ($_POST['action']);
+$Tools->validate_action(false);
 
 # validate post
-is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid ID"), true);
-is_numeric($_POST['id']) || strlen($_POST['id'])==0 ?:	$Result->show("danger", _("Invalid ID"), true);
+is_numeric($POST->subnetId) ?:						$Result->show("danger", _("Invalid ID"), true);
+is_numeric($POST->id) || is_blank($POST->id) ?:	$Result->show("danger", _("Invalid ID"), true);
 
 # fetch address and subnet
-$address = (array) $Addresses->fetch_address(null, $_POST['id']);
-$subnet  = (array) $Subnets->fetch_subnet(null, $_POST['subnetId']);
+$address = (array) $Addresses->fetch_address(null, $POST->id);
+$subnet  = (array) $Subnets->fetch_subnet(null, $POST->subnetId);
 
 # fetch all slave subnets
 $Subnets->fetch_subnet_slaves_recursive ($subnet['id']);
@@ -59,7 +59,7 @@ $Subnets->fetch_subnet_slaves_recursive ($subnet['id']);
 		<td>
 			<strong><?php print $address['ip']; ?></strong>
 
-   			<input type="hidden" name="action" 	 	value="<?php print $_POST['action']; ?>">
+   			<input type="hidden" name="action" 	 	value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="id" 		 	value="<?php print $address['id']; ?>">
 			<input type="hidden" name="subnet"   	value="<?php print $subnet['ip']."/$subnet[mask]"; ?>">
 			<input type="hidden" name="subnetId" 	value="<?php print $subnet['id']; ?>">
@@ -72,13 +72,13 @@ $Subnets->fetch_subnet_slaves_recursive ($subnet['id']);
 	<!-- description -->
 	<tr>
 		<td><?php print _('Description'); ?></td>
-		<td><?php print strlen(@$address['description'])>0 ? $address['description'] : "/"; ?></td>
+		<td><?php print !is_blank(@$address['description']) ? $address['description'] : "/"; ?></td>
 	</tr>
 
 	<!-- DNS name -->
 	<tr>
 		<td><?php print _('DNS name'); ?></td>
-		<td><?php print strlen(@$address['hostname'])>0 ? $address['hostname'] : "/"; ?></td>
+		<td><?php print !is_blank(@$address['hostname']) ? $address['hostname'] : "/"; ?></td>
 	</tr>
 
 	<!-- divider -->

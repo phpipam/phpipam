@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	This script takes 2 argumets from argv:
+ *	This script takes 2 arguments from argv:
  *		* subnetId
  *		* ports
  *
@@ -59,7 +59,7 @@ $z = 0;			//addresses array index
 /*
 test
 */
-$ports = explode(";", $argv[2]);
+$ports = pf_explode(";", $argv[2]);
 
 $out = array();
 
@@ -69,6 +69,8 @@ foreach($scan_addresses as $k=>$v) {
 		$addresses[] = array("ip"=>$v, "port"=>$p);
 	}
 }
+
+$Database->resetConn(); // Close database, forked processes inherit and close file handles on exit.
 
 while ($z < sizeof($scan_addresses)) {
 

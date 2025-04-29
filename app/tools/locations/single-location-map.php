@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # fetch location
-if(!$location) {
+if(!isset($location)) {
     $location = $Tools->fetch_object("locations", "id", $location_index);
 }
 
@@ -23,9 +23,9 @@ elseif(!is_object($location)) {
     $OSM = new OpenStreetMap($Database);
 
     // recode
-    if (strlen($location->long)==0 && strlen($location->lat)==0 && strlen($location->address)>0) {
+    if (is_blank($location->long) && is_blank($location->lat) && !is_blank($location->address)) {
         $latlng = $OSM->get_latlng_from_address ($location->address);
-        if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
+        if(isset($latlng['lat']) && isset($latlng['lng'])) {
             // save
             $Tools->update_latlng ($location->id, $latlng['lat'], $latlng['lng']);
             $location->lat = $latlng['lat'];
@@ -37,8 +37,8 @@ elseif(!is_object($location)) {
     $resize = @$resize === false ? false : true;
 
     # no long/lat
-    if( (strlen($location->long)>0 && strlen($location->lat))) {
+    if( (!is_blank($location->long) && !is_blank($location->lat))) {
         $OSM->add_location($location);
-        $OSM->map($height);
+        $OSM->map($height ?? null);
     }
 }

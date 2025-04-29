@@ -23,12 +23,12 @@ $csrf = $User->Crypto->csrf_cookie ("create", "permissions");
 
 
 # ID must be numeric
-if(!is_numeric($_POST['subnetId']))	{ $Result->show("danger", _("Invalid ID"), true, true); }
+if(!is_numeric($POST->subnetId))	{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # get all groups
 $groups = $Admin->fetch_all_objects ("userGroups", "g_name");
 # get subnet details
-$subnet = $Subnets->fetch_subnet(null, $_POST['subnetId']);
+$subnet = $Subnets->fetch_subnet(null, $POST->subnetId);
 ?>
 
 
@@ -98,7 +98,7 @@ $('.input-switch').on('switchChange.bootstrapSwitch', function (e, data) {
 			print "</span>";
 
 			# hidden
-			print "<input type='hidden' name='subnetId' value='$_POST[subnetId]'>";
+			print "<input type='hidden' name='subnetId' value='".escape_input($POST->subnetId)."'>";
 
 			print "	</td>";
 			print "</tr>";
@@ -112,7 +112,7 @@ $('.input-switch').on('switchChange.bootstrapSwitch', function (e, data) {
 	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 
     <!-- set parameters to slave subnets -->
-    <?php if($Subnets->has_slaves($_POST['subnetId'])) { ?>
+    <?php if($Subnets->has_slaves($POST->subnetId)) { ?>
     <tr>
         <td colspan="2" class="hr"><hr></td>
     </tr>

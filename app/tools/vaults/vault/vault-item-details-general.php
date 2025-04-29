@@ -14,18 +14,18 @@ else {
 	print "<br>";
 
 	// back
-	print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], "vaults", $_GET['subnetId'])."'><i class='fa fa-angle-left'></i> "._("All vault items")."</a><br><br>";
+	print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, "vaults", $GET->subnetId)."'><i class='fa fa-angle-left'></i> "._("All vault items")."</a><br><br>";
 
 	// test
-	if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])!="test") {
+	if(isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) === false) {
 	    $Result->show("danger", _("Cannot unlock vault"), false);
 
 	}
 	else {
 
 		// fetch item
-		$vault_item = $Tools->fetch_object("vaultItems", "id", $_GET['sPage']);
-		$vault_item_values = json_decode($User->Crypto->decrypt($vault_item->values, $_SESSION[$vault_id]));
+		$vault_item = $Tools->fetch_object("vaultItems", "id", $GET->sPage);
+		$vault_item_values = db_json_decode($User->Crypto->decrypt($vault_item->values, $_SESSION[$vault_id]));
 
 		// get custom fields
 		$custom_fields = $Tools->fetch_custom_fields('vaultItems');
@@ -73,13 +73,13 @@ else {
 
 				print "<tr>";
 				print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
-				print "	<td style='vertical-align:top;align:left;'>".$vault_item->{$key}."</td>";
+				print "	<td style='vertical-align:top;align-content:left;'>".$vault_item->{$key}."</td>";
 				print "</tr>";
 			}
 		}
 
 		// actions
-		if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])=="test") {
+		if(isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) !== false) {
 			// divider
 			print "<tr>";
 			print "	<td colspan='2'><hr></td>";
@@ -188,7 +188,7 @@ else {
 				print "<tr>";
 				print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Issuer")."</h4><hr></td>";
 				print "</tr>";
-				if(strlen($certificate_details['issuer']['C'])>0) {
+				if(!is_blank($certificate_details['issuer']['C'])) {
 				print "<tr>";
 				print "	<th>"._("Country")."</th>";
 				print "	<td>".$certificate_details['issuer']['C']."</td>";
@@ -206,7 +206,7 @@ else {
 				print "	<td>".$certificate_details['issuer']['L']."</td>";
 				print "</tr>";
 				}
-				if(strlen($certificate_details['issuer']['O'])>0) {
+				if(!is_blank($certificate_details['issuer']['O'])) {
 				print "<tr>";
 				print "	<th>"._("Organisation name")."</th>";
 				print "	<td>".$certificate_details['issuer']['O']."</td>";

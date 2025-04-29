@@ -23,14 +23,14 @@ elseif ($User->check_module_permissions ("nat", User::ACCESS_R, false, false)===
 else {
 
 	# fetch nat
-	$n = $Tools->fetch_object("nat", "id", $_GET['subnetId']);
+	$n = $Tools->fetch_object("nat", "id", $GET->subnetId);
 	if($n===false)			{ $Result->show("danger", _("Invalid ID"), true); }
 
 	# get custom fields
 	$custom_fields = $Tools->fetch_custom_fields('nat');
 
 	# back link
-	print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], "nat")."' style='margin-bottom:10px;'><i class='fa fa-chevron-left'></i> ". _('All NAT translations')."</a>";
+	print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, "nat")."' style='margin-bottom:10px;'><i class='fa fa-chevron-left'></i> ". _('All NAT translations')."</a>";
 	?>
 
 
@@ -72,8 +72,8 @@ else {
         $n->description = str_replace("\n", "<br>", $n->description);
 
         // port
-        if(strlen($n->src_port)==0) $n->src_port = "/";
-        if(strlen($n->dst_port)==0) $n->dst_port = "/";
+        if(is_blank($n->src_port)) $n->src_port = "/";
+        if(is_blank($n->dst_port)) $n->dst_port = "/";
 
         // print
         print "<table class='ipaddress_subnet table-condensed'>";

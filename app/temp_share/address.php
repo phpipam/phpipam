@@ -6,7 +6,7 @@
 
 # get IP and subnet details (for subnet request)
 if(!isset($address)) {
-	$address = (array) $Addresses-> fetch_address(null, $_GET['subnetId']);
+	$address = (array) $Addresses-> fetch_address(null, $GET->subnetId);
 	$subnet  = (array) $Subnets->fetch_subnet(null, $address['subnetId']);
 }
 
@@ -15,16 +15,16 @@ $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 
 # set selected address fields array
 $selected_ip_fields = $settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);																			//format to array
+$selected_ip_fields = pf_explode(";", $selected_ip_fields);																			//format to array
 $selected_ip_fields_size = in_array('state', $selected_ip_fields) ? (sizeof($selected_ip_fields)-1) : sizeof($selected_ip_fields);	//set size of selected fields
-if($selected_ip_fields_size==1 && strlen($selected_ip_fields[0])==0) { $selected_ip_fields_size = 0; }								//fix for 0
+if($selected_ip_fields_size==1 && is_blank($selected_ip_fields[0])) { $selected_ip_fields_size = 0; }								//fix for 0
 
 
 # set ping statuses
-$statuses = explode(";", $settings->pingStatus);
+$statuses = pf_explode(";", $settings->pingStatus);
 
 # checks
-if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesnt exist
+if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesn't exist
 
  # resolve dns name
 $DNS = new DNS ($Database);
@@ -37,8 +37,8 @@ $address = $Addresses->reformat_empty_array_fields($address, "<span class='text-
 print "<h4>"._('IP address details')."</h4><hr>";
 
 # back
-if(@$temp_objects[$_GET['section']]->type=="subnets") {
-print "<a class='btn btn-default btn-sm btn-default' href='".create_link("temp_share",$_GET['section'])."'><i class='fa fa-chevron-left'></i> "._('Back to subnet')."</a>";
+if(@$temp_objects[$GET->section]->type=="subnets") {
+print "<a class='btn btn-default btn-sm btn-default' href='".create_link("temp_share",$GET->section)."'><i class='fa fa-chevron-left'></i> "._('Back to subnet')."</a>";
 }
 
 # check if it exists, otherwise print error
@@ -79,8 +79,8 @@ if(sizeof($address)>1) {
 	print "	<td>";
 
 	if ($address['state'] == "0") 	  { $stateClass = _("Offline"); }
-	else if ($address['state'] == "2") { $stateClass = _("Reserved"); }
-	else if ($address['state'] == "3") { $stateClass = _("DHCP"); }
+	elseif ($address['state'] == "2") { $stateClass = _("Reserved"); }
+	elseif ($address['state'] == "3") { $stateClass = _("DHCP"); }
 	else						  { $stateClass = _("Online"); }
 
 	print $Addresses->address_type_index_to_type ($address['state']);
@@ -123,7 +123,7 @@ if(sizeof($address)>1) {
 	if(in_array('switch', $selected_ip_fields)) {
 	print "<tr>";
 	print "	<th>"._('Device')."</th>";
-	if(strlen($address['switch'])>0) {
+	if(!is_blank($address['switch'])) {
 		# get device
 		$device = $Tools->fetch_object("devices", "id", $address['switch']);
 		if($device!==false) {
@@ -185,11 +185,11 @@ if(sizeof($address)>1) {
 	# custom fields
 	if(sizeof($custom_fields) > 0) {
 		print "<tr>";
-		print "	<td colsapn='2'><hr></td>";
+		print "	<td colspan='2'><hr></td>";
 		print "</tr>";
 
 		foreach($custom_fields as $key=>$field) {
-			if(strlen($address[$key])>0) {
+			if(!is_blank($address[$key])) {
 			$address[$key] = str_replace(array("\n", "\r\n"), "<br>",$address[$key]);
 			print "<tr>";
 			print "	<th>$key</th>";

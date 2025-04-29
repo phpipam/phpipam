@@ -11,8 +11,8 @@ $User->check_user_session();
 $active_requests   = $Tools->fetch_multiple_objects ("requests", "processed", 0, "id", false);
 $inactive_requests = $Tools->fetch_multiple_objects ("requests", "processed", 1, "id", false);
 # set hidden custom fields
-$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
-$hidden_cfields = is_array($hidden_cfields['requests']) ? $hidden_cfields['requests'] : array();
+$hidden_cfields = db_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_cfields = isset($hidden_cfields['requests']) ? $hidden_cfields['requests'] : array();
 ?>
 
 <h4><?php print _('List of all active IP addresses requests'); ?></h4>
@@ -37,7 +37,7 @@ else {
 	<th><?php print _('Comment'); ?></th>
 	<!-- Custom fields -->
 	<?php
-	$custom_fields = $Tools->fetch_custom_fields('requests');	
+	$custom_fields = $Tools->fetch_custom_fields('requests');
 	# hidden custom
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $ck=>$myField) 	{
@@ -73,7 +73,7 @@ else {
 		}
 		else {
 			// ip not provided
-			$request['ip_addr'] = strlen($request['ip_addr'])>0 ? $request['ip_addr'] : _("Automatic");
+			$request['ip_addr'] = !is_blank($request['ip_addr']) ? $request['ip_addr'] : _("Automatic");
 
 			print '<tr>'. "\n";
 			print "	<td><button class='btn btn-xs btn-default open_popup' data-script='app/admin/requests/edit.php' data-class='700' data-action='edit' data-requestid='$request[id]'><i class='fa fa-pencil' rel='tooltip' data-title=' "._('Process')."'></i></td>";

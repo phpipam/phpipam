@@ -15,11 +15,11 @@ $Result   = new Result ();
 # verify tdat user is logged in
 $User->check_user_session();
 
-# validate numberic id
-if(!is_numeric($_POST['cid']))	{ $Result->show("danger", _("Invalid ID"), true, true); }
+# validate numeric id
+if(!is_numeric($POST->cid))	{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch item
-$clog = $Log->fetch_changelog ($_POST['cid']);
+$clog = $Log->fetch_changelog ($POST->cid);
 if($clog==false)				{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # validate permissions
@@ -61,7 +61,7 @@ print "<tr>";
 print "	<td>"._('Object')."</td>";
 print "	<td>";
 	// print object details
-	if(strlen($clog->tid)==0) 	{ print _($type)." <span class='badge badge1 badge5 alert-danger'>"._("Deleted")."</span>"; }
+	if(is_blank($clog->tid)) 	{ print _($type)." <span class='badge badge1 badge5 alert-danger'>"._("Deleted")."</span>"; }
 	elseif($type=="IP address") { print _($type)." (<a href='".create_link("subnets",$clog->sectionId,$clog->subnetId,"address-details",$clog->tid)."'>".$Subnets->transform_address ($clog->ip_addr, "dotted")."</a>)";}
 	elseif($type=="Subnet")   	{ print _($type)." (<a href='".create_link("subnets",$clog->sectionId,$clog->tid)."'>".$Subnets->transform_address ($clog->ip_addr, "dotted")."/$clog->mask</a>)";}
 	elseif($type=="Folder")   	{ print _($type)." (<a href='".create_link("folder",$clog->sectionId,$clog->tid)."'>$clog->sDescription</a>)"; }
@@ -97,7 +97,7 @@ print "	<td>";
 	# format diff
 	$changelog = str_replace("\r\n", "<br>",$clog->cdiff);
 	$changelog = str_replace("\n", "<br>",$changelog);
-	$changelog = array_filter(explode("<br>", $changelog));
+	$changelog = array_filter(pf_explode("<br>", $changelog));
 
 	# set type
 	if($clog->ctype=="ip_addr") 	 { $type = "address"; }
@@ -109,8 +109,8 @@ print "	<td>";
 
 	foreach ($changelog as $c) {
 		// field
-		$field = explode(": ", $c);
-	    $value = explode("=>", $field[1]);
+		$field = array_pad(explode(":", $c), 2 , '');
+   	    $value = array_pad(explode("=>", $field[1]), 2, '');
 
 	    $field_name = trim(str_replace(array("[","]"), "", $field[0]));
 

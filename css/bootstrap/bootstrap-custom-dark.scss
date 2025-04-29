@@ -929,6 +929,9 @@ html {
                     border: 1px solid white;
                     color: white !important;
                 }
+                span.badge-white {
+                    color: white !important;
+                }
             }
         }
         td {
@@ -1237,6 +1240,8 @@ html {
 
         legend {
             color: white;
+            border-bottom: 1px solid $color_gray_5 !important;
+
         }
 
         form {
@@ -1260,6 +1265,45 @@ html {
     #searchSelect {
         background: $color_gray_8 !important;
     }
+}
+
+
+.panel.panel-default {
+    background: transparent;
+
+    border: 1px solid rgba(255,255,255,0.1) !important;
+
+    .panel-heading {
+        background: rgba(0, 0, 0, 0.3);
+        border-bottom: 1px solid rgba(255,255,255,0.5) !important;
+        color: white;
+    }
+
+    .list-group-item {
+        background: transparent;
+        border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+    }
+    .list-group-item:last-child {
+        border-bottom: none;
+    }
+
+    &:last-child {
+        border-bottom: none !important;
+    }
+}
+.octicon-passkey-fill {
+  fill: #ccc;
+}
+.list-group-item {
+    border: none;
+}
+.btn-default.disabled.focus,
+.btn-default.disabled:focus,
+.btn-default.disabled:hover,
+.btn-default[disabled].focus,
+.btn-default[disabled]:focus,
+.btn-default[disabled]:hover {
+    background: rgba(0,0,0,0.1) !important;
 }
 
 

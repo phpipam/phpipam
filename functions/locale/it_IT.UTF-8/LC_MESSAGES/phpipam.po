@@ -2153,7 +2153,7 @@ msgid "Cannot update request"
 msgstr "Impossibile aggiornare la richiesta"
 
 #: site/admin/manageRequestResult.php:33
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr "La richiesta &egrave; stata rifiutata"
 
 #: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
@@ -2201,7 +2201,7 @@ msgid "Errors occured when importing to database!"
 msgstr "Si sono verificati degli errore durante l&#39;importazione del database!"
 
 #: site/admin/CSVimportSubmit.php:95 site/admin/ripeImportResult.php:72
-msgid "Import successfull"
+msgid "Import successful"
 msgstr "Impostazione eseguita"
 
 #: site/admin/CSVimportVerify.php:25
@@ -2628,7 +2628,7 @@ msgid "If group does not have access to section it will not be able to access su
 msgstr "Se un gruppo non ha accesso alla sezione non potr&agrave; accedere alle subnet, anche se<br>i permessi sulle subnet sono impostati"
 
 #: site/admin/customSubnetFieldsOrder.php:15 site/admin/customIPFieldsOrder.php:15 site/admin/customVLANFieldsOrder.php:15 site/admin/customUserFieldsOrder.php:15
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr "I campi non possono essere vuoti"
 
 #: site/admin/customSubnetFieldsOrder.php:19 site/admin/customIPFieldsOrder.php:19 site/admin/customVLANFieldsOrder.php:19 site/admin/customUserFieldsOrder.php:19
@@ -3005,7 +3005,7 @@ msgid "Truncating network will remove all IP addresses, that belong to selected 
 msgstr "Troncare la rete canceller&agrave; tutti gli indirizzi IP che appartengono alla subnet selezionata!"
 
 #: site/admin/manageSubnetTruncateSave.php:23
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr "Subnet troncata con successo"
 
 #: site/admin/usersEditEmailNotif.php:23
@@ -5438,10 +5438,10 @@ msgstr "Errore impostazione permessi subnet"
 msgid "Manage permissions for folder"
 msgstr "Gestione permessi per cartella"
 
-msgid "Only subnets that have no nested subnets can be splitted"
+msgid "Only subnets that have no nested subnets can be split"
 msgstr "Solo le subnet che non hanno subnet annidate possono essere divise"
 
-msgid "Subnet too small to be splitted"
+msgid "Subnet too small to be split"
 msgstr "Subnet troppo piccola per essere divisa"
 
 msgid "Name prefix"
@@ -5992,7 +5992,7 @@ msgstr "Tipo dispositivo non valido."
 msgid "Maximum zone name length"
 msgstr "Lunghezza massima nome zona"
 
-msgid "Choose a maximum lenght of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgid "Choose a maximum length of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
 msgstr ""
 "Scegli  una lunghezza massima per il nome della zona.<br>La lunghezza predefinita &egrave; 3, il massimo &egrave; 32 caratteri.<br>(considerare che il firewall potrebbe avere dei limiti per la lunghezza dei nomi zona o "
 "degli address objects)"
@@ -6021,7 +6021,7 @@ msgstr "Indicatore cliente zona"
 msgid "Zone generator method"
 msgstr "Metodo generazione zona"
 
-msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own unique zone names you can choose the option &quot;text&quot."
+msgid "Generate zone names automatically with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own unique zone names you can choose the option &quot;text&quot."
 msgstr "Genera i nomi zona automaticamente con l&#39;impostazione &quot;decimal&quot; o &quot;hex&quot;. Per utilizzare nomi zona proprietari scegliere &quot;text&quot;."
 
 msgid "Zone name padding"
@@ -6304,7 +6304,7 @@ msgstr "Nessun dispositivo disponibile per interrogazione tabella instradamenti 
 msgid "No new subnets found"
 msgstr "Nessuna nuova subnet trovata"
 
-msgid "SNMP module disbled"
+msgid "SNMP module disabled"
 msgstr "Modulo SNMP disattivato"
 
 msgid "No devices for SNMP ARP query available"
@@ -7087,7 +7087,7 @@ msgstr "Aggiorna i tag dell&#39;indirizzo quando si verifica un cambio di stato"
 msgid "Require unique subnets"
 msgstr "Richiedi subnet univoche"
 
-msgid "Require unique subnets accross all sections"
+msgid "Require unique subnets across all sections"
 msgstr "Richiedi subnet univoche tra tutte le sezioni"
 
 msgid "Set maximum number of concurrent ICMP checks (default 128)"
@@ -7153,13 +7153,13 @@ msgstr "Segna come utilizzata"
 msgid "Set subnet alert threshold"
 msgstr "Imposta soglia allerta subnet"
 
-msgid "Failed to set subnet permissons for subnet"
+msgid "Failed to set subnet permissions for subnet"
 msgstr "Errore impostando i permessi per la subnet"
 
 msgid "No result"
 msgstr "Nessun risultato"
 
-msgid "Subnet splitted successfully"
+msgid "Subnet split successfully"
 msgstr "Subent divisa"
 
 msgid "Copy custom field values"
@@ -7981,7 +7981,7 @@ msgstr "Opzioni aggiornate"
 msgid "Upgrade"
 msgstr "Aggiorna"
 
-msgid "Object is Natted"
+msgid "Object is NATted"
 msgstr "L&#39;oggetto &egrave; in nat"
 
 msgid "Invalid generator ID"

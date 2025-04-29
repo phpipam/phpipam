@@ -16,18 +16,18 @@ if ($User->settings->enableRACK!="1") {
 }
 else {
     # validate integer
-    if(!is_numeric($_GET['subnetId']))      { header("Location: ".create_link($_GET['page'], "racks")); $error =_("Invalid rack Id"); }
+    if(!is_numeric($GET->subnetId))      { header("Location: ".create_link($GET->page, "racks")); $error =_("Invalid rack Id"); }
     # init racks object
     $Racks = new phpipam_rack ($Database);
     # fetch all racks
-    $rack = $Racks->fetch_rack_details ($_GET['subnetId']);
-    $rack_devices = $Racks->fetch_rack_devices ($_GET['subnetId']);
-    $rack_contents = $Racks->fetch_rack_contents ($_GET['subnetId']);
+    $rack = $Racks->fetch_rack_details ($GET->subnetId);
+    $rack_devices = $Racks->fetch_rack_devices ($GET->subnetId);
+    $rack_contents = $Racks->fetch_rack_contents ($GET->subnetId);
     $Racks->add_rack_start_print($rack_devices);
     $Racks->add_rack_start_print($rack_contents);
 
     // rack check
-    if($rack===false)                       { header("Location: ".create_link($_GET['page'], "racks")); $error =_("Invalid rack Id"); }
+    if($rack===false)                       { header("Location: ".create_link($GET->page, "racks")); $error =_("Invalid rack Id"); }
 
     // get custom fields
     $cfields = $Tools->fetch_custom_fields ('racks');
@@ -134,7 +134,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
                 $rack->{$key} = $Tools->create_links($rack->{$key});
                 print "<tr>";
                 print " <th>".$Tools->print_custom_field_name ($key)."</th>";
-                print " <td style='vertical-align:top;align:left;'>".$rack->{$key}."</td>";
+                print " <td style='vertical-align:top;align-content:left;'>".$rack->{$key}."</td>";
                 print "</tr>";
             }
             // divider
@@ -144,7 +144,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         # action button groups
         if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
             print "<tr>";
-            print " <th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
+            print " <th style='vertical-align:bottom;align-content:left;'>"._('Actions')."</th>";
             print "<td class='actions'>";
 
 
@@ -194,6 +194,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
             reset($rack_contents);
             $prev = false;
             $is_back =  false;
+            $error = "";
             do {
                 if (!($cd = current($rack_devices))) {
                     $cur = current($rack_contents);
@@ -259,7 +260,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         }
         ?>
 
-        <?php if($User->settings->enableLocations==1 && strlen($rack->location)>0 && $rack->location!=0) { ?>
+        <?php if($User->settings->enableLocations==1 && !is_blank($rack->location) && $rack->location!=0) { ?>
         <tr><td colspan='2' style="padding-top:50px !important;"><hr></td></tr>
         <tr>
             <td colspan="2">
@@ -275,7 +276,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
     </div>
 
     <!-- location -->
-    <?php if($User->settings->enableLocations==1 && strlen($rack->location)>0 && $rack->location!=0) {  ?>
+    <?php if($User->settings->enableLocations==1 && !is_blank($rack->location) && $rack->location!=0) {  ?>
     <div class="col-xs-12 col-md-6">
 
         <div>
@@ -294,7 +295,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
     <?php } ?>
 
     <!-- image -->
-    <?php if(!($User->settings->enableLocations==1 && strlen($rack->location)>0 && $rack->location!=0)) { ?>
+    <?php if(!($User->settings->enableLocations==1 && !is_blank($rack->location) && $rack->location!=0)) { ?>
     <div class="col-xs-12 col-md-6">
         <?php if($rack->hasBack!="0") { ?>
         <img src="<?php print $Tools->create_rack_link ($rack->id, NULL, true); ?>" style='width:200px;margin-left:5px;float:right;'>

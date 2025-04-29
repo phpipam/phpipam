@@ -15,7 +15,15 @@ class Session_DB {
 	protected $Database;
 
 	/**
-	 * Construnctor
+	 * Result
+	 *
+	 * @var Result
+	 * @access public
+	 */
+	public $Result;
+
+	/**
+	 * Constructor
 	 *
 	 * @method __construct
 	 * @param  Database_PDO $database
@@ -104,8 +112,8 @@ class Session_DB {
 	 * @return bool
 	 */
 	public function _write ($id, $data) {
-		// we need some data otherwise dont save session
-		if(strlen($data)==0) {
+		// we need some data, otherwise don't save session
+		if(is_blank($data)) {
 			//return true;
 		}
 		// set insert / update values

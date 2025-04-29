@@ -8,8 +8,8 @@
 $User->check_user_session();
 
 # get all custom fields
-$custom_pstn_fields  = $_REQUEST['pstn']=="on"      ? $Tools->fetch_custom_fields ("pstnPrefixes") : array();
-$custom_pstnn_fields = $_REQUEST['pstn']=="on"      ? $Tools->fetch_custom_fields ("pstnNumbers") : array();
+$custom_pstn_fields  = $GET->pstn=="on"      ? $Tools->fetch_custom_fields ("pstnPrefixes") : array();
+$custom_pstnn_fields = $GET->pstn=="on"      ? $Tools->fetch_custom_fields ("pstnNumbers") : array();
 
 $hidden_pstn_fields  = is_array(@$hidden_fields['pstnPrefixes']) ? $hidden_fields['pstnPrefixes'] : array();
 $hidden_pstnn_fields = is_array(@$hidden_fields['pstnNumbers']) ? $hidden_fields['pstnNumbers'] : array();
@@ -56,7 +56,7 @@ if(sizeof($result_pstn) > 0) {
 		print " <td><dd>$pstn->name</dd></td>";
 		print " <td><dd>".$pstn->prefix.$pstn->start." - ".$pstn->prefix.$pstn->stop."</dd></td>";
 		//device										{
-		if(strlen($pstn->deviceId)>0 && $pstn->deviceId!="0") {
+		if(!is_blank($pstn->deviceId) && $pstn->deviceId!="0") {
 			$switch = $Tools->fetch_object("devices", "id", $pstn->deviceId);
 			$pstn->deviceId = $switch===false ? "/" : "<a href='".create_link("tools", "devices", $switch->id)."'>".$switch->hostname."</a>";
 		}
@@ -136,7 +136,7 @@ if(sizeof($result_pstnn) > 0) {
 		print " <td><dd>$pstnn->name</dd></td>";
 		print " <td><dd>$pstnn->owner</dd></td>";
 		//device										{
-		if(strlen($pstnn->deviceId)>0 && $pstnn->deviceId!="0") {
+		if(!is_blank($pstnn->deviceId) && $pstnn->deviceId!="0") {
 			$switch = $Tools->fetch_object("devices", "id", $pstnn->deviceId);
 			$pstnn->deviceId = $switch===false ? "/" : "<a href='".create_link("tools", "devices", $switch->id)."'>".$switch->hostname."</a>";
 		}

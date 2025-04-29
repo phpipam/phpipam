@@ -28,12 +28,12 @@ $OSM = new OpenStreetMap($Database);
 
 // get all
 foreach ($all_locations as $k=>$l) {
-    if(strlen($l->long)==0 && strlen($l->lat)==0 && strlen($l->address)==0 ) {
+    if(is_blank($l->long) && is_blank($l->lat) && is_blank($l->address) ) {
         // map not used
         unset($all_locations[$k]);
     }
     // recode
-    elseif (strlen($l->long)==0 && strlen($l->lat)==0 && strlen($l->address)>0) {
+    elseif (is_blank($l->long) && is_blank($l->lat) && !is_blank($l->address)) {
         $latlng = $OSM->get_latlng_from_address ($l->address);
         if($latlng['lat']==NULL || $latlng['lng']==NULL) {
             unset($all_locations[$k]);
@@ -63,7 +63,7 @@ foreach ($member_circuits as $circuit) {
 
     $OSM->add_circuit($circuit_l1, $circuit_l2, $type_hash[$circuit->type]);
 }
-$OSM->map($height);
+$OSM->map($height ?? null);
 
 print "<hr>";
 print "<div class='text-right'>";

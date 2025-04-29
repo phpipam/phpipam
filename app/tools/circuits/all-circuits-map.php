@@ -25,7 +25,7 @@ foreach($circuit_types as $t){
 }
 
 //Fetch all locations and store info hash, same as above.
-//This will elimate the need of looping through circuits the first time
+//This will eliminate the need of looping through circuits the first time
 $locations = $Tools->fetch_all_objects("locations");
 $locations = is_array($locations) ? $locations : [];
 
@@ -36,11 +36,11 @@ $OSM = new OpenStreetMap($Database);
 
 foreach ($all_locations as $k=>$l) {
     // map used
-    if(strlen($l->long)==0 && strlen($l->lat)==0 && strlen($l->address)==0 ) {
+    if(is_blank($l->long) && is_blank($l->lat) && is_blank($l->address) ) {
         unset($all_locations[$k]);
     }
     // recode
-    elseif (strlen($l->long)==0 && strlen($l->lat)==0 && strlen($l->address)>0) {
+    elseif (is_blank($l->long) && is_blank($l->lat) && !is_blank($l->address)) {
         $latlng = $OSM->get_latlng_from_address ($l->address);
         if($latlng['lat']==NULL || $latlng['lng']==NULL) {
             unset($all_locations[$k]);

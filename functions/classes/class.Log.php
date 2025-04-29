@@ -347,7 +347,7 @@ class Logging extends Common_functions {
 				if (array_key_exists("HTTP_PHPIPAM_TOKEN", $_SERVER)) {
 					$admin = new Admin($this->Database, False);
 					$token = $admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN']);
-					if ($token === False) {
+					if ($token === false) {
 						$this->user_id = null;
 					}
 					else {
@@ -359,7 +359,7 @@ class Logging extends Common_functions {
 				}
 			}
 			else {
-				try { $user_id = $this->Database->getObjectQuery("select * from `users` where `username` = ? limit 1", array($_SESSION['ipamusername'])); }
+				try { $user_id = $this->Database->getObjectQuery("users", "select * from `users` where `username` = ? limit 1", array($_SESSION['ipamusername'])); }
 				catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
 			}
 			# save id
@@ -429,7 +429,7 @@ class Logging extends Common_functions {
 	 *		*.*                                             /var/log/phpipam-changelog.log
 	 *		!*
 	 *
-	 *		# > rysylog example
+	 *		# > rsyslog example
 	 *		auth.alert;auth.warning;auth.debug              /var/log/auth.log
 	 *		if $programname == 'phpipam' then /var/log/phpipam.log
 	 *		if $programname == 'phpipam-changelog' then /var/log/phpipam-changelog.log
@@ -606,7 +606,7 @@ class Logging extends Common_functions {
 	 * @param mixed $informational (default: Off)
 	 * @param mixed $notice (default: Off)
 	 * @param mixed $warning (default: Off)
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_logs ($logCount, $direction = NULL, $lastId = NULL, $highestId = NULL, $informational = "off", $notice = "off", $warning = "off") {
 
@@ -655,7 +655,7 @@ class Logging extends Common_functions {
         $query[] = "order by `id` desc limit $logCount ;";
 
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery(implode("\n", $query), $params); }
+	    try { $logs = $this->Database->getObjectsQuery('logs', implode("\n", $query), $params); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 	    # return results
@@ -670,7 +670,7 @@ class Logging extends Common_functions {
 	 */
 	public function log_fetch_highest_id () {
 		# fetch
-	    try { $id = $this->Database->getObjectQuery("select id from logs order by id desc limit 1;"); }
+	    try { $id = $this->Database->getObjectQuery('logs', "select id from logs order by id desc limit 1;"); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 		# return result
 		return $id->id;
@@ -719,11 +719,10 @@ class Logging extends Common_functions {
 			return true;
 		}
 
-		// folder
-		if($this->object_type == "subnet") {
-			if ($this->object_old['isFolder'] || $this->object_new['isFolder']) {
-				$this->object_type = "folder";
-			}
+		# folder
+		if ((isset($this->object_new['isFolder']) && $this->object_new['isFolder'] == "1") ||
+		    (isset($this->object_old['isFolder']) && $this->object_old['isFolder'] == "1")) {
+			$this->object_type = "folder";
 		}
 
 		// make sure we have settings
@@ -810,7 +809,7 @@ class Logging extends Common_functions {
 		# null and from cli, set admin user
 		if ($this->user===null && php_sapi_name()=="cli") { $this->user_id = 1; }
 
-        # if user is not specify dont write changelog
+        # if user is not specified, don't write changelog
         if (!isset($this->user) || $this->user == false || $this->user == null) {
             return true;
         }
@@ -822,7 +821,7 @@ class Logging extends Common_functions {
 		# set object type
 		$object_type = $this->object_type=="folder" ? "subnet" : $this->object_type;
 
-		# if required values are missing dont save changelog
+		# if required values are missing, don't save changelog
 		if(is_null($obj_id) || $obj_id=="NULL")	{ return false; }
 
 	    # set values
@@ -845,7 +844,7 @@ class Logging extends Common_functions {
 			return false;
 		}
 		# mail
-		if ($this->mail_changelog && strlen($changelog)>0) {
+		if ($this->mail_changelog && !is_blank($changelog)) {
 			$this->changelog_send_mail ($changelog);
 		}
 		# ok
@@ -946,7 +945,7 @@ class Logging extends Common_functions {
 	}
 
 	/**
-	 * Calculate possible chages on edit
+	 * Calculate possible changes on edit
 	 *
 	 * @access private
 	 * @return array
@@ -964,17 +963,19 @@ class Logging extends Common_functions {
 			}
 		}
 		// ip address - old needs to be transformed to dotted format
-		$this->object_old['ip_addr'] = $this->Subnets->transform_address($this->object_old['ip_addr'], "dotted");
-		$this->object_new['ip_addr'] = $this->Subnets->transform_address($this->object_new['ip_addr'], "dotted");
+		if (isset($this->object_old['ip_addr']))
+			$this->object_old['ip_addr'] = $this->Subnets->transform_address($this->object_old['ip_addr'], "dotted");
+		if (isset($this->object_new['ip_addr']))
+			$this->object_new['ip_addr'] = $this->Subnets->transform_address($this->object_new['ip_addr'], "dotted");
 
 		$log = [];
 		// check each value
 		foreach($this->object_new as $k=>$v) {
 			//change
-			if($this->object_old[$k]!=$v && ($this->object_old[$k] != str_replace("\'", "'", $v)))	{
+			if($this->object_old[$k]!=$v && ($this->object_old[$k] != str_replace("\'", "'", (string) $v)))	{
 				//empty
-				if(strlen(@$this->object_old[$k])==0)	{ $this->object_old[$k] = "NULL"; }
-				if(strlen(@$v)==0)						{ $v = "NULL"; }
+				if(is_blank(@$this->object_old[$k]))	{ $this->object_old[$k] = "NULL"; }
+				if(is_blank(@$v))						{ $v = "NULL"; }
 
 				//tag change
 				if($k == 'state') 				{ $v = $this->changelog_format_tag_diff ($k, $v); }
@@ -1112,16 +1113,16 @@ class Logging extends Common_functions {
 			}
 
 			# if section does not change
-			if($this->object_new['sectionId']==$this->object_new['sectionIdNew']) {
+			if(isset($this->object_new['sectionId']) && isset($this->object_new['sectionIdNew']) && $this->object_new['sectionId']==$this->object_new['sectionIdNew']) {
 				unset(	$this->object_new['sectionIdNew']);
 			}
 			else {
-				$this->object_old['sectionIdNew'] = $this->object_old['sectionId'];
+				$this->object_old['sectionIdNew'] = isset($this->object_old['sectionId']) ? $this->object_old['sectionId'] : null;
 			}
 
 			//transform subnet to IP address format
-			if(strlen($this->object_new['subnet'])>0) 	{ $this->object_new['subnet'] = $this->Subnets->transform_address ($this->object_new['subnet'], "dotted");}
-			if(strlen($this->object_old['subnet'])>0) 	{ $this->object_old['subnet'] = $this->Subnets->transform_address ($this->object_old['subnet'], "dotted");}
+			if(isset($this->object_new['subnet']) && !is_blank($this->object_new['subnet'])) 	{ $this->object_new['subnet'] = $this->Subnets->transform_address ($this->object_new['subnet'], "dotted");}
+			if(isset($this->object_old['subnet']) && !is_blank($this->object_old['subnet'])) 	{ $this->object_old['subnet'] = $this->Subnets->transform_address ($this->object_old['subnet'], "dotted");}
 
 			//remove subnet/mask for folders
 			if (@$this->object_new['isFolder']=="1")	{ unset($this->object_new['subnet'], $this->object_new['mask']); }
@@ -1159,17 +1160,18 @@ class Logging extends Common_functions {
 	 * @access private
 	 * @param string $k
 	 * @param mixed $v
-	 * @return void
+	 * @return mixed
 	 */
 	private function changelog_format_section_diff ($k, $v) {
 		//get old and new device
-		if($this->object_old[$k] != "NULL") {
+		if(isset($this->object_old[$k]) && $this->object_old[$k] != "NULL") {
 			$section = $this->Sections->fetch_section ("id", $this->object_old[$k]);
 			$this->object_old[$k] = $section->name." (id ".$section->id.")";
 		}
 		if($v != "NULL")	{
 			$section = $this->Sections->fetch_section ("id", $v);
-			$v = $section->name." (id ".$section->id.")";
+			if (is_object($section))
+				$v = $section->name." (id ".$section->id.")";
 		}
 		//result
 		return $v;
@@ -1191,7 +1193,7 @@ class Logging extends Common_functions {
 			} else {
 				$subnet = $this->Subnets->fetch_subnet("id", $this->object_old[$k]);
 				if (is_object($subnet)) {
-					$this->object_old[$k] = strlen($subnet->description) > 0 ? $this->Subnets->transform_address($subnet->subnet, "dotted") . "/$subnet->mask [$subnet->description]" : $this->Subnets->transform_address($subnet->subnet, "dotted") . "/" . $subnet->mask;
+					$this->object_old[$k] = !is_blank($subnet->description) ? $this->Subnets->transform_address($subnet->subnet, "dotted") . "/$subnet->mask [$subnet->description]" : $this->Subnets->transform_address($subnet->subnet, "dotted") . "/" . $subnet->mask;
 					$this->object_old[$k] .= " (id " . $subnet->id . ")";
 				}
 			}
@@ -1202,7 +1204,7 @@ class Logging extends Common_functions {
 		}
 		else {
 			$subnet = $this->Subnets->fetch_subnet("id", $v);
-			$v  = strlen($subnet->description)>0 ? $this->Subnets->transform_address($subnet->subnet, "dotted")."/$subnet->mask [$subnet->description]" : $this->Subnets->transform_address($subnet->subnet, "dotted")."/".$subnet->mask;
+			$v  = !is_blank($subnet->description) ? $this->Subnets->transform_address($subnet->subnet, "dotted")."/$subnet->mask [$subnet->description]" : $this->Subnets->transform_address($subnet->subnet, "dotted")."/".$subnet->mask;
 			$v .= " (id ".$subnet->id.")";
 		}
 		//result
@@ -1219,12 +1221,13 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_device_diff ($k, $v) {
 		// old none
-		if($this->object_old[$k] == 0)	{
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
 			$this->object_old[$k] = _("None");
 		}
 		elseif($this->object_old[$k] != "NULL") {
 			$dev = $this->Tools->fetch_object("devices", "id", $this->object_old[$k]);
-			$this->object_old[$k] = $dev->hostname;
+			if (is_object($dev))
+				$this->object_old[$k] = $dev->hostname;
 		}
 		// new none
 		if($v == 0)	{
@@ -1232,7 +1235,8 @@ class Logging extends Common_functions {
 		}
 		if($v != "NULL") {
 			$dev = $this->Tools->fetch_object("devices", "id", $v);
-			$v = $dev->hostname;
+			if (is_object($dev))
+				$v = $dev->hostname;
 		}
 		//result
 		return $v;
@@ -1248,12 +1252,13 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_vlan_diff ($k, $v) {
 		//old none
-		if($this->object_old[$k] == 0)	{
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
 			$this->object_old[$k] = _("None");
 		}
 		elseif($this->object_old[$k] != "NULL") {
 			$vlan = $this->Tools->fetch_object("vlans", "vlanId", $this->object_old[$k]);
-			$this->object_old[$k] = $vlan->name." [$vlan->number]";
+			if (is_object($vlan))
+				$this->object_old[$k] = $vlan->name." [$vlan->number]";
 		}
 		//new none
 		if($v == 0)	{
@@ -1261,7 +1266,8 @@ class Logging extends Common_functions {
 		}
 		elseif($v != "NULL") {
 			$vlan = $this->Tools->fetch_object("vlans", "vlanId", $v);
-			$v = $vlan->name." [$vlan->number]";
+			if (is_object($vlan))
+				$v = $vlan->name." [$vlan->number]";
 		}
 		//result
 		return $v;
@@ -1277,12 +1283,13 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_vrf_diff ($k, $v) {
 		//old none
-		if($this->object_old[$k] == 0)	{
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
 			$this->object_old[$k] = _("None");
 		}
 		elseif($this->object_old[$k] != "NULL") {
 			$vrf = $this->Tools->fetch_object("vrf", "vrfId", $this->object_old[$k]);
-			$this->object_old[$k] = $vrf->name." [$vrf->description]";
+			if (is_object($vrf))
+				$this->object_old[$k] = $vrf->name." [$vrf->description]";
 		}
 		// new none
 		if($v == 0)	{
@@ -1290,7 +1297,8 @@ class Logging extends Common_functions {
 		}
 		elseif($v != "NULL") {
 			$vrf = $this->Tools->fetch_object("vrf", "vrfId", $v);
-			$v = $vrf->name." [$vrf->description]";
+			if (is_object($vrf))
+				$v = $vrf->name." [$vrf->description]";
 		}
 		//result
 		return $v;
@@ -1306,12 +1314,13 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_ns_diff ($k, $v) {
 		//old none
-		if($this->object_old[$k] == 0)	{
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
 			$this->object_old[$k] = _("None");
 		}
 		elseif($this->object_old[$k] != "NULL") {
 			$ns = $this->Tools->fetch_object("nameservers", "id", $this->object_old[$k]);
-			$this->object_old[$k] = $ns->name." [".$ns->namesrv1."]";
+			if (is_object($ns))
+				$this->object_old[$k] = $ns->name." [".$ns->namesrv1."]";
 		}
 		// new none
 		if($v == 0)	{
@@ -1319,7 +1328,8 @@ class Logging extends Common_functions {
 		}
 		elseif($v != "NULL") {
 			$ns = $this->Tools->fetch_object("nameservers", "id", $v);
-			$v = $ns->name." [".$ns->namesrv1."]";
+			if (is_object($ns))
+				$v = $ns->name." [".$ns->namesrv1."]";
 		}
 		//result
 		return $v;
@@ -1335,12 +1345,13 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_location_diff ($k, $v) {
 		//old none
-		if($this->object_old[$k] == 0)	{
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
 			$this->object_old[$k] = _("None");
 		}
 		elseif($this->object_old[$k] != "NULL") {
 			$location = $this->Tools->fetch_object("locations", "id", $this->object_old[$k]);
-			$this->object_old[$k] = strlen($location->description>0) ? $location->name." [$location->description]" : $location->name;
+			if (is_object($location))
+				$this->object_old[$k] = !is_blank($location->description) ? $location->name." [$location->description]" : $location->name;
 		}
 		// new none
 		if($v == 0)	{
@@ -1348,7 +1359,8 @@ class Logging extends Common_functions {
 		}
 		elseif($v != "NULL") {
 			$location = $this->Tools->fetch_object("locations", "id", $v);
-			$v = strlen($location->description>0) ? $location->name." [$location->description]" : $location->name;
+			if (is_object($location))
+				$v = !is_blank($location->description) ? $location->name." [$location->description]" : $location->name;
 		}
 		//result
 		return $v;
@@ -1364,7 +1376,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_master_section_diff ($k, $v) {
 		// old root
-		if($this->object_old[$k]==0) {
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k]==0) {
 			$this->object_old[$k] = _("Root");
 		}
 		else {
@@ -1393,8 +1405,12 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_permission_diff ($k, $v) {
 		// get old and compare
-		$this->object_new['permissions'] = json_decode(str_replace("\\", "", $this->object_new['permissions']), true);		//Remove /
-		$this->object_old['permissions'] = json_decode(str_replace("\\", "", $this->object_old['permissions']), true);		//Remove /
+		if (isset($this->object_new['permissions'])) {
+			$this->object_new['permissions'] = db_json_decode(str_replace("\\", "", $this->object_new['permissions']), true);		//Remove /
+		}
+		if (isset($this->object_old['permissions'])) {
+			$this->object_old['permissions'] = db_json_decode(str_replace("\\", "", $this->object_old['permissions']), true);		//Remove /
+		}
 
 		# Get all groups:
 		$groups = (array) $this->Tools->fetch_all_objects("userGroups", "g_id");
@@ -1457,7 +1473,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_permission_change () {
 		# get old and compare
-		$this->object_new['permissions_change'] = json_decode(str_replace("\\", "", $this->object_new['permissions_change']), true);		//Remove /
+		$this->object_new['permissions_change'] = db_json_decode(str_replace("\\", "", $this->object_new['permissions_change']), true);		//Remove /
 
 		# Get all groups:
 		$groups = (array) $this->Tools->fetch_all_objects("userGroups", "g_id");
@@ -1473,7 +1489,7 @@ class Logging extends Common_functions {
 
 		# reformat
 		if($this->object_new['permissions_change']!="null") {
-			$new_permissions = json_decode($this->object_new['permissions_change']);
+			$new_permissions = db_json_decode($this->object_new['permissions_change']);
 			foreach($new_permissions as $group_id=>$p) {
 				$log['Permissions'] .= "<br>". $groups[$group_id]['g_name'] ." : ".$this->Subnets->parse_permissions($p);
 			}
@@ -1489,7 +1505,7 @@ class Logging extends Common_functions {
 	 * @param bool $filter
 	 * @param mixed $expr
 	 * @param int $limit (default: 100)
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_all_changelogs ($filter, $expr, $limit = 100) {
     	# limit check
@@ -1540,7 +1556,7 @@ class Logging extends Common_functions {
 					) as `ips` order by `cid` desc limit $limit;";
 
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query, $filter ? array("expr"=>$expr) : null); }
+	    try { $logs = $this->Database->getObjectsQuery('changelog', $query, $filter ? array("expr"=>$expr) : null); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 	    # return results
@@ -1552,7 +1568,7 @@ class Logging extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $id
-	 * @return void
+	 * @return object|false
 	 */
 	public function fetch_changelog ($id) {
     	# limit check
@@ -1584,7 +1600,7 @@ class Logging extends Common_functions {
 					where `changelog`.`ctype` = 'section' and `changelog`.`cid` = :id
 				) as `ips`  order by `cid` desc limit 1;";
 	    # fetch
-	    try { $logs = $this->Database->getObjectQuery($query, array("id"=>$id)); }
+	    try { $logs = $this->Database->getObjectQuery('changelog', $query, array("id"=>$id)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), false);
 			return false;
@@ -1608,6 +1624,7 @@ class Logging extends Common_functions {
 	    if (!is_object($this->Addresses)) $this->Addresses = new Addresses ($this->Database);
 	    $ips = $this->Addresses->fetch_subnet_addresses_recursive ($subnetId, false);
 
+
 	    # fetch changelog for IPs
 	    if(sizeof($ips) > 0) {
 		    # query
@@ -1626,7 +1643,7 @@ class Logging extends Common_functions {
 			$query .= ") and `c`.`ctype` = 'ip_addr' order by `c`.`cid` desc limit $limit;";
 
 			# fetch
-		    try { $logs = $this->Database->getObjectsQuery($query, array_filter($args)); }
+		    try { $logs = $this->Database->getObjectsQuery('changelog', $query, array_filter($args)); }
 			catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 		    # return result
@@ -1682,7 +1699,7 @@ class Logging extends Common_functions {
 						and `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
 		}
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query, array($coid, $object_type)); }
+	    try { $logs = $this->Database->getObjectsQuery('changelog', $query, array($coid, $object_type)); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false); return false; }
 
 	    # return result
@@ -1708,31 +1725,33 @@ class Logging extends Common_functions {
 		$this->Subnets->reset_subnet_slaves_recursive ();
 		$this->Subnets->fetch_subnet_slaves_recursive ($subnetId);
 		# remove master subnet ID
-		$key = array_search($subnetId, $this->Subnets->slaves);
-		unset($this->Subnets->slaves[$key]);
-		$this->Subnets->slaves = array_unique($this->Subnets->slaves);
+		if(!is_null($this->Subnets->slaves)) {
+			$key = array_search($subnetId, $this->Subnets->slaves);
+			unset($this->Subnets->slaves[$key]);
+			$this->Subnets->slaves = array_unique($this->Subnets->slaves);
 
-	    # if some slaves are present get changelog
-	    if(sizeof($this->Subnets->slaves) > 0) {
-		    # set query
-		    $query  = "select
-						`u`.`real_name`,`o`.`sectionId`,`o`.`subnet`,`o`.`mask`,`o`.`isFolder`,`o`.`description`,`o`.`id`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`  from `changelog` as `c`, `users` as `u`, `subnets` as `o`
-						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
-						and (";
-			foreach($this->Subnets->slaves as $slaveId) {
-			if(!isset($args)) $args = array();
-			$query .= "`c`.`coid` = ? or ";
-			$args[] = $slaveId;							//set keys
+		    # if some slaves are present get changelog
+		    if(sizeof($this->Subnets->slaves) > 0) {
+			    # set query
+			    $query  = "select
+							`u`.`real_name`,`o`.`sectionId`,`o`.`subnet`,`o`.`mask`,`o`.`isFolder`,`o`.`description`,`o`.`id`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`  from `changelog` as `c`, `users` as `u`, `subnets` as `o`
+							where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
+							and (";
+				foreach($this->Subnets->slaves as $slaveId) {
+				if(!isset($args)) $args = array();
+				$query .= "`c`.`coid` = ? or ";
+				$args[] = $slaveId;							//set keys
+				}
+				$query  = substr($query, 0, -3);
+				$query .= ") and `c`.`ctype` = 'subnet' order by `c`.`cid` desc limit $limit;";
+
+				# fetch
+			    try { $logs = $this->Database->getObjectsQuery('changelog', $query, $args); }
+				catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
+
+			    # return result
+			    return $logs;
 			}
-			$query  = substr($query, 0, -3);
-			$query .= ") and `c`.`ctype` = 'subnet' order by `c`.`cid` desc limit $limit;";
-
-			# fetch
-		    try { $logs = $this->Database->getObjectsQuery($query, $args); }
-			catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-
-		    # return result
-		    return $logs;
 	    }
 		else {
 			return false;
@@ -1769,13 +1788,17 @@ class Logging extends Common_functions {
 
 		# set object
 		$obj_details = $this->object_action == "add" ? $this->object_new : $this->object_old;
+		$obj_details = array_merge(['id' => null, 'name' => null, 'description' => null, 'subnet' => null, 'ip_addr' => null, 'mask' => null, 'hostname' => null], $obj_details);
 
 		# change ip_addr
 		$this->object_type = str_replace("ip_addr", "address", $this->object_type);
 		$this->object_type = str_replace("ip_range", "address range", $this->object_type);
 
 		# folder
-		if ( $this->object_new['isFolder']=="1" || $this->object_old['isFolder']=="1" )	{ $this->object_type = "folder"; }
+		if ((isset($this->object_new['isFolder']) && $this->object_new['isFolder'] == "1") ||
+		    (isset($this->object_old['isFolder']) && $this->object_old['isFolder'] == "1")) {
+			$this->object_type = "folder";
+		}
 
 		# set subject
 		$subject = "";
@@ -1785,14 +1808,14 @@ class Logging extends Common_functions {
 
 		// if address we need subnet details !
 		$address_subnet = array();
-		if ($this->object_type=="address")		{ $address_subnet = (array) $this->Tools->fetch_object("subnets", "id", $obj_details['subnetId']); }
+		if ($this->object_type=="address")		{ $address_subnet = (array) $this->Tools->fetch_object("subnets", "id", $this->object_orig['subnetId']); }
 
 		# set object details
 		$details = "";
 		if ($this->object_type=="section") 		{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("subnets",$obj_details['id'])."'>".$obj_details['name'] . "(".$obj_details['description'].") - id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="subnet")	{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("subnets",$this->object_orig['sectionId'],$obj_details['id'])."'>".$this->Subnets->transform_address ($obj_details['subnet'], "dotted")."/".$obj_details['mask']." (".$obj_details['description'].") - id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="folder")	{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("folder",$this->object_orig['sectionId'],$obj_details['id'])."'>".$obj_details['description']." - id ".$obj_details['id']."</a>"; }
-		elseif ($this->object_type=="address")	{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("subnets",$this->object_orig['section'],$this->object_orig['subnetId'],"address-details",$this->object_orig['id'])."'>".$this->Subnets->transform_address ($obj_details['ip_addr'], "dotted")." ( hostname ".$obj_details['hostname'].", subnet: ".$this->Subnets->transform_address ($address_subnet['subnet'], "dotted")."/".$address_subnet['mask'].")- id ".$obj_details['id']."</a>"; }
+		elseif ($this->object_type=="address")	{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("subnets",$address_subnet['sectionId'],$this->object_orig['subnetId'],"address-details",$this->object_orig['id'])."'>".$this->Subnets->transform_address ($obj_details['ip_addr'], "dotted")." ( hostname ".$obj_details['hostname'].", subnet: ".$this->Subnets->transform_address ($address_subnet['subnet'], "dotted")."/".$address_subnet['mask'].")- id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="address range")	{ $details = $changelog; }
 
 		# remove subnet sectionId
@@ -1816,13 +1839,13 @@ class Logging extends Common_functions {
 		$content[] = "<td>";
 		// add changelog
 		$changelog = str_replace("\r\n", "<br>",$changelog);
-		$changelog = array_filter(explode("<br>", $changelog));
+		$changelog = array_filter(pf_explode("<br>", $changelog));
 		$content[] = "<table>";
 
 		foreach ($changelog as $c) {
     		// field
-    		$field = explode(":", $c);
-    	    $value = explode("=>", $field[1]);
+			$field = array_pad(explode(":", $c), 2 , '');
+        	$value = array_pad(explode("=>", $field[1]), 2, '');
 
     	    // format field
     	    $field = trim(str_replace(array("[","]"), "", $field[0]));

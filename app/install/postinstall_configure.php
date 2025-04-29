@@ -1,3 +1,5 @@
+<?php if (!defined('VERSION_VISIBLE') || Config::ValueOf('disable_installer')) { print _("Install scripts disabled"); exit(0); } ?>
+
 <div class="widget-dash col-xs-12 col-md-8 col-md-offset-2">
 <div class="inner install" style="min-height:auto;">
 	<h4><?php print _("Postinstall configuration"); ?></h4>
@@ -5,12 +7,12 @@
 	<div class="hContent">
 
 		<div class="text-muted" style="margin:10px;">
-		<?php print _("Hi, almost set, lets just set some basic settings. You can change all settings under administration once logged in!"); ?>
+		<?php print _("Hi. Almost set. Let's just set some basic settings. You can change all settings under administration once logged in!"); ?>
 		</div>
 		<hr>
 
 		<?php
-		# lets verify database
+		# let's verify database
 		$errors = $Tools->verify_database ();
 
 		/* print result */
@@ -41,7 +43,7 @@
 			}
 			print "</div>";
 		}
-		# no db errors, lets configure !
+		# no db errors, so lets configure !
 		else {
 		?>
 
@@ -77,7 +79,7 @@
 			<!-- Database location -->
 			<div class="col-xs-12 col-md-4"><strong><?php print _("Site URL"); ?></strong></div>
 			<div class="col-xs-12 col-md-8">
-				<input type="text" style="width:100%;" name="siteURL" class="form-control" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="<?php print $_SERVER['SCRIPT_URI'];  ?>">
+				<input type="text" style="width:100%;" name="siteURL" class="form-control" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="<?php print escape_input($_SERVER['SCRIPT_URI']);  ?>">
 				<div class="text-muted"></div>
 			</div>
 

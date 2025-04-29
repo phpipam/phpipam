@@ -3,6 +3,9 @@
 # Check we have been included and not called directly
 require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
+# check if site is demo
+$User->is_demo();
+
 # Don't corrupt output with php errors!
 disable_php_errors();
 
@@ -16,10 +19,10 @@ disable_php_errors();
 $Snmp       = new phpipamSNMP ();
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disbled", true, true, false, true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disabled", true, true, false, true); }
 
 # check section permissions
-if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }
+if($Sections->check_permission ($User->user, $POST->sectionId) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }
 
 # fetch devices that use get_routing_table query
 $devices_used = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_routing_table%", "id", true, true);
@@ -139,7 +142,7 @@ else {
     print "</div>";
 
     # show debug?
-    if($_POST['debug']==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }
+    if($POST->debug==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }
 
     ?>
 </div>

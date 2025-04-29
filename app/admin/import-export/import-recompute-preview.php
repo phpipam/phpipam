@@ -64,4 +64,3 @@ if ($counters['edit'] > 0) {
 	</script>
 <?php
 }
-?>

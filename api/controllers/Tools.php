@@ -37,10 +37,10 @@ class Tools_controller extends Common_api_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @param class $Database
-	 * @param class $Tools
-	 * @param mixed $params		// post/get values
-	 * @param class $Response
+	 * @param PDO_Database $Database
+	 * @param Tools $Tools
+	 * @param API_params $params
+	 * @param Response $response
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
@@ -54,7 +54,7 @@ class Tools_controller extends Common_api_functions {
 		$this->define_tools_controllers ();
 		$this->define_available_identifiers ();
 
-		// fist validate subcontroller
+		// first validate subcontroller
 		$this->validate_subcontroller ();
 		// rewrite subcontroller
 		$this->rewrite_subcontroller ();
@@ -581,7 +581,7 @@ class Tools_controller extends Common_api_functions {
 	 */
 	private function parse_nat_objects ($obj) {
     	if($this->Tools->validate_json_string($obj)!==false) {
-        	return(json_decode($obj, true));
+        	return(db_json_decode($obj, true));
     	}
     	else {
         	return array ();
@@ -595,10 +595,10 @@ class Tools_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function format_location () {
-		if((strlen(@$this->_params->lat)==0 || strlen(@$this->_params->long)==0) && strlen(@$this->_params->address)>0) {
+		if((is_blank(@$this->_params->lat) || is_blank(@$this->_params->long)) && !is_blank(@$this->_params->address)) {
             $OSM = new OpenStreetMap($this->Database);
             $latlng = $OSM->get_latlng_from_address ($this->_params->address);
-            if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
+            if(isset($latlng['lat']) && isset($latlng['lng'])) {
                 $this->_params->lat  = $latlng['lat'];
                 $this->_params->long = $latlng['lng'];
             }

@@ -26,9 +26,9 @@ if ($User->settings->enableRACK!="1") {
 else {
     # print
     print "<ul class='nav nav-tabs' style='margin-bottom:20px;'>";
-    $class = !isset($_GET['subnetId']) ? "active" : "";
+    $class = !isset($GET->subnetId) ? "active" : "";
     print " <li role='presentation' class='$class'><a href='".create_link("tools", "racks")."'>"._('Rack list')."</a></li>";
-    $class = isset($_GET['subnetId']) && $_GET['subnetId']=="map" ? "active" : "";
+    $class = isset($GET->subnetId) && $GET->subnetId=="map" ? "active" : "";
     print " <li role='presentation' class='$class'><a href='".create_link("tools", "racks", "map")."'>"._("Rack scheme")."</a></li>";
     print "</ul>";
 
@@ -40,6 +40,6 @@ else {
     print '<br>';
 
     # include subpage
-    if(!isset($_GET['subnetId']))   { include(dirname(__FILE__)."/print-racks-list.php"); }
+    if(!isset($GET->subnetId))   { include(dirname(__FILE__)."/print-racks-list.php"); }
     else                            { include("print-racks-map.php"); }
 }

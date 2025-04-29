@@ -24,13 +24,13 @@ $User->check_maintaneance_mode ();
 # perm check popup
 $User->check_module_permissions ("vlan", User::ACCESS_RWA, true, true);
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "scan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "scan", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fake error
 print "<div class='alert-danger hidden'></div>";
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disabled"), true); }
 # admin check
 if($User->is_admin()!==true) 	                { $Result->show("danger", _('Admin privileges required'), true); }
 
@@ -38,9 +38,9 @@ if($User->is_admin()!==true) 	                { $Result->show("danger", _('Admin
 $Snmp = new phpipamSNMP ();
 
 # domain Id must be int
-if (!is_numeric($_POST['domainId']))            { $Result->show("danger", _("Invalid domain Id"), true); }
+if (!is_numeric($POST->domainId))            { $Result->show("danger", _("Invalid domain Id"), true); }
 # fetch domain
-$domain = $Tools->fetch_object ("vlanDomains", "id", $_POST['domainId']);
+$domain = $Tools->fetch_object ("vlanDomains", "id", $POST->domainId);
 if ($domain===false)                            { $Result->show("danger", _("Invalid domain Id"), true); }
 
 # get existing vlans
@@ -52,7 +52,7 @@ if ($existing_vlans!==false) {
 }
 
 # set devices
-foreach ($_POST as $k=>$p) {
+foreach ($POST as $k=>$p) {
     if (strpos($k, "device-")!==false) {
         # fetch device
         $device = $Tools->fetch_object ("devices", "id", str_replace("device-", "", $k));
@@ -144,7 +144,7 @@ else {
 		print "<td>";
 		print "	<input type='text' class='form-control input-sm' name='name$m' value='$name'>";
 		print "	<input type='hidden' name='number$m' value='$number'>";
-		print "	<input type='hidden' name='domainId$m' value='$_POST[domainId]'>";
+		print "	<input type='hidden' name='domainId$m' value='".escape_input($POST->domainId)."'>";
 
 		print "</td>";
 		//description
@@ -172,12 +172,12 @@ else {
 	print "<tr>";
 	print "	<td colspan='$colspan'>";
 	print " <div id='vlanScanAddResult'></div>";
-	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveVlanScanResults' data-script='vlans-scan' data-subnetId='".$_POST['subnetId']."'><i class='fa fa-plus'></i> "._("Add discovered VLANS")."</a>";
+	print "		<a href='' class='btn btn-sm btn-success pull-right' id='saveVlanScanResults' data-script='vlans-scan' data-subnetId='".escape_input($POST->subnetId)."'><i class='fa fa-plus'></i> "._("Add discovered VLANS")."</a>";
 	print "	</td>";
 	print "</tr>";
 
 	print "</table>";
-	print '<input type="hidden" name="csrf_cookie" value="'.$_POST['csrf_cookie'].'">';
+	print '<input type="hidden" name="csrf_cookie" value="'.escape_input($POST->csrf_cookie).'">';
 	print "</form>";
 
     // print errors
@@ -201,4 +201,4 @@ print "</span>";
 print "</div>";
 
 # show debug?
-if($_POST['debug']==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }
+if($POST->debug==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }

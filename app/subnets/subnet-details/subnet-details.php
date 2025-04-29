@@ -30,7 +30,7 @@ else {
 
             if ($linked_subnet !== false) {
                 // desc fix
-                $linked_subnet->description = strlen($linked_subnet->description)>0 ? "($linked_subnet->description)" : "";
+                $linked_subnet->description = !is_blank($linked_subnet->description) ? "($linked_subnet->description)" : "";
 
                 print "<tr>";
                 print " <th style='font-weight:normal'>";
@@ -61,7 +61,7 @@ else {
                 print " <ul class='submenu-linked'>";
                 foreach ($is_linked_subnets as $k=>$linked_subnet) {
                     // desc fix
-                    $linked_subnet->description = strlen($linked_subnet->description)>0 ? "($linked_subnet->description)" : "";
+                    $linked_subnet->description = !is_blank($linked_subnet->description) ? "($linked_subnet->description)" : "";
 
                     print "<li style='font-size:13px;'>";
                     print "<i class='icon-gray fa fa-gray fa-angle-right'></i> ";
@@ -78,12 +78,12 @@ else {
 	<tr>
 		<th><?php print _('Hierarchy'); ?></th>
 		<td>
-			<?php $Subnets->print_breadcrumbs($Sections, $Subnets, $_GET); ?>
+			<?php $Subnets->print_breadcrumbs($Sections, $Subnets, $GET->as_array()); ?>
 		</td>
 	</tr>
 	<tr>
 		<th><?php print _('Subnet description'); ?></th>
-		<td><?php print html_entity_decode($subnet['description']); ?></td>
+		<td><?php print $subnet['description']; ?></td>
 	</tr>
 
 	<tr>
@@ -114,12 +114,12 @@ else {
 
 	<?php } ?>
 
-	<?php if(@array_key_exists($subnet['id'], $all_nats_per_object['subnets'])) { ?>
+	<?php if(@is_array($all_nats_per_object['subnets'])) { if(@array_key_exists($subnet['id'], $all_nats_per_object['subnets'])) { ?>
 	<tr>
 		<th><?php print _('NAT'); ?></th>
 		<td><?php $Addresses->print_nat_link($all_nats, $all_nats_per_object, $subnet, false, "subnet"); ?> <?php print _("Subnet is natted"); ?></a></td>
 	</tr>
-	<?php } ?>
+	<?php }} ?>
 
 	<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_R) { ?>
 	<tr>
@@ -225,14 +225,15 @@ else {
 			$device = $Tools->fetch_object("devices", "id", $subnet['device']);
 			if (is_object($device)) {
 				# rack
-				if ($User->settings->enableRACK=="1" && strlen($device->rack)>0 && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
-					if (!is_object($Racks)) $Racks = new phpipam_rack ($Database);
+				$rack_text = "";
+				if ($User->settings->enableRACK=="1" && !is_blank($device->rack) && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
+					if (!isset($Racks)) $Racks = new phpipam_rack($Database);
 					$Racks->add_rack_start_print($device);
 					$rack = $Tools->fetch_object("racks", "id", $device->rack);
 					$rack_text = !is_object($rack) ? "" : "<br><span class='badge badge1 badge5' style='padding-top:4px;'>$rack->name / "._('Position').": $device->rack_start_print "._("Size").": $device->rack_size U <i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackId='$rack->id' data-deviceId='$device->id'></i></span>";
 				}
 				print "<a href='".create_link("tools","devices",$device->id)."'>".$device->hostname."</a>";
-				if (strlen($device->description)>0) {
+				if (!is_blank($device->description)) {
 					print ' ('.$device->description.')';
 				}
 				print $rack_text;
@@ -295,7 +296,7 @@ else {
     	<td>
     		<span class="text-muted">
     		<?php
-    		if(strlen($subnet['editDate'])>1)  	{ print $subnet['editDate']; }
+    		if(!is_blank($subnet['editDate']))  	{ print $subnet['editDate']; }
     		else 								{ print _("Never"); }
     		?>
     		</span>
@@ -331,9 +332,9 @@ else {
 
 		if ($fwZone!==false) {
 			// alias fix
-			$fwZone->alias 		= strlen($fwZone->alias)>0 ? "(".$fwZone->alias.")" : "";
-			$fwZone->description 	= strlen($fwZone->description)>0 ? " - ".$fwZone->description : "";
-			$fwZone->interface 	= strlen($fwZone->interface)>0 ? "(".$fwZone->interface.")" : "";
+			$fwZone->alias 		= !is_blank($fwZone->alias) ? "(".$fwZone->alias.")" : "";
+			$fwZone->description 	= !is_blank($fwZone->description) ? " - ".$fwZone->description : "";
+			$fwZone->interface 	= !is_blank($fwZone->interface) ? "(".$fwZone->interface.")" : "";
 
 			# divider
 			print "<tr>";
@@ -500,7 +501,7 @@ else {
 	# custom subnet fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $key=>$field) {
-			if(strlen($subnet[$key])>0) {
+			if(!is_blank($subnet[$key])) {
 				$subnet[$key] = str_replace(array("\n", "\r\n"), "<br>",$subnet[$key]);
 				$html_custom[] = "<tr>";
 				$html_custom[] = "	<th>".$Tools->print_custom_field_name ($key)."</th>";
@@ -532,8 +533,8 @@ else {
 
 	# check for temporary shares!
 	if($User->settings->tempShare==1) {
-		if (is_array(json_decode($User->settings->tempAccess, true))) {
-			foreach(json_decode($User->settings->tempAccess) as $s) {
+		if (is_array(db_json_decode($User->settings->tempAccess, true))) {
+			foreach(db_json_decode($User->settings->tempAccess) as $s) {
 				if($s->type=="subnets" && $s->id==$subnet['id']) {
 					if(time()<$s->validity) {
 						$active_shares[] = $s;
@@ -594,6 +595,7 @@ else {
 
 	print "	<div class='btn-toolbar'>";
 
+	$sp = [];
 	# set values for permissions
 	if($subnet_permission == 1) {
 		$sp['editsubnet']= false;		//edit subnet
@@ -604,7 +606,7 @@ else {
 		$sp['changelog'] = false;		//changelog view
 		$sp['import'] 	 = false;		//import
 	}
-	else if ($subnet_permission == 2) {
+	elseif ($subnet_permission == 2) {
 		$sp['editsubnet']= false;		//edit subnet
 		$sp['editperm']  = false;		//edit permissions
 
@@ -613,7 +615,7 @@ else {
 		$sp['changelog'] = true;		//changelog view
 		$sp['import'] 	 = true;		//import
 	}
-	else if ($subnet_permission == 3) {
+	elseif ($subnet_permission == 3) {
 		$sp['editsubnet']= true;		//edit subnet
 		$sp['editperm']  = true;		//edit permissions
 
@@ -703,7 +705,7 @@ else {
 	print "</div>";
 
 		# firewall address object actions
-		$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = db_json_decode($User->settings->firewallZoneSettings,true);
 		if ( $User->settings->enableFirewallZones == 1 && $subnet_permission > 1) {
 			print "<div class='btn-group'>";
 			print "<a class='subnet_to_zone btn btn-xs btn-default".(($fwZone == false) ? '':' disabled')."' href='' data-container='body' rel='tooltip' title='"._('Map subnet to firewall zone')."' data-subnetId='$subnet[id]' data-operation='subnet2zone'><i class='fa fa-fire'></i></a>";

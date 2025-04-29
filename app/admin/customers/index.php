@@ -1,4 +1,5 @@
 <?php
+if (!isset($User)) { exit(); }
 
 /**
  * Based on GET parameter we load:
@@ -13,7 +14,7 @@ $User->check_user_session();
 $User->is_admin(true);
 
 # load subpage
-if (!isset($_GET['subnetId'])) {
+if (!isset($GET->subnetId)) {
 	include(dirname(__FILE__).'/../../tools/customers/all-customers.php');
 }
 else {
