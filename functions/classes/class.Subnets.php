@@ -2376,7 +2376,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $cidr
 	 * @return bool
 	 */
-	public function verify_subnet_nesting ($masterSubnetId, $cidr) {
+	public function verify_subnet_nesting ($masterSubnetId, $cidr, $sameSizeAllowed = false) {
 		//first get details for root subnet
 		$master_details = $this->fetch_subnet (null, $masterSubnetId);
 
@@ -2389,7 +2389,7 @@ class Subnets extends Common_functions {
 
 		// if child same as parent return error
 		if ($cidr == $this->transform_address($master_details->subnet)."/".$master_details->mask) {
-    		return false;
+    		return $sameSizeAllowed;
 		}
 		else {
     		//check
@@ -2438,7 +2438,7 @@ class Subnets extends Common_functions {
 					$parent_subnet = $this->fetch_subnet(null, $masterSubnetId);
 					if($parent_subnet->isFolder!=1) {
 						//check that new is inside its master subnet
-						if(!$this->verify_subnet_nesting ($parent_subnet->id, $this->transform_to_dotted($subnet)."/".$mask)) {
+						if(!$this->verify_subnet_nesting ($parent_subnet->id, $this->transform_to_dotted($subnet)."/".$mask, $section->sameSizeAllowed=="1")) {
 							$this->Result->show("danger", _("New subnet not in master subnet")."!", true);
 						}
 						// it cannot be same !

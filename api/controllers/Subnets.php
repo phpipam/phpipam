@@ -926,7 +926,10 @@ class Subnets_controller extends Common_api_functions {
 			else {
 				// not for folders
 				if(@$this->_params->isFolder!=1 && $master_subnet->isFolder!=1) {
-					if(!$this->Subnets->verify_subnet_nesting ($this->_params->masterSubnetId, $this->_params->subnet."/".$this->_params->mask))
+					$section = $this->Tools->fetch_object ("sections", "id", $this->_params->sectionId);
+					if($section===false) { $this->Response->throw_exception(400, "Invalid section Id"); }
+
+					if(!$this->Subnets->verify_subnet_nesting ($this->_params->masterSubnetId, $this->_params->subnet."/".$this->_params->mask, $section->sameSizeAllowed == 1))
 																									{ $this->Response->throw_exception(409, "Subnet is not within boundaries of its master subnet"); }
 				}
 				// set permissions
@@ -1025,7 +1028,7 @@ class Subnets_controller extends Common_api_functions {
 		    //disable checks for folders and if strict check enabled
 		    if($section->strictMode==1 && !$parent_is_folder ) {
 			    //verify that nested subnet is inside root subnet
-		        if (!$this->Subnets->verify_subnet_nesting($this->_params->masterSubnetId, $cidr)) 	{ $this->Response->throw_exception(409, "Nested subnet not in root subnet"); }
+		        if (!$this->Subnets->verify_subnet_nesting($this->_params->masterSubnetId, $cidr, $section->sameSizeAllowed == 1)) 	{ $this->Response->throw_exception(409, "Nested subnet not in root subnet"); }
 
 			    //nested?
 		        $overlap = $this->Subnets->verify_nested_subnet_overlapping($cidr, $this->_params->vrfId, $this->_params->masterSubnetId);

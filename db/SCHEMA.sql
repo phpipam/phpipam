@@ -132,6 +132,7 @@ CREATE TABLE `sections` (
   `masterSection` INT(11)  NULL  DEFAULT '0',
   `permissions` varchar(1024) DEFAULT NULL, /* __no_html_escape__ */
   `strictMode` BINARY(1)  NOT NULL  DEFAULT '1',
+  `sameSizeAllowed` BINARY(1)  NOT NULL  DEFAULT '0',
   `subnetOrdering` VARCHAR(16)  NULL  DEFAULT NULL,
   `order` INT(3)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
@@ -1081,5 +1082,5 @@ CREATE TABLE `nominatim_cache` (
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
-UPDATE `settings` SET `version` = "1.73";
-UPDATE `settings` SET `dbversion` = 43;
+UPDATE `settings` SET `version` = "1.74";
+UPDATE `settings` SET `dbversion` = 44;

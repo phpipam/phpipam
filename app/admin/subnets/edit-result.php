@@ -107,7 +107,7 @@ if ($POST->action=="add") {
 	    // we are adding nested subnet
 	    if($POST->masterSubnetId!=0) {
     	    //verify that nested subnet is inside its parent
-	        if (!$Subnets->verify_subnet_nesting($POST->masterSubnetId, $POST->cidr)) {
+	        if (!$Subnets->verify_subnet_nesting($POST->masterSubnetId, $POST->cidr, $section['sameSizeAllowed']==1)) {
 	            $errors[] = _('Nested subnet not in root subnet!');
 	        }
 	        else {
@@ -189,7 +189,7 @@ elseif ($POST->action=="edit") {
     	if ($parent_is_folder===false) {
     		/* verify that nested subnet is inside root subnet */
 	    	if($POST->masterSubnetId != 0) {
-		    	if (!$overlap = $Subnets->verify_subnet_nesting($POST->masterSubnetId, $POST->cidr)) {
+		    	if (!$overlap = $Subnets->verify_subnet_nesting($POST->masterSubnetId, $POST->cidr, $section['sameSizeAllowed'] == 1)) {
 		    		$errors[] = _('Nested subnet not in root subnet!');
 		    	}
 	    	}

@@ -99,6 +99,18 @@ if (!is_object($section)) {
 			</td>
 		</tr>
 
+		<!-- Allow same size -->
+		<tr>
+			<td><?php print _('Allow same size'); ?></td>
+			<td colspan="2">
+				<select name="sameSizeAllowed" class="input-small form-control input-sm input-w-auto pull-left" <?php if($POST->action=="delete") print 'disabled="disabled"'; ?>>
+					<option value="1"><?php print _('Yes'); ?></option>
+					<option value="0" <?php if($section->sameSizeAllowed == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
+				</select>
+				<span class="help-inline info2"><?php print _('Yes allow create child subnet with the same size (address and mask) as parent. Usually when managing subnets from cloud provider.'); ?></span>
+			</td>
+		</tr>
+
 		<!-- Show Subnets -->
 		<tr>
 			<td><?php print _('Show subnet menu'); ?></td>

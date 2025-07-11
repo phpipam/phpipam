@@ -49,7 +49,8 @@ if ($sections !== false) {
     <th><?php print _('Name'); ?></th>
     <th><?php print _('Description'); ?></th>
     <th><?php print _('Parent'); ?></th>
-    <th><?php print _('Strict mode'); ?></th>
+	<th><?php print _('Strict mode'); ?></th>
+    <th><?php print _('Allow same size'); ?></th>
     <th><?php print _('Show subnet menu'); ?></th>
     <th><?php print _('Show VLAN menu'); ?></th>
     <th><?php print _('Show VRF menu'); ?></th>
@@ -82,6 +83,9 @@ if(isset($sections_sorted)) {
 	    //strictMode
 	    $mode = $section['strictMode']==0 ? "<span class='badge badge1 badge5 alert-danger'>"._("No") : "<span class='badge badge1 badge5 alert-success'>"._("Yes");
 	    print '	<td>'. $mode .'</span></td>'. "\n";
+		//sameSizeAllowed
+	    $sameSizeAllowed = $section['sameSizeAllowed']==0 ? "<span class='badge badge1 badge5 alert-danger'>"._("No") : "<span class='badge badge1 badge5 alert-success'>"._("Yes");
+	    print '	<td>'. $sameSizeAllowed .'</span></td>'. "\n";
 	    //Show Subnets
 	    print " <td>";
 	    print @$section['showSubnet']==1 ? "<span class='badge badge1 badge5 alert-success'>"._("Yes") : "<span class='badge badge1 badge5 alert-danger'>"._("No");

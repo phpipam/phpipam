@@ -21,14 +21,14 @@ $User->check_user_session();
  * @param  array|string $result_fields
  * @return array
  */
-function get_strict_subnets($Subnets, $sectionId, $cidr, $result_fields="*") {
+function get_strict_subnets($Subnets, $sectionId, $cidr, $result_fields="*", $sameSizeAllowed=false) {
 	$strict_subnets = $Subnets->fetch_overlapping_subnets($cidr, 'sectionId', $sectionId, $result_fields);
 	if (!is_array($strict_subnets)) return array();
 
 	list(,$cidr_mask) = $Subnets->cidr_network_and_mask($cidr);
 
 	foreach ($strict_subnets as $i => $subnet) {
-		if ($subnet->mask >= $cidr_mask) unset($strict_subnets[$i]); else break;
+		if (($subnet->mask > $cidr_mask && $sameSizeAllowed) or ($subnet->mask == $cidr_mask && !$sameSizeAllowed)) unset($strict_subnets[$i]); else break;
 	}
 	return $strict_subnets;
 }
@@ -44,7 +44,7 @@ if (!is_object($section)) { return ''; }
 // Don't fetch all fields
 $fields = array('id','masterSubnetId','isFolder','subnet','mask','description');
 
-$strict_subnets = get_strict_subnets($Subnets, $sectionId, $cidr, $fields);
+$strict_subnets = get_strict_subnets($Subnets, $sectionId, $cidr, $fields, $section->sameSizeAllowed==1);
 
 $folders = $Subnets->fetch_section_subnets($sectionId, 'isFolder', '1', $fields);
 if (!is_array($folders)) $folders = array();

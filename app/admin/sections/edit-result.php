@@ -101,6 +101,7 @@ else {
 					"name"             => $POST->name,
 					"description"      => $POST->description,
 					"strictMode"       => $POST->strictMode,
+					"sameSizeAllowed"  => $POST->sameSizeAllowed,
 					"subnetOrdering"   => $POST->subnetOrdering,
 					"showSubnet"       => $POST->showSubnet,
 					"showVLAN"         => $POST->showVLAN,

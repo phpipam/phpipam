@@ -1,8 +1,8 @@
 <?php
 /* set latest version */
-define("VERSION", "1.73");									//decimal release version e.g 1.32
+define("VERSION", "1.74");									//decimal release version e.g 1.32
 /* set latest version */
-define("VERSION_VISIBLE", "1.7.3");							//visible version in footer e.g 1.3.2
+define("VERSION_VISIBLE", "1.7.4");							//visible version in footer e.g 1.3.2
 /* set latest revision */
 define("REVISION", "001");									//increment on static content changes (js/css) or point releases to avoid caching issues
 /* set last possible upgrade */
