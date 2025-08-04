@@ -2111,6 +2111,9 @@ class User extends Common_functions {
      * @return int
      */
     public function get_module_permissions ($module_name = "") {
+        if (!in_array($module_name, $this->get_enabled_modules()))
+            return User::ACCESS_NONE;
+
         if(!in_array($module_name, $this->get_modules_with_permissions()))
             return User::ACCESS_NONE;
 
@@ -2168,6 +2171,32 @@ class User extends Common_functions {
                 "routing",
                 "vaults"
             ];
+    }
+
+    /**
+     * Return array of enabled modules
+     *
+     * @method get_enabled_modules
+     * @return array
+     */
+    public function get_enabled_modules () {
+        $modules = array();
+        $modules[] = "devices";
+        $modules[] = "l2dom";
+        $modules[] = "vlan";
+        if ($this->settings->enableCircuits == 1) $modules[] = "circuits";
+        if ($this->settings->enableCustomers == 1) $modules[] = "customers";
+        if ($this->settings->enableDHCP == 1) $modules[] = "dhcp";
+        if ($this->settings->enableLocations == 1) $modules[] = "locations";
+        if ($this->settings->enableNAT == 1) $modules[] = "nat";
+        if ($this->settings->enablePowerDNS == 1) $modules[] = "pdns";
+        if ($this->settings->enablePSTN == 1) $modules[] = "pstn";
+        if ($this->settings->enableRACK == 1) $modules[] = "racks";
+        if ($this->settings->enableRouting == 1) $modules[] = "routing";
+        if ($User->settings->enableVaults == 1) $modules[] = "vaults";
+        if ($this->settings->enableVRF == 1) $modules[] = "vrf";
+
+        return $modules;
     }
 
     /**

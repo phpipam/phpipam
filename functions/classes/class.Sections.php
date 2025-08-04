@@ -571,13 +571,13 @@ class Sections extends Common_functions {
 			$html[] = '<th data-field="description">'._('Description').'</th>';
 			if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
 			$html[] = '<th data-field="vlan">'._('VLAN').'</th>';
-			if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
+			if($User->get_module_permissions ("vrf")>=User::ACCESS_R) {
 				$html[] = '<th data-field="vrf">'._('VRF').'</th>';
 			}
 			$html[] = '<th data-field="masterSubnet">'._('Master Subnet').'</th>';
 			if($User->get_module_permissions ("devices")>=User::ACCESS_R)
 			$html[] = '<th data-field="device">'._('Device').'</th>';
-			if($User->settings->enableCustomers == 1 && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+			if($User->get_module_permissions ("customers")>=User::ACCESS_R) {
 				$html[] = '<th data-field="customer" class="hidden-xs hidden-sm">'._('Customer').'</th>';
 			}
 			if(is_array($custom)) {

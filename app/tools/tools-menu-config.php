@@ -85,28 +85,28 @@ $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-list",        "href"=
 if($User->settings->enableIPrequests==1)
 $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-plus",        "href"=>"requests",                    "name"=>_("IP requests"),          "description"=>_("Manage IP requests")];
 $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-info",        "href"=>"instructions",                "name"=>_("Instructions"),         "description"=>_("Instructions for managing IP addresses")];
-if($User->settings->enablePowerDNS==1 && $User->get_module_permissions ("pdns")>=User::ACCESS_R)
+if($User->get_module_permissions ("pdns")>=User::ACCESS_R)
 $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-database",    "href"=>"powerDNS",                    "name"=>_("PowerDNS"),             "description"=>_("PowerDNS")];
-if($User->settings->enableDHCP==1 && $User->get_module_permissions ("dhcp")>=User::ACCESS_R)
+if($User->get_module_permissions ("dhcp")>=User::ACCESS_R)
 $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-database",    "href"=>"dhcp",                        "name"=>_("DHCP"),                 "description"=>_("DHCP information")];
-if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>=User::ACCESS_R)
+if($User->get_module_permissions ("pstn")>=User::ACCESS_R)
 $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-phone",       "href"=>"pstn-prefixes",               "name"=>_("PSTN prefixes"),        "description"=>_("PSTN prefixes")];
 $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-sitemap",     "href"=>"mac-lookup",                  "name"=>_("MAC lookup"),           "description"=>_("Lookup MAC address vendor")];
-if($User->settings->enableVaults == 1 && $User->get_module_permissions ("vaults")>=User::ACCESS_R)
+if($User->get_module_permissions ("vaults")>=User::ACCESS_R)
 $tools_menu[_('Tools')][] =     ["show"=>true, "icon"=>"fa-key",         "href"=>"vaults",                      "name"=>_("Vaults"),               "description"=>_("Secure information storing")];
 
 # Subnets
-if($User->settings->enableCustomers == 1 && $User->get_module_permissions ("customers")>=User::ACCESS_R)
+if($User->get_module_permissions ("customers")>=User::ACCESS_R)
 $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-users",       "href"=>"customers",                   "name"=>_("Customers"),            "description"=>_("Customers")];
 $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-star",        "href"=>"favourites",                  "name"=>_("Favourite networks"),   "description"=>_("Favourite networks")];
 $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-sitemap",     "href"=>"subnets",                     "name"=>_("Subnets"),              "description"=>_("All subnets")];
 if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
 $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-cloud",       "href"=>"vlan",                        "name"=>_("VLAN"),                 "description"=>_("VLANs and belonging subnets")];
-if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R)
+if($User->get_module_permissions ("vrf")>=User::ACCESS_R)
 $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-cloud",       "href"=>"vrf",                         "name"=>_("VRF"),                  "description"=>_("VRFs and belonging networks")];
-if($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User::ACCESS_R)
+if($User->get_module_permissions ("nat")>=User::ACCESS_R)
 $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-exchange",    "href"=>"nat",                         "name"=>_("NAT"),                  "description"=>_("NAT translations")];
-if($User->settings->enableRouting==1 && $User->get_module_permissions ("routing")>=User::ACCESS_R)
+if($User->get_module_permissions ("routing")>=User::ACCESS_R)
 $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-exchange",    "href"=>"routing",                     "name"=>_("Routing"),              "description"=>_("Routing information")];
 if($User->settings->enableMulticast == 1)
 $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-map-o",       "href"=>"multicast-networks",          "name"=>_("Multicast networks"),   "description"=>_("Multicast subnets and mapping")];
@@ -124,11 +124,11 @@ $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-bullhorn",    "href"=
 # devices
 if($User->get_module_permissions ("devices")>=User::ACCESS_R)
 $tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-desktop",     "href"=>"devices",                     "name"=>_("Devices"),              "description"=>_("All configured devices")];
-if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>=User::ACCESS_R)
+if($User->get_module_permissions ("racks")>=User::ACCESS_R)
 $tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-bars",        "href"=>"racks",                       "name"=>_("Racks"),                "description"=>_("Rack information")];
-if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>=User::ACCESS_R)
+if($User->get_module_permissions ("circuits")>=User::ACCESS_R)
 $tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-random",      "href"=>"circuits",                    "name"=>_("Circuits"),             "description"=>_("Circuit information")];
-if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>=User::ACCESS_R)
+if($User->get_module_permissions ("locations")>=User::ACCESS_R)
 $tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-map",         "href"=>"locations",                   "name"=>_("Locations"),            "description"=>_("Locations")];
 
 # user menu

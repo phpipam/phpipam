@@ -25,7 +25,7 @@ $User->check_l2domain_permissions($vlan_domain);
 $custom_fields = $Tools->fetch_custom_fields('vlans');
 
 # customer
-if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+if ($User->get_module_permissions ("customers")>=User::ACCESS_R) {
 	$customer = $Tools->fetch_object ("customers", "id", $vlan['customer_id']);
 	if($customer===false) {
 		$customer = new StdClass ();
@@ -63,7 +63,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, $GET->s
 		<td><?php print $vlan['description']; ?></td>
 	</tr>
 
-	<?php if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
+	<?php if ($User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
 	<tr>
 		<td colspan='2'><hr></td>
 	</tr>

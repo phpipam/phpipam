@@ -8,7 +8,7 @@ if(!isset($GET->section)) { $GET->section = ""; }
 # tool items
 $tool_items = array();
 // customers
-if($User->settings->enableCustomers == 1  && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+if($User->get_module_permissions ("customers")>=User::ACCESS_R) {
 $tool_items["customers"] = array(
                         "name"=>"Customers",
                         "href"=>array("tools", "customers"),
@@ -26,7 +26,7 @@ $tool_items["vlan"] = array (
                         );
 }
 // VRF
-if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
+if($User->get_module_permissions ("vrf")>=User::ACCESS_R) {
 $tool_items["vrf"] = array(
                         "name"=>"VRF",
                         "href"=>array("tools", "vrf"),
@@ -35,7 +35,7 @@ $tool_items["vrf"] = array(
                        );
 }
 // nat
-if($User->settings->enableNAT==1  && $User->get_module_permissions ("nat")>=User::ACCESS_R) {
+if($User->get_module_permissions ("nat")>=User::ACCESS_R) {
 $tool_items["nat"] = array (
                         "name"=>"NAT",
                         "href"=>array("tools", "nat"),
@@ -44,7 +44,7 @@ $tool_items["nat"] = array (
                         );
 }
 // pdns
-if($User->settings->enablePowerDNS==1 && $User->get_module_permissions ("pdns")>=User::ACCESS_R) {
+if($User->get_module_permissions ("pdns")>=User::ACCESS_R) {
 $tool_items["powerDNS"] = array (
                         "name"=>"PowerDNS",
                         "href"=>array("tools", "powerDNS"),
@@ -53,7 +53,7 @@ $tool_items["powerDNS"] = array (
                         );
 }
 // dhcp
-if($User->settings->enableDHCP==1 && $User->get_module_permissions ("dhcp")>=User::ACCESS_R) {
+if($User->get_module_permissions ("dhcp")>=User::ACCESS_R) {
 $tool_items["dhcp"] = array (
                         "name"=>"DHCP",
                         "href"=>array("tools", "dhcp"),
@@ -62,7 +62,7 @@ $tool_items["dhcp"] = array (
                         );
 }
 // locations
-if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
+if($User->get_module_permissions ("locations")>=User::ACCESS_R) {
 $tool_items["locations"] = array (
                         "name"=>"Locations",
                         "href"=>array("tools", "locations"),
@@ -79,7 +79,7 @@ $tool_items["devices"] = array (
                         "icon"=>"fa-desktop"
                         );
 // rack
-if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
+if($User->get_module_permissions ("racks")>=User::ACCESS_R) {
 $tool_items["racks"] = array (
                         "name"=>"Racks",
                         "href"=>array("tools", "racks"),
@@ -88,7 +88,7 @@ $tool_items["racks"] = array (
                         );
 }
 // circuits
-if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>=User::ACCESS_R) {
+if($User->get_module_permissions ("circuits")>=User::ACCESS_R) {
 $tool_items["circuits"] = array (
                         "name"=>"Circuits",
                         "href"=>array("tools", "circuits"),
@@ -97,7 +97,7 @@ $tool_items["circuits"] = array (
                         );
 }
 // Routing
-if($User->settings->enableRouting == 1 && $User->get_module_permissions ("routing")>=User::ACCESS_R) {
+if($User->get_module_permissions ("routing")>=User::ACCESS_R) {
 $tool_items["routing"] = array (
                         "name"=>"Routing",
                         "href"=>array("tools", "routing"),
@@ -106,7 +106,7 @@ $tool_items["routing"] = array (
                         );
 }
 // pstn
-if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>=User::ACCESS_R) {
+if($User->get_module_permissions ("pstn")>=User::ACCESS_R) {
 $tool_items["pstn-prefixes"] = array (
                         "name"=>"PSTN",
                         "href"=>array("tools", "pstn-prefixes"),
@@ -126,7 +126,7 @@ $tool_items["multicast-networks"] = array (
 }
 
 // vaults
-if($User->settings->enableVaults==1 && $User->get_module_permissions ("vaults")>=User::ACCESS_R) {
+if($User->get_module_permissions ("vaults")>=User::ACCESS_R) {
 $tool_items["vaults"] = array (
                         "name"=>"Vaults",
                         "href"=>array("tools", "vaults"),

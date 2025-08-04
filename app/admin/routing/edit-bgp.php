@@ -92,7 +92,7 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
 
 	<?php
     // customers
-    if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
+    if($User->get_module_permissions ("vrf")>=User::ACCESS_R) {
         // fetch customers
         $customers = $Tools->fetch_all_objects ("customers", "title");
         // print
@@ -118,7 +118,7 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
     }
 
     // circuits
-    if($User->settings->enableCircuits==1 && $User->get_module_permissions ("circuits")>=User::ACCESS_R) {
+    if($User->get_module_permissions ("circuits")>=User::ACCESS_R) {
         // fetch customers
         $circuits = $Tools->fetch_all_objects ("circuits", "cid");
         // print
@@ -144,7 +144,7 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
     }
 
     // circuits
-    if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
+    if($User->get_module_permissions ("vrf")>=User::ACCESS_R) {
         // fetch customers
         $vrfs = $Tools->fetch_all_objects ("vrf", "name");
         // print

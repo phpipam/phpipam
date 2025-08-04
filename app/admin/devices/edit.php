@@ -132,7 +132,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	</tr>
 
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
+	<?php if($User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
 	<tr>
 		<td><?php print _('Location'); ?></td>
 		<td>
@@ -152,7 +152,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	<?php } ?>
 
     <!-- Rack -->
-    <?php if($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>=User::ACCESS_R) { ?>
+    <?php if($User->get_module_permissions ("racks")>=User::ACCESS_R) { ?>
 	<tr>
 	   	<td colspan="2"><hr></td>
     </tr>
@@ -177,14 +177,12 @@ $('#switchManagementEdit select[name=rack]').change(function() {
         </td>
     </tr>
 
-	<?php if ($User->get_module_permissions ("racks")>=User::ACCESS_R) { ?>
     <tbody id="rack" style="<?php print $display; ?>">
 		<?php include ("edit-rack-dropdown.php"); ?>
     </tbody>
 	<tr>
 	   	<td colspan="2"><hr></td>
     </tr>
-    <?php } ?>
     <?php } ?>
 
 	<!-- Description -->

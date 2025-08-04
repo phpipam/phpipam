@@ -51,18 +51,18 @@ elseif(isset($GET->subnetId)) {
         <!-- tabs -->
         <ul class='nav nav-tabs' style='margin-bottom:20px;'>
             <li role='presentation' <?php if(!isset($GET->sPage)) print " class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id); ?>'><?php print _("Device details"); ?></a> </li>
-            <?php if($User->settings->enableLocations==1 && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
+            <?php if($User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
             <li role='presentation' <?php if($GET->sPage=="location") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "location"); ?>'><?php print _("Location"); ?></a></li>
             <?php } ?>
             <li role='presentation' <?php if($GET->sPage=="subnets") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "subnets"); ?>'><?php print _("Subnets"); ?> <span class='badge badge1 badge5' style="margin-left:5px;display:inline;"><?php print $cnt_subnets; ?></span></a></li>
             <li role='presentation' <?php if($GET->sPage=="addresses") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "addresses"); ?>'><?php print _("Addresses"); ?> <span class='badge badge1 badge5' style="margin-left:5px;display:inline;"><?php print $cnt_addresses; ?></span></a></li>
-            <?php if($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User::ACCESS_R) { ?>
+            <?php if($User->get_module_permissions ("nat")>=User::ACCESS_R) { ?>
             <li role='presentation' <?php if($GET->sPage=="nat") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "nat"); ?>'><?php print _("NAT"); ?> <span class='badge badge1 badge5' style="margin-left:5px;display:inline;"><?php print $cnt_nat; ?></span></a></li>
             <?php } ?>
-            <?php if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>=User::ACCESS_R) { ?>
+            <?php if($User->get_module_permissions ("pstn")>=User::ACCESS_R) { ?>
             <li role='presentation' <?php if($GET->sPage=="pstn-prefixes") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "pstn-prefixes"); ?>'><?php print _("PSTN prefixes"); ?> <span class='badge badge1 badge5' style="margin-left:5px;display:inline;"><?php print $cnt_pstn; ?></span></a></li>
             <?php } ?>
-            <?php if($User->settings->enableCircuits==1 && $User->get_module_permissions ("circuits")>=User::ACCESS_R) { ?>
+            <?php if($User->get_module_permissions ("circuits")>=User::ACCESS_R) { ?>
             <li role='presentation' <?php if($GET->sPage=="circuits") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "circuits"); ?>'><?php print _("Circuits"); ?> <span class='badge badge1 badge5' style="margin-left:5px;display:inline;"><?php print $cnt_circuits; ?></span></a></li>
             <?php } ?>
         </ul>
