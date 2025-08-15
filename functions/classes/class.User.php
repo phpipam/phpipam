@@ -979,20 +979,34 @@ class User extends Common_functions {
      * @return void
      */
     public function auth_http ($username, $password) {
-        # check login restrictions for authenticated user
-        $this->check_login_restrictions ($username);
+        # auth OK
+        if($password == '') {
+            # check login restrictions for authenticated user
+            $this->check_login_restrictions ($username);
 
-        # save to session
-        $this->write_session_parameters ();
+            # save to session
+            $this->write_session_parameters ();
 
-        $this->Result->show("success", _("Login successful"));
-        $this->Log->write( _("User login"), _("User")." ".$this->user->real_name." "._("logged in"), 0, $username );
+            $this->Result->show("success", _("Login successful"));
+            $this->Log->write( _("User login"), _("User")." ".$this->user->real_name." "._("logged in"), 0, $username );
 
-        # write last logintime
-        $this->update_login_time ();
+            # write last logintime
+            $this->update_login_time ();
 
-        # remove possible blocked IP
-        $this->block_remove_entry ();
+            # remove possible blocked IP
+            $this->block_remove_entry ();
+        }
+        # auth failed
+       else {
+            # add blocked count
+            $this->block_ip ();
+            $this->log_failed_access ($username);
+
+            $this->Log->write( _("User login"), _("Password used with auth_http"), 2, $username );
+
+             # apache
+            $this->Result->show("danger", _("Invalid username or password"), true);
+       }
     }
 
     /**
