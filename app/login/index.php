@@ -3,14 +3,17 @@ header('X-XSS-Protection:1; mode=block');
 # verify php build
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
 
+$User->logoff();
 // http auth
 if( !empty($_SERVER['PHP_AUTH_USER']) ) {
     // try to authenticate
 	$User->authenticate ($_SERVER['PHP_AUTH_USER'], '');
-	// Redirect user where he came from, if unknown go to dashboard.
-	if ($redirect = $User->get_redirect_cookie()) { header("Location: " . $redirect); }
-	else                                          { header("Location: " . create_link("dashboard")); }
-	exit();
+	if ($User->is_authenticated()) {
+		// Redirect user where he came from, if unknown go to dashboard.
+		if ($redirect = $User->get_redirect_cookie()) { header("Location: " . $redirect); }
+		else                                          { header("Location: " . create_link("dashboard")); }
+		exit();
+	}
 }
 // disable requests module for public
 if(@$config['requests_public']===false) {
