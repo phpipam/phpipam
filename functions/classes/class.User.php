@@ -646,7 +646,7 @@ class User extends Common_functions {
      * @return array
      */
     public function fetch_available_auth_method_types () {
-		return array("AD", "LDAP", "NetIQ", "Radius", "SAML2");
+		return array("AD", "http", "LDAP", "NetIQ", "Radius", "SAML2");
 	}
 
 
