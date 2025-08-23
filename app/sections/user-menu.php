@@ -22,7 +22,7 @@ foreach ($params as $k => $p) {
 }
 
 # if all are off print all on!
-if($GET->subnets!="on" && $GET->addresses!="on" && $GET->vlans!="on" && $GET->vrf!="on" && $GET->pstn!="on" && $GET->circuits!="on" && $GET->customers!="on") {
+if($GET->subnets!="on" && $GET->addresses!="on" && $GET->vlans!="on" && $GET->vrf!="on" && $GET->pstn!="on" && $GET->circuits!="on" && $GET->customers!="on" && $GET->locations!="on") {
 	$GET->subnets   ="on";
 	$GET->addresses ="on";
 	$GET->vlans     ="on";
@@ -30,6 +30,7 @@ if($GET->subnets!="on" && $GET->addresses!="on" && $GET->vlans!="on" && $GET->vr
 	$GET->pstn      ="on";
 	$GET->circuits  ="on";
 	$GET->customers ="on";
+	$GET->locations ="on";
 }
 ?>
 
@@ -59,6 +60,9 @@ if($GET->subnets!="on" && $GET->addresses!="on" && $GET->vlans!="on" && $GET->vr
 		<?php } ?>
 		<?php if($User->settings->enableCustomers==1) { ?>
 		<input type="checkbox" name="customers" 	    value="on" <?php if($GET->customers=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Customers'); ?><br>
+		<?php } ?>
+		<?php if($User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
+		<input type="checkbox" name="locations" value="on" <?php if($GET->locations=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Locations'); ?><br>
 		<?php } ?>
 	</div>
 
