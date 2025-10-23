@@ -14306,7 +14306,7 @@ msgstr "Переключено в"
 
 #: app/sections/user-menu.php:78
 msgid "Switch back user"
-msgstr "Вернуться к предыдущему пользователю""
+msgstr "Вернуться к предыдущему пользователю"
 
 #: app/sections/all-sections.php:35
 msgid "Available sections"
@@ -17182,7 +17182,7 @@ msgstr "IP Калькулятор"
 
 #: app/tools/mac-lookup/index.php:7 app/tools/tools-menu-config.php:92
 msgid "MAC lookup"
-msgstr "Поиск по MAC-адресу""
+msgstr "Поиск по MAC-адресу"
 
 #: app/tools/tools-menu-config.php:92
 msgid "Lookup MAC address vendor"
