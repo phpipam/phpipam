@@ -440,6 +440,7 @@ Parameter          | Type           | Methods            | Description
 **vrfId**          | int            | POST, PATCH        | Assigns subnet to VRF(default: 0)
 **masterSubnetId** | int            | POST, PATCH        | Master subnet id for nested subnet (default: 0)
 **nameserverId**   | int            | POST, PATCH        | Id of nameserver to attach to subnet (default: 0)
+**timeserverId**   | int            | POST, PATCH        | Id of timeserver to attach to subnet (default: 0)
 **showName**       | binary         | POST, PATCH        | Controls weather subnet is displayed as IP address or Name in subnets menu (default: 0)
 **permissions**    | varchar (json) | POST, PATCH        | Group permissions for subnet.
 **DNSrecursive**   | binary         | POST, PATCH        | Controls if PTR records should be created for subnet (default: 0)
@@ -624,6 +625,7 @@ Available subcontrollers are:
 * vlans
 * vrfs
 * nameservers
+* timeservers
 * scanagents
 * locations
 * nat

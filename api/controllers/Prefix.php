@@ -144,6 +144,7 @@ class Prefix_controller extends Common_api_functions {
                                         "DNSrecursive",
                                         "DNSrecords",
                                         "nameserverId",
+                                        "timeserverId",        
                                         "scanAgent",
                                         "isFull",
                                         "state",

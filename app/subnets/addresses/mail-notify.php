@@ -27,11 +27,12 @@ $csrf = $User->Crypto->csrf_cookie ("create", "mail_notify");
 # get IP address id
 $id = $POST->id;
 
-# fetch address, subnet, vlan and nameservers
+# fetch address, subnet, vlan and nameservers,timeservers
 $address = (array) $Addresses->fetch_address (null, $id);
 $subnet  = (array) $Subnets->fetch_subnet (null, $address['subnetId']);
 $vlan    = (array) $Tools->fetch_object ("vlans", "vlanId", $subnet['vlanId']);
 $nameservers    = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
+$timeservers    = (array) $Tools->fetch_object("timeservers", "id", $subnet['timeserverId']);
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
@@ -75,6 +76,14 @@ if ( !empty( $subnet['nameserverId'] ) ) {
 
 						$content[] = "&bull; "._('Nameservers').": \t $nslist ({$nameservers['name']})";
 }
+
+# Timeserver sets
+if ( !empty( $subnet['timeserverId'] ) ) {
+	$tslist = str_replace(";", ", ", $timeservers['timesrv1']);
+
+						$content[] = "&bull; "._('Timeservers').": \t $tslist ({$timeservers['name']})";
+}
+
 
 # Switch
 if(!empty($address['switch'])) {

@@ -859,6 +859,7 @@ class Common_api_functions {
 		if($controller=="l2domains"){ $this->keys['permissions'] = "sections"; }
 		if($this->_params->controller=="tools" && $tools_table=="deviceTypes")  { $this->keys['tid'] = "id"; }
 		if($this->_params->controller=="tools" && $tools_table=="nameservers")  { $this->keys['permissions'] = "sections"; }
+		if($this->_params->controller=="tools" && $tools_table=="timeservers")  { $this->keys['permissions'] = "sections"; }                
 		if($this->_params->controller=="subnets" )  								  { $this->keys['ip'] = "ip_addr"; }
 
 		// special keys for POST / PATCH
@@ -1130,5 +1131,15 @@ class Common_api_functions {
 	 */
 	protected function read_subnet_nameserver($nsid) {
 		return (is_numeric($nsid) && $nsid > 0) ? $this->Tools->fetch_object("nameservers", "id", $nsid) : false;
+	}
+        
+        /**
+	 * Returns timeserver details
+	 *
+	 * @param int $tsid
+	 * @return object|false
+	 */
+	protected function read_subnet_timeserver($tsid) {
+		return (is_numeric($tsid) && $tsid > 0) ? $this->Tools->fetch_object("timeservers", "id", $tsid) : false;
 	}
 }

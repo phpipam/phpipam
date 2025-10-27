@@ -392,6 +392,7 @@ class Subnets extends Common_functions {
 							"showName"       => @$subnet['showName'],
 							"permissions"    => $subnet['permissions'],
 							"nameserverId"   => $subnet_old->nameserverId,
+							"timeserverId"   => $subnet_old->timeserverId,                            
 							"device"		 => $subnet_old->device,
 							"isPool"		 => $subnet_old->isPool,
 							);
@@ -808,7 +809,7 @@ class Subnets extends Common_functions {
 	private function fetch_all_subnets_for_Check($discoverytype, $agentId) {
 		if (is_null($agentId) || !is_numeric($agentId))	{ return false; }
 		// Exclude subnets with children
-		$query = "SELECT s.id, s.subnet, s.sectionId, s.mask, s.resolveDNS, s.nameserverId FROM subnets AS s
+		$query = "SELECT s.id, s.subnet, s.sectionId, s.mask, s.resolveDNS, s.nameserverId, s.timeserverId FROM subnets AS s
 				LEFT JOIN subnets AS child ON child.masterSubnetId = s.id
 				WHERE s.scanAgent = ? AND s.$discoverytype = 1 AND s.isFolder = 0 AND s.mask > 0 AND s.subnet < 4294967296 AND child.id IS NULL;";
 		try { $subnets = $this->Database->getObjectsQuery('subnets', $query, array($agentId)); }

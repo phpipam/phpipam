@@ -193,6 +193,7 @@ class Logging extends Common_functions {
 						"DNSrecursive"          => "Create recursive PowerDNS records",
 						"DNSrecords"            => "Show PowerDNS records",
 						"nameserverId"          => "Nameserver",
+						"timeserverId"          => "Timeserver",            
 						"scanAgent"             => "Scan agent index",
 						"isFolder"              => "Object is folder",
 						"isFull"                => "Subnet is marked as full",
@@ -903,6 +904,8 @@ class Logging extends Common_functions {
 			elseif($k == "permissions") 	{ $this->object_new[$k] = $this->changelog_format_permission_diff ($k, $v); }
 			// nameserver index
 			elseif($k == "nameserverId") 	{ $this->object_new[$k] = $this->changelog_format_ns_diff ($k, $v); }
+                        // timeserver index
+			elseif($k == "timeserverId") 	{ $this->object_new[$k] = $this->changelog_format_ts_diff ($k, $v); }
 		}
 	}
 
@@ -941,6 +944,8 @@ class Logging extends Common_functions {
 			elseif($k == "permissions") 	{ $this->object_old[$k] = $this->changelog_format_permission_diff ($k, $v); }
 			// nameserver index
 			elseif($k == "nameserverId") 	{ $this->object_old[$k] = $this->changelog_format_ns_diff ($k, $v); }
+                        // timeserver index
+			elseif($k == "timeserverId") 	{ $this->object_old[$k] = $this->changelog_format_ts_diff ($k, $v); }
 		}
 	}
 
@@ -1003,7 +1008,9 @@ class Logging extends Common_functions {
 				elseif($k == "permissions") 	{ $v = $this->changelog_format_permission_diff ($k, $v); }
 				// nameserver index
 				elseif($k == "nameserverId") 	{ $v = $this->changelog_format_ns_diff ($k, $v); }
-				// make booleans
+				// timeserver index
+			        elseif($k == "timeserverId") 	{ $v = $this->changelog_format_ts_diff ($k, $v); }
+                                // make booleans
 				$v = $this->changelog_make_booleans ($k, $v);
 				//set log
 				if ($k!=="id")
@@ -1083,6 +1090,7 @@ class Logging extends Common_functions {
 					$this->object_new['DNSrecursive'],
 					$this->object_new['DNSrecords'],
 					$this->object_new['nameserverId'],
+					$this->object_new['timeserverId'],                                        
 					$this->object_new['scanAgent'],
 					$this->object_new['isFull'],
 					$this->object_new['isPool'],
@@ -1103,6 +1111,7 @@ class Logging extends Common_functions {
 					$this->object_old['DNSrecursive'],
 					$this->object_old['DNSrecords'],
 					$this->object_old['nameserverId'],
+                                        $this->object_old['timeserverId'],
 					$this->object_old['scanAgent'],
 					$this->object_old['isFull'],
 					$this->object_old['isPool'],
@@ -1335,6 +1344,38 @@ class Logging extends Common_functions {
 		return $v;
 	}
 
+        
+        	/**
+	 * Format TS if change
+	 *
+	 * @access private
+	 * @param string $k
+	 * @param mixed $v
+	 * @return void
+	 */
+	private function changelog_format_ts_diff ($k, $v) {
+		//old none
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
+			$this->object_old[$k] = _("None");
+		}
+		elseif($this->object_old[$k] != "NULL") {
+			$ts = $this->Tools->fetch_object("timeservers", "id", $this->object_old[$k]);
+			if (is_object($ts))
+				$this->object_old[$k] = $ts->name." [".$ts->timesrv1."]";
+		}
+		// new none
+		if($v == 0)	{
+			$v = _("None");
+		}
+		elseif($v != "NULL") {
+			$ts = $this->Tools->fetch_object("timeservers", "id", $v);
+			if (is_object($ts))
+				$v = $ts->name." [".$ts->timesrv1."]";
+		}
+		//result
+		return $v;
+	}
+        
 	/**
 	 * Format location change
 	 *

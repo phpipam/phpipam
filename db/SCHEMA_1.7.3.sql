@@ -281,7 +281,6 @@ CREATE TABLE `subnets` (
   `DNSrecursive` BOOL NOT NULL DEFAULT '0',
   `DNSrecords` BOOL NOT NULL DEFAULT '0',
   `nameserverId` INT(11) NULL DEFAULT '0',
-  `timeserverId` INT(11) NULL DEFAULT '0',
   `scanAgent` INT(11)  DEFAULT NULL,
   `customer_id` INT(11) unsigned NULL default NULL,
   `isFolder` BOOL NOT NULL DEFAULT '0',
@@ -423,18 +422,18 @@ CREATE TABLE `lang` (
 INSERT INTO `lang` (`l_id`, `l_code`, `l_name`)
 VALUES
    (1, 'en_GB.UTF-8', 'English'),
-   (2, 'sl_SI.UTF-8', 'Slovenščina'),
-   (3, 'fr_FR.UTF-8', 'Français'),
+   (2, 'sl_SI.UTF-8', 'SlovenÅ¡Äina'),
+   (3, 'fr_FR.UTF-8', 'FranÃ§ais'),
    (4, 'nl_NL.UTF-8', 'Nederlands'),
    (5, 'de_DE.UTF-8', 'Deutsch'),
    (6, 'pt_BR.UTF-8', 'Brazil'),
-   (7, 'es_ES.UTF-8', 'Español'),
+   (7, 'es_ES.UTF-8', 'EspaÃ±ol'),
    (8, 'cs_CZ.UTF-8', 'Czech'),
    (9, 'en_US.UTF-8', 'English (US)'),
   (10, 'ru_RU.UTF-8', 'Russian'),
   (11, 'zh_CN.UTF-8', 'Chinese'),
   (12, 'ja_JP.UTF-8', 'Japanese'),
-  (13, 'zh_TW.UTF-8', 'Chinese traditional (繁體中文)'),
+  (13, 'zh_TW.UTF-8', 'Chinese traditional (ç¹é«ä¸­æ)'),
   (14, 'it_IT.UTF-8', 'Italian');
 
 
@@ -512,24 +511,6 @@ CREATE TABLE `nameservers` (
 INSERT INTO `nameservers` (`name`, `namesrv1`, `description`, `permissions`)
 VALUES
 	('Google NS', '8.8.8.8;8.8.4.4', 'Google public nameservers', '1;2');
-
-# Dump of table timeservers
-# ------------------------------------------------------------
-DROP TABLE IF EXISTS `timeservers`;
-
-CREATE TABLE `timeservers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `timesrv1` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `permissions` varchar(128) DEFAULT NULL,
-  `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/* insert default values */
-INSERT INTO `timeservers` (`id`, `name`, `timesrv1`, `description`, `permissions`) VALUES
-(1, 'Google NTP', 'time.google.com', 'Google public timeservers', '1;2');
-
 
 
 
@@ -1101,4 +1082,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.73";
-UPDATE `settings` SET `dbversion` = 44;
+UPDATE `settings` SET `dbversion` = 43;

@@ -73,6 +73,7 @@ else {
     	$subnet_old_details['pingSubnet'] 	    = @$subnet_old_temp['pingSubnet'];        // inherit pingSubnet
     	$subnet_old_details['discoverSubnet']   = @$subnet_old_temp['discoverSubnet'];    // inherit discovery
     	$subnet_old_details['nameserverId']     = @$subnet_old_temp['nameserverId'];      // inherit nameserver
+    	$subnet_old_details['timeserverId']     = @$subnet_old_temp['timeserverId'];      // inherit timeserver        
     	if($User->settings->enableLocations=="1")
     	$subnet_old_details['location']         = @$subnet_old_temp['location'];          // inherit location
         if($User->settings->enableCustomers=="1")
@@ -300,6 +301,15 @@ $("input[name='subnet']").change(function() {
 		</td>
 		<td class="info2"><?php print _('Select nameserver set'); ?></td>
     </tr>
+    
+   	<!-- Timeservers -->
+	<tr>
+		<td class="middle"><?php print _('Timeservers'); ?></td>
+		<td id="timeserverDropdown">
+			<?php include('edit-timeserver-dropdown.php'); ?>
+		</td>
+		<td class="info2"><?php print _('Select timeserver set'); ?></td>
+    </tr> 
 
     <!-- Master subnet -->
     <tr>

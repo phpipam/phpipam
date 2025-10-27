@@ -288,6 +288,7 @@ else {
 					"DNSrecursive"   => $Admin->verify_checkbox($POST->DNSrecursive),
 					"DNSrecords"     => $Admin->verify_checkbox($POST->DNSrecords),
 					"nameserverId"   => $POST->nameserverId,
+					"timeserverId"   => $POST->timeserverId,            
 					"device"         => $POST->device,
 					"isFull"         => $Admin->verify_checkbox($POST->isFull),
 					"isPool"         => $Admin->verify_checkbox($POST->isPool)
@@ -377,6 +378,7 @@ else {
 					"vlanId"       =>$POST->vlanId,
 					"vrfId"        =>$POST->vrfId,
 					"nameserverId" =>$POST->nameserverId,
+					"timeserverId" =>$POST->timeserverId,            
 					"scanAgent"    =>$POST->scanAgent,
 					"device"       =>$POST->device,
 					"isFull"       =>$Admin->verify_checkbox($POST->isFull),

@@ -2462,6 +2462,32 @@ $(document).on("click", "#remove_nameserver", function() {
     hideSpinner();  return false;
 });
 
+/* ---- Timeservers ----- */
+// add new
+$(document).on("click", "#add_timeserver", function() {
+    showSpinner();
+    //get old number
+    var num = $(this).attr("data-id");
+    // append
+    $('table#timeserverManagementEdit2 tbody#timeservers').append("<tr id='timesrv-"+num+"'><td>Timeserver "+num+"</td><td><input type='text' class='rd form-control input-sm' name='timesrv-"+num+"'></input><td><button class='btn btn-sm btn-default' id='remove_timeserver' data-id='timesrv-"+num+"'><i class='fa fa-trash-o'></i></buttom></td></td></tr>");
+    // add number
+    num++;
+    $(this).attr("data-id", num);
+
+    hideSpinner();  return false;
+});
+// remove
+$(document).on("click", "#remove_timeserver", function() {
+    showSpinner();
+    //get old number
+    var id = $(this).attr("data-id");
+    // append
+    var el = document.getElementById(id);
+    el.parentNode.removeChild(el);
+
+    hideSpinner();  return false;
+});
+
 /* ---- IP requests ----- */
 //submit form
 $(document).on("click", "button.manageRequest", function() {

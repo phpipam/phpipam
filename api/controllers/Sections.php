@@ -102,7 +102,13 @@ class Sections_controller extends Common_api_functions {
 					if ($ns!==false) {
 						$result[$k]->nameservers = $ns;
 					}
-
+                                        
+					//timeservers
+					$ts = $this->read_subnet_timeserver ($r->timeserverId);
+					if ($ts!==false) {
+						$result[$k]->timeservers = $ts;
+					}
+                                        
 					// get usage
 					$result[$k]->usage = $this->read_subnet_usage($r->id);
 

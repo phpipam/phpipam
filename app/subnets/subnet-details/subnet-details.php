@@ -187,6 +187,28 @@ else {
 		</td>
 	</tr>
 
+        	<!-- timeservers -->
+	<tr>
+		<th><?php print _('Timeservers'); ?></th>
+		<td>
+		<?php
+
+		// Only show timeservers if defined for subnet
+		if(!empty($subnet['timeserverId'])) {
+			# fetch recursive timeserver details
+			$timeservers = $Tools->fetch_object("timeservers", "id", $subnet['timeserverId']);
+			print str_replace(";", ", ", $timeservers->timesrv1);
+			//Print name of timeserver group
+			print ' ('.$timeservers->name.')';
+		}
+
+		else {
+			print "<span class='text-muted'>/</span>";
+		}
+		?>
+		</td>
+	</tr>
+        
 	<!-- Customers -->
 	<?php if($User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
 	<tr>

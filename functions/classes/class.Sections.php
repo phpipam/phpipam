@@ -405,7 +405,39 @@ class Sections extends Common_functions {
 	}
 
 
-
+/**
+	 * Fetches timeserver sets to belong to section
+	 *
+	 * @access public
+	 * @param mixed $sectionId
+	 * @return array|bool
+	 */
+	public function fetch_section_timeserver_sets ($sectionId) {
+		# first fetch all timeserver sets
+		$Admin = new Admin ($this->Database, false);
+		$timeservers = $Admin->fetch_all_objects ("timeservers","name");
+		# loop and check
+		if ($timeservers!==false) {
+    		$permitted = array();
+			foreach($timeservers as $t) {
+				//default
+				if($t->id==1) {
+						$permitted[] = $t->id;
+				}
+				else {
+					//array
+					if(in_array($sectionId, pf_explode(";", $t->permissions))) {
+						$permitted[] = $t->id;
+					}
+				}
+			}
+			# return permitted
+			return $permitted;
+		}
+		else {
+			return false;
+		}
+	}
 
 
 	/**

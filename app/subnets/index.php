@@ -30,6 +30,9 @@ $vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
 # fetch recursive nameserver details
 $nameservers = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
 
+# fetch recursive timeserver details
+$timeservers = (array) $Tools->fetch_object("timeservers", "id", $subnet['timeserverId']);
+
 # verify that is it displayed in proper section, otherwise warn!
 if($subnet['sectionId']!=$GET->section)	{
 	$sd = $Sections->fetch_section("id", $subnet['sectionId']);

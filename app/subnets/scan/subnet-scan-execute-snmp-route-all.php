@@ -111,7 +111,27 @@ else {
     	$permitted_nameservers = isset($nsout) ? array_filter($nsout) : false;
     }
 
+    $permitted_timeservers = $Sections->fetch_section_timeserver_sets ($POST->sectionId);
 
+    # fetch all belonging timeserver set
+    $cnt = 0;
+
+    # Only parse timeserver if any exists
+    if($permitted_timeservers != false) {
+    	foreach($permitted_timeservers as $k=>$t) {
+    		// fetch timeserver sets and append
+    		$timeserver_set = $Tools->fetch_multiple_objects("timeservers", "id", $t, "name", "timesrv1");
+    		//save to array
+    		$tsout[$n] = $timeserver_set;
+    		//count add
+    		$cnt++;
+    	}
+    	//filter out empty
+    	$permitted_timeservers = isset($tsout) ? array_filter($tsout) : false;
+    }
+    
+    
+    
     # fetch all IPv4 masks
     $masks =  $Subnets->get_ipv4_masks ();
 
@@ -144,6 +164,7 @@ else {
     	if($User->settings->enableVRF==1)
     	print "	<th>"._("VRF")."</th>";
     	print "	<th>"._("Nameservers")."</th>";
+    	print "	<th>"._("Timeservers")."</th>";        
     	print "	<th style='width:5px;'></th>";
     	print "</tr>";
 
@@ -289,6 +310,29 @@ else {
                             print "</select>";
                             print "</td>";
 
+                            //timeserver
+                            print "<td>";
+                            print "<select name='timeserverId-$m' class='form-control input-sm input-w-100'>";
+                            print "<optgroup label='"._('Select timeserver set')."'>";
+                            print "<option value='0'>"._('No timeservers')."</option>";
+                        	# print all available timeserver sets
+                        	if ($permitted_timeservers!==false) {
+                        		foreach($permitted_timeservers as $t) {
+
+                        			if($t[0]!==null) {
+                        				foreach($t as $ts) {
+                        					// set print
+                        					$printTS = "$ts->name";
+                        					$printTS .= " (" . array_shift(pf_explode(";",$ts->timesrv1)).",...)";
+                                            print '<option value="'. $ns->id .'">'. $printTS .'</option>'. "\n";
+                        				}
+                        			}
+                        		}
+                        	}
+                            print "</optgroup>";
+                            print "</select>";
+                            print "</td>";                            
+                            
                     		//remove button
                     		print 	"<td><a href='' class='btn btn-xs btn-danger remove-snmp-subnet' data-target-subnet='$m'><i class='fa fa-times'></i></a></td>";
                     		print "</tr>";

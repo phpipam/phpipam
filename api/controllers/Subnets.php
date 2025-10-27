@@ -689,13 +689,18 @@ class Subnets_controller extends Common_api_functions {
 		$subnetId = is_null($subnetId) ? $this->_params->id : $subnetId;
 		// fetch
 		$result = $this->Subnets->fetch_subnet ("id", $subnetId);
-        // add nameservers, GW and calculation
+        // add nameservers, timeservers, GW and calculation
         if($result!==false) {
             $ns = $this->read_subnet_nameserver($result->nameserverId);
             if ($ns!==false) {
                 $result->nameservers = $ns;
             }
-
+            
+            $ts = $this->read_subnet_timeserver($result->timeserverId);
+            if ($ts!==false) {
+                $result->timeservers = $ts;
+            }
+            
     		$gateway = $this->read_subnet_gateway(null);
     		if ( $gateway!== false) {
         		$result->gatewayId = $gateway->id;
@@ -734,12 +739,17 @@ class Subnets_controller extends Common_api_functions {
 			}
 		}
 
-		// add nameservers, GW, permission and location for each network found
+		// add nameservers, timeservers, GW, permission and location for each network found
 		foreach($results as $key => $result) {
 			$ns = $this->read_subnet_nameserver($result->nameserverId);
 			if ($ns!==false) {
 				$result->nameservers = $ns;
 			}
+                        
+                        $ts = $this->read_subnet_timeserver($result->timeserverId);
+                        if ($ts!==false) {
+                                $result->timeservers = $ts;
+                        }
 
 			if (isset($subnet_gws[$result->id])) {
 				$gateway = $subnet_gws[$result->id][0];
