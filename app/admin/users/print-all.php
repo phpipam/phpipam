@@ -82,7 +82,7 @@ foreach ($users as $user) {
 	print '	<td><a href="'.create_link("administration","users",$user['id']).'">' . $user['real_name'] . '</a> '.$disabled.'</td>'. "\n";
 	print '	<td>' . $user['username']  . '</td>'. "\n";
 	print '	<td>' . $user['email']     . '</td>'. "\n";
-	print '	<td>' . $user['role']      . '</td>'. "\n";
+	print '	<td>' . _($user['role'])      . '</td>'. "\n";
 
 	# language
 	if(!is_blank($user['lang'])) {
@@ -91,16 +91,17 @@ foreach ($users as $user) {
 		print "<td>$lname->l_name</td>";
 	}
 	else {
-		print "<td>English (default)</td>";
+		print "<td>"._("English (default)")."</td>";
 	}
 
 	# check users auth method
 	$auth_method = $Admin->fetch_object("usersAuthMethod", "id", $user['authMethod']);
 	//false
 	print "<td>";
-	if($auth_method===false) 	{ print "<span class='text-muted'>No auth method</span>"; }
+	if($auth_method===false) 	{ print "<span class='text-muted'>"._("No auth method")."</span>"; }
 	elseif($passkey_only)   	{ print "<span class='badge badge1 badge5 alert-success'>"._("Passkey only")."</span>"; }
-	else 					 	{ print "<span class='badge badge1 badge5 alert-success'>".$auth_method->type."</span> <span class='text-muted'>(".$auth_method->description."</a>)"; }
+	else 					 	{ print "<span class='badge badge1 badge5 alert-success'>" . _($auth_method->type) . "</span> <span class='text-muted'>(" . _($auth_method->description) . ")</span>"; }
+	
 	// 2fa
 	if ($User->settings->{'2fa_provider'}!=='none' && $passkey_only!==true) {
 		if (!is_null($user['2fa_secret']) && $user['2fa']=="1") {
@@ -127,7 +128,7 @@ foreach ($users as $user) {
 	}
 	else {
 		print "<td>";
-		print "<btn class='btn btn-xs btn-default toggle-module-permissions'>Show <i class='fa fa-angle-down'></i></btn><div class='hidden module-permissions'>";
+		print "<btn class='btn btn-xs btn-default toggle-module-permissions'>"._("Show")." <i class='fa fa-angle-down'></i></btn><div class='hidden module-permissions'>";
 		include("print_module_permissions.php");
 		print "</div>";
 		print "</td>";
@@ -144,7 +145,7 @@ foreach ($users as $user) {
 		print '	<td>';
 		if(sizeof($gr)>0) {
 			foreach($gr as $group) {
-				print $group['g_name']."<br>";
+				print _($group['g_name'])."<br>";
 			}
 		}
 		else {

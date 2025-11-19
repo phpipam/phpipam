@@ -83,7 +83,7 @@ if($certificates_db!==false) {
 			print "	<td>"._($pkey)."</td>";
 			print "	<td>$status</td>";
 			print "	<td>".$certificate['subject']['CN']."</td>";
-			print "	<td>".$validTo." ($valid_days days)</td>";
+			print "	<td>".$validTo." ($valid_days "._('days').")</td>";
 			print "	<td>".$certificate['issuer']['O']."</td>";
 			print "	<td>".str_replace([","], "<br>", $certificate['extensions']['subjectAltName'])."</td>";
 
@@ -123,7 +123,7 @@ if($certificates_db!==false) {
 else {
 	print "<tr>";
 	print "	<td colspan='$csize'>";
-	$Result->show('info', "No items");
+	$Result->show('info', _("No items"));
 	print "	</td>";
 	print "</tr>";
 }

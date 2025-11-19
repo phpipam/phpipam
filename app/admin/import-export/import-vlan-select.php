@@ -24,7 +24,7 @@ $mtable = "vlans"; # main table where to check the fields
 # extra fields
 $extfields["domain"]["table"] = "vlanDomains";
 $extfields["domain"]["field"] = "name";
-$extfields["domain"]["pname"] = "domain"; # name prefix for fields from other tables
+$extfields["domain"]["pname"] = _("domain"); # name prefix for fields from other tables
 # required fields without which we will not continue
 $reqfields = array("number","name");
 
@@ -50,7 +50,7 @@ foreach($expfields as $std_field) {
 	$msgr = in_array($std_field,$reqfields) ? "*" : "";
 
 	#prebuild template table rows to avoid useless foreach loops
-	$tpl_field_names.= "<th>".$pname.$field['Field'].$msgr."</th>";
+	$tpl_field_names.= "<th>".$pname._($field['Field']).$msgr."</th>";
 	$tpl_field_types.= "<td><small>". wordwrap($field['Type'],18,"<br>\n",true) ."</small></td>";
 }
 
@@ -63,7 +63,7 @@ if(sizeof($custom_fields) > 0) {
 		# mark required fields with *
 		$msgr = in_array($myField['name'],$reqfields) ? "*" : "";
 
-		$tpl_field_names.= "<th>".$myField['name'].$msgr."</th>";
+		$tpl_field_names.= "<th>"._($myField['name']).$msgr."</th>";
 		$tpl_field_types.= "<td><small>". wordwrap($myField['type'],18,"<br>\n",true) ."</small></td>";
 		$expfields[] = $myField['name'];
 	}

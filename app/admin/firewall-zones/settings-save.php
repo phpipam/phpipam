@@ -58,7 +58,7 @@ if (!preg_match('/^[0-3]$/i', $POST->zoneGenerator)) {
 }
 
 # validate the hidden values (zoneGeneratorType).
-if (!is_array($POST->zoneGeneratorType) || $POST->zoneGeneratorType !== ['decimal', 'hex', 'text']) {
+if (!is_array($POST->zoneGeneratorType) || $POST->zoneGeneratorType !== [_('decimal'), _('hex'), _('text')]) {
 	$Result->show("danger", _("Invalid zone generator types. Do not manipulate the POST values!"), true);
 }
 
@@ -106,7 +106,7 @@ if (!preg_match('/^[0-9]+$/i', $POST->deviceType)) {
 }
 
 # validate the hidden values (subnetPatternValues).
-if (!is_array($POST->subnetPatternValues) || $POST->subnetPatternValues !== ['network', 'description']) {
+if (!is_array($POST->subnetPatternValues) || $POST->subnetPatternValues !== [_('network'), 'description']) {
 	$Result->show("danger", _("Invalid subnet name types. Do not manipulate the POST values!"), true);
 }
 

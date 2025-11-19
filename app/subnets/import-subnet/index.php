@@ -56,7 +56,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	}
 
 	# set standard fields
-	$standard_fields = array ("ip address","ip state","description","hostname","fw_object","mac","owner","device","port","notes", "location");
+	$standard_fields = array (_("ip address"),_("ip state"),_("description"),_("hostname"),_("fw_object"),"mac",_("owner"),_("device"),_("port"),_("notes"), _("location"));
 
 	if (!is_writeable( dirname(__FILE__) . '/upload' )) $Result->show("danger", _("'app/subnets/import-subnet/upload' folder is not writeable."), false, false);
 	?>

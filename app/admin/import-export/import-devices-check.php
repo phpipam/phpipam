@@ -69,7 +69,7 @@ foreach ($data as &$cdata) {
 
 	# check if required fields are present and not empty
 	foreach($reqfields as $creq) {
-		if ((!isset($cdata[$creq]) or ($cdata[$creq] == ""))) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
+		if ((!isset($cdata[$creq]) or ($cdata[$creq] == ""))) { $msg.= tr_("Required field %s missing or empty.",_($creq)); $action = "error"; }
 	}
 
 	# Check if section is provided and valid and link it if it is
@@ -94,14 +94,14 @@ foreach ($data as &$cdata) {
     	    !$Addresses->validate_ip($cdata['ip_addr'])
     	)
     	    {
-    	        $msg.="Invalid IP address.";
+    	        $msg.=_("Invalid IP address.");
     	        $action = "error";
     	    }
-		if ((!empty($cdata['hostname'])) and (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
+		if ((!empty($cdata['hostname'])) and (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.=_("Invalid DNS name."); $action = "error"; }
 #       Allow all chars in description ... Why Limit it ?
 #		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 		if ($cdata['mac']) {
-			if (!preg_match("/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/", $cdata['mac'])) { $msg.="Invalid MAC address."; $action = "error"; }
+			if (!preg_match("/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/", $cdata['mac'])) { $msg.=_("Invalid MAC address."); $action = "error"; }
 		}
 	}
 
@@ -116,27 +116,27 @@ foreach ($data as &$cdata) {
 			$action = "skip"; # skip duplicate fields if identical, update if different
 			# Should we just let the database decided to update or not?  Nice for UI, but alot of
 			# code maintenance here.
-			if ($cdata['description'] != $cedata['description']) { $msg.= "Device description will be updated."; $action = "edit"; }
-			if ($cdata['ip_addr'] != $cedata['ip_addr']) { $msg.= "Device ip_addr will be updated."; $action = "edit"; }
-			if ($cdata['type'] != $cedata['type']) { $msg.= "DeviceType will be updated."; $action = "edit"; }
-			if ($cdata['sectionId'] != $cedata['sectionId']) { $msg.= "sectionId will be updated."; $action = "edit"; }
-			if ($cdata['rack'] != $cedata['rack']) { $msg.= "rack will be updated."; $action = "edit"; }
-			if ($cdata['rack_start'] != $cedata['rack_start']) { $msg.= "rack_start will be updated."; $action = "edit"; }
-			if ($cdata['rack_size'] != $cedata['rack_size']) { $msg.= "rack_size will be updated."; $action = "edit"; }
-			if ($cdata['location'] != $cedata['location']) { $msg.= "location will be updated."; $action = "edit"; }
+			if ($cdata['description'] != $cedata['description']) { $msg.= _("Device description will be updated."); $action = "edit"; }
+			if ($cdata['ip_addr'] != $cedata['ip_addr']) { $msg.= _("Device ip_addr will be updated."); $action = "edit"; }
+			if ($cdata['type'] != $cedata['type']) { $msg.= _("DeviceType will be updated."); $action = "edit"; }
+			if ($cdata['sectionId'] != $cedata['sectionId']) { $msg.= _("sectionId will be updated."); $action = "edit"; }
+			if ($cdata['rack'] != $cedata['rack']) { $msg.= _("rack will be updated."); $action = "edit"; }
+			if ($cdata['rack_start'] != $cedata['rack_start']) { $msg.= _("rack_start will be updated."); $action = "edit"; }
+			if ($cdata['rack_size'] != $cedata['rack_size']) { $msg.= _("rack_size will be updated."); $action = "edit"; }
+			if ($cdata['location'] != $cedata['location']) { $msg.= _("location will be updated."); $action = "edit"; }
 
 			# Check if the values of the custom fields have changed
 			if(sizeof($custom_fields) > 0) {
 				foreach($custom_fields as $myField) {
 					if ($cdata[$myField['name']] != $cedata[$myField['name']]) {
-						$msg.= $myField['name']." will be updated."; $action = "edit";
+						$msg.= tr_($myField['name']," %s will be updated."); $action = "edit";
 					}
 				}
 			}
 
-			if ($action == "skip") { $msg.= "Duplicate, will skip."; }
+			if ($action == "skip") { $msg.= _("Duplicate, will skip."); }
 		} else {
-			$msg.="New entry, will be added."; $action = "add";
+			$msg.=_("New entry, will be added."); $action = "add";
 			# Add it to ndata for duplicate check
 			# $ndata[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']][$cdata['ip_addr']] = $cdata;
 		}

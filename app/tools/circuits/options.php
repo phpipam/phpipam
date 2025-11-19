@@ -26,7 +26,7 @@ if($User->is_admin(false)) {
 
     foreach($circuit_options as $v) {
         $html[] = " <a class='open_popup' data-script='app/admin/circuits/edit-options.php' data-action='delete' data-type='type' data-op_id='$v->id' data-value='$v->ctname' data-color='$v->ctcolor' data-pattern='$v->ctpattern' href='' rel='tooltip' data-placement='right' title='"._("Remove option")."'>";
-        $html[] = "    <span class='badge badge1' style='color:white;background:$v->ctcolor !important'><i class='fa fa-remove'></i> $v->ctname ($v->ctpattern Line)</span>";
+        $html[] = "    <span class='badge badge1' style='color:white;background:$v->ctcolor !important'><i class='fa fa-remove'></i> "._($v->ctname)." ".tr_("(%s Line)",_($v->ctpattern))."</span>";
         $html[] = "</a><br>";
     }
     $html[] = "<br>";

@@ -45,7 +45,7 @@
 			<hr style="padding-top: 3px">
 		</div>
 		<div style="width: 10%;" class='text-center pull-left'>
-			or
+		<?php print _("or"); ?>
 		</div>
 		<div style="width: 45%;" class='text-center pull-left'>
 			<hr style="padding-top: 3px">

@@ -12,12 +12,12 @@ print '<ul class="nav nav-tabs">';
 // default tab
 if(!isset($GET->sPage)) { $GET->sPage = "details"; }
 // check
-if(!array_key_exists($GET->sPage, $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
+if(!array_key_exists($GET->sPage, $tabs)) 	{ $Result->show("danger", _("Invalid request"), true); }
 
 // print
 foreach($tabs as $k=>$t) {
 	$class = $GET->sPage==$k ? "class='active'" : "";
-	print "<li role='presentation' $class><a href=".create_link("folder", $section['id'], $folder['id'], $k).">$t</a></li>";
+	print "<li role='presentation' $class><a href=".create_link("folder", $section['id'], $folder['id'], $k).">"._($t)."</a></li>";
 }
 print "</ul>";
 

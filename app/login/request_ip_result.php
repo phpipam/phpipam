@@ -19,6 +19,14 @@ if(!$User->is_authenticated() && @$config['requests_public']===false) {
 	$Tools->settings->enableIPrequests = 0;
 }
 
+# set default language
+if(isset($User->settings->defaultLang) && !is_null($User->settings->defaultLang) ) {
+	# get global default language
+	$lang = $User->get_default_lang();
+	if (is_object($lang))
+		set_ui_language($lang->l_code);
+}
+
 # requests must be enabled!
 if($Tools->settings->enableIPrequests==1) {
 	# verify MAC Address

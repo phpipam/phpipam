@@ -28,7 +28,7 @@ $(document).ready(function() {
 		$(this).removeClass('w-lock').addClass('w-unlock');
 		$(this).find('i').removeClass('fa fa-dashboard').addClass('fa fa-check');	//change icon
 		$(this).find('a').addClass('btn-success');	//add success class
-		$(this).find('a').attr('data-original-title','Click to save widgets order');
+		$(this).find('a').attr('data-original-title','<?php print _("Click to save widgets order");?>');
 		$('#dashboard .inner i').fadeIn('fast');
 		$('#dashboard .add-widgets').fadeIn('fast');
 		$('#dashboard .inner').addClass('movable');

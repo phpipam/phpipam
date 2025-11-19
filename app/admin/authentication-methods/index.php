@@ -58,8 +58,8 @@ foreach($all_methods as $method) {
 	$user_num = $Database->numObjectsFilter("users", "authMethod", $method->id);
 
 	print "<tr>";
-	print "	<td><span class='badge badge1 badge-white'>$method->type</span></td>";
-	print "	<td>$method->description</td>";
+	print "	<td><span class='badge badge1 badge-white'>"._($method->type)."</span></td>";
+	print "	<td>"._($method->description)."</td>";
 	//parameters
 	print "	<td>";
 	print "	<span class='text-muted'>";
@@ -90,7 +90,7 @@ foreach($all_methods as $method) {
 	print "	</span>";
 	print "	</td>";
 	print "	<td class='$protected_class'>$user_num</td>";
-	print "	<td class='$protected_class'>$method->protected</td>";
+	print "	<td class='$protected_class'>"._("$method->protected")."</td>";
 	//actions
 	$disabled = $method->type=="local" ? "disabled" : "";
 	print "	<td class='actions'>";

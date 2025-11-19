@@ -87,15 +87,15 @@ else {
     print "<tbody>";
 
     // init array
-    $nats_reordered = array("source"=>array(), "static"=>array(), "destination"=>array());
+    $nats_reordered = array(_("source")=>array(), _("static")=>array(), _("destination")=>array());
 
     # rearrange based on type
     if($all_nats !== false) {
         foreach ($all_nats as $n) {
             # policy
-            if($n->policy=="Yes") { $n->type = $n->type . " policy"; }
+            if($n->policy=="Yes") { $n->type = _($n->type) . _(" policy"); }
             # save
-            $nats_reordered[$n->type][] = $n;
+            $nats_reordered[_($n->type)][] = $n;
         }
     }
 
@@ -108,13 +108,13 @@ else {
         $colspan = $policy_nat_found ? 11 :10;
         $colspan += $csize;
         print "<tr>";
-        print " <td colspan='$colspan' class='th'><i class='fa fa-exchange'></i> "._(ucwords($k)." NAT")."</td>";
+        print " <td colspan='$colspan' class='th'><i class='fa fa-exchange'></i> "._(ucwords($k))." NAT"."</td>";
         print "</tr>";
 
         # if none than print
         if(sizeof($nats)==0) {
             print "<tr>";
-            print " <td colspan='$colspan'>".$Result->show("info",_("No")." $k "._("NAT configured"), false, false, true)."</td>";
+            print " <td colspan='$colspan'>".$Result->show("info",tr_("No %s NAT configured",_($k)), false, false, true)."</td>";
             print "</tr>";
         }
         else {
@@ -156,7 +156,7 @@ else {
                 // print
                 print "<tr>";
                 print " <td><strong><a href='".create_link($GET->page, "nat", $n->id)."'>$n->name</a></strong></td>";
-                print " <td><span class='badge badge1 badge5'>".ucwords($n->type)."</span></td>";
+                print " <td><span class='badge badge1 badge5'>"._(ucwords($n->type))."</span></td>";
                 print " <td>".implode("<br>", $sources)."</td>";
                 print " <td style='width:10px;'><i class='fa $icon'></i></td>";
                 print " <td>".implode("<br>", $destinations)."</td>";

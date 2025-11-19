@@ -53,11 +53,37 @@ if($GET->subnetId==1 || $GET->subnetId==2)  {
     	<input type="hidden" name="id" value="<?php print escape_input($GET->subnetId); ?>">
 
     	<script src="js/ckeditor/ckeditor.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+
+    	<?php
+    	// Get language code from session and clean it
+    	$current_lang = isset($_SESSION['ipamlanguage']) ? $_SESSION['ipamlanguage'] : "en";
+    	$current_lang = strtolower(preg_replace('/\..*$/', '', $current_lang));  // Remove .utf-8 and convert to lowercase
+    	$current_lang = str_replace('_', '-', $current_lang);  // Convert _ to -
+    	
+    	// Try specific language file first, then fall back to base language
+    	$lang_files = array(
+    	    "js/ckeditor/lang/{$current_lang}.js",                                    // Try exact match first
+    	    "js/ckeditor/lang/" . explode('-', $current_lang)[0] . ".js"             // Then try base language
+    	);
+    	
+    	foreach ($lang_files as $lang_file) {
+    	    $server_path = dirname(__FILE__) . "/../../../" . $lang_file;
+    	    if (file_exists($server_path)) {
+    	        $current_lang = basename($lang_file, '.js');  // Use the actual language file name
+    	        echo "<script>\n";
+    	        echo file_get_contents($server_path);
+    	        echo "\nCKEDITOR.lang.languages['{$current_lang}'] = 1;\n";
+    	        echo "</script>\n";
+    	        break;
+    	    }
+    	}
+    	?>
     	<script>
-        	CKEDITOR.replace( 'instructions', {
-    	    	uiColor: '#f9f9f9',
-    	    	autoParagraph: false		//wrap inside p
-        	});
+            var editor = CKEDITOR.replace('instructions', {
+                uiColor: '#f9f9f9',
+    	    	autoParagraph: false,		//wrap inside p
+                language: '<?php echo $current_lang; ?>'
+            });
         </script>
 
     	<!-- preview, submit -->

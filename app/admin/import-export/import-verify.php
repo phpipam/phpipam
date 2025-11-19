@@ -31,7 +31,7 @@ $upload_dir = "upload/";
 $today = date("Ymd-His");
 
 if (!is_dir($upload_dir) || !is_writable($upload_dir)) {
-	echo '{"status":"error", "error":"Upload directory is not writable, or does not exist."}';
+	echo '{"status":"error", "error":"'._("Upload directory is not writable, or does not exist.").'"}';
 	exit;
 }
 
@@ -39,17 +39,17 @@ if (!is_dir($upload_dir) || !is_writable($upload_dir)) {
 if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 	//wrong extension
     if(!in_array(strtolower($filetype), $allowed)) {
-		echo '{"status":"error", "error":"Invalid document type"}';
+		echo '{"status":"error", "error":"'._("Invalid document type").'"}';
         exit;
     }
 	//if cannot move
 	elseif(!move_uploaded_file($_FILES["file"]["tmp_name"], $upload_dir."data_import.".$filetype )) {
-		echo '{"status":"error", "error":"Cannot move file to upload dir"}';
+		echo '{"status":"error", "error":"'._("Cannot move file to upload dir").'"}';
 		exit;
 	}
 	//other errors
 	elseif($_FILES['file']['error'] != 0) {
-		echo '{"status":"error", "error":"Error: '.$_FILES['file']['error'].'" }';
+		echo '{"status":"error", "error":"'. tr_("Error: %s", $_FILES['file']['error']).'"}';
         exit;
 	}
 	else {
@@ -97,5 +97,5 @@ elseif (isset($_FILES['file']['error'])) {
 }
 
 /* default - error */
-echo '{"status":"error","error":"Empty or too big file (limit '.ini_get('post_max_size').')"}';
+echo '{"status":"error","error":"'.tr_("Empty or too big file (limit %s", ini_get('post_max_size')).'"}';
 exit;

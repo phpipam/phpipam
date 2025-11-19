@@ -45,10 +45,10 @@ foreach ($data as &$cdata) {
 
 		if ($cdata['result']) {
 			$trc = $colors[$cdata['action']];
-			$msg = "L2 Domain ".$cdata['action']." successful.";
+			$msg = tr_("L2 Domain %s successful.",_($cdata['action']));
 		} else {
 			$trc = "danger";
-			$msg = "L2 Domain ".$cdata['action']." failed.";
+			$msg = tr_("L2 Domain %s failed.",_($cdata['action']));
 		}
 		$rows.="<tr class='".$trc."'><td><i class='fa ".$icons[$cdata['action']]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>
 			<td>".$cdata['name']."</td>
