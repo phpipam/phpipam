@@ -18,7 +18,7 @@ $User->check_user_session();
 // Create a workbook
 $filename = "phpipam_template_" . $type . ".xls";
 $workbook = new Spreadsheet_Excel_Writer();
-$lineCount = 0;
+$workbook->setVersion(8);
 
 // Create a worksheet
 $worksheet = $workbook->addWorksheet("template");
