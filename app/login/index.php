@@ -12,9 +12,18 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 	else                                          { header("Location: " . create_link("dashboard")); }
 	exit();
 }
+
 // disable requests module for public
 if(@$config['requests_public']===false) {
 	$User->settings->enableIPrequests = 0;
+}
+
+# set default language
+if(isset($User->settings->defaultLang) && !is_null($User->settings->defaultLang) ) {
+	# get global default language
+	$lang = $User->get_default_lang();
+	if (is_object($lang))
+		set_ui_language($lang->l_code);
 }
 ?>
 
