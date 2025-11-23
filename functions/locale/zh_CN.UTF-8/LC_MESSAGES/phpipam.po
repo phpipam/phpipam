@@ -988,7 +988,7 @@ msgstr "截断子网失败"
 #: functions/classes/class.Subnets.php:324
 #: functions/classes/class.Subnets.php:344
 #: functions/classes/class.Subnets.php:348
-#: app/tools/logs/export.php:80
+#: app/tools/logs/export.php:82
 #: app/tools/dhcp/subnets.php:94
 #: app/admin/import-export/export-devtype.php:51
 #: app/admin/import-export/export-devtype-field-select.php:40
@@ -2101,7 +2101,7 @@ msgid "Action"
 msgstr "动作"
 
 #: functions/classes/class.Log.php:1883
-#: app/tools/logs/export.php:82
+#: app/tools/logs/export.php:84
 #: app/tools/logs/detail-popup.php:70
 #: app/tools/logs/show-logs.php:47
 #: app/tools/changelog/show-popup.php:87
@@ -2856,6 +2856,51 @@ msgstr "认证失败"
 #: functions/classes/class.User.php:1102
 #: functions/classes/class.FirewallZones.php:687
 #: functions/classes/class.FirewallZones.php:716
+#: js/magic.js:61 js/magic.js:84
+#: js/magic.js:613 js/magic.js:628
+#: js/magic.js:641 js/magic.js:659
+#: js/magic.js:674 js/magic.js:688
+#: js/magic.js:700 js/magic.js:713
+#: js/magic.js:725 js/magic.js:740
+#: js/magic.js:768 js/magic.js:802
+#: js/magic.js:817 js/magic.js:831
+#: js/magic.js:853 js/magic.js:934
+#: js/magic.js:985 js/magic.js:999
+#: js/magic.js:1011 js/magic.js:1022
+#: js/magic.js:1032 js/magic.js:1054
+#: js/magic.js:1182 js/magic.js:1214
+#: js/magic.js:1235 js/magic.js:1372
+#: js/magic.js:1382 js/magic.js:1396
+#: js/magic.js:1405 js/magic.js:1427
+#: js/magic.js:1448 js/magic.js:1458
+#: js/magic.js:1493 js/magic.js:1512
+#: js/magic.js:1544 js/magic.js:1587
+#: js/magic.js:1615 js/magic.js:1634
+#: js/magic.js:1660 js/magic.js:1680
+#: js/magic.js:1687 js/magic.js:1701
+#: js/magic.js:1727 js/magic.js:1746
+#: js/magic.js:1800 js/magic.js:1813
+#: js/magic.js:1823 js/magic.js:1833
+#: js/magic.js:1844 js/magic.js:1919
+#: js/magic.js:1931 js/magic.js:1961
+#: js/magic.js:1971 js/magic.js:1990
+#: js/magic.js:2000 js/magic.js:2027
+#: js/magic.js:2043 js/magic.js:2061
+#: js/magic.js:2075 js/magic.js:2094
+#: js/magic.js:2139 js/magic.js:2151
+#: js/magic.js:2167 js/magic.js:2347
+#: js/magic.js:2366 js/magic.js:2498
+#: js/magic.js:2516 js/magic.js:2536
+#: js/magic.js:2547 js/magic.js:2560
+#: js/magic.js:2571 js/magic.js:2581
+#: js/magic.js:2596 js/magic.js:2605
+#: js/magic.js:2621 js/magic.js:2667
+#: js/magic.js:2672 js/magic.js:2807
+#: js/magic.js:2812 js/magic.js:2840
+#: js/magic.js:2845 js/magic.js:2871
+#: js/magic.js:2876 js/magic.js:2887
+#: js/magic.js:2901 js/magic.js:2921
+#: js/magic.js:2933 js/magic.js:2947
 #: app/upgrade/index.php:141
 #: app/tools/vrf/index.php:22
 #: app/subnets/addresses/address-modify-submit.php:259
@@ -3809,6 +3854,72 @@ msgstr "清除变更日志时出错"
 msgid "Changelogs cleared successfully"
 msgstr "更改日志已成功清除"
 
+#: js/magic.js:61 js/magic.js:84
+#: js/magic.js:613 js/magic.js:628
+#: js/magic.js:641 js/magic.js:659
+#: js/magic.js:674 js/magic.js:688
+#: js/magic.js:700 js/magic.js:713
+#: js/magic.js:725 js/magic.js:740
+#: js/magic.js:768 js/magic.js:802
+#: js/magic.js:817 js/magic.js:831
+#: js/magic.js:853 js/magic.js:934
+#: js/magic.js:985 js/magic.js:999
+#: js/magic.js:1011 js/magic.js:1022
+#: js/magic.js:1032 js/magic.js:1054
+#: js/magic.js:1182 js/magic.js:1214
+#: js/magic.js:1235 js/magic.js:1372
+#: js/magic.js:1382 js/magic.js:1396
+#: js/magic.js:1405 js/magic.js:1427
+#: js/magic.js:1448 js/magic.js:1458
+#: js/magic.js:1493 js/magic.js:1512
+#: js/magic.js:1544 js/magic.js:1587
+#: js/magic.js:1615 js/magic.js:1634
+#: js/magic.js:1660 js/magic.js:1680
+#: js/magic.js:1687 js/magic.js:1701
+#: js/magic.js:1727 js/magic.js:1746
+#: js/magic.js:1800 js/magic.js:1813
+#: js/magic.js:1823 js/magic.js:1833
+#: js/magic.js:1844 js/magic.js:1919
+#: js/magic.js:1931 js/magic.js:1961
+#: js/magic.js:1971 js/magic.js:1990
+#: js/magic.js:2000 js/magic.js:2027
+#: js/magic.js:2043 js/magic.js:2061
+#: js/magic.js:2075 js/magic.js:2094
+#: js/magic.js:2139 js/magic.js:2151
+#: js/magic.js:2167 js/magic.js:2347
+#: js/magic.js:2366 js/magic.js:2498
+#: js/magic.js:2516 js/magic.js:2536
+#: js/magic.js:2547 js/magic.js:2560
+#: js/magic.js:2571 js/magic.js:2581
+#: js/magic.js:2596 js/magic.js:2605
+#: js/magic.js:2621 js/magic.js:2667
+#: js/magic.js:2672 js/magic.js:2807
+#: js/magic.js:2812 js/magic.js:2840
+#: js/magic.js:2845 js/magic.js:2871
+#: js/magic.js:2876 js/magic.js:2887
+#: js/magic.js:2901 js/magic.js:2921
+#: js/magic.js:2933 js/magic.js:2947
+#: app/tools/circuits/physical-circuits/all-circuits.php:56
+#: app/tools/circuits/physical-circuits/circuit-details-general.php:34
+#: app/tools/circuits/providers/provider-details.php:137
+#: app/tools/search/search_results/search-results_circuits.php:37
+#: app/tools/search/search-results-export.php:493
+#: app/tools/customers/customer/objects/circuits.php:42
+#: app/tools/devices/device-details/device-circuits.php:55
+#: app/tools/vaults/all-vaults.php:47
+#: app/tools/vaults/vault/vault-details-general.php:74
+#: app/tools/vaults/vault/vault-items-certificates.php:27
+#: app/subnets/import-subnet/print-file.php:51
+#: app/admin/circuits/edit-circuit.php:143
+#: app/admin/users/print-user/account.php:11
+#: app/admin/users/edit.php:120
+msgid "Status"
+msgstr "状态"
+
+#: js/magic.js:1438
+msgid "Preparing download..."
+msgstr "准备下载..."
+
 # PHPIPAM translations file - zh_CN
 # Copyright (C) phpipam 2013
 # This file is distributed under the same license as the phpipam package.
@@ -3948,7 +4059,7 @@ msgstr "自动数据库升级"
 #: app/upgrade/index.php:151
 #: app/upgrade/index.php:155
 #: app/tools/logs/index.php:35
-#: app/tools/logs/export.php:96
+#: app/tools/logs/export.php:98
 #: app/tools/logs/detail-popup.php:34
 #: app/tools/logs/show-logs.php:94
 #: app/tools/vaults/vault/vault-items-certificates.php:74
@@ -4370,23 +4481,6 @@ msgstr "类型"
 #: app/admin/circuits/edit-circuit.php:137
 msgid "Capacity"
 msgstr "容量"
-
-#: app/tools/circuits/physical-circuits/all-circuits.php:56
-#: app/tools/circuits/physical-circuits/circuit-details-general.php:34
-#: app/tools/circuits/providers/provider-details.php:137
-#: app/tools/search/search_results/search-results_circuits.php:37
-#: app/tools/search/search-results-export.php:493
-#: app/tools/customers/customer/objects/circuits.php:42
-#: app/tools/devices/device-details/device-circuits.php:55
-#: app/tools/vaults/all-vaults.php:47
-#: app/tools/vaults/vault/vault-details-general.php:74
-#: app/tools/vaults/vault/vault-items-certificates.php:27
-#: app/subnets/import-subnet/print-file.php:51
-#: app/admin/circuits/edit-circuit.php:143
-#: app/admin/users/print-user/account.php:11
-#: app/admin/users/edit.php:120
-msgid "Status"
-msgstr "状态"
 
 #: app/tools/circuits/physical-circuits/all-circuits.php:57
 #: app/tools/circuits/physical-circuits/circuit-details-points.php:131
@@ -4936,7 +5030,7 @@ msgid "Log files are sent to syslog"
 msgstr "日志文件发送到系统日志"
 
 #: app/tools/logs/index.php:33
-#: app/tools/logs/export.php:95
+#: app/tools/logs/export.php:97
 #: app/tools/logs/detail-popup.php:26
 #: app/tools/logs/show-logs.php:86
 msgid "Informational"
@@ -4969,7 +5063,7 @@ msgstr "下一页"
 msgid "Administrative privileges required!"
 msgstr "需要管理权限！"
 
-#: app/tools/logs/export.php:81
+#: app/tools/logs/export.php:83
 #: app/tools/logs/detail-popup.php:66
 #: app/tools/logs/show-logs.php:48
 #: app/dashboard/widgets/error_logs.php:43
@@ -4977,7 +5071,7 @@ msgstr "需要管理权限！"
 msgid "Severity"
 msgstr "严重性"
 
-#: app/tools/logs/export.php:83
+#: app/tools/logs/export.php:85
 #: app/tools/logs/show-logs.php:49
 #: app/tools/vaults/vault/vault-items-passwords.php:25
 #: app/dashboard/widgets/recent_logins.php:41
@@ -5006,19 +5100,19 @@ msgstr "严重性"
 msgid "Username"
 msgstr "用户名"
 
-#: app/tools/logs/export.php:84
+#: app/tools/logs/export.php:86
 #: app/dashboard/widgets/error_logs.php:44
 #: app/dashboard/widgets/access_logs.php:44
 msgid "Command"
 msgstr "命令"
 
-#: app/tools/logs/export.php:85
+#: app/tools/logs/export.php:87
 #: app/tools/logs/detail-popup.php:82
 #: app/tools/temp-shares/index.php:33
 msgid "Details"
 msgstr "详细信息"
 
-#: app/tools/logs/export.php:97
+#: app/tools/logs/export.php:99
 msgid "Critical"
 msgstr "严重"
 
@@ -10472,6 +10566,10 @@ msgstr "您不属于任何组。 请联系系统管理员！"
 #: app/dashboard/index.php:141
 msgid "Add new widget"
 msgstr "添加新的小部件"
+
+#: app/dashboard/index.php:149
+msgid "You can download latest phpIPAM version"
+msgstr "您可以下载最新版本的 phpIPAM"
 
 #: app/dashboard/index.php:167
 msgid "Loading widget"
@@ -16253,6 +16351,11 @@ msgstr "保管库密码"
 msgid "Vault secret. Please store secret as it cannot be retrieved if lost!"
 msgstr "保管库密码。 请妥善保管，一旦丢失将无法找回！"
 
+#: app/admin/vaults/edit-item-certificate-result.php:55
+#: app/admin/powerDNS/record-edit-result.php:40
+msgid "Invalid name"
+msgstr "名称无效"
+
 #: app/admin/vaults/edit-item-certificate-result.php:74
 msgid "Invalid certificate"
 msgstr "证书无效"
@@ -18007,10 +18110,6 @@ msgstr "单击“重新生成”将删除子网的所有 PTR 记录并重新创�
 #: app/admin/powerDNS/refresh-ptr-records.php:38
 msgid "Invalid Subnet ID"
 msgstr "子网 ID 无效"
-
-#: app/admin/powerDNS/record-edit-result.php:40
-msgid "Invalid name"
-msgstr "名称无效"
 
 #: app/admin/powerDNS/record-edit-result.php:41
 msgid "Invalid content"
