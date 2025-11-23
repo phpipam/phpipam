@@ -58,7 +58,7 @@ function open_popup (popup_class, target_script, post_data, secondary) {
     $.post(target_script, post_data, function(data) {
         showPopup('popup_w'+popup_class, data, secondary);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText+"<br>Status: "+textStatus+"<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText+"<br>"+ _("Status") +": "+textStatus+"<br>"+ _("Error") +": "+errorThrown); });
     // prevent reload
     return false;
 }
@@ -81,7 +81,7 @@ function submit_popup_data (result_div, target_script, post_data, reload) {
         else {
             hideSpinner();
         }
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     // prevent reload
     return false;
 }
@@ -610,7 +610,7 @@ $(document).on("click", ".modIPaddr", function() {
         $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //move orphaned IP address
@@ -625,7 +625,7 @@ $(document).on("click", "a.moveIPaddr", function() {
         $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //resolve DNS name
@@ -638,7 +638,7 @@ $(document).on("click", "#refreshHostname", function() {
             $('input[name=hostname]').val(data);
         }
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
 });
 //submit ip address change
 $(document).on("click", "button#editIPAddressSubmit, .editIPSubmitDelete", function() {
@@ -656,7 +656,7 @@ $(document).on("click", "button#editIPAddressSubmit, .editIPSubmitDelete", funct
         $('div.addnew_check').slideDown('fast');
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //ping check
@@ -671,7 +671,7 @@ $(document).on("click", ".ping_ipaddress", function() {
         $('#popupOverlay2 div.popup_w400').html(data);
         showPopup('popup_w400', false, true);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 
 
@@ -685,7 +685,7 @@ $(document).on("click", "a.mail_ipaddress", function() {
         $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //send mail with IP details!
@@ -697,7 +697,7 @@ $(document).on("click", "#mailIPAddressSubmit", function() {
         $('div.sendmail_check').html(data).slideDown('fast');
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 /*    send notification mail - subnet
@@ -710,7 +710,7 @@ $(document).on("click", "a.mail_subnet", function() {
         $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //send mail with IP details!
@@ -722,7 +722,7 @@ $(document).on("click", "#mailSubnetSubmit", function() {
         $('div.sendmail_check').html(data).slideDown('fast');
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -737,7 +737,7 @@ $('a.scan_subnet').click(function() {
         $('#popupOverlay div.popup_wmasks').html(data);
         showPopup('popup_wmasks');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 //show telnet port
 $(document).on('change', "table.table-scan select#type", function() {
@@ -765,7 +765,7 @@ $(document).on('click','#subnetScanSubmit', function() {
     $.post('app/subnets/scan/subnet-scan-execute.php', {subnetId:subnetId, type:type, debug:debug, port:port, csrf_cookie:csrf}, function(data) {
         $('#subnetScanResult').html(data).slideDown('fast');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 //remove result
 $(document).on('click', '.resultRemove', function() {
@@ -799,7 +799,7 @@ $(document).on('click', 'a#saveScanResults', function() {
         //hide if success!
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 
 
@@ -814,7 +814,7 @@ $('a.csvImport').click(function () {
         $('div.popup_max').html(data);
         showPopup('popup_max');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //display uploaded file
@@ -828,7 +828,7 @@ $(document).on("click", "input#csvimportcheck", function() {
         hideSpinner();
         // add reload class
         $('.importFooter').removeClass("hidePopups").addClass("hidePopupsReload");
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
 });
 //import file script
 $(document).on("click", "input#csvImportNo", function() {
@@ -850,7 +850,7 @@ $(document).on("click", "input#csvImportYes", function() {
     $.post('app/subnets/import-subnet/import-file.php', postData, function(data) {
         $('div.csvImportResult').html(data).slideDown('fast');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
 });
 //download template
 $(document).on("click", "#csvtemplate", function() {
@@ -931,7 +931,7 @@ $('a.csvExport').click(function() {
         $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //export
@@ -982,7 +982,7 @@ $(document).on('click', 'a.editFavourite', function() {
             showPopup('popup_w500');
             hideSpinner();
         }
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 
 
@@ -996,7 +996,7 @@ $('a.request_ipaddress').click(function () {
         $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //show request form from widget
@@ -1008,7 +1008,7 @@ $(document).on("click", "button#requestIP_widget", function() {
         $('div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //auto-suggest first available IP in selected subnet
@@ -1019,7 +1019,7 @@ $(document).on("change", "select#subnetId", function() {
     $.post('app/login/request_ip_first_free.php', { subnetId:subnetId}, function(data) {
         $('input.ip_addr').val(data);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
 });
 
 //submit request
@@ -1029,7 +1029,7 @@ $(document).on("click", "button#requestIPAddressSubmit", function() {
     $.post('app/login/request_ip_result.php', request, function(data) {
         $('div#requestIPresult').html(data).slideDown('fast');
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -1051,7 +1051,7 @@ $('form#ipCalc').submit(function () {
     $.post('app/tools/ip-calculator/result.php', ipCalcData, function(data) {
         $('div.ipCalcResult').html(data).fadeIn('fast');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //reset input
@@ -1179,7 +1179,7 @@ $('form#userModSelf').submit(function () {
         if(data.search("danger")==-1) { $('div.userModSelfResult').delay(2000).fadeOut('slow'); hideSpinner(); }
         else                          { hideSpinner(); }
 
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //    Generate random pass
@@ -1211,7 +1211,7 @@ $('form#changePassRequiredForm').submit(function() {
     $.post('app/tools/pass-change/result.php', postData, function(data) {
         $('div#changePassRequiredResult').html(data).fadeIn('fast');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 // show subnet masks popup
@@ -1232,7 +1232,7 @@ $(document).on("click", ".logo-clear", function() {
         $('div.logo-current').html(data).slideDown('fast');
         //reload after 1 second if all is ok!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
 });
 
 /* show/hide smtp body */
@@ -1369,7 +1369,7 @@ $('#instructionsForm').submit(function () {
         $('div.instructionsResult').html(data).fadeIn('fast');
         if(data.search("alert-danger")==-1 && data.search("error")==-1)         { $('div.instructionsResult').delay(2000).fadeOut('slow'); hideSpinner(); }
         else                                { hideSpinner(); }
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 $('#preview').click(function () {
@@ -1379,7 +1379,7 @@ $('#preview').click(function () {
     $.post('app/admin/instructions/preview.php', {instructions:instructions, csrf_cookie:$("#instructionsForm input[name=csrf_cookie]").val()}, function(data) {
         $('div.instructionsPreview').html(data).fadeIn('fast');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -1393,7 +1393,7 @@ $('form#logs').change(function () {
     $.post('app/tools/logs/show-logs.php', logSelection, function(data) {
         $('div.logs').html(data);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
 });
 //log files show details
 $(document).on("click", "a.openLogDetail", function() {
@@ -1402,7 +1402,7 @@ $(document).on("click", "a.openLogDetail", function() {
         $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //log files page change
@@ -1424,7 +1424,7 @@ $('#logDirection button').click(function() {
     $.post('app/tools/logs/show-logs.php', postData, function(data1) {
         $('div.logs').html(data1);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //logs export
@@ -1435,7 +1435,7 @@ $('#downloadLogs').click(function() {
     $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/tools/logs/export.php?csrf="+csrf+"'></iframe></div>");
     hideSpinner();
     //show downloading
-    $('div.logs').prepend("<div class='alert alert-info' id='logsInfo'><i class='icon-remove icon-gray selfDestruct'></i> Preparing download... </div>");
+    $('div.logs').prepend("<div class='alert alert-info' id='logsInfo'><i class='icon-remove icon-gray selfDestruct'></i> "+ _("Preparing download...") +" </div>");
     return false;
 });
 //logs clear
@@ -1445,7 +1445,7 @@ $('#clearLogs').click(function() {
     $.post('app/tools/logs/clear-logs.php?csrf='+csrf, function(data) {
         $('div.logs').html(data);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +":  " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //logs clear
@@ -1455,7 +1455,7 @@ $('#clearChangeLogs').click(function() {
     $.post('app/tools/changelog/clear-logs.php?csrf='+csrf, function(data) {
         $('div.logs').html(data);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -1490,7 +1490,7 @@ $(document).on("click", "#editSectionSubmit, .editSectionSubmitDelete", function
         $('div.sectionEditResult').html(data).slideDown('fast');
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //section ordering save
@@ -1509,7 +1509,7 @@ $(document).on("click", "#sectionOrderSubmit", function() {
         //reload after 2 seconds if succeeded!
         reload_window (data);
 
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 
 
@@ -1541,7 +1541,7 @@ $(document).on("click", "#editDomainSubmit", function() {
             else {
                 hideSpinner();
             }
-        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
         // prevent reload
         return false;
     }
@@ -1584,7 +1584,7 @@ $('#firewallZoneSettings').submit(function() {
         $('div.settingsEdit').html(data).slideDown('fast');
         //reload after 1 second if all is ok!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -1612,7 +1612,7 @@ $(document).on("click", ".subnet_to_zone", function() {
         $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -1631,7 +1631,7 @@ $(document).on("change", ".checkMapping",(function () {
     $.post('app/admin/firewall-zones/ajax.php', pData, function(data) {
         $('div.mappingAdd').html(data).slideDown('fast');
 
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     hideSpinner();
     return false;
 }));
@@ -1657,7 +1657,7 @@ $(document).on("click", ".deleteTempNetwork", function() {
     // post
     $.post("app/admin/firewall-zones/ajax.php", pData , function(data) {
         $('div'+".zoneNetwork").html(data).slideDown('fast');
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     setTimeout(function (){hideSpinner();}, 500);
 
     return false;
@@ -1677,14 +1677,14 @@ $(document).on("click", "#editNetworkSubmit", function() {
             if(data.search("alert-danger")==-1 && data.search("error")==-1 && data.search("alert-warning") == -1 ) {
                 $.post("app/admin/firewall-zones/ajax.php", $('form#networkEdit :input[name != "sectionId"]').serialize(), function(data) {
                     $('div'+".zoneNetwork").html(data).slideDown('fast');
-                }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+                }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
                 setTimeout(function (){hideSpinner();hidePopup2();}, 500);
             } else { hideSpinner(); }
         }
         else {
             hideSpinner();
         }
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     // prevent reload
     return false;
 });
@@ -1698,7 +1698,7 @@ $(document).on("change", ".firewallZoneSection",(function () {
     $.post('app/admin/firewall-zones/ajax.php', pData, function(data) {
         $('div.sectionSubnets').html(data).slideDown('fast');
 
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     hideSpinner();
     return false;
 }));
@@ -1724,7 +1724,7 @@ $(document).on("change", ".mappingZoneInformation",(function() {
     $.post('app/admin/firewall-zones/ajax.php', pData, function(data) {
         $('div.zoneInformation').html(data).slideDown('fast');
 
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     hideSpinner();
     return false;
 }));
@@ -1743,7 +1743,7 @@ $(document).on("click", "a.fw_autogen", function() {
     showSpinner();
 
     // send information to ajax.php to generate a new address object
-    $.post('app/admin/firewall-zones/ajax.php', {subnetId:subnetId, IPId:IPId, dnsName:dnsName, action:action, operation:operation}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    $.post('app/admin/firewall-zones/ajax.php', {subnetId:subnetId, IPId:IPId, dnsName:dnsName, action:action, operation:operation}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
 
     // hide the spinner and reload the window on success
     setTimeout(function (){hideSpinner();window.location.reload();}, 500);
@@ -1797,7 +1797,7 @@ $(document).on("click", ".editSubnet", function() {
         $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
 
     return false;
 });
@@ -1810,7 +1810,7 @@ $(document).on("click", "#resize, #split, #truncate, .subnet-truncate", function
     $.post("app/admin/subnets/"+action+".php", {action:action, subnetId:subnetId}, function(data) {
         showPopup('popup_w500', data, true);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 //resize save
 $(document).on("click", "button#subnetResizeSubmit", function() {
@@ -1820,7 +1820,7 @@ $(document).on("click", "button#subnetResizeSubmit", function() {
         $('div.subnetResizeResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 //split save
 $(document).on("click", "button#subnetSplitSubmit", function() {
@@ -1830,7 +1830,7 @@ $(document).on("click", "button#subnetSplitSubmit", function() {
         $('div.subnetSplitResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 //truncate save
 $(document).on("click", "button#subnetTruncateSubmit", function() {
@@ -1841,7 +1841,7 @@ $(document).on("click", "button#subnetTruncateSubmit", function() {
         $('div.subnetTruncateResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 $(document).on("submit", "#editSubnetDetails", function() { return false;
 });
@@ -1916,7 +1916,7 @@ $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function()
         else {
             hideSpinner();
         }
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -1928,7 +1928,7 @@ $(document).on("click", "#get-ripe", function() {
     $.post("app/admin/subnets/ripe-query.php", {subnet: subnet}, function(data) {
         showPopup('popup_w500', data, true);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 // fill ripe fields
 $(document).on('click', "#ripeMatchSubmit", function() {
@@ -1958,7 +1958,7 @@ $(document).on("click", ".showSubnetPerm", function () {
         $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 //submit permission change
 $(document).on("click", ".editSubnetPermissionsSubmit", function() {
@@ -1968,7 +1968,7 @@ $(document).on("click", ".editSubnetPermissionsSubmit", function() {
         $('.editSubnetPermissionsResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 //auto-suggest possible slaves select
 $(document).on("click", ".dropdown-subnets li a", function() {
@@ -1987,7 +1987,7 @@ $('.editSubnetLink').click(function() {
         $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
 
    return false;
 });
@@ -1997,7 +1997,7 @@ $(document).on('click', '.linkSubnetSave', function() {
         $('.linkSubnetSaveResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 
 
@@ -2024,7 +2024,7 @@ $(document).on("change", "select#selectSectionfromIPCalc", function() {
         $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
 });
 $(document).on("click", ".createfromfree", function() {
     //get details - we need Section, network and subnet bitmask
@@ -2040,7 +2040,7 @@ $(document).on("click", ".createfromfree", function() {
         $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -2058,7 +2058,7 @@ $(document).on("click", '.edit_subnet, button.edit_subnet, button#add_subnet', f
         $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -2072,7 +2072,7 @@ $(document).on("change", "select[name=vlanId]", function() {
         $.post('app/admin/vlans/edit.php', {action:"add", fromSubnet:"true", domain:domain}, function(data) {
             showPopup('popup_w400', data, true);
             hideSpinner();
-        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     }
     return false;
 });
@@ -2091,7 +2091,7 @@ $(document).on("click", ".vlanManagementEditFromSubnetButton", function() {
             $.post('app/admin/subnets/edit-vlan-dropdown.php', {vlanId:vlanId, sectionId:sectionId} , function(data) {
                 $('.editSubnetDetails td#vlanDropdown').html(data);
                 hideSpinner();
-            }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+            }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
             //hide popup after 1 second
             setTimeout(function (){ hidePopup('popup_w400', true); hidePopup2(); parameter = null;}, 1000);
         }
@@ -2136,7 +2136,7 @@ $(document).on("click", "#add_folder, .add_folder", function() {
         $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
 
     return false;
 });
@@ -2148,7 +2148,7 @@ $(document).on("click", ".editFolderSubmit", function() {
         $('.manageFolderEditResult').html("").html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 //delete folder
 $(document).on("click", ".editFolderSubmitDelete", function() {
@@ -2164,7 +2164,7 @@ $(document).on("click", ".editFolderSubmitDelete", function() {
         $('.manageFolderEditResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });   return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });   return false;
 });
 
 
@@ -2344,7 +2344,7 @@ $(document).on("click", "#editNatSubmit", function() {
             else {
                 hideSpinner();
             }
-        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
         return false;
     }
 });
@@ -2363,7 +2363,7 @@ $(document).on("click", ".removeNatItem", function() {
         else {
             hideSpinner();
         }
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 // add item popup
@@ -2495,7 +2495,7 @@ $('form#ripeImport').submit(function() {
     $.post('app/admin/ripe-import/ripe-telnet.php', as, function(data) {
         $('div.ripeImportTelnet').html(data).fadeIn('fast');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 // remove as line
@@ -2513,7 +2513,7 @@ $(document).on("submit", "form#asImport", function() {
         //hide after 2 seconds
         if(data.search("alert-danger")==-1 && data.search("error")==-1)     { $('table.asImport').delay(1000).fadeOut('fast'); hideSpinner(); }
         else                             { hideSpinner(); }
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -2533,7 +2533,7 @@ $(document).on("click", ".edit-custom-field", function() {
         $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //submit change
@@ -2544,7 +2544,7 @@ $(document).on("click", "#editcustomSubmit", function() {
         $('div.customEditResult').html(data).slideDown('fast');
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //field reordering
@@ -2557,7 +2557,7 @@ $('table.customIP button.down').click(function() {
         $('div.'+table+'-order-result').html(data).slideDown('fast');
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //filter
@@ -2568,7 +2568,7 @@ $('.edit-custom-filter').click(function() {
         $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 $(document).on("click", "#editcustomFilterSubmit", function() {
@@ -2578,7 +2578,7 @@ $(document).on("click", "#editcustomFilterSubmit", function() {
         $('div.customEditFilterResult').html(data).slideDown('fast');
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -2593,7 +2593,7 @@ $(document).on('click', "#regApiKey", function() {
     $.post('app/admin/api/generate-key.php', function(data) {
         $('input#appcode').val(data);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 //regenerate agent key
@@ -2602,7 +2602,7 @@ $(document).on('click', "#regAgentKey", function() {
     $.post('app/admin/api/generate-key.php', function(data) {
         $('input[name=code]').val(data);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -2618,7 +2618,7 @@ $('button#searchReplaceSave').click(function() {
     $.post('app/admin/replace-fields/result.php', searchData, function(data) {
         $('div.searchReplaceResult').html(data);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -2664,12 +2664,12 @@ $('button.dataExport').click(function () {
             showPopup('popup_w400');
         }
         hideSpinner();
-        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     } else {
         $.post('app/admin/import-export/not-implemented.php', function(data) {
         $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
-        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     }
     return false;
 });
@@ -2804,12 +2804,12 @@ $('button.dataImport').click(function () {
             showPopup('popup_w700');
         }
         hideSpinner();
-        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     } else {
         $.post('app/admin/import-export/not-implemented.php', function(data) {
         $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
-        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     }
     return false;
 });
@@ -2837,12 +2837,12 @@ $(document).on("click", "button#dataImportPreview", function() {
             showPopup('popup_w700');
         }
         hideSpinner();
-        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     } else {
         $.post('app/admin/import-export/not-implemented.php', function(data) {
         $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
-        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     }
     return false;
 });
@@ -2868,12 +2868,12 @@ $(document).on("click", "button#dataImportSubmit", function() {
             showPopup('popup_w700');
         }
         hideSpinner();
-        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     } else {
         $.post('app/admin/import-export/not-implemented.php', function(data) {
         $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
-        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     }
     return false;
 });
@@ -2884,7 +2884,7 @@ $('button.dataRecompute').click(function () {
     $('#popupOverlay div.popup_w700').html(data);
     showPopup('popup_w700');
     hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -2898,7 +2898,7 @@ $(document).on('click', '.btn-tablefix', function() {
     $.post('app/admin/verify-database/fix.php', {tableid:tableid, fieldid:fieldid, type:type}, function(data) {
         $('div#fix-result-'+tableid+fieldid).html(data).fadeIn('fast');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); });
     return false;
 });
 
@@ -2918,7 +2918,7 @@ $('table#manageSubnets').on('click','button.editSubnet', function() {
         $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); }); return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); }); return false;
 });
 //change subnet permissions
 $('table#manageSubnets').on('click','button.showSubnetPerm', function() {
@@ -2930,7 +2930,7 @@ $('table#manageSubnets').on('click','button.showSubnetPerm', function() {
         $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); }); return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); }); return false;
 });
 $('table#manageSubnets').on('click','button.add_folder', function() {
     showSpinner();
@@ -2944,7 +2944,7 @@ $('table#manageSubnets').on('click','button.add_folder', function() {
         $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); }); return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>"+ _("Status") +": " + textStatus + "<br>"+ _("Error") +": "+errorThrown); }); return false;
 });
 
 return false;
