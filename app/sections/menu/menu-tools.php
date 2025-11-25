@@ -12,7 +12,7 @@ if($User->settings->enableCustomers == 1  && $User->get_module_permissions ("cus
 $tool_items["customers"] = array(
                         "name"=>"Customers",
                         "href"=>array("tools", "customers"),
-                        "title"=>"Customers",
+                        "title"=>_("Customers"),
                         "icon"=>"fa-users"
                        );
 }
@@ -21,7 +21,7 @@ if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
 $tool_items["vlan"] = array (
                         "name"=>"VLAN",
                         "href"=>array("tools", "vlan"),
-                        "title"=>"Show VLANs and belonging subnets",
+                        "title"=>_("Show VLANs and belonging subnets"),
                         "icon"=>"fa-cloud"
                         );
 }
@@ -30,7 +30,7 @@ if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>=Use
 $tool_items["vrf"] = array(
                         "name"=>"VRF",
                         "href"=>array("tools", "vrf"),
-                        "title"=>"Show VRFs and belonging networks",
+                        "title"=>_("Show VRFs and belonging networks"),
                         "icon"=>"fa-cloud"
                        );
 }
@@ -39,7 +39,7 @@ if($User->settings->enableNAT==1  && $User->get_module_permissions ("nat")>=User
 $tool_items["nat"] = array (
                         "name"=>"NAT",
                         "href"=>array("tools", "nat"),
-                        "title"=>"Nat translations",
+                        "title"=>_("Nat translations"),
                         "icon"=>"fa-exchange"
                         );
 }
@@ -48,7 +48,7 @@ if($User->settings->enablePowerDNS==1 && $User->get_module_permissions ("pdns")>
 $tool_items["powerDNS"] = array (
                         "name"=>"PowerDNS",
                         "href"=>array("tools", "powerDNS"),
-                        "title"=>"powerDNS management",
+                        "title"=>_("powerDNS management"),
                         "icon"=>"fa-database"
                         );
 }
@@ -57,7 +57,7 @@ if($User->settings->enableDHCP==1 && $User->get_module_permissions ("dhcp")>=Use
 $tool_items["dhcp"] = array (
                         "name"=>"DHCP",
                         "href"=>array("tools", "dhcp"),
-                        "title"=>"DHCP information",
+                        "title"=>_("DHCP information"),
                         "icon"=>"fa-database"
                         );
 }
@@ -66,7 +66,7 @@ if($User->settings->enableLocations == 1 && $User->get_module_permissions ("loca
 $tool_items["locations"] = array (
                         "name"=>"Locations",
                         "href"=>array("tools", "locations"),
-                        "title"=>"Show locations",
+                        "title"=>_("Show locations"),
                         "icon"=>"fa-map"
                         );
 }
@@ -75,7 +75,7 @@ if($User->get_module_permissions ("devices")>=User::ACCESS_R)
 $tool_items["devices"] = array (
                         "name"=>"Devices",
                         "href"=>array("tools", "devices"),
-                        "title"=>"Show all configured devices",
+                        "title"=>_("Show all configured devices"),
                         "icon"=>"fa-desktop"
                         );
 // rack
@@ -83,7 +83,7 @@ if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>=
 $tool_items["racks"] = array (
                         "name"=>"Racks",
                         "href"=>array("tools", "racks"),
-                        "title"=>"Show racks",
+                        "title"=>_("Show racks"),
                         "icon"=>"fa-bars"
                         );
 }
@@ -92,7 +92,7 @@ if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circu
 $tool_items["circuits"] = array (
                         "name"=>"Circuits",
                         "href"=>array("tools", "circuits"),
-                        "title"=>"Show circuits",
+                        "title"=>_("Show circuits"),
                         "icon"=>"fa-random"
                         );
 }
@@ -101,7 +101,7 @@ if($User->settings->enableRouting == 1 && $User->get_module_permissions ("routin
 $tool_items["routing"] = array (
                         "name"=>"Routing",
                         "href"=>array("tools", "routing"),
-                        "title"=>"Show routing",
+                        "title"=>_("Show routing"),
                         "icon"=>"fa-exchange"
                         );
 }
@@ -110,7 +110,7 @@ if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>=Use
 $tool_items["pstn-prefixes"] = array (
                         "name"=>"PSTN",
                         "href"=>array("tools", "pstn-prefixes"),
-                        "title"=>"PSTN prefixes",
+                        "title"=>_("PSTN prefixes"),
                         "icon"=>"fa-phone"
                         );
 }
@@ -120,7 +120,7 @@ if($User->settings->enableMulticast == 1) {
 $tool_items["multicast-networks"] = array (
                         "name"=>"Multicast",
                         "href"=>array("tools", "multicast-networks"),
-                        "title"=>"Show multicast subnets and mapping",
+                        "title"=>_("Show multicast subnets and mapping"),
                         "icon"=>"fa-map-o"
                         );
 }
@@ -130,7 +130,7 @@ if($User->settings->enableVaults==1 && $User->get_module_permissions ("vaults")>
 $tool_items["vaults"] = array (
                         "name"=>"Vaults",
                         "href"=>array("tools", "vaults"),
-                        "title"=>"Vaults",
+                        "title"=>_("Vaults"),
                         "icon"=>"fa-key"
                         );
 }
@@ -139,7 +139,7 @@ $tool_items["vaults"] = array (
 $tool_items["search"] = array (
                         "name"=>"Search",
                         "href"=>array("tools", "search"),
-                        "title"=>"Search database Addresses, subnets and VLANs",
+                        "title"=>_("Search database Addresses, subnets and VLANs"),
                         "icon"=>"fa-search"
                         );
 ?>

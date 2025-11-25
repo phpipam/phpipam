@@ -129,8 +129,8 @@ $(document).ready(function() {
 	}
 	else {
 		// connection to selected database
-		if ($test==false)		{ $Result->show("danger ", "Failed to connect to database:<hr> ".$PowerDNS->error, false); }
-		else					{ $Result->show("success ", "Database connection ok"."."); }
+		if ($test==false)		{ $Result->show("danger ", _("Failed to connect to database:<hr> ").$PowerDNS->error, false); }
+		else					{ $Result->show("success ", _("Database connection ok")."."); }
 	}
 
 	?>

@@ -28,7 +28,7 @@ if ($groups!==false) {
 		$g = (array) $g;
 
 		print "<tr>";
-		print "	<th>$g[g_name]</th>";
+		print "	<th>"._($g['g_name'])."</th>";
 		print "	<td>";
         print $Subnets->parse_permissions(@$permissons[$g['g_id']]);
 		print "	</td>";

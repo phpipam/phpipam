@@ -66,8 +66,8 @@ $(document).ready(function(){
 	var switch_options = {
 	    onColor: 'default',
 	    offColor: 'default',
-	    onText: 'Yes',
-	    offText: 'No',
+	    onText: <?php print json_encode(_("Yes")); ?>,
+		offText: <?php print json_encode(_("No")); ?>,
 	    size: "mini"
 	};
 	$(".input-switch").bootstrapSwitch(switch_options);

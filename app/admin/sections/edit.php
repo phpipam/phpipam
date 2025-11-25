@@ -195,7 +195,7 @@ if (!is_object($section)) {
 				else		{ print "<td></td>"; }
 
 				# name
-				print "<td>$g[g_name]</td>";
+				print "<td>"._($g['g_name'])."</td>";
 
 				# line
 				print "<td>";
@@ -271,8 +271,8 @@ if (!is_object($section)) {
 $(document).ready(function() {
 /* bootstrap switch */
 var switch_options = {
-	onText: "Yes",
-	offText: "No",
+	onText: <?php print json_encode(_("Yes")); ?>,
+	offText: <?php print json_encode(_("No")); ?>,
     onColor: 'default',
     offColor: 'default',
     size: "mini"

@@ -116,7 +116,7 @@ if(isset($sections_sorted)) {
 	    		    		$group = $Tools->fetch_object("userGroups", "g_id", $key);
 	    		    		# parse permissions
 	    		    		$perm  = $Subnets->parse_permissions($p);
-	    		    		print $group->g_name." : ".$perm."<br>";
+	    		    		print _($group->g_name)." : ".$perm."<br>";
 	    		    	}
 	    	    	}
 	    	    	else {

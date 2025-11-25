@@ -99,14 +99,14 @@ $address_ids = array_unique($address_ids);
 
     # Results
     if(!empty($removed_subnets)) {
-        $Result->show("info", _("Removed")." ".sizeof($removed_subnets)." "._("subnets")."<hr>Ids: ".implode("; ", $removed_subnets));
+        $Result->show("info", _("Removed")." ".sizeof($removed_subnets)." "._("subnets")."<hr>"._("Ids").": ".implode("; ", $removed_subnets));
     }
     else {
         $Result->show("info", _("No subnets removed from NAT"));
     }
 
     if(!empty($removed_addresses)) {
-        $Result->show("info", _("Removed")." ".sizeof($removed_addresses)." "._("addresses")."<hr>Ids: ".implode("; ", $removed_addresses));
+        $Result->show("info", _("Removed")." ".sizeof($removed_addresses)." "._("addresses")."<hr>"._("Ids").": ".implode("; ", $removed_addresses));
     }
     else {
         $Result->show("info", _("No addresses removed from NAT"));

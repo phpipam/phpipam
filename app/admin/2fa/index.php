@@ -126,9 +126,9 @@ else {
 
 		// status
 		$status = "";
-		if ($u->{'2fa'}==0)						{ $status = "<span class='badge badge1 severity2'>Disabled</span>";					$btn2_class = "disabled"; $btn3_class = "disabled"; }
-		elseif (is_blank($u->{'2fa_secret'}))	{ $status = "<span class='badge badge1 severity1'>Enabled, not activated</span>";	$btn1_class = "disabled"; $btn2_class = "disabled"; }
-		else 									{ $status = "<span class='badge badge1 severity0'>Enabled</span>";					$btn1_class = "disabled"; }
+		if ($u->{'2fa'}==0)						{ $status = "<span class='badge badge1 severity2'>"._("Disabled")."</span>";					$btn2_class = "disabled"; $btn3_class = "disabled"; }
+		elseif (is_blank($u->{'2fa_secret'}))	{ $status = "<span class='badge badge1 severity1'>"._("Enabled, not activated")."</span>";	$btn1_class = "disabled"; $btn2_class = "disabled"; }
+		else 									{ $status = "<span class='badge badge1 severity0'>"._("Enabled")."</span>";					$btn1_class = "disabled"; }
 
 		$html[] = "<tr>";
 		$html[] = "		<td><a class='btn btn-xs btn-default'>$u->real_name</a></td>";

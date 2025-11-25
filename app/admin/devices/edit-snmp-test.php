@@ -114,14 +114,14 @@ if (isset($queries)) {
     // debug
     $res[] = "<hr>";
     $res[] = "<div class='text-right'>";
-    $res[] = "  <a class='btn btn-sm btn-default pull-right' id='toggle_debug'>Toggle debug</a><br><br>";
+    $res[] = "  <a class='btn btn-sm btn-default pull-right' id='toggle_debug'>"._('Toggle debug')."</a><br><br>";
     $res[] = "</div>";
     $res[] = " <pre id='debug' style='display:none;'>";
     $res[] = print_r($debug, true);
     $res[] = "</pre>";
 
     //print
-    $Result->show("Query result", implode("", $res), false, true, false, true);
+    $Result->show(_("Query result"), implode("", $res), false, true, false, true);
 }
 else {
    $Result->show("warning", _("No queries"), false, true, false, true);
