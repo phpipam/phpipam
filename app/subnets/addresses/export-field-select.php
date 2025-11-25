@@ -13,11 +13,15 @@ $Result		= new Result;
 $User		= new User ($Database);
 $Subnets	= new Subnets ($Database);
 $Tools	    = new Tools ($Database);
+$Result		= new Result();
 
 # verify that user is logged in
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
+
+# validate csrf cookie
+$User->Crypto->csrf_cookie ("validate", "generate-export", $GET->csrf) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # set and check permissions
 $subnet_permission = $Subnets->check_permission($User->user, $POST->subnetId);
@@ -157,6 +161,6 @@ print '</form>';
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-success" id="exportSubnet"><i class="fa fa-download"></i> <?php print _('Export'); ?></button>
+		<button class="btn btn-sm btn-success" id="exportSubnet" csrf="<?php print $GET->csrf; ?>"><i class="fa fa-download"></i> <?php print _('Export'); ?></button>
 	</div>
 </div>

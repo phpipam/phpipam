@@ -34,7 +34,8 @@
     + XSS - Unsafe HTML allowed in Request IP Instructions;
     + XSS - Unsafe HTML allowed in Password vault;
     + Local exposure of DB credentials via mysqldump;
-    + Addedd CSRF cookie for clear-changelog and clear-log;
+    + Added CSRF cookie for clear-changelog and clear-log;
+    + Added CSRF cookie for data exports;
 
 == 1.7.0
 

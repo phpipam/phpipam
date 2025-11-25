@@ -8,6 +8,9 @@
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 # initialize required objects
 $Database	= new Database_PDO;
 $Result		= new Result;
@@ -18,6 +21,20 @@ if (!isset($Devtype)) { $Devtype = new Devtype ($Database); }
 
 # verify that user is logged in
 $User->check_user_session();
+
+# validate csrf cookie
+if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === false) {
+	$content  = _("Invalid CSRF cookie");
+
+	header("Cache-Control: private");
+	header("Content-Description: File Transfer");
+	header("Content-Type: application/octet-stream");
+	header('Content-Disposition: attachment; filename="' . "error_message.txt" . '"');
+	header("Content-Length: " . strlen($content));
+
+	print($content);
+	exit();
+}
 
 # fetch all devtypes domains
 $devtypes =  $Devtype->fetch_all_objects("deviceTypes", "tid");

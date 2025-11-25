@@ -11,9 +11,13 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Tools		= new Tools ($Database);
+$Result     = new Result();
 
 # verify that user is logged in
 $User->check_user_session();
+
+# validate csrf cookie
+$User->Crypto->csrf_cookie ("validate", "generate-export", $GET->csrf) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields('vrf');
@@ -71,6 +75,6 @@ print '</form>';
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="vrf"><i class="fa fa-upload"></i> <?php print _('Export'); ?></button>
+		<button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="vrf" csrf="<?php print $GET->csrf; ?>"><i class="fa fa-upload"></i> <?php print _('Export'); ?></button>
 	</div>
 </div>
