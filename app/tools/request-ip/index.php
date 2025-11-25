@@ -75,8 +75,8 @@ $User->check_user_session();
 			# default tag
 			$request['state'] = "2";
 			foreach($states as $s) {
-				if ($request['state']==$s['id'])	{ print "<option value='$s[id]' selected='selected'>$s[type]</option>"; }
-				else								{ print "<option value='$s[id]'>$s[type]</option>"; }
+				if ($request['state']==$s['id'])	{ print "<option value='$s[id]' selected='selected'>"._($s['type'])."</option>"; }
+				else								{ print "<option value='$s[id]'>"._($s['type'])."</option>"; }
 			}
 			?>
 			</select>

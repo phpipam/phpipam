@@ -39,10 +39,10 @@ else {
 		$Result->show("warning alert-absolute", _("You can login to your account with with passkeys only").".<hr>"._("This can be changed under Account details tab").".");
 	}
 	elseif($User->user->passkey_only=="1") {
-		$Result->show("warning alert-absolute", _("You can login to your account with normal authentication method only untill you create passkeys".".<hr>"._("This can be changed under Account details tab.")));
+		$Result->show("warning alert-absolute", _("You can login to your account with normal authentication method only untill you create passkeys").".<hr>"._("This can be changed under Account details tab."));
 	}
 	else {
-		$Result->show("warning alert-absolute", _("You can login to your account with normal authentication method or with passkeys".".<hr>"._("This can be changed under Account details tab.")));
+		$Result->show("warning alert-absolute", _("You can login to your account with normal authentication method or with passkeys").".<hr>"._("This can be changed under Account details tab."));
 	}
 	print "<div class='clearfix'></div>";
 

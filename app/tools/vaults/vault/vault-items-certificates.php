@@ -72,7 +72,7 @@ if($certificates_db!==false) {
 			// status
 			if($valid_days<0)  		{ $status = "<span class='badge alert-danger'>"._("Expired")."</span>"; $warning = "danger";  $warningIcon = "<i class='fa fa-warning'></i>"; }
 			elseif($valid_days<30) 	{ $status = "<span class='badge alert-warning'>"._("Warning")."</span>"; $warning = "warning"; $warningIcon = "<i class='fa fa-warning'></i>"; }
-			else 					{ $status = "<span class='badge alert-success'>"._("OK")."</span>"; $warning = ""; $warningIcon = ""; }
+			else 					{ $status = "<span class='badge alert-success'>"._("Normal")."</span>"; $warning = ""; $warningIcon = ""; }
 
 			// pkey
 			$pkey = openssl_get_privatekey(base64_decode($values['certificate']))===false ? "-" : "<i class='fa fa-key' rel='tooltip' title='"._("Certificate has private key")."'></i>";
@@ -83,7 +83,7 @@ if($certificates_db!==false) {
 			print "	<td>"._($pkey)."</td>";
 			print "	<td>$status</td>";
 			print "	<td>".$certificate['subject']['CN']."</td>";
-			print "	<td>".$validTo." ($valid_days days)</td>";
+			print "	<td>".$validTo." ($valid_days "._('days').")</td>";
 			print "	<td>".$certificate['issuer']['O']."</td>";
 			print "	<td>".str_replace([","], "<br>", $certificate['extensions']['subjectAltName'])."</td>";
 
@@ -123,7 +123,7 @@ if($certificates_db!==false) {
 else {
 	print "<tr>";
 	print "	<td colspan='$csize'>";
-	$Result->show('info', "No items");
+	$Result->show('info', _("No items"));
 	print "	</td>";
 	print "</tr>";
 }
