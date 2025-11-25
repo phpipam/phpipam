@@ -18,7 +18,7 @@ $User->check_user_session();
 // Create a workbook
 $filename = "phpipam_template_" . $type . ".xls";
 $workbook = new Spreadsheet_Excel_Writer();
-$lineCount = 0;
+$workbook->setVersion(8);
 
 // Create a worksheet
 $worksheet = $workbook->addWorksheet("template");
@@ -46,7 +46,7 @@ elseif ($type == 'ipaddr'){
 	//get all custom fields!
 	$custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	// set headers
-	// "section","ip_addr","hostname","description","vrf","subnet","mac","owner","device","note","tag","gateway"
+	// "section","ip_addr","hostname","description","vrf","subnet","mac","owner","device","note","tag","gateway","port","location"
 	$worksheet->write($lineCount, 0, _('Section'));
 	$worksheet->write($lineCount, 1, _('IP address'));
 	$worksheet->write($lineCount, 2, _('Hostname'));
@@ -59,7 +59,9 @@ elseif ($type == 'ipaddr'){
 	$worksheet->write($lineCount, 9, _('Note'));
 	$worksheet->write($lineCount, 10, _('Tag'));
 	$worksheet->write($lineCount, 11, _('Is_Gateway'));
-	$fc =12 ;
+	$worksheet->write($lineCount, 12, _('Port'));
+	$worksheet->write($lineCount, 13, _('Location'));
+	$fc =14 ;
 	foreach($custom_address_fields as $k=>$f) {
 		$worksheet->write($lineCount, $fc, $k);
 		$fc++;

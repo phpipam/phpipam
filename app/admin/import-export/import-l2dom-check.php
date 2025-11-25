@@ -38,30 +38,30 @@ foreach ($data as &$cdata) {
 
 	# check if required fields are present and not empty
 	foreach($reqfields as $creq) {
-		if ((!isset($cdata[$creq])) or ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
+		if ((!isset($cdata[$creq])) or ($cdata[$creq] == "")) { $msg.= tr_("Required field %s missing or empty.",_($creq)); $action = "error"; }
 	}
 
 	# check data format
 	if ($action != "error") {
-		if (!preg_match("/^[a-zA-Z0-9-_. ]+$/", $cdata['name'])) { $msg.="Invalid name format."; $action = "error"; }
-		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
+		if (!preg_match("/^[a-zA-Z0-9-_. ]+$/", $cdata['name'])) { $msg.=_("Invalid name format."); $action = "error"; }
+		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.=_("Invalid characters in description."); $action = "error"; }
 	}
 
 	# check if duplicate L2 domain
-	if (isset($unique[$cdata['name']])) { $msg.= "Duplicate VLAN domain found. Please check import file."; $action = "error"; }
+	if (isset($unique[$cdata['name']])) { $msg.= _("Duplicate VLAN domain found. Please check import file."); $action = "error"; }
 
 	# check if existing
 	if ($action != "error") {
 		if (isset($edata[$cdata['name']])) {
 			$cdata['id'] = $edata[$cdata['name']]['id'];
 			$action = "skip"; # skip duplicate fields if identical, update if different
-			if ($cdata['description'] != $edata[$cdata['name']]['description']) { $msg.= "L2 Domain description will be updated."; $action = "edit"; }
+			if ($cdata['description'] != $edata[$cdata['name']]['description']) { $msg.= _("L2 Domain description will be updated."); $action = "edit"; }
 
 			if ($action == "skip") {
-				$msg.= "Duplicate, will skip.";
+				$msg.= _("Duplicate, will skip.");
 			}
 		} else {
-			$msg.="New entry, will be added."; $action = "add";
+			$msg.=_("New entry, will be added."); $action = "add";
 		}
 	}
 

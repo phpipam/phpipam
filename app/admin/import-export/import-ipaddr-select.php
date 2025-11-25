@@ -27,33 +27,33 @@ $mtable = "ipaddresses"; # main table where to check the fields
 # extra fields
 $extfields["section"]["table"] = "sections";
 $extfields["section"]["field"] = "name";
-$extfields["section"]["pname"] = "section";
+$extfields["section"]["pname"] = _("section");
 $extfields["vrf"]["table"] = "vrf";
 $extfields["vrf"]["field"] = "name";
 $extfields["vrf"]["pname"] = "vrf";
 $extfields["subnet"]["table"] = "subnets";
 $extfields["subnet"]["field"] = "subnet";
-$extfields["subnet"]["pname"] = "subnet";
+$extfields["subnet"]["pname"] = _("subnet");
 //$extfields["mask"]["table"] = "subnets";
 //$extfields["mask"]["field"] = "mask";
 //$extfields["mask"]["pname"] = "subnet";
 $extfields["device"]["table"] = "devices";
 $extfields["device"]["field"] = "hostname";
-$extfields["device"]["pname"] = "device";
+$extfields["device"]["pname"] = _("device");
 $extfields["tag"]["table"] = "ipTags";
 $extfields["tag"]["field"] = "type";
-$extfields["tag"]["pname"] = "tag";
+$extfields["tag"]["pname"] = _("tag");
 
 ## using the extra fields as a trick to display some nicer names for these regular fields
 $extfields["ip_addr"]["table"] = "ipaddresses";
-$extfields["ip_addr"]["field"] = "ip_addr";
-$extfields["ip_addr"]["pname"] = "ip address";
+$extfields["ip_addr"]["field"] = _("ip_addr");
+$extfields["ip_addr"]["pname"] = _("ip address");
 $extfields["hostname"]["table"] = "ipaddresses";
 $extfields["hostname"]["field"] = "hostname";
-$extfields["hostname"]["pname"] = "hostname";
+$extfields["hostname"]["pname"] = _("hostname");
 $extfields["gateway"]["table"] = "ipaddresses";
-$extfields["gateway"]["field"] = "is_gateway";
-$extfields["gateway"]["pname"] = "gateway";
+$extfields["gateway"]["field"] = _("is_gateway");
+$extfields["gateway"]["pname"] = _("gateway");
 
 # required fields without which we will not continue
 $reqfields = array("section","ip_addr","subnet");
@@ -80,7 +80,7 @@ foreach($expfields as $std_field) {
 	$msgr = in_array($std_field,$reqfields) ? "*" : "";
 
 	#prebuild template table rows to avoid useless foreach loops
-	$tpl_field_names.= "<th>".($pname ? $pname : $field['Field']).$msgr."</th>";
+	$tpl_field_names.= "<th>".($pname ? $pname : _($field['Field'])).$msgr."</th>";
 	$tpl_field_types.= "<td><small>". wordwrap($field['Type'],18,"<br>\n",true) ."</small></td>";
 }
 

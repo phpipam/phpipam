@@ -79,7 +79,7 @@ if(sizeof($vlan_domains) > 0) {
 	print "	<tr>";
     print "	<th>"._('Name')."</th>";
     print "	<th>"._('Description')."</th>";
-    print "	<th>"._('Export')."</th>";
+    print "	<th>"._(' Export')."</th>";
     print "	</tr>\n";
 
 	foreach($vlan_domains as $domain) {
@@ -107,6 +107,6 @@ print '</form>';
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="vlan"><i class="fa fa-upload"></i> <?php print _('Export'); ?></button>
+		<button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="vlan"><i class="fa fa-upload"></i> <?php print _(' Export'); ?></button>
 	</div>
 </div>
