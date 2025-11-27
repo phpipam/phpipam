@@ -36,6 +36,7 @@
     + Local exposure of DB credentials via mysqldump;
     + Added CSRF cookie for clear-changelog and clear-log;
     + Added CSRF cookie for data exports;
+    + RCE - Authenticated remote code execution via ping_path;
 
 == 1.7.0
 
