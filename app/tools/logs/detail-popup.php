@@ -43,7 +43,7 @@ $userprint = $user===false ? "" : $user->real_name."(".$user->username.")";
 $log['details'] = str_replace("\n", "<br>", $log['details']);
 
 # check if site is demo
-if(IS_DEMO) { $log['ipaddr'] = "x.x.x.x"; }
+if(defined('IS_DEMO')) { $log['ipaddr'] = "x.x.x.x"; }
 ?>
 
 
