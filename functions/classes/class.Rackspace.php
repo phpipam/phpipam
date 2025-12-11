@@ -222,6 +222,7 @@ class phpipam_rack extends Tools {
     public function free_u($rack, $rack_devices, $rack_contents, $current_device = null) {
         $current_device      = new Params($current_device);
         $current_device_size = isset($current_device->rack_size) ? $current_device->rack_size-1 : 0;
+        if ($current_device_size<0) $current_device_size = 0;
 
         // available spaces
         $available_front = [];

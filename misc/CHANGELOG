@@ -1,47 +1,42 @@
-== 1.7.4
+== 1.8.0
 
     Bugfixes:
     ----------------------------
-    + Backported PHP8 compatibility fixes;
-    + Can not empty address fields (#4322);
-    + jQuery error when adding an IP address range (#4350);
-
-    Security Fixes:
-    ----------------------------
-    + Addedd CSRF cookie for clear-changelog and clear-log;
-    + XSS - Reflected in install scripts;
-    + XSS - Unsafe HTML allowed in Request IP Instructions;
-    + XSS - Unsafe HTML allowed in Password vault;
-    + Local exposure of DB credentials via mysqldump;
-    + RCE - Authenticated remote code execution via ping_path;
-
-== 1.7.3
-
-    Bugfixes:
-    ----------------------------
-    + Backported PHP8 compatibility fixes;
-    + Workaround PHP bug GH-16870 (#4339);
-    + Request new IP hangs (#4346);
-
-== 1.7.2
-
-    Bugfixes:
-    ----------------------------
-    + Slow UI performance with bootstrap v3.4.1 (#4311);
-
-== 1.7.1
-
-    Bugfixes:
-    ----------------------------
-    + Backported PHP8 compatibility fixes;
+    + PHP8 compatibility fixes;
     + Fixed passkeys upgrade queries;
     + MySQL no active transaction error during upgrades (#4319);
     + $config['disable_main_login_form'] shows blank page (#4317);
     + Unable to clear custom fields (#4313);
+    + Modified the text shortening of subnet descriptions (#4279, #4280);
+    + Slow UI performance with bootstrap v3.4.1 (#4311);
+    + Workaround PHP bug GH-16870 (#4339);
+    + Request new IP hangs (#4346);
+    + Fixed required fields validation (#4328);
+    + Can not empty address fields (#4322);
+    + Rack dropdown providing option that is impossible (#4409);
+    + API call to PATCH vlan fails with "Vlan name is required" (#1356);
+    + Invalid content type when using API (#4168);
+    + Deletion of Default L2domain permitted through API (#4419);
+    + Empty POST to Devices API Controller produces a blank device (#4307);
+    + jQuery error when adding an IP address range (#4350);
+    + Request new IP hangs (#4346);
+
+    Enhancements, changes:
+    ----------------------------
+    + Don't update PowerDNS `change_date` removed in v2.1.9;
+    + Added Isle of Man postcodes (#4318);
+    + Added `lastSeen` to IP Address export (#2433);
 
     Security Fixes:
     ----------------------------
     + XSS - reflected via HTTP_X_FORWARDED_PORT;
+    + XSS - Reflected in install scripts;
+    + XSS - Unsafe HTML allowed in Request IP Instructions;
+    + XSS - Unsafe HTML allowed in Password vault;
+    + Local exposure of DB credentials via mysqldump;
+    + Added CSRF cookie for clear-changelog and clear-log;
+    + Added CSRF cookie for data exports;
+    + RCE - Authenticated remote code execution via ping_path;
 
 == 1.7.0
 

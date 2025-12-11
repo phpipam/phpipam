@@ -1245,6 +1245,7 @@ class Common_functions  {
 		// set regexes
 		$country_regex = array(
 			'united kingdom' => '/^([A-Z][A-HJ-Y]?[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR ?0A{2})$/i',
+			'isle of man'    => '/\\A\\bIM[0-9][0-9]? [0-9][A-Z][A-Z]\\b\\z/i',
 			'england'        => '/^([A-Z][A-HJ-Y]?[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR ?0A{2})$/i',
 			'canada'         => '/\\A\\b[ABCEGHJKLMNPRSTVXY][0-9][A-Z][ ]?[0-9][A-Z][0-9]\\b\\z/i',
 			'italy'          => '/^[0-9]{5}$/i',
@@ -2180,9 +2181,23 @@ class Common_functions  {
 							$title[] = $location->name;
 						}
 					} elseif ($get['section'] == "circuits") {
-						$circuit = $this->fetch_object("circuits", "id", $get['subnetId']);
-						if (is_object($circuit)) {
-							$title[] = $circuit->cid;
+						if (isset($get['sPage'])) {
+							if ($get['subnetId']=="logical") {
+								$circuit = $this->fetch_object("circuitsLogical", "id", $get['sPage']);
+								if (is_object($circuit)) {
+									$title[] = $circuit->logical_cid;
+								}
+							} elseif ($get['subnetId']=="providers") {
+								$provider = $this->fetch_object("circuitProviders", "id", $get['sPage']);
+								if (is_object($provider)) {
+									$title[] = $provider->name;
+								}
+							}
+						} else {
+							$circuit = $this->fetch_object("circuits", "id", $get['subnetId']);
+							if (is_object($circuit)) {
+								$title[] = $circuit->cid;
+							}
 						}
 					} elseif ($get['section'] == "pstn-prefixes") {
 						$prefix = $this->fetch_object("pstnPrefixes", "id", $get['subnetId']);

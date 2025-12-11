@@ -61,7 +61,7 @@ class Responses extends Result {
 
 		// time
 		if($time!==false) {
-    		$this->time = $time;
+			$this->time = $time;
 		}
 
 		// custom fields nesting
@@ -80,11 +80,11 @@ class Responses extends Result {
 	 * @return void
 	 */
 	public function validate_content_type () {
-    	// remove charset if provided
-    	if(isset($_SERVER['CONTENT_TYPE']))
-    	$_SERVER['CONTENT_TYPE'] = array_shift(pf_explode(";", $_SERVER['CONTENT_TYPE']));
+		// remove charset if provided
+		if(isset($_SERVER['CONTENT_TYPE']))
+		$_SERVER['CONTENT_TYPE'] = array_shift(pf_explode(";", $_SERVER['CONTENT_TYPE']));
 		// not set, presume json
-		if( !isset($_SERVER['CONTENT_TYPE']) || strlen(@$_SERVER['CONTENT_TYPE']==0) ) {}
+		if( !isset($_SERVER['CONTENT_TYPE']) || strlen(@$_SERVER['CONTENT_TYPE'])==0 ) {}
 		// post
 		elseif($_SERVER['CONTENT_TYPE']=="application/x-www-form-urlencoded") {}
 		// set, verify

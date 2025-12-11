@@ -7,6 +7,8 @@
 # verify that user is logged in
 $User->check_user_session();
 
+$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "generate-export");
+
 # must be numeric
 if(!is_numeric($GET->subnetId))	{ $Result->show("danger", _("Invalid ID"), true); }
 if(!is_numeric($GET->section))	{ $Result->show("danger", _("Invalid ID"), true); }
@@ -151,11 +153,11 @@ if ($folder['sectionId'] != $GET->section) {
 	print "<div class='btn-group'>";
 		//import
 		if($sp['import'])
-		print "<a class='csvImport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."' data-subnetId='$folder[id]'>		<i class='fa fa-download'></i></a>";
+		print "<a class='csvImport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."' data-subnetId='$folder[id]' csrf='$csrf'>		<i class='fa fa-download'></i></a>";
 		else
 		print "<a class='btn btn-xs btn-default disabled'  	href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."'>									<i class='fa fa-download'></i></a>";
 		//export
-		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$folder[id]'>		<i class='fa fa-upload'></i></a>";
+		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$folder[id]' csrf='$csrf'>		<i class='fa fa-upload'></i></a>";
 	print "</div>";
 
 	# favourites / changelog
