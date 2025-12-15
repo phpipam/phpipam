@@ -50,9 +50,9 @@ if($all_agents!==false) {
 		// print
 		print '<tr>' . "\n";
 		print '	<td>' . $a['id'] . '</td>'. "\n";
-		print '	<td>' . $a['name'] . '</td>'. "\n";
-		print '	<td>' . $a['description'] . '</td>'. "\n";
-		print '	<td>' . $a['type'] . '</td>'. "\n";
+		print '	<td>' . _($a['name']) . '</td>'. "\n";
+		print '	<td>' . _($a['description']) . '</td>'. "\n";
+		print '	<td>' . _($a['type']) . '</td>'. "\n";
 		print '	<td>' . $a['code'] . '</td>'. "\n";
 		print '	<td>' . $a['last_access'] . '</td>'. "\n";
 

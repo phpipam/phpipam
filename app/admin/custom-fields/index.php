@@ -161,7 +161,7 @@ foreach($custom_fields as $k=>$cf) {
 	//filter
 	print "<tr>";
 	print "<td colspan='8' style='padding-right:0px;'>";
-	print "	<button class='btn btn-xs btn-info pull-right edit-custom-filter' data-table='$table' rel='tooltip' data-placement='right' title='"._("Set which field to display in table")."'><i class='fa fa-filter'></i> Filter</button>";
+	print "	<button class='btn btn-xs btn-info pull-right edit-custom-filter' data-table='$table' rel='tooltip' data-placement='right' title='"._("Set which field to display in table")."'><i class='fa fa-filter'></i>"._(" Filter")."</button>";
 	print "</td>";
 	print "</tr>";
 

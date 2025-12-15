@@ -51,8 +51,17 @@ foreach($all_types as $t){ array_push($type_id_array, $t->id); }
 if(!in_array($POST->type, $type_id_array))									{ $Result->show("danger", _('Invalid type').'!', true); }
 
 # status
-$statuses = array ("Active", "Inactive", "Reserved");
+$statuses = array (_("Active"), _("Inactive"), _("Reserved"));
 if(!in_array($POST->status, $statuses))									{ $Result->show("danger", _('Invalid status').'!', true); }
+
+# Convert translated status text to database-supported English ENUM values (critical fix)
+$status_translate = [
+    _("Active") => "Active",
+    _("Inactive") => "Inactive",
+    _("Reserved") => "Reserved"
+];
+# Replace POST status with English value (fallback to Active if invalid)
+$POST->status = $status_translate[$POST->status] ?? "Active";
 
 #Check if circuit is part of a larger circuit
 if($POST->action == 'delete'){

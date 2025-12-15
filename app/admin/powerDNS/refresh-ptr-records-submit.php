@@ -99,28 +99,28 @@ else 										{ $empty = true; }
 
 # generate print
 if (sizeof(@$success)>0) {
-	$print[] = "<div class='alert alert-success'><h4>Successful PTR records:</h4>";
+	$print[] = "<div class='alert alert-success'><h4>"._("Successful PTR records:")."</h4>";
 	foreach ($success as $s) {
 		$print[] = $PowerDNS->get_ip_ptr_name ($s->ip)." > ". $s->hostname;
 	}
 	$print[] = "</div>";
 }
 if (is_array($failures) && sizeof($failures)>0) {
-	$print[] = "<div class='alert alert-danger'><h4>Invalid PTR hostnames:</h4>";
+	$print[] = "<div class='alert alert-danger'><h4>"._("Invalid PTR hostnames:")."</h4>";
 	foreach ($failures as $s) {
 		$print[] = "&middot; $s->hostname ($s->ip)";
 	}
 	$print[] = "</div>";
 }
 if (is_array($ignored) && sizeof($ignored)>0) {
-	$print[] = "<div class='alert alert-info'><h4>Ignored records:</h4>";
+	$print[] = "<div class='alert alert-info'><h4>"._("Ignored records:")."</h4>";
 	foreach ($ignored as $s) {
 		$print[] = "&middot; $s->hostname ($s->ip)";
 	}
 	$print[] = "</div>";
 }
 if(isset($empty)) {
-	$print[] = "<div class='alert alert-warning'>Subnet is empty!</div>";
+	$print[] = "<div class='alert alert-warning'>"._("Subnet is empty!")."</div>";
 }
 
 

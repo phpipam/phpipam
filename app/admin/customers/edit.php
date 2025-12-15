@@ -84,7 +84,7 @@ if($POST->action!="add") {
 	    	<input type="text" name="address" class="form-control input-sm" value="<?php print $customer->address; ?>" <?php if($POST->action == "delete") print "readonly"; ?> placeholder="<?php print _("Address"); ?>">
 	    	<input type="text" name="postcode" class="form-control input-sm" value="<?php print $customer->postcode; ?>" <?php if($POST->action == "delete") print "readonly"; ?> placeholder="<?php print _("Postcode"); ?>">
 	    	<input type="text" name="city" class="form-control input-sm" value="<?php print $customer->city; ?>" <?php if($POST->action == "delete") print "readonly"; ?> placeholder="<?php print _("City"); ?>">
-	    	<input type="text" name="state" class="form-control input-sm" value="<?php print $customer->state; ?>" <?php if($POST->action == "delete") print "readonly"; ?> placeholder="<?php print _("State"); ?>">
+	    	<input type="text" name="state" class="form-control input-sm" value="<?php print $customer->state; ?>" <?php if($POST->action == "delete") print "readonly"; ?> placeholder="<?php print tr_("State", "region"); ?>">
 
 	    </td>
        	<td class="info2" style="vertical-align: top !important">* <?php print _('Customer address'); ?></td>

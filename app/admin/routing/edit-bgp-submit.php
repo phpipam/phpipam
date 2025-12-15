@@ -30,6 +30,19 @@ if ($POST->action=="edit" || $POST->action=="add") {
 	if(!$Tools->validate_ip ($POST->local_address))	{ $Result->show("danger",  _("Invalid local address"), true); }
 	if(!$Tools->validate_ip ($POST->peer_address))	{ $Result->show("danger",  _("Invalid peer address"), true); }
 }
+
+# Validate and convert BGP type (critical fix) - Check translated text then convert to DB-supported English ENUM values
+$allowed_bgp_types = [_("internal"), _("external")]; // Allowed translated values (must match frontend option values)
+if(!in_array($POST->bgp_type, $allowed_bgp_types)) {
+    $Result->show("danger",  _("Invalid BGP type"), true);
+}
+# Convert translated text to English ENUM value (fallback to default 'external')
+$bgp_type_translate = [
+    _("internal") => "internal",
+    _("external") => "external"
+];
+$POST->bgp_type = $bgp_type_translate[$POST->bgp_type] ?? "external";
+
 if ($POST->action=="edit" || $POST->action=="delete") {
 	if(!is_numeric($POST->id))						{ $Result->show("danger",  _("Invalid ID"), true); }
 }

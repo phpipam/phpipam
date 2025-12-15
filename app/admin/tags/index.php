@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # if the user's theme is dark, we make the BG parly transparent
-$alpha = ($User->user->theme == "dark") ? "cc" : "";
+$alpha = ($User->user->theme == _("dark")) ? "cc" : "";
 
 # fetch all vrfs
 $all_types = $Admin->fetch_all_objects("ipTags");
@@ -49,8 +49,8 @@ if ($all_types!==false) {
 		$type = (array) $type;
 
 		//format type
-		$showtag   = $type['showtag']==1 ? "Yes" : "No";
-		$updatetag = $type['updateTag']==1 ? "Yes" : "No";
+		$showtag   = $type['showtag']==1 ? _("Yes") : _("No");
+		$updatetag = $type['updateTag']==1 ? _("Yes") : _("No");
 
 		//print details
 		print '<tr>'. "\n";
@@ -59,8 +59,8 @@ if ($all_types!==false) {
 		print '	<td style="background-color:'.$type['bgcolor'].' !important">'. $type['bgcolor'] .'</td>'. "\n";
 		print '	<td style="background-color:'.$type['fgcolor'].' !important">'. $type['fgcolor'] .'</td>'. "\n";
 		print '	<td><div class="ip_vis"><span class="ip-'.$type['id'].'" style="cursor:default;margin:0;background-color:'.$type['bgcolor'].$alpha.';color:'.$type['fgcolor'].';">.12</span></div></td>' . "\n";
-		print '	<td>'. $type['compress'] .'</td>'. "\n";
-		print '	<td>'. $type['locked'] .'</td>'. "\n";
+		print '	<td>'. _($type['compress']) .'</td>'. "\n";
+		print '	<td>'. _($type['locked']) .'</td>'. "\n";
 		print '	<td>'. $updatetag .'</td>'. "\n";
 
 

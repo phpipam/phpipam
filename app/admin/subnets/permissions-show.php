@@ -36,8 +36,8 @@ $subnet = $Subnets->fetch_subnet(null, $POST->subnetId);
 $(document).ready(function() {
 /* bootstrap switch */
 var switch_options = {
-	onText: "Yes",
-	offText: "No",
+	onText: <?php print json_encode(_("Yes")); ?>,
+	offText: <?php print json_encode(_("No")); ?>,
     onColor: 'default',
     offColor: 'default',
     size: "mini"
@@ -83,7 +83,7 @@ $('.input-switch').on('switchChange.bootstrapSwitch', function (e, data) {
 			$g = (array) $g;
 
 			print "<tr>";
-			print "	<td>$g[g_name]</td>";
+			print "	<td>"._($g['g_name'])."</td>";
 			print "	<td>";
 
 			print "<span class='checkbox inline noborder'>";

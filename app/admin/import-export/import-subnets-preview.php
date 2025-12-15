@@ -34,10 +34,10 @@ print _("The entries marked with ")."<i class='fa ".$icons['add']."'></i>, "._("
 	the ones marked with ")."<i class='fa ".$icons['edit']."'></i>, "._("will be updated
 	and the ones marked with ")."<i class='fa ".$icons['skip']."'></i> "._("will be skipped.");
 	
-print "<b>"._("Summary: ")."</b>".($counters['add'] > 0 ? $counters['add'] : "no")._(" new entries.
-		").($counters['edit'] > 0 ? $counters['edit'] : "no")._(" updated entries.
-		").($counters['error'] > 0 ? $counters['error'] : "no")._(" entries skipped due to errors.
-		").($counters['skip'] > 0 ? $counters['skip'] : "no")._(" duplicate entries.
+print "<b>"._("Summary: ")."</b>".($counters['add'] > 0 ? $counters['add'] : "".tr_("no", "none")."")._(" new entries.
+		").($counters['edit'] > 0 ? $counters['edit'] : "".tr_("no", "none")."")._(" updated entries.
+		").($counters['error'] > 0 ? $counters['error'] : "".tr_("no", "none")."")._(" entries skipped due to errors.
+		").($counters['skip'] > 0 ? $counters['skip'] : "".tr_("no", "none")."")._(" duplicate entries.
 		")._("Scroll down for details.");
 
 print "<form id='selectImportFields'>";
@@ -48,7 +48,7 @@ print "<input name='filetype' id='filetype' type='hidden' value='".$filetype."' 
 #print "<input name='rebuildmnr' id='rebuildmnr' type='hidden' value='".$rebuildmnr."' style='display:none;'>";
 print "</form>";
 print "<table class='table table-condensed table-hover' id='previewtable'><tbody>";
-print "<tr class='active'>".$hrow."<th>Action</th></tr>";
+print "<tr class='active'>".$hrow."<th>"._("Action")."</th></tr>";
 print $rows;
 print "</tbody></table><br>";
 # add some spaces so we make pContent div larger and not overlap with the absolute pFooter div

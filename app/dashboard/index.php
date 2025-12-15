@@ -28,7 +28,7 @@ $(document).ready(function() {
 		$(this).removeClass('w-lock').addClass('w-unlock');
 		$(this).find('i').removeClass('fa fa-dashboard').addClass('fa fa-check');	//change icon
 		$(this).find('a').addClass('btn-success');	//add success class
-		$(this).find('a').attr('data-original-title','Click to save widgets order');
+		$(this).find('a').attr('data-original-title','<?php print _("Click to save widgets order");?>');
 		$('#dashboard .inner i').fadeIn('fast');
 		$('#dashboard .add-widgets').fadeIn('fast');
 		$('#dashboard .inner').addClass('movable');
@@ -146,7 +146,7 @@ if(sizeof($uwidgets)>1) {
 	print '<div id="widget-container" class="row-fluid">';
 
 	if(defined('IS_DEMO'))
-	print '<div class="alert alert-info" style="margin:auto;text-align:center;margin:10px;"><i class="fa fa-info fa-pad-right"></i> You can download latest phpIPAM version <a href="https://phpipam.net/download/" target="_blank">here</a>!</div>';
+	print '<div class="alert alert-info" style="margin:auto;text-align:center;margin:10px;"><i class="fa fa-info fa-pad-right"></i> '._("You can download latest phpIPAM version").' <a href="https://phpipam.net/download/" target="_blank">here</a>!</div>';
 
 	foreach($uwidgetschunk as $w) {
 		# print items in a row

@@ -73,7 +73,7 @@ $(document).ready(function() {
 			<div class="input-group">
 				<input type="text" class="form-control input-sm mask" name="mask" placeholder="<?php print _('Subnet bitmask'); ?>" value='24'>
 				<div class="input-group-btn">
-					<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select <span class="caret"></span></button>
+					<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php print _('Select'); ?> <span class="caret"></span></button>
 					<ul class="dropdown-menu dropdown-menu-right dropdown-subnet_search">
 						<?php
                         for($m=31; $m>7; $m--) {

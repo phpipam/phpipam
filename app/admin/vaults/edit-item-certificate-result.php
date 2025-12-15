@@ -52,7 +52,7 @@ elseif($POST->action=="edit") {
 # add, edit
 if($POST->action!="delete") {
 	# name must be more than 2 and alphanumeric
-	if(strlen($POST->name)<3 || strlen($POST->name)>64)			{ $error[] = "Invalid name"; }
+	if(strlen($POST->name)<3 || strlen($POST->name)>64)			{ $error[] = _("Invalid name"); }
 }
 
 # custom

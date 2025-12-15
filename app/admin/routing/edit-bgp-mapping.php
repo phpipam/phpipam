@@ -95,7 +95,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "routing_bgp_mapping");
 		<input type="hidden" name="bgp_id" value="<?php print $bgp->id; ?>">
 		</form>
 		<span class="input-group-btn">
-        	<button class="btn btn-default btn-sm searchSubmit" type="button">Search</button>
+        	<button class="btn btn-default btn-sm searchSubmit" type="button">"<?php print _("Search");?>"</button>
 		</span>
 	</div>
 	</form>

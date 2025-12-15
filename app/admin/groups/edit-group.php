@@ -36,7 +36,7 @@ if($POST->action=="add") {
     //false die
     $group!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
-	$title = $User->get_post_action().' '._('group').' '.$group['g_name'];
+	$title = $User->get_post_action().' '._('group').' '._($group['g_name']);
 }
 ?>
 

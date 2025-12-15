@@ -69,7 +69,7 @@ if(sizeof($result_addresses)>0 || sizeof($result_subnets)>0) {
 
 
     if(sizeof($result_subnets)>0) {
-        $html1[] = "<h4>Subnets</h4>";
+        $html1[] = "<h4>"._("Subnets")."</h4>";
         foreach ($result_subnets as $s) {
             if(isset($nat->src) && isset($nat->dst) && is_array($nat->src['subnets']) && is_array($nat->dst['subnets'])) {
                 if(!in_array($s->id, $nat->src['subnets']) && !in_array($s->id, $nat->dst['subnets'])) {
@@ -82,7 +82,7 @@ if(sizeof($result_addresses)>0 || sizeof($result_subnets)>0) {
         if(sizeof($html1)==1) { $html1 = []; }
     }
     if(sizeof($result_addresses)>0) {
-        $html2[] = "<h4>Addresses</h4>";
+        $html2[] = "<h4>"._("Addresses")."</h4>";
         foreach ($result_addresses as $a) {
             if(isset($nat->src) && isset($nat->dst) && is_array($nat->src['ipaddresses']) && is_array($nat->dst['ipaddresses'])) {
                 if(!in_array($a->id, $nat->src['ipaddresses']) && !in_array($a->id, $nat->dst['ipaddresses'])) {

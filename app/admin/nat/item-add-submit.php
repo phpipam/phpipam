@@ -124,10 +124,10 @@ if(isset($POST->object_type) && isset($POST->object_id)) {
 
         // update
         if ($Admin->object_modify ("nat", "edit", "id", array("id"=>$nat_id, "src"=>$nat->src, "dst"=>$nat->dst))) {
-            $Result->show("success", "Object added", false);
+            $Result->show("success", _("Object added"), false);
         }
         else {
-            $Result->show("danger", "Failed to add object", false);
+            $Result->show("danger", _("Failed to add object"), false);
         }
     }
     else {

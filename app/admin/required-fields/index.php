@@ -56,7 +56,7 @@ unset($standard_fields['id'],
 
 		print '<tr>'. "\n";
 		print '	<td style="width:10px;padding-left:10px;"><input type="checkbox" class="input-switch" name="'. $field .'" value="'. $field .'" '. $checked .'></td>';
-		print '	<td>'. ucfirst($field_print) .'</td>';
+		print '	<td>'. _(ucfirst($field_print)) .'</td>';
 		print '</tr>';
 	}
 	?>

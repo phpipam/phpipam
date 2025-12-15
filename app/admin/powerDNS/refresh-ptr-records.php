@@ -1,6 +1,19 @@
 <?php
 /* functions */
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+
+# Initialize database connection and user objects
+$Database = new Database_PDO;
+$User = new User ($Database);
+$Result = new Result ();
+
+# set default language
+if(isset($User->settings->defaultLang) && !is_null($User->settings->defaultLang) ) {
+    # get global default language
+    $lang = $User->get_default_lang();
+    if (is_object($lang))
+        set_ui_language($lang->l_code);
+}
 ?>
 <!-- header -->
 <div class="pHeader"><?php print _("PTR zone refresh records"); ?></div>
@@ -14,7 +27,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	<br>
 
 	<div class="text-righ2t">
-		<a class="btn btn-default btn-sm refreshPTRsubnetSubmit" data-subnetId=<?php print escape_input($POST->subnetId); ?>><i class="fa fa-refresh"></i> Regenerate</a>
+		<a class="btn btn-default btn-sm refreshPTRsubnetSubmit" data-subnetId=<?php print escape_input($POST->subnetId); ?>><i class="fa fa-refresh"></i> <?php print _("Regenerate");?></a>
 		<hr>
 	</div>
 

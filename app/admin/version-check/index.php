@@ -6,7 +6,7 @@
 # verify that user is logged in
 $User->check_user_session();
 
-print "<h4>phpIPAM version check</h4><hr>";
+print "<h4>"._("phpIPAM version check")."</h4><hr>";
 
 # get latest version */
 $version = $Tools->check_latest_phpipam_version(true);
@@ -39,18 +39,18 @@ print "</table><br>";
 
 # release and commit logs
 print "<ul class='nav nav-tabs log-tabs'>";
-print "<li role='presentation' class='active'><a href='' data-target='changelog'>Change log</a></li>";
+print "<li role='presentation' class='active'><a href='' data-target='changelog'>"._("Change log")."</a></li>";
 if(!is_null($Tools->phpipam_releases))
-print "<li role='presentation'>				  <a href='' data-target='releaselog'>Release log</a></li>";
+print "<li role='presentation'>				  <a href='' data-target='releaselog'>"._("Release log")."</a></li>";
 if ($version_delta > 0)
-print "<li role='presentation'>				  <a href='' data-target='gitlog'>Commit log (local)</a></li>";
+print "<li role='presentation'>				  <a href='' data-target='gitlog'>"._("Commit log (local)")."</a></li>";
 print "</ul>";
 
 
 # changelog
 print "<div class='log-print changelog'>";
 // title
-print "<h4 style='margin-top:40px;'>Changelog</h4><hr>";
+print "<h4 style='margin-top:40px;'>"._("Changelog")."</h4><hr>";
 print "	<pre>";
 $handle = fopen( dirname(__FILE__) . "/../../../misc/CHANGELOG", "r" );
 print fread($handle, 102400);
@@ -61,7 +61,7 @@ print "</div>";
 # release log
 if(!empty($Tools->phpipam_releases)) {
 	print "<div class='log-print releaselog' style='display:none'>";
-	print "<h4 style='margin-top:40px;'>Release log</h4><hr>";
+	print "<h4 style='margin-top:40px;'>"._("Release log")."</h4><hr>";
 	foreach ($Tools->phpipam_releases as $r) {
 		// pre-release ?
 		$prerelease = !is_numeric(str_replace(array("Version", "."), "", $r->title)) ? "<span class='label label-danger'>Prerelease</span>" : "";
@@ -70,10 +70,10 @@ if(!empty($Tools->phpipam_releases)) {
 		print "<h5><i class='fa fa-angle-double-right'></i> $r->title $prerelease</h5>";
 		// date
 		print "<div style='padding-left:20px;margin-bottom:20px;'>";
-		print "<span class='text-muted'>Released on ".date("Y-M-d", strtotime($r->updated))."</span> ";
+		print "<span class='text-muted'>"._("Released on")." ".date("Y-M-d", strtotime($r->updated))."</span> ";
 		print "<div style='padding-top:10px;'>$r->content</div>";
 		// tag
-		print "<a class='btn btn-xs btn-default' href='".$r->link->{'@attributes'}->href."'>Download (GitHub)</a>";
+		print "<a class='btn btn-xs btn-default' href='".$r->link->{'@attributes'}->href."'>"._("Download (GitHub)")."</a>";
 		print "</div>";
 	}
 	print "</div>";
@@ -88,11 +88,11 @@ if ($version_delta > 0) {
 	$commit_log = shell_exec("git log -n100");
 
 	if (!is_string($commit_log)) {
-		$Result->show("info", "Git not available", false);
+		$Result->show("info", _("Git not available"), false);
 	}
 	else {
 		// title
-		print "<h4 style='margin-top:40px;'>Commit log (local) [Last 100]</h4><hr>";
+		print "<h4 style='margin-top:40px;'>"._("Commit log (local) [Last 100]")."</h4><hr>";
 		// split commits
 		$commit_log = preg_split('/\r?\ncommit /', "\n".$commit_log, -1, PREG_SPLIT_NO_EMPTY);
 
@@ -123,7 +123,7 @@ if ($version_delta > 0) {
 			print escape_input($out['author'])." <span class='text-muted'>(pushed on ".escape_input($out['date']).")</span>";
 			print "<div style='padding:10px;max-width:400px;border-radius:6px;border:1px solid #ddd;'>".$lines."</div>";
 			// tag
-			print "<a class='btn btn-xs btn-default' style='margin-top:3px;' href='https://github.com/phpipam/phpipam/commit/$out[commit]' target='_blank'>View</a>";
+			print "<a class='btn btn-xs btn-default' style='margin-top:3px;' href='https://github.com/phpipam/phpipam/commit/$out[commit]' target='_blank'>"._('View')."</a>";
 			print "</div>";
 		}
 	}

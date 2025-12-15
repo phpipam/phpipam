@@ -59,11 +59,11 @@ if ($User->settings->enablePowerDNS=="1" && $subnet->DNSrecursive=="1") {
 			// remove existing records and links
 			$PowerDNS->remove_all_ptr_records ($domain->id, $ptr_indexes);
 			// ok
-			$Result->show("success", "PTR records removed", false);
+			$Result->show("success", _("PTR records removed"), false);
 		}
 	}
 	# error
 	else {
-		$Result->show("danger", "Cannot connect to powerDNS database", false);
+		$Result->show("danger", _("Cannot connect to powerDNS database"), false);
 	}
 }

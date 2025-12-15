@@ -27,9 +27,9 @@ if($POST->action=="edit" || $POST->action=="delete")
 $lang = (array) $Admin->fetch_object ("lang", "l_id", $POST->langid);
 
 # set title
-if($POST->action == "edit")  		{ $title = 'Edit language'; }
-elseif($POST->action == "delete") 	{ $title = 'Delete language'; }
-else 									{ $title = 'Add new language'; }
+if($POST->action == "edit")  		{ $title = _('Edit language'); }
+elseif($POST->action == "delete") 	{ $title = _('Delete language'); }
+else 									{ $title = _('Add new language'); }
 ?>
 
 <!-- header -->

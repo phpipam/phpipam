@@ -122,9 +122,9 @@ $custom = $Tools->fetch_custom_fields('vaultItems');
                 <?php
     			// options
 				$options = [
-                            "website"=>"Fetch website certificate",
-                            "public"=>"Certificate (.cer, .pem, .crt)",
-                            "pkcs12"=>"PKCS12 Certificate with key file (.p12, .pfx)",
+                            "website"=>_("Fetch website certificate"),
+                            "public"=>_("Certificate (.cer, .pem, .crt)"),
+                            "pkcs12"=>_("PKCS12 Certificate with key file (.p12, .pfx)"),
                             // "certificate"=>"Certificate and key file"
                             ];
 				// print
@@ -178,7 +178,7 @@ $(document).ready(function () {
     if($('select[name=type]').length) {
         // no change
         if($('input[name=action]').val()=="edit") {
-            $('select[name=type]').prepend("<option value='' selected disabled>No change</option>");
+            $('select[name=type]').prepend("<option value='' selected disabled><?php print _("No change");?></option>");
         }
         else {
             // load
@@ -213,7 +213,7 @@ $(document).ready(function () {
                 // add
                 append_cert_field (data)
                 // print ok
-                $('div.fetch-result').html("<div class='alert alert-success'>Certificate fetched.</div>")
+                $('div.fetch-result').html("<div class='alert alert-success'><?php print _("Certificate fetched.");?></div>")
             }
         })
 

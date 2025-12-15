@@ -75,8 +75,8 @@ if(sizeof($address)>1) {
         elseif ($address['state'] == "3") { $stateClass = _("DHCP"); }
         else                          { $stateClass = _("Online"); }
 
-        print $Addresses->address_type_index_to_type ($address['state']);
-        print $Addresses->address_type_format_tag ($address['state']);
+        print _($Addresses->address_type_index_to_type ($address['state']));
+        print _($Addresses->address_type_format_tag ($address['state']));
 
         print " </td>";
         print "</tr>";

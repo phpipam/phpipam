@@ -38,11 +38,20 @@ if($POST->action=="delete" || $POST->action=="edit") {
 if($POST->action=="add" || $POST->action=="edit") {
     // name
     if(strlen($POST->name)<3)                                            {  $Result->show("danger",  _("Name must have at least 3 characters"), true); }
-    if(!in_array($POST->type, array("source", "static", "destination"))) {  $Result->show("danger",  _("Invalid NAT type"), true); }
+    if(!in_array($POST->type, array(_("source"), _("static"), _("destination")))) {  $Result->show("danger",  _("Invalid NAT type"), true); }
     if(isset($POST->device)) {
         if(!is_numeric($POST->device))                                   {  $Result->show("danger",  _("Invalid device"), true); }
     }
 }
+
+    # Convert translated NAT type text to database-supported English ENUM values (critical fix)
+    $nat_type_translate = [
+        _("source") => "source",
+        _("static") => "static",
+        _("destination") => "destination"
+    ];
+    # Replace POST type with English value (fallback to static if invalid)
+    $POST->type = $nat_type_translate[$POST->type] ?? "static";
 
 // set values
 // nothing to do here for l10n, the content of the array goes into the database

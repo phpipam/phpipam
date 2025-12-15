@@ -134,7 +134,7 @@ $(function(){
 
             // append pass if required
             if($('#csvimport').attr('data-type')=="pkcs12" || $('#csvimport').attr('data-type')==("certificate")) {
-                var pkey_pass = prompt(<?php print '"Enter private key password"'; ?>);
+                var pkey_pass = prompt('<?php print addslashes(_("Enter private key password")); ?>');
                 data.formData = $.extend({}, {'pkey_pass': pkey_pass}, data.formData);
             }
 
@@ -153,7 +153,7 @@ $(function(){
             } catch (e) {
                 // error
             	$('ul.progressUl li.alert').addClass('alert alert-danger');		//add error class
-            	$('li.alert p').append("<strong>Error: Error parsing json response</strong>");
+            	$('li.alert p').append("<strong><?php print _('Error: Error parsing json response'); ?></strong>");
                 return;
             }
             //success
@@ -165,18 +165,18 @@ $(function(){
                     append_cert_field (resp['certificate'])
 				} else {
 	            	$('ul.progressUl li.alert').addClass('alert alert-danger');		//add error class
-	            	$('li.alert p').append("<strong>Error: Session storage not supoorted</strong>");
+	            	$('li.alert p').append("<strong><?php print _('Error: Session storage not supported'); ?></strong>");
 				}
 
             	$('ul.progressUl li.alert').addClass('alert-success');		//add success class
-            	$('ul.progressUl li.alert p').append('Upload successfull.');	//add ok sign
+            	$('ul.progressUl li.alert p').append('<?php print _("Upload successfull."); ?>');	//add ok sign
             }
             //error
             else {
             	//get error message
 				var respErr = resp['error'];
             	$('ul.progressUl li.alert').addClass('alert alert-danger');		//add error class
-            	$('li.alert p').append("<strong>Error: "+respErr+"</strong>");
+            	$('li.alert p').append("<strong><?php print _("Error:"); ?> "+respErr+"</strong>");
             }
 
         }

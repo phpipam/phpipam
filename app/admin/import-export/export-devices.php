@@ -128,7 +128,7 @@ foreach ($devices as $d) {
 			$d[$k] = $deviceTypes[$d[$k]]['tname'];
 		}
 
-		$worksheet->write($curRow, $curColumn, $d[$k], $format_text);
+		$worksheet->write($curRow, $curColumn, _($d[$k]), $format_text);
 		$curColumn++;
     }
 

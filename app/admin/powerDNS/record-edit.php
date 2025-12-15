@@ -169,7 +169,7 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
 				if ($k == @$record->ttl)		{ $selected = "selected"; }
 				else							{ $selected = ""; }
 				// print
-				print "<option value='$k' $selected>$type</option>";
+				print "<option value='$k' $selected>"._($type)."</option>";
 			}
 			?>
 			</select>
