@@ -17,9 +17,12 @@ $User->check_user_session();
 $csrf = $User->Crypto->csrf_cookie ("create", "authmethods");
 
 # if edit check if protected?
-if($POST->action!="add") {
+if ($POST->action != "add") {
 	$auth_method = $Admin->fetch_object("usersAuthMethod", "id", $POST->id);
-	if($auth_method->protected=="Yes")								{ $Result->show("danger", _("Method cannot be change as it is protected"), true, true); }
+	if ($auth_method->protected == "Yes") {
+		if ($POST->action == 'edit' && $POST->id == 1) $Result->show("danger", _("Method cannot be change as it is protected"), true, true);
+		if ($POST->action == 'delete') $Result->show("danger", _("Method cannot be deleted as it is protected"), true, true);
+	}
 }
 
 # check for permitted auth methods
