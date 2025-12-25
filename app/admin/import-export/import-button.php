@@ -11,6 +11,8 @@ if (!isset($Tools)) { $Tools = new Tools ($Database); }
 # verify that user is logged in, to guard against direct access of page and possible exploits
 $User->check_user_session();
 
+#To add a variable, first translate the array in expfields and then pass it in
+$expfields = array_map ('_',$expfields);
 ?>
 
 <form id="dataimport" method="post" action="app/admin/import-export/import-verify.php" enctype="multipart/form-data">

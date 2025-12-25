@@ -77,10 +77,10 @@ foreach ($data as &$cdata) {
 
 		if ($cdata['result']) {
 			$trc = $colors[$cdata['action']];
-			$msg = "Devices  ".$cdata['action']." successful.";
+			$msg = tr_("Devices %s successful.",_($cdata['action']));
 		} else {
 			$trc = "danger";
-			$msg = "Devices  ".$cdata['action']." failed.";
+			$msg = tr_("Devices %s failed.",_($cdata['action']));
 		}
 
 		$rows.="<tr class='".$trc."'><td><i class='fa ".$icons[$action]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>";
@@ -90,7 +90,7 @@ foreach ($data as &$cdata) {
 	}
 }
 print "<table class='table table-condensed table-hover' id='resultstable'><tbody>";
-print "<tr class='active'>".$hrow."<th>Result</th></tr>";
+print "<tr class='active'>".$hrow."<th>"._("Result")."</th></tr>";
 print $rows;
 print "</tbody></table><br>";
 ?>

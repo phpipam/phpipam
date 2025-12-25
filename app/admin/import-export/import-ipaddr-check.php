@@ -122,7 +122,7 @@ foreach ($data as &$cdata) {
 
 	# check if required fields are present and not empty
 	foreach($reqfields as $creq) {
-		if (!isset($cdata[$creq]) || ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
+		if (!isset($cdata[$creq]) || ($cdata[$creq] == "")) { $msg.= tr_("Required field %s missing or empty.",_($creq)); $action = "error"; }
 	}
 
 	# if the subnet contains "/", split it in network and mask
@@ -132,18 +132,18 @@ foreach ($data as &$cdata) {
 			$cdata['mask'] = $cmask;
 			$cdata['subnet'] = $caddr;
 		}
-		else { $msg.= "The subnet needs to have the mask defined as /BM (Bit Mask)"; $action = "error"; }
+		else { $msg.= _("The subnet needs to have the mask defined as /BM (Bit Mask)"); $action = "error"; }
 		if ((!empty($cdata['mask'])) && (!preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", $cdata['mask']))) {
-			$msg.="Invalid network mask format."; $action = "error";
+			$msg.=_("Invalid network mask format."); $action = "error";
 		} else {
 			$cdata['type'] = $Subnets->identify_address($cdata['subnet']);
-			if (($cdata['type'] == "IPv6") && (($cdata['mask']<0) || ($cdata['mask']>128))) { $msg.="Invalid IPv6 network mask."; $action = "error"; }
+			if (($cdata['type'] == "IPv6") && (($cdata['mask']<0) || ($cdata['mask']>128))) { $msg.=_("Invalid IPv6 network mask."); $action = "error"; }
 		}
 	}
 
 	# Check if section is provided and valid and link it if it is
 	if (!isset($section_names[strtolower($cdata['section'])])) {
-		$msg.= "Invalid section."; $action = "error";
+		$msg.= _("Invalid section."); $action = "error";
 	} else {
 		$cdata['sectionId'] = $section_names[strtolower($cdata['section'])]['id'];
 	}
@@ -151,7 +151,7 @@ foreach ($data as &$cdata) {
 	# Check if VRF is provided and valid and link it if it is
 	if (!empty($cdata['vrf'])) {
 		if (!isset($vrf_data[$cdata['vrf']])) {
-			$msg.= "Invalid VRF."; $action = "error";
+			$msg.= _("Invalid VRF."); $action = "error";
 		} else {
 			$cdata['vrfId'] = $vrf_data[$cdata['vrf']]['vrfId'];
 		}
@@ -163,7 +163,7 @@ foreach ($data as &$cdata) {
 
 	# Check Subnet and mask are defined
 	if (empty($cdata['subnet']) || empty($cdata['mask'])) {
-		$msg.= "Subnet/Mask not provided."; $action = "error";
+		$msg.= _("Subnet/Mask not provided."); $action = "error";
 	}
 
 	# If provided VRF doesn't match then search for Subnet in all VRFs
@@ -176,7 +176,7 @@ foreach ($data as &$cdata) {
 					$cdata['vrfId'] = $results[0];
 					$cdata['vrf']   = $vrf_byid[$results[0]];
 				} else {
-					$msg.= "Search matches multiple subnets, please specify VRF."; $action = "error";
+					$msg.= _("Search matches multiple subnets, please specify VRF."); $action = "error";
 				}
 			}
 		}
@@ -185,7 +185,7 @@ foreach ($data as &$cdata) {
 	# Check if Subnet is provided and valid and link it if it is
 	if ($action != "error") {
 		if (!isset($subnet_data[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']])) {
-			$msg.= "Unable to locate the subnet in the specified VRF."; $action = "error";
+			$msg.= _("Unable to locate the subnet in the specified VRF."); $action = "error";
 		} else {
 			$cdata['subnetId'] = $subnet_data[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']]['id'];
 		}
@@ -194,7 +194,7 @@ foreach ($data as &$cdata) {
 	# Match device name against device IDs
 	if (!empty($cdata['device'])) {
 		if (!isset($device_data[$cdata['sectionId']][$cdata['device']])) {
-			$msg.= "Invalid device hostname."; $action = "error";
+			$msg.= _("Invalid device hostname."); $action = "error";
 		} else {
 			$cdata['switch'] = $device_data[$cdata['sectionId']][$cdata['device']]['id'];
 		}
@@ -205,7 +205,7 @@ foreach ($data as &$cdata) {
 	# Check if a tag is provided and valid and link it if it is
 	if (!empty($cdata['tag'])) {
 		if (!isset($tag_data[$cdata['tag']])) {
-			$msg.= "Invalid tag."; $action = "error";
+			$msg.= _("Invalid tag."); $action = "error";
 		} else {
 			$cdata['state'] = $tag_data[$cdata['tag']]['id'];
 		}
@@ -219,14 +219,14 @@ foreach ($data as &$cdata) {
 	if (in_array(strtolower($cdata['is_gateway']),array("yes","true","1"))) { $cdata['is_gateway'] = 1; } else { $cdata['is_gateway'] = 0; }
 
 	if ($action != "error") {
-    	if(!$Addresses->validate_ip($cdata['ip_addr'])) { $msg.="Invalid IP address."; $action = "error"; }
-		if ((!empty($cdata['hostname'])) && (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
-		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
+    	if(!$Addresses->validate_ip($cdata['ip_addr'])) { $msg.=_("Invalid IP address."); $action = "error"; }
+		if ((!empty($cdata['hostname'])) && (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.=_("Invalid DNS name."); $action = "error"; }
+		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.=_("Invalid characters in description."); $action = "error"; }
 		if ($cdata['mac']) {
-			if (!preg_match("/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/", $cdata['mac'])) { $msg.="Invalid MAC address."; $action = "error"; }
+			if (!preg_match("/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/", $cdata['mac'])) { $msg.=_("Invalid MAC address."); $action = "error"; }
 		}
-		if (preg_match("/[;'\"]/", $cdata['owner'])) { $msg.="Invalid characters in owner name."; $action = "error"; }
-		if (preg_match("/[;'\"]/", $cdata['note'])) { $msg.="Invalid characters in note."; $action = "error"; }
+		if (preg_match("/[;'\"]/", $cdata['owner'])) { $msg.=_("Invalid characters in owner name."); $action = "error"; }
+		if (preg_match("/[;'\"]/", $cdata['note'])) { $msg.=_("Invalid characters in note."); $action = "error"; }
 	}
 
 	// Check IP belongs to subnet
@@ -234,12 +234,12 @@ foreach ($data as &$cdata) {
 		$subnet_cidr = $cdata['subnet'] . '/' . $cdata['mask'];
 		$ip_mask     = $cdata['type'] == "IPv4" ? '32' : '128';
 		$ip_cidr     = $cdata['ip_addr'] . '/' . $ip_mask;
-		if (!$Subnets->verify_overlapping($ip_cidr, $subnet_cidr)) { $msg.="Invalid IP address, not inside subnet."; $action = "error"; }
+		if (!$Subnets->verify_overlapping($ip_cidr, $subnet_cidr)) { $msg.=_("Invalid IP address, not inside subnet."); $action = "error"; }
 	}
 
 	# check if duplicate in the import data
 	if ($action != "error") {
-		if (isset($ndata[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']][$cdata['ip_addr']])) { $msg.="Duplicate entry in imported data."; $action = "error"; }
+		if (isset($ndata[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']][$cdata['ip_addr']])) { $msg.=_("Duplicate entry in imported data."); $action = "error"; }
 	}
 
 	# check if existing in database
@@ -250,27 +250,27 @@ foreach ($data as &$cdata) {
 
 			# Check if we need to change any fields
 			$action = "skip"; # skip duplicate fields if identical, update if different
-			if ($cdata['hostname'] != $cedata['hostname']) { $msg.= "Address DNS name will be updated."; $action = "edit"; }
-			if ($cdata['description'] != $cedata['description']) { $msg.= "Address description will be updated."; $action = "edit"; }
-			if ($cdata['mac'] != $cedata['mac']) { $msg.= "Address MAC address will be updated."; $action = "edit"; }
-			if ($cdata['owner'] != $cedata['owner']) { $msg.= "Address owner will be updated."; $action = "edit"; }
-			if ($cdata['switch'] != $cedata['switch']) { $msg.= "Device will be updated."; $action = "edit"; }
-			if ($cdata['note'] != $cedata['note']) { $msg.= "Address note will be updated."; $action = "edit"; }
-			if ($cdata['state'] != $cedata['state']) { $msg.= "Address tag (state) will be updated."; $action = "edit"; }
-			if ($cdata['port'] != $cedata['port']) { $msg.= "Port will be updated."; $action = "edit"; }
-			if ($cdata['location'] != $cedata['location']) { $msg.= "Location will be updated."; $action = "edit"; }
+			if ($cdata['hostname'] != $cedata['hostname']) { $msg.= _("Address DNS name will be updated."); $action = "edit"; }
+			if ($cdata['description'] != $cedata['description']) { $msg.= _("Address description will be updated."); $action = "edit"; }
+			if ($cdata['mac'] != $cedata['mac']) { $msg.= _("Address MAC address will be updated."); $action = "edit"; }
+			if ($cdata['owner'] != $cedata['owner']) { $msg.= _("Address owner will be updated."); $action = "edit"; }
+			if ($cdata['switch'] != $cedata['switch']) { $msg.= _("Device will be updated."); $action = "edit"; }
+			if ($cdata['note'] != $cedata['note']) { $msg.= _("Address note will be updated."); $action = "edit"; }
+			if ($cdata['state'] != $cedata['state']) { $msg.= _("Address tag (state) will be updated."); $action = "edit"; }
+			if ($cdata['port'] != $cedata['port']) { $msg.= _("Port will be updated."); $action = "edit"; }
+			if ($cdata['location'] != $cedata['location']) { $msg.= _("Location will be updated."); $action = "edit"; }
 
 			# Check if the values of the custom fields have changed
 			if(sizeof($custom_fields) > 0) {
 				foreach($custom_fields as $myField) {
 					if ($cdata[$myField['name']] != $cedata[$myField['name']]) {
-						$msg.= $myField['name']." will be updated."; $action = "edit";
+						$msg.= tr_($myField['name']." %s will be updated."); $action = "edit";
 					}
 				}
 			}
 
 			if ($action == "skip") {
-				$msg.= "Duplicate, will skip.";
+				$msg.= _("Duplicate, will skip.");
 			} else {
 				# set id of matched subnet
 				$cdata['id'] = $cedata['id'];
@@ -281,7 +281,7 @@ foreach ($data as &$cdata) {
 // 				$cdata['firewallAddressObject'] = $cedata['firewallAddressObject'];
 			}
 		} else {
-			$msg.="New entry, will be added."; $action = "add";
+			$msg.=_("New entry, will be added."); $action = "add";
 
 			# Add it to ndata for duplicate check
 			$ndata[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']][$cdata['ip_addr']] = $cdata;

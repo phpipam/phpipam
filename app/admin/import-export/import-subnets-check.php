@@ -97,7 +97,7 @@ foreach ($data as &$cdata) {
 
 	# check if required fields are present and not empty
 	foreach($reqfields as $creq) {
-		if ((!isset($cdata[$creq])) || ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
+		if ((!isset($cdata[$creq])) || ($cdata[$creq] == "")) { $msg.= tr_("Required field %s missing or empty.",_($creq)); $action = "error"; }
 	}
 
 	# if the subnet contains "/", split it in network and mask
@@ -107,19 +107,19 @@ foreach ($data as &$cdata) {
 			$cdata['mask'] = $cmask;
 			$cdata['subnet'] = $caddr;
 		} else { # check that mask is provided
-			if ((!isset($cdata['mask'])) || ($cdata['mask'] == "")) { $msg.= "Required field mask missing or empty."; $action = "error"; }
+			if ((!isset($cdata['mask'])) || ($cdata['mask'] == "")) { $msg.= _("Required field mask missing or empty."); $action = "error"; }
 		}
 		if ((!empty($cdata['mask'])) && (!preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", $cdata['mask']))) {
-			$msg.="Invalid network mask format."; $action = "error";
+			$msg.=_("Invalid network mask format."); $action = "error";
 		} else {
 			$cdata['type'] = $Subnets->identify_address($cdata['subnet']);
-			if (($cdata['type'] == "IPv6") && (($cdata['mask']<0) || ($cdata['mask']>128))) { $msg.="Invalid IPv6 network mask."; $action = "error"; }
+			if (($cdata['type'] == "IPv6") && (($cdata['mask']<0) || ($cdata['mask']>128))) { $msg.=_("Invalid IPv6 network mask."); $action = "error"; }
 		}
 	}
 
 	# Check if section is provided and valid and link it if it is
 	if (!isset($section_names[$cdata['section']])) {
-		$msg.= "Invalid section."; $action = "error";
+		$msg.= _("Invalid section."); $action = "error";
 	} else {
 		$cdata['sectionId'] = $section_names[$cdata['section']]['id'];
 	}
@@ -127,7 +127,7 @@ foreach ($data as &$cdata) {
 	# Check if VRF is provided and valid and link it if it is
 	if (!empty($cdata['vrf'])) {
 		if (!isset($vrf_data[$cdata['vrf']])) {
-			$msg.= "Invalid VRF."; $action = "error";
+			$msg.= _("Invalid VRF."); $action = "error";
 		} else {
 			$cdata['vrfId'] = $vrf_data[$cdata['vrf']]['vrfId'];
 		}
@@ -140,14 +140,14 @@ foreach ($data as &$cdata) {
 	if (!empty($cdata['domain'])) { $cdom = $cdata['domain']; } else { $cdom = "default"; }
 	if (!isset($vlan_data[$cdom])) {
 		# the default domain is always there, so if anything is missing we return an error
-		$msg.= "Invalid VLAN domain."; $action = "error";
+		$msg.= _("Invalid VLAN domain."); $action = "error";
 	} else {
 		if (!empty($cdata['vlan'])) {
 		        if (in_array(strtolower($cdata['vlan']),array("na","n/a","nan"))) { $cdata['vlan'] = ""; }
 			if ((!empty($cdata['vlan'])) && (strtolower($cdata['vlan']) != "na")) {
 			    $v = strtolower($cdata['vlan']);
 				if (!isset($vlan_data[$cdom][$v])) {
-					$msg.= "VLAN not found in provided domain."; $action = "error";
+					$msg.= _("VLAN not found in provided domain."); $action = "error";
 				} else {
 					$cdata['vlanId'] = $vlan_data[$cdom][$v]['vlanId'];
 				}
@@ -165,16 +165,16 @@ foreach ($data as &$cdata) {
 			$cidr_check = $Subnets->verify_cidr_address($cdata['subnet']."/".$cdata['mask']);
 			if (strlen($cidr_check)>5) { $msg.=$cidr_check; $action = "error"; }
 		} else { $msg.=$net['message']; $action = "error"; }
-		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
-		if ((!empty($cdata['vrf'])) && (!preg_match("/^[a-zA-Z0-9-_]+$/", $cdata['vrf']))) { $msg.="Invalid VRF name format."; $action = "error"; }
+		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.=_("Invalid characters in description."); $action = "error"; }
+		if ((!empty($cdata['vrf'])) && (!preg_match("/^[a-zA-Z0-9-_]+$/", $cdata['vrf']))) { $msg.=_("Invalid VRF name format."); $action = "error"; }
 # Allow VLAN to be the string now.
 #		if ((!empty($cdata['vlan'])) && (!preg_match("/^[0-9]+$/", $cdata['vlan']))) { $msg.="Invalid VLAN number format."; $action = "error"; }
-		if ((!empty($cdata['domain'])) && (!preg_match("/^[a-zA-Z0-9-_. ]+$/", $cdata['domain']))) { $msg.="Invalid VLAN domain format."; $action = "error"; }
+		if ((!empty($cdata['domain'])) && (!preg_match("/^[a-zA-Z0-9-_. ]+$/", $cdata['domain']))) { $msg.=_("Invalid VLAN domain format."); $action = "error"; }
 	}
 
 	# check if duplicate in the import data
 	if ($action != "error") {
-		if (isset($ndata[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']])) { $msg.="Duplicate entry in imported data."; $action = "error"; }
+		if (isset($ndata[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']])) { $msg.=_("Duplicate entry in imported data."); $action = "error"; }
 	}
 
 	# check if existing in database
@@ -185,19 +185,19 @@ foreach ($data as &$cdata) {
 
 			# Check if we need to change any fields
 			$action = "skip"; # skip duplicate fields if identical, update if different
-			if ($cdata['description'] != $cedata['description']) { $msg.= "Subnet description will be updated."; $action = "edit"; }
-			if ($cdata['vlanId'] != $cedata['vlanId']) { $msg.= "VLAN ID will be updated."; $action = "edit"; }
+			if ($cdata['description'] != $cedata['description']) { $msg.= _("Subnet description will be updated."); $action = "edit"; }
+			if ($cdata['vlanId'] != $cedata['vlanId']) { $msg.= _("VLAN ID will be updated."); $action = "edit"; }
 			# Check if the values of the custom fields have changed
 			if(sizeof($custom_fields) > 0) {
 				foreach($custom_fields as $myField) {
 					if ($cdata[$myField['name']] != $cedata[$myField['name']]) {
-						$msg.= $myField['name']." will be updated."; $action = "edit";
+						$msg.= tr_($myField['name']," %s will be updated."); $action = "edit";
 					}
 				}
 			}
 
 			if ($action == "skip") {
-				$msg.= "Duplicate, will skip.";
+				$msg.= _("Duplicate, will skip.");
 			} else {
 				# set id of matched subnet
 				$cdata['id'] = $cedata['id'];
@@ -208,7 +208,7 @@ foreach ($data as &$cdata) {
 				// $cdata['pingSubnet'] = $cedata['pingSubnet'];				$cdata['discoverSubnet'] = $cedata['discoverSubnet'];
 			}
 		} else {
-			$msg.="New entry, will be added."; $action = "add";
+			$msg.=_("New entry, will be added."); $action = "add";
 			# Set master to 0 for now, will figure that after we add it, with the recompute function
 			$cdata['masterSubnetId'] = "0";
 			# Inherit section permissions for new subnets

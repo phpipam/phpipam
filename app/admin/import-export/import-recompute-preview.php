@@ -34,7 +34,7 @@ print _("The entries marked with ")."<i class='fa ".$icons['edit']."'></i>, "._(
 
 print "<form id='selectImportFields'>".$pass_inputs."</form>";
 print "<table class='table table-condensed table-hover' id='previewtable'><tbody>";
-print "<tr class='active'><th></th><th>Section</th><th>Subnet</th><th>Description</th><th>VRF</th><th>Master</th><th>Action</th></tr>";
+print "<tr class='active'><th></th><th>"._("Section")."</th><th>"._("Subnet")."</th><th>"._("Description")."</th><th>VRF</th><th>"._("Master")."</th><th>"._("Action")."</th></tr>";
 print $rows;
 print "</tbody></table><br>";
 # add some spaces so we make pContent div larger and not overlap with the absolute pFooter div

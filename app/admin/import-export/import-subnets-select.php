@@ -27,13 +27,13 @@ $mtable = "subnets"; # main table where to check the fields
 # extra fields
 $extfields["section"]["table"] = "sections";
 $extfields["section"]["field"] = "name";
-$extfields["section"]["pname"] = "section"; # name prefix for fields from other tables
+$extfields["section"]["pname"] = _("section"); # name prefix for fields from other tables
 $extfields["vlan"]["table"] = "vlans";
 $extfields["vlan"]["field"] = "name";
 $extfields["vlan"]["pname"] = "vlan";
 $extfields["domain"]["table"] = "vlanDomains";
 $extfields["domain"]["field"] = "name";
-$extfields["domain"]["pname"] = "domain";
+$extfields["domain"]["pname"] = _("domain");
 $extfields["vrf"]["table"] = "vrf";
 $extfields["vrf"]["field"] = "name";
 $extfields["vrf"]["pname"] = "vrf";
@@ -68,7 +68,7 @@ foreach($expfields as $std_field) {
 	$msgr = in_array($std_field,$reqfields) ? "*" : "";
 
 	#prebuild template table rows to avoid useless foreach loops
-	$tpl_field_names.= "<th>".$pname.$field['Field'].$msgr."</th>";
+	$tpl_field_names.= "<th>".$pname._($field['Field']).$msgr."</th>";
 	$tpl_field_types.= "<td><small>". wordwrap($field['Type'],18,"<br>\n",true) ."</small></td>";
 }
 

@@ -56,22 +56,22 @@ foreach ($data as &$cdata) {
 
 	# check if domain exists and link ID, otherwise issue error
 	if (!in_array($cdom,$vdom)) {
-		$msg.= "Missing VLAN domain. Please add/import VLAN domain first."; $action = "error";
+		$msg.= _("Missing VLAN domain. Please add/import VLAN domain first."); $action = "error";
 	} else {
 		$cdata['domainId'] = $vdomid[$cdom];
 	}
 
 	# check if required fields are present and not empty
 	foreach($reqfields as $creq) {
-		if ((!isset($cdata[$creq])) or ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
+		if ((!isset($cdata[$creq])) or ($cdata[$creq] == "")) { $msg.= tr_("Required field %s missing or empty.",_($creq)); $action = "error"; }
 	}
 
 	# check data format
 	if ($action != "error") {
-		if (!preg_match("//u", $cdata['name'])) { $msg.="Invalid name format."; $action = "error"; }
-		if (!preg_match("/^[0-9]+$/", $cdata['number'])) { $msg.="Invalid number format."; $action = "error"; }
-		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
-		if (!preg_match("/^[a-zA-Z0-9-_. ]+$/", $cdom)) { $msg.="Invalid domain format."; $action = "error"; }
+		if (!preg_match("//u", $cdata['name'])) { $msg.=_("Invalid name format."); $action = "error"; }
+		if (!preg_match("/^[0-9]+$/", $cdata['number'])) { $msg.=_("Invalid number format."); $action = "error"; }
+		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.=_("Invalid characters in description."); $action = "error"; }
+		if (!preg_match("/^[a-zA-Z0-9-_. ]+$/", $cdom)) { $msg.=_("Invalid domain format."); $action = "error"; }
 		if ($action != "error") { if ($cdata['number']>$User->settings->vlanMax) { $msg.= _('Highest possible VLAN number is ').$User->settings->vlanMax.'!'; $action = "error"; } }
 	}
 
@@ -79,29 +79,29 @@ foreach ($data as &$cdata) {
 	if(sizeof($custom_fields) > 0) { foreach($custom_fields as $myField) { $cfieldtds.= "<td>".$cdata[$myField['name']]."</td>"; } }
 
 	# check if duplicate VLAN
-	if (isset($unique[$cdom][$cdata['number']])) { $msg.= "Duplicate VLAN domain and number not supported. Please check import file."; $action = "error"; }
+	if (isset($unique[$cdom][$cdata['number']])) { $msg.= _("Duplicate VLAN domain and number not supported. Please check import file."); $action = "error"; }
 
 	# check if existing
 	if ($action != "error") {
 		if (isset($edata[$cdom][$cdata['number']])) {
 			$cdata['vlanId'] = $edata[$cdom][$cdata['number']]['vlanId'];
 			$action = "skip"; # skip duplicate fields if identical, update if different
-			if ($cdata['name'] != $edata[$cdom][$cdata['number']]['name']) { $msg.= "VLAN name will be updated."; $action = "edit"; }
-			if ($cdata['description'] != $edata[$cdom][$cdata['number']]['description']) { $msg.= "VLAN description will be updated."; $action = "edit"; }
+			if ($cdata['name'] != $edata[$cdom][$cdata['number']]['name']) { $msg.= _("VLAN name will be updated."); $action = "edit"; }
+			if ($cdata['description'] != $edata[$cdom][$cdata['number']]['description']) { $msg.= _("VLAN description will be updated."); $action = "edit"; }
 			# Check if the values of the custom fields have changed
 			if(sizeof($custom_fields) > 0) {
 				foreach($custom_fields as $myField) {
 					if ($cdata[$myField['name']] != $edata[$cdom][$cdata['number']][$myField['name']]) {
-						$msg.= "VLAN ".$myField['name']." will be updated."; $action = "edit";
+						$msg.= tr_("VLAN %s will be updated.",_($myField['name'])); $action = "edit";
 					}
 				}
 			}
 
 			if ($action == "skip") {
-				$msg.= "Duplicate, will skip.";
+				$msg.= _("Duplicate, will skip.");
 			}
 		} else {
-			$msg.="New entry, will be added."; $action = "add";
+			$msg.=_("New entry, will be added."); $action = "add";
 		}
 	}
 

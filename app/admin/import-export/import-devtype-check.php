@@ -38,7 +38,7 @@ foreach ($data as &$cdata) {
 
 	# check if required fields are present and not empty
 	foreach($reqfields as $creq) {
-		if ((!isset($cdata[$creq])) or ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
+		if ((!isset($cdata[$creq])) or ($cdata[$creq] == "")) { $msg.= tr_("Required field %s missing or empty.",_($creq)); $action = "error"; }
 	}
 
 
@@ -47,13 +47,13 @@ foreach ($data as &$cdata) {
 		if (isset($edata[$cdata['tname']])) {
 			$cdata['tid'] = $edata[$cdata['tname']]['tid'];
 			$action = "skip"; # skip duplicate fields if identical, update if different
-			if ($cdata['tdescription'] != $edata[$cdata['tname']]['tdescription']) { $msg.= " description will be updated."; $action = "edit"; }
+			if ($cdata['tdescription'] != $edata[$cdata['tname']]['tdescription']) { $msg.= _(" description will be updated."); $action = "edit"; }
 
 			if ($action == "skip") {
-				$msg.= "Duplicate, will skip.";
+				$msg.= _("Duplicate, will skip.");
 			}
 		} else {
-			$msg.="New entry, will be added."; $action = "add";
+			$msg.=_("New entry, will be added."); $action = "add";
 		}
 	}
 

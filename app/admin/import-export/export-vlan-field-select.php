@@ -83,7 +83,7 @@ if(sizeof($vlan_domains) > 0) {
 	print "	<tr>";
     print "	<th>"._('Name')."</th>";
     print "	<th>"._('Description')."</th>";
-    print "	<th>"._('Export')."</th>";
+    print "	<th>"._(' Export')."</th>";
     print "	</tr>\n";
 
 	foreach($vlan_domains as $domain) {

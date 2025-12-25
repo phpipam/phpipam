@@ -30,11 +30,11 @@ $mtable = "devices"; # main table where to check the fields
 
 // # extra fields
 $extfields["deviceType"]["table"] = "deviceTypes";
-$extfields["deviceType"]["field"] = "tname";
-$extfields["deviceType"]["pname"] = "deviceType";
+$extfields["deviceType"]["field"] = _("tname");
+$extfields["deviceType"]["pname"] = _("deviceType");
 $extfields["section"]["table"] = "sections";
-$extfields["section"]["field"] = "name";
-$extfields["section"]["pname"] = "section";
+$extfields["section"]["field"] = _("name");
+$extfields["section"]["pname"] = _("section");
 // $extfields["subnet"]["table"] = "subnets";
 // $extfields["subnet"]["field"] = "subnet";
 // $extfields["subnet"]["pname"] = "subnet";
@@ -84,7 +84,7 @@ foreach($expfields as $std_field) {
 	$msgr = in_array($std_field,$reqfields) ? "*" : "";
 
 	#prebuild template table rows to avoid useless foreach loops
-	$tpl_field_names.= "<th>".($pname ? $pname : $field['Field']).$msgr."</th>";
+	$tpl_field_names.= "<th>".($pname ? $pname : _($field['Field'])).$msgr."</th>";
 	$tpl_field_types.= "<td><small>". wordwrap($field['Type'],18,"<br>\n",true) ."</small></td>";
 }
 

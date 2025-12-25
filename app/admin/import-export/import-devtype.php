@@ -45,20 +45,20 @@ foreach ($data as &$cdata) {
 
 		if ($cdata['result']) {
 			$trc = $colors[$cdata['action']];
-			$msg = "DeviceTypes ".$cdata['action']." successful.";
+			$msg = tr_("DeviceTypes %s successful.",$cdata['action']);
 		} else {
 			$trc = "danger";
-			$msg = "DeviceTypes ".$cdata['action']." failed.";
+			$msg = tr_("DeviceTypes %s failed.",$cdata['action']);
 		}
 		$rows.="<tr class='".$trc."'><td><i class='fa ".$icons[$cdata['action']]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>
 			<td>".$cdata['tname']."</td>
-			<td>".$cdata['tdescription']."</td>
+			<td>".$cdata[_('tdescription')]."</td>
 			<td>"._($msg)."</td></tr>";
 	}
 }
 
 print "<table class='table table-condensed table-hover' id='resultstable'><tbody>";
-print "<tr class='active'>".$hrow."<th>Result</th></tr>";
+print "<tr class='active'>".$hrow."<th>"._("Result")."</th></tr>";
 print $rows;
 print "</tbody></table><br>";
 ?>

@@ -39,14 +39,14 @@ foreach ($data as &$cdata) {
 
 	# check if required fields are present and not empty
 	foreach($reqfields as $creq) {
-		if ((!isset($cdata[$creq])) or ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
+		if ((!isset($cdata[$creq])) or ($cdata[$creq] == "")) { $msg.= tr_("Required field %s missing or empty.",_($creq)); $action = "error"; }
 	}
 
 	# check data format
 	if ($action != "error") {
-		if (!preg_match("/^[a-zA-Z0-9-_]+$/", $cdata['name'])) { $msg.="Invalid name format."; $action = "error"; }
-		if (!preg_match("/^[0-9:]+$/", $cdata['rd'])) { $msg.="Invalid RD format."; $action = "error"; }
-		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
+		if (!preg_match("/^[a-zA-Z0-9-_]+$/", $cdata['name'])) { $msg.=_("Invalid name format."); $action = "error"; }
+		if (!preg_match("/^[0-9:]+$/", $cdata['rd'])) { $msg.=_("Invalid RD format."); $action = "error"; }
+		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.=_("Invalid characters in description."); $action = "error"; }
 	}
 
 	# check if existing
@@ -54,23 +54,23 @@ foreach ($data as &$cdata) {
 		if (isset($edata[$cdata['rd']])) {
 			$cdata['vrfId'] = $edata[$cdata['rd']]['vrfId'];
 			$action = "skip"; # skip duplicate fields if identical, update if different
-			if ($cdata['name'] != $edata[$cdata['rd']]['name']) { $msg.= "VRF name will be updated."; $action = "edit"; }
-			if ($cdata['description'] != $edata[$cdata['rd']]['description']) { $msg.= "VRF description will be updated."; $action = "edit"; }
+			if ($cdata['name'] != $edata[$cdata['rd']]['name']) { $msg.= _("VRF name will be updated."); $action = "edit"; }
+			if ($cdata['description'] != $edata[$cdata['rd']]['description']) { $msg.= _("VRF description will be updated."); $action = "edit"; }
 
 			# Check if the values of the custom fields have changed
 			if(sizeof($custom_fields) > 0) {
 				foreach($custom_fields as $myField) {
 					if ($cdata[$myField['name']] != $edata[$cdata['rd']][$myField['name']]) {
-						$msg.= $myField['name']." will be updated."; $action = "edit";
+						$msg.= tr_($myField['name']," %s will be updated."); $action = "edit";
 					}
 				}
 			}
 			
 			if ($action == "skip") {
-				$msg.= "Duplicate, will skip.";
+				$msg.= _("Duplicate, will skip.");
 			}
 		} else {
-			$msg.="New entry, will be added."; $action = "add";
+			$msg.=_("New entry, will be added."); $action = "add";
 		}
 	}
 

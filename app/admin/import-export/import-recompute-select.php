@@ -68,7 +68,7 @@ if(sizeof($all_sections) > 0) {
 		$section_rows.="</tr>\n";
 	}
 } else {
-	$section_rows = "<td colspan='3'>No sections found!</td>";
+	$section_rows = "<td colspan='3'>"._("No sections found!")."</td>";
 }
 
 ?>
@@ -91,7 +91,7 @@ print "<table class='table table-striped table-condensed' id='fieldstable'><tbod
 print "<tr>	<th><input type='checkbox' id='recomputeSectionSelectAll' checked> "._("Section")."</th>
 			<th><input type='checkbox' id='recomputeIPv4SelectAll' checked> IPv4</th>
 			<th><input type='checkbox' id='recomputeIPv6SelectAll' checked> IPv6</th>
-			<th><input type='checkbox' id='recomputeCVRFSelectAll' checked> Cross VRF</th></tr>";
+			<th><input type='checkbox' id='recomputeCVRFSelectAll' checked> "._("Cross VRF")."</th></tr>";
 print $section_rows;
 print "</tbody></table>";
 print "<input type='checkbox' name='recomputeHideUnchanged' checked>" . _('Hide unchanged subnets');
