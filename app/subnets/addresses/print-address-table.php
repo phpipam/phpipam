@@ -165,7 +165,7 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Port')."</th>"; }
 	if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Location')."</th>"; }
 	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'>"._('Owner')."</th>"; }
-	if($User->settings->enableCustomers=="1" && @$cnt_obj["customer_id"]>0 && $User->get_module_permissions ("customers")>=User::ACCESS_R)	{ print "<th class='hidden-xs hidden-sm'>"._('Customer')."</th>"; }
+	if(@$cnt_obj["customer_id"]>0 && $User->get_module_permissions ("customers")>=User::ACCESS_R)	{ print "<th class='hidden-xs hidden-sm'>"._('Customer')."</th>"; }
 	// custom fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) 	{
@@ -454,7 +454,7 @@ else {
 					$device = $Tools->fetch_object("devices", "id", $addresses[$n]->switch);
 					if (is_object($device)) {
 						$rack = "";
-						if ($User->settings->enableRACK == "1" && $User->get_module_permissions("racks") >= User::ACCESS_R && $device->rack > 0) {
+						if ($User->get_module_permissions("racks")>=User::ACCESS_R && $device->rack > 0) {
 							$rack = "<i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackid='" . $device->rack . "' data-deviceid='" . $device->id . "'></i>";
 						}
 						print "<td class='hidden-xs hidden-sm hidden-md'>$rack<a href='" . create_link("tools", "devices", $device->id) . "'>" . escape_input($device->hostname) . "</a></td>";
@@ -480,7 +480,7 @@ else {
 				}
 
 				# customer_id
-				if($User->settings->enableCustomers=="1" && @$cnt_obj["customer_id"] && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+				if(@$cnt_obj["customer_id"] && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 					$customer = $Tools->fetch_object ("customers", "id", $addresses[$n]->customer_id);
 					print $customer===false ? "<td></td>" : "<td>$customer->title <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
 				}

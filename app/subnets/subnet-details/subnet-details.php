@@ -143,7 +143,7 @@ else {
 
 	<?php
 	# VRF
-	if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
+	if($User->get_module_permissions ("vrf")>=User::ACCESS_R) {
 		# get vrf details
 		$vrf = $Tools->fetch_object("vrf", "vrfId" ,$subnet['vrfId']);
 		# null
@@ -251,7 +251,7 @@ else {
 	<?php } ?>
 
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
+	<?php if($User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
 	<tr>
 		<th><?php print _('Location'); ?></th>
 		<td>
@@ -431,7 +431,7 @@ else {
 	}
 
 	# autocreate PTR records
-	if($User->settings->enablePowerDNS==1 && $subnet_permission==3 && $User->get_module_permissions ("pdns")>=User::ACCESS_R) {
+	if($subnet_permission==3 && $User->get_module_permissions ("pdns")>=User::ACCESS_R) {
 		// initialize class
 		if ($subnet['DNSrecursive'] == 1 || $subnet['DNSrecords']==1) {
 			# powerDNS class

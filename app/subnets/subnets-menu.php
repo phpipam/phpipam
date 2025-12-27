@@ -109,7 +109,7 @@ else {
 
 
 	/* print VRF menu ---------- */
-	if($User->settings->enableVRF==1 && $section['showVRF']==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
+	if($section['showVRF']==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
 		$vrfs = $Sections->fetch_section_vrfs($GET->section);
 
 		# if some is present

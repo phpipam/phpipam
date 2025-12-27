@@ -116,7 +116,7 @@ if(sizeof($address)>1) {
     	}
 
         # customer
-        if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+        if($User->get_module_permissions ("customers")>=User::ACCESS_R) {
         $customer= $Tools->fetch_object ("customers", "id", $address['customer_id']);
         print "<tr>";
         print " <th>"._('Customer')."</th>";
@@ -166,7 +166,7 @@ if(sizeof($address)>1) {
         print "</tr>";
         }
 
-    	if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
+    	if($User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
     	<tr>
     		<th><?php print _('Location'); ?></th>
     		<td>

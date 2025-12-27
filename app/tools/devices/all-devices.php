@@ -80,11 +80,11 @@ print '<tr>';
 print "	<th>"._('Name')."</th>";
 print "	<th>"._('IP address')."</th>";
 print "	<th>"._('Description').'</th>';
-if($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
+if($User->get_module_permissions ("racks")>=User::ACCESS_R) {
 print '	<th>'._('Rack').'</th>';
 $colspanCustom++;
 }
-if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
+if($User->get_module_permissions ("locations")>=User::ACCESS_R) {
 print "	<th>"._('Location').'</th>';
 $colspanCustom++;
 }
@@ -133,7 +133,7 @@ else {
 		print "	<td>". $device['ip_addr'] .'</td>'. "\n";
 		print '	<td class="description">'. $device['description'] .'</td>'. "\n";
 		// rack
-	    if($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
+	    if($User->get_module_permissions ("racks")>=User::ACCESS_R) {
 	        print "<td>";
 	        # rack
 	        $rack = $Racks->fetch_rack_details ($device['rack']);
@@ -144,7 +144,7 @@ else {
 	        print "</td>";
 	    }
 	    // location
-		if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
+		if($User->get_module_permissions ("locations")>=User::ACCESS_R) {
 			print "<td>";
 			// Only show nameservers if defined for subnet
     		if(!empty($device['location']) && $device['location']!=0) {
@@ -209,7 +209,7 @@ else {
 		print '	<td>'._('Device not specified').'</td>'. "\n";
 		print '	<td></td>'. "\n";
 		print '	<td></td>'. "\n";
-		if($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
+		if($User->get_module_permissions ("racks")>=User::ACCESS_R) {
 		print '	<td></td>'. "\n";
 		}
 		if($User->settings->enableSNMP=="1" && $User->is_admin(false)) {

@@ -49,7 +49,7 @@ else {
 
 
 # customer
-if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+if ($User->get_module_permissions ("customers")>=User::ACCESS_R) {
     $customer = $Tools->fetch_object ("customers", "id", $rack->customer_id);
 }
 ?>
@@ -107,7 +107,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         </tr>
         <?php } ?>
 
-        <?php if ($User->settings->enableCustomers=="1" &&  $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
+        <?php if ($User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
         <tr>
             <td colspan='2'><hr></td>
         </tr>

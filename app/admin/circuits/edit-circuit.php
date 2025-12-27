@@ -158,7 +158,7 @@ $(document).ready(function(){
 
 	<?php
     // customers
-    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+    if($User->get_module_permissions ("customers")>=User::ACCESS_R) {
         // fetch customers
         $customers = $Tools->fetch_all_objects ("customers", "title");
         // print

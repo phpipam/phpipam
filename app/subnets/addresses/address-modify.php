@@ -440,7 +440,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	print "</tr>";
 
 	// customer
-	if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+	if ($User->get_module_permissions ("customers")>=User::ACCESS_R) {
 
 		print '<tr>'. "\n";
 		print '	<td>'._('Customer').'</td>'. "\n";
@@ -538,7 +538,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 
     // location
-    if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
+    if($User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
 	<tr>
 		<td>
 			<?php
