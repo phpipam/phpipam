@@ -24,7 +24,8 @@ if($User->check_module_permissions ("racks", User::ACCESS_R, false)===false) {
 # all racks or one ?
 elseif (isset($GET->subnetId)) {
 	# map
-	if($GET->subnetId=="map") { include("print-racks.php"); }
+	if($_GET['subnetId']=="map") { include("print-racks.php"); }
+	elseif(isset($_GET['sPage'])){ include("print-rack-page.php"); }
 	else 						 { include("print-single-rack.php"); }
 }
 else                             { include("print-racks.php"); }
