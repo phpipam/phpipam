@@ -44,6 +44,10 @@ else {
 	// from IP table
 	// we provide record hostname and strip domain from it
 	if (!is_numeric($POST->domain_id) && !is_numeric($POST->id)) {
+		// Keep a copy of the textual $POST->domain_id, before it's dereferenced into
+		// a numeric idetifier, so that we can prepopulate the "Name" edit field.
+		$POST->name = $POST->domain_id;
+
 		// fetch all domains
 		$all_domains = $PowerDNS->fetch_all_domains ();
 		if ($all_domains!==false) {
@@ -82,6 +86,7 @@ else {
 		}
 		else {
 			$record = new Params ();
+			$record->name = $POST->name;
 			$record->ttl = (isset($pdns->ttl) && $pdns->ttl > 0) ? $pdns->ttl : 3600;
 			$record->content = $POST->id;
 		}
