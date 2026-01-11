@@ -130,6 +130,12 @@ if ($User->settings->enableNAT==1) {
 		<?php include('subnet-details/subnet-graph.php'); ?>
 	</div>
 	<?php } ?>
+  <!-- subnet sharing -->`
+	<?php if($GET->sPage!="location" && !$slaves) { ?>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <?php include('subnet-details/subnet-sharing.php'); ?>
+        </div>
+	<?php } ?>
 
 	<!-- subnet slaves list -->
 	<div class="col-xs-12 subnetSlaves">
