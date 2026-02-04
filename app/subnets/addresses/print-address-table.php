@@ -471,7 +471,7 @@ else {
 			    # print location
 			    if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
 			    	$location_name = $Tools->fetch_object("locations", "id", $addresses[$n]->location);
-			    	print "<td class='hidden-xs hidden-sm hidden-md'>".$location_name->name."</td>";
+			    	print $location_name===false ? "<td></td>" : "<td class='hidden-xs hidden-sm hidden-md'>".$location_name->name."</td>";
 			    }
 
 				# print owner
