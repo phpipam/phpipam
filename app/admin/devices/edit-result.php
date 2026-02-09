@@ -14,6 +14,8 @@ $Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Racks      = new phpipam_rack ($Database);
 $Result 	= new Result ();
+if (!isset($Devices)) { $Devices = new Devices ($Database); }
+if (!isset($Addresses)) { $Addresses = new Addresses ($Database); }
 
 # verify that user is logged in
 $User->check_user_session();
@@ -31,6 +33,13 @@ $User->check_maintaneance_mode ();
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "device", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
+# Get a list of existing devices
+$devices = $Devices->fetch_all_objects("devices", "id");
+foreach ($devices as $d) {
+    $d = (array) $d;
+    $devices[strtolower($d['hostname'])] = $d;
+}
+
 # ID must be numeric
 if($POST->action!="add" && !is_numeric($POST->switchid))			{ $Result->show("danger", _("Invalid ID"), true); }
 
@@ -43,11 +52,27 @@ foreach($POST as $key=>$line) {
 		unset($POST->{$key});
 	}
 }
+
 # glue sections together
 $POST->sections = !empty($temp) ? implode(";", $temp) : null;
 
 # Hostname must be present
 if($POST->hostname == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }
+
+# Check if duplicate hostname
+// Error duplicate when (action=add && duplicate found) or (action=edit && duplicate found) 
+if($POST->action != "delete" && isset($devices[strtolower(trim($POST->hostname))]) && $devices[strtolower(trim($POST->hostname))]['id'] != $POST->switchid ) 								{ $Result->show("danger", _('Hostname already exist in database').'!', true); }
+
+# Validate ip_addr
+if(
+	$POST->action != "delete" &&
+    isset($POST->ip_addr) &&
+    !is_blank($POST->ip_addr) &&
+    !$Addresses->validate_ip($POST->ip_addr)
+   )
+{
+    $Result->show("danger", _('Invalid IP address').'!', true);
+}
 
 # rack checks
 if ($POST->rack !== "0" && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
@@ -72,10 +97,10 @@ if ($POST->rack !== "0" && $User->get_module_permissions ("racks")>=User::ACCESS
 # set update values
 $values = array(
 				"id"          =>$POST->switchid,
-				"hostname"    =>$POST->hostname,
+				"hostname"    =>trim($POST->hostname),
 				"ip_addr"     =>$POST->ip_addr,
 				"type"        =>$POST->type,
-				"description" =>$POST->description,
+				"description" =>trim($POST->description),
 				"sections"    =>$POST->sections,
 				"location"    =>$POST->location
 				);
