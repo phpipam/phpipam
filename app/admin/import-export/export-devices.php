@@ -114,6 +114,18 @@ foreach ($devices as $d) {
 			$d[$k] = $deviceTypes[$d[$k]]['tname'];
 		}
 
+		if ($k == "sections"){
+			$ds = explode(";", $d[$k]);
+			$d[$k] = '';
+			foreach ($ds as $s) {
+				if (isset($section_ids[$s])){
+					$d[$k] .= $section_ids[$s]['name'];
+					$d[$k] .= ";";
+				}
+			}
+			$d[$k] = trim($d[$k],';');
+		}
+
 		$worksheet->write($curRow, $curColumn, $d[$k], $format_text);
 		$curColumn++;
     }

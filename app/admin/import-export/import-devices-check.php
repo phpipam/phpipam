@@ -26,7 +26,7 @@ if (!isset($custom_fields)) { $custom_fields = $Tools->fetch_custom_fields("devi
 
 # check which sections we need to care about
 $used_section = array();
-foreach ($data as &$cdata) { $used_section[strtolower($cdata['section'])]=$cdata['section']; }
+foreach ($data as &$cdata) { $used_section[strtolower($cdata['sections'])]=$cdata['sections']; }
 
 # fetch all sections and load all subnets
 $all_sections = $Sections->fetch_all_sections();
@@ -53,7 +53,7 @@ foreach ($devices as $d) {
 
 foreach ($deviceTypes as $d) {
     $d = (array) $d;
-    $edata['deviceTypes'][strtolower($d['tname'])] = $d;
+    $edata['deviceType'][strtolower($d['tname'])] = $d;
 }
 
 #error_log ( "devicestypes : " . json_encode ($deviceTypes) ) ;
@@ -72,19 +72,25 @@ foreach ($data as &$cdata) {
 		if ((!isset($cdata[$creq]) or ($cdata[$creq] == ""))) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
 	}
 
-	# Check if section is provided and valid and link it if it is
-	if (!isset($section_names[strtolower($cdata['section'])])) {
-		$msg.= "Invalid section."; $action = "error";
-	} else {
-		$cdata['sections'] = $section_names[strtolower($cdata['section'])]['id'];
+	# Check if sections are provided and valid and link them if they are
+	$cs = explode(";", $cdata['sections']); 
+	$cdata['sections'] = '';
+	foreach ($cs as $s) {
+		if (!isset($s) && !isset($section_names[strtolower($s)])) {
+			$msg.= "Invalid section(s)."; $action = "error";
+		} else {
+			$cdata['sections'] .= $section_names[strtolower($s)]['id'];
+			$cdata['sections'] .= ";";
+		}
 	}
+	$cdata['sections'] = trim($cdata['sections'],';');
 
 	# Check if deviceType is provided and valid and link it if it is
-	if (!isset($edata['deviceTypes'][strtolower($cdata['deviceType'])])
+	if (!isset($cdata['type']) && !isset($edata['deviceType'][strtolower($cdata['type'])])
 	    ) {
 		$msg.= "Invalid deviceType."; $action = "error";
 	} else {
-		$cdata['type'] = $edata['deviceTypes'][strtolower($cdata['deviceType'])]['tid'];
+		$cdata['type'] = $edata['deviceType'][strtolower($cdata['type'])]['tid'];
 	}
 
 	if ($action != "error") {
@@ -97,7 +103,8 @@ foreach ($data as &$cdata) {
     	        $msg.="Invalid IP address.";
     	        $action = "error";
     	    }
-		if ((!empty($cdata['hostname'])) and (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
+    	// Device hostnames are not checked when created via GUI ... Why retrict it on import ?
+		// if ((!empty($cdata['hostname'])) and (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
 #       Allow all chars in description ... Why Limit it ?
 #		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 		if ($cdata['mac']) {
@@ -111,14 +118,14 @@ foreach ($data as &$cdata) {
 		if (isset($edata['devices'][strtolower($cdata['hostname'])]) ) {
     		$cdata['id'] = $edata['devices'][strtolower($cdata['hostname'])]['id'];
 			# copy content to a variable for easier checks
-			$cedata = $edata[strtolower($cdata['hostname'])];
+			$cedata = $edata['devices'][strtolower($cdata['hostname'])];
 			# Check if we need to change any fields
 			$action = "skip"; # skip duplicate fields if identical, update if different
 			# Should we just let the database decided to update or not?  Nice for UI, but alot of
 			# code maintenance here.
 			if ($cdata['description'] != $cedata['description']) { $msg.= "Device description will be updated."; $action = "edit"; }
 			if ($cdata['ip_addr'] != $cedata['ip_addr']) { $msg.= "Device ip_addr will be updated."; $action = "edit"; }
-			if ($cdata['type'] != $cedata['type']) { $msg.= "DeviceType will be updated."; $action = "edit"; }
+			if ($cdata['type'] != $cedata['type']) { $msg.= "type will be updated."; $action = "edit"; }
 			if ($cdata['sectionId'] != $cedata['sectionId']) { $msg.= "sectionId will be updated."; $action = "edit"; }
 			if ($cdata['rack'] != $cedata['rack']) { $msg.= "rack will be updated."; $action = "edit"; }
 			if ($cdata['rack_start'] != $cedata['rack_start']) { $msg.= "rack_start will be updated."; $action = "edit"; }

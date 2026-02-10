@@ -105,9 +105,9 @@ elseif ($type == 'l2dom'){
 	// set headers
     $worksheet->write($lineCount, $curColumn++, _('hostname'));
     $worksheet->write($lineCount, $curColumn++, _('ip_addr'));
-    $worksheet->write($lineCount, $curColumn++, _('deviceType'));
+    $worksheet->write($lineCount, $curColumn++, _('type'));
     $worksheet->write($lineCount, $curColumn++, _('description'));
-    $worksheet->write($lineCount, $curColumn++, _('section'));
+    $worksheet->write($lineCount, $curColumn++, _('sections'));
 #    $worksheet->write($lineCount, $curColumn++, _('snmp_community'));
 #    $worksheet->write($lineCount, $curColumn++, _('snmp_version'));
 #    $worksheet->write($lineCount, $curColumn++, _('snmp_port'));
