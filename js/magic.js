@@ -1100,9 +1100,10 @@ function search_execute (loc) {
     var pstn      = $('#'+form_name+' input[name=pstn]').is(":checked") ? "on" : "off";
     var circuits  = $('#'+form_name+' input[name=circuits]').is(":checked") ? "on" : "off";
     var customers = $('#'+form_name+' input[name=customers]').is(":checked") ? "on" : "off";
+    var locations = $('#'+form_name+' input[name=locations]').is(":checked") ? "on" : "off";
 
     // set cookie json-encoded with parameters
-    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'","pstn":"'+pstn+'","circuits":"'+circuits+'","customers":"'+customers+'"}',365);
+    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'","pstn":"'+pstn+'","circuits":"'+circuits+'","customers":"'+customers+'","locations":"'+locations+'"}',365);
 
     //lets try to detect IEto set location
     var ua = window.navigator.userAgent;
