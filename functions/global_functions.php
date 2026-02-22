@@ -156,11 +156,7 @@ function set_ui_language($default_lang = null) {
 			continue;
 
 		putenv("LC_ALL=".$lang);
-
-		// https://help.ubuntu.com/community/EnvironmentVariables
-		// Unlike "LANG" and "LC_*", "LANGUAGE" should not be assigned a complete locale name including the encoding part (e.g. ".UTF-8").
 		putenv("LANG=".$lang);
-		putenv("LANGUAGE=".preg_replace("/\.utf-?8/i", "", $lang));
 
 		setlocale(LC_ALL, $lang);
 
