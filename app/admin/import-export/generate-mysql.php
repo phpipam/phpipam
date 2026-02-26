@@ -20,51 +20,41 @@ $User->check_user_session();
 
 $mysqldump = Config::ValueOf('mysqldump_cli_binary', '/usr/bin/mysqldump');
 
-# validate csrf cookie
-if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === false) {
-    $filename = "error_message.txt";
-
-    $content  = _("Invalid CSRF cookie");
-} elseif (!file_exists($mysqldump)) {
+if (!file_exists($mysqldump)) {
     $filename = "error_message.txt";
 
     $content  = _("Unable to locate executable: ") . $mysqldump . "\n";
     $content .= _("Please configure \$mysqldump_cli_binary in config.php\n");
 } else {
-    $filename = "phpipam_MySQL_dump_" . date("Y-m-d") . ".sql";
+    $tmp_file = tempnam(sys_get_temp_dir(), 'phpipam_mysqldump_');
 
-    $db = Config::ValueOf('db');
+    if ($tmp_file === false) {
+        $filename = "error_message.txt";
+        $content  = _("Unable to create tmp file");
+    } else {
+        $cnf_file = "$tmp_file.cnf";
+        rename($tmp_file, $cnf_file);
 
-    $command      = sprintf("%s --opt -h %s -u %s -p %s", escapeshellcmd($mysqldump), escapeshellarg($db['host']), escapeshellarg($db['user']), escapeshellarg($db['name']));
-    $command_safe = sprintf("%s --opt -h %s -u %s -p %s", escapeshellcmd($mysqldump), escapeshellarg($db['host']), _("'<REDACTED>'"), escapeshellarg($db['name']));
+        $fh = fopen($cnf_file, "w");
+        if ($fh !== false) {
+            $db = Config::ValueOf('db');
+            fputs($fh, sprintf("[mysqldump]\nhost=%s\nuser=%s\npassword=%s\n", $db['host'], $db['user'], $db['pass']));
 
-    $pipes = [];
+            $filename = "phpipam_MySQL_dump_" . date("Y-m-d") . ".sql";
 
-    $descriptorspec = [
-        0 => ["pipe", "r"], // STDIN
-        1 => ["pipe", "w"], // STDOUT
-        2 => ["pipe", "w"]  // STDERR
-    ];
+            $command = sprintf("%s --defaults-extra-file=$cnf_file --opt %s", escapeshellcmd($mysqldump), escapeshellarg($db['name']));
 
-    $content  = "# phpipam Database dump \n";
-    $content .= "#    command executed: $command_safe \n";
-    $content .= "# --------------------- \n\n";
+            $content  = "# phpipam Database dump \n";
+            $content .= "#    command executed: $command \n";
+            $content .= "# --------------------- \n\n";
+            $content .= shell_exec($command);
 
-    $process = proc_open($command, $descriptorspec, $pipes);
-    if (is_resource($process)) {
-        // Write password to STDIN
-        fwrite($pipes[0], $db['pass']);
-        fclose($pipes[0]);
-
-        // Read STDOUT
-        $content .= stream_get_contents($pipes[1]);
-        fclose($pipes[1]);
-
-        // Read STDERR
-        $content .= stream_get_contents($pipes[2]);
-        fclose($pipes[2]);
-
-        $return_value = proc_close($process);
+            fclose($fh);
+        } else {
+            $filename = "error_message.txt";
+            $content  = _("Unable to open tmp file");
+        }
+        unlink($cnf_file);
     }
 }
 
