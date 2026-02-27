@@ -1362,7 +1362,7 @@ $(document).on("click", ".groupselect", function() {
 $('#instructionsForm').submit(function () {
     var csrf_cookie = $("#instructionsForm input[name=csrf_cookie]").val();
     var id = $("#instructionsForm input[name=id]").val();
-    var instructions = CKEDITOR.instances.instructions.getData();
+    var instructions = $("#instructionsForm textarea[id=instructions]").val();
     $('div.instructionsPreview').hide('fast');
 
     showSpinner();
@@ -1375,7 +1375,7 @@ $('#instructionsForm').submit(function () {
 });
 $('#preview').click(function () {
     showSpinner();
-    var instructions = CKEDITOR.instances.instructions.getData();
+    var instructions = $("#instructionsForm textarea[id=instructions]").val();
 
     $.post('app/admin/instructions/preview.php', {instructions:instructions, csrf_cookie:$("#instructionsForm input[name=csrf_cookie]").val()}, function(data) {
         $('div.instructionsPreview').html(data).fadeIn('fast');
