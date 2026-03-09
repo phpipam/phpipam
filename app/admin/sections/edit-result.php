@@ -95,6 +95,10 @@ else {
 
 	list($removed_permissions, $changed_permissions, $new_permissions) = $Sections->get_permission_changes ($POST->as_array(), $old_permissions);
 
+	if (!in_array($POST->subnetOrdering, array_keys($Subnets->get_valid_subnet_orderings(true)))) {
+		$Result->show("danger", _("Invalid subnetOrdering"), true);
+	}
+
 	# set variables for update
 	$values = array(
 					"id"               => $POST->id,

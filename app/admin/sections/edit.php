@@ -11,6 +11,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
+$Subnets	= new Subnets($Database);
 $Sections	= new Sections ($Database);
 $Result 	= new Result ();
 
@@ -153,14 +154,7 @@ if (!is_object($section)) {
 			<td colspan="2">
 				<select name="subnetOrdering" class="form-control input-sm input-w-auto pull-left">
 					<?php
-					$opts = array(
-						"default"			=> _("Default"),
-						"subnet,asc"		=> _("Subnet, ascending"),
-						"subnet,desc"		=> _("Subnet, descending"),
-						"description,asc"	=> _("Description, ascending"),
-						"description,desc"	=> _("Description, descending"),
-					);
-
+					$opts = $Subnets->get_valid_subnet_orderings(true);
 					foreach($opts as $key=>$line) {
 						if($section->subnetOrdering == $key) 	{ print "<option value='$key' selected>$line</option>"; }
 						else 									{ print "<option value='$key'>$line</option>"; }

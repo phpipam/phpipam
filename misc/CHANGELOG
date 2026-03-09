@@ -1,3 +1,9 @@
+== 1.7.5
+
+    Security Fixes:
+    ----------------------------
+    + SQL injection via subnetOrdering;
+
 == 1.7.4
 
     Bugfixes:
