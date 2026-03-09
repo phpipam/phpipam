@@ -713,13 +713,7 @@ $(document).ready(function() {
 	<td>
 		<select name="subnetOrdering" class="form-control input-sm input-w-auto">
 			<?php
-			$opts = array(
-				"subnet,asc"		=> _("Subnet, ascending"),
-				"subnet,desc"		=> _("Subnet, descending"),
-				"description,asc"	=> _("Description, ascending"),
-				"description,desc"	=> _("Description, descending"),
-			);
-
+			$opts = $Subnets->get_valid_subnet_orderings(false);
 			foreach($opts as $key=>$line) {
 				if($settings['subnetOrdering'] == $key) { print "<option value='$key' selected>$line</option>"; }
 				else 									{ print "<option value='$key'>$line</option>"; }

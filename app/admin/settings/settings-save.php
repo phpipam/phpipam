@@ -11,6 +11,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
+$Subnets	= new Subnets ($Database);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -51,6 +52,10 @@ if (!in_array("gd", get_loaded_extensions()))                               { $R
 
 //remove link_field if None
 if ($POST->link_field=="None") $POST->link_field = "";
+
+if (!in_array($POST->subnetOrdering, array_keys($Subnets->get_valid_subnet_orderings(false)))) {
+	$Result->show("danger", _("Invalid subnetOrdering"), true);
+}
 
 # set update values
 $values = array("id"=>1,

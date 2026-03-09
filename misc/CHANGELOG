@@ -46,6 +46,7 @@
     + Added CSRF cookie for clear-changelog and clear-log;
     + Added CSRF cookie for data exports;
     + RCE - Authenticated remote code execution via ping_path;
+    + SQL injection via subnetOrdering;
 
     Translations:
     ----------------------------
