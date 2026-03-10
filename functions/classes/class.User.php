@@ -2146,28 +2146,69 @@ class User extends Common_functions {
     }
 
     /**
+     * Get available modules
+     *
+     * @method get_modules_with_permissions_prefix_perm
+     * @return array
+     */
+    public function get_modules_with_permissions_prefix_perm() {
+        $this->get_settings();
+
+        $perm_names = [];
+
+        if ($this->settings->enableCircuits == 1)
+            $perm_names['perm_circuits'] = "Circuits";
+
+        if ($this->settings->enableCustomers == 1)
+            $perm_names['perm_customers'] = "Customers";
+
+        $perm_names['perm_devices'] = "Devices";
+
+        $perm_names['perm_dhcp'] = "DHCP";
+
+        if ($this->settings->enableFirewallZones == 1)
+            $perm_names['perm_fwzones'] = "Firewall Zones";
+
+        $perm_names['perm_l2dom'] = "L2 Domains";
+
+        if ($this->settings->enableLocations == 1)
+            $perm_names['perm_locations'] = "Locations";
+
+        if ($this->settings->enableNAT == 1)
+            $perm_names['perm_nat'] = "NAT";
+
+        if ($this->settings->enablePowerDNS == 1)
+            $perm_names['perm_pdns'] = "PowerDNS";
+
+        if ($this->settings->enablePSTN == 1)
+            $perm_names['perm_pstn'] = "PSTN";
+
+        if ($this->settings->enableRACK == 1)
+            $perm_names['perm_racks'] = "Racks";
+
+        if ($this->settings->enableRouting == 1)
+            $perm_names['perm_routing'] = "Routing";
+
+        if ($this->settings->enableVaults == 1)
+            $perm_names['perm_vaults'] = "Vaults";
+
+        $perm_names['perm_vlan'] = "VLANs";
+
+        $perm_names['perm_vrf'] = "VRFs";
+
+        return $perm_names;
+    }
+
+    /**
      * Return array of all modules with permissions
      *
      * @method get_modules_with_permissions
      * @return array
      */
-    public function get_modules_with_permissions () {
-        return [
-                "vlan",
-                "l2dom",
-                "vrf",
-                "pdns",
-                "circuits",
-                "racks",
-                "nat",
-                "pstn",
-                "customers",
-                "locations",
-                "devices",
-                "dhcp",
-                "routing",
-                "vaults"
-            ];
+    public function get_modules_with_permissions() {
+        $modules = array_keys($this->get_modules_with_permissions_prefix_perm());
+        // remove perm_ prefix
+        return str_replace('perm_', '', $modules);
     }
 
     /**
