@@ -182,7 +182,8 @@ else {
 
 															// circuit
 															if ($o->type=="circuit") {
-																$provider = $Tools->fetch_object ("circuitProviders", "id", $o->id);
+																$circuit = $Tools->fetch_object ("circuits", "id", $o->id);
+																$provider = $Tools->fetch_object ("circuitProviders", "id", $circuit->provider);
 																$o->description = " <span class='text-muted'>($provider->name)</span>";
 															}
 															
