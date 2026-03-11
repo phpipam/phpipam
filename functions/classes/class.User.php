@@ -2164,7 +2164,8 @@ class User extends Common_functions {
 
         $perm_names['perm_devices'] = "Devices";
 
-        $perm_names['perm_dhcp'] = "DHCP";
+        if ($this->settings->enableDHCP == 1)
+            $perm_names['perm_dhcp'] = "DHCP";
 
         if ($this->settings->enableFirewallZones == 1)
             $perm_names['perm_fwzones'] = "Firewall Zones";
@@ -2194,7 +2195,8 @@ class User extends Common_functions {
 
         $perm_names['perm_vlan'] = "VLANs";
 
-        $perm_names['perm_vrf'] = "VRFs";
+        if ($this->settings->enableVRF == 1)
+            $perm_names['perm_vrf'] = "VRFs";
 
         return $perm_names;
     }
