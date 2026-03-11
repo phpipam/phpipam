@@ -3378,7 +3378,7 @@ class Subnets extends Common_functions {
 		if(!is_numeric($sectionId))		{ $this->Result->show("danger", _("Invalid ID"), true); }
 
 		$folders = array();
-		$section_subnets = $this->fetch_section_subnets ($sectionId, false, false, array('id', 'masterSubnetId', 'isFolder', 'subnet', 'mask', 'description'));
+		$section_subnets = $this->fetch_section_subnets ($sectionId, false, false);
 		if (!is_array($section_subnets)) $section_subnets = array();
 
 		foreach($section_subnets as $subnet) {
