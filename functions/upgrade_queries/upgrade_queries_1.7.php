@@ -72,3 +72,7 @@ $upgrade_queries["1.73.43"][] = "UPDATE `settings` set `version` = '1.73';";
 $upgrade_queries["1.74.43"]   = [];
 $upgrade_queries["1.74.43"][] = "-- Version update";
 $upgrade_queries["1.74.43"][] = "UPDATE `settings` set `version` = '1.74';";
+
+$upgrade_queries["1.75.43"]   = [];
+$upgrade_queries["1.75.43"][] = "-- Version update";
+$upgrade_queries["1.75.43"][] = "UPDATE `settings` set `version` = '1.75';";
