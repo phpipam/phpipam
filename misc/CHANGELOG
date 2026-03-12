@@ -2,6 +2,7 @@
 
     Security Fixes:
     ----------------------------
+    + XSS - via unescaped DHCP Kea hostname;
     + SQL injection via subnetOrdering;
 
 == 1.7.4

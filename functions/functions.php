@@ -54,6 +54,7 @@ if(!defined('BASE')) {
 
 /* @classes ---------------------- */
 require( dirname(__FILE__) . '/classes/class.Params.php' );		//Paramter handling class
+require( dirname(__FILE__) . '/classes/class.Rewrite.php' );	//Class for POST/GET rewriting
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions
 require( dirname(__FILE__) . '/classes/class.PDO.php' );		//Class PDO - wrapper for database
 require( dirname(__FILE__) . '/classes/class.User.php' );		//Class for active user management
@@ -73,7 +74,6 @@ require( dirname(__FILE__) . '/classes/class.Mail.php' );		//Class for Mailing
 require( dirname(__FILE__) . '/classes/class.Rackspace.php' );	//Class for Racks
 require( dirname(__FILE__) . '/classes/class.SNMP.php' );	    //Class for SNMP queries
 require( dirname(__FILE__) . '/classes/class.DHCP.php' );	    //Class for DHCP
-require( dirname(__FILE__) . '/classes/class.Rewrite.php' );	    //Class for DHCP
 require( dirname(__FILE__) . '/classes/class.SubnetsTree.php' );	    //Class for generating list of subnets based on nested tree structure
 require( dirname(__FILE__) . '/classes/class.SubnetsMenu.php' );	    //Class for generating subnets menu.
 require( dirname(__FILE__) . '/classes/class.SubnetsTable.php' );	    //Class for generating JSON to populate subnet <tables> using boostrap-tables.
