@@ -40,6 +40,7 @@
     ----------------------------
     + XSS - reflected via HTTP_X_FORWARDED_PORT;
     + XSS - Reflected in install scripts;
+    + XSS - via unescaped DHCP Kea hostname;
     + XSS - Unsafe HTML allowed in Request IP Instructions;
     + XSS - Unsafe HTML allowed in Password vault;
     + Local exposure of DB credentials via mysqldump;

@@ -180,6 +180,9 @@ class DHCP_kea extends Common_functions {
         $this->parse_config ();
         // parse and save subnets
         $this->parse_subnets ();
+
+        $Rewrite = new Rewrite();
+        $this->api = $Rewrite->is_api();
     }
 
     /**
@@ -197,6 +200,7 @@ class DHCP_kea extends Common_functions {
     private function init_database_conection ($username, $password, $host, $port, $dbname) {
         // open
         $this->Database_kea = new Database_PDO ($username, $password, $host, $port, $dbname);
+        $this->Database_kea->html_escape_enabled = $this->api ? false : true;
     }
 
 
@@ -357,6 +361,16 @@ class DHCP_kea extends Common_functions {
         }
         else {
             throw new exception("Cannot read leases file ".$lease_database['name']);
+        }
+
+        if (!$this->api) {
+            foreach ($leases_parsed as $lease) {
+                foreach($lease as $k => $v) {
+                    if (is_string($v)) {
+                            $lease[$k] = escape_input($v);
+                    }
+                }
+            }
         }
 
         // save result
