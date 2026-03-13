@@ -82,7 +82,7 @@ else {
             print " <td>$bgp->local_as</td>";
             print " <td>$bgp->peer_address</td>";
             print " <td>$bgp->local_address</td>";
-            print " <td>$bgp->bgp_type</td>";
+            print " <td>"._($bgp->bgp_type)."</td>";
             // subnets
             print " <td>".$Tools->fetch_routing_subnets ("bgp", $bgp->id, true)[0]->cnt."</td>";
 

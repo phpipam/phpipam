@@ -37,7 +37,7 @@ print "</tr>";
 
 print '<tr>';
 print "	<th>". _('Type').'</th>';
-print "	<td>".$type_hash[$circuit->type]."</td>";
+print "	<td>"._($type_hash[$circuit->type])."</td>";
 print "</tr>";
 
 print '<tr>';

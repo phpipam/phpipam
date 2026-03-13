@@ -19,7 +19,7 @@ $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 <?php if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) { ?>
 <div class="btn-group pull-right" style="margin-bottom:10px;">
 	<div class="hidden"><select name="dataType"><option value='vlan' selected="selected">VLAN</option></select></div>
-	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title="Export data entries for the selected type"><i class="fa fa-download"></i> Export</button>
+	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title='<?php print _("Export data entries for the selected type");?>'><i class="fa fa-download"></i><?php print _(" Export");?></button>
 </div>
 <?php } ?>
 
@@ -43,7 +43,7 @@ $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 	<td class='border-bottom'><?php print _('List of all VLANs in all domains'); ?></td>
 	<td class='border-bottom'></td>
 	<td class='border-bottom'><span class='text-muted'><?php print _('All sections'); ?></span></td>
-	<td class='border-bottom'><a class='btn btn-xs btn-default' href='<?php print create_link($GET->page, $GET->section, "all"); ?>'>Show VLANs</a></td>
+	<td class='border-bottom'><a class='btn btn-xs btn-default' href='<?php print create_link($GET->page, $GET->section, "all"); ?>'><?php print _("Show VLANs");?></a></td>
 	<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_RW) { ?><td class='border-bottom'></td><?php } ?>
 </tr>
 
@@ -55,10 +55,10 @@ foreach($vlan_domains as $domain) {
 
 	// format sections
 	if($domain->id==1) {
-		$sections = "All sections";
+		$sections = _("All sections");
 	}
 	elseif(is_blank(@$domain->permissions)) {
-		$sections = "None";
+		$sections = _("None");
 	}
 	else {
 		//explode
@@ -80,11 +80,11 @@ foreach($vlan_domains as $domain) {
 
 	// print
 	print "<tr class='text-top'>";
-	print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, $GET->section, $domain->id)."'><i class='fa fa-cloud prefix'></i> $domain->name</a></strong></td>";
-	print "	<td>$domain->description</td>";
+	print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, $GET->section, $domain->id)."'><i class='fa fa-cloud prefix'></i> "._($domain->name)."</a></strong></td>";
+	print "	<td>"._($domain->description)."</td>";
 	print "	<td>$cnt "._("VLANs")."</td>";
 	print "	<td><span class='text-muted'>$sections</span></td>";
-	print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, $GET->section, $domain->id)."'>Show VLANs</a></td>";
+	print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, $GET->section, $domain->id)."'>"._("Show VLANs")."</a></td>";
 
     // links
     print "<td class='actions'>";

@@ -13,7 +13,7 @@ print "</tr>";
 
 print '<tr>';
 print " <th>". _('BGP type').'</th>';
-print " <td>$bgp->bgp_type</td>";
+print " <td>"._($bgp->bgp_type)."</td>";
 print "</tr>";
 
 if ($User->settings->enableCustomers=="1") {

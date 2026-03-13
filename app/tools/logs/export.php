@@ -24,6 +24,7 @@ $User->check_user_session();
 // Create a workbook
 $filename = "phpipam_logs_export_". date("Y-m-d") .".xls";
 $workbook = new Spreadsheet_Excel_Writer();
+$workbook->setVersion(8);
 
 //increase memory size
 ini_set('memory_limit', '1024M');
@@ -72,6 +73,7 @@ $format_top->setTop(1);
 
 // Create a worksheet
 $worksheet =& $workbook->addWorksheet('phpipam logs');
+$worksheet->setInputEncoding("utf-8");
 
 $lineCount = 0;
 //Write titles

@@ -116,7 +116,7 @@ $colspan_dhcp = 4;
             // owner
             print "<td>$n->owner</td>";
             // state
-            print "<td>".$Addresses->address_type_index_to_type ($n->state)."</td>";
+            print "<td>"._($Addresses->address_type_index_to_type ($n->state))."</td>";
             // device
             if ($User->get_module_permissions ("devices")>=User::ACCESS_R) {
             print "<td>$device</td>";

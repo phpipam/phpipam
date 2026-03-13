@@ -28,6 +28,8 @@ is_numeric($GET->subnetId) ? : $Result->show("danger", _("Invalid ID"), true);
 print "<h4>"._("Belonging Circuits")."</h4><hr>";
 
 //fetch
+// ensure $device is an object to access ->id (some callers may provide arrays)
+if (is_array($device)) { $device = (object) $device; }
 $device_circuits = $Tools->fetch_all_device_circuits ($device->id);
 
 
@@ -79,9 +81,9 @@ else {
             print '<tr>'. "\n";
             print " <td><a class='btn btn-xs btn-default' href='".create_link("tools","circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
             print " <td><a href='".create_link("tools","circuits","providers",$circuit->pid)."'>$circuit->name</a></td>";
-            print " <td>{$type_hash[$circuit->type]}</td>";
+            print " <td>"._($type_hash[$circuit->type])."</td>";
             print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";
-            print " <td class='hidden-xs hidden-sm'>$circuit->status</td>";
+            print " <td class='hidden-xs hidden-sm'>"._($circuit->status)."</td>";
             if($User->get_module_permissions ("locations")>=User::ACCESS_R) {
             print " <td class='hidden-xs hidden-sm'>$locationA_html</td>";
             print " <td class='hidden-xs hidden-sm'>$locationB_html</td>";

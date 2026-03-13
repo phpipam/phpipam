@@ -85,7 +85,7 @@ else {
         // type
         print "<tr>";
         print "	<th>"._("Type")."</th>";
-        print " <td><span class='badge badge1 badge5'>".ucwords($n->type)." NAT</span></td>";
+        print " <td><span class='badge badge1 badge5'>"._(ucwords($n->type))." NAT</span></td>";
         print "</tr>";
         // policy
         print "<tr>";

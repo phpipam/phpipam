@@ -31,8 +31,8 @@ $csize = sizeof($custom_fields) - sizeof($hidden_fields);
 
 
 # title
-print "<h4>"._('Available VLANs in domain')." $vlan_domain->name</h4><hr>";
-print "<div class='text-muted' style='padding-left:10px;'>".$vlan_domain->description."</div>";
+print "<h4>"._('Available VLANs in domain')." "._($vlan_domain->name)."</h4><hr>";
+print "<div class='text-muted' style='padding-left:10px;'>"._($vlan_domain->description)."</div>";
 ?>
 <br>
 <div class="btn-group" style="margin-bottom:10px;">

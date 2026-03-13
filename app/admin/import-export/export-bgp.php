@@ -98,10 +98,28 @@ $worksheet->setInputEncoding("utf-8");
 $curRow = 0;
 $curColumn = 0;
 
-foreach ($fields as $k) {
-    $worksheet->write($curRow, $curColumn, ucwords(str_replace("_"," ",_($k))) ,$format_header);
-    $curColumn++;
-}
+//Write header row
+$worksheet->write($curRow, $curColumn, _('ID'), $format_header);
+$curColumn++;
+$worksheet->write($curRow, $curColumn, _('Local AS'), $format_header);
+$curColumn++;
+$worksheet->write($curRow, $curColumn, _('Local Address'), $format_header);
+$curColumn++;
+$worksheet->write($curRow, $curColumn, _('Peer Name'), $format_header);
+$curColumn++;
+$worksheet->write($curRow, $curColumn, _('Peer Address'), $format_header);
+$curColumn++;
+$worksheet->write($curRow, $curColumn, _('BGP Type'), $format_header);
+$curColumn++;
+$worksheet->write($curRow, $curColumn, _('VRF'), $format_header);
+$curColumn++;
+$worksheet->write($curRow, $curColumn, _('Circuit'), $format_header);
+$curColumn++;
+$worksheet->write($curRow, $curColumn, _('Customer'), $format_header);
+$curColumn++;
+$worksheet->write($curRow, $curColumn, _('Description'), $format_header);
+$curColumn++;
+
 
 $curRow++;
 $curColumn = 0;
@@ -114,10 +132,27 @@ foreach ($all_bgp_entries as $d) {
 	$d['circuit'] = $circuit_ids[$d['circuit_id']]['cid'];
 	$d['customer'] = $customer_ids[$d['customer_id']]['title'];
 
-    foreach ($fields as $k) {
-        $worksheet->write($curRow, $curColumn, $d[$k], $format_text);
-        $curColumn++;
-    }
+     // Write data fields in header-matching order
+	$worksheet->write($curRow, $curColumn, $d['id'], $format_text);
+	$curColumn++;
+	$worksheet->write($curRow, $curColumn, $d['local_as'], $format_text);
+	$curColumn++;
+	$worksheet->write($curRow, $curColumn, $d['local_address'], $format_text);
+	$curColumn++;
+	$worksheet->write($curRow, $curColumn, $d['peer_name'], $format_text);
+	$curColumn++;
+	$worksheet->write($curRow, $curColumn, $d['peer_address'], $format_text);
+	$curColumn++;
+	$worksheet->write($curRow, $curColumn, _($d['bgp_type']), $format_text); 
+	$curColumn++;
+	$worksheet->write($curRow, $curColumn, $d['vrf'], $format_text);
+	$curColumn++;
+	$worksheet->write($curRow, $curColumn, $d['circuit'], $format_text);
+	$curColumn++;
+	$worksheet->write($curRow, $curColumn, $d['customer'], $format_text);
+	$curColumn++;
+	$worksheet->write($curRow, $curColumn, $d['description'], $format_text);
+	$curColumn++;
 
 	$curRow++;
 	$curColumn = 0;

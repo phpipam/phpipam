@@ -38,7 +38,7 @@ $tabs = array("subnets", "leases", "reservations");
         	}
 
         	// check
-        	if(!in_array($GET->subnetId, $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
+        	if(!in_array($GET->subnetId, $tabs)) 	{ $Result->show("danger", _("Invalid request"), true); }
 
         	// print
         	foreach($tabs as $t) {
@@ -55,7 +55,7 @@ $tabs = array("subnets", "leases", "reservations");
         $filename = $GET->subnetId . ".php";
 
         // include file
-        if(!file_exists(dirname(__FILE__) . $filename)) 	{ $Result->show("danger", "Invalid request", true); }
+        if(!file_exists(dirname(__FILE__) . $filename)) 	{ $Result->show("danger", _("Invalid request"), true); }
         else											    { include(dirname(__FILE__) . $filename); }
         ?>
         </div>

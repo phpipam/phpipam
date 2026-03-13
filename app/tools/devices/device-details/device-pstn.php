@@ -90,7 +90,7 @@ else {
                 $cnt = $cnt_sl." Prefixes";
     		}
     		else {
-                $cnt = $Tools->count_database_objects("pstnNumbers", "prefix", $sp->id). " Addresses";
+                $cnt = $Tools->count_database_objects("pstnNumbers", "prefix", $sp->id). " "._('Addresses')."";
     		}
             print "	<td><span class='badge badge1 badge5'>".$cnt."</span></td>";
 
