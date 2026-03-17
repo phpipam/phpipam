@@ -86,9 +86,9 @@ else {
 		}
 		else {
 			$record = new Params ();
-			$record->name = $POST->name;
+			$record->name = escape_input($POST->name);
 			$record->ttl = (isset($pdns->ttl) && $pdns->ttl > 0) ? $pdns->ttl : 3600;
-			$record->content = $POST->id;
+			$record->content = escape_input($POST->id);
 		}
 	}
 }
@@ -99,7 +99,7 @@ $domain!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
 // default
 if (!isset($record)) {
-	$record = new StdClass ();
+	$record = new Params ();
 	$record->ttl = (isset($pdns->ttl) && $pdns->ttl > 0) ? $pdns->ttl : 3600;
 	$record->name = $domain->name;
 }
