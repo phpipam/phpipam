@@ -41,7 +41,7 @@ else 				{ $type = "WAN"; }
 	<li> <?php print _("TCP window size").": $tcp"; ?></li>
 	<li> <?php print _("Delay").": $delay"." "._("ms"); ?></li>
 	<li> <?php print _("Speed").": $mbps"." "._("MBps"); ?></li>
-	<li> <?php print _("Newtork type").": $type"; ?></li>
+	<li> <?php print _("Network type").": $type"; ?></li>
 	<li> <?php print _("File size").": $fsize"." "."MB"; ?></li>
 </ul>
 </p>
