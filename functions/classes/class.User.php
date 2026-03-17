@@ -1032,8 +1032,8 @@ class User extends Common_functions {
             $dirparams['use_tls'] = false;
             // Support the pre-1.2 auth settings as well as the current version
             // TODO: remove legacy support at some point
-            if ($authparams['ldap_security'] == 'tls' || $authparams['use_tls'] == 1)         { $dirparams['use_tls'] = true; }
-            elseif ($authparams['ldap_security'] == 'ssl' || $authparams['use_ssl'] == 1)     { $dirparams['use_ssl'] = true; }
+            if ($authparams['ldap_security'] == 'tls' || !empty($authparams['use_tls']))         { $dirparams['use_tls'] = true; }
+            elseif ($authparams['ldap_security'] == 'ssl' || !empty($authparams['use_ssl']))     { $dirparams['use_ssl'] = true; }
             if (isset($authparams['admin_username']) && isset($authparams['admin_password'])) {
                 $dirparams['admin_username'] = $authparams['adminUsername'];
                 $dirparams['admin_password'] = $authparams['adminPassword'];
