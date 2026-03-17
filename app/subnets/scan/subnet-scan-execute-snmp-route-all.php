@@ -227,7 +227,7 @@ else {
                         	foreach($permitted_domains as $d) {
                         		//more than default
                     			print "<optgroup label='".$d['domain']->name."'>";
-                    			if($d['vlans'][0]!==null) {
+                    			if(!empty($d['vlans']) && is_array($d['vlans'])) {
                     				foreach($d['vlans'] as $v) {
                     					// set print
                     					$printVLAN = $v->number;
@@ -249,7 +249,7 @@ else {
                             //blank
                             print '<option disabled="disabled">'._('Select VRF').'</option>';
                             print '<option value="0">'._('None').'</option>';
-                            if($vrfs!=false) {
+                            if(!empty($vrfs)) {
                     	        foreach($vrfs as $vrf) {
                         	        // set permitted
                         	        $permitted_sections = pf_explode(";", $vrf->sections);
