@@ -220,18 +220,18 @@ const startLogin = async (e) => {
 
         // process result by http status returned from passkey_login_check
         if(result.status==200) {
-            $('#loginCheckPasskeys').html("<div class='alert alert-success'>Passkey authentication successfull</div>").show();
+            $('#loginCheckPasskeys').html("<div class='alert alert-success'>"+ _("Passkey authentication successfull") +"</div>").show();
             setTimeout(loginRedirect2, 1000)
         }
         else {
-            $('#loginCheckPasskeys').html("<div class='alert alert-danger'>Passkey authentication failed!</div>").show();
+            $('#loginCheckPasskeys').html("<div class='alert alert-danger'>"+ _("Passkey authentication failed!") +"</div>").show();
             console.log(result)
             hideSpinner()
         }
     }
     // handle throwable error
     catch(err) {
-        $('#loginCheckPasskeys').html("<div class='alert alert-danger'>Passkey authentication failed!</div>").show();
+        $('#loginCheckPasskeys').html("<div class='alert alert-danger'>"+ _("Passkey authentication failed!") +"</div>").show();
         console.log(err)
         hideSpinner();
     }
