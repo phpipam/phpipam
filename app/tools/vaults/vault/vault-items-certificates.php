@@ -79,7 +79,7 @@ if($certificates_db!==false) {
 
 			// print
 			print "<tr class='text-top $warning'>";
-			print "	<td><strong><a href='".create_link("tools","vaults",$vault->id, $p->id)."'>".$values['name']."</a> $warningIcon</strong></td>";
+			print "	<td><strong><a href='".create_link("tools","vaults",$vault->id, $p->id)."'>".escape_input($values['name'])."</a> $warningIcon</strong></td>";
 			print "	<td>"._($pkey)."</td>";
 			print "	<td>$status</td>";
 			print "	<td>".$certificate['subject']['CN']."</td>";

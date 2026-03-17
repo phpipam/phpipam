@@ -18,7 +18,7 @@ if(!isset($GET->subnetId)) { $GET->subnetId = 1; }
 // validate
 if($GET->subnetId==1 || $GET->subnetId==2)  {
     # fetch instructions
-    $instructions = $Tools->fetch_instructions($GET->subnetId);
+    $instructions = $Tools->parsedown_instructions($GET->subnetId, false);
 
     # set params
     if($GET->subnetId==1)  {
@@ -41,7 +41,7 @@ if($GET->subnetId==1 || $GET->subnetId==2)  {
     </ul>
 
     <!-- title -->
-    <h4><?php print _($title); ?></h4>
+    <h4><?php print _($title); ?> : <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank" rel="noopener noreferrer"><?php print _("Markdown Cheat Sheet");?></a></h4>
     <hr>
 
 
@@ -51,14 +51,6 @@ if($GET->subnetId==1 || $GET->subnetId==2)  {
     	<textarea style="width:100%;" name="instructions" id="instructions" rows="<?php print $rowcount; ?>"><?php print $instructions; ?></textarea>
     	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	<input type="hidden" name="id" value="<?php print escape_input($GET->subnetId); ?>">
-
-    	<script src="js/ckeditor/ckeditor.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-    	<script>
-        	CKEDITOR.replace( 'instructions', {
-    	    	uiColor: '#f9f9f9',
-    	    	autoParagraph: false		//wrap inside p
-        	});
-        </script>
 
     	<!-- preview, submit -->
     	<br>

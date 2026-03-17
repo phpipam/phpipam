@@ -5,27 +5,41 @@
  *********************************/
 
 /* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
+require_once(dirname(__FILE__) . '/../../../functions/functions.php');
+require(dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
+# Don't corrupt output with php errors!
+disable_php_errors();
 
 # initialize user object
 $Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Sections	= new Sections ($Database);
-$Subnets	= new Subnets ($Database);
-$Addresses	= new Addresses ($Database);
-$Tools		= new Tools ($Database);
-$Admin		= new Admin ($Database);
-$Result 	= new Result ();
+$User 		= new User($Database);
+$Sections	= new Sections($Database);
+$Subnets	= new Subnets($Database);
+$Addresses	= new Addresses($Database);
+$Tools		= new Tools($Database);
+$Admin		= new Admin($Database);
+$Result 	= new Result();
 
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === false) {
+	$content  = _("Invalid CSRF cookie");
 
+	header("Cache-Control: private");
+	header("Content-Description: File Transfer");
+	header("Content-Type: application/octet-stream");
+	header('Content-Disposition: attachment; filename="' . "error_message.txt" . '"');
+	header("Content-Length: " . strlen($content));
+
+	print($content);
+	exit();
+}
 
 // Create a workbook
-$filename = "phpipam_IP_address_export_". date("Y-m-d") .".xls";
+$filename = "phpipam_IP_address_export_" . date("Y-m-d") . ".xls";
 $workbook = new Spreadsheet_Excel_Writer();
 $workbook->setVersion(8);
 
@@ -37,10 +51,10 @@ $ip_types = $Addresses->addresses_types_fetch();
 //fetch devices and reorder
 $devices = $Tools->fetch_all_objects("devices", "hostname");
 $devices_indexed = array();
-if ($devices!==false) {
-    foreach($devices as $d) {
-    	$devices_indexed[$d->id] = $d;
-    }
+if ($devices !== false) {
+	foreach ($devices as $d) {
+		$devices_indexed[$d->id] = $d;
+	}
 }
 
 
@@ -82,11 +96,11 @@ foreach ($sections as $section) {
 	$section = (array) $section;
 	// Create a worksheet
 	$worksheet_name = $Tools->shorten_text($section['name'], 30);
-	$worksheet =& $workbook->addWorksheet($worksheet_name);
+	$worksheet = &$workbook->addWorksheet($worksheet_name);
 	$worksheet->setInputEncoding("utf-8");
 
 	//get all subnets in this section
-	$subnets = $Subnets->fetch_section_subnets ($section['id']);
+	$subnets = $Subnets->fetch_section_subnets($section['id']);
 
 	$lineCount = 0;
 	//Write titles
@@ -94,87 +108,86 @@ foreach ($sections as $section) {
 		//cast
 		$subnet = (array) $subnet;
 		//ignore folders!
-		if($subnet['isFolder']!="1") {
+		if ($subnet['isFolder'] != "1") {
 			//vlan details
 			$vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
-			if(!is_blank($vlan['number'])) {
+			if (!is_blank($vlan['number'])) {
 				$vlanText = " (vlan: " . $vlan['number'];
-				if(!is_blank($vlan['name'])) {
-					$vlanText .= ' - '. $vlan['name'] . ')';
-				}
-				else {
+				if (!is_blank($vlan['name'])) {
+					$vlanText .= ' - ' . $vlan['name'] . ')';
+				} else {
 					$vlanText .= ")";
 				}
-			}
-			else {
+			} else {
 				$vlanText = "";
 			}
 
-			$worksheet->write($lineCount, 0, $Subnets->transform_to_dotted($subnet['subnet']) . "/" .$subnet['mask'] . " - " . $subnet['description'] . $vlanText, $format_header );
+			$worksheet->write($lineCount, 0, $Subnets->transform_to_dotted($subnet['subnet']) . "/" . $subnet['mask'] . " - " . $subnet['description'] . $vlanText, $format_header);
 			$worksheet->mergeCells($lineCount, 0, $lineCount, $colSize);
 
 			$lineCount++;
 
 			//IP addresses in subnet
-			$ipaddresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
+			$ipaddresses = $Addresses->fetch_subnet_addresses($subnet['id']);
 
 			//write headers
-			$worksheet->write($lineCount, 0, _('ip address' ),$format_title);
-			$worksheet->write($lineCount, 1, _('ip state' ),$format_title);
-			$worksheet->write($lineCount, 2, _('description' ),$format_title);
-			$worksheet->write($lineCount, 3, _('hostname' ),$format_title);
-			$worksheet->write($lineCount, 4, _('mac' ),$format_title);
-			$worksheet->write($lineCount, 5, _('owner' ),$format_title);
-			$worksheet->write($lineCount, 6, _('device' ),$format_title);
-			$worksheet->write($lineCount, 7, _('port' ),$format_title);
-			$worksheet->write($lineCount, 8, _('note' ),$format_title);
+			$worksheet->write($lineCount, 0, _('ip address'), $format_title);
+			$worksheet->write($lineCount, 1, _('ip state'), $format_title);
+			$worksheet->write($lineCount, 2, _('description'), $format_title);
+			$worksheet->write($lineCount, 3, _('hostname'), $format_title);
+			$worksheet->write($lineCount, 4, _('mac'), $format_title);
+			$worksheet->write($lineCount, 5, _('owner'), $format_title);
+			$worksheet->write($lineCount, 6, _('device'), $format_title);
+			$worksheet->write($lineCount, 7, _('port'), $format_title);
+			$worksheet->write($lineCount, 8, _('note'), $format_title);
 			$m = 9;
 			//custom
-			if(sizeof($myFields) > 0) {
-				foreach($myFields as $myField) {
-					$worksheet->write($lineCount, $m, $myField['name'] ,$format_title);
+			if (sizeof($myFields) > 0) {
+				foreach ($myFields as $myField) {
+					$worksheet->write($lineCount, $m, $myField['name'], $format_title);
 					$m++;
 				}
 			}
 
 			$lineCount++;
 
-			if(is_array($ipaddresses) && sizeof($ipaddresses) > 0) {
+			if (is_array($ipaddresses) && sizeof($ipaddresses) > 0) {
 
-			foreach ($ipaddresses as $ip) {
-				//cast
-				$ip = (array) $ip;
+				foreach ($ipaddresses as $ip) {
+					//cast
+					$ip = (array) $ip;
 
-				//reformat state
-				if(@$ip_types[$ip['state']]['showtag']==1) 	{ $ip['state'] = $ip_types[$ip['state']]['type']; }
-				else										{ $ip['state'] = ""; }
-
-				//change switch ID to name
-				$ip['switch'] = is_null($ip['switch'])||is_blank($ip['switch'])||$ip['switch']==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
-
-				$worksheet->write($lineCount, 0, $Subnets->transform_to_dotted($ip['ip_addr']), $format_left);
-				$worksheet->write($lineCount, 1, $ip['state']);
-				$worksheet->write($lineCount, 2, $ip['description']);
-				$worksheet->write($lineCount, 3, $ip['hostname']);
-				$worksheet->write($lineCount, 4, $ip['mac']);
-				$worksheet->write($lineCount, 5, $ip['owner']);
-				$worksheet->write($lineCount, 6, $ip['switch']);
-				$worksheet->write($lineCount, 7, $ip['port']);
-				$worksheet->write($lineCount, 8, $ip['note']);
-				//custom
-				$m = 9;
-				if(sizeof($myFields) > 0) {
-					foreach($myFields as $myField) {
-						$worksheet->write($lineCount, $m, $ip[$myField['name']]);
-						$m++;
+					//reformat state
+					if (@$ip_types[$ip['state']]['showtag'] == 1) {
+						$ip['state'] = $ip_types[$ip['state']]['type'];
+					} else {
+						$ip['state'] = "";
 					}
+
+					//change switch ID to name
+					$ip['switch'] = is_null($ip['switch']) || is_blank($ip['switch']) || $ip['switch'] == 0 ? "" : $devices_indexed[$ip['switch']]->hostname;
+
+					$worksheet->write($lineCount, 0, $Subnets->transform_to_dotted($ip['ip_addr']), $format_left);
+					$worksheet->write($lineCount, 1, $ip['state']);
+					$worksheet->write($lineCount, 2, $ip['description']);
+					$worksheet->write($lineCount, 3, $ip['hostname']);
+					$worksheet->write($lineCount, 4, $ip['mac']);
+					$worksheet->write($lineCount, 5, $ip['owner']);
+					$worksheet->write($lineCount, 6, $ip['switch']);
+					$worksheet->write($lineCount, 7, $ip['port']);
+					$worksheet->write($lineCount, 8, $ip['note']);
+					//custom
+					$m = 9;
+					if (sizeof($myFields) > 0) {
+						foreach ($myFields as $myField) {
+							$worksheet->write($lineCount, $m, $ip[$myField['name']]);
+							$m++;
+						}
+					}
+
+					$lineCount++;
 				}
-
-				$lineCount++;
-			}
-
-		}
-			else {
+			} else {
 				$worksheet->write($lineCount, 0, _('No hosts'));
 				$lineCount++;
 			}

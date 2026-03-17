@@ -16,7 +16,7 @@ if(!preg_match('/[^A-Za-z0-9-]*$/', $POST->type))       { $Result->show("danger"
 
 
 # invoke CLI with threading support
-$cmd = $Scan->php_exec." ".dirname(__FILE__) . '/../../../functions/scan/subnet-scan-icmp-execute.php'." 'discovery' ".$POST->subnetId;
+$cmd = sprintf("%s '%s/../../../functions/scan/subnet-scan-icmp-execute.php' 'discovery' %s", escapeshellcmd($Scan->php_exec), dirname(__FILE__), escapeshellarg($POST->subnetId));
 
 # save result to $output
 exec($cmd, $output, $retval);

@@ -927,7 +927,8 @@ $('a.csvExport').click(function() {
     showSpinner();
     var subnetId = $(this).attr('data-subnetId');
     //show select fields
-    $.post('app/subnets/addresses/export-field-select.php', {subnetId:subnetId}, function(data) {
+    csrf = $(this).attr('csrf')
+    $.post('app/subnets/addresses/export-field-select.php?csrf='+csrf, {subnetId:subnetId}, function(data) {
         $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
         hideSpinner();
@@ -938,7 +939,7 @@ $('a.csvExport').click(function() {
 $(document).on("click", "button#exportSubnet", function() {
     var subnetId = $('a.csvExport').attr('data-subnetId');
     //get selected fields
-    var exportFields = $('form#selectExportFields').serialize();
+    var exportFields = $('form#selectExportFields').serialize() + "&csrf=" + $(this).attr('csrf');
     $("div.dl").remove();    //remove old innerDiv
     $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/subnets/addresses/export-subnet.php?subnetId=" + subnetId + "&" + exportFields + "'></iframe></div>");
     return false;
@@ -1362,7 +1363,7 @@ $(document).on("click", ".groupselect", function() {
 $('#instructionsForm').submit(function () {
     var csrf_cookie = $("#instructionsForm input[name=csrf_cookie]").val();
     var id = $("#instructionsForm input[name=id]").val();
-    var instructions = CKEDITOR.instances.instructions.getData();
+    var instructions = $("#instructionsForm textarea[id=instructions]").val();
     $('div.instructionsPreview').hide('fast');
 
     showSpinner();
@@ -1375,7 +1376,7 @@ $('#instructionsForm').submit(function () {
 });
 $('#preview').click(function () {
     showSpinner();
-    var instructions = CKEDITOR.instances.instructions.getData();
+    var instructions = $("#instructionsForm textarea[id=instructions]").val();
 
     $.post('app/admin/instructions/preview.php', {instructions:instructions, csrf_cookie:$("#instructionsForm input[name=csrf_cookie]").val()}, function(data) {
         $('div.instructionsPreview').html(data).fadeIn('fast');
@@ -2635,8 +2636,10 @@ $('button#XLSdump, button#MySQLdump, button#hostfileDump').click(function () {
     else if ($(this).attr('id')=="MySQLdump")       { script = "generate-mysql.php"; }
     else if ($(this).attr('id')=="hostfileDump")    { script = "generate-hosts.php"; }
 
+    csrf = $(this).attr('csrf')
+
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/"+script+"'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/"+script+"?csrf="+csrf+"'></iframe></div>");
     hideSpinner();
 });
 
@@ -2652,11 +2655,12 @@ $('button.dataExport').click(function () {
     popsize["devices"] = "max";
     // get requested datatype
     var dataType = $('select[name=dataType]').find(":selected").val();
+    var csrf = $('select[name=dataType]').attr('csrf')
     hidePopups();
     //show popup window
     if (implemented.indexOf(dataType) > -1) {
         showSpinner();
-        $.post('app/admin/import-export/export-' + dataType + '-field-select.php', function(data) {
+        $.post('app/admin/import-export/export-' + dataType + '-field-select.php?csrf='+csrf, function(data) {
         if (popsize[dataType] !== undefined) {
             $('div.popup_'+popsize[dataType]).html(data);
             showPopup('popup_'+popsize[dataType]);
@@ -2678,7 +2682,7 @@ $('button.dataExport').click(function () {
 $(document).on("click", "button#dataExportSubmit", function() {
     //get selected fields
     var dataType = $(this).attr('data-type');
-    var exportFields = $('form#selectExportFields').serialize();
+    var exportFields = $('form#selectExportFields').serialize() + "&csrf=" + $(this).attr('csrf');
     //show popup window
     switch(dataType) {
         case 'vrf':

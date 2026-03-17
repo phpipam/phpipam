@@ -43,14 +43,14 @@ foreach ($devices_used as $d) {
         // remove those not in subnet
         if (sizeof($res)>0) {
            // save for debug
-           $debug[$d->hostname][$q] = $res;
+           $debug[$d->hostname]["get_routing_table"] = $res;
 
            // save result
-           $found[$d->id][$q] = $res;
+           $found[$d->id]["get_routing_table"] = $res;
         }
     } catch (Exception $e) {
        // save for debug
-       $debug[$d->hostname][$q] = $res;
+       $debug[$d->hostname]["get_routing_table"] = $res;
        $errors[] = $e->getMessage();
 	}
 }
@@ -96,6 +96,10 @@ else {
                 	print "</tr>";
 
                     print "<tbody id=device-$deviceid>";
+
+                    // Initialize a dedicated counter before the loop
+                    $ip_counter = 0;
+
                 	foreach ($query_result as $ip) {
                     	//get bitmask
                     	foreach ($masks as $k=>$m) {
@@ -113,7 +117,8 @@ else {
                 		print 	"<td><a href='' class='btn btn-xs btn-success select-snmp-subnet' data-subnet='$ip[subnet]' data-mask='$ip[bitmask]'><i class='fa fa-check'></i> "._('Select')."</a></td>";
                 		print "</tr>";
 
-                		$m++;
+                        // Use the new, correct counter variable
+                		$ip_counter++;
                     }
                     print "</tbody>";
                 }

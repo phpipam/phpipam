@@ -54,14 +54,14 @@ foreach ($devices_used as $d) {
        // remove those not in subnet
        if (sizeof($res)>0) {
            // save for debug
-           $debug[$d->hostname][$q] = $res;
+           $debug[$d->hostname]["get_routing_table"] = $res;
 
            // save result
-           $found[$d->id]["get_vlan_table"] = $res;
+           $found[$d->id]["get_routing_table"] = $res;
         }
     } catch (Exception $e) {
        // save for debug
-       $debug[$d->hostname]["get_vlan_table"] = $res ?? null;
+       $debug[$d->hostname]["get_routing_table"] = $res ?? null;
 
        $errors[] = $e->getMessage();
 	}
@@ -227,7 +227,7 @@ else {
                         	foreach($permitted_domains as $d) {
                         		//more than default
                     			print "<optgroup label='".$d['domain']->name."'>";
-                    			if($d['vlans'][0]!==null) {
+                    			if(!empty($d['vlans']) && is_array($d['vlans'])) {
                     				foreach($d['vlans'] as $v) {
                     					// set print
                     					$printVLAN = $v->number;
@@ -249,7 +249,7 @@ else {
                             //blank
                             print '<option disabled="disabled">'._('Select VRF').'</option>';
                             print '<option value="0">'._('None').'</option>';
-                            if($vrfs!=false) {
+                            if(!empty($vrfs)) {
                     	        foreach($vrfs as $vrf) {
                         	        // set permitted
                         	        $permitted_sections = pf_explode(";", $vrf->sections);

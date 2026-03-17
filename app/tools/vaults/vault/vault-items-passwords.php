@@ -52,15 +52,15 @@ if($passwords!==false) {
 
 		// print
 		print "<tr class='$trclass'>";
-		print "	<td><strong>".$values['name']."</strong></td>";
-		print "	<td>".$values['username']."</td>";
+		print "	<td><strong>".escape_input($values['name'])."</strong></td>";
+		print "	<td>".escape_input($values['username'])."</td>";
 		if($trclass=="alert-danger") {
 		print "	<td><i class='fa fa-warning' style='width:20px;'></i> <span>********</span></td>";
 		}
 		else {
-		print "	<td><i class='fa fa-eye passShow' style='width:20px;' rel='tooltip' title='Show password' data-pass='".$values['password']."'></i> <span>********</span></td>";
+		print "	<td><i class='fa fa-eye passShow' style='width:20px;' rel='tooltip' title='Show password' data-pass='".escape_input($values['password'])."'></i> <span>********</span></td>";
 		}
-		print "	<td class='hidden-sm'>".$values['description']."</td>";
+		print "	<td class='hidden-sm'>".escape_input($values['description'])."</td>";
 
         // custom fields
         if(sizeof(@$custom_fields) > 0) {
