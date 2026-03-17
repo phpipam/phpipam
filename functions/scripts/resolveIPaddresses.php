@@ -101,6 +101,6 @@ if (is_array($ipaddresses)) {
 
 # if verbose print result so it can be emailed via cron!
 if($config['resolve_verbose'] == true && isset($res)) {
-	print implode("\n", $res);
+	print implode("\n", $res)."\n";
 }
 ?>
