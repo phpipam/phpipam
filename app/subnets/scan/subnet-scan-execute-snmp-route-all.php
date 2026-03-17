@@ -54,14 +54,14 @@ foreach ($devices_used as $d) {
        // remove those not in subnet
        if (sizeof($res)>0) {
            // save for debug
-           $debug[$d->hostname][$q] = $res;
+           $debug[$d->hostname]["get_routing_table"] = $res;
 
            // save result
-           $found[$d->id]["get_vlan_table"] = $res;
+           $found[$d->id]["get_routing_table"] = $res;
         }
     } catch (Exception $e) {
        // save for debug
-       $debug[$d->hostname]["get_vlan_table"] = $res ?? null;
+       $debug[$d->hostname]["get_routing_table"] = $res ?? null;
 
        $errors[] = $e->getMessage();
 	}
