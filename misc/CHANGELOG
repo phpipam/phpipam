@@ -39,6 +39,10 @@
     + Added CSRF cookie for data exports;
     + RCE - Authenticated remote code execution via ping_path;
 
+    Translations:
+    ----------------------------
+    + Updated Russian translation (#4489);
+
 == 1.7.0
 
     New features:
