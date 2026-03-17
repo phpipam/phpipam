@@ -14,11 +14,20 @@
     + Fixed required fields validation (#4328);
     + Can not empty address fields (#4322);
     + Rack module allows devices to exceed rack boundaries (#4423);
+    + Rack dropdown providing option that is impossible (#4409);
+    + API call to PATCH vlan fails with "Vlan name is required" (#1356);
+    + Invalid content type when using API (#4168);
+    + Deletion of Default L2domain permitted through API (#4419);
+    + Empty POST to Devices API Controller produces a blank device (#4307);
+    + jQuery error when adding an IP address range (#4350);
+    + Request new IP hangs (#4346);
 
     Enhancements, changes:
     ----------------------------
     + Don't update PowerDNS `change_date` removed in v2.1.9;
     + Added Isle of Man postcodes (#4318);
+    + Added `lastSeen` to IP Address export (#2433);
+    + User and Edit IP instructions now use Markdown;
     + Make Rack Devices Clickable from picture (#2372);
     + Setting to enable/disable devices overlapping in racks (#4424);
     + Colorization of rack devices; devices can be deep (front & back) of a rack (#4431);
@@ -29,7 +38,16 @@
     ----------------------------
     + XSS - reflected via HTTP_X_FORWARDED_PORT;
     + XSS - Reflected in install scripts;
-    + Addedd CSRF cookie for clear-changelog and clear-log;
+    + XSS - Unsafe HTML allowed in Request IP Instructions;
+    + XSS - Unsafe HTML allowed in Password vault;
+    + Local exposure of DB credentials via mysqldump;
+    + Added CSRF cookie for clear-changelog and clear-log;
+    + Added CSRF cookie for data exports;
+    + RCE - Authenticated remote code execution via ping_path;
+
+    Translations:
+    ----------------------------
+    + Updated Russian translation (#4489);
 
 == 1.7.0
 

@@ -23,43 +23,7 @@ foreach ($User->get_modules_with_permissions() as $m) {
     }
 }
 
-
-// VLAN
-$perm_names['perm_vlan'] = "VLAN";
-// L2Domains
-$perm_names['perm_l2dom'] = "L2 Domains";
-// VRF
-$perm_names['perm_vrf'] = "VRF";
-// PDNS
-if ($User->settings->enablePowerDNS==1)
-$perm_names['perm_pdns'] = "PowerDNS";
-// Devices
-$perm_names['perm_devices'] = "Devices";
-// Racks
-if ($User->settings->enableRACK==1)
-$perm_names['perm_racks'] = "Racks";
-// Circuits
-if ($User->settings->enableCircuits==1)
-$perm_names['perm_circuits'] = "Circuits";
-// NAT
-if ($User->settings->enableNAT==1)
-$perm_names['perm_nat'] = "NAT";
-// Customers
-if ($User->settings->enableCustomers==1)
-$perm_names['perm_customers'] = "Customers";
-// Locations
-if ($User->settings->enableLocations==1)
-$perm_names['perm_locations'] = "Locations";
-// pstn
-if ($User->settings->enablePSTN==1)
-$perm_names['perm_pstn'] = "PSTN";
-// routing
-if ($User->settings->enableRouting==1)
-$perm_names['perm_routing'] = "Routing";
-// vaults
-if ($User->settings->enableVaults==1)
-$perm_names['perm_vaults'] = "Vaults";
-
+$perm_names = $User->get_modules_with_permissions_prefix_perm();
 
 // user page
 if(($GET->page=="administration" && $GET->section=="users" && $GET->sPage=="modules") || ($GET->section=="user-menu")) {

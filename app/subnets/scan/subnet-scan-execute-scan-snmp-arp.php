@@ -27,6 +27,7 @@ if($Subnets->check_permission ($User->user, $POST->subnetId) != 3) 	{ $Result->s
 
 # set class
 $Snmp = new phpipamSNMP ();
+$subnet_ip_addresses = array();
 
 // fetch all existing hosts
 $all_subnet_hosts = (array) $Addresses->fetch_subnet_addresses ($POST->subnetId);

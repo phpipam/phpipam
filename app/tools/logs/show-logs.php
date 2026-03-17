@@ -102,6 +102,9 @@ foreach ($logs as $log) {
 	/* reformat details */
 	$log['details'] = str_replace("\"", "'", $log['details']);
 
+    # check if site is demo
+    if(defined('IS_DEMO')) { $log['ipaddr'] = "x.x.x.x"; }
+
     print '<tr class="'.$color.' '. $log['severityText'] .'" id="'. $log['id'] .'">'. "\n";
  	print '	<td class="date">'. $log['date']     .'</td>'. "\n";
     print '	<td class="severity"><span>'. $log['severity'] .'</span>'. $log['severityText'] .'</td>'. "\n";
