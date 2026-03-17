@@ -87,7 +87,7 @@ class Vlans_controller extends Common_api_functions {
 	public function GET () {
 		// all
 		if (!isset($this->_params->id) || $this->_params->id == "all") {
-			$result = $this->Tools->fetch_all_objects ("vlans", 'vlanId');
+			$result = $this->fetch_all_with_filter("vlans", "vlanId");
 			// check result
 			if($result===false)						{ $this->Response->throw_exception(404, 'No vlans configured'); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
@@ -96,18 +96,15 @@ class Vlans_controller extends Common_api_functions {
 		elseif(@$this->_params->id2=="subnets") {
 			// first validate
 			$this->validate_vlan ();
-			// save result
-			$result = $this->Tools->fetch_multiple_objects ("subnets", "vlanId", $this->_params->id, 'id', true);
-
-			// only 1 section ?
+			// save result - filter by sectionId at SQL level if provided
 			if(isset($this->_params->id3)) {
-				if($result!=NULL) {
-					foreach ($result as $k=>$r) {
-						if($r->sectionId!=$this->_params->id3) {
-							unset($result[$k]);
-						}
-					}
-				}
+				$result = $this->Database->getObjectsQuery("subnets",
+					"SELECT * FROM `subnets` WHERE `vlanId` = ? AND `sectionId` = ? ORDER BY `id` ASC",
+					array($this->_params->id, $this->_params->id3));
+				$result = (is_array($result) && sizeof($result) > 0) ? $result : null;
+			}
+			else {
+				$result = $this->Tools->fetch_multiple_objects ("subnets", "vlanId", $this->_params->id, 'id', true);
 			}
 
 			// add gateway
@@ -285,13 +282,11 @@ class Vlans_controller extends Common_api_functions {
 
 		//if it already exist die
 		if($this->settings->vlanDuplicate==0 && $_SERVER['REQUEST_METHOD']=="POST") {
-			$check_vlan = $this->Admin->fetch_multiple_objects ("vlans", "domainId", $this->_params->domainId, "vlanId");
-			if($check_vlan!==false) {
-				foreach($check_vlan as $v) {
-					if($v->number == $this->_params->number) {
-																							{ $this->Response->throw_exception(409, "Vlan already exists"); }
-					}
-				}
+			$check_vlan = $this->Database->getObjectQuery("vlans",
+				"SELECT * FROM `vlans` WHERE `domainId` = ? AND `number` = ? LIMIT 1",
+				array($this->_params->domainId, $this->_params->number));
+			if($check_vlan!==false && $check_vlan!==null) {
+				$this->Response->throw_exception(409, "Vlan already exists");
 			}
 		}
 

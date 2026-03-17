@@ -148,7 +148,7 @@ class Sections_controller extends Common_api_functions {
 		# all sections
 		else {
 				// all sections
-				$result = $this->Sections->fetch_all_sections();
+				$result = $this->fetch_all_with_filter("sections", "order");
 				// check result
 				if($result===false) 					{ return array("code"=>200, "message"=>"No sections available"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
