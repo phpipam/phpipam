@@ -96,11 +96,11 @@ if(!isset($userinfo['count'])) {
 		foreach($userinfo as $u) {
 			print "<tr>";
 			print "	<td>".escape_input($u['displayname'][0])."</td>";
-			print "	<td>".escape_input($u['samaccountname'][0])."</td>";
+			print "	<td>".escape_input($esc_dname)."</td>";
 			print "	<td>".escape_input($u['mail'][0])."</td>";
 			//actions
 			print " <td style='width:10px;'>";
-			print "		<a href='' class='btn btn-sm btn-default btn-success userselect' data-uname='".escape_input($u['displayname'][0])."' data-username='".escape_input($u['samaccountname'][0])."' data-email='".escape_input($u['mail'][0])."' data-server='".escape_input($POST->server)."' data-server-type='".$server->type."'>"._('Select')."</a>";
+			print "		<a href='' class='btn btn-sm btn-default btn-success userselect' data-uname='".escape_input($u['displayname'][0])."' data-username='".escape_input($esc_dname)."' data-email='".escape_input($u['mail'][0])."' data-server='".escape_input($POST->server)."' data-server-type='".$server->type."'>"._('Select')."</a>";
 			print "	</td>";
 			print "</tr>";
 		}
