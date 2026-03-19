@@ -264,35 +264,18 @@ try {
 	}
 
 	// if lock is enabled wait until it clears
-	if( $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
-    	// set transaction lock file name
-    	$controller->set_transaction_lock_file ($lock_file);
+	if( $app->app_lock==1 && (strtoupper($_SERVER['REQUEST_METHOD'])=="POST" || strtoupper($_SERVER['REQUEST_METHOD'])=="PATCH")) {
 
-    	// check if locked form previous process
-    	while ($controller->is_transaction_locked ()) {
-        	// max ?
-        	if ((microtime(true) - $start) > $app->app_lock_wait) {
-            	$Response->throw_exception(503, "Transaction timed out after $app->app_lock_wait seconds because of transaction lock");
-        	}
-        	// add random delay
-        	usleep(rand(250000,500000));
-    	}
+		// Lock released when $Lock variable descoped
+		$Lock = new LockForUpdateFile($lock_file);
+		$Lock->obtain_lock($app->app_lock_wait);
 
-    	// add new lock
-    	$controller->add_transaction_lock ();
-    	// execute the action
+    	// execute the action with lock
     	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
     }
     else {
-    	// execute the action
+    	// execute the action without lock
     	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
-    }
-
-    // remove transaction lock
-    if(is_object($controller) && $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
-        if($controller->is_transaction_locked ()) {
-            $controller->remove_transaction_lock ();
-        }
     }
 } catch ( Exception $e ) {
 	// catch any exceptions and report the problem
@@ -304,13 +287,6 @@ try {
 		$Response->result['success'] = false;
 		$Response->result['code'] 	 = 500;
 		$Response->result['message'] = $result;
-	}
-
-    // remove transaction lock
-    if(isset($controller) && $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
-        if($controller->is_transaction_locked ()) {
-            $controller->remove_transaction_lock ();
-        }
     }
 }
 

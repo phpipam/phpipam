@@ -312,7 +312,8 @@ class Addresses_controller extends Common_api_functions  {
     		if($subnet->isFull==1)                       { $this->Response->throw_exception(404, "No free addresses found (subnet is full)"); }
 
     		// Obtain exclusive MySQL lock so parallel API requests on the same object are thread safe.
-    		$Lock = new LockForUpdate($this->Database, 'subnets', $subnet->id);
+    		$Lock = new LockForUpdateMySQL($this->Database, 'subnets', $subnet->id);
+    		$Lock->obtain_lock(-1);
 
     		$this->_params->ip_addr = $this->Addresses->get_first_available_address ($subnet->id);
     		// null

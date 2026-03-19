@@ -89,7 +89,8 @@ class Subnets_controller extends Common_api_functions {
 			$this->validate_subnet_id ();
 
 			// Obtain exclusive MySQL lock so parallel API requests on the same object are thread safe.
-			$Lock = new LockForUpdate($this->Database, 'subnets', $this->_params->id);
+			$Lock = new LockForUpdateMySQL($this->Database, 'subnets', $this->_params->id);
+			$Lock->obtain_lock(-1);
 
 			$direction = ($this->_params->id2=="first_subnet") ? Subnets::SEARCH_FIND_FIRST : Subnets::SEARCH_FIND_LAST;
 			$this->post_find_free_subnet($direction);
