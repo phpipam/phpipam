@@ -1,7 +1,7 @@
 <table class="donate">
 <tr>
 	<td>
-		<a href="http://phpipam.net">phpIPAM IP address management <?php print '[v'. VERSION_VISIBLE. ']'; ?></a>
+		<a href="http://phpipam.net" target='_blank'>phpIPAM IP address management <?php print '[v'. VERSION_VISIBLE. ']'; ?></a>
 		<?php
 		// Display SCHEMA database version in development builds
 		if(PUBLISHED===false) {
@@ -9,7 +9,7 @@
 		}
 		// show github tree ref (Docker builds)
 		if (defined("GIT_VCS_REF")) {
-			print " git <a href='https://github.com/phpipam/phpipam/tree/".GIT_VCS_REF."'>".GIT_VCS_REF."</a>";
+			print " git <a href='https://github.com/phpipam/phpipam/tree/".GIT_VCS_REF."' target='_blank'>".GIT_VCS_REF."</a>";
 		}
 		?>
 	</td>
