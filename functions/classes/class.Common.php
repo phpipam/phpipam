@@ -655,71 +655,6 @@ class Common_functions  {
 	}
 
 	/**
-	 * Remove common XSS vectors.
-	 * This function is not and will never be 100% effective.
-	 *
-	 * TODO: Switch user instructions to use markdown. Sanitising raw HTML is impossible.
-	 *
-	 * @param   string  $html
-	 * @return  string
-	 */
-	public function noxss_html($html) {
-		if (!is_string($html) || is_blank($html))
-			return "";
-
-		// Convert encoding to UTF-8
-		$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
-
-		// Throw loadHTML() parsing errors
-		$err_mode = libxml_use_internal_errors(false);
-		$php_reporting = error_reporting(0);
-
-		try {
-			$dom = new \DOMDocument();
-			if ($dom->loadHTML("<html>".$html."</html>", LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NOERROR) === false)
-				return "";
-
-			$banned_elements = ['script', 'iframe', 'embed', 'object'];
-			$remove_elements = [];
-
-			$elements = $dom->getElementsByTagName('*');
-
-			if (is_object($elements) && $elements->length>0) {
-				foreach($elements as $e) {
-					if (in_array($e->nodeName, $banned_elements)) {
-						$remove_elements[] = $e;
-						continue;
-					}
-
-					if (!$e->hasAttributes())
-						continue;
-
-					// remove on* HTML event attributes
-					foreach ($e->attributes as $attr) {
-						if (substr($attr->nodeName,0,2) == "on")
-							$e->removeAttribute($attr->nodeName);
-					}
-				}
-
-				// Remove banned elements
-				foreach($remove_elements as $e)
-					$e->parentNode->removeChild($e);
-
-				// Return sanitised HTML
-				$html = str_replace(['<html>', '</html>'], '', $dom->saveHTML());
-			}
-		} catch (Exception $e) {
-			$html = "";
-		}
-
-		// restore error mode
-		libxml_use_internal_errors($err_mode);
-		error_reporting($php_reporting);
-
-		return is_string($html) ? $html : "";
-	}
-
-	/**
 	 * Changes empty array fields to specified character
 	 *
 	 * @access public
@@ -2180,9 +2115,23 @@ class Common_functions  {
 							$title[] = $location->name;
 						}
 					} elseif ($get['section'] == "circuits") {
-						$circuit = $this->fetch_object("circuits", "id", $get['subnetId']);
-						if (is_object($circuit)) {
-							$title[] = $circuit->cid;
+						if (isset($get['sPage'])) {
+							if ($get['subnetId']=="logical") {
+								$circuit = $this->fetch_object("circuitsLogical", "id", $get['sPage']);
+								if (is_object($circuit)) {
+									$title[] = $circuit->logical_cid;
+								}
+							} elseif ($get['subnetId']=="providers") {
+								$provider = $this->fetch_object("circuitProviders", "id", $get['sPage']);
+								if (is_object($provider)) {
+									$title[] = $provider->name;
+								}
+							}
+						} else {
+							$circuit = $this->fetch_object("circuits", "id", $get['subnetId']);
+							if (is_object($circuit)) {
+								$title[] = $circuit->cid;
+							}
 						}
 					} elseif ($get['section'] == "pstn-prefixes") {
 						$prefix = $this->fetch_object("pstnPrefixes", "id", $get['subnetId']);

@@ -728,7 +728,7 @@ class Admin extends Common_functions {
 	    $field['fieldDefault'] = is_blank($field['fieldDefault']) ? NULL : $field['fieldDefault'];
 
 	    # character set if needed
-	    if($field['fieldType']=="varchar" || $field['fieldType']=="text" || $field['fieldType']=="set" || $field['fieldType']=="enum")	{ $charset = "CHARACTER SET utf8mb4"; }
+	    if($field['fieldType']=="varchar" || $field['fieldType']=="text" || $field['fieldType']=="set" || $field['fieldType']=="enum")	{ $charset = "CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"; }
 	    else																															{ $charset = ""; }
 
 	    # escape fields

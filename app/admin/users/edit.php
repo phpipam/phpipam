@@ -364,42 +364,7 @@ $(document).ready(function(){
 	print '</tr>';
 
 	// Modules permissions
-	$perm_modules = [];
-	// VLAN
-	$perm_modules["perm_vlan"] = "VLAN";
-	// VLAN
-	$perm_modules["perm_l2dom"] = "L2Domains";
-	// VRF
-	$perm_modules["perm_vrf"]  = "VRF";
-	// powerDNS
-	if ($User->settings->enablePowerDNS==1)
-	$perm_modules["perm_pdns"] = "PowerDNS";
-	// devices
-	$perm_modules["perm_devices"] = "Devices";
-	// Racks
-	if ($User->settings->enableRACK==1)
-	$perm_modules["perm_racks"] = "Racks";
-	// Circuits
-	if ($User->settings->enableCircuits==1)
-	$perm_modules["perm_circuits"] = "Circuits";
-	// NAT
-	if ($User->settings->enableNAT==1)
-	$perm_modules["perm_nat"] = "NAT";
-	// Customers
-	if ($User->settings->enableCustomers==1)
-	$perm_modules["perm_customers"] = "Customers";
-	// Locations
-	if ($User->settings->enableLocations==1)
-	$perm_modules["perm_locations"] = "Locations";
-	// PSTN
-	if ($User->settings->enablePSTN==1)
-	$perm_modules["perm_pstn"] = "PSTN";
-	// Routing
-	if ($User->settings->enableRouting==1)
-	$perm_modules["perm_routing"] = "Routing";
-	// Vaults
-	if ($User->settings->enableVaults==1)
-	$perm_modules["perm_vaults"] = "Vaults";
+	$perm_modules = $User->get_modules_with_permissions_prefix_perm();
 
 	// Set default module permissions
 	foreach ($perm_modules as $key => $name) {

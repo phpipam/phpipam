@@ -26,7 +26,7 @@ $POST->port = str_replace(";",",",$POST->port);
 if(!is_numeric($POST->subnetId)) { $Result->show("danger", _('Invalid subnet Identifier').'!', true); }
 
 # invoke CLI with threading support
-$cmd = $Scan->php_exec." ".dirname(__FILE__) . "/../../../functions/scan/subnet-scan-telnet-execute.php ".$POST->subnetId." '".$POST->port."'";
+$cmd = sprintf("%s '%s/../../../functions/scan/subnet-scan-telnet-execute.php' %s %s", escapeshellcmd($Scan->php_exec), dirname(__FILE__), escapeshellarg($POST->subnetId), escapeshellarg($POST->port));
 
 # save result to $output
 exec($cmd, $output, $retval);
