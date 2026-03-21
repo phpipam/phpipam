@@ -263,20 +263,38 @@ try {
 		$Response->throw_exception(501, $Response->errors[501]);
 	}
 
-	// if lock is enabled wait until it clears
-	if( $app->app_lock==1 && (strtoupper($_SERVER['REQUEST_METHOD'])=="POST" || strtoupper($_SERVER['REQUEST_METHOD'])=="PATCH")) {
+	// Transaction locking is only enabled for POST, PUT, PATCH and DELETE requests.
+	if (in_array(strtoupper($_SERVER['REQUEST_METHOD']), ["POST", "PUT", "PATCH", "DELETE"])) {
+		$lock_type = $app->app_lock_type;
 
-		// Lock released when $Lock variable descoped
-		$Lock = new LockForUpdateFile($lock_file);
-		$Lock->obtain_lock($app->app_lock_wait);
+		if ($lock_type == "Auto") {
+			// Default to MySQL row locking when loadbalanced
+			$lock_type = (Config::ValueOf('trust_x_forwarded_headers') === true) ? "MySQL" : "File";
+		}
 
-    	// execute the action with lock
-    	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
-    }
-    else {
-    	// execute the action without lock
-    	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
-    }
+		if ($lock_type == "File") {
+			$Lock = new LockForUpdateFile($lock_file);
+			$Lock->obtain_lock($app->app_lock_wait);
+
+			// Execute the action with file lock.
+			// Safe when load-balanced to singe instance.
+			$result = $controller->{$_SERVER['REQUEST_METHOD']}();
+		} elseif ($lock_type == "MySQL") {
+			$Lock = new LockForUpdateMySQL($Database, 'apiLock', 1);
+			$Lock->obtain_lock($app->app_lock_wait);
+
+			// execute the action with MySQL row lock.
+			// Safe when load-balanced across multiple instances.
+			$result = $controller->{$_SERVER['REQUEST_METHOD']}();
+		} else {
+			// Disabled - *DANGER* execute write actions without locking.
+			// Not guaranteed to be thread safe.
+			$result = $controller->{$_SERVER['REQUEST_METHOD']}();
+		}
+	} else {
+		// Execute the GET read requests without lock.
+		$result = $controller->{$_SERVER['REQUEST_METHOD']}();
+	}
 } catch ( Exception $e ) {
 	// catch any exceptions and report the problem
 	$result = $e->getMessage();

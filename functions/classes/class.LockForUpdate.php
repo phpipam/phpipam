@@ -64,7 +64,7 @@ class LockForUpdateFile extends LockForUpdateBase {
             throw new Exception(sprintf(_("Cannot open file %s"), $this->fileName));
         }
 
-        $timeout = filter_var($timeout_seconds, FILTER_VALIDATE_INT, ['default' => 50, 'min_range' => 0, 'max_range' => 3600]);
+        $timeout = filter_var($timeout_seconds, FILTER_VALIDATE_INT, ['options' => ['default' => 50, 'min_range' => 0, 'max_range' => 3600]]);
         if ($timeout == 0) {
             $timeout = 3600;
         }
@@ -159,7 +159,7 @@ class LockForUpdateMySQL extends LockForUpdateBase {
     public function obtain_lock($timeout_seconds) {
 
         $res = false;
-        $timeout = filter_var($timeout_seconds, FILTER_VALIDATE_INT, ['default' => 50, 'min_range' => 0, 'max_range' => 3600]);
+        $timeout = filter_var($timeout_seconds, FILTER_VALIDATE_INT, ['options' => ['default' => 50, 'min_range' => 0, 'max_range' => 3600]]);
         if ($timeout == 0) {
             $timeout = 3600;
         }
@@ -173,14 +173,20 @@ class LockForUpdateMySQL extends LockForUpdateBase {
             }
 
             $res = $this->Database->getObjectQuery($this->tableName, "SELECT * FROM `$this->tableName` WHERE `id`=? FOR UPDATE;", [$this->id]);
+        } catch (PDOException $e) {
+            if ($e->errorInfo[1] == 1205) {
+                throw new Exception(sprintf(_("MySQL wait timeout exceeded after %0.4f seconds"), microtime(true) - $start_time));
+            } else {
+                throw new Exception(sprintf(_("Unexpected SQL error: %s"), $e->getMessage()));
+            }
         } catch (Exception $e) {
-            // Catch getObjectQuery exceptions
+            throw new Exception(sprintf(_("Unexpected general error: %s"), $e->getMessage()));
         }
 
         if (is_object($res)) {
             $this->locked_res = $res;
         } else {
-            throw new Exception(sprintf(_("Cannot obtain lock after %0.4f seconds"), microtime(true) - $start_time));
+            throw new Exception(sprintf(_("No available rows to lock in table %s"), $this->tableName));
         }
     }
 

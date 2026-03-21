@@ -27,6 +27,7 @@
     + Added Isle of Man postcodes (#4318);
     + Added `lastSeen` to IP Address export (#2433);
     + User and Edit IP instructions now use Markdown;
+    + Added API locking methods (File, MySQL);
 
     Security Fixes:
     ----------------------------
