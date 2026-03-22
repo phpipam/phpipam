@@ -19,9 +19,9 @@ if($POST->action!="add") {
 	$method_settings->params = db_json_decode($method_settings->params);
 }
 else {
-	$method_settings = new StdClass ();
+	$method_settings = new Params ();
 	# set default values
-    $method_settings->params = new StdClass ();
+    $method_settings->params = new Params ();
     $method_settings->params->hostname = "localhost";
 	$method_settings->params->port = 1812;
 	$method_settings->params->timeout = 2;
