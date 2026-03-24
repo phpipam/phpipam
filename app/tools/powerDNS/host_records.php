@@ -23,6 +23,7 @@ else {
         $records = $PowerDNS->search_records ("content", $ip->content, 'content', true);
         $cname = array();
         // loop
+        if (!\is_array($records) && !\is_object($records)) { continue; }
         foreach ($records as $r) {
             $out[$k][] = $r;
              //search also for CNAME records

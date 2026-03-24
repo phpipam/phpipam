@@ -41,6 +41,7 @@ if (is_blank($POST->{'domain-filter'})) {unset($POST->{'domain-filter'});}
 // if search filter out hits
 if ($GET->sPage == "search" && !is_blank($POST->{'domain-filter'})) {
     // loop domains
+    if (!is_array($domains)) { $domains = []; }
     foreach ($domains as $k => $d) {
         // search through records, if no hits unset
         $hit = false;
@@ -111,6 +112,7 @@ elseif ($domains === false) {$Result->show("info alert-absolute", _("No domains 
 <!-- domains -->
 <?php
 /* prints domain records */
+if (!is_array($domains)) { $domains = []; }
 foreach ($domains as $d) {
     // nulls
     foreach ($d as $k => $v) {
