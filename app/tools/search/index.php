@@ -59,6 +59,9 @@ if (isset($_COOKIE['search_parameters'])) {
 		<?php if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
 		<input type="checkbox" name="customers" 	    value="on" <?php if($GET->customers=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Customers'); ?>
 		<?php } ?>
+		<?php if($User->get_module_permissions ("devices")>=User::ACCESS_R) { ?>
+		<input type="checkbox" name="devices" 	    value="on" <?php if($GET->devices=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Devices'); ?>
+		<?php } ?>
 	</div>
 </form>
 

@@ -56,19 +56,3 @@ $upgrade_queries["1.7.43"][] = "-- Increase 2fa_length minimum value to 26 (128b
 $upgrade_queries["1.7.43"][] = "UPDATE `settings` SET `2fa_length`=26 WHERE `2fa_length`<26;";
 $upgrade_queries["1.7.43"][] = "-- Database version bump";
 $upgrade_queries["1.7.43"][] = "UPDATE `settings` SET `dbversion` = '43';";
-
-$upgrade_queries["1.71.43"]   = [];
-$upgrade_queries["1.71.43"][] = "-- Version update";
-$upgrade_queries["1.71.43"][] = "UPDATE `settings` set `version` = '1.71';";
-
-$upgrade_queries["1.72.43"]   = [];
-$upgrade_queries["1.72.43"][] = "-- Version update";
-$upgrade_queries["1.72.43"][] = "UPDATE `settings` set `version` = '1.72';";
-
-$upgrade_queries["1.73.43"]   = [];
-$upgrade_queries["1.73.43"][] = "-- Version update";
-$upgrade_queries["1.73.43"][] = "UPDATE `settings` set `version` = '1.73';";
-
-$upgrade_queries["1.74.43"]   = [];
-$upgrade_queries["1.74.43"][] = "-- Version update";
-$upgrade_queries["1.74.43"][] = "UPDATE `settings` set `version` = '1.74';";

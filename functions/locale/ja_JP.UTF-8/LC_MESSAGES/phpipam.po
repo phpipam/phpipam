@@ -8287,10 +8287,6 @@ msgstr "ここに"
 msgid "SNMP management"
 msgstr "API管理"
 
-#: /var/www/phpipam/app/admin/snmp/index.php:38
-msgid "SNMP module disabled"
-msgstr "SNMPモジュールを無効にする"
-
 #: /var/www/phpipam/app/admin/snmp/index.php:48
 msgid "Query"
 msgstr "クエリ"

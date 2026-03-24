@@ -34,7 +34,7 @@ $selected_ip_fields = $User->settings->IPfilter;
 $selected_ip_fields = pf_explode(";", $selected_ip_fields);
 
 // all are off?
-if (is_blank($GET->addresses) && is_blank($GET->subnets) && is_blank($GET->vlans) && is_blank($GET->vrf) && is_blank($GET->pstn) && is_blank($GET->circuits) && is_blank($GET->customers)) {
+if (is_blank($GET->addresses) && is_blank($GET->subnets) && is_blank($GET->vlans) && is_blank($GET->vrf) && is_blank($GET->pstn) && is_blank($GET->circuits) && is_blank($GET->customers) && is_blank($GET->devices)) {
 	require("search-tips.php");
 }
 // empty request
@@ -81,6 +81,10 @@ else {
 		// customers
 		if ($GET->customers == "on" && $User->get_module_permissions("customers") >= User::ACCESS_R) {
 			require(dirname(__FILE__) . '/search_results/search-results_customers.php');
+		}
+		// devices
+		if ($GET->devices == "on" && $User->get_module_permissions("devices") >= User::ACCESS_R) {
+			require(dirname(__FILE__) . '/search_results/search-results_devices.php');
 		}
 	}
 

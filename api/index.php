@@ -263,37 +263,38 @@ try {
 		$Response->throw_exception(501, $Response->errors[501]);
 	}
 
-	// if lock is enabled wait until it clears
-	if( $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
-    	// set transaction lock file name
-    	$controller->set_transaction_lock_file ($lock_file);
+	// Transaction locking is only enabled for POST, PUT, PATCH and DELETE requests.
+	if (in_array(strtoupper($_SERVER['REQUEST_METHOD']), ["POST", "PUT", "PATCH", "DELETE"])) {
+		$lock_type = $app->app_lock_type;
 
-    	// check if locked form previous process
-    	while ($controller->is_transaction_locked ()) {
-        	// max ?
-        	if ((microtime(true) - $start) > $app->app_lock_wait) {
-            	$Response->throw_exception(503, "Transaction timed out after $app->app_lock_wait seconds because of transaction lock");
-        	}
-        	// add random delay
-        	usleep(rand(250000,500000));
-    	}
+		if ($lock_type == "Auto") {
+			// Default to MySQL row locking when loadbalanced
+			$lock_type = (Config::ValueOf('trust_x_forwarded_headers') === true) ? "MySQL" : "File";
+		}
 
-    	// add new lock
-    	$controller->add_transaction_lock ();
-    	// execute the action
-    	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
-    }
-    else {
-    	// execute the action
-    	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
-    }
+		if ($lock_type == "File") {
+			$Lock = new LockForUpdateFile($lock_file);
+			$Lock->obtain_lock($app->app_lock_wait);
 
-    // remove transaction lock
-    if(is_object($controller) && $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
-        if($controller->is_transaction_locked ()) {
-            $controller->remove_transaction_lock ();
-        }
-    }
+			// Execute the action with file lock.
+			// Safe when load-balanced to singe instance.
+			$result = $controller->{$_SERVER['REQUEST_METHOD']}();
+		} elseif ($lock_type == "MySQL") {
+			$Lock = new LockForUpdateMySQL($Database, 'apiLock', 1);
+			$Lock->obtain_lock($app->app_lock_wait);
+
+			// execute the action with MySQL row lock.
+			// Safe when load-balanced across multiple instances.
+			$result = $controller->{$_SERVER['REQUEST_METHOD']}();
+		} else {
+			// Disabled - *DANGER* execute write actions without locking.
+			// Not guaranteed to be thread safe.
+			$result = $controller->{$_SERVER['REQUEST_METHOD']}();
+		}
+	} else {
+		// Execute the GET read requests without lock.
+		$result = $controller->{$_SERVER['REQUEST_METHOD']}();
+	}
 } catch ( Exception $e ) {
 	// catch any exceptions and report the problem
 	$result = $e->getMessage();
@@ -304,13 +305,6 @@ try {
 		$Response->result['success'] = false;
 		$Response->result['code'] 	 = 500;
 		$Response->result['message'] = $result;
-	}
-
-    // remove transaction lock
-    if(isset($controller) && $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
-        if($controller->is_transaction_locked ()) {
-            $controller->remove_transaction_lock ();
-        }
     }
 }
 

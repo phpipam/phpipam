@@ -178,7 +178,7 @@ if(sizeof($custom_fields) > 0) {
 
 <?php
 	# check for requests guide
-	$instructions = $Tools->fetch_instructions(2);
+	$instructions = $Tools->parsedown_instructions(2);
 
 	if (strlen($instructions) > 0) {
 		print "<div id='login' class='request'>";

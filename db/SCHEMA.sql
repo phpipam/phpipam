@@ -415,7 +415,7 @@ DROP TABLE IF EXISTS `lang`;
 CREATE TABLE `lang` (
   `l_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `l_code` varchar(12) NOT NULL DEFAULT '',
-  `l_name` varchar(32) DEFAULT NULL,
+  `l_name` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`l_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
@@ -525,7 +525,7 @@ CREATE TABLE `api` (
   `app_permissions` int(1) DEFAULT '1',
   `app_comment` TEXT  NULL,
   `app_security`SET('ssl_code','ssl_token','crypt','user','none')  NOT NULL  DEFAULT 'ssl_token',
-  `app_lock` INT(1)  NOT NULL  DEFAULT '0',
+  `app_lock_type` enum('Auto','File','MySQL','Disabled') NOT NULL DEFAULT 'Auto',
   `app_lock_wait` INT(4)  NOT NULL  DEFAULT '30',
   `app_nest_custom_fields` TINYINT(1)  NULL  DEFAULT '0',
   `app_show_links` TINYINT(1)  NULL  DEFAULT '0',
@@ -533,6 +533,19 @@ CREATE TABLE `api` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_id` (`app_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+# Dump of table apiLock
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `apiLock`;
+
+CREATE TABLE `apiLock` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `description` varchar(32) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `apiLock` (`id`, `description`) VALUES (1, 'API POST lock');
 
 
 # Dump of table changelog
@@ -1081,5 +1094,5 @@ CREATE TABLE `nominatim_cache` (
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
-UPDATE `settings` SET `version` = "1.74";
-UPDATE `settings` SET `dbversion` = 43;
+UPDATE `settings` SET `version` = "1.8";
+UPDATE `settings` SET `dbversion` = 45;

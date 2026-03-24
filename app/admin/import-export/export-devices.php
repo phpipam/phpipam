@@ -25,6 +25,20 @@ if (!isset($Devices)) { $Devices = new Devtype ($Database); }
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === false) {
+	$content  = _("Invalid CSRF cookie");
+
+	header("Cache-Control: private");
+	header("Content-Description: File Transfer");
+	header("Content-Type: application/octet-stream");
+	header('Content-Disposition: attachment; filename="' . "error_message.txt" . '"');
+	header("Content-Length: " . strlen($content));
+
+	print($content);
+	exit();
+}
+
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields('devices');
 # prepare HTML variables
@@ -64,7 +78,7 @@ if (is_array($devtypes)) {
 
 # Create a workbook
 $today = date("Ymd");
-$filename = $today."_phpipam_deviceTypes_export.xls";
+$filename = $today."_phpipam_devices_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
 $workbook->setVersion(8);
 

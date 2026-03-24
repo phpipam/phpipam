@@ -509,6 +509,39 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Function to search devices
+	 *
+	 * @access public
+	 * @param mixed $search_term
+	 * @param array $custom_fields (default: array())
+	 * @return array
+	 */
+	public function search_devices ($search_term, $custom_fields = array()) {
+		# query
+		$query[] = "select * from `devices` where `hostname` like :search_term or `description` like :search_term ";
+		# custom
+		if(sizeof($custom_fields) > 0) {
+			foreach($custom_fields as $myField) {
+				$myField['name'] = $this->Database->escape($myField['name']);
+				$query[] = " or `{$myField['name']}` like :search_term ";
+			}
+		}
+		$query[] = ";";
+		# join query
+		$query = implode("\n", $query);
+
+		# fetch
+		try { $search = $this->Database->getObjectsQuery('devices', $query, array("search_term"=>"%$search_term%")); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+		# return result
+		return $search;
+	}
+
+	/**
 	 * Reformat possible nun-full IPv4 address for search
 	 *
 	 *	e.g. 10.10.10 -> 10.10.10.0 - 10.10.10.255
@@ -967,19 +1000,34 @@ class Tools extends Common_functions {
 	}
 
 	/**
-	 *  Fetch sanitised HTML instructions
-	 *  @param int $name
+	 *  Fetch HTML instructions
+	 *  @param int $id
+	 *  @param bool $sanitize (default: true)
+	 *  @param mixed $text (default: false)
 	 *  @return string
 	 */
-	public function fetch_instructions($id) {
-		$instructions = $this->fetch_object("instructions", "id", $id);
-		$html = is_object($instructions) && is_string($instructions->instructions) ? html_entity_decode($instructions->instructions, ENT_QUOTES) : '';
+	public function parsedown_instructions($id, $sanitize=true, $text=false) {
+		if ($text === false) {
+			$instructions = $this->fetch_object("instructions", "id", $id);
+			if (!is_object($instructions))
+				return "";
+			$text = $instructions->instructions;
+		}
 
-		/* format line breaks */
-		$html = stripslashes($html);
+		if ($sanitize === false)
+			return $text;
 
-		/* prevent <script> */ #
-		return $this->noxss_html($html);
+		// Return sanitized markdown
+		$parse_down_class = dirname(__FILE__) . '/../parsedown/Parsedown.php';
+
+		if (!file_exists($parse_down_class))
+			return _('parsedown library missing, please update submodules');
+
+		require_once($parse_down_class);
+
+		$Parsedown = new \Parsedown();
+		$Parsedown->setSafeMode(true);
+		return $Parsedown->text($text) ? : "";
 	}
 
 	/**

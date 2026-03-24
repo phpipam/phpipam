@@ -38,16 +38,15 @@ if($POST->action!="delete") {
 	if(!($POST->app_permissions==0 || $POST->app_permissions==1 || $POST->app_permissions ==2 || $POST->app_permissions ==3 ))	{ $error[] = "Invalid permissions"; }
 	}
 	# lock check
-	if($POST->app_lock=="1") {
-    	if(!is_numeric($POST->app_lock_wait))                                                            { $error[] = "Invalid wait value"; }
-    	elseif ($POST->app_lock_wait<1)                                                                  { $error[] = "Invalid wait value"; }
+	if (filter_var($POST->app_lock_wait, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'max_range' => 3600]]) === false) {
+		$error[] = _("Invalid lock wait value. Valid range 1-3600 (Default: 30)");
 	}
 	# api_allow_unsafe check
 	if($POST->app_security=="none" && Config::ValueOf('api_allow_unsafe')!==true)											{ $error[] = "API server requires SSL. Please set \$api_allow_unsafe in config.php to override"; }
 }
 
 # default lock_wait
-if($POST->app_lock_wait=="") { $POST->app_lock_wait=0; }
+if($POST->app_lock_wait=="") { $POST->app_lock_wait=30; }
 
 # die if errors
 if(sizeof($error) > 0) {
@@ -61,7 +60,7 @@ else {
 					"app_code"               =>$POST->app_code,
 					"app_permissions"        =>$POST->app_permissions,
 					"app_security"           =>$POST->app_security,
-					"app_lock"               =>$POST->app_lock,
+					"app_lock_type"          =>$POST->app_lock_type,
 					"app_lock_wait"          =>$POST->app_lock_wait,
 					"app_nest_custom_fields" =>$POST->app_nest_custom_fields,
 					"app_show_links"         =>$POST->app_show_links,

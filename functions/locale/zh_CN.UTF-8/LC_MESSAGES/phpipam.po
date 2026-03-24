@@ -6,7 +6,7 @@
 # "Content-Transfer-Encoding: 8bit\n"
 # "Last-Translator: wxtewx <wxtewx@qq.com>\n"
 # "PO-Revision-Date: 2023-09-03 22:48\n"
-e# "Project-Id-Version: 1.70\n"
+# "Project-Id-Version: 1.70\n"
 # "Language: zh_CN\n"
 # "MIME-Version: 1.0\n"
 # "Content-Type: text/plain; charset=UTF-8\n"

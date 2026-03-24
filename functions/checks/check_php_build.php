@@ -15,7 +15,7 @@ if(!defined('PHPIPAM_PHP_MIN'))
 define('PHPIPAM_PHP_MIN', "7.2");
 
 if(!defined('PHPIPAM_PHP_UNTESTED'))
-define('PHPIPAM_PHP_UNTESTED', "8.4");  // PHP 8.4 or greater is untested, use at own risk and expect issues
+define('PHPIPAM_PHP_UNTESTED', "8.5");  // PHP 8.5 or greater is untested, use at own risk and expect issues
 
 if (phpversion() >= PHPIPAM_PHP_UNTESTED) {
     $_SESSION['footer_warnings']['php_version'] = _('Unsupported PHP version ') . phpversion();
