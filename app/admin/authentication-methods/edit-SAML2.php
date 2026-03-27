@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 $version = db_json_decode(@file_get_contents(dirname(__FILE__).'/../../../functions/php-saml/src/Saml2/version.json'), true);
 $version = @$version['php-saml']['version'];

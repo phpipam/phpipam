@@ -2,6 +2,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # fetch all auth methods
 $all_methods = $Admin->fetch_all_objects("usersAuthMethod");
@@ -32,7 +34,7 @@ foreach($all_method_types as $type) {
 <div class="panel panel-default pull-left" style="width:auto;border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;">
 
 <!-- table -->
-<table id="userPrint" class="table nosearch table-striped table-top" data-cookie-id-table="admin_authm" style="bordmarginer-bottom:0px;">
+<table id="userPrint" class="table nosearch table-striped table-top" data-cookie-id-table="admin_authm" style="border-bottom:0px;">
 
 <!-- Headers -->
 <thead>

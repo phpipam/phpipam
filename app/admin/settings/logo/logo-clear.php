@@ -13,6 +13,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 // define file
 $file = dirname(__FILE__)."/../../../../css/images/logo/logo.png";

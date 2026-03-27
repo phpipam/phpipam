@@ -18,6 +18,8 @@ if (!isset($Subnets)) { $Subnets = new Subnets ($Database); }
 
 # verify that user is logged in, to guard against direct access of page and possible exploits
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # read again the custom fields, if any
 if (!isset($custom_fields)) { $custom_fields = $Tools->fetch_custom_fields("ipaddresses"); }

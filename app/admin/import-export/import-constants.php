@@ -13,5 +13,3 @@ $colors['add'] = "success";
 $colors['edit'] = "info";
 $colors['skip'] = "warning";
 $colors['error'] = "danger";
-
-?>

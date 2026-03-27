@@ -9,6 +9,8 @@ if (!isset($Tools)) { $Tools = new Tools ($Database); }
 
 # verify that user is logged in, to guard against direct access of page and possible exploits
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # Don't corrupt output with php errors!
 disable_php_errors();
@@ -37,7 +39,7 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
         exit;
     }
 	//if cannot move
-	else if(!move_uploaded_file($_FILES["file"]["tmp_name"], str_replace("//", "/", $_SERVER['DOCUMENT_ROOT'].BASE."css/images/logo/logo.png"))) {
+	elseif(!move_uploaded_file($_FILES["file"]["tmp_name"], str_replace("//", "/", $_SERVER['DOCUMENT_ROOT'].BASE."css/images/logo/logo.png"))) {
 		echo '{"status":"error", "error":"Cannot move file to upload dir. You can upload file manually to '.str_replace("//", "/", $_SERVER['DOCUMENT_ROOT'].BASE."css/images/logo/logo.png").'"}';
 		exit;
 	}

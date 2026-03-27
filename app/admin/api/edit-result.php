@@ -15,6 +15,9 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
+
 # check if site is demo
 $User->is_demo();
 # check maintaneance mode

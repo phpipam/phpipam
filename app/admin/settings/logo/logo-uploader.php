@@ -15,6 +15,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "settings", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";

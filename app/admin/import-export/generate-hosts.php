@@ -23,6 +23,8 @@ $Result 	= new Result();
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # validate csrf cookie
 if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === false) {

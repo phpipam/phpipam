@@ -2,6 +2,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # fetch user details
 $user = $Admin->fetch_object("users", "id", $GET->subnetId);

@@ -22,6 +22,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # get hidden custom fields from settings
 $filters = db_json_decode($User->settings->hiddenCustomFields, true);

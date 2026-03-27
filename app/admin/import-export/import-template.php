@@ -19,6 +19,9 @@ $type = $GET->type;
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
+
 // Create a workbook
 $filename = "phpipam_template_" . $type . ".xls";
 $workbook = new Spreadsheet_Excel_Writer();

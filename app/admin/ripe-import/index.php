@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 ?>
 
 <h4><?php print _('Import subnets from RIPE'); ?></h4>
@@ -14,7 +16,7 @@ $User->check_user_session();
 
 <?php $Result->show("info alert-absolute",  _('This script imports subnets from RIPE database for specific AS. Enter desired AS to search for subnets'), false); ?>
 
-<form name="ripeImport" id="ripeImport" style="margin-top:50px;clear:both;" class="form-inline" role="form">
+<form name="ripeImport" id="ripeImport" style="margin-top:50px;clear:both;" class="form-inline">
 	<div class="form-group">
 		<input class="search form-control input-sm" placeholder="<?php print _('AS number'); ?>" name="as" type="text">
 	</div>

@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # fetch all APIs
 $users = $Admin->fetch_all_objects("users", "username");

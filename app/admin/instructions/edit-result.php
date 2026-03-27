@@ -16,6 +16,9 @@ $Log 		= new Logging ($Database, $User->settings);
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
+
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 

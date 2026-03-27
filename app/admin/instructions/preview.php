@@ -10,6 +10,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 // vaidate cookie
 $User->Crypto->csrf_cookie ("validate", "instructions", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";

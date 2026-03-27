@@ -16,6 +16,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 
 //strip AS if provided, to get just the number

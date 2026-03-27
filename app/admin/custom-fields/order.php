@@ -16,6 +16,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # some verifications
 if( (empty($POST->current)) || (empty($POST->next)) ) 							{ $Result->show("danger", _('Fields cannot be empty')."!", true); }
@@ -25,4 +27,3 @@ if( (empty($POST->current)) || (empty($POST->next)) ) 							{ $Result->show("da
 if(!$Admin->reorder_custom_fields($POST->table, $POST->next, $POST->current)) 	{ $Result->show("danger", _('Reordering failed')."!", true); }
 else 																					{ $Result->show("success", _('Fields reordered successfully')."!");}
 
-?>

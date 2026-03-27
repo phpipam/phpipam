@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # if the user's theme is dark, we make the BG parly transparent
 $alpha = ($User->user->theme == "dark") ? "cc" : "";

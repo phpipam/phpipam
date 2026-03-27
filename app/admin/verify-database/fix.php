@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # admin user is required
-$User->is_admin(true);
+$User->is_admin();
 
 /* verifications */
 if(!isset($POST->tableid) || is_blank($POST->tableid) ) {

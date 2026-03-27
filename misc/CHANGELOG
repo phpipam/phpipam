@@ -48,6 +48,7 @@
     + Added CSRF cookie for data exports;
     + RCE - Authenticated remote code execution via ping_path;
     + SQL injection via subnetOrdering;
+    + Missing admin authorization checks;
 
     Translations:
     ----------------------------
