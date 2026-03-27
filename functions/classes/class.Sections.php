@@ -423,6 +423,7 @@ class Sections extends Common_functions {
 	public function parse_section_permissions($permissions) {
 		# save to array
 		$permissions = db_json_decode($permissions, true);
+		$permissions = is_array($permissions) ? $permissions : [];
 		# start Tools object
 		$Tools = new Tools ($this->Database);
 		if(sizeof($permissions)>0) {
@@ -451,6 +452,7 @@ class Sections extends Common_functions {
 	public function check_permission ($user, $sectionid) {
 		# decode groups user belongs to
 		$groups = db_json_decode($user->groups, true);
+		$groups = is_array($groups) ? $groups : [];
 
 		# admins always has permission rwa
 		if($user->role == "Administrator")		{ return 3; }
@@ -458,6 +460,7 @@ class Sections extends Common_functions {
 			# fetch section details and check permissions
 			$section  = $this->fetch_section ("id", $sectionid);
 			$sectionP = db_json_decode($section->permissions, true);
+			$sectionP = is_array($sectionP) ? $sectionP : [];
 
 			# default permission is no access
 			$out = 0;
