@@ -17,6 +17,12 @@ $Result 	= new Result ();
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
+# perm check popup
+if ($POST->action == "edit") {
+	$User->check_module_permissions("devices", User::ACCESS_RW, true, true);
+} else {
+	$User->check_module_permissions("devices", User::ACCESS_RWA, true, true);
+}
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "device_types", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";

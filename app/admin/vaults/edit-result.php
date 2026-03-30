@@ -21,7 +21,9 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # make sure user has access
-if ($User->get_module_permissions ("vaults")<User::ACCESS_RWA) { $Result->show("danger", _("Insufficient privileges").".", true); }
+if ($User->get_module_permissions("vaults") < User::ACCESS_RWA) {
+	$Result->show("danger", _("Insufficient privileges") . ".", true, true);
+}
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "vaults", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";

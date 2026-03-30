@@ -14,6 +14,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# verify module permissions
+$User->check_module_permissions ("routing", User::ACCESS_RW, true);
+
 # fetch BGP details
 $bgp = $Admin->fetch_object("routing_bgp", "id", $POST->bgpid);
 // false

@@ -49,6 +49,7 @@
     + RCE - Authenticated remote code execution via ping_path;
     + SQL injection via subnetOrdering;
     + Missing admin authorization checks;
+    + Missing module authorization checks;
 
     Translations:
     ----------------------------

@@ -18,6 +18,11 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
+# make sure user has access
+if ($User->get_module_permissions("vaults") == User::ACCESS_NONE) {
+	$Result->show("danger", _("Insufficient privileges") . ".", true, true);
+}
+
 // fetch vault
 $vault = $Admin->fetch_object("vaults", "id", $POST->id);
 // validate vault id

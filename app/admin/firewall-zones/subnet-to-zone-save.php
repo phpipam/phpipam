@@ -16,6 +16,12 @@ $Zones    = new FirewallZones($Database);
 
 # validate session parameters
 $User->check_user_session();
+# perm check popup
+if ($POST->action == "edit") {
+	$User->check_module_permissions("fwzones", User::ACCESS_RW, true, true);
+} else {
+	$User->check_module_permissions("fwzones", User::ACCESS_RWA, true, true);
+}
 
 # validate $POST->subnetId values
 if (!preg_match('/^[0-9]+$/i', $POST->subnetId))  						{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!"), true); }

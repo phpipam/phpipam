@@ -7,6 +7,10 @@
 
 # validate session parameters
 $User->check_user_session();
+# perm check
+if ($User->get_module_permissions ("fwzones")==User::ACCESS_NONE) {
+	$Result->show("danger", _("You do not have permissions to access this module"), false);
+}
 
 # default settings for firewall zones and firewall address objects: (JSON)
 # {

@@ -17,7 +17,11 @@ $Racks 		= new phpipam_rack ($Database);
 # verify that user is logged in
 $User->check_user_session();
 # verify module permissions
-$User->check_module_permissions ("racks", User::ACCESS_RW, true, false);
+if ($POST->action == "edit") {
+    $User->check_module_permissions("racks", User::ACCESS_RW, true, true);
+} else {
+    $User->check_module_permissions("racks", User::ACCESS_RWA, true, true);
+}
 $User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 
 # check maintaneance mode

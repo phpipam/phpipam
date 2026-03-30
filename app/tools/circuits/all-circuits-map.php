@@ -7,8 +7,10 @@ require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 # Prints map of all Circuits
 #
 
+# verify that user is logged in
+$User->check_user_session();
 # perm check
-$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
+$User->check_module_permissions("circuits", User::ACCESS_R, true, false);
 
 print "<h3>"._('Map of all circuits')."</h3>";
 

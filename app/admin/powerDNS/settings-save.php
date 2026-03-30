@@ -15,6 +15,9 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("pdns", User::ACCESS_RWA, true, false);
+
 # check if site is demo
 $User->is_demo();
 # check maintaneance mode

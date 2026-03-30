@@ -10,7 +10,7 @@ require( dirname(__FILE__) . '/../../../../functions/include-only.php' );
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
+$User->check_module_permissions("circuits", User::ACCESS_R, true, false);
 
 # check
 is_numeric($GET->sPage) ? : $Result->show("danger", _("Invalid ID"), true);
@@ -32,7 +32,7 @@ if($provider!==false) {
 	$custom_fields = $Tools->fetch_custom_fields('circuitProviders');
 	$custom_fields_circuits = $Tools->fetch_custom_fields('circuits');
 	$colspanCustom = 0;
-	
+
 	// details
 	print "<div class='col-xs-12'>";
 

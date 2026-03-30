@@ -1,6 +1,11 @@
 <br><br>
 <span class='text-muted'><?php print _("Filter by"); ?>:</span><br>
 <?php
+# verify that user is logged in
+$User->check_user_session();
+# perm check
+$User->check_module_permissions ("devices", User::ACCESS_R, true, false);
+
 
 # filter if requested
 if (isset($GET->subnetId) && @isset($GET->sPage)) {
@@ -129,7 +134,7 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 	print "   <li><a href='".create_link("tools","devices")."'>"._("All sections")."</a></li>";
 	print "   <li><a href='".create_link("tools","devices","section","")."'>"._("No section")."</a></li>";
 	print "		<li role='separator' class='divider'></li>";
-	if($sections!==false) {
+	if(is_array($sections)) {
 		foreach ($sections as $s) {
 			$selected = $s->name==$GET->sPage ? "class='active'" : "";
 			print "   <li $selected><a href='".create_link("tools","devices","section", $s->name)."'>".$s->name."</a></li>";

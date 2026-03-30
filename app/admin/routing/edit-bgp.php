@@ -21,11 +21,10 @@ $User->check_user_session();
 $csrf = $User->Crypto->csrf_cookie ("create", "routing_bgp");
 
 # perm check popup
-if($POST->action=="edit") {
-    $User->check_module_permissions ("routing", User::ACCESS_RW, true, true);
-}
-else {
-    $User->check_module_permissions ("routing", User::ACCESS_RWA, true, true);
+if ($POST->action == "edit") {
+	$User->check_module_permissions("routing", User::ACCESS_RW, true, true);
+} else {
+	$User->check_module_permissions("routing", User::ACCESS_RWA, true, true);
 }
 
 # validate action

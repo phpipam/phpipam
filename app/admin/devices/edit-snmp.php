@@ -17,6 +17,12 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if ($POST->action == "edit") {
+	$User->check_module_permissions("devices", User::ACCESS_RW, true, true);
+} else {
+	$User->check_module_permissions("devices", User::ACCESS_RWA, true, true);
+}
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "device_snmp");

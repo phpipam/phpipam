@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("pstn", User::ACCESS_R, true, false);
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('pstnPrefixes');

@@ -19,11 +19,10 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 # perm check popup
-if($POST->action=="edit") {
-    $User->check_module_permissions ("vrf", User::ACCESS_RW, true, true);
-}
-else {
-    $User->check_module_permissions ("vrf", User::ACCESS_RWA, true, true);
+if ($POST->action == "edit") {
+	$User->check_module_permissions("vrf", User::ACCESS_RW, true, true);
+} else {
+	$User->check_module_permissions("vrf", User::ACCESS_RWA, true, true);
 }
 
 # validate csrf cookie

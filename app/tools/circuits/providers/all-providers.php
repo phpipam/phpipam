@@ -18,7 +18,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
+$User->check_module_permissions("circuits", User::ACCESS_R, true, false);
 
 # filter circuits or fetch print all?
 $circuit_providers = $Tools->fetch_all_objects("circuitProviders", "name");

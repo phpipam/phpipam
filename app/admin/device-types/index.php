@@ -7,6 +7,11 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# perm check
+if ($User->get_module_permissions ("devices")==User::ACCESS_NONE) {
+	$Result->show("danger", _("You do not have permissions to access this module"), false);
+}
+
 # fetch all devices
 $devices = $Admin->fetch_all_objects("deviceTypes", "tid");
 ?>

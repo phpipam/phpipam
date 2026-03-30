@@ -21,13 +21,11 @@ $User->check_user_session();
 $csrf = $POST->action=="add" ? $User->Crypto->csrf_cookie ("create", "pstn_add") : $User->Crypto->csrf_cookie ("create", "pstn_".$POST->id);
 
 # perm check popup
-if($POST->action=="edit") {
-    $User->check_module_permissions ("pstn", User::ACCESS_RW, true, true);
+if ($POST->action == "edit") {
+    $User->check_module_permissions("pstn", User::ACCESS_RW, true, false);
+} else {
+    $User->check_module_permissions("pstn", User::ACCESS_RWA, true, false);
 }
-else {
-    $User->check_module_permissions ("pstn", User::ACCESS_RWA, true, true);
-}
-
 
 # get Location object
 if($POST->action!="add") {
@@ -235,7 +233,7 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editPSTNSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } else if ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
+		<button class="btn btn-sm btn-default <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editPSTNSubmit"><i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?></button>
 	</div>
 	<!-- result -->
 	<div class="editPSTNResult"></div>

@@ -17,8 +17,12 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-# verify module permissions
-$User->check_module_permissions ("racks", User::ACCESS_RW, true, true);
+# perm check popup
+if ($POST->action == "edit") {
+    $User->check_module_permissions("racks", User::ACCESS_RW, true, true);
+} else {
+    $User->check_module_permissions("racks", User::ACCESS_RWA, true, true);
+}
 $User->check_module_permissions ("devices", User::ACCESS_R, true, true);
 
 # validate action

@@ -7,6 +7,8 @@
 
 # validate session parameters
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 
 # initialize classes
 $Zones = new FirewallZones($Database);

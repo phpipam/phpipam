@@ -22,7 +22,11 @@ $User->check_user_session();
 $csrf = $User->Crypto->csrf_cookie ("create", "pstn_number");
 
 # perm check popup
-$User->check_module_permissions ("pstn", User::ACCESS_RW, true, true);
+if ($POST->action == "edit") {
+    $User->check_module_permissions("pstn", User::ACCESS_RW, true, false);
+} else {
+    $User->check_module_permissions("pstn", User::ACCESS_RWA, true, false);
+}
 
 # get Location object
 if($POST->action!="add") {

@@ -18,7 +18,9 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # make sure user has access
-if ($User->get_module_permissions ("vaults")<User::ACCESS_RW) { $Result->show("danger", _("Insufficient privileges").".", true, true); }
+if ($User->get_module_permissions("vaults") < User::ACCESS_RW) {
+	$Result->show("danger", _("Insufficient privileges") . ".", true, true);
+}
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "vaultitem");

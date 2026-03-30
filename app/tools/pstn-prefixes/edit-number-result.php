@@ -13,8 +13,12 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-# perm check
-$User->check_module_permissions ("pstn", User::ACCESS_RW, true, false);
+# perm check popup
+if ($POST->action == "edit") {
+    $User->check_module_permissions("pstn", User::ACCESS_RW, true, false);
+} else {
+    $User->check_module_permissions("pstn", User::ACCESS_RWA, true, false);
+}
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "pstn_number", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
