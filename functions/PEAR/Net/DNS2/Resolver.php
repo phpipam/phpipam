@@ -31,7 +31,7 @@ class Net_DNS2_Resolver extends Net_DNS2
      * @access public
      *
      */
-    public function __construct(array $options = null)
+    public function __construct(?array $options = null)
     {
         parent::__construct($options);
     }

@@ -910,7 +910,7 @@ class adLDAP {
             }
         }
         if ($encode === true && $key != 'password') {
-            $item = utf8_encode($item);
+            $item = mb_convert_encoding($item, 'UTF-8', 'ISO-8859-1');
         }
     }
 
