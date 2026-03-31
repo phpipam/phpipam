@@ -1903,7 +1903,7 @@ class Addresses extends Common_functions {
         $html = array();
         $html[] = "<tr>";
         $html[] = "<td colspan='3'>";
-        $html[] = "<strong>$n->name</strong> <span class='badge badge1 badge5'>".ucwords($n->type)."</span>";
+        $html[] = "<strong>$n->name</strong> <span class='badge badge1 badge5'>"._(ucwords($n->type))."</span>";
         $html[] = "</td>";
         $html[] = "</tr>";
 
