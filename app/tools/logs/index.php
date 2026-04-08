@@ -7,6 +7,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->Crypto->csrf_cookie ("create", "logs");
+
 # admin class
 $Admin = new Admin($Database, false);
 
@@ -33,10 +36,10 @@ else {
 
 
 	<!-- download log files -->
-	<button id="downloadLogs" class="btn btn-sm btn-default" style="margin-left:20px"><i class="fa fa-download"></i> <?php print _('Download logs'); ?></button>
+	<button id="downloadLogs" class="btn btn-sm btn-default" style="margin-left:20px" data-csrf='<?php print $csrf; ?>'><i class="fa fa-download"></i> <?php print _('Download logs'); ?></button>
 
 	<!-- download log files -->
-	<button id="clearLogs" class="btn btn-sm btn-default"><i class="fa fa-trash-o"></i> <?php print _('Clear logs'); ?></button>
+	<button id="clearLogs" class="btn btn-sm btn-default" data-csrf='<?php print $csrf; ?>'><i class="fa fa-trash-o"></i> <?php print _('Clear logs'); ?></button>
 
 	<span class="pull-right" id="logDirection">
 	<div class="btn-group">

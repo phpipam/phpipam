@@ -31,7 +31,7 @@ if ($auth_methods!==false) {
 $custom = $Tools->fetch_custom_fields('userGroups');
 
 /* check customfields */
-$ffields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$ffields = db_json_decode($User->settings->hiddenCustomFields, true);
 $ffields = is_array(@$ffields['userGroups']) ? $ffields['userGroups'] : array();
 
 $colspanCustom = 0;
@@ -56,8 +56,7 @@ $colspanCustom = 0;
 <!-- Headers -->
 <thead>
 <tr>
-    <th><?php print _('Group name'); ?></th>
-    <th><?php print _('Group description'); ?></th>
+    <th><?php print _('Group'); ?></th>
     <th><?php print _('Belonging users'); ?></th>
     <th><?php print _('Section permissions'); ?></th>
 	<?php
@@ -78,12 +77,14 @@ $colspanCustom = 0;
 <tbody>
 <!-- admins -->
 <tr>
-	<td><strong><?php print _('Administrators'); ?></strong></td>
-	<td><?php print _('Administrator level users'); ?></td>
+	<td>
+		<span class='badge badge1 badge-white'><?php print _('Administrators'); ?></span><br>
+		<span class="muted"><?php print _('Administrator level users'); ?></span>
+	</td>
 	<td>
 	<?php
-	foreach($admins as $a) {
-		print $a->real_name."<br>";
+	foreach($admins as $user) {
+			print '<img src="css/images/userVader.png" alt="Standard user icon" rel="tooltip" title="" data-original-title="User"> '."<a href='".create_link("administration","users",$user->id)."'>".$user->real_name."</a><br>";
 	}
 	?>
 	</td>
@@ -99,8 +100,9 @@ if($groups) {
 		$g = (array) $g;
 
 		print '<tr>' . "\n";
-		print '	<td><strong>' . $g['g_name'] . '</strong></td>'. "\n";
-		print '	<td>' . $g['g_desc'] . '</td>'. "\n";
+		print '	<td>';
+		print '		<span class="badge badge1 badge-white">' . $g['g_name'] . '</span><br>'. "\n";
+		print '		<span class="muted">' . $g['g_desc'] . '</span></td>'. "\n";
 		# users in group
 		print "	<td>";
 		$u = $Admin->group_fetch_users($g['g_id']);
@@ -108,7 +110,7 @@ if($groups) {
 			foreach($u as $name) {
 				# get details
 				$user = $Admin->fetch_object("users", "id", $name);
-				print $user->real_name."<br>";
+				print '<img src="css/images/userTrooper.png" alt="Standard user icon" rel="tooltip" title="" data-original-title="User"> '."<a href='".create_link("administration","users",$user->id)."'>".$user->real_name."</a><br>";
 			}
 		} else {
 			print "<span class='text-muted'>"._("No users")."</span>";

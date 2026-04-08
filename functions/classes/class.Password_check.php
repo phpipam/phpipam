@@ -1,7 +1,7 @@
 <?php
 
 /**
- * phpIPAM password chack class
+ * phpIPAM password check class
  *
  * validates password against password policy
  */
@@ -42,7 +42,7 @@ class Password_check extends Common_functions {
 
 	/**
 	 * Error text if some
-	 * @var string
+	 * @var array
 	 */
 	private $errors = [];
 
@@ -112,7 +112,7 @@ class Password_check extends Common_functions {
 	}
 
 	/**
-	 * Saves valdation error to string
+	 * Saves validation error to string
 	 *
 	 * @method save_error
 	 * @param  string $string
@@ -184,7 +184,7 @@ class Password_check extends Common_functions {
 	}
 
 	/**
-	 * Validate minumun number of lowercase numbers
+	 * Validate minimum number of lowercase numbers
 	 *
 	 * @method validate_minLowerCase
 	 * @return void
@@ -229,7 +229,7 @@ class Password_check extends Common_functions {
 	private function validate_maxSymbols () {
 		$cnt = $this->count_symbols ();
 		// check
-		if ($cnt < $this->requirements['maxSymbols']) {
+		if ($cnt > $this->requirements['maxSymbols']) {
 			$this->save_error (_("Too many symbols")." ("._("maximum")." {$this->requirements['maxSymbols']}).");
 		}
 	}
@@ -275,6 +275,6 @@ class Password_check extends Common_functions {
 	 * @return string[]|false
 	 */
 	private function get_special_chars () {
-		return preg_split('//u',preg_replace("/[a-z,A-Z,0-9]/u", "", $this->password), -1, PREG_SPLIT_NO_EMPTY);
+		return preg_split('//u',preg_replace("/[a-zA-Z,0-9]/u", "", $this->password), -1, PREG_SPLIT_NO_EMPTY);
 	}
 }

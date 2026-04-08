@@ -18,7 +18,7 @@ $User->check_user_session();
 
 
 # fetch log
-$log = $Admin->fetch_object("logs", "id", $_POST['id']);
+$log = $Admin->fetch_object("logs", "id", $POST->id);
 if($log==false)	{ $Result->show("danger", _("Invalid ID"), true, true); }
 else			{ $log = (array) $log; }
 
@@ -41,6 +41,9 @@ $userprint = $user===false ? "" : $user->real_name."(".$user->username.")";
 
 # details format
 $log['details'] = str_replace("\n", "<br>", $log['details']);
+
+# check if site is demo
+if(defined('IS_DEMO')) { $log['ipaddr'] = "x.x.x.x"; }
 ?>
 
 

@@ -15,11 +15,11 @@ $Result   = new Result ();
 # verify tdat user is logged in
 $User->check_user_session();
 
-# validate numberic id
-if(!is_numeric($_POST['cid']))	{ $Result->show("danger", _("Invalid ID"), true, true); }
+# validate numeric id
+if(!is_numeric($POST->cid))	{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch item
-$clog = $Log->fetch_changelog ($_POST['cid']);
+$clog = $Log->fetch_changelog ($POST->cid);
 if($clog==false)				{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # validate permissions
@@ -109,8 +109,8 @@ print "	<td>";
 
 	foreach ($changelog as $c) {
 		// field
-		$field = pf_explode(": ", $c);
-	    $value = pf_explode("=>", @$field[1]);
+		$field = array_pad(explode(":", $c), 2 , '');
+   	    $value = array_pad(explode("=>", $field[1]), 2, '');
 
 	    $field_name = trim(str_replace(array("[","]"), "", $field[0]));
 

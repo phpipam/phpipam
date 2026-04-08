@@ -25,6 +25,20 @@ if (!isset($Devices)) { $Devices = new Devtype ($Database); }
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === false) {
+	$content  = _("Invalid CSRF cookie");
+
+	header("Cache-Control: private");
+	header("Content-Description: File Transfer");
+	header("Content-Type: application/octet-stream");
+	header('Content-Disposition: attachment; filename="' . "error_message.txt" . '"');
+	header("Content-Length: " . strlen($content));
+
+	print($content);
+	exit();
+}
+
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields('devices');
 # prepare HTML variables
@@ -43,6 +57,7 @@ if(sizeof($custom_fields) > 0) {
 
 $section_ids = array ();
 $devtypes =  $Devtype->fetch_all_objects("deviceTypes", "tid");
+$deviceTypes = [];
 $devices = $Devices->fetch_all_objects("devices", "id");
 $all_sections = $Sections->fetch_all_sections();
 
@@ -53,8 +68,8 @@ if (is_array($all_sections)) {
 	}
 }
 
-if (is_array($deviceTypes)) {
-	foreach ($deviceTypes as $d) {
+if (is_array($devtypes)) {
+	foreach ($devtypes as $d) {
 	    $d = (array) $d;
 	    $deviceTypes[$d['tid']] = $d;
 	}
@@ -63,7 +78,7 @@ if (is_array($deviceTypes)) {
 
 # Create a workbook
 $today = date("Ymd");
-$filename = $today."_phpipam_deviceTypes_export.xls";
+$filename = $today."_phpipam_devices_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
 $workbook->setVersion(8);
 
@@ -88,10 +103,11 @@ $curColumn = 0;
 
 
 foreach ($fields as $k) {
-    if( ($_GET[$k] == "on") ) {
-        $worksheet->write($curRow, $curColumn, _($k) ,$format_header);
-        $curColumn++;
-    }
+	if ((!isset($GET->{$k})) || ($GET->{$k} != "on"))
+		continue;
+
+	$worksheet->write($curRow, $curColumn, _($k), $format_header);
+	$curColumn++;
 }
 
 $curRow++;
@@ -102,10 +118,18 @@ foreach ($devices as $d) {
 	$d = (array) $d;
 
     foreach ($fields as $k) {
-        if( (isset($_GET[$k])) && ($_GET[$k] == "on") ) {
-            $worksheet->write($curRow, $curColumn, $d[$k], $format_text);
-            $curColumn++;
-        }
+		if ((!isset($GET->{$k})) || ($GET->{$k} != "on"))
+			continue;
+
+		if (!isset($d[$k])) {
+			$d[$k] = '';
+		}
+		if ($k == "type" && isset($deviceTypes[$d[$k]])) {
+			$d[$k] = $deviceTypes[$d[$k]]['tname'];
+		}
+
+		$worksheet->write($curRow, $curColumn, $d[$k], $format_text);
+		$curColumn++;
     }
 
 	$curRow++;
@@ -118,5 +142,3 @@ $workbook->send($filename);
 
 // Let's send the file
 $workbook->close();
-
-?>

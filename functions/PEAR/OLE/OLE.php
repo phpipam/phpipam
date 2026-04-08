@@ -47,6 +47,7 @@ $GLOBALS['_OLE_INSTANCES'] = array();
 * @author   Xavier Noguer <xnoguer@php.net>
 * @author   Christian Schmidt <schmidt@php.net>
 */
+#[AllowDynamicProperties]
 class OLE extends PEAR
 {
 
@@ -506,7 +507,7 @@ class OLE extends PEAR
         // factor used for separating numbers into 4 bytes parts
         $factor = pow(2, 32);
 
-        // days from 1-1-1601 until the beggining of UNIX era
+        // days from 1-1-1601 until the beginning of UNIX era
         $days = 134774;
         // calculate seconds
         $big_date = $days * 24 * 3600 +
@@ -523,12 +524,12 @@ class OLE extends PEAR
         $res = '';
 
         for ($i = 0; $i < 4; $i++) {
-            $hex = $low_part % 0x100;
+            $hex = (int) $low_part % 0x100;
             $res .= pack('c', $hex);
             $low_part /= 0x100;
         }
         for ($i = 0; $i < 4; $i++) {
-            $hex = $high_part % 0x100;
+            $hex = (int) $high_part % 0x100;
             $res .= pack('c', $hex);
             $high_part /= 0x100;
         }
@@ -568,10 +569,10 @@ class OLE extends PEAR
         // translate to seconds
         $big_date /= 10000000;
 
-        // days from 1-1-1601 until the beggining of UNIX era
+        // days from 1-1-1601 until the beginning of UNIX era
         $days = 134774;
 
-        // translate to seconds from beggining of UNIX era
+        // translate to seconds from beginning of UNIX era
         $big_date -= $days * 24 * 3600;
         return floor($big_date);
     }

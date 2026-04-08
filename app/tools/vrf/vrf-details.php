@@ -24,7 +24,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 
 
 <div class="btn-group" style='margin-bottom:10px;'>
-    <a href='<?php print create_link($_GET['page'], "vrf"); ?>' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> <?php print _("All VRFs"); ?></a>
+    <a href='<?php print create_link($GET->page, "vrf"); ?>' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> <?php print _("All VRFs"); ?></a>
 </div>
 
 <table class="ipaddress_subnet table-condensed table-full">
@@ -110,7 +110,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 			$vrf->{$key} = $Tools->create_links($vrf->{$key});
 			print "<tr>";
 			print "	<th>$key</th>";
-			print "	<td style='vertical-align:top;align:left;'>".$vrf->{$key}."</td>";
+			print "	<td style='vertical-align:top;align-content:left;'>".$vrf->{$key}."</td>";
 			print "</tr>";
 		}
 		// divider
@@ -121,8 +121,8 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 	if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
 		# action button groups
 		print "<tr>";
-		print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
-		print "	<td style='vertical-align:bottom;align:left;'>";
+		print "	<th style='vertical-align:bottom;align-content:left;'>"._('Actions')."</th>";
+		print "	<td style='vertical-align:bottom;align-content:left;'>";
 
 		// actions
         $links = [];

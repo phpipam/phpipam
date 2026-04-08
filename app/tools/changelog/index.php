@@ -7,8 +7,8 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# strip tags - XSS
-$_GET = $User->strip_input_tags ($_GET);
+# create csrf token
+$csrf = $User->Crypto->csrf_cookie ("create", "changelog");
 
 # header
 print "<h4>"._('Changelog')."</h4>";
@@ -16,17 +16,17 @@ print "<h4>"._('Changelog')."</h4>";
 # if enabled
 if($User->settings->enableChangelog == 1) {
 	# set default size
-	if(!isset($_GET['subnetId']))	{$input_climit = 50; }
-	else							{$input_climit = (int) $_GET['subnetId']; }
+	if(!isset($GET->subnetId))	{$input_climit = 50; }
+	else							{$input_climit = (int) $GET->subnetId; }
 
 	# change parameters - search string provided
 	$input_cfilter = '';
-	if(isset($_GET['sPage'])) {
-		$input_cfilter = escape_input(urldecode($_GET['subnetId']));
-		$input_climit  = (int) $_GET['sPage'];
+	if(isset($GET->sPage)) {
+		$input_cfilter = escape_input(urldecode($GET->subnetId));
+		$input_climit  = (int) $GET->sPage;
 	}
-	elseif(isset($_GET['subnetId'])) {
-		$input_climit  = (int) $_GET['subnetId'];
+	elseif(isset($GET->subnetId)) {
+		$input_climit  = (int) $GET->subnetId;
 	}
 	else {
 		$input_climit  = 50;
@@ -60,13 +60,15 @@ if($User->settings->enableChangelog == 1) {
 	</form>
 
 		<!-- clear log files -->
-		<button id="clearChangeLogs" class="btn btn-sm btn-default pull-left"><i class="fa fa-trash-o"></i> <?php print _('Clear logs'); ?></button>
+		<button id="clearChangeLogs" class="btn btn-sm btn-default pull-left" data-csrf='<?php print $csrf; ?>'><i class="fa fa-trash-o"></i> <?php print _('Clear logs'); ?></button>
 	</div>
 
+	<div class="normalTable logs" style="clear:both;">
 	<?php
 	# printout
 	include_once('changelog-print.php');
 }
 else {
 	$Result->show("info",_("Change logging is disabled. You can enable it under administration")."!", false);
-}
+} ?>
+	</div>		<!-- end normalTable logs div -->

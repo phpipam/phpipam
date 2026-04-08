@@ -6,7 +6,7 @@
  *********************************************/
 
 # required functions if requested via AJAX
-if(!is_object(@$User)) {
+if(!isset($User)) {
 	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;

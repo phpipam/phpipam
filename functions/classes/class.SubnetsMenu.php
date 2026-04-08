@@ -66,15 +66,13 @@ class SubnetsMenu {
 	 * @return string
 	 */
 	private function get_subnet_description($subnet) {
-		$subnet->description = $this->Subnets->shorten_text($subnet->description, 34);
-
-		if ($subnet->isFolder == 1) {
-			return $subnet->description;
-		}
-
 		// Make use of $subnet->ip if already set by cache/previous call
 		if (!isset($subnet->ip)) {
 			$subnet->ip = $this->Subnets->transform_to_dotted($subnet->subnet);
+		}
+
+		if ($subnet->isFolder == 1 || $subnet->showName == 1) {
+			return $this->Subnets->shorten_text($subnet->description, 50);
 		}
 
 		// Generate subnet description
@@ -86,13 +84,13 @@ class SubnetsMenu {
 				break;
 
 			case 1:	// Description Only
-				$description = empty($subnet->description) ?  $subnet->ip.'/'.$subnet->mask : $subnet->description; // fix for empty
+				$description = empty($subnet->description) ?  $subnet->ip.'/'.$subnet->mask : $this->Subnets->shorten_text($subnet->description, 50); // fix for empty
 				break;
 
 			case 2:	// Subnet Network & Description
 				$description = $subnet->ip.'/'.$subnet->mask;
 				if (!empty($subnet->description)) {
-					$description = $description . ' ('.$subnet->description.')';
+					$description = $description . ' ('. $this->Subnets->shorten_text($subnet->description, 34) .')';
 				}
 				break;
 		}
@@ -152,17 +150,17 @@ class SubnetsMenu {
 			// folder - opened
 			if($subnet->isFolder == 1) {
 				$this->html[] = '<li class="folderF folder-'.$style_open.' '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="fa fa-gray fa-folder fa-folder'.$style_openf.'" rel="tooltip" data-placement="right" data-html="true" title="'._('Folder contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
-				$this->html[] = '<a href="'.create_link("folder", $subnet->sectionId, $subnet->id).'">'.$description.'</a>';
+				$this->html[] = '<a href="'.create_link("folder", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->description.'">'.$description.'</a>';
 			}
 			// print name
 			elseif($subnet->showName == 1) {
 				$this->html[] = '<li class="folder folder-'.$style_open.' '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="fa fa-gray fa-folder-'.$style_open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
-				$this->html[] = '<a href="'.create_link("subnets", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->ip.'/'.$subnet->mask.'">'.$subnet->description.'</a>';
+				$this->html[] = '<a href="'.create_link("subnets", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->ip.'/'.$subnet->mask.(empty($subnet->description) ? "" : " (".$subnet->description.")").'">'.$description.'</a>';
 			}
 			// print subnet
 			else {
 				$this->html[] = '<li class="folder folder-'.$style_open.' '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="fa fa-gray fa-folder-'.$style_open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
-				$this->html[] = '<a href="'.create_link("subnets", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$description.'">'.$description.'</a>';
+				$this->html[] = '<a href="'.create_link("subnets", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->description.'">'.$description.'</a>';
 			}
 
 		} else {
@@ -170,17 +168,17 @@ class SubnetsMenu {
 			// folder - opened
 			if($subnet->isFolder == 1) {
 				$this->html[] = '<li class="leaf '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="fa fa-gray fa-sfolder fa-folder'.$style_openf.'"></i>';
-				$this->html[] = '<a href="'.create_link("folder", $subnet->sectionId, $subnet->id).'">'.$description.'</a></li>';
+				$this->html[] = '<a href="'.create_link("folder", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->description.'">'.$description.'</a></li>';
 			}
 			// print name
 			elseif($subnet->showName == 1) {
 				$this->html[] = '<li class="leaf '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="'.$style_leafClass.' fa fa-gray fa-angle-right"></i>';
-				$this->html[] = '<a href="'.create_link("subnets", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->ip.'/'.$subnet->mask.'">'.$subnet->description.'</a></li>';
+				$this->html[] = '<a href="'.create_link("subnets", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->ip.'/'.$subnet->mask.(empty($subnet->description) ? "" : " (".$subnet->description.")").'">'.$description.'</a></li>';
 			}
 			// print subnet
 			else {
 				$this->html[] = '<li class="leaf '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="'.$style_leafClass.' fa fa-gray fa-angle-right"></i>';
-				$this->html[] = '<a href="'.create_link("subnets",  $subnet->sectionId,$subnet->id).'" rel="tooltip" data-placement="right" title="'.$description.'">'.$description.'</a></li>';
+				$this->html[] = '<a href="'.create_link("subnets",  $subnet->sectionId,$subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->description.'">'.$description.'</a></li>';
 			}
 		}
 	}
@@ -208,7 +206,6 @@ class SubnetsMenu {
 		# Close required number of existing levels
 		while ($this->nestedlevel > $level) {
 			$this->html[] = '</ul>';
-			$this->html[] = '</ui>';
 			$this->nestedlevel--;
 		}
 	}

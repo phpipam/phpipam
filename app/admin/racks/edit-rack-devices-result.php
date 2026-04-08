@@ -22,51 +22,48 @@ $User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
-# strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
-
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "rack_devices", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "rack_devices", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # device type?
-if (!isset($_POST['devicetype']) || (($_POST['devicetype'] != 'device') && ($_POST['devicetype'] != 'content'))) { $Result->show("danger", _("Invalid device type"), true, true); }
+if (!isset($POST->devicetype) || (($POST->devicetype != 'device') && ($POST->devicetype != 'content'))) { $Result->show("danger", _("Invalid device type"), true, true); }
 
 # ID must be numeric
-if(!is_numeric($_POST['rackid']))			                              { $Result->show("danger", _("Invalid ID"), true); }
-if(($_POST['devicetype'] == 'device') && !is_numeric($_POST['deviceid'])) { $Result->show("danger", _("Invalid ID"), true); }
-if(!is_numeric($_POST['rack_start']))			                          { $Result->show("danger", _("Invalid start value"), true); }
-if(!is_numeric($_POST['rack_size']))			                          { $Result->show("danger", _("Invalid size value"), true); }
+if(!is_numeric($POST->rackid))			                              { $Result->show("danger", _("Invalid ID"), true); }
+if(($POST->devicetype == 'device') && !is_numeric($POST->deviceid)) { $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($POST->rack_start))			                          { $Result->show("danger", _("Invalid start value"), true); }
+if(!is_numeric($POST->rack_size))			                          { $Result->show("danger", _("Invalid size value"), true); }
 
 # name
-if (($_POST['devicetype'] == 'content') && (!isset($_POST['name']) || (trim($_POST['name'] === '')))) { $Result->show("danger", _("Invalid device name"), true); }
+if (($POST->devicetype == 'content') && (!isset($POST->name) || (trim($POST->name === '')))) { $Result->show("danger", _("Invalid device name"), true); }
 
 # validate rack
-$rack = $Admin->fetch_object("racks", "id", $_POST['rackid']);
+$rack = $Admin->fetch_object("racks", "id", $POST->rackid);
 if ($rack===false)                                                     { $Result->show("danger", _("Invalid ID"), true); }
 
 # check size
 if($rack->hasBack!="0") {
-	if($_POST['rack_start']+($_POST['rack_size']-1)>(2*$rack->size))   { $Result->show("danger", _("Invalid rack position (overflow)"), true); }
+	if($POST->rack_start+($POST->rack_size-1)>(2*$rack->size))   { $Result->show("danger", _("Invalid rack position (overflow)"), true); }
 }
 else {
-	if($_POST['rack_start']+($_POST['rack_size']-1)>$rack->size)       { $Result->show("danger", _("Invalid rack position (overflow)"), true); }
+	if($POST->rack_start+($POST->rack_size-1)>$rack->size)       { $Result->show("danger", _("Invalid rack position (overflow)"), true); }
 }
 
-switch ($_POST['devicetype']) {
+switch ($POST->devicetype) {
     case 'device':
     # validate device
-    $device = $Admin->fetch_object("devices", "id", $_POST['deviceid']);
+    $device = $Admin->fetch_object("devices", "id", $POST->deviceid);
     if ($device===false)                                                   { $Result->show("danger", _("Invalid Device ID"), true); }
 
     # set update values
-    $values = array("id"=>@$_POST['deviceid'],
-				    "rack"=>@$_POST['rackid'],
-				    "rack_start"=>@$_POST['rack_start'],
-				    "rack_size"=>@$_POST['rack_size'],
+    $values = array("id"=>$POST->deviceid,
+				    "rack"=>$POST->rackid,
+				    "rack_start"=>$POST->rack_start,
+				    "rack_size"=>$POST->rack_size,
 				    );
 
     # inherit location if it is not already set
-    if ($User->settings->enableLocations=="1" && @$_POST['no_location']!="1") {
+    if ($User->settings->enableLocations=="1" && $POST->no_location!="1") {
 	    if (($device->location=="0" || is_null($device->location)) && ($rack->location!="0" && !is_null($rack->location))) {
 		    $values['location'] = $rack->location;
 	    }
@@ -79,10 +76,10 @@ switch ($_POST['devicetype']) {
 
     case 'content':
     # set values
-    $values = array("name"=>@$_POST['name'],
-                    "rack"=>@$_POST['rackid'],
-                    "rack_start"=>@$_POST['rack_start'],
-                    "rack_size"=>@$_POST['rack_size'],
+    $values = array("name"=>$POST->name,
+                    "rack"=>$POST->rackid,
+                    "rack_start"=>$POST->rack_start,
+                    "rack_size"=>$POST->rack_size,
                     );
 
     # add content

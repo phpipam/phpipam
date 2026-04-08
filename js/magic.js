@@ -32,6 +32,13 @@ $(document).keydown(function(e) {
     }
 });
 
+
+
+$(document).on("click", "a", function() {
+    hideTooltips()
+});
+
+
 // no enter in sortfields
 $(document).on("submit", ".searchFormClass", function() {
     return false;
@@ -465,8 +472,9 @@ $(document).on('click', '#sortablePopup li a.widget-add', function() {
     var wsize = $(this).attr('data-size');
     var wtitle= $(this).attr('data-htitle');
     //create
-    var data = '<div class="row-fluid"><div class="span'+wsize+' widget-dash" id="'+wid+'"><div class="inner movable"><h4>'+wtitle+'</h4><div class="hContent"></div></div></div></div>';
-    $('#dashboard').append(data);
+    var data = '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-'+wsize+' widget-dash" id="'+wid+'"><div class="inner movable"><h4>'+wtitle+'</h4><div class="hContent"></div></div></div>';
+    $('#widget-container').append(data);
+    $('#dashboard .row-fluid').sortable('refresh');
     //load
     w = wid.replace("w-", "");
     $.post('app/dashboard/widgets/'+w+'.php', function(data) {
@@ -558,17 +566,17 @@ $('#expandfolders').click(function() {
     var action = $(this).attr('data-action');
     //open
     if(action == 'close') {
-        $('.subnets ul#subnets li.folder > i').removeClass('fa-folder-close-o').addClass('fa-folder-open-o');
-        $('.subnets ul#subnets li.folderF > i').removeClass('fa-folder').addClass('fa-folder-open');
-        $('.subnets ul#subnets ul.submenu').removeClass('submenu-close').addClass('submenu-open').slideDown('fast');
+        $('ul#subnets li.folder > i').removeClass('fa-folder-close-o').addClass('fa-folder-open-o');
+        $('ul#subnets li.folderF > i').removeClass('fa-folder').addClass('fa-folder-open');
+        $('ul#subnets ul.submenu').removeClass('submenu-close').addClass('submenu-open').slideDown('fast');
         $(this).attr('data-action','open');
         createCookie('expandfolders','1','365');
         $(this).removeClass('fa-expand').addClass('fa-compress');
     }
     else {
-        $('.subnets ul#subnets li.folder > i').addClass('fa-folder-close-o').removeClass('fa-folder-open-o');
-        $('.subnets ul#subnets li.folderF > i').addClass('fa-folder').removeClass('fa-folder-open');
-        $('.subnets ul#subnets ul.submenu').addClass('submenu-close').removeClass('submenu-open').slideUp('fast');
+        $('ul#subnets li.folder > i').addClass('fa-folder-close-o').removeClass('fa-folder-open-o');
+        $('ul#subnets li.folderF > i').addClass('fa-folder').removeClass('fa-folder-open');
+        $('ul#subnets ul.submenu').addClass('submenu-close').removeClass('submenu-open').slideUp('fast');
         $(this).attr('data-action','close');
         createCookie('expandfolders','0','365');
         $(this).removeClass('fa-compress').addClass('fa-expand');
@@ -919,7 +927,8 @@ $('a.csvExport').click(function() {
     showSpinner();
     var subnetId = $(this).attr('data-subnetId');
     //show select fields
-    $.post('app/subnets/addresses/export-field-select.php', {subnetId:subnetId}, function(data) {
+    csrf = $(this).attr('csrf')
+    $.post('app/subnets/addresses/export-field-select.php?csrf='+csrf, {subnetId:subnetId}, function(data) {
         $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
         hideSpinner();
@@ -930,7 +939,7 @@ $('a.csvExport').click(function() {
 $(document).on("click", "button#exportSubnet", function() {
     var subnetId = $('a.csvExport').attr('data-subnetId');
     //get selected fields
-    var exportFields = $('form#selectExportFields').serialize();
+    var exportFields = $('form#selectExportFields').serialize() + "&csrf=" + $(this).attr('csrf');
     $("div.dl").remove();    //remove old innerDiv
     $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/subnets/addresses/export-subnet.php?subnetId=" + subnetId + "&" + exportFields + "'></iframe></div>");
     return false;
@@ -1092,9 +1101,10 @@ function search_execute (loc) {
     var pstn      = $('#'+form_name+' input[name=pstn]').is(":checked") ? "on" : "off";
     var circuits  = $('#'+form_name+' input[name=circuits]').is(":checked") ? "on" : "off";
     var customers = $('#'+form_name+' input[name=customers]').is(":checked") ? "on" : "off";
+    var devices   = $('#'+form_name+' input[name=devices]').is(":checked") ? "on" : "off";
 
     // set cookie json-encoded with parameters
-    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'","pstn":"'+pstn+'","circuits":"'+circuits+'","customers":"'+customers+'"}',365);
+    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'","pstn":"'+pstn+'","circuits":"'+circuits+'","customers":"'+customers+'","devices":"'+devices+'"}',365);
 
     //lets try to detect IEto set location
     var ua = window.navigator.userAgent;
@@ -1126,7 +1136,7 @@ $('form#search').submit(function () {
 // search ipaddress override
 $('a.search_ipaddress').click(function() {
     // set cookie json-encoded with parameters
-    createCookie("search_parameters",'{"addresses":"on","subnets":"off","vlans":"off","vrf":"off","pstn":"off","circuits":"off","customers":"off"}',365);
+    createCookie("search_parameters",'{"addresses":"on","subnets":"off","vlans":"off","vrf":"off","pstn":"off","circuits":"off","customers":"off","devices":"off"}',365);
 });
 
 //show/hide search select fields
@@ -1139,7 +1149,6 @@ $(document).on("mouseleave", '#user_menu', function(event){
     var object1 = $("#searchSelect");
     object1.slideUp();
 });
-
 
 //search export
 $(document).on("click", "#exportSearch", function(event){
@@ -1354,7 +1363,7 @@ $(document).on("click", ".groupselect", function() {
 $('#instructionsForm').submit(function () {
     var csrf_cookie = $("#instructionsForm input[name=csrf_cookie]").val();
     var id = $("#instructionsForm input[name=id]").val();
-    var instructions = CKEDITOR.instances.instructions.getData();
+    var instructions = $("#instructionsForm textarea[id=instructions]").val();
     $('div.instructionsPreview').hide('fast');
 
     showSpinner();
@@ -1367,7 +1376,7 @@ $('#instructionsForm').submit(function () {
 });
 $('#preview').click(function () {
     showSpinner();
-    var instructions = CKEDITOR.instances.instructions.getData();
+    var instructions = $("#instructionsForm textarea[id=instructions]").val();
 
     $.post('app/admin/instructions/preview.php', {instructions:instructions, csrf_cookie:$("#instructionsForm input[name=csrf_cookie]").val()}, function(data) {
         $('div.instructionsPreview').html(data).fadeIn('fast');
@@ -1423,8 +1432,9 @@ $('#logDirection button').click(function() {
 //logs export
 $('#downloadLogs').click(function() {
     showSpinner();
+    var csrf = $(this).attr('data-csrf');
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/tools/logs/export.php'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/tools/logs/export.php?csrf="+csrf+"'></iframe></div>");
     hideSpinner();
     //show downloading
     $('div.logs').prepend("<div class='alert alert-info' id='logsInfo'><i class='icon-remove icon-gray selfDestruct'></i> Preparing download... </div>");
@@ -1433,7 +1443,8 @@ $('#downloadLogs').click(function() {
 //logs clear
 $('#clearLogs').click(function() {
     showSpinner();
-    $.post('app/tools/logs/clear-logs.php', function(data) {
+    var csrf = $(this).attr('data-csrf');
+    $.post('app/tools/logs/clear-logs.php?csrf='+csrf, function(data) {
         $('div.logs').html(data);
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1442,7 +1453,8 @@ $('#clearLogs').click(function() {
 //logs clear
 $('#clearChangeLogs').click(function() {
     showSpinner();
-    $.post('app/tools/changelog/clear-logs.php', function(data) {
+    var csrf = $(this).attr('data-csrf');
+    $.post('app/tools/changelog/clear-logs.php?csrf='+csrf, function(data) {
         $('div.logs').html(data);
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -2418,6 +2430,10 @@ $(document).on("click", "#editVLANdomainsubmit", function() {
     submit_popup_data (".domainEditResult", "app/admin/vlans/edit-domain-result.php", $('form#editVLANdomain').serialize());
 });
 
+/* ---- Show permissions ----- */
+$(document).on("click", ".toggle-module-permissions", function () {
+    $(this).next('div').toggleClass('hidden');
+})
 
 /* ---- VRF ----- */
 //submit form
@@ -2620,24 +2636,31 @@ $('button#XLSdump, button#MySQLdump, button#hostfileDump').click(function () {
     else if ($(this).attr('id')=="MySQLdump")       { script = "generate-mysql.php"; }
     else if ($(this).attr('id')=="hostfileDump")    { script = "generate-hosts.php"; }
 
+    csrf = $(this).attr('csrf')
+
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/"+script+"'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/"+script+"?csrf="+csrf+"'></iframe></div>");
     hideSpinner();
 });
 
 
 //Export Section
 $('button.dataExport').click(function () {
-    var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype"]; var popsize = {};
+    var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype"];
+    var popsize = {};
+    // popup window size definition
     popsize["subnets"] = "w700";
-    popsize["ipaddr"] = "w700";
+    popsize["ipaddr"]  = "w700";
+    popsize["vlan"]    = "w700";
     popsize["devices"] = "max";
+    // get requested datatype
     var dataType = $('select[name=dataType]').find(":selected").val();
+    var csrf = $('select[name=dataType]').attr('csrf')
     hidePopups();
     //show popup window
     if (implemented.indexOf(dataType) > -1) {
         showSpinner();
-        $.post('app/admin/import-export/export-' + dataType + '-field-select.php', function(data) {
+        $.post('app/admin/import-export/export-' + dataType + '-field-select.php?csrf='+csrf, function(data) {
         if (popsize[dataType] !== undefined) {
             $('div.popup_'+popsize[dataType]).html(data);
             showPopup('popup_'+popsize[dataType]);
@@ -2659,7 +2682,7 @@ $('button.dataExport').click(function () {
 $(document).on("click", "button#dataExportSubmit", function() {
     //get selected fields
     var dataType = $(this).attr('data-type');
-    var exportFields = $('form#selectExportFields').serialize();
+    var exportFields = $('form#selectExportFields').serialize() + "&csrf=" + $(this).attr('csrf');
     //show popup window
     switch(dataType) {
         case 'vrf':

@@ -22,6 +22,20 @@ $Tools	    = new Tools ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === false) {
+	$content  = _("Invalid CSRF cookie");
+
+	header("Cache-Control: private");
+	header("Content-Description: File Transfer");
+	header("Content-Type: application/octet-stream");
+	header('Content-Disposition: attachment; filename="' . "error_message.txt" . '"');
+	header("Content-Length: " . strlen($content));
+
+	print($content);
+	exit();
+}
+
 # fetch all vrfs
 $all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
 if (!$all_vrfs) { $all_vrfs = array(); }
@@ -54,15 +68,15 @@ $curRow = 0;
 $curColumn = 0;
 
 //write headers
-if( (isset($_GET['name'])) && ($_GET['name'] == "on") ) {
+if ($GET->name == "on") {
 	$worksheet->write($curRow, $curColumn, _('Name') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['rd'])) && ($_GET['rd'] == "on") ) {
+if ($GET->rd == "on") {
 	$worksheet->write($curRow, $curColumn, _('RD') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+if ($GET->description == "on") {
 	$worksheet->write($curRow, $curColumn, _('Description') ,$format_header);
 	$curColumn++;
 }
@@ -72,7 +86,7 @@ if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $myField) {
 		//set temp name - replace space with three ___
 		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
-		if( (isset($_GET[$myField['nameTemp']])) && ($_GET[$myField['nameTemp']] == "on") ) {
+		if( $GET->{$myField['nameTemp']} == "on") {
 			$worksheet->write($curRow, $curColumn, $myField['name'] ,$format_header);
 			$curColumn++;
 		}
@@ -89,15 +103,15 @@ foreach ($all_vrfs as $vrf) {
 	//reset row count
 	$curColumn = 0;
 
-	if( (isset($_GET['name'])) && ($_GET['name'] == "on") ) {
+	if ($GET->name == "on") {
 		$worksheet->write($curRow, $curColumn, $vrf['name'], $format_text);
 		$curColumn++;
 	}
-	if( (isset($_GET['rd'])) && ($_GET['rd'] == "on") ) {
+	if ($GET->rd == "on") {
 		$worksheet->write($curRow, $curColumn, $vrf['rd'], $format_text);
 		$curColumn++;
 	}
-	if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+	if ($GET->description == "on") {
 		$worksheet->write($curRow, $curColumn, $vrf['description'], $format_text);
 		$curColumn++;
 	}
@@ -107,13 +121,13 @@ foreach ($all_vrfs as $vrf) {
 		foreach($custom_fields as $myField) {
 		//set temp name - replace space with three ___
 		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
-		if( (isset($_GET[$myField['nameTemp']])) && ($_GET[$myField['nameTemp']] == "on") ) {
+		if( $GET->{$myField['nameTemp']} == "on") {
 			$worksheet->write($curRow, $curColumn, $vlan[$myField['name']], $format_text);
 			$curColumn++;
 					}
 				}
 			}
-	
+
 	$curRow++;
 }
 
@@ -125,5 +139,3 @@ $workbook->send($filename);
 
 // Let's send the file
 $workbook->close();
-
-?>

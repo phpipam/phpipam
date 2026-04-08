@@ -6,7 +6,7 @@
  *
  *  This class servers as a wrapper for different DHCP servers
  *
- *  Curently supported are:
+ *  Currently supported are:
  *      - kea (http://kea.isc.org/wiki)
  *
  *

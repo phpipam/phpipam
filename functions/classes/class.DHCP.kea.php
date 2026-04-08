@@ -221,7 +221,7 @@ class DHCP_kea extends Common_functions {
             throw new exception ("Cannot access config file ".$this->kea_config_file);
         }
 
-        // loop and remove comments (contains #) and replace multilpe spaces
+        // loop and remove comments (contains #) and replace multiple spaces
         $out   = array();
         foreach ($config as $k=>$f) {
             if (strpos($f, "#")!==false || is_blank($f)) {}
@@ -241,7 +241,7 @@ class DHCP_kea extends Common_functions {
 		}
 
         // save config
-        $this->config = pf_json_decode($config, true);
+        $this->config = db_json_decode($config, true);
         // save IPv4 / IPv6 flags
         if(isset($this->config['Dhcp4']))   { $this->ipv4_used = true; }
         if(isset($this->config['Dhcp6']))   { $this->ipv6_used = true; }
@@ -387,7 +387,7 @@ class DHCP_kea extends Common_functions {
             throw new Exception("IPv6 leases not yet!");
         }
         // fetch leases
-		try { $leases = $this->Database_kea->getObjectsQuery($query); }
+		try { $leases = $this->Database_kea->getObjectsQuery("lease4", $query); }
 		catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}
@@ -466,7 +466,7 @@ class DHCP_kea extends Common_functions {
 
 
         // first check reservations under subnet > reservations, can be both
-        $this->get_reservations_config_file ($type);
+        $this->get_reservations_config_file ($type, $reservations_database);
 
         // if set in config check also database
         if ($reservations_database!==false) {
@@ -492,9 +492,10 @@ class DHCP_kea extends Common_functions {
      *
      * @access private
      * @param mixed $type
+     * @param array $reservations_database
      * @return void
      */
-    private function get_reservations_config_file ($type) {
+    private function get_reservations_config_file ($type, $reservations_database) {
         // read file
         if($type=="IPv4") {
             // check if set
@@ -569,7 +570,7 @@ class DHCP_kea extends Common_functions {
             $query = "select * from `hosts`;";
         }
         // fetch leases
-		try { $reservations = $this->Database_kea->getObjectsQuery($query); }
+		try { $reservations = $this->Database_kea->getObjectsQuery("hosts", $query); }
 		catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}

@@ -25,9 +25,9 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # get requested params
-if(isset($_GET['ip'])) {
+if(isset($GET->ip)) {
     // remove chars
-    $search_term =  htmlspecialchars(trim($_GET['ip']));
+    $search_term =  htmlspecialchars(trim($GET->ip));
 }
 else {
     $search_term = "";
@@ -39,7 +39,7 @@ $search_term = str_replace("*", "%", $search_term);
 
 # parse parameters from cookie
 if (isset($_COOKIE['search_parameters'])) {
-    $params = pf_json_decode($_COOKIE['search_parameters'], true);
+    $params = db_json_decode($_COOKIE['search_parameters'], true);
     if($params) {
         foreach ($params as $k=>$p) {
             if ($p=="on") {
@@ -67,6 +67,7 @@ $custom_vrf_fields       = $_REQUEST['vrf']=="on"       ? $Tools->fetch_custom_f
 $custom_circuit_fields   = $_REQUEST['circuits']=="on"  ? $Tools->fetch_custom_fields ("circuits") : array();
 $custom_circuit_p_fields = $_REQUEST['circuits']=="on"  ? $Tools->fetch_custom_fields ("circuitProviders") : array();
 $custom_customer_fields  = $_REQUEST['customers']=="on" ? $Tools->fetch_custom_fields ("customers") : array();
+$custom_device_fields    = $_REQUEST['devices']=="on"   ? $Tools->fetch_custom_fields ("devices") : array();
 
 
 # set selected address fields array
@@ -96,10 +97,12 @@ if(@$_REQUEST['circuits']=="on" && $User->get_module_permissions ("circuits")>=U
 else 																				{ $result_circuits = []; }
 if(@$_REQUEST['circuits']=="on" && $User->get_module_permissions ("circuits")>=User::ACCESS_R) 	{ $result_circuits_p = $Tools->search_circuit_providers($search_term, $custom_circuit_p_fields); }
 else  																				{ $result_circuits_p = []; }
-
 # search customers
-if(@$_REQUEST['customers']=="on" && $User->get_module_permissions ("customers")>=User::ACCESS_R) 		{ $result_customers = $Tools->search_customers($search_term, $custom_vrf_fields); }
+if(@$_REQUEST['customers']=="on" && $User->get_module_permissions ("customers")>=User::ACCESS_R) 		{ $result_customers = $Tools->search_customers($search_term, $custom_customer_fields); }
 else  																					{ $result_customers = []; }
+# search devices
+if(@$_REQUEST['devices']=="on" && $User->get_module_permissions ("devices")>=User::ACCESS_R) 		{ $result_devices = $Tools->search_devices($search_term, $custom_device_fields); }
+else  																					{ $result_devices = []; }
 
 /*
  *	Write xls
@@ -117,6 +120,13 @@ $format_title->setFgColor(22);			//light gray
 $format_title->setBottom(2);
 $format_title->setAlign('left');
 
+//formatting content - borders around IP addresses
+$format_right =& $workbook->addFormat();
+$format_right->setRight(1);
+$format_left =& $workbook->addFormat();
+$format_left->setLeft(1);
+$format_top =& $workbook->addFormat();
+$format_top->setTop(1);
 
 $lineCount = 0;		//for line change
 $m = 0;				//for section change
@@ -614,6 +624,54 @@ if(is_array($result_customers) && sizeof($result_customers)>0) {
 		$c=3;
 		if(sizeof($custom_customer_fields) > 0) {
 			foreach($custom_customer_fields as $field) {
+				$worksheet->write($lineCount, $c, $line[$field['name']]);
+				$c++;
+			}
+		}
+		//new line
+		$lineCount++;
+	}
+}
+
+
+
+
+/* -- Create a worksheet for Devices -- */
+if(is_array($result_devices) && sizeof($result_devices)>0) {
+	$lineCount = 0;
+
+	$worksheet =& $workbook->addWorksheet(_('Devices'));
+	$worksheet->setInputEncoding("utf-8");
+
+	//write headers
+	$worksheet->write($lineCount, 0, _('Hostname') ,$format_title);
+	$worksheet->write($lineCount, 1, _('Description') ,$format_title);
+	$worksheet->write($lineCount, 2, _('Type') ,$format_title);
+
+	$c=3;
+	if(sizeof($custom_device_fields) > 0) {
+		foreach($custom_device_fields as $field) {
+			$worksheet->write($lineCount, $c, $field['name'], $format_title);
+			$c++;
+		}
+	}
+
+	//new line
+	$lineCount++;
+
+	foreach($result_devices as $line) {
+		//cast
+		$line = (array) $line;
+
+		//print details
+		$worksheet->write($lineCount, 0, $line['hostname'], $format_left);
+		$worksheet->write($lineCount, 1, $line['description']);
+		$worksheet->write($lineCount, 2, $line['type']);
+
+		//custom
+		$c=3;
+		if(sizeof($custom_device_fields) > 0) {
+			foreach($custom_device_fields as $field) {
 				$worksheet->write($lineCount, $c, $line[$field['name']]);
 				$c++;
 			}

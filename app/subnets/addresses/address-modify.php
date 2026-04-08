@@ -22,19 +22,19 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # create csrf token
-$csrf = $_POST['action']=="add"||$_POST['action']=="all-add" ? $User->Crypto->csrf_cookie ("create", "address_add") : $User->Crypto->csrf_cookie ("create", "address_".$_POST['id']);
+$csrf = $POST->action=="add"||$POST->action=="all-add" ? $User->Crypto->csrf_cookie ("create", "address_add") : $User->Crypto->csrf_cookie ("create", "address_".$POST->id);
 
 # validate action
-$Tools->validate_action ($_POST['action']);
+$Tools->validate_action(false);
 
 # validate post
-is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid subnet ID"), true, true);
-is_numeric($_POST['id']) || is_blank($_POST['id']) ?:	$Result->show("danger", _("Invalid ID"), true, true);
+is_numeric($POST->subnetId) ?:						$Result->show("danger", _("Invalid subnet ID"), true, true);
+is_numeric($POST->id) || is_blank($POST->id) ?:	$Result->show("danger", _("Invalid ID"), true, true);
 
 # get posted values
-$subnetId= escape_input($_POST['subnetId']);
-$action  = escape_input($_POST['action']);
-$id      = escape_input($_POST['id']);
+$subnetId= escape_input($POST->subnetId);
+$action  = escape_input($POST->action);
+$id      = escape_input($POST->id);
 
 # fetch subnet
 $subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
@@ -47,7 +47,7 @@ $subnet_permission > 1 ?:		$Result->show("danger", _('Cannot edit IP address det
 
 // set selected address and required addresses fields array
 $selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);
-$required_ip_fields = $Tools->explode_filtered(";", $User->settings->IPrequired);																			//format to array
+$required_ip_fields = $Tools->explode_filtered(";", $User->settings->IPrequired);		//format to array
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
@@ -60,14 +60,20 @@ if (($action=="add" || $action=="all-add") && ($subnet['isFull']==1 && $subnet['
 if ($action == "all-add") {
 	$address['ip_addr'] = $Subnets->transform_address($id, "dotted");
 	$address['id'] = 0;
+	$address['PTR'] = null;
+	$address['location'] = null;
+	$address['customer_id'] = null;
 }
-else if ($action == "add") {
+elseif ($action == "add") {
 	# get first available IP address
 	$first = $Addresses->get_first_available_address ($subnetId);
 	$first = !$first ? "" : $Subnets->transform_address($first, "dotted");
 
 	$address['ip_addr'] = $first;
 	$address['id'] = 0;
+	$address['PTR'] = null;
+	$address['location'] = null;
+	$address['customer_id'] = null;
 }
 else {
 	$address = (array) $Addresses->fetch_address(null, $id);
@@ -189,7 +195,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		<td><?php print _('IP address'); ?> *</td>
 		<td>
 		<div class="input-group">
-			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print $Subnets->transform_address($address['ip_addr'], "dotted");; if(is_numeric($_POST['stopIP'])>0) print "-".$Subnets->transform_address($_POST['stopIP'],"dotted"); ?>" placeholder="<?php print _('IP address'); ?>">
+			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print $Subnets->transform_address($address['ip_addr'], "dotted");; if(is_numeric($POST->stopIP)>0) print "-".$Subnets->transform_address($POST->stopIP,"dotted"); ?>" placeholder="<?php print _('IP address'); ?>">
     		<span class="input-group-addon" style="border-left:none;">
     			<a class="ping_ipaddress ping_ipaddress_new" data-subnetid="<?php print $subnetId; ?>" data-id="" href="#" rel="tooltip" data-container="body" title="" data-original-title="<?php print _('Check availability'); ?>">
  					<i class="fa fa-gray fa-cogs"></i>
@@ -259,7 +265,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		if(!isset($address['mac'])) {$address['mac'] = "";}
 
 		// set star if field is required
-		$required = in_array("description", $required_ip_fields) ? " *" : "";
+		$required = in_array("mac", $required_ip_fields) ? " *" : "";
 
 		print '<tr class="text-top">'. "\n";
 		print '	<td style="padding-top:7px;">'._('MAC address').$required.'</td>'. "\n";
@@ -351,7 +357,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	 	print '</tr>';
 
 		//remove all associated queries if delete
-		if ($_POST['action']=="delete" || $_POST['action']=="all-edit") {
+		if ($POST->action=="delete" || $POST->action=="all-edit") {
     		// check
     		$PowerDNS = new PowerDNS ($Database);
     		$records  = $PowerDNS->search_records ("name", $address['hostname'], 'name', true);
@@ -434,14 +440,18 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	print "</tr>";
 
 	// customer
-	if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
+	if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R && in_array('customer_id', $selected_ip_fields)) {
+
+		// set star if field is required
+		$required = in_array("customer_id", $required_ip_fields) ? " *" : "";
 
 		print '<tr>'. "\n";
-		print '	<td>'._('Customer').'</td>'. "\n";
+		print '	<td>'._('Customer').$required.'</td>'. "\n";
 		print '	<td>'. "\n";
 
 		print '<select name="customer_id" class="ip_addr form-control input-sm input-xs input-w-auto" '.$delete.'>'. "\n";
 		print '<option disabled>'._('Select customer').':</option>'. "\n";
+		if($required=="" || $address['customer_id']==null)
 		print '<option value="0" selected>'._('None').'</option>'. "\n";
 
 		// fetch devices
@@ -490,7 +500,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 		print '<select name="switch" class="ip_addr form-control input-sm input-w-auto" '.$delete.'>'. "\n";
 		print '<option disabled>'._('Select device').':</option>'. "\n";
-		if($required=="")
+		if($required=="" || $address['switch']==null)
 		print '<option value="0" selected>'._('None').'</option>'. "\n";
 
 		// fetch devices
@@ -532,7 +542,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 
     // location
-    if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
+    if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R && in_array('location', $selected_ip_fields)) { ?>
 	<tr>
 		<td>
 			<?php
@@ -543,11 +553,11 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 			</td>
 		<td>
 			<select name="location" class="form-control input-sm input-w-auto">
-				<?php if($required=="") { ?>
-    			<option value="0"><?php print _("None"); ?></option>
-    			<?php } ?>
-    			<?php
-                if($locations!==false) {
+				<?php
+				print '<option disabled>'._('Select customer').':</option>'. "\n";
+				if($required=="" || $address['location']==null)
+				print '<option value="0">' . _("None") . '</option>';
+                if(is_array($locations)) {
         			foreach($locations as $l) {
         				if($address['location'] == $l->id)	{ print "<option value='$l->id' selected='selected'>$l->name</option>"; }
         				else					            { print "<option value='$l->id'>$l->name</option>"; }

@@ -20,12 +20,12 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # id must be numeric
-is_numeric($_POST['id']) || is_blank($_POST['id']) ?:	$Result->show("danger", _("Invalid ID"), true);
+is_numeric($POST->id) || is_blank($POST->id) ?:	$Result->show("danger", _("Invalid ID"), true);
 
 $csrf = $User->Crypto->csrf_cookie ("create", "mail_notify");
 
 # get IP address id
-$id = $_POST['id'];
+$id = $POST->id;
 
 # fetch address, subnet, vlan and nameservers
 $address = (array) $Addresses->fetch_address (null, $id);
@@ -73,7 +73,7 @@ empty($subnet['vlanId']) ? : 			$content[] = "&bull; "._('VLAN ID').": \t\t $vla
 if ( !empty( $subnet['nameserverId'] ) ) {
 	$nslist = str_replace(";", ", ", $nameservers['namesrv1']);
 
-						$content[] = "&bull; "._('Nameservers').": \t $nslist (${nameservers['name']})";
+						$content[] = "&bull; "._('Nameservers').": \t $nslist ({$nameservers['name']})";
 }
 
 # Switch

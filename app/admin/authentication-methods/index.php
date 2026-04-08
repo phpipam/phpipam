@@ -28,8 +28,11 @@ foreach($all_method_types as $type) {
 
 </div>
 
+<div class='clearfix'></div>
+<div class="panel panel-default pull-left" style="width:auto;border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;">
+
 <!-- table -->
-<table id="userPrint" class="table sorted nosearch table-striped table-top table-auto" data-cookie-id-table="admin_authm">
+<table id="userPrint" class="table nosearch table-striped table-top" data-cookie-id-table="admin_authm" style="bordmarginer-bottom:0px;">
 
 <!-- Headers -->
 <thead>
@@ -55,7 +58,7 @@ foreach($all_methods as $method) {
 	$user_num = $Database->numObjectsFilter("users", "authMethod", $method->id);
 
 	print "<tr>";
-	print "	<td>$method->type</td>";
+	print "	<td><span class='badge badge1 badge-white'>$method->type</span></td>";
 	print "	<td>$method->description</td>";
 	//parameters
 	print "	<td>";
@@ -66,7 +69,7 @@ foreach($all_methods as $method) {
 			'secret',
 			'spx509key'
 		];
-		$params = pf_json_decode($method->params);
+		$params = db_json_decode($method->params);
 		foreach($params as $key=>$parameter) {
 			// mask secure keys
 			if(in_array($key, $secure_keys) && !is_blank($parameter) ) { $parameter = "********"; }
@@ -77,6 +80,12 @@ foreach($all_methods as $method) {
 	}
 	else {
 		print _("no parameters");
+	}
+	// radius - composer validation
+	if($method->type=="Radius") {
+	    if($User->composer_has_errors(["dapphp/radius"])) {
+	        $Result->show("danger", $User->composer_err, false);
+	    }
 	}
 	print "	</span>";
 	print "	</td>";
@@ -98,13 +107,15 @@ foreach($all_methods as $method) {
 ?>
 </tbody>
 </table>
+</div>
+<div class='clearfix'></div>
 
 
-<hr>
-<div class="alert alert-info alert-absolute" style="margin-top:30px;">
+
+<div class="alert alert-info alert-absolute">
 	<?php print _("Here you can set different authentication methods for your users."); ?>
 	<hr>
-	<?php print _("phpIPAM currently supports 7 methods for authentication:"); ?>
+	<?php print _("phpIPAM currently supports following authentication methods:"); ?>
 	<ul>
 		<li><?php print _("Local authentication"); ?></li>
 		<li><?php print _("Apache authentication"); ?></li>
@@ -113,8 +124,9 @@ foreach($all_methods as $method) {
 		<li><?php print _("NetIQ authentication"); ?></li>
 		<li><?php print _("Radius authentication"); ?></li>
 		<li><?php print _("SAMLv2 authentication"); ?></li>
+		<li><?php print _("Passkey authentication"); ?></li>
 	</ul>
 	<br>
 	<?php print _("For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation please check ")."<a href='http://adldap.sourceforge.net/'>adLDAP</a><br><br>"; ?>
-	<?php print _('First create new user under user management with <u>same username as on AD</u> and set authention type to one of available methods.')."<br>"._('Also set proper permissions - group membership for new user'); ?>
+	<?php print _('First create new user under user management with <u>same username as on AD</u> and set authentication type to one of available methods.')."<br>"._('Also set proper permissions - group membership for new user'); ?>
 </div>

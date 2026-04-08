@@ -3,11 +3,8 @@
 # user must be authenticated and admin
 $User->is_admin (true);
 
-# strip tags - XSS
-$_GET = $User->strip_input_tags ($_GET);
-
 # get clog entries
-$clogs = $Log->fetch_changlog_entries("section", $_GET['sPage']);
+$clogs = $Log->fetch_changlog_entries("section", $GET->sPage);
 
 # header
 print "<h4>"._('Section')." - "._('Changelog')."</h4><hr>";
@@ -44,16 +41,19 @@ else {
 		# format diff
 		$l['cdiff'] = str_replace("\n", "<br>", $l['cdiff']);
 
+		# set class for badge
+		if($l['cresult']=="success") { $bclass='alert-success'; }
+		else 						 { $bclass='alert-danger'; }
+
 		print "<tr>";
 		print "	<td>$l[real_name]</td>";
-		print "	<td>"._("$l[caction]")."</td>";
-		print "	<td>"._("$l[cresult]")."</td>";
-		print "	<td>$l[cdate]</td>";
-		print "	<td>$l[cdiff]</td>";
+		print "	<td><span class='badge badge1 badge5'>"._(ucwords($l['caction']))."</span></td>";
+		print "	<td><span class='badge badge1 badge5 $bclass'>"._(ucwords("$l[cresult]"))."</span></td>";
+		print "	<td class='text-muted'>$l[cdate]</td>";
+		print "	<td><p style='background: rgba(0,0,0,0.1); padding:10px 20px;border-radius:4px;margin-bottom:0px;'>".$l['cdiff']."</p></td>";
 		print "</tr>";
 
 	}
 
 	print "</table>";
 }
-?>

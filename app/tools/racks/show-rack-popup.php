@@ -27,11 +27,11 @@ if ($User->settings->enableRACK!="1") {
 }
 else {
     # validate integer
-    if(!is_numeric($_POST['rackid']))      { $error = _("Invalid rack Id"); }
+    if(!is_numeric($POST->rackid))      { $error = _("Invalid rack Id"); }
     # init racks object
     $Racks = new phpipam_rack ($Database);
     # fetch all racks
-    $rack = $Racks->fetch_rack_details ($_POST['rackid']);
+    $rack = $Racks->fetch_rack_details ($POST->rackid);
 
     // rack check
     if($rack===false)                       { $error =_("Invalid rack Id"); }
@@ -48,9 +48,9 @@ else {
     }
     else {
     ?>
-        <img src="<?php print $Tools->create_rack_link ($rack->id, $_POST['deviceid']); ?>" style='width:180px;'>
+        <img src="<?php print $Tools->create_rack_link ($rack->id, $POST->deviceid); ?>" style='width:180px;'>
         <?php if($rack->hasBack!="0") { ?>
-        <img src="<?php print $Tools->create_rack_link ($rack->id, $_POST['deviceid'], true); ?>" style='width:180px;'>
+        <img src="<?php print $Tools->create_rack_link ($rack->id, $POST->deviceid, true); ?>" style='width:180px;'>
         <?php } ?>
     <?php } ?>
 </div>

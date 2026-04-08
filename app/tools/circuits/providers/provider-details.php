@@ -13,10 +13,13 @@ $User->check_user_session();
 $User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
 
 # check
-is_numeric($_GET['sPage']) ? : $Result->show("danger", _("Invalid ID"), true);
+is_numeric($GET->sPage) ? : $Result->show("danger", _("Invalid ID"), true);
 
 # fetch provider
-$provider = $Tools->fetch_object ("circuitProviders", "id", $_GET['sPage']);
+$provider = $Tools->fetch_object ("circuitProviders", "id", $GET->sPage);
+$circuit_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
+$type_hash = [];
+foreach($circuit_types as $t){ $type_hash[$t->id] = $t->ctname; }
 
 // print back link
 print "<div class='btn-group'>";
@@ -28,7 +31,8 @@ if($provider!==false) {
 	// get custom fields
 	$custom_fields = $Tools->fetch_custom_fields('circuitProviders');
 	$custom_fields_circuits = $Tools->fetch_custom_fields('circuits');
-
+	$colspanCustom = 0;
+	
 	// details
 	print "<div class='col-xs-12'>";
 
@@ -150,20 +154,20 @@ if($provider!==false) {
 			$locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
 			$locationA_html = "<span class='text-muted'>"._("Not set")."</span>";
 			if($locationA!==false) {
-				$locationA_html = "<a href='".create_link($_GET['page'],$locationA['type'],$locationA['id'])."'>$locationA[name]</a> <i class='fa fa-gray $locationA[icon]'></i>";
+				$locationA_html = "<a href='".create_link($GET->page,$locationA['type'],$locationA['id'])."'>$locationA[name]</a> <i class='fa fa-gray $locationA[icon]'></i>";
 			}
 
 			$locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
 			$locationB_html = "<span class='text-muted'>"._("Not set")."</span>";
 			if($locationB!==false) {
-				$locationB_html = "<a href='".create_link($_GET['page'],$locationB['type'],$locationB['id'])."'>$locationB[name]</a> <i class='fa fa-gray $locationB[icon]'></i>";
+				$locationB_html = "<a href='".create_link($GET->page,$locationB['type'],$locationB['id'])."'>$locationB[name]</a> <i class='fa fa-gray $locationB[icon]'></i>";
 			}
 
 			//print details
 			print '<tr>'. "\n";
-			print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
+			print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page,"circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
 			print "	<td>$circuit->name</td>";
-			print "	<td>$circuit->type</td>";
+			print "	<td>{$type_hash[$circuit->type]}</td>";
 			print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";
 			print " <td class='hidden-xs hidden-sm'>$circuit->status</td>";
 			print "	<td class='hidden-xs hidden-sm'>$locationA_html</td>";
@@ -185,7 +189,7 @@ if($provider!==false) {
 	        $links = [];
 	        if($User->get_module_permissions ("circuits")>=User::ACCESS_R) {
 	            $links[] = ["type"=>"header", "text"=>_("Show circuit")];
-	            $links[] = ["type"=>"link", "text"=>_("View"), "href"=>create_link($_GET['page'], "circuits", $circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
+	            $links[] = ["type"=>"link", "text"=>_("View"), "href"=>create_link($GET->page, "circuits", $circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
 	            $links[] = ["type"=>"divider"];
 	        }
 	        if($User->get_module_permissions ("circuits")>=User::ACCESS_RW) {

@@ -9,7 +9,7 @@ GET    | /api/my_app/user/               | Checks if token is still valid and re
 &nbsp; | /api/my_app/user/token_expires/ | Returns token expiration date
 &nbsp; | /api/my_app/user/all/           | Returns all users<br> _rwa app permissions required_
 &nbsp; | /api/my_app/user/admins/        | Returns admin users<br> _rwa app permissions required_
-POST   | /api/my_app/user/               | Authenticates user through "authorization" header. Successfull response contains "token" and "expires". **This token must be included in each following interactions with API as "phpipam-token" HTTP header.**
+POST   | /api/my_app/user/               | Authenticates user through "authorization" header. Successful response contains "token" and "expires". **This token must be included in each following interactions with API as "phpipam-token" HTTP header.**
 PATCH  | /api/my_app/user/               | Same as GET, but it resets the expiration of token.<br> _"phpipam-token" or "token" HTTP header must be present._
 DELETE | /api/my_app/user/               | Removes (revokes) token.<br> _"phpipam-token" or "token" HTTP header must be present._
 
@@ -47,7 +47,7 @@ POST   | /api/my_app/subnets/                          | Creates new subnet
 PATCH  | /api/my_app/subnets/                          | Updates Subnet
 &nbsp; | /api/my_app/subnets/{id}/resize/              | Resizes subnet to new mask
 &nbsp; | /api/my_app/subnets/{id}/split/               | Splits subnet to smaller subnets
-&nbsp; | /api/my_app/subnets/{id}/permissions/         | Sets subnet permissions (?grouname1=ro&groupname2=3&43=1)
+&nbsp; | /api/my_app/subnets/{id}/permissions/         | Sets subnet permissions (?groupname1=ro&groupname2=3&43=1)
 DELETE | /api/my_app/subnets/{id}/                     | Deletes Subnet
 &nbsp; | /api/my_app/subnets/{id}/truncate/            | Removes all addresses from subnet
 &nbsp; | /api/my_app/subnets/{id}/permissions/         | Removes all permissions

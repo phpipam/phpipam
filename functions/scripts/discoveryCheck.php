@@ -28,6 +28,7 @@ require(dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
 
 # initialize objects
 $Database   = new Database_PDO;
+$Admin      = new Admin($Database, false);
 $Subnets    = new Subnets($Database);
 $Addresses  = new Addresses($Database);
 $Tools      = new Tools($Database);
@@ -128,6 +129,8 @@ if ($Scan->icmp_type == "fping") {
     //different scan for fping
     print "discoveryCheck: Scan start, " . sizeof($scan_subnets) . " subnets\n";
 
+    $Database->resetConn(); // Close database, forked processes inherit and close file handles on exit.
+
     while ($z < sizeof($scan_subnets)) {
 
         $threads = [];
@@ -158,6 +161,8 @@ if ($Scan->icmp_type == "fping") {
         unset($threads);
     }
 
+    $Database->connect();
+
     //fping finds all subnet addresses, we must remove existing ones !
     foreach ($scan_subnets as $sk => $s) {
         if (isset($s->discovered) && is_array($s->discovered)) {
@@ -173,6 +178,8 @@ if ($Scan->icmp_type == "fping") {
 } else {
     //ping, pear
     print "discoveryCheck: Scan start, " . sizeof($addresses) . " IPs\n";
+
+    $Database->resetConn(); // Close database, forked processes inherit and close file handles on exit.
 
     while ($z < sizeof($addresses)) {
 
@@ -206,6 +213,8 @@ if ($Scan->icmp_type == "fping") {
         unset($threads);
     }
 
+    $Database->connect();
+
     $addresses = array_filter($addresses);
 
     //ok, we have all available addresses, rekey them
@@ -226,17 +235,6 @@ if ($Scan->get_debugging()) {
     print "discoveryCheck: Discovered addresses:\n----------\n";
     print_r($scan_subnets);
 }
-
-
-
-# reinitialize objects
-$Database   = new Database_PDO;
-$Admin      = new Admin($Database, false);
-$Addresses  = new Addresses($Database);
-$Subnets    = new Subnets($Database);
-$DNS        = new DNS($Database);
-$Scan       = new Scan($Database);
-$Result     = new Result();
 
 # insert to database
 $discovered = 0;                //for mailing

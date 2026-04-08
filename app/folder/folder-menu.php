@@ -10,20 +10,20 @@ $tabs = array("details"=>"Folder details", "map"=>"Space map", "mapsearch"=>"Mas
 
 print '<ul class="nav nav-tabs">';
 // default tab
-if(!isset($_GET['sPage'])) { $_GET['sPage'] = "details"; }
+if(!isset($GET->sPage)) { $GET->sPage = "details"; }
 // check
-if(!array_key_exists($_GET['sPage'], $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
+if(!array_key_exists($GET->sPage, $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
 
 // print
 foreach($tabs as $k=>$t) {
-	$class = $_GET['sPage']==$k ? "class='active'" : "";
+	$class = $GET->sPage==$k ? "class='active'" : "";
 	print "<li role='presentation' $class><a href=".create_link("folder", $section['id'], $folder['id'], $k).">$t</a></li>";
 }
 print "</ul>";
 
 
 // details or map?
-if($_GET['sPage']=="details") {
+if($GET->sPage=="details") {
 	// details
 	include ("folder-details.php");
 
@@ -55,7 +55,7 @@ if($_GET['sPage']=="details") {
 	}
 }
 // mask search
-elseif($_GET['sPage']=="mapsearch") {
+elseif($GET->sPage=="mapsearch") {
 	# Subnets in Folder
 	if ($slaves!==false) {
 	    print '<div class="ipaddresses_overlay">';

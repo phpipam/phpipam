@@ -29,12 +29,17 @@ $pdns = $PowerDNS->db_settings;
 
 // check if TTL is set
 if ($test!==false) {
-    $test_ttl = pf_json_decode($User->settings->powerDNS);
-    if ($test_ttl->ttl==NULL) {
-        $Result->show("warning", "Please set <a href='".create_link("administration", "powerDNS", "defaults")."'>default powerDNS values</a>!", false);
+    $test_ttl = db_json_decode($User->settings->powerDNS);
+    if (is_null($test_ttl->ttl)) {
+		$Result->show("warning", "Please set <a href='" . create_link("administration", "powerDNS", "defaults") . "'>default powerDNS values</a>!", false);
     }
 }
-
+// errors
+if(isset($PowerDNS->db_check_error)) {
+	foreach ($PowerDNS->db_check_error as $err) {
+		$Result->show("warning", $err);
+	}
+}
 ?>
 <!-- tabs -->
 <ul class="nav nav-tabs">
@@ -43,18 +48,18 @@ if ($test!==false) {
 	$tabs = array("domains", "host_records", "reverse_v4", "reverse_v6", "settings", "defaults");
 
 	// default tab
-	if(!isset($_GET['subnetId'])) {
-		if(!$test)	{ $_GET['subnetId'] = "settings"; }
-		else		{ $_GET['subnetId'] = "domains"; }
+	if(!isset($GET->subnetId)) {
+		if(!$test)	{ $GET->subnetId = "settings"; }
+		else		{ $GET->subnetId = "domains"; }
 	}
 
 	// check
-	if(!in_array($_GET['subnetId'], $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
+	if(!in_array($GET->subnetId, $tabs)) 	{ $Result->show("danger", "Invalid request", true); }
 
 	// print
 	foreach($tabs as $t) {
 		$title = str_replace('_', ' ', $t);
-		$class = $_GET['subnetId']==$t ? "class='active'" : "";
+		$class = $GET->subnetId==$t ? "class='active'" : "";
 		print "<li role='presentation' $class><a href=".create_link("administration", "powerDNS", "$t").">". _(ucwords($title))."</a></li>";
 	}
 	?>
@@ -63,11 +68,11 @@ if ($test!==false) {
 <div>
 <?php
 // include content
-$pdns_section = $_GET['subnetId'];
+$pdns_section = $GET->subnetId;
 if (preg_match("/reverse_/", $pdns_section)) {
 	$filename = 'domains.php';
 } else {
-	$filename = "$_GET[subnetId].php";
+	$filename = $GET->subnetId.".php";
 }
 
 // include file

@@ -11,7 +11,7 @@ $User->check_user_session();
 $custom = $Tools->fetch_custom_fields('pstnPrefixes');
 
 # get hidden fields
-$hidden_custom_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_custom_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_custom_fields = is_array(@$hidden_custom_fields['pstnPrefixes']) ? $hidden_custom_fields['pstnPrefixes'] : array();
 
 # perm check
@@ -24,10 +24,10 @@ elseif ($User->settings->enablePSTN != "1") {
 }
 else {
     # all prefixes
-    if (!isset($_GET['subnetId'])) {
+    if (!isset($GET->subnetId)) {
         include("all-prefixes.php");
     } else { # single prefixes
-        $isMaster = $Tools->count_database_objects("pstnPrefixes", "master", $_GET['subnetId']) != 0;
+        $isMaster = $Tools->count_database_objects("pstnPrefixes", "master", $GET->subnetId) != 0;
         include("single-prefix.php");
     }
 }

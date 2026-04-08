@@ -326,6 +326,10 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
             if (strlen($name) > 31) {
                 return $this->raiseError("Sheetname $name must be <= 31 chars");
             }
+        } else {
+            if (function_exists('iconv')) {
+                $name = iconv('UTF-8', 'UTF-16LE', $name);
+            }
         }
 
         // Check that the worksheet name doesn't already exist: a fatal Excel error.
@@ -624,7 +628,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
             if ($this->_country_code != -1) {
                 $offset += 8; // adding COUNTRY record
             }
-            // add the lenght of SUPBOOK, EXTERNSHEET and NAME records
+            // add the length of SUPBOOK, EXTERNSHEET and NAME records
             //$offset += 8; // FIXME: calculate real value when storing the records
         }
         $total_worksheets = count($this->_worksheets);
@@ -932,11 +936,15 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
         }
 
         $grbit     = 0x0000;                    // Visibility and sheet type
-        $cch       = strlen($sheetname);        // Length of sheet name
+        if ($this->_BIFF_version == 0x0600) {
+            $cch = mb_strlen($sheetname, 'UTF-16LE'); // Length of sheet name
+        } else {
+            $cch = strlen($sheetname); // Length of sheet name
+        }
 
         $header    = pack("vv",  $record, $length);
         if ($this->_BIFF_version == 0x0600) {
-            $data      = pack("Vvv", $offset, $grbit, $cch);
+            $data      = pack("VvCC", $offset, $grbit, $cch, 0x1);
         } else {
             $data      = pack("VvC", $offset, $grbit, $cch);
         }

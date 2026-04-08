@@ -20,46 +20,43 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "device_snmp", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true, false, true) : "";
-
-# get modified details
-$device = $Admin->strip_input_tags($_POST);
+$User->Crypto->csrf_cookie ("validate", "device_snmp", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true, false, true) : "";
 
 # ID, port snd community must be numeric
-if(!is_numeric($_POST['device_id']))			              { $Result->show("danger", _("Invalid ID"), true, true, false, true); }
-if(!is_numeric($_POST['snmp_version']))			              { $Result->show("danger", _("Invalid version"), true, true, false, true); }
-if($_POST['snmp_version']!=0) {
-if(!is_numeric($_POST['snmp_port']))			              { $Result->show("danger", _("Invalid port"), true, true, false, true); }
-if(!is_numeric($_POST['snmp_timeout']))			              { $Result->show("danger", _("Invalid timeout"), true, true, false, true); }
-if($_POST['snmp_timeout'] > 10000)				              { $Result->show("danger", _("Invalid timeout").' > 10,000ms (10s)', true, true, false, true); }
+if(!is_numeric($POST->device_id))			              { $Result->show("danger", _("Invalid ID"), true, true, false, true); }
+if(!is_numeric($POST->snmp_version))			              { $Result->show("danger", _("Invalid version"), true, true, false, true); }
+if($POST->snmp_version!=0) {
+if(!is_numeric($POST->snmp_port))			              { $Result->show("danger", _("Invalid port"), true, true, false, true); }
+if(!is_numeric($POST->snmp_timeout))			              { $Result->show("danger", _("Invalid timeout"), true, true, false, true); }
+if($POST->snmp_timeout > 10000)				              { $Result->show("danger", _("Invalid timeout").' > 10,000ms (10s)', true, true, false, true); }
 }
 
 # version can be 0, 1 or 2
-if ($_POST['snmp_version']<0 || $_POST['snmp_version']>3)     { $Result->show("danger", _("Invalid version"), true, true, false, true); }
+if ($POST->snmp_version<0 || $POST->snmp_version>3)     { $Result->show("danger", _("Invalid version"), true, true, false, true); }
 
 # validate device
-$device = $Admin->fetch_object ("devices", "id", $_POST['device_id']);
+$device = $Admin->fetch_object ("devices", "id", $POST->device_id);
 if($device===false)                                           { $Result->show("danger", _("Invalid device"), true, true, false, true); }
 
 # set new snmp variables
-$device->snmp_community          = $_POST['snmp_community'];
-$device->snmp_version            = $_POST['snmp_version'];
-$device->snmp_port               = $_POST['snmp_port'];
-$device->snmp_timeout            = $_POST['snmp_timeout'];
-$device->snmp_v3_sec_level       = $_POST['snmp_v3_sec_level'];
-$device->snmp_v3_auth_protocol   = $_POST['snmp_v3_auth_protocol'];
-$device->snmp_v3_auth_pass       = $_POST['snmp_v3_auth_pass'];
-$device->snmp_v3_priv_protocol   = $_POST['snmp_v3_priv_protocol'];
-$device->snmp_v3_priv_pass       = $_POST['snmp_v3_priv_pass'];
-$device->snmp_v3_ctx_name        = $_POST['snmp_v3_ctx_name'];
-$device->snmp_v3_ctx_engine_id   = $_POST['snmp_v3_ctx_engine_id'];
+$device->snmp_community          = $POST->snmp_community;
+$device->snmp_version            = $POST->snmp_version;
+$device->snmp_port               = $POST->snmp_port;
+$device->snmp_timeout            = $POST->snmp_timeout;
+$device->snmp_v3_sec_level       = $POST->snmp_v3_sec_level;
+$device->snmp_v3_auth_protocol   = $POST->snmp_v3_auth_protocol;
+$device->snmp_v3_auth_pass       = $POST->snmp_v3_auth_pass;
+$device->snmp_v3_priv_protocol   = $POST->snmp_v3_priv_protocol;
+$device->snmp_v3_priv_pass       = $POST->snmp_v3_priv_pass;
+$device->snmp_v3_ctx_name        = $POST->snmp_v3_ctx_name;
+$device->snmp_v3_ctx_engine_id   = $POST->snmp_v3_ctx_engine_id;
 
 # init snmp class
 $Snmp = new phpipamSNMP ();
 
 
 # set queries
-foreach($_POST as $k=>$p) {
+foreach($POST as $k=>$p) {
     if(strpos($k, "query-")!==false) {
         if($p=="on") {
             $queries[] = substr($k, 6);

@@ -8,6 +8,9 @@
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 # initialize required objects
 $Database 	= new Database_PDO;
 $Result		= new Result;
@@ -17,6 +20,20 @@ $Tools	    = new Tools ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+
+# validate csrf cookie
+if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === false) {
+	$content  = _("Invalid CSRF cookie");
+
+	header("Cache-Control: private");
+	header("Content-Description: File Transfer");
+	header("Content-Type: application/octet-stream");
+	header('Content-Disposition: attachment; filename="' . "error_message.txt" . '"');
+	header("Content-Length: " . strlen($content));
+
+	print($content);
+	exit();
+}
 
 # fetch all l2 domains
 $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
@@ -52,19 +69,19 @@ $curRow = 0;
 $curColumn = 0;
 
 //write headers
-if( (isset($_GET['name'])) && ($_GET['name'] == "on") ) {
+if ($GET->name == "on") {
 	$worksheet->write($curRow, $curColumn, _('Name') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['number'])) && ($_GET['number'] == "on") ) {
+if ($GET->number == "on") {
 	$worksheet->write($curRow, $curColumn, _('Number') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['domain'])) && ($_GET['domain'] == "on") ) {
+if ($GET->domain == "on") {
 	$worksheet->write($curRow, $curColumn, _('Domain') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+if ($GET->description == "on") {
 	$worksheet->write($curRow, $curColumn, _('Description') ,$format_header);
 	$curColumn++;
 }
@@ -75,7 +92,7 @@ if(sizeof($custom_fields) > 0) {
 		//set temp name - replace space with three ___
 		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
 
-		if( (isset($_GET[$myField['nameTemp']])) && ($_GET[$myField['nameTemp']] == "on") ) {
+		if( $GET->{$myField['nameTemp']} == "on") {
 			$worksheet->write($curRow, $curColumn, $myField['name'] ,$format_header);
 			$curColumn++;
 		}
@@ -94,10 +111,7 @@ foreach ($vlan_domains as $vlan_domain) {
     $vldn = str_replace(" ", "_",$vlan_domain['name']);
     $vldn = str_replace(".", "_",$vldn);
 
-	if(
-	    isset($_GET['exportDomain__'. $vldn]) &&
-	    $_GET['exportDomain__'.$vldn] == "on"
-	) {
+	if ($GET->{'exportDomain__'.$vldn} == "on") {
 		// get all VLANs in VLAN domain
 		$all_vlans = $Admin->fetch_multiple_objects("vlans", "domainId", $vlan_domain['id'], "number");
 		$all_vlans = (array) $all_vlans;
@@ -106,24 +120,24 @@ foreach ($vlan_domains as $vlan_domain) {
 		//write all VLAN entries
 		foreach ($all_vlans as $vlan) {
 			//cast
-			$vlan = (array) $vlan;
+			$vlan = array_merge(['name' => '', 'number' => null, 'description' => ''], (array) $vlan);
 
 			//reset row count
 			$curColumn = 0;
 
-			if( (isset($_GET['name'])) && ($_GET['name'] == "on") ) {
+			if ($GET->name == "on") {
 				$worksheet->write($curRow, $curColumn, $vlan['name'], $format_text);
 				$curColumn++;
 			}
-			if( (isset($_GET['number'])) && ($_GET['number'] == "on") ) {
+			if ($GET->number == "on") {
 				$worksheet->write($curRow, $curColumn, $vlan['number'], $format_text);
 				$curColumn++;
 			}
-			if( (isset($_GET['domain'])) && ($_GET['domain'] == "on") ) {
+			if ($GET->domain == "on") {
 				$worksheet->write($curRow, $curColumn, $vlan_domain['name'], $format_text);
 				$curColumn++;
 			}
-			if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+			if ($GET->description == "on") {
 				$worksheet->write($curRow, $curColumn, $vlan['description'], $format_text);
 				$curColumn++;
 			}
@@ -135,7 +149,7 @@ foreach ($vlan_domains as $vlan_domain) {
 					//set temp name - replace space with three ___
 					$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
 
-					if( (isset($_GET[$myField['nameTemp']])) && ($_GET[$myField['nameTemp']] == "on") ) {
+					if( $GET->{$myField['nameTemp']} == "on" ) {
 						$worksheet->write($curRow, $curColumn, $vlan[$myField['name']], $format_text);
 						$curColumn++;
 					}
@@ -151,12 +165,10 @@ foreach ($vlan_domains as $vlan_domain) {
 $curRow++;
 
 //write domain sheet
-if(
-    isset($_GET['exportVLANDomains']) &&
-    $_GET['exportVLANDomains'] == "on"
-) {
+if ($GET->exportVLANDomains == "on") {
 	// Create a worksheet
 	$worksheet_domains =& $workbook->addWorksheet('Domains');
+	$worksheet_domains->setInputEncoding("utf-8");
 
 	$curRow = 0;
 	$curColumn = 0;
@@ -177,9 +189,7 @@ if(
         $vldn = str_replace(" ", "_",$vlan_domain['name']);
         $vldn = str_replace(".", "_",$vldn);
 
-		if( isset($_GET['exportDomain__'. $vldn] ) &&
-		        ($_GET['exportDomain__'. $vldn ] == "on")
-		    ) {
+		if( $GET->{'exportDomain__'. $vldn} == "on" ) {
 			$worksheet_domains->write($curRow, $curColumn, $vlan_domain['name'], $format_text);
 			$curColumn++;
 			$worksheet_domains->write($curRow, $curColumn, $vlan_domain['description'], $format_text);
@@ -196,5 +206,3 @@ $workbook->send($filename);
 
 // Let's send the file
 $workbook->close();
-
-?>

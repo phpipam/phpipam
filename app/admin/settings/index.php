@@ -515,7 +515,7 @@ $(document).ready(function() {
 		<input type="checkbox" class="input-switch" value="1" name="enforceUnique" <?php if($settings['enforceUnique'] == 1) print 'checked'; ?>>
 	</td>
 	<td class="info2">
-		<?php print _('Require unique subnets accross all sections'); ?>
+		<?php print _('Require unique subnets across all sections'); ?>
 	</td>
 </tr>
 
@@ -552,8 +552,19 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Passkeys -->
+<tr>
+	<td class="title"><?php print _("Enable Passkeys"); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="passkeys" <?php if($settings['passkeys'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable passkeys for passwordless login'); ?>
+	</td>
+</tr>
 
-<!-- ICPM -->
+
+<!-- ICMP -->
 <tr class="settings-title">
 	<th colspan="3"><h4><?php print _('ICMP settings'); ?></h4></th>
 </tr>

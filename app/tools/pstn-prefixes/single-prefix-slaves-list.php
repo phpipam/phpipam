@@ -72,7 +72,7 @@ else {
 
     		print "<tr>";
     		//prefix, name
-    		print "	<td><a href='".create_link($_GET['page'],"pstn-prefixes",$sp->id)."'>  ".$sp->prefix."</a></td>";
+    		print "	<td><a href='".create_link($GET->page,"pstn-prefixes",$sp->id)."'>  ".$sp->prefix."</a></td>";
     		print "	<td><strong>$sp->name</strong></td>";
     		// range
     		print " <td>".$sp->prefix.$sp->start."<br>".$sp->prefix.$sp->stop."</td>";

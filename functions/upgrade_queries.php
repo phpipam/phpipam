@@ -19,6 +19,8 @@ include('upgrade_queries/upgrade_queries_1.3.php');
 include('upgrade_queries/upgrade_queries_1.4.php');
 include('upgrade_queries/upgrade_queries_1.5.php');
 include('upgrade_queries/upgrade_queries_1.6.php');
+include('upgrade_queries/upgrade_queries_1.7.php');
+include('upgrade_queries/upgrade_queries_1.8.php');
 
 
 // output if required

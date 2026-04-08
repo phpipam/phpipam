@@ -20,7 +20,7 @@ if (isset($objects["racks"])) {
 	$custom = $Tools->fetch_custom_fields('racks');
 
 	# get hidden fields
-	$hidden_custom_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+	$hidden_custom_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 	$hidden_custom_fields = is_array(@$hidden_custom_fields['racks']) ? $hidden_custom_fields['racks'] : array();
 
     // table
@@ -61,7 +61,7 @@ if (isset($objects["racks"])) {
         // print
         print "<tr>";
 
-        print " <td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], "racks", $r->id)."'><i class='fa fa-bars prefix'></i> $r->name</a></td>";
+        print " <td><a class='btn btn-xs btn-default' href='".create_link($GET->page, "racks", $r->id)."'><i class='fa fa-bars prefix'></i> $r->name</a></td>";
         print " <td>$r->size U</td>";
         print " <td>"._($r->back)."</td>";
         print " <td>$cnt "._("devices")."</td>";
@@ -83,7 +83,7 @@ if (isset($objects["racks"])) {
         $links = [];
         if($User->get_module_permissions ("racks")>=User::ACCESS_R) {
             $links[] = ["type"=>"header", "text"=>_("Show rack")];
-            $links[] = ["type"=>"link", "text"=>_("Show rack"), "href"=>create_link($_GET['page'], "racks", $r->id), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"link", "text"=>_("Show rack"), "href"=>create_link($GET->page, "racks", $r->id), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"link", "text"=>_("Show popup"), "href"=>"", "class"=>"showRackPopup", "dataparams"=>"data-rackId='$r->id' data-deviceId='0'", "icon"=>"server"];
             $links[] = ["type"=>"divider"];
         }

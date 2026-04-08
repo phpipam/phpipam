@@ -5,7 +5,7 @@
  *********************************************/
 
 # required functions if requested via AJAX
-if(!is_object(@$User)) {
+if(!isset($User)) {
 	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
@@ -18,7 +18,7 @@ if(!is_object(@$User)) {
 $User->check_user_session ();
 
 # if direct request that redirect to tools page
-if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
 	header("Location: ".create_link("tools","customers"));
 }
 
@@ -27,7 +27,12 @@ $User->check_module_permissions ("customers", User::ACCESS_R, true);
 # filter customers or fetch print all?
 $customers = $Tools->fetch_all_objects("customers", "title");
 
+# fetch widget parameters
+$wparam = $Tools->get_widget_params("customers");
+$height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['default' => null, 'min_range' => 1, 'max_range' => 800]]);
+
 # table
+print '<div style="' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 print '<table id="customers" class="table sorted table-striped table-top" data-cookie-id-table="customers">';
 
 #headers
@@ -57,4 +62,4 @@ else {
 	}
 }
 print '</table>';
-?>
+print '</div>';

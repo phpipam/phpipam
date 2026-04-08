@@ -173,6 +173,8 @@ $z = 0;         //addresses array index
 if ($Scan->icmp_type == "fping") {
     print "pingCheck: Scan start, " . sizeof($subnets) . " subnets\n";
 
+    $Database->resetConn(); // Close database, forked processes inherit and close file handles on exit.
+
     //different scan for fping
     while ($z < sizeof($subnets)) {
 
@@ -202,6 +204,8 @@ if ($Scan->icmp_type == "fping") {
         }
         unset($threads);
     }
+
+    $Database->connect();
 
     //now we must remove all non-existing hosts
     foreach ($subnets as $sk => $s) {
@@ -242,6 +246,8 @@ if ($Scan->icmp_type == "fping") {
 } else {
     //ping, pear
     print "pingCheck: Scan start, " . sizeof($addresses) . " IPs\n";
+
+    $Database->resetConn(); // Close database, forked processes inherit and close file handles on exit.
 
     while ($z < sizeof($addresses)) {
 
@@ -284,15 +290,7 @@ if ($Scan->icmp_type == "fping") {
         unset($threads);
     }
 
-    //update statuses for online
-
-    # re-initialize classes
-    $Database  = new Database_PDO;
-    $Scan      = new Scan($Database, $Subnets->settings);
-    $Addresses = new Addresses($Database);
-
-    // reset debugging
-    $Scan->set_debugging(false);
+    $Database->connect();
 
     # update all active statuses
     foreach ($addresses as $k => $a) {
@@ -395,22 +393,6 @@ if ($Scan->get_debugging()) {
 
 # all done, mail diff?
 if (!empty($address_change) && $config['ping_check_send_mail']) {
-
-    # remove old classes
-    unset($Database, $Subnets, $Addresses, $Tools, $Scan, $Result);
-
-    $Database   = new Database_PDO;
-    $Subnets    = new Subnets($Database);
-    $Addresses  = new Addresses($Database);
-    $Tools      = new Tools($Database);
-    $Scan       = new Scan($Database);
-    $Result     = new Result();
-
-    // set exit flag to true
-    $Scan->ping_set_exit(true);
-    // set debugging
-    $Scan->set_debugging(false);
-
 
     # check for recipients
     foreach ($Tools->fetch_multiple_objects("users", "role", "Administrator") as $admin) {

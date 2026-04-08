@@ -21,95 +21,92 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # perm check popup
-if($_POST['action']=="edit") {
+if($POST->action=="edit") {
     $User->check_module_permissions ("pdns", User::ACCESS_RW, true, false);
 }
 else {
     $User->check_module_permissions ("pdns", User::ACCESS_RWA, true, false);
 }
 
-# strip input tags
-$_POST = $Tools->strip_input_tags($_POST);
-
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "domain", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "domain", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 # checks / validation
-if ($_POST['action']!="delete") {
+if ($POST->action!="delete") {
 	// fqdn
-	if ($_POST['action']=="add")
-	if($Tools->validate_hostname($_POST['name'])===false)			{ $Result->show("danger", _("Invalid domain name"), true); }
+	if ($POST->action=="add")
+	if($Tools->validate_hostname($POST->name)===false)			{ $Result->show("danger", _("Invalid domain name"), true); }
 	// master
-	if (!is_blank($_POST['master'])) {
-    	// if multilpe masters
-    	if (strpos($_POST['master'], ",")!==false) {
+	if (!is_blank($POST->master)) {
+    	// if multiple masters
+    	if (strpos($POST->master, ",")!==false) {
         	// to array and trim, check each
-        	$masters = array_filter(pf_explode(",", $_POST['master']));
+        	$masters = array_filter(pf_explode(",", $POST->master));
         	foreach ($masters as $m) {
               if(!filter_var($m, FILTER_VALIDATE_IP))  { $Result->show("danger", _("Master must be an IP address"). " - ". $m, true); }
         	}
     	}
     	else {
-          if(!filter_var($_POST['master'], FILTER_VALIDATE_IP))	{ $Result->show("danger", _("Master must be an IP address"). " - ". $_POST['master'], true); }
+          if(!filter_var($POST->master, FILTER_VALIDATE_IP))	{ $Result->show("danger", _("Master must be an IP address"). " - ". escape_input($POST->master), true); }
     	}
 	}
 	// type
-	if(!in_array($_POST['type'], (array )$PowerDNS->domain_types))	{ $Result->show("danger", _("Invalid domain type"), true); }
+	if(!in_array($POST->type, (array )$PowerDNS->domain_types))	{ $Result->show("danger", _("Invalid domain type"), true); }
 
 	# new domain
-	if ($_POST['action']=="add" && !isset($_POST['manual'])) {
-		if ($Tools->validate_email($_POST['hostmaster'])===false)	{ $Result->show("danger", _("Invalid domain hostmaster"), true); }
+	if ($POST->action=="add" && !isset($POST->manual)) {
+		if ($Tools->validate_email($POST->hostmaster)===false)	{ $Result->show("danger", _("Invalid domain hostmaster"), true); }
 	}
 
 	// if slave master must be present
-	if ($_POST['type']=="SLAVE") {
-    	if (is_blank($_POST['master'])) { $Result->show("danger", _("Please set master server(s) if domain type is SLAVE"), true); }
+	if ($POST->type=="SLAVE") {
+    	if (is_blank($POST->master)) { $Result->show("danger", _("Please set master server(s) if domain type is SLAVE"), true); }
         else {
-        	if (strpos($_POST['master'], ",")!==false) {
+        	if (strpos($POST->master, ",")!==false) {
             	// to array and trim, check each
-            	$masters = array_filter(pf_explode(",", $_POST['master']));
+            	$masters = array_filter(pf_explode(",", $POST->master));
             	foreach ($masters as $m) {
                   if(!filter_var($m, FILTER_VALIDATE_IP))  { $Result->show("danger", _("Master must be an IP address"). " - ". $m, true); }
             	}
         	}
         	else {
-              if(!filter_var($_POST['master'], FILTER_VALIDATE_IP))	{ $Result->show("danger", _("Master must be an IP address"). " - ". $_POST['master'], true); }
+              if(!filter_var($POST->master, FILTER_VALIDATE_IP))	{ $Result->show("danger", _("Master must be an IP address"). " - ". escape_input($POST->master), true); }
         	}
     	}
 	}
 
 
 	# if update sve old domain !
-	if ($_POST['action']=="edit") {
-		$old_domain = $PowerDNS->fetch_domain ($_POST['id']);
+	if ($POST->action=="edit") {
+		$old_domain = $PowerDNS->fetch_domain ($POST->id);
 	}
 }
 
 # set update array
-$values = array("id"=>@$_POST['id'],
-				"master"=>@$_POST['master'],
-				"type"=>@$_POST['type']
+$values = array("id"=>$POST->id,
+				"master"=>$POST->master,
+				"type"=>$POST->type
 				);
 # name only on add
-if ($_POST['action']=="add")
-$values['name'] = $_POST['name'];
+if ($POST->action=="add")
+$values['name'] = $POST->name;
 
 
 # remove all references if delete
-if ($_POST['action']=="delete") 									{ $PowerDNS->remove_all_records ($values['id']); }
+if ($POST->action=="delete") 									{ $PowerDNS->remove_all_records ($values['id']); }
 
 # for creation validate default records before creating them ! => true means check only
-if ($_POST['action']=="add" && !isset($_POST['manual']))            { $PowerDNS->create_default_records ($_POST, true); }
+if ($POST->action=="add" && !isset($POST->manual))            { $PowerDNS->create_default_records ($POST->as_array(), true); }
 
 # update
-if(!$PowerDNS->domain_edit($_POST['action'], $values)) {
-    $Result->show("danger", _("Failed to")." ".$_POST["action"]." "._("domain").'!', true);
+if(!$PowerDNS->domain_edit($POST->action, $values)) {
+    $Result->show("danger", _("Failed to")." ".$User->get_post_action()." "._("domain").'!', true);
 }
 else {
-    $Result->show("success", _("Domain")." ".$_POST["action"]." "._("successful").'!', false);
+    $Result->show("success", _("Domain")." ".$User->get_post_action()." "._("successful").'!', false);
 }
 
 # create default records
-if ($_POST['action']=="add" && !isset($_POST['manual']))			{ $PowerDNS->create_default_records ($_POST); }
-?>
+if ($POST->action=="add" && !isset($POST->manual))			{ $PowerDNS->create_default_records ($POST->as_array()); }
+

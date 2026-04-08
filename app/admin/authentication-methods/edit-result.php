@@ -16,56 +16,55 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check if site is demo
+$User->is_demo();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
-# strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
-
 # validate & remove csrf cookie
-$User->Crypto->csrf_cookie ("validate", "authmethods", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-unset($_POST['csrf_cookie']);
+$User->Crypto->csrf_cookie ("validate", "authmethods", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+unset($POST->csrf_cookie);
 
 # get action
-$action = $_POST['action'];
+$action = $POST->action;
 
 //for adding remove id
 if($action=="add") {
-	unset($_POST['id']);
+	unset($POST->id);
 }
 else {
 	//check id
-	if(!is_numeric($_POST['id']))	{ $Result->show("danger", _("Invalid ID"), true); }
+	if(!is_numeric($POST->id))	{ $Result->show("danger", _("Invalid ID"), true); }
 }
 
 # set update query
 $values = array(
-				"id"          =>@$_POST['id'],
-				"type"        =>$_POST['type'],
-				"description" =>@$_POST['description'],
+				"id"          =>$POST->id,
+				"type"        =>$POST->type,
+				"description" =>$POST->description,
 				);
 
 # Validate input
-if (isset($_POST['type']) && $_POST['type']=="SAML2") {
+if ($POST->type=="SAML2") {
 	# The JIT & SAML mapped user options are mutually exclusive.
-	if (filter_var($_POST['jit'], FILTER_VALIDATE_BOOLEAN) && !empty($_POST['MappedUser'])) {
+	if (filter_var($POST->jit, FILTER_VALIDATE_BOOLEAN) && !empty($POST->MappedUser)) {
 		$Result->show("danger",  _("The JIT and mapped user options are mutually exclusive"), true);
 	}
 
 	# Validate Prettify links is enabled for strict mode.
-	if (filter_var($_POST['strict'], FILTER_VALIDATE_BOOLEAN) && !filter_var($User->settings->prettyLinks, FILTER_VALIDATE_BOOLEAN)) {
+	if (filter_var($POST->strict, FILTER_VALIDATE_BOOLEAN) && !filter_var($User->settings->prettyLinks, FILTER_VALIDATE_BOOLEAN)) {
 		$Result->show("danger",  _("Strict mode requires global setting \"Prettify links\"=yes"), true);
 	}
 
 	# Verify that the private certificate and key are provided if Signing Authn Requests is set
-	if($action!="delete" && filter_var(['spsignauthn'], FILTER_VALIDATE_BOOLEAN) && (empty($_POST['spx509cert']) || empty($_POST['spx509key']))) {
+	if($action!="delete" && filter_var(['spsignauthn'], FILTER_VALIDATE_BOOLEAN) && (empty($POST->spx509cert) || empty($POST->spx509key))) {
 		$Result->show("danger",  _("SP (Client) certificate and key are required to sign Authn requests"), true);
 	}
 }
 
 # remove processed params
-unset($_POST['id'], $_POST['type'], $_POST['description'], $_POST['action']);
-$values["params"]=json_encode($_POST);
+unset($POST->id, $POST->type, $POST->description, $POST->action);
+$values["params"]=json_encode($POST);
 
 $secure_keys=[
 	'adminUsername',
@@ -78,10 +77,10 @@ $secure_keys=[
 # log values
 $values_log = $values;
 # mask secure keys
-foreach($_POST as $key => $value) {
-	if(in_array($key, $secure_keys)){ $_POST[$key] = "********"; }
+foreach($POST as $key => $value) {
+	if(in_array($key, $secure_keys)){ $POST->{$key} = "********"; }
 }
-$values_log["params"]=json_encode($_POST);
+$values_log["params"]=json_encode($POST);
 
 # add - set protected
 if($action=="add") {

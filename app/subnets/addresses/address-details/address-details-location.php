@@ -15,15 +15,15 @@ elseif (is_numeric($address['location'])) {
         $resize = false;
         $height = "500px;";
 
-        $sid_orig = $_GET['subnetId'];
-        $_GET['subnetId'] = $address['location'];
+        $sid_orig = $GET->subnetId;
+        $GET->subnetId = $address['location'];
 
         $hide_title = true;
 
         include(dirname(__FILE__).'/../../../tools/locations/single-location.php');
 
         // back
-        $_GET['subnetId'] = $sid_orig;
+        $GET->subnetId = $sid_orig;
         $location = $loc_old;
     }
     else {

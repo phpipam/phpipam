@@ -4,7 +4,7 @@
  *
  * Script to verify userentered input and verify it against database
  *
- * If successfull write values to session and go to main page!
+ * If successful write values to session and go to main page!
  *
  */
 
@@ -18,11 +18,8 @@ $User 		= new User ($Database);
 $Result 	= new Result ();
 $Log 		= new Logging ($Database);
 
-# strip input tags form username only - password stip later because od LDAP
-$_POST['ipamusername'] = $User->strip_input_tags ($_POST['ipamusername']);
-
 # Authenticate
-if( !empty($_POST['ipamusername']) && !empty($_POST['ipampassword']) )  {
+if( !empty($POST->ipamusername) && !empty($POST->ipampassword) )  {
 
 	# initialize array
 	$ipampassword = array();
@@ -35,20 +32,24 @@ if( !empty($_POST['ipamusername']) && !empty($_POST['ipampassword']) )  {
 		// all good
 	}
 	# count set, captcha required
-	elseif(!isset($_POST['captcha'])) {
+	elseif(!isset($POST->captcha)) {
 		$Log->write( _("Login IP blocked"), _("Login from IP address")." ".$_SERVER['REMOTE_ADDR']." "._("was blocked because of 5 minute block after 5 failed 2fa attempts"), 1);
 		$Result->show("danger", _('You have been blocked for 5 minutes due to authentication failures'), true);
 	}
 	# captcha check
 	else {
 		# check captcha
-		if(strtolower($_POST['captcha'])!=strtolower($_SESSION['securimage_code_value']['default'])) {
+		$captcha_code = isset($_SESSION['securimage_code_value']) ? $_SESSION['securimage_code_value']['default'] : '';
+		if ($captcha_code == '') {
+			$Result->show("danger", _("Missing security code"), true);
+		}
+		if(strtolower($POST->captcha)!=strtolower($captcha_code)) {
 			$Result->show("danger", _("Invalid security code"), true);
 		}
 	}
 
 	# all good, try to authentucate user
-	$User->authenticate ($_POST['ipamusername'], $_POST['ipampassword']);
+	$User->authenticate($POST->ipamusername, $POST->ipampassword);
 }
 # Username / pass not provided
 else {

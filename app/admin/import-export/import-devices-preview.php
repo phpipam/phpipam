@@ -28,7 +28,7 @@ include 'import-devices-check.php';
 <!-- content -->
 <div class="pContent">
 <?php
-$searchallvrfs = (isset($_GET['searchallvrfs']) && $_GET['searchallvrfs'] == 'on') ? 'on' : '';
+$searchallvrfs = ($GET->searchallvrfs == 'on') ? 'on' : '';
 
 print '<h4>'._("Uploaded data").'</h4><hr>';
 print _("The entries marked with ")."<i class='fa ".$icons['add']."'></i>, "._("will be added,
@@ -79,4 +79,3 @@ if (($counters['add'] > 0) || ($counters['edit'] > 0)) {
 	</script>
 <?php
 }
-?>

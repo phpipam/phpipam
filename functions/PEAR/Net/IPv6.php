@@ -175,7 +175,7 @@ class Net_IPv6
     // {{{ removeNetmaskSpec()
 
     /**
-     * Removes a possible existing prefix length/ netmask specification at an IP addresse.
+     * Removes a possible existing prefix length/ netmask specification at an IP address.
      *
      * @param String $ip the (compressed) IP as Hex representation
      *
@@ -227,7 +227,7 @@ class Net_IPv6
     // {{{ getNetmaskSpec()
 
     /**
-     * Returns a possible existing prefix length/netmask specification on an IP addresse.
+     * Returns a possible existing prefix length/netmask specification on an IP address.
      *
      * @param String $ip the (compressed) IP as Hex representation
      *
@@ -399,14 +399,14 @@ class Net_IPv6
      * Returns the type of an IPv6 address.
      *
      * RFC 2373, Section 2.3 describes several types of addresses in
-     * the IPv6 addresse space.
-     * Several addresse types are markers for reserved spaces and as
+     * the IPv6 address space.
+     * Several address types are markers for reserved spaces and as
      * consequence a subject to change.
      *
      * @param String $ip the IP address in Hex format,
      *                    compressed IPs are allowed
      *
-     * @return int one of the addresse type constants
+     * @return int one of the address type constants
      * @access public
      * @since  1.1.0
      * @static
@@ -505,22 +505,22 @@ class Net_IPv6
     // {{{ Uncompress()
 
     /**
-     * Uncompresses an IPv6 adress
+     * Uncompresses an IPv6 address
      *
-     * RFC 2373 allows you to compress zeros in an adress to '::'. This
-     * function expects an valid IPv6 adress and expands the '::' to
+     * RFC 2373 allows you to compress zeros in an address to '::'. This
+     * function expects an valid IPv6 address and expands the '::' to
      * the required zeros.
      *
      * Example:  FF01::101  ->  FF01:0:0:0:0:0:0:101
      *           ::1        ->  0:0:0:0:0:0:0:1
      *
-     * @param String $ip a valid IPv6-adress (hex format)
+     * @param String $ip a valid IPv6-address (hex format)
      * @param Boolean $leadingZeros if true, leading zeros are added to each
      *                              block of the address
      *                              (FF01::101  ->
      *                               FF01:0000:0000:0000:0000:0000:0000:0101)
      *
-     * @return String the uncompressed IPv6-adress (hex format)
+     * @return String the uncompressed IPv6-address (hex format)
      * @access public
      * @see Compress()
      * @static
@@ -645,17 +645,17 @@ class Net_IPv6
     // {{{ Compress()
 
     /**
-     * Compresses an IPv6 adress
+     * Compresses an IPv6 address
      *
-     * RFC 2373 allows you to compress zeros in an adress to '::'. This
-     * function expects an valid IPv6 adress and compresses successive zeros
+     * RFC 2373 allows you to compress zeros in an address to '::'. This
+     * function expects an valid IPv6 address and compresses successive zeros
      * to '::'
      *
      * Example:  FF01:0:0:0:0:0:0:101   -> FF01::101
      *           0:0:0:0:0:0:0:1        -> ::1
      *
-     * Whe $ip is an already compressed adress the methode returns the value as is,
-     * also if the adress can be compressed further.
+     * When $ip is an already compressed addresss, the method returns the value as is,
+     * also if the address can be compressed further.
      *
      * Example: FF01::0:1 -> FF01::0:1
      *
@@ -663,10 +663,10 @@ class Net_IPv6
      *
      * Example: FF01::0:1 -> FF01::1
      *
-     * @param String  $ip    a valid IPv6-adress (hex format)
-     * @param boolean $force if true the adress will be compresses as best as possible (since 1.2.0)
+     * @param String  $ip    a valid IPv6-address (hex format)
+     * @param boolean $force if true the address will be compresses as best as possible (since 1.2.0)
      *
-     * @return tring the compressed IPv6-adress (hex format)
+     * @return tring the compressed IPv6-address (hex format)
      * @access public
      * @see    Uncompress()
      * @static
@@ -752,9 +752,9 @@ class Net_IPv6
     /**
      * Represent IPv6 address in RFC5952 format.
      *
-     * @param String  $ip a valid IPv6-adress (hex format)
+     * @param String  $ip a valid IPv6-address (hex format)
      *
-     * @return String the recommended representation of IPv6-adress (hex format)
+     * @return String the recommended representation of IPv6-address (hex format)
      * @access public
      * @see    compress()
      * @static
@@ -778,11 +778,11 @@ class Net_IPv6
     // {{{ isCompressible()
 
     /**
-     * Checks, if an IPv6 adress can be compressed
+     * Checks, if an IPv6 address can be compressed
      *
-     * @param String $ip a valid IPv6 adress
+     * @param String $ip a valid IPv6 address
      *
-     * @return Boolean true, if adress can be compressed
+     * @return Boolean true, if address can be compressed
      *
      * @access public
      * @since 1.2.0b
@@ -800,15 +800,15 @@ class Net_IPv6
     // {{{ SplitV64()
 
     /**
-     * Splits an IPv6 adress into the IPv6 and a possible IPv4 part
+     * Splits an IPv6 address into the IPv6 and a possible IPv4 part
      *
-     * RFC 2373 allows you to note the last two parts of an IPv6 adress as
-     * an IPv4 compatible adress
+     * RFC 2373 allows you to note the last two parts of an IPv6 address as
+     * an IPv4 compatible address
      *
      * Example:  0:0:0:0:0:0:13.1.68.3
      *           0:0:0:0:0:FFFF:129.144.52.38
      *
-     * @param String  $ip         a valid IPv6-adress (hex format)
+     * @param String  $ip         a valid IPv6-address (hex format)
      * @param Boolean $uncompress if true, the address will be uncompressed
      *                            before processing
      *
@@ -851,13 +851,13 @@ class Net_IPv6
     // {{{ checkIPv6()
 
     /**
-     * Checks an IPv6 adress
+     * Checks an IPv6 address
      *
      * Checks if the given IP is IPv6-compatible
      *
-     * @param String $ip a valid IPv6-adress
+     * @param String $ip a valid IPv6-address
      *
-     * @return Boolean true if $ip is an IPv6 adress
+     * @return Boolean true if $ip is an IPv6 address
      * @access public
      * @static
      */
@@ -960,7 +960,7 @@ class Net_IPv6
      * the number of netwask bits is provided via $bits
      *
      * The result is an indexed array. The key 'start'
-     * contains the lowest possible IP adress. The key
+     * contains the lowest possible IP address. The key
      * 'end' the highest address.
      *
      * @param String $ipToParse the IPv6 address

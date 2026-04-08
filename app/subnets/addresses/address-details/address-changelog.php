@@ -11,7 +11,7 @@ $User->check_user_session();
 $clogs = $Log->fetch_changlog_entries("ip_addr", $address['id']);
 
 # permissions
-$permission = $Subnets->check_permission ($User->user, $_GET['subnetId']);
+$permission = $Subnets->check_permission ($User->user, $GET->subnetId);
 if($permission == 0)	{ $Result->show("danger", _('You do not have permission to access this network'), true); }
 
 # header
@@ -44,15 +44,18 @@ else {
 		# format diff
 		$l['cdiff'] = str_replace("\n", "<br>", $l['cdiff']);
 
+		# set class for badge
+		if($l['cresult']=="success") { $bclass='alert-success'; }
+		else 						 { $bclass='alert-danger'; }
+
 		print "<tr>";
 		print "	<td>$l[real_name]</td>";
-		print "	<td>"._("$l[caction]")."</td>";
-		print "	<td>"._("$l[cresult]")."</td>";
-		print "	<td>$l[cdate]</td>";
-		print "	<td>$l[cdiff]</td>";
+		print "	<td><span class='badge badge1 badge5'>"._(ucwords($l['caction']))."</span></td>";
+		print "	<td><span class='badge badge1 badge5 $bclass'>"._(ucwords("$l[cresult]"))."</span></td>";
+		print "	<td class='text-muted'>$l[cdate]</td>";
+		print "	<td><p style='background: rgba(0,0,0,0.1); padding:10px 20px;border-radius:4px;margin-bottom:0px;'>$l[cdiff]</p></td>";
 		print "</tr>";
 
 	}
 	print "</table>";
 }
-?>

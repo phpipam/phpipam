@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Script to disaply vault edit result
+ * Script to display vault edit result
  *************************************/
 
 /* functions */
@@ -23,11 +23,11 @@ $User->check_maintaneance_mode ();
 $html = [];
 
 // public certificate only
-if($_POST['type']=="public" || $_POST['type']=="pkcs12") {
+if($POST->type=="public" || $POST->type=="pkcs12") {
 	$html[] = "<tr>";
 	$html[] = "<td></td>";
 	$html[] = "<td>";
-	$html[] = '<form id="csvimport" method="post" data-type="'.$_POST['type'].'" action="app/admin/vaults/import-certificate-file-verify.php" enctype="multipart/form-data">';
+	$html[] = '<form id="csvimport" method="post" data-type="'.$POST->type.'" action="app/admin/vaults/import-certificate-file-verify.php" enctype="multipart/form-data">';
 	$html[] = '<div id="drop">';
 	$html[] = '	<input type="file" name="file" id="csvfile" style="display:none;">';
 	$html[] = '<a class="btn btn-sm btn-default">'._("Select certificate").'</a>';
@@ -40,11 +40,11 @@ if($_POST['type']=="public" || $_POST['type']=="pkcs12") {
 	$html[] = "</tr>";
 }
 // public + private
-elseif($_POST['type']=="certificate") {
+elseif($POST->type=="certificate") {
     $html[] = "<tr>";
     $html[] = "<td></td>";
     $html[] = "<td>";
-    $html[] = '<form id="csvimport" method="post" data-type="'.$_POST['type'].'" action="app/admin/vaults/import-certificate-file-verify.php" enctype="multipart/form-data">';
+    $html[] = '<form id="csvimport" method="post" data-type="'.$POST->type.'" action="app/admin/vaults/import-certificate-file-verify.php" enctype="multipart/form-data">';
     $html[] = '<div id="drop">';
     $html[] = ' <input type="file" name="file" id="csvfile" style="display:none;" multiple>';
     $html[] = '<a class="btn btn-sm btn-default">'._("Select files").'</a>';
@@ -57,7 +57,7 @@ elseif($_POST['type']=="certificate") {
     $html[] = "</tr>";
 }
 // public + private
-elseif($_POST['type']=="website") {
+elseif($POST->type=="website") {
 	$html[] = "<tr>";
 	$html[] = "<td></td><td>";
 	$html[] = "<div class='row'>";
@@ -115,7 +115,7 @@ $(function(){
         	//remove all old references
         	$('ul.progressUl li').remove();
         	//add name to hidden class for magic.js
-        	$('.fname').html(data.files[0].name);
+        	$('.fname').text(data.files[0].name);
             var tpl = $('<li class="alert"><p></p><span></span></li>');
             // Append the file name and file size
             //--tpl.find('p').text(data.files[0].name).append(' (<i>' + formatFileSize(data.files[0].size) + '</i>)');

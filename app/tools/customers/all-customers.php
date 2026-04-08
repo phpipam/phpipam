@@ -17,13 +17,10 @@ $User->check_module_permissions ("customers", User::ACCESS_R, true);
 # filter customers or fetch print all?
 $customers = $Tools->fetch_all_objects("customers", "title");
 
-# strip tags - XSS
-$_GET = $User->strip_input_tags ($_GET);
-
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('customers');
 # get hidden fields */
-$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['customers'] : array();
 
 $colspanCustom = 0;
@@ -73,7 +70,7 @@ else {
 	foreach ($customers as $customer) {
 		// print details
 		print '<tr>'. "\n";
-		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link($_GET['page'],"customers",$customer->title)."'>$customer->title</a></strong></td>";
+		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link($GET->page,"customers",$customer->title)."'>$customer->title</a></strong></td>";
 		print "	<td>$customer->address, $customer->postcode $customer->city, $customer->state</td>";
 		// contact
 		if(!is_blank($customer->contact_person))
@@ -84,10 +81,10 @@ else {
 		if(sizeof(@$custom_fields) > 0) {
 			foreach($custom_fields as $field) {
 				if(!in_array($field['name'], $hidden_fields)) {
-					// create html links
-					$customer->{$field['name']} = $User->create_links($customer->{$field['name']}, $field['type']);
 
-					print "<td class='hidden-sm hidden-xs hidden-md'>".$customer->{$field['name']}."</td>";
+					print "<td class='hidden-sm hidden-xs hidden-md'>";
+					$Tools->print_custom_field ($field['type'],$customer->{$field['name']});
+					print "</td>";
 				}
 			}
 		}
@@ -97,7 +94,7 @@ else {
         $links = [];
         if($User->get_module_permissions ("customers")>=User::ACCESS_R) {
             $links[] = ["type"=>"header", "text"=>_("Show")];
-            $links[] = ["type"=>"link", "text"=>_("Show customer"), "href"=>create_link($_GET['page'], "customers", $customer->title), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"link", "text"=>_("Show customer"), "href"=>create_link($GET->page, "customers", $customer->title), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];
         }
         if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {

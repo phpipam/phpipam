@@ -23,22 +23,42 @@ $Addresses	= new Addresses ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === false) {
+	$content  = _("Invalid CSRF cookie");
+
+	header("Cache-Control: private");
+	header("Content-Description: File Transfer");
+	header("Content-Type: application/octet-stream");
+	header('Content-Disposition: attachment; filename="' . "error_message.txt" . '"');
+	header("Content-Length: " . strlen($content));
+
+	print($content);
+	exit();
+}
+
+// Do not escape html special chars
+$Database->html_escape_enabled = false;
+
 # fetch subnet details
-$subnet = $Tools->fetch_object("subnets", "id", $_GET['subnetId']);
-if (!is_object($subnet) || $Subnets->check_permission($User->user, $_GET['subnetId'], $subnet) == User::ACCESS_NONE) {
+$subnet = $Tools->fetch_object("subnets", "id", $GET->subnetId);
+if (!is_object($subnet) || $Subnets->check_permission($User->user, $GET->subnetId, $subnet) == User::ACCESS_NONE) {
 	$Result->fatal_http_error(404, _("Subnet not found"));
 }
 $subnet = (array) $subnet;
 
 # fetch all IP addresses in subnet
-$addresses = $Addresses->fetch_subnet_addresses ($_GET['subnetId'], "ip_addr", "asc") ? : [];
+$addresses = $Addresses->fetch_subnet_addresses ($GET->subnetId, "ip_addr", "asc") ? : [];
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 
+// enforce permissions
+if($User->get_module_permissions ("devices")<User::ACCESS_R) unset($GET->device);
+if($User->get_module_permissions ("locations")<User::ACCESS_R) unset($GET->location);
 
 # Create a workbook
-$filename = isset($_GET['filename'])&&!is_blank(@$_GET['filename']) ? $_GET['filename'] : "phpipam_subnet_export.xls";
+$filename = isset($GET->filename)&&!is_blank($GET->filename) ? $GET->filename : "phpipam_subnet_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
 $workbook->setVersion(8);
 
@@ -100,48 +120,52 @@ $lineCount++;
 $rowCount = 0;
 
 //write headers
-if( (isset($_GET['ip_addr'])) && ($_GET['ip_addr'] == "on") ) {
+if( (isset($GET->ip_addr)) && ($GET->ip_addr == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('ip address') ,$format_title);
 	$rowCount++;
 }
-if( (isset($_GET['state'])) && ($_GET['state'] == "on") ) {
-	$worksheet->write($lineCount, $rowCount, _('ip state') ,$format_title);
+if( (isset($GET->tag)) && ($GET->tag == "on") ) {
+	$worksheet->write($lineCount, $rowCount, _('tag') ,$format_title);
 	$rowCount++;
 }
-if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+if( (isset($GET->description)) && ($GET->description == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('description') ,$format_title);
 	$rowCount++;
 }
-if( (isset($_GET['hostname'])) && ($_GET['hostname'] == "on") ) {
+if( (isset($GET->hostname)) && ($GET->hostname == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('hostname') ,$format_title);
 	$rowCount++;
 }
-if( (isset($_GET['firewallAddressObject'])) && ($_GET['firewallAddressObject'] == "on") ) {
+if( (isset($GET->firewallAddressObject)) && ($GET->firewallAddressObject == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('fw object') ,$format_title);
 	$rowCount++;
 }
-if( (isset($_GET['mac'])) && ($_GET['mac'] == "on") ) {
+if( (isset($GET->mac)) && ($GET->mac == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('mac') ,$format_title);
 	$rowCount++;
 }
-if( (isset($_GET['owner'])) && ($_GET['owner'] == "on") ) {
+if( (isset($GET->owner)) && ($GET->owner == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('owner') ,$format_title);
 	$rowCount++;
 }
-if( (isset($_GET['switch'])) && ($_GET['switch'] == "on") ) {
+if( (isset($GET->device)) && ($GET->device == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('device') ,$format_title);
 	$rowCount++;
 }
-if( (isset($_GET['port'])) && ($_GET['port'] == "on") ) {
+if( (isset($GET->port)) && ($GET->port == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('port') ,$format_title);
 	$rowCount++;
 }
-if( (isset($_GET['note'])) && ($_GET['note'] == "on") ) {
+if( (isset($GET->note)) && ($GET->note == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('note') ,$format_title);
 	$rowCount++;
 }
-if( (isset($_GET['location'])) && ($_GET['location'] == "on") ) {
+if( (isset($GET->location)) && ($GET->location == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('location') ,$format_title);
+	$rowCount++;
+}
+if( (isset($GET->lastSeen)) && ($GET->lastSeen == "on") ) {
+	$worksheet->write($lineCount, $rowCount, _('Last seen') ,$format_title);
 	$rowCount++;
 }
 
@@ -151,7 +175,7 @@ if(sizeof($custom_fields) > 0) {
 		//set temp name - replace space with three ___
 		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
 
-		if( (isset($_GET[$myField['nameTemp']])) && ($_GET[$myField['nameTemp']] == "on") ) {
+		if( (isset($GET->{$myField['nameTemp']})) && ($GET->{$myField['nameTemp']} == "on") ) {
 			$worksheet->write($lineCount, $rowCount, $myField['name'] ,$format_title);
 			$rowCount++;
 		}
@@ -199,50 +223,54 @@ foreach ($addresses as $ip) {
 	$ip['switch']   = is_null($ip['switch'])||is_blank($ip['switch'])||$ip['switch']==0||!isset($devices_indexed[$ip['switch']]) ? "" : $devices_indexed[$ip['switch']]->hostname;
 	$ip['location'] = is_null($ip['location'])||is_blank($ip['location'])||$ip['location']==0||!isset($locations_indexed[$ip['location']]) ? "" : $locations_indexed[$ip['location']]->name;
 
-	if( (isset($_GET['ip_addr'])) && ($_GET['ip_addr'] == "on") ) {
+	if( (isset($GET->ip_addr)) && ($GET->ip_addr == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $Subnets->transform_address($ip['ip_addr'],"dotted"), $format_left);
 		$rowCount++;
 	}
-	if( (isset($_GET['state'])) && ($_GET['state'] == "on") ) {
+	if( (isset($GET->tag)) && ($GET->tag == "on") ) {
 		if(@$ip_types[$ip['state']]['showtag']==1) {
 		$worksheet->write($lineCount, $rowCount, $ip_types[$ip['state']]['type']);
 		}
 		$rowCount++;
 	}
-	if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+	if( (isset($GET->description)) && ($GET->description == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['description']);
 		$rowCount++;
 	}
-	if( (isset($_GET['hostname'])) && ($_GET['hostname'] == "on") ) {
+	if( (isset($GET->hostname)) && ($GET->hostname == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['hostname']);
 		$rowCount++;
 	}
-	if( (isset($_GET['firewallAddressObject'])) && ($_GET['firewallAddressObject'] == "on") ) {
+	if( (isset($GET->firewallAddressObject)) && ($GET->firewallAddressObject == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['firewallAddressObject']);
 		$rowCount++;
 	}
-	if( (isset($_GET['mac'])) && ($_GET['mac'] == "on") ) {
+	if( (isset($GET->mac)) && ($GET->mac == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['mac']);
 		$rowCount++;
 	}
-	if( (isset($_GET['owner'])) && ($_GET['owner'] == "on") ) {
+	if( (isset($GET->owner)) && ($GET->owner == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['owner']);
 		$rowCount++;
 	}
-	if( (isset($_GET['switch'])) && ($_GET['switch'] == "on") ) {
+	if( (isset($GET->device)) && ($GET->device == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['switch']);
 		$rowCount++;
 	}
-	if( (isset($_GET['port'])) && ($_GET['port'] == "on") ) {
+	if( (isset($GET->port)) && ($GET->port == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['port']);
 		$rowCount++;
 	}
-	if( (isset($_GET['note'])) && ($_GET['note'] == "on") ) {
+	if( (isset($GET->note)) && ($GET->note == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['note']);
 		$rowCount++;
 	}
-	if( (isset($_GET['location'])) && ($_GET['location'] == "on") ) {
+	if( (isset($GET->location)) && ($GET->location == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['location']);
+		$rowCount++;
+	}
+	if( (isset($GET->lastSeen)) && ($GET->lastSeen == "on") ) {
+		$worksheet->write($lineCount, $rowCount, $ip['lastSeen']);
 		$rowCount++;
 	}
 
@@ -252,7 +280,7 @@ foreach ($addresses as $ip) {
 			//set temp name - replace space with three ___
 			$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
 
-			if( (isset($_GET[$myField['nameTemp']])) && ($_GET[$myField['nameTemp']] == "on") ) {
+			if( (isset($GET->{$myField['nameTemp']})) && ($GET->{$myField['nameTemp']} == "on") ) {
 				$worksheet->write($lineCount, $rowCount, $ip[$myField['name']]);
 				$rowCount++;
 			}
@@ -271,5 +299,3 @@ $workbook->send($filename);
 
 // Let's send the file
 $workbook->close();
-
-?>

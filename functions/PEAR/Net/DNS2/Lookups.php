@@ -1,50 +1,18 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * DNS Library for handling lookups and updates. 
  *
- * PHP Version 5
+ * Copyright (c) 2020, Mike Pultz <mike@mikepultz.com>. All rights reserved.
  *
- * Copyright (c) 2010, Mike Pultz <mike@mikepultz.com>.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
- *
- *   * Neither the name of Mike Pultz nor the names of his contributors 
- *     may be used to endorse or promote products derived from this 
- *     software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRIC
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * See LICENSE for more details.
  *
  * @category  Networking
  * @package   Net_DNS2
  * @author    Mike Pultz <mike@mikepultz.com>
- * @copyright 2010 Mike Pultz <mike@mikepultz.com>
+ * @copyright 2020 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id$
- * @link      http://pear.php.net/package/Net_DNS2
+ * @link      https://netdns2.com/
  * @since     File available since Release 0.6.0
  *
  */
@@ -69,12 +37,6 @@ Net_DNS2_Lookups::$protocol_by_id       = array_flip(Net_DNS2_Lookups::$protocol
 
 /**
  * This class provides simple lookups used througout the Net_DNS2 code
- * 
- * @category Networking
- * @package  Net_DNS2
- * @author   Mike Pultz <mike@mikepultz.com>
- * @license  http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link     http://pear.php.net/package/Net_DNS2
  * 
  */
 class Net_DNS2_Lookups
@@ -103,6 +65,7 @@ class Net_DNS2_Lookups
     const OPCODE_STATUS         = 2;        // RFC 1035
     const OPCODE_NOTIFY         = 4;        // RFC 1996
     const OPCODE_UPDATE         = 5;        // RFC 2136
+    const OPCODE_DSO            = 6;        // RFC 8490
 
     /*
      * Resource Record Classes
@@ -127,8 +90,9 @@ class Net_DNS2_Lookups
     const RCODE_NXRRSET         = 8;        // RFC 2136
     const RCODE_NOTAUTH         = 9;        // RFC 2136
     const RCODE_NOTZONE         = 10;       // RFC 2136
+    const RCODE_DSOTYPENI       = 11;       // RFC 8490
 
-    // 11-15 reserved
+    // 12-15 reserved
 
     const RCODE_BADSIG          = 16;       // RFC 2845
     const RCODE_BADVERS         = 16;       // RFC 6891    
@@ -206,6 +170,12 @@ class Net_DNS2_Lookups
     const EDNS0_OPT_TCP_KEEPALIVE   = 11;
     const EDNS0_OPT_PADDING         = 12;
     const EDNS0_OPT_CHAIN           = 13;
+    const EDNS0_OPT_KEY_TAG         = 14;
+    // 15 - unsassigned
+    const EDNS0_OPT_CLIENT_TAG      = 16;
+    const EDNS0_OPT_SERVER_TAG      = 17;
+    // 18-26945 - unassigned
+    const EDNS0_OPT_DEVICEID        = 26946;
 
     /*
      * DNSSEC Algorithms
@@ -221,6 +191,10 @@ class Net_DNS2_Lookups
     const DNSSEC_ALGORITHM_RSASHA256	        = 8;
     const DNSSEC_ALGORITHM_RSASHA512            = 10;
     const DNSSEC_ALGORITHM_ECCGOST              = 12;
+    const DNSSEC_ALGORITHM_ECDSAP256SHA256      = 13;
+    const DNSSEC_ALGORITHM_ECDSAP384SHA384      = 14;
+    const DNSSEC_ALGORITHM_ED25519              = 15;
+    const DNSSEC_ALGORITHM_ED448                = 16;
     const DNSSEC_ALGORITHM_INDIRECT             = 252;
     const DNSSEC_ALGORITHM_PRIVATEDNS           = 253;
     const DNSSEC_ALGORITHM_PRIVATEOID           = 254;
@@ -230,6 +204,9 @@ class Net_DNS2_Lookups
      */
     const DNSSEC_DIGEST_RES                     = 0;
     const DNSSEC_DIGEST_SHA1                    = 1;
+    const DNSSEC_DIGEST_SHA256                  = 2;
+    const DNSSEC_DIGEST_GOST                    = 3;
+    const DNSSEC_DIGEST_SHA384                  = 4;
 
     /*
      * The packet id used when sending requests
@@ -239,8 +216,8 @@ class Net_DNS2_Lookups
     /*
      * Used to map resource record types to their id's, and back
      */
-    public static $rr_types_by_id = array();
-    public static $rr_types_by_name = array(
+    public static $rr_types_by_id   = [];
+    public static $rr_types_by_name = [
 
         'SIG0'          => 0,       // RFC 2931 pseudo type
         'A'             => 1,       // RFC 1035
@@ -295,7 +272,7 @@ class Net_DNS2_Lookups
         'NSEC3'         => 50,      // RFC 5155
         'NSEC3PARAM'    => 51,      // RFC 5155
         'TLSA'          => 52,      // RFC 6698
-        'SMIMEA'        => 53,      // draft-ietf-dane-smime-10
+        'SMIMEA'        => 53,      // RFC 8162
 
                                     // 54 unassigned
 
@@ -307,8 +284,11 @@ class Net_DNS2_Lookups
         'CDNSKEY'       => 60,      // RFC 7344
         'OPENPGPKEY'    => 61,      // RFC 7929
         'CSYNC'         => 62,      // RFC 7477
+        'ZONEMD'        => 63,      // Not implemented yet
+        'SVCB'          => 64,      // Not implemented yet
+        'HTTPS'         => 65,      // Not implemented yet
 
-                                    // 63 - 98 unassigned
+                                    // 66 - 98 unassigned
 
         'SPF'           => 99,      // RFC 4408
         'UINFO'         => 100,     // no RFC, Not implemented
@@ -331,42 +311,45 @@ class Net_DNS2_Lookups
         'MAILB'         => 253,     // RFC 883, Not implemented
         'MAILA'         => 254,     // RFC 973, Not implemented
         'ANY'           => 255,     // RFC 1035 - we support both 'ANY' and '*'
-        'URI'           => 256,     // tools.ietf.org/html/draft-faltstrom-uri-06
-        'CAA'           => 257,     // tools.ietf.org/html/draft-ietf-pkix-caa-03
+        'URI'           => 256,     // RFC 7553
+        'CAA'           => 257,     // RFC 8659
         'AVC'           => 258,     // Application Visibility and Control
+        'DOA'           => 259,     // Not implemented yet
+        'AMTRELAY'      => 260,     // RFC 8777
 
-                                    // 259 - 32767 unassigned
+                                    // 261 - 32767 unassigned
 
         'TA'            => 32768,   // same as DS
-        'DLV'           => 32769    // RFC 4431
-    );
+        'DLV'           => 32769,   // RFC 4431
+        'TYPE65534'     => 65534    // Private Bind record
+    ];
 
     /*
      * Qtypes and Metatypes - defined in RFC2929 section 3.1
      */
-    public static $rr_qtypes_by_id = array();
-    public static $rr_qtypes_by_name = array(
+    public static $rr_qtypes_by_id      = [];
+    public static $rr_qtypes_by_name    = [
 
         'IXFR'          => 251,     // RFC 1995 - only a full (AXFR) is supported
         'AXFR'          => 252,     // RFC 1035
         'MAILB'         => 253,     // RFC 883, Not implemented
         'MAILA'         => 254,     // RFC 973, Not implemented
         'ANY'           => 255      // RFC 1035 - we support both 'ANY' and '*'
-    );
+    ];
     
-    public static $rr_metatypes_by_id = array();
-    public static $rr_metatypes_by_name = array(
+    public static $rr_metatypes_by_id   = [];
+    public static $rr_metatypes_by_name = [
 
         'OPT'           => 41,      // RFC 2671
         'TKEY'          => 249,     // RFC 2930
         'TSIG'          => 250      // RFC 2845
-    );
+    ];
 
     /*
      * used to map resource record id's to RR class names
      */
-    public static $rr_types_class_to_id = array();
-    public static $rr_types_id_to_class = array(
+    public static $rr_types_class_to_id = [];
+    public static $rr_types_id_to_class = [
 
         1           => 'Net_DNS2_RR_A',
         2           => 'Net_DNS2_RR_NS',
@@ -433,27 +416,29 @@ class Net_DNS2_Lookups
         256         => 'Net_DNS2_RR_URI',
         257         => 'Net_DNS2_RR_CAA',
         258         => 'Net_DNS2_RR_AVC',
+        260         => 'Net_DNS2_RR_AMTRELAY',
         32768       => 'Net_DNS2_RR_TA',
-        32769       => 'Net_DNS2_RR_DLV'
-    );
+        32769       => 'Net_DNS2_RR_DLV',
+        65534       => 'Net_DNS2_RR_TYPE65534'
+    ];
 
     /*
      * used to map resource record class names to their id's, and back
      */
-    public static $classes_by_id = array();
-    public static $classes_by_name = array(
+    public static $classes_by_id    = [];
+    public static $classes_by_name  = [
 
         'IN'    => self::RR_CLASS_IN,        // RFC 1035
         'CH'    => self::RR_CLASS_CH,        // RFC 1035
         'HS'    => self::RR_CLASS_HS,        // RFC 1035
         'NONE'  => self::RR_CLASS_NONE,      // RFC 2136
         'ANY'   => self::RR_CLASS_ANY        // RFC 1035
-    );
+    ];
 
     /*
      * maps response codes to error messages
      */
-    public static $result_code_messages = array(
+    public static $result_code_messages = [
 
         self::RCODE_NOERROR     => 'The request completed successfully.',
         self::RCODE_FORMERR     => 'The name server was unable to interpret the query.',
@@ -474,13 +459,13 @@ class Net_DNS2_Lookups
         self::RCODE_BADNAME     => 'Duplicate key name.',
         self::RCODE_BADALG      => 'Algorithm not supported.',
         self::RCODE_BADTRUNC    => 'Bad truncation.'
-    );
+    ];
 
     /*
      * maps DNS SEC alrorithms to their mnemonics
      */
-    public static $algorithm_name_to_id = array();
-    public static $algorithm_id_to_name = array(
+    public static $algorithm_name_to_id = [];
+    public static $algorithm_id_to_name = [
     
         self::DNSSEC_ALGORITHM_RES                  => 'RES',
         self::DNSSEC_ALGORITHM_RSAMD5               => 'RSAMD5',
@@ -493,26 +478,33 @@ class Net_DNS2_Lookups
         self::DNSSEC_ALGORITHM_RSASHA256            => 'RSASHA256',
         self::DNSSEC_ALGORITHM_RSASHA512            => 'RSASHA512',
         self::DNSSEC_ALGORITHM_ECCGOST              => 'ECC-GOST',
+        self::DNSSEC_ALGORITHM_ECDSAP256SHA256      => 'ECDSAP256SHA256',
+        self::DNSSEC_ALGORITHM_ECDSAP384SHA384      => 'ECDSAP384SHA384',
+        self::DNSSEC_ALGORITHM_ED25519              => 'ED25519',
+        self::DNSSEC_ALGORITHM_ED448                => 'ED448',
         self::DNSSEC_ALGORITHM_INDIRECT             => 'INDIRECT',
         self::DNSSEC_ALGORITHM_PRIVATEDNS           => 'PRIVATEDNS',
         self::DNSSEC_ALGORITHM_PRIVATEOID           => 'PRIVATEOID'
-    );
+    ];
 
     /*
      * maps DNSSEC digest types to their mnemonics
      */
-    public static $digest_name_to_id = array();
-    public static $digest_id_to_name = array(
+    public static $digest_name_to_id = [];
+    public static $digest_id_to_name = [
 
         self::DNSSEC_DIGEST_RES         => 'RES',
-        self::DNSSEC_DIGEST_SHA1        => 'SHA-1'
-    );
+        self::DNSSEC_DIGEST_SHA1        => 'SHA-1',
+        self::DNSSEC_DIGEST_SHA256      => 'SHA-256',
+        self::DNSSEC_DIGEST_GOST        => 'GOST-R-34.11-94',
+        self::DNSSEC_DIGEST_SHA384      => 'SHA-384'
+    ];
 
     /*
      * Protocols names - RFC 1010
      */
-    public static $protocol_by_id = array();
-    public static $protocol_by_name = array(
+    public static $protocol_by_id   = [];
+    public static $protocol_by_name = [
 
         'ICMP'          => 1,
         'IGMP'          => 2,
@@ -565,14 +557,5 @@ class Net_DNS2_Lookups
         'WB-EXPAK'      => 79
         // 80 - 254     - Unassigned
         // 255          - Reserved
-    );
+    ];
 }
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * c-hanging-comment-ender-p: nil
- * End:
- */
-?>

@@ -39,7 +39,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "2fa");
 <tr>
 	<td><?php print _('2FA name'); ?></td>
 	<td>
-		<input type="text" class="form-control input-sm" name="2fa_name" value="<?php print @$settings->{'2fa_name'}; ?>">
+		<input type="text" class="form-control input-sm" name="2fa_name" value="<?php print @$User->settings->{'2fa_name'}; ?>">
 	</td>
 	<td class="info2"><?php print _('Name for 2fa application that will be displayed'); ?></td>
 </tr>
@@ -48,16 +48,16 @@ $csrf = $User->Crypto->csrf_cookie ("create", "2fa");
 <tr>
 	<td><?php print _('2FA length'); ?></td>
 	<td>
-		<input type="text" class="form-control input-sm" name="2fa_length" value="<?php print @$settings->{'2fa_length'}; ?>">
+		<input type="text" class="form-control input-sm" name="2fa_length" value="<?php print @$User->settings->{'2fa_length'}; ?>">
 	</td>
-	<td class="info2"><?php print _('Length of 2FA secret (16 to 32)'); ?></td>
+	<td class="info2"><?php print _('Length of 2FA secret (26 to 32)'); ?></td>
 </tr>
 
 <!-- Length-->
 <tr>
 	<td><?php print _('2FA user change'); ?></td>
 	<td>
-		<input type="checkbox" class="input-switch" value="1" name="2fa_userchange" <?php if(@$settings->{'2fa_userchange'} == 1) print 'checked'; ?>>
+		<input type="checkbox" class="input-switch" value="1" name="2fa_userchange" <?php if(@$User->settings->{'2fa_userchange'} == 1) print 'checked'; ?>>
 	</td>
 	<td class="info2"><?php print _('Can users change 2fa settings for their account'); ?></td>
 </tr>
@@ -163,14 +163,16 @@ else {
 <article style='margin-top:50px;' class="text-muted">
 <?php print _("phpIPAM supports two-factor-authentication to add additional security layer for user authentication."); ?>
 <br>
-<?php print _("After user successfully logs in it will be presented with additional screen to enter code from Google authenticator application."); ?>
+<?php print _("After user successfully logs in it will be presented with additional screen to enter code from your preferred authenticator application."); ?>
 <br><br>
-<?php print _("Google Authenticator is available on following links based on your OS:"); ?>
+<?php print _("Authenticator apps are available on following links based on your OS:"); ?>
 <ul>
-	<li> <a href='https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8' target="_self">Apple iOS</a></li>
-	<li> <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_self">Android</a></li>
+	<li> <a href='https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8' target="_self">Google Authenticator - Apple iOS</a></li>
+	<li> <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_self">Google Authenticator - Android</a></li>
+	<li> <a href='https://itunes.apple.com/us/app/microsoft-authenticator/id983156458?mt=8' target="_self">Microsoft Authenticator - Apple iOS</a></li>
+	<li> <a href="https://play.google.com/store/apps/details?id=com.azure.authenticator" target="_self">Microsoft Authenticator - Android</a></li>
 </ul>
-<?php print _("You can also use Microsoft or any other otp provider."); ?>
+<?php print _("You can also use any other OTP provider."); ?>
 </article>
 
 

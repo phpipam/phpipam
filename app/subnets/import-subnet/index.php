@@ -19,17 +19,19 @@ $Result 	= new Result;
 $User->check_user_session();
 
 # permissions
-$permission = $Subnets->check_permission ($User->user, $_POST['subnetId']);
+$permission = $Subnets->check_permission ($User->user, $POST->subnetId);
 
 # die if write not permitted
 if($permission < 2) { $Result->show("danger", _('You cannot write to this subnet'), true); }
 
 # fetch subnet details
-$subnet = $Subnets->fetch_subnet (null, $_POST['subnetId']);
-$subnet!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
+$subnet = $Subnets->fetch_subnet (null, $POST->subnetId);
+if (!is_object($subnet)) {
+	$Result->show("danger", _("Invalid ID"), true, true);
+}
 
 # full
-if ($_POST['type']!="update-icmp" && $subnet->isFull==1)                { $Result->show("warning", _("Cannot scan as subnet is market as used"), true, true); }
+if ($POST->type!="update-icmp" && $subnet->isFull==1)                { $Result->show("warning", _("Cannot scan as subnet is market as used"), true, true); }
 
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
@@ -120,7 +122,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	        	$('ul.progressUl li').remove();
 
 	        	//add name to hidden class for magic.js
-	        	$('.fname').html(data.files[0].name);
+	        	$('.fname').text(data.files[0].name);
 
 	            var tpl = $('<li class="alert"><p></p><span></span></li>');
 

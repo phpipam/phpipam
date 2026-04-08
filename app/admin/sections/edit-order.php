@@ -21,7 +21,7 @@ $User->check_user_session();
 $sections = $Sections->fetch_all_sections();
 ?>
 
-<script src="js/jquery-ui-1.10.3.custom.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<script src="js/jquery-ui.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 <script>
 $(document).ready(function() {
 	// initialize sortable

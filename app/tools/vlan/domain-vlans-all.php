@@ -19,7 +19,7 @@ $vlans = $Tools->fetch_all_domains_and_vlans ();
 $custom_fields = (array) $Tools->fetch_custom_fields('vlans');
 
 # set hidden fields
-$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : array();
 
 # size of custom fields
@@ -35,7 +35,7 @@ print "<hr>";
 print "<div class='text-muted' style='padding-left:10px;'>"._('List of VLANS in all domains')."</div>";
 
 print "<div class='btn-group' style='margin-bottom:10px;'>";
-print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GET['section'])."'><i class='fa fa-angle-left'></i> "._('L2 Domains')."</a>";
+print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, $GET->section)."'><i class='fa fa-angle-left'></i> "._('L2 Domains')."</a>";
 print "</div>";
 
 
@@ -79,7 +79,7 @@ else {
 		if (!$User->check_l2domain_permissions($vlan_domain, 1, false)) continue;
 
 		// show free vlans - start
-		if($User->user->hideFreeRange!=1 && !isset($_GET['sPage'])) {
+		if($User->user->hideFreeRange!=1 && !isset($GET->sPage)) {
 			if($m==0 && $vlan->number!=1)	{
 				print "<tr class='success'>";
 				print "<td></td>";
@@ -112,8 +112,8 @@ else {
 		$class = $n==0 ? "odd" : "even";
 		// start - VLAN details
 		print "<tr class='$class change'>";
-		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $vlan->domainId, $vlan->id)."'><i class='fa fa-cloud prefix'></i> ".$vlan->number."</a></td>";
-		print "	<td><a href='".create_link($_GET['page'], $_GET['section'], $vlan->domainId, $vlan->id)."'>".$vlan->name."</a>".$vlan->description."</td>";
+		print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, $GET->section, $vlan->domainId, $vlan->id)."'><i class='fa fa-cloud prefix'></i> ".$vlan->number."</a></td>";
+		print "	<td><a href='".create_link($GET->page, $GET->section, $vlan->domainId, $vlan->id)."'>".$vlan->name."</a>".$vlan->description."</td>";
 		print "	<td>".$vlan->domainName.$vlan->domainDescription."</td>";
 		if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 			 $customer = $Tools->fetch_object ("customers", "id", $vlan->customer_id);
@@ -151,7 +151,7 @@ else {
         print "</tr>";
 
 		# show free vlans - last
-		if($User->user->hideFreeRange!=1 && !isset($_GET['sPage'])) {
+		if($User->user->hideFreeRange!=1 && !isset($GET->sPage)) {
 			if($m==(sizeof($vlans)-1)) {
 				if($User->settings->vlanMax > $vlans[0]->number) {
 					print "<tr class='success'>";

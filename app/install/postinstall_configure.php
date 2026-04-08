@@ -1,3 +1,5 @@
+<?php if (!defined('VERSION_VISIBLE') || Config::ValueOf('disable_installer')) { print _("Install scripts disabled"); exit(0); } ?>
+
 <div class="widget-dash col-xs-12 col-md-8 col-md-offset-2">
 <div class="inner install" style="min-height:auto;">
 	<h4><?php print _("Postinstall configuration"); ?></h4>
@@ -77,7 +79,7 @@
 			<!-- Database location -->
 			<div class="col-xs-12 col-md-4"><strong><?php print _("Site URL"); ?></strong></div>
 			<div class="col-xs-12 col-md-8">
-				<input type="text" style="width:100%;" name="siteURL" class="form-control" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="<?php print $_SERVER['SCRIPT_URI'];  ?>">
+				<input type="text" style="width:100%;" name="siteURL" class="form-control" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="<?php print escape_input($_SERVER['SCRIPT_URI']);  ?>">
 				<div class="text-muted"></div>
 			</div>
 

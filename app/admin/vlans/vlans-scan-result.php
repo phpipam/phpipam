@@ -22,11 +22,11 @@ $User->check_maintaneance_mode ();
 # perm check popup
 $User->check_module_permissions ("vlan", User::ACCESS_RWA, true, true);
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "scan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "scan", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # check for number of input values
 $max = ini_get("max_input_vars");
-if(sizeof($_POST)>=ini_get("max_input_vars")) 							{ $Result->show("danger", _("Number of discovered hosts exceed maximum possible defined by php.ini - set to ")." $max <hr>"._("Please adjust your php.ini settings for value `max_input_vars`"), true); }
+if(sizeof($POST)>=ini_get("max_input_vars")) 							{ $Result->show("danger", _("Number of discovered hosts exceed maximum possible defined by php.ini - set to ")." $max <hr>"._("Please adjust your php.ini settings for value `max_input_vars`"), true); }
 
 // fetch custom fields and check for required
 $required_fields = $Tools->fetch_custom_fields ('vlans');
@@ -39,7 +39,7 @@ if($required_fields!==false) {
 }
 
 # ok, lets get results form post array!
-foreach($_POST as $key=>$line) {
+foreach($POST as $key=>$line) {
 	// IP address
 	if(substr($key, 0,4)=="name") 			    { $res[substr($key, 4)]['name']  	    = $line; }
 	// mac

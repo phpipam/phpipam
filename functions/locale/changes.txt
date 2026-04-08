@@ -5514,3 +5514,192 @@ msgstr ""
 msgid "Scan agents"
 msgstr ""
 
+
+
+### 1.6.1
+
+msgid "passkey"
+msgstr ""
+
+msgid "Passkey"
+msgstr ""
+
+msgid "2fa account status"
+msgstr ""
+
+msgid "2fa disabled"
+msgstr ""
+
+msgid "2fa enabled"
+msgstr ""
+
+msgid "2fa status"
+msgstr ""
+
+msgid "Account"
+msgstr ""
+
+msgid "Check passkey you want to remove"
+msgstr ""
+
+msgid "Details for your preferred authenticator application are below. Please write down your details, otherwise you will not be able to login to phpipam"
+msgstr ""
+
+msgid "Disable 2fa for user"
+msgstr ""
+
+msgid "Enable Passkeys"
+msgstr ""
+
+msgid "Enable Vaults"
+msgstr ""
+
+msgid "Enable Vaults for storing encrypted information"
+msgstr ""
+
+msgid "Enable passkeys for passwordless login"
+msgstr ""
+
+msgid "failed"
+msgstr ""
+
+msgid "Failed passkey login"
+msgstr ""
+
+msgid "has logged out"
+msgstr ""
+
+msgid "Here you can change settings for two-factor authentication and get your 2fa secret."
+msgstr ""
+
+msgid "Invalid theme"
+msgstr ""
+
+msgid "logged in"
+msgstr ""
+
+msgid "Login with a passkey"
+msgstr ""
+
+msgid "Only passkey authentication is possible for this account"
+msgstr ""
+
+msgid "Passkey login only"
+msgstr ""
+
+msgid "Passkey only"
+msgstr ""
+
+msgid "Passkey required for login"
+msgstr ""
+
+msgid "Passkeys"
+msgstr ""
+
+msgid "Select to only allow account login with passkey"
+msgstr ""
+
+msgid "successful"
+msgstr ""
+
+msgid "There are no passkeys set for user. Resetting passkey login only to false."
+msgstr ""
+
+msgid "Two-factor authentication"
+msgstr ""
+
+msgid "User account is disabled"
+msgstr ""
+
+msgid "User permissions for phpipam modules"
+msgstr ""
+
+msgid "You can also scan following QR code with your preferred authenticator application"
+msgstr ""
+
+msgid "You can login to your account with normal authentication method only untill you create passkeys."
+msgstr ""
+
+msgid "You can only login to your account using passkeys"
+msgstr ""
+
+msgid "Passwordless authentication"
+msgstr ""
+
+msgid "Account details"
+msgstr ""
+
+msgid "You can login to your account with with passkeys only"
+msgstr ""
+
+msgid "This can be changed under Account details tab"
+msgstr ""
+
+msgid "Your passkeys"
+msgstr ""
+
+msgid "Added on"
+msgstr ""
+
+msgid "Last used"
+msgstr ""
+
+msgid "You authenticated with this passkey"
+msgstr ""
+
+msgid "Add a passkey"
+msgstr ""
+
+msgid "Rename"
+msgstr ""
+
+msgid "Here you can manage passkey authentication for your account"
+msgstr ""
+
+msgid "Passkeys are a password replacement that validates your identity using touch, facial recognition, a device password, or a PIN"
+msgstr ""
+
+msgid "Name your passkey"
+msgstr ""
+
+msgid "Duplicates"
+msgstr ""
+
+msgid "Duplicated subnets"
+msgstr ""
+
+msgid "Duplicated hosts"
+msgstr ""
+
+msgid "No duplicate subnets found"
+msgstr ""
+
+msgid "Routing"
+msgstr ""
+
+msgid "BGP routing"
+msgstr ""
+
+msgid "Add peer"
+msgstr ""
+
+msgid "Peer name"
+msgstr ""
+
+msgid "Peer AS"
+msgstr ""
+
+msgid "Local AS"
+msgstr ""
+
+msgid "Peer address"
+msgstr ""
+
+msgid "Local address"
+msgstr ""
+
+msgid "Local Address"
+msgstr ""
+
+msgid "BGP type"
+msgstr ""

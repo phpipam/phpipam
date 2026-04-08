@@ -54,7 +54,7 @@
 		Make sure BASE directive is set for your installation. This is used to properly detect phpIPAM directory. It must be set in config.php.
 
 		<div class="well" style="padding:5px;margin-top:5px;">
-		Detected BASE: <?php print str_replace("upgrade/", "", $_SERVER['REQUEST_URI']);  ?>
+		Detected BASE: <?php escape_input(print str_replace("upgrade/", "", $_SERVER['REQUEST_URI']));  ?>
 		</div>
 
 		<h4>2.) Enable mod_rewrite</h4>

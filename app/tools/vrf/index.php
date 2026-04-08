@@ -13,9 +13,9 @@ if ($User->get_module_permissions ('vrf')==User::ACCESS_NONE) {
 	$Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 # display single VRF or all ?
-elseif(is_numeric(@$_GET['subnetId'])) {
+elseif(is_numeric($GET->subnetId)) {
 	# get VRF details
-	$vrf = $Tools->fetch_object ("vrf", "vrfId", $_GET['subnetId']);
+	$vrf = $Tools->fetch_object ("vrf", "vrfId", $GET->subnetId);
 
 	if ($vrf===false) {
 		print "<div class='subnetDetails'>";

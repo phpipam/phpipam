@@ -21,7 +21,7 @@ if(!isset($User)) {
 $User->check_user_session();
 
 # fetch all permitted domains
-$permitted_domains = $Sections->fetch_section_domains ($_POST['sectionId']);
+$permitted_domains = $Sections->fetch_section_domains ($POST->sectionId);
 
 # fetch all belonging vlans
 $cnt = 0;
@@ -61,7 +61,7 @@ $permitted_domains = array_filter($out);
 
 					/* selected? */
 					if(@$subnet_old_details['vlanId']==$v->vlanId) 	{ print '<option value="'. $v->vlanId .'" selected>'. $printVLAN .'</option>'. "\n"; }
-					elseif(@$_POST['vlanId'] == $v->vlanId) 	{ print '<option value="'. $v->vlanId .'" selected>'. $printVLAN .'</option>'. "\n"; }
+					elseif($POST->vlanId == $v->vlanId) 	{ print '<option value="'. $v->vlanId .'" selected>'. $printVLAN .'</option>'. "\n"; }
 					else 										{ print '<option value="'. $v->vlanId .'">'. $printVLAN .'</option>'. "\n"; }
 				}
 			}

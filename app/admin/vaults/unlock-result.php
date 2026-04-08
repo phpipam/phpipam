@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Script to disaply vault edit result
+ * Script to display vault edit result
  *************************************/
 
 /* functions */
@@ -22,24 +22,21 @@ $User->check_maintaneance_mode ();
 # make sure user has access
 if ($User->get_module_permissions ("vaults")==User::ACCESS_NONE) { $Result->show("danger", _("Insufficient privileges").".", true); }
 
-# strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
-
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "vaultunlock", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "vaultunlock", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 // fetch vault
-$vault = $Admin->fetch_object("vaults", "id", $_POST['vaultId']);
+$vault = $Admin->fetch_object("vaults", "id", $POST->vaultId);
 // validate vault id
 $vault===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 
 // test
-if($User->Crypto->decrypt($vault->test, $_POST["vaultpass"])!="test") {
+if($User->Crypto->decrypt($vault->test, $POST->vaultpass) === false) {
 	$Result->show("danger", _("Invalid master password"), true);
 }
 else {
 	// write session
-	$_SESSION['vault'.$vault->id] = $_POST['vaultpass'];
+	$_SESSION['vault'.$vault->id] = $POST->vaultpass;
 	// OK, redirect
 	$Result->show("success", _("Vault unlocked, redirecting..."), false);
 }

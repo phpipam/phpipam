@@ -1,21 +1,19 @@
 <?php
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 /**
  * Print dropdown menu for rack selection of device
  *
- * We need following inputs from $_POST:
+ * We need following inputs from $POST:
  *  - rackid 		(id of rack)
  *  - device_id 	(id of device)
  *
  */
 
 # show only for numeric (set) rackid
-if(@$_POST['rackid']>0 || @$device['rack']>0) {
+if($POST->rackid>0 || @$device['rack']>0) {
 	# load objects for ajax-loaded stuff
 	if(!isset($User) || !is_object($User)) {
-		/* functions */
-		require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-
 		# initialize user object
 		$Database 	= new Database_PDO;
 		$User 		= new User ($Database);
@@ -26,15 +24,15 @@ if(@$_POST['rackid']>0 || @$device['rack']>0) {
 		$User->check_user_session();
 
 		# validate in inputs
-		if(!is_numeric($_POST['rackid'])) 	{ print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid ID"), false, false, true)."</td></tr>"; die(); }
+		if(!is_numeric($POST->rackid)) 	{ print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid ID"), false, false, true)."</td></tr>"; die(); }
 		# fetch rack
-		$rack = $User->fetch_object ("racks", "id", $_POST['rackid']);
+		$rack = $User->fetch_object ("racks", "id", $POST->rackid);
 		if($rack===false) 					{ print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid rack"), false, false, true)."</td></tr>"; die(); }
 
-		if (isset($_POST['deviceid'])) {
-			if(!is_numeric($_POST['deviceid'])) { print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid ID"), false, false, true)."</td></tr>"; die(); }
+		if (isset($POST->deviceid)) {
+			if(!is_numeric($POST->deviceid)) { print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid ID"), false, false, true)."</td></tr>"; die(); }
 			# fetch device
-			$device = $User->fetch_object ("devices", "id", $_POST['deviceid']);
+			$device = $User->fetch_object ("devices", "id", $POST->deviceid);
 			if($device===false) 				{ print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid device"), false, false, true)."</td></tr>"; die(); }
 			$device = (array) $device;
 		} else {
@@ -90,7 +88,7 @@ if(@$_POST['rackid']>0 || @$device['rack']>0) {
 			}
 			else {
 			    foreach ($available as $a) {
-                    		$selected = $a==$device['rack_start'] ? "selected" : "";
+                    		$selected = $a==@$device['rack_start'] ? "selected" : "";
 			        print "<option value='$a' $selected>$a</option>";
 			    }
 			}

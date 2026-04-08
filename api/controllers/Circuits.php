@@ -26,10 +26,10 @@ class Circuits_controller extends Common_api_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @param class $Database
-	 * @param class $Tools
-	 * @param mixed $params		// post/get values
-	 * @param class $Response
+	 * @param PDO_Database $Database
+	 * @param Tools $Tools
+	 * @param API_params $params
+	 * @param Response $response
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
@@ -314,7 +314,7 @@ class Circuits_controller extends Common_api_functions {
 	private function validate_object ($action="edit", $old_object = null) {
 		# circuits validation
 		if($this->type=="circuits") {
-			// chech that id doesnt already exist
+			// check that id doesnt already exist
 			$this->validate_cid ($action, $old_object);
 			// validate provider
 			$this->validate_circuit_provider ($action);
@@ -460,7 +460,7 @@ class Circuits_controller extends Common_api_functions {
 	}
 
 	/**
-	 * Validate circuit devide and location
+	 * Validate circuit divide and location
 	 *
 	 * @method validate_circuit_devices_locations
 	 *

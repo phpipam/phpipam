@@ -12,11 +12,14 @@ $requiredExt  = array("session", "sockets", "filter", "openssl", "gmp", "json", 
 $requiredFns  = array("simplexml_load_string");
 
 if(!defined('PHPIPAM_PHP_MIN'))
-define('PHPIPAM_PHP_MIN', "5.4");
+define('PHPIPAM_PHP_MIN', "7.2");
 
 if(!defined('PHPIPAM_PHP_UNTESTED'))
-define('PHPIPAM_PHP_UNTESTED', "8.2");  // PHP 8.2 or greater is untested & unsupported
+define('PHPIPAM_PHP_UNTESTED', "8.6");  // PHP 8.6 or greater is untested, use at own risk and expect issues
 
+if (phpversion() >= PHPIPAM_PHP_UNTESTED) {
+    $_SESSION['footer_warnings']['php_version'] = _('Unsupported PHP version ') . phpversion();
+}
 
 # Empty missing arrays to prevent errors
 $missingExt = [];
@@ -50,6 +53,8 @@ foreach ($requiredFns as $fn) {
 if (!@include_once 'PEAR.php') {
     $missingExt[] = "php PEAR support";
 }
+
+if(!isset($url)) { $url = ""; }
 
 /* headers */
 $error   = [];
@@ -99,6 +104,9 @@ elseif ( !empty($missingFns) ) {
     }
     $error[] = '</ul><hr>' . "\n";
     $error[] = _('Please recompile PHP to include missing functions and restart Apache.');
+}
+elseif ( isset($Database) && !$Database->set_names ) {
+    $error[] = "<strong>"._('Your database server does not support utf8mb4').":</strong><br><hr>";
 }
 else {
     /* No issues, delete $error */

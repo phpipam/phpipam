@@ -21,8 +21,6 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-
-
 // Create a workbook
 $filename = "phpipam_logs_export_". date("Y-m-d") .".xls";
 $workbook = new Spreadsheet_Excel_Writer();
@@ -31,7 +29,20 @@ $workbook = new Spreadsheet_Excel_Writer();
 ini_set('memory_limit', '1024M');
 
 //fetch sections, and for each section write new tab, inside tab write all values!
-$logs = $Admin->fetch_all_objects ("logs", "id");
+if($User->Crypto->csrf_cookie ("validate", "logs", $GET->csrf) === false) {
+	$logs = [];
+	$logs[] = [
+		"id"       =>"",
+		"severity" =>2,
+		"date"     => "",
+		"username" => "",
+		"command"  => "",
+		"details"  => "Invalid CSRF cookie"
+		];
+}
+else {
+	$logs = $Admin->fetch_all_objects ("logs", "id");
+}
 
 //formatting headers
 $format_header =& $workbook->addFormat();
@@ -115,4 +126,3 @@ $workbook->send($filename);
 
 // Let's send the file
 $workbook->close();
-?>

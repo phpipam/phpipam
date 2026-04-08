@@ -39,6 +39,13 @@ class PingThread {
     private $pid;
 
 	/**
+	* holds the parent process id
+	*
+	* @var integer
+	*/
+    private $ppid;
+
+	/**
 	* holds the exit code after the child dies
 	*/
     private $exitCode = -1;
@@ -138,7 +145,7 @@ class PingThread {
 		fclose($this->sockets[0]);
 		$response = fgets($this->sockets[1]);
 		if (is_string($response) && !is_blank($response)) {
-			$response = pf_json_decode($response);
+			$response = db_json_decode($response);
 		} else {
 			$response = null;
 		}
@@ -256,6 +263,8 @@ class PingThread {
                 call_user_func( $this->runnable );
             }
 
+            //and kill the child using posix_kill ( exit(0) duplicates headers!! )
+            posix_kill($this->pid , SIGKILL);
             exit( 0 );
         }
     }

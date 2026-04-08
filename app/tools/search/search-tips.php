@@ -1,7 +1,7 @@
 <?php
 
 /*
- * sime search tips....
+ * some search tips....
  **************************/
 ?>
 

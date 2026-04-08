@@ -22,19 +22,19 @@ $User->check_maintaneance_mode ();
 $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 
 # get NAT object
-$nat = $Admin->fetch_object ("nat", "id", $_POST['id']);
+$nat = $Admin->fetch_object ("nat", "id", $POST->id);
 $nat!==false ? : $Result->show("danger", _("Invalid ID"), true);
 
 # static NAT checks
 if($nat->type=="static") {
     // static NAT can only have IP address
-    if($_POST['object_type']!="ipaddresses") {
+    if($POST->object_type!="ipaddresses") {
         //$Result->show("danger", _("Static NAT can only contain IP address"), true);
     }
 
     // decode
-    $nat_src = pf_json_decode($nat->src, true);
-    $nat_dst = pf_json_decode($nat->dst, true);
+    $nat_src = db_json_decode($nat->src, true);
+    $nat_dst = db_json_decode($nat->dst, true);
 
     // validate all objects
     if(is_array(@$nat_src['ipaddresses'])) {
@@ -53,7 +53,7 @@ if($nat->type=="static") {
     }
 
     // check
-    if(is_array($nat_src) && $_POST['type']=="src") {
+    if(is_array($nat_src) && $POST->type=="src") {
         $nat_src = array_filter($nat_src);
 
         if(isset($nat_src['ipaddresses'])) {
@@ -64,7 +64,7 @@ if($nat->type=="static") {
     }
 
     // check
-    if(is_array($nat_dst) && $_POST['type']=="dst") {
+    if(is_array($nat_dst) && $POST->type=="dst") {
         $nat_dst = array_filter($nat_dst);
 
         if(isset($nat_dst['ipaddresses'])) {
@@ -80,16 +80,16 @@ if($nat->type=="static") {
 // object_id - optional
 
 # validate type
-if($_POST['type']!=="src" && $_POST['type']!=="dst") { $Result->show("danger", _("Invalid type"), true); }
+if($POST->type!=="src" && $POST->type!=="dst") { $Result->show("danger", _("Invalid type"), true); }
 
 # if type (subnets, ipaddresses) is set and id than just link
-if(isset($_POST['object_type']) && isset($_POST['object_id'])) {
+if(isset($POST->object_type) && isset($POST->object_id)) {
 
     // parameters
-    $obj_type = $_POST['object_type'];      // subnets, ipaddresses
-    $obj_id   = $_POST['object_id'];        // object identifier
-    $nat_id   = $_POST['id'];               // nat id
-    $nat_type = $_POST['type'];             // src, dst
+    $obj_type = $POST->object_type;      // subnets, ipaddresses
+    $obj_id   = $POST->object_id;        // object identifier
+    $nat_id   = $POST->id;               // nat id
+    $nat_type = $POST->type;             // src, dst
 
     // validate object type
     if (!in_array($obj_type, ['subnets', 'ipaddresses'])) { $Result->show("danger", _("Invalid object type"), true); }
@@ -102,20 +102,25 @@ if(isset($_POST['object_type']) && isset($_POST['object_id'])) {
     if($item!==false) {
         // update
         if($nat_type=="src") {
-            $nat_array = pf_json_decode($nat->src, true);
+            $nat_array = db_json_decode($nat->src, true);
         }
         else {
-            $nat_array = pf_json_decode($nat->dst, true);
+            $nat_array = db_json_decode($nat->dst, true);
         }
 
-        if(is_array($nat_array[$obj_type]))
+        if(is_array($nat_array) && is_array($nat_array[$obj_type]))
         $nat_array[$obj_type] = array_merge($nat_array[$obj_type], array($obj_id));
         else
         $nat_array[$obj_type] = array($obj_id);
 
         // to json
-        if ($nat_type=="src")   { $nat->src = json_encode($nat_array); }
-        else                    { $nat->dst = json_encode($nat_array); }
+        if ($nat_type=="src") {
+            $nat->src = json_encode($nat_array);
+            $nat->dst = json_encode(db_json_decode($nat->dst));
+        } else {
+            $nat->src = json_encode(db_json_decode($nat->src));
+            $nat->dst = json_encode($nat_array);
+        }
 
         // update
         if ($Admin->object_modify ("nat", "edit", "id", array("id"=>$nat_id, "src"=>$nat->src, "dst"=>$nat->dst))) {

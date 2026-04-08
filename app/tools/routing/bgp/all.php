@@ -8,6 +8,8 @@
 $User->check_user_session();
 # verify module permissions
 $User->check_module_permissions ("routing", User::ACCESS_R, true);
+
+$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "generate-export");
 ?>
 
 <?php
@@ -26,7 +28,7 @@ else {
         if($User->get_module_permissions ("routing")>=User::ACCESS_RWA) {
         print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/routing/edit-bgp.php' data-class='700' data-action='add' data-bgpid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add peer')."</a>";
         }
-        print "<a href='app/admin/import-export/export-bgp.php' class='btn btn-sm btn-default' data-class='700' style='margin-bottom:10px;'><i class='fa fa-download'></i> "._('Export')."</a>";
+        print "<a href='app/admin/import-export/export-bgp.php?csrf=$csrf' class='btn btn-sm btn-default' data-class='700' style='margin-bottom:10px;'><i class='fa fa-download'></i> "._('Export')."</a>";
 
     print "</div>";
 
@@ -75,7 +77,7 @@ else {
             // print
             print "<tr>";
 
-            print " <td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], "routing", "bgp", $bgp->id)."'><i class='fa fa-exchange prefix'></i> $bgp->peer_name</a></td>";
+            print " <td><a class='btn btn-xs btn-default' href='".create_link($GET->page, "routing", "bgp", $bgp->id)."'><i class='fa fa-exchange prefix'></i> $bgp->peer_name</a></td>";
             print " <td>$bgp->peer_as</td>";
             print " <td>$bgp->local_as</td>";
             print " <td>$bgp->peer_address</td>";
@@ -100,7 +102,7 @@ else {
             $links = [];
             if($User->get_module_permissions ("routing")>=User::ACCESS_R) {
                 $links[] = ["type"=>"header", "text"=>_("Show BGP")];
-                $links[] = ["type"=>"link", "text"=>_("Show BGP"), "href"=>create_link($_GET['page'], "routing", "bgp", $bgp->id), "icon"=>"eye", "visible"=>"dropdown"];
+                $links[] = ["type"=>"link", "text"=>_("Show BGP"), "href"=>create_link($GET->page, "routing", "bgp", $bgp->id), "icon"=>"eye", "visible"=>"dropdown"];
                 $links[] = ["type"=>"divider"];
             }
             if($User->get_module_permissions ("routing")>=User::ACCESS_RW) {

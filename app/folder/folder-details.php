@@ -4,12 +4,14 @@
  * display folder content
  *************************/
 
-# ferify that user is logged in
+# verify that user is logged in
 $User->check_user_session();
 
+$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "generate-export");
+
 # must be numeric
-if(!is_numeric($_GET['subnetId']))	{ $Result->show("danger", _("Invalid ID"), true); }
-if(!is_numeric($_GET['section']))	{ $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($GET->subnetId))	{ $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($GET->section))	{ $Result->show("danger", _("Invalid ID"), true); }
 
 # die if empty or not folder
 if(sizeof($folder) == 0) 			{ $Result->show("danger", _("Folder does not exist"), true); }
@@ -22,9 +24,12 @@ $vlan = $Tools->fetch_object("vlans", "vlanId", @$vlanId);
 $rowSpan = 10 + sizeof($cfields);
 
 # verify that is it displayed in proper section, otherwise warn!
-if($folder['sectionId']!=$_GET['section'])	{
-	$sd = $Sections->fetch_section ("id", $folder['sectionId']);
-									{ $Result->show("warning", "Folder is in section <a href='".create_link("folder",$sd->id,$folder['id'])."'>$sd->name</a>!", false); }
+if ($folder['sectionId'] != $GET->section) {
+	$sd = $Sections->fetch_section("id", $folder['sectionId']);
+	if (!is_object($sd)) {
+		$sd = new Params();
+	}
+	$Result->show("warning", "Folder is in section <a href='" . create_link("folder", $sd->id, $folder['id']) . "'>" . $sd->name . "</a>!", false);
 }
 ?>
 
@@ -33,7 +38,7 @@ if($folder['sectionId']!=$_GET['section'])	{
 	<tr>
 		<th><?php print _('Hierarchy'); ?></th>
 		<td>
-			<?php $Subnets->print_breadcrumbs ($Sections, $Subnets, $_GET); ?>
+			<?php $Subnets->print_breadcrumbs ($Sections, $Subnets, $GET->as_array()); ?>
 		</td>
 	</tr>
 	<tr>
@@ -80,6 +85,7 @@ if($folder['sectionId']!=$_GET['section'])	{
 
 	print "	<div class='btn-toolbar'>";
 
+	$sp = [];
 	/* set values for permissions */
 	if($folder_permission == 1) {
 		$sp['editsubnet']= false;		//edit subnet
@@ -88,14 +94,14 @@ if($folder['sectionId']!=$_GET['section'])	{
 		$sp['addip'] 	 = false;		//add ip address
 		$sp['import'] 	 = false;		//import
 	}
-	else if ($folder_permission == 2) {
+	elseif ($folder_permission == 2) {
 		$sp['editsubnet']= false;		//edit subnet
 		$sp['editperm']  = false;		//edit permissions
 		$sp['changelog'] = true;		//changelog view
 		$sp['addip'] 	 = true;		//add ip address
 		$sp['import'] 	 = true;		//import
 	}
-	else if ($folder_permission == 3) {
+	elseif ($folder_permission == 3) {
 		$sp['editsubnet']= true;		//edit subnet
 		$sp['editperm']  = true;		//edit permissions
 		$sp['changelog'] = true;		//changelog view
@@ -147,11 +153,11 @@ if($folder['sectionId']!=$_GET['section'])	{
 	print "<div class='btn-group'>";
 		//import
 		if($sp['import'])
-		print "<a class='csvImport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."' data-subnetId='$folder[id]'>		<i class='fa fa-download'></i></a>";
+		print "<a class='csvImport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."' data-subnetId='$folder[id]' csrf='$csrf'>		<i class='fa fa-download'></i></a>";
 		else
 		print "<a class='btn btn-xs btn-default disabled'  	href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."'>									<i class='fa fa-download'></i></a>";
 		//export
-		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$folder[id]'>		<i class='fa fa-upload'></i></a>";
+		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$folder[id]' csrf='$csrf'>		<i class='fa fa-upload'></i></a>";
 	print "</div>";
 
 	# favourites / changelog

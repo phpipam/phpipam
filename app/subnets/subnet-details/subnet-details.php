@@ -4,6 +4,8 @@
  * Main script to display master subnet details if subnet has slaves
  ***********************************************************************/
 
+$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "generate-export");
+
 # set rowspan
 $rowSpan = 10 + sizeof($custom_fields);
 
@@ -78,12 +80,12 @@ else {
 	<tr>
 		<th><?php print _('Hierarchy'); ?></th>
 		<td>
-			<?php $Subnets->print_breadcrumbs($Sections, $Subnets, $_GET); ?>
+			<?php $Subnets->print_breadcrumbs($Sections, $Subnets, $GET->as_array()); ?>
 		</td>
 	</tr>
 	<tr>
 		<th><?php print _('Subnet description'); ?></th>
-		<td><?php print html_entity_decode($subnet['description']); ?></td>
+		<td><?php print $subnet['description']; ?></td>
 	</tr>
 
 	<tr>
@@ -225,8 +227,9 @@ else {
 			$device = $Tools->fetch_object("devices", "id", $subnet['device']);
 			if (is_object($device)) {
 				# rack
+				$rack_text = "";
 				if ($User->settings->enableRACK=="1" && !is_blank($device->rack) && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
-					if (!is_object($Racks)) $Racks = new phpipam_rack ($Database);
+					if (!isset($Racks)) $Racks = new phpipam_rack($Database);
 					$Racks->add_rack_start_print($device);
 					$rack = $Tools->fetch_object("racks", "id", $device->rack);
 					$rack_text = !is_object($rack) ? "" : "<br><span class='badge badge1 badge5' style='padding-top:4px;'>$rack->name / "._('Position').": $device->rack_start_print "._("Size").": $device->rack_size U <i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackId='$rack->id' data-deviceId='$device->id'></i></span>";
@@ -532,8 +535,8 @@ else {
 
 	# check for temporary shares!
 	if($User->settings->tempShare==1) {
-		if (is_array(pf_json_decode($User->settings->tempAccess, true))) {
-			foreach(pf_json_decode($User->settings->tempAccess) as $s) {
+		if (is_array(db_json_decode($User->settings->tempAccess, true))) {
+			foreach(db_json_decode($User->settings->tempAccess) as $s) {
 				if($s->type=="subnets" && $s->id==$subnet['id']) {
 					if(time()<$s->validity) {
 						$active_shares[] = $s;
@@ -594,6 +597,7 @@ else {
 
 	print "	<div class='btn-toolbar'>";
 
+	$sp = [];
 	# set values for permissions
 	if($subnet_permission == 1) {
 		$sp['editsubnet']= false;		//edit subnet
@@ -604,7 +608,7 @@ else {
 		$sp['changelog'] = false;		//changelog view
 		$sp['import'] 	 = false;		//import
 	}
-	else if ($subnet_permission == 2) {
+	elseif ($subnet_permission == 2) {
 		$sp['editsubnet']= false;		//edit subnet
 		$sp['editperm']  = false;		//edit permissions
 
@@ -613,7 +617,7 @@ else {
 		$sp['changelog'] = true;		//changelog view
 		$sp['import'] 	 = true;		//import
 	}
-	else if ($subnet_permission == 3) {
+	elseif ($subnet_permission == 3) {
 		$sp['editsubnet']= true;		//edit subnet
 		$sp['editperm']  = true;		//edit permissions
 
@@ -690,11 +694,11 @@ else {
 	print "<div class='btn-group'>";
 		//import
 		if($sp['import'])
-		print "<a class='csvImport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."' data-subnetId='$subnet[id]'>		<i class='fa fa-download'></i></a>";
+		print "<a class='csvImport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."' data-subnetId='$subnet[id]' csrf='$csrf'>		<i class='fa fa-download'></i></a>";
 		else
 		print "<a class='btn btn-xs btn-default disabled'  	href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."'>									<i class='fa fa-download'></i></a>";
 		//export
-		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$subnet[id]'>		<i class='fa fa-upload'></i></a>";
+		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$subnet[id]' csrf='$csrf'>		<i class='fa fa-upload'></i></a>";
 		//share
 		if($subnet_permission>1 && $User->settings->tempShare==1) {
         print "<a class='btn btn-xs btn-default open_popup' data-script='app/tools/temp-shares/edit.php' data-class='700' data-action='edit' data-id='$subnet[id]' data-type='subnets' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."'><i class='fa fa-share-alt'></i></a>";
@@ -703,7 +707,7 @@ else {
 	print "</div>";
 
 		# firewall address object actions
-		$firewallZoneSettings = pf_json_decode($User->settings->firewallZoneSettings,true);
+		$firewallZoneSettings = db_json_decode($User->settings->firewallZoneSettings,true);
 		if ( $User->settings->enableFirewallZones == 1 && $subnet_permission > 1) {
 			print "<div class='btn-group'>";
 			print "<a class='subnet_to_zone btn btn-xs btn-default".(($fwZone == false) ? '':' disabled')."' href='' data-container='body' rel='tooltip' title='"._('Map subnet to firewall zone')."' data-subnetId='$subnet[id]' data-operation='subnet2zone'><i class='fa fa-fire'></i></a>";

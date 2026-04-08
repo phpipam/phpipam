@@ -2382,7 +2382,7 @@ msgid "Cannot update request"
 msgstr "Nelze aktualizovat požadavek"
 
 #: site/admin/manageRequestResult.php:33
-msgid "Request has beed rejected"
+msgid "Request has been rejected"
 msgstr "Požadavek byl odmítnut"
 
 #: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
@@ -2430,7 +2430,7 @@ msgid "Errors occured when importing to database!"
 msgstr "Při importu databáze nastala chyba!"
 
 #: site/admin/CSVimportSubmit.php:95 site/admin/RIPE / ARINImportResult.php:72
-msgid "Import successfull"
+msgid "Import successful"
 msgstr "Import proběhl úspěšně"
 
 #: site/admin/CSVimportVerify.php:25
@@ -2868,7 +2868,7 @@ msgstr ""
 #: site/admin/customIPFieldsOrder.php:15
 #: site/admin/customVLANFieldsOrder.php:15
 #: site/admin/customUserFieldsOrder.php:15
-msgid "Fileds cannot be empty"
+msgid "Fields cannot be empty"
 msgstr "Pole nemohou být prázdná"
 
 #: site/admin/customSubnetFieldsOrder.php:19
@@ -3264,7 +3264,7 @@ msgid "Truncating network will remove all IP addresses, that belong to selected 
 msgstr ""
 
 #: site/admin/manageSubnetTruncateSave.php:23
-msgid "Subnet truncated succesfully"
+msgid "Subnet truncated successfully"
 msgstr ""
 
 #: site/admin/usersEditEmailNotif.php:23

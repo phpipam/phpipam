@@ -12,9 +12,10 @@ class L2domains_controller extends Common_api_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @param class $Database
-	 * @param class $Tools
-	 * @param mixed $params		// post/get values
+	 * @param PDO_Database $Database
+	 * @param Tools $Tools
+	 * @param API_params $params
+	 * @param Response $response
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
@@ -187,7 +188,7 @@ class L2domains_controller extends Common_api_functions {
 	 */
 	public function DELETE () {
 		# check that domain exists
-		$this->validate_domain ();
+		$this->validate_domain_edit ();
 
 		# set variables for update
 		$values = array();
@@ -244,7 +245,10 @@ class L2domains_controller extends Common_api_functions {
 			// we cannot delete default domain
 			if(@$this->_params->id==1 && $_SERVER['REQUEST_METHOD']=="DELETE")				{ $this->Response->throw_exception(409, "Default domain cannot be deleted"); }
 			// ID must be numeric
-			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(404, "Invalid domain id"); }
+			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(400, "Domain id must be numeric"); }
+			// check that it exists
+			if($this->Tools->fetch_object ("vlanDomains", "id", $this->_params->id) === false )
+																							{ $this->Response->throw_exception(404, "Invalid domain id"); }
 		}
 		// create checks
 		elseif ($_SERVER['REQUEST_METHOD']=="POST") {

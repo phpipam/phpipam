@@ -23,13 +23,13 @@ $csrf = $User->Crypto->csrf_cookie ("create", "linkedsubnet");
 
 
 # ID must be numeric
-if(!is_numeric($_POST['subnetId']))	{ $Result->show("danger", _("Invalid ID"), true, true); }
+if(!is_numeric($POST->subnetId))	{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # get all IPv6 subnets
 $ipv6_subnets = $Subnets->fetch_all_subnets_search ("IPv6");
 
 # get subnet details
-$subnet = $Subnets->fetch_subnet(null, $_POST['subnetId']);
+$subnet = $Subnets->fetch_subnet(null, $POST->subnetId);
 ?>
 
 

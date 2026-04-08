@@ -1,6 +1,28 @@
 <?php
 
 /**
+ *  API Parameter class
+ */
+class API_params extends Params {
+
+	/**
+	 * Read array of arguments
+	 *
+	 * @param array $args
+	 * @param bool  $strip_tags
+	 * @param bool	$html_escape
+	 * @return void
+	 */
+	public function read($args, $strip_tags = false, $html_escape = false) {
+		if (is_array($args) && isset($args['controller'])) {
+			$args['controller'] = strtolower($args['controller']);
+		}
+
+		parent::read($args, $strip_tags, $html_escape);
+	}
+}
+
+/**
  *	phpIPAM API class for common functions
  *
  *
@@ -23,36 +45,6 @@ class Common_api_functions {
 	 * @access public
 	 */
 	public $_params;
-
-	/**
-	 * Lock transaction to avoid duplicate entries or errors
-	 *
-	 * (default value: 0)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $lock = 0;
-
-	/**
-	 * File to write lock to
-	 *
-	 * (default value: "_lock.txt")
-	 *
-	 * @var string
-	 * @access public
-	 */
-	public $lock_file_name = "/tmp/phpipam_api_lock.txt";
-
-    /**
-     * File handler
-     *
-     * (default value: false)
-     *
-     * @var bool|resource
-     * @access private
-     */
-    private $lock_file_handler = false;
 
     /**
      * Custom fields
@@ -160,7 +152,7 @@ class Common_api_functions {
 
 	/**
 	 * App object - will be passed by index.php
-	 * to provide app detauls
+	 * to provide app details
 	 *
 	 * @var false|object
 	 */
@@ -372,9 +364,7 @@ class Common_api_functions {
 			$this->Response->throw_exception(404, _('No results (filter applied)'));
 
 		# reindex filtered result
-		$result = array_values($result2);
-
-		return $result;
+		return array_values($result2);
 	}
 
 	/**
@@ -522,10 +512,9 @@ class Common_api_functions {
 			$result["slaves"]           = array ("GET");
 			$result["slaves_recursive"] = array ("GET");
 			$result["truncate"]         = array ("DELETE");
-			$result["permissions"]      = array ("DELETE");
+			$result["permissions"]      = array ("DELETE", "PATCH");
 			$result["resize"]           = array ("PATCH");
 			$result["split"]            = array ("PATCH");
-			$result["permissions"]      = array ("PATCH");
 			// return
 			return $result;
 		}
@@ -626,6 +615,8 @@ class Common_api_functions {
 	 * @return void
 	 */
 	protected function transform_address ($result) {
+		$result_is_object = false;
+
 		if (is_object($result)) {
 			$result_is_object = true;
 			$result = [$result];
@@ -747,16 +738,13 @@ class Common_api_functions {
 	 * @access public
 	 * @return array
 	 */
-	public function get_possible_permissions () {
-		// set
-		$permissions = array(
-    		            "na"=>0,
-    		            "ro"=>1,
-    		            "rw"=>2,
-    		            "rwa"=>3
-                        );
-        // return
-		return $permissions;
+	public function get_possible_permissions() {
+		return array(
+			"na" => 0,
+			"ro" => 1,
+			"rw" => 2,
+			"rwa" => 3
+		);
 	}
 
 	/**
@@ -766,27 +754,30 @@ class Common_api_functions {
 	 * @param mixed $result
 	 * @return mixed
 	 */
-	protected function remove_folders ($result) {
+	protected function remove_folders($result) {
 		// must be subnets
-		if($this->_params->controller!="subnets") {
+		if ($this->_params->controller != "subnets") {
 			return $result;
 		}
-		else {
-			// multiple options
-			if (is_array($result)) {
-				foreach($result as $k=>$r) {
-					// remove
-					if($r->isFolder=="1")				{ unset($result[$k]); }
-			}	}
-			// single item
-			else {
-					// remove
-					if($result->isFolder=="1")			{ unset($result); }
+
+		if (is_array($result)) {
+			foreach ($result as $k => $r) {
+				if (isset($r->isFolder) && $r->isFolder == "1") {
+					unset($result[$k]);
+				}
 			}
-			# return
-			if(empty($result))	{ $this->Response->throw_exception(404, "No subnets found"); }
-			else				{ return $result; }
-	}	}
+		} else {
+			if (isset($result->isFolder) && $result->isFolder == "1") {
+				unset($result);
+			}
+		}
+
+		if (empty($result)) {
+			$this->Response->throw_exception(404, "No subnets found");
+		}
+		return $result;
+	}
+
 	/**
 	 * This method removes all subnets if controller is subnets
 	 *
@@ -794,30 +785,29 @@ class Common_api_functions {
 	 * @param mixed $result
 	 * @return mixed
 	 */
-	protected function remove_subnets ($result) {
+	protected function remove_subnets($result) {
 		// must be subnets
-		if($this->_params->controller!="folders") {
+		if ($this->_params->controller != "folders") {
 			return $result;
 		}
-		else {
-			// multiple options
-			if (is_array($result)) {
-				foreach($result as $k=>$r) {
-					// remove
-					if($r->isFolder!="1")				{ unset($result[$k]); }
-			}	}
-			// single item
-			else {
-					// remove
-					if($result->isFolder!="1")			{ unset($result); }
+
+		if (is_array($result)) {
+			foreach ($result as $k => $r) {
+				if (isset($r->isFolder) && $r->isFolder != "1") {
+					unset($result[$k]);
+				}
 			}
-			# return
-			if($result===NULL)	{ $this->Response->throw_exception(404, "No folders found"); }
-			else				{ return $result; }
-	}	}
+		} else {
+			if (isset($result->isFolder) && $result->isFolder != "1") {
+				unset($result);
+			}
+		}
 
-
-
+		if (empty($result)) {
+			$this->Response->throw_exception(404, "No folders found");
+		}
+		return $result;
+	}
 
 	/**
 	 * Remaps keys based on request type
@@ -826,7 +816,7 @@ class Common_api_functions {
 	 * @param mixed $result (default: null)
 	 * @param mixed $controller (default: null)
 	 * @param mixed $tools_table (default: null)
-	 * @return void
+	 * @return mixed
 	 */
 	protected function remap_keys ($result = null, $controller = null, $tools_table = null) {
 		// define keys array
@@ -876,7 +866,7 @@ class Common_api_functions {
 	 *
 	 * @access private
 	 * @param mixed $result
-	 * @return void
+	 * @return mixed
 	 */
 	private function remap_result_keys ($result) {
 		# single
@@ -925,148 +915,6 @@ class Common_api_functions {
 		return $result_remapped;
 	}
 
-
-
-
-
-
-    /* ! @transaction_locking --------------- */
-
-    /**
-     * Open file handler to manage lock file
-     *
-     * @access private
-     * @return void
-     */
-    private function file_init_handler () {
-        try {
-            $this->lock_file_handler = fopen($this->lock_file_name, 'w');
-        }
-        catch ( Exception $e ) {
-            $this->Response->throw_exception(500, "Cannot init file handler for $this->lock_file_name ".$e->getMessage());
-        }
-    }
-
-    /**
-     * Adds Exclusive lock and writes 1 to file
-     *
-     * @access private
-     * @return void
-     */
-    private function file_add_lock () {
-        try {
-            // add lock
-            flock($this->lock_file_handler, LOCK_EX);
-            // write content
-            $this->file_write_content ("1");
-        }
-        catch ( Exception $e ) {
-            $this->Response->throw_exception(500, "Cannot add LOCK_UN to $this->lock_file_name ".$e->getMessage());
-        }
-    }
-    /**
-     * Removes exclusive lock
-     *
-     * @access private
-     * @return void
-     */
-    private function file_remove_lock () {
-        try {
-            // write content
-            $this->file_write_content ("0");
-            // close handler
-            fclose($this->lock_file_handler);
-        }
-        catch ( Exception $e ) {
-            $this->Response->throw_exception(500, "Cannot remove LOCK_UN from $this->lock_file_name ".$e->getMessage());
-        }
-    }
-
-    /**
-     * Write content to file.
-     *
-     * @access private
-     * @param string $content (default: "")
-     * @return void
-     */
-    private function file_write_content ($content = "") {
-        try {
-            fwrite($this->lock_file_handler, $content);
-        }
-        catch ( Exception $e ) {
-            $this->Response->throw_exception(500, "Cannot write content to $this->lock_file_name ".$e->getMessage());
-        }
-    }
-
-	/**
-	 * Resets lock file name
-	 *
-	 * @access public
-	 * @param string $file (default: "")
-	 * @return void
-	 */
-	public function set_transaction_lock_file ($file = "") {
-        if(!is_blank($file)) {
-            $this->lock_file_name = $file;
-        }
-	}
-
-	/**
-	 * Sets translaction lock
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function add_transaction_lock () {
-    	$this->file_init_handler ();
-        $this->file_add_lock ();
-	}
-
-	/**
-	 * Removes transaction lock
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function remove_transaction_lock () {
-    	$this->file_remove_lock();
-	}
-
-	/**
-	 * Checks for lock
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function is_transaction_locked () {
-        // check for stalled lock file
-        $this->check_stalled_file ();
-        // response
-        if(file_exists($this->lock_file_name)) {
-            return file_get_contents($this->lock_file_name) == "1" ? true : false;
-        }
-        else {
-            return false;
-        }
-
-	}
-
-	/**
-	 * Removes stalled lock file if needed
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function check_stalled_file () {
-    	if(file_exists($this->lock_file_name)) {
-        	// if more that 60 seconds remove it
-        	if((time() - filemtime($this->lock_file_name)) > 60) {
-            	$this->file_init_handler ();
-            	$this->remove_transaction_lock ();
-        	}
-    	}
-	}
-
 	/**
 	* Unmarshal nested custom field data into the root object, and unset
 	* the custom_fields parameter when done. This function does not have
@@ -1085,7 +933,7 @@ class Common_api_functions {
 				if (array_key_exists($key, $this->custom_fields)) {
 					$this->_params->$key = $value;
 				} else {
-					$this->Response->throw_exception(400, "${key} is not a valid custom field");
+					$this->Response->throw_exception(400, "{$key} is not a valid custom field");
 				}
 			}
 			unset($this->_params->custom_fields);

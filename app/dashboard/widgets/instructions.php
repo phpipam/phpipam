@@ -4,8 +4,8 @@
  **********************************************/
 
 # required functions
-if(!is_object(@$User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
+if(!isset($User)) {
+	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);
@@ -26,7 +26,7 @@ $User->check_user_session ();
 
 # set size parameters
 $height = 200;
-$slimit = 5;			//we dont need this, we will recalculate
+$slimit = 5;			//we don't need this, we will recalculate
 
 # count
 $m = 0;
@@ -35,9 +35,9 @@ $m = 0;
 $widget = $Tools->fetch_object ("widgets", "wfile", "instructions");
 
 # if direct request include plot JS
-if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
 	# get widget details
-	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_REQUEST['section'])) { $Result->show("danger", _("Invalid widget"), true); }
+	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $GET->section)) { $Result->show("danger", _("Invalid widget"), true); }
 	# reset size and limit
 	$height = 350;
 	$slimit = 100;

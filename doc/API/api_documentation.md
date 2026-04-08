@@ -448,6 +448,7 @@ Parameter          | Type           | Methods            | Description
 **scanAgent**      | binary         | POST, PATCH        | Controls which scanagent to use for subnet (default: 1)
 **pingSubnet**     | binary         | POST, PATCH        | Controls if subnet should be included in status checks (default: 0)
 **discoverSubnet** | binary         | POST, PATCH        | Controls if new hosts should be discovered for new host scans (default: 0)
+**resolveDNS**     | binary         | POST, PATCH        | Controls if reverse DNS should be discovered for new host scans (default: 0)
 **isFolder**       | binary         | POST               | Controls if we are adding subnet or folder (default: 0)
 **isFull**         | binary         | POST, PATCH        | Marks subnet as used (default: 0)
 **state**          | int            | POST, PATCH        | Assigns state (tag) to subnet (default: 1 - Used)
@@ -457,7 +458,7 @@ Parameter          | Type           | Methods            | Description
 
 ### 3.3 Folders controller
 
-Folder controller is an **alias for subnets controller**. Folder is defined with with isFolder=1 parameter.
+Folder controller is an **alias for subnets controller**. Folder is defined with isFolder=1 parameter.
 
 ### 3.4 Addresses controller
 
@@ -602,7 +603,7 @@ Parameter                       | Type    | Methods            | Description
 **id**                          | number  | GET, PATCH, DELETE | Device identifier
 **hostname**                    | varchar | POST, PATCH        | Device hostname
 **ip_addr**                     | varchar | POST, PATCH        | Device ip address
-**descriptuion**                | varchar | POST, PATCH        | Device description
+**description**                 | varchar | POST, PATCH        | Device description
 **sections**                    | varchar | POST, PATCH        | List of section id's device belongs to (e.g. 3;4;5)
 **rack, rack_start, rack_size** | varchar | POST, PATCH        | Device rack index, start position and size in U
 **location**                    | varchar | POST, PATCH        | Device location index

@@ -24,7 +24,7 @@ $User->check_module_permissions ("vrf", User::ACCESS_RWA, true, false);
 
 # check for number of input values
 $max = ini_get("max_input_vars");
-if(sizeof($_POST)>=ini_get("max_input_vars")) 							{ $Result->show("danger", _("Number of discovered hosts exceed maximum possible defined by php.ini - set to ")." $max <hr>"._("Please adjust your php.ini settings for value `max_input_vars`"), true); }
+if(sizeof($POST)>=ini_get("max_input_vars")) 							{ $Result->show("danger", _("Number of discovered hosts exceed maximum possible defined by php.ini - set to ")." $max <hr>"._("Please adjust your php.ini settings for value `max_input_vars`"), true); }
 
 // fetch custom fields and check for required
 $required_fields = $Tools->fetch_custom_fields ('vrf');
@@ -37,7 +37,7 @@ if($required_fields!==false) {
 }
 
 # ok, lets get results form post array!
-foreach($_POST as $key=>$line) {
+foreach($POST as $key=>$line) {
 	// IP address
 	if(substr($key, 0,2)=="rd") 			    { $res[substr($key, 2)]['rd']  	        = $line; }
 	// mac
@@ -78,4 +78,3 @@ if(sizeof($res)>0) {
 }
 # error
 else { $Result->show("danger", _("No entries available"), true); }
-?>

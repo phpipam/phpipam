@@ -27,7 +27,7 @@ $device_types = $Tools->fetch_all_objects ("deviceTypes", "tid");
 $custom_fields = (array) $Tools->fetch_custom_fields('devices');
 
 # set hidden fields
-$hidden_fields = pf_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['devices']) ? $hidden_fields['devices'] : array();
 
 # size of custom fields
@@ -37,14 +37,12 @@ $csize = sizeof($custom_fields) - sizeof($hidden_fields);
 $filter = false;
 
 // reindex types
+$device_types_indexed = [];
 if (isset($device_types)) {
 	foreach($device_types as $dt) {
-		$device_types_indexed[$dt->tid] = $dt;
+		$device_types_indexed[$dt->tid] = $dt->tname;
 	}
 }
-
-# strip tags - XSS
-$_GET = $User->strip_input_tags ($_GET);
 
 # title
 print "<h4>"._('List of devices')."</h4>";
@@ -59,6 +57,14 @@ print "<div class='btn-group'>";
 	if($User->is_admin(false))
 	print "<a href='".create_link("administration", "device-types")."' class='btn btn-sm btn-default'><i class='fa fa-tablet'></i> "._('Manage device types')."</a>";
 print "</div>";
+
+if($User->get_module_permissions ("devices")>=User::ACCESS_RW) {
+	print '<div class="btn-group pull-right" style="margin-bottom:10px;">';
+	print '	<div class="hidden"><select name="dataType"><option value="devices" selected="selected">Devices</option></select></div>';
+	print '	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title="Export data entries for the selected type"><i class="fa fa-download"></i> Export</button>';
+	print '</div>';
+	print '<div class="clearfix"></div>';
+}
 
 # filter
 include_once ("all-devices-filter.php");
@@ -151,7 +157,7 @@ else {
 			print "</td>";
 		}
 		print '	<td><span class="badge badge1 badge5">'. $cnt .'</span> '._('Objects').'</td>'. "\n";
-		print '	<td class="hidden-sm">'. $device_types_indexed[$device['type']]->tname .'</td>'. "\n";
+		print '	<td class="hidden-sm">'. (isset($device_types_indexed[$device['type']]) ? $device_types_indexed[$device['type']] : '') .'</td>'. "\n";
 
         //custom fields - no subnets
         if(sizeof(@$custom_fields) > 0) {
@@ -179,7 +185,7 @@ else {
             }
 			if($User->settings->enableSNMP=="1" && $User->is_admin(false)) {
 	            $links[] = ["type"=>"header", "text"=>_("SNMP")];
-	            $links[] = ["type"=>"link", "text"=>_("Manage SNMP"), "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='edit' data-switchId='$device[id]''", "icon"=>"cogs"];
+	            $links[] = ["type"=>"link", "text"=>_("Manage SNMP"), "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='edit' data-switchId='$device[id]'", "icon"=>"cogs"];
 			}
             // print links
             print $User->print_actions($User->user->compress_actions, $links);

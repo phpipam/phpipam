@@ -13,7 +13,7 @@ else {
 	require_once (dirname(__FILE__)."/../../../functions/GoogleAuthenticator/PHPGangsta/GoogleAuthenticator.php");
 	$ga = new PHPGangsta_GoogleAuthenticator();
 	// create secret
-	$secret = $ga->createSecret($User->settings->{'2fa_length'});
+	$secret = $ga->createSecret(32);  	// Override $User->settings->{'2fa_length'}. Only lengths 16 and 32 produce reliable results. See #3724
 	$username = strtolower($User->user->username)."@".$User->settings->{'2fa_name'};
 
 	// save secret to DB
@@ -33,13 +33,13 @@ else {
 	$html[] = '		<legend style="margin-top:10px;">'._('Two-factor authentication details').'</legend>';
 	$html[] = '	</div>';
 	$html[] = '	<div>';
-	$html[] = '		'._('Details for your Google Authenticator are below. Please write down your details, otherwise you will not be able to login to phpipam');
+	$html[] = '		'._('Details for your preferred authenticator application are below. Please write down your details, otherwise you will not be able to login to phpipam');
 	$html[] = '		<div style="border: 2px dashed red;margin:20px;padding: 10px" class="text-center row">';
 	$html[] = '			<div class="col-xs-12" style="padding:5px 10px 3px 20px;"><strong>'._('Account').': <span style="color:red; font-size: 16px">'.$username.'</span></strong></div>';
 	$html[] = '			<div class="col-xs-12" style="padding:0px 10px 3px 20px;"><strong>'._('Secret').' : <span style="color:red; font-size: 16px">'.$secret.'</span></strong></div>';
 	$html[] = '		</div>';
 	$html[] = '		<div class="text-center">';
-	$html[] = '		<hr>'._('You can also scan followign QR code with Google Authenticator application').':<br><br>';
+	$html[] = '		<hr>'._('You can also scan following QR code with your preferred authenticator application').':<br><br>';
 	$html[] = '			<div id="qrcode" style="width:200px;margin:auto;"></div>';
 	$html[] = '		</div>';
 	$html[] = '		<div class="text-right" style="margin-top:10px;">';
@@ -57,7 +57,7 @@ else {
 <script src="functions/qrcodejs/qrcode.min.js"></script>
 <script>
 var qrcode = new QRCode(document.getElementById("qrcode"), {
-	text: "otpauth://totp/<?php print $username."?secret=".$secret; ?>",
+	text: "otpauth://totp/phpIPAM:<?php print urlencode($username)."?secret=".$secret; ?>",
 	width: 200,
 	height: 200,
 	colorDark : "#000000",

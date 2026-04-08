@@ -17,11 +17,11 @@ $DNS		= new DNS ($Database);
 $User->check_user_session();
 
 # fetch subnet
-$subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
+$subnet = $Subnets->fetch_subnet ("id", $POST->subnetId);
 $nsid = $subnet===false ? false : $subnet->nameserverId;
 
 # resolve
-$hostname = $DNS->resolve_address ($_POST['ipaddress'], false, true, $nsid);
+$hostname = $DNS->resolve_address ($POST->ipaddress, false, true, $nsid);
 
 # print result
 print $hostname['name'];

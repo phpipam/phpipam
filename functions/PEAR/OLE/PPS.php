@@ -30,6 +30,7 @@ require_once 'OLE.php';
 * @category Structures
 * @package  OLE
 */
+#[AllowDynamicProperties]
 class OLE_PPS extends PEAR
 {
     /**

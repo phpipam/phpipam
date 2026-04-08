@@ -10,23 +10,6 @@
 
 
 /**
- * Decodes a JSON string
- *
- * @param string $json
- * @param bool $associative
- * @param integer $depth
- * @param integer $flags
- * @return mixed
- */
-function pf_json_decode($json, $associative = null, $depth = 512, $flags = 0)
-{
-    if (is_blank($json))
-        return null;
-
-    return json_decode($json, $associative, $depth, $flags);
-}
-
-/**
  * Split a string by a string
  *
  * @param string $separator
@@ -34,7 +17,7 @@ function pf_json_decode($json, $associative = null, $depth = 512, $flags = 0)
  * @return string[]|false
  */
 function pf_explode($separator, $string) {
-    if (is_blank($string))
+    if (is_blank($string) || empty($separator))
         return [''];
 
     return explode($separator, $string);

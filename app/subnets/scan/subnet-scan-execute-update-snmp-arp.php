@@ -3,6 +3,9 @@
 # Check we have been included and not called directly
 require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
+# check if site is demo
+$User->is_demo();
+
 # Don't corrupt output with php errors!
 disable_php_errors();
 
@@ -11,19 +14,19 @@ disable_php_errors();
  *******************************/
 
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disbled", true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disabled", true); }
 # subnet check
-$subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
+$subnet = $Subnets->fetch_subnet ("id", $POST->subnetId);
 if ($subnet===false)                            { $Result->show("danger", "Invalid subnet Id", true);  }
 
 # verify that user has write permissionss for subnet
-if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
+if($Subnets->check_permission ($User->user, $POST->subnetId) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
 
 # set class
 $Snmp = new phpipamSNMP ();
 
 // fetch all hosts to be scanned
-$all_subnet_hosts = (array) $Addresses->fetch_subnet_addresses ($_POST['subnetId']);
+$all_subnet_hosts = (array) $Addresses->fetch_subnet_addresses ($POST->subnetId);
 
 // execute only if some exist
 if (sizeof($all_subnet_hosts)>0) {
@@ -71,8 +74,8 @@ if (sizeof($all_subnet_hosts)>0) {
                            // add to alive
                            $result[$Subnets->transform_address($r['ip'], "decimal")]['code'] = 0;
                            $result[$Subnets->transform_address($r['ip'], "decimal")]['status'] = "Online";
-                           // update alive time
-                           @$Scan->ping_update_lastseen($result[$Subnets->transform_address($r['ip'], "decimal")]['id']);
+                           // update alive time and mac address
+                           @$Scan->ping_update_lastseen($result[$Subnets->transform_address($r['ip'], "decimal")]['id'], null, $r['mac']);
                        }
                    }
                }
@@ -138,4 +141,4 @@ print "</span>";
 print "</div>";
 
 # show debug?
-if($_POST['debug']==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }
+if($POST->debug==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }

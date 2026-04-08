@@ -1,8 +1,3 @@
-<div id="login">
-
-<form name="login" id="login" class="form-inline" method="post">
-<div class="loginForm row">
-
 	<!-- title -->
 	<div class="col-xs-12">
 		<legend style="margin-top:10px;"><?php print _('Please login'); ?></legend>
@@ -46,26 +41,33 @@
 	</div>
 	<?php } ?>
 
-	<div class="col-xs-12">
-		<hr>
-		<input type="submit" value="<?php print _('Login'); ?>" class="btn btn-sm btn-default pull-right"></input>
+	<div class="col-xs-12" style="padding-top:15px;">
+		<!-- <hr style="margin-top:5px;margin-bottom:10px;"> -->
+		<input type="submit" value="<?php print _('Login'); ?>" class="btn btn-sm btn-success" style="width:100%"></input>
 	</div>
 
-</div>
+	<?php require(dirname(__FILE__) . '/login_form_sso.php'); ?>
 
-</form>
+	<?php if(defined('IS_DEMO')) { ?>
 
-<?php
-/* show request module if enabled in config file */
-if($User->settings->enableIPrequests == 1) {
-?>
-<div class="iprequest">
-	<a href="<?php print create_link("request_ip"); ?>">
-	<i class="fa fa-plus fa-pad-right"></i> <?php print _('Request new IP address'); ?>
-	</a>
-</div>
-<?php
-}
-?>
+	</div>
 
-</div>
+	<div class="alert alert-warning" style="width:400px;margin:auto;margin-top:30px;">
+	<strong>Demo accounts:</strong>
+	<span class="pull-right">
+	<!-- Place this tag where you want the +1 button to render -->
+	<g:plusone size="medium" class='pull-right'></g:plusone>
+	<!-- Place this render call where appropriate -->
+	<script type="text/javascript">
+	(function() {
+	  var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+	    po.src = 'https://apis.google.com/js/plusone.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+	})();
+	</script>
+	</span>
+	<hr>
+	<strong>Admin demo:</strong> Admin / ipamadmin<br>
+	<strong>Viewer demo:</strong> demo / demo1234<br>
+
+	<?php } ?>

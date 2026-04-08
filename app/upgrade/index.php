@@ -39,11 +39,12 @@ $Upgrade = new Upgrade ($Database);
 	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script src="js/jquery-3.5.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/jquery-3.7.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/install.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/bootstrap.custom.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<?php if ($User->settings->theme!="white") { ?>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->settings->theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?>">
 	<?php } ?>

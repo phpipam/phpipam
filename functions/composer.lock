@@ -1,0 +1,191 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "23e5bbc9dd993a1c1824330765401dfd",
+    "packages": [
+        {
+            "name": "dapphp/radius",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dapphp/radius.git",
+                "reference": "023f538e46d20fa285f55dd65d7054fb9b370a82"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dapphp/radius/zipball/023f538e46d20fa285f55dd65d7054fb9b370a82",
+                "reference": "023f538e46d20fa285f55dd65d7054fb9b370a82",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5.13"
+            },
+            "suggest": {
+                "ext-openssl": "To support hashing required by Pear_CHAP"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Crypt_CHAP_": "lib/"
+                },
+                "psr-4": {
+                    "Dapphp\\Radius\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Drew Phillips",
+                    "email": "drew@drew-phillips.com",
+                    "homepage": "https://drew-phillips.com/"
+                },
+                {
+                    "name": "SysCo/al",
+                    "homepage": "http://developer.sysco.ch/php/"
+                }
+            ],
+            "description": "A pure PHP RADIUS client based on the SysCo/al implementation",
+            "homepage": "https://github.com/dapphp/radius",
+            "keywords": [
+                "Authentication",
+                "authorization",
+                "chap",
+                "ms-chap",
+                "ms-chap v2",
+                "pap",
+                "radius",
+                "rfc1994",
+                "rfc2284",
+                "rfc2759",
+                "rfc2865",
+                "rfc2869"
+            ],
+            "support": {
+                "issues": "https://github.com/dapphp/radius/issues",
+                "source": "https://github.com/dapphp/radius/tree/v3.0.0"
+            },
+            "time": "2022-01-26T04:33:16+00:00"
+        },
+        {
+            "name": "firehed/cbor",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Firehed/cbor-php.git",
+                "reference": "eef67b1b5fdf90a3688fc8d9d13afdaf342c4b80"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Firehed/cbor-php/zipball/eef67b1b5fdf90a3688fc8d9d13afdaf342c4b80",
+                "reference": "eef67b1b5fdf90a3688fc8d9d13afdaf342c4b80",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.1"
+            },
+            "suggest": {
+                "ext-bcmath": "Enables parsing of very large values"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Firehed\\CBOR\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eric Stern",
+                    "email": "eric@ericstern.com"
+                }
+            ],
+            "description": "CBOR decoder",
+            "homepage": "https://github.com/Firehed/CBOR",
+            "keywords": [
+                "cbor"
+            ],
+            "support": {
+                "issues": "https://github.com/Firehed/cbor-php/issues",
+                "source": "https://github.com/Firehed/cbor-php/tree/master"
+            },
+            "time": "2019-05-14T06:31:13+00:00"
+        },
+        {
+            "name": "firehed/webauthn",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Firehed/webauthn-php.git",
+                "reference": "e263a3553360d63131af707f3e563b151f4661b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Firehed/webauthn-php/zipball/e263a3553360d63131af707f3e563b151f4661b9",
+                "reference": "e263a3553360d63131af707f3e563b151f4661b9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-hash": "*",
+                "ext-openssl": "*",
+                "firehed/cbor": "^0.1.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "maglnet/composer-require-checker": "^4.1",
+                "mheap/phpunit-github-actions-printer": "^1.5",
+                "nikic/php-parser": "^4.14",
+                "phpstan/phpstan": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpstan/phpstan-strict-rules": "^1.0",
+                "phpunit/phpunit": "^9.3",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Firehed\\WebAuthn\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eric Stern",
+                    "email": "eric@ericstern.com"
+                }
+            ],
+            "description": "Web Authentication",
+            "support": {
+                "issues": "https://github.com/Firehed/webauthn-php/issues",
+                "source": "https://github.com/Firehed/webauthn-php/tree/main"
+            },
+            "time": "2023-12-10T19:00:08+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "firehed/webauthn": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
+}

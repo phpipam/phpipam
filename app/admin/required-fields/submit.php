@@ -21,7 +21,7 @@ $User->check_maintaneance_mode ();
 
 # set fields to update
 $values = array("id"=>1,
-				"IPrequired"=>implode(';', $_POST));
+				"IPrequired"=>implode(';', $POST->as_array()));
 
 # update
 if(!$Admin->object_modify("settings", "edit", "id", $values))   { $Result->show("danger alert-absolute",  _("Update failed"), true); }

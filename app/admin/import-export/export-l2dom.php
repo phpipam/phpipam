@@ -8,6 +8,9 @@
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 # initialize required objects
 $Database	= new Database_PDO;
 $Result		= new Result;
@@ -17,6 +20,20 @@ $Tools		= new Tools ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+
+# validate csrf cookie
+if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === false) {
+	$content  = _("Invalid CSRF cookie");
+
+	header("Cache-Control: private");
+	header("Content-Description: File Transfer");
+	header("Content-Type: application/octet-stream");
+	header('Content-Disposition: attachment; filename="' . "error_message.txt" . '"');
+	header("Content-Length: " . strlen($content));
+
+	print($content);
+	exit();
+}
 
 # fetch all l2 domains
 $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
@@ -46,11 +63,11 @@ $curRow = 0;
 $curColumn = 0;
 
 //write headers
-if( (isset($_GET['name'])) && ($_GET['name'] == "on") ) {
+if ($GET->name == "on") {
 	$worksheet->write($curRow, $curColumn, _('Name') ,$format_header);
 	$curColumn++;
 }
-if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+if ($GET->description == "on") {
 	$worksheet->write($curRow, $curColumn, _('Description') ,$format_header);
 	$curColumn++;
 }
@@ -62,11 +79,11 @@ foreach ($vlan_domains as $vlan_domain) {
 	//cast
 	$vlan_domain = (array) $vlan_domain;
 
-	if( (isset($_GET['name'])) && ($_GET['name'] == "on") ) {
+	if ($GET->name == "on") {
 		$worksheet->write($curRow, $curColumn, $vlan_domain['name'], $format_text);
 		$curColumn++;
 	}
-	if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
+	if ($GET->description == "on") {
 		$worksheet->write($curRow, $curColumn, $vlan_domain['description'], $format_text);
 		$curColumn++;
 	}
@@ -81,5 +98,3 @@ $workbook->send($filename);
 
 // Let's send the file
 $workbook->close();
-
-?>

@@ -56,7 +56,7 @@ $adldap->group()->members($groupName);
 DOCUMENTATION
 =============
 
-You can find our website at http://adldap.sourceforce.net or the class documentation at
+You can find our website at http://adldap.sourceforge.net or the class documentation at
 
 http://adldap.sourceforge.net/wiki/doku.php?id=documentation
 

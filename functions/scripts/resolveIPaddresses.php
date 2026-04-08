@@ -28,6 +28,9 @@ $Result		= new Result();
 if( php_sapi_name()!="cli" ) { $Result->show_cli("cli only\n", true); }
 
 # set all subnet ids
+if(!isset($config['resolve_subnets'])) {
+	$config['resolve_subnets'] = []; // Init the subnet array as empty array if not set.
+}
 $resolved_subnets = $Database->findObjects("subnets", "resolveDNS", "1", 'id', true);
 if(is_array($resolved_subnets)) {
 	foreach ($resolved_subnets as $s) {
@@ -42,13 +45,13 @@ if(is_array($resolved_subnets)) {
 
 # check all subnets
 if(sizeof($config['resolve_subnets']) == 0) {
-	# get ony ip's with empty DNS
+	# get only ip's with empty DNS
 	if($config['resolve_emptyonly'] == 1) 	{ $query = 'select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` where `hostname` = "" or `hostname` is NULL order by `ip_addr` ASC;'; }
 	else 									{ $query = 'select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` order by `ip_addr` ASC;'; }
 }
 # check selected subnets
 else {
-	$query[] = "select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` where ";
+	$query[] = "select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` where (";
 	//go through subnets
 	$m=1;
 	foreach($config['resolve_subnets'] as $k=>$subnetId) {
@@ -57,7 +60,8 @@ else {
 		else										{ $query[] = '`subnetId` = "'. $subnetId .'" or '; }
 		$m++;
 	}
-	# get ony ip's with empty DNS
+	$query[] = ")";
+	# get only ip's with empty DNS
 	if($config['resolve_emptyonly'] == 1) {
 		$query[] = ' and (`hostname` = "" or `hostname` is NULL ) ';
 	}
@@ -68,7 +72,7 @@ else {
 }
 
 # fetch records
-$ipaddresses = $Database->getObjectsQuery($query);
+$ipaddresses = $Database->getObjectsQuery('ipaddresses', $query);
 
 # try to update dns records
 if (is_array($ipaddresses)) {
@@ -97,6 +101,6 @@ if (is_array($ipaddresses)) {
 
 # if verbose print result so it can be emailed via cron!
 if($config['resolve_verbose'] == true && isset($res)) {
-	print implode("\n", $res);
+	print implode("\n", $res)."\n";
 }
 ?>

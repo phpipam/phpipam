@@ -1076,7 +1076,7 @@
                     }).fail(errorHandler);
                 }, errorHandler);
             } else {
-                // Return an empy list for file system items
+                // Return an empty list for file system items
                 // other than files or directories:
                 dfd.resolve([]);
             }

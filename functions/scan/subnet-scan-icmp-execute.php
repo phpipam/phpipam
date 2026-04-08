@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	This script takes 2 possible argumets from argv:
+ *	This script takes 2 possible arguments from argv:
  *		* scan type			//status update or subnet discovery?
  *
  *		* subnet in cidr format
@@ -106,6 +106,8 @@ else {
 	$scan_addresses = $Scan->prepare_addresses_to_scan($argv[1], $argv[2]) ?: [];
 
 	$z = 0;			//scan_addresses array index
+
+	$Database->resetConn(); // Close database, forked processes inherit and close file handles on exit.
 
 	while ($z < sizeof($scan_addresses)) {
 

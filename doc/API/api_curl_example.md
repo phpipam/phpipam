@@ -66,7 +66,7 @@ Update subnet description (using form-encoded data):
     {"code":200,"success":true,"message":"Subnet updated","time":0.008}%
 ```
 
-Request fist available subnet with mask /29 inside specific subnet:
+Request first available subnet with mask /29 inside specific subnet:
 
 ```bash
     curl -X GET https://devel.phpipam.net/api/apiclient/subnets/92/first_subnet/29/ --header "token: .J1e9ipFZkPE6EvIRAqEf9hp" -i

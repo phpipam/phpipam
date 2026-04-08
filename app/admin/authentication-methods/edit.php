@@ -17,8 +17,8 @@ $User->check_user_session();
 $csrf = $User->Crypto->csrf_cookie ("create", "authmethods");
 
 # if edit check if protected?
-if($_POST['action']!="add") {
-	$auth_method = $Admin->fetch_object("usersAuthMethod", "id", $_POST['id']);
+if($POST->action!="add") {
+	$auth_method = $Admin->fetch_object("usersAuthMethod", "id", $POST->id);
 	if($auth_method->protected=="Yes")								{ $Result->show("danger", _("Method cannot be change as it is protected"), true, true); }
 }
 
@@ -26,6 +26,6 @@ if($_POST['action']!="add") {
 $permitted_methods = $User->fetch_available_auth_method_types();
 
 # route to proper auth method editing
-if(!file_exists(dirname(__FILE__)."/edit-$_POST[type].php"))	{ $Result->show("danger", _("Invalid method type"), true, true); }
-elseif (!in_array($_POST['type'], $permitted_methods))			{ $Result->show("danger", _("Invalid method type"), true, true); }
-else															{ include("edit-$_POST[type].php"); }
+if(!file_exists(dirname(__FILE__)."/edit-".$POST->type.".php"))	{ $Result->show("danger", _("Invalid method type"), true, true); }
+elseif (!in_array($POST->type, $permitted_methods))			{ $Result->show("danger", _("Invalid method type"), true, true); }
+else															{ include("edit-".$POST->type.".php"); }

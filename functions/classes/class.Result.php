@@ -229,7 +229,7 @@ class Result {
 			// set close class for JS
 			$pclass = $popup2===false ? "hidePopups" : "hidePopup2";
 			// change danger to error for popup
-			$htext = $class==="danger" ? "error" : $class;
+			$htext = $class==="danger" ? "error" : escape_input($class);
 
 			$out[] = '<div class="pHeader">'._(ucwords($htext)).'</div>';
 			$out[] = '<div class="pContent">';

@@ -27,6 +27,20 @@ class PowerDNS extends Common_functions {
     public $db_settings;
 
     /**
+     * Array of DB errors
+     *
+     * @var array|null
+     */
+    public $db_check_error = null;
+
+    /**
+     * Active DB connection
+     *
+     * @var mixed
+     */
+    public $active_db = false;
+
+    /**
      * Default settings
      *
      * @var object
@@ -77,7 +91,7 @@ class PowerDNS extends Common_functions {
     /**
      * ttl value
      *
-     * @var int|string
+     * @var object
      * @access public
      */
     public $ttl;
@@ -142,7 +156,7 @@ class PowerDNS extends Common_functions {
         $this->set_domain_types ();
         // set record types
         $this->set_record_types ();
-        // set uery values
+        // set query values
         $this->set_query_values ();
         // set ttl values
         $this->set_ttl_values ();
@@ -167,13 +181,40 @@ class PowerDNS extends Common_functions {
      */
     private function db_set () {
         // decode values form powerDNS
-        $this->db_settings = strlen($this->settings->powerDNS)>10 ? pf_json_decode($this->settings->powerDNS) : pf_json_decode($this->db_set_db_settings ());
-        // set connection
-        $this->Database_pdns = new Database_PDO ($this->db_settings->username, $this->db_settings->password, $this->db_settings->host, $this->db_settings->port, $this->db_settings->name);
+        $this->db_settings = strlen($this->settings->powerDNS)>10 ? db_json_decode($this->settings->powerDNS) : db_json_decode($this->db_set_db_settings ());
+
+        // if comma delimited host
+        if (strpos($this->db_settings->host, ";")!==false) {
+            // get all databases
+            $this->db_settings->host = explode(";", $this->db_settings->host);
+            // set active index
+            $this->active_db = false;
+            // check each, use first we are able to connect to
+            foreach ($this->db_settings->host as $key=>$host) {
+                // set connection
+                unset($this->Database_pdns);
+                $this->Database_pdns = new Database_PDO ($this->db_settings->username, $this->db_settings->password, $host, $this->db_settings->port, $this->db_settings->name);
+                // check connection, try untill it fails
+                if(!$this->db_check ()) {
+                    $this->db_check_error[] = $this->error." :: ".$host;
+                }
+                else {
+                    if($this->active_db==false) {
+                        $this->active_db = $key;
+                    }
+                }
+            }
+            // connect to active
+            $this->Database_pdns = new Database_PDO ($this->db_settings->username, $this->db_settings->password, $this->db_settings->host[$this->active_db], $this->db_settings->port, $this->db_settings->name);
+        }
+        else {
+            // set connection
+            $this->Database_pdns = new Database_PDO ($this->db_settings->username, $this->db_settings->password, $this->db_settings->host, $this->db_settings->port, $this->db_settings->name);
+        }
     }
 
     /**
-     * Sets default values for database connection and othern parameters
+     * Sets default values for database connection and other parameters
      *
      * @access private
      * @return string
@@ -536,7 +577,7 @@ class PowerDNS extends Common_functions {
      * @return bool|array|object
      */
     public function fetch_domain_by_id ($id) {
-        # chcek cache
+        # check cache
         if (array_key_exists($id, $this->domains_cache)) { return $this->domains_cache[$id]; }
 
         # fetch
@@ -560,19 +601,22 @@ class PowerDNS extends Common_functions {
      * @param mixed $name
      * @return object|false
      */
-    public function fetch_domain_by_name ($name) {
+    public function fetch_domain_by_name($name) {
         # fetch
-        try { $domain = $this->Database_pdns->findObjects("domains", "name", $name); }
-        catch (Exception $e) {
-            $this->Result->show("danger", _("Error: ").$e->getMessage());
+        try {
+            $domain = $this->Database_pdns->findObjects("domains", "name", $name);
+        } catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ") . $e->getMessage());
+            return false;
+        }
+
+        if (!is_array($domain) || empty($domain)) {
             return false;
         }
 
         # cache
         $this->domains_cache[$domain[0]->id] = $domain[0];
-
-        # result
-        return is_object(($domain[0])) ? $domain[0] : false;
+        return $domain[0];
     }
 
     /**
@@ -586,7 +630,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = 'SELECT COUNT(*) AS `cnt` FROM `records` WHERE `domain_id` = ? AND `type` IS NOT NULL;';
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery($query, array($domain_id)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($domain_id)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -607,7 +651,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = "select count(*) as `cnt` from `records` where `domain_id` = ? and `type` = ?;";
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery($query, array($domain_id, $type)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($domain_id, $type)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -636,7 +680,7 @@ class PowerDNS extends Common_functions {
     public function fetch_all_domain_records ($domain_id) {
         $query = "SELECT * FROM `records` WHERE `domain_id` = ? AND `type` IS NOT NULL ORDER BY $this->orderby $this->orderdir LIMIT $this->limit;";
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery($query, array($domain_id)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($domain_id)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -657,7 +701,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = "select * from `records` where `domain_id` = ? and `type` = ? order by $this->orderby $this->orderdir limit $this->limit;";
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery($query, array($domain_id, $type)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($domain_id, $type)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -687,6 +731,27 @@ class PowerDNS extends Common_functions {
     }
 
     /**
+     * Searches domains referencing a hostname or ip
+     *
+     * @access public
+     * @param mixed $hostname
+     * @param mixed $ip
+     * @return array|boolean
+     */
+    public function search_domains_by_hostname_or_ip ($hostname, $ip) {
+        // query
+        $query = "select DISTINCT(`domain_id`) from `records` where `name` = ? or `content` = ? and `type` != 'NS' and `type` != 'SOA';";
+        // fetch
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($hostname, $ip)); }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage());
+            return false;
+        }
+        # result
+        return sizeof($records)>0 ? $records : false;
+    }
+
+    /**
      * Searches records for specific domainid for type and name values
      *
      * @access public
@@ -699,7 +764,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = "select * from `records` where `domain_id` = ? and `type` = ? and `name` = ? limit 1;";
         // fetch
-        try { $records = $this->Database_pdns->getObjectQuery($query, array($domain_id, $type, $name)); }
+        try { $records = $this->Database_pdns->getObjectQuery("records", $query, array($domain_id, $type, $name)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -734,7 +799,7 @@ class PowerDNS extends Common_functions {
      *
      * @access public
      * @param mixed $hostname
-     * @return void
+     * @return array|false
      */
     public function seach_aliases ($hostname) {
         // fetch
@@ -765,7 +830,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = "select DISTINCT(`content`) from records WHERE INET_ATON(`content`) IS NOT NULL or `content` LIKE '%:%';";
          // search
-        try { $records = $this->Database_pdns->getObjectsQuery($query); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -933,17 +998,28 @@ class PowerDNS extends Common_functions {
      * @return void
      */
     public function pdns_remove_ip_and_hostname_records ($hostname, $ip) {
-         // set query
-        $query = "delete from `records` where (`name` = ? or `content` = ?) and `type` != 'NS' and `type` != 'SOA';";
+        // find out which domains are going to need an soa serial update
+        $domains_records = $this->search_domains_by_hostname_or_ip($hostname, $ip);
 
-        // run
-		try { $this->Database_pdns->runQuery($query, array($hostname, $ip)); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		#result
-		return true;
+        // set query
+       $query = "delete from `records` where (`name` = ? or `content` = ?) and `type` != 'NS' and `type` != 'SOA';";
+
+       // run
+       try { $this->Database_pdns->runQuery($query, array($hostname, $ip)); }
+       catch (Exception $e) {
+           $this->Result->show("danger", _("Error: ").$e->getMessage());
+           return false;
+       }
+
+       // update soa serial for impacted domains
+       if($domains_records !== false) {
+           foreach ($domains_records as $d) {
+               $this->update_soa_serial ($d->domain_id);
+           }
+       }
+
+       #result
+       return true;
     }
 
     /**
@@ -993,8 +1069,7 @@ class PowerDNS extends Common_functions {
         // set update content
         $content = array(
                         "id"=>$soa->id,
-                        "content"=>implode(" ", $soa_serial),
-                        "change_date"=>$soa_serial[2]
+                        "content"=>implode(" ", $soa_serial)
                         );
         // update
         $this->update_domain_record_content ($content);
@@ -1041,7 +1116,7 @@ class PowerDNS extends Common_functions {
         $soa   = array();
         $soa[] = array_shift(pf_explode(";", $values['ns']));
         $soa[] = str_replace ("@", ".", $values['hostmaster']);
-        $soa[] = $this->set_default_change_date ();
+        $soa[] = date("Ymd")."00";
         $soa[] = $this->validate_refresh ($values['refresh']);
         $soa[] = $this->validate_integer ($values['retry']);
         $soa[] = $this->validate_integer ($values['expire']);
@@ -1096,7 +1171,6 @@ class PowerDNS extends Common_functions {
         $record->content     = $content;                                                                                // record content
         $record->ttl         = $this->validate_ttl ($ttl);                                                              // ttl validation
         $record->prio        = $this->validate_prio ($prio);                                                            // priority, default NULL
-        $record->change_date = $this->set_default_change_date ();                                                       // sets default change date
         $record->disabled    = $disabled;                                                                               // enables of disables record
         // return record
         return (array) $record;
@@ -1124,7 +1198,6 @@ class PowerDNS extends Common_functions {
         if (!is_null($content)) $record->content     = $content;                                          // record content
         if (!is_null($ttl))     $record->ttl         = $this->validate_ttl ($ttl);                        // ttl validation
         if (!is_null($prio))    $record->prio        = $this->validate_prio ($prio);                      // priority, default NULL
-                                $record->change_date = $this->update_record_change_date ($old_date);      // updates change date
         if (!is_null($disabled))$record->disabled    = $disabled;                                         // enables of disables record
         // return record
         return (array) $record;
@@ -1218,7 +1291,7 @@ class PowerDNS extends Common_functions {
      * @return void
      */
     private function validate_record_type ($type) {
-        // if set check, otherwise ognore
+        // if set check, otherwise ignore
         if(isset($type)) {
             // check record type
             if(!in_array($type, (array) $this->record_types))    { $this->Result->show("danger", _("Invalid record type"), true); }
@@ -1310,37 +1383,6 @@ class PowerDNS extends Common_functions {
         }
         // ok
         return $int;
-    }
-
-    /**
-     * Sets default change date for record
-     *
-     *    - 2015032701
-     *
-     * @access private
-     * @return void
-     */
-    private function set_default_change_date () {
-        return date("Ymd")."00";
-    }
-
-    /**
-     * Updates change date for record
-     *
-     * @access private
-     * @param mixed $current_date (default: null)
-     * @return void
-     */
-    private function update_record_change_date ($current_date=null) {
-        // not set
-        if (is_null($current_date))        { return $this->set_default_change_date (); }
-
-        // split to date / sequence
-        $date = substr($current_date, 0,8);
-
-        // date same ++, otherwise default
-        if ($date==date('Ymd'))            { return $current_date+1; }
-        else                               { return $this->set_default_change_date (); }
     }
 
     /**
@@ -1503,7 +1545,7 @@ class PowerDNS extends Common_functions {
      */
     public function record_exists ($domain_id, $name, $type, $content) {
         // execute
-        try { $res = $this->Database_pdns->getObjectQuery("select count(*) as `cnt` from `records` where `domain_id` = ? and `name`=? and `type`=? and `content`=?;", array($domain_id, $name, $type, $content)); }
+        try { $res = $this->Database_pdns->getObjectQuery("records", "select count(*) as `cnt` from `records` where `domain_id` = ? and `name`=? and `type`=? and `content`=?;", array($domain_id, $name, $type, $content)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -1520,7 +1562,7 @@ class PowerDNS extends Common_functions {
      * @return bool
      */
     public function record_id_exists ($ptr_id = 0) {
-        # 0 or dalse
+        # 0 or false
         if (@$ptr_id==0 || $ptr_id===false)    { return false; }
 
         # fetch
@@ -1542,7 +1584,7 @@ class PowerDNS extends Common_functions {
      * @return bool
      */
     public function remove_all_ptr_records ($domain_id, $indexes = array()) {
-        // if false return ok and dont execute
+        // if false return ok and don't execute
         if (sizeof($indexes)==0 || !is_array($indexes)) {
             return true;
         }

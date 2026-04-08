@@ -8,6 +8,9 @@
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 # classes
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
@@ -57,5 +60,3 @@ $workbook->send($filename);
 
 // Let's send the file
 $workbook->close();
-
-?>

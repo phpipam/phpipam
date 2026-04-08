@@ -42,6 +42,7 @@ require_once 'PEAR.php';
 * @package  Spreadsheet_Excel_Writer
 */
 
+#[AllowDynamicProperties]
 class Spreadsheet_Excel_Writer_Format extends PEAR
 {
     /**

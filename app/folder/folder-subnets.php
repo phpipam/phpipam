@@ -10,11 +10,11 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 $User->check_user_session();
 
 # must be numeric
-if(!is_numeric($_GET['subnetId']))	{ $Result->show("danger", _("Invalid ID"), true); }
-if(!is_numeric($_GET['section']))	{ $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($GET->subnetId))	{ $Result->show("danger", _("Invalid ID"), true); }
+if(!is_numeric($GET->section))	{ $Result->show("danger", _("Invalid ID"), true); }
 
 # set master folder ID to check for slaves
-$folderId = $_GET['subnetId'];
+$folderId = $GET->subnetId;
 
 # get section details
 $section = $Sections->fetch_section ("id", $folder['sectionId']);
@@ -30,7 +30,7 @@ if($slaves) {
 	}
 
 	# first print belonging folders
-	if(isset($folders) && @$_GET['sPage']!=="map" && @$_GET['sPage']!=="mapsearch") {
+	if(isset($folders) && $GET->sPage!=="map" && $GET->sPage!=="mapsearch") {
 		# print title
 		print "<h4>"._("Folder")." $folder[description] "._('has')." ". sizeof($folders)." "._('directly nested folders').":</h4><hr>";
 
@@ -71,7 +71,7 @@ if($slaves) {
 		print "</table>";
 	}
 	# print subnets
-	if(sizeof($subnets)>0 && @$_GET['sPage']!=="map" && @$_GET['sPage']!=="mapsearch") {
+	if(sizeof($subnets)>0 && $GET->sPage!=="map" && $GET->sPage!=="mapsearch") {
 		# title
 		print "<h4>"._("Folder")." $folder[description] "._('has')." ".sizeof($subnets)." "._('directly nested subnets').":</h4><hr><br>";
 
@@ -193,4 +193,3 @@ else {
 	print "<hr>";
 	$Result->show("info", _("Folder has no subfolders or belonging subnets")."!", false);
 }
-?>
