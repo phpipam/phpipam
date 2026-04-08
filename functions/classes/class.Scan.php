@@ -313,40 +313,46 @@ class Scan extends Common_functions {
 	 *	timeout value: for miliseconds multiply by 1000
 	 *
 	 * @access protected
-	 * @param string $address
-	 * @return void
+	 * @param string $address  // IPv4/IPv6
+	 * @return int
 	 */
-	protected function ping_address_method_ping ($address) {
+	protected function ping_address_method_ping($address) {
 		# if ipv6 append 6
-		$ping_path = ($this->identify_address ($address)=="IPv6") ? $this->ping_path."6" : $this->ping_path;
+		$ping_path = ($this->identify_address($address) == "IPv6") ? $this->ping_path . "6" : $this->ping_path;
 
 		# verify ping path
-		$this->ping_verify_path ($ping_path);
+		$this->ping_verify_path($ping_path);
+
+		$icmp_count   = filter_var($this->icmp_count,   FILTER_VALIDATE_INT, ['options' => ['default' => 1, 'min_range' => 1, 'max_range' => 5]]);
+		$icmp_timeout = filter_var($this->icmp_timeout, FILTER_VALIDATE_INT, ['options' => ['default' => 1, 'min_range' => 1, 'max_range' => 2]]);
 
 		# set ping command based on OS type
 		if ($this->os_type == "FreeBSD") {
-			$cmd = sprintf("%s -c %s -W %s %s 1>/dev/null 2>&1", escapeshellcmd($ping_path), escapeshellarg($this->icmp_count), escapeshellarg($this->icmp_timeout * 1000), escapeshellarg($address));
+			$cmd = sprintf("%s -c %d -W %d %s 1>/dev/null 2>&1", escapeshellcmd($ping_path), $icmp_count, $icmp_timeout * 1000, escapeshellarg($address));
 		} elseif ($this->os_type == "Linux") {
-			$cmd = sprintf("%s -c %s -W %s %s 1>/dev/null 2>&1", escapeshellcmd($ping_path), escapeshellarg($this->icmp_count), escapeshellarg($this->icmp_timeout), escapeshellarg($address));
+			$cmd = sprintf("%s -c %d -W %d %s 1>/dev/null 2>&1", escapeshellcmd($ping_path), $icmp_count, $icmp_timeout, escapeshellarg($address));
 		} elseif ($this->os_type == "Windows") {
-			$cmd = sprintf("%s -n %s -w %s %s", escapeshellcmd($ping_path), escapeshellarg($this->icmp_count), escapeshellarg($this->icmp_timeout * 1000), escapeshellarg($address));
+			$cmd = sprintf("%s -n %d -w %d %s", escapeshellcmd($ping_path), $icmp_count, $icmp_timeout * 1000, escapeshellarg($address));
 		} else {
-			$cmd = sprintf("%s -c %s -n %s 1>/dev/null 2>&1", escapeshellcmd($ping_path), escapeshellarg($this->icmp_count), escapeshellarg($address));
+			$cmd = sprintf("%s -c %d -n %s 1>/dev/null 2>&1", escapeshellcmd($ping_path), $icmp_count, escapeshellarg($address));
 		}
 
-        # for IPv6 remove wait
-        if ($this->identify_address ($address)=="IPv6") {
-            $cmd = pf_explode(" ", $cmd);
-            unset($cmd[3], $cmd[4]);
-            $cmd = implode(" ", $cmd);
-        }
+		# for IPv6 remove wait
+		if ($this->identify_address($address) == "IPv6") {
+			$cmd = pf_explode(" ", $cmd);
+			unset($cmd[3], $cmd[4]);
+			$cmd = implode(" ", $cmd);
+		}
 
 		# execute command, return $retval
-	    exec($cmd, $output, $retval);
+		exec($cmd, $output, $retval);
 
 		# return result for web or cmd
-		if($this->icmp_exit)	{ exit  ($retval); }
-		else					{ return $retval; }
+		if ($this->icmp_exit) {
+			exit($retval);
+		} else {
+			return $retval;
+		}
 	}
 
 	/**
@@ -424,26 +430,32 @@ class Scan extends Common_functions {
 	 *	fping cannot be run from web, it needs root privileges to be able to open raw socket :/
 	 *
 	 * @access public
-	 * @param mixed $subnet 	//CIDR
-	 * @return void
+	 * @param mixed $address 	// IPv4/IPv6
+	 * @return int
 	 */
-	public function ping_address_method_fping ($address) {
-		$this->ping_verify_path ($this->fping_path);
+	public function ping_address_method_fping($address) {
+		$this->ping_verify_path($this->fping_path);
 
 		# set command
 		$type = ($this->identify_address($address) == "IPv6") ? '--ipv6' : '--ipv4';
-		$cmd = sprintf("%s %s -c %s -t %s %s", escapeshellcmd($this->fping_path), $type, escapeshellarg($this->icmp_count), escapeshellarg($this->icmp_timeout * 1000), escapeshellarg($address));
-		# execute command, return $retval
-	    exec($cmd, $output, $retval);
+		$icmp_count   = filter_var($this->icmp_count,   FILTER_VALIDATE_INT, ['options' => ['default' => 1, 'min_range' => 1, 'max_range' => 5]]);
+		$icmp_timeout = filter_var($this->icmp_timeout, FILTER_VALIDATE_INT, ['options' => ['default' => 1, 'min_range' => 1, 'max_range' => 2]]);
 
-	    # save result
-	    if($retval==0) {
-	    	$this->save_fping_rtt ($output[0]);
+		$cmd = sprintf("%s %s -c %d -t %d %s", escapeshellcmd($this->fping_path), $type, $icmp_count, $icmp_timeout * 1000, escapeshellarg($address));
+		# execute command, return $retval
+		exec($cmd, $output, $retval);
+
+		# save result
+		if ($retval == 0) {
+			$this->save_fping_rtt($output[0]);
 		}
 
 		# return result for web or cmd
-		if($this->icmp_exit)	{ exit  ($retval); }
-		else					{ return $retval; }
+		if ($this->icmp_exit) {
+			exit($retval);
+		} else {
+			return $retval;
+		}
 	}
 
 	/**

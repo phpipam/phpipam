@@ -112,17 +112,17 @@ if($POST->action!="add") {
 	<tr>
 	    <td><?php print _('Transaction lock'); ?></td>
 	    <td>
-	    	<select name="app_lock" class="form-control input-sm input-w-auto">
+	    	<select name="app_lock_type" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>_("No"),1=>_("Yes"));
+			$perms = ["Auto" => _("Auto"), "File" => _("File"), "MySQL" => _("MySQL"), "Disabled" => _("Disabled")];
 	    	foreach($perms as $k=>$p) {
-		    	if($k==$api->app_lock)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
-		    	else					{ print "<option value='$k' 				   >".$p."</option>"; }
+		    	if($k==$api->app_lock_type)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
+		    	else					    { print "<option value='$k' 				   >".$p."</option>"; }
 	    	}
 	    	?>
 	    	</select>
 	    </td>
-       	<td class="info2"><?php print _('Lock POST transactions'); ?></td>
+       	<td class="info2"><?php print _('Transaction Lock Type: Auto, /tmp File, MySQL row lock, Disabled'); ?></td>
     </tr>
 
 	<!-- lock wait -->

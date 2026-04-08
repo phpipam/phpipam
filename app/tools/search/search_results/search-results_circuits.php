@@ -17,6 +17,10 @@ $hidden_circuit_p_fields = is_array(@$hidden_fields['circuitProviders']) ? $hidd
 # search circuits
 $result_circuits   = $Tools->search_circuits ($searchTerm, $custom_circuit_fields);
 $result_circuits_p = $Tools->search_circuit_providers ($searchTerm, $custom_circuit_p_fields);
+
+$circuit_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
+$type_hash = [];
+foreach($circuit_types as $t){  $type_hash[$t->id] = $t->ctname; }
 ?>
 
 
@@ -57,7 +61,7 @@ if(sizeof($result_circuits) > 0) {
 		print "<tr class='nolink'>";
 		print " <td><dd><a class='btn btn-xs btn-default' href='".create_link("tools","circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></dd></td>";
 		print " <td><dd><a href='".create_link("tools","circuits","providers",$circuit->pid)."'>$circuit->name</a></dd></td>";
-		print " <td><dd>$circuit->type</dd></td>";
+		print " <td><dd>".$type_hash[$circuit->type]."</dd></td>";
 		print " <td><dd>$circuit->capacity</dd></td>";
 		print " <td><dd>$circuit->status</dd></td>";
 		print " <td><dd>$circuit->comment</dd></td>";

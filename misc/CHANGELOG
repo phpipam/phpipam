@@ -26,6 +26,7 @@
     ----------------------------
     + Don't update PowerDNS `change_date` removed in v2.1.9;
     + Added Isle of Man postcodes (#4318);
+    + Adds search functionality for Devices (#4406);
     + Added `lastSeen` to IP Address export (#2433);
     + User and Edit IP instructions now use Markdown;
     + Make Rack Devices Clickable from picture (#2372);
@@ -33,6 +34,7 @@
     + Colorization of rack devices; devices can be deep (front & back) of a rack (#4431);
     + Organize racks in a location using rows or rooms (#4433);
     + Support for embedding a rack into a rack, "Subrack" (#3069, #1552, #1623);
+    + Added API locking methods (File, MySQL);
 
     Security Fixes:
     ----------------------------

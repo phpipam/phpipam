@@ -19,9 +19,9 @@ if($POST->action!="add") {
 	$method_settings->params = db_json_decode($method_settings->params);
 }
 else {
-	$method_settings = new StdClass ();
+	$method_settings = new Params ();
 	# set default values
-	$method_settings->params = new StdClass ();
+	$method_settings->params = new Params ();
     $method_settings->params->domain_controllers = "dc1.domain.local;dc2.domain.local";
 	$method_settings->params->base_dn = "CN=Users,CN=Company,DC=domain,DC=local";
 	$method_settings->params->account_suffix = "@domain.local";

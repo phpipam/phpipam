@@ -509,6 +509,39 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Function to search devices
+	 *
+	 * @access public
+	 * @param mixed $search_term
+	 * @param array $custom_fields (default: array())
+	 * @return array
+	 */
+	public function search_devices ($search_term, $custom_fields = array()) {
+		# query
+		$query[] = "select * from `devices` where `hostname` like :search_term or `description` like :search_term ";
+		# custom
+		if(sizeof($custom_fields) > 0) {
+			foreach($custom_fields as $myField) {
+				$myField['name'] = $this->Database->escape($myField['name']);
+				$query[] = " or `{$myField['name']}` like :search_term ";
+			}
+		}
+		$query[] = ";";
+		# join query
+		$query = implode("\n", $query);
+
+		# fetch
+		try { $search = $this->Database->getObjectsQuery('devices', $query, array("search_term"=>"%$search_term%")); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+		# return result
+		return $search;
+	}
+
+	/**
 	 * Reformat possible nun-full IPv4 address for search
 	 *
 	 *	e.g. 10.10.10 -> 10.10.10.0 - 10.10.10.255
