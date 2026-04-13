@@ -55,7 +55,7 @@ else {
 	foreach ($customers as $customer) {
 		// print details
 		print '<tr>'. "\n";
-		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link("tools","customers",$customer->title)."'>$customer->title</a></strong></td>";
+		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link("tools","customers",html_entity_decode($customer->title))."'>$customer->title</a></strong></td>";
 		print "	<td>$customer->address, $customer->postcode $customer->city, $customer->state</td>";
 		print " <td><a href='mailto:$customer->contact_mail'>$customer->contact_person</a> ($customer->contact_phone)</td>";
 		print '</tr>';

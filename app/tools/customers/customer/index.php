@@ -11,7 +11,7 @@ $User->check_user_session();
 $User->check_module_permissions ("customers", User::ACCESS_R, true);
 
 # fetch customer
-$customer = $Tools->fetch_object("customers", "title", urldecode($GET->subnetId));
+$customer = $Tools->fetch_object("customers", "title", $GET->subnetId);
 
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('customers');

@@ -9,7 +9,10 @@ $User->check_user_session();
 $User->check_module_permissions ("vrf", User::ACCESS_R, true, false);
 
 # not existing
-if(!$vrf) { $Result->show("danger", _('Invalid VRF id'), true); }
+if (!is_object($vrf)) {
+	$Result->show("danger", _('Invalid VRF id'), true);
+	exit(0);
+}
 
 # get custom VLAN fields
 $cfields = $Tools->fetch_custom_fields ('vrf');
@@ -90,7 +93,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 		 		print "<span class='text-muted'>/</span>";
 		 }
 		 else {
-			print "<span>".$customer->title." <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></span>";
+			print "<span>".$customer->title." <a target='_blank' href='".create_link("tools","customers",html_entity_decode($customer->title))."'><i class='fa fa-external-link'></i></a></span>";
 		 }
 		 print "	</td>";
 		 print "</tr>";

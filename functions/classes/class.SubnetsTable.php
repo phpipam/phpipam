@@ -150,7 +150,7 @@ class SubnetsTable {
 		// customer
 		if ($this->Tools->settings->enableCustomers == 1) {
 			$customer = $this->Tools->fetch_object ("customers", "id", $subnet->customer_id);
-			$tr['customer'] = $customer===false ? "/" : $customer->title." <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a>";
+			$tr['customer'] = $customer===false ? "/" : $customer->title." <a target='_blank' href='".create_link("tools","customers",html_entity_decode($customer->title))."'><i class='fa fa-external-link'></i></a>";
 		}
 
 		//custom

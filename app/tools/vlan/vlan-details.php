@@ -69,7 +69,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, $GET->s
 	</tr>
 	<tr>
 		<th><?php print _('Customer'); ?></th>
-		<td><?php print $customer->title . " <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a>"; ?></td>
+		<td><?php print $customer->title . " <a target='_blank' href='".create_link("tools","customers",html_entity_decode($customer->title))."'><i class='fa fa-external-link'></i></a>"; ?></td>
 	</tr>
 	<?php } ?>
 

@@ -14,12 +14,11 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 /**
  * Print IP addresses
  *******************/
+# only if set
+if (isset($objects["ipaddresses"])) {
 
 # set addresses
 $addresses = $objects['ipaddresses'];
-
-# only if set
-if (isset($objects["ipaddresses"])) {
 
 # reset custom fields to ip addresses
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');

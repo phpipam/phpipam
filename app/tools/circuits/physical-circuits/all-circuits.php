@@ -101,7 +101,7 @@ else {
 		// customers
 		if($User->settings->enableCustomers=="1") {
 			 $customer = $Tools->fetch_object ("customers", "id", $circuit->customer_id);
-			 print $customer===false ? "<td></td>" : "<td>".$customer->title." <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
+			 print $customer===false ? "<td></td>" : "<td>".$customer->title." <a target='_blank' href='".create_link("tools","customers",html_entity_decode($customer->title))."'><i class='fa fa-external-link'></i></a></td>";
 		}
 		print "	<td>".$type_hash[$circuit->type]."</td>";
 		print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";
