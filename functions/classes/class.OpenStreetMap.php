@@ -117,12 +117,12 @@ class OpenStreetMap extends Common_functions
         }
 
         if ($type == "locations") {
-            $title = escape_input($object->name);
-            $desc  = escape_input($object->description);
+            $title = $object->name;
+            $desc  = $object->description;
             $id    = $object->id;
         } elseif ($type == "customers") {
-            $title = escape_input($object->title);
-            $desc  = escape_input($object->note);
+            $title = $object->title;
+            $desc  = $object->note;
             $id    = $object->title;
         } else {
             return false;
