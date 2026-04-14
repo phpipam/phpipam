@@ -2877,7 +2877,6 @@ class Tools extends Common_functions {
     public function fetch_location_objects ($id = false, $count = false) {
         // check
         if(is_numeric($id)) {
-            $id = $this->Database->escape ($id);
             // count ?
             $select = $count ? "count(*) as cnt " : "*";
             // query
@@ -2887,47 +2886,47 @@ class Tools extends Common_functions {
                         FROM devices d
                         JOIN locations l
                         ON d.location = l.id
-                        WHERE l.id = $id
+                        WHERE l.id = :id
 
                         UNION ALL
                         SELECT r.id, r.name, '' as mask, 'racks' as type, '' as sectionId, r.location, r.description
                         FROM racks r
                         JOIN locations l
                         ON r.location = l.id
-                        WHERE l.id = $id
+                        WHERE l.id = :id
 
                         UNION ALL
                         SELECT s.id, s.subnet as name, s.mask, 'subnets' as type, s.sectionId, s.location, s.description
                         FROM subnets s
                         JOIN locations l
                         ON s.location = l.id
-                        WHERE l.id = $id
+                        WHERE l.id = :id
 
                         UNION ALL
                         SELECT a.id, a.ip_addr as name, 'mask', 'addresses' as type, a.subnetId as sectionId, a.location, a.hostname as description
                         FROM ipaddresses a
                         JOIN locations l
                         ON a.location = l.id
-                        WHERE l.id = $id
+                        WHERE l.id = :id
 
                         UNION ALL
                         SELECT c.id, c.cid as name, 'mask', 'circuit' as type, 'none' as sectionId, c.location2, 'none' as description
                         FROM circuits c
                         JOIN locations l
                         ON c.location1 = l.id
-                        WHERE l.id = $id
+                        WHERE l.id = :id
 
                         UNION ALL
                         SELECT c.id, c.cid as name, 'mask', 'circuit' as type, 'none' as sectionId, c.location2, '' as description
                         FROM circuits c
                         JOIN locations l
                         ON c.location2 = l.id
-                        WHERE l.id = $id
+                        WHERE l.id = :id
                         )
-                        as linked;";
+                        as linked ORDER BY CASE `type` WHEN 'subnets' THEN LPAD(name,39,0) WHEN 'addresses' THEN LPAD(name,39,0) ELSE name END ASC;";
 
      		// fetch
-    		try { $objects = $this->Database->getObjectsQuery('devices', $query); }
+    		try { $objects = $this->Database->getObjectsQuery('devices', $query, [':id' => $id]); }
     		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
 
     		// return
