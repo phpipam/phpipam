@@ -288,9 +288,6 @@ class Scan extends Common_functions {
 		$this->icmp_timeout = $timeout;
 		$this->icmp_count = $count;
 
-		# escape address
-		$address = escapeshellarg($address);
-
 		# make sure it is in right format
 		$address = $this->transform_address ($address, "dotted");
 		# set method name variable
@@ -316,7 +313,7 @@ class Scan extends Common_functions {
 	 *	timeout value: for miliseconds multiply by 1000
 	 *
 	 * @access protected
-	 * @param ip $address
+	 * @param string $address
 	 * @return void
 	 */
 	protected function ping_address_method_ping ($address) {
@@ -327,10 +324,15 @@ class Scan extends Common_functions {
 		$this->ping_verify_path ($ping_path);
 
 		# set ping command based on OS type
-		if ($this->os_type == "FreeBSD")    { $cmd = $ping_path." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
-		elseif($this->os_type == "Linux")   { $cmd = $ping_path." -c $this->icmp_count -W $this->icmp_timeout $address 1>/dev/null 2>&1"; }
-		elseif($this->os_type == "Windows")	{ $cmd = $ping_path." -n $this->icmp_count -w ".($this->icmp_timeout*1000)." $address"; }
-		else								{ $cmd = $ping_path." -c $this->icmp_count -n $address 1>/dev/null 2>&1"; }
+		if ($this->os_type == "FreeBSD") {
+			$cmd = sprintf("%s -c %s -W %s %s 1>/dev/null 2>&1", escapeshellcmd($ping_path), escapeshellarg($this->icmp_count), escapeshellarg($this->icmp_timeout * 1000), escapeshellarg($address));
+		} elseif ($this->os_type == "Linux") {
+			$cmd = sprintf("%s -c %s -W %s %s 1>/dev/null 2>&1", escapeshellcmd($ping_path), escapeshellarg($this->icmp_count), escapeshellarg($this->icmp_timeout), escapeshellarg($address));
+		} elseif ($this->os_type == "Windows") {
+			$cmd = sprintf("%s -n %s -w %s %s", escapeshellcmd($ping_path), escapeshellarg($this->icmp_count), escapeshellarg($this->icmp_timeout * 1000), escapeshellarg($address));
+		} else {
+			$cmd = sprintf("%s -c %s -n %s 1>/dev/null 2>&1", escapeshellcmd($ping_path), escapeshellarg($this->icmp_count), escapeshellarg($address));
+		}
 
         # for IPv6 remove wait
         if ($this->identify_address ($address)=="IPv6") {
@@ -429,8 +431,8 @@ class Scan extends Common_functions {
 		$this->ping_verify_path ($this->fping_path);
 
 		# set command
-		$type = ($this->identify_address ($address)=="IPv6") ? '--ipv6' : '--ipv4';
-		$cmd = $this->fping_path." $type -c $this->icmp_count -t ".($this->icmp_timeout*1000)." $address";
+		$type = ($this->identify_address($address) == "IPv6") ? '--ipv6' : '--ipv4';
+		$cmd = sprintf("%s %s -c %s -t %s %s", escapeshellcmd($this->fping_path), $type, escapeshellarg($this->icmp_count), escapeshellarg($this->icmp_timeout * 1000), escapeshellarg($address));
 		# execute command, return $retval
 	    exec($cmd, $output, $retval);
 
@@ -480,7 +482,7 @@ class Scan extends Common_functions {
 		$this->ping_verify_path ($this->fping_path);
 		$out = array();
 		# set command
-		$cmd = $this->fping_path . ' -c ' . $this->icmp_count . ' -t ' . ($this->icmp_timeout * 1000) . ' -Agq ' . $subnet_cidr . ' 2>&1';
+		$cmd = sprintf("%s -c %s -t %s -Agq %s 2>&1", escapeshellcmd($this->fping_path), escapeshellarg($this->icmp_count), escapeshellarg($this->icmp_timeout * 1000), escapeshellarg($subnet_cidr));
 		# execute command, return $retval
 		exec($cmd, $output, $retval);
 
@@ -519,13 +521,13 @@ class Scan extends Common_functions {
 	private function ping_verify_path ($path) {
 		// Windows
 		if($this->os_type=="Windows") {
-			if(!file_exists('"'.$path.'"')) {
+			if (!file_exists('"' . preg_replace('`(?<!^) `', '^ ', escapeshellcmd($path)) . '"')) {
 				if($this->icmp_exit)	{ exit  ($this->ping_exit_explain(1000)); }
 				else					{ return $this->Result->show("danger", _($this->ping_exit_explain(1000)), true);  }
 			}
 		}
 		else {
-			if(!file_exists($path)) {
+			if (!file_exists(escapeshellcmd($path))) {
 				if($this->icmp_exit)	{ exit  ($this->ping_exit_explain(1000)); }
 				else					{ return $this->Result->show("danger", _($this->ping_exit_explain(1000)), true);  }
 			}

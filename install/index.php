@@ -55,7 +55,7 @@ require_once('../functions/functions.php')
 		Make sure BASE directive is set for your installation. This is used to properly detect phpIPAM directory. It must be set in config.php and in .htaccess
 
 		<div class="well" style="padding:5px;margin-top:5px;">
-		Detected BASE: <?php print str_replace("install/", "", $_SERVER['REQUEST_URI']);  ?>
+		Detected BASE: <?php print escape_input(str_replace("install/", "", $_SERVER['REQUEST_URI']));  ?>
 		</div>
 
 		<h4>2.) Enable mod_rewrite</h4>

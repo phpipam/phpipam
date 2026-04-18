@@ -1430,8 +1430,9 @@ $('#logDirection button').click(function() {
 //logs export
 $('#downloadLogs').click(function() {
     showSpinner();
+    var csrf = $(this).attr('data-csrf');
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/tools/logs/export.php'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/tools/logs/export.php?csrf="+csrf+"'></iframe></div>");
     hideSpinner();
     //show downloading
     $('div.logs').prepend("<div class='alert alert-info' id='logsInfo'><i class='icon-remove icon-gray selfDestruct'></i> Preparing download... </div>");
@@ -1440,7 +1441,8 @@ $('#downloadLogs').click(function() {
 //logs clear
 $('#clearLogs').click(function() {
     showSpinner();
-    $.post('app/tools/logs/clear-logs.php', function(data) {
+    var csrf = $(this).attr('data-csrf');
+    $.post('app/tools/logs/clear-logs.php?csrf='+csrf, function(data) {
         $('div.logs').html(data);
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1449,7 +1451,8 @@ $('#clearLogs').click(function() {
 //logs clear
 $('#clearChangeLogs').click(function() {
     showSpinner();
-    $.post('app/tools/changelog/clear-logs.php', function(data) {
+    var csrf = $(this).attr('data-csrf');
+    $.post('app/tools/changelog/clear-logs.php?csrf='+csrf, function(data) {
         $('div.logs').html(data);
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });

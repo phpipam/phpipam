@@ -7,6 +7,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->Crypto->csrf_cookie ("create", "changelog");
+
 # header
 print "<h4>"._('Changelog')."</h4>";
 
@@ -57,7 +60,7 @@ if($User->settings->enableChangelog == 1) {
 	</form>
 
 		<!-- clear log files -->
-		<button id="clearChangeLogs" class="btn btn-sm btn-default pull-left"><i class="fa fa-trash-o"></i> <?php print _('Clear logs'); ?></button>
+		<button id="clearChangeLogs" class="btn btn-sm btn-default pull-left" data-csrf='<?php print $csrf; ?>'><i class="fa fa-trash-o"></i> <?php print _('Clear logs'); ?></button>
 	</div>
 
 	<div class="normalTable logs" style="clear:both;">

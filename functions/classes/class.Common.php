@@ -679,7 +679,7 @@ class Common_functions  {
 			if ($dom->loadHTML("<html>".$html."</html>", LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NOERROR) === false)
 				return "";
 
-			$banned_elements = ['script', 'iframe', 'embed', 'object'];
+			$banned_elements = ['script', 'iframe', 'embed', 'object', 'form'];
 			$remove_elements = [];
 
 			$elements = $dom->getElementsByTagName('*');
@@ -694,10 +694,11 @@ class Common_functions  {
 					if (!$e->hasAttributes())
 						continue;
 
-					// remove on* HTML event attributes
+					// remove on* and *action* HTML event attributes
 					foreach ($e->attributes as $attr) {
-						if (substr($attr->nodeName,0,2) == "on")
+						if (substr($attr->nodeName, 0, 2) == "on" || strpos($attr->nodeName, 'action') !== false) {
 							$e->removeAttribute($attr->nodeName);
+						}
 					}
 				}
 

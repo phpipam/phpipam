@@ -14,7 +14,7 @@ $User->is_demo();
 if(!is_numeric($POST->subnetId))                        { $Result->show("danger", "Invalid subnet Id", true); die(); }
 
 # invoke CLI with threading support
-$cmd = $Scan->php_exec." ".dirname(__FILE__) . '/../../../functions/scan/subnet-scan-icmp-execute.php'." 'update' ".$POST->subnetId;
+$cmd = sprintf("%s '%s/../../../functions/scan/subnet-scan-icmp-execute.php' 'update' %s", escapeshellcmd($Scan->php_exec), dirname(__FILE__), escapeshellarg($POST->subnetId));
 
 # save result to $output
 exec($cmd, $output, $retval);

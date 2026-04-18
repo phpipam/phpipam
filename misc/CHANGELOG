@@ -1,3 +1,20 @@
+== 1.7.4
+
+    Bugfixes:
+    ----------------------------
+    + Backported PHP8 compatibility fixes;
+    + Can not empty address fields (#4322);
+    + jQuery error when adding an IP address range (#4350);
+
+    Security Fixes:
+    ----------------------------
+    + Addedd CSRF cookie for clear-changelog and clear-log;
+    + XSS - Reflected in install scripts;
+    + XSS - Unsafe HTML allowed in Request IP Instructions;
+    + XSS - Unsafe HTML allowed in Password vault;
+    + Local exposure of DB credentials via mysqldump;
+    + RCE - Authenticated remote code execution via ping_path;
+
 == 1.7.3
 
     Bugfixes:
