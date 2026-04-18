@@ -46,9 +46,33 @@ if (sizeof($all_subnet_hosts)>0) {
 $selected_ip_fields = $User->settings->IPfilter;
 $selected_ip_fields = pf_explode(";", $selected_ip_fields);
 
-# fetch devices that use get_routing_table query
-$devices_used_arp = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_arp_table%", "id", true, true);
-$devices_used_mac = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_mac_table%", "id", true, true);
+// if deviceGroup is defined -> use deviceGroup
+// else use traditional method of device selection
+if ($subnet->deviceGroup != 0) {
+    $deviceGroup_members = $Tools->fetch_multiple_objects("device_to_group", "g_id", $subnet->deviceGroup, "d_id");
+    $devices_used_arp = false;
+    $devices_used_mac = false;
+
+    if ($deviceGroup_members !== false && sizeof($deviceGroup_members) > 0) {
+        $devices_used_arp = [];
+        $devices_used_mac = [];
+
+        foreach ($deviceGroup_members as $deviceGroup_member) {
+            $device = $Tools->fetch_object("devices", "id", $deviceGroup_member->d_id);
+
+            // Only add devices with corresponding SNMP-query
+            if (str_contains($device->snmp_queries, "get_arp_table")) {
+                $devices_used_arp[] = $device;
+            } elseif (str_contains($device->snmp_queries, "get_mac_table")) {
+                $devices_used_mac[] = $device;
+            }
+        }
+    }
+} else {
+    # fetch devices that use get_routing_table query
+    $devices_used_arp = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_arp_table%", "id", true, true);
+    $devices_used_mac = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_mac_table%", "id", true, true);
+}
 
 # filter out devices not in this section - ARP
 if ($devices_used_arp !== false) {
