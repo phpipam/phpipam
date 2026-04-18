@@ -482,6 +482,11 @@ class phpipamSNMP extends Common_functions {
      * @return void
      */
     private function connection_open () {
+        // IPv6 needs to be surrounded with brackets when specifying port  => [::1]:1161
+        $host_with_port = filter_var($this->snmp_host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) ? '[' . $this->snmp_host . ']' : $this->snmp_host;
+        // include port with host
+        $host_with_port = $host_with_port . ':' . $this->snmp_port;
+        
         // init connection
         if ($this->snmp_session === false) {
             if ($this->snmp_version=="1")       { $this->snmp_session = new SNMP(SNMP::VERSION_1,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000, $this->snmp_retries); }
