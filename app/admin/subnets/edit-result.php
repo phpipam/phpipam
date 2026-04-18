@@ -294,6 +294,7 @@ else {
 					"DNSrecords"     => $Admin->verify_checkbox($POST->DNSrecords),
 					"nameserverId"   => $POST->nameserverId,
 					"device"         => $POST->device,
+					"deviceGroup"    => $POST->deviceGroup,
 					"isFull"         => $Admin->verify_checkbox($POST->isFull),
 					"isPool"         => $Admin->verify_checkbox($POST->isPool)
 					);
