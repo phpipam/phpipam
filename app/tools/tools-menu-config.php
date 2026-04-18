@@ -19,6 +19,7 @@ $tools_menu_items = [
 						"changelog"          => _("changelog"),
 						"dhcp"               => _("dhcp"),
 						"devices"            => _("devices"),
+						"device-groups"      => _("device-groups"),
 						"favourites"         => _("favourites"),
 						"firewall-zones"     => _("firewall-zones"),
 						"instructions"       => _("instructions"),
@@ -122,8 +123,10 @@ if($User->settings->enableThreshold==1)
 $tools_menu[_('Subnets')][] =   ["show"=>true, "icon"=>"fa-bullhorn",    "href"=>"threshold",                   "name"=>_("Threshold"),            "description"=>_("List of thresholded subnets")];
 
 # devices
-if($User->get_module_permissions ("devices")>=User::ACCESS_R)
+if($User->get_module_permissions ("devices")>=User::ACCESS_R) {
 $tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-desktop",     "href"=>"devices",                     "name"=>_("Devices"),              "description"=>_("All configured devices")];
+$tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-object-group","href"=>"device-groups",               "name"=>_("Device groups"),        "description"=>_("All configured device groups")];
+}
 if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>=User::ACCESS_R)
 $tools_menu[_('Devices')][] =   ["show"=>true, "icon"=>"fa-bars",        "href"=>"racks",                       "name"=>_("Racks"),                "description"=>_("Rack information")];
 if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>=User::ACCESS_R)

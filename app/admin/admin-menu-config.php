@@ -58,6 +58,7 @@ $admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-magic",  
 
 # device managements
 $admin_menu[_('Device management')][] =     ["show"=>true, "icon"=>"fa-desktop",        "href"=>"devices",                "name"=>_("Devices"),                  "description"=>_("Device management")];
+$admin_menu[_('Device management')][] =     ["show"=>true, "icon"=>"fa-object-group",   "href"=>"device-groups",          "name"=>_("Device Groups"),            "description"=>_("Device group management")];
 if($User->settings->enableRACK == 1)
 $admin_menu[_('Device management')][] =     ["show"=>true, "icon"=>"fa-bars",           "href"=>"racks",                  "name"=>_("Racks"),                    "description"=>_("Rack management")];
 if($User->settings->enableCircuits == 1)
@@ -80,6 +81,7 @@ $admin_menu_items = [
                     "custom-fields"          => _("custom-fields"),
                     "dhcp"                   => _("dhcp"),
                     "devices"                => _("devices"),
+                    "device-groups"          => _("device-groups"),
                     "device-types"           => _("device-types"),
                     "filter-fields"          => _("filter-fields"),
                     "required-fields"        => _("required-fields"),

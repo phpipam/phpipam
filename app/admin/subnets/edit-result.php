@@ -32,6 +32,11 @@ if($POST->action=="add") {
 	$User->Crypto->csrf_cookie ("validate", "subnet_".$POST->subnetId, $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 }
 
+# if device and device group is set -> fail
+if($POST->device != 0 && $POST->deviceGroup != 0) {
+	$Result->show("danger", _("Device and Device group can not be used at the same time!"), true);
+}
+
 # if show name than description must be set
 if($POST->showName==1 && is_blank($POST->description)) 	{ $Result->show("danger", _("Please enter subnet description to show as name!"), true); }
 
@@ -289,6 +294,7 @@ else {
 					"DNSrecords"     => $Admin->verify_checkbox($POST->DNSrecords),
 					"nameserverId"   => $POST->nameserverId,
 					"device"         => $POST->device,
+					"deviceGroup"    => $POST->deviceGroup,
 					"isFull"         => $Admin->verify_checkbox($POST->isFull),
 					"isPool"         => $Admin->verify_checkbox($POST->isPool)
 					);

@@ -24,8 +24,29 @@ if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP 
 # check section permissions
 if($Sections->check_permission ($User->user, $POST->sectionId) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }
 
-# fetch devices that use get_routing_table query
-$devices_used = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_routing_table%", "id", true, true);
+// if deviceGroup is defined -> use deviceGroup
+// else use traditional method of device selection
+$subnet = $Tools->fetch_object("subnets", "id", $POST->subnetId);
+if ($subnet !== false && $subnet->deviceGroup != 0) {
+    $deviceGroup_members = $Tools->fetch_multiple_objects("device_to_group", "g_id", $subnet->deviceGroup, "d_id");
+    $devices_used = false;
+
+    if ($deviceGroup_members !== false && sizeof($deviceGroup_members) > 0) {
+        $devices_used = [];
+
+        foreach ($deviceGroup_members as $deviceGroup_member) {
+            $device = $Tools->fetch_object("devices", "id", $deviceGroup_member->d_id);
+
+            // Only add devices with corresponding SNMP-query
+            if (str_contains($device->snmp_queries, "get_routing_table")) {
+                $devices_used[] = $device;
+            }
+        }
+    }
+} else {
+    # fetch devices that use get_routing_table query
+    $devices_used = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_routing_table%", "id", true, true);
+}
 
 # fetch all IPv4 masks
 $masks =  $Subnets->get_ipv4_masks ();
