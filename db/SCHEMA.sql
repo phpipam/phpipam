@@ -274,6 +274,7 @@ CREATE TABLE `subnets` (
   `vlanId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `showName` BOOL NOT NULL DEFAULT '0',
   `device` INT  UNSIGNED  NULL  DEFAULT '0',
+  `deviceGroup` INT UNSIGNED NULL DEFAULT NULL,
   `permissions` varchar(1024) DEFAULT NULL, /* __no_html_escape__ */
   `pingSubnet` BOOL NOT NULL DEFAULT '0',
   `discoverSubnet` BOOL NOT NULL DEFAULT '0',
@@ -342,6 +343,33 @@ CREATE TABLE `devices` (
   PRIMARY KEY (`id`),
   KEY `hostname` (`hostname`),
   KEY `location` (`location`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+# Dump of table deviceGroups
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `deviceGroups`;
+
+CREATE TABLE `deviceGroups` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) DEFAULT NULL,
+  `desc` varchar(1024) DEFAULT NULL,
+  `editDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+# Dump of table device_to_group
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `device_to_group`;
+
+CREATE TABLE `device_to_group` (
+  `d_id` int(11) unsigned,
+  `g_id` int(11) unsigned,
+  `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`g_id`, `d_id`),
+  FOREIGN KEY (`d_id`) REFERENCES `devices`      (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`g_id`) REFERENCES `deviceGroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
