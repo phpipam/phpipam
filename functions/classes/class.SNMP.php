@@ -489,9 +489,9 @@ class phpipamSNMP extends Common_functions {
         
         // init connection
         if ($this->snmp_session === false) {
-            if ($this->snmp_version=="1")       { $this->snmp_session = new SNMP(SNMP::VERSION_1,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000, $this->snmp_retries); }
-            elseif ($this->snmp_version=="2")   { $this->snmp_session = new SNMP(SNMP::VERSION_2c, $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000, $this->snmp_retries); }
-            elseif ($this->snmp_version=="3")   { $this->snmp_session = new SNMP(SNMP::VERSION_3,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000, $this->snmp_retries);
+            if ($this->snmp_version=="1")       { $this->snmp_session = new SNMP(SNMP::VERSION_1,  $host_with_port, $this->snmp_community, $this->snmp_timeout * 1000, $this->snmp_retries); }
+            elseif ($this->snmp_version=="2")   { $this->snmp_session = new SNMP(SNMP::VERSION_2c, $host_with_port, $this->snmp_community, $this->snmp_timeout * 1000, $this->snmp_retries); }
+            elseif ($this->snmp_version=="3")   { $this->snmp_session = new SNMP(SNMP::VERSION_3,  $host_with_port, $this->snmp_community, $this->snmp_timeout * 1000, $this->snmp_retries);
                                                   $this->snmp_session->setSecurity(
                                                                                    $this->snmpv3_security->sec_level,
                                                                                    $this->snmpv3_security->auth_proto,
