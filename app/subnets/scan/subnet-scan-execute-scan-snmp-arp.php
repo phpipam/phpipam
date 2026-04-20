@@ -48,6 +48,11 @@ $devices_used = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get
 # filter out not in this section
 if ($devices_used !== false) {
     foreach ($devices_used as $d) {
+        // Check if the 'ip' key exists and is not null
+        if (!isset($r['ip'])) {
+            // Skip to the next iteration of the loop
+            continue;
+        }
         // get possible sections
         $permitted_sections = pf_explode(";", $d->sections);
         // check

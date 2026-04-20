@@ -1423,7 +1423,7 @@ class Logging extends Common_functions {
 
 		// loop
 		$val = array();
-		if(is_array($this->object_new['permissions'])) {
+		if(isset($this->object_new['permissions']) && is_array($this->object_new['permissions'])) {
 			foreach($this->object_new['permissions'] as $group_id=>$p) {
 				$val[] = $groups[$group_id]['g_name'] ." : ".$this->Subnets->parse_permissions($p);
 			}
