@@ -260,9 +260,14 @@ class Devices_controller extends Common_api_functions {
         $values = array();
         $values['id'] = $this->_params->id;
 
+        # check that device exists
+        if($this->Admin->fetch_object ("devices", "id", $this->_params->id)===false) {
+            $this->Response->throw_exception(404, "Device does not exist");
+        }
+
         # execute delete
         if (!$this->Admin->object_modify('devices', 'delete', 'id', $values)) {
-            $this->Response->throw_exception(500, 'Device delete failed');
+            $this->Response->throw_exception(500, 'Device delete failed';
         }
         else {
             // delete all references

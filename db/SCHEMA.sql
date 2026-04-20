@@ -554,7 +554,7 @@ DROP TABLE IF EXISTS `changelog`;
 
 CREATE TABLE `changelog` (
   `cid` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `ctype` set('ip_addr','subnet','section') NOT NULL DEFAULT '',
+  `ctype` ENUM('ip_addr','subnet','section','devices','vrf','vlans') NOT NULL,
   `coid` int(11) unsigned NOT NULL,
   `cuser` int(11) unsigned NOT NULL,
   `caction` ENUM('add','edit','delete','truncate','resize','perm_change') NOT NULL DEFAULT 'edit',
@@ -1095,4 +1095,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.8";
-UPDATE `settings` SET `dbversion` = 45;
+UPDATE `settings` SET `dbversion` = 46;

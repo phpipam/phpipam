@@ -815,8 +815,16 @@ class Logging extends Common_functions {
         }
 
 		# set update id based on action
-		if ($this->object_action=="add")	{ $obj_id = $this->object_new['id']; }
-		else								{ $obj_id = $this->object_old['id']; }
+		if ($this->object_action=="add")	{
+			if ($this->object_type=="vrf") 			{ $obj_id = $this->object_new['vrfId']; }
+			elseif ($this->object_type=="vlans")	{ $obj_id = $this->object_new['vlanId']; }
+			else {$obj_id = $this->object_new['id']; }
+		}
+		else {
+			if ($this->object_type=="vrf") 			{ $obj_id = $this->object_old['vrfId']; }
+			elseif ($this->object_type=="vlans")	{ $obj_id = $this->object_old['vlanId']; }
+			else {$obj_id = $this->object_old['id']; }
+		}
 
 		# set object type
 		$object_type = $this->object_type=="folder" ? "subnet" : $this->object_type;
@@ -863,7 +871,10 @@ class Logging extends Common_functions {
 						"ip_addr",
 						"subnet",
 						"folder",
-						"section"
+						"section",
+						"devices",
+						"vrf",
+						"vlans"
 						);
 		# check
 		return in_array($this->object_type, $objects) ? true : false;
@@ -1132,6 +1143,21 @@ class Logging extends Common_functions {
 		elseif($this->object_type == "section") {
 			unset($this->object_old['order']);
 		}
+		elseif($this->object_type == "devices") {
+			foreach ($this->object_old as $key=>$value) {
+				if (substr($key,0,5)=="snmp_") {
+					unset($this->object_old[$key]);
+				}
+			}
+			foreach ($this->object_new as $key=>$value) {
+				if (substr($key,0,5)=="snmp_") {
+					unset($this->object_new[$key]);
+				}
+			}
+		}
+		elseif($this->object_type == "vlans") {
+			// nothing to do here
+		}
 
 		# common
 		unset($this->object_new['action']);
@@ -1251,6 +1277,8 @@ class Logging extends Common_functions {
 	 * @return void
 	 */
 	private function changelog_format_vlan_diff ($k, $v) {
+		//if the diff is being processed for a vlan, then don't format the vlanId because vlanId is the primary key for the table
+		if ($this->object_type == "vlans") return $v;
 		//old none
 		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
 			$this->object_old[$k] = _("None");
@@ -1282,6 +1310,8 @@ class Logging extends Common_functions {
 	 * @return void
 	 */
 	private function changelog_format_vrf_diff ($k, $v) {
+		//if the diff is being processed for a vrf, then don't format the vrfId because vrfId is the primary key for the table
+		if ($this->object_type == "vrf") return $v;
 		//old none
 		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
 			$this->object_old[$k] = _("None");
@@ -1550,6 +1580,36 @@ class Logging extends Common_functions {
 					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
 					LEFT JOIN `sections` ON `sections`.`id`=`changelog`.`coid`
 					where `changelog`.`ctype` = 'section'
+					$subquery_filter2
+					order by `cid` desc limit $limit)
+
+					union all
+
+					(select `cid`,`coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`hostname`,'empty','empty','empty',`devices`.`id` as `tid`,`users`.`id` as `userid`,'empty',`devices`.`description` as `dDescription`
+					FROM `changelog`
+					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
+					LEFT JOIN `devices` ON `devices`.`id`=`changelog`.`coid`
+					where `changelog`.`ctype` = 'devices'
+					$subquery_filter2
+					order by `cid` desc limit $limit)
+
+					union all
+
+					(select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`name` ,'empty','empty','empty',`vrf`.`vrfId` as `tid`,`users`.`id` as `userid`,'empty',`vrf`.`description` as `vDescription`
+					FROM `changelog`
+					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
+					LEFT JOIN `vrf` ON `vrf`.`vrfId`=`changelog`.`coid`
+					where `changelog`.`ctype` = 'vrf'
+					$subquery_filter2
+					order by `cid` desc limit $limit)
+
+					union all
+
+					(select `cid`,`coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`name`,'empty',`domainId`,'empty',`vlans`.`vlanId` as `tid`,`users`.`id` as `userid`,'empty',`vlans`.`description` as `vDescription`
+					FROM `changelog`
+					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
+					LEFT JOIN `vlans` ON `vlans`.`vlanId`=`changelog`.`coid`
+					where `changelog`.`ctype` = 'vlans'
 					$subquery_filter2
 					order by `cid` desc limit $limit)
 

@@ -189,6 +189,8 @@ class Admin extends Common_functions {
 		$this->save_last_insert_id ();
 		# ok
 		$this->Log->write( $table." "._("Object creation"), _("A new")." ".$table." "._("database object created").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values_log, "NULL")), 0);
+		$values[$this->cache_set_identifier($table)] = $this->lastId;
+		$this->Log->write_changelog($table, "add", 'success', array(), $values);
 		return true;
 	}
 
@@ -209,6 +211,9 @@ class Admin extends Common_functions {
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
 
+		# get original object
+		$old_object = $this->fetch_object($table,$key,$values[$key]);
+
 		# execute
 		try { $this->Database->updateObject($table, $values, $key); }
 		catch (Exception $e) {
@@ -220,6 +225,7 @@ class Admin extends Common_functions {
 		$this->save_last_insert_id ();
 		# ok
 		$this->Log->write( $table." "._("object")." ".$values[$key]." "._("edit"), _("Object")." ".$key=$values[$key]." "._("in")." ".$table." "._("edited").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values_log, "NULL")), 0);
+		$this->Log->write_changelog($table, "edit", 'success', $old_object, $values);
 		return true;
 	}
 
@@ -238,7 +244,11 @@ class Admin extends Common_functions {
 	private function object_edit_multiple ($table, $ids, $values) {
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
-
+		# get original objects
+		$old_objects = array();
+		foreach ($ids as $this_id) {
+			$old_objects[$this_id] = $this->fetch_object($table, "id", $this_id);
+		}
 		# execute
 		try { $this->Database->updateMultipleObjects($table, $ids, $values); }
 		catch (Exception $e) {
@@ -250,6 +260,9 @@ class Admin extends Common_functions {
 		$this->save_last_insert_id ();
 		# ok
 		$this->Log->write( $table." "._("multiple objects edit"), _("Multiple objects in")." ".$table." "._("edited").".<hr>".$this->array_to_log($ids)."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
+		foreach ($ids as $this_id) {
+			$this->Log->write_changelog($table, "edit", 'success', $old_objects[$this_id], $values);
+		}
 		return true;
 	}
 
@@ -263,6 +276,9 @@ class Admin extends Common_functions {
 	 * @return boolean
 	 */
 	private function object_delete ($table, $field, $id) {
+		# get original object
+		$old_object = $this->fetch_object($table, $field, $id);
+
 		# execute
 		try { $this->Database->deleteRow($table, $field, $id); }
 		catch (Exception $e) {
@@ -273,7 +289,8 @@ class Admin extends Common_functions {
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		$this->Log->write( $table." "._("object")." ".$id." "._("edit"), _("Object")." ".$field=$id." "._("in")." ".$table." "._("deleted").".", 0);
+		$this->Log->write( $table." "._("object")." ".$id." "._("delete"), _("Object")." ".$field=$id." "._("in")." ".$table." "._("deleted").".", 0);
+		$this->Log->write_changelog($table, "delete", 'success', $old_object, array());
 		return true;
 	}
 
