@@ -513,7 +513,7 @@ class adLDAPGroups {
 
         $groupsArray = array();        
         for ($i=0; $i<$entries["count"]; $i++){
-            if ($includeDescription && strlen($entries[$i]["description"][0]) > 0 ) {
+            if ($includeDescription && isset($entries[$i]["description"][0]) && strlen($entries[$i]["description"][0]) > 0 ) {
                 $groupsArray[$entries[$i]["samaccountname"][0]] = $entries[$i]["description"][0];
             }
             else if ($includeDescription){

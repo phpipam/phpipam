@@ -37,7 +37,7 @@ foreach($permitted_domains as $k=>$d) {
 	$cnt++;
 }
 //filter out empty
-$permitted_domains = array_filter($out);
+$permitted_domains = is_array($out) ? array_filter($out) : [];
 ?>
 
 <select name="vlanId" class="form-control input-sm input-w-auto">
