@@ -19,6 +19,11 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
+# make sure user has access
+if ($User->get_module_permissions("vaults") < User::ACCESS_RW) {
+	$Result->show("danger", _("Insufficient privileges") . ".", true, true);
+}
+
 // print content
 $html = [];
 

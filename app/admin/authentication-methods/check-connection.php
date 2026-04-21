@@ -17,6 +17,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # feth settings
 $auth_settings = $Admin->fetch_object ("usersAuthMethod", "id", $POST->id);

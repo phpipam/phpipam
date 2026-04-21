@@ -22,7 +22,7 @@ foreach ($params as $k => $p) {
 }
 
 # if all are off print all on!
-if($GET->subnets!="on" && $GET->addresses!="on" && $GET->vlans!="on" && $GET->vrf!="on" && $GET->pstn!="on" && $GET->circuits!="on" && $GET->customers!="on") {
+if($GET->subnets!="on" && $GET->addresses!="on" && $GET->vlans!="on" && $GET->vrf!="on" && $GET->pstn!="on" && $GET->circuits!="on" && $GET->customers!="on" && $GET->devices!="on") {
 	$GET->subnets   ="on";
 	$GET->addresses ="on";
 	$GET->vlans     ="on";
@@ -30,6 +30,7 @@ if($GET->subnets!="on" && $GET->addresses!="on" && $GET->vlans!="on" && $GET->vr
 	$GET->pstn      ="on";
 	$GET->circuits  ="on";
 	$GET->customers ="on";
+	$GET->devices   ="on";
 }
 ?>
 
@@ -60,6 +61,7 @@ if($GET->subnets!="on" && $GET->addresses!="on" && $GET->vlans!="on" && $GET->vr
 		<?php if($User->settings->enableCustomers==1) { ?>
 		<input type="checkbox" name="customers" 	    value="on" <?php if($GET->customers=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Customers'); ?><br>
 		<?php } ?>
+		<input type="checkbox" name="devices"		value="on" <?php if($GET->devices=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Devices'); ?><br>
 	</div>
 
 	<!-- settings -->

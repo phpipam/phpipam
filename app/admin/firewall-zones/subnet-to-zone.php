@@ -14,8 +14,11 @@ $User 	  = new User ($Database);
 $Result   = new Result ();
 $Zones    = new FirewallZones($Database);
 
-# validate session parameters
 $User->check_user_session();
+# perm check
+if ($User->get_module_permissions ("fwzones")==User::ACCESS_NONE) {
+	$Result->show("danger", _("You do not have permissions to access this module"), false);
+}
 
 # validate $POST->operation values
 if ($POST->operation != 'subnet2zone') 				{ $Result->show("danger", _("Invalid operation. Do not manipulate the POST values!"), true); }

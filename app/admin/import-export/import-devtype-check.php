@@ -16,6 +16,8 @@ if (!isset($Devtype)) { $Devtype = new Devtype ($Database); }
 
 # verify that user is logged in, to guard against direct access of page and possible exploits
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 $deviceTypes = $Devtype->fetch_all_objects("deviceTypes", "tid");
 
@@ -38,7 +40,7 @@ foreach ($data as &$cdata) {
 
 	# check if required fields are present and not empty
 	foreach($reqfields as $creq) {
-		if ((!isset($cdata[$creq])) or ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
+		if ((!isset($cdata[$creq])) || ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
 	}
 
 
@@ -68,5 +70,3 @@ foreach ($data as &$cdata) {
 		<td>"._($cdata['msg'])."</td></tr>";
 
 }
-
-?>

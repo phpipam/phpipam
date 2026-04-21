@@ -3,8 +3,10 @@
 # Check we have been included and not called directly
 require( dirname(__FILE__) . '/../../../../functions/include-only.php' );
 
+# verify that user is logged in
+$User->check_user_session();
 # perm check
-$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
+$User->check_module_permissions("circuits", User::ACCESS_R, true, false);
 
 print "<h4>"._('Circuit details')."</h4>";
 print "<hr>";
@@ -57,7 +59,7 @@ if ($User->settings->enableCustomers=="1") {
 		$customer->title = "/";
 	}
 print "	<th>". _('Customer').'</th>';
-print "	<td>$customer->title <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
+print "	<td>$customer->title <a target='_blank' href='".create_link("tools","customers",html_entity_decode($customer->title))."'><i class='fa fa-external-link'></i></a></td>";
 print "</tr>";
 }
 

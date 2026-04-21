@@ -13,6 +13,8 @@ $Admin 		= new Admin ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # Load subnets and recompute the master/nested relations
 include 'import-recompute-logic.php';

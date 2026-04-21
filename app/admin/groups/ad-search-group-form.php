@@ -15,6 +15,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # fetch all available LDAP servers
 $servers = $Admin->fetch_all_objects ("usersAuthMethod");

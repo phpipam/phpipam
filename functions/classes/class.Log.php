@@ -1788,7 +1788,7 @@ class Logging extends Common_functions {
 
 		# set object
 		$obj_details = $this->object_action == "add" ? $this->object_new : $this->object_old;
-		$obj_details = array_merge(array('id' => null, 'name' => null, 'description' => null, 'subnet' => null, 'ip_addr' => null, 'mask' => null, 'hostname' => null), (array) $obj_details);
+		$obj_details = array_merge(['id' => null, 'name' => null, 'description' => null, 'subnet' => null, 'ip_addr' => null, 'mask' => null, 'hostname' => null], (array) $obj_details);
 
 		# change ip_addr
 		$this->object_type = str_replace("ip_addr", "address", $this->object_type);

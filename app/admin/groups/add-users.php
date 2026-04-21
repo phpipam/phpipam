@@ -15,7 +15,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-
+# admin check
+$User->is_admin();
 
 # id must be numeric
 if(!is_numeric($POST->g_id))		{ $Result->show("danger", _("Invalid ID"), true, true); }

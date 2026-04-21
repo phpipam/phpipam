@@ -14,6 +14,8 @@ if (!isset($Admin)) { $Admin = new Admin ($Database); }
 
 # verify that user is logged in, to guard against direct access of page and possible exploits
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # read again the custom fields, if any
 if (!isset($custom_fields)) { $custom_fields = $Tools->fetch_custom_fields("vrf"); }
@@ -39,7 +41,7 @@ foreach ($data as &$cdata) {
 
 	# check if required fields are present and not empty
 	foreach($reqfields as $creq) {
-		if ((!isset($cdata[$creq])) or ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
+		if ((!isset($cdata[$creq])) || ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
 	}
 
 	# check data format
@@ -65,7 +67,7 @@ foreach ($data as &$cdata) {
 					}
 				}
 			}
-			
+
 			if ($action == "skip") {
 				$msg.= "Duplicate, will skip.";
 			}
@@ -83,5 +85,3 @@ foreach ($data as &$cdata) {
 	$rows.= "<td>"._($cdata['msg'])."</td></tr>";
 
 }
-
-?>

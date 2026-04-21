@@ -13,8 +13,12 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-# permissions
-$User->check_module_permissions ("routing", User::ACCESS_RW, true, false);
+# perm check popup
+if ($POST->action == "edit") {
+	$User->check_module_permissions("routing", User::ACCESS_RW, true, true);
+} else {
+	$User->check_module_permissions("routing", User::ACCESS_RWA, true, true);
+}
 
 # validate
 $bgp_id     = isset($POST->bgp_id) ? $POST->bgp_id : '';

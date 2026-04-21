@@ -21,7 +21,9 @@ $User->check_user_session();
 $csrf = $User->Crypto->csrf_cookie ("create", "vaultunlock");
 
 # make sure user has access
-if ($User->get_module_permissions ("vaults")==User::ACCESS_NONE) { $Result->show("danger", _("Insufficient privileges").".", true, true); }
+if ($User->get_module_permissions("vaults") == User::ACCESS_NONE) {
+	$Result->show("danger", _("Insufficient privileges") . ".", true, true);
+}
 
 # ID must be numeric
 if(!is_numeric($POST->id)) { $Result->show("danger", _("Invalid ID"), true, true); }

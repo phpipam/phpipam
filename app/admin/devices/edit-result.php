@@ -18,11 +18,10 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($POST->action=="edit") {
-    $User->check_module_permissions ("devices", User::ACCESS_RW, true, false);
-}
-else {
-    $User->check_module_permissions ("devices", User::ACCESS_RWA, true, false);
+if ($POST->action == "edit") {
+	$User->check_module_permissions("devices", User::ACCESS_RW, true, true);
+} else {
+	$User->check_module_permissions("devices", User::ACCESS_RWA, true, true);
 }
 
 # check maintaneance mode
@@ -50,7 +49,8 @@ $POST->sections = !empty($temp) ? implode(";", $temp) : null;
 if($POST->hostname == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }
 
 # rack checks
-if ($POST->rack !== "0" && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
+$POST->rack_deep = (@$POST->rack_deep=="1") ? "1" : "0";
+if ($POST->rack !== "0" && $User->get_module_permissions ("racks")>User::ACCESS_R) {
     if ($User->settings->enableRACK!="1") {
         unset($POST->rack);
     }
@@ -58,13 +58,19 @@ if ($POST->rack !== "0" && $User->get_module_permissions ("racks")>=User::ACCESS
         # validate position and size
         if (!is_numeric($POST->rack))                               { $Result->show("danger", _('Invalid rack identifier').'!', true); }
         if (!is_numeric($POST->rack_start))                         { $Result->show("danger", _('Invalid rack start position').'!', true); }
-        if ($POST->rack_size == 0) {
-			if ($POST->rack!=0) { $Result->show("danger", _('Invalid rack size').'!', true); }
-		}
+		if (!is_numeric($POST->rack_size)) 							{ $Result->show("danger", _('Invalid rack size').'!', true); }
+		$POST->rack_deep = (isset($POST->rack_deep) && $POST->rack_deep=="1") ? "1" : "0";
+		if ($POST->rack != 0 && $POST->rack_size < 1) 				{ $Result->show("danger", _('Invalid rack size').'!', true); }
 		# validate rack
 		$rack = $Racks->fetch_rack_details($POST->rack);
-		if (!is_numeric($POST->rack) || ($rack > 0 && !is_object($rack))) {
-			$Result->show("danger", _('Rack does not exist') . '!', true);
+		if (!is_object($rack)) 										{ $Result->show("danger", _('Rack does not exist').'!', true); }
+		# check overflow
+		if ($Racks->check_device_overflow($POST->rack,$POST->rack_start,$POST->rack_size)) 
+																	{ $Result->show("danger", _('Invalid rack position (overflow)').'!', true); }
+		# check overlaps
+		if ($User->settings->rackAllowOverlap!="1") {
+			if ($Racks->check_device_overlap($POST->rack,$POST->rack_start,$POST->rack_size,$POST->rack_deep,$POST->switchid)) 
+																	{ $Result->show("danger", _('Overlaps with existing rack item').'!', true); };
 		}
     }
 }
@@ -85,10 +91,11 @@ $update = $Tools->update_POST_custom_fields('devices', $POST->action, $POST);
 $values = array_merge($values, $update);
 
 # rack
-if (!is_blank($POST->rack) && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
+if (!is_blank($POST->rack) && $User->get_module_permissions ("racks")>User::ACCESS_R) {
 	$values['rack']       = $POST->rack;
 	$values['rack_start'] = $POST->rack_start;
 	$values['rack_size']  = $POST->rack_size;
+	$values['rack_deep']  = $POST->rack_deep;
 }
 # perms
 if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {

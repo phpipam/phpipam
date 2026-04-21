@@ -117,12 +117,12 @@ class OpenStreetMap extends Common_functions
         }
 
         if ($type == "locations") {
-            $title = escape_input($object->name);
-            $desc  = escape_input($object->description);
+            $title = $object->name;
+            $desc  = $object->description;
             $id    = $object->id;
         } elseif ($type == "customers") {
-            $title = escape_input($object->title);
-            $desc  = escape_input($object->note);
+            $title = $object->title;
+            $desc  = $object->note;
             $id    = $object->title;
         } else {
             return false;
@@ -354,7 +354,8 @@ class OpenStreetMap extends Common_functions
 
         try {
             // Obtain exclusive MySQL row lock
-            $Lock = new LockForUpdate($this->Database, 'nominatim', 1);
+            $Lock = new LockForUpdateMySQL($this->Database, 'nominatim', 1);
+            $Lock->obtain_lock(-1);
 
             $elapsed = -microtime(true);
 
@@ -367,7 +368,8 @@ class OpenStreetMap extends Common_functions
                 }
             }
 
-            $url = $Lock->locked_row->url;
+            $locked_row = $Lock->get_locked_resource();
+            $url = $locked_row->url;
             $url = $url . "?format=json&q=" . rawurlencode($address);
             $headers = [
                 'User-Agent: phpIPAM/' . VERSION_VISIBLE . ' (Open source IP address management)',

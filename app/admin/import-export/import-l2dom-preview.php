@@ -14,6 +14,8 @@ $User		= new User ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # load data from uploaded file
 include 'import-load-data.php';

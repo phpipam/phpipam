@@ -12,6 +12,8 @@ $User = new User ($Database);
 
 # verify that user is logged in, to guard against direct access of page and possible exploits
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # load data from uploaded file
 include 'import-load-data.php';
@@ -34,7 +36,7 @@ $rows = "";
 # import a device
 foreach ($data as &$cdata) {
 	if (($cdata['action'] == "add") || ($cdata['action'] == "edit")) {
-	
+
 
 		// # set update array
 

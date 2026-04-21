@@ -23,6 +23,20 @@ $Addresses	= new Addresses ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === false) {
+	$content  = _("Invalid CSRF cookie");
+
+	header("Cache-Control: private");
+	header("Content-Description: File Transfer");
+	header("Content-Type: application/octet-stream");
+	header('Content-Disposition: attachment; filename="' . "error_message.txt" . '"');
+	header("Content-Length: " . strlen($content));
+
+	print($content);
+	exit();
+}
+
 // Do not escape html special chars
 $Database->html_escape_enabled = false;
 
@@ -39,6 +53,9 @@ $addresses = $Addresses->fetch_subnet_addresses ($GET->subnetId, "ip_addr", "asc
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 
+// enforce permissions
+if($User->get_module_permissions ("devices")<User::ACCESS_R) unset($GET->device);
+if($User->get_module_permissions ("locations")<User::ACCESS_R) unset($GET->location);
 
 # Create a workbook
 $filename = isset($GET->filename)&&!is_blank($GET->filename) ? $GET->filename : "phpipam_subnet_export.xls";
@@ -107,8 +124,8 @@ if( (isset($GET->ip_addr)) && ($GET->ip_addr == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('ip address') ,$format_title);
 	$rowCount++;
 }
-if( (isset($GET->state)) && ($GET->state == "on") ) {
-	$worksheet->write($lineCount, $rowCount, _('ip state') ,$format_title);
+if( (isset($GET->tag)) && ($GET->tag == "on") ) {
+	$worksheet->write($lineCount, $rowCount, _('tag') ,$format_title);
 	$rowCount++;
 }
 if( (isset($GET->description)) && ($GET->description == "on") ) {
@@ -131,7 +148,7 @@ if( (isset($GET->owner)) && ($GET->owner == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('owner') ,$format_title);
 	$rowCount++;
 }
-if( (isset($GET->switch)) && ($GET->switch == "on") ) {
+if( (isset($GET->device)) && ($GET->device == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('device') ,$format_title);
 	$rowCount++;
 }
@@ -145,6 +162,10 @@ if( (isset($GET->note)) && ($GET->note == "on") ) {
 }
 if( (isset($GET->location)) && ($GET->location == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('location') ,$format_title);
+	$rowCount++;
+}
+if( (isset($GET->lastSeen)) && ($GET->lastSeen == "on") ) {
+	$worksheet->write($lineCount, $rowCount, _('Last seen') ,$format_title);
 	$rowCount++;
 }
 
@@ -206,7 +227,7 @@ foreach ($addresses as $ip) {
 		$worksheet->write($lineCount, $rowCount, $Subnets->transform_address($ip['ip_addr'],"dotted"), $format_left);
 		$rowCount++;
 	}
-	if( (isset($GET->state)) && ($GET->state == "on") ) {
+	if( (isset($GET->tag)) && ($GET->tag == "on") ) {
 		if(@$ip_types[$ip['state']]['showtag']==1) {
 		$worksheet->write($lineCount, $rowCount, $ip_types[$ip['state']]['type']);
 		}
@@ -232,7 +253,7 @@ foreach ($addresses as $ip) {
 		$worksheet->write($lineCount, $rowCount, $ip['owner']);
 		$rowCount++;
 	}
-	if( (isset($GET->switch)) && ($GET->switch == "on") ) {
+	if( (isset($GET->device)) && ($GET->device == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['switch']);
 		$rowCount++;
 	}
@@ -246,6 +267,10 @@ foreach ($addresses as $ip) {
 	}
 	if( (isset($GET->location)) && ($GET->location == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['location']);
+		$rowCount++;
+	}
+	if( (isset($GET->lastSeen)) && ($GET->lastSeen == "on") ) {
+		$worksheet->write($lineCount, $rowCount, $ip['lastSeen']);
 		$rowCount++;
 	}
 

@@ -19,7 +19,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
+$User->check_module_permissions("circuits", User::ACCESS_R, true, false);
 
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('circuits');
@@ -101,7 +101,7 @@ else {
 		// customers
 		if($User->settings->enableCustomers=="1") {
 			 $customer = $Tools->fetch_object ("customers", "id", $circuit->customer_id);
-			 print $customer===false ? "<td></td>" : "<td>".$customer->title." <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
+			 print $customer===false ? "<td></td>" : "<td>".$customer->title." <a target='_blank' href='".create_link("tools","customers",html_entity_decode($customer->title))."'><i class='fa fa-external-link'></i></a></td>";
 		}
 		print "	<td>".$type_hash[$circuit->type]."</td>";
 		print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";

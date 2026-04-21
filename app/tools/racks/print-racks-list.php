@@ -30,11 +30,12 @@ else {
     print "<tr>";
     print " <th>"._('Name')."</th>";
     print " <th>"._('Size')."</th>";
+    print " <th>"._('Row')."</th>";
     print " <th>"._('Back side')."</th>";
     print " <th>"._('Devices')."</th>";
     print " <th>"._('Description')."</th>";
 
-    $colspan = 6;
+    $colspan = 7;
     if($User->settings->enableCustomers=="1") {
         print ' <th data-field="customer" data-sortable="true">'._('Customer').'</th>' . "\n";
         $colspan++;
@@ -67,7 +68,7 @@ else {
         foreach ($Racks->all_racks as $r) {
             // back
             $r->back = $r->hasBack!="0" ? "Yes" : "No";
-            // cht devices
+            // count contained devices
             $cnt = $Tools->count_database_objects ("devices", "rack", $r->id) + $Tools->count_database_objects ("rackContents", "rack", $r->id);
 
             // fix possible null
@@ -100,12 +101,13 @@ else {
 
             print " <td><a class='btn btn-xs btn-default' href='".create_link($GET->page, "racks", $r->id)."'><i class='fa fa-bars prefix'></i> $r->name</a></td>";
             print " <td>$r->size U</td>";
+            print " <td>$r->row</td>";
             print " <td>"._($r->back)."</td>";
             print " <td>$cnt "._("devices")."</td>";
             print " <td>$r->description</td>";
             if($User->settings->enableCustomers=="1") {
                  $customer = $Tools->fetch_object ("customers", "id", $r->customer_id);
-                 print $customer===false ? "<td></td>" : "<td>{$customer->title} <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
+                 print $customer===false ? "<td></td>" : "<td>{$customer->title} <a target='_blank' href='".create_link("tools","customers",html_entity_decode($customer->title))."'><i class='fa fa-external-link'></i></a></td>";
             }
     		//custom
     		if(sizeof($custom) > 0) {

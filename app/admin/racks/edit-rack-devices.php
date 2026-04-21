@@ -17,8 +17,12 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-# verify module permissions
-$User->check_module_permissions ("racks", User::ACCESS_RW, true, true);
+# perm check popup
+if ($POST->action == "edit") {
+    $User->check_module_permissions("racks", User::ACCESS_RW, true, true);
+} else {
+    $User->check_module_permissions("racks", User::ACCESS_RWA, true, true);
+}
 $User->check_module_permissions ("devices", User::ACCESS_R, true, true);
 
 # validate action
@@ -28,7 +32,7 @@ $Admin->validate_action();
 if($POST->action!="add" && !is_numeric($POST->rackid))		{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # device type?
-if (!isset($POST->devicetype) || (($POST->devicetype != 'device') && ($POST->devicetype != 'content'))) { $Result->show("danger", _("Invalid device type"), true, true); }
+if (!isset($POST->devicetype) || ($POST->devicetype != 'device' && $POST->devicetype != 'content' && $POST->devicetype != 'subrack')) { $Result->show("danger", _("Invalid device type"), true, true); }
 
 # remove or add ?
 if ($POST->action=="remove") {
@@ -91,7 +95,10 @@ else {
 			    }
 		    }
 	    }
-    }
+    } elseif ($POST->devicetype == 'subrack') {
+		$subracks = $Racks->fetch_orphan_subracks();
+		if ($subracks===false) unset($subracks);
+	}
 ?>
 
 <script>
@@ -107,9 +114,15 @@ $(document).ready(function(){
 <div class="pContent">
     <?php
     // no devides
-    if ((!isset($devices)||sizeof($devices)==0) && ($POST->devicetype == 'device')) {
+    if ($POST->devicetype == 'device' && (!isset($devices)||sizeof($devices)==0)) {
         $Result->show("info", _("No devices available"), false);
-    }
+	} elseif ($POST->devicetype == 'subrack' && (!isset($subracks)||sizeof($subracks)==0)) {
+		$Result->show("info", _("No subracks available"), false);
+	} elseif ($POST->devicetype == 'subrack' && $rack->subrack) {
+		$Result->show("info", _("Nesting subracks is not allowed"), false);
+		# unsetting the array suppresses the "Add" button
+		unset($subracks);
+	}
     else {
     ?>
         <form id="rackDeviceManagementEdit">
@@ -118,7 +131,7 @@ $(document).ready(function(){
 
         	<!-- Select device  -->
         	<tr>
-        		<td><?php print _('Device'); ?></td>
+        		<td><?php print ($POST->devicetype=='subrack') ? _('Subrack') : _('Device'); ?></td>
         		<td>
                     <?php if ($POST->devicetype == 'device') { ?>
         			<select name="deviceid" class="form-control input-sm input-w-auto">
@@ -128,6 +141,14 @@ $(document).ready(function(){
                         }
         			?>
         			</select>
+					<?php } elseif ($POST->devicetype=='subrack') { ?>
+					<select name="subrackid" class="form-control input-sm input-w-auto">
+					<?php
+					foreach($subracks as $r) {
+						print "<option value='$r->id' >$r->name</option>";
+					}
+					?>
+					</select>
                     <?php } else { ?>
                     <input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Device name'); ?>">
                     <?php } ?>
@@ -138,14 +159,14 @@ $(document).ready(function(){
         	<tr>
         		<td><?php print _('Start position'); ?></td>
         		<td>
-                    <select name="rack_start" class="form-control input-sm input-w-auto">
+                    <select name="rack_start" class="form-control input-sm input-w-auto" style="min-width:70px">
             		<?php
-                    list($available, $available_back) = $Racks->free_u($rack, $rack_devices, $rack_contents);
+                    list($available_front, $available_back) = $Racks->free_u($rack, $rack_devices, $rack_contents);
 
                     // print available spaces
                     if($rack->hasBack!="0") {
                         print "<optgroup label='"._("Front")."'>";
-                        foreach ($available as $a) {
+                        foreach ($available_front as $a) {
                             print "<option value='$a'>$a</option>";
                         }
                         print "</optgroup>";
@@ -157,7 +178,7 @@ $(document).ready(function(){
                         print "</optgroup>";
                     }
                     else {
-                        foreach ($available as $a) {
+                        foreach ($available_front as $a) {
                             print "<option value='$a'>$a</option>";
                         }
                     }
@@ -177,12 +198,19 @@ $(document).ready(function(){
         		</td>
         	</tr>
 
+			<tr>
+				<td><?php print _('Full Depth'); ?></td>
+				<td>
+					<input type="checkbox" class="input-switch" name="rack_deep" value="1" >
+				</td>
+			</tr>
+
             <!-- Location override -->
             <?php if($User->settings->enableLocations=="1" && ($rack->location!="0" && !is_null($rack->location)) && ($POST->devicetype == 'device')) { ?>
             <tr>
                 <td colspan="2">
                 <hr>
-                    <input type="checkbox" class="input-switch" value="1" name="no_location"> <span class="text-muted"><?php print _("Don't update device location from rack"); ?></span>
+                    <input type="checkbox" class="input-switch" value="1" name="no_location"> <span title="Prevent overwriting the device's Location with the value of the rack's Location" class="text-muted"><?php print _("Don't update device location from rack"); ?></span>
                 </td>
             </tr>
             <?php } ?>
@@ -197,7 +225,7 @@ $(document).ready(function(){
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<?php if ((!empty($devices)) || ($POST->devicetype != 'device')) { ?>
+		<?php if (!empty($devices) || !empty($subracks) || $POST->devicetype=='content') { ?>
 		<button class="btn btn-sm btn-default btn-success" id="editRackDevicesubmit"><i class="fa fa-plus"></i> <?php print $User->get_post_action(); ?></button>
         <?php } ?>
 	</div>

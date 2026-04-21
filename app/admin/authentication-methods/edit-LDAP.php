@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # validate action
 $Admin->validate_action();
@@ -19,9 +21,9 @@ if($POST->action!="add") {
 	$method_settings->params = db_json_decode($method_settings->params);
 }
 else {
-	$method_settings = new StdClass ();
+	$method_settings = new Params ();
 	# set default values
-	$method_settings->params = new StdClass ();
+	$method_settings->params = new Params ();
     $method_settings->params->domain_controllers = "ldap1.domain.local;ldap2.domain.local";
 	$method_settings->params->base_dn = "CN=Users,CN=Company,DC=domain,DC=local";
 	$method_settings->params->account_suffix = "";
@@ -179,7 +181,7 @@ $delete = $POST->action=="delete" ? "disabled" : "";
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<button class='btn btn-sm btn-default submit_popup <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/authentication-methods/edit-result.php" data-result_div="editAuthMethodResult" data-form='editAuthMethod'>
-			<i class="fa <?php if($POST->action=="add") { print "fa-plus"; } else if ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
+			<i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
 		</button>
 	</div>
 

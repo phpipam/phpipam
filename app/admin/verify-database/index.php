@@ -5,7 +5,7 @@
  ****************************************/
 
 # admin user is required
-$User->is_admin(true);
+$User->is_admin();
 
 # title
 print "<h4>"._('Database structure verification').'</h4><hr>';

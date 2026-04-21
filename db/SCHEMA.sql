@@ -177,6 +177,8 @@ CREATE TABLE `settings` (
   `enableSNMP` TINYINT(1)  NULL  DEFAULT '0',
   `enableThreshold` TINYINT(1)  NULL  DEFAULT '1',
   `enableRACK` TINYINT(1)  NULL  DEFAULT '1',
+  `rackImageFormat` ENUM('png','svg') NOT NULL DEFAULT 'svg',
+  `rackAllowOverlap` INT(1) NOT NULL DEFAULT 0,
   `enableLocations` TINYINT(1)  NULL  DEFAULT '1',
   `enablePSTN` TINYINT(1)  NULL  DEFAULT '0',
   `enableChangelog` TINYINT(1)  NOT NULL  DEFAULT '1',
@@ -337,6 +339,7 @@ CREATE TABLE `devices` (
   `rack` int(11) unsigned DEFAULT NULL,
   `rack_start` int(11) unsigned DEFAULT NULL,
   `rack_size` int(11) unsigned DEFAULT NULL,
+  `rack_deep` int(1) NOT NULL DEFAULT 0,
   `location` int(11) unsigned DEFAULT NULL,
   `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -415,7 +418,7 @@ DROP TABLE IF EXISTS `lang`;
 CREATE TABLE `lang` (
   `l_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `l_code` varchar(12) NOT NULL DEFAULT '',
-  `l_name` varchar(32) DEFAULT NULL,
+  `l_name` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`l_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
@@ -525,7 +528,7 @@ CREATE TABLE `api` (
   `app_permissions` int(1) DEFAULT '1',
   `app_comment` TEXT  NULL,
   `app_security`SET('ssl_code','ssl_token','crypt','user','none')  NOT NULL  DEFAULT 'ssl_token',
-  `app_lock` INT(1)  NOT NULL  DEFAULT '0',
+  `app_lock_type` enum('Auto','File','MySQL','Disabled') NOT NULL DEFAULT 'Auto',
   `app_lock_wait` INT(4)  NOT NULL  DEFAULT '30',
   `app_nest_custom_fields` TINYINT(1)  NULL  DEFAULT '0',
   `app_show_links` TINYINT(1)  NULL  DEFAULT '0',
@@ -533,6 +536,19 @@ CREATE TABLE `api` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_id` (`app_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+# Dump of table apiLock
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `apiLock`;
+
+CREATE TABLE `apiLock` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `description` varchar(32) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `apiLock` (`id`, `description`) VALUES (1, 'API POST lock');
 
 
 # Dump of table changelog
@@ -604,6 +620,8 @@ CREATE TABLE `deviceTypes` (
   `tid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `tname` varchar(128) DEFAULT NULL,
   `tdescription` varchar(128) DEFAULT NULL,
+  `bgcolor` varchar(7) DEFAULT '#E6E6E6',
+  `fgcolor` varchar(7) DEFAULT '#000',
   PRIMARY KEY (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
@@ -782,6 +800,7 @@ CREATE TABLE `racks` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL DEFAULT '',
   `size` int(2) DEFAULT NULL,
+  `subrack` tinyint(1) NOT NULL DEFAULT 0,
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `row` INT(11)  NOT NULL  DEFAULT '1',
   `hasBack` TINYINT(1)  NOT NULL  DEFAULT '0',
@@ -804,6 +823,8 @@ CREATE TABLE `rackContents` (
   `rack` int(11) unsigned DEFAULT NULL,
   `rack_start` int(11) unsigned DEFAULT NULL,
   `rack_size` int(11) unsigned DEFAULT NULL,
+  `rack_deep` tinyint(1) NOT NULL DEFAULT 0,
+  `subrackId` INT(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `rack` (`rack`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1081,5 +1102,5 @@ CREATE TABLE `nominatim_cache` (
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
-UPDATE `settings` SET `version` = "1.74";
-UPDATE `settings` SET `dbversion` = 43;
+UPDATE `settings` SET `version` = "1.8";
+UPDATE `settings` SET `dbversion` = 46;

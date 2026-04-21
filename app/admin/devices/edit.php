@@ -17,11 +17,10 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($POST->action=="edit") {
-    $User->check_module_permissions ("devices", User::ACCESS_RW, true, true);
-}
-else {
-    $User->check_module_permissions ("devices", User::ACCESS_RWA, true, true);
+if ($POST->action == "edit") {
+	$User->check_module_permissions("devices", User::ACCESS_RW, true, true);
+} else {
+	$User->check_module_permissions("devices", User::ACCESS_RWA, true, true);
 }
 
 # create csrf token
@@ -40,6 +39,7 @@ if($POST->action!="add" && !is_numeric($POST->switchid))		{ $Result->show("dange
 # fetch device details
 if( ($POST->action == "edit") || ($POST->action == "delete") ) {
 	$device = (array) $Admin->fetch_object("devices", "id", $POST->switchid);
+	$device['type'] = ($device['type']>0) ? $device['type'] : 0;
 	// false
 	if ($device===false)                                            { $Result->show("danger", _("Invalid ID"), true, true);  }
 }
@@ -49,6 +49,7 @@ else {
 	$device['type']       = 9;
 	$device['rack_start'] = 1;
 	$device['rack_size']  = 1;
+	$device['rack_deep']  = 0;
 	$device['location'] = null;
 	$device['rack'] = null;
 }
@@ -69,6 +70,16 @@ else                            { $display=''; }
 <script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    onText: 'Yes',
+	    offText: 'No',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
 });
 // form change
 $('#switchManagementEdit select[name=rack]').change(function() {
@@ -122,6 +133,8 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 			<select name="type" class="form-control input-sm input-w-auto">
 			<?php
 			$types = $Admin->fetch_all_objects("deviceTypes", "tid");
+			// if the type of this device isn't found in the list of device types, then prepend it
+			if (!in_array($device['type'],array_column($types,'tid'))) array_unshift($types,(object) array("tid"=>$device['type'],"tname"=>"Undefined"));
 			foreach($types as $name) {
 				if($device['type'] == $name->tid)	{ print "<option value='$name->tid' selected='selected'>$name->tname</option>"; }
 				else								{ print "<option value='$name->tid' >$name->tname</option>"; }

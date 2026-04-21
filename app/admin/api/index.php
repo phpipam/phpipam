@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # fetch all APIs
 $all_apis = $Admin->fetch_all_objects("api");
@@ -69,10 +71,10 @@ $app_perms_text = array("SSL with User token"=>"ssl_token","SSL with App code to
 			elseif($a['app_permissions']==3)	{ $a['app_permissions'] = _("Read / Write / Admin"); }
 
 			# wait update
-			$a['app_lock_wait'] = $a['app_lock']==1 ? $a['app_lock_wait']." sec" : "/";
+			$a['app_lock_wait'] = $a['app_lock_type']!="Disabled" ? $a['app_lock_wait']." sec" : "/";
 
 			# reformat lock and nesting
-			$a['app_lock']               = $a['app_lock']==1 ? _("Yes") : _("No");
+			$a['app_lock_type']          = $a['app_lock_type'];
 			$a['app_nest_custom_fields'] = $a['app_nest_custom_fields']==1 ? _("Yes") : _("No");
 			$a['app_show_links'] 		 = $a['app_show_links']==1 ? _("Yes") : _("No");
 
@@ -83,7 +85,7 @@ $app_perms_text = array("SSL with User token"=>"ssl_token","SSL with App code to
 
 			print '	<td>' . $a['app_permissions'] . '</td>'. "\n";
 			print '	<td>' . $a['app_security'] . '</td>'. "\n";
-			print '	<td>' . $a['app_lock'] . '</td>'. "\n";
+			print '	<td>' . $a['app_lock_type'] . '</td>'. "\n";
 			print '	<td>' . $a['app_lock_wait'] . '</td>'. "\n";
 			print '	<td>' . $a['app_nest_custom_fields'] . '</td>'. "\n";
 			print '	<td>' . $a['app_show_links'] . '</td>'. "\n";

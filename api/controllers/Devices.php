@@ -189,9 +189,7 @@ class Devices_controller extends Common_api_functions {
 
         # validations
         $this->validate_device_type ();
-
-        # only 1 parameter ?
-        if (sizeof($values) == 1)   { $this->Response->throw_exception(400, 'No parameters'); }
+		$this->validate_device_edit();
 
         // provide default params if they are not set
         if(!isset($this->_params->sections)) {
@@ -227,6 +225,7 @@ class Devices_controller extends Common_api_functions {
 
         # validations
         $this->validate_device_type();
+		$this->validate_device_edit();
 
         # validate and prepare keys
         $values = $this->validate_keys();
@@ -254,13 +253,12 @@ class Devices_controller extends Common_api_functions {
      * @method DELETE
      */
     public function DELETE () {
+		# validations
+		$this->validate_device_edit();
+
         # set variables for delete
         $values = array();
         $values['id'] = $this->_params->id;
-
-        # check that section exists
-        if($this->Admin->fetch_object ("devices", "id", $this->_params->id)===false)
-                                                        { $this->Response->throw_exception(404, "Device does not exist"); }
 
         # execute delete
         if (!$this->Admin->object_modify('devices', 'delete', 'id', $values)) {
@@ -318,4 +316,34 @@ class Devices_controller extends Common_api_functions {
         // return
         return $sections;
     }
+
+
+	/**
+	 * Validates device on edit
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function validate_device_edit () {
+		// delete checks
+		if($_SERVER['REQUEST_METHOD']=="DELETE") {
+			// ID must be numeric
+			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(400, "Invalid device id"); }
+			// check that device exists
+			if($this->Admin->fetch_object ("devices", "id", $this->_params->id)===false)	{ $this->Response->throw_exception(404, "Device does not exist"); }
+		}
+		// create checks
+		elseif ($_SERVER['REQUEST_METHOD']=="POST") {
+			// name must be present
+			if(@$this->_params->hostname == "" || !isset($this->_params->hostname))			{ $this->Response->throw_exception(400, "Hostname is mandatory"); }
+		}
+		// update checks
+		elseif ($_SERVER['REQUEST_METHOD']=="PATCH") {
+			// ID must be numeric
+			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(400, "Invalid device id"); }
+			// name cannot be nothing
+			if(isset($this->_params->hostname) && @$this->_params->hostname == "")			{ $this->Response->throw_exception(400, "Hostname is mandatory"); }
+		}
+	}
+
 }

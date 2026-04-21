@@ -16,6 +16,8 @@ $Sections	= new Sections ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 $mtable = "subnets"; # main table where to check the fields
 # predefine field list

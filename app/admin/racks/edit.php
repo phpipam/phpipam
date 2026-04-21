@@ -18,11 +18,10 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-if($POST->action=="edit") {
-    $User->check_module_permissions ("racks", User::ACCESS_RW, true, true);
-}
-else {
-    $User->check_module_permissions ("racks", User::ACCESS_RWA, true, true);
+if ($POST->action == "edit") {
+    $User->check_module_permissions("racks", User::ACCESS_RW, true, true);
+} else {
+    $User->check_module_permissions("racks", User::ACCESS_RWA, true, true);
 }
 
 # create csrf token
@@ -108,6 +107,15 @@ $(document).ready(function(){
 		</td>
 	</tr>
 
+	<!-- subrack -->
+	<tr>
+		<td><?php print _('Subrack'); ?></td>
+		<td>
+			<?php $checked = @$rack->subrack=="1" ? "checked" : ""; ?>
+			<input type="checkbox" name="subrack" class="input-switch" value="1" <?php print $checked; ?>>
+		</td>
+	</tr>
+
 	<!-- Front -->
 	<tr>
 		<td><?php print _('Back side'); ?></td>
@@ -148,6 +156,15 @@ $(document).ready(function(){
 	</tr>
 	<?php } ?>
 
+	<!-- row  -->
+	<tr>
+		<td><?php print _('Row'); ?></td>
+		<td>
+			<input type="text" name="row" class="form-control input-sm" placeholder="<?php print _('Row'); ?>" value="<?php if(isset($rack->row)) print $rack->row; ?>" style="width:100px" <?php print $readonly; ?>>
+		</td>
+	</tr>
+
+	<!-- customers -->
 	<?php
     // customers
     if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>=User::ACCESS_R) {

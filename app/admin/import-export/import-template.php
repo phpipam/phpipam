@@ -5,6 +5,10 @@
 /* functions */
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
+
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 # classes
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
@@ -15,6 +19,9 @@ $type = $GET->type;
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
+
 // Create a workbook
 $filename = "phpipam_template_" . $type . ".xls";
 $workbook = new Spreadsheet_Excel_Writer();

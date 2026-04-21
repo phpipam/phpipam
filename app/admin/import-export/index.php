@@ -6,6 +6,10 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
+
+$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "generate-export");
 ?>
 
 <script>
@@ -31,7 +35,7 @@ $(document).on('change', "select#dataType", function() {
 	<tr>
 		<td class="title"><?php print _('Data set'); ?></td>
 		<td>
-			<select name="dataType" id="dataType" class="form-control input-sm input-w-auto" rel='tooltip' data-placement='right' title='<?php print _('Pick data set'); ?>'>
+			<select name="dataType" id="dataType" class="form-control input-sm input-w-auto" rel='tooltip' data-placement='right' title='<?php print _('Pick data set'); ?>' csrf='<?php print $csrf; ?>'>
 					<option value='vrf'><?php print _('VRF'); ?></option>
 					<option value='vlan'><?php print _('VLAN'); ?></option>
 					<option value='l2dom'><?php print _('L2 Domains'); ?></option>
@@ -66,12 +70,12 @@ $(document).on('change', "select#dataType", function() {
 <!-- MySQL dump -->
 <hr style="margin-top:50px;">
 <h4><?php print _('Create MySQL database dump'); ?></h4>
-<button class="btn btn-sm btn-default" id="MySQLdump"><i class="fa fa-upload"></i> <?php print _('Prepare MySQL dump'); ?></button>
+<button class="btn btn-sm btn-default" id="MySQLdump" csrf="<?php print $csrf; ?>"><i class="fa fa-upload"></i> <?php print _('Prepare MySQL dump'); ?></button>
 
 <!-- XLS dump -->
 <h4><?php print _('Create XLS file of IP addresses'); ?></h4>
-<button class="btn btn-sm btn-default" id="XLSdump"><i class="fa fa-upload"></i> <?php print _('Prepare XLS dump'); ?></button>
+<button class="btn btn-sm btn-default" id="XLSdump" csrf="<?php print $csrf; ?>"><i class="fa fa-upload"></i> <?php print _('Prepare XLS dump'); ?></button>
 
 <!-- XLS dump -->
 <h4><?php print _('Create hostfile dump'); ?></h4>
-<button class="btn btn-sm btn-default" id="hostfileDump"><i class="fa fa-upload"></i> <?php print _('Prepare hostfile dump'); ?></button>
+<button class="btn btn-sm btn-default" id="hostfileDump" csrf="<?php print $csrf; ?>"><i class="fa fa-upload"></i> <?php print _('Prepare hostfile dump'); ?></button>

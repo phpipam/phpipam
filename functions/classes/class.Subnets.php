@@ -110,15 +110,43 @@ class Subnets extends Common_functions {
 	/**
 	 * Returns array of subnet ordering
 	 *
+	 * @param object|false $section
 	 * @access private
 	 * @return void
 	 */
-	private function get_subnet_order () {
-	    $this->get_settings ();
-	    return pf_explode(",", $this->settings->subnetOrdering);
+	private function get_subnet_order($section) {
+		$this->get_settings();
+		$order = $this->settings->subnetOrdering;
+
+		if (is_object($section) && !is_blank($section->subnetOrdering) && $section->subnetOrdering != "default") {
+			$order = $section->subnetOrdering;
+		}
+
+		if (!in_array($order, array_keys($this->get_valid_subnet_orderings(false)))) {
+			$order = "subnet,asc";
+		}
+		return explode(",", $order);
 	}
 
-
+	/**
+	 * Returns array of valud subnet orderings
+	 *
+	 * @param bool $default
+	 * @return array
+	 */
+	public function get_valid_subnet_orderings($default) {
+		$opts = [
+			"default"			=> _("Default"),
+			"subnet,asc"		=> _("Subnet, ascending"),
+			"subnet,desc"		=> _("Subnet, descending"),
+			"description,asc"	=> _("Description, ascending"),
+			"description,desc"	=> _("Description, descending"),
+		];
+		if (!$default) {
+			unset($opts["default"]);
+		}
+		return $opts;
+	}
 
 
 
@@ -523,14 +551,9 @@ class Subnets extends Common_functions {
 	 * @return array|false
 	 */
 	public function fetch_section_subnets ($sectionId, $field = false, $value = false, $result_fields = "*") {
-		# fetch settings and set subnet ordering
-		$this->get_settings();
-
-		$order = $this->get_subnet_order ();
-
 		# section ordering - overrides network
 		$section  = $this->fetch_object ("sections", "id", $sectionId);
-		if(@$section->subnetOrdering!="default" && !is_blank(@$section->subnetOrdering) ) 	{ $order = pf_explode(',', $section->subnetOrdering); }
+		$order = $this->get_subnet_order($section);
 
 		// subnet fix
 		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
@@ -829,14 +852,9 @@ class Subnets extends Common_functions {
 	 * @return array|false
 	 */
 	public function fetch_vlan_subnets ($vlanId, $sectionId=null) {
-		# fetch settings and set subnet ordering
-		$this->get_settings();
-
-		$order = $this->get_subnet_order ();
-
 		# section ordering - overrides network
 		$section  = $this->fetch_object ("sections", "id", $sectionId);
-		if(@$section->subnetOrdering!="default" && !is_blank(@$section->subnetOrdering) ) 	{ $order = pf_explode(',', $section->subnetOrdering); }
+		$order = $this->get_subnet_order($section);
 
 		// subnet fix
 		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
@@ -921,14 +939,9 @@ class Subnets extends Common_functions {
 	 * @return array|false
 	 */
 	public function fetch_vrf_subnets ($vrfId, $sectionId=null) {
-		# fetch settings and set subnet ordering
-		$this->get_settings();
-
-		$order = $this->get_subnet_order ();
-
 		# section ordering - overrides network
 		$section  = $this->fetch_object ("sections", "id", $sectionId);
-		if(@$section->subnetOrdering!="default" && !is_blank(@$section->subnetOrdering) ) 	{ $order = pf_explode(',', $section->subnetOrdering); }
+		$order = $this->get_subnet_order($section);
 
 		// subnet fix
 		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
@@ -3378,7 +3391,7 @@ class Subnets extends Common_functions {
 		if(!is_numeric($sectionId))		{ $this->Result->show("danger", _("Invalid ID"), true); }
 
 		$folders = array();
-		$section_subnets = $this->fetch_section_subnets ($sectionId, false, false, array('id', 'masterSubnetId', 'isFolder', 'subnet', 'mask', 'description'));
+		$section_subnets = $this->fetch_section_subnets ($sectionId, false, false);
 		if (!is_array($section_subnets)) $section_subnets = array();
 
 		foreach($section_subnets as $subnet) {

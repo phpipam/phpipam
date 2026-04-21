@@ -323,7 +323,7 @@ class Addresses extends Common_functions {
 	 * @param object $address
 	 * @param mixed $linked_field
 	 * @param mixed $value
-	 * @return void
+	 * @return array|false
 	 */
 	public function search_similar_addresses ($address, $linked_field, $value) {
 		// sanity checks
@@ -1562,7 +1562,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param array $addresses
-	 * @return void
+	 * @return array
 	 */
 	public function compress_address_ranges ($addresses, $state=4) {
     	# set size

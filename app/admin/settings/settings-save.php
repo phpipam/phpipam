@@ -11,11 +11,15 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
+$Subnets	= new Subnets ($Database);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
+
 # check if site is demo
 $User->is_demo();
 
@@ -52,6 +56,10 @@ if (!in_array("gd", get_loaded_extensions()))                               { $R
 //remove link_field if None
 if ($POST->link_field=="None") $POST->link_field = "";
 
+if (!in_array($POST->subnetOrdering, array_keys($Subnets->get_valid_subnet_orderings(false)))) {
+	$Result->show("danger", _("Invalid subnetOrdering"), true);
+}
+
 # set update values
 $values = array("id"=>1,
 				//site settings
@@ -70,6 +78,8 @@ $values = array("id"=>1,
 				"enableIPrequests"    =>$Admin->verify_checkbox($POST->enableIPrequests),
 				"enableMulticast"     =>$Admin->verify_checkbox($POST->enableMulticast),
 				"enableRACK"          =>$Admin->verify_checkbox($POST->enableRACK),
+				"rackImageFormat"     =>$POST->rackImageFormat,
+				"rackAllowOverlap"    =>$Admin->verify_checkbox($POST->rackAllowOverlap),
 				"enableCircuits"      =>$Admin->verify_checkbox($POST->enableCircuits),
 				"enableLocations"     =>$Admin->verify_checkbox($POST->enableLocations),
 				"enableSNMP"          =>$Admin->verify_checkbox($POST->enableSNMP),

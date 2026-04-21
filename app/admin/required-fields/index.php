@@ -7,6 +7,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 // get all fields in IP table
 foreach($Tools->fetch_standard_fields("ipaddresses") as $s) {

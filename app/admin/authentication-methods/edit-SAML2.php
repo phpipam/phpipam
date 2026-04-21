@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 $version = db_json_decode(@file_get_contents(dirname(__FILE__).'/../../../functions/php-saml/src/Saml2/version.json'), true);
 $version = @$version['php-saml']['version'];
@@ -26,9 +28,9 @@ if($POST->action!="add") {
 	$method_settings->params = db_json_decode($method_settings->params);
 }
 else {
-	$method_settings = new StdClass ();
+	$method_settings = new Params ();
 	# set default values
-	$method_settings->params = new StdClass ();
+	$method_settings->params = new Params ();
 	$method_settings->params->clientId = $User->createURL().create_link();
 	$method_settings->params->strict = "1";
 	$method_settings->params->idpissuer = "";

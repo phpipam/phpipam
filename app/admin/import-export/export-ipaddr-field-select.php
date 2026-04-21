@@ -13,9 +13,15 @@ $User		= new User ($Database);
 $Admin		= new Admin ($Database);
 $Tools		= new Tools ($Database);
 $Sections	= new Sections ($Database);
+$Result		= new Result();
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
+
+# validate csrf cookie
+$User->Crypto->csrf_cookie ("validate", "generate-export", $GET->csrf) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # Won't check per subnet/section rights since this is an admin section, where the admin user has full access
 
@@ -156,6 +162,6 @@ print '</form>';
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="ipaddr"><i class="fa fa-upload"></i> <?php print _('Export'); ?></button>
+		<button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="ipaddr" csrf="<?php print $GET->csrf; ?>"><i class="fa fa-upload"></i> <?php print _('Export'); ?></button>
 	</div>
 </div>

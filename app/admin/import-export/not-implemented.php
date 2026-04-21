@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Not implemented message 
+ * Not implemented message
  */
 
 # include required scripts
@@ -13,7 +13,8 @@ $User 		= new User ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
-
+# admin check
+$User->is_admin();
 ?>
 
 <!-- header -->

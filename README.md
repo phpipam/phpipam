@@ -16,7 +16,8 @@ to be able to display javascript quickly and correctly.
 ## Branches
  - MASTER: Latest stable release
  - DEVELOP: Current development branch
- - 1.7: Maintenance branch for 1.7.x releases
+ - 1.8: Maintenance branch for 1.8.x releases
+ - 1.7: Maintenance branch for 1.7.x releases (obsolete)
  - 1.6: Maintenance branch for 1.6.x releases (obsolete)
  - 1.5: Maintenance branch for 1.5.x releases (obsolete)
  - 1.4: Maintenance branch for 1.4.x releases (obsolete)
@@ -30,7 +31,8 @@ phpIPAM has been developed and tested on the following PHP versions.\
 The use of untested PHP versions is unsupported and may result in compatibility issues.
 
 - MASTER: See latest 1.x.y release version
-- DEVELOP: PHP versions 7.2 to 8.4
+- DEVELOP: PHP versions 7.2 to 8.5
+- 1.8.x: PHP versions 7.2 to 8.5
 - 1.7.x: PHP versions 7.2 to 8.3
 - 1.6.x: PHP versions 7.2 to 8.3
 - 1.5.x: PHP versions 5.4 to 7.4

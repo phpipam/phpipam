@@ -10,6 +10,11 @@ if (!isset($Tools)) { $Tools = new Tools ($Database); }
 # verify that user is logged in, to guard against direct access of page and possible exploits
 $User->check_user_session();
 
+# make sure user has access
+if ($User->get_module_permissions("vaults") < User::ACCESS_RW) {
+	$Result->show("danger", _("Insufficient privileges") . ".", true, true);
+}
+
 # Don't corrupt output with php errors!
 disable_php_errors();
 

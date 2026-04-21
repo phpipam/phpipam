@@ -3,6 +3,11 @@
 # Check we have been included and not called directly
 require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
+# verify that user is logged in
+$User->check_user_session();
+# perm check
+$User->check_module_permissions("circuits", User::ACCESS_R, true, false);
+
 ?>
 <ul class='nav nav-tabs' style='margin-top:0px;margin-bottom:20px;'>
     <li role='presentation' <?php if(!isset($GET->subnetId)||is_numeric($GET->subnetId)) print " class='active'"; ?>>
@@ -19,7 +24,7 @@ require( dirname(__FILE__) . '/../../../functions/include-only.php' );
         <a href='<?php print create_link($GET->page, "circuits", "circuit_map"); ?>'><?php print _("Circuit map"); ?></a>
     </li>
 	<?php } ?>
-    <?php if($User->is_admin(false)) { ?>
+    <?php if($User->check_module_permissions("circuits", User::ACCESS_RWA, false, false)) { ?>
     <li role='presentation' <?php if($GET->subnetId=="options") print " class='active'"; ?>>
         <a href='<?php print create_link($GET->page, "circuits", "options"); ?>'><?php print _("Options"); ?></a>
     </li>

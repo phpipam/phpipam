@@ -28,6 +28,9 @@ $Result		= new Result();
 if( php_sapi_name()!="cli" ) { $Result->show_cli("cli only\n", true); }
 
 # set all subnet ids
+if(!isset($config['resolve_subnets'])) {
+	$config['resolve_subnets'] = []; // Init the subnet array as empty array if not set.
+}
 $resolved_subnets = $Database->findObjects("subnets", "resolveDNS", "1", 'id', true);
 if(is_array($resolved_subnets)) {
 	foreach ($resolved_subnets as $s) {
@@ -98,6 +101,6 @@ if (is_array($ipaddresses)) {
 
 # if verbose print result so it can be emailed via cron!
 if($config['resolve_verbose'] == true && isset($res)) {
-	print implode("\n", $res);
+	print implode("\n", $res)."\n";
 }
 ?>

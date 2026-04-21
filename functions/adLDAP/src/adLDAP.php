@@ -339,10 +339,10 @@ class adLDAP {
      * @return adLDAPComputers
      */
     public function computer() {
-        if (!$this->computerClass) {
-            $this->computerClass = new adLDAPComputers($this);
+        if (!$this->computersClass) {
+            $this->computersClass = new adLDAPComputers($this);
         }
-        return $this->computerClass;
+        return $this->computersClass;
     }
 
     /**
@@ -588,7 +588,7 @@ class adLDAP {
     * @throws Exception - if unable to bind to Domain Controller
     * @return bool
     */
-    function __construct($options = array()) {
+    public function __construct($options = array()) {
         // You can specifically overide any of the default configuration options setup above
         if (count($options) > 0) {
             if (array_key_exists("account_suffix", $options)) { $this->accountSuffix = $options["account_suffix"]; }
@@ -628,7 +628,7 @@ class adLDAP {
      *
      * @return void
      */
-    function __destruct() {
+    public function __destruct() {
         $this->close();
     }
 
@@ -766,7 +766,7 @@ class adLDAP {
     public function getRootDse($attributes = array("*", "+")) {
         if (!$this->ldapBind) { return (false); }
 
-        $sr = @ldap_read($this->ldapConnection, NULL, 'objectClass=*', $attributes);
+        $sr = @ldap_read($this->ldapConnection, "(objectclass=*)", 'objectClass=*', $attributes);
         $entries = @ldap_get_entries($this->ldapConnection, $sr);
         return $entries;
     }
@@ -910,7 +910,7 @@ class adLDAP {
             }
         }
         if ($encode === true && $key != 'password') {
-            $item = utf8_encode($item);
+            $item = mb_convert_encoding($item, 'UTF-8', 'ISO-8859-1');
         }
     }
 
@@ -971,5 +971,3 @@ class adLDAP {
 * }
 */
 class adLDAPException extends Exception {}
-
-?>

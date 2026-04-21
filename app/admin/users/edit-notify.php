@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # fetch users to receive notification and filter
 $users = $Admin->fetch_multiple_objects ("users", "role", "Administrator");
@@ -54,6 +56,7 @@ try {
 	$content[] = "</table>";
 
 	# plain
+	$content_plain = [];
 	$content_plain[] = "$subject"."\r\n------------------------------\r\n";
 	$content_plain[] = _("Name").": ".$POST->real_name;
 	# we dont need pass for domain account

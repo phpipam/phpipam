@@ -14,6 +14,8 @@ $User		= new User ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # load data from uploaded file
 include 'import-load-data.php';
@@ -33,7 +35,7 @@ print '<h4>'._("Uploaded data").'</h4><hr>';
 print _("The entries marked with ")."<i class='fa ".$icons['add']."'></i>, "._("will be added,
 	the ones marked with ")."<i class='fa ".$icons['edit']."'></i>, "._("will be updated
 	and the ones marked with ")."<i class='fa ".$icons['skip']."'></i> "._("will be skipped.");
-	
+
 print "<b>"._("Summary: ")."</b>".($counters['add'] > 0 ? $counters['add'] : "no")._(" new entries.
 		").($counters['edit'] > 0 ? $counters['edit'] : "no")._(" updated entries.
 		").($counters['error'] > 0 ? $counters['error'] : "no")._(" entries skipped due to errors.

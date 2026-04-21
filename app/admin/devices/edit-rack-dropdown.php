@@ -1,6 +1,15 @@
 <?php
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
+# verify that user is logged in
+$User->check_user_session();
+# perm check popup
+if ($POST->action == "edit") {
+	$User->check_module_permissions("devices", User::ACCESS_RW, true, true);
+} else {
+	$User->check_module_permissions("devices", User::ACCESS_RWA, true, true);
+}
+
 /**
  * Print dropdown menu for rack selection of device
  *
@@ -68,7 +77,7 @@ if($POST->rackid>0 || @$device['rack']>0) {
 	<tr>
 	    <td><?php print _('Start position'); ?></td>
 	    <td>
-			<select name="rack_start" class="form-control input-sm input-w-auto">
+			<select name="rack_start" class="form-control input-sm input-w-auto" style="min-width:70px">
 			<?php
 			// print available spaces
 			if($rack->hasBack!="0") {
@@ -101,6 +110,12 @@ if($POST->rackid>0 || @$device['rack']>0) {
 	    <td>
 	        <input type="text" name="rack_size" size="2" class="form-control input-w-auto input-sm" style="width:100px;" placeholder="1" value="<?php print @$device['rack_size']; ?>">
 	    </td>
+	</tr>
+	<tr>
+		<td><?php print _('Full Depth'); ?></td>
+		<td>
+			<input type="checkbox" class="input-switch" name="rack_deep" value="1" <?php if(@$device['rack_deep'] == 1) print 'checked'; ?>>
+		</td>
 	</tr>
 <?php
 }

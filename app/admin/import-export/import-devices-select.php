@@ -15,6 +15,8 @@ $Admin 		= new Admin ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 $tpl_field_names = "";
 $tpl_field_types = "";
@@ -47,7 +49,7 @@ $extfields["section"]["pname"] = "section";
 // $extfields["tag"]["table"] = "ipTags";
 // $extfields["tag"]["field"] = "type";
 // $extfields["tag"]["pname"] = "tag";
-// 
+//
 // ## using the extra fields as a trick to display some nicer names for these regular fields
 // $extfields["ip_addr"]["table"] = "ipaddresses";
 // $extfields["ip_addr"]["field"] = "ip_addr";

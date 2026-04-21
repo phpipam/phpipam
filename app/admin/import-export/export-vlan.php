@@ -8,6 +8,9 @@
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 # initialize required objects
 $Database 	= new Database_PDO;
 $Result		= new Result;
@@ -17,6 +20,22 @@ $Tools	    = new Tools ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
+
+# validate csrf cookie
+if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === false) {
+	$content  = _("Invalid CSRF cookie");
+
+	header("Cache-Control: private");
+	header("Content-Description: File Transfer");
+	header("Content-Type: application/octet-stream");
+	header('Content-Disposition: attachment; filename="' . "error_message.txt" . '"');
+	header("Content-Length: " . strlen($content));
+
+	print($content);
+	exit();
+}
 
 # fetch all l2 domains
 $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
@@ -133,7 +152,8 @@ foreach ($vlan_domains as $vlan_domain) {
 					$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
 
 					if( $GET->{$myField['nameTemp']} == "on" ) {
-						$worksheet->write($curRow, $curColumn, $vlan[$myField['name']], $format_text);
+						$custom_value = isset($vlan[$myField['name']]) ? $vlan[$myField['name']] : '';
+						$worksheet->write($curRow, $curColumn, $custom_value, $format_text);
 						$curColumn++;
 					}
 				}

@@ -14,11 +14,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # perm check popup
-if($POST->action=="edit") {
-    $User->check_module_permissions ("locations", User::ACCESS_RW, true, false);
-}
-else {
-    $User->check_module_permissions ("locations", User::ACCESS_RWA, true, false);
+if ($POST->action == "edit") {
+    $User->check_module_permissions("locations", User::ACCESS_RW, true, false);
+} else {
+    $User->check_module_permissions("locations", User::ACCESS_RWA, true, false);
 }
 
 # check maintaneance mode

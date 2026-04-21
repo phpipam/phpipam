@@ -17,7 +17,9 @@ if(!is_numeric($POST->subnetId))                        { $Result->show("danger"
 $cmd = sprintf("%s '%s/../../../functions/scan/subnet-scan-icmp-execute.php' 'update' %s", escapeshellcmd($Scan->php_exec), dirname(__FILE__), escapeshellarg($POST->subnetId));
 
 # save result to $output
-exec($cmd, $output, $retval);
+if (exec($cmd, $output, $retval) === false) {
+	$Result->show("danger", _("Exec failed") . ": " . escape_input($cmd), true);
+}
 
 # format result back to object
 $output = array_values(array_filter($output));

@@ -6,12 +6,14 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("pdns", User::ACCESS_R, true, false);
 
 # fetch unique IPs
 $unique_ips = $PowerDNS->search_unique_ips ();
 
 # validate
-if ($unique_ips===false)	{ $Result->show ("info", _("No host records available"), false); }
+if (!is_array($unique_ips))	{ $Result->show ("info", _("No host records available"), false); }
 else {
 	# set order
 	$PowerDNS->set_query_values (10000, "name,type", " asc");

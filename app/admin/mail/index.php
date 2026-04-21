@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # fetch mail settings
 $mail_settings = $Admin->fetch_object("settingsMail", "id", 1);

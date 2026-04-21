@@ -25,7 +25,9 @@ $content = "";
 $filename = "";
 
 # make sure user has access
-if ($User->get_module_permissions ("vaults")<User::ACCESS_RW) { $content = "Insufficient privileges"; }
+if ($User->get_module_permissions("vaults") < User::ACCESS_RW) {
+	$Result->show("danger", _("Insufficient privileges") . ".", true, true);
+}
 
 // set vaultx pass variable
 $vault_id = "vault".$GET->vaultid;

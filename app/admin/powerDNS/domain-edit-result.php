@@ -21,11 +21,10 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # perm check popup
-if($POST->action=="edit") {
-    $User->check_module_permissions ("pdns", User::ACCESS_RW, true, false);
-}
-else {
-    $User->check_module_permissions ("pdns", User::ACCESS_RWA, true, false);
+if ($POST->action == "edit") {
+	$User->check_module_permissions("pdns", User::ACCESS_RW, true, false);
+} else {
+	$User->check_module_permissions("pdns", User::ACCESS_RWA, true, false);
 }
 
 # validate csrf cookie

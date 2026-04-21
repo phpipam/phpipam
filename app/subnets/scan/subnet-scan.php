@@ -24,7 +24,7 @@ $csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "scan");
 if(!is_numeric($POST->subnetId))										{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # verify that user has write permissionss for subnet
-if($Subnets->check_permission ($User->user, $POST->subnetId) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
+if($Subnets->check_permission ($User->user, $POST->subnetId) < 2) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
 
 # Check if scanning has been disabled
 if($User->settings->scanPingType=="none") { $Result->show("danger", _('Scanning disabled').' (scanPingType=None)', true, true); }

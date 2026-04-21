@@ -84,7 +84,7 @@ foreach ($scan_devices as $d) {
 }
 
 # none and errors
-if(sizeof($new_vrfs)==0 && isset($errors)) {
+if(sizeof($new_vrfs)==0 && isset($errors) && is_array($errors)) {
     $Result->show("info", _("No vrfs found"), false);
     $Result->show("warning", implode("<hr>", $errors), false);
 }
@@ -169,7 +169,7 @@ else {
 	print "</form>";
 
     // print errors
-    if (isset($errors)) {
+    if (isset($errors) && is_array($errors)) {
         print "<hr>";
         foreach ($errors as $e) {
             print $Result->show ("warning", $e, false);

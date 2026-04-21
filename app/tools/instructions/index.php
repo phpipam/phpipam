@@ -6,7 +6,7 @@ if (!isset($User)) { exit(); }
  **********************************************/
 
 /* fetch instructions and print them in instructions div */
-$instructions = $Tools->fetch_instructions(1);
+$instructions = $Tools->parsedown_instructions(1);
 
 // HSS header
 header('X-XSS-Protection:1; mode=block');

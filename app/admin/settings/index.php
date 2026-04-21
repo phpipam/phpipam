@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# admin check
+$User->is_admin();
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "settings");
@@ -376,6 +378,32 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<tr>
+	<td class="title"><?php print _('Rack image format'); ?></td>
+	<td>
+		<select name="rackImageFormat" class="form-control input-sm input-w-auto">
+		<?php
+			print "<option value='png'>"._('PNG')."</option>";
+			if($settings['rackImageFormat']=="svg") { print "<option value='svg' selected='selected'>"._('SVG')."</option>"; }
+			else									{ print "<option value='svg'>"._('SVG')."</option>"; }
+		?>
+		</select>
+	</td>
+	<td class="info2">
+		<?php print _('Set which image format should be used for rack drawings'); ?>
+	</td>
+</tr>
+
+<tr>
+	<td class="title"><?php print _('Allow rack overlaps'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="rackAllowOverlap" <?php if($settings['rackAllowOverlap'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Allow multiple devices to overlap inside a rack'); ?>
+	</td>
+</tr>
+
 <!-- Circuits -->
 <tr>
 	<td class="title"><?php print _('Circuits module'); ?></td>
@@ -687,13 +715,7 @@ $(document).ready(function() {
 	<td>
 		<select name="subnetOrdering" class="form-control input-sm input-w-auto">
 			<?php
-			$opts = array(
-				"subnet,asc"		=> _("Subnet, ascending"),
-				"subnet,desc"		=> _("Subnet, descending"),
-				"description,asc"	=> _("Description, ascending"),
-				"description,desc"	=> _("Description, descending"),
-			);
-
+			$opts = $Subnets->get_valid_subnet_orderings(false);
 			foreach($opts as $key=>$line) {
 				if($settings['subnetOrdering'] == $key) { print "<option value='$key' selected>$line</option>"; }
 				else 									{ print "<option value='$key'>$line</option>"; }

@@ -73,7 +73,7 @@ class Net_DNS2_Question
      * @access public
      *
      */
-    public function __construct(Net_DNS2_Packet &$packet = null)
+    public function __construct(?Net_DNS2_Packet &$packet = null)
     {
         if (!is_null($packet)) {
 
