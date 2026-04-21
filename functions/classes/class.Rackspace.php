@@ -28,16 +28,6 @@ class phpipam_rack extends Tools {
     public $all_racks = false;
 
     /**
-     * Content of current rack
-     *
-     * (default value: array())
-     *
-     * @var array
-     * @access private
-     */
-    private $rack_content = array();
-
-    /**
      * Rack
      *
      * @var Rack
@@ -206,8 +196,7 @@ class phpipam_rack extends Tools {
      */
     public function free_u($rack, $rack_devices, $rack_contents, $current_device = null) {
         $current_device      = new Params($current_device);
-        $current_device_size = isset($current_device->rack_size) ? $current_device->rack_size : 0;
-        $current_device_size = ($current_device->rack_size > 0) ? $current_device->rack_size-1 : 0;
+        $current_device_size = (isset($current_device->rack_size) && $current_device->rack_size > 0) ? $current_device->rack_size-1 : 0;
 
         // available spaces
         $available_front = [];
@@ -635,7 +624,8 @@ class phpipam_rack extends Tools {
 			if ($device_start>$rack->size) $request = array_merge($request,range($device_start-$rack->size,$device_start-$rack->size+$device_size-1));
 			else $request = array_merge($request,range($device_start+$rack->size,$device_start+$rack->size+$device_size-1));
 		}
-		foreach ($this->fetch_rack_devices ($rack->id) as $d) {
+		$rack_devices = $this->fetch_rack_devices ($rack->id) ? : [];
+		foreach ($rack_devices as $d) {
 			# bypass comparison if it's the current device
 			if ($d->id==$current_device_id) continue;
 			foreach (range($d->rack_start,$d->rack_start + $d->rack_size - 1) as $ru) {
@@ -652,7 +642,8 @@ class phpipam_rack extends Tools {
 				}
 			}
 		}
-		foreach ($this->fetch_rack_contents ($rack->id) as $c) {
+		$rack_content = $this->fetch_rack_contents ($rack->id) ? : [];
+		foreach ($rack_content as $c) {
 			# bypass comparison if it's the current content
 			if ($c->id==$current_content_id) continue;
 			foreach (range($c->rack_start,$c->rack_start + $c->rack_size - 1) as $ru) {
@@ -821,8 +812,6 @@ class RackDrawer extends Common_functions {
      * @return void
      */
     private function imageCenterString($img, $text, $color) {
-        $font = 0;
-        $num = Array( Array(6, -8), Array(4.7, 6), Array(5.6, 12), Array(6.5, 12), Array(7.6, 16), Array(8.5, 16));
         $width = ceil(mb_strlen($text) * 6.6);
         $x = imagesx($img) - $width - 8;
         $y = Imagesy($img) +9;
@@ -909,6 +898,14 @@ class Model {
  * RackDrawer_SVG
  */
 class RackDrawer_SVG extends Common_functions {
+
+	/**
+	 * rack
+	 *
+	 * @var mixed
+	 * @access private
+	 */
+	private $rack;
 
 	/**
 	 * Output image height
@@ -1186,10 +1183,12 @@ class RackDrawer_SVG extends Common_functions {
 					$this_y = $cornerstone_y + (($blade->getStartLocation() - 0) * ($blade_h + $subrack_margin));
 					$this_h = ($blade_h * $blade->getSize()) + ($subrack_margin * ($blade->getSize() - 1));
 					$class = ($blade->isActive()) ? "active" : "inactive";
-					if ($blade->getUrl()) $queue[] = "<a href='{$blade->getUrl()}' target='_parent'>";
+					// Chrome won't render nested <a>
+					// if ($blade->getUrl()) $queue[] = "<a href='{$blade->getUrl()}' target='_parent'>";
 					$queue[] = "<rect class='{$class}' width='{$blade_w}' height='{$this_h}' x='{$cornerstone_x}' y='{$this_y}' style='fill:{$blade->getBgcolor()};' {$transform} />";
 					if (strlen($content->getName())>0) $queue[] = "<text class='device' x='".($this->marginSides + ($blade_w / 2))."' y='".($this_y + (.7 * $blade_h * $blade->getSize()))."' style='fill:{$blade->getFgcolor()};stroke:{$blade->getFgcolor()};font-size:10px;' {$transform}>{$blade->getName()}</text>";
-					if ($blade->getUrl()) $queue[] = "</a>";
+					// Chrome won't render nested <a>
+					// if ($blade->getUrl()) $queue[] = "</a>";
 				}
 			} else {
 				$y = $y + (($size - 1) * $this->unitYSize / 2); // increase the height by .5RU for each device whose size exceeds 1 RU

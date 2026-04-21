@@ -56,7 +56,7 @@ elseif($POST->action=="delete") {
 
 # if subrack is being enabled, prevent nesting subracks
 if ($POST->subrack=="1") {
-	$rack_content = $Racks->fetch_rack_contents ($rack_details->id);
+	$rack_content = $Racks->fetch_rack_contents ($rack_details->id) ? : [];
 	foreach ($rack_content as $c) {
 		if ($c->subrackId>0) 	{ $Result->show("danger", _('Nesting subracks is not allowed').'!', true); }
 	}
