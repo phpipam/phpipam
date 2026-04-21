@@ -107,6 +107,21 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         </tr>
         <?php } ?>
 
+		<!-- row -->
+		<tr>
+			<th><?php print _("Row"); ?></th>
+			<td><?php print $rack->row; ?></td>
+		</tr>
+
+		<?php if ($rack->subrack) {
+		print "<tr>";
+		print " <th>"._('Subrack')."</th>";
+		$parent = $Racks->find_subrack_parent($rack->id);
+		if ($parent===false) print " <td>"._('Orphaned')."</td>";
+		else print " <td>"._('Inside')." <a href='".create_link("tools", "racks", $parent->id)."'>".$parent->name."</a></td>";
+		print "</tr>";
+		} ?>
+
         <?php if ($User->settings->enableCustomers=="1" &&  $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
         <tr>
             <td colspan='2'><hr></td>
@@ -179,17 +194,83 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         // devices
         if ($rack_devices===false && $rack_contents===false) {
             print " <span class='text-muted'>"._("Rack is empty")."</span>";
-            if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
-                print " <hr>";
-                print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
-                print "<br>";
-                print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='content'><i class='fa fa-plus'></i></a> "._("Add custom equipment");
-            }
         }
         else {
             if ($rack_devices===false) $rack_devices = array();
             if ($rack_contents===false) $rack_contents = array();
 
+			// let's make an array where the RU position is the lookup key
+			$all_contents = array();
+			foreach ($rack_devices as $this_device) {
+				if (!isset($all_contents[$this_device->rack_start])) {
+					$all_contents[$this_device->rack_start] = array();
+				}
+				$all_contents[$this_device->rack_start][] = $this_device;
+			}
+			foreach ($rack_contents as $this_content) {
+				if (!isset($all_contents[$this_content->rack_start])) {
+					$all_contents[$this_content->rack_start] = array();
+				}
+				$all_contents[$this_content->rack_start][] = $this_content;
+			}
+
+			$loops = array();
+			$loops[] = ($rack->topDown) ? array("values"=>range(1,$rack->size),"label"=>"Front side") : array("values"=>range($rack->size,1),"label"=>"Front side");
+			if ($rack->hasBack) $loops[] = ($rack->topDown) ? array("values"=>range($rack->size + 1,2 * $rack->size),"label"=>"Back side") : array("values"=>range(2 * $rack->size,$rack->size+1),"label"=>"Back side");
+
+			// find contents that are in invalid positions
+			$invalid = array();
+			foreach (array_keys($all_contents) as $key) {
+				$max = ($rack->hasBack) ? $rack->size * 2 : $rack->size;
+				if ($key > $max || $key < 1) {
+					$invalid[] = $key;
+				}
+			}
+			$loops[] = array("values"=>$invalid,"label"=>"Invalid");
+
+			// iterate through all rack items, front first, then back, following topDown or !topDown order
+			$outputCount = 0;
+			foreach ($loops as $loop) {
+				$prev = false;
+				foreach ($loop['values'] as $i) {
+					if (isset($all_contents[$i])) {
+						foreach ($all_contents[$i] as $cur) {
+							$error = "";
+							// detect whether device or content
+							$itemType = (property_exists($cur,'hostname')) ? "device" : "content";
+							// check for collisions, overflows, invalid sizes, invalid locations, etc
+							if (property_exists($cur,'hostname')) {
+								// if it has a hostname, then it's a device
+								$error = ($Racks->check_device_overlap($rack->id,$cur->rack_start,$cur->rack_size,$cur->rack_deep,$cur->id)) ? "alert-danger" : $error;
+							} elseif (property_exists($cur,'name')) {
+								// if it has a name, then it's a content
+								$error = ($Racks->check_device_overlap($rack->id,$cur->rack_start,$cur->rack_size,"0",null,$cur->id)) ? "alert-danger" : $error;
+							}
+							$error = ($Racks->check_device_overflow($rack->id,$cur->rack_start,$cur->rack_size)) ? "alert-danger" : $error;
+							$error = ($loop['label']=="Invalid") ? "alert-danger" : $error;
+							$error = (!is_numeric($cur->rack_size)) ? "alert-danger" : $error;
+							$error = ($cur->rack_size<1) ? "alert-danger" : $error;
+
+							if ($prev===false) { if ($outputCount>0) print "<hr>"; print _($loop['label']).":<br>"; }
+							if ($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
+								print "<a href='' class='btn btn-xs btn-default btn-danger editRackDevice' data-action='remove' rel='tooltip' data-html='true' data-placement='left' title='"._("Remove")."' data-action='remove' style='margin-bottom:2px;margin-right:5px;' data-rackid='$rack->id' data-deviceid='$cur->id' data-devicetype='{$itemType}' data-csrf='".$User->Crypto->csrf_cookie ("create-if-not-exists", "rack_devices_".$rack->id."_device_".$cur->id)."'><i class='fa fa-times'></i></a> ";
+							}
+							print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $cur->rack_start_print, "._("Size").": $cur->rack_size U</span>";
+							if (isset($cur->hostname)) {
+								print " <a href='".create_link("tools", "devices", $cur->id)."'>$cur->hostname</a><br>";
+							} else {
+								print " $cur->name<br>";
+							}
+							$prev = $cur;
+							$outputCount+=1;
+						}
+						unset($all_contents[$i]);
+					}
+				}
+			}
+
+/*
+ * keeping this code here on purpose for comparison in case issues pop up in the next week 2025-03-23
             reset($rack_devices);
             reset($rack_contents);
             $prev = false;
@@ -246,14 +327,17 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
                 # next
                 $prev = $cur;
             } while ($cur);
+*/
 
-            //add / remove device from rack
-            if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
-                print "<hr>";
-                print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
-                print "<br>";
-                print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='content'><i class='fa fa-plus'></i></a> "._("Add custom equipment");
-            }
+        }
+        //add / remove device from rack
+        if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
+            print "<hr>";
+            print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
+            print "<br>";
+            print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='content'><i class='fa fa-plus'></i></a> "._("Add custom equipment");
+            print "<br>";
+            print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='subrack'><i class='fa fa-plus'></i></a> "._("Add subrack");
         }
         print "</td>";
         print "</tr>";
@@ -264,10 +348,20 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         <tr><td colspan='2' style="padding-top:50px !important;"><hr></td></tr>
         <tr>
             <td colspan="2">
-                <img src="<?php print $Tools->create_rack_link ($rack->id); ?>" style='width:200px;'>
-                <?php if($rack->hasBack!="0") { ?>
-                <img src="<?php print $Tools->create_rack_link ($rack->id, NULL, true); ?>" style='width:200px;margin-left:5px;'>
-                <?php } ?>
+				<?php
+				if($User->settings->rackImageFormat=="svg") {
+					print '<object data="' . $Tools->create_rack_link ($rack->id) . '" style="width:auto;height:auto;"></object>';
+				} else {
+					print '<img src="' . $Tools->create_rack_link ($rack->id) . '" style="width:200px;">';
+				}
+				if($rack->hasBack!="0") {
+					if($User->settings->rackImageFormat=="svg") {
+						print '<object data="' . $Tools->create_rack_link ($rack->id, NULL, true) . '" style="width:auto;height:auto;margin-left:5px;"></object>';
+					} else {
+						print '<img src="' . $Tools->create_rack_link ($rack->id, NULL, true) . '" style="width:200px;margin-left:5px;">';
+					}
+				}
+				?>
             </td>
         </tr>
         <?php } ?>
@@ -297,10 +391,20 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
     <!-- image -->
     <?php if(!($User->settings->enableLocations==1 && !is_blank($rack->location) && $rack->location!=0)) { ?>
     <div class="col-xs-12 col-md-6">
-        <?php if($rack->hasBack!="0") { ?>
-        <img src="<?php print $Tools->create_rack_link ($rack->id, NULL, true); ?>" style='width:200px;margin-left:5px;float:right;'>
-        <?php } ?>
-        <img src="<?php print $Tools->create_rack_link ($rack->id); ?>" style='width:200px;float:right;'>
+		<?php
+		if($rack->hasBack!="0") {
+			if($User->settings->rackImageFormat=="svg") {
+				print '<object data="' . $Tools->create_rack_link ($rack->id, NULL, true) . '" style="width:auto;height:auto;margin-left:5px;float:right;"></object>';
+			} else {
+				print '<img src="' . $Tools->create_rack_link ($rack->id, NULL, true) . '" style="width:200px;margin-left:5px;float:right;">';
+			}
+		}
+		if($User->settings->rackImageFormat=="svg") {
+			print '<object data="' . $Tools->create_rack_link ($rack->id) . '" style="width:auto;height:auto;float:right;"></object>';
+		} else {
+			print '<img src="' . $Tools->create_rack_link ($rack->id) . '" style="width:200px;float:right;">';
+		}
+		?>
     </div>
     <?php } ?>
 

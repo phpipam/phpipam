@@ -30,26 +30,29 @@ else {
 	print '<table id="switchManagement" class="table table-striped table-auto table-top">';
 
 	#headers
+	print "<thead>";
 	print '<tr>';
 	print '	<th>'._('Name').'</th>';
 	print '	<th>'._('Description').'</th>';
+	print '	<th>'._('BG color').'</th>';
+	print '	<th>'._('FG color').'</th>';
 	print '	<th class="actions"></th>';
 	print '</tr>';
+	print "</thead>";
 
 	foreach ($devices as $type) {
-		//cast
-		$type = (array) $type;
-
 		//print details
 		print '<tr>'. "\n";
 
-		print '	<td>'. _($type['tname']) .'</td>'. "\n";
-		print '	<td>'. _($type['tdescription']) .'</td>'. "\n";
+		print '	<td>'. _($type->tname) .'</td>'. "\n";
+		print '	<td>'. _($type->tdescription) .'</td>'. "\n";
+		print '	<td style="background-color:'.$type->bgcolor.' !important">'. $type->bgcolor .'</td>'. "\n";
+		print '	<td style="background-color:'.$type->fgcolor.' !important">'. $type->fgcolor .'</td>'. "\n";
 
 		print '	<td class="actions">'. "\n";
 		print "	<div class='btn-group'>";
-		print "		<button class='btn btn-xs btn-default editDevType' data-action='edit'   data-tid='$type[tid]'><i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default editDevType' data-action='delete' data-tid='$type[tid]'><i class='fa fa-times'></i></button>";
+		print "		<button class='btn btn-xs btn-default editDevType' data-action='edit'   data-tid='{$type->tid}'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default editDevType' data-action='delete' data-tid='{$type->tid}'><i class='fa fa-times'></i></button>";
 		print "	</div>";
 		print '	</td>'. "\n";
 

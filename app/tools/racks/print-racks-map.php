@@ -39,7 +39,8 @@ else {
                 $r->location = "0";
             }
             // save
-            $all_rack_locations[$r->location][] = $r;
+            if (!isset($all_rack_locations[$r->location])) $all_rack_locations[$r->location] = array();
+            $all_rack_locations[$r->location][$r->row][] = $r;
         }
 
         // reorder
@@ -48,7 +49,7 @@ else {
         // print tabs
         if($User->settings->enableLocations=="1") {
             print "<ul class='nav nav-tabs' style='margin-bottom:20px;'>";
-            foreach ($all_rack_locations as $location_id=>$all_racks) {
+            foreach ($all_rack_locations as $location_id=>$all_rows) {
                 // null
                 if($location_id=="0") {
                     $location = new StdClass ();
@@ -68,42 +69,30 @@ else {
             $GET->sPage = 0;
         }
 
-        $m=1;
         // go through locations and print racks
         $sPage = isset($GET->sPage) ? $GET->sPage : null;
-        foreach ($all_rack_locations as $location_id=>$all_racks) {
+        foreach ($all_rack_locations as $location_id=>$all_rows) {
             // only if match
             if($location_id==$sPage) {
-                // null
-                if($location_id=="0") {
-                    $location = new StdClass ();
-                    $location->name = "No location";
-                    $location->description = "Location not set for this racks.";
-                }
-                else {
-                    $location = $Tools->fetch_object ("locations", "id", $location_id);
-                }
-
-                // print
-                if($location!==false) {
+                foreach($all_rows as $row_num=>$all_racks) {
                     // title
-                    if($location_id==0)
-                    print "<h4>$m.) ".$location->name."</h4><hr>";
-                    else
-                    print "<h4><a href='".create_link("tools", "locations", $location_id)."'>$m.) ".$location->name."</a></h4><hr>";
-                    print !is_blank($location->description) ? "<span class='text-muted'>$location->description</span>" : "";
+                    print "<h4>" . _('Row')." {$row_num}</h4><hr>";
                     // racks
-                    print "<div style='margin-bottom:30px;'>";
+                    print "<div style='height:auto;margin-bottom:30px;'>";
                     foreach ($all_racks as $r) {
-                        print "<img src='".$Tools->create_rack_link ($r->id)."'' style='width:180px;margin-right:5px;vertical-align:bottom'>";
-                        // back side?
-                        if($r->hasBack!="0") {
-                        print "<img src='".$Tools->create_rack_link ($r->id, NULL, true)."'' style='width:180px;margin-left:-5px;vertical-align:bottom'>";
+                        if ($User->settings->rackImageFormat=='svg') {
+                            print "<object data='".$Tools->create_rack_link ($r->id)."'' style='width:auto;height:auto;margin-right:5px;vertical-align:bottom;'></object>";
+                            // back side?
+                            if($r->hasBack!="0") 
+                            print "<object data='".$Tools->create_rack_link ($r->id, NULL, true)."'' style='width:auto;height:auto;margin-left:-5px;margin-right:5px;vertical-align:bottom;'></object>";
+                        } else {
+                            print "<img src='".$Tools->create_rack_link ($r->id)."'' style='width:180px;margin-right:5px;vertical-align:bottom'>";
+                            // back side?
+                            if($r->hasBack!="0") 
+                            print "<img src='".$Tools->create_rack_link ($r->id, NULL, true)."'' style='width:180px;margin-left:-5px;margin-right:5px;vertical-align:bottom'>";
                         }
                     }
                     print "</div>";
-
-                    $m++;
                 }
             }
         }

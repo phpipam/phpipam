@@ -177,6 +177,8 @@ CREATE TABLE `settings` (
   `enableSNMP` TINYINT(1)  NULL  DEFAULT '0',
   `enableThreshold` TINYINT(1)  NULL  DEFAULT '1',
   `enableRACK` TINYINT(1)  NULL  DEFAULT '1',
+  `rackImageFormat` ENUM('png','svg') NOT NULL DEFAULT 'svg',
+  `rackAllowOverlap` INT(1) NOT NULL DEFAULT 0,
   `enableLocations` TINYINT(1)  NULL  DEFAULT '1',
   `enablePSTN` TINYINT(1)  NULL  DEFAULT '0',
   `enableChangelog` TINYINT(1)  NOT NULL  DEFAULT '1',
@@ -337,6 +339,7 @@ CREATE TABLE `devices` (
   `rack` int(11) unsigned DEFAULT NULL,
   `rack_start` int(11) unsigned DEFAULT NULL,
   `rack_size` int(11) unsigned DEFAULT NULL,
+  `rack_deep` int(1) NOT NULL DEFAULT 0,
   `location` int(11) unsigned DEFAULT NULL,
   `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -617,6 +620,8 @@ CREATE TABLE `deviceTypes` (
   `tid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `tname` varchar(128) DEFAULT NULL,
   `tdescription` varchar(128) DEFAULT NULL,
+  `bgcolor` varchar(7) DEFAULT '#E6E6E6',
+  `fgcolor` varchar(7) DEFAULT '#000',
   PRIMARY KEY (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /* insert default values */
@@ -795,6 +800,7 @@ CREATE TABLE `racks` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL DEFAULT '',
   `size` int(2) DEFAULT NULL,
+  `subrack` tinyint(1) NOT NULL DEFAULT 0,
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `row` INT(11)  NOT NULL  DEFAULT '1',
   `hasBack` TINYINT(1)  NOT NULL  DEFAULT '0',
@@ -817,6 +823,8 @@ CREATE TABLE `rackContents` (
   `rack` int(11) unsigned DEFAULT NULL,
   `rack_start` int(11) unsigned DEFAULT NULL,
   `rack_size` int(11) unsigned DEFAULT NULL,
+  `rack_deep` tinyint(1) NOT NULL DEFAULT 0,
+  `subrackId` INT(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `rack` (`rack`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1095,4 +1103,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.8";
-UPDATE `settings` SET `dbversion` = 45;
+UPDATE `settings` SET `dbversion` = 46;
