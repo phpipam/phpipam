@@ -63,11 +63,12 @@ if($User->settings->enableLocations != 1)     { unset_array_value($selected_ip_f
 if($User->settings->enableCustomers != 1)     { unset_array_value($selected_ip_fields, 'customer_id'); }
 
 /* Addresses and fields manupulations */
+if (!isset($addresses) || !is_array($addresses))
+	$addresses = [];
 
 # save for visual display !
 $addresses_visual = $addresses;
 # new compress functions
-$addresses=[];
 $Addresses->addresses_types_fetch();
 foreach($Addresses->address_types as $t) {
 	if($t['compress']=="Yes" && $User->user->compressOverride!="Uncompress") {
