@@ -666,7 +666,7 @@ class Net_IPv6
      * @param String  $ip    a valid IPv6-address (hex format)
      * @param boolean $force if true the address will be compresses as best as possible (since 1.2.0)
      *
-     * @return tring the compressed IPv6-address (hex format)
+     * @return string the compressed IPv6-address (hex format)
      * @access public
      * @see    Uncompress()
      * @static
@@ -792,7 +792,7 @@ class Net_IPv6
     public static function isCompressible($ip)
     {
 
-        return (bool)($ip != Net_IPv6::compress($address));
+        return (bool)($ip != Net_IPv6::compress($ip));
 
     }
 

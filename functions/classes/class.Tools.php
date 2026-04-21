@@ -935,7 +935,7 @@ class Tools extends Common_functions {
 	 * @return bool
 	 */
 	public function verify_widget ($file) {
-		return file_exists(__DIR__."/../../app/dashboard/widgets/$file.php")||file_exists(__DIR__."/../../app/dashboard/widgets/custom/$file.php") ? true : false;
+		return file_exists(__DIR__ . "/../../public/app/dashboard/widgets/$file.php") || file_exists(__DIR__ . "/../../public/app/dashboard/widgets/custom/$file.php") ? true : false;
 	}
 
 	/**
@@ -1016,14 +1016,6 @@ class Tools extends Common_functions {
 
 		if ($sanitize === false)
 			return $text;
-
-		// Return sanitized markdown
-		$parse_down_class = __DIR__ . '/../parsedown/Parsedown.php';
-
-		if (!file_exists($parse_down_class))
-			return _('parsedown library missing, please update submodules');
-
-		require_once($parse_down_class);
 
 		$Parsedown = new \Parsedown();
 		$Parsedown->setSafeMode(true);
@@ -3324,9 +3316,9 @@ class Tools extends Common_functions {
 	 * @return mixed
 	 */
 	private function parse_import_file_xls ($subnet, $custom_address_fields) {
-     	# get excel object
-    	require_once(__DIR__.'/../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
-    	$data = new Spreadsheet_Excel_Reader(__DIR__ . '/../../app/subnets/import-subnet/upload/import.xls', false, 'utf-8');
+     	//excel reader 2.21
+		require_once __DIR__ . '/../php-excel-reader/excel_reader2.php';
+    	$data = new Spreadsheet_Excel_Reader(__DIR__ . '/../../public/app/subnets/import-subnet/upload/import.xls', false, 'utf-8');
 
     	//get number of rows
     	$numRows = $data->rowcount(0);
@@ -3375,7 +3367,7 @@ class Tools extends Common_functions {
 	 */
 	private function parse_import_file_csv () {
     	// get file to string
-		$handle = fopen(__DIR__ . '/../../app/subnets/import-subnet/upload/import.csv', "r");
+		$handle = fopen(__DIR__ . '/../../public/app/subnets/import-subnet/upload/import.csv', "r");
 		if ($handle) {
 		    while (($outFile[] = fgets($handle)) !== false) {}
 		    fclose($handle);
@@ -3573,7 +3565,7 @@ class Tools extends Common_functions {
 	 */
 	public function verify_translation ($code) {
 		//verify that proper files exist
-		return !file_exists("functions/locale/$code/LC_MESSAGES/phpipam.mo") ? false : true;
+		return !file_exists(__DIR__ . "/../locale/$code/LC_MESSAGES/phpipam.mo") ? false : true;
 	}
 
 	/**
@@ -3585,7 +3577,7 @@ class Tools extends Common_functions {
 	 */
 	public function get_translation_version ($code) {
 		//check for version
-		$ver = shell_exec("grep 'Project-Id-Version:' ".__DIR__."/../locale/$code/LC_MESSAGES/phpipam.po");
+		$ver = shell_exec("grep 'Project-Id-Version:' " . __DIR__ . "/../locale/$code/LC_MESSAGES/phpipam.po");
 		//parse
 		$ver = str_replace(["Project-Id-Version:", " ", '"', "#",'\n', ":"], "", $ver);
 		//return version

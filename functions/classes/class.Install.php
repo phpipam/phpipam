@@ -172,10 +172,10 @@ class Install extends Common_functions {
 	private function install_database_execute ($migrate = false) {
 	    # import SCHEMA file queries
 	    if($migrate) {
-		    $query  = file_get_contents("../../db/MIGRATE.sql");
+		    $query  = file_get_contents(__DIR__ . '/../../db/MIGRATE.sql');
 		}
 		else {
-		    $query  = file_get_contents("../../db/SCHEMA.sql");
+		    $query  = file_get_contents(__DIR__ . '/../../db/SCHEMA.sql');
 		}
 
 	    # formulate queries
@@ -419,7 +419,7 @@ class Upgrade extends Install {
 	 */
 	private function load_all_queries () {
 		// include upgrade files
-		require (__DIR__."/../upgrade_queries.php");
+		require __DIR__ . '/../upgrade_queries.php';
 		// add queries
 		foreach ($upgrade_queries as $version=>$query_arr) {
 			foreach ($query_arr as $query) {

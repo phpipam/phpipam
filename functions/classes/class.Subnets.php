@@ -112,7 +112,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @param object|false $section
 	 * @access private
-	 * @return void
+	 * @return array|false
 	 */
 	private function get_subnet_order($section) {
 		$this->get_settings();
@@ -3558,7 +3558,7 @@ class Subnets extends Common_functions {
 	 * Fetch subnet information form  RIPE / ARIN
 	 *
 	 * @access public
-	 * @param mixed $subnet
+	 * @param string $subnet
 	 * @return array
 	 */
 	public function resolve_ripe_arin ($subnet) {

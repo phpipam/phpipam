@@ -164,7 +164,7 @@ function set_ui_language($default_lang = null) {
 		if (!is_string($lang) || strlen($lang)==0)
 			continue;
 
-		if (!file_exists(__DIR__."/locale/$lang/LC_MESSAGES/phpipam.mo"))
+		if (!file_exists(__DIR__ . "/locale/$lang/LC_MESSAGES/phpipam.mo"))
 			continue;
 
 		putenv("LC_ALL=".$lang);
@@ -177,7 +177,7 @@ function set_ui_language($default_lang = null) {
 		setlocale(LC_ALL, $lang);
 
 		bind_textdomain_codeset('phpipam', 'UTF-8');
-		bindtextdomain("phpipam", __DIR__."/locale");
+		bindtextdomain("phpipam", __DIR__ . '/locale');
 		textdomain("phpipam");
 
 		return true;
@@ -253,4 +253,4 @@ function gmp_pow2(int $exp) : GMP {
 }
 
 // Include backwards compatibility wrapper functions.
-require_once('php_poly_fill.php');
+require_once __DIR__ . '/php_poly_fill.php';

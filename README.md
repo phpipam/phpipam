@@ -30,8 +30,8 @@ to be able to display javascript quickly and correctly.
 phpIPAM has been developed and tested on the following PHP versions.\
 The use of untested PHP versions is unsupported and may result in compatibility issues.
 
-- MASTER: See latest 1.x.y release version
-- DEVELOP: PHP versions 7.2 to 8.5
+- MASTER: Latest stable release version
+- DEVELOP: PHP versions 8.2 to 8.5 ( composer migration, read [UPDATE.md](UPDATE.md) )
 - 1.8.x: PHP versions 7.2 to 8.5
 - 1.7.x: PHP versions 7.2 to 8.3
 - 1.6.x: PHP versions 7.2 to 8.3

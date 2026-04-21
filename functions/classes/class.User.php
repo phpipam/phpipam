@@ -807,37 +807,50 @@ class User extends Common_functions {
      */
     public function authenticate ($username, $password, $saml = false) {
         # first we need to check if username exists
-        $this->fetch_user_details ($username);
+        $this->fetch_user_details($username);
         # set method type if set, otherwise presume local auth
         $this->authmethodid = !is_blank(@$this->user->authMethod) ? $this->user->authMethod : 1;
 
         # 2fa
-        if ($this->user->{'2fa'}==1) {
+        if ($this->user->{'2fa'} == 1) {
             $this->twofa = true;
         }
 
         # get authentication method details
-        $this->get_auth_method_type ();
+        $this->get_auth_method_type();
 
-        # authenticate based on name of auth method
-        if(!method_exists($this, $this->authmethodtype))    {
-            $this->Log->write ( _("User login"), _('Error: Invalid authentication method'), 2 );
-            $this->Result->show("danger", _("Error: Invalid authentication method"), true);
+        # set method name variable
+        $authmethodtype = $this->authmethodtype;
+
+        if ($saml !== false) {
+            $authmethodtype = 'auth_SAML2';
+        } elseif ($authmethodtype == "auth_SAML2") {
+            $this->Result->show("danger", _("Please use") . " <a href='" . create_link('saml2') . "'>" . _("login") . "</a>!", true);
         }
-        else {
-            # set method name variable
-            $authmethodtype = $this->authmethodtype;
-            if($saml !== false) {
-                $authmethodtype = 'auth_SAML2';
-            }
-            # is auth_SAML and $saml == false throw error
-            if ($authmethodtype=="auth_SAML2" && $saml===false) {
-                $this->Result->show("danger", _("Please use")." <a href='".create_link('saml2')."'>"._("login")."</a>!", true);
-            }
-            else {
-                # authenticate
-                $this->{$authmethodtype} ($username, $password);
-            }
+
+        # authenticate
+        switch ($authmethodtype) {
+            case 'auth_local':
+                $this->auth_local($username, $password);
+                break;
+            case 'auth_AD':
+                $this->auth_AD($username, $password);
+                break;
+            case 'auth_LDAP':
+                $this->auth_LDAP($username, $password);
+                break;
+            case 'auth_NetIQ':
+                $this->auth_NetIQ($username, $password);
+                break;
+            case 'auth_Radius':
+                $this->auth_Radius($username, $password);
+                break;
+            case 'auth_SAML2':
+                $this->auth_SAML2($username);
+                break;
+            default:
+                $this->Log->write(_("User login"), _('Error: Invalid authentication method'), 2);
+                $this->Result->show("danger", _("Error: Invalid authentication method"), true);
         }
     }
 
@@ -1019,7 +1032,7 @@ class User extends Common_functions {
      */
     private function directory_connect ($authparams) {
         # adLDAP script
-        require(__DIR__ . "/../adLDAP/src/adLDAP.php");
+        require_once __DIR__ . '/../adLDAP/src/adLDAP.php';
         $dirparams = [];
         $dirparams['base_dn'] = @$authparams['base_dn'];
         $dirparams['ad_port'] = @$authparams['ad_port'];
@@ -1160,63 +1173,6 @@ class User extends Common_functions {
     /**
      * Authenticates user on radius server
      *
-     * @access private
-     * @param mixed $username
-     * @param mixed $password
-     * @return void
-     */
-    private function auth_radius_legacy ($username, $password) {
-        # decode radius parameters
-        $params = db_json_decode($this->authmethodparams);
-
-        # check for socket support !
-        if(!in_array("sockets", get_loaded_extensions())) {
-            $this->Log->write( _("Radius login"), _("php Socket extension missing"), 2 );
-            $this->Result->show("danger", _("php Socket extension missing"), true);
-        }
-
-        # initialize radius class
-        require( __DIR__ . '/class.Radius.php' );
-        $Radius = new Radius ($params->hostname, $params->secret, $params->suffix, $params->timeout, $params->port);
-        //debugging
-        $this->debugging!==true ? : $Radius->SetDebugMode(TRUE);
-
-        # authenticate
-        $auth = $Radius->AccessRequest($username, $password);
-        # debug?
-        if($this->debugging) {
-            print "<pre style='width:700px;margin:auto;margin-top:10px;'>";
-            print(escape_input(implode("<br>", $Radius->debug_text)));
-            print "</pre>";
-        }
-
-        # authenticate user
-        if($auth) {
-            # check login restrictions for authenticated user
-            $this->check_login_restrictions ($username);
-            # save to session
-            $this->write_session_parameters ();
-
-            $this->Log->write( _("Radius login"), _("User")." ".$this->user->real_name." "._("logged in via radius"), 0, $username );
-            $this->Result->show("success", _("Radius login successful"));
-
-            # write last logintime
-            $this->update_login_time ();
-            # remove possible blocked IP
-            $this->block_remove_entry ();
-        }
-        else {
-            # add blocked count
-            $this->block_ip ();
-            $this->log_failed_access ($username);
-            $this->Log->write( _("Radius login"), _("Failed to authenticate user on radius server"), 2, $username );
-            $this->Result->show("danger", _("Invalid username or password"), true);
-        }
-    }
-
-    /**
-     * Authenticates user on radius server
-     *
      * GH: https://github.com/dapphp/radius
      *
      * @access private
@@ -1224,20 +1180,12 @@ class User extends Common_functions {
      * @param mixed $password
      * @return void
      */
-    private function auth_radius ($username, $password) {
+    private function auth_Radius ($username, $password) {
         # decode radius parameters
         $params = db_json_decode($this->authmethodparams);
 
-        # Valdate composer
-        if($this->composer_has_errors(["dapphp/radius"])) {
-            $this->Result->show("danger", _("Error in authentication method. Please contact administrator").".", true);
-        }
-
-        # Composer
-        require __DIR__ . '/../vendor/autoload.php';
-
         // init client
-        $client = new Radius();
+        $client = new \Dapphp\Radius\Radius();
         // set params
         $client->setServer($params->hostname)
                ->setSecret($params->secret)
@@ -1310,10 +1258,9 @@ class User extends Common_functions {
      *
      * @access private
      * @param mixed $username
-     * @param mixed $password (default: null)
      * @return void
      */
-    private function auth_SAML2 ($username, $password = null) {
+    private function auth_SAML2 ($username) {
         # check login restrictions for authenticated user
         $this->check_login_restrictions ($username);
 
@@ -2118,7 +2065,7 @@ class User extends Common_functions {
             return User::ACCESS_RWA;
 
         if (!is_object($this->user) || !property_exists($this->user, 'perm_'.$module_name))
-            return USER::ACCESS_NONE;
+            return User::ACCESS_NONE;
 
         return $this->user->{'perm_'.$module_name};
     }

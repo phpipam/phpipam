@@ -290,10 +290,18 @@ class Scan extends Common_functions {
 
 		# make sure it is in right format
 		$address = $this->transform_address ($address, "dotted");
-		# set method name variable
-		$ping_method = "ping_address_method_".$this->icmp_type;
+
 		# ping with selected method
-		return $this->{$ping_method} ($address);
+		switch ($this->icmp_type) {
+			case "ping":
+				return $this->ping_address_method_ping($address);
+			case "pear":
+				return $this->ping_address_method_pear($address);
+			case "fping":
+				return $this->ping_address_method_fping($address);
+			default:
+				return $this->ping_address_method_none($address);
+		}
 	}
 
 	/**
@@ -364,7 +372,7 @@ class Scan extends Common_functions {
 	 */
 	protected function ping_address_method_pear ($address) {
 		# we need pear ping package
-		require_once(__DIR__ . '/../../functions/PEAR/Net/Ping.php');
+		require_once __DIR__ . '/../PEAR/Net/Ping.php';
 		$ping = Net_Ping::factory();
 
 		# ipv6 not supported
@@ -551,14 +559,14 @@ class Scan extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $code
-	 * @return void
+	 * @return string
 	 */
 	public function ping_exit_explain ($code) {
 		# fetch explain codes
 		$explain_codes = $this->ping_set_exit_code_explains ();
 
 		# return code
-		return isset($explain_codes[$code]) ? $explain_codes[$code] : false;
+		return isset($explain_codes[$code]) ? $explain_codes[$code] : "";
 	}
 
 	/**
@@ -569,7 +577,7 @@ class Scan extends Common_functions {
 	 *	extend if needed for future scripts
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function ping_set_exit_code_explains () {
 		$explain_codes[0]  = "SUCCESS";

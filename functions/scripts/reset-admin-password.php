@@ -8,7 +8,7 @@
  */
 
 # include required scripts
-require_once(__DIR__ . '/../functions.php');
+require_once __DIR__ . "/../functions.php";
 
 # Don't corrupt output with php errors!
 disable_php_errors();

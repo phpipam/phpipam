@@ -12,7 +12,7 @@ define("PUBLISHED", false);									//hide dbversion in footer
 
 // Automatically set DBVERSION as everyone forgets!
 function get_dbversion() {
-    require('upgrade_queries.php');
+    require __DIR__ . '/upgrade_queries.php';
     $upgrade_keys = array_keys($upgrade_queries);
     return str_replace(VERSION.".", "", end($upgrade_keys));
 }

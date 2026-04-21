@@ -30,8 +30,8 @@
  */
 
 # include required scripts
-require_once(__DIR__ . '/../functions.php');
-require(__DIR__ . '/../../functions/classes/class.Thread.php');
+require_once __DIR__ . "/../functions.php";
+require_once __DIR__ . '/../classes/class.Thread.php';
 
 # initialize objects
 $Database   = new Database_PDO;

@@ -37,12 +37,6 @@ class Common_functions  {
 	public $json_error = false;
 
 	/**
-	 * Composer error flag
-	 * @var bool
-	 */
-	public $composer_err = false;
-
-    /**
      * Default font
      *
      * (default value: "<font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:12px)
@@ -594,7 +588,7 @@ class Common_functions  {
 	public function initialize_pear_net_IPv4 () {
 		//initialize NET object
 		if(!is_object($this->Net_IPv4)) {
-			require_once( __DIR__ . '/../../functions/PEAR/Net/IPv4.php' );
+			require_once __DIR__ . '/../PEAR/Net/IPv4.php';
 			//initialize object
 			$this->Net_IPv4 = new Net_IPv4();
 		}
@@ -609,7 +603,7 @@ class Common_functions  {
 	public function initialize_pear_net_IPv6 () {
 		//initialize NET object
 		if(!is_object($this->Net_IPv6)) {
-			require_once( __DIR__ . '/../../functions/PEAR/Net/IPv6.php' );
+			require_once __DIR__ . '/../PEAR/Net/IPv6.php';
 			//initialize object
 			$this->Net_IPv6 = new Net_IPv6();
 		}
@@ -624,7 +618,7 @@ class Common_functions  {
 	public function initialize_pear_net_DNS2 () {
 		//initialize NET object
 		if(!is_object($this->DNS2)) {
-			require_once( __DIR__ . '/../../functions/PEAR/Net/DNS2.php' );
+			require_once __DIR__ . '/../PEAR/Net/DNS2.php';
 			//initialize object
 			$this->DNS2 = new Net_DNS2_Resolver(["timeout"=>2]);
 		}
@@ -1765,7 +1759,7 @@ class Common_functions  {
 			// Generated from vendorMac.xml
 			// Unique MAC address: 51316
 			// Updated: 05 April 2024
-			$data = file_get_contents(__DIR__ . "/../vendormacs.json");
+			$data = file_get_contents(__DIR__ . '/../vendormacs.json');
 			if (is_string($data)) {
 				$this->mac_address_vendors = json_decode($data, true);
 			}
@@ -2289,68 +2283,4 @@ class Common_functions  {
 	    // result
 	    return implode("\n", $html);
 	}
-
-	/**
-	 * Composer auto-load error-handler.
-	 *
-	 * @param int $errno
-	 * @param string $errstr
-	 * @param string $errfile
-	 * @param int $errline
-	 * @return bool
-	 */
-	static function composer_autoload_error_handler($errno, $errstr, $errfile, $errline) {
-		$Result = new Result();
-		$Result->show($errno >128 ? 'danger' : 'warning', "<h5>" . escape_input($errfile) . ":" . escape_input($errline) . "</h5>" . escape_input($errstr));
-		return true;
-	}
-
-	/**
-	 * Composer check
-	 *
-	 * Checks if composer is installed and if requested checks for composer modules required
-	 *
-	 * @method composer_has_error
-	 * @param  array $composer_packages
-	 * @return bool
-	 */
-	public function composer_has_errors ($composer_packages = []) {
-		// check for autoload file
-        if(!file_exists(__DIR__ . '/../vendor/autoload.php')) {
-        	$this->composer_err = _("Composer autoload not present")." !<hr>"._("Please install composer modules ( cd functions && composer install ).");
-        	return true;
-        }
-
-        // autoload composer files - catch and display errors.
-		$old_handler = set_error_handler("Common_functions::composer_autoload_error_handler", E_ALL);
-        require __DIR__ . '/../vendor/autoload.php';
-		set_error_handler($old_handler, E_ALL);
-
-        // check if composer is installed
-        if (!class_exists('\Composer\InstalledVersions')) {
-        	$this->composer_err = _("Composer is not installed")."!<hr>"._("Please install composer and composer modules ( cd functions && composer install ).");
-        	return true;
-        }
-
-        // validate all packages if required
-        if(is_array($composer_packages)) {
-        	if(sizeof($composer_packages)>0) {
-        		foreach ($composer_packages as $package) {
-					if(\Composer\InstalledVersions::isInstalled($package)===false) {
-						$this->composer_err .= _("Composer package")." ".$package." "._("is not installed")." !<hr>"._("Please install required modules ( cd functions && composer install ).");
-					}
-        		}
-        		// check
-        		if ($this->composer_err!==false) {
-        			return true;
-        		}
-        	}
-        }
-        // all good
-        return false;
-	}
-
-
 }
-
-

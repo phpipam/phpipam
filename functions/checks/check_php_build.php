@@ -10,20 +10,33 @@
 $requiredExt  = ["session", "sockets", "filter", "openssl", "gmp", "json", "gettext", "PDO", "pdo_mysql", "mbstring", "gd", "iconv", "ctype", "curl", "dom", "pcre", "libxml"];
 # Required functions (included in php-xml or php-simplexml package)
 $requiredFns  = ["simplexml_load_string"];
+# Required composer packages
+$requiredPks  = [
+    "bacon/bacon-qr-code",
+    "dapphp/radius",
+    "dapphp/securimage",
+    "erusev/parsedown",
+    "firehed/cbor",
+    "firehed/webauthn",
+    "onelogin/php-saml",
+    "phpgangsta/googleauthenticator",
+    "phpmailer/phpmailer",
+    ];
 
 if(!defined('PHPIPAM_PHP_MIN'))
-define('PHPIPAM_PHP_MIN', "7.2");
+define('PHPIPAM_PHP_MIN', "8.2");
 
 if(!defined('PHPIPAM_PHP_UNTESTED'))
 define('PHPIPAM_PHP_UNTESTED', "8.6");  // PHP 8.6 or greater is untested, use at own risk and expect issues
 
-if (phpversion() >= PHPIPAM_PHP_UNTESTED) {
+if (phpversion() < PHPIPAM_PHP_MIN || phpversion() >= PHPIPAM_PHP_UNTESTED) {
     $_SESSION['footer_warnings']['php_version'] = _('Unsupported PHP version ') . phpversion();
 }
 
 # Empty missing arrays to prevent errors
 $missingExt = [];
 $missingFns = [];
+$missingPkg = [];
 
 # Check for missing modules
 $availableExt = get_loaded_extensions();
@@ -54,6 +67,20 @@ if (!@include_once 'PEAR.php') {
     $missingExt[] = "php PEAR support";
 }
 
+# Check for Composer issues
+if (!class_exists('\Composer\InstalledVersions')) {
+    $missingPkg[] = _("Missing vendor/autoload.php.");
+} else {
+    foreach ($requiredPks as $package) {
+        if (\Composer\InstalledVersions::isInstalled($package) === false) {
+            $missingPkg[] = _("Composer package") . " " . $package . " " . _("is not installed.");
+        }
+    }
+}
+if ($composer_autoload_err && !Config::ValueOf('allow_untested_php_versions', false)) {
+    $missingPkg[] = $composer_autoload_err;
+}
+
 if(!isset($url)) { $url = ""; }
 
 /* headers */
@@ -75,7 +102,7 @@ if ( PHP_INT_SIZE == 4 ) {
     $error[] = "<strong>"._('Not 64-bit system')."!</strong><br><hr>";
     $error[] = _('From release 1.4 on 64bit system is required!');
 }
-elseif ( phpversion() < PHPIPAM_PHP_MIN ) {
+elseif ( phpversion() < PHPIPAM_PHP_MIN && !Config::ValueOf('allow_untested_php_versions', false) ) {
     $error[] = "<strong>"._('Unsupported PHP version')."!</strong><br><hr>";
     $error[] = _('Minimum PHP version required').": ".PHPIPAM_PHP_MIN."<br>";
     $error[] = _("Detected PHP version: ").phpversion();
@@ -104,6 +131,15 @@ elseif ( !empty($missingFns) ) {
     }
     $error[] = '</ul><hr>' . "\n";
     $error[] = _('Please recompile PHP to include missing functions and restart Apache.');
+}
+elseif ( !empty($missingPkg) ) {
+    $error[] = "<strong>"._('The following composer issues are present').":</strong><br><hr>";
+    $error[] = '<ul>' . "\n";
+    foreach ($missingPkg as $missing) {
+        $error[] = '<li>'. $missing .'</li>' . "\n";
+    }
+    $error[] = '</ul><hr>' . "\n";
+    $error[] =  _("Please run 'composer install' from the project root directory.");
 }
 elseif ( isset($Database) && !$Database->set_names ) {
     $error[] = "<strong>"._('Your database server does not support utf8mb4').":</strong><br><hr>";

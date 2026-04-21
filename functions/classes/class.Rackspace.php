@@ -251,10 +251,10 @@ class phpipam_rack extends Tools {
             unset($available_back[$rack->size+$m]);
         }
 
-        /* if the current device rackStart is not valid because of a prior bug, then it will not be included 
-         * in the result. this is bad because the GUI will not have that option included in the dropdown menu, 
-         * which will mean the user could accidentally submit the form and move the device to a different 
-         * position without realizing. therefore, let us ensure the current position is included even if it's 
+        /* if the current device rackStart is not valid because of a prior bug, then it will not be included
+         * in the result. this is bad because the GUI will not have that option included in the dropdown menu,
+         * which will mean the user could accidentally submit the form and move the device to a different
+         * position without realizing. therefore, let us ensure the current position is included even if it's
          * invalid. we will then try to catch the invalid position upon form submission.
          */
         if (property_exists($current_device, 'rack_start')) {
@@ -747,9 +747,9 @@ class RackDrawer extends Common_functions {
     public function draw(Rack $rack) {
         $this->rack = $rack;
 
-        $top = imagecreatefromstring(file_get_contents(__DIR__.'/../../css/images/blankracks/rack-top.png', false));
-        $unit = imagecreatefromstring(file_get_contents(__DIR__.'/../../css/images/blankracks/rack-unit.png', false));
-        $bottom = imagecreatefromstring(file_get_contents(__DIR__.'/../../css/images/blankracks/rack-bottom.png', false));
+        $top =    imagecreatefromstring(file_get_contents(__DIR__ . '/../../public/css/images/blankracks/rack-top.png', false));
+        $unit =   imagecreatefromstring(file_get_contents(__DIR__ . '/../../public/css/images/blankracks/rack-unit.png', false));
+        $bottom = imagecreatefromstring(file_get_contents(__DIR__ . '/../../public/css/images/blankracks/rack-bottom.png', false));
         $this->rackXSize = imagesx($top);
         $this->topYSize = imagesy($top);
         $this->unitYSize = imagesy($unit);
@@ -767,14 +767,14 @@ class RackDrawer extends Common_functions {
         for ($i = 0; $i < $this->rack->getSpace(); $i++) {
             imagecopy($this->template, $unit, 0, $y, 0, 0, $this->rackXSize, $this->unitYSize);
             $text = ($this->rack->getOrientation()) ? $i + 1 : $this->rack->getSpace() - $i;
-            $textBox = imagettfbbox(12, 0, __DIR__."/../../css/fonts/MesloLGS-Regular.ttf", $text);
+            $textBox = imagettfbbox(12, 0, __DIR__ . '/../../public/css/fonts/MesloLGS-Regular.ttf', $text);
 
             // disable transparency for U labels
             imagealphablending($this->template, true);
             imagettftext($this->template, 12, 0,
                 $this->rackInsideXOffset - 4 - abs($textBox[2] - $textBox[0]),
                 $y + abs($textBox[1] - $textBox[7]) + round(($this->unitYSize - ($textBox[1] - $textBox[7])) / 2),
-                $textColor, __DIR__."/../../css/fonts/MesloLGS-Regular.ttf", $text);
+                $textColor, __DIR__ . '/../../public/css/fonts/MesloLGS-Regular.ttf', $text);
             imagealphablending($this->template, false);
 
             $y += $this->unitYSize;
@@ -816,7 +816,7 @@ class RackDrawer extends Common_functions {
         $x = imagesx($img) - $width - 8;
         $y = Imagesy($img) +9;
         // imagestring($img, $font, $x/2, $y/2, $text, $color);
-        imagettftext($img, 8, 0, (int) $x/2, (int) $y/2, $color, __DIR__."/../../css/fonts/MesloLGS-Regular.ttf", $text );
+        imagettftext($img, 8, 0, (int) $x/2, (int) $y/2, $color, __DIR__ . '/../../public/css/fonts/MesloLGS-Regular.ttf', $text );
     }
 
     /**
@@ -1054,7 +1054,7 @@ class RackDrawer_SVG extends Common_functions {
 	}
 
 	/**
-	 * Draws rack frame 
+	 * Draws rack frame
 	 *
 	 * @access public
 	 * @return void

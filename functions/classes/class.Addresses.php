@@ -1675,7 +1675,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $id
-	 * @return void
+	 * @return bool
 	 */
 	private function verify_subnet_id ($id) {
 		try { $res = $this->Database->numObjectsFilter("subnets", "id", $id ); }

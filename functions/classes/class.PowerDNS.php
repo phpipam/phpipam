@@ -695,7 +695,7 @@ class PowerDNS extends Common_functions {
      * @access public
      * @param mixed $domain_id
      * @param mixed $type
-     * @return void
+     * @return array|false
      */
     public function fetch_domain_records_by_type ($domain_id, $type) {
         // query

@@ -27,12 +27,11 @@
  */
 
 /* functions */
-require_once( __DIR__ . '/../../functions/functions.php' );
+require_once __DIR__ . "/../functions.php";
+require_once __DIR__ . '/../classes/class.Thread.php';
 
 # Don't corrupt output with php errors!
 disable_php_errors();
-
-require( __DIR__ . '/../../functions/classes/class.Thread.php');
 
 # initialize user object
 $Database 	= new Database_PDO;

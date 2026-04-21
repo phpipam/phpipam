@@ -1242,8 +1242,8 @@ class Spreadsheet_Excel_Reader extends stdClass {
 									$formatstr = $this->formatRecords[$indexCode];
 								if ($formatstr!="") {
 									$tmp = preg_replace("/\;.*/","",(string) $formatstr);
-									$tmp = preg_replace("/^\[[^\]]*\]/","",$tmp);
-									if (preg_match("/[^hmsday\/\-:\s\\\,AMP]/i", $tmp) == 0) { // found day and time format
+									$tmp = preg_replace("/^\[[^\]]*\]/","",(string) $tmp);
+									if (preg_match("/[^hmsday\/\-:\s\\\,AMP]/i", (string) $tmp) == 0) { // found day and time format
 										$isdate = TRUE;
 										$formatstr = $tmp;
 										$formatstr = str_replace(['AM/PM','mmmm','mmm'], ['a','F','M'], $formatstr);
@@ -1251,10 +1251,10 @@ class Spreadsheet_Excel_Reader extends stdClass {
 										// This mess tries to fix for that.
 										// 'm' == minutes only if following h/hh or preceding s/ss
 										$formatstr = preg_replace("/(h:?)mm?/","$1i", $formatstr);
-										$formatstr = preg_replace("/mm?(:?s)/","i$1", $formatstr);
+										$formatstr = preg_replace("/mm?(:?s)/","i$1", (string) $formatstr);
 										// A single 'm' = n in PHP
-										$formatstr = preg_replace("/(^|[^m])m([^m]|$)/", '$1n$2', $formatstr);
-										$formatstr = preg_replace("/(^|[^m])m([^m]|$)/", '$1n$2', $formatstr);
+										$formatstr = preg_replace("/(^|[^m])m([^m]|$)/", '$1n$2', (string) $formatstr);
+										$formatstr = preg_replace("/(^|[^m])m([^m]|$)/", '$1n$2', (string) $formatstr);
 										// else it's months
 										$formatstr = str_replace('mm', 'm', $formatstr);
 										// Convert single 'd' to 'j'

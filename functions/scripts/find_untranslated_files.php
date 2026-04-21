@@ -9,9 +9,11 @@
 // only from cli
 if (php_sapi_name() != "cli")	{ die("Cli only!"); }
 
+# include required scripts
+require_once __DIR__ . '/../functions.php';
 
 // search for all translated words and put them to array
-$untranslated = pf_explode("\n",shell_exec("cd ".__DIR__."/../../ && grep -r '_(' * "));
+$untranslated = pf_explode("\n",shell_exec("cd " . __DIR__ . "/../../ && grep -r '_(' * "));
 // loop and search
 foreach ($untranslated as $u) {
 	// find string
@@ -37,7 +39,7 @@ $all_translations = array_unique($all_translations);
 
 
 // search all existing translations
-$untranslated = pf_explode("\n",shell_exec("cd ".__DIR__."/../../ && more functions/locale/en/LC_MESSAGES/phpipam.po"));
+$untranslated = pf_explode("\n",shell_exec("cd " . __DIR__ . "/../../ && more functions/locale/en/LC_MESSAGES/phpipam.po"));
 // loop and create
 foreach ($untranslated as $u) {
 	// search for string
@@ -77,4 +79,3 @@ function get_string_between($string, $start, $end){
     $len = strpos($string,(string) $end,$ini) - $ini;
     return substr($string,$ini,$len);
 }
-?>

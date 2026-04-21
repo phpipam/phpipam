@@ -1,0 +1,73 @@
+{
+  "name": "phpipam/phpipam",
+  "description": "Open source IP address management tool",
+  "keywords": [
+    "phpIPAM",
+    "IPAM",
+    "IPv4",
+    "IPv6",
+    "address",
+    "management"
+  ],
+  "homepage": "https://github.com/phpipam/phpipam",
+  "type": "project",
+  "license": "GPL-3.0-only",
+  "support": {
+    "issues": "https://github.com/phpipam/phpipam/issues",
+    "source": "https://github.com/phpipam/phpipam"
+  },
+  "authors": [
+    {
+      "name": "Miha Petkovsek",
+      "email": "miha.petkovsek@gmail.com"
+    },
+    {
+      "name": "Gary Allan",
+      "email": "github@gallan.co.uk"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "ext-ctype": "*",
+    "ext-curl": "*",
+    "ext-dom": "*",
+    "ext-filter": "*",
+    "ext-gd": "*",
+    "ext-gettext": "*",
+    "ext-gmp": "*",
+    "ext-iconv": "*",
+    "ext-json": "*",
+    "ext-libxml": "*",
+    "ext-mbstring": "*",
+    "ext-openssl": "*",
+    "ext-pcre": "*",
+    "ext-pdo": "*",
+    "ext-pdo_mysql": "*",
+    "ext-session": "*",
+    "ext-sockets": "*",
+    "bacon/bacon-qr-code": "^3.1",
+    "dapphp/radius": "^3.0",
+    "dapphp/securimage": "^4.0.2",
+    "erusev/parsedown": "^1.8",
+    "firehed/cbor": "^0.1.0",
+    "firehed/webauthn": "^0.9.1",
+    "onelogin/php-saml": "^4.3",
+    "phpgangsta/googleauthenticator": "dev-master",
+    "phpmailer/phpmailer": "^7.0"
+  },
+  "config": {
+    "platform": {
+      "php": "8.2"
+    },
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "require-dev": {
+    "driftingly/rector-laravel": "^2.3",
+    "laravel/pint": "^1.29",
+    "phpcompatibility/php-compatibility": "^10.0.0@dev",
+    "phpstan/phpstan": "^2.1"
+  }
+}

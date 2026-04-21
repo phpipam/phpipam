@@ -95,7 +95,7 @@ class OpenStreetMap extends Common_functions
     /**
      * Add customer object to map
      *
-     * @param   StdClass  $location
+     * @param   StdClass  $customer
      * @return  bool
      */
     public function add_customer($customer)
@@ -152,7 +152,7 @@ class OpenStreetMap extends Common_functions
      * Add circuit object to map
      *
      * @param   StdClass $location1  Location of A end
-     * @param   StdClas  $location2  Location of B end
+     * @param   StdClass $location2  Location of B end
      * @param   StdClass $type       Circuit circuitType object (color & dotted)
      * @return  bool
      */
@@ -352,12 +352,12 @@ class OpenStreetMap extends Common_functions
             return $result;
         }
 
+        $elapsed = -microtime(true);
+
         try {
             // Obtain exclusive MySQL row lock
             $Lock = new LockForUpdateMySQL($this->Database, 'nominatim', 1);
             $Lock->obtain_lock(-1);
-
-            $elapsed = -microtime(true);
 
             // Check cached results from the last 24h
             $cached_result = $this->search_geo_cache($address, true);

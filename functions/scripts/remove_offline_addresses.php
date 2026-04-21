@@ -12,7 +12,7 @@
 if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!"); }
 
 # include required scripts
-require_once( __DIR__ . '/../functions.php' );
+require_once __DIR__ . "/../functions.php";
 
 # initialize objects
 $Database 	= new Database_PDO;
@@ -156,5 +156,3 @@ if(sizeof($removed_addresses)>0 && $config['removed_addresses_send_mail']) {
 		$Result->show_cli("Mailer Error: ".$e->getMessage(), true);
 	}
 }
-
-?>
