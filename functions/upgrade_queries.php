@@ -21,6 +21,7 @@ include('upgrade_queries/upgrade_queries_1.5.php');
 include('upgrade_queries/upgrade_queries_1.6.php');
 include('upgrade_queries/upgrade_queries_1.7.php');
 include('upgrade_queries/upgrade_queries_1.8.php');
+include('upgrade_queries/upgrade_queries_1.9.php');
 
 
 // output if required

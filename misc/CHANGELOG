@@ -1,3 +1,9 @@
+== 1.9.0
+
+    Bugfixes:
+    ----------------------------
+    + PHP8 compatibility fixes;
+
 == 1.8.0
 
     Bugfixes:
