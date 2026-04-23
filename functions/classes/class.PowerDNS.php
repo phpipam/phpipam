@@ -327,6 +327,7 @@ class PowerDNS extends Common_functions {
         $record_types[] = "SPF";
         $record_types[] = "SRV";
         $record_types[] = "LUA";
+        $record_types[] = "TLSA";
 
         // save
         $this->record_types = (object) $record_types;
