@@ -58,7 +58,8 @@ class Devices_controller extends Common_api_functions {
         // methods
         $result = array();
         $result['methods'] = array(
-                                array("href"=>"/api/".$this->_params->app_id."/devices/",                     "methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
+                                array("href"=>"/api/".$this->_params->app_id."/devices/",                     "methods"=>array(array("rel"=>"options","method"=>"OPTIONS"),
+                                                                                                                               array("rel"=>"read",	  "method"=>"GET"))),
                                 array("href"=>"/api/".$this->_params->app_id."/devices/search/{search_term}", "methods"=>array(array("rel"=>"search", "method"=>"GET"))),
                                 array("href"=>"/api/".$this->_params->app_id."/devices/{id}/",                "methods"=>array(array("rel"=>"read", "method"=>"GET"),
                                                                                                                                array("rel"=>"create", "method"=>"POST"),

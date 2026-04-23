@@ -95,12 +95,13 @@ class Circuits_controller extends Common_api_functions {
 
 		// methods
 		$result['methods'] = array(
-								array("href"=>"/api/".$this->_params->app_id."/circuits/", 					"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
+								array("href"=>"/api/".$this->_params->app_id."/circuits/", 					"methods"=>array(array("rel"=>"options","method"=>"OPTIONS"),
+																															 array("rel"=>"read",	"method"=>"GET"))),
 								array("href"=>"/api/".$this->_params->app_id."/circuits/{id}/", 			"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
 																												 			 array("rel"=>"create", "method"=>"POST"),
 																												 			 array("rel"=>"update", "method"=>"PATCH"),
 																												 			 array("rel"=>"delete", "method"=>"DELETE"))),
-								array("href"=>"/api/".$this->_params->app_id."/circuits/providers/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
+								array("href"=>"/api/".$this->_params->app_id."/circuits/providers/", 		"methods"=>array(array("rel"=>"options","method"=>"OPTIONS"))),
 								array("href"=>"/api/".$this->_params->app_id."/circuits/providers/{id}/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
 																												 			 array("rel"=>"create", "method"=>"POST"),
 																												 			 array("rel"=>"update", "method"=>"PATCH"),

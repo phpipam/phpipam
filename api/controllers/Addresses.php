@@ -62,7 +62,8 @@ class Addresses_controller extends Common_api_functions  {
 		// methods
 		$result = array();
 		$result['methods'] = array(
-								array("href"=>"/api/".$this->_params->app_id."/addresses/", 	"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
+								array("href"=>"/api/".$this->_params->app_id."/addresses/", 	"methods"=>array(array("rel"=>"options","method"=>"OPTIONS"),
+																												 array("rel"=>"read",	"method"=>"GET"))),
 								array("href"=>"/api/".$this->_params->app_id."/addresses/{id}/","methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
 																												 array("rel"=>"create", "method"=>"POST"),
 																												 array("rel"=>"update", "method"=>"PATCH"),

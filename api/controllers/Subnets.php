@@ -55,7 +55,8 @@ class Subnets_controller extends Common_api_functions {
 		// methods
 		$result = array();
 		$result['methods'] = array(
-								array("href"=>"/api/".$this->_params->app_id."/subnets/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
+								array("href"=>"/api/".$this->_params->app_id."/subnets/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"),
+																												 array("rel"=>"read",	 "method"=>"GET"))),
 								array("href"=>"/api/".$this->_params->app_id."/subnets/{id}/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
 																												 array("rel"=>"create", "method"=>"POST"),
 																												 array("rel"=>"update", "method"=>"PATCH"),
