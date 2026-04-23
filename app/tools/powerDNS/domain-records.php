@@ -44,7 +44,7 @@ if ($domain === false) {
 
         // sort so SOA appears at the top
         $order = array();
-        if(isset($records_default)) {
+        if(isset($records_default) && is_array($records_default)) {
             foreach ($records_default as $key => $row) {
                 $order[$key] = $row['order'];
             }
@@ -74,7 +74,7 @@ if ($domain === false) {
         if (strpos($domain->master, ";") !== false) {$master = pf_explode(";", $domain->master);} else { $master = array($domain->master);}
         print "<td>" . _("Master servers") . ":</td>";
         print "<td>";
-        foreach ($master as $k => $m) {
+        if (is_array($master) || is_object($master)) foreach ($master as $k => $m) {
             if (!is_blank($m)) {
                 print "<span class='badge badge1'>$m</span><br>";
             }
@@ -177,6 +177,7 @@ if (isset($records_default)) {
     print "</tr>";
 
     // defaults
+    if (!is_array($records_default)) { $records_default = []; }
     foreach ($records_default as $r) {
         print_record((object) $r);
     }

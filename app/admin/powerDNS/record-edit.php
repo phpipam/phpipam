@@ -104,7 +104,7 @@ if (!isset($record)) {
 }
 
 // if IPv6 automatically add AAAA record!
-if ($User->identify_address($record->content)=="IPv6" && $User->validate_ip($record->content)) {
+if (isset($record->content) && $User->identify_address($record->content)=="IPv6" && $User->validate_ip($record->content)) {
     $record->type = "AAAA";
 }
 
@@ -126,7 +126,7 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
 	<tr>
 		<td style="width:150px;"><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('www.example.com'); ?>" value="<?php print $record->name; ?>" <?php print $readonly; ?>>
+			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('www.example.com'); ?>" value="<?php print $record->name ?? ''; ?>" <?php print $readonly; ?>>
 			<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
 			<input type="hidden" name="id" value="<?php print escape_input($POST->id); ?>">
 			<input type="hidden" name="domain_id" value="<?php print escape_input($POST->domain_id); ?>">
@@ -157,7 +157,7 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
 	<tr>
 		<td><?php print _('Content'); ?></td>
 		<td>
-			<input type="text" class="name form-control input-sm" name="content" placeholder="<?php print _('10.10.10.1'); ?>" value='<?php print $record->content; ?>' <?php print $readonly; ?>>
+			<input type="text" class="name form-control input-sm" name="content" placeholder="<?php print _('10.10.10.1'); ?>" value='<?php print $record->content ?? ''; ?>' <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -184,7 +184,7 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
 	<tr>
 		<td><?php print _('Priority'); ?></td>
 		<td>
-			<input type="text" class="name form-control input-sm input-w-100" name="prio" placeholder="<?php print _('Priority'); ?>" value="<?php print $record->prio; ?>" <?php print $readonly; ?>>
+			<input type="text" class="name form-control input-sm input-w-100" name="prio" placeholder="<?php print _('Priority'); ?>" value="<?php print $record->prio ?? ''; ?>" <?php print $readonly; ?>>
 
 		</td>
 	</tr>
@@ -195,7 +195,7 @@ $readonly = $POST->action=="delete" ? "readonly" : "";
 		<td>
 			<select name="disabled" class="form-control input-w-auto input-sm" <?php print $readonly; ?>>
 				<option value="0"><?php print _('No'); ?></option>
-				<option value="1" <?php if($record->disabled==1) print "selected='selected'"; ?>><?php print _('Yes'); ?></option>
+				<option value="1" <?php if(isset($record->disabled) && $record->disabled==1) print "selected='selected'"; ?>><?php print _('Yes'); ?></option>
 			</select>
 		</td>
 	</tr>
