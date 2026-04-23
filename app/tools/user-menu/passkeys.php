@@ -123,8 +123,14 @@ const startRegister = async (e) => {
 	    const createOptions = {
 	        publicKey: {
 	            rp: {
-	                name: '<?php print $User->createURL (); ?>',
+	                id: '<?php print preg_replace('|https?://|', '', $User->createURL ()); ?>',
+					name: '<?php print $User->createURL (); ?>',
 	            },
+				authenticatorSelection: {
+					authenticatorAttachment: "cross-platform",
+					requireResidentKey: true,
+					userVerification: "optional"
+				},
 	            user: {
 	                name: "<?php print $User->user->username; ?>",
 	                displayName: "<?php print $User->user->real_name; ?>",
