@@ -767,14 +767,14 @@ class RackDrawer extends Common_functions {
         for ($i = 0; $i < $this->rack->getSpace(); $i++) {
             imagecopy($this->template, $unit, 0, $y, 0, 0, $this->rackXSize, $this->unitYSize);
             $text = ($this->rack->getOrientation()) ? $i + 1 : $this->rack->getSpace() - $i;
-            $textBox = imagettfbbox(12, 0, dirname(__FILE__)."/../../css/fonts/MesloLGS-Regular.ttf", $text);
+            $textBox = imagettfbbox(12, 0, dirname(__FILE__)."/../../css/fonts/NotoSansSC-Regular.ttf", $text);
 
             // disable transparency for U labels
             imagealphablending($this->template, true);
             imagettftext($this->template, 12, 0,
                 $this->rackInsideXOffset - 4 - abs($textBox[2] - $textBox[0]),
                 $y + abs($textBox[1] - $textBox[7]) + round(($this->unitYSize - ($textBox[1] - $textBox[7])) / 2),
-                $textColor, dirname(__FILE__)."/../../css/fonts/MesloLGS-Regular.ttf", $text);
+                $textColor, dirname(__FILE__)."/../../css/fonts/NotoSansSC-Regular.ttf", $text);
             imagealphablending($this->template, false);
 
             $y += $this->unitYSize;
@@ -816,7 +816,7 @@ class RackDrawer extends Common_functions {
         $x = imagesx($img) - $width - 8;
         $y = Imagesy($img) +9;
         // imagestring($img, $font, $x/2, $y/2, $text, $color);
-        imagettftext($img, 8, 0, (int) $x/2, (int) $y/2, $color, dirname(__FILE__)."/../../css/fonts/MesloLGS-Regular.ttf", $text );
+        imagettftext($img, 8, 0, (int) $x/2, (int) $y/2, $color, dirname(__FILE__)."/../../css/fonts/NotoSansSC-Regular.ttf", $text );
     }
 
     /**
