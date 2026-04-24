@@ -723,7 +723,7 @@ abstract class DB {
 	 * Anti stored-XSS: Safe by default strategy
 	 *
 	 * Call htmlentities() on all string data returned from the database to ensure it is safe to pass to print().
-	 * Areas of code that require unsafe HTML symbols will be updated to explicitly call html_entity_decode().
+	 * Areas of code that require unsafe HTML symbols will be updated to explicitly call unescape_input().
 	 *
 	 * @param string $tableName
 	 * @param mixed $data

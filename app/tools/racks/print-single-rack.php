@@ -131,7 +131,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
             <td>
                 <?php
                 if($customer!==false && $User->get_module_permissions ("customers")>=User::ACCESS_R)
-                print $customer->title . " <a target='_blank' href='".create_link("tools","customers",html_entity_decode($customer->title))."'><i class='fa fa-external-link'></i></a>";
+                print $customer->title . " <a target='_blank' href='".create_link("tools","customers",unescape_input($customer->title))."'><i class='fa fa-external-link'></i></a>";
                 ?>
                 </td>
         </tr>
