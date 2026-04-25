@@ -117,7 +117,7 @@ else {
 		print "	<td>".$vlan->domainName.$vlan->domainDescription."</td>";
 		if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 			 $customer = $Tools->fetch_object ("customers", "id", $vlan->customer_id);
-			 print $customer===false ? "<td></td>" : "<td>{$customer->title} <a target='_blank' href='".create_link("tools","customers",html_entity_decode($customer->title))."'><i class='fa fa-external-link'></i></a></td>";
+			 print $customer===false ? "<td></td>" : "<td>{$customer->title} <a target='_blank' href='".create_link("tools","customers",unescape_input($customer->title))."'><i class='fa fa-external-link'></i></a></td>";
 		}
         // custom fields - no subnets
         if(sizeof(@$custom_fields) > 0) {

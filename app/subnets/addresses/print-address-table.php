@@ -63,11 +63,12 @@ if($User->settings->enableLocations != 1)     { unset_array_value($selected_ip_f
 if($User->settings->enableCustomers != 1)     { unset_array_value($selected_ip_fields, 'customer_id'); }
 
 /* Addresses and fields manupulations */
+if (!isset($addresses) || !is_array($addresses))
+	$addresses = [];
 
 # save for visual display !
 $addresses_visual = $addresses;
 # new compress functions
-$addresses=[];
 $Addresses->addresses_types_fetch();
 foreach($Addresses->address_types as $t) {
 	if($t['compress']=="Yes" && $User->user->compressOverride!="Uncompress") {
@@ -483,7 +484,7 @@ else {
 				# customer_id
 				if($User->settings->enableCustomers=="1" && @$cnt_obj["customer_id"] && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 					$customer = $Tools->fetch_object ("customers", "id", $addresses[$n]->customer_id);
-					print $customer===false ? "<td></td>" : "<td>$customer->title <a target='_blank' href='".create_link("tools","customers",html_entity_decode($customer->title))."'><i class='fa fa-external-link'></i></a></td>";
+					print $customer===false ? "<td></td>" : "<td>$customer->title <a target='_blank' href='".create_link("tools","customers",unescape_input($customer->title))."'><i class='fa fa-external-link'></i></a></td>";
 				}
 
 				# print custom fields

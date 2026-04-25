@@ -109,7 +109,7 @@ switch ($POST->devicetype) {
 	# is that subrack already placed somewhere?
 	if ($Database->getObjectQuery("rackContents", "SELECT * from `rackContents` where `subrackId` = ? limit 1;", [$POST->subrackid]))
 																			{ $Result->show("danger", _("Subrack is already in a rack"), true); }
-	$values = array("name"=>$subrack->name,
+	$values = array("name"=>unescape_input($subrack->name),
 					"rack"=>$POST->rackid,
 					"rack_start"=>$POST->rack_start,
 					"rack_size"=>$POST->rack_size,

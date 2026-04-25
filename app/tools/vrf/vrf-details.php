@@ -93,7 +93,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 		 		print "<span class='text-muted'>/</span>";
 		 }
 		 else {
-			print "<span>".$customer->title." <a target='_blank' href='".create_link("tools","customers",html_entity_decode($customer->title))."'><i class='fa fa-external-link'></i></a></span>";
+			print "<span>".$customer->title." <a target='_blank' href='".create_link("tools","customers",unescape_input($customer->title))."'><i class='fa fa-external-link'></i></a></span>";
 		 }
 		 print "	</td>";
 		 print "</tr>";

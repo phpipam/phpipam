@@ -78,13 +78,25 @@ function is_blank($data) {
 
 /**
  * Escape HTML and quotes in user provided input
- * @param  mixed $data
+ * @param  string $data
  * @return string
  */
 function escape_input($data) {
 	if (is_blank($data))
 		return '';
 	$safe_data = htmlentities($data, ENT_QUOTES, 'UTF-8');
+	return is_string($safe_data) ? $safe_data : '';
+}
+
+/**
+ * Unescape HTML and quotes in user provided input
+ * @param  string $data
+ * @return string
+ */
+function unescape_input($data) {
+	if (is_blank($data))
+		return '';
+	$safe_data = html_entity_decode($data, ENT_QUOTES, 'UTF-8');
 	return is_string($safe_data) ? $safe_data : '';
 }
 

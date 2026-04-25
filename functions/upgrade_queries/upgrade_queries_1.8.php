@@ -35,3 +35,7 @@ $upgrade_queries["1.8.46"][] = "ALTER TABLE `rackContents` ADD `subrackId` INT(1
 $upgrade_queries["1.8.46"][] = "ALTER TABLE `rackContents` ADD `rack_deep` TINYINT(11) NOT NULL DEFAULT 0 AFTER `rack_size`;";
 $upgrade_queries["1.8.46"][] = "-- Database version bump";
 $upgrade_queries["1.8.46"][] = "UPDATE `settings` SET `dbversion` = '46';";
+
+$upgrade_queries["1.81.46"]   = [];
+$upgrade_queries["1.81.46"][] = "-- Version update";
+$upgrade_queries["1.81.46"][] = "UPDATE `settings` set `version` = '1.81';";
