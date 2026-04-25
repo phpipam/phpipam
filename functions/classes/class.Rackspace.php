@@ -343,7 +343,7 @@ class phpipam_rack extends Tools {
                         if(!$draw_names) { unset ($rd['name']); }
                         // populate the subrack data
                         if ($c->subrackId) {
-                            $rd['url'] = create_link("tools", "racks", $c->subrackId);
+                            $rd['url'] = escape_input(create_link("tools", "racks", $c->subrackId));
                             if ($recursion) $rd['subrack'] = $this->compile_rack_contents ($c->subrackId, $deviceId, !$is_back, $draw_names, false);
                             if (sizeof($rd['subrack']->getContent())==0) unset($rd['subrack']);
                         }
@@ -364,7 +364,7 @@ class phpipam_rack extends Tools {
                             if(!$draw_names) { unset ($rd['name']); }
                             // populate the subrack data
                             if ($c->subrackId) {
-                                $rd['url'] = create_link("tools", "racks", $c->subrackId);
+                                $rd['url'] = escape_input(create_link("tools", "racks", $c->subrackId));
                                 if ($recursion) $rd['subrack'] = $this->compile_rack_contents ($c->subrackId, $deviceId, $is_back, $draw_names, false);
                             if (sizeof($rd['subrack']->getContent())==0) unset($rd['subrack']);
                             }
@@ -390,7 +390,7 @@ class phpipam_rack extends Tools {
                         // remove name if not permitted
                         if(!$draw_names) { unset ($rd['name']); }
                         if ($c->subrackId) {
-                            $rd['url'] = create_link("tools", "racks", $c->subrackId);
+                            $rd['url'] = escape_input(create_link("tools", "racks", $c->subrackId));
                             if ($recursion) $rd['subrack'] = $this->compile_rack_contents ($c->subrackId, $deviceId, $is_back, $draw_names, false);
                             if (sizeof($rd['subrack']->getContent())==0) unset($rd['subrack']);
                         }
@@ -410,7 +410,7 @@ class phpipam_rack extends Tools {
                             // remove name if not permitted
                             if(!$draw_names) { unset ($rd['name']); }
                             if ($c->subrackId) {
-                                $rd['url'] = create_link("tools", "racks", $c->subrackId);
+                                $rd['url'] = escape_input(create_link("tools", "racks", $c->subrackId));
                                 if ($recursion) $rd['subrack'] = $this->compile_rack_contents ($c->subrackId, $deviceId, !$is_back, $draw_names, false);
                             if (sizeof($rd['subrack']->getContent())==0) unset($rd['subrack']);
                             }
@@ -438,7 +438,7 @@ class phpipam_rack extends Tools {
                                     "startLocation"=>$d->rack_start-$rack->size,
                                     "size"=>$d->rack_size,
                                     "rackName"=>$rack->name,
-                                    "url"=>create_link("tools", "devices", $d->id),
+                                    "url"=>escape_input(create_link("tools", "devices", $d->id)),
                                     "bgcolor"=>$bg,
                                     "fgcolor"=>$fg,
                                     );
@@ -458,7 +458,7 @@ class phpipam_rack extends Tools {
                                         "startLocation"=>$d->rack_start,
                                         "size"=>$d->rack_size,
                                         "rackName"=>$rack->name,
-                                        "url"=>create_link("tools", "devices", $d->id),
+                                        "url"=>escape_input(create_link("tools", "devices", $d->id)),
                                         "bgcolor"=>$bg,
                                         "fgcolor"=>$fg,
                                         );
@@ -480,7 +480,7 @@ class phpipam_rack extends Tools {
                                     "startLocation"=>$d->rack_start,
                                     "size"=>$d->rack_size,
                                     "rackName"=>$rack->name,
-                                    "url"=>create_link("tools", "devices", $d->id),
+                                    "url"=>escape_input(create_link("tools", "devices", $d->id)),
                                     "bgcolor"=>$bg,
                                     "fgcolor"=>$fg,
                                     );
@@ -500,7 +500,7 @@ class phpipam_rack extends Tools {
                                         "startLocation"=>$d->rack_start-$rack->size,
                                         "size"=>$d->rack_size,
                                         "rackName"=>$rack->name,
-                                        "url"=>create_link("tools", "devices", $d->id),
+                                        "url"=>escape_input(create_link("tools", "devices", $d->id)),
                                         "bgcolor"=>$bg,
                                         "fgcolor"=>$fg,
                                         );
@@ -1132,7 +1132,7 @@ class RackDrawer_SVG extends Common_functions {
 		$w = $this->imgXSize - ($this->marginSides * 2) - 14;
 		$h = $this->unitYSize - 2;
 		$this->svgData[] = "<!-- nameplate -->";
-		$this->svgData[] = "<a href='".create_link("tools", "racks", $this->rack->getId())."' target='_parent'>";
+		$this->svgData[] = "<a href='".escape_input(create_link("tools", "racks", $this->rack->getId()))."' target='_parent'>";
 		$this->svgData[] = "<rect width='{$w}' height='{$h}' x='".($this->marginSides + 7)."' y='1' style='fill:white;stroke:none;' />";
 		$this->svgData[] = "<text class='nameplate' x='".($this->imgXSize / 2)."' y='".($this->marginTop - 6)."'>{$this->rack->getName()}</text>";
 		$this->svgData[] = "</a>";
