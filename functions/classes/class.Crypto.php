@@ -4,12 +4,6 @@
  * Cryptographic Code
  */
 class Crypto {
-    /**
-     * mcrypt cipher mode.
-     * Change to MCRYPT_RIJNDAEL_128 to use AES-256 compliant RIJNDAEL algorithm (rijndael-128)
-     * @var mixed
-     */
-    private $legacy_mcrypt_aes_mode = "rijndael-256"; // Use string value as MCRYPT_RIJNDAEL_256 constant may not be defined.
 
     /**
      * Result
@@ -77,10 +71,7 @@ class Crypto {
     public function encrypt($rawdata, $password, $method="openssl-128-cbc") {
         $method = $this->supported_methods($method);
 
-        if ($method === 'mcrypt')
-            return $this->encrypt_using_legacy_mcrypt($rawdata, $password);
-        else
-            return $this->encrypt_using_openssl($rawdata, $password, $method);
+        return $this->encrypt_using_openssl($rawdata, $password, $method);
     }
 
     /**
@@ -93,10 +84,7 @@ class Crypto {
     public function decrypt($base64data, $password, $method="openssl-128-cbc") {
         $method = $this->supported_methods($method);
 
-        if ($method === "mcrypt")
-            return $this->decrypt_using_legacy_mcrypt($base64data, $password);
-        else
-            return $this->decrypt_using_openssl($base64data, $password, $method);
+        return $this->decrypt_using_openssl($base64data, $password, $method);
     }
 
     /**
@@ -106,10 +94,6 @@ class Crypto {
      */
     private function supported_methods($method) {
         switch ($method) {
-            case 'mcrypt':
-                $retval = 'mcrypt';
-                break;
-
             case 'openssl':
             case 'openssl-128':
             case 'openssl-128-cbc':
@@ -124,10 +108,6 @@ class Crypto {
             default:
                 $this->Result->show("danger", _("Error: "). _("Unsupported encryption method").": ".escape_input($method), true);
         }
-
-        $required_ext = ($retval === 'mcrypt') ? 'mcrypt' : 'openssl';
-        if (!in_array($required_ext, get_loaded_extensions()))
-            $this->Result->show("danger", _("Error: "). _('PHP extension not installed: ').$required_ext, true);
 
         return $retval;
     }
@@ -188,30 +168,6 @@ class Crypto {
 
         // Finally decrypt
         return openssl_decrypt($ciphertext_raw, $method, $key, OPENSSL_RAW_DATA, $iv);
-    }
-
-    // Legacy mcrypt - mcrypt support may be removed in a future release.
-
-    /**
-     * encrypt data and base64 encode results
-     * @param  string $rawdata
-     * @param  string $password
-     * @return string|false
-     */
-    private function encrypt_using_legacy_mcrypt($rawdata, $password) {
-        // Suppress php72 mcrypt deprecation warnings (module is available in PECL).
-        return base64_encode(@mcrypt_encrypt($this->legacy_mcrypt_aes_mode, $password, $rawdata, MCRYPT_MODE_ECB));
-    }
-
-    /**
-     * decrypt base64 encoded data
-     * @param  string $base64data
-     * @param  string $password
-     * @return string|false
-     */
-    private function decrypt_using_legacy_mcrypt($base64data, $password) {
-        // Suppress php72 mcrypt deprecation warnings (module is available in PECL).
-        return trim(@mcrypt_decrypt($this->legacy_mcrypt_aes_mode, $password, base64_decode($base64data), MCRYPT_MODE_ECB));
     }
 
     /**** Security Tokens ****/

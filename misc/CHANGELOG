@@ -5,6 +5,10 @@
     + PHP8 compatibility fixes;
     + Rack SVG image errors (#4595);
 
+    Enhancements, changes:
+    ----------------------------
+    + Remove support for mcrypt;
+
 == 1.8.0
 
     Bugfixes:
