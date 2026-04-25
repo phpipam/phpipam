@@ -3,6 +3,7 @@
     Bugfixes:
     ----------------------------
     + PHP8 compatibility fixes;
+    + Rack SVG image errors (#4595);
 
 == 1.8.0
 
