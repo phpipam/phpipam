@@ -296,7 +296,7 @@ else {
 					                $Addresses->ptr_link($addresses[$n]->id, $ptr->id);
 					        } else { $Addresses->ptr_link($addresses[$n]->id, 0); }
 					}
-					unset($dns_records);
+					$dns_records = [];
 					if (is_array($records) || $ptr!==false) {
 						$dns_records[] = "<br>";
 						$dns_records[] = "<ul class='submenu-dns text-muted'>";
@@ -311,17 +311,17 @@ else {
 						}
 						$dns_records[] = "</ul>";
 						// if none ignore
-						$dns_records = sizeof($dns_records)==3 ? "" : implode(" ", $dns_records);
+						$dns_records_txt = sizeof($dns_records)==3 ? "" : implode(" ", $dns_records);
 					} else {
-						$dns_records = "";
+						$dns_records_txt = "";
 					}
 
 					// search for IP records
 					$records2 = $PowerDNS->search_records ("content", $addresses[$n]->ip, 'content', true);
-					unset($dns_records2);
+					$dns_records2 = [];
 					if (is_array($records2)) {
                         $dns_cname_unique = array();        // unique CNAME records to prevent multiple
-                        unset($cname);
+                        $cname = [];
 						$dns_records2[] = "<br>";
 						$dns_records2[] = "<ul class='submenu-dns text-muted'>";
 						foreach ($records2 as $r) {
@@ -346,15 +346,15 @@ else {
                         }
 						$dns_records2[] = "</ul>";
 						// if none ignore
-						$dns_records2 = sizeof($dns_records2)==3 ? "" : implode(" ", $dns_records2);
+						$dns_records2_txt = sizeof($dns_records2)==3 ? "" : implode(" ", $dns_records2);
 					} else {
-						$dns_records2 = "";
+						$dns_records2_txt = "";
 					}
 				}
 				// disabled
 				else {
-					$dns_records = "";
-					$dns_records2 = "";
+					$dns_records_txt = "";
+					$dns_records2_txt = "";
 					$button = "";
 				}
 				// add button
@@ -379,7 +379,7 @@ else {
 	                $Addresses->print_nat_link($all_nats, $all_nats_per_object, $subnet, $addresses[$n]);
 	            }
 
-			    print $dns_records2."</td>";
+			    print $dns_records2_txt."</td>";
 
 			    # resolve dns name
 			    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->hostname, false, $subnet['nameserverId']);
@@ -388,7 +388,7 @@ else {
 					$Addresses->update_address_hostname ($addresses[$n]->ip_addr, $addresses[$n]->id, $resolve['name']);
 					$addresses[$n]->hostname = $resolve['name'];
 				}
-																		{ print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>"; }
+																		{ print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records_txt</td>"; }
 
 				# print firewall address object - mandatory if enabled
 				if($zone) {
