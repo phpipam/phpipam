@@ -43,6 +43,7 @@ class Params extends stdClass implements Countable {
      *
      * @return int
      */
+    #[\Override]
     public function count() : int {
         return count($this->as_array());
     }
@@ -65,10 +66,7 @@ class Params extends stdClass implements Countable {
      * @return mixed
      */
     public function __get($name) {
-        if (isset($this->{$name}))
-            return $this->{$name};
-
-        return $this->____default;
+        return $this->{$name} ?? $this->____default;
     }
 
     /**

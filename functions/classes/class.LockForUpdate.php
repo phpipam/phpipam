@@ -73,7 +73,7 @@ class LockForUpdateFile extends LockForUpdateBase {
         do {
             $locked = flock($this->locked_res, LOCK_EX | LOCK_NB);
             if (!$locked) {
-                usleep(rand(2000, 5000));
+                usleep(random_int(2000, 5000));
             }
         } while (!$locked && ((microtime(true) - $start_time) < $timeout));
 
@@ -88,6 +88,7 @@ class LockForUpdateFile extends LockForUpdateBase {
      *
      * @return void
      */
+    #[\Override]
     public function release_lock() {
         if ($this->locked_res) {
             $res = $this->locked_res;
@@ -195,6 +196,7 @@ class LockForUpdateMySQL extends LockForUpdateBase {
      *
      * @return void
      */
+    #[\Override]
     public function release_lock() {
         $this->locked_res = false;
         $this->Database->commit();

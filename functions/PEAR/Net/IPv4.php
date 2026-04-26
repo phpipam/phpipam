@@ -90,12 +90,12 @@ $GLOBALS['Net_IPv4_Netmask_Map'] = array(
 class Net_IPv4
 {
     // {{{ properties
-    var $ip = "";
-    var $bitmask = false;
-    var $netmask = "";
-    var $network = "";
-    var $broadcast = "";
-    var $long = 0;
+    public $ip = "";
+    public $bitmask = false;
+    public $netmask = "";
+    public $network = "";
+    public $broadcast = "";
+    public $long = 0;
 
     //pear
     public $pear;
@@ -326,7 +326,7 @@ class Net_IPv4
 
 	function getNetmask($length)
 	{
-		if (! PEAR::isError($ipobj = Net_IPv4::parseAddress("0.0.0.0/" . $length))) {
+		if (! PEAR::isError($ipobj = $this->parseAddress("0.0.0.0/" . $length))) {
 			$mask = $ipobj->netmask;
 			unset($ipobj);
 			return $mask;
@@ -339,7 +339,7 @@ class Net_IPv4
 
 	function getNetLength($netmask)
 	{
-		if (! PEAR::isError($ipobj = Net_IPv4::parseAddress("0.0.0.0/" . $netmask))) {
+		if (! PEAR::isError($ipobj = $this->parseAddress("0.0.0.0/" . $netmask))) {
 			$bitmask = $ipobj->bitmask;
 			unset($ipobj);
 			return $bitmask;
@@ -352,7 +352,7 @@ class Net_IPv4
 
 	function getSubnet($ip, $netmask)
 	{
-		if (! PEAR::isError($ipobj = Net_IPv4::parseAddress($ip . "/" . $netmask))) {
+		if (! PEAR::isError($ipobj = $this->parseAddress($ip . "/" . $netmask))) {
 			$net = $ipobj->network;
 			unset($ipobj);
 			return $net;
@@ -366,13 +366,13 @@ class Net_IPv4
 	function inSameSubnet($ip1, $ip2)
 	{
 		if (! is_object($ip1) || strcasecmp(get_class($ip1), 'net_ipv4') <> 0) {
-			$ipobj1 = Net_IPv4::parseAddress($ip1);
+			$ipobj1 = $this->parseAddress($ip1);
 			if (PEAR::isError($ipobj1)) {
                 return $this->pear->raiseError("IP addresses must be an understood format or a Net_IPv4 object");
 			}
 		}
 		if (! is_object($ip2) || strcasecmp(get_class($ip2), 'net_ipv4') <> 0) {
-			$ipobj2 = Net_IPv4::parseAddress($ip2);
+			$ipobj2 = $this->parseAddress($ip2);
 			if (PEAR::isError($ipobj2)) {
                 return $this->pear->raiseError("IP addresses must be an understood format or a Net_IPv4 object");
 			}
@@ -394,7 +394,7 @@ class Net_IPv4
      */
     function atoh($addr)
     {
-        if (! Net_IPv4::validateIP($addr)) {
+        if (! $this->validateIP($addr)) {
             return false;
         }
         $ap = explode(".", $addr);
@@ -451,14 +451,14 @@ class Net_IPv4
     function ipInNetwork($ip, $network)
     {
         if (! is_object($network) || strcasecmp(get_class($network), 'net_ipv4') <> 0) {
-            $network = Net_IPv4::parseAddress($network);
+            $network = $this->parseAddress($network);
         }
         if (strcasecmp(get_class($network), 'pear_error') === 0) {
             return false;
         }
-        $net = Net_IPv4::ip2double($network->network);
-        $bcast = Net_IPv4::ip2double($network->broadcast);
-        $ip = Net_IPv4::ip2double($ip);
+        $net = $this->ip2double($network->network);
+        $bcast = $this->ip2double($network->broadcast);
+        $ip = $this->ip2double($ip);
         unset($network);
         if ($ip >= $net && $ip <= $bcast) {
             return true;

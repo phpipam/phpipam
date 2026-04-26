@@ -40,7 +40,8 @@ class L2domains_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function OPTIONS () {
+	#[\Override]
+    public function OPTIONS () {
 		// validate
 		$this->validate_options_request ();
 
@@ -74,7 +75,8 @@ class L2domains_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function GET () {
+	#[\Override]
+    public function GET () {
 		// all domains
 		if(!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ("vlanDomains", 'id', true);
@@ -124,7 +126,8 @@ class L2domains_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function POST () {
+	#[\Override]
+    public function POST () {
 		# remap keys
 		$this->remap_keys ();
 
@@ -153,7 +156,8 @@ class L2domains_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function PATCH () {
+	#[\Override]
+    public function PATCH () {
 		# remap keys
 		$this->remap_keys ();
 
@@ -186,7 +190,8 @@ class L2domains_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function DELETE () {
+	#[\Override]
+    public function DELETE () {
 		# check that domain exists
 		$this->validate_domain_edit ();
 

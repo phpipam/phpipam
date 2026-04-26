@@ -67,7 +67,7 @@ class Net_Ping
     * @var string
     * @access private
     */
-    var $_ping_path = "";
+    public $_ping_path = "";
 
     /**
     * Array with the result from the ping execution
@@ -75,7 +75,7 @@ class Net_Ping
     * @var array
     * @access private
     */
-    var $_result = array();
+    public $_result = array();
 
     /**
     * OS_Guess instance
@@ -83,7 +83,7 @@ class Net_Ping
     * @var object
     * @access private
     */
-    var $_OS_Guess = "";
+    public $_OS_Guess = "";
 
     /**
     * OS_Guess->getSysname result
@@ -91,7 +91,7 @@ class Net_Ping
     * @var string
     * @access private
     */
-    var $_sysname = "";
+    public $_sysname = "";
 
     /**
     * Ping command arguments
@@ -99,7 +99,7 @@ class Net_Ping
     * @var array
     * @access private
     */
-    var $_args = array();
+    public $_args = array();
 
     /**
     * Indicates if an empty array was given to setArgs
@@ -107,7 +107,7 @@ class Net_Ping
     * @var boolean
     * @access private
     */
-    var $_noArgs = true;
+    public $_noArgs = true;
 
     /**
     * Contains the argument->option relation
@@ -115,7 +115,7 @@ class Net_Ping
     * @var array
     * @access private
     */
-    var $_argRelation = array();
+    public $_argRelation = array();
 
     //pear
     public $pear;
@@ -597,7 +597,7 @@ class Net_Ping_Result
     * @var array
     * @access private
     */
-    var $_icmp_sequence = array(); /* array($sequence_number => $time ) */
+    public $_icmp_sequence = array(); /* array($sequence_number => $time ) */
 
     /**
     * The target's IP Address
@@ -605,7 +605,7 @@ class Net_Ping_Result
     * @var string
     * @access private
     */
-    var $_target_ip;
+    public $_target_ip;
 
     /**
     * Number of bytes that are sent with each ICMP request
@@ -613,7 +613,7 @@ class Net_Ping_Result
     * @var int
     * @access private
     */
-    var $_bytes_per_request;
+    public $_bytes_per_request;
 
     /**
     * The total number of bytes that are sent with all ICMP requests
@@ -621,7 +621,7 @@ class Net_Ping_Result
     * @var int
     * @access private
     */
-    var $_bytes_total;
+    public $_bytes_total;
 
     /**
     * The ICMP request's TTL
@@ -629,7 +629,7 @@ class Net_Ping_Result
     * @var int
     * @access private
     */
-    var $_ttl;
+    public $_ttl;
 
     /**
     * The raw Net_Ping::result
@@ -637,7 +637,7 @@ class Net_Ping_Result
     * @var array
     * @access private
     */
-    var $_raw_data = array();
+    public $_raw_data = array();
 
     /**
     * The Net_Ping::_sysname
@@ -645,7 +645,7 @@ class Net_Ping_Result
     * @var int
     * @access private
     */
-    var $_sysname;
+    public $_sysname;
 
     /**
     * Statistical information about the ping
@@ -653,7 +653,7 @@ class Net_Ping_Result
     * @var int
     * @access private
     */
-    var $_round_trip = array(); /* array('min' => xxx, 'avg' => yyy, 'max' => zzz) */
+    public $_round_trip = array(); /* array('min' => xxx, 'avg' => yyy, 'max' => zzz) */
 
 
     /**

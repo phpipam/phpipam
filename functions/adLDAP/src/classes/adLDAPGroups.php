@@ -589,11 +589,7 @@ class adLDAPGroups {
         $fields = array("samaccountname","distinguishedname");
         $sr = ldap_search($this->adldap->getLdapConnection(), $this->adldap->getBaseDn(), $filter, $fields);
         $entries = ldap_get_entries($this->adldap->getLdapConnection(), $sr);
-
-        if (isset($entries[0]['distinguishedname'][0])) {
-            return $entries[0]['distinguishedname'][0];
-        }
-        return false;
+        return $entries[0]['distinguishedname'][0] ?? false;
      }
 
      /**

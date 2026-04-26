@@ -114,55 +114,55 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
     * The index of the character we are currently looking at
     * @var integer
     */
-    var $_current_char;
+    public $_current_char;
 
     /**
     * The token we are working on.
     * @var string
     */
-    var $_current_token;
+    public $_current_token;
 
     /**
     * The formula to parse
     * @var string
     */
-    var $_formula;
+    public $_formula;
 
     /**
     * The character ahead of the current char
     * @var string
     */
-    var $_lookahead;
+    public $_lookahead;
 
     /**
     * The parse tree to be generated
     * @var string
     */
-    var $_parse_tree;
+    public $_parse_tree;
 
     /**
     * The byte order. 1 => big endian, 0 => little endian.
     * @var integer
     */
-    var $_byte_order;
+    public $_byte_order;
 
     /**
     * Array of external sheets
     * @var array
     */
-    var $_ext_sheets;
+    public $_ext_sheets;
 
     /**
     * Array of sheet references in the form of REF structures
     * @var array
     */
-    var $_references;
+    public $_references;
 
     /**
     * The BIFF version for the workbook
     * @var integer
     */
-    var $_BIFF_version;
+    public $_BIFF_version;
 
     /**
     * The class constructor

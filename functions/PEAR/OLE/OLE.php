@@ -55,43 +55,43 @@ class OLE extends PEAR
     * The file handle for reading an OLE container
     * @var resource
     */
-    var $_file_handle;
+    public $_file_handle;
 
     /**
     * Array of PPS's found on the OLE container
     * @var array
     */
-    var $_list;
+    public $_list;
 
     /**
     * Root directory of OLE container
     * @var OLE_PPS_Root
     */
-    var $root;
+    public $root;
 
     /**
     * Big Block Allocation Table
     * @var array  (blockId => nextBlockId)
     */
-    var $bbat;
+    public $bbat;
 
     /**
     * Short Block Allocation Table
     * @var array  (blockId => nextBlockId)
     */
-    var $sbat;
+    public $sbat;
 
     /**
     * Size of big blocks. This is usually 512.
     * @var  int  number of octets per block.
     */
-    var $bigBlockSize;
+    public $bigBlockSize;
 
     /**
     * Size of small blocks. This is usually 64.
     * @var  int  number of octets per block
     */
-    var $smallBlockSize;
+    public $smallBlockSize;
 
 
     /**
@@ -335,8 +335,8 @@ class OLE extends PEAR
             $pps->NextPps = $this->_readInt4($fh);
             $pps->DirPps  = $this->_readInt4($fh);
             fseek($fh, 20, SEEK_CUR);
-            $pps->Time1st = OLE::OLE2LocalDate(fread($fh, 8));
-            $pps->Time2nd = OLE::OLE2LocalDate(fread($fh, 8));
+            $pps->Time1st = $this->OLE2LocalDate(fread($fh, 8));
+            $pps->Time2nd = $this->OLE2LocalDate(fread($fh, 8));
             $pps->_StartBlock = $this->_readInt4($fh);
             $pps->Size = $this->_readInt4($fh);
             $pps->No = count($this->_list);

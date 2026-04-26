@@ -45,25 +45,25 @@ class OLE_ChainedBlockStream extends PEAR
      * The OLE container of the file that is being read.
      * @var OLE
      */
-    var $ole;
+    public $ole;
 
     /**
      * Parameters specified by fopen().
      * @var array
      */
-    var $params;
+    public $params;
 
     /**
      * The binary data of the file.
      * @var  string
      */
-    var $data;
+    public $data;
 
     /**
      * The file pointer.
      * @var  int  byte offset
      */
-    var $pos;
+    public $pos;
 
     /**
      * Implements support for fopen().

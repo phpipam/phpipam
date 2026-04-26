@@ -507,7 +507,7 @@ abstract class DB {
 
 		// SQL Injection - strip backquote character
 		$str = str_replace('`', '', $str);
-		return $this->unquote_outer($this->pdo->quote($str));
+		return static::unquote_outer($this->pdo->quote($str));
 	}
 
 	/**
@@ -1220,7 +1220,8 @@ class Database_PDO extends DB {
 	 * @access public
 	 * @return void
 	 */
-	public function connect() {
+	#[\Override]
+    public function connect() {
 		parent::connect();
 		//@$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
 	}
@@ -1231,7 +1232,8 @@ class Database_PDO extends DB {
 	 * @access protected
 	 * @return string
 	 */
-	protected function makeDsn() {
+	#[\Override]
+    protected function makeDsn() {
 		# for installation
 		if($this->install)	{ return 'mysql:host=' . $this->host . ';port=' . $this->port . ';charset=' . $this->charset; }
 		else				{ return 'mysql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->dbname . ';charset=' . $this->charset; }

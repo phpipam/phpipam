@@ -49,199 +49,199 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * The index given by the workbook when creating a new format.
     * @var integer
     */
-    var $_xf_index;
+    public $_xf_index;
 
     /**
     * Index to the FONT record.
     * @var integer
     */
-    var $font_index;
+    public $font_index;
 
     /**
     * The font name (ASCII).
     * @var string
     */
-    var $_font_name;
+    public $_font_name;
 
     /**
     * Height of font (1/20 of a point)
     * @var integer
     */
-    var $_size;
+    public $_size;
 
     /**
     * Bold style
     * @var integer
     */
-    var $_bold;
+    public $_bold;
 
     /**
     * Bit specifiying if the font is italic.
     * @var integer
     */
-    var $_italic;
+    public $_italic;
 
     /**
     * Index to the cell's color
     * @var integer
     */
-    var $_color;
+    public $_color;
 
     /**
     * The text underline property
     * @var integer
     */
-    var $_underline;
+    public $_underline;
 
     /**
     * Bit specifiying if the font has strikeout.
     * @var integer
     */
-    var $_font_strikeout;
+    public $_font_strikeout;
 
     /**
     * Bit specifiying if the font has outline.
     * @var integer
     */
-    var $_font_outline;
+    public $_font_outline;
 
     /**
     * Bit specifiying if the font has shadow.
     * @var integer
     */
-    var $_font_shadow;
+    public $_font_shadow;
 
     /**
     * 2 bytes specifiying the script type for the font.
     * @var integer
     */
-    var $_font_script;
+    public $_font_script;
 
     /**
     * Byte specifiying the font family.
     * @var integer
     */
-    var $_font_family;
+    public $_font_family;
 
     /**
     * Byte specifiying the font charset.
     * @var integer
     */
-    var $_font_charset;
+    public $_font_charset;
 
     /**
     * An index (2 bytes) to a FORMAT record (number format).
     * @var integer
     */
-    var $_num_format;
+    public $_num_format;
 
     /**
     * Bit specifying if formulas are hidden.
     * @var integer
     */
-    var $_hidden;
+    public $_hidden;
 
     /**
     * Bit specifying if the cell is locked.
     * @var integer
     */
-    var $_locked;
+    public $_locked;
 
     /**
     * The three bits specifying the text horizontal alignment.
     * @var integer
     */
-    var $_text_h_align;
+    public $_text_h_align;
 
     /**
     * Bit specifying if the text is wrapped at the right border.
     * @var integer
     */
-    var $_text_wrap;
+    public $_text_wrap;
 
     /**
     * The three bits specifying the text vertical alignment.
     * @var integer
     */
-    var $_text_v_align;
+    public $_text_v_align;
 
     /**
     * 1 bit, apparently not used.
     * @var integer
     */
-    var $_text_justlast;
+    public $_text_justlast;
 
     /**
     * The two bits specifying the text rotation.
     * @var integer
     */
-    var $_rotation;
+    public $_rotation;
 
     /**
     * The cell's foreground color.
     * @var integer
     */
-    var $_fg_color;
+    public $_fg_color;
 
     /**
     * The cell's background color.
     * @var integer
     */
-    var $_bg_color;
+    public $_bg_color;
 
     /**
     * The cell's background fill pattern.
     * @var integer
     */
-    var $_pattern;
+    public $_pattern;
 
     /**
     * Style of the bottom border of the cell
     * @var integer
     */
-    var $_bottom;
+    public $_bottom;
 
     /**
     * Color of the bottom border of the cell.
     * @var integer
     */
-    var $_bottom_color;
+    public $_bottom_color;
 
     /**
     * Style of the top border of the cell
     * @var integer
     */
-    var $_top;
+    public $_top;
 
     /**
     * Color of the top border of the cell.
     * @var integer
     */
-    var $_top_color;
+    public $_top_color;
 
     /**
     * Style of the left border of the cell
     * @var integer
     */
-    var $_left;
+    public $_left;
 
     /**
     * Color of the left border of the cell.
     * @var integer
     */
-    var $_left_color;
+    public $_left_color;
 
     /**
     * Style of the right border of the cell
     * @var integer
     */
-    var $_right;
+    public $_right;
 
     /**
     * Color of the right border of the cell.
     * @var integer
     */
-    var $_right_color;
+    public $_right_color;
 
     /**
     * Constructor

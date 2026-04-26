@@ -40,7 +40,8 @@ class Vrfs_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function OPTIONS () {
+	#[\Override]
+    public function OPTIONS () {
 		// validate
 		$this->validate_options_request ();
 
@@ -75,7 +76,8 @@ class Vrfs_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function GET () {
+	#[\Override]
+    public function GET () {
 		// all
 		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ("vrf", 'vrfId');
@@ -141,7 +143,8 @@ class Vrfs_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function POST () {
+	#[\Override]
+    public function POST () {
 		# check for valid keys
 		$values = $this->validate_keys ();
 
@@ -167,7 +170,8 @@ class Vrfs_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function PATCH () {
+	#[\Override]
+    public function PATCH () {
 		# verify
 		$this->validate_vrf ();
 		# check that it exists
@@ -200,7 +204,8 @@ class Vrfs_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function DELETE () {
+	#[\Override]
+    public function DELETE () {
 		# check that vrf exists
 		$this->validate_vrf ();
 

@@ -445,6 +445,7 @@ else {
 			$zone = $PowerDNS->get_ptr_zone_name ($subnet['ip'], $subnet['mask']);
 			// fetch domain
 			$domain = $PowerDNS->fetch_domain_by_name ($zone);
+			$btns = [];
 			// count PTR records
 			if ($domain!==false) {
 				if ($User->check_module_permissions ("pdns", User::ACCESS_RWA, false, false)) {
@@ -457,10 +458,10 @@ else {
             }
 				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
 				$btns[] = "</div>";
-				$btns = implode("\n", $btns);
+				$btns_txt = implode("\n", $btns);
 				}
 				else {
-				$btns = "";
+				$btns_txt = "";
 				}
 
 				$zone = "<span class='text-muted'>(domain $zone)</span> <span class='badge badge1 badge5'>".$PowerDNS->count_domain_records_by_type ($domain->id, "PTR")." records</span>";
@@ -470,7 +471,10 @@ else {
 				$btns[] = "<div class='btn-group'>";
 				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
 				$btns[] = "</div>";
-				$btns = implode("\n", $btns);
+				$btns_txt = implode("\n", $btns);
+				}
+				else {
+				$btns_txt = "";
 				}
 
 				$zone = "<span class='badge alert-danger'>Zone $zone missing</span>";
@@ -487,7 +491,7 @@ else {
 
 		print "<tr>";
 		print "	<th>"._('Autocreate reverse records')."</th>";
-		if($subnet['DNSrecursive'] == 1) 			{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $btns $zone</td>"; }		# yes
+		if($subnet['DNSrecursive'] == 1) 			{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $btns_txt $zone</td>"; }		# yes
 		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
 		print "</tr>";
 		print "<tr>";

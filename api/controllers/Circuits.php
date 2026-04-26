@@ -89,7 +89,8 @@ class Circuits_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function OPTIONS () {
+	#[\Override]
+    public function OPTIONS () {
 		// validate
 		$this->validate_options_request ();
 
@@ -133,7 +134,8 @@ class Circuits_controller extends Common_api_functions {
 	 * @access public
 	 * @return void|array
 	 */
-	public function GET () {
+	#[\Override]
+    public function GET () {
 		// all
 		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ($this->type, 'id');
@@ -185,7 +187,8 @@ class Circuits_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function POST () {
+	#[\Override]
+    public function POST () {
 		# remap keys
 		$this->remap_keys ();
 		# validate id
@@ -225,7 +228,8 @@ class Circuits_controller extends Common_api_functions {
 	 *
 	 * @return void|array
 	 */
-	public function PATCH () {
+	#[\Override]
+    public function PATCH () {
 		# remap keys
 		$this->remap_keys ();
 		# validate id
@@ -261,7 +265,8 @@ class Circuits_controller extends Common_api_functions {
 	 *
 	 * @return void|array
 	 */
-	public function DELETE () {
+	#[\Override]
+    public function DELETE () {
 		# verify
 		$this->validate_id ("delete");
 

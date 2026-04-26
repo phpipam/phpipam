@@ -111,6 +111,7 @@ class Nat_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[\Override]
     public function OPTIONS () {
         // validate
         $this->validate_options_request ();
@@ -139,6 +140,7 @@ class Nat_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[\Override]
     public function GET () {
         # Get all NATs from DB
         if (!isset($this->_params->id) || $this->_params->id == "all") {
@@ -191,6 +193,7 @@ class Nat_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[\Override]
     public function HEAD () {
         return $this->GET ();
     }
@@ -201,6 +204,7 @@ class Nat_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[\Override]
     public function POST () {
         # check for valid keys
         $values = $this->validate_keys ();
@@ -222,6 +226,7 @@ class Nat_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[\Override]
     public function PATCH () {
         # check for valid keys
         $values = $this->validate_keys ();
@@ -349,6 +354,7 @@ class Nat_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[\Override]
     public function DELETE () {
         $values = $this->validate_keys();
         $this->validate_nat_edit();

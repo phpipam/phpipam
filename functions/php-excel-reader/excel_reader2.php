@@ -94,7 +94,7 @@ function v($data,$pos) {
 
 #[AllowDynamicProperties]
 class OLERead extends stdClass {
-	var $data = '';
+	public $data = '';
 	function __construct(){	}
 
 	function read($sFileName){
@@ -314,10 +314,10 @@ define('SPREADSHEET_EXCEL_READER_DEF_NUM_FORMAT',	"%s");
 class Spreadsheet_Excel_Reader extends stdClass {
 
 	// MK: Added to make data retrieval easier
-	var $colnames = array();
-	var $colindexes = array();
-	var $standardColWidth = 0;
-	var $defaultColWidth = 0;
+	public $colnames = array();
+	public $colindexes = array();
+	public $standardColWidth = 0;
+	public $defaultColWidth = 0;
 
 	function myHex($d) {
 		if ($d < 16) return "0" . dechex($d);
@@ -654,28 +654,28 @@ class Spreadsheet_Excel_Reader extends stdClass {
 	// END PUBLIC API
 
 
-	var $boundsheets = array();
-	var $formatRecords = array();
-	var $fontRecords = array();
-	var $xfRecords = array();
-	var $colInfo = array();
-   	var $rowInfo = array();
+	public $boundsheets = array();
+	public $formatRecords = array();
+	public $fontRecords = array();
+	public $xfRecords = array();
+	public $colInfo = array();
+   	public $rowInfo = array();
 
-	var $sst = array();
-	var $sheets = array();
+	public $sst = array();
+	public $sheets = array();
 
-	var $data;
-	var $_ole;
-	var $_defaultEncoding = "UTF-8";
-	var $_defaultFormat = SPREADSHEET_EXCEL_READER_DEF_NUM_FORMAT;
-	var $_columnsFormat = array();
-	var $_rowoffset = 1;
-	var $_coloffset = 1;
+	public $data;
+	public $_ole;
+	public $_defaultEncoding = "UTF-8";
+	public $_defaultFormat = SPREADSHEET_EXCEL_READER_DEF_NUM_FORMAT;
+	public $_columnsFormat = array();
+	public $_rowoffset = 1;
+	public $_coloffset = 1;
 
 	/**
 	 * List of default date formats used by Excel
 	 */
-	var $dateFormats = array (
+	public $dateFormats = array (
 		0xe => "m/d/Y",
 		0xf => "M-d-Y",
 		0x10 => "d-M",
@@ -693,7 +693,7 @@ class Spreadsheet_Excel_Reader extends stdClass {
 	/**
 	 * Default number formats used by Excel
 	 */
-	var $numberFormats = array(
+	public $numberFormats = array(
 		0x1 => "0",
 		0x2 => "0.00",
 		0x3 => "#,##0",
@@ -716,7 +716,7 @@ class Spreadsheet_Excel_Reader extends stdClass {
 		0x30 => "##0.0E+0"
 	);
 
-    var $colors = Array(
+    public $colors = Array(
         0x00 => "#000000",
         0x01 => "#FFFFFF",
         0x02 => "#FF0000",
@@ -794,7 +794,7 @@ class Spreadsheet_Excel_Reader extends stdClass {
         0x7FFF => "#000000"
     );
 
-	var $lineStyles = array(
+	public $lineStyles = array(
 		0x00 => "",
 		0x01 => "Thin",
 		0x02 => "Medium",
@@ -811,7 +811,7 @@ class Spreadsheet_Excel_Reader extends stdClass {
 		0x0D => "Slanted medium dash-dotted"
 	);
 
-	var $lineStylesCss = array(
+	public $lineStylesCss = array(
 		"Thin" => "1px solid",
 		"Medium" => "2px solid",
 		"Dashed" => "1px dashed",

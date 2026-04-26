@@ -425,20 +425,20 @@ else {
                                     $type = $d->isFolder==1 ? "folder" : "subnets";
                                     $mobjects[] = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i><span style='color:#999'> $d->name / $d->description: </span> <a href='".create_link($type,$d->sectionId,$d->subnetId)."'>".$Subnets->transform_address($d->ip_addr, "dotted")."</a><br>";
                                 }
-                                $mobjects = implode("\n", $mobjects);
+                                $mobjects_txt = implode("\n", $mobjects);
                             }
                             else {
-                                $mobjects = "";
+                                $mobjects_txt = "";
                             }
                 	    }
                 	    else {
                     	    $mclass = "";
                     	    $minfo = "";
-                    	    $mobjects = "";
+                    	    $mobjects_txt = "";
                 	    }
                     }
 					// multicast ?
-					if ($User->settings->enableMulticast=="1" && $Subnets->is_multicast ($addresses[$n]->ip_addr))          { print "<td class='$mclass' style='white-space:nowrap;'>".$addresses[$n]->mac." $minfo $mobjects</td>"; }
+					if ($User->settings->enableMulticast=="1" && $Subnets->is_multicast ($addresses[$n]->ip_addr))          { print "<td class='$mclass' style='white-space:nowrap;'>".$addresses[$n]->mac." $minfo $mobjects_txt</td>"; }
 					elseif(!empty($addresses[$n]->mac)) 				{ print "<td class='narrow'><i class='info fa fa-gray fa-sitemap' rel='tooltip' data-container='body' data-html='true' title='".$User->show_mac_and_vendor($addresses[$n]->mac)."'></i></td>"; }
 					else 												{ print "<td class='narrow'></td>"; }
 				}

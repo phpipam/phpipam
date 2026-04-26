@@ -48,6 +48,7 @@ class Devices_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[\Override]
     public function OPTIONS () {
         // validate
         $this->validate_options_request();
@@ -88,6 +89,7 @@ class Devices_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[\Override]
     public function GET () {
         // all objects
         if (!isset($this->_params->id) || $this->_params->id == "all") {
@@ -180,6 +182,7 @@ class Devices_controller extends Common_api_functions {
      *
      * @method POST
      */
+    #[\Override]
     public function POST () {
         # Put incoming keys in order
         $this->remap_keys ();
@@ -219,6 +222,7 @@ class Devices_controller extends Common_api_functions {
      *
      * @method PATCH
      */
+    #[\Override]
     public function PATCH (){
         # Put incoming keys back in order
         $this->remap_keys();
@@ -252,6 +256,7 @@ class Devices_controller extends Common_api_functions {
      *
      * @method DELETE
      */
+    #[\Override]
     public function DELETE () {
 		# validations
 		$this->validate_device_edit();

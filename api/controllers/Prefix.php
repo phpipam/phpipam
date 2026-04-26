@@ -347,6 +347,7 @@ class Prefix_controller extends Common_api_functions {
      * @access public
      * @return array
      */
+    #[\Override]
     public function OPTIONS () {
         // validate
         $this->validate_options_request ();
@@ -377,6 +378,7 @@ class Prefix_controller extends Common_api_functions {
      * @access public
      * @return array
      */
+    #[\Override]
     public function GET () {
         // external identifier
         if($this->_params->id == "external_id") {
@@ -467,6 +469,7 @@ class Prefix_controller extends Common_api_functions {
      * @access public
      * @return array
      */
+    #[\Override]
     public function POST () {
         // validate parameters
         $this->validate_all_request_parameters ();

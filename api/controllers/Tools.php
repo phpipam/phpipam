@@ -140,7 +140,8 @@ class Tools_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function OPTIONS () {
+	#[\Override]
+    public function OPTIONS () {
 		// validate
 		$this->validate_options_request ();
 
@@ -203,7 +204,8 @@ class Tools_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function GET () {
+	#[\Override]
+    public function GET () {
 		# validate identifiers
 		$this->validate_subcontroller_identifier ();
 
@@ -338,7 +340,8 @@ class Tools_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function POST () {
+	#[\Override]
+    public function POST () {
 		# rewrite tool controller _params
 		$table_name = $this->rewrite_tool_input_params ();
 
@@ -374,7 +377,8 @@ class Tools_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function PATCH () {
+	#[\Override]
+    public function PATCH () {
 		# rewrite tool controller _params
 		$table_name = $this->rewrite_tool_input_params();
 
@@ -413,7 +417,8 @@ class Tools_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function DELETE () {
+	#[\Override]
+    public function DELETE () {
 		# rewrite tool controller _params
 		$table_name = $this->rewrite_tool_input_params();
 

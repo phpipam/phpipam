@@ -185,33 +185,33 @@
  *********************************************************************/
 class Radius
 {
-    var $_ip_radius_server;       // Radius server IP address
-    var $_shared_secret;          // Shared secret with the radius server
-    var $_radius_suffix;          // Radius suffix (default is '');
-    var $_udp_timeout;            // Timeout of the UDP connection in seconds (default value is 5)
-    var $_authentication_port;    // Authentication port (default value is 1812)
-    var $_accounting_port;        // Accounting port (default value is 1813)
-    var $_nas_ip_address;         // NAS IP address
-    var $_nas_port;               // NAS port
-    var $_encrypted_password;     // Encrypted password, as described in the RFC 2865
-    var $_user_ip_address;        // Remote IP address of the user
-    var $_request_authenticator;  // Request-Authenticator, 16 octets random number
-    var $_response_authenticator; // Request-Authenticator, 16 octets random number
-    var $_username;               // Username to sent to the Radius server
-    var $_password;               // Password to sent to the Radius server (clear password, must be encrypted)
-    var $_identifier_to_send;     // Identifier field for the packet to be sent
-    var $_identifier_received;    // Identifier field for the received packet
-    var $_radius_packet_to_send;  // Radius packet code (1=Access-Request, 2=Access-Accept, 3=Access-Reject, 4=Accounting-Request, 5=Accounting-Response, 11=Access-Challenge, 12=Status-Server (experimental), 13=Status-Client (experimental), 255=Reserved
-    var $_radius_packet_received; // Radius packet code (1=Access-Request, 2=Access-Accept, 3=Access-Reject, 4=Accounting-Request, 5=Accounting-Response, 11=Access-Challenge, 12=Status-Server (experimental), 13=Status-Client (experimental), 255=Reserved
-    var $_attributes_to_send;     // Radius attributes to send
-    var $_attributes_received;    // Radius attributes received
-    var $_socket_to_server;       // Socket connection
-    var $_debug_mode;             // Debug mode flag
-    var $debug_text = [];         // Debug messages
-    var $_attributes_info;        // Attributes info array
-    var $_radius_packet_info;     // Radius packet codes info array
-    var $_last_error_code;        // Last error code
-    var $_last_error_message;     // Last error message
+    public $_ip_radius_server;       // Radius server IP address
+    public $_shared_secret;          // Shared secret with the radius server
+    public $_radius_suffix;          // Radius suffix (default is '');
+    public $_udp_timeout;            // Timeout of the UDP connection in seconds (default value is 5)
+    public $_authentication_port;    // Authentication port (default value is 1812)
+    public $_accounting_port;        // Accounting port (default value is 1813)
+    public $_nas_ip_address;         // NAS IP address
+    public $_nas_port;               // NAS port
+    public $_encrypted_password;     // Encrypted password, as described in the RFC 2865
+    public $_user_ip_address;        // Remote IP address of the user
+    public $_request_authenticator;  // Request-Authenticator, 16 octets random number
+    public $_response_authenticator; // Request-Authenticator, 16 octets random number
+    public $_username;               // Username to sent to the Radius server
+    public $_password;               // Password to sent to the Radius server (clear password, must be encrypted)
+    public $_identifier_to_send;     // Identifier field for the packet to be sent
+    public $_identifier_received;    // Identifier field for the received packet
+    public $_radius_packet_to_send;  // Radius packet code (1=Access-Request, 2=Access-Accept, 3=Access-Reject, 4=Accounting-Request, 5=Accounting-Response, 11=Access-Challenge, 12=Status-Server (experimental), 13=Status-Client (experimental), 255=Reserved
+    public $_radius_packet_received; // Radius packet code (1=Access-Request, 2=Access-Accept, 3=Access-Reject, 4=Accounting-Request, 5=Accounting-Response, 11=Access-Challenge, 12=Status-Server (experimental), 13=Status-Client (experimental), 255=Reserved
+    public $_attributes_to_send;     // Radius attributes to send
+    public $_attributes_received;    // Radius attributes received
+    public $_socket_to_server;       // Socket connection
+    public $_debug_mode;             // Debug mode flag
+    public $debug_text = [];         // Debug messages
+    public $_attributes_info;        // Attributes info array
+    public $_radius_packet_info;     // Radius packet codes info array
+    public $_last_error_code;        // Last error code
+    public $_last_error_message;     // Last error message
 
 
     /*********************************************************************
@@ -322,7 +322,7 @@ class Radius
         $this->_request_authenticator = '';
         for ($ra_loop = 0; $ra_loop <= 15; $ra_loop++)
         {
-            $this->_request_authenticator .= chr(rand(1, 255));
+            $this->_request_authenticator .= chr(random_int(1, 255));
         }
     }
 
@@ -422,7 +422,7 @@ class Radius
             $previous_result = '';
             for ($xor_loop = 0; $xor_loop <= 15; $xor_loop++)
             {
-                $value1 = ord(substr($padded_password, ($full_loop * 16) + $xor_loop, 1));
+                $value1 = ord(substr($padded_password, ($full_loop * 16) + $xor_loop, 1)[0]);
                 $value2 = hexdec(substr($xor_value, 2 * $xor_loop, 2));
                 $xor_result = $value1^$value2;
                 $previous_result .= chr($xor_result);
@@ -583,7 +583,7 @@ class Radius
         $attribute_count = count((array)$this->_attributes_to_send);
         for ($attributes_loop = 0; $attributes_loop < $attribute_count; $attributes_loop++)
         {
-            if ($type == ord(substr($this->_attributes_to_send[$attributes_loop], 0, 1)))
+            if ($type == ord(substr($this->_attributes_to_send[$attributes_loop], 0, 1)[0]))
             {
                 $attribute_index = $attributes_loop;
                 break;
@@ -646,10 +646,10 @@ class Radius
                     $attribute_value = $attribute_raw_value;
                     break;
                 case 'A': // Address, 32 bit value, most significant octet first.
-                    $attribute_value = ord(substr($attribute_raw_value, 0, 1)).'.'.ord(substr($attribute_raw_value, 1, 1)).'.'.ord(substr($attribute_raw_value, 2, 1)).'.'.ord(substr($attribute_raw_value, 3, 1));
+                    $attribute_value = ord(substr($attribute_raw_value, 0, 1)[0]).'.'.ord(substr($attribute_raw_value, 1, 1)[0]).'.'.ord(substr($attribute_raw_value, 2, 1)[0]).'.'.ord(substr($attribute_raw_value, 3, 1)[0]);
                     break;
                 case 'I': // Integer, 32 bit unsigned value, most significant octet first.
-                    $attribute_value = (ord(substr($attribute_raw_value, 0, 1)) * 256 * 256 * 256) + (ord(substr($attribute_raw_value, 1, 1)) * 256 * 256) + (ord(substr($attribute_raw_value, 2, 1)) * 256) + ord(substr($attribute_raw_value, 3, 1));
+                    $attribute_value = (ord(substr($attribute_raw_value, 0, 1)[0]) * 256 * 256 * 256) + (ord(substr($attribute_raw_value, 1, 1)[0]) * 256 * 256) + (ord(substr($attribute_raw_value, 2, 1)[0]) * 256) + ord(substr($attribute_raw_value, 3, 1)[0]);
                     break;
                 case 'D': // Time, 32 bit unsigned value, most significant octet first -- seconds since 00:00:00 UTC, January 1, 1970. (not used in this RFC)
                     $attribute_value = NULL;
@@ -669,12 +669,12 @@ class Radius
     {
         $result = array();
         $offset_in_raw = 0;
-        $vendor_id = (ord(substr($vendor_specific_raw_value, 0, 1)) * 256 * 256 * 256) + (ord(substr($vendor_specific_raw_value, 1, 1)) * 256 * 256) + (ord(substr($vendor_specific_raw_value, 2, 1)) * 256) + ord(substr($vendor_specific_raw_value, 3, 1));
+        $vendor_id = (ord(substr($vendor_specific_raw_value, 0, 1)[0]) * 256 * 256 * 256) + (ord(substr($vendor_specific_raw_value, 1, 1)[0]) * 256 * 256) + (ord(substr($vendor_specific_raw_value, 2, 1)[0]) * 256) + ord(substr($vendor_specific_raw_value, 3, 1)[0]);
         $offset_in_raw += 4;
         while ($offset_in_raw < strlen($vendor_specific_raw_value))
         {
-            $vendor_type = (ord(substr($vendor_specific_raw_value, 0 + $offset_in_raw, 1)));
-            $vendor_length = (ord(substr($vendor_specific_raw_value, 1 + $offset_in_raw, 1)));
+            $vendor_type = (ord(substr($vendor_specific_raw_value, 0 + $offset_in_raw, 1)[0]));
+            $vendor_length = (ord(substr($vendor_specific_raw_value, 1 + $offset_in_raw, 1)[0]));
             $attribute_specific = substr($vendor_specific_raw_value, 2 + $offset_in_raw, $vendor_length);
             $result[] = array($vendor_id, $vendor_type, $attribute_specific);
             $offset_in_raw += ($vendor_length);
@@ -759,8 +759,8 @@ class Radius
                 $readable_attributes = '';
                 foreach ($this->_attributes_to_send as $one_attribute_to_send)
                 {
-                    $attribute_info = $this->GetAttributesInfo(ord(substr($one_attribute_to_send, 0, 1)));
-                    $this->DebugInfo('Attribute '.ord(substr($one_attribute_to_send, 0, 1)).' ('.$attribute_info[0].'), length '.(ord(substr($one_attribute_to_send, 1, 1)) - 2).', format '.$attribute_info[1].', value <em>'.$this->DecodeAttribute(substr($one_attribute_to_send, 2), ord(substr($one_attribute_to_send, 0, 1))).'</em>');
+                    $attribute_info = $this->GetAttributesInfo(ord(substr($one_attribute_to_send, 0, 1)[0]));
+                    $this->DebugInfo('Attribute '.ord(substr($one_attribute_to_send, 0, 1)[0]).' ('.$attribute_info[0].'), length '.(ord(substr($one_attribute_to_send, 1, 1)[0]) - 2).', format '.$attribute_info[1].', value <em>'.$this->DecodeAttribute(substr($one_attribute_to_send, 2), ord(substr($one_attribute_to_send, 0, 1)[0])).'</em>');
                 }
             }
             $read_socket_array   = array($_socket_to_server);
@@ -791,20 +791,20 @@ class Radius
             }
         }
 
-        $this->_radius_packet_received = intval(ord(substr($received_packet, 0, 1)));
+        $this->_radius_packet_received = intval(ord(substr($received_packet, 0, 1)[0]));
 
         $this->DebugInfo('<b>Packet type '.$this->_radius_packet_received.' ('.$this->GetRadiusPacketInfo($this->_radius_packet_received).')'.' received</b>');
 
         if ($this->_radius_packet_received > 0)
         {
-            $this->_identifier_received = intval(ord(substr($received_packet, 1, 1)));
-            $packet_length = (intval(ord(substr($received_packet, 2, 1))) * 256) + (intval(ord(substr($received_packet, 3, 1))));
+            $this->_identifier_received = intval(ord(substr($received_packet, 1, 1)[0]));
+            $packet_length = (intval(ord(substr($received_packet, 2, 1)[0])) * 256) + (intval(ord(substr($received_packet, 3, 1)[0])));
             $this->_response_authenticator = substr($received_packet, 4, 16);
             $attributes_content = substr($received_packet, 20, ($packet_length - 4 - 16));
             while (strlen($attributes_content) > 2)
             {
-                $attribute_type = intval(ord(substr($attributes_content, 0, 1)));
-                $attribute_length = intval(ord(substr($attributes_content, 1, 1)));
+                $attribute_type = intval(ord(substr($attributes_content, 0, 1)[0]));
+                $attribute_length = intval(ord(substr($attributes_content, 1, 1)[0]));
                 $attribute_raw_value = substr($attributes_content, 2, $attribute_length - 2);
                 $attributes_content = substr($attributes_content, $attribute_length);
 

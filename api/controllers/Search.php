@@ -63,7 +63,8 @@ class Search_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function OPTIONS () {
+	#[\Override]
+    public function OPTIONS () {
 		// validate
 		$this->validate_options_request ();
 
@@ -96,7 +97,8 @@ class Search_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function GET () {
+	#[\Override]
+    public function GET () {
 		// start search
 		if(isset($this->_params->id)) {
 			// set result array

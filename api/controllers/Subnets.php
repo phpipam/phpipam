@@ -48,7 +48,8 @@ class Subnets_controller extends Common_api_functions {
 	 * @access public
 	 * @return array
 	 */
-	public function OPTIONS () {
+	#[\Override]
+    public function OPTIONS () {
 		// validate
 		$this->validate_options_request ();
 
@@ -80,7 +81,8 @@ class Subnets_controller extends Common_api_functions {
 	 * @access public
 	 * @return array
 	 */
-	public function POST () {
+	#[\Override]
+    public function POST () {
 		# add required parameters
 		if(!isset($this->_params->isFolder)) { $this->_params->isFolder = "0"; }
 		elseif($this->_params->isFolder==1)	 { unset($this->_params->subnet, $this->_params->mask); }
@@ -160,7 +162,8 @@ class Subnets_controller extends Common_api_functions {
 	 * @access public
 	 * @return array
 	 */
-	public function GET () {
+	#[\Override]
+    public function GET () {
 		// all
 		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->read_all_subnets();
@@ -274,7 +277,8 @@ class Subnets_controller extends Common_api_functions {
 	 * @access public
 	 * @return array
 	 */
-	public function PATCH () {
+	#[\Override]
+    public function PATCH () {
 		// Check for id
 		$this->validate_subnet_id ();
 
@@ -332,7 +336,8 @@ class Subnets_controller extends Common_api_functions {
 	 * @access public
 	 * @return array
 	 */
-	public function DELETE () {
+	#[\Override]
+    public function DELETE () {
 		// Check for id
 		$this->validate_subnet_id ();
 

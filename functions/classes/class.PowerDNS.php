@@ -1489,7 +1489,7 @@ class PowerDNS extends Common_functions {
 
         $networkp = $ipp & $maskp;
         $ipt = '';
-        foreach(str_split($networkp) as $char) $ipt .= str_pad(dechex(ord($char)), 2, '0', STR_PAD_LEFT);
+        foreach(str_split($networkp) as $char) $ipt .= str_pad(dechex(ord($char[0])), 2, '0', STR_PAD_LEFT);
         $prefixnibbles = floor($mask / 4);
         $network = substr($ipt, 0, $prefixnibbles);
         $zone = array_reverse(str_split($network));

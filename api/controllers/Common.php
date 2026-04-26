@@ -13,7 +13,8 @@ class API_params extends Params {
 	 * @param bool	$html_escape
 	 * @return void
 	 */
-	public function read($args, $strip_tags = false, $html_escape = false) {
+	#[\Override]
+    public function read($args, $strip_tags = false, $html_escape = false) {
 		if (is_array($args) && isset($args['controller'])) {
 			$args['controller'] = strtolower($args['controller']);
 		}

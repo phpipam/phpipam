@@ -47,25 +47,25 @@ define("OP_LTE",        0x07);
 */
 class Spreadsheet_Excel_Writer_Validator
 {
-   var $_type;
-   var $_style;
-   var $_fixedList;
-   var $_blank;
-   var $_incell;
-   var $_showprompt;
-   var $_showerror;
-   var $_title_prompt;
-   var $_descr_prompt;
-   var $_title_error;
-   var $_descr_error;
-   var $_operator;
-   var $_formula1;
-   var $_formula2;
+   public $_type;
+   public $_style;
+   public $_fixedList;
+   public $_blank;
+   public $_incell;
+   public $_showprompt;
+   public $_showerror;
+   public $_title_prompt;
+   public $_descr_prompt;
+   public $_title_error;
+   public $_descr_error;
+   public $_operator;
+   public $_formula1;
+   public $_formula2;
     /**
     * The parser from the workbook. Used to parse validation formulas also
     * @var Spreadsheet_Excel_Writer_Parser
     */
-    var $_parser;
+    public $_parser;
 
     function __construct(&$parser)
     {

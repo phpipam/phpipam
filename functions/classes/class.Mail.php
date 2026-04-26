@@ -134,7 +134,8 @@ class phpipam_mail extends Common_functions {
 	 * @param int $level (default: 2)
 	 * @return void
 	 */
-	public function set_debugging ($level = 2) {
+	#[\Override]
+    public function set_debugging ($level = 2) {
 		$this->Php_mailer->SMTPDebug = $level == 1 ? 1 : 2;
 		// output
 		$this->Php_mailer->Debugoutput = 'html';

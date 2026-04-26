@@ -55,7 +55,8 @@ class Addresses_controller extends Common_api_functions  {
 	 * @access public
 	 * @return void
 	 */
-	public function OPTIONS () {
+	#[\Override]
+    public function OPTIONS () {
 		// validate
 		$this->validate_options_request ();
 
@@ -99,7 +100,8 @@ class Addresses_controller extends Common_api_functions  {
 	 * @access public
 	 * @return void
 	 */
-	public function GET () {
+	#[\Override]
+    public function GET () {
 		// all
 		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			// fetch all
@@ -295,7 +297,8 @@ class Addresses_controller extends Common_api_functions  {
 	 * @access public
 	 * @return void
 	 */
-	public function POST () {
+	#[\Override]
+    public function POST () {
 		// remap keys
 		$this->remap_keys ();
 
@@ -359,7 +362,8 @@ class Addresses_controller extends Common_api_functions  {
 	 * @access public
 	 * @return void
 	 */
-	public function PATCH () {
+	#[\Override]
+    public function PATCH () {
 		// remap keys
 		$this->remap_keys ();
 
@@ -420,7 +424,8 @@ class Addresses_controller extends Common_api_functions  {
 	 * @access public
 	 * @return void
 	 */
-	public function DELETE () {
+	#[\Override]
+    public function DELETE () {
     	// delete by ip
     	if ($this->Tools->validate_ip ($this->_params->id)!==false && isset($this->_params->id2)) {
         	// find

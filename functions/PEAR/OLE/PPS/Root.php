@@ -36,7 +36,7 @@ class OLE_PPS_Root extends OLE_PPS
     * The temporary dir for storing the OLE file
     * @var string
     */
-    var $_tmp_dir;
+    public $_tmp_dir;
 
     /**
     * Constructor

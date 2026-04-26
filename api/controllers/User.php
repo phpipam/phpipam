@@ -100,7 +100,8 @@ class User_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function OPTIONS () {
+	#[\Override]
+    public function OPTIONS () {
 		// validate
 		$this->validate_options_request ();
 
@@ -132,7 +133,8 @@ class User_controller extends Common_api_functions {
 	 *		- /all/							// returns all phpipam users
 	 *		- /admins/						// returns ipam admins
 	 */
-	public function GET () {
+	#[\Override]
+    public function GET () {
 		// token_expires
 		if ($this->_params->id=="token_expires" || $this->_params->id=="token" || !isset($this->_params->id) || $this->_params->id=="all" || $this->_params->id=="admins") {
 			// block IP
@@ -178,7 +180,8 @@ class User_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function POST () {
+	#[\Override]
+    public function POST () {
 		// block IP
 		$this->validate_block ();
 		// authenticate user and provide token
@@ -195,7 +198,8 @@ class User_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function PATCH () {
+	#[\Override]
+    public function PATCH () {
 		// block IP
 		$this->validate_block ();
 		// validate token
@@ -217,7 +221,8 @@ class User_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function DELETE () {
+	#[\Override]
+    public function DELETE () {
 		// block IP
 		$this->validate_block ();
 		// validate token

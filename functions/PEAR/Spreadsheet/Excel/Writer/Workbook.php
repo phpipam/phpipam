@@ -53,117 +53,117 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * Filename for the Workbook
     * @var string
     */
-    var $_filename;
+    public $_filename;
 
     /**
     * Formula parser
     * @var object Parser
     */
-    var $_parser;
+    public $_parser;
 
     /**
     * Flag for 1904 date system (0 => base date is 1900, 1 => base date is 1904)
     * @var integer
     */
-    var $_1904;
+    public $_1904;
 
     /**
     * The active worksheet of the workbook (0 indexed)
     * @var integer
     */
-    var $_activesheet;
+    public $_activesheet;
 
     /**
     * 1st displayed worksheet in the workbook (0 indexed)
     * @var integer
     */
-    var $_firstsheet;
+    public $_firstsheet;
 
     /**
     * Number of workbook tabs selected
     * @var integer
     */
-    var $_selected;
+    public $_selected;
 
     /**
     * Index for creating adding new formats to the workbook
     * @var integer
     */
-    var $_xf_index;
+    public $_xf_index;
 
     /**
     * Flag for preventing close from being called twice.
     * @var integer
     * @see close()
     */
-    var $_fileclosed;
+    public $_fileclosed;
 
     /**
     * The BIFF file size for the workbook.
     * @var integer
     * @see _calcSheetOffsets()
     */
-    var $_biffsize;
+    public $_biffsize;
 
     /**
     * The default sheetname for all sheets created.
     * @var string
     */
-    var $_sheetname;
+    public $_sheetname;
 
     /**
     * The default XF format.
     * @var object Format
     */
-    var $_tmp_format;
+    public $_tmp_format;
 
     /**
     * Array containing references to all of this workbook's worksheets
     * @var array
     */
-    var $_worksheets;
+    public $_worksheets;
 
     /**
     * Array of sheetnames for creating the EXTERNSHEET records
     * @var array
     */
-    var $_sheetnames;
+    public $_sheetnames;
 
     /**
     * Array containing references to all of this workbook's formats
     * @var array
     */
-    var $_formats;
+    public $_formats;
 
     /**
     * Array containing the colour palette
     * @var array
     */
-    var $_palette;
+    public $_palette;
 
     /**
     * The default format for URLs.
     * @var object Format
     */
-    var $_url_format;
+    public $_url_format;
 
     /**
     * The codepage indicates the text encoding used for strings
     * @var integer
     */
-    var $_codepage;
+    public $_codepage;
 
     /**
     * The country code used for localization
     * @var integer
     */
-    var $_country_code;
+    public $_country_code;
 
     /**
     * number of bytes for sizeinfo of strings
     * @var integer
     */
-    var $_string_sizeinfo_size;
+    public $_string_sizeinfo_size;
 
     /**
     * Class constructor

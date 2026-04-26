@@ -38,7 +38,8 @@ class Sections_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function OPTIONS () {
+	#[\Override]
+    public function OPTIONS () {
 		// validate
 		$this->validate_options_request ();
 
@@ -75,7 +76,8 @@ class Sections_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function GET () {
+	#[\Override]
+    public function GET () {
 		// fetch subnets in section
 		if(@$this->_params->id2=="subnets" && is_numeric($this->_params->id)) {
 			// we don't need id2 anymore
@@ -165,7 +167,8 @@ class Sections_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function POST () {
+	#[\Override]
+    public function POST () {
 		# check for valid keys
 		$values = $this->validate_keys ();
 
@@ -202,7 +205,8 @@ class Sections_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function PATCH () {
+	#[\Override]
+    public function PATCH () {
 		# Check for id
 		if(!isset($this->_params->id))					{ $this->Response->throw_exception(400, "Section Id required"); }
 		# check that section exists
@@ -231,7 +235,8 @@ class Sections_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function DELETE () {
+	#[\Override]
+    public function DELETE () {
 		# Check for id
 		if(!isset($this->_params->id))					{ $this->Response->throw_exception(400, "Section Id required"); }
 		# check that section exists
