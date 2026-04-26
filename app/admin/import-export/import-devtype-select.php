@@ -21,10 +21,10 @@ $tpl_field_names = "";
 $tpl_field_types = "";
 
 # predefine field list
-$expfields = array ("tname","tdescription");
+$expfields =  ["tname","tdescription"];
 $mtable = "deviceTypes"; # main table where to check the fields
 # required fields without which we will not continue
-$reqfields = array("tname");
+$reqfields = ["tname"];
 
 # manually adjust the standard fields
 foreach($expfields as $std_field) {

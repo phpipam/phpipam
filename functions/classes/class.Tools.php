@@ -91,14 +91,14 @@ class Tools extends Common_functions {
 	    # set query
 	    $query = 'SELECT vlans.vlanId,vlans.number,vlans.name,vlans.description,vlans.customer_id,subnets.subnet,subnets.mask,subnets.id AS subnetId,subnets.sectionId'.@$custom_fields_query.' FROM vlans LEFT JOIN subnets ON subnets.vlanId = vlans.vlanId where vlans.`domainId` = ? ORDER BY vlans.number ASC;';
 		# fetch
-		try { $vlans = $this->Database->getObjectsQuery("vlans", $query, array($domainId)); }
+		try { $vlans = $this->Database->getObjectsQuery("vlans", $query, [$domainId]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
 
 		# reorder
-		$out = array();
+		$out = [];
 		foreach ($vlans as $vlan) {
 			$out[$vlan->vlanId][] = $vlan;
 		}
@@ -128,7 +128,7 @@ class Tools extends Common_functions {
 	 * @param array $custom_fields (default: array())
 	 * @return array
 	 */
-	public function search_addresses($search_term, $high = "", $low = "", $custom_fields = array()) {
+	public function search_addresses($search_term, $high = "", $low = "", $custom_fields = []) {
 
     	$tags = $this->fetch_all_objects ("ipTags", "id");
     	foreach ($tags as $t) {
@@ -165,7 +165,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $result = $this->Database->getObjectsQuery('ipaddresses', $query, array("low"=>$low, "high"=>$high, "search_term"=>"%$search_term%", "tags"=>$tags)); }
+		try { $result = $this->Database->getObjectsQuery('ipaddresses', $query, ["low"=>$low, "high"=>$high, "search_term"=>"%$search_term%", "tags"=>$tags]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -188,7 +188,7 @@ class Tools extends Common_functions {
 	 * @param mixed $custom_fields (default: array())
 	 * @return array
 	 */
-	public function search_subnets($search_term, $high, $low, $search_req, $custom_fields = array()) {
+	public function search_subnets($search_term, $high, $low, $search_req, $custom_fields = []) {
 		# first search if range provided
 		$result1 = $this->search_subnets_range  ($search_term, $high, $low, $custom_fields);
 		# search inside subnets even if IP does not exist!
@@ -212,7 +212,7 @@ class Tools extends Common_functions {
 	 * @param mixed $custom_fields (default: array())
 	 * @return array
 	 */
-	private function search_subnets_range ($search_term, $high, $low, $custom_fields = array()) {
+	private function search_subnets_range ($search_term, $high, $low, $custom_fields = []) {
 		# reformat low/high
 		if($high=="" && $low=="")	{ $high = "1"; $low = "1"; }
 
@@ -279,7 +279,7 @@ class Tools extends Common_functions {
 	 * @param array $custom_fields (default: array())
 	 * @return array
 	 */
-	public function search_vlans($search_term, $custom_fields = array()) {
+	public function search_vlans($search_term, $custom_fields = []) {
 		# query
 		$query[] = "select * from `vlans` where `name` like :search_term or `description` like :search_term or `number` like :search_term ";
 		# custom
@@ -294,7 +294,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery('vlans', $query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery('vlans', $query, ["search_term"=>"%$search_term%"]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -313,7 +313,7 @@ class Tools extends Common_functions {
 	 * @param array $custom_fields (default: array())
 	 * @return array
 	 */
-	public function search_vrfs ($search_term, $custom_fields = array()) {
+	public function search_vrfs ($search_term, $custom_fields = []) {
 		# query
 		$query[] = "select * from `vrf` where `name` like :search_term or `description` like :search_term or `rd` like :search_term ";
 		# custom
@@ -328,7 +328,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery('vrf', $query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery('vrf', $query, ["search_term"=>"%$search_term%"]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -346,7 +346,7 @@ class Tools extends Common_functions {
 	 * @param array $custom_prefix_fields (default: array())
 	 * @return array
 	 */
-	public function search_pstn_refixes ($search_term, $custom_prefix_fields = array()) {
+	public function search_pstn_refixes ($search_term, $custom_prefix_fields = []) {
 		# query
 		$query[] = "select *,concat(prefix,start) as raw from `pstnPrefixes` where `prefix` like :search_term or `name` like :search_term or `description` like :search_term ";
 		# custom
@@ -361,7 +361,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery('pstnPrefixes', $query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery('pstnPrefixes', $query, ["search_term"=>"%$search_term%"]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -379,7 +379,7 @@ class Tools extends Common_functions {
 	 * @param array $custom_prefix_fields (default: array())
 	 * @return array
 	 */
-	public function search_pstn_numbers ($search_term, $custom_prefix_fields = array()) {
+	public function search_pstn_numbers ($search_term, $custom_prefix_fields = []) {
 		# query
 		$query[] = "select * from `pstnNumbers` where `number` like :search_term or `name` like :search_term or `description` like :search_term or `owner` like :search_term ";
 		# custom
@@ -394,7 +394,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery('pstnNumbers', $query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery('pstnNumbers', $query, ["search_term"=>"%$search_term%"]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -412,7 +412,7 @@ class Tools extends Common_functions {
 	 * @param array $custom_circuit_fields (default: array())
 	 * @return array
 	 */
-	public function search_circuits ($search_term, $custom_circuit_fields = array()) {
+	public function search_circuits ($search_term, $custom_circuit_fields = []) {
 		# query
 		$query[] = "select c.*,p.name,p.description,p.contact,p.id as pid ";
 		$query[] = "from circuits as c, circuitProviders as p ";
@@ -431,7 +431,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery("circuits", $query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery("circuits", $query, ["search_term"=>"%$search_term%"]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -450,7 +450,7 @@ class Tools extends Common_functions {
 	 * @param array $custom_circuit_fields (default: array())
 	 * @return array
 	 */
-	public function search_circuit_providers ($search_term, $custom_circuit_fields = array()) {
+	public function search_circuit_providers ($search_term, $custom_circuit_fields = []) {
 		# query
 		$query[] = "select * from `circuitProviders` where `name` like :search_term or `description` like :search_term or `contact` like :search_term ";
 		# custom
@@ -465,7 +465,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery("circuitProviders", $query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery("circuitProviders", $query, ["search_term"=>"%$search_term%"]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -483,7 +483,7 @@ class Tools extends Common_functions {
 	 * @param array $custom_fields (default: array())
 	 * @return array
 	 */
-	public function search_customers ($search_term, $custom_fields = array()) {
+	public function search_customers ($search_term, $custom_fields = []) {
 		# query
 		$query[] = "select * from `customers` where `title` like :search_term or `address` like :search_term or `postcode` like :search_term or `city` like :search_term or `state` like :search_term ";
 		# custom
@@ -498,7 +498,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery('customers', $query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery('customers', $query, ["search_term"=>"%$search_term%"]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -516,7 +516,7 @@ class Tools extends Common_functions {
 	 * @param array $custom_fields (default: array())
 	 * @return array
 	 */
-	public function search_devices ($search_term, $custom_fields = array()) {
+	public function search_devices ($search_term, $custom_fields = []) {
 		# query
 		$query[] = "select * from `devices` where `hostname` like :search_term or `description` like :search_term ";
 		# custom
@@ -531,7 +531,7 @@ class Tools extends Common_functions {
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $search = $this->Database->getObjectsQuery('devices', $query, array("search_term"=>"%$search_term%")); }
+		try { $search = $this->Database->getObjectsQuery('devices', $query, ["search_term"=>"%$search_term%"]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -580,18 +580,18 @@ class Tools extends Common_functions {
 			}
 			# 3 pieces, we need to modify > check whole subnet
 			elseif (sizeof($address) == 3) {
-				$result['low']  = $Addresses->transform_to_decimal(implode(".", array_merge($address, array(0))));
-				$result['high'] = $Addresses->transform_to_decimal(implode(".", array_merge($address, array(255))));
+				$result['low']  = $Addresses->transform_to_decimal(implode(".", array_merge($address, [0])));
+				$result['high'] = $Addresses->transform_to_decimal(implode(".", array_merge($address, [255])));
 			}
 			# 2 pieces also
 			elseif (sizeof($address) == 2) {
-				$result['low']  = $Addresses->transform_to_decimal(implode(".", array_merge($address, array(0,0))));
-				$result['high'] = $Addresses->transform_to_decimal(implode(".", array_merge($address, array(255,255))));
+				$result['low']  = $Addresses->transform_to_decimal(implode(".", array_merge($address, [0,0])));
+				$result['high'] = $Addresses->transform_to_decimal(implode(".", array_merge($address, [255,255])));
 			}
 			# 1 piece also
 			elseif (sizeof($address) == 1) {
-				$result['low']  = $Addresses->transform_to_decimal(implode(".", array_merge($address, array(0,0,0))));
-				$result['high'] = $Addresses->transform_to_decimal(implode(".", array_merge($address, array(255,255,255))));
+				$result['low']  = $Addresses->transform_to_decimal(implode(".", array_merge($address, [0,0,0])));
+				$result['high'] = $Addresses->transform_to_decimal(implode(".", array_merge($address, [255,255,255])));
 			}
 			# else return same value
 			else {
@@ -619,12 +619,12 @@ class Tools extends Common_functions {
 		# parse address
 		$this->initialize_pear_net_IPv6 ();
 
-		$return = array();
+		$return = [];
 
 		# validate
 		if ($this->Net_IPv6->checkIPv6($address)==false) {
 			// return 0
-			return array("high"=>0, "low"=>0);
+			return ["high"=>0, "low"=>0];
 		}
 		else {
 			# fake mask
@@ -672,7 +672,7 @@ class Tools extends Common_functions {
     	# fetch columns
 		$fields = $this->fetch_columns ($table);
 
-		$res = array();
+		$res = [];
 
 		# save Field values only
 		foreach($fields as $field) {
@@ -694,7 +694,7 @@ class Tools extends Common_functions {
 			unset($res[$st]);
 		}
 		# return array
-		return sizeof($res)==0 ? array() : $res;
+		return sizeof($res)==0 ? [] : $res;
 	}
 
 	/**
@@ -713,10 +713,10 @@ class Tools extends Common_functions {
 				$out[] = $f;
 			}
 			# result
-			return isset($out) ? $out : array();
+			return isset($out) ? $out : [];
 		}
 		else {
-			return array();
+			return [];
 		}
 	}
 
@@ -828,7 +828,7 @@ class Tools extends Common_functions {
 		$definition = pf_explode("\n", $definition);
 
 		# go through,if it begins with ` use it !
-		$out = array();
+		$out = [];
 		foreach($definition as $d) {
 			$d = trim($d);
 			if(strpos(trim($d), "`")==0) {
@@ -837,7 +837,7 @@ class Tools extends Common_functions {
 			}
 		}
 		# return array of fields
-		return is_array($out) ? array_filter($out) : array();
+		return is_array($out) ? array_filter($out) : [];
 	}
 
 	/**
@@ -852,7 +852,7 @@ class Tools extends Common_functions {
 		# get definitions to array, explode with CREATE TABLE `
 		$creates = pf_explode("CREATE TABLE `", $schema);
 		# fill tables array
-		$tables = array();
+		$tables = [];
 		foreach($creates as $k=>$c) {
 			if($k>0)	{ $tables[] = strstr($c, "`", true); }	//we exclude first !
 		}
@@ -875,7 +875,7 @@ class Tools extends Common_functions {
 		# escape field
 		$table = $this->Database->escape($table);
 		# fetch
-	    try { $field_data = $this->Database->getObjectQuery("no_html_escape", "show full columns from `$table` where `Field` = ?;", array($field)); }
+	    try { $field_data = $this->Database->getObjectQuery("no_html_escape", "show full columns from `$table` where `Field` = ?;", [$field]); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 		# result
 	    return($field_data);
@@ -919,7 +919,7 @@ class Tools extends Common_functions {
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 	    # reindex
-	    $wout = array();
+	    $wout = [];
 	    foreach($widgets as $w) {
 			$wout[$w->wfile] = $w;
 	    }
@@ -1154,7 +1154,7 @@ class Tools extends Common_functions {
     	// fetch all users with mailNotify
         $notification_users = $this->fetch_multiple_objects ("users", "mailNotify", "Yes", "id", true);
         // recipients array
-        $recipients = array();
+        $recipients = [];
         // any ?
         if ($notification_users!==false) {
          	// if subnetId is set check who has permissions
@@ -1198,7 +1198,7 @@ class Tools extends Common_functions {
 		// addresses
 		$this->Addresses = new Addresses ($this->Database);
 
-		$mail = array();
+		$mail = [];
 
 		// change fields for mailings
 		foreach ($values as $k=>$v) {
@@ -1334,7 +1334,7 @@ class Tools extends Common_functions {
 			# update check field
 			$this->update_db_verify_field ();
 			# return empty array
-			return array();
+			return [];
 		}
 	}
 
@@ -1352,7 +1352,7 @@ class Tools extends Common_functions {
 	public function table_exists ($tablename, $quit = false) {
 	    # query
 	    $query = 'SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = "'.$this->Database->dbname.'" AND table_name = ?;';
-		try { $count = $this->Database->getObjectQuery("no_html_escape", $query, array($tablename)); }
+		try { $count = $this->Database->getObjectQuery("no_html_escape", $query, [$tablename]); }
 		catch (Exception $e) { !$quit ? : $this->Result->show("danger", $e->getMessage(), true);	return false; }
 		# return
 		return $count->count ==1 ? true : false;
@@ -1524,7 +1524,7 @@ class Tools extends Common_functions {
 		# get definitions to array, explode with CREATE TABLE `
 		$creates = pf_explode("CREATE TABLE `", $schema);
 
-		$indexes = array ();
+		$indexes =  [];
 		foreach($creates as $k=>$c) {
 			if($k == 0) continue;
 			$c = trim(strstr($c, ";" . "\n", true));
@@ -1743,7 +1743,7 @@ class Tools extends Common_functions {
 			// check for latest release
 			foreach ($json->entry as $e) {
 				// releases will be named with numberic values
-				if (is_numeric(str_replace(array("Version", "."), "", $e->title))) {
+				if (is_numeric(str_replace(["Version", "."], "", $e->title))) {
 					// save
 					$this->phpipam_latest_release = $e;
 					// return
@@ -1812,7 +1812,7 @@ class Tools extends Common_functions {
         $net = $this->Net_IPv4->parseAddress( $cidr );
 
         # set ip address type
-        $out = array();
+        $out = [];
         $out['Type']            = 'IPv4';
 
         # calculate network details
@@ -1877,7 +1877,7 @@ class Tools extends Common_functions {
 	 */
 	private function define_ipv4_address_types () {
 	    # define classes
-	    $classes = array();
+	    $classes = [];
 	    $classes['private A']          = '10.0.0.0/8';
 	    $classes['private B']          = '172.16.0.0/12';
 	    $classes['private C']          = '192.168.0.0/16';
@@ -1909,7 +1909,7 @@ class Tools extends Common_functions {
 		$this->initialize_pear_net_IPv6 ();
 
         # set ip address type
-        $out = array();
+        $out = [];
         $out['Type']                      = 'IPv6';
 
         # calculate network details
@@ -2052,7 +2052,7 @@ class Tools extends Common_functions {
         // to array "subnets"=>array(1,2,3)
         $objects = db_json_decode($json_objects, true);
         // init out array
-        $out = array();
+        $out = [];
         // set ping statuses for warning and offline
         $this->get_settings();
         $statuses = pf_explode(";", $this->settings->pingStatus);
@@ -2126,12 +2126,12 @@ class Tools extends Common_functions {
      * @param array $all_nats (default: array())
      * @return array
      */
-    public function reindex_nat_objects ($all_nats = array()) {
+    public function reindex_nat_objects ($all_nats = []) {
         // out array
-        $out = array(
-            "ipaddresses"=>array(),
-            "subnets"=>array()
-        );
+        $out = [
+            "ipaddresses"=>[],
+            "subnets"=>[]
+        ];
         // loop
         if(is_array($all_nats)) {
             if (sizeof($all_nats)>0) {
@@ -2195,9 +2195,9 @@ class Tools extends Common_functions {
 
         // no src/dst
         if ($sources===false)
-            $sources = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+            $sources = ["<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>"];
         if ($destinations===false)
-            $destinations = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+            $destinations = ["<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>"];
 
         // description
         $n->description = str_replace("\n", "<br>", $n->description);
@@ -2219,7 +2219,7 @@ class Tools extends Common_functions {
         $icon =  $n->type=="static" ? "fa-arrows-h" : "fa-long-arrow-right";
 
         // to html
-        $html = array();
+        $html = [];
         $html[] = "<tr>";
         $html[] = "<td colspan='4'>";
         $html[] = "<span class='badge badge1 badge5'>".ucwords((string) $n->type)."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
@@ -2293,11 +2293,11 @@ class Tools extends Common_functions {
     public function fetch_all_prefixes ($master = false, $recursive = false) {
 	    if($master && !$recursive) {
     	    $query = 'select *,concat(prefix,start) as raw from pstnPrefixes where master = ? order by raw asc;';
-    	    $params = array($master);
+    	    $params = [$master];
 	    }
 	    else {
     	    $query = 'select *,concat(prefix,start) as raw from pstnPrefixes order by raw asc;';
-    	    $params = array();
+    	    $params = [];
         }
 		# fetch
 		try { $prefixes = $this->Database->getObjectsQuery('pstnPrefixes', $query, $params); }
@@ -2308,7 +2308,7 @@ class Tools extends Common_functions {
         // for master + recursive we need to go from master id to next 0 (root
         if($master && $recursive && $prefixes) {
             $master_set = false;
-            $out = array();
+            $out = [];
 
             foreach ($prefixes as $k=>$p) {
         	    if($p->id == $master) {
@@ -2336,7 +2336,7 @@ class Tools extends Common_functions {
      * @return mixed
      */
     public function prefix_normalize ($number) {
-        return str_replace(array("+", " ", "-"), "", $number);
+        return str_replace(["+", " ", "-"], "", $number);
     }
 
 	/**
@@ -2347,7 +2347,7 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	public function fetch_prefix_parents_recursive ($id) {
-		$parents = array();
+		$parents = [];
 		$root = false;
 
 		while($root === false) {
@@ -2392,7 +2392,7 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	public function fetch_parents_recursive ($table, $parent_field, $return_field, $id, $reverse = false) {
-		$parents = array();
+		$parents = [];
 		$root = false;
 
 		while($root === false) {
@@ -2435,7 +2435,7 @@ class Tools extends Common_functions {
     	else {
         	$query = "select count(*) as cnt from pstnNumbers where prefix = ? and number = ?;";
     		# fetch
-    		try { $cnt = $this->Database->getObjectQuery('pstnNumbers', $query, array($prefix, $number)); }
+    		try { $cnt = $this->Database->getObjectQuery('pstnNumbers', $query, [$prefix, $number]); }
     		catch (Exception $e) {
     			$this->Result->show("danger", _("Error: ").$e->getMessage());
     			return false;
@@ -2462,10 +2462,10 @@ class Tools extends Common_functions {
 		# set hidden fields
 		$this->get_settings();
 		$hidden_fields = db_json_decode($this->settings->hiddenCustomFields, true);
-		$hidden_fields = isset($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
+		$hidden_fields = isset($hidden_fields['subnets']) ? $hidden_fields['subnets'] : [];
 
 		# set html array
-		$html = array();
+		$html = [];
 		# root is 0
 		$rootId = 0;
 
@@ -2478,7 +2478,7 @@ class Tools extends Common_functions {
 			}
 
 			# create loop array
-			$children_prefixes = array();
+			$children_prefixes = [];
 			foreach ($prefixes as $item) {
 				$item = (array) $item;
 				$children_prefixes[(int) $item['master']][] = $item;
@@ -2492,7 +2492,7 @@ class Tools extends Common_functions {
 
 		# initializing $parent as the root
 		$parent = $rootId;
-		$parent_stack = array();
+		$parent_stack = [];
 
 		# return table content (tr and td's)
 		if (is_array($children_prefixes[$parent]))
@@ -2653,15 +2653,15 @@ class Tools extends Common_functions {
 	public function print_masterprefix_dropdown_menu($prefixId = false) {
 
 		# initialize vars
-		$children_prefixes = array();
-		$parent_stack_prefixes = array();
-		$html = array();
+		$children_prefixes = [];
+		$parent_stack_prefixes = [];
+		$html = [];
 		$rootId = 0;			// root is 0
 		$parent = $rootId;      // initializing $parent as the root
 
 		# fetch all prefixes in section
 		$all_prefixes = $this->fetch_all_prefixes();
-		if (!is_array($all_prefixes)) $all_prefixes = array();
+		if (!is_array($all_prefixes)) $all_prefixes = [];
 		# folder or subnet?
 		foreach ($all_prefixes as $s) {
 			$children_prefixes[(int) $s->master][] = (array) $s;
@@ -2723,7 +2723,7 @@ class Tools extends Common_functions {
 		# set size
 		$size = sizeof($numbers);
 		// vars
-		$numbers_formatted = array();
+		$numbers_formatted = [];
 		$fIndex = null;
 
 		# loop through IP addresses
@@ -2793,7 +2793,7 @@ class Tools extends Common_functions {
 		$this->get_addresses_types();
 
 	    # calculate max number of hosts
-	    $details = array();
+	    $details = [];
 	    $details['maxhosts'] = ($prefix->stop - $prefix->start + 1);
 
 		# get IP address count per address type
@@ -2827,7 +2827,7 @@ class Tools extends Common_functions {
 		// fetch address types
 		$this->get_addresses_types();
 
-		$count = array();
+		$count = [];
 		$count['used'] = 0;				//initial sum count
 		# create array of keys with initial value of 0
 		foreach($this->address_types as $a) {
@@ -2953,7 +2953,7 @@ class Tools extends Common_functions {
 	 *
 	 * @return false|array
 	 */
-	public function fetch_all_circuits ($custom_circuit_fields = array ()) {
+	public function fetch_all_circuits ($custom_circuit_fields =  []) {
 		// set query
 		$query[] = "select";
 		$query[] = "c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,c.comment,c.customer_id,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status";
@@ -2968,7 +2968,7 @@ class Tools extends Common_functions {
 		$query[] = "from circuits as c, circuitProviders as p where c.provider = p.id";
 		$query[] = "order by c.cid asc;";
 		// fetch
-		try { $circuits = $this->Database->getObjectsQuery('circuits', implode("\n", $query), array()); }
+		try { $circuits = $this->Database->getObjectsQuery('circuits', implode("\n", $query), []); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
@@ -3033,7 +3033,7 @@ class Tools extends Common_functions {
 	 *
 	 * @return false|array
 	 */
-	public function fetch_all_provider_circuits ($provider_id, $custom_circuit_fields = array ()) {
+	public function fetch_all_provider_circuits ($provider_id, $custom_circuit_fields =  []) {
 		// set query
 		$query[] = "select";
 		$query[] = "c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status";
@@ -3048,7 +3048,7 @@ class Tools extends Common_functions {
 		$query[] = "from circuits as c, circuitProviders as p where c.provider = p.id and c.provider = ?";
 		$query[] = "order by c.cid asc;";
 		// fetch
-		try { $circuits = $this->Database->getObjectsQuery('circuits', implode("\n", $query), array($provider_id)); }
+		try { $circuits = $this->Database->getObjectsQuery('circuits', implode("\n", $query), [$provider_id]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
@@ -3073,7 +3073,7 @@ class Tools extends Common_functions {
 					from circuits as c, circuitProviders as p where c.provider = p.id and (c.device1 = :deviceid or c.device2 = :deviceid)
 					order by c.cid asc;";
 		// fetch
-		try { $circuits = $this->Database->getObjectsQuery('circuits', $query, array("deviceid"=>$device_id)); }
+		try { $circuits = $this->Database->getObjectsQuery('circuits', $query, ["deviceid"=>$device_id]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
@@ -3112,14 +3112,14 @@ class Tools extends Common_functions {
 				return false;
 			}
 			else {
-				$array = array (
+				$array =  [
 								"type"     => "devices",
 								"id"       => $device->id,
 								"name"     => $device->hostname,
 								"icon" 	   => "",
 								"location" => is_null($device->location)||$device->location==0 ? NULL : $device->location,
 								"rack"     => is_null($device->rack)||$device->rack==0 ? NULL : $device->rack
-				                );
+				                ];
 				// check rack location if not configured
 				if ($array['location']==NULL && $array['rack']!=NULL) {
 					$rack_location = $this->fetch_object ("racks", "id", $array['rack']);
@@ -3138,14 +3138,14 @@ class Tools extends Common_functions {
 				return false;
 			}
 			else {
-				return array (
+				return  [
 								"type"     => "locations",
 								"id"       => $location->id,
 								"name"     => $location->name,
 								"icon" 	   => "fa-map",
 								"location" => $location->id,
 								"rack"     => NULL
-				                );
+				                ];
 			}
 		}
 		else {
@@ -3332,7 +3332,7 @@ class Tools extends Common_functions {
     	$numRows = $data->rowcount(0);
     	$numRows++;
 
-    	$outFile = array();
+    	$outFile = [];
 
     	// set delimiter
     	$this->csv_delimiter = ";";
@@ -3447,7 +3447,7 @@ class Tools extends Common_functions {
 	 * @return void
 	 */
 	private function parse_validate_file ($outFile, $subnet) {
-    	$result = array();
+    	$result = [];
     	$errors = 0;
 
     	# present ?
@@ -3587,7 +3587,7 @@ class Tools extends Common_functions {
 		//check for version
 		$ver = shell_exec("grep 'Project-Id-Version:' ".__DIR__."/../locale/$code/LC_MESSAGES/phpipam.po");
 		//parse
-		$ver = str_replace(array("Project-Id-Version:", " ", '"', "#",'\n', ":"), "", $ver);
+		$ver = str_replace(["Project-Id-Version:", " ", '"', "#",'\n', ":"], "", $ver);
 		//return version
 		return $ver;
 	}

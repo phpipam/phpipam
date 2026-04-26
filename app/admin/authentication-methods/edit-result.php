@@ -41,11 +41,11 @@ else {
 }
 
 # set update query
-$values = array(
+$values = [
 				"id"          =>$POST->id,
 				"type"        =>$POST->type,
 				"description" =>$POST->description,
-				);
+				];
 
 # Validate input
 if ($POST->type=="SAML2") {
@@ -96,5 +96,5 @@ else																				{ $Result->show("success", _("Authentication method upda
 
 # if delete also reset all users that have thos auth method
 if($action=="delete") {
-	$Database->runQuery("update `users` set `authMethod`=1 where `authMethod`= ?;", array($values['id']));
+	$Database->runQuery("update `users` set `authMethod`=1 where `authMethod`= ?;", [$values['id']]);
 }

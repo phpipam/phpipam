@@ -705,7 +705,7 @@ class FirewallZones extends Common_functions {
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
 		if(!sizeof($networkInformation)>0 ) {
-			$params = array('zoneId' => $zoneId, 'subnetId' => $subnetId);
+			$params = ['zoneId' => $zoneId, 'subnetId' => $subnetId];
 
 			# try to fetch all subnet and vlan informations for this zone
 			try { $this->Database->insertObject("firewallZoneSubnet", $params);}
@@ -807,7 +807,7 @@ class FirewallZones extends Common_functions {
 
 		if ($network) {
 			foreach ($network as $subnetId) {
-				$values = array('zoneId' => $lastId[0]->id, 'subnetId' => $subnetId);
+				$values = ['zoneId' => $lastId[0]->id, 'subnetId' => $subnetId];
 				# add the network bindings if there are any
 				try { $this->Database->insertObject("firewallZoneSubnet", $values); }
 				catch (Exception $e) {
@@ -1023,7 +1023,7 @@ class FirewallZones extends Common_functions {
 		# compare both versions, if there is no difference, just do nothing
 		if ($zone->firewallAddressObject != $firewallAddressObject ) {
 			# update field in database
-			$values = array('id' => $id , 'firewallAddressObject' => $firewallAddressObject);
+			$values = ['id' => $id , 'firewallAddressObject' => $firewallAddressObject];
 			try { $this->Database->updateObject("subnets", $values, "id"); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
@@ -1147,7 +1147,7 @@ class FirewallZones extends Common_functions {
 
 		if ($address_old->firewallAddressObject != $firewallAddressObject) {
 			# update field in database
-			$values = array('id' => $IPId , 'subnetId' => $subnetId, 'firewallAddressObject' => $firewallAddressObject);
+			$values = ['id' => $IPId , 'subnetId' => $subnetId, 'firewallAddressObject' => $firewallAddressObject];
 			try { $this->Database->updateObject("ipaddresses", $values, "id", "subnetId"); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
@@ -1225,7 +1225,7 @@ class FirewallZones extends Common_functions {
 
 			if ($address_old->firewallAddressObject != $firewallAddressObject) {
 				# update field in database
-				$values = array('id' => $ipaddress->id , 'subnetId' => $subnetId, 'firewallAddressObject' => $firewallAddressObject);
+				$values = ['id' => $ipaddress->id , 'subnetId' => $subnetId, 'firewallAddressObject' => $firewallAddressObject];
 				try { $this->Database->updateObject("ipaddresses", $values, "id", "subnetId"); }
 				catch (Exception $e) {
 					$this->Result->show("danger", _("Error: ").$e->getMessage(), false);

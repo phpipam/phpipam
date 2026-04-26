@@ -54,10 +54,10 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 	}
 
 	# Normal links
-	$el = array("page", "section", "subnetId", "sPage", "ipaddrid", "tab");
+	$el = ["page", "section", "subnetId", "sPage", "ipaddrid", "tab"];
 	// override for search
 	if ($l0=="tools" && $l1=="search")
-	    $el = array("page", "section", "ip", "addresses", "subnets", "vlans", "ip");
+	    $el = ["page", "section", "ip", "addresses", "subnets", "vlans", "ip"];
 
 	foreach($parts as $i=>$p) {
 		$parts[$i] = "$el[$i]=$p";

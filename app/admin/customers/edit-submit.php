@@ -56,7 +56,7 @@ if ($POST->action!="delete") {
  */
 
 // set update values
-$values = array(
+$values = [
 				"id"             => $POST->id,
 				"title"          => $POST->title,
 				"address"        => $POST->address,
@@ -67,7 +67,7 @@ $values = array(
 				"contact_phone"  => $POST->contact_phone,
 				"contact_mail"   => $POST->contact_mail,
 				"note"           => $POST->note
-				);
+				];
 
 // fetch custom fields
 $update = $Tools->update_POST_custom_fields('customers', $POST->action, $POST);

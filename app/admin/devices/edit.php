@@ -45,7 +45,7 @@ if( ($POST->action == "edit") || ($POST->action == "delete") ) {
 }
 // defaults
 else {
-	$device = array ();
+	$device =  [];
 	$device['type']       = 9;
 	$device['rack_start'] = 1;
 	$device['rack_size']  = 1;
@@ -134,7 +134,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 			<?php
 			$types = $Admin->fetch_all_objects("deviceTypes", "tid");
 			// if the type of this device isn't found in the list of device types, then prepend it
-			if (!in_array($device['type'],array_column($types,'tid'))) array_unshift($types,(object) array("tid"=>$device['type'],"tname"=>"Undefined"));
+			if (!in_array($device['type'],array_column($types,'tid'))) array_unshift($types,(object) ["tid"=>$device['type'],"tname"=>"Undefined"]);
 			foreach($types as $name) {
 				if($device['type'] == $name->tid)	{ print "<option value='$name->tid' selected='selected'>$name->tname</option>"; }
 				else								{ print "<option value='$name->tid' >$name->tname</option>"; }
@@ -258,7 +258,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 
 		# reformat device sections to array
 		$deviceSections = pf_explode(";", @$device['sections']);
-		$deviceSections = is_array($deviceSections) ? $deviceSections : array();
+		$deviceSections = is_array($deviceSections) ? $deviceSections : [];
 
 		if ($sections!==false) {
 			foreach($sections as $section) {

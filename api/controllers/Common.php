@@ -168,7 +168,7 @@ class Common_api_functions {
 	 */
 
 	private function NOT_IMPLEMENTED() {
-		return array("code"=>501, "message"=>"Method not implemented");
+		return ["code"=>501, "message"=>"Method not implemented"];
 	}
 
 	public function OPTIONS () {
@@ -235,7 +235,7 @@ class Common_api_functions {
 	 */
 	protected function set_valid_keys ($controller) {
 		# array of controller keys
-		$this->controller_keys = array("app_id", "controller");
+		$this->controller_keys = ["app_id", "controller"];
 
 		# array of all valid keys - fetch from SCHEMA
 		$this->valid_keys = $this->Tools->fetch_standard_fields ($controller);
@@ -258,7 +258,7 @@ class Common_api_functions {
 		}
 
 		# set items to remove
-		$this->remove_keys = array("editDate");
+		$this->remove_keys = ["editDate"];
 		# remove update time
 		foreach($this->valid_keys as $k=>$v) {
 			if(in_array($v, $this->remove_keys)) {
@@ -325,7 +325,7 @@ class Common_api_functions {
 	 * @param array $result
 	 * @return object[]
 	 */
-	protected function filter_result ($result = array ()) {
+	protected function filter_result ($result =  []) {
 		// remap keys before applying filter
 		$result = $this->remap_keys ($result, false);
 		// validate
@@ -495,111 +495,111 @@ class Common_api_functions {
 	 */
 	private function define_links ($controller) {
     	// init
-    	$result = array();
+    	$result = [];
 		// sections
 		if($controller=="sections") {
-			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
-			$result["subnets"]          = array ("GET");
+			$result["self"]			 	=  ["GET","POST","DELETE","PATCH"];
+			$result["subnets"]          =  ["GET"];
 			// return
 			return $result;
 		}
 		// subnets
 		elseif($controller=="subnets") {
-			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
-			$result["addresses"]        = array ("GET");
-			$result["addresses/{ip}"]   = array ("GET");
-			$result["usage"]            = array ("GET");
-			$result["first_free"]       = array ("GET");
-			$result["slaves"]           = array ("GET");
-			$result["slaves_recursive"] = array ("GET");
-			$result["truncate"]         = array ("DELETE");
-			$result["permissions"]      = array ("DELETE", "PATCH");
-			$result["resize"]           = array ("PATCH");
-			$result["split"]            = array ("PATCH");
+			$result["self"]			 	=  ["GET","POST","DELETE","PATCH"];
+			$result["addresses"]        =  ["GET"];
+			$result["addresses/{ip}"]   =  ["GET"];
+			$result["usage"]            =  ["GET"];
+			$result["first_free"]       =  ["GET"];
+			$result["slaves"]           =  ["GET"];
+			$result["slaves_recursive"] =  ["GET"];
+			$result["truncate"]         =  ["DELETE"];
+			$result["permissions"]      =  ["DELETE", "PATCH"];
+			$result["resize"]           =  ["PATCH"];
+			$result["split"]            =  ["PATCH"];
 			// return
 			return $result;
 		}
 		// addresses
 		elseif($controller=="addresses") {
-			$result["self"]				= array ("GET","POST","DELETE","PATCH");
-			$result["ping"]				= array ("GET");
+			$result["self"]				=  ["GET","POST","DELETE","PATCH"];
+			$result["ping"]				=  ["GET"];
 			// return
 			return $result;
 		}
 		// tags
 		elseif($controller=="addresses/tags") {
-			$result["self"]				= array ("GET");
-			$result["addresses"]		= array ("GET");
+			$result["self"]				=  ["GET"];
+			$result["addresses"]		=  ["GET"];
 			// return
 			return $result;
 		}
 		// tools - devices
 		elseif($controller=="tools/devices") {
-			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
-			$result["addresses"]        = array ("GET");
+			$result["self"]			 	=  ["GET","POST","DELETE","PATCH"];
+			$result["addresses"]        =  ["GET"];
 			// return
 			return $result;
 		}
 		// tools - devices
 		elseif($controller=="tools/devicetypes") {
-			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
-			$result["devices"]        	= array ("GET");
+			$result["self"]			 	=  ["GET","POST","DELETE","PATCH"];
+			$result["devices"]        	=  ["GET"];
 			// return
 			return $result;
 		}
 		// tools - tags
 		elseif($controller=="tools/iptags") {
-			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
-			$result["addresses"]        = array ("GET");
+			$result["self"]			 	=  ["GET","POST","DELETE","PATCH"];
+			$result["addresses"]        =  ["GET"];
 			// return
 			return $result;
 		}
 		// tools - tags
 		elseif($controller=="tools/vlans") {
-			$result["self"]			 	= array ("GET");
-			$result["subnets"]          = array ("GET");
+			$result["self"]			 	=  ["GET"];
+			$result["subnets"]          =  ["GET"];
 			// return
 			return $result;
 		}
 		// tools - tags
 		elseif($controller=="tools/vrf") {
-			$result["self"]			 	= array ("GET");
-			$result["subnets"]          = array ("GET");
+			$result["self"]			 	=  ["GET"];
+			$result["subnets"]          =  ["GET"];
 			// return
 			return $result;
 		}
 		// tags
 		elseif($controller=="iptags") {
-			$result["self"]				= array ("GET");
-			$result["addresses"]		= array ("GET");
+			$result["self"]				=  ["GET"];
+			$result["addresses"]		=  ["GET"];
 			// return
 			return $result;
 		}
 		// tags
 		elseif($controller=="devices") {
-			$result["self"]				= array ("GET");
-			$result["addresses"]		= array ("GET");
+			$result["self"]				=  ["GET"];
+			$result["addresses"]		=  ["GET"];
 			// return
 			return $result;
 		}
 		// vlan domains
 		elseif($controller=="l2domains") {
-			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
-			$result["vlans"]          	= array ("GET");
+			$result["self"]			 	=  ["GET","POST","DELETE","PATCH"];
+			$result["vlans"]          	=  ["GET"];
 			// return
 			return $result;
 		}
 		// vlans
 		elseif($controller=="vlans") {
-			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
-			$result["subnets"]          = array ("GET");
+			$result["self"]			 	=  ["GET","POST","DELETE","PATCH"];
+			$result["subnets"]          =  ["GET"];
 			// return
 			return $result;
 		}
 		// vrfs
 		elseif($controller=="vrfs") {
-			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
-			$result["subnets"]          = array ("GET");
+			$result["self"]			 	=  ["GET","POST","DELETE","PATCH"];
+			$result["subnets"]          =  ["GET"];
 			// return
 			return $result;
 		}
@@ -648,7 +648,7 @@ class Common_api_functions {
 	 */
 	protected function validate_keys () {
     	// init values
-    	$values = array();
+    	$values = [];
     	// loop
 		foreach($this->_params as $pk=>$pv) {
 			if(!in_array($pk, $this->valid_keys)) 	{ $this->Response->throw_exception(400, 'Invalid request key '.$pk); }
@@ -673,7 +673,7 @@ class Common_api_functions {
 	 */
 	protected function validate_options_request () {
 		foreach($this->_params as $key=>$val) {
-			if(!in_array($key, array("app_id", "controller", "id"))) {
+			if(!in_array($key, ["app_id", "controller", "id"])) {
 													{ $this->Response->throw_exception(400, 'Invalid request key parameter '.$key); }
 			}
 		}
@@ -709,7 +709,7 @@ class Common_api_functions {
 	 */
 	public function reformat_mac_address ($mac, $format = 1) {
     	// strip al tags first
-    	$mac = strtolower(str_replace(array(":",".","-"), "", $mac));
+    	$mac = strtolower(str_replace([":",".","-"], "", $mac));
     	// format 4
     	if ($format==4) {
         	return $mac;
@@ -740,12 +740,12 @@ class Common_api_functions {
 	 * @return array
 	 */
 	public function get_possible_permissions() {
-		return array(
+		return [
 			"na" => 0,
 			"ro" => 1,
 			"rw" => 2,
 			"rwa" => 3
-		);
+		];
 	}
 
 	/**
@@ -821,7 +821,7 @@ class Common_api_functions {
 	 */
 	protected function remap_keys ($result = null, $controller = null, $tools_table = null) {
 		// define keys array
-		$this->keys = array("switch"=>"deviceId", "state"=>"tag", "ip_addr"=>"ip");
+		$this->keys = ["switch"=>"deviceId", "state"=>"tag", "ip_addr"=>"ip"];
 
 		// exceptions
 		if($controller=="vlans") 	{ $this->keys['vlanId'] = "id"; }
@@ -891,7 +891,7 @@ class Common_api_functions {
 		# array
 		else {
 			// create a new array for the remapped data
-			$result_remapped = array();
+			$result_remapped = [];
 
 			// loop
 			foreach ($result as $m=>$r) {

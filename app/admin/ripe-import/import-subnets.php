@@ -79,7 +79,7 @@ else {
 	//insert if all other is ok!
 	foreach($subnets_to_insert as $subnet_import) {
 		//formulate insert query
-		$values = array("sectionId"=>$subnet_import['sectionId'],
+		$values = ["sectionId"=>$subnet_import['sectionId'],
 						"subnet"=>$subnet_import['subnet'],
 						"mask"=>$subnet_import['mask'],
 						"description"=>$subnet_import['description'],
@@ -87,7 +87,7 @@ else {
 						"vrfId"=>$subnet_import['vrfId'],
 						"masterSubnetId"=>0,
 						"showName"=>$subnet_import['showName']
-						);
+						];
 
 		if(!$Admin->object_modify("subnets", "add", "id", $values)) {
 			$Result->show("danger", _('Failed to import subnet').' '. $Subnets->transform_to_dotted($subnet_import['subnet'])."/".$subnet_import['mask'], false);

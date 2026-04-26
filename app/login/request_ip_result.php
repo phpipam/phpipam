@@ -36,7 +36,7 @@ if($Tools->settings->enableIPrequests==1) {
 	}
 
 	# formulate insert values
-	$values = array(
+	$values = [
 					"subnetId"    => $POST->subnetId,
 					"ip_addr"     => $POST->ip_addr,
 					"description" => $POST->description,
@@ -47,7 +47,7 @@ if($Tools->settings->enableIPrequests==1) {
 					"requester"   => $POST->requester,
 					"comment"     => $POST->comment,
 					"processed"   => 0
-	    			);
+	    			];
 
 	# fetch custom fields
 	$update = $Tools->update_POST_custom_fields('requests', $POST->action, $POST);

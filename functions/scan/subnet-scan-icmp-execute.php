@@ -50,17 +50,17 @@ if(isset($argv[1]))	{ $argv[1] = str_replace("'", "", $argv[1]); }
  */
 
 //script can only be run from cli
-if(php_sapi_name()!="cli") 								{ die(json_encode(array("status"=>1, "error"=>"This script can only be run from cli!"))); }
+if(php_sapi_name()!="cli") 								{ die(json_encode(["status"=>1, "error"=>"This script can only be run from cli!"])); }
 //check input parameters
-if(!isset($argv[1]) || !isset($argv[2]))				{ die(json_encode(array("status"=>1, "error"=>"Missing required input parameters"))); }
+if(!isset($argv[1]) || !isset($argv[2]))				{ die(json_encode(["status"=>1, "error"=>"Missing required input parameters"])); }
 // test to see if threading is available
 if($Scan->settings->scanPingType!="fping")
-if( !PingThread::available($errmsg) ) 								{ die(json_encode(array("status"=>1, "error"=>"Threading is required for scanning subnets - Error: $errmsg\n"))); }
+if( !PingThread::available($errmsg) ) 								{ die(json_encode(["status"=>1, "error"=>"Threading is required for scanning subnets - Error: $errmsg\n"])); }
 //check script
-if($argv[1]!="update"&&$argv[1]!="discovery")			{ die(json_encode(array("status"=>1, "error"=>"Invalid scan type!"))); }
+if($argv[1]!="update"&&$argv[1]!="discovery")			{ die(json_encode(["status"=>1, "error"=>"Invalid scan type!"])); }
 //verify cidr
 if(!is_numeric($argv[2])) {
-	if($Subnets->verify_cidr_address($argv[2])!==true)	{ die(json_encode(array("status"=>1, "error"=>"Invalid subnet CIDR address provided"))); }
+	if($Subnets->verify_cidr_address($argv[2])!==true)	{ die(json_encode(["status"=>1, "error"=>"Invalid subnet CIDR address provided"])); }
 }
 
 /**
@@ -74,7 +74,7 @@ if(!is_numeric($argv[2])) {
 if($Scan->settings->scanPingType=="fping") {
 	# fetch subnet
 	$subnet = $Subnets->fetch_subnet(null, $argv[2]);
-	$subnet!==false ? : 								  die(json_encode(array("status"=>1, "error"=>"Invalid subnet ID provided")));
+	$subnet!==false ? : 								  die(json_encode(["status"=>1, "error"=>"Invalid subnet ID provided"]));
 
 	//set exit flag to true
 	$Scan->ping_set_exit(false);
@@ -85,11 +85,11 @@ if($Scan->settings->scanPingType=="fping") {
 	$retval = $Scan->ping_address_method_fping_subnet ($subnet_cidr);
 
 	# errors
-	if($retval==3)										{ die(json_encode(array("status"=>1, "error"=>"invalid command line arguments"))); }
-	if($retval==4)										{ die(json_encode(array("status"=>1, "error"=>"system call failure"))); }
+	if($retval==3)										{ die(json_encode(["status"=>1, "error"=>"invalid command line arguments"])); }
+	if($retval==4)										{ die(json_encode(["status"=>1, "error"=>"system call failure"])); }
 
 	# parse result
-	if(empty($Scan->fping_result))					{ die(json_encode(array("status"=>0, "values"=>array("alive"=>null)))); }
+	if(empty($Scan->fping_result))					{ die(json_encode(["status"=>0, "values"=>["alive"=>null]])); }
 	else {
 		//check each line
 		foreach($Scan->fping_result as $l) {
@@ -128,7 +128,7 @@ else {
 		}
 
 		if (empty($threads)) {
-			die(json_encode(array("status" => 1, "error" => "Unable to spawn scanning pool")));
+			die(json_encode(["status" => 1, "error" => "Unable to spawn scanning pool"]));
 		}
 
 		// wait for all the threads to finish

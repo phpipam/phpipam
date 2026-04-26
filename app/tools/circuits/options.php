@@ -47,11 +47,11 @@ print implode("\n", $html);
 
 
 /* fetch all custom fields */
-$custom_tables = array(
+$custom_tables = [
 						"circuitProviders" => _("Circuit providers"),
 						"circuits"         => _("Circuits"),
 						"circuitsLogical"  => _("Logical circuits")
-						);
+						];
 # create array
 foreach($custom_tables as $k=>$f) {
 	$custom_fields[$k]            = $Tools->fetch_custom_fields($k);
@@ -95,7 +95,7 @@ foreach($custom_fields as $k=>$cf) {
 
 	# get custom fields
 	$ffields = db_json_decode($User->settings->hiddenCustomFields, true);
-	$ffields = is_array(@$ffields[$table]) ? $ffields[$table] : array();
+	$ffields = is_array(@$ffields[$table]) ? $ffields[$table] : [];
 
 	print "<tbody id='custom-$k'>";
 

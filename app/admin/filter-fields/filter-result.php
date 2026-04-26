@@ -23,8 +23,8 @@ $User->is_admin();
 $User->check_maintaneance_mode ();
 
 # set fields to update
-$values = array("id"=>1,
-				"IPfilter"=>implode(';', $POST->as_array()));
+$values = ["id"=>1,
+				"IPfilter"=>implode(';', $POST->as_array())];
 
 # update
 if(!$Admin->object_modify("settings", "edit", "id", $values)) {

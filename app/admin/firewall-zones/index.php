@@ -24,7 +24,7 @@ if($User->settings->enableFirewallZones==1) {
 <ul class="nav nav-tabs">
 	<?php
 	# tabs
-	$tabs = array("mapping", "zones", "settings");
+	$tabs = ["mapping", "zones", "settings"];
 
 	# default tab
 	if(!isset($GET->subnetId)) {

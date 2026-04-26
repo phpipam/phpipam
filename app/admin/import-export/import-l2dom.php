@@ -37,10 +37,10 @@ $rows = "";
 foreach ($data as &$cdata) {
 	if (($cdata['action'] == "add") || ($cdata['action'] == "edit")) {
 		# set update array
-		$values = array("id"=>$cdata['id'],
+		$values = ["id"=>$cdata['id'],
 						"name"=>$cdata['name'],
 						"description"=>$cdata['description']
-						);
+						];
 
 		# update
 		$cdata['result'] = $Admin->object_modify("vlanDomains", $cdata['action'], "id", $values);

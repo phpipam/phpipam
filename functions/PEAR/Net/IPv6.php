@@ -154,7 +154,7 @@ class Net_IPv6
 
         if(false === strrpos($ip, '/')) {
 
-            return array($addr, $spec);
+            return [$addr, $spec];
 
         }
 
@@ -167,7 +167,7 @@ class Net_IPv6
 
         }
 
-        return array($addr, $spec);
+        return [$addr, $spec];
 
     }
     // }}}
@@ -620,7 +620,7 @@ class Net_IPv6
 
         if(true == $leadingZeros) {
 
-            $uipT    = array();
+            $uipT    = [];
             $uiparts = explode(':', $uip);
 
             foreach($uiparts as $p) {
@@ -832,7 +832,7 @@ class Net_IPv6
             $pos      = strrpos($ip, ':');
 
             if(false === $pos) {
-            	return array("", $ip);
+            	return ["", $ip];
             }
 
             $ip[$pos] = '_';
@@ -842,7 +842,7 @@ class Net_IPv6
 
         } else {
 
-            return array($ip, "");
+            return [$ip, ""];
 
         }
     }
@@ -1011,7 +1011,7 @@ class Net_IPv6
         $endAddress   = Net_IPv6::_bin2Ip(Net_IPv6::_ip2Bin($ip)
                                           | ($binNetmask ^ $maxNetmask));
 
-        return array('start' => $startAddress, 'end' => $endAddress);
+        return ['start' => $startAddress, 'end' => $endAddress];
     }
 
     // }}}

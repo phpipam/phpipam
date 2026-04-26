@@ -144,7 +144,7 @@ $(document).ready(function(){
 			<select name="status" class="form-control input-w-auto input-sm">
 				<?php
 				// statuses array
-				$statuses = array ("Active", "Inactive", "Reserved");
+				$statuses =  ["Active", "Inactive", "Reserved"];
 
 				foreach ($statuses as $v) {
 					$selected = $circuit->status == $v ? "selected" : "";

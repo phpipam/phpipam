@@ -29,7 +29,7 @@ if(strpos((string) $_FILES['file']['name'], "/")!==false) {
 }
 
 /* list of permitted file extensions */
-$allowed = array('xls','csv');
+$allowed = ['xls','csv'];
 
 /* no errors */
 if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {

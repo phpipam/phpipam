@@ -78,7 +78,7 @@ class SubnetsTree {
 	 * Reset subnets internal tree structures
 	 */
 	public function reset() {
-		$this->subnets = array();
+		$this->subnets = [];
 
 		$root = new stdClass ();
 		$root->id = 0;
@@ -86,8 +86,8 @@ class SubnetsTree {
 		$root->description = _("Root folder");
 		$root->masterSubnetId = 0;
 
-		$this->subnets_by_id = array(0 => $root);
-		$this->children_by_parent_id = array();
+		$this->subnets_by_id = [0 => $root];
+		$this->children_by_parent_id = [];
 	}
 
 	/**
@@ -95,7 +95,7 @@ class SubnetsTree {
 	 * @param  boolean $show_root
 	 */
 	public function walk($show_root = true) {
-		$this->subnets = array();
+		$this->subnets = [];
 		$this->walk_recursive(0, 0, $show_root);
 	}
 

@@ -39,9 +39,9 @@ $destinations = $Tools->translate_nat_objects_for_display ($n->dst, false, false
 
 // no src/dst
 if ($sources===false)
-    $sources = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+    $sources = ["<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>"];
 if ($destinations===false)
-    $destinations = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+    $destinations = ["<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>"];
 
 // description
 $n->description = !is_blank($n->description) ? "($n->description)" : "";

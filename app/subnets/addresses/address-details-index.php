@@ -23,7 +23,7 @@ $subnet  = (array) $Subnets->fetch_subnet(null, $address['subnetId']);
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
 $hidden_cfields = db_json_decode($User->settings->hiddenCustomFields, true) ? : ['ipaddresses' => null];
-$hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
+$hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : [];
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
@@ -67,8 +67,8 @@ print "<a class='btn btn-default btn-sm btn-default' href='".create_link("subnet
 if(sizeof($address)>1) {
 
     # NAT search
-    $all_nats = array();
-    $all_nats_per_object = array();
+    $all_nats = [];
+    $all_nats_per_object = [];
 
     if ($User->settings->enableNAT==1) {
         # fetch all object

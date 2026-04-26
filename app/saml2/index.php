@@ -29,40 +29,40 @@ try {
         if (!isset($params->clientId))              // If not set use prior default value for clientId
             $params->clientId = $Tools->createURL();
 
-        $settings = array(
+        $settings = [
             'strict' => filter_var($params->strict, FILTER_VALIDATE_BOOLEAN),
             'debug' => filter_var($params->debugprotocol, FILTER_VALIDATE_BOOLEAN),
-            'sp' => array(
+            'sp' => [
                 'entityId' => $params->clientId,
-                'assertionConsumerService' => array(
+                'assertionConsumerService' => [
                     'url' => $Tools->createURL() . create_link('saml2'),
                     'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-                ),
-                'singleLogoutService' => array(
+                ],
+                'singleLogoutService' => [
                     'url' => $Tools->createURL() . create_link(),
                     'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-                ),
+                ],
                 'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
                 'x509cert' => $params->spx509cert,
                 'privateKey' => $params->spx509key,
-            ),
-            'idp' => array(
+            ],
+            'idp' => [
                 'entityId' => $params->idpissuer,
-                'singleSignOnService' => array(
+                'singleSignOnService' => [
                     'url' => $params->idplogin,
                     'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-                ),
-                'singleLogoutService' => array(
+                ],
+                'singleLogoutService' => [
                     'url' => $params->idplogout,
                     'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-                ),
+                ],
                 'x509cert' => $params->idpx509cert,
-            ),
-            'security' => array(
+            ],
+            'security' => [
                 'requestedAuthnContext' => false,
                 'authnRequestsSigned' => filter_var($params->spsignauthn, FILTER_VALIDATE_BOOLEAN),
-            ),
-        );
+            ],
+        ];
 
         OneLogin\Saml2\Utils::setProxyVars(true);
         $auth = new OneLogin\Saml2\Auth($settings);
@@ -70,7 +70,7 @@ try {
 
     //if SAMLResponse is not in the request, create an authnrequest and send it to the idp
     if (!isset($_POST["SAMLResponse"])) {
-        $ssoBuiltUrl = $auth->login(null, array(), false, false, true);
+        $ssoBuiltUrl = $auth->login(null, [], false, false, true);
         $_SESSION['AuthNRequestID'] = $auth->getLastRequestID();
         header('Pragma: no-cache');
         header('Cache-Control: no-cache, must-revalidate');

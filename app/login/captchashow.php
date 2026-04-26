@@ -15,7 +15,7 @@ $Database = new Database_PDO;
 $User     = new User ($Database);
 
 // options
-$options = array (
+$options =  [
 			'image_width'            => 425,       // width of captcha image in pixels
 			'image_height'           => 50,        // height of captcha image in pixels
 			'code_length'            => 6,         // # of characters for captcha code
@@ -30,7 +30,7 @@ $options = array (
 			'no_session'             => false,
 			'session_name'           => Config::ValueOf('phpsessname', 'phpipam'),
 			'use_database'           => false
-			);
+			];
 
 // construct
 $captcha = new Securimage($options);

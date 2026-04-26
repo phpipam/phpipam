@@ -57,7 +57,7 @@ foreach($POST as $key=>$line) {
 }
 
 # loop and make sure that we do not have any duplicate IPs !
-$unique_ips = array();
+$unique_ips = [];
 foreach ($res as $r) {
     if(in_array($r['ip_addr'], $unique_ips)) {
         $Result->show("danger", "Duplicated IP address $r[ip_addr] cannot be imported!", true);
@@ -72,7 +72,7 @@ if(sizeof($res)>0) {
 	$errors = 0;
 	foreach($res as $r) {
 		# set insert values
-		$values = array("ip_addr"=>$Subnets->transform_to_decimal($r['ip_addr']),
+		$values = ["ip_addr"=>$Subnets->transform_to_decimal($r['ip_addr']),
 						"hostname"=>$r['hostname'],
 						"subnetId"=>$POST->subnetId,
 						"description"=>$r['description'],
@@ -81,7 +81,7 @@ if(sizeof($res)>0) {
 						"state"=>2,
 						"lastSeen"=>date("Y-m-d H:i:s"),
 						"action"=>"add"
-						);
+						];
         # port
         if(isset($r['port']))   { $values['port'] = $r['port']; }
         # custom fields

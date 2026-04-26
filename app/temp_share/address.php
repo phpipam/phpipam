@@ -63,7 +63,7 @@ if(sizeof($address)>1) {
 	print "<tr>";
 	print "	<th>"._('Hierarchy')."</th>";
 	print "	<td>";
-	$Sections->print_breadcrumbs($Sections, $Subnets, array("page"=>"subnets", "section"=>$subnet['sectionId'], "subnetId"=>$subnet['id'], "ipaddrid"=>$address['id']), $Addresses);
+	$Sections->print_breadcrumbs($Sections, $Subnets, ["page"=>"subnets", "section"=>$subnet['sectionId'], "subnetId"=>$subnet['id'], "ipaddrid"=>$address['id']], $Addresses);
 	print "</td>";
 	print "</tr>";
 
@@ -190,7 +190,7 @@ if(sizeof($address)>1) {
 
 		foreach($custom_fields as $key=>$field) {
 			if(!is_blank($address[$key])) {
-			$address[$key] = str_replace(array("\n", "\r\n"), "<br>",$address[$key]);
+			$address[$key] = str_replace(["\n", "\r\n"], "<br>",$address[$key]);
 			print "<tr>";
 			print "	<th>$key</th>";
 			print "	<td>";

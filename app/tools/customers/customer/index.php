@@ -17,7 +17,7 @@ $customer = $Tools->fetch_object("customers", "title", $GET->subnetId);
 $custom_fields = $Tools->fetch_custom_fields('customers');
 # get hidden fields */
 $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-$hidden_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['customers'] : array();
+$hidden_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['customers'] : [];
 
 # structure and include details
 print "<div class='row'>";

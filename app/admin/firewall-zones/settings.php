@@ -67,12 +67,12 @@ foreach($types as $t) {
 }
 
 # build the array for name pattern
-$namePattern = array (	'patternIndicator' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternIndicator">Indicator</span>',
+$namePattern =  [	'patternIndicator' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternIndicator">Indicator</span>',
 						'patternZoneName' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternZoneName">Zone name</span>',
 						'patternIPType' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternIPType">IP Type</span>',
 						'patternHost' 		=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternHost">Host</span>',
 						'patternFQDN' 		=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternFQDN">FQDN</span>',
-						'patternSeparator' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternSeparator">'.$firewallZoneSettings->separator.'</span>');
+						'patternSeparator' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternSeparator">'.$firewallZoneSettings->separator.'</span>'];
 ?>
 
 <script>

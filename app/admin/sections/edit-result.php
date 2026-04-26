@@ -100,7 +100,7 @@ else {
 	}
 
 	# set variables for update
-	$values = array(
+	$values = [
 					"id"               => $POST->id,
 					"name"             => $POST->name,
 					"description"      => $POST->description,
@@ -112,7 +112,7 @@ else {
 					"showSupernetOnly" => $POST->showSupernetOnly,
 					"masterSection"    => $POST->masterSection,
 					"permissions"      => json_encode($new_permissions)
-					);
+					];
 
 	# execute update
 	if(!$Sections->modify_section ($POST->action, $values, $POST->id))	{ $Result->show("danger", _("Section")." ".$User->get_post_action()." "._("failed"), false); }
@@ -122,7 +122,7 @@ else {
 	if ($POST->delegate==1) {
 		// fetch section subnets (use $subnets object to prime its cache)
 		$section_subnets = $Subnets->fetch_multiple_objects ("subnets", "sectionId", $POST->id);
-		if (!is_array($section_subnets)) $section_subnets = array();
+		if (!is_array($section_subnets)) $section_subnets = [];
 
 		// apply permission changes
 		$Subnets->set_permissions ($section_subnets, $removed_permissions, $changed_permissions);

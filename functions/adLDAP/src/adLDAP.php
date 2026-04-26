@@ -115,7 +115,7 @@ class adLDAP {
      *
      * @var array
      */
-    protected $domainControllers = array("dc01.mydomain.local");
+    protected $domainControllers = ["dc01.mydomain.local"];
 
     /**
      * Optional account with higher privileges for searching
@@ -588,7 +588,7 @@ class adLDAP {
     * @throws Exception - if unable to bind to Domain Controller
     * @return bool
     */
-    public function __construct($options = array()) {
+    public function __construct($options = []) {
         // You can specifically overide any of the default configuration options setup above
         if (count($options) > 0) {
             if (array_key_exists("account_suffix", $options)) { $this->accountSuffix = $options["account_suffix"]; }
@@ -753,7 +753,7 @@ class adLDAP {
      */
     public function findBaseDn()
     {
-        $namingContext = $this->getRootDse(array('defaultnamingcontext'));
+        $namingContext = $this->getRootDse(['defaultnamingcontext']);
         return $namingContext[0]['defaultnamingcontext'][0];
     }
 
@@ -763,7 +763,7 @@ class adLDAP {
     * @param string[] $attributes The attributes you wish to query e.g. defaultnamingcontext
     * @return array
     */
-    public function getRootDse($attributes = array("*", "+")) {
+    public function getRootDse($attributes = ["*", "+"]) {
         if (!$this->ldapBind) { return (false); }
 
         $sr = @ldap_read($this->ldapConnection, "(objectclass=*)", 'objectClass=*', $attributes);
@@ -824,10 +824,10 @@ class adLDAP {
         // LDAP doesn't like NULL attributes, only set them if they have values
         // If you wish to remove an attribute you should set it to a space
         // TO DO: Adapt user_modify to use ldap_mod_delete to remove a NULL attribute
-        $mod = array();
+        $mod = [];
 
         // Check every attribute to see if it contains 8bit characters and then UTF8 encode them
-        array_walk($attributes, array($this, 'encode8bit'));
+        array_walk($attributes, [$this, 'encode8bit']);
 
         if ($attributes["address_city"]) { $mod["l"][0] = $attributes["address_city"]; }
         if ($attributes["address_code"]) { $mod["postalCode"][0] = $attributes["address_code"]; }

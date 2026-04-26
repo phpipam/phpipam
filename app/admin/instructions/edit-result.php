@@ -32,7 +32,7 @@ if ($POST->id=="1" || $POST->id=="2") {
     // update
     if($Database->objectExists("instructions", $POST->id)) {
         print "update";
-        try { $Database->updateObject("instructions", array("id"=>$POST->id, "instructions"=>$instructions), "id"); }
+        try { $Database->updateObject("instructions", ["id"=>$POST->id, "instructions"=>$instructions], "id"); }
         catch (Exception $e) {
         	$Result->show("danger", _("Error: ").$e->getMessage(), false);
             $Log->write( _("Instructions updated"), _("Failed to update instructions")."<hr>".$e->getMessage(), 1);
@@ -40,7 +40,7 @@ if ($POST->id=="1" || $POST->id=="2") {
      }
     // create new
     else {
-        try { $Database->insertObject("instructions", array("id"=>$POST->id, "instructions"=>$instructions), false, true, false); }
+        try { $Database->insertObject("instructions", ["id"=>$POST->id, "instructions"=>$instructions], false, true, false); }
         catch (Exception $e) {
         	$Result->show("danger", _("Error: ").$e->getMessage(), false);
             $Log->write( _("Instructions updated"), _("Failed to update instructions")."<hr>".$e->getMessage(), 1);

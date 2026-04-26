@@ -46,7 +46,7 @@ $all_customer_entries = $Tools->fetch_all_objects ("customers", "id", true);
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields('routing_bgp');
 # prepare HTML variables
-$fields = array ( 'id', 'local_as', 'local_address', 'peer_name', 'peer_address', 'bgp_type', 'vrf', 'circuit', 'customer', 'description' );
+$fields =  [ 'id', 'local_as', 'local_address', 'peer_name', 'peer_address', 'bgp_type', 'vrf', 'circuit', 'customer', 'description' ];
 
 if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $myField) {

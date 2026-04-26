@@ -29,7 +29,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "vlan_domain");
 
 # fetch vlan details
 $l2_domain = $Admin->fetch_object ("vlanDomains", "id", $POST->id);
-$l2_domain = $l2_domain!==false ? (array) $l2_domain : array();
+$l2_domain = $l2_domain!==false ? (array) $l2_domain : [];
 
 # set readonly flag
 $readonly = $POST->action=="delete" ? "readonly" : "";
@@ -80,7 +80,7 @@ $(document).ready(function(){
 		$sections = $Sections->fetch_all_sections();
 		# reformat domains sections to array
 		$domain_sections = pf_explode(";", @$l2_domain['permissions']);
-		$domain_sections = is_array($domain_sections) ? $domain_sections : array();
+		$domain_sections = is_array($domain_sections) ? $domain_sections : [];
 		// loop
 		if($sections!==false) {
 			foreach($sections as $section) {

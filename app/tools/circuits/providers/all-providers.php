@@ -27,7 +27,7 @@ $circuit_providers = $Tools->fetch_all_objects("circuitProviders", "name");
 $custom_fields = $Tools->fetch_custom_fields('circuitProviders');
 # get hidden fields */
 $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-$hidden_fields = is_array(@$hidden_fields['circuitProviders']) ? $hidden_fields['circuitProviders'] : array();
+$hidden_fields = is_array(@$hidden_fields['circuitProviders']) ? $hidden_fields['circuitProviders'] : [];
 
 # title
 print "<h4>"._('List of Circuit providers')."</h4>";

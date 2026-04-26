@@ -83,10 +83,10 @@ if ($POST->action!="delete") {
 }
 
 # set update array
-$values = array("id"=>$POST->id,
+$values = ["id"=>$POST->id,
 				"master"=>$POST->master,
 				"type"=>$POST->type
-				);
+				];
 # name only on add
 if ($POST->action=="add")
 $values['name'] = $POST->name;

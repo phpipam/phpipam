@@ -49,7 +49,7 @@ else {
                 $subprefixes_cnt = $Tools->fetch_all_prefixes ($prefix->id, true);
 
                 if($subprefixes_cnt !== false) {
-                    $numbers = array();
+                    $numbers = [];
                     foreach ($subprefixes_cnt as $sp) {
                         $subprefix_numbers = $Tools->fetch_multiple_objects ("pstnNumbers", "prefix", $sp->id, "number", true);
                         if ($subprefix_numbers!==false) {

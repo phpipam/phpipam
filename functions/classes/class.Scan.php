@@ -193,7 +193,7 @@ class Scan extends Common_functions {
 		//check
 		if(!in_array($method, $possible)) {
 			//die or print?
-			if($this->icmp_exit)				{ die(json_encode(array("status"=>1, "error"=>_("Invalid scan method.")))); }
+			if($this->icmp_exit)				{ die(json_encode(["status"=>1, "error"=>_("Invalid scan method.")])); }
 			else								{ $this->Result->show("danger", _("Invalid scan method."), true); }
 		}
 		//ok
@@ -388,7 +388,7 @@ class Scan extends Common_functions {
 		}
 		else {
 			//set count and timeout
-			$ping->setArgs(array('count' => $this->icmp_timeout, 'timeout' => $this->icmp_timeout));
+			$ping->setArgs(['count' => $this->icmp_timeout, 'timeout' => $this->icmp_timeout]);
 			//execute
 			$ping_response = $ping->ping($address);
 			//check response for error
@@ -492,7 +492,7 @@ class Scan extends Common_functions {
 	 */
 	public function ping_address_method_fping_subnet ($subnet_cidr, $return_result = false) {
 		$this->ping_verify_path ($this->fping_path);
-		$out = array();
+		$out = [];
 		# set command
 		$cmd = sprintf("%s -c %s -t %s -Agq %s 2>&1", escapeshellcmd($this->fping_path), escapeshellarg($this->icmp_count), escapeshellarg($this->icmp_timeout * 1000), escapeshellarg((string) $subnet_cidr));
 		# execute command, return $retval
@@ -605,7 +605,7 @@ class Scan extends Common_functions {
     	# set datetime
     	$datetime = is_null($datetime) ? date("Y-m-d H:i:s") : $datetime;
 		# execute
-		$update_ipaddress = array("id"=>$id, "lastSeen"=>$datetime);
+		$update_ipaddress = ["id"=>$id, "lastSeen"=>$datetime];
 		if (!is_null($mac)) {
 			$update_ipaddress["mac"] = $mac;
 		}
@@ -629,7 +629,7 @@ class Scan extends Common_functions {
     	// set date
 		$datetime = $datetime===false ? date("Y-m-d H:i:s") : $datetime;
 		# execute
-		try { $this->Database->updateObject("scanAgents", array("id"=>$id, "last_access"=>$datetime), "id"); }
+		try { $this->Database->updateObject("scanAgents", ["id"=>$id, "last_access"=>$datetime], "id"); }
 		catch (Exception $e) {
 		}
 	}
@@ -646,7 +646,7 @@ class Scan extends Common_functions {
 		// set date
 		$datetime = $datetime===false ? date("Y-m-d H:i:s") : $datetime;
 		// update
-		try { $this->Database->updateObject("subnets", array("id"=>$subnet_id, "lastScan"=>$datetime), "id"); }
+		try { $this->Database->updateObject("subnets", ["id"=>$subnet_id, "lastScan"=>$datetime], "id"); }
 		catch (Exception $e) {}
 	}
 
@@ -662,7 +662,7 @@ class Scan extends Common_functions {
 		// set date
 		$datetime = $datetime===false ? date("Y-m-d H:i:s") : $datetime;
 		// update
-		try { $this->Database->updateObject("subnets", array("id"=>$subnet_id, "lastDiscovery"=>$datetime), "id"); }
+		try { $this->Database->updateObject("subnets", ["id"=>$subnet_id, "lastDiscovery"=>$datetime], "id"); }
 		catch (Exception $e) {}
 	}
 
@@ -682,7 +682,7 @@ class Scan extends Common_functions {
 			if ($last_seen_date!==false && !is_null($last_seen_date) && strlen($last_seen_date)>2 && $last_seen_date!="0000-00-00 00:00:00" && $last_seen_date!="1970-01-01 00:00:01" && $last_seen_date!="1970-01-01 01:00:00") {
 				// don't update reserved to offline
 				if (!($tag_id==1 && $old_tag_id==3)) {
-					try { $this->Database->updateObject("ipaddresses", array("id"=>$address_id, "state"=>$tag_id), "id"); }
+					try { $this->Database->updateObject("ipaddresses", ["id"=>$address_id, "state"=>$tag_id], "id"); }
 					catch (Exception $e) {
 						return false;
 					}
@@ -757,7 +757,7 @@ class Scan extends Common_functions {
 		# update addresses statuses
 		elseif($type=="update") { return $this->prepare_addresses_to_update ($subnet); }
 		# fail
-		else 					{ die(json_encode(array("status"=>1, "error"=>_("Invalid scan type provided.")))); }
+		else 					{ die(json_encode(["status"=>1, "error"=>_("Invalid scan type provided.")])); }
 	}
 
 	/**
@@ -774,14 +774,14 @@ class Scan extends Common_functions {
 		//subnet ID is provided, fetch subnet
 		$subnet = $Subnets->fetch_subnet(null, $subnetId);
 		if($subnet===false)	{
-			 if ($die)											{ die(json_encode(array("status"=>1, "error"=>_("Invalid subnet ID provided.")))); }
-			 else												{ return array(); }
+			 if ($die)											{ die(json_encode(["status"=>1, "error"=>_("Invalid subnet ID provided.")])); }
+			 else												{ return []; }
 		}
 
 		// we should support only up to 4094 hosts!
 		if($Subnets->max_hosts ($subnet)>4096 && php_sapi_name()!="cli")
-		if ($die)												{ die(json_encode(array("status"=>1, "error"=>_("Scanning from GUI is only available for subnets up to /20 or 4096 hosts!")))); }
-		else													{ return array(); }
+		if ($die)												{ die(json_encode(["status"=>1, "error"=>_("Scanning from GUI is only available for subnets up to /20 or 4096 hosts!")])); }
+		else													{ return []; }
 
 		# set array of addresses to scan, exclude existing!
 		$ip = $Subnets->get_all_possible_subnet_addresses ($subnet);
@@ -791,8 +791,8 @@ class Scan extends Common_functions {
 
 		//none to scan?
 		if(sizeof($ip)==0)	{
-			if ($die)											{ die(json_encode(array("status"=>1, "error"=>"Didn't find any address to scan!"))); }
-			else												{ return array(); }
+			if ($die)											{ die(json_encode(["status"=>1, "error"=>"Didn't find any address to scan!"])); }
+			else												{ return []; }
 		}
 
 		//return
@@ -824,7 +824,7 @@ class Scan extends Common_functions {
 			$ip = array_values(@$ip);
 		}
 		//return
-		return is_array(@$ip) ? $ip : array();
+		return is_array(@$ip) ? $ip : [];
 	}
 
 	/**
@@ -841,7 +841,7 @@ class Scan extends Common_functions {
 		# result
 		$ip = $Subnets->get_all_possible_subnet_addresses ($subnet);
 		//none to scan?
-		if(sizeof($ip)==0)									{ die(json_encode(array("status"=>1, "error"=>_("Didn't find any address to scan!")))); }
+		if(sizeof($ip)==0)									{ die(json_encode(["status"=>1, "error"=>_("Didn't find any address to scan!")])); }
 		//result
 		return $ip;
 	}
@@ -869,7 +869,7 @@ class Scan extends Common_functions {
 			return $scan_addresses;
 		}
 		else {
-			return array();
+			return [];
 		}
 	}
 }

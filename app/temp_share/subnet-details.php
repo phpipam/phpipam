@@ -10,7 +10,7 @@
 	<tr>
 		<th><?php print _('Hierarchy'); ?></th>
 		<td>
-			<?php $Subnets->print_breadcrumbs($Sections, $Subnets, array("page"=>"subnets", "section"=>$subnet['sectionId'], "subnetId"=>$subnet['id'])); ?>
+			<?php $Subnets->print_breadcrumbs($Sections, $Subnets, ["page"=>"subnets", "section"=>$subnet['sectionId'], "subnetId"=>$subnet['id']]); ?>
 		</td>
 	</tr>
 	<tr>
@@ -117,7 +117,7 @@
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $key=>$field) {
 			if(!is_blank($subnet[$key])) {
-				$subnet[$key] = str_replace(array("\n", "\r\n"), "<br>",$subnet[$key]);
+				$subnet[$key] = str_replace(["\n", "\r\n"], "<br>",$subnet[$key]);
 				$html_custom[] = "<tr>";
 				$html_custom[] = "	<th>".$Tools->print_custom_field_name ($key)."</th>";
 				$html_custom[] = "	<td>";

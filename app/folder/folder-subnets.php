@@ -20,7 +20,7 @@ $folderId = $GET->subnetId;
 $section = $Sections->fetch_section ("id", $folder['sectionId']);
 
 // init subnets
-$subnets = array();
+$subnets = [];
 
 if($slaves) {
 	# sort slaves by folder / subnet

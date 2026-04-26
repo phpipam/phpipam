@@ -60,14 +60,14 @@ if ($Tools->validate_mac ($search_term)===false) {
 }
 
 # get all custom fields
-$custom_address_fields   = $_REQUEST['addresses']=="on" ? $Tools->fetch_custom_fields ("ipaddresses") : array();
-$custom_subnet_fields    = $_REQUEST['subnets']=="on"   ? $Tools->fetch_custom_fields ("subnets") : array();
-$custom_vlan_fields      = $_REQUEST['vlans']=="on"     ? $Tools->fetch_custom_fields ("vlans") : array();
-$custom_vrf_fields       = $_REQUEST['vrf']=="on"       ? $Tools->fetch_custom_fields ("vrf") : array();
-$custom_circuit_fields   = $_REQUEST['circuits']=="on"  ? $Tools->fetch_custom_fields ("circuits") : array();
-$custom_circuit_p_fields = $_REQUEST['circuits']=="on"  ? $Tools->fetch_custom_fields ("circuitProviders") : array();
-$custom_customer_fields  = $_REQUEST['customers']=="on" ? $Tools->fetch_custom_fields ("customers") : array();
-$custom_device_fields    = $_REQUEST['devices']=="on"   ? $Tools->fetch_custom_fields ("devices") : array();
+$custom_address_fields   = $_REQUEST['addresses']=="on" ? $Tools->fetch_custom_fields ("ipaddresses") : [];
+$custom_subnet_fields    = $_REQUEST['subnets']=="on"   ? $Tools->fetch_custom_fields ("subnets") : [];
+$custom_vlan_fields      = $_REQUEST['vlans']=="on"     ? $Tools->fetch_custom_fields ("vlans") : [];
+$custom_vrf_fields       = $_REQUEST['vrf']=="on"       ? $Tools->fetch_custom_fields ("vrf") : [];
+$custom_circuit_fields   = $_REQUEST['circuits']=="on"  ? $Tools->fetch_custom_fields ("circuits") : [];
+$custom_circuit_p_fields = $_REQUEST['circuits']=="on"  ? $Tools->fetch_custom_fields ("circuitProviders") : [];
+$custom_customer_fields  = $_REQUEST['customers']=="on" ? $Tools->fetch_custom_fields ("customers") : [];
+$custom_device_fields    = $_REQUEST['devices']=="on"   ? $Tools->fetch_custom_fields ("devices") : [];
 
 
 # set selected address fields array

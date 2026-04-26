@@ -32,7 +32,7 @@ class SubnetsTable {
 	 * Index of all VLANs.
 	 * @var array
 	 */
-	private $all_vlans = array();
+	private $all_vlans = [];
 
 	/**
 	 * Class Constructor
@@ -48,7 +48,7 @@ class SubnetsTable {
 		$this->Tools->get_Settings();
 
 		$hiddenCustomFields = db_json_decode($this->Tools->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
-		$this->hidden_fields = is_array($hiddenCustomFields['subnets']) ? $hiddenCustomFields['subnets'] : array();
+		$this->hidden_fields = is_array($hiddenCustomFields['subnets']) ? $hiddenCustomFields['subnets'] : [];
 
 		# fetch all vlans and domains and reindex
 		$vlans_and_domains = $this->Tools->fetch_all_domains_and_vlans ();
@@ -81,7 +81,7 @@ class SubnetsTable {
 			$padding = '10px';
 		}
 
-		$tr = array();
+		$tr = [];
 		# description
 		$description = is_blank($subnet->description) ? "/" : $subnet->description;
 
@@ -181,7 +181,7 @@ class SubnetsTable {
 		}
 
 		# set permission
-		$html = array();
+		$html = [];
 
 		$html[] = "<div class='btn-group actions' style='padding:0px;'>";
 		if($subnet->permissions_check>1) {
@@ -216,7 +216,7 @@ class SubnetsTable {
 	public function json_paginate($SubnetsTree, $offset, $limit) {
 		// If showSupernetOnly is enabled extract the first level of subnets
 		if ($this->showSupernetOnly) {
-			$subnets = array();
+			$subnets = [];
 			foreach($SubnetsTree->subnets as $s) {
 				if ($s->level == 0) $subnets[] = $s;
 			}
@@ -226,7 +226,7 @@ class SubnetsTable {
 
 		// Generate JSON response
 		$total = sizeof($subnets);
-		$rows = array();
+		$rows = [];
 
 		// Extract and generate json data for $limit rows at $offset
 		for ($i=$offset; $i<$total && $i<($offset+$limit); $i++) {
@@ -234,7 +234,7 @@ class SubnetsTable {
 		}
 
 		// bootstrap-tables paginated server-side response format.
-		$data = array('total' => $total, 'rows' => $rows);
+		$data = ['total' => $total, 'rows' => $rows];
 		return json_encode($data);
 	}
 }

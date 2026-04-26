@@ -8,11 +8,11 @@
 $User->check_user_session();
 
 # get all custom fields
-$custom_circuit_fields   = $GET->circuits=="on"  ? $Tools->fetch_custom_fields ("circuits") : array();
-$custom_circuit_p_fields = $GET->circuits=="on"  ? $Tools->fetch_custom_fields ("circuitProviders") : array();
+$custom_circuit_fields   = $GET->circuits=="on"  ? $Tools->fetch_custom_fields ("circuits") : [];
+$custom_circuit_p_fields = $GET->circuits=="on"  ? $Tools->fetch_custom_fields ("circuitProviders") : [];
 
-$hidden_circuit_fields   = is_array(@$hidden_fields['circuits']) ? $hidden_fields['circuits'] : array();
-$hidden_circuit_p_fields = is_array(@$hidden_fields['circuitProviders']) ? $hidden_fields['circuitProviders'] : array();
+$hidden_circuit_fields   = is_array(@$hidden_fields['circuits']) ? $hidden_fields['circuits'] : [];
+$hidden_circuit_p_fields = is_array(@$hidden_fields['circuitProviders']) ? $hidden_fields['circuitProviders'] : [];
 
 # search circuits
 $result_circuits   = $Tools->search_circuits ($searchTerm, $custom_circuit_fields);

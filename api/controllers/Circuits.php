@@ -95,20 +95,20 @@ class Circuits_controller extends Common_api_functions {
 		$this->validate_options_request ();
 
 		// methods
-		$result['methods'] = array(
-								array("href"=>"/api/".$this->_params->app_id."/circuits/", 					"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
-								array("href"=>"/api/".$this->_params->app_id."/circuits/{id}/", 			"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
-																												 			 array("rel"=>"create", "method"=>"POST"),
-																												 			 array("rel"=>"update", "method"=>"PATCH"),
-																												 			 array("rel"=>"delete", "method"=>"DELETE"))),
-								array("href"=>"/api/".$this->_params->app_id."/circuits/providers/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
-								array("href"=>"/api/".$this->_params->app_id."/circuits/providers/{id}/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
-																												 			 array("rel"=>"create", "method"=>"POST"),
-																												 			 array("rel"=>"update", "method"=>"PATCH"),
-																												 			 array("rel"=>"delete", "method"=>"DELETE"))),
-							);
+		$result['methods'] = [
+								["href"=>"/api/".$this->_params->app_id."/circuits/", 					"methods"=>[["rel"=>"options", "method"=>"OPTIONS"]]],
+								["href"=>"/api/".$this->_params->app_id."/circuits/{id}/", 			"methods"=>[["rel"=>"read", 	"method"=>"GET"],
+																												 			 ["rel"=>"create", "method"=>"POST"],
+																												 			 ["rel"=>"update", "method"=>"PATCH"],
+																												 			 ["rel"=>"delete", "method"=>"DELETE"]]],
+								["href"=>"/api/".$this->_params->app_id."/circuits/providers/", 		"methods"=>[["rel"=>"options", "method"=>"OPTIONS"]]],
+								["href"=>"/api/".$this->_params->app_id."/circuits/providers/{id}/", 	"methods"=>[["rel"=>"read", 	"method"=>"GET"],
+																												 			 ["rel"=>"create", "method"=>"POST"],
+																												 			 ["rel"=>"update", "method"=>"PATCH"],
+																												 			 ["rel"=>"delete", "method"=>"DELETE"]]],
+							];
 		# result
-		return array("code"=>200, "data"=>$result);
+		return ["code"=>200, "data"=>$result];
 	}
 
 
@@ -141,7 +141,7 @@ class Circuits_controller extends Common_api_functions {
 			$result = $this->Tools->fetch_all_objects ($this->type, 'id');
 			// check result
 			if($result===false)						{ $this->Response->throw_exception(404, "No {$this->type_text}s configured"); }
-			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+			else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, null, true, true)]; }
 		}
 		// provider circuits
 		elseif($this->type==="circuitProviders" && isset($this->_params->id2)) {
@@ -149,7 +149,7 @@ class Circuits_controller extends Common_api_functions {
 				$result = $this->Tools->fetch_multiple_objects ("circuits", "provider", $this->_params->id);
 				// check result
 				if($result==NULL)						{ $this->Response->throw_exception(404, "No circuits belonging to provider"); }
-				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+				else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, null, true, true)]; }
 			}
 			else {
 				$this->Response->throw_exception(400, "Invalid API query");
@@ -160,7 +160,7 @@ class Circuits_controller extends Common_api_functions {
 			$result = $this->Tools->fetch_object ($this->type, "cid", $this->_params->id2);
 			// check result
 			if($result==NULL)						{ $this->Response->throw_exception(404, "{$this->type_text} not found"); }
-			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+			else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, null, true, true)]; }
 		}
 		// read details
 		else {
@@ -170,7 +170,7 @@ class Circuits_controller extends Common_api_functions {
 			$result = $this->Tools->fetch_object ($this->type, "id", $this->_params->id);
 			// check result
 			if($result==NULL)						{ $this->Response->throw_exception(404, "{$this->type_text} not found"); }
-			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+			else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, null, true, true)]; }
 		}
 	}
 
@@ -206,10 +206,10 @@ class Circuits_controller extends Common_api_functions {
 		else {
 			//set result
 			if($this->type=="circuits") {
-				return array("code"=>201, "message"=>"{$this->type_text} created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/circuits/".$this->Admin->lastId."/");
+				return ["code"=>201, "message"=>"{$this->type_text} created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/circuits/".$this->Admin->lastId."/"];
 			}
 			else {
-				return array("code"=>201, "message"=>"{$this->type_text} created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/circuits/providers/".$this->Admin->lastId."/");
+				return ["code"=>201, "message"=>"{$this->type_text} created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/circuits/providers/".$this->Admin->lastId."/"];
 			}
 		}
 	}
@@ -248,7 +248,7 @@ class Circuits_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "{$this->type_text} edit failed"); }
 		else {
 			//set result
-			return array("code"=>200, "message"=>"{$this->type_text} updated");
+			return ["code"=>200, "message"=>"{$this->type_text} updated"];
 		}
 	}
 
@@ -271,7 +271,7 @@ class Circuits_controller extends Common_api_functions {
 		$this->validate_id ("delete");
 
 		# set variables for delete
-		$values = array();
+		$values = [];
 		$values["id"] = $this->_params->id;
 		# validate that something is present
 		$this->validate_values ($values);
@@ -285,7 +285,7 @@ class Circuits_controller extends Common_api_functions {
 				$this->Admin->remove_object_references ("circuits", "id", $this->_params->id);
 			}
 			// set result
-			return array("code"=>200, "message"=>"{$this->type_text} deleted");
+			return ["code"=>200, "message"=>"{$this->type_text} deleted"];
 		}
 	}
 
@@ -433,7 +433,7 @@ class Circuits_controller extends Common_api_functions {
 	private function validate_circuit_type ($action="add") {
 		if(isset($this->_params->type)) {
 			$type_desc = $this->Database->getFieldInfo ("circuits", "type");
-			$all_types = pf_explode(",", str_replace(array("enum","(",")","'"), "",$type_desc->Type));
+			$all_types = pf_explode(",", str_replace(["enum","(",")","'"], "",$type_desc->Type));
 			if(!in_array($this->_params->type, $all_types))									{ $this->Response->throw_exception(400, "Invalid circuit type"); }
 		}
 		else {
@@ -454,7 +454,7 @@ class Circuits_controller extends Common_api_functions {
 	 */
 	private function validate_circuit_status ($action="add") {
 		if (isset($this->_params->status)) {
-			$statuses = array ("Active", "Inactive", "Reserved");
+			$statuses =  ["Active", "Inactive", "Reserved"];
 			if(!in_array($this->_params->status, $statuses))								{ $this->Response->throw_exception(400, _("Invalid status")); }
 		}
 		else {

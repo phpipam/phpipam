@@ -38,7 +38,7 @@ else {
 
 	# set hidden fields
 	$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-	$hidden_fields = is_array(@$hidden_fields['nat']) ? $hidden_fields['nat'] : array();
+	$hidden_fields = is_array(@$hidden_fields['nat']) ? $hidden_fields['nat'] : [];
 
 	# size of custom fields
 	$csize = sizeof($custom_fields) - sizeof($hidden_fields);
@@ -87,7 +87,7 @@ else {
     print "<tbody>";
 
     // init array
-    $nats_reordered = array("source"=>array(), "static"=>array(), "destination"=>array());
+    $nats_reordered = ["source"=>[], "static"=>[], "destination"=>[]];
 
     # rearrange based on type
     if($all_nats !== false) {
@@ -125,9 +125,9 @@ else {
 
                 // no src/dst
                 if ($sources===false)
-                    $sources = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+                    $sources = ["<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>"];
                 if ($destinations===false)
-                    $destinations = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+                    $destinations = ["<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>"];
 
                 // device
                 if (strlen((string) $n->device)) {

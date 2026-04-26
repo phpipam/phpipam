@@ -385,7 +385,7 @@ $(document).ready(function(){
 		print "	<td>"._($name)."</td>";
 		print "	<td>";
 		print "		<select class='form-control input-sm input-w-auto' name='$key'>";
-        foreach (array(0,1,2,3) as $p) {
+        foreach ([0,1,2,3] as $p) {
 			$selected = $p==$module_permissions[str_replace("perm_","",$key)] ? "selected" : "";
             print "<option value='$p' $selected>".$Subnets->parse_permissions ($p)."</option>";
         }

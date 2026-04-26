@@ -96,13 +96,13 @@ class Nat_controller extends Common_api_functions {
         $this->init_object ("Addresses", $Database);
         $this->init_object ("Devices", $Database);
         $this->set_valid_keys ("nat");
-        $this->valid_types = array("source", "destination", "static");
-        $this->validation_data = array(
-            "ipaddresses" => array(
+        $this->valid_types = ["source", "destination", "static"];
+        $this->validation_data = [
+            "ipaddresses" => [
                 "object"   => $this->Addresses,
                 "function" => 'fetch_address',
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -117,15 +117,15 @@ class Nat_controller extends Common_api_functions {
         $this->validate_options_request ();
 
         // methods
-        $result = array();
-        $result['methods'] = array(
-            array("href"=>"/api/".$this->_params->app_id."/nat/",       "methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
-            array("href"=>"/api/".$this->_params->app_id."/nat/{id}/",  "methods"=>array(array("rel"=>"read",    "method"=>"GET"),
-                                                                                         array("rel"=>"create",  "method"=>"POST"),
-                                                                                         array("rel"=>"update",  "method"=>"PATCH"),
-                                                                                         array("rel"=>"delete",  "method"=>"DELETE"))),
-        );
-        return array("code"=>200, "data"=>$result);
+        $result = [];
+        $result['methods'] = [
+            ["href"=>"/api/".$this->_params->app_id."/nat/",       "methods"=>[["rel"=>"options", "method"=>"OPTIONS"]]],
+            ["href"=>"/api/".$this->_params->app_id."/nat/{id}/",  "methods"=>[["rel"=>"read",    "method"=>"GET"],
+                                                                                         ["rel"=>"create",  "method"=>"POST"],
+                                                                                         ["rel"=>"update",  "method"=>"PATCH"],
+                                                                                         ["rel"=>"delete",  "method"=>"DELETE"]]],
+        ];
+        return ["code"=>200, "data"=>$result];
     }
 
     /**
@@ -145,11 +145,11 @@ class Nat_controller extends Common_api_functions {
         # Get all NATs from DB
         if (!isset($this->_params->id) || $this->_params->id == "all") {
             $result = $this->Tools->fetch_all_objects ("nat", 'id');
-            return array("code"=>200, "data"=>$this->convert_from_DB($result), true, true);#$this->prepare_result ($result, null, true, true));
+            return ["code"=>200, "data"=>$this->convert_from_DB($result), true, true];#$this->prepare_result ($result, null, true, true));
         }
         elseif (isset($this->_params->id) && is_numeric($this->_params->id)) {
             $result = $this->Tools->fetch_multiple_objects ("nat", "id", $this->_params->id, 'id', true);
-            return array("code"=>200, "data"=>$this->convert_from_DB($result), true, true);
+            return ["code"=>200, "data"=>$this->convert_from_DB($result), true, true];
         }
         else {
             $this->Response->throw_exception(400, "Invalid ID format");
@@ -164,12 +164,12 @@ class Nat_controller extends Common_api_functions {
      * @return list of formatted results
      **/
     private function convert_from_DB($results) {
-        $out = array();
+        $out = [];
         foreach ($results as $r) {
-            $rr = array(
-                "src"  => array(),
-                "dst"  => array()
-            );
+            $rr = [
+                "src"  => [],
+                "dst"  => []
+            ];
             foreach ($r as $k => $v) {
                 if ($k != "src" && $k != "dst") {
                     $rr[$k] = $v;
@@ -178,7 +178,7 @@ class Nat_controller extends Common_api_functions {
                     # Better source and destination presentation (json decode values from DB)
                     $jd = (array) db_json_decode($v, true);
                     if ($jd && $jd["ipaddresses"]) {
-                        $rr[$k] = array('ipaddresses' => $jd["ipaddresses"]);
+                        $rr[$k] = ['ipaddresses' => $jd["ipaddresses"]];
                     }
                 }
             }
@@ -210,13 +210,13 @@ class Nat_controller extends Common_api_functions {
         $values = $this->validate_keys ();
         # validate input format
         $this->validate_nat_edit();
-        foreach (array("src","dst") as $k)
+        foreach (["src","dst"] as $k)
             $values[$k] = json_encode($values[$k]);
         #$this->Response->throw_exception(500, "AAA".json_encode($values['src']));
         if (!$this->Admin->object_modify ("nat", "add", "id", $values)) {
             $this->Response->throw_exception(500, "NAT creation failed");
         }
-        return array("code"=>201, "message"=>"NAT created", "id"=>$this->Admin->lastId, "location"=>"/api".$this->_params->app_id."/nat/".$this->Admin->lastId."/");
+        return ["code"=>201, "message"=>"NAT created", "id"=>$this->Admin->lastId, "location"=>"/api".$this->_params->app_id."/nat/".$this->Admin->lastId."/"];
     }
 
 
@@ -232,7 +232,7 @@ class Nat_controller extends Common_api_functions {
         $values = $this->validate_keys ();
         # validate input format
         $this->validate_nat_edit();
-        foreach (array("src","dst") as $k) {
+        foreach (["src","dst"] as $k) {
             if ( array_key_exists($k, $values) ) {
                 $values[$k] = json_encode($values[$k]);
             }
@@ -241,7 +241,7 @@ class Nat_controller extends Common_api_functions {
         if (!$this->Admin->object_modify ("nat", "edit", "id", $values)) {
             $this->Response->throw_exception(500, "NAT modification failed");
         }
-        return array("code"=>200, "message"=>"NAT modified", "id"=>$this->_params->id, "location"=>"/api".$this->_params->app_id."/nat/".$this->Admin->lastId."/");
+        return ["code"=>200, "message"=>"NAT modified", "id"=>$this->_params->id, "location"=>"/api".$this->_params->app_id."/nat/".$this->Admin->lastId."/"];
     }
 
     /**
@@ -262,12 +262,12 @@ class Nat_controller extends Common_api_functions {
         if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH") {
             # Check optional fields format
             # TBD: subnets for src & dst ?
-            foreach (array("src_port", "dst_port") as  $k) {
+            foreach (["src_port", "dst_port"] as  $k) {
                 if ( $this->_params->$k && !is_numeric($this->_params->$k) )  {
                     $this->Response->throw_exception(400, "Invalid value for $k (must be numeric)");
                 }
             }
-            foreach (array("src","dst") as $k) {
+            foreach (["src","dst"] as $k) {
                 $this->verify_src_dst($k);
             }
             $this->verify_device();
@@ -318,7 +318,7 @@ class Nat_controller extends Common_api_functions {
             if (!is_array($input_param)) {
                 $this->Response->throw_exception(400, "Invalid $k format (Must be an array");
             }
-            $input_out = array();
+            $input_out = [];
             foreach ($input_param as $pk => $pv) {
                 if (!in_array($pk, array_keys($this->validation_data))) {
                     $this->Response->throw_exception(400, "Invalid key identifier for $k ($pk)");
@@ -326,7 +326,7 @@ class Nat_controller extends Common_api_functions {
                 if (!is_array($pv)) {
                     $this->Response->throw_exception(400, "Invalid value for $k (must be an array)");
                 }
-                $values = array();
+                $values = [];
                 foreach ($pv as $v) {
                     if (!is_numeric($v)) {
                         $this->Response->throw_exception(400, "Invalid value $v (must be an integer)");
@@ -343,7 +343,7 @@ class Nat_controller extends Common_api_functions {
                         }
                     }
                 }
-                array_push($input_out, array($pk => $values));
+                array_push($input_out, [$pk => $values]);
             }
         }
     }
@@ -365,7 +365,7 @@ class Nat_controller extends Common_api_functions {
                 $this->Response->throw_exception(500, "NAT delete failed");
             }
             else {
-                return array("code"=>200, "message"=>"NAT deleted");
+                return ["code"=>200, "message"=>"NAT deleted"];
             }
         }
         else {

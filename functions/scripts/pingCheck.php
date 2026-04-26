@@ -66,7 +66,7 @@ if (!isset($config['ping_check_send_mail'])) {
 }
 
 // response for mailing
-$address_change = array();          // Array with differences, can be used to email to admins
+$address_change = [];          // Array with differences, can be used to email to admins
 
 // set now for whole script
 $now     = time();
@@ -108,12 +108,12 @@ $subnets = [];
 foreach ($scan_subnets as $s) {
     //set array for fping
     if ($Scan->icmp_type == "fping") {
-        $subnets[] = array(
+        $subnets[] = [
             "id"         => $s->id,
             "cidr"       => $Subnets->transform_to_dotted($s->subnet) . "/" . $s->mask,
             "nsid"       => $s->nameserverId,
             "resolveDNS" => $s->resolveDNS
-        );
+        ];
     }
 
     $subnet_addresses = $Addresses->fetch_subnet_addresses($s->id) ?: [];
@@ -123,7 +123,7 @@ foreach ($scan_subnets as $s) {
         if ($a->excludePing != 1) {
             //create different array for fping
             if ($Scan->icmp_type == "fping") {
-                $addresses2[$s->id][$a->id] = array(
+                $addresses2[$s->id][$a->id] = [
                     "id"          => $a->id,
                     "ip_addr"     => $a->ip_addr,
                     "description" => $a->description,
@@ -134,10 +134,10 @@ foreach ($scan_subnets as $s) {
                     "state"       => $a->state,
                     "resolveDNS"  => $s->resolveDNS,
                     "nsid"        => $s->nameserverId,
-                );
+                ];
                 $addresses[$s->id][$a->id]  = $a->ip_addr;
             } else {
-                $addresses[]                = array(
+                $addresses[]                = [
                     "id"          => $a->id,
                     "ip_addr"     => $a->ip_addr,
                     "description" => $a->description,
@@ -148,7 +148,7 @@ foreach ($scan_subnets as $s) {
                     "state"       => $a->state,
                     "resolveDNS"  => $s->resolveDNS,
                     "nsid"        => $s->nameserverId,
-                );
+                ];
             }
         }
     }
@@ -397,7 +397,7 @@ if (!empty($address_change) && $config['ping_check_send_mail']) {
     # check for recipients
     foreach ($Tools->fetch_multiple_objects("users", "role", "Administrator") as $admin) {
         if ($admin->mailNotify == "Yes") {
-            $recepients[] = array("name" => $admin->real_name, "email" => $admin->email);
+            $recepients[] = ["name" => $admin->real_name, "email" => $admin->email];
         }
     }
     # none?

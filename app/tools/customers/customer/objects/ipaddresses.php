@@ -24,7 +24,7 @@ $addresses = $objects['ipaddresses'];
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
 $hidden_cfields = db_json_decode($User->settings->hiddenCustomFields, true);
-$hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
+$hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : [];
 
 # set selected address fields array
 $selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);  																	//format to array

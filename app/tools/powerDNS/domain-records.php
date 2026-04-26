@@ -43,7 +43,7 @@ if ($domain === false) {
         }
 
         // sort so SOA appears at the top
-        $order = array();
+        $order = [];
         if(isset($records_default)) {
             foreach ($records_default as $key => $row) {
                 $order[$key] = $row['order'];
@@ -71,7 +71,7 @@ if ($domain === false) {
     if ($domain->type == "SLAVE") {
         // master servers
         print "<tr class='text-top'>";
-        if (strpos((string) $domain->master, ";") !== false) {$master = pf_explode(";", $domain->master);} else { $master = array($domain->master);}
+        if (strpos((string) $domain->master, ";") !== false) {$master = pf_explode(";", $domain->master);} else { $master = [$domain->master];}
         print "<td>" . _("Master servers") . ":</td>";
         print "<td>";
         foreach ($master as $k => $m) {

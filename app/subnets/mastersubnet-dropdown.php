@@ -23,7 +23,7 @@ $User->check_user_session();
  */
 function get_strict_subnets($Subnets, $sectionId, $cidr, $result_fields="*") {
 	$strict_subnets = $Subnets->fetch_overlapping_subnets($cidr, 'sectionId', $sectionId, $result_fields);
-	if (!is_array($strict_subnets)) return array();
+	if (!is_array($strict_subnets)) return [];
 
 	list(,$cidr_mask) = $Subnets->cidr_network_and_mask($cidr);
 
@@ -42,12 +42,12 @@ $section = $Sections->fetch_section('id', $sectionId);
 if (!is_object($section)) { return ''; }
 
 // Don't fetch all fields
-$fields = array('id','masterSubnetId','isFolder','subnet','mask','description');
+$fields = ['id','masterSubnetId','isFolder','subnet','mask','description'];
 
 $strict_subnets = get_strict_subnets($Subnets, $sectionId, $cidr, $fields);
 
 $folders = $Subnets->fetch_section_subnets($sectionId, 'isFolder', '1', $fields);
-if (!is_array($folders)) $folders = array();
+if (!is_array($folders)) $folders = [];
 
 // Generate HTML <options> dropdown menu
 $foldersTree = new SubnetsTree($Subnets, $User->user);
@@ -70,7 +70,7 @@ $dropdown->subnetsTree($foldersTree);
 if ($section->strictMode == 0) {
 	// Strict mode is disabled, allow nested chaos....
 	$all_subnets = $Subnets->fetch_section_subnets($sectionId, false, false, $fields);
-	if (!is_array($all_subnets)) $all_subnets = array();
+	if (!is_array($all_subnets)) $all_subnets = [];
 
 	foreach($all_subnets as $subnet) {
 		if ($subnet->isFolder) $subnet->disabled = 1; else break;

@@ -52,7 +52,7 @@ $sections = $Sections->fetch_sections();
 $ip_types = $Addresses->addresses_types_fetch();
 //fetch devices and reorder
 $devices = $Tools->fetch_all_objects("devices", "hostname");
-$devices_indexed = array();
+$devices_indexed = [];
 if ($devices !== false) {
 	foreach ($devices as $d) {
 		$devices_indexed[$d->id] = $d;

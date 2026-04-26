@@ -59,10 +59,10 @@ if(sizeof($res)>0) {
 	$errors = 0;
 	foreach($res as $r) {
 		# set insert values
-		$values = array("rd"=>$r['rd'],
+		$values = ["rd"=>$r['rd'],
 						"name"=>$r['name'],
 						"description"=>$r['description']
-						);
+						];
         # custom fields
 		if (isset($required_fields)) {
 			foreach ($required_fields as $k=>$f) {

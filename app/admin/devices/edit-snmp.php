@@ -216,7 +216,7 @@ $('#switchSNMPManagementEdit').change(function() {
 		<?php
 		# select queries
 		$queries = pf_explode(";", $device->snmp_queries);
-		$queries = is_array($queries) ? $queries : array();
+		$queries = is_array($queries) ? $queries : [];
         // loop
 		foreach($Snmp->snmp_queries as $k=>$m) {
 			if(in_array($k, $queries)) 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="query-'. $k .'" value="on" checked> '. $k .'</div>'. "\n"; }

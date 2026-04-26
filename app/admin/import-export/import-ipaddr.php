@@ -38,7 +38,7 @@ foreach ($data as &$cdata) {
 	if (($cdata['action'] == "add") || ($cdata['action'] == "edit")) {
 		// # set update array
 
-		$values = array(
+		$values = [
 						"id"          =>$cdata['id'],
 						"ip_addr"     =>$Addresses->transform_address($cdata['ip_addr'],"decimal"),
 						"subnetId"    =>$cdata['subnetId'],
@@ -52,7 +52,7 @@ foreach ($data as &$cdata) {
 						"port"        =>$cdata['port'],
 						"location"    =>$cdata['location'],
 						"is_gateway"  =>$cdata['is_gateway']
-						);
+						];
 
 		# add custom fields
 		if(sizeof($custom_fields) > 0) {

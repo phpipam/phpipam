@@ -7,8 +7,8 @@ $User->check_user_session();
 
 
 # NAT search
-$all_nats = array();
-$all_nats_per_object = array();
+$all_nats = [];
+$all_nats_per_object = [];
 
 if ($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User::ACCESS_R) {
     # fetch all object

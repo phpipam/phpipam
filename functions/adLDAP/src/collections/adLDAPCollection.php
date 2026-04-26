@@ -92,7 +92,7 @@ abstract class adLDAPCollection
                         return $this->info[0][strtolower($attribute)][0];
                     }
                     else {
-                        $array = array();
+                        $array = [];
                         foreach ($this->info[0][strtolower($attribute)] as $key => $value) {
                             if ((string)$key != 'count') {
                                 $array[$key] = $value;

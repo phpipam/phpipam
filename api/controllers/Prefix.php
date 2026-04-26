@@ -124,7 +124,7 @@ class Prefix_controller extends Common_api_functions {
      * @var array
      * @access private
      */
-    private $valid_address_types = array("IPv4", "IPv6", "v4", "v6", "4", "6");
+    private $valid_address_types = ["IPv4", "IPv6", "v4", "v6", "4", "6"];
 
     /**
      * List of ignored subnet fields
@@ -136,7 +136,7 @@ class Prefix_controller extends Common_api_functions {
      * @var array
      * @access private
      */
-    private $ignored_prefix_fields = array(
+    private $ignored_prefix_fields = [
                                         "linked_subnet",
                                         "firewallAddressObject",
                                         "pingSubnet",
@@ -157,7 +157,7 @@ class Prefix_controller extends Common_api_functions {
                                         "location",
                                         "isFolder",
                                         "editDate"
-                                    );
+                                    ];
 
     /**
      * List of ignored addresses fields
@@ -169,7 +169,7 @@ class Prefix_controller extends Common_api_functions {
      * @var array
      * @access private
      */
-    private $ignored_addresses_fields = array(
+    private $ignored_addresses_fields = [
                                         "state",
                                         "deviceId",
                                         "switch",
@@ -181,7 +181,7 @@ class Prefix_controller extends Common_api_functions {
                                         "PTR",
                                         "firewallAddressObject",
                                         "editDate"
-                                    );
+                                    ];
 
     /**
      * Query type, overrides if addresses are requested
@@ -353,14 +353,14 @@ class Prefix_controller extends Common_api_functions {
         $this->validate_options_request ();
 
         // methods
-        $result = array();
-        $result['methods'] = array(
-                                array("href"=>"/api/".$this->_params->app_id."/sections/",      "methods"=>array(array("rel"=>"options","method"=>"OPTIONS"))),
-                                array("href"=>"/api/".$this->_params->app_id."/sections/{id}/", "methods"=>array(array("rel"=>"read",   "method"=>"GET"),
-                                                                                                                 array("rel"=>"create", "method"=>"POST")))
-                            );
+        $result = [];
+        $result['methods'] = [
+                                ["href"=>"/api/".$this->_params->app_id."/sections/",      "methods"=>[["rel"=>"options","method"=>"OPTIONS"]]],
+                                ["href"=>"/api/".$this->_params->app_id."/sections/{id}/", "methods"=>[["rel"=>"read",   "method"=>"GET"],
+                                                                                                                 ["rel"=>"create", "method"=>"POST"]]]
+                            ];
         # result
-        return array("code"=>200, "data"=>$result);
+        return ["code"=>200, "data"=>$result];
     }
 
 
@@ -403,9 +403,9 @@ class Prefix_controller extends Common_api_functions {
             }
             // result
             if($subnets===false && $addresses===false)  { $this->Response->throw_exception(404, "No objects found"); }
-            elseif($addresses===false)                  { return array("code"=>200, "data"=>array("subnets"=>$subnets)); }
-            elseif($subnets===false)                    { return array("code"=>200, "data"=>array("addresses"=>$addresses)); }
-            else                                        { return array("code"=>200, "data"=>array("subnets"=>$subnets, "addresses"=>$addresses)); }
+            elseif($addresses===false)                  { return ["code"=>200, "data"=>["subnets"=>$subnets]]; }
+            elseif($subnets===false)                    { return ["code"=>200, "data"=>["addresses"=>$addresses]]; }
+            else                                        { return ["code"=>200, "data"=>["subnets"=>$subnets, "addresses"=>$addresses]]; }
         }
         // get all subnets involved in querying
         elseif(!isset($this->_params->id3)) {
@@ -431,7 +431,7 @@ class Prefix_controller extends Common_api_functions {
                         $subnets[$k]->usage = $this->calculate_subnet_usage ($s->id);
                     }
                 }
-                return array("code"=>200, "data"=>$this->prepare_result ($subnets, "subnets", $this->use_links, true));
+                return ["code"=>200, "data"=>$this->prepare_result ($subnets, "subnets", $this->use_links, true)];
             }
         }
         // get prefix
@@ -452,7 +452,7 @@ class Prefix_controller extends Common_api_functions {
 
             // response
             if($available===false)      { $this->Response->throw_exception(404, "No $this->query_type found"); }
-            else                        { return array("code"=>200, "data"=>$available); }
+            else                        { return ["code"=>200, "data"=>$available]; }
         }
     }
 
@@ -524,7 +524,7 @@ class Prefix_controller extends Common_api_functions {
 		}
 		else {
 			//set result
-			return array("code"=>201, "message"=>"Subnet created", "id"=>$this->Subnets->lastInsertId, "data"=>$this->Tools->transform_address ($values['subnet'], "dotted")."/".$values['mask'], "location"=>"/api/".$this->_params->app_id."/subnets/".$this->Subnets->lastInsertId."/");
+			return ["code"=>201, "message"=>"Subnet created", "id"=>$this->Subnets->lastInsertId, "data"=>$this->Tools->transform_address ($values['subnet'], "dotted")."/".$values['mask'], "location"=>"/api/".$this->_params->app_id."/subnets/".$this->Subnets->lastInsertId."/"];
 		}
     }
 
@@ -571,7 +571,7 @@ class Prefix_controller extends Common_api_functions {
 		}
 		else {
     		//set result
-            return array("code"=>201, "message"=>"Address created", "id"=>$this->Addresses->lastId, "subnetId"=>$this->master_subnet->id, "data"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted"), "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
+            return ["code"=>201, "message"=>"Address created", "id"=>$this->Addresses->lastId, "subnetId"=>$this->master_subnet->id, "data"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted"), "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/"];
 		}
     }
 
@@ -687,7 +687,7 @@ class Prefix_controller extends Common_api_functions {
         else                                { $limit = ""; }
         // set query and params
         $query = "select * from `subnets` where `".$this->custom_field_name."` = ? $limit order by `".$this->custom_field_orderby."` ".$this->custom_field_order_direction.";";
-        $params = array($this->_params->id);
+        $params = [$this->_params->id];
         // search
         try { $subnets = $this->Database->getObjectsQuery('subnets', $query, $params); }
         catch (Exception $e) { $this->Response->throw_exception(500, "Error: ".$e->getMessage()); }
@@ -844,18 +844,18 @@ class Prefix_controller extends Common_api_functions {
     public function get_subnet_select_parameters ($type = "subnets") {
         // subnets or addresses
         if($type=="subnets") {
-            return array(
+            return [
                         "name"=>$this->custom_field_name,
                         "order"=>$this->custom_field_orderby,
                         "direction"=>$this->custom_field_order_direction
-                        );
+                        ];
         }
         else {
-            return array(
+            return [
                         "name"=>$this->custom_field_name_addr,
                         "order"=>$this->custom_field_orderby_addr,
                         "direction"=>$this->custom_field_order_direction_addr
-                        );
+                        ];
         }
     }
 }

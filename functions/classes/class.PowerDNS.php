@@ -112,7 +112,7 @@ class PowerDNS extends Common_functions {
      * @var array
      * @access private
      */
-    private $domains_cache = array();
+    private $domains_cache = [];
 
     /**
      * Database class - phpipam
@@ -275,12 +275,12 @@ class PowerDNS extends Common_functions {
      * @access private
      */
     private function set_domain_types () {
-        $types = array(
+        $types = [
                 "NATIVE",
                 "MASTER",
                 "SLAVE",
                 "SUPERSLAVE"
-                );
+                ];
         # save
         $this->domain_types = (object) $types;
     }
@@ -313,7 +313,7 @@ class PowerDNS extends Common_functions {
      */
     private function set_record_types () {
         // init
-        $record_types = array();
+        $record_types = [];
         // set array
         $record_types[] = "A";
         $record_types[] = "AAAA";
@@ -339,7 +339,7 @@ class PowerDNS extends Common_functions {
      */
     private function set_ttl_values () {
         // init
-        $ttl = array();
+        $ttl = [];
         // set array
         $ttl[60]     = "1 minute";
         $ttl[180]    = "3 minutes";
@@ -630,7 +630,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = 'SELECT COUNT(*) AS `cnt` FROM `records` WHERE `domain_id` = ? AND `type` IS NOT NULL;';
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($domain_id)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, [$domain_id]); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -651,7 +651,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = "select count(*) as `cnt` from `records` where `domain_id` = ? and `type` = ?;";
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($domain_id, $type)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, [$domain_id, $type]); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -680,7 +680,7 @@ class PowerDNS extends Common_functions {
     public function fetch_all_domain_records ($domain_id) {
         $query = "SELECT * FROM `records` WHERE `domain_id` = ? AND `type` IS NOT NULL ORDER BY $this->orderby $this->orderdir LIMIT $this->limit;";
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($domain_id)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, [$domain_id]); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -701,7 +701,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = "select * from `records` where `domain_id` = ? and `type` = ? order by $this->orderby $this->orderdir limit $this->limit;";
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($domain_id, $type)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, [$domain_id, $type]); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -742,7 +742,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = "select DISTINCT(`domain_id`) from `records` where `name` = ? or `content` = ? and `type` != 'NS' and `type` != 'SOA';";
         // fetch
-        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, array($hostname, $ip)); }
+        try { $records = $this->Database_pdns->getObjectsQuery("records", $query, [$hostname, $ip]); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -764,7 +764,7 @@ class PowerDNS extends Common_functions {
         // query
         $query = "select * from `records` where `domain_id` = ? and `type` = ? and `name` = ? limit 1;";
         // fetch
-        try { $records = $this->Database_pdns->getObjectQuery("records", $query, array($domain_id, $type, $name)); }
+        try { $records = $this->Database_pdns->getObjectQuery("records", $query, [$domain_id, $type, $name]); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -1005,7 +1005,7 @@ class PowerDNS extends Common_functions {
        $query = "delete from `records` where (`name` = ? or `content` = ?) and `type` != 'NS' and `type` != 'SOA';";
 
        // run
-       try { $this->Database_pdns->runQuery($query, array($hostname, $ip)); }
+       try { $this->Database_pdns->runQuery($query, [$hostname, $ip]); }
        catch (Exception $e) {
            $this->Result->show("danger", _("Error: ").$e->getMessage());
            return false;
@@ -1067,10 +1067,10 @@ class PowerDNS extends Common_functions {
         if($serial!==false)         { $soa_serial[2] = $serial; }
 
         // set update content
-        $content = array(
+        $content = [
                         "id"=>$soa->id,
                         "content"=>implode(" ", $soa_serial)
-                        );
+                        ];
         // update
         $this->update_domain_record_content ($content);
     }
@@ -1113,7 +1113,7 @@ class PowerDNS extends Common_functions {
         $this->db_set_db_settings ();
 
         // content
-        $soa   = array();
+        $soa   = [];
         $soa[] = array_shift(pf_explode(";", $values['ns']));
         $soa[] = str_replace ("@", ".", $values['hostmaster']);
         $soa[] = date("Ymd")."00";
@@ -1396,7 +1396,7 @@ class PowerDNS extends Common_functions {
      */
     public function update_all_records ($domain_id, $old_name, $name) {
         // execute
-        try { $this->Database_pdns->runQuery("update `records` set `name` = replace(`name`, ?, ?) where where `domain_id` = ?;", array($old_name, $name, $domain_id)); }
+        try { $this->Database_pdns->runQuery("update `records` set `name` = replace(`name`, ?, ?) where where `domain_id` = ?;", [$old_name, $name, $domain_id]); }
         catch (Exception $e) {
             // write log
             $this->Result->show("danger", _("Error: ").$e->getMessage());
@@ -1414,7 +1414,7 @@ class PowerDNS extends Common_functions {
      */
     public function remove_all_records ($domain_id) {
         // execute
-        try { $this->Database_pdns->runQuery("delete from `records` where `domain_id` = ?;", array($domain_id)); }
+        try { $this->Database_pdns->runQuery("delete from `records` where `domain_id` = ?;", [$domain_id]); }
         catch (Exception $e) {
             // write log
             $this->Log->write( _("PowerDNS domain truncate"), _("Failed to remove all PowerDNS domain records").": ".$e->getMessage()."<hr>".$this->array_to_log((array) $domain_id), 2);
@@ -1545,7 +1545,7 @@ class PowerDNS extends Common_functions {
      */
     public function record_exists ($domain_id, $name, $type, $content) {
         // execute
-        try { $res = $this->Database_pdns->getObjectQuery("records", "select count(*) as `cnt` from `records` where `domain_id` = ? and `name`=? and `type`=? and `content`=?;", array($domain_id, $name, $type, $content)); }
+        try { $res = $this->Database_pdns->getObjectQuery("records", "select count(*) as `cnt` from `records` where `domain_id` = ? and `name`=? and `type`=? and `content`=?;", [$domain_id, $name, $type, $content]); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -1583,18 +1583,18 @@ class PowerDNS extends Common_functions {
      * @param mixed $indexes (array of PTR indexes)
      * @return bool
      */
-    public function remove_all_ptr_records ($domain_id, $indexes = array()) {
+    public function remove_all_ptr_records ($domain_id, $indexes = []) {
         // if false return ok and don't execute
         if (sizeof($indexes)==0 || !is_array($indexes)) {
             return true;
         }
          // set parameters - default
-        $params = array($domain_id);
+        $params = [$domain_id];
         // set query - start
         $query  = "delete from `records` where `domain_id` = ? and `type` = 'PTR'";
         // loop
         if (sizeof($indexes)>0) {
-            $q_tmp = array();
+            $q_tmp = [];
             $query .= " and (";
             foreach ($indexes as $i) {
                 $q_tmp[] = " `id` = ? ";

@@ -37,7 +37,7 @@ $vault===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 $custom = $Tools->fetch_custom_fields('vaultItems');
 
 /* checks */
-$error = array();
+$error = [];
 
 # add, edit
 if($POST->action!="delete") {
@@ -64,10 +64,10 @@ else {
 
 
 	# create array of values for modification
-	$values = array(
+	$values = [
 					"id"     => $POST->id,
 					"values" => $User->Crypto->encrypt(json_encode($values_array), $_SESSION['vault'.$vault->id])
-					);
+					];
 
 	# add test
 	if($POST->action=="add") {

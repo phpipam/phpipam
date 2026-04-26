@@ -40,7 +40,7 @@ if($User->settings->enableChangelog == 1) {
 		<div class='form-group'>
 			<select name='climit' class='input-sm climit form-control'>
 			<?php
-			$printLimits = array(50,100,250,500);
+			$printLimits = [50,100,250,500];
 			foreach($printLimits as $l) {
 				if($l ==$input_climit)	{ print "<option value='$l' selected='selected'>$l</option>"; }
 				else							{ print "<option value='$l'>$l</option>"; }

@@ -17,11 +17,11 @@ class PingThread {
 	*
 	* @var array
 	*/
-    private $errors = array(
+    private $errors = [
         PingThread::FUNCTION_NOT_CALLABLE => 'You must specify a valid function name that can be called from the current scope.',
         PingThread::COULD_NOT_FORK => 'pcntl_fork() returned a status of -1. No new process was created',
         PingThread::IPC_SOCKET_FAILED => 'socket_create_pair() returned a status of -1. No new process was created',
-    );
+    ];
 
 	/**
 	* callback for the function that should
@@ -254,7 +254,7 @@ class PingThread {
             $this->pid = posix_getpid();//pid (child)
             $this->ppid = posix_getppid();//pid (parent)
 
-            pcntl_signal( SIGTERM, array( $this, 'signalHandler' ) );
+            pcntl_signal( SIGTERM, [ $this, 'signalHandler' ] );
             $arguments = func_get_args();
             if ( !empty( $arguments ) ) {
                 call_user_func_array( $this->runnable, $arguments );
@@ -290,7 +290,7 @@ class PingThread {
 			$this->pid = posix_getpid();//pid (child)
 			$this->ppid = posix_getppid();//pid (parent)
 
-			pcntl_signal( SIGTERM, array( $this, 'signalHandler' ) );
+			pcntl_signal( SIGTERM, [ $this, 'signalHandler' ] );
 			$array_args = func_get_args();
 			if ( !empty( $array_args ) ) {
 				$results = call_user_func_array( $this->runnable, $array_args );

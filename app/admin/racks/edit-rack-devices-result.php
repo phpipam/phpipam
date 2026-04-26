@@ -68,12 +68,12 @@ switch ($POST->devicetype) {
     if ($device===false)                                                   { $Result->show("danger", _("Invalid Device ID"), true); }
 
     # set update values
-    $values = array("id"=>$POST->deviceid,
+    $values = ["id"=>$POST->deviceid,
 				    "rack"=>$POST->rackid,
 				    "rack_start"=>$POST->rack_start,
 				    "rack_size"=>$POST->rack_size,
 					"rack_deep"=>$POST->rack_deep,
-				    );
+				    ];
 
     # inherit location if it is not already set
     if ($User->settings->enableLocations=="1" && $POST->no_location!="1") {
@@ -89,12 +89,12 @@ switch ($POST->devicetype) {
 
     case 'content':
     # set values
-    $values = array("name"=>$POST->name,
+    $values = ["name"=>$POST->name,
                     "rack"=>$POST->rackid,
                     "rack_start"=>$POST->rack_start,
                     "rack_size"=>$POST->rack_size,
 					"rack_deep"=>$POST->rack_deep,
-                    );
+                    ];
 
     # add content
     if (!$Admin->object_modify('rackContents', 'add', null, $values))       { $Result->show("danger", _("Failed to add device to rack").'!', false); }
@@ -109,13 +109,13 @@ switch ($POST->devicetype) {
 	# is that subrack already placed somewhere?
 	if ($Database->getObjectQuery("rackContents", "SELECT * from `rackContents` where `subrackId` = ? limit 1;", [$POST->subrackid]))
 																			{ $Result->show("danger", _("Subrack is already in a rack"), true); }
-	$values = array("name"=>unescape_input($subrack->name),
+	$values = ["name"=>unescape_input($subrack->name),
 					"rack"=>$POST->rackid,
 					"rack_start"=>$POST->rack_start,
 					"rack_size"=>$POST->rack_size,
 					"rack_deep"=>$POST->rack_deep,
 					"subrackId"=>$subrack->id,
-					);
+					];
 	if (!$Admin->object_modify('rackContents', 'add', null, $values))		{ $Result->show("danger", _("Failed to add subrack to rack").'!', false); }
 	else 																	{ $Result->show("success", _("Subrack")." "._("added to rack"), false); }
 	break;

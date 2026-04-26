@@ -15,7 +15,7 @@ $custom_fields = $Tools->fetch_custom_fields('subnets');
 
 # set hidden fields
 $hidden_cfields = db_json_decode($User->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
-$hidden_cfields = is_array($hidden_cfields['subnets']) ? $hidden_cfields['subnets'] : array();
+$hidden_cfields = is_array($hidden_cfields['subnets']) ? $hidden_cfields['subnets'] : [];
 
 # set selected address fields array
 $selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);  																	//format to array
@@ -170,7 +170,7 @@ if ($subnets!==false) {
                                 $minfo = "<i class='fa fa-exclamation-triangle' rel='tooltip' title='"._('Duplicate MAC')."'></i>";
                                 // formulate object
                                 if ($duplicates!==false) {
-                                    $mobjects = array();
+                                    $mobjects = [];
                                     $mobjects[] = "<hr><p class='muted' style='font-size:11px'>Duplicated addresses:</p>";
                                     $mobjects[] = "<ul class='submenu-dns'> ";
                                     foreach ($duplicates as $d) {

@@ -65,7 +65,7 @@ if($settings->version !== $settings_old->version)	{ $Result->show("danger", "Ver
  */
 
 // set special identifiers
-$special_identifiers = array (
+$special_identifiers =  [
 								"changelog"          =>"cid",
 								"deviceTypes"        =>"tid",
 								"firewallZoneSubnet" =>"zoneId",
@@ -73,15 +73,15 @@ $special_identifiers = array (
 								"vlans"              =>"vlanId",
 								"vrf"                =>"vrfId",
 								"widgets"            =>"wid"
-                              );
+                              ];
 // ignored tables
-$ignored_tables = array("lang", "loginAttempts", "instructions", "settings", "settingsMail", "widgets", "deviceTypes", "requests", "changelog", "logs", "firewallZoneMapping", "firewallZones", "firewallZoneSubnet");
+$ignored_tables = ["lang", "loginAttempts", "instructions", "settings", "settingsMail", "widgets", "deviceTypes", "requests", "changelog", "logs", "firewallZoneMapping", "firewallZones", "firewallZoneSubnet"];
 // result array
-$highest_ids        = array();		// current highest ids
-$highest_ids_old    = array();		// new highest ids
-$highest_ids_append = array();		// diff, to append to importing indexes
-$old_data			= array();		// old content data
-$new_data			= array();		// old content data - we will change those values
+$highest_ids        = [];		// current highest ids
+$highest_ids_old    = [];		// new highest ids
+$highest_ids_append = [];		// diff, to append to importing indexes
+$old_data			= [];		// old content data
+$new_data			= [];		// old content data - we will change those values
 
 
 
@@ -226,7 +226,7 @@ foreach ($old_data as $table => $table_content) {
 			// sections
 			if(strlen((string) $value_obj->sections)>1) {
 				$sections     = pf_explode(";", $value_obj->sections);
-				$sections_new = array();
+				$sections_new = [];
 				foreach ($sections as $k=>$v) {
 					$sections_new[$highest_ids_append["sections"] + $k] = $v;
 				}
@@ -263,7 +263,7 @@ foreach ($old_data as $table => $table_content) {
 				// groups
 				if($value_obj->role!="Administrator") {
 					$groups_tmp = db_json_decode($value_obj->groups, true);
-					$groups_new = array();
+					$groups_new = [];
 					foreach ($groups_tmp as $gid=>$gid2) {
 						$groups_new[$gid+$highest_ids_append["userGroups"]] = $gid+$highest_ids_append["userGroups"];
 					}
@@ -272,7 +272,7 @@ foreach ($old_data as $table => $table_content) {
 				// favourite subnets
 				if(!is_blank($value_obj->favourite_subnets)) {
 					$fs_tmp = pf_explode(";", $value_obj->favourite_subnets);
-					$fs_new = array();
+					$fs_new = [];
 					foreach ($fs_tmp as $gid) {
 						$fs_new[] = $gid+$highest_ids_append["subnets"];
 					}
@@ -300,7 +300,7 @@ foreach ($old_data as $table => $table_content) {
 			// permissions
 			if(!is_blank($value_obj->permissions)) {
 				$fs_tmp = pf_explode(";", $value_obj->permissions);
-				$fs_new = array();
+				$fs_new = [];
 				foreach ($fs_tmp as $gid) {
 					$fs_new[] = $gid+$highest_ids_append["sections"];
 				}
@@ -316,7 +316,7 @@ foreach ($old_data as $table => $table_content) {
 			// sections
 			if(!is_blank($value_obj->sections)) {
 				$fs_tmp = pf_explode(";", $value_obj->sections);
-				$fs_new = array();
+				$fs_new = [];
 				foreach ($fs_tmp as $gid) {
 					$fs_new[] = $gid+$highest_ids_append["sections"];
 				}
@@ -332,7 +332,7 @@ foreach ($old_data as $table => $table_content) {
 			// permissions
 			if(!is_blank($value_obj->permissions)) {
 				$fs_tmp = pf_explode(";", $value_obj->permissions);
-				$fs_new = array();
+				$fs_new = [];
 				foreach ($fs_tmp as $gid) {
 					$fs_new[] = $gid+$highest_ids_append["sections"];
 				}
@@ -414,10 +414,10 @@ foreach ($old_data as $table => $table_content) {
 			// src
 			if (!is_blank($value_obj->src)) {
 				$arr     = json_encode($value_obj->src, true);
-				$arr_new = array();
+				$arr_new = [];
 				if (is_array($arr)) {
 					foreach ($arr as $type=>$objects) {
-						$arr_new[$type] = array();
+						$arr_new[$type] = [];
 						if(sizeof($objects)>0) {
 							foreach($objects as $ok=>$object) {
 								$arr_new[$type][] = $highest_ids_append[$type] + $object;
@@ -430,10 +430,10 @@ foreach ($old_data as $table => $table_content) {
 			// dst
 			if (!is_blank($value_obj->dst)) {
 				$arr     = json_encode($value_obj->dst, true);
-				$arr_new = array();
+				$arr_new = [];
 				if (is_array($arr)) {
 					foreach ($arr as $type=>$objects) {
-						$arr_new[$type] = array();
+						$arr_new[$type] = [];
 						if(sizeof($objects)>0) {
 							foreach($objects as $ok=>$object) {
 								$arr_new[$type][] = $highest_ids_append[$type] + $object;

@@ -105,14 +105,14 @@ print "	<td>";
 	elseif($clog->ctype=="folder") 	 { $type = "subnet"; }
     else 							 { $type = $clog->ctype; }
 
-	$diff = array();
+	$diff = [];
 
 	foreach ($changelog as $c) {
 		// field
 		$field = array_pad(explode(":", $c), 2 , '');
    	    $value = array_pad(explode("=>", $field[1]), 2, '');
 
-	    $field_name = trim(str_replace(array("[","]"), "", $field[0]));
+	    $field_name = trim(str_replace(["[","]"], "", $field[0]));
 
 	    if(is_array(@$Log->changelog_keys[$type])) {
 		    if (array_key_exists($field_name, $Log->changelog_keys[$type])) {

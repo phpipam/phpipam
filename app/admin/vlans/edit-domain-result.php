@@ -54,12 +54,12 @@ else {
 }
 
 # set update values
-$values = array(
+$values = [
 				"id"          =>$POST->id,
 				"name"        =>$POST->name,
 				"description" =>$POST->description,
 				"permissions" =>$POST->permissions
-				);
+				];
 
 # update domain
 if(!$Admin->object_modify("vlanDomains", $POST->action, "id", $values))	{}

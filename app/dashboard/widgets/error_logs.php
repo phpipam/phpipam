@@ -33,7 +33,7 @@ else {
 
 	# print last N access logs
 	$logs = $Log->fetch_logs($max, NULL, NULL, NULL, "off", "on", "on");
-	if (!is_array($logs)) { $logs = array(); }
+	if (!is_array($logs)) { $logs = []; }
 
 	print '<div style="' . (isset($height) ? "height:{$height}px;overflow-y:auto;" : "") . '">';
 	print "<table class='table table-condensed table-hover table-top'>";

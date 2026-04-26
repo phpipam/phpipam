@@ -45,7 +45,7 @@ class Responses extends Result {
 	 * @param array $custom_fields
 	 * @return void
 	 */
-	public function formulate_result ($result, $time = false, $nest_custom_fields = false, $custom_fields = array()) {
+	public function formulate_result ($result, $time = false, $nest_custom_fields = false, $custom_fields = []) {
 		// make sure result is array
 		$this->result = is_null($this->result) ? (array) $result : $this->result;
 
@@ -159,7 +159,7 @@ class Responses extends Result {
 	 * @param  array              $custom_fields
 	 * @return void
 	 */
-	private function nest_custom_fields ($custom_fields = array()) {
+	private function nest_custom_fields ($custom_fields = []) {
 		// make sure custom_fields is array
 		if(!is_array($custom_fields)) { $custom_fields = []; }
 
@@ -296,7 +296,7 @@ class Responses extends Result {
 	 * @license http://creativecommons.org/licenses/by/3.0/
 	 * @license CC-BY-3.0 <http://spdx.org/licenses/CC-BY-3.0>
 	 */
-	public function xml_to_array ( $xmlObject, $out = array () ) {
+	public function xml_to_array ( $xmlObject, $out =  [] ) {
 	    foreach ( (array) $xmlObject as $index => $node )
 	        $out[$index] = ( is_object ( $node ) ) ? $this->xml_to_array ( $node ) : $node;
 
@@ -314,7 +314,7 @@ class Responses extends Result {
 		// object to array
 	    if(is_object($obj)) $obj = (array) $obj;
 	    if(is_array($obj)) {
-	        $new = array();
+	        $new = [];
 	        foreach($obj as $key => $val) {
 	            $new[$key] = $this->object_to_array($val);
 	        }

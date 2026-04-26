@@ -6,7 +6,7 @@
 <?php
 
 // tabs
-$tabs = array("details"=>"Folder details", "map"=>"Space map", "mapsearch"=>"Mask search");
+$tabs = ["details"=>"Folder details", "map"=>"Space map", "mapsearch"=>"Mask search"];
 
 print '<ul class="nav nav-tabs">';
 // default tab

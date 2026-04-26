@@ -86,9 +86,9 @@ if (is_array($ipaddresses)) {
 		# update if change
 		if($hostname['class']=="resolved") {
 			# values
-			$values = array("hostname"=>$hostname['name'],
+			$values = ["hostname"=>$hostname['name'],
 							"id"=>$ip->id
-							);
+							];
 			# execute
 			if(!$Admin->object_modify("ipaddresses", "edit", "id", $values))	{ $Result->show_cli("Failed to update address ".$Subnets->transform_to_dotted($ip->ip_addr)); }
 

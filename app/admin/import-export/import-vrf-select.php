@@ -21,9 +21,9 @@ $tpl_field_names = "";
 $tpl_field_types = "";
 
 # predefine field list
-$expfields = array ("name","rd","description");
+$expfields =  ["name","rd","description"];
 # required fields without which we will not continue
-$reqfields = array("rd","name");
+$reqfields = ["rd","name"];
 
 # manually adjust the standard fields
 foreach($expfields as $std_field) {

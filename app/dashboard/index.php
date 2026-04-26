@@ -110,7 +110,7 @@ if ($User->is_admin(false)!==true && (is_blank($User->user->groups) || $User->us
 	print "<div class='clearfix'></div>";
 
 	// reset uwidgets
-	$uwidgets = array("tools", "ipcalc");
+	$uwidgets = ["tools", "ipcalc"];
 }
 
 # split widgets to rows (chunks)

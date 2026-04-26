@@ -27,7 +27,7 @@ $User->check_maintaneance_mode ();
 $User->Crypto->csrf_cookie ("validate", "mail", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # set update query
-$values = array("id"=>1,
+$values = ["id"=>1,
 				"mtype"=>$POST->mtype,
 				"msecure"=>$POST->msecure,
 				"mauth"=>$POST->mauth,
@@ -37,7 +37,7 @@ $values = array("id"=>1,
 				"mpass"=>$POST->mpass,
 				"mAdminName"=>$POST->mAdminName,
 				"mAdminMail"=>$POST->mAdminMail
-				);
+				];
 
 # update
 if(!$Admin->object_modify("settingsMail", "edit", "id", $values))	{ $Result->show("danger",  _('Cannot update settings').'!', true); }

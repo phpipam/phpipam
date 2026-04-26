@@ -37,7 +37,7 @@ require_once 'PEAR.php';
 * OLE_ChainedBlockStream::stream_open().
 * @var  array
 */
-$GLOBALS['_OLE_INSTANCES'] = array();
+$GLOBALS['_OLE_INSTANCES'] = [];
 
 /**
 * OLE package base class.
@@ -99,7 +99,7 @@ class OLE extends PEAR
     * @access public
     */
     public function __construct() {
-        $this->_list = array();
+        $this->_list = [];
     }
 
     /**
@@ -170,11 +170,11 @@ class OLE extends PEAR
         $mbatFirstBlockId = $this->_readInt4($fh);
         // Number of blocks in Master Block Allocation Table
         $mbbatBlockCount = $this->_readInt4($fh);
-        $this->bbat = array();
+        $this->bbat = [];
 
         // Remaining 4 * 109 bytes of current block is beginning of Master
         // Block Allocation Table
-        $mbatBlocks = array();
+        $mbatBlocks = [];
         for ($i = 0; $i < 109; $i++) {
             $mbatBlocks[] = $this->_readInt4($fh);
         }
@@ -201,7 +201,7 @@ class OLE extends PEAR
         }
 
         // Read short block allocation table (SBAT)
-        $this->sbat = array();
+        $this->sbat = [];
         $shortBlockCount = $sbbatBlockCount * $this->bigBlockSize / 4;
         $sbatFh = $this->getStream($sbatFirstBlockId);
         for ($blockId = 0; $blockId < $shortBlockCount; $blockId++) {
@@ -314,12 +314,12 @@ class OLE extends PEAR
             switch ($type) {
             case OLE_PPS_TYPE_ROOT:
                 require_once 'OLE/PPS/Root.php';
-                $pps = new OLE_PPS_Root(null, null, array());
+                $pps = new OLE_PPS_Root(null, null, []);
                 $this->root = $pps;
                 break;
             case OLE_PPS_TYPE_DIR:
                 $pps = new OLE_PPS(null, null, null, null, null,
-                                   null, null, null, null, array());
+                                   null, null, null, null, []);
                 break;
             case OLE_PPS_TYPE_FILE:
                 require_once 'OLE/PPS/File.php';
@@ -354,8 +354,8 @@ class OLE extends PEAR
         // Initialize $pps->children on directories
         foreach ($this->_list as $pps) {
             if ($pps->Type == OLE_PPS_TYPE_DIR || $pps->Type == OLE_PPS_TYPE_ROOT) {
-                $nos = array($pps->DirPps);
-                $pps->children = array();
+                $nos = [$pps->DirPps];
+                $pps->children = [];
                 while ($nos) {
                     $no = array_pop($nos);
                     if ($no != -1) {

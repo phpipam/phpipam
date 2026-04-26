@@ -15,7 +15,7 @@ $custom = $Tools->fetch_custom_fields('locations');
 
 # get hidden fields
 $hidden_custom_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-$hidden_custom_fields = is_array(@$hidden_custom_fields['locations']) ? $hidden_custom_fields['locations'] : array();
+$hidden_custom_fields = is_array(@$hidden_custom_fields['locations']) ? $hidden_custom_fields['locations'] : [];
 
 # perm check
 if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {

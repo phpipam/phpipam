@@ -57,7 +57,7 @@ if (!is_blank($POST->allowedSymbols)) {
 }
 
 # set update values
-$values = array("id"=>1, "passwordPolicy"=>json_encode($passwordPolicy));
+$values = ["id"=>1, "passwordPolicy"=>json_encode($passwordPolicy)];
 
 if(!$Admin->object_modify("settings", "edit", "id", $values))	{ $Result->show("danger",  _("Cannot update settings"), true); }
 else															{ $Result->show("success", _("Settings updated successfully"), false); }

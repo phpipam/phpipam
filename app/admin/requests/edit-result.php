@@ -34,11 +34,11 @@ $subnet = (array) $Admin->fetch_object("subnets", "id", $POST->subnetId);
 /* if action is reject set processed and accepted to 1 and 0 */
 if($POST->action == "reject") {
 	//set reject values
-	$values = array("id"=>$POST->requestId,
+	$values = ["id"=>$POST->requestId,
 					"processed"=>1,
 					"accepted"=>0,
 					"adminComment"=>$POST->adminComment
-					);
+					];
 	if(!$Admin->object_modify("requests", "edit", "id", $values))		{ $Result->show("danger",  _("Failed to reject IP request"), true); }
 	else																{ $Result->show("success", _("Request has been rejected"), false); }
 
@@ -54,7 +54,7 @@ else {
 	if ($Addresses->address_exists($Addresses->transform_address($POST->ip_addr, "decimal"), $subnet['id'])) { $Result->show("danger", _('IP address already exists'), true); }
 
 	//insert to ipaddresses table
-	$values = array(
+	$values = [
 					"action"      =>"add",
 					"ip_addr"     =>$Addresses->transform_address($POST->ip_addr,"decimal"),
 					"subnetId"    =>$POST->subnetId,
@@ -66,7 +66,7 @@ else {
 					"switch"      =>$POST->switch,
 					"port"        =>$POST->port,
 					"note"        =>$POST->note
-					);
+					];
 
 	# fetch custom fields
 	$update = $Tools->update_POST_custom_fields('ipaddresses', $POST->action, $POST);
@@ -75,11 +75,11 @@ else {
 	if(!$Addresses->modify_address($values))	{ $Result->show("danger",  _("Failed to create IP address"), true); }
 
 	//accept message
-	$values2 = array("id"=>$POST->requestId,
+	$values2 = ["id"=>$POST->requestId,
 					"processed"=>1,
 					"accepted"=>1,
 					"adminComment"=>$comment
-					);
+					];
 	if(!$Admin->object_modify("requests", "edit", "id", $values2))		{ $Result->show("danger",  _("Cannot confirm IP address"), true); }
 	else																{ $Result->show("success", _("IP request accepted/rejected"), false); }
 

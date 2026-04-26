@@ -27,7 +27,7 @@ $User->is_admin();
 if (!isset($custom_fields)) { $custom_fields = $Tools->fetch_custom_fields("devices"); }
 
 # check which sections we need to care about
-$used_section = array();
+$used_section = [];
 foreach ($data as &$cdata) { $used_section[strtolower((string) $cdata['section'])]=$cdata['section']; }
 
 # fetch all sections and load all subnets
@@ -35,10 +35,10 @@ $all_sections = $Sections->fetch_all_sections();
 #$devtypes = $Sections->fetch_all_sections();
 
 # get all addresses in all subnets in all sections
-$edata = array();
-$section_names = array();
-$subnet_data = array();
-$subnet_search = array();
+$edata = [];
+$section_names = [];
+$subnet_data = [];
+$subnet_search = [];
 
 $devices = $Devices->fetch_all_objects("devices", "id");
 $deviceTypes = $Devtype->fetch_all_objects("deviceTypes", "tid");
@@ -62,8 +62,8 @@ foreach ($deviceTypes as $d) {
 
 
 $rows = "";
-$counters = array();
-$ndata = array(); # store new addresses in a similar format with edata for easier processing
+$counters = [];
+$ndata = []; # store new addresses in a similar format with edata for easier processing
 
 # check the fields
 foreach ($data as &$cdata) {

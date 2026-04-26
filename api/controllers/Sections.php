@@ -44,16 +44,16 @@ class Sections_controller extends Common_api_functions {
 		$this->validate_options_request ();
 
 		// methods
-		$result = array();
-		$result['methods'] = array(
-								array("href"=>"/api/".$this->_params->app_id."/sections/", 			"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
-								array("href"=>"/api/".$this->_params->app_id."/sections/{id}/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
-																													 array("rel"=>"create", "method"=>"POST"),
-																													 array("rel"=>"update", "method"=>"PATCH"),
-																													 array("rel"=>"delete", "method"=>"DELETE"))),
-							);
+		$result = [];
+		$result['methods'] = [
+								["href"=>"/api/".$this->_params->app_id."/sections/", 			"methods"=>[["rel"=>"options", "method"=>"OPTIONS"]]],
+								["href"=>"/api/".$this->_params->app_id."/sections/{id}/", 	"methods"=>[["rel"=>"read", 	"method"=>"GET"],
+																													 ["rel"=>"create", "method"=>"POST"],
+																													 ["rel"=>"update", "method"=>"PATCH"],
+																													 ["rel"=>"delete", "method"=>"DELETE"]]],
+							];
 		# result
-		return array("code"=>200, "data"=>$result);
+		return ["code"=>200, "data"=>$result];
 	}
 
 
@@ -119,21 +119,21 @@ class Sections_controller extends Common_api_functions {
 			if(empty($result)) 						{ $this->Response->throw_exception(404, "No subnets found"); }
 			else {
 				$this->custom_fields = $this->Tools->fetch_custom_fields('subnets');
-				return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true));
+				return ["code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)];
 			}
 		}
 		// verify ID
 		elseif(isset($this->_params->id)) {
 			# changelog
 			if($this->_params->id2=="changelog") 		{
-				return array("code"=>200, "data"=>$this->section_changelog ());
+				return ["code"=>200, "data"=>$this->section_changelog ()];
 			}
 			# fetch by id
 			elseif(is_numeric($this->_params->id)) {
 				$result = $this->Sections->fetch_section ("id", $this->_params->id);
 				// check result
 				if($result===false) 					{ $this->Response->throw_exception(404, "Section does not exist"); }
-				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+				else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, null, true, true)]; }
 			}
 			# Custom fields not supported
 			elseif($this->_params->id=="custom_fields") {
@@ -144,7 +144,7 @@ class Sections_controller extends Common_api_functions {
 				$result = $this->Sections->fetch_section ("name", $this->_params->id);
 				// check result
 				if($result==false) 					    { $this->Response->throw_exception(404, $this->Response->errors[404]); }
-				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+				else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, null, true, true)]; }
 			}
 		}
 		# all sections
@@ -152,8 +152,8 @@ class Sections_controller extends Common_api_functions {
 				// all sections
 				$result = $this->Sections->fetch_all_sections();
 				// check result
-				if($result===false) 					{ return array("code"=>200, "message"=>"No sections available"); }
-				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+				if($result===false) 					{ return ["code"=>200, "message"=>"No sections available"]; }
+				else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, null, true, true)]; }
 		}
 	}
 
@@ -191,7 +191,7 @@ class Sections_controller extends Common_api_functions {
 														{ $this->Response->throw_exception(500, "Section create failed"); }
 		else {
 			//set result
-			return array("code"=>201, "message"=>"Section created", "id"=>$this->Sections->lastInsertId, "location"=>"/api/".$this->_params->app_id."/sections/".$this->Sections->lastInsertId."/");
+			return ["code"=>201, "message"=>"Section created", "id"=>$this->Sections->lastInsertId, "location"=>"/api/".$this->_params->app_id."/sections/".$this->Sections->lastInsertId."/"];
 		}
 	}
 
@@ -221,7 +221,7 @@ class Sections_controller extends Common_api_functions {
 														{ $this->Response->throw_exception(500, "Section update failed"); }
 		else {
 			//set result
-			return array("code"=>200, "data"=>NULL);
+			return ["code"=>200, "data"=>NULL];
 		}
 	}
 
@@ -244,7 +244,7 @@ class Sections_controller extends Common_api_functions {
 														{ $this->Response->throw_exception(404, "Section does not exist"); }
 
 		# set variables for update
-		$values = array();
+		$values = [];
 		$values["id"] = $this->_params->id;
 
 		# execute update
@@ -252,7 +252,7 @@ class Sections_controller extends Common_api_functions {
 														{ $this->Response->throw_exception(500, "Section delete failed"); }
 		else {
 			//set result
-			return array("code"=>200, "data"=>NULL);
+			return ["code"=>200, "data"=>NULL];
 		}
 	}
 

@@ -8,7 +8,7 @@
 
 class Table extends Common_functions {
 
-    private $limits = array(25, 50, 100, 250, 500, "all");
+    private $limits = [25, 50, 100, 250, 500, "all"];
 
     public $limit = 50;
 
@@ -16,7 +16,7 @@ class Table extends Common_functions {
 
     public $subpage = 1;
 
-    public $filters = array();
+    public $filters = [];
 
 
 
@@ -54,11 +54,11 @@ class Table extends Common_functions {
     	// set pagination
     	$pagination = $this->get_table_pagination ($subnets);
     	// result
-    	return array(
+    	return [
 	            "dropdown"   => $dropdown,
 	            "filters"    => $this->filters,
 	            "pagination" => $pagination
-	            );
+	            ];
 	}
 
 	private function set_table_filter_data ($subnets) {
@@ -86,19 +86,19 @@ class Table extends Common_functions {
 		$pagenum = (int) ceil(sizeof($subnets)/$this->limit);
 
         // save
-        $this->filters = array(
+        $this->filters = [
                 "subpage" => $this->subpage,
                 "limit"   => $this->limit,
                 "pagenum" => $pagenum,
                 "start"   => $start,
                 "stop"    => $stop
-                );
+                ];
 	}
 
 	private function get_table_dropdown () {
     	// print
     	if($this->filters['pagenum']>1) {
-        	$html = array();
+        	$html = [];
         	$html[] = "<form id='table-dropdown-select' class='pull-right'>";
         	$html[] = "<select name='limit' class='form-control input-sm input-w-auto table-limit'>";
         	foreach ($this->limits as $l) {
@@ -117,7 +117,7 @@ class Table extends Common_functions {
 
 	private function get_table_pagination ($subnets) {
 		// pagination html start
-		$html   = array();
+		$html   = [];
 		$html[] = "<ul class='pagination input-sm'>";
 
 		// previous

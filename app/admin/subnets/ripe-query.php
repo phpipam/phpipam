@@ -34,7 +34,7 @@ $res = $Subnets->resolve_ripe_arin ($POST->subnet);
 	// ok, print field matching
 	else {
 		// fetch all fields for subnets
-		$standard_fields = array("description");
+		$standard_fields = ["description"];
 		$custom_fields 	 = $Tools->fetch_custom_fields ("subnets");
 
 		// leave only varchar and text
@@ -44,7 +44,7 @@ $res = $Subnets->resolve_ripe_arin ($POST->subnet);
 			}
 		}
 		// append description
-		$custom_fields = array_merge(array("description"=>array("name"=>"description")), $custom_fields);
+		$custom_fields = array_merge(["description"=>["name"=>"description"]], $custom_fields);
 
 		print "<h4>"._("Please select fields to populate:")."</h4>";
 		// form

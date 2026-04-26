@@ -52,14 +52,14 @@ if(sizeof($res)>0) {
 	$errors = 0;
 	foreach($res as $r) {
 		# set insert values
-		$values = array("ip_addr"=>$Subnets->transform_to_decimal($r['ip_addr']),
+		$values = ["ip_addr"=>$Subnets->transform_to_decimal($r['ip_addr']),
 						"hostname"=>$r['hostname'],
 						"subnetId"=>$POST->subnetId,
 						"description"=>$r['description'],
 						"state"=>2,
 						"lastSeen"=>date("Y-m-d H:i:s"),
 						"action"=>"add"
-						);
+						];
         # custom fields
 		if (isset($required_fields)) {
 			foreach ($required_fields as $k=>$f) {

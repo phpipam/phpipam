@@ -42,11 +42,11 @@ $Scan->ping_set_exit(true);
  */
 
 //script can only be run from cli
-if(php_sapi_name()!="cli") 								{ die(json_encode(array("status"=>1, "error"=>"This script can only be run from cli!"))); }
+if(php_sapi_name()!="cli") 								{ die(json_encode(["status"=>1, "error"=>"This script can only be run from cli!"])); }
 //check input parameters
-if(!isset($argv[1]) || !isset($argv[2]))				{ die(json_encode(array("status"=>1, "error"=>"Missing required input parameters"))); }
+if(!isset($argv[1]) || !isset($argv[2]))				{ die(json_encode(["status"=>1, "error"=>"Missing required input parameters"])); }
 // test to see if threading is available
-if( !PingThread::available($errmsg) ) 								{ die(json_encode(array("status"=>1, "error"=>"Threading is required for scanning subnets - Error: $errmsg\n"))); }
+if( !PingThread::available($errmsg) ) 								{ die(json_encode(["status"=>1, "error"=>"Threading is required for scanning subnets - Error: $errmsg\n"])); }
 
 /**
  *	Create array of addresses to scan
@@ -61,12 +61,12 @@ test
 */
 $ports = pf_explode(";", $argv[2]);
 
-$out = array();
+$out = [];
 
 //reset array, set each IP together with port
 foreach($scan_addresses as $k=>$v) {
 	foreach($ports as $p) {
-		$addresses[] = array("ip"=>$v, "port"=>$p);
+		$addresses[] = ["ip"=>$v, "port"=>$p];
 	}
 }
 
@@ -91,7 +91,7 @@ while ($z < sizeof($scan_addresses)) {
     }
 
     if (empty($threads)) {
-        die(json_encode(array("status" => 1, "error" => "Unable to spawn scanning pool")));
+        die(json_encode(["status" => 1, "error" => "Unable to spawn scanning pool"]));
     }
 
     //wait for all the threads to finish

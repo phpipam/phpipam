@@ -56,7 +56,7 @@ foreach ($POST as $k=>$p) {
 if (!isset($scan_devices))                      { $Result->show("danger", _("No devices for SNMP VRF query available"), true); }
 
 // init result array
-$new_vrfs = array();
+$new_vrfs = [];
 
 // ok, we have devices, connect to each device and do query
 foreach ($scan_devices as $d) {

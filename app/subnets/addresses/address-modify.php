@@ -404,7 +404,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
             	 	}
                     //search also for CNAME records
-                    $dns_cname_unique = array();
+                    $dns_cname_unique = [];
                     $dns_records_cname = $PowerDNS->seach_aliases ($r->name);
                     if(is_array($dns_records_cname)) {
                         foreach ($dns_records_cname as $cn) {

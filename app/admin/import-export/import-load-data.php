@@ -49,7 +49,7 @@ foreach ($expfields as $expfield) {
 	$hiddenfields.="<input name='importFields__".escape_input(str_replace(" ", "_",trim($expfield)))."' type='hidden' value='".escape_input($impfield)."' style='display:none;'>";
 }
 
-$data = array();
+$data = [];
 
 # read first row from CSV
 if (strtolower((string) $filetype) == "csv") {
@@ -62,7 +62,7 @@ if (strtolower((string) $filetype) == "csv") {
 	# set delimiter
 	$Tools->set_csv_delimiter ($line);
 	$row++;
-	$line = str_replace( array("\r\n","\r","\n") , "" , $line);	//remove line break
+	$line = str_replace( ["\r\n","\r","\n"] , "" , $line);	//remove line break
 	$cols = str_getcsv ($line, $Tools->csv_delimiter);
 	foreach ($cols as $val) {
 		$col++;
@@ -74,9 +74,9 @@ if (strtolower((string) $filetype) == "csv") {
 	# read each remaining row into a dictionary with expected fields as keys
 	while (($line = fgets($filehdl)) !== false) {
 		$row++;$col = 0;
-		$line = str_replace( array("\r\n","\r","\n") , "" , $line);	//remove line break
+		$line = str_replace( ["\r\n","\r","\n"] , "" , $line);	//remove line break
 		$cols = str_getcsv ($line, $Tools->csv_delimiter);
-		$record = array();
+		$record = [];
 		foreach ($cols as $val) {
 			$col++;
 			if ($col > $hcol) {
@@ -105,7 +105,7 @@ elseif(strtolower((string) $filetype) == "xls") {
 
 	# read each remaining row into a dictionary with expected fields as keys
 	for($row=2;$row<=$xls->rowcount($sheet);$row++) {
-		$record = array();
+		$record = [];
 		for($col=1;$col<=$xls->colcount($sheet);$col++) {
 			if ($col > $hcol) {
 					$Result->show('danger', _("Extra column found on line ").$row._(" in XLS file. Please check input file."), true);

@@ -21,11 +21,11 @@ $User->is_admin();
 
 $mtable = "subnets"; # main table where to check the fields
 # predefine field list
-$expfields = array ("section","subnet","mask","description","vrf");
+$expfields =  ["section","subnet","mask","description","vrf"];
 # required fields without which we will not continue, vrf is optional - if not set we check against default VRF
-$reqfields = array("section","subnet");
+$reqfields = ["section","subnet"];
 # we don't care about custom fields here
-$custom_fields = array();
+$custom_fields = [];
 # fetch all sections
 $all_sections = $Sections->fetch_all_sections();
 

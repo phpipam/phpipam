@@ -62,7 +62,7 @@ else {
     # print
     else {
         // set printed locations array
-        $printed_locations = array ();
+        $printed_locations =  [];
 
         // loop
         foreach ($Racks->all_racks as $r) {

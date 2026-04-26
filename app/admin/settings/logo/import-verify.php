@@ -25,7 +25,7 @@ $filename = pf_explode(".", $filename);
 $filename = end($filename);
 
 /* list of permitted file extensions */
-$allowed = array('png');
+$allowed = ['png'];
 
 /* no errors */
 if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {

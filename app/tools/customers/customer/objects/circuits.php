@@ -21,7 +21,7 @@ if (isset($objects["circuits"])) {
 
 	# get hidden fields
 	$hidden_circuit_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-	$hidden_circuit_fields = is_array(@$hidden_circuit_fields['circuits']) ? $hidden_circuit_fields['circuits'] : array();
+	$hidden_circuit_fields = is_array(@$hidden_circuit_fields['circuits']) ? $hidden_circuit_fields['circuits'] : [];
 
 
 	# filter circuits or fetch print all?

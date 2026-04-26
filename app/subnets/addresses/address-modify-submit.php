@@ -58,7 +58,7 @@ if(is_array($required_ip_fields) && $action!="delete") {
 	if($User->settings->enableLocations=="0") { unset($required_ip_fields['location']); }
 
 	// set default array
-	$required_field_errors = array();
+	$required_field_errors = [];
 	// Check that all required fields are present
 	foreach ($required_ip_fields as $required_field) {
 		if (!isset($POST->{$required_field}) || is_blank($POST->{$required_field})) {
@@ -66,7 +66,7 @@ if(is_array($required_ip_fields) && $action!="delete") {
 		}
 	}
 	// Check that certain required fields are not zero
-	foreach (array("customer_id","switch","location") as $drop_down_field) {
+	foreach (["customer_id","switch","location"] as $drop_down_field) {
 		if (in_array($drop_down_field,$required_ip_fields)) {
 			if ($POST->{$drop_down_field} == "0") {
 				$required_field_errors[] = ucwords($drop_down_field)." "._("is required");

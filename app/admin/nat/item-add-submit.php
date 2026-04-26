@@ -109,9 +109,9 @@ if(isset($POST->object_type) && isset($POST->object_id)) {
         }
 
         if(is_array($nat_array) && is_array($nat_array[$obj_type]))
-        $nat_array[$obj_type] = array_merge($nat_array[$obj_type], array($obj_id));
+        $nat_array[$obj_type] = array_merge($nat_array[$obj_type], [$obj_id]);
         else
-        $nat_array[$obj_type] = array($obj_id);
+        $nat_array[$obj_type] = [$obj_id];
 
         // to json
         if ($nat_type=="src") {
@@ -123,7 +123,7 @@ if(isset($POST->object_type) && isset($POST->object_id)) {
         }
 
         // update
-        if ($Admin->object_modify ("nat", "edit", "id", array("id"=>$nat_id, "src"=>$nat->src, "dst"=>$nat->dst))) {
+        if ($Admin->object_modify ("nat", "edit", "id", ["id"=>$nat_id, "src"=>$nat->src, "dst"=>$nat->dst])) {
             $Result->show("success", "Object added", false);
         }
         else {

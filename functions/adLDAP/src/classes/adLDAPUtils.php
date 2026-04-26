@@ -63,7 +63,7 @@ class adLDAPUtils {
     public function niceNames($groups)
     {
 
-        $groupArray = array();
+        $groupArray = [];
         for ($i=0; $i<$groups["count"]; $i++){ // For each group
             $line = $groups[$i];
 

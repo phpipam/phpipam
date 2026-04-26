@@ -51,7 +51,7 @@ $locations = $Tools->fetch_all_objects("locations", "id");
 # cnt
 $edit = 0;
 $add  = 0;
-$invalid_lines = array();
+$invalid_lines = [];
 $errors = 0;
 
 # import each value
@@ -98,7 +98,7 @@ foreach($outFile as $k=>$line) {
 		else																		{ $action = "add"; }
 
 		// set insert / update values
-		$address_insert = array(
+		$address_insert = [
 								"action"                => $action,
 								"subnetId"              => $POST->subnetId,
 								"ip_addr"               => $line[0],
@@ -112,7 +112,7 @@ foreach($outFile as $k=>$line) {
 								"port"                  => $line[8],
 								"note"                  => $line[9],
 								"location"              => $line[10]
-								);
+								];
 		// add id
 		if ($action=="edit")	{ $address_insert["id"] = $id; }
         // custom fields

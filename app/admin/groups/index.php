@@ -34,7 +34,7 @@ $custom = $Tools->fetch_custom_fields('userGroups');
 
 /* check customfields */
 $ffields = db_json_decode($User->settings->hiddenCustomFields, true);
-$ffields = is_array(@$ffields['userGroups']) ? $ffields['userGroups'] : array();
+$ffields = is_array(@$ffields['userGroups']) ? $ffields['userGroups'] : [];
 
 $colspanCustom = 0;
 ?>

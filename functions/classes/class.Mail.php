@@ -91,7 +91,7 @@ class phpipam_mail extends Common_functions {
 		$this->Php_mailer->Host = $this->mail_settings->mserver;
 		$this->Php_mailer->Port = $this->mail_settings->mport;
 		//permit self-signed certs and don't verify certs
-		$this->Php_mailer->SMTPOptions = array("ssl"=>array("verify_peer"=>false, "verify_peer_name"=>false, "allow_self_signed"=>true));
+		$this->Php_mailer->SMTPOptions = ["ssl"=>["verify_peer"=>false, "verify_peer_name"=>false, "allow_self_signed"=>true]];
 		// uncomment this to disable AUTOTLS if security is set to none
 		$this->Php_mailer->SMTPAutoTLS = false;
 		//set smtp auth
@@ -156,7 +156,7 @@ class phpipam_mail extends Common_functions {
 	 * @return string
 	 */
 	public function generate_message ($body) {
-    	$html = array();
+    	$html = [];
 		$html[] = $this->set_header ();			//set header
 		$html[] = $this->set_body_start ();		//start body
 		$html[] = $body;						//set body
@@ -174,7 +174,7 @@ class phpipam_mail extends Common_functions {
 	 * @return void
 	 */
 	public function generate_message_plain ($body) {
-    	$html = array();
+    	$html = [];
 		$html[] = $body;						//set body
 		$html[] = $this->set_footer_plain ();	//set footer
 	}
@@ -186,7 +186,7 @@ class phpipam_mail extends Common_functions {
 	 * @return string
 	 */
 	private function set_header () {
-    	$html = array();
+    	$html = [];
 		$html[] = "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>";
 		$html[] = "<html><head>";
 		$html[] = "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>";
@@ -209,7 +209,7 @@ class phpipam_mail extends Common_functions {
 		// set width
 		$logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
 
-    	$html = array();
+    	$html = [];
     	$html[] = "<body style='margin:0px;padding:0px;background:#f9f9f9;border-collapse:collapse;'>";
     	# logo
     	if(!file_exists( __DIR__."/../../css/images/logo/logo.png")) {
@@ -253,7 +253,7 @@ class phpipam_mail extends Common_functions {
 	 * @return string
 	 */
 	public function set_footer () {
-    	$html = array();
+    	$html = [];
 		$html[] = "<hr style='margin-left:10px;width:300px;height:0px;margin-top:40px;margin-left:0px;border-top:0px;border-bottom:1px solid #ddd;'>";
 		$html[] = "<div class='padding-left:10px;'>";
 		$html[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $this->mail_font_style_light "._("This email was automatically generated. You can change your notification settings in account details")."!</font><br>";

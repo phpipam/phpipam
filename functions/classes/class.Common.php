@@ -265,7 +265,7 @@ class Common_functions  {
 		# null method
 		$method = is_null($method) ? "id" : $this->Database->escape($method);
 
-		try { $res = $this->Database->getObjectQuery($table, "SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
+		try { $res = $this->Database->getObjectQuery($table, "SELECT * from `$table` where `$method` = ? limit 1;", [$value]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -392,7 +392,7 @@ class Common_functions  {
     	// fetch all users with mailNotify
         $notification_users = $this->fetch_multiple_objects ("users", "mailChangelog", "Yes", "id", true);
         // recipients array
-        $recipients = array();
+        $recipients = [];
         // any ?
         if (is_array($notification_users)) {
         	if(sizeof($notification_users)>0) {
@@ -626,7 +626,7 @@ class Common_functions  {
 		if(!is_object($this->DNS2)) {
 			require_once( __DIR__ . '/../../functions/PEAR/Net/DNS2.php' );
 			//initialize object
-			$this->DNS2 = new Net_DNS2_Resolver(array("timeout"=>2));
+			$this->DNS2 = new Net_DNS2_Resolver(["timeout"=>2]);
 		}
 	}
 
@@ -663,7 +663,7 @@ class Common_functions  {
 	 * @return array
 	 */
 	public function reformat_empty_array_fields ($fields, $char = "/") {
-    	$out = array();
+    	$out = [];
     	// loop
 		foreach($fields as $k=>$v) {
     		if(is_array($v)) {
@@ -690,7 +690,7 @@ class Common_functions  {
 	 */
 	public function remove_empty_array_fields ($fields) {
     	// init
-    	$out = array();
+    	$out = [];
     	// loop
     	if(is_array($fields)) {
 			foreach($fields as $k=>$v) {
@@ -867,7 +867,7 @@ class Common_functions  {
 	 */
 	public function reformat_mac_address ($mac, $format = 1) {
     	// strip al tags first
-    	$mac = strtolower(str_replace(array(":",".","-"), "", $mac));
+    	$mac = strtolower(str_replace([":",".","-"], "", $mac));
     	// format 4
     	if ($format==4) {
         	return $mac;
@@ -1023,7 +1023,7 @@ class Common_functions  {
 	 * @return string[]
 	 */
 	private function get_valid_actions () {
-		return array(
+		return [
 		        "add",
 		        "all-add",
 		        "edit",
@@ -1035,7 +1035,7 @@ class Common_functions  {
 		        "move",
 		        "remove",
 		        "assign"
-		      );
+		      ];
 	}
 
 	/**
@@ -1177,7 +1177,7 @@ class Common_functions  {
 		// to lower
 		$country = strtolower((string) $country);
 		// set regexes
-		$country_regex = array(
+		$country_regex = [
 			'united kingdom' => '/^([A-Z][A-HJ-Y]?[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR ?0A{2})$/i',
 			'isle of man'    => '/\\A\\bIM[0-9][0-9]? [0-9][A-Z][A-Z]\\b\\z/i',
 			'england'        => '/^([A-Z][A-HJ-Y]?[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR ?0A{2})$/i',
@@ -1188,7 +1188,7 @@ class Common_functions  {
 			'belgium'        => '/^[1-9]{1}[0-9]{3}$/i',
 			'united states'  => '/\\A\\b[0-9]{5}(?:-[0-9]{4})?\\b\\z/i',
 			'default'        => '/^[0-9]/i',
-		);
+		];
 
 		// check for country
 		if ( isset($country_regex[$country]) ) {
@@ -1324,7 +1324,7 @@ class Common_functions  {
 				return;
 
 			# save to array
-			$types_out = array();
+			$types_out = [];
 			foreach($types as $t) {
 				$types_out[$t->id] = (array) $t;
 			}
@@ -1355,7 +1355,7 @@ class Common_functions  {
 	 */
 	public function json_error_decode ($error_int) {
     	// init
-    	$error = array();
+    	$error = [];
 		// error definitions
 		$error[0] = "JSON_ERROR_NONE";
 		$error[1] = "JSON_ERROR_DEPTH";
@@ -1433,7 +1433,7 @@ class Common_functions  {
      */
     public function update_latlng ($id, $lat, $lng) {
 		# execute
-		try { $this->Database->updateObject("locations", array("id"=>$id, "lat"=>$lat, "long"=>$lng), "id"); }
+		try { $this->Database->updateObject("locations", ["id"=>$id, "lat"=>$lat, "long"=>$lng], "id"); }
 		catch (Exception $e) {
 			return false;
 		}
@@ -1490,11 +1490,11 @@ class Common_functions  {
 		}
 
         # result
-        return array(
+        return [
 			"required"         => $required,
 			"field"            => implode("\n", $html),
 			"timepicker_index" => $timepicker_index
-        );
+        ];
 	}
 
     /**
@@ -1509,10 +1509,10 @@ class Common_functions  {
      * @return array
      */
     private function create_custom_field_input_set_enum ($field, $object, $disabled_text, $set_delimiter = "", $nameSuffix = "") {
-		$html = array();
+		$html = [];
     	//parse values
     	$field['type'] = trim(substr((string) $field['type'],0,-1));
-    	$tmp = substr($field['type'], 0,3)=="set" ? pf_explode(",", str_replace(array("set(", "'"), "", $field['type'])) : pf_explode(",", str_replace(array("enum(", "'"), "", $field['type']));
+    	$tmp = substr($field['type'], 0,3)=="set" ? pf_explode(",", str_replace(["set(", "'"], "", $field['type'])) : pf_explode(",", str_replace(["enum(", "'"], "", $field['type']));
     	//null
     	if($field['Null']!="NO") { array_unshift($tmp, ""); }
 
@@ -1553,7 +1553,7 @@ class Common_functions  {
      * @return array
      */
     private function create_custom_field_input_date ($field, $object, &$timepicker_index, $disabled_text, $nameSuffix = "") {
-   		$html = array ();
+   		$html =  [];
     	// just for first
     	if($timepicker_index==0) {
     		$html[] =  '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css?v='.SCRIPT_PREFIX.'">';
@@ -1592,9 +1592,9 @@ class Common_functions  {
      * @return array
      */
     private function create_custom_field_input_boolean ($field, $object, $disabled_text, $nameSuffix = "") {
-    	$html = array ();
+    	$html =  [];
     	$html[] =  "<select name='$field[nameNew]$nameSuffix' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]' $disabled_text>";
-    	$tmp = array(0=>"No",1=>"Yes");
+    	$tmp = [0=>"No",1=>"Yes"];
     	//null
     	if($field['Null']!="NO") { $tmp[2] = ""; }
 
@@ -1619,7 +1619,7 @@ class Common_functions  {
      * @return array
      */
     private function create_custom_field_input_textarea ($field, $object, $disabled_text, $nameSuffix = "") {
-    	$html = array ();
+    	$html =  [];
     	$html[] = ' <textarea class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. $object->{$field['name']}. '</textarea>'. "\n";
     	// result
     	return $html;
@@ -1636,14 +1636,14 @@ class Common_functions  {
      * @return array
      */
     private function create_custom_field_input_input ($field, $object, $disabled_text, $nameSuffix = "") {
-        $html = array ();
+        $html =  [];
         // max length
         $maxlength = 100;
         if(strpos((string) $field['type'],"varchar")!==false) {
-            $maxlength = str_replace(array("varchar","(",")"),"", $field['type']);
+            $maxlength = str_replace(["varchar","(",")"],"", $field['type']);
         }
         if(strpos((string) $field['type'],"int")!==false) {
-            $maxlength = str_replace(array("int","(",")"),"", $field['type']);
+            $maxlength = str_replace(["int","(",")"],"", $field['type']);
         }
         // print
 		$html[] = ' <input type="text" class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" value="'. $object->{$field['name']}. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
@@ -1795,9 +1795,9 @@ class Common_functions  {
 	 * @return array
 	 */
 	public function get_permission_changes ($post_permissions, $old_permissions) {
-		$new_permissions = array();
-		$removed_permissions = array();
-		$changed_permissions = array();
+		$new_permissions = [];
+		$removed_permissions = [];
+		$changed_permissions = [];
 
 		# set new posted permissions
 		foreach($post_permissions as $key=>$val) {
@@ -1818,7 +1818,7 @@ class Common_functions  {
 				}
 			}
 		} else {
-			$old_permissions = array();  // fix for adding
+			$old_permissions = [];  // fix for adding
 		}
 		// add also new groups if available
 		if(is_array($new_permissions)) {
@@ -1829,7 +1829,7 @@ class Common_functions  {
 			}
 		}
 
-		return array($removed_permissions, $changed_permissions, $new_permissions);
+		return [$removed_permissions, $changed_permissions, $new_permissions];
 	}
 
 	/**
@@ -2021,7 +2021,7 @@ class Common_functions  {
 		// remove html tags
 		$get = $this->strip_input_tags($get);
 		// init
-		$title = array();
+		$title = [];
 		$title[] = $this->settings->siteTitle;
 
 		// page

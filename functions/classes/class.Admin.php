@@ -291,7 +291,7 @@ class Admin extends Common_functions {
 		$table = $this->Database->escape($table);
 		$field = $this->Database->escape($field);
 
-		try { $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", array($new_value, $old_value)); }
+		try { $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", [$new_value, $old_value]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
@@ -312,7 +312,7 @@ class Admin extends Common_functions {
 		$table = $this->Database->escape($table);
 		$field = $this->Database->escape($field);
 
-		try { $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", array($new_value, $old_value)); }
+		try { $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", [$new_value, $old_value]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
@@ -362,7 +362,7 @@ class Admin extends Common_functions {
 	 * @return array
 	 */
 	public function groups_parse ($group_ids) {
-		$out = array ();
+		$out =  [];
 		// check
 		if(!is_null($group_ids)) {
 			if(sizeof($group_ids)>0) {
@@ -388,7 +388,7 @@ class Admin extends Common_functions {
 	 * @return array
 	 */
 	public function groups_parse_ids ($group_ids) {
-		$out = array ();
+		$out =  [];
 		// check
 		if(!is_null($group_ids)) {
 			if(sizeof($group_ids) >0) {
@@ -409,7 +409,7 @@ class Admin extends Common_functions {
 	 * @return array of user ids
 	 */
 	public function group_fetch_users ($group_id) {
-		$out = array ();
+		$out =  [];
 		# get all users
 		$users = $this->fetch_all_objects("users");
 		# check if $gid in array
@@ -428,7 +428,7 @@ class Admin extends Common_functions {
 			}
 		}
 		# return
-		return isset($out) ? $out : array();
+		return isset($out) ? $out : [];
 	}
 
 	/**
@@ -439,7 +439,7 @@ class Admin extends Common_functions {
 	 * @return array
 	 */
 	public function group_fetch_missing_users ($group_id) {
-		$out = array ();
+		$out =  [];
 		# get all users
 		$users = $this->fetch_all_objects("users");
 
@@ -515,7 +515,7 @@ class Admin extends Common_functions {
 	 * @return void
 	 */
 	public function update_user_groups ($uid, $groups) {
-	    return $this->object_modify ("users", "edit", "id", array("id"=>$uid, "groups"=>$groups));
+	    return $this->object_modify ("users", "edit", "id", ["id"=>$uid, "groups"=>$groups]);
 	}
 
 	/**
@@ -527,7 +527,7 @@ class Admin extends Common_functions {
 	 * @return void
 	 */
 	public function update_section_groups($sid, $groups) {
-	    return $this->object_modify ("sections", "edit", "id", array("id"=>$sid, "permissions"=>$groups));
+	    return $this->object_modify ("sections", "edit", "id", ["id"=>$sid, "permissions"=>$groups]);
 	}
 
 	/**
@@ -621,7 +621,7 @@ class Admin extends Common_functions {
 		# if some exist update
 		if($count>0) {
 			# update
-		    try { $this->Database->runQuery("update `ipaddresses` set `$field` = replace(`$field`, ?, ?);", array($search, $replace)); }
+		    try { $this->Database->runQuery("update `ipaddresses` set `$field` = replace(`$field`, ?, ?);", [$search, $replace]); }
 		    catch (Exception $e) {
 			    $this->Result->show("danger alert-absolute", _("Error: ").$e->getMessage(), true);
 		    }
@@ -738,7 +738,7 @@ class Admin extends Common_functions {
 	    }
 
 	    # set parametized values
-	    $params = array();
+	    $params = [];
 	    if (strpos($query, ":default")>0)	$params['default'] = $field['fieldDefault'];
 	    if (strpos($query, ":comment")>0)	$params['comment'] = $field['Comment'];
 
@@ -764,7 +764,7 @@ class Admin extends Common_functions {
 	 */
 	public function save_custom_fields_filter ($table, $filtered_fields) {
 		# old custom fields, save them to array
-		$hidden_array = !is_blank($this->settings->hiddenCustomFields) ? db_json_decode($this->settings->hiddenCustomFields, true) : array();
+		$hidden_array = !is_blank($this->settings->hiddenCustomFields) ? db_json_decode($this->settings->hiddenCustomFields, true) : [];
 
 		# set new array for table
 		if(is_null($filtered_fields))	{ unset($hidden_array[$table]); }
@@ -774,7 +774,7 @@ class Admin extends Common_functions {
 		$hidden_json = json_encode($hidden_array, JSON_UNESCAPED_UNICODE);
 
 		# update database
-	    try { $this->object_edit ("settings", $key="id", array("id"=>1,"hiddenCustomFields"=>$hidden_json)); }
+	    try { $this->object_edit ("settings", $key="id", ["id"=>1,"hiddenCustomFields"=>$hidden_json]); }
 	    catch (Exception $e) {
 		    $this->Result->show("danger", _("Error: ").$e->getMessage(), true);
 	    }

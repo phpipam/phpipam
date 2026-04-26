@@ -30,7 +30,7 @@ $custom_fields = $Tools->fetch_custom_fields('devices');
 # prepare HTML variables
 $custom_fields_names = "";
 $custom_fields_boxes = "";
-$section_ids = array();
+$section_ids = [];
 
 if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $myField) {

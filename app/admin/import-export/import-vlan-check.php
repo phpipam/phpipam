@@ -25,7 +25,7 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 if (!isset($custom_fields)) { $custom_fields = $Tools->fetch_custom_fields("vlans"); }
 
 # Load existing data
-$edata = array(); $vdom = array(); $vdomid = array();
+$edata = []; $vdom = []; $vdomid = [];
 # process for easier later check
 foreach ($vlan_domains as $vlan_domain) {
 	//cast
@@ -46,8 +46,8 @@ foreach ($vlan_domains as $vlan_domain) {
 }
 
 $rows = "";
-$counters = array();
-$unique = array();
+$counters = [];
+$unique = [];
 
 # check the fields
 foreach ($data as &$cdata) {

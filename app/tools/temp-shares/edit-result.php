@@ -46,17 +46,17 @@ else {
 }
 
 # set new access
-$new_access[$POST->code] = array("id"=>$POST->id,
+$new_access[$POST->code] = ["id"=>$POST->id,
 									"type"=>$POST->type,
 									"code"=>$POST->code,
 									"validity"=>strtotime((string) $POST->validity),
 									"userId"=>$User->user->id
-									);
+									];
 
 # create array of values for modification
 $old_access = db_json_decode($User->settings->tempAccess, true);
 if(!is_array($old_access)) {
-	$old_access = array();
+	$old_access = [];
 } else {
 	//remove all expired
 	foreach($old_access as $k=>$a) {
@@ -65,12 +65,12 @@ if(!is_array($old_access)) {
 		}
 	}
 	//reset array
-	is_array($old_access) ? : $old_access = array();
+	is_array($old_access) ? : $old_access = [];
 }
 $new_access = json_encode(array_merge($old_access, array_filter($new_access)));
 
 # execute
-if(!$Admin->object_modify("settings", "edit", "id", array("id"=>1,"tempAccess"=>$new_access))) 	{ $Result->show("danger",  _("Temporary share create error"), true); }
+if(!$Admin->object_modify("settings", "edit", "id", ["id"=>1,"tempAccess"=>$new_access])) 	{ $Result->show("danger",  _("Temporary share create error"), true); }
 else 																							{ $Result->show("success", _("Temporary share created"), false); }
 
 # send mail

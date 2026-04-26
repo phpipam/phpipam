@@ -55,7 +55,7 @@ foreach($POST as $key=>$line) {
 $POST->snmp_queries = !empty($temp) ? implode(";", $temp) : null;
 
 # set update values
-$values = array(
+$values = [
 				"id"                      => $POST->device_id,
 				"snmp_version"            => $POST->snmp_version,
 				"snmp_community"          => $POST->snmp_community,
@@ -69,7 +69,7 @@ $values = array(
 				"snmp_v3_priv_pass"       => $POST->snmp_v3_priv_pass,
 				"snmp_v3_ctx_name"        => $POST->snmp_v3_ctx_name,
 				"snmp_v3_ctx_engine_id"   => $POST->snmp_v3_ctx_engine_id
-				);
+				];
 
 # update device
 if(!$Admin->object_modify("devices", "edit", "id", $values))    { $Result->show("danger",  _("SNMP edit failed").'!', false); }

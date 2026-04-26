@@ -18,12 +18,12 @@ else {
 	# set order
 	$PowerDNS->set_query_values (10000, "name,type", " asc");
 
-    $dns_cname_unique = array();        // unique CNAME records to prevent multiple
+    $dns_cname_unique = [];        // unique CNAME records to prevent multiple
 
     # fetch records for each IP address
     foreach ($unique_ips as $k=>$ip) {
         $records = $PowerDNS->search_records ("content", $ip->content, 'content', true);
-        $cname = array();
+        $cname = [];
         // loop
         foreach ($records as $r) {
             $out[$k][] = $r;

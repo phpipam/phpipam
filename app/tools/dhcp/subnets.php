@@ -19,7 +19,7 @@ function print_subnets ($s) {
     // cast
     $s = (object) $s;
     // printed option to add defaults
-    $printed_options = array();
+    $printed_options = [];
     // get config
     global $config;
 

@@ -43,12 +43,12 @@ if($POST->interface && !preg_match('/^[0-9a-z.\/\-_ :]+$/i',(string) $POST->inte
 # check if there is any device mapping necessary
 if ($POST->deviceId) {
 	# build the query parameter arrary
-	$values = array('id' => '',
+	$values = ['id' => '',
 					'zoneId' => $POST->zoneId,
 					'alias' => $POST->alias,
 					'deviceId' => $POST->deviceId,
 					'interface' => $POST->interface
-					);
+					];
 	# modify
 	if(!$Zones->modify_mapping('add',$values)) 	{ $Result->show("danger",  _("Cannot add mapping"), true); }
 }

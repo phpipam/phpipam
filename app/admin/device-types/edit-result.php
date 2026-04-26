@@ -40,12 +40,12 @@ if($POST->action!="delete") {
 }
 
 # create array of values for modification
-$values = array("tid"=>$POST->tid,
+$values = ["tid"=>$POST->tid,
 				"tname"=>$POST->tname,
 				"tdescription"=>$POST->tdescription,
 				"bgcolor"=>$POST->bgcolor,
 				"fgcolor"=>$POST->fgcolor,
-				);
+				];
 
 # update
 if(!$Admin->object_modify("deviceTypes", $POST->action, "tid", $values)) {

@@ -41,9 +41,9 @@ else {
 
         // no src/dst
         if ($sources===false)
-            $sources = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+            $sources = ["<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>"];
         if ($destinations===false)
-            $destinations = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+            $destinations = ["<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>"];
 
         // device
         if (strlen((string) $n->device)) {

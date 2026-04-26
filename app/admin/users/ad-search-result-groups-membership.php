@@ -33,14 +33,14 @@ if(is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword))	{ $Re
 try {
 	if($server->type == "NetIQ") { $params->account_suffix = ""; }
 	//set options
-	$options = array(
+	$options = [
 			'base_dn'=>$params->base_dn,
 			'account_suffix'=>$params->account_suffix,
 			'domain_controllers'=>pf_explode(";",$params->domain_controllers),
 			'use_ssl'=>$params->use_ssl,
 			'use_tls'=>$params->use_tls,
 			'ad_port'=>$params->ad_port
-			);
+			];
 	//AD
 	$adldap = new adLDAP($options);
 

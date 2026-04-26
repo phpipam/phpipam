@@ -69,7 +69,7 @@ else {
     # print
     else {
         // set printed locations array
-        $printed_locations = array ();
+        $printed_locations =  [];
 
         // loop
         foreach ($all_bgp_entries as $bgp) {

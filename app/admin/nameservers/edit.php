@@ -115,7 +115,7 @@ $nameservers->namesrv1 = !is_string($nameservers->namesrv1) ? [" "] : pf_explode
 		$sections = $Sections->fetch_all_sections();
 		# reformat domains sections to array
 		$nameservers_sections = pf_explode(";", $nameservers->permissions);
-		$nameservers_sections = is_array($nameservers_sections) ? $nameservers_sections : array();
+		$nameservers_sections = is_array($nameservers_sections) ? $nameservers_sections : [];
 		// loop
 		if ($sections !== false) {
 			foreach($sections as $section) {

@@ -88,7 +88,7 @@ if ($disable_email_notification) {
 
 # check for recipients
 foreach ($Admin->fetch_multiple_objects("users", "role", "Administrator") as $admin) {
-	$recepients[] = array("name" => $admin->real_name, "email" => $admin->email);
+	$recepients[] = ["name" => $admin->real_name, "email" => $admin->email];
 }
 # none?
 if (!isset($recepients)) {

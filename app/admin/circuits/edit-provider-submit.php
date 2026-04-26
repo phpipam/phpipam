@@ -36,12 +36,12 @@ if($POST->action!="add" && !is_numeric($POST->providerid))			{ $Result->show("da
 if($POST->name == "") 												{ $Result->show("danger", _('Name is mandatory').'!', true); }
 
 # set update values
-$values = array(
+$values = [
 				"id"          => $POST->providerid,
 				"name"    	  => $POST->name,
 				"description" => $POST->description,
 				"contact"     => $POST->contact
-				);
+				];
 
 # fetch custom fields
 $update = $Tools->update_POST_custom_fields('circuitProviders', $POST->action, $POST);

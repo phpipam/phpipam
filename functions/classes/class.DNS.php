@@ -51,14 +51,14 @@ class DNS extends Common_functions {
 	 *
 	 * @var array
 	 */
-	public $ns = array();
+	public $ns = [];
 
 	/**
 	 * Array of dead NS
 	 *
 	 * @var array
 	 */
-	public $dead_ns = array();
+	public $dead_ns = [];
 
 	/**
 	 * Print error if DNS is not accessible
@@ -163,7 +163,7 @@ class DNS extends Common_functions {
 						$this->ns = $nsarray;
 					}
 					else {
-						$this->ns = array();
+						$this->ns = [];
 						return false;
 					}
 				}
@@ -190,13 +190,13 @@ class DNS extends Common_functions {
 
 		// if both are set ignore
 		if (!is_blank($hostname) && !is_blank($address)) {
-											{ return array("class"=>"", "address"=>$address, "name"=>$hostname); }
+											{ return ["class"=>"", "address"=>$address, "name"=>$hostname]; }
 		}
 		// if settings permits to check or override is set
 		elseif($this->settings->enableDNSresolving == 1 || $override===true) {
 			// ignore if remote DNS failed
 			if ($this->dns_type=="remote" && sizeof($this->ns)==0) {
-				return array("class"=>"", 		"address"=>$address, "name"=>$hostname);
+				return ["class"=>"", 		"address"=>$address, "name"=>$hostname];
 			}
 			// if address is set fetch A record
 			elseif ($address!==false && !is_blank($address)) {
@@ -206,8 +206,8 @@ class DNS extends Common_functions {
 				// resolve
 				$resolved = $this->resolve_address_net_dns ($address);
 				// false ?
-				if ($resolved===false)		{ return array("class"=>"", 		"address"=>$address, "name"=>$hostname); }
-				else						{ return array("class"=>"resolved", "address"=>$address, "name"=>$resolved); }
+				if ($resolved===false)		{ return ["class"=>"", 		"address"=>$address, "name"=>$hostname]; }
+				else						{ return ["class"=>"resolved", "address"=>$address, "name"=>$resolved]; }
 			}
 			// if hostname is set fetch PTR record
 			elseif($hostname!==false && !is_blank($hostname)) {
@@ -217,12 +217,12 @@ class DNS extends Common_functions {
 				// resolve
 				$resolved = $this->resolve_address_net_dns ($hostname);
 				// false ?
-				if ($resolved===false)		{ return array("class"=>"",			"address"=>$address, "name"=>$hostname); }
-				else						{ return array("class"=>"resolved", "address"=>$resolved, "name"=>$hostname); }
+				if ($resolved===false)		{ return ["class"=>"",			"address"=>$address, "name"=>$hostname]; }
+				else						{ return ["class"=>"resolved", "address"=>$resolved, "name"=>$hostname]; }
 			}
 		}
 		// don't check
-		else 								{ return array("class"=>"",			"address"=>$address, "name"=>$hostname); }
+		else 								{ return ["class"=>"",			"address"=>$address, "name"=>$hostname]; }
 	}
 
 	/**
@@ -238,7 +238,7 @@ class DNS extends Common_functions {
 			// check each , if dead remove it !
 			foreach ($this->ns as $ns) {
 				if (!in_array($ns, $this->dead_ns)) {
-					$this->DNS2->setServers (array($ns));
+					$this->DNS2->setServers ([$ns]);
 
 					// try to get record
 					try {

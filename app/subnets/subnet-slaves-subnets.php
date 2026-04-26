@@ -6,7 +6,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 
 # set which custom fields to display
 $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-$visible_fields = array();
+$visible_fields = [];
 # set visible fields
 foreach ($custom_fields as $k=>$f) {
     if (isset($hidden_fields['subnets'])) {

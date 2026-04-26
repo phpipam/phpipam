@@ -46,8 +46,8 @@ $custom_fields = $Tools->fetch_custom_fields('devices');
 # prepare HTML variables
 $custom_fields_names = "";
 $custom_fields_boxes = "";
-$section_ids = array();
-$fields = array ( 'id', 'hostname', 'ip_addr', 'type', 'description', 'sections', 'rack', 'rack_start', 'rack_size', 'location' );
+$section_ids = [];
+$fields =  [ 'id', 'hostname', 'ip_addr', 'type', 'description', 'sections', 'rack', 'rack_start', 'rack_size', 'location' ];
 
 if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $myField) {
@@ -57,7 +57,7 @@ if(sizeof($custom_fields) > 0) {
 	}
 }
 
-$section_ids = array ();
+$section_ids =  [];
 $devtypes =  $Devtype->fetch_all_objects("deviceTypes", "tid");
 $deviceTypes = [];
 $devices = $Devices->fetch_all_objects("devices", "id");

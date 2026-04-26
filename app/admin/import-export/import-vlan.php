@@ -37,12 +37,12 @@ $rows = "";
 foreach ($data as &$cdata) {
 	if (($cdata['action'] == "add") || ($cdata['action'] == "edit")) {
 		# set update array
-		$values = array("vlanId"=>$cdata['vlanId'],
+		$values = ["vlanId"=>$cdata['vlanId'],
 						"number"=>$cdata['number'],
 						"name"=>$cdata['name'],
 						"description"=>$cdata['description'],
 						"domainId"=>$cdata['domainId']
-						);
+						];
 		# add custom fields
 		if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {

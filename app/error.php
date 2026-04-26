@@ -1,5 +1,5 @@
 <?php
-$http_codes = array(
+$http_codes = [
     100 => 'Continue',
     101 => 'Switching Protocols',
     102 => 'Processing',
@@ -55,7 +55,7 @@ $http_codes = array(
     507 => 'Insufficient Storage',
     509 => 'Bandwidth Limit Exceeded',
     510 => 'Not Extended'
-);
+];
 
 // validate
 if (!array_key_exists((string) $GET->section, $http_codes)) { $GET->section = 404; }

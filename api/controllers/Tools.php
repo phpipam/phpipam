@@ -77,7 +77,7 @@ class Tools_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function define_tools_controllers () {
-		$this->subcontrollers = array(
+		$this->subcontrollers = [
 		                              	"ipTags"	  => "tags",
 										"devices"     => "devices",
 										"deviceTypes" => "device_types",
@@ -89,7 +89,7 @@ class Tools_controller extends Common_api_functions {
 										"racks"       => "racks",
 										"nat"         => "nat",
 										"customers"   => "customers"
-									  );
+									  ];
 	}
 
 	/**
@@ -99,19 +99,19 @@ class Tools_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function define_available_identifiers () {
-		$this->identifiers = array(
-								"ipTags"      => array("id2", "id3"),
-								"devices"     => array("id2", "id3"),
-								"deviceTypes" => array("id2", "id3"),
-								"vlans"       => array("id2", "id3"),
-								"vrf"         => array("id2", "id3"),
-								"nameservers" => array("id2"),
-								"scanAgents"  => array("id2"),
-								"locations"   => array("id2", "id3"),
-								"racks"       => array("id2", "id3"),
-								"nat"         => array("id2", "id3"),
-								"customers"   => array("id2")
-								);
+		$this->identifiers = [
+								"ipTags"      => ["id2", "id3"],
+								"devices"     => ["id2", "id3"],
+								"deviceTypes" => ["id2", "id3"],
+								"vlans"       => ["id2", "id3"],
+								"vrf"         => ["id2", "id3"],
+								"nameservers" => ["id2"],
+								"scanAgents"  => ["id2"],
+								"locations"   => ["id2", "id3"],
+								"racks"       => ["id2", "id3"],
+								"nat"         => ["id2", "id3"],
+								"customers"   => ["id2"]
+								];
 	}
 
 	/**
@@ -149,22 +149,22 @@ class Tools_controller extends Common_api_functions {
 		$app = $this->Tools->fetch_object ("api", "app_id", $this->_params->app_id);
 
 		// controllers
-		$controllers = array(
-						array("rel"=>"sections",	"href"=>"/api/".$_GET['app_id']."/sections/"),
-						array("rel"=>"subnets",		"href"=>"/api/".$_GET['app_id']."/subnets/"),
-						array("rel"=>"folders",		"href"=>"/api/".$_GET['app_id']."/folders/"),
-						array("rel"=>"addresses",	"href"=>"/api/".$_GET['app_id']."/addresses/"),
-						array("rel"=>"vlans",		"href"=>"/api/".$_GET['app_id']."/vlan/"),
-						array("rel"=>"vrfs",		"href"=>"/api/".$_GET['app_id']."/vrf/"),
-						array("rel"=>"nameservers",	"href"=>"/api/".$_GET['app_id']."/tools/nameservers/"),
-						array("rel"=>"scanAgents",	"href"=>"/api/".$_GET['app_id']."/tools/scanagents/"),
-						array("rel"=>"locations",	"href"=>"/api/".$_GET['app_id']."/tools/locations/"),
-						array("rel"=>"racks",	    "href"=>"/api/".$_GET['app_id']."/tools/racks/"),
-						array("rel"=>"nat",	        "href"=>"/api/".$_GET['app_id']."/tools/nat/"),
-						array("rel"=>"tools",		"href"=>"/api/".$_GET['app_id']."/tools/")
-					);
+		$controllers = [
+						["rel"=>"sections",	"href"=>"/api/".$_GET['app_id']."/sections/"],
+						["rel"=>"subnets",		"href"=>"/api/".$_GET['app_id']."/subnets/"],
+						["rel"=>"folders",		"href"=>"/api/".$_GET['app_id']."/folders/"],
+						["rel"=>"addresses",	"href"=>"/api/".$_GET['app_id']."/addresses/"],
+						["rel"=>"vlans",		"href"=>"/api/".$_GET['app_id']."/vlan/"],
+						["rel"=>"vrfs",		"href"=>"/api/".$_GET['app_id']."/vrf/"],
+						["rel"=>"nameservers",	"href"=>"/api/".$_GET['app_id']."/tools/nameservers/"],
+						["rel"=>"scanAgents",	"href"=>"/api/".$_GET['app_id']."/tools/scanagents/"],
+						["rel"=>"locations",	"href"=>"/api/".$_GET['app_id']."/tools/locations/"],
+						["rel"=>"racks",	    "href"=>"/api/".$_GET['app_id']."/tools/racks/"],
+						["rel"=>"nat",	        "href"=>"/api/".$_GET['app_id']."/tools/nat/"],
+						["rel"=>"tools",		"href"=>"/api/".$_GET['app_id']."/tools/"]
+					];
 		# Response
-		return array("code"=>200, "data"=>array("permissions"=>$this->Subnets->parse_permissions($app->app_permissions), "controllers"=>$controllers));
+		return ["code"=>200, "data"=>["permissions"=>$this->Subnets->parse_permissions($app->app_permissions), "controllers"=>$controllers]];
 	}
 
 
@@ -214,7 +214,7 @@ class Tools_controller extends Common_api_functions {
 			$result = $this->Tools->fetch_all_objects ($this->_params->id,  $this->sort_key);
 			// result
 			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
-			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, false)); }
+			else										{ return ["code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, false)]; }
 		}
 		# by parameter
 		elseif (isset($this->_params->id3)) {
@@ -310,7 +310,7 @@ class Tools_controller extends Common_api_functions {
 			}
 			// result
 			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
-			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, true)); }
+			else										{ return ["code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, true)]; }
 
 		}
 		# by id
@@ -321,7 +321,7 @@ class Tools_controller extends Common_api_functions {
 			$result = $this->Tools->fetch_object ($this->_params->id, $this->sort_key, $this->_params->id2);
 			// result
 			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
-			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, false)); }
+			else										{ return ["code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, false)]; }
 		}
 	}
 
@@ -364,7 +364,7 @@ class Tools_controller extends Common_api_functions {
 			$this->Response->throw_exception(500, $table_name." object creation failed");
 
 		//set result
-		return array("code"=>201, "data"=>$table_name." object created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/tools/".$table_name."/".$this->Admin->lastId."/");
+		return ["code"=>201, "data"=>$table_name." object created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/tools/".$table_name."/".$this->Admin->lastId."/"];
 	}
 
 
@@ -404,7 +404,7 @@ class Tools_controller extends Common_api_functions {
 			$this->Response->throw_exception(500, $table_name." object edit failed");
 
 		//set result
-		return array("code"=>200, "message"=>$table_name." object updated");
+		return ["code"=>200, "message"=>$table_name." object updated"];
 	}
 
 
@@ -426,7 +426,7 @@ class Tools_controller extends Common_api_functions {
 		$this->validate_tools_object ($table_name);
 
 		# set variables for delete
-		$values = array();
+		$values = [];
 		$values[$this->sort_key] = $this->_params->{$this->sort_key};
 
 		# execute delete
@@ -442,7 +442,7 @@ class Tools_controller extends Common_api_functions {
 			$this->Admin->remove_object_references ("ipaddresses", $update_field, $this->_params->{$this->sort_key});
 
 		// set result
-		return array("code"=>200, "message"=>$table_name." object deleted");
+		return ["code"=>200, "message"=>$table_name." object deleted"];
 	}
 
 	/**
@@ -589,7 +589,7 @@ class Tools_controller extends Common_api_functions {
         	return(db_json_decode($obj, true));
     	}
     	else {
-        	return array ();
+        	return  [];
     	}
 	}
 

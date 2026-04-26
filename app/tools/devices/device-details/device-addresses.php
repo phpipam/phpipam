@@ -19,7 +19,7 @@ $device = (array) $Tools->fetch_object ("devices", "id", $GET->subnetId);
 $custom_fields = $Tools->fetch_custom_fields('devices');
 # fetch all addresses on switch
 $addresses     = $Tools->fetch_multiple_objects("ipaddresses", "switch", $device['id']);
-if ($addresses===false) { $addresses = array(); }
+if ($addresses===false) { $addresses = []; }
 
 # set selected address fields array
 $selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);

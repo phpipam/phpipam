@@ -25,17 +25,17 @@ $User->is_admin();
 if (!isset($custom_fields)) { $custom_fields = $Tools->fetch_custom_fields("ipaddresses"); }
 
 # check which sections we need to care about
-$used_section = array();
+$used_section = [];
 foreach ($data as &$cdata) { $used_section[strtolower((string) $cdata['section'])]=$cdata['section']; }
 
 # fetch all VRFs
 $all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
-if (!$all_vrfs) { $all_vrfs = array(); }
-$vrf_byid = array();
+if (!$all_vrfs) { $all_vrfs = []; }
+$vrf_byid = [];
 # insert default VRF in the list
-array_splice($all_vrfs,0,0,(object) array(array('vrfId' => '0', 'name' => 'default', 'rd' => '0:0')));
+array_splice($all_vrfs,0,0,(object) [['vrfId' => '0', 'name' => 'default', 'rd' => '0:0']]);
 # process for easier later check
-$vrf_data = array();
+$vrf_data = [];
 foreach ($all_vrfs as $vrf) {
 	//cast
 	$vrf = (array) $vrf;
@@ -49,10 +49,10 @@ foreach ($all_vrfs as $vrf) {
 $all_sections = $Sections->fetch_all_sections();
 
 # get all addresses in all subnets in all sections
-$edata = array();
-$section_names = array();
-$subnet_data = array();
-$subnet_search = array();
+$edata = [];
+$section_names = [];
+$subnet_data = [];
+$subnet_search = [];
 
 foreach ($all_sections as $section) {
 	$section = (array) $section;
@@ -99,11 +99,11 @@ foreach ($all_sections as $section) {
 }
 
 # Load available tags
-$tag_data = array(); $ip_tags = (array) $Addresses->addresses_types_fetch();
+$tag_data = []; $ip_tags = (array) $Addresses->addresses_types_fetch();
 foreach ($ip_tags as $c_tag) { $tag_data[$c_tag['type']] = $c_tag; }
 
 # Load available devices
-$device_data = array();
+$device_data = [];
 $devices = $Tools->fetch_all_objects("devices", "hostname");
 if ($devices!==false) {
 	foreach($devices as $c_dev) {
@@ -116,7 +116,7 @@ if ($devices!==false) {
 
 $rows = "";
 $counters = ["add" => 0, "edit" => 0, "skip" => 0, "error" => 0];
-$ndata = array(); # store new addresses in a similar format with edata for easier processing
+$ndata = []; # store new addresses in a similar format with edata for easier processing
 
 # check the fields
 foreach ($data as &$cdata) {
@@ -218,7 +218,7 @@ foreach ($data as &$cdata) {
 
 
 	# Verify gateway
-	if (in_array(strtolower((string) $cdata['is_gateway']),array("yes","true","1"))) { $cdata['is_gateway'] = 1; } else { $cdata['is_gateway'] = 0; }
+	if (in_array(strtolower((string) $cdata['is_gateway']),["yes","true","1"])) { $cdata['is_gateway'] = 1; } else { $cdata['is_gateway'] = 0; }
 
 	if ($action != "error") {
     	if(!$Addresses->validate_ip($cdata['ip_addr'])) { $msg.="Invalid IP address."; $action = "error"; }

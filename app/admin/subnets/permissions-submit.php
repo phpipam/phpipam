@@ -31,7 +31,7 @@ $old_permissions = db_json_decode($subnet_old->permissions, true);
 
 list($removed_permissions, $changed_permissions) = $Subnets->get_permission_changes ($POST->as_array(), $old_permissions);
 
-$subnet_list = array();
+$subnet_list = [];
 # propagate ?
 if ($POST->set_inheritance=="Yes") {
     // fetch all possible slaves + master

@@ -21,7 +21,7 @@ if (isset($objects["racks"])) {
 
 	# get hidden fields
 	$hidden_custom_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-	$hidden_custom_fields = is_array(@$hidden_custom_fields['racks']) ? $hidden_custom_fields['racks'] : array();
+	$hidden_custom_fields = is_array(@$hidden_custom_fields['racks']) ? $hidden_custom_fields['racks'] : [];
 
     // table
     print "<table class='table sorted table-striped table-top table-td-top' data-cookie-id-table='rack_list'>";

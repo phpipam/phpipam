@@ -34,10 +34,10 @@ if($POST->action!="add" && !is_numeric($POST->tid)) { $Result->show("danger", _(
 $readonly = $POST->action=="delete" ? "readonly" : "";
 # set default values
 if($POST->action=="add") {
-	$device = (object) array(
+	$device = (object) [
 		"bgcolor"=>"#E6E6E6",
 		"fgcolor"=>"#000",
-		);
+		];
 }
 
 # fetch device type details

@@ -44,9 +44,9 @@ if($Admin->fetch_object("userGroups", "g_name", $POST->g_name)!==false)	{ $Resul
 }
 
 # create array of values for modification
-$values = array("g_id"=>$POST->g_id,
+$values = ["g_id"=>$POST->g_id,
 				"g_name"=>$POST->g_name,
-				"g_desc"=>$POST->g_desc);
+				"g_desc"=>$POST->g_desc];
 
 # fetch custom fields
 $update = $Tools->update_POST_custom_fields('userGroups', $POST->action, $POST);

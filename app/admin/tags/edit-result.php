@@ -41,14 +41,14 @@ if($POST->action!="delete") {
 }
 
 # create array of values for modification
-$values = array("id"=>$POST->id,
+$values = ["id"=>$POST->id,
 				"type"=>$POST->type,
 				"bgcolor"=>$POST->bgcolor,
 				"fgcolor"=>$POST->fgcolor,
 				"showtag"=>$POST->showtag,
 				"compress"=>$POST->compress,
 				"updateTag"=>$POST->updateTag
-				);
+				];
 
 # execute
 if(!$Admin->object_modify("ipTags", $POST->action, "id", $values)) 	{ $Result->show("danger", _("Tag")." ".$User->get_post_action()._(" error"), true); }

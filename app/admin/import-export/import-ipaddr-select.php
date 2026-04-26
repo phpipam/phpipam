@@ -22,7 +22,7 @@ $tpl_field_names = "";
 $tpl_field_types = "";
 
 # predefine field list
-$expfields = array ("section","ip_addr","hostname","description","vrf","subnet","mac","owner","device","note","tag","is_gateway", "port", "location");
+$expfields =  ["section","ip_addr","hostname","description","vrf","subnet","mac","owner","device","note","tag","is_gateway", "port", "location"];
 //$disfields = array ("Section","IP Address","Hostname","Description","VRF","Subnet","MAC","owner","device","note","TAG");
 $mtable = "ipaddresses"; # main table where to check the fields
 
@@ -58,7 +58,7 @@ $extfields["gateway"]["field"] = "is_gateway";
 $extfields["gateway"]["pname"] = "gateway";
 
 # required fields without which we will not continue
-$reqfields = array("section","ip_addr","subnet");
+$reqfields = ["section","ip_addr","subnet"];
 
 # manually adjust the standard fields
 foreach($expfields as $std_field) {

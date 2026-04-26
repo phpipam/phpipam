@@ -51,7 +51,7 @@ if(!is_numeric($GET->subnetId)) 		{ $Result->show("danger", _('Invalid ID'), tru
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
 $hidden_cfields = db_json_decode($User->settings->hiddenCustomFields, true) ? : ['ipaddresses'=>null];
-$hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
+$hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : [];
 
 # set selected address fields array
 $selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);  																	//format to array
@@ -320,7 +320,7 @@ else {
 					$records2 = $PowerDNS->search_records ("content", $addresses[$n]->ip, 'content', true);
 					$dns_records2 = [];
 					if (is_array($records2)) {
-                        $dns_cname_unique = array();        // unique CNAME records to prevent multiple
+                        $dns_cname_unique = [];        // unique CNAME records to prevent multiple
                         $cname = [];
 						$dns_records2[] = "<br>";
 						$dns_records2[] = "<ul class='submenu-dns text-muted'>";
@@ -418,7 +418,7 @@ else {
                             $minfo = "<i class='fa fa-exclamation-triangle' rel='tooltip' title='"._('Duplicate MAC')."'></i>";
                             // formulate object
                             if ($duplicates!==false) {
-                                $mobjects = array();
+                                $mobjects = [];
                                 $mobjects[] = "<hr><p class='muted' style='font-size:11px'>Duplicated addresses:</p>";
                                 $mobjects[] = "<ul class='submenu-dns'> ";
                                 foreach ($duplicates as $d) {

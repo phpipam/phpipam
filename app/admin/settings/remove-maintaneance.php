@@ -19,8 +19,8 @@ $User->check_user_session();
 $User->is_admin();
 
 # set update values
-$values = array("id"=>1,
+$values = ["id"=>1,
 				"maintaneanceMode" => 0
-				);
+				];
 if(!$Admin->object_modify("settings", "edit", "id", $values))	{ $Result->show("danger",  _("Cannot update settings"), true, true, false, false, true); }
 else															{ $Result->show("success", _("Maintaneance mode removed"), true, true, false, false, true); }

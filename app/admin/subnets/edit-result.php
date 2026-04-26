@@ -52,7 +52,7 @@ $POST->subnet = trim((string) $temp[0]);
 
 
 # errors array
-$errors = array ();
+$errors =  [];
 # default vrf
 if(!isset($POST->vrfId) || $POST->vrfId==null)	{ $POST->vrfId = 0; }
 if(!is_numeric($POST->vrfId))						{ $POST->vrfId = 0; }
@@ -271,7 +271,7 @@ else {
 	if (!isset($POST->pingSubnet)&&!isset($POST->discoverSubnet)&&!isset($POST->resolveDNS))	{ $POST->scanAgent=0; }
 
 	# create array of default update values
-	$values = array(
+	$values = [
 					"id"             => $POST->subnetId,
 					"isFolder"       => 0,
 					"masterSubnetId" => $POST->masterSubnetId,
@@ -291,7 +291,7 @@ else {
 					"device"         => $POST->device,
 					"isFull"         => $Admin->verify_checkbox($POST->isFull),
 					"isPool"         => $Admin->verify_checkbox($POST->isPool)
-					);
+					];
     # location
     if (isset($POST->location)) {
         if (!is_numeric($POST->location)) {
@@ -351,7 +351,7 @@ else {
 			$Subnets->remove_subnet_slaves_master($POST->subnetId);
 			if(sizeof($Subnets->slaves)>0) {
 				foreach($Subnets->slaves as $slaveId) {
-					$Admin->object_modify ("subnets", "edit", "id", array("id"=>$slaveId, "sectionId"=>$POST->sectionIdNew));
+					$Admin->object_modify ("subnets", "edit", "id", ["id"=>$slaveId, "sectionId"=>$POST->sectionIdNew]);
 				}
 			}
 		}
@@ -373,7 +373,7 @@ else {
     		$Subnets->remove_subnet_slaves_master($POST->subnetId);
 		}
     	# set what to update
-    	$values = array(
+    	$values = [
 					"vlanId"       =>$POST->vlanId,
 					"vrfId"        =>$POST->vrfId,
 					"nameserverId" =>$POST->nameserverId,
@@ -381,7 +381,7 @@ else {
 					"device"       =>$POST->device,
 					"isFull"       =>$Admin->verify_checkbox($POST->isFull),
 					"isPool"       =>$Admin->verify_checkbox($POST->isPool)
-					);
+					];
         # optional values
         if(isset($POST->allowRequests))  $values['allowRequests']  = $Admin->verify_checkbox($POST->allowRequests);
         if(isset($POST->showName))       $values['showName']       = $Admin->verify_checkbox($POST->showName);
@@ -392,7 +392,7 @@ else {
         # propagate changes
 		if(is_array($Subnets->slaves) && sizeof($Subnets->slaves)>0) {
 			foreach($Subnets->slaves as $slaveId) {
-				 $Admin->object_modify ("subnets", "edit", "id", array_merge(array("id"=>$slaveId), $values));
+				 $Admin->object_modify ("subnets", "edit", "id", array_merge(["id"=>$slaveId], $values));
 			}
         }
 	}
@@ -442,7 +442,7 @@ else {
 				$values = db_json_decode($User->settings->powerDNS, true);
 				$values['name'] = $zone;
 				// create domain
-				$PowerDNS->domain_edit ("add", array("name"=>$zone,"type"=>"NATIVE"));
+				$PowerDNS->domain_edit ("add", ["name"=>$zone,"type"=>"NATIVE"]);
 				// create default records
 				$PowerDNS->create_default_records ($values);
 			}
@@ -471,7 +471,7 @@ else {
 				$values = db_json_decode($User->settings->powerDNS, true);
 				$values['name'] = $zone;
 				// create domain
-				$PowerDNS->domain_edit ("add", array("name"=>$zone,"type"=>"NATIVE"));
+				$PowerDNS->domain_edit ("add", ["name"=>$zone,"type"=>"NATIVE"]);
 				// save id
 				$domain_id = $PowerDNS->get_last_db_id ();
 				// create default records

@@ -6,106 +6,106 @@ $User->check_user_session();
 if(!isset($GET->section)) { $GET->section = ""; }
 
 # admin items
-$admin_items = array();
+$admin_items = [];
 // users
-$admin_items["users"] = array (
+$admin_items["users"] =  [
                         "name"=>"Users",
-                        "href"=>array("administration", "users"),
+                        "href"=>["administration", "users"],
                         "title"=>"User management",
                         "icon"=>"fa-user"
-                        );
+                        ];
 // sections
-$admin_items["sections"] = array(
+$admin_items["sections"] = [
                         "name"=>"Sections",
-                        "href"=>array("administration", "sections"),
+                        "href"=>["administration", "sections"],
                         "title"=>"Section management",
                         "icon"=>"fa-server"
-                       );
+                       ];
 // vlans
-$admin_items["vlans"] = array (
+$admin_items["vlans"] =  [
                         "name"=>"VLAN",
-                        "href"=>array("administration", "vlans"),
+                        "href"=>["administration", "vlans"],
                         "title"=>"VLAN management",
                         "icon"=>"fa-cloud"
-                        );
+                        ];
 // VRF
 if($User->settings->enableVRF == 1) {
-$admin_items["vrf"] = array(
+$admin_items["vrf"] = [
                         "name"=>"VRF",
-                        "href"=>array("administration", "vrf"),
+                        "href"=>["administration", "vrf"],
                         "title"=>"VRF management",
                         "icon"=>"fa-cloud"
-                       );
+                       ];
 }
 // nat
 if($User->settings->enableNAT==1) {
-$admin_items["nat"] = array (
+$admin_items["nat"] =  [
                         "name"=>"NAT",
-                        "href"=>array("administration", "nat"),
+                        "href"=>["administration", "nat"],
                         "title"=>"NAT management",
                         "icon"=>"fa-exchange"
-                        );
+                        ];
 }
 // pdns
 if($User->settings->enablePowerDNS==1) {
-$admin_items["powerDNS"] = array (
+$admin_items["powerDNS"] =  [
                         "name"=>"PowerDNS",
-                        "href"=>array("administration", "powerDNS"),
+                        "href"=>["administration", "powerDNS"],
                         "title"=>"powerDNS management",
                         "icon"=>"fa-database"
-                        );
+                        ];
 }
 // dhcp
 if($User->settings->enableDHCP==1) {
-$admin_items["dhcp"] = array (
+$admin_items["dhcp"] =  [
                         "name"=>"DHCP",
-                        "href"=>array("administration", "dhcp"),
+                        "href"=>["administration", "dhcp"],
                         "title"=>"DHCP information",
                         "icon"=>"fa-database"
-                        );
+                        ];
 }
 // devices
-$admin_items["devices"] = array (
+$admin_items["devices"] =  [
                         "name"=>"Devices",
-                        "href"=>array("administration", "devices"),
+                        "href"=>["administration", "devices"],
                         "title"=>"Show all configured devices",
                         "icon"=>"fa-desktop"
-                        );
+                        ];
 // rack
 if($User->settings->enableRACK == 1) {
-$admin_items["racks"] = array (
+$admin_items["racks"] =  [
                         "name"=>"Racks",
-                        "href"=>array("administration", "racks"),
+                        "href"=>["administration", "racks"],
                         "title"=>"Show racks",
                         "icon"=>"fa-bars"
-                        );
+                        ];
 }
 // circuits
 if($User->settings->enableCircuits == 1) {
-$admin_items["circuits"] = array (
+$admin_items["circuits"] =  [
                         "name"=>"Circuits",
-                        "href"=>array("administration", "circuits"),
+                        "href"=>["administration", "circuits"],
                         "title"=>"Show circuits",
                         "icon"=>"fa-random"
-                        );
+                        ];
 }
 // BGP
 if($User->settings->enableRouting == 1) {
-$admin_items["routing"] = array (
+$admin_items["routing"] =  [
                         "name"=>"Routing",
-                        "href"=>array("administration", "routing"),
+                        "href"=>["administration", "routing"],
                         "title"=>"Show Routing",
                         "icon"=>"fa-exchange"
-                        );
+                        ];
 }
 // locations
 if($User->settings->enableLocations == 1) {
-$admin_items["locations"] = array (
+$admin_items["locations"] =  [
                         "name"=>"Locations",
-                        "href"=>array("administration", "locations"),
+                        "href"=>["administration", "locations"],
                         "title"=>"Show locations",
                         "icon"=>"fa-map"
-                        );
+                        ];
 }
 ?>
 

@@ -110,7 +110,7 @@ class User extends Common_functions {
      *
      * @var array
      */
-    public $themes = array("white", "dark");
+    public $themes = ["white", "dark"];
 
     /**
      * (json) parameters for authentication
@@ -558,7 +558,7 @@ class User extends Common_functions {
         # set mode status
         $maintaneance_mode = $on ? "1" : "0";
         # execute
-        try { $this->Database->updateObject("settings", array("id"=>1, "maintaneanceMode"=>$maintaneance_mode), "id"); }
+        try { $this->Database->updateObject("settings", ["id"=>1, "maintaneanceMode"=>$maintaneance_mode], "id"); }
         catch (Exception $e) {}
     }
 
@@ -637,7 +637,7 @@ class User extends Common_functions {
      * @return array
      */
     public function fetch_available_auth_method_types () {
-		return array("AD", "LDAP", "NetIQ", "Radius", "SAML2");
+		return ["AD", "LDAP", "NetIQ", "Radius", "SAML2"];
 	}
 
 
@@ -673,13 +673,13 @@ class User extends Common_functions {
 
             if(sizeof($subnets)>0) {
                 // init
-                $fsubnets = array();
+                $fsubnets = [];
                 # fetch details for each subnet
                 foreach($subnets as $id) {
                     $query = "select `su`.`id`, `su`.`id` as `subnetId`,`se`.`id` as `sectionId`, `subnet`, `mask`,`isFull`,`su`.`description`,`se`.`description` as `section`, `vlanId`, `isFolder`
                               from `subnets` as `su`, `sections` as `se` where `su`.`id` = ? and `su`.`sectionId` = `se`.`id` limit 1;";
 
-                    try { $fsubnet = $this->Database->getObjectQuery('subnets', $query, array($id)); }
+                    try { $fsubnet = $this->Database->getObjectQuery('subnets', $query, [$id]); }
                     catch (Exception $e) {
                         $this->Result->show("danger", _("Error: ").$e->getMessage());
                         return false;
@@ -721,9 +721,9 @@ class User extends Common_functions {
         # set old favourite subnets
         $old_favourites = pf_explode(";", $this->user->favourite_subnets);
         # set new
-        $new_favourites = implode(";", array_diff($old_favourites, array($subnetId)));
+        $new_favourites = implode(";", array_diff($old_favourites, [$subnetId]));
         # update
-        try { $this->Database->updateObject("users", array("favourite_subnets"=>$new_favourites, "id"=>$this->user->id), "id"); }
+        try { $this->Database->updateObject("users", ["favourite_subnets"=>$new_favourites, "id"=>$this->user->id], "id"); }
         catch (Exception $e) {
             return false;
         }
@@ -740,11 +740,11 @@ class User extends Common_functions {
     private function add_favourite ($subnetId) {
         # set old favourite subnets
         $old_favourites = pf_explode(";", $this->user->favourite_subnets);
-        $old_favourites = is_array($old_favourites) ? $old_favourites : array();
+        $old_favourites = is_array($old_favourites) ? $old_favourites : [];
         # set new
-        $new_favourites = implode(";",array_merge(array($subnetId), $old_favourites));
+        $new_favourites = implode(";",array_merge([$subnetId], $old_favourites));
         # update
-        try { $this->Database->updateObject("users", array("favourite_subnets"=>$new_favourites, "id"=>$this->user->id), "id"); }
+        try { $this->Database->updateObject("users", ["favourite_subnets"=>$new_favourites, "id"=>$this->user->id], "id"); }
         catch (Exception $e) {
             return false;
         }
@@ -1020,7 +1020,7 @@ class User extends Common_functions {
     private function directory_connect ($authparams) {
         # adLDAP script
         require(__DIR__ . "/../adLDAP/src/adLDAP.php");
-        $dirparams = Array();
+        $dirparams = [];
         $dirparams['base_dn'] = @$authparams['base_dn'];
         $dirparams['ad_port'] = @$authparams['ad_port'];
         $dirparams['account_suffix'] = @$authparams['account_suffix'];
@@ -1645,7 +1645,7 @@ class User extends Common_functions {
      * @return void
      */
     public function update_user_pass ($password) {
-        try { $this->Database->updateObject("users", array("password"=>$this->crypt_user_pass ($password), "passChange"=>"No", "id"=>$this->user->id), "id"); }
+        try { $this->Database->updateObject("users", ["password"=>$this->crypt_user_pass ($password), "passChange"=>"No", "id"=>$this->user->id], "id"); }
         catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
 
         $this->Result->show("success", _("Hi").", ".$this->user->real_name.", "._("your password was updated").". <a class='btn btn-sm btn-default' href='".create_link("dashboard")."'>Dashboard</a>", false);
@@ -1726,7 +1726,7 @@ class User extends Common_functions {
      */
     public function self_update_widgets ($widgets) {
         # update
-        try { $this->Database->updateObject("users", array("widgets"=>$widgets, "id"=>$this->user->id)); }
+        try { $this->Database->updateObject("users", ["widgets"=>$widgets, "id"=>$this->user->id]); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage(), false);
             return false;
@@ -1745,7 +1745,7 @@ class User extends Common_functions {
         # fix for older versions
         if($this->settings->version!="1.1") {
             # update
-            try { $this->Database->updateObject("users", array("lastLogin"=>date("Y-m-d H:i:s"), "id"=>$this->user->id)); }
+            try { $this->Database->updateObject("users", ["lastLogin"=>date("Y-m-d H:i:s"), "id"=>$this->user->id]); }
             catch (Exception $e) {
                 $this->Result->show("danger", _("Error: ").$e->getMessage(), false);
                 return false;
@@ -1761,7 +1761,7 @@ class User extends Common_functions {
      */
     public function update_activity_time () {
         # update
-        try { $this->Database->updateObject("users", array("lastActivity"=>date("Y-m-d H:i:s"), "id"=>$this->user->id)); }
+        try { $this->Database->updateObject("users", ["lastActivity"=>date("Y-m-d H:i:s"), "id"=>$this->user->id]); }
         catch (Exception $e) { }
     }
 
@@ -1935,11 +1935,11 @@ class User extends Common_functions {
         $cached_item = $this->cache_check('get_user_permissions_from_json', $json);
         if(is_object($cached_item)) return $cached_item->result;
 
-        $groups = array();
+        $groups = [];
         foreach((array) db_json_decode($json, true) as $group_id => $perm) {
-            $group_details = $this->groups_parse (array($group_id));
+            $group_details = $this->groups_parse ([$group_id]);
 
-            $tmp = array();
+            $tmp = [];
             $tmp['group_id'] = $group_id;
             $tmp['permission'] = $perm;
             $tmp['name'] = $group_details[$group_id]['g_name'];
@@ -1969,11 +1969,11 @@ class User extends Common_functions {
 	    		// group details
 	    		$group = $this->fetch_object ("userGroups", "g_id", $g_id);
 	    		$out[$group->g_id] = (array) $group;
-	    		$out[$group->g_id]['members'] = $this->fetch_multiple_objects("users", "groups", "%\"$g_id\"%", "real_name", true, true, array("username"));
+	    		$out[$group->g_id]['members'] = $this->fetch_multiple_objects("users", "groups", "%\"$g_id\"%", "real_name", true, true, ["username"]);
 	    	}
 	    }
 	    # return array of groups
-	    return isset($out) ? $out : array();
+	    return isset($out) ? $out : [];
 	}
 
     /**

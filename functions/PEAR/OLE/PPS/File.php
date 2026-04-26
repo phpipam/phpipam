@@ -59,7 +59,7 @@ class OLE_PPS_File extends OLE_PPS
             null,
             null,
             '',
-            array());
+            []);
     }
 
     /**

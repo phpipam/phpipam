@@ -7,9 +7,9 @@
  */
 
 # Required extensions
-$requiredExt  = array("session", "sockets", "filter", "openssl", "gmp", "json", "gettext", "PDO", "pdo_mysql", "mbstring", "gd", "iconv", "ctype", "curl", "dom", "pcre", "libxml");
+$requiredExt  = ["session", "sockets", "filter", "openssl", "gmp", "json", "gettext", "PDO", "pdo_mysql", "mbstring", "gd", "iconv", "ctype", "curl", "dom", "pcre", "libxml"];
 # Required functions (included in php-xml or php-simplexml package)
-$requiredFns  = array("simplexml_load_string");
+$requiredFns  = ["simplexml_load_string"];
 
 if(!defined('PHPIPAM_PHP_MIN'))
 define('PHPIPAM_PHP_MIN', "7.2");

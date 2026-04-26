@@ -46,10 +46,10 @@ if($User->settings->vlanDuplicate==0) {
 }
 
 # formulate update query
-$values = array(
+$values = [
 				"vlanid"   =>$POST->vlanid,
 				"domainId" =>$vlan_domain->id
-				);
+				];
 # update
 if(!$Admin->object_modify("vlans", "edit", "vlanid", $values))	{ $Result->show("danger",  _("Failed to move VLAN to new domain").'!', true); }
 else															{ $Result->show("success", _("VLAN moved to new domain successfully").'!', false); }

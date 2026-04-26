@@ -27,7 +27,7 @@ $User->check_maintaneance_mode ();
 $User->Crypto->csrf_cookie ("validate", "agent", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 /* checks */
-$error = array();
+$error = [];
 
 # for edit check old details
 if ($POST->action=="edit" || $POST->action=="delete") {
@@ -62,12 +62,12 @@ if(sizeof($error) > 0) {
 }
 else {
 	# create array of values for modification
-	$values = array("id"=>$POST->id,
+	$values = ["id"=>$POST->id,
 					"name"=>$POST->name,
 					"description"=>$POST->description,
 					"code"=>$POST->code,
 					"type"=>$POST->type
-					);
+					];
 	# null
 	$values = $Admin->remove_empty_array_fields ($values);
 
@@ -79,7 +79,7 @@ else {
 	if ($POST->action=="delete") {
 		$query = "update `subnets` set `scanAgent`=0, `pingSubnet`=0, `discoverSubnet`=0 where `scanAgent` = ?;";
 
-		try { $Database->runQuery($query, array($POST->id)); }
+		try { $Database->runQuery($query, [$POST->id]); }
 		catch (Exception $e) {
 			$Result->show("danger", _("Error: ").$e->getMessage());
 			return false;

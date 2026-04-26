@@ -21,7 +21,7 @@ function print_leases ($s) {
     // cast
     $s = (object) $s;
     // printed option to add defaults
-    $printed_options = array();
+    $printed_options = [];
 
     $html[] = "<tr>";
 

@@ -32,7 +32,7 @@ require_once 'PEAR.php';
  *
  * @global array $GLOBALS['Net_IPv4_Netmask_Map']
  */
-$GLOBALS['Net_IPv4_Netmask_Map'] = array(
+$GLOBALS['Net_IPv4_Netmask_Map'] = [
             0 => "0.0.0.0",
             1 => "128.0.0.0",
             2 => "192.0.0.0",
@@ -66,7 +66,7 @@ $GLOBALS['Net_IPv4_Netmask_Map'] = array(
             30 => "255.255.255.252",
             31 => "255.255.255.254",
             32 => "255.255.255.255"
-        );
+        ];
 // }}}
 // {{{ Net_IPv4
 

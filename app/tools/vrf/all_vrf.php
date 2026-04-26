@@ -17,7 +17,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
 
 # set hidden fields
 $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-$hidden_fields = is_array(@$hidden_fields['vrf']) ? $hidden_fields['vrf'] : array();
+$hidden_fields = is_array(@$hidden_fields['vrf']) ? $hidden_fields['vrf'] : [];
 
 # set size of custom fields
 $custom_size = sizeof($custom) - sizeof($hidden_fields);

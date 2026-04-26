@@ -79,13 +79,13 @@ $custom_fields = $Tools->fetch_custom_fields ('subnets');
 
 # set hidden fields
 $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-$hidden_fields = isset($hidden_fields['subnets']) && is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
+$hidden_fields = isset($hidden_fields['subnets']) && is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : [];
 
 $subnetsTree = new SubnetsTree($Subnets, $User->user);
 $subnetsTable = new SubnetsTable($Tools, $custom_fields, $showSupernetOnly);
 
 if ($search_cidr === false) {
-    $subnets = $Subnets->fetch_section_subnets($sectionId, false, false, array());
+    $subnets = $Subnets->fetch_section_subnets($sectionId, false, false, []);
 } else {
     $subnets = $Subnets->fetch_overlapping_subnets($search_cidr, 'sectionId', $sectionId);
 }

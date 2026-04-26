@@ -25,7 +25,7 @@ $tpl_field_types = "";
 
 
 # predefine field list
-$expfields = array ("hostname", "ip_addr", "deviceType", "description", "section", "rack", "rack_start", "rack_size", "location");
+$expfields =  ["hostname", "ip_addr", "deviceType", "description", "section", "rack", "rack_start", "rack_size", "location"];
 #$expfields = array ("hostname", "ip_addr", "deviceType", "description", "section", "snmp_community", "snmp_version", "snmp_port", "snmp_timeout", "snmp_queries", "snmp_v3_sec_level", "snmp_v3_auth_protocol", "snmp_v3_auth_pass", "snmp_v3_priv_protocol", "snmp_v3_priv_pass", "snmp_v3_ctx_name", "snmp_v3_ctx_engine_id", "rack", "rack_start", "rack_size", "location");
 //$disfields = array ("Section","IP Address","Hostname","Description","VRF","Subnet","MAC","owner","device","note","TAG");
 $mtable = "devices"; # main table where to check the fields
@@ -62,7 +62,7 @@ $extfields["section"]["pname"] = "section";
 // $extfields["gateway"]["pname"] = "gateway";
 
 # required fields without which we will not continue
-$reqfields = array("hostname");
+$reqfields = ["hostname"];
 
 # manually adjust the standard fields
 foreach($expfields as $std_field) {

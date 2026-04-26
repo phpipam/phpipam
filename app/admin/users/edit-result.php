@@ -91,7 +91,7 @@ if($POST->disabled=="Yes" && $POST->userId==1) 			{ $Result->show("danger", _("A
 
 # formulate update values
 # nothing to do here for l10n, the content of the array goes into the database
-$values = array(
+$values = [
 				"id"             =>$POST->userId,
 				"real_name"      =>$POST->real_name,
 				"email"          =>$POST->email,
@@ -102,7 +102,7 @@ $values = array(
 				"mailChangelog"  =>$POST->mailChangelog,
 				"theme"          =>$POST->theme=="default" ? "" : $POST->theme,
 				"disabled"       =>$POST->disabled=="Yes" ? "Yes" : "No"
-				);
+				];
 
 
 # username only on add

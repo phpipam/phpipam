@@ -37,14 +37,14 @@ if($auth_settings->type=="AD" || $auth_settings->type=="LDAP" || $auth_settings-
 	try {
 		if($auth_settings->type == "NetIQ") { $params->account_suffix = ""; }
 		//set options
-		$options = array(
+		$options = [
 				'base_dn'            =>$parameters->base_dn,
 				'account_suffix'     =>$parameters->account_suffix,
 				'domain_controllers' =>$controllers,
 				'use_ssl'            =>$parameters->use_ssl,
 				'use_tls'            =>$parameters->use_tls,
 				'ad_port'            =>$parameters->ad_port
-				);
+				];
 		$adldap = new adLDAP($options);
 		//LDAP?
 		if($auth_settings->type=="LDAP") $adldap->setUseOpenLDAP(true);

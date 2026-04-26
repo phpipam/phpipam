@@ -5,7 +5,7 @@ $User->check_user_session();
 $User->check_module_permissions ("dhcp", User::ACCESS_R, true, false);
 
 // tabs
-$tabs = array("subnets", "leases", "reservations");
+$tabs = ["subnets", "leases", "reservations"];
 
 ?>
 <div class="DHCP">

@@ -30,10 +30,10 @@ if(!is_numeric($POST->subnetId))	{ $Result->show("danger", _("Invalid ID"), true
 if(!is_numeric($POST->linked_subnet))	{ $Result->show("danger", _("Invalid ID"), true); }
 
 # submit
-$values = array(
+$values = [
     "id" => $POST->subnetId,
     "linked_subnet" => $POST->linked_subnet
-);
+];
 
 # verify that user has write permissions for subnet
 if($Subnets->modify_subnet ("edit", $values)!==false) {

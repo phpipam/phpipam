@@ -57,9 +57,9 @@ $values->nxdomain_ttl = $old_values->nxdomain_ttl;
 $values->ttl 		= $old_values->ttl;
 
 # set update values
-$values_new = array("id"=>1,
+$values_new = ["id"=>1,
 				"powerDNS"=>json_encode($values),
-				);
+				];
 if(!$Admin->object_modify("settings", "edit", "id", $values_new))	{ $Result->show("danger",  _("Cannot update settings"), false); }
 else															    { $Result->show("success", _("Settings updated successfully"), false); }
 

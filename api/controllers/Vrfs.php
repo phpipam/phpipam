@@ -46,15 +46,15 @@ class Vrfs_controller extends Common_api_functions {
 		$this->validate_options_request ();
 
 		// methods
-		$result['methods'] = array(
-								array("href"=>"/api/".$this->_params->app_id."/vrfs/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
-								array("href"=>"/api/".$this->_params->app_id."/vrfs/{id}/", "methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
-																											 array("rel"=>"create", "method"=>"POST"),
-																											 array("rel"=>"update", "method"=>"PATCH"),
-																											 array("rel"=>"delete", "method"=>"DELETE"))),
-							);
+		$result['methods'] = [
+								["href"=>"/api/".$this->_params->app_id."/vrfs/", 		"methods"=>[["rel"=>"options", "method"=>"OPTIONS"]]],
+								["href"=>"/api/".$this->_params->app_id."/vrfs/{id}/", "methods"=>[["rel"=>"read", 	"method"=>"GET"],
+																											 ["rel"=>"create", "method"=>"POST"],
+																											 ["rel"=>"update", "method"=>"PATCH"],
+																											 ["rel"=>"delete", "method"=>"DELETE"]]],
+							];
 		# result
-		return array("code"=>200, "data"=>$result);
+		return ["code"=>200, "data"=>$result];
 	}
 
 
@@ -83,13 +83,13 @@ class Vrfs_controller extends Common_api_functions {
 			$result = $this->Tools->fetch_all_objects ("vrf", 'vrfId');
 			// check result
 			if($result===false)						{ $this->Response->throw_exception(404, 'No vrfs configured'); }
-			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+			else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, null, true, true)]; }
 		}
 		// custom fields
 		if($this->_params->id=="custom_fields") {
 			// check result
 			if(sizeof($this->custom_fields)==0)			{ $this->Response->throw_exception(404, 'No custom fields defined'); }
-			else										{ return array("code"=>200, "data"=>$this->custom_fields); }
+			else										{ return ["code"=>200, "data"=>$this->custom_fields]; }
 		}
 		// subnets
 		elseif (isset($this->_params->id2)) {
@@ -113,7 +113,7 @@ class Vrfs_controller extends Common_api_functions {
 				if($result===false)					{ $this->Response->throw_exception(404, 'No subnets belonging to this vrf'); }
 				else {
 					$this->custom_fields = $this->Tools->fetch_custom_fields('subnets');
-					return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true));
+					return ["code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)];
 				}
 			}
 			// error
@@ -129,7 +129,7 @@ class Vrfs_controller extends Common_api_functions {
 			$result = $this->Tools->fetch_object ("vrf", "vrfId", $this->_params->id);
 			// check result
 			if($result===false)						{ $this->Response->throw_exception(404, "VRF not found"); }
-			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+			else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, null, true, true)]; }
 		}
 	}
 
@@ -156,7 +156,7 @@ class Vrfs_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "VRF creation failed"); }
 		else {
 			//set result
-			return array("code"=>201, "message"=>"VRF created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/vrfs/".$this->Admin->lastId."/");
+			return ["code"=>201, "message"=>"VRF created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/vrfs/".$this->Admin->lastId."/"];
 		}
 	}
 
@@ -189,7 +189,7 @@ class Vrfs_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "Vrf edit failed"); }
 		else {
 			//set result
-			return array("code"=>200, "message"=>"VRF updated");
+			return ["code"=>200, "message"=>"VRF updated"];
 		}
 	}
 
@@ -210,7 +210,7 @@ class Vrfs_controller extends Common_api_functions {
 		$this->validate_vrf ();
 
 		# set variables for update
-		$values = array();
+		$values = [];
 		$values["vrfId"] = $this->_params->id;
 
 		# execute delete
@@ -221,7 +221,7 @@ class Vrfs_controller extends Common_api_functions {
 			$this->Admin->remove_object_references ("subnets", "vrfId", $this->_params->id);
 
 			// set result
-			return array("code"=>200, "message"=>"VRF deleted");
+			return ["code"=>200, "message"=>"VRF deleted"];
 		}
 	}
 

@@ -46,9 +46,9 @@ else {
 }
 
 # set update values
-$values = array("id"=>$POST->subnetId,
+$values = ["id"=>$POST->subnetId,
 				"subnet"=>$subnet_new['subnet'],
 				"mask"=>$POST->newMask
-				);
+				];
 if(!$Subnets->modify_subnet ("resize", $values))				{ $Result->show("danger",  _("Error resizing subnet")."!", true); }
 else															{ $Result->show("success", _("Subnet resized successfully")."!", true); }

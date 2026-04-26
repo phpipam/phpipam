@@ -16,11 +16,11 @@ function top10_widget($type_ip, $type_percentage, $height, $slimit) {
 
 	$type_name = $type_ip . "top10". ($type_percentage ? "Percentage" : "Hosts");
 
-	$top_subnets = array();
+	$top_subnets = [];
 	$all_subnets = $Tools->fetch_top_subnets($type_ip, 1000000, $type_percentage);
 
 	# Find subnets with user access, label duplicates.
-	$unique = array();
+	$unique = [];
 	$valid_subnets = 0;
 
 

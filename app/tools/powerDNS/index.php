@@ -49,7 +49,7 @@ if ($User->get_module_permissions ("pdns")>=User::ACCESS_R) {
         <ul class="nav nav-tabs">
         	<?php
         	// tabs
-        	$tabs = array("domains", "host_records", "reverse_v4", "reverse_v6");
+        	$tabs = ["domains", "host_records", "reverse_v4", "reverse_v6"];
 
         	// default tab
         	if(!isset($GET->subnetId)) {

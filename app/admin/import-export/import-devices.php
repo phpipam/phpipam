@@ -40,7 +40,7 @@ foreach ($data as &$cdata) {
 
 		// # set update array
 
-		$values = array(
+		$values = [
             'id'	    =>$cdata['id'],
             'hostname'	    =>$cdata['hostname'],
             'ip_addr'	    =>$cdata['ip_addr'],
@@ -64,7 +64,7 @@ foreach ($data as &$cdata) {
             'rack_size'	    =>$cdata['rack_size'],
             'location'	    =>$cdata['location'],
             'editDate'	    =>$cdata['editDate']
-        );
+        ];
 
 
 		# add custom fields

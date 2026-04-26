@@ -37,7 +37,7 @@ if($POST->action=="delete" || $POST->action=="edit") {
 if($POST->action=="add" || $POST->action=="edit") {
     // name
     if(strlen((string) $POST->name)<3)                                            {  $Result->show("danger",  _("Name must have at least 3 characters"), true); }
-    if(!in_array($POST->type, array("source", "static", "destination"))) {  $Result->show("danger",  _("Invalid NAT type"), true); }
+    if(!in_array($POST->type, ["source", "static", "destination"])) {  $Result->show("danger",  _("Invalid NAT type"), true); }
     if(isset($POST->device)) {
         if(!is_numeric($POST->device))                                   {  $Result->show("danger",  _("Invalid device"), true); }
     }
@@ -45,7 +45,7 @@ if($POST->action=="add" || $POST->action=="edit") {
 
 // set values
 // nothing to do here for l10n, the content of the array goes into the database
-$values = array(
+$values = [
     "id"          => $POST->id,
     "name"        => $POST->name,
     "type"        => $POST->type,
@@ -55,7 +55,7 @@ $values = array(
     "description" => $POST->description,
     "policy"      => "No",
     "policy_dst"  =>  ""
-     );
+     ];
 
 if ($User->get_module_permissions ("devices")==User::ACCESS_NONE) {
     unset ($values['device']);

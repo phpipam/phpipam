@@ -60,7 +60,7 @@ if($POST->action=="add" || $POST->action=="edit") {
 }
 
 // set values
-$values = array(
+$values = [
     "id"          =>$POST->id,
     "name"        =>$POST->name,
     "prefix"      =>$POST->prefix,
@@ -69,7 +69,7 @@ $values = array(
     "state"       =>$POST->state,
     "deviceId"    =>$POST->deviceId,
     "description" =>$POST->description
-    );
+    ];
 # remove device
 if ($User->get_module_permissions ("devices")<User::ACCESS_RW) {
     unset ($values['deviceId']);

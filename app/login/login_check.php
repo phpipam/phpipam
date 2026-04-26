@@ -22,7 +22,7 @@ $Log 		= new Logging ($Database);
 if( !empty($POST->ipamusername) && !empty($POST->ipampassword) )  {
 
 	# initialize array
-	$ipampassword = array();
+	$ipampassword = [];
 
 	# check failed table
 	$cnt = $User->block_check_ip ();

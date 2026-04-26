@@ -80,7 +80,7 @@ if (!$POST->zone && $POST->action == 'add')  {
 
 # validate the zone name if text mode is enabled
 if ($POST->generator == 2 ) {
-	$textSettings = array ( $POST->zone,$POST->id);
+	$textSettings =  [ $POST->zone,$POST->id];
 	if(!$zone=$Zones->generate_zone_name($textSettings)){
 		$Result->show("danger",  _("Cannot validate zone name"), true);
 	}
@@ -88,22 +88,22 @@ if ($POST->generator == 2 ) {
 
 # build the query parameter arrary
 if($POST->generator != 2 && $POST->action == 'edit') {
-	$values = array('id' => $POST->id,
+	$values = ['id' => $POST->id,
 					'indicator' => $POST->indicator,
 					'padding' => $padding ?? 0,
 					'description' => $description,
 					'network' => $POST->network
-					);
+					];
 }
 else {
-	$values = array('id' => $POST->id,
+	$values = ['id' => $POST->id,
 					'generator' => $POST->generator,
 					'zone' => $zone,
 					'indicator' => $POST->indicator,
 					'padding' => $padding ?? 0,
 					'description' => $description,
 					'network' => $POST->network
-					);
+					];
 }
 
 # update

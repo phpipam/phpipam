@@ -22,7 +22,7 @@ $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 # validate id
 if(!is_numeric($POST->id))                           { $Result->show("danger", _("Invalid ID"), true, true); }
 # validate type
-if(!in_array($POST->type, array("src", "dst")))      { $Result->show("danger", _("Invalid NAT direction"), true, true); }
+if(!in_array($POST->type, ["src", "dst"]))      { $Result->show("danger", _("Invalid NAT direction"), true, true); }
 
 # get NAT object
 $nat = $Admin->fetch_object ("nat", "id", $POST->id);

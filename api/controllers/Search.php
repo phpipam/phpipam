@@ -69,12 +69,12 @@ class Search_controller extends Common_api_functions {
 		$this->validate_options_request ();
 
 		// methods
-		$result = array();
-		$result['methods'] = array(
-								array("href"=>"/api/".$this->_params->app_id."/search/{id}/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"))),
-							);
+		$result = [];
+		$result['methods'] = [
+								["href"=>"/api/".$this->_params->app_id."/search/{id}/", 	"methods"=>[["rel"=>"read", 	"method"=>"GET"]]],
+							];
 		# result
-		return array("code"=>200, "data"=>$result);
+		return ["code"=>200, "data"=>$result];
 	}
 
 
@@ -116,7 +116,7 @@ class Search_controller extends Common_api_functions {
 			$result['search_filter'] = $this->search_items;
 
 			// return result
-			return array("code"=>200, "data"=>$result);
+			return ["code"=>200, "data"=>$result];
 		}
 		// search string missing
 		else {
@@ -154,10 +154,10 @@ class Search_controller extends Common_api_functions {
 
 		// result
 		if(sizeof($result)==0) {
-			return array("code"=>404, "data"=>"No subnets found");
+			return ["code"=>404, "data"=>"No subnets found"];
 		}
 		else {
-			return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, false));
+			return ["code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, false)];
 		}
 	}
 
@@ -174,10 +174,10 @@ class Search_controller extends Common_api_functions {
 
 		// result
 		if(sizeof($result)==0) {
-			return array("code"=>404, "data"=>"No addresses found");
+			return ["code"=>404, "data"=>"No addresses found"];
 		}
 		else {
-			return array("code"=>200, "data"=>$this->prepare_result ($result, "addresses", true, false));
+			return ["code"=>200, "data"=>$this->prepare_result ($result, "addresses", true, false)];
 		}
 	}
 
@@ -192,10 +192,10 @@ class Search_controller extends Common_api_functions {
 
 		// result
 		if(sizeof($result)==0) {
-			return array("code"=>404, "data"=>"No vlan found");
+			return ["code"=>404, "data"=>"No vlan found"];
 		}
 		else {
-			return array("code"=>200, "data"=>$this->prepare_result ($result, "vlans", true, false));
+			return ["code"=>200, "data"=>$this->prepare_result ($result, "vlans", true, false)];
 		}
 	}
 
@@ -210,10 +210,10 @@ class Search_controller extends Common_api_functions {
 
 		// result
 		if(sizeof($result)==0) {
-			return array("code"=>404, "data"=>"No vrf found");
+			return ["code"=>404, "data"=>"No vrf found"];
 		}
 		else {
-			return array("code"=>200, "data"=>$this->prepare_result ($result, "vrfs", true, false));
+			return ["code"=>200, "data"=>$this->prepare_result ($result, "vrfs", true, false)];
 		}
 	}
 }

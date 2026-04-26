@@ -97,7 +97,7 @@ if($POST->action=="edit" && $POST->hasBack=="1" && $POST->size < $rack_details->
 }
 
 # set update values
-$values = array(
+$values = [
 				"id"          => $POST->rackid,
 				"name"        => $POST->name,
 				"size"        => $POST->size,
@@ -105,7 +105,7 @@ $values = array(
 				"hasBack"     => $Admin->verify_checkbox($POST->hasBack),
 				"topDown"     => $POST->topDown,
 				"description" => $POST->description
-				);
+				];
 if (isset($POST->row)) $values['row'] = $POST->row;
 
 # fetch custom fields
@@ -134,23 +134,23 @@ if($POST->action=="delete"){
 	# remove all references from subnets and ip addresses
 	$Admin->remove_object_references ("devices", "rack", $values["id"], NULL);
     # remove all custom devices for the rack
-    try { $Database->runQuery("delete from rackContents where `rack` = ?", array($values['id'])); }
+    try { $Database->runQuery("delete from rackContents where `rack` = ?", [$values['id']]); }
     catch (Exception $e) {}
 }
 # remove all devices if back is removed
 if($POST->action=="edit" && $POST->hasBack!="1") {
-    try { $Database->runQuery("update devices set `rack` = 0 where `rack` = ? and rack_start > ?;", array($POST->rackid, $POST->size)); }
+    try { $Database->runQuery("update devices set `rack` = 0 where `rack` = ? and rack_start > ?;", [$POST->rackid, $POST->size]); }
     catch (Exception $e) {}
-    try { $Database->runQuery("delete from rackContents where `rack` = ? and rack_start > ?;", array($POST->rackid, $POST->size)); }
+    try { $Database->runQuery("delete from rackContents where `rack` = ? and rack_start > ?;", [$POST->rackid, $POST->size]); }
     catch (Exception $e) {}
 }
 # update positions of rack devices when rack size changes
 if($POST->action=="edit" && $POST->hasBack=="1" && $rack_details->size!=$POST->size ) {
-	$values = array (
+	$values =  [
 						"rackid"   => $rack_details->id,
 						"new_size" => $POST->size,
 						"old_size" => $rack_details->size
-	                 );
+	                 ];
     try { $Database->runQuery("UPDATE `devices` set `rack_start` = `rack_start` + :new_size - :old_size where `rack` = :rackid and rack_start > :old_size", $values); }
     catch (Exception $e) {}
     try { $Database->runQuery("UPDATE `rackContents` set `rack_start` = `rack_start` + :new_size - :old_size where `rack` = :rackid and rack_start > :old_size", $values); }

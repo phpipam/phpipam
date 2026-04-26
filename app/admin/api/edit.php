@@ -81,7 +81,7 @@ if($POST->action!="add") {
 	    <td>
 	    	<select name="app_permissions" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>_("Disabled"),1=>_("Read"),2=>_("Read / Write"),3=>_("Read / Write / Admin"));
+	    	$perms = [0=>_("Disabled"),1=>_("Read"),2=>_("Read / Write"),3=>_("Read / Write / Admin")];
 	    	foreach($perms as $k=>$p) {
 		    	if($k==$api->app_permissions)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
 		    	else							{ print "<option value='$k' 				   >".$p."</option>"; }
@@ -98,7 +98,7 @@ if($POST->action!="add") {
 	    <td>
 	    	<select name="app_security" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array("ssl_token"=>_("SSL with User token"), "ssl_code"=>_("SSL with App code token"), "crypt"=>_("Encrypted"), "none"=>_("User token"));
+	    	$perms = ["ssl_token"=>_("SSL with User token"), "ssl_code"=>_("SSL with App code token"), "crypt"=>_("Encrypted"), "none"=>_("User token")];
 
 	    	foreach($perms as $k=>$p) {
 		    	if($k==$api->app_security)		{ print "<option value='$k' selected='selected'>$p</option>"; }
@@ -142,7 +142,7 @@ if($POST->action!="add") {
 	    <td>
 	    	<select name="app_nest_custom_fields" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>_("No"),1=>_("Yes"));
+	    	$perms = [0=>_("No"),1=>_("Yes")];
 	    	foreach($perms as $k=>$p) {
 		    	if($k==$api->app_nest_custom_fields)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
 		    	else									{ print "<option value='$k' 				   >".$p."</option>"; }
@@ -159,7 +159,7 @@ if($POST->action!="add") {
 	    <td>
 	    	<select name="app_show_links" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>_("No"),1=>_("Yes"));
+	    	$perms = [0=>_("No"),1=>_("Yes")];
 	    	foreach($perms as $k=>$p) {
 		    	if($k==$api->app_show_links)	{ print "<option value='$k' selected='selected'>".$p."</option>"; }
 		    	else							{ print "<option value='$k' 				   >".$p."</option>"; }

@@ -27,7 +27,7 @@ $User->is_admin();
 
 # get hidden custom fields from settings
 $filters = db_json_decode($User->settings->hiddenCustomFields, true);
-isset($filters[$POST->table]) ? : $filters[$POST->table] = array();
+isset($filters[$POST->table]) ? : $filters[$POST->table] = [];
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields($POST->table);

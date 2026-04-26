@@ -11,7 +11,7 @@ $User->check_user_session();
 $custom = $Tools->fetch_custom_fields('pstnPrefixes');
 # get hidden fields */
 $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-$hidden_fields = is_array(@$hidden_fields['pstnPrefixes']) ? $hidden_fields['pstnPrefixes'] : array();
+$hidden_fields = is_array(@$hidden_fields['pstnPrefixes']) ? $hidden_fields['pstnPrefixes'] : [];
 
 # check
 is_numeric($GET->subnetId) ? : $Result->show("danger", _("Invalid ID"), true);

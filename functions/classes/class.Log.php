@@ -162,8 +162,8 @@ class Logging extends Common_functions {
 	 * @var mixed
 	 * @access protected
 	 */
-	public $changelog_keys = array(
-    	"section" => array(
+	public $changelog_keys = [
+    	"section" => [
 						"id"             => "index",
 						"name"           => "Subnet name",
 						"description"    => "Description",
@@ -174,8 +174,8 @@ class Logging extends Common_functions {
 						"showVLAN"       => "Show VLANs in side menu",
 						"showVRF"        => "Show VRF in side menu",
 						"showSupernetOnly" => "Show only supernets"
-    	),
-    	"subnet" => array(
+    	],
+    	"subnet" => [
 						"id"                    => "Subnet id",
 						"subnet"                => "Subnet",
 						"masterSubnetId"        => "Master subnet",
@@ -203,15 +203,15 @@ class Logging extends Common_functions {
 						"linked_subnet"         => "Linked IPv6 subnet",
 						"location"              => "Subnet location",
 						"lastScan"              => "Last scan date"
-    	            ),
-    	"folder" => array(
+    	            ],
+    	"folder" => [
 						"id"             => "Folder id",
 						"masterSubnetId" => "Master folder index",
 						"sectionId"      => "Section index",
 						"description"    => "Description",
 						"isFolder"       => "Object is folder"
-    	            ),
-        "address" => array(
+    	            ],
+        "address" => [
 						"id"                    => "Address id",
 						"subnetId"              => "Subnet",
 						"ip_addr"               => "IP address",
@@ -232,8 +232,8 @@ class Logging extends Common_functions {
 						"firewallAddressObject" => "Firewall object index",
 						"location"              => "Address location",
 						"section"				=> "Section"
-                    )
-	);
+                    ]
+	];
 
 	/**
 	 * Addresses object
@@ -359,7 +359,7 @@ class Logging extends Common_functions {
 				}
 			}
 			else {
-				try { $user_id = $this->Database->getObjectQuery("users", "select * from `users` where `username` = ? limit 1", array($_SESSION['ipamusername'])); }
+				try { $user_id = $this->Database->getObjectQuery("users", "select * from `users` where `username` = ? limit 1", [$_SESSION['ipamusername']]); }
 				catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
 			}
 			# save id
@@ -483,7 +483,7 @@ class Logging extends Common_functions {
 	 */
 	private function syslog_set_priority () {
     	// init
-    	$priorities = array();
+    	$priorities = [];
 		# definitions
 		$priorities[] = "LOG_EMERG";
 		$priorities[] = "LOG_ALERT";
@@ -534,7 +534,7 @@ class Logging extends Common_functions {
 		$changelog = str_replace("<hr>", ",",$changelog);
 
 		# formulate
-		$log = array();
+		$log = [];
         if(isset($changelog)) {
             if (is_array($changelog)) {
         		foreach($changelog as $k=>$l) {
@@ -573,14 +573,14 @@ class Logging extends Common_functions {
 	 */
 	private function database_write_log () {
 	    # set values
-	    $values = array(
+	    $values = [
 					"command"  =>$this->log_command,
 					"severity" =>$this->log_severity,
 					"date"     =>$this->Database->toDate(),
 					"username" =>$this->log_username,
 					"ipaddr"   =>$this->get_user_ip(),
 					"details"  =>$this->log_details
-					);
+					];
 		# null empty values
 		$values = $this->reformat_empty_array_fields($values, null);
 		$values = $this->strip_input_tags($values);
@@ -619,9 +619,9 @@ class Logging extends Common_functions {
     	}
 
 		# query
-		$query = array();               // query
-		$query_severities = array();    // severities
-		$params = array();              // sql bind parameters
+		$query = [];               // query
+		$query_severities = [];    // severities
+		$params = [];              // sql bind parameters
 
         $query[] = "select * from (";
 		$query[] = "select * from logs ";
@@ -702,7 +702,7 @@ class Logging extends Common_functions {
 	 * @param bool $mail_changelog (default: true)
 	 * @return boolean|null
 	 */
-	public function write_changelog ($object_type, $action, $result, $old = array(), $new = array(), $mail_changelog = true) {
+	public function write_changelog ($object_type, $action, $result, $old = [], $new = [], $mail_changelog = true) {
 		//set values
 		$this->object_type 	  = $object_type;
 		$this->object_action  = $action;
@@ -729,7 +729,7 @@ class Logging extends Common_functions {
 		$this->get_settings ();
 
 		# default log
-		$log = array();
+		$log = [];
 
 		// check if syslog globally enabled and write log
 	    if($this->settings->enableChangelog==1) {
@@ -825,7 +825,7 @@ class Logging extends Common_functions {
 		if(is_null($obj_id) || $obj_id=="NULL")	{ return false; }
 
 	    # set values
-	    $values = array(
+	    $values = [
 	    			"ctype"	 => $object_type,
 	    			"coid"	 => $obj_id,
 	    			"cuser"	 => $this->user_id,
@@ -833,7 +833,7 @@ class Logging extends Common_functions {
 	    			"cresult"=> $this->object_result,
 	    			"cdate"	 => date("Y-m-d H:i:s"),
 	    			"cdiff"	 => $changelog
-					);
+					];
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
 
@@ -859,12 +859,12 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_validate_object () {
 		# set valid objects
-		$objects = array(
+		$objects = [
 						"ip_addr",
 						"subnet",
 						"folder",
 						"section"
-						);
+						];
 		# check
 		return in_array($this->object_type, $objects) ? true : false;
 	}
@@ -1415,14 +1415,14 @@ class Logging extends Common_functions {
 		# Get all groups:
 		$groups = (array) $this->Tools->fetch_all_objects("userGroups", "g_id");
 		// rekey
-		$out = array();
+		$out = [];
 		foreach($groups as $g) {
 			$out[$g->g_id]['g_name'] = $g->g_name;
 		}
 		$groups = $out;
 
 		// loop
-		$val = array();
+		$val = [];
 		if(is_array($this->object_new['permissions'])) {
 			foreach($this->object_new['permissions'] as $group_id=>$p) {
 				$val[] = $groups[$group_id]['g_name'] ." : ".$this->Subnets->parse_permissions($p);
@@ -1444,11 +1444,11 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_make_booleans ($k, $v) {
     	// init
-    	$keys = array();
+    	$keys = [];
 		// list of keys to be changed per object
-		$keys['section'] = array("strictMode", "showVLAN", "showVRF", "showSupernetOnly");
-		$keys['subnet']  = array("allowRequests", "showName", "pingSubnet", "discoverSubnet", "resolveDNS", "DNSrecursive", "DNSrecords", "isFull", "isPool");
-		$keys['ip_addr'] = array("is_gateway", "excludePing", "PTRignore");
+		$keys['section'] = ["strictMode", "showVLAN", "showVRF", "showSupernetOnly"];
+		$keys['subnet']  = ["allowRequests", "showName", "pingSubnet", "discoverSubnet", "resolveDNS", "DNSrecursive", "DNSrecords", "isFull", "isPool"];
+		$keys['ip_addr'] = ["is_gateway", "excludePing", "PTRignore"];
 
 		// check
 		if (array_key_exists((string) $this->object_type, $keys)) {
@@ -1478,8 +1478,8 @@ class Logging extends Common_functions {
 		# Get all groups:
 		$groups = (array) $this->Tools->fetch_all_objects("userGroups", "g_id");
 		// rekey
-		$out = array();
-		$log = array();
+		$out = [];
+		$log = [];
 
 		foreach($groups as $k=>$g) {
 			// save
@@ -1556,7 +1556,7 @@ class Logging extends Common_functions {
 					) as `ips` order by `cid` desc limit $limit;";
 
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery('changelog', $query, $filter ? array("expr"=>$expr) : null); }
+	    try { $logs = $this->Database->getObjectsQuery('changelog', $query, $filter ? ["expr"=>$expr] : null); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 	    # return results
@@ -1600,7 +1600,7 @@ class Logging extends Common_functions {
 					where `changelog`.`ctype` = 'section' and `changelog`.`cid` = :id
 				) as `ips`  order by `cid` desc limit 1;";
 	    # fetch
-	    try { $logs = $this->Database->getObjectQuery('changelog', $query, array("id"=>$id)); }
+	    try { $logs = $this->Database->getObjectQuery('changelog', $query, ["id"=>$id]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), false);
 			return false;
@@ -1620,7 +1620,7 @@ class Logging extends Common_functions {
 	 */
 	public function fetch_subnet_addresses_changelog_recursive ($subnetId, $limit = 50) {
 	    # get all addresses ids
-	    $ips  = array();
+	    $ips  = [];
 	    if (!is_object($this->Addresses)) $this->Addresses = new Addresses ($this->Database);
 	    $ips = $this->Addresses->fetch_subnet_addresses_recursive ($subnetId, false);
 
@@ -1634,7 +1634,7 @@ class Logging extends Common_functions {
 						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
 						and (";
 
-            $args = array();
+            $args = [];
 			foreach($ips as $ip) {
 			$query .= "`c`.`coid` = ? or ";
 			$args[] = $ip->id;
@@ -1699,7 +1699,7 @@ class Logging extends Common_functions {
 						and `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
 		}
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery('changelog', $query, array($coid, $object_type)); }
+	    try { $logs = $this->Database->getObjectsQuery('changelog', $query, [$coid, $object_type]); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false); return false; }
 
 	    # return result
@@ -1738,7 +1738,7 @@ class Logging extends Common_functions {
 							where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
 							and (";
 				foreach($this->Subnets->slaves as $slaveId) {
-				if(!isset($args)) $args = array();
+				if(!isset($args)) $args = [];
 				$query .= "`c`.`coid` = ? or ";
 				$args[] = $slaveId;							//set keys
 				}
@@ -1807,7 +1807,7 @@ class Logging extends Common_functions {
 		elseif($this->object_action == "delete"){ $subject = ucwords($this->object_type)." delete notification"; }
 
 		// if address we need subnet details !
-		$address_subnet = array();
+		$address_subnet = [];
 		if ($this->object_type=="address")		{ $address_subnet = (array) $this->Tools->fetch_object("subnets", "id", $this->object_orig['subnetId']); }
 
 		# set object details
@@ -1824,7 +1824,7 @@ class Logging extends Common_functions {
 		}
 
 		# set content
-		$content = array();
+		$content = [];
 		$content[] = "<div style='padding:10px;'>";
 		$content[] = "<table>";
 		$content[] = "<tr><td colspan='2'>$this->mail_font_style<strong>"._("The following change was made on ipam").":</strong></font></td></tr>";
@@ -1848,7 +1848,7 @@ class Logging extends Common_functions {
         	$value = array_pad(explode("=>", $field[1]), 2, '');
 
     	    // format field
-    	    $field = trim(str_replace(array("[","]"), "", $field[0]));
+    	    $field = trim(str_replace(["[","]"], "", $field[0]));
 
     	    // no isFolder
     	    if($field!=="isFolder") {
@@ -1875,7 +1875,7 @@ class Logging extends Common_functions {
 		$content[] = "</div>";
 
 		# set plain content
-		$content_plain = array();
+		$content_plain = [];
 		$content_plain[] = _("Object type").": ".$this->object_type;
 		$content_plain[] = _("Object details").": ".strip_tags($details);
 		$content_plain[] = _("User").": ".$this->user->real_name." (".$this->user->username.")";

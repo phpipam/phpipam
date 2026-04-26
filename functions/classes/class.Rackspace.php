@@ -15,7 +15,7 @@ class phpipam_rack extends Tools {
      * @var array
      * @access public
      */
-    public $rack_sizes = array();
+    public $rack_sizes = [];
 
     /**
      * List of all racks
@@ -320,7 +320,7 @@ class phpipam_rack extends Tools {
         if ($is_back) 				{ $rack_name = "["._('R')."] ".$rack->name; }
         elseif ($rack->hasBack) 	{ $rack_name = "["._('F')."] ".$rack->name; }
         else 						{ $rack_name = $rack->name; }
-        $rack_content = array();
+        $rack_content = [];
 
         // set freeform content
         if ($contents!==false) {
@@ -329,12 +329,12 @@ class phpipam_rack extends Tools {
                 if ($is_back) {
                     if ($c->rack_start > $rack->size) {
                         // add initial location
-                        $rd = array("id"=>"none",
+                        $rd = ["id"=>"none",
                                     "name"=>$c->name,
                                     "startLocation"=>$c->rack_start-$rack->size,
                                     "size"=>$c->rack_size,
                                     "rackName"=>$rack->name,
-                                    );
+                                    ];
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
                         // prepend name if full depth
@@ -352,12 +352,12 @@ class phpipam_rack extends Tools {
                     } else {
                         if ($c->rack_deep) {
                             // add initial location
-                            $rd = array("id"=>"none",
+                            $rd = ["id"=>"none",
                                         "name"=>"["._('R')."] ".$c->name,
                                         "startLocation"=>$c->rack_start,
                                         "size"=>$c->rack_size,
                                         "rackName"=>$rack->name,
-                                        );
+                                        ];
                             // if startlocation is not set
                             $rd['startLocation'] -= 1;
                             // remove name if not permitted
@@ -377,12 +377,12 @@ class phpipam_rack extends Tools {
                 else {
                     if($c->rack_start <= $rack->size) {
                         // add initial location
-                        $rd = array("id"=>"none",
+                        $rd = ["id"=>"none",
                                     "name"=>$c->name,
                                     "startLocation"=>$c->rack_start,
                                     "size"=>$c->rack_size,
                                     "rackName"=>$rack->name,
-                                    );
+                                    ];
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
                         // prepend name if full depth
@@ -399,12 +399,12 @@ class phpipam_rack extends Tools {
                     } else {
                         if ($c->rack_deep) {
                             // add initial location
-                            $rd = array("id"=>"none",
+                            $rd = ["id"=>"none",
                                         "name"=>"["._('R')."] ".$c->name,
                                         "startLocation"=>$c->rack_start-$rack->size,
                                         "size"=>$c->rack_size,
                                         "rackName"=>$rack->name,
-                                        );
+                                        ];
                             // if startlocation is not set
                             $rd['startLocation'] -= 1;
                             // remove name if not permitted
@@ -433,7 +433,7 @@ class phpipam_rack extends Tools {
                 if($is_back) {
                     if($d->rack_start > $rack->size) {
                         // add initial location
-                        $rd = array("id"=>$d->id,
+                        $rd = ["id"=>$d->id,
                                     "name"=>$d->hostname,
                                     "startLocation"=>$d->rack_start-$rack->size,
                                     "size"=>$d->rack_size,
@@ -441,7 +441,7 @@ class phpipam_rack extends Tools {
                                     "url"=>escape_input(create_link("tools", "devices", $d->id)),
                                     "bgcolor"=>$bg,
                                     "fgcolor"=>$fg,
-                                    );
+                                    ];
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
                         // prepend name if full depth
@@ -453,7 +453,7 @@ class phpipam_rack extends Tools {
                     } else {
                         if ($d->rack_deep) {
                             // add initial location
-                            $rd = array("id"=>$d->id,
+                            $rd = ["id"=>$d->id,
                                         "name"=>"["._('R')."] ".$d->hostname,
                                         "startLocation"=>$d->rack_start,
                                         "size"=>$d->rack_size,
@@ -461,7 +461,7 @@ class phpipam_rack extends Tools {
                                         "url"=>escape_input(create_link("tools", "devices", $d->id)),
                                         "bgcolor"=>$bg,
                                         "fgcolor"=>$fg,
-                                        );
+                                        ];
                             // if startlocation is not set
                             $rd['startLocation'] -= 1;
                             // remove name if not permitted
@@ -475,7 +475,7 @@ class phpipam_rack extends Tools {
                 else {
                     if($d->rack_start <= $rack->size) {
                         // add initial location
-                        $rd = array("id"=>$d->id,
+                        $rd = ["id"=>$d->id,
                                     "name"=>$d->hostname,
                                     "startLocation"=>$d->rack_start,
                                     "size"=>$d->rack_size,
@@ -483,7 +483,7 @@ class phpipam_rack extends Tools {
                                     "url"=>escape_input(create_link("tools", "devices", $d->id)),
                                     "bgcolor"=>$bg,
                                     "fgcolor"=>$fg,
-                                    );
+                                    ];
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
                         // prepend name if full depth
@@ -495,7 +495,7 @@ class phpipam_rack extends Tools {
                     } else {
                         if ($d->rack_deep) {
                             // add initial location
-                            $rd = array("id"=>$d->id,
+                            $rd = ["id"=>$d->id,
                                         "name"=>"["._('R')."] " . $d->hostname,
                                         "startLocation"=>$d->rack_start-$rack->size,
                                         "size"=>$d->rack_size,
@@ -503,7 +503,7 @@ class phpipam_rack extends Tools {
                                         "url"=>escape_input(create_link("tools", "devices", $d->id)),
                                         "bgcolor"=>$bg,
                                         "fgcolor"=>$fg,
-                                        );
+                                        ];
                             // if startlocation is not set
                             $rd['startLocation'] -= 1;
                             // remove name if not permitted
@@ -517,8 +517,8 @@ class phpipam_rack extends Tools {
         }
 
         // create rack
-        $result = new Rack (array("id"=>$id, "name"=>$rack_name, "content"=>$rack_content,
-							"space"=>$rack->size, "orientation"=>$rack->topDown));
+        $result = new Rack (["id"=>$id, "name"=>$rack_name, "content"=>$rack_content,
+							"space"=>$rack->size, "orientation"=>$rack->topDown]);
 
         // set active device
         if ($deviceId!==false) {
@@ -550,7 +550,7 @@ class phpipam_rack extends Tools {
 	 * @return array|false
 	 */
 	public function fetch_orphan_subracks () {
-		$out = array();
+		$out = [];
 		$racks = $this->fetch_all_objects("racks", "id");
 		if ($racks!==false) {
 			$all_content = $this->fetch_all_objects("rackContents");
@@ -968,7 +968,7 @@ class RackDrawer_SVG extends Common_functions {
 	 * @var mixed
 	 * @access private
 	 */
-	private $svgData = array();
+	private $svgData = [];
 
 
 	/**
@@ -1145,13 +1145,13 @@ class RackDrawer_SVG extends Common_functions {
 	 * @return void
 	 */
 	private function drawContents() {
-		$output = array();
-		$keepOnTop = array();
+		$output = [];
+		$keepOnTop = [];
 		$output[] = "<!-- contents -->";
 		$w = $this->imgXSize - ($this->marginSides * 2);
 		$x_center = $this->imgXSize / 2;
 		foreach ($this->rack->getContent() as $content) {
-			$queue = array();
+			$queue = [];
 			$size = max($content->getSize(), 1);
 			$h = $this->unitYSize * $size;
 			$yPos = ($this->rack->getOrientation()) ?

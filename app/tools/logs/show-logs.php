@@ -74,7 +74,7 @@ if(!isset($POST->direction)) 									{ $POST->direction = ""; }
 
 /* get requested logs */
 $logs = $Log->fetch_logs($logCount, $POST->direction, $POST->lastId, $highestId, $informational, $notice, $warning);
-if (!is_array($logs)) { $logs = array(); }
+if (!is_array($logs)) { $logs = []; }
 
 $x = 0;
 foreach ($logs as $log) {

@@ -196,37 +196,37 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
             print " <span class='text-muted'>"._("Rack is empty")."</span>";
         }
         else {
-            if ($rack_devices===false) $rack_devices = array();
-            if ($rack_contents===false) $rack_contents = array();
+            if ($rack_devices===false) $rack_devices = [];
+            if ($rack_contents===false) $rack_contents = [];
 
 			// let's make an array where the RU position is the lookup key
-			$all_contents = array();
+			$all_contents = [];
 			foreach ($rack_devices as $this_device) {
 				if (!isset($all_contents[$this_device->rack_start])) {
-					$all_contents[$this_device->rack_start] = array();
+					$all_contents[$this_device->rack_start] = [];
 				}
 				$all_contents[$this_device->rack_start][] = $this_device;
 			}
 			foreach ($rack_contents as $this_content) {
 				if (!isset($all_contents[$this_content->rack_start])) {
-					$all_contents[$this_content->rack_start] = array();
+					$all_contents[$this_content->rack_start] = [];
 				}
 				$all_contents[$this_content->rack_start][] = $this_content;
 			}
 
-			$loops = array();
-			$loops[] = ($rack->topDown) ? array("values"=>range(1,$rack->size),"label"=>"Front side") : array("values"=>range($rack->size,1),"label"=>"Front side");
-			if ($rack->hasBack) $loops[] = ($rack->topDown) ? array("values"=>range($rack->size + 1,2 * $rack->size),"label"=>"Back side") : array("values"=>range(2 * $rack->size,$rack->size+1),"label"=>"Back side");
+			$loops = [];
+			$loops[] = ($rack->topDown) ? ["values"=>range(1,$rack->size),"label"=>"Front side"] : ["values"=>range($rack->size,1),"label"=>"Front side"];
+			if ($rack->hasBack) $loops[] = ($rack->topDown) ? ["values"=>range($rack->size + 1,2 * $rack->size),"label"=>"Back side"] : ["values"=>range(2 * $rack->size,$rack->size+1),"label"=>"Back side"];
 
 			// find contents that are in invalid positions
-			$invalid = array();
+			$invalid = [];
 			foreach (array_keys($all_contents) as $key) {
 				$max = ($rack->hasBack) ? $rack->size * 2 : $rack->size;
 				if ($key > $max || $key < 1) {
 					$invalid[] = $key;
 				}
 			}
-			$loops[] = array("values"=>$invalid,"label"=>"Invalid");
+			$loops[] = ["values"=>$invalid,"label"=>"Invalid"];
 
 			// iterate through all rack items, front first, then back, following topDown or !topDown order
 			$outputCount = 0;

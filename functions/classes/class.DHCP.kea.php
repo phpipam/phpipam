@@ -30,7 +30,7 @@ class DHCP_kea extends Common_functions {
      * @var array
      * @access private
      */
-    private $kea_settings = array();
+    private $kea_settings = [];
 
     /**
      * Raw config file
@@ -83,7 +83,7 @@ class DHCP_kea extends Common_functions {
      * @var array
      * @access public
      */
-    public $subnets4 = array();
+    public $subnets4 = [];
 
     /**
      * Array to store DHCP subnets, parsed from config file
@@ -96,7 +96,7 @@ class DHCP_kea extends Common_functions {
      * @var array
      * @access public
      */
-    public $subnets6 = array();
+    public $subnets6 = [];
 
     /**
      * set available lease database types
@@ -106,7 +106,7 @@ class DHCP_kea extends Common_functions {
      * @var array
      * @access public
      */
-    public $lease_types = array("memfile", "mysql", "postgresql");
+    public $lease_types = ["memfile", "mysql", "postgresql"];
 
     /**
      * List of active leases
@@ -116,7 +116,7 @@ class DHCP_kea extends Common_functions {
      * @var array
      * @access public
      */
-    public $leases4 = array();
+    public $leases4 = [];
 
     /**
      * List of active leases
@@ -126,7 +126,7 @@ class DHCP_kea extends Common_functions {
      * @var array
      * @access public
      */
-    public $leases6 = array();
+    public $leases6 = [];
 
     /**
      * Available reservation methods
@@ -136,7 +136,7 @@ class DHCP_kea extends Common_functions {
      * @var array
      * @access public
      */
-    public $reservation_types = array("file", "mysql");
+    public $reservation_types = ["file", "mysql"];
 
     /**
      * Definition of hosts reservations
@@ -146,8 +146,8 @@ class DHCP_kea extends Common_functions {
      * @var array
      * @access public
      */
-    public $reservations4 = array();
-    public $reservations6 = array();
+    public $reservations4 = [];
+    public $reservations6 = [];
 
     /**
      * Database object for leases and hosts
@@ -168,7 +168,7 @@ class DHCP_kea extends Common_functions {
      * @param array $kea_settings (default: array())
      * @return void
      */
-    public function __construct($kea_settings = array()) {
+    public function __construct($kea_settings = []) {
         // save settings
         if (is_array($kea_settings))            { $this->kea_settings = $kea_settings; }
         else                                    { throw new exception ("Invalid kea settings"); }
@@ -226,7 +226,7 @@ class DHCP_kea extends Common_functions {
         }
 
         // loop and remove comments (contains #) and replace multiple spaces
-        $out   = array();
+        $out   = [];
         foreach ($config as $k=>$f) {
             if (strpos($f, "#")!==false || is_blank($f)) {}
             else {
@@ -322,7 +322,7 @@ class DHCP_kea extends Common_functions {
         // if leases are present format to array
         if (sizeof($leases_from_file)>0 && $leases_from_file!==false) {
             // init array
-            $leases_parsed = array();
+            $leases_parsed = [];
             // loop and save leases
             foreach ($leases_from_file as $l) {
                 if(strlen($l)>1) {
@@ -343,7 +343,7 @@ class DHCP_kea extends Common_functions {
                     }
                     // save only active
                     if ($l[4] > time() ) {
-                        $leases_parsed[] = array(
+                        $leases_parsed[] = [
                         					"address" => $l[0],
                         					"hwaddr" => $l[1],
                         					"client_id" => $l[2],
@@ -354,7 +354,7 @@ class DHCP_kea extends Common_functions {
                         					"fqdn_rev" => $l[7],
                         					"hostname" => $l[8],
                         					"state" => $l[9]
-                        				);
+                        				];
                     }
                 }
             }
@@ -408,7 +408,7 @@ class DHCP_kea extends Common_functions {
 		// save leases
 		if (sizeof($leases)>0) {
     		// we need array
-    		$result = array();
+    		$result = [];
     		// loop
     		foreach ($leases as $k=>$l) {
         		$result[$k] = (array) $l;
@@ -521,28 +521,28 @@ class DHCP_kea extends Common_functions {
                         unset($s_id);
                         $s_id = isset($s['id']) ? $s['id'] : "";
                         // init array
-                        $this->reservations4 = array();
+                        $this->reservations4 = [];
                         $m=0;
                         // loop
                         foreach ($s['reservations'] as $r) {
-                            $this->reservations4[$m] = array(
+                            $this->reservations4[$m] = [
                                                     "location"       => "Config file",
                                                     "hw-address"     => $r['hw-address'],
                                                     "ip-address"     => $r['ip-address'],
                                                     "hostname"       => $r['hostname'],
                                                     "dhcp4_subnet_id"=> $s_id,
                                                     "subnet"         => $s['subnet']
-                                                    );
+                                                    ];
                             // options
                             if(isset($r['options'])) {
-                                $this->reservations4[$m]['options'] = array();
+                                $this->reservations4[$m]['options'] = [];
                                 foreach ($r['options'] as $o) {
                                      $this->reservations4[$m]['options'][$o['name']] = $o['data'];
                                 }
                             }
                             // classes
                             if(isset($r['client-classes'])) {
-                                $this->reservations4[$m]['classes'] = array();
+                                $this->reservations4[$m]['classes'] = [];
                                 foreach ($r['client-classes'] as $c) {
                                      $this->reservations4[$m]['classes'][] = $c;
                                 }
@@ -591,7 +591,7 @@ class DHCP_kea extends Common_functions {
 		// save leases
 		if (sizeof($reservations)>0) {
     		// we need array
-    		$result = array();
+    		$result = [];
     		// loop
     		foreach ($reservations as $k=>$l) {
         		// check for subnet
@@ -632,7 +632,7 @@ class DHCP_kea extends Common_functions {
     public function read_statistics () {
         $sock = stream_socket_client('unix:///var/lib/kea/socket', $errno, $errstr);
 
-        $cmd = array("command"=>"list-commands");
+        $cmd = ["command"=>"list-commands"];
 
         fwrite($sock, json_encode($cmd)."\r\n");
 

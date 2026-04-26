@@ -106,15 +106,15 @@ class User_controller extends Common_api_functions {
 		$this->validate_options_request ();
 
 		// methods
-		$result = array();
-		$result['methods'] = array(
-								array("href"=>"/api/".$this->_params->app_id."/user/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
-																										 array("rel"=>"create", "method"=>"POST"),
-																										 array("rel"=>"update", "method"=>"PATCH"),
-																										 array("rel"=>"delete", "method"=>"DELETE"))),
-							);
+		$result = [];
+		$result['methods'] = [
+								["href"=>"/api/".$this->_params->app_id."/user/", 	"methods"=>[["rel"=>"read", 	"method"=>"GET"],
+																										 ["rel"=>"create", "method"=>"POST"],
+																										 ["rel"=>"update", "method"=>"PATCH"],
+																										 ["rel"=>"delete", "method"=>"DELETE"]]],
+							];
 		# result
-		return array("code"=>200, "data"=>$result);
+		return ["code"=>200, "data"=>$result];
 	}
 
 
@@ -153,15 +153,15 @@ class User_controller extends Common_api_functions {
 				else {
 					// admins or all
 					if ($this->_params->id=="admins") {
-						return array("code"=>200, "data"=>$this->User->fetch_multiple_objects ("users", "role", "Administrator", "id", true, false, "*"));
+						return ["code"=>200, "data"=>$this->User->fetch_multiple_objects ("users", "role", "Administrator", "id", true, false, "*")];
 					}
 					else {
-						return array("code"=>200, "data"=>$this->User->fetch_all_objects ("users", "id", true));
+						return ["code"=>200, "data"=>$this->User->fetch_all_objects ("users", "id", true)];
 					}
 				}
 			}
 			else {
-				return array("code"=>200, "data"=>array("expires"=>$this->token_expires));
+				return ["code"=>200, "data"=>["expires"=>$this->token_expires]];
 			}
 		}
 		// return success for backwards compatibility
@@ -207,7 +207,7 @@ class User_controller extends Common_api_functions {
 		// refresh
 		$this->refresh_token_expiration ();
 		// ok
-		return array("code"=>200, "data"=>array("expires"=>$this->token_expires));
+		return ["code"=>200, "data"=>["expires"=>$this->token_expires]];
 	}
 
 
@@ -230,7 +230,7 @@ class User_controller extends Common_api_functions {
 		// remove token
 		$this->remove_token ();
 		// result
-		return array("code"=>200, "data"=>array("Token removed"));
+		return ["code"=>200, "data"=>["Token removed"]];
 	}
 
 
@@ -329,7 +329,7 @@ class User_controller extends Common_api_functions {
 		}
 
 	    # result
-	    return array("code"=>200, "data"=>array("token"=>$this->token, "expires"=>$this->token_expires));
+	    return ["code"=>200, "data"=>["token"=>$this->token, "expires"=>$this->token_expires]];
 	}
 
 	/**
@@ -426,11 +426,11 @@ class User_controller extends Common_api_functions {
 	 */
 	private function save_user_token () {
 		# set token values
-		$values = array(
+		$values = [
 					"id"=>$this->User->user->id,
 					"token"=>$this->token,
 					"token_valid_until"=>$this->token_expires
-					);
+					];
 		# save token to database
 		if(!$this->Admin->object_modify ("users", "edit",  "id", $values ))
 													{ $this->Response->throw_exception(500, "Failed to update token"); }
@@ -576,10 +576,10 @@ class User_controller extends Common_api_functions {
 
 		$this->token_expires = date("Y-m-d H:i:s", time()+$this->token_valid_time);
 		# set token values
-		$values = array(
+		$values = [
 					"id"=>$this->User->user->id,
 					"token_valid_until"=>$this->token_expires
-					);
+					];
 		# save token to database
 		if(!$this->Admin->object_modify ("users", "edit",  "id", $values ))
 													{ $this->Response->throw_exception(500, "Failed to update token expiration date"); }
@@ -593,11 +593,11 @@ class User_controller extends Common_api_functions {
 	 */
 	private function remove_token () {
 		# set token values
-		$values = array(
+		$values = [
 					"id"=>$this->User->user->id,
 					"token"=>null,
 					"token_valid_until"=>null
-					);
+					];
 		# save token to database
 		if(!$this->Admin->object_modify ("users", "edit",  "id", $values ))
 													{ $this->Response->throw_exception(500, "Failed to remove token"); }

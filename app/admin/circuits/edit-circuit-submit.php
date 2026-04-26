@@ -50,7 +50,7 @@ foreach($all_types as $t){ array_push($type_id_array, $t->id); }
 if(!in_array($POST->type, $type_id_array))									{ $Result->show("danger", _('Invalid type').'!', true); }
 
 # status
-$statuses = array ("Active", "Inactive", "Reserved");
+$statuses =  ["Active", "Inactive", "Reserved"];
 if(!in_array($POST->status, $statuses))									{ $Result->show("danger", _('Invalid status').'!', true); }
 
 #Check if circuit is part of a larger circuit
@@ -102,7 +102,7 @@ else {
 }
 
 # set update values
-$values = array(
+$values = [
 				"id"        => $POST->id,
 				"cid"       => $POST->cid,
   				"provider"  => $POST->provider,
@@ -114,7 +114,7 @@ $values = array(
   				"device2"   => $POST->device2,
   				"location2" => $POST->location2,
   				"comment"   => $POST->comment
-				);
+				];
 
 # fetch custom fields
 $update = $Tools->update_POST_custom_fields('circuits', $POST->action, $POST);

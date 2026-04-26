@@ -61,7 +61,7 @@ if (!in_array($POST->subnetOrdering, array_keys($Subnets->get_valid_subnet_order
 }
 
 # set update values
-$values = array("id"=>1,
+$values = ["id"=>1,
 				//site settings
 				"siteTitle"           =>$POST->siteTitle,
 				"siteDomain"          =>$POST->siteDomain,
@@ -118,7 +118,7 @@ $values = array("id"=>1,
 				"scanPingPath"        =>$POST->scanPingPath,
 				"scanFPingPath"       =>$POST->scanFPingPath,
 				"scanMaxThreads"      =>$POST->scanMaxThreads
-				);
+				];
 // Update linked_field indexes
 $Tools->verify_linked_field_indexes($POST->link_field);
 

@@ -14,14 +14,14 @@ class SubnetsMenu {
 	 * Store generated HTML
 	 * @var array
 	 */
-	private $html = array();
+	private $html = [];
 
 	/**
 	 * Array of expanded subnet/folder ids
 	 * Lookus by index, $expanded[$id] = 1 vs full array search for every item [in_array()]
 	 * @var array
 	 */
-	private $expanded = array();
+	private $expanded = [];
 
 	/**
 	 * Expand All Folders/Subnets
@@ -134,7 +134,7 @@ class SubnetsMenu {
 			$style_openf = "-open";
 		}
 
-		return array($style_open, $style_openf, $style_active, $style_leafClass);
+		return [$style_open, $style_openf, $style_active, $style_leafClass];
 	}
 
 	/**

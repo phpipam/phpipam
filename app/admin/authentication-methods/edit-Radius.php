@@ -130,7 +130,7 @@ $delete = $POST->action=="delete" ? "disabled" : "";
 		<td>
 			<select name="timeout" class="form-control input-sm input-w-auto">
 			<?php
-			$values = array(1,2,3,5,10);
+			$values = [1,2,3,5,10];
 			foreach($values as $v) {
 				if($v==@$method_settings->params->timeout)	{ print "<option value='$v' selected=selected>$v</option>"; }
 				else										{ print "<option value='$v'					 >$v</option>"; }

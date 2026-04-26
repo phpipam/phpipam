@@ -21,14 +21,14 @@ $tpl_field_names = "";
 $tpl_field_types = "";
 
 # predefine field list
-$expfields = array ("name","number","description","domain");
+$expfields =  ["name","number","description","domain"];
 $mtable = "vlans"; # main table where to check the fields
 # extra fields
 $extfields["domain"]["table"] = "vlanDomains";
 $extfields["domain"]["field"] = "name";
 $extfields["domain"]["pname"] = "domain"; # name prefix for fields from other tables
 # required fields without which we will not continue
-$reqfields = array("number","name");
+$reqfields = ["number","name"];
 
 # manually adjust the standard fields
 foreach($expfields as $std_field) {

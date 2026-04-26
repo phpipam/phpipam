@@ -591,7 +591,7 @@ class phpipamSNMP extends Common_functions {
             $n++;
         };
 
-        $interface_indexes = array();       // to avoid fetching if multiple times
+        $interface_indexes = [];       // to avoid fetching if multiple times
         // fetch interface name
         $n=0;
         foreach ($res3 as $r) {

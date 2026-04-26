@@ -28,7 +28,7 @@ $User->Crypto->csrf_cookie ("validate", "ns", $POST->csrf_cookie) === false ? $R
 if ($POST->action!="delete") {
 
 	$m=1;
-	$nservers_reindexed = array ();
+	$nservers_reindexed =  [];
 	# reindex
 	foreach($POST as $k=>$v) {
 		if(strpos((string) $k, "namesrv-")!==false) {
@@ -55,7 +55,7 @@ foreach($POST as $key=>$line) {
 $POST->namesrv1 = isset($all_nameservers) ? implode(";", $all_nameservers) : "";
 
 // set sections
-$temp = array();
+$temp = [];
 foreach($POST as $key=>$line) {
 	if (!is_blank(strstr((string) $key,"section-"))) {
 		$key2 = str_replace("section-", "", $key);
@@ -67,12 +67,12 @@ foreach($POST as $key=>$line) {
 $POST->permissions = sizeof($temp)>0 ? implode(";", $temp) : null;
 
 # set update array
-$values = array("id"=>$POST->nameserverid,
+$values = ["id"=>$POST->nameserverid,
 				"name"=>$POST->name,
 				"permissions"=>$POST->permissions,
 				"namesrv1"=>$POST->namesrv1,
 				"description"=>$POST->description
-				);
+				];
 # update
 if(!$Admin->object_modify("nameservers", $POST->action, "id", $values))	{ $Result->show("danger", _("Failed to")." ".$User->get_post_action()." "._("nameserver set").'!', true); }
 else { $Result->show("success", _("Nameserver set")." ".$User->get_post_action()." "._("successful").'!', false); }

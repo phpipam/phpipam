@@ -103,7 +103,7 @@ class OLE_PPS extends PEAR
     * Array of child PPS's (only used by Root and Dir PPS's)
     * @var array
     */
-    public $children = array();
+    public $children = [];
 
     /**
     * Pointer to OLE container

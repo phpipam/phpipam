@@ -29,7 +29,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 if ($User->settings->log!="syslog") {
 	/* get logs */
 	$clogs = $Log->fetch_all_changelogs (false, "", 50);
-	if (!is_array($clogs)) { $clogs = array(); }
+	if (!is_array($clogs)) { $clogs = []; }
 }
 
 # syslog
@@ -79,7 +79,7 @@ else {
         		$changelog = htmlentities($changelog);
         		$changelog = array_filter(pf_explode("<br>", $changelog));
 
-                $diff = array();
+                $diff = [];
 
         		foreach ($changelog as $c) {
             		// type
@@ -101,7 +101,7 @@ else {
 					$field = array_pad(explode(":", $c), 2 , '');
         	    	$value = array_pad(explode("=>", unescape_input($field[1])), 2, '');
 
-            	    $field = trim(str_replace(array("[","]"), "", $field[0]));
+            	    $field = trim(str_replace(["[","]"], "", $field[0]));
             	    if(is_array(@$Log->changelog_keys[$type])) {
                 	    if (array_key_exists($field, $Log->changelog_keys[$type])) {
                     	    $field = $Log->changelog_keys[$type][$field];

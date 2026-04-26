@@ -334,7 +334,7 @@ class Install extends Common_functions {
 	 * @return void
 	 */
 	public function postauth_update_admin_pass ($adminpass) {
-		try { $this->Database->updateObject("users", array("password"=>$adminpass, "passChange"=>"No","username"=>"Admin"), "username"); }
+		try { $this->Database->updateObject("users", ["password"=>$adminpass, "passChange"=>"No","username"=>"Admin"], "username"); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false); }
 		return true;
 	}
@@ -348,7 +348,7 @@ class Install extends Common_functions {
 	 * @return void
 	 */
 	private function postauth_update_settings ($siteTitle, $siteURL) {
-		try { $this->Database->updateObject("settings", array("siteTitle"=>$siteTitle, "siteURL"=>$siteURL,"id"=>1), "id"); }
+		try { $this->Database->updateObject("settings", ["siteTitle"=>$siteTitle, "siteURL"=>$siteURL,"id"=>1], "id"); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false); }
 		return true;
 	}
@@ -508,7 +508,7 @@ class Upgrade extends Install {
 		# set queries
 		$queries = $this->get_queries ();
 		// create default arrays
-		$queries_ok = array();			// succesful queries
+		$queries_ok = [];			// succesful queries
 
 		// execute
 		try {

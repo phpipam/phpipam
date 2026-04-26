@@ -510,7 +510,7 @@ $(document).ready(function() {
 	<td>
 		<select name="log" class="form-control input-sm input-w-auto">
 		<?php
-		$types = array("Database"=>_("Database"), "syslog"=>_("Syslog"), "both"=>_("Syslog and local Database"));
+		$types = ["Database"=>_("Database"), "syslog"=>_("Syslog"), "both"=>_("Syslog and local Database")];
 		//default
 		foreach($types as $k=>$d) {
 			if($k==$settings['log']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
@@ -686,7 +686,7 @@ $(document).ready(function() {
 	<td>
 		<select name="visualLimit" class="form-control input-sm input-w-auto">
 			<?php
-			$opts = array(
+			$opts = [
 				"0"=>_("Don't show visual display"),
 				"19"=>"/19 (8190)",
 				"20"=>"/20 (4094)",
@@ -694,7 +694,7 @@ $(document).ready(function() {
 				"22"=>"/22 (1024)",
 				"23"=>"/23 (512)",
 				"24"=>"/24 (256)"
-			);
+			];
 
 			foreach($opts as $key=>$line) {
 				if($settings['visualLimit'] == $key) { print "<option value='$key' selected>$line</option>"; }
@@ -735,11 +735,11 @@ $(document).ready(function() {
 	<td>
 		<select name="subnetView" class="form-control input-sm input-w-auto">
 			<?php
-			$opts = array(
+			$opts = [
 				"0"=>_("Subnet Network Only"),
 				"1"=>_("Description Only"),
 				"2"=>_("Subnet Network and Description")
-			);
+			];
 			foreach($opts as $key=>$line) {
 				if($settings['subnetView'] == $key) { print "<option value='$key' selected>$line</option>"; }
 				else 								{ print "<option value='$key'>$line</option>"; }

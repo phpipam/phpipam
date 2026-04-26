@@ -28,7 +28,7 @@ $custom_fields = (array) $Tools->fetch_custom_fields('devices');
 
 # set hidden fields
 $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-$hidden_fields = is_array(@$hidden_fields['devices']) ? $hidden_fields['devices'] : array();
+$hidden_fields = is_array(@$hidden_fields['devices']) ? $hidden_fields['devices'] : [];
 
 # size of custom fields
 $csize = sizeof($custom_fields) - sizeof($hidden_fields);

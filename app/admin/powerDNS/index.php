@@ -45,7 +45,7 @@ if(isset($PowerDNS->db_check_error)) {
 <ul class="nav nav-tabs">
 	<?php
 	// tabs
-	$tabs = array("domains", "host_records", "reverse_v4", "reverse_v6", "settings", "defaults");
+	$tabs = ["domains", "host_records", "reverse_v4", "reverse_v6", "settings", "defaults"];
 
 	// default tab
 	if(!isset($GET->subnetId)) {

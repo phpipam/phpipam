@@ -46,8 +46,8 @@ $subnet_usage  = $Subnets->calculate_subnet_usage ($subnet);
 $location = "subnets";
 
 # NAT search
-$all_nats = array();
-$all_nats_per_object = array();
+$all_nats = [];
+$all_nats_per_object = [];
 
 if ($User->settings->enableNAT==1) {
     # fetch all object

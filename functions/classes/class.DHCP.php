@@ -29,7 +29,7 @@ class DHCP extends Common_functions {
      * @var array
      * @access private
      */
-    private $dhcp_server_types = array("kea");
+    private $dhcp_server_types = ["kea"];
 
     /**
      * Selected DHCP server from $dhcp_server_types to use with phpipam.
@@ -51,7 +51,7 @@ class DHCP extends Common_functions {
      * @var array
      * @access private
      */
-    private $dhcp_settings = array();
+    private $dhcp_settings = [];
 
     /**
      * DHCP_server holder class
@@ -79,7 +79,7 @@ class DHCP extends Common_functions {
      * @param array $dhcp_settings (default: array())
      * @return void
      */
-    public function __construct($server_type, $dhcp_settings = array()) {
+    public function __construct($server_type, $dhcp_settings = []) {
         // init Result class
         $this->Result = new Result ();
 

@@ -14,7 +14,7 @@ class SubnetsMasterDropDown {
 	 * Store generated html
 	 * @var array
 	 */
-	private $html = array();
+	private $html = [];
 
 	/**
 	 * Name of current <optgroup>
@@ -73,7 +73,7 @@ class SubnetsMasterDropDown {
 	 * @return string
 	 */
 	private function get_subnet_options($subnet) {
-		$options = array();
+		$options = [];
 
 		// selected="selected"
 		if ($subnet->id == $this->previously_selected) {

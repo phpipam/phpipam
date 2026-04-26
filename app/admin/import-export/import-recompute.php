@@ -42,7 +42,7 @@ try {
 			if ($c_subnet['action'] != "edit") { continue; }
 
 			# We only need id and new master
-			$values = array("id"=>$c_subnet['id'], "masterSubnetId"=>$c_subnet['new_masterSubnetId']);
+			$values = ["id"=>$c_subnet['id'], "masterSubnetId"=>$c_subnet['new_masterSubnetId']];
 
 			# update
 			$c_subnet['result'] = $Admin->object_modify("subnets", $c_subnet['action'], "id", $values);

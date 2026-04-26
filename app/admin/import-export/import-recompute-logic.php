@@ -23,7 +23,7 @@ $User->is_admin();
 # Load colors and icons
 include 'import-constants.php';
 
-$rlist = array();
+$rlist = [];
 $pass_inputs = ""; # Pass fields from one page to another
 
 # Read selected fields and pass them to the save form
@@ -44,14 +44,14 @@ foreach($GET as $key => $value) {
 #print "<pre>";print_r($rlist);print "</pre>";
 
 # fetch all sections and store their names
-$all_sections = $Sections->fetch_all_sections(); $sect_names = array();
+$all_sections = $Sections->fetch_all_sections(); $sect_names = [];
 foreach($all_sections as $section) { $section = (array) $section; $sect_names[$section['id']] = $section['name']; }
 
 # fetch all VRFs
-$all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId"); $vrf_name = array();
-if (!$all_vrfs) { $all_vrfs = array(); }
+$all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId"); $vrf_name = [];
+if (!$all_vrfs) { $all_vrfs = []; }
 # insert default VRF in the list
-array_splice($all_vrfs,0,0,(object) array(array('vrfId' => '0', 'name' => 'default', 'rd' => '0:0')));
+array_splice($all_vrfs,0,0,(object) [['vrfId' => '0', 'name' => 'default', 'rd' => '0:0']]);
 foreach ($all_vrfs as $vrf) { $vrf = (array) $vrf; $vrf_name[(int)$vrf['vrfId']] = $vrf['name']; }
 
 $rows = ""; $counters = ['edit' => 0, 'skip' => 0]; $edata = [];

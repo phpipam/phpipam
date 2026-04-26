@@ -62,13 +62,13 @@ if(is_blank($POST->name))												{ $Result->show("danger", _('Name is requir
 
 
 # formulate update query
-$values = array(
+$values = [
 				"vlanId"      => $POST->vlanid,
 				"number"      => $POST->number,
 				"name"        => $POST->name,
 				"description" => $POST->description,
 				"domainId"    => $POST->domainid
-				);
+				];
 
 # append custom
 if(sizeof($custom) > 0) {

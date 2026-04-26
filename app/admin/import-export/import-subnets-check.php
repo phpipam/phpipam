@@ -30,7 +30,7 @@ if (!isset($custom_fields)) { $custom_fields = $Tools->fetch_custom_fields("subn
 # fetch all l2 domains
 $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 # load VLANs and process for easier later check
-$vlan_data = array();
+$vlan_data = [];
 foreach ($vlan_domains as $vlan_domain) {
 	//cast
 	$vlan_domain = (array) $vlan_domain;
@@ -40,7 +40,7 @@ foreach ($vlan_domains as $vlan_domain) {
 	// skip empty domains
 	if (sizeof($all_vlans)==0) {
 		# create entry for domain check
-		$vlan_data[$vlan_domain['name']] = array();
+		$vlan_data[$vlan_domain['name']] = [];
 		continue;
 	}
 	//write all VLAN entries
@@ -54,11 +54,11 @@ foreach ($vlan_domains as $vlan_domain) {
 
 # fetch all VRFs
 $all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
-if (!$all_vrfs) { $all_vrfs = array(); }
+if (!$all_vrfs) { $all_vrfs = []; }
 # insert default VRF in the list
-array_splice($all_vrfs,0,0,(object) array(array('vrfId' => '0', 'name' => 'default', 'rd' => '0:0')));
+array_splice($all_vrfs,0,0,(object) [['vrfId' => '0', 'name' => 'default', 'rd' => '0:0']]);
 # process for easier later check
-$vrf_data = array();
+$vrf_data = [];
 foreach ($all_vrfs as $vrf) {
 	//cast
 	$vrf = (array) $vrf;
@@ -70,7 +70,7 @@ foreach ($all_vrfs as $vrf) {
 $all_sections = $Sections->fetch_all_sections();
 
 # get all subnets in all sections
-$edata = array(); $section_names = array();
+$edata = []; $section_names = [];
 
 foreach ($all_sections as $section) {
 	$section = (array) $section;
@@ -90,8 +90,8 @@ foreach ($all_sections as $section) {
 error_log ( "vlan data : " . json_encode($vlan_data, true ) );
 
 $rows = "";
-$counters = array();
-$ndata = array(); # store new networks in a similar format with edata for easier processing
+$counters = [];
+$ndata = []; # store new networks in a similar format with edata for easier processing
 
 # check the fields
 foreach ($data as &$cdata) {
@@ -145,7 +145,7 @@ foreach ($data as &$cdata) {
 		$msg.= "Invalid VLAN domain."; $action = "error";
 	} else {
 		if (!empty($cdata['vlan'])) {
-		        if (in_array(strtolower((string) $cdata['vlan']),array("na","n/a","nan"))) { $cdata['vlan'] = ""; }
+		        if (in_array(strtolower((string) $cdata['vlan']),["na","n/a","nan"])) { $cdata['vlan'] = ""; }
 			if ((!empty($cdata['vlan'])) && (strtolower((string) $cdata['vlan']) != "na")) {
 			    $v = strtolower((string) $cdata['vlan']);
 				if (!isset($vlan_data[$cdom][$v])) {

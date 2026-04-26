@@ -34,7 +34,7 @@ if(is_blank($POST->option))                           { $Result->show("danger", 
 if($POST->action!="add" && $POST->action!="delete") { $Result->show("danger", _('Invalid action'), true); }
 
 # validate type
-if(!in_array($POST->type, array("type"))) { $Result->show("danger", _('Invalid type'), true); }
+if(!in_array($POST->type, ["type"])) { $Result->show("danger", _('Invalid type'), true); }
 
 # defaults must be present
 if($POST->type=="type") {
@@ -42,12 +42,12 @@ if($POST->type=="type") {
 }
 
 # set values
-$values = array (
+$values =  [
                  "id"        => $POST->op_id,
                  "ctname"    => $POST->option,
                  "ctcolor"   => $POST->color,
                  "ctpattern" => $POST->pattern
-                 );
+                 ];
 # execute
 if(!$Admin->object_modify("circuitTypes", $POST->action, "id", $values))  { $Result->show("danger",  _("Option " . $User->get_post_action() . " error"), true); }
 else                                                                         { $Result->show("success", _("Option " . $User->get_post_action() . " success"), false); }

@@ -67,7 +67,7 @@ class adLDAPComputers {
 
         $filter = "(&(objectClass=computer)(cn=".$computerName."))";
         if ($fields === NULL) {
-            $fields = array("memberof", "cn", "displayname", "dnshostname", "distinguishedname", "objectcategory", "operatingsystem", "operatingsystemservicepack", "operatingsystemversion");
+            $fields = ["memberof", "cn", "displayname", "dnshostname", "distinguishedname", "objectcategory", "operatingsystem", "operatingsystemservicepack", "operatingsystemversion"];
         }
         $sr = ldap_search($this->adldap->getLdapConnection(), $this->adldap->getBaseDn(), $filter, $fields);
         $entries = ldap_get_entries($this->adldap->getLdapConnection(), $sr);
@@ -112,7 +112,7 @@ class adLDAPComputers {
         if ($recursive === NULL) { $recursive = $this->adldap->getRecursiveGroups(); } // use the default option if they haven't set it
 
         //get a list of the groups
-        $groups = $this->groups($computerName, array("memberof"), $recursive);
+        $groups = $this->groups($computerName, ["memberof"], $recursive);
 
         //return true if the specified group is in the group list
         if (in_array($group, $groups)) {
@@ -136,7 +136,7 @@ class adLDAPComputers {
         if (!$this->adldap->getLdapBind()) { return false; }
 
         //search the directory for their information
-        $info = @$this->info($computerName, array("memberof", "primarygroupid"));
+        $info = @$this->info($computerName, ["memberof", "primarygroupid"]);
         $groups = $this->adldap->utilities()->niceNames($info[0]["memberof"]); //presuming the entry returned is our guy (unique usernames)
 
         if ($recursive === true) {

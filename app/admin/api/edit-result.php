@@ -27,7 +27,7 @@ $User->check_maintaneance_mode ();
 $User->Crypto->csrf_cookie ("validate", "apiedit", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 /* checks */
-$error = array();
+$error = [];
 
 if($POST->action!="delete") {
 	# code must be exactly 32 chars long and alphanumeric if app_security = crypt
@@ -57,7 +57,7 @@ if(sizeof($error) > 0) {
 }
 else {
 	# create array of values for modification
-	$values = array(
+	$values = [
 					"id"                     =>$POST->id,
 					"app_id"                 =>$POST->app_id,
 					"app_code"               =>$POST->app_code,
@@ -68,7 +68,7 @@ else {
 					"app_nest_custom_fields" =>$POST->app_nest_custom_fields,
 					"app_show_links"         =>$POST->app_show_links,
 					"app_comment"            =>$POST->app_comment
-					);
+					];
 
 	# execute
 	if(!$Admin->object_modify("api", $POST->action, "id", $values)) 	{ $Result->show("danger",  _("API"). " " . $User->get_post_action() ." "._("error"), true); }

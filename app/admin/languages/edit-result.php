@@ -32,10 +32,10 @@ if($POST->action != "delete" && strlen((string) $POST->l_code) < 2)		{ $Result->
 if($POST->action != "delete" && strlen((string) $POST->l_name) < 2)		{ $Result->show("danger", _('Name must be at least 2 characters long'), true); }
 
 # create update array
-$values = array("l_id"=>$POST->l_id,
+$values = ["l_id"=>$POST->l_id,
 				"l_code"=>$POST->l_code,
 				"l_name"=>$POST->l_name
-				);
+				];
 
 # update
 if(!$Admin->object_modify("lang", $POST->action, "l_id", $values))	{ $Result->show("danger",  _("Language " . $User->get_post_action() . " error"), true); }

@@ -64,14 +64,14 @@ if($POST->action=="add" || $POST->action=="edit") {
 }
 
 // set values
-$values = array(
+$values = [
     "id"          =>$POST->id,
     "name"        =>$POST->name,
     "address"     =>$POST->address,
     "lat"         =>$POST->lat,
     "long"        =>$POST->long,
     "description" =>$POST->description
-    );
+    ];
 
 # fetch custom fields
 $update = $Tools->update_POST_custom_fields('locations', $POST->action, $POST);

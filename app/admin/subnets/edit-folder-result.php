@@ -115,12 +115,12 @@ if ($POST->action=="delete" && !isset($POST->deleteconfirm)) {
 else {
 
 	# create array of default update values
-	$values = array(
+	$values = [
 					"id"             => $POST->subnetId,
 					"isFolder"       => 1,
 					"masterSubnetId" => $POST->masterSubnetId,
 					"description"    => $POST->description
-					);
+					];
 	# for new subnets we add permissions
 	if($POST->action=="add") {
 		$values['permissions'] = $POST->permissions;
@@ -148,7 +148,7 @@ else {
 
 			if(sizeof($Subnets->slaves)>0) {
 				foreach($Subnets->slaves as $slaveId) {
-					$Admin->object_modify ("subnets", "edit", "id", array("id"=>$slaveId, "sectionId"=>$values['sectionId']));
+					$Admin->object_modify ("subnets", "edit", "id", ["id"=>$slaveId, "sectionId"=>$values['sectionId']]);
 				}
 			}
 		}
@@ -160,7 +160,7 @@ else {
 
 			if(sizeof($Subnets->slaves)>0) {
 				foreach($Subnets->slaves as $slaveId) {
-					$Admin->object_modify ("subnets", "delete", "id", array("id"=>$slaveId));
+					$Admin->object_modify ("subnets", "delete", "id", ["id"=>$slaveId]);
 				}
 			}
 		}

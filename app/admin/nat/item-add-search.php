@@ -56,9 +56,9 @@ if ($type == "IPv4") 		{ $search_term_edited = $Tools->reformat_IPv4_for_search 
 elseif($type == "IPv6") 	{ $search_term_edited = $Tools->reformat_IPv6_for_search ($search_term); }	//reformat the IPv4 address!
 
 # search addresses
-$result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low'], array());
+$result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low'], []);
 # search subnets
-$result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $POST->ip, array());
+$result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $POST->ip, []);
 
 # if some found print
 if(sizeof($result_addresses)>0 || sizeof($result_subnets)>0) {

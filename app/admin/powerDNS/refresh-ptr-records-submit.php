@@ -44,7 +44,7 @@ $values['name'] = $zone;
 // domain missing, create it and default records
 if ($domain===false) {
 	// create domain
-	$PowerDNS->domain_edit ("add", array("name"=>$zone,"type"=>"NATIVE"));
+	$PowerDNS->domain_edit ("add", ["name"=>$zone,"type"=>"NATIVE"]);
 	// create default records
 	$PowerDNS->create_default_records ($values);
 }

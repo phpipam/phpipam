@@ -22,7 +22,7 @@ $Result		= new Result();
 
 
 // response for mailing
-$removed_addresses = array();			// Array with differences, can be used to email to admins
+$removed_addresses = [];			// Array with differences, can be used to email to admins
 
 // if config is not set die
 if(!isset($config['removed_addresses_timelimit'])) { die("Please set timelimit for address removal!"); }
@@ -77,7 +77,7 @@ if(sizeof($removed_addresses)>0 && $config['removed_addresses_send_mail']) {
 	# check for recipients
 	foreach($Subnets->fetch_multiple_objects ("users", "role", "Administrator") as $admin) {
 		if($admin->mailNotify=="Yes") {
-			$recepients[] = array("name"=>$admin->real_name, "email"=>$admin->email);
+			$recepients[] = ["name"=>$admin->real_name, "email"=>$admin->email];
 		}
 	}
 	# none?

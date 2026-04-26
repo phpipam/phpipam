@@ -190,7 +190,7 @@ $lineCount++;
 $ip_types = $Addresses->addresses_types_fetch();
 //fetch devices and reorder
 $devices = $Tools->fetch_all_objects("devices", "hostname");
-$devices_indexed = array();
+$devices_indexed = [];
 if ($devices!==false) {
 	foreach($devices as $d) {
 		$devices_indexed[$d->id] = (object) $d;
@@ -202,7 +202,7 @@ $devices_indexed[0]->hostname = 0;
 
 //fetch locations and reorder
 $locations = $Tools->fetch_all_objects("locations", "id");
-$locations_indexed = array();
+$locations_indexed = [];
 if ($locations!==false) {
 	foreach($locations as $d) {
 		$locations_indexed[$d->id] = (object) $d;

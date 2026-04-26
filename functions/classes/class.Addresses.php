@@ -13,7 +13,7 @@ class Addresses extends Common_functions {
 	 * @var array
 	 * @access public
 	 */
-	public $address_types = array();
+	public $address_types = [];
 
 	/**
 	 * Mail changelog or not
@@ -95,7 +95,7 @@ class Addresses extends Common_functions {
     	$types = $this->fetch_all_objects ("ipTags", "id");
 
 		# save to array
-		$types_out = array();
+		$types_out = [];
 		foreach($types as $t) {
 			$types_out[$t->id] = (array) $t;
 		}
@@ -162,7 +162,7 @@ class Addresses extends Common_functions {
 		# fetch address states
 		$this->addresses_types_fetch();
 		# reindex
-		$states_assoc = array();
+		$states_assoc = [];
 		foreach($this->address_types as $s) {
 			$states_assoc[$s['type']] = $s;
 		}
@@ -210,7 +210,7 @@ class Addresses extends Common_functions {
 			return $cached;
 		}
 		else {
-			try { $address = $this->Database->getObjectQuery("ipaddresses", "SELECT * FROM `ipaddresses` where `$method` = ? limit 1;", array($id)); }
+			try { $address = $this->Database->getObjectQuery("ipaddresses", "SELECT * FROM `ipaddresses` where `$method` = ? limit 1;", [$id]); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
 				return false;
@@ -233,7 +233,7 @@ class Addresses extends Common_functions {
 	 * @return object|false
 	 */
 	public function fetch_address_multiple_criteria ($ip_addr, $subnetId) {
-		try { $address = $this->Database->getObjectQuery("ipaddresses", "SELECT * FROM `ipaddresses` where `ip_addr` = ? and `subnetId` = ? limit 1;", array($ip_addr, $subnetId)); }
+		try { $address = $this->Database->getObjectQuery("ipaddresses", "SELECT * FROM `ipaddresses` where `ip_addr` = ? and `subnetId` = ? limit 1;", [$ip_addr, $subnetId]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -297,7 +297,7 @@ class Addresses extends Common_functions {
 		// Fetch all similar addresses for entire subnet.
 		try {
 			$query = "SELECT * FROM `ipaddresses` WHERE `state`<>4 AND `$linked_field` IN (SELECT `$linked_field` FROM `ipaddresses` WHERE `subnetId`=? AND LENGTH(`$linked_field`)>0) ORDER BY LPAD(ip_addr,39,0)";
-			$linked_subnet_addrs = $this->Database->getObjectsQuery('ipaddresses', $query, array($address->subnetId));
+			$linked_subnet_addrs = $this->Database->getObjectsQuery('ipaddresses', $query, [$address->subnetId]);
 		} catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -433,7 +433,7 @@ class Addresses extends Common_functions {
 		# log and changelog
 		$address['id'] = $this->lastId;
 		$this->Log->write( _("Address create"), _("New address created").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
-		$this->Log->write_changelog('ip_addr', "add", 'success', array(), $address, $this->mail_changelog);
+		$this->Log->write_changelog('ip_addr', "add", 'success', [], $address, $this->mail_changelog);
 
 		# edit DNS PTR record
 		$this->ptr_modify ("add", $address);
@@ -529,7 +529,7 @@ class Addresses extends Common_functions {
 
 		# log and changelog
 		$this->Log->write( _("Address delete"), _("Address")." ".$address["ip_addr"]." "._("deleted").".<hr>".$this->array_to_log((array) $address_old), 0);
-		$this->Log->write_changelog('ip_addr', "delete", 'success', (array) $address_old, array(), $this->mail_changelog);
+		$this->Log->write_changelog('ip_addr', "delete", 'success', (array) $address_old, [], $this->mail_changelog);
 
 		# edit DNS PTR record
 		$this->ptr_modify ("delete", $address);
@@ -553,7 +553,7 @@ class Addresses extends Common_functions {
 	 */
 	protected function modify_address_move ($address) {
 		# execute
-		try { $this->Database->updateObject("ipaddresses", array("subnetId"=>$address['newSubnet'], "id"=>$address['id'])); }
+		try { $this->Database->updateObject("ipaddresses", ["subnetId"=>$address['newSubnet'], "id"=>$address['id']]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
@@ -576,7 +576,7 @@ class Addresses extends Common_functions {
 		# set found flag for returns
 		$found = 0;
 		# fetch all nats
-		try { $all_nats = $this->Database->getObjectsQuery ('nat', "select * from `nat` where `src` like :id or `dst` like :id", array ("id"=>'%"'.$obj_id.'"%')); }
+		try { $all_nats = $this->Database->getObjectsQuery ('nat', "select * from `nat` where `src` like :id or `dst` like :id",  ["id"=>'%"'.$obj_id.'"%']); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -592,9 +592,9 @@ class Addresses extends Common_functions {
 			    $d = db_json_decode($nat->dst, true);
 
 			    if(is_array($s['ipaddresses']))
-			    $s['ipaddresses'] = array_diff($s['ipaddresses'], array($obj_id));
+			    $s['ipaddresses'] = array_diff($s['ipaddresses'], [$obj_id]);
 			    if(is_array($d['ipaddresses']))
-			    $d['ipaddresses'] = array_diff($d['ipaddresses'], array($obj_id));
+			    $d['ipaddresses'] = array_diff($d['ipaddresses'], [$obj_id]);
 
 			    # save back and update
 			    $src_new = json_encode(array_filter($s));
@@ -604,7 +604,7 @@ class Addresses extends Common_functions {
 			    if($s!=$src_new || $d!=$dst_new) {
 			    	$found++;
 
-				    if($Admin->object_modify ("nat", "edit", "id", array("id"=>$nat->id, "src"=>$src_new, "dst"=>$dst_new))!==false) {
+				    if($Admin->object_modify ("nat", "edit", "id", ["id"=>$nat->id, "src"=>$src_new, "dst"=>$dst_new])!==false) {
 				    	if($print) {
 					        $this->Result->show("success", _("Address removed from NAT"), false);
 						}
@@ -629,13 +629,13 @@ class Addresses extends Common_functions {
 	 */
 	public function update_address_hostname ($ip, $id, $hostname = "") {
 		if(is_numeric($id) && !is_blank($hostname)) {
-			try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "hostname"=>$hostname)); }
+			try { $this->Database->updateObject("ipaddresses", ["id"=>$id, "hostname"=>$hostname]); }
 			catch (Exception $e) {
 				return false;
 			}
 			// save log
 			$this->Log->write( _("Address DNS resolved"), _("Address")." ".$ip." "._("resolved").".<hr>".$this->array_to_log((array) $hostname), 0);
-			$this->Log->write_changelog('ip_addr', "edit", 'success', array ("id"=>$id, "hostname"=>""), array("id"=>$id, "hostname"=>$hostname), $this->mail_changelog);
+			$this->Log->write_changelog('ip_addr', "edit", 'success',  ["id"=>$id, "hostname"=>""], ["id"=>$id, "hostname"=>$hostname], $this->mail_changelog);
 		}
 	}
 
@@ -648,8 +648,8 @@ class Addresses extends Common_functions {
 	 */
 	private function threshold_check ($address) {
     	$address = (object) $address;
-    	$content = array();
-    	$content_plain = array();
+    	$content = [];
+    	$content_plain = [];
 
         # fetch settings
         $this->get_settings ();
@@ -735,7 +735,7 @@ class Addresses extends Common_functions {
 	 * @return bool
 	 */
 	public function remove_gateway ($subnetId) {
-		try { $this->Database->updateObject("ipaddresses", array("subnetId"=>$subnetId, "is_gateway"=>0), "subnetId"); }
+		try { $this->Database->updateObject("ipaddresses", ["subnetId"=>$subnetId, "is_gateway"=>0], "subnetId"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -774,7 +774,7 @@ class Addresses extends Common_functions {
 		if($cnt===true) { $query = "select count(*) as `cnt` from `ipaddresses` where `subnetId`=? and `ip_addr`=?;"; }
 		else			{ $query = "select `id` from `ipaddresses` where `subnetId`=? and `ip_addr`=?;";  }
 		# fetch
-		try { $count = $this->Database->getObjectQuery("ipaddresses", $query, array($subnetId, $address)); }
+		try { $count = $this->Database->getObjectQuery("ipaddresses", $query, [$subnetId, $address]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -815,7 +815,7 @@ class Addresses extends Common_functions {
 		}
 
 		# fetch all addresses in subnet and subnet
-		$addresses = $this->fetch_subnet_addresses($subnetId, "ip_addr", "asc", array("ip_addr")) ?: [];
+		$addresses = $this->fetch_subnet_addresses($subnetId, "ip_addr", "asc", ["ip_addr"]) ?: [];
 
 		# full subnet?
 		if (gmp_cmp(sizeof($addresses), $this->Subnets->max_hosts($subnet)) >= 0) {
@@ -1091,7 +1091,7 @@ class Addresses extends Common_functions {
 	 */
 	public function ptr_link ($address_id, $ptr_id) {
 		# execute
-		try { $this->Database->updateObject("ipaddresses", array("id"=>$address_id, "PTR"=>$ptr_id)); }
+		try { $this->Database->updateObject("ipaddresses", ["id"=>$address_id, "PTR"=>$ptr_id]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
@@ -1108,7 +1108,7 @@ class Addresses extends Common_functions {
 	 */
 	private function ptr_unlink ($address_id) {
 		# execute
-		try { $this->Database->updateObject("ipaddresses", array("id"=>$address_id, "PTR"=>0)); }
+		try { $this->Database->updateObject("ipaddresses", ["id"=>$address_id, "PTR"=>0]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
@@ -1124,7 +1124,7 @@ class Addresses extends Common_functions {
 	 * @return bool
 	 */
 	public function ptr_unlink_subnet_addresses ($subnet_id) {
-		try { $this->Database->runQuery("update `ipaddresses` set `PTR` = 0 where `subnetId` = ?;", array($subnet_id)); }
+		try { $this->Database->runQuery("update `ipaddresses` set `PTR` = 0 where `subnetId` = ?;", [$subnet_id]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -1152,14 +1152,14 @@ class Addresses extends Common_functions {
 	 * @return void
 	 */
 	public function ptr_get_subnet_indexes ($subnetId) {
-		try { $indexes = $this->Database->getObjectsQuery('ipaddresses', "select `PTR` from `ipaddresses` where `PTR` != 0 and `subnetId` = ?;", array($subnetId)); }
+		try { $indexes = $this->Database->getObjectsQuery('ipaddresses', "select `PTR` from `ipaddresses` where `PTR` != 0 and `subnetId` = ?;", [$subnetId]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
 		# parse
 		if (sizeof($indexes)>0) {
-    		$out = array();
+    		$out = [];
     		// loop
     		foreach ($indexes as $i) {
         		$out[] = $i->PTR;
@@ -1167,7 +1167,7 @@ class Addresses extends Common_functions {
     		return $out;
 		}
 		else {
-    		return array();
+    		return [];
 		}
 	}
 
@@ -1208,7 +1208,7 @@ class Addresses extends Common_functions {
 	    if ($this->address_exists($address[0], $subnetId)) { return _('IP address already exists').' - '.$address[0]; }
 
 		# format insert array
-		$address_insert = array("subnetId"=>$subnetId,
+		$address_insert = ["subnetId"=>$subnetId,
 								"ip_addr"=>$address[0],
 								"state"=>$address[1],
 								"description"=>$address[2],
@@ -1218,7 +1218,7 @@ class Addresses extends Common_functions {
 								"switch"=>$address[6],
 								"port"=>$address[7],
 								"note"=>$address[8]
-								);
+								];
 
 		# switch to 0, state to active
 		$address_insert['switch'] = is_blank($address_insert['switch']) ? 0 : $address_insert['switch'];
@@ -1274,8 +1274,8 @@ class Addresses extends Common_functions {
 	 */
 	public function fetch_subnet_addresses ($subnetId, $order=null, $order_direction=null, $fields = "*") {
 		# set order
-		if(!is_null($order)) 	{ $order = array($order, $order_direction); }
-		else 					{ $order = array("ip_addr", "asc"); }
+		if(!is_null($order)) 	{ $order = [$order, $order_direction]; }
+		else 					{ $order = ["ip_addr", "asc"]; }
 
 		# fields
 		if(is_array($fields)) {
@@ -1286,7 +1286,7 @@ class Addresses extends Common_functions {
 		$order[0] = $this->Database->escape ($order[0]);
 		$order[1] = $this->Database->escape ($order[1]);
 
-		try { $addresses = $this->Database->getObjectsQuery('ipaddresses', "SELECT $fields FROM `ipaddresses` where `subnetId` = ? order by `$order[0]` $order[1];", array($subnetId)); }
+		try { $addresses = $this->Database->getObjectsQuery('ipaddresses', "SELECT $fields FROM `ipaddresses` where `subnetId` = ? order by `$order[0]` $order[1];", [$subnetId]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -1298,7 +1298,7 @@ class Addresses extends Common_functions {
 			}
 		}
 		# result
-		return !empty($addresses) ? $addresses : array();
+		return !empty($addresses) ? $addresses : [];
 	}
 
 	/**
@@ -1334,7 +1334,7 @@ class Addresses extends Common_functions {
 		if(empty($subnets)) { return 0; }
 
 		# create query
-		$tmp = array();
+		$tmp = [];
 		foreach($subnets as $k=>$s) {
 			if (is_object($s))	{ $tmp[] = " `subnetId`=$s->id "; }
 			else				{ $tmp[] = " `subnetId`=$s "; }
@@ -1373,14 +1373,14 @@ class Addresses extends Common_functions {
 		$this->Subnets->slaves = [];
 
 		# ip address order
-		if(!is_null($order)) 	{ $order_addr = array($order, $order_direction); }
-		else 					{ $order_addr = array("ip_addr", "asc"); }
+		if(!is_null($order)) 	{ $order_addr = [$order, $order_direction]; }
+		else 					{ $order_addr = ["ip_addr", "asc"]; }
 
 		# escape ordering
 		$order_addr[0] = $this->Database->escape ($order_addr[0]);
 		$order_addr[1] = $this->Database->escape ($order_addr[1]);
 
-		$ids = array();
+		$ids = [];
 		$ids[] = $subnetId;
 
 	    # set query to fetch all ip addresses for specified subnets or just count
@@ -1568,7 +1568,7 @@ class Addresses extends Common_functions {
     	# set size
     	$size = sizeof($addresses);
     	// vars
-    	$addresses_formatted = array();
+    	$addresses_formatted = [];
 		$fIndex = null;
 
 		# loop through IP addresses
@@ -1635,7 +1635,7 @@ class Addresses extends Common_functions {
 	 */
 	public function find_invalid_addresses () {
     	// init
-    	$false = array();
+    	$false = [];
 		// find unique ids
 		$ids = $this->find_unique_subnetids ();
 
@@ -1832,7 +1832,7 @@ class Addresses extends Common_functions {
     	$address = new Params($address);
 
     	// cnt
-    	$html = array();
+    	$html = [];
     	$html[] = '<table class="popover_table">';
 
     	$cnt = 0;
@@ -1891,16 +1891,16 @@ class Addresses extends Common_functions {
 
         // no src/dst
         if ($sources===false)
-            $sources = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+            $sources = ["<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>"];
         if ($destinations===false)
-            $destinations = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+            $destinations = ["<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>"];
 
 
         // icon
         $icon =  $n->type=="static" ? "fa-arrows-h" : "fa-long-arrow-right";
 
         // to html
-        $html = array();
+        $html = [];
         $html[] = "<tr>";
         $html[] = "<td colspan='3'>";
         $html[] = "<strong>$n->name</strong> <span class='badge badge1 badge5'>".ucwords((string) $n->type)."</span>";
@@ -1947,7 +1947,7 @@ class Addresses extends Common_functions {
         // to array "subnets"=>array(1,2,3)
         $objects = db_json_decode($json_objects, true);
         // init out array
-        $out = array();
+        $out = [];
         // check
         if(is_array($objects)) {
             if(sizeof($objects)>0) {

@@ -28,7 +28,7 @@ $filename = pf_explode(".", $filename);
 $filename = end($filename);
 
 /* list of permitted file extensions */
-$allowed = array('cer', 'pem', 'crt', 'p12', 'pfx');
+$allowed = ['cer', 'pem', 'crt', 'p12', 'pfx'];
 
 /* no errors */
 if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {

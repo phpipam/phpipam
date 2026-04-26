@@ -209,9 +209,9 @@ class OLE_ChainedBlockStream extends PEAR
      */
     function stream_stat()
     {
-        return array(
+        return [
             'size' => strlen($this->data),
-            );
+            ];
     }
 
     // Methods used by stream_wrapper_register() that are not implemented:

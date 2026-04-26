@@ -12,7 +12,7 @@ class Devices_controller extends Common_api_functions {
      *
      * @var mixed
      */
-    protected $default_search_fields = array('hostname','ip_addr','description');
+    protected $default_search_fields = ['hostname','ip_addr','description'];
 
 
     /**
@@ -57,17 +57,17 @@ class Devices_controller extends Common_api_functions {
         $app = $this->Tools->fetch_object('api', 'app_id', $this->_params->app_id);
 
         // methods
-        $result = array();
-        $result['methods'] = array(
-                                array("href"=>"/api/".$this->_params->app_id."/devices/",                     "methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
-                                array("href"=>"/api/".$this->_params->app_id."/devices/search/{search_term}", "methods"=>array(array("rel"=>"search", "method"=>"GET"))),
-                                array("href"=>"/api/".$this->_params->app_id."/devices/{id}/",                "methods"=>array(array("rel"=>"read", "method"=>"GET"),
-                                                                                                                               array("rel"=>"create", "method"=>"POST"),
-                                                                                                                               array("rel"=>"update", "method"=>"PATCH"),
-                                                                                                                               array("rel"=>"delete", "method"=>"DELETE"))),
-                             );
+        $result = [];
+        $result['methods'] = [
+                                ["href"=>"/api/".$this->_params->app_id."/devices/",                     "methods"=>[["rel"=>"options", "method"=>"OPTIONS"]]],
+                                ["href"=>"/api/".$this->_params->app_id."/devices/search/{search_term}", "methods"=>[["rel"=>"search", "method"=>"GET"]]],
+                                ["href"=>"/api/".$this->_params->app_id."/devices/{id}/",                "methods"=>[["rel"=>"read", "method"=>"GET"],
+                                                                                                                               ["rel"=>"create", "method"=>"POST"],
+                                                                                                                               ["rel"=>"update", "method"=>"PATCH"],
+                                                                                                                               ["rel"=>"delete", "method"=>"DELETE"]]],
+                             ];
         # Response
-        return array('code'=>200, 'data'=>$result);
+        return ['code'=>200, 'data'=>$result];
     }
 
 
@@ -97,7 +97,7 @@ class Devices_controller extends Common_api_functions {
             $result = $this->Tools->fetch_all_objects('devices', 'id');
             // result
             if(!$result)     { return $this->Response->throw_exception(404, "No devices configured"); }
-            else             { return array('code'=>200, 'data'=>$this->prepare_result($result, 'devices', true, false)); }
+            else             { return ['code'=>200, 'data'=>$this->prepare_result($result, 'devices', true, false)]; }
         }
         // parameters are set
         else {
@@ -132,7 +132,7 @@ class Devices_controller extends Common_api_functions {
 
                     // result
                     if(!$result)     { return $this->Response->throw_exception(404, "No devices found"); }
-                    else             { return array('code'=>200, 'data'=>$this->prepare_result($result, 'devices', true, false)); }
+                    else             { return ['code'=>200, 'data'=>$this->prepare_result($result, 'devices', true, false)]; }
                 }
                 else {
                     $this->Response->throw_exception(400, 'No search term given');
@@ -167,7 +167,7 @@ class Devices_controller extends Common_api_functions {
 
                 // all ok, prepare result
                 if($result === false)       { return $this->Response->throw_exception(404, "No ".$this->_params->id2." found"); }
-                else                        { return array('code'=>200, 'data'=>$this->prepare_result($result, 'devices', true, false)); }
+                else                        { return ['code'=>200, 'data'=>$this->prepare_result($result, 'devices', true, false)]; }
             }
         }
     }
@@ -208,7 +208,7 @@ class Devices_controller extends Common_api_functions {
         }
         else {
             //set result
-            return array("code"=>201, "message"=>"Device created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/devices/".$this->Admin->lastId."/");
+            return ["code"=>201, "message"=>"Device created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/devices/".$this->Admin->lastId."/"];
         }
     }
 
@@ -242,7 +242,7 @@ class Devices_controller extends Common_api_functions {
             $this->Response->throw_exception(500, 'Device edit failed');
         } else {
             // fetch the updated object and hand it back to the client
-            return array("code"=>200, "message"=>"Device updated", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/devices/".$values['id']."/");
+            return ["code"=>200, "message"=>"Device updated", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/devices/".$values['id']."/"];
         }
     }
 
@@ -262,7 +262,7 @@ class Devices_controller extends Common_api_functions {
 		$this->validate_device_edit();
 
         # set variables for delete
-        $values = array();
+        $values = [];
         $values['id'] = $this->_params->id;
 
         # execute delete
@@ -274,7 +274,7 @@ class Devices_controller extends Common_api_functions {
             $this->Admin->remove_object_references('ipaddresses', 'switch', $this->_params->id);
 
             // set result
-            return array("code"=>200, "message"=>"Device deleted");
+            return ["code"=>200, "message"=>"Device deleted"];
         }
     }
 
@@ -312,7 +312,7 @@ class Devices_controller extends Common_api_functions {
         $sections = $this->Admin->fetch_all_objects ("sections");
         // reformat
         if($sections!==false) {
-            $sections_all = array ();
+            $sections_all =  [];
             foreach ($sections as $s) {
                 $sections_all[$s->id] = $s->id;
             }

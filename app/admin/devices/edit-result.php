@@ -76,7 +76,7 @@ if ($POST->rack !== "0" && $User->get_module_permissions ("racks")>User::ACCESS_
 }
 
 # set update values
-$values = array(
+$values = [
 				"id"          =>$POST->switchid,
 				"hostname"    =>$POST->hostname,
 				"ip_addr"     =>$POST->ip_addr,
@@ -84,7 +84,7 @@ $values = array(
 				"description" =>$POST->description,
 				"sections"    =>$POST->sections,
 				"location"    =>$POST->location
-				);
+				];
 
 # fetch custom fields
 $update = $Tools->update_POST_custom_fields('devices', $POST->action, $POST);

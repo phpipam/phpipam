@@ -244,50 +244,50 @@ class Radius
         $this->_radius_packet_info[13] = 'Status-Client (experimental)';
         $this->_radius_packet_info[255] = 'Reserved';
 
-        $this->_attributes_info[1] = array('User-Name', 'S');
-        $this->_attributes_info[2] = array('User-Password', 'S');
-        $this->_attributes_info[3] = array('CHAP-Password', 'S'); // Type (1) / Length (1) / CHAP Ident (1) / String
-        $this->_attributes_info[4] = array('NAS-IP-Address', 'A');
-        $this->_attributes_info[5] = array('NAS-Port', 'I');
-        $this->_attributes_info[6] = array('Service-Type', 'I');
-        $this->_attributes_info[7] = array('Framed-Protocol', 'I');
-        $this->_attributes_info[8] = array('Framed-IP-Address', 'A');
-        $this->_attributes_info[9] = array('Framed-IP-Netmask', 'A');
-        $this->_attributes_info[10] = array('Framed-Routing', 'I');
-        $this->_attributes_info[11] = array('Filter-Id', 'T');
-        $this->_attributes_info[12] = array('Framed-MTU', 'I');
-        $this->_attributes_info[13] = array('Framed-Compression', 'I');
-        $this->_attributes_info[14] = array('Login-IP-Host', 'A');
-        $this->_attributes_info[15] = array('Login-service', 'I');
-        $this->_attributes_info[16] = array('Login-TCP-Port', 'I');
-        $this->_attributes_info[17] = array('(unassigned)', '');
-        $this->_attributes_info[18] = array('Reply-Message', 'T');
-        $this->_attributes_info[19] = array('Callback-Number', 'S');
-        $this->_attributes_info[20] = array('Callback-Id', 'S');
-        $this->_attributes_info[21] = array('(unassigned)', '');
-        $this->_attributes_info[22] = array('Framed-Route', 'T');
-        $this->_attributes_info[23] = array('Framed-IPX-Network', 'I');
-        $this->_attributes_info[24] = array('State', 'S');
-        $this->_attributes_info[25] = array('Class', 'S');
-        $this->_attributes_info[26] = array('Vendor-Specific', 'S'); // Type (1) / Length (1) / Vendor-Id (4) / Vendor type (1) / Vendor length (1) / Attribute-Specific...
-        $this->_attributes_info[27] = array('Session-Timeout', 'I');
-        $this->_attributes_info[28] = array('Idle-Timeout', 'I');
-        $this->_attributes_info[29] = array('Termination-Action', 'I');
-        $this->_attributes_info[30] = array('Called-Station-Id', 'S');
-        $this->_attributes_info[31] = array('Calling-Station-Id', 'S');
-        $this->_attributes_info[32] = array('NAS-Identifier', 'S');
-        $this->_attributes_info[33] = array('Proxy-State', 'S');
-        $this->_attributes_info[34] = array('Login-LAT-Service', 'S');
-        $this->_attributes_info[35] = array('Login-LAT-Node', 'S');
-        $this->_attributes_info[36] = array('Login-LAT-Group', 'S');
-        $this->_attributes_info[37] = array('Framed-AppleTalk-Link', 'I');
-        $this->_attributes_info[38] = array('Framed-AppleTalk-Network', 'I');
-        $this->_attributes_info[39] = array('Framed-AppleTalk-Zone', 'S');
-        $this->_attributes_info[60] = array('CHAP-Challenge', 'S');
-        $this->_attributes_info[61] = array('NAS-Port-Type', 'I');
-        $this->_attributes_info[62] = array('Port-Limit', 'I');
-        $this->_attributes_info[63] = array('Login-LAT-Port', 'S');
-        $this->_attributes_info[76] = array('Prompt', 'I');
+        $this->_attributes_info[1] = ['User-Name', 'S'];
+        $this->_attributes_info[2] = ['User-Password', 'S'];
+        $this->_attributes_info[3] = ['CHAP-Password', 'S']; // Type (1) / Length (1) / CHAP Ident (1) / String
+        $this->_attributes_info[4] = ['NAS-IP-Address', 'A'];
+        $this->_attributes_info[5] = ['NAS-Port', 'I'];
+        $this->_attributes_info[6] = ['Service-Type', 'I'];
+        $this->_attributes_info[7] = ['Framed-Protocol', 'I'];
+        $this->_attributes_info[8] = ['Framed-IP-Address', 'A'];
+        $this->_attributes_info[9] = ['Framed-IP-Netmask', 'A'];
+        $this->_attributes_info[10] = ['Framed-Routing', 'I'];
+        $this->_attributes_info[11] = ['Filter-Id', 'T'];
+        $this->_attributes_info[12] = ['Framed-MTU', 'I'];
+        $this->_attributes_info[13] = ['Framed-Compression', 'I'];
+        $this->_attributes_info[14] = ['Login-IP-Host', 'A'];
+        $this->_attributes_info[15] = ['Login-service', 'I'];
+        $this->_attributes_info[16] = ['Login-TCP-Port', 'I'];
+        $this->_attributes_info[17] = ['(unassigned)', ''];
+        $this->_attributes_info[18] = ['Reply-Message', 'T'];
+        $this->_attributes_info[19] = ['Callback-Number', 'S'];
+        $this->_attributes_info[20] = ['Callback-Id', 'S'];
+        $this->_attributes_info[21] = ['(unassigned)', ''];
+        $this->_attributes_info[22] = ['Framed-Route', 'T'];
+        $this->_attributes_info[23] = ['Framed-IPX-Network', 'I'];
+        $this->_attributes_info[24] = ['State', 'S'];
+        $this->_attributes_info[25] = ['Class', 'S'];
+        $this->_attributes_info[26] = ['Vendor-Specific', 'S']; // Type (1) / Length (1) / Vendor-Id (4) / Vendor type (1) / Vendor length (1) / Attribute-Specific...
+        $this->_attributes_info[27] = ['Session-Timeout', 'I'];
+        $this->_attributes_info[28] = ['Idle-Timeout', 'I'];
+        $this->_attributes_info[29] = ['Termination-Action', 'I'];
+        $this->_attributes_info[30] = ['Called-Station-Id', 'S'];
+        $this->_attributes_info[31] = ['Calling-Station-Id', 'S'];
+        $this->_attributes_info[32] = ['NAS-Identifier', 'S'];
+        $this->_attributes_info[33] = ['Proxy-State', 'S'];
+        $this->_attributes_info[34] = ['Login-LAT-Service', 'S'];
+        $this->_attributes_info[35] = ['Login-LAT-Node', 'S'];
+        $this->_attributes_info[36] = ['Login-LAT-Group', 'S'];
+        $this->_attributes_info[37] = ['Framed-AppleTalk-Link', 'I'];
+        $this->_attributes_info[38] = ['Framed-AppleTalk-Network', 'I'];
+        $this->_attributes_info[39] = ['Framed-AppleTalk-Zone', 'S'];
+        $this->_attributes_info[60] = ['CHAP-Challenge', 'S'];
+        $this->_attributes_info[61] = ['NAS-Port-Type', 'I'];
+        $this->_attributes_info[62] = ['Port-Limit', 'I'];
+        $this->_attributes_info[63] = ['Login-LAT-Port', 'S'];
+        $this->_attributes_info[76] = ['Prompt', 'I'];
 
         $this->_identifier_to_send = 0;
         $this->_user_ip_address = (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0');
@@ -562,7 +562,7 @@ class Radius
             return $this->_attributes_info[intval($info_index)];
         } else
         {
-            return array('', '');
+            return ['', ''];
         }
     }
 
@@ -667,7 +667,7 @@ class Radius
      *********************************************************************/
     function DecodeVendorSpecificContent($vendor_specific_raw_value)
     {
-        $result = array();
+        $result = [];
         $offset_in_raw = 0;
         $vendor_id = (ord(substr((string) $vendor_specific_raw_value, 0, 1)[0]) * 256 * 256 * 256) + (ord(substr((string) $vendor_specific_raw_value, 1, 1)[0]) * 256 * 256) + (ord(substr((string) $vendor_specific_raw_value, 2, 1)[0]) * 256) + ord(substr((string) $vendor_specific_raw_value, 3, 1)[0]);
         $offset_in_raw += 4;
@@ -676,7 +676,7 @@ class Radius
             $vendor_type = (ord(substr((string) $vendor_specific_raw_value, 0 + $offset_in_raw, 1)[0]));
             $vendor_length = (ord(substr((string) $vendor_specific_raw_value, 1 + $offset_in_raw, 1)[0]));
             $attribute_specific = substr((string) $vendor_specific_raw_value, 2 + $offset_in_raw, $vendor_length);
-            $result[] = array($vendor_id, $vendor_type, $attribute_specific);
+            $result[] = [$vendor_id, $vendor_type, $attribute_specific];
             $offset_in_raw += ($vendor_length);
         }
 
@@ -763,7 +763,7 @@ class Radius
                     $this->DebugInfo('Attribute '.ord(substr((string) $one_attribute_to_send, 0, 1)[0]).' ('.$attribute_info[0].'), length '.(ord(substr((string) $one_attribute_to_send, 1, 1)[0]) - 2).', format '.$attribute_info[1].', value <em>'.$this->DecodeAttribute(substr((string) $one_attribute_to_send, 2), ord(substr((string) $one_attribute_to_send, 0, 1)[0])).'</em>');
                 }
             }
-            $read_socket_array   = array($_socket_to_server);
+            $read_socket_array   = [$_socket_to_server];
             $write_socket_array  = NULL;
             $except_socket_array = NULL;
 
@@ -823,7 +823,7 @@ class Radius
                     $this->DebugInfo('Attribute '.$attribute_type.' ('.$attribute_info[0].'), length '.($attribute_length - 2).', format '.$attribute_info[1].', value <em>'.$attribute_value.'</em>');
                 }
 
-                $this->_attributes_received[] = array($attribute_type, $attribute_value);
+                $this->_attributes_received[] = [$attribute_type, $attribute_value];
             }
         }
 

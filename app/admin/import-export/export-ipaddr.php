@@ -114,9 +114,9 @@ if ($GET->vrf == "on") {
 	$curColumn++;
 	# fetch all VRFs
 	$all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
-	if (!$all_vrfs) { $all_vrfs = array(); }
+	if (!$all_vrfs) { $all_vrfs = []; }
 	# prepare list for easy processing
-	$vrfs = array(); $vrfs[0] = "default";
+	$vrfs = []; $vrfs[0] = "default";
 	foreach ($all_vrfs as $vrf) { $vrf = (array) $vrf; $vrfs[$vrf['vrfId']] = $vrf['name']; }
 }
 if ($GET->subnet == "on") {
@@ -136,7 +136,7 @@ if ($GET->device == "on") {
 	$curColumn++;
 	# get Devices and reorder
 	$devices = $Tools->fetch_all_objects ("devices", "hostname");
-	$devices_indexed = array();
+	$devices_indexed = [];
 	if ($devices!==false) {
 	foreach($devices as $d) {
     		$devices_indexed[$d->id] = $d;

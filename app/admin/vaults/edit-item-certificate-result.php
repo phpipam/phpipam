@@ -37,7 +37,7 @@ $vault===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 $custom = $Tools->fetch_custom_fields('vaultItems');
 
 /* checks */
-$error = array();
+$error = [];
 // cert check
 if($POST->action=="add") {
 	// print_r(base64_decode($POST->certificate));
@@ -82,10 +82,10 @@ else {
 	// die('alert-danger');
 
 	# create array of values for modification
-	$values = array(
+	$values = [
 					"id"     => $POST->id,
 					"values" => $User->Crypto->encrypt(json_encode($values_array), $_SESSION['vault'.$vault->id])
-					);
+					];
 
 	# append custom
 	if(sizeof($custom) > 0) {

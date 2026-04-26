@@ -30,7 +30,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "circuit_options");
 $Admin->validate_action(false);
 
 # validate type
-if(!in_array($POST->type, array("type"))) { $Result->show("danger", _('Invalid type'), true, true); }
+if(!in_array($POST->type, ["type"])) { $Result->show("danger", _('Invalid type'), true, true); }
 
 # disabled
 $readonly = $POST->action=="delete" ? "disabled" : "";

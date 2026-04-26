@@ -22,7 +22,7 @@ $User->is_admin();
 $deviceTypes = $Devtype->fetch_all_objects("deviceTypes", "tid");
 
 # Load existing data
-$edata = array();
+$edata = [];
 # process for easier later check
 foreach ($deviceTypes as $dt) {
 	//cast
@@ -31,8 +31,8 @@ foreach ($deviceTypes as $dt) {
 }
 
 $rows = "";
-$counters = array();
-$unique = array();
+$counters = [];
+$unique = [];
 
 # check the fields
 foreach ($data as &$cdata) {

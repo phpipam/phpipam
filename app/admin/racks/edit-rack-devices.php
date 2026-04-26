@@ -43,11 +43,11 @@ if ($POST->action=="remove") {
     switch ($POST->devicetype) {
         case 'device':
         # set values
-        $values = array("id"=>$POST->deviceid,
+        $values = ["id"=>$POST->deviceid,
                         "rack"=>"",
                         "rack_start"=>"",
                         "rack_size"=>""
-                        );
+                        ];
         # update
         if(!$Admin->object_modify("devices", "edit", "id", $values))    { $Result->show("success", _("Failed to remove device from rack").'!', true, true); }
         else                                                            { $Result->show("success", _("Device removed from rack").'!', false, true); }

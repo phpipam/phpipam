@@ -39,12 +39,12 @@ if(strlen((string) $POST->dname)<2) 													{ $Result->show("danger", _('Pl
 try {
 	if($server->type == "NetIQ") { $params->account_suffix = ""; }
 	//set options
-	$options = array(
+	$options = [
 			'base_dn'=>$params->base_dn,
 			'account_suffix'=>$params->account_suffix,
 			'domain_controllers'=>pf_explode(";", str_replace(" ", "", $params->domain_controllers)),
 			'ad_port'=>$params->ad_port
-			);
+			];
 
 	// Set security
 	if($server->type == "LDAP") {
@@ -69,7 +69,7 @@ try {
 
 	//search for domain user!
 	$esc_dname = ldap_escape($POST->dname, '', LDAP_ESCAPE_FILTER);
-	$userinfo = $adldap->user()->info("*$esc_dname*", array("*"), false, $server->type);
+	$userinfo = $adldap->user()->info("*$esc_dname*", ["*"], false, $server->type);
 
 	//echo $adldap->getLastError();
 }

@@ -56,12 +56,12 @@ if ($POST->action != 'delete') {
 
 
 # build the query parameter arrary
-$values = array('id' => $POST->id,
+$values = ['id' => $POST->id,
 				'zoneId' => $POST->zoneId,
 				'alias' => $POST->alias,
 				'deviceId' => $POST->deviceId,
 				'interface' => $POST->interface
-				);
+				];
 # modify
 if(!$Zones->modify_mapping($POST->action,$values)) 	{ $Result->show("danger",  _("Cannot add mapping"), true); }
 else 													{ $Result->show("success", _("Mapping modified successfully"), true);  }

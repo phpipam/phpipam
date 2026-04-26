@@ -38,7 +38,7 @@ if(is_blank($POST->wtitle) || is_blank($POST->wfile)) 	{ $Result->show("danger",
 $POST->wfile = str_replace(".php","",trim((string) $POST->wfile));
 
 # set update values
-$values = array("wid"=>$POST->wid,
+$values = ["wid"=>$POST->wid,
 				"wtitle"=>$POST->wtitle,
 				"wdescription"=>$POST->wdescription,
 				"wfile"=>$POST->wfile,
@@ -47,7 +47,7 @@ $values = array("wid"=>$POST->wid,
 				"wparams"=>$POST->wparams,
 				"whref"=>$POST->whref,
 				"wsize"=>$POST->wsize
-				);
+				];
 # update
 if(!$Admin->object_modify("widgets", $POST->action, "wid", $values))	{ $Result->show("danger",  _("Widget ".$User->get_post_action()." error")."!", true); }
 else																	{ $Result->show("success", _("Widget ".$User->get_post_action()." success")."!", true); }

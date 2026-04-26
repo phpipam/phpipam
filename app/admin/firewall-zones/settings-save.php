@@ -149,9 +149,9 @@ if($POST->autogen != 'on')	{ $values->autogen = 'off'; }
 else 							{ $values->autogen = $POST->autogen; }
 
 # prepare the database update and encode the array with JSON_FORCE_OBJECT to keep the ids.
-$values = array('id' => 1,
+$values = ['id' => 1,
 				'firewallZoneSettings' => json_encode($values,JSON_FORCE_OBJECT)
-				);
+				];
 
 # update the settings, alert or reply the success message.
 if(!$Admin->object_modify("settings", "edit", "id", $values)) 	{ $Result->show("danger",  _("Cannot update settings"), true); }

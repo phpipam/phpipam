@@ -38,7 +38,7 @@ foreach ($data as &$cdata) {
 	if (($cdata['action'] == "add") || ($cdata['action'] == "edit")) {
 		// # set update array
 
-		$values = array("id"=>$cdata['id'],
+		$values = ["id"=>$cdata['id'],
 						"sectionId"=>$cdata['sectionId'],
 						"subnet"=>$Subnets->transform_to_decimal($cdata['subnet']),
 						"mask"=>$cdata['mask'],
@@ -48,7 +48,7 @@ foreach ($data as &$cdata) {
 						"masterSubnetId"=>$cdata['masterSubnetId'],
 						"permissions"=>$cdata['permissions'],
 						"isFolder"=>0
-						);
+						];
 
 		# add custom fields
 		if(sizeof($custom_fields) > 0) {

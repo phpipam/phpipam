@@ -19,7 +19,7 @@ $type_hash = [];
 foreach($circuit_types as $t){ $type_hash[$t->id] = $t->ctname; }
 # get hidden fields */
 $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-$hidden_fields = is_array(@$hidden_fields['circuits']) ? $hidden_fields['circuits'] : array();
+$hidden_fields = is_array(@$hidden_fields['circuits']) ? $hidden_fields['circuits'] : [];
 
 # check
 is_numeric($GET->subnetId) ? : $Result->show("danger", _("Invalid ID"), true);

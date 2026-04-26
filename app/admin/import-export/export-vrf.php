@@ -40,7 +40,7 @@ if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === fa
 
 # fetch all vrfs
 $all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
-if (!$all_vrfs) { $all_vrfs = array(); }
+if (!$all_vrfs) { $all_vrfs = []; }
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields('vrf');

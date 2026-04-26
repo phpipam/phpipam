@@ -47,13 +47,13 @@ foreach($POST as $key=>$line) {
 $POST->sections = isset($temp) ? implode(";", $temp) : null;
 
 # set update array
-$values = array(
+$values = [
 				"vrfId"       =>$POST->vrfId,
 				"name"        =>$POST->name,
 				"rd"          =>$POST->rd,
 				"sections"    =>$POST->sections,
 				"description" =>$POST->description
-				);
+				];
 # append custom
 if(sizeof($custom) > 0) {
 	foreach($custom as $myField) {

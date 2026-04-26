@@ -61,16 +61,16 @@ class Addresses_controller extends Common_api_functions  {
 		$this->validate_options_request ();
 
 		// methods
-		$result = array();
-		$result['methods'] = array(
-								array("href"=>"/api/".$this->_params->app_id."/addresses/", 	"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
-								array("href"=>"/api/".$this->_params->app_id."/addresses/{id}/","methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
-																												 array("rel"=>"create", "method"=>"POST"),
-																												 array("rel"=>"update", "method"=>"PATCH"),
-																												 array("rel"=>"delete", "method"=>"DELETE"))),
-							);
+		$result = [];
+		$result['methods'] = [
+								["href"=>"/api/".$this->_params->app_id."/addresses/", 	"methods"=>[["rel"=>"options", "method"=>"OPTIONS"]]],
+								["href"=>"/api/".$this->_params->app_id."/addresses/{id}/","methods"=>[["rel"=>"read", 	"method"=>"GET"],
+																												 ["rel"=>"create", "method"=>"POST"],
+																												 ["rel"=>"update", "method"=>"PATCH"],
+																												 ["rel"=>"delete", "method"=>"DELETE"]]],
+							];
 		# result
-		return array("code"=>200, "data"=>$result);
+		return ["code"=>200, "data"=>$result];
 	}
 
 
@@ -108,13 +108,13 @@ class Addresses_controller extends Common_api_functions  {
 			$result = $this->Addresses->fetch_all_objects ("ipaddresses");
 			// check result
 			if ($result===false)						{ $this->Response->throw_exception(500, "Unable to read addresses"); }
-			else										{ return array("code"=>200, "data"=>$this->prepare_result($result, "addresses", true, true)); }
+			else										{ return ["code"=>200, "data"=>$this->prepare_result($result, "addresses", true, true)]; }
 		}
 		// subnet Id > read all addresses in subnet
 		elseif($this->_params->id=="custom_fields") {
 			// check result
 			if(sizeof($this->custom_fields)==0)			{ $this->Response->throw_exception(404, 'No custom fields defined'); }
-			else										{ return array("code"=>200, "data"=>$this->custom_fields); }
+			else										{ return ["code"=>200, "data"=>$this->custom_fields]; }
 		}
 		// first free
 		elseif($this->_params->id=="first_free") {
@@ -129,7 +129,7 @@ class Addresses_controller extends Common_api_functions  {
     		$this->_params->ip_addr = $this->Addresses->get_first_available_address ($subnet->id);
     		// null
     		if ($this->_params->ip_addr==false)          { $this->Response->throw_exception(404, 'No free addresses found'); }
-            else                                         { return array("code"=>200, "data"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted")); }
+            else                                         { return ["code"=>200, "data"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted")]; }
 		}
 		// address search inside predefined subnet
 		elseif($this->Tools->validate_ip ($this->_params->id)!==false && isset($this->_params->id2)) {
@@ -149,7 +149,7 @@ class Addresses_controller extends Common_api_functions  {
                 else                    { $result = $result_filtered; }
             }
     		if ($result==false)                          { $this->Response->throw_exception(404, 'No addresses found'); }
-            else                                         { return array("code"=>200, "data"=>$result); }
+            else                                         { return ["code"=>200, "data"=>$result]; }
 		}
 		// tags
 		elseif($this->_params->id=="tags") {
@@ -180,7 +180,7 @@ class Addresses_controller extends Common_api_functions  {
 
 				// result
 				if($result===false)						{ $this->Response->throw_exception(404, 'No addresses found'); }
-				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, "addresses", true, false)); }
+				else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, "addresses", true, false)]; }
 			}
 			// tags
 			else {
@@ -198,7 +198,7 @@ class Addresses_controller extends Common_api_functions  {
 
 				// result
 				if($result===false)						{ $this->Response->throw_exception(404, 'Tag not found'); }
-				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, "addresses/tags", true, false)); }
+				else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, "addresses/tags", true, false)]; }
 			}
 		}
 		// Search all addresses matching custom link_field field's value
@@ -207,7 +207,7 @@ class Addresses_controller extends Common_api_functions  {
 			$result = $this->Tools->fetch_multiple_objects ("ipaddresses", $this->Addresses->Log->settings->link_field, $this->_params->id2);
 			// result
 				if($result===false)						{ $this->Response->throw_exception(404, 'No addresses found'); }
-				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, "addresses", true, false)); }
+				else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, "addresses", true, false)]; }
 		}
 		//
 		// id not set
@@ -225,7 +225,7 @@ class Addresses_controller extends Common_api_functions  {
 				$this->validate_address_id ();
 
 				// set result
-				$result = array();
+				$result = [];
 				$result['scan_type'] = $Scan->icmp_type;
 				$result['exit_code'] = $Scan->ping_address ($this->old_address->ip);
 				$result['result_code'] = $Scan->ping_exit_explain ($result['exit_code']);
@@ -233,11 +233,11 @@ class Addresses_controller extends Common_api_functions  {
 
 				// success
 				if($result['exit_code']==0) 			{ $Scan->ping_update_lastseen ($this->_params->id); }
-				return array("code"=>200, "data"=>$result);
+				return ["code"=>200, "data"=>$result];
 			}
 			// changelog
 			elseif ($this->_params->id2=="changelog")   {
-				return array("code"=>200, "data"=>$this->address_changelog ());
+				return ["code"=>200, "data"=>$this->address_changelog ()];
 			}
 			// default
 			else {
@@ -245,7 +245,7 @@ class Addresses_controller extends Common_api_functions  {
 				$result = $this->Addresses->fetch_address ("id", $this->_params->id);
 				// check result
 				if($result==false)						{ $this->Response->throw_exception(404, "Invalid Id"); }
-				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, true, true)); }
+				else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, true, true)]; }
 			}
 		}
 		// ip address ?
@@ -257,14 +257,14 @@ class Addresses_controller extends Common_api_functions  {
 			$result = $this->Tools->fetch_multiple_objects ("ipaddresses", "ip_addr", $this->Subnets->transform_address ($this->_params->id2, "decimal"));
 			// check result
 			if($result===false)							{ $this->Response->throw_exception(404, 'Address not found'); }
-			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, true, true)); }
+			else										{ return ["code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, true, true)]; }
 		}
         // search host ?
         elseif (@$this->_params->id=="search_hostname") {
             $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "hostname", $this->_params->id2);
             // check result
             if($result===false)                         { $this->Response->throw_exception(404, 'Hostname not found'); }
-            else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
+            else                                        { return ["code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false)];}
         }
         // search host base (initial substring), return sorted by name
         elseif (@$this->_params->id=="search_hostbase") {
@@ -272,14 +272,14 @@ class Addresses_controller extends Common_api_functions  {
             $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "hostname", $target, "hostname", true, true);
             // check result
             if($result===false)                         { $this->Response->throw_exception(404, 'Host name not found'); }
-            else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
+            else                                        { return ["code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false)];}
         }
 		 elseif (@$this->_params->id=="search_mac") {
             $this->_params->id2 = $this->reformat_mac_address ($this->_params->id2, 1);
             $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "mac", $this->_params->id2, "mac");
             // check result
             if($result===false)                         { $this->Response->throw_exception(404, 'Host name not found'); }
-            else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
+            else                                        { return ["code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false)];}
 		// false
 		} else											{  $this->Response->throw_exception(400, "Invalid Id"); }
 	}
@@ -341,10 +341,10 @@ class Addresses_controller extends Common_api_functions  {
 		else {
     		//set result
     		if($this->_params->id=="first_free")   {
-        	    return array("code"=>201, "message"=>"Address created", "id"=>$this->Addresses->lastId, "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/", "data"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted"));
+        	    return ["code"=>201, "message"=>"Address created", "id"=>$this->Addresses->lastId, "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/", "data"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted")];
     		}
     		else {
-        	    return array("code"=>201, "message"=>"Address created", "id"=>$this->Addresses->lastId, "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
+        	    return ["code"=>201, "message"=>"Address created", "id"=>$this->Addresses->lastId, "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/"];
     		}
 		}
 	}
@@ -402,7 +402,7 @@ class Addresses_controller extends Common_api_functions  {
 		}
 		else {
 			//set result
-			return array("code"=>200, "message"=>"Address updated");
+			return ["code"=>200, "message"=>"Address updated"];
 		}
 
 	}
@@ -450,7 +450,7 @@ class Addresses_controller extends Common_api_functions  {
 		$this->validate_address_id ();
 
 		// set variables for delete
-		$values = array();
+		$values = [];
 		$values["id"] 	  = $this->_params->id;
 		$values["action"] = "delete";
 
@@ -468,7 +468,7 @@ class Addresses_controller extends Common_api_functions  {
 													{ $this->Response->throw_exception(500, "Failed to delete address"); }
 		else {
 			//set result
-			return array("code"=>200, "message"=>"Address deleted");
+			return ["code"=>200, "message"=>"Address deleted"];
 		}
 
 	}

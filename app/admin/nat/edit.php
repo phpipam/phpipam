@@ -75,7 +75,7 @@ $custom = $Tools->fetch_custom_fields('nat');
         	<th><?php print _('Type'); ?></th>
         	<td>
             	<?php
-                $nat_types = array("source", "static", "destination");
+                $nat_types = ["source", "static", "destination"];
                 ?>
             	<select name="type" class="form-control input-sm input-w-auto" <?php print $readonly; ?>>
                 <?php

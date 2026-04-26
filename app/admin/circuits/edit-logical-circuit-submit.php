@@ -45,13 +45,13 @@ if(sizeof($id_list ) != sizeof(array_unique($id_list))){  $Result->show("danger"
 if($POST->action == "add" && sizeof($id_list) == 0){  $Result->show("danger", _('No circuits selected').'!', true); }
 
 # set update values
-$values = array(
+$values = [
 				"id"           => $POST->id,
 				"logical_cid"  => $POST->logical_cid,
 				"purpose"      => $POST->purpose,
 				"comments"     => $POST->comments,
 				"member_count" => sizeof($id_list)
-				);
+				];
 
 # fetch custom fields
 $update = $Tools->update_POST_custom_fields('circuitsLogical', $POST->action, $POST);

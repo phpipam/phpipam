@@ -212,10 +212,10 @@ if($User->user->authMethod == 1) {
 	<td>
 		<select name="menuType" class="form-control input-sm input-w-auto">
 			<?php
-			$opts = array(
+			$opts = [
 				"Static"=>_("Static"),
 				"Dynamic"=>_("Dynamic")
-			);
+			];
 			foreach($opts as $key=>$line) {
 				if($User->user->menuType == $key) { print "<option value='$key' selected>$line</option>"; }
 				else 							  { print "<option value='$key'>$line</option>"; }

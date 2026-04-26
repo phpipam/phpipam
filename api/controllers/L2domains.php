@@ -46,16 +46,16 @@ class L2domains_controller extends Common_api_functions {
 		$this->validate_options_request ();
 
 		// methods
-		$result = array();
-		$result['methods'] = array(
-								array("href"=>"/api/l2domains/".$this->_params->app_id."/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
-								array("href"=>"/api/l2domains/".$this->_params->app_id."/{id}/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
-																												 	array("rel"=>"create", "method"=>"POST"),
-																												 	array("rel"=>"update", "method"=>"PATCH"),
-																												 	array("rel"=>"delete", "method"=>"DELETE"))),
-							);
+		$result = [];
+		$result['methods'] = [
+								["href"=>"/api/l2domains/".$this->_params->app_id."/", 		"methods"=>[["rel"=>"options", "method"=>"OPTIONS"]]],
+								["href"=>"/api/l2domains/".$this->_params->app_id."/{id}/", 	"methods"=>[["rel"=>"read", 	"method"=>"GET"],
+																												 	["rel"=>"create", "method"=>"POST"],
+																												 	["rel"=>"update", "method"=>"PATCH"],
+																												 	["rel"=>"delete", "method"=>"DELETE"]]],
+							];
 		# result
-		return array("code"=>200, "data"=>$result);
+		return ["code"=>200, "data"=>$result];
 	}
 
 
@@ -82,14 +82,14 @@ class L2domains_controller extends Common_api_functions {
 			$result = $this->Tools->fetch_all_objects ("vlanDomains", 'id', true);
 			// check result
 			if($result===false)						{ $this->Response->throw_exception(404, 'No domains configured'); }
-			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+			else									{ return ["code"=>200, "data"=>$this->prepare_result ($result, null, true, true)]; }
 		}
 		// set
 		else {
 			// custom fields
 			if($this->_params->id=="custom_fields") {
 				if(sizeof($this->custom_fields)==0)	{ $this->Response->throw_exception(404, 'No custom fields defined'); }
-				else								{ return array("code"=>200, "data"=>$this->custom_fields); }
+				else								{ return ["code"=>200, "data"=>$this->custom_fields]; }
 			}
 			// vlans
 			elseif (@$this->_params->id2=="vlans") {
@@ -99,7 +99,7 @@ class L2domains_controller extends Common_api_functions {
 				$result = $this->Tools->fetch_multiple_objects ("vlans", "domainId", $this->_params->id, 'vlanId', true);
 				// check result
 				if($result==NULL)					{ $this->Response->throw_exception(404, "No vlans belonging to this domain"); }
-				else								{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+				else								{ return ["code"=>200, "data"=>$this->prepare_result ($result, null, true, true)]; }
 			}
 			// id
 			else {
@@ -109,7 +109,7 @@ class L2domains_controller extends Common_api_functions {
 				$result = $this->Tools->fetch_object ("vlanDomains", "id", $this->_params->id);
 				// check result
 				if($result==NULL)					{ $this->Response->throw_exception(404, "Invalid domain id"); }
-				else								{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+				else								{ return ["code"=>200, "data"=>$this->prepare_result ($result, null, true, true)]; }
 			}
 
 		}
@@ -142,7 +142,7 @@ class L2domains_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "Domain creation failed"); }
 		else {
 			//set result
-			return array("code"=>201, "message"=>"L2 domain created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/l2domains/".$this->Admin->lastId."/");
+			return ["code"=>201, "message"=>"L2 domain created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/l2domains/".$this->Admin->lastId."/"];
 		}
 	}
 
@@ -174,7 +174,7 @@ class L2domains_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "Domain edit failed"); }
 		else {
 			//set result
-			return array("code"=>200, "message"=>"L2 domain updated");
+			return ["code"=>200, "message"=>"L2 domain updated"];
 		}
 	}
 
@@ -196,7 +196,7 @@ class L2domains_controller extends Common_api_functions {
 		$this->validate_domain_edit ();
 
 		# set variables for update
-		$values = array();
+		$values = [];
 		$values["id"] = $this->_params->id;
 
 		# execute delete
@@ -207,7 +207,7 @@ class L2domains_controller extends Common_api_functions {
 			$this->Admin->update_object_references ("vlans", "domainId", $this->_params->id, 1);
 
 			// set result
-			return array("code"=>200, "message"=>"L2 domain deleted and vlans migrated to default domain");
+			return ["code"=>200, "message"=>"L2 domain deleted and vlans migrated to default domain"];
 		}
 	}
 

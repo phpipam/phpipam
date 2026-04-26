@@ -35,7 +35,7 @@ unset($old_access[$POST->code]);
 $new_access = !is_array($old_access) ? "" : json_encode(array_filter($old_access));
 
 # execute
-if(!$Admin->object_modify("settings", "edit", "id", array("id"=>1,"tempAccess"=>$new_access))) 	{ $Result->show("danger",  _("Temporary share delete error"), true); }
+if(!$Admin->object_modify("settings", "edit", "id", ["id"=>1,"tempAccess"=>$new_access])) 	{ $Result->show("danger",  _("Temporary share delete error"), true); }
 else 																							{ $Result->show("success", _("Temporary share deleted"), false); }
 
 ?>

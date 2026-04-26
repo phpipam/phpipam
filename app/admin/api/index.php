@@ -13,7 +13,7 @@ $User->is_admin();
 $all_apis = $Admin->fetch_all_objects("api");
 
 # app security texts
-$app_perms_text = array("SSL with User token"=>"ssl_token","SSL with App code token"=>"ssl_code","Encrypted"=>"crypt", "User token"=>"none");
+$app_perms_text = ["SSL with User token"=>"ssl_token","SSL with App code token"=>"ssl_code","Encrypted"=>"crypt", "User token"=>"none"];
 
 ?>
 

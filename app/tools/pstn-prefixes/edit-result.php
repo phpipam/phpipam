@@ -108,7 +108,7 @@ if($POST->action=="add" && $POST->master==0) {
 }
 
 // set values
-$values = array(
+$values = [
     "id"          =>$POST->id,
     "name"        =>$POST->name,
     "prefix"      =>$POST->prefix,
@@ -117,7 +117,7 @@ $values = array(
     "stop"        =>$POST->stop,
     "deviceId"    =>$POST->deviceId,
     "description" =>$POST->description
-    );
+    ];
 
 # perm check
 if ($User->get_module_permissions ("devices")==User::ACCESS_NONE) {

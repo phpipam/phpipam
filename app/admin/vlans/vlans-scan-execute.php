@@ -66,7 +66,7 @@ foreach ($POST as $k=>$p) {
 if (!isset($scan_devices))                      { $Result->show("danger", _("No devices for SNMP VLAN query available"), true); }
 
 // init result array
-$new_vlans = array();
+$new_vlans = [];
 
 // ok, we have devices, connect to each device and do query
 foreach ($scan_devices as $d) {

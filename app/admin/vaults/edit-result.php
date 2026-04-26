@@ -32,7 +32,7 @@ $User->Crypto->csrf_cookie ("validate", "vaults", $POST->csrf_cookie) === false 
 $custom = $Tools->fetch_custom_fields('vaults');
 
 /* checks */
-$error = array();
+$error = [];
 
 # add, edit
 if($POST->action!="delete") {
@@ -55,11 +55,11 @@ if(sizeof($error) > 0) {
 }
 else {
 	# create array of values for modification
-	$values = array(
+	$values = [
 					"id"                     =>$POST->id,
 					"name"                   =>$POST->name,
 					"description"            =>$POST->description
-					);
+					];
 
 	# append custom
 	if(sizeof($custom) > 0) {

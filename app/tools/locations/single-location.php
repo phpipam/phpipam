@@ -141,7 +141,7 @@ else {
                 }
                 else {
                     // reindex
-                    $object_groups = array("racks"=>array(), "devices"=>array(), "subnets"=>array());
+                    $object_groups = ["racks"=>[], "devices"=>[], "subnets"=>[]];
                     foreach ($objects as $o) {
                         $object_groups[$o->type][] = $o;
                     }

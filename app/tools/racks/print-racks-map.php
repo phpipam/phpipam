@@ -30,7 +30,7 @@ else {
     else {
 
         // array of racks
-        $all_rack_locations = array ();
+        $all_rack_locations =  [];
 
         // reorder by location
         foreach ($Racks->all_racks as $r) {
@@ -39,7 +39,7 @@ else {
                 $r->location = "0";
             }
             // save
-            if (!isset($all_rack_locations[$r->location])) $all_rack_locations[$r->location] = array();
+            if (!isset($all_rack_locations[$r->location])) $all_rack_locations[$r->location] = [];
             $all_rack_locations[$r->location][$r->row][] = $r;
         }
 

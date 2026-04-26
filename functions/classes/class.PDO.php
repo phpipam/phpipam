@@ -105,7 +105,7 @@ abstract class DB {
 	 * @var array
 	 * @access public
 	 */
-	public $cache = array();
+	public $cache = [];
 
 	/**
 	 * Enable MySQL CTE query support
@@ -410,7 +410,7 @@ abstract class DB {
 	 * @param integer|null &$rowCount (default: null)
 	 * @return bool
 	 */
-	public function runQuery($query, $values = array(), &$rowCount = null) {
+	public function runQuery($query, $values = [], &$rowCount = null) {
 		if (!$this->isConnected()) $this->connect();
 
 		$result = null;
@@ -550,7 +550,7 @@ abstract class DB {
 
 		//debug
 		$this->log_query ($statement, (array) $value);
-		$statement->execute(array($value));
+		$statement->execute([$value]);
 
 		return $statement->fetchColumn();
 	}
@@ -594,7 +594,7 @@ abstract class DB {
 		//formulate an update statement based on the object parameters
 		$objParams = array_keys($obj);
 
-		$preparedParamArr = array();
+		$preparedParamArr = [];
 		foreach ($objParams as $objParam) {
 			$preparedParamArr[] = '`' . $this->escape($objParam) . '`=?';
 		}
@@ -638,7 +638,7 @@ abstract class DB {
 		$idParts = array_fill(0, $num, '`id`=?');
 		//set values
 		$objParams = array_keys($values);
-		$preparedParamArr = array();
+		$preparedParamArr = [];
 		foreach ($objParams as $objParam) {
 			$preparedParamArr[] = '`' . $this->escape($objParam) . '`=?';
 		}
@@ -678,7 +678,7 @@ abstract class DB {
 		//formulate an update statement based on the object parameters
 		$objValues = array_values($obj);
 
-		$preparedParamsArr = array();
+		$preparedParamsArr = [];
 		foreach ($obj as $key => $value) {
 			$preparedParamsArr[] = '`' . $this->escape($key) . '`';
 		}
@@ -714,7 +714,7 @@ abstract class DB {
 	 * @param mixed $id (default: null)
 	 * @return bool
 	 */
-	public function objectExists($tableName, $query = null, $values = array(), $id = null) {
+	public function objectExists($tableName, $query = null, $values = [], $id = null) {
 		return is_object($this->getObject($tableName, $id));
 	}
 
@@ -800,7 +800,7 @@ abstract class DB {
 			$statement = $this->pdo->query('SELECT * FROM `'.$tableName.'` ORDER BY `'.$sortField.'` '.$sortStr.' LIMIT '.$numRecords.' OFFSET '.$offset.';');
 		}
 
-		$results = array();
+		$results = [];
 
 		if (is_object($statement)) {
 			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
@@ -819,7 +819,7 @@ abstract class DB {
 	 * @param string $class (default: 'stdClass')
 	 * @return array
 	 */
-	public function getObjectsQuery($tableName, $query = null, $values = array(), $class = 'stdClass') {
+	public function getObjectsQuery($tableName, $query = null, $values = [], $class = 'stdClass') {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
@@ -828,7 +828,7 @@ abstract class DB {
 		$this->log_query ($statement, $values);
 		$statement->execute((array)$values);
 
-		$results = array();
+		$results = [];
 
 		if (is_object($statement)) {
 			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
@@ -850,10 +850,10 @@ abstract class DB {
 		$statement = $this->pdo->prepare("SELECT `$groupField`,COUNT(*) FROM `$tableName` GROUP BY `$groupField`");
 
 		//debug
-		$this->log_query ($statement, array());
+		$this->log_query ($statement, []);
 		$statement->execute();
 
-		$results = array();
+		$results = [];
 
 		if (is_object($statement)) {
 			$results = $statement->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -887,7 +887,7 @@ abstract class DB {
 		}
 
 		//debug
-		$this->log_query ($statement, array($id));
+		$this->log_query ($statement, [$id]);
 		$statement->execute();
 
 		//we can then extract the single object (if we have a result)
@@ -910,7 +910,7 @@ abstract class DB {
 	 * @param string $class (default: 'stdClass')
 	 * @return object|null
 	 */
-	public function getObjectQuery($tableName, $query = null, $values = array(), $class = 'stdClass') {
+	public function getObjectQuery($tableName, $query = null, $values = [], $class = 'stdClass') {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
@@ -973,9 +973,9 @@ abstract class DB {
 
 	    // subnets
 	    if ($table=='subnets' && $sortField=='subnet') {
-	        return $this->getObjectsQuery($table, 'SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY LPAD(`subnet`,39,0) ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+	        return $this->getObjectsQuery($table, 'SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY LPAD(`subnet`,39,0) ' . ($sortAsc ? '' : 'DESC') . ';', [$value]);
 	    } else {
-	        return $this->getObjectsQuery($table, 'SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+	        return $this->getObjectsQuery($table, 'SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', [$value]);
 	    }
 	}
 
@@ -992,7 +992,7 @@ abstract class DB {
 		$table = $this->escape($table);
 		$field = $this->escape($field);
 
-		return $this->getObjectQuery($table, 'SELECT * FROM `' . $table . '` WHERE `' . $field . '` = ? LIMIT 1;', array($value));
+		return $this->getObjectQuery($table, 'SELECT * FROM `' . $table . '` WHERE `' . $field . '` = ? LIMIT 1;', [$value]);
 	}
 
 	/**
@@ -1005,7 +1005,7 @@ abstract class DB {
 	public function deleteObject($tableName, $id) {
 		$tableName = $this->escape($tableName);
 
-		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `id`=?;', array($id));
+		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `id`=?;', [$id]);
 	}
 
 	/**
@@ -1057,9 +1057,9 @@ abstract class DB {
 
 		//multiple
 		if(!empty($field2))
-		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=? and `'.$field2.'`=?;', array($value, $value2));
+		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=? and `'.$field2.'`=?;', [$value, $value2]);
 		else
-		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=?;', array($value));
+		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=?;', [$value]);
 	}
 
 	/**
@@ -1129,7 +1129,7 @@ class Database_PDO extends DB {
 	 * @var array
 	 * @access protected
 	 */
-	protected $pdo_ssl_opts = array ();
+	protected $pdo_ssl_opts =  [];
 
 	/**
 	 * flag if installation is happening!
@@ -1190,15 +1190,15 @@ class Database_PDO extends DB {
 		$this->ssl = false;
 		if (@$db['ssl']===true) {
 
-			$this->pdo_ssl_opts = array (
+			$this->pdo_ssl_opts =  [
 				'ssl_key'    => PDO::MYSQL_ATTR_SSL_KEY,
 				'ssl_cert'   => PDO::MYSQL_ATTR_SSL_CERT,
 				'ssl_ca'     => PDO::MYSQL_ATTR_SSL_CA,
 				'ssl_cipher' => PDO::MYSQL_ATTR_SSL_CIPHER,
 				'ssl_capath' => PDO::MYSQL_ATTR_SSL_CAPATH
-			);
+			];
 
-			$this->ssl = array();
+			$this->ssl = [];
 
 			if ($db['ssl_verify']===false) {
 				$this->ssl[1014] = false;	// PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT=1014 exists as of PHP 7.0.18 and PHP 7.1.4.
@@ -1252,14 +1252,14 @@ class Database_PDO extends DB {
 			WHERE `table_schema`='" . $this->dbname . "';
 		");
 
-		$columnsByTable = array();
+		$columnsByTable = [];
 
 		if (!is_array($columns))
 			return $columnsByTable;
 
 		foreach ($columns as $column) {
 			if (!isset($columnsByTable[$column->table_name])) {
-				$columnsByTable[$column->table_name] = array();
+				$columnsByTable[$column->table_name] = [];
 			}
 
 			$columnsByTable[$column->table_name][$column->column_name] = $column;
@@ -1281,7 +1281,7 @@ class Database_PDO extends DB {
     	$tableName = $this->escape($tableName);
     	$field = $this->escape($field);
     	// fetch and return
-    	return $this->getObjectQuery("no_html_escape", "SHOW FIELDS FROM `$tableName` where Field = ?", array($field));
+    	return $this->getObjectQuery("no_html_escape", "SHOW FIELDS FROM `$tableName` where Field = ?", [$field]);
 	}
 
 	/**
@@ -1298,25 +1298,25 @@ class Database_PDO extends DB {
 			WHERE i.`constraint_type` = 'FOREIGN KEY' AND i.`table_schema`='" . $this->dbname . "';
 			");
 
-		$foreignLinksByTable = array();
-		$foreignLinksByRefTable = array();
+		$foreignLinksByTable = [];
+		$foreignLinksByRefTable = [];
 
 		if (!is_array($foreignLinks))
-			return array($foreignLinksByTable, $foreignLinksByRefTable);
+			return [$foreignLinksByTable, $foreignLinksByRefTable];
 
 		foreach ($foreignLinks as $foreignLink) {
 			if (!isset($foreignLinksByTable[$foreignLink->table_name])) {
-				$foreignLinksByTable[$foreignLink->table_name] = array();
+				$foreignLinksByTable[$foreignLink->table_name] = [];
 			}
 
 			if (!isset($foreignLinksByRefTable[$foreignLink->referenced_table_name])) {
-				$foreignLinksByRefTable[$foreignLink->referenced_table_name] = array();
+				$foreignLinksByRefTable[$foreignLink->referenced_table_name] = [];
 			}
 
 			$foreignLinksByTable[$foreignLink->table_name][$foreignLink->column_name] = $foreignLink;
 			$foreignLinksByRefTable[$foreignLink->referenced_table_name][$foreignLink->table_name] = $foreignLink;
 		}
 
-		return array($foreignLinksByTable, $foreignLinksByRefTable);
+		return [$foreignLinksByTable, $foreignLinksByRefTable];
 	}
 }

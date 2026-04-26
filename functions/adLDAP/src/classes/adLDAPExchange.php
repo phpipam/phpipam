@@ -82,12 +82,12 @@ class adLDAPExchange {
         }
         $mdbUseDefaults = $this->adldap->utilities()->boolToStr($useDefaults);
 
-        $attributes = array(
+        $attributes = [
             'exchange_homemdb'=>$container.",".$baseDn,
             'exchange_proxyaddress'=>'SMTP:'.$emailAddress,
             'exchange_mailnickname'=>$mailNickname,
             'exchange_usedefaults'=>$mdbUseDefaults
-        );
+        ];
         $result = $this->adldap->user()->modify($username, $attributes, $isGUID);
         if ($result == false) {
             return false;
@@ -117,7 +117,7 @@ class adLDAPExchange {
         $proxyValue = 'X400:';
 
         // Find the dn of the user
-        $user = $this->adldap->user()->info($username, array("cn","proxyaddresses"), $isGUID);
+        $user = $this->adldap->user()->info($username, ["cn","proxyaddresses"], $isGUID);
         if ($user[0]["dn"] === NULL) { return false; }
         $userDn = $user[0]["dn"];
 
@@ -160,13 +160,13 @@ class adLDAPExchange {
         }
 
         // Find the dn of the user
-        $user = $this->adldap->user()->info($username, array("cn","proxyaddresses"), $isGUID);
+        $user = $this->adldap->user()->info($username, ["cn","proxyaddresses"], $isGUID);
         if ($user[0]["dn"] === NULL){ return false; }
         $userDn = $user[0]["dn"];
 
         // We need to scan existing proxy addresses and demote the default one
         if (is_array($user[0]["proxyaddresses"]) && $default === true) {
-            $modAddresses = array();
+            $modAddresses = [];
             for ($i=0;$i<sizeof($user[0]['proxyaddresses']);$i++) {
                 if (strstr((string) $user[0]['proxyaddresses'][$i], 'SMTP:') !== false) {
                     $user[0]['proxyaddresses'][$i] = str_replace('SMTP:', 'smtp:', $user[0]['proxyaddresses'][$i]);
@@ -222,12 +222,12 @@ class adLDAPExchange {
         if ($emailAddress === NULL) { return "Missing compulsory fields [emailAddress]"; }
 
         // Find the dn of the user
-        $user = $this->adldap->user()->info($username, array("cn","proxyaddresses"), $isGUID);
+        $user = $this->adldap->user()->info($username, ["cn","proxyaddresses"], $isGUID);
         if ($user[0]["dn"] === NULL) { return false; }
         $userDn = $user[0]["dn"];
 
         if (is_array($user[0]["proxyaddresses"])) {
-            $mod = array();
+            $mod = [];
             for ($i=0;$i<sizeof($user[0]['proxyaddresses']);$i++) {
                 if (strstr((string) $user[0]['proxyaddresses'][$i], 'SMTP:') !== false && $user[0]['proxyaddresses'][$i] == 'SMTP:' . $emailAddress) {
                     $mod['proxyAddresses'][0] = 'SMTP:' . $emailAddress;
@@ -260,12 +260,12 @@ class adLDAPExchange {
         if ($emailAddress === NULL) { return "Missing compulsory fields [emailAddress]"; }
 
         // Find the dn of the user
-        $user = $this->adldap->user()->info($username, array("cn","proxyaddresses"), $isGUID);
+        $user = $this->adldap->user()->info($username, ["cn","proxyaddresses"], $isGUID);
         if ($user[0]["dn"] === NULL){ return false; }
         $userDn = $user[0]["dn"];
 
         if (is_array($user[0]["proxyaddresses"])) {
-            $modAddresses = array();
+            $modAddresses = [];
             for ($i=0;$i<sizeof($user[0]['proxyaddresses']);$i++) {
                 if (strstr((string) $user[0]['proxyaddresses'][$i], 'SMTP:') !== false) {
                     $user[0]['proxyaddresses'][$i] = str_replace('SMTP:', 'smtp:', $user[0]['proxyaddresses'][$i]);
@@ -304,12 +304,12 @@ class adLDAPExchange {
 
         if ($mailNickname !== NULL) {
             // Find the dn of the user
-            $user = $this->adldap->contact()->info($distinguishedName, array("cn","displayname"));
+            $user = $this->adldap->contact()->info($distinguishedName, ["cn","displayname"]);
             if ($user[0]["displayname"] === NULL) { return false; }
             $mailNickname = $user[0]['displayname'][0];
         }
 
-        $attributes = array("email"=>$emailAddress,"contact_email"=>"SMTP:" . $emailAddress,"exchange_proxyaddress"=>"SMTP:" . $emailAddress,"exchange_mailnickname" => $mailNickname);
+        $attributes = ["email"=>$emailAddress,"contact_email"=>"SMTP:" . $emailAddress,"exchange_proxyaddress"=>"SMTP:" . $emailAddress,"exchange_mailnickname" => $mailNickname];
 
         // Translate the update to the LDAP schema
         $mod = $this->adldap->adldap_schema($attributes);
@@ -330,11 +330,11 @@ class adLDAPExchange {
      * @param array $attributes An array of the AD attributes you wish to return
      * @return array
      */
-    public function servers($attributes = array('cn','distinguishedname','serialnumber'))
+    public function servers($attributes = ['cn','distinguishedname','serialnumber'])
     {
         if (!$this->adldap->getLdapBind()){ return false; }
 
-        $configurationNamingContext = $this->adldap->getRootDse(array('configurationnamingcontext'));
+        $configurationNamingContext = $this->adldap->getRootDse(['configurationnamingcontext']);
         $sr = @ldap_search($this->adldap->getLdapConnection(), $configurationNamingContext[0]['configurationnamingcontext'][0],'(&(objectCategory=msExchExchangeServer))', $attributes);
         $entries = @ldap_get_entries($this->adldap->getLdapConnection(), $sr);
         return $entries;
@@ -348,7 +348,7 @@ class adLDAPExchange {
      * @param bool $recursive If enabled this will automatically query the databases within a storage group
      * @return array
      */
-    public function storageGroups($exchangeServer, $attributes = array('cn','distinguishedname'), $recursive = NULL)
+    public function storageGroups($exchangeServer, $attributes = ['cn','distinguishedname'], $recursive = NULL)
     {
         if (!$this->adldap->getLdapBind()){ return false; }
         if ($exchangeServer === NULL) { return "Missing compulsory field [exchangeServer]"; }
@@ -374,7 +374,7 @@ class adLDAPExchange {
      * @param array $attributes An array of the AD attributes you wish to return
      * @return array
      */
-    public function storageDatabases($storageGroup, $attributes = array('cn','distinguishedname','displayname')) {
+    public function storageDatabases($storageGroup, $attributes = ['cn','distinguishedname','displayname']) {
         if (!$this->adldap->getLdapBind()){ return false; }
         if ($storageGroup === NULL) { return "Missing compulsory field [storageGroup]"; }
 

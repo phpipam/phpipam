@@ -8,8 +8,8 @@
 $User->check_user_session();
 
 # get all custom fields
-$custom_device_fields = $GET->devices=="on"     ? $Tools->fetch_custom_fields ("devices") : array();
-$hidden_device_fields = is_array(@$hidden_fields['devices']) ? $hidden_fields['devices'] : array();
+$custom_device_fields = $GET->devices=="on"     ? $Tools->fetch_custom_fields ("devices") : [];
+$hidden_device_fields = is_array(@$hidden_fields['devices']) ? $hidden_fields['devices'] : [];
 
 # search devices
 $result_devices = $Tools->search_devices($searchTerm, $custom_device_fields);

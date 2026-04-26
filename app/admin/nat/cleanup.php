@@ -22,11 +22,11 @@ $User->check_module_permissions ("nat", User::ACCESS_RWA, true, true);
 
 # fetch all nat items
 $all_nat = $Tools->fetch_all_objects ("nat");
-$all_nat = $all_nat === false ? array() : $all_nat;
+$all_nat = $all_nat === false ? [] : $all_nat;
 
 # set arrays
-$subnet_ids  = array ();
-$address_ids = array ();
+$subnet_ids  =  [];
+$address_ids =  [];
 
 # decode and save ids for each item to array
 foreach ($all_nat as $nat) {
@@ -70,8 +70,8 @@ $address_ids = array_unique($address_ids);
 
     <?php
     # init arrays
-    $removed_subnets   = array ();
-    $removed_addresses = array ();
+    $removed_subnets   =  [];
+    $removed_addresses =  [];
 
     # first subnets
     if(!empty($subnet_ids)) {

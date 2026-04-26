@@ -116,7 +116,7 @@ class Sections extends Common_functions {
 		$values['id'] = $this->lastInsertId;
 		$this->Log->write( _("Sections create"), _("New section created").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		# write changelog
-		$this->Log->write_changelog('section', "add", 'success', array(), $values);
+		$this->Log->write_changelog('section', "add", 'success', [], $values);
 		return true;
 	}
 
@@ -172,7 +172,7 @@ class Sections extends Common_functions {
 			if(is_array($section_subnets) && sizeof($section_subnets)>0) {
 				foreach($section_subnets as $ss) {
 					//delete subnet
-					$Subnets->modify_subnet("delete", array("id"=>$ss->id));
+					$Subnets->modify_subnet("delete", ["id"=>$ss->id]);
 				}
 			}
 			# delete all sections
@@ -185,7 +185,7 @@ class Sections extends Common_functions {
 		}
 
 		# write changelog
-		$this->Log->write_changelog('section', "delete", 'success', $old_section, array());
+		$this->Log->write_changelog('section', "delete", 'success', $old_section, []);
 		# log
 		$this->Log->write( _("Section")." ".$old_section->name." "._("delete"), _("Section")." ".$old_section->name." "._("deleted").".<hr>".$this->array_to_log($this->reformat_empty_array_fields((array) $old_section)), 0);
 		return true;
@@ -202,7 +202,7 @@ class Sections extends Common_functions {
 		# update each section
 		foreach($order as $key=>$o) {
 			# execute
-			try { $this->Database->updateObject("sections", array("order"=>$o, "id"=>$key), "id"); }
+			try { $this->Database->updateObject("sections", ["order"=>$o, "id"=>$key], "id"); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 				return false;
@@ -269,13 +269,13 @@ class Sections extends Common_functions {
 	 * @return array
 	 */
 	public function fetch_subsections ($sectionId) {
-		try { $subsections = $this->Database->getObjectsQuery('sections', "SELECT * FROM `sections` where `masterSection` = ?;", array($sectionId)); }
+		try { $subsections = $this->Database->getObjectsQuery('sections', "SELECT * FROM `sections` where `masterSection` = ?;", [$sectionId]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
 		# result
-		return sizeof($subsections)>0 ? $subsections : array();
+		return sizeof($subsections)>0 ? $subsections : [];
 	}
 
 	/**
@@ -294,10 +294,10 @@ class Sections extends Common_functions {
 			}
 		}
 		else {
-				$subsections_ids = array();
+				$subsections_ids = [];
 		}
 		//array of section + all subsections
-		return  array_filter(array_merge($subsections_ids, array($id)));
+		return  array_filter(array_merge($subsections_ids, [$id]));
 	}
 
 	/**
@@ -311,7 +311,7 @@ class Sections extends Common_functions {
 		# set query
 		$query = "select distinct(`v`.`vlanId`),`v`.`name`,`v`.`number`,`v`.`domainId`, `v`.`description` from `subnets` as `s`,`vlans` as `v` where `s`.`sectionId` = ? and `s`.`vlanId`=`v`.`vlanId` order by `v`.`number` asc;";
 		# fetch
-		try { $vlans = $this->Database->getObjectsQuery('subnets', $query, array($sectionId)); }
+		try { $vlans = $this->Database->getObjectsQuery('subnets', $query, [$sectionId]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -331,7 +331,7 @@ class Sections extends Common_functions {
 		# set query
 		$query = "select distinct(`v`.`vrfId`),`v`.`name`,`v`.`description` from `subnets` as `s`,`vrf` as `v` where `s`.`sectionId` = ? and `s`.`vrfId`=`v`.`vrfId` order by `v`.`name` asc;";
 		# fetch
-		try { $vrfs = $this->Database->getObjectsQuery('subnets', $query, array($sectionId)); }
+		try { $vrfs = $this->Database->getObjectsQuery('subnets', $query, [$sectionId]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -353,7 +353,7 @@ class Sections extends Common_functions {
 		$Admin = new Admin ($this->Database, false);
 		$domains = $Admin->fetch_all_objects ("vlanDomains", "name");
 		# loop and check
-		$permitted = array();
+		$permitted = [];
 		foreach($domains as $d) {
 			//default
 			if($d->id==1) {
@@ -383,7 +383,7 @@ class Sections extends Common_functions {
 		$nameservers = $Admin->fetch_all_objects ("nameservers","name");
 		# loop and check
 		if ($nameservers!==false) {
-    		$permitted = array();
+    		$permitted = [];
 			foreach($nameservers as $n) {
 				//default
 				if($n->id==1) {
@@ -432,7 +432,7 @@ class Sections extends Common_functions {
 	    	}
 	    }
 	    # return array of groups
-		return isset($out) ? $out : array();
+		return isset($out) ? $out : [];
 	}
 
 	/**
@@ -493,7 +493,7 @@ class Sections extends Common_functions {
 		$sections = $this->fetch_all_sections();
 
 		# init result
-		$out = array();
+		$out = [];
 
 		# loop through sections and check if group_id in permissions
         if ($sections !== false) {
@@ -536,7 +536,7 @@ class Sections extends Common_functions {
 	 * @return string
 	 */
 	public function print_section_subnets_table($User, $sectionId, $showSupernetOnly = false) {
-		$html = array();
+		$html = [];
 
 		# create csrf token
 		$csrf_ffss = $User->Crypto->csrf_cookie ("create-if-not-exists", "find_free_section_subnets");
@@ -547,7 +547,7 @@ class Sections extends Common_functions {
 
 		# set hidden fields
 		$hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true) ? : ['subnets'=>null];
-		$hidden_fields = is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
+		$hidden_fields = is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : [];
 
 		# check permission
 		$permission = $this->check_permission($User->user, $sectionId);

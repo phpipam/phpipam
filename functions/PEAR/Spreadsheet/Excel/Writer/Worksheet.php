@@ -402,9 +402,9 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $this->_dim_rowmax     = 0;
         $this->_dim_colmin     = $colmax + 1;
         $this->_dim_colmax     = 0;
-        $this->_colinfo        = array();
-        $this->_selection      = array(0,0,0,0);
-        $this->_panes          = array();
+        $this->_colinfo        = [];
+        $this->_selection      = [0,0,0,0];
+        $this->_panes          = [];
         $this->_active_pane    = 3;
         $this->_frozen         = 0;
         $this->selected        = 0;
@@ -439,14 +439,14 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $this->_fit_width       = 0;
         $this->_fit_height      = 0;
 
-        $this->_hbreaks         = array();
-        $this->_vbreaks         = array();
+        $this->_hbreaks         = [];
+        $this->_vbreaks         = [];
 
         $this->_protect         = 0;
         $this->_password        = null;
 
-        $this->col_sizes        = array();
-        $this->_row_sizes        = array();
+        $this->col_sizes        = [];
+        $this->_row_sizes        = [];
 
         $this->_zoom            = 100;
         $this->_print_scale     = 100;
@@ -457,11 +457,11 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $this->_outline_right     = 1;
         $this->_outline_on        = 1;
 
-        $this->_merged_ranges     = array();
+        $this->_merged_ranges     = [];
 
         $this->_input_encoding    = '';
 
-        $this->_dv                = array();
+        $this->_dv                = [];
 
         $this->_tmp_dir = $tmp_dir;
 
@@ -697,7 +697,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         }
         // don't check rowmin, rowmax, etc... because we don't know when this
         // is going to be called
-        $this->_merged_ranges[] = array($first_row, $first_col, $last_row, $last_col);
+        $this->_merged_ranges[] = [$first_row, $first_col, $last_row, $last_col];
     }
 
     /**
@@ -763,7 +763,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     */
     function setColumn($firstcol, $lastcol, $width, $format = null, $hidden = 0, $level = 0)
     {
-        $this->_colinfo[] = array($firstcol, $lastcol, $width, &$format, $hidden, $level);
+        $this->_colinfo[] = [$firstcol, $lastcol, $width, &$format, $hidden, $level];
 
         // Set width to zero if column is hidden
         $width = ($hidden) ? 0 : $width;
@@ -784,7 +784,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     */
     function setSelection($first_row,$first_column,$last_row,$last_column)
     {
-        $this->_selection = array($first_row,$first_column,$last_row,$last_column);
+        $this->_selection = [$first_row,$first_column,$last_row,$last_column];
     }
 
     /**
@@ -1317,20 +1317,20 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         if (preg_match("/([A-I]?[A-Z]):([A-I]?[A-Z])/", $cell, $match)) {
             list($no_use, $col1) =  $this->_cellToRowcol($match[1] .'1'); // Add a dummy row
             list($no_use, $col2) =  $this->_cellToRowcol($match[2] .'1'); // Add a dummy row
-            return(array($col1, $col2));
+            return([$col1, $col2]);
         }
 
         // Convert a cell range: 'A1:B7'
         if (preg_match("/\$?([A-I]?[A-Z]\$?\d+):\$?([A-I]?[A-Z]\$?\d+)/", $cell, $match)) {
             list($row1, $col1) =  $this->_cellToRowcol($match[1]);
             list($row2, $col2) =  $this->_cellToRowcol($match[2]);
-            return(array($row1, $col1, $row2, $col2));
+            return([$row1, $col1, $row2, $col2]);
         }
 
         // Convert a cell reference: 'A1' or 'AD2000'
         if (preg_match("/\$?([A-I]?[A-Z]\$?\d+)/", $cell)) {
             list($row1, $col1) =  $this->_cellToRowcol($match[1]);
-            return(array($row1, $col1));
+            return([$row1, $col1]);
         }
 
         // TODO use real error codes
@@ -1366,7 +1366,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $row--;
         $col--;
 
-        return(array($row, $col));
+        return([$row, $col]);
     }
 
     /**
@@ -2393,11 +2393,11 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
 
         // Swap last row/col for first row/col as necessary
         if ($rwFirst > $rwLast) {
-            list($rwFirst, $rwLast) = array($rwLast, $rwFirst);
+            list($rwFirst, $rwLast) = [$rwLast, $rwFirst];
         }
 
         if ($colFirst > $colLast) {
-            list($colFirst, $colLast) = array($colLast, $colFirst);
+            list($colFirst, $colLast) = [$colLast, $colFirst];
         }
 
         $header   = pack("vv",         $record, $length);
@@ -2821,11 +2821,11 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
 
         // Swap last row/col for first row/col as necessary
         if ($first_row > $last_row) {
-            list($first_row, $last_row) = array($last_row, $first_row);
+            list($first_row, $last_row) = [$last_row, $first_row];
         }
 
         if ($first_col > $last_col) {
-            list($first_col, $last_col) = array($last_col, $first_col);
+            list($first_col, $last_col) = [$last_col, $first_col];
         }
 
         $header   = pack("vv",    $record, $length);
@@ -3471,7 +3471,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $header  = pack("Vvvvv", 0x000c, $width, $height, 0x01, 0x18);
         $data    = $header . $data;
 
-        return (array($width, $height, $size, $data));
+        return ([$width, $height, $size, $data]);
     }
 
     /**

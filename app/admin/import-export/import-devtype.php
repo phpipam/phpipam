@@ -37,10 +37,10 @@ $rows = "";
 foreach ($data as &$cdata) {
 	if (($cdata['action'] == "add") || ($cdata['action'] == "edit")) {
 		# set update array
-		$values = array("tid"=>$cdata['tid'],
+		$values = ["tid"=>$cdata['tid'],
 						"tname"=>$cdata['tname'],
 						"tdescription"=>$cdata['tdescription']
-						);
+						];
 
 		# update
 		$cdata['result'] = $Admin->object_modify("deviceTypes", $cdata['action'], "tid", $values);

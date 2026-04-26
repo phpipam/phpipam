@@ -164,7 +164,7 @@ define('MCUNIQUE', "section");
 /**
  * Permit private subpages - private apps under /app/tools/custom/<custom_app_name>/index.php
  ******************************/
-$private_subpages = array();
+$private_subpages = [];
 
 /**
  * proxy connection details

@@ -19,13 +19,13 @@ $User->check_user_session();
 
 # get hidden fields
 $hidden_circuit_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-$hidden_circuit_fields = is_array(@$hidden_circuit_fields['circuits']) ? $hidden_circuit_fields['circuits'] : array();
+$hidden_circuit_fields = is_array(@$hidden_circuit_fields['circuits']) ? $hidden_circuit_fields['circuits'] : [];
 
 $hidden_logical_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-$hidden_logical_fields = is_array(@$hidden_logical_fields['circuits']) ? $hidden_logical_fields['circuitsLogical'] : array();
+$hidden_logical_fields = is_array(@$hidden_logical_fields['circuits']) ? $hidden_logical_fields['circuitsLogical'] : [];
 
 $hidden_provider_fields = db_json_decode($User->settings->hiddenCustomFields, true);
-$hidden_provider_fields = is_array(@$hidden_provider_fields['circuitProviders']) ? $hidden_provider_fields['circuitProviders'] : array();
+$hidden_provider_fields = is_array(@$hidden_provider_fields['circuitProviders']) ? $hidden_provider_fields['circuitProviders'] : [];
 
 # menu
 include("app/tools/circuits/menu.php");

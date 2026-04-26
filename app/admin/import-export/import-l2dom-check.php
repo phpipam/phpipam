@@ -22,7 +22,7 @@ $User->is_admin();
 $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 
 # Load existing data
-$edata = array();
+$edata = [];
 # process for easier later check
 foreach ($vlan_domains as $vlan_domain) {
 	//cast
@@ -31,8 +31,8 @@ foreach ($vlan_domains as $vlan_domain) {
 }
 
 $rows = "";
-$counters = array();
-$unique = array();
+$counters = [];
+$unique = [];
 
 # check the fields
 foreach ($data as &$cdata) {

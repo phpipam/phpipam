@@ -108,7 +108,7 @@ class adLDAPContacts {
         if (!$this->adldap->getLdapBind()) { return false; }
 
         // Search the directory for their information
-        $info = @$this->info($distinguishedName, array("memberof", "primarygroupid"));
+        $info = @$this->info($distinguishedName, ["memberof", "primarygroupid"]);
         $groups = $this->adldap->utilities()->niceNames($info[0]["memberof"]); //presuming the entry returned is our contact
 
         if ($recursive === true) {
@@ -135,7 +135,7 @@ class adLDAPContacts {
 
         $filter = "distinguishedName=".$distinguishedName;
         if ($fields === NULL) {
-            $fields = array("distinguishedname", "mail", "memberof", "department", "displayname", "telephonenumber", "primarygroupid", "objectsid");
+            $fields = ["distinguishedname", "mail", "memberof", "department", "displayname", "telephonenumber", "primarygroupid", "objectsid"];
         }
         $sr = ldap_search($this->adldap->getLdapConnection(), $this->adldap->getBaseDn(), $filter, $fields);
         $entries = ldap_get_entries($this->adldap->getLdapConnection(), $sr);
@@ -191,7 +191,7 @@ class adLDAPContacts {
         if ($recursive === NULL) { $recursive = $this->adldap->getRecursiveGroups(); } //use the default option if they haven't set it
 
         // Get a list of the groups
-        $groups = $this->groups($distinguisedName, array("memberof"), $recursive);
+        $groups = $this->groups($distinguisedName, ["memberof"], $recursive);
 
         // Return true if the specified group is in the group list
         if (in_array($group, $groups)) {
@@ -256,11 +256,11 @@ class adLDAPContacts {
 
         // Perform the search and grab all their details
         $filter = "(&(objectClass=contact)(cn=".$search."))";
-        $fields = array("displayname", "distinguishedname");
+        $fields = ["displayname", "distinguishedname"];
         $sr = ldap_search($this->adldap->getLdapConnection(), $this->adldap->getBaseDn(), $filter, $fields);
         $entries = ldap_get_entries($this->adldap->getLdapConnection(), $sr);
 
-        $usersArray = array();
+        $usersArray = [];
         for ($i = 0; $i < $entries["count"]; $i++) {
             if ($includeDescription && strlen((string) $entries[$i]["displayname"][0]) > 0) {
                 $usersArray[$entries[$i]["distinguishedname"][0]] = $entries[$i]["displayname"][0];

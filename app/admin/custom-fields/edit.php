@@ -104,7 +104,7 @@ function check_name_whitespace () {
 		$mTypes = $Admin->valid_custom_field_types();
 		//reformat old type
 		$oldMType = strstr((string) @$fieldval['Type'], "(", true);
-		$oldMSize = str_replace(array("(",")"), "",strstr((string) @$fieldval['Type'], "(", false));
+		$oldMSize = str_replace(["(",")"], "",strstr((string) @$fieldval['Type'], "(", false));
 
 		//exceptions
 		if(@$fieldval['Type']=="text" || @$fieldval['Type']=="date" || @$fieldval['Type']=="datetime" || @$fieldval['Type']=="set" || @$fieldval['Type']=="enum")	{ $oldMType = @$fieldval['Type']; }
