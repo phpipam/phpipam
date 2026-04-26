@@ -6,7 +6,7 @@ if (!isset($User)) { die; }
 $User->check_user_session();
 
 # Check parsedown class is available
-$parse_down_class = dirname(__FILE__) . '/../../../functions/parsedown/Parsedown.php';
+$parse_down_class = __DIR__ . '/../../../functions/parsedown/Parsedown.php';
 
 if (!file_exists($parse_down_class)) {
     $Result->show("danger", _('parsedown library missing, please update submodules'), true);
@@ -30,7 +30,7 @@ else {
 # Strip leading and trailing slashes
 $document = preg_replace('/((^\/+)|(\/+$))/', '', $document);
 
-$path_root = realpath(dirname(__FILE__) . "/../../../doc");
+$path_root = realpath(__DIR__ . "/../../../doc");
 $path_doc  = realpath("$path_root/$document");
 
 if (strpos($path_doc, (string) $path_root) !== 0) {

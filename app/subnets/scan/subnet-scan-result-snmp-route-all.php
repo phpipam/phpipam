@@ -1,7 +1,7 @@
 <?php
 
 # Check we have been included and not called directly
-require( dirname(__FILE__) . '/../../../functions/include-only.php' );
+require( __DIR__ . '/../../../functions/include-only.php' );
 
 /*
  * Discover newsubnetshosts with snmp
@@ -70,7 +70,7 @@ if (isset($subnets_all)) {
             }
         }
         # include edit script
-        include (dirname(__FILE__)."/../../admin/subnets/edit-result.php");
+        include (__DIR__."/../../admin/subnets/edit-result.php");
     }
 }
 else { $Result->show("danger", "No subnets selected", true); }

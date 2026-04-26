@@ -22,7 +22,7 @@
 if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!"); }
 
 # include required scripts
-require_once( dirname(__FILE__) . '/../functions.php' );
+require_once( __DIR__ . '/../functions.php' );
 
 # New database details
 $db_new['host'] = "localhost";

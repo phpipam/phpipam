@@ -10,4 +10,4 @@ $User->check_user_session();
 $User->check_module_permissions ("dhcp", User::ACCESS_R, true, false);
 
 # print leases
-include(dirname(__FILE__)."/../../tools/dhcp/leases.php");
+include(__DIR__."/../../tools/dhcp/leases.php");

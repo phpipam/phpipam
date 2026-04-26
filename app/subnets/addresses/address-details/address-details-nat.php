@@ -1,5 +1,5 @@
 <?php
-include(dirname(__FILE__)."/../../subnet-details/subnet-nat.php");
+include(__DIR__."/../../subnet-details/subnet-nat.php");
 ?>
 
 

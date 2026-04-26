@@ -10,7 +10,7 @@ if ($User->twofa_required()===false) {
 # generate and print code
 else {
 	# init class
-	require_once (dirname(__FILE__)."/../../../functions/GoogleAuthenticator/PHPGangsta/GoogleAuthenticator.php");
+	require_once (__DIR__."/../../../functions/GoogleAuthenticator/PHPGangsta/GoogleAuthenticator.php");
 	$ga = new PHPGangsta_GoogleAuthenticator();
 	// create secret
 	$secret = $ga->createSecret(32);  	// Override $User->settings->{'2fa_length'}. Only lengths 16 and 32 produce reliable results. See #3724

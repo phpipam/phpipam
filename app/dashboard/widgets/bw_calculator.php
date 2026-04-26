@@ -7,7 +7,7 @@
 
 # required functions if requested via AJAX
 if(!isset($User)) {
-	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+	require_once( __DIR__ . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);
@@ -24,6 +24,6 @@ $widget = true;
 print "<div style='padding:10px;position:relative;'>";
 
 # include ipcalc
-include (dirname(__FILE__)."/../../../app/tools/ip-calculator/bw-calculator.php");
+include (__DIR__."/../../../app/tools/ip-calculator/bw-calculator.php");
 
 print "</div>";

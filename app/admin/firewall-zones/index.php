@@ -45,8 +45,8 @@ if($User->settings->enableFirewallZones==1) {
 <div>
 <?php
 # include content
-if(!file_exists(dirname(__FILE__) . '/'.$GET->subnetId.".php")) 	{ $Result->show("danger", "Invalid request", true); }
-else																{ include(dirname(__FILE__) . '/'.$GET->subnetId.".php"); }
+if(!file_exists(__DIR__ . '/'.$GET->subnetId.".php")) 	{ $Result->show("danger", "Invalid request", true); }
+else																{ include(__DIR__ . '/'.$GET->subnetId.".php"); }
 ?>
 </div>
 

@@ -4,7 +4,7 @@
  *************************************************/
 
  /* functions */
-require_once( dirname(__FILE__) . '/../../../../functions/functions.php' );
+require_once( __DIR__ . '/../../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -17,7 +17,7 @@ $User->check_user_session();
 $User->is_admin();
 
 // define file
-$file = dirname(__FILE__)."/../../../../css/images/logo/logo.png";
+$file = __DIR__."/../../../../css/images/logo/logo.png";
 
 # try to remove logo
 try {

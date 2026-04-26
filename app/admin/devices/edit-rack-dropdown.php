@@ -1,5 +1,5 @@
 <?php
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( __DIR__ . '/../../../functions/functions.php' );
 
 # verify that user is logged in
 $User->check_user_session();

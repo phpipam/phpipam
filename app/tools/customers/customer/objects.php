@@ -31,7 +31,7 @@ include("objects/menu.php");
 
 # item or error
 if(array_key_exists($GET->sPage, $Tools->get_customer_object_types())) {
-	if (file_exists(dirname(__FILE__)."/objects/".$GET->sPage.".php")) {
+	if (file_exists(__DIR__."/objects/".$GET->sPage.".php")) {
 		include("objects/".$GET->sPage.".php");
 	}
 	else {

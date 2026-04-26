@@ -1,2 +1,2 @@
 <?php
-require( dirname(__FILE__) . '/../../admin/subnets/index.php');
+require( __DIR__ . '/../../admin/subnets/index.php');

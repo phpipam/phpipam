@@ -5,12 +5,12 @@
  *********************************/
 
 /* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( __DIR__ . '/../../../functions/functions.php' );
 
 # Don't corrupt output with php errors!
 disable_php_errors();
 
-require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
+require( __DIR__ . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # initialize user object
 $Database 	= new Database_PDO;

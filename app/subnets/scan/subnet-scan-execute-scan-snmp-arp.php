@@ -1,7 +1,7 @@
 <?php
 
 # Check we have been included and not called directly
-require( dirname(__FILE__) . '/../../../functions/include-only.php' );
+require( __DIR__ . '/../../../functions/include-only.php' );
 
 # check if site is demo
 $User->is_demo();

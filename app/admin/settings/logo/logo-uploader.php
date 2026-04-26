@@ -5,7 +5,7 @@
  **************************/
 
 /* functions */
-require_once( dirname(__FILE__) . '/../../../../functions/functions.php' );
+require_once( __DIR__ . '/../../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -27,8 +27,8 @@ $clear = true;
 // set width
 $logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
 
-if(!file_exists( dirname(__FILE__)."/../../../../css/images/logo/logo.png")) {
-    require( dirname(__FILE__).'/logo-builtin.php' );
+if(!file_exists( __DIR__."/../../../../css/images/logo/logo.png")) {
+    require( __DIR__.'/logo-builtin.php' );
     $clear = false;
 }
 else {
@@ -42,7 +42,7 @@ else {
 <!-- content -->
 <div class="pContent">
 
-    <?php if (!is_writeable( dirname(__FILE__) . '/../../../../css/images/logo' )) $Result->show("danger", _("'css/images/logo' folder is not writeable."), false, false); ?>
+    <?php if (!is_writeable( __DIR__ . '/../../../../css/images/logo' )) $Result->show("danger", _("'css/images/logo' folder is not writeable."), false, false); ?>
 
     <h4><?php print _("Current"); ?><?php if($clear) print "<a class='btn btn-xs btn-danger logo-clear pull-right' style='text-shadow:none'><i class='fa fa-times'></i></a>"; ?></h4>
     <div class='logo-current'>

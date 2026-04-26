@@ -32,7 +32,7 @@
 */
 
 require_once 'PEAR.php';
-require_once( dirname(__FILE__) . '/Writer/Workbook.php');
+require_once( __DIR__ . '/Writer/Workbook.php');
 
 
 /**

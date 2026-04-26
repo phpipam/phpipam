@@ -7,8 +7,8 @@
  */
 
 # include required scripts
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-require_once (dirname(__FILE__) . "/../../../functions/GoogleAuthenticator/PHPGangsta/GoogleAuthenticator.php");
+require_once( __DIR__ . '/../../../functions/functions.php' );
+require_once (__DIR__ . "/../../../functions/GoogleAuthenticator/PHPGangsta/GoogleAuthenticator.php");
 
 # initialize required objects
 $Database       = new Database_PDO;

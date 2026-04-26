@@ -297,7 +297,7 @@ class Net_DNS2
         //
         if (strncmp($name, 'Net_DNS2', 8) == 0) {
 
-            include dirname(__FILE__) . '/../' . str_replace('_', '/', $name) . '.php';
+            include __DIR__ . '/../' . str_replace('_', '/', $name) . '.php';
         }
 
         return;

@@ -125,11 +125,11 @@ class DHCP extends Common_functions {
      * @return void
      */
     private function verify_class_file () {
-        if(!file_exists(dirname(__FILE__)."/class.DHCP.".$this->dhcp_selected_type.".php")) {
+        if(!file_exists(__DIR__."/class.DHCP.".$this->dhcp_selected_type.".php")) {
             $this->Result->show("danger", _("Missing class file")." /functions/classes/class.DHCP.".$this->dhcp_selected_type.".php", true);
         }
         else {
-            include(dirname(__FILE__)."/class.DHCP.".$this->dhcp_selected_type.".php");
+            include(__DIR__."/class.DHCP.".$this->dhcp_selected_type.".php");
         }
     }
 

@@ -32,8 +32,8 @@
 *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-require_once( dirname(__FILE__) . '/Parser.php');
-require_once( dirname(__FILE__) . '/BIFFwriter.php');
+require_once( __DIR__ . '/Parser.php');
+require_once( __DIR__ . '/BIFFwriter.php');
 
 /**
 * Class for generating Excel Spreadsheets

@@ -7,7 +7,7 @@
 
 
 /* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( __DIR__ . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -29,7 +29,7 @@ $parameters = new Params( db_json_decode($auth_settings->params) );
 # AD?
 if($auth_settings->type=="AD" || $auth_settings->type=="LDAP" || $auth_settings->type=="NetIQ") {
 	# adLDAP function
-	include (dirname(__FILE__) . "/../../../functions/adLDAP/src/adLDAP.php");
+	include (__DIR__ . "/../../../functions/adLDAP/src/adLDAP.php");
 	# set controllers
 	$controllers = pf_explode(";", str_replace(" ", "", $parameters->domain_controllers));
 

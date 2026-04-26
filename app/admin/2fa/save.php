@@ -5,7 +5,7 @@
  **************************/
 
 /* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( __DIR__ . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -36,8 +36,8 @@ if(!is_numeric($POST->{'2fa_length'}))										{ $Result->show("danger", _("Inv
 if($POST->{'2fa_length'}>32 || $POST->{'2fa_length'}<26)						{ $Result->show("danger", _("Invalid length"), true); }
 
 // make sure all git submodules are included
-if (!file_exists(dirname(__FILE__)."/../../../functions/GoogleAuthenticator/PHPGangsta/GoogleAuthenticator.php"))	{ $Result->show("danger", _("GoogleAuthenticator submodule missing."), true); }
-if (!file_exists(dirname(__FILE__)."/../../../functions/qrcodejs/qrcode.js"))	{ $Result->show("danger", _("QRCode submodule missing."), true); }
+if (!file_exists(__DIR__."/../../../functions/GoogleAuthenticator/PHPGangsta/GoogleAuthenticator.php"))	{ $Result->show("danger", _("GoogleAuthenticator submodule missing."), true); }
+if (!file_exists(__DIR__."/../../../functions/qrcodejs/qrcode.js"))	{ $Result->show("danger", _("QRCode submodule missing."), true); }
 
 // change
 $POST->{'2fa_userchange'} = isset($POST->{'2fa_userchange'}) ? $POST->{'2fa_userchange'} : 0;

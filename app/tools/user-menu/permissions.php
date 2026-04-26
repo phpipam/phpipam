@@ -8,4 +8,4 @@
 <?php
 # Module permisisons
 $user = (array) $User->user;
-include(dirname(__FILE__)."/../../admin/users/print_module_permissions.php");
+include(__DIR__."/../../admin/users/print_module_permissions.php");

@@ -20,7 +20,7 @@ elseif (is_numeric($address['location'])) {
 
         $hide_title = true;
 
-        include(dirname(__FILE__).'/../../../tools/locations/single-location.php');
+        include(__DIR__.'/../../../tools/locations/single-location.php');
 
         // back
         $GET->subnetId = $sid_orig;

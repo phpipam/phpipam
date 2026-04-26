@@ -11,7 +11,7 @@
  */
 
 // functions
-require_once( dirname(__FILE__) . '/../functions.php' );
+require_once( __DIR__ . '/../functions.php' );
 
 // AD sync
 $Database = new Database_PDO;

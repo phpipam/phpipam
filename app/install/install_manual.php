@@ -38,11 +38,11 @@ $filename	  = $GET->subnetId=="migrate" ? "MIGRATE" : "SCHEMA";
 		<?php
 		// file check
 		if($GET->subnetId=="migrate") {
-			if(!file_exists(dirname(__FILE__)."/../../db/MIGRATE.sql")) {
+			if(!file_exists(__DIR__."/../../db/MIGRATE.sql")) {
 				print "<div class='alert alert-danger'>Cannot access file db/MIGRATE.sql!</div>";
 			}
 		}
-		elseif (!file_exists(dirname(__FILE__)."/../../db/SCHEMA.sql")) {
+		elseif (!file_exists(__DIR__."/../../db/SCHEMA.sql")) {
 				print "<div class='alert alert-danger'>Cannot access file db/SCHEMA.sql!</div>";
 		}
 		?>
@@ -75,12 +75,12 @@ $file .= "# Create tables and import data\n";
 $file .= "# ------------------------------------------------------------\n\n\n\n";
 
 if($GET->subnetId=="migrate") {
-	if(file_exists(dirname(__FILE__)."/../../db/MIGRATE.sql")) {
-		$file .= file_get_contents(dirname(__FILE__)."/../../db/MIGRATE.sql");
+	if(file_exists(__DIR__."/../../db/MIGRATE.sql")) {
+		$file .= file_get_contents(__DIR__."/../../db/MIGRATE.sql");
 	}
 }
 else {
-		$file .= file_get_contents(dirname(__FILE__)."/../../db/SCHEMA.sql");
+		$file .= file_get_contents(__DIR__."/../../db/SCHEMA.sql");
 }
 print_r($file); ?>
 </pre>

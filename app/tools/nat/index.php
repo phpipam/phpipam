@@ -16,7 +16,7 @@ elseif ($User->check_module_permissions ("nat", User::ACCESS_R, false, false)===
 }
 else {
     //single nat
-    if(isset($GET->subnetId)) { include(dirname(__FILE__).'/nat_details.php'); }
+    if(isset($GET->subnetId)) { include(__DIR__.'/nat_details.php'); }
     //all nats
-    else                         { include(dirname(__FILE__).'/all_nats.php'); }
+    else                         { include(__DIR__.'/all_nats.php'); }
 }

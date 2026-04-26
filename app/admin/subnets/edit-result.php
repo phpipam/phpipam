@@ -7,7 +7,7 @@
 /* this can come from snmp, so if objects are already initialized print it */
 if (!function_exists("create_link")) {
     /* functions */
-    require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+    require_once( __DIR__ . '/../../../functions/functions.php' );
 
     # initialize user object
     $Database 	= new Database_PDO;

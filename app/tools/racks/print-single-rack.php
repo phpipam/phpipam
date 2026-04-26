@@ -382,7 +382,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
                 $resize = false;
                 $height = "500px;";
 
-                include(dirname(__FILE__).'/../locations/single-location-map.php');
+                include(__DIR__.'/../locations/single-location-map.php');
             ?>
         </div>
     </div>

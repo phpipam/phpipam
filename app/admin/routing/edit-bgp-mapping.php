@@ -1,7 +1,7 @@
 <?php
 
 /* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( __DIR__ . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -86,7 +86,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "routing_bgp_mapping");
 
 	<div style='margin-top:50px;'></div>
 	<?php
-		include(dirname(__FILE__)."/../../tools/routing/bgp/details-subnets.php");
+		include(__DIR__."/../../tools/routing/bgp/details-subnets.php");
 	?>
 
 	<div style='margin-top:50px;'></div>

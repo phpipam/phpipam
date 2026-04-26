@@ -1,7 +1,7 @@
 <?php
 if (!defined('VERSION_VISIBLE') || Config::ValueOf('disable_installer')) { print _("Install scripts disabled"); exit(0); }
 
-require_once(dirname(__FILE__) . '/../../functions/classes/class.Crypto.php');
+require_once(__DIR__ . '/../../functions/classes/class.Crypto.php');
 $db = Config::ValueOf('db');
 
 // Manually start session as we do not have $User.
@@ -91,7 +91,7 @@ $filename	  = $GET->subnetId=="migrate" ? "MIGRATE" : "SCHEMA";
 			<?php
 			// file check
 			if($GET->subnetId=="migrate") {
-				if(!file_exists(dirname(__FILE__)."/../../db/MIGRATE.sql")) { ?>
+				if(!file_exists(__DIR__."/../../db/MIGRATE.sql")) { ?>
 					<div class="col-xs-12"><hr><div class='alert alert-danger'><?php print _("Cannot access file db/MIGRATE.sql!"); ?></div></div>
 			<?php }
 			}

@@ -40,6 +40,6 @@ else {
     print '<br>';
 
     # include subpage
-    if(!isset($GET->subnetId))   { include(dirname(__FILE__)."/print-racks-list.php"); }
+    if(!isset($GET->subnetId))   { include(__DIR__."/print-racks-list.php"); }
     else                            { include("print-racks-map.php"); }
 }

@@ -1,7 +1,7 @@
 <?php
 
 # Check we have been included and not called directly
-require( dirname(__FILE__) . '/../../../functions/include-only.php' );
+require( __DIR__ . '/../../../functions/include-only.php' );
 
 # check if site is demo
 $User->is_demo();
@@ -16,7 +16,7 @@ if(!preg_match('/[^A-Za-z0-9-]*$/', (string) $POST->type))       { $Result->show
 
 
 # invoke CLI with threading support
-$cmd = sprintf("%s '%s/../../../functions/scan/subnet-scan-icmp-execute.php' 'discovery' %s", escapeshellcmd($Scan->php_exec), dirname(__FILE__), escapeshellarg($POST->subnetId));
+$cmd = sprintf("%s '%s/../../../functions/scan/subnet-scan-icmp-execute.php' 'discovery' %s", escapeshellcmd($Scan->php_exec), __DIR__, escapeshellarg($POST->subnetId));
 
 # save result to $output
 exec($cmd, $output, $retval);

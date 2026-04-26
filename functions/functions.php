@@ -4,10 +4,10 @@
 require_once('global_functions.php');
 
 /* Enable output buffering */
-require_once( dirname(__FILE__) . '/output_buffering.php' );
+require_once( __DIR__ . '/output_buffering.php' );
 
 /* @config file ------------------ */
-require_once( dirname(__FILE__) . '/classes/class.Config.php' );
+require_once( __DIR__ . '/classes/class.Config.php' );
 $config = Config::ValueOf('config');
 
 /**
@@ -49,42 +49,42 @@ else {
 // auto-set base if not already defined
 if(!defined('BASE')) {
 	$root = substr((string) $_SERVER['DOCUMENT_ROOT'],-1)=="/" ? substr((string) $_SERVER['DOCUMENT_ROOT'],0,-1) : $_SERVER['DOCUMENT_ROOT'];	// fix for missing / in some environments
-	define('BASE', substr(str_replace($root, "", dirname(__FILE__)),0,-9));
+	define('BASE', substr(str_replace($root, "", __DIR__),0,-9));
 }
 
 /* @classes ---------------------- */
-require( dirname(__FILE__) . '/classes/class.Params.php' );		//Paramter handling class
-require( dirname(__FILE__) . '/classes/class.Rewrite.php' );	//Class for POST/GET rewriting
-require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions
-require( dirname(__FILE__) . '/classes/class.PDO.php' );		//Class PDO - wrapper for database
-require( dirname(__FILE__) . '/classes/class.User.php' );		//Class for active user management
-require( dirname(__FILE__) . '/classes/class.Log.php' );		//Class for log saving
-require( dirname(__FILE__) . '/classes/class.Result.php' );		//Class for result printing
-require( dirname(__FILE__) . '/classes/class.Install.php' );	//Class for Install
-require( dirname(__FILE__) . '/classes/class.Sections.php' );	//Class for sections
-require( dirname(__FILE__) . '/classes/class.Subnets.php' );	//Class for subnets
-require( dirname(__FILE__) . '/classes/class.Tools.php' );		//Class for tools
-require( dirname(__FILE__) . '/classes/class.Addresses.php' );	//Class for addresses
-require( dirname(__FILE__) . '/classes/class.Scan.php' );		//Class for Scanning and pinging
-require( dirname(__FILE__) . '/classes/class.DNS.php' );		//Class for DNS management
-require( dirname(__FILE__) . '/classes/class.PowerDNS.php' );	//Class for PowerDNS management
-require( dirname(__FILE__) . '/classes/class.FirewallZones.php' );	//Class for firewall zone management
-require( dirname(__FILE__) . '/classes/class.Admin.php' );		//Class for Administration
-require( dirname(__FILE__) . '/classes/class.Mail.php' );		//Class for Mailing
-require( dirname(__FILE__) . '/classes/class.Rackspace.php' );	//Class for Racks
-require( dirname(__FILE__) . '/classes/class.SNMP.php' );	    //Class for SNMP queries
-require( dirname(__FILE__) . '/classes/class.DHCP.php' );	    //Class for DHCP
-require( dirname(__FILE__) . '/classes/class.SubnetsTree.php' );	    //Class for generating list of subnets based on nested tree structure
-require( dirname(__FILE__) . '/classes/class.SubnetsMenu.php' );	    //Class for generating subnets menu.
-require( dirname(__FILE__) . '/classes/class.SubnetsTable.php' );	    //Class for generating JSON to populate subnet <tables> using boostrap-tables.
-require( dirname(__FILE__) . '/classes/class.SubnetsMasterDropDown.php' );	    //Class for generating HTML master subnet dropdown menus
-require( dirname(__FILE__) . '/classes/class.Devtype.php' );	    //
-require( dirname(__FILE__) . '/classes/class.Devices.php' );	    //
-require( dirname(__FILE__) . '/classes/class.Crypto.php' );	    	// Crypto class
-require( dirname(__FILE__) . '/classes/class.Password_check.php' );	// Class for password check
-require( dirname(__FILE__) . '/classes/class.Session_DB.php' );	    // Class for storing sessions to database
-require( dirname(__FILE__) . '/classes/class.LockForUpdate.php' );	    // Class for MySQL row locking
-require( dirname(__FILE__) . '/classes/class.OpenStreetMap.php' );	    // Class for OSM
+require( __DIR__ . '/classes/class.Params.php' );		//Paramter handling class
+require( __DIR__ . '/classes/class.Rewrite.php' );	//Class for POST/GET rewriting
+require( __DIR__ . '/classes/class.Common.php' );		//Class common - common functions
+require( __DIR__ . '/classes/class.PDO.php' );		//Class PDO - wrapper for database
+require( __DIR__ . '/classes/class.User.php' );		//Class for active user management
+require( __DIR__ . '/classes/class.Log.php' );		//Class for log saving
+require( __DIR__ . '/classes/class.Result.php' );		//Class for result printing
+require( __DIR__ . '/classes/class.Install.php' );	//Class for Install
+require( __DIR__ . '/classes/class.Sections.php' );	//Class for sections
+require( __DIR__ . '/classes/class.Subnets.php' );	//Class for subnets
+require( __DIR__ . '/classes/class.Tools.php' );		//Class for tools
+require( __DIR__ . '/classes/class.Addresses.php' );	//Class for addresses
+require( __DIR__ . '/classes/class.Scan.php' );		//Class for Scanning and pinging
+require( __DIR__ . '/classes/class.DNS.php' );		//Class for DNS management
+require( __DIR__ . '/classes/class.PowerDNS.php' );	//Class for PowerDNS management
+require( __DIR__ . '/classes/class.FirewallZones.php' );	//Class for firewall zone management
+require( __DIR__ . '/classes/class.Admin.php' );		//Class for Administration
+require( __DIR__ . '/classes/class.Mail.php' );		//Class for Mailing
+require( __DIR__ . '/classes/class.Rackspace.php' );	//Class for Racks
+require( __DIR__ . '/classes/class.SNMP.php' );	    //Class for SNMP queries
+require( __DIR__ . '/classes/class.DHCP.php' );	    //Class for DHCP
+require( __DIR__ . '/classes/class.SubnetsTree.php' );	    //Class for generating list of subnets based on nested tree structure
+require( __DIR__ . '/classes/class.SubnetsMenu.php' );	    //Class for generating subnets menu.
+require( __DIR__ . '/classes/class.SubnetsTable.php' );	    //Class for generating JSON to populate subnet <tables> using boostrap-tables.
+require( __DIR__ . '/classes/class.SubnetsMasterDropDown.php' );	    //Class for generating HTML master subnet dropdown menus
+require( __DIR__ . '/classes/class.Devtype.php' );	    //
+require( __DIR__ . '/classes/class.Devices.php' );	    //
+require( __DIR__ . '/classes/class.Crypto.php' );	    	// Crypto class
+require( __DIR__ . '/classes/class.Password_check.php' );	// Class for password check
+require( __DIR__ . '/classes/class.Session_DB.php' );	    // Class for storing sessions to database
+require( __DIR__ . '/classes/class.LockForUpdate.php' );	    // Class for MySQL row locking
+require( __DIR__ . '/classes/class.OpenStreetMap.php' );	    // Class for OSM
 
 
 

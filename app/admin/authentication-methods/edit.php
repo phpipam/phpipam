@@ -1,7 +1,7 @@
 <?php
 
 /* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( __DIR__ . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -28,6 +28,6 @@ if($POST->action!="add") {
 $permitted_methods = $User->fetch_available_auth_method_types();
 
 # route to proper auth method editing
-if(!file_exists(dirname(__FILE__)."/edit-".$POST->type.".php"))	{ $Result->show("danger", _("Invalid method type"), true, true); }
+if(!file_exists(__DIR__."/edit-".$POST->type.".php"))	{ $Result->show("danger", _("Invalid method type"), true, true); }
 elseif (!in_array($POST->type, $permitted_methods))			{ $Result->show("danger", _("Invalid method type"), true, true); }
 else															{ include("edit-".$POST->type.".php"); }

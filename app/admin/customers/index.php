@@ -15,8 +15,8 @@ $User->is_admin(true);
 
 # load subpage
 if (!isset($GET->subnetId)) {
-	include(dirname(__FILE__).'/../../tools/customers/all-customers.php');
+	include(__DIR__.'/../../tools/customers/all-customers.php');
 }
 else {
-	include(dirname(__FILE__).'/../../tools/customers/customer/index.php');
+	include(__DIR__.'/../../tools/customers/customer/index.php');
 }

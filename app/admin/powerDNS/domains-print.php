@@ -10,4 +10,4 @@ $User->check_user_session();
 $User->check_module_permissions ("pdns", User::ACCESS_R, true, false);
 
 # include tools PowerDNS
-include dirname(__FILE__) . "/../../tools/powerDNS/domains-print.php";
+include __DIR__ . "/../../tools/powerDNS/domains-print.php";

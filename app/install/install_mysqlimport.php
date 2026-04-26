@@ -40,11 +40,11 @@ exit</pre>
 				<?php
 				// file check
 				if($GET->subnetId=="migrate") {
-					if(!file_exists(dirname(__FILE__)."/../../db/MIGRATE.sql")) {
+					if(!file_exists(__DIR__."/../../db/MIGRATE.sql")) {
 						print "<div class='alert alert-danger'>"._("Cannot access file db/MIGRATE.sql!")."</div>";
 					}
 				}
-				elseif (!file_exists(dirname(__FILE__)."/../../db/SCHEMA.sql")) {
+				elseif (!file_exists(__DIR__."/../../db/SCHEMA.sql")) {
 						print "<div class='alert alert-danger'>"._("Cannot access file db/SCHEMA.sql!")."</div>";
 				}
 				else {

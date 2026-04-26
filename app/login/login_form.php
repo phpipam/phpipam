@@ -46,7 +46,7 @@
 		<input type="submit" value="<?php print _('Login'); ?>" class="btn btn-sm btn-success" style="width:100%"></input>
 	</div>
 
-	<?php require(dirname(__FILE__) . '/login_form_sso.php'); ?>
+	<?php require(__DIR__ . '/login_form_sso.php'); ?>
 
 	<?php if(defined('IS_DEMO')) { ?>
 

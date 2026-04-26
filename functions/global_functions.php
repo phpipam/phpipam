@@ -164,7 +164,7 @@ function set_ui_language($default_lang = null) {
 		if (!is_string($lang) || strlen($lang)==0)
 			continue;
 
-		if (!file_exists(dirname(__FILE__)."/locale/$lang/LC_MESSAGES/phpipam.mo"))
+		if (!file_exists(__DIR__."/locale/$lang/LC_MESSAGES/phpipam.mo"))
 			continue;
 
 		putenv("LC_ALL=".$lang);
@@ -177,7 +177,7 @@ function set_ui_language($default_lang = null) {
 		setlocale(LC_ALL, $lang);
 
 		bind_textdomain_codeset('phpipam', 'UTF-8');
-		bindtextdomain("phpipam", dirname(__FILE__)."/locale");
+		bindtextdomain("phpipam", __DIR__."/locale");
 		textdomain("phpipam");
 
 		return true;

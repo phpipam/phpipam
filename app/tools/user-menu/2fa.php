@@ -5,7 +5,7 @@
 $User->check_user_session();
 
 # init class
-require_once (dirname(__FILE__)."/../../../functions/GoogleAuthenticator/PHPGangsta/GoogleAuthenticator.php");
+require_once (__DIR__."/../../../functions/GoogleAuthenticator/PHPGangsta/GoogleAuthenticator.php");
 $ga = new PHPGangsta_GoogleAuthenticator();
 
 # secret

@@ -1,7 +1,7 @@
 <?php
 
 # Check we have been included and not called directly
-require( dirname(__FILE__) . '/../../../functions/include-only.php' );
+require( __DIR__ . '/../../../functions/include-only.php' );
 
 # check if site is demo
 $User->is_demo();
@@ -14,7 +14,7 @@ $User->is_demo();
 if(!is_numeric($POST->subnetId))                        { $Result->show("danger", "Invalid subnet Id", true); die(); }
 
 # invoke CLI with threading support
-$cmd = sprintf("%s '%s/../../../functions/scan/subnet-scan-icmp-execute.php' 'update' %s", escapeshellcmd($Scan->php_exec), dirname(__FILE__), escapeshellarg($POST->subnetId));
+$cmd = sprintf("%s '%s/../../../functions/scan/subnet-scan-icmp-execute.php' 'update' %s", escapeshellcmd($Scan->php_exec), __DIR__, escapeshellarg($POST->subnetId));
 
 # save result to $output
 if (exec($cmd, $output, $retval) === false) {

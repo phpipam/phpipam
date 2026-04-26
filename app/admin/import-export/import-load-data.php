@@ -4,7 +4,7 @@
  *************************************************/
 
 # include required scripts
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( __DIR__ . '/../../../functions/functions.php' );
 
 # initialize user object, if not already set
 if (!isset($Database)) 	{ $Database = new Database_PDO; }
@@ -93,7 +93,7 @@ if (strtolower((string) $filetype) == "csv") {
 # read first row from XLS
 elseif(strtolower((string) $filetype) == "xls") {
 	# get excel object
-	require_once(dirname(__FILE__) . '/../../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
+	require_once(__DIR__ . '/../../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
 	$xls = new Spreadsheet_Excel_Reader('upload/data_import.xls', false);
 	$sheet = 0; $row = 1;
 

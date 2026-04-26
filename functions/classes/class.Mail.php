@@ -45,17 +45,17 @@ class phpipam_mail extends Common_functions {
 		$this->mail_settings = $mail_settings;
 
 		# we need phpmailer
-		if(file_exists(dirname(__FILE__).'/../PHPMailer/PHPMailerAutoload.php')) {
+		if(file_exists(__DIR__.'/../PHPMailer/PHPMailerAutoload.php')) {
 			// legacy versions
-			require_once( dirname(__FILE__).'/../PHPMailer/PHPMailerAutoload.php');
+			require_once( __DIR__.'/../PHPMailer/PHPMailerAutoload.php');
 
 			# initialize object
 			$this->Php_mailer = new PHPMailer(true);			//localhost by default
 		}
-		elseif (file_exists(dirname(__FILE__).'/../PHPMailer/src/Exception.php')) {
-			require_once( dirname(__FILE__).'/../PHPMailer/src/Exception.php');
-			require_once( dirname(__FILE__).'/../PHPMailer/src/PHPMailer.php');
-			require_once( dirname(__FILE__).'/../PHPMailer/src/SMTP.php');
+		elseif (file_exists(__DIR__.'/../PHPMailer/src/Exception.php')) {
+			require_once( __DIR__.'/../PHPMailer/src/Exception.php');
+			require_once( __DIR__.'/../PHPMailer/src/PHPMailer.php');
+			require_once( __DIR__.'/../PHPMailer/src/SMTP.php');
 
 			$this->Php_mailer = new PHPMailer\PHPMailer\PHPMailer();
 		} else {
@@ -212,13 +212,13 @@ class phpipam_mail extends Common_functions {
     	$html = array();
     	$html[] = "<body style='margin:0px;padding:0px;background:#f9f9f9;border-collapse:collapse;'>";
     	# logo
-    	if(!file_exists( dirname(__FILE__)."/../../css/images/logo/logo.png")) {
+    	if(!file_exists( __DIR__."/../../css/images/logo/logo.png")) {
 			$img = ''; // Load built-in image
-			require( dirname(__FILE__).'/../../app/admin/settings/logo/logo-builtin.php' );
+			require( __DIR__.'/../../app/admin/settings/logo/logo-builtin.php' );
 			$html[] = $img;
 		}
 		else {
-			$html[] = "<img style='max-width:".$logo_width."px;margin-top:15px;margin-bottom:20px;' alt='phpipam' src='data:image/png;base64,".base64_encode(file_get_contents(dirname(__FILE__)."/../../css/images/logo/logo.png"))."'>";
+			$html[] = "<img style='max-width:".$logo_width."px;margin-top:15px;margin-bottom:20px;' alt='phpipam' src='data:image/png;base64,".base64_encode(file_get_contents(__DIR__."/../../css/images/logo/logo.png"))."'>";
 		}
 
 		# return

@@ -12,9 +12,9 @@ if (
 	print "</div>";
 } else {
 	# include requested widget file
-	if (file_exists(dirname(__FILE__) . "/" . $GET->section . ".php")) {
-		include(dirname(__FILE__) . "/" . $GET->section . ".php");
+	if (file_exists(__DIR__ . "/" . $GET->section . ".php")) {
+		include(__DIR__ . "/" . $GET->section . ".php");
 	} else {
-		include(dirname(__FILE__) . "/custom/" . $GET->section . ".php");
+		include(__DIR__ . "/custom/" . $GET->section . ".php");
 	}
 }

@@ -34,8 +34,8 @@
  * @version 4.0.4
  * @link http://adldap.sourceforge.net/
  */
-require_once(dirname(__FILE__) . '/../adLDAP.php');
-require_once(dirname(__FILE__) . '/../collections/adLDAPUserCollection.php');
+require_once(__DIR__ . '/../adLDAP.php');
+require_once(__DIR__ . '/../collections/adLDAPUserCollection.php');
 
 /**
 * USER FUNCTIONS

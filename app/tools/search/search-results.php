@@ -56,35 +56,35 @@ else {
 	if (!is_blank($GET->ip)) {
 		// subnets
 		if ($GET->subnets == "on") {
-			require(dirname(__FILE__) . '/search_results/search-results_subnets.php');
+			require(__DIR__ . '/search_results/search-results_subnets.php');
 		}
 		// addresses
 		if ($GET->addresses == "on") {
-			require(dirname(__FILE__) . '/search_results/search-results_addresses.php');
+			require(__DIR__ . '/search_results/search-results_addresses.php');
 		}
 		// vlan
 		if ($GET->vlans == "on" && $User->get_module_permissions("vlan") >= User::ACCESS_R) {
-			require(dirname(__FILE__) . '/search_results/search-results_vlans.php');
+			require(__DIR__ . '/search_results/search-results_vlans.php');
 		}
 		// vrf
 		if ($GET->vrf == "on" && $User->get_module_permissions("vrf") >= User::ACCESS_R) {
-			require(dirname(__FILE__) . '/search_results/search-results_vrfs.php');
+			require(__DIR__ . '/search_results/search-results_vrfs.php');
 		}
 		// pstn
 		if ($GET->pstn == "on" && $User->get_module_permissions("pstn") >= User::ACCESS_R) {
-			require(dirname(__FILE__) . '/search_results/search-results_pstn.php');
+			require(__DIR__ . '/search_results/search-results_pstn.php');
 		}
 		// circuits
 		if ($GET->circuits == "on" && $User->get_module_permissions("circuits") >= User::ACCESS_R) {
-			require(dirname(__FILE__) . '/search_results/search-results_circuits.php');
+			require(__DIR__ . '/search_results/search-results_circuits.php');
 		}
 		// customers
 		if ($GET->customers == "on" && $User->get_module_permissions("customers") >= User::ACCESS_R) {
-			require(dirname(__FILE__) . '/search_results/search-results_customers.php');
+			require(__DIR__ . '/search_results/search-results_customers.php');
 		}
 		// devices
 		if ($GET->devices == "on" && $User->get_module_permissions("devices") >= User::ACCESS_R) {
-			require(dirname(__FILE__) . '/search_results/search-results_devices.php');
+			require(__DIR__ . '/search_results/search-results_devices.php');
 		}
 	}
 

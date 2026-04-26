@@ -20,7 +20,7 @@ if ($User->settings->enableLocations=="1" && $User->get_module_permissions ("loc
         $GET->subnetId = $device['location'];
 
         $hide_title = true;
-        include(dirname(__FILE__).'/../../locations/single-location.php');
+        include(__DIR__.'/../../locations/single-location.php');
 
         $GET->subnetId = $sid_orig;
         if (isset($loc_old)) {

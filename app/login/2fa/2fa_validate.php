@@ -1,7 +1,7 @@
 <?php
 
 /* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( __DIR__ . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -37,7 +37,7 @@ else {
 	# check for failed logins and captcha
 	if($User->blocklimit > $cnt) {
 		# init class
-		require_once (dirname(__FILE__)."/../../../functions/GoogleAuthenticator/PHPGangsta/GoogleAuthenticator.php");
+		require_once (__DIR__."/../../../functions/GoogleAuthenticator/PHPGangsta/GoogleAuthenticator.php");
 		$ga = new PHPGangsta_GoogleAuthenticator();
 		# validate
 		if ($ga->verifyCode($User->user->{'2fa_secret'}, $POST->code, 2)) {

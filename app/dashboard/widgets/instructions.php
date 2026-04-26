@@ -5,7 +5,7 @@
 
 # required functions
 if(!isset($User)) {
-	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+	require_once( __DIR__ . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);
@@ -48,4 +48,4 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 }
 
 $i_am_a_widget = true;
-require( dirname(__FILE__) . '/../../tools/instructions/index.php' );
+require( __DIR__ . '/../../tools/instructions/index.php' );

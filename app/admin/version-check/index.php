@@ -52,7 +52,7 @@ print "<div class='log-print changelog'>";
 // title
 print "<h4 style='margin-top:40px;'>Changelog</h4><hr>";
 print "	<pre>";
-$handle = fopen( dirname(__FILE__) . "/../../../misc/CHANGELOG", "r" );
+$handle = fopen( __DIR__ . "/../../../misc/CHANGELOG", "r" );
 print fread($handle, 102400);
 print "	</pre>";
 print "</div>";

@@ -57,8 +57,8 @@ $tabs = array("subnets", "leases", "reservations");
         $filename = $GET->subnetId . ".php";
 
         // include file
-        if(!file_exists(dirname(__FILE__) . $filename)) 	{ $Result->show("danger", "Invalid request", true); }
-        else											    { include(dirname(__FILE__) . $filename); }
+        if(!file_exists(__DIR__ . $filename)) 	{ $Result->show("danger", "Invalid request", true); }
+        else											    { include(__DIR__ . $filename); }
         ?>
         </div>
 <?php

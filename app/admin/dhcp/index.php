@@ -26,7 +26,7 @@ elseif($User->settings->enableDHCP==1) { ?>
         $Result->show("danger", "Error parsing DHCP settings: ".$Tools->json_error, false);
 
         // settings
-        include(dirname(__FILE__) . "/settings.php");
+        include(__DIR__ . "/settings.php");
     }
     else {
         # parse and verify settings
@@ -61,9 +61,9 @@ elseif($User->settings->enableDHCP==1) { ?>
         <div>
         <?php
         // include file
-        if(!file_exists(dirname(__FILE__) . "/".$GET->subnetId.".php")) 	{ $Result->show("danger", "Invalid request", true); }
+        if(!file_exists(__DIR__ . "/".$GET->subnetId.".php")) 	{ $Result->show("danger", "Invalid request", true); }
         elseif (!in_array($GET->subnetId, $tabs))                    { $Result->show("danger", "Invalid request", true); }
-        else													        { include(dirname(__FILE__) . "/".$GET->subnetId.".php"); }
+        else													        { include(__DIR__ . "/".$GET->subnetId.".php"); }
         ?>
         </div>
 <?php

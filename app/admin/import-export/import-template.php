@@ -3,8 +3,8 @@
  *	Generate XLS template
  *********************************/
 /* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
+require_once( __DIR__ . '/../../../functions/functions.php' );
+require( __DIR__ . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # Don't corrupt output with php errors!
 disable_php_errors();

@@ -35,8 +35,8 @@
  * @link http://adldap.sourceforge.net/
  */
 
-require_once(dirname(__FILE__).'/../adLDAP.php');
-require_once(dirname(__FILE__).'/../collections/adLDAPContactCollection.php');
+require_once(__DIR__.'/../adLDAP.php');
+require_once(__DIR__.'/../collections/adLDAPContactCollection.php');
 
 class adLDAPContacts {
     /**

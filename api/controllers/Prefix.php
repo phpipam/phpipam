@@ -275,7 +275,7 @@ class Prefix_controller extends Common_api_functions {
      */
     private function init_subnets_controller () {
         // file
-        require( dirname(__FILE__) . "/Subnets.php");
+        require( __DIR__ . "/Subnets.php");
 		// validate parameters on Subnets_controller
 		$this->Subnets_controller = new Subnets_controller ($this->Database, $this->Tools, $this->_params, $this->Response);
     }
@@ -287,7 +287,7 @@ class Prefix_controller extends Common_api_functions {
      */
     private function init_addresses_controller () {
         // file
-        require( dirname(__FILE__) . "/Addresses.php");
+        require( __DIR__ . "/Addresses.php");
 		// validate parameters on Subnets_controller
 		$this->Addresses_controller = new Addresses_controller ($this->Database, $this->Tools, $this->_params, $this->Response);
     }

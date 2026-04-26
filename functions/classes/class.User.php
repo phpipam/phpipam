@@ -1019,7 +1019,7 @@ class User extends Common_functions {
      */
     private function directory_connect ($authparams) {
         # adLDAP script
-        require(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
+        require(__DIR__ . "/../adLDAP/src/adLDAP.php");
         $dirparams = Array();
         $dirparams['base_dn'] = @$authparams['base_dn'];
         $dirparams['ad_port'] = @$authparams['ad_port'];
@@ -1176,7 +1176,7 @@ class User extends Common_functions {
         }
 
         # initialize radius class
-        require( dirname(__FILE__) . '/class.Radius.php' );
+        require( __DIR__ . '/class.Radius.php' );
         $Radius = new Radius ($params->hostname, $params->secret, $params->suffix, $params->timeout, $params->port);
         //debugging
         $this->debugging!==true ? : $Radius->SetDebugMode(TRUE);

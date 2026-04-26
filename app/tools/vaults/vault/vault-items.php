@@ -10,8 +10,8 @@ print "<br>";
 
 // include
 if($vault->type=="passwords") {
-	include(dirname(__FILE__)."/vault-items-passwords.php");
+	include(__DIR__."/vault-items-passwords.php");
 }
 else {
-	include(dirname(__FILE__)."/vault-items-certificates.php");
+	include(__DIR__."/vault-items-certificates.php");
 }

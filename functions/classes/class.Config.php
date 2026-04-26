@@ -25,7 +25,7 @@ class Config {
             return $alt_file;
         }
 
-        return dirname(__FILE__) . "/../../config.php";
+        return __DIR__ . "/../../config.php";
     }
 
     /**

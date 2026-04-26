@@ -594,7 +594,7 @@ class Common_functions  {
 	public function initialize_pear_net_IPv4 () {
 		//initialize NET object
 		if(!is_object($this->Net_IPv4)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv4.php' );
+			require_once( __DIR__ . '/../../functions/PEAR/Net/IPv4.php' );
 			//initialize object
 			$this->Net_IPv4 = new Net_IPv4();
 		}
@@ -609,7 +609,7 @@ class Common_functions  {
 	public function initialize_pear_net_IPv6 () {
 		//initialize NET object
 		if(!is_object($this->Net_IPv6)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv6.php' );
+			require_once( __DIR__ . '/../../functions/PEAR/Net/IPv6.php' );
 			//initialize object
 			$this->Net_IPv6 = new Net_IPv6();
 		}
@@ -624,7 +624,7 @@ class Common_functions  {
 	public function initialize_pear_net_DNS2 () {
 		//initialize NET object
 		if(!is_object($this->DNS2)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/DNS2.php' );
+			require_once( __DIR__ . '/../../functions/PEAR/Net/DNS2.php' );
 			//initialize object
 			$this->DNS2 = new Net_DNS2_Resolver(array("timeout"=>2));
 		}
@@ -1765,7 +1765,7 @@ class Common_functions  {
 			// Generated from vendorMac.xml
 			// Unique MAC address: 51316
 			// Updated: 05 April 2024
-			$data = file_get_contents(dirname(__FILE__) . "/../vendormacs.json");
+			$data = file_get_contents(__DIR__ . "/../vendormacs.json");
 			if (is_string($data)) {
 				$this->mac_address_vendors = json_decode($data, true);
 			}

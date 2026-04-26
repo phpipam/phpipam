@@ -6,7 +6,7 @@
 	<td colspan="2">
 		<?php
 		$user = (array) $user;
-		include(dirname(__FILE__)."/../print_module_permissions.php");
+		include(__DIR__."/../print_module_permissions.php");
 		$user = (object) $user;
 		?>
 	</td>

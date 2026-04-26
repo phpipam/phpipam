@@ -44,7 +44,7 @@ if($GET->sPage=="details") {
 	    $slaves = false;
 	    // print
 	    print '<div class="ipaddresses_overlay">';
-	    include_once(dirname(__FILE__).'/../subnets/addresses/print-address-table.php');
+	    include_once(__DIR__.'/../subnets/addresses/print-address-table.php');
 	    print '</div>';
 	}
 

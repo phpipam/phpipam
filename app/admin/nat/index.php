@@ -7,4 +7,4 @@ $User->check_user_session();
 $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 
 # show all nat objects
-include(dirname(__FILE__)."/../../tools/nat/index.php");
+include(__DIR__."/../../tools/nat/index.php");

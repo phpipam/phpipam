@@ -33,10 +33,10 @@ else {
     # specific entry details
     if (isset($GET->sPage)) {
         # menu
-        include(dirname(__FILE__)."/menu.php");
+        include(__DIR__."/menu.php");
         # include
-        if($GET->subnetId=="bgp")      { include(dirname(__FILE__)."/bgp/details.php"); }
-        elseif($GET->subnetId=="ospf") { include(dirname(__FILE__)."/ospf/details.php"); }
+        if($GET->subnetId=="bgp")      { include(__DIR__."/bgp/details.php"); }
+        elseif($GET->subnetId=="ospf") { include(__DIR__."/ospf/details.php"); }
         else                              { $Result->show("danger", _("Invalid routing module."), false); }
     }
     # all entries
@@ -44,10 +44,10 @@ else {
         # default
         if (!isset($GET->subnetId))    { $GET->subnetId = "bgp"; }
         # menu
-        include(dirname(__FILE__)."/menu.php");
+        include(__DIR__."/menu.php");
         # include
-        if($GET->subnetId=="bgp")      { include(dirname(__FILE__)."/bgp/all.php"); }
-        elseif($GET->subnetId=="ospf") { include(dirname(__FILE__)."/ospf/all.php"); }
+        if($GET->subnetId=="bgp")      { include(__DIR__."/bgp/all.php"); }
+        elseif($GET->subnetId=="ospf") { include(__DIR__."/ospf/all.php"); }
         else                              { $Result->show("danger", _("Invalid routing module."), false); }
     }
 }

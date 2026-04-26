@@ -1,10 +1,10 @@
 <?php
 /* @config file ------------------ */
-require_once(dirname(__FILE__) . '/../../functions/classes/class.Config.php');
+require_once(__DIR__ . '/../../functions/classes/class.Config.php');
 
 # verify php build
 require_once('functions/checks/check_php_build.php');        // check for support for PHP modules and database connection
-define("TOOLKIT_PATH", dirname(__FILE__) . '/../../functions/php-saml/');
+define("TOOLKIT_PATH", __DIR__ . '/../../functions/php-saml/');
 require_once(TOOLKIT_PATH . '../xmlseclibs/xmlseclibs.php'); // We load the xmlsec libs required by OneLogin's SAML
 require_once(TOOLKIT_PATH . '_toolkit_loader.php');   // We load the SAML2 lib
 

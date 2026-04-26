@@ -116,15 +116,15 @@ if($Install->check_db_connection(false) && $Install->check_table("vrf", false)) 
 <?php
 
 # select install type
-if(!isset($GET->section))										{ include(dirname(__FILE__)."/welcome.php"); }
+if(!isset($GET->section))										{ include(__DIR__."/welcome.php"); }
 # open subpage
 else {
 	// open initial installation page
-	if($GET->section=="select_type")							{ include(dirname(__FILE__)."/select_install_type.php"); }
+	if($GET->section=="select_type")							{ include(__DIR__."/select_install_type.php"); }
 	// section error
-	elseif($GET->section=="sql_error")							{ include(dirname(__FILE__)."/sql_error.php"); }
+	elseif($GET->section=="sql_error")							{ include(__DIR__."/sql_error.php"); }
 	// check if subnetId == configure than already installed
-	elseif($GET->subnetId=="configure")							{ include(dirname(__FILE__)."/postinstall_configure.php"); }
+	elseif($GET->subnetId=="configure")							{ include(__DIR__."/postinstall_configure.php"); }
 	// set installation type
 	else {
     	// validate install type
@@ -132,8 +132,8 @@ else {
         if(!in_array($GET->section, $install_types)) 	        { $Result->show("danger", "Invalid request", false); }
         else {
 			// verify that page exists
-			if(!file_exists(dirname(__FILE__)."/".$GET->section.".php"))	{ include("invalid_install_type.php"); }
-			else														{ include(dirname(__FILE__)."/".$GET->section.".php"); }
+			if(!file_exists(__DIR__."/".$GET->section.".php"))	{ include("invalid_install_type.php"); }
+			else														{ include(__DIR__."/".$GET->section.".php"); }
 		}
 	}
 }

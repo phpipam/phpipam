@@ -172,7 +172,7 @@ abstract class DB {
 	 * @return void
 	 */
 	private function load_schema_exceptions() {
-		$fh = fopen(dirname(__FILE__) . '/../../db/SCHEMA.sql', 'r');
+		$fh = fopen(__DIR__ . '/../../db/SCHEMA.sql', 'r');
 		if ($fh === false) {
 			return;
 		}
