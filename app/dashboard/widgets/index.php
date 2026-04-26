@@ -2,7 +2,7 @@
 
 # get filelist for all configured widgets
 if (
-	!preg_match('/^[a-zA-Z0-9-_]+$/', $GET->section) ||
+	!preg_match('/^[a-zA-Z0-9-_]+$/', (string) $GET->section) ||
 	$Tools->fetch_object("widgets", "wfile", $GET->section) === false ||
 	$Tools->verify_widget($GET->section) === false
 ) {

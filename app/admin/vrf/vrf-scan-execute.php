@@ -43,7 +43,7 @@ if ($existing_vrfs!==false) {
 
 # set devices
 foreach ($POST as $k=>$p) {
-    if (strpos($k, "device-")!==false) {
+    if (strpos((string) $k, "device-")!==false) {
         # fetch device
         $device = $Tools->fetch_object ("devices", "id", str_replace("device-", "", $k));
         if ($device !== false) {

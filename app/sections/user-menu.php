@@ -6,7 +6,7 @@
 
 # filter ip value
 if(!is_blank($GET->ip)) {
-	$GET->ip = urldecode(trim($GET->ip));
+	$GET->ip = urldecode(trim((string) $GET->ip));
 }
 
 # verify that user is logged in
@@ -14,7 +14,7 @@ $User->check_user_session();
 
 // set parameters form cookie
 $sp = isset($_COOKIE['search_parameters']) ? $_COOKIE['search_parameters'] : '';
-$params = json_decode($sp, true) ?: [];
+$params = json_decode((string) $sp, true) ?: [];
 foreach ($params as $k => $p) {
 	if ($p == "on") {
 		$GET->{$k} = $p;

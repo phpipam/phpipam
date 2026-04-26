@@ -119,10 +119,10 @@ class Net_DNS2_RR_TXT extends Net_DNS2_RR
 
         foreach ($this->text as $t) {
 
-            $data .= chr(strlen($t)) . $t;
+            $data .= chr(strlen((string) $t)) . $t;
         }
 
-        $packet->offset += strlen($data);
+        $packet->offset += strlen((string) $data);
 
         return $data;
     }

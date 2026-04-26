@@ -24,7 +24,7 @@ if ($User->get_module_permissions ("fwzones")==User::ACCESS_NONE) {
 if ($POST->operation != 'subnet2zone') 				{ $Result->show("danger", _("Invalid operation. Do not manipulate the POST values!"), true); }
 
 # validate $POST->subnetId values
-if (!preg_match('/^[0-9]+$/i', $POST->subnetId)) 	{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!"), true); }
+if (!preg_match('/^[0-9]+$/i', (string) $POST->subnetId)) 	{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!"), true); }
 
 $firewallZones = $Zones->get_zones();
 

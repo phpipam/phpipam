@@ -125,7 +125,7 @@ class Subnets extends Common_functions {
 		if (!in_array($order, array_keys($this->get_valid_subnet_orderings(false)))) {
 			$order = "subnet,asc";
 		}
-		return explode(",", $order);
+		return explode(",", (string) $order);
 	}
 
 	/**
@@ -1520,11 +1520,11 @@ class Subnets extends Common_functions {
 	 * @return mixed
 	 */
 	public function reformat_number ($number) {
-		$length = strlen($number);
+		$length = strlen((string) $number);
 		$pos	= $length - 3;
 
 		if ($length > 8) {
-			$number = "~". substr($number, 0, $length - $pos) . "&middot;10^<sup>". $pos ."</sup>";
+			$number = "~". substr((string) $number, 0, $length - $pos) . "&middot;10^<sup>". $pos ."</sup>";
 		}
 		return $number;
 	}
@@ -2049,7 +2049,7 @@ class Subnets extends Common_functions {
 	 */
 	public function verify_cidr_address_IPv6 ($cidr, $issubnet = true) {
 		# to lower
-		$cidr = strtolower($cidr);
+		$cidr = strtolower((string) $cidr);
 		# Initialize PEAR NET object
 		$this->initialize_pear_net_IPv6 ();
         # validate
@@ -2719,7 +2719,7 @@ class Subnets extends Common_functions {
     	// fetch settings
     	$this->get_settings ();
     	// search
- 		try { $res = $this->Database->getObjectsQuery('ipaddresses', "select ipaddresses.* from `ipaddresses` join subnets on ipaddresses.subnetId = subnets.id where subnets.pingSubnet = 1 and `lastSeen` between ? and ? order by lastSeen desc limit $limit;", array(date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-$timelimit), date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-(int) str_replace(";","",strstr($this->settings->pingStatus, ";")))) ); }
+ 		try { $res = $this->Database->getObjectsQuery('ipaddresses', "select ipaddresses.* from `ipaddresses` join subnets on ipaddresses.subnetId = subnets.id where subnets.pingSubnet = 1 and `lastSeen` between ? and ? order by lastSeen desc limit $limit;", array(date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-$timelimit), date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-(int) str_replace(";","",strstr((string) $this->settings->pingStatus, ";")))) ); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -3673,7 +3673,7 @@ class Subnets extends Common_functions {
 	 */
 	private function ripe_arin_fetch ($network, $type, $subnet) {
 		// Validate $subnet
-		$cidr = array_pad(explode("/", $subnet), 2, null);
+		$cidr = array_pad(explode("/", (string) $subnet), 2, null);
 		if (
 			(sizeof($cidr) > 2) ||
 			(filter_var($cidr[0], FILTER_VALIDATE_IP) === false) ||

@@ -276,7 +276,7 @@ class FirewallZones extends Common_functions {
 			if($mappings[$key]->padding == 1 && $mappings[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name length
-			$mappings[$key]->zone = str_pad(ltrim($mappings[$key]->zone,0),$mappings[$key]->length,"0",STR_PAD_LEFT);
+			$mappings[$key]->zone = str_pad(ltrim((string) $mappings[$key]->zone,0),$mappings[$key]->length,"0",STR_PAD_LEFT);
 			}
 			# inject network informations
 			foreach ($networkInformation as $nkey => $nval) {
@@ -350,7 +350,7 @@ class FirewallZones extends Common_functions {
 			if($mapping[$key]->padding == 1 && $mapping[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name length
-			$mapping[$key]->zone = str_pad(ltrim($mapping[$key]->zone,0),$mapping[$key]->length,"0",STR_PAD_LEFT);
+			$mapping[$key]->zone = str_pad(ltrim((string) $mapping[$key]->zone,0),$mapping[$key]->length,"0",STR_PAD_LEFT);
 			}
 			# inject network informations
 			foreach ($networkInformation as $nkey => $nval) {
@@ -428,7 +428,7 @@ class FirewallZones extends Common_functions {
 				if($info[$key]->padding == 1 && $info[$key]->generator != 2){
 				# remove leading zeros (padding) and raise the value in case of any zone name length changes
 				# add some padding to reach the maximum zone name length
-				$info[$key]->zone = str_pad(ltrim($info[$key]->zone,0),$info[$key]->length,"0",STR_PAD_LEFT);
+				$info[$key]->zone = str_pad(ltrim((string) $info[$key]->zone,0),$info[$key]->length,"0",STR_PAD_LEFT);
 				}
 			}
 		}
@@ -479,7 +479,7 @@ class FirewallZones extends Common_functions {
 			if($zones[$key]->padding == 1 && $zones[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name length
-			$zones[$key]->zone = str_pad(ltrim($zones[$key]->zone,0),$zones[$key]->length,"0",STR_PAD_LEFT);
+			$zones[$key]->zone = str_pad(ltrim((string) $zones[$key]->zone,0),$zones[$key]->length,"0",STR_PAD_LEFT);
 			}
 			# inject network informations
 			foreach ($networkInformation as $nkey => $nval) {
@@ -539,7 +539,7 @@ class FirewallZones extends Common_functions {
 			if($zone[$key]->padding == 1 && $zone[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name length
-			$zone[$key]->zone = str_pad(ltrim($zone[$key]->zone,0),$zone[$key]->length,"0",STR_PAD_LEFT);
+			$zone[$key]->zone = str_pad(ltrim((string) $zone[$key]->zone,0),$zone[$key]->length,"0",STR_PAD_LEFT);
 			}
 			# inject network informations
 			foreach ($networkInformation as $nkey => $nval) {
@@ -1014,7 +1014,7 @@ class FirewallZones extends Common_functions {
 				$firewallAddressObject = $firewallAddressObject.str_replace(':',$firewallZoneSettings['separator'],$this->Subnets->transform_to_dotted($zone->subnet)).'-'.$zone->mask;
 			}
 		} elseif ($firewallZoneSettings['subnetPatternValues'][$firewallZoneSettings['subnetPattern']] == 'description' ) {
-			$firewallAddressObject = $firewallAddressObject.str_replace(' ',$firewallZoneSettings['separator'],strtolower($zone->subnetDescription));
+			$firewallAddressObject = $firewallAddressObject.str_replace(' ',$firewallZoneSettings['separator'],strtolower((string) $zone->subnetDescription));
 		}
 
 		# get subnet information to compare against the changes

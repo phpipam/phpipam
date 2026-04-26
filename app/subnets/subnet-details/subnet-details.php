@@ -116,7 +116,7 @@ else {
 
 	<?php } ?>
 
-	<?php if(@is_array($all_nats_per_object['subnets'])) { if(@array_key_exists($subnet['id'], $all_nats_per_object['subnets'])) { ?>
+	<?php if(@is_array($all_nats_per_object['subnets'])) { if(@array_key_exists((string) $subnet['id'], $all_nats_per_object['subnets'])) { ?>
 	<tr>
 		<th><?php print _('NAT'); ?></th>
 		<td><?php $Addresses->print_nat_link($all_nats, $all_nats_per_object, $subnet, false, "subnet"); ?> <?php print _("Subnet is natted"); ?></a></td>
@@ -450,7 +450,7 @@ else {
 			if ($domain!==false) {
 				if ($User->check_module_permissions ("pdns", User::ACCESS_RWA, false, false)) {
 				$btns[] = "<div class='btn-group'>";
-            if (preg_match("/^.*ip6.arpa$/", $domain->name)) {
+            if (preg_match("/^.*ip6.arpa$/", (string) $domain->name)) {
 				   $btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("tools", "powerDNS", "reverse_v6", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
             }
             else {

@@ -21,8 +21,8 @@ $User->is_admin();
 
 
 //strip AS if provided, to get just the number
-if(substr($POST->as, 0,2)=="AS" || substr($POST->as, 0,2)=="as") {
-	$POST->as = substr($POST->as, 2);
+if(substr((string) $POST->as, 0,2)=="AS" || substr((string) $POST->as, 0,2)=="as") {
+	$POST->as = substr((string) $POST->as, 2);
 };
 
 // numeric
@@ -74,7 +74,7 @@ else {
 		if ($m > 999) break;
 
 		# only not empty
-		if(strlen($route)>2) {
+		if(strlen((string) $route)>2) {
 			print '<tr>'. "\n";
 
 			//delete

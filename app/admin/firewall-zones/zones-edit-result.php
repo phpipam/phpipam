@@ -33,27 +33,27 @@ if($POST->action != 'add' && $POST->action != 'delete' && $POST->action != 'edit
 }
 
 # check the zone name. valid values are alphanumeric characters and special characters like ".-_ "
-if($POST->zone && !preg_match('/^[0-9a-z.\-_ ]+$/i',$POST->zone)) {
+if($POST->zone && !preg_match('/^[0-9a-z.\-_ ]+$/i',(string) $POST->zone)) {
 	$Result->show("danger", _("Invalid zone name value."), true);
 }
 
 if($firewallZoneSettings['zoneGenerator']=="2")
-if(is_blank($POST->zone) || strlen($POST->zone)>$firewallZoneSettings['zoneLength']) {
+if(is_blank($POST->zone) || strlen((string) $POST->zone)>$firewallZoneSettings['zoneLength']) {
 	$Result->show("danger", _("Invalid zone name length."), true);
 }
 
 # check the zone indicator ID. valid values are 0 or 1.
-if($POST->indicator && !preg_match('/^[0-1]$/i',$POST->indicator)) {
+if($POST->indicator && !preg_match('/^[0-1]$/i',(string) $POST->indicator)) {
 	$Result->show("danger", _("Invalid indicator ID."), true);
 }
 
 # check the generator value. valid value: integer
-if($POST->generator && !preg_match('/^[0-9]+$/i',$POST->generator)) {
+if($POST->generator && !preg_match('/^[0-9]+$/i',(string) $POST->generator)) {
 	$Result->show("danger", _("Invalid generator ID."), true);
 }
 
 # check the padding value. valid value: on or off
-if($POST->padding && !preg_match('/^(on|off)$/i',$POST->padding)) {
+if($POST->padding && !preg_match('/^(on|off)$/i',(string) $POST->padding)) {
 	$Result->show("danger", _("Invalid padding setting."), true);
 }
 
@@ -67,7 +67,7 @@ if($POST->generator != 2) {
 }
 
 # transform description to valid value
-$description = trim(htmlspecialchars($POST->description));
+$description = trim(htmlspecialchars((string) $POST->description));
 
 # generate a unique zone name if the generator is set to decimal or hex
 if (!$POST->zone && $POST->action == 'add')  {

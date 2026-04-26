@@ -79,7 +79,7 @@ try {
 	$content_plain 	= implode("\r\n",$content_plain);
 
 	$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
-	$phpipam_mail->Php_mailer->addAddress(addslashes(trim($POST->email)), addslashes(trim($POST->real_name)));
+	$phpipam_mail->Php_mailer->addAddress(addslashes(trim((string) $POST->email)), addslashes(trim((string) $POST->real_name)));
 	//add all admins to CC
 	if (sizeof($users)>0) {
 		foreach($users as $admin) {

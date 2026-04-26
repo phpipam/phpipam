@@ -28,7 +28,7 @@ $User->Crypto->csrf_cookie ("validate", "settings", $POST->csrf_cookie) === fals
 
 
 //check for http/https
-if ( (strpos($POST->siteURL,'http://') !== false) || (strpos($POST->siteURL,'https://') !== false) ) 	{}
+if ( (strpos((string) $POST->siteURL,'http://') !== false) || (strpos((string) $POST->siteURL,'https://') !== false) ) 	{}
 else 																										{ $POST->siteURL = "http://".$POST->siteURL; }
 
 //verify ping status fields

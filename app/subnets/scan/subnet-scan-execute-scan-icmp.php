@@ -12,7 +12,7 @@ $User->is_demo();
 
 # validate subnetId and type
 if(!is_numeric($POST->subnetId))                        { $Result->show("danger", "Invalid subnet Id", true); die(); }
-if(!preg_match('/[^A-Za-z0-9-]*$/', $POST->type))       { $Result->show("danger", "Invalid scan type", true); die(); }
+if(!preg_match('/[^A-Za-z0-9-]*$/', (string) $POST->type))       { $Result->show("danger", "Invalid scan type", true); die(); }
 
 
 # invoke CLI with threading support

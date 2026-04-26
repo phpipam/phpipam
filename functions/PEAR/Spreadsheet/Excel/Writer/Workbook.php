@@ -634,7 +634,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
         $total_worksheets = count($this->_worksheets);
         // add the length of the BOUNDSHEET records
         for ($i = 0; $i < $total_worksheets; $i++) {
-            $offset += $boundsheet_length + strlen($this->_worksheets[$i]->name);
+            $offset += $boundsheet_length + strlen((string) $this->_worksheets[$i]->name);
         }
         $offset += $EOF;
 
@@ -711,8 +711,8 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
             // Also check for a string of zeros, which is a valid format string
             // but would evaluate to zero.
             //
-            if (!preg_match("/^0+\d/", $num_format)) {
-                if (preg_match("/^\d+$/", $num_format)) { // built-in format
+            if (!preg_match("/^0+\d/", (string) $num_format)) {
+                if (preg_match("/^\d+$/", (string) $num_format)) { // built-in format
                     continue;
                 }
             }
@@ -1318,8 +1318,8 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
         $continue           = 0;
 
         foreach (array_keys($this->_str_table) as $string) {
-            $string_length = strlen($string);
-            $headerinfo    = unpack("vlength/Cencoding", $string);
+            $string_length = strlen((string) $string);
+            $headerinfo    = unpack("vlength/Cencoding", (string) $string);
             $encoding      = $headerinfo["encoding"];
             $split_string  = 0;
 
@@ -1488,8 +1488,8 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
         /* TODO: not good for performance */
         foreach (array_keys($this->_str_table) as $string) {
 
-            $string_length = strlen($string);
-            $headerinfo    = unpack("vlength/Cencoding", $string);
+            $string_length = strlen((string) $string);
+            $headerinfo    = unpack("vlength/Cencoding", (string) $string);
             $encoding      = $headerinfo["encoding"];
             $split_string  = 0;
 
@@ -1548,11 +1548,11 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
 
                 if ($space_remaining > $header_length) {
                     // Write as much as possible of the string in the current block
-                    $tmp = substr($string, 0, $space_remaining);
+                    $tmp = substr((string) $string, 0, $space_remaining);
                     $this->_append($tmp);
 
                     // The remainder will be written in the next block(s)
-                    $string = substr($string, $space_remaining);
+                    $string = substr((string) $string, $space_remaining);
 
                     // Reduce the current block length by the amount written
                     $block_length -= $continue_limit - $continue - $align;

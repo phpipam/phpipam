@@ -161,7 +161,7 @@ else {
                     // loop
                     foreach ($object_groups as $t=>$ob) {
                     	print "<tr>";
-                    	print "	<th>"._(ucwords($t))."</th>";
+                    	print "	<th>"._(ucwords((string) $t))."</th>";
                         print "<td style='line-height:20px;'>";
                     	// print objects
                     	if(sizeof($ob)>0) {

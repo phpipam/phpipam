@@ -46,8 +46,8 @@ if($all_agents!==false) {
 		$a = (array) $a;
 
 		// fixes
-		$a['code'] = strlen($a['code'])===0 ? "/" : $a['code'];
-		$a['last_access'] = strlen($a['last_access'])===0 ? "<span class='text-muted'>"._("Never")."</span>" : $a['last_access'];
+		$a['code'] = strlen((string) $a['code'])===0 ? "/" : $a['code'];
+		$a['last_access'] = strlen((string) $a['last_access'])===0 ? "<span class='text-muted'>"._("Never")."</span>" : $a['last_access'];
 
 		// print
 		print '<tr>' . "\n";

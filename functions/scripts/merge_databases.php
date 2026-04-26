@@ -96,7 +96,7 @@ foreach ($tables as $table) {
 	// ignored databases
 	if(!in_array($table, $ignored_tables)) {
 		// set id
-		$identifier = array_key_exists($table, $special_identifiers) ? $special_identifiers[$table] : "id";
+		$identifier = array_key_exists((string) $table, $special_identifiers) ? $special_identifiers[$table] : "id";
 		// fetch old and new
 		$highest_id     = $Database->getObjectQuery     ($table, "SELECT `$identifier` FROM `$table` ORDER BY `$identifier` DESC LIMIT 0, 1;");
 		$lowest_id_old  = $Database_old->getObjectQuery ($table, "SELECT `$identifier` FROM `$table` ORDER BY `$identifier` ASC LIMIT 0, 1;");
@@ -224,7 +224,7 @@ foreach ($old_data as $table => $table_content) {
 				$new_data[$table][$lk]->type = $highest_ids_append["deviceTypes"] + $value_obj->type;
 			}
 			// sections
-			if(strlen($value_obj->sections)>1) {
+			if(strlen((string) $value_obj->sections)>1) {
 				$sections     = pf_explode(";", $value_obj->sections);
 				$sections_new = array();
 				foreach ($sections as $k=>$v) {

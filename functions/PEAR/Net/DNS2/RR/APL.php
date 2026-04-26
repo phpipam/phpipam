@@ -75,7 +75,7 @@ class Net_DNS2_RR_APL extends Net_DNS2_RR
     {
         foreach ($rdata as $item) {
 
-            if (preg_match('/^(!?)([1|2])\:([^\/]*)\/([0-9]{1,3})$/', $item, $m)) {
+            if (preg_match('/^(!?)([1|2])\:([^\/]*)\/([0-9]{1,3})$/', (string) $item, $m)) {
 
                 $i = [
 
@@ -119,7 +119,7 @@ class Net_DNS2_RR_APL extends Net_DNS2_RR
                 // unpack the family, prefix, negate and length values
                 //   
                 $x = unpack(
-                    'naddress_family/Cprefix/Cextra', substr($this->rdata, $offset)
+                    'naddress_family/Cprefix/Cextra', substr((string) $this->rdata, $offset)
                 );
 
                 $item = [
@@ -134,7 +134,7 @@ class Net_DNS2_RR_APL extends Net_DNS2_RR
 
                 case 1:
                     $r = unpack(
-                        'C*', substr($this->rdata, $offset + 4, $item['afd_length'])
+                        'C*', substr((string) $this->rdata, $offset + 4, $item['afd_length'])
                     );
                     if (count($r) < 4) {
 
@@ -149,7 +149,7 @@ class Net_DNS2_RR_APL extends Net_DNS2_RR
                     break;
                 case 2:
                     $r = unpack(
-                        'C*', substr($this->rdata, $offset + 4, $item['afd_length'])
+                        'C*', substr((string) $this->rdata, $offset + 4, $item['afd_length'])
                     );
                     if (count($r) < 8) {
 

@@ -734,8 +734,8 @@ class Net_IPv6
 
         }
 
-        $cip = preg_replace('/((^:)|(:$))/', '', $cip);
-        $cip = preg_replace('/((^:)|(:$))/', '::', $cip);
+        $cip = preg_replace('/((^:)|(:$))/', '', (string) $cip);
+        $cip = preg_replace('/((^:)|(:$))/', '::', (string) $cip);
 
         if ('' != $netmask) {
 
@@ -878,7 +878,7 @@ class Net_IPv6
         $count  = 0;
 
         if (!empty($ipPart[0])) {
-            $ipv6 = explode(':', $ipPart[0]);
+            $ipv6 = explode(':', (string) $ipPart[0]);
 
             foreach($ipv6 as $element) { // made a validate precheck
                 if(!preg_match('/[0-9a-fA-F]*/', $element)) {
@@ -895,7 +895,7 @@ class Net_IPv6
                 }
 
                 $dec = hexdec($ipv6[$i]);
-                $hex = strtoupper(preg_replace("/^[0]{1,3}(.*[0-9a-fA-F])$/",
+                $hex = strtoupper((string) preg_replace("/^[0]{1,3}(.*[0-9a-fA-F])$/",
                                                 "\\1",
                                                 $ipv6[$i]));
 
@@ -914,7 +914,7 @@ class Net_IPv6
 
             } else if (6 == $count and !empty($ipPart[1])) {
 
-                $ipv4  = explode('.', $ipPart[1]);
+                $ipv4  = explode('.', (string) $ipPart[1]);
                 $count = 0;
 
                 for ($i = 0; $i < count($ipv4); $i++) {

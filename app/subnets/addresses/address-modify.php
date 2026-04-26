@@ -38,7 +38,7 @@ $id      = escape_input($POST->id);
 
 # fetch subnet
 $subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
-if (strpos($_SERVER['HTTP_REFERER'], "verify-database")==0)
+if (strpos((string) $_SERVER['HTTP_REFERER'], "verify-database")==0)
 sizeof($subnet)>0 ?:			$Result->show("danger", _("Invalid subnet"), true, true);
 
 # set and check permissions
@@ -218,7 +218,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 			<input type="hidden" name="addressId" 	value="<?php print $address['id']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			<?php
-			if (strpos($_SERVER['HTTP_REFERER'], "verify-database")!=0) { print "<input type='hidden' name='verifydatabase' value='yes'>"; }
+			if (strpos((string) $_SERVER['HTTP_REFERER'], "verify-database")!=0) { print "<input type='hidden' name='verifydatabase' value='yes'>"; }
 			?>
     	</td>
 	</tr>

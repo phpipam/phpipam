@@ -99,7 +99,7 @@ class Net_DNS2_RR_DS extends Net_DNS2_RR
             //
             // unpack the keytag, algorithm and digesttype
             //
-            $x = unpack('nkeytag/Calgorithm/Cdigesttype/H*digest', $this->rdata);
+            $x = unpack('nkeytag/Calgorithm/Cdigesttype/H*digest', (string) $this->rdata);
 
             $this->keytag       = $x['keytag'];
             $this->algorithm    = $x['algorithm'];
@@ -125,7 +125,7 @@ class Net_DNS2_RR_DS extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->digest) > 0) {
+        if (strlen((string) $this->digest) > 0) {
 
             $data = pack('nCCH*', $this->keytag, $this->algorithm, $this->digesttype, $this->digest);
 

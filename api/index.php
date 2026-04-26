@@ -85,7 +85,7 @@ try {
 		$encryption_method = Config::ValueOf('api_crypt_encryption_library', 'openssl-128-cbc');
 
 		// decrypt request - form_encoded
-		if(strpos($content_type, "application/x-www-form-urlencoded")!==false) {
+		if(strpos((string) $content_type, "application/x-www-form-urlencoded")!==false) {
 			$decoded = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $encryption_method);
 			if ($decoded === false) $Response->throw_exception(503, 'Invalid enc_request');
 			$decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
@@ -133,7 +133,7 @@ try {
 	// Append Global API parameters / POST parameters if POST,PATCH or DELETE
 	if($_SERVER['REQUEST_METHOD']=="GET" || $_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE") {
 		// if application tupe is JSON (application/json)
-		if(strpos($content_type, "application/json")!==false){
+		if(strpos((string) $content_type, "application/json")!==false){
 			$rawPostData = file_get_contents('php://input');
 			if (is_string($rawPostData) && !is_blank($rawPostData)) {
 				$json = db_json_decode($rawPostData, true);
@@ -145,7 +145,7 @@ try {
 			}
 		}
 		// if application tupe is XML (application/json)
-		elseif(strpos($content_type, "application/xml")!==false){
+		elseif(strpos((string) $content_type, "application/xml")!==false){
 			$rawPostData = file_get_contents('php://input');
 			if (is_string($rawPostData) && !is_blank($rawPostData)) {
 				$xml = $Response->xml_to_array($rawPostData);
@@ -228,8 +228,8 @@ try {
 	/* Initialize controller ---------- */
 
 	// get the controller and format it correctly
-	$controller_name = ucfirst($Params->controller)."_controller";
-	$controller_file = ucfirst($Params->controller);
+	$controller_name = ucfirst((string) $Params->controller)."_controller";
+	$controller_file = ucfirst((string) $Params->controller);
 
 	// check if the controller exists. if not, throw an exception
 	if( file_exists( dirname(__FILE__) . "/controllers/$controller_file.php") ) {
@@ -254,17 +254,17 @@ try {
 	// POST and PATCH. This only works for controllers that support custom
 	// fields and if the app has nested custom fields enabled, otherwise
 	// this is skipped.
-	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' || strtoupper($_SERVER['REQUEST_METHOD']) == 'PATCH') {
+	if (strtoupper((string) $_SERVER['REQUEST_METHOD']) == 'POST' || strtoupper((string) $_SERVER['REQUEST_METHOD']) == 'PATCH') {
 		$controller->unmarshal_nested_custom_fields();
 	}
 
 	// check if the action exists in the controller. if not, throw an exception.
-	if( method_exists($controller, strtolower($_SERVER['REQUEST_METHOD'])) === false ) {
+	if( method_exists($controller, strtolower((string) $_SERVER['REQUEST_METHOD'])) === false ) {
 		$Response->throw_exception(501, $Response->errors[501]);
 	}
 
 	// Transaction locking is only enabled for POST, PUT, PATCH and DELETE requests.
-	if (in_array(strtoupper($_SERVER['REQUEST_METHOD']), ["POST", "PUT", "PATCH", "DELETE"])) {
+	if (in_array(strtoupper((string) $_SERVER['REQUEST_METHOD']), ["POST", "PUT", "PATCH", "DELETE"])) {
 		$lock_type = $app->app_lock_type;
 
 		if ($lock_type == "Auto") {

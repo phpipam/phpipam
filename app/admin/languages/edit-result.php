@@ -28,8 +28,8 @@ $User->check_maintaneance_mode ();
 $User->Crypto->csrf_cookie ("validate", "languages", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # verify that description is present if action != delete
-if($POST->action != "delete" && strlen($POST->l_code) < 2)		{ $Result->show("danger", _('Code must be at least 2 characters long'), true); }
-if($POST->action != "delete" && strlen($POST->l_name) < 2)		{ $Result->show("danger", _('Name must be at least 2 characters long'), true); }
+if($POST->action != "delete" && strlen((string) $POST->l_code) < 2)		{ $Result->show("danger", _('Code must be at least 2 characters long'), true); }
+if($POST->action != "delete" && strlen((string) $POST->l_name) < 2)		{ $Result->show("danger", _('Name must be at least 2 characters long'), true); }
 
 # create update array
 $values = array("l_id"=>$POST->l_id,

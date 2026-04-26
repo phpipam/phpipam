@@ -48,7 +48,7 @@ foreach ($vlan_domains as $vlan_domain) {
 		//cast
 		$vlan = (array) $vlan;
 		$vlan_data[$vlan_domain['name']][$vlan['number']] = $vlan;
-		$vlan_data[$vlan_domain['name']][strtolower($vlan['name'])] = $vlan;
+		$vlan_data[$vlan_domain['name']][strtolower((string) $vlan['name'])] = $vlan;
 	}
 }
 
@@ -104,14 +104,14 @@ foreach ($data as &$cdata) {
 
 	# if the subnet contains "/", split it in network and mask
 	if ($action != "error") {
-		if (preg_match("/\//", $cdata['subnet'])) {
+		if (preg_match("/\//", (string) $cdata['subnet'])) {
 			list($caddr,$cmask) = $Subnets->cidr_network_and_mask($cdata['subnet']);
 			$cdata['mask'] = $cmask;
 			$cdata['subnet'] = $caddr;
 		} else { # check that mask is provided
 			if ((!isset($cdata['mask'])) || ($cdata['mask'] == "")) { $msg.= "Required field mask missing or empty."; $action = "error"; }
 		}
-		if ((!empty($cdata['mask'])) && (!preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", $cdata['mask']))) {
+		if ((!empty($cdata['mask'])) && (!preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", (string) $cdata['mask']))) {
 			$msg.="Invalid network mask format."; $action = "error";
 		} else {
 			$cdata['type'] = $Subnets->identify_address($cdata['subnet']);
@@ -145,9 +145,9 @@ foreach ($data as &$cdata) {
 		$msg.= "Invalid VLAN domain."; $action = "error";
 	} else {
 		if (!empty($cdata['vlan'])) {
-		        if (in_array(strtolower($cdata['vlan']),array("na","n/a","nan"))) { $cdata['vlan'] = ""; }
-			if ((!empty($cdata['vlan'])) && (strtolower($cdata['vlan']) != "na")) {
-			    $v = strtolower($cdata['vlan']);
+		        if (in_array(strtolower((string) $cdata['vlan']),array("na","n/a","nan"))) { $cdata['vlan'] = ""; }
+			if ((!empty($cdata['vlan'])) && (strtolower((string) $cdata['vlan']) != "na")) {
+			    $v = strtolower((string) $cdata['vlan']);
 				if (!isset($vlan_data[$cdom][$v])) {
 					$msg.= "VLAN not found in provided domain."; $action = "error";
 				} else {
@@ -165,13 +165,13 @@ foreach ($data as &$cdata) {
 		if ($net = $Subnets->get_network_boundaries($cdata['subnet'],$cdata['mask'])) {
 			$cdata['mask'] = $net['bitmask'];
 			$cidr_check = $Subnets->verify_cidr_address($cdata['subnet']."/".$cdata['mask']);
-			if (strlen($cidr_check)>5) { $msg.=$cidr_check; $action = "error"; }
+			if (strlen((string) $cidr_check)>5) { $msg.=$cidr_check; $action = "error"; }
 		} else { $msg.=$net['message']; $action = "error"; }
-		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
-		if ((!empty($cdata['vrf'])) && (!preg_match("/^[a-zA-Z0-9-_]+$/", $cdata['vrf']))) { $msg.="Invalid VRF name format."; $action = "error"; }
+		if (preg_match("/[;'\"]/", (string) $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
+		if ((!empty($cdata['vrf'])) && (!preg_match("/^[a-zA-Z0-9-_]+$/", (string) $cdata['vrf']))) { $msg.="Invalid VRF name format."; $action = "error"; }
 # Allow VLAN to be the string now.
 #		if ((!empty($cdata['vlan'])) && (!preg_match("/^[0-9]+$/", $cdata['vlan']))) { $msg.="Invalid VLAN number format."; $action = "error"; }
-		if ((!empty($cdata['domain'])) && (!preg_match("/^[a-zA-Z0-9-_. ]+$/", $cdata['domain']))) { $msg.="Invalid VLAN domain format."; $action = "error"; }
+		if ((!empty($cdata['domain'])) && (!preg_match("/^[a-zA-Z0-9-_. ]+$/", (string) $cdata['domain']))) { $msg.="Invalid VLAN domain format."; $action = "error"; }
 	}
 
 	# check if duplicate in the import data

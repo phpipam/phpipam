@@ -10,7 +10,7 @@ require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 # section
 $section_search = false;
 foreach ($POST as $k=>$p) {
-    if (strpos($k, "sectionId")!==false) {
+    if (strpos((string) $k, "sectionId")!==false) {
         $section = $Sections->fetch_section("id", $p);
         if ($section===false)                                           { $Result->show("danger", _("Invalid section Id"), true, false, false, true); }
     }

@@ -44,7 +44,7 @@ if (isset($argv[1])) {
 }
 
 // validate password
-if (strlen($password) < 8) {
+if (strlen((string) $password) < 8) {
 	$Result->show_cli("Password must be at least 8 characters long", true);
 }
 
@@ -122,7 +122,7 @@ try {
 	$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 	//add all admins to CC
 	foreach ($recepients as $admin) {
-		$phpipam_mail->Php_mailer->addAddress(addslashes($admin['email']), addslashes($admin['name']));
+		$phpipam_mail->Php_mailer->addAddress(addslashes((string) $admin['email']), addslashes((string) $admin['name']));
 	}
 	$phpipam_mail->Php_mailer->Subject = $subject;
 	$phpipam_mail->Php_mailer->msgHTML($content);

@@ -67,7 +67,7 @@ if($POST->device1=="0") {
 	$POST->device1   = 0;
 	$POST->location1 = 0;
 }
-elseif(strpos($POST->device1,"device_")!==false) {
+elseif(strpos((string) $POST->device1,"device_")!==false) {
 	$deviceId = str_replace("device_", "", $POST->device1);
 	if($Tools->fetch_object("devices","id",$deviceId)===false) 			    { $Result->show("danger", _('Invalid device A').'!', true); }
 	// save
@@ -86,7 +86,7 @@ if($POST->device2=="0") {
 	$POST->device2   = 0;
 	$POST->location2 = 0;
 }
-elseif(strpos($POST->device2,"device_")!==false) {
+elseif(strpos((string) $POST->device2,"device_")!==false) {
 	$deviceId = str_replace("device_", "", $POST->device2);
 	if($Tools->fetch_object("devices","id",$deviceId)===false) 			     { $Result->show("danger", _('Invalid device B').'!', true); }
 	// save

@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # change * to % for database wildchar
-$searchTerm = trim($searchTerm);
+$searchTerm = trim((string) $searchTerm);
 $searchTerm = str_replace("*", "%", $searchTerm);
 $searchTerm_edited = ['high' => '', 'low' => ''];
 

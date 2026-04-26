@@ -174,7 +174,7 @@ class Common_functions  {
 		$b = array_pad(pf_explode('.', $verB), 3, 0);
 
 		if ($a[0] != $b[0]) return $a[0] < $b[0] ? -1 : 1;			// 1.x.y is less than 2.x.y
-		if (strcmp($a[1], $b[1]) != 0) return strcmp($a[1], $b[1]);	// 1.21.y is less than 1.3.y
+		if (strcmp((string) $a[1], (string) $b[1]) != 0) return strcmp((string) $a[1], (string) $b[1]);	// 1.21.y is less than 1.3.y
 		if ($a[2] != $b[2]) return $a[2] < $b[2] ? -1 : 1;			// 1.4.9 is less than 1.4.10
 		return 0;
 	}
@@ -520,7 +520,7 @@ class Common_functions  {
         $ip_tables = ["subnets"=>"subnet", "ipaddresses"=>"ip_addr"];
 
         // check
-        return array_key_exists ($table, $ip_tables) ? $ip_tables[$table] : false;
+        return array_key_exists ((string) $table, $ip_tables) ? $ip_tables[$table] : false;
     }
 
     /**
@@ -644,7 +644,7 @@ class Common_functions  {
 					$input[$k] = $this->strip_input_tags($v);
 					continue;
 				}
-				$input[$k] = is_null($v) ? NULL : strip_tags($v);
+				$input[$k] = is_null($v) ? NULL : strip_tags((string) $v);
 			}
 			# stripped array
 			return $input;
@@ -777,7 +777,7 @@ class Common_functions  {
 
 		foreach($logs as $key=>$req) {
 			# ignore __ and PHPSESSID
-			if( substr($key,0,2)=='__' || substr($key,0,9)=='PHPSESSID' || substr($key,0,4)=='pass' || $key=='plainpass' || $key=='values')
+			if( substr((string) $key,0,2)=='__' || substr((string) $key,0,9)=='PHPSESSID' || substr((string) $key,0,4)=='pass' || $key=='plainpass' || $key=='values')
 				continue;
 
 			// NOTE The colon character ":" is reserved as it used in array_to_log for implode/explode.
@@ -845,10 +845,10 @@ class Common_functions  {
 		// minimum length = 8
 		if ($chars < 8) $chars = 8;
 		// count input text size
-		$origLen = mb_strlen($text);
+		$origLen = mb_strlen((string) $text);
 		// cut unwanted chars
 		if ($origLen > $chars) {
-			$text = mb_substr($text, 0, $chars-3) . '...';
+			$text = mb_substr((string) $text, 0, $chars-3) . '...';
 		}
 		return $text;
 	}
@@ -1111,7 +1111,7 @@ class Common_functions  {
     	    return $valid;
 	    }
 	    else {
-    	    if(strpos($hostname, ".")!==false)  { return $valid; }
+    	    if(strpos((string) $hostname, ".")!==false)  { return $valid; }
     	    else                                { return false; }
 	    }
 	}
@@ -1175,7 +1175,7 @@ class Common_functions  {
 	 */
 	public function validate_postcode ($value = "", $country = 'united kingdom') {
 		// to lower
-		$country = strtolower($country);
+		$country = strtolower((string) $country);
 		// set regexes
 		$country_regex = array(
 			'united kingdom' => '/^([A-Z][A-HJ-Y]?[0-9][A-Z0-9]? ?[0-9][A-Z]{2}|GIR ?0A{2})$/i',
@@ -1192,10 +1192,10 @@ class Common_functions  {
 
 		// check for country
 		if ( isset($country_regex[$country]) ) {
-			return preg_match($country_regex[$country], $value);
+			return preg_match($country_regex[$country], (string) $value);
 		}
 		// default
-		return preg_match($country_regex['default'], $value);
+		return preg_match($country_regex['default'], (string) $value);
 	}
 
 	/**
@@ -1469,7 +1469,7 @@ class Common_functions  {
 		}
 
         //set, enum
-        if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
+        if(substr((string) $field['type'], 0,3) == "set" || substr((string) $field['type'], 0,4) == "enum") {
         	$html = $this->create_custom_field_input_set_enum ($field, $object, $disabled_text, $set_delimiter, $nameSuffix);
         }
         //date and time picker
@@ -1511,7 +1511,7 @@ class Common_functions  {
     private function create_custom_field_input_set_enum ($field, $object, $disabled_text, $set_delimiter = "", $nameSuffix = "") {
 		$html = array();
     	//parse values
-    	$field['type'] = trim(substr($field['type'],0,-1));
+    	$field['type'] = trim(substr((string) $field['type'],0,-1));
     	$tmp = substr($field['type'], 0,3)=="set" ? pf_explode(",", str_replace(array("set(", "'"), "", $field['type'])) : pf_explode(",", str_replace(array("enum(", "'"), "", $field['type']));
     	//null
     	if($field['Null']!="NO") { array_unshift($tmp, ""); }
@@ -1639,10 +1639,10 @@ class Common_functions  {
         $html = array ();
         // max length
         $maxlength = 100;
-        if(strpos($field['type'],"varchar")!==false) {
+        if(strpos((string) $field['type'],"varchar")!==false) {
             $maxlength = str_replace(array("varchar","(",")"),"", $field['type']);
         }
-        if(strpos($field['type'],"int")!==false) {
+        if(strpos((string) $field['type'],"int")!==false) {
             $maxlength = str_replace(array("int","(",")"),"", $field['type']);
         }
         // print
@@ -1801,8 +1801,8 @@ class Common_functions  {
 
 		# set new posted permissions
 		foreach($post_permissions as $key=>$val) {
-			if(substr($key, 0,5) == "group") {
-				if($val != "0") $new_permissions[substr($key,5)] = $val;
+			if(substr((string) $key, 0,5) == "group") {
+				if($val != "0") $new_permissions[substr((string) $key,5)] = $val;
 			}
 		}
 

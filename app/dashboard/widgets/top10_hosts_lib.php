@@ -91,11 +91,11 @@ function top10_widget($type_ip, $type_percentage, $height, $slimit) {
 
 					# odd/even if more than 5 items
 					if($valid_subnets > 5) {
-						if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $display_item, '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
-						else	 	{ print "['" . addslashes($subnet['description']) . "', $display_item, '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+						if ($m&1) 	{ print "['|<br>" . addslashes((string) $subnet['description']) . "', $display_item, '" . addslashes((string) $subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+						else	 	{ print "['" . addslashes((string) $subnet['description']) . "', $display_item, '" . addslashes((string) $subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
 					}
 					else {
-						print "['" . addslashes($subnet['description']) . "', $display_item, '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";
+						print "['" . addslashes((string) $subnet['description']) . "', $display_item, '" . addslashes((string) $subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";
 					}
 				}
 				?>

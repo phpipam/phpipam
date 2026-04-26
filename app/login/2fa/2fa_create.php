@@ -14,7 +14,7 @@ else {
 	$ga = new PHPGangsta_GoogleAuthenticator();
 	// create secret
 	$secret = $ga->createSecret(32);  	// Override $User->settings->{'2fa_length'}. Only lengths 16 and 32 produce reliable results. See #3724
-	$username = strtolower($User->user->username)."@".$User->settings->{'2fa_name'};
+	$username = strtolower((string) $User->user->username)."@".$User->settings->{'2fa_name'};
 
 	// save secret to DB
 	try {
@@ -57,7 +57,7 @@ else {
 <script src="functions/qrcodejs/qrcode.min.js"></script>
 <script>
 var qrcode = new QRCode(document.getElementById("qrcode"), {
-	text: "otpauth://totp/phpIPAM:<?php print urlencode($username)."?secret=".$secret; ?>",
+	text: "otpauth://totp/phpIPAM:<?php print urlencode((string) $username)."?secret=".$secret; ?>",
 	width: 200,
 	height: 200,
 	colorDark : "#000000",

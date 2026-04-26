@@ -169,7 +169,7 @@ foreach ($found as $k=>$f) {
     $mac = $f['mac'];
 
     // remove duplicate macs on same device & Port-channels
-    if(isset($mac_lookup[$dev][$mac]) || stripos($f['port'], "port-channel")!==false) {
+    if(isset($mac_lookup[$dev][$mac]) || stripos((string) $f['port'], "port-channel")!==false) {
         unset($found[$k]);
     } else {
         $mac_lookup[$dev][$mac] = 1;

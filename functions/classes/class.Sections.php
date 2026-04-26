@@ -583,7 +583,7 @@ class Sections extends Common_functions {
 			if(is_array($custom)) {
 				foreach($custom as $field) {
 					if(!in_array($field['name'], $hidden_fields)) {
-						$html[] = '<th data-field="'.urlencode($field['name']).'" class="hidden-xs hidden-sm">'.$Tools->print_custom_field_name($field['name']).'</th>';
+						$html[] = '<th data-field="'.urlencode((string) $field['name']).'" class="hidden-xs hidden-sm">'.$Tools->print_custom_field_name($field['name']).'</th>';
 					}
 				}
 			}

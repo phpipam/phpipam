@@ -321,13 +321,13 @@ if ($Scan->icmp_type == "fping") {
 // loop
 foreach ($address_change as $k => $change) {
     // null old - set to epoch time
-    if (strtotime($change['lastSeenOld']) === false) {
+    if (strtotime((string) $change['lastSeenOld']) === false) {
         $change['lastSeenOld'] = date("Y-m-d H:i:s", 0);
     }
 
     // set general diffs
-    $deviceDiff = $now - strtotime($change['lastSeenOld']);         // now - device last seen
-    $agentDiff  = $now - strtotime($agent->last_access);            // now - last agent check
+    $deviceDiff = $now - strtotime((string) $change['lastSeenOld']);         // now - device last seen
+    $agentDiff  = $now - strtotime((string) $agent->last_access);            // now - last agent check
 
     // if now online and old offline send mail
     if ($change['lastSeenNew'] != NULL && $deviceDiff >= (int) $statuses[1]) {
@@ -485,7 +485,7 @@ if (!empty($address_change) && $config['ping_check_send_mail']) {
         $phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
         //add all admins to CC
         foreach ($recepients as $admin) {
-            $phpipam_mail->Php_mailer->addAddress(addslashes($admin['email']), addslashes($admin['name']));
+            $phpipam_mail->Php_mailer->addAddress(addslashes((string) $admin['email']), addslashes((string) $admin['name']));
         }
         $phpipam_mail->Php_mailer->Subject = $subject;
         $phpipam_mail->Php_mailer->msgHTML($content);

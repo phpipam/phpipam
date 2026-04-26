@@ -132,7 +132,7 @@ class Tools extends Common_functions {
 
     	$tags = $this->fetch_all_objects ("ipTags", "id");
     	foreach ($tags as $t) {
-        	if(strtolower($t->type)==strtolower($search_term)) {
+        	if(strtolower((string) $t->type)==strtolower((string) $search_term)) {
             	$tags = $t->id;
             	break;
         	}
@@ -1093,7 +1093,7 @@ class Tools extends Common_functions {
 			$content[] = "<tr><td colspan='2' style='margin:0px;>$this->mail_font_style <strong>$subject</strong></font></td></tr>";
 			foreach($values as $k=>$v) {
 			// title search
-			if (preg_match("/s_title_/", $k)) {
+			if (preg_match("/s_title_/", (string) $k)) {
 			$content[] = "<tr><td colspan='2' style='margin:0px;border-bottom:1px solid #eeeeee;'>$this->mail_font_style<strong>$v</strong></font></td></tr>";
 			}
 			else {
@@ -1120,12 +1120,12 @@ class Tools extends Common_functions {
 			$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 			if ($recipients!==false) {
 			foreach($recipients as $r) {
-			$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r->email)));
+			$phpipam_mail->Php_mailer->addAddress(addslashes(trim((string) $r->email)));
 			}
-			$phpipam_mail->Php_mailer->AddCC(addslashes(trim($recipients_requester)));
+			$phpipam_mail->Php_mailer->AddCC(addslashes(trim((string) $recipients_requester)));
 			}
 			else {
-			$phpipam_mail->Php_mailer->addAddress(addslashes(trim($recipients_requester)));
+			$phpipam_mail->Php_mailer->addAddress(addslashes(trim((string) $recipients_requester)));
 			}
 			$phpipam_mail->Php_mailer->Subject = $subject;
 			$phpipam_mail->Php_mailer->msgHTML($content);
@@ -1732,7 +1732,7 @@ class Tools extends Common_functions {
 			return false;
 		}
 		# set releases href
-		$xml = simplexml_load_string($curl['result']);
+		$xml = simplexml_load_string((string) $curl['result']);
 
 		// if ok
 		if ($xml!==false) {
@@ -2204,7 +2204,7 @@ class Tools extends Common_functions {
         $n->description = !is_blank($n->description) ? "<br>$n->description" : "";
 
         // device
-        if (strlen($n->device)) {
+        if (strlen((string) $n->device)) {
             if($n->device !== 0) {
                 $device = $this->fetch_object ("devices", "id", $n->device);
                 $description = !is_blank($device->description) ? " ($device->description)" : "";
@@ -2222,7 +2222,7 @@ class Tools extends Common_functions {
         $html = array();
         $html[] = "<tr>";
         $html[] = "<td colspan='4'>";
-        $html[] = "<span class='badge badge1 badge5'>".ucwords($n->type)."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
+        $html[] = "<span class='badge badge1 badge5'>".ucwords((string) $n->type)."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
         $html[] = "<span class='pull-right'>";
         $html[] = $actions_menu;
         $html[] = "</span>";
@@ -3191,7 +3191,7 @@ class Tools extends Common_functions {
 		// filter if requested
 		if ($search !== false && sizeof($domains)>0) {
 			foreach ($domains as $k=>$d) {
-				if (strpos($d->number, $search)===false && strpos($d->name, $search)===false && strpos($d->description, $search)===false) {
+				if (strpos((string) $d->number, $search)===false && strpos((string) $d->name, $search)===false && strpos((string) $d->description, $search)===false) {
 					unset($domains[$k]);
 				}
 			}

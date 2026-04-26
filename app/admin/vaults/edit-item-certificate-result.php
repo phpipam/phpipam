@@ -45,7 +45,7 @@ if($POST->action=="add") {
 }
 // for edits without certificate get old value!
 elseif($POST->action=="edit") {
-	if(openssl_x509_parse(base64_decode($POST->certificate))===false) {
+	if(openssl_x509_parse(base64_decode((string) $POST->certificate))===false) {
 		$vault_item = $Tools->fetch_object("vaultItems", "id", $POST->id);
 		$vault_item_values = db_json_decode($User->Crypto->decrypt($vault_item->values, $_SESSION['vault'.$POST->vaultId]));
 		$POST->certificate = $vault_item_values->certificate;
@@ -55,7 +55,7 @@ elseif($POST->action=="edit") {
 # add, edit
 if($POST->action!="delete") {
 	# name must be more than 2 and alphanumeric
-	if(strlen($POST->name)<3 || strlen($POST->name)>64)			{ $error[] = "Invalid name"; }
+	if(strlen((string) $POST->name)<3 || strlen((string) $POST->name)>64)			{ $error[] = "Invalid name"; }
 }
 
 # custom

@@ -46,7 +46,7 @@ class Search_controller extends Common_api_functions {
 	 */
 	private function define_search_items () {
 		foreach ($this->_params as $item => $value) {
-			if (array_key_exists($item, $this->search_items)) {
+			if (array_key_exists((string) $item, $this->search_items)) {
 				if($value==0 || $value==1) {
 					$this->search_items[$item] = $value;
 				}

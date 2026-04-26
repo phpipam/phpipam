@@ -107,7 +107,7 @@ class Net_DNS2_RR_NSEC3 extends Net_DNS2_RR
         //
         foreach ($this->type_bit_maps as $rr) {
     
-            $out .= ' ' . strtoupper($rr);
+            $out .= ' ' . strtoupper((string) $rr);
         }
 
         return $out;
@@ -139,11 +139,11 @@ class Net_DNS2_RR_NSEC3 extends Net_DNS2_RR
         } else {
     
             $this->salt_length = strlen(pack('H*', $salt));
-            $this->salt = strtoupper($salt);
+            $this->salt = strtoupper((string) $salt);
         }
 
         $this->hashed_owner_name = array_shift($rdata);
-        $this->hash_length = strlen(base64_decode($this->hashed_owner_name));
+        $this->hash_length = strlen(base64_decode((string) $this->hashed_owner_name));
 
         $this->type_bit_maps = $rdata;
 
@@ -166,7 +166,7 @@ class Net_DNS2_RR_NSEC3 extends Net_DNS2_RR
             //
             // unpack the first values
             //
-            $x = unpack('Calgorithm/Cflags/niterations/Csalt_length', $this->rdata);
+            $x = unpack('Calgorithm/Cflags/niterations/Csalt_length', (string) $this->rdata);
         
             $this->algorithm    = $x['algorithm'];
             $this->flags        = $x['flags'];
@@ -177,15 +177,15 @@ class Net_DNS2_RR_NSEC3 extends Net_DNS2_RR
 
             if ($this->salt_length > 0) {
  
-                $x = unpack('H*', substr($this->rdata, $offset, $this->salt_length));
-                $this->salt = strtoupper($x[1]);
+                $x = unpack('H*', substr((string) $this->rdata, $offset, $this->salt_length));
+                $this->salt = strtoupper((string) $x[1]);
                 $offset += $this->salt_length;
             }
 
             //
             // unpack the hash length
             //
-            $x = unpack('@' . $offset . '/Chash_length', $this->rdata);
+            $x = unpack('@' . $offset . '/Chash_length', (string) $this->rdata);
             $offset++;
 
             //
@@ -195,7 +195,7 @@ class Net_DNS2_RR_NSEC3 extends Net_DNS2_RR
             if ($this->hash_length > 0) {
 
                 $this->hashed_owner_name = base64_encode(
-                    substr($this->rdata, $offset, $this->hash_length)
+                    substr((string) $this->rdata, $offset, $this->hash_length)
                 );
                 $offset += $this->hash_length;
             }
@@ -204,7 +204,7 @@ class Net_DNS2_RR_NSEC3 extends Net_DNS2_RR
             // parse out the RR bitmap
             //
             $this->type_bit_maps = Net_DNS2_BitMap::bitMapToArray(
-                substr($this->rdata, $offset)
+                substr((string) $this->rdata, $offset)
             );
 
             return true;
@@ -247,7 +247,7 @@ class Net_DNS2_RR_NSEC3 extends Net_DNS2_RR
         $data .= chr($this->hash_length);
         if ($this->hash_length > 0) {
 
-            $data .= base64_decode($this->hashed_owner_name);
+            $data .= base64_decode((string) $this->hashed_owner_name);
         }
 
         //

@@ -282,7 +282,7 @@ class Result {
 	 */
 	protected function set_location_header ($location) {
 		# validate location header
-		if(!preg_match('/^[a-zA-Z0-9\-\_\/.]+$/i',$location)) {
+		if(!preg_match('/^[a-zA-Z0-9\-\_\/.]+$/i',(string) $location)) {
 			$this->throw_exception (500, "Invalid location header");
 		}
 		# set

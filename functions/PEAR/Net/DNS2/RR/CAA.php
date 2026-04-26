@@ -94,15 +94,15 @@ class Net_DNS2_RR_CAA extends Net_DNS2_RR
             //
             // unpack the flags and tag length
             //
-            $x = unpack('Cflags/Ctag_length', $this->rdata);
+            $x = unpack('Cflags/Ctag_length', (string) $this->rdata);
 
             $this->flags    = $x['flags'];
             $offset         = 2;
 
-            $this->tag      = substr($this->rdata, $offset, $x['tag_length']);
+            $this->tag      = substr((string) $this->rdata, $offset, $x['tag_length']);
             $offset         += $x['tag_length'];
 
-            $this->value    = substr($this->rdata, $offset);
+            $this->value    = substr((string) $this->rdata, $offset);
 
             return true;
         }
@@ -123,10 +123,10 @@ class Net_DNS2_RR_CAA extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->value) > 0) {
+        if (strlen((string) $this->value) > 0) {
 
             $data  = chr($this->flags);
-            $data .= chr(strlen($this->tag)) . $this->tag . $this->value;
+            $data .= chr(strlen((string) $this->tag)) . $this->tag . $this->value;
 
             $packet->offset += strlen($data);
 

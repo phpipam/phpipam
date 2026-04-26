@@ -28,28 +28,28 @@ if($POST->action != 'add' && $POST->action != 'delete' && $POST->action != 'edit
 	$Result->show("danger", _("Invalid action."), true);
 }
 # check the zone alias. valid values are alphanumeric characters and special characters like ".-_: "
-if($POST->alias && !preg_match('/^[0-9a-z.\/\-_ :]+$/i',$POST->alias)) {
+if($POST->alias && !preg_match('/^[0-9a-z.\/\-_ :]+$/i',(string) $POST->alias)) {
 	$Result->show("danger", _("Invalid zone alias value."), true);
 }
 # check the interface name. valid values are alphanumeric characters and special characters like ".-_/: "
-if($POST->interface && !preg_match('/^[0-9a-z.\/\-_ :]+$/i',$POST->interface)) {
+if($POST->interface && !preg_match('/^[0-9a-z.\/\-_ :]+$/i',(string) $POST->interface)) {
 	$Result->show("danger", _("Invalid interface."), true);
 }
 if ($POST->action != 'delete') {
 	# check the zone  ID. valid value: integer
-	if(!preg_match('/^[0-9]+$/i',$POST->zoneId)) {
+	if(!preg_match('/^[0-9]+$/i',(string) $POST->zoneId)) {
 		$Result->show("danger", _("Invalid zone ID."), true);
-	} elseif (preg_match('/^0$/i',$POST->zoneId)) {
+	} elseif (preg_match('/^0$/i',(string) $POST->zoneId)) {
 		$Result->show("danger", _("Invalid zone ID."), true);
 	}
 	# check the device ID. valid value: integer
-	if(!preg_match('/^[0-9]+$/i',$POST->deviceId)) {
+	if(!preg_match('/^[0-9]+$/i',(string) $POST->deviceId)) {
 		$Result->show("danger", _("Invalid device ID."), true);
-	} elseif (preg_match('/^0$/i',$POST->deviceId)) {
+	} elseif (preg_match('/^0$/i',(string) $POST->deviceId)) {
 		$Result->show("danger", _("Please select a device."), true);
 	}
 	# check the mapping ID. valid value: integer
-	if($POST->id && !preg_match('/^[0-9]+$/i',$POST->id)) {
+	if($POST->id && !preg_match('/^[0-9]+$/i',(string) $POST->id)) {
 		$Result->show("danger", _("Invalid mapping ID."), true);
 	}
 }

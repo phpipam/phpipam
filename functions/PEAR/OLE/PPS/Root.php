@@ -318,7 +318,7 @@ class OLE_PPS_Root extends OLE_PPS
                             fwrite($FILE, $sBuff);
                         }
                     } else {
-                        fwrite($FILE, $raList[$i]->_data);
+                        fwrite($FILE, (string) $raList[$i]->_data);
                     }
 
                     if ($raList[$i]->Size % $this->_BIG_BLOCK_SIZE) {
@@ -408,7 +408,7 @@ class OLE_PPS_Root extends OLE_PPS
     {
         // Save each PPS WK
         for ($i = 0; $i < count($raList); $i++) {
-            fwrite($this->_FILEH_, $raList[$i]->_getPpsWk());
+            fwrite($this->_FILEH_, (string) $raList[$i]->_getPpsWk());
         }
         // Adjust for Block
         $iCnt = count($raList);

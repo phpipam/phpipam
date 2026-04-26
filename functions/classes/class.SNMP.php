@@ -769,7 +769,7 @@ class phpipamSNMP extends Common_functions {
             $k = str_replace($this->snmp_oids['CISCO-VTP-MIB::vtpVlanName'].'.1.', "", $k);
             $k = array_pop(pf_explode(".", $k));
             // set value
-            $r  = trim(str_replace("\"","",substr($r, strpos($r, ":")+2)));
+            $r  = trim(str_replace("\"","",substr((string) $r, strpos((string) $r, ":")+2)));
             $res[$k] = $r;
         }
 
@@ -882,16 +882,16 @@ class phpipamSNMP extends Common_functions {
             $mac_parts = [];
             list($type, $mac) = $this->extract_type_and_value($input);
 
-            if (strlen($mac)==6) {
+            if (strlen((string) $mac)==6) {
                 // 6 byte binary string (Cisco bug?), try unpacking to hex string.
-                $mac = unpack('H*mac', $mac)['mac'];
+                $mac = unpack('H*mac', (string) $mac)['mac'];
             }
 
-            if (preg_match('/^[0-9a-fA-F]{12}$/',$mac)) {
+            if (preg_match('/^[0-9a-fA-F]{12}$/',(string) $mac)) {
                 // hex string "0011223344AA"
-                $mac_parts = str_split($mac, 2);
+                $mac_parts = str_split((string) $mac, 2);
 
-            } elseif (preg_match('/^([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})$/', $mac, $matches)) {
+            } elseif (preg_match('/^([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})$/', (string) $mac, $matches)) {
                 // separated MAC address, 0:1b:c:55:7
                 unset($matches[0]);
                 foreach($matches as $i => $v)

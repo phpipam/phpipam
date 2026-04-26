@@ -63,9 +63,9 @@ $Snmp = new phpipamSNMP ();
 
 # set queries
 foreach($POST as $k=>$p) {
-    if(strpos($k, "query-")!==false) {
+    if(strpos((string) $k, "query-")!==false) {
         if($p=="on") {
-            $queries[] = substr($k, 6);
+            $queries[] = substr((string) $k, 6);
         }
     }
 }

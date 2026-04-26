@@ -24,8 +24,8 @@ if($admin->password!='$6$rounds=3000$JQEE6dL9NpvjeFs4$RK5X3oa28.Uzt/h5VAfdrsvlVe
 # update
 else {
 	# check lengths
-	if(strlen($POST->password1)<8)				{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
-	if(strlen($POST->password2)<8)				{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
+	if(strlen((string) $POST->password1)<8)				{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
+	if(strlen((string) $POST->password2)<8)				{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
 
 	# check password match
 	if($POST->password1!=$POST->password2)	{ $Result->show("danger", _("Passwords do not match"), true); }

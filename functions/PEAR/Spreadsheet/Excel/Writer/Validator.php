@@ -180,13 +180,13 @@ class Spreadsheet_Excel_Writer_Validator
 
    function _getData()
    {
-      $title_prompt_len = strlen($this->_title_prompt);
-      $descr_prompt_len = strlen($this->_descr_prompt);
-      $title_error_len = strlen($this->_title_error);
-      $descr_error_len = strlen($this->_descr_error);
+      $title_prompt_len = strlen((string) $this->_title_prompt);
+      $descr_prompt_len = strlen((string) $this->_descr_prompt);
+      $title_error_len = strlen((string) $this->_title_error);
+      $descr_error_len = strlen((string) $this->_descr_error);
 
-      $formula1_size = strlen($this->_formula1);
-      $formula2_size = strlen($this->_formula2);
+      $formula1_size = strlen((string) $this->_formula1);
+      $formula2_size = strlen((string) $this->_formula2);
 
       $data  = pack("V", $this->_getOptions());
       $data .= pack("vC", $title_prompt_len, 0x00) . $this->_title_prompt;

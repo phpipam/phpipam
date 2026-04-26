@@ -107,7 +107,7 @@ if(isset($sections_sorted)) {
 			//permissions
 			if($User->is_admin(false)) {
 	    		print "<td>";
-	    	    if(strlen($section['permissions'])>1 && !is_null($section['permissions'])) {
+	    	    if(strlen((string) $section['permissions'])>1 && !is_null($section['permissions'])) {
 	    	    	$permissions = $Sections->parse_section_permissions($section['permissions']);
 	    	    	# print for each if they exist
 	    	    	if(sizeof($permissions) > 0) {

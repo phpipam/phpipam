@@ -104,7 +104,7 @@ $max_width = (@$temp_objects[$GET->section]->type=="ipaddresses" || isset($GET->
 	# none
 	elseif(sizeof($temp_objects)==0)								{ $Log->write( _("Tempory share access"), $GET->section, 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
 	# try to fetch object
-	elseif(!array_key_exists($GET->section, $temp_objects))		{ $Log->write( _("Tempory share access"), $GET->section, 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
+	elseif(!array_key_exists((string) $GET->section, $temp_objects))		{ $Log->write( _("Tempory share access"), $GET->section, 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
 	# ok, include script
 	else {
 		//check if expired

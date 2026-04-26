@@ -133,7 +133,7 @@ if ($subnets!==false) {
 				    # status icon
 				    if($subnet->pingSubnet=="1") {
 					    //calculate
-					    $tDiff = time() - strtotime($address->lastSeen);
+					    $tDiff = time() - strtotime((string) $address->lastSeen);
 					    if($address->excludePing=="1" ) { $hStatus = "padded"; $hTooltip = ""; }
 					    elseif($address->lastSeen == "0000-00-00 00:00:00") { $hStatus = "neutral"; 	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Device is offline")."<hr>"._("Last seen").": "._("Never")."'";}
 					    elseif($address->lastSeen == "1970-01-01 00:00:01") { $hStatus = "neutral"; 	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Device is offline")."<hr>"._("Last seen").": "._("Never")."'";}

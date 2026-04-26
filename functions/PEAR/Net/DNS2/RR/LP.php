@@ -66,7 +66,7 @@ class Net_DNS2_RR_LP extends Net_DNS2_RR
     protected function rrFromString(array $rdata)
     {
         $this->preference = array_shift($rdata);
-        $this->fqdn = trim(array_shift($rdata), '.');
+        $this->fqdn = trim((string) array_shift($rdata), '.');
 
         return true;
     }
@@ -87,7 +87,7 @@ class Net_DNS2_RR_LP extends Net_DNS2_RR
             //
             // parse the preference
             //
-            $x = unpack('npreference', $this->rdata);
+            $x = unpack('npreference', (string) $this->rdata);
             $this->preference = $x['preference'];
             $offset = $packet->offset + 2;
 
@@ -115,7 +115,7 @@ class Net_DNS2_RR_LP extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->fqdn) > 0) {
+        if (strlen((string) $this->fqdn) > 0) {
      
             $data = pack('n', $this->preference);
             $packet->offset += 2;

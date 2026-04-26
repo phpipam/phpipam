@@ -101,7 +101,7 @@ $(document).ready(function() {
 	<hr>
 	<?php
 	// multiple databases
-	if(strpos($pdns->host, ";")!==false) {
+	if(strpos((string) $pdns->host, ";")!==false) {
 		// multiple ?
 		if(isset($PowerDNS->db_check_error)) {
 			foreach ($PowerDNS->db_check_error as $err) {
@@ -114,7 +114,7 @@ $(document).ready(function() {
 			// print active
 			else {
 				// set to array
-				$active_db = explode(";", $PowerDNS->db_settings->host);
+				$active_db = explode(";", (string) $PowerDNS->db_settings->host);
 				// print
 				$Result->show("success ", "Database connection ok".". "._("Active database").": ".$active_db[$PowerDNS->active_db]);
 			}

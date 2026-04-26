@@ -33,11 +33,11 @@ $document = preg_replace('/((^\/+)|(\/+$))/', '', $document);
 $path_root = realpath(dirname(__FILE__) . "/../../../doc");
 $path_doc  = realpath("$path_root/$document");
 
-if (strpos($path_doc, $path_root) !== 0) {
+if (strpos($path_doc, (string) $path_root) !== 0) {
     $Result->show("danger", _('Requested resource is not inside doc directory'), true);
 }
 
-if (is_file($path_doc) && preg_match('/\.md$/', $document)) {
+if (is_file($path_doc) && preg_match('/\.md$/', (string) $document)) {
     # Display file. We know this file exists under doc folder and ends .md
 
     $md = file_get_contents($path_doc) ? : "";
@@ -52,7 +52,7 @@ if (is_file($path_doc) && preg_match('/\.md$/', $document)) {
             foreach($elements as $e) {
                 // Add id to headers
                 if (in_array($e->tagName, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])) {
-                    $id = str_replace(['.', '(', ')'], '', mb_strtolower($e->nodeValue));
+                    $id = str_replace(['.', '(', ')'], '', mb_strtolower((string) $e->nodeValue));
                     $id = str_replace(' ', '-', $id);
                     $e->setAttribute('id', $id);
                 }

@@ -553,14 +553,14 @@ class OLE extends PEAR
         $factor = pow(2,32);
         $high_part = 0;
         for ($i = 0; $i < 4; $i++) {
-            list(, $high_part) = unpack('C', $string[(7 - $i)]);
+            list(, $high_part) = unpack('C', (string) $string[(7 - $i)]);
             if ($i < 3) {
                 $high_part *= 0x100;
             }
         }
         $low_part = 0;
         for ($i = 4; $i < 8; $i++) {
-            list(, $low_part) = unpack('C', $string[(7 - $i)]);
+            list(, $low_part) = unpack('C', (string) $string[(7 - $i)]);
             if ($i < 7) {
                 $low_part *= 0x100;
             }

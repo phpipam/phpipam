@@ -292,7 +292,7 @@ class Net_IPv4
          * a network long ip address.  Whichever was given, populate the
          * other field
          */
-        if (strlen($this->ip)) {
+        if (strlen((string) $this->ip)) {
             if (! $this->validateIP($this->ip)) {
                 return $this->pear->raiseError("invalid IP address");
             }
@@ -307,9 +307,9 @@ class Net_IPv4
          * Check to see if we were supplied with a bitmask or a netmask.
          * Populate the other field as needed.
          */
-        if (strlen($this->bitmask)) {
+        if (strlen((string) $this->bitmask)) {
             $this->netmask = $validNM[$this->bitmask];
-        } else if (strlen($this->netmask)) {
+        } else if (strlen((string) $this->netmask)) {
             $validNM_rev = array_flip($validNM);
             $this->bitmask = $validNM_rev[$this->netmask];
         } else {

@@ -14,7 +14,7 @@ $groups = $Tools->fetch_all_objects ("userGroups", "g_name");
 // show permissions
 if ($groups!==false) {
 	# parse permissions
-	if(strlen($subnet['permissions'])>1)    { $s_permissons = $Sections->parse_section_permissions($subnet['permissions']); }
+	if(strlen((string) $subnet['permissions'])>1)    { $s_permissons = $Sections->parse_section_permissions($subnet['permissions']); }
 	else 								    { $s_permissons = ""; }
 
     print "<table class='ipaddress_subnet table-condensed table-auto'>";

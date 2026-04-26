@@ -886,7 +886,7 @@ class Model {
     {
         foreach ($fields as $field => $value)
         {
-            $setter = 'set' . ucfirst($field);
+            $setter = 'set' . ucfirst((string) $field);
             if (method_exists($this, $setter)) {
                 $this->{$setter}($value);
             }
@@ -1178,7 +1178,7 @@ class RackDrawer_SVG extends Common_functions {
 				}
 				$cornerstone_x = $this->marginSides + $subrack_margin;
 				$cornerstone_y = $yPos + $h + $this->unitYSize;
-				if (strlen($content->getName())>0) $queue[] = "<text class='device' x='".($cornerstone_x + ($blade_w / 2))."' y='".($cornerstone_y - 6)."' style='fill:{$content->getFgcolor()};stroke:{$content->getFgcolor()}' {$transform}>{$content->getName()}</text>";
+				if (strlen((string) $content->getName())>0) $queue[] = "<text class='device' x='".($cornerstone_x + ($blade_w / 2))."' y='".($cornerstone_y - 6)."' style='fill:{$content->getFgcolor()};stroke:{$content->getFgcolor()}' {$transform}>{$content->getName()}</text>";
 				foreach ($content->getSubrack()->getContent() as $blade) {
 					$this_y = $cornerstone_y + (($blade->getStartLocation() - 0) * ($blade_h + $subrack_margin));
 					$this_h = ($blade_h * $blade->getSize()) + ($subrack_margin * ($blade->getSize() - 1));
@@ -1186,13 +1186,13 @@ class RackDrawer_SVG extends Common_functions {
 					// Chrome won't render nested <a>
 					// if ($blade->getUrl()) $queue[] = "<a href='{$blade->getUrl()}' target='_parent'>";
 					$queue[] = "<rect class='{$class}' width='{$blade_w}' height='{$this_h}' x='{$cornerstone_x}' y='{$this_y}' style='fill:{$blade->getBgcolor()};' {$transform} />";
-					if (strlen($content->getName())>0) $queue[] = "<text class='device' x='".($this->marginSides + ($blade_w / 2))."' y='".($this_y + (.7 * $blade_h * $blade->getSize()))."' style='fill:{$blade->getFgcolor()};stroke:{$blade->getFgcolor()};font-size:10px;' {$transform}>{$blade->getName()}</text>";
+					if (strlen((string) $content->getName())>0) $queue[] = "<text class='device' x='".($this->marginSides + ($blade_w / 2))."' y='".($this_y + (.7 * $blade_h * $blade->getSize()))."' style='fill:{$blade->getFgcolor()};stroke:{$blade->getFgcolor()};font-size:10px;' {$transform}>{$blade->getName()}</text>";
 					// Chrome won't render nested <a>
 					// if ($blade->getUrl()) $queue[] = "</a>";
 				}
 			} else {
 				$y = $y + (($size - 1) * $this->unitYSize / 2); // increase the height by .5RU for each device whose size exceeds 1 RU
-				if (strlen($content->getName())>0) $queue[] = "<text class='device' x='".($x_center)."' y='{$y}' style='fill:{$content->getFgcolor()};stroke:{$content->getFgcolor()}'>{$content->getName()}</text>";
+				if (strlen((string) $content->getName())>0) $queue[] = "<text class='device' x='".($x_center)."' y='{$y}' style='fill:{$content->getFgcolor()};stroke:{$content->getFgcolor()}'>{$content->getName()}</text>";
 			}
 			if ($content->getUrl()) $queue[] = "</a>";
 			// place the queue onto the stack

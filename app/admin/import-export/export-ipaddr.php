@@ -179,7 +179,7 @@ if($all_sections!==false) {
 	foreach ($all_sections as $section) {
 		//cast
 		$section = (array) $section;
-		$section['url_name'] = urlencode($section['id']);
+		$section['url_name'] = urlencode((string) $section['id']);
 
 		if( $GET->{'exportSection__'.$section['url_name']} == "on" ) {
 			// get all subnets in section
@@ -325,7 +325,7 @@ if ($GET->exportSections == "on") {
 	foreach ($sections_sorted as $section) {
 		//cast
 		$section = (array) $section;
-		$section['url_name'] = urlencode($section['id']);
+		$section['url_name'] = urlencode((string) $section['id']);
 
 		if( $GET->{'exportSection__'.$section['url_name']} == "on") {
 			$worksheet_sections->write($curRow, $curColumn, $section['name'], $format_text);

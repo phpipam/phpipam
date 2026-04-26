@@ -71,7 +71,7 @@ else {
 		# folder?
 		if($subnet['isFolder']==1)			{ print "	<td><a href='".create_link("subnets",$GET->section,$GET->subnetId)."'>$subnet[description]</a></td>"; }
 		else 								{ print "	<td><a href='".create_link("subnets",$GET->section,$GET->subnetId)."'>$subnet[ip]/$subnet[mask]</a></td>"; }
-		print "	<td><span class='badge badge1 badge5'>"._(ucwords($l['caction']))."</span></td>";
+		print "	<td><span class='badge badge1 badge5'>"._(ucwords((string) $l['caction']))."</span></td>";
 		print "	<td><span class='badge badge1 badge5 $bclass'>"._(ucwords("$l[cresult]"))."</span></td>";
 		print "	<td class='text-muted'>$l[cdate]</td>";
 		print "	<td><p style='background: rgba(0,0,0,0.1); padding:10px 20px;border-radius:4px;margin-bottom:0px;'>$l[cdiff]</p></td>";

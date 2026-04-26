@@ -70,7 +70,7 @@ if (sizeof($all_subnet_hosts)>0) {
                foreach ($res as $kr=>$r) {
                    if ($Subnets->is_subnet_inside_subnet ($r['ip']."/32", $Subnets->transform_address($subnet->subnet, "dotted")."/".$subnet->mask)===true) {
                        // must be existing
-                       if (array_key_exists($Subnets->transform_address($r['ip'], "decimal"), $result)) {
+                       if (array_key_exists((string) $Subnets->transform_address($r['ip'], "decimal"), $result)) {
                            // add to alive
                            $result[$Subnets->transform_address($r['ip'], "decimal")]['code'] = 0;
                            $result[$Subnets->transform_address($r['ip'], "decimal")]['status'] = "Online";

@@ -28,7 +28,7 @@ if (!isset($custom_fields)) { $custom_fields = $Tools->fetch_custom_fields("devi
 
 # check which sections we need to care about
 $used_section = array();
-foreach ($data as &$cdata) { $used_section[strtolower($cdata['section'])]=$cdata['section']; }
+foreach ($data as &$cdata) { $used_section[strtolower((string) $cdata['section'])]=$cdata['section']; }
 
 # fetch all sections and load all subnets
 $all_sections = $Sections->fetch_all_sections();
@@ -45,17 +45,17 @@ $deviceTypes = $Devtype->fetch_all_objects("deviceTypes", "tid");
 
 foreach ($all_sections as $section) {
 	$section = (array) $section;
-	$section_names[strtolower($section['name'])] = $section;
+	$section_names[strtolower((string) $section['name'])] = $section;
 }
 
 foreach ($devices as $d) {
     $d = (array) $d;
-    $edata['devices'][strtolower($d['hostname'])] = $d;
+    $edata['devices'][strtolower((string) $d['hostname'])] = $d;
 }
 
 foreach ($deviceTypes as $d) {
     $d = (array) $d;
-    $edata['deviceTypes'][strtolower($d['tname'])] = $d;
+    $edata['deviceTypes'][strtolower((string) $d['tname'])] = $d;
 }
 
 #error_log ( "devicestypes : " . json_encode ($deviceTypes) ) ;
@@ -75,18 +75,18 @@ foreach ($data as &$cdata) {
 	}
 
 	# Check if section is provided and valid and link it if it is
-	if (!isset($section_names[strtolower($cdata['section'])])) {
+	if (!isset($section_names[strtolower((string) $cdata['section'])])) {
 		$msg.= "Invalid section."; $action = "error";
 	} else {
-		$cdata['sections'] = $section_names[strtolower($cdata['section'])]['id'];
+		$cdata['sections'] = $section_names[strtolower((string) $cdata['section'])]['id'];
 	}
 
 	# Check if deviceType is provided and valid and link it if it is
-	if (!isset($edata['deviceTypes'][strtolower($cdata['deviceType'])])
+	if (!isset($edata['deviceTypes'][strtolower((string) $cdata['deviceType'])])
 	    ) {
 		$msg.= "Invalid deviceType."; $action = "error";
 	} else {
-		$cdata['type'] = $edata['deviceTypes'][strtolower($cdata['deviceType'])]['tid'];
+		$cdata['type'] = $edata['deviceTypes'][strtolower((string) $cdata['deviceType'])]['tid'];
 	}
 
 	if ($action != "error") {
@@ -99,21 +99,21 @@ foreach ($data as &$cdata) {
     	        $msg.="Invalid IP address.";
     	        $action = "error";
     	    }
-		if ((!empty($cdata['hostname'])) && (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
+		if ((!empty($cdata['hostname'])) && (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", (string) $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
 #       Allow all chars in description ... Why Limit it ?
 #		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 		if ($cdata['mac']) {
-			if (!preg_match("/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/", $cdata['mac'])) { $msg.="Invalid MAC address."; $action = "error"; }
+			if (!preg_match("/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/", (string) $cdata['mac'])) { $msg.="Invalid MAC address."; $action = "error"; }
 		}
 	}
 
 
 	# check if existing in database
 	if ($action != "error") {
-		if (isset($edata['devices'][strtolower($cdata['hostname'])]) ) {
-    		$cdata['id'] = $edata['devices'][strtolower($cdata['hostname'])]['id'];
+		if (isset($edata['devices'][strtolower((string) $cdata['hostname'])]) ) {
+    		$cdata['id'] = $edata['devices'][strtolower((string) $cdata['hostname'])]['id'];
 			# copy content to a variable for easier checks
-			$cedata = $edata[strtolower($cdata['hostname'])];
+			$cedata = $edata[strtolower((string) $cdata['hostname'])];
 			# Check if we need to change any fields
 			$action = "skip"; # skip duplicate fields if identical, update if different
 			# Should we just let the database decided to update or not?  Nice for UI, but alot of

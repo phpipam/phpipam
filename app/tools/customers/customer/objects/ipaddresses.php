@@ -78,7 +78,7 @@ foreach($addresses as $dummy) {
     # status icon
     if($subnet['pingSubnet']=="1") {
 	    //calculate
-	    $tDiff = time() - strtotime($addresses[$n]->lastSeen);
+	    $tDiff = time() - strtotime((string) $addresses[$n]->lastSeen);
 	    if($addresses[$n]->excludePing=="1" ) { $hStatus = "padded"; $hTooltip = ""; }
 	    if(is_null($addresses[$n]->lastSeen))   { $hStatus = "neutral"; $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address was never online")."'"; }
 	    elseif($addresses[$n]->lastSeen == "0000-00-00 00:00:00") { $hStatus = "neutral"; 	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address is offline")."<hr>"._("Last seen").": "._("Never")."'";}

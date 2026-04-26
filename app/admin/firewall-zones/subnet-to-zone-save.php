@@ -24,19 +24,19 @@ if ($POST->action == "edit") {
 }
 
 # validate $POST->subnetId values
-if (!preg_match('/^[0-9]+$/i', $POST->subnetId))  						{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!"), true); }
+if (!preg_match('/^[0-9]+$/i', (string) $POST->subnetId))  						{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!"), true); }
 # validate $POST->zoneId values
-if (!preg_match('/^[0-9]+$/i', $POST->zoneId) || $POST->zoneId == 0) 	 { $Result->show("danger", _("Invalid or no zone ID. "), true); }
+if (!preg_match('/^[0-9]+$/i', (string) $POST->zoneId) || $POST->zoneId == 0) 	 { $Result->show("danger", _("Invalid or no zone ID. "), true); }
 
 # validate $POST->deviceId values
-if ($POST->deviceId && !preg_match('/^[0-9]+$/i', $POST->deviceId)) 	 { $Result->show("danger", _("Invalid device ID. Do not manipulate the POST values!"), true); }
+if ($POST->deviceId && !preg_match('/^[0-9]+$/i', (string) $POST->deviceId)) 	 { $Result->show("danger", _("Invalid device ID. Do not manipulate the POST values!"), true); }
 
 # check the zone alias. valid values are alphanumeric characters and special characters like ".-_: "
-if($POST->alias && !preg_match('/^[0-9a-z.\/\-_ :]+$/i',$POST->alias)) {
+if($POST->alias && !preg_match('/^[0-9a-z.\/\-_ :]+$/i',(string) $POST->alias)) {
 	$Result->show("danger", _("Invalid zone alias value."), true);
 }
 # check the interface name. valid values are alphanumeric characters and special characters like ".-_/: "
-if($POST->interface && !preg_match('/^[0-9a-z.\/\-_ :]+$/i',$POST->interface)) {
+if($POST->interface && !preg_match('/^[0-9a-z.\/\-_ :]+$/i',(string) $POST->interface)) {
 	$Result->show("danger", _("Invalid interface."), true);
 }
 

@@ -69,7 +69,7 @@ class Net_DNS2_Resolver extends Net_DNS2
         //
         if ( (strpos($name, '.') === false) && ($type != 'PTR') ) {
 
-            $name .= '.' . strtolower($this->domain);
+            $name .= '.' . strtolower((string) $this->domain);
         }
 
         //
@@ -190,7 +190,7 @@ class Net_DNS2_Resolver extends Net_DNS2
             //
             foreach ($response->answer as $index => $object) {
 
-                if ( (strcasecmp(trim($object->name, '.'), trim($packet->question[0]->qname, '.')) == 0)
+                if ( (strcasecmp(trim((string) $object->name, '.'), trim((string) $packet->question[0]->qname, '.')) == 0)
                     && ($object->type == $packet->question[0]->qtype)
                     && ($object->class == $packet->question[0]->qclass)
                 ) {

@@ -467,8 +467,8 @@ class Logging extends Common_functions {
 		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')		{ $facility = "LOG_USER"; }
 		else {
 			//login, logout
-			if (strpos($this->log_command, "login")>0 ||
-				strpos($this->log_command, "logged out")>0) { $facility = "LOG_AUTH"; }
+			if (strpos((string) $this->log_command, "login")>0 ||
+				strpos((string) $this->log_command, "logged out")>0) { $facility = "LOG_AUTH"; }
 			else 											{ $facility = "LOG_USER"; }
 		}
 		# save
@@ -1451,7 +1451,7 @@ class Logging extends Common_functions {
 		$keys['ip_addr'] = array("is_gateway", "excludePing", "PTRignore");
 
 		// check
-		if (array_key_exists($this->object_type, $keys)) {
+		if (array_key_exists((string) $this->object_type, $keys)) {
 			if (in_array($k, $keys[$this->object_type])) {
 				if ($v=="0") { $this->object_old[$k] = "True";	return "False"; }
 				else 		 { $this->object_old[$k] = "False"; return "True"; }
@@ -1515,9 +1515,9 @@ class Logging extends Common_functions {
 			$subquery_filter1 = ""; $subquery_filter2 ="";
 			if($filter) {
 				/* replace * with % */
-				if(substr($expr, 0, 1)=="*")								{ $expr[0] = "%"; }
-				if(substr($expr, -1, 1)=="*")								{ $expr = substr_replace($expr, "%", -1);  }
-				if(substr($expr, 0, 1)!="*" && substr($expr, -1, 1)!="*")	{ $expr = "%".$expr."%"; }
+				if(substr((string) $expr, 0, 1)=="*")								{ $expr[0] = "%"; }
+				if(substr((string) $expr, -1, 1)=="*")								{ $expr = substr_replace($expr, "%", -1);  }
+				if(substr((string) $expr, 0, 1)!="*" && substr((string) $expr, -1, 1)!="*")	{ $expr = "%".$expr."%"; }
 
 				$subquery_filter1 = "AND (`coid`=:expr or `ctype`=:expr or `real_name` like :expr or `cdate` like :expr or `cdiff` like :expr or INET_NTOA(`ip_addr`) like :expr)";
 				$subquery_filter2 = "AND (`coid`=:expr or `ctype`=:expr or `real_name` like :expr or `cdate` like :expr or `cdiff` like :expr)";
@@ -1916,7 +1916,7 @@ class Logging extends Common_functions {
 
 			$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 			foreach($recipients as $r) {
-			$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r->email)));
+			$phpipam_mail->Php_mailer->addAddress(addslashes(trim((string) $r->email)));
 			}
 			$phpipam_mail->Php_mailer->Subject = $subject;
 			$phpipam_mail->Php_mailer->msgHTML($content);

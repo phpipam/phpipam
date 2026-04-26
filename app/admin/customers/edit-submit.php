@@ -43,10 +43,10 @@ if($POST->action!="add" && !is_numeric($POST->id))					{ $Result->show("danger",
 // add / edit validations
 if ($POST->action!="delete") {
 	// check strings
-	if(strlen($POST->title)<3)		{ $Result->show("danger", _("Invalid Title"), true); }
-	if(strlen($POST->address)<3)		{ $Result->show("danger", _("Invalid Address"), true); }
-	if(strlen($POST->city)<3)			{ $Result->show("danger", _("Invalid City"), true); }
-	if(strlen($POST->state)<3)		{ $Result->show("danger", _("Invalid State"), true); }
+	if(strlen((string) $POST->title)<3)		{ $Result->show("danger", _("Invalid Title"), true); }
+	if(strlen((string) $POST->address)<3)		{ $Result->show("danger", _("Invalid Address"), true); }
+	if(strlen((string) $POST->city)<3)			{ $Result->show("danger", _("Invalid City"), true); }
+	if(strlen((string) $POST->state)<3)		{ $Result->show("danger", _("Invalid State"), true); }
 	// validate postcode
 	if(!$Tools->validate_postcode ($POST->postcode, $POST->state)) { $Result->show("danger", _("Invalid Postcode"), true); }
 }

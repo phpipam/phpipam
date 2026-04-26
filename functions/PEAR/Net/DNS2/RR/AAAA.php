@@ -99,7 +99,7 @@ class Net_DNS2_RR_AAAA extends Net_DNS2_RR
             // but we want to keep with the preferred standard, so we'll parse
             // it manually.
             //
-            $x = unpack('n8', $this->rdata);
+            $x = unpack('n8', (string) $this->rdata);
             if (count($x) == 8) {
 
                 $this->address = vsprintf('%x:%x:%x:%x:%x:%x:%x:%x', $x);

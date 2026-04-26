@@ -65,7 +65,7 @@ class Net_DNS2_RR_EUI48 extends Net_DNS2_RR
         // re: RFC 7043, the field must be represented as six two-digit hex numbers
         // separated by hyphens.
         //
-        $a = explode('-', $value);
+        $a = explode('-', (string) $value);
         if (count($a) != 6) {
 
             return false;
@@ -83,7 +83,7 @@ class Net_DNS2_RR_EUI48 extends Net_DNS2_RR
         //
         // store it
         //
-        $this->address = strtolower($value);
+        $this->address = strtolower((string) $value);
 
         return true;
     }
@@ -101,7 +101,7 @@ class Net_DNS2_RR_EUI48 extends Net_DNS2_RR
     {
         if ($this->rdlength > 0) {
 
-            $x = unpack('C6', $this->rdata);
+            $x = unpack('C6', (string) $this->rdata);
             if (count($x) == 6) {
             
                 $this->address = vsprintf('%02x-%02x-%02x-%02x-%02x-%02x', $x);
@@ -127,7 +127,7 @@ class Net_DNS2_RR_EUI48 extends Net_DNS2_RR
     {
         $data = '';
 
-        $a = explode('-', $this->address);
+        $a = explode('-', (string) $this->address);
         foreach ($a as $b) {
 
             $data .= chr(hexdec($b));

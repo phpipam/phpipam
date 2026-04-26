@@ -131,7 +131,7 @@ class Rewrite {
 	 */
 	private function process_request_uri () {
 		// ignore for direct access
-		if(strpos($_SERVER['REQUEST_URI'], "index.php")===false) {
+		if(strpos((string) $_SERVER['REQUEST_URI'], "index.php")===false) {
 			if(BASE!="/") {
 				$this->uri_parts = array_values(array_filter(pf_explode("/", str_replace(BASE, "", $_SERVER['REQUEST_URI']))));
 			}
@@ -178,7 +178,7 @@ class Rewrite {
 				$this->get_params = $_GET;
 			} else {
 				foreach ($this->uri_parts as $k=>$l) {
-					if (strncmp($l, '?', 1) == 0) continue; //skip qsa
+					if (strncmp((string) $l, '?', 1) == 0) continue; //skip qsa
 					switch ($k) {
 						case 0  : $this->get_params['page'] 	= $l;	break;
 						case 1  : $this->get_params['section']  = $l;	break;
@@ -207,7 +207,7 @@ class Rewrite {
 	 * @return void
 	 */
 	private function append_qsa () {
-		if(strpos($_SERVER['REQUEST_URI'], "?")!==false) {
+		if(strpos((string) $_SERVER['REQUEST_URI'], "?")!==false) {
 			$parts = pf_explode("?", $_SERVER['REQUEST_URI']);
 			$parts = $parts[1];
 			// parse
@@ -260,7 +260,7 @@ class Rewrite {
 		// create
 		if(sizeof($this->uri_parts)>0) {
 			foreach ($this->uri_parts as $k=>$l) {
-				if (strncmp($l, '?', 1) == 0) continue; //skip qsa
+				if (strncmp((string) $l, '?', 1) == 0) continue; //skip qsa
 				switch ($k) {
 					case 0  : $this->get_params['app_id']     = $l;	break;
 					case 1  : $this->get_params['controller'] = $l;	break;

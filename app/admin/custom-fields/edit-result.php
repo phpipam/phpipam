@@ -32,7 +32,7 @@ if($POST->action == "delete") {
 }
 else {
 	# remove spaces
-	$POST->name = trim($POST->name);
+	$POST->name = trim((string) $POST->name);
 
 	if($POST->action == "add") {
 		# check if name is taken
@@ -53,7 +53,7 @@ else {
 	if(!preg_match('/^(\p{L}|\p{N})[(\p{L}|\p{N}) _.-]+$/u', $POST->name)) 	{ $errors[] = _('Only alphanumeric, spaces and underscore characters are allowed'); }
 
 	# required must have default value
-	if($POST->NULL=="NO" && mb_strlen($POST->fieldDefault)==0)			{ $errors[] = _('Required fields must have default values'); }
+	if($POST->NULL=="NO" && mb_strlen((string) $POST->fieldDefault)==0)			{ $errors[] = _('Required fields must have default values'); }
 
 	# db type validations
 

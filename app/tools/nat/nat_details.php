@@ -46,7 +46,7 @@ else {
             $destinations = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
 
         // device
-        if (strlen($n->device)) {
+        if (strlen((string) $n->device)) {
             if($n->device !== 0) {
                 $device = $Tools->fetch_object ("devices", "id", $n->device);
                 $n->device = $device===false ? "/" : "<a href='".create_link("tools", "devices", $device->id)."'>$device->hostname</a>";
@@ -85,7 +85,7 @@ else {
         // type
         print "<tr>";
         print "	<th>"._("Type")."</th>";
-        print " <td><span class='badge badge1 badge5'>".ucwords($n->type)." NAT</span></td>";
+        print " <td><span class='badge badge1 badge5'>".ucwords((string) $n->type)." NAT</span></td>";
         print "</tr>";
         // policy
         print "<tr>";

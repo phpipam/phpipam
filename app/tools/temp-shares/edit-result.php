@@ -21,7 +21,7 @@ $User->check_user_session();
 if($User->settings->tempShare!=1)									{ $Result->show("danger", _("Temporary sharing disabled"), true); }
 if($POST->type!="subnets"&&$POST->type!="ipaddresses") 		{ $Result->show("danger", _("Invalid type"), true); }
 if(!is_numeric($POST->id)) 										{ $Result->show("danger", _("Invalid ID"), true); }
-if(strlen($POST->code)!=32) 										{ $Result->show("danger", _("Invalid code"), true); }
+if(strlen((string) $POST->code)!=32) 										{ $Result->show("danger", _("Invalid code"), true); }
 if($POST->validity<date("Y-m-d H:i:s"))							{ $Result->show("danger", _("Invalid date"), true); }
 if($POST->validity>date("Y-m-d H:i:s", strtotime("+ 7 days")))	{ $Result->show("danger", _("1 week is max validity time"), true); }
 # verify each recipient
@@ -49,7 +49,7 @@ else {
 $new_access[$POST->code] = array("id"=>$POST->id,
 									"type"=>$POST->type,
 									"code"=>$POST->code,
-									"validity"=>strtotime($POST->validity),
+									"validity"=>strtotime((string) $POST->validity),
 									"userId"=>$User->user->id
 									);
 

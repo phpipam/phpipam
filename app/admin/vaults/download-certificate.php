@@ -53,7 +53,7 @@ $vault_item_values = db_json_decode($User->Crypto->decrypt($vault_item->values, 
     // $options['cer']   = "Download DER encoded public certificate (binary) - cer";
 
     // private key
-    if(openssl_get_privatekey(base64_decode($vault_item_values->certificate))!==false) {
+    if(openssl_get_privatekey(base64_decode((string) $vault_item_values->certificate))!==false) {
     $options['pem']   = "Download PEM encoded certificate (ASCII) with private key - pem";
     // $options['der']   = "Download DER encoded certificate (Binary) with private key - der";
     $options['p12']   = "Download PKCS#12 encoded certificate (Binary) with private key - p12";

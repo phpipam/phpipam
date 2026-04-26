@@ -577,7 +577,7 @@ class Admin extends Common_functions {
 
 			if(is_array($g)) {
 				if(sizeof($g)>0) {
-					if(array_key_exists($gid, $g)) {
+					if(array_key_exists((string) $gid, $g)) {
 						unset($g[$gid]);
 						$ng = json_encode($g);
 						$this->update_section_groups($s->id,$ng);
@@ -696,7 +696,7 @@ class Admin extends Common_functions {
 				$this->Result->show("danger", _("Error: ") . _("SET functionality not fully implemented, please change to ENUM"));
 				return false;
 			case "enum":
-				$data = str_getcsv($field['fieldSize'], ",", "'", "\\");
+				$data = str_getcsv((string) $field['fieldSize'], ",", "'", "\\");
 				foreach ($data as $i => $v) {
 					$data[$i] = "'" . $this->Database->escape($v) . "'";
 				}

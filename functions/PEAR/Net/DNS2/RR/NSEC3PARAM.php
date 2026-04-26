@@ -106,7 +106,7 @@ class Net_DNS2_RR_NSEC3PARAM extends Net_DNS2_RR
         } else {
 
             $this->salt_length = strlen(pack('H*', $salt));
-            $this->salt = strtoupper($salt);
+            $this->salt = strtoupper((string) $salt);
         }
         
         return true;
@@ -125,7 +125,7 @@ class Net_DNS2_RR_NSEC3PARAM extends Net_DNS2_RR
     {
         if ($this->rdlength > 0) {
 
-            $x = unpack('Calgorithm/Cflags/niterations/Csalt_length', $this->rdata);
+            $x = unpack('Calgorithm/Cflags/niterations/Csalt_length', (string) $this->rdata);
 
             $this->algorithm    = $x['algorithm'];
             $this->flags        = $x['flags'];
@@ -134,8 +134,8 @@ class Net_DNS2_RR_NSEC3PARAM extends Net_DNS2_RR
 
             if ($this->salt_length > 0) {
 
-                $x = unpack('H*', substr($this->rdata, 5, $this->salt_length));
-                $this->salt = strtoupper($x[1]);
+                $x = unpack('H*', substr((string) $this->rdata, 5, $this->salt_length));
+                $this->salt = strtoupper((string) $x[1]);
             }
 
             return true;

@@ -24,7 +24,7 @@ if ($User->twofa_required()===false) {
 	header("Location:".$url.create_link (null));
 }
 # length check
-elseif (strlen($POST->code)!==6) {
+elseif (strlen((string) $POST->code)!==6) {
 	$Result->show ("danger", _("Invalid code length"));
 }
 # generate and print code

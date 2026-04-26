@@ -35,7 +35,7 @@ if(is_blank($POST->wtitle) || is_blank($POST->wfile)) 	{ $Result->show("danger",
 }
 
 # Remove .php form wfile if it is present
-$POST->wfile = str_replace(".php","",trim($POST->wfile));
+$POST->wfile = str_replace(".php","",trim((string) $POST->wfile));
 
 # set update values
 $values = array("wid"=>$POST->wid,

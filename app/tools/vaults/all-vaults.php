@@ -37,7 +37,7 @@ else {
 	foreach ($all_vault_types as $key=>$all_vaults_grouped) {
 
 		// title
-		print "<h4 style='margin-top:30px;'>"._(ucwords($key))."</h4><hr>";
+		print "<h4 style='margin-top:30px;'>"._(ucwords((string) $key))."</h4><hr>";
 
 		print '<table id="userPrint" class="table sorted table-striped sorted tab1le-auto" data-cookie-id-table="admin_vaults">';
 		# headers

@@ -32,7 +32,7 @@ $params = new Params( db_json_decode($server->params) );
 //no login parameters
 if(is_blank($params->adminUsername) || is_blank($params->adminPassword))	{ $Result->show("danger", _("Missing credentials"), true); }
 //at least 2 chars
-if(strlen($POST->dname)<2) 													{ $Result->show("danger", _('Please enter at least 2 characters'), true); }
+if(strlen((string) $POST->dname)<2) 													{ $Result->show("danger", _('Please enter at least 2 characters'), true); }
 
 
 //open connection

@@ -29,7 +29,7 @@ $res = $Subnets->resolve_ripe_arin ($POST->subnet);
 	<?php
 	// error ?
 	if ($res['result']=="error") {
-		$Result->show("danger", _(ucwords($res['error'])), false);
+		$Result->show("danger", _(ucwords((string) $res['error'])), false);
 	}
 	// ok, print field matching
 	else {
@@ -39,7 +39,7 @@ $res = $Subnets->resolve_ripe_arin ($POST->subnet);
 
 		// leave only varchar and text
 		foreach ($custom_fields as $k=>$f) {
-			if (!(strpos($f['type'], "varchar")!==false || $f['type']=="text")) {
+			if (!(strpos((string) $f['type'], "varchar")!==false || $f['type']=="text")) {
 				unset($custom_fields[$k]);
 			}
 		}
@@ -71,7 +71,7 @@ $res = $Subnets->resolve_ripe_arin ($POST->subnet);
 						// replace descr with description
 						if ($k=="descr")	$k = "description";
 
-						if (strtolower($f['name'])==strtolower($k))	{ print "<option values='$f[name]' selected='selected'>$f[name]</option>"; }
+						if (strtolower((string) $f['name'])==strtolower((string) $k))	{ print "<option values='$f[name]' selected='selected'>$f[name]</option>"; }
 						else										{ print "<option values='$f[name]'>$f[name]</option>"; }
 					}
 				}

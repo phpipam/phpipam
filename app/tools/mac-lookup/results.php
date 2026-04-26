@@ -24,7 +24,7 @@ if ($User->validate_mac($mac) === false) {
 	if ($mac_vendor == "") {
 		$Result->show("info", _("No matches found for prefix") . " " . $mac, false);
 	} else {
-		$mac = strtoupper($User->reformat_mac_address($mac, 1));
+		$mac = strtoupper((string) $User->reformat_mac_address($mac, 1));
 
 		// print
 		print "<div style='font-size:16px;'>Vendor: <strong class='clipboard'>" . escape_input($mac_vendor) . "</strong></div><hr>";

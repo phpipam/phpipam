@@ -176,7 +176,7 @@ class Sections_controller extends Common_api_functions {
 		unset($values['editDate']);
 
 		# validate mandatory parameters
-		if(strlen($this->_params->name)<3)				{ $this->Response->throw_exception(400, 'Name is mandatory or too short (mininum 3 characters)'); }
+		if(strlen((string) $this->_params->name)<3)				{ $this->Response->throw_exception(400, 'Name is mandatory or too short (mininum 3 characters)'); }
 
 		# verify masterSection
 		if(isset($this->_params->masterSection)) {
@@ -291,7 +291,7 @@ class Sections_controller extends Common_api_functions {
 			if (sizeof($clogs)>0) {
 				foreach ($clogs as $l) {
 					// diff to array
-					$l->cdiff = explode("\r\n", str_replace(["[","]"], "", trim($l->cdiff)));
+					$l->cdiff = explode("\r\n", str_replace(["[","]"], "", trim((string) $l->cdiff)));
 					// save
 					$clogs_formatted[] = [
 						"user"   => $l->real_name,

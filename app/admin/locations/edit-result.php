@@ -39,11 +39,11 @@ if($POST->action=="add" || $POST->action=="edit") {
     if($POST->action!=="delete") {
         // lat
         if(!is_blank($POST->lat)) {
-            if(!preg_match('/^(\-?\d+(\.\d+)?).\s*(\-?\d+(\.\d+)?)$/', $POST->lat)) { $Result->show("danger",  _("Invalid Latitude"), true); }
+            if(!preg_match('/^(\-?\d+(\.\d+)?).\s*(\-?\d+(\.\d+)?)$/', (string) $POST->lat)) { $Result->show("danger",  _("Invalid Latitude"), true); }
         }
         // long
         if(!is_blank($POST->long)) {
-            if(!preg_match('/^(\-?\d+(\.\d+)?).\s*(\-?\d+(\.\d+)?)$/', $POST->long)) { $Result->show("danger",  _("Invalid Longitude"), true); }
+            if(!preg_match('/^(\-?\d+(\.\d+)?).\s*(\-?\d+(\.\d+)?)$/', (string) $POST->long)) { $Result->show("danger",  _("Invalid Longitude"), true); }
         }
 
         // fetch latlng

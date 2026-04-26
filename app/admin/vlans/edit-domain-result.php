@@ -40,7 +40,7 @@ if($POST->name == "") 												{ $Result->show("danger", _('Name is mandatory
 if($POST->id!=1) {
 	$temp = [];
 	foreach($POST as $key=>$line) {
-		if (!is_blank(strstr($key,"section-"))) {
+		if (!is_blank(strstr((string) $key,"section-"))) {
 			$key2 = str_replace("section-", "", $key);
 			$temp[] = $key2;
 			unset($POST->{$key});

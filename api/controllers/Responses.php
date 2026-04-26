@@ -84,7 +84,7 @@ class Responses extends Result {
 		if(isset($_SERVER['CONTENT_TYPE']))
 		$_SERVER['CONTENT_TYPE'] = array_shift(pf_explode(";", $_SERVER['CONTENT_TYPE']));
 		// not set, presume json
-		if( !isset($_SERVER['CONTENT_TYPE']) || strlen(@$_SERVER['CONTENT_TYPE'])==0 ) {}
+		if( !isset($_SERVER['CONTENT_TYPE']) || strlen((string) @$_SERVER['CONTENT_TYPE'])==0 ) {}
 		// post
 		elseif($_SERVER['CONTENT_TYPE']=="application/x-www-form-urlencoded") {}
 		// set, verify
@@ -264,7 +264,7 @@ class Responses extends Result {
 		// loop through values
 	    foreach ($data as $key => $value) {
 		    // if spaces exist in key replace them with underscores
-		    if(strpos($key, " ")>0)	{ $key = str_replace(" ", "_", $key); }
+		    if(strpos((string) $key, " ")>0)	{ $key = str_replace(" ", "_", $key); }
 
 		    // if key is numeric append item
 		    if(is_numeric($key)) $key = "item".$key;

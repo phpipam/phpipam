@@ -31,7 +31,7 @@ if ($POST->action!="delete") {
 	$nservers_reindexed = array ();
 	# reindex
 	foreach($POST as $k=>$v) {
-		if(strpos($k, "namesrv-")!==false) {
+		if(strpos((string) $k, "namesrv-")!==false) {
 			$nservers_reindexed["namesrv-".$m] = $v;
 			$m++;
 			unset($POST->{$k});
@@ -46,9 +46,9 @@ if ($POST->action!="delete") {
 
 // merge nameservers
 foreach($POST as $key=>$line) {
-	if (!is_blank(strstr($key,"namesrv-"))) {
+	if (!is_blank(strstr((string) $key,"namesrv-"))) {
 		if (!is_blank($line)) {
-			$all_nameservers[] = trim($line);
+			$all_nameservers[] = trim((string) $line);
 		}
 	}
 }
@@ -57,7 +57,7 @@ $POST->namesrv1 = isset($all_nameservers) ? implode(";", $all_nameservers) : "";
 // set sections
 $temp = array();
 foreach($POST as $key=>$line) {
-	if (!is_blank(strstr($key,"section-"))) {
+	if (!is_blank(strstr((string) $key,"section-"))) {
 		$key2 = str_replace("section-", "", $key);
 		$temp[] = $key2;
 		unset($POST->{$key});

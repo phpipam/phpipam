@@ -47,7 +47,7 @@ if ($GET->sPage == "search" && !is_blank($POST->{'domain-filter'})) {
         // search through records, if no hits unset
         $hit = false;
         foreach ($d as $dd) {
-            if (preg_match("/" . $POST->{'domain-filter'} . "/", $dd)) {
+            if (preg_match("/" . $POST->{'domain-filter'} . "/", (string) $dd)) {
                 $hit = true;
                 break;
             }

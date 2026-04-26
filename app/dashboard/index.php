@@ -152,7 +152,7 @@ if(sizeof($uwidgets)>1) {
 		# print items in a row
 		foreach($w as $c) {
 			/* print items */
-			if(array_key_exists($c, $widgets)) {
+			if(array_key_exists((string) $c, $widgets)) {
 				$wdet = (array) $widgets[$c];
 
 				//reset size if not set

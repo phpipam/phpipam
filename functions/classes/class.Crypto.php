@@ -50,7 +50,7 @@ class Crypto {
      * @return string|false
      */
     private function hash_hmac($algo, $data1, $data2, $raw_output = false) {
-        $hash = hash_hmac($algo, $data1, $data2, $raw_output);
+        $hash = hash_hmac($algo, (string) $data1, (string) $data2, $raw_output);
 
         if ($hash !== false)
             return $hash;

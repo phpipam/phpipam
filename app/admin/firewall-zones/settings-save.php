@@ -33,33 +33,33 @@ if (($POST->zoneLength < 1) || ($POST->zoneLength > 31)) {
 
 $ipType = $POST->ipType;
 # validate the IPv4 type alias.
-if (!is_array($ipType) || sizeof($ipType) < 2 || !preg_match('/^[a-z0-9\-\_.]+$/i', $ipType[0])) {
+if (!is_array($ipType) || sizeof($ipType) < 2 || !preg_match('/^[a-z0-9\-\_.]+$/i', (string) $ipType[0])) {
 	$Result->show("danger", _("Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."), true);
 }
 
 # validate the IPv6 type alias.
-if (!is_array($ipType) || sizeof($ipType) < 2 || !preg_match('/^[a-z0-9\-\_.]+$/i', $ipType[1])) {
+if (!is_array($ipType) || sizeof($ipType) < 2 || !preg_match('/^[a-z0-9\-\_.]+$/i', (string) $ipType[1])) {
 	$Result->show("danger", _("Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."), true);
 }
 
 # validate the separator character.
-if (!preg_match('/^[\-\_.]+$/i', $POST->separator)) {
+if (!preg_match('/^[\-\_.]+$/i', (string) $POST->separator)) {
 	$Result->show("danger", _("Invalid separator. Only &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."), true);
 }
 
 $indicator = $POST->indicator;
 # validate the indicator for own firewall zones.
-if (!is_array($indicator) || sizeof($indicator)<2 || !preg_match('/^[a-z0-9\-\_.]+$/i', $indicator[0])) {
+if (!is_array($indicator) || sizeof($indicator)<2 || !preg_match('/^[a-z0-9\-\_.]+$/i', (string) $indicator[0])) {
 	$Result->show("danger", _("Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."), true);
 }
 
 # validate the IPv6 type alias.
-if (!is_array($indicator) || sizeof($indicator)<2 || !preg_match('/^[a-z0-9\-\_.]+$/i', $indicator[1])) {
+if (!is_array($indicator) || sizeof($indicator)<2 || !preg_match('/^[a-z0-9\-\_.]+$/i', (string) $indicator[1])) {
 	$Result->show("danger", _("Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."), true);
 }
 
 # validate the zoneGenerator value.
-if (!preg_match('/^[0-3]$/i', $POST->zoneGenerator)) {
+if (!preg_match('/^[0-3]$/i', (string) $POST->zoneGenerator)) {
 	$Result->show("danger", _("Invalid zone generator method. Do not manipulate the POST values!"), true);
 }
 
@@ -107,7 +107,7 @@ if ($POST->pattern) {
 }
 
 # validate device type ID.
-if (!preg_match('/^[0-9]+$/i', $POST->deviceType)) {
+if (!preg_match('/^[0-9]+$/i', (string) $POST->deviceType)) {
 	$Result->show("danger", _("Invalid device type."), true);
 }
 
@@ -117,7 +117,7 @@ if (!is_array($POST->subnetPatternValues) || $POST->subnetPatternValues !== ['ne
 }
 
 # validate the subnetPattern value.
-if (!preg_match('/^[0-1]$/i', $POST->subnetPattern)) {
+if (!preg_match('/^[0-1]$/i', (string) $POST->subnetPattern)) {
 	$Result->show("danger", _("Invalid subnet name. Do not manipulate the POST values!"), true);
 }
 

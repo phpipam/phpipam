@@ -22,7 +22,7 @@ print '<div class="pContent">';
 
 /* checks */
 if($User->settings->tempShare!=1)									{ $Result->show("danger", _("Temporary sharing disabled"), true); }
-if(strlen($POST->code)!=32) 										{ $Result->show("danger", _("Invalid code"), true); }
+if(strlen((string) $POST->code)!=32) 										{ $Result->show("danger", _("Invalid code"), true); }
 
 # remove object
 $old_access = db_json_decode($User->settings->tempAccess, true);

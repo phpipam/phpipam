@@ -25,7 +25,7 @@ if ($POST->action == "edit") {
 }
 
 # validate $POST->id values
-if (!preg_match('/^[0-9]+$/i', $POST->id)) {
+if (!preg_match('/^[0-9]+$/i', (string) $POST->id)) {
 	$Result->show("danger", _("Invalid ID. Do not manipulate the POST values!"), true);
 }
 

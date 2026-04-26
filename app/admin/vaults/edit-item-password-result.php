@@ -42,9 +42,9 @@ $error = array();
 # add, edit
 if($POST->action!="delete") {
 	# name must be more than 2 and alphanumeric
-	if(strlen($POST->name)<3 || strlen($POST->name)>64)			{ $error[] = "Invalid name"; }
-	if(strlen($POST->username)<3 || strlen($POST->username)>64)	{ $error[] = "Invalid username"; }
-	if(strlen($POST->password)<3 || strlen($POST->password)>64)	{ $error[] = "Invalid password"; }
+	if(strlen((string) $POST->name)<3 || strlen((string) $POST->name)>64)			{ $error[] = "Invalid name"; }
+	if(strlen((string) $POST->username)<3 || strlen((string) $POST->username)>64)	{ $error[] = "Invalid username"; }
+	if(strlen((string) $POST->password)<3 || strlen((string) $POST->password)>64)	{ $error[] = "Invalid password"; }
 }
 
 

@@ -39,7 +39,7 @@ if ($POST->action!="delete") {
 	// master
 	if (!is_blank($POST->master)) {
     	// if multiple masters
-    	if (strpos($POST->master, ",")!==false) {
+    	if (strpos((string) $POST->master, ",")!==false) {
         	// to array and trim, check each
         	$masters = array_filter(pf_explode(",", $POST->master));
         	foreach ($masters as $m) {
@@ -62,7 +62,7 @@ if ($POST->action!="delete") {
 	if ($POST->type=="SLAVE") {
     	if (is_blank($POST->master)) { $Result->show("danger", _("Please set master server(s) if domain type is SLAVE"), true); }
         else {
-        	if (strpos($POST->master, ",")!==false) {
+        	if (strpos((string) $POST->master, ",")!==false) {
             	// to array and trim, check each
             	$masters = array_filter(pf_explode(",", $POST->master));
             	foreach ($masters as $m) {

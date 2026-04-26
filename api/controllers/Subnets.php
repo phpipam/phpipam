@@ -525,7 +525,7 @@ class Subnets_controller extends Common_api_functions {
                     }
                 }
                 else {
-                    if(!array_key_exists($perm, $valid_permissions_array)) {
+                    if(!array_key_exists((string) $perm, $valid_permissions_array)) {
                                                 $this->Response->throw_exception(500, "Invalid permissions ".$perm);
                     }
                     else {
@@ -657,7 +657,7 @@ class Subnets_controller extends Common_api_functions {
 			if (sizeof($clogs)>0) {
 				foreach ($clogs as $l) {
 					// diff to array
-					$l->cdiff = explode("\r\n", str_replace(["[","]"], "", trim($l->cdiff)));
+					$l->cdiff = explode("\r\n", str_replace(["[","]"], "", trim((string) $l->cdiff)));
 					// save
 					$clogs_formatted[] = [
 						"user"   => $l->real_name,

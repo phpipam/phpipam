@@ -73,7 +73,7 @@ $('.input-switch').on('switchChange.bootstrapSwitch', function (e, data) {
 
 	<?php
 	# parse permissions
-	if(strlen($subnet->permissions)>1) 	{ $permissons = $Sections->parse_section_permissions($subnet->permissions); }
+	if(strlen((string) $subnet->permissions)>1) 	{ $permissons = $Sections->parse_section_permissions($subnet->permissions); }
 	else 								{ $permissons = ""; }
 
 	# print each group

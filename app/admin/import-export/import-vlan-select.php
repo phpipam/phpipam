@@ -53,7 +53,7 @@ foreach($expfields as $std_field) {
 
 	#prebuild template table rows to avoid useless foreach loops
 	$tpl_field_names.= "<th>".$pname.$field['Field'].$msgr."</th>";
-	$tpl_field_types.= "<td><small>". wordwrap($field['Type'],18,"<br>\n",true) ."</small></td>";
+	$tpl_field_types.= "<td><small>". wordwrap((string) $field['Type'],18,"<br>\n",true) ."</small></td>";
 }
 
 # append the custom fields, if any
@@ -66,7 +66,7 @@ if(sizeof($custom_fields) > 0) {
 		$msgr = in_array($myField['name'],$reqfields) ? "*" : "";
 
 		$tpl_field_names.= "<th>".$myField['name'].$msgr."</th>";
-		$tpl_field_types.= "<td><small>". wordwrap($myField['type'],18,"<br>\n",true) ."</small></td>";
+		$tpl_field_types.= "<td><small>". wordwrap((string) $myField['type'],18,"<br>\n",true) ."</small></td>";
 		$expfields[] = $myField['name'];
 	}
 }

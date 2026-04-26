@@ -43,7 +43,7 @@ if( !empty($POST->ipamusername) && !empty($POST->ipampassword) )  {
 		if ($captcha_code == '') {
 			$Result->show("danger", _("Missing security code"), true);
 		}
-		if(strtolower($POST->captcha)!=strtolower($captcha_code)) {
+		if(strtolower($POST->captcha)!=strtolower((string) $captcha_code)) {
 			$Result->show("danger", _("Invalid security code"), true);
 		}
 	}

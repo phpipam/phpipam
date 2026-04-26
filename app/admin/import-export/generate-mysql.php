@@ -44,7 +44,7 @@ if (!file_exists($mysqldump)) {
 
             $filename = "phpipam_MySQL_dump_" . date("Y-m-d") . ".sql";
 
-            $command = sprintf("%s --defaults-extra-file=$cnf_file --opt %s", escapeshellcmd($mysqldump), escapeshellarg($db['name']));
+            $command = sprintf("%s --defaults-extra-file=$cnf_file --opt %s", escapeshellcmd($mysqldump), escapeshellarg((string) $db['name']));
 
             $content  = "# phpipam Database dump \n";
             $content .= "#    command executed: $command \n";

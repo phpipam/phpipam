@@ -52,7 +52,7 @@ foreach ($expfields as $expfield) {
 $data = array();
 
 # read first row from CSV
-if (strtolower($filetype) == "csv") {
+if (strtolower((string) $filetype) == "csv") {
 	# open CSV file
 	$filehdl = fopen('upload/data_import.csv', 'r');
 
@@ -67,7 +67,7 @@ if (strtolower($filetype) == "csv") {
 	foreach ($cols as $val) {
 		$col++;
 		# map import columns to expected fields as per previous window
-		$fieldmap[$col] = escape_input(trim($impfields[$val]));
+		$fieldmap[$col] = escape_input(trim((string) $impfields[$val]));
 		$hcol = $col;
 	}
 
@@ -83,7 +83,7 @@ if (strtolower($filetype) == "csv") {
 				$Result->show('danger', _("Extra column found on line ").$row._(" in CSV file. CSV delimiter used in value field?"), true);
 			} else {
 				# read each row into a dictionary with expected fields as keys
-				$record[$fieldmap[$col]] = escape_input(trim($val));
+				$record[$fieldmap[$col]] = escape_input(trim((string) $val));
 			}
 		}
 		$data[] = $record;
@@ -91,7 +91,7 @@ if (strtolower($filetype) == "csv") {
 	fclose($filehdl);
 }
 # read first row from XLS
-elseif(strtolower($filetype) == "xls") {
+elseif(strtolower((string) $filetype) == "xls") {
 	# get excel object
 	require_once(dirname(__FILE__) . '/../../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
 	$xls = new Spreadsheet_Excel_Reader('upload/data_import.xls', false);
@@ -110,7 +110,7 @@ elseif(strtolower($filetype) == "xls") {
 			if ($col > $hcol) {
 					$Result->show('danger', _("Extra column found on line ").$row._(" in XLS file. Please check input file."), true);
 			} else {
-				$record[$fieldmap[$col]] = escape_input(trim($Tools->convert_encoding_to_UTF8($xls->val($row,$col,$sheet))));
+				$record[$fieldmap[$col]] = escape_input(trim((string) $Tools->convert_encoding_to_UTF8($xls->val($row,$col,$sheet))));
 			}
 		}
 		$data[] = $record;

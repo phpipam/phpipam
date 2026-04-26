@@ -95,7 +95,7 @@ class Net_DNS2_RR_DNAME extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->dname) > 0) {
+        if (strlen((string) $this->dname) > 0) {
 
             return $packet->compress($this->dname, $packet->offset);
         }

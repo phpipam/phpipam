@@ -527,7 +527,7 @@ class User extends Common_functions {
             return;
         }
 
-        setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 120, true, $this->isHttps());
+        setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', (string) $uri), 120, true, $this->isHttps());
     }
 
     /**
@@ -939,7 +939,7 @@ class User extends Common_functions {
      */
     private function auth_local ($username, $password) {
         # auth ok
-        if(hash_equals($this->user->password, crypt($password, $this->user->password))) {
+        if(hash_equals($this->user->password, crypt((string) $password, (string) $this->user->password))) {
             # check login restrictions for authenticated user
             $this->check_login_restrictions ($username);
 
@@ -1606,7 +1606,7 @@ class User extends Common_functions {
         # get prefix
         $prefix = $this->detect_crypt_type ();
         # return crypted variable
-        return crypt($input, $prefix.$salt);
+        return crypt((string) $input, $prefix.$salt);
     }
 
     /**
@@ -2083,7 +2083,7 @@ class User extends Common_functions {
             if (!is_array($permissions)) {
                 $this->user->{'perm_'.$m} = 0;
             }
-            elseif(array_key_exists($m, $permissions)) {
+            elseif(array_key_exists((string) $m, $permissions)) {
                 $this->user->{'perm_'.$m} = $permissions[$m];
             }
             else {

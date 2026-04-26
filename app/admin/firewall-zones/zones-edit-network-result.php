@@ -27,7 +27,7 @@ if($POST->action != 'add' && $POST->action != 'delete'){
 	$Result->show("danger", _("Invalid action."), true);
 }
 # check the mastersubnet  ID. valid value: integer
-if($POST->masterSubnetId && !preg_match('/^[0-9]+$/i',$POST->masterSubnetId)) {
+if($POST->masterSubnetId && !preg_match('/^[0-9]+$/i',(string) $POST->masterSubnetId)) {
 	$Result->show("danger", _("Invalid subnet ID."), true);
 } elseif (!$POST->masterSubnetId) {
 	$Result->show("danger", _("Please choose a appropriate network to bind to the firewall zone."), true);
@@ -36,7 +36,7 @@ if($POST->masterSubnetId && !preg_match('/^[0-9]+$/i',$POST->masterSubnetId)) {
 # validate network ID informations
 if($POST->network) {
 	foreach ($POST->network as $network) {
-		if(!preg_match('/^[0-9]+$/i',$network)) {
+		if(!preg_match('/^[0-9]+$/i',(string) $network)) {
 			$Result->show("danger", _("Invalid network ID."), true);
 		}
 	}
@@ -50,7 +50,7 @@ if($POST->noZone == 1) {
 }
 
 # check the zone ID. valid value: integer
-if($POST->netZoneId && !preg_match('/^[0-9]+$/i',$POST->netZoneId)) {
+if($POST->netZoneId && !preg_match('/^[0-9]+$/i',(string) $POST->netZoneId)) {
 	$Result->show("danger", _("Invalid zone ID."), true);
 } else {
 	# update

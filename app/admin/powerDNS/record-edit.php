@@ -66,7 +66,7 @@ else {
 			if (isset($matches)) {
 				$max = 0;
 				foreach($matches as $k=>$m){
-					$length = strlen($m->name);
+					$length = strlen((string) $m->name);
 					if($length > $max){ $max = $length; $element_id = $k; }
 				}
 				// save longest match id

@@ -59,7 +59,7 @@ class Net_DNS2_RR_DHCID extends Net_DNS2_RR
     protected function rrToString()
     {
         $out = pack('nC', $this->id_type, $this->digest_type);
-        $out .= base64_decode($this->digest);
+        $out .= base64_decode((string) $this->digest);
 
         return base64_encode($out);
     }
@@ -75,7 +75,7 @@ class Net_DNS2_RR_DHCID extends Net_DNS2_RR
      */
     protected function rrFromString(array $rdata)
     {
-        $data = base64_decode(array_shift($rdata));
+        $data = base64_decode((string) array_shift($rdata));
         if (strlen($data) > 0) {
 
             //
@@ -113,7 +113,7 @@ class Net_DNS2_RR_DHCID extends Net_DNS2_RR
             //
             // unpack the id type and digest type
             //
-            $x = unpack('nid_type/Cdigest_type', $this->rdata);
+            $x = unpack('nid_type/Cdigest_type', (string) $this->rdata);
 
             $this->id_type      = $x['id_type'];
             $this->digest_type  = $x['digest_type'];
@@ -122,7 +122,7 @@ class Net_DNS2_RR_DHCID extends Net_DNS2_RR
             // copy out the digest
             //
             $this->digest = base64_encode(
-                substr($this->rdata, 3, $this->rdlength - 3)
+                substr((string) $this->rdata, 3, $this->rdlength - 3)
             );
 
             return true;
@@ -144,10 +144,10 @@ class Net_DNS2_RR_DHCID extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->digest) > 0) {
+        if (strlen((string) $this->digest) > 0) {
 
             $data = pack('nC', $this->id_type, $this->digest_type) . 
-                base64_decode($this->digest);
+                base64_decode((string) $this->digest);
 
             $packet->offset += strlen($data);
 

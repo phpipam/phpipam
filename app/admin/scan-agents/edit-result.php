@@ -50,7 +50,7 @@ if (@$agent_old->type=="direct" && $POST->action=="delete") {
 if($POST->action!="delete") {
 	# code must be exactly 32 chars long and alfanumeric if app_security = crypt
 	if(@$agent_old->type!="direct") {
-	if(strlen($POST->code)!=32 || !preg_match("#^[a-zA-Z0-9-_=]+$#", $POST->code))		{ $error[] = _("Invalid agent code"); }
+	if(strlen((string) $POST->code)!=32 || !preg_match("#^[a-zA-Z0-9-_=]+$#", (string) $POST->code))		{ $error[] = _("Invalid agent code"); }
 	}
 	# name must be more than 2 and alphanumberic
 	if(is_blank($POST->name))										{ $error[] = _("Invalid agent name"); }

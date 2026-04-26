@@ -74,7 +74,7 @@ class Net_DNS2_RR_NSAP extends Net_DNS2_RR
      */
     protected function rrFromString(array $rdata)
     {
-        $data = strtolower(trim(array_shift($rdata)));
+        $data = strtolower(trim((string) array_shift($rdata)));
 
         //
         // there is no real standard for format, so we can't rely on the fact that
@@ -137,7 +137,7 @@ class Net_DNS2_RR_NSAP extends Net_DNS2_RR
                 //
                 $x = unpack(
                     'Cafi/nidi/Cdfi/C3aa/nrsvd/nrd/narea/Nidh/nidl/Csel', 
-                    $this->rdata
+                    (string) $this->rdata
                 );
 
                 $this->afi  = sprintf('0x%02x', $x['afi']);
@@ -178,28 +178,28 @@ class Net_DNS2_RR_NSAP extends Net_DNS2_RR
             //
             // build the aa field
             //
-            $aa = unpack('A2x/A2y/A2z', $this->aa);
+            $aa = unpack('A2x/A2y/A2z', (string) $this->aa);
 
             //
             // build the id field
             //
-            $id = unpack('A8a/A4b', $this->id);
+            $id = unpack('A8a/A4b', (string) $this->id);
 
             //
             $data = pack(
                 'CnCCCCnnnNnC', 
-                hexdec($this->afi), 
-                hexdec($this->idi),
-                hexdec($this->dfi),
-                hexdec($aa['x']),
-                hexdec($aa['y']),
-                hexdec($aa['z']),
-                hexdec($this->rsvd),
-                hexdec($this->rd),
-                hexdec($this->area),
-                hexdec($id['a']),
-                hexdec($id['b']),
-                hexdec($this->sel)
+                hexdec((string) $this->afi), 
+                hexdec((string) $this->idi),
+                hexdec((string) $this->dfi),
+                hexdec((string) $aa['x']),
+                hexdec((string) $aa['y']),
+                hexdec((string) $aa['z']),
+                hexdec((string) $this->rsvd),
+                hexdec((string) $this->rd),
+                hexdec((string) $this->area),
+                hexdec((string) $id['a']),
+                hexdec((string) $id['b']),
+                hexdec((string) $this->sel)
             );
 
             if (strlen($data) == 20) {

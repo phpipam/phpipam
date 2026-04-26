@@ -88,7 +88,7 @@ class Net_DNS2_RR_KX extends Net_DNS2_RR
             //
             // parse the preference
             //
-            $x = unpack('npreference', $this->rdata);
+            $x = unpack('npreference', (string) $this->rdata);
             $this->preference = $x['preference'];
 
             //
@@ -116,9 +116,9 @@ class Net_DNS2_RR_KX extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->exchange) > 0) {
+        if (strlen((string) $this->exchange) > 0) {
      
-            $data = pack('nC', $this->preference, strlen($this->exchange)) . 
+            $data = pack('nC', $this->preference, strlen((string) $this->exchange)) . 
                 $this->exchange;
 
             $packet->offset += strlen($data);

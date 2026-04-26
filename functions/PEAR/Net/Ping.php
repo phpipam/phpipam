@@ -743,11 +743,11 @@ class Net_Ping_Result
         // succesful ICMP reply which ping printed.
         for ( $i=1; $i<count($upper); $i++ ) {
             // anything like "64 bytes " at the front of any line in $upper??
-            if ( preg_match('/^\s*(\d+)\s*bytes/i', $upper[$i], $matches) ) {
+            if ( preg_match('/^\s*(\d+)\s*bytes/i', (string) $upper[$i], $matches) ) {
                 return( (int)$matches[1] );
             }
             // anything like "bytes=64" in any line in the buffer??
-            if ( preg_match('/bytes=(\d+)/i', $upper[$i], $matches) ) {
+            if ( preg_match('/bytes=(\d+)/i', (string) $upper[$i], $matches) ) {
                 return( (int)$matches[1] );
             }
         }
@@ -755,7 +755,7 @@ class Net_Ping_Result
         // Some flavors of ping give two numbers, as in "n(m) bytes", on
         // the first line. We'll take the first number and add 8 for the
         // 8 bytes of header and such in an ICMP ECHO REQUEST.
-        if ( preg_match('/(\d+)\(\d+\)\D+$/', $upper[0], $matches) ) {
+        if ( preg_match('/(\d+)\(\d+\)\D+$/', (string) $upper[0], $matches) ) {
             return( (int)(8+$matches[1]) );
         }
 
@@ -765,7 +765,7 @@ class Net_Ping_Result
         // ping flavors just put the number of data (ie, payload) bytes
         // if they don't specify both numbers as n(m). So we add 8 bytes
         // for the ICMP headers.
-        if ( preg_match('/(\d+)\D+$/', $upper[0], $matches) ) {
+        if ( preg_match('/(\d+)\D+$/', (string) $upper[0], $matches) ) {
             return( (int)(8+$matches[1]) );
         }
 
@@ -800,12 +800,12 @@ class Net_Ping_Result
         for ( $i=1; $i<count($upper); $i++ ) {
             // by our definition, it's not a success line if we can't
             // find the time
-            if ( preg_match('/=\s*([\d+\.]+)\s*ms/i', $upper[$i], $matches) ) {
+            if ( preg_match('/=\s*([\d+\.]+)\s*ms/i', (string) $upper[$i], $matches) ) {
                 // float cast deals neatly with values like "126." which
                 // some pings generate
                 $rtt = (float)$matches[1];
                 // does the line have an obvious sequence number?
-                if ( preg_match('/icmp_seq\s*=\s*([\d+]+)/i', $upper[$i], $matches) ) {
+                if ( preg_match('/icmp_seq\s*=\s*([\d+]+)/i', (string) $upper[$i], $matches) ) {
                     $results[$matches[1]] = $rtt;
                 }
                 else {
@@ -826,7 +826,7 @@ class Net_Ping_Result
     function _parseResultDetailLoss($lower)
     {
         for ( $i=1; $i<count($lower); $i++ ) {
-            if ( preg_match('/(\d+)%/', $lower[$i], $matches) ) {
+            if ( preg_match('/(\d+)%/', (string) $lower[$i], $matches) ) {
                 $this->_loss = (int)$matches[1];
                 return;
             }
@@ -842,7 +842,7 @@ class Net_Ping_Result
     {
         for ( $i=1; $i<count($lower); $i++ ) {
             // the second number on the line
-            if ( preg_match('/^\D*\d+\D+(\d+)/', $lower[$i], $matches) ) {
+            if ( preg_match('/^\D*\d+\D+(\d+)/', (string) $lower[$i], $matches) ) {
                 $this->_received = (int)$matches[1];
                 return;
             }
@@ -872,7 +872,7 @@ class Net_Ping_Result
         $results = array();
         $matches = array();
         for ( $i=(count($lower)-1); $i>=0; $i-- ) {
-            if ( preg_match('|('.$p1.')[^0-9]+('.$p2.')|i', $lower[$i], $matches) ) {
+            if ( preg_match('|('.$p1.')[^0-9]+('.$p2.')|i', (string) $lower[$i], $matches) ) {
                 break;
             }
         }
@@ -906,8 +906,8 @@ class Net_Ping_Result
         // layout.
         $p3 = '[a-z]+\s*=\s*([0-9\.]+).*';
         for ( $i=(count($lower)-1); $i>=0; $i-- ) {
-            if ( preg_match('/min.*max/i', $lower[$i]) ) {
-                if ( preg_match('/'.$p3.$p3.$p3.'/i', $lower[$i], $matches) ) {
+            if ( preg_match('/min.*max/i', (string) $lower[$i]) ) {
+                if ( preg_match('/'.$p3.$p3.$p3.'/i', (string) $lower[$i], $matches) ) {
                     $results['min'] = $matches[1];
                     $results['max'] = $matches[2];
                     $results['avg'] = $matches[3];
@@ -932,7 +932,7 @@ class Net_Ping_Result
         // put the target IP on the first line, but some only list it
         // in successful ping packet lines.
         for ( $i=0; $i<count($upper); $i++ ) {
-            if ( preg_match('/(\d+\.\d+\.\d+\.\d+)/', $upper[$i], $matches) ) {
+            if ( preg_match('/(\d+\.\d+\.\d+\.\d+)/', (string) $upper[$i], $matches) ) {
                 return( $matches[0] );
             }
         }
@@ -950,7 +950,7 @@ class Net_Ping_Result
     {
         for ( $i=1; $i<count($lower); $i++ ) {
             // the first number on the line
-            if ( preg_match('/^\D*(\d+)/', $lower[$i], $matches) ) {
+            if ( preg_match('/^\D*(\d+)/', (string) $lower[$i], $matches) ) {
                 $this->_transmitted = (int)$matches[1];
                 return;
             }
@@ -966,7 +966,7 @@ class Net_Ping_Result
     {
         //extract TTL from first icmp echo line
         for ( $i=1; $i<count($upper); $i++ ) {
-            if (   preg_match('/ttl=(\d+)/i', $upper[$i], $matches)
+            if (   preg_match('/ttl=(\d+)/i', (string) $upper[$i], $matches)
                 && (int)$matches[1] > 0
                 ) {
                 return( (int)$matches[1] );
@@ -990,11 +990,11 @@ print_r($this);
 exit;
 }
         // Trim empty elements from the front
-        while ( preg_match('/^\s*$/', $data[0]) ) {
+        while ( preg_match('/^\s*$/', (string) $data[0]) ) {
             array_splice($data, 0, 1);
         }
         // Trim empty elements from the back
-        while ( preg_match('/^\s*$/', $data[(count($data)-1)]) ) {
+        while ( preg_match('/^\s*$/', (string) $data[(count($data)-1)]) ) {
             array_splice($data, -1, 1);
         }
     }
@@ -1013,7 +1013,7 @@ exit;
 
         // find the blank line closest to the end
         $dividerIndex = count($data) - 1;
-        while ( !preg_match('/^\s*$/', $data[$dividerIndex]) ) {
+        while ( !preg_match('/^\s*$/', (string) $data[$dividerIndex]) ) {
             $dividerIndex--;
             if ( $dividerIndex < 0 ) {
                 break;

@@ -324,8 +324,8 @@ if ($discovered > 0 && $config['discovery_check_send_mail']) {
                     $content[] = "<tr>";
                     $content[] = "  <td style='padding:3px 8px;border:1px solid silver;'>$ip</td>";
                     $content[] = "  <td style='padding:3px 8px;border:1px solid silver;'>" . $hostnames[$ip] . "</td>";
-                    $content[] = "  <td style='padding:3px 8px;border:1px solid silver;'><a href='" . rtrim($Scan->settings->siteURL, "/") . "" . create_link("subnets", $section->id, $subnet->id) . "'>" . $Subnets->transform_to_dotted($subnet->subnet) . "/" . $subnet->mask . " - " . $subnet->description . "</a></td>";
-                    $content[] = "  <td style='padding:3px 8px;border:1px solid silver;'><a href='" . rtrim($Scan->settings->siteURL, "/") . "" . create_link("subnets", $section->id) . "'>$section->name $section->description</a></td>";
+                    $content[] = "  <td style='padding:3px 8px;border:1px solid silver;'><a href='" . rtrim((string) $Scan->settings->siteURL, "/") . "" . create_link("subnets", $section->id, $subnet->id) . "'>" . $Subnets->transform_to_dotted($subnet->subnet) . "/" . $subnet->mask . " - " . $subnet->description . "</a></td>";
+                    $content[] = "  <td style='padding:3px 8px;border:1px solid silver;'><a href='" . rtrim((string) $Scan->settings->siteURL, "/") . "" . create_link("subnets", $section->id) . "'>$section->name $section->description</a></td>";
                     $content[] = "</tr>";
 
                     //plain content
@@ -343,7 +343,7 @@ if ($discovered > 0 && $config['discovery_check_send_mail']) {
         $phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
         //add all admins to CC
         foreach ($recepients as $admin) {
-            $phpipam_mail->Php_mailer->addAddress(addslashes($admin['email']), addslashes($admin['name']));
+            $phpipam_mail->Php_mailer->addAddress(addslashes((string) $admin['email']), addslashes((string) $admin['name']));
         }
         $phpipam_mail->Php_mailer->Subject = $subject;
         $phpipam_mail->Php_mailer->msgHTML($content);

@@ -140,7 +140,7 @@ if(sizeof($custom_fields) > 0) {
 		$timepicker_index = $custom_input['timepicker_index'];
 
 		print ' <tr>'. "\n";
-		print " <td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
+		print " <td>".ucwords((string) $Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
 		print " <td>".$custom_input['field']."</td>";
 		print '</tr>'. "\n";
 	}

@@ -31,7 +31,7 @@ if($POST->action=="delete" || $POST->action=="edit") {
 }
 if($POST->action=="add" || $POST->action=="edit") {
     // name
-    if(strlen($POST->name)<3)                                        { $Result->show("danger",  _("Name must have at least 3 characters"), true); }
+    if(strlen((string) $POST->name)<3)                                        { $Result->show("danger",  _("Name must have at least 3 characters"), true); }
 
     // number
     if(!is_numeric($POST->number))                                   { $Result->show("danger",  _("Number must be numeric"), true); }
@@ -50,7 +50,7 @@ if($POST->action=="add" || $POST->action=="edit") {
     $prefix->prefix_raw_stop  = $Tools->prefix_normalize ($prefix->prefix.$prefix->stop);
 
     // pad number
-    $POST->number = str_pad($POST->number, (strlen($prefix->prefix_raw_start)-strlen($prefix->prefix_raw)),  "0", STR_PAD_LEFT);
+    $POST->number = str_pad((string) $POST->number, (strlen((string) $prefix->prefix_raw_start)-strlen((string) $prefix->prefix_raw)),  "0", STR_PAD_LEFT);
 
     $POST->prefix_number = $Tools->prefix_normalize ($prefix->prefix.$POST->number);
 

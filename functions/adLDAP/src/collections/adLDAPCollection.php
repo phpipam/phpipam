@@ -87,7 +87,7 @@ abstract class adLDAPCollection
     {
         if (isset($this->info[0]) && is_array($this->info[0])) {
             foreach ($this->info[0] as $keyAttr => $valueAttr) {
-                if (strtolower($keyAttr) == strtolower($attribute)) {
+                if (strtolower((string) $keyAttr) == strtolower($attribute)) {
                     if ($this->info[0][strtolower($attribute)]['count'] == 1) {
                         return $this->info[0][strtolower($attribute)][0];
                     }
@@ -126,7 +126,7 @@ abstract class adLDAPCollection
     public function __isset($attribute) {
         if (isset($this->info[0]) && is_array($this->info[0])) {
             foreach ($this->info[0] as $keyAttr => $valueAttr) {
-                if (strtolower($keyAttr) == strtolower($attribute)) {
+                if (strtolower((string) $keyAttr) == strtolower($attribute)) {
                     return true;
                 }
             }

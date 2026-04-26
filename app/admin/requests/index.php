@@ -51,7 +51,7 @@ else {
 		foreach ($custom_fields as $field) {
 			print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			if(!in_array($myField['name'], $hidden_cfields)) 	{
-				print '<td>'.ucwords($Tools->print_custom_field_name ($field['name'])).'</td>';
+				print '<td>'.ucwords((string) $Tools->print_custom_field_name ($field['name'])).'</td>';
 			}
 		}
 	}

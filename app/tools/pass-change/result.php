@@ -16,7 +16,7 @@ $User->check_user_session ();
 $User->Crypto->csrf_cookie ("validate", "pass-change", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # Check old password
-if(!hash_equals($User->user->password, crypt($POST->oldpassword, $User->user->password))) { $Result->show("danger", _("Invalid password"), true); }
+if(!hash_equals($User->user->password, crypt((string) $POST->oldpassword, (string) $User->user->password))) { $Result->show("danger", _("Invalid password"), true); }
 
 # Check new password != old password
 if($POST->ipampassword1==$POST->oldpassword) { $Result->show("danger", _("New password must be different"), true); }

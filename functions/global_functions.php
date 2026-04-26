@@ -33,7 +33,7 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 	for($i=0; $i<=6; $i++) {
 		if (is_null(${"l$i"})) continue;
 
-		foreach(explode('/', ${"l$i"}) as $p) {
+		foreach(explode('/', (string) ${"l$i"}) as $p) {
 			// url encode all
 			$parts[] = urlencode($p);
 		}
@@ -153,7 +153,7 @@ function set_ui_language($default_lang = null) {
 	$sys_lang  = is_string(getenv("LC_ALL")) ? getenv("LC_ALL") : null;
 
 	// Read accepted HTTP languages
-	$http_accept_langs = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']) : [];
+	$http_accept_langs = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? explode(',', (string) $_SERVER['HTTP_ACCEPT_LANGUAGE']) : [];
 	// remove ;q= (q-factor weighting)
 	$http_accept_langs = preg_replace("/;.*$/", "", $http_accept_langs);
 
@@ -204,7 +204,7 @@ function setcookie_samesite($name, $value, $lifetime, $httponly=false, $secure=f
 	# Manually set cookie via header, php native support for samesite attribute is >=php7.3
 
 	$name = urlencode($name);
-	$value = urlencode($value);
+	$value = urlencode((string) $value);
 
 	$tz = date_default_timezone_get();
 	date_default_timezone_set('UTC');

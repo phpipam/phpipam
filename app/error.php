@@ -58,7 +58,7 @@ $http_codes = array(
 );
 
 // validate
-if (!array_key_exists($GET->section, $http_codes)) { $GET->section = 404; }
+if (!array_key_exists((string) $GET->section, $http_codes)) { $GET->section = 404; }
 ?>
 
 <div class="container" style="margin-top:20px;">

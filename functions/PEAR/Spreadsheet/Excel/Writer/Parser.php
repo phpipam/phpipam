@@ -549,38 +549,38 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
     */
     function _convert($token)
     {
-        if (preg_match("/^\"[^\"]{0,255}\"$/", $token)) {
+        if (preg_match("/^\"[^\"]{0,255}\"$/", (string) $token)) {
             return $this->_convertString($token);
 
         } elseif (is_numeric($token)) {
             return $this->_convertNumber($token);
 
         // match references like A1 or $A$1
-        } elseif (preg_match('/^\$?([A-Ia-i]?[A-Za-z])\$?(\d+)$/',$token)) {
+        } elseif (preg_match('/^\$?([A-Ia-i]?[A-Za-z])\$?(\d+)$/',(string) $token)) {
             return $this->_convertRef2d($token);
 
         // match external references like Sheet1!A1 or Sheet1:Sheet2!A1
-        } elseif (preg_match("/^\w+(\:\w+)?\![A-Ia-i]?[A-Za-z](\d+)$/u",$token)) {
+        } elseif (preg_match("/^\w+(\:\w+)?\![A-Ia-i]?[A-Za-z](\d+)$/u",(string) $token)) {
             return $this->_convertRef3d($token);
 
         // match external references like 'Sheet1'!A1 or 'Sheet1:Sheet2'!A1
-        } elseif (preg_match("/^'[\w -]+(\:[\w -]+)?'\![A-Ia-i]?[A-Za-z](\d+)$/u",$token)) {
+        } elseif (preg_match("/^'[\w -]+(\:[\w -]+)?'\![A-Ia-i]?[A-Za-z](\d+)$/u",(string) $token)) {
             return $this->_convertRef3d($token);
 
         // match ranges like A1:B2
-        } elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?(\d+)\:(\$)?[A-Ia-i]?[A-Za-z](\$)?(\d+)$/",$token)) {
+        } elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?(\d+)\:(\$)?[A-Ia-i]?[A-Za-z](\$)?(\d+)$/",(string) $token)) {
             return $this->_convertRange2d($token);
 
         // match ranges like A1..B2
-        } elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?(\d+)\.\.(\$)?[A-Ia-i]?[A-Za-z](\$)?(\d+)$/",$token)) {
+        } elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?(\d+)\.\.(\$)?[A-Ia-i]?[A-Za-z](\$)?(\d+)$/",(string) $token)) {
             return $this->_convertRange2d($token);
 
         // match external ranges like Sheet1!A1 or Sheet1:Sheet2!A1:B2
-        } elseif (preg_match("/^\w+(\:\w+)?\!([A-Ia-i]?[A-Za-z])?(\d+)\:([A-Ia-i]?[A-Za-z])?(\d+)$/u",$token)) {
+        } elseif (preg_match("/^\w+(\:\w+)?\!([A-Ia-i]?[A-Za-z])?(\d+)\:([A-Ia-i]?[A-Za-z])?(\d+)$/u",(string) $token)) {
             return $this->_convertRange3d($token);
 
         // match external ranges like 'Sheet1'!A1 or 'Sheet1:Sheet2'!A1:B2
-        } elseif (preg_match("/^'[\w -]+(\:[\w -]+)?'\!([A-Ia-i]?[A-Za-z])?(\d+)\:([A-Ia-i]?[A-Za-z])?(\d+)$/u",$token)) {
+        } elseif (preg_match("/^'[\w -]+(\:[\w -]+)?'\!([A-Ia-i]?[A-Za-z])?(\d+)\:([A-Ia-i]?[A-Za-z])?(\d+)$/u",(string) $token)) {
             return $this->_convertRange3d($token);
 
         // operators (including parentheses)
@@ -610,11 +610,11 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
     function _convertNumber($num)
     {
         // Integer in the range 0..2**16-1
-        if ((preg_match("/^\d+$/", $num)) and ($num <= 65535)) {
+        if ((preg_match("/^\d+$/", (string) $num)) and ($num <= 65535)) {
             return pack("Cv", $this->ptg['ptgInt'], $num);
         } else { // A float
             if ($this->_byte_order) { // if it's Big Endian
-                $num = strrev($num);
+                $num = strrev((string) $num);
             }
             return pack("Cd", $this->ptg['ptgNum'], $num);
         }
@@ -868,11 +868,11 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
     function _packExtRef($ext_ref)
     {
         $ext_ref = preg_replace("/^'/", '', $ext_ref); // Remove leading  ' if any.
-        $ext_ref = preg_replace("/'$/", '', $ext_ref); // Remove trailing ' if any.
+        $ext_ref = preg_replace("/'$/", '', (string) $ext_ref); // Remove trailing ' if any.
 
         // Check if there is a sheet range eg., Sheet1:Sheet2.
-        if (preg_match("/:/", $ext_ref)) {
-            list($sheet_name1, $sheet_name2) = preg_split('/:/', $ext_ref);
+        if (preg_match("/:/", (string) $ext_ref)) {
+            list($sheet_name1, $sheet_name2) = preg_split('/:/', (string) $ext_ref);
 
             $sheet1 = $this->_getSheetIndex($sheet_name1);
             if ($sheet1 == -1) {
@@ -914,11 +914,11 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
     function _getRefIndex($ext_ref)
     {
         $ext_ref = preg_replace("/^'/", '', $ext_ref); // Remove leading  ' if any.
-        $ext_ref = preg_replace("/'$/", '', $ext_ref); // Remove trailing ' if any.
+        $ext_ref = preg_replace("/'$/", '', (string) $ext_ref); // Remove trailing ' if any.
 
         // Check if there is a sheet range eg., Sheet1:Sheet2.
-        if (preg_match("/:/", $ext_ref)) {
-            list($sheet_name1, $sheet_name2) = preg_split('/:/', $ext_ref);
+        if (preg_match("/:/", (string) $ext_ref)) {
+            list($sheet_name1, $sheet_name2) = preg_split('/:/', (string) $ext_ref);
 
             $sheet1 = $this->_getSheetIndex($sheet_name1);
             if ($sheet1 == -1) {
@@ -1219,7 +1219,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
                 break;
             default:
                 // if it's a reference
-                if (preg_match('/^\$?[A-Ia-i]?[A-Za-z]\$?[0-9]+$/',$token) and
+                if (preg_match('/^\$?[A-Ia-i]?[A-Za-z]\$?[0-9]+$/',(string) $token) and
                    !preg_match("/[0-9]/",$this->_lookahead) and
                    ($this->_lookahead != ':') and ($this->_lookahead != '.') and
                    ($this->_lookahead != '!'))
@@ -1227,39 +1227,39 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
                     return $token;
                 }
                 // If it's an external reference (Sheet1!A1 or Sheet1:Sheet2!A1)
-                elseif (preg_match("/^\w+(\:\w+)?\![A-Ia-i]?[A-Za-z][0-9]+$/u",$token) and
+                elseif (preg_match("/^\w+(\:\w+)?\![A-Ia-i]?[A-Za-z][0-9]+$/u",(string) $token) and
                        !preg_match("/[0-9]/",$this->_lookahead) and
                        ($this->_lookahead != ':') and ($this->_lookahead != '.'))
                 {
                     return $token;
                 }
                 // If it's an external reference ('Sheet1'!A1 or 'Sheet1:Sheet2'!A1)
-                elseif (preg_match("/^'[\w -]+(\:[\w -]+)?'\![A-Ia-i]?[A-Za-z][0-9]+$/u",$token) and
+                elseif (preg_match("/^'[\w -]+(\:[\w -]+)?'\![A-Ia-i]?[A-Za-z][0-9]+$/u",(string) $token) and
                        !preg_match("/[0-9]/",$this->_lookahead) and
                        ($this->_lookahead != ':') and ($this->_lookahead != '.'))
                 {
                     return $token;
                 }
                 // if it's a range (A1:A2)
-                elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+:(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",$token) and
+                elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+:(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",(string) $token) and
                        !preg_match("/[0-9]/",$this->_lookahead))
                 {
                     return $token;
                 }
                 // if it's a range (A1..A2)
-                elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+\.\.(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",$token) and
+                elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+\.\.(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",(string) $token) and
                        !preg_match("/[0-9]/",$this->_lookahead))
                 {
                     return $token;
                 }
                 // If it's an external range like Sheet1!A1 or Sheet1:Sheet2!A1:B2
-                elseif (preg_match("/^\w+(\:\w+)?\!([A-Ia-i]?[A-Za-z])?[0-9]+:([A-Ia-i]?[A-Za-z])?[0-9]+$/u",$token) and
+                elseif (preg_match("/^\w+(\:\w+)?\!([A-Ia-i]?[A-Za-z])?[0-9]+:([A-Ia-i]?[A-Za-z])?[0-9]+$/u",(string) $token) and
                        !preg_match("/[0-9]/",$this->_lookahead))
                 {
                     return $token;
                 }
                 // If it's an external range like 'Sheet1'!A1 or 'Sheet1:Sheet2'!A1:B2
-                elseif (preg_match("/^'[\w -]+(\:[\w -]+)?'\!([A-Ia-i]?[A-Za-z])?[0-9]+:([A-Ia-i]?[A-Za-z])?[0-9]+$/u",$token) and
+                elseif (preg_match("/^'[\w -]+(\:[\w -]+)?'\!([A-Ia-i]?[A-Za-z])?[0-9]+:([A-Ia-i]?[A-Za-z])?[0-9]+$/u",(string) $token) and
                        !preg_match("/[0-9]/",$this->_lookahead))
                 {
                     return $token;
@@ -1272,12 +1272,12 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
                     return $token;
                 }
                 // If it's a string (of maximum 255 characters)
-                elseif (preg_match("/^\"[^\"]{0,255}\"$/",$token))
+                elseif (preg_match("/^\"[^\"]{0,255}\"$/",(string) $token))
                 {
                     return $token;
                 }
                 // if it's a function call
-                elseif (preg_match("/^[A-Z0-9\xc0-\xdc\.]+$/i",$token) and ($this->_lookahead == "("))
+                elseif (preg_match("/^[A-Z0-9\xc0-\xdc\.]+$/i",(string) $token) and ($this->_lookahead == "("))
                 {
                     return $token;
                 }
@@ -1680,9 +1680,9 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
             $polish .= $converted_tree;
         }
         // if it's a function convert it here (so we can set it's arguments)
-        if (preg_match("/^[A-Z0-9\xc0-\xdc\.]+$/",$tree['value']) and
-            !preg_match('/^([A-Ia-i]?[A-Za-z])(\d+)$/',$tree['value']) and
-            !preg_match("/^[A-Ia-i]?[A-Za-z](\d+)\.\.[A-Ia-i]?[A-Za-z](\d+)$/",$tree['value']) and
+        if (preg_match("/^[A-Z0-9\xc0-\xdc\.]+$/",(string) $tree['value']) and
+            !preg_match('/^([A-Ia-i]?[A-Za-z])(\d+)$/',(string) $tree['value']) and
+            !preg_match("/^[A-Ia-i]?[A-Za-z](\d+)\.\.[A-Ia-i]?[A-Za-z](\d+)$/",(string) $tree['value']) and
             !is_numeric($tree['value']) and
             !isset($this->ptg[$tree['value']]))
         {

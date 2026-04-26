@@ -24,7 +24,7 @@ if (is_blank($POST->vlanId))                    { $POST->vlanId = 0; }
 if (is_blank($POST->id))                        { $POST->id = 0; }
 
 # validations
-if (strlen($POST->mac)>21)                       { die("True"); }
+if (strlen((string) $POST->mac)>21)                       { die("True"); }
 if (!is_numeric($POST->sectionId))               { die("True"); }
 if (!is_numeric($POST->vlanId))                  { die("True"); }
 if (!is_numeric($POST->id))                      { die("True"); }

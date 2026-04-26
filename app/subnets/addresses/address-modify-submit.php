@@ -62,7 +62,7 @@ if(is_array($required_ip_fields) && $action!="delete") {
 	// Check that all required fields are present
 	foreach ($required_ip_fields as $required_field) {
 		if (!isset($POST->{$required_field}) || is_blank($POST->{$required_field})) {
-			$required_field_errors[] = ucwords($required_field)." "._("is required");
+			$required_field_errors[] = ucwords((string) $required_field)." "._("is required");
 		}
 	}
 	// Check that certain required fields are not zero
@@ -141,7 +141,7 @@ $POST->is_gateway = $POST->is_gateway==1 ? 1 : 0;
 $subnet_is_multicast = $Subnets->is_multicast ($subnet['subnet']);
 
 # are we adding/editing range?
-if (!is_blank(strstr($POST->ip_addr,"-"))) {
+if (!is_blank(strstr((string) $POST->ip_addr,"-"))) {
 
 	# set flag for updating
 	$POST->type = "series";
@@ -289,7 +289,7 @@ else {
 	# validate and normalize MAC address
 	if($action!=="delete") {
     	if(!is_blank($POST->mac)) {
-    		$POST->mac = trim($POST->mac);
+    		$POST->mac = trim((string) $POST->mac);
         	if($User->validate_mac ($POST->mac)===false) {
             	$Result->show("danger", _('Invalid MAC address')."!", true);
         	}

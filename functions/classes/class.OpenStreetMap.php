@@ -280,7 +280,7 @@ class OpenStreetMap extends Common_functions
     private function hash_from_address($address)
     {
         $address_min = preg_replace('#\s+#', ' ', mb_strtolower($address));
-        $hash = openssl_digest(trim($address_min), 'sha256', true);
+        $hash = openssl_digest(trim((string) $address_min), 'sha256', true);
 
         if (!is_string($hash) || strlen($hash) != 32) {
             throw new \Exception(_('openssl_digest failure'));

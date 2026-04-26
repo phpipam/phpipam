@@ -77,7 +77,7 @@ class Net_DNS2_RR_WKS extends Net_DNS2_RR
      */
     protected function rrFromString(array $rdata)
     {
-        $this->address  = strtolower(trim(array_shift($rdata), '.'));
+        $this->address  = strtolower(trim((string) array_shift($rdata), '.'));
         $this->protocol = array_shift($rdata);
         $this->bitmap   = $rdata;
 
@@ -100,7 +100,7 @@ class Net_DNS2_RR_WKS extends Net_DNS2_RR
             //
             // get the address and protocol value
             //
-            $x = unpack('Naddress/Cprotocol', $this->rdata);
+            $x = unpack('Naddress/Cprotocol', (string) $this->rdata);
 
             $this->address  = long2ip($x['address']);
             $this->protocol = $x['protocol'];
@@ -109,7 +109,7 @@ class Net_DNS2_RR_WKS extends Net_DNS2_RR
             // unpack the port list bitmap
             //
             $port = 0;
-            foreach (unpack('@5/C*', $this->rdata) as $set) {
+            foreach (unpack('@5/C*', (string) $this->rdata) as $set) {
 
                 $s = sprintf('%08b', $set);
 
@@ -139,7 +139,7 @@ class Net_DNS2_RR_WKS extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->address) > 0) {
+        if (strlen((string) $this->address) > 0) {
 
             $data = pack('NC', ip2long($this->address), $this->protocol);
 

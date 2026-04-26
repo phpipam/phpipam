@@ -151,7 +151,7 @@ if(sizeof($address)>1) {
 	# last edited
 	print "<tr>";
 	print "	<th>"._('Last edited')."</th>";
-	if(strlen($address['editDate'])>1) {
+	if(strlen((string) $address['editDate'])>1) {
 		print "	<td>$address[editDate]</td>";
 	} else {
 		print "	<td>"._('Never')."</td>";
@@ -166,7 +166,7 @@ if(sizeof($address)>1) {
 	print "<tr>";
 
 	# calculate
-	$tDiff = time() - strtotime($address['lastSeen']);
+	$tDiff = time() - strtotime((string) $address['lastSeen']);
 	if($address['excludePing']==1)		 					{ $seen_status = ""; 			$seen_text = ""; }
 	elseif($address['lastSeen'] == "0000-00-00 00:00:00") 	{ $seen_status = "neutral"; 	$seen_text = _("Device is offline")."<br>"._("Last seen").": "._("Never");}
 	elseif($address['lastSeen'] == "1970-01-01 00:00:01") 	{ $seen_status = "neutral"; 	$seen_text = _("Device is offline")."<br>"._("Last seen").": "._("Never");}

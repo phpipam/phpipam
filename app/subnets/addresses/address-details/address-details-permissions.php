@@ -17,7 +17,7 @@ print "<h4>"._('Address permissions').":</h4><hr>";
 // show permissions
 if ($groups!==false) {
 	# parse permissions
-	if(strlen($subnet['permissions'])>1)    { $permissons = $Sections->parse_section_permissions($subnet['permissions']); }
+	if(strlen((string) $subnet['permissions'])>1)    { $permissons = $Sections->parse_section_permissions($subnet['permissions']); }
 	else 								    { $permissons = ""; }
 
     print "<table class='ipaddress_subnet table-condensed table-auto'>";

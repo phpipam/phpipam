@@ -17,7 +17,7 @@ foreach ($untranslated as $u) {
 	// find string
 	$str = get_string_between($u, "_('", "')");
 	// remove "" and '
-	$str = trim($str, "',\"");
+	$str = trim((string) $str, "',\"");
 	// search for invalid content and remove
 	if (substr($str, 0, 1)!="$") {
 		$all_translations[] = $str;
@@ -26,7 +26,7 @@ foreach ($untranslated as $u) {
 	// find string
 	$str = get_string_between($u, '_("', '")');
 	// remove "" and '
-	$str = trim($str, "',\"");
+	$str = trim((string) $str, "',\"");
 	// search for invalid content and remove
 	if (substr($str, 0, 1)!="$") {
 		$all_translations[] = $str;
@@ -71,10 +71,10 @@ print_r($text);
 // returns string between 2 separators
 function get_string_between($string, $start, $end){
     $string = " ".$string;
-    $ini = strpos($string,$start);
+    $ini = strpos($string,(string) $start);
     if ($ini == 0) return "";
-    $ini += strlen($start);
-    $len = strpos($string,$end,$ini) - $ini;
+    $ini += strlen((string) $start);
+    $len = strpos($string,(string) $end,$ini) - $ini;
     return substr($string,$ini,$len);
 }
 ?>

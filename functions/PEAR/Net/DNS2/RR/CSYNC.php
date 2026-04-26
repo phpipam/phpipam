@@ -63,7 +63,7 @@ class Net_DNS2_RR_CSYNC extends Net_DNS2_RR
         //
         foreach ($this->type_bit_maps as $rr) {
 
-            $out .= ' ' . strtoupper($rr);
+            $out .= ' ' . strtoupper((string) $rr);
         }
 
         return $out;
@@ -104,7 +104,7 @@ class Net_DNS2_RR_CSYNC extends Net_DNS2_RR
             //
             // unpack the serial and flags values
             //
-            $x = unpack('@' . $packet->offset . '/Nserial/nflags', $packet->rdata);
+            $x = unpack('@' . $packet->offset . '/Nserial/nflags', (string) $packet->rdata);
 
             $this->serial   = Net_DNS2::expandUint32($x['serial']);
             $this->flags    = $x['flags'];
@@ -113,7 +113,7 @@ class Net_DNS2_RR_CSYNC extends Net_DNS2_RR
             // parse out the RR bitmap                 
             //
             $this->type_bit_maps = Net_DNS2_BitMap::bitMapToArray(
-                substr($this->rdata, 6)
+                substr((string) $this->rdata, 6)
             );
 
             return true;

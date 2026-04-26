@@ -181,12 +181,12 @@ class PowerDNS extends Common_functions {
      */
     private function db_set () {
         // decode values form powerDNS
-        $this->db_settings = strlen($this->settings->powerDNS)>10 ? db_json_decode($this->settings->powerDNS) : db_json_decode($this->db_set_db_settings ());
+        $this->db_settings = strlen((string) $this->settings->powerDNS)>10 ? db_json_decode($this->settings->powerDNS) : db_json_decode($this->db_set_db_settings ());
 
         // if comma delimited host
-        if (strpos($this->db_settings->host, ";")!==false) {
+        if (strpos((string) $this->db_settings->host, ";")!==false) {
             // get all databases
-            $this->db_settings->host = explode(";", $this->db_settings->host);
+            $this->db_settings->host = explode(";", (string) $this->db_settings->host);
             // set active index
             $this->active_db = false;
             // check each, use first we are able to connect to
@@ -1260,18 +1260,18 @@ class PowerDNS extends Common_functions {
         // certain record types allow forbidden characters in record name
         // when using reserved words
         if ($type == "TXT") {
-            if (preg_match("/^_dmarc.*$/", $name)
-                && preg_match("/^.{1,253}$/", $name)                               //overall length check
-                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $name))           //length of each label)
+            if (preg_match("/^_dmarc.*$/", (string) $name)
+                && preg_match("/^.{1,253}$/", (string) $name)                               //overall length check
+                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", (string) $name))           //length of each label)
             { return $name; }
-            if (preg_match("/^.*_domainkey.*$/", $name)
-                && preg_match("/^.{1,253}$/", $name)                               //overall length check
-                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $name))           //length of each label)
+            if (preg_match("/^.*_domainkey.*$/", (string) $name)
+                && preg_match("/^.{1,253}$/", (string) $name)                               //overall length check
+                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", (string) $name))           //length of each label)
             { return $name; }
         }
 
         // DNS wildcard records are OK (https://tools.ietf.org/html/rfc4592#section-2.1.1)
-        if (preg_match("/^\*\..*$/", $name) && $this->validate_hostname(substr($name, 2))) {
+        if (preg_match("/^\*\..*$/", (string) $name) && $this->validate_hostname(substr((string) $name, 2))) {
             return $name;
         }
 

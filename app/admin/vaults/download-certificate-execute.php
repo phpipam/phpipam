@@ -49,7 +49,7 @@ if($vault_item_values===false || $vault_item_values===NULL || !isset($vault_item
 }
 else {
     // parse certificate to cer format
-    $certificate = base64_decode($vault_item_values->certificate);
+    $certificate = base64_decode((string) $vault_item_values->certificate);
 }
 
 // no key
@@ -60,7 +60,7 @@ try {
     if($content == "") {
 
         // base64 decode cert form DB
-        $certificate = base64_decode($vault_item_values->certificate);
+        $certificate = base64_decode((string) $vault_item_values->certificate);
 
         // public and private keys
         // $cert_res_pub = openssl_pkey_get_public  ($certificate);

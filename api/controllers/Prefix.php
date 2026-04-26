@@ -632,9 +632,9 @@ class Prefix_controller extends Common_api_functions {
      */
     private function set_address_type () {
         // ipv4
-        if ( strpos($this->_params->id2, "6")!==false )      { $this->address_type = "IPv6"; }
+        if ( strpos((string) $this->_params->id2, "6")!==false )      { $this->address_type = "IPv6"; }
         // ipv6
-        elseif ( strpos($this->_params->id2, "4")!==false )  { $this->address_type = "IPv4"; }
+        elseif ( strpos((string) $this->_params->id2, "4")!==false )  { $this->address_type = "IPv4"; }
         // both
         else                                                 { $this->Response->throw_exception(400, "Invalid address type");  }
     }

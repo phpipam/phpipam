@@ -70,10 +70,10 @@ foreach ($data as &$cdata) {
 
 	# check data format
 	if ($action != "error") {
-		if (!preg_match("//u", $cdata['name'])) { $msg.="Invalid name format."; $action = "error"; }
-		if (!preg_match("/^[0-9]+$/", $cdata['number'])) { $msg.="Invalid number format."; $action = "error"; }
-		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
-		if (!preg_match("/^[a-zA-Z0-9-_. ]+$/", $cdom)) { $msg.="Invalid domain format."; $action = "error"; }
+		if (!preg_match("//u", (string) $cdata['name'])) { $msg.="Invalid name format."; $action = "error"; }
+		if (!preg_match("/^[0-9]+$/", (string) $cdata['number'])) { $msg.="Invalid number format."; $action = "error"; }
+		if (preg_match("/[;'\"]/", (string) $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
+		if (!preg_match("/^[a-zA-Z0-9-_. ]+$/", (string) $cdom)) { $msg.="Invalid domain format."; $action = "error"; }
 		if ($action != "error") { if ($cdata['number']>$User->settings->vlanMax) { $msg.= _('Highest possible VLAN number is ').$User->settings->vlanMax.'!'; $action = "error"; } }
 	}
 

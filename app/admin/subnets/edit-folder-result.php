@@ -78,7 +78,7 @@ elseif ($POST->action=="edit") {
 }
 
 //check for name length - 2 is minimum!
-if(strlen($POST->description)<2 && $POST->action!="delete") { $Result->show("danger", _('Folder name must have at least 2 characters')."!", true); }
+if(strlen((string) $POST->description)<2 && $POST->action!="delete") { $Result->show("danger", _('Folder name must have at least 2 characters')."!", true); }
 
 # delete and not yet confirmed
 if ($POST->action=="delete" && !isset($POST->deleteconfirm)) {

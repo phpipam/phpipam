@@ -311,7 +311,7 @@ abstract class DB {
 			$myFile = "/tmp/queries.txt";
 			$fh = fopen($myFile, 'a') or die("can't open file");
 			// query
-			fwrite($fh, $query->queryString);
+			fwrite($fh, (string) $query->queryString);
 			// values
 			if(is_array($values)) {
             fwrite($fh, " Params: ".implode(", ", $values));
@@ -331,15 +331,15 @@ abstract class DB {
 	 * @return string
 	 */
 	public static function unquote_outer($str) {
-		$len = strlen($str);
+		$len = strlen((string) $str);
 
 		if ($len>1) {
 			if ($str[0] == "'" && $str[$len-1] == "'") {
-				return substr($str, 1, -1);
+				return substr((string) $str, 1, -1);
 			} elseif ($str[0] == "'") {
-				return substr($str, 1);
+				return substr((string) $str, 1);
 			} elseif ($str[$len-1] == "'") {
-				return substr($str, 0, -1);
+				return substr((string) $str, 0, -1);
 			}
 		} elseif ($len>0) {
 			if ($str[0] == "'") {

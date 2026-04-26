@@ -36,15 +36,15 @@ if ($POST->action != "add") {
 
 # edit and add - check that smth is in name and content!
 if ($POST->action != "delete") {
-    if (strlen($POST->name) < 2) {$Result->show("danger", _("Invalid name"), true);}
-    if (strlen($POST->content) < 2) {$Result->show("danger", _("Invalid content"), true);}
+    if (strlen((string) $POST->name) < 2) {$Result->show("danger", _("Invalid name"), true);}
+    if (strlen((string) $POST->content) < 2) {$Result->show("danger", _("Invalid content"), true);}
 }
 
 # dont permit modifications on slave domain
 $domain = $PowerDNS->fetch_domain ($POST->domain_id);
 $domain!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
-if(strtolower($domain->type) == "slave") {
+if(strtolower((string) $domain->type) == "slave") {
 	$Result->show("danger", _("Adding domain record on slave zone is not permitted"), true);
 }
 

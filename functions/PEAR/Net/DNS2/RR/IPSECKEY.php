@@ -130,7 +130,7 @@ class Net_DNS2_RR_IPSECKEY extends Net_DNS2_RR
         $precedence     = array_shift($rdata);
         $gateway_type   = array_shift($rdata);
         $algorithm      = array_shift($rdata);
-        $gateway        = trim(strtolower(trim(array_shift($rdata))), '.');
+        $gateway        = trim(strtolower(trim((string) array_shift($rdata))), '.');
         $key            = array_shift($rdata);
         
         //
@@ -206,7 +206,7 @@ class Net_DNS2_RR_IPSECKEY extends Net_DNS2_RR
             //
             // parse off the precedence, gateway type and algorithm
             //
-            $x = unpack('Cprecedence/Cgateway_type/Calgorithm', $this->rdata);
+            $x = unpack('Cprecedence/Cgateway_type/Calgorithm', (string) $this->rdata);
 
             $this->precedence   = $x['precedence'];
             $this->gateway_type = $x['gateway_type'];
@@ -223,12 +223,12 @@ class Net_DNS2_RR_IPSECKEY extends Net_DNS2_RR
                 break;
 
             case self::GATEWAY_TYPE_IPV4:
-                $this->gateway = inet_ntop(substr($this->rdata, $offset, 4));
+                $this->gateway = inet_ntop(substr((string) $this->rdata, $offset, 4));
                 $offset += 4;
                 break;
 
             case self::GATEWAY_TYPE_IPV6:
-                $ip = unpack('n8', substr($this->rdata, $offset, 16));
+                $ip = unpack('n8', substr((string) $this->rdata, $offset, 16));
                 if (count($ip) == 8) {
 
                     $this->gateway = vsprintf('%x:%x:%x:%x:%x:%x:%x:%x', $ip);
@@ -260,7 +260,7 @@ class Net_DNS2_RR_IPSECKEY extends Net_DNS2_RR
                 
             case self::ALGORITHM_DSA:
             case self::ALGORITHM_RSA:
-                $this->key = base64_encode(substr($this->rdata, $offset));
+                $this->key = base64_encode(substr((string) $this->rdata, $offset));
                 break;
              
             default:
@@ -307,7 +307,7 @@ class Net_DNS2_RR_IPSECKEY extends Net_DNS2_RR
             break;
             
         case self::GATEWAY_TYPE_DOMAIN:
-            $data .= chr(strlen($this->gateway))  . $this->gateway;
+            $data .= chr(strlen((string) $this->gateway))  . $this->gateway;
             break;
             
         default:
@@ -324,7 +324,7 @@ class Net_DNS2_RR_IPSECKEY extends Net_DNS2_RR
             
         case self::ALGORITHM_DSA:
         case self::ALGORITHM_RSA:
-            $data .= base64_decode($this->key);
+            $data .= base64_decode((string) $this->key);
             break;
             
         default:

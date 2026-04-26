@@ -378,13 +378,13 @@ class adLDAPUsers {
          //
          // Unfortunately the maths involved are too big for PHP integers, so I've had to require
          // BCMath functions to work with arbitrary precision numbers.
-         if (bcmod($maxPwdAge, 4294967296) === '0') {
+         if (bcmod((string) $maxPwdAge, 4294967296) === '0') {
             return "Domain does not expire passwords";
         }
         
         // Add maxpwdage and pwdlastset and we get password expiration time in Microsoft's
         // time units.  Because maxpwd age is negative we need to subtract it.
-        $pwdExpire = bcsub($pwdLastSet, $maxPwdAge);
+        $pwdExpire = bcsub((string) $pwdLastSet, (string) $maxPwdAge);
     
         // Convert MS's time to Unix time
         $status['expiryts'] = bcsub(bcdiv($pwdExpire, '10000000'), '11644473600');
@@ -571,7 +571,7 @@ class adLDAPUsers {
 
         $usersArray = array();
         for ($i=0; $i<$entries["count"]; $i++){
-            if ($includeDescription && strlen($entries[$i]["displayname"][0])>0){
+            if ($includeDescription && strlen((string) $entries[$i]["displayname"][0])>0){
                 $usersArray[$entries[$i]["samaccountname"][0]] = $entries[$i]["displayname"][0];
             } elseif ($includeDescription){
                 $usersArray[$entries[$i]["samaccountname"][0]] = $entries[$i]["samaccountname"][0];
@@ -632,7 +632,7 @@ class adLDAPUsers {
 
         $usersArray = array();
         for ($i=0; $i < $entries["count"]; $i++) {
-            if ($includeDescription && strlen($entries[$i]["displayname"][0]) > 0) {
+            if ($includeDescription && strlen((string) $entries[$i]["displayname"][0]) > 0) {
                 $usersArray[$entries[$i]["samaccountname"][0]] = $entries[$i]["displayname"][0];
             }
             else if ($includeDescription) {

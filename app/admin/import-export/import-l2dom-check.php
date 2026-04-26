@@ -45,8 +45,8 @@ foreach ($data as &$cdata) {
 
 	# check data format
 	if ($action != "error") {
-		if (!preg_match("/^[a-zA-Z0-9-_. ]+$/", $cdata['name'])) { $msg.="Invalid name format."; $action = "error"; }
-		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
+		if (!preg_match("/^[a-zA-Z0-9-_. ]+$/", (string) $cdata['name'])) { $msg.="Invalid name format."; $action = "error"; }
+		if (preg_match("/[;'\"]/", (string) $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 	}
 
 	# check if duplicate L2 domain

@@ -26,7 +26,7 @@ if (!isset($custom_fields)) { $custom_fields = $Tools->fetch_custom_fields("ipad
 
 # check which sections we need to care about
 $used_section = array();
-foreach ($data as &$cdata) { $used_section[strtolower($cdata['section'])]=$cdata['section']; }
+foreach ($data as &$cdata) { $used_section[strtolower((string) $cdata['section'])]=$cdata['section']; }
 
 # fetch all VRFs
 $all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
@@ -56,10 +56,10 @@ $subnet_search = array();
 
 foreach ($all_sections as $section) {
 	$section = (array) $section;
-	$section_names[strtolower($section['name'])] = $section;
+	$section_names[strtolower((string) $section['name'])] = $section;
 
 	# skip sections we're not importing for, so we save cpu time and memory
-	if (!isset($used_section[strtolower($section['name'])])) { continue; }
+	if (!isset($used_section[strtolower((string) $section['name'])])) { continue; }
 
 	$section_subnets = $Subnets->fetch_section_subnets($section['id']);
 
@@ -129,13 +129,13 @@ foreach ($data as &$cdata) {
 
 	# if the subnet contains "/", split it in network and mask
 	if ($action != "error") {
-		if (preg_match("/\//", $cdata['subnet'])) {
+		if (preg_match("/\//", (string) $cdata['subnet'])) {
 			list($caddr,$cmask) = $Subnets->cidr_network_and_mask($cdata['subnet']);
 			$cdata['mask'] = $cmask;
 			$cdata['subnet'] = $caddr;
 		}
 		else { $msg.= "The subnet needs to have the mask defined as /BM (Bit Mask)"; $action = "error"; }
-		if ((!empty($cdata['mask'])) && (!preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", $cdata['mask']))) {
+		if ((!empty($cdata['mask'])) && (!preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", (string) $cdata['mask']))) {
 			$msg.="Invalid network mask format."; $action = "error";
 		} else {
 			$cdata['type'] = $Subnets->identify_address($cdata['subnet']);
@@ -144,10 +144,10 @@ foreach ($data as &$cdata) {
 	}
 
 	# Check if section is provided and valid and link it if it is
-	if (!isset($section_names[strtolower($cdata['section'])])) {
+	if (!isset($section_names[strtolower((string) $cdata['section'])])) {
 		$msg.= "Invalid section."; $action = "error";
 	} else {
-		$cdata['sectionId'] = $section_names[strtolower($cdata['section'])]['id'];
+		$cdata['sectionId'] = $section_names[strtolower((string) $cdata['section'])]['id'];
 	}
 
 	# Check if VRF is provided and valid and link it if it is
@@ -218,17 +218,17 @@ foreach ($data as &$cdata) {
 
 
 	# Verify gateway
-	if (in_array(strtolower($cdata['is_gateway']),array("yes","true","1"))) { $cdata['is_gateway'] = 1; } else { $cdata['is_gateway'] = 0; }
+	if (in_array(strtolower((string) $cdata['is_gateway']),array("yes","true","1"))) { $cdata['is_gateway'] = 1; } else { $cdata['is_gateway'] = 0; }
 
 	if ($action != "error") {
     	if(!$Addresses->validate_ip($cdata['ip_addr'])) { $msg.="Invalid IP address."; $action = "error"; }
-		if ((!empty($cdata['hostname'])) && (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
-		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
+		if ((!empty($cdata['hostname'])) && (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", (string) $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
+		if (preg_match("/[;'\"]/", (string) $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 		if ($cdata['mac']) {
-			if (!preg_match("/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/", $cdata['mac'])) { $msg.="Invalid MAC address."; $action = "error"; }
+			if (!preg_match("/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/", (string) $cdata['mac'])) { $msg.="Invalid MAC address."; $action = "error"; }
 		}
-		if (preg_match("/[;'\"]/", $cdata['owner'])) { $msg.="Invalid characters in owner name."; $action = "error"; }
-		if (preg_match("/[;'\"]/", $cdata['note'])) { $msg.="Invalid characters in note."; $action = "error"; }
+		if (preg_match("/[;'\"]/", (string) $cdata['owner'])) { $msg.="Invalid characters in owner name."; $action = "error"; }
+		if (preg_match("/[;'\"]/", (string) $cdata['note'])) { $msg.="Invalid characters in note."; $action = "error"; }
 	}
 
 	// Check IP belongs to subnet

@@ -417,7 +417,7 @@ class Net_DNS2
                 // if we don't have a domain, but we have a search list, then
                 // take the first entry on the search list as the domain
                 //
-                if ( (strlen($this->domain) == 0)
+                if ( (strlen((string) $this->domain) == 0)
                     && (count($this->search_list) > 0)
                 ) {
                     $this->domain = $this->search_list[0];
@@ -838,7 +838,7 @@ class Net_DNS2
     {
         $hex = unpack('H*hex', inet_pton($_address));
 
-        return substr(preg_replace('/([A-f0-9]{4})/', "$1:", $hex['hex']), 0, -1);
+        return substr((string) preg_replace('/([A-f0-9]{4})/', "$1:", (string) $hex['hex']), 0, -1);
     }
 
     /**
@@ -1093,7 +1093,7 @@ class Net_DNS2
             //
             // if a local IP address / port is set, then add it
             //
-            if (strlen($this->local_host) > 0) {
+            if (strlen((string) $this->local_host) > 0) {
 
                 $this->sock[Net_DNS2_Socket::SOCK_STREAM][$_ns]->bindAddress(
                     $this->local_host, $this->local_port
@@ -1303,7 +1303,7 @@ class Net_DNS2
             //
             // if a local IP address / port is set, then add it
             //
-            if (strlen($this->local_host) > 0) {
+            if (strlen((string) $this->local_host) > 0) {
 
                 $this->sock[Net_DNS2_Socket::SOCK_DGRAM][$_ns]->bindAddress(
                     $this->local_host, $this->local_port

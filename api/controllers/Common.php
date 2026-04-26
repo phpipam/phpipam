@@ -16,7 +16,7 @@ class API_params extends Params {
 	#[\Override]
     public function read($args, $strip_tags = false, $html_escape = false) {
 		if (is_array($args) && isset($args['controller'])) {
-			$args['controller'] = strtolower($args['controller']);
+			$args['controller'] = strtolower((string) $args['controller']);
 		}
 
 		parent::read($args, $strip_tags, $html_escape);
@@ -346,11 +346,11 @@ class Common_api_functions {
 
 			if ($this->_params->filter_match == 'partial') {
 				// match partial string
-				if (strpos($r->{$this->_params->filter_by}, $this->_params->filter_value) === false)
+				if (strpos((string) $r->{$this->_params->filter_by}, (string) $this->_params->filter_value) === false)
 					continue;
 			} elseif ($this->_params->filter_match == 'regex') {
 				// match regular expression
-				if (preg_match($this->_params->filter_value, $r->{$this->_params->filter_by}) !== 1)
+				if (preg_match($this->_params->filter_value, (string) $r->{$this->_params->filter_by}) !== 1)
 					continue;
 			} else {
 				// match full string
@@ -416,7 +416,7 @@ class Common_api_functions {
 	 */
 	protected function add_links ($result, $controller=null) {
 		// lower controller
-		$controller = strtolower($controller);
+		$controller = strtolower((string) $controller);
 
 		// multiple options
 		if(is_array($result)) {
@@ -877,7 +877,7 @@ class Common_api_functions {
 			// search and replace
 			if(is_array($result) || is_object($result)) {
 				foreach($result as $k=>$v) {
-					if(array_key_exists($k, $this->keys)) {
+					if(array_key_exists((string) $k, $this->keys)) {
 						// replace
 						$key = $this->keys[$k];
 						$result_remapped->{$key} = $v;
@@ -900,7 +900,7 @@ class Common_api_functions {
 
 				// search and replace
 				foreach($r as $k=>$v) {
-					if(array_key_exists($k, $this->keys)) {
+					if(array_key_exists((string) $k, $this->keys)) {
 						// replace
 						$key_val = $this->keys[$k];
 						$result_remapped[$m]->{$key_val} = $v;

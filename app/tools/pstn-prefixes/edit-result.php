@@ -38,7 +38,7 @@ if($POST->action=="delete" || $POST->action=="edit") {
 }
 if($POST->action=="add" || $POST->action=="edit") {
     // name
-    if(strlen($POST->name)<3)                                        { $Result->show("danger",  _("Name must have at least 3 characters"), true); }
+    if(strlen((string) $POST->name)<3)                                        { $Result->show("danger",  _("Name must have at least 3 characters"), true); }
 
     // prefix
     if(!$POST->prefix)                                               { $Result->show("danger", _("Prefix can not be empty!"), true); }

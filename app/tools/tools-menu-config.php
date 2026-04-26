@@ -62,7 +62,7 @@ if(is_array($private_subpages) && sizeof($private_subpages)>0) {
     // loop
     foreach ($private_subpages as $s) {
         // title
-        $tools_menu[_('Custom tools')][] = ["show"=>true, "icon"=>"fa-angle-right", "href"=>$s, "name"=>ucwords($s), "description"=>ucwords($s)." "._("custom tool")];
+        $tools_menu[_('Custom tools')][] = ["show"=>true, "icon"=>"fa-angle-right", "href"=>$s, "name"=>ucwords((string) $s), "description"=>ucwords((string) $s)." "._("custom tool")];
         // add to inclusion check
         $tools_menu_items[$s] = $s;
     }

@@ -399,7 +399,7 @@ class Scan extends Common_functions {
 				//all good
 				if($ping_response->_transmitted == $ping_response->_received) {
 					$result['code'] = 0;
-					$this->rtt = "RTT: ". strstr($ping_response->_round_trip['avg'], ".", true);
+					$this->rtt = "RTT: ". strstr((string) $ping_response->_round_trip['avg'], ".", true);
 				}
 				//ping loss
 				elseif($ping_response->_received == 0) {
@@ -494,7 +494,7 @@ class Scan extends Common_functions {
 		$this->ping_verify_path ($this->fping_path);
 		$out = array();
 		# set command
-		$cmd = sprintf("%s -c %s -t %s -Agq %s 2>&1", escapeshellcmd($this->fping_path), escapeshellarg($this->icmp_count), escapeshellarg($this->icmp_timeout * 1000), escapeshellarg($subnet_cidr));
+		$cmd = sprintf("%s -c %s -t %s -Agq %s 2>&1", escapeshellcmd($this->fping_path), escapeshellarg($this->icmp_count), escapeshellarg($this->icmp_timeout * 1000), escapeshellarg((string) $subnet_cidr));
 		# execute command, return $retval
 		exec($cmd, $output, $retval);
 

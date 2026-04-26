@@ -55,7 +55,7 @@ if($certificates_db!==false) {
 			$values = db_json_decode($values, true);
 			$trclass = "";
 			// parse certificate
-			$certificate = openssl_x509_parse(base64_decode($values['certificate']));
+			$certificate = openssl_x509_parse(base64_decode((string) $values['certificate']));
 
 			// if($values['name']=="pkey test") {
 			// 	print "<pre>";
@@ -75,7 +75,7 @@ if($certificates_db!==false) {
 			else 					{ $status = "<span class='badge alert-success'>"._("OK")."</span>"; $warning = ""; $warningIcon = ""; }
 
 			// pkey
-			$pkey = openssl_get_privatekey(base64_decode($values['certificate']))===false ? "-" : "<i class='fa fa-key' rel='tooltip' title='"._("Certificate has private key")."'></i>";
+			$pkey = openssl_get_privatekey(base64_decode((string) $values['certificate']))===false ? "-" : "<i class='fa fa-key' rel='tooltip' title='"._("Certificate has private key")."'></i>";
 
 			// print
 			print "<tr class='text-top $warning'>";

@@ -41,7 +41,7 @@ if($POST->action!="add") {
 	# null ?
 	$customer===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 	# title
-	$title =  ucwords($POST->action) .' '._('customer').' '.$customer->title;
+	$title =  ucwords((string) $POST->action) .' '._('customer').' '.$customer->title;
 } else {
 	# generate new code
 	$customer = new Params ();

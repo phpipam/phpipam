@@ -137,8 +137,8 @@ print "<table class='table table-condensed table-top'>";
 	// type
 	print "<tr>";
 	print "	<td><strong>"._('Type')."</strong></td>";
-	print "	<td>".ucwords(substr($locationA->type, 0,-1))."</td>";
-	print "	<td>".ucwords(substr($locationB->type, 0,-1))."</td>";
+	print "	<td>".ucwords(substr((string) $locationA->type, 0,-1))."</td>";
+	print "	<td>".ucwords(substr((string) $locationB->type, 0,-1))."</td>";
 	print "</tr>";
 
 	// rack

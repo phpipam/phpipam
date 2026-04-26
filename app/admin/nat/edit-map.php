@@ -47,7 +47,7 @@ if ($destinations===false)
 $n->description = !is_blank($n->description) ? "($n->description)" : "";
 
 // device
-if (strlen($n->device)) {
+if (strlen((string) $n->device)) {
     if($n->device !== 0) {
         $device = $Tools->fetch_object ("devices", "id", $n->device);
         $description = !is_blank($device->description) ? "($device->description)" : "";
@@ -79,7 +79,7 @@ $icon =  $n->type=="static" ? "fa-arrows-h" : "fa-long-arrow-right";
     // print
     print "<tr>";
     print " <td colspan='4'>";
-    print " <span class='badge badge1 badge5'>".ucwords($n->type)."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
+    print " <span class='badge badge1 badge5'>".ucwords((string) $n->type)."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
     print "</td>";
     print "</tr>";
 

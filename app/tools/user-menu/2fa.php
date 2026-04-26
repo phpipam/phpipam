@@ -21,7 +21,7 @@ if (is_null($User->user->{'2fa_secret'}) && $User->user->{'2fa'}=="1") {
 }
 
 // get QR code
-$username = strtolower($User->user->username)."@".$User->settings->{'2fa_name'};
+$username = strtolower((string) $User->user->username)."@".$User->settings->{'2fa_name'};
 
 // passkey only
 if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {

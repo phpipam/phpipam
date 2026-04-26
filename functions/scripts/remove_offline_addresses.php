@@ -143,7 +143,7 @@ if(sizeof($removed_addresses)>0 && $config['removed_addresses_send_mail']) {
 		$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 		//add all admins to CC
 		foreach($recepients as $admin) {
-			$phpipam_mail->Php_mailer->addAddress(addslashes($admin['email']), addslashes($admin['name']));
+			$phpipam_mail->Php_mailer->addAddress(addslashes((string) $admin['email']), addslashes((string) $admin['name']));
 		}
 		$phpipam_mail->Php_mailer->Subject = $subject;
 		$phpipam_mail->Php_mailer->msgHTML($content);

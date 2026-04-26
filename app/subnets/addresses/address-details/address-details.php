@@ -192,7 +192,7 @@ if(sizeof($address)>1) {
     	# last edited
     	print "<tr>";
     	print "	<th>"._('Last edited')."</th>";
-    	if(strlen($address['editDate'])>1) {
+    	if(strlen((string) $address['editDate'])>1) {
     		print "	<td>$address[editDate]</td>";
     	} else {
     		print "	<td>"._('Never')."</td>";
@@ -205,7 +205,7 @@ if(sizeof($address)>1) {
     	print "<tr>";
 
     	# calculate
-    	$tDiff = time() - strtotime($address['lastSeen']);
+    	$tDiff = time() - strtotime((string) $address['lastSeen']);
     	if($address['excludePing']==1)		 					{ $seen_status = ""; 			$seen_text = ""; }
     	elseif($address['lastSeen'] == "0000-00-00 00:00:00") 	{ $seen_status = "neutral"; 	$seen_text = _("Device is offline")."<br>"._("Last seen").": "._("Never");}
     	elseif($address['lastSeen'] == "1970-01-01 00:00:01") 	{ $seen_status = "neutral"; 	$seen_text = _("Device is offline")."<br>"._("Last seen").": "._("Never");}
@@ -346,7 +346,7 @@ if(sizeof($address)>1) {
     			print "		<a class='search_ipaddress btn btn-default btn-xs         "; if(is_blank($resolve['name'])) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(!is_blank($resolve['name']))   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
     			print "		<a class='mail_ipaddress   btn btn-default btn-xs          ' href='#' data-id='".$address['id']."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																<i class='fa fa-gray fa-envelope-o'></i></a>";
     			if(isset($zone)) {
-    			print "		<a class='fw_autogen	   btn btn-default btn-xs          ' href='#' data-subnetid='".$subnet['id']."' data-action='adr' data-ipid='".$address['id']."' data-dnsname='".((preg_match('/\//i',$address['hostname'])) ? '':$address['hostname'])."' rel='tooltip' data-container='body' title='"._('Regenerate firewall address object.')."'><i class='fa fa-gray fa-fire'></i></a>";
+    			print "		<a class='fw_autogen	   btn btn-default btn-xs          ' href='#' data-subnetid='".$subnet['id']."' data-action='adr' data-ipid='".$address['id']."' data-dnsname='".((preg_match('/\//i',(string) $address['hostname'])) ? '':$address['hostname'])."' rel='tooltip' data-container='body' title='"._('Regenerate firewall address object.')."'><i class='fa fa-gray fa-fire'></i></a>";
     			}
     			print "		<a class='delete_ipaddress btn btn-default btn-xs modIPaddr' data-action='delete' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' id2='$address[ip]' rel='tooltip' data-container='body' title='"._('Delete IP address')."'>													<i class='fa fa-gray fa-times'></i></a>";
     			//share

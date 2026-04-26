@@ -35,7 +35,7 @@ if($POST->action == "delete") {
 	$Admin->remove_group_from_sections($POST->g_id);
 }
 else {
-	if(strlen($POST->g_name) < 2)										{ $Result->show("danger", _('Name must be at least 2 characters long')."!", true); }
+	if(strlen((string) $POST->g_name) < 2)										{ $Result->show("danger", _('Name must be at least 2 characters long')."!", true); }
 }
 
 # unique name

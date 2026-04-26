@@ -92,7 +92,7 @@ $format_top->setTop(1);
 
 
 // Create a worksheet
-$worksheet_name = strlen($subnet['description']) > 30 ? substr($subnet['description'],0,27).'...' : $subnet['description'];
+$worksheet_name = strlen((string) $subnet['description']) > 30 ? substr((string) $subnet['description'],0,27).'...' : $subnet['description'];
 $worksheet =& $workbook->addWorksheet($worksheet_name);
 $worksheet->setInputEncoding("utf-8");
 

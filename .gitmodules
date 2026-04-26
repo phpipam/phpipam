@@ -36,3 +36,4 @@
 [submodule "functions/LdapRecord"]
 	path = functions/LdapRecord
 	url = https://github.com/DirectoryTree/LdapRecord.git
+	ignore = all

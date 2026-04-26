@@ -85,7 +85,7 @@ class OLE_ChainedBlockStream extends PEAR
         }
 
         // 25 is length of "ole-chainedblockstream://"
-        parse_str(substr($path, 25), $this->params);
+        parse_str(substr((string) $path, 25), $this->params);
         if (!isset($this->params['oleInstanceId'],
                    $this->params['blockId'],
                    $GLOBALS['_OLE_INSTANCES'][$this->params['oleInstanceId']])) {

@@ -45,7 +45,7 @@ else {
 		print "</tr>";
 
 		// private key
-		$pkey = openssl_get_privatekey(base64_decode($vault_item_values->certificate))===false ? "-" : "<i class='fa fa-key'></i> ["._("Certificate has private key")."]";
+		$pkey = openssl_get_privatekey(base64_decode((string) $vault_item_values->certificate))===false ? "-" : "<i class='fa fa-key'></i> ["._("Certificate has private key")."]";
 		print "<tr>";
 		print "	<th>"._("Private key")."</th>";
 		print "	<td>".$pkey."</td>";
@@ -93,7 +93,7 @@ else {
 
 			$links[] = ["type"=>"header", "text"=>_("Download")];
 			$links[] = ["type"=>"link", "text"=>_("Download certificate (.cer)"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/download-certificate.php' data-class='700' data-type='public' data-vaultid='$vault->id', data-id='$p->id'", "icon"=>"download"];
-			if(openssl_get_privatekey(base64_decode($values['certificate']))!==false) {
+			if(openssl_get_privatekey(base64_decode((string) $values['certificate']))!==false) {
 			$links[] = ["type"=>"link", "text"=>_("Download certificate with key (.p12)"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/download-certificate.php' data-class='700' data-type='pkcs12' data-vaultid='$vault->id', data-id='$p->id'", "icon"=>"download"];
 			}
 
@@ -109,18 +109,18 @@ else {
 			print "</td>";
 			print "</tr>";
 
-			$cert_chain = preg_split("/(?=-----BEGIN CERTIFICATE-----)/m", base64_decode($vault_item_values->certificate), -1, PREG_SPLIT_NO_EMPTY);
+			$cert_chain = preg_split("/(?=-----BEGIN CERTIFICATE-----)/m", base64_decode((string) $vault_item_values->certificate), -1, PREG_SPLIT_NO_EMPTY);
 
 			foreach($cert_chain as $link) {
 				// decode and print cert
 				$certificate_details = openssl_x509_parse($link, true);
 
 				// get public key details
-				$key = openssl_pkey_get_public(base64_decode($vault_item_values->certificate));
+				$key = openssl_pkey_get_public(base64_decode((string) $vault_item_values->certificate));
 				$key_details = openssl_pkey_get_details($key);
 
 				// get hash
-				$cert = openssl_x509_read(base64_decode($vault_item_values->certificate));
+				$cert = openssl_x509_read(base64_decode((string) $vault_item_values->certificate));
 				$sha1_hash = openssl_x509_fingerprint($cert); // sha1 hash
 				$sha256_hash = openssl_x509_fingerprint($cert, 'SHA256'); // md5 hash
 
@@ -148,7 +148,7 @@ else {
 				print "</tr>";
 				print "<tr>";
 				print "	<th>"._("Serial number")."</th>";
-				print "	<td>".chunk_split($certificate_details['serialNumberHex'], 2, ' ')."</td>";
+				print "	<td>".chunk_split((string) $certificate_details['serialNumberHex'], 2, ' ')."</td>";
 				print "</tr>";
 				print "<tr>";
 				print "	<th>"._("Key size")."</th>";
@@ -194,13 +194,13 @@ else {
 				print "	<td>".$certificate_details['issuer']['C']."</td>";
 				print "</tr>";
 				}
-				if(strlen($certificate_details['issuer']['ST'])) {
+				if(strlen((string) $certificate_details['issuer']['ST'])) {
 				print "<tr>";
 				print "	<th>"._("County")."</th>";
 				print "	<td>".$certificate_details['issuer']['ST']."</td>";
 				print "</tr>";
 				}
-				if(strlen($certificate_details['issuer']['L'])) {
+				if(strlen((string) $certificate_details['issuer']['L'])) {
 				print "<tr>";
 				print "	<th>"._("Locality")."</th>";
 				print "	<td>".$certificate_details['issuer']['L']."</td>";
@@ -226,7 +226,7 @@ else {
 				print "</tr>";
 				foreach($certificate_details['extensions'] as $ext_key=>$e) {
 					print "<tr>";
-					print "	<th>".ucwords(preg_replace('/(?<!\ )[A-Z]/', ' $0', $ext_key))."</th>";
+					print "	<th>".ucwords((string) preg_replace('/(?<!\ )[A-Z]/', ' $0', (string) $ext_key))."</th>";
 					print "	<td>".str_replace(",","<br>",$e)."</td>";
 					print "</tr>";
 				}

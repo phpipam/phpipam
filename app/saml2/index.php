@@ -204,7 +204,7 @@ try {
                 if (array_key_exists('*', $saml_modules)) {
                     $um[$module] = $saml_modules['*'];
                 }
-                if (array_key_exists($module, $saml_modules)) {
+                if (array_key_exists((string) $module, $saml_modules)) {
                     $um[$module] = $saml_modules[$module];
                 }
             }

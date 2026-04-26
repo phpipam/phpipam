@@ -28,8 +28,8 @@ if(!is_numeric($POST->gid))		{ $Result->show("danger", _("Invalid ID"), true); }
 
 # parse result
 foreach($POST as $k=>$p) {
-	if(substr($k, 0,4) == "user") {
-		$users[substr($k, 4)] = substr($k, 4);
+	if(substr((string) $k, 0,4) == "user") {
+		$users[substr((string) $k, 4)] = substr((string) $k, 4);
 	}
 }
 

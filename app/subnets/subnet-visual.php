@@ -21,7 +21,7 @@ foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
 	$title = $ip_addr;
 
 	# already exists
-	if (array_key_exists($m, $visual_addresses)) {
+	if (array_key_exists((string) $m, $visual_addresses)) {
 
 		# fix for empty states - if state is disabled, set to active
 		if(is_blank($visual_addresses[$m]['state'])) { $visual_addresses[$m]['state'] = 1; }
@@ -51,7 +51,7 @@ foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
 	}
 
 	# print box
-	$shortname = ($Subnets->identify_address($m) == "IPv6") ? substr(strrchr($ip_addr,':'), 1) : '.'.substr(strrchr($ip_addr,'.'), 1);
+	$shortname = ($Subnets->identify_address($m) == "IPv6") ? substr(strrchr((string) $ip_addr,':'), 1) : '.'.substr(strrchr((string) $ip_addr,'.'), 1);
 
 	if($subnet_permission > 1) 	{
 		print "<span class='ip-$class modIPaddr' 	style='background:$background;color:$foreground' data-action='$action' rel='tooltip' title='$title' data-position='top' data-html='true' data-subnetId='".$subnet['id']."' data-id='$id'>".$shortname."</span>";

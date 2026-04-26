@@ -42,13 +42,13 @@ if($POST->action=="edit" || $POST->action=="delete") {
 }
 
 # modify post parameters
-$POST->cidr = trim($POST->subnet);
+$POST->cidr = trim((string) $POST->subnet);
 $POST->id   = $POST->subnetId;
 
 # get mask and subnet
 $temp = $Subnets->cidr_network_and_mask($POST->subnet);
-$POST->mask   = trim($temp[1]);
-$POST->subnet = trim($temp[0]);
+$POST->mask   = trim((string) $temp[1]);
+$POST->subnet = trim((string) $temp[0]);
 
 
 # errors array
@@ -86,7 +86,7 @@ if ($POST->action=="add") {
 
     //verify cidr
     $cidr_check = $Subnets->verify_cidr_address($POST->cidr);
-    if(strlen($cidr_check)>5) 												{ $errors[] = $cidr_check; }
+    if(strlen((string) $cidr_check)>5) 												{ $errors[] = $cidr_check; }
 
 
     # Set permissions if adding new subnet

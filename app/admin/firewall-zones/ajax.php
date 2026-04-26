@@ -26,7 +26,7 @@ if ($User->get_module_permissions ("fwzones")==User::ACCESS_NONE) {
 # generate a dropdown list for all subnets within a section
 if ($POST->operation == 'fetchSectionSubnets') {
 	if($POST->sectionId) {
-		if(preg_match('/^[0-9]+$/i',$POST->sectionId)) {
+		if(preg_match('/^[0-9]+$/i',(string) $POST->sectionId)) {
 			$sectionId = $POST->sectionId;
 			print $Subnets->print_mastersubnet_dropdown_menu($sectionId);
 		} else {
@@ -38,7 +38,7 @@ if ($POST->operation == 'fetchSectionSubnets') {
 # deliver zone details
 if ($POST->operation == 'deliverZoneDetail') {
 	if ($POST->zoneId) {
-		if(preg_match('/^[0-9]+$/i',$POST->zoneId)) {
+		if(preg_match('/^[0-9]+$/i',(string) $POST->zoneId)) {
 			# return the zone details
 			$Zones->get_zone_detail($POST->zoneId);
 
@@ -50,7 +50,7 @@ if ($POST->operation == 'deliverZoneDetail') {
 
 # deliver networkinformations about a specific zone
 if ($POST->netZoneId) {
-	if(preg_match('/^[0-9]+$/i',$POST->netZoneId)) {
+	if(preg_match('/^[0-9]+$/i',(string) $POST->netZoneId)) {
 		# return the zone details
 		$Zones->get_zone_network($POST->netZoneId);
 	} else {
@@ -94,15 +94,15 @@ if ($POST->noZone == 1) {
 # generate a new firewall address object on request
 if ($POST->operation == 'autogen') {
 	if ($POST->action == 'net') {
-		if (preg_match('/^[0-9]+$/i',$POST->subnetId)){
+		if (preg_match('/^[0-9]+$/i',(string) $POST->subnetId)){
 			$Zones->update_address_objects($POST->subnetId);
 		}
 	} elseif ($POST->action == 'adr') {
-		if (preg_match('/^[0-9]+$/i',$POST->subnetId) && preg_match('/^[0-9a-z-.]+$/i',$POST->dnsName) && preg_match('/^[0-9]+$/i',$POST->IPId)) {
+		if (preg_match('/^[0-9]+$/i',(string) $POST->subnetId) && preg_match('/^[0-9a-z-.]+$/i',(string) $POST->dnsName) && preg_match('/^[0-9]+$/i',(string) $POST->IPId)) {
 			$Zones->update_address_object($POST->subnetId,$POST->IPId,$POST->dnsName);
 		}
 	} elseif ($POST->action == 'subnet') {
-		if (preg_match('/^[0-9]+$/i',$POST->subnetId)) {
+		if (preg_match('/^[0-9]+$/i',(string) $POST->subnetId)) {
 			$Zones->generate_subnet_object ($POST->subnetId);
 		}
 	}

@@ -35,8 +35,8 @@ if($POST->tname == "") 									{ $Result->show("danger", _('Name is mandatory')
 
 # checks
 if($POST->action!="delete") {
-	if(strlen($POST->bgcolor)<4)		{ $Result->show("danger", _("Invalid bg color"), true); }
-	if(strlen($POST->fgcolor)<4)		{ $Result->show("danger", _("Invalid fg color"), true); }
+	if(strlen((string) $POST->bgcolor)<4)		{ $Result->show("danger", _("Invalid bg color"), true); }
+	if(strlen((string) $POST->fgcolor)<4)		{ $Result->show("danger", _("Invalid fg color"), true); }
 }
 
 # create array of values for modification

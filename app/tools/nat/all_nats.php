@@ -108,7 +108,7 @@ else {
         $colspan = $policy_nat_found ? 11 :10;
         $colspan += $csize;
         print "<tr>";
-        print " <td colspan='$colspan' class='th'><i class='fa fa-exchange'></i> "._(ucwords($k)." NAT")."</td>";
+        print " <td colspan='$colspan' class='th'><i class='fa fa-exchange'></i> "._(ucwords((string) $k)." NAT")."</td>";
         print "</tr>";
 
         # if none than print
@@ -130,7 +130,7 @@ else {
                     $destinations = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
 
                 // device
-                if (strlen($n->device)) {
+                if (strlen((string) $n->device)) {
                     if($n->device !== 0) {
                         $device = $Tools->fetch_object ("devices", "id", $n->device);
                         $n->device = $device===false ? "/" : "<a href='".create_link("tools", "devices", $device->id)."'>$device->hostname</a>";
@@ -156,7 +156,7 @@ else {
                 // print
                 print "<tr>";
                 print " <td><strong><a href='".create_link($GET->page, "nat", $n->id)."'>$n->name</a></strong></td>";
-                print " <td><span class='badge badge1 badge5'>".ucwords($n->type)."</span></td>";
+                print " <td><span class='badge badge1 badge5'>".ucwords((string) $n->type)."</span></td>";
                 print " <td>".implode("<br>", $sources)."</td>";
                 print " <td style='width:10px;'><i class='fa $icon'></i></td>";
                 print " <td>".implode("<br>", $destinations)."</td>";

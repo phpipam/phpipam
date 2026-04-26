@@ -73,7 +73,7 @@ if($POST->action!="delete") {
 	if ($POST->action=="add") {
 		//username > 8 chars
 		if ($auth_method->type=="local") {
-			if(strlen($POST->username)<3)								{ $Result->show("danger", _("Username must be at least 3 characters long!"), true); }
+			if(strlen((string) $POST->username)<3)								{ $Result->show("danger", _("Username must be at least 3 characters long!"), true); }
 		} else {
 			if(is_blank($POST->username))								{ $Result->show("danger", _("Username must be at least 1 character long!"), true); }
 		}

@@ -22,7 +22,7 @@ $User->check_module_permissions ("customers", User::ACCESS_RW, true, true);
 $User->check_maintaneance_mode ();
 
 // make sure correct object is applied
-if(!array_key_exists($POST->object, $Tools->get_customer_object_types())) {
+if(!array_key_exists((string) $POST->object, $Tools->get_customer_object_types())) {
 	$Result->show ("danger", _("Invalid object"), true, true);
 }
 // ID must be numeric

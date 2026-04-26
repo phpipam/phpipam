@@ -40,7 +40,7 @@ if ($server->type == "LDAP") {
 //no login parameters
 if(is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword))	{ $Result->show("danger", _("Missing credentials"), true); }
 //at least 2 chars
-if(strlen($POST->dfilter)<2) 												{ $Result->show("danger", _('Please enter at least 2 characters'), true); }
+if(strlen((string) $POST->dfilter)<2) 												{ $Result->show("danger", _('Please enter at least 2 characters'), true); }
 
 
 //open connection

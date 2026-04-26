@@ -551,7 +551,7 @@ class User_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function validate_token_expiration () {
-		return strtotime($this->token_expires) < time() ? true : false;
+		return strtotime((string) $this->token_expires) < time() ? true : false;
 	}
 
 	/**
@@ -565,7 +565,7 @@ class User_controller extends Common_api_functions {
 		$this->token = $this->User->user->token;
 
 		// convert existing expiry date string to a timestamp
-		$expire_time = strtotime($this->token_expires);
+		$expire_time = strtotime((string) $this->token_expires);
 
 		// Write Throttling from token updates
 		// In order to keep the DB writes from token updates to a minimum, only update the expire time

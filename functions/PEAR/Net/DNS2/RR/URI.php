@@ -75,7 +75,7 @@ class Net_DNS2_RR_URI extends Net_DNS2_RR
     {
         $this->priority = $rdata[0];
         $this->weight   = $rdata[1];
-        $this->target   = trim(strtolower(trim($rdata[2])), '"');
+        $this->target   = trim(strtolower(trim((string) $rdata[2])), '"');
         
         return true;
     }
@@ -96,7 +96,7 @@ class Net_DNS2_RR_URI extends Net_DNS2_RR
             //
             // unpack the priority and weight
             //
-            $x = unpack('npriority/nweight/a*target', $this->rdata);
+            $x = unpack('npriority/nweight/a*target', (string) $this->rdata);
 
             $this->priority = $x['priority'];
             $this->weight   = $x['weight'];
@@ -121,7 +121,7 @@ class Net_DNS2_RR_URI extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->target) > 0) {
+        if (strlen((string) $this->target) > 0) {
 
             $data = pack('nna*', $this->priority, $this->weight, $this->target);
 

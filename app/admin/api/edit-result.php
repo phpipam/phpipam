@@ -32,10 +32,10 @@ $error = array();
 if($POST->action!="delete") {
 	# code must be exactly 32 chars long and alphanumeric if app_security = crypt
 	if($POST->app_security=="crypt") {
-	if(strlen($POST->app_code)!=32 || !preg_match("#^[a-zA-Z0-9-_=]+$#", $POST->app_code))								{ $error[] = "Invalid application code"; }
+	if(strlen((string) $POST->app_code)!=32 || !preg_match("#^[a-zA-Z0-9-_=]+$#", (string) $POST->app_code))								{ $error[] = "Invalid application code"; }
 	}
 	# name must be more than 2 and alphanumeric
-	if(strlen($POST->app_id)<3 || strlen($POST->app_id)>12 || !preg_match("#^[a-zA-Z0-9-_=]+$#",$POST->app_id))			{ $error[] = "Invalid application id"; }
+	if(strlen((string) $POST->app_id)<3 || strlen((string) $POST->app_id)>12 || !preg_match("#^[a-zA-Z0-9-_=]+$#",(string) $POST->app_id))			{ $error[] = "Invalid application id"; }
 	# permissions must be 0,1,2
 	if($POST->app_security!="user") {
 	if(!($POST->app_permissions==0 || $POST->app_permissions==1 || $POST->app_permissions ==2 || $POST->app_permissions ==3 ))	{ $error[] = "Invalid permissions"; }

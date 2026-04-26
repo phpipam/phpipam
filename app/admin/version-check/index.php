@@ -70,7 +70,7 @@ if(!empty($Tools->phpipam_releases)) {
 		print "<h5><i class='fa fa-angle-double-right'></i> $r->title $prerelease</h5>";
 		// date
 		print "<div style='padding-left:20px;margin-bottom:20px;'>";
-		print "<span class='text-muted'>Released on ".date("Y-M-d", strtotime($r->updated))."</span> ";
+		print "<span class='text-muted'>Released on ".date("Y-M-d", strtotime((string) $r->updated))."</span> ";
 		print "<div style='padding-top:10px;'>$r->content</div>";
 		// tag
 		print "<a class='btn btn-xs btn-default' href='".$r->link->{'@attributes'}->href."'>Download (GitHub)</a>";

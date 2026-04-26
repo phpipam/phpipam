@@ -173,7 +173,7 @@ if($User->is_admin(false)) {
 	}
 
 	# check for new version periodically, 1x/week
-	if( $User->is_admin(false) && (strtotime(date("Y-m-d H:i:s")) - strtotime($User->settings->vcheckDate)) > 604800 ) {
+	if( $User->is_admin(false) && (strtotime(date("Y-m-d H:i:s")) - strtotime((string) $User->settings->vcheckDate)) > 604800 ) {
 		# check for new version
 		if(!$version = $Tools->check_latest_phpipam_version ()) {
 			# we failed, so NW is not ok. update time anyway to avoid future failures

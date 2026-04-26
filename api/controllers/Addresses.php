@@ -386,7 +386,7 @@ class Addresses_controller extends Common_api_functions  {
 
 		# append old address details and fill details if not provided - validate_update_parameters fetches $this->old_address
 		foreach ($this->old_address as $ok=>$oa) {
-			if (!array_key_exists($ok, $values)) {
+			if (!array_key_exists((string) $ok, $values)) {
 				if(!is_null($oa)) {
 					$values[$ok] = $oa;
 				}
@@ -639,7 +639,7 @@ class Addresses_controller extends Common_api_functions  {
 			if (sizeof($clogs)>0) {
 				foreach ($clogs as $l) {
 					// diff to array
-					$l->cdiff = explode("\r\n", str_replace(["[","]"], "", trim($l->cdiff)));
+					$l->cdiff = explode("\r\n", str_replace(["[","]"], "", trim((string) $l->cdiff)));
 					// save
 					$clogs_formatted[] = [
 						"user"   => $l->real_name,

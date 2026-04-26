@@ -1175,19 +1175,19 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         if (is_null($token))
             $token = '';
 
-        if (preg_match("/^([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))?$/", $token)) {
+        if (preg_match("/^([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))?$/", (string) $token)) {
             // Match number
             return $this->writeNumber($row, $col, $token, $format);
-        } elseif (preg_match("/^[fh]tt?p:\/\//", $token)) {
+        } elseif (preg_match("/^[fh]tt?p:\/\//", (string) $token)) {
             // Match http or ftp URL
             return $this->writeUrl($row, $col, $token, '', $format);
-        } elseif (preg_match("/^mailto:/", $token)) {
+        } elseif (preg_match("/^mailto:/", (string) $token)) {
             // Match mailto:
             return $this->writeUrl($row, $col, $token, '', $format);
-        } elseif (preg_match("/^(?:in|ex)ternal:/", $token)) {
+        } elseif (preg_match("/^(?:in|ex)ternal:/", (string) $token)) {
             // Match internal or external sheet link
             return $this->writeUrl($row, $col, $token, '', $format);
-        } elseif (preg_match("/^=/", $token)) {
+        } elseif (preg_match("/^=/", (string) $token)) {
             // Match formula
             return $this->writeFormula($row, $col, $token, $format);
         } elseif ($token == '') {
@@ -1810,7 +1810,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
             return -1;
         }
 
-        $formlen    = strlen($formula);    // Length of the binary string
+        $formlen    = strlen((string) $formula);    // Length of the binary string
         $length     = 0x16 + $formlen;     // Length of the record data
 
         $header    = pack("vv",      $record, $length);
@@ -1986,7 +1986,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $options     = pack("V", 0x08);
 
         // Convert the URL type and to a null terminated wchar string
-        $url         = join("\0", preg_split("''", $url, -1, PREG_SPLIT_NO_EMPTY));
+        $url         = join("\0", preg_split("''", (string) $url, -1, PREG_SPLIT_NO_EMPTY));
         $url         = $url . "\0\0\0";
 
         // Pack the length of the URL as chars (not wchars)
@@ -2042,11 +2042,11 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         // Strip URL type and change Unix dir separator to Dos style (if needed)
         //
         $url = preg_replace('/^external:/', '', $url);
-        $url = preg_replace('/\//', "\\", $url);
+        $url = preg_replace('/\//', "\\", (string) $url);
 
         // Write the visible label
         if ($str == '') {
-            $str = preg_replace('/\#/', ' - ', $url);
+            $str = preg_replace('/\#/', ' - ', (string) $url);
         }
         $str_error = $this->writeString($row1, $col1, $str, $format);
         if (($str_error == -2) or ($str_error == -3)) {
@@ -2059,10 +2059,10 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         //   otherwise, absolute
 
         $absolute    = 0x02; // Bit mask
-        if (!preg_match("/\\\/", $url)) {
+        if (!preg_match("/\\\/", (string) $url)) {
             $absolute    = 0x00;
         }
-        if (preg_match("/^\.\.\\\/", $url)) {
+        if (preg_match("/^\.\.\\\/", (string) $url)) {
             $absolute    = 0x00;
         }
         $link_type               = 0x01 | $absolute;
@@ -2086,7 +2086,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
             $sheet       = '';
         }*/
         $dir_long = $url;
-        if (preg_match("/\#/", $url)) {
+        if (preg_match("/\#/", (string) $url)) {
             $link_type |= 0x08;
         }
 
@@ -2096,11 +2096,11 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $link_type   = pack("V", $link_type);
 
         // Calculate the up-level dir count e.g.. (..\..\..\ == 3)
-        $up_count    = preg_match_all("/\.\.\\\/", $dir_long, $useless);
+        $up_count    = preg_match_all("/\.\.\\\/", (string) $dir_long, $useless);
         $up_count    = pack("v", $up_count);
 
         // Store the short dos dir name (null terminated)
-        $dir_short   = preg_replace("/\.\.\\\/", '', $dir_long) . "\0";
+        $dir_short   = preg_replace("/\.\.\\\/", '', (string) $dir_long) . "\0";
 
         // Store the long dir name as a wchar string (non-null terminated)
         //$dir_long       = join("\0", preg_split('//', $dir_long));

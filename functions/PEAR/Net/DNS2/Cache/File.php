@@ -116,7 +116,7 @@ class Net_DNS2_Cache_File extends Net_DNS2_Cache
         //
         // if there's no cache file set, then there's nothing to do
         //
-        if (strlen($this->cache_file) == 0) {
+        if (strlen((string) $this->cache_file) == 0) {
             return;
         }
 
@@ -182,7 +182,7 @@ class Net_DNS2_Cache_File extends Net_DNS2_Cache
                 //
                 // write the file contents
                 //
-                fwrite($fp, $data);
+                fwrite($fp, (string) $data);
             }
 
             //

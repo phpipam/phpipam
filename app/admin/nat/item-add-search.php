@@ -40,7 +40,7 @@ if(isset($POST->ip)) {
 }
 
 # change * to % for database wildchar
-$search_term = trim($search_term);
+$search_term = trim((string) $search_term);
 $search_term = str_replace("*", "%", $search_term);
 
 # fetch old details

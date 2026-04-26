@@ -28,28 +28,28 @@ if($required_fields!==false) {
 # ok, lets get results form post array!
 foreach($POST as $key=>$line) {
 	// IP address
-	if(substr($key, 0,2)=="ip") 			    { $res[substr($key, 2)]['ip_addr']  	= $line; }
+	if(substr((string) $key, 0,2)=="ip") 			    { $res[substr((string) $key, 2)]['ip_addr']  	= $line; }
 	// mac
-	elseif(substr($key, 0,3)=="mac") 		    { $res[substr($key, 3)]['mac']  	    = $line; }
+	elseif(substr((string) $key, 0,3)=="mac") 		    { $res[substr((string) $key, 3)]['mac']  	    = $line; }
 	// device
-	elseif(substr($key, 0,6)=="device") 	    { $res[substr($key, 6)]['switch']       = $line; }
+	elseif(substr((string) $key, 0,6)=="device") 	    { $res[substr((string) $key, 6)]['switch']       = $line; }
 	// description
-	elseif(substr($key, 0,11)=="description") 	{ $res[substr($key, 11)]['description'] = $line; }
+	elseif(substr((string) $key, 0,11)=="description") 	{ $res[substr((string) $key, 11)]['description'] = $line; }
 	// description
-	elseif(substr($key, 0,4)=="port") 	        { $res[substr($key, 4)]['port']         = $line; }
+	elseif(substr((string) $key, 0,4)=="port") 	        { $res[substr((string) $key, 4)]['port']         = $line; }
 	// dns name
-	elseif(substr($key, 0,8)=="hostname") 		{ $res[substr($key, 8)]['hostname']  	= $line; }
+	elseif(substr((string) $key, 0,8)=="hostname") 		{ $res[substr((string) $key, 8)]['hostname']  	= $line; }
 	// custom fields
 	elseif (isset($required_fields)) {
     	foreach ($required_fields as $k=>$f) {
-        	if((strpos($key, $f['name'])) !== false) {
-                                                { $res[substr($key, strlen($f['name']))][$f['name']] = $line; }
+        	if((strpos((string) $key, (string) $f['name'])) !== false) {
+                                                { $res[substr((string) $key, strlen((string) $f['name']))][$f['name']] = $line; }
         	}
     	}
 	}
 
 	//verify that it is not already in table!
-	if(substr($key, 0,2)=="ip") {
+	if(substr((string) $key, 0,2)=="ip") {
 		if($Addresses->address_exists ($line, $POST->subnetId) === true) {
 			$Result->show("danger", "IP address $line already exists!", true);
 		}

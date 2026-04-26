@@ -392,7 +392,7 @@ class Radius
     function SetUsername($username = '')
     {
         $temp_username = $username;
-        if (false === strpos($temp_username, '@'))
+        if (false === strpos((string) $temp_username, '@'))
         {
             $temp_username .= $this->_radius_suffix;
         }
@@ -408,21 +408,21 @@ class Radius
         $encrypted_password = '';
         $padded_password = $password;
 
-        if (0 != (strlen($password) % 16))
+        if (0 != (strlen((string) $password) % 16))
         {
-            $padded_password .= str_repeat(chr(0), (16 - strlen($password) % 16));
+            $padded_password .= str_repeat(chr(0), (16 - strlen((string) $password) % 16));
         }
 
         $previous_result = $this->_request_authenticator;
 
-        for ($full_loop = 0; $full_loop < (strlen($padded_password) / 16); $full_loop++)
+        for ($full_loop = 0; $full_loop < (strlen((string) $padded_password) / 16); $full_loop++)
         {
             $xor_value = md5($this->_shared_secret.$previous_result);
 
             $previous_result = '';
             for ($xor_loop = 0; $xor_loop <= 15; $xor_loop++)
             {
-                $value1 = ord(substr($padded_password, ($full_loop * 16) + $xor_loop, 1)[0]);
+                $value1 = ord(substr((string) $padded_password, ($full_loop * 16) + $xor_loop, 1)[0]);
                 $value2 = hexdec(substr($xor_value, 2 * $xor_loop, 2));
                 $xor_result = $value1^$value2;
                 $previous_result .= chr($xor_result);
@@ -583,7 +583,7 @@ class Radius
         $attribute_count = count((array)$this->_attributes_to_send);
         for ($attributes_loop = 0; $attributes_loop < $attribute_count; $attributes_loop++)
         {
-            if ($type == ord(substr($this->_attributes_to_send[$attributes_loop], 0, 1)[0]))
+            if ($type == ord(substr((string) $this->_attributes_to_send[$attributes_loop], 0, 1)[0]))
             {
                 $attribute_index = $attributes_loop;
                 break;
@@ -597,10 +597,10 @@ class Radius
             switch ($this->_attributes_info[$type][1])
             {
                 case 'T': // Text, 1-253 octets containing UTF-8 encoded ISO 10646 characters (RFC 2279).
-                    $temp_attribute = chr($type).chr(2 + strlen($value)).$value;
+                    $temp_attribute = chr($type).chr(2 + strlen((string) $value)).$value;
                     break;
                 case 'S': // String, 1-253 octets containing binary data (values 0 through 255 decimal, inclusive).
-                    $temp_attribute = chr($type).chr(2 + strlen($value)).$value;
+                    $temp_attribute = chr($type).chr(2 + strlen((string) $value)).$value;
                     break;
                 case 'A': // Address, 32 bit value, most significant octet first.
                     $ip_array = pf_explode(".", $value);
@@ -646,10 +646,10 @@ class Radius
                     $attribute_value = $attribute_raw_value;
                     break;
                 case 'A': // Address, 32 bit value, most significant octet first.
-                    $attribute_value = ord(substr($attribute_raw_value, 0, 1)[0]).'.'.ord(substr($attribute_raw_value, 1, 1)[0]).'.'.ord(substr($attribute_raw_value, 2, 1)[0]).'.'.ord(substr($attribute_raw_value, 3, 1)[0]);
+                    $attribute_value = ord(substr((string) $attribute_raw_value, 0, 1)[0]).'.'.ord(substr((string) $attribute_raw_value, 1, 1)[0]).'.'.ord(substr((string) $attribute_raw_value, 2, 1)[0]).'.'.ord(substr((string) $attribute_raw_value, 3, 1)[0]);
                     break;
                 case 'I': // Integer, 32 bit unsigned value, most significant octet first.
-                    $attribute_value = (ord(substr($attribute_raw_value, 0, 1)[0]) * 256 * 256 * 256) + (ord(substr($attribute_raw_value, 1, 1)[0]) * 256 * 256) + (ord(substr($attribute_raw_value, 2, 1)[0]) * 256) + ord(substr($attribute_raw_value, 3, 1)[0]);
+                    $attribute_value = (ord(substr((string) $attribute_raw_value, 0, 1)[0]) * 256 * 256 * 256) + (ord(substr((string) $attribute_raw_value, 1, 1)[0]) * 256 * 256) + (ord(substr((string) $attribute_raw_value, 2, 1)[0]) * 256) + ord(substr((string) $attribute_raw_value, 3, 1)[0]);
                     break;
                 case 'D': // Time, 32 bit unsigned value, most significant octet first -- seconds since 00:00:00 UTC, January 1, 1970. (not used in this RFC)
                     $attribute_value = NULL;
@@ -669,13 +669,13 @@ class Radius
     {
         $result = array();
         $offset_in_raw = 0;
-        $vendor_id = (ord(substr($vendor_specific_raw_value, 0, 1)[0]) * 256 * 256 * 256) + (ord(substr($vendor_specific_raw_value, 1, 1)[0]) * 256 * 256) + (ord(substr($vendor_specific_raw_value, 2, 1)[0]) * 256) + ord(substr($vendor_specific_raw_value, 3, 1)[0]);
+        $vendor_id = (ord(substr((string) $vendor_specific_raw_value, 0, 1)[0]) * 256 * 256 * 256) + (ord(substr((string) $vendor_specific_raw_value, 1, 1)[0]) * 256 * 256) + (ord(substr((string) $vendor_specific_raw_value, 2, 1)[0]) * 256) + ord(substr((string) $vendor_specific_raw_value, 3, 1)[0]);
         $offset_in_raw += 4;
-        while ($offset_in_raw < strlen($vendor_specific_raw_value))
+        while ($offset_in_raw < strlen((string) $vendor_specific_raw_value))
         {
-            $vendor_type = (ord(substr($vendor_specific_raw_value, 0 + $offset_in_raw, 1)[0]));
-            $vendor_length = (ord(substr($vendor_specific_raw_value, 1 + $offset_in_raw, 1)[0]));
-            $attribute_specific = substr($vendor_specific_raw_value, 2 + $offset_in_raw, $vendor_length);
+            $vendor_type = (ord(substr((string) $vendor_specific_raw_value, 0 + $offset_in_raw, 1)[0]));
+            $vendor_length = (ord(substr((string) $vendor_specific_raw_value, 1 + $offset_in_raw, 1)[0]));
+            $attribute_specific = substr((string) $vendor_specific_raw_value, 2 + $offset_in_raw, $vendor_length);
             $result[] = array($vendor_id, $vendor_type, $attribute_specific);
             $offset_in_raw += ($vendor_length);
         }
@@ -696,12 +696,12 @@ class Radius
 
         $this->SetPacketCodeToSend(1); // Access-Request
 
-        if (0 < strlen($username))
+        if (0 < strlen((string) $username))
         {
             $this->SetUsername($username);
         }
 
-        if (0 < strlen($password))
+        if (0 < strlen((string) $password))
         {
             $this->SetPassword($password);
         }
@@ -727,7 +727,7 @@ class Radius
         }
 
         $packet_length  = 4; // Radius packet code + Identifier + Length high + Length low
-        $packet_length += strlen($this->_request_authenticator); // Request-Authenticator
+        $packet_length += strlen((string) $this->_request_authenticator); // Request-Authenticator
         $packet_length += strlen($attributes_content); // Attributes
 
         $packet_data  = chr($this->_radius_packet_to_send);
@@ -759,8 +759,8 @@ class Radius
                 $readable_attributes = '';
                 foreach ($this->_attributes_to_send as $one_attribute_to_send)
                 {
-                    $attribute_info = $this->GetAttributesInfo(ord(substr($one_attribute_to_send, 0, 1)[0]));
-                    $this->DebugInfo('Attribute '.ord(substr($one_attribute_to_send, 0, 1)[0]).' ('.$attribute_info[0].'), length '.(ord(substr($one_attribute_to_send, 1, 1)[0]) - 2).', format '.$attribute_info[1].', value <em>'.$this->DecodeAttribute(substr($one_attribute_to_send, 2), ord(substr($one_attribute_to_send, 0, 1)[0])).'</em>');
+                    $attribute_info = $this->GetAttributesInfo(ord(substr((string) $one_attribute_to_send, 0, 1)[0]));
+                    $this->DebugInfo('Attribute '.ord(substr((string) $one_attribute_to_send, 0, 1)[0]).' ('.$attribute_info[0].'), length '.(ord(substr((string) $one_attribute_to_send, 1, 1)[0]) - 2).', format '.$attribute_info[1].', value <em>'.$this->DecodeAttribute(substr((string) $one_attribute_to_send, 2), ord(substr((string) $one_attribute_to_send, 0, 1)[0])).'</em>');
                 }
             }
             $read_socket_array   = array($_socket_to_server);

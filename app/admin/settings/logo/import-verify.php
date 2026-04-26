@@ -30,7 +30,7 @@ $allowed = array('png');
 /* no errors */
 if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 	//wrong extension
-    if(!in_array(strtolower($filename), $allowed)) {
+    if(!in_array(strtolower((string) $filename), $allowed)) {
 		echo '{"status":"error", "error":"Invalid document type - allowed '.implode(";", $allowed).'"}';
         exit;
     }

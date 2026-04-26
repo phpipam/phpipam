@@ -143,10 +143,10 @@ class Install extends Common_functions {
 	 * @return void
 	 */
 	private function create_grants () {
-		$esc_user = addcslashes($this->db['user'],"'");
-		$esc_pass = addcslashes($this->db['pass'],"'");
+		$esc_user = addcslashes((string) $this->db['user'],"'");
+		$esc_pass = addcslashes((string) $this->db['pass'],"'");
 		$db_name  = $this->db['name'];
-		$webhost  = is_string(@$this->db['webhost']) && !is_blank(@$this->db['webhost']) ? addcslashes($this->db['webhost'],"'") : 'localhost';
+		$webhost  = is_string(@$this->db['webhost']) && !is_blank(@$this->db['webhost']) ? addcslashes((string) $this->db['webhost'],"'") : 'localhost';
 
 		try {
 			# Check if user exists;
@@ -518,8 +518,8 @@ class Upgrade extends Install {
 			# execute all queries
 			foreach($queries as $k=>$query) {
 				// execute
-				if(strpos($query, "--")!==0 && !is_blank(trim((string) $query))) {
-					$ignore_on_failure = (strpos($query, '-- IGNORE_ON_FAILURE')!== false);
+				if(strpos((string) $query, "--")!==0 && !is_blank(trim((string) $query))) {
+					$ignore_on_failure = (strpos((string) $query, '-- IGNORE_ON_FAILURE')!== false);
 
 					if ($ignore_on_failure) $this->Database->setErrMode(\PDO::ERRMODE_SILENT);
 					$this->Database->runQuery($query);

@@ -68,7 +68,7 @@ class Net_DNS2_RR_ATMA extends Net_DNS2_RR
     {
         $value = array_shift($rdata);
 
-        if (ctype_xdigit($value) == true) {
+        if (ctype_xdigit((string) $value) == true) {
             
             $this->format   = 0;
             $this->address  = $value;
@@ -102,19 +102,19 @@ class Net_DNS2_RR_ATMA extends Net_DNS2_RR
             //
             // unpack the format
             //
-            $x = unpack('Cformat/N*address', $this->rdata);
+            $x = unpack('Cformat/N*address', (string) $this->rdata);
 
             $this->format = $x['format'];
 
             if ($this->format == 0) {
 
-                $a = unpack('@1/H*address', $this->rdata);
+                $a = unpack('@1/H*address', (string) $this->rdata);
 
                 $this->address = $a['address'];
 
             } else if ($this->format == 1) {
 
-                $this->address = substr($this->rdata, 1, $this->rdlength - 1);
+                $this->address = substr((string) $this->rdata, 1, $this->rdlength - 1);
 
             } else {
 

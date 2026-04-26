@@ -1793,11 +1793,11 @@ class Addresses extends Common_functions {
 	 * @return void
 	 */
 	public function reformat_number ($number) {
-		$length = strlen($number);
+		$length = strlen((string) $number);
 		$pos	= $length - 3;
 
 		if ($length > 8) {
-			$number = "~". substr($number, 0, $length - $pos) . "&middot;10^<sup>". $pos ."</sup>";
+			$number = "~". substr((string) $number, 0, $length - $pos) . "&middot;10^<sup>". $pos ."</sup>";
 		}
 		return $number;
 	}
@@ -1903,7 +1903,7 @@ class Addresses extends Common_functions {
         $html = array();
         $html[] = "<tr>";
         $html[] = "<td colspan='3'>";
-        $html[] = "<strong>$n->name</strong> <span class='badge badge1 badge5'>".ucwords($n->type)."</span>";
+        $html[] = "<strong>$n->name</strong> <span class='badge badge1 badge5'>".ucwords((string) $n->type)."</span>";
         $html[] = "</td>";
         $html[] = "</tr>";
 

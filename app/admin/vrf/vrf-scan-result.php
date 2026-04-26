@@ -39,16 +39,16 @@ if($required_fields!==false) {
 # ok, lets get results form post array!
 foreach($POST as $key=>$line) {
 	// IP address
-	if(substr($key, 0,2)=="rd") 			    { $res[substr($key, 2)]['rd']  	        = $line; }
+	if(substr((string) $key, 0,2)=="rd") 			    { $res[substr((string) $key, 2)]['rd']  	        = $line; }
 	// mac
-	elseif(substr($key, 0,4)=="name") 		    { $res[substr($key, 4)]['name']  	    = $line; }
+	elseif(substr((string) $key, 0,4)=="name") 		    { $res[substr((string) $key, 4)]['name']  	    = $line; }
 	// description
-	elseif(substr($key, 0,11)=="description") 	{ $res[substr($key, 11)]['description'] = $line; }
+	elseif(substr((string) $key, 0,11)=="description") 	{ $res[substr((string) $key, 11)]['description'] = $line; }
 	// custom fields
 	elseif (isset($required_fields)) {
     	foreach ($required_fields as $k=>$f) {
-        	if((strpos($key, $f['name'])) !== false) {
-                                                { $res[substr($key, strlen($f['name']))][$f['name']] = $line; }
+        	if((strpos((string) $key, (string) $f['name'])) !== false) {
+                                                { $res[substr((string) $key, strlen((string) $f['name']))][$f['name']] = $line; }
         	}
     	}
 	}

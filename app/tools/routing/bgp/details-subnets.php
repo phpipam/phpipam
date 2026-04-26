@@ -65,7 +65,7 @@ else {
 			print "<tr>";
 		    print "	<td><a href='".create_link("subnets",$subnet['sectionId'],$subnet['subnet_id'])."'>".$Subnets->transform_address($subnet['subnet'], "dotted")."/$subnet[mask] $fullinfo</a></td>";
 		    print "	<td>$subnet[description]</td>";
-		    print "	<td>$icon ".ucwords($subnet['direction'])."</td>";
+		    print "	<td>$icon ".ucwords((string) $subnet['direction'])."</td>";
 
 			if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
 		    print "	<td class='small'><a href='".create_link("tools","vlan", $vlan->domainId, $vlan->vlanId)."'><span class='badge badge1'>$vlan->number</span></a></td>";

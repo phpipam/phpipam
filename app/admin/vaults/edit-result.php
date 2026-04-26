@@ -37,11 +37,11 @@ $error = array();
 # add, edit
 if($POST->action!="delete") {
 	# name must be more than 2 and alphanumeric
-	if(strlen($POST->name)<3 || strlen($POST->name)>64)			{ $error[] = "Invalid name"; }
+	if(strlen((string) $POST->name)<3 || strlen((string) $POST->name)>64)			{ $error[] = "Invalid name"; }
 }
 # ad - check secret length
 if($POST->action=="add") {
-	if(strlen($POST->secret)<8)									{ $Result->show("danger", _("Secret must be at least 8 characters long!"), true); }
+	if(strlen((string) $POST->secret)<8)									{ $Result->show("danger", _("Secret must be at least 8 characters long!"), true); }
 
 	//enforce password policy
 	$policy = (db_json_decode($User->settings->passwordPolicy, true));

@@ -157,7 +157,7 @@ class SubnetsTable {
 		if(is_array($this->custom_fields)) {
 			foreach($this->custom_fields as $field) {
 				if(!in_array($field['name'], $this->hidden_fields)) {
-					$field_name = urlencode($field['name']);
+					$field_name = urlencode((string) $field['name']);
 
 					// create html links
 					$subnet->{$field['name']} = $this->Tools->create_links($subnet->{$field['name']}, $field['type']);

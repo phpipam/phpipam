@@ -50,7 +50,7 @@ else {
 
 		print "<tr>";
 		print "	<td>$l[real_name]</td>";
-		print "	<td><span class='badge badge1 badge5'>"._(ucwords($l['caction']))."</span></td>";
+		print "	<td><span class='badge badge1 badge5'>"._(ucwords((string) $l['caction']))."</span></td>";
 		print "	<td><span class='badge badge1 badge5 $bclass'>"._(ucwords("$l[cresult]"))."</span></td>";
 		print "	<td class='text-muted'>$l[cdate]</td>";
 		print "	<td><p style='background: rgba(0,0,0,0.1); padding:10px 20px;border-radius:4px;margin-bottom:0px;'>$l[cdiff]</p></td>";

@@ -299,8 +299,8 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
         // Set properties passed to Spreadsheet_Excel_Writer_Workbook::addFormat()
         foreach ($properties as $property => $value)
         {
-            if (method_exists($this, 'set'.ucwords($property))) {
-                $method_name = 'set'.ucwords($property);
+            if (method_exists($this, 'set'.ucwords((string) $property))) {
+                $method_name = 'set'.ucwords((string) $property);
                 $this->{$method_name}($value);
             }
         }

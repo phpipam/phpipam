@@ -265,7 +265,7 @@ else {
 			    # status icon
 			    if($subnet['pingSubnet']=="1") {
 				    //calculate
-				    $tDiff = !is_null($addresses[$n]->lastSeen)>0 ? time() - strtotime($addresses[$n]->lastSeen) : time();
+				    $tDiff = !is_null($addresses[$n]->lastSeen)>0 ? time() - strtotime((string) $addresses[$n]->lastSeen) : time();
 				    if($addresses[$n]->excludePing=="1" ) { $hStatus = "padded"; $hTooltip = ""; }
 				    elseif(is_null($addresses[$n]->lastSeen))   { $hStatus = "neutral"; $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address was never online")."'"; }
 				    elseif($addresses[$n]->lastSeen == "0000-00-00 00:00:00") { $hStatus = "neutral"; 	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address is offline")."<hr>"._("Last seen").": "._("Never")."'";}

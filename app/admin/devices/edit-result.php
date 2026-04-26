@@ -35,7 +35,7 @@ if($POST->action!="add" && !is_numeric($POST->switchid))			{ $Result->show("dang
 
 # available devices set
 foreach($POST as $key=>$line) {
-	if (!is_blank(strstr($key,"section-"))) {
+	if (!is_blank(strstr((string) $key,"section-"))) {
 		$key2 = str_replace("section-", "", $key);
 		$temp[] = $key2;
 

@@ -85,7 +85,7 @@ class Net_DNS2_RR_AFSDB extends Net_DNS2_RR
             //
             // unpack the subtype
             //
-            $x = unpack('nsubtype', $this->rdata);
+            $x = unpack('nsubtype', (string) $this->rdata);
 
             $this->subtype  = $x['subtype'];
             $offset         = $packet->offset + 2;
@@ -111,7 +111,7 @@ class Net_DNS2_RR_AFSDB extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->hostname) > 0) {
+        if (strlen((string) $this->hostname) > 0) {
             
             $data = pack('n', $this->subtype);
             $packet->offset += 2;

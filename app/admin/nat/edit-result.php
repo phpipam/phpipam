@@ -36,7 +36,7 @@ if($POST->action=="delete" || $POST->action=="edit") {
 }
 if($POST->action=="add" || $POST->action=="edit") {
     // name
-    if(strlen($POST->name)<3)                                            {  $Result->show("danger",  _("Name must have at least 3 characters"), true); }
+    if(strlen((string) $POST->name)<3)                                            {  $Result->show("danger",  _("Name must have at least 3 characters"), true); }
     if(!in_array($POST->type, array("source", "static", "destination"))) {  $Result->show("danger",  _("Invalid NAT type"), true); }
     if(isset($POST->device)) {
         if(!is_numeric($POST->device))                                   {  $Result->show("danger",  _("Invalid device"), true); }

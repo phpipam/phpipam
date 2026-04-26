@@ -54,7 +54,7 @@ if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === fa
 			}
 
 			//than address details
-			$diff = 17 - strlen($Subnets->transform_to_dotted($host->ip_addr));	//for print offset
+			$diff = 17 - strlen((string) $Subnets->transform_to_dotted($host->ip_addr));	//for print offset
 			$diff > 0 ?: $diff = 3;												//IPv6 print offset
 
 			$res[] = $Subnets->transform_to_dotted($host->ip_addr) . str_repeat(" ", $diff) . "$host->hostname";
