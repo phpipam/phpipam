@@ -50,7 +50,7 @@ else {
 	if(is_numeric(substr($POST->name, 0, 1))) 								{ $errors[] = _('Name must not start with number'); }
 
 	# only alphanumeric and _ are allowed
-	if(!preg_match('/^(\p{L}|\p{N})[(\p{L}|\p{N}) _.-]+$/u', $POST->name)) 	{ $errors[] = _('Only alphanumeric, spaces and underscore characters are allowed'); }
+	if(!preg_match('/^(\p{L}|\p{N})[(\p{L}|\p{N}) _-]+$/u', $POST->name)) 	{ $errors[] = _('Only alphanumeric, spaces and underscore characters are allowed'); }
 
 	# required must have default value
 	if($POST->NULL=="NO" && mb_strlen((string) $POST->fieldDefault)==0)			{ $errors[] = _('Required fields must have default values'); }
