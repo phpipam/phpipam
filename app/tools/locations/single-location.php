@@ -180,6 +180,13 @@ else {
                             	// description
                             	$o->description = !is_blank($o->description) ? " <span class='text-muted'>($o->description)</span>" : "";
 
+															// circuit
+															if ($o->type=="circuit") {
+																$circuit = $Tools->fetch_object ("circuits", "id", $o->id);
+																$provider = $Tools->fetch_object ("circuitProviders", "id", $circuit->provider);
+																$o->description = " <span class='text-muted'>($provider->name)</span>";
+															}
+															
                             	// subnet name
                             	if ($o->type=="subnets")    $o->name = $Tools->transform_address ($o->name,"dotted")."/".$o->mask;
 
