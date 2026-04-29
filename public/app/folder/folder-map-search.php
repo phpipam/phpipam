@@ -1,5 +1,8 @@
 <?php
 
+if (!isset($subnet) || !is_array($subnet)) {
+	return;
+}
 
 # max mask possible
 $biggest_subnet_mask = 32;

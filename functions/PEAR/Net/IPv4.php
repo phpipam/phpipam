@@ -430,7 +430,7 @@ class Net_IPv4
      */
     function ip2double($ip)
     {
-        return (double)(sprintf("%u", ip2long($ip)));
+        return (float)(sprintf("%u", ip2long($ip)));
     }
 
     // }}}

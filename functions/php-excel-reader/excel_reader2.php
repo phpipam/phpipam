@@ -181,11 +181,11 @@ class OLERead extends stdClass {
 		// readData(rootStartBlock)
 		$block = $this->rootStartBlock;
 		$pos = 0;
-		$this->entry = $this->__readData($block);
-		$this->__readPropertySets();
+		$this->entry = $this->____readData($block);
+		$this->____readPropertySets();
 	}
 
-	function __readData($bl) {
+	private function ____readData($bl) {
 		$block = $bl;
 		$pos = 0;
 		$data = '';
@@ -197,7 +197,7 @@ class OLERead extends stdClass {
 		return $data;
 	 }
 
-	function __readPropertySets(){
+	private function ____readPropertySets(){
 		$offset = 0;
 		while ($offset < strlen((string) $this->entry)) {
 			$d = substr((string) $this->entry, $offset, PROPERTY_STORAGE_BLOCK_SIZE);
@@ -229,7 +229,7 @@ class OLERead extends stdClass {
 
 	function getWorkBook(){
 		if ($this->props[$this->wrkbook]['size'] < SMALL_BLOCK_THRESHOLD){
-			$rootdata = $this->__readData($this->props[$this->rootentry]['startBlock']);
+			$rootdata = $this->____readData($this->props[$this->rootentry]['startBlock']);
 			$streamData = '';
 			$block = $this->props[$this->wrkbook]['startBlock'];
 			$pos = 0;

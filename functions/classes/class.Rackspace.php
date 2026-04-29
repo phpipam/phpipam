@@ -112,6 +112,7 @@ class phpipam_rack extends Tools {
             $this->all_racks = false;
         }
         else {
+            $out = [];
             // reindex
             foreach ($all_racks as $r) {
                 $out[$r->id] = $r;
@@ -307,9 +308,8 @@ class phpipam_rack extends Tools {
      * @param  bool $recursion		// a kill switch to make sure we don't loop infinitely
      *
      * @access private
-     * @return void
      */
-    private function compile_rack_contents ($id, $deviceId = false, $is_back = false, $draw_names = true, $recursion = true) {
+    private function compile_rack_contents ($id, $deviceId = false, $is_back = false, $draw_names = true, $recursion = true): Rack {
         // fetch rack details
         $rack = $this->fetch_rack_details ($id);
         // fetch rack devices
@@ -786,7 +786,11 @@ class RackDrawer extends Common_functions {
 
         header("Content-type: image/png");
         imagepng($this->template);
-        imagedestroy($this->template);
+        if (version_compare(PHP_VERSION, '8.5.0', '<')) {
+            // phpcs:ignore
+            imagedestroy($this->template);
+            // phpcs:enable
+        }
     }
 
     /**
@@ -838,7 +842,11 @@ class RackDrawer extends Common_functions {
                 $this->topYSize + $this->unitYSize * ($this->rack->getSpace() - ($content->getStartLocation() + $content->getSize()));
 
             imagecopy($this->template, $img, $this->rackInsideXOffset + 1, $yPos, 0, 0, $this->rackInsideXSize - 2, $pixelSize);
-            imagedestroy($img);
+            if (version_compare(PHP_VERSION, '8.5.0', '<')) {
+                // phpcs:ignore
+                imagedestroy($img);
+                // phpcs:enable
+            }
         }
     }
 

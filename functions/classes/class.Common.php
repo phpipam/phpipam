@@ -1406,8 +1406,11 @@ class Common_functions  {
 			$result['result_code'] = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 			$result['error_msg']   = curl_error($curl);
 
-			// close
-			curl_close ($curl);
+			if (version_compare(PHP_VERSION, '8.5.0', '<')) {
+				// phpcs:ignore
+				curl_close ($curl);
+				// phpcs:ignore
+			}
 
 		} catch (Exception $e) {
 			$result['error_msg'] = $e->getMessage();

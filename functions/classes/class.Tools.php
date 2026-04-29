@@ -3382,7 +3382,7 @@ class Tools extends Common_functions {
     	/* validate IP */
     	foreach($outFile as $k=>$v) {
         	//put it to array
-        	$field = str_getcsv ($v, $this->csv_delimiter);
+        	$field = str_getcsv ($v, $this->csv_delimiter, '"', "\\");
 
         	if(!filter_var($field[0], FILTER_VALIDATE_IP)) {
             	unset($outFile[$k]);
@@ -3450,7 +3450,7 @@ class Tools extends Common_functions {
             	$line = $this->convert_encoding_to_UTF8($line);
 
             	//put it to array
-            	$field = str_getcsv ($line, $this->csv_delimiter);
+            	$field = str_getcsv ($line, $this->csv_delimiter, '"', "\\");
 
             	//verify IP address
             	if(!filter_var($field[0], FILTER_VALIDATE_IP)) 	{ $class = "danger";	$errors++; }

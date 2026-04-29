@@ -254,10 +254,9 @@ class Password_check extends Common_functions {
 	/**
 	 * Count all symbols
 	 *
-	 * @method count_symbols
-	 * @return void
+
 	 */
-	private function count_symbols () {
+	private function count_symbols (): int {
 		$cnt = 0;
 		foreach (preg_split('//u',$this->password, -1, PREG_SPLIT_NO_EMPTY) as $l) {
 			if (in_array($l, $this->allowedSymbols)) {

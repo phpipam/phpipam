@@ -46,6 +46,7 @@ else {
 }
 
 # we need old values for mailing
+$subnet_old_details = [];
 if($POST->action=="edit" || $POST->action=="delete") {
 	$subnet_old_details = (array) $Subnets->fetch_subnet(null, $POST->subnetId);
 }

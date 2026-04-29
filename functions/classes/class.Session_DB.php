@@ -1,170 +1,148 @@
 <?php
 
 /**
- *
  * php php_sessions class wrapper to work with session cookies in database
- *
  */
-class Session_DB {
+final class Session_DB implements SessionHandlerInterface
+{
+    /**
+     * @var Database_PDO
+     */
+    private $Database;
 
-	/**
-	 * Database
-	 *
-	 * @var mixed
-	 */
-	protected $Database;
+    /**
+     * @var Result
+     */
+    private $Result;
 
-	/**
-	 * Result
-	 *
-	 * @var Result
-	 * @access public
-	 */
-	public $Result;
+    /**
+     * @return void
+     */
+    public function __construct(Database_PDO $database)
+    {
+        $this->Database = $database;
 
-	/**
-	 * Constructor
-	 *
-	 * @method __construct
-	 * @param  Database_PDO $database
-	 */
-	public function __construct (Database_PDO $database) {
-		# initialize database object
-		$this->Database = $database;
-		// result
-		$this->Result = new Result ();
-		// set handler
-		$this->set_handler ();
-	}
+        $this->Result = new Result;
 
-	/**
-	 * Register this class as session handler
-	 * @method set_handler
-	 */
-	private function set_handler () {
-		// Set database as handler if requested
-		session_set_save_handler(
-			[$this, "_open"],
-			[$this, "_close"],
-			[$this, "_read"],
-			[$this, "_write"],
-			[$this, "_destroy"],
-			[$this, "_gc"]
-		);
-		// start
-		session_start ();
-	}
+        session_set_save_handler($this, true);
 
-	/**
-	 * Open connection
-	 * @method _open
-	 * @return bool
-	 */
-	public function _open () {
-		try {
-			$this->Database->connect();
-			return true;
-		}
-		catch (Exception $e) {
-			$this->Result->show("danger", $e->getMessage(), false);
-			return false;
-		}
-	}
+        session_start();
+    }
 
-	/**
-	 * Close connection - not needed
-	 * @method _close
-	 * @return void
-	 */
-	public function _close () {
-		return true;
-	}
+    /**
+     * Open connection
+     *
+     * @param  string  $path
+     * @param  string  $name
+     */
+    public function open($path, $name): bool
+    {
+        try {
+            $this->Database->connect();
+        } catch (PDOException $e) {
+            $this->Result->show('danger', $e->getMessage(), false);
 
-	/**
-	 * Check database for session data
-	 * @method _read
-	 * @param  string $id
-	 * @return string
-	 */
-	public function _read ($id) {
-		// check database for cookie
-		try {
-			// Note: Database->getObject() does not support non-numeric id's. Use findObject().
-			$session = $this->Database->findObject ('php_sessions', 'id', $id);
-			// check
-			if (!is_object($session) || empty($session->data))
-				return "";
+            return false;
+        }
 
-			return $session->data;
-		}
-		catch (Exception $e) {
-			$this->Result->show("danger", $e->getMessage(), false);
-			return "";
-		}
-	}
+        return true;
+    }
 
-	/**
-	 * Save session data
-	 *
-	 * @method _write
-	 * @param  string $id
-	 * @param  string $data
-	 * @return bool
-	 */
-	public function _write ($id, $data) {
-		// we need some data, otherwise don't save session
-		if(is_blank($data)) {
-			//return true;
-		}
-		// set insert / update values
-		$values = [
-					"id" 		=> $id,
-					"access"    => time(),
-					"data"      => $data,
-					"remote_ip"	=> $_SERVER['REMOTE_ADDR']
-				  ];
-		// insert
-		try {
-			$this->Database->insertObject ("php_sessions", $values, false, true, false);
-			return true;
-		}
-		catch (Exception $e) {
-			$this->Result->show("danger", $e->getMessage(), false);
-			return false;
-		}
-	}
+    /**
+     * Close connection - not needed
+     */
+    public function close(): bool
+    {
+        return true;
+    }
 
-	/**
-	 * Destroy session
-	 *
-	 * @method _destroy
-	 * @param  string $id
-	 * @return bool
-	 */
-	public function _destroy ($id) {
-		try {
-			$this->Database->deleteObject ("php_sessions", $id);
-			return true;
-		}
-		catch (Exception $e) {
-			$this->Result->show("danger", $e->getMessage(), false);
-			return false;
-		}
-	}
+    /**
+     * Check database for session data
+     *
+     * @param  string  $id
+     * @return string|false
+     */
+    #[\ReturnTypeWillChange]
+    public function read($id)
+    {
+        // check database for cookie
+        try {
+            // Note: Database->getObject() does not support non-numeric id's. Use findObject().
+            $session = $this->Database->findObject('php_sessions', 'id', $id);
 
-	/**
-	 * Garbage collection functions
-	 * @method _gc
-	 * @param  int $max
-	 * @return bool
-	 */
-	public function _gc ($max) {
-		try {
-			$this->Database->runQuery ("DELETE FROM php_sessions WHERE `access` < ?", [time() - $max]);
-			return true;
-		}
-		catch (Exception $e) {
-			return false;
-		}
-	}
+            if (is_object($session) && strlen($session->data) > 0) {
+                return (string) $session->data;
+            }
+        } catch (PDOException $e) {
+            $this->Result->show('danger', $e->getMessage(), false);
+
+            return false;
+        }
+
+        return '';
+    }
+
+    /**
+     * Save session data
+     *
+     * @param  string  $id
+     * @param  string  $data
+     */
+    public function write($id, $data): bool
+    {
+        // set insert / update values
+        $values = [
+            'id' => $id,
+            'access' => time(),
+            'data' => $data,
+            'remote_ip' => $_SERVER['REMOTE_ADDR'],
+        ];
+
+        try {
+            $this->Database->insertObject('php_sessions', $values, false, true, false);
+        } catch (PDOException $e) {
+            $this->Result->show('danger', $e->getMessage(), false);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Destroy session
+     *
+     * @param  string  $id
+     */
+    public function destroy($id): bool
+    {
+        try {
+            $this->Database->deleteObject('php_sessions', $id);
+        } catch (PDOException $e) {
+            $this->Result->show('danger', $e->getMessage(), false);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Garbage collection functions
+     *
+     * @param  int  $max
+     * @return int|false
+     */
+    #[\ReturnTypeWillChange]
+    public function gc($max)
+    {
+        $rowCount = 0;
+        try {
+            $this->Database->runQuery('DELETE FROM php_sessions WHERE `access` < ?', [time() - $max], $rowCount);
+        } catch (PDOException $e) {
+            return false;
+        }
+
+        return (int) $rowCount;
+    }
 }

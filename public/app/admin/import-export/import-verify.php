@@ -70,7 +70,7 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 
 		/* format file */
 		$data = str_replace( ["\r\n","\r","\n"] , "" , $data);	//remove line break
-		$data = str_getcsv ($data, $Tools->csv_delimiter);
+		$data = str_getcsv ($data, $Tools->csv_delimiter, '"', "\\");
 
 		foreach ($data as $col) {
 			$firstrow[] = $col;

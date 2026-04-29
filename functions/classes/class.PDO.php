@@ -462,6 +462,7 @@ abstract class DB {
 
 			// Run Anchor query then the recursive query until there are no more results
 			$level = 1;
+			$rowCount = 0;
 			do {
 				// reset args for recursive query
 				$anchor_args = $level==1 ? $anchor_args : [];

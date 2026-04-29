@@ -63,7 +63,7 @@ if (strtolower((string) $filetype) == "csv") {
 	$Tools->set_csv_delimiter ($line);
 	$row++;
 	$line = str_replace( ["\r\n","\r","\n"] , "" , $line);	//remove line break
-	$cols = str_getcsv ($line, $Tools->csv_delimiter);
+	$cols = str_getcsv ($line, $Tools->csv_delimiter, '"', "\\");
 	foreach ($cols as $val) {
 		$col++;
 		# map import columns to expected fields as per previous window
@@ -75,7 +75,7 @@ if (strtolower((string) $filetype) == "csv") {
 	while (($line = fgets($filehdl)) !== false) {
 		$row++;$col = 0;
 		$line = str_replace( ["\r\n","\r","\n"] , "" , $line);	//remove line break
-		$cols = str_getcsv ($line, $Tools->csv_delimiter);
+		$cols = str_getcsv ($line, $Tools->csv_delimiter, '"', "\\");
 		$record = [];
 		foreach ($cols as $val) {
 			$col++;

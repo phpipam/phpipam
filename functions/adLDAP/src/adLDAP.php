@@ -641,10 +641,11 @@ class adLDAP {
     {
         // Connect to the AD/LDAP server as the username/password
         $domainController = $this->randomController();
+        $port = (int) $this->adPort;
         if ($this->useSSL) {
-            $this->ldapConnection = ldap_connect("ldaps://".$domainController, $this->adPort);
+            $this->ldapConnection = ldap_connect("ldaps://$domainController:$port");
         } else {
-            $this->ldapConnection = ldap_connect($domainController, $this->adPort);
+            $this->ldapConnection = ldap_connect("ldap://$domainController:$port");
         }
 
         // Set some ldap options for talking to AD
