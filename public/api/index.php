@@ -18,8 +18,7 @@
  */
 
 # include functions
-if(!function_exists("create_link"))
-    require_once( __DIR__ . '/../functions/functions.php' );		// functions and objects from phpipam
+require_once __DIR__ . '/../../functions/functions.php';	// functions and objects from phpipam
 
 # include common API controllers
 require_once( __DIR__ . '/controllers/Common.php');			// common methods

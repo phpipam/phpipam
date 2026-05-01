@@ -1,6 +1,6 @@
 <?php
 /* site functions */
-require_once( 'functions/functions.php' );
+require_once __DIR__ . '/../functions/functions.php';
 
 /* config */
 if (!file_exists(Config::config_file_path()))	{ die("<br><hr>-- config.php file missing! Please copy default config file `config.dist.php` to `config.php` and set configuration! --<hr><br>phpipam installation documentation: <a href='http://phpipam.net/documents/installation/'>http://phpipam.net/documents/installation/</a>"); }

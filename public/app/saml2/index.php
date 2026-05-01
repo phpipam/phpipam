@@ -1,5 +1,5 @@
 <?php
-require_once( __DIR__ . '/../../functions/functions.php' );
+require_once  __DIR__ . '/../../../functions/functions.php';
 
 if (!isset($Database)) {
     $Database = new Database_PDO;

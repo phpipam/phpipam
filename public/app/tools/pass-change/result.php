@@ -1,7 +1,6 @@
 <?php
+require_once __DIR__ . '/../../../../functions/functions.php';
 
-# functions
-require_once('../../../functions/functions.php');
 
 # Classes
 $Database = new Database_PDO;

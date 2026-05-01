@@ -5,7 +5,7 @@
  *************************************************/
 
 # include required scripts
-require_once( __DIR__ . '/../../../functions/functions.php' );
+require_once  __DIR__ . '/../../../../functions/functions.php';
 
 # initialize required objects
 $Database 	= new Database_PDO;

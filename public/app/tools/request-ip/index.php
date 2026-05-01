@@ -3,7 +3,7 @@
 /** Show IP request form for non-privileged users - AJAX-loaded **/
 
 # include required scripts
-require_once( __DIR__ . '/../../../functions/functions.php' );
+require_once  __DIR__ . '/../../../../functions/functions.php';
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -31,7 +31,7 @@ $User->check_user_session();
 		<td><?php print _('IP address');?> *</td>
 		<td>
 			<?php
-			require_once('../../../functions/functions.php');
+			require_once __DIR__ . '/../../../../functions/functions.php';
 			if(isset($POST->ip_addr)){
 				$first = $POST->ip_addr;
 			}else{
