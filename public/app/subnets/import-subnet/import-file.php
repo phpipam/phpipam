@@ -31,7 +31,7 @@ if($permission < 2) 			   $Result->show("danger", _('You cannot write to this su
 is_numeric($POST->subnetId) ? : $Result->show("danger", _("Invalid subnet ID") ,true);
 
 # set filetype
-$filetype = pf_explode(".", $POST->filetype);
+$filetype = explode(".", (string) $POST->filetype);
 $filetype = end($filetype);
 
 # get custom fields

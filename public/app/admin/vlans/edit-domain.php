@@ -79,7 +79,7 @@ $(document).ready(function(){
 		# select sections
 		$sections = $Sections->fetch_all_sections();
 		# reformat domains sections to array
-		$domain_sections = pf_explode(";", @$l2_domain['permissions']);
+		$domain_sections = explode(";", (string) @$l2_domain['permissions']);
 		$domain_sections = is_array($domain_sections) ? $domain_sections : [];
 		// loop
 		if($sections!==false) {

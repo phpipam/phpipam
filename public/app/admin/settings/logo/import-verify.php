@@ -21,7 +21,7 @@ disable_php_errors();
 
 /* get extension */
 $filename = $_FILES['file']['name'];
-$filename = pf_explode(".", $filename);
+$filename = explode(".", (string) $filename);
 $filename = end($filename);
 
 /* list of permitted file extensions */

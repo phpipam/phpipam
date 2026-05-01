@@ -327,7 +327,7 @@ class DHCP_kea extends Common_functions {
             foreach ($leases_from_file as $l) {
                 if(strlen($l)>1) {
                     // to array
-                    $l = pf_explode(",", $l);
+                    $l = explode(",", (string) $l);
 
                     // set state
                     switch ($l[9]) {

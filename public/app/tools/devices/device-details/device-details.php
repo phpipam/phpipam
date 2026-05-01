@@ -112,7 +112,7 @@ if($GET->subnetId!=0 && sizeof($device)>0) {
     	print "	<th>". _('Sections').':</th>';
     	print "	<td>";
     	if(!is_blank($device['hostname'])) {
-    		$section_ids = pf_explode(";", $device['sections']);
+    		$section_ids = explode(";", (string) $device['sections']);
     		foreach($section_ids as $k=>$id) {
     			$section = $Sections->fetch_section(null, $id);
                 if (!is_object($section)) {
@@ -288,13 +288,13 @@ if($GET->subnetId!=0 && sizeof($device)>0) {
         if ($rack!==false) {
             if ($User->settings->rackImageFormat=='svg') {
 	            // back
-	            if($rack->hasBack!="0") 
+	            if($rack->hasBack!="0")
 	            print " <object data='".$Tools->create_rack_link ($device['rack'], $device['id'], true)."' class='pull-right' style='width:auto;height:auto;margin-left:5px;'></object>";
 	            // front
 	            print " <object data='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pull-right' style='width:auto;height:auto;'></object>";
             } else {
 	            // back
-	            if($rack->hasBack!="0") 
+	            if($rack->hasBack!="0")
 	            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'], true)."' class='pull-right' style='width:180px;margin-left:5px;'>";
 	            // front
 	            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pull-right' style='width:180px;'>";

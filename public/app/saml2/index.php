@@ -180,7 +180,7 @@ try {
             $values["role"] = filter_var($auth->getAttribute("is_admin")[0], FILTER_VALIDATE_BOOLEAN) ? "Administrator" : "User";
 
             // Parse groups
-            $saml_groups = array_map('trim', pf_explode(',', $auth->getAttribute("groups")[0])) ?: [];
+            $saml_groups = array_map('trim', explode(',', (string) $auth->getAttribute("groups")[0])) ?: [];
 
             $ug = [];
             foreach ($Tools->fetch_all_objects("userGroups", "g_id") as $g) {
@@ -192,9 +192,9 @@ try {
 
             //parse modules
             $saml_modules = [];
-            foreach (pf_explode(',', $auth->getAttribute("modules")[0]) as $entry) {
+            foreach (explode(',', (string) $auth->getAttribute("modules")[0]) as $entry) {
                 if (strpos($entry, ":") !== false) {
-                    list($module_name, $module_perm) = array_map('trim', pf_explode(':', $entry)) ?: ['', 0];
+                    list($module_name, $module_perm) = array_map('trim', explode(':', $entry)) ?: ['', 0];
                     $saml_modules[$module_name] = filter_var($module_perm, FILTER_VALIDATE_INT, ["options" => ["default" => 0, "min_range" => 0, "max_range" => 3]]);
                 }
             }

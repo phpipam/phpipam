@@ -126,7 +126,7 @@ foreach ($domains as $d) {
     // get SOA record
     $soa = $PowerDNS->fetch_domain_records_by_type($d->id, "SOA");
     if (is_object($soa)) {
-        $serial = pf_explode(" ", $soa[0]->content);
+        $serial = explode(" ", (string) $soa[0]->content);
         $serial = $serial[2];
     } else {
         $serial = '';

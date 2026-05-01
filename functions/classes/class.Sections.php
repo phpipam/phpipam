@@ -361,7 +361,7 @@ class Sections extends Common_functions {
 			}
 			else {
 				//array
-				if(in_array($sectionId, pf_explode(";", $d->permissions))) {
+				if(in_array($sectionId, explode(";", (string) $d->permissions))) {
 					$permitted[] = $d->id;
 				}
 			}
@@ -391,7 +391,7 @@ class Sections extends Common_functions {
 				}
 				else {
 					//array
-					if(in_array($sectionId, pf_explode(";", $n->permissions))) {
+					if(in_array($sectionId, explode(";", (string) $n->permissions))) {
 						$permitted[] = $n->id;
 					}
 				}

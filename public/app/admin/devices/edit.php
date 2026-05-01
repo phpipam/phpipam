@@ -257,7 +257,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 		$sections = $Sections->fetch_all_sections();
 
 		# reformat device sections to array
-		$deviceSections = pf_explode(";", @$device['sections']);
+		$deviceSections = explode(";", (string) @$device['sections']);
 		$deviceSections = is_array($deviceSections) ? $deviceSections : [];
 
 		if ($sections!==false) {

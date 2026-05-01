@@ -215,7 +215,7 @@ $('#switchSNMPManagementEdit').change(function() {
 		<td style="text-align:top">
 		<?php
 		# select queries
-		$queries = pf_explode(";", $device->snmp_queries);
+		$queries = explode(";", (string) $device->snmp_queries);
 		$queries = is_array($queries) ? $queries : [];
         // loop
 		foreach($Snmp->snmp_queries as $k=>$m) {

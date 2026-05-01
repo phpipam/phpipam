@@ -150,7 +150,7 @@ if (!is_blank(strstr((string) $POST->ip_addr,"-"))) {
 	$POST->ip_addr = str_replace(" ", "", (string) $POST->ip_addr);
 
 	# get start and stop of range
-	$range		 = pf_explode("-", $POST->ip_addr);
+	$range		 = explode("-", $POST->ip_addr);
 	$POST->start = $range[0];
 	$POST->stop  = $range[1];
 

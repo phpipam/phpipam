@@ -34,7 +34,7 @@ else 																										{ $POST->siteURL = "http://".$POST->siteURL; }
 //verify ping status fields
 $POST->pingStatus = str_replace(" ", "", (string) $POST->pingStatus);		//remove possible spaces
 $POST->pingStatus = str_replace(",", ";", (string) $POST->pingStatus);		//change possible , for ;
-$statuses = pf_explode(";", $POST->pingStatus);
+$statuses = explode(";", $POST->pingStatus);
 
 if(sizeof($statuses)!=2)													{ $Result->show("danger", _("Invalid ping status intervals"), true); }
 if(!is_numeric($statuses[0]) || !is_numeric($statuses[1]))					{ $Result->show("danger", _("Invalid ping status intervals"), true); }

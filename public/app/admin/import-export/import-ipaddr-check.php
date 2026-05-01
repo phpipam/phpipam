@@ -108,7 +108,7 @@ $devices = $Tools->fetch_all_objects("devices", "hostname");
 if ($devices!==false) {
 	foreach($devices as $c_dev) {
 		$c_dev = (array) $c_dev;
-		$c_dev_sections=pf_explode(";", $c_dev['sections']);
+		$c_dev_sections=explode(";", (string) $c_dev['sections']);
 		# Populate each section with the devices it has
 		foreach($c_dev_sections as $c_dev_sect) { $device_data[$c_dev_sect][$c_dev['hostname']] = $c_dev;}
 	}

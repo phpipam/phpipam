@@ -509,7 +509,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
     		foreach($devices as $device) {
     			$device = (array) $device;
     			//check if permitted in this section!
-    			$sections=pf_explode(";", $device['sections']);
+    			$sections=explode(";", (string) $device['sections']);
     			if(in_array($subnet['sectionId'], $sections)) {
     			//if same
     			if($device['id'] == $address['switch']) { print '<option value="'. $device['id'] .'" selected>'. $device['hostname'] .'</option>'. "\n"; }

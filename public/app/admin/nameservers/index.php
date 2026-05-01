@@ -48,7 +48,7 @@ else {
 
 		// sections
 		if (!is_null($nameservers['permissions'])) {
-			$sections = array_filter(pf_explode(";", $nameservers['permissions']));
+			$sections = array_filter(explode(";", (string) $nameservers['permissions']));
 			// some
 			if (sizeof($sections)>0) {
 				foreach($sections as $id) {
@@ -69,7 +69,7 @@ else {
 		}
 
 		// merge all nmeservers
-		$all_nameservers = pf_explode(";", $nameservers['namesrv1']);
+		$all_nameservers = explode(";", (string) $nameservers['namesrv1']);
 
 		//print details
 		print '<tr>'. "\n";

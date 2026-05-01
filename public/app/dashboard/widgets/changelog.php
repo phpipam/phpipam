@@ -77,7 +77,7 @@ else {
         		$changelog = str_replace("\r\n", "<br>",(string) $l['cdiff']);
         		$changelog = str_replace("\n", "<br>",(string) $changelog);
         		$changelog = htmlentities($changelog);
-        		$changelog = array_filter(pf_explode("<br>", $changelog));
+        		$changelog = array_filter(explode("<br>", $changelog));
 
                 $diff = [];
 

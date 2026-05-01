@@ -97,7 +97,7 @@ print "	<td>";
 	# format diff
 	$changelog = str_replace("\r\n", "<br>",(string) $clog->cdiff);
 	$changelog = str_replace("\n", "<br>",(string) $changelog);
-	$changelog = array_filter(pf_explode("<br>", $changelog));
+	$changelog = array_filter(explode("<br>", $changelog));
 
 	# set type
 	if($clog->ctype=="ip_addr") 	 { $type = "address"; }

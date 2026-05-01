@@ -568,7 +568,7 @@ class Tools extends Common_functions {
 		# else calculate options
 		else {
 			# if subnet is not provided maybe wildcard is, so explode it to array
-			$address = pf_explode(".", $address);
+			$address = explode(".", $address);
             # remove empty
             foreach($address as $k=>$a) {
                 if (is_blank($a))  unset($address[$k]);
@@ -804,7 +804,7 @@ class Tools extends Common_functions {
 
 		$dbversion = strstr($schema, 'UPDATE `settings` SET `dbversion` =');
 		$dbversion = strstr($dbversion, ';', true);
-		$dbversion = pf_explode("=", $dbversion);
+		$dbversion = explode("=", (string) $dbversion);
 
 		return intval($dbversion[1]);
 	}
@@ -825,7 +825,7 @@ class Tools extends Common_functions {
 		$definition = trim(strstr($definition, ";" . "\n", true));
 
 		# get each line to array
-		$definition = pf_explode("\n", $definition);
+		$definition = explode("\n", $definition);
 
 		# go through,if it begins with ` use it !
 		$out = [];
@@ -850,7 +850,7 @@ class Tools extends Common_functions {
 		$schema = $this->read_db_schema();
 
 		# get definitions to array, explode with CREATE TABLE `
-		$creates = pf_explode("CREATE TABLE `", $schema);
+		$creates = explode("CREATE TABLE `", $schema);
 		# fill tables array
 		$tables = [];
 		foreach($creates as $k=>$c) {
@@ -1418,7 +1418,7 @@ class Tools extends Common_functions {
 		$file = trim(strstr($file, "# Dump of table", true));
 
 		//get proper line
-		$file = pf_explode("\n", $file);
+		$file = explode("\n", $file);
 		foreach($file as $k=>$l) {
 			if(strpos(trim($l), "$field`")==1) {
 				$res = trim($l, ",");
@@ -1514,7 +1514,7 @@ class Tools extends Common_functions {
 		$schema = $this->read_db_schema();
 
 		# get definitions to array, explode with CREATE TABLE `
-		$creates = pf_explode("CREATE TABLE `", $schema);
+		$creates = explode("CREATE TABLE `", $schema);
 
 		$indexes =  [];
 		foreach($creates as $k=>$c) {
@@ -1523,7 +1523,7 @@ class Tools extends Common_functions {
 
 			$table = strstr($c, "`", true);
 
-			$definitions = pf_explode("\n", $c);
+			$definitions = explode("\n", $c);
 			foreach($definitions as $definition) {
 				if (preg_match('/(KEY|UNIQUE KEY) +`(.*)` +\(/', $definition, $matches)) {
 					$indexes[$table][] = $matches[2];
@@ -1596,7 +1596,7 @@ class Tools extends Common_functions {
 		$file = trim(strstr($file, "# Dump of table", true));
 
 		//get proper line
-		$file = pf_explode("\n", $file);
+		$file = explode("\n", $file);
 
 		$line = false;
 		foreach($file as $k=>$l) {
@@ -1956,7 +1956,7 @@ class Tools extends Common_functions {
 		//uncompress
 	    $uncompressed = $this->Net_IPv6->removeNetmaskSpec($this->Net_IPv6->uncompress($addresses));
 	    $len = $pflen / 4;
-	    $parts = pf_explode(':', $uncompressed);
+	    $parts = explode(':', $uncompressed);
 	    $res = '';
 	    foreach($parts as $part) {
 	        $res .= str_pad($part, 4, '0', STR_PAD_LEFT);
@@ -2047,7 +2047,7 @@ class Tools extends Common_functions {
         $out = [];
         // set ping statuses for warning and offline
         $this->get_settings();
-        $statuses = pf_explode(";", $this->settings->pingStatus);
+        $statuses = explode(";", (string) $this->settings->pingStatus);
         // check
         if(is_array($objects)) {
             if(sizeof($objects)>0) {
@@ -2844,7 +2844,7 @@ class Tools extends Common_functions {
 	 * @return mixed
 	 */
 	public function explode_filtered($delimiter, $string) {
-	    $ret = pf_explode($delimiter, $string);
+	    $ret = explode($delimiter, $string);
 	    if (!is_array($ret))
 	        return false;
 	    return array_filter($ret);

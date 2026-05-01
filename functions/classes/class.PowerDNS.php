@@ -1060,7 +1060,7 @@ class PowerDNS extends Common_functions {
         else                        { $soa = $soa[0]; }
 
         // update serial it not autoserial
-        $soa_serial = pf_explode(" ", $soa->content);
+        $soa_serial = explode(" ", (string) $soa->content);
         $soa_serial[2] = $this->db_settings->autoserial=="Yes" ? 0 : (int) $soa_serial[2]+1;
 
         // if serail set override it
@@ -1114,7 +1114,7 @@ class PowerDNS extends Common_functions {
 
         // content
         $soa   = [];
-        $soa[] = array_shift(pf_explode(";", $values['ns']));
+        $soa[] = array_shift(explode(";", (string) $values['ns']));
         $soa[] = str_replace ("@", ".", (string) $values['hostmaster']);
         $soa[] = date("Ymd")."00";
         $soa[] = $this->validate_refresh ($values['refresh']);
@@ -1126,7 +1126,7 @@ class PowerDNS extends Common_functions {
         $records[] = $this->formulate_new_record ($this->lastId, $values['name'], "SOA", implode(" ", $soa), $values['ttl'], null, 0, $checkOnly);
 
         // formulate NS records
-        $ns = pf_explode(";", $values['ns']);
+        $ns = explode(";", (string) $values['ns']);
         if (sizeof($ns)>0) {
             foreach($ns as $s) {
                 // validate
@@ -1464,7 +1464,7 @@ class PowerDNS extends Common_functions {
         $bits = $mask<24 ? 2 : 1;
 
         // to array
-        $zone = pf_explode(".", $ip);
+        $zone = explode(".", (string) $ip);
 
         // create name
         if ($bits==1)    { return $zone[2].".".$zone[1].".".$zone[0].".in-addr.arpa"; }
@@ -1508,7 +1508,7 @@ class PowerDNS extends Common_functions {
         // set zone prefix and reverse content
         if ($this->identify_address ($ip)=="IPv4") {
             $prefix = ".in-addr.arpa";
-            $zone = array_reverse(pf_explode(".", $ip));
+            $zone = array_reverse(explode(".", (string) $ip));
         }
         else {
             // PEAR for IPv6
@@ -1518,7 +1518,7 @@ class PowerDNS extends Common_functions {
             $ip = $this->Net_IPv6->removeNetmaskSpec($ip);
 
             // to array
-            $ip = pf_explode(":", $ip);
+            $ip = explode(":", $ip);
 
             // if 0 than add 4 nulls
             foreach ($ip as $k=>$i) {

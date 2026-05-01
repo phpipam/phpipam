@@ -50,7 +50,7 @@ try {
 	$options = [
 			'base_dn'=>$params->base_dn,
 			'account_suffix'=>$params->account_suffix,
-			'domain_controllers'=>pf_explode(";",$params->domain_controllers),
+			'domain_controllers'=>explode(";",(string) $params->domain_controllers),
 			'use_ssl'=>$params->use_ssl,
 			'use_tls'=>$params->use_tls,
 			'ad_port'=>$params->ad_port

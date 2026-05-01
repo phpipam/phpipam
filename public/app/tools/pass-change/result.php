@@ -22,7 +22,7 @@ if($POST->ipampassword1==$POST->oldpassword) { $Result->show("danger", _("New pa
 
 # Enforce password policy
 $policy = (db_json_decode($User->settings->passwordPolicy, true));
-$Password_check->set_requirements($policy, pf_explode(",",$policy['allowedSymbols']));
+$Password_check->set_requirements($policy, explode(",",(string) $policy['allowedSymbols']));
 if (!$Password_check->validate ($POST->ipampassword1)) { $Result->show("danger alert-danger ", _('Password validation errors').":<br> - ".implode("<br> - ", $Password_check->get_errors ()), true); }
 
 if($POST->ipampassword1!=$POST->ipampassword2) { $Result->show("danger", _("New passwords do not match"), true); }

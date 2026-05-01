@@ -159,13 +159,13 @@ class Common_functions  {
 	 * Compare dotted version numbers 1.21.0 <=> 1.4.10
 	 *
 	 * @access public
-	 * @param string $verA
+	 * @param mixed $verA
 	 * @param mixed $verB
 	 * @return int
 	 */
 	public function cmp_version_strings($verA, $verB) {
-		$a = array_pad(pf_explode('.', $verA), 3, 0);
-		$b = array_pad(pf_explode('.', $verB), 3, 0);
+		$a = array_pad(explode('.', (string) $verA), 3, 0);
+		$b = array_pad(explode('.', (string) $verB), 3, 0);
 
 		if ($a[0] != $b[0]) return $a[0] < $b[0] ? -1 : 1;			// 1.x.y is less than 2.x.y
 		if (strcmp((string) $a[1], (string) $b[1]) != 0) return strcmp((string) $a[1], (string) $b[1]);	// 1.21.y is less than 1.3.y
@@ -1509,7 +1509,7 @@ class Common_functions  {
 		$html = [];
     	//parse values
     	$field['type'] = trim(substr((string) $field['type'],0,-1));
-    	$tmp = substr($field['type'], 0,3)=="set" ? pf_explode(",", str_replace(["set(", "'"], "", $field['type'])) : pf_explode(",", str_replace(["enum(", "'"], "", $field['type']));
+    	$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(["set(", "'"], "", $field['type'])) : explode(",", str_replace(["enum(", "'"], "", $field['type']));
     	//null
     	if($field['Null']!="NO") { array_unshift($tmp, ""); }
 

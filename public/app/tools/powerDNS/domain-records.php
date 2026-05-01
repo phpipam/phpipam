@@ -71,7 +71,7 @@ if ($domain === false) {
     if ($domain->type == "SLAVE") {
         // master servers
         print "<tr class='text-top'>";
-        if (strpos((string) $domain->master, ";") !== false) {$master = pf_explode(";", $domain->master);} else { $master = [$domain->master];}
+        if (strpos((string) $domain->master, ";") !== false) {$master = explode(";", (string) $domain->master);} else { $master = [$domain->master];}
         print "<td>" . _("Master servers") . ":</td>";
         print "<td>";
         foreach ($master as $k => $m) {

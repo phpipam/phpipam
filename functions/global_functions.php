@@ -251,6 +251,3 @@ function gmp_pow2(int $exp) : GMP {
 	gmp_setbit($result, $exp);
 	return $result;
 }
-
-// Include backwards compatibility wrapper functions.
-require_once __DIR__ . '/php_poly_fill.php';

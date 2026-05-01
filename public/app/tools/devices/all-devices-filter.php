@@ -30,7 +30,7 @@ if (isset($GET->subnetId) && @isset($GET->sPage)) {
 		$section = $Database->getObjectQuery("sections", "select id,name from `sections` where `name` = ?", [$GET->sPage]);
 		// check in which section device can be
 		foreach ($devices as $k=>$d) {
-			$device_section_ids = pf_explode(";", $d->sections);
+			$device_section_ids = explode(";", (string) $d->sections);
 
 			if (!in_array($section->id, $device_section_ids)) {
 				unset($devices[$k]);

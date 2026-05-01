@@ -190,7 +190,7 @@ else {
 				<p class="muted">
 	            <?php
 	            $title = str_replace(" / ", "<span class='divider'>/</span>", (string) $title);
-	            $tmp = pf_explode($User->settings->siteTitle, $title);
+	            $tmp = explode((string) $User->settings->siteTitle, $title);
 	            unset($tmp[0]);
 	            print implode($User->settings->siteTitle, $tmp);
 	            ?>

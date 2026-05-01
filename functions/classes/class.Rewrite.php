@@ -133,10 +133,10 @@ class Rewrite {
 		// ignore for direct access
 		if(strpos((string) $_SERVER['REQUEST_URI'], "index.php")===false) {
 			if(BASE!="/") {
-				$this->uri_parts = array_values(array_filter(pf_explode("/", str_replace((string) BASE, "", (string) $_SERVER['REQUEST_URI']))));
+				$this->uri_parts = array_values(array_filter(explode("/", str_replace((string) BASE, "", (string) $_SERVER['REQUEST_URI']))));
 			}
 			else {
-				$this->uri_parts = array_values(array_filter(pf_explode("/", $_SERVER['REQUEST_URI'])));
+				$this->uri_parts = array_values(array_filter(explode("/", (string) $_SERVER['REQUEST_URI'])));
 			}
 
 			// urldecode uri_parts
@@ -208,7 +208,7 @@ class Rewrite {
 	 */
 	private function append_qsa () {
 		if(strpos((string) $_SERVER['REQUEST_URI'], "?")!==false) {
-			$parts = pf_explode("?", $_SERVER['REQUEST_URI']);
+			$parts = explode("?", (string) $_SERVER['REQUEST_URI']);
 			$parts = $parts[1];
 			// parse
 			parse_str ($parts, $out);

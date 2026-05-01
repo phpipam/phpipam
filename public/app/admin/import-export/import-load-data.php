@@ -17,8 +17,8 @@ $User->check_user_session();
 # admin check
 $User->is_admin();
 
-$expfields = pf_explode("|",$GET->expfields);
-$reqfields = pf_explode("|",$GET->reqfields);
+$expfields = explode("|",(string) $GET->expfields);
+$reqfields = explode("|",(string) $GET->reqfields);
 if (isset($GET->filetype)) {
 	$filetype = $GET->filetype;
 } else {

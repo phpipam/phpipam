@@ -31,7 +31,7 @@ $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
-$selected_ip_fields = pf_explode(";", $selected_ip_fields);
+$selected_ip_fields = explode(";", (string) $selected_ip_fields);
 
 // all are off?
 if (is_blank($GET->addresses) && is_blank($GET->subnets) && is_blank($GET->vlans) && is_blank($GET->vrf) && is_blank($GET->pstn) && is_blank($GET->circuits) && is_blank($GET->customers) && is_blank($GET->devices)) {

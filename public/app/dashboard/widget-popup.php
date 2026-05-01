@@ -13,7 +13,7 @@ $Result 	= new Result ();
 $User->check_user_session (false);
 
 # user widgets form database
-$uwidgets = pf_explode(";",$User->user->widgets);	//selected
+$uwidgets = explode(";",(string) $User->user->widgets);	//selected
 $uwidgets = array_filter((array) $uwidgets);
 
 # fetch all widgets

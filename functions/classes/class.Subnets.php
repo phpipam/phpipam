@@ -1070,7 +1070,7 @@ class Subnets extends Common_functions {
 			$out[$mask]->wildcard = long2ip(~ip2long($net->netmask));	   //0.0.255.255
 
 			// binary
-			$parts = pf_explode(".", $net->netmask);
+			$parts = explode(".", (string) $net->netmask);
 			foreach($parts as $k=>$p) { $parts[$k] = str_pad(decbin($p),8, 0); }
 			$out[$mask]->binary = implode(".", $parts);
 		}
@@ -1105,7 +1105,7 @@ class Subnets extends Common_functions {
 			$out[$mask]->wildcard = long2ip(~ip2long($net->netmask));	   //0.0.255.255
 
 			// binary
-			$parts = pf_explode(".", $net->netmask);
+			$parts = explode(".", (string) $net->netmask);
 			foreach($parts as $k=>$p) { $parts[$k] = str_pad(decbin($p),8, 0); }
 			$out[$mask]->binary = implode(".", $parts);
 		}
@@ -2853,7 +2853,7 @@ class Subnets extends Common_functions {
     	// ipv4
     	if ($this->identify_address ($address)=="IPv4") {
         	// to array
-        	$mac_tmp = pf_explode(".", $address);
+        	$mac_tmp = explode(".", (string) $address);
         	// check 3rd octet
         	if ($mac_tmp[1]>=128) { $mac_tmp[1]=$mac_tmp[1]-128; }
         	// create mac
@@ -2865,7 +2865,7 @@ class Subnets extends Common_functions {
             	//expand
             	$expanded = $this->Net_IPv6->uncompress($address);
             	// to array
-                $mac_tmp = pf_explode(":", $expanded);
+                $mac_tmp = explode(":", $expanded);
             	$mac = strtolower("33:33:".str_pad(dechex($mac_tmp[4]),2,"0",STR_PAD_LEFT).":".str_pad(dechex($mac_tmp[5]),2,"0",STR_PAD_LEFT).":".str_pad(dechex($mac_tmp[6]),2,"0",STR_PAD_LEFT).":".str_pad(dechex($mac_tmp[7]),2,"0",STR_PAD_LEFT));
         	}
         	else {
@@ -2970,7 +2970,7 @@ class Subnets extends Common_functions {
 	public function validate_multicast_mac ($mac, $sectionId, $vlanId, $unique_required="vlan", $address_id = 0) {
     	// first put it to common format (1)
     	$mac = $this->reformat_mac_address ($mac);
-    	$mac_delimited =  pf_explode(":", $mac);
+    	$mac_delimited =  explode(":", $mac);
     	// we permit empty
         if (is_blank($mac)) {
             return true;
@@ -3565,7 +3565,7 @@ class Subnets extends Common_functions {
 		// set subnet allocations
 		$this->define_ripe_arin_subnets ();
 		// take only first bit of ip address to match /8 delegations
-		$subnet_check = reset(pf_explode(".", $subnet));
+		$subnet_check = reset(explode(".", $subnet));
 		// ripe or arin?
 		if (in_array($subnet_check, $this->ripe))		{ return $this->query_ripe ($subnet); }
 		elseif (in_array($subnet_check, $this->arin))	{ return $this->query_arin ($subnet); }
@@ -3719,7 +3719,7 @@ class Subnets extends Common_functions {
 			while (!feof($ripe_connection)) { $out .= fgets($ripe_connection); }
 
 			//parse it
-			$out = pf_explode("\n", $out);
+			$out = explode("\n", $out);
 
 			//we only want lines starting with route or route6
 			$subnet = [];
@@ -3728,7 +3728,7 @@ class Subnets extends Common_functions {
 					//replace route6 with route
 					$line = str_replace("route6:", "route:", $line);
 					//only take IP address
-					$line = pf_explode("route:", $line);
+					$line = explode("route:", $line);
 					$line = trim($line[1]);
 					//set result
 					$subnet[] = $line;

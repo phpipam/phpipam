@@ -20,9 +20,9 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # create array of ordering
-$otmp = pf_explode(";", $POST->position);
+$otmp = explode(";", (string) $POST->position);
 foreach($otmp as $ot) {
-	$ptmp = pf_explode(":", $ot);
+	$ptmp = explode(":", $ot);
 	$order[$ptmp[0]] = $ptmp[1];
 }
 

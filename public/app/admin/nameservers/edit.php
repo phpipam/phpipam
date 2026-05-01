@@ -39,7 +39,7 @@ if($POST->action!="add") {
 $readonly = $POST->action=="delete" ? "readonly" : "";
 
 # set nameservers
-$nameservers->namesrv1 = !is_string($nameservers->namesrv1) ? [" "] : pf_explode(";", $nameservers->namesrv1);
+$nameservers->namesrv1 = !is_string($nameservers->namesrv1) ? [" "] : explode(";", $nameservers->namesrv1);
 ?>
 
 
@@ -114,7 +114,7 @@ $nameservers->namesrv1 = !is_string($nameservers->namesrv1) ? [" "] : pf_explode
 		# select sections
 		$sections = $Sections->fetch_all_sections();
 		# reformat domains sections to array
-		$nameservers_sections = pf_explode(";", $nameservers->permissions);
+		$nameservers_sections = explode(";", (string) $nameservers->permissions);
 		$nameservers_sections = is_array($nameservers_sections) ? $nameservers_sections : [];
 		// loop
 		if ($sections !== false) {

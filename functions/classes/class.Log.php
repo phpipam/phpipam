@@ -1839,7 +1839,7 @@ class Logging extends Common_functions {
 		$content[] = "<td>";
 		// add changelog
 		$changelog = str_replace("\r\n", "<br>",$changelog);
-		$changelog = array_filter(pf_explode("<br>", $changelog));
+		$changelog = array_filter(explode("<br>", $changelog));
 		$content[] = "<table>";
 
 		foreach ($changelog as $c) {

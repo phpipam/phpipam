@@ -41,7 +41,7 @@ if ($POST->action!="delete") {
     	// if multiple masters
     	if (strpos((string) $POST->master, ",")!==false) {
         	// to array and trim, check each
-        	$masters = array_filter(pf_explode(",", $POST->master));
+        	$masters = array_filter(explode(",", (string) $POST->master));
         	foreach ($masters as $m) {
               if(!filter_var($m, FILTER_VALIDATE_IP))  { $Result->show("danger", _("Master must be an IP address"). " - ". $m, true); }
         	}
@@ -64,7 +64,7 @@ if ($POST->action!="delete") {
         else {
         	if (strpos((string) $POST->master, ",")!==false) {
             	// to array and trim, check each
-            	$masters = array_filter(pf_explode(",", $POST->master));
+            	$masters = array_filter(explode(",", (string) $POST->master));
             	foreach ($masters as $m) {
                   if(!filter_var($m, FILTER_VALIDATE_IP))  { $Result->show("danger", _("Master must be an IP address"). " - ". $m, true); }
             	}

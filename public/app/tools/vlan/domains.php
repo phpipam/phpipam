@@ -63,7 +63,7 @@ foreach($vlan_domains as $domain) {
 	else {
 		//explode
 		$sec = [];
-		$sections_tmp = pf_explode(";", $domain->permissions);
+		$sections_tmp = explode(";", (string) $domain->permissions);
 		foreach($sections_tmp as $t) {
 			//fetch section
 			$tmp_section = $Sections->fetch_section(null, $t);

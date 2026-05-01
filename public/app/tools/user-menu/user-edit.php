@@ -36,7 +36,7 @@ if (!is_blank($POST->password1)) {
 	if ($POST->password1 != $POST->password2) 							{ $Result->show("danger alert-absolute", _('Passwords do not match!'), true); }
 	# validate pass against policy
 	$policy = (db_json_decode($User->settings->passwordPolicy, true));
-	$Password_check->set_requirements  ($policy, pf_explode(",",$policy['allowedSymbols']));
+	$Password_check->set_requirements  ($policy, explode(",",(string) $policy['allowedSymbols']));
 	if (!$Password_check->validate ($POST->password1)) 						{ $Result->show("danger alert-danger ", _('Password validation errors').":<br> - ".implode("<br> - ", $Password_check->get_errors ()), true); }
 }
 

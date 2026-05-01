@@ -184,7 +184,7 @@ $("input[name='subnet']").change(function() {
 
         	# reset CIDR if $showDropMenuFull
         	// if ($showDropMenuFull && strlen(@$dropdown_menu)>2) {
-	        // 	$cidr = pf_explode("\n",$dropdown_menu);
+	        // 	$cidr = explode("\n",$dropdown_menu);
 	        // 	$cidr = substr(strip_tags($cidr[1]), 2);
 	        // 	//validate
 	        // 	if ($Subnets->verify_cidr_address($cidr)===false) { unset($cidr); };
@@ -277,7 +277,7 @@ $("input[name='subnet']").change(function() {
 				if ($devices!==false) {
 					foreach($devices as $device) {
 						//check if permitted in this section!
-						$sections = pf_explode(";", $device->sections);
+						$sections = explode(";", (string) $device->sections);
 						if(in_array($POST->sectionId, $sections)) {
 							//if same
 							if($device->id == @$subnet_old_details['device']) 	{ print '<option value="'. $device->id .'" selected>'. $device->hostname .'</option>'. "\n"; }
@@ -335,7 +335,7 @@ $("input[name='subnet']").change(function() {
         if(is_array($vrfs)) {
 	        foreach($vrfs as $vrf) {
     	        // set permitted
-    	        $permitted_sections = pf_explode(";", $vrf->sections);
+    	        $permitted_sections = explode(";", (string) $vrf->sections);
     	        // section must be in array
     	        if (is_blank($vrf->sections) || in_array($POST->sectionId, $permitted_sections)) {
     				//cast

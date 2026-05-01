@@ -21,8 +21,8 @@ disable_php_errors();
 
 /* get extension */
 $filename = $_FILES['file']['name'];
-$expfields = pf_explode("|",$POST->expfields);
-$file_exp = pf_explode(".", $filename);
+$expfields = explode("|",(string) $POST->expfields);
+$file_exp = explode(".", (string) $filename);
 $filetype = strtolower(end($file_exp));
 
 /* list of permitted file extensions */

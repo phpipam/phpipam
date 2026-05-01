@@ -22,7 +22,7 @@ if($Sections->check_permission ($User->user, $POST->sectionId) != 3) { $Result->
 # loop
 foreach ($POST as $k=>$p) {
     # explode
-    $k = pf_explode("-", $k);
+    $k = explode("-", (string) $k);
     # numeric
     if (is_numeric($k[1])) {
         // output array

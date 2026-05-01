@@ -19,7 +19,7 @@ $User->Crypto->csrf_cookie ("validate", "mail_notify", $POST->csrf_cookie) === f
 $User->check_user_session();
 
 # verify each recipient
-foreach (pf_explode(",", $POST->recipients) as $rec) {
+foreach (explode(",", (string) $POST->recipients) as $rec) {
 	if(!filter_var(trim($rec), FILTER_VALIDATE_EMAIL)) {
 		$Result->show("danger", _("Invalid email address")." - ".$rec, true);
 	}
@@ -39,7 +39,7 @@ try {
 	// set html content
 	$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
 	$content[] = "<tr><td style='padding:5px;margin:0px;border-bottom:1px solid #eeeeee;'>$User->mail_font_style<strong>$subject</strong></font></td></tr>";
-	foreach(pf_explode("\r\n", $POST->content) as $c) {
+	foreach(explode("\r\n", (string) $POST->content) as $c) {
 	$content[] = "<tr><td style='padding-left:15px;margin:0px;'>$User->mail_font_style $c</font></td></tr>";
 	}
 	$content[] = "<tr><td style='padding-left:15px;padding-top:20px;margin:0px;font-style:italic;'>$User->mail_font_style_light Sent by user ".$User->user->real_name." at ".date('Y/m/d H:i')."</font></td></tr>";
@@ -54,7 +54,7 @@ try {
 	$content_plain 	= implode("\r\n",$content_plain);
 
 	$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
-	foreach(pf_explode(",", $POST->recipients) as $r) {
+	foreach(explode(",", (string) $POST->recipients) as $r) {
 	$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r)));
 	}
 	$phpipam_mail->Php_mailer->Subject = $subject;

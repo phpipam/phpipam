@@ -53,7 +53,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
         	}
         	else {
         		//explode
-        		$sections_tmp = pf_explode(";", $vrf->sections);
+        		$sections_tmp = explode(";", (string) $vrf->sections);
         		foreach($sections_tmp as $t) {
         			//fetch section
         			$tmp_section = $Sections->fetch_section(null, $t);
