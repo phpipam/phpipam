@@ -33,7 +33,7 @@ $fields = $Tools->fetch_custom_fields($table);
 /* anything to write? */
 if(sizeof($POST)>0) {
 	foreach($POST as $k=>$v) {
-		$kTest = str_replace("___", " ", $k);
+		$kTest = str_replace("___", " ", (string) $k);
 		$filtered_fields[] = array_key_exists($kTest, $fields) ? $kTest : $k;
 	}
 }

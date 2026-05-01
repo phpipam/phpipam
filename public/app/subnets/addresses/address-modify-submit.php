@@ -82,7 +82,7 @@ if(is_array($required_ip_fields) && $action!="delete") {
 
 
 # remove all spaces in hostname
-if (!is_blank($POST->hostname)) { $POST->hostname = str_replace(" ", "", $POST->hostname); }
+if (!is_blank($POST->hostname)) { $POST->hostname = str_replace(" ", "", (string) $POST->hostname); }
 
 # required fields
 isset($POST->action) ?:		$Result->show("danger", _("Missing required fields"). " action", true);
@@ -147,7 +147,7 @@ if (!is_blank(strstr((string) $POST->ip_addr,"-"))) {
 	$POST->type = "series";
 
 	# remove possible spaces
-	$POST->ip_addr = str_replace(" ", "", $POST->ip_addr);
+	$POST->ip_addr = str_replace(" ", "", (string) $POST->ip_addr);
 
 	# get start and stop of range
 	$range		 = pf_explode("-", $POST->ip_addr);
@@ -180,7 +180,7 @@ if (!is_blank(strstr((string) $POST->ip_addr,"-"))) {
 
     # check if delete is confirmed
     if ($action=="delete" && !isset($POST->deleteconfirm)) {
-	    $range = str_replace("-", " - ", $POST->ip_addr);
+	    $range = str_replace("-", " - ", (string) $POST->ip_addr);
 		# for ajax to prevent reload
 		print "<div style='display:none'>alert alert-danger</div>";
 		# result

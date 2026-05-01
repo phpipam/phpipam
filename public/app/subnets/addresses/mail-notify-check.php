@@ -45,7 +45,7 @@ try {
 	$content[] = "<tr><td style='padding-left:15px;padding-top:20px;margin:0px;font-style:italic;'>$User->mail_font_style_light Sent by user ".$User->user->real_name." at ".date('Y/m/d H:i')."</font></td></tr>";
 	//set al content
 	$content_plain[] = "$subject"."\r\n------------------------------\r\n";
-	$content_plain[] = str_replace("&middot;", "\t - ", $POST->content);
+	$content_plain[] = str_replace("&middot;", "\t - ", (string) $POST->content);
 	$content_plain[] = "\r\n\r\n"._("Sent by user")." ".$User->user->real_name." at ".date('Y/m/d H:i');
 	$content[] = "</table>";
 

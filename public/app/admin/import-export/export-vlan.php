@@ -92,7 +92,7 @@ if ($GET->description == "on") {
 if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $myField) {
 		//set temp name - replace space with three ___
-		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
+		$myField['nameTemp'] = str_replace(" ", "___", (string) $myField['name']);
 
 		if( $GET->{$myField['nameTemp']} == "on") {
 			$worksheet->write($curRow, $curColumn, $myField['name'] ,$format_header);
@@ -110,8 +110,8 @@ foreach ($vlan_domains as $vlan_domain) {
 	//cast
 	$vlan_domain = (array) $vlan_domain;
 
-    $vldn = str_replace(" ", "_",$vlan_domain['name']);
-    $vldn = str_replace(".", "_",$vldn);
+    $vldn = str_replace(" ", "_",(string) $vlan_domain['name']);
+    $vldn = str_replace(".", "_",(string) $vldn);
 
 	if ($GET->{'exportDomain__'.$vldn} == "on") {
 		// get all VLANs in VLAN domain
@@ -149,7 +149,7 @@ foreach ($vlan_domains as $vlan_domain) {
 			if(sizeof($custom_fields) > 0) {
 				foreach($custom_fields as $myField) {
 					//set temp name - replace space with three ___
-					$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
+					$myField['nameTemp'] = str_replace(" ", "___", (string) $myField['name']);
 
 					if( $GET->{$myField['nameTemp']} == "on" ) {
 						$custom_value = isset($vlan[$myField['name']]) ? $vlan[$myField['name']] : '';
@@ -189,8 +189,8 @@ if ($GET->exportVLANDomains == "on") {
 		//cast
 		$vlan_domain = (array) $vlan_domain;
 
-        $vldn = str_replace(" ", "_",$vlan_domain['name']);
-        $vldn = str_replace(".", "_",$vldn);
+        $vldn = str_replace(" ", "_",(string) $vlan_domain['name']);
+        $vldn = str_replace(".", "_",(string) $vldn);
 
 		if( $GET->{'exportDomain__'. $vldn} == "on" ) {
 			$worksheet_domains->write($curRow, $curColumn, $vlan_domain['name'], $format_text);

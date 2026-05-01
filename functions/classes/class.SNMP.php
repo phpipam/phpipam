@@ -766,7 +766,7 @@ class phpipamSNMP extends Common_functions {
         // parse result
         foreach ($res1 as $k=>$r) {
             // set number
-            $k = str_replace($this->snmp_oids['CISCO-VTP-MIB::vtpVlanName'].'.1.', "", $k);
+            $k = str_replace($this->snmp_oids['CISCO-VTP-MIB::vtpVlanName'].'.1.', "", (string) $k);
             $k = array_pop(pf_explode(".", $k));
             // set value
             $r  = trim(str_replace("\"","",substr((string) $r, strpos((string) $r, ":")+2)));
@@ -821,8 +821,8 @@ class phpipamSNMP extends Common_functions {
         // parse results
         foreach ($res1 as $k=>$r) {
             // set name
-            $k = str_replace($this->snmp_oids['MPLS-VPN-MIB::mplsVpnVrfRouteDistinguisher'].'.', "", $k);
-            $k = str_replace("\"", "", $k);
+            $k = str_replace($this->snmp_oids['MPLS-VPN-MIB::mplsVpnVrfRouteDistinguisher'].'.', "", (string) $k);
+            $k = str_replace("\"", "", (string) $k);
             $k = $this->decode_mplsVpnVrfName($k);
             // set rd
             $r  = $this->parse_snmp_result_value ($r);
@@ -830,8 +830,8 @@ class phpipamSNMP extends Common_functions {
         }
         foreach ($res2 as $k=>$r) {
             // set name
-            $k = str_replace($this->snmp_oids['MPLS-VPN-MIB::mplsVpnVrfDescription'].'.', "", $k);
-            $k = str_replace("\"", "", $k);
+            $k = str_replace($this->snmp_oids['MPLS-VPN-MIB::mplsVpnVrfDescription'].'.', "", (string) $k);
+            $k = str_replace("\"", "", (string) $k);
             $k = $this->decode_mplsVpnVrfName($k);
             // set descr
             $r  = $this->parse_snmp_result_value ($r);

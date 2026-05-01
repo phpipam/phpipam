@@ -34,7 +34,7 @@ elseif (!is_numeric($POST->port))	{ $Result->show("danger", "Invalid port number
 // formulate json
 $values = new StdClass ();
 
-$values->host 		= trim(str_replace(",", ";", $POST->host));
+$values->host 		= trim(str_replace(",", ";", (string) $POST->host));
 $values->name 		= $POST->name;
 $values->username 	= $POST->username;
 $values->password 	= $POST->password;

@@ -59,7 +59,7 @@ else {
 			print "</tr>";
 
 			foreach($custom_fields as $key=>$field) {
-				$vault_item->{$key} = str_replace("\n", "<br>",$vault_item->{$key});
+				$vault_item->{$key} = str_replace("\n", "<br>",(string) $vault_item->{$key});
 
 				# fix for boolean
 				if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
@@ -139,7 +139,7 @@ else {
 				print "	<td>".$certificate_details['subject']['CN']."</td>";
 				print "</tr>";
 				print "	<th>"._("Alt names")."</th>";
-				print "	<td>".str_replace(",","<br>",$certificate_details['extensions']['subjectAltName'])."</td>";
+				print "	<td>".str_replace(",","<br>",(string) $certificate_details['extensions']['subjectAltName'])."</td>";
 				print "</tr>";
 
 				// Certificate details
@@ -227,7 +227,7 @@ else {
 				foreach($certificate_details['extensions'] as $ext_key=>$e) {
 					print "<tr>";
 					print "	<th>".ucwords((string) preg_replace('/(?<!\ )[A-Z]/', ' $0', (string) $ext_key))."</th>";
-					print "	<td>".str_replace(",","<br>",$e)."</td>";
+					print "	<td>".str_replace(",","<br>",(string) $e)."</td>";
 					print "</tr>";
 				}
 			}

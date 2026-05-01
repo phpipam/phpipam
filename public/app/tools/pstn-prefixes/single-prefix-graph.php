@@ -21,14 +21,14 @@ $(function () {
     	<?php
 		# first free hosts
      	if($details['freehosts_percent']>0)  {
-    		$details['freehosts_percent'] = str_replace(",", ".", $details['freehosts_percent']);
+    		$details['freehosts_percent'] = str_replace(",", ".", (string) $details['freehosts_percent']);
     		print "{ label: '"._('Free')."',     data: $details[freehosts_percent], color: '#ffffff' }, ";		# free hosts
     	}
     	# than all other percentages
     	if(isset($Subnets->address_types)) {
     	foreach($Subnets->address_types as $t) {
 	    if($details[$t['type']."_percent"]>0) {
-    		$details[$t['type']."_percent"] = str_replace(",", ".", $details[$t['type']."_percent"]);
+    		$details[$t['type']."_percent"] = str_replace(",", ".", (string) $details[$t['type']."_percent"]);
     		print "{ label: '"._($t['type'])."', data: ".$details[$t["type"]."_percent"].", color: '".$t['bgcolor']."' }, ";
 	    }
     	}

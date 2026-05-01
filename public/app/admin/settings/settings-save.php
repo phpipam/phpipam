@@ -32,8 +32,8 @@ if ( (strpos((string) $POST->siteURL,'http://') !== false) || (strpos((string) $
 else 																										{ $POST->siteURL = "http://".$POST->siteURL; }
 
 //verify ping status fields
-$POST->pingStatus = str_replace(" ", "", $POST->pingStatus);		//remove possible spaces
-$POST->pingStatus = str_replace(",", ";", $POST->pingStatus);		//change possible , for ;
+$POST->pingStatus = str_replace(" ", "", (string) $POST->pingStatus);		//remove possible spaces
+$POST->pingStatus = str_replace(",", ";", (string) $POST->pingStatus);		//change possible , for ;
 $statuses = pf_explode(";", $POST->pingStatus);
 
 if(sizeof($statuses)!=2)													{ $Result->show("danger", _("Invalid ping status intervals"), true); }

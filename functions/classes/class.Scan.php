@@ -720,7 +720,7 @@ class Scan extends Common_functions {
 	 */
 	public function telnet_address ($address, $port) {
 		# set all ports
-		$ports = pf_explode(",", str_replace(";",",",$port));
+		$ports = pf_explode(",", str_replace(";",",",(string) $port));
 		# default response is dead
 		$retval = 1;
 		//try each port until one is alive

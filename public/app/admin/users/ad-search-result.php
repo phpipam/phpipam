@@ -42,7 +42,7 @@ try {
 	$options = [
 			'base_dn'=>$params->base_dn,
 			'account_suffix'=>$params->account_suffix,
-			'domain_controllers'=>pf_explode(";", str_replace(" ", "", $params->domain_controllers)),
+			'domain_controllers'=>pf_explode(";", str_replace(" ", "", (string) $params->domain_controllers)),
 			'ad_port'=>$params->ad_port
 			];
 

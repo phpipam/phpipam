@@ -15,7 +15,7 @@ $gateway_ip      = $gateway===false ? "/" : $Subnets->transform_to_dotted($gatew
 # check if it exists, otherwise print error
 if(sizeof($address)>1) {
 
-    $address['description'] = str_replace("\n", "<br>", $address['description']);
+    $address['description'] = str_replace("\n", "<br>", (string) $address['description']);
 
     print "<table style='width:100%'>";
     print "<tr>";
@@ -251,7 +251,7 @@ if(sizeof($address)>1) {
 
     		foreach($custom_fields as $key=>$field) {
     			if(!is_blank($address[$key])) {
-    			$address[$key] = str_replace(["\n", "\r\n"], "<br>",$address[$key]);
+    			$address[$key] = str_replace(["\n", "\r\n"], "<br>",(string) $address[$key]);
     			print "<tr>";
     			print "	<th>" . $Tools->print_custom_field_name($key) . "</th>";
     			print "	<td>";

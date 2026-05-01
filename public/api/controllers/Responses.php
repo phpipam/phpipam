@@ -264,7 +264,7 @@ class Responses extends Result {
 		// loop through values
 	    foreach ($data as $key => $value) {
 		    // if spaces exist in key replace them with underscores
-		    if(strpos((string) $key, " ")>0)	{ $key = str_replace(" ", "_", $key); }
+		    if(strpos((string) $key, " ")>0)	{ $key = str_replace(" ", "_", (string) $key); }
 
 		    // if key is numeric append item
 		    if(is_numeric($key)) $key = "item".$key;

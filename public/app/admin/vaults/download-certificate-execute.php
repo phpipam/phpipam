@@ -101,8 +101,8 @@ try {
             // get PEM pubkey
             openssl_x509_export ($cert_res_pub, $exported_pub);
             // remove BEGIN / END Certificate
-            $exported_pub = str_replace("-----BEGIN CERTIFICATE-----".PHP_EOL, "", $exported_pub);
-            $exported_pub = str_replace("-----END CERTIFICATE-----".PHP_EOL, "", $exported_pub);
+            $exported_pub = str_replace("-----BEGIN CERTIFICATE-----".PHP_EOL, "", (string) $exported_pub);
+            $exported_pub = str_replace("-----END CERTIFICATE-----".PHP_EOL, "", (string) $exported_pub);
 
             // $content = wordwrap($exported_pub, 64, "\r\n", true);
             $content = wordwrap(base64_decode($exported_pub), 64, "\r\n", true);

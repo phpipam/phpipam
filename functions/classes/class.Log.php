@@ -509,8 +509,8 @@ class Logging extends Common_functions {
 	 */
 	private function syslog_format_details () {
 		// replace <br>
-		$this->log_details = str_replace("<br>", ",",$this->log_details);
-		$this->log_details = str_replace("<hr>", ",",$this->log_details);
+		$this->log_details = str_replace("<br>", ",",(string) $this->log_details);
+		$this->log_details = str_replace("<hr>", ",",(string) $this->log_details);
 		// replace spaces
 		$this->log_details = trim($this->log_details, ",");
 	}
@@ -530,8 +530,8 @@ class Logging extends Common_functions {
 		else								{ $obj_id = $this->object_old['id']; }
 
 		# format
-		$changelog = str_replace("<br>", ",",$changelog);
-		$changelog = str_replace("<hr>", ",",$changelog);
+		$changelog = str_replace("<br>", ",",(string) $changelog);
+		$changelog = str_replace("<hr>", ",",(string) $changelog);
 
 		# formulate
 		$log = [];
@@ -779,7 +779,7 @@ class Logging extends Common_functions {
 			if(is_array($log) && sizeof($log)>0) {
 				// reformat null
 				foreach ($log as $k=>$v) {
-					$log[$k] = str_replace(": <br>", ": / <br>", $v);
+					$log[$k] = str_replace(": <br>", ": / <br>", (string) $v);
 				}
 				// execute
 				if ($this->log_type == "syslog")	{ $this->syslog_write_changelog ($log); }
@@ -802,7 +802,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_write_to_db ($changelog) {
 		# log to array
-		$changelog = str_replace("<br>", "\r\n", $this->array_to_log ($changelog, true));
+		$changelog = str_replace("<br>", "\r\n", (string) $this->array_to_log ($changelog, true));
 		# fetch user id
 		$this->get_active_user_id ();
 
@@ -1406,10 +1406,10 @@ class Logging extends Common_functions {
 	private function changelog_format_permission_diff ($k, $v) {
 		// get old and compare
 		if (isset($this->object_new['permissions'])) {
-			$this->object_new['permissions'] = db_json_decode(str_replace("\\", "", $this->object_new['permissions']), true);		//Remove /
+			$this->object_new['permissions'] = db_json_decode(str_replace("\\", "", (string) $this->object_new['permissions']), true);		//Remove /
 		}
 		if (isset($this->object_old['permissions'])) {
-			$this->object_old['permissions'] = db_json_decode(str_replace("\\", "", $this->object_old['permissions']), true);		//Remove /
+			$this->object_old['permissions'] = db_json_decode(str_replace("\\", "", (string) $this->object_old['permissions']), true);		//Remove /
 		}
 
 		# Get all groups:
@@ -1473,7 +1473,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_format_permission_change () {
 		# get old and compare
-		$this->object_new['permissions_change'] = db_json_decode(str_replace("\\", "", $this->object_new['permissions_change']), true);		//Remove /
+		$this->object_new['permissions_change'] = db_json_decode(str_replace("\\", "", (string) $this->object_new['permissions_change']), true);		//Remove /
 
 		# Get all groups:
 		$groups = (array) $this->Tools->fetch_all_objects("userGroups", "g_id");
@@ -1791,8 +1791,8 @@ class Logging extends Common_functions {
 		$obj_details = array_merge(['id' => null, 'name' => null, 'description' => null, 'subnet' => null, 'ip_addr' => null, 'mask' => null, 'hostname' => null], (array) $obj_details);
 
 		# change ip_addr
-		$this->object_type = str_replace("ip_addr", "address", $this->object_type);
-		$this->object_type = str_replace("ip_range", "address range", $this->object_type);
+		$this->object_type = str_replace("ip_addr", "address", (string) $this->object_type);
+		$this->object_type = str_replace("ip_range", "address range", (string) $this->object_type);
 
 		# folder
 		if ((isset($this->object_new['isFolder']) && $this->object_new['isFolder'] == "1") ||

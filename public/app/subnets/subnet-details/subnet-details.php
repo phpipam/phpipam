@@ -177,7 +177,7 @@ else {
 		if(!empty($subnet['nameserverId'])) {
 			# fetch recursive nameserver details
 			$nameservers = $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
-			print str_replace(";", ", ", $nameservers->namesrv1);
+			print str_replace(";", ", ", (string) $nameservers->namesrv1);
 			//Print name of nameserver group
 			print ' ('.$nameservers->name.')';
 		}
@@ -508,7 +508,7 @@ else {
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $key=>$field) {
 			if(!is_blank($subnet[$key])) {
-				$subnet[$key] = str_replace(["\n", "\r\n"], "<br>",$subnet[$key]);
+				$subnet[$key] = str_replace(["\n", "\r\n"], "<br>",(string) $subnet[$key]);
 				$html_custom[] = "<tr>";
 				$html_custom[] = "	<th>".$Tools->print_custom_field_name ($key)."</th>";
 				$html_custom[] = "	<td>";

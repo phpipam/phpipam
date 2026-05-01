@@ -82,7 +82,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($GET->page, $GET->s
 		print "</tr>";
 
 		foreach($custom_fields as $key=>$field) {
-			$vlan[$key] = str_replace("\n", "<br>",$vlan[$key]);
+			$vlan[$key] = str_replace("\n", "<br>",(string) $vlan[$key]);
 
 			# fix for boolean
 			if($field['type']=="tinyint(1)" || $field['type']=="boolean") {

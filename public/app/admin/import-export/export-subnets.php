@@ -135,7 +135,7 @@ if ($GET->discover == "on") {
 if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $myField) {
 		//set temp name - replace space with three ___
-		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
+		$myField['nameTemp'] = str_replace(" ", "___", (string) $myField['name']);
 
 		if( $GET->{$myField['nameTemp']} == "on" ) {
 			$worksheet->write($curRow, $curColumn, $myField['name'] ,$format_header);
@@ -247,7 +247,7 @@ if($all_sections!==false) {
 				if(sizeof($custom_fields) > 0) {
 					foreach($custom_fields as $myField) {
 						//set temp name - replace space with three ___
-						$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
+						$myField['nameTemp'] = str_replace(" ", "___", (string) $myField['name']);
 
 						if( $GET->{$myField['nameTemp']} == "on" ) {
 							$worksheet->write($curRow, $curColumn, $subnet[$myField['name']], $format_text);

@@ -74,8 +74,8 @@ else {
 			if($permission > 0)	{
 
 				# format diff
-        		$changelog = str_replace("\r\n", "<br>",$l['cdiff']);
-        		$changelog = str_replace("\n", "<br>",$changelog);
+        		$changelog = str_replace("\r\n", "<br>",(string) $l['cdiff']);
+        		$changelog = str_replace("\n", "<br>",(string) $changelog);
         		$changelog = htmlentities($changelog);
         		$changelog = array_filter(pf_explode("<br>", $changelog));
 

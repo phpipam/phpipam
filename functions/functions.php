@@ -3,7 +3,7 @@
 // auto-set base if not already defined
 if(!defined('BASE')) {
 	$root = substr((string) $_SERVER['DOCUMENT_ROOT'],-1)=="/" ? substr((string) $_SERVER['DOCUMENT_ROOT'],0,-1) : $_SERVER['DOCUMENT_ROOT'];	// fix for missing / in some environments
-	define('BASE', substr(str_replace($root, "", realpath(__DIR__ . '/../public/app')), 0, -3));
+	define('BASE', substr(str_replace((string) $root, "", (string) realpath(__DIR__ . '/../public/app')), 0, -3));
 }
 
 // global and missing functions

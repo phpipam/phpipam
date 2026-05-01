@@ -133,7 +133,7 @@ class Rewrite {
 		// ignore for direct access
 		if(strpos((string) $_SERVER['REQUEST_URI'], "index.php")===false) {
 			if(BASE!="/") {
-				$this->uri_parts = array_values(array_filter(pf_explode("/", str_replace(BASE, "", $_SERVER['REQUEST_URI']))));
+				$this->uri_parts = array_values(array_filter(pf_explode("/", str_replace((string) BASE, "", (string) $_SERVER['REQUEST_URI']))));
 			}
 			else {
 				$this->uri_parts = array_values(array_filter(pf_explode("/", $_SERVER['REQUEST_URI'])));

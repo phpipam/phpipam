@@ -144,7 +144,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
             print "<tr><td colspan='2'><hr></td></tr>";
             // fields
             foreach($cfields as $key=>$field) {
-                $rack->{$key} = str_replace("\n", "<br>",$rack->{$key});
+                $rack->{$key} = str_replace("\n", "<br>",(string) $rack->{$key});
                 // create links
                 $rack->{$key} = $Tools->create_links($rack->{$key});
                 print "<tr>";

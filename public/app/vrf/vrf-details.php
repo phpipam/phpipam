@@ -76,7 +76,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 		print "<tr><td><hr></td><td></td></tr>";
 		// fields
 		foreach($cfields as $key=>$field) {
-			$vrf->{$key} = str_replace("\n", "<br>",$vrf->{$key});
+			$vrf->{$key} = str_replace("\n", "<br>",(string) $vrf->{$key});
 			// create links
 			$vrf->{$key} = $Tools->create_links($vrf->{$key});
 			print "<tr>";

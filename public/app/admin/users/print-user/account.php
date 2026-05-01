@@ -44,7 +44,7 @@
 # custom subnet fields
 if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $key=>$field) {
-		$user->{$key} = str_replace("\n", "<br>",$user->{$key});
+		$user->{$key} = str_replace("\n", "<br>",(string) $user->{$key});
 		print "<tr>";
 		print "	<td>$key</td>";
 		print "	<td>";

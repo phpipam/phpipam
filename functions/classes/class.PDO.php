@@ -177,7 +177,7 @@ abstract class DB {
 			return;
 		}
 
-		$lines = explode("\n", str_replace("\r\n", "\n", fread($fh, 100000)));
+		$lines = explode("\n", str_replace("\r\n", "\n", (string) fread($fh, 100000)));
 		fclose($fh);
 
 		$current_table = "";

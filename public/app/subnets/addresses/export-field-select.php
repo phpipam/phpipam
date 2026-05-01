@@ -135,7 +135,7 @@ if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $myField) {
 
 		//change spaces to ___
-		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
+		$myField['nameTemp'] = str_replace(" ", "___", (string) $myField['name']);
 
 		print "	<tr>";
 		print "	<td>$myField[name]</td>";

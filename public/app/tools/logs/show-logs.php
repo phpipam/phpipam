@@ -100,7 +100,7 @@ foreach ($logs as $log) {
     }
 
 	/* reformat details */
-	$log['details'] = str_replace("\"", "'", $log['details']);
+	$log['details'] = str_replace("\"", "'", (string) $log['details']);
 
     # check if site is demo
     if(defined('IS_DEMO')) { $log['ipaddr'] = "x.x.x.x"; }

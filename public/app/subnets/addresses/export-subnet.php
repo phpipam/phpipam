@@ -172,7 +172,7 @@ if( (isset($GET->lastSeen)) && ($GET->lastSeen == "on") ) {
 if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $myField) {
 		//set temp name - replace space with three ___
-		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
+		$myField['nameTemp'] = str_replace(" ", "___", (string) $myField['name']);
 
 		if( (isset($GET->{$myField['nameTemp']})) && ($GET->{$myField['nameTemp']} == "on") ) {
 			$worksheet->write($lineCount, $rowCount, $myField['name'] ,$format_title);
@@ -277,7 +277,7 @@ foreach ($addresses as $ip) {
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) {
 			//set temp name - replace space with three ___
-			$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
+			$myField['nameTemp'] = str_replace(" ", "___", (string) $myField['name']);
 
 			if( (isset($GET->{$myField['nameTemp']})) && ($GET->{$myField['nameTemp']} == "on") ) {
 				$worksheet->write($lineCount, $rowCount, $ip[$myField['name']]);

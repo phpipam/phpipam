@@ -66,7 +66,7 @@ if (is_file($path_doc) && preg_match('/\.md$/', (string) $document)) {
             }
         }
 
-        $html = str_replace(['<html>', '</html>'], '', $dom->saveHTML());
+        $html = str_replace(['<html>', '</html>'], '', (string) $dom->saveHTML());
     }
 }
 elseif (is_dir($path_doc)) {

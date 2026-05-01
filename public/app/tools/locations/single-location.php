@@ -92,7 +92,7 @@ else {
             		print "<tr><td colspan='2'><hr></td></tr>";
             		// fields
             		foreach($cfields as $key=>$field) {
-            			$location->{$key} = str_replace("\n", "<br>",$location->{$key});
+            			$location->{$key} = str_replace("\n", "<br>",(string) $location->{$key});
             			// create links
             			$location->{$key} = $Tools->create_links($location->{$key});
             			print "<tr>";

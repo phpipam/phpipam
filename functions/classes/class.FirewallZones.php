@@ -1011,10 +1011,10 @@ class FirewallZones extends Common_functions {
 			if (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
 				$firewallAddressObject = $firewallAddressObject.$this->Subnets->transform_to_dotted($zone->subnet).'-'.$zone->mask;
 			} elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-				$firewallAddressObject = $firewallAddressObject.str_replace(':',$firewallZoneSettings['separator'],$this->Subnets->transform_to_dotted($zone->subnet)).'-'.$zone->mask;
+				$firewallAddressObject = $firewallAddressObject.str_replace(':',(string) $firewallZoneSettings['separator'],(string) $this->Subnets->transform_to_dotted($zone->subnet)).'-'.$zone->mask;
 			}
 		} elseif ($firewallZoneSettings['subnetPatternValues'][$firewallZoneSettings['subnetPattern']] == 'description' ) {
-			$firewallAddressObject = $firewallAddressObject.str_replace(' ',$firewallZoneSettings['separator'],strtolower((string) $zone->subnetDescription));
+			$firewallAddressObject = $firewallAddressObject.str_replace(' ',(string) $firewallZoneSettings['separator'],strtolower((string) $zone->subnetDescription));
 		}
 
 		# get subnet information to compare against the changes

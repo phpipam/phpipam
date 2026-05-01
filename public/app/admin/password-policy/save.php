@@ -52,7 +52,7 @@ foreach ($passwordPolicy as $k=>$f) {
 }
 # symbols
 if (!is_blank($POST->allowedSymbols)) {
-	$POST->allowedSymbols = str_replace(" ", "", $POST->allowedSymbols);
+	$POST->allowedSymbols = str_replace(" ", "", (string) $POST->allowedSymbols);
 	$passwordPolicy['allowedSymbols'] = $POST->allowedSymbols;
 }
 

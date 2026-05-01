@@ -83,7 +83,7 @@ function top10_widget($type_ip, $type_percentage, $height, $slimit) {
 
 					if ($type_percentage === true) {
 						# set percentage because of localisation
-						$subnet['percentage'] = str_replace(",", ".", $subnet['percentage']);
+						$subnet['percentage'] = str_replace(",", ".", (string) $subnet['percentage']);
 						$display_item = $subnet['percentage'];
 					} else {
 						$display_item = $subnet['usage'];
@@ -177,7 +177,7 @@ function top10_widget($type_ip, $type_percentage, $height, $slimit) {
 					show: true
 				},
 				yaxis: {
-					<?php if ($type_percentage) print "max: ".str_replace(",", ".", $top_subnets[0]->percentage); ?>
+					<?php if ($type_percentage) print "max: ".str_replace(",", ".", (string) $top_subnets[0]->percentage); ?>
 				},
 
 				margin: {

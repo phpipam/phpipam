@@ -137,7 +137,7 @@ $readonly = $POST->action=="edit" || $POST->action=="delete" ? true : false;
     	print "</tr>";
 	    foreach($custom_fields as $field) {
 	    	# retain newlines
-	    	$folder_old_details[$field['name']] = str_replace("\n", "\\n", @$folder_old_details[$field['name']]);
+	    	$folder_old_details[$field['name']] = str_replace("\n", "\\n", (string) @$folder_old_details[$field['name']]);
 
 			# set default value !
 			if ($POST->action=="add")	{ $folder_old_details[$field['name']] = $field['Default']; }

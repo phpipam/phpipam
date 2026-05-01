@@ -68,14 +68,14 @@ if($POST->device1=="0") {
 	$POST->location1 = 0;
 }
 elseif(strpos((string) $POST->device1,"device_")!==false) {
-	$deviceId = str_replace("device_", "", $POST->device1);
+	$deviceId = str_replace("device_", "", (string) $POST->device1);
 	if($Tools->fetch_object("devices","id",$deviceId)===false) 			    { $Result->show("danger", _('Invalid device A').'!', true); }
 	// save
 	$POST->device1   = $deviceId;
 	$POST->location1 = 0;
 }
 else {
-	$locationId = str_replace("location_", "", $POST->device1);
+	$locationId = str_replace("location_", "", (string) $POST->device1);
 	if($Tools->fetch_object("locations","id",$locationId)===false) 			 { $Result->show("danger", _('Invalid location A').'!', true); }
 	// save
 	$POST->device1   = 0;
@@ -87,14 +87,14 @@ if($POST->device2=="0") {
 	$POST->location2 = 0;
 }
 elseif(strpos((string) $POST->device2,"device_")!==false) {
-	$deviceId = str_replace("device_", "", $POST->device2);
+	$deviceId = str_replace("device_", "", (string) $POST->device2);
 	if($Tools->fetch_object("devices","id",$deviceId)===false) 			     { $Result->show("danger", _('Invalid device B').'!', true); }
 	// save
 	$POST->device2   = $deviceId;
 	$POST->location2 = 0;
 }
 else {
-	$locationId = str_replace("location_", "", $POST->device2);
+	$locationId = str_replace("location_", "", (string) $POST->device2);
 	if($Tools->fetch_object("locations","id",$locationId)===false) 			 { $Result->show("danger", _('Invalid location B').'!', true); }
 	// save
 	$POST->device2   = 0;

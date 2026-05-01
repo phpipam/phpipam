@@ -85,7 +85,7 @@ if($certificates_db!==false) {
 			print "	<td>".$certificate['subject']['CN']."</td>";
 			print "	<td>".$validTo." ($valid_days days)</td>";
 			print "	<td>".$certificate['issuer']['O']."</td>";
-			print "	<td>".str_replace([","], "<br>", $certificate['extensions']['subjectAltName'])."</td>";
+			print "	<td>".str_replace([","], "<br>", (string) $certificate['extensions']['subjectAltName'])."</td>";
 
 	        // custom fields
 	        if(sizeof(@$custom_fields) > 0) {

@@ -14,7 +14,7 @@ define("PUBLISHED", false);									//hide dbversion in footer
 function get_dbversion() {
     require __DIR__ . '/upgrade_queries.php';
     $upgrade_keys = array_keys($upgrade_queries);
-    return str_replace(VERSION.".", "", end($upgrade_keys));
+    return str_replace(VERSION.".", "", (string) end($upgrade_keys));
 }
 
 if(!defined('DBVERSION'))

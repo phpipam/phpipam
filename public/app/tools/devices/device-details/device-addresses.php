@@ -73,7 +73,7 @@ if(sizeof($addresses) > 0) {
 			# print info button for hover
 			print "<td class='note'>";
 			if(!empty($ip['note'])) {
-				$ip['note'] = str_replace("\n", "<br>",$ip['note']);
+				$ip['note'] = str_replace("\n", "<br>",(string) $ip['note']);
 				print "	<i class='fa fa-comment-o' rel='tooltip' title='$ip[note]'></i>";
 			}
 			print "</td>";

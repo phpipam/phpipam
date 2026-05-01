@@ -60,7 +60,7 @@ else {
 	foreach($clogs as $l) {
 		$l = (array) $l;
 		# format diff
-		$l['cdiff'] = str_replace("\n", "<br>", $l['cdiff']);
+		$l['cdiff'] = str_replace("\n", "<br>", (string) $l['cdiff']);
 
 		# set class for badge
 		if($l['cresult']=="success") { $bclass='alert-success'; }
@@ -108,7 +108,7 @@ if($clogsSlaves) {
 	foreach($clogsSlaves as $l) {
 		$l = (array) $l;
 		# format diff
-		$l['cdiff'] = str_replace("\n", "<br>", $l['cdiff']);
+		$l['cdiff'] = str_replace("\n", "<br>", (string) $l['cdiff']);
 
 		print "<tr>";
 		print "	<td>$l[real_name]</td>";
@@ -152,7 +152,7 @@ if($clogsAddresses) {
 		$l = (array) $l;
 		# format diff
 		if(!is_null($l['cdiff']))
-		$l['cdiff'] = str_replace("\n", "<br>", $l['cdiff']);
+		$l['cdiff'] = str_replace("\n", "<br>", (string) $l['cdiff']);
 
 		print "<tr>";
 		print "	<td>$l[real_name]</td>";

@@ -155,7 +155,7 @@ else {
         		print "<tr><td colspan='2'><hr></td></tr>";
         		// fields
         		foreach($cfields as $key=>$field) {
-        			$prefix->{$key} = str_replace("\n", "<br>",$prefix->{$key});
+        			$prefix->{$key} = str_replace("\n", "<br>",(string) $prefix->{$key});
         			// create links
         			$prefix->{$key} = $Tools->create_links($prefix->{$key});
         			print "<tr>";

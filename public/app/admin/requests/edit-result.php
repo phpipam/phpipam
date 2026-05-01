@@ -97,7 +97,7 @@ else {
 	$tmp['vlan'] = $vlan==false ? "" : $vlan->number." - ".$vlan->description;
 	//set dns
 	$dns = $Tools->fetch_object ("nameservers", "id", $subnet['nameserverId']);
-	$tmp['dns'] = $dns==false ? "" : $dns->description." <br> ".str_replace(";", ", ", $dns->namesrv1);
+	$tmp['dns'] = $dns==false ? "" : $dns->description." <br> ".str_replace(";", ", ", (string) $dns->namesrv1);
 
 	$POST->read($tmp);
 

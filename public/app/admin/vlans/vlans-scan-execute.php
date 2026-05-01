@@ -55,7 +55,7 @@ if ($existing_vlans!==false) {
 foreach ($POST as $k=>$p) {
     if (strpos((string) $k, "device-")!==false) {
         # fetch device
-        $device = $Tools->fetch_object ("devices", "id", str_replace("device-", "", $k));
+        $device = $Tools->fetch_object ("devices", "id", str_replace("device-", "", (string) $k));
         if ($device !== false) {
             $scan_devices[] = $device;
         }

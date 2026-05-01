@@ -39,7 +39,7 @@ else {
 		# cast
 		$l = (array) $l;
 		# format diff
-		$l['cdiff'] = str_replace("\n", "<br>", $l['cdiff']);
+		$l['cdiff'] = str_replace("\n", "<br>", (string) $l['cdiff']);
 
 		# set class for badge
 		if($l['cresult']=="success") { $bclass='alert-success'; }

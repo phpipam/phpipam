@@ -11,13 +11,13 @@ $User->is_demo();
 if(empty($POST->port)) 	  { $Result->show("danger", _('Please enter ports to scan').'!', true); }
 
 //verify ports
-$pcheck = pf_explode(";", str_replace(",",";",$POST->port));
+$pcheck = pf_explode(";", str_replace(",",";",(string) $POST->port));
 foreach($pcheck as $p) {
 	if(!is_numeric($p)) {
 		$Result->show("danger", _("Invalid port").' ('.$p.')', true);
 	}
 }
-$POST->port = str_replace(";",",",$POST->port);
+$POST->port = str_replace(";",",",(string) $POST->port);
 
 // verify subnetId
 if(!is_numeric($POST->subnetId)) { $Result->show("danger", _('Invalid subnet Identifier').'!', true); }

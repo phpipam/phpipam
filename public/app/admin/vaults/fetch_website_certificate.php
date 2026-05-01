@@ -36,7 +36,7 @@ if (!filter_var($POST->website, FILTER_VALIDATE_URL)) {
 }
 
 // replace https
-$website = str_replace(["https://", "http://"], "ssl://", $POST->website);
+$website = str_replace(["https://", "http://"], "ssl://", (string) $POST->website);
 if (!preg_match('/:\d+$/',$website)) {
 	$website.= ":443";
 }

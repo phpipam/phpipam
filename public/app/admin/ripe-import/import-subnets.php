@@ -36,7 +36,7 @@ foreach($POST as $key=>$line) {
 # format and verify each record
 foreach($allSubnets as $subnet) {
 	//get sequential number
-	$m = str_replace("subnet-", "", $subnet);
+	$m = str_replace("subnet-", "", (string) $subnet);
 
 	//reformat subnet
 	$_temp = $Subnets->cidr_network_and_mask($POST->{'subnet-' . $m});

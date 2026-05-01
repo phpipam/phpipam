@@ -69,7 +69,7 @@ else {
         }
 
         // description
-        $n->description = str_replace("\n", "<br>", $n->description);
+        $n->description = str_replace("\n", "<br>", (string) $n->description);
 
         // port
         if(is_blank($n->src_port)) $n->src_port = "/";

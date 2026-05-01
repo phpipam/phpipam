@@ -58,7 +58,7 @@ $POST->namesrv1 = isset($all_nameservers) ? implode(";", $all_nameservers) : "";
 $temp = [];
 foreach($POST as $key=>$line) {
 	if (!is_blank(strstr((string) $key,"section-"))) {
-		$key2 = str_replace("section-", "", $key);
+		$key2 = str_replace("section-", "", (string) $key);
 		$temp[] = $key2;
 		unset($POST->{$key});
 	}

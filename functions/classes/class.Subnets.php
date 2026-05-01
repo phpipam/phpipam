@@ -2719,7 +2719,7 @@ class Subnets extends Common_functions {
     	// fetch settings
     	$this->get_settings ();
     	// search
- 		try { $res = $this->Database->getObjectsQuery('ipaddresses', "select ipaddresses.* from `ipaddresses` join subnets on ipaddresses.subnetId = subnets.id where subnets.pingSubnet = 1 and `lastSeen` between ? and ? order by lastSeen desc limit $limit;", [date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-$timelimit), date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-(int) str_replace(";","",strstr((string) $this->settings->pingStatus, ";")))] ); }
+ 		try { $res = $this->Database->getObjectsQuery('ipaddresses', "select ipaddresses.* from `ipaddresses` join subnets on ipaddresses.subnetId = subnets.id where subnets.pingSubnet = 1 and `lastSeen` between ? and ? order by lastSeen desc limit $limit;", [date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-$timelimit), date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-(int) str_replace(";","",(string) strstr((string) $this->settings->pingStatus, ";")))] ); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;

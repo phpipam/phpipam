@@ -71,7 +71,7 @@ empty($subnet['vlanId']) ? : 			$content[] = "&bull; "._('VLAN ID').": \t\t $vla
 
 # Nameserver sets
 if ( !empty( $subnet['nameserverId'] ) ) {
-	$nslist = str_replace(";", ", ", $nameservers['namesrv1']);
+	$nslist = str_replace(";", ", ", (string) $nameservers['namesrv1']);
 
 						$content[] = "&bull; "._('Nameservers').": \t $nslist ({$nameservers['name']})";
 }

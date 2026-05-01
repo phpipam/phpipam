@@ -62,7 +62,7 @@ if (strtolower((string) $filetype) == "csv") {
 	# set delimiter
 	$Tools->set_csv_delimiter ($line);
 	$row++;
-	$line = str_replace( ["\r\n","\r","\n"] , "" , $line);	//remove line break
+	$line = str_replace( ["\r\n","\r","\n"] , "" , (string) $line);	//remove line break
 	$cols = str_getcsv ($line, $Tools->csv_delimiter, '"', "\\");
 	foreach ($cols as $val) {
 		$col++;

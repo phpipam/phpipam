@@ -552,7 +552,7 @@ class Tools extends Common_functions {
 	 */
 	public function reformat_IPv4_for_search ($address) {
 		# remove % sign if present
-		$address = str_replace("%", "", $address);
+		$address = str_replace("%", "", (string) $address);
 		# we need Addresses class
 		$Addresses = new Addresses ($this->Database);
 
@@ -735,7 +735,7 @@ class Tools extends Common_functions {
 		if (!empty($custom_fields) && $action != "delete") {
 			foreach ($custom_fields as $field) {
 				# replace possible ___ back to spaces!
-				$field['nameTest'] = str_replace(" ", "___", $field['name']);
+				$field['nameTest'] = str_replace(" ", "___", (string) $field['name']);
 				if (isset($POST->{$field['nameTest']})) {
 					$POST->{$field['name']} = $POST->{$field['nameTest']};
 				} else {
@@ -790,7 +790,7 @@ class Tools extends Common_functions {
 	 */
 	private function read_db_schema() {
 		$fh = fopen(__DIR__ . '/../../db/SCHEMA.sql', 'r');
-		return str_replace("\r\n", "\n", fread($fh, 100000));
+		return str_replace("\r\n", "\n", (string) fread($fh, 100000));
 	}
 
 	/**
@@ -1735,11 +1735,11 @@ class Tools extends Common_functions {
 			// check for latest release
 			foreach ($json->entry as $e) {
 				// releases will be named with numberic values
-				if (is_numeric(str_replace(["Version", "."], "", $e->title))) {
+				if (is_numeric(str_replace(["Version", "."], "", (string) $e->title))) {
 					// save
 					$this->phpipam_latest_release = $e;
 					// return
-					return str_replace("Version", "", $e->title);
+					return str_replace("Version", "", (string) $e->title);
 				}
 			}
 			// none
@@ -2192,7 +2192,7 @@ class Tools extends Common_functions {
             $destinations = ["<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>"];
 
         // description
-        $n->description = str_replace("\n", "<br>", $n->description);
+        $n->description = str_replace("\n", "<br>", (string) $n->description);
         $n->description = !is_blank($n->description) ? "<br>$n->description" : "";
 
         // device
@@ -2328,7 +2328,7 @@ class Tools extends Common_functions {
      * @return mixed
      */
     public function prefix_normalize ($number) {
-        return str_replace(["+", " ", "-"], "", $number);
+        return str_replace(["+", " ", "-"], "", (string) $number);
     }
 
 	/**
@@ -2584,7 +2584,7 @@ class Tools extends Common_functions {
 							//text
 							elseif ($field['type'] == "text") {
 								if (!is_blank($option[$field['name']])) {
-									$html[] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='" . str_replace("\n", "<br>", $option[$field['name']]) . "'>";
+									$html[] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='" . str_replace("\n", "<br>", (string) $option[$field['name']]) . "'>";
 								} else {
 									$html[] = "";
 								}
@@ -3579,7 +3579,7 @@ class Tools extends Common_functions {
 		//check for version
 		$ver = shell_exec("grep 'Project-Id-Version:' " . __DIR__ . "/../locale/$code/LC_MESSAGES/phpipam.po");
 		//parse
-		$ver = str_replace(["Project-Id-Version:", " ", '"', "#",'\n', ":"], "", $ver);
+		$ver = str_replace(["Project-Id-Version:", " ", '"', "#",'\n', ":"], "", (string) $ver);
 		//return version
 		return $ver;
 	}

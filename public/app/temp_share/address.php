@@ -190,7 +190,7 @@ if(sizeof($address)>1) {
 
 		foreach($custom_fields as $key=>$field) {
 			if(!is_blank($address[$key])) {
-			$address[$key] = str_replace(["\n", "\r\n"], "<br>",$address[$key]);
+			$address[$key] = str_replace(["\n", "\r\n"], "<br>",(string) $address[$key]);
 			print "<tr>";
 			print "	<th>$key</th>";
 			print "	<td>";

@@ -861,7 +861,7 @@ class Common_functions  {
 	 */
 	public function reformat_mac_address ($mac, $format = 1) {
     	// strip al tags first
-    	$mac = strtolower(str_replace([":",".","-"], "", $mac));
+    	$mac = strtolower(str_replace([":",".","-"], "", (string) $mac));
     	// format 4
     	if ($format==4) {
         	return $mac;
@@ -1457,7 +1457,7 @@ class Common_functions  {
         // disabled
         $disabled_text = $disabled ? "readonly" : "";
         // replace spaces with |
-        $field['nameNew'] = str_replace(" ", "___", $field['name']);
+        $field['nameNew'] = str_replace(" ", "___", (string) $field['name']);
         // required
         $required = $field['Null']=="NO" ? "*" : "";
 		// set default value if adding new object
@@ -1637,10 +1637,10 @@ class Common_functions  {
         // max length
         $maxlength = 100;
         if(strpos((string) $field['type'],"varchar")!==false) {
-            $maxlength = str_replace(["varchar","(",")"],"", $field['type']);
+            $maxlength = str_replace(["varchar","(",")"],"", (string) $field['type']);
         }
         if(strpos((string) $field['type'],"int")!==false) {
-            $maxlength = str_replace(["int","(",")"],"", $field['type']);
+            $maxlength = str_replace(["int","(",")"],"", (string) $field['type']);
         }
         // print
 		$html[] = ' <input type="text" class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" value="'. $object->{$field['name']}. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
@@ -1665,7 +1665,7 @@ class Common_functions  {
 
 		// delimiter ?
 		if($delimiter !== false && $replacement !== false) {
-			$value = str_replace($delimiter, $replacement, $value);
+			$value = str_replace($delimiter, (string) $replacement, $value);
 		}
 
 		//booleans

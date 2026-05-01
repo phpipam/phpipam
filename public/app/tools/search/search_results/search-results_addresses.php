@@ -139,7 +139,7 @@ if(is_array($result_addresses)) {
 				print ' <td class="hidden-sm hidden-xs">'. $line['owner']  .'</td>' . "\n";
 				print ' <td class="note hidden-sm hidden-xs">' . "\n";
 				if(!empty($line['note'])) {
-					$line['note'] = str_replace("\n", "<br>",$line['note']);
+					$line['note'] = str_replace("\n", "<br>",(string) $line['note']);
 					print '<i class="fa fa-gray fa fa-comment-o" rel="tooltip" title="'. $line['note']. '"></i>' . "\n";
 				}
 				print '</td>'. "\n";
@@ -150,7 +150,7 @@ if(is_array($result_addresses)) {
 			elseif (in_array('note', $selected_ip_fields)) {
 				print '<td class="note">' . "\n";
 				if(!empty($line['note'])) {
-					$line['note'] = str_replace("\n", "<br>",$line['note']);
+					$line['note'] = str_replace("\n", "<br>",(string) $line['note']);
 					print '	<i class="fa fa-gray fa fa-comment-o" rel="tooltip" title="'. $line['note']. '"></i>' . "\n";
 				}
 				print '</td>'. "\n";

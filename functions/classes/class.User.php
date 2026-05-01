@@ -1037,7 +1037,7 @@ class User extends Common_functions {
         $dirparams['base_dn'] = @$authparams['base_dn'];
         $dirparams['ad_port'] = @$authparams['ad_port'];
         $dirparams['account_suffix'] = @$authparams['account_suffix'];
-        $dirparams['domain_controllers'] = pf_explode(";", str_replace(" ", "", $authparams['domain_controllers']));
+        $dirparams['domain_controllers'] = pf_explode(";", str_replace(" ", "", (string) $authparams['domain_controllers']));
         // set ssl and tls separate for ldap and AD
         if ($this->ldap) {
             // set ssl and tls

@@ -97,7 +97,7 @@ foreach ($logs as $log) {
 	}
 
 	//remove breaks in details
-	$log['details'] = str_replace("<br>", "\n", $log['details']);
+	$log['details'] = str_replace("<br>", "\n", (string) $log['details']);
 
 	$worksheet->write($lineCount, 0, $log['id'], $format_left);
 	$worksheet->write($lineCount, 1, $log['severity']);

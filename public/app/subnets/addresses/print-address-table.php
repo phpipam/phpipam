@@ -503,7 +503,7 @@ else {
 							}
 							//text
 							elseif($myField['type']=="text") {
-								if(!is_blank($addresses[$n]->{$myField['name']}))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n]->{$myField['name']})."'>"; }
+								if(!is_blank($addresses[$n]->{$myField['name']}))	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", (string) $addresses[$n]->{$myField['name']})."'>"; }
 								else											{ print ""; }
 							}
 							else {
@@ -616,7 +616,7 @@ else {
 						}
 						# print info button for hover
 						if(in_array('note', $selected_ip_fields)) {
-							if(!empty($s->note)) 								{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",$s->note)."'></i></td>"; }
+							if(!empty($s->note)) 								{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",(string) $s->note)."'></i></td>"; }
 							else 												{ print "<td class='narrow'></td>"; }
 						}
 						# print device

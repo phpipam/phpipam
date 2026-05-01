@@ -75,9 +75,9 @@ else {
 		# printout
 		if($permission > 0)	{
 			# format diff
-    		$l['cdiff'] = str_replace("\n", "<br>",$l['cdiff']);
-    		$l['cdiff'] = str_replace("[", "[<strong>", $l['cdiff']);
-    		$l['cdiff'] = str_replace("]", "</strong>]", $l['cdiff']);
+    		$l['cdiff'] = str_replace("\n", "<br>",(string) $l['cdiff']);
+    		$l['cdiff'] = str_replace("[", "[<strong>", (string) $l['cdiff']);
+    		$l['cdiff'] = str_replace("]", "</strong>]", (string) $l['cdiff']);
 
 			# format type
 			switch($l['ctype']) {

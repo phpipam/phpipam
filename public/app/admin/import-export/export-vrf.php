@@ -86,7 +86,7 @@ if ($GET->description == "on") {
 if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $myField) {
 		//set temp name - replace space with three ___
-		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
+		$myField['nameTemp'] = str_replace(" ", "___", (string) $myField['name']);
 		if( $GET->{$myField['nameTemp']} == "on") {
 			$worksheet->write($curRow, $curColumn, $myField['name'] ,$format_header);
 			$curColumn++;
@@ -121,7 +121,7 @@ foreach ($all_vrfs as $vrf) {
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) {
 		//set temp name - replace space with three ___
-		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
+		$myField['nameTemp'] = str_replace(" ", "___", (string) $myField['name']);
 		if( $GET->{$myField['nameTemp']} == "on") {
 			$worksheet->write($curRow, $curColumn, $vlan[$myField['name']], $format_text);
 			$curColumn++;

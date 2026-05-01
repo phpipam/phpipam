@@ -38,7 +38,7 @@ if($POST->name == "") { $Result->show("danger", _("Name is mandatory"), true); }
 // set sections
 foreach($POST as $key=>$line) {
 	if (!is_blank(strstr((string) $key,"section-"))) {
-		$key2 = str_replace("section-", "", $key);
+		$key2 = str_replace("section-", "", (string) $key);
 		$temp[] = $key2;
 		unset($POST->{$key});
 	}
@@ -58,7 +58,7 @@ $values = [
 if(sizeof($custom) > 0) {
 	foreach($custom as $myField) {
 		# replace possible ___ back to spaces!
-		$myField['nameTest']      = str_replace(" ", "___", $myField['name']);
+		$myField['nameTest']      = str_replace(" ", "___", (string) $myField['name']);
 		if(isset($POST->{$myField['nameTest']})) { $values[$myField['name']] = $POST->{$myField['nameTest']};}
 	}
 }

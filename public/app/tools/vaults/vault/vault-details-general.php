@@ -47,7 +47,7 @@ else {
 		print "</tr>";
 
 		foreach($custom_fields_v as $key=>$field) {
-			$vault->{$key} = str_replace("\n", "<br>",$vault->{$key});
+			$vault->{$key} = str_replace("\n", "<br>",(string) $vault->{$key});
 
 			# fix for boolean
 			if($field['type']=="tinyint(1)" || $field['type']=="boolean") {

@@ -39,7 +39,7 @@ if($POST->logical_cid == "") 	{ $Result->show("danger", _('Logical Circuit ID is
 
 # Validate to make sure there aren't duplicates of the same circuit in the list of circuit ids
 # Create list of member circuit IDs for mapping
-$POST->circuit_list = str_replace("undefined.", "", $POST->circuit_list);
+$POST->circuit_list = str_replace("undefined.", "", (string) $POST->circuit_list);
 $id_list = $POST->circuit_list!=="" ? pf_explode("." , rtrim((string) $POST->circuit_list,".")) : [];
 if(sizeof($id_list ) != sizeof(array_unique($id_list))){  $Result->show("danger", _('Remove duplicates of circuit').'!', true); }
 if($POST->action == "add" && sizeof($id_list) == 0){  $Result->show("danger", _('No circuits selected').'!', true); }

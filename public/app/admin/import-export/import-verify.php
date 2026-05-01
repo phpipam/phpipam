@@ -69,7 +69,7 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 		$Tools->set_csv_delimiter ($data);
 
 		/* format file */
-		$data = str_replace( ["\r\n","\r","\n"] , "" , $data);	//remove line break
+		$data = str_replace( ["\r\n","\r","\n"] , "" , (string) $data);	//remove line break
 		$data = str_getcsv ($data, $Tools->csv_delimiter, '"', "\\");
 
 		foreach ($data as $col) {

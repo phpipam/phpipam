@@ -1115,7 +1115,7 @@ class PowerDNS extends Common_functions {
         // content
         $soa   = [];
         $soa[] = array_shift(pf_explode(";", $values['ns']));
-        $soa[] = str_replace ("@", ".", $values['hostmaster']);
+        $soa[] = str_replace ("@", ".", (string) $values['hostmaster']);
         $soa[] = date("Ymd")."00";
         $soa[] = $this->validate_refresh ($values['refresh']);
         $soa[] = $this->validate_integer ($values['retry']);

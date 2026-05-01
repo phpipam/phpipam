@@ -71,7 +71,7 @@ if($POST->action=="edit" && !is_blank($POST->policy_dst)) {
 if(sizeof($custom) > 0) {
     foreach($custom as $myField) {
         # replace possible ___ back to spaces!
-        $myField['nameTest'] = str_replace(" ", "___", $myField['name']);
+        $myField['nameTest'] = str_replace(" ", "___", (string) $myField['name']);
         if(isset($POST->{$myField['nameTest']})) { $values[$myField['name']] = $POST->{$myField['nameTest']};}
     }
 }

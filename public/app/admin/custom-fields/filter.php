@@ -62,7 +62,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
 
 	<?php
 	foreach($custom as $k=>$c) {
-		$kNew = str_replace(" ", "___", $k);
+		$kNew = str_replace(" ", "___", (string) $k);
 		print "<tr>";
 		# select
 		print "	<td style='width:20px;'>";

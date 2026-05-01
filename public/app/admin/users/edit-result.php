@@ -159,7 +159,7 @@ if ($User->settings->{'2fa_provider'}!=='none') {
 $passkeys_to_remove = [];
 foreach($POST as $key=>$post) {
 	if(substr($key, 0,15) == "delete-passkey-") {
-		$passkeys_to_remove[] = str_replace("delete-passkey-", "", $key);
+		$passkeys_to_remove[] = str_replace("delete-passkey-", "", (string) $key);
 	}
 }
 

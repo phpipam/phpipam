@@ -370,7 +370,7 @@ $(document).ready(function(){
 
 	// Set default module permissions
 	foreach ($perm_modules as $key => $name) {
-		$module_permissions[str_replace("perm_", "", $key)] = "0";
+		$module_permissions[str_replace("perm_", "", (string) $key)] = "0";
 	}
 	// Merge with user module permissions
 	$user_module_permissions = db_json_decode($user->module_permissions, true);
@@ -386,7 +386,7 @@ $(document).ready(function(){
 		print "	<td>";
 		print "		<select class='form-control input-sm input-w-auto' name='$key'>";
         foreach ([0,1,2,3] as $p) {
-			$selected = $p==$module_permissions[str_replace("perm_","",$key)] ? "selected" : "";
+			$selected = $p==$module_permissions[str_replace("perm_","",(string) $key)] ? "selected" : "";
             print "<option value='$p' $selected>".$Subnets->parse_permissions ($p)."</option>";
         }
 		print "		</select>";
