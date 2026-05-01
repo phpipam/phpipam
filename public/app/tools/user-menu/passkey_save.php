@@ -30,7 +30,7 @@ use Firehed\WebAuthn\{
 
 # process request
 $json = file_get_contents('php://input');
-$data = json_decode($json, true);
+$data = json_decode((string) $json, true);
 
 //
 // we dont try to catch exceptions, as messages are unclear, check webserver/php-fpm error_logs

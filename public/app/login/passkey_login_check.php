@@ -31,7 +31,7 @@ use Firehed\WebAuthn\{
 
 // process request json
 $json = file_get_contents('php://input');
-$data = json_decode($json, true);
+$data = json_decode((string) $json, true);
 
 // parser
 $parser = new ArrayBufferResponseParser();
