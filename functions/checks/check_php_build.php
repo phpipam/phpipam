@@ -132,6 +132,10 @@ elseif ( !empty($missingFns) ) {
     $error[] = '</ul><hr>' . "\n";
     $error[] = _('Please recompile PHP to include missing functions and restart Apache.');
 }
+elseif ( is_dir(__DIR__ . '/../vendor') ) {
+    $error[] =  "<strong>" . _("'functions/vendor' folder found") . ":</strong><br><hr>";
+    $error[] = _("Please follow the \"Prepare for composer package management\" instructions in UPDATE.md to resolve this issue.");
+}
 elseif ( !empty($missingPkg) ) {
     $error[] = "<strong>"._('The following composer issues are present').":</strong><br><hr>";
     $error[] = '<ul>' . "\n";

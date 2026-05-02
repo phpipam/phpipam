@@ -4,7 +4,7 @@ In general upgrading phpIPAM is a 6 step process:
 
 1. Check PHP requirements
 1. Backup database and `config.php` configuration file
-1. Prepare for composer package management changes [ *upgrading from phpIPAM < v1.9.0 ]
+1. Prepare for composer package management [ *upgrading from phpIPAM < v1.9.0 ]
 1. Upgrade phpIPAM code
 1. Update webserver configuration [ *upgrading from phpIPAM < v1.9.0 ]
 1. Upgrade phpIPAM database.
@@ -73,7 +73,7 @@ Enter password:
 
 Backup your `config.php` file containing database connection settings for phpIPAM.
 
-# Prepare for composer package management changes [ * upgrading from phpIPAM < v1.9.0 ]
+# Prepare for composer package management [ * upgrading from phpIPAM < v1.9.0 ]
 
 phpIPAM versions prior to 1.9.0 use a mix of git submodule and [composer](https://getcomposer.org/) packages installed in the `functions` sub-directory.
 
