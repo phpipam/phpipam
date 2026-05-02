@@ -49,8 +49,8 @@ else {
 		//print details
 		print '<tr>'. "\n";
 
-		print '	<td>'. _($type->tname) .'</td>'. "\n";
-		print '	<td>'. _($type->tdescription) .'</td>'. "\n";
+		print '	<td>'. _((string) $type->tname) .'</td>'. "\n";
+		print '	<td>'. _((string) $type->tdescription) .'</td>'. "\n";
 		print '	<td style="background-color:'.$type->bgcolor.' !important">'. $type->bgcolor .'</td>'. "\n";
 		print '	<td style="background-color:'.$type->fgcolor.' !important">'. $type->fgcolor .'</td>'. "\n";
 

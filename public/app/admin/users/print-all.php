@@ -76,7 +76,7 @@ foreach ($users as $user) {
 
 	# set icon based on normal user or admin
 	if($user['role'] == "Administrator") 	{ print '	<td><img src="css/images/userVader.png" alt="'._("Administrator user icon").'" rel="tooltip" title="'._('Administrator').'"></td>'. "\n"; }
-	else 									{ print '	<td><img src="css/images/userTrooper.png" alt="'._("Standard user icon").'" rel="tooltip" title="'. _($user['role']) .'"></td>'. "\n";	}
+	else 									{ print '	<td><img src="css/images/userTrooper.png" alt="'._("Standard user icon").'" rel="tooltip" title="'. _((string) $user['role']) .'"></td>'. "\n";	}
 
 	# disabled
 	$disabled = $user['disabled']=="Yes" ? "<span class='badge badge1 badge5 alert-danger'>"._("Disabled")."</span>" : "";

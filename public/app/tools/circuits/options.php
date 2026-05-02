@@ -99,7 +99,7 @@ foreach($custom_fields as $k=>$cf) {
 	//title
 	print "	<tr>";
 	print "	<th colspan='8'>";
-	print "		<h5>"._($title)."</h5>";
+	print "		<h5>"._((string) $title)."</h5>";
 	print "	</th>";
 	print "	</tr>";
 
@@ -168,7 +168,7 @@ foreach($custom_fields as $k=>$cf) {
 	//add
 	print "<tr>";
 	print "<td colspan='8' style='padding-right:0px;'>";
-	print "	<button class='btn btn-xs btn-default pull-right edit-custom-field' data-action='add'  data-fieldname='' data-table='$table' rel='tooltip' data-placement='right' title='"._($tooltip)."'><i class='fa fa-plus'></i></button>";
+	print "	<button class='btn btn-xs btn-default pull-right edit-custom-field' data-action='add'  data-fieldname='' data-table='$table' rel='tooltip' data-placement='right' title='"._((string) $tooltip)."'><i class='fa fa-plus'></i></button>";
 	print "</td>";
 	print "</tr>";
 

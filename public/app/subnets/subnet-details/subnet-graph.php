@@ -37,7 +37,7 @@ $(function () {
 			$type_percent = $t['type']."_percent";
 			if(isset($details[$type_percent]) && $details[$type_percent]>0) {
 				$details[$type_percent] = str_replace(",", ".", (string) $details[$type_percent]);
-				print "{ label: '"._($t['type'])."', data: ".$details[$t["type"]."_percent"].", color: '".$t['bgcolor']."' }, ";
+				print "{ label: '"._((string) $t['type'])."', data: ".$details[$t["type"]."_percent"].", color: '".$t['bgcolor']."' }, ";
 			}
     	}
     	?>

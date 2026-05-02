@@ -382,7 +382,7 @@ $(document).ready(function(){
 	foreach ($perm_modules as $key=>$name) {
 		// print row
 		print "<tr>";
-		print "	<td>"._($name)."</td>";
+		print "	<td>"._((string) $name)."</td>";
 		print "	<td>";
 		print "		<select class='form-control input-sm input-w-auto' name='$key'>";
         foreach ([0,1,2,3] as $p) {

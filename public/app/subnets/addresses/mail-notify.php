@@ -93,7 +93,7 @@ empty($address['owner']) ? : 			$content[] = "&bull; "._('Owners').": \t\t $addr
 if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $custom_field) {
 		if(!empty($address[$custom_field['name']])) {
-						$content[] =  "&bull; ". _($custom_field['name']).":\t".$address[$custom_field['name']];
+						$content[] =  "&bull; ". _((string) $custom_field['name']).":\t".$address[$custom_field['name']];
 		}
 	}
 }

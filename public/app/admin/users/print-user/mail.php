@@ -3,9 +3,9 @@
 </tr>
 <tr>
 	<td><?php print _('Mail notifications'); ?></td>
-	<td><?php print $user->role == "Administrator" ? _($user->mailNotify) : _("No"); ?></td>
+	<td><?php print $user->role == "Administrator" ? _((string) $user->mailNotify) : _("No"); ?></td>
 </tr>
 <tr>
 	<td><?php print _('Changelog notifications'); ?></td>
-	<td><?php print $user->role == "Administrator" ? _($user->mailChangelog) : _("No"); ?></td>
+	<td><?php print $user->role == "Administrator" ? _((string) $user->mailChangelog) : _("No"); ?></td>
 </tr>

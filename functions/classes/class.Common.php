@@ -1059,7 +1059,7 @@ class Common_functions  {
 			$valid_actions = $this->get_valid_actions();
 
 			if (in_array($action, $valid_actions)) {
-				return escape_input(ucwords(_($action)));
+				return escape_input(ucwords(_((string) $action)));
 			} else {
 				return _('Invalid $_POST action');
 			}

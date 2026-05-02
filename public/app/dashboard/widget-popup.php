@@ -37,8 +37,8 @@ $widgets = (array) $widgets;
 			# size fix
 			if(is_blank($wtmp['wsize']))	{ $wtmp['wsize']=6; }
 			print "<li id='$k'>";
-			print "	<a href='' class='btn btn-xs fa-marg-right  btn-default btn-success widget-add' id='w-$wtmp[wfile]' data-size='$wtmp[wsize]' data-htitle='$wtmp[wtitle]'><i class='fa fa-plus'></i></a>"._($wtmp['wtitle']);
-			print "	<div class='muted' style='margin-left:27px;'>"._($wtmp['wdescription'])."</div>";
+			print "	<a href='' class='btn btn-xs fa-marg-right  btn-default btn-success widget-add' id='w-$wtmp[wfile]' data-size='$wtmp[wsize]' data-htitle='$wtmp[wtitle]'><i class='fa fa-plus'></i></a>"._((string) $wtmp['wtitle']);
+			print "	<div class='muted' style='margin-left:27px;'>"._((string) $wtmp['wdescription'])."</div>";
 			print "</li>\n";
 			$m++;
 		}

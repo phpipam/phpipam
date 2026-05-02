@@ -29,7 +29,7 @@ $(function () {
     	foreach($Subnets->address_types as $t) {
 	    if($details[$t['type']."_percent"]>0) {
     		$details[$t['type']."_percent"] = str_replace(",", ".", (string) $details[$t['type']."_percent"]);
-    		print "{ label: '"._($t['type'])."', data: ".$details[$t["type"]."_percent"].", color: '".$t['bgcolor']."' }, ";
+    		print "{ label: '"._((string) $t['type'])."', data: ".$details[$t["type"]."_percent"].", color: '".$t['bgcolor']."' }, ";
 	    }
     	}
     	}

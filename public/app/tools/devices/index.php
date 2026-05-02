@@ -45,7 +45,7 @@ elseif(isset($GET->subnetId)) {
 
         <?php if($device!==false) { ?>
         <h4>
-            <?php print _("Device")." "._($device->hostname); ?></h4><hr>
+            <?php print _("Device")." "._((string) $device->hostname); ?></h4><hr>
         <?php } ?>
 
         <!-- tabs -->

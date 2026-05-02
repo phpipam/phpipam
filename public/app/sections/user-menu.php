@@ -72,7 +72,7 @@ if($GET->subnets!="on" && $GET->addresses!="on" && $GET->vlans!="on" && $GET->vr
 
 	<span class="info"><?php print _('Hi'); ?>,<?php print $realuser->real_name;  ?></span><br>
 	<a href="<?php print create_link("tools","user-menu"); ?>"><?php print _('Switched to'); ?>&nbsp;<?php print $User->user->real_name; ?></a><br>
-	<span class="info"><?php print _('Logged in as'); ?>  <?php print "&nbsp;"._($User->user->role); ?></span><br>
+	<span class="info"><?php print _('Logged in as'); ?>  <?php print "&nbsp;"._((string) $User->user->role); ?></span><br>
 
 	<!-- switch back -->
 	<a href="<?php print create_link(null)."?switch=back"; ?>"><?php print _('Switch back user'); ?>  <i class="fa fa-pad-left fa-undo"></i></a>
@@ -80,7 +80,7 @@ if($GET->subnets!="on" && $GET->addresses!="on" && $GET->vlans!="on" && $GET->vr
 	<?php } else { ?>
 
 	<a href="<?php print create_link("tools","user-menu"); ?>"><?php print _('Hi'); ?>, <?php print $User->user->real_name;  ?></a><br>
-	<span class="info"><?php print _('Logged in as'); ?>  <?php print "&nbsp;"._($User->user->role); ?></span><br>
+	<span class="info"><?php print _('Logged in as'); ?>  <?php print "&nbsp;"._((string) $User->user->role); ?></span><br>
 
 	<!-- logout -->
 	<a  href="<?php print create_link("login"); ?>"><?php print _('Logout'); ?>  <i class="fa fa-pad-left fa-sign-out"></i></a>

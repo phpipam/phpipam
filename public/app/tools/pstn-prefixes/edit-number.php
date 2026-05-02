@@ -140,8 +140,8 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     	print '		<select name="state" '.$readonly.' class="ip_addr form-control input-sm input-w-auto">';
     	# printout
     	foreach($ip_types as $k=>$type) {
-    		if($number->state==$k)				{ print "<option value='$k' selected>"._($type['type'])."</option>"; }
-    		else									{ print "<option value='$k'>"._($type['type'])."</option>"; }
+    		if($number->state==$k)				{ print "<option value='$k' selected>"._((string) $type['type'])."</option>"; }
+    		else									{ print "<option value='$k'>"._((string) $type['type'])."</option>"; }
     	}
     	print '		</select>';
     	print '	</td>';

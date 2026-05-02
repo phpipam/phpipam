@@ -121,7 +121,7 @@ class Addresses extends Common_functions {
 		}
 		else {
 			if($this->address_types[$state]['showtag']==1) {
-				return "<i class='fa fa-".$this->address_types[$state]['type']." fa-tag state' rel='tooltip' style='color:".$this->address_types[$state]['bgcolor']."' title='"._($this->address_types[$state]['type'])."'></i>";
+				return "<i class='fa fa-".$this->address_types[$state]['type']." fa-tag state' rel='tooltip' style='color:".$this->address_types[$state]['bgcolor']."' title='"._((string) $this->address_types[$state]['type'])."'></i>";
 			}
 		}
 	}

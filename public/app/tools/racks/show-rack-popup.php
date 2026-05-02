@@ -44,7 +44,7 @@ else {
 <div class="pContent text-center">
     <?php
     if(isset($error)) {
-        $Result->show("danger", _($error), true, true, false, true);
+        $Result->show("danger", _((string) $error), true, true, false, true);
     }
     else {
     ?>

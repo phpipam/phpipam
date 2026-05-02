@@ -67,6 +67,6 @@ foreach ($data as &$cdata) {
 	$rows.="<tr class='".$colors[$action]."'><td><i class='fa ".$icons[$action]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>
 		<td>".$cdata['tname']."</td>
 		<td>".$cdata['tdescription']."</td>
-		<td>"._($cdata['msg'])."</td></tr>";
+		<td>"._((string) $cdata['msg'])."</td></tr>";
 
 }

@@ -230,7 +230,7 @@ if(is_array($result_addresses) && sizeof($result_addresses)>0) {
 			$worksheet->write($lineCount, $x, $Subnets->transform_to_dotted($ip['ip_addr']), $format_left);	$x++;
 			# state
 			if(in_array('state', $selected_ip_fields)) {
-			$worksheet->write($lineCount, $x, _($Addresses->address_type_index_to_type ($ip['state'])) );					$x++;
+			$worksheet->write($lineCount, $x, _((string) $Addresses->address_type_index_to_type ($ip['state'])) );					$x++;
 			}
 			$worksheet->write($lineCount, $x, $ip['description']);					$x++;
 			$worksheet->write($lineCount, $x, $ip['hostname']);						$x++;

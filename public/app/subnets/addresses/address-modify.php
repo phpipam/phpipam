@@ -310,8 +310,8 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	print '		<select name="state" '.$delete.' class="ip_addr form-control input-sm input-w-auto">'. "\n";
 	# printout
 	foreach($ip_types as $k=>$type) {
-		if($address['state']==$k)				{ print "<option value='$k' selected>"._($type['type'])."</option>"; }
-		else									{ print "<option value='$k'>"._($type['type'])."</option>"; }
+		if($address['state']==$k)				{ print "<option value='$k' selected>"._((string) $type['type'])."</option>"; }
+		else									{ print "<option value='$k'>"._((string) $type['type'])."</option>"; }
 	}
 	print '		</select>'. "\n";
 	print '	</td>'. "\n";

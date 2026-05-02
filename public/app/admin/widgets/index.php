@@ -62,12 +62,12 @@ print "</p>";
 			else		{ $vPrint = "<span class='badge badge1 badge5 alert-danger'>"._('Invalid')."</span>"; }
 
 			print "<tr>";
-			print "	<td>"._($w['wtitle'])."</td>";
-			print "	<td>"._($w['wdescription'])."</td>";
+			print "	<td>"._((string) $w['wtitle'])."</td>";
+			print "	<td>"._((string) $w['wdescription'])."</td>";
 			print "	<td>$w[wfile].php</td>";
-			print "	<td>"._($w['wadminonly'])."</td>";
-			print "	<td>"._($w['wactive'])."</td>";
-			print "	<td>"._($w['wparams'])."</td>";
+			print "	<td>"._((string) $w['wadminonly'])."</td>";
+			print "	<td>"._((string) $w['wactive'])."</td>";
+			print "	<td>"._((string) $w['wparams'])."</td>";
 			print "	<td>$vPrint</td>";
 			print "	<td>";
 			print "	<div class='btn-group'>";

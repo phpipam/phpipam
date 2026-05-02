@@ -300,6 +300,6 @@ foreach ($data as &$cdata) {
 	foreach ($expfields as $cfield) {
 		$rows .= "<td>" . (isset($cdata[$cfield]) ? escape_input($cdata[$cfield]) : "") . "</td>";
 	}
-	$rows.= "<td>"._($cdata['msg'])."</td></tr>";
+	$rows.= "<td>"._((string) $cdata['msg'])."</td></tr>";
 
 }

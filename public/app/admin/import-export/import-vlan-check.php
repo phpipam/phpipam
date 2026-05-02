@@ -118,5 +118,5 @@ foreach ($data as &$cdata) {
 		<td>".$cdata['description']."</td>
 		<td>".$cdata['domain']."</td>
 		".$cfieldtds."
-		<td>"._($cdata['msg'])."</td></tr>";
+		<td>"._((string) $cdata['msg'])."</td></tr>";
 }

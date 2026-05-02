@@ -37,7 +37,7 @@ if(($GET->page=="administration" && $GET->section=="users" && $GET->sPage=="modu
             print '<li class="list-group-item">';
             // title
             print "<span style='padding-top:8px;' class='pull-l1eft'>";
-            print "<strong>"._($perm_names[$key])."</strong>";
+            print "<strong>"._((string) $perm_names[$key])."</strong>";
             print "</span>";
             // perms
             print ' <strong class="btn-group pull-right">';
@@ -55,7 +55,7 @@ else {
     print "<table class='table-noborder popover_table'>";
     foreach ($user as $key=>$u) {
         if(strpos((string) $key, "perm_")!==false && array_key_exists((string) $key, $perm_names)) {
-            print "<tr><td>"._($perm_names[$key])."</td><td>".$User->print_permission_badge($user[$key])."</td></tr>";
+            print "<tr><td>"._((string) $perm_names[$key])."</td><td>".$User->print_permission_badge($user[$key])."</td></tr>";
         }
     }
     print "</table>";
