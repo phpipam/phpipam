@@ -1,4 +1,4 @@
-Feature candidates for 1.8:
+Feature candidates for 1.9:
 ---------------------------
 
 Prio1 features / enhancements:
@@ -10,10 +10,6 @@ Prio1 features / enhancements:
     - 2FA enhancements
         - After code saved require confirmation with TOTP
         - Other enhancements based on Jeff reported bugs
-    - Composer:
-        - Move requirements from gitmodules to composer
-        - new requirements via composer
-        - Add checks etc
     - Webhooks support
         - send data via json to external URL / script
     - API

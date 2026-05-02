@@ -7,7 +7,10 @@
 
     Enhancements, changes:
     ----------------------------
-    + Remove support for mcrypt;
+    + Minimum PHP version raised to 8.2.0;
+    + HTML files moved to 'public' folder (see UPDATING.md);
+    + Removed git submodules, full migrarion to composer (see UPDATING.md);
+    + Removed support for mcrypt;
 
 == 1.8.0
 
