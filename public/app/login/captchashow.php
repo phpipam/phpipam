@@ -9,6 +9,9 @@
 // defines Securimage class
 require_once __DIR__ . '/../../../functions/functions.php';
 
+# Don't corrupt output with php errors!
+disable_php_errors();
+
 // Create a user $_SESSION to store captcha code
 $Database = new Database_PDO;
 $User     = new User ($Database);
