@@ -49,7 +49,7 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 		// process cer
 		if($filename=="cer" || $filename=="pem" || $filename=="crt") {
 			// detect BEGIN CERTIFICATE
-			if(strpos(file_get_contents($_FILES["file"]["tmp_name"]), "BEGIN CERTIFICATE")!==false) {
+			if(strpos((string) file_get_contents($_FILES["file"]["tmp_name"]), "BEGIN CERTIFICATE")!==false) {
 				$certificate = trim(file_get_contents($_FILES["file"]["tmp_name"]));
 			}
 			// binary

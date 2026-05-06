@@ -628,7 +628,7 @@ class Tools extends Common_functions {
 		}
 		else {
 			# fake mask
-			if (strpos($address, "/")==0)	{ $address .= "/128"; }
+			if (strpos((string) $address, "/")==0)	{ $address .= "/128"; }
 
 			# parse address
 			$parsed = $this->Net_IPv6->parseAddress($address);
@@ -833,7 +833,7 @@ class Tools extends Common_functions {
 			$d = trim($d);
 			if(strpos(trim($d), "`")==0) {
 				$d = strstr(trim($d, "`"), "`", true);
-				$out[] = substr($d, strpos($d, "`"));
+				$out[] = substr($d, strpos((string) $d, "`"));
 			}
 		}
 		# return array of fields

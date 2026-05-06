@@ -25,7 +25,7 @@ $path_root = realpath(__DIR__ . "/../../../doc");
 $path_doc  = realpath("$path_root/$document");
 $html = "";
 
-if (strpos($path_doc, (string) $path_root) !== 0) {
+if (strpos((string) $path_doc, (string) $path_root) !== 0) {
     $Result->show("danger", _('Requested resource is not inside doc directory'), true);
 }
 

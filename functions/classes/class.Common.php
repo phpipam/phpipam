@@ -731,8 +731,8 @@ class Common_functions  {
 	 */
 	public function identify_address ($address) {
 		# dotted representation
-		if (strpos($address, ':') !== false) return 'IPv6';
-		if (strpos($address, '.') !== false) return 'IPv4';
+		if (strpos((string) $address, ':') !== false) return 'IPv6';
+		if (strpos((string) $address, '.') !== false) return 'IPv4';
 		# numeric representation
 		if (is_numeric($address)) {
 			if($address <= 4294967295) return 'IPv4'; // 4294967295 = '255.255.255.255'
