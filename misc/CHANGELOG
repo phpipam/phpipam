@@ -4,6 +4,7 @@
     ----------------------------
     + PHP8 compatibility fixes;
     + Rack SVG image errors (#4595);
+    + Rack dropdown fails to populate while editing a device (#4602);
 
     Enhancements, changes:
     ----------------------------

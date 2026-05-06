@@ -1,6 +1,16 @@
 <?php
 require_once  __DIR__ . '/../../../../functions/functions.php';
 
+$ajax_loaded = false;
+if (!isset($User) || !is_object($User)) {
+	# initialize user object
+	$Database 	= new Database_PDO;
+	$User 		= new User($Database);
+	$Racks 		= new phpipam_rack($Database);
+	$Result 	= new Result();
+
+	$ajax_loaded = true;
+}
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
@@ -22,7 +32,7 @@ if ($POST->action == "edit") {
 # show only for numeric (set) rackid
 if($POST->rackid>0 || @$device['rack']>0) {
 	# load objects for ajax-loaded stuff
-	if(!isset($User) || !is_object($User)) {
+	if($ajax_loaded) {
 		# initialize user object
 		$Database 	= new Database_PDO;
 		$User 		= new User ($Database);
