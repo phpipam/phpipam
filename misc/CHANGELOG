@@ -2,6 +2,7 @@
 
     Bugfixes:
     ----------------------------
+    + Rack dropdown fails to populate while editing a device (#4602);
 
 == 1.8.1
 
