@@ -33,15 +33,6 @@ if ($POST->action == "edit") {
 if($POST->rackid>0 || @$device['rack']>0) {
 	# load objects for ajax-loaded stuff
 	if($ajax_loaded) {
-		# initialize user object
-		$Database 	= new Database_PDO;
-		$User 		= new User ($Database);
-		$Racks 		= new phpipam_rack ($Database);
-		$Result 	= new Result ();
-
-		# verify that user is logged in
-		$User->check_user_session();
-
 		# validate in inputs
 		if(!is_numeric($POST->rackid)) 	{ print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid ID"), false, false, true)."</td></tr>"; die(); }
 		# fetch rack
@@ -76,6 +67,23 @@ if($POST->rackid>0 || @$device['rack']>0) {
 	// available spaces
 	list($available, $available_back) = $Racks->free_u($rack, $rack_devices, $rack_contents, $device);
 	?>
+	<script>
+	$(document).ready(function(){
+		if ($("[rel=tooltip]").length) {
+			$("[rel=tooltip]").tooltip();
+		}
+
+		/* bootstrap switch */
+		var switch_options = {
+			onColor: 'default',
+			offColor: 'default',
+			onText: 'Yes',
+			offText: 'No',
+			size: "mini"
+		};
+		$(".input-switch").bootstrapSwitch(switch_options);
+	});
+	</script>
 
 	<tr>
 		<td></td>
