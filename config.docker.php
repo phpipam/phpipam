@@ -109,3 +109,10 @@ $session_storage = "database";
  * General tweaks
  ******************************/
 $config['footer_message'] = file_env('IPAM_FOOTER_MESSAGE', $config['footer_message']);
+
+/**
+ * Allow API calls over HTTP (security = none)
+ *
+ * @var bool
+ */
+$api_allow_unsafe = file_env('API_ALLOW_UNSAFE',  $api_allow_unsafe);
