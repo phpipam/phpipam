@@ -104,8 +104,16 @@ $cookie_samesite = file_env('COOKIE_SAMESITE', $cookie_samesite);
  */
 $session_storage = "database";
 
+/**
+ * Allow API calls over HTTP (security = none)
+ *
+ * @var bool
+ */
+$api_allow_unsafe = file_env('API_ALLOW_UNSAFE',  $api_allow_unsafe);
+
 
 /**
  * General tweaks
  ******************************/
 $config['footer_message'] = file_env('IPAM_FOOTER_MESSAGE', $config['footer_message']);
+
