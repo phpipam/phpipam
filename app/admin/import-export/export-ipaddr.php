@@ -143,6 +143,18 @@ if ($GET->device == "on") {
     	}
 	}
 }
+if($GET->location == "on") {
+	$worksheet->write($curRow, $curColumn, _('Location') ,$format_header);
+	$curColumn++;
+	# get Locations and reorder
+	$locations = $Tools->fetch_all_objects ("locations", "name");
+	$locations_indexed = array();
+	if ($locations!==false) {
+	foreach($locations as $d) {
+    		$locations_indexed[$d->id] = $d;
+    	}
+	}
+}
 if ($GET->note == "on") {
 	$worksheet->write($curRow, $curColumn, _('Note') ,$format_header);
 	$curColumn++;
@@ -257,6 +269,13 @@ if($all_sections!==false) {
 						//change device to name
 						$ip['device'] = is_null($ip['switch'])||is_blank($ip['switch'])||$ip['switch']==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
 						$worksheet->write($curRow, $curColumn, $ip['device'], $format_text);
+						$curColumn++;
+					}
+
+					if($GET->location == "on") {
+						//change location to name
+						$ip['location'] = is_null($ip['location'])||is_blank($ip['location'])||$ip['location']==0 ? "" : $locations_indexed[$ip['location']]->name;
+						$worksheet->write($curRow, $curColumn, $ip['location'], $format_text);
 						$curColumn++;
 					}
 
