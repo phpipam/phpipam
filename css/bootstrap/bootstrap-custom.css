@@ -505,6 +505,10 @@ table.ipaddresses td.unused {
 	color: #777;
 	border: none;
 }
+.alert-dismissible .close, .alert-dismissible.close {
+	right: 0px;
+}
+
 .text-muted,
 td.info2 {
 	font-size: 12px;
