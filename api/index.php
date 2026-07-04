@@ -231,6 +231,11 @@ try {
 	$controller_name = ucfirst($Params->controller)."_controller";
 	$controller_file = ucfirst($Params->controller);
 
+	// controller name must be a plain identifier
+	if( !preg_match('/^[A-Za-z0-9_]+$/', $controller_file) ) {
+		$Response->throw_exception(400, 'Invalid controller');
+	}
+	
 	// check if the controller exists. if not, throw an exception
 	if( file_exists( dirname(__FILE__) . "/controllers/$controller_file.php") ) {
 		require_once( dirname(__FILE__) . "/controllers/$controller_file.php");
