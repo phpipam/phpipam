@@ -283,6 +283,7 @@ CREATE TABLE `subnets` (
   `DNSrecursive` BOOL NOT NULL DEFAULT '0',
   `DNSrecords` BOOL NOT NULL DEFAULT '0',
   `nameserverId` INT(11) NULL DEFAULT '0',
+  `timeserverId` INT(11) NULL DEFAULT '0',
   `scanAgent` INT(11)  DEFAULT NULL,
   `customer_id` INT(11) unsigned NULL default NULL,
   `isFolder` BOOL NOT NULL DEFAULT '0',
@@ -514,6 +515,25 @@ CREATE TABLE `nameservers` (
 INSERT INTO `nameservers` (`name`, `namesrv1`, `description`, `permissions`)
 VALUES
 	('Google NS', '8.8.8.8;8.8.4.4', 'Google public nameservers', '1;2');
+
+
+# Dump of table timeservers
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `timeservers`;
+
+CREATE TABLE `timeservers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `timesrv1` varchar(255) DEFAULT NULL,
+  `description` text,
+  `permissions` varchar(128) DEFAULT NULL, /* __no_html_escape__ */
+  `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/* insert default values */
+INSERT INTO `timeservers` (`name`, `timesrv1`, `description`, `permissions`)
+VALUES
+	('NTP pool servers', '0.pool.ntp.org;1.pool.ntp.org', 'NTP pool project servers', '1;2');
 
 
 
@@ -1103,4 +1123,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.9";
-UPDATE `settings` SET `dbversion` = 46;
+UPDATE `settings` SET `dbversion` = 47;

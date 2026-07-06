@@ -420,6 +420,7 @@ class Subnets extends Common_functions {
 							"showName"       => @$subnet['showName'],
 							"permissions"    => $subnet['permissions'],
 							"nameserverId"   => $subnet_old->nameserverId,
+							"timeserverId"    => $subnet_old->timeserverId,
 							"device"		 => $subnet_old->device,
 							"isPool"		 => $subnet_old->isPool,
 							];

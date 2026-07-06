@@ -179,6 +179,10 @@ foreach ($old_data as $table => $table_content) {
 			if ($value_obj->nameserverId > 0) {
 				$new_data[$table][$lk]->nameserverId = $highest_ids_append["nameservers"] + $value_obj->nameserverId;
 			}
+			// time
+			if ($value_obj->timeserverId > 0) {
+				$new_data[$table][$lk]->timeserverId = $highest_ids_append["timeservers"] + $value_obj->timeserverId;
+			}
 			// location
 			if ($value_obj->location > 0) {
 				$new_data[$table][$lk]->location = $highest_ids_append["locations"] + $value_obj->location;
@@ -326,6 +330,22 @@ foreach ($old_data as $table => $table_content) {
 	}
 	// update nameservers
 	elseif ($table == "nameservers") {
+		// go through each table and update
+		foreach ($table_content as $lk=>$value_obj) {
+			$new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
+			// permissions
+			if(!is_blank($value_obj->permissions)) {
+				$fs_tmp = explode(";", (string) $value_obj->permissions);
+				$fs_new = [];
+				foreach ($fs_tmp as $gid) {
+					$fs_new[] = $gid+$highest_ids_append["sections"];
+				}
+				$new_data[$table][$lk]->permissions = implode(";", $fs_new);
+			}
+		}
+	}
+	// update timeservers
+	elseif ($table == "timeservers") {
 		// go through each table and update
 		foreach ($table_content as $lk=>$value_obj) {
 			$new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;

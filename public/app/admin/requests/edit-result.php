@@ -98,6 +98,9 @@ else {
 	//set dns
 	$dns = $Tools->fetch_object ("nameservers", "id", $subnet['nameserverId']);
 	$tmp['dns'] = $dns==false ? "" : $dns->description." <br> ".str_replace(";", ", ", (string) $dns->namesrv1);
+	//set time
+	$time = $Tools->fetch_object ("timeservers", "id", $subnet['timeserverId']);
+	$tmp['time'] = $time==false ? "" : $time->description." <br> ".str_replace(";", ", ", (string) $time->timesrv1);
 
 	$POST->read($tmp);
 

@@ -31,6 +31,7 @@ $subnet  = (array) $Subnets->fetch_subnet (null, $POST->id);
 $vlan    = (array) $Tools->fetch_object ("vlans", "vlanId", $subnet['vlanId']);
 $vrf     = (array) $Tools->fetch_object ("vrf", "vrfId", $subnet['vrfId']);
 $nameservers    = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
+$timeservers     = (array) $Tools->fetch_object("timeservers", "id", $subnet['timeserverId']);
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('subnets');
@@ -63,6 +64,13 @@ if ( !empty( $subnet['nameserverId'] ) ) {
 	$nslist = str_replace(";", ", ", (string) $nameservers['namesrv1']);
 
 						$content[] = "&bull; "._('Nameservers').": \t $nslist ({$nameservers['name']})";
+}
+
+# Timeserver sets
+if ( !empty( $subnet['timeserverId'] ) ) {
+	$timelist = str_replace(";", ", ", (string) $timeservers['timesrv1']);
+
+						$content[] = "&bull; "._('Timeservers').": \t $timelist ({$timeservers['name']})";
 }
 
 # custom
