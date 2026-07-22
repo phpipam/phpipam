@@ -3,6 +3,7 @@
     Bugfixes:
     ----------------------------
     + Rack dropdown fails to populate while editing a device (#4602);
+    + Temporary share links expose all IP addresses (#4623);
 
 == 1.8.1
 

@@ -10,6 +10,11 @@ if(!isset($address)) {
 	$subnet  = (array) $Subnets->fetch_subnet(null, $address['subnetId']);
 }
 
+# verify address belongs to shared subnet
+if ($address['subnetId'] !== $temp_objects[$GET->section]->id) {
+	$Result->show("danger", _('Invalid ID'), true);
+}
+
 # fetch all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 
