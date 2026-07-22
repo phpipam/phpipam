@@ -55,13 +55,13 @@ if(sizeof($address)>1) {
 	# ip
 	print "<tr>";
 	print "	<th>"._('IP address')."</th>";
-	print "	<td><strong>$address[ip]</strong></td>";
+	print "	<td><strong>{$address['ip']}</strong></td>";
 	print "</tr>";
 
 	# description
 	print "<tr>";
 	print "	<th>"._('Description')."</th>";
-	print "	<td>$address[description]</td>";
+	print "	<td>{$address['description']}</td>";
 	print "</tr>";
 
 	# hierarchy
@@ -75,7 +75,7 @@ if(sizeof($address)>1) {
 	# subnet
 	print "<tr>";
 	print "	<th>"._('Subnet')."</th>";
-	print "	<td>$subnet[ip]/$subnet[mask] ($subnet[description])</td>";
+	print "	<td>{$subnet['ip']}/{$subnet['mask']} ({$subnet['description']})</td>";
 	print "</tr>";
 
 	# state
@@ -97,14 +97,14 @@ if(sizeof($address)>1) {
 	# hostname
 	print "<tr>";
 	print "	<th>"._('Hostname')."</th>";
-	print "	<td>$resolve[name]</td>";
+	print "	<td>{$resolve['name']}</td>";
 	print "</tr>";
 
 	# mac
 	if(in_array('owner', $selected_ip_fields)) {
 	print "<tr>";
 	print "	<th>"._('Owner')."</th>";
-	print "	<td>$address[owner]</td>";
+	print "	<td>{$address['owner']}</td>";
 	print "</tr>";
 	}
 
@@ -112,7 +112,7 @@ if(sizeof($address)>1) {
 	if(in_array('mac', $selected_ip_fields)) {
 	print "<tr>";
 	print "	<th>"._('MAC address')."</th>";
-	print "	<td>$address[mac]</td>";
+	print "	<td>{$address['mac']}</td>";
 	print "</tr>";
 	}
 
@@ -120,7 +120,7 @@ if(sizeof($address)>1) {
 	if(in_array('note', $selected_ip_fields)) {
 	print "<tr>";
 	print "	<th>"._('Note')."</th>";
-	print "	<td>$address[note]</td>";
+	print "	<td>{$address['note']}</td>";
 	print "</tr>";
 	}
 
@@ -149,7 +149,7 @@ if(sizeof($address)>1) {
 	if(in_array('port', $selected_ip_fields)) {
 	print "<tr>";
 	print "	<th>"._('Port')."</th>";
-	print "	<td>$address[port]</td>";
+	print "	<td>{$address['port']}</td>";
 	print "</tr>";
 	}
 
@@ -157,7 +157,7 @@ if(sizeof($address)>1) {
 	print "<tr>";
 	print "	<th>"._('Last edited')."</th>";
 	if(strlen($address['editDate'])>1) {
-		print "	<td>$address[editDate]</td>";
+		print "	<td>{$address['editDate']}</td>";
 	} else {
 		print "	<td>"._('Never')."</td>";
 	}
@@ -182,7 +182,7 @@ if(sizeof($address)>1) {
 
 	print "	<th>"._('Availability')."<br><span class='status status-ip status-$seen_status' style='pull-right'></span></th>";
 	print "	<td>";
-	print "$seen_text";
+	print "{$seen_text}";
 
 	print "	</td>";
 	print "</tr>";
@@ -197,7 +197,7 @@ if(sizeof($address)>1) {
 			if(!is_blank($address[$key])) {
 			$address[$key] = str_replace(array("\n", "\r\n"), "<br>",$address[$key]);
 			print "<tr>";
-			print "	<th>$key</th>";
+			print "	<th>{$key}</th>";
 			print "	<td>";
 			#booleans
 			if($field['type']=="tinyint(1)")	{
