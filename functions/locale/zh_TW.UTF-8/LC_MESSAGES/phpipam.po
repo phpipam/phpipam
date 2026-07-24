@@ -7844,7 +7844,7 @@ msgstr "VLAN 已經存在於另一個網域中。"
 msgid "Unique VLAN"
 msgstr "唯一 VLAN"
 
-msgid "Require unique vlan accross domains"
+msgid "Require unique vlan across domains"
 msgstr "需要可跨網域的唯一 VLAN"
 
 msgid "Admin privileges required"

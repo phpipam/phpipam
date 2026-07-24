@@ -6372,7 +6372,7 @@ msgid "Unique VLAN"
 msgstr "ユニークなVLAN"
 
 #: /var/www/phpipam/app/admin/vlans/edit.php:139
-msgid "Require unique vlan accross domains"
+msgid "Require unique vlan across domains"
 msgstr "ドメイン間で固有のVLANを要求します"
 
 #: /var/www/phpipam/app/admin/vlans/edit.php:176

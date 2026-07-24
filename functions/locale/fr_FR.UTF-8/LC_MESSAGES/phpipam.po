@@ -7390,7 +7390,7 @@ msgstr "le VLAN existe déjà dans un autre domaine !"
 msgid "Unique VLAN"
 msgstr "VLAN unique"
 
-msgid "Require unique vlan accross domains"
+msgid "Require unique vlan across domains"
 msgstr "Nécessite un VLAN unique sur l’ensemble des domaines"
 
 msgid "Admin privileges required"

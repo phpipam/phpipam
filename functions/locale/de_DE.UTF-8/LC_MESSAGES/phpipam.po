@@ -9281,7 +9281,7 @@ msgid "Unique VLAN"
 msgstr "Eindeutiges VLAN"
 
 #: app/admin/vlans/edit.php:173
-msgid "Require unique vlan accross domains"
+msgid "Require unique vlan across domains"
 msgstr "Einfordern von eindeutigen VLANs über alle Domänen hinweg"
 
 #: app/admin/vlans/edit.php:209

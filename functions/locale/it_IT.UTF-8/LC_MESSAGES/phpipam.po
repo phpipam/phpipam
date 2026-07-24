@@ -7228,7 +7228,7 @@ msgstr "La VLAN esiste gi&agrave; in un altro dominio!"
 msgid "Unique VLAN"
 msgstr "VLAN univoca"
 
-msgid "Require unique vlan accross domains"
+msgid "Require unique vlan across domains"
 msgstr "Richiedi vlan univoche tra tutti i domini"
 
 msgid "Admin privileges required"

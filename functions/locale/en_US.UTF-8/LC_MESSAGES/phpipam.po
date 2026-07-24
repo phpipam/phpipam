@@ -7500,7 +7500,7 @@ msgstr ""
 msgid "Unique VLAN"
 msgstr ""
 
-msgid "Require unique vlan accross domains"
+msgid "Require unique vlan across domains"
 msgstr ""
 
 msgid "Admin privileges required"

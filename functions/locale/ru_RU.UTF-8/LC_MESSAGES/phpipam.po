@@ -14002,7 +14002,7 @@ msgid "Unique VLAN"
 msgstr "Уникальный VLAN"
 
 #: app/admin/vlans/edit.php:173
-msgid "Require unique vlan accross domains"
+msgid "Require unique vlan across domains"
 msgstr "Требуется уникальный VLAN во всех доменах"
 
 #: app/admin/vlans/vlans-scan-execute.php:32

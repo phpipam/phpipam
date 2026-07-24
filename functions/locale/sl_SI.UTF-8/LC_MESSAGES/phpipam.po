@@ -7247,7 +7247,7 @@ msgstr "VLAN že obstaja v drugi domeni!"
 msgid "Unique VLAN"
 msgstr "Unikaten VLAN"
 
-msgid "Require unique vlan accross domains"
+msgid "Require unique vlan across domains"
 msgstr "Zahtevaj unikaten VLAN po vseh domenah"
 
 msgid "Admin privileges required"
