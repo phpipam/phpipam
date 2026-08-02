@@ -11,7 +11,11 @@ We actively welcome your pull requests.
 2. Keep pull requests small. Split large changes into multiple pull-requests where possible to make reviews easier.
 3. Avoid unnessary changes to white-space and formatting to make reviews easier.
 4. Document the feature or bugfix in the pull request description.
-5. Test changes on all PHP versions supported by the `develop` branch listed in README.md.
+5. Test compatibility with all PHP versions supported by the `develop` branch listed in README.md. \
+Example: Test for PHP 8.2 compatibility
+```bash
+./vendor/bin/phpcs -p functions public --standard=PHPCompatibility --exclude=PHPCompatibility.Attributes.NewAttributes --colors --runtime-set testVersion 8.2
+```
 
 Pull requests will be merged into the `develop` branch and backported to the current `stable` point-release branch where appropiate.
 
