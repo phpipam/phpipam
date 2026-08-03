@@ -4,7 +4,7 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
 
-# "Project-Id-Version: 1.70\n"
+# "Project-Id-Version: 1.90\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
 # "PO-Revision-Date: 2017-02-21 14:33+0200\n"
@@ -7247,7 +7247,7 @@ msgstr "VLAN že obstaja v drugi domeni!"
 msgid "Unique VLAN"
 msgstr "Unikaten VLAN"
 
-msgid "Require unique vlan accross domains"
+msgid "Require unique vlan across domains"
 msgstr "Zahtevaj unikaten VLAN po vseh domenah"
 
 msgid "Admin privileges required"

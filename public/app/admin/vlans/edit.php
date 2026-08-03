@@ -172,7 +172,7 @@ $(document).ready(function(){
     	<td><?php print _('Unique VLAN'); ?></td>
     	<td>
 	    	<input type="checkbox" name="unique" value="on">
-	    	<span class="text-muted"><?php print _('Require unique vlan accross domains'); ?></span>
+	    	<span class="text-muted"><?php print _('Require unique vlan across domains'); ?></span>
 	    </td>
     </tr>
 	<?php } ?>

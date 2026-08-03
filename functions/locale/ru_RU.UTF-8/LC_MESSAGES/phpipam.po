@@ -7,7 +7,7 @@
 # "Content-Transfer-Encoding: 8bit\n"
 # "Last-Translator: Elena Mishina <lepata@basealt.ru>\n"
 # "PO-Revision-Date: 2025-08-12 14:30+0300\n"
-# "Project-Id-Version: 1.70\n"
+# "Project-Id-Version: 1.90\n"
 # "Language: ru_RU\n"
 # "MIME-Version: 1.0\n"
 # "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
@@ -14002,7 +14002,7 @@ msgid "Unique VLAN"
 msgstr "Уникальный VLAN"
 
 #: app/admin/vlans/edit.php:173
-msgid "Require unique vlan accross domains"
+msgid "Require unique vlan across domains"
 msgstr "Требуется уникальный VLAN во всех доменах"
 
 #: app/admin/vlans/vlans-scan-execute.php:32
