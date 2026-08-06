@@ -219,7 +219,7 @@ class Common_functions  {
 		# null table
 		if(is_null($table)||is_blank($table)) return false;
 
-		$cached_item = $this->cache_check("fetch_all_objects", "t=$table f=$sortField o=$sortAsc");
+		$cached_item = $this->cache_check("fetch_all_objects", "id", "t=$table f=$sortField o=$sortAsc");
 		if(is_object($cached_item)) return $cached_item->result;
 
 		# fetch
@@ -231,12 +231,12 @@ class Common_functions  {
 		# save
 		if (is_array($res)) {
 			foreach ($res as $r) {
-				$this->cache_write ($table, $r);
+				$this->cache_write ($table, null, $r);
 			}
 		}
 		# result
 		$result = (is_array($res) && sizeof($res)>0) ? $res : false;
-		$this->cache_write ("fetch_all_objects", (object) ["id"=>"t=$table f=$sortField o=$sortAsc", "result" => $result]);
+		$this->cache_write ("fetch_all_objects", "id", (object) ["id"=>"t=$table f=$sortField o=$sortAsc", "result" => $result]);
 		return $result;
 	}
 
@@ -257,22 +257,22 @@ class Common_functions  {
 		if(is_null($value))    return false;
 		if($value===0)         return false;
 
-		# check cache
-		$cached_item = $this->cache_check($table, $value);
-		if(is_object($cached_item))
-			return $cached_item;
-
 		# null method
 		$method = is_null($method) ? "id" : $this->Database->escape($method);
 
-		try { $res = $this->Database->getObjectQuery($table, "SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
+		# check cache
+		$cached_item = $this->cache_check($table, $method, $value);
+		if(is_object($cached_item))
+			return $cached_item;
+
+		try { $res = $this->Database->getObjectQuery($table, "SELECT * from `$table` where `$method` = ? limit 1;", [$value]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
 
 		# save to cache array
-		$this->cache_write ($table, $res);
+		$this->cache_write ($table, $method, $res);
 
 		return is_object($res) ? $res : false;
 	}
@@ -304,7 +304,7 @@ class Common_functions  {
 			# save to cache
 			if ($result_fields==="*" && is_array($res)) { // Only cache objects containing all fields
 				foreach ($res as $r) {
-					$this->cache_write ($table, $r);
+					$this->cache_write ($table, $field, $r);
 				}
 			}
 			# result
@@ -361,7 +361,7 @@ class Common_functions  {
 
 		$tableName = $this->Database->escape($tableName);
 
-		$cached_item = $this->cache_check("getTableSchemaByField", "t=$tableName");
+		$cached_item = $this->cache_check("getTableSchemaByField", "id", "t=$tableName");
 		if(is_object($cached_item)) return $cached_item->result;
 
 		try {
@@ -377,7 +377,7 @@ class Common_functions  {
 				$results[$col->COLUMN_NAME] = $col;
 			}
 		}
-		$this->cache_write("getTableSchemaByField", (object) ["id"=>"t=$tableName", "result" => $results]);
+		$this->cache_write("getTableSchemaByField", "id", (object) ["id"=>"t=$tableName", "result" => $results]);
 		return $results;
 	}
 
@@ -459,10 +459,11 @@ class Common_functions  {
      *
      * @access protected
      * @param string $table
+     * @param string $identifier
      * @param mixed $object
      * @return void
      */
-    protected function cache_write ($table, $object) {
+    protected function cache_write ($table, $identifier, $object) {
         if (!is_object($object))
             return;
 
@@ -470,13 +471,17 @@ class Common_functions  {
         if ($this->cache_check_exceptions($table))
             return;
 
-        // get and check id property
-        $identifier = $this->cache_set_identifier ($table);
+        if (is_null($identifier)) {
+            $identifier = $this->cache_set_identifier($table);
+        }
 
         if (!property_exists($object, $identifier))
             return;
 
         $id = $object->{$identifier};
+        if (is_null($id)) {
+            return;
+        }
 
         // already set
         if (isset($this->Database->cache[$table][$identifier][$id]))
@@ -549,14 +554,12 @@ class Common_functions  {
      * Checks if object already exists in cache..
      *
      * @access protected
-     * @param mixed $table
+     * @param string $table
+     * @param string $identifier
      * @param mixed $id
      * @return object|false
      */
-    protected function cache_check ($table, $id) {
-        // get identifier
-        $identifier = $this->cache_set_identifier ($table);
-
+    protected function cache_check ($table, $identifier, $id) {
         // check if cache is already set, otherwise return false
         if (isset($this->Database->cache[$table][$identifier][$id]))
             return clone $this->Database->cache[$table][$identifier][$id];

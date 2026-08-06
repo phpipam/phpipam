@@ -4,6 +4,10 @@
     ----------------------------
     + Rack dropdown fails to populate while editing a device (#4602);
 
+    Security Fixes:
+    ----------------------------
+    + API authentication bypass via object cache key collision;
+
 == 1.8.1
 
     Bugfixes:
