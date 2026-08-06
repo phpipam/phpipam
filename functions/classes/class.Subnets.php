@@ -566,7 +566,7 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if ($result_fields==="*" && is_array($subnets)) { // Only cache objects containing all fields
 			foreach($subnets as $subnet) {
-				$this->cache_write ("subnets", $subnet);
+				$this->cache_write ("subnets", "id", $subnet);
 			}
 		}
 		# result
@@ -771,7 +771,7 @@ class Subnets extends Common_functions {
 			# save to subnets cache
 			if(is_array($subnets)) {
 				foreach($subnets as $subnet) {
-					$this->cache_write ("subnets", $subnet);
+					$this->cache_write ("subnets", "id", $subnet);
 				}
 			}
 		}
@@ -857,7 +857,7 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if(is_array($subnets)) {
 			foreach($subnets as $subnet) {
-                $this->cache_write ("subnets", $subnet);
+                $this->cache_write ("subnets", "id", $subnet);
 			}
 		}
 		# result
@@ -898,7 +898,7 @@ class Subnets extends Common_functions {
     		// check
     		if (is_array($subnets)) {
         		foreach ($subnets as $s) {
-                    $this->cache_write ("subnets", $s);
+                    $this->cache_write ("subnets", "id", $s);
         		}
     		}
 			# result
@@ -941,7 +941,7 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if(is_array($subnets)) {
 			foreach($subnets as $subnet) {
-                $this->cache_write ("subnets", $subnet);
+                $this->cache_write ("subnets", "id", $subnet);
 			}
 		}
 		# result
@@ -1157,7 +1157,7 @@ class Subnets extends Common_functions {
 
 			foreach($slaves as $slave) {
 				# save to subnets cache
-				$this->cache_write ("subnets", $slave);
+				$this->cache_write ("subnets", "id", $slave);
 
 				# save to full array of slaves
 				$this->slaves_full[$slave->id] = $slave;
@@ -1293,7 +1293,7 @@ class Subnets extends Common_functions {
 			$subnet = (object) $subnet;
 		}
 
-		$cached_item = $this->cache_check("fn_calculate_subnet_usage", $subnet->id);
+		$cached_item = $this->cache_check("fn_calculate_subnet_usage", "id", $subnet->id);
 		if(is_object($cached_item)) return $cached_item->result;
 
 		if ($this->has_slaves($subnet->id)) {
@@ -1358,7 +1358,7 @@ class Subnets extends Common_functions {
 		$subnet_usage["maxhosts"] = $max_hosts;
 
 		// Save results
-		$this->cache_write ("fn_calculate_subnet_usage", (object) ["id"=>$subnet->id, "result" => $subnet_usage]);
+		$this->cache_write ("fn_calculate_subnet_usage", "id", (object) ["id"=>$subnet->id, "result" => $subnet_usage]);
 		return $subnet_usage;
 	}
 
@@ -2954,7 +2954,7 @@ class Subnets extends Common_functions {
 		if(is_null($subnet->permissions) || $subnet->permissions=="null")	return 0;
 
 		# Check cached result
-		$cached_item = $this->cache_check('subnet_permissions', "p=$subnet->permissions s=$subnet->sectionId");
+		$cached_item = $this->cache_check('subnet_permissions', "id", "p=$subnet->permissions s=$subnet->sectionId");
 		if(is_object($cached_item)) return $cached_item->result;
 
 		$subnetP = db_json_decode(@$subnet->permissions, true);
@@ -3001,7 +3001,7 @@ class Subnets extends Common_functions {
 		}
 
 		# return result
-		$this->cache_write ('subnet_permissions', (object) ["id"=>"p=$subnet->permissions s=$subnet->sectionId", "result" => $out]);
+		$this->cache_write ('subnet_permissions', "id", (object) ["id"=>"p=$subnet->permissions s=$subnet->sectionId", "result" => $out]);
 		return $out;
 	}
 

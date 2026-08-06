@@ -1806,7 +1806,7 @@ class User extends Common_functions {
      */
     public function get_user_permissions_from_json ($json) {
         // Check cache
-        $cached_item = $this->cache_check('get_user_permissions_from_json', $json);
+        $cached_item = $this->cache_check('get_user_permissions_from_json', "id", $json);
         if(is_object($cached_item)) return $cached_item->result;
 
         $groups = [];
@@ -1823,7 +1823,7 @@ class User extends Common_functions {
             $groups[] = $tmp;
         }
         // Cache results to avoid repeat database queries.
-        $this->cache_write('get_user_permissions_from_json', (object) ["id"=>$json, "result" => $groups]);
+        $this->cache_write('get_user_permissions_from_json', "id", (object) ["id"=>$json, "result" => $groups]);
         return $groups;
     }
 
@@ -1879,11 +1879,11 @@ class User extends Common_functions {
             $valid_sections = $l2domain->permissions;
         }
 
-        $cached_item = $this->cache_check('l2domain_permissions', $valid_sections);
+        $cached_item = $this->cache_check('l2domain_permissions', "id", $valid_sections);
         if(is_object($cached_item)) return $cached_item->result;
 
         if (empty($valid_sections)) {
-            $this->cache_write('l2domain_permissions', (object) ["id"=>$valid_sections, "result" => 0]);
+            $this->cache_write('l2domain_permissions', "id", (object) ["id"=>$valid_sections, "result" => 0]);
             return 0;
         }
 
@@ -1915,7 +1915,7 @@ class User extends Common_functions {
         }
 
         # return result
-        $this->cache_write('l2domain_permissions', (object) ["id"=>$valid_sections, "result" => $max_permission]);
+        $this->cache_write('l2domain_permissions', "id", (object) ["id"=>$valid_sections, "result" => $max_permission]);
         return $max_permission;
     }
 

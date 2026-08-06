@@ -194,7 +194,7 @@ class Addresses extends Common_functions {
 		$method = is_null($method) ? "id" : $method;
 
 		# check cache first
-		$cached = ($method=="id") ? $this->cache_check("ipaddresses", $id) : false;
+		$cached = $this->cache_check("ipaddresses", $method, $id);
 
 		if(is_object($cached))	{
 			return $cached;
@@ -207,7 +207,7 @@ class Addresses extends Common_functions {
 			}
 			# save to addresses cache
 			if(is_object($address)) {
-				$this->cache_write("ipaddresses", $address);
+				$this->cache_write("ipaddresses", $method, $address);
 			}
 			#result
 			return !is_null($address) ? $address : false;
@@ -229,7 +229,7 @@ class Addresses extends Common_functions {
 		}
 		# save to addresses cache
 		if(is_object($address)) {
-			$this->cache_write("ipaddresses", $address);
+			$this->cache_write("ipaddresses", "id", $address);
 		}
 		#result
 		return !is_null($address) ? $address : false;
@@ -251,7 +251,7 @@ class Addresses extends Common_functions {
 			# save to addresses cache
 			if(is_array($addresses)) {
 				foreach($addresses as $address) {
-					$this->cache_write("ipaddresses", $address);
+					$this->cache_write("ipaddresses", "id", $address);
 				}
 			}
 		}
@@ -277,7 +277,7 @@ class Addresses extends Common_functions {
 	 */
 	private function bulk_fetch_similar_addresses($address, $linked_field, $value) {
 		// Check cache
-		$cached_item = $this->cache_check("similar_addresses", "f=$linked_field id=$address->subnetId");
+		$cached_item = $this->cache_check("similar_addresses", "id", "f=$linked_field id=$address->subnetId");
 		if (is_object($cached_item))
 			return $cached_item->result;
 
@@ -299,7 +299,7 @@ class Addresses extends Common_functions {
 		}
 
 		// Save to cache and return
-		$this->cache_write ("similar_addresses", (object) ["id"=>"f=$linked_field id=$address->subnetId", "result" => $bulk_search]);
+		$this->cache_write ("similar_addresses", "id", (object) ["id"=>"f=$linked_field id=$address->subnetId", "result" => $bulk_search]);
 		return $bulk_search;
 	}
 
@@ -1256,7 +1256,7 @@ class Addresses extends Common_functions {
 		# save to addresses cache (complete objects only)
 		if(is_array($addresses) && $fields=="*") {
 			foreach($addresses as $address) {
-				$this->cache_write("ipaddresses", $address);
+				$this->cache_write("ipaddresses", "id", $address);
 			}
 		}
 		# result

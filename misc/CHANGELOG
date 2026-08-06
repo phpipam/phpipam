@@ -13,6 +13,10 @@
     + Removed git submodules, full migration to composer (see UPDATING.md);
     + Removed support for mcrypt;
 
+    Security Fixes:
+    ----------------------------
+    + API authentication bypass via object cache key collision;
+
 == 1.8.0
 
     Bugfixes:
