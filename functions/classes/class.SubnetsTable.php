@@ -61,7 +61,7 @@ class SubnetsTable {
 	 * Generate a table row from a subnet object.
 	 * Return colums as array('field_name'=>'data',...)
 	 *
-	 * @param  stdObject $subnet
+	 * @param  stdClass $subnet
 	 * @return array
 	 */
 	private function table_row($subnet) {

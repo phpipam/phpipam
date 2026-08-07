@@ -13,7 +13,6 @@ class DNS extends Common_functions {
 	 * (default value: "A")
 	 *
 	 * @var string
-	 * @access private
 	 */
 	private $type = "A";
 
@@ -80,7 +79,6 @@ class DNS extends Common_functions {
 	/**
 	 * __construct function.
 	 *
-	 * @access public
 	 * @param Database_PDO $Database
 	 * @param mixed $settings (default: null)
 	 */
@@ -88,7 +86,6 @@ class DNS extends Common_functions {
 	/**
 	 * __construct function
 	 *
-	 * @method __construct
 	 * @param  Database_PDO $Database
 	 * @param  object|array $settings
 	 * @param  bool         $print_error
@@ -109,7 +106,6 @@ class DNS extends Common_functions {
 	/**
 	 * Set flag to return multiple records if found
 	 *
-	 * @method set_multiple
 	 * @param  bool $multiple
 	 */
 	public function set_multiple ($multiple = false) {
@@ -122,7 +118,6 @@ class DNS extends Common_functions {
 	/**
 	 * Sets array of nameservers to use
 	 *
-	 * @access private
 	 * @param mixed $nsid (default: null)
 	 * @return void
 	 */
@@ -174,7 +169,6 @@ class DNS extends Common_functions {
  	/**
  	 * Resolves hostname from IP or IP from hostname
  	 *
- 	 * @access public
  	 * @param mixed $address  (default: false)	- IP address
  	 * @param mixed $hostname (default: false)	- hostname
  	 * @param bool $override  (default: false)	- checks even if not permitted in settings
@@ -228,9 +222,8 @@ class DNS extends Common_functions {
 	/**
 	 * Resolve address using NET_DNS2
 	 *
-	 * @access public
 	 * @param mixed $address
-	 * @return void
+	 * @return mixed
 	 */
 	public function resolve_address_net_dns ($address) {
 		// set nameservers

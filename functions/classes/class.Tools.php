@@ -7,7 +7,7 @@
 class Tools extends Common_functions {
 
 	/**
-	 * var Subnets
+	 * @var Subnets
 	 */
 	private $Subnets = null;
 
@@ -45,7 +45,6 @@ class Tools extends Common_functions {
 	/**
 	 * __construct method
 	 *
-	 * @access public
 	 */
 	public function __construct (Database_PDO $database) {
 		parent::__construct();
@@ -74,7 +73,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetch vlans and subnets for tools vlan display. Joined query
 	 *
-	 * @access public
 	 * @param int $domainId (default: 1)
 	 * @return array|bool
 	 */
@@ -121,7 +119,6 @@ class Tools extends Common_functions {
 	/**
 	 * Search database for addresses
 	 *
-	 * @access public
 	 * @param mixed $search_term
 	 * @param string $high (default: "")
 	 * @param string $low (default: "")
@@ -180,7 +177,6 @@ class Tools extends Common_functions {
 	 *	First search range
 	 *	If host provided search also inside subnet ranges
 	 *
-	 * @access public
 	 * @param mixed $search_term
 	 * @param string $high
 	 * @param string $low
@@ -205,7 +201,6 @@ class Tools extends Common_functions {
 	/**
 	 * Search for subnets inside range
 	 *
-	 * @access private
 	 * @param mixed $search_term
 	 * @param string $high
 	 * @param string $low
@@ -245,7 +240,7 @@ class Tools extends Common_functions {
 	/**
 	 * Search inside subnets if host address is provided!
 	 *
-	 * @access private
+	 * @param string $search_term
 	 * @param string $high
 	 * @param string $low
 	 * @return array
@@ -274,7 +269,6 @@ class Tools extends Common_functions {
 	/**
 	 * Function to search vlans
 	 *
-	 * @access public
 	 * @param mixed $search_term
 	 * @param array $custom_fields (default: array())
 	 * @return array
@@ -308,7 +302,6 @@ class Tools extends Common_functions {
 	/**
 	 * Function to search vrf
 	 *
-	 * @access public
 	 * @param mixed $search_term
 	 * @param array $custom_fields (default: array())
 	 * @return array
@@ -341,7 +334,6 @@ class Tools extends Common_functions {
 	/**
 	 * Search for PSTN prefixes.
 	 *
-	 * @access public
 	 * @param mixed $search_term
 	 * @param array $custom_prefix_fields (default: array())
 	 * @return array
@@ -374,7 +366,6 @@ class Tools extends Common_functions {
 	/**
 	 * Search for PSTN numbers.
 	 *
-	 * @access public
 	 * @param mixed $search_term
 	 * @param array $custom_prefix_fields (default: array())
 	 * @return array
@@ -407,7 +398,6 @@ class Tools extends Common_functions {
 	/**
 	 * Search for circuits.
 	 *
-	 * @access public
 	 * @param mixed $search_term
 	 * @param array $custom_circuit_fields (default: array())
 	 * @return array
@@ -445,7 +435,6 @@ class Tools extends Common_functions {
 	/**
 	 * Search for circuit providers
 	 *
-	 * @access public
 	 * @param mixed $search_term
 	 * @param array $custom_circuit_fields (default: array())
 	 * @return array
@@ -478,7 +467,6 @@ class Tools extends Common_functions {
 	/**
 	 * Function to search customers
 	 *
-	 * @access public
 	 * @param mixed $search_term
 	 * @param array $custom_fields (default: array())
 	 * @return array
@@ -511,7 +499,6 @@ class Tools extends Common_functions {
 	/**
 	 * Function to search devices
 	 *
-	 * @access public
 	 * @param mixed $search_term
 	 * @param array $custom_fields (default: array())
 	 * @return array
@@ -546,7 +533,6 @@ class Tools extends Common_functions {
 	 *
 	 *	e.g. 10.10.10 -> 10.10.10.0 - 10.10.10.255
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @return array high/low decimal address
 	 */
@@ -611,7 +597,6 @@ class Tools extends Common_functions {
 	 *		a:a:a::a
 	 *		a:a:a:a:a:a:a:a/mask
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @return array
 	 */
@@ -662,7 +647,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches all custom fields
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @return array
 	 */
@@ -700,7 +684,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches all custom fields and reorders them into numeric array
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @return array
 	 */
@@ -762,7 +745,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetch all fields configured in table - standard + custom
 	 *
-	 * @access private
 	 * @param mixed $table
 	 * @return array
 	 */
@@ -785,7 +767,6 @@ class Tools extends Common_functions {
 	/**
 	 * Read the SCHEMA.sql file and enforce UNIX LF
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function read_db_schema() {
@@ -812,7 +793,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches standard database fields from SCHEMA.sql file
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @return array
 	 */
@@ -866,7 +846,6 @@ class Tools extends Common_functions {
 	 *
 	 * Array (Field, Type, Collation, Null, Comment)
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @param mixed $field
 	 * @return array
@@ -900,7 +879,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches all widgets
 	 *
-	 * @access public
 	 * @param bool $admin (default: false)
 	 * @param bool $inactive (default: false)
 	 * @return array
@@ -931,7 +909,6 @@ class Tools extends Common_functions {
 	/**
 	 * Verify that widget file exists
 	 *
-	 * @access public
 	 * @return bool
 	 */
 	public function verify_widget ($file) {
@@ -972,7 +949,6 @@ class Tools extends Common_functions {
 	/**
 	 * fetches all IP requests and saves them to $requests
 	 *
-	 * @access public
 	 * @return int|array
 	 */
 	public function requests_fetch ($num = true) {
@@ -982,7 +958,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches number of active IP requests
 	 *
-	 * @access private
 	 * @return int
 	 */
 	private function requests_fetch_num () {
@@ -992,7 +967,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches all requests and saves them to $requests
 	 *
-	 * @access private
 	 * @return array
 	 */
 	private function requests_fetch_objects () {
@@ -1025,7 +999,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches all subnets that are set to allow requests
 	 *
-	 * @access public
 	 * @return array|null
 	 */
 	public function requests_fetch_available_subnets () {
@@ -1046,7 +1019,6 @@ class Tools extends Common_functions {
 	/**
 	 * Sends mail for IP request
 	 *
-	 * @access public
 	 * @param string $action
 	 * @param mixed $values
 	 * @return bool
@@ -1138,7 +1110,6 @@ class Tools extends Common_functions {
 	/**
 	 * Returns list of recipients to get new
 	 *
-	 * @access private
 	 * @param bool|mixed $subnetId
 	 * @return array|bool
 	 */
@@ -1179,7 +1150,6 @@ class Tools extends Common_functions {
 	/**
 	 * Reformats request value/key pairs for request mailing
 	 *
-	 * @access private
 	 * @param mixed $values
 	 * @return array
 	 */
@@ -1285,7 +1255,6 @@ class Tools extends Common_functions {
 	/**
 	 * Checks if all database fields are installed ok
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function verify_database () {
@@ -1336,7 +1305,6 @@ class Tools extends Common_functions {
 	 *	true = exists
 	 *	false = doesn't exist
 	 *
-	 * @access public
 	 * @param mixed $tablename
 	 * @param bool $quit
 	 * @return bool
@@ -1356,7 +1324,6 @@ class Tools extends Common_functions {
 	 *	true = exists
 	 *	false = doesn't exist
 	 *
-	 * @access public
 	 * @param mixed $fieldname
 	 * @return bool
 	 */
@@ -1374,7 +1341,6 @@ class Tools extends Common_functions {
 	/**
 	 * Updates DB check flag in database
 	 *
-	 * @access private
 	 */
 	private function update_db_verify_field () {
 		# query
@@ -1386,7 +1352,6 @@ class Tools extends Common_functions {
 	/**
 	 * Get fix for missing table.
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @return false|string
 	 */
@@ -1405,7 +1370,6 @@ class Tools extends Common_functions {
 	/**
 	 * Get fix for missing field.
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @param mixed $field
 	 * @return string|false
@@ -1433,7 +1397,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fix missing table - create
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @return bool
 	 */
@@ -1452,7 +1415,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fix missing field in table
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @param mixed $field
 	 * @return bool
@@ -1478,7 +1440,6 @@ class Tools extends Common_functions {
 	/**
 	 * Verify that all required indexes are present in database
 	 *
-	 * @method verify_database_indexes
 	 * @return bool
 	 */
 	public function verify_database_indexes () {
@@ -1506,7 +1467,6 @@ class Tools extends Common_functions {
 	 *
 	 * ignoring primary keys
 	 *
-	 * @method get_schema_indexes
 	 * @return array
 	 */
 	private function get_schema_indexes () {
@@ -1550,7 +1510,6 @@ class Tools extends Common_functions {
 	/**
 	 * Using required database indexes remove all that are existing and return array of missing indexes
 	 *
-	 * @method get_missing_database_indexes
 	 * @param array $schema_indexes
 	 * @return array|null
 	 */
@@ -1579,7 +1538,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fix missing indexes
 	 *
-	 * @method fix_missing_index
 	 * @param  string $table
 	 * @param  string $index_name
 	 * @return void
@@ -1706,7 +1664,6 @@ class Tools extends Common_functions {
 	/**
 	 * Check for latest version on gitHub
 	 *
-	 * @access public
 	 * @param bool $print_error (default: false)
 	 * @return string|bool
 	 */
@@ -1753,7 +1710,6 @@ class Tools extends Common_functions {
 	/**
 	 * Updates DB version check flag in database
 	 *
-	 * @access public
 	 */
 	public function update_phpipam_checktime () {
 		# query
@@ -1778,7 +1734,6 @@ class Tools extends Common_functions {
 	/**
 	 * Calculates IP calculator result per IP type
 	 *
-	 * @access public
 	 * @param mixed $cidr
 	 * @return mixed
 	 */
@@ -1790,7 +1745,6 @@ class Tools extends Common_functions {
 	/**
 	 * Calculates IPv4 results from provided CIDR address
 	 *
-	 * @access private
 	 * @param mixed $cidr
 	 * @return array
 	 */
@@ -1839,9 +1793,8 @@ class Tools extends Common_functions {
 	/**
 	 * Returns IPv4 address type from cidr
 	 *
-	 * @access private
-	 * @param $network
-	 * @param $broadcast
+	 * @param string $network
+	 * @param string $broadcast
 	 * @return string|false
 	 */
 	private function get_ipv4_address_type ($network, $broadcast) {
@@ -1864,7 +1817,6 @@ class Tools extends Common_functions {
 	/**
 	 * Defines all possible IPv4 address types
 	 *
-	 * @access private
 	 * @return array
 	 */
 	private function define_ipv4_address_types () {
@@ -1890,7 +1842,6 @@ class Tools extends Common_functions {
 	/**
 	 * Calculates IPv6 from cidr
 	 *
-	 * @access private
 	 * @param mixed $cidr
 	 * @return array
 	 */
@@ -1945,7 +1896,6 @@ class Tools extends Common_functions {
 	 *
 	 *	If a prefix length is given, generate only up to this length (ie. for zone definitions)
 	 *
-	 * @access public
 	 * @param mixed $addresses
 	 * @param int $pflen (default: 128)
 	 * @return string
@@ -1971,8 +1921,7 @@ class Tools extends Common_functions {
 	/**
 	 * Returns IPv6 address type from cidr
 	 *
-	 * @access private
-	 * @param CIDR $cidr
+	 * @param string $cidr
 	 * @return string|false
 	 */
 	private function get_ipv6_address_type ($cidr) {
@@ -1989,7 +1938,6 @@ class Tools extends Common_functions {
 	/**
 	 * Defines all IPv6 address types
 	 *
-	 * @access private
 	 * @return string[]
 	 */
 	private function define_ipv6_address_types () {
@@ -2032,12 +1980,11 @@ class Tools extends Common_functions {
     /**
      * Translates NAT objects to be shown on page
      *
-     * @access public
      * @param string $json_objects
      * @param int|bool $nat_id (default: false)
      * @param bool $json_objects (default: false)
      * @param bool $object_type (default: false) - to bold it (ipaddresses / subnets)
-     * @param int|bool object_id (default: false) - to bold it
+     * @param int|bool $object_id (default: false) - to bold it
      * @return array|false
      */
     public function translate_nat_objects_for_display ($json_objects, $nat_id = false, $admin = false, $object_type = false, $object_id=false) {
@@ -2114,7 +2061,6 @@ class Tools extends Common_functions {
      *                  [subnet_id] => array (nat_id1, nat_id2)
      *              )
      *
-     * @access public
      * @param array $all_nats (default: array())
      * @return array
      */
@@ -2167,7 +2113,6 @@ class Tools extends Common_functions {
     /**
      * Prints single NAT for display in devices, subnets, addresses.
      *
-     * @access public
      * @param mixed $n
      * @param bool $is_admin (default: false)
      * @param bool|int $nat_id (default: false)
@@ -2277,7 +2222,6 @@ class Tools extends Common_functions {
     /**
      * Returns all prefixes in correct order
      *
-     * @access public
      * @param bool|int $master (default: false)
      * @param bool $recursive (default: false)
      * @return array|bool
@@ -2323,7 +2267,6 @@ class Tools extends Common_functions {
     /**
      * Normalize prefix / number.
      *
-     * @access public
      * @param mixed $number
      * @return mixed
      */
@@ -2334,7 +2277,6 @@ class Tools extends Common_functions {
 	/**
 	 * fetch whole tree path for prefix - from slave to parents
 	 *
-	 * @access public
 	 * @param mixed $id
 	 * @return array
 	 */
@@ -2378,7 +2320,7 @@ class Tools extends Common_functions {
 	 * @param string $table
 	 * @param string $parent_field
 	 * @param string $return_field
-	 * @param int $false
+	 * @param int $id
 	 * @param bool $reverse (default: true)
 	 *
 	 * @return array
@@ -2415,7 +2357,6 @@ class Tools extends Common_functions {
 	/**
 	 * Checks for duplicate number.
 	 *
-	 * @access public
 	 * @param bool $prefix (default: false)
 	 * @param bool $number (default: false)
 	 * @return null|boolean
@@ -2440,7 +2381,6 @@ class Tools extends Common_functions {
 	/**
 	 * Prints structured menu of prefixes
 	 *
-	 * @access public
 	 * @param mixed $user
 	 * @param mixed $prefixes
 	 * @param mixed $custom_fields
@@ -2638,7 +2578,6 @@ class Tools extends Common_functions {
 	/**
 	 * Prints dropdown menu for master prefix selection in prefix editing
 	 *
-	 * @access public
 	 * @param bool $prefixId (default: false)
 	 * @return mixed
 	 */
@@ -2707,7 +2646,6 @@ class Tools extends Common_functions {
 	 *	input is array of pstn ranges
 	 *	output compresses pstn range
 	 *
-	 * @access public
 	 * @param array $numbers
 	 * @return array
 	 */
@@ -2775,7 +2713,6 @@ class Tools extends Common_functions {
 	/**
 	 * Calculates pstn usage - dhcp, active, ...
 	 *
-	 * @access public
 	 * @param object $prefix        //subnet in decimal format
 	 * @param object $numbers	     //netmask in decimal format
 	 * @return array
@@ -2811,7 +2748,6 @@ class Tools extends Common_functions {
 	/**
 	 * Calculates number usage per host type
 	 *
-	 * @access public
 	 * @param mixed $numbers
 	 * @return array
 	 */
@@ -2861,9 +2797,8 @@ class Tools extends Common_functions {
     /**
      * Fetches all location objects.
      *
-     * @access public
      * @param bool|int $id (default: false)
-     * @param bool count (default: false)
+     * @param bool $count (default: false)
      * @return array|bool
      */
     public function fetch_location_objects ($id = false, $count = false) {
@@ -2939,7 +2874,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches all circuits from database
 	 *
-	 * @method fetch_all_circuits
 	 *
 	 * @param  array $custom_circuit_fields
 	 *
@@ -2971,7 +2905,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches all logical circuits belonging to circuit
 	 *
-	 * @method fetch_all_logical_circuits_using_circuit
 	 * @param  int $circuit_id
 	 * @return array|false
 	 */
@@ -2995,7 +2928,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetch all members of logical circuit
 	 *
-	 * @method fetch_all_logical_circuit_members
 	 * @param  int $logical_circuit_id
 	 * @return array|false
 	 */
@@ -3018,7 +2950,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches all circuits for specific provider
 	 *
-	 * @method fetch_all_circuits
 	 *
 	 * @param  int $provider_id
 	 * @param  array $custom_circuit_fields
@@ -3052,7 +2983,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches all circuits for specific device
 	 *
-	 * @method fetch_all_circuits
 	 *
 	 * @param  int $device_id
 	 *
@@ -3087,7 +3017,6 @@ class Tools extends Common_functions {
 	 *  - location => "location index or NULL"
 	 *  - rack => "NULL if location, rack_id if device is set with rack otherwise NULL"
 	 *
-	 * @method reformat_circuit_location
 	 *
 	 * @param  int $deviceId
 	 * @param  int $locationId
@@ -3148,7 +3077,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetch all l2 domains and vlans
 	 *
-	 * @access public
 	 * @param string $search (default: false)
 	 * @return array|bool
 	 */
@@ -3195,7 +3123,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetch all objects belonging to customer
 	 *
-	 * @method fetch_customer_objects
 	 * @param  int $customer_id
 	 * @return void
 	 */
@@ -3219,7 +3146,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetch all routing subnets
 	 *
-	 * @method fetch_routing_subnets
 	 * @param  string $type [bgp,ospf]
 	 * @param  int $id (default: 0)
 	 * @param  bool $cnt (default: true)
@@ -3248,7 +3174,6 @@ class Tools extends Common_functions {
 	/**
 	 * Return all possible customer object relations
 	 *
-	 * @method get_customer_object_types
 	 * @return array
 	 */
 	public function get_customer_object_types () {
@@ -3266,7 +3191,6 @@ class Tools extends Common_functions {
 	/**
 	 * Return sorting for fetch_multiple_objects
 	 *
-	 * @method get_customer_object_types_sorts
 	 * @param  string $type
 	 * @return string
 	 */
@@ -3285,7 +3209,6 @@ class Tools extends Common_functions {
 	/**
 	 * Parses import file
 	 *
-	 * @access public
 	 * @param string $filetype
 	 * @param object $subnet
 	 * @param array $custom_address_fields
@@ -3310,7 +3233,6 @@ class Tools extends Common_functions {
 	/**
 	 * Parses xls import file
 	 *
-	 * @access private
 	 * @param object $subnet
 	 * @param array $custom_address_fields
 	 * @return mixed
@@ -3362,7 +3284,6 @@ class Tools extends Common_functions {
 	/**
 	 * Parses CSV import file
 	 *
-	 * @access private
 	 * @return array
 	 */
 	private function parse_import_file_csv () {
@@ -3410,7 +3331,6 @@ class Tools extends Common_functions {
 	/**
 	 * Detects CSV delimiter
 	 *
-	 * @method set_csv_delimiter
 	 * @param  string $outFile
 	 * @return string
 	 */
@@ -3433,7 +3353,6 @@ class Tools extends Common_functions {
 	 *
 	 *      append class to array
 	 *
-	 * @access private
 	 * @param mixed $outFile
 	 * @param object $subnet
 	 * @return void
@@ -3487,7 +3406,6 @@ class Tools extends Common_functions {
 	/**
 	 * Counts number of IP addresses for statistics
 	 *
-	 * @access public
 	 * @param string $type (default: "IPv4")
 	 * @return int
 	 */
@@ -3506,7 +3424,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches top subnets for dashboard graphs
 	 *
-	 * @access public
 	 * @param mixed $type
 	 * @param string $limit (default: "10")
 	 * @param bool $perc (default: false)
@@ -3545,7 +3462,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches all addresses to export to hosts file
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function fetch_addresses_for_export () {
@@ -3559,7 +3475,6 @@ class Tools extends Common_functions {
 	/**
 	 * Verify that translation exists
 	 *
-	 * @access public
 	 * @param mixed $code		//lang code
 	 * @return bool
 	 */
@@ -3571,7 +3486,6 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches translation version from code
 	 *
-	 * @access public
 	 * @param mixed $code		//lang code
 	 * @return string
 	 */

@@ -62,7 +62,7 @@ class SubnetsMenu {
 
 	/**
 	 * Return the Subnet/Folder description
-	 * @param  stdObject $subnet
+	 * @param  stdClass $subnet
 	 * @return string
 	 */
 	private function get_subnet_description($subnet) {
@@ -100,7 +100,7 @@ class SubnetsMenu {
 
 	/**
 	 * Generate Style values to apply to selected subnet/folder
-	 * @param  stdObject $subnet
+	 * @param  stdClass $subnet
 	 * @return array
 	 */
 	private function get_subnet_styles($subnet) {
@@ -139,7 +139,7 @@ class SubnetsMenu {
 
 	/**
 	 * Generate a <li> menu item for provided subnet/folder
-	 * @param  stdObject $subnet
+	 * @param  stdClass $subnet
 	 */
 	private function menu_item($subnet) {
 		$description = $this->get_subnet_description($subnet);
@@ -186,7 +186,7 @@ class SubnetsMenu {
 	/**
 	 * Generate required <ul> </ul> nested HTML
 	 * @param  integer $level
-	 * @param  stdObject|null $subnet
+	 * @param  stdClass|null $subnet
 	 */
 	private function menu_nested_level($level, $subnet) {
 		if (is_object($subnet)) {

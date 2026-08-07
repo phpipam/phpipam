@@ -25,7 +25,6 @@ class FirewallZones extends Common_functions {
 	 * private Subnets object
 	 *
 	 * @var Subnets
-	 * @access private
 	 */
 	private $Subnets;
 
@@ -35,7 +34,6 @@ class FirewallZones extends Common_functions {
 	 * (default value: false)
 	 *
 	 * @var bool
-	 * @access public
 	 */
 	public $error = false;
 
@@ -43,7 +41,6 @@ class FirewallZones extends Common_functions {
 	 * number of results
 	 *
 	 * @var int
-	 * @access public
 	 */
 	public $limit;
 
@@ -51,7 +48,6 @@ class FirewallZones extends Common_functions {
 	 * orderby
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $orderby;
 
@@ -59,7 +55,6 @@ class FirewallZones extends Common_functions {
 	 * orderdir
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $orderdir;
 
@@ -67,7 +62,6 @@ class FirewallZones extends Common_functions {
 	 * firewallZoneSettings
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $firewallZoneSettings;
 
@@ -77,7 +71,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * __construct function.
 	 *
-	 * @access public
 	 * @param Database_PDO $Database
 	 * @return void
 	 */
@@ -98,7 +91,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * convert zone name from decimal to hex (only for display reasons)
 	 *
-	 * @access public
 	 * @param mixed $zone
 	 * @return string
 	 */
@@ -116,7 +108,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Generate unique zone names by generator type
 	 *
-	 * @access public
 	 * @param mixed $values
 	 * @return void
 	 */
@@ -137,7 +128,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Create decimal zone name
 	 *
-	 * @access private
 	 * @param mixed $zoneLength
 	 * @param mixed $zoneGenerator
 	 * @return string|false
@@ -181,7 +171,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * validate text zone names
 	 *
-	 * @access private
 	 * @param mixed $values
 	 * @return void
 	 */
@@ -221,7 +210,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Fetches zone mappings from database
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function get_zone_mappings () {
@@ -294,7 +282,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Fetches zone mapping from database, depending on id
 	 *
-	 * @access public
 	 * @param mixed $id
 	 * @return object|false
 	 */
@@ -369,7 +356,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Checks if there is any mapping for a specific zone
 	 *
-	 * @access public
 	 * @param mixed $zoneId
 	 * @return void
 	 */
@@ -388,7 +374,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Fetches zone mapping informations for subnet detail from database, depending on id
 	 *
-	 * @access public
 	 * @param mixed $id
 	 * @return object|false
 	 */
@@ -441,7 +426,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Fetches all zones from database
 	 *
-	 * @access public
 	 * @return array|false
 	 */
 	public function get_zones () {
@@ -499,7 +483,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Fetches single zone from database, depending on zone id
 	 *
-	 * @access public
 	 * @param mixed $id
 	 * @return object|false
 	 */
@@ -560,7 +543,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * display formatted zone data
 	 *
-	 * @access public
 	 * @param mixed $id
 	 * @return void
 	 */
@@ -614,7 +596,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * display formatted zone network(s)
 	 *
-	 * @access public
 	 * @param mixed $id
 	 * @return void
 	 */
@@ -668,7 +649,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * validate if a network is suitable to map to a zone
 	 *
-	 * @access public
 	 * @param mixed $subnetId
 	 * @return bool
 	 */
@@ -692,7 +672,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * add a network to a zone
 	 *
-	 * @access public
 	 * @param mixed $zoneId
 	 * @param mixed $subnetId
 	 * @return false|string
@@ -724,7 +703,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * delete a network of a zone
 	 *
-	 * @access public
 	 * @param mixed $zoneId
 	 * @param mixed $subnetId
 	 * @return string|false
@@ -748,7 +726,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Modify zone details main method
 	 *
-	 * @access public
 	 * @param mixed $action
 	 * @param mixed $values
 	 * @return void
@@ -778,7 +755,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Create new zone method
 	 *
-	 * @access private
 	 * @param mixed $values
 	 * @param mixed $network
 	 * @return boolean
@@ -826,7 +802,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Edit zone
 	 *
-	 * @access private
 	 * @param mixed $values
 	 * @return boolean
 	 */
@@ -847,7 +822,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Deletes zone and all corresponding mappings
 	 *
-	 * @access private
 	 * @param string $id
 	 * @return boolean
 	 */
@@ -880,7 +854,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Modify mapping - main method
 	 *
-	 * @access public
 	 * @param mixed $action
 	 * @param mixed $values
 	 * @return void
@@ -903,7 +876,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Create new mapping
 	 *
-	 * @access private
 	 * @param mixed $values
 	 * @return boolean
 	 */
@@ -924,7 +896,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Edit mapping
 	 *
-	 * @access private
 	 * @param mixed $values
 	 * @return boolean
 	 */
@@ -945,7 +916,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * Deletes single mapping
 	 *
-	 * @access private
 	 * @param string $id
 	 * @return boolean
 	 */
@@ -969,7 +939,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * generate a firewall subnet object
 	 *
-	 * @access public
 	 * @param mixed $id
 	 * @return bool
 	 */
@@ -1044,7 +1013,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * generate a firewall address object
 	 *
-	 * @access public
 	 * @param mixed $id
 	 * @param mixed $dnsName
 	 * @return string
@@ -1095,7 +1063,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * update a firewall address object
 	 *
-	 * @access public
 	 * @param mixed $subnetId
 	 * @param mixed $IPId
 	 * @param mixed $dnsName
@@ -1169,7 +1136,6 @@ class FirewallZones extends Common_functions {
 	/**
 	 * update a firewall address objects for a whole network
 	 *
-	 * @access public
 	 * @param mixed $subnetId
 	 * @return bool
 	 */

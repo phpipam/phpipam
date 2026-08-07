@@ -129,7 +129,6 @@ class User extends Common_functions {
     /**
      * __construct function.
      *
-     * @access public
      * @param Database_PDO $database
      * @param bool $api (default: false)
      */
@@ -183,7 +182,6 @@ class User extends Common_functions {
     /**
      * registers new session
      *
-     * @access private
      * @return void
      */
     private function register_session () {
@@ -202,8 +200,7 @@ class User extends Common_functions {
 
     /**
      * Start session - files or use database handler
-     * @method start_session
-     * @return [type]
+     * @return void
      */
     private function start_session () {
         // check if database should be set for sessions
@@ -230,7 +227,6 @@ class User extends Common_functions {
     /**
      * destroys session
      *
-     * @access public
      * @return void
      */
     public function destroy_session () {
@@ -240,7 +236,6 @@ class User extends Common_functions {
     /**
      * sets session name if specified in config file
      *
-     * @access private
      * @return void
      */
     private function set_session_name () {
@@ -259,7 +254,6 @@ class User extends Common_functions {
      *  gc_maxlifetime  : time for server to keep data parameters for (at least 24 hours)
      *  cookie_lifetime : time for client browser to keep cookies
      *
-     * @access private
      * @return void
      */
     private function set_session_ini_params () {
@@ -272,7 +266,6 @@ class User extends Common_functions {
     /**
      * saves parameters to session after authentication succeeds
      *
-     * @access private
      * @return void
      */
     private function write_session_parameters () {
@@ -294,7 +287,6 @@ class User extends Common_functions {
     /**
      * Update users language
      *
-     * @access public
      * @return void
      */
     public function update_session_language () {
@@ -309,7 +301,6 @@ class User extends Common_functions {
     /**
      * Checks if user is authenticated - session is set
      *
-     * @access public
      * @return bool
      */
     public function is_authenticated () {
@@ -341,7 +332,6 @@ class User extends Common_functions {
 
     /**
      * Check if 2fa is required for user
-     * @method twofa_required
      * @return bool
      */
     public function twofa_required () {
@@ -351,7 +341,6 @@ class User extends Common_functions {
     /**
      * Checks if current user is admin or not
      *
-     * @access public
      * @param bool $die (default: true)
      * @return string|bool
      */
@@ -366,7 +355,6 @@ class User extends Common_functions {
     /**
      * checks if user is authenticated, if not redirects to login page
      *
-     * @access public
      * @param bool $redirect (default: true)
      * @return string|false
      */
@@ -422,7 +410,6 @@ class User extends Common_functions {
     /**
      * Sets UI theme for user
      *
-     * @method set_user_theme
      * @return void
      */
     private function set_user_theme () {
@@ -450,7 +437,6 @@ class User extends Common_functions {
      * Check if users timeout expired
      *     if yes set timeout flag
      *
-     * @access private
      * @return void
      */
     private function check_timeout () {
@@ -466,7 +452,6 @@ class User extends Common_functions {
     /**
      * resets inactivity time after each successful login
      *
-     * @access private
      * @return void
      */
     private function reset_inactivity_time () {
@@ -499,7 +484,6 @@ class User extends Common_functions {
     /**
      * Saves redirect cookie if session times out
      *
-     * @access private
      * @return void
      */
     private function set_redirect_cookie () {
@@ -533,7 +517,6 @@ class User extends Common_functions {
     /**
      * Checks if system is in maintaneance mode and exits if it is
      *
-     * @method check_maintaneance_mode
      * @param  bool    $is_popup (default: false)
      * @return void
      */
@@ -551,7 +534,6 @@ class User extends Common_functions {
     /**
      * Sets maintaneance mode
      *
-     * @method set_maintaneance_mode
      * @param  bool $on (default: false)
      */
     public function set_maintaneance_mode ($on = false) {
@@ -566,7 +548,6 @@ class User extends Common_functions {
      * Migrate resolve_subnets from config.php to database
      * for versions older than 1.31
      *
-     * @method migrate_resolve_subnets
      *
      * @return void
      */
@@ -604,7 +585,6 @@ class User extends Common_functions {
     /**
      * Checks AJAX loaded pages for proper origin
      *
-     * @access private
      * @return void
      */
     private function check_referrer () {
@@ -618,7 +598,6 @@ class User extends Common_functions {
     /**
      * fetches default language
      *
-     * @access public
      * @return object
      */
     public function get_default_lang () {
@@ -633,7 +612,6 @@ class User extends Common_functions {
      *
      *    Can be extended by reading set properties from set field options
      *
-     * @access public
      * @return array
      */
     public function fetch_available_auth_method_types () {
@@ -657,7 +635,6 @@ class User extends Common_functions {
     /**
      * Fetches details for users favourite subnets
      *
-     * @access public
      * @return array|false
      */
     public function fetch_favourite_subnets () {
@@ -698,7 +675,6 @@ class User extends Common_functions {
     /**
      * Edit users favourites
      *
-     * @access public
      * @param mixed $action
      * @param mixed $subnetId
      * @return bool
@@ -713,7 +689,6 @@ class User extends Common_functions {
     /**
      * Remove subnet from user favourite subnets
      *
-     * @access private
      * @param mixed $subnetId
      * @return bool
      */
@@ -733,7 +708,6 @@ class User extends Common_functions {
     /**
      * Add subnet to user favourite subnets
      *
-     * @access private
      * @param int $subnetId
      * @return bool
      */
@@ -754,7 +728,6 @@ class User extends Common_functions {
     /**
      * Checks if subnet is in users favourite subnets
      *
-     * @access public
      * @param int $subnetId
      * @return boolean
      */
@@ -769,7 +742,6 @@ class User extends Common_functions {
     /**
      * Checks if folder is favourite - alias for is subnet favourite
      *
-     * @access public
      * @param mixed $subnetId
      * @return bool
      */
@@ -799,7 +771,6 @@ class User extends Common_functions {
      *    > sets authentication method and checks validity
      *    > authenticates
      *
-     * @access public
      * @param string $username
      * @param string $password
      * @param bool $saml
@@ -857,7 +828,6 @@ class User extends Common_functions {
     /**
      * tries to fetch user details from database by username if not already existing locally
      *
-     * @access public
      * @param string $username
      * @param bool $force
      * @return void
@@ -893,7 +863,6 @@ class User extends Common_functions {
     /**
      * Fetch all languages from database.
      *
-     * @access public
      * @return array
      */
     public function fetch_langs () {
@@ -909,7 +878,6 @@ class User extends Common_functions {
     /**
      * fetches language details from database
      *
-     * @access private
      * @return string
      */
     private function fetch_lang_details () {
@@ -926,7 +894,6 @@ class User extends Common_functions {
     /**
      * Fetches name and details of authentication method (local, AD, LDAP, ...) from DB and saves them to var
      *
-     * @access private
      * @return void
      */
     private function get_auth_method_type () {
@@ -945,7 +912,6 @@ class User extends Common_functions {
      * local user authentication method, authenticates users through local DB entry
      * we provide user object from DB, and username/password entered by users
      *
-     * @access private
      * @param mixed $username
      * @param mixed $password
      * @return void
@@ -986,7 +952,6 @@ class User extends Common_functions {
      * HTTP REMOTE_USER authentication, the user is already authenticated
      * by the web server so just create the session
      *
-     * @access private
      * @param mixed $username
      * @param mixed $password
      * @return void
@@ -1011,7 +976,6 @@ class User extends Common_functions {
     /**
      * Shows login prompt for apache logins
      *
-     * @access private
      * @return void
      */
     private function show_http_login () {
@@ -1026,7 +990,6 @@ class User extends Common_functions {
      *
      *Connect using adLDAP
      *
-     * @access private
      * @param mixed $authparams
      * @return adLDAP object
      */
@@ -1074,7 +1037,6 @@ class User extends Common_functions {
      *    Using library > adLDAP - LDAP Authentication with PHP for Active Directory
      *    http://adldap.sourceforge.net
      *
-     * @access private
      * @param array $authparams
      * @param string $username
      * @param string $password
@@ -1121,7 +1083,6 @@ class User extends Common_functions {
      * AD (Active directory) authentication function
      *
      *
-     * @access private
      * @param mixed $username
      * @param mixed $password
      * @return void
@@ -1137,7 +1098,6 @@ class User extends Common_functions {
      *    LDAP authentication
      *    same as AD authentication, only set the LDAP flag to true
      *
-     * @access private
      * @param mixed $username
      * @param mixed $password
      * @return void
@@ -1161,7 +1121,6 @@ class User extends Common_functions {
      * NetIQ authentication
      * same as AD authentication, only add cn= before username
      *
-     * @access private
      * @param mixed $username
      * @param mixed $password
      * @return void
@@ -1175,7 +1134,6 @@ class User extends Common_functions {
      *
      * GH: https://github.com/dapphp/radius
      *
-     * @access private
      * @param mixed $username
      * @param mixed $password
      * @return void
@@ -1256,7 +1214,6 @@ class User extends Common_functions {
     /**
      * SAML2 auth
      *
-     * @access private
      * @param mixed $username
      * @return void
      */
@@ -1278,7 +1235,6 @@ class User extends Common_functions {
 
     /**
      * Check for any login restrictions after user has authenticated
-     * @method check_login_restrictions
      * @param  string $username
      * @return void
      */
@@ -1307,7 +1263,6 @@ class User extends Common_functions {
 
     /**
      * Process succesfull passkey auth
-     * @method auth_passkey_success
      * @param  string $encodedCredential
      * @return bool
      */
@@ -1364,8 +1319,7 @@ class User extends Common_functions {
 
     /**
      * Fetch user details based on passkey ID
-     * @method fetch_passkey_user_details
-     * @return obj
+     * @return void
      */
     private function fetch_passkey_user_details () {
         try {
@@ -1382,13 +1336,12 @@ class User extends Common_functions {
         }
         catch (Exception $e) {
             header('HTTP/1.1 500 '.$e->getMessage());
-            return false;
+            return;
         }
     }
 
     /**
      * Get passkeys for user
-     * @method get_user_passkeys
      * @param  bool $user_id
      * @return array
      */
@@ -1405,8 +1358,7 @@ class User extends Common_functions {
 
     /**
      * Get passkey for user based on key_id
-     * @method get_user_passkeys
-     * @param  bool $user_id
+     * @param  bool $keyId
      * @return object|null
      */
     public function get_user_passkey_by_keyId ($keyId = false) {
@@ -1420,7 +1372,6 @@ class User extends Common_functions {
 
     /**
      * Save new passkey
-     * @method save_passkey
      * @param  string $credential
      * @return bool
      */
@@ -1438,7 +1389,6 @@ class User extends Common_functions {
 
     /**
      * Rename passkey
-     * @method rename_passkey
      * @param  int $id
      * @param  string $comment
      * @return bool
@@ -1456,7 +1406,6 @@ class User extends Common_functions {
 
     /**
      * Delete passkey
-     * @method delete_passkey
      * @param  int $id
      * @return bool
      */
@@ -1473,8 +1422,8 @@ class User extends Common_functions {
 
     /**
      * Update passkey on succesfull login
-     * @method save_passkey
-     * @param  string $credential
+     * @param  string $credentialId
+     * @param  string $updated_credential
      * @return bool
      */
     public function update_passkey ($credentialId = "", $updated_credential = "") {
@@ -1491,7 +1440,6 @@ class User extends Common_functions {
 
     /**
      * Save authneitcation user id to session
-     * @method set_passkey_user_id
      * @param  int $userid
      */
     public function set_passkey_user_id ($userid = 0) {
@@ -1500,7 +1448,6 @@ class User extends Common_functions {
 
     /**
      * Return user id
-     * @method get_passkey_user_id
      * @return int
      */
     public function get_passkey_user_id () {
@@ -1509,8 +1456,7 @@ class User extends Common_functions {
 
     /**
      * Remove temporary clear_passkey_user_id
-     * @method clear_passkey_user_id
-     * @return [type]
+     * @return void
      */
     public function clear_passkey_user_id () {
         unset($_SESSION['passkey_user_id']);
@@ -1539,7 +1485,6 @@ class User extends Common_functions {
      *            CRYPT_SHA256 == 1        (Salt starting with $5$rounds=5000$, 16 character salt.)
      *            CRYPT_SHA512 == 1        (Salt starting with $6$rounds=5000$, 16 character salt.)
      *
-     * @access public
      * @param mixed $input
      * @return string
      */
@@ -1559,7 +1504,6 @@ class User extends Common_functions {
     /**
      *    this function will detect highest crypt type to use for system
      *
-     * @access public
      * @return string
      */
     private function detect_crypt_type () {
@@ -1573,7 +1517,6 @@ class User extends Common_functions {
     /**
      * Returns crypt type used to encrypt password
      *
-     * @access public
      * @return string
      */
     public function return_crypt_type () {
@@ -1587,7 +1530,6 @@ class User extends Common_functions {
     /**
      * Updates users password
      *
-     * @access public
      * @param mixed $password
      * @return void
      */
@@ -1615,7 +1557,6 @@ class User extends Common_functions {
     /**
      * User self update method
      *
-     * @access public
      * @param Params $post
      * @return bool
      */
@@ -1667,7 +1608,6 @@ class User extends Common_functions {
     /**
      * User self update widgets.
      *
-     * @access public
      * @param mixed $widgets
      * @return bool
      */
@@ -1685,7 +1625,6 @@ class User extends Common_functions {
     /**
      * Updates last users login time
      *
-     * @access public
      * @return bool
      */
     public function update_login_time () {
@@ -1703,7 +1642,6 @@ class User extends Common_functions {
     /**
      * Updates last users activity time
      *
-     * @access public
      * @return void
      */
     public function update_activity_time () {
@@ -1726,9 +1664,8 @@ class User extends Common_functions {
     /**
      * sets limit for failed login attempts
      *
-     * @access public
      * @param int $limit
-     * @return none
+     * @return void
      */
     public function set_block_limit ($limit) {
         $this->blocklimit = $limit;
@@ -1737,8 +1674,6 @@ class User extends Common_functions {
     /**
      * checks if IP is blocked and returns count for entries
      *
-     * @access public
-     * @param none
      * @return int|false
      */
     public function block_check_ip() {
@@ -1761,7 +1696,6 @@ class User extends Common_functions {
     /**
      * adds new IP to block or updates count if already present
      *
-     * @access public
      * @return bool
      */
     public function block_ip() {
@@ -1783,7 +1717,6 @@ class User extends Common_functions {
      * sets IP address to block
      * needed for proxy access to block end user not whole proxy
      *
-     * @access private
      * @return void
      */
     private function block_get_ip() {
@@ -1793,7 +1726,6 @@ class User extends Common_functions {
     /**
      * purges login attempts more than 5 minutes old (since last attempt)
      *
-     * @access private
      * @return void
      */
     private function purge_blocked_entries() {
@@ -1809,7 +1741,6 @@ class User extends Common_functions {
     /**
      * updates existing log attempt count
      *
-     * @access private
      * @return void
      */
     private function block_update_count() {
@@ -1825,7 +1756,6 @@ class User extends Common_functions {
     /**
      * adds new IP entry to block with count 1
      *
-     * @access private
      * @return void
      */
     private function block_add_entry() {
@@ -1839,7 +1769,6 @@ class User extends Common_functions {
     /**
      * removes blocked IP entry if it exists on successful login
      *
-     * @access private
      * @return void
      */
     private function block_remove_entry() {
@@ -1852,8 +1781,7 @@ class User extends Common_functions {
 
     /**
      * log failed accesses, for further processing by tools like Fail2Ban
-     *
-     * @access private
+     * @param string $username
      * @return void
      */
     private function log_failed_access($username) {
@@ -1873,7 +1801,6 @@ class User extends Common_functions {
     /**
      * From json {"2":"2","3":"1"}, get user list + perm
      *
-     * @method get_user_permissions_from_json
      * @param  string     $json
      * @return array
      */
@@ -1906,7 +1833,6 @@ class User extends Common_functions {
 	 *	input:  array of group ids
 	 *	output: array of groups ( "id"=>array($group) )
 	 *
-     * @method groups_parse
 	 * @param array  $group_ids
 	 * @return array
 	 */
@@ -1932,7 +1858,6 @@ class User extends Common_functions {
      *     - 2 ; read-write
      *     - 3 : admin
      *
-     * @method get_l2domain_permissions
      * @param  object $l2domain
      * @return int
      */
@@ -1997,7 +1922,6 @@ class User extends Common_functions {
     /**
      * Check if user has l2domain permissions for specific access level
      *
-     * @method check_l2domain_permissions
      * @param  object $l2domain
      * @param  int $required_level
      * @param  bool $die
@@ -2019,7 +1943,6 @@ class User extends Common_functions {
     /**
      * Register use module permissions from json
      *
-     * @method register_user_module_permissions
      * @return void
      */
     private function register_user_module_permissions () {
@@ -2053,7 +1976,6 @@ class User extends Common_functions {
      *     - 2 ; read-write
      *     - 3 : admin
      *
-     * @method get_module_permissions
      * @param  string $module_name
      * @return int
      */
@@ -2073,7 +1995,6 @@ class User extends Common_functions {
     /**
      * Check if user has module permissions for specific access level
      *
-     * @method check_module_permissions
      * @param  string $module_name
      * @param  int $required_level
      * @param  bool $die
@@ -2095,7 +2016,6 @@ class User extends Common_functions {
     /**
      * Get available modules
      *
-     * @method get_modules_with_permissions_prefix_perm
      * @return array
      */
     public function get_modules_with_permissions_prefix_perm() {
@@ -2151,7 +2071,6 @@ class User extends Common_functions {
     /**
      * Return array of all modules with permissions
      *
-     * @method get_modules_with_permissions
      * @return array
      */
     public function get_modules_with_permissions() {
@@ -2163,7 +2082,6 @@ class User extends Common_functions {
     /**
      * Prints permission badge
      *
-     * @method print_permission_badge
      * @param  int $level
      * @return string
      */
@@ -2181,7 +2099,6 @@ class User extends Common_functions {
      * Store below to config.php:
      *     define('IS_DEMO', true);
      *
-     * @method is_demo
      * @param  bool $popup
      * @return bool
      */

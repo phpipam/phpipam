@@ -27,7 +27,6 @@ class DHCP extends Common_functions {
      * (default value: array("kea"))
      *
      * @var array
-     * @access private
      */
     private $dhcp_server_types = ["kea"];
 
@@ -37,7 +36,6 @@ class DHCP extends Common_functions {
      * (default value: null)
      *
      * @var mixed
-     * @access private
      */
     private $dhcp_selected_type = null;
 
@@ -49,7 +47,6 @@ class DHCP extends Common_functions {
      * (default value: array())
      *
      * @var array
-     * @access private
      */
     private $dhcp_settings = [];
 
@@ -61,7 +58,6 @@ class DHCP extends Common_functions {
      * (default value: false)
      *
      * @var object
-     * @access private
      */
     private $DHCP_server = false;
 
@@ -74,7 +70,6 @@ class DHCP extends Common_functions {
     /**
      * __construct function.
      *
-     * @access public
      * @param mixed $server_type
      * @param array $dhcp_settings (default: array())
      * @return void
@@ -101,7 +96,6 @@ class DHCP extends Common_functions {
     /**
      * Inits specific DHCP server and passes parameters
      *
-     * @access private
      * @return void
      */
     private function init_dhcp_server_class () {
@@ -121,7 +115,6 @@ class DHCP extends Common_functions {
     /**
      * Makes sure php class for selected DHCP type is found
      *
-     * @access private
      * @return void
      */
     private function verify_class_file () {
@@ -136,7 +129,6 @@ class DHCP extends Common_functions {
     /**
      * Checks if DHCP subclass has specified method.
      *
-     * @access private
      * @param mixed $method
      * @return void
      */
@@ -156,7 +148,6 @@ class DHCP extends Common_functions {
     /**
      * Returns raw config file to display under settings.
      *
-     * @access public
      * @return void
      */
     public function read_config_raw () {
@@ -174,7 +165,6 @@ class DHCP extends Common_functions {
      *          - `option-data` > array of default options with name and data keys (e.g. array(array("name"=>"domain-name", "data"=>"domain.local")))
      *          - `subnet6` (details are provided in documentation for read_subnets method below)
      *
-     * @access public
      * @return void
      */
     public function read_config () {
@@ -200,7 +190,6 @@ class DHCP extends Common_functions {
      *
      *  Default values will be added to `option-data` from config file if it exists (if (isset($config['Dhcp4']['option-data'])))
      *
-     * @access public
      * @param string $type (default: "IPv4")
      * @return void
      */
@@ -235,7 +224,6 @@ class DHCP extends Common_functions {
      *      - `hostname` - client hostname (varchar)
      *
      *
-     * @access public
      * @param string $type (default: "IPv4")
      * @return void
      */
@@ -278,7 +266,6 @@ class DHCP extends Common_functions {
      *      - `options` - array of options for client in key=>val format options = array("name-servers"=>"10.10.10.1");
      *      - `classes` - array of classes to assign to client
      *
-     * @access public
      * @param string $type (default: "IPv4")
      * @return void
      */

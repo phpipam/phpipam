@@ -10,7 +10,6 @@ class Scan extends Common_functions {
 	 * (array of objects) to store addresses, address ID is array index
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $addresses;
 
@@ -20,7 +19,6 @@ class Scan extends Common_functions {
 	 * (default value: null)
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $php_exec = null;
 
@@ -30,7 +28,6 @@ class Scan extends Common_functions {
 	 * (default value: "ping")
 	 *
 	 * @var string
-	 * @access public
 	 */
 	public $icmp_type = "ping";
 
@@ -138,7 +135,6 @@ class Scan extends Common_functions {
 	/**
 	 * __construct function
 	 *
-	 * @access public
 	 * @param Database_PDO $database
 	 * @param mixed $settings (default: null)
 	 */
@@ -173,7 +169,6 @@ class Scan extends Common_functions {
 	/**
 	 * Returns all possible ping types / apps
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function ping_fetch_types () {
@@ -183,7 +178,6 @@ class Scan extends Common_functions {
 	/**
 	 * This function resets the scan method, for cron scripts
 	 *
-	 * @access public
 	 * @param mixed $method
 	 * @return void
 	 */
@@ -205,7 +199,6 @@ class Scan extends Common_functions {
 	/**
 	 * Sets php exec
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function set_php_exec () {
@@ -231,7 +224,6 @@ class Scan extends Common_functions {
 	/**
 	 * Sets OS type
 	 *
-	 * @method set_os_type
 	 */
 	private function set_os_type () {
 		if	(PHP_OS == "FreeBSD" || PHP_OS == "NetBSD")                         { $this->os_type = "FreeBSD"; }
@@ -244,7 +236,6 @@ class Scan extends Common_functions {
 	 *
 	 *	Default is return
 	 *
-	 * @access public
 	 * @param bool $exit (default: false)
 	 * @return void
 	 */
@@ -276,12 +267,10 @@ class Scan extends Common_functions {
 	 *
 	 *	all other codes can be explained in ping_exit_explain method
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @param int $count (default: 1)
 	 * @param int $timeout (default: 1)
-	 * @param bool $exit (default: false)
-	 * @return void
+	 * @return int
 	 */
 	public function ping_address ($address, $count=1, $timeout = 1) {
 		#set parameters
@@ -367,8 +356,8 @@ class Scan extends Common_functions {
 	 * Ping selected address with PEAR ping package
 	 *
 	 * @access protected
-	 * @param ip $address
-	 * @return void
+	 * @param string $address
+	 * @return int
 	 */
 	protected function ping_address_method_pear ($address) {
 		# we need pear ping package
@@ -437,7 +426,6 @@ class Scan extends Common_functions {
 	 *
 	 *	fping cannot be run from web, it needs root privileges to be able to open raw socket :/
 	 *
-	 * @access public
 	 * @param mixed $address 	// IPv4/IPv6
 	 * @return int
 	 */
@@ -469,7 +457,6 @@ class Scan extends Common_functions {
 	/**
 	 * Saves RTT for fping
 	 *
-	 * @access private
 	 * @param mixed $line
 	 * @return void
 	 */
@@ -494,9 +481,9 @@ class Scan extends Common_functions {
 	 *
 	 *	fping cannot be run from web, it needs root privileges to be able to open raw socket :/
 	 *
-	 * @access public
-	 * @param mixed $subnet 	//CIDR
-	 * @return void
+	 * @param mixed $subnet_cidr 	//CIDR
+	 * @param bool $return_result
+	 * @return int
 	 */
 	public function ping_address_method_fping_subnet ($subnet_cidr, $return_result = false) {
 		$this->ping_verify_path ($this->fping_path);
@@ -534,7 +521,6 @@ class Scan extends Common_functions {
 	/**
 	 * Verifies that ping file exists
 	 *
-	 * @access private
 	 * @param mixed $path
 	 * @return void
 	 */
@@ -557,7 +543,6 @@ class Scan extends Common_functions {
 	/**
 	 * Explains invalid error codes
 	 *
-	 * @access public
 	 * @param mixed $code
 	 * @return string
 	 */
@@ -576,7 +561,6 @@ class Scan extends Common_functions {
 	 *
 	 *	extend if needed for future scripts
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function ping_set_exit_code_explains () {
@@ -604,7 +588,6 @@ class Scan extends Common_functions {
 	/**
 	 * Update lastseen field for specific IP address
 	 *
-	 * @access public
 	 * @param int $id
 	 * @param datetime $datetime
 	 * @return void
@@ -628,7 +611,6 @@ class Scan extends Common_functions {
 	/**
 	 * Update last check time for agent
 	 *
-	 * @access public
 	 * @param int $id
 	 * @param  false|datetime $datetime
 	 * @return void
@@ -645,7 +627,6 @@ class Scan extends Common_functions {
 	/**
 	 * Updates last time that subnet was scanned
 	 *
-	 * @method update_subnet_scantime
 	 * @param  int $subnet_id
 	 * @param  false|datetime $datetime
 	 * @return void
@@ -661,7 +642,6 @@ class Scan extends Common_functions {
 	/**
 	 * Updates last time discovery check was run on subnet
 	 *
-	 * @method update_subnet_discoverytime
 	 * @param  int $subnet_id
 	 * @param  false|datetime $datetime
 	 * @return void
@@ -677,8 +657,7 @@ class Scan extends Common_functions {
 	/**
 	 * Updates address tag if state changes
 	 *
-	 * @method update_address_tag
-	 * @param  int$address_id
+	 * @param  int $address_id
 	 * @param  int $tag_id (default: 2)
 	 * @param  int $old_tag_id (default: null)
 	 * @param  string $last_seen_date (default: false)
@@ -713,7 +692,6 @@ class Scan extends Common_functions {
 	/**
 	 * Opens socket connection on specified TCP ports, if at least one is available host is alive
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @param mixed $port
 	 * @return void
@@ -753,7 +731,6 @@ class Scan extends Common_functions {
 	/**
 	 * Returns all addresses to be scanned or updated
 	 *
-	 * @access public
 	 * @param mixed $type		//discovery, update
 	 * @param mixed $subnet
 	 * @param bool $type
@@ -761,7 +738,7 @@ class Scan extends Common_functions {
 	 */
 	public function prepare_addresses_to_scan ($type, $subnet, $die = true) {
 		# discover new addresses
-		if($type=="discovery") 	{ return is_numeric($subnet) ? $this->prepare_addresses_to_discover_subnetId ($subnet, $die) : $this->prepare_addresses_to_discover_subnet ($subnet, $die); }
+		if($type=="discovery") 	{ return is_numeric($subnet) ? $this->prepare_addresses_to_discover_subnetId ($subnet, $die) : $this->prepare_addresses_to_discover_subnet ($subnet); }
 		# update addresses statuses
 		elseif($type=="update") { return $this->prepare_addresses_to_update ($subnet); }
 		# fail
@@ -771,8 +748,8 @@ class Scan extends Common_functions {
 	/**
 	 * Returns array of all addresses to be scanned inside subnet defined with subnetId
 	 *
-	 * @access public
 	 * @param mixed $subnetId
+	 * @param bool $die
 	 * @return array
 	 */
 	public function prepare_addresses_to_discover_subnetId ($subnetId, $die) {
@@ -810,7 +787,6 @@ class Scan extends Common_functions {
 	/**
 	 * Removes existing addresses from
 	 *
-	 * @access private
 	 * @param mixed $ip				//array of ip addresses in decimal format
 	 * @param mixed $subnetId		//id of subnet
 	 * @return array
@@ -838,7 +814,6 @@ class Scan extends Common_functions {
 	/**
 	 * Returns array of all addresses in subnet
 	 *
-	 * @access public
 	 * @param mixed $subnet
 	 * @return array
 	 */
@@ -857,7 +832,6 @@ class Scan extends Common_functions {
 	/**
 	 * Returns array of all addresses to be scanned
 	 *
-	 * @access public
 	 * @param mixed $subnetId
 	 * @return array
 	 */
@@ -896,6 +870,8 @@ class Scan extends Common_functions {
  *		- icmp subnet discovery (web > ping, pear)
  *		- icmp status update (cli)
  *		- icmp discovery (cli)
+ * @param string $address
+ * @return int
  */
 function ping_address ($address) {
 //	$Database = new Database_PDO;
@@ -907,6 +883,9 @@ function ping_address ($address) {
 
 /**
  *	Telnet address helper for CLI threading
+ * @param string $address
+ * @param int $port
+ * @return int
  */
 function telnet_address ($address, $port) {
 	global $Scan;
@@ -916,6 +895,9 @@ function telnet_address ($address, $port) {
 
 /**
  *	fping subnet helper for fping threading, all methods
+ * @param string $subnet_cidr
+ * @param boolean $return
+ * @return int
  */
 function fping_subnet ($subnet_cidr, $return = true) {
 	global $Scan;

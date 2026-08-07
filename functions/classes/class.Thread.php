@@ -83,7 +83,7 @@ class PingThread {
 	* class constructor - you can pass
 	* the callback function as an argument
 	*
-	* @param callback $_runnable
+	* @param callable $_runnable
 	*/
     public function __construct( $_runnable = null ) {
 		if (!is_null($_runnable))
@@ -160,8 +160,8 @@ class PingThread {
 	/**
 	* sets the callback
 	*
-	* @param callback $_runnable
-	* @return callback
+	* @param callable $_runnable
+	* @return callable
 	*/
     public function setRunnable( $_runnable ) {
         if( self::runnableOk( $_runnable ) ) {
@@ -175,7 +175,7 @@ class PingThread {
 	/**
 	* gets the callback
 	*
-	* @return callback
+	* @return callable
 	*/
     public function getRunnable() {
         return $this->runnable;
@@ -324,7 +324,7 @@ class PingThread {
 
 	/**
 	* alias of stop();
-	*
+	* @param int $_signal
 	* @return boolean
 	*/
     public function kill( $_signal = SIGKILL, $_wait = false ) {

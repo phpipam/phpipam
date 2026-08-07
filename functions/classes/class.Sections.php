@@ -10,7 +10,6 @@ class Sections extends Common_functions {
 	 * (array of objects) to store sections, section ID is array index
 	 *
 	 * @var array
-	 * @access public
 	 */
 	public $sections;
 
@@ -20,7 +19,6 @@ class Sections extends Common_functions {
 	 * (default value: null)
 	 *
 	 * @var int
-	 * @access public
 	 */
 	public $lastInsertId = null;
 
@@ -42,7 +40,6 @@ class Sections extends Common_functions {
 	/**
 	 * __construct function.
 	 *
-	 * @access public
 	 * @param Database_PDO $database
 	 */
 	public function __construct (Database_PDO $database) {
@@ -71,7 +68,6 @@ class Sections extends Common_functions {
 	/**
 	 * Modify section
 	 *
-	 * @access public
 	 * @param mixed $action
 	 * @param mixed $values
 	 * @return bool
@@ -91,7 +87,6 @@ class Sections extends Common_functions {
 	/**
 	 * Creates new section
 	 *
-	 * @access private
 	 * @param mixed $values
 	 * @return bool
 	 */
@@ -123,7 +118,6 @@ class Sections extends Common_functions {
 	/**
 	 * Edit existing section
 	 *
-	 * @access private
 	 * @param mixed $values
 	 * @return bool
 	 */
@@ -152,7 +146,6 @@ class Sections extends Common_functions {
 	/**
 	 * Delete section, subsections, subnets and ip addresses
 	 *
-	 * @access private
 	 * @param mixed $values
 	 * @return bool
 	 */
@@ -194,7 +187,6 @@ class Sections extends Common_functions {
 	/**
 	 * Updates section order
 	 *
-	 * @access private
 	 * @param mixed $order
 	 * @return bool
 	 */
@@ -228,7 +220,6 @@ class Sections extends Common_functions {
 	/**
 	 * fetches all available sections
 	 *
-	 * @access public
 	 * @param string $order_by (default: "order")
 	 * @param bool $sort_asc (default: true)
 	 * @return array|bool
@@ -251,7 +242,6 @@ class Sections extends Common_functions {
 	/**
 	 * fetches section by specified method
 	 *
-	 * @access public
 	 * @param string $method
 	 * @param mixed $value
 	 * @return object|bool
@@ -264,7 +254,6 @@ class Sections extends Common_functions {
 	/**
 	 * Fetch subsections for specified sectionid
 	 *
-	 * @access public
 	 * @param mixed $sectionId
 	 * @return array
 	 */
@@ -281,7 +270,6 @@ class Sections extends Common_functions {
 	/**
 	 * Fetches ids of section and possible subsections for deletion
 	 *
-	 * @access private
 	 * @param int $id
 	 * @return array
 	 */
@@ -303,7 +291,6 @@ class Sections extends Common_functions {
 	/**
 	 * Fetches all vlans in section
 	 *
-	 * @access public
 	 * @param mixed $sectionId
 	 * @return array|bool
 	 */
@@ -323,7 +310,6 @@ class Sections extends Common_functions {
 	/**
 	 * Fetches all vrfs in section
 	 *
-	 * @access public
 	 * @param mixed $sectionId
 	 * @return array|bool
 	 */
@@ -344,7 +330,6 @@ class Sections extends Common_functions {
 	/**
 	 * Fetches section domains
 	 *
-	 * @access public
 	 * @param mixed $sectionId
 	 * @return array
 	 */
@@ -373,7 +358,6 @@ class Sections extends Common_functions {
 	/**
 	 * Fetches nameserver sets to belong to section
 	 *
-	 * @access public
 	 * @param mixed $sectionId
 	 * @return array|bool
 	 */
@@ -416,7 +400,6 @@ class Sections extends Common_functions {
 	/**
 	 * Checks section permissions and returns group privilege for each section
 	 *
-	 * @access public
 	 * @param mixed $permissions
 	 * @return array
 	 */
@@ -443,8 +426,7 @@ class Sections extends Common_functions {
 	 *	1 = read
 	 *	0 = no access
 	 *
-	 * @access public
-	 * @param obj $user
+	 * @param stdClass $user
 	 * @param int $sectionid
 	 * @return int
 	 */
@@ -483,7 +465,6 @@ class Sections extends Common_functions {
 	/**
 	 * This function returns permissions of group_id for each section
 	 *
-	 * @access public
 	 * @param int $gid						//id of group to verify permissions
 	 * @param bool $name (default: true)	//should index be name or id?
 	 * @return array

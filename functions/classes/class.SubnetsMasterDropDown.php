@@ -69,7 +69,7 @@ class SubnetsMasterDropDown {
 
 	/**
 	 * Return <option> customisations
-	 * @param  stdObject $subnet
+	 * @param  stdClass $subnet
 	 * @return string
 	 */
 	private function get_subnet_options($subnet) {
@@ -91,7 +91,7 @@ class SubnetsMasterDropDown {
 
 	/**
 	 * Generate menu item from subnet object
-	 * @param stdObject $subnet
+	 * @param stdClass $subnet
 	 * @param integer $level
 	 */
 	public function add_option($subnet, $level = 0) {

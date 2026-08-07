@@ -23,7 +23,6 @@ class Table extends Common_functions {
 	/**
 	 * __construct function
 	 *
-	 * @access public
 	 */
 	public function __construct () {
 		# initialize Result
@@ -45,10 +44,15 @@ class Table extends Common_functions {
 
 
 
-
+	/**
+	 * paginate_table
+	 *
+	 * @param mixed $subnets
+	 * @return void
+	 */
 	public function paginate_table ($subnets) {
     	// set filters for table
-    	$filters = $this->set_table_filter_data ($subnets);
+    	$this->set_table_filter_data ($subnets);
     	// top dropdowns
     	$dropdown = $this->get_table_dropdown ();
     	// set pagination
@@ -61,6 +65,12 @@ class Table extends Common_functions {
 	            ];
 	}
 
+	/**
+	 * set_table_filter_data
+	 *
+	 * @param mixed $subnets
+	 * @return void
+	 */
 	private function set_table_filter_data ($subnets) {
 		// page
 		if(isset($_GET['subpage'])) {

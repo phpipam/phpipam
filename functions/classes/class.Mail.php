@@ -16,7 +16,6 @@ class phpipam_mail extends Common_functions {
 	 * (default value: null)
 	 *
 	 * @var mixed
-	 * @access private
 	 */
 	private $mail_settings = null;
 
@@ -24,7 +23,6 @@ class phpipam_mail extends Common_functions {
 	 * Php_mailer object
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $Php_mailer;
 
@@ -36,8 +34,8 @@ class phpipam_mail extends Common_functions {
 	/**
 	 * __construct function.
 	 *
-	 * @access public
 	 * @param mixed $settings
+	 * @param mixed $mail_settings
 	 */
 	public function __construct ($settings, $mail_settings) {
 		# set settings and mailsettings
@@ -54,7 +52,6 @@ class phpipam_mail extends Common_functions {
 	/**
 	 * Sets SMTP parameters
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function set_smtp() {
@@ -83,7 +80,6 @@ class phpipam_mail extends Common_functions {
 	/**
 	 * Set SMTP login parameters
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function set_smtp_auth() {
@@ -99,7 +95,6 @@ class phpipam_mail extends Common_functions {
 	/**
 	 * Overrides mail settings in database. For sending test emails.
 	 *
-	 * @access public
 	 * @param mixed $override_settings
 	 * @return void
 	 */
@@ -112,7 +107,6 @@ class phpipam_mail extends Common_functions {
 	/**
 	 * Resets SMTP debugging
 	 *
-	 * @access public
 	 * @param int $level (default: 2)
 	 * @return void
 	 */
@@ -133,7 +127,6 @@ class phpipam_mail extends Common_functions {
 	/**
 	 * Generates mail message
 	 *
-	 * @access public
 	 * @param string $body
 	 * @return string
 	 */
@@ -151,7 +144,6 @@ class phpipam_mail extends Common_functions {
 	/**
 	 * Generates plain text mail
 	 *
-	 * @access public
 	 * @param mixed $body
 	 * @return void
 	 */
@@ -164,7 +156,6 @@ class phpipam_mail extends Common_functions {
 	/**
 	 * set_header function.
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function set_header () {
@@ -181,7 +172,6 @@ class phpipam_mail extends Common_functions {
 	/**
 	 * Begins message body
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function set_body_start () {
@@ -210,7 +200,6 @@ class phpipam_mail extends Common_functions {
 	/**
 	 * Sets message body
 	 *
-	 * @access public
 	 * @param mixed $body
 	 * @return void
 	 */
@@ -221,7 +210,6 @@ class phpipam_mail extends Common_functions {
 	/**
 	 * ends message body and html
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function set_body_end () {
@@ -231,7 +219,6 @@ class phpipam_mail extends Common_functions {
 	/**
 	 * Sets footer
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function set_footer () {
@@ -249,7 +236,6 @@ class phpipam_mail extends Common_functions {
 	/**
 	 * Sets plain footer
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function set_footer_plain () {

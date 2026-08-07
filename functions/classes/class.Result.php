@@ -17,7 +17,6 @@ class Result {
 	 * error code handler
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $errors;
 
@@ -27,7 +26,6 @@ class Result {
 	 * (default value: "result")
 	 *
 	 * @var string
-	 * @access public
 	 */
 	public $exit_method = "result";
 
@@ -37,7 +35,6 @@ class Result {
 	 * (default value: false)
 	 *
 	 * @var bool
-	 * @access public
 	 */
 	public $die = false;
 
@@ -47,7 +44,6 @@ class Result {
 	 * (default value: null)
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $result = null;
 
@@ -57,14 +53,12 @@ class Result {
 	 * (default value: false)
 	 *
 	 * @var bool
-	 * @access public
 	 */
 	public $exception = false;
 
 	/**
 	 * __construct function
 	 *
-	 * @access public
 	 */
 	public function __construct() {
 		$this->set_error_codes ();
@@ -75,7 +69,6 @@ class Result {
 	 *
 	 *	http://www.restapitutorial.com/httpstatuscodes.html
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function set_error_codes () {
@@ -103,7 +96,6 @@ class Result {
 	/**
 	 * Show result
 	 *
-	 * @access public
 	 * @param string $class (default: "muted")				result class - danger, success, warning, info
 	 * @param string|array|object $text (default: "No value provided")	text to display
 	 * @param bool $die (default: false)					controls stop of php execution
@@ -157,7 +149,6 @@ class Result {
 	/**
 	 * Alias for show method for backwards compatibility
 	 *
-	 * @access public
 	 * @param string|array|object $text (default: "No value provided")
 	 * @param bool $die (default: false)
 	 * @return void
@@ -169,7 +160,6 @@ class Result {
 	/**
 	 * Shows result for cli functions
 	 *
-	 * @access public
 	 * @param string $text (default: "No value provided")
 	 * @return void
 	 */
@@ -194,7 +184,6 @@ class Result {
 	/**
 	 * Show GUI result
 	 *
-	 * @access public
 	 * @param mixed $class
 	 * @param string|array|object $text
 	 * @param mixed $popup
@@ -249,7 +238,6 @@ class Result {
 	/**
 	 * Sets new header and throws exception
 	 *
-	 * @access public
 	 * @param int $code
 	 * @param mixed $exception
 	 * @return void
@@ -311,7 +299,6 @@ class Result {
 	/**
 	 * __destruct function
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function __destruct() {

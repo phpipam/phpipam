@@ -98,7 +98,6 @@ class Logging extends Common_functions {
 	 * object_type
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $object_type;
 
@@ -108,7 +107,6 @@ class Logging extends Common_functions {
 	 *  add, edit, delete
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $object_action;
 
@@ -116,7 +114,6 @@ class Logging extends Common_functions {
 	 * Result - success, failure
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $object_result;
 
@@ -124,7 +121,6 @@ class Logging extends Common_functions {
 	 * mail_changelog
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $mail_changelog;
 
@@ -142,7 +138,6 @@ class Logging extends Common_functions {
 	 * user details
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $user;
 
@@ -238,7 +233,7 @@ class Logging extends Common_functions {
 	/**
 	 * Addresses object
 	 *
-	 * @var mixed
+	 * @var Addresses
 	 * @access protected
 	 */
 	protected $Addresses;
@@ -246,7 +241,7 @@ class Logging extends Common_functions {
 	/**
 	 * Sections object
 	 *
-	 * @var mixed
+	 * @var Sections
 	 * @access protected
 	 */
 	protected $Sections;
@@ -254,7 +249,7 @@ class Logging extends Common_functions {
 	/**
 	 * Subnets object
 	 *
-	 * @var mixed
+	 * @var Subnets
 	 * @access protected
 	 */
 	protected $Subnets;
@@ -262,7 +257,7 @@ class Logging extends Common_functions {
 	/**
 	 * Tools object
 	 *
-	 * @var mixed
+	 * @var Tools
 	 * @access protected
 	 */
 	protected $Tools;
@@ -273,7 +268,6 @@ class Logging extends Common_functions {
 	/**
 	 * __construct function.
 	 *
-	 * @access public
 	 * @param Database_PDO $database
 	 * @param mixed $settings (default: null)
 	 */
@@ -321,7 +315,6 @@ class Logging extends Common_functions {
 	 *		Database (default)
 	 *		syslog
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function set_log_type () {
@@ -332,7 +325,6 @@ class Logging extends Common_functions {
 	/**
 	 * Gets id of active user
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function get_active_user_id () {
@@ -377,7 +369,6 @@ class Logging extends Common_functions {
 	/**
 	 * write log function
 	 *
-	 * @access public
 	 * @param mixed $command
 	 * @param mixed $details (default: NULL)
 	 * @param int $severity (default: 0)
@@ -434,7 +425,6 @@ class Logging extends Common_functions {
 	 *		if $programname == 'phpipam' then /var/log/phpipam.log
 	 *		if $programname == 'phpipam-changelog' then /var/log/phpipam-changelog.log
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function syslog_write () {
@@ -459,7 +449,6 @@ class Logging extends Common_functions {
 	/**
 	 * Sets facility for syslog
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function syslog_set_facility () {
@@ -478,7 +467,6 @@ class Logging extends Common_functions {
 	/**
 	 * Sets priority
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function syslog_set_priority () {
@@ -504,7 +492,6 @@ class Logging extends Common_functions {
 	/**
 	 * Reformat syslog details
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function syslog_format_details () {
@@ -518,7 +505,6 @@ class Logging extends Common_functions {
 	/**
 	 * Writes changelog to syslog
 	 *
-	 * @access private
 	 * @param mixed $changelog
 	 * @return void
 	 */
@@ -568,7 +554,6 @@ class Logging extends Common_functions {
 	/**
 	 * Writes log to local database
 	 *
-	 * @access private
 	 * @return boolean
 	 */
 	private function database_write_log () {
@@ -598,7 +583,6 @@ class Logging extends Common_functions {
 	/**
 	 * fetches logs for specified parameters
 	 *
-	 * @access public
 	 * @param mixed $logCount
 	 * @param mixed $direction (default: NULL)
 	 * @param mixed $lastId (default: NULL)
@@ -665,7 +649,6 @@ class Logging extends Common_functions {
 	/**
 	 * Returns highest (last) log id
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function log_fetch_highest_id () {
@@ -693,7 +676,6 @@ class Logging extends Common_functions {
 	/**
 	 * Write new changelog to db or send to syslog
 	 *
-	 * @access public
 	 * @param string $object_type
 	 * @param string $action
 	 * @param string $result
@@ -796,7 +778,6 @@ class Logging extends Common_functions {
 	/**
 	 * Writes changelog to database
 	 *
-	 * @access private
 	 * @param mixed $changelog
 	 * @return void
 	 */
@@ -854,7 +835,6 @@ class Logging extends Common_functions {
 	/**
 	 * Checks if object should write changelog
 	 *
-	 * @access private
 	 * @return boolean
 	 */
 	private function changelog_validate_object () {
@@ -872,7 +852,6 @@ class Logging extends Common_functions {
 	/**
 	 * Formats values on creation
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function changelog_reformat_add_diff () {
@@ -910,7 +889,6 @@ class Logging extends Common_functions {
 	/**
 	 * Formats values on delete
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function changelog_reformat_delete_diff () {
@@ -947,7 +925,6 @@ class Logging extends Common_functions {
 	/**
 	 * Calculate possible changes on edit
 	 *
-	 * @access private
 	 * @return array
 	 */
 	private function changelog_calculate_edit_diff () {
@@ -1017,7 +994,6 @@ class Logging extends Common_functions {
 	/**
 	 * Removes unneeded values from changelog based on log type
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function changelog_unset_unneeded_values () {
@@ -1142,10 +1118,9 @@ class Logging extends Common_functions {
 	/**
 	 * Formats tag from int to nam.
 	 *
-	 * @access private
 	 * @param string $k
 	 * @param mixed $v
-	 * @return void
+	 * @return mixed
 	 */
 	private function changelog_format_tag_diff ($k, $v) {
 		if (isset($this->object_old[$k])) {
@@ -1157,7 +1132,6 @@ class Logging extends Common_functions {
 	/**
 	 * Formats section if change
 	 *
-	 * @access private
 	 * @param string $k
 	 * @param mixed $v
 	 * @return mixed
@@ -1180,7 +1154,6 @@ class Logging extends Common_functions {
 	/**
 	 * Formats master subnet if change
 	 *
-	 * @access private
 	 * @param string $k
 	 * @param mixed $v
 	 * @return string
@@ -1214,10 +1187,9 @@ class Logging extends Common_functions {
 	/**
 	 * Format device if change
 	 *
-	 * @access private
 	 * @param string $k
 	 * @param mixed $v
-	 * @return void
+	 * @return mixed
 	 */
 	private function changelog_format_device_diff ($k, $v) {
 		// old none
@@ -1245,10 +1217,9 @@ class Logging extends Common_functions {
 	/**
 	 * Format vlan if change
 	 *
-	 * @access private
 	 * @param string $k
 	 * @param mixed $v
-	 * @return void
+	 * @return mixed
 	 */
 	private function changelog_format_vlan_diff ($k, $v) {
 		//old none
@@ -1276,10 +1247,9 @@ class Logging extends Common_functions {
 	/**
 	 * Format vrf if change
 	 *
-	 * @access private
 	 * @param string $k
 	 * @param mixed $v
-	 * @return void
+	 * @return mixed
 	 */
 	private function changelog_format_vrf_diff ($k, $v) {
 		//old none
@@ -1307,10 +1277,9 @@ class Logging extends Common_functions {
 	/**
 	 * Format NS if change
 	 *
-	 * @access private
 	 * @param string $k
 	 * @param mixed $v
-	 * @return void
+	 * @return mixed
 	 */
 	private function changelog_format_ns_diff ($k, $v) {
 		//old none
@@ -1338,10 +1307,9 @@ class Logging extends Common_functions {
 	/**
 	 * Format location change
 	 *
-	 * @access private
 	 * @param string $k
 	 * @param mixed $v
-	 * @return void
+	 * @return mixed
 	 */
 	private function changelog_format_location_diff ($k, $v) {
 		//old none
@@ -1369,10 +1337,9 @@ class Logging extends Common_functions {
 	/**
 	 * Format master section ifchange
 	 *
-	 * @access private
 	 * @param string $k
 	 * @param mixed $v
-	 * @return void
+	 * @return mixed
 	 */
 	private function changelog_format_master_section_diff ($k, $v) {
 		// old root
@@ -1398,7 +1365,6 @@ class Logging extends Common_functions {
 	/**
 	 * Format permissions on change - EDIT
 	 *
-	 * @access private
 	 * @param string $k
 	 * @param mixed $v
 	 * @return string
@@ -1437,10 +1403,9 @@ class Logging extends Common_functions {
 	/**
 	 * Make true / false from 0/1
 	 *
-	 * @access private
 	 * @param mixed $k
 	 * @param mixed $v
-	 * @return void
+	 * @return mixed
 	 */
 	private function changelog_make_booleans ($k, $v) {
     	// init
@@ -1468,8 +1433,7 @@ class Logging extends Common_functions {
 	/**
 	 * Format permission on permission only change
 	 *
-	 * @access private
-	 * @return void
+	 * @return array
 	 */
 	private function changelog_format_permission_change () {
 		# get old and compare
@@ -1501,7 +1465,6 @@ class Logging extends Common_functions {
 	/**
 	 * fetches all changelogs
 	 *
-	 * @access public
 	 * @param bool $filter
 	 * @param mixed $expr
 	 * @param int $limit (default: 100)
@@ -1566,7 +1529,6 @@ class Logging extends Common_functions {
 	/**
 	 * fetches single changelog
 	 *
-	 * @access public
 	 * @param int $id
 	 * @return object|false
 	 */
@@ -1613,7 +1575,6 @@ class Logging extends Common_functions {
 	/**
 	 * Fetches changelog for addresses in subnet for all slave subnets
 	 *
-	 * @access public
 	 * @param mixed $subnetId
 	 * @param int $limit (default: 50)
 	 * @return void
@@ -1657,10 +1618,11 @@ class Logging extends Common_functions {
 	/**
 	 * fetch changelog entries for specified type entry
 	 *
-	 * @param $object_type = 'ip_addr','subnet','section'
-	 * @param $coid = objectId from ctype definition
-	 * @param $long (default: false)
-	 * @param $limit (default: 50)
+	 * @param string $object_type ('ip_addr','subnet','section')
+	 * @param string $coid (objectId from ctype definition)
+	 * @param bool $long (default: false)
+	 * @param int $limit (default: 50)
+	 * @return array
 	 */
 	public function fetch_changlog_entries ($object_type, $coid, $long = false, $limit = 50) {
     	# limit check
@@ -1709,7 +1671,6 @@ class Logging extends Common_functions {
 	/**
 	 * Fetches changelog entries for all slave subnets recursive
 	 *
-	 * @access public
 	 * @param mixed $subnetId
 	 * @param int $limit (default: 50)
 	 * @return void
@@ -1777,7 +1738,6 @@ class Logging extends Common_functions {
 	/**
 	 * Send mail on new changelog
 	 *
-	 * @access public
 	 * @param string $changelog
 	 * @return boolean
 	 */

@@ -18,7 +18,6 @@ class DHCP_kea extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access private
      */
     private $kea_config_file = "/etc/kea/kea.conf";
 
@@ -28,7 +27,6 @@ class DHCP_kea extends Common_functions {
      * (default value: array())
      *
      * @var array
-     * @access private
      */
     private $kea_settings = [];
 
@@ -38,7 +36,6 @@ class DHCP_kea extends Common_functions {
      * (default value: "")
      *
      * @var string
-     * @access public
      */
     public $config_raw = "";
 
@@ -48,7 +45,6 @@ class DHCP_kea extends Common_functions {
      * (default value: false)
      *
      * @var array|bool
-     * @access public
      */
     public $config = false;
 
@@ -58,7 +54,6 @@ class DHCP_kea extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access public
      */
     public $ipv4_used = false;
 
@@ -68,7 +63,6 @@ class DHCP_kea extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access public
      */
     public $ipv6_used = false;
 
@@ -81,7 +75,6 @@ class DHCP_kea extends Common_functions {
      * (default value: array())
      *
      * @var array
-     * @access public
      */
     public $subnets4 = [];
 
@@ -94,7 +87,6 @@ class DHCP_kea extends Common_functions {
      * (default value: array())
      *
      * @var array
-     * @access public
      */
     public $subnets6 = [];
 
@@ -104,7 +96,6 @@ class DHCP_kea extends Common_functions {
      * (default value: array("memfile", "mysql", "postgresql"))
      *
      * @var array
-     * @access public
      */
     public $lease_types = ["memfile", "mysql", "postgresql"];
 
@@ -114,7 +105,6 @@ class DHCP_kea extends Common_functions {
      * (default value: array())
      *
      * @var array
-     * @access public
      */
     public $leases4 = [];
 
@@ -124,7 +114,6 @@ class DHCP_kea extends Common_functions {
      * (default value: array())
      *
      * @var array
-     * @access public
      */
     public $leases6 = [];
 
@@ -134,7 +123,6 @@ class DHCP_kea extends Common_functions {
      * (default value: array("mysql"))
      *
      * @var array
-     * @access public
      */
     public $reservation_types = ["file", "mysql"];
 
@@ -144,7 +132,6 @@ class DHCP_kea extends Common_functions {
      * (default value: array())
      *
      * @var array
-     * @access public
      */
     public $reservations4 = [];
     public $reservations6 = [];
@@ -164,7 +151,6 @@ class DHCP_kea extends Common_functions {
     /**
      * __construct function.
      *
-     * @access public
      * @param array $kea_settings (default: array())
      * @return void
      */
@@ -188,13 +174,11 @@ class DHCP_kea extends Common_functions {
     /**
      * Opens database connection if needed for leases and hosts
      *
-     * @access private
      * @param mixed $username
      * @param mixed $password
      * @param mixed $host
      * @param mixed $port
      * @param mixed $dbname
-     * @param mixed $charset
      * @return void
      */
     private function init_database_conection ($username, $password, $host, $port, $dbname) {
@@ -211,7 +195,6 @@ class DHCP_kea extends Common_functions {
     /**
      * This function parses config file and returns it as array.
      *
-     * @access private
      * @return void
      */
     private function parse_config () {
@@ -254,7 +237,6 @@ class DHCP_kea extends Common_functions {
     /**
      * Saves subnets definition to $subnets object
      *
-     * @access private
      * @return void
      */
     private function parse_subnets () {
@@ -277,7 +259,6 @@ class DHCP_kea extends Common_functions {
     /**
      * Saves leases to $leases object as array.
      *
-     * @access public
      * @param string $type (default: "IPv4")
      * @return void
      */
@@ -309,7 +290,6 @@ class DHCP_kea extends Common_functions {
      *  First line is structure
      *      address,hwaddr,client_id,valid_lifetime,expire,subnet_id,fqdn_fwd,fqdn_rev,hostname,state
      *
-     * @access private
      * @param mixed $lease_database
      * @param string $type (default: "IPv4")
      * @return void
@@ -381,7 +361,6 @@ class DHCP_kea extends Common_functions {
     /**
      * Fetches leases from mysql database.
      *
-     * @access private
      * @param mixed $lease_database
      * @param string $type (default: "IPv4")
      * @return void
@@ -427,7 +406,6 @@ class DHCP_kea extends Common_functions {
     /**
      * Fetches leases from postgres SQL.
      *
-     * @access private
      * @param mixed $lease_database
      * @return void
      */
@@ -455,7 +433,6 @@ class DHCP_kea extends Common_functions {
      *
      *  For KEA v 1.0 only MySQL is supported. If needed later item can be added to $reservation_types and new method created
      *
-     * @access public
      * @param string $type (default: "IPv4")
      * @return void
      */
@@ -504,7 +481,6 @@ class DHCP_kea extends Common_functions {
      *
      *  https://kea.isc.org/wiki/HostReservationDesign
      *
-     * @access private
      * @param mixed $type
      * @param array $reservations_database
      * @return void
@@ -566,7 +542,6 @@ class DHCP_kea extends Common_functions {
     /**
      * Fetches leases from mysql database.
      *
-     * @access private
      * @param mixed $reservations_database  //database details
      * @param mixed $type                   //ipv4 / ipv6
      * @return void

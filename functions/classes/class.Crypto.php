@@ -65,7 +65,7 @@ class Crypto {
      * encrypt data and base64 encode results
      * @param  string $rawdata
      * @param  string $password
-     * @param  string method   (default value: "openssl-128-cbc")
+     * @param  string $method   (default value: "openssl-128-cbc")
      * @return string|false
      */
     public function encrypt($rawdata, $password, $method="openssl-128-cbc") {
@@ -187,7 +187,6 @@ class Crypto {
     /**
      * CSRF cookie creation / validation.
      *
-     * @access public
      * @param string $action (default: "create")
      * @param mixed $index (default: null)
      * @param mixed $value (default: null)
@@ -208,7 +207,6 @@ class Crypto {
     /**
      * Creates cookie to prevent csrf
      *
-     * @access private
      * @param mixed $index
      * @param bool $if_not_exists (default: false)
      * @return string
@@ -228,8 +226,8 @@ class Crypto {
     /**
      * Validate provided csrf cookie
      *
-     * @access private
      * @param mixed $index
+     * @param mixed $value
      * @return bool
      */
     private function csrf_cookie_validate ($index, $value) {

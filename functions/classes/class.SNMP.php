@@ -15,7 +15,6 @@ class phpipamSNMP extends Common_functions {
 	 * (default value: false)
 	 *
 	 * @var bool
-	 * @access public
 	 */
 	public $last_result = false;
 
@@ -25,7 +24,6 @@ class phpipamSNMP extends Common_functions {
      * (default value: false)
      *
      * @var SNMP|bool
-     * @access private
      */
     private $snmp_session = false;
 
@@ -35,7 +33,6 @@ class phpipamSNMP extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access private
      */
     private $snmp_host = false;
 
@@ -45,7 +42,6 @@ class phpipamSNMP extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access private
      */
     private $snmp_hostname = false;
 
@@ -55,7 +51,6 @@ class phpipamSNMP extends Common_functions {
 	 * (default value: 1)
 	 *
 	 * @var int
-	 * @access private
 	 */
 	private $snmp_version = 1;
 
@@ -65,7 +60,6 @@ class phpipamSNMP extends Common_functions {
 	 * (default value: 'public')
 	 *
 	 * @var string
-	 * @access private
 	 */
 	private $snmp_community = 'public';
 
@@ -75,7 +69,6 @@ class phpipamSNMP extends Common_functions {
 	 * (default value: '161')
 	 *
 	 * @var string
-	 * @access private
 	 */
 	private $snmp_port = '161';
 
@@ -85,7 +78,6 @@ class phpipamSNMP extends Common_functions {
 	 * (default value: '1000')
 	 *
 	 * @var string
-	 * @access private
 	 */
 	private $snmp_timeout = '1000';
 
@@ -95,7 +87,6 @@ class phpipamSNMP extends Common_functions {
 	 * (default value: '3')
 	 *
 	 * @var string
-	 * @access private
 	 */
 	private $snmp_retries = '3';
 
@@ -105,7 +96,6 @@ class phpipamSNMP extends Common_functions {
     * (default value: false)
     *
     * @var mixed
-    * @access private
     */
     private $snmpv3_security = false;
 
@@ -115,7 +105,6 @@ class phpipamSNMP extends Common_functions {
 	 * (default value: false)
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $snmp_queries = false;
 
@@ -125,7 +114,6 @@ class phpipamSNMP extends Common_functions {
 	 * (default value: false)
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $snmp_oids = false;
 
@@ -135,7 +123,6 @@ class phpipamSNMP extends Common_functions {
 	 * (default value: "")
 	 *
 	 * @var string
-	 * @access public
 	 */
 	public $snmp_sysObjectID = "";
 
@@ -145,7 +132,6 @@ class phpipamSNMP extends Common_functions {
 	 * (default value: 1)
 	 *
 	 * @var int
-	 * @access public
 	 */
 	public $vlan_number = 1;
 
@@ -155,9 +141,6 @@ class phpipamSNMP extends Common_functions {
 	/**
 	 * __construct function.
 	 *
-	 * @access public
-	 * @param Database_PDO $Database
-	 * @param bool $device (default: false)
 	 * @return void
 	 */
 	public function __construct () {
@@ -170,7 +153,6 @@ class phpipamSNMP extends Common_functions {
 	/**
 	 * Sets all supported SNMP queries
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function set_snmp_queries () {
@@ -252,7 +234,6 @@ class phpipamSNMP extends Common_functions {
     /**
      * Saves last snmp result
      *
-     * @access private
      * @param mixed $result
      * @return void
      */
@@ -263,7 +244,6 @@ class phpipamSNMP extends Common_functions {
 	/**
 	 * snmp_get
 	 *
-	 * @access private
 	 * @param string $oid
 	 * @param string $index (default: "")
 	 * @return mixed
@@ -275,7 +255,6 @@ class phpipamSNMP extends Common_functions {
 	/**
 	 * snmp_walk
 	 *
-	 * @access private
 	 * @param string $oid
 	 * @param string $index (default: "")
 	 * @return mixed
@@ -287,7 +266,6 @@ class phpipamSNMP extends Common_functions {
 	/**
 	 * snmp_poll
 	 *
-	 * @access private
 	 * @param string $type
 	 * @param string $oid
 	 * @param string $index (default: "")
@@ -324,7 +302,6 @@ class phpipamSNMP extends Common_functions {
 	/**
 	 * Sets snmp device details
 	 *
-	 * @access public
 	 * @param array|object|bool $device (default: false)
 	 * @param int $vlan_number (default: false)
 	 * @return void
@@ -357,7 +334,6 @@ class phpipamSNMP extends Common_functions {
 	/**
 	 * Sets snmp host to query
 	 *
-	 * @access private
 	 * @param mixed $ip
 	 * @return void
 	 */
@@ -373,8 +349,7 @@ class phpipamSNMP extends Common_functions {
 	/**
 	 * Sets snmp hostname for debugging
 	 *
-	 * @access private
-	 * @param mixed $ip
+	 * @param mixed $hostname
 	 * @return void
 	 */
 	private function set_snmp_hostname ($hostname) {
@@ -386,7 +361,6 @@ class phpipamSNMP extends Common_functions {
 	/**
 	 * Sets SNMP community
 	 *
-	 * @access private
 	 * @param mixed $community
 	 * @param mixed $vlan_number
 	 * @return void
@@ -407,7 +381,6 @@ class phpipamSNMP extends Common_functions {
 	/**
 	 * Sets SNMP version
 	 *
-	 * @access private
 	 * @param int $version (default: 1)
 	 * @return void
 	 */
@@ -420,7 +393,6 @@ class phpipamSNMP extends Common_functions {
 	/**
 	 * Sets snmp port
 	 *
-	 * @access private
 	 * @param mixed $port
 	 * @return void
 	 */
@@ -433,7 +405,6 @@ class phpipamSNMP extends Common_functions {
 	/**
 	 * Sets snmp timeout
 	 *
-	 * @access private
 	 * @param mixed $timeout
 	 * @return void
 	 */
@@ -448,8 +419,7 @@ class phpipamSNMP extends Common_functions {
     /**
      * Sets SNMPv3 Security parameters
      *
-     * @access private
-     * @param mixed $timeout
+     * @param mixed $device
      * @return void
      */
     private function set_snmpv3_security ($device) {
@@ -478,7 +448,6 @@ class phpipamSNMP extends Common_functions {
     /**
      * Sets new SNMP session
      *
-     * @access private
      * @return void
      */
     private function connection_open () {
@@ -508,7 +477,6 @@ class phpipamSNMP extends Common_functions {
     /**
      * Closes current snmp connection.
      *
-     * @access public
      * @return void
      */
     public function connection_close () {
@@ -535,7 +503,6 @@ class phpipamSNMP extends Common_functions {
     /**
      * Wrapper that executes snmp fetch / walk
      *
-     * @access public
      * @param mixed $query
      * @return mixed
      */
@@ -547,7 +514,6 @@ class phpipamSNMP extends Common_functions {
     /**
      * Fetches system info
      *
-     * @access private
      * @return void
      */
     private function get_system_info () {
@@ -566,7 +532,6 @@ class phpipamSNMP extends Common_functions {
     /**
      * Fetch ARP table from device.
      *
-     * @access private
      * @return void
      */
     private function get_arp_table () {
@@ -634,7 +599,6 @@ class phpipamSNMP extends Common_functions {
      *  Than we fetch interface description
      *
      *
-     * @access private
      * @return void
      */
     private function get_mac_table () {
@@ -687,7 +651,6 @@ class phpipamSNMP extends Common_functions {
     /**
      * Fetch ARP table from device.
      *
-     * @access private
      * @return void
      */
     private function get_interfaces_ip () {
@@ -720,7 +683,6 @@ class phpipamSNMP extends Common_functions {
     /**
      * Fetch routing table from device.
      *
-     * @access private
      * @return void
      */
     private function get_routing_table () {
@@ -753,7 +715,6 @@ class phpipamSNMP extends Common_functions {
     /**
      * Fetch vlan table from device.
      *
-     * @access private
      * @return void
      */
     private function get_vlan_table () {
@@ -806,7 +767,6 @@ class phpipamSNMP extends Common_functions {
     /**
      * Fetch vrf table from device.
      *
-     * @access private
      * @return void
      */
     private function get_vrf_table () {
@@ -873,7 +833,6 @@ class phpipamSNMP extends Common_functions {
      * Standardise SNMP MACs  -> 0:1:fe   >> 00:01:fe
      *                        -> 0-1-fe   >> 00:01:fe
      *                        -> 00 01 fe >> 00:01:fe
-     * @access private
      * @param string $input
      * @return string
      */
@@ -914,8 +873,7 @@ class phpipamSNMP extends Common_functions {
     /**
      * Parses result - removes STRING:
      *
-     * @access private
-     * @param string input
+     * @param string $input
      * @return string
      */
     private function parse_snmp_result_value ($input) {

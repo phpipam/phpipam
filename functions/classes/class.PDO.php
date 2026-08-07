@@ -68,7 +68,6 @@ abstract class DB {
 	 * (default value: '')
 	 *
 	 * @var string
-	 * @access public
 	 */
 	public $dbname 	= '';		// needed for DB check
 
@@ -103,7 +102,6 @@ abstract class DB {
 	 * (default value: array())
 	 *
 	 * @var array
-	 * @access public
 	 */
 	public $cache = [];
 
@@ -148,7 +146,6 @@ abstract class DB {
 	/**
 	 * __construct function.
 	 *
-	 * @access public
 	 * @param mixed $username (default: null)
 	 * @param mixed $password (default: null)
 	 * @param mixed $charset (default: null)
@@ -209,7 +206,6 @@ abstract class DB {
 	/**
 	 * convert a date object/string ready for use in sql
 	 *
-	 * @access public
 	 * @static
 	 * @param mixed $date (default: null)
 	 * @return string|false
@@ -228,7 +224,6 @@ abstract class DB {
 	 * Connect to the database
 	 * Call whenever a connection is needed to be made
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function connect() {
@@ -288,7 +283,6 @@ abstract class DB {
 	/**
 	 * resets connection.
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function resetConn() {
@@ -300,7 +294,6 @@ abstract class DB {
 	/**
 	 * logs queries to file
 	 *
-	 * @access private
 	 * @param mixed $query
 	 * @param array $values
 	 * @return void
@@ -325,7 +318,6 @@ abstract class DB {
 	/**
 	 * Remove outer quotes from a string
 	 *
-	 * @access public
 	 * @static
 	 * @param mixed $str
 	 * @return string
@@ -353,7 +345,6 @@ abstract class DB {
 	/**
 	 * Are we currently connected to the database
 	 *
-	 * @access public
 	 * @return bool
 	 */
 	public function isConnected() {
@@ -363,7 +354,6 @@ abstract class DB {
 	/**
 	 * MySQL CTE support check
 	 *
-	 * @access public
 	 * @return bool
 	 */
 	public function is_cte_enabled() {
@@ -393,7 +383,6 @@ abstract class DB {
 	/**
 	 * Returns last insert ID
 	 *
-	 * @access public
 	 * @return string|false
 	 */
 	public function lastInsertId() {
@@ -404,7 +393,6 @@ abstract class DB {
 	 * Run a statement on the database
 	 * Note: no objects are fetched
 	 *
-	 * @access public
 	 * @param mixed $query
 	 * @param array $values (default: array())
 	 * @param integer|null &$rowCount (default: null)
@@ -496,7 +484,6 @@ abstract class DB {
 	 * Allow a value to be escaped, ready for insertion as a mysql parameter
 	 * Note: for usage as a value (rather than prepared statements), you MUST manually quote around.
 	 *
-	 * @access public
 	 * @param mixed $str
 	 * @return string
 	 */
@@ -514,7 +501,6 @@ abstract class DB {
 	/**
 	 * Get a quick number of objects in a table
 	 *
-	 * @access public
 	 * @param mixed $tableName
 	 * @return mixed
 	 */
@@ -534,7 +520,6 @@ abstract class DB {
 	/**
 	 * Get a quick number of objects in a table for filtered field
 	 *
-	 * @access public
 	 * @param mixed $tableName
 	 * @param mixed $method
 	 * @param boolean $like (default: false)
@@ -561,7 +546,6 @@ abstract class DB {
 	 *
 	 * Note: the id of the object is assumed to be in.
 	 *
-	 * @access public
 	 * @param mixed $tableName
 	 * @param mixed $obj
 	 * @param string $primarykey (default: 'id')
@@ -626,7 +610,6 @@ abstract class DB {
 	/**
 	 * Update multiple objects at once.
 	 *
-	 * @access public
 	 * @param string $tableName
 	 * @param array $ids
 	 * @param array $values
@@ -653,7 +636,6 @@ abstract class DB {
 	 * Insert an object into a table
 	 * Note: an id field is ignored if specified.
 	 *
-	 * @access public
 	 * @param string $tableName
 	 * @param object|array $obj
 	 * @param bool $raw (default: false)
@@ -708,7 +690,6 @@ abstract class DB {
 	/**
 	 * Check if an object exists.
 	 *
-	 * @access public
 	 * @param string $tableName
 	 * @param string $query (default: null)
 	 * @param array $values (default: array())
@@ -768,7 +749,6 @@ abstract class DB {
 	/**
 	 * Get a filtered list of objects from the database.
 	 *
-	 * @access public
 	 * @param string $tableName
 	 * @param string $sortField (default: 'id')
 	 * @param bool $sortAsc (default: true)
@@ -813,7 +793,6 @@ abstract class DB {
 	/**
 	 * Get all objects matching values
 	 *
-	 * @access public
 	 * @param string $tableName
 	 * @param mixed $query (default: null)
 	 * @param array $values (default: array())
@@ -866,7 +845,6 @@ abstract class DB {
 	/**
 	 * Get a single object from the database
 	 *
-	 * @access public
 	 * @param mixed $tableName
 	 * @param mixed $id (default: null)
 	 * @param string $class (default: 'stdClass')
@@ -904,7 +882,6 @@ abstract class DB {
 	/**
 	 * Fetches single object from provided query
 	 *
-	 * @access public
 	 * @param string $tableName
 	 * @param mixed $query (default: null)
 	 * @param array $values (default: array())
@@ -931,7 +908,6 @@ abstract class DB {
 	/**
 	 * Escape $result_fields parameter
 	 *
-	 * @access public
 	 * @param string|array $result_fields
 	 * @return string
 	 */
@@ -948,7 +924,6 @@ abstract class DB {
 	/**
 	 * Searches for object in database
 	 *
-	 * @access public
 	 * @param string $table
 	 * @param mixed $field
 	 * @param mixed $value
@@ -983,7 +958,6 @@ abstract class DB {
 	/**
 	 * Searches for single object.
 	 *
-	 * @access public
 	 * @param string $table
 	 * @param mixed $field
 	 * @param mixed $value
@@ -1027,7 +1001,6 @@ abstract class DB {
 	/**
 	 * Delete a list of objects from the database based on identifier
 	 *
-	 * @method deleteObjects
 	 * @param  string $tableName
 	 * @param  string $identifier
 	 * @param  mixed $id
@@ -1043,7 +1016,6 @@ abstract class DB {
 	/**
 	 * Delete specified row
 	 *
-	 * @access public
 	 * @param string $tableName
 	 * @param string $field
 	 * @param string $value
@@ -1066,8 +1038,7 @@ abstract class DB {
 	/**
 	 * truncate specified table
 	 *
-	 * @access public
-	 * @param {string} $tableName
+	 * @param string $tableName
 	 * @return bool
 	 */
 	public function emptyTable($tableName) {
@@ -1080,7 +1051,6 @@ abstract class DB {
 	/**
 	 * Begin SQL Transaction
 	 *
-	 * @access public
 	 * @return bool
 	 */
 	public function beginTransaction() {
@@ -1090,7 +1060,6 @@ abstract class DB {
 	/**
 	 * Commit SQL Transaction
 	 *
-	 * @access public
 	 * @return bool
 	 */
 	public function commit() {
@@ -1102,7 +1071,6 @@ abstract class DB {
 	/**
 	 * Commit SQL Transaction
 	 *
-	 * @access public
 	 * @return bool
 	 */
 	public function rollBack() {
@@ -1138,7 +1106,6 @@ class Database_PDO extends DB {
 	 * (default value: false)
 	 *
 	 * @var bool
-	 * @access public
 	 */
 	public $install = false;
 
@@ -1148,7 +1115,6 @@ class Database_PDO extends DB {
 	/**
 	 * __construct function.
 	 *
-	 * @access public
 	 * @param mixed $host (default: null)
 	 * @param mixed $port (default: null)
 	 * @param mixed $dbname (default: null)
@@ -1174,7 +1140,6 @@ class Database_PDO extends DB {
 	/**
 	 * get database parameters from config.php
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function set_db_params () {
@@ -1218,7 +1183,6 @@ class Database_PDO extends DB {
 	/**
 	 * connect function.
 	 *
-	 * @access public
 	 * @return void
 	 */
 	#[\Override]
@@ -1243,7 +1207,6 @@ class Database_PDO extends DB {
 	/**
 	 * more generic static useful methods
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function getColumnInfo() {
@@ -1272,7 +1235,6 @@ class Database_PDO extends DB {
 	/**
 	 * Returns field info.
 	 *
-	 * @access public
 	 * @param bool $tableName (default: false)
 	 * @param bool $field (default: false)
 	 * @return object|null
@@ -1288,7 +1250,6 @@ class Database_PDO extends DB {
 	/**
 	 * getForeignKeyInfo function.
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function getForeignKeyInfo() {

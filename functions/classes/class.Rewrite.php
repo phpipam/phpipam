@@ -74,7 +74,6 @@ class Rewrite {
 	/**
 	 * Constructor
 	 *
-	 * @method __construct
 	 */
 	public function __construct () {
 		if (php_sapi_name() !== "cli") {
@@ -88,7 +87,6 @@ class Rewrite {
 	/**
 	 * Set API flag
 	 *
-	 * @method set_api_flag
 	 *
 	 * @return void
 	 */
@@ -101,7 +99,6 @@ class Rewrite {
 	/**
 	 * [get_url_params description]
 	 *
-	 * @method get_url_params
 	 *
 	 * @return array
 	 */
@@ -112,7 +109,6 @@ class Rewrite {
 	/**
 	 * Checks if API is requested
 	 *
-	 * @method is_api
 	 *
 	 * @return bool
 	 */
@@ -125,7 +121,6 @@ class Rewrite {
 	 *
 	 * Remove url and base and save raw request to array
 	 *
-	 * @method process_request_uri
 	 *
 	 * @return void
 	 */
@@ -156,7 +151,6 @@ class Rewrite {
 	/**
 	 * Create get parameters based on api or non-api
 	 *
-	 * @method create_get_params
 	 *
 	 * @return void
 	 */
@@ -167,7 +161,6 @@ class Rewrite {
 	/**
 	 * Create GET parameters for UI
 	 *
-	 * @method create_get_params_ui
 	 *
 	 * @return void
 	 */
@@ -203,7 +196,6 @@ class Rewrite {
 	/**
 	 * Check if some additional parameters were passed and add them to uri_parts
 	 *
-	 * @method append_qsa
 	 * @return void
 	 */
 	private function append_qsa () {
@@ -220,7 +212,6 @@ class Rewrite {
 	/**
 	 * Fix UI parameters - exceptions
 	 *
-	 * @method fix_ui_params
 	 *
 	 * @return void
 	 */
@@ -250,7 +241,6 @@ class Rewrite {
 	/**
 	 * Create GET parameters for API
 	 *
-	 * @method create_get_params_api
 	 *
 	 * @return void
 	 */
@@ -279,9 +269,8 @@ class Rewrite {
 	/**
 	 * Remove api from uri parameters and reindex request array
 	 *
-	 * @method remove_api_from_uri_params
 	 *
-	 * @return [type]
+	 * @return void
 	 */
 	private function remove_api_from_uri_params () {
 		if($this->uri_parts[0]=="api") {

@@ -62,7 +62,7 @@ class SubnetsTree {
 
 	/**
 	 * Add subnet object to internal tree structures
-	 * @param stdObject $subnet
+	 * @param stdClass $subnet
 	 */
 	public function add($subnet) {
 		if (!is_object($subnet)) return;

@@ -11,7 +11,6 @@ class Admin extends Common_functions {
 	 * (array of objects) to store users, user id is array index
 	 *
 	 * @var array
-	 * @access public
 	 */
 	public $users;
 
@@ -19,7 +18,6 @@ class Admin extends Common_functions {
 	 * (array of objects) to store groups, group id is array index
 	 *
 	 * @var array
-	 * @access public
 	 */
 	public $groups;
 
@@ -29,7 +27,6 @@ class Admin extends Common_functions {
 	 * (default value: null)
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $lastId = null;
 
@@ -39,7 +36,6 @@ class Admin extends Common_functions {
 	 * (default value: true)
 	 *
 	 * @var bool
-	 * @access private
 	 */
 	private $admin_required = true;
 
@@ -59,7 +55,6 @@ class Admin extends Common_functions {
 	/**
 	 * __construct function.
 	 *
-	 * @access public
 	 * @param Database_PDO $database
 	 * @param bool $admin_required (default: true)
 	 */
@@ -81,7 +76,6 @@ class Admin extends Common_functions {
 	/**
 	 * Saves last insert ID on object modification.
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function save_last_insert_id () {
@@ -91,7 +85,6 @@ class Admin extends Common_functions {
 	/**
 	 * Sets admin required flag if needed
 	 *
-	 * @access public
 	 * @param boolean $bool
 	 * @return void
 	 */
@@ -102,7 +95,6 @@ class Admin extends Common_functions {
 	/**
 	 * Checks if current user is admin
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function is_admin () {
@@ -168,7 +160,6 @@ class Admin extends Common_functions {
 	 *
 	 *		$values are all values that should be passed to create object
 	 *
-	 * @access private
 	 * @param mixed $table
 	 * @param mixed $values
 	 * @param array $values_log		//log variables
@@ -198,7 +189,6 @@ class Admin extends Common_functions {
 	 *		$values are all values that should be passed to edit object,
 	 *		id will be used to match field to update.
 	 *
-	 * @access private
 	 * @param mixed $table			//name of table to update
 	 * @param mixed $key
 	 * @param array $values			//update variables
@@ -229,7 +219,6 @@ class Admin extends Common_functions {
 	 *		$values are all values that should be passed to edit object,
 	 *		ids will be used to match fields to update.
 	 *
-	 * @access private
 	 * @param mixed $table			//name of table to update
 	 * @param array $values			//update variables
 	 * @param string $ids
@@ -256,7 +245,6 @@ class Admin extends Common_functions {
 	/**
 	 * Delete object in table by specified object id
 	 *
-	 * @access private
 	 * @param mixed $table		//table to update
 	 * @param string $field		//field selection (where $field = $id)
 	 * @param mixed $id			//field identifier
@@ -280,7 +268,6 @@ class Admin extends Common_functions {
 	/**
 	 * Removes or replaces all old object references
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @param mixed $field
 	 * @param mixed $old_value
@@ -301,7 +288,6 @@ class Admin extends Common_functions {
 	/**
 	 * Resets or replaces all old object references
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @param mixed $field
 	 * @param mixed $old_value
@@ -322,7 +308,6 @@ class Admin extends Common_functions {
 	/**
 	 * Empties table
 	 *
-	 * @access public
 	 * @param mixed $table (default: null)
 	 * @return boolean
 	 */
@@ -357,7 +342,6 @@ class Admin extends Common_functions {
 	 *	input:  array of group ids
 	 *	output: array of groups ( "id"=>array($group) )
 	 *
-	 * @access public
 	 * @param mixed $group_ids
 	 * @return array
 	 */
@@ -383,7 +367,6 @@ class Admin extends Common_functions {
 	 *	input:  array of group ids
 	 *	output: array of ids (  "id"=>id )
 	 *
-	 * @access public
 	 * @param mixed $group_ids
 	 * @return array
 	 */
@@ -404,8 +387,7 @@ class Admin extends Common_functions {
 
 	/**
 	 * Fetches all users that are in group
-	 *
-	 * @access public
+	 * @param mixed $group_id
 	 * @return array of user ids
 	 */
 	public function group_fetch_users ($group_id) {
@@ -434,7 +416,6 @@ class Admin extends Common_functions {
 	/**
 	 * Fetches all users that are not admins and are not in group
 	 *
-	 * @access public
 	 * @param mixed $group_id
 	 * @return array
 	 */
@@ -464,7 +445,6 @@ class Admin extends Common_functions {
 	/**
 	 * This function adds new group access to user account
 	 *
-	 * @access private
 	 * @param mixed $gid
 	 * @param mixed $uid
 	 * @return boolean
@@ -486,7 +466,6 @@ class Admin extends Common_functions {
 	/**
 	 * This function removes group from users account.
 	 *
-	 * @access public
 	 * @param mixed $gid
 	 * @param mixed $uid
 	 * @return boolean
@@ -509,7 +488,6 @@ class Admin extends Common_functions {
 	/**
 	 * Update groups for specified user
 	 *
-	 * @access public
 	 * @param mixed $uid
 	 * @param string $groups
 	 * @return void
@@ -521,7 +499,6 @@ class Admin extends Common_functions {
 	/**
 	 * Update group permissions for section
 	 *
-	 * @access public
 	 * @param mixed $sid
 	 * @param string $groups
 	 * @return void
@@ -533,7 +510,6 @@ class Admin extends Common_functions {
 	/**
 	 * Removes all users from specified group on group delete
 	 *
-	 * @access public
 	 * @param int $gid	//group id
 	 * @return boolean
 	 */
@@ -564,7 +540,6 @@ class Admin extends Common_functions {
 	/**
 	 * Removes group ID from all section permissions
 	 *
-	 * @access public
 	 * @param mixed $gid
 	 * @return boolean
 	 */
@@ -607,7 +582,6 @@ class Admin extends Common_functions {
 	/**
 	 * Replace fields
 	 *
-	 * @access public
 	 * @param mixed $field
 	 * @param mixed $search
 	 * @param mixed $replace
@@ -667,7 +641,6 @@ class Admin extends Common_functions {
 	/**
 	 * Updates custom field definition
 	 *
-	 * @access public
 	 * @param array $field
 	 * @return bool
 	 */
@@ -757,7 +730,6 @@ class Admin extends Common_functions {
 	/**
 	 * Save custom fields that should be hidden from normal display
 	 *
-	 * @access public
 	 * @param mixed $table				//name of custom fields table
 	 * @param mixed $filtered_fields	//array of field to hide for this table
 	 * @return boolean
@@ -785,7 +757,6 @@ class Admin extends Common_functions {
 	/**
 	 * Reorders custom fields
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @param mixed $next
 	 * @param mixed $current

@@ -22,7 +22,6 @@ class Common_functions  {
 	 * (default value: null)
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $settings = null;
 
@@ -32,7 +31,6 @@ class Common_functions  {
 	 * (default value: false)
 	 *
 	 * @var bool
-	 * @access public
 	 */
 	public $json_error = false;
 
@@ -42,7 +40,6 @@ class Common_functions  {
      * (default value: "<font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:12px)
      *
      * @var string
-     * @access public
      */
     public $mail_font_style = "<font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:12px;color:#333;'>";
 
@@ -52,7 +49,6 @@ class Common_functions  {
      * (default value: "<font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:12px)
      *
      * @var string
-     * @access public
      */
     public $mail_font_style_light = "<font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:11px;color:#777;'>";
 
@@ -62,7 +58,6 @@ class Common_functions  {
      * (default value: "<font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:12px)
      *
      * @var string
-     * @access public
      */
     public $mail_font_style_href = "<font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:12px;color:#a0ce4e;'>";
 
@@ -78,7 +73,6 @@ class Common_functions  {
 	 * Result
 	 *
 	 * @var Result
-	 * @access public
 	 */
 	public $Result;
 
@@ -86,7 +80,6 @@ class Common_functions  {
 	 * Log
 	 *
 	 * @var Logging
-	 * @access public
 	 */
 	public $Log;
 
@@ -112,14 +105,13 @@ class Common_functions  {
 	 * (default value: null)
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $address_types = null;
 
 	/**
 	 * NET_DNS object
 	 *
-	 * @var NET_DNS
+	 * @var Net_DNS2_Resolver
 	 * @access protected
 	 */
 	protected $DNS2;
@@ -143,7 +135,6 @@ class Common_functions  {
 	/**
 	 * __construct function
 	 *
-	 * @access public
 	 */
 	public function __construct () {
 		# debugging
@@ -158,7 +149,6 @@ class Common_functions  {
 	 /**
 	 * Compare dotted version numbers 1.21.0 <=> 1.4.10
 	 *
-	 * @access public
 	 * @param mixed $verA
 	 * @param mixed $verB
 	 * @return int
@@ -176,7 +166,6 @@ class Common_functions  {
 	/**
 	 * Fetch mysql version info
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function fetch_mysql_version () {
@@ -203,7 +192,6 @@ class Common_functions  {
 	/**
 	 * Fetch all objects from specified table in database
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @param mixed $sortField (default:id)
 	 * @param mixed bool (default:true)
@@ -237,7 +225,6 @@ class Common_functions  {
 	/**
 	 * Fetches specified object specified table in database
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @param mixed $method
 	 * @param mixed $value
@@ -276,7 +263,6 @@ class Common_functions  {
 	 *
 	 *	doesn't cache
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @param mixed $field
 	 * @param mixed $value
@@ -309,7 +295,6 @@ class Common_functions  {
 	/**
 	 * Count objects in database.
 	 *
-	 * @access public
 	 * @param mixed $table
 	 * @param mixed $field
 	 * @param mixed $val (default: null)
@@ -378,7 +363,6 @@ class Common_functions  {
 	/**
 	 * Get all admins that are set to receive changelog
 	 *
-	 * @access public
 	 * @param bool|mixed $subnetId
 	 * @return array|false
 	 */
@@ -424,7 +408,6 @@ class Common_functions  {
 	/**
 	 * fetches settings from database
 	 *
-	 * @access private
 	 * @return object|false
 	 */
 	public function get_settings () {
@@ -561,7 +544,6 @@ class Common_functions  {
 	/**
 	 * Sets debugging
 	 *
-	 * @access public
 	 * @param bool $debug (default: false)
 	 * @return bool
 	 */
@@ -572,7 +554,6 @@ class Common_functions  {
 	/**
 	 * Gets debugging
 	 *
-	 * @access public
 	 * @return bool
 	 */
 	public function get_debugging () {
@@ -582,7 +563,6 @@ class Common_functions  {
 	/**
 	 * Initializes PEAR Net IPv4 object
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function initialize_pear_net_IPv4 () {
@@ -597,7 +577,6 @@ class Common_functions  {
 	/**
 	 * Initializes PEAR Net IPv6 object
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function initialize_pear_net_IPv6 () {
@@ -612,7 +591,6 @@ class Common_functions  {
 	/**
 	 * Initializes PEAR Net IPv6 object
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function initialize_pear_net_DNS2 () {
@@ -627,7 +605,6 @@ class Common_functions  {
 	/**
 	 * Strip tags from array or field to protect from XSS
 	 *
-	 * @access public
 	 * @param array|string $input
 	 * @return array|string
 	 */
@@ -651,7 +628,6 @@ class Common_functions  {
 	/**
 	 * Changes empty array fields to specified character
 	 *
-	 * @access public
 	 * @param array|object $fields
 	 * @param string $char (default: "/")
 	 * @return array
@@ -678,7 +654,6 @@ class Common_functions  {
 	/**
 	 * Removes empty array fields
 	 *
-	 * @access public
 	 * @param array $fields
 	 * @return array
 	 */
@@ -702,7 +677,6 @@ class Common_functions  {
 	/**
 	 * Detect the encoding used for a string and convert to UTF-8
 	 *
-	 * @method convert_encoding_to_UTF8
 	 * @param  string $string
 	 * @return string
 	 */
@@ -714,7 +688,6 @@ class Common_functions  {
 	/**
 	 * Function to verify checkbox if 0 length
 	 *
-	 * @access public
 	 * @param mixed $field
 	 * @return int|mixed
 	 */
@@ -725,7 +698,6 @@ class Common_functions  {
 	/**
 	 * identify ip address type - ipv4 or ipv6
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @return mixed IP version
 	 */
@@ -747,7 +719,6 @@ class Common_functions  {
 	/**
 	 * Alias of identify_address_format function
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @return mixed
 	 */
@@ -758,7 +729,6 @@ class Common_functions  {
 	/**
 	 * Transforms array to log format
 	 *
-	 * @access public
 	 * @param mixed $logs
 	 * @param bool $changelog
 	 * @return mixed
@@ -791,7 +761,6 @@ class Common_functions  {
 	/**
 	 * Transforms seconds to hms
 	 *
-	 * @access public
 	 * @param mixed $sec
 	 * @param bool $padHours (default: false)
 	 * @return mixed
@@ -827,7 +796,6 @@ class Common_functions  {
 	/**
 	 * Shortens text to max chars
 	 *
-	 * @access public
 	 * @param mixed $text
 	 * @param int $chars (default: 25)
 	 * @return mixed
@@ -850,7 +818,6 @@ class Common_functions  {
 	/**
 	 * Reformats MAC address to requested format
 	 *
-	 * @access public
 	 * @param mixed $mac
 	 * @param string $format (default: 1)
 	 *      1 : 00:66:23:33:55:66
@@ -911,7 +878,6 @@ class Common_functions  {
 	/**
 	* Returns true if site is accessed with https
 	*
-	* @access public
 	* @return bool
 	*/
 	public function isHttps () {
@@ -957,7 +923,6 @@ class Common_functions  {
 	/**
 	 * Create URL for base
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function createURL () {
@@ -989,7 +954,6 @@ class Common_functions  {
 	 *
 	 *	source: https://css-tricks.com/snippets/php/find-urls-in-text-make-links/
 	 *
-	 * @access public
  	 * @param string $text
 	 * @param string $field_type
 	 * @return string
@@ -1013,7 +977,6 @@ class Common_functions  {
 	/**
 	 * Sets valid actions
 	 *
-	 * @access private
 	 * @return string[]
 	 */
 	private function get_valid_actions () {
@@ -1035,7 +998,6 @@ class Common_functions  {
 	/**
 	 * Validate posted action on scripts
 	 *
-	 * @access public
 	 * @param bool $popup
 	 * @return mixed|bool
 	 */
@@ -1071,7 +1033,6 @@ class Common_functions  {
 	/**
 	 * Validates email address.
 	 *
-	 * @access public
 	 * @param mixed $email
 	 * @return bool
 	 */
@@ -1082,7 +1043,6 @@ class Common_functions  {
 	/**
 	 * Validate hostname
 	 *
-	 * @access public
 	 * @param mixed $hostname
 	 * @param bool $permit_root_domain
 	 * @return bool|mixed
@@ -1113,7 +1073,6 @@ class Common_functions  {
 	/**
 	 * Validates IP address
 	 *
-	 * @access public
 	 * @param mixed $ip
 	 * @return bool
 	 */
@@ -1125,7 +1084,6 @@ class Common_functions  {
 	/**
 	 * Validates MAC address
 	 *
-	 * @access public
 	 * @param mixed $mac
 	 * @return bool
 	 */
@@ -1141,7 +1099,6 @@ class Common_functions  {
     /**
      * Validates json from provided string.
      *
-     * @access public
      * @param mixed $string
      * @return mixed
      */
@@ -1195,7 +1152,6 @@ class Common_functions  {
 	/**
 	 * Transforms ipv6 to nt
 	 *
-	 * @access public
 	 * @param mixed $ipv6
 	 * @return mixed
 	 */
@@ -1219,7 +1175,6 @@ class Common_functions  {
 	/**
 	 * Transforms int to ipv4
 	 *
-	 * @access private
 	 * @param mixed $ipv4long
 	 * @return mixed
 	 */
@@ -1235,7 +1190,6 @@ class Common_functions  {
 	/**
 	 * Transforms int to ipv6
 	 *
-	 * @access private
 	 * @param mixed $ipv6long
 	 * @return mixed
 	 */
@@ -1252,7 +1206,6 @@ class Common_functions  {
 	 *	0 = decimal
 	 *	1 = dotted
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @return mixed decimal or dotted
 	 */
@@ -1265,7 +1218,6 @@ class Common_functions  {
 	 *
 	 *	format can be decimal (1678323323) or dotted (10.10.0.0)
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @param string $format (default: "dotted")
 	 * @return mixed requested format
@@ -1282,7 +1234,6 @@ class Common_functions  {
 	/**
 	 * Transform IP address from decimal to dotted (167903488 -> 10.2.1.0)
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @return mixed dotted format
 	 */
@@ -1294,7 +1245,6 @@ class Common_functions  {
 	/**
 	 * Transform IP address from dotted to decimal (10.2.1.0 -> 167903488)
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @return int IP address
 	 */
@@ -1343,7 +1293,6 @@ class Common_functions  {
 	/**
 	 * Returns text representation of json errors
 	 *
-	 * @access public
 	 * @param mixed $error_int
 	 * @return mixed
 	 */
@@ -1422,7 +1371,6 @@ class Common_functions  {
     /**
      * Updates location to latlng from address
      *
-     * @access public
      * @param mixed $id
      * @param mixed $lat
      * @param mixed $lng
@@ -1440,7 +1388,6 @@ class Common_functions  {
     /**
      * Creates form input field for custom fields.
      *
-     * @access public
      * @param mixed $field
      * @param mixed $object
      * @param mixed $timepicker_index
@@ -1497,7 +1444,6 @@ class Common_functions  {
     /**
      * Creates form input field for set and enum values
      *
-     * @access private
      * @param mixed $field
      * @param mixed $object
      * @param string $disabled_text
@@ -1541,7 +1487,6 @@ class Common_functions  {
     /**
      * Creates form input field for date fields.
      *
-     * @access private
      * @param mixed $field
      * @param mixed $object
      * @param mixed $timepicker_index
@@ -1581,7 +1526,6 @@ class Common_functions  {
     /**
      * Creates form input field for boolean fields.
      *
-     * @access private
      * @param mixed $field
      * @param mixed $object
      * @param string $disabled_text
@@ -1608,7 +1552,6 @@ class Common_functions  {
     /**
      * Creates form input field for text fields.
      *
-     * @access private
      * @param mixed $field
      * @param mixed $object
      * @param string $disabled_text
@@ -1625,7 +1568,6 @@ class Common_functions  {
     /**
      * Creates form input field for date fields.
      *
-     * @access private
      * @param mixed $field
      * @param mixed $object
      * @param string $disabled_text
@@ -1651,7 +1593,6 @@ class Common_functions  {
 	/**
 	 * Prints custom field
 	 *
-	 * @method print_custom_field
 	 *
 	 * @param  string $type
 	 * @param  string $value
@@ -1687,7 +1628,6 @@ class Common_functions  {
 	/**
 	 * Print custom field name, strip out custom_ prefix
 	 *
-	 * @method print_custom_field_name
 	 *
 	 * @param  string $name
 	 *
@@ -1700,13 +1640,12 @@ class Common_functions  {
 	/**
 	 * Creates image link to rack.
 	 *
-	 * @method create_rack_link
 	 *
 	 * @param  bool|int $rackId
 	 * @param  bool|int $deviceId
 	 * @param  bool $is_back
 	 *
-	 * @return [type]
+	 * @return string|false
 	 */
 	public function create_rack_link ($rackId = false, $deviceId = false, $is_back = false) {
     	if($rackId===false) {
@@ -1748,7 +1687,6 @@ class Common_functions  {
 	 *
 	 * https://www.macvendorlookup.com/vendormacs-xml-download
 	 *
-	 * @method get_mac_address_vendor
 	 * @param  string $mac
 	 * @param  string &$prefix
 	 * @return string
@@ -1786,7 +1724,6 @@ class Common_functions  {
 	/**
 	 * Read user supplied permissions ($_POST) and calculate deltas from old_permissions
 	 *
-	 * @access public
 	 * @param  array $post_permissions
 	 * @param  array $old_permissions
 	 * @return array
@@ -1832,7 +1769,6 @@ class Common_functions  {
 	/**
 	 * Parse subnet permissions to user readable format
 	 *
-	 * @access public
 	 * @param mixed $permissions
 	 * @return string
 	 */
@@ -1860,7 +1796,6 @@ class Common_functions  {
 	/**
 	 * print_breadcrumbs function.
 	 *
-	 * @access public
 	 * @param mixed $Section
 	 * @param mixed $Subnet
 	 * @param mixed $req
@@ -1879,7 +1814,6 @@ class Common_functions  {
 	/**
 	 * Print address breadcrumbs
 	 *
-	 * @access private
 	 * @param mixed $Subnet
 	 * @param mixed $req
 	 * @param mixed $Address
@@ -1928,9 +1862,8 @@ class Common_functions  {
 	/**
 	 * Print folder breadcrumbs
 	 *
-	 * @access private
-	 * @param obj $Section
-	 * @param obj $Subnet
+	 * @param Sections $Section
+	 * @param Subnets $Subnet
 	 * @param mixed $req
 	 * @return void
 	 */
@@ -1967,7 +1900,6 @@ class Common_functions  {
 	/**
 	 * Prints tools breadcrumbs
 	 *
-	 * @access public
 	 * @param mixed $req
 	 * @return void
 	 */
@@ -2010,7 +1942,6 @@ class Common_functions  {
 	/**
 	 * Prints site title
 	 *
-	 * @access public
 	 * @param mixed $get
 	 * @return string
 	 */
@@ -2183,12 +2114,11 @@ class Common_functions  {
 	 *     visible: where it should be visible
 	 *
 	 *
-	 * @method print_actions
-	 * @param  string $type
+	 * @param  string $compress
 	 * @param  array $items [array of items]
 	 * @param  bool $left_align
 	 * @param  bool $print_text
-	 * @return [type]
+	 * @return	string
 	 */
 	public function print_actions ($compress = "1", $items = [], $left_align = false, $print_text = false) {
 	    if (sizeof($items)>0) {
@@ -2202,7 +2132,6 @@ class Common_functions  {
 	/**
 	 * Prints action dropdown
 	 *
-	 * @method print_actions_buttons
 	 * @param  array $items [array of items]
 	 * @param  bool $left_align
 	 * @param  bool $print_text
@@ -2259,7 +2188,6 @@ class Common_functions  {
 	/**
 	 * Prints icons btn-group
 	 *
-	 * @method print_actions_buttons
 	 * @param  array $items [array of items]
 	 * @return string
 	 */

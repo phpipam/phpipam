@@ -11,7 +11,6 @@ class Addresses extends Common_functions {
 	 * Address types array
 	 *
 	 * @var array
-	 * @access public
 	 */
 	public $address_types = [];
 
@@ -21,7 +20,6 @@ class Addresses extends Common_functions {
 	 * (default value: true)
 	 *
 	 * @var bool
-	 * @access public
 	 */
 	public $mail_changelog = true;
 
@@ -31,7 +29,6 @@ class Addresses extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access public
      */
     public $lastId = false;
 
@@ -47,7 +44,6 @@ class Addresses extends Common_functions {
 	 * PowerDNS object
 	 *
 	 * @var PowerDNS
-	 * @access private
 	 */
 	private $PowerDNS;
 
@@ -57,7 +53,6 @@ class Addresses extends Common_functions {
 	/**
 	 * __construct function
 	 *
-	 * @access public
 	 */
 	public function __construct (Database_PDO $Database) {
 		parent::__construct();
@@ -87,7 +82,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Returns array of address types.
 	 *
-	 * @access public
 	 * @return array of address types and parameters
 	 */
 	public function addresses_types_fetch () {
@@ -108,7 +102,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Sets address tag
 	 *
-	 * @access public
 	 * @param int $state
 	 * @return string
 	 */
@@ -131,7 +124,6 @@ class Addresses extends Common_functions {
 	 *
 	 *		1 > Offline
 	 *
-	 * @access public
 	 * @param int $index
 	 * @return mixed address type
 	 */
@@ -152,7 +144,6 @@ class Addresses extends Common_functions {
 	 *
 	 *	Offline > 1
 	 *
-	 * @access public
 	 * @param mixed $type
 	 * @return mixed
 	 */
@@ -194,7 +185,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Fetches address by specified method
 	 *
-	 * @access public
 	 * @param string $method
 	 * @param mixed $id
 	 * @return object|false address
@@ -227,7 +217,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Fetch addresses on int ip_addr and subnetId
 	 *
-	 * @access public
 	 * @param mixed $ip_addr
 	 * @param mixed $subnetId
 	 * @return object|false
@@ -249,7 +238,6 @@ class Addresses extends Common_functions {
 	/**
 	 *  Fetches duplicate addresses
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function fetch_duplicate_addresses() {
@@ -282,7 +270,6 @@ class Addresses extends Common_functions {
 	 *
 	 * Returns an array indexed by $value.  $bulk_search[$value] = Array of similar IPs with same $value
 	 *
-	 * @access public
 	 * @param object $address
 	 * @param mixed $linked_field
 	 * @param mixed $value
@@ -319,7 +306,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Searches database for similar addresses
 	 *
-	 * @access public
 	 * @param object $address
 	 * @param mixed $linked_field
 	 * @param mixed $value
@@ -348,7 +334,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Address modification
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @param bool $mail_changelog (default: true)
 	 * @return void
@@ -565,7 +550,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Remove item from nat when item is removed
 	 *
-	 * @method remove_nat_item
 	 *
 	 * @param  int $obj_id
 	 * @param  bool $print
@@ -619,7 +603,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Updates hostname for IP addresses
 	 *
-	 * @method update_address_hostname
 	 *
 	 * @param  mixed $ip
 	 * @param  int $id
@@ -642,7 +625,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Checks if subnet usage is over threshold and sends alert
 	 *
-	 * @access private
 	 * @param mixed $address
 	 * @return void
 	 */
@@ -730,7 +712,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Removes gateway if it exists
 	 *
-	 * @access public
 	 * @param mixed $subnetId
 	 * @return bool
 	 */
@@ -746,7 +727,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Fetches custom IP address fields
 	 *
-	 * @access public
 	 * @return object custom address fields
 	 */
 	public function set_custom_fields () {
@@ -761,7 +741,6 @@ class Addresses extends Common_functions {
 	 *
 	 *	if cnt is false we will return id if it exists and false ifnot
 	 *
-	 * @access public
 	 * @param int $address
 	 * @param int $subnetId
 	 * @param int $subnetId
@@ -787,7 +766,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Calculates diff between two IP addresses
 	 *
-	 * @access public
 	 * @param int $ip1
 	 * @param int $ip2
 	 * @return void
@@ -800,7 +778,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Returns first available subnet address, false if none
 	 *
-	 * @access public
 	 * @param int $subnetId
 	 * @return string|false
 	 */
@@ -860,7 +837,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Modifies powerDNS PTR record
 	 *
-	 * @access public
 	 * @param mixed $action
 	 * @param mixed $address
 	 * @param bool $print_error (default: true)
@@ -909,7 +885,6 @@ class Addresses extends Common_functions {
 	/**
 	 * This function removes all records - ip and hostname referenced by address.
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @return void
 	 */
@@ -929,7 +904,6 @@ class Addresses extends Common_functions {
 	/**
 	 *  Validates pdns database connection
 	 *
-	 * @access public
 	 * @param bool $die (default: false)
 	 * @return void
 	 */
@@ -949,7 +923,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Set zone name and fetch domain details
 	 *
-	 * @access private
 	 * @param mixed $subnet_id
 	 * @return object|false
 	 */
@@ -970,7 +943,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Create new PTR record when adding new IP address
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @param mixed $print_error (default: true)
 	 * @param mixed $id (default: NULL)
@@ -1015,7 +987,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Edits PTR
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @param mixed $print_error (default: true)
 	 * @return void
@@ -1058,7 +1029,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Remove PTR from database
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @param mixed $print_error
 	 * @return void
@@ -1084,7 +1054,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Links PTR record with address record
 	 *
-	 * @access public
 	 * @param mixed $address_id
 	 * @param mixed $ptr_id
 	 * @return bool
@@ -1102,7 +1071,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Remove PTR link if it exists
 	 *
-	 * @access private
 	 * @param mixed $address_id
 	 * @return bool
 	 */
@@ -1119,7 +1087,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Removes all PTR references for all hosts in subnet
 	 *
-	 * @access public
 	 * @param mixed $subnet_id
 	 * @return bool
 	 */
@@ -1136,7 +1103,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Checks if PTR record exists
 	 *
-	 * @access private
 	 * @param mixed $ptr_id (default: 0)
 	 * @return bool
 	 */
@@ -1147,7 +1113,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Returns array of all ptr indexes in current subnet
 	 *
-	 * @access public
 	 * @param mixed $subnetId
 	 * @return void
 	 */
@@ -1192,7 +1157,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Import single line from csv to database
 	 *
-	 * @access public
 	 * @param array $address
 	 * @param int $subnetId
 	 * @return void
@@ -1255,7 +1219,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Opens new Subnets connection if not already opened
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function initialize_subnets_object () {
@@ -1265,7 +1228,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Fetches all IP addresses in subnet
 	 *
-	 * @access public
 	 * @param mixed $subnetId
 	 * @param mixed $order (default: null)
 	 * @param mixed $order_direction (default: null)
@@ -1306,7 +1268,6 @@ class Addresses extends Common_functions {
 	 *
 	 * Returns number of addresses in subnet
 	 *
-	 * @access public
 	 * @param int $subnetId
 	 * @return int
 	 */
@@ -1325,7 +1286,6 @@ class Addresses extends Common_functions {
 	 *
 	 *	we provide array of all subnet ids
 	 *
-	 * @access public
 	 * @param mixed $subnets
 	 * @return void
 	 */
@@ -1357,10 +1317,9 @@ class Addresses extends Common_functions {
 	 *
 	 *	count returns count only, else whole subnets
 	 *
-	 * @access public
 	 * @param int $subnetId
 	 * @param bool $count
-	 * @return void
+	 * @return array|int
 	 */
 	public function fetch_subnet_addresses_recursive ($subnetId, $count = false, $order=null, $order_direction=null ) {
 		# initialize subnets
@@ -1416,7 +1375,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Validates IP address
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @return void
 	 */
@@ -1444,7 +1402,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Checks if address is subnet for IPv4 addresses
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @param int $netmask
 	 * @return boolean
@@ -1458,7 +1415,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Checks if address is broadcast for IPv4 addresses
 	 *
-	 * @access public
 	 * @param mixed $address
 	 * @param int $netmask
 	 * @return boolean
@@ -1472,7 +1428,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Checks if hostname in database is unique
 	 *
-	 * @access public
 	 * @param mixed $hostname
 	 * @return boolean
 	 */
@@ -1560,7 +1515,6 @@ class Addresses extends Common_functions {
 	 *	input is array of ip addresses
 	 *	output compresses address range
 	 *
-	 * @access public
 	 * @param array $addresses
 	 * @return array
 	 */
@@ -1630,7 +1584,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Finds invalid addresses - that have subnetId that does not exist
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function find_invalid_addresses () {
@@ -1657,7 +1610,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Finds all unique master subnet ids
 	 *
-	 * @access private
 	 * @return array|false
 	 */
 	private function find_unique_subnetids () {
@@ -1673,7 +1625,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Verifies that subnetid exists
 	 *
-	 * @access private
 	 * @param mixed $id
 	 * @return bool
 	 */
@@ -1707,7 +1658,6 @@ class Addresses extends Common_functions {
 	 *
 	 *	we provide user details and subnetId
 	 *
-	 * @access public
 	 * @param object $user
 	 * @param int $subnetId
 	 * @return int permission level
@@ -1788,7 +1738,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Present numbers in pow 10, only for IPv6
 	 *
-	 * @access public
 	 * @param mixed $number
 	 * @return void
 	 */
@@ -1818,7 +1767,6 @@ class Addresses extends Common_functions {
 	/**
 	 * Prints nat link
 	 *
-	 * @access public
 	 * @param array $all_nats
 	 * @param array $all_nats_per_object
 	 * @param object $subnet
@@ -1874,7 +1822,6 @@ class Addresses extends Common_functions {
     /**
      * Prints single NAT for display in devices, subnets, addresses.
      *
-     * @access public
      * @param mixed $n
      * @param bool|int $nat_id (default: false)
      * @param bool|mixed $object_type (default: false)
@@ -1935,13 +1882,12 @@ class Addresses extends Common_functions {
     /**
      * Translates NAT objects to be shown on page
      *
-     * @access public
      * @param string $json_objects
      * @param int|bool $nat_id (default: false)
      * @param bool $json_objects (default: false)
      * @param bool $object_type (default: false) - to bold it (ipaddresses / subnets)
-     * @param int|bool object_id (default: false) - to bold it
-     * @return void
+     * @param int|bool $object_id (default: false) - to bold it
+     * @return string[]|false
      */
     public function translate_nat_objects_for_popup ($json_objects, $nat_id = false, $admin = false, $object_type = false, $object_id=false) {
         // to array "subnets"=>array(1,2,3)

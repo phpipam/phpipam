@@ -13,7 +13,6 @@ class phpipam_rack extends Tools {
      * (default value: array())
      *
      * @var array
-     * @access public
      */
     public $rack_sizes = [];
 
@@ -23,7 +22,6 @@ class phpipam_rack extends Tools {
      * (default value: false)
      *
      * @var object|bool
-     * @access public
      */
     public $all_racks = false;
 
@@ -38,7 +36,7 @@ class phpipam_rack extends Tools {
     /**
      * Drawer
      *
-     * @var Drawer
+     * @var RackDrawer
      * @access protected
      */
     protected $Drawer;
@@ -56,7 +54,6 @@ class phpipam_rack extends Tools {
 	/**
 	 * __construct function
 	 *
-	 * @access public
 	 */
 	public function __construct (Database_PDO $database) {
 		# Save database object
@@ -86,7 +83,6 @@ class phpipam_rack extends Tools {
     /**
      * Defines all possible rack sizes
      *
-     * @access private
      * @return void
      */
     private function define_rack_sizes () {
@@ -97,7 +93,6 @@ class phpipam_rack extends Tools {
     /**
      * Fetches and returns all racks from database
      *
-     * @method fetch_all_racks
      *
      * @param  bool $locations
      *
@@ -125,7 +120,6 @@ class phpipam_rack extends Tools {
     /**
      * Fetches details about specific rack
      *
-     * @access public
      * @param mixed $id
      * @return object|false
      */
@@ -142,7 +136,6 @@ class phpipam_rack extends Tools {
     /**
      * Fetches all devices attached to rack
      *
-     * @access public
      * @param mixed $id
      * @return array|false
      */
@@ -179,7 +172,6 @@ class phpipam_rack extends Tools {
     /**
      * Fetches all freeform contents attached to rack
      *
-     * @access public
      * @param mixed $id
      * @return array|false
      */
@@ -284,7 +276,6 @@ class phpipam_rack extends Tools {
     /**
      * Prepare rack object and content
      *
-     * @method draw_rack
      *
      * @param  int $id
      * @param  bool|int $deviceId   // active device id
@@ -307,7 +298,6 @@ class phpipam_rack extends Tools {
      * @param  bool $is_back        // we are asking for the back side
      * @param  bool $recursion		// a kill switch to make sure we don't loop infinitely
      *
-     * @access private
      */
     private function compile_rack_contents ($id, $deviceId = false, $is_back = false, $draw_names = true, $recursion = true): Rack {
         // fetch rack details
@@ -530,7 +520,6 @@ class phpipam_rack extends Tools {
 	/**
 	 * Finds the rack that a subrack is located within
 	 *
-	 * @access public
 	 * @param  mixed $id    // the id of the subrack we're looking for
 	 * @return array|false
 	 */
@@ -546,7 +535,6 @@ class phpipam_rack extends Tools {
 	/**
 	 * Fetch subracks that are not mounted anywhere
 	 *
-	 * @access public
 	 * @return array|false
 	 */
 	public function fetch_orphan_subracks () {
@@ -571,7 +559,6 @@ class phpipam_rack extends Tools {
     /**
      * Draw rack
      *
-     * @access private
      * @return void
      */
     private function set_draw_rack () {
@@ -581,7 +568,6 @@ class phpipam_rack extends Tools {
 	/**
 	 * Check device overflow. Checks if a new device will exceed the boundaries of the rack.
 	 *
-	 * @access public
 	 * @param int $rack_id        // rack id
 	 * @param int $device_start   // device position in rack
 	 * @param int $device_size    // device size in rack
@@ -605,7 +591,6 @@ class phpipam_rack extends Tools {
 	/**
 	 * Check device overlap. Checks if a new device will overlap with existing devices.
 	 *
-	 * @access public
 	 * @param int $rack_id				// rack id
 	 * @param int $device_start			// device position in rack
 	 * @param int $device_size			// device size in rack
@@ -677,15 +662,13 @@ class RackDrawer extends Common_functions {
      * rack
      *
      * @var mixed
-     * @access private
      */
     private $rack;
 
     /**
      * template
      *
-     * @var GdImage
-     * @access private
+     * @var resource
      */
     private $template;
 
@@ -693,7 +676,6 @@ class RackDrawer extends Common_functions {
      * rackXSize
      *
      * @var mixed
-     * @access private
      */
     private $rackXSize;
 
@@ -701,7 +683,6 @@ class RackDrawer extends Common_functions {
      * rackInsideXOffset
      *
      * @var int
-     * @access private
      */
     private $rackInsideXOffset = 27;
 
@@ -709,7 +690,6 @@ class RackDrawer extends Common_functions {
      * rackInsideXSize
      *
      * @var int
-     * @access private
      */
     private $rackInsideXSize = 200;
 
@@ -717,7 +697,6 @@ class RackDrawer extends Common_functions {
      * topYSize
      *
      * @var int
-     * @access private
      */
     private $topYSize;
 
@@ -725,7 +704,6 @@ class RackDrawer extends Common_functions {
      * unitYSize
      *
      * @var int
-     * @access private
      */
     private $unitYSize;
 
@@ -733,14 +711,12 @@ class RackDrawer extends Common_functions {
      * bottomYSize
      *
      * @var int
-     * @access private
      */
     private $bottomYSize;
 
     /**
      * Draws rack
      *
-     * @access public
      * @param Rack $rack
      * @return void
      */
@@ -796,7 +772,6 @@ class RackDrawer extends Common_functions {
     /**
      * Draws the name plate of the rack itself
      *
-     * @access private
      * @return void
      */
     private function drawNameplate() {
@@ -810,7 +785,7 @@ class RackDrawer extends Common_functions {
     /**
      * Inserts the passed text in fontsize and color into the passed image
      *
-     * @param GdImage $img
+     * @param resource $img
      * @param string $text
      * @param int $color
      * @return void
@@ -826,7 +801,6 @@ class RackDrawer extends Common_functions {
     /**
      *  Draws a content slot into the result.
      *
-     * @access private
      * @return void
      */
     private function drawContents() {
@@ -853,7 +827,6 @@ class RackDrawer extends Common_functions {
     /**
      * Draws rack content.
      *
-     * @access private
      * @param RackContent $content
      * @param mixed $img
      * @param mixed $name
@@ -886,7 +859,6 @@ class Model {
     /**
      * __construct function.
      *
-     * @access public
      * @param array $fields
      * @return void
      */
@@ -911,70 +883,60 @@ class RackDrawer_SVG extends Common_functions {
 	 * rack
 	 *
 	 * @var mixed
-	 * @access private
 	 */
 	private $rack;
 
 	/**
 	 * Output image height
 	 * @var integer
-	 * @access private
 	 */
 	private $imgYSize;
 
 	/**
 	 * Output image width
 	 * @var integer
-	 * @access private
 	 */
 	private $imgXSize = 250;
 
 	/**
 	 * Output height of 1 RU
 	 * @var integer
-	 * @access private
 	 */
 	private $unitYSize = 20;
 
 	/**
 	 * Output width to the left and right of a rack device or content
 	 * @var integer
-	 * @access private
 	 */
 	private $marginSides = 28;	// pixels from edge to content
 
 	/**
 	 * Output height of header
 	 * @var integer
-	 * @access private
 	 */
 	private $marginTop = 20;	// pixels from edge to content
 
 	/**
 	 * Output height of footer
 	 * @var integer
-	 * @access private
 	 */
 	private $marginBottom = 20;	// pixels from edge to content
 
 	/**
 	 * Output height of wheels and feet
 	 * @var integer
-	 * @access private
 	 */
 	private $marginFeet = 15;	// pixels from edge to content
 
 	/**
 	 * Output width of that decorative border on the sides
 	 * @var integer
-	 * @access private
 	 */
 	private $marginDecorative = 10;	// pixels from edge to content
 
 	/**
 	 * Output SVG text lines
 	 * @var mixed
-	 * @access private
 	 */
 	private $svgData = [];
 
@@ -982,7 +944,6 @@ class RackDrawer_SVG extends Common_functions {
 	/**
 	 * Draws svg definitions
 	 *
-	 * @access public
 	 * @return void
 	 */
 	private function drawDefs() {
@@ -1015,7 +976,6 @@ class RackDrawer_SVG extends Common_functions {
 	/**
 	 * Draws svg styles
 	 *
-	 * @access public
 	 * @return void
 	 */
 	private function drawStyles() {
@@ -1064,7 +1024,6 @@ class RackDrawer_SVG extends Common_functions {
 	/**
 	 * Draws rack frame
 	 *
-	 * @access public
 	 * @return void
 	 */
 	private function drawFrame() {
@@ -1133,7 +1092,6 @@ class RackDrawer_SVG extends Common_functions {
 	/**
 	 * Draws rack name title bar
 	 *
-	 * @access public
 	 * @return void
 	 */
 	private function drawNameplate() {
@@ -1149,7 +1107,6 @@ class RackDrawer_SVG extends Common_functions {
 	/**
 	 * Draws all the things in the rack
 	 *
-	 * @access public
 	 * @return void
 	 */
 	private function drawContents() {
@@ -1214,7 +1171,6 @@ class RackDrawer_SVG extends Common_functions {
 	/**
 	 * Return SVG HTML entities
 	 *
-	 * @access public
 	 * @return string
 	 */
     private function svg_html_entities() {
@@ -1225,7 +1181,6 @@ class RackDrawer_SVG extends Common_functions {
 	/**
 	 * Draws the rack
 	 *
-	 * @access public
 	 * @param mixed $rack   // the rack object
 	 * @return void
 	 */
@@ -1260,7 +1215,6 @@ class Rack extends Model {
      * id
      *
      * @var int
-     * @access private
      */
     private $id;
 
@@ -1268,7 +1222,6 @@ class Rack extends Model {
      * Name
      *
      * @var string
-     * @access private
      */
     private $name;
 
@@ -1278,7 +1231,6 @@ class Rack extends Model {
      * (default value: 48)
      *
      * @var int
-     * @access private
      */
     private $space = 48;
 
@@ -1288,7 +1240,6 @@ class Rack extends Model {
      * (default value: 0)
      *
      * @var int
-     * @access private
      */
     private $orientation = 0;
 
@@ -1296,7 +1247,6 @@ class Rack extends Model {
      * Rack content
      *
      * @var mixed
-     * @access private
      */
     private $content;
 
@@ -1306,7 +1256,6 @@ class Rack extends Model {
      * (default value: false)
      *
      * @var bool
-     * @access private
      */
     private $active = false;
 
@@ -1314,7 +1263,6 @@ class Rack extends Model {
     /**
      * returns id.
      *
-     * @access public
      * @return int
      */
     public function getId() {
@@ -1324,8 +1272,7 @@ class Rack extends Model {
     /**
      * Set rack id.
      *
-     * @access public
-     * @param mixed $name
+     * @param mixed $id
      * @return void
      */
     public function setId($id) {
@@ -1335,7 +1282,6 @@ class Rack extends Model {
     /**
      * returns name.
      *
-     * @access public
      * @return string
      */
     public function getName() {
@@ -1345,7 +1291,6 @@ class Rack extends Model {
     /**
      * Set rack name.
      *
-     * @access public
      * @param mixed $name
      * @return void
      */
@@ -1356,7 +1301,6 @@ class Rack extends Model {
     /**
      * getSpace function.
      *
-     * @access public
      * @return int
      */
     public function getSpace() {
@@ -1366,7 +1310,6 @@ class Rack extends Model {
     /**
      * setSpace function.
      *
-     * @access public
      * @param mixed $space
      * @return void
      */
@@ -1377,7 +1320,6 @@ class Rack extends Model {
     /**
      * getOrientation function.
      *
-     * @access public
      * @return int
      */
     public function getOrientation() {
@@ -1387,7 +1329,6 @@ class Rack extends Model {
     /**
      * setOrientation function.
      *
-     * @access public
      * @param mixed $orientation
      * @return void
      */
@@ -1398,7 +1339,6 @@ class Rack extends Model {
     /**
      * Returns rack content.
      *
-     * @access public
      * @return mixed
      */
     public function getContent() {
@@ -1408,7 +1348,6 @@ class Rack extends Model {
     /**
      * Sets rack content.
      *
-     * @access public
      * @param mixed $content
      * @return void
      */
@@ -1419,7 +1358,6 @@ class Rack extends Model {
     /**
      * Checks if item is active
      *
-     * @access public
      * @return bool
      */
     public function isActive() {
@@ -1429,7 +1367,6 @@ class Rack extends Model {
     /**
      * Sets active item
      *
-     * @access public
      * @param bool $active (default: true)
      * @return void
      */
@@ -1440,7 +1377,6 @@ class Rack extends Model {
     /**
      * Set active rack device.
      *
-     * @access public
      * @param mixed $id         // device id
      * @return void
      */
@@ -1464,7 +1400,6 @@ class RackContent extends Model {
      * var id
      *
      * @var int
-     * @access private
      */
     private $id;
 
@@ -1472,7 +1407,6 @@ class RackContent extends Model {
      * Rack name
      *
      * @var string
-     * @access private
      */
     private $name;
 
@@ -1480,7 +1414,6 @@ class RackContent extends Model {
      * Active item
      *
      * @var bool
-     * @access private
      */
     private $active;
 
@@ -1488,7 +1421,6 @@ class RackContent extends Model {
      * Start location
      *
      * @var int
-     * @access private
      */
     private $startLocation;
 
@@ -1496,7 +1428,6 @@ class RackContent extends Model {
      * Rack size
      *
      * @var int
-     * @access private
      */
     private $size;
 
@@ -1504,7 +1435,6 @@ class RackContent extends Model {
 	 * hyperlink to the device
 	 *
 	 * @var string
-	 * @access private
 	 */
 	private $url = "";
 
@@ -1512,7 +1442,6 @@ class RackContent extends Model {
 	 * subrack
 	 *
 	 * @var mixed
-	 * @access private
 	 */
 	private $subrack;
 
@@ -1520,7 +1449,6 @@ class RackContent extends Model {
 	 * background color
 	 *
 	 * @var string
-	 * @access private
 	 */
 	private $bgcolor = "#E6E6E6";
 
@@ -1528,7 +1456,6 @@ class RackContent extends Model {
 	 * foreground color
 	 *
 	 * @var string
-	 * @access private
 	 */
 	private $fgcolor = "black";
 
@@ -1537,7 +1464,6 @@ class RackContent extends Model {
     /**
      * returns id
      *
-     * @access public
      * @return int
      */
     public function getId() {
@@ -1547,7 +1473,6 @@ class RackContent extends Model {
     /**
      * Sets rack id
      *
-     * @access public
      * @param mixed $id
      * @return void
      */
@@ -1558,7 +1483,6 @@ class RackContent extends Model {
     /**
      * Returns rack name
      *
-     * @access public
      * @return string
      */
     public function getName() {
@@ -1568,7 +1492,6 @@ class RackContent extends Model {
     /**
      * Sets rack name
      *
-     * @access public
      * @param mixed $name
      * @return void
      */
@@ -1579,7 +1502,6 @@ class RackContent extends Model {
     /**
      * Checks if item is active
      *
-     * @access public
      * @return bool
      */
     public function isActive() {
@@ -1589,7 +1511,6 @@ class RackContent extends Model {
     /**
      * Sets active item
      *
-     * @access public
      * @param bool $active (default: true)
      * @return void
      */
@@ -1600,7 +1521,6 @@ class RackContent extends Model {
     /**
      * Returns start position
      *
-     * @access public
      * @return int
      */
     public function getStartLocation() {
@@ -1610,7 +1530,6 @@ class RackContent extends Model {
     /**
      * Sets start position
      *
-     * @access public
      * @param mixed $startLocation
      * @return void
      */
@@ -1621,7 +1540,6 @@ class RackContent extends Model {
     /**
      * Gets rack size.
      *
-     * @access public
      * @return int
      */
     public function getSize() {
@@ -1631,7 +1549,6 @@ class RackContent extends Model {
     /**
      * Sets rack size
      *
-     * @access public
      * @param mixed $size
      * @return void
      */
@@ -1642,7 +1559,6 @@ class RackContent extends Model {
 	/**
 	 * Returns url
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function getUrl() {
@@ -1652,7 +1568,6 @@ class RackContent extends Model {
 	/**
 	 * Sets url
 	 *
-	 * @access public
 	 * @param mixed $url
 	 * @return void
 	 */
@@ -1663,7 +1578,6 @@ class RackContent extends Model {
 	/**
 	 * Returns subrack
 	 *
-	 * @access public
 	 * @return mixed
 	 */
 	public function getSubrack() {
@@ -1673,7 +1587,6 @@ class RackContent extends Model {
 	/**
 	 * Sets subrack
 	 *
-	 * @access public
 	 * @param mixed $subrack
 	 * @return void
 	 */
@@ -1684,7 +1597,6 @@ class RackContent extends Model {
 	/**
 	 * Returns bgcolor
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function getBgcolor() {
@@ -1694,8 +1606,7 @@ class RackContent extends Model {
 	/**
 	 * Sets bgcolor
 	 *
-	 * @access public
-	 * @param mixed $name
+	 * @param mixed $color
 	 * @return void
 	 */
 	public function setBgcolor($color) {
@@ -1705,7 +1616,6 @@ class RackContent extends Model {
 	/**
 	 * Returns fgcolor
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function getFgcolor() {
@@ -1715,8 +1625,7 @@ class RackContent extends Model {
 	/**
 	 * Sets fgcolor
 	 *
-	 * @access public
-	 * @param mixed $name
+	 * @param mixed $color
 	 * @return void
 	 */
 	public function setFgcolor($color) {

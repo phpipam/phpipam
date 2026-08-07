@@ -14,7 +14,6 @@ class PowerDNS extends Common_functions {
      * (default value: false)
      *
      * @var bool|string
-     * @access public
      */
     public $error = false;
 
@@ -22,7 +21,6 @@ class PowerDNS extends Common_functions {
      * Database settings
      *
      * @var array|object
-     * @access public
      */
     public $db_settings;
 
@@ -44,7 +42,6 @@ class PowerDNS extends Common_functions {
      * Default settings
      *
      * @var object
-     * @access public
      */
     public $defaults;
 
@@ -52,7 +49,6 @@ class PowerDNS extends Common_functions {
      * Number of results
      *
      * @var int
-     * @access public
      */
     public $limit;
 
@@ -60,7 +56,6 @@ class PowerDNS extends Common_functions {
      * Order field
      *
      * @var string
-     * @access public
      */
     public $orderby;
 
@@ -68,7 +63,6 @@ class PowerDNS extends Common_functions {
      * Order direction
      *
      * @var string
-     * @access public
      */
     public $orderdir;
 
@@ -76,7 +70,6 @@ class PowerDNS extends Common_functions {
      * Domain types
      *
      * @var object
-     * @access public
      */
     public $domain_types;
 
@@ -84,7 +77,6 @@ class PowerDNS extends Common_functions {
      * Record types
      *
      * @var mixed
-     * @access public
      */
     public $record_types;
 
@@ -92,7 +84,6 @@ class PowerDNS extends Common_functions {
      * ttl value
      *
      * @var object
-     * @access public
      */
     public $ttl;
 
@@ -100,7 +91,6 @@ class PowerDNS extends Common_functions {
      * Last insert id
      *
      * @var int|string
-     * @access public
      */
     public $lastId;
 
@@ -110,7 +100,6 @@ class PowerDNS extends Common_functions {
      * (default value: array())
      *
      * @var array
-     * @access private
      */
     private $domains_cache = [];
 
@@ -136,7 +125,6 @@ class PowerDNS extends Common_functions {
     /**
      * __construct function.
      *
-     * @access public
      * @param Database_PDO $Database
      */
     public function __construct (Database_PDO $Database) {
@@ -177,7 +165,6 @@ class PowerDNS extends Common_functions {
     /**
      * Sets database connection
      *
-     * @access private
      */
     private function db_set () {
         // decode values form powerDNS
@@ -216,7 +203,6 @@ class PowerDNS extends Common_functions {
     /**
      * Sets default values for database connection and other parameters
      *
-     * @access private
      * @return string
      */
     private function db_set_db_settings () {
@@ -245,7 +231,6 @@ class PowerDNS extends Common_functions {
     /**
      * Checks database connection with given parameters
      *
-     * @access public
      * @return bool
      */
     public function db_check () {
@@ -262,7 +247,6 @@ class PowerDNS extends Common_functions {
     /**
      * Returns Id of last insert
      *
-     * @access public
      * @return int
      */
     public function get_last_db_id () {
@@ -272,7 +256,6 @@ class PowerDNS extends Common_functions {
     /**
      * Returns domain types
      *
-     * @access private
      */
     private function set_domain_types () {
         $types = [
@@ -309,7 +292,6 @@ class PowerDNS extends Common_functions {
      *    For now only basic record types are available because of validations.
      *    If some other record is required uncomment it, note that input will not be validated
      *
-     * @access private
      */
     private function set_record_types () {
         // init
@@ -335,7 +317,6 @@ class PowerDNS extends Common_functions {
     /**
      * Sets default values for TTL
      *
-     * @access private
      */
     private function set_ttl_values () {
         // init
@@ -362,7 +343,6 @@ class PowerDNS extends Common_functions {
     /**
      * set_query_values function.
      *
-     * @access public
      * @param int|string $limit (default: 1000000)
      * @param string $orderby (default: "id")
      * @param string $orderdir (default: "asc")
@@ -384,7 +364,6 @@ class PowerDNS extends Common_functions {
     /**
      * Edit domain wrapper
      *
-     * @access public
      * @param string $action
      * @param object|array $values
      * @return void
@@ -403,7 +382,6 @@ class PowerDNS extends Common_functions {
     /**
      * Creates new domain
      *
-     * @access private
      * @param object|array $values
      * @return bool
      */
@@ -428,7 +406,6 @@ class PowerDNS extends Common_functions {
     /**
      * Edits domain
      *
-     * @access private
      * @param object|array $values
      * @return bool
      */
@@ -453,7 +430,6 @@ class PowerDNS extends Common_functions {
     /**
      * Deletes domain
      *
-     * @access private
      * @param object|array $values
      * @return bool
      */
@@ -476,7 +452,6 @@ class PowerDNS extends Common_functions {
     /**
      * Fetches all domains
      *
-     * @access public
      * @return bool|array|object
      */
     public function fetch_all_domains () {
@@ -497,7 +472,6 @@ class PowerDNS extends Common_functions {
     /**
      * Fetches all forward domains
      *
-     * @access public
      * @return bool|array|object
      */
     public function fetch_all_forward_domains () {
@@ -518,7 +492,6 @@ class PowerDNS extends Common_functions {
     /**
      * Fetches all reverse IPv4 domains
      *
-     * @access public
      * @return bool|array|object
      */
     public function fetch_reverse_v4_domains () {
@@ -539,7 +512,6 @@ class PowerDNS extends Common_functions {
     /**
      * Fetches all reverse IPv6 domains
      *
-     * @access public
      * @return bool|array|object
      */
     public function fetch_reverse_v6_domains () {
@@ -560,7 +532,6 @@ class PowerDNS extends Common_functions {
     /**
      * Fetches domain record by id (numberic) of name (varchar)
      *
-     * @access public
      * @param string|int $id
      * @return bool|array|object
      */
@@ -572,7 +543,6 @@ class PowerDNS extends Common_functions {
     /**
      * Fetches domain details by id
      *
-     * @access public
      * @param int|string $id
      * @return bool|array|object
      */
@@ -597,7 +567,6 @@ class PowerDNS extends Common_functions {
     /**
      * Fetches domain details by name
      *
-     * @access public
      * @param mixed $name
      * @return object|false
      */
@@ -622,7 +591,6 @@ class PowerDNS extends Common_functions {
     /**
      * Returns number of records for domain
      *
-     * @access public
      * @param mixed $domain_id
      * @return void
      */
@@ -642,7 +610,6 @@ class PowerDNS extends Common_functions {
     /**
      * Conts number of records types
      *
-     * @access public
      * @param mixed $domain_id
      * @param string $type (default: "PTR")
      * @return void
@@ -673,7 +640,6 @@ class PowerDNS extends Common_functions {
     /**
      * Fetches all records for some domain
      *
-     * @access public
      * @param mixed $domain_id
      * @return void
      */
@@ -692,7 +658,6 @@ class PowerDNS extends Common_functions {
     /**
      * Fetches all records by type.
      *
-     * @access public
      * @param mixed $domain_id
      * @param mixed $type
      * @return array|false
@@ -713,7 +678,6 @@ class PowerDNS extends Common_functions {
     /**
      * Fetches record from database
      *
-     * @access public
      * @param int|string $record_id
      * @return object|boolean
      */
@@ -733,7 +697,6 @@ class PowerDNS extends Common_functions {
     /**
      * Searches domains referencing a hostname or ip
      *
-     * @access public
      * @param mixed $hostname
      * @param mixed $ip
      * @return array|boolean
@@ -754,7 +717,6 @@ class PowerDNS extends Common_functions {
     /**
      * Searches records for specific domainid for type and name values
      *
-     * @access public
      * @param mixed $domain_id
      * @param mixed $type
      * @param mixed $name
@@ -776,7 +738,6 @@ class PowerDNS extends Common_functions {
     /**
      * Searches for domain record
      *
-     * @access public
      * @param string $field (default: "content")
      * @param mixed $value (default: null)
      * @param string $sortField (default: 'id')
@@ -797,7 +758,6 @@ class PowerDNS extends Common_functions {
     /**
      * Search aliases for specific hostname
      *
-     * @access public
      * @param mixed $hostname
      * @return array|false
      */
@@ -823,7 +783,6 @@ class PowerDNS extends Common_functions {
     /**
      * Returns unique IP addresses from content field in pdns table
      *
-     * @access public
      * @return void
      */
     public function search_unique_ips () {
@@ -842,7 +801,6 @@ class PowerDNS extends Common_functions {
     /**
      * Edit PowerDNS record
      *
-     * @access public
      * @param mixed $action
      * @param array $values
      * @return bool
@@ -862,7 +820,6 @@ class PowerDNS extends Common_functions {
     /**
      * Create new record
      *
-     * @access public
      * @param array|object $record
      * @param bool $print_success
      * @return bool
@@ -902,9 +859,8 @@ class PowerDNS extends Common_functions {
     /**
      * Updates domain record and SOA serial
      *
-     * @access public
      * @param mixed $domain_id
-     * @param mixed (array) $content
+     * @param mixed $content
      * @param bool $print_success
      * @return bool
      */
@@ -939,7 +895,6 @@ class PowerDNS extends Common_functions {
     /**
      * Removes domain record
      *
-     * @access public
      * @param mixed $domain_id
      * @param mixed $record_id
      * @param bool $print_success
@@ -967,7 +922,6 @@ class PowerDNS extends Common_functions {
     /**
      * Removes specified domain record by id
      *
-     * @access public
      * @param mixed $id
      * @return bool
      */
@@ -992,7 +946,6 @@ class PowerDNS extends Common_functions {
     /**
      * Remove all records for IP address and hostname.
      *
-     * @access public
      * @param mixed $hostname
      * @param mixed $ip
      * @return void
@@ -1025,7 +978,6 @@ class PowerDNS extends Common_functions {
     /**
      * Updates content of specific record
      *
-     * @access public
      * @param array|object $content
      * @return bool
      */
@@ -1047,7 +999,6 @@ class PowerDNS extends Common_functions {
     /**
      * Updates SOA serial
      *
-     * @access private
      * @param int|string $domain_id
      * @param mixed $serial
      * @return void
@@ -1078,7 +1029,6 @@ class PowerDNS extends Common_functions {
     /**
      * Updates all SOA serials if it changes from autoserial false to true
      *
-     * @access public
      * @param bool $autoserial (Default : No)
      * @return void
      */
@@ -1101,7 +1051,6 @@ class PowerDNS extends Common_functions {
      *    - SOA record (primary hostmaster serial refresh retry expire default_ttl)
      *    - One entry for each NS
      *
-     * @access public
      * @param array $values
      * @param bool $checkOnly
      * @return void
@@ -1150,7 +1099,6 @@ class PowerDNS extends Common_functions {
     /**
      * Creates object with values for new record
      *
-     * @access public
      * @param mixed $domain_id
      * @param mixed $name
      * @param mixed $type
@@ -1179,7 +1127,6 @@ class PowerDNS extends Common_functions {
     /**
      * Validates edit of record
      *
-     * @access public
      * @param mixed $name (default: null)
      * @param mixed $type (default: null)
      * @param mixed $content (default: null)
@@ -1206,7 +1153,6 @@ class PowerDNS extends Common_functions {
     /**
      * Validates record content.
      *
-     * @access private
      * @param mixed $record
      * @return void
      */
@@ -1234,7 +1180,6 @@ class PowerDNS extends Common_functions {
      *    - must be an integer
      *    - domain must already exist
      *
-     * @access private
      * @param mixed $domain_id
      * @return void
      */
@@ -1252,9 +1197,8 @@ class PowerDNS extends Common_functions {
      *
      *    - if not null validate hostname
      *
-     * @access private
-     * @param mixed $name
-     * @return void
+     * @param string $name
+     * @return string
      */
     private function validate_record_name ($name, $type = NULL) {
         // certain record types allow forbidden characters in record name
@@ -1286,9 +1230,8 @@ class PowerDNS extends Common_functions {
      *
      *    - check against permitted record types
      *
-     * @access private
-     * @param mixed $type
-     * @return void
+     * @param string $type
+     * @return string
      */
     private function validate_record_type ($type) {
         // if set check, otherwise ignore
@@ -1306,9 +1249,8 @@ class PowerDNS extends Common_functions {
      *    - numeric
      *    - between 0 and 2147483647
      *
-     * @access private
-     * @param mixed $ttl
-     * @return void
+     * @param int $ttl
+     * @return int
      */
     private function validate_ttl ($ttl) {
         // check numberfic
@@ -1322,9 +1264,8 @@ class PowerDNS extends Common_functions {
     /**
      * Validates nxdomain ttl
      *
-     * @access private
-     * @param mixed $ttl
-     * @return void
+     * @param int $ttl
+     * @return int
      */
     private function validate_nxdomain_ttl ($ttl) {
         // check numberfic
@@ -1338,9 +1279,8 @@ class PowerDNS extends Common_functions {
     /**
      * Validate refresh SOA value
      *
-     * @access private
-     * @param mixed $refresh
-     * @return void
+     * @param int $refresh
+     * @return int
      */
     private function validate_refresh ($refresh) {
         // check numberfic
@@ -1354,9 +1294,8 @@ class PowerDNS extends Common_functions {
     /**
      * Validates priority
      *
-     * @access private
-     * @param mixed $prio
-     * @return void
+     * @param int $prio
+     * @return int
      */
     private function validate_prio ($prio) {
         // validate numbric
@@ -1372,9 +1311,8 @@ class PowerDNS extends Common_functions {
     /**
      * Validates integer
      *
-     * @access private
-     * @param mixed $int
-     * @return void
+     * @param int $int
+     * @return int
      */
     private function validate_integer ($int) {
         // validate numbric
@@ -1388,11 +1326,10 @@ class PowerDNS extends Common_functions {
     /**
      * Updates all existing domain records if domain name changes !
      *
-     * @access public
      * @param mixed $domain_id
      * @param mixed $old_name
      * @param mixed $name
-     * @return void
+     * @return bool
      */
     public function update_all_records ($domain_id, $old_name, $name) {
         // execute
@@ -1408,7 +1345,6 @@ class PowerDNS extends Common_functions {
     /**
      * Removes all domain records
      *
-     * @access public
      * @param mixed $domain_id
      * @return bool
      */
@@ -1444,9 +1380,9 @@ class PowerDNS extends Common_functions {
     /**
      * Returns PTR zone from ip address / subnet based on IP version
      *
-     * @access public
-     * @param mixed $ip
-     * @return void
+     * @param string $ip
+     * @param int $mask
+     * @return string
      */
     public function get_ptr_zone_name ($ip, $mask) {
         return $this->identify_address ($ip)=="IPv4" ? $this->get_ptr_zone_name_v4 ($ip, $mask) : $this->get_ptr_zone_name_v6 ($ip, $mask);
@@ -1455,11 +1391,11 @@ class PowerDNS extends Common_functions {
     /**
      * Returns PTR zone for IPv4 records
      *
-     * @access public
-     * @param mixed $ip
-     * @return void
+     * @param string $ip
+     * @param int $mask
+     * @return string
      */
-    public function get_ptr_zone_name_v4 ($ip, $mask) {
+    private function get_ptr_zone_name_v4 ($ip, $mask) {
         // check mask to see how many IP bits to remove
         $bits = $mask<24 ? 2 : 1;
 
@@ -1474,11 +1410,11 @@ class PowerDNS extends Common_functions {
     /**
      * Returns PTR zone for IPv6 record
      *
-     * @access public
-     * @param mixed $ip
-     * @return void
+     * @param string $ip
+     * @param int $mask
+     * @return string
      */
-    public function get_ptr_zone_name_v6 ($ip, $mask) {
+    private function get_ptr_zone_name_v6 ($ip, $mask) {
         $ipp = inet_pton($ip);
         $maskbin = str_repeat('1', $mask) . str_repeat('0', 128 - $mask);
         $maskhex = '';
@@ -1500,9 +1436,8 @@ class PowerDNS extends Common_functions {
     /**
      * Set name for PTR host record
      *
-     * @access public
-     * @param mixed $ip
-     * @return void
+     * @param string $ip
+     * @return string
      */
     public function get_ip_ptr_name ($ip) {
         // set zone prefix and reverse content
@@ -1536,7 +1471,6 @@ class PowerDNS extends Common_functions {
     /**
      * Checks if record exists
      *
-     * @access public
      * @param mixed $domain_id
      * @param mixed $name
      * @param mixed $type
@@ -1557,7 +1491,6 @@ class PowerDNS extends Common_functions {
     /**
      * Checks if record exists by id
      *
-     * @access private
      * @param mixed $ptr_id (default: 0)
      * @return bool
      */
@@ -1578,7 +1511,6 @@ class PowerDNS extends Common_functions {
     /**
      * Removes all PTR records for subnet
      *
-     * @access public
      * @param mixed $domain_id
      * @param mixed $indexes (array of PTR indexes)
      * @return bool

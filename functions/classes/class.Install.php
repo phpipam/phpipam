@@ -10,7 +10,6 @@ class Install extends Common_functions {
 	 * to store DB exceptions
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $exception;
 
@@ -36,7 +35,6 @@ class Install extends Common_functions {
 	/**
 	 * __construct function.
 	 *
-	 * @access public
 	 * @param Database_PDO $Database
 	 */
 	public function __construct (Database_PDO $Database) {
@@ -69,7 +67,6 @@ class Install extends Common_functions {
 	/**
 	 * Install database files
 	 *
-	 * @access public
 	 * @param mixed $rootuser
 	 * @param mixed $rootpass
 	 * @param bool $drop_database (default: false)
@@ -111,7 +108,6 @@ class Install extends Common_functions {
 	/**
 	 * Drop existing database
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function drop_database () {
@@ -125,7 +121,6 @@ class Install extends Common_functions {
 	/**
 	 * Create database
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function create_database () {
@@ -139,7 +134,6 @@ class Install extends Common_functions {
 	/**
 	 * Create user grants
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function create_grants () {
@@ -165,7 +159,6 @@ class Install extends Common_functions {
 	/**
 	 * Execute files installation
 	 *
-	 * @access private
 	 * @param $migrate (default: false)
 	 * @return void
 	 */
@@ -227,13 +220,12 @@ class Install extends Common_functions {
 	/**
 	 * Tries to connect to database
 	 *
-	 * @access public
 	 * @param bool $redirect
 	 * @return void
 	 */
 	public function check_db_connection ($redirect = false) {
 		# try to connect
-		try { $res = $this->Database->connect(); }
+		try { $this->Database->connect(); }
 		catch (Exception $e) 	{
 			$this->exception = $e->getMessage();
 			# redirect ?
@@ -247,7 +239,6 @@ class Install extends Common_functions {
 	/**
 	 * Checks if table exists
 	 *
-	 * @access public
 	 * @param string $table
 	 * @return bool
 	 */
@@ -277,7 +268,6 @@ class Install extends Common_functions {
 	/**
 	 * This function redirects to install page
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function redirect_to_install () {
@@ -288,7 +278,6 @@ class Install extends Common_functions {
 	/**
 	 * Sets DB parameters
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function set_db_params () {
@@ -311,7 +300,6 @@ class Install extends Common_functions {
 	/**
 	 * Post installation settings update.
 	 *
-	 * @access public
 	 * @param mixed $adminpass
 	 * @param mixed $siteTitle
 	 * @param mixed $siteURL
@@ -329,7 +317,6 @@ class Install extends Common_functions {
 	/**
 	 * Updates admin password after installation
 	 *
-	 * @access public
 	 * @param mixed $adminpass
 	 * @return void
 	 */
@@ -342,7 +329,6 @@ class Install extends Common_functions {
 	/**
 	 * Updates settings after installation
 	 *
-	 * @access private
 	 * @param mixed $siteTitle
 	 * @param mixed $siteURL
 	 * @return void
@@ -382,7 +368,6 @@ class Upgrade extends Install {
 	/**
 	 * __construct function.
 	 *
-	 * @method __construct
 	 * @param  Database_PDO $Database
 	 */
 	public function __construct (Database_PDO $Database) {
@@ -401,7 +386,6 @@ class Upgrade extends Install {
 	/**
 	 * Get old version from database
 	 *
-	 * @method get_old_version
 	 * @return void
 	 */
 	private function get_old_version () {
@@ -414,7 +398,6 @@ class Upgrade extends Install {
 	/**
 	 * Load all queries from upgrade list and add them to array of queries
 	 *
-	 * @method load_all_queries
 	 * @return void
 	 */
 	private function load_all_queries () {
@@ -432,7 +415,6 @@ class Upgrade extends Install {
 	/**
 	 * Add new query to upgrade query list
 	 *
-	 * @method register_query
 	 * @param  string $version
 	 * @param  string $query
 	 * @return void
@@ -452,7 +434,6 @@ class Upgrade extends Install {
 	/**
 	 * Returns all upgrade queries to be executed
 	 *
-	 * @method get_queries
 	 * @return array
 	 */
 	public function get_queries () {
@@ -461,7 +442,6 @@ class Upgrade extends Install {
 
 	/**
 	 * For PDO execution we cannot use delimiters so we need to remove them
-	 * @method process_procedures
 	 * @param  string $query
 	 * @return string
 	 */
@@ -483,7 +463,6 @@ class Upgrade extends Install {
 	/**
 	 * Upgrade database checks and executes.
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function upgrade_database () {
@@ -501,7 +480,6 @@ class Upgrade extends Install {
 	/**
 	 * Execute database upgrade.
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function upgrade_database_execute () {

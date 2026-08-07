@@ -10,7 +10,6 @@ class Devtype extends Common_functions {
 	 * (array of objects) to store sections, section ID is array index
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $sections;
 
@@ -20,7 +19,6 @@ class Devtype extends Common_functions {
 	 * (default value: null)
 	 *
 	 * @var mixed
-	 * @access public
 	 */
 	public $lastInsertId = null;
 
@@ -39,7 +37,6 @@ class Devtype extends Common_functions {
 	/**
 	 * __construct function.
 	 *
-	 * @access public
 	 * @param Database_PDO $database
 	 */
 	public function __construct (Database_PDO $database) {

@@ -49,7 +49,6 @@ class Password_check extends Common_functions {
 
 	/**
 	 * Constructor
-	 * @method __construct
 	 * @param  array $requirements
 	 * @param  array $symbols
 	 */
@@ -62,7 +61,6 @@ class Password_check extends Common_functions {
 	 * Set provided password requirements - overrides defaults
 	 * if provided when calling class
 	 *
-	 * @method set_requirements
 	 * @param  array $requirements
 	 * @param  array $symbols
 	 */
@@ -88,7 +86,6 @@ class Password_check extends Common_functions {
 
 	/**
 	 * Validate input password against requirements
-	 * @method validate
 	 * @param  string $password
 	 * @return bool
 	 */
@@ -114,7 +111,6 @@ class Password_check extends Common_functions {
 	/**
 	 * Saves validation error to string
 	 *
-	 * @method save_error
 	 * @param  string $string
 	 * @return void
 	 */
@@ -125,7 +121,6 @@ class Password_check extends Common_functions {
 	/**
 	 * Returns last error when validation failed
 	 *
-	 * @method get_error
 	 * @return array
 	 */
 	public function get_errors () {
@@ -138,7 +133,6 @@ class Password_check extends Common_functions {
 	/**
 	 * Validate minimum length
 	 *
-	 * @method validate_minLength
 	 * @return void
 	 */
 	private function validate_minLength () {
@@ -150,7 +144,6 @@ class Password_check extends Common_functions {
 	/**
 	 * Validate maximum length
 	 *
-	 * @method validate_maxLength
 	 * @return void
 	 */
 	private function validate_maxLength () {
@@ -162,7 +155,6 @@ class Password_check extends Common_functions {
 	/**
 	 * Validate minimum number of numbers
 	 *
-	 * @method validate_minNumbers
 	 * @return void
 	 */
 	private function validate_minNumbers () {
@@ -174,7 +166,6 @@ class Password_check extends Common_functions {
 	/**
 	 * Validate minimum number of letters
 	 *
-	 * @method validate_minLetters
 	 * @return void
 	 */
 	private function validate_minLetters () {
@@ -186,7 +177,6 @@ class Password_check extends Common_functions {
 	/**
 	 * Validate minimum number of lowercase numbers
 	 *
-	 * @method validate_minLowerCase
 	 * @return void
 	 */
 	private function validate_minLowerCase () {
@@ -197,7 +187,6 @@ class Password_check extends Common_functions {
 
 	/**
 	 * Validate minimum number of uppercase numbers
-	 * @method validate_minUpperCase
 	 * @return void
 	 */
 	private function validate_minUpperCase () {
@@ -209,7 +198,6 @@ class Password_check extends Common_functions {
 	/**
 	 * Validate minimum number of symbols
 	 *
-	 * @method validate_minSymbols
 	 * @return void
 	 */
 	private function validate_minSymbols () {
@@ -223,7 +211,6 @@ class Password_check extends Common_functions {
 	/**
 	 * Validate maximum number of symbols
 	 *
-	 * @method validate_maxSymbols
 	 * @return void
 	 */
 	private function validate_maxSymbols () {
@@ -237,7 +224,6 @@ class Password_check extends Common_functions {
 	/**
 	 * Validate all symbols
 	 *
-	 * @method validate_symbols
 	 * @return void
 	 */
 	private function validate_symbols () {
@@ -270,7 +256,6 @@ class Password_check extends Common_functions {
 	/**
 	 * Get all special characters - symbols
 	 *
-	 * @method get_special_chars
 	 * @return string[]|false
 	 */
 	private function get_special_chars () {
