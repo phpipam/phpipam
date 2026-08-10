@@ -44,6 +44,7 @@ $admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-exchange"
 if($User->settings->enableRouting==1)
 $admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-exchange",       "href"=>"routing",                "name"=>_("Routing"),                  "description"=>_("Routing management")];
 $admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-cloud",          "href"=>"nameservers",            "name"=>_("Nameservers"),              "description"=>_("Recursive nameserver sets for subnets")];
+$admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-clock-o",        "href"=>"timeservers",            "name"=>_("Timeservers"),              "description"=>_("Timeserver sets for subnets")];
 if($User->settings->enableFirewallZones == 1)
 $admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-fire",           "href"=>"firewall-zones",         "name"=>_("Firewall Zones"),           "description"=>_("Firewall zone management")];
 $admin_menu[_('IP related management')][] = ["show"=>true, "icon"=>"fa-upload",         "href"=>"import-export",          "name"=>_("Import / Export"),          "description"=>_("Import/Export IP related data (VRF, VLAN, Subnets, IP, Devices)")];
@@ -90,6 +91,7 @@ $admin_menu_items = [
                     "languages"              => _("languages"),
                     "mail"                   => _("mail"),
                     "nameservers"            => _("nameservers"),
+                    "timeservers"            => _("timeservers"),
                     "powerDNS"               => _("powerDNS"),
                     "racks"                  => _("racks"),
                     "replace-fields"         => _("replace-fields"),

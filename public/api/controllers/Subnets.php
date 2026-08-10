@@ -698,6 +698,11 @@ class Subnets_controller extends Common_api_functions {
                 $result->nameservers = $ns;
             }
 
+            $time = $this->read_subnet_timeserver($result->timeserverId);
+            if ($time!==false) {
+                $result->timeservers = $time;
+            }
+
     		$gateway = $this->read_subnet_gateway(null);
     		if ( $gateway!== false) {
         		$result->gatewayId = $gateway->id;
@@ -741,6 +746,11 @@ class Subnets_controller extends Common_api_functions {
 			$ns = $this->read_subnet_nameserver($result->nameserverId);
 			if ($ns!==false) {
 				$result->nameservers = $ns;
+			}
+
+			$time = $this->read_subnet_timeserver($result->timeserverId);
+			if ($time!==false) {
+				$result->timeservers = $time;
 			}
 
 			if (isset($subnet_gws[$result->id])) {

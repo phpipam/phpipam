@@ -84,6 +84,7 @@ class Tools_controller extends Common_api_functions {
 										"vlans"       => "vlans",
 										"vrf"         => "vrfs",
 										"nameservers" => "nameservers",
+										"timeservers"  => "timeservers",
 										"scanAgents"  => "scanagents",
 										"locations"   => "locations",
 										"racks"       => "racks",
@@ -106,6 +107,7 @@ class Tools_controller extends Common_api_functions {
 								"vlans"       => ["id2", "id3"],
 								"vrf"         => ["id2", "id3"],
 								"nameservers" => ["id2"],
+								"timeservers"  => ["id2"],
 								"scanAgents"  => ["id2"],
 								"locations"   => ["id2", "id3"],
 								"racks"       => ["id2", "id3"],
@@ -157,6 +159,7 @@ class Tools_controller extends Common_api_functions {
 						["rel"=>"vlans",		"href"=>"/api/".$_GET['app_id']."/vlan/"],
 						["rel"=>"vrfs",		"href"=>"/api/".$_GET['app_id']."/vrf/"],
 						["rel"=>"nameservers",	"href"=>"/api/".$_GET['app_id']."/tools/nameservers/"],
+						["rel"=>"timeservers",	"href"=>"/api/".$_GET['app_id']."/tools/timeservers/"],
 						["rel"=>"scanAgents",	"href"=>"/api/".$_GET['app_id']."/tools/scanagents/"],
 						["rel"=>"locations",	"href"=>"/api/".$_GET['app_id']."/tools/locations/"],
 						["rel"=>"racks",	    "href"=>"/api/".$_GET['app_id']."/tools/racks/"],
@@ -239,6 +242,11 @@ class Tools_controller extends Common_api_functions {
                 		$ns = $this->read_subnet_nameserver ($r->nameserverId);
                         if ($ns!==false) {
                             $result[$k]->nameservers = $ns;
+                        }
+                    	//timeservers
+                		$time = $this->read_subnet_timeserver ($r->timeserverId);
+                        if ($time!==false) {
+                            $result[$k]->timeservers = $time;
                         }
     				}
     			}

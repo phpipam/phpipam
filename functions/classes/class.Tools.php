@@ -1225,6 +1225,12 @@ class Tools extends Common_functions {
 				$mail['DNS servers'] = $v;
 				}
 			}
+			// timeservers
+			elseif ($k=="time") {
+				if (!is_blank($v)) {
+				$mail['Timeservers'] = $v;
+				}
+			}
 			// vlans
 			elseif ($k=="vlan") {
 				if (!is_blank($v)) {

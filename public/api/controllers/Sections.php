@@ -105,6 +105,12 @@ class Sections_controller extends Common_api_functions {
 						$result[$k]->nameservers = $ns;
 					}
 
+					//timeservers
+					$time = $this->read_subnet_timeserver ($r->timeserverId);
+					if ($time!==false) {
+						$result[$k]->timeservers = $time;
+					}
+
 					// get usage
 					$result[$k]->usage = $this->read_subnet_usage($r->id);
 

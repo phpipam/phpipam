@@ -188,6 +188,7 @@ class Logging extends Common_functions {
 						"DNSrecursive"          => "Create recursive PowerDNS records",
 						"DNSrecords"            => "Show PowerDNS records",
 						"nameserverId"          => "Nameserver",
+						"timeserverId"           => "Timeserver",
 						"scanAgent"             => "Scan agent index",
 						"isFolder"              => "Object is folder",
 						"isFull"                => "Subnet is marked as full",
@@ -882,6 +883,8 @@ class Logging extends Common_functions {
 			elseif($k == "permissions") 	{ $this->object_new[$k] = $this->changelog_format_permission_diff ($k, $v); }
 			// nameserver index
 			elseif($k == "nameserverId") 	{ $this->object_new[$k] = $this->changelog_format_ns_diff ($k, $v); }
+			// timeserver index
+			elseif($k == "timeserverId") 	{ $this->object_new[$k] = $this->changelog_format_time_diff ($k, $v); }
 		}
 	}
 
@@ -919,6 +922,8 @@ class Logging extends Common_functions {
 			elseif($k == "permissions") 	{ $this->object_old[$k] = $this->changelog_format_permission_diff ($k, $v); }
 			// nameserver index
 			elseif($k == "nameserverId") 	{ $this->object_old[$k] = $this->changelog_format_ns_diff ($k, $v); }
+			// timeserver index
+			elseif($k == "timeserverId") 	{ $this->object_old[$k] = $this->changelog_format_time_diff ($k, $v); }
 		}
 	}
 
@@ -980,6 +985,8 @@ class Logging extends Common_functions {
 				elseif($k == "permissions") 	{ $v = $this->changelog_format_permission_diff ($k, $v); }
 				// nameserver index
 				elseif($k == "nameserverId") 	{ $v = $this->changelog_format_ns_diff ($k, $v); }
+				// timeserver index
+				elseif($k == "timeserverId") 	{ $v = $this->changelog_format_time_diff ($k, $v); }
 				// make booleans
 				$v = $this->changelog_make_booleans ($k, $v);
 				//set log
@@ -1299,6 +1306,37 @@ class Logging extends Common_functions {
 			$ns = $this->Tools->fetch_object("nameservers", "id", $v);
 			if (is_object($ns))
 				$v = $ns->name." [".$ns->namesrv1."]";
+		}
+		//result
+		return $v;
+	}
+
+	/**
+	 * Format timeserver if change
+	 *
+	 * @access private
+	 * @param string $k
+	 * @param mixed $v
+	 * @return void
+	 */
+	private function changelog_format_time_diff ($k, $v) {
+		//old none
+		if(is_null($this->object_old) || !isset($this->object_old[$k]) || $this->object_old[$k] == 0)	{
+			$this->object_old[$k] = _("None");
+		}
+		elseif($this->object_old[$k] != "NULL") {
+			$time = $this->Tools->fetch_object("timeservers", "id", $this->object_old[$k]);
+			if (is_object($time))
+				$this->object_old[$k] = $time->name." [".$time->timesrv1."]";
+		}
+		// new none
+		if($v == 0)	{
+			$v = _("None");
+		}
+		elseif($v != "NULL") {
+			$time = $this->Tools->fetch_object("timeservers", "id", $v);
+			if (is_object($time))
+				$v = $time->name." [".$time->timesrv1."]";
 		}
 		//result
 		return $v;
