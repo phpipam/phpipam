@@ -1,5 +1,7 @@
 <?php
 
+use OpenApi\Attributes as OA;
+
 /**
  *	phpIPAM API class to authenticate users
  *
@@ -100,6 +102,13 @@ class User_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Options(
+		path: "/{app_id}/user/",
+		tags: ["user"],
+		summary: "Discover supported user routes/methods (HATEOAS)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [new OA\Response(response: 200, description: "OK")]
+	)]
 	#[\Override]
     public function OPTIONS () {
 		// validate
@@ -133,6 +142,36 @@ class User_controller extends Common_api_functions {
 	 *		- /all/							// returns all phpipam users
 	 *		- /admins/						// returns ipam admins
 	 */
+	#[OA\Get(
+		path: "/{app_id}/user/",
+		tags: ["user"],
+		summary: "Get current token expiration date",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(properties: [new OA\Property(property: "expires", type: "string", format: "date-time")])),
+			new OA\Response(response: 401, description: "Invalid/missing token", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/user/all/",
+		tags: ["user"],
+		summary: "List all phpIPAM users (requires RWA app permission)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK"),
+			new OA\Response(response: 503, description: "Invalid app permissions", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/user/admins/",
+		tags: ["user"],
+		summary: "List phpIPAM administrator users (requires RWA app permission)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK"),
+			new OA\Response(response: 503, description: "Invalid app permissions", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function GET () {
 		// token_expires
@@ -180,6 +219,23 @@ class User_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Post(
+		path: "/{app_id}/user/",
+		tags: ["user"],
+		summary: "Log in and obtain a phpipam-token (ssl_token security model)",
+		description: "Send HTTP Basic Authentication credentials (a phpIPAM user/password with API permission on this app). If a still-valid token already exists for the user it is extended, otherwise a new one is generated. No phpipam-token header is required or used for this call.",
+		security: [["basicAuth" => []]],
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(properties: [
+				new OA\Property(property: "token", type: "string"),
+				new OA\Property(property: "expires", type: "string", format: "date-time")
+			])),
+			new OA\Response(response: 400, description: "Missing username/password", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 403, description: "Invalid credentials", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "IP blocked after excessive login failures", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function POST () {
 		// block IP
@@ -198,6 +254,17 @@ class User_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Patch(
+		path: "/{app_id}/user/",
+		tags: ["user"],
+		summary: "Extend the validity of the current token (ssl_token security model)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(properties: [new OA\Property(property: "expires", type: "string", format: "date-time")])),
+			new OA\Response(response: 401, description: "Invalid/missing token", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "Authentication not needed (ssl_code apps have no per-session token)", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function PATCH () {
 		// block IP
@@ -221,6 +288,17 @@ class User_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Delete(
+		path: "/{app_id}/user/",
+		tags: ["user"],
+		summary: "Revoke the current token (ssl_token security model)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "Token removed", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 401, description: "Invalid/missing token", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "Authentication not needed (ssl_code apps have no per-session token)", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function DELETE () {
 		// block IP

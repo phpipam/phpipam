@@ -1,5 +1,7 @@
 <?php
 
+use OpenApi\Attributes as OA;
+
 /**
  *	phpIPAM API class to work with subnets
  *
@@ -48,6 +50,13 @@ class Subnets_controller extends Common_api_functions {
 	 * @access public
 	 * @return array
 	 */
+	#[OA\Options(
+		path: "/{app_id}/subnets/",
+		tags: ["subnets"],
+		summary: "Discover supported subnets routes/methods (HATEOAS)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [new OA\Response(response: 200, description: "OK")]
+	)]
 	#[\Override]
     public function OPTIONS () {
 		// validate
@@ -81,6 +90,60 @@ class Subnets_controller extends Common_api_functions {
 	 * @access public
 	 * @return array
 	 */
+	#[OA\Post(
+		path: "/{app_id}/subnets/",
+		tags: ["subnets"],
+		summary: "Create a new subnet (or folder)",
+		description: "Set isFolder=1 to create a folder instead of a real subnet (subnet/mask are then ignored).",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+			required: ["sectionId"],
+			properties: [
+				new OA\Property(property: "subnet", type: "string", description: "Required unless isFolder=1", example: "192.168.1.0"),
+				new OA\Property(property: "mask", type: "string", description: "Required unless isFolder=1", example: "24"),
+				new OA\Property(property: "sectionId", type: "integer", example: 1),
+				new OA\Property(property: "description", type: "string"),
+				new OA\Property(property: "masterSubnetId", type: "integer", example: 0),
+				new OA\Property(property: "vlanId", type: "integer"),
+				new OA\Property(property: "vrfId", type: "integer"),
+				new OA\Property(property: "isFolder", type: "boolean", example: false),
+				new OA\Property(property: "permissions", type: "string"),
+			]
+		)),
+		responses: [
+			new OA\Response(response: 201, description: "Subnet created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Invalid parameters", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "Overlapping/out of boundaries", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Post(
+		path: "/{app_id}/subnets/{id}/first_subnet/{mask}/",
+		tags: ["subnets"],
+		summary: "Create the first free subnet with the given mask under master subnet {id}",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Master subnet id", schema: new OA\Schema(type: "integer")),
+			new OA\Parameter(name: "mask", in: "path", required: true, schema: new OA\Schema(type: "string")),
+		],
+		responses: [
+			new OA\Response(response: 201, description: "Subnet created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 404, description: "No free subnet found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Post(
+		path: "/{app_id}/subnets/{id}/last_subnet/{mask}/",
+		tags: ["subnets"],
+		summary: "Create the last free subnet with the given mask under master subnet {id}",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Master subnet id", schema: new OA\Schema(type: "integer")),
+			new OA\Parameter(name: "mask", in: "path", required: true, schema: new OA\Schema(type: "string")),
+		],
+		responses: [
+			new OA\Response(response: 201, description: "Subnet created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 404, description: "No free subnet found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
 	#[\Override]
     public function POST () {
 		# add required parameters
@@ -162,6 +225,184 @@ class Subnets_controller extends Common_api_functions {
 	 * @access public
 	 * @return array
 	 */
+	#[OA\Get(
+		path: "/{app_id}/subnets/",
+		tags: ["subnets"],
+		summary: "List all subnets (all sections)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+			new OA\Response(response: 500, description: "Unable to read subnets", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/subnets/{id}/",
+		tags: ["subnets"],
+		summary: "Read a single subnet by id",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(ref: "#/components/schemas/Subnet")),
+			new OA\Response(response: 400, description: "Invalid subnet id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/subnets/custom_fields/",
+		tags: ["subnets"],
+		summary: "List custom fields defined on the subnets table",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK"),
+			new OA\Response(response: 404, description: "No custom fields defined", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/subnets/cidr/{subnet}/",
+		tags: ["subnets"],
+		summary: "Search subnets by CIDR network address (alias: /subnets/search/{subnet}/)",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "subnet", in: "path", required: true, description: "Network address (dotted/colon notation)", schema: new OA\Schema(type: "string")),
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+			new OA\Response(response: 404, description: "No subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/subnets/overlapping/{subnet}/{mask}/",
+		tags: ["subnets"],
+		summary: "Search subnets overlapping a given network/mask (IPv4 & IPv6)",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "subnet", in: "path", required: true, schema: new OA\Schema(type: "string")),
+			new OA\Parameter(name: "mask", in: "path", required: true, schema: new OA\Schema(type: "string")),
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+			new OA\Response(response: 404, description: "No subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/subnets/{id}/addresses/",
+		tags: ["subnets"],
+		summary: "List all addresses in a subnet (optionally filtered to a single {ip} via id3)",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Address"))),
+			new OA\Response(response: 404, description: "No addresses found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/subnets/{id}/slaves/",
+		tags: ["subnets"],
+		summary: "List immediate slave subnets",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+			new OA\Response(response: 404, description: "No slaves", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/subnets/{id}/slaves_recursive/",
+		tags: ["subnets"],
+		summary: "List all slave subnets recursively",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+			new OA\Response(response: 404, description: "No slaves", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/subnets/{id}/usage/",
+		tags: ["subnets"],
+		summary: "Get subnet usage statistics (free/used/offline counts, percentage)",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		responses: [new OA\Response(response: 200, description: "OK")]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/subnets/{id}/first_free/",
+		tags: ["subnets"],
+		summary: "Get the first free address in a subnet",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "string", example: "192.168.1.5")),
+			new OA\Response(response: 404, description: "No free addresses found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "Subnet contains subnets", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/subnets/{id}/all_subnets/{mask}/",
+		tags: ["subnets"],
+		summary: "List all free subnets of the given mask under master subnet {id}",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Master subnet id", schema: new OA\Schema(type: "integer")),
+			new OA\Parameter(name: "mask", in: "path", required: true, schema: new OA\Schema(type: "string")),
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(type: "string"))),
+			new OA\Response(response: 404, description: "No subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/subnets/{id}/first_subnet/{mask}/",
+		tags: ["subnets"],
+		summary: "Get the first free subnet of the given mask under master subnet {id} (read-only, does not create it)",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Master subnet id", schema: new OA\Schema(type: "integer")),
+			new OA\Parameter(name: "mask", in: "path", required: true, schema: new OA\Schema(type: "string")),
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "string")),
+			new OA\Response(response: 404, description: "No subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/subnets/{id}/last_subnet/{mask}/",
+		tags: ["subnets"],
+		summary: "Get the last free subnet of the given mask under master subnet {id} (read-only, does not create it)",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Master subnet id", schema: new OA\Schema(type: "integer")),
+			new OA\Parameter(name: "mask", in: "path", required: true, schema: new OA\Schema(type: "string")),
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "string")),
+			new OA\Response(response: 404, description: "No subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/subnets/{id}/changelog/",
+		tags: ["subnets"],
+		summary: "Get the change log for a subnet",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK"),
+			new OA\Response(response: 404, description: "No changelogs found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
 	#[\Override]
     public function GET () {
 		// all
@@ -277,6 +518,81 @@ class Subnets_controller extends Common_api_functions {
 	 * @access public
 	 * @return array
 	 */
+	#[OA\Patch(
+		path: "/{app_id}/subnets/{id}/",
+		tags: ["subnets"],
+		summary: "Update a subnet (subnet/mask cannot be changed here, use resize)",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		requestBody: new OA\RequestBody(content: new OA\JsonContent(
+			properties: [
+				new OA\Property(property: "description", type: "string"),
+				new OA\Property(property: "sectionId", type: "integer"),
+				new OA\Property(property: "vlanId", type: "integer"),
+				new OA\Property(property: "vrfId", type: "integer"),
+			]
+		)),
+		responses: [
+			new OA\Response(response: 200, description: "Subnet updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Subnet/mask cannot be changed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Patch(
+		path: "/{app_id}/subnets/{id}/resize/",
+		tags: ["subnets"],
+		summary: "Resize a subnet to a new mask",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(required: ["mask"], properties: [
+			new OA\Property(property: "mask", type: "string", example: "25"),
+		])),
+		responses: [
+			new OA\Response(response: 200, description: "Subnet resized", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Subnet mask not provided", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "Resize would break nesting/overlap rules", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Patch(
+		path: "/{app_id}/subnets/{id}/split/",
+		tags: ["subnets"],
+		summary: "Split a subnet into multiple smaller subnets, moving existing addresses",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+			required: ["number"],
+			properties: [
+				new OA\Property(property: "number", type: "integer", description: "Number of new subnets to split into", example: 4),
+				new OA\Property(property: "group", type: "string", enum: ["yes", "no"], default: "yes"),
+				new OA\Property(property: "prefix", type: "string", description: "Optional name prefix for created subnets"),
+				new OA\Property(property: "copy_custom", type: "string", enum: ["yes", "no"], default: "yes"),
+			]
+		)),
+		responses: [
+			new OA\Response(response: 200, description: "Subnet split", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Invalid number of new subnets", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Patch(
+		path: "/{app_id}/subnets/{id}/permissions/",
+		tags: ["subnets"],
+		summary: "Change subnet permissions (map of groupId/groupName to permission level)",
+		description: "0=no access, 1=read-only, 2=read-write, 3=read-write-add. Body keys are group ids or names, values are permission levels or names.",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(type: "object", additionalProperties: true, example: ["3" => "2", "2" => "1"])),
+		responses: [
+			new OA\Response(response: 200, description: "Subnet permissions updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 500, description: "Invalid group/permission", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
 	#[\Override]
     public function PATCH () {
 		// Check for id
@@ -336,6 +652,39 @@ class Subnets_controller extends Common_api_functions {
 	 * @access public
 	 * @return array
 	 */
+	#[OA\Delete(
+		path: "/{app_id}/subnets/{id}/",
+		tags: ["subnets"],
+		summary: "Delete a subnet, along with its addresses",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		responses: [
+			new OA\Response(response: 200, description: "Subnet deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 500, description: "Failed to delete subnet", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+		]
+	)]
+	#[OA\Delete(
+		path: "/{app_id}/subnets/{id}/truncate/",
+		tags: ["subnets"],
+		summary: "Delete all addresses in a subnet, keeping the subnet itself",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		responses: [new OA\Response(response: 200, description: "Subnet truncated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse"))]
+	)]
+	#[OA\Delete(
+		path: "/{app_id}/subnets/{id}/permissions/",
+		tags: ["subnets"],
+		summary: "Remove all custom permissions from a subnet",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+		],
+		responses: [new OA\Response(response: 200, description: "Subnet permissions removed", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse"))]
+	)]
 	#[\Override]
     public function DELETE () {
 		// Check for id

@@ -68,6 +68,7 @@
     "driftingly/rector-laravel": "^2.3",
     "laravel/pint": "^1.29",
     "phpcompatibility/php-compatibility": "^10.0.0@dev",
-    "phpstan/phpstan": "^2.1"
+    "phpstan/phpstan": "^2.1",
+    "zircote/swagger-php": "^6.5"
   }
 }

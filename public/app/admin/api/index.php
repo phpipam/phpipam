@@ -113,6 +113,8 @@ $app_perms_text = ["SSL with User token"=>"ssl_token","SSL with App code token"=
 	?>
 
 	<h4><?php print _('API documentation'); ?></h4>
+	<a href="api/docs/index.html" target="_blank"><?php print _('Local API reference'); ?></a>
+	&nbsp;|&nbsp;
 	<a href="http://phpipam.net/api-documentation/" target="_blank">http://phpipam.net/api-documentation/</a>
 
 <?php

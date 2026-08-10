@@ -1,5 +1,7 @@
 <?php
 
+use OpenApi\Attributes as OA;
+
 /**
  *  phpIPAM API class to work with prefixes
  *
@@ -347,6 +349,13 @@ class Prefix_controller extends Common_api_functions {
      * @access public
      * @return array
      */
+    #[OA\Options(
+        path: "/{app_id}/prefix/",
+        tags: ["prefix"],
+        summary: "Discover supported prefix routes/methods (HATEOAS)",
+        parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+        responses: [new OA\Response(response: 200, description: "OK")]
+    )]
     #[\Override]
     public function OPTIONS () {
         // validate
@@ -378,6 +387,118 @@ class Prefix_controller extends Common_api_functions {
      * @access public
      * @return array
      */
+    #[OA\Get(
+        path: "/{app_id}/prefix/{customer_type}/",
+        tags: ["prefix"],
+        summary: "List candidate master subnets matching a customer_type custom field (any address family)",
+        description: "Searches subnets where the custom field configured as \$custom_field_name (default: custom_customer_type) equals {customer_type}, ordered by \$custom_field_orderby/\$custom_field_order_direction (default: subnet asc).",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "customer_type", in: "path", required: true, description: "Value of the customer_type custom field to search subnets for", schema: new OA\Schema(type: "string")),
+            new OA\Parameter(name: "usage", in: "query", required: false, description: "If set to true, append subnet usage statistics to each returned subnet", schema: new OA\Schema(type: "string", enum: ["true"]))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+            new OA\Response(response: 400, description: "Invalid custom field custom_customer_type (field not defined on subnets table)", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: "No master subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
+    #[OA\Get(
+        path: "/{app_id}/prefix/{customer_type}/{address_type}/",
+        tags: ["prefix"],
+        summary: "List candidate master subnets matching a customer_type custom field, filtered by address family",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "customer_type", in: "path", required: true, description: "Value of the customer_type custom field to search subnets for", schema: new OA\Schema(type: "string")),
+            new OA\Parameter(name: "address_type", in: "path", required: true, description: "IP protocol version filter", schema: new OA\Schema(type: "string", enum: ["IPv4", "IPv6", "v4", "v6", "4", "6"])),
+            new OA\Parameter(name: "usage", in: "query", required: false, description: "If set to true, append subnet usage statistics to each returned subnet", schema: new OA\Schema(type: "string", enum: ["true"]))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+            new OA\Response(response: 400, description: "Invalid custom field custom_customer_type, or invalid address type", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: "No master subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
+    #[OA\Get(
+        path: "/{app_id}/prefix/{customer_type}/{address_type}/{mask}/",
+        tags: ["prefix"],
+        summary: "Find the first available subnet of the given mask under any master subnet matching customer_type/address_type",
+        description: "Iterates matching master subnets (ordered by the configured custom field ordering) and returns the first free subnet found with the requested bitmask. Does not create it.",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "customer_type", in: "path", required: true, description: "Value of the customer_type custom field to search subnets for", schema: new OA\Schema(type: "string")),
+            new OA\Parameter(name: "address_type", in: "path", required: true, description: "IP protocol version filter", schema: new OA\Schema(type: "string", enum: ["IPv4", "IPv6", "v4", "v6", "4", "6"])),
+            new OA\Parameter(name: "mask", in: "path", required: true, description: "Requested subnet bitmask (8-128, IPv4 limited to <=32)", schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "string", description: "First available subnet found")),
+            new OA\Response(response: 400, description: "Invalid custom field, invalid address type, or invalid subnet mask", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: "No subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
+    #[OA\Get(
+        path: "/{app_id}/prefix/{customer_type}/address/",
+        tags: ["prefix"],
+        summary: "List candidate master subnets for address allocation matching a customer_type custom field",
+        description: "Searches subnets where the custom field configured as \$custom_field_name_addr (default: custom_customer_address_type) equals {customer_type}. Subnets that already contain slave subnets are excluded, since only leaf subnets can hold addresses.",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "customer_type", in: "path", required: true, description: "Value of the address custom field to search subnets for", schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+            new OA\Response(response: 400, description: "Invalid custom field custom_customer_address_type (field not defined on subnets table)", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: "No master subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
+    #[OA\Get(
+        path: "/{app_id}/prefix/{customer_type}/address/{address_type}/",
+        tags: ["prefix"],
+        summary: "List candidate master subnets for address allocation, filtered by address family",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "customer_type", in: "path", required: true, description: "Value of the address custom field to search subnets for", schema: new OA\Schema(type: "string")),
+            new OA\Parameter(name: "address_type", in: "path", required: true, description: "IP protocol version filter", schema: new OA\Schema(type: "string", enum: ["IPv4", "IPv6", "v4", "v6", "4", "6"]))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+            new OA\Response(response: 400, description: "Invalid custom field custom_customer_address_type, or invalid address type", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: "No master subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
+    #[OA\Get(
+        path: "/{app_id}/prefix/{customer_type}/{address_type}/address/",
+        tags: ["prefix"],
+        summary: "Find the first available address under any master subnet matching customer_type/address_type",
+        description: "Iterates matching master subnets (leaf subnets only) and returns the first free IP address found. Does not create it.",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "customer_type", in: "path", required: true, description: "Value of the address custom field to search subnets for", schema: new OA\Schema(type: "string")),
+            new OA\Parameter(name: "address_type", in: "path", required: true, description: "IP protocol version filter", schema: new OA\Schema(type: "string", enum: ["IPv4", "IPv6", "v4", "v6", "4", "6"]))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "string", example: "192.168.1.5")),
+            new OA\Response(response: 400, description: "Invalid custom field custom_customer_address_type, or invalid address type", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: "No address found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
+    #[OA\Get(
+        path: "/{app_id}/prefix/external_id/{external_identifier_field}/",
+        tags: ["prefix"],
+        summary: "Find subnets and/or addresses linked by the configured external identifier field",
+        description: "Searches both subnets and ipaddresses tables for rows whose external identifier column (private property external_identifier_field, default: csid) equals the provided value. Returns whichever of subnets/addresses were found; omits the key entirely for the side with no matches.",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "external_identifier_field", in: "path", required: true, description: "Value to match against the csid (external identifier) column, not the field name itself", schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(properties: [
+                new OA\Property(property: "subnets", type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet")),
+                new OA\Property(property: "addresses", type: "array", items: new OA\Items(ref: "#/components/schemas/Address"))
+            ])),
+            new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
     #[\Override]
     public function GET () {
         // external identifier
@@ -469,6 +590,59 @@ class Prefix_controller extends Common_api_functions {
      * @access public
      * @return array
      */
+    #[OA\Post(
+        path: "/{app_id}/prefix/{customer_type}/{address_type}/{mask}/",
+        tags: ["prefix"],
+        summary: "Create the first available subnet of the given mask under any master subnet matching customer_type/address_type",
+        description: "Searches master subnets matching {customer_type}/{address_type}, finds the first free subnet with the requested bitmask, and creates it. sectionId, masterSubnetId and permissions are inherited automatically from the matched master subnet and must not be supplied.",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "customer_type", in: "path", required: true, description: "Value of the customer_type custom field to search subnets for", schema: new OA\Schema(type: "string")),
+            new OA\Parameter(name: "address_type", in: "path", required: true, description: "IP protocol version filter", schema: new OA\Schema(type: "string", enum: ["IPv4", "IPv6", "v4", "v6", "4", "6"])),
+            new OA\Parameter(name: "mask", in: "path", required: true, description: "Requested subnet bitmask (8-128, IPv4 limited to <=32)", schema: new OA\Schema(type: "string"))
+        ],
+        requestBody: new OA\RequestBody(content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "description", type: "string", description: "Defaults to 'Prefix controller autocreated' if not provided"),
+                new OA\Property(property: "vlanId", type: "integer"),
+                new OA\Property(property: "vrfId", type: "integer")
+            ]
+        )),
+        responses: [
+            new OA\Response(response: 201, description: "Subnet created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+            new OA\Response(response: 400, description: "Invalid custom field, invalid address type, or invalid subnet mask", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: "No subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 409, description: "Subnet is not within boundaries of its master subnet, or overlaps an existing subnet", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 500, description: "Failed to create subnet", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
+    #[OA\Post(
+        path: "/{app_id}/prefix/{customer_type}/{address_type}/address/",
+        tags: ["prefix"],
+        summary: "Create the first available address under any master subnet matching customer_type/address_type",
+        description: "Searches leaf master subnets (no slave subnets) matching {customer_type}/{address_type}, finds the first free IP address, and creates it. ip_addr and subnetId are derived automatically and must not be supplied.",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "customer_type", in: "path", required: true, description: "Value of the address custom field to search subnets for", schema: new OA\Schema(type: "string")),
+            new OA\Parameter(name: "address_type", in: "path", required: true, description: "IP protocol version filter", schema: new OA\Schema(type: "string", enum: ["IPv4", "IPv6", "v4", "v6", "4", "6"]))
+        ],
+        requestBody: new OA\RequestBody(content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "hostname", type: "string"),
+                new OA\Property(property: "description", type: "string", description: "Defaults to 'Prefix controller autocreated' if not provided"),
+                new OA\Property(property: "mac", type: "string"),
+                new OA\Property(property: "owner", type: "string"),
+                new OA\Property(property: "state", type: "integer", description: "IP tag id, defaults to 2 (Used)")
+            ]
+        )),
+        responses: [
+            new OA\Response(response: 201, description: "Address created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+            new OA\Response(response: 400, description: "Invalid custom field, or invalid address type", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: "No addresses found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 409, description: "IP address already exists", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 500, description: "Failed to create address", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
     #[\Override]
     public function POST () {
         // validate parameters

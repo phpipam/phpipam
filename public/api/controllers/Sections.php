@@ -1,5 +1,7 @@
 <?php
 
+use OpenApi\Attributes as OA;
+
 /**
  *	phpIPAM API class to work with sections
  *
@@ -38,6 +40,13 @@ class Sections_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Options(
+		path: "/{app_id}/sections/",
+		tags: ["sections"],
+		summary: "Discover supported sections routes/methods (HATEOAS)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [new OA\Response(response: 200, description: "OK")]
+	)]
 	#[\Override]
     public function OPTIONS () {
 		// validate
@@ -76,6 +85,85 @@ class Sections_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Get(
+		path: "/{app_id}/sections/",
+		tags: ["sections"],
+		summary: "List all sections",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [new OA\Response(response: 200, description: "OK, or no sections available", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Section")))]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/sections/{id}/",
+		tags: ["sections"],
+		summary: "Read a single section by numeric id",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Section id", schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(ref: "#/components/schemas/Section")),
+			new OA\Response(response: 404, description: "Section does not exist", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/sections/{name}/",
+		tags: ["sections"],
+		summary: "Read a single section by name",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "name", in: "path", required: true, description: "Section name", schema: new OA\Schema(type: "string"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(ref: "#/components/schemas/Section")),
+			new OA\Response(response: 404, description: "Section does not exist", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/sections/custom_fields/",
+		tags: ["sections"],
+		summary: "Custom fields on sections (not supported)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [new OA\Response(response: 409, description: "Custom fields not supported", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/sections/{id}/subnets/",
+		tags: ["sections"],
+		summary: "List all subnets in a section",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Section id", schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+			new OA\Response(response: 404, description: "No subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/sections/{id}/subnets/addresses/",
+		tags: ["sections"],
+		summary: "List all subnets in a section, including their addresses",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Section id", schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+			new OA\Response(response: 404, description: "No subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/sections/{id}/changelog/",
+		tags: ["sections"],
+		summary: "Get the change log for a section",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Section id", schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK"),
+			new OA\Response(response: 404, description: "No changelogs found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function GET () {
 		// fetch subnets in section
@@ -167,6 +255,34 @@ class Sections_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Post(
+		path: "/{app_id}/sections/",
+		tags: ["sections"],
+		summary: "Create a new section",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+			required: ["name"],
+			properties: [
+				new OA\Property(property: "name", type: "string", description: "Minimum 3 characters", example: "Customers"),
+				new OA\Property(property: "description", type: "string"),
+				new OA\Property(property: "masterSection", type: "integer", description: "Parent section id. Only 1 level of nesting is permitted (parent must itself be a top-level section)", example: 0),
+				new OA\Property(property: "permissions", type: "string", description: "JSON-encoded map of groupId => permission level"),
+				new OA\Property(property: "strictMode", type: "boolean"),
+				new OA\Property(property: "subnetOrdering", type: "string"),
+				new OA\Property(property: "order", type: "integer"),
+				new OA\Property(property: "showSubnet", type: "boolean"),
+				new OA\Property(property: "showVLAN", type: "boolean"),
+				new OA\Property(property: "showVRF", type: "boolean"),
+				new OA\Property(property: "showSupernetOnly", type: "boolean"),
+				new OA\Property(property: "DNS", type: "string")
+			]
+		)),
+		responses: [
+			new OA\Response(response: 201, description: "Section created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Name is mandatory or too short (minimum 3 characters), or invalid masterSection id, or nesting more than 1 level deep", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "Section create failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function POST () {
 		# check for valid keys
@@ -205,6 +321,37 @@ class Sections_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Patch(
+		path: "/{app_id}/sections/{id}/",
+		tags: ["sections"],
+		summary: "Update a section",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Section id", schema: new OA\Schema(type: "integer"))
+		],
+		requestBody: new OA\RequestBody(content: new OA\JsonContent(
+			properties: [
+				new OA\Property(property: "name", type: "string", description: "Minimum 3 characters"),
+				new OA\Property(property: "description", type: "string"),
+				new OA\Property(property: "masterSection", type: "integer"),
+				new OA\Property(property: "permissions", type: "string", description: "JSON-encoded map of groupId => permission level"),
+				new OA\Property(property: "strictMode", type: "boolean"),
+				new OA\Property(property: "subnetOrdering", type: "string"),
+				new OA\Property(property: "order", type: "integer"),
+				new OA\Property(property: "showSubnet", type: "boolean"),
+				new OA\Property(property: "showVLAN", type: "boolean"),
+				new OA\Property(property: "showVRF", type: "boolean"),
+				new OA\Property(property: "showSupernetOnly", type: "boolean"),
+				new OA\Property(property: "DNS", type: "string")
+			]
+		)),
+		responses: [
+			new OA\Response(response: 200, description: "Section updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Section Id required", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "Section does not exist", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "Section update failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function PATCH () {
 		# Check for id
@@ -235,6 +382,21 @@ class Sections_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Delete(
+		path: "/{app_id}/sections/{id}/",
+		tags: ["sections"],
+		summary: "Delete a section, along with its subnets and addresses",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Section id", schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "Section deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Section Id required", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "Section does not exist", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "Section delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function DELETE () {
 		# Check for id
