@@ -1,5 +1,7 @@
 <?php
 
+use OpenApi\Attributes as OA;
+
 /**
  *	phpIPAM API class to work with vrfs
  *
@@ -40,6 +42,13 @@ class Vrfs_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Options(
+		path: "/{app_id}/vrfs/",
+		tags: ["vrfs"],
+		summary: "Discover supported vrfs routes/methods (HATEOAS)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [new OA\Response(response: 200, description: "OK")]
+	)]
 	#[\Override]
     public function OPTIONS () {
 		// validate
@@ -76,6 +85,54 @@ class Vrfs_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Get(
+		path: "/{app_id}/vrfs/",
+		tags: ["vrfs"],
+		summary: "List all VRFs (alias: /vrfs/all/)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Vrf"))),
+			new OA\Response(response: 404, description: "No vrfs configured", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/vrfs/custom_fields/",
+		tags: ["vrfs"],
+		summary: "List custom fields defined on the vrf table",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK"),
+			new OA\Response(response: 404, description: "No custom fields defined", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/vrfs/{id}/",
+		tags: ["vrfs"],
+		summary: "Read a single VRF by id",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(ref: "#/components/schemas/Vrf")),
+			new OA\Response(response: 400, description: "Vrf Id is required / must be numeric / Invalid VRF id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "VRF not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/vrfs/{id}/subnets/",
+		tags: ["vrfs"],
+		summary: "List all subnets belonging to a VRF",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "VRF id", schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+			new OA\Response(response: 400, description: "Vrf Id is required / must be numeric / Invalid VRF id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "No subnets belonging to this vrf", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function GET () {
 		// all
@@ -143,6 +200,28 @@ class Vrfs_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Post(
+		path: "/{app_id}/vrfs/",
+		tags: ["vrfs"],
+		summary: "Create a new VRF",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+			required: ["name"],
+			properties: [
+				new OA\Property(property: "name", type: "string", example: "Customer-A"),
+				new OA\Property(property: "rd", type: "string", description: "Route distinguisher"),
+				new OA\Property(property: "description", type: "string"),
+				new OA\Property(property: "sections", type: "string", description: "Comma-separated list of section ids this VRF is restricted to"),
+				new OA\Property(property: "customer_id", type: "integer")
+			]
+		)),
+		responses: [
+			new OA\Response(response: 201, description: "VRF created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "VRF name is required", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "VRF with that name already exists", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "VRF creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function POST () {
 		# check for valid keys
@@ -170,6 +249,30 @@ class Vrfs_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Patch(
+		path: "/{app_id}/vrfs/{id}/",
+		tags: ["vrfs"],
+		summary: "Update an existing VRF",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		requestBody: new OA\RequestBody(content: new OA\JsonContent(
+			properties: [
+				new OA\Property(property: "name", type: "string", example: "Customer-A"),
+				new OA\Property(property: "rd", type: "string", description: "Route distinguisher"),
+				new OA\Property(property: "description", type: "string"),
+				new OA\Property(property: "sections", type: "string", description: "Comma-separated list of section ids this VRF is restricted to"),
+				new OA\Property(property: "customer_id", type: "integer")
+			]
+		)),
+		responses: [
+			new OA\Response(response: 200, description: "VRF updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Vrf Id is required / must be numeric / Invalid VRF id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "VRF with that name already exists", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "Vrf edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function PATCH () {
 		# verify
@@ -204,6 +307,20 @@ class Vrfs_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Delete(
+		path: "/{app_id}/vrfs/{id}/",
+		tags: ["vrfs"],
+		summary: "Delete a VRF, removing all references from subnets that used it",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "VRF deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Vrf Id is required / must be numeric / Invalid VRF id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "Vrf delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function DELETE () {
 		# check that vrf exists

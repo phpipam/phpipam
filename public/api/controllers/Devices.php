@@ -1,5 +1,7 @@
 <?php
 
+use OpenApi\Attributes as OA;
+
 /**
  *	phpIPAM API class to work with devices.
  *
@@ -48,6 +50,13 @@ class Devices_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[OA\Options(
+        path: "/{app_id}/devices/",
+        tags: ["devices"],
+        summary: "Discover supported devices routes/methods (HATEOAS)",
+        parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+        responses: [new OA\Response(response: 200, description: "OK")]
+    )]
     #[\Override]
     public function OPTIONS () {
         // validate
@@ -89,6 +98,76 @@ class Devices_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[OA\Get(
+        path: "/{app_id}/devices/",
+        tags: ["devices"],
+        summary: "List all devices",
+        parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+        responses: [
+            new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Device"))),
+            new OA\Response(response: 404, description: "No devices configured", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
+    #[OA\Get(
+        path: "/{app_id}/devices/search/{search_term}/",
+        tags: ["devices"],
+        summary: "Search devices by hostname, ip_addr, description, or custom fields (substring match)",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "search_term", in: "path", required: true, schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Device"))),
+            new OA\Response(response: 404, description: "No devices found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
+    #[OA\Get(
+        path: "/{app_id}/devices/search/",
+        tags: ["devices"],
+        summary: "Search devices without a search term (always fails)",
+        parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+        responses: [new OA\Response(response: 400, description: "No search term given", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))]
+    )]
+    #[OA\Get(
+        path: "/{app_id}/devices/{id}/",
+        tags: ["devices"],
+        summary: "Read a single device by id",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(ref: "#/components/schemas/Device")),
+            new OA\Response(response: 400, description: "ID must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: "Device not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
+    #[OA\Get(
+        path: "/{app_id}/devices/{id}/addresses/",
+        tags: ["devices"],
+        summary: "List all IP addresses assigned to this device",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "id", in: "path", required: true, description: "Device id", schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Address"))),
+            new OA\Response(response: 404, description: "No addresses found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
+    #[OA\Get(
+        path: "/{app_id}/devices/{id}/subnets/",
+        tags: ["devices"],
+        summary: "List all subnets whose gateway/device is this device",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "id", in: "path", required: true, description: "Device id", schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+            new OA\Response(response: 404, description: "No subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
     #[\Override]
     public function GET () {
         // all objects
@@ -182,6 +261,37 @@ class Devices_controller extends Common_api_functions {
      *
      * @method POST
      */
+    #[OA\Post(
+        path: "/{app_id}/devices/",
+        tags: ["devices"],
+        summary: "Create a new device",
+        parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+        requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+            required: ["hostname"],
+            properties: [
+                new OA\Property(property: "hostname", type: "string", example: "switch-01"),
+                new OA\Property(property: "ip_addr", type: "string", example: "192.168.1.1"),
+                new OA\Property(property: "type", type: "integer", description: "Device type id, see tools/deviceTypes"),
+                new OA\Property(property: "description", type: "string"),
+                new OA\Property(property: "sections", type: "string", description: "Comma/semicolon separated list of section ids; defaults to all sections if omitted"),
+                new OA\Property(property: "snmp_community", type: "string"),
+                new OA\Property(property: "snmp_version", type: "string", enum: ["0","1","2","3"], description: "0=disabled, 1=v1, 2=v2c, 3=v3"),
+                new OA\Property(property: "snmp_port", type: "integer", example: 161),
+                new OA\Property(property: "snmp_timeout", type: "integer", example: 1000),
+                new OA\Property(property: "snmp_queries", type: "string"),
+                new OA\Property(property: "snmp_v3_sec_level", type: "string", enum: ["none","noAuthNoPriv","authNoPriv","authPriv"], description: "Representative SNMPv3 field; other snmp_v3_* sub-fields (auth/priv protocol/pass, context name/engine id) are also accepted"),
+                new OA\Property(property: "rack", type: "integer"),
+                new OA\Property(property: "rack_start", type: "integer"),
+                new OA\Property(property: "rack_size", type: "integer"),
+                new OA\Property(property: "location", type: "integer")
+            ]
+        )),
+        responses: [
+            new OA\Response(response: 201, description: "Device created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+            new OA\Response(response: 400, description: "Hostname is mandatory / Invalid devicetype identifier / Device type does not exist", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 500, description: "Device creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
     #[\Override]
     public function POST () {
         # Put incoming keys in order
@@ -222,6 +332,39 @@ class Devices_controller extends Common_api_functions {
      *
      * @method PATCH
      */
+    #[OA\Patch(
+        path: "/{app_id}/devices/{id}/",
+        tags: ["devices"],
+        summary: "Update an existing device",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "hostname", type: "string", example: "switch-01"),
+                new OA\Property(property: "ip_addr", type: "string", example: "192.168.1.1"),
+                new OA\Property(property: "type", type: "integer", description: "Device type id, see tools/deviceTypes"),
+                new OA\Property(property: "description", type: "string"),
+                new OA\Property(property: "sections", type: "string"),
+                new OA\Property(property: "snmp_community", type: "string"),
+                new OA\Property(property: "snmp_version", type: "string", enum: ["0","1","2","3"]),
+                new OA\Property(property: "snmp_port", type: "integer"),
+                new OA\Property(property: "snmp_timeout", type: "integer"),
+                new OA\Property(property: "snmp_queries", type: "string"),
+                new OA\Property(property: "snmp_v3_sec_level", type: "string", enum: ["none","noAuthNoPriv","authNoPriv","authPriv"], description: "Representative SNMPv3 field; other snmp_v3_* sub-fields are also accepted"),
+                new OA\Property(property: "rack", type: "integer"),
+                new OA\Property(property: "rack_start", type: "integer"),
+                new OA\Property(property: "rack_size", type: "integer"),
+                new OA\Property(property: "location", type: "integer")
+            ]
+        )),
+        responses: [
+            new OA\Response(response: 200, description: "Device updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+            new OA\Response(response: 400, description: "Invalid device id / Hostname is mandatory / Invalid devicetype identifier / Device type does not exist / No parameters", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 500, description: "Device edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
     #[\Override]
     public function PATCH (){
         # Put incoming keys back in order
@@ -256,6 +399,21 @@ class Devices_controller extends Common_api_functions {
      *
      * @method DELETE
      */
+    #[OA\Delete(
+        path: "/{app_id}/devices/{id}/",
+        tags: ["devices"],
+        summary: "Delete a device",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Device deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+            new OA\Response(response: 400, description: "Invalid device id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: "Device does not exist", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 500, description: "Device delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
     #[\Override]
     public function DELETE () {
 		# validations

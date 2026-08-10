@@ -1,5 +1,7 @@
 <?php
 
+use OpenApi\Attributes as OA;
+
 /**
  *	phpIPAM API class to work with Circuits and Circuit providers
  *
@@ -89,6 +91,20 @@ class Circuits_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Options(
+		path: "/{app_id}/circuits/",
+		tags: ["circuits"],
+		summary: "Discover supported circuits/providers routes/methods (HATEOAS)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [new OA\Response(response: 200, description: "OK")]
+	)]
+	#[OA\Options(
+		path: "/{app_id}/circuits/providers/",
+		tags: ["circuits"],
+		summary: "Discover supported circuit providers routes/methods (HATEOAS)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [new OA\Response(response: 200, description: "OK")]
+	)]
 	#[\Override]
     public function OPTIONS () {
 		// validate
@@ -134,6 +150,145 @@ class Circuits_controller extends Common_api_functions {
 	 * @access public
 	 * @return void|array
 	 */
+	#[OA\Get(
+		path: "/{app_id}/circuits/",
+		tags: ["circuits"],
+		summary: "List all circuits (alias: /circuits/all/)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(properties: [
+				new OA\Property(property: "id", type: "string", example: "1"),
+				new OA\Property(property: "cid", type: "string"),
+				new OA\Property(property: "provider", type: "string"),
+				new OA\Property(property: "type", type: "string"),
+				new OA\Property(property: "capacity", type: "string"),
+				new OA\Property(property: "status", type: "string", enum: ["Active", "Inactive", "Reserved"]),
+				new OA\Property(property: "device1", type: "string"),
+				new OA\Property(property: "location1", type: "string"),
+				new OA\Property(property: "device2", type: "string"),
+				new OA\Property(property: "location2", type: "string"),
+				new OA\Property(property: "comment", type: "string"),
+				new OA\Property(property: "parent", type: "string"),
+				new OA\Property(property: "customer_id", type: "string"),
+				new OA\Property(property: "differentiator", type: "string")
+			]))),
+			new OA\Response(response: 404, description: "No circuits configured", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/circuits/{id}/",
+		tags: ["circuits"],
+		summary: "Read a single circuit by id",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(properties: [
+				new OA\Property(property: "id", type: "string", example: "1"),
+				new OA\Property(property: "cid", type: "string"),
+				new OA\Property(property: "provider", type: "string"),
+				new OA\Property(property: "type", type: "string"),
+				new OA\Property(property: "capacity", type: "string"),
+				new OA\Property(property: "status", type: "string", enum: ["Active", "Inactive", "Reserved"]),
+				new OA\Property(property: "device1", type: "string"),
+				new OA\Property(property: "location1", type: "string"),
+				new OA\Property(property: "device2", type: "string"),
+				new OA\Property(property: "location2", type: "string"),
+				new OA\Property(property: "comment", type: "string"),
+				new OA\Property(property: "parent", type: "string"),
+				new OA\Property(property: "customer_id", type: "string"),
+				new OA\Property(property: "differentiator", type: "string")
+			])),
+			new OA\Response(response: 400, description: "Invalid ID", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "circuit not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/circuits/id/{cid}/",
+		tags: ["circuits"],
+		summary: "Read a single circuit by its Circuit ID (cid) value - alias of /circuits/circuit_id/{cid}/",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "cid", in: "path", required: true, description: "Circuit ID (cid) value", schema: new OA\Schema(type: "string"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(properties: [
+				new OA\Property(property: "id", type: "string"),
+				new OA\Property(property: "cid", type: "string"),
+				new OA\Property(property: "provider", type: "string")
+			])),
+			new OA\Response(response: 404, description: "circuit not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/circuits/circuit_id/{cid}/",
+		tags: ["circuits"],
+		summary: "Read a single circuit by its Circuit ID (cid) value - alias of /circuits/id/{cid}/",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "cid", in: "path", required: true, description: "Circuit ID (cid) value", schema: new OA\Schema(type: "string"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(properties: [
+				new OA\Property(property: "id", type: "string"),
+				new OA\Property(property: "cid", type: "string"),
+				new OA\Property(property: "provider", type: "string")
+			])),
+			new OA\Response(response: 404, description: "circuit not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/circuits/providers/",
+		tags: ["circuits"],
+		summary: "List all circuit providers (alias: /circuits/providers/all/)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(properties: [
+				new OA\Property(property: "id", type: "string", example: "1"),
+				new OA\Property(property: "name", type: "string"),
+				new OA\Property(property: "description", type: "string"),
+				new OA\Property(property: "contact", type: "string")
+			]))),
+			new OA\Response(response: 404, description: "No providers configured", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/circuits/providers/{id}/",
+		tags: ["circuits"],
+		summary: "Read a single circuit provider by id",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Provider id", schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(properties: [
+				new OA\Property(property: "id", type: "string", example: "1"),
+				new OA\Property(property: "name", type: "string"),
+				new OA\Property(property: "description", type: "string"),
+				new OA\Property(property: "contact", type: "string")
+			])),
+			new OA\Response(response: 400, description: "Invalid ID", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "provider not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/circuits/providers/{id}/circuits/",
+		tags: ["circuits"],
+		summary: "List all circuits belonging to a given provider",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Provider id", schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(properties: [
+				new OA\Property(property: "id", type: "string"),
+				new OA\Property(property: "cid", type: "string"),
+				new OA\Property(property: "provider", type: "string")
+			]))),
+			new OA\Response(response: 404, description: "No circuits belonging to provider", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function GET () {
 		// all
@@ -187,6 +342,56 @@ class Circuits_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Post(
+		path: "/{app_id}/circuits/",
+		tags: ["circuits"],
+		summary: "Create a new circuit",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+			required: ["cid", "provider"],
+			properties: [
+				new OA\Property(property: "cid", type: "string", description: "Circuit ID, must be unique per differentiator"),
+				new OA\Property(property: "provider", type: "integer", description: "Existing circuit provider id"),
+				new OA\Property(property: "type", type: "string", description: "Defaults to Default if not provided"),
+				new OA\Property(property: "capacity", type: "string"),
+				new OA\Property(property: "status", type: "string", enum: ["Active", "Inactive", "Reserved"], default: "Active"),
+				new OA\Property(property: "device1", type: "integer", description: "Defaults to 0 if neither device1 nor location1 is provided"),
+				new OA\Property(property: "location1", type: "integer", description: "Defaults to 0 if neither device1 nor location1 is provided"),
+				new OA\Property(property: "device2", type: "integer", description: "Defaults to 0 if neither device2 nor location2 is provided"),
+				new OA\Property(property: "location2", type: "integer", description: "Defaults to 0 if neither device2 nor location2 is provided"),
+				new OA\Property(property: "comment", type: "string"),
+				new OA\Property(property: "parent", type: "integer"),
+				new OA\Property(property: "customer_id", type: "integer"),
+				new OA\Property(property: "differentiator", type: "string")
+			]
+		)),
+		responses: [
+			new OA\Response(response: 201, description: "circuit created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Circuit ID is mandatory / Invalid circuit provider / Invalid circuit type / Invalid status / Invalid device or location", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "Circuit ID already exists / No values present", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "circuit creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Post(
+		path: "/{app_id}/circuits/providers/",
+		tags: ["circuits"],
+		summary: "Create a new circuit provider",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+			required: ["name"],
+			properties: [
+				new OA\Property(property: "name", type: "string"),
+				new OA\Property(property: "description", type: "string"),
+				new OA\Property(property: "contact", type: "string")
+			]
+		)),
+		responses: [
+			new OA\Response(response: 201, description: "provider created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 404, description: "Name is mandatory", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "No values present", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "provider creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function POST () {
 		# remap keys
@@ -228,6 +433,62 @@ class Circuits_controller extends Common_api_functions {
 	 *
 	 * @return void|array
 	 */
+	#[OA\Patch(
+		path: "/{app_id}/circuits/{id}/",
+		tags: ["circuits"],
+		summary: "Update an existing circuit",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		requestBody: new OA\RequestBody(content: new OA\JsonContent(
+			properties: [
+				new OA\Property(property: "cid", type: "string"),
+				new OA\Property(property: "provider", type: "integer", description: "Existing circuit provider id"),
+				new OA\Property(property: "type", type: "string"),
+				new OA\Property(property: "capacity", type: "string"),
+				new OA\Property(property: "status", type: "string", enum: ["Active", "Inactive", "Reserved"]),
+				new OA\Property(property: "device1", type: "integer"),
+				new OA\Property(property: "location1", type: "integer"),
+				new OA\Property(property: "device2", type: "integer"),
+				new OA\Property(property: "location2", type: "integer"),
+				new OA\Property(property: "comment", type: "string"),
+				new OA\Property(property: "parent", type: "integer"),
+				new OA\Property(property: "customer_id", type: "integer"),
+				new OA\Property(property: "differentiator", type: "string")
+			]
+		)),
+		responses: [
+			new OA\Response(response: 200, description: "circuit updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "circuit id is required / circuit id must be numeric / Invalid circuit provider / Invalid circuit type / Invalid status / Invalid device or location", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "Nonexisting circuit id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "Circuit ID already exists / No values present", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "circuit edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Patch(
+		path: "/{app_id}/circuits/providers/{id}/",
+		tags: ["circuits"],
+		summary: "Update an existing circuit provider",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		requestBody: new OA\RequestBody(content: new OA\JsonContent(
+			properties: [
+				new OA\Property(property: "name", type: "string"),
+				new OA\Property(property: "description", type: "string"),
+				new OA\Property(property: "contact", type: "string")
+			]
+		)),
+		responses: [
+			new OA\Response(response: 200, description: "provider updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "provider id is required / provider id must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "Nonexisting provider id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "No values present", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "provider edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function PATCH () {
 		# remap keys
@@ -265,6 +526,36 @@ class Circuits_controller extends Common_api_functions {
 	 *
 	 * @return void|array
 	 */
+	#[OA\Delete(
+		path: "/{app_id}/circuits/{id}/",
+		tags: ["circuits"],
+		summary: "Delete a circuit",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "circuit deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "circuit id is required / circuit id must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "Nonexisting circuit id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "circuit delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Delete(
+		path: "/{app_id}/circuits/providers/{id}/",
+		tags: ["circuits"],
+		summary: "Delete a circuit provider (also removes references to it from any circuits)",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "provider deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "provider id is required / provider id must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "Nonexisting provider id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "provider delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function DELETE () {
 		# verify

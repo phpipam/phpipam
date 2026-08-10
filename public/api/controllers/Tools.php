@@ -1,5 +1,7 @@
 <?php
 
+use OpenApi\Attributes as OA;
+
 /**
  *	phpIPAM API class to work with tools
  *
@@ -140,6 +142,23 @@ class Tools_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Options(
+	    path: "/{app_id}/tools/",
+	    tags: ["tools"],
+	    summary: "Discover supported tools routes/methods (HATEOAS)",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [new OA\Response(response: 200, description: "OK")]
+	)]
+	#[OA\Options(
+	    path: "/{app_id}/tools/{subcontroller}/",
+	    tags: ["tools"],
+	    summary: "Discover supported routes/methods for a tools subcontroller (HATEOAS)",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "subcontroller", in: "path", required: true, description: "One of: ipTags, devices, deviceTypes, vlans, vrf, nameservers, scanAgents, locations, racks, nat, customers", schema: new OA\Schema(type: "string"))
+	    ],
+	    responses: [new OA\Response(response: 200, description: "OK")]
+	)]
 	#[\Override]
     public function OPTIONS () {
 		// validate
@@ -204,6 +223,623 @@ class Tools_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Get(
+	    path: "/{app_id}/tools/tags/",
+	    tags: ["tools"],
+	    summary: "List all IP tags",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer", example: 1),
+	                new OA\Property(property: "type", type: "string", example: "Offline"),
+	                new OA\Property(property: "showtag", type: "boolean"),
+	                new OA\Property(property: "bgcolor", type: "string", example: "#f59c99"),
+	                new OA\Property(property: "fgcolor", type: "string", example: "#ffffff"),
+	                new OA\Property(property: "compress", type: "string", enum: ["No","Yes"]),
+	                new OA\Property(property: "locked", type: "string", enum: ["No","Yes"]),
+	                new OA\Property(property: "updateTag", type: "boolean")
+	            ]
+	        ))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/tags/{id}/",
+	    tags: ["tools"],
+	    summary: "Read a single IP tag by id",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer"),
+	                new OA\Property(property: "type", type: "string"),
+	                new OA\Property(property: "showtag", type: "boolean"),
+	                new OA\Property(property: "bgcolor", type: "string"),
+	                new OA\Property(property: "fgcolor", type: "string"),
+	                new OA\Property(property: "compress", type: "string", enum: ["No","Yes"]),
+	                new OA\Property(property: "locked", type: "string", enum: ["No","Yes"]),
+	                new OA\Property(property: "updateTag", type: "boolean")
+	            ]
+	        )),
+	        new OA\Response(response: 400, description: "Identifier must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/tags/{id}/addresses/",
+	    tags: ["tools"],
+	    summary: "List addresses currently marked with this IP tag",
+	    description: "Matches ipaddresses.state == {id}.",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Address"))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/devices/",
+	    tags: ["tools"],
+	    summary: "List all devices",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Device"))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/devices/{id}/",
+	    tags: ["tools"],
+	    summary: "Read a single device by id",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(ref: "#/components/schemas/Device")),
+	        new OA\Response(response: 400, description: "Identifier must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/devices/{id}/addresses/",
+	    tags: ["tools"],
+	    summary: "List addresses whose switch is this device",
+	    description: "Matches ipaddresses.switch == {id}.",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Address"))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/device_types/",
+	    tags: ["tools"],
+	    summary: "List all device types",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "tid", type: "integer", example: 1),
+	                new OA\Property(property: "tname", type: "string", example: "Switch"),
+	                new OA\Property(property: "tdescription", type: "string", nullable: true),
+	                new OA\Property(property: "bgcolor", type: "string", example: "#E6E6E6"),
+	                new OA\Property(property: "fgcolor", type: "string", example: "#000")
+	            ]
+	        ))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/device_types/{id}/",
+	    tags: ["tools"],
+	    summary: "Read a single device type by id",
+	    description: "{id} maps to the deviceTypes.tid field.",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "tid", type: "integer"),
+	                new OA\Property(property: "tname", type: "string"),
+	                new OA\Property(property: "tdescription", type: "string", nullable: true),
+	                new OA\Property(property: "bgcolor", type: "string"),
+	                new OA\Property(property: "fgcolor", type: "string")
+	            ]
+	        )),
+	        new OA\Response(response: 400, description: "Identifier must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/device_types/{id}/devices/",
+	    tags: ["tools"],
+	    summary: "List devices of this device type",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, description: "Device type id (tid)", schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Device"))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/vlans/",
+	    tags: ["tools"],
+	    summary: "List all VLANs (read-only alias; manage VLANs via the /vlans controller)",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Vlan"))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/vlans/{id}/",
+	    tags: ["tools"],
+	    summary: "Read a single VLAN by id",
+	    description: "{id} maps to the vlans.vlanId field.",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(ref: "#/components/schemas/Vlan")),
+	        new OA\Response(response: 400, description: "Identifier must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/vlans/{id}/subnets/",
+	    tags: ["tools"],
+	    summary: "List subnets that belong to this VLAN",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, description: "VLAN id (vlanId)", schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/vrfs/",
+	    tags: ["tools"],
+	    summary: "List all VRFs (read-only alias; manage VRFs via the /vrf controller)",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Vrf"))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/vrfs/{id}/",
+	    tags: ["tools"],
+	    summary: "Read a single VRF by id",
+	    description: "{id} maps to the vrf.vrfId field.",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(ref: "#/components/schemas/Vrf")),
+	        new OA\Response(response: 400, description: "Identifier must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/vrfs/{id}/subnets/",
+	    tags: ["tools"],
+	    summary: "List subnets that belong to this VRF",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, description: "VRF id (vrfId)", schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/nameservers/",
+	    tags: ["tools"],
+	    summary: "List all nameserver sets",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer", example: 1),
+	                new OA\Property(property: "name", type: "string", example: "Google NS"),
+	                new OA\Property(property: "namesrv1", type: "string", description: "Semicolon separated list of nameserver IPs", example: "8.8.8.8;8.8.4.4"),
+	                new OA\Property(property: "description", type: "string", nullable: true),
+	                new OA\Property(property: "permissions", type: "string", nullable: true, description: "JSON-encoded map of groupId => permission level")
+	            ]
+	        ))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/nameservers/{id}/",
+	    tags: ["tools"],
+	    summary: "Read a single nameserver set by id",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer"),
+	                new OA\Property(property: "name", type: "string"),
+	                new OA\Property(property: "namesrv1", type: "string"),
+	                new OA\Property(property: "description", type: "string", nullable: true),
+	                new OA\Property(property: "permissions", type: "string", nullable: true)
+	            ]
+	        )),
+	        new OA\Response(response: 400, description: "Identifier must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/scanagents/",
+	    tags: ["tools"],
+	    summary: "List all scan agents",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer", example: 1),
+	                new OA\Property(property: "name", type: "string", example: "localhost"),
+	                new OA\Property(property: "description", type: "string", nullable: true),
+	                new OA\Property(property: "type", type: "string", enum: ["direct","api","mysql"]),
+	                new OA\Property(property: "code", type: "string", nullable: true, description: "Unique agent code used by the scanning script"),
+	                new OA\Property(property: "last_access", type: "string", format: "date-time", nullable: true)
+	            ]
+	        ))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/scanagents/{id}/",
+	    tags: ["tools"],
+	    summary: "Read a single scan agent by id",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer"),
+	                new OA\Property(property: "name", type: "string"),
+	                new OA\Property(property: "description", type: "string", nullable: true),
+	                new OA\Property(property: "type", type: "string", enum: ["direct","api","mysql"]),
+	                new OA\Property(property: "code", type: "string", nullable: true),
+	                new OA\Property(property: "last_access", type: "string", format: "date-time", nullable: true)
+	            ]
+	        )),
+	        new OA\Response(response: 400, description: "Identifier must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/locations/",
+	    tags: ["tools"],
+	    summary: "List all locations",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer", example: 1),
+	                new OA\Property(property: "name", type: "string"),
+	                new OA\Property(property: "description", type: "string", nullable: true),
+	                new OA\Property(property: "address", type: "string", nullable: true),
+	                new OA\Property(property: "lat", type: "string", nullable: true),
+	                new OA\Property(property: "long", type: "string", nullable: true)
+	            ]
+	        ))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/locations/{id}/",
+	    tags: ["tools"],
+	    summary: "Read a single location by id",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer"),
+	                new OA\Property(property: "name", type: "string"),
+	                new OA\Property(property: "description", type: "string", nullable: true),
+	                new OA\Property(property: "address", type: "string", nullable: true),
+	                new OA\Property(property: "lat", type: "string", nullable: true),
+	                new OA\Property(property: "long", type: "string", nullable: true)
+	            ]
+	        )),
+	        new OA\Response(response: 400, description: "Identifier must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/locations/{id}/subnets/",
+	    tags: ["tools"],
+	    summary: "List subnets assigned to this location",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/locations/{id}/devices/",
+	    tags: ["tools"],
+	    summary: "List devices assigned to this location",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Device"))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/locations/{id}/racks/",
+	    tags: ["tools"],
+	    summary: "List racks assigned to this location",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer"),
+	                new OA\Property(property: "name", type: "string"),
+	                new OA\Property(property: "size", type: "integer", nullable: true),
+	                new OA\Property(property: "location", type: "integer", nullable: true)
+	            ]
+	        ))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/locations/{id}/ipaddresses/",
+	    tags: ["tools"],
+	    summary: "List IP addresses assigned to this location",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Address"))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/racks/",
+	    tags: ["tools"],
+	    summary: "List all racks",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer", example: 1),
+	                new OA\Property(property: "name", type: "string"),
+	                new OA\Property(property: "size", type: "integer", nullable: true),
+	                new OA\Property(property: "subrack", type: "boolean"),
+	                new OA\Property(property: "location", type: "integer", nullable: true),
+	                new OA\Property(property: "row", type: "integer"),
+	                new OA\Property(property: "hasBack", type: "boolean"),
+	                new OA\Property(property: "topDown", type: "boolean"),
+	                new OA\Property(property: "description", type: "string", nullable: true),
+	                new OA\Property(property: "customer_id", type: "integer", nullable: true)
+	            ]
+	        ))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/racks/{id}/",
+	    tags: ["tools"],
+	    summary: "Read a single rack by id",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer"),
+	                new OA\Property(property: "name", type: "string"),
+	                new OA\Property(property: "size", type: "integer", nullable: true),
+	                new OA\Property(property: "subrack", type: "boolean"),
+	                new OA\Property(property: "location", type: "integer", nullable: true),
+	                new OA\Property(property: "row", type: "integer"),
+	                new OA\Property(property: "hasBack", type: "boolean"),
+	                new OA\Property(property: "topDown", type: "boolean"),
+	                new OA\Property(property: "description", type: "string", nullable: true),
+	                new OA\Property(property: "customer_id", type: "integer", nullable: true)
+	            ]
+	        )),
+	        new OA\Response(response: 400, description: "Identifier must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/racks/{id}/devices/",
+	    tags: ["tools"],
+	    summary: "List devices mounted in this rack",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Device"))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/nat/",
+	    tags: ["tools"],
+	    summary: "List all NAT rules",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer", example: 1),
+	                new OA\Property(property: "name", type: "string", nullable: true),
+	                new OA\Property(property: "type", type: "string", enum: ["source","static","destination"]),
+	                new OA\Property(property: "src", type: "string", nullable: true, description: "JSON-encoded map of object type => array of ids"),
+	                new OA\Property(property: "dst", type: "string", nullable: true, description: "JSON-encoded map of object type => array of ids"),
+	                new OA\Property(property: "src_port", type: "integer", nullable: true),
+	                new OA\Property(property: "dst_port", type: "integer", nullable: true),
+	                new OA\Property(property: "device", type: "integer", nullable: true, description: "Device id owning this NAT rule"),
+	                new OA\Property(property: "description", type: "string", nullable: true),
+	                new OA\Property(property: "policy", type: "string", enum: ["Yes","No"]),
+	                new OA\Property(property: "policy_dst", type: "string", nullable: true)
+	            ]
+	        ))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/nat/{id}/",
+	    tags: ["tools"],
+	    summary: "Read a single NAT rule by id",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer"),
+	                new OA\Property(property: "name", type: "string", nullable: true),
+	                new OA\Property(property: "type", type: "string", enum: ["source","static","destination"]),
+	                new OA\Property(property: "src", type: "string", nullable: true),
+	                new OA\Property(property: "dst", type: "string", nullable: true),
+	                new OA\Property(property: "device", type: "integer", nullable: true),
+	                new OA\Property(property: "description", type: "string", nullable: true)
+	            ]
+	        )),
+	        new OA\Response(response: 400, description: "Identifier must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/nat/{id}/objects/",
+	    tags: ["tools"],
+	    summary: "Get a NAT rule with its src/dst object id lists decoded",
+	    description: "src and dst are returned as a map of object type (e.g. subnets, ipaddresses) to an array of referenced object ids.",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK"),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/nat/{id}/objects_full/",
+	    tags: ["tools"],
+	    summary: "Get a NAT rule with its src/dst objects fully resolved",
+	    description: "Like objects/, but each referenced id is replaced with the full fetched object.",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK"),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/customers/",
+	    tags: ["tools"],
+	    summary: "List all customers",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer", example: 1),
+	                new OA\Property(property: "title", type: "string"),
+	                new OA\Property(property: "address", type: "string", nullable: true),
+	                new OA\Property(property: "postcode", type: "string", nullable: true),
+	                new OA\Property(property: "city", type: "string", nullable: true),
+	                new OA\Property(property: "state", type: "string", nullable: true),
+	                new OA\Property(property: "lat", type: "string", nullable: true),
+	                new OA\Property(property: "long", type: "string", nullable: true),
+	                new OA\Property(property: "contact_person", type: "string", nullable: true),
+	                new OA\Property(property: "contact_phone", type: "string", nullable: true),
+	                new OA\Property(property: "contact_mail", type: "string", nullable: true),
+	                new OA\Property(property: "note", type: "string", nullable: true),
+	                new OA\Property(property: "status", type: "string", enum: ["Active","Reserved","Inactive"])
+	            ]
+	        ))),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/tools/customers/{id}/",
+	    tags: ["tools"],
+	    summary: "Read a single customer by id",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(
+	            type: "object",
+	            properties: [
+	                new OA\Property(property: "id", type: "integer"),
+	                new OA\Property(property: "title", type: "string"),
+	                new OA\Property(property: "address", type: "string", nullable: true),
+	                new OA\Property(property: "city", type: "string", nullable: true),
+	                new OA\Property(property: "contact_phone", type: "string", nullable: true),
+	                new OA\Property(property: "contact_mail", type: "string", nullable: true),
+	                new OA\Property(property: "status", type: "string", enum: ["Active","Reserved","Inactive"])
+	            ]
+	        )),
+	        new OA\Response(response: 400, description: "Identifier must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 404, description: "No objects found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
 	#[\Override]
     public function GET () {
 		# validate identifiers
@@ -340,6 +976,235 @@ class Tools_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Post(
+	    path: "/{app_id}/tools/tags/",
+	    tags: ["tools"],
+	    summary: "Create a new IP tag",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+	        required: ["type"],
+	        properties: [
+	            new OA\Property(property: "type", type: "string", example: "Maintenance"),
+	            new OA\Property(property: "showtag", type: "boolean", default: true),
+	            new OA\Property(property: "bgcolor", type: "string", example: "#000"),
+	            new OA\Property(property: "fgcolor", type: "string", example: "#fff"),
+	            new OA\Property(property: "compress", type: "string", enum: ["No","Yes"], default: "No"),
+	            new OA\Property(property: "locked", type: "string", enum: ["No","Yes"], default: "No"),
+	            new OA\Property(property: "updateTag", type: "boolean", default: false)
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 201, description: "Tag created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Post(
+	    path: "/{app_id}/tools/devices/",
+	    tags: ["tools"],
+	    summary: "Create a new device",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+	        required: ["hostname"],
+	        properties: [
+	            new OA\Property(property: "hostname", type: "string"),
+	            new OA\Property(property: "ip_addr", type: "string", nullable: true),
+	            new OA\Property(property: "type", type: "integer", description: "Device type id (deviceTypes.tid)"),
+	            new OA\Property(property: "description", type: "string", nullable: true),
+	            new OA\Property(property: "sections", type: "string", nullable: true, description: "Semicolon separated list of section ids"),
+	            new OA\Property(property: "snmp_community", type: "string", nullable: true),
+	            new OA\Property(property: "snmp_version", type: "string", enum: ["0","1","2","3"]),
+	            new OA\Property(property: "snmp_port", type: "integer", nullable: true),
+	            new OA\Property(property: "snmp_timeout", type: "integer", nullable: true),
+	            new OA\Property(property: "snmp_queries", type: "string", nullable: true),
+	            new OA\Property(property: "rack", type: "integer", nullable: true),
+	            new OA\Property(property: "rack_start", type: "integer", nullable: true),
+	            new OA\Property(property: "rack_size", type: "integer", nullable: true),
+	            new OA\Property(property: "location", type: "integer", nullable: true),
+	            new OA\Property(property: "address", type: "string", nullable: true, description: "If lat/long are not set, resolved to coordinates via Nominatim"),
+	            new OA\Property(property: "lat", type: "string", nullable: true),
+	            new OA\Property(property: "long", type: "string", nullable: true)
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 201, description: "Device created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters, invalid device type or invalid ip_addr", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Post(
+	    path: "/{app_id}/tools/device_types/",
+	    tags: ["tools"],
+	    summary: "Create a new device type",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+	        required: ["tname"],
+	        properties: [
+	            new OA\Property(property: "tname", type: "string", example: "Custom type"),
+	            new OA\Property(property: "tdescription", type: "string", nullable: true),
+	            new OA\Property(property: "bgcolor", type: "string", example: "#E6E6E6"),
+	            new OA\Property(property: "fgcolor", type: "string", example: "#000")
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 201, description: "Device type created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Post(
+	    path: "/{app_id}/tools/vlans/",
+	    tags: ["tools"],
+	    summary: "Not supported here - VLANs must be created via the /vlans controller",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [new OA\Response(response: 400, description: "Please use vlans controller", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))]
+	)]
+	#[OA\Post(
+	    path: "/{app_id}/tools/vrfs/",
+	    tags: ["tools"],
+	    summary: "Not supported here - VRFs must be created via the /vrf controller",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [new OA\Response(response: 400, description: "Please use vrf controller", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))]
+	)]
+	#[OA\Post(
+	    path: "/{app_id}/tools/nameservers/",
+	    tags: ["tools"],
+	    summary: "Create a new nameserver set",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+	        required: ["name","namesrv1"],
+	        properties: [
+	            new OA\Property(property: "name", type: "string", example: "Google NS"),
+	            new OA\Property(property: "namesrv1", type: "string", description: "Semicolon separated list of nameserver IPs", example: "8.8.8.8;8.8.4.4"),
+	            new OA\Property(property: "description", type: "string", nullable: true),
+	            new OA\Property(property: "permissions", type: "string", nullable: true, description: "JSON-encoded map of groupId => permission level")
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 201, description: "Nameserver set created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Post(
+	    path: "/{app_id}/tools/scanagents/",
+	    tags: ["tools"],
+	    summary: "Create a new scan agent",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+	        required: ["name"],
+	        properties: [
+	            new OA\Property(property: "name", type: "string"),
+	            new OA\Property(property: "description", type: "string", nullable: true),
+	            new OA\Property(property: "type", type: "string", enum: ["direct","api","mysql"]),
+	            new OA\Property(property: "code", type: "string", nullable: true, description: "Unique agent code used by the scanning script")
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 201, description: "Scan agent created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Post(
+	    path: "/{app_id}/tools/locations/",
+	    tags: ["tools"],
+	    summary: "Create a new location",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+	        required: ["name"],
+	        properties: [
+	            new OA\Property(property: "name", type: "string"),
+	            new OA\Property(property: "description", type: "string", nullable: true),
+	            new OA\Property(property: "address", type: "string", nullable: true, description: "If lat/long are not set, resolved to coordinates via Nominatim"),
+	            new OA\Property(property: "lat", type: "string", nullable: true),
+	            new OA\Property(property: "long", type: "string", nullable: true)
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 201, description: "Location created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Post(
+	    path: "/{app_id}/tools/racks/",
+	    tags: ["tools"],
+	    summary: "Create a new rack",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+	        required: ["name"],
+	        properties: [
+	            new OA\Property(property: "name", type: "string"),
+	            new OA\Property(property: "size", type: "integer", nullable: true, description: "Number of U's"),
+	            new OA\Property(property: "subrack", type: "boolean", default: false),
+	            new OA\Property(property: "location", type: "integer", nullable: true),
+	            new OA\Property(property: "row", type: "integer", default: 1),
+	            new OA\Property(property: "hasBack", type: "boolean", default: false),
+	            new OA\Property(property: "topDown", type: "boolean", default: false),
+	            new OA\Property(property: "description", type: "string", nullable: true),
+	            new OA\Property(property: "customer_id", type: "integer", nullable: true)
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 201, description: "Rack created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Post(
+	    path: "/{app_id}/tools/nat/",
+	    tags: ["tools"],
+	    summary: "Create a new NAT rule",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+	        properties: [
+	            new OA\Property(property: "name", type: "string", nullable: true),
+	            new OA\Property(property: "type", type: "string", enum: ["source","static","destination"], default: "source"),
+	            new OA\Property(property: "src", type: "string", nullable: true, description: "JSON-encoded map of object type => array of ids"),
+	            new OA\Property(property: "dst", type: "string", nullable: true, description: "JSON-encoded map of object type => array of ids"),
+	            new OA\Property(property: "src_port", type: "integer", nullable: true),
+	            new OA\Property(property: "dst_port", type: "integer", nullable: true),
+	            new OA\Property(property: "device", type: "integer", nullable: true, description: "Device id owning this NAT rule"),
+	            new OA\Property(property: "description", type: "string", nullable: true),
+	            new OA\Property(property: "policy", type: "string", enum: ["Yes","No"], default: "No"),
+	            new OA\Property(property: "policy_dst", type: "string", nullable: true)
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 201, description: "NAT rule created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Post(
+	    path: "/{app_id}/tools/customers/",
+	    tags: ["tools"],
+	    summary: "Create a new customer",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+	        required: ["title"],
+	        properties: [
+	            new OA\Property(property: "title", type: "string"),
+	            new OA\Property(property: "address", type: "string", nullable: true),
+	            new OA\Property(property: "postcode", type: "string", nullable: true),
+	            new OA\Property(property: "city", type: "string", nullable: true),
+	            new OA\Property(property: "state", type: "string", nullable: true),
+	            new OA\Property(property: "lat", type: "string", nullable: true),
+	            new OA\Property(property: "long", type: "string", nullable: true),
+	            new OA\Property(property: "contact_person", type: "string", nullable: true),
+	            new OA\Property(property: "contact_phone", type: "string", nullable: true),
+	            new OA\Property(property: "contact_mail", type: "string", nullable: true),
+	            new OA\Property(property: "note", type: "string", nullable: true),
+	            new OA\Property(property: "status", type: "string", enum: ["Active","Reserved","Inactive"], default: "Active")
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 201, description: "Customer created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
 	#[\Override]
     public function POST () {
 		# rewrite tool controller _params
@@ -377,6 +1242,257 @@ class Tools_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Patch(
+	    path: "/{app_id}/tools/tags/{id}/",
+	    tags: ["tools"],
+	    summary: "Update an IP tag",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    requestBody: new OA\RequestBody(content: new OA\JsonContent(
+	        properties: [
+	            new OA\Property(property: "type", type: "string"),
+	            new OA\Property(property: "showtag", type: "boolean"),
+	            new OA\Property(property: "bgcolor", type: "string"),
+	            new OA\Property(property: "fgcolor", type: "string"),
+	            new OA\Property(property: "compress", type: "string", enum: ["No","Yes"]),
+	            new OA\Property(property: "locked", type: "string", enum: ["No","Yes"]),
+	            new OA\Property(property: "updateTag", type: "boolean")
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 200, description: "Tag updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters or invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Patch(
+	    path: "/{app_id}/tools/devices/{id}/",
+	    tags: ["tools"],
+	    summary: "Update a device",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    requestBody: new OA\RequestBody(content: new OA\JsonContent(
+	        properties: [
+	            new OA\Property(property: "hostname", type: "string"),
+	            new OA\Property(property: "ip_addr", type: "string", nullable: true),
+	            new OA\Property(property: "type", type: "integer", description: "Device type id (deviceTypes.tid)"),
+	            new OA\Property(property: "description", type: "string", nullable: true),
+	            new OA\Property(property: "sections", type: "string", nullable: true),
+	            new OA\Property(property: "snmp_community", type: "string", nullable: true),
+	            new OA\Property(property: "rack", type: "integer", nullable: true),
+	            new OA\Property(property: "rack_start", type: "integer", nullable: true),
+	            new OA\Property(property: "rack_size", type: "integer", nullable: true),
+	            new OA\Property(property: "location", type: "integer", nullable: true),
+	            new OA\Property(property: "address", type: "string", nullable: true),
+	            new OA\Property(property: "lat", type: "string", nullable: true),
+	            new OA\Property(property: "long", type: "string", nullable: true)
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 200, description: "Device updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters, invalid device type, invalid ip_addr or invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Patch(
+	    path: "/{app_id}/tools/device_types/{id}/",
+	    tags: ["tools"],
+	    summary: "Update a device type",
+	    description: "{id} maps to the deviceTypes.tid field.",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    requestBody: new OA\RequestBody(content: new OA\JsonContent(
+	        properties: [
+	            new OA\Property(property: "tname", type: "string"),
+	            new OA\Property(property: "tdescription", type: "string", nullable: true),
+	            new OA\Property(property: "bgcolor", type: "string"),
+	            new OA\Property(property: "fgcolor", type: "string")
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 200, description: "Device type updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters or invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Patch(
+	    path: "/{app_id}/tools/vlans/{id}/",
+	    tags: ["tools"],
+	    summary: "Not supported here - VLANs must be updated via the /vlans controller",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [new OA\Response(response: 400, description: "Please use vlans controller", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))]
+	)]
+	#[OA\Patch(
+	    path: "/{app_id}/tools/vrfs/{id}/",
+	    tags: ["tools"],
+	    summary: "Not supported here - VRFs must be updated via the /vrf controller",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [new OA\Response(response: 400, description: "Please use vrf controller", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))]
+	)]
+	#[OA\Patch(
+	    path: "/{app_id}/tools/nameservers/{id}/",
+	    tags: ["tools"],
+	    summary: "Update a nameserver set",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    requestBody: new OA\RequestBody(content: new OA\JsonContent(
+	        properties: [
+	            new OA\Property(property: "name", type: "string"),
+	            new OA\Property(property: "namesrv1", type: "string"),
+	            new OA\Property(property: "description", type: "string", nullable: true),
+	            new OA\Property(property: "permissions", type: "string", nullable: true)
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 200, description: "Nameserver set updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters or invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Patch(
+	    path: "/{app_id}/tools/scanagents/{id}/",
+	    tags: ["tools"],
+	    summary: "Update a scan agent",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    requestBody: new OA\RequestBody(content: new OA\JsonContent(
+	        properties: [
+	            new OA\Property(property: "name", type: "string"),
+	            new OA\Property(property: "description", type: "string", nullable: true),
+	            new OA\Property(property: "type", type: "string", enum: ["direct","api","mysql"]),
+	            new OA\Property(property: "code", type: "string", nullable: true)
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 200, description: "Scan agent updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters or invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Patch(
+	    path: "/{app_id}/tools/locations/{id}/",
+	    tags: ["tools"],
+	    summary: "Update a location",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    requestBody: new OA\RequestBody(content: new OA\JsonContent(
+	        properties: [
+	            new OA\Property(property: "name", type: "string"),
+	            new OA\Property(property: "description", type: "string", nullable: true),
+	            new OA\Property(property: "address", type: "string", nullable: true),
+	            new OA\Property(property: "lat", type: "string", nullable: true),
+	            new OA\Property(property: "long", type: "string", nullable: true)
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 200, description: "Location updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters or invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Patch(
+	    path: "/{app_id}/tools/racks/{id}/",
+	    tags: ["tools"],
+	    summary: "Update a rack",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    requestBody: new OA\RequestBody(content: new OA\JsonContent(
+	        properties: [
+	            new OA\Property(property: "name", type: "string"),
+	            new OA\Property(property: "size", type: "integer", nullable: true),
+	            new OA\Property(property: "subrack", type: "boolean"),
+	            new OA\Property(property: "location", type: "integer", nullable: true),
+	            new OA\Property(property: "row", type: "integer"),
+	            new OA\Property(property: "hasBack", type: "boolean"),
+	            new OA\Property(property: "topDown", type: "boolean"),
+	            new OA\Property(property: "description", type: "string", nullable: true),
+	            new OA\Property(property: "customer_id", type: "integer", nullable: true)
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 200, description: "Rack updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters or invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Patch(
+	    path: "/{app_id}/tools/nat/{id}/",
+	    tags: ["tools"],
+	    summary: "Update a NAT rule",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    requestBody: new OA\RequestBody(content: new OA\JsonContent(
+	        properties: [
+	            new OA\Property(property: "name", type: "string", nullable: true),
+	            new OA\Property(property: "type", type: "string", enum: ["source","static","destination"]),
+	            new OA\Property(property: "src", type: "string", nullable: true),
+	            new OA\Property(property: "dst", type: "string", nullable: true),
+	            new OA\Property(property: "src_port", type: "integer", nullable: true),
+	            new OA\Property(property: "dst_port", type: "integer", nullable: true),
+	            new OA\Property(property: "device", type: "integer", nullable: true),
+	            new OA\Property(property: "description", type: "string", nullable: true),
+	            new OA\Property(property: "policy", type: "string", enum: ["Yes","No"]),
+	            new OA\Property(property: "policy_dst", type: "string", nullable: true)
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 200, description: "NAT rule updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters or invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Patch(
+	    path: "/{app_id}/tools/customers/{id}/",
+	    tags: ["tools"],
+	    summary: "Update a customer",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    requestBody: new OA\RequestBody(content: new OA\JsonContent(
+	        properties: [
+	            new OA\Property(property: "title", type: "string"),
+	            new OA\Property(property: "address", type: "string", nullable: true),
+	            new OA\Property(property: "postcode", type: "string", nullable: true),
+	            new OA\Property(property: "city", type: "string", nullable: true),
+	            new OA\Property(property: "state", type: "string", nullable: true),
+	            new OA\Property(property: "lat", type: "string", nullable: true),
+	            new OA\Property(property: "long", type: "string", nullable: true),
+	            new OA\Property(property: "contact_person", type: "string", nullable: true),
+	            new OA\Property(property: "contact_phone", type: "string", nullable: true),
+	            new OA\Property(property: "contact_mail", type: "string", nullable: true),
+	            new OA\Property(property: "note", type: "string", nullable: true),
+	            new OA\Property(property: "status", type: "string", enum: ["Active","Reserved","Inactive"])
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 200, description: "Customer updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "No parameters or invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
 	#[\Override]
     public function PATCH () {
 		# rewrite tool controller _params
@@ -417,6 +1533,155 @@ class Tools_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Delete(
+	    path: "/{app_id}/tools/tags/{id}/",
+	    tags: ["tools"],
+	    summary: "Delete an IP tag",
+	    description: "Also clears ipaddresses.state references to this tag.",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "Tag deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "Invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Delete(
+	    path: "/{app_id}/tools/devices/{id}/",
+	    tags: ["tools"],
+	    summary: "Delete a device",
+	    description: "Also clears ipaddresses.switch references to this device.",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "Device deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "Invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Delete(
+	    path: "/{app_id}/tools/device_types/{id}/",
+	    tags: ["tools"],
+	    summary: "Delete a device type",
+	    description: "{id} maps to the deviceTypes.tid field.",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "Device type deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "Invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Delete(
+	    path: "/{app_id}/tools/vlans/{id}/",
+	    tags: ["tools"],
+	    summary: "Not supported here - VLANs must be deleted via the /vlans controller",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [new OA\Response(response: 400, description: "Please use vlans controller", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))]
+	)]
+	#[OA\Delete(
+	    path: "/{app_id}/tools/vrfs/{id}/",
+	    tags: ["tools"],
+	    summary: "Not supported here - VRFs must be deleted via the /vrf controller",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [new OA\Response(response: 400, description: "Please use vrf controller", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))]
+	)]
+	#[OA\Delete(
+	    path: "/{app_id}/tools/nameservers/{id}/",
+	    tags: ["tools"],
+	    summary: "Delete a nameserver set",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "Nameserver set deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "Invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Delete(
+	    path: "/{app_id}/tools/scanagents/{id}/",
+	    tags: ["tools"],
+	    summary: "Delete a scan agent",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "Scan agent deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "Invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Delete(
+	    path: "/{app_id}/tools/locations/{id}/",
+	    tags: ["tools"],
+	    summary: "Delete a location",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "Location deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "Invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Delete(
+	    path: "/{app_id}/tools/racks/{id}/",
+	    tags: ["tools"],
+	    summary: "Delete a rack",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "Rack deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "Invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Delete(
+	    path: "/{app_id}/tools/nat/{id}/",
+	    tags: ["tools"],
+	    summary: "Delete a NAT rule",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "NAT rule deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "Invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Delete(
+	    path: "/{app_id}/tools/customers/{id}/",
+	    tags: ["tools"],
+	    summary: "Delete a customer",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "Customer deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "Invalid identifier", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 500, description: "Object delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
 	#[\Override]
     public function DELETE () {
 		# rewrite tool controller _params

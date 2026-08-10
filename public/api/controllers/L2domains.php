@@ -1,5 +1,7 @@
 <?php
 
+use OpenApi\Attributes as OA;
+
 /**
  *	phpIPAM API class to work with VLAN domains
  *
@@ -40,6 +42,13 @@ class L2domains_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Options(
+		path: "/{app_id}/l2domains/",
+		tags: ["l2domains"],
+		summary: "Discover supported l2domains routes/methods (HATEOAS)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [new OA\Response(response: 200, description: "OK")]
+	)]
 	#[\Override]
     public function OPTIONS () {
 		// validate
@@ -75,6 +84,64 @@ class L2domains_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Get(
+		path: "/{app_id}/l2domains/",
+		tags: ["l2domains"],
+		summary: "List all L2 (VLAN) domains",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(properties: [
+				new OA\Property(property: "id", type: "integer", example: 1),
+				new OA\Property(property: "name", type: "string", example: "default"),
+				new OA\Property(property: "description", type: "string", nullable: true, example: "default L2 domain"),
+				new OA\Property(property: "sections", type: "string", nullable: true, description: "JSON-encoded map of groupId => permission level (stored internally as 'permissions', exposed as 'sections' in read responses)")
+			]))),
+			new OA\Response(response: 404, description: "No domains configured", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/l2domains/custom_fields/",
+		tags: ["l2domains"],
+		summary: "List custom fields defined on the vlanDomains table",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK"),
+			new OA\Response(response: 404, description: "No custom fields defined", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/l2domains/{id}/vlans/",
+		tags: ["l2domains"],
+		summary: "List all VLANs belonging to an L2 domain",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "L2 domain id", schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Vlan"))),
+			new OA\Response(response: 400, description: "Domain id must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "Invalid domain id / No vlans belonging to this domain", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/l2domains/{id}/",
+		tags: ["l2domains"],
+		summary: "Read a single L2 domain by id",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(properties: [
+				new OA\Property(property: "id", type: "integer", example: 1),
+				new OA\Property(property: "name", type: "string", example: "default"),
+				new OA\Property(property: "description", type: "string", nullable: true, example: "default L2 domain"),
+				new OA\Property(property: "sections", type: "string", nullable: true, description: "JSON-encoded map of groupId => permission level (stored internally as 'permissions', exposed as 'sections' in read responses)")
+			])),
+			new OA\Response(response: 400, description: "Domain id must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "Invalid domain id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function GET () {
 		// all domains
@@ -126,6 +193,25 @@ class L2domains_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Post(
+		path: "/{app_id}/l2domains/",
+		tags: ["l2domains"],
+		summary: "Create a new L2 (VLAN) domain",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+			required: ["name"],
+			properties: [
+				new OA\Property(property: "name", type: "string", example: "Colo 1"),
+				new OA\Property(property: "description", type: "string", nullable: true),
+				new OA\Property(property: "permissions", type: "string", nullable: true, description: "JSON-encoded map of groupId => permission level")
+			]
+		)),
+		responses: [
+			new OA\Response(response: 201, description: "L2 domain created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Domain name is mandatory", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "Domain creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function POST () {
 		# remap keys
@@ -156,6 +242,28 @@ class L2domains_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Patch(
+		path: "/{app_id}/l2domains/{id}/",
+		tags: ["l2domains"],
+		summary: "Update an existing L2 (VLAN) domain",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		requestBody: new OA\RequestBody(content: new OA\JsonContent(
+			properties: [
+				new OA\Property(property: "name", type: "string", example: "Colo 1"),
+				new OA\Property(property: "description", type: "string", nullable: true),
+				new OA\Property(property: "permissions", type: "string", nullable: true, description: "JSON-encoded map of groupId => permission level")
+			]
+		)),
+		responses: [
+			new OA\Response(response: 200, description: "L2 domain updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Invalid domain id / Domain name is mandatory", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "Invalid domain id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "Domain edit failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function PATCH () {
 		# remap keys
@@ -190,6 +298,23 @@ class L2domains_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Delete(
+		path: "/{app_id}/l2domains/{id}/",
+		tags: ["l2domains"],
+		summary: "Delete an L2 (VLAN) domain (VLANs in this domain are migrated to the default domain)",
+		description: "The default domain (id=1) cannot be deleted.",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "L2 domain deleted and vlans migrated to default domain", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Domain id must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "Invalid domain id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "Default domain cannot be deleted", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "L2 domain delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function DELETE () {
 		# check that domain exists

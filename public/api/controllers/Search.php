@@ -1,5 +1,7 @@
 <?php
 
+use OpenApi\Attributes as OA;
+
 /**
  *	phpIPAM API search class
  *
@@ -63,6 +65,13 @@ class Search_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Options(
+	    path: "/{app_id}/search/",
+	    tags: ["search"],
+	    summary: "Discover supported search routes/methods (HATEOAS)",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [new OA\Response(response: 200, description: "OK")]
+	)]
 	#[\Override]
     public function OPTIONS () {
 		// validate
@@ -97,6 +106,43 @@ class Search_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Get(
+	    path: "/{app_id}/search/{search_string}/",
+	    tags: ["search"],
+	    summary: "Search subnets, addresses, VLANs and VRFs for a matching string or IP address",
+	    description: "Runs the search string against every object type that is enabled through the subnets/addresses/vlan/vrf query flags (subnets and addresses are searched by default, vlan and vrf are not). IP-like search strings are reformatted so that a partial address also matches. Each enabled object type gets its own key in the response data; a type with no hits reports its own \"code\":404 entry inline rather than failing the whole request. The effective flags are echoed back under \"search_filter\".",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "search_string", in: "path", required: true, description: "Search string or (partial) IP address to search for", schema: new OA\Schema(type: "string")),
+	        new OA\Parameter(name: "subnets", in: "query", required: false, description: "Include subnets in the search (1=on, default; 0=off)", schema: new OA\Schema(type: "integer", enum: [0, 1], default: 1)),
+	        new OA\Parameter(name: "addresses", in: "query", required: false, description: "Include IP addresses in the search (1=on, default; 0=off)", schema: new OA\Schema(type: "integer", enum: [0, 1], default: 1)),
+	        new OA\Parameter(name: "vlan", in: "query", required: false, description: "Include VLANs in the search (1=on; 0=off, default)", schema: new OA\Schema(type: "integer", enum: [0, 1], default: 0)),
+	        new OA\Parameter(name: "vrf", in: "query", required: false, description: "Include VRFs in the search (1=on; 0=off, default)", schema: new OA\Schema(type: "integer", enum: [0, 1], default: 0)),
+	    ],
+	    responses: [
+	        new OA\Response(
+	            response: 200,
+	            description: "OK",
+	            content: new OA\JsonContent(
+	                properties: [
+	                    new OA\Property(property: "code", type: "integer", example: 200),
+	                    new OA\Property(
+	                        property: "data",
+	                        type: "object",
+	                        properties: [
+	                            new OA\Property(property: "subnets", type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet")),
+	                            new OA\Property(property: "addresses", type: "array", items: new OA\Items(ref: "#/components/schemas/Address")),
+	                            new OA\Property(property: "vlan", type: "array", items: new OA\Items(ref: "#/components/schemas/Vlan")),
+	                            new OA\Property(property: "vrf", type: "array", items: new OA\Items(ref: "#/components/schemas/Vrf")),
+	                            new OA\Property(property: "search_filter", type: "object", description: "Effective subnets/addresses/vlan/vrf flags applied to this search", example: ["subnets" => "1", "addresses" => "1", "vlan" => "0", "vrf" => "0"]),
+	                        ]
+	                    ),
+	                ]
+	            )
+	        ),
+	        new OA\Response(response: 400, description: "Search string not provided", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	    ]
+	)]
 	#[\Override]
     public function GET () {
 		// start search

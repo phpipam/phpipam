@@ -1,5 +1,7 @@
 <?php
 
+use OpenApi\Attributes as OA;
+
 /**
  *	phpIPAM API class to work with VLANS
  *
@@ -49,6 +51,13 @@ class Vlans_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Options(
+		path: "/{app_id}/vlans/",
+		tags: ["vlans"],
+		summary: "Discover supported vlans routes/methods (HATEOAS)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [new OA\Response(response: 200, description: "OK")]
+	)]
 	#[\Override]
     public function OPTIONS () {
 		// validate
@@ -85,6 +94,79 @@ class Vlans_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Get(
+		path: "/{app_id}/vlans/",
+		tags: ["vlans"],
+		summary: "List all VLANs (alias: /vlans/all/)",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Vlan"))),
+			new OA\Response(response: 404, description: "No vlans configured", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/vlans/{id}/",
+		tags: ["vlans"],
+		summary: "Read a single VLAN by id",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(ref: "#/components/schemas/Vlan")),
+			new OA\Response(response: 404, description: "Vlan not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/vlans/custom_fields/",
+		tags: ["vlans"],
+		summary: "List custom fields defined on the vlans table",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		responses: [
+			new OA\Response(response: 200, description: "OK"),
+			new OA\Response(response: 404, description: "No custom fields defined", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/vlans/search/{number}/",
+		tags: ["vlans"],
+		summary: "Search VLANs by VLAN number",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "number", in: "path", required: true, description: "VLAN number to search for", schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Vlan"))),
+			new OA\Response(response: 404, description: "Vlans not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/vlans/{id}/subnets/",
+		tags: ["vlans"],
+		summary: "List all subnets belonging to a VLAN",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Vlan id", schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+			new OA\Response(response: 404, description: "Invalid Vlan id / No subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
+	#[OA\Get(
+		path: "/{app_id}/vlans/{id}/subnets/{sectionId}/",
+		tags: ["vlans"],
+		summary: "List subnets belonging to a VLAN, filtered to a single section",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, description: "Vlan id", schema: new OA\Schema(type: "integer")),
+			new OA\Parameter(name: "sectionId", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Subnet"))),
+			new OA\Response(response: 404, description: "Invalid Vlan id / No subnets found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function GET () {
 		// all
@@ -161,6 +243,28 @@ class Vlans_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Post(
+		path: "/{app_id}/vlans/",
+		tags: ["vlans"],
+		summary: "Create a new VLAN",
+		parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+		requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+			required: ["name", "number"],
+			properties: [
+				new OA\Property(property: "domainId", type: "integer", description: "L2 domain id, defaults to 1", example: 1),
+				new OA\Property(property: "name", type: "string"),
+				new OA\Property(property: "number", type: "integer"),
+				new OA\Property(property: "description", type: "string"),
+				new OA\Property(property: "customer_id", type: "integer")
+			]
+		)),
+		responses: [
+			new OA\Response(response: 201, description: "Vlan created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Invalid domain id / Vlan name is required / Vlan number must be number / Vlan number cannot be negative", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "Vlan already exists / Highest possible VLAN number exceeded", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "Vlan creation failed / Highest possible VLAN number exceeded", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function POST () {
 		# check for valid keys
@@ -191,6 +295,31 @@ class Vlans_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Patch(
+		path: "/{app_id}/vlans/{id}/",
+		tags: ["vlans"],
+		summary: "Update an existing VLAN",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		requestBody: new OA\RequestBody(content: new OA\JsonContent(
+			properties: [
+				new OA\Property(property: "domainId", type: "integer"),
+				new OA\Property(property: "name", type: "string"),
+				new OA\Property(property: "number", type: "integer"),
+				new OA\Property(property: "description", type: "string"),
+				new OA\Property(property: "customer_id", type: "integer")
+			]
+		)),
+		responses: [
+			new OA\Response(response: 200, description: "Vlan updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Vlan Id is required / Vlan Id must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "Invalid Vlan id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 409, description: "Highest possible VLAN number exceeded", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "Vlan edit failed / Highest possible VLAN number exceeded", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function PATCH () {
 		# verify
@@ -226,6 +355,21 @@ class Vlans_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Delete(
+		path: "/{app_id}/vlans/{id}/",
+		tags: ["vlans"],
+		summary: "Delete a VLAN, removing references from any subnets that use it",
+		parameters: [
+			new OA\Parameter(ref: "#/components/parameters/app_id"),
+			new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+		],
+		responses: [
+			new OA\Response(response: 200, description: "Vlan deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+			new OA\Response(response: 400, description: "Vlan Id is required / Vlan Id must be numeric", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 404, description: "Invalid Vlan id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+			new OA\Response(response: 500, description: "Vlan delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+		]
+	)]
 	#[\Override]
     public function DELETE () {
 		# verify

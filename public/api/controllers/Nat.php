@@ -1,5 +1,7 @@
 <?php
 
+use OpenApi\Attributes as OA;
+
 /**
  *  phpIPAM API class to work with NAT
  *
@@ -111,6 +113,13 @@ class Nat_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[OA\Options(
+        path: "/{app_id}/nat/",
+        tags: ["nat"],
+        summary: "Discover supported NAT routes/methods (HATEOAS)",
+        parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+        responses: [new OA\Response(response: 200, description: "OK")]
+    )]
     #[\Override]
     public function OPTIONS () {
         // validate
@@ -140,6 +149,74 @@ class Nat_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[OA\Get(
+        path: "/{app_id}/nat/",
+        tags: ["nat"],
+        summary: "List all NAT entries (alias: /nat/all/)",
+        parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "OK",
+                content: new OA\JsonContent(type: "array", items: new OA\Items(
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "id", type: "integer", example: 1),
+                        new OA\Property(property: "name", type: "string", nullable: true, example: "Outbound NAT"),
+                        new OA\Property(property: "type", type: "string", enum: ["source", "destination", "static"]),
+                        new OA\Property(property: "src", type: "object", description: "Map of identifier type to array of ids. Currently only 'ipaddresses' is supported.",
+                            properties: [new OA\Property(property: "ipaddresses", type: "array", items: new OA\Items(type: "integer"))]
+                        ),
+                        new OA\Property(property: "dst", type: "object", description: "Same structure as src",
+                            properties: [new OA\Property(property: "ipaddresses", type: "array", items: new OA\Items(type: "integer"))]
+                        ),
+                        new OA\Property(property: "src_port", type: "integer", nullable: true),
+                        new OA\Property(property: "dst_port", type: "integer", nullable: true),
+                        new OA\Property(property: "device", type: "integer", nullable: true, description: "Device id"),
+                        new OA\Property(property: "description", type: "string", nullable: true),
+                        new OA\Property(property: "policy", type: "string", enum: ["Yes", "No"]),
+                        new OA\Property(property: "policy_dst", type: "string", nullable: true)
+                    ]
+                ))
+            )
+        ]
+    )]
+    #[OA\Get(
+        path: "/{app_id}/nat/{id}/",
+        tags: ["nat"],
+        summary: "Read a single NAT entry by id",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "OK",
+                content: new OA\JsonContent(type: "array", items: new OA\Items(
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "id", type: "integer", example: 1),
+                        new OA\Property(property: "name", type: "string", nullable: true, example: "Outbound NAT"),
+                        new OA\Property(property: "type", type: "string", enum: ["source", "destination", "static"]),
+                        new OA\Property(property: "src", type: "object", description: "Map of identifier type to array of ids. Currently only 'ipaddresses' is supported.",
+                            properties: [new OA\Property(property: "ipaddresses", type: "array", items: new OA\Items(type: "integer"))]
+                        ),
+                        new OA\Property(property: "dst", type: "object", description: "Same structure as src",
+                            properties: [new OA\Property(property: "ipaddresses", type: "array", items: new OA\Items(type: "integer"))]
+                        ),
+                        new OA\Property(property: "src_port", type: "integer", nullable: true),
+                        new OA\Property(property: "dst_port", type: "integer", nullable: true),
+                        new OA\Property(property: "device", type: "integer", nullable: true, description: "Device id"),
+                        new OA\Property(property: "description", type: "string", nullable: true),
+                        new OA\Property(property: "policy", type: "string", enum: ["Yes", "No"]),
+                        new OA\Property(property: "policy_dst", type: "string", nullable: true)
+                    ]
+                ))
+            ),
+            new OA\Response(response: 400, description: "Invalid ID format", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
     #[\Override]
     public function GET () {
         # Get all NATs from DB
@@ -193,6 +270,13 @@ class Nat_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[OA\Head(
+        path: "/{app_id}/nat/",
+        tags: ["nat"],
+        summary: "HEAD request for NAT list/details (runs the same processing as GET, but no response body is returned)",
+        parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+        responses: [new OA\Response(response: 200, description: "OK (headers only, no body)")]
+    )]
     #[\Override]
     public function HEAD () {
         return $this->GET ();
@@ -204,6 +288,41 @@ class Nat_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[OA\Post(
+        path: "/{app_id}/nat/",
+        tags: ["nat"],
+        summary: "Create a new NAT entry",
+        parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+        requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+            required: ["name", "type"],
+            properties: [
+                new OA\Property(property: "name", type: "string", description: "NAT name (mandatory)", example: "Outbound NAT"),
+                new OA\Property(property: "type", type: "string", enum: ["source", "destination", "static"], description: "NAT type (mandatory)"),
+                new OA\Property(property: "src", type: "object", description: "Map of identifier type to array of ids. Currently only 'ipaddresses' is supported.",
+                    properties: [new OA\Property(property: "ipaddresses", type: "array", items: new OA\Items(type: "integer"), description: "Address ids")]
+                ),
+                new OA\Property(property: "dst", type: "object", description: "Same structure as src",
+                    properties: [new OA\Property(property: "ipaddresses", type: "array", items: new OA\Items(type: "integer"), description: "Address ids")]
+                ),
+                new OA\Property(property: "src_port", type: "integer", description: "Must be numeric"),
+                new OA\Property(property: "dst_port", type: "integer", description: "Must be numeric"),
+                new OA\Property(property: "device", type: "integer", description: "Device id, must reference an existing device"),
+                new OA\Property(property: "description", type: "string"),
+                new OA\Property(property: "policy", type: "string", enum: ["Yes", "No"]),
+                new OA\Property(property: "policy_dst", type: "string")
+            ]
+        )),
+        responses: [
+            new OA\Response(response: 201, description: "NAT created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+            new OA\Response(
+                response: 400,
+                description: "Possible causes: Missing NAT name; Missing NAT type; Invalid type; ID should not be set for creation; Invalid value for src_port/dst_port (must be numeric); Invalid src/dst format (must be an array); Invalid key identifier for src/dst; Invalid value for src/dst (must be an array or integer); Wrong format for device ID (must be numeric); Device ID not found",
+                content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")
+            ),
+            new OA\Response(response: 404, description: "ID not found for the given src/dst identifier type", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 500, description: "NAT creation failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
     #[\Override]
     public function POST () {
         # check for valid keys
@@ -226,6 +345,43 @@ class Nat_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[OA\Patch(
+        path: "/{app_id}/nat/{id}/",
+        tags: ["nat"],
+        summary: "Update an existing NAT entry",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "name", type: "string"),
+                new OA\Property(property: "type", type: "string", enum: ["source", "destination", "static"]),
+                new OA\Property(property: "src", type: "object", description: "Map of identifier type to array of ids. Currently only 'ipaddresses' is supported.",
+                    properties: [new OA\Property(property: "ipaddresses", type: "array", items: new OA\Items(type: "integer"), description: "Address ids")]
+                ),
+                new OA\Property(property: "dst", type: "object", description: "Same structure as src",
+                    properties: [new OA\Property(property: "ipaddresses", type: "array", items: new OA\Items(type: "integer"), description: "Address ids")]
+                ),
+                new OA\Property(property: "src_port", type: "integer", description: "Must be numeric"),
+                new OA\Property(property: "dst_port", type: "integer", description: "Must be numeric"),
+                new OA\Property(property: "device", type: "integer", description: "Device id, must reference an existing device"),
+                new OA\Property(property: "description", type: "string"),
+                new OA\Property(property: "policy", type: "string", enum: ["Yes", "No"]),
+                new OA\Property(property: "policy_dst", type: "string")
+            ]
+        )),
+        responses: [
+            new OA\Response(response: 200, description: "NAT modified", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+            new OA\Response(
+                response: 400,
+                description: "Possible causes: Invalid ID format; Invalid value for src_port/dst_port (must be numeric); Invalid src/dst format (must be an array); Invalid key identifier for src/dst; Invalid value for src/dst (must be an array or integer); Wrong format for device ID (must be numeric); Device ID not found",
+                content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")
+            ),
+            new OA\Response(response: 404, description: "ID not found (NAT id, or src/dst identifier)", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 500, description: "NAT modification failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
     #[\Override]
     public function PATCH () {
         # check for valid keys
@@ -354,6 +510,21 @@ class Nat_controller extends Common_api_functions {
      * @access public
      * @return void
      */
+    #[OA\Delete(
+        path: "/{app_id}/nat/{id}/",
+        tags: ["nat"],
+        summary: "Delete an existing NAT entry",
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/app_id"),
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "NAT deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+            new OA\Response(response: 400, description: "Invalid ID format", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: "ID not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 500, description: "NAT delete failed", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+        ]
+    )]
     #[\Override]
     public function DELETE () {
         $values = $this->validate_keys();

@@ -1,5 +1,7 @@
 <?php
 
+use OpenApi\Attributes as OA;
+
 /**
  *	phpIPAM API class to work with Addresses
  *
@@ -55,6 +57,13 @@ class Addresses_controller extends Common_api_functions  {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Options(
+	    path: "/{app_id}/addresses/",
+	    tags: ["addresses"],
+	    summary: "Discover supported addresses routes/methods (HATEOAS)",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [new OA\Response(response: 200, description: "OK")]
+	)]
 	#[\Override]
     public function OPTIONS () {
 		// validate
@@ -100,6 +109,199 @@ class Addresses_controller extends Common_api_functions  {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Get(
+	    path: "/{app_id}/addresses/",
+	    tags: ["addresses"],
+	    summary: "List all addresses (all subnets)",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Address"))),
+	        new OA\Response(response: 500, description: "Unable to read addresses", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/{id}/",
+	    tags: ["addresses"],
+	    summary: "Read a single address by id",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(ref: "#/components/schemas/Address")),
+	        new OA\Response(response: 404, description: "Invalid id", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/custom_fields/",
+	    tags: ["addresses"],
+	    summary: "List custom fields defined on the ipaddresses table",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK"),
+	        new OA\Response(response: 404, description: "No custom fields defined", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/first_free/{subnetId}/",
+	    tags: ["addresses"],
+	    summary: "Get the first free address in a subnet (does not reserve it)",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "subnetId", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "string", example: "192.168.1.5")),
+	        new OA\Response(response: 404, description: "No free addresses found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/{ip}/{subnetId}/",
+	    tags: ["addresses"],
+	    summary: "Read an address by IP within a given subnet",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "ip", in: "path", required: true, schema: new OA\Schema(type: "string"), example: "192.168.1.5"),
+	        new OA\Parameter(name: "subnetId", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(ref: "#/components/schemas/Address")),
+	        new OA\Response(response: 404, description: "No addresses found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/tags/",
+	    tags: ["addresses"],
+	    summary: "List all IP tags",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK"),
+	        new OA\Response(response: 404, description: "Tag not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/tags/{id}/",
+	    tags: ["addresses"],
+	    summary: "Read a single IP tag by id or type",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, description: "Tag id (numeric) or type", schema: new OA\Schema(type: "string"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK"),
+	        new OA\Response(response: 404, description: "Tag not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/tags/{id}/addresses/",
+	    tags: ["addresses"],
+	    summary: "List all addresses tagged with the given tag/state, optionally filtered by subnetId",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, description: "Tag/state id", schema: new OA\Schema(type: "integer")),
+	        new OA\Parameter(name: "subnetId", in: "query", required: false, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Address"))),
+	        new OA\Response(response: 404, description: "No addresses found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/search_linked/{value}/",
+	    tags: ["addresses"],
+	    summary: "Search addresses by the custom Link addresses field value",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "value", in: "path", required: true, schema: new OA\Schema(type: "string"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Address"))),
+	        new OA\Response(response: 404, description: "No addresses found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/{id}/ping/",
+	    tags: ["addresses"],
+	    summary: "Ping an address and update its last-seen date on success",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(properties: [
+	            new OA\Property(property: "scan_type", type: "string"),
+	            new OA\Property(property: "exit_code", type: "integer"),
+	            new OA\Property(property: "result_code", type: "string"),
+	            new OA\Property(property: "message", type: "string", example: "Address online")
+	        ])),
+	        new OA\Response(response: 404, description: "Address does not exist", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/{id}/changelog/",
+	    tags: ["addresses"],
+	    summary: "Get the change log for an address",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK"),
+	        new OA\Response(response: 404, description: "No changelogs found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/search/{ip}/",
+	    tags: ["addresses"],
+	    summary: "Search addresses by exact IP (across all subnets)",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "ip", in: "path", required: true, schema: new OA\Schema(type: "string"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Address"))),
+	        new OA\Response(response: 404, description: "Address not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/search_hostname/{hostname}/",
+	    tags: ["addresses"],
+	    summary: "Search addresses by exact hostname",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "hostname", in: "path", required: true, schema: new OA\Schema(type: "string"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Address"))),
+	        new OA\Response(response: 404, description: "Hostname not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/search_hostbase/{hostbase}/",
+	    tags: ["addresses"],
+	    summary: "Search addresses by leading substring of hostname, sorted by name",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "hostbase", in: "path", required: true, schema: new OA\Schema(type: "string"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Address"))),
+	        new OA\Response(response: 404, description: "Host name not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Get(
+	    path: "/{app_id}/addresses/search_mac/{mac}/",
+	    tags: ["addresses"],
+	    summary: "Search addresses by MAC address",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "mac", in: "path", required: true, schema: new OA\Schema(type: "string"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "OK", content: new OA\JsonContent(type: "array", items: new OA\Items(ref: "#/components/schemas/Address"))),
+	        new OA\Response(response: 404, description: "Host name not found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
 	#[\Override]
     public function GET () {
 		// all
@@ -297,6 +499,48 @@ class Addresses_controller extends Common_api_functions  {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Post(
+	    path: "/{app_id}/addresses/",
+	    tags: ["addresses"],
+	    summary: "Create a new address",
+	    parameters: [new OA\Parameter(ref: "#/components/parameters/app_id")],
+	    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+	        required: ["ip_addr", "subnetId"],
+	        properties: [
+	            new OA\Property(property: "ip_addr", type: "string", example: "192.168.1.10"),
+	            new OA\Property(property: "subnetId", type: "integer", example: 3),
+	            new OA\Property(property: "hostname", type: "string"),
+	            new OA\Property(property: "description", type: "string"),
+	            new OA\Property(property: "mac", type: "string"),
+	            new OA\Property(property: "owner", type: "string"),
+	            new OA\Property(property: "state", type: "integer", description: "IP tag id, defaults to 2 (Used)")
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 201, description: "Address created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "Invalid parameters", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+	        new OA\Response(response: 409, description: "IP address already exists", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Post(
+	    path: "/{app_id}/addresses/first_free/{subnetId}/",
+	    tags: ["addresses"],
+	    summary: "Create an address using the first free IP in a subnet",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "subnetId", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    requestBody: new OA\RequestBody(content: new OA\JsonContent(
+	        properties: [
+	            new OA\Property(property: "hostname", type: "string"),
+	            new OA\Property(property: "description", type: "string")
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 201, description: "Address created", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 404, description: "No free addresses found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
 	#[\Override]
     public function POST () {
 		// remap keys
@@ -362,6 +606,28 @@ class Addresses_controller extends Common_api_functions  {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Patch(
+	    path: "/{app_id}/addresses/{id}/",
+	    tags: ["addresses"],
+	    summary: "Update an address (ip/subnetId cannot be changed)",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    requestBody: new OA\RequestBody(content: new OA\JsonContent(
+	        properties: [
+	            new OA\Property(property: "hostname", type: "string"),
+	            new OA\Property(property: "description", type: "string"),
+	            new OA\Property(property: "mac", type: "string"),
+	            new OA\Property(property: "owner", type: "string"),
+	            new OA\Property(property: "state", type: "integer")
+	        ]
+	    )),
+	    responses: [
+	        new OA\Response(response: 200, description: "Address updated", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 400, description: "IP/subnet cannot be changed, or no data provided", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
 	#[\Override]
     public function PATCH () {
 		// remap keys
@@ -424,6 +690,34 @@ class Addresses_controller extends Common_api_functions  {
 	 * @access public
 	 * @return void
 	 */
+	#[OA\Delete(
+	    path: "/{app_id}/addresses/{id}/",
+	    tags: ["addresses"],
+	    summary: "Delete an address by id",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer")),
+	        new OA\Parameter(name: "remove_dns", in: "query", required: false, description: "If set, also removes any associated PowerDNS PTR record", schema: new OA\Schema(type: "integer", enum: [0, 1]))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "Address deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 500, description: "Failed to delete address", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
+	#[OA\Delete(
+	    path: "/{app_id}/addresses/{ip}/{subnetId}/",
+	    tags: ["addresses"],
+	    summary: "Delete an address by IP within a given subnet",
+	    parameters: [
+	        new OA\Parameter(ref: "#/components/parameters/app_id"),
+	        new OA\Parameter(name: "ip", in: "path", required: true, schema: new OA\Schema(type: "string")),
+	        new OA\Parameter(name: "subnetId", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+	    ],
+	    responses: [
+	        new OA\Response(response: 200, description: "Address deleted", content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")),
+	        new OA\Response(response: 404, description: "No addresses found", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse"))
+	    ]
+	)]
 	#[\Override]
     public function DELETE () {
     	// delete by ip
