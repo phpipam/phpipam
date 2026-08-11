@@ -246,7 +246,7 @@ class Nat_controller extends Common_api_functions {
      * @return void
      **/
     private function validate_nat_edit() {
-        if ($_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE") {
+        if (in_array($this->request_method(), ["PATCH", "DELETE"])) {
             if (!isset($this->_params->id) || !is_numeric($this->_params->id)) {
                 $this->Response->throw_exception(400, "Invalid ID format");
             }
@@ -254,7 +254,7 @@ class Nat_controller extends Common_api_functions {
                 $this->Response->throw_exception(404, "ID not found");
             }
         }
-        if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH") {
+        if (in_array($this->request_method(), ["POST", "PATCH"])) {
             # Check optional fields format
             # TBD: subnets for src & dst ?
             foreach (array("src_port", "dst_port") as  $k) {
@@ -268,7 +268,7 @@ class Nat_controller extends Common_api_functions {
             $this->verify_device();
 
         }
-        if ($_SERVER['REQUEST_METHOD']=="POST") {
+        if ($this->request_method()=="POST") {
             if (!isset($this->_params->name))
                 $this->Response->throw_exception(400, "Missing NAT name"); # Seems to be mandatory in the GUI
             if (!isset($this->_params->type))

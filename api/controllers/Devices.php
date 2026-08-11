@@ -326,19 +326,19 @@ class Devices_controller extends Common_api_functions {
 	 */
 	private function validate_device_edit () {
 		// delete checks
-		if($_SERVER['REQUEST_METHOD']=="DELETE") {
+		if($this->request_method()=="DELETE") {
 			// ID must be numeric
 			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(400, "Invalid device id"); }
 			// check that device exists
 			if($this->Admin->fetch_object ("devices", "id", $this->_params->id)===false)	{ $this->Response->throw_exception(404, "Device does not exist"); }
 		}
 		// create checks
-		elseif ($_SERVER['REQUEST_METHOD']=="POST") {
+		elseif ($this->request_method()=="POST") {
 			// name must be present
 			if(@$this->_params->hostname == "" || !isset($this->_params->hostname))			{ $this->Response->throw_exception(400, "Hostname is mandatory"); }
 		}
 		// update checks
-		elseif ($_SERVER['REQUEST_METHOD']=="PATCH") {
+		elseif ($this->request_method()=="PATCH") {
 			// ID must be numeric
 			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(400, "Invalid device id"); }
 			// name cannot be nothing

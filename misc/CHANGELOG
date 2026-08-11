@@ -7,6 +7,9 @@
     Security Fixes:
     ----------------------------
     + API authentication bypass via object cache key collision;
+    + Disabled API endpoints still accessible;
+    + API read only permission bypass;
+    + API controller arbitrary local file inclusion;
 
 == 1.8.1
 

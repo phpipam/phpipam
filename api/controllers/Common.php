@@ -163,8 +163,11 @@ class Common_api_functions {
 
 	/**
 	 * Provide default REQUEST_METHODs
-	 *
+	 * @return string
 	 */
+	protected function request_method() {
+		return strtoupper((string) $_SERVER['REQUEST_METHOD']);
+	}
 
 	private function NOT_IMPLEMENTED() {
 		return array("code"=>501, "message"=>"Method not implemented");
@@ -832,14 +835,14 @@ class Common_api_functions {
 		if($this->_params->controller=="subnets" )  								  { $this->keys['ip'] = "ip_addr"; }
 
 		// special keys for POST / PATCH
-		if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH") {
+		if (in_array($this->request_method(), ["POST", "PUT", "PATCH"])) {
 		if($this->_params->controller=="circuits")   								  { $this->keys['cid'] 		= "circuit_id"; }
 		}
 
 		// POST / PATCH / DELETE
-		if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE")		{ return $this->remap_update_keys (); }
+		if (in_array($this->request_method(), ["POST", "PUT", "PATCH", "DELETE"]))		{ return $this->remap_update_keys (); }
 		// GET
-		elseif ($_SERVER['REQUEST_METHOD']=="GET")											{ return $this->remap_result_keys ($result); }
+		elseif (in_array($this->request_method(), ["GET", "HEAD"]))						{ return $this->remap_result_keys ($result); }
 	}
 
 	/**
