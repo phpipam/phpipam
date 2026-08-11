@@ -289,7 +289,7 @@ class Vlans_controller extends Common_api_functions {
 			$this->Response->throw_exception(500, _('Highest possible VLAN number is ').$this->settings->vlanMax.'!');
 
 		//if it already exist die
-		if($this->settings->vlanDuplicate==0 && $_SERVER['REQUEST_METHOD']=="POST") {
+		if($this->settings->vlanDuplicate==0 && $this->request_method()=="POST") {
 			$check_vlan = $this->Admin->fetch_multiple_objects ("vlans", "domainId", $this->_params->domainId, "vlanId");
 			if($check_vlan!==false) {
 				foreach($check_vlan as $v) {
@@ -301,9 +301,9 @@ class Vlans_controller extends Common_api_functions {
 		}
 
 		//if number too high
-		if($this->_params->number>$this->settings->vlanMax && $_SERVER['REQUEST_METHOD']!="DELETE")
+		if($this->_params->number>$this->settings->vlanMax && $this->request_method()!="DELETE")
 																							{ $this->Response->throw_exception(409, 'Highest possible VLAN number is '.$this->settings->vlanMax.'!'); }
-		if($_SERVER['REQUEST_METHOD']=="POST") {
+		if($this->request_method()=="POST") {
 			if($this->_params->number<0)													{ $this->Response->throw_exception(400, "Vlan number cannot be negative"); }
 			elseif(!is_numeric($this->_params->number))										{ $this->Response->throw_exception(400, "Vlan number must be number"); }
 			if(is_blank($this->_params->name))													{ $this->Response->throw_exception(400, "Vlan name is required"); }

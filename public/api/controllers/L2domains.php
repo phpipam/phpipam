@@ -246,9 +246,9 @@ class L2domains_controller extends Common_api_functions {
 	 */
 	private function validate_domain_edit () {
 		// delete checks
-		if($_SERVER['REQUEST_METHOD']=="DELETE") {
+		if($this->request_method()=="DELETE") {
 			// we cannot delete default domain
-			if(@$this->_params->id==1 && $_SERVER['REQUEST_METHOD']=="DELETE")				{ $this->Response->throw_exception(409, "Default domain cannot be deleted"); }
+			if(@$this->_params->id==1 && $this->request_method()=="DELETE")				{ $this->Response->throw_exception(409, "Default domain cannot be deleted"); }
 			// ID must be numeric
 			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(400, "Domain id must be numeric"); }
 			// check that it exists
@@ -256,12 +256,12 @@ class L2domains_controller extends Common_api_functions {
 																							{ $this->Response->throw_exception(404, "Invalid domain id"); }
 		}
 		// create checks
-		elseif ($_SERVER['REQUEST_METHOD']=="POST") {
+		elseif ($this->request_method()=="POST") {
 			// name must be present
 			if(@$this->_params->name == "" || !isset($this->_params->name)) 				{ $this->Response->throw_exception(400, "Domain name is mandatory"); }
 		}
 		// update checks
-		elseif ($_SERVER['REQUEST_METHOD']=="PATCH") {
+		elseif ($this->request_method()=="PATCH") {
 			// ID must be numeric
 			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(400, "Invalid domain id"); }
 			// name must be present

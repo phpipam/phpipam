@@ -60,7 +60,7 @@ class Tools_controller extends Common_api_functions {
 		$this->rewrite_subcontroller ();
 
         // set keys if options are not provided
-		if($_SERVER['REQUEST_METHOD']!="OPTIONS" && isset($this->_params->controller)) {
+		if($this->request_method()!="OPTIONS" && isset($this->_params->controller)) {
             // set valid keys
     		$this->set_valid_keys ($this->_params->id);
             // set sort key
@@ -491,7 +491,7 @@ class Tools_controller extends Common_api_functions {
 	 */
 	private function validate_subcontroller () {
 		// not options
-		if($_SERVER['REQUEST_METHOD']!=="OPTIONS") {
+		if($this->request_method()!=="OPTIONS") {
     		if (!in_array($this->_params->id, @$this->subcontrollers))			{ $this->Response->throw_exception(400, "Invalid subcontroller"); }
 		}
 	}
