@@ -2777,10 +2777,10 @@ class Tools extends Common_functions {
 	 *
 	 * @param  string $delimiter
 	 * @param  string $string
-	 * @return mixed
+	 * @return array|false
 	 */
 	public function explode_filtered($delimiter, $string) {
-	    $ret = explode($delimiter, $string);
+	    $ret = explode((string) $delimiter, (string) $string);
 	    if (!is_array($ret))
 	        return false;
 	    return array_filter($ret);

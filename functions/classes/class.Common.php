@@ -415,7 +415,7 @@ class Common_functions  {
 			return $this->settings;
 
 		// fetch_object results are cached in $Database->cache.
-		$settings = $this->fetch_object("settings", "id", 1);
+		$settings = new Params($this->fetch_object("settings", "id", 1));
 
 		if (!is_object($settings))
 			return false;
@@ -711,7 +711,7 @@ class Common_functions  {
 			return 'IPv6';
 		} else {
 			# decimal representation
-			if(strlen($address) < 12) return 'IPv4';
+			if(strlen((string) $address) < 12) return 'IPv4';
 			return 'IPv6';
 		}
 	}
@@ -1184,7 +1184,7 @@ class Common_functions  {
 			// Convert unsigned int IPv4 to signed integer.
 			$ipv4long = (int) ($ipv4long + 0);
 		}
-		return long2ip($ipv4long);
+		return long2ip((int) $ipv4long);
 	}
 
 	/**

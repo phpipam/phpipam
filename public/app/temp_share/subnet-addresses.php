@@ -15,7 +15,7 @@ $DNS = new DNS ($Database, $User->settings);
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # set hidden custom fields
 $hidden_cfields = db_json_decode($settings->hiddenCustomFields, true);
-$hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : [];
+$hidden_cfields = isset($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : [];
 
 # set selected address fields array
 $selected_ip_fields = $settings->IPfilter;
@@ -147,7 +147,7 @@ else {
 	    #
 
 	    # ip - range
-	    if($addresses[$n]->class=="range-dhcp")
+	    if(property_exists($addresses[$n], 'class') && $addresses[$n]->class=="range-dhcp")
 	    {
 	    	print "<tr class='dhcp'>";
 		    print "	<td>";
