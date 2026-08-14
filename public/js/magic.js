@@ -2555,7 +2555,8 @@ $('table.customIP button.down').click(function() {
     var current  = $(this).attr('data-fieldname');
     var next     = $(this).attr('data-nextfieldname');
     var table    = $(this).attr('data-table');
-    $.post('app/admin/custom-fields/order.php', {current:current, next:next, table:table}, function(data) {
+    var csrf     = $(this).attr('data-csrf');
+    $.post('app/admin/custom-fields/order.php', {current:current, next:next, table:table, csrf_cookie:csrf}, function(data) {
         $('div.'+table+'-order-result').html(data).slideDown('fast');
         //reload after 2 seconds if succeeded!
         reload_window (data);

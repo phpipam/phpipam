@@ -22,6 +22,8 @@
     + Temporary shares can enumerate all addresses;
     + Temporary share creation, missing permission checks;
     + Temporary share creation, missing CSRF checks;
+    + Second-Order SQL injection in custom field reordering;
+    + Custom field reordering, missing CSRF checks;
 
 == 1.8.0
 

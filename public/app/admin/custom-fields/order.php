@@ -18,6 +18,8 @@ $Result 	= new Result ();
 $User->check_user_session();
 # admin check
 $User->is_admin();
+# validate csrf cookie
+$User->Crypto->csrf_cookie ("validate", "custom_field_reorder", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # some verifications
 if( (empty($POST->current)) || (empty($POST->next)) ) 							{ $Result->show("danger", _('Fields cannot be empty')."!", true); }
