@@ -9,6 +9,9 @@ $User->check_user_session();
 # admin check
 $User->is_admin();
 
+# create csrf token
+$csrf = $User->Crypto->csrf_cookie ("create", "custom_field_reorder");
+
 /* fetch all custom fields */
 $custom_tables = array(
 						"ipaddresses"      => _("IP addresses"),
@@ -111,7 +114,7 @@ foreach($custom_fields as $k=>$cf) {
 			print "<tr class='$class'>";
 
 			# ordering
-			if (( ($m+1) != $size) ) 	{ print "<td style='width:10px;'><button class='btn btn-xs btn-default down' data-direction='down' data-table='$table' rel='tooltip' title='"._("Move down")."' data-fieldname='".$custom_fields_numeric[$table][$m]['name']."' data-nextfieldname='".$custom_fields_numeric[$table][$m+1]['name']."'><i class='fa fa-chevron-down'></i></button></td>";	}
+			if (( ($m+1) != $size) ) 	{ print "<td style='width:10px;'><button class='btn btn-xs btn-default down' data-direction='down' data-table='$table' data-csrf='$csrf' rel='tooltip' title='"._("Move down")."' data-fieldname='".$custom_fields_numeric[$table][$m]['name']."' data-nextfieldname='".$custom_fields_numeric[$table][$m+1]['name']."'><i class='fa fa-chevron-down'></i></button></td>";	}
 			else 						{ print "<td style='width:10px;'></td>";}
 
 			print "<td class='name'>".$Tools->print_custom_field_name ($f['name'])."</td>";
