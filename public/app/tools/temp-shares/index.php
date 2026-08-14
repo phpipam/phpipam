@@ -7,6 +7,8 @@
 # verify that user is logged in
 $User->check_user_session();
 
+$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "temp-shares");
+
 # fetch all shares
 $temp_shares = db_json_decode($User->settings->tempAccess);
 ?>
@@ -91,7 +93,7 @@ foreach($temp_shares as $s) {
 		# remove
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
-		print "		<button class='btn btn-xs btn-default removeSharedTemp' data-code='$s->code' ><i class='fa fa-times'></i></button>";
+		print "		<button class='btn btn-xs btn-default removeSharedTemp' data-csrf='$csrf' data-code='$s->code' ><i class='fa fa-times'></i></button>";
 		print "	</div>";
 		print "</td>";
 

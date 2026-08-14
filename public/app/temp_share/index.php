@@ -101,7 +101,7 @@ $max_width = (@$temp_objects[$GET->section]->type=="ipaddresses" || isset($GET->
 	# disabled
 	if($settings->tempShare!=1)										{ $Result->show("danger", _("Temporary sharing disabled"), false); }
 	# none
-	elseif(sizeof($temp_objects)==0)								{ $Log->write( _("Tempory share access"), $GET->section, 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
+	elseif(!is_array($temp_objects))								{ $Log->write( _("Tempory share access"), $GET->section, 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
 	# try to fetch object
 	elseif(!array_key_exists((string) $GET->section, $temp_objects))		{ $Log->write( _("Tempory share access"), $GET->section, 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
 	# ok, include script
@@ -112,12 +112,20 @@ $max_width = (@$temp_objects[$GET->section]->type=="ipaddresses" || isset($GET->
 			//log
 			$Log->write( _("Tempory share access"), $GET->section, 0);
 
-			if($temp_objects[$GET->section]->type=="subnets") 		{
+			if ($temp_objects[$GET->section]->type == "subnets") {
 				# address?
-				if(isset($GET->subnetId))							{ include("address.php"); }
-				else													{ include("subnet.php"); }
-			}
-			else														{
+				if (isset($GET->subnetId)) {
+					$address = $Addresses->fetch_address(null, $GET->subnetId);
+					if (!is_object($address) || $address->subnetId != $temp_objects[$GET->section]->id) {
+						$Result->show("danger", _("Invalid ID"), true);
+					}
+					unset($address);
+
+					include("address.php");
+				} else {
+					include("subnet.php");
+				}
+			} else {
 				# set object
 				$object = $temp_objects[$GET->section];
 

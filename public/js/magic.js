@@ -2482,7 +2482,7 @@ $(document).on("click", "button.manageRequest", function() {
 //remove temp
 $(document).on("click", ".removeSharedTemp", function() {
     showPopup("popup_w400");
-    submit_popup_data ("#popupOverlay .popup_w400", "app/tools/temp-shares/delete-result.php", {code:$(this).attr('data-code')});
+    submit_popup_data ("#popupOverlay .popup_w400", "app/tools/temp-shares/delete-result.php", {code:$(this).attr('data-code'),csrf_cookie:$(this).attr('data-csrf')});
     hideSpinner();
 });
 

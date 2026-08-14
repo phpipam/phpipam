@@ -17,6 +17,8 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+$User->Crypto->csrf_cookie ("validate", "temp-shares", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+
 /* checks */
 if($User->settings->tempShare!=1)									{ $Result->show("danger", _("Temporary sharing disabled"), true); }
 if($POST->type!="subnets"&&$POST->type!="ipaddresses") 		{ $Result->show("danger", _("Invalid type"), true); }
@@ -33,13 +35,20 @@ if(!is_blank($POST->email)) {
 
 # fetch object
 $object = $Admin->fetch_object ($POST->type, "id", $POST->id);
+if (!is_object($object)) {
+	$Result->show("danger", _("Invalid ID"), true, true);
+}
 
 if($POST->type=="subnets") {
+	if($Subnets->check_permission ($User->user, $object->id)<User::ACCESS_RW) { $Result->show("danger", _("Invalid ID"), true, true); }
+
 	$tmp[] = _("Share type: subnet");
 	$tmp[] = "\t".$Subnets->transform_to_dotted($object->subnet)."/$object->mask";
 	$tmp[] = "\t".$object->description;
 }
 else {
+	if($Subnets->check_permission ($User->user, $object->subnetId)<User::ACCESS_RW) { $Result->show("danger", _("Invalid ID"), true, true); }
+
 	$tmp[] = _("Share type: IP address");
 	$tmp[] = "\t".$Subnets->transform_to_dotted($object->ip_addr);
 	$tmp[] = "\t".$object->description;
@@ -68,6 +77,9 @@ if(!is_array($old_access)) {
 	is_array($old_access) ? : $old_access = [];
 }
 $new_access = json_encode(array_merge($old_access, array_filter($new_access)));
+if (strlen($new_access) > 65535) {
+	$Result->show("danger", _("Maximum number of shares exceeded"), true, true);
+}
 
 # execute
 if(!$Admin->object_modify("settings", "edit", "id", ["id"=>1,"tempAccess"=>$new_access])) 	{ $Result->show("danger",  _("Temporary share create error"), true); }
@@ -95,7 +107,8 @@ if(!is_blank($POST->email)) {
 		$content[] = "<tr><td colsapn='2' style='line-height:18px;'>$User->mail_font_style <strong>Details:</strong><br>".implode("<br> - ", $tmp)."</font><br></td></tr>";
 		$content[] = "<tr><td style='padding:5px;padding-left:15px;padding-top:20px;font-style:italic;'>$User->mail_font_style_light Sent by user ".$User->user->real_name." at ".date('Y/m/d H:i')."</font></td></tr>";
 		//set al content
-		$content_plain[] = "$subject"."\r\n------------------------------\r\n";
+		$content_plain = [];
+		$content_plain[] = "New ipam share created"."\r\n------------------------------\r\n";
 		$content_plain[] = "Hi, new share was created on ".$User->settings->siteTitle.", available on following address:\r\n ".$url;
 		$content_plain[] = "\r\nDetails: \r\n".implode("\r\n", $tmp)."\r\n";
 		$content_plain[] = "\r\n\r\n"._("Sent by user")." ".$User->user->real_name." at ".date('Y/m/d H:i');

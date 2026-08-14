@@ -19,6 +19,9 @@
     + Disabled API endpoints still accessible;
     + API read only permission bypass;
     + API controller arbitrary local file inclusion;
+    + Temporary shares can enumerate all addresses;
+    + Temporary share creation, missing permission checks;
+    + Temporary share creation, missing CSRF checks;
 
 == 1.8.0
 

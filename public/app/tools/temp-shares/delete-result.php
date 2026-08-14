@@ -17,6 +17,8 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+$User->Crypto->csrf_cookie ("validate", "temp-shares", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+
 print '<div class="pHeader">'._("Remove temporary share").'</div>';
 print '<div class="pContent">';
 
