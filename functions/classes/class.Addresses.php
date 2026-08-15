@@ -1900,6 +1900,10 @@ class Addresses extends Common_functions {
                 foreach ($objects as $ot=>$ids) {
                     if (sizeof($ids)>0) {
                         foreach ($ids as $id) {
+                            // Check table names - MySQL on Windows is case-insensitive
+                            if (!in_array(strtolower($ot), ['subnets', 'ipaddresses'])) {
+                                continue;
+                            }
                             // fetch
                             $item = $this->fetch_object($ot, "id", $id);
                             if($item!==false) {

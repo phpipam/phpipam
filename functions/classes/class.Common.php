@@ -239,6 +239,7 @@ class Common_functions  {
 		if($value===0)         return false;
 
 		# null method
+		$table  = $this->Database->escape($table);
 		$method = is_null($method) ? "id" : $this->Database->escape($method);
 
 		# check cache
@@ -246,9 +247,11 @@ class Common_functions  {
 		if(is_object($cached_item))
 			return $cached_item;
 
-		try { $res = $this->Database->getObjectQuery($table, "SELECT * from `$table` where `$method` = ? limit 1;", [$value]); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
+		$query = "SELECT * FROM `$table` WHERE `$method` = :method LIMIT 1;";
+		try {
+			$res = $this->Database->getObjectQuery($table, $query, ['method' => $value]);
+		} catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ") . $e->getMessage());
 			return false;
 		}
 
