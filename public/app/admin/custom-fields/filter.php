@@ -72,7 +72,11 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		# remove custom_
 		$k1 = $Tools->print_custom_field_name ($k);
 		# name and comment
-		print "	<td>".$k1." (".$c['Comment'].")</td>";
+		print "	<td>" . $k1;
+		if (strlen($c['Comment']) > 0) {
+			print " (" . $c['Comment'] . ")";
+		}
+		print "</td>";
 		print "</tr>";
 	}
 
