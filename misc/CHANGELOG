@@ -14,6 +14,7 @@
     + Temporary share creation, missing permission checks;
     + Temporary share creation, missing CSRF checks;
     + Second-Order SQL injection in custom field reordering;
+    + Second-Order SQL injection in NAT fields;
     + Custom field reordering, missing CSRF checks;
 
 == 1.8.1
