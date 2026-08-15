@@ -146,6 +146,14 @@ function check_name_whitespace () {
 		</td>
 	</tr>
 
+	<!-- unique -->
+	<tr>
+		<td><?php print _('Unique field'); ?></td>
+		<td>
+			<input name="fieldUnique" type="checkbox" value="yes" <?php if(@$fieldval['Key']=="UNI") print "checked"; ?>>
+		</td>
+	</tr>
+
 	</table>
 	</form>
 </div>

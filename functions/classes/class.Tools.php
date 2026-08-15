@@ -668,6 +668,7 @@ class Tools extends Common_functions {
 			$res[$field['Field']]['Comment'] = $field['Comment'];
 			$res[$field['Field']]['Null'] 	 = $field['Null'];
 			$res[$field['Field']]['Default'] = $field['Default'];
+			$res[$field['Field']]['Key']	 = $field['Key'];
 		}
 
 		# fetch standard fields

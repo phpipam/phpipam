@@ -59,6 +59,7 @@ foreach($custom_tables as $k=>$f) {
 	<td><?php print _('Field type'); ?></td>
 	<td><?php print _('Default'); ?></td>
 	<td><?php print _('Required'); ?></td>
+	<td><?php print _('Unique'); ?></td>
 	<td><?php print _('Visible'); ?></td>
 	<td></td>
 </tr>
@@ -85,7 +86,7 @@ foreach($custom_fields as $k=>$cf) {
 
 	//title
 	print "	<tr>";
-	print "	<th colspan='8'>";
+	print "	<th colspan='9'>";
 	print "		<h5>"._((string) $title)."</h5>";
 	print "	</th>";
 	print "	</tr>";
@@ -93,7 +94,7 @@ foreach($custom_fields as $k=>$cf) {
 	//empty
 	if(sizeof($cf) == 0) {
 	print "	<tr>";
-	print "	<td colspan='8'>";
+	print "	<td colspan='9'>";
 	print "		<div class='alert alert-info alert-nomargin'>"._('No custom fields created yet')."</div>";
 	print "	</td>";
 	print "	</tr>";
@@ -130,6 +131,10 @@ foreach($custom_fields as $k=>$cf) {
 			if(@$f['Null']=="NO")		{ print "<td>"._('Required')."</td>"; }
 			else						{ print "<td></td>"; }
 
+			# unique
+			if(@$f['Key']=="UNI")		{ print "<td>"._('Unique')."</td>"; }
+			else						{ print "<td></td>"; }
+
 			# visible
 			if(in_array($f['name'], $ffields))	{ print "<td><span class='text-danger'>"._('No')."</span></td>"; }
 			else								{ print "<td><span class='text-success'>"._('Yes')."</span></td>"; }
@@ -154,21 +159,21 @@ foreach($custom_fields as $k=>$cf) {
 
 	//add
 	print "<tr>";
-	print "<td colspan='8' style='padding-right:0px;'>";
+	print "<td colspan='9' style='padding-right:0px;'>";
 	print "	<button class='btn btn-xs btn-default pull-right edit-custom-field' data-action='add'  data-fieldname='' data-table='$table' rel='tooltip' data-placement='right' title='"._((string) $tooltip)."'><i class='fa fa-plus'></i></button>";
 	print "</td>";
 	print "</tr>";
 
 	//filter
 	print "<tr>";
-	print "<td colspan='8' style='padding-right:0px;'>";
+	print "<td colspan='9' style='padding-right:0px;'>";
 	print "	<button class='btn btn-xs btn-info pull-right edit-custom-filter' data-table='$table' rel='tooltip' data-placement='right' title='"._("Set which field to display in table")."'><i class='fa fa-filter'></i> Filter</button>";
 	print "</td>";
 	print "</tr>";
 
 	//result
 	print "<tr>";
-	print "	<td colspan='8' class='result'>";
+	print "	<td colspan='9' class='result'>";
 	print "		<div class='$table-order-result'></div>";
 	print "</td>";
 	print "</tr>";

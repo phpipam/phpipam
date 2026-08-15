@@ -723,8 +723,43 @@ class Admin extends Common_functions {
 			return false;
 		}
 		# field updated
-        $this->Log->write( _("Custom field")." ".$field["action"], _("Custom field")." ".$field["action"]." "._("success")." (".$field["name"].").<hr>".$this->array_to_log($field), 0);
-	    return true;
+		$this->Log->write( _("Custom field")." ".$field["action"], _("Custom field")." ".$field["action"]." "._("success")." (".$field["name"].").<hr>".$this->array_to_log($field), 0);
+
+		# manage unique index (delete action requires no handling - MySQL drops indexes with the column)
+		if ($field['action'] === 'add') {
+			if (@$field['fieldUnique'] === 'yes') {
+				try { $this->Database->runQuery("ALTER TABLE `$field[table]` ADD UNIQUE (`$field[name]`);"); }
+				catch (Exception $e) {
+					$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+					return false;
+				}
+			}
+		}
+		else if ($field['action'] === 'edit') {
+			# check for an existing unique index on this column (excluding the primary key)
+			try { $idx = $this->Database->getObjectQuery("no_html_escape", "SHOW INDEX FROM `$field[table]` WHERE Column_name = '$field[name]' AND Non_unique = 0 AND Key_name != 'PRIMARY';"); }
+			catch (Exception $e) {
+				$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+				return false;
+			}
+			$hasUnique  = !is_null($idx);
+			$wantsUnique = (@$field['fieldUnique'] === 'yes');
+			if ($hasUnique && !$wantsUnique) {
+				try { $this->Database->runQuery("ALTER TABLE `$field[table]` DROP INDEX `$idx->Key_name`;"); }
+				catch (Exception $e) {
+					$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+					return false;
+				}
+			}
+			else if (!$hasUnique && $wantsUnique) {
+				try { $this->Database->runQuery("ALTER TABLE `$field[table]` ADD UNIQUE (`$field[name]`);"); }
+				catch (Exception $e) {
+					$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
