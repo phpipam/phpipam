@@ -12,6 +12,7 @@
     + HTML files moved to 'public' folder (see UPDATING.md);
     + Removed git submodules, full migration to composer (see UPDATING.md);
     + Removed support for mcrypt;
+    + Open MySQL connections with Pdo\Mysql::ATTR_MULTI_STATEMENTS=false;
 
     Security Fixes:
     ----------------------------

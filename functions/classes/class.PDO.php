@@ -157,7 +157,7 @@ abstract class DB {
 		if (isset($password)) $this->password = $password;
 		if (isset($charset))  $this->charset = $charset;
 		# ssl
-		if ($ssl) {
+		if (is_array($ssl)) {
 			$this->ssl = $ssl;
 		}
 		$this->load_schema_exceptions();
@@ -230,12 +230,13 @@ abstract class DB {
 		$dsn = $this->makeDsn();
 
 		try {
-			# ssl?
+			$attr_multi_statements = version_compare(PHP_VERSION, '8.5.0', '<') ? PDO::MYSQL_ATTR_MULTI_STATEMENTS : Pdo\Mysql::ATTR_MULTI_STATEMENTS;
+
 			if ($this->ssl) {
-				$this->pdo = new \PDO($dsn, $this->username, $this->password, $this->ssl);
+				$this->pdo = new \PDO($dsn, $this->username, $this->password, array_merge([$attr_multi_statements => false, (array) $this->ssl]));
 			}
 			else {
-				$this->pdo = new \PDO($dsn, $this->username, $this->password);
+				$this->pdo = new \PDO($dsn, $this->username, $this->password, [$attr_multi_statements => false]);
 			}
 
 			$this->setErrMode(\PDO::ERRMODE_EXCEPTION);
@@ -442,32 +443,47 @@ abstract class DB {
 			//  - cte_0,     temporary results storage (can't reference a temporary table name multiple times in the same query)
 			//  - cte_last,  results of the last iteration.
 
-			$query = "DROP TABLE IF EXISTS cte_query, cte_0, cte_1, cte_last;" .
-					"CREATE TEMPORARY TABLE cte_query $schema ENGINE = $tmptable_engine_type;" .
-					"CREATE TEMPORARY TABLE cte_0     $schema ENGINE = $tmptable_engine_type;" .
-					"CREATE TEMPORARY TABLE cte_last  $schema ENGINE = $tmptable_engine_type;";
-			$this->runQuery($query);
+			$queries = [
+				"DROP TABLE IF EXISTS cte_query, cte_0, cte_1, cte_last;",
+				"CREATE TEMPORARY TABLE cte_query $schema ENGINE = $tmptable_engine_type;",
+				"CREATE TEMPORARY TABLE cte_0     $schema ENGINE = $tmptable_engine_type;",
+				"CREATE TEMPORARY TABLE cte_last  $schema ENGINE = $tmptable_engine_type;"
+			];
+			foreach ($queries as $query) {
+				$this->runQuery($query);
+			}
 
 			// Run Anchor query then the recursive query until there are no more results
 			$level = 1;
 			$rowCount = 0;
 			do {
 				// reset args for recursive query
-				$anchor_args = $level==1 ? $anchor_args : [];
+				$anchor_args = $level == 1 ? $anchor_args : [];
 
-				$query = "INSERT INTO cte_0 ".($level++==1 ? $anchor_query : $recursive_query).";" .
-						"TRUNCATE TABLE cte_last;" .
-						"INSERT IGNORE INTO cte_last  SELECT * FROM cte_0;" .
-						"TRUNCATE TABLE cte_0;" .
-						"INSERT IGNORE INTO cte_query SELECT * FROM cte_last;";
+				$query = "INSERT INTO cte_0 " . ($level++ == 1 ? $anchor_query : $recursive_query) . ";";
 				$result = $this->runQuery($query, $anchor_args, $rowCount);
 
-				if ($level>256) { throw new Exception(_('Recursion limit reached.')); }
+				if ($result) {
+					$queries = [
+						"TRUNCATE TABLE cte_last;",
+						"INSERT IGNORE INTO cte_last  SELECT * FROM cte_0;",
+						"TRUNCATE TABLE cte_0;",
+						"INSERT IGNORE INTO cte_query SELECT * FROM cte_last;"
+					];
+					foreach ($queries as $query) {
+						if ($result) {
+							$result = $this->runQuery($query);
+						}
+					}
+				}
+
+				if ($level > 256) {
+					throw new Exception(_('Recursion limit reached.'));
+				}
 			} while ($result == 1 && $rowCount > 0);
 
 			// Run $result_query using cte temporary table results
 			$results = $this->getObjectsQuery($tableName, $results_query);
-
 		} catch (Exception $e) {
 			if ($cleanup)
 				$this->runQuery("DROP TABLE IF EXISTS cte_query, cte_0, cte_last;");
@@ -1156,13 +1172,23 @@ class Database_PDO extends DB {
 		$this->ssl = false;
 		if (@$db['ssl']===true) {
 
-			$this->pdo_ssl_opts =  [
-				'ssl_key'    => PDO::MYSQL_ATTR_SSL_KEY,
-				'ssl_cert'   => PDO::MYSQL_ATTR_SSL_CERT,
-				'ssl_ca'     => PDO::MYSQL_ATTR_SSL_CA,
-				'ssl_cipher' => PDO::MYSQL_ATTR_SSL_CIPHER,
-				'ssl_capath' => PDO::MYSQL_ATTR_SSL_CAPATH
-			];
+			if (version_compare(PHP_VERSION, '8.5.0', '<')) {
+				$this->pdo_ssl_opts =  [
+					'ssl_key'    => PDO::MYSQL_ATTR_SSL_KEY,
+					'ssl_cert'   => PDO::MYSQL_ATTR_SSL_CERT,
+					'ssl_ca'     => PDO::MYSQL_ATTR_SSL_CA,
+					'ssl_cipher' => PDO::MYSQL_ATTR_SSL_CIPHER,
+					'ssl_capath' => PDO::MYSQL_ATTR_SSL_CAPATH
+				];
+			} else {
+				$this->pdo_ssl_opts =  [
+					'ssl_key'    => Pdo\Mysql::ATTR_SSL_KEY,
+					'ssl_cert'   => Pdo\Mysql::ATTR_SSL_CERT,
+					'ssl_ca'     => Pdo\Mysql::ATTR_SSL_CA,
+					'ssl_cipher' => Pdo\Mysql::ATTR_SSL_CIPHER,
+					'ssl_capath' => Pdo\Mysql::ATTR_SSL_CAPATH
+				];
+			}
 
 			$this->ssl = [];
 
