@@ -8123,7 +8123,7 @@ msgstr "暂时禁用共享"
 
 #: app/temp_share/index.php:104 app/temp_share/index.php:106
 #: app/temp_share/index.php:110 app/temp_share/index.php:113
-msgid "Tempory share access"
+msgid "Temporary share access"
 msgstr "临时共享访问"
 
 #: app/admin/circuits/edit-circuit-submit.php:53

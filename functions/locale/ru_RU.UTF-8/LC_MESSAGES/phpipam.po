@@ -8061,7 +8061,7 @@ msgstr "Временная раздача отключена"
 
 #: app/temp_share/index.php:104 app/temp_share/index.php:106
 #: app/temp_share/index.php:110 app/temp_share/index.php:113
-msgid "Tempory share access"
+msgid "Temporary share access"
 msgstr "Временный доступ к раздаче"
 
 #: app/admin/circuits/edit-circuit-submit.php:53
