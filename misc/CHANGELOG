@@ -9,8 +9,9 @@
     Enhancements, changes:
     ----------------------------
     + Minimum PHP version raised to 8.2.0;
-    + HTML files moved to 'public' folder (see UPDATING.md);
-    + Removed git submodules, full migration to composer (see UPDATING.md);
+    + HTML files moved to 'public' folder (see UPDATE.md);
+    + API controllers moved to 'functions/api/controllers' folder (see UPDATE.md);
+    + Removed git submodules, full migration to composer (see UPDATE.md);
     + Removed support for mcrypt;
     + Open MySQL connections with Pdo\Mysql::ATTR_MULTI_STATEMENTS=false;
 

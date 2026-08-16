@@ -4,7 +4,7 @@
  *	just an alias for Subnets
  */
 
-require("Subnets.php");
+require_once __DIR__ . "/Subnets.php";
 
 class Folders_controller extends Subnets_controller {
 }

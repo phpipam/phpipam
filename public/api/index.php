@@ -21,8 +21,8 @@
 require_once __DIR__ . '/../../functions/functions.php';	// functions and objects from phpipam
 
 # include common API controllers
-require_once( __DIR__ . '/controllers/Common.php');			// common methods
-require_once( __DIR__ . '/controllers/Responses.php');			// exception, header and response handling
+require_once __DIR__ . '/../../functions/api/controllers/Common.php';			// common methods
+require_once __DIR__ . '/../../functions/api/controllers/Responses.php';		// exception, header and response handling
 
 # Don't corrupt output with php errors!
 disable_php_errors();
@@ -180,7 +180,7 @@ try {
 	if ($Params->controller != "user") {
 		if($app->app_security=="ssl_token" || $app->app_security=="none") {
 			// start auth class and validate connection
-			require_once( __DIR__ . '/controllers/User.php');				// authentication and token handling
+			require_once( __DIR__ . '/../../functions/api/controllers/User.php');				// authentication and token handling
 			$Authentication = new User_controller ($Database, $Tools, $Params, $Response);
 			$Authentication->check_auth ();
 		}
@@ -188,7 +188,7 @@ try {
 		// validate ssl_code
 		if($app->app_security=="ssl_code") {
 			// start auth class and validate connection
-			require_once( __DIR__ . '/controllers/User.php');				// authentication and token handling
+			require_once( __DIR__ . '/../../functions/api/controllers/User.php');				// authentication and token handling
 			$Authentication = new User_controller ($Database, $Tools, $Params, $Response);
 			$Authentication->check_auth_code ($app->app_id);
 		}
@@ -198,7 +198,7 @@ try {
 		// validate ssl_code
 		if($app->app_security=="ssl_code" && in_array($request_method, ['GET', 'HEAD'])) {
 			// start auth class and validate connection
-			require_once( __DIR__ . '/controllers/User.php');				// authentication and token handling
+			require_once( __DIR__ . '/../../functions/api/controllers/User.php');				// authentication and token handling
 			$Authentication = new User_controller ($Database, $Tools, $Params, $Response);
 			$Authentication->check_auth_code ($app->app_id);
 
@@ -230,7 +230,7 @@ try {
 	$controller_file = ucfirst((string) $Params->controller);
 
 	$valid_controller = false;
-	foreach ([__DIR__ . "/controllers",  __DIR__ . "/controllers/custom"] as $location) {
+	foreach ([__DIR__ . "/../../functions/api/controllers",  __DIR__ . "/../../functions/api/controllers/custom"] as $location) {
 		$base_path = realpath($location);
 
 		$candidate = $location . "/$controller_file.php";

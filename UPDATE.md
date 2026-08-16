@@ -168,6 +168,8 @@ phpIPAM v1.9.0 relocated all HTML application code from the project root directo
 
 When upgrading from phpIPAM v1.8.x or below, update your webserver, reverse-proxy or load-balancer configuration to point to the new HTML location.
 
+phpIPAM v1.9.0 relocated API controllers into \"functions/api/controllers\". Please manually relocate any custom API controllers into the \"functions/api/controllers/custom\" sub-folder.
+
 # Upgrade phpIPAM database
 
 To upgrade your phpIPAM database to latest version choose from the multiple options presented on the browser upgrade page:

@@ -4,7 +4,7 @@
  *	just an alias for Vrfs
  */
 
-require("Vrfs.php");
+require_once __DIR__ . "/Vrfs.php";
 
 class Vrf_controller extends Vrfs_controller {
 }
