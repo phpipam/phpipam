@@ -1,0 +1,15 @@
+{
+  "preset": "laravel",
+  "exclude": [
+    "functions/adLDAP",
+    "functions/PEAR",
+    "functions/php-excel-reader",
+    "public",
+    "vendor"
+  ],
+  "rules": {
+    "no_mixed_echo_print": {
+      "use": "print"
+    }
+  }
+}
