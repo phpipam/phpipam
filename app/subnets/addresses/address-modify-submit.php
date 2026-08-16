@@ -131,6 +131,9 @@ $Tools->update_POST_custom_fields('ipaddresses', $action, $POST);
 # we need old address details for mailing or if we are editing address
 if($action=="edit" || $action=="delete" || $action=="move") {
 	$address_old = (array) $Addresses->fetch_address(null, $POST->id);
+	if (empty($address_old) || (int) $address_old['subnetId'] !== (int) $POST->subnetId) {
+		$Result->show("danger", _("Invalid address for selected subnet"), true);
+	}
 }
 
 # set excludePing value
@@ -303,6 +306,8 @@ else {
 	# reset subnet if move
 	if($action == "move")	{
 		$subnet = (array) $Subnets->fetch_subnet(null, $POST->newSubnet);
+		sizeof($subnet)>0 ?: $Result->show("danger", _("Invalid destination subnet"), true);
+		$Subnets->check_permission($User->user, $POST->newSubnet) > User::ACCESS_R ?: $Result->show("danger", _("Cannot edit IP address"), true);
 		$POST->ip_addr = $address_old['ip'];
 	}
 	# if errors are present print them, else execute query!
