@@ -257,7 +257,7 @@ class Vrfs_controller extends Common_api_functions {
 	 */
 	private function validate_vrf_edit () {
 		// check for POST method
-		if($_SERVER['REQUEST_METHOD']=="POST") {
+		if($this->request_method()=="POST") {
 			// check name
 			if(is_blank($this->_params->name))												{ $this->Response->throw_exception(400, "VRF name is required"); }
 			// check that it exists

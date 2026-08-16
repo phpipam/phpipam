@@ -30,6 +30,9 @@ if(is_numeric($POST->id)) {
 	!is_blank($POST->id) ?:								$Result->show("danger", _("Invalid ID"), true, true, false, true);
 	# fetch address
 	$address = (array) $Addresses->fetch_address(null, $POST->id);
+	if (empty($address) || (int) $address['subnetId'] !== (int) $POST->subnetId) {
+		$Result->show("danger", _("Invalid address for selected subnet"), true, true, false, true);
+	}
 }
 // from adding new IP, validate
 else {

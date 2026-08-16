@@ -45,8 +45,10 @@ $Database->html_escape_enabled = false;
 # get phpipam settings
 $settings = $Tools->get_settings();
 
+$request_method = strtoupper((string) $_SERVER['REQUEST_METHOD']);
+
 # set empty controller for options
-if($_SERVER['REQUEST_METHOD']=="OPTIONS") {
+if($request_method=="OPTIONS") {
 	if( !isset($_GET['controller']) || $_GET['controller']=="")	{ $_GET['controller'] = "Tools"; }
 }
 
@@ -72,9 +74,9 @@ try {
 	$app = $Tools->fetch_object ("api", "app_id", $_GET['app_id']);
 
 	// verify app_id
-	if($app === false) 										{ $Response->throw_exception(400, "Invalid application id"); }
+	if(!is_object($app)) 										{ $Response->throw_exception(400, "Invalid application id"); }
 	// check that app is enabled
-	if($app->app_permissions==="0") 						{ $Response->throw_exception(503, "Application disabled"); }
+	if($app->app_permissions==0) 						{ $Response->throw_exception(503, "Application disabled"); }
 
 
 	/* Check app security and prepare request parameters ---------- */
@@ -130,8 +132,8 @@ try {
 	}
 
 
-	// Append Global API parameters / POST parameters if POST,PATCH or DELETE
-	if($_SERVER['REQUEST_METHOD']=="GET" || $_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE") {
+	// Append Global API parameters / POST parameters if POST, PATCH or DELETE
+	if(in_array($request_method, ['GET', 'HEAD', 'POST', 'PATCH', 'PUT', 'DELETE'])) {
 		// if application tupe is JSON (application/json)
 		if(strpos($content_type, "application/json")!==false){
 			$rawPostData = file_get_contents('php://input');
@@ -195,7 +197,7 @@ try {
 	// throw token not needed
 	else {
 		// validate ssl_code
-		if($app->app_security=="ssl_code" && $_SERVER['REQUEST_METHOD']!="GET") {
+		if($app->app_security=="ssl_code" && in_array($request_method, ['GET', 'HEAD'])) {
 			// start auth class and validate connection
 			require_once( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
 			$Authentication = new User_controller ($Database, $Tools, $Params, $Response);
@@ -214,10 +216,7 @@ try {
 	}
 	// verify permissions for delete/create/edit if controller is not user (needed for auth)
 	if ($Params->controller != "user") {
-    	if( ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH"
-    	  || $_SERVER['REQUEST_METHOD']=="PUT"  || $_SERVER['REQUEST_METHOD']=="DELETE"
-    	  )
-    	  && $app->app_permissions<2) {
+    	if( in_array($request_method, ['POST', 'PATCH', 'PUT', 'DELETE']) && $app->app_permissions<2 ) {
     		$Response->throw_exception(401, 'invalid permissions');
     	}
 	}
@@ -231,15 +230,20 @@ try {
 	$controller_name = ucfirst($Params->controller)."_controller";
 	$controller_file = ucfirst($Params->controller);
 
-	// check if the controller exists. if not, throw an exception
-	if( file_exists( dirname(__FILE__) . "/controllers/$controller_file.php") ) {
-		require_once( dirname(__FILE__) . "/controllers/$controller_file.php");
+	$valid_controller = false;
+	foreach ([__DIR__ . "/controllers",  __DIR__ . "/controllers/custom"] as $location) {
+		$base_path = realpath($location);
+
+		$candidate = $location . "/$controller_file.php";
+		if (realpath(dirname($candidate)) == $base_path && file_exists($candidate)) {
+			$valid_controller = $candidate;
+			break;
+		}
 	}
-	// check custom controllers
-	elseif( file_exists( dirname(__FILE__) . "/controllers/custom/$controller_file.php") ) {
-		require_once( dirname(__FILE__) . "/controllers/custom/$controller_file.php");
-	}
-	else {
+
+	if ($valid_controller) {
+		require_once($valid_controller);
+	} else {
 		$Response->throw_exception(400, 'Invalid controller');
 	}
 
@@ -254,17 +258,17 @@ try {
 	// POST and PATCH. This only works for controllers that support custom
 	// fields and if the app has nested custom fields enabled, otherwise
 	// this is skipped.
-	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' || strtoupper($_SERVER['REQUEST_METHOD']) == 'PATCH') {
+	if (in_array($request_method, ['POST', 'PATCH', 'PUT'])) {
 		$controller->unmarshal_nested_custom_fields();
 	}
 
 	// check if the action exists in the controller. if not, throw an exception.
-	if( method_exists($controller, strtolower($_SERVER['REQUEST_METHOD'])) === false ) {
+	if( method_exists($controller, strtolower($request_method)) === false ) {
 		$Response->throw_exception(501, $Response->errors[501]);
 	}
 
 	// Transaction locking is only enabled for POST, PUT, PATCH and DELETE requests.
-	if (in_array(strtoupper($_SERVER['REQUEST_METHOD']), ["POST", "PUT", "PATCH", "DELETE"])) {
+	if (in_array($request_method, ["POST", "PATCH", "PUT", "DELETE"])) {
 		$lock_type = $app->app_lock_type;
 
 		if ($lock_type == "Auto") {
@@ -278,22 +282,22 @@ try {
 
 			// Execute the action with file lock.
 			// Safe when load-balanced to singe instance.
-			$result = $controller->{$_SERVER['REQUEST_METHOD']}();
+			$result = $controller->{$request_method}();
 		} elseif ($lock_type == "MySQL") {
 			$Lock = new LockForUpdateMySQL($Database, 'apiLock', 1);
 			$Lock->obtain_lock($app->app_lock_wait);
 
 			// execute the action with MySQL row lock.
 			// Safe when load-balanced across multiple instances.
-			$result = $controller->{$_SERVER['REQUEST_METHOD']}();
+			$result = $controller->{$request_method}();
 		} else {
 			// Disabled - *DANGER* execute write actions without locking.
 			// Not guaranteed to be thread safe.
-			$result = $controller->{$_SERVER['REQUEST_METHOD']}();
+			$result = $controller->{$request_method}();
 		}
 	} else {
 		// Execute the GET read requests without lock.
-		$result = $controller->{$_SERVER['REQUEST_METHOD']}();
+		$result = $controller->{$request_method}();
 	}
 } catch ( Exception $e ) {
 	// catch any exceptions and report the problem

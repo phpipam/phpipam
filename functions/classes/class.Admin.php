@@ -800,11 +800,11 @@ class Admin extends Common_functions {
 	    $old = (array) $Tools->fetch_full_field_definition ($table, $current);
 
 	    # set update request
-	    if($old['Null']=="NO")	{ $query  = 'ALTER TABLE `'.$table.'` MODIFY COLUMN `'. $current .'` '.$old['Type'].' NOT NULL COMMENT "'.$old['Comment'].'" AFTER `'. $next .'`;'; }
-	    else					{ $query  = 'ALTER TABLE `'.$table.'` MODIFY COLUMN `'. $current .'` '.$old['Type'].' DEFAULT NULL COMMENT "'.$old['Comment'].'" AFTER `'. $next .'`;'; }
+	    if($old['Null']=="NO")	{ $query  = 'ALTER TABLE `'.$table.'` MODIFY COLUMN `'. $current .'` '.$old['Type'].' NOT NULL     COMMENT :comment AFTER `'. $next .'`;'; }
+	    else					{ $query  = 'ALTER TABLE `'.$table.'` MODIFY COLUMN `'. $current .'` '.$old['Type'].' DEFAULT NULL COMMENT :comment AFTER `'. $next .'`;'; }
 
 		# execute
-		try { $res = $this->Database->runQuery($query); }
+		try { $res = $this->Database->runQuery($query, ['comment' => $old['Comment']]); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;

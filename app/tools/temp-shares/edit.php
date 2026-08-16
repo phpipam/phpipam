@@ -17,6 +17,8 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "temp-shares");
+
 # checks
 if($User->settings->tempShare!=1)								{ $Result->show("danger", _("Temporary sharing disabled"), true, true); }
 if($POST->type!="subnets"&&$POST->type!="ipaddresses") 	{ $Result->show("danger", _("Invalid type"), true, true); }
@@ -25,17 +27,23 @@ if(!is_numeric($POST->id)) 									{ $Result->show("danger", _("Invalid ID"), t
 
 //fetch object details
 $object = $Tools->fetch_object ($POST->type, "id", $POST->id);
-
+if (!is_object($object)) {
+	$Result->show("danger", _("Invalid ID"), true, true);
+}
 
 # set share details
 $share = new StdClass;
 //set details
 if($POST->type=="subnets") {
+	if($Subnets->check_permission ($User->user, $object->id)<User::ACCESS_RW) { $Result->show("danger", _("Invalid ID"), true, true); }
+
 	$tmp[] = _("Share type: subnet");
 	$tmp[] = $Subnets->transform_to_dotted($object->subnet)."/$object->mask";
 	$tmp[] = $object->description;
 }
 else {
+	if($Subnets->check_permission ($User->user, $object->subnetId)<User::ACCESS_RW) { $Result->show("danger", _("Invalid ID"), true, true); }
+
 	$tmp[] = _("Share type: IP address");
 	$tmp[] = $Subnets->transform_to_dotted($object->ip_addr);
 	$tmp[] = $object->description;
@@ -108,6 +116,7 @@ $(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );
     </tr>
 
 </table>
+<input type='hidden' name='csrf_cookie' value='<?php print $csrf; ?>'>";
 </form>
 
 </div>
