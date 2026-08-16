@@ -16,6 +16,7 @@
     + Second-Order SQL injection in custom field reordering;
     + Second-Order SQL injection in NAT fields;
     + Custom field reordering, missing CSRF checks;
+    + Subnet permissions can be rewritten by any authenticated user;
 
 == 1.8.1
 

@@ -21,9 +21,10 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "permissions");
 
-
 # ID must be numeric
 if(!is_numeric($POST->subnetId))	{ $Result->show("danger", _("Invalid ID"), true, true); }
+
+if($Sections->check_permission ($User->user, $POST->subnetId) != User::ACCESS_RWA) { $Result->show("danger", _('You do not have permissions to add edit/delete this subnet')."!", true); }
 
 # get all groups
 $groups = $Admin->fetch_all_objects ("userGroups", "g_name");
