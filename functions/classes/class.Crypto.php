@@ -236,7 +236,7 @@ class Crypto {
         // Check CSRF cookie is present
         if (empty($value)) return false;
         // Check CSRF cookie is valid and return
-        return $_SESSION[$name] == $value ? true : false;
+        return isset($_SESSION[$name]) && (string) $_SESSION[$name] === (string) $value ? true : false;
     }
 
 }

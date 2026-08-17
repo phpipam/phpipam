@@ -116,7 +116,7 @@ $(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );
     </tr>
 
 </table>
-<input type='hidden' name='csrf_cookie' value='<?php print $csrf; ?>'>";
+<input type='hidden' name='csrf_cookie' value='<?php print $csrf; ?>'>
 </form>
 
 </div>
