@@ -193,17 +193,16 @@ class Subnets_controller extends Common_api_functions {
 
 			// addresses in subnet
 			if($this->_params->id2=="addresses") {
-				$result = $this->read_subnet_addresses ();
-				// if {ip} is set filter it out
+				// if {ip} is set query directly by subnetId + ip_addr
 				if(isset($this->_params->id3)) {
-					if(is_array($result)) {
-	    				foreach ($result as $k=>$r) {
-	        				if ($r->ip !== $this->_params->id3) {
-	            				unset($result[$k]);
-	        				}
-	    				}
-	    			}
-                    if(sizeof($result)==0) { $result = false; }
+					$ip_decimal = $this->Subnets->transform_address($this->_params->id3, "decimal");
+					$result = $this->Database->getObjectsQuery("ipaddresses",
+						"SELECT * FROM `ipaddresses` WHERE `subnetId` = ? AND `ip_addr` = ?",
+						array($this->_params->id, $ip_decimal));
+					$result = (is_array($result) && sizeof($result) > 0) ? $result : false;
+				}
+				else {
+					$result = $this->read_subnet_addresses ();
 				}
 				// check result
 				if($result===false)						{ $this->Response->throw_exception(404, "No addresses found"); }
@@ -720,8 +719,8 @@ class Subnets_controller extends Common_api_functions {
 	 * @return array|false
 	 */
 	private function read_all_subnets() {
-		// fetch
-		$results = $this->Subnets->fetch_all_subnets();
+		// fetch with SQL-level filter if applicable
+		$results = $this->fetch_all_with_filter("subnets", "id");
 
 		if (!is_array($results))
 			return false;
@@ -818,18 +817,12 @@ class Subnets_controller extends Common_api_functions {
 	private function read_search_subnet () {
 		// transform
 		$this->_params->id2 = $this->Subnets->transform_address ($this->_params->id2, "decimal");
-		// check
-		$subnet = $this->Tools->fetch_multiple_objects ("subnets", "subnet", $this->_params->id2);
-		// validate mask
-		if($subnet!==false) {
-			foreach($subnet as $s) {
-				if($s->mask == $this->_params->id3) {
-					$result[] = $s;
-				}
-			}
-		}
+		// query by both subnet and mask directly
+		$result = $this->Database->getObjectsQuery("subnets",
+			"SELECT * FROM `subnets` WHERE `subnet` = ? AND `mask` = ?",
+			array($this->_params->id2, $this->_params->id3));
 		# result
-		return !isset($result) ? false : $result;
+		return (is_array($result) && sizeof($result) > 0) ? $result : false;
 	}
 
 	/**

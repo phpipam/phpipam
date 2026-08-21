@@ -84,6 +84,14 @@ class Common_api_functions {
      */
     public $custom_fields;
 
+    /**
+     * Flag indicating filter was already applied at SQL level
+     *
+     * @var bool
+     * @access protected
+     */
+    protected $filter_applied = false;
+
 	/**
 	 * valid_keys
 	 *
@@ -324,8 +332,10 @@ class Common_api_functions {
 								{ $result = $this->add_links ($result, $controller); }
 			}
 		}
-		// filter
-		if (isset($this->_params->filter_by)) {
+		// filter - skip if already applied at SQL level
+		$filter_applied = $this->filter_applied;
+		$this->filter_applied = false;
+		if (isset($this->_params->filter_by) && !$filter_applied) {
 								{ $result = $this->filter_result ($result); }
 		}
 		// transform address
@@ -433,6 +443,130 @@ class Common_api_functions {
 			if (($last_err = preg_last_error()) != PREG_NO_ERROR)
 				$this->Response->throw_exception(400, _('Invalid regular expression')." (err=$last_err)");
 		}
+	}
+
+	/**
+	 * Converts a PCRE regex pattern (with delimiters) to a MySQL REGEXP pattern.
+	 *
+	 * @access protected
+	 * @param string $pcre_pattern
+	 * @return string|false  MySQL-compatible pattern, or false on failure
+	 */
+	protected function pcre_to_mysql_regexp($pcre_pattern) {
+		if (!is_string($pcre_pattern) || strlen($pcre_pattern) < 2)
+			return false;
+
+		$delimiter = $pcre_pattern[0];
+
+		// Validate delimiter is non-alphanumeric
+		if (ctype_alnum($delimiter) || $delimiter === '\\')
+			return false;
+
+		$last_pos = strrpos($pcre_pattern, $delimiter, 1);
+		if ($last_pos === false)
+			return false;
+
+		$pattern = substr($pcre_pattern, 1, $last_pos - 1);
+
+		// Unescape the delimiter within the pattern
+		$pattern = str_replace('\\' . $delimiter, $delimiter, $pattern);
+
+		return $pattern;
+	}
+
+	/**
+	 * Builds SQL WHERE condition from API filter parameters.
+	 *
+	 * Returns [null, []] if SQL-level filtering cannot be applied,
+	 * allowing PHP filter_result to handle it as fallback.
+	 *
+	 * Supports filter_match modes: full (=), partial (LIKE), regex (REGEXP).
+	 *
+	 * @access protected
+	 * @return array  [$where_sql, $params] or [null, []]
+	 */
+	protected function build_sql_filter_condition() {
+		if (!isset($this->_params->filter_by))
+			return [null, []];
+
+		if (!isset($this->_params->filter_value) || is_blank($this->_params->filter_value))
+			return [null, []];
+
+		if (!isset($this->_params->filter_match))
+			$this->_params->filter_match = 'full';
+
+		if (!in_array($this->_params->filter_match, ['full', 'partial', 'regex']))
+			return [null, []];
+
+		// Reverse-map API field name to DB column name
+		// Base mapping (same as remap_keys with $controller=false)
+		$reverse_keys = array("deviceId"=>"switch", "tag"=>"state", "ip"=>"ip_addr");
+		$filter_by = $this->_params->filter_by;
+		$db_column = isset($reverse_keys[$filter_by]) ? $reverse_keys[$filter_by] : $filter_by;
+
+		// Validate column exists in valid_keys
+		if (!is_array($this->valid_keys) || !in_array($db_column, $this->valid_keys))
+			return [null, []];
+
+		$db_column_escaped = $this->Database->escape($db_column);
+		if (is_blank($db_column_escaped))
+			return [null, []];
+
+		$filter_value = $this->_params->filter_value;
+
+		if ($this->_params->filter_match == 'full') {
+			return ["`$db_column_escaped` = ?", [$filter_value]];
+		} elseif ($this->_params->filter_match == 'partial') {
+			return ["`$db_column_escaped` LIKE ?", ['%' . $filter_value . '%']];
+		} elseif ($this->_params->filter_match == 'regex') {
+			$mysql_pattern = $this->pcre_to_mysql_regexp($filter_value);
+			if ($mysql_pattern === false)
+				return [null, []];
+			return ["`$db_column_escaped` REGEXP ?", [$mysql_pattern]];
+		}
+
+		return [null, []];
+	}
+
+	/**
+	 * Fetches all objects from a table, applying filter at SQL level when possible.
+	 *
+	 * If filter_by/filter_value params are set and can be converted to SQL,
+	 * the WHERE clause is pushed to the database. Otherwise falls back to
+	 * fetch_all_objects (PHP filter_result handles filtering in prepare_result).
+	 *
+	 * @access protected
+	 * @param string $table
+	 * @param string $sortField (default: 'id')
+	 * @param bool $sortAsc (default: true)
+	 * @return array|false
+	 */
+	protected function fetch_all_with_filter($table, $sortField = 'id', $sortAsc = true) {
+		list($where, $params) = $this->build_sql_filter_condition();
+
+		if ($where !== null) {
+			$escapedTable = $this->Database->escape($table);
+			$escapedSort  = $this->Database->escape($sortField);
+
+			// Handle special sort field for vlans and vrfs
+			if ($table == 'vlans' && $sortField == 'id') { $escapedSort = 'vlanId'; }
+			if ($table == 'vrf'   && $sortField == 'id') { $escapedSort = 'vrfId'; }
+
+			$sortDir = $sortAsc ? 'ASC' : 'DESC';
+			$query   = "SELECT * FROM `$escapedTable` WHERE $where ORDER BY `$escapedSort` $sortDir";
+
+			try {
+				$result = $this->Database->getObjectsQuery($table, $query, $params);
+			} catch (Exception $e) {
+				// SQL filter failed (e.g. invalid REGEXP), fall back to PHP filtering
+				return $this->Tools->fetch_all_objects($table, $sortField, $sortAsc);
+			}
+
+			$this->filter_applied = true;
+			return (is_array($result) && sizeof($result) > 0) ? $result : false;
+		}
+
+		return $this->Tools->fetch_all_objects($table, $sortField, $sortAsc);
 	}
 
 	/**

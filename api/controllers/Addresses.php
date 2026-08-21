@@ -102,8 +102,8 @@ class Addresses_controller extends Common_api_functions  {
 	public function GET () {
 		// all
 		if (!isset($this->_params->id) || $this->_params->id == "all") {
-			// fetch all
-			$result = $this->Addresses->fetch_all_objects ("ipaddresses");
+			// fetch all - apply filter at SQL level when possible
+			$result = $this->fetch_all_with_filter("ipaddresses");
 			// check result
 			if ($result===false)						{ $this->Response->throw_exception(500, "Unable to read addresses"); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result($result, "addresses", true, true)); }
@@ -131,21 +131,11 @@ class Addresses_controller extends Common_api_functions  {
 		}
 		// address search inside predefined subnet
 		elseif($this->Tools->validate_ip ($this->_params->id)!==false && isset($this->_params->id2)) {
-            // fetch all in subnet
-            $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "subnetId", $this->_params->id2);
-            if($result!==false) {
-            	$result_filtered = "";
-                foreach ($result as $k=>$r) {
-                    if($r->ip !== $this->_params->id) {
-                        unset($result[$k]);
-                    }
-                    else {
-                        $result_filtered = $r;
-                    }
-                }
-                if(sizeof($result)==0)  { $result = false;  }
-                else                    { $result = $result_filtered; }
-            }
+            // query by both subnetId and ip_addr directly using the unique key
+            $ip_decimal = $this->Subnets->transform_address($this->_params->id, "decimal");
+            $result = $this->Database->getObjectQuery("ipaddresses",
+                "SELECT * FROM `ipaddresses` WHERE `subnetId` = ? AND `ip_addr` = ? LIMIT 1",
+                array($this->_params->id2, $ip_decimal));
     		if ($result==false)                          { $this->Response->throw_exception(404, 'No addresses found'); }
             else                                         { return array("code"=>200, "data"=>$result); }
 		}
@@ -155,25 +145,14 @@ class Addresses_controller extends Common_api_functions  {
 			if (@$this->_params->id3=="addresses") {
 				// validate
 				$this->validate_tag ();
-				// fetch
-				$result = $this->Tools->fetch_multiple_objects ("ipaddresses", "state", $this->_params->id2);
-
-				// filter by subnetId
-				if ($result!==false) {
-					if(isset($this->_params->subnetId)) {
-						if (is_numeric($this->_params->subnetId)) {
-							// filter
-							foreach ($result as $k=>$v) {
-								if ($v->subnetId != $this->_params->subnetId) {
-									unset($result[$k]);
-								}
-							}
-							// any left
-							if (sizeof($result)==0) {
-								$result = false;
-							}
-						}
-					}
+				// fetch - use SQL filter when subnetId is provided
+				if(isset($this->_params->subnetId) && is_numeric($this->_params->subnetId)) {
+					$result = $this->Database->getObjectsQuery("ipaddresses",
+						"SELECT * FROM `ipaddresses` WHERE `state` = ? AND `subnetId` = ? ORDER BY `ip_addr`",
+						array($this->_params->id2, $this->_params->subnetId));
+					$result = (is_array($result) && sizeof($result) > 0) ? $result : false;
+				} else {
+					$result = $this->Tools->fetch_multiple_objects ("ipaddresses", "state", $this->_params->id2);
 				}
 
 				// result
@@ -426,21 +405,15 @@ class Addresses_controller extends Common_api_functions  {
 	public function DELETE () {
     	// delete by ip
     	if ($this->Tools->validate_ip ($this->_params->id)!==false && isset($this->_params->id2)) {
-        	// find
-        	$result = $this->Tools->fetch_multiple_objects ("ipaddresses", "ip_addr", $this->Tools->transform_address($this->_params->id, "decimal"));
-        	if($result!==false) {
-            	foreach ($result as $k=>$r) {
-                	if($r->subnetId != $this->_params->id2) {
-                    	unset($result[$k]);
-                	}
-            	}
-        	}
-        	if (sizeof($result)==0 || $result===false)   { $this->Response->throw_exception(404, "No addresses found"); }
+        	// find by both ip_addr and subnetId using unique key
+        	$ip_decimal = $this->Tools->transform_address($this->_params->id, "decimal");
+        	$result = $this->Database->getObjectQuery("ipaddresses",
+        		"SELECT * FROM `ipaddresses` WHERE `ip_addr` = ? AND `subnetId` = ? LIMIT 1",
+        		array($ip_decimal, $this->_params->id2));
+        	if ($result===false || $result===null) { $this->Response->throw_exception(404, "No addresses found"); }
         	else {
-            	// rekey
-            	$result = array_values($result);
             	// replace parameters
-            	$this->_params->id = $result[0]->id;
+            	$this->_params->id = $result->id;
         	}
     	}
 

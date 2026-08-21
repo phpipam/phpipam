@@ -209,7 +209,7 @@ class Tools_controller extends Common_api_functions {
 
 		# all ?
 		if (!isset($this->_params->id2)) {
-			$result = $this->Tools->fetch_all_objects ($this->_params->id,  $this->sort_key);
+			$result = $this->fetch_all_with_filter($this->_params->id, $this->sort_key);
 			// result
 			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, false)); }

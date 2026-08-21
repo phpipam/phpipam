@@ -92,7 +92,7 @@ class Devices_controller extends Common_api_functions {
         // all objects
         if (!isset($this->_params->id) || $this->_params->id == "all") {
             // fetch all devices
-            $result = $this->Tools->fetch_all_objects('devices', 'id');
+            $result = $this->fetch_all_with_filter('devices', 'id');
             // result
             if(!$result)     { return $this->Response->throw_exception(404, "No devices configured"); }
             else             { return array('code'=>200, 'data'=>$this->prepare_result($result, 'devices', true, false)); }
