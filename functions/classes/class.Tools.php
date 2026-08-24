@@ -529,6 +529,72 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Search for locations
+	 *
+	 * @access public
+	 * @param mixed $search_term
+	 * @param array $custom_fields (default: [])
+	 * @return array
+	 */
+	public function search_locations ($search_term, $custom_fields = []) {
+		# query
+		$query[] = "select * from `locations` where `name` like :search_term or `description` like :search_term or `address` like :search_term ";
+		# custom
+		if(sizeof($custom_fields) > 0) {
+			foreach($custom_fields as $myField) {
+				$myField['name'] = $this->Database->escape($myField['name']);
+				$query[] = " or `{$myField['name']}` like :search_term ";
+			}
+		}
+		$query[] = ";";
+		# join query
+		$query = implode("\n", $query);
+
+		# fetch
+		try { $search = $this->Database->getObjectsQuery('locations', $query, ["search_term"=>"%$search_term%"]); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+		# return result
+		return $search;
+	}
+
+	/**
+	 * Search for logical circuits
+	 *
+	 * @access public
+	 * @param mixed $search_term
+	 * @param array $custom_fields (default: [])
+	 * @return array
+	 */
+	public function search_circuitsLogical ($search_term, $custom_fields = []) {
+		# query
+		$query[] = "select * from `circuitsLogical` where `logical_cid` like :search_term or `purpose` like :search_term or `comments` like :search_term ";
+		# custom
+		if(sizeof($custom_fields) > 0) {
+			foreach($custom_fields as $myField) {
+				$myField['name'] = $this->Database->escape($myField['name']);
+				$query[] = " or `{$myField['name']}` like :search_term ";
+			}
+		}
+		$query[] = ";";
+		# join query
+		$query = implode("\n", $query);
+
+		# fetch
+		try { $search = $this->Database->getObjectsQuery('circuitsLogical', $query, ["search_term"=>"%$search_term%"]); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+		# return result
+		return $search;
+	}
+
+	/**
 	 * Reformat possible nun-full IPv4 address for search
 	 *
 	 *	e.g. 10.10.10 -> 10.10.10.0 - 10.10.10.255
