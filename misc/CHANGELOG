@@ -4,6 +4,10 @@
     ----------------------------
     + Dynamic authentication API endpoints returns 409 (#4640);
 
+    Security Fixes:
+    ----------------------------
+    + 2FA activation, bypass CSRF checks;
+
 == 1.8.2
 
     Bugfixes:
