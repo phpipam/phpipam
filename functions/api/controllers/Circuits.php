@@ -432,13 +432,12 @@ class Circuits_controller extends Common_api_functions {
 	 */
 	private function validate_circuit_type ($action="add") {
 		if(isset($this->_params->type)) {
-			$type_desc = $this->Database->getFieldInfo ("circuits", "type");
-			$all_types = explode(",", str_replace(["enum","(",")","'"], "",(string) $type_desc->Type));
-			if(!in_array($this->_params->type, $all_types))									{ $this->Response->throw_exception(400, "Invalid circuit type"); }
+			if($this->Tools->fetch_object("circuitTypes", "id", $this->_params->type)===false)	{ $this->Response->throw_exception(400, "Invalid circuit type"); }
 		}
 		else {
 			if ($action=="add") {
-				$this->_params->type = "Default";
+				$default_type = $this->Tools->fetch_object("circuitTypes", "ctname", "Default");
+				$this->_params->type = $default_type===false ? 1 : $default_type->id;
 			}
 		}
 	}
