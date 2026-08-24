@@ -148,7 +148,7 @@ class Tools_controller extends Common_api_functions {
 		// get api
 		$app = $this->Tools->fetch_object ("api", "app_id", $this->_params->app_id);
 
-		// controllers
+		// top-level controllers - dedicated API controller files, not tools sub-resources
 		$controllers = [
 						["rel"=>"sections",	"href"=>"/api/".$_GET['app_id']."/sections/"],
 						["rel"=>"subnets",		"href"=>"/api/".$_GET['app_id']."/subnets/"],
@@ -156,13 +156,17 @@ class Tools_controller extends Common_api_functions {
 						["rel"=>"addresses",	"href"=>"/api/".$_GET['app_id']."/addresses/"],
 						["rel"=>"vlans",		"href"=>"/api/".$_GET['app_id']."/vlan/"],
 						["rel"=>"vrfs",		"href"=>"/api/".$_GET['app_id']."/vrf/"],
-						["rel"=>"nameservers",	"href"=>"/api/".$_GET['app_id']."/tools/nameservers/"],
-						["rel"=>"scanAgents",	"href"=>"/api/".$_GET['app_id']."/tools/scanagents/"],
-						["rel"=>"locations",	"href"=>"/api/".$_GET['app_id']."/tools/locations/"],
-						["rel"=>"racks",	    "href"=>"/api/".$_GET['app_id']."/tools/racks/"],
-						["rel"=>"nat",	        "href"=>"/api/".$_GET['app_id']."/tools/nat/"],
+						["rel"=>"circuits",	"href"=>"/api/".$_GET['app_id']."/circuits/"],
 						["rel"=>"tools",		"href"=>"/api/".$_GET['app_id']."/tools/"]
 					];
+
+		// tools sub-resources - generated from the actual subcontroller registry so this
+		// list can't drift from what's really routable under /tools/{id}/ (see
+		// define_tools_controllers(); array key is the rel, value is the URL segment)
+		foreach ($this->subcontrollers as $rel=>$url_segment) {
+			$controllers[] = ["rel"=>$rel, "href"=>"/api/".$_GET['app_id']."/tools/".$url_segment."/"];
+		}
+
 		# Response
 		return ["code"=>200, "data"=>["permissions"=>$this->Subnets->parse_permissions($app->app_permissions), "controllers"=>$controllers]];
 	}
