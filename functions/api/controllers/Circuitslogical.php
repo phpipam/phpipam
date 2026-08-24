@@ -5,7 +5,7 @@
  *
  *
  */
-class CircuitsLogical_controller extends Common_api_functions {
+class Circuitslogical_controller extends Common_api_functions {
 
 	/**
 	 * __construct function
@@ -138,11 +138,15 @@ class CircuitsLogical_controller extends Common_api_functions {
 		if(!$this->Admin->object_modify ("circuitsLogical", "add", "id", $values))
 													{ $this->Response->throw_exception(500, "logical circuit creation failed"); }
 
+		# circuitsLogicalMapping has no auto_increment id column, so lastId must be
+		# captured now - inserting members below overwrites Admin->lastId
+		$new_id = $this->Admin->lastId;
+
 		# attach members
-		$this->replace_members ($this->Admin->lastId, $members);
+		$this->replace_members ($new_id, $members);
 
 		//set result
-		return ["code"=>201, "message"=>"logical circuit created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/circuitsLogical/".$this->Admin->lastId."/"];
+		return ["code"=>201, "message"=>"logical circuit created", "id"=>$new_id, "location"=>"/api/".$this->_params->app_id."/circuitsLogical/".$new_id."/"];
 	}
 
 
