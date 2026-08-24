@@ -270,6 +270,10 @@ class Circuits_controller extends Common_api_functions {
 		# verify
 		$this->validate_id ("delete");
 
+		# a physical circuit that's still a member of a logical circuit cannot be deleted
+		if($this->type=="circuits" && $this->Tools->fetch_all_logical_circuits_using_circuit($this->_params->id)!==false)
+													{ $this->Response->throw_exception(409, "Circuit is currently used in a larger logical circuit"); }
+
 		# set variables for delete
 		$values = [];
 		$values["id"] = $this->_params->id;
