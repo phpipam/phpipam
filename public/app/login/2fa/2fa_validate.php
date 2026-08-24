@@ -14,14 +14,12 @@ $User->check_user_session(true, true);
 
 # validate csrf cookie
 if ($User->Crypto->csrf_cookie("validate", "2fa_validation", $POST->csrf_cookie) === false) {
-	if ($POST->show_error == "true") {
-		$Result->show("danger", _("Invalid CSRF cookie"), true);
-	}
+	$Result->show("danger", _("Invalid CSRF cookie"), true);
 }
 
 # if 2fa is not needed redirect to /
 if ($User->twofa_required()===false) {
-	header("Location:".$url.create_link (null));
+	header("Location:".$User->createURL().create_link (null));
 }
 # length check
 elseif (strlen((string) $POST->code)!==6) {
@@ -45,9 +43,7 @@ else {
 			unset ($_SESSION['2fa_required']);
 		}
 		else {
-			if ($POST->show_error=="true") {
-				$Result->show ("danger", _("Invalid code"));
-			}
+			$Result->show ("danger", _("Invalid code"));
 			// update block count
 			$User->block_ip ();
 		}

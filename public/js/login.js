@@ -70,8 +70,7 @@ $('form#login').submit(function() {
 
 /*  Check 2fs
 *********************/
-function submit_2fs (showerror) {
-    if (typeof(showerror)==='undefined') showerror = true;
+function submit_2fs () {
     //show spinner
     showSpinner();
     //stop all active animations
@@ -82,7 +81,7 @@ function submit_2fs (showerror) {
 
     $('div#twofaCheck').hide();
     //post to check form
-    $.post('app/login/2fa/2fa_validate.php', {"code":code, "csrf_cookie":csrf, "show_error":showerror}, function(data) {
+    $.post('app/login/2fa/2fa_validate.php', {"code":code, "csrf_cookie":csrf}, function(data) {
         $('div#twofaCheck').html(data).fadeIn('fast');
         //reload after 2 seconds if succeeded!
         if(data.search("alert alert-success") != -1) {
@@ -99,7 +98,7 @@ function submit_2fs (showerror) {
 
 /* Submit form */
 $('form#login_2fs').submit(function() {
-    submit_2fs (true);
+    submit_2fs ();
     return false;
 });
 
@@ -108,7 +107,7 @@ $(document).keyup(function(e) {
     var codeval = $('form#login_2fs input#2fa_code').val();
     if (codeval != null) {
         if(codeval.length == 6) {
-            submit_2fs (true);
+            submit_2fs ();
         }
         else if (codeval.length > 0) {
             $('div#twofaCheck').fadeOut('fast');
