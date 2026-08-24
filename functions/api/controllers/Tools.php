@@ -157,6 +157,7 @@ class Tools_controller extends Common_api_functions {
 						["rel"=>"vlans",		"href"=>"/api/".$_GET['app_id']."/vlan/"],
 						["rel"=>"vrfs",		"href"=>"/api/".$_GET['app_id']."/vrf/"],
 						["rel"=>"circuits",	"href"=>"/api/".$_GET['app_id']."/circuits/"],
+						["rel"=>"circuitsLogical",	"href"=>"/api/".$_GET['app_id']."/circuitsLogical/"],
 						["rel"=>"tools",		"href"=>"/api/".$_GET['app_id']."/tools/"]
 					];
 
