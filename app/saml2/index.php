@@ -178,8 +178,17 @@ try {
             $values["email"] = $auth->getAttribute("email")[0];
             $values["role"] = filter_var($auth->getAttribute("is_admin")[0], FILTER_VALIDATE_BOOLEAN) ? "Administrator" : "User";
 
-            // Parse groups
-            $saml_groups = array_map('trim', pf_explode(',', $auth->getAttribute("groups")[0])) ?: [];
+            // Parse groups (Fix for Keycloak SAML field)
+            $raw_groups = $auth->getAttribute("groups");
+            $saml_groups = [];
+            
+            if (is_array($raw_groups)) {
+                if (count($raw_groups) === 1 && strpos($raw_groups[0], ',') !== false) {
+                    $saml_groups = array_map('trim', pf_explode(',', $raw_groups[0]));
+                } else {
+                    $saml_groups = array_map('trim', $raw_groups);
+                }
+            }
 
             $ug = [];
             foreach ($Tools->fetch_all_objects("userGroups", "g_id") as $g) {
