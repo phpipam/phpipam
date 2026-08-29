@@ -12,7 +12,7 @@
     + HTML files moved to 'public' folder (see UPDATING.md);
     + Removed git submodules, full migrarion to composer (see UPDATING.md);
     + Removed support for mcrypt;
-    + Added ability for custom fields to enforce unique values
+    + Added ability for custom fields to enforce unique values (#3286);
 
 == 1.8.0
 
