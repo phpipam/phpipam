@@ -2258,7 +2258,7 @@ class Tools extends Common_functions {
         	    elseif ($master_set && $p->master!=0) {
             	    $out[] = $p;
         	    }
-        	    elseif ($master_set && $p->master!=0) {
+        	    elseif ($master_set && $p->master==0) {
             	    break;
         	    }
             }
