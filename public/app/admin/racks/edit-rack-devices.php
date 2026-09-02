@@ -87,7 +87,7 @@ else {
 
     if ($POST->devicetype == 'device') {
         # all devices
-	    $devices = $Admin->fetch_all_objects("devices", "id");
+        $devices = $Admin->fetch_all_objects("devices", "hostname");
 	    if ($devices!==false) {
 		    foreach($devices as $k=>$d) {
 			    if ((!is_blank($d->rack)) && ($d->rack != 0)) {
