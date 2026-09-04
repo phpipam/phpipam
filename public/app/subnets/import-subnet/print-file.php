@@ -33,7 +33,9 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 # fetch subnet
 $subnet = $Subnets->fetch_subnet("id",$POST->subnetId);
 
-if($subnet===false)                $Result->show("danger", _("Invalid subnet ID") ,true);
+if ($subnet === false || $Subnets->check_permission($User->user, $POST->subnetId, $subnet) === User::ACCESS_NONE) {
+	$Result->show("danger", _("Invalid subnet ID"), true);
+}
 
 # Parse file
 $outFile = $Tools->parse_import_file ($filetype, $subnet, $custom_address_fields);

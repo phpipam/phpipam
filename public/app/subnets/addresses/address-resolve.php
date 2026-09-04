@@ -23,7 +23,10 @@ if (!is_object($subnet) || $Subnets->check_permission($User->user, $POST->subnet
     print _("Invalid ID");
     die();
 }
-# resolve
+if (!$Addresses->address_within_subnet($POST->ipaddress, $subnet, false)) {
+    print _("Invalid IP address");
+    die();
+}
 
 $nsid = is_object($subnet) ? $subnet->nameserverId : false;
 $hostname = $DNS->resolve_address ($POST->ipaddress, false, true, $nsid);

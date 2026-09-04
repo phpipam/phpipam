@@ -4,5 +4,3 @@
 
 # include required scripts
 include( 'addresses/mail-notify-check.php' );
-
-?>
