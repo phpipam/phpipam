@@ -28,9 +28,17 @@ $id = $POST->id;
 
 # fetch subnet, vlan and nameservers
 $subnet  = (array) $Subnets->fetch_subnet (null, $POST->id);
+if (empty($subnet) || $Subnets->check_permission($User->user, $POST->id) < User::ACCESS_R) {
+    $Result->show("danger", _("Invalid ID"), true);
+}
+
 $vlan    = (array) $Tools->fetch_object ("vlans", "vlanId", $subnet['vlanId']);
 $vrf     = (array) $Tools->fetch_object ("vrf", "vrfId", $subnet['vrfId']);
 $nameservers    = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
+
+# PHP8
+$vlan = array_merge(['number' => null, 'name' => null], $vlan);
+$vrf = array_merge(['name' => null, 'description' => null], $vrf);
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('subnets');
