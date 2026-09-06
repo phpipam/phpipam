@@ -278,6 +278,14 @@ class Addresses_controller extends Common_api_functions  {
             // check result
             if($result===false)                         { $this->Response->throw_exception(404, 'Host name not found'); }
             else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
+	// search custom field specified, return sorted by hostname (Issue #4110)
+	// /api/my_app/addresses/search_custom_field/{custom_FieldName}/{custom_FieldValue}
+	elseif (@$this->_params->id=="search_custom_field") {
+		$result = $this->Tools->fetch_multiple_objects ("ipaddresses", $this->_params->id2, ($this->_params->id3 ?? '%%'), "hostname", true, (isset($this->_params->id3) ? false : true));
+            	// check result
+            	if($result===false)                         { $this->Response->throw_exception(200, 'IP addresses with [' . $this->_params->id2 . '] not found'); }
+            	else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
+	}
 		// false
 		} else											{  $this->Response->throw_exception(400, "Invalid Id"); }
 	}
