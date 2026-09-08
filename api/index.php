@@ -197,7 +197,7 @@ try {
 	// throw token not needed
 	else {
 		// validate ssl_code
-		if($app->app_security=="ssl_code" && in_array($request_method, ['GET', 'HEAD'])) {
+		if($app->app_security=="ssl_code" && !in_array($request_method, ['GET', 'HEAD'])) {
 			// start auth class and validate connection
 			require_once( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
 			$Authentication = new User_controller ($Database, $Tools, $Params, $Response);

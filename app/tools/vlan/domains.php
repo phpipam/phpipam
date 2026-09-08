@@ -16,9 +16,10 @@ $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 <?php } ?>
 </div>
 
-<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) { ?>
+<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) {
+	$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "generate-export"); ?>
 <div class="btn-group pull-right" style="margin-bottom:10px;">
-	<div class="hidden"><select name="dataType"><option value='vlan' selected="selected">VLAN</option></select></div>
+	<div class="hidden"><select name="dataType" csrf="<?php print $csrf; ?>"><option value='vlan' selected="selected">VLAN</option></select></div>
 	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title="Export data entries for the selected type"><i class="fa fa-download"></i> Export</button>
 </div>
 <?php } ?>

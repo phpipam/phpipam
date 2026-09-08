@@ -579,7 +579,7 @@ else {
 			print "<td>";
 			$m=1;
 			foreach($expired_shares as $s) {
-				print "<button class='btn btn-xs btn-danger removeSharedTemp' data-code='$s->code' ><i class='fa fa-times'></i></button> <a href='".create_link("temp_share",$s->code)."'>Share $m</a> ("._("Expired")." ".date("Y-m-d H:i:s", $s->validity).")<br>";
+				print "<button class='btn btn-xs btn-danger removeSharedTemp' data-csrf='$csrf2' data-code='$s->code' ><i class='fa fa-times'></i></button> <a href='".create_link("temp_share",$s->code)."'>Share $m</a> ("._("Expired")." ".date("Y-m-d H:i:s", $s->validity).")<br>";
 				$m++;
 			}
 			print "<td>";

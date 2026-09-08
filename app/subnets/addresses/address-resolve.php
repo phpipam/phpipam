@@ -11,6 +11,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 $Database 	= new Database_PDO;
 $User		= new User ($Database);
 $Subnets	= new Subnets ($Database);
+$Addresses	= new Addresses ($Database);
 $DNS		= new DNS ($Database);
 
 # verify that user is logged in
@@ -18,10 +19,16 @@ $User->check_user_session();
 
 # fetch subnet
 $subnet = $Subnets->fetch_subnet ("id", $POST->subnetId);
-$nsid = $subnet===false ? false : $subnet->nameserverId;
+if (!is_object($subnet) || $Subnets->check_permission($User->user, $POST->subnetId) < User::ACCESS_RW) {
+    print _("Invalid ID");
+    die();
+}
+if (!$Addresses->address_within_subnet($POST->ipaddress, $subnet, false)) {
+    print _("Invalid IP address");
+    die();
+}
 
-# resolve
+$nsid = is_object($subnet) ? $subnet->nameserverId : false;
 $hostname = $DNS->resolve_address ($POST->ipaddress, false, true, $nsid);
 
-# print result
 print $hostname['name'];
