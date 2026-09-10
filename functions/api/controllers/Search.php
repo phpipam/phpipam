@@ -12,10 +12,14 @@ class Search_controller extends Common_api_functions {
 	 * @var array
 	 */
 	private $search_items = [
-						"subnets"   => "1",
-						"addresses" => "1",
-						"vlan"      => "0",
-						"vrf"       => "0"
+						"subnets"         => "1",
+						"addresses"       => "1",
+						"vlan"            => "0",
+						"vrf"             => "0",
+						"devices"         => "0",
+						"circuits"        => "0",
+						"circuitsLogical" => "0",
+						"locations"       => "0"
 	];
 
 	/**
@@ -111,6 +115,10 @@ class Search_controller extends Common_api_functions {
 			if ($this->search_items['addresses']==1) 	{ $result['addresses'] = $this->search_addresses (); }
 			if ($this->search_items['vlan']==1) 		{ $result['vlan']      = $this->search_vlans (); }
 			if ($this->search_items['vrf']==1) 			{ $result['vrf']       = $this->search_vrfs (); }
+			if ($this->search_items['devices']==1) 		{ $result['devices']   = $this->search_devices (); }
+			if ($this->search_items['circuits']==1) 		{ $result['circuits']  = $this->search_circuits (); }
+			if ($this->search_items['circuitsLogical']==1) { $result['circuitsLogical'] = $this->search_circuitsLogical (); }
+			if ($this->search_items['locations']==1) 	{ $result['locations'] = $this->search_locations (); }
 
 			// add filter
 			$result['search_filter'] = $this->search_items;
@@ -214,6 +222,78 @@ class Search_controller extends Common_api_functions {
 		}
 		else {
 			return ["code"=>200, "data"=>$this->prepare_result ($result, "vrfs", true, false)];
+		}
+	}
+
+	/**
+	 * Search devices
+	 * @method search_devices
+	 * @return array
+	 */
+	private function search_devices () {
+		// search
+		$result = $this->Tools->search_devices($this->_params->id, $this->Tools->fetch_custom_fields ("devices"));
+
+		// result
+		if(sizeof($result)==0) {
+			return ["code"=>404, "data"=>"No devices found"];
+		}
+		else {
+			return ["code"=>200, "data"=>$this->prepare_result ($result, "devices", true, false)];
+		}
+	}
+
+	/**
+	 * Search circuits
+	 * @method search_circuits
+	 * @return array
+	 */
+	private function search_circuits () {
+		// search
+		$result = $this->Tools->search_circuits($this->_params->id, $this->Tools->fetch_custom_fields ("circuits"));
+
+		// result
+		if(sizeof($result)==0) {
+			return ["code"=>404, "data"=>"No circuits found"];
+		}
+		else {
+			return ["code"=>200, "data"=>$this->prepare_result ($result, "circuits", true, false)];
+		}
+	}
+
+	/**
+	 * Search logical circuits
+	 * @method search_circuitsLogical
+	 * @return array
+	 */
+	private function search_circuitsLogical () {
+		// search
+		$result = $this->Tools->search_circuitsLogical($this->_params->id, $this->Tools->fetch_custom_fields ("circuitsLogical"));
+
+		// result
+		if(sizeof($result)==0) {
+			return ["code"=>404, "data"=>"No logical circuits found"];
+		}
+		else {
+			return ["code"=>200, "data"=>$this->prepare_result ($result, "circuitsLogical", true, false)];
+		}
+	}
+
+	/**
+	 * Search locations
+	 * @method search_locations
+	 * @return array
+	 */
+	private function search_locations () {
+		// search
+		$result = $this->Tools->search_locations($this->_params->id, $this->Tools->fetch_custom_fields ("locations"));
+
+		// result
+		if(sizeof($result)==0) {
+			return ["code"=>404, "data"=>"No locations found"];
+		}
+		else {
+			return ["code"=>200, "data"=>$this->prepare_result ($result, "locations", true, false)];
 		}
 	}
 }
