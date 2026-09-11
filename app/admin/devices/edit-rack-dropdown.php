@@ -85,41 +85,41 @@ if($POST->rackid>0 || @$device['rack']>0) {
 	</tr>
 
 	<tr>
-	    <td><?php print _('Start position'); ?></td>
-	    <td>
+		<td><?php print _('Start position'); ?></td>
+		<td>
 			<select name="rack_start" class="form-control input-sm input-w-auto" style="min-width:70px">
 			<?php
 			// print available spaces
 			if($rack->hasBack!="0") {
-			    print "<optgroup label='"._("Front")."'>";
-			    foreach ($available as $a) {
-			    	$selected = $a==$device['rack_start'] ? "selected" : "";
-			        print "<option value='$a' $selected $disabled>$a</option>";
-			    }
-			    print "</optgroup>";
+				print "<optgroup label='"._("Front")."'>";
+				foreach ($available as $a) {
+					$selected = $a==$device['rack_start'] ? "selected" : "";
+					print "<option value='$a' $selected $disabled>$a</option>";
+				}
+				print "</optgroup>";
 
-			    print "<optgroup label='"._("Back")."'>";
-			    foreach ($available_back as $k=>$a) {
-			    	$selected = $k==$device['rack_start'] ? "selected" : "";
-			        print "<option value='$k' $selected>$a</option>";
-			    }
-			    print "</optgroup>";
+				print "<optgroup label='"._("Back")."'>";
+				foreach ($available_back as $k=>$a) {
+					$selected = $k==$device['rack_start'] ? "selected" : "";
+					print "<option value='$k' $selected>$a</option>";
+				}
+				print "</optgroup>";
 			}
 			else {
-			    foreach ($available as $a) {
-                    		$selected = $a==@$device['rack_start'] ? "selected" : "";
-			        print "<option value='$a' $selected>$a</option>";
-			    }
+				foreach ($available as $a) {
+					$selected = $a==@$device['rack_start'] ? "selected" : "";
+					print "<option value='$a' $selected>$a</option>";
+				}
 			}
 			?>
 			</select>
-	    </td>
+		</td>
 	</tr>
 	<tr>
-	    <td><?php print _('Size'); ?> (U)</td>
-	    <td>
-	        <input type="text" name="rack_size" size="2" class="form-control input-w-auto input-sm" style="width:100px;" placeholder="1" value="<?php print @$device['rack_size']; ?>">
-	    </td>
+		<td><?php print _('Size'); ?> (U)</td>
+		<td>
+			<input type="text" name="rack_size" size="2" class="form-control input-w-auto input-sm" style="width:100px;" placeholder="1" value="<?php print @$device['rack_size']; ?>">
+		</td>
 	</tr>
 	<tr>
 		<td><?php print _('Full Depth'); ?></td>
