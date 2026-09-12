@@ -49,7 +49,7 @@ else {
 		}
 	}
 	else {
-		$Log->write( _("Login IP blocked"), _("Login from IP address")." ".$_SERVER['REMOTE_ADDR']." "._("was blocked because of 5 minute block after 5 failed 2fa attempts"), 1);
+		$Log->write( _("Login IP blocked"), _("Login from IP address")." ".$User->get_user_ip()." "._("was blocked because of 5 minute block after 5 failed 2fa attempts"), 1);
 		$Result->show("danger", _('You have been blocked for 5 minutes due to 2fa authentication failures'), true);
 	}
 }

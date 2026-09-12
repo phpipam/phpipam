@@ -910,7 +910,7 @@ class Common_functions  {
 	 *
 	 * @return string|null
 	 */
-	protected function get_user_ip() {
+	public function get_user_ip() {
 		if (php_sapi_name() === "cli")
 			return null;
 
