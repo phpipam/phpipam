@@ -5,16 +5,16 @@
 $User->check_user_session();
 
 # init class
-$ga = new PHPGangsta_GoogleAuthenticator();
+$ga = new PragmaRX\Google2FA\Google2FA();
 
 # secret
-if (is_null($User->user->{'2fa_secret'}) && $User->user->{'2fa'}=="1") {
+if ((string) $User->user->{'2fa_secret'} === '' && $User->user->{'2fa'}) {
 	// create secret
-	$User->user->{'2fa_secret'} = $ga->createSecret(32); // Override $User->settings->{'2fa_length'}. Only lengths 16 and 32 produce reliable results. See #3724
+	$User->user->{'2fa_secret'} = $ga->generateSecretKey(User::TOTP_SECRET_LEN);
 	// admin class
 	$Admin = new Admin ($Database, false);
 	// update user
-	if($Admin->object_modify ("users", "edit", "id", ["id"=>$User->user->id, "2fa_secret"=>$User->user->{'2fa_secret'}])===false) {
+	if($Admin->object_modify ("users", "edit", "id", ["id" => $User->user->id, "2fa" => 2, "2fa_secret" => $User->user->{'2fa_secret'}])===false) {
 		$Result->show("danger", _("Failed to activate 2fa for user"), true, true, false, false, true );
 	}
 }
@@ -47,9 +47,9 @@ if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
 <table id="userModSelf" class="table table-condensed" style='margin-bottom:0px;width:100%'>
 <tr>
 	<td class="title"><?php print _('2fa status'); ?></td>
-	<?php if ($User->settings->{'2fa_userchange'}=="1") { ?>
+	<?php if ($User->settings->{'2fa_userchange'}) { ?>
 	<td>
-		<input type="checkbox" value="1" class="input-switch" name="2fa" <?php if($User->user->{'2fa'} == 1) print 'checked'; ?>>
+		<input type="checkbox" value="1" class="input-switch" name="2fa" <?php if($User->user->{'2fa'}) print 'checked'; ?>>
 	</td>
 	<td class="text-right">
 		<input type="submit" class="btn btn-default btn-success btn-sm submit_popup" data-script="app/tools/user-menu/2fa_save.php" data-result_div="userModSelf2faResult" data-form='2fa_user' value="<?php print _("Save"); ?>">
@@ -57,7 +57,7 @@ if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
 	<?php } else { ?>
 	<td>
 		<?php
-		print $User->user->{'2fa'} == 1 ? _("Enabled") : _("Disabled");
+		print $User->user->{'2fa'} ? _("Enabled") : _("Disabled");
 		?>
 	</td>
 	<?php }  ?>
@@ -79,7 +79,7 @@ if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
 if ($passkey_only) {
 	$Result->show ("warning alert-absolute", _("You can only login to your account using passkeys").".", false);
 }
-elseif($User->user->{'2fa_secret'}!=null && $User->user->{'2fa'}==1) {
+elseif((string) $User->user->{'2fa_secret'} !== '' && $User->user->{'2fa'}) {
 	$qrCodeWriter = new \BaconQrCode\Writer(new \BaconQrCode\Renderer\ImageRenderer(new \BaconQrCode\Renderer\RendererStyle\RendererStyle(300), new \BaconQrCode\Renderer\Image\SvgImageBackEnd()));
 
 	$html   = [];

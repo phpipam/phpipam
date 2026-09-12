@@ -110,12 +110,13 @@ if ($User->twofa_required()===false || $User->user->{'2fa'}==0) {
 
 	<?php
 	// if user did not receive code yet print it out !
-	if (is_blank($User->user->{'2fa_secret'})) {
-		include ('2fa_create.php');
+	if (is_blank($User->user->{'2fa_secret'}) || $User->user->{'2fa'} === 2) {
+		require __DIR__ . '/2fa_create.php';
+		require __DIR__ . '/2fa_form.php';
 	}
 	// print form
 	else {
-		include ('2fa_form.php');
+		require __DIR__ . '/2fa_form.php';
 	}
 	?>
 

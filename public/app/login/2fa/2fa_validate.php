@@ -35,12 +35,18 @@ else {
 	# check for failed logins and captcha
 	if($User->blocklimit > $cnt) {
 		# init class
-		$ga = new PHPGangsta_GoogleAuthenticator();
+		$ga = new PragmaRX\Google2FA\Google2FA();
 		# validate
-		if ($ga->verifyCode($User->user->{'2fa_secret'}, $POST->code, 2)) {
+		if ($ga->verifyKey((string) $User->user->{'2fa_secret'}, (string) $POST->code, 2)) {
 			$Result->show ("success", _("Code validated. Redirecting..."));
 			// remove 2fa flag from session
 			unset ($_SESSION['2fa_required']);
+
+			// Mark user as having successful 2fa login
+			if ($User->user->{'2fa'} !== 1) {
+				$Admin = new Admin ($Database, false);
+				$Admin->object_modify ("users", "edit", "id", ["id" => $User->user->id, "2fa" => 1]);
+			}
 		}
 		else {
 			$Result->show ("danger", _("Invalid code"));

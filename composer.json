@@ -52,8 +52,8 @@
     "firehed/cbor": "^0.1.0",
     "firehed/webauthn": "^0.9.1",
     "onelogin/php-saml": "^4.3",
-    "phpgangsta/googleauthenticator": "dev-master",
-    "phpmailer/phpmailer": "^7.0"
+    "phpmailer/phpmailer": "^7.0",
+    "pragmarx/google2fa": "^9.1"
   },
   "config": {
     "platform": {

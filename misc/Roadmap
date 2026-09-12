@@ -7,9 +7,6 @@ Prio1 features / enhancements:
         - adldap > ldaprecord backend migration
         - Rewrite of separate class for AD/LDAP auth
         - group authentication without local user
-    - 2FA enhancements
-        - After code saved require confirmation with TOTP
-        - Other enhancements based on Jeff reported bugs
     - Webhooks support
         - send data via json to external URL / script
     - API

@@ -19,8 +19,8 @@ $requiredPks  = [
     "firehed/cbor",
     "firehed/webauthn",
     "onelogin/php-saml",
-    "phpgangsta/googleauthenticator",
     "phpmailer/phpmailer",
+    "pragmarx/google2fa",
     ];
 
 if(!defined('PHPIPAM_PHP_MIN'))

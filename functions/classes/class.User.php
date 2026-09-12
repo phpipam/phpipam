@@ -13,6 +13,11 @@ use Dapphp\Radius\Radius;
 */
 class User extends Common_functions {
 
+    const ACCESS_NONE = 0;
+    const ACCESS_R = 1;
+    const ACCESS_RW = 2;
+    const ACCESS_RWA = 3;
+    const TOTP_SECRET_LEN = 32;     // Use power of 2 for App compatibility
 
     /**
      * Current username
@@ -783,7 +788,7 @@ class User extends Common_functions {
         $this->authmethodid = !is_blank(@$this->user->authMethod) ? $this->user->authMethod : 1;
 
         # 2fa
-        if ($this->user->{'2fa'} == 1) {
+        if ($this->user->{'2fa'}) {
             $this->twofa = true;
         }
 
@@ -1961,11 +1966,6 @@ class User extends Common_functions {
             }
         }
     }
-
-    const ACCESS_NONE = 0;
-    const ACCESS_R = 1;
-    const ACCESS_RW = 2;
-    const ACCESS_RWA = 3;
 
     /**
      * Get module permissions for user

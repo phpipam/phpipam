@@ -224,7 +224,6 @@ CREATE TABLE `settings` (
   `passwordPolicy` VARCHAR(1024)  NULL  DEFAULT '{\"minLength\":8,\"maxLength\":0,\"minNumbers\":0,\"minLetters\":0,\"minLowerCase\":0,\"minUpperCase\":0,\"minSymbols\":0,\"maxSymbols\":0,\"allowedSymbols\":\"#,_,-,!,[,],=,~\"}', /* __no_html_escape__ */
   `2fa_provider` ENUM('none','Google_Authenticator') NULL DEFAULT 'none',
   `2fa_name` VARCHAR(32)  NULL  DEFAULT 'phpipam',
-  `2fa_length` INT(2)  NULL  DEFAULT '26',
   `2fa_userchange` BOOL  NOT NULL  DEFAULT '1',
   `passkeys` TINYINT(1)  NULL  DEFAULT '1',
   PRIMARY KEY (`id`)
@@ -395,7 +394,7 @@ CREATE TABLE `users` (
   `hideFreeRange` tinyint(1) DEFAULT '0',
   `menuType` ENUM('Static','Dynamic')  NOT NULL  DEFAULT 'Dynamic',
   `menuCompact` TINYINT  NULL  DEFAULT '1',
-  `2fa` BOOL  NOT NULL  DEFAULT '0',
+  `2fa` TINYINT(1)  NOT NULL  DEFAULT '0',
   `2fa_secret` VARCHAR(32)  NULL  DEFAULT NULL,
   `theme` VARCHAR(32)  NULL  DEFAULT '',
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
@@ -1103,4 +1102,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.9";
-UPDATE `settings` SET `dbversion` = 46;
+UPDATE `settings` SET `dbversion` = 47;

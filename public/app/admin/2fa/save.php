@@ -31,10 +31,6 @@ if(!in_array($POST->{'2fa_provider'}, $providers)) 							{ $Result->show("dange
 // verify name
 if(strlen((string) $POST->{'2fa_name'})>32 || is_blank($POST->{'2fa_name'}))			{ $Result->show("danger", _("Invalid application name"), true); }
 
-// verify length
-if(!is_numeric($POST->{'2fa_length'}))										{ $Result->show("danger", _("Invalid value for length"), true); }
-if($POST->{'2fa_length'}>32 || $POST->{'2fa_length'}<26)						{ $Result->show("danger", _("Invalid length"), true); }
-
 // change
 $POST->{'2fa_userchange'} = isset($POST->{'2fa_userchange'}) ? $POST->{'2fa_userchange'} : 0;
 
@@ -42,7 +38,6 @@ $POST->{'2fa_userchange'} = isset($POST->{'2fa_userchange'}) ? $POST->{'2fa_user
 $values = [
 			"id"             => 1,
 			"2fa_name"       => $POST->{'2fa_name'},
-			"2fa_length"     => $POST->{'2fa_length'},
 			"2fa_provider"   => $POST->{'2fa_provider'},
 			"2fa_userchange" => $POST->{'2fa_userchange'}
 			];

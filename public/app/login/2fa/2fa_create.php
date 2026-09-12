@@ -10,20 +10,24 @@ if ($User->twofa_required()===false) {
 # generate and print code
 else {
 	# init class
-	$ga = new PHPGangsta_GoogleAuthenticator();
+	$ga = new PragmaRX\Google2FA\Google2FA;
+
 	// create secret
-	$secret = $ga->createSecret(32);  	// Override $User->settings->{'2fa_length'}. Only lengths 16 and 32 produce reliable results. See #3724
-	$username = strtolower((string) $User->user->username)."@".$User->settings->{'2fa_name'};
+	$secret = (string) $User->user->{'2fa_secret'};
+	$username = strtolower((string) $User->user->username) . "@" . (string) $User->settings->{'2fa_name'};
 
-	// save secret to DB
-	try {
-		$Admin = new Admin ($Database, false);
-		$Admin->object_modify ("users", "edit", "id", ["id"=>$User->user->id, "2fa_secret"=>$secret]);
-	}
-	catch (exception $e) {
-		$Result->show ("danger", $e->getMessage());
-	}
+	if ($secret === '') {
+		$secret = $ga->generateSecretKey(User::TOTP_SECRET_LEN);
 
+		// save secret to DB
+		try {
+			$Admin = new Admin ($Database, false);
+			$Admin->object_modify ("users", "edit", "id", ["id" => $User->user->id, "2fa" => 2, "2fa_secret" => $secret]);
+		}
+		catch (exception $e) {
+			$Result->show ("danger", $e->getMessage());
+		}
+	}
 	$qrCodeWriter = new \BaconQrCode\Writer(new \BaconQrCode\Renderer\ImageRenderer(new \BaconQrCode\Renderer\RendererStyle\RendererStyle(300), new \BaconQrCode\Renderer\Image\SvgImageBackEnd()));
 
 	// set HTML content
@@ -42,9 +46,6 @@ else {
 	$html[] = '		<div class="text-center">';
 	$html[] = '		<hr>'._('You can also scan following QR code with your preferred authenticator application').':<br><br>';
 	$html[] =       $qrCodeWriter->writeString("otpauth://totp/phpIPAM:$username?secret=$secret");
-	$html[] = '		</div>';
-	$html[] = '		<div class="text-right" style="margin-top:10px;">';
-	$html[] = '			<hr><a class="btn bt-sm btn-default" href="'.$url.create_link (null).'">'._('Validate').'</a>';
 	$html[] = '		</div>';
 	$html[] = '	</div>';
 	$html[] = '</div>';
