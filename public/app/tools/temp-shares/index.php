@@ -46,16 +46,24 @@ else {
 $cnt = 0;
 // loop
 foreach($temp_shares as $s) {
-	# fetch object
-	$object = $Tools->fetch_object ($s->type, "id", $s->id);
-	# fetch user
-	$user   = $Tools->fetch_object ("users", "id", $s->userId);
+	if (! in_array($s->type, ['subnets', 'ipaddresses'])) {
+		continue;
+	}
 
-	//type test
+	$object = $Tools->fetch_object($s->type, "id", $s->id);
+	if (! is_object($object)) {
+		continue;
+	}
+
+	$user = $Tools->fetch_object("users", "id", $s->userId);
+	if (! is_object($user)) {
+		continue;
+	}
+
 	$s->type_text = $s->type=="subnets" ? "Subnet" : "IP address";
+	$s->permissionId = $s->type === 'subnets' ? $object->id : $object->subnetId;
 
-	# check permission
-	if($Subnets->check_permission ($User->user, $object->id)>0) {
+    if ($Subnets->check_permission($User->user, $s->permissionId) >= User::ACCESS_R) {
 		$cnt++;
 		//set details
 		unset($tmp);
@@ -72,16 +80,18 @@ foreach($temp_shares as $s) {
 		//validity
 		$class = time()>$s->validity ? "alert-danger" : "alert-success";
 
-		//access logs
-		unset($logText);
-		$logs = $Tools->fetch_multiple_objects ("logs", "details", $s->code, "date", false);
-		if($logs===false)	{ $logText = "<span class='text-muted'>"._("No access")."</span>"; }
-		else {
-			foreach($logs as $l) {
-				$logText[] = $l->date." <span class='text-muted'>(IP $l->ipaddr)</span>";
-			}
-			$logText = implode("<br>", $logText);
-		}
+        //access logs
+        $logText = [];
+        $logs = $Tools->fetch_multiple_objects("logs", "details", $s->code, "date", false);
+        if (is_array($logs)) {
+            foreach ($logs as $l) {
+                $logText[] = $l->date . " <span class='text-muted'>(IP $l->ipaddr)</span>";
+            }
+        }
+        if (empty($logText)) {
+            $logText[] = "<span class='text-muted'>" . _("No access") . "</span>";
+        }
+        $logText = implode("<br>", $logText);
 
 		print "<tr class='text-top'>";
 		print "	<td>$s->type_text</td>";
