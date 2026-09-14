@@ -1,3 +1,8 @@
+<?php
+if (!defined('SCRIPT_PREFIX')) {
+	define('SCRIPT_PREFIX', 'e1');
+}
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -19,7 +24,7 @@
 	<!-- css -->
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.min.css?v=<?php print SCRIPT_PREFIX; ?>">
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap-custom.css?v=<?php print SCRIPT_PREFIX; ?>">
-	<?php if ($User->settings->theme!="white") { ?>
+	<?php if (isset($User) && $User->settings->theme!=="white") { ?>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->settings->theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?>">
 	<?php } ?>
 	<link rel="shortcut icon" href="../css/images/favicon.ico">
@@ -54,7 +59,7 @@
 		Make sure BASE directive is set for your installation. This is used to properly detect phpIPAM directory. It must be set in config.php.
 
 		<div class="well" style="padding:5px;margin-top:5px;">
-		Detected BASE: <?php escape_input(print str_replace("upgrade/", "", (string) $_SERVER['REQUEST_URI']));  ?>
+		Detected BASE: <?php print htmlentities(str_replace("upgrade/", "", (string) $_SERVER['REQUEST_URI']), ENT_QUOTES, 'UTF-8');  ?>
 		</div>
 
 		<h4>2.) Enable mod_rewrite</h4>

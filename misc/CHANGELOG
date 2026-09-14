@@ -32,6 +32,7 @@
     + Cross subnet and ping insecure direct object references;
     + 2FA activation, bypass CSRF checks;
     + Insecure direct object references (x2);
+    + Reflected Cross-Site Scripting (XSS) in /upgrade/index.php;
 
 == 1.8.0
 
