@@ -3,14 +3,29 @@ header('X-XSS-Protection:1; mode=block');
 # verify php build
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
 
+$User->logoff();
+
 // http auth
-if( !empty($_SERVER['PHP_AUTH_USER']) ) {
-    // try to authenticate
-	$User->authenticate ($_SERVER['PHP_AUTH_USER'], '');
-	// Redirect user where he came from, if unknown go to dashboard.
-	if ($redirect = $User->get_redirect_cookie()) { header("Location: " . $redirect); }
-	else                                          { header("Location: " . create_link("dashboard")); }
-	exit();
+$auth_method = $User->fetch_object ("usersAuthMethod", "id", 2);
+$auth_method->params = db_json_decode($auth_method->params);
+$server_var = $auth_method->params->server_var ? $auth_method->params->server_var : 'PHP_AUTH_USER';
+if( !empty($_SERVER[$server_var]) ) {
+	if ($auth_method->params->prefix) {
+		// check prefix
+		if ($auth_method->params->prefix == substr($_SERVER[$server_var], 0, strlen($auth_method->params->prefix))) {
+			// remove prefix and try to authenticate
+			$User->authenticate (substr($_SERVER[$server_var], strlen($auth_method->params->prefix)), '');
+		}
+	} else {
+		// try to authenticate
+		$User->authenticate ($_SERVER[$server_var], '');
+	}
+	if ($User->is_authenticated()) {
+		// Redirect user where he came from, if unknown go to dashboard.
+		if ($redirect = $User->get_redirect_cookie()) { header("Location: " . $redirect); }
+		else                                          { header("Location: " . create_link("dashboard")); }
+		exit();
+	}
 }
 // disable requests module for public
 if(@$config['requests_public']===false) {

@@ -340,6 +340,15 @@ class User extends Common_functions {
     }
 
     /**
+     * Logoff the current user
+     */
+    public function logoff () {
+            $this->is_authenticated = false;
+            $this->user = null;
+            unset($_SESSION['ipamusername']);
+    }
+
+    /**
      * Check if 2fa is required for user
      * @method twofa_required
      * @return bool
@@ -637,7 +646,7 @@ class User extends Common_functions {
      * @return array
      */
     public function fetch_available_auth_method_types () {
-		return array("AD", "LDAP", "NetIQ", "Radius", "SAML2");
+		return array("AD", "http", "LDAP", "NetIQ", "Radius", "SAML2");
 	}
 
 
@@ -809,34 +818,36 @@ class User extends Common_functions {
         # first we need to check if username exists
         $this->fetch_user_details ($username);
         # set method type if set, otherwise presume local auth
-        $this->authmethodid = !is_blank(@$this->user->authMethod) ? $this->user->authMethod : 1;
+        if (is_object($this->user)) {
+            $this->authmethodid = !is_blank(@$this->user->authMethod) ? $this->user->authMethod : 1;
 
-        # 2fa
-        if ($this->user->{'2fa'}==1) {
-            $this->twofa = true;
-        }
-
-        # get authentication method details
-        $this->get_auth_method_type ();
-
-        # authenticate based on name of auth method
-        if(!method_exists($this, $this->authmethodtype))    {
-            $this->Log->write ( _("User login"), _('Error: Invalid authentication method'), 2 );
-            $this->Result->show("danger", _("Error: Invalid authentication method"), true);
-        }
-        else {
-            # set method name variable
-            $authmethodtype = $this->authmethodtype;
-            if($saml !== false) {
-                $authmethodtype = 'auth_SAML2';
+            # 2fa
+            if ($this->user->{'2fa'}==1) {
+                $this->twofa = true;
             }
-            # is auth_SAML and $saml == false throw error
-            if ($authmethodtype=="auth_SAML2" && $saml===false) {
-                $this->Result->show("danger", _("Please use")." <a href='".create_link('saml2')."'>"._("login")."</a>!", true);
+
+            # get authentication method details
+            $this->get_auth_method_type ();
+
+            # authenticate based on name of auth method
+            if(!method_exists($this, $this->authmethodtype))    {
+                $this->Log->write ( _("User login"), _('Error: Invalid authentication method'), 2 );
+                $this->Result->show("danger", _("Error: Invalid authentication method"), true);
             }
             else {
-                # authenticate
-                $this->{$authmethodtype} ($username, $password);
+                # set method name variable
+                $authmethodtype = $this->authmethodtype;
+                if($saml !== false) {
+                    $authmethodtype = 'auth_SAML2';
+                }
+                # is auth_SAML and $saml == false throw error
+                if ($authmethodtype=="auth_SAML2" && $saml===false) {
+                    $this->Result->show("danger", _("Please use")." <a href='".create_link('saml2')."'>"._("login")."</a>!", true);
+                }
+                else {
+                    # authenticate
+                    $this->{$authmethodtype} ($username, $password);
+                }
             }
         }
     }
@@ -862,18 +873,18 @@ class User extends Common_functions {
                 $this->block_ip();
                 $this->log_failed_access($username);
                 $this->Log->write(_("User login"), _('Invalid username'), 2, $username);
-                $this->Result->show("danger", _("Invalid username or password"), true);
+                $this->Result->show("danger", _("Invalid username or password"));
+            } else {
+                # admin?
+                if ($user->role == "Administrator") {
+                    $this->isadmin = true;
+                }
+
+                $this->user = $user;
+
+                // register permissions
+                $this->register_user_module_permissions();
             }
-
-            # admin?
-            if ($user->role == "Administrator") {
-                $this->isadmin = true;
-            }
-
-            $this->user = $user;
-
-            // register permissions
-            $this->register_user_module_permissions();
         }
     }
 
@@ -979,20 +990,34 @@ class User extends Common_functions {
      * @return void
      */
     public function auth_http ($username, $password) {
-        # check login restrictions for authenticated user
-        $this->check_login_restrictions ($username);
+        # auth OK
+        if($password == '') {
+            # check login restrictions for authenticated user
+            $this->check_login_restrictions ($username);
 
-        # save to session
-        $this->write_session_parameters ();
+            # save to session
+            $this->write_session_parameters ();
 
-        $this->Result->show("success", _("Login successful"));
-        $this->Log->write( _("User login"), _("User")." ".$this->user->real_name." "._("logged in"), 0, $username );
+            $this->Result->show("success", _("Login successful"));
+            $this->Log->write( _("User login"), _("User")." ".$this->user->real_name." "._("logged in"), 0, $username );
 
-        # write last logintime
-        $this->update_login_time ();
+            # write last logintime
+            $this->update_login_time ();
 
-        # remove possible blocked IP
-        $this->block_remove_entry ();
+            # remove possible blocked IP
+            $this->block_remove_entry ();
+        }
+        # auth failed
+       else {
+            # add blocked count
+            $this->block_ip ();
+            $this->log_failed_access ($username);
+
+            $this->Log->write( _("User login"), _("Password used with auth_http"), 2, $username );
+
+             # apache
+            $this->Result->show("danger", _("Invalid username or password"), true);
+       }
     }
 
     /**
