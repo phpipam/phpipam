@@ -49,7 +49,7 @@ else {
     else {
     ?>
         <img src="<?php print $Tools->create_rack_link ($rack->id, $POST->deviceid); ?>" style='width:180px;'>
-        <?php if($rack->hasBack!="0") { ?>
+        <?php if((int) $rack->hasBack) { ?>
         <img src="<?php print $Tools->create_rack_link ($rack->id, $POST->deviceid, true); ?>" style='width:180px;'>
         <?php } ?>
     <?php } ?>

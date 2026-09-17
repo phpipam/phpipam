@@ -1644,30 +1644,29 @@ class Common_functions  {
 		return strpos($name, "custom_")===0 ? _(substr($name, 7)) : _($name);
 	}
 
-	/**
-	 * Creates image link to rack.
-	 *
-	 *
-	 * @param  bool|int $rackId
-	 * @param  bool|int $deviceId
-	 * @param  bool $is_back
-	 *
-	 * @return string|false
-	 */
-	public function create_rack_link ($rackId = false, $deviceId = false, $is_back = false) {
-    	if($rackId===false) {
-        	    return false;
-    	}
-    	else {
-        	//device ?
-        	if ($deviceId!==false) {
-            	return $this->createURL ().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&deviceId=$deviceId&is_back=$is_back";
-        	}
-        	else {
-            	return $this->createURL ().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&is_back=$is_back";
-        	}
-    	}
-	}
+    /**
+     * Creates image link to rack.
+     *
+     * @param  int  $rackId
+     * @param  int  $deviceId
+     * @param  bool $is_back
+     * @return string
+     */
+    public function create_rack_link($rackId, $deviceId, $is_back = false) {
+		$rackId = filter_var($rackId, FILTER_VALIDATE_INT);
+		$deviceId = filter_var($deviceId, FILTER_VALIDATE_INT);
+		$is_back = filter_var($is_back, FILTER_VALIDATE_BOOLEAN) ? '1' : '0';
+
+        if ($rackId === false) {
+            return '';
+        }
+
+        if ($deviceId === false) {
+			return $this->createURL().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&is_back=$is_back";
+        } else {
+			return $this->createURL().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&deviceId=$deviceId&is_back=$is_back";
+        }
+    }
 
 	/**
 	 * Show MAC address and vendor details
