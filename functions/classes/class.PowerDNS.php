@@ -613,7 +613,7 @@ class PowerDNS extends Common_functions {
      *
      * @param mixed $domain_id
      * @param string $type (default: "PTR")
-     * @return void
+     * @return int|false
      */
     public function count_domain_records_by_type ($domain_id, $type="PTR") {
         // query

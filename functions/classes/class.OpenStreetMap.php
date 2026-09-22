@@ -294,7 +294,7 @@ class OpenStreetMap extends Common_functions
      *
      * @param   string  $address
      * @param   string  $only_recent
-     * @return  StdClass|false
+     * @return  object|false
      */
     private function search_geo_cache($address, $only_recent = true)
     {

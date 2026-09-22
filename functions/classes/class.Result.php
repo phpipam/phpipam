@@ -103,7 +103,7 @@ class Result {
 	 * @param bool $inline (default: false)					return, not print
 	 * @param bool $popup2 (default: false)					close for JS for popup2
 	 * @param bool $reload (default: false)					reload
-	 * @return void
+	 * @return string
 	 */
 	public function show($class="muted", $text="No value provided", $die=false, $popup=false, $inline = false, $popup2 = false, $reload = false) {
 

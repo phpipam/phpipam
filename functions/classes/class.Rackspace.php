@@ -521,7 +521,7 @@ class phpipam_rack extends Tools {
 	 * Finds the rack that a subrack is located within
 	 *
 	 * @param  mixed $id    // the id of the subrack we're looking for
-	 * @return array|false
+	 * @return object|false
 	 */
 	public function find_subrack_parent ($id) {
 		foreach ($this->fetch_all_objects("rackContents") as $c) {

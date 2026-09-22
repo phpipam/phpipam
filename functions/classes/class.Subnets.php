@@ -1245,7 +1245,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @param bool $sectionId (default: false)
 	 * @param bool $cidr (default: false)
-	 * @return array|false
+	 * @return object|false
 	 */
 	public function find_subnet ($sectionId = false, $cidr = false) {
     	// check
