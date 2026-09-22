@@ -27,7 +27,7 @@ $User->check_user_session();
 $User->is_admin();
 
 # validate csrf cookie
-if ($User->Crypto->csrf_cookie("validate", "generate-export", $GET->csrf) === false) {
+if ($User->Crypto->csrf_validate($GET->csrf) === false) {
 	$filename = "error_message.txt";
 
 	$content  = _("Invalid CSRF cookie");

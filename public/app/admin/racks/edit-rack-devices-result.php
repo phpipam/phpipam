@@ -28,7 +28,7 @@ $User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "rack_devices", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # device type?
 if (!isset($POST->devicetype) || ($POST->devicetype != 'device' && $POST->devicetype != 'content' && $POST->devicetype != 'subrack')) { $Result->show("danger", _("Invalid device type"), true, true); }

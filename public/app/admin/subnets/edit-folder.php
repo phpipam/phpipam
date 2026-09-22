@@ -20,7 +20,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $POST->action=="add" ? $User->Crypto->csrf_cookie ("create", "folder_add") : $User->Crypto->csrf_cookie ("create", "folder_".$POST->subnetId);
+$csrf = $User->Crypto->csrf_session_token();
 
 # validate action
 $Admin->validate_action();

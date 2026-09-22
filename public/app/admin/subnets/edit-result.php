@@ -26,11 +26,7 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-if($POST->action=="add") {
-	$User->Crypto->csrf_cookie ("validate", "subnet_add", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-} else {
-	$User->Crypto->csrf_cookie ("validate", "subnet_".$POST->subnetId, $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-}
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # if show name than description must be set
 if($POST->showName==1 && is_blank($POST->description)) 	{ $Result->show("danger", _("Please enter subnet description to show as name!"), true); }
@@ -413,7 +409,7 @@ else {
 		if (!isset($POST->DNSrecursive) && @$old_subnet_details->DNSrecursive==0) { $POST->DNSrecursive = 0; }
 
 		// recreate csrf cookie
-        $csrf = $User->Crypto->csrf_cookie ("create", "domain");
+        $csrf = $User->Crypto->csrf_session_token();
 
 		//delete
 		if ($POST->action=="delete") {

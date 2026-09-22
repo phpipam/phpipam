@@ -25,7 +25,7 @@ if ($POST->action == "edit") {
 }
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "vlan_domain");
+$csrf = $User->Crypto->csrf_session_token();
 
 # fetch vlan details
 $l2_domain = $Admin->fetch_object ("vlanDomains", "id", $POST->id);

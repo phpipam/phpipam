@@ -24,7 +24,7 @@ $User->is_demo();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "mail", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # set update query
 $values = ["id"=>1,

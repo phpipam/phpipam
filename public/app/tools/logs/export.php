@@ -28,7 +28,7 @@ $workbook = new Spreadsheet_Excel_Writer();
 ini_set('memory_limit', '1024M');
 
 //fetch sections, and for each section write new tab, inside tab write all values!
-if($User->Crypto->csrf_cookie ("validate", "logs", $GET->csrf) === false) {
+if($User->Crypto->csrf_validate($GET->csrf) === false) {
 	$logs = [];
 	$logs[] = [
 		"id"       =>"",

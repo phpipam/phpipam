@@ -25,7 +25,7 @@ $filetype = end($filetype);
 # check integer
 is_numeric($POST->subnetId) ? : $Result->show("danger", _("Invalid subnet ID") ,true);
 
-$csrf = $User->Crypto->csrf_cookie ("create", "import_file");
+$csrf = $User->Crypto->csrf_session_token();
 
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');

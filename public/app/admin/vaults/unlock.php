@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "vaultunlock");
+$csrf = $User->Crypto->csrf_session_token();
 
 # make sure user has access
 if ($User->get_module_permissions("vaults") == User::ACCESS_NONE) {

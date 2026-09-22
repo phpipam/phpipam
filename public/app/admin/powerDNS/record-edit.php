@@ -25,7 +25,7 @@ if ($POST->action == "edit") {
 }
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "record");
+$csrf = $User->Crypto->csrf_session_token();
 
 # save settings for powerDNS default
 $pdns = $PowerDNS->db_settings;

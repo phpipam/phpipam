@@ -12,7 +12,7 @@ $Password_check = new Password_check ();
 $User->check_user_session ();
 
 #CSRF
-$User->Crypto->csrf_cookie ("validate", "pass-change", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # Check old password
 if(!hash_equals($User->user->password, crypt((string) $POST->oldpassword, (string) $User->user->password))) { $Result->show("danger", _("Invalid password"), true); }

@@ -28,7 +28,7 @@ $User->is_demo();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "pdns_defaults", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 // validations
 if(is_blank($POST->ttl))	{ $POST->ttl = $PowerDNS->defaults->ttl; }

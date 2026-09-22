@@ -26,7 +26,7 @@ if ($bgp===false)                                            { $Result->show("da
 $bgp_mapped_subnets = $Tools->fetch_routing_subnets ("bgp", $bgp->id, false);
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "routing_bgp_mapping");
+$csrf = $User->Crypto->csrf_session_token();
 
 ?>
 

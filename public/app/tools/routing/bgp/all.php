@@ -9,7 +9,7 @@ $User->check_user_session();
 # verify module permissions
 $User->check_module_permissions ("routing", User::ACCESS_R, true);
 
-$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "generate-export");
+$csrf = $User->Crypto->csrf_session_token();
 ?>
 
 <?php

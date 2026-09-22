@@ -24,7 +24,7 @@ $User->check_maintaneance_mode ();
 # perm check popup
 $User->check_module_permissions ("vlan", User::ACCESS_RWA, true, true);
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "scan", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fake error
 print "<div class='alert-danger hidden'></div>";

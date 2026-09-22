@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 // validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "changelog", $GET->csrf) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($GET->csrf) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # truncate logs table
 if(!$Admin->truncate_table("changelog")) 	{ $Result->show("danger",  _('Error clearing logs')."!", true); }

@@ -9,7 +9,7 @@
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "user-menu");
+$csrf = $User->Crypto->csrf_session_token();
 
 ?>
 <script>

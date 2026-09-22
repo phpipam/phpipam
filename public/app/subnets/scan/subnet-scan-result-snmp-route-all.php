@@ -55,7 +55,7 @@ if (isset($subnets_all)) {
         # set new POST
         $POST = new Params($s);
         # create csrf token
-        $POST->csrf_cookie = $User->Crypto->csrf_cookie ("create", "subnet_add");
+        $POST->csrf_cookie = $User->Crypto->csrf_session_token();
         # permissions
         $subnet['permissions'] = $section->permissions;
         # check for master

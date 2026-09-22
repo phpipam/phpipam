@@ -9,7 +9,7 @@ $User->check_user_session();
 # admin check
 $User->is_admin();
 
-$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "generate-export");
+$csrf = $User->Crypto->csrf_session_token();
 ?>
 
 <script>

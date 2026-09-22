@@ -20,7 +20,7 @@ $User->check_user_session();
 $User->is_admin();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "group");
+$csrf = $User->Crypto->csrf_session_token();
 # validate action
 $Admin->validate_action(false);
 # fetch custom fields

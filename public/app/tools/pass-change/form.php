@@ -3,7 +3,7 @@
 $User->check_user_session ();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "pass-change");
+$csrf = $User->Crypto->csrf_session_token();
 ?>
 
 <div class="col-xs-12 col-md-6 col-md-offset-3" style="margin-top:50px;">

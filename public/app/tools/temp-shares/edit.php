@@ -17,7 +17,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "temp-shares");
+$csrf = $User->Crypto->csrf_session_token();
 
 # checks
 if($User->settings->tempShare!=1)								{ $Result->show("danger", _("Temporary sharing disabled"), true, true); }

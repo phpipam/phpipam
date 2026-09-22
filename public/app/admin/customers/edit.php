@@ -24,7 +24,7 @@ else {
 }
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "customer");
+$csrf = $User->Crypto->csrf_session_token();
 
 # validate action
 $Tools->validate_action();

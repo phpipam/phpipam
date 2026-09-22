@@ -10,7 +10,7 @@ $User->check_user_session();
 $User->check_module_permissions ("pdns", User::ACCESS_R, true, false);
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "pdns_defaults");
+$csrf = $User->Crypto->csrf_session_token();
 
 $readonly = $POST->action=="delete" ? "readonly" : "";
 ?>

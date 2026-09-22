@@ -13,7 +13,7 @@ $Log 		= new Logging ($Database);
 $User->check_user_session(true, true);
 
 # validate csrf cookie
-if ($User->Crypto->csrf_cookie("validate", "2fa_validation", $POST->csrf_cookie) === false) {
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
 	$Result->show("danger", _("Invalid CSRF cookie"), true);
 }
 

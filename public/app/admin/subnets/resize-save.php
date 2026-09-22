@@ -23,7 +23,7 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "resize", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # ID must be numeric
 if(!is_numeric($POST->subnetId))									{ $Result->show("danger", _("Invalid ID"), true); }

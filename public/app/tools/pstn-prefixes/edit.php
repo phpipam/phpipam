@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $POST->action=="add" ? $User->Crypto->csrf_cookie ("create", "pstn_add") : $User->Crypto->csrf_cookie ("create", "pstn_".$POST->id);
+$csrf = $User->Crypto->csrf_session_token();
 
 # perm check popup
 if ($POST->action == "edit") {

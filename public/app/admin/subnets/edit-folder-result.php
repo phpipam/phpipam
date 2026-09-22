@@ -23,11 +23,7 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-if($POST->action=="add") {
-	$User->Crypto->csrf_cookie ("validate", "folder_add", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-} else {
-	$User->Crypto->csrf_cookie ("validate", "folder_".$POST->subnetId, $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-}
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # ID must be numeric
 if($POST->action=="add") {

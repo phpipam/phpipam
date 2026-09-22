@@ -19,7 +19,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "section");
+$csrf = $User->Crypto->csrf_session_token();
 
 # validate action
 $Admin->validate_action();

@@ -5,6 +5,8 @@
  */
 class Crypto {
 
+    private const CSRF_TOKEN_LEN = 32;
+
     /**
      * Result
      * @var Result
@@ -185,58 +187,30 @@ class Crypto {
     }
 
     /**
-     * CSRF cookie creation / validation.
+     * Read/set csrf
      *
-     * @param string $action (default: "create")
-     * @param mixed $index (default: null)
-     * @param mixed $value (default: null)
      * @return string
      */
-    public function csrf_cookie ($action = "create", $index = null, $value = null) {
-        switch ($action) {
-            case "create":
-            case "create-if-not-exists":
-                return $this->csrf_cookie_create ($index, $action == "create-if-not-exists");
-            case "validate":
-                return $this->csrf_cookie_validate ($index, $value);
-            default:
-                $this->Result->show("danger", _("Invalid CSRF cookie action"), true);
+    public function csrf_session_token()
+    {
+         if (! isset($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = $this->generate_html_safe_token(Crypto::CSRF_TOKEN_LEN);
         }
+
+        return (string) $_SESSION['csrf_token'];
     }
 
     /**
-     * Creates cookie to prevent csrf
+     * Validate csrf value
      *
-     * @param mixed $index
-     * @param bool $if_not_exists (default: false)
-     * @return string
-     */
-    private function csrf_cookie_create ($index, $if_not_exists = false) {
-        // set cookie suffix
-        $name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
-        // check if exists
-        if ($if_not_exists && isset($_SESSION[$name]))
-            return $_SESSION[$name];
-        // save cookie
-        $_SESSION[$name] = $this->generate_html_safe_token(32);
-        // return
-        return $_SESSION[$name];
-    }
-
-    /**
-     * Validate provided csrf cookie
-     *
-     * @param mixed $index
-     * @param mixed $value
+     * @param string $value
      * @return bool
      */
-    private function csrf_cookie_validate ($index, $value) {
-        // set cookie suffix
-        $name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
-        // Check CSRF cookie is present
-        if (empty($value)) return false;
-        // Check CSRF cookie is valid and return
-        return isset($_SESSION[$name]) && (string) $_SESSION[$name] === (string) $value ? true : false;
+    public function csrf_validate ($value) {
+        if (! isset($_SESSION['csrf_token'])) {
+            return false;
+        }
+        return hash_equals((string) $_SESSION['csrf_token'], (string) $value) ? true : false;
     }
 
 }

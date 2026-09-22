@@ -23,7 +23,7 @@ $User->check_user_session();
 $User->is_demo();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "user-menu", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # verify email
 if(!filter_var($POST->email, FILTER_VALIDATE_EMAIL))							{ $Result->show("danger alert-absolute",  _('Email not valid!'), true); }

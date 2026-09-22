@@ -39,7 +39,7 @@ if ($POST->action=="remove") {
     # fetch rack details
     $rack = $Admin->fetch_object("racks", "id", $POST->rackid);
     # validate csrf cookie
-    $User->Crypto->csrf_cookie ("validate", "rack_devices_".$rack->id."_device_".$POST->deviceid, $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
+    $User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
     switch ($POST->devicetype) {
         case 'device':
         # set values
@@ -76,7 +76,7 @@ if ($POST->action=="remove") {
 # add to rack
 else {
     # create csrf token
-    $csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "rack_devices");
+    $csrf = $User->Crypto->csrf_session_token();
     # fetch rack details
     $rack = $Admin->fetch_object("racks", "id", $POST->rackid);
     # check

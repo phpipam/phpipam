@@ -20,7 +20,7 @@ $User->check_user_session();
 $User->validate_action();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "passkeyedit");
+$csrf = $User->Crypto->csrf_session_token();
 
 # fetch passkey
 $passkey = $User->get_user_passkey_by_keyId ($POST->keyid);

@@ -19,7 +19,7 @@ $User->check_user_session();
 $User->is_admin();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "languages");
+$csrf = $User->Crypto->csrf_session_token();
 
 # validate action
 $Admin->validate_action();

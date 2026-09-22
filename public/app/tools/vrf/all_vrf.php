@@ -36,7 +36,7 @@ $custom_size = sizeof($custom) - sizeof($hidden_fields);
 </div>
 
 <?php if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
-	$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "generate-export"); ?>
+	$csrf = $User->Crypto->csrf_session_token(); ?>
 <div class="btn-group pull-right" style="margin-bottom:10px;">
 	<div class="hidden"><select name="dataType" csrf="<?php print $csrf; ?>"><option value='vrf' selected="selected">VRF</option></select></div>
 	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title="Export data entries for the selected type"><i class="fa fa-download"></i> Export</button>

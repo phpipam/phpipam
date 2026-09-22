@@ -22,7 +22,7 @@ $User->is_admin();
 $User->is_demo();
 
 // validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "2fa", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 // check 2fa_provider
 $providers = ['none', "Google_Authenticator"];

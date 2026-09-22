@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 
-$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "generate-export");
+$csrf = $User->Crypto->csrf_session_token();
 
 # must be numeric
 if(!is_numeric($GET->subnetId))	{ $Result->show("danger", _("Invalid ID"), true); }
@@ -143,7 +143,7 @@ if ($folder['sectionId'] != $GET->section) {
 	print "<div class='btn-group'>";
 		print "<a class='modIPaddr btn btn-xs btn-default btn-success' 	href='' data-container='body' rel='tooltip' title='"._('Add new IP address')."' data-subnetId='$folder[id]' data-action='add' data-id=''>	<i class='fa fa-plus'></i></a> ";
         if($folder_permission>1 && $User->settings->enableSNMP=="1") {
-		$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "scan");
+		$csrf = $User->Crypto->csrf_session_token();
         print "<button class='btn btn-xs btn-success' id='snmp-routing-section' rel='tooltip' data-container='body' title='"._('Search for subnets through SNMP')."' data-subnetId='$folder[id]' data-sectionId='$folder[sectionId]' data-csrf-cookie='$csrf'><i class='fa fa-cogs'></i></button>";
         print "<button class='btn btn-xs btn-default' id='truncate' rel='tooltip' data-container='body' title='"._('Truncate subnet')."' data-subnetId='$folder[id]'><i class='fa fa-gray fa-trash-o'></i></button>";
         }

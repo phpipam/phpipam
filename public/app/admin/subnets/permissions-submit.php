@@ -21,7 +21,7 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "permissions", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 if($Sections->check_permission ($User->user, $POST->subnetId) != User::ACCESS_RWA) { $Result->show("danger", _('You do not have permissions to add edit/delete this subnet')."!", true); }
 

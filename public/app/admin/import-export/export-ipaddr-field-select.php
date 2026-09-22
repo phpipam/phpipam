@@ -21,7 +21,7 @@ $User->check_user_session();
 $User->is_admin();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "generate-export", $GET->csrf) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($GET->csrf) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # Won't check per subnet/section rights since this is an admin section, where the admin user has full access
 

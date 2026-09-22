@@ -10,7 +10,7 @@ $User->check_user_session();
 $User->is_admin();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "replace_fields");
+$csrf = $User->Crypto->csrf_session_token();
 ?>
 
 <h4><?php print _('Search and replace fields in IP address list'); ?></h4>

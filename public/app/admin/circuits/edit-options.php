@@ -24,7 +24,7 @@ if ($POST->action == "edit") {
 }
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "circuit_options");
+$csrf = $User->Crypto->csrf_session_token();
 
 # validate action
 $Admin->validate_action(false);

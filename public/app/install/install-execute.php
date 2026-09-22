@@ -18,7 +18,7 @@ $Result 	= new Result ();
 
 // Manually start session as we do not have $User.
 session_start();
-$Crypto->csrf_cookie ("validate", "install_execute", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # make sure it is properly requested
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")						{ $Result->show("danger", _("Invalid request"), true); }

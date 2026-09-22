@@ -1,6 +1,6 @@
 <?php
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "2fa_validation");
+$csrf = $User->Crypto->csrf_session_token();
 ?>
 
 <div id="login">

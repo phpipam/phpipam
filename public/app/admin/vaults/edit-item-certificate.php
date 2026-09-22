@@ -23,7 +23,7 @@ if ($User->get_module_permissions("vaults") < User::ACCESS_RW) {
 }
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "vaultitem");
+$csrf = $User->Crypto->csrf_session_token();
 
 # validate action
 $Admin->validate_action();

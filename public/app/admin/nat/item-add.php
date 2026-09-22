@@ -29,7 +29,7 @@ $nat = $Admin->fetch_object ("nat", "id", $POST->id);
 $nat!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
 // new cookie
-$csrf_cookie = $User->Crypto->csrf_cookie ("create", "nat_add");
+$csrf_cookie = $User->Crypto->csrf_session_token();
 ?>
 
 <!-- header -->

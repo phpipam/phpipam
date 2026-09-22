@@ -10,7 +10,7 @@ $User->check_user_session();
 $User->is_admin();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "settings");
+$csrf = $User->Crypto->csrf_session_token();
 
 # current policy
 $policy = db_json_decode($User->settings->passwordPolicy);

@@ -24,7 +24,7 @@ if ($POST->action == "edit") {
 }
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "vlan");
+$csrf = $User->Crypto->csrf_session_token();
 
 # validate action
 $Admin->validate_action();

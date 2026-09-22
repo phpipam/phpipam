@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "logs");
+$csrf = $User->Crypto->csrf_session_token();
 
 # admin class
 $Admin = new Admin($Database, false);

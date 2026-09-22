@@ -18,7 +18,7 @@ $User           = new User ($Database);
 $User->check_user_session();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "passkeyedit", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fetch passkey
 $passkey = $User->get_user_passkey_by_keyId ($POST->keyid);

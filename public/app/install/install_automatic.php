@@ -9,7 +9,7 @@ $db = Config::ValueOf('db');
 session_start();
 
 $Crypto = new Crypto();
-$csrf = $Crypto->csrf_cookie("create", "install_execute");
+$csrf = $Crypto->csrf_session_token();
 
 // add prefix - install or migrate
 $title_prefix = $GET->subnetId=="migrate" ? _("migration") : _("installation");

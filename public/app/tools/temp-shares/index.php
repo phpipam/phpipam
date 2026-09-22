@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 
-$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "temp-shares");
+$csrf = $User->Crypto->csrf_session_token();
 
 # fetch all shares
 $temp_shares = db_json_decode($User->settings->tempAccess);

@@ -24,7 +24,7 @@ $User->is_admin();
 $User->is_demo();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "settings", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 //check for http/https

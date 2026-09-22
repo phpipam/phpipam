@@ -23,7 +23,7 @@ if ($POST->action == "edit") {
 }
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "device_types");
+$csrf = $User->Crypto->csrf_session_token();
 
 # validate action
 $Admin->validate_action();

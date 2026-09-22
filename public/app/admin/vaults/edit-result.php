@@ -26,7 +26,7 @@ if ($User->get_module_permissions("vaults") < User::ACCESS_RWA) {
 }
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "vaults", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('vaults');

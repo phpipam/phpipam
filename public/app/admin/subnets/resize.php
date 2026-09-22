@@ -18,8 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "resize");
-
+$csrf = $User->Crypto->csrf_session_token();
 
 # ID must be numeric
 if(!is_numeric($POST->subnetId))									{ $Result->show("danger", _("Invalid ID"), true, true); }

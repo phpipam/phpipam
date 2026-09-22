@@ -26,7 +26,7 @@ if ($POST->action == "edit") {
 }
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "device_snmp", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true, false, true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true, false, true) : "";
 
 # ID, port snd community must be numeric
 if(!is_numeric($POST->device_id))			              { $Result->show("danger", _("Invalid ID"), true, true, false, true); }

@@ -24,7 +24,7 @@ $server = $Admin->fetch_object("usersAuthMethod", "id", $POST->server);
 $server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "group");
+$csrf = $User->Crypto->csrf_session_token();
 
 //parse parameters
 $params = db_json_decode($server->params);

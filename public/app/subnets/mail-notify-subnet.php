@@ -21,7 +21,7 @@ $User->check_user_session();
 # id must be numeric
 is_numeric($POST->id) || is_blank($POST->id) ?:	$Result->show("danger", _("Invalid ID"), true);
 
-$csrf = $User->Crypto->csrf_cookie ("create", "mail_notify");
+$csrf = $User->Crypto->csrf_session_token();
 
 # get IP address id
 $id = $POST->id;

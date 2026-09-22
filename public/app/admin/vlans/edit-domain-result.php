@@ -26,7 +26,7 @@ if ($POST->action == "edit") {
 }
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "vlan_domain", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # we cannot delete default domain
 if($POST->id==1 && $POST->action=="delete")						{ $Result->show("danger", _("Default domain cannot be deleted"), true); }

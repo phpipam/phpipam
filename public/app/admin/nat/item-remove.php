@@ -22,7 +22,7 @@ $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "nat", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
 
 # get NAT object
 $nat = $Admin->fetch_object ("nat", "id", $POST->id);

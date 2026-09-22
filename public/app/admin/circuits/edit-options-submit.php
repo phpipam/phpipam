@@ -25,7 +25,7 @@ if ($POST->action == "edit") {
 }
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "circuit_options", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # empty
 if(is_blank($POST->option))                           { $Result->show("danger", _('Value cannot be empty'), true); }

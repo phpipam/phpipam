@@ -22,7 +22,7 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "requests", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # verify permissions
 if($Subnets->check_permission($User->user, $POST->subnetId) != 3)	{ $Result->show("danger", _('You do not have permissions to process this request')."!", true); }

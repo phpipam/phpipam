@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "changelog");
+$csrf = $User->Crypto->csrf_session_token();
 
 # header
 print "<h4>"._('Changelog')."</h4>";

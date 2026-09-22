@@ -59,7 +59,7 @@ print "<div class='btn-group'>";
 print "</div>";
 
 if($User->get_module_permissions ("devices")>=User::ACCESS_RW) {
-	$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "generate-export");
+	$csrf = $User->Crypto->csrf_session_token();
 	print '<div class="btn-group pull-right" style="margin-bottom:10px;">';
 	print '	<div class="hidden"><select name="dataType" csrf="'.$csrf.'"><option value="devices" selected="selected">Devices</option></select></div>';
 	print '	<button class="dataExport btn btn-sm btn-default" rel="tooltip" data-placement="bottom" title="" data-original-title="Export data entries for the selected type"><i class="fa fa-download"></i> Export</button>';

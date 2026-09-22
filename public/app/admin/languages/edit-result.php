@@ -25,7 +25,7 @@ $User->is_demo();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "languages", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # verify that description is present if action != delete
 if($POST->action != "delete" && strlen((string) $POST->l_code) < 2)		{ $Result->show("danger", _('Code must be at least 2 characters long'), true); }

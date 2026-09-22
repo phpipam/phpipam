@@ -28,7 +28,7 @@ if ($POST->action == "edit") {
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "device", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # ID must be numeric
 if($POST->action!="add" && !is_numeric($POST->switchid))			{ $Result->show("danger", _("Invalid ID"), true); }

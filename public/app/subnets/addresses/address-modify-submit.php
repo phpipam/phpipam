@@ -25,12 +25,7 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-if($POST->action=="add") {
-	$User->Crypto->csrf_cookie ("validate", "address_add", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-}
-else {
-	$User->Crypto->csrf_cookie ("validate", "address_".$POST->id, $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-}
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # validate action
 $Tools->validate_action(false);

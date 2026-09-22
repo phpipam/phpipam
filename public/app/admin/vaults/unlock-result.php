@@ -25,7 +25,7 @@ if ($User->get_module_permissions("vaults") == User::ACCESS_NONE) {
 }
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "vaultunlock", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 // fetch vault
 $vault = $Admin->fetch_object("vaults", "id", $POST->vaultId);

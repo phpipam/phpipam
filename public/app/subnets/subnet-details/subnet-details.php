@@ -4,8 +4,7 @@
  * Main script to display master subnet details if subnet has slaves
  ***********************************************************************/
 
-$csrf1 = $User->Crypto->csrf_cookie ("create-if-not-exists", "generate-export");
-$csrf2 = $User->Crypto->csrf_cookie ("create-if-not-exists", "temp-shares");
+$csrf = $User->Crypto->csrf_session_token();
 
 # set rowspan
 $rowSpan = 10 + sizeof($custom_fields);
@@ -565,7 +564,7 @@ else {
 			print "<td>";
 			$m=1;
 			foreach($active_shares as $s) {
-				print "<button class='btn btn-xs btn-default removeSharedTemp' data-csrf='$csrf2' data-code='$s->code' ><i class='fa fa-times'></i></button> <a href='".create_link("temp_share",$s->code)."'>Share $m</a> ("._("Expires")." ".date("Y-m-d H:i:s", $s->validity).")<br>";
+				print "<button class='btn btn-xs btn-default removeSharedTemp' data-csrf='$csrf' data-code='$s->code' ><i class='fa fa-times'></i></button> <a href='".create_link("temp_share",$s->code)."'>Share $m</a> ("._("Expires")." ".date("Y-m-d H:i:s", $s->validity).")<br>";
 				$m++;
 			}
 			print "<td>";
@@ -583,7 +582,7 @@ else {
 			print "<td>";
 			$m=1;
 			foreach($expired_shares as $s) {
-				print "<button class='btn btn-xs btn-danger removeSharedTemp' data-csrf='$csrf2' data-code='$s->code' ><i class='fa fa-times'></i></button> <a href='".create_link("temp_share",$s->code)."'>Share $m</a> ("._("Expired")." ".date("Y-m-d H:i:s", $s->validity).")<br>";
+				print "<button class='btn btn-xs btn-danger removeSharedTemp' data-csrf='$csrf' data-code='$s->code' ><i class='fa fa-times'></i></button> <a href='".create_link("temp_share",$s->code)."'>Share $m</a> ("._("Expired")." ".date("Y-m-d H:i:s", $s->validity).")<br>";
 				$m++;
 			}
 			print "<td>";
@@ -699,11 +698,11 @@ else {
 	print "<div class='btn-group'>";
 		//import
 		if($sp['import'])
-		print "<a class='csvImport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."' data-subnetId='$subnet[id]' csrf='$csrf1'>		<i class='fa fa-download'></i></a>";
+		print "<a class='csvImport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."' data-subnetId='$subnet[id]' csrf='$csrf'>		<i class='fa fa-download'></i></a>";
 		else
 		print "<a class='btn btn-xs btn-default disabled'  	href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."'>									<i class='fa fa-download'></i></a>";
 		//export
-		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$subnet[id]' csrf='$csrf1'>		<i class='fa fa-upload'></i></a>";
+		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$subnet[id]' csrf='$csrf'>		<i class='fa fa-upload'></i></a>";
 		//share
 		if($subnet_permission>1 && $User->settings->tempShare==1) {
         print "<a class='btn btn-xs btn-default open_popup' data-script='app/tools/temp-shares/edit.php' data-class='700' data-action='edit' data-id='$subnet[id]' data-type='subnets' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."'><i class='fa fa-share-alt'></i></a>";

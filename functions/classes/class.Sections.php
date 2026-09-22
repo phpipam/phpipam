@@ -520,7 +520,7 @@ class Sections extends Common_functions {
 		$html = [];
 
 		# create csrf token
-		$csrf_ffss = $User->Crypto->csrf_cookie ("create-if-not-exists", "find_free_section_subnets");
+		$csrf_ffss = $User->Crypto->csrf_session_token();
 
 		# set custom fields
 		$Tools = new Tools ($this->Database);

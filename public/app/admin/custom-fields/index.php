@@ -10,7 +10,7 @@ $User->check_user_session();
 $User->is_admin();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "custom_field_reorder");
+$csrf = $User->Crypto->csrf_session_token();
 
 /* fetch all custom fields */
 $custom_tables = [

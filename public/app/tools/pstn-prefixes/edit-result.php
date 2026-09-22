@@ -20,15 +20,8 @@ if ($POST->action == "edit") {
     $User->check_module_permissions("pstn", User::ACCESS_RWA, true, false);
 }
 
-
 # validate csrf cookie
-if($POST->action=="add") {
-    $User->Crypto->csrf_cookie ("validate", "pstn_add", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-}
-else {
-    $User->Crypto->csrf_cookie ("validate", "pstn_".$POST->id, $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-}
-
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # validations
 if($POST->action=="delete" || $POST->action=="edit") {

@@ -20,7 +20,7 @@ $User->check_user_session();
 $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "nat_add", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # length
 if(is_blank($POST->ip))   { $Result->show("danger", _("Please enter IP address"), true); }

@@ -12,7 +12,7 @@ $User->check_user_session();
 $User->is_admin();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "instructions");
+$csrf = $User->Crypto->csrf_session_token();
 
 // default
 if(!isset($GET->subnetId)) { $GET->subnetId = 1; }

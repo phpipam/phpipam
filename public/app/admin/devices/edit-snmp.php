@@ -25,7 +25,7 @@ if ($POST->action == "edit") {
 }
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "device_snmp");
+$csrf = $User->Crypto->csrf_session_token();
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('devices');

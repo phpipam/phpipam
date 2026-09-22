@@ -13,7 +13,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$User->Crypto->csrf_cookie ("validate", "routing_bgp", $POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # perm check popup
 if ($POST->action == "edit") {

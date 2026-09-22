@@ -16,7 +16,7 @@ $User->check_user_session();
 $User->is_admin();
 
 # create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "authmethods");
+$csrf = $User->Crypto->csrf_session_token();
 
 # if edit check if protected?
 if($POST->action!="add") {
