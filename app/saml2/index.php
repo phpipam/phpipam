@@ -179,7 +179,11 @@ try {
             $values["role"] = filter_var($auth->getAttribute("is_admin")[0], FILTER_VALIDATE_BOOLEAN) ? "Administrator" : "User";
 
             // Parse groups
-            $saml_groups = array_map('trim', pf_explode(',', $auth->getAttribute("groups")[0])) ?: [];
+            if(count($auth->getAttribute("groups")) > 0){
+                $saml_groups = $auth->getAttribute("groups");
+            }else{
+                $saml_groups = array_map('trim', pf_explode(',', $auth->getAttribute("groups")[0])) ?: [];
+            }
 
             $ug = [];
             foreach ($Tools->fetch_all_objects("userGroups", "g_id") as $g) {
