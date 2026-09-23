@@ -136,9 +136,9 @@ try {
             // - "is_admin", (Boolean), OPTIONAL, default: 0
             //   User role, "Administrator" or "Normal User".
             //
-            // - "groups", (String), OPTIONAL (Admins have admin level access to all groups), default: ""
-            //   Comma separated list of group membership.
-            //   e.g "groups"="Operators,Guests"
+            // - "groups", (String|List), OPTIONAL (Admins have admin level access to all groups), default: ""
+            //   Can either be a comma separated list of group membership or SAML claim with multiple separate attribute values
+            //   e.g "groups"="Operators,Guests" or "groups"=["Operators","Guests"] respectively.
             //
             // - "modules", (String), OPTIONAL (Admins have admin level access to all modules), default: ""
             //   Comma separated list of modules with permission level, 0=None, 1=Read, 2=Read/Write, 3=Admin
