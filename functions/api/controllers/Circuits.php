@@ -39,7 +39,7 @@ class Circuits_controller extends Common_api_functions {
 		$this->init_object ("Admin", $Database);
 		// reset parameters
 		if($params->id=="providers") {
-			$this->rewrite_controller_params ((array) $params);
+			$this->rewrite_controller_params ($params->as_array());
 			// set valid keys
 			$this->set_valid_keys ("circuitProviders");
 			// set type
