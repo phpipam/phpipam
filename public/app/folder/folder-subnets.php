@@ -9,6 +9,8 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 # verify that user is logged in
 $User->check_user_session();
 
+$csrf = $User->Crypto->csrf_session_token();
+
 # must be numeric
 if(!is_numeric($GET->subnetId))	{ $Result->show("danger", _("Invalid ID"), true); }
 if(!is_numeric($GET->section))	{ $Result->show("danger", _("Invalid ID"), true); }
@@ -151,10 +153,10 @@ if($slaves) {
 					print "	<div class='btn-group'>";
 					print "		<button class='btn btn-xs btn-default editSubnet'     data-action='edit'   data-subnetid='".$slave['id']."'  data-sectionid='".$slave['sectionId']."'><i class='fa fa-gray fa fa-pencil'></i></button>";
 					if($User->is_subnet_favourite($slave['id'])){
-                                                print " <a class='btn btn-xs btn-default btn-info editFavourite favourite-$slave[id]' href='' data-container='body' rel='tooltip' title='"._('Click to remove from favourites')."' data-subnetId='$slave[id]' data-action='remove'><i class='fa fa-star'></i></a>";
+                                                print " <a class='btn btn-xs btn-default btn-info editFavourite favourite-$slave[id]' href='' data-container='body' rel='tooltip' title='"._('Click to remove from favourites')."' data-subnetId='$slave[id]' data-action='remove' csrf='$csrf'><i class='fa fa-star'></i></a>";
                                         }
 					else{
-                                                print " <a class='btn btn-xs btn-default editFavourite favourite-$slave[id]' href='' data-container='body' rel='tooltip' title='"._('Click to add to favourites')."' data-subnetId='$slave[id]' data-action='add'><i class='fa fa-star fa-star-o'></i></a>";
+                                                print " <a class='btn btn-xs btn-default editFavourite favourite-$slave[id]' href='' data-container='body' rel='tooltip' title='"._('Click to add to favourites')."' data-subnetId='$slave[id]' data-action='add' csrf='$csrf'><i class='fa fa-star fa-star-o'></i></a>";
                                         }
 
 					print "		<button class='btn btn-xs btn-default showSubnetPerm' data-action='show'   data-subnetid='".$slave['id']."'  data-sectionid='".$slave['sectionId']."'><i class='fa fa-gray fa fa-tasks'></i></button>";

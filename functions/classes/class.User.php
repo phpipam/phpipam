@@ -640,41 +640,36 @@ class User extends Common_functions {
     /**
      * Fetches details for users favourite subnets
      *
-     * @return array|false
+     * @return array
      */
     public function fetch_favourite_subnets () {
-        # none
-        if(is_blank($this->user->favourite_subnets)) {
-            return false;
+        if (is_blank($this->user->favourite_subnets)) {
+            return [];
         }
-        # ok
-        else {
-            # store to array
-            $subnets = explode(";", (string) $this->user->favourite_subnets);
-            $subnets = array_filter($subnets);
 
-            if(sizeof($subnets)>0) {
-                // init
-                $fsubnets = [];
-                # fetch details for each subnet
-                foreach($subnets as $id) {
-                    $query = "select `su`.`id`, `su`.`id` as `subnetId`,`se`.`id` as `sectionId`, `subnet`, `mask`,`isFull`,`su`.`description`,`se`.`description` as `section`, `vlanId`, `isFolder`
-                              from `subnets` as `su`, `sections` as `se` where `su`.`id` = ? and `su`.`sectionId` = `se`.`id` limit 1;";
+        # store to array
+        $subnets = explode(";", (string) $this->user->favourite_subnets);
+        $subnets = array_filter($subnets);
 
-                    try { $fsubnet = $this->Database->getObjectQuery('subnets', $query, [$id]); }
-                    catch (Exception $e) {
-                        $this->Result->show("danger", _("Error: ").$e->getMessage());
-                        return false;
-                    }
+        $fsubnets = [];
+        # fetch details for each subnet
+        foreach ($subnets as $id) {
+            $query = "select `su`.`id`, `su`.`id` as `subnetId`,`se`.`id` as `sectionId`, `subnet`, `mask`,`isFull`,`su`.`description`,`se`.`description` as `section`, `vlanId`, `isFolder`
+                     from `subnets` as `su`, `sections` as `se` where `su`.`id` = ? and `su`.`sectionId` = `se`.`id` limit 1;";
 
-                    # out array if sql was able to retrieve info for the favourite
-                    if (!empty($fsubnet)) $fsubnets[] = (array) $fsubnet;
-                }
-                return empty($fsubnets) ? false : $fsubnets;
-            } else {
-                return false;
+            try {
+                $fsubnet = $this->Database->getObjectQuery('subnets', $query, [$id]);
+            } catch (Exception $e) {
+                $this->Result->show("danger", _("Error: ") . $e->getMessage());
+                return [];
+            }
+
+            # out array if sql was able to retrieve info for the favourite
+            if (is_object($fsubnet)) {
+                $fsubnets[] = (array) $fsubnet;
             }
         }
+        return $fsubnets;
     }
 
     /**

@@ -34,6 +34,7 @@
     + Insecure direct object references (x2);
     + Reflected Cross-Site Scripting (XSS) in /upgrade/index.php;
     + Reflected Cross-Site Scripting (XSS) in show-rack-popup.php;
+    + Favourites, missing permission and CSRF checks;
 
 == 1.8.0
 

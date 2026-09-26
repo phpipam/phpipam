@@ -4,6 +4,8 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 </script>
 <?php
 
+$csrf = $User->Crypto->csrf_session_token();
+
 # set which custom fields to display
 $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $visible_fields = [];
@@ -152,10 +154,10 @@ foreach ($slave_subnets as $slave_subnet) {
 		print "	<div class='btn-group'>";
 		print "		<button class='btn btn btn-xs btn-default editSubnet'     data-action='edit'   data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'><i class='fa fa-gray fa-pencil'></i></button>";
 		if ($User->is_subnet_favourite($slave_subnet['id'])){
-			print " <a class='btn btn-xs btn-default btn-info editFavourite favourite-$slave_subnet[id]' href='' data-container='body' rel='tooltip' title='"._('Click to remove from favourites')."' data-subnetId='$slave_subnet[id]' data-action='remove'><i class='fa fa-star'></i></a>";
+			print " <a class='btn btn-xs btn-default btn-info editFavourite favourite-$slave_subnet[id]' href='' data-container='body' rel='tooltip' title='"._('Click to remove from favourites')."' data-subnetId='$slave_subnet[id]' data-action='remove' csrf='$csrf'><i class='fa fa-star'></i></a>";
 		}
 		else{
-			print " <a class='btn btn-xs btn-default editFavourite favourite-$slave_subnet[id]' href='' data-container='body' rel='tooltip' title='"._('Click to add to favourites')."' data-subnetId='$slave_subnet[id]' data-action='add'><i class='fa fa-star fa-star-o'></i></a>";
+			print " <a class='btn btn-xs btn-default editFavourite favourite-$slave_subnet[id]' href='' data-container='body' rel='tooltip' title='"._('Click to add to favourites')."' data-subnetId='$slave_subnet[id]' data-action='add' csrf='$csrf'><i class='fa fa-star fa-star-o'></i></a>";
 		}
 		print "		<button class='btn btn btn-xs btn-default showSubnetPerm' data-action='show'   data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'><i class='fa fa-gray fa-tasks'></i></button>";
 		print "		<button class='btn btn btn-xs btn-default editSubnet'     data-action='delete' data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'><i class='fa fa-gray fa-times'></i></button>";

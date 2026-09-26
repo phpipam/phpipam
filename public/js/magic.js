@@ -952,10 +952,11 @@ $(document).on('click', 'a.editFavourite', function() {
     var subnetId = $(this).attr('data-subnetId');
     var action   = $(this).attr('data-action');
     var from     = $(this).attr('data-from');
+    var csrf     = $(this).attr('csrf');
     var item     = $(this);
 
     //remove
-    $.post('app/tools/favourites/favourite-edit.php', {subnetId:subnetId, action:action, from:from}, function(data) {
+    $.post('app/tools/favourites/favourite-edit.php', {subnetId:subnetId, action:action, from:from, csrf:csrf}, function(data) {
         //success - widget - remove item
         if(data=='success' && from=='widget')   {
             $('tr.favSubnet-'+subnetId).addClass('error');

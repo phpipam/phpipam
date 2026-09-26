@@ -7,15 +7,22 @@
 # verify that user is logged in
 $User->check_user_session();
 
+$csrf = $User->Crypto->csrf_session_token();
+
 # fetch favourite subnets
-$favourite_subnets = $User->fetch_favourite_subnets();
+$favourite_subnets = [];
+foreach($User->fetch_favourite_subnets() as $f) {
+	if ($Subnets->check_permission($User->user, $f['subnetId']) >= User::ACCESS_R) {
+		$favourite_subnets[] = $f;
+	}
+}
 
 # title
 print "<h4>"._('Favourite subnets')."</h4>";
 print "<hr>";
 
 # print if none
-if(empty($favourite_subnets) || !isset($favourite_subnets[0])) {
+if(empty($favourite_subnets)) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No favourite subnets selected")."</p><br>";
 	print "<small>"._("You can add subnets to favourites by clicking star icon in subnet details")."!</small><br>";
@@ -88,7 +95,7 @@ else {
 			print "	<td class='actions'>";
 			print "	<div class='btn-group'>";
 			print "	<a class='btn btn-xs btn-default modIPaddr btn-success $disabled' href='' data-container='body' rel='tooltip' title='"._('Add new IP address')."' data-subnetId='$f[subnetId]' data-action='add' data-id=''><i class='fa fa-plus'></i></a>";
-			print "	<a class='btn btn-xs btn-default editFavourite' data-subnetId='$f[subnetId]' data-action='remove' data-from='widget'><i class='fa fa-star favourite-$f[subnetId]' rel='tooltip' title='"._('Click to remove from favourites')."'></i></a>";
+			print "	<a class='btn btn-xs btn-default editFavourite' data-subnetId='$f[subnetId]' data-action='remove' data-from='widget' csrf='$csrf'><i class='fa fa-star favourite-$f[subnetId]' rel='tooltip' title='"._('Click to remove from favourites')."'></i></a>";
 			print "	</div>";
 			print " </td>";
 
@@ -98,4 +105,3 @@ else {
 	print "</tbody>";
 	print "</table>";
 }
-?>

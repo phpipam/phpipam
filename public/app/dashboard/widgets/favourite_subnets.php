@@ -13,6 +13,8 @@ if(!isset($User)) {
 # user must be authenticated
 $User->check_user_session ();
 
+$csrf = $User->Crypto->csrf_session_token();
+
 # if direct request that redirect to tools page
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest")	{
 	header("Location: ".create_link("tools","favourites"));
@@ -28,8 +30,13 @@ $(document).ready(function() {
 </script>
 
 <?php
-# fetch favourite subnets with details
-$fsubnets = $User->fetch_favourite_subnets ();
+# fetch favourite subnets
+$favourite_subnets = [];
+foreach($User->fetch_favourite_subnets() as $f) {
+	if ($Subnets->check_permission($User->user, $f['subnetId']) >= User::ACCESS_R) {
+		$favourite_subnets[] = $f;
+	}
+}
 
 # fetch widget parameters
 $wparam = $Tools->get_widget_params("favourite_subnets");
@@ -50,8 +57,8 @@ print "	<th></th>";
 print "</tr>";
 
 # subnets
-if ($fsubnets) {
-	$m = 1;  // counter
+$m = 0;  // counter
+if (is_array($fsubnets)) {
 	foreach($fsubnets as $f) {
 
 		# must be either subnet or folder
@@ -100,7 +107,7 @@ if ($fsubnets) {
 			print "	<td class='actions'>";
 			print "	<div class='btn-group'>";
 			print "	<a class='btn btn-xs btn-default modIPaddr btn-success $disabled' href='' data-container='body' rel='tooltip' title='"._('Add new IP address')."' data-subnetId='$f[subnetId]' data-action='add' data-id=''><i class='fa fa-plus'></i></a>";
-			print "	<a class='btn btn-xs btn-default editFavourite' data-subnetId='$f[subnetId]' data-action='remove' data-from='widget'><i class='fa fa-star favourite-$f[subnetId]' rel='tooltip' title='"._('Click to remove from favourites')."'></i></a>";
+			print "	<a class='btn btn-xs btn-default editFavourite' data-subnetId='$f[subnetId]' data-action='remove' data-from='widget' csrf='$csrf'><i class='fa fa-star favourite-$f[subnetId]' rel='tooltip' title='"._('Click to remove from favourites')."'></i></a>";
 			print "	</div>";
 			print " </td>";
 
@@ -112,7 +119,7 @@ if ($fsubnets) {
 
 print "</table>";
 
-if(!$fsubnets) {
+if($m === 0) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No favourite subnets selected")."</p>";
 	print "<small>"._("You can add subnets to favourites by clicking star icon in subnet details")."!</small>";
@@ -120,4 +127,3 @@ if(!$fsubnets) {
 }
 
 print "</div>";
-?>

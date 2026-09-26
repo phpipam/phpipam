@@ -143,7 +143,6 @@ if ($folder['sectionId'] != $GET->section) {
 	print "<div class='btn-group'>";
 		print "<a class='modIPaddr btn btn-xs btn-default btn-success' 	href='' data-container='body' rel='tooltip' title='"._('Add new IP address')."' data-subnetId='$folder[id]' data-action='add' data-id=''>	<i class='fa fa-plus'></i></a> ";
         if($folder_permission>1 && $User->settings->enableSNMP=="1") {
-		$csrf = $User->Crypto->csrf_session_token();
         print "<button class='btn btn-xs btn-success' id='snmp-routing-section' rel='tooltip' data-container='body' title='"._('Search for subnets through SNMP')."' data-subnetId='$folder[id]' data-sectionId='$folder[sectionId]' data-csrf-cookie='$csrf'><i class='fa fa-cogs'></i></button>";
         print "<button class='btn btn-xs btn-default' id='truncate' rel='tooltip' data-container='body' title='"._('Truncate subnet')."' data-subnetId='$folder[id]'><i class='fa fa-gray fa-trash-o'></i></button>";
         }
@@ -164,9 +163,9 @@ if ($folder['sectionId'] != $GET->section) {
 	print "<div class='btn-group'>";
 		#favourite
 		if($User->is_folder_favourite ($folder['id']))
-		print "<a class='btn btn-xs btn-default btn-info editFavourite favourite-$folder[id]' href='' data-container='body' rel='tooltip' title='"._('Click to remove from favourites')."' data-subnetId='$folder[id]' data-action='remove'><i class='fa fa-star'></i></a> ";
+		print "<a class='btn btn-xs btn-default btn-info editFavourite favourite-$folder[id]' href='' data-container='body' rel='tooltip' title='"._('Click to remove from favourites')."' data-subnetId='$folder[id]' data-action='remove' csrf='$csrf'><i class='fa fa-star'></i></a> ";
 		else
-		print "<a class='btn btn-xs btn-default editFavourite favourite-$folder[id]' 		 href='' data-container='body' rel='tooltip' title='"._('Click to add to favourites')."' data-subnetId='$folder[id]' data-action='add'>	<i class='fa fa-star fa-star-o' ></i></a> ";
+		print "<a class='btn btn-xs btn-default editFavourite favourite-$folder[id]' 		 href='' data-container='body' rel='tooltip' title='"._('Click to add to favourites')."' data-subnetId='$folder[id]' data-action='add' csrf='$csrf'>	<i class='fa fa-star fa-star-o' ></i></a> ";
 		# changelog
 		if($User->settings->enableChangelog==1) {
 		if($sp['changelog'])

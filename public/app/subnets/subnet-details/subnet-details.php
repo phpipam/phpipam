@@ -663,9 +663,9 @@ else {
 	print "<div class='btn-group'>";
 		# favourite
 		if($User->is_subnet_favourite($subnet['id']))
-		print "<a class='btn btn-xs btn-default btn-info editFavourite favourite-$subnet[id]' href='' data-container='body' rel='tooltip' title='"._('Click to remove from favourites')."' data-subnetId='$subnet[id]' data-action='remove'>			<i class='fa fa-star'></i></a> ";
+		print "<a class='btn btn-xs btn-default btn-info editFavourite favourite-$subnet[id]' href='' data-container='body' rel='tooltip' title='"._('Click to remove from favourites')."' data-subnetId='$subnet[id]' data-action='remove' csrf='$csrf'>			<i class='fa fa-star'></i></a> ";
 		else
-		print "<a class='btn btn-xs btn-default editFavourite favourite-$subnet[id]' 		 href='' data-container='body' rel='tooltip' title='"._('Click to add to favourites')."' data-subnetId='$subnet[id]' data-action='add'>						<i class='fa fa-star fa-star-o' ></i></a> ";
+		print "<a class='btn btn-xs btn-default editFavourite favourite-$subnet[id]' 		 href='' data-container='body' rel='tooltip' title='"._('Click to add to favourites')."' data-subnetId='$subnet[id]' data-action='add' csrf='$csrf'>						<i class='fa fa-star fa-star-o' ></i></a> ";
 		# changelog
 		if($User->settings->enableChangelog==1) {
 		if($sp['changelog'])
