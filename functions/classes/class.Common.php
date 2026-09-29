@@ -307,7 +307,7 @@ class Common_functions  {
 			# save to cache
 			if ($result_fields==="*" && is_array($res)) { // Only cache objects containing all fields
 				foreach ($res as $r) {
-					$this->cache_write ($table, $field, $r);
+					$this->cache_write ($table, null, $r);
 				}
 			}
 			# result
