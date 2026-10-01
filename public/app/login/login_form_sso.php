@@ -17,8 +17,9 @@
 		}
 
 		//check if SAML2 login is possible
-		if (is_object($Tools->fetch_object("usersAuthMethod", "type", "SAML2"))) {
-			$Result->show("success", _('You can login with SAML2') . ' <a href="' . create_link('saml2') . '">' . _('here') . '</a>!', false);
+		$saml2settings = $Tools->fetch_object("usersAuthMethod", "type", "SAML2");
+		if (is_object($saml2settings)) {
+			$Result->show("success", _('You can login with SAML2') . ' <a href="' . create_link('saml2') . '">(' . $saml2settings->description  . ') ' . _('here') . '</a>!', false);
 		}
 
 		?>
