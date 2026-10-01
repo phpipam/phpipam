@@ -541,6 +541,7 @@ class Common_functions  {
     protected function cache_set_identifier ($table) {
         // Tables with different primary keys
         $mapings = [
+            'api'=>'app_id',
             'userGroups'=>'g_id',
             'lang'=>'l_id',
             'vlans'=>'vlanId',
