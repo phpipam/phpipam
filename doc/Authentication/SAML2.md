@@ -118,13 +118,13 @@ Create and update local SAML user accounts automatically using data from the SAM
 
 Configure your SAML identity provider to include the following assertion attributes.
 
-Attribute    | Type                                 | Notes
--------------|--------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-display_name | MANDATORY STRING                     | Users full name / real name.<br>Can not be blank.
-email        | MANDATORY STRING                     | Users valid email address.<br>Can not be blank. Must pass PHP `filter_var($email, FILTER_VALIDATE_EMAIL)`
-is_admin     | OPTIONAL BOOL<br>   (Default: false) | User role, "Administrator" or "Normal User".
-groups       | OPTIONAL STRING<br> (Default: "")    | Comma separated list of group membership.<br>e.g Assign the user to the Operators and Guests groups.<br>`groups=Operators,Guests`
-modules      | OPTIONAL STRING<br> (Default: "")    | Comma separated list of modules with permission level, 0=None, 1=Read, 2=Read/Write, 3=Admin<br> "`*`" can be used to wildcard match all modules.<br> e.g Assign admin permissions to the vlan module and read permissions to everything else.<br>`modules = *:1,vlan:3`
+Attribute    | Type                                      | Notes
+-------------|-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+display_name | MANDATORY STRING                          | Users full name / real name.<br>Can not be blank.
+email        | MANDATORY STRING                          | Users valid email address.<br>Can not be blank. Must pass PHP `filter_var($email, FILTER_VALIDATE_EMAIL)`
+is_admin     | OPTIONAL BOOL<br>   (Default: false)      | User role, "Administrator" or "Normal User".
+groups       | OPTIONAL STRING OR LIST<br> (Default: "") | Can either be a comma-separated list of group membership or SAML claim with multiple separate attribute values.<br>`groups=Operators,Guests` or `groups=[Operators,Guests]` respectively.
+modules      | OPTIONAL STRING<br> (Default: "")         | Comma separated list of modules with permission level, 0=None, 1=Read, 2=Read/Write, 3=Admin<br> "`*`" can be used to wildcard match all modules.<br> e.g Assign admin permissions to the vlan module and read permissions to everything else.<br>`modules = *:1,vlan:3`
 
 "Administrator" users have full admin privileges to all phpIPAM groups and all phpIPAM modules. `groups` and `modules` are ignored and can be omitted.
 
