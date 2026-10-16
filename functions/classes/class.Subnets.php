@@ -1646,11 +1646,15 @@ class Subnets extends Common_functions {
 	 * @return mixed|false
 	 */
 	public function get_first_possible_subnet ($address, $free, $print = true) {
+		if (gmp_cmp($free, 0) <= 0) {
+			return false;
+		}
+
 		# set max possible mask for IP range
 		$maxmask =  $this->get_max_netmask ($this->transform_address ($address, "dotted"));
 
-		# calculate maximum possible IP mask
-		$mask = floor(log($free)/log(2));
+		# calculate maximum possible IP mask without floating-point rounding
+		$mask = strlen(gmp_strval($free, 2)) - 1;
 		$mask = $maxmask - $mask;
 
 		# we have now maximum mask. We need to verify if subnet is valid
