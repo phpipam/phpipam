@@ -1,0 +1,85 @@
+name: phpIPAM regression and compatibility
+
+on:
+  push:
+    branches:
+      - 'fix/**'
+  pull_request:
+    branches:
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  regression:
+    name: Regression / PHP ${{ matrix.php }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4', '8.5']
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Install PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ctype, curl, dom, gd, gettext, gmp, iconv, mbstring, pdo_mysql, sockets, xml
+          tools: composer:v2
+          coverage: none
+        env:
+          fail-fast: true
+      - name: Verify PHP and PEAR
+        run: |
+          php -v
+          php -r 'if (!stream_resolve_include_path("PEAR.php")) { fwrite(STDERR, "PEAR.php was not installed\n"); exit(1); }'
+      - name: PHP syntax checks (entire application)
+        shell: bash
+        run: |
+          set -euo pipefail
+          find functions public tests -type f -name '*.php' -print0 | xargs -0 -r -n 1 -P 4 php -l > /tmp/php-lint.log || {
+            grep -v 'No syntax errors detected' /tmp/php-lint.log || true
+            exit 1
+          }
+          echo "PHP files checked: $(grep -c '^No syntax errors detected' /tmp/php-lint.log)"
+      - name: Test validation error paths (nine cases)
+        run: php -d display_errors=1 -d error_reporting=-1 tests/verify-cidr-address-ipv4.php
+      - name: Test actual Net_IPv4 parser integration (nine cases)
+        run: php -d display_errors=1 -d error_reporting=-1 tests/verify-cidr-address-ipv4-integration.php
+
+  dependency-and-compatibility:
+    name: Composer and PHPCompatibility / PHP ${{ matrix.php }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.5']
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ctype, curl, dom, gd, gettext, gmp, iconv, mbstring, pdo_mysql, sockets, xml
+          tools: composer:v2
+          coverage: none
+        env:
+          fail-fast: true
+      - name: Validate dependency manifest and lock
+        run: composer validate --no-check-publish
+      - name: Install locked dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress --no-scripts
+      - name: Check installed platform requirements
+        run: composer check-platform-reqs
+      - name: Check PHP 8.2-8.5 compatibility for modified PHP code
+        run: |
+          vendor/bin/phpcs -p functions/classes/class.Subnets.php tests/verify-cidr-address-ipv4.php tests/verify-cidr-address-ipv4-integration.php --standard=PHPCompatibility --exclude=PHPCompatibility.Attributes.NewAttributes --runtime-set testVersion 8.2-8.5
