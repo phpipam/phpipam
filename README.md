@@ -16,13 +16,14 @@ to be able to display javascript quickly and correctly.
 ## Branches
  - MASTER: Latest stable release
  - DEVELOP: Current development branch
- - 1.8: Maintenance branch for 1.8.x releases
- - 1.7: Maintenance branch for 1.7.x releases (obsolete)
- - 1.6: Maintenance branch for 1.6.x releases (obsolete)
- - 1.5: Maintenance branch for 1.5.x releases (obsolete)
- - 1.4: Maintenance branch for 1.4.x releases (obsolete)
- - 1.3: Maintenance branch for 1.3.x releases (obsolete)
- - 1.2: Maintenance branch for 1.2.x releases (obsolete)
+ - 1.9: Maintenance branch for 1.9.x releases
+ - 1.8: Maintenance branch for 1.8.x releases (not maintained)
+ - 1.7: Maintenance branch for 1.7.x releases (not maintained)
+ - 1.6: Maintenance branch for 1.6.x releases (not maintained)
+ - 1.5: Maintenance branch for 1.5.x releases (not maintained)
+ - 1.4: Maintenance branch for 1.4.x releases (not maintained)
+ - 1.3: Maintenance branch for 1.3.x releases (not maintained)
+ - 1.2: Maintenance branch for 1.2.x releases (not maintained)
  - Other branches: Feature testing
 
 ## Supported PHP versions
@@ -30,8 +31,11 @@ to be able to display javascript quickly and correctly.
 phpIPAM has been developed and tested on the following PHP versions.\
 The use of untested PHP versions is unsupported and may result in compatibility issues.
 
+phpIPAM 1.9.0 switched to composer for dependency management, read [UPDATE.md](UPDATE.md) before upgrading from phpIPAM 1.8.x or older.
+
 - MASTER: Latest stable release version
-- DEVELOP: PHP versions 8.2 to 8.5 ( composer migration, read [UPDATE.md](UPDATE.md) )
+- DEVELOP: PHP versions 8.2 to 8.5
+- 1.9.x: PHP versions 8.2 to 8.5
 - 1.8.x: PHP versions 7.2 to 8.5
 - 1.7.x: PHP versions 7.2 to 8.3
 - 1.6.x: PHP versions 7.2 to 8.3
@@ -50,7 +54,7 @@ Just run `php functions/scripts/reset-admin-password.php` in the cli and enter y
 ## Reverse-Proxy (Infinite login loops)
 As of v1.6.0 when deployed behind a reverse-proxy, set config.php `$trust_x_forwarded_headers = true;` or Docker image environment variable `IPAM_TRUST_X_FORWARDED=true` to accept HTTP X_FORWARDED_ headers.
 
-**WARNING!** The following HTTP headers shoud be filtered and/or overwritten by the reverse-proxy to avoid potential abuse by end-clients.
+**WARNING!** The following HTTP headers should be filtered and/or overwritten by the reverse-proxy to avoid potential abuse by end-clients.
 
 - X_FORWARDED_FOR
 - X_FORWARDED_HOST
