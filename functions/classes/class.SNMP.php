@@ -280,6 +280,13 @@ class phpipamSNMP extends Common_functions {
 		// try
 		try {
 			$res = $this->snmp_session->{$type} ($query_num);
+			// A reused SNMP session can return false with no error set on later
+			// queries (e.g. the 2nd/3rd walk in get_arp_table). Reconnect and retry once.
+			if ($res === false && $this->snmp_session->getErrno () == 0) {
+				$this->snmp_session = false;
+				$this->connection_open ();
+				$res = $this->snmp_session->{$type} ($query_num);
+			}
 		}
 		catch (Exception $e) {
 			throw new Exception ("<strong>$this->snmp_hostname</strong>: ".$e->getMessage(). "<br> oid: ".$query);
