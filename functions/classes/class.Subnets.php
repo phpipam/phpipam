@@ -1975,7 +1975,7 @@ class Subnets extends Common_functions {
 		# Initialize PEAR NET object
 		$this->initialize_pear_net_IPv4 ();
 		# validate
-        if ($net = $this->Net_IPv4->parseAddress ($cidr)) {
+		if (($net = $this->Net_IPv4->parseAddress ($cidr)) && !PEAR::isError($net)) {
             if (!$this->Net_IPv4->validateIP ($net->ip)) 				{ return _("Invalid IP address!"); }														//validate IP
             elseif (($net->network != $net->ip) && ($issubnet))			{ return _("IP address cannot be subnet! (Consider using")." ". $net->network .")"; }		//network must be same as provided IP address
             elseif (!$this->Net_IPv4->validateNetmask ($net->netmask)) 	{ return _('Invalid netmask').' ' . $net->netmask; }    									//validate netmask
