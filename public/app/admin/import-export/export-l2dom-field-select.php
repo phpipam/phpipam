@@ -1,56 +1,56 @@
 <?php
 
 /**
- *	L2 Domain export
+ *  L2 Domain export
  */
 
-# include required scripts
-require_once  __DIR__ . '/../../../../functions/functions.php';
+// include required scripts
+require_once __DIR__.'/../../../../functions/functions.php';
 
-# initialize user object
-$Database	= new Database_PDO;
-$User		= new User ($Database);
-$Admin		= new Admin ($Database);
-$Tools		= new Tools ($Database);
-$Result		= new Result();
+// initialize user object
+$Database = new Database_PDO;
+$User = new User($Database);
+$Admin = new Admin($Database);
+$Tools = new Tools($Database);
+$Result = new Result;
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
-# admin check
+// admin check
 $User->is_admin();
 
-# validate csrf cookie
-$User->Crypto->csrf_validate($GET->csrf) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+// validate csrf cookie
+$User->Crypto->csrf_validate($GET->csrf) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
 
-# prepare HTML variables
-$custom_fields_names = "";
-$custom_fields_boxes = "";
+// prepare HTML variables
+$custom_fields_names = '';
+$custom_fields_boxes = '';
 
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print _("Select L2 Domain fields to export"); ?></div>
+<div class="pHeader"><?php print _('Select L2 Domain fields to export'); ?></div>
 
 <!-- content -->
 <div class="pContent" style="overflow:auto;">
 
 <?php
 
-# print
+// print
 print '<form id="selectExportFields">';
 
-# table
+// table
 print "	<table class='table table-striped table-condensed'>";
 
-print "	<tr>";
-print "	<th>"._('Name')."</th>";
-print "	<th>"._('Description')."</th>";
-print "	</tr>";
+print '	<tr>';
+print '	<th>'._('Name').'</th>';
+print '	<th>'._('Description').'</th>';
+print '	</tr>';
 
-print "	<tr>";
+print '	<tr>';
 print "	<td><input type='checkbox' name='name' checked title='"._('Mandatory')."'></td>";
 print "	<td><input type='checkbox' name='description' checked> </td>";
-print "	</tr>";
+print '	</tr>';
 
 print '</table>';
 print '</form>';
@@ -61,8 +61,8 @@ print '</form>';
 
 <!-- footer -->
 <div class="pFooter">
-	<div class="btn-group">
-		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="l2dom" csrf="<?php print $GET->csrf; ?>"><i class="fa fa-upload"></i> <?php print _('Export'); ?></button>
-	</div>
+    <div class="btn-group">
+        <button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
+        <button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="l2dom" csrf="<?php print $GET->csrf; ?>"><i class="fa fa-upload"></i> <?php print _('Export'); ?></button>
+    </div>
 </div>

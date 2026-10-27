@@ -62,7 +62,7 @@ final class Session_DB implements SessionHandlerInterface
      * @param  string  $id
      * @return string|false
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function read($id)
     {
         // check database for cookie
@@ -133,7 +133,7 @@ final class Session_DB implements SessionHandlerInterface
      * @param  int  $max
      * @return int|false
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function gc($max)
     {
         $rowCount = 0;

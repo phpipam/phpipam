@@ -1,19 +1,19 @@
 <?php
 
 /* functions */
-require_once  __DIR__ . '/../../../../functions/functions.php';
+require_once __DIR__.'/../../../../functions/functions.php';
 
-# Don't corrupt output with php errors!
+// Don't corrupt output with php errors!
 disable_php_errors();
 
-# initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Sections	= new Sections ($Database);
-$Subnets    = new Subnets ($Database);
-$Tools      = new Tools ($Database);
+// initialize user object
+$Database = new Database_PDO;
+$User = new User($Database);
+$Sections = new Sections($Database);
+$Subnets = new Subnets($Database);
+$Tools = new Tools($Database);
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
 
 /*
@@ -23,24 +23,28 @@ header('Content-Type: application/json');
 
 /**
  * Convert search strings into sensible CIDRs.
- * @param  string $search_cidr
+ *
+ * @param  string  $search_cidr
  * @return string
  */
-function complete_search_cidr($search_cidr) {
-    if (!isset($search_cidr))
+function complete_search_cidr($search_cidr)
+{
+    if (! isset($search_cidr)) {
         return '';
+    }
 
     $search_cidr = trim($search_cidr);
 
-    # Check if mask is already provided
-    if (strpos($search_cidr, '/') !== false)
+    // Check if mask is already provided
+    if (strpos($search_cidr, '/') !== false) {
         return $search_cidr;
+    }
 
-    # Complete the 'search' cidr by guessing the mask, IPv4 only...
+    // Complete the 'search' cidr by guessing the mask, IPv4 only...
     $ipv4 = array_filter(explode('.', $search_cidr), 'strlen');
     $search_cidr = implode('.', $ipv4);
 
-    switch (sizeof($ipv4)) {
+    switch (count($ipv4)) {
         case 1:
             return $search_cidr.'.0.0.0/8';
         case 2:
@@ -54,30 +58,34 @@ function complete_search_cidr($search_cidr) {
     }
 }
 
-
-# Validate inputs
-$search           = $GET->search;
-$sectionId        = filter_var($GET->sectionId, FILTER_VALIDATE_INT);
+// Validate inputs
+$search = $GET->search;
+$sectionId = filter_var($GET->sectionId, FILTER_VALIDATE_INT);
 $showSupernetOnly = filter_var($GET->showSupernetOnly, FILTER_VALIDATE_BOOLEAN);
-$offset           = filter_var($GET->offset, FILTER_VALIDATE_INT);
-$limit            = filter_var($GET->limit, FILTER_VALIDATE_INT);
+$offset = filter_var($GET->offset, FILTER_VALIDATE_INT);
+$limit = filter_var($GET->limit, FILTER_VALIDATE_INT);
 
-if ($sectionId===false || $offset===false || $limit===false) { return; }
+if ($sectionId === false || $offset === false || $limit === false) {
+    return;
+}
 
-# Try to auto-complete search string.
+// Try to auto-complete search string.
 $search_cidr = complete_search_cidr($search);
-# Ensure search is a valid CIDR address
-if ($Subnets->verify_cidr_address($search_cidr)!==true)
+// Ensure search is a valid CIDR address
+if ($Subnets->verify_cidr_address($search_cidr) !== true) {
     $search_cidr = false;
+}
 
-# check section permission
+// check section permission
 $permission = $Sections->check_permission($User->user, $sectionId);
-if ($permission == 0 ) { return; }
+if ($permission == 0) {
+    return;
+}
 
-# set custom fields
-$custom_fields = $Tools->fetch_custom_fields ('subnets');
+// set custom fields
+$custom_fields = $Tools->fetch_custom_fields('subnets');
 
-# set hidden fields
+// set hidden fields
 $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = isset($hidden_fields['subnets']) && is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : [];
 
@@ -91,7 +99,9 @@ if ($search_cidr === false) {
 }
 
 if (is_array($subnets)) {
-    foreach($subnets as $subnet) { $subnetsTree->add($subnet); }
+    foreach ($subnets as $subnet) {
+        $subnetsTree->add($subnet);
+    }
 }
 $subnetsTree->walk(false);
 

@@ -1,29 +1,27 @@
 <?php
 
 /**
- *
  * Save users passkey
- *
  */
 
 // phpipam stuff
-require_once  __DIR__ . '/../../../functions/functions.php';
+require_once __DIR__.'/../../../functions/functions.php';
 
 // webauthn modules
-use Firehed\WebAuthn\{
-    Codecs,
-    CredentialContainer,
-    ArrayBufferResponseParser,
-};
+use Firehed\WebAuthn\ArrayBufferResponseParser;
+use Firehed\WebAuthn\Codecs;
+use Firehed\WebAuthn\CredentialContainer;
+use Firehed\WebAuthn\SessionChallengeManager;
+use Firehed\WebAuthn\SingleOriginRelyingParty;
 
 try {
-    # initialize required objects
-    $Database       = new Database_PDO;
-    $Tools          = new Tools($Database);
-    $User           = new User($Database);
+    // initialize required objects
+    $Database = new Database_PDO;
+    $Tools = new Tools($Database);
+    $User = new User($Database);
 
-    if (!$Tools->isHttps() || $User->settings->dbversion < 40 || $User->settings->passkeys != 1) {
-        throw new Exception("Unauthorized");
+    if (! $Tools->isHttps() || $User->settings->dbversion < 40 || $User->settings->passkeys != 1) {
+        throw new Exception('Unauthorized');
     }
 
     // process request json
@@ -31,7 +29,7 @@ try {
     $data = json_decode((string) $json, true);
 
     // parser
-    $parser = new ArrayBufferResponseParser();
+    $parser = new ArrayBufferResponseParser;
     $getResponse = $parser->parseGetResponse($data);
     $userHandle = $getResponse->getUserHandle();
 
@@ -40,14 +38,14 @@ try {
     }
 
     $user_passkeys = $User->get_user_passkeys($User->get_passkey_user_id());
-    $codec = new Codecs\Credential();
+    $codec = new Codecs\Credential;
     $credentials = array_map(function ($row) use ($codec) {
         return $codec->decode($row->credential);
     }, $user_passkeys);
     $credentialContainer = new CredentialContainer($credentials);
 
-    $rp = new \Firehed\WebAuthn\SingleOriginRelyingParty($User->createURL());
-    $challengeManager = new \Firehed\WebAuthn\SessionChallengeManager();
+    $rp = new SingleOriginRelyingParty($User->createURL());
+    $challengeManager = new SessionChallengeManager;
     $updatedCredential = $getResponse->verify($challengeManager, $rp, $credentialContainer);
 
     // confirm login
@@ -57,14 +55,13 @@ try {
     // print result
     header('HTTP/1.1 200 OK');
     header('Content-type: application/json');
-    echo json_encode([
+    print json_encode([
         'success' => true,
-        'credential_ids' => $updatedCredential->getStorageId()
+        'credential_ids' => $updatedCredential->getStorageId(),
     ]);
-
 } catch (Exception $e) {
     // set header type
     header('Content-Type: text/html; charset=utf-8');
     header('HTTP/1.1 403 Unauthorized');
-    die();
+    exit();
 }

@@ -1,8 +1,8 @@
 <?php
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
-# perm check
-$User->check_module_permissions ("pstn", User::ACCESS_R, true, false);
+// perm check
+$User->check_module_permissions('pstn', User::ACCESS_R, true, false);
 ?>
 
 
@@ -16,73 +16,73 @@ $User->check_module_permissions ("pstn", User::ACCESS_R, true, false);
 
 <script>
 $(function () {
-	//data
+    //data
     var data = [
-    	<?php
-		# first free hosts
-     	if($details['freehosts_percent']>0)  {
-    		$details['freehosts_percent'] = str_replace(",", ".", (string) $details['freehosts_percent']);
-    		print "{ label: '"._('Free')."',     data: $details[freehosts_percent], color: '#ffffff' }, ";		# free hosts
-    	}
-    	# than all other percentages
-    	if(isset($Subnets->address_types)) {
-    	foreach($Subnets->address_types as $t) {
-	    if($details[$t['type']."_percent"]>0) {
-    		$details[$t['type']."_percent"] = str_replace(",", ".", (string) $details[$t['type']."_percent"]);
-    		print "{ label: '"._((string) $t['type'])."', data: ".$details[$t["type"]."_percent"].", color: '".$t['bgcolor']."' }, ";
-	    }
-    	}
-    	}
-    	?>
-	];
-	//options
-	var options = {
+        <?php
+        // first free hosts
+        if ($details['freehosts_percent'] > 0) {
+            $details['freehosts_percent'] = str_replace(',', '.', (string) $details['freehosts_percent']);
+            print "{ label: '"._('Free')."',     data: $details[freehosts_percent], color: '#ffffff' }, ";      // free hosts
+        }
+// than all other percentages
+if (isset($Subnets->address_types)) {
+    foreach ($Subnets->address_types as $t) {
+        if ($details[$t['type'].'_percent'] > 0) {
+            $details[$t['type'].'_percent'] = str_replace(',', '.', (string) $details[$t['type'].'_percent']);
+            print "{ label: '"._((string) $t['type'])."', data: ".$details[$t['type'].'_percent'].", color: '".$t['bgcolor']."' }, ";
+        }
+    }
+}
+?>
+    ];
+    //options
+    var options = {
     series: {
         pie: {
             show: true,
             label: {
-	            show: true,
-	            radius: 1,
-	            threshold: 0.01	//hide < 1%
+                show: true,
+                radius: 1,
+                threshold: 0.01 //hide < 1%
             },
             background: {
-	            color: 'red'
+                color: 'red'
             },
             radius: 0.9,
             stroke: {
-	            color: '#ccc',
-	            width: 1
+                color: '#ccc',
+                width: 1
             },
             offset: {
-	            left: 0
+                left: 0
             }
 
         }
     },
     legend: {
-	    show: true,
-	    backgroundColor: ""
+        show: true,
+        backgroundColor: ""
     },
-	grid: {
-		hoverable: false,
-	  	clickable: true
-	},
+    grid: {
+        hoverable: false,
+        clickable: true
+    },
     highlightColor: '#AA4643',
     grid: {
-	        show: true,
-	        aboveData: false,
-	        color: "#666",
-	        backgroundColor: "white",
-    		borderWidth: 0,
-    		borderColor: null,
-    		minBorderMargin: null,
-    		clickable: true,
-    		hoverable: true,
-    		autoHighlight: true,
-    		mouseActiveRadius: 3
-    		}
+            show: true,
+            aboveData: false,
+            color: "#666",
+            backgroundColor: "white",
+            borderWidth: 0,
+            borderColor: null,
+            minBorderMargin: null,
+            clickable: true,
+            hoverable: true,
+            autoHighlight: true,
+            mouseActiveRadius: 3
+            }
     };
-	//draw
+    //draw
     $.plot($("#pieChart"), data, options);
 });
 </script>

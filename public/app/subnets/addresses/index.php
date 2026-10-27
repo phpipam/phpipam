@@ -1,3 +1,3 @@
 <?php
-# prevent directory listing
-?>
+
+// prevent directory listing

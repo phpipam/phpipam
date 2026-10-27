@@ -4,7 +4,6 @@
     "functions/adLDAP",
     "functions/PEAR",
     "functions/php-excel-reader",
-    "public",
     "vendor"
   ],
   "rules": {

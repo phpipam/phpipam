@@ -5,40 +5,42 @@
  *************************************************/
 
 /* functions */
-require_once  __DIR__ . '/../../../../functions/functions.php';
+require_once __DIR__.'/../../../../functions/functions.php';
 
-# initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
-$Tools      = new Tools ($Database);
-$Result 	= new Result ();
+// initialize user object
+$Database = new Database_PDO;
+$User = new User($Database);
+$Admin = new Admin($Database);
+$Tools = new Tools($Database);
+$Result = new Result;
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
-# admin check
+// admin check
 $User->is_admin();
 
-# create csrf token
+// create csrf token
 $csrf = $User->Crypto->csrf_session_token();
-# validate action
+// validate action
 $Admin->validate_action(false);
-# fetch custom fields
-$custom     = $Tools->fetch_custom_fields('userGroups');
+// fetch custom fields
+$custom = $Tools->fetch_custom_fields('userGroups');
 
-# fetch group and set title
-if($POST->action=="add") {
-	$title = _('Add new group');
+// fetch group and set title
+if ($POST->action == 'add') {
+    $title = _('Add new group');
 } else {
-    # ID
-    if(!is_numeric($POST->id))   $Result->show("danger", _("Invalid Id"), true, true);
+    // ID
+    if (! is_numeric($POST->id)) {
+        $Result->show('danger', _('Invalid Id'), true, true);
+    }
 
-	//fetch all group details
-    $group = (array) $Admin->fetch_object("userGroups", "g_id", $POST->id);
-    //false die
-    $group!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
+    // fetch all group details
+    $group = (array) $Admin->fetch_object('userGroups', 'g_id', $POST->id);
+    // false die
+    $group !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
 
-	$title = $User->get_post_action().' '._('group').' '.$group['g_name'];
+    $title = $User->get_post_action().' '._('group').' '.$group['g_name'];
 }
 ?>
 
@@ -48,55 +50,58 @@ if($POST->action=="add") {
 <!-- content -->
 <div class="pContent">
 
-	<form id="groupEdit" name="groupEdit">
-	<table class="groupEdit table table-noborder table-condensed">
+    <form id="groupEdit" name="groupEdit">
+    <table class="groupEdit table table-noborder table-condensed">
 
-	<!-- name -->
-	<tr>
-	    <td><?php print _('Group name'); ?></td>
-	    <td><input type="text" name="g_name" class="form-control input-sm" value="<?php print @$group['g_name']; ?>" <?php if($POST->action == "delete") print "readonly"; ?>></td>
-       	<td class="info2">
-	   		<?php print _('Enter group name'); ?>
-       	</td>
+    <!-- name -->
+    <tr>
+        <td><?php print _('Group name'); ?></td>
+        <td><input type="text" name="g_name" class="form-control input-sm" value="<?php print @$group['g_name']; ?>" <?php if ($POST->action == 'delete') {
+            print 'readonly';
+        } ?>></td>
+        <td class="info2">
+            <?php print _('Enter group name'); ?>
+        </td>
     </tr>
 
     <!-- description -->
     <tr>
-    	<td><?php print _('Description'); ?></td>
-    	<td>
-    		<input type="text" name="g_desc" class="form-control input-sm" value="<?php print @$group['g_desc']; ?>" <?php if($POST->action == "delete") print "readonly"; ?>>
+        <td><?php print _('Description'); ?></td>
+        <td>
+            <input type="text" name="g_desc" class="form-control input-sm" value="<?php print @$group['g_desc']; ?>" <?php if ($POST->action == 'delete') {
+                print 'readonly';
+            } ?>>
 
-    		<input type="hidden" name="g_id" value="<?php print escape_input($POST->id); ?>">
-    		<input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
-    		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
-    	</td>
-    	<td class="info2"><?php print _('Enter description'); ?></td>
+            <input type="hidden" name="g_id" value="<?php print escape_input($POST->id); ?>">
+            <input type="hidden" name="action" value="<?php print escape_input($POST->action); ?>">
+            <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
+        </td>
+        <td class="info2"><?php print _('Enter description'); ?></td>
     </tr>
 
     <!-- Custom -->
     <?php
-    if(sizeof($custom) > 0) {
-
+    if (count($custom) > 0) {
         print '<tr>';
         print ' <td colspan="2"><hr></td>';
         print '</tr>';
 
-        # count datepickers
+        // count datepickers
         $timepicker_index = 0;
 
-        # all my fields
-        foreach($custom as $field) {
+        // all my fields
+        foreach ($custom as $field) {
             // create input > result is array (required, input(html), timepicker_index)
-            $custom_input = $Tools->create_custom_field_input ($field, $group, $timepicker_index);
+            $custom_input = $Tools->create_custom_field_input($field, $group, $timepicker_index);
             $timepicker_index = $custom_input['timepicker_index'];
             // print
-            print "<tr>";
-            print " <td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
-            print " <td>".$custom_input['field']."</td>";
-            print "</tr>";
+            print '<tr>';
+            print ' <td>'.ucwords($Tools->print_custom_field_name($field['name'])).' '.$custom_input['required'].'</td>';
+            print ' <td>'.$custom_input['field'].'</td>';
+            print '</tr>';
         }
     }
-    ?>
+?>
 
 </table>
 </form>
@@ -106,13 +111,23 @@ if($POST->action=="add") {
 
 <!-- footer -->
 <div class="pFooter">
-	<div class="btn-group">
-		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-        <button class='btn btn-sm btn-default submit_popup <?php if($POST->action=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/groups/edit-group-result.php" data-result_div="groupEditResult" data-form='groupEdit'>
-            <i class="fa <?php if($POST->action=="add") { print "fa-plus"; } elseif ($POST->action=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print $User->get_post_action(); ?>
+    <div class="btn-group">
+        <button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
+        <button class='btn btn-sm btn-default submit_popup <?php if ($POST->action == 'delete') {
+            print 'btn-danger';
+        } else {
+            print 'btn-success';
+        } ?>' data-script="app/admin/groups/edit-group-result.php" data-result_div="groupEditResult" data-form='groupEdit'>
+            <i class="fa <?php if ($POST->action == 'add') {
+                print 'fa-plus';
+            } elseif ($POST->action == 'delete') {
+                print 'fa-trash-o';
+            } else {
+                print 'fa-check';
+            } ?>"></i> <?php print $User->get_post_action(); ?>
         </button>
-	</div>
+    </div>
 
-	<!-- Result -->
-	<div id="groupEditResult"></div>
+    <!-- Result -->
+    <div id="groupEditResult"></div>
 </div>

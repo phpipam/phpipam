@@ -1,40 +1,46 @@
 <?php
 
 /**
- *	Script to replace fields in IP address list
+ *  Script to replace fields in IP address list
  ***********************************************/
 
 /* functions */
-require_once  __DIR__ . '/../../../../functions/functions.php';
+require_once __DIR__.'/../../../../functions/functions.php';
 
-# initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
-$Result 	= new Result ();
+// initialize user object
+$Database = new Database_PDO;
+$User = new User($Database);
+$Admin = new Admin($Database);
+$Result = new Result;
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
-# admin check
+// admin check
 $User->is_admin();
 
-# check maintaneance mode
-$User->check_maintaneance_mode ();
+// check maintaneance mode
+$User->check_maintaneance_mode();
 
-# validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+// validate csrf cookie
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
 
-//verify post
-if(empty($POST->search)) { $Result->show("danger", _('Please enter something in search field').'!', true); }
-//if device verify that it exists
-if($POST->field == "switch") {
-	if(!$device1 = $Admin->fetch_object("devices", "hostname", $POST->search))	{ $Result->show("danger  alert-absolute", _('Switch').' "<i>'. escape_input($POST->search) . '</i>" '._('does not exist, first create switch under admin menu').'!', true); }
-	if(!$device2 = $Admin->fetch_object("devices", "hostname", $POST->replace))	{ $Result->show("danger  alert-absolute", _('Switch').' "<i>'. escape_input($POST->search) . '</i>" '._('does not exist, first create switch under admin menu').'!', true); }
+// verify post
+if (empty($POST->search)) {
+    $Result->show('danger', _('Please enter something in search field').'!', true);
+}
+// if device verify that it exists
+if ($POST->field == 'switch') {
+    if (! $device1 = $Admin->fetch_object('devices', 'hostname', $POST->search)) {
+        $Result->show('danger  alert-absolute', _('Switch').' "<i>'.escape_input($POST->search).'</i>" '._('does not exist, first create switch under admin menu').'!', true);
+    }
+    if (! $device2 = $Admin->fetch_object('devices', 'hostname', $POST->replace)) {
+        $Result->show('danger  alert-absolute', _('Switch').' "<i>'.escape_input($POST->search).'</i>" '._('does not exist, first create switch under admin menu').'!', true);
+    }
 
-	//replace posts
-	$POST->search  = $device1->id;
-	$POST->replace = $device2->id;
+    // replace posts
+    $POST->search = $device1->id;
+    $POST->replace = $device2->id;
 }
 
-# update
-$Admin->replace_fields ($POST->field, $POST->search, $POST->replace);
+// update
+$Admin->replace_fields($POST->field, $POST->search, $POST->replace);

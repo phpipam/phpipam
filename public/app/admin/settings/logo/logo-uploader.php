@@ -1,37 +1,36 @@
 <?php
 
 /**
- *	Site settings
+ *  Site settings
  **************************/
 
 /* functions */
-require_once  __DIR__ . '/../../../../../functions/functions.php';
+require_once __DIR__.'/../../../../../functions/functions.php';
 
-# initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
-$Result 	= new Result ();
+// initialize user object
+$Database = new Database_PDO;
+$User = new User($Database);
+$Admin = new Admin($Database);
+$Result = new Result;
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
-# admin check
+// admin check
 $User->is_admin();
 
-# validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
+// validate csrf cookie
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true, true) : '';
 
-# clear identifier
+// clear identifier
 $clear = true;
 
 // set width
 $logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
 
-if(!file_exists( __DIR__."/../../../../css/images/logo/logo.png")) {
-    require( __DIR__.'/logo-builtin.php' );
+if (! file_exists(__DIR__.'/../../../../css/images/logo/logo.png')) {
+    require __DIR__.'/logo-builtin.php';
     $clear = false;
-}
-else {
+} else {
     $img = "<img style='max-width:".$logo_width."px;margin-top:15px;margin-bottom:20px;' alt='phpipam' src='css/images/logo/logo.png'>";
 }
 ?>
@@ -42,31 +41,35 @@ else {
 <!-- content -->
 <div class="pContent">
 
-    <?php if (!is_writeable( __DIR__ . '/../../../../css/images/logo' )) $Result->show("danger", _("'css/images/logo' folder is not writeable."), false, false); ?>
+    <?php if (! is_writable(__DIR__.'/../../../../css/images/logo')) {
+        $Result->show('danger', _("'css/images/logo' folder is not writeable."), false, false);
+    } ?>
 
-    <h4><?php print _("Current"); ?><?php if($clear) print "<a class='btn btn-xs btn-danger logo-clear pull-right' style='text-shadow:none'><i class='fa fa-times'></i></a>"; ?></h4>
+    <h4><?php print _('Current'); ?><?php if ($clear) {
+        print "<a class='btn btn-xs btn-danger logo-clear pull-right' style='text-shadow:none'><i class='fa fa-times'></i></a>";
+    } ?></h4>
     <div class='logo-current'>
         <?php print $img; ?>
     </div>
     <hr>
 
-    <h4><?php print _("New"); ?></h4>
+    <h4><?php print _('New'); ?></h4>
 
-    <span class="text-muted"><?php print _("Image will be shown in")." ".$logo_width._("px width in phpipam header and mail headers"); ?>.</span>
+    <span class="text-muted"><?php print _('Image will be shown in').' '.$logo_width._('px width in phpipam header and mail headers'); ?>.</span>
 
-	<form id="csvimport" method="post" action="app/admin/settings/logo/import-verify.php" enctype="multipart/form-data">
-	<div id="drop">
-		<input type="file" name="file" id="csvfile" style="display:none;">
+    <form id="csvimport" method="post" action="app/admin/settings/logo/import-verify.php" enctype="multipart/form-data">
+    <div id="drop">
+        <input type="file" name="file" id="csvfile" style="display:none;">
 
-		<?php print _('Select image'); ?>: <a class="btn btn-sm btn-default"><?php print _("Browse"); ?></a>
-	</div>
-	<span class="fname" style="display:none"></span>
+        <?php print _('Select image'); ?>: <a class="btn btn-sm btn-default"><?php print _('Browse'); ?></a>
+    </div>
+    <span class="fname" style="display:none"></span>
 
-	<ul class="progressUl">
-	<!-- The file uploads will be shown here -->
-	</ul>
+    <ul class="progressUl">
+    <!-- The file uploads will be shown here -->
+    </ul>
 
-	</form>
+    </form>
 
 
     <!-- jQuery File Upload Dependencies -->
@@ -76,105 +79,105 @@ else {
 
 
     <script>
-	$(function(){
+    $(function(){
 
-	    var ul = $('#csvimport ul');
+        var ul = $('#csvimport ul');
 
-	    $('#drop a').click(function(){
-	        // Simulate a click on the file input button to show the file browser dialog
-	        $(this).parent().find('input').click();
-	    });
+        $('#drop a').click(function(){
+            // Simulate a click on the file input button to show the file browser dialog
+            $(this).parent().find('input').click();
+        });
 
-	    // Initialize the jQuery File Upload plugin
-	    $('#csvimport').fileupload({
+        // Initialize the jQuery File Upload plugin
+        $('#csvimport').fileupload({
 
-	        // This element will accept file drag/drop uploading
-	        dropZone: $('#drop'),
+            // This element will accept file drag/drop uploading
+            dropZone: $('#drop'),
 
-	        // This function is called when a file is added to the queue;
-	        // either via the browse button, or via drag/drop:
-	        add: function (e, data) {
+            // This function is called when a file is added to the queue;
+            // either via the browse button, or via drag/drop:
+            add: function (e, data) {
 
-	        	//remove all old references
-	        	$('ul.progressUl li').remove();
+                //remove all old references
+                $('ul.progressUl li').remove();
 
-	        	//add name to hidden class for magic.js
-	        	$('.fname').text(data.files[0].name);
+                //add name to hidden class for magic.js
+                $('.fname').text(data.files[0].name);
 
-	            var tpl = $('<li class="alert"><p></p><span></span></li>');
+                var tpl = $('<li class="alert"><p></p><span></span></li>');
 
-	            // Append the file name and file size
-	            tpl.find('p').text(data.files[0].name).append(' (<i>' + formatFileSize(data.files[0].size) + '</i>)');
+                // Append the file name and file size
+                tpl.find('p').text(data.files[0].name).append(' (<i>' + formatFileSize(data.files[0].size) + '</i>)');
 
-	            // Add the HTML to the UL element
-	            data.context = tpl.appendTo(ul);
+                // Add the HTML to the UL element
+                data.context = tpl.appendTo(ul);
 
-	            // Listen for clicks on the cancel icon
-	            tpl.find('span').click(function(){
-	                if(tpl.hasClass('working')){
-	                    jqXHR.abort();
-	                }
-	                tpl.fadeOut(function(){
-	                    tpl.remove();
-	                });
+                // Listen for clicks on the cancel icon
+                tpl.find('span').click(function(){
+                    if(tpl.hasClass('working')){
+                        jqXHR.abort();
+                    }
+                    tpl.fadeOut(function(){
+                        tpl.remove();
+                    });
 
-	            });
+                });
 
-	            // Automatically upload the file once it is added to the queue
-	            var jqXHR = data.submit();
-	        },
+                // Automatically upload the file once it is added to the queue
+                var jqXHR = data.submit();
+            },
 
-	        fail:function(e, data){
-	            // Something has gone wrong!
-	            $('ul.progressUl li.alert').addClass('alert alert-danger');
-	        },
-	        success:function(e, data){
-	            // All good, check for response!
-	            try {
-	                var resp = jQuery.parseJSON(e);
-	            } catch (e) {
-	                // error
-	            	$('ul.progressUl li.alert').addClass('alert alert-danger');		//add error class
-	            	$('li.alert p').append("<br><strong>Error: Error parsing json response</strong>");
+            fail:function(e, data){
+                // Something has gone wrong!
+                $('ul.progressUl li.alert').addClass('alert alert-danger');
+            },
+            success:function(e, data){
+                // All good, check for response!
+                try {
+                    var resp = jQuery.parseJSON(e);
+                } catch (e) {
+                    // error
+                    $('ul.progressUl li.alert').addClass('alert alert-danger');     //add error class
+                    $('li.alert p').append("<br><strong>Error: Error parsing json response</strong>");
 
-	                return;
-	            }
-	            //get status
-	            var respStat = resp['status'];
-	            //success
-	            if(respStat == "success") {
-	            	$('ul.progressUl li.alert').addClass('alert-success');		//add success class
-	            	$('ul.progressUl li.alert p').append('<br><strong>Upload successfull</strong>');	//add ok sign
-	            	// reload
-	            	$('div.loading').show();
-	            	setTimeout(function (){window.location.reload();}, 1000);
-	            }
-	            //error
-	            else {
-	            	//get error message
-					var respErr = resp['error'];
-	            	$('ul.progressUl li.alert').addClass('alert alert-danger');		//add error class
-	            	$('li.alert p').append("<br><strong>Error: "+respErr+"</strong>");
-	            }
+                    return;
+                }
+                //get status
+                var respStat = resp['status'];
+                //success
+                if(respStat == "success") {
+                    $('ul.progressUl li.alert').addClass('alert-success');      //add success class
+                    $('ul.progressUl li.alert p').append('<br><strong>Upload successfull</strong>');    //add ok sign
+                    // reload
+                    $('div.loading').show();
+                    setTimeout(function (){window.location.reload();}, 1000);
+                }
+                //error
+                else {
+                    //get error message
+                    var respErr = resp['error'];
+                    $('ul.progressUl li.alert').addClass('alert alert-danger');     //add error class
+                    $('li.alert p').append("<br><strong>Error: "+respErr+"</strong>");
+                }
 
-	        }
-	    });
+            }
+        });
 
-	    // Prevent the default action when a file is dropped on the window
-	    $(document).on('drop dragover', function (e) {
-	        e.preventDefault();
-	    });
+        // Prevent the default action when a file is dropped on the window
+        $(document).on('drop dragover', function (e) {
+            e.preventDefault();
+        });
 
-	    // Helper function that formats the file sizes
-	    function formatFileSize(bytes) {
-	        if (typeof bytes !== 'number') 	{ return ''; }
-	        if (bytes >= 1000000000) 		{  return (bytes / 1000000000).toFixed(2) + ' GB'; }
-	        if (bytes >= 1000000) 			{ return (bytes / 1000000).toFixed(2) + ' MB'; }
-	        //return result
-	        return (bytes / 1000).toFixed(2) + ' KB';
-	    }
+        // Helper function that formats the file sizes
+        function formatFileSize(bytes) {
+            if (typeof bytes !== 'number')  { return ''; }
+            if (bytes >= 1000000000)        {  return (bytes / 1000000000).toFixed(2) + ' GB'; }
+            if (bytes >= 1000000)           { return (bytes / 1000000).toFixed(2) + ' MB'; }
+            //return result
+            return (bytes / 1000).toFixed(2) + ' KB';
+        }
 
-	});
+    });
     </script>
 
 
@@ -183,9 +186,9 @@ else {
 
 <!-- footer -->
 <div class="pFooter">
-	<div class="btn-group">
-		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-	</div>
-	<!-- result -->
-	<div class="save-logo-result"></div>
+    <div class="btn-group">
+        <button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
+    </div>
+    <!-- result -->
+    <div class="save-logo-result"></div>
 </div>

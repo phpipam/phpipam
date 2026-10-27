@@ -1,46 +1,44 @@
 <?php
 
 /**
- *
  * Save users passkey
- *
  */
 
 // phpipam stuff
-require_once  __DIR__ . '/../../../../functions/functions.php';
+require_once __DIR__.'/../../../../functions/functions.php';
 
 // webauthn modules
-use Firehed\WebAuthn\{
-    Codecs,
-    ArrayBufferResponseParser
-};
+use Firehed\WebAuthn\ArrayBufferResponseParser;
+use Firehed\WebAuthn\Codecs;
+use Firehed\WebAuthn\SessionChallengeManager;
+use Firehed\WebAuthn\SingleOriginRelyingParty;
 
 try {
-    # initialize required objects
-    $Database       = new Database_PDO;
-    $Tools          = new Tools($Database);
-    $User           = new User($Database);
+    // initialize required objects
+    $Database = new Database_PDO;
+    $Tools = new Tools($Database);
+    $User = new User($Database);
 
-    # Require a fully authenticated session, including completion of 2FA.
+    // Require a fully authenticated session, including completion of 2FA.
     $User->check_user_session();
 
-    if (!$Tools->isHttps() || $User->settings->dbversion < 40 || $User->settings->passkeys != 1) {
-        throw new Exception("Unauthorized");
+    if (! $Tools->isHttps() || $User->settings->dbversion < 40 || $User->settings->passkeys != 1) {
+        throw new Exception('Unauthorized');
     }
 
-    # process request
+    // process request
     $json = file_get_contents('php://input');
     $data = json_decode((string) $json, true);
 
-    $parser = new ArrayBufferResponseParser();
+    $parser = new ArrayBufferResponseParser;
     $createResponse = $parser->parseCreateResponse($data);
 
-    $rp = new \Firehed\WebAuthn\SingleOriginRelyingParty($User->createURL());
-    $challengeManager = new \Firehed\WebAuthn\SessionChallengeManager();
+    $rp = new SingleOriginRelyingParty($User->createURL());
+    $challengeManager = new SessionChallengeManager;
     $credential = $createResponse->verify($challengeManager, $rp);
 
     // encode credentials to store to database
-    $codec = new Codecs\Credential();
+    $codec = new Codecs\Credential;
     $encodedCredential = $codec->encode($credential);
 
     // save passkey
@@ -51,11 +49,10 @@ try {
     header('Content-type: application/json');
     print json_encode([
         'success' => true,
-        'storage_id' => $credential->getStorageId()
+        'storage_id' => $credential->getStorageId(),
     ]);
-
 } catch (Exception $e) {
     header('Content-Type: text/html; charset=utf-8');
     header('HTTP/1.1 403 Unauthorized');
-    die();
+    exit();
 }

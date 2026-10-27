@@ -1,10 +1,9 @@
 <?php
 
 /**
- *	just an alias for Subnets
+ *  just an alias for Subnets
  */
 
-require_once __DIR__ . "/Subnets.php";
+require_once __DIR__.'/Subnets.php';
 
-class Folders_controller extends Subnets_controller {
-}
+class Folders_controller extends Subnets_controller {}

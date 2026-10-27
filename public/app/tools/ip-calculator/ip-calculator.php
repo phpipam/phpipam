@@ -1,9 +1,9 @@
 <?php
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
 ?>
 
-<h4><?php print _('IPv4v6 calculator');?></h4>
+<h4><?php print _('IPv4v6 calculator'); ?></h4>
 <hr>
 
 <!-- ipCalc form -->
@@ -12,12 +12,12 @@ $User->check_user_session();
 
     <!-- IP address input -->
     <tr>
-        <td><?php print _('IP address');?> / <?php print _('mask');?></td>
+        <td><?php print _('IP address'); ?> / <?php print _('mask'); ?></td>
         <td>
             <input type="text" class="form-control" name="cidr" size="40" autofocus="autofocus">
         </td>
         <td>
-            <div class="info2" style="margin-bottom:0px;"><?php print _('Please enter IP address and mask in CIDR format');?></div>
+            <div class="info2" style="margin-bottom:0px;"><?php print _('Please enter IP address and mask in CIDR format'); ?></div>
         </td>
     </tr>
 
@@ -25,10 +25,10 @@ $User->check_user_session();
     <tr class="th">
         <td></td>
         <td>
-        	<div class="btn-group">
-            	<button type="submit" class="btn btn-sm btn-default"><i class="fa fa-check"></i> <?php print _('Calculate');?></button>
-				<input type="button" class="btn btn-sm btn-default reset" value="<?php print _('Reset');?>">
-        	</div>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-sm btn-default"><i class="fa fa-check"></i> <?php print _('Calculate'); ?></button>
+                <input type="button" class="btn btn-sm btn-default reset" value="<?php print _('Reset'); ?>">
+            </div>
         </td>
         <td></td>
     </tr>

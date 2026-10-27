@@ -4,27 +4,31 @@
  * Script to print racks
  ***************************/
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
 
-# fetch custom fields
+// fetch custom fields
 $custom = $Tools->fetch_custom_fields('racks');
 
-# get hidden fields
+// get hidden fields
 $hidden_custom_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_custom_fields = is_array(@$hidden_custom_fields['racks']) ? $hidden_custom_fields['racks'] : [];
-# create csrf token
+// create csrf token
 $csrf = $User->Crypto->csrf_session_token();
 
-# verify module permissions
-if($User->check_module_permissions ("racks", User::ACCESS_R, false)===false) {
-	print "<h4>"._("Racks")."</h4><hr>";
-    $Result->show("danger", _("You do not have permissions to access this module"), false);
+// verify module permissions
+if ($User->check_module_permissions('racks', User::ACCESS_R, false) === false) {
+    print '<h4>'._('Racks').'</h4><hr>';
+    $Result->show('danger', _('You do not have permissions to access this module'), false);
 }
-# all racks or one ?
+// all racks or one ?
 elseif (isset($GET->subnetId)) {
-	# map
-	if($GET->subnetId=="map") { include("print-racks.php"); }
-	else 						 { include("print-single-rack.php"); }
+    // map
+    if ($GET->subnetId == 'map') {
+        include 'print-racks.php';
+    } else {
+        include 'print-single-rack.php';
+    }
+} else {
+    include 'print-racks.php';
 }
-else                             { include("print-racks.php"); }

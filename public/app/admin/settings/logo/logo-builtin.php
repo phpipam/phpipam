@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Default phpIPAM.png logo
  */

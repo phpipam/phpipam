@@ -4,24 +4,23 @@
  * Script to edit / add / delete groups
  *************************************************/
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
-# perm check
-$User->check_module_permissions ("dhcp", User::ACCESS_R, true, false);
+// perm check
+$User->check_module_permissions('dhcp', User::ACCESS_R, true, false);
 ?>
 
 <br>
-<h4><?php print _("DHCP settings"); ?></h4><hr>
+<h4><?php print _('DHCP settings'); ?></h4><hr>
 
 <?php
-foreach ($dhcp_db as $k=>$s) {
-    if(is_array($s)) {
-        print $k."<br>";
-        foreach ($s as $k2=>$s2) {
-        print "&nbsp;&nbsp; $k2: $s2<br>";
+foreach ($dhcp_db as $k => $s) {
+    if (is_array($s)) {
+        print $k.'<br>';
+        foreach ($s as $k2 => $s2) {
+            print "&nbsp;&nbsp; $k2: $s2<br>";
         }
-    }
-    else {
+    } else {
         print "$k: $s<br>";
     }
 }

@@ -1,43 +1,41 @@
 <?php
 
 /**
- *
  * Rename passkey
- *
  */
 
-# include required scripts
-require_once  __DIR__ . '/../../../../functions/functions.php';
+// include required scripts
+require_once __DIR__.'/../../../../functions/functions.php';
 
-# initialize required objects
-$Database       = new Database_PDO;
-$Result         = new Result;
-$User           = new User($Database);
+// initialize required objects
+$Database = new Database_PDO;
+$Result = new Result;
+$User = new User($Database);
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
 
-# validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+// validate csrf cookie
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
 
-# fetch passkey
+// fetch passkey
 $passkey = $User->get_user_passkey_by_keyId($POST->keyid);
 
-# validate
+// validate
 if (is_null($passkey) || ($passkey->user_id != $User->user->id)) {
-	$Result->show("danger", _("Passkey not found"), true);
+    $Result->show('danger', _('Passkey not found'), true);
 }
 
-if ($POST->action == "edit" || $POST->action == "add") {
-	if ($User->rename_passkey($passkey->id, $POST->comment)) {
-		$Result->show("success", _("Passkey renamed"), false);
-	} else {
-		$Result->show("danger", _("Failed to rename passkey"), false);
-	}
+if ($POST->action == 'edit' || $POST->action == 'add') {
+    if ($User->rename_passkey($passkey->id, $POST->comment)) {
+        $Result->show('success', _('Passkey renamed'), false);
+    } else {
+        $Result->show('danger', _('Failed to rename passkey'), false);
+    }
 } else {
-	if ($User->delete_passkey($passkey->id)) {
-		$Result->show("success", _("Passkey removed"), false);
-	} else {
-		$Result->show("danger", _("Failed to remove passkey"), false);
-	}
+    if ($User->delete_passkey($passkey->id)) {
+        $Result->show('success', _('Passkey removed'), false);
+    } else {
+        $Result->show('danger', _('Failed to remove passkey'), false);
+    }
 }

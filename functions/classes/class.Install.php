@@ -1,547 +1,574 @@
 <?php
 
 /**
- *	phpIPAM Install class
+ *  phpIPAM Install class
  */
+class Install extends Common_functions
+{
+    /**
+     * to store DB exceptions
+     *
+     * @var mixed
+     */
+    public $exception;
 
-class Install extends Common_functions {
+    /**
+     * Database parameters
+     *
+     * @var mixed
+     */
+    protected $db;
 
-	/**
-	 * to store DB exceptions
-	 *
-	 * @var mixed
-	 */
-	public $exception;
+    /**
+     * Database_root - for initial installation
+     *
+     * @var Database_PDO
+     */
+    protected $Database_root;
 
-	/**
-	 * Database parameters
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $db;
+    /**
+     * __construct function.
+     */
+    public function __construct(Database_PDO $Database)
+    {
+        parent::__construct();
 
-	/**
-	 * Database_root - for initial installation
-	 *
-	 * @var Database_PDO
-	 * @access protected
-	 */
-	protected $Database_root;
+        // initialize Result
+        $this->Result = new Result;
+        // initialize object
+        $this->Database = $Database;
+        // set db
+        $this->set_db_params();
+        // Log object
+        try {
+            $this->Database->connect();
+        } catch (Exception $e) {
+        }
+    }
 
+    /**
+     * @install methods
+     * ------------------------------
+     */
 
+    /**
+     * Install database files
+     *
+     * @param  mixed  $rootuser
+     * @param  mixed  $rootpass
+     * @param  bool  $drop_database  (default: false)
+     * @param  bool  $create_database  (default: false)
+     * @param  bool  $create_grants  (default: false)
+     * @param  bool  $migrate  (default: false)
+     * @return void
+     */
+    public function install_database($rootuser, $rootpass, $drop_database = false, $create_database = false, $create_grants = false, $migrate = false)
+    {
 
+        // open new connection
+        $this->Database_root = new Database_PDO($rootuser, $rootpass);
 
-	/**
-	 * __construct function.
-	 *
-	 * @param Database_PDO $Database
-	 */
-	public function __construct (Database_PDO $Database) {
-		parent::__construct();
+        // set install flag to make sure DB is not trying to be selected via DSN
+        $this->Database_root->install = true;
 
-		# initialize Result
-		$this->Result = new Result ();
-		# initialize object
-		$this->Database = $Database;
-		# set db
-		$this->set_db_params ();
-		# Log object
-		try { $this->Database->connect(); }
-		catch ( Exception $e ) {}
-	}
+        // drop database if requested
+        if ($drop_database === true) {
+            $this->drop_database();
+        }
 
+        // create database if requested
+        if ($create_database === true) {
+            $this->create_database();
+        }
 
+        // set permissions!
+        if ($create_grants === true) {
+            $this->create_grants();
+        }
 
+        // reset connection, reset install flag and connect again
+        $this->Database_root->resetConn();
 
+        // install database
+        if ($this->install_database_execute($migrate) !== false) {
+            // return true, if some errors occurred script already died! */
+            sleep(1);
+            $this->Log = new Logging($this->Database);
+            $this->Log->write(_('Database installation'), _('Database installed successfully.')._(' Version ').VERSION.'.'.REVISION._(' installed'), 1);
 
+            return true;
+        }
+    }
 
+    /**
+     * Drop existing database
+     *
+     * @return void
+     */
+    private function drop_database()
+    {
+        // set query
+        $query = 'drop database if exists `'.$this->db['name'].'`;';
+        // execute
+        try {
+            $this->Database_root->runQuery($query);
+        } catch (Exception $e) {
+            $this->Result->show('danger', $e->getMessage(), true);
+        }
+    }
 
+    /**
+     * Create database
+     *
+     * @return void
+     */
+    private function create_database()
+    {
+        // set query
+        $query = 'create database `'.$this->db['name'].'`;';
+        // execute
+        try {
+            $this->Database_root->runQuery($query);
+        } catch (Exception $e) {
+            $this->Result->show('danger', $e->getMessage(), true);
+        }
+    }
 
+    /**
+     * Create user grants
+     *
+     * @return void
+     */
+    private function create_grants()
+    {
+        $esc_user = addcslashes((string) $this->db['user'], "'");
+        $esc_pass = addcslashes((string) $this->db['pass'], "'");
+        $db_name = $this->db['name'];
+        $webhost = is_string(@$this->db['webhost']) && ! is_blank(@$this->db['webhost']) ? addcslashes((string) $this->db['webhost'], "'") : 'localhost';
 
-	/**
-	 * @install methods
-	 * ------------------------------
-	 */
+        try {
+            // Check if user exists;
+            $result = $this->Database_root->getObjectQuery('no_html_escape', "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$esc_user' AND host = '$webhost') AS user_exists;");
 
-	/**
-	 * Install database files
-	 *
-	 * @param mixed $rootuser
-	 * @param mixed $rootpass
-	 * @param bool $drop_database (default: false)
-	 * @param bool $create_database (default: false)
-	 * @param bool $create_grants (default: false)
-	 * @param bool $migrate (default: false)
-	 * @return void
-	 */
-	public function install_database ($rootuser, $rootpass, $drop_database = false, $create_database = false, $create_grants = false, $migrate = false) {
+            // create user if not exists and set permissions
+            if ($result->user_exists == 0) {
+                $this->Database_root->runQuery("CREATE USER '$esc_user'@'$webhost' IDENTIFIED BY '$esc_pass';");
+            }
+            $this->Database_root->runQuery("GRANT ALL ON `$db_name`.* TO '$esc_user'@'$webhost';");
+            $this->Database_root->runQuery('FLUSH PRIVILEGES;');
+        } catch (Exception $e) {
+            $this->Result->show('danger', $e->getMessage(), true);
+        }
+    }
 
-		# open new connection
-		$this->Database_root = new Database_PDO ($rootuser, $rootpass);
+    /**
+     * Execute files installation
+     *
+     * @param  $migrate  (default: false)
+     * @return void
+     */
+    private function install_database_execute($migrate = false)
+    {
+        // import SCHEMA file queries
+        if ($migrate) {
+            $query = file_get_contents(__DIR__.'/../../db/MIGRATE.sql');
+        } else {
+            $query = file_get_contents(__DIR__.'/../../db/SCHEMA.sql');
+        }
 
-		# set install flag to make sure DB is not trying to be selected via DSN
-		$this->Database_root->install = true;
+        // formulate queries
+        $queries = array_filter(explode(";\n", (string) $query));
 
-		# drop database if requested
-		if($drop_database===true) 	{ $this->drop_database(); }
+        // append version
+        $queries[] = "UPDATE `settings` SET `version` = '".VERSION."'";
+        $queries[] = "UPDATE `settings` SET `dbversion` = '".DBVERSION."'";
+        $queries[] = 'UPDATE `settings` SET `dbverified` = 0';
 
-		# create database if requested
-		if($create_database===true) { $this->create_database(); }
+        // execute
+        foreach ($queries as $q) {
+            // length check
+            if (! is_blank($q)) {
+                try {
+                    $this->Database_root->runQuery($q.';');
+                } catch (Exception $e) {
+                    // unlock tables
+                    try {
+                        $this->Database_root->runQuery('UNLOCK TABLES;');
+                    } catch (Exception $e) {
+                    }
+                    // drop database
+                    try {
+                        $this->Database_root->runQuery('drop database if exists `'.$this->db['name'].'`;');
+                    } catch (Exception $e) {
+                        $this->Result->show('danger', _('Cannot drop database: ').$e->getMessage(), true);
+                    }
+                    // print error
+                    $this->Result->show('danger', _('Cannot install sql SCHEMA file').': '.$e->getMessage().'<br>'._('query that failed').": <pre>$q</pre>", false);
+                    $this->Result->show('info', _('Database dropped'), false);
 
-		# set permissions!
-		if($create_grants===true) 	{ $this->create_grants(); }
+                    return false;
+                }
+            }
+        }
+    }
 
-	    # reset connection, reset install flag and connect again
-		$this->Database_root->resetConn();
+    /**
+     * @check methods
+     * ------------------------------
+     */
 
-		# install database
-		if($this->install_database_execute ($migrate) !== false) {
-		    # return true, if some errors occurred script already died! */
-			sleep(1);
-			$this->Log = new Logging ($this->Database);
-			$this->Log->write( _("Database installation"), _("Database installed successfully.")._(" Version ").VERSION.".".REVISION._(" installed"), 1 );
-			return true;
-		}
-	}
+    /**
+     * Tries to connect to database
+     *
+     * @param  bool  $redirect
+     * @return void
+     */
+    public function check_db_connection($redirect = false)
+    {
+        // try to connect
+        try {
+            $this->Database->connect();
+        } catch (Exception $e) {
+            $this->exception = $e->getMessage();
+            // redirect ?
+            if ($redirect == true) {
+                $this->redirect_to_install();
+            } else {
+                return false;
+            }
+        }
 
-	/**
-	 * Drop existing database
-	 *
-	 * @return void
-	 */
-	private function drop_database () {
-	 	# set query
-	    $query = "drop database if exists `". $this->db['name'] ."`;";
-		# execute
-		try { $this->Database_root->runQuery($query); }
-		catch (Exception $e) {	$this->Result->show("danger", $e->getMessage(), true);}
-	}
+        // ok
+        return true;
+    }
 
-	/**
-	 * Create database
-	 *
-	 * @return void
-	 */
-	private function create_database () {
-	 	# set query
-	    $query = "create database `". $this->db['name'] ."`;";
-		# execute
-		try { $this->Database_root->runQuery($query); }
-		catch (Exception $e) {	$this->Result->show("danger", $e->getMessage(), true);}
-	}
+    /**
+     * Checks if table exists
+     *
+     * @param  string  $table
+     * @return bool
+     */
+    public function check_table($table, $redirect = false)
+    {
+        // set query
+        $query = "SELECT COUNT(*) AS `cnt` FROM information_schema.tables WHERE table_schema = '".$this->db['name']."' AND table_name = '$table';";
+        // try to fetch count
+        try {
+            $result = $this->Database->getObjectQuery('no_html_escape', $query);
+        } catch (Exception $e) {
+            if ($redirect === true) {
+                $this->redirect_to_install();
+            }
 
-	/**
-	 * Create user grants
-	 *
-	 * @return void
-	 */
-	private function create_grants () {
-		$esc_user = addcslashes((string) $this->db['user'],"'");
-		$esc_pass = addcslashes((string) $this->db['pass'],"'");
-		$db_name  = $this->db['name'];
-		$webhost  = is_string(@$this->db['webhost']) && !is_blank(@$this->db['webhost']) ? addcslashes((string) $this->db['webhost'],"'") : 'localhost';
+            return false;
+        }
+        // redirect if it is not existing
+        if (! is_object($result) || $result->cnt != 1) {
+            if ($redirect === true) {
+                $this->redirect_to_install();
+            }
 
-		try {
-			# Check if user exists;
-			$result = $this->Database_root->getObjectQuery("no_html_escape", "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$esc_user' AND host = '$webhost') AS user_exists;");
+            return false;
+        }
 
-			# create user if not exists and set permissions
-			if ($result->user_exists == 0) {
-				$this->Database_root->runQuery("CREATE USER '$esc_user'@'$webhost' IDENTIFIED BY '$esc_pass';");
-			}
-			$this->Database_root->runQuery("GRANT ALL ON `$db_name`.* TO '$esc_user'@'$webhost';");
-			$this->Database_root->runQuery("FLUSH PRIVILEGES;");
+        // ok
+        return true;
+    }
 
-		} catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
-	}
+    /**
+     * This function redirects to install page
+     *
+     * @return void
+     */
+    private function redirect_to_install()
+    {
+        // redirect to install
+        header('Location: '.create_link('install'));
+    }
 
-	/**
-	 * Execute files installation
-	 *
-	 * @param $migrate (default: false)
-	 * @return void
-	 */
-	private function install_database_execute ($migrate = false) {
-	    # import SCHEMA file queries
-	    if($migrate) {
-		    $query  = file_get_contents(__DIR__ . '/../../db/MIGRATE.sql');
-		}
-		else {
-		    $query  = file_get_contents(__DIR__ . '/../../db/SCHEMA.sql');
-		}
+    /**
+     * Sets DB parameters
+     *
+     * @return void
+     */
+    private function set_db_params()
+    {
+        $this->db = Config::ValueOf('db');
+    }
 
-	    # formulate queries
-	    $queries = array_filter(explode(";\n", (string) $query));
+    /**
+     * @postinstallation functions
+     * ------------------------------
+     */
 
-	    # append version
-		$queries[] = "UPDATE `settings` SET `version` = '".VERSION."'";
-		$queries[] = "UPDATE `settings` SET `dbversion` = '".DBVERSION."'";
-		$queries[] = "UPDATE `settings` SET `dbverified` = 0";
+    /**
+     * Post installation settings update.
+     *
+     * @param  mixed  $adminpass
+     * @param  mixed  $siteTitle
+     * @param  mixed  $siteURL
+     * @return void
+     */
+    public function postauth_update($adminpass, $siteTitle, $siteURL)
+    {
+        // update Admin pass
+        $this->postauth_update_admin_pass($adminpass);
+        // update settings
+        $this->postauth_update_settings($siteTitle, $siteURL);
 
-	    # execute
-	    foreach($queries as $q) {
-		    //length check
-		    if (!is_blank($q)) {
-				try { $this->Database_root->runQuery($q.";"); }
-				catch (Exception $e) {
-					//unlock tables
-					try { $this->Database_root->runQuery("UNLOCK TABLES;"); }
-					catch (Exception $e) {}
-					//drop database
-					try { $this->Database_root->runQuery("drop database if exists `". $this->db['name'] ."`;"); }
-					catch (Exception $e) {
-						$this->Result->show("danger", _("Cannot drop database: ").$e->getMessage(), true);
-					}
-					//print error
-					$this->Result->show("danger", _("Cannot install sql SCHEMA file").": ".$e->getMessage()."<br>"._("query that failed").": <pre>$q</pre>", false);
-					$this->Result->show("info", _("Database dropped"), false);
+        // ok
+        return true;
+    }
 
-					return false;
-				}
-			}
-	    }
-	}
+    /**
+     * Updates admin password after installation
+     *
+     * @param  mixed  $adminpass
+     * @return void
+     */
+    public function postauth_update_admin_pass($adminpass)
+    {
+        try {
+            $this->Database->updateObject('users', ['password' => $adminpass, 'passChange' => 'No', 'username' => 'Admin'], 'username');
+        } catch (Exception $e) {
+            $this->Result->show('danger', $e->getMessage(), false);
+        }
 
+        return true;
+    }
 
+    /**
+     * Updates settings after installation
+     *
+     * @param  mixed  $siteTitle
+     * @param  mixed  $siteURL
+     * @return void
+     */
+    private function postauth_update_settings($siteTitle, $siteURL)
+    {
+        try {
+            $this->Database->updateObject('settings', ['siteTitle' => $siteTitle, 'siteURL' => $siteURL, 'id' => 1], 'id');
+        } catch (Exception $e) {
+            $this->Result->show('danger', $e->getMessage(), false);
+        }
 
-
-
-
-
-
-
-
-	/**
-	 * @check methods
-	 * ------------------------------
-	 */
-
-	/**
-	 * Tries to connect to database
-	 *
-	 * @param bool $redirect
-	 * @return void
-	 */
-	public function check_db_connection ($redirect = false) {
-		# try to connect
-		try { $this->Database->connect(); }
-		catch (Exception $e) 	{
-			$this->exception = $e->getMessage();
-			# redirect ?
-			if($redirect == true)  	{ $this->redirect_to_install (); }
-			else					{ return false; }
-		}
-		# ok
-		return true;
-	}
-
-	/**
-	 * Checks if table exists
-	 *
-	 * @param string $table
-	 * @return bool
-	 */
-	public function check_table ($table, $redirect = false) {
-		# set query
-		$query = "SELECT COUNT(*) AS `cnt` FROM information_schema.tables WHERE table_schema = '" . $this->db['name'] . "' AND table_name = '$table';";
-		# try to fetch count
-		try {
-			$result = $this->Database->getObjectQuery("no_html_escape", $query);
-		} catch (Exception $e) {
-			if ($redirect === true) {
-				$this->redirect_to_install();
-			}
-			return false;
-		}
-		# redirect if it is not existing
-		if (!is_object($result) || $result->cnt != 1) {
-			if ($redirect === true) {
-				$this->redirect_to_install();
-			}
-			return false;
-		}
-		# ok
-		return true;
-	}
-
-	/**
-	 * This function redirects to install page
-	 *
-	 * @return void
-	 */
-	private function redirect_to_install () {
-		# redirect to install
-		header("Location: ".create_link("install"));
-	}
-
-	/**
-	 * Sets DB parameters
-	 *
-	 * @return void
-	 */
-	private function set_db_params () {
-		$this->db = Config::ValueOf('db');
-	}
-
-
-
-
-
-
-
-
-
-	/**
-	 * @postinstallation functions
-	 * ------------------------------
-	 */
-
-	/**
-	 * Post installation settings update.
-	 *
-	 * @param mixed $adminpass
-	 * @param mixed $siteTitle
-	 * @param mixed $siteURL
-	 * @return void
-	 */
-	function postauth_update($adminpass, $siteTitle, $siteURL) {
-		# update Admin pass
-		$this->postauth_update_admin_pass ($adminpass);
-		# update settings
-		$this->postauth_update_settings ($siteTitle, $siteURL);
-		# ok
-		return true;
-	}
-
-	/**
-	 * Updates admin password after installation
-	 *
-	 * @param mixed $adminpass
-	 * @return void
-	 */
-	public function postauth_update_admin_pass ($adminpass) {
-		try { $this->Database->updateObject("users", ["password"=>$adminpass, "passChange"=>"No","username"=>"Admin"], "username"); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false); }
-		return true;
-	}
-
-	/**
-	 * Updates settings after installation
-	 *
-	 * @param mixed $siteTitle
-	 * @param mixed $siteURL
-	 * @return void
-	 */
-	private function postauth_update_settings ($siteTitle, $siteURL) {
-		try { $this->Database->updateObject("settings", ["siteTitle"=>$siteTitle, "siteURL"=>$siteURL,"id"=>1], "id"); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false); }
-		return true;
-	}
+        return true;
+    }
 }
 
-
-
-
-
-
 /**
- *
  * Upgrade class
- *
  */
-class Upgrade extends Install {
+class Upgrade extends Install
+{
+    /**
+     * upgrade queries with comments
+     *
+     * @var array
+     */
+    private $queries = [];
 
-	/**
-	 * upgrade queries with comments
-	 * @var array
-	 */
-	private $queries = [];
+    /**
+     * Old version
+     *
+     * @var string
+     */
+    private $old_version = '1.2';
 
-	/**
-	 * Old version
-	 * @var string
-	 */
-	private $old_version = "1.2";
+    /**
+     * __construct function.
+     */
+    public function __construct(Database_PDO $Database)
+    {
+        // initialize objects
+        $this->Database = $Database;
+        $this->Result = new Result;
+        // check DB connection
+        try {
+            $this->Database->connect();
+        } catch (Exception $e) {
+        }
+        // get old version
+        $this->get_old_version();
+        // load queries
+        $this->load_all_queries();
+    }
 
+    /**
+     * Get old version from database
+     *
+     * @return void
+     */
+    private function get_old_version()
+    {
+        // fetch settings from database
+        $this->get_settings();
+        // save version
+        $this->old_version = $this->settings->version.'.'.$this->settings->dbversion;
+    }
 
-	/**
-	 * __construct function.
-	 *
-	 * @param  Database_PDO $Database
-	 */
-	public function __construct (Database_PDO $Database) {
-		# initialize objects
-		$this->Database = $Database;
-		$this->Result   = new Result ();
-		// check DB connection
-		try { $this->Database->connect(); }
-		catch ( Exception $e ) {}
-		// get old version
-		$this->get_old_version ();
-		// load queries
-		$this->load_all_queries ();
-	}
+    /**
+     * Load all queries from upgrade list and add them to array of queries
+     *
+     * @return void
+     */
+    private function load_all_queries()
+    {
+        // include upgrade files
+        require __DIR__.'/../upgrade_queries.php';
+        // add queries
+        foreach ($upgrade_queries as $version => $query_arr) {
+            foreach ($query_arr as $query) {
+                // save query
+                $this->register_query($version, $query);
+            }
+        }
+    }
 
-	/**
-	 * Get old version from database
-	 *
-	 * @return void
-	 */
-	private function get_old_version () {
-		// fetch settings from database
-		$this->get_settings ();
-		// save version
-		$this->old_version = $this->settings->version.".".$this->settings->dbversion;
-	}
+    /**
+     * Add new query to upgrade query list
+     *
+     * @param  string  $version
+     * @param  string  $query
+     * @return void
+     */
+    private function register_query($version, $query)
+    {
+        // check if version is higher than old version, otherwise skip query
+        if ($this->cmp_version_strings($version, $this->old_version) > 0) {
+            // break
+            if (strpos($query, '--') === 0) {
+                $this->queries[] = "\n";
+            }
+            // save query
+            $this->queries[] = trim($this->process_procedures($query));
+        }
+    }
 
-	/**
-	 * Load all queries from upgrade list and add them to array of queries
-	 *
-	 * @return void
-	 */
-	private function load_all_queries () {
-		// include upgrade files
-		require __DIR__ . '/../upgrade_queries.php';
-		// add queries
-		foreach ($upgrade_queries as $version=>$query_arr) {
-			foreach ($query_arr as $query) {
-				// save query
-				$this->register_query ($version, $query);
-			}
-		}
-	}
+    /**
+     * Returns all upgrade queries to be executed
+     *
+     * @return array
+     */
+    public function get_queries()
+    {
+        return $this->queries;
+    }
 
-	/**
-	 * Add new query to upgrade query list
-	 *
-	 * @param  string $version
-	 * @param  string $query
-	 * @return void
-	 */
-	private function register_query ($version, $query) {
-		// check if version is higher than old version, otherwise skip query
-		if ($this->cmp_version_strings($version, $this->old_version) > 0) {
-			// break
-			if (strpos($query, "--")===0) {
-				$this->queries[] = "\n";
-			}
-			// save query
-			$this->queries[] = trim($this->process_procedures($query));
-		}
-	}
+    /**
+     * For PDO execution we cannot use delimiters so we need to remove them
+     *
+     * @param  string  $query
+     * @return string
+     */
+    private function process_procedures($query)
+    {
+        $query = str_replace('DELIMITER $$', '', $query);       // remove DELIMITER $$ start statement
+        $query = str_replace('DELIMITER $', '', $query);        // remove DELIMITER $  end statement
+        $query = str_replace('END $$', 'END;', $query);     // Replace END $$ with END;
 
-	/**
-	 * Returns all upgrade queries to be executed
-	 *
-	 * @return array
-	 */
-	public function get_queries () {
-		return $this->queries;
-	}
+        // result
+        return $query;
+    }
 
-	/**
-	 * For PDO execution we cannot use delimiters so we need to remove them
-	 * @param  string $query
-	 * @return string
-	 */
-	private function process_procedures ($query) {
-		$query = str_replace("DELIMITER $$", "", $query);		// remove DELIMITER $$ start statement
-		$query = str_replace("DELIMITER $", "", $query);		// remove DELIMITER $  end statement
-		$query = str_replace("END $$", "END;", $query);		// Replace END $$ with END;
-		// result
-		return $query;
-	}
+    /**
+     * Execute upgrade
+     * ---------------
+     */
 
+    /**
+     * Upgrade database checks and executes.
+     *
+     * @return void
+     */
+    public function upgrade_database()
+    {
+        if ($this->old_version == VERSION.DBVERSION) {
+            $this->Result->show('danger', _('Database already at latest version'), true);
+        } else {
+            // check db connection
+            if ($this->check_db_connection(false) === false) {
+                $this->Result->show('danger', _('Cannot connect to database'), true);
+            }
+            // execute
+            else {
+                return $this->upgrade_database_execute();
+            }
+        }
+    }
 
+    /**
+     * Execute database upgrade.
+     *
+     * @return void
+     */
+    private function upgrade_database_execute()
+    {
+        // set queries
+        $queries = $this->get_queries();
+        // create default arrays
+        $queries_ok = [];           // succesful queries
 
-	/**
-	 * Execute upgrade
-	 * ---------------
-	 */
+        // execute
+        try {
+            // Begin transaction
+            $this->Database->beginTransaction();
 
-	/**
-	 * Upgrade database checks and executes.
-	 *
-	 * @return void
-	 */
-	public function upgrade_database () {
-		if($this->old_version == VERSION.DBVERSION) { $this->Result->show("danger", _("Database already at latest version"), true); }
-		else {
-			# check db connection
-			if($this->check_db_connection(false)===false)  	{ $this->Result->show("danger", _("Cannot connect to database"), true); }
-			# execute
-			else {
-				return $this->upgrade_database_execute ();
-			}
-		}
-	}
+            // execute all queries
+            foreach ($queries as $k => $query) {
+                // execute
+                if (strpos((string) $query, '--') !== 0 && ! is_blank(trim((string) $query))) {
+                    $ignore_on_failure = (strpos((string) $query, '-- IGNORE_ON_FAILURE') !== false);
 
-	/**
-	 * Execute database upgrade.
-	 *
-	 * @return void
-	 */
-	private function upgrade_database_execute () {
-		# set queries
-		$queries = $this->get_queries ();
-		// create default arrays
-		$queries_ok = [];			// succesful queries
+                    if ($ignore_on_failure) {
+                        $this->Database->setErrMode(PDO::ERRMODE_SILENT);
+                    }
+                    $this->Database->runQuery($query);
+                    if ($ignore_on_failure) {
+                        $this->Database->setErrMode(PDO::ERRMODE_EXCEPTION);
+                    }
+                }
+                // save ok
+                $queries_ok[] = $query;
+                // remove old
+                unset($queries[$k]);
+            }
 
-		// execute
-		try {
-			# Begin transaction
-			$this->Database->beginTransaction();
+            $this->Database->runQuery('UPDATE `settings` SET `version` = ?', VERSION);
+            $this->Database->runQuery('UPDATE `settings` SET `dbversion` = ?', DBVERSION);
+            $this->Database->runQuery('UPDATE `settings` SET `dbverified` = ?', 0);
 
-			# execute all queries
-			foreach($queries as $k=>$query) {
-				// execute
-				if(strpos((string) $query, "--")!==0 && !is_blank(trim((string) $query))) {
-					$ignore_on_failure = (strpos((string) $query, '-- IGNORE_ON_FAILURE')!== false);
+            // All good, commit changes
+            $this->Database->commit();
+        } catch (Exception $e) {
+            // Something went wrong, revert all upgrade changes
+            $this->Database->rollBack();
+            // write log
+            $this->Log = new Logging($this->Database);
+            $this->Log->write(_('Database upgrade'), $e->getMessage().'<br>'._('query: ').$query, 2);
+            // fail
+            print '<h3>'._('Upgrade failed')." !</h3><hr style='margin:30px;'>";
+            $this->Result->show('danger', $e->getMessage().'<hr>'._('Failed query').': <pre>'.$query.'</pre>', false);
 
-					if ($ignore_on_failure) $this->Database->setErrMode(\PDO::ERRMODE_SILENT);
-					$this->Database->runQuery($query);
-					if ($ignore_on_failure) $this->Database->setErrMode(\PDO::ERRMODE_EXCEPTION);
-				}
-				// save ok
-				$queries_ok[] = $query;
-				// remove old
-				unset($queries[$k]);
-			}
+            // print failure
+            $this->Result->show('danger', _('Failed to upgrade database!'), false);
+            print "<div class='text-right'><a class='btn btn-sm btn-default' href='".create_link('administration', 'verify-database')."'>"._('Go to administration and fix').'</a></div><br><hr><br>';
 
-			$this->Database->runQuery("UPDATE `settings` SET `version` = ?", VERSION);
-			$this->Database->runQuery("UPDATE `settings` SET `dbversion` = ?", DBVERSION);
-			$this->Database->runQuery("UPDATE `settings` SET `dbverified` = ?", 0);
+            if (count($queries_ok) > 0) {
+                $this->Result->show('success', _('Succesful queries').': <pre>'.implode('<br>', $queries_ok).'</pre>', false);
+            }
+            if (count($queries) > 0) {
+                $this->Result->show('warning', _('Not executed queries').': <pre>'.implode('<br>', $queries).'</pre>', false);
+            }
 
-			# All good, commit changes
-			$this->Database->commit();
-		}
-		catch (Exception $e) {
-			# Something went wrong, revert all upgrade changes
-			$this->Database->rollBack();
-			// write log
-			$this->Log = new Logging ($this->Database);
-			$this->Log->write( _("Database upgrade"), $e->getMessage()."<br>"._("query: ").$query, 2 );
-			# fail
-			print "<h3>"._("Upgrade failed")." !</h3><hr style='margin:30px;'>";
-			$this->Result->show("danger", $e->getMessage()."<hr>"._("Failed query").": <pre>".$query."</pre>", false);
+            return false;
+        }
 
-			# print failure
-			$this->Result->show("danger", _("Failed to upgrade database!"), false);
-			print "<div class='text-right'><a class='btn btn-sm btn-default' href='".create_link('administration', "verify-database")."'>"._("Go to administration and fix")."</a></div><br><hr><br>";
+        // all good, print it
+        usleep(500000);
+        $this->Log = new Logging($this->Database);
+        $this->Log->write(_('Database upgrade'), _('Database upgraded from version ').$this->settings->version._('.r').$this->settings->dbversion._(' to version ').VERSION._('.r').DBVERSION, 1);
 
-			if(sizeof($queries_ok)>0)
-			$this->Result->show("success", _("Succesful queries").": <pre>".implode("<br>", $queries_ok)."</pre>", false);
-			if(sizeof($queries)>0)
-			$this->Result->show("warning", _("Not executed queries").": <pre>".implode("<br>", $queries)."</pre>", false);
-
-			return false;
-		}
-
-		# all good, print it
-		usleep(500000);
-		$this->Log = new Logging ($this->Database);
-		$this->Log->write( _("Database upgrade"), _("Database upgraded from version ").$this->settings->version._(".r").$this->settings->dbversion._(" to version ").VERSION._(".r").DBVERSION, 1 );
-		return true;
-	}
+        return true;
+    }
 }

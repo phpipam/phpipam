@@ -1,42 +1,48 @@
 <?php
-require_once  __DIR__ . '/../../../functions/functions.php';
 
-if (!isset($Database)) {
-    $Database = new Database_PDO();
-    $Tools = new Tools ($Database);
+use OneLogin\Saml2\Auth;
+use OneLogin\Saml2\Error;
+use OneLogin\Saml2\Utils;
+
+require_once __DIR__.'/../../../functions/functions.php';
+
+if (! isset($Database)) {
+    $Database = new Database_PDO;
+    $Tools = new Tools($Database);
 }
 
 // get SAML2 settings from db
-$dbobj = $Tools->fetch_object("usersAuthMethod", "type", "SAML2");
-if (!$dbobj) {
-    $Result->show("danger", _("SAML settings not found in database"), true);
+$dbobj = $Tools->fetch_object('usersAuthMethod', 'type', 'SAML2');
+if (! $dbobj) {
+    $Result->show('danger', _('SAML settings not found in database'), true);
 }
 
-//decode authentication module params
+// decode authentication module params
 $params = new Params(db_json_decode($dbobj->params, true));
 
-if (empty($params->idpx509cert) && !empty($params->idpcertfingerprint)) {
-    $Result->show("danger", _("Please login as admin and update SAML authentication settings"), true);
+if (empty($params->idpx509cert) && ! empty($params->idpcertfingerprint)) {
+    $Result->show('danger', _('Please login as admin and update SAML authentication settings'), true);
 }
 
 try {
-    //if using advanced settings, instantiate without db settings
+    // if using advanced settings, instantiate without db settings
     if (filter_var($params->advanced, FILTER_VALIDATE_BOOLEAN)) {
-        $auth = new OneLogin\Saml2\Auth();
+        $auth = new Auth;
     } else {
-        if (!isset($params->clientId))              // If not set use prior default value for clientId
+        if (! isset($params->clientId)) {              // If not set use prior default value for clientId
             $params->clientId = $Tools->createURL();
+        }
 
         $settings = [
             'strict' => filter_var($params->strict, FILTER_VALIDATE_BOOLEAN),
             'sp' => [
                 'entityId' => $params->clientId,
                 'assertionConsumerService' => [
-                    'url' => $Tools->createURL() . create_link('saml2'),
+                    'url' => $Tools->createURL().create_link('saml2'),
                     'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
                 ],
                 'singleLogoutService' => [
-                    'url' => $Tools->createURL() . create_link(),
+                    'url' => $Tools->createURL().create_link(),
                     'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
                 ],
                 'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
@@ -61,8 +67,8 @@ try {
             ],
         ];
 
-        OneLogin\Saml2\Utils::setProxyVars(true);
-        $auth = new OneLogin\Saml2\Auth($settings);
+        Utils::setProxyVars(true);
+        $auth = new Auth($settings);
     }
 
     $idp_settings = $auth->getSettings();
@@ -70,17 +76,17 @@ try {
     $errors = $idp_settings->validateMetadata($metadata);
     if (empty($errors)) {
         header('Content-Type: text/xml');
-        echo $metadata;
+        print $metadata;
     } else {
-        throw new OneLogin\Saml2\Error(
-            'Invalid SP metadata: ' . implode(', ', $errors),
-            OneLogin\Saml2\Error::METADATA_SP_INVALID
+        throw new Error(
+            'Invalid SP metadata: '.implode(', ', $errors),
+            Error::METADATA_SP_INVALID
         );
     }
 } catch (Exception $e) {
-    print _("Fatal SAML error") . ": ";
+    print _('Fatal SAML error').': ';
 
-    if (!filter_var($params->debugprotocol, FILTER_VALIDATE_BOOLEAN)) {
+    if (! filter_var($params->debugprotocol, FILTER_VALIDATE_BOOLEAN)) {
         print escape_input($e->getMessage());
     }
     exit();

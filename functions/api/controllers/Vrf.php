@@ -1,10 +1,9 @@
 <?php
 
 /**
- *	just an alias for Vrfs
+ *  just an alias for Vrfs
  */
 
-require_once __DIR__ . "/Vrfs.php";
+require_once __DIR__.'/Vrfs.php';
 
-class Vrf_controller extends Vrfs_controller {
-}
+class Vrf_controller extends Vrfs_controller {}
