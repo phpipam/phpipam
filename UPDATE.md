@@ -73,7 +73,7 @@ Enter password:
 
 Backup your `config.php` file containing database connection settings for phpIPAM.
 
-# Prepare for composer package management [ * upgrading from phpIPAM < v1.9.0 ]
+# Prepare for composer package management* <br>[ * upgrading from phpIPAM < v1.9.0 ]
 
 phpIPAM versions prior to 1.9.0 use a mix of git submodule and [composer](https://getcomposer.org/) packages installed in the `functions` sub-directory.
 
@@ -121,7 +121,7 @@ If you are using `master` branch on GitHub simply pull the latest stable release
 [root@ipam:/var/www/phpipam]$ composer install --no-dev --no-scripts
 ```
 
-## git on specific branch [ * phpIPAM >= v1.9.0 ]
+## git on specific branch* <br>[ * phpIPAM >= v1.9.0 ]
 
 If you use specific branch, pull down new code, switch to desired branch and update dependencies;
 
@@ -134,7 +134,7 @@ If you use specific branch, pull down new code, switch to desired branch and upd
 [root@ipam:/var/www/phpipam]$ composer install --no-dev --no-scripts
 ```
 
-## git on specific branch [ * phpIPAM < v1.9.0 ]
+## git on specific branch* <br>[ * phpIPAM < v1.9.0 ]
 
 If you use specific branch, pull down new code, switch to desired branch and update dependencies;
 
@@ -162,13 +162,13 @@ To manually extract new phpipam release head over to [https://github.com/phpipam
 [root@ipam:/var/www/phpipam]$ composer install --no-dev --no-scripts
 ```
 
-# Update webserver configuration [ * upgrading from phpIPAM < v1.9.0 ]
+# Update webserver configuration* <br>[ * upgrading from phpIPAM < v1.9.0 ]
 
-phpIPAM v1.9.0 relocated all HTML application code from the project root directory into the \"public\" sub-directory.
+phpIPAM v1.9.0 relocated all HTML application code from the project root directory into the `public` sub-directory.
 
-When upgrading from phpIPAM v1.8.x or below, update your webserver, reverse-proxy or load-balancer configuration to point to the new HTML location.
+1) When upgrading from phpIPAM v1.8.x or below, update your webserver, reverse-proxy or load-balancer configuration to point to the new HTML location.
 
-phpIPAM v1.9.0 relocated API controllers into \"functions/api/controllers\". Please manually relocate any custom API controllers into the \"functions/api/controllers/custom\" sub-folder.
+1) phpIPAM v1.9.0 relocated API controllers into `functions/api/controllers`, manually relocate any custom API controllers into the `functions/api/controllers/custom` sub-folder.
 
 # Upgrade phpIPAM database
 
