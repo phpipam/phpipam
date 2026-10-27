@@ -9,82 +9,62 @@
 // phpipam stuff
 require_once  __DIR__ . '/../../../functions/functions.php';
 
-# initialize required objects
-$Database       = new Database_PDO;
-$User           = new User ($Database);
-
-// set header typw
-header('Content-Type: text/html; charset=utf-8');
-
 // webauthn modules
 use Firehed\WebAuthn\{
-    ChallengeManagerInterface,
     Codecs,
     CredentialContainer,
-    RelyingParty,
-    SessionChallengeManager,
-    SingleOriginRelyingParty,
-    ResponseParser,
     ArrayBufferResponseParser,
-    BinaryString
 };
 
-// process request json
-$json = file_get_contents('php://input');
-$data = json_decode((string) $json, true);
+try {
+    # initialize required objects
+    $Database       = new Database_PDO;
+    $Tools          = new Tools($Database);
+    $User           = new User($Database);
 
-// parser
-$parser = new ArrayBufferResponseParser();
-$getResponse = $parser->parseGetResponse($data);
-
-// Set relaying party
-$rp = new \Firehed\WebAuthn\SingleOriginRelyingParty($User->createURL ());
-// challange manager
-$challengeManager = new \Firehed\WebAuthn\SessionChallengeManager();
-
-// get user credentials
-$passkey = $User->get_user_passkey_by_keyId ($data['keyId']);
-
-// none found
-if (is_null($passkey)) {
-    header('HTTP/1.1 404 Not Found');
-    return;
-}
-else {
-    try {
-        // set user id
-        $User->set_passkey_user_id ($passkey->user_id);
-
-        // init credentails
-        $codec = new Codecs\Credential();
-
-        // set credentials
-        $credentials[0] = $codec->decode($passkey->credential);;
-
-        // container
-        $credentialContainer = new CredentialContainer($credentials);
-
-        // Verify credentials, if it fails exit
-        $updatedCredential = $getResponse->verify($challengeManager, $rp, $credentialContainer);
-
-        // Auth success. Now update credential and save session
-
-        // encode credentials to store to database
-        $codec = new Codecs\Credential();
-        $encodedCredential = $codec->encode($updatedCredential);
-
-        // confirm login
-        $User->auth_passkey ($updatedCredential->getStorageId(), $encodedCredential, $data['keyId']);
-
-        // print result
-        header('HTTP/1.1 200 OK');
-        header('Content-type: application/json');
-        echo json_encode([
-                'success' => true,
-                'credential_ids' => $updatedCredential->getStorageId()
-        ]);
+    if (!$Tools->isHttps() || $User->settings->dbversion < 40 || $User->settings->passkeys != 1) {
+        throw new Exception("Unauthorized");
     }
-    catch (Exception $e) {
-        header('HTTP/1.1 500 '.$e->getMessage());
+
+    // process request json
+    $json = file_get_contents('php://input');
+    $data = json_decode((string) $json, true);
+
+    // parser
+    $parser = new ArrayBufferResponseParser();
+    $getResponse = $parser->parseGetResponse($data);
+    $userHandle = $getResponse->getUserHandle();
+
+    if ($userHandle !== null && $userHandle != $User->get_passkey_user_id()) {
+        throw new Exception('User handle does not match authentcating user');
     }
+
+    $user_passkeys = $User->get_user_passkeys($User->get_passkey_user_id());
+    $codec = new Codecs\Credential();
+    $credentials = array_map(function ($row) use ($codec) {
+        return $codec->decode($row->credential);
+    }, $user_passkeys);
+    $credentialContainer = new CredentialContainer($credentials);
+
+    $rp = new \Firehed\WebAuthn\SingleOriginRelyingParty($User->createURL());
+    $challengeManager = new \Firehed\WebAuthn\SessionChallengeManager();
+    $updatedCredential = $getResponse->verify($challengeManager, $rp, $credentialContainer);
+
+    // confirm login
+    $encodedCredential = $codec->encode($updatedCredential);
+    $User->auth_passkey($updatedCredential->getStorageId(), $encodedCredential, $data['keyId']);
+
+    // print result
+    header('HTTP/1.1 200 OK');
+    header('Content-type: application/json');
+    echo json_encode([
+        'success' => true,
+        'credential_ids' => $updatedCredential->getStorageId()
+    ]);
+
+} catch (Exception $e) {
+    // set header type
+    header('Content-Type: text/html; charset=utf-8');
+    header('HTTP/1.1 403 Unauthorized');
+    die();
 }

@@ -65,7 +65,7 @@ foreach ($users as $user) {
 
 	// passkeys
 	$passkey_only = false;
-	if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
+	if ($User->settings->dbversion >= 40 && $User->settings->passkeys == 1) {
 		// get user passkeys
 		$user_passkeys = $User->get_user_passkeys($user['id']);
 		// set passkey_only flag
@@ -114,7 +114,7 @@ foreach ($users as $user) {
 	}
 
 	// passkeys
-	if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
+	if ($User->settings->dbversion >= 40 && $User->settings->passkeys == 1) {
 		// get user passkeys
 		$user_passkeys = $User->get_user_passkeys($user['id']);
 		if (sizeof($user_passkeys)>0) {

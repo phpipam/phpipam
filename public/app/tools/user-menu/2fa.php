@@ -23,7 +23,7 @@ if ((string) $User->user->{'2fa_secret'} === '' && $User->user->{'2fa'}) {
 $username = strtolower((string) $User->user->username)."@".$User->settings->{'2fa_name'};
 
 // passkey only
-if ($User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
+if ($User->settings->dbversion >= 40 && $User->settings->passkeys == 1) {
 	// get user passkeys
 	$user_passkeys = $User->get_user_passkeys($User->user->id);
 	// set passkey_only flag

@@ -6,6 +6,7 @@
     + Rack SVG image errors (#4595);
     + Rack dropdown fails to populate while editing a device (#4602);
     + Dynamic authentication API endpoints returns 409 (#4640);
+    + Passkey enrolment issues;
 
     Enhancements, changes:
     ----------------------------
@@ -35,6 +36,7 @@
     + Reflected Cross-Site Scripting (XSS) in /upgrade/index.php;
     + Reflected Cross-Site Scripting (XSS) in show-rack-popup.php;
     + Favourites, missing permission and CSRF checks;
+    + Passkey enrolment can bypass TOTP;
 
 == 1.8.0
 

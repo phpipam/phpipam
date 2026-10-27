@@ -21,7 +21,7 @@ if (!$Tools->isHttps()) {
 	$Result->show("danger alert-absolute", _("TLS is required for passcode authentication"), false);
 }
 # are passkeys enabled ?
-elseif (!$User->settings->dbversion >= 40 && $User->settings->{'passkeys'}=="1") {
+elseif (!$User->settings->dbversion >= 40 && $User->settings->passkeys == 1) {
 	$Result->show("danger alert-absolute", _("Passkey authentication is disabled"), false);
 }
 # is
@@ -111,30 +111,43 @@ const startRegister = async (e) => {
     }
 
     try {
+		const data = {
+    		userName: '<?php print $User->user->username; ?>',
+			displayName: '<?php print $User->user->real_name; ?>',
+    		userId: '<?php print $User->user->id; ?>',
+			rp: '<?php print $User->createURL (); ?>',
+		}
+
     	// get and parse challenge
-		const challengeReq = await fetch('app/tools/user-menu/passkey_challenge.php')
-		const challenge    = await challengeReq.json()
+		const response = await fetch('app/tools/user-menu/passkey_challenge.php')
+		const challengeB64 = await response.json()
+		const challenge = atob(challengeB64) // base64-decode
 
 		// create
 	    const createOptions = {
 	        publicKey: {
 	            rp: {
-	                name: '<?php print $User->createURL (); ?>',
+	                name: data.rp,
 	            },
 	            user: {
-	                name: "<?php print $User->user->username; ?>",
-	                displayName: "<?php print $User->user->real_name; ?>",
-	                id: Uint8Array.from("<?php print $User->user->id; ?>", c => c.charCodeAt(0)),
+	                name: data.userName,
+	                displayName: data.displayName,
+	                id: Uint8Array.from(data.userId, c => c.charCodeAt(0)),
 	            },
 	            // This base64-decodes the response and translates it into the Webauthn-required format.
 	            // challenge: Uint8Array.from(atob(challenge), c => c.charCodeAt(0)),
-	            challenge: Uint8Array.from(atob(challenge), c => c.charCodeAt(0)),
+	            challenge: Uint8Array.from(challenge, c => c.charCodeAt(0)),
 	            pubKeyCredParams: [
 	                {
-	                    alg: -7, // ES256
 	                    type: "public-key",
-	                }
-	            ]
+	                    alg: -7 // "ES256" as registered in the IANA COSE Algorithms registry,
+
+                    },
+                    {
+	                    type: "public-key",
+                    	alg: -257 // Value registered by this specification for "RS256"
+                    }
+                ],
 	        },
 	        attestation: 'direct',
 	    }

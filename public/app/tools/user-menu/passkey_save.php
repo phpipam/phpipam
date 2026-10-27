@@ -9,74 +9,53 @@
 // phpipam stuff
 require_once  __DIR__ . '/../../../../functions/functions.php';
 
-# initialize required objects
-$Database       = new Database_PDO;
-$User           = new User ($Database);
-
-// set header typw
-header('Content-Type: text/html; charset=utf-8');
-
 // webauthn modules
 use Firehed\WebAuthn\{
-    ChallengeManagerInterface,
     Codecs,
-    CredentialContainer,
-    RelyingParty,
-    SessionChallengeManager,
-    SingleOriginRelyingParty,
-    JsonResponseParser,
     ArrayBufferResponseParser
 };
 
-# process request
-$json = file_get_contents('php://input');
-$data = json_decode((string) $json, true);
+try {
+    # initialize required objects
+    $Database       = new Database_PDO;
+    $Tools          = new Tools($Database);
+    $User           = new User($Database);
 
-//
-// we dont try to catch exceptions, as messages are unclear, check webserver/php-fpm error_logs
-//
+    # Require a fully authenticated session, including completion of 2FA.
+    $User->check_user_session();
 
-// try {
-    // parser
+    if (!$Tools->isHttps() || $User->settings->dbversion < 40 || $User->settings->passkeys != 1) {
+        throw new Exception("Unauthorized");
+    }
+
+    # process request
+    $json = file_get_contents('php://input');
+    $data = json_decode((string) $json, true);
+
     $parser = new ArrayBufferResponseParser();
     $createResponse = $parser->parseCreateResponse($data);
 
-    // escape keyId
-    $data['keyId'] = $User->strip_input_tags ($data['keyId']);
-
-    // Relaying party
-    $rp = new \Firehed\WebAuthn\SingleOriginRelyingParty($User->createURL ());
-    // challange manager
+    $rp = new \Firehed\WebAuthn\SingleOriginRelyingParty($User->createURL());
     $challengeManager = new \Firehed\WebAuthn\SessionChallengeManager();
-
-    // Verify credentials, if it fails exit
-    try {
-        $credential = $createResponse->verify($challengeManager, $rp);
-    } catch (Exception $e) {
-        header('HTTP/1.1 403 Unauthorized');
-        return;
-    }
+    $credential = $createResponse->verify($challengeManager, $rp);
 
     // encode credentials to store to database
     $codec = new Codecs\Credential();
     $encodedCredential = $codec->encode($credential);
 
-
     // save passkey
-    $User->save_passkey ($encodedCredential, $credential->getStorageId(), $data['keyId']);
+    $User->save_passkey($encodedCredential, $credential->getStorageId(), $data['keyId']);
 
     // print result
     header('HTTP/1.1 200 OK');
     header('Content-type: application/json');
-    echo json_encode([
-            'success' => true,
-            'credentialId' => $credential->getStorageId()
+    print json_encode([
+        'success' => true,
+        'storage_id' => $credential->getStorageId()
     ]);
-// } catch (exception $e) {
-//     header('HTTP/1.1 500 '.$e->getMessage());
-// }
-// catch (Throwable) {
-//     // Verification failed. Send an error to the user?
-//     header('HTTP/1.1 403 Unauthorized');
-//     return;
-// }
+
+} catch (Exception $e) {
+    header('Content-Type: text/html; charset=utf-8');
+    header('HTTP/1.1 403 Unauthorized');
+    die();
+}

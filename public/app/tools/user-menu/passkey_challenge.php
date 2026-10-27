@@ -7,19 +7,27 @@
 // phpipam stuff
 require_once  __DIR__ . '/../../../../functions/functions.php';
 
-# initialize required objects - to start session
-$Database       = new Database_PDO;
-$User           = new User ($Database);
+try {
+    # initialize required objects - to start session
+    $Database       = new Database_PDO;
+    $Tools          = new Tools($Database);
+    $User           = new User($Database);
 
-// webauthn modules
-use Firehed\WebAuthn\{
-    SessionChallengeManager
-};
+    if (!$Tools->isHttps() || $User->settings->dbversion < 40 || $User->settings->passkeys != 1) {
+        throw new Exception("Unauthorized");
+    }
 
-// Generate challenge
-$challengeManager = new \Firehed\WebAuthn\SessionChallengeManager();
-$challenge = $challengeManager->createChallenge();
+    // Generate challenge
+    $challengeManager = new \Firehed\WebAuthn\SessionChallengeManager();
+    $challenge = \Firehed\WebAuthn\ExpiringChallenge::withLifetime(300);
+    $challengeManager->manageChallenge($challenge);
 
-// Send json challenge to user
-header('Content-type: application/json');
-echo json_encode($challenge->getBase64());
+    // Send json challenge to user
+    header('Content-type: application/json');
+    print json_encode($challenge->getBase64());
+
+} catch (Exception $e) {
+    header('Content-Type: text/html; charset=utf-8');
+    header('HTTP/1.1 403 Unauthorized');
+    die();
+}

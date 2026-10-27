@@ -1263,7 +1263,9 @@ class User extends Common_functions {
 
     /**
      * Process succesfull passkey auth
+     * @param  string $credentialId
      * @param  string $encodedCredential
+     * @param  string $keyId
      * @return bool
      */
     public function auth_passkey ($credentialId = "", $encodedCredential = "", $keyId = "") {
@@ -1373,6 +1375,8 @@ class User extends Common_functions {
     /**
      * Save new passkey
      * @param  string $credential
+     * @param  string $credentialId
+     * @param  string $keyId
      * @return bool
      */
     public function save_passkey ($credential = "", $credentialId = NULL, $keyId = NULL) {
