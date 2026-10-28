@@ -59,7 +59,7 @@ $invalid_lines = [];
 $errors = 0;
 
 // import each value
-foreach ($outFile as $k => $line) {
+foreach ($outFile as $line) {
     // if not error
     if ($line['class'] != 'danger' || ($line['class'] == 'danger' && $POST->ignoreError == '1')) {
         // reformat IP state from name to id

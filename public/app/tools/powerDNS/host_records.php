@@ -110,7 +110,7 @@ if (! is_array($unique_ips)) {
 
     // defaults
     if (count($out) > 0) {
-        foreach ($out as $k => $r) {
+        foreach ($out as $r) {
             print "<tr><th colspan='7' style='padding-top:40px;'>".('DNS records resolving to IP address').' '.$r[0]->content.'</th></tr>';
             // records
             foreach ($r as $re) {

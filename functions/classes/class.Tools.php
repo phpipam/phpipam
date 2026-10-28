@@ -1444,7 +1444,7 @@ class Tools extends Common_functions
 
         // get proper line
         $file = explode("\n", $file);
-        foreach ($file as $k => $l) {
+        foreach ($file as $l) {
             if (strpos(trim($l), "$field`") == 1) {
                 $res = trim($l, ',');
                 $res .= ';';
@@ -1636,7 +1636,7 @@ class Tools extends Common_functions
         $file = explode("\n", $file);
 
         $line = false;
-        foreach ($file as $k => $l) {
+        foreach ($file as $l) {
             // trim
             $l = trim($l);
             if (strpos($l, 'KEY `'.$index_name.'`') !== false) {
@@ -2085,7 +2085,7 @@ class Tools extends Common_functions
                     if (count($ids) > 0) {
                         foreach ($ids as $id) {
                             // Check table names - MySQL on Windows is case-insensitive
-                            if (! in_array(strtolower($ot), ['subnets', 'ipaddresses'])) {
+                            if (! in_array(strtolower((string) $ot), ['subnets', 'ipaddresses'])) {
                                 continue;
                             }
                             // fetch
@@ -2344,7 +2344,7 @@ class Tools extends Common_functions
             $master_set = false;
             $out = [];
 
-            foreach ($prefixes as $k => $p) {
+            foreach ($prefixes as $p) {
                 if ($p->id == $master) {
                     $out[] = $p;
                     $master_set = true;
@@ -3508,7 +3508,7 @@ class Tools extends Common_functions
 
         // present ?
         if (count($outFile) > 0) {
-            foreach ($outFile as $k => $line) {
+            foreach ($outFile as $line) {
                 // convert encoding if necessary
                 $line = $this->convert_encoding_to_UTF8($line);
 

@@ -289,7 +289,7 @@ if ($Scan->icmp_type == 'fping') {
     $Database->connect();
 
     // update all active statuses
-    foreach ($addresses as $k => $a) {
+    foreach ($addresses as $a) {
         if ($a['newStatus'] == 0) {
             $Scan->ping_update_lastseen($a['id'], $nowdate);
         }

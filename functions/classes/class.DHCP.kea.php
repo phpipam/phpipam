@@ -207,7 +207,7 @@ class DHCP_kea extends Common_functions
 
         // loop and remove comments (contains #) and replace multiple spaces
         $out = [];
-        foreach ($config as $k => $f) {
+        foreach ($config as $f) {
             if (strpos($f, '#') !== false || is_blank($f)) {
             } else {
                 if (! is_blank($f)) {
@@ -559,7 +559,7 @@ class DHCP_kea extends Common_functions
             // we need array
             $result = [];
             // loop
-            foreach ($reservations as $k => $l) {
+            foreach ($reservations as $l) {
                 // check for subnet
                 if ($l->dhcp4_subnet_id !== 0 && ! is_blank($l->dhcp4_subnet_id)) {
                     if ($type == 'IPv4') {

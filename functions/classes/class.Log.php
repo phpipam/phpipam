@@ -1595,7 +1595,7 @@ class Logging extends Common_functions
         $out = [];
         $log = [];
 
-        foreach ($groups as $k => $g) {
+        foreach ($groups as $g) {
             // save
             $out[$g->g_id]['g_name'] = $g->g_name;
         }

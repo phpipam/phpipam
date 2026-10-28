@@ -39,7 +39,7 @@ function print_leases($s)
     // classes
     $html[] = ' <td>';
     if (count($s->{'classes'}) > 0) {
-        foreach ($s->{'classes'} as $k => $v) {
+        foreach ($s->{'classes'} as $v) {
             $html[] = $v.'<br>';
         }
     } else {

@@ -76,7 +76,7 @@ if ($firewallZoneMapping) {
             // set the loop counter
             $i = 1;
             if ($mapping->network) {
-                foreach ($mapping->network as $key => $network) {
+                foreach ($mapping->network as $network) {
                     print '<tr class="border-top">';
                     if ($i === 1) {
                         $title = $mapping->indicator == 0 ? 'Own Zone' : 'Customer Zone';

@@ -67,7 +67,7 @@ $ports = explode(';', $argv[2]);
 $out = [];
 
 // reset array, set each IP together with port
-foreach ($scan_addresses as $k => $v) {
+foreach ($scan_addresses as $v) {
     foreach ($ports as $p) {
         $addresses[] = ['ip' => $v, 'port' => $p];
     }

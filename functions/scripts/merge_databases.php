@@ -408,7 +408,7 @@ foreach ($old_data as $table => $table_content) {
                     foreach ($arr as $type => $objects) {
                         $arr_new[$type] = [];
                         if (count($objects) > 0) {
-                            foreach ($objects as $ok => $object) {
+                            foreach ($objects as $object) {
                                 $arr_new[$type][] = $highest_ids_append[$type] + $object;
                             }
                         }
@@ -424,7 +424,7 @@ foreach ($old_data as $table => $table_content) {
                     foreach ($arr as $type => $objects) {
                         $arr_new[$type] = [];
                         if (count($objects) > 0) {
-                            foreach ($objects as $ok => $object) {
+                            foreach ($objects as $object) {
                                 $arr_new[$type][] = $highest_ids_append[$type] + $object;
                             }
                         }
@@ -476,7 +476,7 @@ foreach ($old_data as $table => $table_content) {
 if (isset($new_custom_fields)) {
     foreach ($new_custom_fields as $table => $field) {
         // each field
-        foreach ($field as $fname => $fval) {
+        foreach ($field as $fval) {
             $null = $fval['Null'] == 'YES' ? '' : 'NOT NULL';
             $default = ! is_blank($fval['Default']) ? "DEFAULT '$fval[Default]'" : '';
             // update table definition
@@ -494,7 +494,7 @@ if (isset($new_custom_fields)) {
 
 // insert new data
 foreach ($new_data as $table => $field) {
-    foreach ($field as $k => $var) {
+    foreach ($field as $var) {
         try {
             $Database->insertObject($table, $var, false, false, false);
         } catch (Exception $e) {

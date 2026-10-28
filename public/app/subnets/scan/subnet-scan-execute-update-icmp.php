@@ -43,7 +43,7 @@ if ($User->settings->scanPingType == 'fping' && isset($script_result->values->al
     // fetch all hosts to be scanned
     $all_subnet_hosts = $Scan->prepare_addresses_to_scan('update', $POST->subnetId);
     // loop check
-    foreach ($all_subnet_hosts as $k => $h) {
+    foreach ($all_subnet_hosts as $h) {
         // alive ?
         if (count($script_result->values->alive) > 0) {
             if (! in_array($h, $script_result->values->alive)) {

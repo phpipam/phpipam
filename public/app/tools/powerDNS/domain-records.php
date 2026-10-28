@@ -77,7 +77,7 @@ if ($domain === false) {
             }
             print '<td>'._('Master servers').':</td>';
             print '<td>';
-            foreach ($master as $k => $m) {
+            foreach ($master as $m) {
                 if (! is_blank($m)) {
                     print "<span class='badge badge1'>$m</span><br>";
                 }

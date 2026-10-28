@@ -72,7 +72,7 @@ if (count($all_subnet_hosts) > 0) {
                 // save for debug
                 $debug[$d->hostname]['get_arp_table'] = $res;
                 // check
-                foreach ($res as $kr => $r) {
+                foreach ($res as $r) {
                     if ($Subnets->is_subnet_inside_subnet($r['ip'].'/32', $Subnets->transform_address($subnet->subnet, 'dotted').'/'.$subnet->mask) === true) {
                         // must be existing
                         if (array_key_exists((string) $Subnets->transform_address($r['ip'], 'decimal'), $result)) {

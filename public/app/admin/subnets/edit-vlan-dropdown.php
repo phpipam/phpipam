@@ -25,7 +25,7 @@ $permitted_domains = $Sections->fetch_section_domains($POST->sectionId);
 
 // fetch all belonging vlans
 $cnt = 0;
-foreach ($permitted_domains as $k => $d) {
+foreach ($permitted_domains as $d) {
     // fetch domain
     $domain = $Tools->fetch_object('vlanDomains', 'id', $d);
     // fetch vlans and append

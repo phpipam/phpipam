@@ -45,7 +45,7 @@ if ($firewallZones) {
         // set the loop counter
         $i = 1;
         if (isset($zoneObject->network)) {
-            foreach ($zoneObject->network as $key => $network) {
+            foreach ($zoneObject->network as $network) {
                 print '<tr class="border-top">';
                 if ($i === 1) {
                     // set title

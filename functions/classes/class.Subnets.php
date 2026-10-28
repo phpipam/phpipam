@@ -652,7 +652,7 @@ class Subnets extends Common_functions
         // Recompute nested relationships for $subnets
         $results = [];
 
-        foreach ($subnets as $i => $subnet) {
+        foreach ($subnets as $subnet) {
             // Skip changing subnets with folder masters
             if (isset($subnetById[$subnet->masterSubnetId]) && $subnetById[$subnet->masterSubnetId]->isFolder) {
                 continue;
@@ -3888,7 +3888,7 @@ class Subnets extends Common_functions
             $out = [];
             // loop
             if (isset($ripe_result['result']->objects->object[0]->attributes->attribute)) {
-                foreach ($ripe_result['result']->objects->object[0]->attributes->attribute as $k => $v) {
+                foreach ($ripe_result['result']->objects->object[0]->attributes->attribute as $v) {
                     $out[$v->name] = $v->value;
                 }
             }

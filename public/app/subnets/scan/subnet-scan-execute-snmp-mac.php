@@ -97,7 +97,7 @@ foreach ($permitted_devices_arp as $d) {
             // save for debug
             $debug[$d->hostname]['get_arp_table'] = $res;
             // check
-            foreach ($res as $kr => $r) {
+            foreach ($res as $r) {
                 // if is inside subnet
                 if ($Subnets->is_subnet_inside_subnet($r['ip'].'/32', $Subnets->transform_address($subnet->subnet, 'dotted').'/'.$subnet->mask) === false) {
                 }

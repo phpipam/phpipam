@@ -15,7 +15,7 @@ if (! is_blank($User->settings->link_field)) {
 
         print "<table class='ipaddress_subnet table-condensed table-auto'>";
 
-        foreach ($similar as $k => $s) {
+        foreach ($similar as $s) {
             // fetch subnet and section
             $sn = $Subnets->fetch_subnet('id', $s->subnetId);
             $se = $Sections->fetch_section('id', $sn->sectionId);

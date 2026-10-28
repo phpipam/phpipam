@@ -70,7 +70,7 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
         print '</tr>';
     } else {
         // print
-        foreach ($subprefixes as $k => $sp) {
+        foreach ($subprefixes as $sp) {
             print '<tr>';
             // prefix, name
             print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, 'pstn-prefixes', $sp->id)."'>  ".$sp->prefix.'</a></td>';

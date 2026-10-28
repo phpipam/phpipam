@@ -52,7 +52,7 @@ $missing = $Admin->group_fetch_missing_users($POST->g_id);
 
         <?php
     // show missing
-        foreach ($missing as $k => $m) {
+        foreach ($missing as $m) {
             // get user details
             $u = (array) $Admin->fetch_object('users', 'id', $m);
 

@@ -62,7 +62,7 @@ try {
     // fetch all groups
     $all_groups = $Admin->fetch_all_objects('userGroups', 'g_id');
     if ($all_groups !== false) {
-        foreach ($all_groups as $k => $g) {
+        foreach ($all_groups as $g) {
             // members
             $domain_group_members = $adldap->group()->members($g->g_name);
             // false

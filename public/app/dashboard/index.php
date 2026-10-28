@@ -117,7 +117,7 @@ if ($User->is_admin(false) !== true && (is_blank($User->user->groups) || $User->
 $currSize = 0;                  // to calculate size
 $m = 0;                           // to calculate chunk index
 
-foreach ($uwidgets as $uk => $uv) {
+foreach ($uwidgets as $uv) {
     // get details
     $wdet = isset($widgets[$uv]) ? (array) $widgets[$uv] : ['wsize' => 6];
     if (is_blank($wdet['wsize'])) {

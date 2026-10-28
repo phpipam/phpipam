@@ -56,7 +56,7 @@ foreach ($POST as $key => $line) {
     }
     // custom fields
     elseif (isset($required_fields)) {
-        foreach ($required_fields as $k => $f) {
+        foreach ($required_fields as $f) {
             if ((strpos((string) $key, (string) $f['name'])) !== false) {
                 $res[substr((string) $key, strlen((string) $f['name']))][$f['name']] = $line;
             }
@@ -102,7 +102,7 @@ if (count($res) > 0) {
         }
         // custom fields
         if (isset($required_fields)) {
-            foreach ($required_fields as $k => $f) {
+            foreach ($required_fields as $f) {
                 $values[$f['name']] = $r[$f['name']];
             }
         }

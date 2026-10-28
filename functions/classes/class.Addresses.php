@@ -1388,7 +1388,7 @@ class Addresses extends Common_functions
 
         // create query
         $tmp = [];
-        foreach ($subnets as $k => $s) {
+        foreach ($subnets as $s) {
             if (is_object($s)) {
                 $tmp[] = " `subnetId`=$s->id ";
             } else {
@@ -2007,7 +2007,7 @@ class Addresses extends Common_functions
                     if (count($ids) > 0) {
                         foreach ($ids as $id) {
                             // Check table names - MySQL on Windows is case-insensitive
-                            if (! in_array(strtolower($ot), ['subnets', 'ipaddresses'])) {
+                            if (! in_array(strtolower((string) $ot), ['subnets', 'ipaddresses'])) {
                                 continue;
                             }
                             // fetch

@@ -111,7 +111,7 @@ else {
 
     // Only parse nameserver if any exists
     if ($permitted_nameservers != false) {
-        foreach ($permitted_nameservers as $k => $n) {
+        foreach ($permitted_nameservers as $n) {
             // fetch nameserver sets and append
             $nameserver_set = $Tools->fetch_multiple_objects('nameservers', 'id', $n, 'name', 'namesrv1');
             // save to array

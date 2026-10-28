@@ -110,7 +110,7 @@ $(document).ready(function(){
             <select name="provider" class="form-control input-w-auto input-sm">
                 <?php
                 if ($circuit_providers !== false) {
-                    foreach ($circuit_providers as $key => $p) {
+                    foreach ($circuit_providers as $p) {
                         $selected = $circuit->provider == $p->id ? 'selected' : '';
                         print "<option value='$p->id' $selected>$p->name</option>";
                     }

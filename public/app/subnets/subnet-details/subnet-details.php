@@ -59,7 +59,7 @@ else {
         print ' </th>';
         print ' <td>';
         print " <ul class='submenu-linked'>";
-        foreach ($is_linked_subnets as $k => $linked_subnet) {
+        foreach ($is_linked_subnets as $linked_subnet) {
             // desc fix
             $linked_subnet->description = ! is_blank($linked_subnet->description) ? "($linked_subnet->description)" : '';
 

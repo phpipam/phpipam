@@ -78,7 +78,7 @@ foreach ($permitted_devices as $d) {
             // save for debug
             $debug[$d->hostname]['get_arp_table'] = $res;
             // check
-            foreach ($res as $kr => $r) {
+            foreach ($res as $r) {
                 // if is inside subnet
                 if ($Subnets->is_subnet_inside_subnet($r['ip'].'/32', $Subnets->transform_address($subnet->subnet, 'dotted').'/'.$subnet->mask) === false) {
                 }
@@ -98,7 +98,7 @@ foreach ($permitted_devices as $d) {
             // save for debug
             $debug[$d->hostname]['get_interfaces_ip'] = $res;
             // check
-            foreach ($res as $kr => $r) {
+            foreach ($res as $r) {
                 // if is inside subnet
                 if ($Subnets->is_subnet_inside_subnet($r['ip'].'/32', $Subnets->transform_address($subnet->subnet, 'dotted').'/'.$subnet->mask) === false) {
                 }

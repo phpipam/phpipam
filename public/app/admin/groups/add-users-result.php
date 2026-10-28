@@ -42,7 +42,7 @@ if (strlen($POST->gid == 0)) {
 
 // add each user to group
 if (count($users) > 0) {
-    foreach ($users as $key => $u) {
+    foreach ($users as $u) {
         if (! $Admin->add_group_to_user($POST->gid, $u)) {
             // get user details
             $user = $Admin->fetch_object('users', 'id', $u);

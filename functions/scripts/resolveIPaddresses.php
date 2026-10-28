@@ -59,7 +59,7 @@ else {
     $query[] = 'select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` where (';
     // go through subnets
     $m = 1;
-    foreach ($config['resolve_subnets'] as $k => $subnetId) {
+    foreach ($config['resolve_subnets'] as $subnetId) {
         // last
         if ($m == count($config['resolve_subnets'])) {
             $query[] = '`subnetId` = "'.$subnetId.'" ';

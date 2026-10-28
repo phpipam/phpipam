@@ -84,7 +84,7 @@ $(document).ready(function() {
 
 <?php
 // print
-foreach ($tools_menu as $k => $tool) {
+foreach ($tools_menu as $tool) {
     // items
     foreach ($tool as $t) {
         // remove unneeded

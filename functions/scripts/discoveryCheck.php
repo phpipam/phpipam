@@ -93,7 +93,7 @@ if ($scan_subnets !== false) {
     // initial array
     $addresses_tmp = [];
     // loop
-    foreach ($scan_subnets as $i => $s) {
+    foreach ($scan_subnets as $s) {
         $addresses_tmp[$s->id] = $Scan->prepare_addresses_to_scan('discovery', $s->id, false);
         // save discovery time
         $Scan->update_subnet_discoverytime($s->id, $nowdate);
