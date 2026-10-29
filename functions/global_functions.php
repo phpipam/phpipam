@@ -86,7 +86,7 @@ function create_link($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null,
  */
 function is_blank($data)
 {
-    return (! isset($data) || strlen($data) == 0) ? true : false;
+    return ! isset($data) || strlen($data) == 0;
 }
 
 /**

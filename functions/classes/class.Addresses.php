@@ -256,10 +256,9 @@ class Addresses extends Common_functions
      *
      * @param  object  $address
      * @param  mixed  $linked_field
-     * @param  mixed  $value
      * @return array|false
      */
-    private function bulk_fetch_similar_addresses($address, $linked_field, $value)
+    private function bulk_fetch_similar_addresses($address, $linked_field)
     {
         // Check cache
         $cached_item = $this->cache_check('similar_addresses', 'id', "f=$linked_field id=$address->subnetId");
@@ -306,7 +305,7 @@ class Addresses extends Common_functions
             return false;
         }
 
-        $bulk_search = $this->bulk_fetch_similar_addresses($address, $linked_field, $value);
+        $bulk_search = $this->bulk_fetch_similar_addresses($address, $linked_field);
 
         // Check if similar addresses exist with the specified $value
         if (! isset($bulk_search[$address->{$linked_field}])) {
@@ -1245,12 +1244,6 @@ class Addresses extends Common_functions
      */
     public function import_address_from_csv($address, $subnetId)
     {
-        // Subnets object
-        $this->initialize_subnets_object();
-
-        // fetch subnet details
-        $subnet = (array) $this->Subnets->fetch_subnet(null, $subnetId);
-
         // check for duplicates
         if ($this->address_exists($address[0], $subnetId)) {
             return _('IP address already exists').' - '.$address[0];
@@ -1518,7 +1511,7 @@ class Addresses extends Common_functions
         $this->initialize_subnets_object();
         $boundaries = $this->Subnets->get_network_boundaries($address, $netmask);
 
-        return $this->transform_address($address, 'dotted') == $boundaries['network'] ? true : false;
+        return $this->transform_address($address, 'dotted') == $boundaries['network'];
     }
 
     /**
@@ -1533,7 +1526,7 @@ class Addresses extends Common_functions
         $this->initialize_subnets_object();
         $boundaries = $this->Subnets->get_network_boundaries($address, $netmask);
 
-        return $this->transform_address($address, 'dotted') == $boundaries['broadcast'] ? true : false;
+        return $this->transform_address($address, 'dotted') == $boundaries['broadcast'];
     }
 
     /**
@@ -1552,7 +1545,7 @@ class Addresses extends Common_functions
             return false;
         }
 
-        return $cnt == 0 ? true : false;
+        return $cnt == 0;
     }
 
     /**

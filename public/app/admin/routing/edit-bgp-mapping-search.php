@@ -40,7 +40,7 @@ try {
 }
 
 // printout
-if (is_array($subnets) && count($subnets) > 0) {
+if (is_array($subnets) && $subnets != []) {
     // remove existing
     $bgp_mapped_subnets = $Tools->fetch_routing_subnets('bgp', $bgp_id, false) ?: [];
     $map_arr = [];

@@ -238,6 +238,6 @@ class Crypto
             return false;
         }
 
-        return hash_equals((string) $_SESSION['csrf_token'], (string) $value) ? true : false;
+        return hash_equals((string) $_SESSION['csrf_token'], (string) $value);
     }
 }

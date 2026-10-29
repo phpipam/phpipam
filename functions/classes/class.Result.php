@@ -175,7 +175,7 @@ class Result
     public function show_cli_message($text = 'No value provided')
     {
         // array - join
-        if (is_array($text) && count($text) > 0) {
+        if (is_array($text) && $text != []) {
             // 1 element
             if (count($text) == 1) {
                 $text = $text[0];
@@ -317,8 +317,6 @@ class Result
 
     /**
      * __destruct function
-     *
-     * @return void
      */
     public function __destruct()
     {

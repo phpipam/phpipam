@@ -131,7 +131,7 @@ class SubnetsTable
         }
 
         // masterSubnet
-        $masterSubnet = ($subnet->masterSubnetId == 0 || empty($subnet->masterSubnetId)) ? true : false;
+        $masterSubnet = $subnet->masterSubnetId == 0 || empty($subnet->masterSubnetId);
 
         if ($masterSubnet) {
             $tr['masterSubnet'] = '/';

@@ -563,21 +563,6 @@ class Addresses_controller extends Common_api_functions
     }
 
     /**
-     * This method will be used if subnetId is not present and will try to
-     * find it in system itself.
-     *
-     * It will only take into consideration subnets that do not have underlying
-     * slave subnets.
-     *
-     * In case more than 1 subnet is found error will be thrown.
-     *
-     * @method autosearch_subnet_id
-     *
-     * @return void
-     */
-    private function autosearch_subnet_id() {}
-
-    /**
      * Validates address on creation
      *
      * @return void

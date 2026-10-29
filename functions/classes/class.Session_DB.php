@@ -15,9 +15,6 @@ final class Session_DB implements SessionHandlerInterface
      */
     private $Result;
 
-    /**
-     * @return void
-     */
     public function __construct(Database_PDO $database)
     {
         $this->Database = $database;

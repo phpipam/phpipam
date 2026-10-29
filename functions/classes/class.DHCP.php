@@ -64,7 +64,6 @@ class DHCP extends Common_functions
      *
      * @param  mixed  $server_type
      * @param  array  $dhcp_settings  (default: array())
-     * @return void
      */
     public function __construct($server_type, $dhcp_settings = [])
     {

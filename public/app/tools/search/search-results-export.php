@@ -156,7 +156,7 @@ $lineCount = 0;     // for line change
 $m = 0;             // for section change
 
 /* -- Create a worksheet for addresses -- */
-if (is_array($result_addresses) && count($result_addresses) > 0) {
+if (is_array($result_addresses) && $result_addresses != []) {
     $worksheet = &$workbook->addWorksheet(_('Addresses'));
     $worksheet->setInputEncoding('utf-8');
 
@@ -336,7 +336,7 @@ if (is_array($result_addresses) && count($result_addresses) > 0) {
 }
 
 /* -- Create a worksheet for subnets -- */
-if (is_array($result_subnets) && count($result_subnets) > 0) {
+if (is_array($result_subnets) && $result_subnets != []) {
     $lineCount = 0;
 
     $worksheet = &$workbook->addWorksheet(_('Subnets'));
@@ -442,7 +442,7 @@ if (is_array($result_subnets) && count($result_subnets) > 0) {
 }
 
 /* -- Create a worksheet for VLANs -- */
-if (is_array($result_vlans) && count($result_vlans) > 0) {
+if (is_array($result_vlans) && $result_vlans != []) {
     $lineCount = 0;
 
     $worksheet = &$workbook->addWorksheet(_('VLANs'));
@@ -485,7 +485,7 @@ if (is_array($result_vlans) && count($result_vlans) > 0) {
 }
 
 /* -- Create a worksheet for VRFs -- */
-if (is_array($result_vrf) && count($result_vrf) > 0) {
+if (is_array($result_vrf) && $result_vrf != []) {
     $lineCount = 0;
 
     $worksheet = &$workbook->addWorksheet(_('VRFs'));
@@ -528,7 +528,7 @@ if (is_array($result_vrf) && count($result_vrf) > 0) {
 }
 
 /* -- Create a worksheet for Circuits -- */
-if (is_array($result_circuits) && count($result_circuits) > 0) {
+if (is_array($result_circuits) && $result_circuits != []) {
     $lineCount = 0;
 
     $worksheet = &$workbook->addWorksheet(_('Circuits'));
@@ -579,7 +579,7 @@ if (is_array($result_circuits) && count($result_circuits) > 0) {
 }
 
 /* -- Create a worksheet for Circuit providers -- */
-if (is_array($result_circuits_p) && count($result_circuits_p) > 0) {
+if (is_array($result_circuits_p) && $result_circuits_p != []) {
     $lineCount = 0;
 
     $worksheet = &$workbook->addWorksheet(_('Circuit providers'));
@@ -624,7 +624,7 @@ if (is_array($result_circuits_p) && count($result_circuits_p) > 0) {
 }
 
 /* -- Create a worksheet for Customers -- */
-if (is_array($result_customers) && count($result_customers) > 0) {
+if (is_array($result_customers) && $result_customers != []) {
     $lineCount = 0;
 
     $worksheet = &$workbook->addWorksheet(_('Customers'));
@@ -673,7 +673,7 @@ if (is_array($result_customers) && count($result_customers) > 0) {
 }
 
 /* -- Create a worksheet for Devices -- */
-if (is_array($result_devices) && count($result_devices) > 0) {
+if (is_array($result_devices) && $result_devices != []) {
     $lineCount = 0;
 
     $worksheet = &$workbook->addWorksheet(_('Devices'));

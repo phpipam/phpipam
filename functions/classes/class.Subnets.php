@@ -606,7 +606,7 @@ class Subnets extends Common_functions
         }
 
         // result
-        return (is_array($subnets) && count($subnets) > 0) ? $subnets : false;
+        return (is_array($subnets) && $subnets != []) ? $subnets : false;
     }
 
     /**
@@ -933,7 +933,7 @@ class Subnets extends Common_functions
         }
 
         // result
-        return (is_array($subnets) && count($subnets) > 0) ? $subnets : false;
+        return (is_array($subnets) && $subnets != []) ? $subnets : false;
     }
 
     /**
@@ -949,7 +949,7 @@ class Subnets extends Common_functions
         $subnet = $this->fetch_subnet('id', $subnetId);
 
         // same id?
-        return @$subnet->vlanId == $vlanId ? true : false;
+        return @$subnet->vlanId == $vlanId;
     }
 
     /**
@@ -978,7 +978,7 @@ class Subnets extends Common_functions
             }
 
             // result
-            return (is_array($subnets) && count($subnets) > 0) ? $subnets : false;
+            return (is_array($subnets) && $subnets != []) ? $subnets : false;
         }
     }
 
@@ -1025,7 +1025,7 @@ class Subnets extends Common_functions
         }
 
         // result
-        return (is_array($subnets) && count($subnets) > 0) ? $subnets : false;
+        return (is_array($subnets) && $subnets != []) ? $subnets : false;
     }
 
     /**
@@ -1041,7 +1041,7 @@ class Subnets extends Common_functions
         $subnet = $this->fetch_subnet('id', $subnetId);
 
         // same id?
-        return @$subnet->vrfId == $vrfId ? true : false;
+        return @$subnet->vrfId == $vrfId;
     }
 
     /**
@@ -1639,7 +1639,7 @@ class Subnets extends Common_functions
         }
 
         // IPv4, handle /32 & /31
-        return ($subnet->mask < 31) ? true : false;
+        return $subnet->mask < 31;
     }
 
     /**
@@ -2277,7 +2277,7 @@ class Subnets extends Common_functions
         $sections_subnets = $masterSubnetId == 0 ? $this->fetch_overlapping_subnets($new_subnet, 'sectionId', $sectionId) : $this->fetch_subnet_slaves($masterSubnetId);
 
         // verify new against each existing
-        if (is_array($sections_subnets) && count($sections_subnets) > 0) {
+        if (is_array($sections_subnets) && $sections_subnets != []) {
             foreach ($sections_subnets as $existing_subnet) {
                 // only check if vrfId's match
                 if ((int) $existing_subnet->vrfId == $vrfId) {

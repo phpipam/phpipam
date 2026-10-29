@@ -430,7 +430,7 @@ else {
         }
 
         // propagate changes
-        if (is_array($Subnets->slaves) && count($Subnets->slaves) > 0) {
+        if (is_array($Subnets->slaves) && $Subnets->slaves != []) {
             foreach ($Subnets->slaves as $slaveId) {
                 $Admin->object_modify('subnets', 'edit', 'id', array_merge(['id' => $slaveId], $values));
             }
@@ -524,7 +524,7 @@ else {
                 $Addresses->pdns_validate_connection();
                 $hosts = $Addresses->fetch_subnet_addresses($old_subnet_details->id, 'ip_addr', 'asc');
                 // loop
-                if (is_array($hosts) && count($hosts) > 0) {
+                if (is_array($hosts) && $hosts != []) {
                     $cnt = 0;
                     $err = 0;
                     $ski = 0;

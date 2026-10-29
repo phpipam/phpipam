@@ -39,7 +39,7 @@ require_once __DIR__.'/../../functions/functions.php';
 <!-- page header -->
 <div id="header">
 <div class="hero-unit">
-    <a href="<?php print create_link(null); ?>">phpIPAM installation error</a>
+    <a href="<?php print create_link(); ?>">phpIPAM installation error</a>
 </div>
 </div>
 

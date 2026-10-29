@@ -90,8 +90,6 @@ else {
                     // type
                     switch ($l['ctype']) {
                         case 'ip_addr':
-                            $type = 'address';
-                            break;
                         case 'ip_range':
                             $type = 'address';
                             break;

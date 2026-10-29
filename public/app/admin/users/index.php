@@ -13,7 +13,7 @@ $User->is_admin();
 if ($GET->subnetId == 'switch') {
     $_SESSION['realipamusername'] = $_SESSION['ipamusername'];
     $_SESSION['ipamusername'] = $GET->sPage;
-    print '<script>window.location.href = "'.create_link(null).'";</script>';
+    print '<script>window.location.href = "'.create_link().'";</script>';
 }
 
 // print all or specific user?

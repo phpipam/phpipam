@@ -121,7 +121,7 @@ $(document).ready(function(){
         // all my fields
         foreach ($custom as $field) {
             // readonly
-            $disabled = $readonly == 'readonly' ? true : false;
+            $disabled = $readonly == 'readonly';
             // create input > result is array (required, input(html), timepicker_index)
             $custom_input = $Tools->create_custom_field_input($field, $provider, $timepicker_index, $disabled);
             $timepicker_index = $custom_input['timepicker_index'];

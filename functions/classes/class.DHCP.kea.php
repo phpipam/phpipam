@@ -147,7 +147,6 @@ class DHCP_kea extends Common_functions
      * __construct function.
      *
      * @param  array  $kea_settings  (default: array())
-     * @return void
      */
     public function __construct($kea_settings = [])
     {
@@ -208,11 +207,8 @@ class DHCP_kea extends Common_functions
         // loop and remove comments (contains #) and replace multiple spaces
         $out = [];
         foreach ($config as $f) {
-            if (strpos($f, '#') !== false || is_blank($f)) {
-            } else {
-                if (! is_blank($f)) {
-                    $out[] = $f;
-                }
+            if (strpos((string) $f, '#') === false && ! is_blank(trim((string) $f))) {
+                $out[] = $f;
             }
         }
 

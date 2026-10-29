@@ -523,7 +523,7 @@ class User_controller extends Common_api_functions
      */
     private function validate_token_expiration()
     {
-        return strtotime((string) $this->token_expires) < time() ? true : false;
+        return strtotime((string) $this->token_expires) < time();
     }
 
     /**

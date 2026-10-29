@@ -37,8 +37,7 @@ if ($User->settings->vlanDuplicate == 0 && ($POST->action == 'add' || $POST->act
     // check
     if ($check_vlan !== false) {
         foreach ($check_vlan as $v) {
-            if ($v->vlanId == $POST->vlanid) {
-            } elseif ($v->number == $POST->number) {
+            if ($v->vlanId != $POST->vlanid && $v->number == $POST->number) {
                 $Result->show('danger', _('VLAN already exists'), true);
             }
         }

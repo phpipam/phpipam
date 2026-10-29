@@ -22,14 +22,6 @@ class Responses extends Result
     public $time = false;
 
     /**
-     * __construct function
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Formulates result to JSON or XML
      *
      * @param  mixed  $result

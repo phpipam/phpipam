@@ -72,7 +72,7 @@ foreach ($scan_devices as $d) {
     try {
         $res = $Snmp->get_query('get_vrf_table');
         // remove those not in subnet
-        if (is_array($res) && count($res) > 0) {
+        if (is_array($res) && $res != []) {
             // save for debug
             $debug[$d->hostname]['get_vrf_table'] = $res;
             // loop and save

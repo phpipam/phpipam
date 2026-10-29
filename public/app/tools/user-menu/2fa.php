@@ -33,7 +33,7 @@ if (array_key_exists('2fa', $subpages)) { ?>
         // get user passkeys
         $user_passkeys = $User->get_user_passkeys($User->user->id);
         // set passkey_only flag
-        $passkey_only = count($user_passkeys) > 0 && $User->user->passkey_only == '1' ? true : false;
+        $passkey_only = count($user_passkeys) > 0 && $User->user->passkey_only == 1;
     }
     ?>
 

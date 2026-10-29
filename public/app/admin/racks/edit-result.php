@@ -156,14 +156,13 @@ if ($User->settings->enableCustomers == '1' && $User->get_module_permissions('cu
 }
 
 // update rack
-if (! $Admin->object_modify('racks', $POST->action, 'id', $values)) {
-} else {
+if ($Admin->object_modify('racks', $POST->action, 'id', $values)) {
     $Result->show('success', _('Rack').' '.$User->get_post_action().' '._('successful').'!', false);
 }
 
 if ($POST->action == 'delete') {
     // remove all references from subnets and ip addresses
-    $Admin->remove_object_references('devices', 'rack', $values['id'], null);
+    $Admin->remove_object_references('devices', 'rack', $values['id']);
     // remove all custom devices for the rack
     try {
         $Database->runQuery('delete from rackContents where `rack` = ?', [$values['id']]);

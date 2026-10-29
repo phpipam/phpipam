@@ -84,8 +84,6 @@ else {
         }
         if ($User->settings->enablePowerDNS == '1') {
             $subnet_old_details['DNSrecursive'] = @$subnet_old_temp['DNSrecursive'];      // inherit DNSrecursive
-        }
-        if ($User->settings->enablePowerDNS == '1') {
             $subnet_old_details['DNSrecords'] = @$subnet_old_temp['DNSrecords'];          // inherit DNSrecords
         }
     }
@@ -116,7 +114,7 @@ if ($User->settings->enableLocations == '1') {
 }
 
 // set readonly flag
-$readonly = $POST->action == 'edit' || $POST->action == 'delete' ? true : false;
+$readonly = $POST->action == 'edit' || $POST->action == 'delete';
 ?>
 
 <?php if ($User->settings->enableThreshold == '1') { ?>

@@ -382,7 +382,6 @@ class PingThread
         switch ($_signal) {
             case SIGTERM:
                 exit(0);
-                break;
         }
     }
 }

@@ -93,19 +93,13 @@ foreach ($permitted_devices_arp as $d) {
     try {
         $res = $Snmp->get_query('get_arp_table');
         // remove those not in subnet
-        if (is_array($res) && count($res) > 0) {
+        if (is_array($res) && $res != []) {
             // save for debug
             $debug[$d->hostname]['get_arp_table'] = $res;
             // check
             foreach ($res as $r) {
                 // if is inside subnet
-                if ($Subnets->is_subnet_inside_subnet($r['ip'].'/32', $Subnets->transform_address($subnet->subnet, 'dotted').'/'.$subnet->mask) === false) {
-                }
-                // check if host already exists, than remove it
-                elseif (in_array($r['ip'], $subnet_ip_addresses)) {
-                }
-                // save
-                else {
+                if ($Subnets->is_subnet_inside_subnet($r['ip'].'/32', $Subnets->transform_address($subnet->subnet, 'dotted').'/'.$subnet->mask)) {
                     $found_arp[] = $r;
                 }
             }
@@ -130,7 +124,7 @@ foreach ($permitted_devices_mac as $d) {
     try {
         $res = $Snmp->get_query('get_mac_table');
         // remove those not in subnet
-        if (is_array($res) && count($res) > 0) {
+        if (is_array($res) && $res != []) {
             // save for debug
             $debug[$d->hostname]['get_mac_table'] = $res;
             // save found

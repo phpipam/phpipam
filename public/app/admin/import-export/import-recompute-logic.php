@@ -42,9 +42,9 @@ $pass_inputs = ''; // Pass fields from one page to another
 foreach ($GET as $key => $value) {
     if (preg_match("/recomputeSection_(\d+)$/", (string) $key, $matches) && ($value == 'on')) {
         // Grab provided values
-        $rlist[$matches[1]]['IPv4'] = ($GET->{'recomputeSectionIPv4_'.$matches[1]} == 'on' ? true : false);
-        $rlist[$matches[1]]['IPv6'] = ($GET->{'recomputeSectionIPv6_'.$matches[1]} == 'on' ? true : false);
-        $rlist[$matches[1]]['CVRF'] = ($GET->{'recomputeSectionCVRF_'.$matches[1]} == 'on' ? true : false);
+        $rlist[$matches[1]]['IPv4'] = ($GET->{'recomputeSectionIPv4_'.$matches[1]} == 'on');
+        $rlist[$matches[1]]['IPv6'] = ($GET->{'recomputeSectionIPv6_'.$matches[1]} == 'on');
+        $rlist[$matches[1]]['CVRF'] = ($GET->{'recomputeSectionCVRF_'.$matches[1]} == 'on');
         // Build hidden form inputs
         $pass_inputs .= "<input name='".$key."' type='hidden' value='".$value."' style='display:none;'>";
         $pass_inputs .= "<input name='recomputeSectionIPv4_".$matches[1]."' type='hidden' value='".$GET->{'recomputeSectionIPv4_'.$matches[1]}."' style='display:none;'>";

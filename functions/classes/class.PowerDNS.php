@@ -1668,7 +1668,7 @@ class PowerDNS extends Common_functions
         }
 
         // ok
-        return $res->cnt > 0 ? true : false;
+        return $res->cnt > 0;
     }
 
     /**
@@ -1715,7 +1715,7 @@ class PowerDNS extends Common_functions
         // set query - start
         $query = "delete from `records` where `domain_id` = ? and `type` = 'PTR'";
         // loop
-        if (count($indexes) > 0) {
+        if (is_array($indexes) && $indexes != []) {
             $q_tmp = [];
             $query .= ' and (';
             foreach ($indexes as $i) {

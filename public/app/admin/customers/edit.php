@@ -147,7 +147,7 @@ if ($POST->action != 'add') {
         // all my fields
         foreach ($custom as $field) {
             // readonly
-            $disabled = ($POST->action == 'delete') ? true : false;
+            $disabled = $POST->action == 'delete';
             // create input > result is array (required, input(html), timepicker_index)
             $custom_input = $Tools->create_custom_field_input($field, $customer, $timepicker_index, $disabled);
             $timepicker_index = $custom_input['timepicker_index'];

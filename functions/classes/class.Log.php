@@ -762,7 +762,7 @@ class Logging extends Common_functions
             }
 
             // if change happened write it!
-            if (is_array($log) && count($log) > 0) {
+            if (is_array($log) && $log != []) {
                 // reformat null
                 foreach ($log as $k => $v) {
                     $log[$k] = str_replace(': <br>', ': / <br>', (string) $v);
@@ -868,7 +868,7 @@ class Logging extends Common_functions
         ];
 
         // check
-        return in_array($this->object_type, $objects) ? true : false;
+        return in_array($this->object_type, $objects);
     }
 
     /**
@@ -925,7 +925,7 @@ class Logging extends Common_functions
             }
             // permission change
             elseif ($k == 'permissions') {
-                $this->object_new[$k] = $this->changelog_format_permission_diff($k, $v);
+                $this->object_new[$k] = $this->changelog_format_permission_diff($k);
             }
             // nameserver index
             elseif ($k == 'nameserverId') {
@@ -988,7 +988,7 @@ class Logging extends Common_functions
             }
             // permission change
             elseif ($k == 'permissions') {
-                $this->object_old[$k] = $this->changelog_format_permission_diff($k, $v);
+                $this->object_old[$k] = $this->changelog_format_permission_diff($k);
             }
             // nameserver index
             elseif ($k == 'nameserverId') {
@@ -1082,7 +1082,7 @@ class Logging extends Common_functions
                 }
                 // permission change
                 elseif ($k == 'permissions') {
-                    $v = $this->changelog_format_permission_diff($k, $v);
+                    $v = $this->changelog_format_permission_diff($k);
                 }
                 // nameserver index
                 elseif ($k == 'nameserverId') {
@@ -1508,10 +1508,9 @@ class Logging extends Common_functions
      * Format permissions on change - EDIT
      *
      * @param  string  $k
-     * @param  mixed  $v
      * @return string
      */
-    private function changelog_format_permission_diff($k, $v)
+    private function changelog_format_permission_diff($k)
     {
         // get old and compare
         if (isset($this->object_new['permissions'])) {

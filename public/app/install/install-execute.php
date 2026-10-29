@@ -31,19 +31,18 @@ if (! isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WIT
 // if already installed ignore!
 if ($Install->check_table('widgets', false) && $POST->dropdb != 'on') {
     // check for possible errors
-    if (count($errors = $Tools->verify_database()) > 0) {
-    } else {
+    if (count($errors = $Tools->verify_database()) == 0) {
         $Result->show('danger', _('Database already installed'), true);
     }
 }
 
 // get possible advanced options
-$dropdb = $POST->dropdb == 'on' ? true : false;
-$createdb = $POST->createdb == 'on' ? true : false;
-$creategrants = $POST->creategrants == 'on' ? true : false;
+$dropdb = $POST->dropdb == 'on';
+$createdb = $POST->createdb == 'on';
+$creategrants = $POST->creategrants == 'on';
 
 // migration flag - select different sql file
-$migrate = $POST->install_type === 'migrate' ? true : false;
+$migrate = $POST->install_type === 'migrate';
 
 // try to install new database */
 if ($Install->install_database($POST->mysqlrootuser, $POST->mysqlrootpass, $dropdb, $createdb, $creategrants, $migrate)) {

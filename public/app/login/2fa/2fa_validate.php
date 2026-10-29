@@ -21,7 +21,7 @@ if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
 
 // if 2fa is not needed redirect to /
 if ($User->twofa_required() === false) {
-    header('Location:'.$User->createURL().create_link(null));
+    header('Location:'.$User->createURL().create_link());
 }
 // length check
 elseif (strlen((string) $POST->code) !== 6) {

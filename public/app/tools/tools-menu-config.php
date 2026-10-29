@@ -53,7 +53,7 @@ $tools_menu_items = [
 
 // custom
 $private_subpages = Config::ValueOf('private_subpages');
-if (is_array($private_subpages) && count($private_subpages) > 0) {
+if (is_array($private_subpages) && $private_subpages != []) {
     // array and icon
     $tools_menu[_('Custom tools')] = [];
     $tools_menu_icons[_('Custom tools')] = 'fa-star';

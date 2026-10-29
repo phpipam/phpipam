@@ -211,7 +211,7 @@ $(document).ready(function(){
 
         <tr>
             <td style="padding-top:10px;"><?php print _('Passkey login only'); ?></td>
-            <td style="padding-top:10px;"><input type="checkbox" value="1" class="input-switch" name="passkey_only" <?php if ($user->passkey_only == '1') {
+            <td style="padding-top:10px;"><input type="checkbox" value="1" class="input-switch" name="passkey_only" <?php if ($user->passkey_only == 1) {
                 print 'checked';
             } ?>></td>
             <td style="padding-top:10px;" class="info2"><?php print _('Select to only allow account login with passkey'); ?></td>

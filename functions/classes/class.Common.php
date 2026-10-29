@@ -222,7 +222,7 @@ class Common_functions
             }
         }
         // result
-        $result = (is_array($res) && count($res) > 0) ? $res : false;
+        $result = (is_array($res) && $res != []) ? $res : false;
         $this->cache_write('fetch_all_objects', 'id', (object) ['id' => "t=$table f=$sortField o=$sortAsc", 'result' => $result]);
 
         return $result;
@@ -315,7 +315,7 @@ class Common_functions
             }
 
             // result
-            return (is_array($res) && count($res) > 0) ? $res : false;
+            return (is_array($res) && $res != []) ? $res : false;
         }
     }
 
@@ -534,7 +534,7 @@ class Common_functions
             'php_sessions' => 1];
 
         // check
-        return isset($exceptions[$table]) ? true : false;
+        return isset($exceptions[$table]);
     }
 
     /**
@@ -600,7 +600,7 @@ class Common_functions
      */
     public function set_debugging($debug = false)
     {
-        $this->debugging = $debug == true ? true : false;
+        $this->debugging = $debug == true;
     }
 
     /**
@@ -724,8 +724,7 @@ class Common_functions
         // loop
         if (is_array($fields)) {
             foreach ($fields as $k => $v) {
-                if (is_null($v) || is_blank($v)) {
-                } else {
+                if (! (is_null($v) || is_blank($v))) {
                     $out[$k] = $v;
                 }
             }

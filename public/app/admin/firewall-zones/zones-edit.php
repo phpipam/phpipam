@@ -137,7 +137,6 @@ if ($POST->action == 'add') {
             <td>
                 <input type="checkbox" class="input-switch" name="padding" <?php if ($POST->action == 'edit' && $firewallZone->padding == 1) {
                     print 'checked';
-                } elseif ($POST->action == 'edit' && $firewallZone->padding == 0) {
                 } elseif ($firewallZoneSettings['padding'] == 'on') {
                     print 'checked';
                 }?>>

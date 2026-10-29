@@ -132,7 +132,7 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
 
             print '</tr>';
 
-            // search for free numbers in middle
+            // search for free numbers in middle and end
             if ($User->user->hideFreeRange != 1) {
                 if ($k != count($subprefixes) - 1 && (($subprefixes[$k + 1]->prefix_raw_start - $sp->prefix_raw_stop) != 1)) {
                     print '<tr>';
@@ -140,10 +140,6 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
                     print " <td class='unused' colspan='".($colspan - 1)."'>".($subprefixes[$k + 1]->prefix_raw_start - $sp->prefix_raw_stop - 1).' '._('Unused').'</td>';
                     print '</tr>';
                 }
-            }
-
-            // search for free numbers in the end
-            if ($User->user->hideFreeRange != 1) {
                 if ($k == count($subprefixes) - 1 && (($prefix->prefix_raw_stop - $n->prefix_raw_stop) != 1)) {
                     print '<tr>';
                     print " <td class='unused'></td>";

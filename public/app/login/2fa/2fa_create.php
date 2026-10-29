@@ -11,7 +11,7 @@ $User->check_user_session(true, true);
 
 // if 2fa is not needed redirect to /
 if ($User->twofa_required() === false) {
-    header('Location:'.$url.create_link(null));
+    header('Location:'.$url.create_link());
 }
 // generate and print code
 else {

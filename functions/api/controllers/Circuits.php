@@ -321,7 +321,7 @@ class Circuits_controller extends Common_api_functions
         // circuits validation
         if ($this->type == 'circuits') {
             // check that id doesnt already exist
-            $this->validate_cid($action, $old_object);
+            $this->validate_cid($old_object);
             // validate provider
             $this->validate_circuit_provider($action);
             // validate type
@@ -411,11 +411,10 @@ class Circuits_controller extends Common_api_functions
      *
      * @method validate_cid
      *
-     * @param  string  $action
      * @param  object|null  $old_object
      * @return void
      */
-    private function validate_cid($action, $old_object)
+    private function validate_cid($old_object)
     {
         // edit
         if ($old_object->cid !== null) {

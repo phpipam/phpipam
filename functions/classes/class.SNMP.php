@@ -135,8 +135,6 @@ class phpipamSNMP extends Common_functions
 
     /**
      * __construct function.
-     *
-     * @return void
      */
     public function __construct()
     {

@@ -945,7 +945,7 @@ class Tools extends Common_functions
      */
     public function verify_widget($file)
     {
-        return file_exists(__DIR__."/../../public/app/dashboard/widgets/$file.php") || file_exists(__DIR__."/../../public/app/dashboard/widgets/custom/$file.php") ? true : false;
+        return file_exists(__DIR__."/../../public/app/dashboard/widgets/$file.php") || file_exists(__DIR__."/../../public/app/dashboard/widgets/custom/$file.php");
     }
 
     /**
@@ -1360,7 +1360,7 @@ class Tools extends Common_functions
         }
 
         // return
-        return $count->count == 1 ? true : false;
+        return $count->count == 1;
     }
 
     /**
@@ -1387,7 +1387,7 @@ class Tools extends Common_functions
         }
 
         // return true if it exists
-        return $count !== null ? true : false;
+        return $count !== null;
     }
 
     /**
@@ -1633,8 +1633,6 @@ class Tools extends Common_functions
 
         // get proper line
         $file = explode("\n", $file);
-
-        $line = false;
         foreach ($file as $l) {
             // trim
             $l = trim($l);
@@ -2472,7 +2470,7 @@ class Tools extends Common_functions
             }
 
             // result
-            return $cnt->cnt > 0 ? true : false;
+            return $cnt->cnt > 0;
         }
     }
 
@@ -3322,11 +3320,10 @@ class Tools extends Common_functions
             case 'vlans':
                 return 'number';
             case 'vrf':
+            case 'racks':
                 return 'name';
             case 'circuits':
                 return 'cid';
-            case 'racks':
-                return 'name';
             default:
                 return 'id';
         }
@@ -3352,7 +3349,7 @@ class Tools extends Common_functions
         }
         // XLS
         elseif (strtolower($filetype) == 'xls') {
-            $outFile = $this->parse_import_file_xls($subnet, $custom_address_fields);
+            $outFile = $this->parse_import_file_xls($custom_address_fields);
         }
         // error
         else {
@@ -3366,11 +3363,10 @@ class Tools extends Common_functions
     /**
      * Parses xls import file
      *
-     * @param  object  $subnet
      * @param  array  $custom_address_fields
      * @return mixed
      */
-    private function parse_import_file_xls($subnet, $custom_address_fields)
+    private function parse_import_file_xls($custom_address_fields)
     {
         // excel reader 2.21
         require_once __DIR__.'/../php-excel-reader/excel_reader2.php';

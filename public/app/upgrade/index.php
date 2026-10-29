@@ -66,7 +66,7 @@ $Upgrade = new Upgrade($Database);
 <div class="jqueryError">
     <div class='alert alert-danger' style="width:400px;margin:auto"><?php print _('jQuery error!'); ?></div>
     <div class="jqueryErrorText"></div><br>
-    <a href="<?php print create_link(null); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;"><?php print _('Hide'); ?></a>
+    <a href="<?php print create_link(); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;"><?php print _('Hide'); ?></a>
 </div>
 
 <!-- Popups -->
@@ -82,7 +82,7 @@ $Upgrade = new Upgrade($Database);
 <div class="row header-install" id="header">
     <div class="col-xs-12">
         <div class="hero-unit" style="padding:20px;margin-bottom:10px;">
-            <a href="<?php print create_link(null); ?>"><?php print $User->settings->siteTitle; ?></a>
+            <a href="<?php print create_link(); ?>"><?php print $User->settings->siteTitle; ?></a>
             <p class="muted"><?php print _('Upgrade'); ?></p>
         </div>
     </div>
@@ -125,7 +125,7 @@ elseif ($User->is_admin(false)) {
     if ($User->cmp_version_strings($User->settings->version.'.'.$User->settings->dbversion, VERSION.'.'.DBVERSION) == 0) {
         $title = _('Database upgrade check');
         $content = "<div class='alert alert-success'>"._("Database seems up to date and doesn't need to be upgraded!").'</div>';
-        $content .= '<div class="text-right"><a href="'.create_link(null).'"><button class="btn btn-sm btn-default">'._('Go to dashboard').'</button></a></div>';
+        $content .= '<div class="text-right"><a href="'.create_link().'"><button class="btn btn-sm btn-default">'._('Go to dashboard').'</button></a></div>';
     }
     // version too old
     elseif ($User->settings->version < LAST_POSSIBLE) {

@@ -47,8 +47,6 @@ class OpenStreetMap extends Common_functions
 
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct(Database_PDO $database)
     {

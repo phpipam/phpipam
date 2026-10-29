@@ -942,8 +942,6 @@ class Model
 {
     /**
      * __construct function.
-     *
-     * @return void
      */
     public function __construct(array $fields)
     {

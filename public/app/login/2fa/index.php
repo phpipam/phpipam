@@ -9,7 +9,7 @@ $User->check_user_session(true, true);
 // if 2fa is not needed redirect to /
 if ($User->twofa_required() === false || $User->user->{'2fa'} == 0) {
     unset($_SESSION['2fa_required']);
-    header('Location:'.$url.create_link(null));
+    header('Location:'.$url.create_link());
 }
 ?>
 
@@ -69,7 +69,7 @@ if ($User->twofa_required() === false || $User->user->{'2fa'} == 0) {
 <div class="jqueryError">
     <div class='alert alert-danger' style="width:400px;margin:auto">jQuery error!</div>
     <div class="jqueryErrorText"></div><br>
-    <a href="<?php print create_link(null); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
+    <a href="<?php print create_link(); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
 </div>
 
 <!-- Popups -->
@@ -96,7 +96,7 @@ if ($User->twofa_required() === false || $User->user->{'2fa'} == 0) {
     <!-- title -->
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
         <div class="hero-unit" style="padding:20px;margin-bottom:10px;margin-top: 10px;">
-            <a href="<?php print create_link(null); ?>"><?php print $User->settings->siteTitle; ?></a>
+            <a href="<?php print create_link(); ?>"><?php print $User->settings->siteTitle; ?></a>
             <p class="muted"><?php print _('Two-factor authentication'); ?></p>
         </div>
     </div>

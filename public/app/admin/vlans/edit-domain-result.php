@@ -66,8 +66,7 @@ $values = [
 ];
 
 // update domain
-if (! $Admin->object_modify('vlanDomains', $POST->action, 'id', $values)) {
-} else {
+if ($Admin->object_modify('vlanDomains', $POST->action, 'id', $values)) {
     $Result->show('success', _('Domain').' '.$User->get_post_action().' '._('successful').'!', false);
 }
 

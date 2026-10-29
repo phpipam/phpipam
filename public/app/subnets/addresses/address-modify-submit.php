@@ -223,10 +223,6 @@ if (! is_blank(strstr((string) $POST->ip_addr, '-'))) {
                 if ($Subnets->is_multicast($POST->ip_addr)) {
                     $POST->mac = $Subnets->create_multicast_mac($Subnets->transform_address($POST->ip_addr, 'dotted'));
                 }
-            }
-
-            // multicast check
-            if ($User->settings->enableMulticast == 1) {
                 if ($Subnets->is_multicast($POST->ip_addr)) {
                     if (! $User->is_admin(false)) {
                         $mtest = $Subnets->validate_multicast_mac($POST->mac, $subnet['sectionId'], $subnet['vlanId'], MCUNIQUE);

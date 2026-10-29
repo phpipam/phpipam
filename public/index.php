@@ -65,7 +65,7 @@ if ($Rewrite->is_api()) {
         if ($GET->switch && $_SESSION['realipamusername'] && $GET->switch == 'back') {
             $_SESSION['ipamusername'] = $_SESSION['realipamusername'];
             unset($_SESSION['realipamusername']);
-            print '<script>window.location.href = "'.create_link(null).'";</script>';
+            print '<script>window.location.href = "'.create_link().'";</script>';
         }
 
         // set default pagesize
@@ -157,7 +157,7 @@ if ($Rewrite->is_api()) {
     <div class="jqueryError">
         <div class='alert alert-danger' style="width:450px;margin:auto">jQuery error!
         <div class="jqueryErrorText"></div><br>
-        <a href="<?php print create_link(null); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
+        <a href="<?php print create_link(); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
         </div>
     </div>
 
@@ -196,7 +196,7 @@ if ($Rewrite->is_api()) {
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="hero-pusher hidden-xs hidden-sm"></div>
             <div class="hero-unit">
-                <a href="<?php print create_link(null); ?>"><?php print $User->settings->siteTitle; ?></a>
+                <a href="<?php print create_link(); ?>"><?php print $User->settings->siteTitle; ?></a>
                 <p class="muted">
                 <?php
                 $title = str_replace(' / ', "<span class='divider'>/</span>", (string) $title);

@@ -150,7 +150,7 @@ foreach ($sections as $section) {
 
             $lineCount++;
 
-            if (is_array($ipaddresses) && count($ipaddresses) > 0) {
+            if (is_array($ipaddresses) && $ipaddresses != []) {
                 foreach ($ipaddresses as $ip) {
                     // cast
                     $ip = (array) $ip;

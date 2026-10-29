@@ -66,7 +66,7 @@ $custom_fields = $Tools->fetch_custom_fields('subnets');
 $sections = $Sections->fetch_all_sections();
 
 // set readonly flag
-$readonly = $POST->action == 'edit' || $POST->action == 'delete' ? true : false;
+$readonly = $POST->action == 'edit' || $POST->action == 'delete';
 ?>
 
 

@@ -77,7 +77,7 @@ if (@$config['requests_public'] === false) {
 <div class="jqueryError">
     <div class='alert alert-danger' style="width:400px;margin:auto">jQuery error!</div>
     <div class="jqueryErrorText"></div><br>
-    <a href="<?php print create_link(null); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
+    <a href="<?php print create_link(); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
 </div>
 
 <!-- Popups -->
@@ -104,7 +104,7 @@ if (@$config['requests_public'] === false) {
     <!-- title -->
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
         <div class="hero-unit" style="padding:20px;margin-bottom:10px;margin-top: 10px;">
-            <a href="<?php print create_link(null); ?>"><?php print $User->settings->siteTitle; ?></a>
+            <a href="<?php print create_link(); ?>"><?php print $User->settings->siteTitle; ?></a>
             <p class="muted"><?php print _('Login'); ?></p>
         </div>
     </div>

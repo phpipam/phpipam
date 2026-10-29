@@ -15,8 +15,6 @@ function print_leases($s)
     global $User;
     // cast
     $s = (object) $s;
-    // printed option to add defaults
-    $printed_options = [];
 
     $html[] = '<tr>';
 

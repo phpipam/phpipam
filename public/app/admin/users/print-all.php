@@ -69,7 +69,7 @@ foreach ($users as $user) {
         // get user passkeys
         $user_passkeys = $User->get_user_passkeys($user['id']);
         // set passkey_only flag
-        $passkey_only = count($user_passkeys) > 0 && $user['passkey_only'] == '1' ? true : false;
+        $passkey_only = count($user_passkeys) > 0 && $user['passkey_only'] == '1';
     }
 
     print '<tr>'."\n";

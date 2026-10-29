@@ -167,7 +167,7 @@ $colspan_dhcp = 4;
 
             print '</tr>';
 
-            // search for free numbers in middle
+            // search for free numbers in middle and end
             if ($User->user->hideFreeRange != 1) {
                 if ($k != count($numbers) - 1 && (($numbers[$k + 1]->number_raw - $n->number_raw) != 1)) {
                     print '<tr>';
@@ -175,10 +175,6 @@ $colspan_dhcp = 4;
                     print " <td class='unused' colspan='".($colspan - 1)."'>".($numbers[$k + 1]->number_raw - $n->number_raw - 1).' '._('Unused').'</td>';
                     print '</tr>';
                 }
-            }
-
-            // search for free numbers in the end
-            if ($User->user->hideFreeRange != 1) {
                 if ($k == count($numbers) - 1 && (($prefix->prefix_raw_stop - $n->number_raw) != 1)) {
                     print '<tr>';
                     print " <td class='unused'></td>";

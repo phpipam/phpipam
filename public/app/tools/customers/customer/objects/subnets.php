@@ -36,7 +36,7 @@ if (isset($objects['subnets'])) {
     print '	<th>'._('Subnet').'</th>';
     print '	<th>'._('Description').'</th>';
     // custom
-    if (isset($visible_fields)) {
+    if (is_array($visible_fields)) {
         foreach ($visible_fields as $f) {
             print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($f['name']).'</th>';
         }
@@ -91,7 +91,7 @@ if (isset($objects['subnets'])) {
         print "	<td><a href='".create_link('subnets', $section->id, $slave_subnet['id'])."'>$slave_subnet[description]</a></td>";
 
         // custom
-        if (isset($visible_fields)) {
+        if (is_array($visible_fields)) {
             foreach ($visible_fields as $key => $field) {
                 // booleans
                 if ($field['type'] == 'tinyint(1)') {

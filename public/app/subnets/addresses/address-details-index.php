@@ -62,7 +62,7 @@ $resolve = $DNS->resolve_address($address['ip_addr'], $address['hostname'], fals
 $address = $Addresses->reformat_empty_array_fields($address, "<span class='text-muted'>/</span>");
 
 // multicast
-$mcast = $User->settings->enableMulticast == '1' && $Subnets->is_multicast($Subnets->transform_address($address['ip_addr'], 'dotted')) ? true : false;
+$mcast = $User->settings->enableMulticast == '1' && $Subnets->is_multicast($Subnets->transform_address($address['ip_addr'], 'dotted'));
 
 // header
 print '<h4>'._('IP address details').' '.$Subnets->transform_to_dotted($address['ip_addr']).'</h4><hr>';

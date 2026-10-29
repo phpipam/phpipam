@@ -66,7 +66,7 @@ $hosts = $Addresses->fetch_subnet_addresses($subnet->id, 'ip_addr', 'asc');
 $ignored = [];
 
 // create PTR records
-if (is_array($hosts) && count($hosts) > 0) {
+if (is_array($hosts) && $hosts != []) {
     foreach ($hosts as $h) {
         // set default hostname for PTR if set
         if (is_blank($h->hostname)) {
@@ -101,21 +101,21 @@ if (is_array($hosts) && count($hosts) > 0) {
 }
 
 // generate print
-if (count(@$success) > 0) {
+if (is_array($success) && $success != []) {
     $print[] = "<div class='alert alert-success'><h4>Successful PTR records:</h4>";
     foreach ($success as $s) {
         $print[] = $PowerDNS->get_ip_ptr_name($s->ip).' > '.$s->hostname;
     }
     $print[] = '</div>';
 }
-if (is_array($failures) && count($failures) > 0) {
+if (is_array($failures) && $failures != []) {
     $print[] = "<div class='alert alert-danger'><h4>Invalid PTR hostnames:</h4>";
     foreach ($failures as $s) {
         $print[] = "&middot; $s->hostname ($s->ip)";
     }
     $print[] = '</div>';
 }
-if (is_array($ignored) && count($ignored) > 0) {
+if (is_array($ignored) && $ignored != []) {
     $print[] = "<div class='alert alert-info'><h4>Ignored records:</h4>";
     foreach ($ignored as $s) {
         $print[] = "&middot; $s->hostname ($s->ip)";

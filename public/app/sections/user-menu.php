@@ -91,7 +91,7 @@ if ($GET->subnets != 'on' && $GET->addresses != 'on' && $GET->vlans != 'on' && $
     <span class="info"><?php print _('Logged in as'); ?>  <?php print '&nbsp;'._((string) $User->user->role); ?></span><br>
 
     <!-- switch back -->
-    <a href="<?php print create_link(null).'?switch=back'; ?>"><?php print _('Switch back user'); ?>  <i class="fa fa-pad-left fa-undo"></i></a>
+    <a href="<?php print create_link().'?switch=back'; ?>"><?php print _('Switch back user'); ?>  <i class="fa fa-pad-left fa-undo"></i></a>
 
     <?php } else { ?>
     <a href="<?php print create_link('tools', 'user-menu'); ?>"><?php print _('Hi'); ?>, <?php print $User->user->real_name; ?></a><br>

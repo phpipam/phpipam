@@ -397,7 +397,7 @@ else {
                         }
                     }
                     // merge cnames
-                    if (isset($cname)) {
+                    if (is_array($cname)) {
                         foreach ($cname as $cna) {
                             $dns_records2[] = $cna;
                         }

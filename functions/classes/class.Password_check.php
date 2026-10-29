@@ -116,7 +116,7 @@ class Password_check extends Common_functions
         $this->validate_symbols();
 
         // check
-        return count($this->errors) == 0 ? true : false;
+        return count($this->errors) == 0;
     }
 
     /**

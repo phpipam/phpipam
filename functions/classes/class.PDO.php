@@ -142,7 +142,6 @@ abstract class DB
      * @param  mixed  $password  (default: null)
      * @param  mixed  $charset  (default: null)
      * @param  mixed  $ssl  (default: null)
-     * @return void
      */
     public function __construct($username = null, $password = null, $charset = null, $ssl = null)
     {
@@ -638,8 +637,6 @@ abstract class DB
         // exit on no parameters
         if (count($preparedParamArr) == 0) {
             throw new Exception('No values to update');
-
-            return false;
         }
 
         $preparedParamStr = implode(',', $preparedParamArr);

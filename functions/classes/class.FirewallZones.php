@@ -65,8 +65,6 @@ class FirewallZones extends Common_functions
 
     /**
      * __construct function.
-     *
-     * @return void
      */
     public function __construct(Database_PDO $Database)
     {

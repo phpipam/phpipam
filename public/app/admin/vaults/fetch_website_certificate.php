@@ -23,8 +23,6 @@ function die_with_error($msg)
 function php_error_handler($errno, $errstr)
 {
     exit(_('Error').': '.$errstr);
-
-    return true;
 }
 
 // make sure user has access

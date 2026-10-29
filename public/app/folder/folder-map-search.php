@@ -23,15 +23,8 @@ foreach ($subnets as $id => $subnet) {
             $biggest_subnet_mask = 128;
         }
 
-        // save biggest/smallest mask
-        if ($type == 'IPv4') {
-            if ($subnet->mask < $biggest_subnet_mask) {
-                $biggest_subnet_mask = $subnet->mask;
-            }
-        } else {
-            if ($subnet->mask < $biggest_subnet_mask) {
-                $biggest_subnet_mask = $subnet->mask;
-            }
+        if ($subnet->mask < $biggest_subnet_mask) {
+            $biggest_subnet_mask = $subnet->mask;
         }
 
         // first ?

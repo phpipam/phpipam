@@ -31,11 +31,6 @@ class Table extends Common_functions
         $this->limit = isset($_COOKIE['table-page-size']) ? $_COOKIE['table-page-size'] : 50;
     }
 
-    private function set_display_limit_cookie()
-    {
-        setcookie_samesite('table-page-size', $this->limit, 2592000, true, $this->isHttps());
-    }
-
     /**
      * paginate_table
      *
@@ -49,7 +44,7 @@ class Table extends Common_functions
         // top dropdowns
         $dropdown = $this->get_table_dropdown();
         // set pagination
-        $pagination = $this->get_table_pagination($subnets);
+        $pagination = $this->get_table_pagination();
 
         // result
         return [
@@ -123,25 +118,22 @@ class Table extends Common_functions
         }
     }
 
-    private function get_table_pagination($subnets)
+    private function get_table_pagination()
     {
         // pagination html start
         $html = [];
         $html[] = "<ul class='pagination input-sm'>";
-
         // previous
         if ($this->filters['subpage'] == 1) {
             $html[] = " <li class='disabled'><a><span aria-hidden='true'>«</span><span class='sr-only'>"._('Previous').'</span></a></li>';
         } else {
             $html[] = " <li><a href='".create_link('subnets', $_GET['section']).'?subpage='.($this->filters['subpage'] - 1).'&limit='.$this->filters['limit']."'><span aria-hidden='true'>«</span><span class='sr-only'>"._('Previous').'</span></a></li> ';
         }
-
         // one page
         if ($this->filters['pagenum'] == 1) {
             return false;
-        }
-        // 1 to 5
-        else {
+        } else {
+            // 1 to 5
             for ($m = 1; $m <= $this->filters['pagenum']; $m++) {
                 // pages
                 if ($m == $this->filters['subpage']) {
@@ -151,14 +143,12 @@ class Table extends Common_functions
                 }
             }
         }
-
         // next
         if ($this->filters['pagenum'] == $this->filters['subpage']) {
             $html[] = " <li class='disabled'><a><span aria-hidden='true'>»</span><span class='sr-only'>"._('Next').'</span></a></li>';
         } else {
             $html[] = " <li><a href='".create_link('subnets', $_GET['section']).'?subpage='.($this->filters['subpage'] + 1).'&limit='.$this->filters['limit']."'><span aria-hidden='true'>»</span><span class='sr-only'>"._('Next').'</span></a></li> ';
         }
-
         // finish
         $html[] = '</ul>';
 

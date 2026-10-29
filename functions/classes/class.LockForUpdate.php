@@ -43,12 +43,10 @@ class LockForUpdateFile extends LockForUpdateBase
 
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct(string $fileName = '')
     {
-        if (is_string($fileName) && strlen($fileName)) {
+        if (strlen((string) $fileName)) {
             $this->fileName = $fileName;
         }
     }

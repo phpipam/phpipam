@@ -343,7 +343,7 @@ class User extends Common_functions
      */
     public function twofa_required()
     {
-        return isset($_SESSION['2fa_required']) ? true : false;
+        return isset($_SESSION['2fa_required']);
     }
 
     /**
@@ -763,7 +763,7 @@ class User extends Common_functions
         $subnets = array_filter($subnets);
 
         // result
-        return in_array($subnetId, $subnets) ? true : false;
+        return in_array($subnetId, $subnets);
     }
 
     /**
@@ -1063,7 +1063,7 @@ class User extends Common_functions
             // Initialize adLDAP
             $dirconn = new adLDAP($dirparams);
         } catch (adLDAPException $e) {
-            $this->Log->write(_('Directory connection error'), _('Failed to connect').': '.$e->getMessage(), 2, null);
+            $this->Log->write(_('Directory connection error'), _('Failed to connect').': '.$e->getMessage(), 2);
             $this->Result->show('danger', _('Error: ').$e->getMessage(), true);
         }
 
@@ -1299,7 +1299,7 @@ class User extends Common_functions
         }
         // is passkey login enforced ?
         elseif ($this->settings->dbversion >= 40 && $this->settings->{'passkeys'} == '1') {
-            if ($this->user->passkey_only == '1') {
+            if ($this->user->passkey_only == 1) {
                 // check passkeys
                 $user_passkeys = $this->get_user_passkeys($this->user->id);
 
@@ -1347,7 +1347,7 @@ class User extends Common_functions
         // save to session
         $this->write_session_parameters();
         // log
-        $this->Log->write(_('User login'), _('User').' '.$this->user->real_name.' '._('logged in'), 0, null);
+        $this->Log->write(_('User login'), _('User').' '.$this->user->real_name.' '._('logged in'), 0);
 
         // write last logintime
         $this->update_login_time();

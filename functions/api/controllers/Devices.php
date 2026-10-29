@@ -46,9 +46,6 @@ class Devices_controller extends Common_api_functions
         // validate
         $this->validate_options_request();
 
-        // get api
-        $app = $this->Tools->fetch_object('api', 'app_id', $this->_params->app_id);
-
         // methods
         $result = [];
         $result['methods'] = [

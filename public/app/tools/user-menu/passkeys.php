@@ -30,9 +30,9 @@ else {
     $user_passkeys = $User->get_user_passkeys(false);
 
     // passkey 0nly ?
-    if (count($user_passkeys) > 0 && $User->user->passkey_only == '1') {
+    if (count($user_passkeys) > 0 && $User->user->passkey_only == 1) {
         $Result->show('warning alert-absolute', _('You can login to your account with with passkeys only').'.<hr>'._('This can be changed under Account details tab').'.');
-    } elseif ($User->user->passkey_only == '1') {
+    } elseif ($User->user->passkey_only == 1) {
         $Result->show('warning alert-absolute', _('You can login to your account with normal authentication method only untill you create passkeys'.'.<hr>'._('This can be changed under Account details tab.')));
     } else {
         $Result->show('warning alert-absolute', _('You can login to your account with normal authentication method or with passkeys'.'.<hr>'._('This can be changed under Account details tab.')));

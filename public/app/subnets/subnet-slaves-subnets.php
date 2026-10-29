@@ -45,7 +45,7 @@ if ($User->settings->enableCustomers == '1' && $User->get_module_permissions('cu
     $colspan_subnets++;
 }
 // custom
-if (isset($visible_fields)) {
+if (is_array($visible_fields)) {
     foreach ($visible_fields as $f) {
         print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($f['name']).'</th>';
     }
@@ -125,7 +125,7 @@ foreach ($slave_subnets as $slave_subnet) {
     }
 
     // custom
-    if (isset($visible_fields)) {
+    if (is_array($visible_fields)) {
         foreach ($visible_fields as $key => $field) {
             // booleans
             if ($field['type'] == 'tinyint(1)') {

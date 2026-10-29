@@ -43,7 +43,7 @@ if ($rack === false) {
 }
 
 // permission - dont draw names if user has no access to devices
-$draw_names = $User->get_module_permissions('devices') >= User::ACCESS_R ? true : false;
+$draw_names = $User->get_module_permissions('devices') >= User::ACCESS_R;
 
 // back
 if ($GET->is_back == '1') {
