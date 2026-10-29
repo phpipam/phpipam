@@ -44,7 +44,7 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : [];
     <th><?php print _('Groups'); ?></th>
     <th><?php print _('Last login'); ?></th>
     <?php
-    if (count(@$custom) > 0) {
+    if (is_array(@$custom)) {
         foreach ($custom as $field) {
             if (! in_array($field['name'], $ffields)) {
                 print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -110,7 +110,7 @@ foreach ($users as $user) {
         print "<span class='badge badge1 badge5 alert-success'>".$auth_method->type."</span> <span class='text-muted'>(".$auth_method->description.'</a>)';
     }
     // 2fa
-    if ($User->settings->{'2fa_provider'} !== 'none' && $passkey_only !== true) {
+    if ($User->settings->{'2fa_provider'} !== 'none' && ! $passkey_only) {
         if (! is_null($user['2fa_secret']) && $user['2fa'] == '1') {
             print "<br><span class='badge badge1 badge5 alert-success'>"._('2fa enabled').'</span>';
         } else {
@@ -147,7 +147,7 @@ foreach ($users as $user) {
         $gr = $Admin->groups_parse($groups);
 
         print '	<td>';
-        if (count($gr) > 0) {
+        if (is_array($gr) && $gr != []) {
             foreach ($gr as $group) {
                 print $group['g_name'].'<br>';
             }
@@ -163,7 +163,7 @@ foreach ($users as $user) {
     print '</td>';
 
     // custom
-    if (count($custom) > 0) {
+    if (is_array($custom)) {
         foreach ($custom as $field) {
             if (! in_array($field['name'], $ffields)) {
                 print "<td class='hidden-xs hidden-sm hidden-md'>";

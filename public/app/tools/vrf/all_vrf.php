@@ -64,7 +64,7 @@ if ($all_vrfs === false) {
     if ($User->settings->enableCustomers == '1') {
         print ' <th data-field="customer" data-sortable="true">'._('Customer').'</th>'."\n";
     }
-    if (count($custom) > 0) {
+    if (is_array($custom)) {
         foreach ($custom as $field) {
             if (! in_array($field['name'], $hidden_fields)) {
                 print "<th class='customField hidden-xs hidden-sm'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -112,7 +112,7 @@ if ($all_vrfs === false) {
         }
 
         // custom fields
-        if (count($custom) > 0) {
+        if (is_array($custom)) {
             foreach ($custom as $field) {
                 if (! in_array($field['name'], $hidden_fields)) {
                     print "<td class='customField hidden-xs hidden-sm'>";

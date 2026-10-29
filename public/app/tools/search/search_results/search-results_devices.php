@@ -34,7 +34,7 @@ foreach ($device_types as $t) {
     <th><?php print _('Description'); ?></th>
     <th><?php print _('Type'); ?></th>
     <?php
-    if (count($custom_device_fields) > 0) {
+    if (is_array($custom_device_fields)) {
         foreach ($custom_device_fields as $field) {
             if (! in_array($field['name'], $hidden_device_fields)) {
                 print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -59,7 +59,7 @@ if (count($result_devices) > 0) {
         print ' <td><dd>'.$device['description'].'</dd></td>'."\n";
         print ' <td><dd>'.$type_hash[$device['type']].'</dd></td>'."\n";
         // custom fields
-        if (count($custom_device_fields) > 0) {
+        if (is_array($custom_device_fields)) {
             foreach ($custom_device_fields as $field) {
                 if (! in_array($field['name'], $hidden_device_fields)) {
                     // what are we creating links to??

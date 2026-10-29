@@ -51,7 +51,7 @@ if ($all_nameservers === false) {
         if (! is_null($nameservers['permissions'])) {
             $sections = array_filter(explode(';', (string) $nameservers['permissions']));
             // some
-            if (count($sections) > 0) {
+            if (is_array($sections) && $sections != []) {
                 foreach ($sections as $id) {
                     $sect = $Admin->fetch_object('sections', 'id', $id);
                     // exists

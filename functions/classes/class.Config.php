@@ -10,7 +10,7 @@ class Config
      *
      * @var object|null
      */
-    private static $config = null;
+    private static $config;
 
     /**
      * Return path of config.php

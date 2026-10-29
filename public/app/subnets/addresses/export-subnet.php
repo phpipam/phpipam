@@ -171,7 +171,7 @@ if ((isset($GET->lastSeen)) && ($GET->lastSeen == 'on')) {
 }
 
 // custom
-if (count($custom_fields) > 0) {
+if (is_array($custom_fields)) {
     foreach ($custom_fields as $myField) {
         // set temp name - replace space with three ___
         $myField['nameTemp'] = str_replace(' ', '___', (string) $myField['name']);
@@ -274,7 +274,7 @@ foreach ($addresses as $ip) {
     }
 
     // custom
-    if (count($custom_fields) > 0) {
+    if (is_array($custom_fields)) {
         foreach ($custom_fields as $myField) {
             // set temp name - replace space with three ___
             $myField['nameTemp'] = str_replace(' ', '___', (string) $myField['name']);

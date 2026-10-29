@@ -62,7 +62,7 @@ $colspanCustom = 0;
     <th><?php print _('Belonging users'); ?></th>
     <th><?php print _('Section permissions'); ?></th>
     <?php
-    if (count(@$custom) > 0) {
+    if (is_array(@$custom)) {
         foreach ($custom as $field) {
             if (! in_array($field['name'], $ffields)) {
                 $colspanCustom++;
@@ -96,7 +96,7 @@ foreach ($admins as $user) {
 
 <?php
 /* print existing sections */
-if ($groups) {
+if (is_array($groups)) {
     foreach ($groups as $g) {
         // cast
         $g = (array) $g;
@@ -108,7 +108,7 @@ if ($groups) {
         // users in group
         print '	<td>';
         $u = $Admin->group_fetch_users($g['g_id']);
-        if (count($u) > 0) {
+        if (is_array($u) && $u != []) {
             foreach ($u as $name) {
                 // get details
                 $user = $Admin->fetch_object('users', 'id', $name);
@@ -122,7 +122,7 @@ if ($groups) {
         // section permissions
         print '	<td>';
         $permissions = $Sections->get_group_section_permissions($g['g_id']);
-        if (count($permissions) > 0) {
+        if (is_array($permissions)) {
             foreach ($permissions as $sec => $perm) {
                 // reformat permissions
                 $perm = $Subnets->parse_permissions($perm);
@@ -132,7 +132,7 @@ if ($groups) {
         print '</td>';
 
         // custom
-        if (count($custom) > 0) {
+        if (is_array($custom)) {
             foreach ($custom as $field) {
                 if (! in_array($field['name'], $ffields)) {
                     print "<td class='hidden-xs hidden-sm hidden-md'>";

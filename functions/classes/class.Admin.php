@@ -26,7 +26,7 @@ class Admin extends Common_functions
      *
      * @var mixed
      */
-    public $lastId = null;
+    public $lastId;
 
     /**
      * if admin user is required to connect. Can be overridden
@@ -119,7 +119,7 @@ class Admin extends Common_functions
      * @param  string|array  $field
      * @param  array  $values
      * @param  array  $values_log
-     * @return void
+     * @return bool
      */
     public function object_modify($table, $action = null, $field = 'id', $values = [], $values_log = [])
     {
@@ -146,7 +146,9 @@ class Admin extends Common_functions
         elseif ($action == 'delete') {
             return $this->object_delete($table, $field, $values[$field]);
         } else {
-            return $this->Result->show('danger', _('Invalid action'), true);
+            $this->Result->show('danger', _('Invalid action'), true);
+
+            return false;
         }
     }
 
@@ -359,17 +361,17 @@ class Admin extends Common_functions
      *  input:  array of group ids
      *  output: array of groups ( "id"=>array($group) )
      *
-     * @param  mixed  $group_ids
+     * @param  array  $group_ids
      * @return array
      */
     public function groups_parse($group_ids)
     {
         $out = [];
-        // check
-        if (! is_null($group_ids)) {
-            if (count($group_ids) > 0) {
-                foreach ($group_ids as $g_id) {
-                    $group = $this->fetch_object('userGroups', 'g_id', $g_id);
+
+        if (is_array($group_ids)) {
+            foreach ($group_ids as $g_id) {
+                $group = $this->fetch_object('userGroups', 'g_id', $g_id);
+                if (is_object($group)) {
                     $out[$group->g_id] = (array) $group;
                 }
             }
@@ -391,11 +393,11 @@ class Admin extends Common_functions
     public function groups_parse_ids($group_ids)
     {
         $out = [];
-        // check
-        if (! is_null($group_ids)) {
-            if (count($group_ids) > 0) {
-                foreach ($group_ids as $g_id) {
-                    $group = $this->fetch_object('userGroups', 'g_id', $g_id);
+
+        if (is_array($group_ids)) {
+            foreach ($group_ids as $g_id) {
+                $group = $this->fetch_object('userGroups', 'g_id', $g_id);
+                if (is_object($group)) {
                     $out[$group->g_id] = $group->g_id;
                 }
             }
@@ -414,15 +416,15 @@ class Admin extends Common_functions
     public function group_fetch_users($group_id)
     {
         $out = [];
-        // get all users
+
         $users = $this->fetch_all_objects('users');
         // check if $gid in array
-        if ($users !== false) {
+        if (is_array($users)) {
             foreach ($users as $u) {
                 $group_array = db_json_decode($u->groups, true);
                 $group_array = $this->groups_parse($group_array);
 
-                if (count($group_array) > 0) {
+                if (is_array($group_array)) {
                     foreach ($group_array as $group) {
                         if (in_array($group_id, $group)) {
                             $out[] = $u->id;
@@ -432,8 +434,7 @@ class Admin extends Common_functions
             }
         }
 
-        // return
-        return isset($out) ? $out : [];
+        return $out;
     }
 
     /**
@@ -445,21 +446,21 @@ class Admin extends Common_functions
     public function group_fetch_missing_users($group_id)
     {
         $out = [];
-        // get all users
+
         $users = $this->fetch_all_objects('users');
 
         // check if $gid in array
-        if ($users !== false) {
+        if (is_array($users)) {
             foreach ($users as $u) {
                 if ($u->role != 'Administrator') {
                     $g = db_json_decode($u->groups, true);
                     // if json failed to decode, then this user is eligible to be added
-                    if (! $g) {
+                    if (! is_array($g)) {
                         $out[] = $u->id;
 
                         continue;
                     }
-                    if (! @in_array($group_id, $g)) {
+                    if (! in_array($group_id, $g)) {
                         $out[] = $u->id;
                     }
                 }
@@ -473,51 +474,47 @@ class Admin extends Common_functions
     /**
      * This function adds new group access to user account
      *
-     * @param  mixed  $gid
-     * @param  mixed  $uid
+     * @param  int  $gid
+     * @param  int  $uid
      * @return bool
      */
     public function add_group_to_user($gid, $uid)
     {
-        // get old groups
         $user = $this->fetch_object('users', 'id', $uid);
 
-        // append new group
-        $g = db_json_decode($user->groups, true);
-        $g[$gid] = $gid;
-        $g = json_encode($g);
+        if (is_object($user)) {
+            // get old groups
+            $g = db_json_decode($user->groups, true);
+            $g[$gid] = $gid;
+            $g = json_encode($g);
 
-        // update
-        if (! $this->update_user_groups($uid, $g)) {
-            return false;
-        } else {
-            return true;
+            return $this->update_user_groups($uid, $g);
         }
+
+        return false;
     }
 
     /**
      * This function removes group from users account.
      *
-     * @param  mixed  $gid
-     * @param  mixed  $uid
+     * @param  int  $gid
+     * @param  int  $uid
      * @return bool
      */
     public function remove_group_from_user($gid, $uid)
     {
-        // get old groups
         $user = $this->fetch_object('users', 'id', $uid);
 
-        // remove group
-        $g = db_json_decode($user->groups, true);
-        unset($g[$gid]);
-        $g = json_encode($g);
+        if (is_object($user)) {
+            // remove group
+            $g = db_json_decode($user->groups, true);
+            unset($g[$gid]);
+            $g = json_encode($g);
 
-        // update
-        if (! $this->update_user_groups($uid, $g)) {
-            return false;
-        } else {
-            return true;
+            return $this->update_user_groups($uid, $g);
         }
+
+        return false;
     }
 
     /**
@@ -525,7 +522,7 @@ class Admin extends Common_functions
      *
      * @param  mixed  $uid
      * @param  string  $groups
-     * @return void
+     * @return bool
      */
     public function update_user_groups($uid, $groups)
     {
@@ -537,7 +534,7 @@ class Admin extends Common_functions
      *
      * @param  mixed  $sid
      * @param  string  $groups
-     * @return void
+     * @return bool
      */
     public function update_section_groups($sid, $groups)
     {
@@ -552,23 +549,19 @@ class Admin extends Common_functions
      */
     public function remove_group_from_users($gid)
     {
-        // get all users
         $users = $this->fetch_all_objects('users');
-        // check if $gid in array
-        if ($users !== false) {
-            foreach ($users as $u) {
-                $g = db_json_decode($u->groups, true);
-                $go = $g;
-                $g = $this->groups_parse($g);
-                // check
-                if (count($g) > 0) {
-                    foreach ($g as $gr) {
-                        if (in_array($gid, $gr)) {
-                            unset($go[$gid]);
-                            $ng = json_encode($go);
-                            $this->update_user_groups($u->id, $ng);
-                        }
-                    }
+        if (! is_array($users)) {
+            return false;
+        }
+
+        foreach ($users as $u) {
+            $go = db_json_decode($u->groups, true);
+            $g = $this->groups_parse($go);
+            foreach ($g as $gr) {
+                if (in_array($gid, $gr)) {
+                    unset($go[$gid]);
+                    $ng = json_encode($go);
+                    $this->update_user_groups($u->id, $ng);
                 }
             }
         }
@@ -579,7 +572,7 @@ class Admin extends Common_functions
     /**
      * Removes group ID from all section permissions
      *
-     * @param  mixed  $gid
+     * @param  int  $gid
      * @return bool
      */
     public function remove_group_from_sections($gid)

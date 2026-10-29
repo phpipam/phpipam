@@ -25,7 +25,7 @@ class Logging extends Common_functions
      *
      * @var mixed
      */
-    protected $log_command = null;
+    protected $log_command;
 
     /**
      * log_details
@@ -34,7 +34,7 @@ class Logging extends Common_functions
      *
      * @var mixed
      */
-    protected $log_details = null;
+    protected $log_details;
 
     /**
      * Syslog facility
@@ -121,7 +121,7 @@ class Logging extends Common_functions
      *
      * @var mixed
      */
-    protected $log_username = null;
+    protected $log_username;
 
     /**
      * user details
@@ -137,7 +137,7 @@ class Logging extends Common_functions
      *
      * @var mixed
      */
-    protected $user_id = null;
+    protected $user_id;
 
     /**
      * Changelog keys for nicer display fo changelog
@@ -1803,7 +1803,7 @@ class Logging extends Common_functions
      * @param  string  $coid  (objectId from ctype definition)
      * @param  bool  $long  (default: false)
      * @param  int  $limit  (default: 50)
-     * @return array
+     * @return array|false
      */
     public function fetch_changlog_entries($object_type, $coid, $long = false, $limit = 50)
     {

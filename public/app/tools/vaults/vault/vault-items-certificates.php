@@ -29,7 +29,7 @@ print "	<th class='hidden-sm'>"._('Expires').'</th>';
 print "	<th class='hidden-sm'>"._('Issuer').'</th>';
 print "	<th class='hidden-sm'>"._('Alt names').'</th>';
 // custom
-if (count(@$custom_fields) > 0) {
+if (is_array(@$custom_fields)) {
     foreach ($custom_fields as $field) {
         print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
     }
@@ -95,7 +95,7 @@ if ($certificates_db !== false) {
             print '	<td>'.str_replace([','], '<br>', (string) $certificate['extensions']['subjectAltName']).'</td>';
 
             // custom fields
-            if (count(@$custom_fields) > 0) {
+            if (is_array(@$custom_fields)) {
                 foreach ($custom_fields as $field) {
                     print "<td class='hidden-xs hidden-sm hidden-md'>";
 

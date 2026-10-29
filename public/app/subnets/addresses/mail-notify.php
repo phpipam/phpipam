@@ -93,7 +93,7 @@ empty($address['mac']) ?: $content[] = '&bull; '._('Mac address').": \t\t $addre
 empty($address['owner']) ?: $content[] = '&bull; '._('Owners').": \t\t $address[owner]";
 
 // custom
-if (count($custom_fields) > 0) {
+if (is_array($custom_fields)) {
     foreach ($custom_fields as $custom_field) {
         if (! empty($address[$custom_field['name']])) {
             $content[] = '&bull; '._((string) $custom_field['name']).":\t".$address[$custom_field['name']];

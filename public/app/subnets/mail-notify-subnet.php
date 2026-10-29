@@ -73,7 +73,7 @@ if (! empty($subnet['nameserverId'])) {
 }
 
 // custom
-if (count($custom_fields) > 0) {
+if (is_array($custom_fields)) {
     foreach ($custom_fields as $custom_field) {
         if (! empty($address[$custom_field['name']])) {
             $content[] = '&bull; '._((string) $custom_field['name']).":\t".$address[$custom_field['name']];

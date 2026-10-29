@@ -195,7 +195,7 @@ $delete = $POST->action == 'delete' ? 'disabled' : '';
     if ($POST->action == 'delete') {
         // check for matching users
         $users = $Admin->fetch_multiple_objects('users', 'authMethod', @$method_settings->id);
-        if ($users !== false) {
+        if (is_array($users)) {
             $Result->show('warning', count($users)._(' users have this method for logging in. They will be reset to local auth!'), false);
         }
     }

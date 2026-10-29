@@ -110,7 +110,7 @@ foreach ($tables as $table) {
         // fetch custom fields
         $cfields_old = $Tools_old->fetch_custom_fields($table);
         $cfields = $Tools->fetch_custom_fields($table);
-        if (count($cfields_old) > 0) {
+        if (is_array($cfields_old)) {
             foreach ($cfields_old as $k => $cf) {
                 if (! array_key_exists($k, $cfields)) {
                     $new_custom_fields[$table] = $cfields_old;
@@ -407,7 +407,7 @@ foreach ($old_data as $table => $table_content) {
                 if (is_array($arr)) {
                     foreach ($arr as $type => $objects) {
                         $arr_new[$type] = [];
-                        if (count($objects) > 0) {
+                        if (is_array($objects)) {
                             foreach ($objects as $object) {
                                 $arr_new[$type][] = $highest_ids_append[$type] + $object;
                             }
@@ -423,7 +423,7 @@ foreach ($old_data as $table => $table_content) {
                 if (is_array($arr)) {
                     foreach ($arr as $type => $objects) {
                         $arr_new[$type] = [];
-                        if (count($objects) > 0) {
+                        if (is_array($objects)) {
                             foreach ($objects as $object) {
                                 $arr_new[$type][] = $highest_ids_append[$type] + $object;
                             }

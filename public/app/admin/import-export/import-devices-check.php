@@ -185,7 +185,7 @@ foreach ($data as &$cdata) {
             }
 
             // Check if the values of the custom fields have changed
-            if (count($custom_fields) > 0) {
+            if (is_array($custom_fields)) {
                 foreach ($custom_fields as $myField) {
                     if ($cdata[$myField['name']] != $cedata[$myField['name']]) {
                         $msg .= $myField['name'].' will be updated.';

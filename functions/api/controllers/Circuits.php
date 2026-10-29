@@ -76,7 +76,7 @@ class Circuits_controller extends Common_api_functions
             unset($params['id4']);
         }
         // post, get etc
-        if (count($params) > 0) {
+        if (is_array($params)) {
             foreach ($params as $k => $p) {
                 $this->_params->{$k} = $p;
             }

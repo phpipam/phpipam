@@ -269,7 +269,7 @@ class Rewrite
         // if requested from /api/ remove it and reindex array_values
         $this->remove_api_from_uri_params();
         // create
-        if (count($this->uri_parts) > 0) {
+        if (is_array($this->uri_parts)) {
             foreach ($this->uri_parts as $k => $l) {
                 if (strncmp((string) $l, '?', 1) == 0) {
                     continue; // skip qsa

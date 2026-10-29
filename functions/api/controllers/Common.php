@@ -39,7 +39,7 @@ class Common_api_functions
     /**
      * _params provided from request
      *
-     * @var object
+     * @var API_Params
      */
     public $_params;
 
@@ -239,7 +239,7 @@ class Common_api_functions
 
         // add custom fields
         $custom_fields = $this->Tools->fetch_custom_fields($controller);
-        if (count($custom_fields) > 0) {
+        if (is_array($custom_fields)) {
             foreach ($custom_fields as $cf) {
                 $this->custom_keys[] = $cf['name'];
             }
@@ -696,7 +696,7 @@ class Common_api_functions
             }
         }
 
-        return $result_is_object === true ? $result[0] : $result;
+        return $result_is_object ? $result[0] : $result;
     }
 
     /**

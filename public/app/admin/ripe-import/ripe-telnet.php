@@ -102,7 +102,7 @@ if (count(@$subnet) == 0) {
             print '<td>'."\n";
             print '<select name="vlan-'.$m.'" class="form-control input-sm input-w-auto">'."\n";
             print '<option value="0">No VLAN</option>';
-            if (count(@$vlans) > 0) {
+            if (is_array(@$vlans)) {
                 foreach ($vlans as $vlan) {
                     // set description
                     $vlan_description = ! is_blank($vlan->description) ? ' ('.$vlan->description.')' : '';

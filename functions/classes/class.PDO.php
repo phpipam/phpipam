@@ -14,7 +14,7 @@ abstract class DB
      *
      * @var mixed
      */
-    protected $username = null;
+    protected $username;
 
     /**
      * Default db password
@@ -23,7 +23,7 @@ abstract class DB
      *
      * @var mixed
      */
-    protected $password = null;
+    protected $password;
 
     /**
      * charset
@@ -48,7 +48,7 @@ abstract class DB
      *
      * @var PDO
      */
-    protected $pdo = null;
+    protected $pdo;
 
     /**
      * SSL attributes
@@ -103,7 +103,7 @@ abstract class DB
      *
      * @var bool|null
      */
-    private $ctes_enabled = null;
+    private $ctes_enabled;
 
     /**
      * Guard against XSS attacks by html escaping strings by default

@@ -39,7 +39,7 @@ if ($User->settings->enableRACK != '1') {
         print ' <th data-field="customer" data-sortable="true">'._('Customer').'</th>'."\n";
         $colspan++;
     }
-    if (count($custom) > 0) {
+    if (is_array($custom)) {
         foreach ($custom as $field) {
             if (! in_array($field['name'], $hidden_custom_fields)) {
                 print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -109,7 +109,7 @@ if ($User->settings->enableRACK != '1') {
                 print $customer === false ? '<td></td>' : "<td>{$customer->title} <a target='_blank' href='".create_link('tools', 'customers', unescape_input($customer->title))."'><i class='fa fa-external-link'></i></a></td>";
             }
             // custom
-            if (count($custom) > 0) {
+            if (is_array($custom)) {
                 foreach ($custom as $field) {
                     if (! in_array($field['name'], $hidden_custom_fields)) {
                         print "<td class='hidden-xs hidden-sm hidden-md'>";

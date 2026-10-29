@@ -91,7 +91,7 @@ if (empty($favourite_subnets)) {
             }
 
             // add address
-            if ($master === true || $f['isFolder'] == 1 || $Subnets->reformat_number($subnet_usage['freehosts']) == '0') {
+            if ($master || $f['isFolder'] == 1 || $Subnets->reformat_number($subnet_usage['freehosts']) == '0') {
                 $disabled = 'disabled';
             } else {
                 $disabled = '';

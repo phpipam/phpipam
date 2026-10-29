@@ -32,7 +32,7 @@ $custom_fields_names = '';
 $custom_fields_boxes = '';
 $section_ids = [];
 
-if (count($custom_fields) > 0) {
+if (is_array($custom_fields)) {
     foreach ($custom_fields as $myField) {
         // change spaces to "___" so it can be used as element id
         $myField['nameTemp'] = str_replace(' ', '___', (string) $myField['name']);

@@ -71,7 +71,7 @@ elseif ($User->check_module_permissions('nat', User::ACCESS_R, false, false) ===
     print ' <th>'._('Dst Port').'</th>';
     print ' <th>'._('Description').'</th>';
 
-    if (count(@$custom_fields) > 0) {
+    if (is_array(@$custom_fields)) {
         foreach ($custom_fields as $field) {
             if (! in_array($field['name'], $hidden_fields)) {
                 print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -175,7 +175,7 @@ elseif ($User->check_module_permissions('nat', User::ACCESS_R, false, false) ===
                 print " <td>$n->dst_port</td>";
                 print " <td><span class='text-muted'>$n->description</span></td>";
                 // custom fields
-                if (count(@$custom_fields) > 0) {
+                if (is_array(@$custom_fields)) {
                     foreach ($custom_fields as $field) {
                         // hidden
                         if (! in_array($field['name'], $hidden_fields)) {

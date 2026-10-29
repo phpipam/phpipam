@@ -220,7 +220,7 @@ if (is_array($result_addresses) && count($result_addresses) > 0) {
         $colSpan--;
     }
     // custom
-    if (count($custom_address_fields) > 0) {
+    if (is_array($custom_address_fields)) {
         foreach ($custom_address_fields as $myField) {
             $worksheet->write($lineCount, $x, $myField['name'], $format_title);
             $x++;
@@ -243,7 +243,7 @@ if (is_array($result_addresses) && count($result_addresses) > 0) {
             // get section
             $section = (array) $Sections->fetch_section(null, $subnet['sectionId']);
             // get VLAN for subnet
-            $vlan = (array) (array) $Tools->fetch_object('vlans', 'vlanId', $subnet['vlanId']);
+            $vlan = (array) $Tools->fetch_object('vlans', 'vlanId', $subnet['vlanId']);
             // format vlan
             if (count($vlan) > 0) {
                 if (! is_blank($vlan['number'])) {
@@ -322,7 +322,7 @@ if (is_array($result_addresses) && count($result_addresses) > 0) {
             }
 
             // custom
-            if (count($custom_address_fields) > 0) {
+            if (is_array($custom_address_fields)) {
                 foreach ($custom_address_fields as $myField) {
                     $worksheet->write($lineCount, $x, $ip[$myField['name']]);
                     $x++;
@@ -360,7 +360,7 @@ if (is_array($result_subnets) && count($result_subnets) > 0) {
     }
     $worksheet->write($lineCount, $rc, _('IP requests'), $format_title);
     $rc++;
-    if (count($custom_subnet_fields) > 0) {
+    if (is_array($custom_subnet_fields)) {
         foreach ($custom_subnet_fields as $field) {
             $worksheet->write($lineCount, $rc, $field['name'], $format_title);
             $rc++;
@@ -429,7 +429,7 @@ if (is_array($result_subnets) && count($result_subnets) > 0) {
         $worksheet->write($lineCount, $rc, $line['allowRequests']);
         $rc++;
         // custom
-        if (count($custom_subnet_fields) > 0) {
+        if (is_array($custom_subnet_fields)) {
             foreach ($custom_subnet_fields as $field) {
                 $worksheet->write($lineCount, $rc, $line[$field['name']]);
                 $rc++;
@@ -453,7 +453,7 @@ if (is_array($result_vlans) && count($result_vlans) > 0) {
     $worksheet->write($lineCount, 1, _('Number'), $format_title);
     $worksheet->write($lineCount, 2, _('Description'), $format_title);
     $c = 3;
-    if (count($custom_vlan_fields) > 0) {
+    if (is_array($custom_vlan_fields)) {
         foreach ($custom_vlan_fields as $field) {
             $worksheet->write($lineCount, $c, $field['name'], $format_title);
             $c++;
@@ -473,7 +473,7 @@ if (is_array($result_vlans) && count($result_vlans) > 0) {
         $worksheet->write($lineCount, 2, $line['description']);
         // custom
         $c = 3;
-        if (count($custom_vlan_fields) > 0) {
+        if (is_array($custom_vlan_fields)) {
             foreach ($custom_subnet_fields as $field) {
                 $worksheet->write($lineCount, $c, $line[$field['name']]);
                 $c++;
@@ -496,7 +496,7 @@ if (is_array($result_vrf) && count($result_vrf) > 0) {
     $worksheet->write($lineCount, 1, _('RD'), $format_title);
     $worksheet->write($lineCount, 2, _('Description'), $format_title);
     $c = 3;
-    if (count($custom_vrf_fields) > 0) {
+    if (is_array($custom_vrf_fields)) {
         foreach ($custom_vrf_fields as $field) {
             $worksheet->write($lineCount, $c, $field['name'], $format_title);
             $c++;
@@ -516,7 +516,7 @@ if (is_array($result_vrf) && count($result_vrf) > 0) {
         $worksheet->write($lineCount, 2, $line['description']);
         // custom
         $c = 3;
-        if (count($custom_vrf_fields) > 0) {
+        if (is_array($custom_vrf_fields)) {
             foreach ($custom_vrf_fields as $field) {
                 $worksheet->write($lineCount, $c, $line[$field['name']]);
                 $c++;
@@ -543,7 +543,7 @@ if (is_array($result_circuits) && count($result_circuits) > 0) {
     $worksheet->write($lineCount, 5, _('Comment'), $format_title);
 
     $c = 6;
-    if (count($custom_circuit_fields) > 0) {
+    if (is_array($custom_circuit_fields)) {
         foreach ($custom_circuit_fields as $field) {
             $worksheet->write($lineCount, $c, $field['name'], $format_title);
             $c++;
@@ -567,7 +567,7 @@ if (is_array($result_circuits) && count($result_circuits) > 0) {
 
         // custom
         $c = 6;
-        if (count($custom_circuit_fields) > 0) {
+        if (is_array($custom_circuit_fields)) {
             foreach ($custom_circuit_fields as $field) {
                 $worksheet->write($lineCount, $c, $line[$field['name']]);
                 $c++;
@@ -591,7 +591,7 @@ if (is_array($result_circuits_p) && count($result_circuits_p) > 0) {
     $worksheet->write($lineCount, 2, _('Contact'), $format_title);
 
     $c = 3;
-    if (count($custom_circuit_p_fields) > 0) {
+    if (is_array($custom_circuit_p_fields)) {
         foreach ($custom_circuit_p_fields as $field) {
             $worksheet->write($lineCount, $c, $field['name'], $format_title);
             $c++;
@@ -612,7 +612,7 @@ if (is_array($result_circuits_p) && count($result_circuits_p) > 0) {
 
         // custom
         $c = 3;
-        if (count($custom_circuit_p_fields) > 0) {
+        if (is_array($custom_circuit_p_fields)) {
             foreach ($custom_circuit_p_fields as $field) {
                 $worksheet->write($lineCount, $c, $line[$field['name']]);
                 $c++;
@@ -636,7 +636,7 @@ if (is_array($result_customers) && count($result_customers) > 0) {
     $worksheet->write($lineCount, 2, _('Contact'), $format_title);
 
     $c = 3;
-    if (count($custom_customer_fields) > 0) {
+    if (is_array($custom_customer_fields)) {
         foreach ($custom_customer_fields as $field) {
             $worksheet->write($lineCount, $c, $field['name'], $format_title);
             $c++;
@@ -661,7 +661,7 @@ if (is_array($result_customers) && count($result_customers) > 0) {
 
         // custom
         $c = 3;
-        if (count($custom_customer_fields) > 0) {
+        if (is_array($custom_customer_fields)) {
             foreach ($custom_customer_fields as $field) {
                 $worksheet->write($lineCount, $c, $line[$field['name']]);
                 $c++;
@@ -685,7 +685,7 @@ if (is_array($result_devices) && count($result_devices) > 0) {
     $worksheet->write($lineCount, 2, _('Type'), $format_title);
 
     $c = 3;
-    if (count($custom_device_fields) > 0) {
+    if (is_array($custom_device_fields)) {
         foreach ($custom_device_fields as $field) {
             $worksheet->write($lineCount, $c, $field['name'], $format_title);
             $c++;
@@ -706,7 +706,7 @@ if (is_array($result_devices) && count($result_devices) > 0) {
 
         // custom
         $c = 3;
-        if (count($custom_device_fields) > 0) {
+        if (is_array($custom_device_fields)) {
             foreach ($custom_device_fields as $field) {
                 $worksheet->write($lineCount, $c, $line[$field['name']]);
                 $c++;

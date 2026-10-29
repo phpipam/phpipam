@@ -35,7 +35,7 @@ class DHCP extends Common_functions
      *
      * @var mixed
      */
-    private $dhcp_selected_type = null;
+    private $dhcp_selected_type;
 
     /**
      * DHCP type specific settings, that will be passed to subclass

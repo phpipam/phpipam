@@ -28,7 +28,7 @@ class PowerDNS extends Common_functions
      *
      * @var array|null
      */
-    public $db_check_error = null;
+    public $db_check_error;
 
     /**
      * Active DB connection
@@ -466,7 +466,7 @@ class PowerDNS extends Common_functions
             return false;
         }
         // cache
-        if (count($res) > 0) {
+        if (is_array($res)) {
             foreach ($res as $r) {
                 $this->domains_cache[$r->id] = $r;
             }
@@ -492,7 +492,7 @@ class PowerDNS extends Common_functions
             return false;
         }
         // cache
-        if (count($res) > 0) {
+        if (is_array($res)) {
             foreach ($res as $r) {
                 $this->domains_cache[$r->id] = $r;
             }
@@ -518,7 +518,7 @@ class PowerDNS extends Common_functions
             return false;
         }
         // cache
-        if (count($res) > 0) {
+        if (is_array($res)) {
             foreach ($res as $r) {
                 $this->domains_cache[$r->id] = $r;
             }
@@ -544,7 +544,7 @@ class PowerDNS extends Common_functions
             return false;
         }
         // cache
-        if (count($res) > 0) {
+        if (is_array($res)) {
             foreach ($res as $r) {
                 $this->domains_cache[$r->id] = $r;
             }
@@ -675,7 +675,7 @@ class PowerDNS extends Common_functions
      * Fetches all records for some domain
      *
      * @param  mixed  $domain_id
-     * @return void
+     * @return array|false
      */
     public function fetch_all_domain_records($domain_id)
     {
@@ -830,7 +830,7 @@ class PowerDNS extends Common_functions
             return false;
         }
         // remove not CNAME
-        if (count($records) > 0) {
+        if (is_array($records)) {
             foreach ($records as $k => $r) {
                 if ($r->type !== 'CNAME') {
                     unset($records[$k]);
@@ -1152,7 +1152,7 @@ class PowerDNS extends Common_functions
      *
      * @param  array  $values
      * @param  bool  $checkOnly
-     * @return void
+     * @return bool
      */
     public function create_default_records($values, $checkOnly = false)
     {
@@ -1163,7 +1163,8 @@ class PowerDNS extends Common_functions
 
         // content
         $soa = [];
-        $soa[] = array_shift(explode(';', (string) $values['ns']));
+        $ns_exploded = explode(';', (string) $values['ns']);
+        $soa[] = array_shift($ns_exploded);
         $soa[] = str_replace('@', '.', (string) $values['hostmaster']);
         $soa[] = date('Ymd').'00';
         $soa[] = $this->validate_refresh($values['refresh']);
@@ -1176,7 +1177,7 @@ class PowerDNS extends Common_functions
 
         // formulate NS records
         $ns = explode(';', (string) $values['ns']);
-        if (count($ns) > 0) {
+        if (is_array($ns)) {
             foreach ($ns as $s) {
                 // validate
                 if ($this->validate_hostname($s) === false) {
@@ -1198,6 +1199,8 @@ class PowerDNS extends Common_functions
         }
         // all good, print it !
         $this->Result->show('success', _('Default records created'), false);
+
+        return true;
     }
 
     /**

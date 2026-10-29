@@ -43,7 +43,7 @@ foreach ($circuit_types as $t) {
     <th><?php print _('Status'); ?></th>
     <th><?php print _('Comment'); ?></th>
     <?php
-    if (count($custom_circuit_fields) > 0) {
+    if (is_array($custom_circuit_fields)) {
         foreach ($custom_circuit_fields as $field) {
             if (! in_array($field['name'], $hidden_circuit_fields)) {
                 print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -68,7 +68,7 @@ if (count($result_circuits) > 0) {
         print " <td><dd>$circuit->status</dd></td>";
         print " <td><dd>$circuit->comment</dd></td>";
         // custom fields
-        if (count($custom_circuit_fields) > 0) {
+        if (is_array($custom_circuit_fields)) {
             foreach ($custom_circuit_fields as $field) {
                 if (! in_array($field['name'], $hidden_circuit_fields)) {
                     $circuit->{$field['name']} = $Tools->create_links($circuit->{$field['name']}, $field['type']);
@@ -114,7 +114,7 @@ if (count($result_circuits) == 0) {
     <th><?php print _('Description'); ?></th>
     <th><?php print _('Contact'); ?></th>
     <?php
-    if (count($custom_circuit_p_fields) > 0) {
+    if (is_array($custom_circuit_p_fields)) {
         foreach ($custom_circuit_p_fields as $field) {
             if (! in_array($field['name'], $hidden_circuit_p_fields)) {
                 print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -135,7 +135,7 @@ if (count($result_circuits_p) > 0) {
         print " <td><dd>$provider->description</dd></td>";
         print " <td><dd>$provider->contact</dd></td>";
         // custom fields
-        if (count($custom_circuit_p_fields) > 0) {
+        if (is_array($custom_circuit_p_fields)) {
             foreach ($custom_circuit_p_fields as $field) {
                 if (! in_array($field['name'], $hidden_circuit_p_fields)) {
                     $provider->{$field['name']} = $Tools->create_links($provider->{$field['name']}, $field['type']);

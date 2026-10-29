@@ -8,7 +8,7 @@ class Tools extends Common_functions
     /**
      * @var Subnets
      */
-    private $Subnets = null;
+    private $Subnets;
 
     /**
      * CSV delimiter
@@ -70,7 +70,7 @@ class Tools extends Common_functions
         $custom_fields = $this->fetch_custom_fields('vlans');
         // if set add to query
         $custom_fields_query = '';
-        if (count($custom_fields) > 0) {
+        if (is_array($custom_fields)) {
             foreach ($custom_fields as $myField) {
                 $custom_fields_query .= ',`vlans`.`'.$myField['name'].'`';
             }
@@ -128,7 +128,7 @@ class Tools extends Common_functions
         $query[] = 'or `hostname` like :search_term ';          // hostname
         $query[] = 'or `owner` like :search_term ';             // owner
         // custom fields
-        if (count($custom_fields) > 0) {
+        if (is_array($custom_fields)) {
             foreach ($custom_fields as $myField) {
                 $myField['name'] = $this->Database->escape($myField['name']);
                 $query[] = "or `$myField[name]` like :search_term ";
@@ -212,7 +212,7 @@ class Tools extends Common_functions
         // search low/high
         $query[] = ' or (LPAD(`subnet`,39,0) >= LPAD(:low,39,0) and LPAD(`subnet`,39,0) <= LPAD(:high,39,0))';
         // custom
-        if (count($custom_fields) > 0) {
+        if (is_array($custom_fields)) {
             foreach ($custom_fields as $myField) {
                 $myField['name'] = $this->Database->escape($myField['name']);
                 $query[] = " or `$myField[name]` like :search_term ";
@@ -279,7 +279,7 @@ class Tools extends Common_functions
         // query
         $query[] = 'select * from `vlans` where `name` like :search_term or `description` like :search_term or `number` like :search_term ';
         // custom
-        if (count($custom_fields) > 0) {
+        if (is_array($custom_fields)) {
             foreach ($custom_fields as $myField) {
                 $myField['name'] = $this->Database->escape($myField['name']);
                 $query[] = " or `$myField[name]` like :search_term ";
@@ -314,7 +314,7 @@ class Tools extends Common_functions
         // query
         $query[] = 'select * from `vrf` where `name` like :search_term or `description` like :search_term or `rd` like :search_term ';
         // custom
-        if (count($custom_fields) > 0) {
+        if (is_array($custom_fields)) {
             foreach ($custom_fields as $myField) {
                 $myField['name'] = $this->Database->escape($myField['name']);
                 $query[] = " or `$myField[name]` like :search_term ";
@@ -349,7 +349,7 @@ class Tools extends Common_functions
         // query
         $query[] = 'select *,concat(prefix,start) as raw from `pstnPrefixes` where `prefix` like :search_term or `name` like :search_term or `description` like :search_term ';
         // custom
-        if (count($custom_prefix_fields) > 0) {
+        if (is_array($custom_prefix_fields)) {
             foreach ($custom_prefix_fields as $myField) {
                 $myField['name'] = $this->Database->escape($myField['name']);
                 $query[] = " or `$myField[name]` like :search_term ";
@@ -384,7 +384,7 @@ class Tools extends Common_functions
         // query
         $query[] = 'select * from `pstnNumbers` where `number` like :search_term or `name` like :search_term or `description` like :search_term or `owner` like :search_term ';
         // custom
-        if (count($custom_prefix_fields) > 0) {
+        if (is_array($custom_prefix_fields)) {
             foreach ($custom_prefix_fields as $myField) {
                 $myField['name'] = $this->Database->escape($myField['name']);
                 $query[] = " or `$myField[name]` like :search_term ";
@@ -422,7 +422,7 @@ class Tools extends Common_functions
         $query[] = 'where c.provider = p.id';
         $query[] = 'and (`cid` like :search_term or `type` like :search_term or `capacity` like :search_term or `comment` like :search_term or `name` like :search_term';
         // custom
-        if (count($custom_circuit_fields) > 0) {
+        if (is_array($custom_circuit_fields)) {
             foreach ($custom_circuit_fields as $myField) {
                 $myField['name'] = $this->Database->escape($myField['name']);
                 $query[] = " or `$myField[name]` like :search_term ";
@@ -458,7 +458,7 @@ class Tools extends Common_functions
         // query
         $query[] = 'select * from `circuitProviders` where `name` like :search_term or `description` like :search_term or `contact` like :search_term ';
         // custom
-        if (count($custom_circuit_fields) > 0) {
+        if (is_array($custom_circuit_fields)) {
             foreach ($custom_circuit_fields as $myField) {
                 $myField['name'] = $this->Database->escape($myField['name']);
                 $query[] = " or `$myField[name]` like :search_term ";
@@ -493,7 +493,7 @@ class Tools extends Common_functions
         // query
         $query[] = 'select * from `customers` where `title` like :search_term or `address` like :search_term or `postcode` like :search_term or `city` like :search_term or `state` like :search_term ';
         // custom
-        if (count($custom_fields) > 0) {
+        if (is_array($custom_fields)) {
             foreach ($custom_fields as $myField) {
                 $myField['name'] = $this->Database->escape($myField['name']);
                 $query[] = " or `$myField[name]` like :search_term ";
@@ -528,7 +528,7 @@ class Tools extends Common_functions
         // query
         $query[] = 'select * from `devices` where `hostname` like :search_term or `description` like :search_term ';
         // custom
-        if (count($custom_fields) > 0) {
+        if (is_array($custom_fields)) {
             foreach ($custom_fields as $myField) {
                 $myField['name'] = $this->Database->escape($myField['name']);
                 $query[] = " or `{$myField['name']}` like :search_term ";
@@ -708,19 +708,18 @@ class Tools extends Common_functions
      */
     public function fetch_custom_fields_numeric($table)
     {
+        $out = [];
+
         // fetch all custom fields
         $custom_fields = $this->fetch_custom_fields($table);
         // make numberic array
-        if (count($custom_fields) > 0) {
+        if (is_array($custom_fields)) {
             foreach ($custom_fields as $f) {
                 $out[] = $f;
             }
-
-            // result
-            return isset($out) ? $out : [];
-        } else {
-            return [];
         }
+
+        return $out;
     }
 
     /**
@@ -2080,72 +2079,71 @@ class Tools extends Common_functions
         $statuses = explode(';', (string) $this->settings->pingStatus);
         // check
         if (is_array($objects)) {
-            if (count($objects) > 0) {
-                foreach ($objects as $ot => $ids) {
-                    if (count($ids) > 0) {
-                        foreach ($ids as $id) {
-                            // Check table names - MySQL on Windows is case-insensitive
-                            if (! in_array(strtolower((string) $ot), ['subnets', 'ipaddresses'])) {
-                                continue;
-                            }
-                            // fetch
-                            $item = $this->fetch_object($ot, 'id', $id);
-                            if ($item !== false) {
-                                // bold
-                                $bold = $item->id == $object_id && $ot == $object_type ? "<span class='strong'>" : '<span>';
-                                // remove
-                                $remove = $admin && $nat_id ? "<span class='remove-nat-item-wrapper_".$ot.'_'.$item->id."'><a class='btn btn-xs btn-danger removeNatItem' data-id='$nat_id' data-type='$ot' data-item-id='$item->id' rel='tooltip' title='"._('Remove')."'><i class='fa fa-times'></i></a>" : '<span>';
-                                // subnets
-                                if ($ot == 'subnets') {
-                                    $out[] = "$remove $bold<a href='".create_link('subnets', $item->sectionId, $item->id)."'>".$this->transform_address($item->subnet, 'dotted').'/'.$item->mask.'</a></span></span>';
-                                }
-                                // addresses
-                                else {
-                                    // subnet
-                                    $snet = $this->fetch_object('subnets', 'id', $item->subnetId);
-                                    // append status
-                                    if ($snet->pingSubnet == '1') {
-                                        // calculate
-                                        if (! is_null($item->lastSeen)) {
-                                            $tDiff = time() - strtotime($item->lastSeen);
-                                        }
-                                        if ($item->excludePing == '1') {
-                                            $hStatus = 'padded';
-                                            $hTooltip = '';
-                                        } elseif (is_null($item->lastSeen)) {
-                                            $hStatus = 'neutral';
-                                            $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address was never online')."'";
-                                        } elseif ($item->lastSeen == '0000-00-00 00:00:00') {
-                                            $hStatus = 'neutral';
-                                            $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address is offline').'<hr>'._('Last seen').': '._('Never')."'";
-                                        } elseif ($item->lastSeen == '1970-01-01 00:00:01') {
-                                            $hStatus = 'neutral';
-                                            $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address is offline').'<hr>'._('Last seen').': '._('Never')."'";
-                                        } elseif ($tDiff < $statuses[0]) {
-                                            $hStatus = 'success';
-                                            $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address is alive').'<hr>'._('Last seen').': '.$item->lastSeen."'";
-                                        } elseif ($tDiff < $statuses[1]) {
-                                            $hStatus = 'warning';
-                                            $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address warning').'<hr>'._('Last seen').': '.$item->lastSeen."'";
-                                        } elseif ($tDiff > $statuses[1]) {
-                                            $hStatus = 'error';
-                                            $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address is offline').'<hr>'._('Last seen').': '.$item->lastSeen."'";
-                                        } else {
-                                            $hStatus = 'neutral';
-                                            $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address status unknown')."'";
-                                        }
-                                    } else {
-                                        $hStatus = 'hidden';
-                                        $hTooltip = '';
-                                    }
-                                    if ($remove == '<span>') {
-                                        $remove .= "<span class='status status-$hStatus' $hTooltip></span>";
-                                    }
+            foreach ($objects as $ot => $ids) {
+                if (! is_array($ids)) {
+                    continue;
+                }
 
-                                    $out[] = "$remove $bold <a href='".create_link('subnets', $snet->sectionId, $item->subnetId, 'address-details', $item->id)."'>".$this->transform_address($item->ip_addr, 'dotted').'</a></span>';
+                foreach ($ids as $id) {
+                    // Check table names - MySQL on Windows is case-insensitive
+                    if (! in_array(strtolower((string) $ot), ['subnets', 'ipaddresses'])) {
+                        continue;
+                    }
+                    $item = $this->fetch_object($ot, 'id', $id);
+                    if (! is_object($item)) {
+                        continue;
+                    }
+
+                    // bold
+                    $bold = $item->id == $object_id && $ot == $object_type ? "<span class='strong'>" : '<span>';
+                    // remove
+                    $remove = $admin && $nat_id ? "<span class='remove-nat-item-wrapper_".$ot.'_'.$item->id."'><a class='btn btn-xs btn-danger removeNatItem' data-id='$nat_id' data-type='$ot' data-item-id='$item->id' rel='tooltip' title='"._('Remove')."'><i class='fa fa-times'></i></a>" : '<span>';
+                    // subnets
+                    if ($ot == 'subnets') {
+                        $out[] = "$remove $bold<a href='".create_link('subnets', $item->sectionId, $item->id)."'>".$this->transform_address($item->subnet, 'dotted').'/'.$item->mask.'</a></span></span>';
+                    } else {
+                        // addresses
+                        $snet = $this->fetch_object('subnets', 'id', $item->subnetId);
+                        // append status
+                        if (is_object($snet) && $snet->pingSubnet == '1') {
+                            if (is_null($item->lastSeen)) {
+                                $hStatus = 'neutral';
+                                $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address was never online')."'";
+                            } else {
+                                $tDiff = time() - strtotime($item->lastSeen);
+
+                                if ($item->excludePing == '1') {
+                                    $hStatus = 'padded';
+                                    $hTooltip = '';
+                                } elseif ($item->lastSeen == '0000-00-00 00:00:00') {
+                                    $hStatus = 'neutral';
+                                    $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address is offline').'<hr>'._('Last seen').': '._('Never')."'";
+                                } elseif ($item->lastSeen == '1970-01-01 00:00:01') {
+                                    $hStatus = 'neutral';
+                                    $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address is offline').'<hr>'._('Last seen').': '._('Never')."'";
+                                } elseif ($tDiff < $statuses[0]) {
+                                    $hStatus = 'success';
+                                    $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address is alive').'<hr>'._('Last seen').': '.$item->lastSeen."'";
+                                } elseif ($tDiff < $statuses[1]) {
+                                    $hStatus = 'warning';
+                                    $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address warning').'<hr>'._('Last seen').': '.$item->lastSeen."'";
+                                } elseif ($tDiff > $statuses[1]) {
+                                    $hStatus = 'error';
+                                    $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address is offline').'<hr>'._('Last seen').': '.$item->lastSeen."'";
+                                } else {
+                                    $hStatus = 'neutral';
+                                    $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._('Address status unknown')."'";
                                 }
                             }
+                        } else {
+                            $hStatus = 'hidden';
+                            $hTooltip = '';
                         }
+                        if ($remove == '<span>') {
+                            $remove .= "<span class='status status-$hStatus' $hTooltip></span>";
+                        }
+
+                        $out[] = "$remove $bold <a href='".create_link('subnets', $snet->sectionId, $item->subnetId, 'address-details', $item->id)."'>".$this->transform_address($item->ip_addr, 'dotted').'</a></span>';
                     }
                 }
             }
@@ -2177,35 +2175,33 @@ class Tools extends Common_functions
         ];
         // loop
         if (is_array($all_nats)) {
-            if (count($all_nats) > 0) {
-                foreach ($all_nats as $n) {
-                    $src = db_json_decode($n->src, true);
-                    $dst = db_json_decode($n->dst, true);
+            foreach ($all_nats as $n) {
+                $src = db_json_decode($n->src, true);
+                $dst = db_json_decode($n->dst, true);
 
-                    // src
-                    if (is_array($src)) {
-                        if (isset($src['subnets']) && is_array($src['subnets'])) {
-                            foreach ($src['subnets'] as $s) {
-                                $out['subnets'][$s][] = $n->id;
-                            }
-                        }
-                        if (isset($src['ipaddresses']) && is_array($src['ipaddresses'])) {
-                            foreach ($src['ipaddresses'] as $s) {
-                                $out['ipaddresses'][$s][] = $n->id;
-                            }
+                // src
+                if (is_array($src)) {
+                    if (isset($src['subnets']) && is_array($src['subnets'])) {
+                        foreach ($src['subnets'] as $s) {
+                            $out['subnets'][$s][] = $n->id;
                         }
                     }
-                    // dst
-                    if (is_array($dst)) {
-                        if (isset($dst['subnets']) && is_array($dst['subnets'])) {
-                            foreach ($dst['subnets'] as $s) {
-                                $out['subnets'][$s][] = $n->id;
-                            }
+                    if (isset($src['ipaddresses']) && is_array($src['ipaddresses'])) {
+                        foreach ($src['ipaddresses'] as $s) {
+                            $out['ipaddresses'][$s][] = $n->id;
                         }
-                        if (isset($dst['ipaddresses']) && is_array($dst['ipaddresses'])) {
-                            foreach ($dst['ipaddresses'] as $s) {
-                                $out['ipaddresses'][$s][] = $n->id;
-                            }
+                    }
+                }
+                // dst
+                if (is_array($dst)) {
+                    if (isset($dst['subnets']) && is_array($dst['subnets'])) {
+                        foreach ($dst['subnets'] as $s) {
+                            $out['subnets'][$s][] = $n->id;
+                        }
+                    }
+                    if (isset($dst['ipaddresses']) && is_array($dst['ipaddresses'])) {
+                        foreach ($dst['ipaddresses'] as $s) {
+                            $out['ipaddresses'][$s][] = $n->id;
                         }
                     }
                 }
@@ -2484,9 +2480,9 @@ class Tools extends Common_functions
      * Prints structured menu of prefixes
      *
      * @param  mixed  $user
-     * @param  mixed  $prefixes
-     * @param  mixed  $custom_fields
-     * @return mixed
+     * @param  array  $prefixes
+     * @param  array  $custom_fields
+     * @return array|false
      */
     public function print_menu_prefixes($user, $prefixes, $custom_fields)
     {
@@ -2504,22 +2500,22 @@ class Tools extends Common_functions
         // root is 0
         $rootId = 0;
 
-        // remove all not permitted!
-        if (count($prefixes) > 0) {
-            foreach ($prefixes as $k => $s) {
-                if ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
-                    unset($prefixes[$k]);
-                }
-            }
-
-            // create loop array
-            $children_prefixes = [];
-            foreach ($prefixes as $item) {
-                $item = (array) $item;
-                $children_prefixes[(int) $item['master']][] = $item;
-            }
-        } else {
+        if (! is_array($prefixes) || $prefixes == []) {
             return false;
+        }
+
+        // remove all not permitted!
+        foreach ($prefixes as $k => $s) {
+            if ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
+                unset($prefixes[$k]);
+            }
+        }
+
+        // create loop array
+        $children_prefixes = [];
+        foreach ($prefixes as $item) {
+            $item = (array) $item;
+            $children_prefixes[(int) $item['master']][] = $item;
         }
 
         // loop will be false if the root has no children (i.e., an empty menu!)
@@ -2610,7 +2606,7 @@ class Tools extends Common_functions
                 }
 
                 // custom
-                if (count($custom_fields) > 0) {
+                if (is_array($custom_fields)) {
                     foreach ($custom_fields as $field) {
                         // hidden?
                         if (! in_array($field['name'], $hidden_fields)) {
@@ -2995,10 +2991,8 @@ class Tools extends Common_functions
         $query[] = 'c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,c.comment,c.customer_id,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status';
         // custom fields
         if (is_array($custom_circuit_fields)) {
-            if (count($custom_circuit_fields) > 0) {
-                foreach ($custom_circuit_fields as $f) {
-                    $query[] = ',c.`'.$f['name'].'`';
-                }
+            foreach ($custom_circuit_fields as $f) {
+                $query[] = ',c.`'.$f['name'].'`';
             }
         }
         $query[] = 'from circuits as c, circuitProviders as p where c.provider = p.id';
@@ -3080,10 +3074,8 @@ class Tools extends Common_functions
         $query[] = 'c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status';
         // custom fields
         if (is_array($custom_circuit_fields)) {
-            if (count($custom_circuit_fields) > 0) {
-                foreach ($custom_circuit_fields as $f) {
-                    $query[] = ',c.`'.$f['name'].'`';
-                }
+            foreach ($custom_circuit_fields as $f) {
+                $query[] = ',c.`'.$f['name'].'`';
             }
         }
         $query[] = 'from circuits as c, circuitProviders as p where c.provider = p.id and c.provider = ?';
@@ -3430,6 +3422,8 @@ class Tools extends Common_functions
      */
     private function parse_import_file_csv()
     {
+        $outFile = [];
+
         // get file to string
         $handle = fopen(__DIR__.'/../../public/app/subnets/import-subnet/upload/import.csv', 'r');
         if ($handle) {
@@ -3497,9 +3491,9 @@ class Tools extends Common_functions
      *
      *      append class to array
      *
-     * @param  mixed  $outFile
+     * @param  array  $outFile
      * @param  object  $subnet
-     * @return void
+     * @return array
      */
     private function parse_validate_file($outFile, $subnet)
     {
@@ -3507,7 +3501,7 @@ class Tools extends Common_functions
         $errors = 0;
 
         // present ?
-        if (count($outFile) > 0) {
+        if (is_array($outFile)) {
             foreach ($outFile as $line) {
                 // convert encoding if necessary
                 $line = $this->convert_encoding_to_UTF8($line);
@@ -3527,7 +3521,7 @@ class Tools extends Common_functions
                 if ($subnet->isFolder != '1') {
                     // check if IP is IPv4 or IPv6
                     $ipsm = '32';
-                    if (! filter_var($field[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
+                    if (filter_var($field[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
                         $ipsm = '128';
                     }
                     if ($this->Subnets->is_subnet_inside_subnet($field[0].'/'.$ipsm, $this->transform_address($subnet->subnet, 'dotted').'/'.$subnet->mask) == false) {

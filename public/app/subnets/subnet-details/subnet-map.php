@@ -41,7 +41,7 @@ for ($searchmask = $subnetmask + 1; $searchmask < $maxmask; $searchmask++) {
                 // broadcast to int
                 $maxint = isset($boundaries['broadcast']) ? $Subnets->transform_address($boundaries['broadcast'], 'decimal') : 0;
 
-                if (count($subnet_addresses) > 0) {
+                if (is_array($subnet_addresses)) {
                     foreach ($subnet_addresses as $a) {
                         if ($a->ip_addr >= $Subnets->transform_address($parsed[0], 'decimal') && $a->ip_addr <= $maxint) {
                             unset($found[$k]);

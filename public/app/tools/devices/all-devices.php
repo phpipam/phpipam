@@ -94,7 +94,7 @@ if ($User->settings->enableLocations == '1' && $User->get_module_permissions('lo
 print "	<th style='color:#428bca'>"._('Number of hosts').'</th>';
 print "	<th class='hidden-sm'>"._('Type').'</th>';
 
-if (count(@$custom_fields) > 0) {
+if (is_array(@$custom_fields)) {
     foreach ($custom_fields as $field) {
         if (! in_array($field['name'], $hidden_fields)) {
             print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -164,7 +164,7 @@ else {
         print '	<td class="hidden-sm">'.(isset($device_types_indexed[$device['type']]) ? $device_types_indexed[$device['type']] : '').'</td>'."\n";
 
         // custom fields - no subnets
-        if (count(@$custom_fields) > 0) {
+        if (is_array(@$custom_fields)) {
             foreach ($custom_fields as $field) {
                 // hidden
                 if (! in_array($field['name'], $hidden_fields)) {

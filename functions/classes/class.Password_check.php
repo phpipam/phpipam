@@ -248,7 +248,7 @@ class Password_check extends Common_functions
     private function validate_symbols()
     {
         $special_chars = $this->get_special_chars();
-        if (count($special_chars) > 0) {
+        if (is_array($special_chars)) {
             foreach ($special_chars as $c) {
                 if (! in_array($c, $this->allowedSymbols)) {
                     $this->save_error(_('Invalid character')." $c.");
@@ -280,6 +280,6 @@ class Password_check extends Common_functions
      */
     private function get_special_chars()
     {
-        return preg_split('//u', (string) preg_replace('/[a-zA-Z,0-9]/u', '', $this->password), -1, PREG_SPLIT_NO_EMPTY);
+        return preg_split('//u', (string) preg_replace('/[a-zA-Z,0-9]/u', '', (string) $this->password), -1, PREG_SPLIT_NO_EMPTY);
     }
 }

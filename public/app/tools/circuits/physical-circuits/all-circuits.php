@@ -54,7 +54,7 @@ print "	<th><span class='hidden-sm hidden-xs'>"._('Point A').'</span></th>';
 print "	<th><span class='hidden-sm hidden-xs'>"._('Point B').'</span></th>';
 print "	<th><span class='hidden-sm hidden-xs'>"._('Comment').'</span></th>';
 $colspanCustom = 0;
-if (count(@$custom_fields) > 0) {
+if (is_array(@$custom_fields)) {
     foreach ($custom_fields as $field) {
         if (! in_array($field['name'], $hidden_circuit_fields)) {
             print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by').' '.$Tools->print_custom_field_name($field['name'])."'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -108,7 +108,7 @@ else {
         print "	<td class='hidden-xs hidden-sm'>$locationB_html</td>";
         print " <td class='hidden-xs hidden-sm'>$circuit->comment</td>";
         // custom
-        if (count(@$custom_fields) > 0) {
+        if (is_array(@$custom_fields)) {
             foreach ($custom_fields as $field) {
                 if (! in_array($field['name'], $hidden_circuit_fields)) {
                     // create html links

@@ -195,14 +195,13 @@ if (! $Admin->object_modify('users', $POST->action, 'id', $values)) {
 }
 
 // remove passkeys if required
-if (count($passkeys_to_remove) > 0) {
-    // lalala
+if (is_array($passkeys_to_remove)) {
     foreach ($passkeys_to_remove as $pk) {
         $User->delete_passkey($pk);
     }
 }
 
 // mail user
-if ($Admin->verify_checkbox($POST->notifyUser) != '0') {
+if ($Admin->verify_checkbox($POST->notifyUser) != 0) {
     include 'edit-notify.php';
 }

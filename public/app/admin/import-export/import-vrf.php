@@ -43,7 +43,7 @@ foreach ($data as &$cdata) {
             'description' => $cdata['description'],
         ];
         // add custom fields
-        if (count($custom_fields) > 0) {
+        if (is_array($custom_fields)) {
             foreach ($custom_fields as $myField) {
                 if (isset($cdata[$myField['name']])) {
                     $values[$myField['name']] = $cdata[$myField['name']];

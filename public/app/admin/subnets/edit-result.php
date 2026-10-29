@@ -373,7 +373,7 @@ else {
             $Subnets->reset_subnet_slaves_recursive();
             $Subnets->fetch_subnet_slaves_recursive($POST->subnetId);
             $Subnets->remove_subnet_slaves_master($POST->subnetId);
-            if (count($Subnets->slaves) > 0) {
+            if (is_array($Subnets->slaves)) {
                 foreach ($Subnets->slaves as $slaveId) {
                     $Admin->object_modify('subnets', 'edit', 'id', ['id' => $slaveId, 'sectionId' => $POST->sectionIdNew]);
                 }

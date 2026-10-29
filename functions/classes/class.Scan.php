@@ -19,7 +19,7 @@ class Scan extends Common_functions
      *
      * @var mixed
      */
-    public $php_exec = null;
+    public $php_exec;
 
     /**
      * default icmp type

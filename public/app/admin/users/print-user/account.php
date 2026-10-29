@@ -42,7 +42,7 @@
 
 <?php
 // custom subnet fields
-if (count($custom_fields) > 0) {
+if (is_array($custom_fields) && $custom_fields != []) {
     foreach ($custom_fields as $key => $field) {
         $user->{$key} = str_replace("\n", '<br>', (string) $user->{$key});
         print '<tr>';

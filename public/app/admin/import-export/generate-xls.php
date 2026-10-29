@@ -141,7 +141,7 @@ foreach ($sections as $section) {
             $worksheet->write($lineCount, 8, _('note'), $format_title);
             $m = 9;
             // custom
-            if (count($myFields) > 0) {
+            if (is_array($myFields)) {
                 foreach ($myFields as $myField) {
                     $worksheet->write($lineCount, $m, $myField['name'], $format_title);
                     $m++;
@@ -176,7 +176,7 @@ foreach ($sections as $section) {
                     $worksheet->write($lineCount, 8, $ip['note']);
                     // custom
                     $m = 9;
-                    if (count($myFields) > 0) {
+                    if (is_array($myFields)) {
                         foreach ($myFields as $myField) {
                             $worksheet->write($lineCount, $m, $ip[$myField['name']]);
                             $m++;

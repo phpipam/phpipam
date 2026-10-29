@@ -40,7 +40,7 @@ elseif ($User->settings->enableLocations != '1') {
     print ' <th>'._('Description').'</th>';
     print ' <th>'._('Address').'</th>';
     print ' <th>'._('Coordinates').'</th>';
-    if (count($custom) > 0) {
+    if (is_array($custom)) {
         foreach ($custom as $field) {
             if (! in_array($field['name'], $hidden_custom_fields)) {
                 print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -84,7 +84,7 @@ elseif ($User->settings->enableLocations != '1') {
                 print '<td>'.$Result->show('warning', _('Location not set'), false, false, true).'</td>';
             }
             // custom
-            if (count($custom) > 0) {
+            if (is_array($custom)) {
                 foreach ($custom as $field) {
                     if (! in_array($field['name'], $hidden_custom_fields)) {
                         print "<td class='hidden-xs hidden-sm hidden-md'>";

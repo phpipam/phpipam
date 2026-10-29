@@ -35,7 +35,7 @@
     } else {
         $groups = db_json_decode($user->groups, true);
         $gr = $Admin->groups_parse($groups);
-        if (count($gr) > 0) {
+        if (is_array($gr) && $gr != []) {
             foreach ($gr as $group) {
                 print $group['g_name'].'<br>';
             }

@@ -36,7 +36,7 @@ foreach ($POST as $k => $p) {
 }
 
 // remove each user from group
-if (count($users) > 0) {
+if (is_array($users) && $users != []) {
     foreach ($users as $u) {
         if (! $Admin->remove_group_from_user($POST->gid, $u)) {
             // get user details

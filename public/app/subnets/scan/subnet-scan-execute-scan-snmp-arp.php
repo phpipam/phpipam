@@ -35,7 +35,7 @@ $subnet_ip_addresses = [];
 // fetch all existing hosts
 $all_subnet_hosts = (array) $Addresses->fetch_subnet_addresses($POST->subnetId);
 // reindex
-if (count($all_subnet_hosts) > 0) {
+if (is_array($all_subnet_hosts)) {
     foreach ($all_subnet_hosts as $h) {
         $subnet_ip_addresses[] = $Subnets->transform_address($h->ip_addr, 'dotted');
     }

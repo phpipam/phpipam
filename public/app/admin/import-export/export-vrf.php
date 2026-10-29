@@ -85,7 +85,7 @@ if ($GET->description == 'on') {
 }
 
 // custom fields
-if (count($custom_fields) > 0) {
+if (is_array($custom_fields)) {
     foreach ($custom_fields as $myField) {
         // set temp name - replace space with three ___
         $myField['nameTemp'] = str_replace(' ', '___', (string) $myField['name']);
@@ -120,7 +120,7 @@ foreach ($all_vrfs as $vrf) {
     }
 
     // custom fields, per VLAN
-    if (count($custom_fields) > 0) {
+    if (is_array($custom_fields)) {
         foreach ($custom_fields as $myField) {
             // set temp name - replace space with three ___
             $myField['nameTemp'] = str_replace(' ', '___', (string) $myField['name']);

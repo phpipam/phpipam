@@ -14,7 +14,7 @@ $User->check_user_session(false);
 
 // user widgets form database
 $uwidgets = explode(';', (string) $User->user->widgets); // selected
-$uwidgets = array_filter((array) $uwidgets);
+$uwidgets = array_filter($uwidgets);
 
 // fetch all widgets
 $widgets = $Tools->fetch_widgets($User->is_admin(false), false);

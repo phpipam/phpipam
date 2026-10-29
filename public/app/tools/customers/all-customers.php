@@ -45,7 +45,7 @@ print '<tr>';
 print '	<th>'._('Title').'</th>';
 print '	<th>'._('Address').'</th>';
 print '	<th>'._('Contact').'</th>';
-if (count(@$custom_fields) > 0) {
+if (is_array(@$custom_fields)) {
     foreach ($custom_fields as $field) {
         if (! in_array($field['name'], $hidden_fields)) {
             print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -78,7 +78,7 @@ else {
             print " <td><span class='muted'>/</span></td>";
         }
         // custom
-        if (count(@$custom_fields) > 0) {
+        if (is_array(@$custom_fields)) {
             foreach ($custom_fields as $field) {
                 if (! in_array($field['name'], $hidden_fields)) {
                     print "<td class='hidden-sm hidden-xs hidden-md'>";

@@ -125,7 +125,7 @@ foreach ($outFile as $line) {
         // custom fields
         // Incorrect Value for $currIndex = 10;
         $currIndex = 10;
-        if (count($custom_address_fields) > 0) {
+        if (is_array($custom_address_fields)) {
             foreach ($custom_address_fields as $field) {
                 $currIndex++;
                 $address_insert[$field['name']] = $line[$currIndex];

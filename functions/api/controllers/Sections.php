@@ -295,19 +295,17 @@ class Sections_controller extends Common_api_functions
         $clogs_formatted = [];
         // loop
         if (is_array($clogs)) {
-            if (count($clogs) > 0) {
-                foreach ($clogs as $l) {
-                    // diff to array
-                    $l->cdiff = explode("\r\n", str_replace(['[', ']'], '', trim((string) $l->cdiff)));
-                    // save
-                    $clogs_formatted[] = [
-                        'user' => $l->real_name,
-                        'action' => $l->caction,
-                        'result' => $l->cresult,
-                        'date' => $l->cdate,
-                        'diff' => $l->cdiff,
-                    ];
-                }
+            foreach ($clogs as $l) {
+                // diff to array
+                $l->cdiff = explode("\r\n", str_replace(['[', ']'], '', trim((string) $l->cdiff)));
+                // save
+                $clogs_formatted[] = [
+                    'user' => $l->real_name,
+                    'action' => $l->caction,
+                    'result' => $l->cresult,
+                    'date' => $l->cdate,
+                    'diff' => $l->cdiff,
+                ];
             }
         }
         // result

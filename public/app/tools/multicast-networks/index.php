@@ -73,7 +73,7 @@ if ($subnets !== false) {
     }
 
     // custom fields
-    if (count($custom_fields) > 0) {
+    if (is_array($custom_fields)) {
         foreach ($custom_fields as $myField) {
             print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($myField['name']).'</th>';
         }
@@ -246,7 +246,7 @@ if ($subnets !== false) {
                     }
 
                     // print custom fields
-                    if (count($custom_fields) > 0) {
+                    if (is_array($custom_fields)) {
                         foreach ($custom_fields as $myField) {
                             if (! in_array($myField['name'], $hidden_cfields)) {
                                 print "<td class='customField hidden-xs hidden-sm hidden-md'>";

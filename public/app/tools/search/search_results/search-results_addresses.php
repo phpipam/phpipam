@@ -64,7 +64,7 @@ if ((in_array('owner', $selected_ip_fields)) && (in_array('note', $selected_ip_f
 }
 
 // custom fields
-if (count($custom_address_fields) > 0) {
+if (is_array($custom_address_fields)) {
     foreach ($custom_address_fields as $field) {
         if (! in_array($field['name'], $hidden_address_fields)) {
             print "<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -181,7 +181,7 @@ if (is_array($result_addresses)) {
                 print '</td>'."\n";
             }
             // custom fields
-            if (count($custom_address_fields) > 0) {
+            if (is_array($custom_address_fields)) {
                 foreach ($custom_address_fields as $field) {
                     if (! in_array($field['name'], $hidden_address_fields)) {
                         $line[$field['name']] = $Tools->create_links($line[$field['name']], $field['type']);

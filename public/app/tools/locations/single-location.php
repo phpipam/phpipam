@@ -162,7 +162,7 @@ if (! is_numeric($GET->subnetId)) {
                     print '	<th>'._(ucwords((string) $t)).'</th>';
                     print "<td style='line-height:20px;'>";
                     // print objects
-                    if (count($ob) > 0) {
+                    if (is_array($ob) && $ob != []) {
                         foreach ($ob as $o) {
                             // fetch subnet
                             if ($o->type == 'addresses') {

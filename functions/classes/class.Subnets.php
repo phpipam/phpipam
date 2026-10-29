@@ -26,7 +26,7 @@ class Subnets extends Common_functions
      *
      * @var mixed
      */
-    public $lastInsertId = null;
+    public $lastInsertId;
 
     /**
      * array of /8 ripe subnets
@@ -314,7 +314,7 @@ class Subnets extends Common_functions
         $this->reset_subnet_slaves_recursive();
         $this->fetch_subnet_slaves_recursive($id);
         $this->remove_subnet_slaves_master($id);
-        if (count($this->slaves) > 0) {
+        if (is_array($this->slaves)) {
             foreach ($this->slaves as $slaveId) {
                 $this->subnet_truncate($id);
                 $this->subnet_delete($slaveId);
@@ -483,7 +483,7 @@ class Subnets extends Common_functions
      *
      * @param  int  $obj_id
      * @param  bool  $print
-     * @return void
+     * @return int|false
      */
     public function remove_subnet_nat_items($obj_id = 0, $print = true)
     {
@@ -2373,7 +2373,7 @@ class Subnets extends Common_functions
                     }
                 }
                 // do checks
-                if (count($all_folders) > 0) {
+                if (is_array($all_folders)) {
                     foreach ($all_folders as $folder) {
                         // fetch all subnets
                         $folder_subnets = $this->fetch_subnet_slaves($folder->id);
@@ -2419,7 +2419,7 @@ class Subnets extends Common_functions
         // slaves
         $this->fetch_subnet_slaves_recursive($old_subnet_id);
         // verify new against each existing
-        if (count($sections_subnets) > 0) {
+        if (is_array($sections_subnets)) {
             foreach ($sections_subnets as $existing_subnet) {
                 // ignore same and slaves
                 if ($existing_subnet->id != $old_subnet_id && ! in_array($existing_subnet->id, $this->slaves)) {
@@ -2664,7 +2664,7 @@ class Subnets extends Common_functions
                         // fetch all folder subnets, remove old subnet and verify overlapping!
                         $folder_subnets = $this->fetch_subnet_slaves($parent_subnet->id);
                         // check
-                        if (count(@$folder_subnets) > 0) {
+                        if (is_array(@$folder_subnets)) {
                             foreach ($folder_subnets as $fs) {
                                 // don't check against old
                                 if ($fs->id != $subnetId) {

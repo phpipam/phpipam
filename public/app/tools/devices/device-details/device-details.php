@@ -229,7 +229,7 @@ if ($GET->subnetId != 0 && count($device) > 0) {
     print "	<td colspan='2'><hr></td>";
     print '</tr>';
 
-    if (count($custom_fields) > 0) {
+    if (is_array($custom_fields)) {
         foreach ($custom_fields as $field) {
             // fix for boolean
             if ($field['type'] == 'tinyint(1)' || $field['type'] == 'boolean') {

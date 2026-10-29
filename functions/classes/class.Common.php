@@ -23,7 +23,7 @@ class Common_functions
      *
      * @var mixed
      */
-    public $settings = null;
+    public $settings;
 
     /**
      * If Jdon validation error occurs it will be saved here
@@ -103,7 +103,7 @@ class Common_functions
      *
      * @var mixed
      */
-    public $address_types = null;
+    public $address_types;
 
     /**
      * NET_DNS object
@@ -124,7 +124,7 @@ class Common_functions
      *
      * @var array|null
      */
-    private $mac_address_vendors = null;
+    private $mac_address_vendors;
 
     /**
      * __construct function
@@ -1381,7 +1381,7 @@ class Common_functions
     public function transform_to_decimal($address)
     {
         if ($this->identify_address($address) == 'IPv4') {
-            return  sprintf('%u', ip2long($address));
+            return sprintf('%u', ip2long($address));
         } else {
             return $this->ip2long6($address);
         }

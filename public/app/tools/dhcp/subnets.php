@@ -29,7 +29,7 @@ function print_subnets($s)
     $html[] = ' <td>'.$s->id.'</td>';
     // pools
     $html[] = ' <td>';
-    if (count($s->pools) > 0) {
+    if (is_array($s->pools) && $s->pools != []) {
         foreach ($s->pools as $p) {
             $html[] = $p['pool'].'<br>';
         }
@@ -39,7 +39,7 @@ function print_subnets($s)
     $html[] = ' </td>';
     // options
     $html[] = ' <td>';
-    if (count($s->{'option-data'}) > 0) {
+    if (is_array($s->{'option-data'}) && $s->{'option-data'} != []) {
         foreach ($s->{'option-data'} as $p) {
             $html[] = $p['name'].': '.$p['data'].'<br>';
             // save to printed options vas

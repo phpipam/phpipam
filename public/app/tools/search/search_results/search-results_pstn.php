@@ -34,7 +34,7 @@ $result_pstnn = $Tools->search_pstn_numbers($searchTerm, $custom_pstnn_fields);
     <th><?php print _('Range'); ?></th>
     <th><?php print _('Device'); ?></th>
     <?php
-    if (count($custom_pstn_fields) > 0) {
+    if (is_array($custom_pstn_fields)) {
         foreach ($custom_pstn_fields as $field) {
             if (! in_array($field['name'], $hidden_pstn_fields)) {
                 print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -66,7 +66,7 @@ if (count($result_pstn) > 0) {
         print ' <td class="hidden-sm hidden-xs">'.$pstn->deviceId.'</td>'."\n";
 
         // custom fields
-        if (count($custom_pstn_fields) > 0) {
+        if (is_array($custom_pstn_fields)) {
             foreach ($custom_pstn_fields as $field) {
                 if (! in_array($field['name'], $hidden_pstn_fields)) {
                     $pstn->{$field['name']} = $Tools->create_links($pstn->{$field['name']}, $field['type']);
@@ -113,7 +113,7 @@ if (count($result_pstn) == 0) {
     <th><?php print _('Owner'); ?></th>
     <th><?php print _('Device'); ?></th>
     <?php
-    if (count($custom_pstnn_fields) > 0) {
+    if (is_array($custom_pstnn_fields)) {
         foreach ($custom_pstnn_fields as $field) {
             if (! in_array($field['name'], $hidden_pstnn_fields)) {
                 print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -144,7 +144,7 @@ if (count($result_pstnn) > 0) {
         print ' <td class="hidden-sm hidden-xs">'.$pstnn->deviceId.'</td>'."\n";
 
         // custom fields
-        if (count($custom_pstnn_fields) > 0) {
+        if (is_array($custom_pstnn_fields)) {
             foreach ($custom_pstnn_fields as $field) {
                 if (! in_array($field['name'], $hidden_pstnn_fields)) {
                     $pstnn->{$field['name']} = $Tools->create_links($pstnn->{$field['name']}, $field['type']);

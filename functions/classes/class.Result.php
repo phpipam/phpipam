@@ -42,7 +42,7 @@ class Result
      *
      * @var mixed
      */
-    public $result = null;
+    public $result;
 
     /**
      * is exception set?

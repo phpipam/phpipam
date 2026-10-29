@@ -48,7 +48,7 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
     print ' <th>'._('Start').'</th>';
     print ' <th>'._('Stop').'</th>';
     print ' <th>'._('Objects').'</th>';
-    if (count($custom) > 0) {
+    if (is_array($custom)) {
         foreach ($custom as $field) {
             if (! in_array($field['name'], $hidden_fields)) {
                 print "<th class='hidden-xs hidden-sm hidden-md'>$field[name]</th>";
@@ -90,7 +90,7 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
             print "	<td><span class='badge badge1 badge5'>".$cnt.'</span></td>';
 
             // custom
-            if (count($custom_fields) > 0) {
+            if (is_array($custom_fields)) {
                 foreach ($custom_fields as $field) {
                     // hidden?
                     if (! in_array($field['name'], $hidden_fields)) {

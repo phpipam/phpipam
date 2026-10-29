@@ -137,7 +137,7 @@ if ($provider !== false) {
         print '	<th>'._('Status').'</th>';
         print '	<th>'._('Point A').'</th>';
         print '	<th>'._('Point B').'</th>';
-        if (count(@$custom_fields_circuits) > 0) {
+        if (is_array(@$custom_fields_circuits)) {
             foreach ($custom_fields_circuits as $field) {
                 if (! in_array($field['name'], $hidden_circuit_fields)) {
                     print '<th>'.$Tools->print_custom_field_name($field['name']).'</th>';
@@ -173,7 +173,7 @@ if ($provider !== false) {
             print "	<td class='hidden-xs hidden-sm'>$locationA_html</td>";
             print "	<td class='hidden-xs hidden-sm'>$locationB_html</td>";
             // custom
-            if (count(@$custom_fields_circuits) > 0) {
+            if (is_array(@$custom_fields_circuits)) {
                 foreach ($custom_fields_circuits as $field) {
                     if (! in_array($field['name'], $hidden_circuit_fields)) {
                         // create html links

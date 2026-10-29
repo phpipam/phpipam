@@ -103,7 +103,7 @@ if ($sections !== false) {
             if (strlen((string) $section['permissions']) > 1 && ! is_null($section['permissions'])) {
                 $permissions = $Sections->parse_section_permissions($section['permissions']);
                 // print for each if they exist
-                if (count($permissions) > 0) {
+                if (is_array($permissions) && $permissions != []) {
                     foreach ($permissions as $key => $p) {
                         // get subnet name
                         $group = $Tools->fetch_object('userGroups', 'g_id', $key);

@@ -41,7 +41,7 @@ if (strlen($POST->gid == 0)) {
 }
 
 // add each user to group
-if (count($users) > 0) {
+if (is_array($users) && $users != []) {
     foreach ($users as $u) {
         if (! $Admin->add_group_to_user($POST->gid, $u)) {
             // get user details

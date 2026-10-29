@@ -58,7 +58,7 @@ foreach ($expfields as $std_field) {
 
 // append the custom fields, if any
 $custom_fields = $Tools->fetch_custom_fields($mtable);
-if (count($custom_fields) > 0) {
+if (is_array($custom_fields)) {
     foreach ($custom_fields as $myField) {
         // add field to required fields if needed
         if ($myField['Null'] == 'NO') {

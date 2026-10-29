@@ -270,7 +270,7 @@ class Tools_controller extends Common_api_functions
                     $result->dst = $this->parse_nat_objects($result->dst);
                     // full ?
                     if ($this->_params->id3 == 'objects_full') {
-                        if (count($result->src) > 0) {
+                        if (is_array($result->src)) {
                             foreach ($result->src as $type => $arr) {
                                 foreach ($arr as $k => $id) {
                                     unset($result->src[$type][$k]);
@@ -278,7 +278,7 @@ class Tools_controller extends Common_api_functions
                                 }
                             }
                         }
-                        if (count($result->dst) > 0) {
+                        if (is_array($result->dst)) {
                             foreach ($result->dst as $type => $arr) {
                                 foreach ($arr as $k => $id) {
                                     unset($result->dst[$type][$k]);

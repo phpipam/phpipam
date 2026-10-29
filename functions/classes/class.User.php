@@ -52,7 +52,7 @@ class User extends Common_functions
      *
      * @var object
      */
-    public $user = null;
+    public $user;
 
     /**
      * flag if user is admin
@@ -1925,17 +1925,23 @@ class User extends Common_functions
      */
     private function groups_parse($group_ids)
     {
-        if (count($group_ids) > 0) {
+        $out = [];
+
+        if (is_array($group_ids)) {
             foreach ($group_ids as $g_id) {
                 // group details
                 $group = $this->fetch_object('userGroups', 'g_id', $g_id);
-                $out[$group->g_id] = (array) $group;
-                $out[$group->g_id]['members'] = $this->fetch_multiple_objects('users', 'groups', "%\"$g_id\"%", 'real_name', true, true, ['username']);
+                if (is_object($group)) {
+                    $out[$group->g_id] = (array) $group;
+                    $members = $this->fetch_multiple_objects('users', 'groups', "%\"$g_id\"%", 'real_name', true, true, ['username']);
+                    if (is_array($members)) {
+                        $out[$group->g_id]['members'] = $members;
+                    }
+                }
             }
         }
 
-        // return array of groups
-        return isset($out) ? $out : [];
+        return $out;
     }
 
     /**
@@ -2235,7 +2241,7 @@ class FakeUser
      *
      * @var StdClass
      */
-    public $settings = null;
+    public $settings;
 
     /**
      * __construct function.

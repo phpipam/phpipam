@@ -34,7 +34,7 @@ if (isset($objects['routing_bgp'])) {
     print ' <th>'._('Local address').'</th>';
     print ' <th>'._('BGP type').'</th>';
     print ' <th>'._('Subnets').'</th>';
-    if (count($custom_bgp) > 0) {
+    if (is_array($custom_bgp)) {
         foreach ($custom_bgp as $field) {
             if (! in_array($field['name'], $hidden_custom_fields_bgp)) {
                 print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -73,7 +73,7 @@ if (isset($objects['routing_bgp'])) {
             print ' <td>'.$Tools->fetch_routing_subnets('bgp', $bgp->id, true)[0]->cnt.'</td>';
 
             // custom
-            if (count($custom_bgp) > 0) {
+            if (is_array($custom_bgp)) {
                 foreach ($custom_bgp as $field) {
                     if (! in_array($field['name'], $hidden_custom_fields_bgp)) {
                         print "<td class='hidden-xs hidden-sm hidden-md'>";

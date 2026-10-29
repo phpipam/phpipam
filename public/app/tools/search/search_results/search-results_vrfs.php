@@ -29,7 +29,7 @@ $result_vrf = $Tools->search_vrfs($searchTerm, $custom_vrf_fields);
     <th><?php print _('RD'); ?></th>
     <th><?php print _('Description'); ?></th>
     <?php
-    if (count($custom_vrf_fields) > 0) {
+    if (is_array($custom_vrf_fields)) {
         foreach ($custom_vrf_fields as $field) {
             if (! in_array($field['name'], $hidden_vrf_fields)) {
                 print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -54,7 +54,7 @@ if (count($result_vrf) > 0) {
         print ' <td><dd>'.$vrf['rd'].'</dd></td>'."\n";
         print ' <td><dd>'.$vrf['description'].'</dd></td>'."\n";
         // custom fields
-        if (count($custom_vrf_fields) > 0) {
+        if (is_array($custom_vrf_fields)) {
             foreach ($custom_vrf_fields as $field) {
                 if (! in_array($field['name'], $hidden_vrf_fields)) {
                     $vrf[$field['name']] = $Tools->create_links($vrf[$field['name']], $field['type']);

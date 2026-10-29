@@ -25,7 +25,7 @@ if ($domain === false) {
     $records = $PowerDNS->fetch_all_domain_records($domain->id);
 
     // exclude SOA, NS
-    if ($records !== false) {
+    if (is_array($records)) {
         foreach ($records as $k => $r) {
             // SOA, NS
             if ($r->type == 'SOA') {
@@ -194,7 +194,7 @@ if ($domain === false) {
         print '</tr>';
 
         // defaults
-        if (count($records) > 0) {
+        if (is_array($records) && $records != []) {
             foreach ($records as $r) {
                 print_record($r);
             }

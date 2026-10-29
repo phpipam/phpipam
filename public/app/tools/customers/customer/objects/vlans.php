@@ -37,7 +37,7 @@ if (isset($objects['vlans'])) {
     print ' <th data-field="number" data-sortable="true">'._('Number').'</th>'."\n";
     print ' <th data-field="vlname" data-sortable="true">'._('Name').'</th>'."\n";
     print ' <th data-field="name" data-sortable="true">'._('L2domain').'</th>'."\n";
-    if (count(@$custom_fields) > 0) {
+    if (is_array(@$custom_fields)) {
         foreach ($custom_fields as $field) {
             if (! in_array($field['name'], $hidden_fields)) {
                 print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -66,7 +66,7 @@ if (isset($objects['vlans'])) {
         print "	<td><a href='".create_link($GET->page, 'vlan', $vlan->domainId, $vlan->vlanId)."'>".$vlan->name.'</a>'.$vlan->description.'</td>';
         print '	<td>'.$domain_text.'</td>';
         // custom fields - no subnets
-        if (count(@$custom_fields) > 0) {
+        if (is_array(@$custom_fields)) {
             foreach ($custom_fields as $field) {
                 // hidden
                 if (! in_array($field['name'], $hidden_fields)) {

@@ -28,7 +28,7 @@ $colspan_dhcp = 4;
         <th></th>
         <?php
         // custom fields
-        if (count($custom_fields) > 0) {
+        if (is_array($custom_fields)) {
             foreach ($custom_fields as $myField) {
                 print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($myField['name']).'</span></th>';
                 $colspan++;
@@ -119,7 +119,7 @@ $colspan_dhcp = 4;
             print "<td>$description</td>";
 
             // print custom fields
-            if (count($custom_fields) > 0) {
+            if (is_array($custom_fields)) {
                 foreach ($custom_fields as $myField) {
                     print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 

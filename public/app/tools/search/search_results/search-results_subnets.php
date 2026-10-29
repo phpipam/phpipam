@@ -37,7 +37,7 @@ $result_subnets = $Tools->search_subnets($searchTerm, $searchTerm_edited['high']
     <?php } ?>
     <th><?php print _('Requests'); ?></th>
     <?php
-    if (count($custom_subnet_fields) > 0) {
+    if (is_array($custom_subnet_fields)) {
         foreach ($custom_subnet_fields as $field) {
             if (! in_array($field['name'], $hidden_subnet_fields)) {
                 print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -113,7 +113,7 @@ if (count($result_subnets) > 0) {
             print ' <td>'._($line['allowRequests']).'</td>'."\n";
 
             // custom fields
-            if (count($custom_subnet_fields) > 0) {
+            if (is_array($custom_subnet_fields)) {
                 foreach ($custom_subnet_fields as $field) {
                     if (! in_array($field['name'], $hidden_subnet_fields)) {
                         $line[$field['name']] = $Tools->create_links($line[$field['name']], $field['type']);

@@ -56,7 +56,7 @@ $values = [
     'description' => $POST->description,
 ];
 // append custom
-if (count($custom) > 0) {
+if (is_array($custom)) {
     foreach ($custom as $myField) {
         // replace possible ___ back to spaces!
         $myField['nameTest'] = str_replace(' ', '___', (string) $myField['name']);

@@ -32,36 +32,42 @@ if ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
     // result
     print "<div class='alert alert-warning'>";
 
+    $out = [];
+    $ipcnt = 0;
+
     // fetch all subsections
     $subsections = $Sections->fetch_subsections($POST->id);
 
     // print what will be deleted
-    if (count($subsections) > 0) {
-        $subnets = $Subnets->fetch_section_subnets($POST->id);             // fetch all subnets in section
-        $num_subnets = count($subnets);                                        // number of subnets to be deleted
-        if (count($subnets) > 0) {
+    if (is_array($subsections) && $subsections != []) {
+        $subnets = $Subnets->fetch_section_subnets($POST->id);
+        $num_subnets = 0;                                                   // number of subnets to be deleted
+        if (is_array($subnets)) {
             foreach ($subnets as $s) {
                 $out[] = $s;
             }
+
+            $num_subnets = $num_subnets + count($subnets);
         }
         // fetch subsection subnets
         foreach ($subsections as $ss) {
-            $subsection_subnets = $Subnets->fetch_section_subnets($ss->id); // fetch all subnets in subsection
-            if (count($subsection_subnets) > 0) {
+            $subsection_subnets = $Subnets->fetch_section_subnets($ss->id);
+            if (is_array($subsection_subnets)) {
                 foreach ($subsection_subnets as $sss) {
                     $out[] = $sss;
                 }
+
+                $num_subnets = $num_subnets + count($subsection_subnets);
             }
-            $num_subnets = $num_subnets + count($subsection_subnets);
             // count all addresses that will be deleted!
-            $ipcnt = $Addresses->count_addresses_in_multiple_subnets($out);
+            $ipcnt = (int) $Addresses->count_addresses_in_multiple_subnets($out);
         }
-    }
-    // no subsections
-    else {
-        $subnets = $Subnets->fetch_section_subnets($POST->id);            // fetch all subnets in section
+    } else {
+        // no subsections
+        $subnets = $Subnets->fetch_section_subnets($POST->id);
         $num_subnets = is_array($subnets) ? count($subnets) : 0;
-        $ipcnt = $Addresses->count_addresses_in_multiple_subnets($subnets);
+        // count all addresses that will be deleted!
+        $ipcnt = (int) $Addresses->count_addresses_in_multiple_subnets($subnets);
     }
 
     // printout
@@ -112,7 +118,7 @@ else {
     ];
 
     // execute update
-    if (! $Sections->modify_section($POST->action, $values, $POST->id)) {
+    if (! $Sections->modify_section($POST->action, $values)) {
         $Result->show('danger', _('Section').' '.$User->get_post_action().' '._('failed'), false);
     } else {
         $Result->show('success', _('Section').' '.$User->get_post_action().' '._('successful'), false);

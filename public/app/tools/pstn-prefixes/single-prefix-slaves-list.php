@@ -27,7 +27,7 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
     if ($User->get_module_permissions('devices') >= User::ACCESS_R) {
         print ' <th>'._('Device').'</th>';
     }
-    if (count($custom) > 0) {
+    if (is_array($custom)) {
         foreach ($custom as $field) {
             if (! in_array($field['name'], $hidden_custom_fields)) {
                 print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -103,7 +103,7 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
             }
 
             // custom
-            if (count($custom) > 0) {
+            if (is_array($custom)) {
                 foreach ($custom as $field) {
                     // hidden?
                     if (! in_array($field['name'], $hidden_custom_fields)) {

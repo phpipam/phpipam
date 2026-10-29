@@ -48,7 +48,7 @@ $custom_fields = $Tools->fetch_custom_fields('routing_bgp');
 // prepare HTML variables
 $fields = ['id', 'local_as', 'local_address', 'peer_name', 'peer_address', 'bgp_type', 'vrf', 'circuit', 'customer', 'description'];
 
-if (count($custom_fields) > 0) {
+if (is_array($custom_fields)) {
     foreach ($custom_fields as $myField) {
         // change spaces to "___" so it can be used as element id
         $myField['nameTemp'] = str_replace(' ', '___', (string) $myField['name']);

@@ -119,7 +119,7 @@ foreach ($data as &$cdata) {
     }
 
     // Generate the custom fields columns
-    if (count($custom_fields) > 0) {
+    if (is_array($custom_fields)) {
         foreach ($custom_fields as $myField) {
             $cfieldtds .= '<td>'.$cdata[$myField['name']].'</td>';
         }
@@ -145,7 +145,7 @@ foreach ($data as &$cdata) {
                 $action = 'edit';
             }
             // Check if the values of the custom fields have changed
-            if (count($custom_fields) > 0) {
+            if (is_array($custom_fields)) {
                 foreach ($custom_fields as $myField) {
                     if ($cdata[$myField['name']] != $edata[$cdom][$cdata['number']][$myField['name']]) {
                         $msg .= 'VLAN '.$myField['name'].' will be updated.';

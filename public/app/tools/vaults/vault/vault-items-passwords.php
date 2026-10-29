@@ -26,7 +26,7 @@ print '	<th>'._('Username').'</th>';
 print "	<th data-width='300' data-width-unit='px'>"._('Password').'</th>';
 print "	<th class='hidden-sm'>"._('Description').'</th>';
 // custom
-if (count(@$custom_fields) > 0) {
+if (is_array(@$custom_fields)) {
     foreach ($custom_fields as $field) {
         print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
     }
@@ -61,7 +61,7 @@ if ($passwords !== false) {
         print "	<td class='hidden-sm'>".escape_input($values['description']).'</td>';
 
         // custom fields
-        if (count(@$custom_fields) > 0) {
+        if (is_array(@$custom_fields)) {
             foreach ($custom_fields as $field) {
                 print "<td class='hidden-xs hidden-sm hidden-md'>";
                 $Tools->print_custom_field($field['type'], $p->{$field['name']});

@@ -50,7 +50,7 @@ print '</thead>';
 // IP addresses
 $ipcnt = 0;
 print '<tbody>';
-if (count($addresses) > 0) {
+if (is_array($addresses)) {
     foreach ($addresses as $ip) {
         // cast
         $ip = (array) $ip;

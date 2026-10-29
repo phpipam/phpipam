@@ -40,7 +40,7 @@ if ($active_requests === false) {
     <?php
     $custom_fields = $Tools->fetch_custom_fields('requests');
     // hidden custom
-    if (count($custom_fields) > 0) {
+    if (is_array($custom_fields)) {
         foreach ($custom_fields as $ck => $myField) {
             if (in_array($myField['name'], $hidden_cfields)) {
                 unset($custom_fields[$ck]);
@@ -48,7 +48,7 @@ if ($active_requests === false) {
         }
     }
     // print custom field
-    if (count($custom_fields) > 0) {
+    if (is_array($custom_fields)) {
         foreach ($custom_fields as $field) {
             print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
             if (! in_array($myField['name'], $hidden_cfields)) {
@@ -84,7 +84,7 @@ if ($active_requests === false) {
             print '	<td>'.$request['requester'].'</td>'."\n";
             print '	<td>'.$request['comment'].'</td>'."\n";
             // custom fields
-            if (count($custom_fields) > 0) {
+            if (is_array($custom_fields)) {
                 foreach ($custom_fields as $field) {
                     print '<td>'.$request[$field['name']].'</td>';
                 }

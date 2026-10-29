@@ -85,7 +85,7 @@ try {
     $phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
     $phpipam_mail->Php_mailer->addAddress(addslashes(trim((string) $POST->email)), addslashes(trim((string) $POST->real_name)));
     // add all admins to CC
-    if (count($users) > 0) {
+    if (is_array($users)) {
         foreach ($users as $admin) {
             $phpipam_mail->Php_mailer->AddCC($admin->email);
         }

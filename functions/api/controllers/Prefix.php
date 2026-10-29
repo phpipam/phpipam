@@ -712,17 +712,15 @@ class Prefix_controller extends Common_api_functions
      */
     private function remove_if_has_slaves($subnets)
     {
-        if (count($subnets) > 0) {
+        if (is_array($subnets)) {
             foreach ($subnets as $k => $s) {
                 if ($this->Subnets->has_slaves($s->id)) {
                     unset($subnets[$k]);
                 }
             }
-
-            return $subnets;
-        } else {
-            return $subnets;
         }
+
+        return $subnets;
     }
 
     /**

@@ -89,7 +89,7 @@ if ($Admin->object_modify('circuitsLogical', $POST->action, 'id', $values)) {
     // Grab list of IDs and create list
     $order = 0;
 
-    if (count($id_list) > 0) {
+    if (is_array($id_list) && $id_list != []) {
         foreach ($id_list as $member_id) {
             // insert values
             $values = [

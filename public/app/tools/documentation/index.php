@@ -38,7 +38,7 @@ if (is_file($path_doc) && preg_match('/\.md$/', (string) $document)) {
     $html = $Parsedown->text(mb_convert_encoding($md, 'HTML-ENTITIES', 'UTF-8')) ?: '';
 
     // loadHTML requires html root.
-    if ($dom->loadHTML('<html>'.$html.'</html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING | LIBXML_NOERROR) !== false) {
+    if ($dom->loadHTML('<html>'.$html.'</html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING | LIBXML_NOERROR)) {
         $elements = $dom->getElementsByTagName('*');
         if (is_object($elements) && $elements->length > 0) {
             foreach ($elements as $e) {

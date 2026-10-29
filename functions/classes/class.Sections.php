@@ -19,7 +19,7 @@ class Sections extends Common_functions
      *
      * @var int
      */
-    public $lastInsertId = null;
+    public $lastInsertId;
 
     /**
      * (object) for User profile
@@ -28,7 +28,7 @@ class Sections extends Common_functions
      *
      * @var mixed
      */
-    protected $user = null;
+    protected $user;
 
     /**
      * __construct function.
@@ -258,10 +258,12 @@ class Sections extends Common_functions
      * Fetch subsections for specified sectionid
      *
      * @param  mixed  $sectionId
-     * @return array
+     * @return array|false
      */
     public function fetch_subsections($sectionId)
     {
+        $subsections = [];
+
         try {
             $subsections = $this->Database->getObjectsQuery('sections', 'SELECT * FROM `sections` where `masterSection` = ?;', [$sectionId]);
         } catch (Exception $e) {
@@ -271,7 +273,7 @@ class Sections extends Common_functions
         }
 
         // result
-        return count($subsections) > 0 ? $subsections : [];
+        return is_array($subsections) ? $subsections : [];
     }
 
     /**
@@ -282,14 +284,14 @@ class Sections extends Common_functions
      */
     private function get_all_section_and_subsection_ids($id)
     {
+        $subsections_ids = [];
+
         // check for subsections and store all ids
         $subsections = $this->fetch_subsections($id);
-        if (count($subsections) > 0) {
+        if (is_array($subsections)) {
             foreach ($subsections as $ss) {
                 $subsections_ids[] = $ss->id;
             }
-        } else {
-            $subsections_ids = [];
         }
 
         // array of section + all subsections
@@ -417,19 +419,23 @@ class Sections extends Common_functions
      */
     public function parse_section_permissions($permissions)
     {
+        $out = [];
+
         // save to array
         $permissions = db_json_decode($permissions, true);
         // start Tools object
         $Tools = new Tools($this->Database);
-        if (count($permissions) > 0) {
+        if (is_array($permissions)) {
             foreach ($permissions as $key => $p) {
                 $group = $Tools->fetch_object('userGroups', 'g_id', $key);
-                $out[$group->g_id] = $p;
+                if (is_object($group)) {
+                    $out[$group->g_id] = $p;
+                }
             }
         }
 
         // return array of groups
-        return isset($out) ? $out : [];
+        return $out;
     }
 
     /**

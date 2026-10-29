@@ -33,7 +33,7 @@ $csrf = $User->Crypto->csrf_session_token();
             // fetch custom fields
             $custom = $Tools->fetch_custom_fields('ipaddresses');
 
-if (count($custom) > 0) {
+if (is_array($custom)) {
     foreach ($custom as $myField) {
         print '<option value="'.$myField['name'].'"> '.$myField['name'].'</option>';
     }

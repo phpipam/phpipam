@@ -28,7 +28,7 @@ $result_customers = $Tools->search_customers($searchTerm, $custom_customers_fiel
     <th><?php print _('Address'); ?></th>
     <th><?php print _('Contact'); ?></th>
     <?php
-    if (count(@$custom_customers_fields) > 0) {
+    if (is_array(@$custom_customers_fields)) {
         foreach ($custom_customers_fields as $field) {
             if (! in_array($field['name'], $hidden_customers_fields)) {
                 print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -44,7 +44,7 @@ $result_customers = $Tools->search_customers($searchTerm, $custom_customers_fiel
 <?php
 
 // result
-if (count($result_customers) > 0) {
+if (is_array($result_customers)) {
     foreach ($result_customers as $customer) {
         // print details
         print '<tr>'."\n";
@@ -57,7 +57,7 @@ if (count($result_customers) > 0) {
             print " <td><span class='muted'>/</span></td>";
         }
         // custom
-        if (count(@$custom_customers_fields) > 0) {
+        if (is_array(@$custom_customers_fields)) {
             foreach ($custom_customers_fields as $field) {
                 if (! in_array($field['name'], $hidden_customers_fields)) {
                     // create html links

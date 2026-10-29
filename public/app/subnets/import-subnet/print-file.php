@@ -59,7 +59,7 @@ print '	<th>'._('Port').'</th>';
 print '	<th>'._('Note').'</th>';
 print '	<th>'._('Location').'</th>';
 // Add custom fields
-if (count($custom_address_fields) > 0) {
+if (is_array($custom_address_fields)) {
     foreach ($custom_address_fields as $field) {
         print "	<th>$field[name]</th>";
     }

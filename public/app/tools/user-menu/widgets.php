@@ -54,7 +54,7 @@ if ($User->user->role == 'Administrator') {
 }
 
 // first selected widgets already in user database
-if (count($user_widgets) > 0) {
+if (is_array($user_widgets)) {
     foreach ($user_widgets as $k) {
         print "<li id='$k'><i class='icon icon-move'></i><input type='checkbox' name='widget-".$widgets[$k]->wfile."' value='on' checked> ".$widgets[$k]->wtitle.'</li>';
     }

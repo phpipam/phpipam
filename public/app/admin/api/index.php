@@ -76,9 +76,6 @@ $app_perms_text = ['SSL with User token' => 'ssl_token', 'SSL with App code toke
 
             // wait update
             $a['app_lock_wait'] = $a['app_lock_type'] != 'Disabled' ? $a['app_lock_wait'].' sec' : '/';
-
-            // reformat lock and nesting
-            $a['app_lock_type'] = $a['app_lock_type'];
             $a['app_nest_custom_fields'] = $a['app_nest_custom_fields'] == 1 ? _('Yes') : _('No');
             $a['app_show_links'] = $a['app_show_links'] == 1 ? _('Yes') : _('No');
 

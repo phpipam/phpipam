@@ -167,7 +167,7 @@ class Responses extends Result
         // simple associative array is an array of objects.
         if (is_array($this->result['data']) && count(array_filter(array_keys($this->result['data']), 'is_string')) == 0) {
             foreach ($this->result['data'] as $dk => $d) {
-                if (count($custom_fields) > 0) {
+                if (is_array($custom_fields) && $custom_fields != []) {
                     foreach ($custom_fields as $k => $cf) {
                         // add to result
                         if (isset($d->$k)) {
@@ -184,7 +184,7 @@ class Responses extends Result
         // This is a single element but we need to guard against
         // non-objects here too.
         elseif (is_object($this->result['data'])) {
-            if (count($custom_fields) > 0) {
+            if (is_array($custom_fields) && $custom_fields != []) {
                 foreach ($custom_fields as $k => $cf) {
                     // add to result
                     $this->result['data']->custom_fields[$k] = $this->result['data']->$k;

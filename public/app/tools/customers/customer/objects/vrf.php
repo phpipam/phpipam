@@ -36,7 +36,7 @@ if (isset($objects['vrf'])) {
     print '<tr">'."\n";
     print ' <th data-field="vlname" data-sortable="true">'._('Name').'</th>'."\n";
     print ' <th data-field="name" data-sortable="true">'._('Description').'</th>'."\n";
-    if (count(@$custom_fields) > 0) {
+    if (is_array(@$custom_fields)) {
         foreach ($custom_fields as $field) {
             if (! in_array($field['name'], $hidden_fields)) {
                 print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -56,7 +56,7 @@ if (isset($objects['vrf'])) {
         print "	<td><a class='btn btn-xs btn-default' href='".create_link($GET->page, 'vrf', $vrf->vrfId)."'><i class='fa fa-cloud prefix'></i> ".$vrf->name.'</a></td>';
         print '	<td>'.$vrf->description.'</td>';
         // custom fields - no subnets
-        if (count(@$custom_fields) > 0) {
+        if (is_array(@$custom_fields)) {
             foreach ($custom_fields as $field) {
                 // hidden
                 if (! in_array($field['name'], $hidden_fields)) {

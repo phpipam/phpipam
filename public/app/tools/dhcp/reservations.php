@@ -28,7 +28,7 @@ function print_leases($s)
 
     // options
     $html[] = ' <td>';
-    if (count($s->{'options'}) > 0) {
+    if (is_array($s->{'options'}) && $s->{'options'} != []) {
         foreach ($s->{'options'} as $k => $v) {
             $html[] = $k.': '.$v.'<br>';
         }
@@ -38,7 +38,7 @@ function print_leases($s)
 
     // classes
     $html[] = ' <td>';
-    if (count($s->{'classes'}) > 0) {
+    if (is_array($s->{'classes'}) && $s->{'classes'} != []) {
         foreach ($s->{'classes'} as $v) {
             $html[] = $v.'<br>';
         }

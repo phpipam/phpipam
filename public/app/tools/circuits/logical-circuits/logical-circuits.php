@@ -48,7 +48,7 @@ print '	<th>'._('Circuit Count').'</th>';
 print '	<th>'._('Members').'</th>';
 print '	<th>'._('Comment').'</th>';
 $colspanCustom = 0;
-if (count(@$custom_fields) > 0) {
+if (is_array(@$custom_fields)) {
     foreach ($custom_fields as $field) {
         if (! in_array($field['name'], $hidden_logical_fields)) {
             print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -88,7 +88,7 @@ else {
         print '	<td>'.$circuit->comments.'</td>';
         print '	</td>';
         // custom
-        if (count(@$custom_fields) > 0) {
+        if (is_array(@$custom_fields)) {
             foreach ($custom_fields as $field) {
                 if (! in_array($field['name'], $hidden_logical_fields)) {
                     // create html links

@@ -55,7 +55,7 @@ if ($vlans === false) {
         print ' <th data-field="customer" data-sortable="true">'._('Customer').'</th>'."\n";
         $csize++;
     }
-    if (count(@$custom_fields) > 0) {
+    if (is_array(@$custom_fields)) {
         foreach ($custom_fields as $field) {
             if (! in_array($field['name'], $hidden_fields)) {
                 print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -118,7 +118,7 @@ if ($vlans === false) {
             print $customer === false ? '<td></td>' : "<td>{$customer->title} <a target='_blank' href='".create_link('tools', 'customers', unescape_input($customer->title))."'><i class='fa fa-external-link'></i></a></td>";
         }
         // custom fields - no subnets
-        if (count(@$custom_fields) > 0) {
+        if (is_array(@$custom_fields)) {
             foreach ($custom_fields as $field) {
                 // hidden
                 if (! in_array($field['name'], $hidden_fields)) {

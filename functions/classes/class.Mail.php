@@ -16,7 +16,7 @@ class phpipam_mail extends Common_functions
      *
      * @var mixed
      */
-    private $mail_settings = null;
+    private $mail_settings;
 
     /**
      * Php_mailer object

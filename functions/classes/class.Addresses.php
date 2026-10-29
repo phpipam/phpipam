@@ -772,7 +772,7 @@ class Addresses extends Common_functions
     /**
      * Fetches custom IP address fields
      *
-     * @return object custom address fields
+     * @return array custom address fields
      */
     public function set_custom_fields()
     {
@@ -1276,7 +1276,7 @@ class Addresses extends Common_functions
         // custom fields, append to array
         $m = 9;
         $custom_fields = $this->set_custom_fields();
-        if (count($custom_fields) > 0) {
+        if (is_array($custom_fields)) {
             foreach ($custom_fields as $c) {
                 $address_insert[$c['name']] = $address[$m];
                 $m++;
@@ -1377,7 +1377,7 @@ class Addresses extends Common_functions
      *  we provide array of all subnet ids
      *
      * @param  mixed  $subnets
-     * @return void
+     * @return int|false
      */
     public function count_addresses_in_multiple_subnets($subnets)
     {
@@ -1764,107 +1764,6 @@ class Addresses extends Common_functions
     }
 
     /**
-     * @permission address methods
-     * -------------------------------
-     */
-
-    /**
-     * Checks permission for specified subnet
-     *
-     *  we provide user details and subnetId
-     *
-     * @param  object  $user
-     * @param  int  $subnetId
-     * @return int permission level
-     */
-    public function check_permission($user, $subnetId)
-    {
-
-        // get all user groups
-        $groups = db_json_decode($user->groups);
-
-        // if user is admin then return 3, otherwise check
-        if ($user->role == 'Administrator') {
-            return 3;
-        }
-
-        $this->initialize_subnets_object();
-        $subnet = $this->Subnets->fetch_subnet('id', $subnetId);
-        // set subnet permissions
-        $subnetP = db_json_decode($subnet->permissions);
-
-        // set section permissions
-        $Sections = new Sections($this->Database);
-        $section = $Sections->fetch_section('id', $subnet->sectionId);
-        $sectionP = db_json_decode($section->permissions);
-
-        // default permission
-        $out = 0;
-
-        // for each group check permissions, save highest to $out
-        if (count($sectionP) > 0) {
-            foreach ($sectionP as $sk => $sp) {
-                // check each group if user is in it and if so check for permissions for that group
-                foreach ($groups as $uk => $up) {
-                    if ($uk == $sk) {
-                        if ($sp > $out) {
-                            $out = $sp;
-                        }
-                    }
-                }
-            }
-        } else {
-            return 0;
-        }
-
-        // if section permission == 0 then return 0
-        if ($out == 0) {
-            return 0;
-        } else {
-            $out = 0;
-            // ok, user has section access, check also for any higher access from subnet
-            if (count($subnetP) > 0) {
-                foreach ($subnetP as $sk => $sp) {
-                    // check each group if user is in it and if so check for permissions for that group
-                    foreach ($groups as $uk => $up) {
-                        if ($uk == $sk) {
-                            if ($sp > $out) {
-                                $out = $sp;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // return result
-        return $out;
-    }
-
-    /**
-     * @misc address methods
-     * -------------------------------
-     */
-
-    /**
-     * Present numbers in pow 10, only for IPv6
-     *
-     * @param  mixed  $number
-     * @return void
-     */
-    public function reformat_number($number)
-    {
-        $length = strlen((string) $number);
-        $pos = $length - 3;
-
-        if ($length > 8) {
-            $number = '~'.substr((string) $number, 0, $length - $pos).'&middot;10^<sup>'.$pos.'</sup>';
-        }
-
-        return $number;
-    }
-
-    /**
      * @nat methods
      * -------------------------------
      */
@@ -2002,27 +1901,25 @@ class Addresses extends Common_functions
         $out = [];
         // check
         if (is_array($objects)) {
-            if (count($objects) > 0) {
-                foreach ($objects as $ot => $ids) {
-                    if (count($ids) > 0) {
-                        foreach ($ids as $id) {
-                            // Check table names - MySQL on Windows is case-insensitive
-                            if (! in_array(strtolower((string) $ot), ['subnets', 'ipaddresses'])) {
-                                continue;
+            foreach ($objects as $ot => $ids) {
+                if (count($ids) > 0) {
+                    foreach ($ids as $id) {
+                        // Check table names - MySQL on Windows is case-insensitive
+                        if (! in_array(strtolower((string) $ot), ['subnets', 'ipaddresses'])) {
+                            continue;
+                        }
+                        // fetch
+                        $item = $this->fetch_object($ot, 'id', $id);
+                        if ($item !== false) {
+                            // bold
+                            $bold = $item->id == $object_id && $ot == $object_type ? "<span class='strong'>" : '<span>';
+                            // subnets
+                            if ($ot == 'subnets') {
+                                $out[] = "$bold".$this->transform_address($item->subnet, 'dotted').'/'.$item->mask.'</span></span>';
                             }
-                            // fetch
-                            $item = $this->fetch_object($ot, 'id', $id);
-                            if ($item !== false) {
-                                // bold
-                                $bold = $item->id == $object_id && $ot == $object_type ? "<span class='strong'>" : '<span>';
-                                // subnets
-                                if ($ot == 'subnets') {
-                                    $out[] = "$bold".$this->transform_address($item->subnet, 'dotted').'/'.$item->mask.'</span></span>';
-                                }
-                                // addresses
-                                else {
-                                    $out[] = "$bold".$this->transform_address($item->ip_addr, 'dotted').'</span>';
-                                }
+                            // addresses
+                            else {
+                                $out[] = "$bold".$this->transform_address($item->ip_addr, 'dotted').'</span>';
                             }
                         }
                     }

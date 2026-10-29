@@ -24,7 +24,7 @@ class SubnetsMasterDropDown
      *
      * @var string|null
      */
-    private $options_group = null;
+    private $options_group;
 
     /**
      * previously selected subnet id.

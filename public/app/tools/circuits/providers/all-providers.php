@@ -46,7 +46,7 @@ print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Descri
 print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Circuits')."'>"._('Circuits').'</span></th>';
 print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Contact')."'>"._('Contact').'</span></th>';
 $colspanCustom = 0;
-if (count(@$custom_fields) > 0) {
+if (is_array(@$custom_fields)) {
     foreach ($custom_fields as $field) {
         if (! in_array($field['name'], $hidden_fields)) {
             print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by').' '.$Tools->print_custom_field_name($field['name'])."'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -77,7 +77,7 @@ else {
         print "	<td>$cnt "._('Circuits').'</td>';
         print " <td>$provider->contact</td>";
         // custom
-        if (count(@$custom_fields) > 0) {
+        if (is_array(@$custom_fields)) {
             foreach ($custom_fields as $field) {
                 if (! in_array($field['name'], $hidden_fields)) {
                     // create html links

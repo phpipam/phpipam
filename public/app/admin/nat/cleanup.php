@@ -74,10 +74,10 @@ $address_ids = array_unique($address_ids);
 $removed_addresses = [];
 
 // first subnets
-if (! empty($subnet_ids)) {
+if (is_array($subnet_ids)) {
     foreach ($subnet_ids as $id) {
         if ($Tools->fetch_object('subnets', 'id', $id) === false) {
-            $cnt = $Subnets->remove_subnet_nat_items($id, false);
+            $cnt = (int) $Subnets->remove_subnet_nat_items($id, false);
             if ($cnt > 0) {
                 $removed_subnets[] = $id;
             }
@@ -86,7 +86,7 @@ if (! empty($subnet_ids)) {
 }
 
 // second addresses
-if (! empty($address_ids)) {
+if (is_array($address_ids)) {
     foreach ($address_ids as $id) {
         if ($Tools->fetch_object('ipaddresses', 'id', $id) === false) {
             $cnt = $Addresses->remove_address_nat_items($id, false);

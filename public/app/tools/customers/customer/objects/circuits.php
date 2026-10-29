@@ -42,7 +42,7 @@ if (isset($objects['circuits'])) {
     print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Capacity')."' class='hidden-sm hidden-xs'>"._('Status').'</span></th>';
     print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by location A')."' class='hidden-sm hidden-xs'>"._('Point A').'</span></th>';
     print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by location B')."' class='hidden-sm hidden-xs'>"._('Point B').'</span></th>';
-    if (count(@$custom_fields) > 0) {
+    if (is_array(@$custom_fields)) {
         foreach ($custom_fields as $field) {
             if (! in_array($field['name'], $hidden_circuit_fields)) {
                 print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by').' '.$Tools->print_custom_field_name($field['name'])."'>".$Tools->print_custom_field_name($field['name']).'</th>';
@@ -90,7 +90,7 @@ if (isset($objects['circuits'])) {
             print "	<td class='hidden-xs hidden-sm'>$locationA_html</td>";
             print "	<td class='hidden-xs hidden-sm'>$locationB_html</td>";
             // custom
-            if (count(@$custom_fields) > 0) {
+            if (is_array(@$custom_fields)) {
                 foreach ($custom_fields as $field) {
                     if (! in_array($field['name'], $hidden_circuit_fields)) {
                         // create html links

@@ -4,10 +4,8 @@
 $permissions = db_json_decode($user['module_permissions'], true);
 // loop
 if (is_array($permissions)) {
-    if (count($permissions) > 0) {
-        foreach ($permissions as $module => $perm) {
-            $user['perm_'.$module] = $perm;
-        }
+    foreach ($permissions as $module => $perm) {
+        $user['perm_'.$module] = $perm;
     }
 }
 

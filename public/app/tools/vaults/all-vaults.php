@@ -43,7 +43,7 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
         print "<th data-width='120' data-width-unit='px'>"._('Status').'</th>';
         print '<th>'._('Description').'</th>';
         // custom
-        if (count(@$custom_fields_v) > 0) {
+        if (is_array(@$custom_fields_v)) {
             foreach ($custom_fields_v as $field) {
                 print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
             }
@@ -62,7 +62,7 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
         // loop
         print '<tbody>';
 
-        if (count($all_vaults_grouped) > 0) {
+        if (is_array($all_vaults_grouped) && $all_vaults_grouped != []) {
             foreach ($all_vaults_grouped as $a) {
                 // set link
                 if (isset($_SESSION['vault'.$a->id]) && $User->Crypto->decrypt($a->test, $_SESSION['vault'.$a->id]) !== false) {
@@ -79,7 +79,7 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
                 print '	<td class="text-muted">'.$a->description.'</td>'."\n";
 
                 // custom fields
-                if (count(@$custom_fields_v) > 0) {
+                if (is_array(@$custom_fields_v)) {
                     foreach ($custom_fields_v as $field) {
                         print "<td class='hidden-xs hidden-sm hidden-md'>";
 

@@ -19,7 +19,7 @@ class Devices extends Common_functions
      *
      * @var mixed
      */
-    public $lastInsertId = null;
+    public $lastInsertId;
 
     /**
      * (object) for User profile
@@ -28,7 +28,7 @@ class Devices extends Common_functions
      *
      * @var mixed
      */
-    protected $user = null;
+    protected $user;
 
     /**
      * __construct function.

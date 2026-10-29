@@ -101,9 +101,7 @@ if (isset($firewallZoneSettings['autogen']) && $firewallZoneSettings['autogen'] 
     if ($POST->action == 'add') {
         $POST->firewallAddressObject = $Zones->generate_address_object($POST->subnetId, $POST->hostname);
     } else {
-        if ($POST->firewallAddressObject) {
-            $POST->firewallAddressObject = $POST->firewallAddressObject;
-        } else {
+        if (! is_string($POST->firewallAddressObject)) {
             $POST->firewallAddressObject = null;
         }
     }

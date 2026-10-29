@@ -136,7 +136,7 @@ if ($subnet['isPool']) {
 
     <?php
     // custom subnet fields
-    if (count($custom_fields) > 0) {
+    if (is_array($custom_fields)) {
         foreach ($custom_fields as $key => $field) {
             if (! is_blank($subnet[$key])) {
                 $subnet[$key] = str_replace(["\n", "\r\n"], '<br>', (string) $subnet[$key]);
