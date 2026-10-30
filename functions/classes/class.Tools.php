@@ -949,6 +949,7 @@ class Tools extends Common_functions
     /**
      * Verify that widget file exists
      *
+     * @param  string  $file
      * @return bool
      */
     public function verify_widget($file)
@@ -1370,7 +1371,8 @@ class Tools extends Common_functions
      *  true = exists
      *  false = doesn't exist
      *
-     * @param  mixed  $fieldname
+     * @param  string  $tablename
+     * @param  string  $fieldname
      * @return bool
      */
     public function field_exists($tablename, $fieldname)

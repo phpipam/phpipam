@@ -1902,15 +1902,16 @@ class Logging extends Common_functions
 
             // if some slaves are present get changelog
             if (count($this->Subnets->slaves) > 0) {
+                if (! isset($args)) {
+                    $args = [];
+                }
+
                 // set query
                 $query = 'select
 							`u`.`real_name`,`o`.`sectionId`,`o`.`subnet`,`o`.`mask`,`o`.`isFolder`,`o`.`description`,`o`.`id`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`  from `changelog` as `c`, `users` as `u`, `subnets` as `o`
 							where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
 							and (';
                 foreach ($this->Subnets->slaves as $slaveId) {
-                    if (! isset($args)) {
-                        $args = [];
-                    }
 
                     $query .= '`c`.`coid` = ? or ';
                     $args[] = $slaveId;                         // set keys

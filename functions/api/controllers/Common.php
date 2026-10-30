@@ -271,7 +271,7 @@ class Common_api_functions
      * @param  mixed  $controller  (default: null)
      * @param  bool  $links  (default: true)
      * @param  bool  $transform_address  (default: true)
-     * @return void
+     * @return array
      */
     protected function prepare_result($result, $controller = null, $links = true, $transform_address = true)
     {
@@ -427,9 +427,9 @@ class Common_api_functions
     /**
      * Creates links for GET requests
      *
-     * @param  mixed  $result
+     * @param  array  $result
      * @param  mixed  $controller
-     * @return void
+     * @return array
      */
     protected function add_links($result, $controller = null)
     {
@@ -691,7 +691,7 @@ class Common_api_functions
      * Transforms IP address and subnet
      *
      * @param  mixed  $result
-     * @return void
+     * @return array|object
      */
     protected function transform_address($result)
     {

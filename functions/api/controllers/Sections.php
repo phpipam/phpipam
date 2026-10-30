@@ -8,10 +8,10 @@ class Sections_controller extends Common_api_functions
     /**
      * __construct function
      *
-     * @param  PDO_Database  $Database
+     * @param  Database_PDO  $Database
      * @param  Tools  $Tools
      * @param  API_params  $params
-     * @param  Response  $response
+     * @param  Responses  $Response
      */
     public function __construct($Database, $Tools, $params, $Response)
     {
@@ -290,9 +290,7 @@ class Sections_controller extends Common_api_functions
     /**
      * Get changelog for subnet
      *
-     * @method subnet_changelog
-     *
-     * @return [type]
+     * @return array|null
      */
     private function section_changelog()
     {

@@ -764,7 +764,7 @@ class RackDrawer extends Common_functions
     /**
      * template
      *
-     * @var resource
+     * @var GdImage
      */
     private $template;
 
@@ -889,7 +889,7 @@ class RackDrawer extends Common_functions
     /**
      * Inserts the passed text in fontsize and color into the passed image
      *
-     * @param  resource  $img
+     * @param  GdImage  $img
      * @param  string  $text
      * @param  int  $color
      * @return void

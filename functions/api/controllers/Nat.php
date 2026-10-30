@@ -56,26 +56,32 @@ class Nat_controller extends Common_api_functions
 
     /**
      * valid src & dst sub-fields
+     *
+     * @var array
      **/
     protected $valid_subfields;
 
     /**
      * Indirection using variable name to data
+     *
+     * @var array
      **/
     protected $validation_data;
 
     /**
      * List of valid NAT types
+     *
+     * @var array
      **/
     protected $valid_types;
 
     /**
      * __construct function
      *
-     * @param  class  $Database
-     * @param  class  $Tools
-     * @param  mixed  $params
-     * @param  mixed  $Response
+     * @param  Database_PDO  $Database
+     * @param  Tools  $Tools
+     * @param  API_params  $params
+     * @param  Responses  $Response
      */
     public function __construct($Database, $Tools, $params, $Response)
     {
@@ -154,7 +160,8 @@ class Nat_controller extends Common_api_functions
      * Convert DB<>API format (especially for JSON-formatted fields)
      * APÏ shows a valid data structure instead of JSON-formatted field
      *
-     * @return list of formatted results
+     * @param  mixed  $results
+     * @return array list of formatted results
      **/
     private function convert_from_DB($results)
     {

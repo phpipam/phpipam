@@ -52,10 +52,10 @@ class User_controller extends Common_api_functions
     /**
      * __construct function
      *
-     * @param  PDO_Database  $Database
+     * @param  Database_PDO  $Database
      * @param  Tools  $Tools
      * @param  API_params  $params
-     * @param  Response  $response
+     * @param  Responses  $Response
      */
     public function __construct($Database, $Tools, $params, $Response)
     {
@@ -217,8 +217,6 @@ class User_controller extends Common_api_functions
     /**
      * Checks authentication token (app_code) from ssl_code method
      *
-     * @method check_auth_code
-     *
      * @param  string  $app_id
      * @return void
      */
@@ -284,8 +282,6 @@ class User_controller extends Common_api_functions
 
     /**
      * Returns app details for validations
-     *
-     * @method fetch_app_details
      *
      * @return object]            app details
      */
@@ -491,8 +487,6 @@ class User_controller extends Common_api_functions
 
     /**
      * Validates token for ssl_code method
-     *
-     * @method validate_requested_token_code
      *
      * @param  string  $app_id
      * @return void

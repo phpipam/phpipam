@@ -20,10 +20,10 @@ class Search_controller extends Common_api_functions
     /**
      * __construct function
      *
-     * @param  PDO_Database  $Database
+     * @param  Database_PDO  $Database
      * @param  Tools  $Tools
      * @param  API_params  $params
-     * @param  Response  $response
+     * @param  Responses  $Response
      */
     public function __construct($Database, $Tools, $params, $Response)
     {
@@ -38,10 +38,7 @@ class Search_controller extends Common_api_functions
     /**
      * Define which items to search if provided in query.
      *
-     *
      *  /api/{app_id}/search/{string}/?subnets=0
-     *
-     * @method define_search_items
      */
     private function define_search_items()
     {
@@ -132,13 +129,11 @@ class Search_controller extends Common_api_functions
     /**
      * Reformat IP addresses for range search
      *
-     * @method reformat_for_search
-     *
-     * @return [type]
+     * @return array
      */
     private function reformat_for_search()
     {
-        // identify address type - v4 or v6
+        $searchTerm_edited = [];
         $type = $this->Tools->identify_address($this->_params->id);
 
         // reformat IP addresses for search
@@ -154,8 +149,6 @@ class Search_controller extends Common_api_functions
 
     /**
      * Search subnets
-     *
-     * @method search_subnets
      *
      * @return array
      */
@@ -177,8 +170,6 @@ class Search_controller extends Common_api_functions
     /**
      * Search IP addresses
      *
-     * @method search_addresses
-     *
      * @return array
      */
     private function search_addresses()
@@ -199,8 +190,6 @@ class Search_controller extends Common_api_functions
     /**
      * Search VLANs
      *
-     * @method search_vrfs
-     *
      * @return array
      */
     private function search_vlans()
@@ -218,8 +207,6 @@ class Search_controller extends Common_api_functions
 
     /**
      * Search VRFs
-     *
-     * @method search_vrfs
      *
      * @return array
      */

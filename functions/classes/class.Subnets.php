@@ -3946,7 +3946,8 @@ class Subnets extends Common_functions
         // set subnet allocations
         $this->define_ripe_arin_subnets();
         // take only first bit of ip address to match /8 delegations
-        $subnet_check = reset(explode('.', $subnet));
+        $exploded_subnet = explode('.', $subnet);
+        $subnet_check = reset($exploded_subnet);
         // ripe or arin?
         if (in_array($subnet_check, $this->ripe)) {
             return $this->query_ripe($subnet);

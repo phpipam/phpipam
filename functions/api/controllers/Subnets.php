@@ -15,10 +15,10 @@ class Subnets_controller extends Common_api_functions
     /**
      * __construct function
      *
-     * @param  PDO_Database  $Database
+     * @param  Database_PDO  $Database
      * @param  Tools  $Tools
      * @param  API_params  $params
-     * @param  Response  $response
+     * @param  Responses  $Response
      */
     public function __construct($Database, $Tools, $params, $Response)
     {
@@ -109,7 +109,7 @@ class Subnets_controller extends Common_api_functions
     /**
      * Populate subnet details from first/last available subnet
      *
-     * @param  int
+     * @param  int  $direction
      * @return void
      */
     private function post_find_free_subnet($direction = Subnets::SEARCH_FIND_FIRST)
@@ -673,9 +673,7 @@ class Subnets_controller extends Common_api_functions
     /**
      * Get changelog for subnet
      *
-     * @method subnet_changelog
-     *
-     * @return [type]
+     * @return array|null
      */
     private function subnet_changelog()
     {

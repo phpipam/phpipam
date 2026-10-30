@@ -749,7 +749,8 @@ class phpipamSNMP extends Common_functions
         foreach ($res1 as $k => $r) {
             // set number
             $k = str_replace($this->snmp_oids['CISCO-VTP-MIB::vtpVlanName'].'.1.', '', (string) $k);
-            $k = array_pop(explode('.', $k));
+            $exploded_k = explode('.', $k);
+            $k = array_pop($exploded_k);
             // set value
             $r = trim(str_replace('"', '', substr((string) $r, strpos((string) $r, ':') + 2)));
             $res[$k] = $r;

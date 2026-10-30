@@ -22,10 +22,10 @@ class Circuits_controller extends Common_api_functions
     /**
      * __construct function
      *
-     * @param  PDO_Database  $Database
+     * @param  Database_PDO  $Database
      * @param  Tools  $Tools
      * @param  API_params  $params
-     * @param  Response  $response
+     * @param  Responses  $Response
      */
     public function __construct($Database, $Tools, $params, $Response)
     {
@@ -52,8 +52,6 @@ class Circuits_controller extends Common_api_functions
 
     /**
      * Rewrite request parameters if circuit providers controller is requested
-     *
-     * @method rewrite_controller_params
      *
      * @param  array  $params
      * @return void
@@ -230,8 +228,6 @@ class Circuits_controller extends Common_api_functions
      * /circuits/{id}/
      * /circuits/providers/{id}/
      *
-     * @method PATCH
-     *
      * @return null|mixed[]
      */
     #[Override]
@@ -266,8 +262,6 @@ class Circuits_controller extends Common_api_functions
      *
      * /circuits/{id}/
      * /circuits/providers/{id}/
-     *
-     * @method DELETE
      *
      * @return null|mixed[]
      */
@@ -304,8 +298,6 @@ class Circuits_controller extends Common_api_functions
     /**
      * Make sure any values are provided
      *
-     * @method validate_values
-     *
      * @param  array  $values
      * @return void
      */
@@ -318,8 +310,6 @@ class Circuits_controller extends Common_api_functions
 
     /**
      * Validate provided parameters
-     *
-     * @method validate_object
      *
      * @param  string  $action
      * @param  object  $old_object
@@ -347,8 +337,6 @@ class Circuits_controller extends Common_api_functions
 
     /**
      * Make sure provided ID is correct
-     *
-     * @method validate_id
      *
      * @param  string  $action
      * @return void
@@ -379,9 +367,7 @@ class Circuits_controller extends Common_api_functions
     /**
      * Validate provided provider name
      *
-     * @method validate_provider_name
-     *
-     * @param  atring  $action
+     * @param  string  $action
      * @return void
      */
     private function validate_provider_name($action)
@@ -397,8 +383,6 @@ class Circuits_controller extends Common_api_functions
 
     /**
      * Validate circiuit provider for circuit object
-     *
-     * @method validate_circuit_provider
      *
      * @param  string  $action
      * @return void
@@ -418,8 +402,6 @@ class Circuits_controller extends Common_api_functions
 
     /**
      * Validate circuit_id
-     *
-     * @method validate_cid
      *
      * @param  object|null  $old_object
      * @return void
@@ -450,8 +432,6 @@ class Circuits_controller extends Common_api_functions
     /**
      * Validate circuit type
      *
-     * @method validate_circuit_type
-     *
      * @param  string  $action
      * @return void
      */
@@ -473,8 +453,6 @@ class Circuits_controller extends Common_api_functions
     /**
      * Validate circuit status
      *
-     * @method validate_circuit_status
-     *
      * @param  string  $action
      * @return void
      */
@@ -494,8 +472,6 @@ class Circuits_controller extends Common_api_functions
 
     /**
      * Validate circuit divide and location
-     *
-     * @method validate_circuit_devices_locations
      *
      * @param  string  $action
      * @return void

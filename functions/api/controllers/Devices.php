@@ -15,10 +15,10 @@ class Devices_controller extends Common_api_functions
     /**
      * __construct function.
      *
-     * @param  PDO_Database  $Database
+     * @param  Database_PDO  $Database
      * @param  Tools  $Tools
      * @param  API_params  $params
-     * @param  Response  $response
+     * @param  Responses  $Response
      */
     public function __construct($Database, $Tools, $params, $Response)
     {
@@ -170,8 +170,6 @@ class Devices_controller extends Common_api_functions
      * Creates new device
      *
      * /devices/
-     *
-     * @method POST
      */
     #[Override]
     public function POST()
@@ -207,8 +205,6 @@ class Devices_controller extends Common_api_functions
 
     /**
      * Update device details
-     *
-     * @method PATCH
      */
     #[Override]
     public function PATCH()
@@ -241,8 +237,6 @@ class Devices_controller extends Common_api_functions
 
     /**
      * Delete existing device
-     *
-     * @method DELETE
      */
     #[Override]
     public function DELETE()
@@ -270,10 +264,6 @@ class Devices_controller extends Common_api_functions
 
     /**
      * Validate device type
-     *
-     * @method validate_device_type
-     *
-     * @return [type]               [description]
      */
     private function validate_device_type()
     {
@@ -292,10 +282,6 @@ class Devices_controller extends Common_api_functions
 
     /**
      * Create delimited string from all sections for default permissions
-     *
-     * @method get_all_sections_delimited
-     *
-     * @return [type]                [description]
      */
     private function get_all_sections_delimited()
     {
