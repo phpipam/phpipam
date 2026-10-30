@@ -283,7 +283,7 @@ class Logging extends Common_functions
             return null;
         }
 
-        return isset($_SESSION['ipamusername']) ? $_SESSION['ipamusername'] : null;
+        return $_SESSION['ipamusername'] ?? null;
     }
 
     /**
@@ -357,7 +357,7 @@ class Logging extends Common_functions
         $this->log_command = $command;
         $this->log_details = $details;
         $this->log_severity = $severity;
-        $this->log_username = $username === null ? $this->log_username : $username;
+        $this->log_username = $username ?? $this->log_username;
 
         // validate
         ! is_null($this->log_command) ?: $this->Result->show('danger', _('Invalid log command'));
@@ -1235,7 +1235,7 @@ class Logging extends Common_functions
             if (isset($this->object_new['sectionId']) && isset($this->object_new['sectionIdNew']) && $this->object_new['sectionId'] == $this->object_new['sectionIdNew']) {
                 unset($this->object_new['sectionIdNew']);
             } else {
-                $this->object_old['sectionIdNew'] = isset($this->object_old['sectionId']) ? $this->object_old['sectionId'] : null;
+                $this->object_old['sectionIdNew'] = $this->object_old['sectionId'] ?? null;
             }
 
             // transform subnet to IP address format

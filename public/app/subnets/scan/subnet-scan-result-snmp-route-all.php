@@ -39,11 +39,7 @@ foreach ($POST as $k => $p) {
 // sort by mask size
 function cmp_subnets($a, $b)
 {
-    if ($a['subnet_dec'] == $b['subnet_dec']) {
-        return 0;
-    }
-
-    return ($a['subnet_dec'] < $b['subnet_dec']) ? -1 : 1;
+    return $a['subnet_dec'] <=> $b['subnet_dec'];
 }
 
 usort($subnets_all, 'cmp_subnets');

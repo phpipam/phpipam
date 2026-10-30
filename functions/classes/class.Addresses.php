@@ -173,7 +173,7 @@ class Addresses extends Common_functions
     public function fetch_address($method, $id)
     {
         // null method
-        $method = is_null($method) ? 'id' : $method;
+        $method = $method ?? 'id';
 
         // check cache first
         $cached = $this->cache_check('ipaddresses', $method, $id);
@@ -196,7 +196,7 @@ class Addresses extends Common_functions
         }
 
         // result
-        return ! is_null($address) ? $address : false;
+        return $address ?? false;
     }
 
     /**
@@ -222,7 +222,7 @@ class Addresses extends Common_functions
         }
 
         // result
-        return ! is_null($address) ? $address : false;
+        return $address ?? false;
     }
 
     /**
@@ -1077,7 +1077,7 @@ class Addresses extends Common_functions
         // insert record
         $this->PowerDNS->add_domain_record($record, false);
         // link to address
-        $id = $id === null ? $this->lastId : $id;
+        $id = $id ?? $this->lastId;
         $this->ptr_link($id, $this->PowerDNS->lastId);
         // ok
         if ($print_error && PHP_SAPI != 'cli') {

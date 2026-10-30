@@ -44,7 +44,7 @@ function get_strict_subnets($Subnets, $sectionId, $cidr, $result_fields = '*')
 }
 
 $sectionId = isset($GET->section) ? (int) $GET->section : 0;
-$cidr = isset($GET->cidr) ? $GET->cidr : '';
+$cidr = $GET->cidr ?? '';
 $previously_selected = isset($GET->prev) ? (int) $GET->prev : -1;
 
 $section = $Sections->fetch_section('id', $sectionId);

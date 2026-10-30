@@ -66,7 +66,7 @@ if (count($free_subnets) > 0) {
     print "<div id='showFreeSubnets'>";
     foreach ($free_subnets as $free_mask => $items) {
         // max
-        $max_subnets = pow(2, $free_mask - $subnet['mask']);
+        $max_subnets = 2 ** ($free_mask - $subnet['mask']);
         //
         //
         print "<div style='margin-top:20px;'>";

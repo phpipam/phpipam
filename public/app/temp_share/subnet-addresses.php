@@ -16,7 +16,7 @@ $DNS = new DNS($Database, $User->settings);
 $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 // set hidden custom fields
 $hidden_cfields = db_json_decode($settings->hiddenCustomFields, true);
-$hidden_cfields = isset($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : [];
+$hidden_cfields = $hidden_cfields['ipaddresses'] ?? [];
 
 // set selected address fields array
 $selected_ip_fields = $settings->IPfilter;

@@ -88,7 +88,7 @@ if ($User->twofa_required() === false || $User->user->{'2fa'} == 0) {
     <?php
     if (file_exists('css/images/logo/logo.png')) {
         // set width
-        $logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
+        $logo_width = $config['logo_width'] ?? 220;
         print "<img style='max-width:".$logo_width."px;margin:10px;margin-top:20px;' src='css/images/logo/logo.png'>";
     }
 ?>

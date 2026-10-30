@@ -179,7 +179,7 @@ class phpipam_mail extends Common_functions
         $config = Config::ValueOf('config');
 
         // set width
-        $logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
+        $logo_width = $config['logo_width'] ?? 220;
 
         $html = [];
         $html[] = "<body style='margin:0px;padding:0px;background:#f9f9f9;border-collapse:collapse;'>";

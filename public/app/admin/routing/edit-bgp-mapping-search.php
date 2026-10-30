@@ -21,8 +21,8 @@ if ($POST->action == 'edit') {
 }
 
 // validate
-$bgp_id = isset($POST->bgp_id) ? $POST->bgp_id : '';
-$search_txt = isset($POST->subnet) ? $POST->subnet : '';
+$bgp_id = $POST->bgp_id ?? '';
+$search_txt = $POST->subnet ?? '';
 
 if (! is_numeric($bgp_id)) {
     $Result->show('danger', _('Invalid ID'), true);

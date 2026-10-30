@@ -98,7 +98,7 @@ else {
 
     // calculate possible subnets
     $res = 0;
-    for ($start = $start_subnet->subnet; $start < $end_subnet->subnet && $res < $POST->results; $start += pow(2, 32 - $POST->mask)) {
+    for ($start = $start_subnet->subnet; $start < $end_subnet->subnet && $res < $POST->results; $start += 2 ** (32 - $POST->mask)) {
         $possible_subnets[] = $start;
         // verify overlapping
         $overlap = false;

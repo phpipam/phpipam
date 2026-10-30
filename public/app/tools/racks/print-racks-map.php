@@ -67,7 +67,7 @@ if ($User->settings->enableRACK != '1') {
         }
 
         // go through locations and print racks
-        $sPage = isset($GET->sPage) ? $GET->sPage : null;
+        $sPage = $GET->sPage ?? null;
         foreach ($all_rack_locations as $location_id => $all_rows) {
             // only if match
             if ($location_id == $sPage) {

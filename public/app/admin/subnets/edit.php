@@ -469,7 +469,7 @@ if ($User->settings->enableCustomers == 1 && $User->get_module_permissions('cust
     <tr>
         <td class="middle"><?php print _('Threshold'); ?></td>
         <td>
-            <?php $svalue = isset($subnet_old_details['threshold']) ? $subnet_old_details['threshold'] : 0; ?>
+            <?php $svalue = $subnet_old_details['threshold'] ?? 0; ?>
             <input type="text" style="width:200px;" class="slider" name="threshold" value="<?php print $svalue; ?>" data-slider-handle="square" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="<?php print $svalue; ?>" data-slider-orientation="horizontal" data-slider-selection="after">
         </td>
         <td class="info2"><?php print _('Set subnet alert threshold'); ?> <span class='badge badge1 badge5 slider-text'><span><?php print $svalue; ?></span>%</span></td>

@@ -87,7 +87,7 @@ try {
     }
 
     /* Check app security and prepare request parameters ---------- */
-    $content_type = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '';
+    $content_type = $_SERVER['CONTENT_TYPE'] ?? '';
 
     // crypt check
     if ($app->app_security == 'crypt') {

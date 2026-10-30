@@ -49,7 +49,7 @@ else {
             // format last used and created
             $created = date('M d, Y', strtotime((string) $passkey->created));
             $last_used = is_null($passkey->used) ? _('Never') : date('M d, Y', strtotime($passkey->used));
-            $passkey->comment = is_null($passkey->comment) ? '-- Unknown --' : $passkey->comment;
+            $passkey->comment = $passkey->comment ?? '-- Unknown --';
             $this_browser = $passkey->keyId == @$_SESSION['keyId'] ? "<span class='badge' style='margin-bottom:2px;margin-left:10px;'>"._('You authenticated with this passkey').'</span>' : '';
 
             print '<li class="list-group-item">';

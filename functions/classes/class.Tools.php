@@ -2530,7 +2530,7 @@ class Tools extends Common_functions
         // set hidden fields
         $this->get_settings();
         $hidden_fields = db_json_decode($this->settings->hiddenCustomFields, true);
-        $hidden_fields = isset($hidden_fields['subnets']) ? $hidden_fields['subnets'] : [];
+        $hidden_fields = $hidden_fields['subnets'] ?? [];
 
         // set html array
         $html = [];

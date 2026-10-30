@@ -5,7 +5,7 @@ $User->check_user_session();
 
 // get all custom fields
 $custom_address_fields = $GET->addresses == 'on' ? $Tools->fetch_custom_fields('ipaddresses') : [];
-$hidden_address_fields = isset($hidden_fields['ipaddresses']) ? $hidden_fields['ipaddresses'] : [];
+$hidden_address_fields = $hidden_fields['ipaddresses'] ?? [];
 
 // search addresses
 $result_addresses = $Tools->search_addresses($searchTerm, $searchTerm_edited['high'], $searchTerm_edited['low'], $custom_address_fields);

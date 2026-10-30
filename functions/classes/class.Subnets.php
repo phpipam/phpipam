@@ -570,7 +570,7 @@ class Subnets extends Common_functions
     public function fetch_subnet($method, $value)
     {
         // null method
-        $method = is_null($method) ? 'id' : $method;
+        $method = $method ?? 'id';
 
         // fetch
         return $this->fetch_object('subnets', $method, $value);
@@ -1139,7 +1139,7 @@ class Subnets extends Common_functions
             return false;
         }
 
-        return ! is_null($gateway) ? $gateway : false;
+        return $gateway ?? false;
     }
 
     /**
@@ -1165,7 +1165,7 @@ class Subnets extends Common_functions
             $out[$mask]->host_bits = 32 - $mask;                              // host bits
             $out[$mask]->subnet_bits = 32 - $out[$mask]->host_bits;           // network bits
             $out[$mask]->hosts = number_format($this->max_hosts(['subnet' => '10.0.0.0', 'mask' => $mask]), 0, ',', '.');     // max hosts
-            $out[$mask]->subnets = number_format(pow(2, ($mask - 8)), 0, ',', '.');
+            $out[$mask]->subnets = number_format(2 ** ($mask - 8), 0, ',', '.');
             $out[$mask]->wildcard = long2ip(~ip2long($net->netmask));      // 0.0.255.255
 
             // binary
@@ -1204,7 +1204,7 @@ class Subnets extends Common_functions
             $out[$mask]->host_bits = 32 - $mask;                              // host bits
             $out[$mask]->subnet_bits = 32 - $out[$mask]->host_bits;           // network bits
             $out[$mask]->hosts = number_format($this->max_hosts(['subnet' => '10.0.0.0', 'mask' => $mask]), 0, ',', '.');     // max hosts
-            $out[$mask]->subnets = number_format(pow(2, ($mask - $subnet_mask)), 0, ',', '.');
+            $out[$mask]->subnets = number_format(2 ** ($mask - $subnet_mask), 0, ',', '.');
             $out[$mask]->wildcard = long2ip(~ip2long($net->netmask));      // 0.0.255.255
 
             // binary
@@ -2941,7 +2941,7 @@ class Subnets extends Common_functions
         }
 
         // return
-        return isset($false) ? $false : false;
+        return $false ?? false;
     }
 
     /**

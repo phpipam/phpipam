@@ -603,7 +603,7 @@ class PowerDNS extends Common_functions
         $this->domains_cache[$domain->id] = $domain;
 
         // result
-        return ! is_null($domain) ? $domain : false;
+        return $domain ?? false;
     }
 
     /**
@@ -748,7 +748,7 @@ class PowerDNS extends Common_functions
         }
 
         // result
-        return ! is_null($record) ? $record : false;
+        return $record ?? false;
     }
 
     /**

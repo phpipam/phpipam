@@ -159,7 +159,7 @@ foreach ($vlan_domains as $vlan_domain) {
                     $myField['nameTemp'] = str_replace(' ', '___', (string) $myField['name']);
 
                     if ($GET->{$myField['nameTemp']} == 'on') {
-                        $custom_value = isset($vlan[$myField['name']]) ? $vlan[$myField['name']] : '';
+                        $custom_value = $vlan[$myField['name']] ?? '';
                         $worksheet->write($curRow, $curColumn, $custom_value, $format_text);
                         $curColumn++;
                     }

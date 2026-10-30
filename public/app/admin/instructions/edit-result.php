@@ -25,7 +25,7 @@ if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
     $Result->show('danger', _('Invalid CSRF cookie'), true);
 }
 
-$instructions = isset($_POST['instructions']) ? $_POST['instructions'] : '';
+$instructions = $_POST['instructions'] ?? '';
 
 // validate ID
 if ($POST->id == '1' || $POST->id == '2') {

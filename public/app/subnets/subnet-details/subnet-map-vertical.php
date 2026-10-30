@@ -63,7 +63,7 @@ for ($searchmask = $subnetmask + 1; $searchmask < $maxmask; $searchmask++) {
 // if some found print
 if (count($free_subnets) > 0) {
     // get maximum number of subnets that will be calculated
-    $max_all_subnets = pow(2, array_keys($free_subnets)[count($free_subnets) - 1] - $subnet['mask']);
+    $max_all_subnets = 2 ** (array_keys($free_subnets)[count($free_subnets) - 1] - $subnet['mask']);
     $levels = count($free_subnets);
 
     // content
@@ -89,7 +89,7 @@ if (count($free_subnets) > 0) {
         print '<tr>';
         foreach ($all_keys as $array_key) {
             // max subnets
-            $max_subnets = pow(2, $array_key - $subnet['mask']);
+            $max_subnets = 2 ** ($array_key - $subnet['mask']);
 
             if (in_array($Subnets->transform_address($subnet_start, 'dotted').'/'.$array_key, $free_subnets[$array_key])) {
                 print '<td>'.$free_subnets[$array_key][$m].'/'.$array_key.'</td>';
@@ -112,7 +112,7 @@ if (count($free_subnets) > 0) {
         break;
 
         // max
-        $max_subnets = pow(2, $free_mask - $subnet['mask']);
+        $max_subnets = 2 ** ($free_mask - $subnet['mask']);
 
         // save start
         $subnet_start = $subnet['subnet'];

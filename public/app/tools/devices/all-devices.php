@@ -126,8 +126,8 @@ else {
         $device = (array) $device;
 
         // count items
-        $cnt1 = isset($cnt_ips[$device['id']]) ? $cnt_ips[$device['id']] : 0;
-        $cnt2 = isset($cnt_subnets[$device['id']]) ? $cnt_subnets[$device['id']] : 0;
+        $cnt1 = $cnt_ips[$device['id']] ?? 0;
+        $cnt2 = $cnt_subnets[$device['id']] ?? 0;
         $cnt = $cnt1 + $cnt2;
 
         // print details
@@ -161,7 +161,7 @@ else {
             print '</td>';
         }
         print '	<td><span class="badge badge1 badge5">'.$cnt.'</span> '._('Objects').'</td>'."\n";
-        print '	<td class="hidden-sm">'.(isset($device_types_indexed[$device['type']]) ? $device_types_indexed[$device['type']] : '').'</td>'."\n";
+        print '	<td class="hidden-sm">'.($device_types_indexed[$device['type']] ?? '').'</td>'."\n";
 
         // custom fields - no subnets
         if (is_array(@$custom_fields)) {
@@ -204,8 +204,8 @@ else {
         print '<tr class="unspecified">'."\n";
 
         // count empty
-        $cnt1 = (isset($cnt_ips['']) ? $cnt_ips[''] : 0) + (isset($cnt_ips[0]) ? $cnt_ips[0] : 0);
-        $cnt2 = (isset($cnt_subnets['']) ? $cnt_subnets[''] : 0) + (isset($cnt_subnets[0]) ? $cnt_subnets[0] : 0);
+        $cnt1 = ($cnt_ips[''] ?? 0) + ($cnt_ips[0] ?? 0);
+        $cnt2 = ($cnt_subnets[''] ?? 0) + ($cnt_subnets[0] ?? 0);
         $cnt = $cnt1 + $cnt2;
 
         print '	<td>'._('Device not specified').'</td>'."\n";

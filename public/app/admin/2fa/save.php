@@ -37,7 +37,7 @@ if (strlen((string) $POST->{'2fa_name'}) > 32 || is_blank($POST->{'2fa_name'})) 
 }
 
 // change
-$POST->{'2fa_userchange'} = isset($POST->{'2fa_userchange'}) ? $POST->{'2fa_userchange'} : 0;
+$POST->{'2fa_userchange'} = $POST->{'2fa_userchange'} ?? 0;
 
 // set update values
 $values = [

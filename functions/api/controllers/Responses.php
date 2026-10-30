@@ -33,7 +33,7 @@ class Responses extends Result
     public function formulate_result($result, $time = false, $nest_custom_fields = false, $custom_fields = [])
     {
         // make sure result is array
-        $this->result = is_null($this->result) ? (array) $result : $this->result;
+        $this->result = $this->result ?? (array) $result;
 
         // get requested content type
         $this->get_request_content_type();

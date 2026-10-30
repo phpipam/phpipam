@@ -13,7 +13,7 @@ if (! is_blank($GET->ip)) {
 $User->check_user_session();
 
 // set parameters form cookie
-$sp = isset($_COOKIE['search_parameters']) ? $_COOKIE['search_parameters'] : '';
+$sp = $_COOKIE['search_parameters'] ?? '';
 $params = json_decode((string) $sp, true) ?: [];
 foreach ($params as $k => $p) {
     if ($p == 'on') {

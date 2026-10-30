@@ -581,7 +581,7 @@ class Common_functions
             'deviceTypes' => 'tid',
             'nominatim_cache' => 'sha256'];
 
-        return isset($mapings[$table]) ? $mapings[$table] : 'id';
+        return $mapings[$table] ?? 'id';
     }
 
     /**
@@ -1117,7 +1117,7 @@ class Common_functions
      */
     public function validate_action($popup = true)
     {
-        $action = isset($_POST['action']) ? $_POST['action'] : '';
+        $action = $_POST['action'] ?? '';
         $valid_actions = $this->get_valid_actions();
 
         if (! in_array($action, $valid_actions)) {
@@ -1436,7 +1436,7 @@ class Common_functions
      */
     protected function translate_address_type($index)
     {
-        return isset($this->address_types[$index]['type']) ? $this->address_types[$index]['type'] : 'Used';
+        return $this->address_types[$index]['type'] ?? 'Used';
     }
 
     /**

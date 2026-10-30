@@ -25,7 +25,7 @@ $User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('dang
 $clear = true;
 
 // set width
-$logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
+$logo_width = $config['logo_width'] ?? 220;
 
 if (! file_exists(__DIR__.'/../../../../css/images/logo/logo.png')) {
     require __DIR__.'/logo-builtin.php';

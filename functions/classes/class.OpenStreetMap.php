@@ -188,7 +188,7 @@ class OpenStreetMap extends Common_functions
         }
 
         ?>
-        <div style="width:100%; height:<?php print isset($height) ? $height : '600px' ?>;" id="map_overlay">
+        <div style="width:100%; height:<?php print $height ?? '600px' ?>;" id="map_overlay">
             <div id="osmap" style="width:100%; height:100%;"></div>
         </div>
         <script>

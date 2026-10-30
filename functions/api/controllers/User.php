@@ -314,7 +314,7 @@ class User_controller extends Common_api_functions
         }
 
         // save
-        $this->token_valid_time = is_null($token_valid_time) ? 21600 : $token_valid_time;
+        $this->token_valid_time = $token_valid_time ?? 21600;
     }
 
     /**
@@ -371,7 +371,7 @@ class User_controller extends Common_api_functions
         }
 
         // save
-        $this->token_length = is_null($length) ? 24 : $length;
+        $this->token_length = $length ?? 24;
     }
 
     /**

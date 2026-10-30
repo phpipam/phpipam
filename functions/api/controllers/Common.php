@@ -278,7 +278,7 @@ class Common_api_functions
     protected function prepare_result($result, $controller = null, $links = true, $transform_address = true)
     {
         // empty controller
-        $controller = is_null($controller) ? $this->_params->controller : $controller;
+        $controller = $controller ?? $this->_params->controller;
 
         // links
         if ($links) {

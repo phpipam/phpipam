@@ -38,6 +38,6 @@ elseif ($User->settings->enableLocations != '1') {
     foreach ($all_locations as $l) {
         $OSM->add_location($l);
     }
-    $height = isset($height) ? $height : null;
+    $height = $height ?? null;
     $OSM->map($height ?? null);
 }

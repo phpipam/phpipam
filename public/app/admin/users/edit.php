@@ -200,7 +200,7 @@ $(document).ready(function(){
             <td style="padding-top:10px;">
             <?php
             foreach ($user_passkeys as $passkey) {
-                $passkey->comment = is_null($passkey->comment) ? '-- Unknown --' : $passkey->comment;
+                $passkey->comment = $passkey->comment ?? '-- Unknown --';
                 print "<input type='checkbox' name='delete-passkey-".$passkey->id."' value='1'> ";
                 print $User->strip_input_tags($passkey->comment).'<br>';
             }

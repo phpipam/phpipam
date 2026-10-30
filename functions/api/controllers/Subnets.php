@@ -736,7 +736,7 @@ class Subnets_controller extends Common_api_functions
     private function read_subnet($subnetId = null)
     {
         // null
-        $subnetId = is_null($subnetId) ? $this->_params->id : $subnetId;
+        $subnetId = $subnetId ?? $this->_params->id;
         // fetch
         $result = $this->Subnets->fetch_subnet('id', $subnetId);
         // add nameservers, GW and calculation

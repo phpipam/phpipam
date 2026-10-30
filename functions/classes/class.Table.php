@@ -28,7 +28,7 @@ class Table extends Common_functions
 
     private function set_display_limit()
     {
-        $this->limit = isset($_COOKIE['table-page-size']) ? $_COOKIE['table-page-size'] : 50;
+        $this->limit = $_COOKIE['table-page-size'] ?? 50;
     }
 
     /**

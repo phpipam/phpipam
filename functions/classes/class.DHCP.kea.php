@@ -485,7 +485,7 @@ class DHCP_kea extends Common_functions
                     if (isset($s['reservations'])) {
                         // save id
                         unset($s_id);
-                        $s_id = isset($s['id']) ? $s['id'] : '';
+                        $s_id = $s['id'] ?? '';
                         // init array
                         $this->reservations4 = [];
                         $m = 0;

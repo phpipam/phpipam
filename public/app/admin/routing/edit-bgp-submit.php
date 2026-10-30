@@ -82,7 +82,7 @@ if (isset($POST->customer_id)) {
 
 // create update array
 $values = [
-    'id' => isset($POST->id) ? $POST->id : null,
+    'id' => $POST->id ?? null,
     'bgp_type' => $POST->bgp_type,
     'local_as' => $POST->local_as,
     'local_address' => $POST->local_address,

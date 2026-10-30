@@ -180,7 +180,7 @@ function set_ui_language($default_lang = null)
         return false;
     }
 
-    $user_lang = isset($_SESSION['ipamlanguage']) ? $_SESSION['ipamlanguage'] : null;
+    $user_lang = $_SESSION['ipamlanguage'] ?? null;
     $sys_lang = is_string(getenv('LC_ALL')) ? getenv('LC_ALL') : null;
 
     // Read accepted HTTP languages

@@ -574,7 +574,7 @@ class Scan extends Common_functions
         $explain_codes = $this->ping_set_exit_code_explains();
 
         // return code
-        return isset($explain_codes[$code]) ? $explain_codes[$code] : '';
+        return $explain_codes[$code] ?? '';
     }
 
     /**
@@ -619,7 +619,7 @@ class Scan extends Common_functions
     public function ping_update_lastseen($id, $datetime = null, $mac = null)
     {
         // set datetime
-        $datetime = is_null($datetime) ? date('Y-m-d H:i:s') : $datetime;
+        $datetime = $datetime ?? date('Y-m-d H:i:s');
         // execute
         $update_ipaddress = ['id' => $id, 'lastSeen' => $datetime];
         if (! is_null($mac)) {
