@@ -59,7 +59,8 @@
                 "issues": "https://github.com/Bacon/BaconQrCode/issues",
                 "source": "https://github.com/Bacon/BaconQrCode/tree/v3.1.1"
             },
-            "time": "2026-04-05T21:06:35+00:00"
+            "time": "2026-04-05T21:06:35+00:00",
+            "published-time": "2026-04-05T21:07:28+00:00"
         },
         {
             "name": "dapphp/radius",
@@ -128,7 +129,8 @@
                 "issues": "https://github.com/dapphp/radius/issues",
                 "source": "https://github.com/dapphp/radius/tree/3.1.0"
             },
-            "time": "2025-12-28T23:50:12+00:00"
+            "time": "2025-12-28T23:50:12+00:00",
+            "published-time": "2025-12-29T01:01:43+00:00"
         },
         {
             "name": "dapphp/securimage",
@@ -185,7 +187,8 @@
                 "source": "https://github.com/dapphp/securimage/tree/4.0.2"
             },
             "abandoned": true,
-            "time": "2020-05-30T10:05:48+00:00"
+            "time": "2020-05-30T10:05:48+00:00",
+            "published-time": "2020-06-08T14:15:06+00:00"
         },
         {
             "name": "dasprid/enum",
@@ -235,7 +238,8 @@
                 "issues": "https://github.com/DASPRiD/Enum/issues",
                 "source": "https://github.com/DASPRiD/Enum/tree/1.0.7"
             },
-            "time": "2025-09-16T12:23:56+00:00"
+            "time": "2025-09-16T12:23:56+00:00",
+            "published-time": "2025-09-16T12:25:04+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -291,7 +295,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-16T11:41:01+00:00"
+            "time": "2026-02-16T11:41:01+00:00",
+            "published-time": "2026-02-16T12:37:29+00:00"
         },
         {
             "name": "firehed/cbor",
@@ -338,7 +343,8 @@
                 "issues": "https://github.com/Firehed/cbor-php/issues",
                 "source": "https://github.com/Firehed/cbor-php/tree/master"
             },
-            "time": "2019-05-14T06:31:13+00:00"
+            "time": "2019-05-14T06:31:13+00:00",
+            "published-time": "2021-09-07T18:35:00+00:00"
         },
         {
             "name": "firehed/webauthn",
@@ -410,7 +416,8 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-03-15T19:03:55+00:00"
+            "time": "2026-03-15T19:03:55+00:00",
+            "published-time": "2026-04-09T19:30:27+00:00"
         },
         {
             "name": "onelogin/php-saml",
@@ -474,7 +481,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-07T22:38:04+00:00"
+            "time": "2026-05-07T22:38:04+00:00",
+            "published-time": "2026-05-11T22:22:37+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -543,7 +551,8 @@
                 "issues": "https://github.com/paragonie/constant_time_encoding/issues",
                 "source": "https://github.com/paragonie/constant_time_encoding"
             },
-            "time": "2025-09-24T15:06:41+00:00"
+            "time": "2025-09-24T15:06:41+00:00",
+            "published-time": "2025-09-24T15:07:11+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -625,7 +634,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-18T08:06:14+00:00"
+            "time": "2026-05-18T08:06:14+00:00",
+            "published-time": "2026-05-18T08:06:42+00:00"
         },
         {
             "name": "pragmarx/google2fa",
@@ -689,7 +699,8 @@
                 "security": "https://github.com/antonioribeiro/google2fa/security/policy",
                 "source": "https://github.com/antonioribeiro/google2fa"
             },
-            "time": "2026-08-15T13:22:01+00:00"
+            "time": "2026-08-15T13:22:01+00:00",
+            "published-time": "2026-08-15T13:28:13+00:00"
         },
         {
             "name": "robrichards/xmlseclibs",
@@ -731,7 +742,8 @@
                 "issues": "https://github.com/robrichards/xmlseclibs/issues",
                 "source": "https://github.com/robrichards/xmlseclibs/tree/3.1.5"
             },
-            "time": "2026-03-13T10:31:56+00:00"
+            "time": "2026-03-13T10:31:56+00:00",
+            "published-time": "2026-03-13T10:34:06+00:00"
         },
         {
             "name": "sop/asn1",
@@ -785,7 +797,8 @@
                 "issues": "https://github.com/sop/asn1/issues",
                 "source": "https://github.com/sop/asn1/tree/4.1.2"
             },
-            "time": "2025-01-08T13:56:59+00:00"
+            "time": "2025-01-08T13:56:59+00:00",
+            "published-time": "2025-01-08T14:08:15+00:00"
         }
     ],
     "packages-dev": [
@@ -883,7 +896,8 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2026-05-06T08:26:05+00:00"
+            "time": "2026-05-06T08:26:05+00:00",
+            "published-time": "2026-05-06T12:56:03+00:00"
         },
         {
             "name": "driftingly/rector-laravel",
@@ -919,7 +933,8 @@
                 "issues": "https://github.com/driftingly/rector-laravel/issues",
                 "source": "https://github.com/driftingly/rector-laravel/tree/2.5.0"
             },
-            "time": "2026-06-02T16:22:14+00:00"
+            "time": "2026-06-02T16:22:14+00:00",
+            "published-time": "2026-06-02T16:21:38+00:00"
         },
         {
             "name": "laravel/pint",
@@ -989,7 +1004,8 @@
                 "issues": "https://github.com/laravel/pint/issues",
                 "source": "https://github.com/laravel/pint"
             },
-            "time": "2026-08-05T16:47:22+00:00"
+            "time": "2026-08-05T16:47:22+00:00",
+            "published-time": "2026-08-05T17:06:35+00:00"
         },
         {
             "name": "phpcompatibility/php-compatibility",
@@ -997,12 +1013,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCompatibility/PHPCompatibility.git",
-                "reference": "4b1ac835da9b71a6ac3bc70ff903638187f33674"
+                "reference": "a0fd248812fd080338dc1227cf6efb1d1b05f07c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibility/zipball/4b1ac835da9b71a6ac3bc70ff903638187f33674",
-                "reference": "4b1ac835da9b71a6ac3bc70ff903638187f33674",
+                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibility/zipball/a0fd248812fd080338dc1227cf6efb1d1b05f07c",
+                "reference": "a0fd248812fd080338dc1227cf6efb1d1b05f07c",
                 "shasum": ""
             },
             "require": {
@@ -1080,7 +1096,8 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2026-09-21T23:21:51+00:00"
+            "time": "2026-10-28T00:02:27+00:00",
+            "published-time": "2026-10-28T00:02:33+00:00"
         },
         {
             "name": "phpcsstandards/phpcsutils",
@@ -1173,15 +1190,16 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2026-07-27T10:28:41+00:00"
+            "time": "2026-07-27T10:28:41+00:00",
+            "published-time": "2026-07-27T10:36:31+00:00"
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.2.16",
+            "version": "2.3.4",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/46a6d9060e5a7763adfcc21ebcb8b504ebdbcb92",
-                "reference": "46a6d9060e5a7763adfcc21ebcb8b504ebdbcb92",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f20ce6f3c82556cfcfc086b152445a12d1d64fff",
+                "reference": "f20ce6f3c82556cfcfc086b152445a12d1d64fff",
                 "shasum": ""
             },
             "require": {
@@ -1237,25 +1255,26 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-09-25T09:31:51+00:00"
+            "time": "2026-10-28T22:38:53+00:00",
+            "published-time": "2026-10-28T22:39:06+00:00"
         },
         {
             "name": "rector/rector",
-            "version": "2.6.7",
+            "version": "2.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "f4aa224edb9b0630fb43826d4cb6a49b62e48d4c"
+                "reference": "12ddb68d34acb91bcf3d00302bf1c7c1b5840bd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/f4aa224edb9b0630fb43826d4cb6a49b62e48d4c",
-                "reference": "f4aa224edb9b0630fb43826d4cb6a49b62e48d4c",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/12ddb68d34acb91bcf3d00302bf1c7c1b5840bd6",
+                "reference": "12ddb68d34acb91bcf3d00302bf1c7c1b5840bd6",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4|^8.0",
-                "phpstan/phpstan": "^2.2.14"
+                "phpstan/phpstan": "^2.3.4"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -1286,7 +1305,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.6.7"
+                "source": "https://github.com/rectorphp/rector/tree/2.8.3"
             },
             "funding": [
                 {
@@ -1294,7 +1313,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-09-13T20:17:44+00:00"
+            "time": "2026-10-29T05:51:41+00:00",
+            "published-time": "2026-10-29T05:51:47+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -1378,20 +1398,21 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2026-08-06T02:45:27+00:00"
+            "time": "2026-08-06T02:45:27+00:00",
+            "published-time": "2026-08-06T02:57:35+00:00"
         },
         {
             "name": "webmozart/assert",
-            "version": "2.4.1",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozarts/assert.git",
-                "reference": "2ccb7c2e821038c03a3e6e1700c570c158c55f70"
+                "reference": "8a163706bbcac613733dba03f51e13b5eb1bb819"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/2ccb7c2e821038c03a3e6e1700c570c158c55f70",
-                "reference": "2ccb7c2e821038c03a3e6e1700c570c158c55f70",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/8a163706bbcac613733dba03f51e13b5eb1bb819",
+                "reference": "8a163706bbcac613733dba03f51e13b5eb1bb819",
                 "shasum": ""
             },
             "require": {
@@ -1442,9 +1463,10 @@
             ],
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/2.4.1"
+                "source": "https://github.com/webmozarts/assert/tree/2.5.0"
             },
-            "time": "2026-06-15T15:31:57+00:00"
+            "time": "2026-10-05T23:14:19+00:00",
+            "published-time": "2026-10-05T23:14:25+00:00"
         }
     ],
     "aliases": [],
@@ -1478,5 +1500,5 @@
     "platform-overrides": {
         "php": "8.2"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.11.0"
 }

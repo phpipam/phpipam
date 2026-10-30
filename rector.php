@@ -24,7 +24,6 @@ use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
 use Rector\Php80\Rector\ClassConstFetch\ClassOnThisVariableObjectRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Php82\Rector\Encapsed\VariableInStringInterpolationFixerRector;
-use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Php85\Rector\FuncCall\ArrayKeyExistsNullToEmptyStringRector;
 use Rector\Php85\Rector\FuncCall\OrdSingleByteRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
@@ -58,10 +57,6 @@ return RectorConfig::configure()
         // AlternativeIfToBracketRector::class,
         // RemoveAlwaysElseRector::class,
         NullToStrictStringFuncCallArgRector::class,
-    ])
-    ->withConfiguredRule(AddOverrideAttributeToOverriddenMethodsRector::class, [
-        'allow_override_empty_method' => true,
-        'add_to_interface_methods' => true,
     ])
     ->withPreparedSets(
         // deadCode: true,
