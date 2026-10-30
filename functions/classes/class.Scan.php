@@ -183,9 +183,8 @@ class Scan extends Common_functions
             }
 
             $this->Result->show('danger', _('Invalid scan method.'), true);
-        }
-        // ok
-        else {
+        } else {
+            // ok
             $this->icmp_type = $method;
         }
     }
@@ -401,13 +400,11 @@ class Scan extends Common_functions
             if ($ping_response->_transmitted == $ping_response->_received) {
                 $result['code'] = 0;
                 $this->rtt = 'RTT: '.strstr((string) $ping_response->_round_trip['avg'], '.', true);
-            }
-            // ping loss
-            elseif ($ping_response->_received == 0) {
+            } elseif ($ping_response->_received == 0) {
+                // ping loss
                 $result['code'] = 1;
-            }
-            // failed
-            else {
+            } else {
+                // failed
                 $result['code'] = 3;
             }
         }

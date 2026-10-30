@@ -792,9 +792,8 @@ class Logging extends Common_functions
                     $this->changelog_write_to_db($log);
                 }
             }
-        }
-        // not enabled
-        else {
+        } else {
+            // not enabled
             return true;
         }
 
@@ -900,53 +899,41 @@ class Logging extends Common_functions
             // tag change
             if ($k == 'state') {
                 $this->object_new[$k] = $this->changelog_format_tag_diff($k, $v);
-            }
-            // section change
-            elseif ($k == 'sectionId') {
+            } elseif ($k == 'sectionId') {
+                // section change
                 $this->object_new[$k] = $this->changelog_format_section_diff($k, $v);
-            }
-            // section change
-            elseif ($k == 'section') {
+            } elseif ($k == 'section') {
+                // section change
                 $this->object_new[$k] = $this->changelog_format_section_diff($k, $v);
-            }
-            // master subnet change
-            elseif ($k == 'subnetId') {
+            } elseif ($k == 'subnetId') {
+                // master subnet change
                 $this->object_new[$k] = $this->changelog_format_master_subnet_diff($k, $v);
-            }
-            // master subnet change
-            elseif ($k == 'masterSubnetId') {
+            } elseif ($k == 'masterSubnetId') {
+                // master subnet change
                 $this->object_new[$k] = $this->changelog_format_master_subnet_diff($k, $v);
-            }
-            // device change
-            elseif ($k == 'switch') {
+            } elseif ($k == 'switch') {
+                // device change
                 $this->object_new[$k] = $this->changelog_format_device_diff($k, $v);
-            }
-            // device change
-            elseif ($k == 'device') {
+            } elseif ($k == 'device') {
+                // device change
                 $this->object_new[$k] = $this->changelog_format_device_diff($k, $v);
-            }
-            // vlan
-            elseif ($k == 'vlanId') {
+            } elseif ($k == 'vlanId') {
+                // vlan
                 $this->object_new[$k] = $this->changelog_format_vlan_diff($k, $v);
-            }
-            // vrf
-            elseif ($k == 'vrfId') {
+            } elseif ($k == 'vrfId') {
+                // vrf
                 $this->object_new[$k] = $this->changelog_format_vrf_diff($k, $v);
-            }
-            // location
-            elseif ($k == 'location') {
+            } elseif ($k == 'location') {
+                // location
                 $this->object_new[$k] = $this->changelog_format_location_diff($k, $v);
-            }
-            // master section change
-            elseif ($k == 'masterSection') {
+            } elseif ($k == 'masterSection') {
+                // master section change
                 $this->object_new[$k] = $this->changelog_format_master_section_diff($k, $v);
-            }
-            // permission change
-            elseif ($k == 'permissions') {
+            } elseif ($k == 'permissions') {
+                // permission change
                 $this->object_new[$k] = $this->changelog_format_permission_diff($k);
-            }
-            // nameserver index
-            elseif ($k == 'nameserverId') {
+            } elseif ($k == 'nameserverId') {
+                // nameserver index
                 $this->object_new[$k] = $this->changelog_format_ns_diff($k, $v);
             }
         }
@@ -963,53 +950,41 @@ class Logging extends Common_functions
             // tag change
             if ($k == 'state') {
                 $this->object_old[$k] = $this->changelog_format_tag_diff($k, $v);
-            }
-            // section change
-            elseif ($k == 'section') {
+            } elseif ($k == 'section') {
+                // section change
                 $this->object_old[$k] = $this->changelog_format_section_diff($k, $v);
-            }
-            // section change
-            elseif ($k == 'sectionId') {
+            } elseif ($k == 'sectionId') {
+                // section change
                 $this->object_old[$k] = $this->changelog_format_section_diff($k, $v);
-            }
-            // subnet change
-            elseif ($k == 'subnetId') {
+            } elseif ($k == 'subnetId') {
+                // subnet change
                 $this->object_old[$k] = $this->changelog_format_master_subnet_diff($k, $v);
-            }
-            // master subnet change
-            elseif ($k == 'masterSubnetId') {
+            } elseif ($k == 'masterSubnetId') {
+                // master subnet change
                 $this->object_old[$k] = $this->changelog_format_master_subnet_diff($k, $v);
-            }
-            // device change
-            elseif ($k == 'switch') {
+            } elseif ($k == 'switch') {
+                // device change
                 $this->object_old[$k] = $this->changelog_format_device_diff($k, $v);
-            }
-            // device change
-            elseif ($k == 'device') {
+            } elseif ($k == 'device') {
+                // device change
                 $this->object_old[$k] = $this->changelog_format_device_diff($k, $v);
-            }
-            // vlan
-            elseif ($k == 'vlanId') {
+            } elseif ($k == 'vlanId') {
+                // vlan
                 $this->object_old[$k] = $this->changelog_format_vlan_diff($k, $v);
-            }
-            // vrf
-            elseif ($k == 'vrfId') {
+            } elseif ($k == 'vrfId') {
+                // vrf
                 $this->object_old[$k] = $this->changelog_format_vrf_diff($k, $v);
-            }
-            // location
-            elseif ($k == 'location') {
+            } elseif ($k == 'location') {
+                // location
                 $this->object_old[$k] = $this->changelog_format_location_diff($k, $v);
-            }
-            // master section change
-            elseif ($k == 'masterSection') {
+            } elseif ($k == 'masterSection') {
+                // master section change
                 $this->object_old[$k] = $this->changelog_format_master_section_diff($k, $v);
-            }
-            // permission change
-            elseif ($k == 'permissions') {
+            } elseif ($k == 'permissions') {
+                // permission change
                 $this->object_old[$k] = $this->changelog_format_permission_diff($k);
-            }
-            // nameserver index
-            elseif ($k == 'nameserverId') {
+            } elseif ($k == 'nameserverId') {
+                // nameserver index
                 $this->object_old[$k] = $this->changelog_format_ns_diff($k, $v);
             }
         }
@@ -1061,53 +1036,41 @@ class Logging extends Common_functions
                 // tag change
                 if ($k == 'state') {
                     $v = $this->changelog_format_tag_diff($k, $v);
-                }
-                // section change
-                elseif ($k == 'sectionIdNew') {
+                } elseif ($k == 'sectionIdNew') {
+                    // section change
                     $v = $this->changelog_format_section_diff($k, $v);
-                }
-                // section change
-                elseif ($k == 'sectionId') {
+                } elseif ($k == 'sectionId') {
+                    // section change
                     $v = $this->changelog_format_section_diff($k, $v);
-                }
-                // subnet change
-                elseif ($k == 'subnet') {
+                } elseif ($k == 'subnet') {
+                    // subnet change
                     $v = $this->changelog_format_master_subnet_diff($k, $v);
-                }
-                // master subnet change
-                elseif ($k == 'masterSubnetId') {
+                } elseif ($k == 'masterSubnetId') {
+                    // master subnet change
                     $v = $this->changelog_format_master_subnet_diff($k, $v);
-                }
-                // device change
-                elseif ($k == 'switch') {
+                } elseif ($k == 'switch') {
+                    // device change
                     $v = $this->changelog_format_device_diff($k, $v);
-                }
-                // device change
-                elseif ($k == 'device') {
+                } elseif ($k == 'device') {
+                    // device change
                     $v = $this->changelog_format_device_diff($k, $v);
-                }
-                // vlan
-                elseif ($k == 'vlanId') {
+                } elseif ($k == 'vlanId') {
+                    // vlan
                     $v = $this->changelog_format_vlan_diff($k, $v);
-                }
-                // vrf
-                elseif ($k == 'vrfId') {
+                } elseif ($k == 'vrfId') {
+                    // vrf
                     $v = $this->changelog_format_vrf_diff($k, $v);
-                }
-                // location
-                elseif ($k == 'location') {
+                } elseif ($k == 'location') {
+                    // location
                     $v = $this->changelog_format_location_diff($k, $v);
-                }
-                // master section change
-                elseif ($k == 'masterSection') {
+                } elseif ($k == 'masterSection') {
+                    // master section change
                     $v = $this->changelog_format_master_section_diff($k, $v);
-                }
-                // permission change
-                elseif ($k == 'permissions') {
+                } elseif ($k == 'permissions') {
+                    // permission change
                     $v = $this->changelog_format_permission_diff($k);
-                }
-                // nameserver index
-                elseif ($k == 'nameserverId') {
+                } elseif ($k == 'nameserverId') {
+                    // nameserver index
                     $v = $this->changelog_format_ns_diff($k, $v);
                 }
 
@@ -1168,9 +1131,8 @@ class Logging extends Common_functions
             if (isset($this->object_new['ip_addr'])) {
                 $this->object_new['ip_addr'] = $this->Subnets->transform_address($this->object_new['ip_addr'], 'dotted');
             }
-        }
-        // remove subnet fields
-        elseif ($this->object_type == 'subnet' || $this->object_type == 'folder') {
+        } elseif ($this->object_type == 'subnet' || $this->object_type == 'folder') {
+            // remove subnet fields
             // remove unneeded values
             unset(
                 $this->object_new['subnetId'],
@@ -1255,9 +1217,8 @@ class Logging extends Common_functions
             if (@$this->object_old['isFolder'] == '1') {
                 unset($this->object_old['subnet'], $this->object_old['mask']);
             }
-        }
-        // remove order fields
-        elseif ($this->object_type == 'section') {
+        } elseif ($this->object_type == 'section') {
+            // remove order fields
             unset($this->object_old['order']);
         }
 

@@ -117,9 +117,8 @@ class Sections_controller extends Common_api_functions
 
                 return ['code' => 200, 'data' => $this->prepare_result($result, 'subnets', true, true)];
             }
-        }
-        // verify ID
-        elseif (isset($this->_params->id)) {
+        } elseif (isset($this->_params->id)) {
+            // verify ID
             // changelog
             if ($this->_params->id2 == 'changelog') {
                 return ['code' => 200, 'data' => $this->section_changelog()];
@@ -136,9 +135,8 @@ class Sections_controller extends Common_api_functions
                 }
             } elseif ($this->_params->id == 'custom_fields') {
                 $this->Response->throw_exception(409, 'Custom fields not supported');
-            }
-            // fetch by name
-            else {
+            } else {
+                // fetch by name
                 $result = $this->Sections->fetch_section('name', $this->_params->id);
                 // check result
                 if ($result == false) {
@@ -147,9 +145,8 @@ class Sections_controller extends Common_api_functions
                     return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
                 }
             }
-        }
-        // all sections
-        else {
+        } else {
+            // all sections
             // all sections
             $result = $this->Sections->fetch_all_sections();
             // check result

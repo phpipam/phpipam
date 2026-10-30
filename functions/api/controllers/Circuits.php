@@ -145,9 +145,8 @@ class Circuits_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
             }
-        }
-        // provider circuits
-        elseif ($this->type === 'circuitProviders' && isset($this->_params->id2)) {
+        } elseif ($this->type === 'circuitProviders' && isset($this->_params->id2)) {
+            // provider circuits
             if ($this->_params->id2 == 'circuits') {
                 $result = $this->Tools->fetch_multiple_objects('circuits', 'provider', $this->_params->id);
                 // check result
@@ -159,9 +158,8 @@ class Circuits_controller extends Common_api_functions
             } else {
                 $this->Response->throw_exception(400, 'Invalid API query');
             }
-        }
-        // circuit by cid
-        elseif ($this->type === 'circuits' && ($this->_params->id == 'circuit_id' || $this->_params->id == 'id')) {
+        } elseif ($this->type === 'circuits' && ($this->_params->id == 'circuit_id' || $this->_params->id == 'id')) {
+            // circuit by cid
             $result = $this->Tools->fetch_object($this->type, 'cid', $this->_params->id2);
             // check result
             if ($result == null) {
@@ -169,9 +167,8 @@ class Circuits_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
             }
-        }
-        // read details
-        else {
+        } else {
+            // read details
             // numeric check
             if (! is_numeric($this->_params->id)) {
                 $this->Response->throw_exception(400, 'Invalid ID');
@@ -342,9 +339,8 @@ class Circuits_controller extends Common_api_functions
             $this->validate_circuit_status($action);
             // validate device and location
             $this->validate_circuit_devices_locations($action);
-        }
-        // providers
-        else {
+        } else {
+            // providers
             $this->validate_provider_name($action);
         }
     }
@@ -439,15 +435,13 @@ class Circuits_controller extends Common_api_functions
                     }
                 }
             }
-        }
-        // add
-        else {
+        } else {
+            // add
             // mandatory
             if (! isset($this->_params->cid)) {
                 $this->Response->throw_exception(400, 'Circuit ID is mandatory');
-            }
-            // check
-            elseif ($this->Tools->fetch_object($this->type, 'cid', $this->_params->cid)) {
+            } elseif ($this->Tools->fetch_object($this->type, 'cid', $this->_params->cid)) {
+                // check
                 $this->Response->throw_exception(409, 'Circuit ID already exists');
             }
         }

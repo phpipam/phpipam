@@ -1112,9 +1112,8 @@ class Addresses extends Common_functions
             $this->lastId = $address->id;
             // new ptr record
             $this->ptr_add($address, true);
-        }
-        // update PTR
-        else {
+        } else {
+            // update PTR
             // fetch domain
             $domain = $this->pdns_fetch_domain($address->subnetId);
 
@@ -1690,16 +1689,14 @@ class Addresses extends Common_functions
                             $addresses_formatted[$c]->class = 'compressed-range';
                         }
                     }
-                }
-                // no gap between this and previous
-                else {
+                } else {
+                    // no gap between this and previous
                     // is state same as previous?
                     if ($addresses[$c]->state == $addresses[$c - 1]->state && $addresses[$c]->state == $state) {
                         $addresses_formatted[$fIndex]->stopIP = $addresses[$c]->ip_addr;    // adds dhcp state
                         $addresses_formatted[$fIndex]->numHosts = gmp_strval(gmp_add(@gmp_sub($addresses[$c]->ip_addr, $addresses_formatted[$fIndex]->ip_addr), 1));    // add number of hosts
-                    }
-                    // different state
-                    else {
+                    } else {
+                        // different state
                         // remove index flag
                         unset($fIndex);
                         // save IP address
@@ -1951,9 +1948,8 @@ class Addresses extends Common_functions
                             // subnets
                             if ($ot == 'subnets') {
                                 $out[] = "$bold".$this->transform_address($item->subnet, 'dotted').'/'.$item->mask.'</span></span>';
-                            }
-                            // addresses
-                            else {
+                            } else {
+                                // addresses
                                 $out[] = "$bold".$this->transform_address($item->ip_addr, 'dotted').'</span>';
                             }
                         }

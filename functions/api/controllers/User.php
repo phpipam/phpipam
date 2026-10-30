@@ -126,9 +126,8 @@ class User_controller extends Common_api_functions
                 // permissions check - RWA required
                 if ($app_details->app_permissions != 3) {
                     $this->Response->throw_exception(503, 'Invalid app permissions');
-                }
-                // ok
-                else {
+                } else {
+                    // ok
                     // admins or all
                     if ($this->_params->id == 'admins') {
                         return ['code' => 200, 'data' => $this->User->fetch_multiple_objects('users', 'role', 'Administrator', 'id', true, false, '*')];
@@ -139,9 +138,8 @@ class User_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => ['expires' => $this->token_expires]];
             }
-        }
-        // return success for backwards compatibility
-        else {
+        } else {
+            // return success for backwards compatibility
             $this->Response->throw_exception(400, 'Invalid identifier');
         }
 
@@ -434,9 +432,8 @@ class User_controller extends Common_api_functions
         // check that token is present
         if (! isset($_SERVER['HTTP_PHPIPAM_TOKEN'])) {
             $this->Response->throw_exception(403, 'Please provide token');
-        }
-        // validate and remove token
-        else {
+        } else {
+            // validate and remove token
             // fetch token - for SSL with APP code differently
             if ($this->app->app_security == 'ssl_code') {
                 if ($_SERVER['HTTP_PHPIPAM_TOKEN'] != $this->app->app_code) {
@@ -470,9 +467,8 @@ class User_controller extends Common_api_functions
         // check that token is present
         if (! isset($_SERVER['HTTP_PHPIPAM_TOKEN'])) {
             $this->Response->throw_exception(401, $this->Response->errors[401]);
-        }
-        // validate and remove token
-        else {
+        } else {
+            // validate and remove token
             // fetch token
             if (($token = $this->Admin->fetch_object('users', 'token', $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false) {
                 $this->Response->throw_exception(401, $this->Response->errors[401]);
@@ -506,9 +502,8 @@ class User_controller extends Common_api_functions
         // check that token is present
         if (! isset($_SERVER['HTTP_PHPIPAM_TOKEN'])) {
             $this->Response->throw_exception(401, $this->Response->errors[401]);
-        }
-        // validate and remove token
-        else {
+        } else {
+            // validate and remove token
             // fetch app_id from token
             if (($app_temp = $this->Admin->fetch_object('api', 'app_code', $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false) {
                 $this->Response->throw_exception(401, $this->Response->errors[401]);

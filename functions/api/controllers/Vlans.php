@@ -83,9 +83,8 @@ class Vlans_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
             }
-        }
-        // check weather to read belonging subnets
-        elseif (@$this->_params->id2 == 'subnets') {
+        } elseif (@$this->_params->id2 == 'subnets') {
+            // check weather to read belonging subnets
             // first validate
             $this->validate_vlan();
             // save result
@@ -120,18 +119,16 @@ class Vlans_controller extends Common_api_functions
 
                 return ['code' => 200, 'data' => $this->prepare_result($result, 'subnets', true, true)];
             }
-        }
-        // custom fields
-        elseif (@$this->_params->id == 'custom_fields') {
+        } elseif (@$this->_params->id == 'custom_fields') {
+            // custom fields
             // check result
             if (count($this->custom_fields) == 0) {
                 $this->Response->throw_exception(404, 'No custom fields defined');
             } else {
                 return ['code' => 200, 'data' => $this->custom_fields];
             }
-        }
-        // search
-        elseif (@$this->_params->id == 'search') {
+        } elseif (@$this->_params->id == 'search') {
+            // search
             $result = $this->Tools->fetch_multiple_objects('vlans', 'number', $this->_params->id2, 'vlanId');
             // check result
             if ($result == null) {
@@ -139,9 +136,8 @@ class Vlans_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
             }
-        }
-        // read vlan details
-        else {
+        } else {
+            // read vlan details
             $result = $this->Tools->fetch_object('vlans', 'vlanId', $this->_params->id);
             // check result
             if ($result == null) {

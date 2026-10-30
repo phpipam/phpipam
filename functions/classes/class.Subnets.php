@@ -1369,9 +1369,8 @@ class Subnets extends Common_functions
                 if (@$subd['masterSubnetId'] != 0) {
                     array_unshift($parents, $subd['masterSubnetId']);
                     $subnetId = $subd['masterSubnetId'];
-                }
-                // root
-                else {
+                } else {
+                    // root
                     array_unshift($parents, $subd['masterSubnetId']);
                     $root = true;
                 }
@@ -2691,9 +2690,8 @@ class Subnets extends Common_functions
         // same mask - ignore
         if ($mask == $mask_old) {
             $this->Result->show('warning', _('New network is same as old network'), true);
-        }
-        // if we are expanding network get new network address!
-        elseif ($mask < $mask_old) {
+        } elseif ($mask < $mask_old) {
+            // if we are expanding network get new network address!
             // Checks for strict mode
             if ($section->strictMode == '1') {
                 // if it has parent make sure it is still within boundaries
@@ -2725,9 +2723,8 @@ class Subnets extends Common_functions
                                 }
                             }
                         }
-                    }
-                    // folder
-                    else {
+                    } else {
+                        // folder
                         // fetch all folder subnets, remove old subnet and verify overlapping!
                         $folder_subnets = $this->fetch_subnet_slaves($parent_subnet->id);
                         // check
@@ -2743,9 +2740,8 @@ class Subnets extends Common_functions
                             }
                         }
                     }
-                }
-                // root subnet, check overlapping !
-                else {
+                } else {
+                    // root subnet, check overlapping !
                     $section_subnets = $this->fetch_section_subnets($section->id);
                     $overlap = $this->verify_subnet_resize_overlapping($section->id, $this->transform_to_dotted($subnet).'/'.$mask, $subnetId, $vrfId);
                     if ($overlap !== false) {
@@ -2753,9 +2749,8 @@ class Subnets extends Common_functions
                     }
                 }
             }
-        }
-        // we are shrinking subnet
-        else {
+        } else {
+            // we are shrinking subnet
             // addresses class
             $Addresses = new Addresses($this->Database);
             // fetch all subnet addresses
@@ -3587,12 +3582,11 @@ class Subnets extends Common_functions
             // if some exist print next ul
             if ($subnets !== []) {
                 // print subnet
-                if ($open == 'open') {
+                if ($open == 'open') {  // show if opened
                     $html[] = '<ul class="submenu submenu-'.$open.'">';
-                }                         // show if opened
-                else {
+                } else {                // hide - prevent flickering
                     $html[] = '<ul class="submenu submenu-'.$open.'" style="display:none">';
-                }    // hide - prevent flickering
+                }
 
                 // loop through subnets
                 foreach ($subnets as $subnet) {
@@ -3698,12 +3692,11 @@ class Subnets extends Common_functions
             // if some exist print next ul
             if ($subnets !== []) {
                 // print subnet
-                if ($open == 'open') {
+                if ($open == 'open') {  // show if opened
                     $html[] = '<ul class="submenu submenu-'.$open.'">';
-                }                         // show if opened
-                else {
+                } else {                // hide - prevent flickering
                     $html[] = '<ul class="submenu submenu-'.$open.'" style="display:none">';
-                }    // hide - prevent flickering
+                }
 
                 // loop through subnets
                 foreach ($subnets as $subnet) {

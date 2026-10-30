@@ -74,12 +74,10 @@ class Responses extends Result
 
         // not set, presume json
         if (! isset($_SERVER['CONTENT_TYPE']) || strlen((string) @$_SERVER['CONTENT_TYPE']) == 0) {
-        }
-        // post
-        elseif ($_SERVER['CONTENT_TYPE'] == 'application/x-www-form-urlencoded') {
-        }
-        // set, verify
-        elseif ($_SERVER['CONTENT_TYPE'] != 'application/xml' && $_SERVER['CONTENT_TYPE'] != 'application/json') {
+        } elseif ($_SERVER['CONTENT_TYPE'] == 'application/x-www-form-urlencoded') {
+            // post
+        } elseif ($_SERVER['CONTENT_TYPE'] != 'application/xml' && $_SERVER['CONTENT_TYPE'] != 'application/json') {
+            // set, verify
             $this->throw_exception(415, 'Invalid Content type '.$_SERVER['CONTENT_TYPE']);
         }
     }
@@ -116,9 +114,8 @@ class Responses extends Result
         if ($seconds === null) {
             header('Cache-Control: no-cache');
             header('Pragma: no-cache');
-        }
-        // cache
-        else {
+        } else {
+            // cache
             header("Cache-Control: $seconds");
         }
     }
@@ -175,8 +172,8 @@ class Responses extends Result
             }
         }
         // This is a single element but we need to guard against
-        // non-objects here too.
         elseif (is_object($this->result['data'])) {
+            // non-objects here too.
             if (is_array($custom_fields) && $custom_fields != []) {
                 foreach ($custom_fields as $k => $cf) {
                     // add to result
@@ -283,9 +280,8 @@ class Responses extends Result
             if (is_array($value)) {
                 $new_object = $object->addChild($key);
                 $this->array_to_xml($new_object, $value);
-            }
-            // else write value
-            else {
+            } else {
+                // else write value
                 $object->addChild($key, $value);
             }
         }

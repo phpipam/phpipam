@@ -179,9 +179,8 @@ class Result
             // 1 element
             if (count($text) == 1) {
                 $text = $text[0];
-            }
-            // multiple - format
-            else {
+            } else {
+                // multiple - format
                 foreach ($text as $l) {
                     $out[] = "\t* $l";
                 }
@@ -217,9 +216,8 @@ class Result
             // single value
             if (count($text) == 1) {
                 $out = $text;
-            }
-            // multiple values
-            else {
+            } else {
+                // multiple values
                 $out[] = '<ul>';
                 foreach ($text as $l) {
                     $out[] = "<li>$l</li>";

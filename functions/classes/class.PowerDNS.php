@@ -1318,9 +1318,8 @@ class PowerDNS extends Common_functions
             if (filter_var($record->content, FILTER_VALIDATE_IP) === false) {
                 $this->Result->show('danger', _('A record must be an IP address'), true);
             }
-        }
-        // AAA records check
-        elseif ($record->type == 'AAAA') {
+        } elseif ($record->type == 'AAAA') {
+            // AAA records check
             if (filter_var($record->content, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
                 $this->Result->show('danger', _('AAAA record must be an IP address'), true);
             }

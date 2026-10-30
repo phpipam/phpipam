@@ -144,9 +144,8 @@ foreach ($old_data as $table => $table_content) {
                 $new_data[$table][$lk]->permissions = json_encode($permissions_new);
             }
         }
-    }
-    // update subnets
-    elseif ($table == 'subnets') {
+    } elseif ($table == 'subnets') {
+        // update subnets
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
@@ -202,9 +201,8 @@ foreach ($old_data as $table => $table_content) {
                 $new_data[$table][$lk]->permissions = json_encode($permissions_new);
             }
         }
-    }
-    // update ipaddresses
-    elseif ($table == 'ipaddresses') {
+    } elseif ($table == 'ipaddresses') {
+        // update ipaddresses
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
@@ -219,9 +217,8 @@ foreach ($old_data as $table => $table_content) {
                 $new_data[$table][$lk]->switch = $highest_ids_append['devices'] + $value_obj->switch;
             }
         }
-    }
-    // update devices
-    elseif ($table == 'devices') {
+    } elseif ($table == 'devices') {
+        // update devices
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
@@ -251,16 +248,14 @@ foreach ($old_data as $table => $table_content) {
                 $new_data[$table][$lk]->location = $highest_ids_append['locations'] + $value_obj->location;
             }
         }
-    }
-    // update userGroups
-    elseif ($table == 'userGroups') {
+    } elseif ($table == 'userGroups') {
+        // update userGroups
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->g_id = $highest_ids_append[$table] + $value_obj->g_id;
         }
-    }
-    // update users
-    elseif ($table == 'users') {
+    } elseif ($table == 'users') {
+        // update users
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             // make sure it doesn't exist already !
@@ -296,17 +291,15 @@ foreach ($old_data as $table => $table_content) {
                 unset($new_data[$table][$lk]);
             }
         }
-    }
-    // update vlans
-    elseif ($table == 'vlans') {
+    } elseif ($table == 'vlans') {
+        // update vlans
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->vlanId = $highest_ids_append[$table] + $value_obj->vlanId;
             $new_data[$table][$lk]->domainId = $highest_ids_append['vlanDomains'] + $value_obj->domainId;
         }
-    }
-    // update vlanDomains
-    elseif ($table == 'vlanDomains') {
+    } elseif ($table == 'vlanDomains') {
+        // update vlanDomains
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
@@ -321,9 +314,8 @@ foreach ($old_data as $table => $table_content) {
                 $new_data[$table][$lk]->permissions = implode(';', $fs_new);
             }
         }
-    }
-    // update vrf
-    elseif ($table == 'vrf') {
+    } elseif ($table == 'vrf') {
+        // update vrf
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->vrfId = $highest_ids_append[$table] + $value_obj->vrfId;
@@ -338,9 +330,8 @@ foreach ($old_data as $table => $table_content) {
                 $new_data[$table][$lk]->sections = implode(';', $fs_new);
             }
         }
-    }
-    // update nameservers
-    elseif ($table == 'nameservers') {
+    } elseif ($table == 'nameservers') {
+        // update nameservers
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
@@ -355,23 +346,20 @@ foreach ($old_data as $table => $table_content) {
                 $new_data[$table][$lk]->permissions = implode(';', $fs_new);
             }
         }
-    }
-    // update api
-    elseif ($table == 'api') {
+    } elseif ($table == 'api') {
+        // update api
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
         }
-    }
-    // update vlans
-    elseif ($table == 'vlans') {
+    } elseif ($table == 'vlans') {
+        // update vlans
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
         }
-    }
-    // update deviceTypes
-    elseif ($table == 'deviceTypes') {
+    } elseif ($table == 'deviceTypes') {
+        // update deviceTypes
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             // more than default
@@ -381,9 +369,8 @@ foreach ($old_data as $table => $table_content) {
                 unset($new_data[$table][$lk]);
             }
         }
-    }
-    // update usersAuthMethod
-    elseif ($table == 'usersAuthMethod') {
+    } elseif ($table == 'usersAuthMethod') {
+        // update usersAuthMethod
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             // more than default
@@ -393,9 +380,8 @@ foreach ($old_data as $table => $table_content) {
                 unset($new_data[$table][$lk]);
             }
         }
-    }
-    // update ipTags
-    elseif ($table == 'ipTags') {
+    } elseif ($table == 'ipTags') {
+        // update ipTags
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             // more than default
@@ -405,9 +391,8 @@ foreach ($old_data as $table => $table_content) {
                 unset($new_data[$table][$lk]);
             }
         }
-    }
-    // update scanAgents
-    elseif ($table == 'scanAgents') {
+    } elseif ($table == 'scanAgents') {
+        // update scanAgents
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             // more than default
@@ -417,9 +402,8 @@ foreach ($old_data as $table => $table_content) {
                 unset($new_data[$table][$lk]);
             }
         }
-    }
-    // update nat
-    elseif ($table == 'nat') {
+    } elseif ($table == 'nat') {
+        // update nat
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
@@ -464,31 +448,27 @@ foreach ($old_data as $table => $table_content) {
                 $value_obj->device = $highest_ids_append['devices'] + $value_obj->device;
             }
         }
-    }
-    // update racks
-    elseif ($table == 'racks') {
+    } elseif ($table == 'racks') {
+        // update racks
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
         }
-    }
-    // update locations
-    elseif ($table == 'locations') {
+    } elseif ($table == 'locations') {
+        // update locations
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
         }
-    }
-    // update pstnPrefixes
-    elseif ($table == 'pstnPrefixes') {
+    } elseif ($table == 'pstnPrefixes') {
+        // update pstnPrefixes
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;
             $new_data[$table][$lk]->deviceId = $highest_ids_append['devices'] + $value_obj->deviceId;
         }
-    }
-    // update pstnPrefixes
-    elseif ($table == 'pstnNumbers') {
+    } elseif ($table == 'pstnNumbers') {
+        // update pstnPrefixes
         // go through each table and update
         foreach ($table_content as $lk => $value_obj) {
             $new_data[$table][$lk]->id = $highest_ids_append[$table] + $value_obj->id;

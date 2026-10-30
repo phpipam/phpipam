@@ -586,9 +586,8 @@ class Tools extends Common_functions
 
             $result['low'] = $Addresses->transform_to_decimal($net->network);
             $result['high'] = $Addresses->transform_to_decimal($net->broadcast);
-        }
-        // else calculate options
-        else {
+        } else {
+            // else calculate options
             // if subnet is not provided maybe wildcard is, so explode it to array
             $address = explode('.', $address);
             // remove empty
@@ -601,24 +600,20 @@ class Tools extends Common_functions
             // 4 pieces is ok, host
             if (count($address) == 4) {
                 $result['low'] = $result['high'] = $Addresses->transform_to_decimal(implode('.', $address));
-            }
-            // 3 pieces, we need to modify > check whole subnet
-            elseif (count($address) == 3) {
+            } elseif (count($address) == 3) {
+                // 3 pieces, we need to modify > check whole subnet
                 $result['low'] = $Addresses->transform_to_decimal(implode('.', array_merge($address, [0])));
                 $result['high'] = $Addresses->transform_to_decimal(implode('.', array_merge($address, [255])));
-            }
-            // 2 pieces also
-            elseif (count($address) == 2) {
+            } elseif (count($address) == 2) {
+                // 2 pieces also
                 $result['low'] = $Addresses->transform_to_decimal(implode('.', array_merge($address, [0, 0])));
                 $result['high'] = $Addresses->transform_to_decimal(implode('.', array_merge($address, [255, 255])));
-            }
-            // 1 piece also
-            elseif (count($address) == 1) {
+            } elseif (count($address) == 1) {
+                // 1 piece also
                 $result['low'] = $Addresses->transform_to_decimal(implode('.', array_merge($address, [0, 0, 0])));
                 $result['high'] = $Addresses->transform_to_decimal(implode('.', array_merge($address, [255, 255, 255])));
-            }
-            // else return same value
-            else {
+            } else {
+                // else return same value
                 $result['low'] = implode('.', $address);
                 $result['high'] = implode('.', $address);
             }
@@ -872,7 +867,7 @@ class Tools extends Common_functions
         foreach ($creates as $k => $c) {
             if ($k > 0) {
                 $tables[] = strstr($c, '`', true);
-            }  // we exclude first !
+            }
         }
 
         // return array of tables
@@ -1237,9 +1232,8 @@ class Tools extends Common_functions
                 $subnet = $this->fetch_object('subnets', 'id', $v);
                 $mail['Subnet'] = $this->transform_address($subnet->subnet, 'dotted').'/'.$subnet->mask;
                 $mail['Subnet'] .= ! is_blank($subnet->description) ? ' - '.$subnet->description : '';
-            }
-            // ip_addr
-            elseif ($k == 'ip_addr') {
+            } elseif ($k == 'ip_addr') {
+                // ip_addr
                 // add title
                 $mail['s_title_2'] = '<br>'._('Address details');
 
@@ -1248,50 +1242,40 @@ class Tools extends Common_functions
                 } else {
                     $mail['IP address'] = _('Automatic');
                 }
-            }
-            // state
-            elseif ($k == 'state') {
+            } elseif ($k == 'state') {
+                // state
                 $mail['State'] = $this->Addresses->address_type_index_to_type($v);
-            }
-            // description
-            elseif ($k == 'description') {
+            } elseif ($k == 'description') {
+                // description
                 $mail['Description'] = $v;
-            }
-            // hostname
-            elseif ($k == 'hostname') {
+            } elseif ($k == 'hostname') {
+                // hostname
                 $mail['Hostname'] = $v;
-            }
-            // owner
-            elseif ($k == 'owner') {
+            } elseif ($k == 'owner') {
+                // owner
                 $mail['Address owner'] = $v;
-            }
-            // requester
-            elseif ($k == 'requester') {
+            } elseif ($k == 'requester') {
+                // requester
                 $mail['Requested by'] = $v;
-            }
-            // comment
-            elseif ($k == 'comment') {
+            } elseif ($k == 'comment') {
+                // comment
                 $mail['Request comment'] = $v;
-            }
-            // admin comment
-            elseif ($k == 'adminComment') {
+            } elseif ($k == 'adminComment') {
+                // admin comment
                 // add title
                 $mail['s_title_3'] = '<br>'._('Admin comment');
 
                 $mail['Admin comment'] = $v;
-            }
-            // admin comment
-            elseif ($k == 'gateway') {
+            } elseif ($k == 'gateway') {
+                // admin comment
                 $mail['Gateway'] = $v;
-            }
-            // nameservers
-            elseif ($k == 'dns') {
+            } elseif ($k == 'dns') {
+                // nameservers
                 if (! is_blank($v)) {
                     $mail['DNS servers'] = $v;
                 }
-            }
-            // vlans
-            elseif ($k == 'vlan') {
+            } elseif ($k == 'vlan') {
+                // vlans
                 if (! is_blank($v)) {
                     $mail['VLAN'] = $v;
                 }
@@ -1331,9 +1315,8 @@ class Tools extends Common_functions
             // check if table exists
             if (! $this->table_exists($table)) {
                 $error['tableError'][] = $table;
-            }
-            // check for each field
-            else {
+            } else {
+                // check for each field
                 foreach ($fields[$table] as $field) {
                     // if it doesn't exist, store error
                     if (! $this->field_exists($table, $field)) {
@@ -2422,9 +2405,8 @@ class Tools extends Common_functions
                 if (@$subd['master'] != 0) {
                     array_unshift($parents, $subd['master']);
                     $id = $subd['master'];
-                }
-                // root
-                else {
+                } else {
+                    // root
                     array_unshift($parents, $subd['master']);
                     $root = true;
                 }
@@ -2469,9 +2451,8 @@ class Tools extends Common_functions
                     // array_unshift($parents, $subd[$parent_field]);
                     $parents[$subd['id']] = $subd[$return_field];
                     $id = $subd[$parent_field];
-                }
-                // root
-                else {
+                } else {
+                    // root
                     $parents[$subd['id']] = $subd[$return_field];
                     $root = true;
                 }
@@ -2657,9 +2638,8 @@ class Tools extends Common_functions
                                 } elseif ($option[$field['name']] == '1') {
                                     $html[] = _('Yes');
                                 }
-                            }
-                            // text
-                            elseif ($field['type'] == 'text') {
+                            } elseif ($field['type'] == 'text') {
+                                // text
                                 if (! is_blank($option[$field['name']])) {
                                     $html[] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", '<br>', (string) $option[$field['name']])."'>";
                                 } else {
@@ -2700,9 +2680,8 @@ class Tools extends Common_functions
 
             if ($option === false) {
                 $parent = array_pop($parent_stack);
-            }
-            // Has slave subnets
-            elseif (! empty($children_prefixes[$option['id']])) {
+            } elseif (! empty($children_prefixes[$option['id']])) {
+                // Has slave subnets
                 $parent_stack[] = $option['master'];
                 $parent = $option['id'];
             }
@@ -2769,9 +2748,8 @@ class Tools extends Common_functions
                 $selected = $option['id'] == $prefixId ? "selected='selected'" : '';
                 if ($option['id']) {
                     $html[] = "<option value='".$option['id']."' $selected>$repeat ".$option['prefix'].' ('.$option['name'].')</option>';
-                }
-                // Has slave subnets
-                elseif (! empty($children_prefixes[$option['id']])) {
+                } elseif (! empty($children_prefixes[$option['id']])) {
+                    // Has slave subnets
                     $parent_stack_prefixes[] = $option['master'];
                     $parent = $option['id'];
                 }
@@ -2822,16 +2800,14 @@ class Tools extends Common_functions
                             $numbers_formatted[$c]->class = 'compressed-range';
                         }
                     }
-                }
-                // no gap between this and previous
-                else {
+                } else {
+                    // no gap between this and previous
                     // is state same as previous?
                     if ($numbers[$c]->state == $numbers[$c - 1]->state && $numbers[$c]->state == $state) {
                         $numbers_formatted[$fIndex]->stopIP = $numbers[$c]->number; // adds dhcp state
                         $numbers_formatted[$fIndex]->numHosts = gmp_strval(gmp_add(@gmp_sub($numbers[$c]->number, $numbers_formatted[$fIndex]->number), 1));    // add number of hosts
-                    }
-                    // different state
-                    else {
+                    } else {
+                        // different state
                         // remove index flag
                         unset($fIndex);
                         // save IP address
@@ -3399,13 +3375,11 @@ class Tools extends Common_functions
         // CSV
         if (strtolower($filetype) == 'csv') {
             $outFile = $this->parse_import_file_csv();
-        }
-        // XLS
-        elseif (strtolower($filetype) == 'xls') {
+        } elseif (strtolower($filetype) == 'xls') {
+            // XLS
             $outFile = $this->parse_import_file_xls($custom_address_fields);
-        }
-        // error
-        else {
+        } else {
+            // error
             $this->Result->show('danger', _('Invalid filetype'), true);
         }
 

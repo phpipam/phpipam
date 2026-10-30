@@ -144,10 +144,9 @@ class Search_controller extends Common_api_functions
         // reformat IP addresses for search
         if ($type == 'IPv4') {
             $searchTerm_edited = $this->Tools->reformat_IPv4_for_search($this->_params->id);
-        }   // reformat the IPv4 address!
-        elseif ($type == 'IPv6') {
+        } elseif ($type == 'IPv6') {
             $searchTerm_edited = $this->Tools->reformat_IPv6_for_search($this->_params->id);
-        }   // reformat the IPv4 address!
+        }
 
         // return
         return $searchTerm_edited;

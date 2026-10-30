@@ -206,9 +206,8 @@ class User extends Common_functions
         // check if database should be set for sessions
         if (Config::ValueOf('session_storage') == 'database' && $this->settings->dbversion >= 3) {
             new Session_DB($this->Database);
-        }
-        // local
-        else {
+        } else {
+            // local
             session_start();
         }
 
@@ -970,9 +969,8 @@ class User extends Common_functions
 
             // remove possible blocked IP
             $this->block_remove_entry();
-        }
-        // auth failed
-        else {
+        } else {
+            // auth failed
             // add blocked count
             $this->block_ip();
             $this->log_failed_access($username);
@@ -1113,8 +1111,7 @@ class User extends Common_functions
                 $this->update_login_time();
                 // remove possible blocked IP
                 $this->block_remove_entry();
-            } // wrong user/pass by default
-            else {
+            } else {
                 // add blocked count
                 $this->block_ip();
                 $this->log_failed_access($username);
@@ -1221,23 +1218,19 @@ class User extends Common_functions
         // pap
         if (! isset($params->authProtocol) || @$params->authProtocol == 'pap') {
             $authenticated = $client->accessRequest($username, $password);
-        }
-        // chap-md5
-        elseif ($params->authProtocol == 'chap') {
+        } elseif ($params->authProtocol == 'chap') {
+            // chap-md5
             $client->setChapPassword($password);
             $authenticated = $client->accessRequest($username);
-        }
-        // mschapv1
-        elseif ($params->authProtocol == 'mschapv1') {
+        } elseif ($params->authProtocol == 'mschapv1') {
+            // mschapv1
             $client->setMSChapPassword($password);
             $authenticated = $client->accessRequest($username);
-        }
-        // mschapv2
-        elseif ($params->authProtocol == 'mschapv2') {
+        } elseif ($params->authProtocol == 'mschapv2') {
+            // mschapv2
             $authenticated = $client->accessRequestEapMsChapV2($username, $password);
-        }
-        // fault
-        else {
+        } else {
+            // fault
             $this->Result->show('danger', _('Invalid radius authentication method'), true);
         }
 
@@ -1306,9 +1299,8 @@ class User extends Common_functions
             $this->log_failed_access($username);
             $this->Log->write(_('login'), _('User account is disabled'), 2, $username);
             $this->Result->show('danger', _('User account is disabled'), true);
-        }
-        // is passkey login enforced ?
-        elseif ($this->settings->dbversion >= 40 && $this->settings->{'passkeys'} == '1') {
+        } elseif ($this->settings->dbversion >= 40 && $this->settings->{'passkeys'} == '1') {
+            // is passkey login enforced ?
             if ($this->user->passkey_only == 1) {
                 // check passkeys
                 $user_passkeys = $this->get_user_passkeys($this->user->id);
@@ -1813,9 +1805,8 @@ class User extends Common_functions
         // first check if already in
         if ($this->block_check_ip()) {
             $this->block_update_count();
-        }
-        // if not in add first entry
-        else {
+        } else {
+            // if not in add first entry
             $this->block_add_entry();
         }
 

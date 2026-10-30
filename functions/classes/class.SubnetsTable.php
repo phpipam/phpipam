@@ -183,9 +183,8 @@ class SubnetsTable
                         } elseif ($subnet->{$field['name']} == '1') {
                             $tr[$field_name] = _('Yes');
                         }
-                    }
-                    // text
-                    elseif ($field['type'] == 'text') {
+                    } elseif ($field['type'] == 'text') {
+                        // text
                         if (! is_blank($subnet->{$field['name']})) {
                             $tr[$field_name] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".($subnet->{$field['name']})."'>";
                         } else {

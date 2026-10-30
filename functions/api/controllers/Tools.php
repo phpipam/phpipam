@@ -207,16 +207,14 @@ class Tools_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->prepare_result($result, 'tools/'.$this->_params->id, true, false)];
             }
-        }
-        // by parameter
-        elseif (isset($this->_params->id3)) {
+        } elseif (isset($this->_params->id3)) {
+            // by parameter
             // devices (for deviceTypes)
             if ($this->_params->id == 'deviceTypes' && $this->_params->id3 == 'devices') {
                 // fetch
                 $result = $this->Tools->fetch_multiple_objects('devices', 'type', $this->_params->id2, 'id', true);
-            }
-            // vlans
-            elseif ($this->_params->id == 'vlans' && $this->_params->id3 == 'subnets') {
+            } elseif ($this->_params->id == 'vlans' && $this->_params->id3 == 'subnets') {
+                // vlans
                 // fetch
                 $result = $this->Tools->fetch_multiple_objects('subnets', 'vlanId', $this->_params->id2, 'id', true);
                 // add gateway
@@ -235,9 +233,8 @@ class Tools_controller extends Common_api_functions
                         }
                     }
                 }
-            }
-            // vrfs
-            elseif ($this->_params->id == 'vrf' && $this->_params->id3 == 'subnets') {
+            } elseif ($this->_params->id == 'vrf' && $this->_params->id3 == 'subnets') {
+                // vrfs
                 // fetch
                 $result = $this->Tools->fetch_multiple_objects('subnets', 'vrfId', $this->_params->id2, 'id', true);
                 // add gateway
@@ -249,19 +246,16 @@ class Tools_controller extends Common_api_functions
                         }
                     }
                 }
-            }
-            // locations
-            elseif ($this->_params->id == 'locations' && (in_array($this->_params->id3, ['subnets', 'racks', 'devices', 'ipaddresses']))) {
+            } elseif ($this->_params->id == 'locations' && (in_array($this->_params->id3, ['subnets', 'racks', 'devices', 'ipaddresses']))) {
+                // locations
                 // fetch
                 $result = $this->Tools->fetch_multiple_objects($this->_params->id3, 'location', $this->_params->id2, 'id', true);
-            }
-            // racks
-            elseif ($this->_params->id == 'racks' && $this->_params->id3 == 'devices') {
+            } elseif ($this->_params->id == 'racks' && $this->_params->id3 == 'devices') {
+                // racks
                 // fetch
                 $result = $this->Tools->fetch_multiple_objects($this->_params->id3, 'rack', $this->_params->id2, 'id', true);
-            }
-            // nat
-            elseif ($this->_params->id == 'nat' && ($this->_params->id3 == 'objects' || $this->_params->id3 == 'objects_full')) {
+            } elseif ($this->_params->id == 'nat' && ($this->_params->id3 == 'objects' || $this->_params->id3 == 'objects_full')) {
+                // nat
                 // fetch nat first
                 $result = $this->Tools->fetch_object($this->_params->id, $this->sort_key, $this->_params->id2);
                 // add objects
@@ -316,9 +310,8 @@ class Tools_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->prepare_result($result, 'tools/'.$this->_params->id, true, true)];
             }
-        }
-        // by id
-        else {
+        } else {
+            // by id
             // numeric
             if (! is_numeric($this->_params->id2)) {
                 $this->Response->throw_exception(400, 'Identifier must be numeric');

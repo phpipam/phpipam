@@ -169,8 +169,8 @@ class Subnets_controller extends Common_api_functions
             }
         }
         // cidr check
-        // check if id2 is set ?
         elseif (isset($this->_params->id2)) {
+            // check if id2 is set ?
             // is IP address provided
             if ($this->_params->id == 'cidr' || $this->_params->id == 'search') {
                 $result = $this->read_search_subnet();
@@ -220,9 +220,8 @@ class Subnets_controller extends Common_api_functions
 
                     return ['code' => 200, 'data' => $this->prepare_result($result, 'addresses', true, true)];
                 }
-            }
-            // slaves
-            elseif ($this->_params->id2 == 'slaves') {
+            } elseif ($this->_params->id2 == 'slaves') {
+                // slaves
                 $result = $this->read_subnet_slaves();
                 // check result
                 if ($result == null) {
@@ -230,9 +229,8 @@ class Subnets_controller extends Common_api_functions
                 } else {
                     return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
                 }
-            }
-            // slaves-recursive
-            elseif ($this->_params->id2 == 'slaves_recursive') {
+            } elseif ($this->_params->id2 == 'slaves_recursive') {
+                // slaves-recursive
                 $result = $this->read_subnet_slaves_recursive();
                 // check result
                 if ($result == null) {
@@ -240,47 +238,38 @@ class Subnets_controller extends Common_api_functions
                 } else {
                     return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
                 }
-            }
-            // usage
-            elseif ($this->_params->id2 == 'usage') {
+            } elseif ($this->_params->id2 == 'usage') {
+                // usage
                 return ['code' => 200, 'data' => $this->subnet_usage()];
-            }
-            // first available address
-            elseif ($this->_params->id2 == 'first_free') {
+            } elseif ($this->_params->id2 == 'first_free') {
+                // first available address
                 return ['code' => 200, 'data' => $this->subnet_first_free_address()];
-            }
-            // search for new free subnet
-            elseif ($this->_params->id2 == 'all_subnets') {
+            } elseif ($this->_params->id2 == 'all_subnets') {
+                // search for new free subnet
                 return ['code' => 200, 'data' => $this->subnet_find_free(Subnets::SEARCH_FIND_ALL, Subnets::SEARCH_FIND_FIRST)];
-            }
-            // search for new free subnet
-            elseif ($this->_params->id2 == 'first_subnet') {
+            } elseif ($this->_params->id2 == 'first_subnet') {
+                // search for new free subnet
                 return ['code' => 200, 'data' => $this->subnet_find_free(1, Subnets::SEARCH_FIND_FIRST)];
-            }
-            // search for new free subnet
-            elseif ($this->_params->id2 == 'last_subnet') {
+            } elseif ($this->_params->id2 == 'last_subnet') {
+                // search for new free subnet
                 return ['code' => 200, 'data' => $this->subnet_find_free(1, Subnets::SEARCH_FIND_LAST)];
-            }
-            // return changelog
-            elseif ($this->_params->id2 == 'changelog') {
+            } elseif ($this->_params->id2 == 'changelog') {
+                // return changelog
                 return ['code' => 200, 'data' => $this->subnet_changelog()];
-            }
-            // fail
-            else {
+            } else {
+                // fail
                 $this->Response->throw_exception(400, 'Invalid request');
             }
-        }
-        // custom fields
-        elseif ($this->_params->id == 'custom_fields') {
+        } elseif ($this->_params->id == 'custom_fields') {
+            // custom fields
             // check result
             if (count($this->custom_fields) == 0) {
                 $this->Response->throw_exception(404, 'No custom fields defined');
             } else {
                 return ['code' => 200, 'data' => $this->custom_fields];
             }
-        }
-        // id
-        elseif (is_numeric($this->_params->id)) {
+        } elseif (is_numeric($this->_params->id)) {
+            // id
             $result = $this->read_subnet();
             // check result
             if ($result == false) {
@@ -288,9 +277,8 @@ class Subnets_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->prepare_result($result, 'subnets', true, true)];
             }
-        }
-        // false
-        else {
+        } else {
+            // false
             $this->Response->throw_exception(404, 'Invalid Id');
         }
 
@@ -334,9 +322,8 @@ class Subnets_controller extends Common_api_functions
             }
 
             $this->Response->throw_exception(400, 'Invalid parameters');
-        }
-        // ok, normal update
-        else {
+        } else {
+            // ok, normal update
             // new section
             if (isset($this->_params->sectionId)) {
                 $this->validate_section();
@@ -399,9 +386,8 @@ class Subnets_controller extends Common_api_functions
             }
 
             $this->Response->throw_exception(400, 'Invalid parameters');
-        }
-        // ok, delete subnet
-        else {
+        } else {
+            // ok, delete subnet
             // set variables for delete
             $values = [];
             $values['id'] = $this->_params->id;
@@ -977,9 +963,8 @@ class Subnets_controller extends Common_api_functions
             $master_subnet = $this->Subnets->fetch_subnet('id', $this->_params->masterSubnetId);
             if ($master_subnet === false) {
                 $this->Response->throw_exception(404, 'Master Subnet does not exist (id='.$this->_params->masterSubnetId.')');
-            }
-            // check that it is inside subnet
-            else {
+            } else {
+                // check that it is inside subnet
                 // not for folders
                 if (@$this->_params->isFolder != 1 && $master_subnet->isFolder != 1) {
                     if (! $this->Subnets->verify_subnet_nesting($this->_params->masterSubnetId, $this->_params->subnet.'/'.$this->_params->mask)) {
@@ -1096,9 +1081,8 @@ class Subnets_controller extends Common_api_functions
                     $this->Response->throw_exception(409, $overlap);
                 }
             }
-        }
-        // not root
-        else {
+        } else {
+            // not root
             // disable checks for folders and if strict check enabled
             if ($section->strictMode == 1 && ! $parent_is_folder) {
                 // verify that nested subnet is inside root subnet

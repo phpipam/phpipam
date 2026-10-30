@@ -85,9 +85,8 @@ class Vrfs_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->custom_fields];
             }
-        }
-        // subnets
-        elseif (isset($this->_params->id2)) {
+        } elseif (isset($this->_params->id2)) {
+            // subnets
             // subnets
             if ($this->_params->id2 == 'subnets') {
                 // validate
@@ -112,14 +111,12 @@ class Vrfs_controller extends Common_api_functions
 
                     return ['code' => 200, 'data' => $this->prepare_result($result, 'subnets', true, true)];
                 }
-            }
-            // error
-            else {
+            } else {
+                // error
                 $this->Response->throw_exception(400, 'Invalid identifier');
             }
-        }
-        // by id
-        else {
+        } else {
+            // by id
             // validate
             $this->validate_vrf();
             // fetch
@@ -263,9 +260,8 @@ class Vrfs_controller extends Common_api_functions
             if ($this->Tools->fetch_object('vrf', 'name', $this->_params->name) !== false) {
                 $this->Response->throw_exception(409, 'VRF with that name already exists');
             }
-        }
-        // update check
-        else {
+        } else {
+            // update check
             // old values
             $vrf_old = $this->Tools->fetch_object('vrf', 'vrfId', $this->_params->id);
 

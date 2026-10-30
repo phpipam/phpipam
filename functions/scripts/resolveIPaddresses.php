@@ -54,9 +54,8 @@ if (count($config['resolve_subnets']) == 0) {
     } else {
         $query = 'select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` order by `ip_addr` ASC;';
     }
-}
-// check selected subnets
-else {
+} else {
+    // check selected subnets
     $query[] = 'select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` where (';
     // go through subnets
     $m = 1;

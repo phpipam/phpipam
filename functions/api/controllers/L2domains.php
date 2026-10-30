@@ -75,9 +75,8 @@ class L2domains_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
             }
-        }
-        // set
-        else {
+        } else {
+            // set
             // custom fields
             if ($this->_params->id == 'custom_fields') {
                 if (count($this->custom_fields) == 0) {
@@ -85,9 +84,8 @@ class L2domains_controller extends Common_api_functions
                 } else {
                     return ['code' => 200, 'data' => $this->custom_fields];
                 }
-            }
-            // vlans
-            elseif (@$this->_params->id2 == 'vlans') {
+            } elseif (@$this->_params->id2 == 'vlans') {
+                // vlans
                 // validate domain
                 $this->validate_domain();
                 // save result
@@ -98,9 +96,8 @@ class L2domains_controller extends Common_api_functions
                 } else {
                     return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
                 }
-            }
-            // id
-            else {
+            } else {
+                // id
                 // validate domain
                 $this->validate_domain();
                 // result
@@ -252,16 +249,14 @@ class L2domains_controller extends Common_api_functions
             if ($this->Tools->fetch_object('vlanDomains', 'id', $this->_params->id) === false) {
                 $this->Response->throw_exception(404, 'Invalid domain id');
             }
-        }
-        // create checks
-        elseif ($this->request_method() == 'POST') {
+        } elseif ($this->request_method() == 'POST') {
+            // create checks
             // name must be present
             if (@$this->_params->name == '' || ! isset($this->_params->name)) {
                 $this->Response->throw_exception(400, 'Domain name is mandatory');
             }
-        }
-        // update checks
-        elseif ($this->request_method() == 'PATCH') {
+        } elseif ($this->request_method() == 'PATCH') {
+            // update checks
             // ID must be numeric
             if (! is_numeric($this->_params->id)) {
                 $this->Response->throw_exception(400, 'Invalid domain id');

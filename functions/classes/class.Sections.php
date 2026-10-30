@@ -522,9 +522,8 @@ class Sections extends Common_functions
                             $out[$section->id] = $p[$gid];
                         }
                     }
-                }
-                // no permissions
-                else {
+                } else {
+                    // no permissions
                     $out[$section->name] = 0;
                 }
             }

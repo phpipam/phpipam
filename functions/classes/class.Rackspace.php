@@ -394,9 +394,8 @@ class phpipam_rack extends Tools
                             $rack_content[] = new RackContent($rd);
                         }
                     }
-                }
-                // front side
-                else {
+                } else {
+                    // front side
                     if ($c->rack_start <= $rack->size) {
                         // add initial location
                         $rd = ['id' => 'none',
@@ -522,9 +521,8 @@ class phpipam_rack extends Tools
                             $rack_content[] = new RackContent($rd);
                         }
                     }
-                }
-                // front side drawing
-                else {
+                } else {
+                    // front side drawing
                     if ($d->rack_start <= $rack->size) {
                         // add initial location
                         $rd = ['id' => $d->id,

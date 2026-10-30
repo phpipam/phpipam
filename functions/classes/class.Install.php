@@ -499,9 +499,8 @@ class Upgrade extends Install
             // check db connection
             if ($this->check_db_connection(false) === false) {
                 $this->Result->show('danger', _('Cannot connect to database'), true);
-            }
-            // execute
-            else {
+            } else {
+                // execute
                 return $this->upgrade_database_execute();
             }
         }

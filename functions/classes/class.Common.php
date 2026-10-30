@@ -939,14 +939,12 @@ class Common_functions
         if ($format == 3) {
             $mac = str_split($mac, 4);
             $mac = implode('.', $mac);
-        }
-        // format 2
-        elseif ($format == 2) {
+        } elseif ($format == 2) {
+            // format 2
             $mac = str_split($mac, 2);
             $mac = implode('-', $mac);
-        }
-        // format 1
-        else {
+        } else {
+            // format 1
             $mac = str_split($mac, 2);
             $mac = implode(':', $mac);
         }
@@ -1571,21 +1569,17 @@ class Common_functions
         // set, enum
         if (substr((string) $field['type'], 0, 3) == 'set' || substr((string) $field['type'], 0, 4) == 'enum') {
             $html = $this->create_custom_field_input_set_enum($field, $object, $disabled_text, $set_delimiter, $nameSuffix);
-        }
-        // date and time picker
-        elseif ($field['type'] == 'date' || $field['type'] == 'datetime') {
+        } elseif ($field['type'] == 'date' || $field['type'] == 'datetime') {
+            // date and time picker
             $html = $this->create_custom_field_input_date($field, $object, $timepicker_index, $disabled_text, $nameSuffix);
-        }
-        // boolean
-        elseif ($field['type'] == 'tinyint(1)') {
+        } elseif ($field['type'] == 'tinyint(1)') {
+            // boolean
             $html = $this->create_custom_field_input_boolean($field, $object, $disabled_text, $nameSuffix);
-        }
-        // text
-        elseif ($field['type'] == 'text') {
+        } elseif ($field['type'] == 'text') {
+            // text
             $html = $this->create_custom_field_input_textarea($field, $object, $disabled_text, $nameSuffix);
-        }
-        // default - input field
-        else {
+        } else {
+            // default - input field
             $html = $this->create_custom_field_input_input($field, $object, $disabled_text, $nameSuffix);
         }
 
@@ -1799,9 +1793,8 @@ class Common_functions
             } else {
                 print _('No');
             }
-        }
-        // text
-        elseif ($type == 'text') {
+        } elseif ($type == 'text') {
+            // text
             if (! is_blank($value)) {
                 print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", '<br>', escape_input($value))."'>";
             } else {
@@ -2007,13 +2000,11 @@ class Common_functions
         // subnets
         if ($req['page'] == 'subnets') {
             $this->print_subnet_breadcrumbs($Subnet, $req, $Address);
-        }
-        // folders
-        elseif ($req['page'] == 'folder') {
+        } elseif ($req['page'] == 'folder') {
+            // folders
             $this->print_folder_breadcrumbs($Section, $Subnet, $req);
-        }
-        // tools
-        elseif ($req['page'] == 'tools') {
+        } elseif ($req['page'] == 'tools') {
+            // tools
             $this->print_tools_breadcrumbs($req);
         }
     }
@@ -2177,9 +2168,8 @@ class Common_functions
             // install, upgrade
             if (in_array($get['page'], ['temp_share', 'request_ip', 'opensearch'])) {
                 $title[] = ucwords(escape_input($get['page']));
-            }
-            // sections, subnets
-            elseif ($get['page'] == 'subnets' || $get['page'] == 'folder') {
+            } elseif ($get['page'] == 'subnets' || $get['page'] == 'folder') {
+                // sections, subnets
                 // subnets
                 $title[] = _('Subnets');
 
@@ -2211,9 +2201,8 @@ class Common_functions
                         $title[] = $this->transform_address($ip->ip_addr, 'dotted');
                     }
                 }
-            }
-            // tools, admin
-            elseif ($get['page'] == 'tools' || $get['page'] == 'administration') {
+            } elseif ($get['page'] == 'tools' || $get['page'] == 'administration') {
+                // tools, admin
                 $title[] = ucwords(escape_input($get['page']));
                 // subpage
                 if (isset($get['section'])) {
@@ -2383,13 +2372,11 @@ class Common_functions
             // title
             if ($i['type'] == 'header') {
                 $html[] = "   <li class='dropdown-header'>".($i['text']).'</li>';
-            }
-            // separator
-            elseif ($i['type'] == 'divider') {
+            } elseif ($i['type'] == 'divider') {
+                // separator
                 $html[] = "   <li role='separator' class='divider'></li>";
-            }
-            // item
-            else {
+            } else {
+                // item
                 $html[] = "   <li><a class='$i[class]' href='$i[href]' $i[dataparams]><i class='fa fa-$i[icon]'></i> ".$i['text'].'</a></li>';
             }
         }

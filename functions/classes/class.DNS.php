@@ -213,9 +213,8 @@ class DNS extends Common_functions
 
                 return ['class' => 'resolved', 'address' => $resolved, 'name' => $hostname];
             }
-        }
-        // don't check
-        else {
+        } else {
+            // don't check
             return ['class' => '',          'address' => $address, 'name' => $hostname];
         }
 
@@ -255,9 +254,8 @@ class DNS extends Common_functions
                     }
                 }
             }
-        }
-        // no NS, default query from /etc/hosts
-        elseif ($this->local_failed === false) {
+        } elseif ($this->local_failed === false) {
+            // no NS, default query from /etc/hosts
             // try to get record
             try {
                 $result = $this->DNS2->query($address, $this->type);

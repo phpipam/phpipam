@@ -207,14 +207,12 @@ class Common_api_functions
         // admin fix
         if ($Object_name == 'Admin') {
             $this->{$Object_name} = new $Object_name($Database, false);
-        }
-        // User fix
-        elseif ($Object_name == 'User') {
+        } elseif ($Object_name == 'User') {
+            // User fix
             $this->{$Object_name} = new $Object_name($Database, true);
             $this->{$Object_name}->user = null;
-        }
-        // default
-        else {
+        } else {
+            // default
             $this->{$Object_name} = new $Object_name($Database);
         }
 
@@ -287,9 +285,8 @@ class Common_api_functions
                 if ($this->_params->links != 'false') {
                     $result = $this->add_links($result, $controller);
                 }
-            }
-            // otherwise take defaults
-            else {
+            } else {
+                // otherwise take defaults
                 if ($this->app->app_show_links == 1) {
                     $result = $this->add_links($result, $controller);
                 }
@@ -485,9 +482,8 @@ class Common_api_functions
                     unset($r->id);
                 }
             }
-        }
-        // single item
-        else {
+        } else {
+            // single item
             // fix for Vlans and Vrfs
             if ($controller == 'vlans') {
                 $result->id = $result->vlanId;
@@ -737,9 +733,8 @@ class Common_api_functions
         foreach ($this->_params as $pk => $pv) {
             if (! in_array($pk, $this->valid_keys)) {
                 $this->Response->throw_exception(400, 'Invalid request key '.$pk);
-            }
-            // set parameters
-            else {
+            } else {
+                // set parameters
                 if (! in_array($pk, $this->controller_keys)) {
                     $values[$pk] = $pv;
                 }
@@ -808,14 +803,12 @@ class Common_api_functions
         if ($format == 3) {
             $mac = str_split($mac, 4);
             $mac = implode('.', $mac);
-        }
-        // format 2
-        elseif ($format == 2) {
+        } elseif ($format == 2) {
+            // format 2
             $mac = str_split($mac, 2);
             $mac = implode('-', $mac);
-        }
-        // format 1
-        else {
+        } else {
+            // format 1
             $mac = str_split($mac, 2);
             $mac = implode(':', $mac);
         }
@@ -1006,9 +999,8 @@ class Common_api_functions
                     }
                 }
             }
-        }
-        // array
-        else {
+        } else {
+            // array
             // create a new array for the remapped data
             $result_remapped = [];
 

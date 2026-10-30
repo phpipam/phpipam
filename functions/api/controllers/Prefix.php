@@ -297,9 +297,8 @@ class Prefix_controller extends Common_api_functions
 
             // overwrite select parameters
             $this->override_custom_fields();
-        }
-        // get single address
-        elseif (in_array($this->_params->id3, ['address', 'addresses', 'ip'])) {
+        } elseif (in_array($this->_params->id3, ['address', 'addresses', 'ip'])) {
+            // get single address
             // set query type
             $this->query_type = 'address';
             // overwrite select parameters
@@ -388,9 +387,8 @@ class Prefix_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => ['subnets' => $subnets, 'addresses' => $addresses]];
             }
-        }
-        // get all subnets involved in querying
-        elseif (! isset($this->_params->id3)) {
+        } elseif (! isset($this->_params->id3)) {
+            // get all subnets involved in querying
             // validate requested custom field
             $this->validate_request_parameters_custom_field();
             // set address type
@@ -417,9 +415,8 @@ class Prefix_controller extends Common_api_functions
 
                 return ['code' => 200, 'data' => $this->prepare_result($subnets, 'subnets', $this->use_links, true)];
             }
-        }
-        // get prefix
-        else {
+        } else {
+            // get prefix
             // set address type
             $this->set_address_type();
             // validate all parameters
@@ -638,13 +635,11 @@ class Prefix_controller extends Common_api_functions
         // ipv4
         if (strpos((string) $this->_params->id2, '6') !== false) {
             $this->address_type = 'IPv6';
-        }
-        // ipv6
-        elseif (strpos((string) $this->_params->id2, '4') !== false) {
+        } elseif (strpos((string) $this->_params->id2, '4') !== false) {
+            // ipv6
             $this->address_type = 'IPv4';
-        }
-        // both
-        else {
+        } else {
+            // both
             $this->Response->throw_exception(400, 'Invalid address type');
         }
     }

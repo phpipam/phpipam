@@ -119,9 +119,8 @@ if ($Scan->settings->scanPingType == 'fping') {
         // create result
         $out['alive'][] = $Subnets->transform_to_decimal($field[0]);
     }
-}
-// pear / ping
-else {
+} else {
+    // pear / ping
     // Create array of addresses to scan
     $scan_addresses = $Scan->prepare_addresses_to_scan($argv[1], $argv[2]) ?: [];
 

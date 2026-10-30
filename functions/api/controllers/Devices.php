@@ -129,9 +129,8 @@ class Devices_controller extends Common_api_functions
             }
 
             $this->Response->throw_exception(400, 'No search term given');
-        }
-        // not search
-        else {
+        } else {
+            // not search
             // Id must be numeric
             if (! is_numeric($this->_params->id)) {
                 $this->Response->throw_exception(400, 'ID must be numeric');
@@ -142,18 +141,15 @@ class Devices_controller extends Common_api_functions
                 // addresses
                 if ($this->_params->id2 == 'addresses') {
                     $result = $this->Tools->fetch_multiple_objects('ipaddresses', 'switch', $this->_params->id, 'id', true);
-                }
-                // subnets
-                elseif ($this->_params->id2 == 'subnets') {
+                } elseif ($this->_params->id2 == 'subnets') {
+                    // subnets
                     $result = $this->Tools->fetch_multiple_objects('subnets', 'device', $this->_params->id, 'id', true);
-                }
-                // error
-                else {
+                } else {
+                    // error
                     $this->Response->throw_exception(400, 'Invalid parameters');
                 }
-            }
-            // device details
-            else {
+            } else {
+                // device details
                 // fetch device
                 $result = $this->Tools->fetch_object('devices', 'id', $this->_params->id);
                 if (! $result) {
@@ -336,16 +332,14 @@ class Devices_controller extends Common_api_functions
             if ($this->Admin->fetch_object('devices', 'id', $this->_params->id) === false) {
                 $this->Response->throw_exception(404, 'Device does not exist');
             }
-        }
-        // create checks
-        elseif ($this->request_method() == 'POST') {
+        } elseif ($this->request_method() == 'POST') {
+            // create checks
             // name must be present
             if (@$this->_params->hostname == '' || ! isset($this->_params->hostname)) {
                 $this->Response->throw_exception(400, 'Hostname is mandatory');
             }
-        }
-        // update checks
-        elseif ($this->request_method() == 'PATCH') {
+        } elseif ($this->request_method() == 'PATCH') {
+            // update checks
             // ID must be numeric
             if (! is_numeric($this->_params->id)) {
                 $this->Response->throw_exception(400, 'Invalid device id');

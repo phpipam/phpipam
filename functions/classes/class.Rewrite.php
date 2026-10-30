@@ -140,9 +140,8 @@ class Rewrite
 
             // set api flag
             $this->set_api_flag();
-        }
-        // no rewrites - return default
-        else {
+        } else {
+            // no rewrites - return default
             // The superglobals $_GET and $_REQUEST are already urldecoded.
             // https://secure.php.net/manual/en/function.urldecode.php
             $this->get_params = $_GET;
@@ -247,9 +246,8 @@ class Rewrite
                         unset($this->get_params['section']);
                     }
                 }
-            }
-            // search fix
-            elseif ($this->get_params['page'] == 'tools') {
+            } elseif ($this->get_params['page'] == 'tools') {
+                // search fix
                 if (isset($this->get_params['section']) && isset($this->get_params['subnetId'])) {
                     if ($this->get_params['section'] == 'search') {
                         $this->get_params['ip'] = $this->get_params['subnetId'];

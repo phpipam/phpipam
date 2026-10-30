@@ -223,9 +223,8 @@ if ($Scan->icmp_type == 'fping') {
                     $addresses2[$s['id']][$ak]['lastSeenNew'] = null;
                     // save to out array
                     $address_change[] = $addresses2[$s['id']][$ak];
-                }
-                // online host
-                else {
+                } else {
+                    // online host
                     // new change = now
                     $addresses2[$s['id']][$ak]['lastSeenNew'] = $nowdate;
                     // save to out array
@@ -342,9 +341,8 @@ foreach ($address_change as $k => $change) {
         if ($address_change[$k]['state'] != 2 && $Scan->settings->updateTags == 1 && $Subnets->address_types[$address_change[$k]['state']]['updateTag'] == 1) {
             $Scan->update_address_tag($address_change[$k]['id'], 2, $address_change[$k]['state'], $change['lastSeenOld']);
         }
-    }
-    // now offline, and diff > offline period, do checks
-    elseif ($change['lastSeenNew'] == null && $deviceDiff >= (int) $statuses[1]) {
+    } elseif ($change['lastSeenNew'] == null && $deviceDiff >= (int) $statuses[1]) {
+        // now offline, and diff > offline period, do checks
         // if not already reported
         if ($deviceDiff <= ((int) $statuses[1] + $agentDiff)) {
             $address_change[$k]['oldStatus'] = 0;
@@ -363,9 +361,8 @@ foreach ($address_change as $k => $change) {
             // remove from change array
             unset($address_change[$k]);
         }
-    }
-    // remove
-    else {
+    } else {
+        // remove
         // check tag
         if ($change['lastSeenNew'] != null) {
             // update tag if not already online

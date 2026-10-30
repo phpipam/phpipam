@@ -100,18 +100,16 @@ class Addresses_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->prepare_result($result, 'addresses', true, true)];
             }
-        }
-        // subnet Id > read all addresses in subnet
-        elseif ($this->_params->id == 'custom_fields') {
+        } elseif ($this->_params->id == 'custom_fields') {
+            // subnet Id > read all addresses in subnet
             // check result
             if (count($this->custom_fields) == 0) {
                 $this->Response->throw_exception(404, 'No custom fields defined');
             } else {
                 return ['code' => 200, 'data' => $this->custom_fields];
             }
-        }
-        // first free
-        elseif ($this->_params->id == 'first_free') {
+        } elseif ($this->_params->id == 'first_free') {
+            // first free
             // check for isFull
             if (isset($this->_params->subnetId)) {
                 $subnet = $this->Tools->fetch_object('subnets', 'id', $this->_params->subnetId);
@@ -130,9 +128,8 @@ class Addresses_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->Addresses->transform_address($this->_params->ip_addr, 'dotted')];
             }
-        }
-        // address search inside predefined subnet
-        elseif ($this->Tools->validate_ip($this->_params->id) !== false && isset($this->_params->id2)) {
+        } elseif ($this->Tools->validate_ip($this->_params->id) !== false && isset($this->_params->id2)) {
+            // address search inside predefined subnet
             // fetch all in subnet
             $result = $this->Tools->fetch_multiple_objects('ipaddresses', 'subnetId', $this->_params->id2);
             if ($result !== false) {
@@ -157,9 +154,8 @@ class Addresses_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $result];
             }
-        }
-        // tags
-        elseif ($this->_params->id == 'tags') {
+        } elseif ($this->_params->id == 'tags') {
+            // tags
             // all addresses with tag
             if (@$this->_params->id3 == 'addresses') {
                 // validate
@@ -192,9 +188,8 @@ class Addresses_controller extends Common_api_functions
                 } else {
                     return ['code' => 200, 'data' => $this->prepare_result($result, 'addresses', true, false)];
                 }
-            }
-            // tags
-            else {
+            } else {
+                // tags
                 // fetch all by tag
                 if (isset($this->_params->id2)) {
                     // validate
@@ -202,14 +197,12 @@ class Addresses_controller extends Common_api_functions
                     // numeric
                     if (is_numeric($this->_params->id2)) {
                         $result = $this->Tools->fetch_object('ipTags', 'id', $this->_params->id2);
-                    }
-                    // type
-                    else {
+                    } else {
+                        // type
                         $result = $this->Tools->fetch_multiple_objects('ipTags', 'type', $this->_params->id2);
                     }
-                }
-                // all tags
-                else {
+                } else {
+                    // all tags
                     $result = $this->Tools->fetch_all_objects('ipTags');
                 }
 
@@ -220,9 +213,8 @@ class Addresses_controller extends Common_api_functions
                     return ['code' => 200, 'data' => $this->prepare_result($result, 'addresses/tags', true, false)];
                 }
             }
-        }
-        // Search all addresses matching custom link_field field's value
-        elseif ($this->_params->id == 'search_linked') {
+        } elseif ($this->_params->id == 'search_linked') {
+            // Search all addresses matching custom link_field field's value
             //
             $result = $this->Tools->fetch_multiple_objects('ipaddresses', $this->Addresses->Log->settings->link_field, $this->_params->id2);
             // result
@@ -233,12 +225,11 @@ class Addresses_controller extends Common_api_functions
             }
         }
         //
-        // id not set
         elseif (! isset($this->_params->id)) {
+            // id not set
             $this->Response->throw_exception(400, 'Address ID is required');
-        }
-        // id
-        elseif (is_numeric($this->_params->id)) {
+        } elseif (is_numeric($this->_params->id)) {
+            // id
             // ping
             if (@$this->_params->id2 == 'ping') {
                 // scan class
@@ -273,9 +264,8 @@ class Addresses_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->prepare_result($result, $this->_params->controller, true, true)];
             }
-        }
-        // ip address ?
-        elseif (@$this->_params->id == 'search') {
+        } elseif (@$this->_params->id == 'search') {
+            // ip address ?
             // validate
             if (! $this->Addresses->validate_address($this->_params->id2)) {
                 $this->Response->throw_exception(400, 'Invalid address');
@@ -289,9 +279,8 @@ class Addresses_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->prepare_result($result, $this->_params->controller, true, true)];
             }
-        }
-        // search host ?
-        elseif (@$this->_params->id == 'search_hostname') {
+        } elseif (@$this->_params->id == 'search_hostname') {
+            // search host ?
             $result = $this->Tools->fetch_multiple_objects('ipaddresses', 'hostname', $this->_params->id2);
             // check result
             if ($result === false) {
@@ -299,9 +288,8 @@ class Addresses_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->prepare_result($result, $this->_params->controller, false, false)];
             }
-        }
-        // search host base (initial substring), return sorted by name
-        elseif (@$this->_params->id == 'search_hostbase') {
+        } elseif (@$this->_params->id == 'search_hostbase') {
+            // search host base (initial substring), return sorted by name
             $target = $this->_params->id2.'%';
             $result = $this->Tools->fetch_multiple_objects('ipaddresses', 'hostname', $target, 'hostname', true, true);
             // check result
