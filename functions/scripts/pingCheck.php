@@ -76,6 +76,7 @@ $nowdate = date('Y-m-d H:i:s');
 if (php_sapi_name() != 'cli') {
     exit("pingCheck-Fatal-Error: This script can only be run from cli!\n");
 }
+
 // test to see if threading is available
 if (! PingThread::available($errmsg)) {
     exit("pingCheck-Fatal-Error: Threading is required for scanning subnets - Error: $errmsg\n");
@@ -87,6 +88,7 @@ if ($Scan->icmp_type == 'fping' && ! file_exists($Scan->settings->scanFPingPath)
 } elseif (! file_exists($Scan->settings->scanPingPath)) {
     exit("pingCheck-Fatal-Error: Invalid ping path!\n");
 }
+
 // verify date.timezone
 if (is_blank(ini_get('date.timezone'))) {
     print 'pingCheck-Warning: date.timezone is not set in '.php_ini_loaded_file()."\n";
@@ -98,6 +100,7 @@ $scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck(1);
 if (empty($scan_subnets)) {
     exit("pingCheck: No subnets are marked for checking status updates\n");
 }
+
 if ($Scan->get_debugging()) {
     print_r($scan_subnets);
 }
@@ -151,6 +154,7 @@ foreach ($scan_subnets as $s) {
             }
         }
     }
+
     // save update time
     $Scan->update_subnet_scantime($s->id, $nowdate);
 }
@@ -159,6 +163,7 @@ foreach ($scan_subnets as $s) {
 if (empty($addresses)) {
     exit("pingCheck: No addresses to check\n");
 }
+
 if ($Scan->get_debugging()) {
     print "pingCheck: Using $Scan->icmp_type\n--------------------\n\n";
     print_r($addresses);
@@ -199,6 +204,7 @@ if ($Scan->icmp_type == 'fping') {
             $subnets[$index]['result'] = $thread->ipc_recv_data();
             $thread->getExitCode();
         }
+
         unset($threads);
     }
 
@@ -280,9 +286,11 @@ if ($Scan->icmp_type == 'fping') {
                 $addresses[$index]['lastSeenNew'] = null;
                 $address_change[$index] = $addresses[$index];
             }
+
             // save exit code for host
             $addresses[$index]['newStatus'] = ($code === 0) ? 0 : 1;
         }
+
         unset($threads);
     }
 
@@ -349,6 +357,7 @@ foreach ($address_change as $k => $change) {
             if ($address_change[$k]['state'] != 1 && $Scan->settings->updateTags == 1 && $Subnets->address_types[$address_change[$k]['state']]['updateTag'] == 1) {
                 $Scan->update_address_tag($address_change[$k]['id'], 1, $address_change[$k]['state'], $change['lastSeenOld']);
             }
+
             // remove from change array
             unset($address_change[$k]);
         }
@@ -393,6 +402,7 @@ if (! empty($address_change) && $config['ping_check_send_mail']) {
             $recepients[] = ['name' => $admin->real_name, 'email' => $admin->email];
         }
     }
+
     // none?
     if (! isset($recepients)) {
         exit();
@@ -450,6 +460,7 @@ if (! empty($address_change) && $config['ping_check_send_mail']) {
                 $lastSeen = date('m/d H:i', strtotime($change['lastSeen']));
                 $ago = $lastSeen.' ('.$Tools->sec2hms($timeDiff).' ago)';
             }
+
             // desc
             $change['description'] = ! is_blank($change['description']) ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
             // subnet desc
@@ -468,6 +479,7 @@ if (! empty($address_change) && $config['ping_check_send_mail']) {
             // plain content
             $content_plain[] = "\t * ".$Subnets->transform_to_dotted($change['ip_addr']).' ('.$Subnets->transform_to_dotted($subnet->subnet).'/'.$subnet->mask.")\r\n \t  ".strip_tags($oldStatus).' => '.strip_tags($newStatus);
         }
+
         $content[] = '</table>';
 
         // set content
@@ -479,6 +491,7 @@ if (! empty($address_change) && $config['ping_check_send_mail']) {
         foreach ($recepients as $admin) {
             $phpipam_mail->Php_mailer->addAddress(addslashes((string) $admin['email']), addslashes((string) $admin['name']));
         }
+
         $phpipam_mail->Php_mailer->Subject = $subject;
         $phpipam_mail->Php_mailer->msgHTML($content);
         $phpipam_mail->Php_mailer->AltBody = $content_plain;

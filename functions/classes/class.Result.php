@@ -185,6 +185,7 @@ class Result
                 foreach ($text as $l) {
                     $out[] = "\t* $l";
                 }
+
                 // join
                 $text = implode("\n", $out);
             }
@@ -210,6 +211,7 @@ class Result
         if (is_object($text)) {
             $text = (array) $text;
         }
+
         // format if array
         if (is_array($text)) {
             // single value
@@ -222,8 +224,10 @@ class Result
                 foreach ($text as $l) {
                     $out[] = "<li>$l</li>";
                 }
+
                 $out[] = '</ul>';
             }
+
             // join
             $text = implode("\n", $out);
         }
@@ -292,6 +296,7 @@ class Result
         if (! preg_match('/^[a-zA-Z0-9\-\_\/.]+$/i', (string) $location)) {
             $this->throw_exception(500, 'Invalid location header');
         }
+
         // set
         header('Location: '.$location);
     }
@@ -312,6 +317,7 @@ class Result
         if ($this->result['code'] == 401) {
             $this->set_location_header('/api/'.$_REQUEST['app_id'].'/user/');
         }
+
         header('HTTP/1.1 '.$this->result['code'].' '.$this->errors[$this->result['code']]);
     }
 

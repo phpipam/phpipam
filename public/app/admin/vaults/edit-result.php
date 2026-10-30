@@ -41,6 +41,7 @@ if ($POST->action != 'delete') {
         $error[] = 'Invalid name';
     }
 }
+
 // ad - check secret length
 if ($POST->action == 'add') {
     if (strlen((string) $POST->secret) < 8) {

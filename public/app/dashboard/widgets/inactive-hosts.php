@@ -41,6 +41,7 @@ if (! isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WIT
     if (! $widget = $Tools->fetch_object('widgets', 'wfile', $GET->section)) {
         $Result->show('danger', _('Invalid widget'), true);
     }
+
     // reset size and limit
     $height = 350;
     $slimit = 100;
@@ -113,4 +114,5 @@ else {
 
     print '</table>';
 }
+
 print '</div>';

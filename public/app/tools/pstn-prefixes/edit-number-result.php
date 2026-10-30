@@ -29,6 +29,7 @@ if ($POST->action == 'delete' || $POST->action == 'edit') {
         $Result->show('danger', _('Invalid PSTN number identifier'), false);
     }
 }
+
 if ($POST->action == 'add' || $POST->action == 'edit') {
     // name
     if (strlen((string) $POST->name) < 3) {

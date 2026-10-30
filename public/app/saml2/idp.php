@@ -89,6 +89,8 @@ try {
     if (! filter_var($params->debugprotocol, FILTER_VALIDATE_BOOLEAN)) {
         print escape_input($e->getMessage());
     }
+
     exit();
 }
+
 exit();

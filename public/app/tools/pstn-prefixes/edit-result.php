@@ -29,6 +29,7 @@ if ($POST->action == 'delete' || $POST->action == 'edit') {
         $Result->show('danger', _('Invalid PSTN object identifier'), false);
     }
 }
+
 if ($POST->action == 'add' || $POST->action == 'edit') {
     // name
     if (strlen((string) $POST->name) < 3) {
@@ -44,6 +45,7 @@ if ($POST->action == 'add' || $POST->action == 'edit') {
     if (! is_numeric($POST->start)) {
         $Result->show('danger', _('Start must be numeric'), true);
     }
+
     if (! is_numeric($POST->stop)) {
         $Result->show('danger', _('Stop must be numeric'), true);
     }
@@ -71,6 +73,7 @@ if ($POST->action == 'add' || $POST->action == 'edit') {
         ) {
             $Result->show('danger', _('Prefix cannot be same as master'), true);
         }
+
         if (
             $POST->prefix_raw_start < $master_prefix->prefix_raw_start ||
             $POST->prefix_raw_stop > $master_prefix->prefix_raw_stop
@@ -79,6 +82,7 @@ if ($POST->action == 'add' || $POST->action == 'edit') {
         }
     }
 }
+
 // root check
 if ($POST->action == 'add' && $POST->master == 0) {
     // set raw values

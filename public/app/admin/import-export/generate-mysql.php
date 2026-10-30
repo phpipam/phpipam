@@ -56,6 +56,7 @@ if (! file_exists($mysqldump)) {
             $filename = 'error_message.txt';
             $content = _('Unable to open tmp file');
         }
+
         unlink($cnf_file);
     }
 }

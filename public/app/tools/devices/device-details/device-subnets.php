@@ -33,6 +33,7 @@ print '	<th>'._('Description').'</th>';
 if ($User->get_module_permissions('vlan') >= User::ACCESS_R) {
     print '	<th>'._('VLAN').'</th>';
 }
+
 print '</tr>';
 print '</thead>';
 

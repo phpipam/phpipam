@@ -44,6 +44,7 @@ if ($nat->type == 'static') {
             }
         }
     }
+
     if (is_array(@$nat_dst['ipaddresses'])) {
         foreach ($nat_dst['ipaddresses'] as $ik => $iv) {
             if ($Tools->fetch_object('ipaddresses', 'id', $iv) === false) {

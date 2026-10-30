@@ -53,6 +53,7 @@ if ($logical_circuit !== false) {
         include 'logical-circuit-details-map.php';
         print '</div>';
     }
+
     print '</div>';
 
     print '</div>';

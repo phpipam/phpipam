@@ -81,6 +81,7 @@ class SubnetsMasterDropDown
         if (! empty($this->options_group)) {
             $this->html[] = '</optgroup>';
         }
+
         $this->options_group = null;
     }
 

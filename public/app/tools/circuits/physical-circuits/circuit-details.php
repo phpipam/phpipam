@@ -56,6 +56,7 @@ if ($circuit !== false) {
         include 'circuit-details-map.php';
         print '</div>';
     }
+
     print '</div>';
 
     //

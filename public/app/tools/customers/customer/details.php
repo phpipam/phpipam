@@ -120,9 +120,11 @@ if ($User->get_module_permissions('customers') >= User::ACCESS_RW) {
         $links[] = ['type' => 'header', 'text' => _('Manage')];
         $links[] = ['type' => 'link', 'text' => _('Edit customer'), 'href' => '', 'class' => 'open_popup', 'dataparams' => " data-script='app/admin/customers/edit.php' data-class='700' data-action='edit' data-id='$customer->id'", 'icon' => 'pencil'];
     }
+
     if ($User->get_module_permissions('customers') >= User::ACCESS_RWA) {
         $links[] = ['type' => 'link', 'text' => _('Delete customer'), 'href' => '', 'class' => 'open_popup', 'dataparams' => " data-script='app/admin/customers/edit.php' data-class='700' data-action='delete' data-id='$customer->id'", 'icon' => 'times'];
     }
+
     // print links
     print $User->print_actions($User->user->compress_actions, $links, true, true);
     print '</td>';

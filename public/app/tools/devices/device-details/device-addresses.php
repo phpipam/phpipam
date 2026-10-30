@@ -39,6 +39,7 @@ print '	<th>'._('IP address').'</th>';
 if (in_array('port', $selected_ip_fields)) {
     print '	<th>'._('Port').'</th>';
 }
+
 print '	<th>'._('Subnet').'</th>';
 print '	<th>'._('Description').'</th>';
 print '	<th></th>';
@@ -69,6 +70,7 @@ if (is_array($addresses)) {
             if (in_array('port', $selected_ip_fields)) {
                 print "	<td class='port'>$ip[port]</td>";
             }
+
             print "	<td class='subnet'><a href='".create_link('subnets', $section['id'], $subnet['id'])."'>$subnet[ip]/$subnet[mask]</a> <span class='text-muted'>($subnet[description])</span></td>";
             print "	<td class='description'>$ip[description]</td>";
 
@@ -78,6 +80,7 @@ if (is_array($addresses)) {
                 $ip['note'] = str_replace("\n", '<br>', (string) $ip['note']);
                 print "	<i class='fa fa-comment-o' rel='tooltip' title='$ip[note]'></i>";
             }
+
             print '</td>';
 
             print "	<td class='dns hidden-xs'>$ip[hostname]</td>";

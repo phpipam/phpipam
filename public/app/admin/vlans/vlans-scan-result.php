@@ -85,6 +85,7 @@ if (count($res) > 0) {
                 $values[$f['name']] = $r[$f['name']];
             }
         }
+
         // insert vlans
         if (! $Admin->object_modify('vlans', 'add', 'vlanId', $values)) {
             $Result->show('danger', _('Failed to import entry').' '.$r['number'].' '.$r['name'], false);

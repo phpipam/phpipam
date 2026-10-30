@@ -33,8 +33,10 @@ foreach ($tools_menu as $k => $tool) {
         } else {
             print "<a href='".create_link('tools', $t['href'])."'><i class='fa fa-angle-right pull-right icon-gray'></i>".$t['name'].'</a>';
         }
+
         print '</li>';
     }
+
     print '</ul>';
 
     print '</div>';

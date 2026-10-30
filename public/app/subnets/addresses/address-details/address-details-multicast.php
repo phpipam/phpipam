@@ -64,6 +64,7 @@ if ($mtest !== true) {
             } else {
                 print " <td><a href='".create_link('subnets', $sn->sectionId, $sn->id)."'>".$Subnets->transform_address($sn->subnet, 'dotted').'/'.$sn->mask."</a>$sn_description</td>";
             }
+
             print '</tr>';
 
             // divider

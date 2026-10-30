@@ -38,6 +38,7 @@ if ($POST->action != 'delete') {
             $Result->show('danger', _('Invalid domain name'), true);
         }
     }
+
     // master
     if (! is_blank($POST->master)) {
         // if multiple masters
@@ -55,6 +56,7 @@ if ($POST->action != 'delete') {
             }
         }
     }
+
     // type
     if (! in_array($POST->type, (array) $PowerDNS->domain_types)) {
         $Result->show('danger', _('Invalid domain type'), true);

@@ -100,9 +100,11 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
                 $links[] = ['type' => 'header', 'text' => _('Manage')];
                 $links[] = ['type' => 'link', 'text' => _('Edit item'), 'href' => '', 'class' => 'open_popup', 'dataparams' => " data-script='app/admin/vaults/edit-item-certificate.php' data-class='700' data-action='edit' data-vaultId='$vault->id' data-id='$vault_item->id'", 'icon' => 'pencil'];
             }
+
             if ($User->get_module_permissions('vaults') >= User::ACCESS_RWA) {
                 $links[] = ['type' => 'link', 'text' => _('Delete item'), 'href' => '', 'class' => 'open_popup', 'dataparams' => " data-script='app/admin/vaults/edit-item-certificate.php' data-class='700' data-action='delete' data-vaultId='$vault->id' data-id='$vault_item->id'", 'icon' => 'times'];
             }
+
             // print links
             print $User->print_actions($User->user->compress_actions, $links, true, true);
             print '</td>';
@@ -193,24 +195,28 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
                     print '	<td>'.$certificate_details['issuer']['C'].'</td>';
                     print '</tr>';
                 }
+
                 if (strlen((string) $certificate_details['issuer']['ST'])) {
                     print '<tr>';
                     print '	<th>'._('County').'</th>';
                     print '	<td>'.$certificate_details['issuer']['ST'].'</td>';
                     print '</tr>';
                 }
+
                 if (strlen((string) $certificate_details['issuer']['L'])) {
                     print '<tr>';
                     print '	<th>'._('Locality').'</th>';
                     print '	<td>'.$certificate_details['issuer']['L'].'</td>';
                     print '</tr>';
                 }
+
                 if (! is_blank($certificate_details['issuer']['O'])) {
                     print '<tr>';
                     print '	<th>'._('Organisation name').'</th>';
                     print '	<td>'.$certificate_details['issuer']['O'].'</td>';
                     print '</tr>';
                 }
+
                 print '<tr>';
                 print '	<th>'._('Common name').'</th>';
                 print '	<td>'.$certificate_details['issuer']['CN'].'</td>';

@@ -56,6 +56,7 @@ $errors = [];
 if (! isset($POST->vrfId) || $POST->vrfId == null) {
     $POST->vrfId = 0;
 }
+
 if (! is_numeric($POST->vrfId)) {
     $POST->vrfId = 0;
 }
@@ -88,6 +89,7 @@ if ($POST->action == 'add') {
     if (! is_numeric($POST->sectionId)) {
         $Result->show('danger', _('Invalid ID'), true);
     }
+
     // verify that user has permissions to add subnet
     if ($Sections->check_permission($User->user, $POST->sectionId) != 3) {
         $Result->show('danger', _('You do not have permissions to add new subnet in this section').'!', true);
@@ -141,11 +143,13 @@ if ($POST->action == 'add') {
         if ($overlap !== false) {
             $errors[] = $overlap;
         }
+
         // we need to validate against all root subnets inside section
         $overlap = $Subnets->verify_subnet_overlapping($POST->sectionId, $POST->cidr, $POST->vrfId);
         if ($overlap !== false) {
             $errors[] = $overlap;
         }
+
         // we need to check also all other folders for same subnets !
         $overlap = $Subnets->verify_subnet_interfolder_overlapping($POST->sectionId, $POST->cidr, $POST->vrfId);
         if ($overlap !== false) {
@@ -168,6 +172,7 @@ elseif ($POST->action == 'edit') {
     if (! is_numeric($POST->subnetId)) {
         $Result->show('danger', _('Invalid ID'), true);
     }
+
     if (! is_numeric($POST->sectionId)) {
         $Result->show('danger', _('Invalid ID'), true);
     }
@@ -235,9 +240,11 @@ else {
     if (! is_numeric($POST->subnetId)) {
         $Result->show('danger', _('Invalid ID'), true);
     }
+
     if (! is_numeric($POST->sectionId)) {
         $Result->show('danger', _('Invalid ID'), true);
     }
+
     // check subnet permissions
     if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
         $Result->show('danger', _('You do not have permissions to add edit/delete this subnet').'!', true);
@@ -252,6 +259,7 @@ if (! empty($errors)) {
     foreach ($errors as $error) {
         print '<br>'.$error;
     }
+
     print '</div>';
     exit();
 }
@@ -269,6 +277,7 @@ elseif ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
     foreach ($Subnets->slaves as $s) {
         $slave_array[$s] = $s;
     }
+
     $ipcnt = $Addresses->count_addresses_in_multiple_subnets($slave_array);
 
     print '<strong>'._('Warning').'</strong>: '._('I will delete').':<ul>';
@@ -276,6 +285,7 @@ elseif ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
     if ($ipcnt > 0) {
         print "	<li>$ipcnt "._('IP addresses').'</li>';
     }
+
     print '</ul>';
 
     print "<hr><div style='text-align:right'>";
@@ -320,8 +330,10 @@ else {
         if (! is_numeric($POST->location)) {
             $Result->show('danger', _('Invalid location value'), true);
         }
+
         $values['location'] = $POST->location;
     }
+
     // append customerId
     if ($User->settings->enableCustomers == '1') {
         if (is_numeric($POST->customer_id)) {
@@ -332,13 +344,16 @@ else {
             }
         }
     }
+
     // threshold
     if (isset($POST->threshold)) {
         if (! is_numeric($POST->threshold)) {
             $Result->show('danger', _('Invalid threshold value'), true);
         }
+
         $values['threshold'] = $POST->threshold;
     }
+
     // for new subnets we add permissions
     if ($POST->action == 'add') {
         $values['permissions'] = $POST->permissions;
@@ -350,6 +365,7 @@ else {
         if ($POST->sectionId != $POST->sectionIdNew) {
             $values['sectionId'] = $POST->sectionIdNew;
         }
+
         // if vrf change
         if ($POST->vrfId != $POST->vrfIdOld) {
             $values['vrfId'] = $POST->vrfId;
@@ -368,6 +384,7 @@ else {
         if ($POST->action == 'add') {
             $new_subnet_id = $Subnets->lastInsertId;
         }
+
         // update also all slave subnets if section changes!
         if (isset($values['sectionId']) && $POST->action == 'edit') {
             $Subnets->reset_subnet_slaves_recursive();
@@ -402,6 +419,7 @@ else {
             $Subnets->fetch_subnet_slaves_recursive($POST->subnetId);
             $Subnets->remove_subnet_slaves_master($POST->subnetId);
         }
+
         // set what to update
         $values = [
             'vlanId' => $POST->vlanId,
@@ -416,15 +434,19 @@ else {
         if (isset($POST->allowRequests)) {
             $values['allowRequests'] = $Admin->verify_checkbox($POST->allowRequests);
         }
+
         if (isset($POST->showName)) {
             $values['showName'] = $Admin->verify_checkbox($POST->showName);
         }
+
         if (isset($POST->discoverSubnet)) {
             $values['discoverSubnet'] = $Admin->verify_checkbox($POST->discoverSubnet);
         }
+
         if (isset($POST->pingSubnet)) {
             $values['pingSubnet'] = $Admin->verify_checkbox($POST->pingSubnet);
         }
+
         if (isset($POST->resolveDNS)) {
             $values['resolveDNS'] = $Admin->verify_checkbox($POST->resolveDNS);
         }
@@ -538,6 +560,7 @@ else {
                             $err++;
                         }
                     }
+
                     // print
                     $Result->show('success', "$cnt "._('PTR records created'));
                     // error

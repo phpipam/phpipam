@@ -7,6 +7,7 @@ $User->check_user_session();
 if (! is_numeric($GET->subnetId)) {
     $Result->show('danger', _('Invalid ID'), true);
 }
+
 if (! is_numeric($GET->section)) {
     $Result->show('danger', _('Invalid ID'), true);
 }

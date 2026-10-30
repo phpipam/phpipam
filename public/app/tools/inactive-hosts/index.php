@@ -30,6 +30,7 @@ if ($inactive_hosts !== false) {
                 $h->mask = $subnet->mask;
                 $out[] = $h;
             }
+
             $m++;
             // break after limit
             if ($m > $slimit) {
@@ -76,5 +77,6 @@ else {
         print " <td>$s->lastSeen</td>";
         print '</tr>';
     }
+
     print '</table>';
 }

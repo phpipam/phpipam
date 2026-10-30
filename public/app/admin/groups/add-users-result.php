@@ -61,6 +61,7 @@ if (isset($errors)) {
     foreach ($errors as $e) {
         print "<li>$e</li>";
     }
+
     print '</ul>';
     print '</div>';
 } else {

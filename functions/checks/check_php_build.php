@@ -79,6 +79,7 @@ if (! class_exists('\Composer\InstalledVersions')) {
         }
     }
 }
+
 if ($composer_autoload_err && ! Config::ValueOf('allow_untested_php_versions', false)) {
     $missingPkg[] = $composer_autoload_err;
 }
@@ -120,6 +121,7 @@ if (PHP_INT_SIZE == 4) {
     foreach ($missingExt as $missing) {
         $error[] = '<li>'.$missing.'</li>'."\n";
     }
+
     $error[] = '</ul><hr>'."\n";
     $error[] = _('Please recompile PHP to include missing extensions and restart Apache.');
 } elseif (! empty($missingFns)) {
@@ -128,6 +130,7 @@ if (PHP_INT_SIZE == 4) {
     foreach ($missingFns as $missing) {
         $error[] = '<li>'.$missing.'</li>'."\n";
     }
+
     $error[] = '</ul><hr>'."\n";
     $error[] = _('Please recompile PHP to include missing functions and restart Apache.');
 } elseif (is_dir(__DIR__.'/../vendor')) {
@@ -139,6 +142,7 @@ if (PHP_INT_SIZE == 4) {
     foreach ($missingPkg as $missing) {
         $error[] = '<li>'.$missing.'</li>'."\n";
     }
+
     $error[] = '</ul><hr>'."\n";
     $error[] = _("Please run 'composer install' from the project root directory.");
 } elseif (isset($Database) && ! $Database->set_names) {

@@ -85,6 +85,7 @@ foreach ($POST as $key => $value) {
         $POST->{$key} = '********';
     }
 }
+
 $values_log['params'] = json_encode($POST);
 
 // add - set protected

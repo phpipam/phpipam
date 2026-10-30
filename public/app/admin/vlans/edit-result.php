@@ -57,6 +57,7 @@ if (isset($POST->unique)) {
 if ($POST->number > $User->settings->vlanMax && $POST->action != 'delete') {
     $Result->show('danger', _('Highest possible VLAN number is ').$User->settings->vlanMax.'!', true);
 }
+
 if ($POST->action == 'add') {
     if ($POST->number < 0) {
         $Result->show('danger', _('VLAN number cannot be negative').'!', true);
@@ -64,6 +65,7 @@ if ($POST->action == 'add') {
         $Result->show('danger', _('Not number').'!', true);
     }
 }
+
 if (is_blank($POST->name)) {
     $Result->show('danger', _('Name is required').'!', true);
 }
@@ -87,6 +89,7 @@ if (is_array($custom)) {
         }
     }
 }
+
 // append customerId
 if ($User->settings->enableCustomers == '1') {
     if (is_numeric($POST->customer_id)) {

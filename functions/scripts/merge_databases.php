@@ -132,6 +132,7 @@ foreach ($old_data as $table => $table_content) {
             if ($value_obj->masterSection > 0) {
                 $new_data[$table][$lk]->masterSection = $highest_ids_append['sections'] + $value_obj->masterSection;
             }
+
             // permissions
             if (! is_blank($value_obj->permissions) && $value_obj->permissions != 'null') {
                 $permissions = db_json_decode($value_obj->permissions);
@@ -139,6 +140,7 @@ foreach ($old_data as $table => $table_content) {
                 foreach ($permissions as $k => $v) {
                     $permissions_new->{$highest_ids_append['userGroups'] + $k} = $v;
                 }
+
                 $new_data[$table][$lk]->permissions = json_encode($permissions_new);
             }
         }
@@ -153,34 +155,42 @@ foreach ($old_data as $table => $table_content) {
             if ($value_obj->masterSubnetId > 0) {
                 $new_data[$table][$lk]->masterSubnetId = $highest_ids_append['subnets'] + $value_obj->masterSubnetId;
             }
+
             // linked subnet
             if ($value_obj->linked_subnet > 0) {
                 $new_data[$table][$lk]->linked_subnet = $highest_ids_append['subnets'] + $value_obj->linked_subnet;
             }
+
             // vlan
             if ($value_obj->vlanId > 0) {
                 $new_data[$table][$lk]->vlanId = $highest_ids_append['vlans'] + $value_obj->vlanId;
             }
+
             // vrf
             if ($value_obj->vrfId > 0) {
                 $new_data[$table][$lk]->vrfId = $highest_ids_append['vrf'] + $value_obj->vrfId;
             }
+
             // device
             if ($value_obj->device > 0) {
                 $new_data[$table][$lk]->device = $highest_ids_append['devices'] + $value_obj->device;
             }
+
             // ns
             if ($value_obj->nameserverId > 0) {
                 $new_data[$table][$lk]->nameserverId = $highest_ids_append['nameservers'] + $value_obj->nameserverId;
             }
+
             // location
             if ($value_obj->location > 0) {
                 $new_data[$table][$lk]->location = $highest_ids_append['locations'] + $value_obj->location;
             }
+
             // scanAgent
             if ($value_obj->scanAgent > 1) {
                 $new_data[$table][$lk]->scanAgent = $highest_ids_append['scanAgents'] + $value_obj->scanAgent;
             }
+
             // permissions
             if (! is_blank($value_obj->permissions) && $value_obj->permissions != 'null') {
                 $permissions = db_json_decode($value_obj->permissions);
@@ -188,6 +198,7 @@ foreach ($old_data as $table => $table_content) {
                 foreach ($permissions as $k => $v) {
                     $permissions_new->{$highest_ids_append['userGroups'] + $k} = $v;
                 }
+
                 $new_data[$table][$lk]->permissions = json_encode($permissions_new);
             }
         }
@@ -202,6 +213,7 @@ foreach ($old_data as $table => $table_content) {
             if ($value_obj->state > 4) {
                 $new_data[$table][$lk]->state = $highest_ids_append['ipTags'] + $value_obj->state;
             }
+
             // device
             if ($value_obj->switch > 0) {
                 $new_data[$table][$lk]->switch = $highest_ids_append['devices'] + $value_obj->switch;
@@ -217,6 +229,7 @@ foreach ($old_data as $table => $table_content) {
             if ($value_obj->type > 9) {
                 $new_data[$table][$lk]->type = $highest_ids_append['deviceTypes'] + $value_obj->type;
             }
+
             // sections
             if (strlen((string) $value_obj->sections) > 1) {
                 $sections = explode(';', (string) $value_obj->sections);
@@ -224,12 +237,15 @@ foreach ($old_data as $table => $table_content) {
                 foreach ($sections as $k => $v) {
                     $sections_new[$highest_ids_append['sections'] + $k] = $v;
                 }
+
                 $new_data[$table][$lk]->sections = implode(';', $sections_new);
             }
+
             // rack
             if ($value_obj->rack > 0) {
                 $new_data[$table][$lk]->rack = $highest_ids_append['racks'] + $value_obj->rack;
             }
+
             // location
             if ($value_obj->location > 0) {
                 $new_data[$table][$lk]->location = $highest_ids_append['locations'] + $value_obj->location;
@@ -254,6 +270,7 @@ foreach ($old_data as $table => $table_content) {
                 if ($value_obj->authMethod > 2) {
                     $new_data[$table][$lk]->authMethod = $highest_ids_append['usersAuthMethod'] + $value_obj->authMethod;
                 }
+
                 // groups
                 if ($value_obj->role != 'Administrator') {
                     $groups_tmp = db_json_decode($value_obj->groups, true);
@@ -261,8 +278,10 @@ foreach ($old_data as $table => $table_content) {
                     foreach ($groups_tmp as $gid => $gid2) {
                         $groups_new[$gid + $highest_ids_append['userGroups']] = $gid + $highest_ids_append['userGroups'];
                     }
+
                     $new_data[$table][$lk]->groups = json_encode($groups_new);
                 }
+
                 // favourite subnets
                 if (! is_blank($value_obj->favourite_subnets)) {
                     $fs_tmp = explode(';', (string) $value_obj->favourite_subnets);
@@ -270,6 +289,7 @@ foreach ($old_data as $table => $table_content) {
                     foreach ($fs_tmp as $gid) {
                         $fs_new[] = $gid + $highest_ids_append['subnets'];
                     }
+
                     $new_data[$table][$lk]->favourite_subnets = implode(';', $fs_new);
                 }
             } else {
@@ -297,6 +317,7 @@ foreach ($old_data as $table => $table_content) {
                 foreach ($fs_tmp as $gid) {
                     $fs_new[] = $gid + $highest_ids_append['sections'];
                 }
+
                 $new_data[$table][$lk]->permissions = implode(';', $fs_new);
             }
         }
@@ -313,6 +334,7 @@ foreach ($old_data as $table => $table_content) {
                 foreach ($fs_tmp as $gid) {
                     $fs_new[] = $gid + $highest_ids_append['sections'];
                 }
+
                 $new_data[$table][$lk]->sections = implode(';', $fs_new);
             }
         }
@@ -329,6 +351,7 @@ foreach ($old_data as $table => $table_content) {
                 foreach ($fs_tmp as $gid) {
                     $fs_new[] = $gid + $highest_ids_append['sections'];
                 }
+
                 $new_data[$table][$lk]->permissions = implode(';', $fs_new);
             }
         }
@@ -414,8 +437,10 @@ foreach ($old_data as $table => $table_content) {
                         }
                     }
                 }
+
                 $new_data[$table][$lk]->src = json_encode($arr_new);
             }
+
             // dst
             if (! is_blank($value_obj->dst)) {
                 $arr = json_encode($value_obj->dst, true);
@@ -430,8 +455,10 @@ foreach ($old_data as $table => $table_content) {
                         }
                     }
                 }
+
                 $new_data[$table][$lk]->dst = json_encode($arr_new);
             }
+
             // device
             if ($value_obj->device > 0) {
                 $value_obj->device = $highest_ids_append['devices'] + $value_obj->device;

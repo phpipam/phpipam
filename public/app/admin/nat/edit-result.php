@@ -34,14 +34,17 @@ if ($POST->action == 'delete' || $POST->action == 'edit') {
         $Result->show('danger', _('Invalid NAT object identifier'), false);
     }
 }
+
 if ($POST->action == 'add' || $POST->action == 'edit') {
     // name
     if (strlen((string) $POST->name) < 3) {
         $Result->show('danger', _('Name must have at least 3 characters'), true);
     }
+
     if (! in_array($POST->type, ['source', 'static', 'destination'])) {
         $Result->show('danger', _('Invalid NAT type'), true);
     }
+
     if (isset($POST->device)) {
         if (! is_numeric($POST->device)) {
             $Result->show('danger', _('Invalid device'), true);
@@ -90,6 +93,7 @@ if (! $Admin->object_modify('nat', $POST->action, 'id', $values)) {
 } else {
     $Result->show('success', _('NAT').' '.$User->get_post_action().' '._('successful'), false);
 }
+
 // add
 if ($POST->action == 'add') {
     print "<div class='new_nat_id hidden'>$Admin->lastId</div>";

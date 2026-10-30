@@ -25,6 +25,7 @@ $User->check_maintaneance_mode();
 if (! array_key_exists((string) $POST->object, $Tools->get_customer_object_types())) {
     $Result->show('danger', _('Invalid object'), true, true);
 }
+
 // ID must be numeric
 if (! is_numeric($POST->id)) {
     $Result->show('danger', _('Invalid object ID'), true, true);

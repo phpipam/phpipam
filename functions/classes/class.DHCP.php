@@ -239,6 +239,7 @@ class DHCP extends Common_functions
         } catch (Exception $e) {
             $this->Result->show('danger', $e->getMessage(), false);
         }
+
         // return leases
         if ($type == 'IPv6') {
             return $this->DHCP_server->leases6;

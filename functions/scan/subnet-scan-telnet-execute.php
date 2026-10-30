@@ -43,10 +43,12 @@ $Scan->ping_set_exit(true);
 if (php_sapi_name() != 'cli') {
     exit(json_encode(['status' => 1, 'error' => 'This script can only be run from cli!']));
 }
+
 // check input parameters
 if (! isset($argv[1]) || ! isset($argv[2])) {
     exit(json_encode(['status' => 1, 'error' => 'Missing required input parameters']));
 }
+
 // test to see if threading is available
 if (! PingThread::available($errmsg)) {
     exit(json_encode(['status' => 1, 'error' => "Threading is required for scanning subnets - Error: $errmsg\n"]));
@@ -106,6 +108,7 @@ while ($z < count($scan_addresses)) {
             $out['dead'][$addresses[$index]['ip']][] = $addresses[$index]['port'];
         }
     }
+
     unset($threads);
 }
 

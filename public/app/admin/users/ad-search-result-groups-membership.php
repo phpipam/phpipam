@@ -36,6 +36,7 @@ try {
     if ($server->type == 'NetIQ') {
         $params->account_suffix = '';
     }
+
     // set options
     $options = [
         'base_dn' => $params->base_dn,

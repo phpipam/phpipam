@@ -27,6 +27,7 @@ if (! defined('VERSION') && php_sapi_name() == 'cli') {
     if (! isset($argv[1])) {
         exit("Please provide version\n");
     }
+
     // Output
     foreach ($upgrade_queries as $version => $queries) {
         if ($version > $argv[1]) {

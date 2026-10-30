@@ -8,6 +8,7 @@ if (! function_exists('gettext')) {
     {
         return $text;
     }
+
     function _($text)
     {
         return $text;
@@ -100,6 +101,7 @@ function escape_input($data)
     if (is_blank($data)) {
         return '';
     }
+
     $safe_data = htmlentities($data, ENT_QUOTES, 'UTF-8');
 
     return is_string($safe_data) ? $safe_data : '';
@@ -116,6 +118,7 @@ function unescape_input($data)
     if (is_blank($data)) {
         return '';
     }
+
     $safe_data = html_entity_decode($data, ENT_QUOTES, 'UTF-8');
 
     return is_string($safe_data) ? $safe_data : '';

@@ -89,6 +89,7 @@ $upgrade_queries['1.5.33'][] = "ALTER TABLE `usersAuthMethod` CHANGE `protected`
 if (defined('MAP_SAML_USER') && defined('SAML_USERNAME') && MAP_SAML_USER != false && ! is_blank(SAML_USERNAME)) {
     $upgrade_queries['1.5.33'][] = "UPDATE `usersAuthMethod` SET `params` = JSON_SET(`params`,'$.MappedUser','".SAML_USERNAME."') WHERE `type`='SAML2'; -- IGNORE_ON_FAILURE"; // MySQL 5.7+
 }
+
 $upgrade_queries['1.5.33'][] = '-- Database version bump';
 $upgrade_queries['1.5.33'][] = "UPDATE `settings` set `dbversion` = '33';";
 

@@ -77,6 +77,7 @@ if (count($free_subnets) > 0) {
     foreach ($free_subnets as $free_mask => $items) {
         print '	<td>/'.$free_mask.'</td>';
     }
+
     print '</tr>';
 
     $all_keys = array_keys($free_subnets);
@@ -102,6 +103,7 @@ if (count($free_subnets) > 0) {
             // rowspan
             // $rowspan = $max_all_subnets/$max_subnets;
         }
+
         print '</tr>';
     }
 

@@ -88,6 +88,7 @@ else {
                     print '</tr>';
                 }
             }
+
             // none available
             if ($cnt === 0) {
                 print '<tr>';
@@ -104,6 +105,7 @@ else {
             print '</tr>';
         }
     }
+
     print '</tbody>';
     print '</table>';
 }

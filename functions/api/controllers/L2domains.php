@@ -209,10 +209,12 @@ class L2domains_controller extends Common_api_functions
         if (! isset($this->_params->id)) {
             $this->_params->id = 1;
         }
+
         // validate number
         if (! is_numeric($this->_params->id)) {
             $this->Response->throw_exception(400, 'Domain id must be numeric');
         }
+
         // check that it exists
         if ($this->Tools->fetch_object('vlanDomains', 'id', $this->_params->id) === false) {
             $this->Response->throw_exception(404, 'Invalid domain id');
@@ -232,10 +234,12 @@ class L2domains_controller extends Common_api_functions
             if (@$this->_params->id == 1 && $this->request_method() == 'DELETE') {
                 $this->Response->throw_exception(409, 'Default domain cannot be deleted');
             }
+
             // ID must be numeric
             if (! is_numeric($this->_params->id)) {
                 $this->Response->throw_exception(400, 'Domain id must be numeric');
             }
+
             // check that it exists
             if ($this->Tools->fetch_object('vlanDomains', 'id', $this->_params->id) === false) {
                 $this->Response->throw_exception(404, 'Invalid domain id');
@@ -254,6 +258,7 @@ class L2domains_controller extends Common_api_functions
             if (! is_numeric($this->_params->id)) {
                 $this->Response->throw_exception(400, 'Invalid domain id');
             }
+
             // name must be present
             if (@$this->_params->name == '' && isset($this->_params->name)) {
                 $this->Response->throw_exception(400, 'Domain name is mandatory');

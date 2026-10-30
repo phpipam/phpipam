@@ -55,6 +55,7 @@ if ($POST->action != 'delete') {
         $POST->password1 = '';
         $POST->password2 = '';
     }
+
     if (! is_blank($POST->password1) || ($POST->action == 'add') && $auth_method->type == 'local') {
         // checks
         if ($POST->password1 != $POST->password2) {
@@ -76,6 +77,7 @@ if ($POST->action != 'delete') {
     if (is_blank($POST->real_name)) {
         $Result->show('danger', _('Real name field is mandatory!'), true);
     }
+
     // email format must be valid
     if (! $Tools->validate_email($POST->email)) {
         $Result->show('danger', _('Invalid email address!'), true);
@@ -93,6 +95,7 @@ if ($POST->action != 'delete') {
                 $Result->show('danger', _('Username must be at least 1 character long!'), true);
             }
         }
+
         // check duplicate
         if ($Admin->fetch_object('users', 'username', $POST->username) !== false) {
             $Result->show('danger', _('User').' '.escape_input($POST->username).' '._('already exists!'), true);
@@ -104,6 +107,7 @@ if ($POST->action != 'delete') {
 if ($POST->action == 'delete' && $POST->userId == 1) {
     $Result->show('danger', _('Admin user cannot be deleted'), true);
 }
+
 // admin user cannot be disabled
 if ($POST->disabled == 'Yes' && $POST->userId == 1) {
     $Result->show('danger', _('Admin user cannot be disabled'), true);
@@ -137,10 +141,12 @@ $values = array_merge($values, $update);
 if (! is_blank($POST->password1) || ($POST->action == 'add' && $auth_method->type == 'local')) {
     $values['password'] = $POST->password1;
 }
+
 // pass change
 if (isset($POST->passChange) && $auth_method->type == 'local') {
     $values['passChange'] = 'Yes';
 }
+
 // set groups user belongs to
 if ($POST->role == 'Administrator') {
     $values['groups'] = null;
@@ -150,6 +156,7 @@ if ($POST->role == 'Administrator') {
             $group[substr($key, 5)] = substr($key, 5);
         }
     }
+
     $values['groups'] = json_encode(@$group);
 }
 
@@ -163,6 +170,7 @@ foreach ($User->get_modules_with_permissions() as $m) {
         }
     }
 }
+
 // formulate permissions
 $values['module_permissions'] = json_encode($permissions);
 

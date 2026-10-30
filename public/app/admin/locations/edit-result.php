@@ -32,11 +32,13 @@ if ($POST->action == 'delete' || $POST->action == 'edit') {
         $Result->show('danger', _('Invalid Location object identifier'), false);
     }
 }
+
 if ($POST->action == 'add' || $POST->action == 'edit') {
     // name
     if (is_blank($POST->name)) {
         $Result->show('danger', _('Name must have at least 1 character'), true);
     }
+
     // lat, long
     if ($POST->action !== 'delete') {
         // lat
@@ -45,6 +47,7 @@ if ($POST->action == 'add' || $POST->action == 'edit') {
                 $Result->show('danger', _('Invalid Latitude'), true);
             }
         }
+
         // long
         if (! is_blank($POST->long)) {
             if (! preg_match('/^(\-?\d+(\.\d+)?).\s*(\-?\d+(\.\d+)?)$/', (string) $POST->long)) {

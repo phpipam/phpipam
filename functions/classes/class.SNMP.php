@@ -479,6 +479,7 @@ class phpipamSNMP extends Common_functions
                 throw new Exception(_('Invalid SNMP version'));
             }
         }
+
         // set parameters
         $this->snmp_session->oid_output_format = SNMP_OID_OUTPUT_NUMERIC;
 
@@ -497,6 +498,7 @@ class phpipamSNMP extends Common_functions
         if (is_object($this->snmp_session)) {
             $this->snmp_session->close();
         }
+
         // to default
         $this->snmp_session = false;
     }
@@ -562,6 +564,7 @@ class phpipamSNMP extends Common_functions
             $res[$n]['ip'] = $this->parse_snmp_result_value($r);
             $n++;
         }
+
         // parse MAC
         $n = 0;
         foreach ($res2 as $r) {
@@ -591,6 +594,7 @@ class phpipamSNMP extends Common_functions
                     $res[$n]['portname'] = '';
                 }
             }
+
             $n++;
         }
 
@@ -678,6 +682,7 @@ class phpipamSNMP extends Common_functions
             $res[$n]['ip'] = $this->parse_snmp_result_value($r);
             $n++;
         }
+
         $n = 0;
         foreach ($res2 as $r) {
             $res[$n]['mac'] = $this->format_snmp_mac_value($r);
@@ -711,6 +716,7 @@ class phpipamSNMP extends Common_functions
             $res[$n]['subnet'] = $this->parse_snmp_result_value($r);
             $n++;
         }
+
         $n = 0;
         foreach ($res2 as $r) {
             $res[$n]['mask'] = $this->parse_snmp_result_value($r);
@@ -777,6 +783,7 @@ class phpipamSNMP extends Common_functions
             if ($i == 0) {
                 continue;
             }
+
             $mplsVpnVrfName .= chr($v);
         }
 
@@ -808,6 +815,7 @@ class phpipamSNMP extends Common_functions
             $r = $this->parse_snmp_result_value($r);
             $res[$k]['rd'] = $r;
         }
+
         foreach ($res2 as $k => $r) {
             // set name
             $k = str_replace($this->snmp_oids['MPLS-VPN-MIB::mplsVpnVrfDescription'].'.', '', (string) $k);

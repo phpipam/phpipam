@@ -44,6 +44,7 @@ if (count($custom_fields) > 0) {
                 $logical_circuit->{$field['name']} = '';
             }
         }
+
         // create links
         $logical_circuit->{$field['name']} = $Tools->create_links($logical_circuit->{$field['name']});
 
@@ -70,6 +71,7 @@ if ($User->get_module_permissions('circuits') >= User::ACCESS_RW) {
     if ($User->get_module_permissions('circuits') >= User::ACCESS_RWA) {
         $links[] = ['type' => 'link', 'text' => _('Delete circuit'), 'href' => '', 'class' => 'open_popup', 'dataparams' => "  data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='delete' data-circuitid='$logical_circuit->id'", 'icon' => 'times'];
     }
+
     // print links
     print $User->print_actions($User->user->compress_actions, $links, true, true);
     print '</td>';

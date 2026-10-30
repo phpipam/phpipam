@@ -28,6 +28,7 @@ $User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('dang
 if (! is_numeric($POST->subnetId)) {
     $Result->show('danger', _('Invalid ID'), true);
 }
+
 // verify that user has write permissions for subnet
 if ($Subnets->check_permission($User->user, $POST->subnetId) < 3) {
     $Result->show('danger', _('You do not have permissions to resize subnet').'!', true);

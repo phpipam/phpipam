@@ -227,6 +227,7 @@ class Tools_controller extends Common_api_functions
                         if ($gateway !== false) {
                             $result[$k]->gatewayId = $gateway->id;
                         }
+
                         // nameservers
                         $ns = $this->read_subnet_nameserver($r->nameserverId);
                         if ($ns !== false) {
@@ -278,6 +279,7 @@ class Tools_controller extends Common_api_functions
                                 }
                             }
                         }
+
                         if (is_array($result->dst)) {
                             foreach ($result->dst as $type => $arr) {
                                 foreach ($arr as $k => $id) {
@@ -294,6 +296,7 @@ class Tools_controller extends Common_api_functions
                 if ($this->_params->id3 != 'addresses') {
                     $this->Response->throw_exception(400, 'Invalid parameter');
                 }
+
                 // define identifier
                 if ($this->_params->id == 'ipTags') {
                     $field = 'state';
@@ -302,9 +305,11 @@ class Tools_controller extends Common_api_functions
                 } else {
                     $this->Response->throw_exception(400, 'Invalid parameter');
                 }
+
                 // fetch
                 $result = $this->Tools->fetch_multiple_objects('ipaddresses', $field, $this->_params->id2, $this->sort_key, true);
             }
+
             // result
             if ($result === false) {
                 $this->Response->throw_exception(404, 'No objects found');
@@ -436,6 +441,7 @@ class Tools_controller extends Common_api_functions
         if ($table_name == 'devices') {
             $update_field = 'switch';
         }
+
         if ($table_name == 'ipTags') {
             $update_field = 'state';
         }
@@ -469,6 +475,7 @@ class Tools_controller extends Common_api_functions
             $this->_params->id = $this->_params->id2;
             unset($this->_params->id2);
         }
+
         if (isset($this->_params->id3)) {
             $this->_params->id2 = $this->_params->id3;
             unset($this->_params->id3);
@@ -510,6 +517,7 @@ class Tools_controller extends Common_api_functions
                 $this->Response->throw_exception(400, 'Invalid subcontroller identifier');
             }
         }
+
         // id2
         if (isset($this->_params->id2)) {
             if (! in_array('id2', $this->identifiers[$this->_params->id])) {
@@ -564,6 +572,7 @@ class Tools_controller extends Common_api_functions
             if (! is_numeric($this->_params->type)) {
                 $this->Response->throw_exception(400, 'Invalid devicetype identifier');
             }
+
             // check
             if ($this->Tools->fetch_object('deviceTypes', 'tid', $this->_params->type) === false) {
                 $this->Response->throw_exception(400, 'Device type does not exist');

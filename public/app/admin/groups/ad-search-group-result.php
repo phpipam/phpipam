@@ -40,6 +40,7 @@ if ($server->type == 'LDAP') {
 if (is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword)) {
     $Result->show('danger', _('Missing credentials'), true);
 }
+
 // at least 2 chars
 if (strlen((string) $POST->dfilter) < 2) {
     $Result->show('danger', _('Please enter at least 2 characters'), true);
@@ -50,6 +51,7 @@ try {
     if ($server->type == 'NetIQ' || $server->type == 'LDAP') {
         $params->account_suffix = '';
     }
+
     // set options
     $options = [
         'base_dn' => $params->base_dn,
@@ -124,8 +126,10 @@ if (count($groups) == 0) {
         } else {
             print "<span class='muted'>"._('No members').'</span>';
         }
+
         print '	</td>';
         print '	</tr>';
     }
+
     print '</table>';
 }

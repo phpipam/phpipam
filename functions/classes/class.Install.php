@@ -154,6 +154,7 @@ class Install extends Common_functions
             if ($result->user_exists == 0) {
                 $this->Database_root->runQuery("CREATE USER '$esc_user'@'$webhost' IDENTIFIED BY '$esc_pass';");
             }
+
             $this->Database_root->runQuery("GRANT ALL ON `$db_name`.* TO '$esc_user'@'$webhost';");
             $this->Database_root->runQuery('FLUSH PRIVILEGES;');
         } catch (Exception $e) {
@@ -196,12 +197,14 @@ class Install extends Common_functions
                         $this->Database_root->runQuery('UNLOCK TABLES;');
                     } catch (Exception $e) {
                     }
+
                     // drop database
                     try {
                         $this->Database_root->runQuery('drop database if exists `'.$this->db['name'].'`;');
                     } catch (Exception $e) {
                         $this->Result->show('danger', _('Cannot drop database: ').$e->getMessage(), true);
                     }
+
                     // print error
                     $this->Result->show('danger', _('Cannot install sql SCHEMA file').': '.$e->getMessage().'<br>'._('query that failed').": <pre>$q</pre>", false);
                     $this->Result->show('info', _('Database dropped'), false);
@@ -262,6 +265,7 @@ class Install extends Common_functions
 
             return false;
         }
+
         // redirect if it is not existing
         if (! is_object($result) || $result->cnt != 1) {
             if ($redirect === true) {
@@ -388,6 +392,7 @@ class Upgrade extends Install
             $this->Database->connect();
         } catch (Exception $e) {
         }
+
         // get old version
         $this->get_old_version();
         // load queries
@@ -440,6 +445,7 @@ class Upgrade extends Install
             if (strpos($query, '--') === 0) {
                 $this->queries[] = "\n";
             }
+
             // save query
             $this->queries[] = trim($this->process_procedures($query));
         }
@@ -523,11 +529,13 @@ class Upgrade extends Install
                     if ($ignore_on_failure) {
                         $this->Database->setErrMode(PDO::ERRMODE_SILENT);
                     }
+
                     $this->Database->runQuery($query);
                     if ($ignore_on_failure) {
                         $this->Database->setErrMode(PDO::ERRMODE_EXCEPTION);
                     }
                 }
+
                 // save ok
                 $queries_ok[] = $query;
                 // remove old
@@ -557,6 +565,7 @@ class Upgrade extends Install
             if (count($queries_ok) > 0) {
                 $this->Result->show('success', _('Succesful queries').': <pre>'.implode('<br>', $queries_ok).'</pre>', false);
             }
+
             if (count($queries) > 0) {
                 $this->Result->show('warning', _('Not executed queries').': <pre>'.implode('<br>', $queries).'</pre>', false);
             }

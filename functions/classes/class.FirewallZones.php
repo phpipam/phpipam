@@ -147,6 +147,7 @@ class FirewallZones extends Common_functions
                 if ($zoneName > 4294967295) {
                     return $this->Result->show('danger', _('The maximum convertable value is reached. Consider to switch to decimal or text mode and change the zone name length value.'), true);
                 }
+
                 if (strlen(dechex($zoneName)) > $zoneLength) {
                     return $this->Result->show('danger', _('Maximum zone name length reached! Consider to change your settings in order to generate larger zone names.'), true);
                 }
@@ -261,12 +262,14 @@ class FirewallZones extends Common_functions
             if ($mappings[$key]->generator == 1) {
                 $mappings[$key]->zone = dechex($mappings[$key]->zone);
             }
+
             // add some padding if it is activated and the zone generator is not text
             if ($mappings[$key]->padding == 1 && $mappings[$key]->generator != 2) {
                 // remove leading zeros (padding) and raise the value in case of any zone name length changes
                 // add some padding to reach the maximum zone name length
                 $mappings[$key]->zone = str_pad(ltrim((string) $mappings[$key]->zone, 0), $mappings[$key]->length, '0', STR_PAD_LEFT);
             }
+
             // inject network informations
             foreach ($networkInformation as $nkey => $nval) {
                 if ($mappings[$key]->id == $nval->zoneId) {
@@ -343,12 +346,14 @@ class FirewallZones extends Common_functions
             if ($mapping[$key]->generator == 1) {
                 $mapping[$key]->zone = dechex($mapping[$key]->zone);
             }
+
             // add some padding if it is activated and the zone generator is not text
             if ($mapping[$key]->padding == 1 && $mapping[$key]->generator != 2) {
                 // remove leading zeros (padding) and raise the value in case of any zone name length changes
                 // add some padding to reach the maximum zone name length
                 $mapping[$key]->zone = str_pad(ltrim((string) $mapping[$key]->zone, 0), $mapping[$key]->length, '0', STR_PAD_LEFT);
             }
+
             // inject network informations
             foreach ($networkInformation as $nkey => $nval) {
                 if ($mapping[$key]->id == $nval->zoneId) {
@@ -422,6 +427,7 @@ class FirewallZones extends Common_functions
         catch (Exception $e) {
             $this->Result->show('danger', _('Database error: ').$e->getMessage());
         }
+
         if ($info) {
             // modify the zone output values
             foreach ($info as $key => $val) {
@@ -429,6 +435,7 @@ class FirewallZones extends Common_functions
                 if ($info[$key]->generator == 1) {
                     $info[$key]->zone = dechex($info[$key]->zone);
                 }
+
                 // add some padding if it is activated and the zone generator is not text
                 if ($info[$key]->padding == 1 && $info[$key]->generator != 2) {
                     // remove leading zeros (padding) and raise the value in case of any zone name length changes
@@ -487,12 +494,14 @@ class FirewallZones extends Common_functions
             if ($zones[$key]->generator == 1) {
                 $zones[$key]->zone = dechex($zones[$key]->zone);
             }
+
             // add some padding if it is activated and the zone generator is not text
             if ($zones[$key]->padding == 1 && $zones[$key]->generator != 2) {
                 // remove leading zeros (padding) and raise the value in case of any zone name length changes
                 // add some padding to reach the maximum zone name length
                 $zones[$key]->zone = str_pad(ltrim((string) $zones[$key]->zone, 0), $zones[$key]->length, '0', STR_PAD_LEFT);
             }
+
             // inject network informations
             foreach ($networkInformation as $nkey => $nval) {
                 if ($zones[$key]->id == $nval->zoneId) {
@@ -555,12 +564,14 @@ class FirewallZones extends Common_functions
             if ($zone[$key]->generator == 1) {
                 $zone[$key]->zone = dechex($zone[$key]->zone);
             }
+
             // add some padding if it is activated and the zone generator is not text
             if ($zone[$key]->padding == 1 && $zone[$key]->generator != 2) {
                 // remove leading zeros (padding) and raise the value in case of any zone name length changes
                 // add some padding to reach the maximum zone name length
                 $zone[$key]->zone = str_pad(ltrim((string) $zone[$key]->zone, 0), $zone[$key]->length, '0', STR_PAD_LEFT);
             }
+
             // inject network informations
             foreach ($networkInformation as $nkey => $nval) {
                 if ($zone[$key]->id == $nval->zoneId) {
@@ -623,6 +634,7 @@ class FirewallZones extends Common_functions
                 } else {
                     print '<td>Folder '.$network->subnetDescription.'</td>';
                 }
+
                 print '<td>'.$network->vlan.$network->vlanName.'</td>';
                 print '</tr>';
             }
@@ -668,6 +680,7 @@ class FirewallZones extends Common_functions
             if ($i === 1) {
                 print '<td rowspan="'.$rowspan.'" style="width:150px;">Network</td>';
             }
+
             print '<td>';
             print '<a class="btn btn-xs btn-danger editNetwork" style="margin-right:5px;" alt="'._('Delete Network').'" title="'._('Delete Network').'" data-action="delete" data-zoneId="'.$id.'" data-subnetId="'.$network->subnetId.'">';
             print '<span><i class="fa fa-close"></i></span>';
@@ -683,9 +696,11 @@ class FirewallZones extends Common_functions
                     print $this->Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.'</td>';
                 }
             }
+
             print '</tr>';
             $i++;
         }
+
         print '</table>';
     }
 
@@ -891,6 +906,7 @@ class FirewallZones extends Common_functions
 
             return false;
         }
+
         // ok
         $this->Log->write(_('Firewall zone edit'), _('Firewall zone edited').'.<hr>'.$this->array_to_log($values), 0, $this->User->username);
 
@@ -927,6 +943,7 @@ class FirewallZones extends Common_functions
 
             return false;
         }
+
         // ok
         $this->Log->write(_('Firewall zone delete'), _('Firewall zone').' '.$old_zone->zone.' '._('deleted').'.<hr>'.$this->array_to_log($old_zone), 0, $this->User->username);
 
@@ -977,6 +994,7 @@ class FirewallZones extends Common_functions
 
             return false;
         }
+
         // ok
         $this->Log->write(_('Firewall zone mapping create'), _('New firewall zone mapping created').'.<hr>'.$this->array_to_log($values), 0, $this->User->username);
 
@@ -1000,6 +1018,7 @@ class FirewallZones extends Common_functions
 
             return false;
         }
+
         // ok
         $this->Log->write(_('Firewall zone mapping edit'), _('Firewall zone mapping edited').'.<hr>'.$this->array_to_log($values), 0, $this->User->username);
 
@@ -1026,6 +1045,7 @@ class FirewallZones extends Common_functions
 
             return false;
         }
+
         // ok
         $this->Log->write(_('Firewall zone mapping delete'), _('Firewall zone mapping').' '.$old_mapping->zone.' '._('deleted').'.<hr>'.$this->array_to_log($old_mapping), 0, $this->User->username);
 
@@ -1056,6 +1076,7 @@ class FirewallZones extends Common_functions
                     } else {
                         $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][1];
                     }
+
                     break;
                 case 'patternZoneName':
                     $firewallAddressObject = $firewallAddressObject.$zone->zone;
@@ -1067,6 +1088,7 @@ class FirewallZones extends Common_functions
                     } elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
                         $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
                     }
+
                     break;
                 case 'patternSeparator':
                     $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['separator'];
@@ -1100,6 +1122,7 @@ class FirewallZones extends Common_functions
 
                 return false;
             }
+
             // clone the address_old obj and replace the firewallAddressObject field to get a diff for logging
             $subnet_old = $subnet;
             $subnet['firewallAddressObject'] = $firewallAddressObject;
@@ -1130,6 +1153,7 @@ class FirewallZones extends Common_functions
         if (! is_object($zone)) {
             $zone = new Params;
         }
+
         $firewallAddressObject = '';
 
         foreach ($firewallZoneSettings['pattern'] as $pattern) {
@@ -1140,6 +1164,7 @@ class FirewallZones extends Common_functions
                     } else {
                         $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][1];
                     }
+
                     break;
                 case 'patternZoneName':
                     $firewallAddressObject = $firewallAddressObject.$zone->zone;
@@ -1151,6 +1176,7 @@ class FirewallZones extends Common_functions
                     } elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
                         $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
                     }
+
                     break;
                 case 'patternHost':
                     $hostName = explode('.', (string) $dnsName);
@@ -1199,6 +1225,7 @@ class FirewallZones extends Common_functions
                     } else {
                         $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][1];
                     }
+
                     break;
                 case 'patternZoneName':
                     $firewallAddressObject = $firewallAddressObject.$zone->zone;
@@ -1210,6 +1237,7 @@ class FirewallZones extends Common_functions
                     } elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
                         $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
                     }
+
                     break;
                 case 'patternHost':
                     $hostName = explode('.', (string) $dnsName);
@@ -1234,6 +1262,7 @@ class FirewallZones extends Common_functions
 
                 return false;
             }
+
             // clone the address_old obj and replace the firewallAddressObject field to get a diff for logging
             $address = clone $address_old;
             $address->firewallAddressObject = $firewallAddressObject;
@@ -1272,6 +1301,7 @@ class FirewallZones extends Common_functions
 
             return false;
         }
+
         foreach ($ipaddresses as $ipaddress) {
             // fetch old details for logging
             $address_old = $this->Addresses->fetch_address(null, $ipaddress->id);
@@ -1284,6 +1314,7 @@ class FirewallZones extends Common_functions
                         } else {
                             $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][1];
                         }
+
                         break;
                     case 'patternZoneName':
                         $firewallAddressObject = $firewallAddressObject.$zone->zone;
@@ -1295,6 +1326,7 @@ class FirewallZones extends Common_functions
                         } elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
                             $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
                         }
+
                         break;
                     case 'patternHost':
                         $hostName = explode('.', (string) $ipaddress->hostname);
@@ -1319,6 +1351,7 @@ class FirewallZones extends Common_functions
 
                     return false;
                 }
+
                 // clone the address_old obj and replace the firewallAddressObject field to get a diff for logging
                 $address = clone $address_old;
                 $address->firewallAddressObject = $firewallAddressObject;

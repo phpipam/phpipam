@@ -51,6 +51,7 @@ else {
             print "	<td><h5 style='padding-left:10px;'><i class='fa fa-gray fa-angle-right'></i> <a href='".create_link('subnets', $ss->id)."' rel='tooltip' data-placement='right' title='$ss->description'>$ss->name</a></h5></td>";
             print '</tr>';
         }
+
         print '</table>';
     }
 
@@ -105,8 +106,10 @@ else {
         if (! isset($section_subnets) || ! is_array($section_subnets)) {
             $section_subnets = (array) $Subnets->fetch_section_subnets($GET->section, false, false, []);
         }
+
         print $Subnets->print_subnets_menu($User->user, $section_subnets);
     }
+
     /* print VLAN menu ---------- */
     if ($section['showVLAN'] == 1 && $User->get_module_permissions('vlan') >= User::ACCESS_R) {
         $vlans = $Sections->fetch_section_vlans($GET->section);
@@ -120,6 +123,7 @@ else {
             if (! isset($section_subnets) || ! is_array($section_subnets)) {
                 $section_subnets = (array) $Subnets->fetch_section_subnets($GET->section, false, false, []);
             }
+
             print $Subnets->print_vlan_menu($User->user, $vlans, $section_subnets, $GET->section);
             print '</div>';
         }
@@ -138,6 +142,7 @@ else {
             if (! is_array($section_subnets)) {
                 $section_subnets = (array) $Subnets->fetch_section_subnets($GET->section, false, false, []);
             }
+
             print $Subnets->print_vrf_menu($User->user, $vrfs, $section_subnets, $GET->section);
             print '</div>';
         }
@@ -151,6 +156,7 @@ if ($section_permission == 3) {
     if (isset($GET->subnetId)) {
         print "	<button class='btn btn-xs btn-default pull-left' id='hideSubnets' rel='tooltip' title='"._('Hide subnet list')."' data-placement='right'><i class='fa fa-gray fa-sm fa-chevron-left'></i></button>";
     }
+
     print '	<span>';
     print "	<div class='btn-group'>";
     print "	 <button id='add_subnet' class='btn btn-xs btn-default btn-success'  rel='tooltip' data-container='body'  data-placement='top' title='"._('Add new subnet to')." $section[name]'  data-subnetId='' data-sectionId='$section[id]' data-action='add'><i class='fa fa-sm fa-plus'></i></button>";
@@ -160,6 +166,7 @@ if ($section_permission == 3) {
         $csrf = $User->Crypto->csrf_session_token();
         print "	 <button class='btn btn-xs btn-default btn-success' id='snmp-routing-section'  rel='tooltip' data-container='body' data-sectionId='$section[id]' data-subnetId='0' data-csrf-cookie='$csrf'  data-placement='top' title='"._('Search for subnets through SNMP')."'><i class='fa fa-sm fa-cogs'></i></button>";
     }
+
     print "	 <button id='add_folder' class='btn btn-xs btn-default btn-success'  rel='tooltip' data-container='body'  data-placement='top' title='"._('Add new folder to')." $section[name]'  data-subnetId='' data-sectionId='$section[id]' data-action='add'><i class='fa fa-sm fa-folder'></i></button>";
     print '	</div>';
     print '	</span>';

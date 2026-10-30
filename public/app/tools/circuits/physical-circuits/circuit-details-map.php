@@ -49,4 +49,5 @@ if (count($all_locations) == 1) {
 } elseif (count($all_locations) == 2) {
     $OSM->add_circuit($all_locations[0], $all_locations[1], $type_hash[$circuit->type]);
 }
+
 $OSM->map($height ?? null);

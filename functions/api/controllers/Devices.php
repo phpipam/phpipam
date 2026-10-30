@@ -282,6 +282,7 @@ class Devices_controller extends Common_api_functions
             if (! is_numeric($this->_params->type)) {
                 $this->Response->throw_exception(400, 'Invalid devicetype identifier');
             }
+
             // check
             if ($this->Tools->fetch_object('deviceTypes', 'tid', $this->_params->type) === false) {
                 $this->Response->throw_exception(400, 'Device type does not exist');
@@ -305,6 +306,7 @@ class Devices_controller extends Common_api_functions
             foreach ($sections as $s) {
                 $sections_all[$s->id] = $s->id;
             }
+
             $sections = implode(';', $sections_all);
         }
 
@@ -325,6 +327,7 @@ class Devices_controller extends Common_api_functions
             if (! is_numeric($this->_params->id)) {
                 $this->Response->throw_exception(400, 'Invalid device id');
             }
+
             // check that device exists
             if ($this->Admin->fetch_object('devices', 'id', $this->_params->id) === false) {
                 $this->Response->throw_exception(404, 'Device does not exist');
@@ -343,6 +346,7 @@ class Devices_controller extends Common_api_functions
             if (! is_numeric($this->_params->id)) {
                 $this->Response->throw_exception(400, 'Invalid device id');
             }
+
             // name cannot be nothing
             if (isset($this->_params->hostname) && @$this->_params->hostname == '') {
                 $this->Response->throw_exception(400, 'Hostname is mandatory');

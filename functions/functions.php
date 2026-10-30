@@ -27,6 +27,7 @@ if (Config::ValueOf('proxy_enabled')) {
         $proxy_auth = base64_encode(Config::ValueOf('proxy_user').':'.Config::ValueOf('proxy_pass'));
         $proxy_settings['header'] = 'Proxy-Authorization: Basic '.$proxy_auth;
     }
+
     stream_context_set_default(['http' => $proxy_settings]);
 
     // for debugging proxy config uncomment next line */

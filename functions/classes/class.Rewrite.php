@@ -177,6 +177,7 @@ class Rewrite
                     if (strncmp((string) $l, '?', 1) == 0) {
                         continue; // skip qsa
                     }
+
                     switch ($k) {
                         case 0:
                             $this->get_params['page'] = $l;
@@ -205,6 +206,7 @@ class Rewrite
         } elseif (count($this->get_params) == 0) {
             $this->get_params['page'] = 'dashboard';
         }
+
         // apppend QSA
         $this->append_qsa();
         // apply fixes
@@ -274,6 +276,7 @@ class Rewrite
                 if (strncmp((string) $l, '?', 1) == 0) {
                     continue; // skip qsa
                 }
+
                 switch ($k) {
                     case 0:
                         $this->get_params['app_id'] = $l;
@@ -299,6 +302,7 @@ class Rewrite
                 }
             }
         }
+
         // apppend QSA
         $this->append_qsa();
     }

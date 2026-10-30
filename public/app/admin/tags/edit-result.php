@@ -35,13 +35,16 @@ if ($POST->action == 'delete') {
 if ($POST->action == 'delete' && $old_tag->locked != 'No') {
     $Result->show('danger', _('Cannot delete locked tag'), true);
 }
+
 if ($POST->action != 'delete') {
     if (strlen((string) $POST->type) < 3) {
         $Result->show('danger', _('Invalid tag name'), true);
     }
+
     if (strlen((string) $POST->bgcolor) < 4) {
         $Result->show('danger', _('Invalid bg color'), true);
     }
+
     if (strlen((string) $POST->fgcolor) < 4) {
         $Result->show('danger', _('Invalid fg color'), true);
     }

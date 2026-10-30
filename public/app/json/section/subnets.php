@@ -103,6 +103,7 @@ if (is_array($subnets)) {
         $subnetsTree->add($subnet);
     }
 }
+
 $subnetsTree->walk(false);
 
 print $subnetsTable->json_paginate($subnetsTree, $offset, $limit);

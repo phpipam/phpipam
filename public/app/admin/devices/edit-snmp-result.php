@@ -29,13 +29,16 @@ $User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('dang
 if (! is_numeric($POST->device_id)) {
     $Result->show('danger', _('Invalid ID'), true);
 }
+
 if (! is_numeric($POST->snmp_version)) {
     $Result->show('danger', _('Invalid version'), true);
 }
+
 if ($POST->snmp_version != 0) {
     if (! is_numeric($POST->snmp_port)) {
         $Result->show('danger', _('Invalid port'), true);
     }
+
     if (! is_numeric($POST->snmp_timeout)) {
         $Result->show('danger', _('Invalid timeout'), true);
     }
@@ -65,6 +68,7 @@ foreach ($POST as $key => $line) {
         unset($POST->$key);
     }
 }
+
 // glue sections together
 $POST->snmp_queries = ! empty($temp) ? implode(';', $temp) : null;
 

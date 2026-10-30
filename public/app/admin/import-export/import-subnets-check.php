@@ -11,18 +11,23 @@ require_once __DIR__.'/../../../../functions/functions.php';
 if (! isset($Database)) {
     $Database = new Database_PDO;
 }
+
 if (! isset($User)) {
     $User = new User($Database);
 }
+
 if (! isset($Admin)) {
     $Admin = new Admin($Database);
 }
+
 if (! isset($Tools)) {
     $Tools = new Tools($Database);
 }
+
 if (! isset($Sections)) {
     $Sections = new Sections($Database);
 }
+
 if (! isset($Subnets)) {
     $Subnets = new Subnets($Database);
 }
@@ -58,6 +63,7 @@ foreach ($vlan_domains as $vlan_domain) {
 
         continue;
     }
+
     // write all VLAN entries
     foreach ($all_vlans as $vlan) {
         // cast
@@ -72,6 +78,7 @@ $all_vrfs = $Admin->fetch_all_objects('vrf', 'vrfId');
 if (! $all_vrfs) {
     $all_vrfs = [];
 }
+
 // insert default VRF in the list
 array_splice($all_vrfs, 0, 0, (object) [['vrfId' => '0', 'name' => 'default', 'rd' => '0:0']]);
 // process for easier later check
@@ -137,6 +144,7 @@ foreach ($data as &$cdata) {
                 $action = 'error';
             }
         }
+
         if ((! empty($cdata['mask'])) && (! preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", (string) $cdata['mask']))) {
             $msg .= 'Invalid network mask format.';
             $action = 'error';
@@ -176,6 +184,7 @@ foreach ($data as &$cdata) {
     } else {
         $cdom = 'default';
     }
+
     if (! isset($vlan_data[$cdom])) {
         // the default domain is always there, so if anything is missing we return an error
         $msg .= 'Invalid VLAN domain.';
@@ -185,6 +194,7 @@ foreach ($data as &$cdata) {
             if (in_array(strtolower((string) $cdata['vlan']), ['na', 'n/a', 'nan'])) {
                 $cdata['vlan'] = '';
             }
+
             if ((! empty($cdata['vlan'])) && (strtolower((string) $cdata['vlan']) != 'na')) {
                 $v = strtolower((string) $cdata['vlan']);
                 if (! isset($vlan_data[$cdom][$v])) {
@@ -213,14 +223,17 @@ foreach ($data as &$cdata) {
             $msg .= $net['message'];
             $action = 'error';
         }
+
         if (preg_match("/[;'\"]/", (string) $cdata['description'])) {
             $msg .= 'Invalid characters in description.';
             $action = 'error';
         }
+
         if ((! empty($cdata['vrf'])) && (! preg_match('/^[a-zA-Z0-9-_]+$/', (string) $cdata['vrf']))) {
             $msg .= 'Invalid VRF name format.';
             $action = 'error';
         }
+
         // Allow VLAN to be the string now.
         //       if ((!empty($cdata['vlan'])) && (!preg_match("/^[0-9]+$/", $cdata['vlan']))) { $msg.="Invalid VLAN number format."; $action = "error"; }
         if ((! empty($cdata['domain'])) && (! preg_match('/^[a-zA-Z0-9-_. ]+$/', (string) $cdata['domain']))) {
@@ -249,10 +262,12 @@ foreach ($data as &$cdata) {
                 $msg .= 'Subnet description will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['vlanId'] != $cedata['vlanId']) {
                 $msg .= 'VLAN ID will be updated.';
                 $action = 'edit';
             }
+
             // Check if the values of the custom fields have changed
             if (is_array($custom_fields)) {
                 foreach ($custom_fields as $myField) {
@@ -298,5 +313,6 @@ foreach ($data as &$cdata) {
     foreach ($expfields as $cfield) {
         $rows .= '<td>'.$cdata[$cfield].'</td>';
     }
+
     $rows .= '<td>'._((string) $cdata['msg']).'</td></tr>';
 }

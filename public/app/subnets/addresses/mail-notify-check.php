@@ -42,6 +42,7 @@ try {
     foreach (explode("\r\n", (string) $POST->content) as $c) {
         $content[] = "<tr><td style='padding-left:15px;margin:0px;'>$User->mail_font_style $c</font></td></tr>";
     }
+
     $content[] = "<tr><td style='padding-left:15px;padding-top:20px;margin:0px;font-style:italic;'>$User->mail_font_style_light Sent by user ".$User->user->real_name.' at '.date('Y/m/d H:i').'</font></td></tr>';
     // set al content
     $content_plain = [];
@@ -58,6 +59,7 @@ try {
     foreach (explode(',', (string) $POST->recipients) as $r) {
         $phpipam_mail->Php_mailer->addAddress(addslashes(trim($r)));
     }
+
     $phpipam_mail->Php_mailer->Subject = $subject;
     $phpipam_mail->Php_mailer->msgHTML($content);
     $phpipam_mail->Php_mailer->AltBody = $content_plain;

@@ -35,12 +35,14 @@ if ($POST->action != 'delete') {
             unset($POST->{$k});
         }
     }
+
     // join
     $POST->read($nservers_reindexed);
 
     if ($POST->name == '') {
         $Result->show('danger', _('Name is mandatory'), true);
     }
+
     if (trim($POST->namesrv - 1) == '') {
         $Result->show('danger', _('Primary nameserver is mandatory'), true);
     }
@@ -54,6 +56,7 @@ foreach ($POST as $key => $line) {
         }
     }
 }
+
 $POST->namesrv1 = isset($all_nameservers) ? implode(';', $all_nameservers) : '';
 
 // set sections
@@ -65,6 +68,7 @@ foreach ($POST as $key => $line) {
         unset($POST->{$key});
     }
 }
+
 // glue sections together
 $POST->permissions = count($temp) > 0 ? implode(';', $temp) : null;
 

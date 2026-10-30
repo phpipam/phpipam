@@ -204,10 +204,12 @@ class Subnets_controller extends Common_api_functions
                             }
                         }
                     }
+
                     if (count($result) == 0) {
                         $result = false;
                     }
                 }
+
                 // check result
                 if ($result === false) {
                     $this->Response->throw_exception(404, 'No addresses found');
@@ -344,6 +346,7 @@ class Subnets_controller extends Common_api_functions
             if (isset($this->_params->subnet)) {
                 $this->Response->throw_exception(400, 'Subnet cannot be changed');
             }
+
             if (isset($this->_params->mask)) {
                 $this->Response->throw_exception(400, 'To change mask use resize method');
             }
@@ -487,9 +490,11 @@ class Subnets_controller extends Common_api_functions
         if (! is_numeric($this->_params->number)) {
             $this->Response->throw_exception(400, 'Invalid number of new subnets');
         }
+
         if (! isset($this->_params->group)) {
             $this->_params->group = 'yes';
         }
+
         if (! isset($this->_params->copy_custom)) {
             $this->_params->copy_custom = 'yes';
         }
@@ -567,10 +572,12 @@ class Subnets_controller extends Common_api_functions
                         $perm = $valid_permissions_array[$perm];
                     }
                 }
+
                 // validated, add to permissions array
                 $requested_permissions[$group->g_id] = $perm;
                 $requested_permissions_full[$group->g_name] = array_search($perm, $valid_permissions_array);
             }
+
             // add id1 param back and set permissions
             $this->_params->id = $id;
             $this->_params->permissions = json_encode($requested_permissions);
@@ -610,6 +617,7 @@ class Subnets_controller extends Common_api_functions
         if ($subnet === false) {
             $this->Response->throw_exception(400, 'Subnet does not exist');
         }
+
         // get usage
         $subnet_usage = $this->Subnets->calculate_subnet_usage($subnet);
 
@@ -631,10 +639,12 @@ class Subnets_controller extends Common_api_functions
         if ($subnet->isFull == 1) {
             $this->Response->throw_exception(404, 'No free addresses found');
         }
+
         // slaves
         if ($this->Subnets->has_slaves($this->_params->id)) {
             $this->Response->throw_exception(409, 'Subnet contains subnets');
         }
+
         // fetch
         $first = $this->Addresses->get_first_available_address($this->_params->id);
         // available?
@@ -700,6 +710,7 @@ class Subnets_controller extends Common_api_functions
                 ];
             }
         }
+
         // result
         if (count($clogs_formatted) > 0) {
             return $clogs_formatted;
@@ -968,6 +979,7 @@ class Subnets_controller extends Common_api_functions
                         $this->Response->throw_exception(409, 'Subnet is not within boundaries of its master subnet');
                     }
                 }
+
                 // set permissions
                 $this->_params->permissions = $master_subnet->permissions;
             }
@@ -1010,6 +1022,7 @@ class Subnets_controller extends Common_api_functions
         if (! is_numeric($this->_params->id)) {
             $this->Response->throw_exception(400, 'Subnet Id must be numeric ('.$this->_params->id.')');
         }
+
         // check subnet
         if ($this->Subnets->fetch_subnet('id', $this->_params->id) === false) {
             $this->Response->throw_exception(404, 'Invalid subnet Id ('.$this->_params->id.')');
@@ -1047,6 +1060,7 @@ class Subnets_controller extends Common_api_functions
         if ($section === false) {
             $this->Response->throw_exception(400, 'Invalid section Id');
         }
+
         // settings
         $this->settings = $this->Tools->get_settings();
 

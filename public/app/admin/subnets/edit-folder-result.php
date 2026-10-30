@@ -100,6 +100,7 @@ if ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
     foreach ($Subnets->slaves as $s) {
         $slave_array[$s] = $s;
     }
+
     $ipcnt = $Addresses->count_addresses_in_multiple_subnets($slave_array);
 
     print '<strong>'._('Warning').'</strong>: '._('I will delete').':<ul>';
@@ -107,6 +108,7 @@ if ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
     if ($ipcnt > 0) {
         print "	<li>$ipcnt "._('IP addresses').'</li>';
     }
+
     print '</ul>';
 
     print "<hr><div style='text-align:right'>";

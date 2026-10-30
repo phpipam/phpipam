@@ -148,16 +148,20 @@ abstract class DB
         if (isset($username)) {
             $this->username = $username;
         }
+
         if (isset($password)) {
             $this->password = $password;
         }
+
         if (isset($charset)) {
             $this->charset = $charset;
         }
+
         // ssl
         if (is_array($ssl)) {
             $this->ssl = $ssl;
         }
+
         $this->load_schema_exceptions();
     }
 
@@ -187,14 +191,17 @@ abstract class DB
 
                 continue;
             }
+
             if (! is_string($current_table)) {
                 continue;
             }
+
             if (strpos($line, ') ENGINE=') === 0) {
                 $current_table = null;
 
                 continue;
             }
+
             if (strpos($line, '__no_html_escape__') !== false) {
                 $col_name = explode('`', $line);
                 if (count($col_name) >= 3) {
@@ -316,6 +323,7 @@ abstract class DB
             if (is_array($values)) {
                 fwrite($fh, ' Params: '.implode(', ', $values));
             }
+
             // break
             fwrite($fh, "\n");
             fclose($fh);
@@ -504,6 +512,7 @@ abstract class DB
             if ($cleanup) {
                 $this->runQuery('DROP TABLE IF EXISTS cte_query, cte_0, cte_last;');
             }
+
             throw $e;
         }
 
@@ -678,6 +687,7 @@ abstract class DB
         foreach ($objParams as $objParam) {
             $preparedParamArr[] = '`'.$this->escape($objParam).'`=?';
         }
+
         // set values
         $all_values = array_merge(array_values($values), $ids);
 
@@ -788,9 +798,11 @@ abstract class DB
                 if ($tableName === 'no_html_escape' || ! is_string($v)) {
                     continue;
                 }
+
                 if (isset($this->html_escape_exceptions[$tableName]) && isset($this->html_escape_exceptions[$tableName][$k])) {
                     continue;
                 }
+
                 $data->{$k} = htmlentities($v, ENT_QUOTES, 'UTF-8');
             }
 
@@ -830,6 +842,7 @@ abstract class DB
         if ($tableName == 'vlans' && $sortField == 'id') {
             $sortField = 'vlanId';
         }
+
         if ($tableName == 'vrf' && $sortField == 'id') {
             $sortField = 'vrfId';
         }
@@ -926,6 +939,7 @@ abstract class DB
         if (! $this->isConnected()) {
             $this->connect();
         }
+
         $id = intval($id);
 
         // has a custom query been provided?
@@ -998,6 +1012,7 @@ abstract class DB
             foreach ($result_fields as $i => $f) {
                 $result_fields[$i] = "`$f`";
             }
+
             $result_fields = implode(',', $result_fields);
         }
 
@@ -1031,6 +1046,7 @@ abstract class DB
         if ($table == 'vlans' && $sortField == 'id') {
             $sortField = 'vlanId';
         }
+
         if ($table == 'vrf' && $sortField == 'id') {
             $sortField = 'vrfId';
         }

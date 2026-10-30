@@ -59,6 +59,7 @@ if ($all_sections !== false) {
             }
         }
     }
+
     // set new array
     $sections_sorted = @$sectionssorted;
 }
@@ -95,36 +96,44 @@ if ($GET->section == 'on') {
     $worksheet->write($curRow, $curColumn, _('Section'), $format_header);
     $curColumn++;
 }
+
 if ($GET->subnet == 'on') {
     $worksheet->write($curRow, $curColumn, _('Subnet'), $format_header);
     $curColumn++;
 }
+
 if ($GET->description == 'on') {
     $worksheet->write($curRow, $curColumn, _('Description'), $format_header);
     $curColumn++;
 }
+
 if ($GET->VLAN == 'on') {
     $worksheet->write($curRow, $curColumn, _('VLAN'), $format_header);
     $curColumn++;
     $worksheet->write($curRow, $curColumn, _('VLAN Domain'), $format_header);
     $curColumn++;
 }
+
 if ($GET->VRF == 'on') {
     $worksheet->write($curRow, $curColumn, _('VRF'), $format_header);
     $curColumn++;
 }
+
 if ($GET->master == 'on') {
     $worksheet->write($curRow, $curColumn, _('Master Subnet'), $format_header);
     $curColumn++;
 }
+
 if ($GET->requests == 'on') {
     $worksheet->write($curRow, $curColumn, _('Requests'), $format_header);
     $curColumn++;
 }
+
 if ($GET->hostscheck == 'on') {
     $worksheet->write($curRow, $curColumn, _('Host check'), $format_header);
     $curColumn++;
 }
+
 if ($GET->discover == 'on') {
     $worksheet->write($curRow, $curColumn, _('Discover'), $format_header);
     $curColumn++;
@@ -176,6 +185,7 @@ if ($all_sections !== false) {
                     } else {
                         $subnet_text = $subnet['ip'].'/'.$subnet['mask'];
                     }
+
                     $worksheet->write($curRow, $curColumn, $subnet_text, $format_text);
                     $curColumn++;
                 }
@@ -208,6 +218,7 @@ if ($all_sections !== false) {
                     } else {
                         $worksheet->write($curRow, $curColumn, '', $format_text);
                     }
+
                     $curColumn++;
                 }
 
@@ -225,6 +236,7 @@ if ($all_sections !== false) {
                     } else {
                         $worksheet->write($curRow, $curColumn, '/', $format_text);
                     }
+
                     $curColumn++;
                 }
 

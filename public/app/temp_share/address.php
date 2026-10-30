@@ -143,6 +143,7 @@ if (count($address) > 1) {
         } else {
             print "	<td><span class='text-muted'>/</span></td>";
         }
+
         print '</tr>';
     }
 
@@ -162,6 +163,7 @@ if (count($address) > 1) {
     } else {
         print '	<td>'._('Never').'</td>';
     }
+
     print '</tr>';
 
     // availability
@@ -224,6 +226,7 @@ if (count($address) > 1) {
                 } else {
                     print $address[$key];
                 }
+
                 print '	</td>';
                 print '</tr>';
             }

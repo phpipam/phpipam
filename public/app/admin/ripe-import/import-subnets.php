@@ -69,6 +69,7 @@ if (isset($errors)) {
     foreach ($errors as $line) {
         print $line.'<br>';
     }
+
     print '</div>';
 } else {
     $errors_import_failed = 0;
@@ -91,6 +92,7 @@ if (isset($errors)) {
             $errors_import_failed++;
         }
     }
+
     // check if all is ok and print it!
     if ($errors_import_failed == 0) {
         $Result->show('success', _('Import successful').'!', false);

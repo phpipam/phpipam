@@ -217,6 +217,7 @@ class Common_api_functions
         else {
             $this->{$Object_name} = new $Object_name($Database);
         }
+
         // set exit method
         $this->{$Object_name}->Result->exit_method = 'exception';
         // set API flag
@@ -294,10 +295,12 @@ class Common_api_functions
                 }
             }
         }
+
         // filter
         if (isset($this->_params->filter_by)) {
             $result = $this->filter_result($result);
         }
+
         // transform address
         if ($transform_address) {
             $result = $this->transform_address($result);
@@ -443,12 +446,15 @@ class Common_api_functions
                 if ($controller == 'vlans') {
                     $r->id = $r->vlanId;
                 }
+
                 if ($controller == 'tools/vlans') {
                     $r->id = $r->vlanId;
                 }
+
                 if ($controller == 'vrfs') {
                     $r->id = $r->vrfId;
                 }
+
                 if ($this->_params->id == 'deviceTypes') {
                     $r->id = $r->tid;
                 }
@@ -474,6 +480,7 @@ class Common_api_functions
                 if ($controller == 'vlans') {
                     unset($r->id);
                 }
+
                 if ($controller == 'vrfs') {
                     unset($r->id);
                 }
@@ -485,12 +492,15 @@ class Common_api_functions
             if ($controller == 'vlans') {
                 $result->id = $result->vlanId;
             }
+
             if ($controller == 'tools/vlans') {
                 $result->id = $result->vlanId;
             }
+
             if ($controller == 'vrfs') {
                 $result->id = $result->vrfId;
             }
+
             if ($this->_params->id == 'deviceTypes') {
                 $result->id = $result->tid;
             }
@@ -510,6 +520,7 @@ class Common_api_functions
                         } else {
                             $result->links[$m]->href = '/api/'.$this->_params->app_id."/$controller/".$result->id."/$link/";
                         }
+
                         $result->links[$m]->methods = $method;
                         // next
                         $m++;
@@ -521,6 +532,7 @@ class Common_api_functions
             if ($controller == 'vlans') {
                 unset($result->id);
             }
+
             if ($controller == 'vrfs') {
                 unset($result->id);
             }
@@ -720,6 +732,7 @@ class Common_api_functions
                 }
             }
         }
+
         // remove editDate
         unset($values['editDate']);
 
@@ -777,6 +790,7 @@ class Common_api_functions
         if ($format == 4) {
             return $mac;
         }
+
         // format 3
         if ($format == 3) {
             $mac = str_split($mac, 4);
@@ -893,21 +907,27 @@ class Common_api_functions
         if ($controller == 'vlans') {
             $this->keys['vlanId'] = 'id';
         }
+
         if ($controller == 'vrfs') {
             $this->keys['vrfId'] = 'id';
         }
+
         if ($controller == 'circuits') {
             $this->keys['cid'] = 'circuit_id';
         }
+
         if ($controller == 'l2domains') {
             $this->keys['permissions'] = 'sections';
         }
+
         if ($this->_params->controller == 'tools' && $tools_table == 'deviceTypes') {
             $this->keys['tid'] = 'id';
         }
+
         if ($this->_params->controller == 'tools' && $tools_table == 'nameservers') {
             $this->keys['permissions'] = 'sections';
         }
+
         if ($this->_params->controller == 'subnets') {
             $this->keys['ip'] = 'ip_addr';
         }
@@ -1013,6 +1033,7 @@ class Common_api_functions
         if (! $this->app->app_nest_custom_fields) {
             return;
         }
+
         if (is_array($this->_params->custom_fields) && isset($this->custom_fields)) {
             foreach ($this->_params->custom_fields as $key => $value) {
                 if (array_key_exists($key, $this->custom_fields)) {
@@ -1021,6 +1042,7 @@ class Common_api_functions
                     $this->Response->throw_exception(400, "{$key} is not a valid custom field");
                 }
             }
+
             unset($this->_params->custom_fields);
         }
     }

@@ -67,6 +67,7 @@ class SubnetsMenu
                 $this->expanded[$e] = 1;
             }
         }
+
         $this->expandall = $expandall;
         $this->selected = $selected;
     }
@@ -105,6 +106,7 @@ class SubnetsMenu
                 if (! empty($subnet->description)) {
                     $description = $description.' ('.$this->Subnets->shorten_text($subnet->description, 34).')';
                 }
+
                 break;
         }
 
@@ -217,6 +219,7 @@ class SubnetsMenu
                 } else {
                     $this->html[] = '<ul class="submenu submenu-'.$style_open.'" style="display:none">'; // hide - prevent flickering
                 }
+
                 $this->nestedlevel++;
             }
         }

@@ -55,6 +55,7 @@ if ($vlans === false) {
         print ' <th data-field="customer" data-sortable="true">'._('Customer').'</th>'."\n";
         $csize++;
     }
+
     if (is_array(@$custom_fields)) {
         foreach ($custom_fields as $field) {
             if (! in_array($field['name'], $hidden_fields)) {
@@ -62,9 +63,11 @@ if ($vlans === false) {
             }
         }
     }
+
     if ($User->get_module_permissions('vlan') >= User::ACCESS_RW) {
         print '<th></th>';
     }
+
     print '</tr>';
     print '</thead>';
 
@@ -85,6 +88,7 @@ if ($vlans === false) {
                 print "<td colspan='".(3 + $csize)."'><btn class='btn btn-xs btn-default open_popup $disabled' data-script='app/admin/vlans/edit.php' data-action='add' data-domain='all' data-number='1'><i class='fa fa-plus'></i></btn> "._('VLAN').' 1 - '.($vlan->number - 1).' ('.($vlan->number - 1).' '._('free').')</td>';
                 print '</tr>';
             }
+
             // show free vlans - before vlan
             if ($m > 0) {
                 if ((($vlan->number) - ($vlans[$m - 1]->number) - 1) > 0) {
@@ -96,6 +100,7 @@ if ($vlans === false) {
                     } else {
                         print "<td colspan='".(3 + $csize)."'><btn class='btn btn-xs btn-default open_popup $disabled' data-script='app/admin/vlans/edit.php' data-action='add' data-domain='all' data-number='".($vlans[$m - 1]->number + 1)."'><i class='fa fa-plus'></i></btn> "._('VLAN').' '.($vlans[$m - 1]->number + 1).' - '.($vlan->number - 1).' ('.(($vlan->number) - ($vlans[$m - 1]->number) - 1).' '._('free').')</td>';
                     }
+
                     print '</tr>';
                 }
             }
@@ -117,6 +122,7 @@ if ($vlans === false) {
             $customer = $Tools->fetch_object('customers', 'id', $vlan->customer_id);
             print $customer === false ? '<td></td>' : "<td>{$customer->title} <a target='_blank' href='".create_link('tools', 'customers', unescape_input($customer->title))."'><i class='fa fa-external-link'></i></a></td>";
         }
+
         // custom fields - no subnets
         if (is_array(@$custom_fields)) {
             foreach ($custom_fields as $field) {
@@ -137,11 +143,13 @@ if ($vlans === false) {
                 $links[] = ['type' => 'header', 'text' => _('Manage')];
                 $links[] = ['type' => 'link', 'text' => _('Edit VLAN'), 'href' => '', 'class' => 'open_popup', 'dataparams' => "data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$vlan->id'", 'icon' => 'pencil'];
             }
+
             if ($User->get_module_permissions('vlan') >= User::ACCESS_RWA) {
                 $links[] = ['type' => 'divider'];
                 $links[] = ['type' => 'link', 'text' => _('Move VLAN'), 'href' => '', 'class' => 'open_popup', 'dataparams' => "data-script='app/admin/vlans/move-vlan.php' data-action='delete' data-vlanid='$vlan->id'", 'icon' => 'external-link'];
                 $links[] = ['type' => 'link', 'text' => _('Delete VLAN'), 'href' => '', 'class' => 'open_popup', 'dataparams' => "data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$vlan->id'", 'icon' => 'times'];
             }
+
             // print links
             print $User->print_actions($User->user->compress_actions, $links);
             print '</td>';
@@ -160,9 +168,11 @@ if ($vlans === false) {
                 }
             }
         }
+
         // next index
         $m++;
     }
+
     print '</tbody>';
 
     print '</table>';

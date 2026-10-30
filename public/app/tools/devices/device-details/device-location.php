@@ -13,6 +13,7 @@ if ($User->settings->enableLocations == '1' && $User->get_module_permissions('lo
             $loc_old = $location;
             unset($location);
         }
+
         $location_index = $device['location'];
 
         $sid_orig = $GET->subnetId;

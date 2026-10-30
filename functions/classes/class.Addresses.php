@@ -80,6 +80,7 @@ class Addresses extends Common_functions
         foreach ($types as $t) {
             $types_out[$t->id] = (array) $t;
         }
+
         // save
         $this->address_types = $types_out;
 
@@ -146,6 +147,7 @@ class Addresses extends Common_functions
         foreach ($this->address_types as $s) {
             $states_assoc[$s['type']] = $s;
         }
+
         // return
         if (isset($states_assoc[$type])) {
             return $states_assoc[$type]['id'];
@@ -184,6 +186,7 @@ class Addresses extends Common_functions
 
                 return false;
             }
+
             // save to addresses cache
             if (is_object($address)) {
                 $this->cache_write('ipaddresses', $method, $address);
@@ -210,6 +213,7 @@ class Addresses extends Common_functions
 
             return false;
         }
+
         // save to addresses cache
         if (is_object($address)) {
             $this->cache_write('ipaddresses', 'id', $address);
@@ -377,9 +381,11 @@ class Addresses extends Common_functions
                 unset($valid_fields['switch']);
                 unset($valid_fields['port']);
             }
+
             if ($User->get_module_permissions('customers') < User::ACCESS_RW) {
                 unset($valid_fields['customer_id']);
             }
+
             if ($User->get_module_permissions('locations') < User::ACCESS_RW) {
                 unset($valid_fields['location']);
             }
@@ -430,6 +436,7 @@ class Addresses extends Common_functions
 
             return false;
         }
+
         // save id
         $this->lastId = $this->Database->lastInsertId();
 
@@ -534,6 +541,7 @@ class Addresses extends Common_functions
             $field2 = null;
             $value2 = null;
         }
+
         // execute
         try {
             $this->Database->deleteRow('ipaddresses', $field, $value, $field2, $value2);
@@ -555,6 +563,7 @@ class Addresses extends Common_functions
         if (@$address['remove_all_dns_records'] == '1') {
             $this->pdns_remove_ip_and_hostname_records($address);
         }
+
         // remove from NAT
         $this->remove_address_nat_items($address['id'], true);
 
@@ -603,6 +612,7 @@ class Addresses extends Common_functions
 
             return false;
         }
+
         // loop and check for object ids
         if (! empty($all_nats)) {
             // init admin object
@@ -616,6 +626,7 @@ class Addresses extends Common_functions
                 if (is_array($s['ipaddresses'])) {
                     $s['ipaddresses'] = array_diff($s['ipaddresses'], [$obj_id]);
                 }
+
                 if (is_array($d['ipaddresses'])) {
                     $d['ipaddresses'] = array_diff($d['ipaddresses'], [$obj_id]);
                 }
@@ -658,6 +669,7 @@ class Addresses extends Common_functions
             } catch (Exception $e) {
                 return false;
             }
+
             // save log
             $this->Log->write(_('Address DNS resolved'), _('Address').' '.$ip.' '._('resolved').'.<hr>'.$this->array_to_log((array) $hostname), 0);
             $this->Log->write_changelog('ip_addr', 'edit', 'success', ['id' => $id, 'hostname' => ''], ['id' => $id, 'hostname' => $hostname], $this->mail_changelog);
@@ -802,6 +814,7 @@ class Addresses extends Common_functions
         } else {
             $query = 'select `id` from `ipaddresses` where `subnetId`=? and `ip_addr`=?;';
         }
+
         // fetch
         try {
             $count = $this->Database->getObjectQuery('ipaddresses', $query, [$subnetId, $address]);
@@ -810,6 +823,7 @@ class Addresses extends Common_functions
 
             return false;
         }
+
         // result
         if ($cnt === true) {
             return $count->cnt == 0 ? false : true;
@@ -870,6 +884,7 @@ class Addresses extends Common_functions
             if (! isset($address_lookup[gmp_strval($cur)])) {
                 return gmp_strval($cur);
             }
+
             // Check next IP
             $cur = gmp_add($cur, 1);
         }
@@ -920,6 +935,7 @@ class Addresses extends Common_functions
                     return true;
                 }
             }
+
             // validate db
             $this->pdns_validate_connection();
 
@@ -955,6 +971,7 @@ class Addresses extends Common_functions
         if ($this->settings->enablePowerDNS != 1) {
             return false;
         }
+
         // validate db
         $this->pdns_validate_connection();
 
@@ -976,10 +993,12 @@ class Addresses extends Common_functions
         if (isset($this->api)) {
             $this->PowerDNS->api = $this->api;
         }
+
         // check connection
         if ($this->PowerDNS->db_check() === false && $die) {
             $this->Result->show('danger', _('Cannot connect to powerDNS database'), true);
         }
+
         // get settings
         $this->get_settings();
     }
@@ -1026,10 +1045,12 @@ class Addresses extends Common_functions
                 $address->hostname = $values->def_ptr_domain;
             }
         }
+
         // validate hostname
         if ($this->validate_hostname($address->hostname) === false) {
             return false;
         }
+
         // fetch domain
         $domain = $this->pdns_fetch_domain($address->subnetId);
 
@@ -1216,6 +1237,7 @@ class Addresses extends Common_functions
 
             return false;
         }
+
         // parse
         if (count($indexes) > 0) {
             $out = [];
@@ -1331,6 +1353,7 @@ class Addresses extends Common_functions
 
             return false;
         }
+
         // save to addresses cache (complete objects only)
         if (is_array($addresses) && $fields == '*') {
             foreach ($addresses as $address) {
@@ -1388,6 +1411,7 @@ class Addresses extends Common_functions
                 $tmp[] = " `subnetId`=$s ";
             }
         }
+
         $query = 'select count(*) as `cnt` from `ipaddresses` where '.implode('or', $tmp).';';
 
         // fetch
@@ -1444,6 +1468,7 @@ class Addresses extends Common_functions
         } else {
             $query = 'select * from `ipaddresses` where `subnetId` = ? ';
         }
+
         foreach ($this->Subnets->slaves as $subnetId2) {
             // ignore orphaned
             if ($subnetId2 != $subnetId) {
@@ -1487,6 +1512,7 @@ class Addresses extends Common_functions
         if ($this->transform_address($address, 'decimal') == 0) {
             return false;
         }
+
         // transform
         $address = $this->transform_address($address, 'dotted');
         // ipv6
@@ -1681,6 +1707,7 @@ class Addresses extends Common_functions
                 $addresses_formatted[$c] = $addresses[$c];
             }
         }
+
         // overrwrite ipaddresses and rekey
         $addresses = @array_values($addresses_formatted);
 
@@ -1710,6 +1737,7 @@ class Addresses extends Common_functions
                 $false[] = $this->fetch_subnet_addresses($id->subnetId);
             }
         }
+
         // filter
         $false = array_filter($false);
 
@@ -1790,6 +1818,7 @@ class Addresses extends Common_functions
                 // print
                 $html[] = str_replace("'", '"', $this->print_nat_link_line($n, false, 'subnets', $subnet->id));
             }
+
             $cnt++;
         }
 
@@ -1837,6 +1866,7 @@ class Addresses extends Common_functions
         if ($sources === false) {
             $sources = ["<span class='badge badge1 badge5 alert-danger'>"._('None').'</span>'];
         }
+
         if ($destinations === false) {
             $destinations = ["<span class='badge badge1 badge5 alert-danger'>"._('None').'</span>'];
         }
@@ -1901,6 +1931,7 @@ class Addresses extends Common_functions
                         if (! in_array(strtolower((string) $ot), ['subnets', 'ipaddresses'])) {
                             continue;
                         }
+
                         // fetch
                         $item = $this->fetch_object($ot, 'id', $id);
                         if ($item !== false) {

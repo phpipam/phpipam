@@ -33,6 +33,7 @@ print "<div class='alert-danger hidden'></div>";
 if ($User->settings->enableSNMP != '1') {
     $Result->show('danger', _('SNMP module disabled'), true);
 }
+
 // admin check
 if ($User->is_admin() !== true) {
     $Result->show('danger', _('Admin privileges required'), true);
@@ -45,6 +46,7 @@ $Snmp = new phpipamSNMP;
 if (! is_numeric($POST->domainId)) {
     $Result->show('danger', _('Invalid domain Id'), true);
 }
+
 // fetch domain
 $domain = $Tools->fetch_object('vlanDomains', 'id', $POST->domainId);
 if ($domain === false) {
@@ -142,6 +144,7 @@ else {
             print '<th>'.$Tools->print_custom_field_name($field['name']).'</th>';
         }
     }
+
     print '	<th></th>';
     print '</tr>';
 
@@ -172,6 +175,7 @@ else {
                 print '<td>'.$custom_input['field']."</td>\n";
             }
         }
+
         // remove button
         print "<td><a href='' class='btn btn-xs btn-danger resultRemove' data-target='result$m'><i class='fa fa-times'></i></a></td>";
         print '</tr>';
@@ -208,6 +212,7 @@ print ' Scanned devices: <br>';
 foreach ($debug as $k => $d) {
     print '&middot; '.$k.'<br>';
 }
+
 print '</span>';
 print '</div>';
 

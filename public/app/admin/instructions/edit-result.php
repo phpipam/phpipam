@@ -47,6 +47,7 @@ if ($POST->id == '1' || $POST->id == '2') {
             $Log->write(_('Instructions updated'), _('Failed to update instructions').'<hr>'.$e->getMessage(), 1);
         }
     }
+
     // success
     if (! isset($e)) {
         // ok

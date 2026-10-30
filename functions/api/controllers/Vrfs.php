@@ -76,6 +76,7 @@ class Vrfs_controller extends Common_api_functions
                 return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
             }
         }
+
         // custom fields
         if ($this->_params->id == 'custom_fields') {
             // check result
@@ -224,10 +225,12 @@ class Vrfs_controller extends Common_api_functions
         if (! isset($this->_params->id)) {
             $this->Response->throw_exception(400, 'Vrf Id is required');
         }
+
         // validate number
         if (! is_numeric($this->_params->id)) {
             $this->Response->throw_exception(400, 'Vrf Id must be numeric');
         }
+
         // check that it exists
         if ($this->Tools->fetch_object('vrf', 'vrfId', $this->_params->id) === false) {
             $this->Response->throw_exception(400, 'Invalid VRF id');
@@ -247,6 +250,7 @@ class Vrfs_controller extends Common_api_functions
             if (is_blank($this->_params->name)) {
                 $this->Response->throw_exception(400, 'VRF name is required');
             }
+
             // check that it exists
             if ($this->Tools->fetch_object('vrf', 'name', $this->_params->name) !== false) {
                 $this->Response->throw_exception(409, 'VRF with that name already exists');

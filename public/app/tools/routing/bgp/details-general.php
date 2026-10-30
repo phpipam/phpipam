@@ -24,6 +24,7 @@ if ($User->settings->enableCustomers == '1') {
     } else {
         print " <td>$customer->title <a target='_blank' href='".create_link('tools', 'customers', unescape_input($customer->title))."'><i class='fa fa-external-link'></i></a></td>";
     }
+
     print '</tr>';
 }
 
@@ -35,6 +36,7 @@ if ($User->settings->enableCircuits == '1') {
     } else {
         print " <td>$circuit->cid <a target='_blank' href='".create_link('tools', 'circuits', $circuit->id)."'><i class='fa fa-external-link'></i></a></td>";
     }
+
     print '</tr>';
 }
 
@@ -46,6 +48,7 @@ if ($User->settings->enableVRF == '1') {
     } else {
         print " <td>$vrf->name <a target='_blank' href='".create_link('tools', 'vrf', $vrf->vrfId)."'><i class='fa fa-external-link'></i></a></td>";
     }
+
     print '</tr>';
 }
 
@@ -124,11 +127,13 @@ if ($User->get_module_permissions('routing') >= User::ACCESS_RW) {
         $links[] = ['type' => 'header', 'text' => _('Manage BGP')];
         $links[] = ['type' => 'link', 'text' => _('Edit BGP'), 'href' => '', 'class' => 'open_popup', 'dataparams' => "data-script='app/admin/routing/edit-bgp.php' data-action='edit' data-class='700' data-bgpid='$bgp->id'", 'icon' => 'pencil'];
     }
+
     if ($User->get_module_permissions('routing') >= User::ACCESS_RWA) {
         $links[] = ['type' => 'link', 'text' => _('Delete BGP'), 'href' => '', 'class' => 'open_popup', 'dataparams' => "data-script='app/admin/routing/edit-bgp.php' data-action='delete' data-class='700' data-bgpid='$bgp->id'", 'icon' => 'times'];
         $links[] = ['type' => 'link', 'text' => _('Subnet mapping'), 'href' => '', 'class' => 'open_popup', 'dataparams' => "data-script='app/admin/routing/edit-bgp-mapping.php' data-class='700' data-secondary='true' data-bgpid='$bgp->id'",  'icon' => 'plus'];
         $links[] = ['type' => 'divider'];
     }
+
     // print links
     print $User->print_actions($User->user->compress_actions, $links, true, true);
     print '</td>';

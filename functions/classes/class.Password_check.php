@@ -84,6 +84,7 @@ class Password_check extends Common_functions
                 }
             }
         }
+
         // override symbols
         if (is_array($symbols)) {
             if (count($symbols) > 0) {

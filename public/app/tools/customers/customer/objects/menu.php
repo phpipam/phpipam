@@ -17,6 +17,7 @@ foreach ($Tools->get_customer_object_types() as $href => $name) {
     $menu[] = "	 <a href='".create_link($GET->page, 'customers', $GET->subnetId, $href)."''>".$name." <span class='badge ' style='margin-left:5px;'>$cnt<span></a>";
     $menu[] = '</li>';
 }
+
 $menu[] = '</ul>';
 
 print implode("\n", $menu);

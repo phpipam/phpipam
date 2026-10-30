@@ -57,6 +57,7 @@ if ($User->settings->enableCustomers == '1') {
         $customer = new Params;
         $customer->title = '/';
     }
+
     print '	<th>'._('Customer').'</th>';
     print "	<td>$customer->title <a target='_blank' href='".create_link('tools', 'customers', unescape_input($customer->title))."'><i class='fa fa-external-link'></i></a></td>";
     print '</tr>';
@@ -105,6 +106,7 @@ if ($User->get_module_permissions('circuits') >= User::ACCESS_RW) {
     if ($User->get_module_permissions('circuits') >= User::ACCESS_RWA) {
         $links[] = ['type' => 'link', 'text' => _('Delete circuit'), 'href' => '', 'class' => 'open_popup', 'dataparams' => "  data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'", 'icon' => 'times'];
     }
+
     // print links
     print $User->print_actions($User->user->compress_actions, $links, true, true);
     print '</td>';

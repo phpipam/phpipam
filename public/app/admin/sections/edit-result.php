@@ -49,6 +49,7 @@ if ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
 
             $num_subnets = $num_subnets + count($subnets);
         }
+
         // fetch subsection subnets
         foreach ($subsections as $ss) {
             $subsection_subnets = $Subnets->fetch_section_subnets($ss->id);
@@ -59,6 +60,7 @@ if ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
 
                 $num_subnets = $num_subnets + count($subsection_subnets);
             }
+
             // count all addresses that will be deleted!
             $ipcnt = (int) $Addresses->count_addresses_in_multiple_subnets($out);
         }
@@ -76,6 +78,7 @@ if ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
     if ($ipcnt > 0) {
         print "	<li>$ipcnt "._('IP addresses').'</li>';
     }
+
     print '</ul>';
 
     print "<hr><div style='text-align:right'>";
@@ -93,6 +96,7 @@ else {
     if (! is_object($section_old)) {
         $section_old = new Params;
     }
+
     // parse old permissions
     $old_permissions = db_json_decode($section_old->permissions, true);
 

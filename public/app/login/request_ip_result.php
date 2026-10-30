@@ -25,6 +25,7 @@ if ($Tools->settings->enableIPrequests == 1) {
     if (! $Tools->validate_mac($POST->mac)) {
         $Result->show('danger', _('Please provide valid mac address').'! ('._('mac').': '.escape_input($POST->mac).')', true);
     }
+
     // verify hostname
     if (! $Tools->validate_hostname($POST->hostname)) {
         $Result->show('danger', _('Please provide valid hostname').'! ('._('hostname').': '.escape_input($POST->hostname).')', true);

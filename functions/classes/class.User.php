@@ -396,6 +396,7 @@ class User extends Common_functions
                 if ($redirect) {
                     header('Location:'.$url.create_link('login', 'timeout'));
                 }
+
                 exit();
             } else {
                 // set redirect cookie
@@ -404,6 +405,7 @@ class User extends Common_functions
                 if ($redirect) {
                     header('Location:'.$url.create_link('login'));
                 }
+
                 exit();
             }
         }
@@ -432,6 +434,7 @@ class User extends Common_functions
         if (! isset($this->settings->theme)) {
             $this->settings->theme = 'dark';
         }
+
         // set user
         if (is_object($this->user)) {
             // use default theme from general settings
@@ -440,6 +443,7 @@ class User extends Common_functions
             } else {
                 $this->user->ui_theme = $this->user->theme;
             }
+
             // validate
             if (! in_array($this->user->ui_theme, $this->themes)) {
                 $this->user->ui_theme = 'white';
@@ -523,6 +527,7 @@ class User extends Common_functions
                 return;
             }
         }
+
         if (Config::ValueOf('trust_x_forwarded_headers') === true && isset($_SERVER['HTTP_X_FORWARDED_URI'])) {
             $uri = $_SERVER['HTTP_X_FORWARDED_URI'];
         } elseif (isset($_SERVER['REQUEST_URI'])) {
@@ -592,6 +597,7 @@ class User extends Common_functions
             } catch (Exception $e) {
             }
         }
+
         // print that is can be deleted
         $this->Result->show('warning', '$config[resolve_subnets] '._('was migrated to database. It can be deleted from config.php'), false);
     }
@@ -931,6 +937,7 @@ class User extends Common_functions
         } catch (Exception $e) {
             $this->Result->show('danger', _('Error: ').$e->getMessage(), true);
         }
+
         // save method name if existing
         if ($method !== false) {
             $this->authmethodtype = 'auth_'.$method->type;
@@ -1050,6 +1057,7 @@ class User extends Common_functions
             } elseif ($authparams['ldap_security'] == 'ssl' || ! empty($authparams['use_ssl'])) {
                 $dirparams['use_ssl'] = true;
             }
+
             if (isset($authparams['admin_username']) && isset($authparams['admin_password'])) {
                 $dirparams['admin_username'] = $authparams['adminUsername'];
                 $dirparams['admin_password'] = $authparams['adminPassword'];
@@ -1058,6 +1066,7 @@ class User extends Common_functions
             $dirparams['use_ssl'] = @$authparams['use_ssl'];
             $dirparams['use_tls'] = @$authparams['use_tls'];
         }
+
         // open connection
         try {
             // Initialize adLDAP
@@ -1155,12 +1164,14 @@ class User extends Common_functions
         } else {
             $udn = 'uid='.$username;
         }
+
         // set DN
         if (! empty($authparams['users_base_dn'])) {
             $udn = $udn.','.$authparams['users_base_dn'];
         } else {
             $udn = $udn.','.$authparams['base_dn'];
         }
+
         // authenticate
         $this->directory_authenticate($authparams, $udn, $password);
     }
@@ -1555,6 +1566,7 @@ class User extends Common_functions
         for ($i = 0; $i < 22; $i++) {
             $salt .= $salt_chars[array_rand($salt_chars)];
         }
+
         // get prefix
         $prefix = $this->detect_crypt_type();
 
@@ -1633,6 +1645,7 @@ class User extends Common_functions
         if ($post->theme == 'default') {
             $post->theme = '';
         }
+
         // set items to update
         $items = [
             'real_name' => $post->real_name,
@@ -1666,6 +1679,7 @@ class User extends Common_functions
 
             return false;
         }
+
         // update language
         $this->update_session_language();
 
@@ -1780,6 +1794,7 @@ class User extends Common_functions
         if (! filter_var($this->ip, FILTER_VALIDATE_IP)) {
             return false;
         }
+
         // first check if already in
         if ($this->block_check_ip()) {
             $this->block_update_count();
@@ -1908,6 +1923,7 @@ class User extends Common_functions
 
             $groups[] = $tmp;
         }
+
         // Cache results to avoid repeat database queries.
         $this->cache_write('get_user_permissions_from_json', 'id', (object) ['id' => $json, 'result' => $groups]);
 
@@ -1971,6 +1987,7 @@ class User extends Common_functions
                     $sections_ids[] = $section->id;
                 }
             }
+
             $valid_sections = implode(';', $sections_ids);
         } else {
             $valid_sections = $l2domain->permissions;
@@ -2231,6 +2248,7 @@ class User extends Common_functions
         ! defined('IS_DEMO') ?: $this->Result->show('danger', '<h4>Demo website !</h4><hr>This script is disabled in demo page!', true, $popup);
     }
 }
+
 /**
  * Fake User object for install/scripts
  */

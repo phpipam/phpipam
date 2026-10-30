@@ -84,6 +84,7 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
     } else {
         print "<span class='text-danger'>"._('Locked').'</span>';
     }
+
     print '</td>';
     print '</tr>';
 
@@ -105,9 +106,11 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
             $links[] = ['type' => 'header', 'text' => _('Manage')];
             $links[] = ['type' => 'link', 'text' => _('Edit Vault'), 'href' => '', 'class' => 'open_popup', 'dataparams' => " data-script='app/admin/vaults/edit.php' data-class='700' data-action='edit' data-id='$vault->id'", 'icon' => 'pencil'];
         }
+
         if ($User->get_module_permissions('vaults') >= User::ACCESS_RWA) {
             $links[] = ['type' => 'link', 'text' => _('Delete Vault'), 'href' => '', 'class' => 'open_popup', 'dataparams' => " data-script='app/admin/vaults/edit.php' data-class='700' data-action='delete' data-id='$vault->id'", 'icon' => 'times'];
         }
+
         // print links
         print $User->print_actions($User->user->compress_actions, $links, true, true);
         print '</td>';

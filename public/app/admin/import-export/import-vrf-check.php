@@ -11,9 +11,11 @@ require_once __DIR__.'/../../../../functions/functions.php';
 if (! isset($Database)) {
     $Database = new Database_PDO;
 }
+
 if (! isset($User)) {
     $User = new User($Database);
 }
+
 if (! isset($Admin)) {
     $Admin = new Admin($Database);
 }
@@ -64,10 +66,12 @@ foreach ($data as &$cdata) {
             $msg .= 'Invalid name format.';
             $action = 'error';
         }
+
         if (! preg_match('/^[0-9:]+$/', (string) $cdata['rd'])) {
             $msg .= 'Invalid RD format.';
             $action = 'error';
         }
+
         if (preg_match("/[;'\"]/", (string) $cdata['description'])) {
             $msg .= 'Invalid characters in description.';
             $action = 'error';
@@ -83,6 +87,7 @@ foreach ($data as &$cdata) {
                 $msg .= 'VRF name will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['description'] != $edata[$cdata['rd']]['description']) {
                 $msg .= 'VRF description will be updated.';
                 $action = 'edit';
@@ -115,5 +120,6 @@ foreach ($data as &$cdata) {
     foreach ($expfields as $cfield) {
         $rows .= '<td>'.$cdata[$cfield].'</td>';
     }
+
     $rows .= '<td>'._((string) $cdata['msg']).'</td></tr>';
 }

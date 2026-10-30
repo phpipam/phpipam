@@ -61,5 +61,6 @@ else {
         print "	<td><p style='background: rgba(0,0,0,0.1); padding:10px 20px;border-radius:4px;margin-bottom:0px;'>$l[cdiff]</p></td>";
         print '</tr>';
     }
+
     print '</table>';
 }

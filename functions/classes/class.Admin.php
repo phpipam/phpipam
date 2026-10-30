@@ -126,6 +126,7 @@ class Admin extends Common_functions
         if (! is_string($table) || is_blank($table)) {
             return false;
         }
+
         // strip tags
         $values = $this->strip_input_tags($values);
         $values_log = $this->strip_input_tags($values_log);
@@ -176,6 +177,7 @@ class Admin extends Common_functions
 
             return false;
         }
+
         // save ID
         $this->save_last_insert_id();
         // ok
@@ -210,6 +212,7 @@ class Admin extends Common_functions
 
             return false;
         }
+
         // save ID
         $this->save_last_insert_id();
         // ok
@@ -243,6 +246,7 @@ class Admin extends Common_functions
 
             return false;
         }
+
         // save ID
         $this->save_last_insert_id();
         // ok
@@ -270,6 +274,7 @@ class Admin extends Common_functions
 
             return false;
         }
+
         // save ID
         $this->save_last_insert_id();
         // ok
@@ -343,6 +348,7 @@ class Admin extends Common_functions
 
                 return false;
             }
+
             // result
             $this->Log->write(_('Database table cleared').': '.$table, null, 0);
 
@@ -460,6 +466,7 @@ class Admin extends Common_functions
 
                         continue;
                     }
+
                     if (! in_array($group_id, $g)) {
                         $out[] = $u->id;
                     }
@@ -624,6 +631,7 @@ class Admin extends Common_functions
             } catch (Exception $e) {
                 $this->Result->show('danger alert-absolute', _('Error: ').$e->getMessage(), true);
             }
+
             // ok, print count
             $this->Result->show('success alert-absolute', $count.' '._('items replaced successfully').'!', false);
         } else {
@@ -675,6 +683,7 @@ class Admin extends Common_functions
 
                     return false;
                 }
+
                 $field['ftype'] = $field['fieldType'].'('.$field['fieldSize'].')';
                 break;
             case 'bool':
@@ -692,6 +701,7 @@ class Admin extends Common_functions
                 foreach ($data as $i => $v) {
                     $data[$i] = "'".$this->Database->escape($v)."'";
                 }
+
                 $field['ftype'] = $field['fieldType'].'('.implode(',', $data).')';
                 break;
             default:
@@ -745,6 +755,7 @@ class Admin extends Common_functions
         if (strpos($query, ':default') > 0) {
             $params['default'] = $field['fieldDefault'];
         }
+
         if (strpos($query, ':comment') > 0) {
             $params['comment'] = $field['Comment'];
         }
@@ -758,6 +769,7 @@ class Admin extends Common_functions
 
             return false;
         }
+
         // field updated
         $this->Log->write(_('Custom field').' '.$field['action'], _('Custom field').' '.$field['action'].' '._('success').' ('.$field['name'].').<hr>'.$this->array_to_log($field), 0);
 

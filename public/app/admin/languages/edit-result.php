@@ -30,6 +30,7 @@ $User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('dang
 if ($POST->action != 'delete' && strlen((string) $POST->l_code) < 2) {
     $Result->show('danger', _('Code must be at least 2 characters long'), true);
 }
+
 if ($POST->action != 'delete' && strlen((string) $POST->l_name) < 2) {
     $Result->show('danger', _('Name must be at least 2 characters long'), true);
 }

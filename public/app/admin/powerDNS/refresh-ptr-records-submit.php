@@ -29,9 +29,11 @@ $subnet = $Subnets->fetch_subnet('id', $POST->subnetId);
 if ($subnet === false) {
     $Result->show('danger', _('Invalid subnet'), true);
 }
+
 if ($subnet->DNSrecursive != 1) {
     $Result->show('danger', _('Automatic PTR creation for this subnet is disabled'), true);
 }
+
 if ($User->settings->enablePowerDNS != 1) {
     $Result->show('danger', _('PowerDNS not enabled'), true);
 }
@@ -74,6 +76,7 @@ if (is_array($hosts) && $hosts != []) {
                 $h->hostname = $values['def_ptr_domain'];
             }
         }
+
         // ignore PTR
         if ($h->PTRignore == '1') {
             $ignored[] = $h;
@@ -106,22 +109,28 @@ if (is_array($success) && $success != []) {
     foreach ($success as $s) {
         $print[] = $PowerDNS->get_ip_ptr_name($s->ip).' > '.$s->hostname;
     }
+
     $print[] = '</div>';
 }
+
 if (is_array($failures) && $failures != []) {
     $print[] = "<div class='alert alert-danger'><h4>Invalid PTR hostnames:</h4>";
     foreach ($failures as $s) {
         $print[] = "&middot; $s->hostname ($s->ip)";
     }
+
     $print[] = '</div>';
 }
+
 if (is_array($ignored) && $ignored != []) {
     $print[] = "<div class='alert alert-info'><h4>Ignored records:</h4>";
     foreach ($ignored as $s) {
         $print[] = "&middot; $s->hostname ($s->ip)";
     }
+
     $print[] = '</div>';
 }
+
 if (isset($empty)) {
     $print[] = "<div class='alert alert-warning'>Subnet is empty!</div>";
 }

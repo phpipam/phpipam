@@ -98,6 +98,7 @@ class Sections extends Common_functions
 
             return false;
         }
+
         // save id
         $this->lastInsertId = $this->Database->lastInsertId();
         // ok
@@ -167,6 +168,7 @@ class Sections extends Common_functions
                     $Subnets->modify_subnet('delete', ['id' => $ss->id]);
                 }
             }
+
             // delete all sections
             try {
                 $this->Database->deleteRow('sections', 'id', $id);
@@ -580,16 +582,20 @@ class Sections extends Common_functions
             if ($User->get_module_permissions('vlan') >= User::ACCESS_R) {
                 $html[] = '<th data-field="vlan">'._('VLAN').'</th>';
             }
+
             if ($User->settings->enableVRF == 1 && $User->get_module_permissions('vrf') >= User::ACCESS_R) {
                 $html[] = '<th data-field="vrf">'._('VRF').'</th>';
             }
+
             $html[] = '<th data-field="masterSubnet">'._('Master Subnet').'</th>';
             if ($User->get_module_permissions('devices') >= User::ACCESS_R) {
                 $html[] = '<th data-field="device">'._('Device').'</th>';
             }
+
             if ($User->settings->enableCustomers == 1 && $User->get_module_permissions('customers') >= User::ACCESS_R) {
                 $html[] = '<th data-field="customer" class="hidden-xs hidden-sm">'._('Customer').'</th>';
             }
+
             if (is_array($custom)) {
                 foreach ($custom as $field) {
                     if (! in_array($field['name'], $hidden_fields)) {

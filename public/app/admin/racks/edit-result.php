@@ -45,12 +45,15 @@ if ($POST->name == '') {
 if (! is_numeric($POST->size)) {
     $Result->show('danger', _('Invalid rack size').'!', true);
 }
+
 if (isset($POST->row) && strlen($POST->row) == 0) {
     unset($POST->row);
 }
+
 if (isset($POST->row) && ! is_numeric($POST->row)) {
     $Result->show('danger', _('Row').' '._('must be numeric').'!', true);
 }
+
 if (isset($POST->subrack) && $POST->subrack != '1') {
     $POST->subrack = '0';
 }
@@ -60,6 +63,7 @@ if ($POST->action == 'edit') {
     if (! is_numeric($POST->rackid)) {
         $Result->show('danger', _('Invalid rack identifier').'!', true);
     }
+
     $rack_details = $Racks->fetch_rack_details($POST->rackid);
     if ($rack_details === false) {
         $Result->show('danger', _('Rack does not exist').'!', true);
@@ -169,17 +173,20 @@ if ($POST->action == 'delete') {
     } catch (Exception $e) {
     }
 }
+
 // remove all devices if back is removed
 if ($POST->action == 'edit' && $POST->hasBack != '1') {
     try {
         $Database->runQuery('update devices set `rack` = 0 where `rack` = ? and rack_start > ?;', [$POST->rackid, $POST->size]);
     } catch (Exception $e) {
     }
+
     try {
         $Database->runQuery('delete from rackContents where `rack` = ? and rack_start > ?;', [$POST->rackid, $POST->size]);
     } catch (Exception $e) {
     }
 }
+
 // update positions of rack devices when rack size changes
 if ($POST->action == 'edit' && $POST->hasBack == '1' && $rack_details->size != $POST->size) {
     $values = [
@@ -191,6 +198,7 @@ if ($POST->action == 'edit' && $POST->hasBack == '1' && $rack_details->size != $
         $Database->runQuery('UPDATE `devices` set `rack_start` = `rack_start` + :new_size - :old_size where `rack` = :rackid and rack_start > :old_size', $values);
     } catch (Exception $e) {
     }
+
     try {
         $Database->runQuery('UPDATE `rackContents` set `rack_start` = `rack_start` + :new_size - :old_size where `rack` = :rackid and rack_start > :old_size', $values);
     } catch (Exception $e) {

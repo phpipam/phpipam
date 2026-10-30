@@ -20,6 +20,7 @@ function die_with_error($msg)
 {
     exit(_('Error').': '.$msg);
 }
+
 function php_error_handler($errno, $errstr)
 {
     exit(_('Error').': '.$errstr);
@@ -74,6 +75,7 @@ if ($r === false && is_blank($errstr)) {
         if (openssl_x509_export($c, $certinfo) === false) {
             die_with_error(_('Could not fetch certificate chain'));
         }
+
         $certchain .= $certinfo;
     }
 

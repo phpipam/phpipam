@@ -11,21 +11,27 @@ require_once __DIR__.'/../../../../functions/functions.php';
 if (! isset($Database)) {
     $Database = new Database_PDO;
 }
+
 if (! isset($User)) {
     $User = new User($Database);
 }
+
 if (! isset($Admin)) {
     $Admin = new Admin($Database);
 }
+
 if (! isset($Tools)) {
     $Tools = new Tools($Database);
 }
+
 if (! isset($Sections)) {
     $Sections = new Sections($Database);
 }
+
 if (! isset($Addresses)) {
     $Addresses = new Addresses($Database);
 }
+
 if (! isset($Subnets)) {
     $Subnets = new Subnets($Database);
 }
@@ -51,6 +57,7 @@ $all_vrfs = $Admin->fetch_all_objects('vrf', 'vrfId');
 if (! $all_vrfs) {
     $all_vrfs = [];
 }
+
 $vrf_byid = [];
 // insert default VRF in the list
 array_splice($all_vrfs, 0, 0, (object) [['vrfId' => '0', 'name' => 'default', 'rd' => '0:0']]);
@@ -174,6 +181,7 @@ foreach ($data as &$cdata) {
             $msg .= 'The subnet needs to have the mask defined as /BM (Bit Mask)';
             $action = 'error';
         }
+
         if ((! empty($cdata['mask'])) && (! preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", (string) $cdata['mask']))) {
             $msg .= 'Invalid network mask format.';
             $action = 'error';
@@ -277,24 +285,29 @@ foreach ($data as &$cdata) {
             $msg .= 'Invalid IP address.';
             $action = 'error';
         }
+
         if ((! empty($cdata['hostname'])) && (! preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", (string) $cdata['hostname']))) {
             $msg .= 'Invalid DNS name.';
             $action = 'error';
         }
+
         if (preg_match("/[;'\"]/", (string) $cdata['description'])) {
             $msg .= 'Invalid characters in description.';
             $action = 'error';
         }
+
         if ($cdata['mac']) {
             if (! preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', (string) $cdata['mac'])) {
                 $msg .= 'Invalid MAC address.';
                 $action = 'error';
             }
         }
+
         if (preg_match("/[;'\"]/", (string) $cdata['owner'])) {
             $msg .= 'Invalid characters in owner name.';
             $action = 'error';
         }
+
         if (preg_match("/[;'\"]/", (string) $cdata['note'])) {
             $msg .= 'Invalid characters in note.';
             $action = 'error';
@@ -332,34 +345,42 @@ foreach ($data as &$cdata) {
                 $msg .= 'Address DNS name will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['description'] != $cedata['description']) {
                 $msg .= 'Address description will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['mac'] != $cedata['mac']) {
                 $msg .= 'Address MAC address will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['owner'] != $cedata['owner']) {
                 $msg .= 'Address owner will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['switch'] != $cedata['switch']) {
                 $msg .= 'Device will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['note'] != $cedata['note']) {
                 $msg .= 'Address note will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['state'] != $cedata['state']) {
                 $msg .= 'Address tag (state) will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['port'] != $cedata['port']) {
                 $msg .= 'Port will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['location'] != $cedata['location']) {
                 $msg .= 'Location will be updated.';
                 $action = 'edit';
@@ -405,5 +426,6 @@ foreach ($data as &$cdata) {
     foreach ($expfields as $cfield) {
         $rows .= '<td>'.(isset($cdata[$cfield]) ? escape_input($cdata[$cfield]) : '').'</td>';
     }
+
     $rows .= '<td>'._((string) $cdata['msg']).'</td></tr>';
 }

@@ -626,6 +626,7 @@ class Scan extends Common_functions
         if (! is_null($mac)) {
             $update_ipaddress['mac'] = $mac;
         }
+
         try {
             $this->Database->updateObject('ipaddresses', $update_ipaddress, 'id');
         } catch (Exception $e) {
@@ -747,6 +748,7 @@ class Scan extends Common_functions
                 break;          // end foreach if success
             }
         }
+
         // exit with result
         exit($retval);
     }
@@ -851,6 +853,7 @@ class Scan extends Common_functions
                     unset($ip[$key]);
                 }
             }
+
             // reindex array for pinging
             $ip = array_values(@$ip);
         }
@@ -898,6 +901,7 @@ class Scan extends Common_functions
             foreach ($subnet_addresses as $a) {
                 $scan_addresses[$a->id] = $a->ip_addr;
             }
+
             // reindex
             $scan_addresses = array_values(@$scan_addresses);
 

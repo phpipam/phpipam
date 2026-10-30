@@ -69,6 +69,7 @@ if ($GET->name == 'on') {
     $worksheet->write($curRow, $curColumn, _('Name'), $format_header);
     $curColumn++;
 }
+
 if ($GET->description == 'on') {
     $worksheet->write($curRow, $curColumn, _('Description'), $format_header);
     $curColumn++;
@@ -85,6 +86,7 @@ foreach ($vlan_domains as $vlan_domain) {
         $worksheet->write($curRow, $curColumn, $vlan_domain['name'], $format_text);
         $curColumn++;
     }
+
     if ($GET->description == 'on') {
         $worksheet->write($curRow, $curColumn, $vlan_domain['description'], $format_text);
         $curColumn++;

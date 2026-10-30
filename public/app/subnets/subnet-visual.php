@@ -36,6 +36,7 @@ foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
         if (! is_blank($visual_addresses[$m]['hostname'])) {
             $title .= '<br>'.$visual_addresses[$m]['hostname'];
         }
+
         if (! is_blank($visual_addresses[$m]['description'])) {
             $title .= '<br>'.$visual_addresses[$m]['description'];
         }
@@ -62,7 +63,9 @@ foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
     } else {
         print "<span class='ip-$class '  			style='background:$background;color:$foreground' data-action='$action' data-subnetId='".$subnet['id']."' data-id='$id'>".$shortname.'</span>';
     }
+
     print "\n";
 }
+
 print '</div>';
 print "<div class='clearfix' style='padding-bottom:20px;'></div>";  // clear float

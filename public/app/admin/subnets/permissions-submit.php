@@ -44,6 +44,7 @@ if ($POST->set_inheritance == 'Yes') {
         $subnet_list = $Subnets->slaves_full;
     }
 }
+
 // append self
 $subnet_list[] = $subnet_old;
 

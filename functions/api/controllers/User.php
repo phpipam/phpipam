@@ -263,6 +263,7 @@ class User_controller extends Common_api_functions
         if (! isset($_SERVER['PHP_AUTH_USER']) || ! isset($_SERVER['PHP_AUTH_PW'])) {
             $this->Response->throw_exception(400, 'Please provide username and password');
         }
+
         // try to authenticate user, it it fails it will fail by itself
         $this->User->authenticate($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
 
@@ -309,6 +310,7 @@ class User_controller extends Common_api_functions
                 $this->Response->throw_exception(500, 'Token valid time must be an integer');
             }
         }
+
         // save
         $this->token_valid_time = is_null($token_valid_time) ? 21600 : $token_valid_time;
     }
@@ -327,6 +329,7 @@ class User_controller extends Common_api_functions
                 $this->Response->throw_exception(500, 'Max failures must be an integer');
             }
         }
+
         // save
         $this->max_failures = $failures == null ? 10 : $failures;
     }
@@ -343,6 +346,7 @@ class User_controller extends Common_api_functions
         if (! is_bool($block)) {
             $this->Response->throw_exception(500, 'Block IP must be a boolean');
         }
+
         // save
         $this->block_ip = $block;
     }
@@ -363,6 +367,7 @@ class User_controller extends Common_api_functions
                 $this->Response->throw_exception(500, 'Maximum token length is 24 characters');
             }
         }
+
         // save
         $this->token_length = is_null($length) ? 24 : $length;
     }
@@ -474,6 +479,7 @@ class User_controller extends Common_api_functions
             if (($token = $this->Admin->fetch_object('users', 'token', $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false) {
                 $this->Response->throw_exception(401, $this->Response->errors[401]);
             }
+
             // save token
             $this->User->user = $token;
             $this->token = $token->token;
@@ -483,6 +489,7 @@ class User_controller extends Common_api_functions
             if ($this->validate_token_expiration() === true) {
                 $this->Response->throw_exception(401, $this->Response->errors[401]);
             }
+
             // refresh
             $this->refresh_token_expiration();
         }

@@ -20,9 +20,11 @@ $Tools = new Tools($Database);
 if (! isset($Sections)) {
     $Sections = new Sections($Database);
 }
+
 if (! isset($Devtype)) {
     $Devtype = new Devtype($Database);
 }
+
 if (! isset($Devices)) {
     $Devices = new Devtype($Database);
 }
@@ -130,6 +132,7 @@ foreach ($devices as $d) {
         if (! isset($d[$k])) {
             $d[$k] = '';
         }
+
         if ($k == 'type' && isset($deviceTypes[$d[$k]])) {
             $d[$k] = $deviceTypes[$d[$k]]['tname'];
         }

@@ -34,6 +34,7 @@ if (is_array(@$custom_fields)) {
         print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
     }
 }
+
 print "	<th style='width:50px;'></th>";
 print '</thead>';
 
@@ -121,6 +122,7 @@ if ($certificates_db !== false) {
                 $links[] = ['type' => 'link', 'text' => _('Edit certificate'), 'href' => '', 'class' => 'open_popup', 'dataparams' => " data-script='app/admin/vaults/edit-item-certificate.php' data-class='700' data-action='edit' data-vaultid='$vault->id', data-id='$p->id'", 'icon' => 'pencil'];
                 $links[] = ['type' => 'link', 'text' => _('Delete certificate'), 'href' => '', 'class' => 'open_popup', 'dataparams' => " data-script='app/admin/vaults/edit-item-certificate.php' data-class='700' data-action='delete' data-vaultId='$vault->id', data-id='$p->id'", 'icon' => 'times'];
             }
+
             // print links
             print $User->print_actions($User->user->compress_actions, $links, false, true);
             print '</td>';

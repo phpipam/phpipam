@@ -25,6 +25,7 @@ $User->check_module_permissions('vlan', User::ACCESS_RW, true, false);
 if (! is_numeric($POST->newDomainId)) {
     $Result->show('danger', _('Invalid ID'), true);
 }
+
 if (! is_numeric($POST->vlanid)) {
     $Result->show('danger', _('Invalid ID'), true);
 }

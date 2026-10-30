@@ -130,6 +130,7 @@ else {
                         } else {
                             $l['ctype'] = 'Subnet';
                         }
+
                         break;
 
                     case 'section':                          $l['ctype'] = 'Section';

@@ -30,6 +30,7 @@ $User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('dang
 if (is_blank($POST->name)) {
     $Result->show('danger', 'Invalid database name', true);
 }
+
 if (is_blank($POST->port)) {
     $POST->port = 3306;
 } elseif (! is_numeric($POST->port)) {

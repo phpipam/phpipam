@@ -67,14 +67,17 @@ class Circuits_controller extends Common_api_functions
             $this->_params->id = $params['id2'];
             unset($params['id2']);
         }
+
         if (isset($params['id3'])) {
             $this->_params->id2 = $params['id3'];
             unset($params['id3']);
         }
+
         if (isset($params['id4'])) {
             $this->_params->id3 = $params['id4'];
             unset($params['id4']);
         }
+
         // post, get etc
         if (is_array($params)) {
             foreach ($params as $k => $p) {
@@ -173,6 +176,7 @@ class Circuits_controller extends Common_api_functions
             if (! is_numeric($this->_params->id)) {
                 $this->Response->throw_exception(400, 'Invalid ID');
             }
+
             // fetch
             $result = $this->Tools->fetch_object($this->type, 'id', $this->_params->id);
             // check result
@@ -353,11 +357,13 @@ class Circuits_controller extends Common_api_functions
             if (! isset($this->_params->id)) {
                 $this->Response->throw_exception(400, "{$this->type_text} id is required");
             }
+
             // validate number
             if (! is_numeric($this->_params->id)) {
                 $this->Response->throw_exception(400, "{$this->type_text} id must be numeric");
             }
         }
+
         // for delete
         if ($action == 'delete' || $action == 'edit') {
             if ($this->Tools->fetch_object($this->type, 'id', $this->_params->id) === false) {
@@ -506,11 +512,13 @@ class Circuits_controller extends Common_api_functions
                     if ($this->Tools->fetch_object('devices', 'id', $this->_params->{'device'.$m}) === false) {
                         $this->Response->throw_exception(400, "Invalid device $m");
                     }
+
                     $this->_params->{'location'.$m} = 0;
                 } else {
                     if ($this->Tools->fetch_object('locations', 'id', $this->_params->{'location'.$m}) === false) {
                         $this->Response->throw_exception(400, "Invalid location $m");
                     }
+
                     $this->_params->{'device'.$m} = 0;
                 }
             }

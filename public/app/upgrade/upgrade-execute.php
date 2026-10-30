@@ -39,6 +39,7 @@ if ($Upgrade->upgrade_database() === true) {
             foreach ($errors['tableError'] as $table) {
                 print '<li>'.$table.'</li>'."\n";
             }
+
             print '</ul>'."\n";
         }
 
@@ -51,8 +52,10 @@ if ($Upgrade->upgrade_database() === true) {
                     print '<li>Table `'.$table.'`: missing field `'.$field.'`;</li>'."\n";
                 }
             }
+
             print '</ul>'."\n";
         }
+
         print '</div>';
     } else {
         // remove maintaneance mode

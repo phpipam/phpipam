@@ -267,6 +267,7 @@ class Logging extends Common_functions
         } else {
             $this->settings = (object) $settings;
         }
+
         // set log type
         $this->set_log_type();
     }
@@ -333,6 +334,7 @@ class Logging extends Common_functions
                     $this->Result->show('danger', _('Database error: ').$e->getMessage());
                 }
             }
+
             // save id
             $this->user_id = is_object($user_id) ? $user_id->id : null;
             // save user
@@ -443,6 +445,7 @@ class Logging extends Common_functions
                 $facility = 'LOG_USER';
             }
         }
+
         // save
         $this->syslog_facility = constant($facility);
     }
@@ -473,6 +476,7 @@ class Logging extends Common_functions
         } else {
             $priority = 'LOG_DEBUG';
         }
+
         // set
         $this->syslog_priority = constant($priority);
     }
@@ -588,6 +592,7 @@ class Logging extends Common_functions
 
             return false;
         }
+
         if ($direction !== null) {
             if ($direction != 'next' && $direction != 'prev' && $direction != '') {
                 $this->Result->show('danger', _('Invalid direction'), true);
@@ -608,12 +613,15 @@ class Logging extends Common_functions
         if ($informational == 'on') {
             $query_severities[] = '`severity` = 0';
         }
+
         if ($notice == 'on') {
             $query_severities[] = '`severity` = 1';
         }
+
         if ($warning == 'on') {
             $query_severities[] = '`severity` = 2';
         }
+
         // join severities
         $query[] = implode(' or ', $query_severities);
         $query[] = ')';
@@ -630,6 +638,7 @@ class Logging extends Common_functions
         } else {
             $query[] = "order by `id` desc limit $logCount";
         }
+
         $query[] = ') as test ';
         $query[] = "order by `id` desc limit $logCount ;";
 
@@ -720,12 +729,15 @@ class Logging extends Common_functions
             if (! is_object($this->Addresses)) {
                 $this->Addresses = new Addresses($this->Database);
             }
+
             if (! is_object($this->Subnets)) {
                 $this->Subnets = new Subnets($this->Database);
             }
+
             if (! is_object($this->Sections)) {
                 $this->Sections = new Sections($this->Database);
             }
+
             if (! is_object($this->Tools)) {
                 $this->Tools = new Tools($this->Database);
             }
@@ -743,6 +755,7 @@ class Logging extends Common_functions
                 foreach ($this->object_new as $k => $v) {
                     $this->object_new[$k] = $this->changelog_make_booleans($k, $v);
                 }
+
                 $log['details'] = '<br>'.$this->array_to_log($this->object_new, true);
             } elseif ($action == 'delete') {
                 // format
@@ -751,6 +764,7 @@ class Logging extends Common_functions
                 foreach ($this->object_old as $k => $v) {
                     $this->changelog_make_booleans($k, $v);
                 }
+
                 $log['details'] = '<br>'.$this->array_to_log($this->object_old, true);
             } elseif ($action == 'truncate') {
                 $log['truncate'] = _('Subnet truncated');
@@ -767,6 +781,7 @@ class Logging extends Common_functions
                 foreach ($log as $k => $v) {
                     $log[$k] = str_replace(': <br>', ': / <br>', (string) $v);
                 }
+
                 // execute
                 if ($this->log_type == 'syslog') {
                     $this->syslog_write_changelog($log);
@@ -843,6 +858,7 @@ class Logging extends Common_functions
 
             return false;
         }
+
         // mail
         if ($this->mail_changelog && ! is_blank($changelog)) {
             $this->changelog_send_mail($changelog);
@@ -1010,15 +1026,18 @@ class Logging extends Common_functions
                 $this->object_new[$k] = 0;
             }
         }
+
         foreach ($this->object_new as $k => $v) {
             if (! isset($this->object_old[$k]) && $v == '1') {
                 $this->object_old[$k] = 0;
             }
         }
+
         // ip address - old needs to be transformed to dotted format
         if (isset($this->object_old['ip_addr'])) {
             $this->object_old['ip_addr'] = $this->Subnets->transform_address($this->object_old['ip_addr'], 'dotted');
         }
+
         if (isset($this->object_new['ip_addr'])) {
             $this->object_new['ip_addr'] = $this->Subnets->transform_address($this->object_new['ip_addr'], 'dotted');
         }
@@ -1032,6 +1051,7 @@ class Logging extends Common_functions
                 if (is_blank(@$this->object_old[$k])) {
                     $this->object_old[$k] = 'NULL';
                 }
+
                 if (is_blank(@$v)) {
                     $v = 'NULL';
                 }
@@ -1088,6 +1108,7 @@ class Logging extends Common_functions
                 elseif ($k == 'nameserverId') {
                     $v = $this->changelog_format_ns_diff($k, $v);
                 }
+
                 // make booleans
                 $v = $this->changelog_make_booleans($k, $v);
                 // set log
@@ -1136,10 +1157,12 @@ class Logging extends Common_functions
             if ($this->object_action == 'add') {
                 unset($this->object_new['mac_old'], $this->object_new['addressId']);
             }
+
             // reformat ip
             if (isset($this->object_old['ip_addr'])) {
                 $this->object_old['ip_addr'] = $this->Subnets->transform_address($this->object_old['ip_addr'], 'dotted');
             }
+
             if (isset($this->object_new['ip_addr'])) {
                 $this->object_new['ip_addr'] = $this->Subnets->transform_address($this->object_new['ip_addr'], 'dotted');
             }
@@ -1217,6 +1240,7 @@ class Logging extends Common_functions
             if (isset($this->object_new['subnet']) && ! is_blank($this->object_new['subnet'])) {
                 $this->object_new['subnet'] = $this->Subnets->transform_address($this->object_new['subnet'], 'dotted');
             }
+
             if (isset($this->object_old['subnet']) && ! is_blank($this->object_old['subnet'])) {
                 $this->object_old['subnet'] = $this->Subnets->transform_address($this->object_old['subnet'], 'dotted');
             }
@@ -1225,6 +1249,7 @@ class Logging extends Common_functions
             if (@$this->object_new['isFolder'] == '1') {
                 unset($this->object_new['subnet'], $this->object_new['mask']);
             }
+
             if (@$this->object_old['isFolder'] == '1') {
                 unset($this->object_old['subnet'], $this->object_old['mask']);
             }
@@ -1270,6 +1295,7 @@ class Logging extends Common_functions
             $section = $this->Sections->fetch_section('id', $this->object_old[$k]);
             $this->object_old[$k] = $section->name.' (id '.$section->id.')';
         }
+
         if ($v != 'NULL') {
             $section = $this->Sections->fetch_section('id', $v);
             if (is_object($section)) {
@@ -1302,6 +1328,7 @@ class Logging extends Common_functions
                 }
             }
         }
+
         // New root or not
         if ($v == 0) {
             $v = _('Root');
@@ -1333,10 +1360,12 @@ class Logging extends Common_functions
                 $this->object_old[$k] = $dev->hostname;
             }
         }
+
         // new none
         if ($v == 0) {
             $v = _('None');
         }
+
         if ($v != 'NULL') {
             $dev = $this->Tools->fetch_object('devices', 'id', $v);
             if (is_object($dev)) {
@@ -1366,6 +1395,7 @@ class Logging extends Common_functions
                 $this->object_old[$k] = $vlan->name." [$vlan->number]";
             }
         }
+
         // new none
         if ($v == 0) {
             $v = _('None');
@@ -1398,6 +1428,7 @@ class Logging extends Common_functions
                 $this->object_old[$k] = $vrf->name." [$vrf->description]";
             }
         }
+
         // new none
         if ($v == 0) {
             $v = _('None');
@@ -1430,6 +1461,7 @@ class Logging extends Common_functions
                 $this->object_old[$k] = $ns->name.' ['.$ns->namesrv1.']';
             }
         }
+
         // new none
         if ($v == 0) {
             $v = _('None');
@@ -1462,6 +1494,7 @@ class Logging extends Common_functions
                 $this->object_old[$k] = ! is_blank($location->description) ? $location->name." [$location->description]" : $location->name;
             }
         }
+
         // new none
         if ($v == 0) {
             $v = _('None');
@@ -1492,6 +1525,7 @@ class Logging extends Common_functions
             $section = $this->Sections->fetch_section('id', $this->object_old[$k]);
             $this->object_old[$k] = $section->name;
         }
+
         // new root
         if ($v == 0) {
             $v = _('Root');
@@ -1516,6 +1550,7 @@ class Logging extends Common_functions
         if (isset($this->object_new['permissions'])) {
             $this->object_new['permissions'] = db_json_decode(str_replace('\\', '', (string) $this->object_new['permissions']), true);      // Remove /
         }
+
         if (isset($this->object_old['permissions'])) {
             $this->object_old['permissions'] = db_json_decode(str_replace('\\', '', (string) $this->object_old['permissions']), true);      // Remove /
         }
@@ -1527,6 +1562,7 @@ class Logging extends Common_functions
         foreach ($groups as $g) {
             $out[$g->g_id]['g_name'] = $g->g_name;
         }
+
         $groups = $out;
 
         // loop
@@ -1536,6 +1572,7 @@ class Logging extends Common_functions
                 $val[] = $groups[$group_id]['g_name'].' : '.$this->Subnets->parse_permissions($p);
             }
         }
+
         $this->object_old[$k] = '';
 
         // result
@@ -1598,6 +1635,7 @@ class Logging extends Common_functions
             // save
             $out[$g->g_id]['g_name'] = $g->g_name;
         }
+
         $groups = $out;
 
         // reformat
@@ -1637,9 +1675,11 @@ class Logging extends Common_functions
             if (substr((string) $expr, 0, 1) == '*') {
                 $expr[0] = '%';
             }
+
             if (substr((string) $expr, -1, 1) == '*') {
                 $expr = substr_replace($expr, '%', -1);
             }
+
             if (substr((string) $expr, 0, 1) != '*' && substr((string) $expr, -1, 1) != '*') {
                 $expr = '%'.$expr.'%';
             }
@@ -1647,6 +1687,7 @@ class Logging extends Common_functions
             $subquery_filter1 = 'AND (`coid`=:expr or `ctype`=:expr or `real_name` like :expr or `cdate` like :expr or `cdiff` like :expr or INET_NTOA(`ip_addr`) like :expr)';
             $subquery_filter2 = 'AND (`coid`=:expr or `ctype`=:expr or `real_name` like :expr or `cdate` like :expr or `cdiff` like :expr)';
         }
+
         $query = "
 					select * from (
 					(select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ipaddresses`.`id` as `tid`,`users`.`id` as `userid`,`subnets`.`isFolder` as `isFolder`,`subnets`.`description` as `sDescription`
@@ -1760,6 +1801,7 @@ class Logging extends Common_functions
         if (! is_object($this->Addresses)) {
             $this->Addresses = new Addresses($this->Database);
         }
+
         $ips = $this->Addresses->fetch_subnet_addresses_recursive($subnetId, false);
 
         // fetch changelog for IPs
@@ -1776,6 +1818,7 @@ class Logging extends Common_functions
                 $query .= '`c`.`coid` = ? or ';
                 $args[] = $ip->id;
             }
+
             $query = substr($query, 0, -3);
             $query .= ") and `c`.`ctype` = 'ip_addr' order by `c`.`cid` desc limit $limit;";
 
@@ -1846,6 +1889,7 @@ class Logging extends Common_functions
 						where `c`.`cuser` = `u`.`id`
 						and `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
         }
+
         // fetch
         try {
             $logs = $this->Database->getObjectsQuery('changelog', $query, [$coid, $object_type]);
@@ -1874,6 +1918,7 @@ class Logging extends Common_functions
 
             return false;
         }
+
         // $subnetId check
         if (! is_numeric($subnetId)) {
             $this->Result->show('danger', _('Invalid subnet Id'), true);
@@ -1885,6 +1930,7 @@ class Logging extends Common_functions
         if (! is_object($this->Subnets)) {
             $this->Subnets = new Subnets($this->Database);
         }
+
         $this->Subnets->reset_subnet_slaves_recursive();
         $this->Subnets->fetch_subnet_slaves_recursive($subnetId);
         // remove master subnet ID
@@ -1904,9 +1950,11 @@ class Logging extends Common_functions
                     if (! isset($args)) {
                         $args = [];
                     }
+
                     $query .= '`c`.`coid` = ? or ';
                     $args[] = $slaveId;                         // set keys
                 }
+
                 $query = substr($query, 0, -3);
                 $query .= ") and `c`.`ctype` = 'subnet' order by `c`.`cid` desc limit $limit;";
 
@@ -2039,9 +2087,11 @@ class Logging extends Common_functions
                     $content[] = "  <td>$this->mail_font_style => </font></td>";
                     $content[] = "  <td>$this->mail_font_style ".trim($value[1]).' </font></td>';
                 }
+
                 $content[] = '</tr>';
             }
         }
+
         $content[] = '</table>';
 
         $content[] = '</font></td></tr>';
@@ -2069,6 +2119,7 @@ class Logging extends Common_functions
         } else {
             $recipients = $this->changelog_mail_get_recipients(false);
         }
+
         if ($recipients === false) {
             return true;
         }
@@ -2089,6 +2140,7 @@ class Logging extends Common_functions
             foreach ($recipients as $r) {
                 $phpipam_mail->Php_mailer->addAddress(addslashes(trim((string) $r->email)));
             }
+
             $phpipam_mail->Php_mailer->Subject = $subject;
             $phpipam_mail->Php_mailer->msgHTML($content);
             $phpipam_mail->Php_mailer->AltBody = $content_plain;

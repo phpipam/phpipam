@@ -99,6 +99,7 @@ try {
             $Result->show('danger', implode('<br>', $errors), true);
             exit();
         }
+
         // is user authenticated
         if (! $auth->isAuthenticated()) {
             $Result->show('danger', 'Not authenticated', true);
@@ -192,6 +193,7 @@ try {
                     $ug[$g->g_id] = $g->g_id;
                 }
             }
+
             $values['groups'] = json_encode($ug);
 
             // parse modules
@@ -209,10 +211,12 @@ try {
                 if (array_key_exists('*', $saml_modules)) {
                     $um[$module] = $saml_modules['*'];
                 }
+
                 if (array_key_exists((string) $module, $saml_modules)) {
                     $um[$module] = $saml_modules[$module];
                 }
             }
+
             $values['module_permissions'] = json_encode($um);
 
             // Construct admin object for helper functions
@@ -237,5 +241,6 @@ try {
     if (filter_var($params->debugprotocol, FILTER_VALIDATE_BOOLEAN)) {
         print escape_input($e->getMessage());
     }
+
     exit();
 }

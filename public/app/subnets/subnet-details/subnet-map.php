@@ -89,6 +89,7 @@ if (count($free_subnets) > 0) {
             // $subnet_start = $subnet_start + pow(2,($pow-$free_mask));
             $subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow2(($pow - $free_mask))));
         }
+
         print '</div>';
         print "<div class='clearfix clearfix1'></div>";
     }

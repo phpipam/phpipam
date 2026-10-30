@@ -70,6 +70,7 @@ if ($POST->action == 'delete') {
         if ($POST->fieldSize != '' && $POST->fieldSize != 0 && $POST->fieldSize != 1) {
             $errors[] = _('Boolean values can only be 0 or 1');
         }
+
         if ($POST->fieldDefault != '' && $POST->fieldDefault != 0 && $POST->fieldDefault != 1) {
             $errors[] = _('Default boolean values can only be 0 or 1');
         }
@@ -79,6 +80,7 @@ if ($POST->action == 'delete') {
         if (! is_numeric($POST->fieldSize)) {
             $errors[] = _('Fieldsize must be numeric');
         }
+
         if ($POST->fieldSize > 256) {
             $errors[] = _('Varchar size limit is 256 characters');
         }
@@ -98,6 +100,7 @@ if (! empty($errors)) {
     foreach ($errors as $error) {
         print '<li style="text-align:left">'.$error.'</li>'."\n";
     }
+
     print '</ul>'."\n";
     print '</div>'."\n";
 } else {

@@ -56,9 +56,11 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
             }
         }
     }
+
     if ($User->is_admin(false)) {
         print " <th style='width:80px'></th>";
     }
+
     print '</tr>';
     print '</thead>';
 
@@ -87,6 +89,7 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
             } else {
                 $cnt = $Tools->count_database_objects('pstnNumbers', 'prefix', $sp->id).' Addresses';
             }
+
             print "	<td><span class='badge badge1 badge5'>".$cnt.'</span></td>';
 
             // custom
@@ -111,12 +114,14 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
                 print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-pencil'></i></button>";
                 print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-times'></i></button>";
             }
+
             print '	</div>';
             print '	</td>';
 
             print '</tr>';
         }
     }
+
     print '</tbody>';
     print '</table>';
 }

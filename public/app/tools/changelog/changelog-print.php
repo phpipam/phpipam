@@ -102,6 +102,7 @@ else {
                     } else {
                         $l['ctype'] = 'Subnet';
                     }
+
                     break;
                 case 'section':
                     $l['ctype'] = 'Section';
@@ -140,6 +141,7 @@ else {
             print '</tr>';
         }
     }
+
     print '</tbody>';
     print '</table>';
 }

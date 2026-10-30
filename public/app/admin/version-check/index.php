@@ -48,9 +48,11 @@ print "<li role='presentation' class='active'><a href='' data-target='changelog'
 if (! is_null($Tools->phpipam_releases)) {
     print "<li role='presentation'>				  <a href='' data-target='releaselog'>Release log</a></li>";
 }
+
 if ($version_delta > 0) {
     print "<li role='presentation'>				  <a href='' data-target='gitlog'>Commit log (local)</a></li>";
 }
+
 print '</ul>';
 
 // changelog
@@ -81,6 +83,7 @@ if (! empty($Tools->phpipam_releases)) {
         print "<a class='btn btn-xs btn-default' href='".$r->link->{'@attributes'}->href."'>Download (GitHub)</a>";
         print '</div>';
     }
+
     print '</div>';
 }
 
@@ -120,12 +123,15 @@ if ($version_delta > 0) {
                 } elseif (is_blank(trim((string) $l))) {
                     unset($lines[$k]);
                 }
+
                 unset($lines[0]);
             }
+
             // merge
             foreach ($lines as $i => $line) {
                 $lines[$i] = escape_input($line);
             }
+
             $lines = implode('<br>', array_filter($lines));
 
             // title

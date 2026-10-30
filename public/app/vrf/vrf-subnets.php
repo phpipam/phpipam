@@ -90,10 +90,12 @@ if (! $slaves) {
                 print '	</div>';
                 print ' </td>';
             }
+
             print '</tr>'."\n";
 
             $m++;
         }
+
         // no because of permissions
         if ($m == 0) {
             print '<tr>';
@@ -104,5 +106,6 @@ if (! $slaves) {
             print '</tr>';
         }
     }
+
     print '</table>'."\n";
 }

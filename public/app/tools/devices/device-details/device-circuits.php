@@ -19,6 +19,7 @@ $type_hash = [];
 foreach ($circuit_types as $t) {
     $type_hash[$t->id] = $t->ctname;
 }
+
 // get hidden fields */
 $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['circuits']) ? $hidden_fields['circuits'] : [];
@@ -55,6 +56,7 @@ if ($User->settings->enableCircuits != '1') {
             print ' <th>'._('Point A').'</th>';
             print ' <th>'._('Point B').'</th>';
         }
+
         print '</tr>';
         print '</thead>';
 
@@ -84,8 +86,10 @@ if ($User->settings->enableCircuits != '1') {
                 print " <td class='hidden-xs hidden-sm'>$locationA_html</td>";
                 print " <td class='hidden-xs hidden-sm'>$locationB_html</td>";
             }
+
             print '</tr>'."\n";
         }
+
         print '</tbody>';
         print '</table>';
     }

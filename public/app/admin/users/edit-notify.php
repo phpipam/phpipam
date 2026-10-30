@@ -53,6 +53,7 @@ try {
         $content[] = '<tr><td style="padding: 0px;padding-left:10px;line-height:18px;text-align:left;">'.$User->mail_font_style.' &bull; '._('Username').'</font></td>	<td style="padding: 0px;padding-left:15px;line-height:18px;text-align:left;">'.$User->mail_font_style.' * '._('your domain username').' ('.$POST->username.')</font></td></tr>';
         $content[] = '<tr><td style="padding: 0px;padding-left:10px;line-height:18px;text-align:left;">'.$User->mail_font_style.' &bull; '._('Password').'</font></td>	<td style="padding: 0px;padding-left:15px;line-height:18px;text-align:left;">'.$User->mail_font_style.' * '._('your domain password').'</font></td></tr>';
     }
+
     $content[] = '<tr><td style="padding: 0px;padding-left:10px;line-height:18px;text-align:left;">'.$User->mail_font_style.' &bull; '._('Email').'</font></td>	<td style="padding: 0px;padding-left:15px;line-height:18px;text-align:left;"><a href="mailto:'.$POST->email.'">'.$User->mail_font_style_href.''.$POST->email.'</font></a></td></tr>';
     $content[] = '<tr><td style="padding: 0px;padding-left:10px;line-height:18px;text-align:left;">'.$User->mail_font_style.' &bull; '._('Role').'</font></td>		<td style="padding: 0px;padding-left:15px;line-height:18px;text-align:left;">'.$User->mail_font_style.' '.$POST->role.'</font></td></tr>';
     $content[] = '<tr><td style="padding: 0px;padding-left:10px;line-height:18px;text-align:left;border-bottom:1px solid #eeeeee;padding-bottom:10px;">'.$User->mail_font_style.' &bull; '._('WebApp').'</font></td>	<td style="padding: 0px;padding-left:15px;line-height:18px;text-align:left;border-bottom:1px solid #eeeeee;padding-bottom:10px;"><a href="'.$User->settings->siteURL.'">'.$User->mail_font_style_href.''.$User->settings->siteURL.'</font></a><td></tr>';
@@ -73,6 +74,7 @@ try {
         $content_plain[] = _('Username').': * your domain username('.$POST->username;
         $content_plain[] = _('Password').': * your domain password';
     }
+
     $content_plain[] = _('Email').': '.$POST->email;
     $content_plain[] = _('Role').': '.$POST->role;
     $content_plain[] = _('WebApp').': '.$User->settings->siteURL;
@@ -90,6 +92,7 @@ try {
             $phpipam_mail->Php_mailer->AddCC($admin->email);
         }
     }
+
     $phpipam_mail->Php_mailer->Subject = $subject;
     $phpipam_mail->Php_mailer->msgHTML($content);
     $phpipam_mail->Php_mailer->AltBody = $content_plain;

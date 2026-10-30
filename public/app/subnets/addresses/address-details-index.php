@@ -14,9 +14,11 @@ $PowerDNS = new PowerDNS($Database);
 if (! is_numeric($GET->subnetId)) {
     $Result->show('danger', _('Invalid ID'), true);
 }
+
 if (! is_numeric($GET->section)) {
     $Result->show('danger', _('Invalid ID'), true);
 }
+
 if (! is_numeric($GET->ipaddrid)) {
     $Result->show('danger', _('Invalid ID'), true);
 }
@@ -50,6 +52,7 @@ $section_permission = $Sections->check_permission($User->user, $subnet['sectionI
 if (count($subnet) == 0) {
     $Result->show('danger', _('Subnet does not exist'), true);
 }                                  // subnet doesn't exist
+
 if ($subnet_permission == 0) {
     $Result->show('danger', _('You do not have permission to access this network'), true);
 }      // not allowed to access
@@ -87,6 +90,7 @@ if (count($address) > 1) {
             foreach ($all_nats as $n) {
                 $out[$n->id] = $n;
             }
+
             $all_nats = $out;
 
             // reindex
@@ -102,20 +106,24 @@ if (count($address) > 1) {
         $active = $GET->tab == 'permissions' ? 'active' : '';
         print " <li role='presentation' class='$active'><a href='".create_link('subnets', $subnet['sectionId'], $subnet['id'], 'address-details', $address['id'], 'permissions')."'>"._('Permissions').'</a></li>';
     }
+
     if ($User->settings->enableNAT == 1 && $User->get_module_permissions('nat') >= User::ACCESS_R) {
         $active = $GET->tab == 'nat' ? 'active' : '';
         print " <li role='presentation' class='$active'><a href='".create_link('subnets', $subnet['sectionId'], $subnet['id'], 'address-details', $address['id'], 'nat')."'>"._('NAT').'</a></li>';
     }
+
     $active = $GET->tab == 'linked' ? 'active' : '';
     print " <li role='presentation' class='$active'><a href='".create_link('subnets', $subnet['sectionId'], $subnet['id'], 'address-details', $address['id'], 'linked')."'>"._('Linked addresses').'</a></li>';
     if ($mcast) {
         $active = $GET->tab == 'multicast' ? 'active' : '';
         print " <li role='presentation' class='$active'><a href='".create_link('subnets', $subnet['sectionId'], $subnet['id'], 'address-details', $address['id'], 'multicast')."'>"._('Multicast').'</a></li>';
     }
+
     if ($User->settings->enableLocations == 1) {
         $active = $GET->tab == 'location' ? 'active' : '';
         print " <li role='presentation' class='$active'><a href='".create_link('subnets', $subnet['sectionId'], $subnet['id'], 'address-details', $address['id'], 'location')."'>"._('Location').'</a></li>';
     }
+
     $active = $GET->tab == 'changelog' ? 'active' : '';
     print " <li role='presentation' class='$active'><a href='".create_link('subnets', $subnet['sectionId'], $subnet['id'], 'address-details', $address['id'], 'changelog')."'>"._('Changelog').'</a></li>';
     print '</ul>';

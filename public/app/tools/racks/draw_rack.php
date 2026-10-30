@@ -32,6 +32,7 @@ if (empty($GET->deviceId)) {
 if (! is_numeric($GET->rackId)) {
     exit();
 }
+
 if (! is_numeric($GET->deviceId)) {
     exit();
 }

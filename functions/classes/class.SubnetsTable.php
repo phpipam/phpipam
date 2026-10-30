@@ -80,6 +80,7 @@ class SubnetsTable
         if (! isset($subnet->ip)) {
             $subnet->ip = $this->Tools->transform_to_dotted($subnet->subnet);
         }
+
         if (is_object($subnet->masterSubnet) && $subnet->masterSubnet->isFolder != 1 && ! isset($subnet->masterSubnet->ip)) {
             $subnet->masterSubnet->ip = $this->Tools->transform_to_dotted($subnet->masterSubnet->subnet);
         }
@@ -120,6 +121,7 @@ class SubnetsTable
         } else {
             $tr['vlan'] = _('Default');
         }
+
         // vrf
         if ($this->Tools->settings->enableVRF == 1) {
             // fetch vrf
@@ -127,6 +129,7 @@ class SubnetsTable
             if (is_numeric($subnet->vlanId)) {
                 $vrf = $this->Tools->fetch_object('vrf', 'vrfId', $subnet->vrfId);
             }
+
             $tr['vrf'] = is_object($vrf) ? $vrf->name : _('Default');
         }
 
@@ -214,6 +217,7 @@ class SubnetsTable
             $html[] = "<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-tasks'></i></button>";
             $html[] = "<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-times'></i></button>";
         }
+
         $html[] = '	</div>';
 
         $tr['buttons'] = implode("\n", $html);

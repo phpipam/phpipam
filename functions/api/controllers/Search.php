@@ -104,12 +104,15 @@ class Search_controller extends Common_api_functions
             if ($this->search_items['subnets'] == 1) {
                 $result['subnets'] = $this->search_subnets();
             }
+
             if ($this->search_items['addresses'] == 1) {
                 $result['addresses'] = $this->search_addresses();
             }
+
             if ($this->search_items['vlan'] == 1) {
                 $result['vlan'] = $this->search_vlans();
             }
+
             if ($this->search_items['vrf'] == 1) {
                 $result['vrf'] = $this->search_vrfs();
             }

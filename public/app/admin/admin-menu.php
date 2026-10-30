@@ -26,11 +26,13 @@ foreach ($admin_menu as $k => $tool) {
                 $active = 'active';
             }
         }
+
         // print
         print "<li class='list-group-item $active'>";
         print "<a href='".create_link('administration', $t['href'])."'><i class='fa fa-angle-right pull-right icon-gray'></i>".$t['name'].'</a>';
         print '</li>';
     }
+
     print '</ul>';
 
     print '</div>';

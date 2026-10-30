@@ -27,6 +27,7 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
     if ($User->get_module_permissions('devices') >= User::ACCESS_R) {
         print ' <th>'._('Device').'</th>';
     }
+
     if (is_array($custom)) {
         foreach ($custom as $field) {
             if (! in_array($field['name'], $hidden_custom_fields)) {
@@ -35,9 +36,11 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
             }
         }
     }
+
     if ($User->get_module_permissions('pstn') >= User::ACCESS_RW) {
         print " <th style='width:80px'></th>";
     }
+
     print '</tr>';
     print '</thead>';
 
@@ -85,6 +88,7 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
             } else {
                 $cnt = $Tools->count_database_objects('pstnNumbers', 'prefix', $sp->id).' Addresses';
             }
+
             print "	<td><span class='badge badge1 badge5'>".$cnt.'</span></td>';
 
             // device
@@ -122,9 +126,11 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
                     $links[] = ['type' => 'header', 'text' => _('Manage')];
                     $links[] = ['type' => 'link', 'text' => _('Edit prefix'), 'href' => '', 'class' => 'open_popup', 'dataparams' => " data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='edit' data-id='$sp->id'", 'icon' => 'pencil'];
                 }
+
                 if ($User->get_module_permissions('pstn') >= User::ACCESS_RWA) {
                     $links[] = ['type' => 'link', 'text' => _('Delete prefix'), 'href' => '', 'class' => 'open_popup', 'dataparams' => " data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='delete' data-id='$sp->id'", 'icon' => 'times'];
                 }
+
                 print $User->print_actions($User->user->compress_actions, $links);
 
                 print '	</td>';
@@ -140,6 +146,7 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
                     print " <td class='unused' colspan='".($colspan - 1)."'>".($subprefixes[$k + 1]->prefix_raw_start - $sp->prefix_raw_stop - 1).' '._('Unused').'</td>';
                     print '</tr>';
                 }
+
                 if ($k == count($subprefixes) - 1 && (($prefix->prefix_raw_stop - $n->prefix_raw_stop) != 1)) {
                     print '<tr>';
                     print " <td class='unused'></td>";
@@ -149,6 +156,7 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
             }
         }
     }
+
     print '</tbody>';
     print '</table>';
 }

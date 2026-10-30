@@ -30,6 +30,7 @@ else {
     if (strlen((string) $POST->password1) < 8) {
         $Result->show('danger', _('Password must be at least 8 characters long!'), true);
     }
+
     if (strlen((string) $POST->password2) < 8) {
         $Result->show('danger', _('Password must be at least 8 characters long!'), true);
     }

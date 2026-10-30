@@ -23,21 +23,27 @@ $User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('dang
 if ($User->settings->tempShare != 1) {
     $Result->show('danger', _('Temporary sharing disabled'), true);
 }
+
 if ($POST->type != 'subnets' && $POST->type != 'ipaddresses') {
     $Result->show('danger', _('Invalid type'), true);
 }
+
 if (! is_numeric($POST->id)) {
     $Result->show('danger', _('Invalid ID'), true);
 }
+
 if (strlen((string) $POST->code) != 32) {
     $Result->show('danger', _('Invalid code'), true);
 }
+
 if ($POST->validity < date('Y-m-d H:i:s')) {
     $Result->show('danger', _('Invalid date'), true);
 }
+
 if ($POST->validity > date('Y-m-d H:i:s', strtotime('+ 7 days'))) {
     $Result->show('danger', _('1 week is max validity time'), true);
 }
+
 // verify each recipient
 if (! is_blank($POST->email)) {
     foreach (explode(',', (string) $POST->email) as $rec) {
@@ -90,9 +96,11 @@ if (! is_array($old_access)) {
             unset($old_access[$k]);
         }
     }
+
     // reset array
     is_array($old_access) ?: $old_access = [];
 }
+
 $new_access = json_encode(array_merge($old_access, array_filter($new_access)));
 if (strlen($new_access) > 65535) {
     $Result->show('danger', _('Maximum number of shares exceeded'), true, true);
@@ -142,6 +150,7 @@ if (! is_blank($POST->email)) {
         foreach (explode(',', (string) $POST->email) as $r) {
             $phpipam_mail->Php_mailer->addAddress(addslashes(trim($r)));
         }
+
         $phpipam_mail->Php_mailer->Subject = 'New ipam share created';
         $phpipam_mail->Php_mailer->msgHTML($content);
         $phpipam_mail->Php_mailer->AltBody = $content_plain;

@@ -155,9 +155,11 @@ class Common_functions
         if ($a[0] != $b[0]) {
             return $a[0] < $b[0] ? -1 : 1;          // 1.x.y is less than 2.x.y
         }
+
         if (strcmp((string) $a[1], (string) $b[1]) != 0) {
             return strcmp((string) $a[1], (string) $b[1]); // 1.21.y is less than 1.3.y
         }
+
         if ($a[2] != $b[2]) {
             return $a[2] < $b[2] ? -1 : 1;          // 1.4.9 is less than 1.4.10
         }
@@ -215,12 +217,14 @@ class Common_functions
 
             return false;
         }
+
         // save
         if (is_array($res)) {
             foreach ($res as $r) {
                 $this->cache_write($table, null, $r);
             }
         }
+
         // result
         $result = (is_array($res) && $res != []) ? $res : false;
         $this->cache_write('fetch_all_objects', 'id', (object) ['id' => "t=$table f=$sortField o=$sortAsc", 'result' => $result]);
@@ -242,15 +246,19 @@ class Common_functions
         if (! is_string($table)) {
             return false;
         }
+
         if (is_blank($table)) {
             return false;
         }
+
         if (is_null($method)) {
             return false;
         }
+
         if (is_null($value)) {
             return false;
         }
+
         if ($value === 0) {
             return false;
         }
@@ -307,6 +315,7 @@ class Common_functions
 
                 return false;
             }
+
             // save to cache
             if ($result_fields === '*' && is_array($res)) { // Only cache objects containing all fields
                 foreach ($res as $r) {
@@ -397,6 +406,7 @@ class Common_functions
                 $results[$col->COLUMN_NAME] = $col;
             }
         }
+
         $this->cache_write('getTableSchemaByField', 'id', (object) ['id' => "t=$tableName", 'result' => $results]);
 
         return $results;
@@ -673,6 +683,7 @@ class Common_functions
 
                     continue;
                 }
+
                 $input[$k] = is_null($v) ? null : strip_tags((string) $v);
             }
 
@@ -769,9 +780,11 @@ class Common_functions
         if (strpos((string) $address, ':') !== false) {
             return 'IPv6';
         }
+
         if (strpos((string) $address, '.') !== false) {
             return 'IPv4';
         }
+
         // numeric representation
         if (is_numeric($address)) {
             if ($address <= 4294967295) {
@@ -891,6 +904,7 @@ class Common_functions
         if ($chars < 8) {
             $chars = 8;
         }
+
         // count input text size
         $origLen = mb_strlen((string) $text);
         // cut unwanted chars
@@ -920,6 +934,7 @@ class Common_functions
         if ($format == 4) {
             return $mac;
         }
+
         // format 3
         if ($format == 3) {
             $mac = str_split($mac, 4);
@@ -952,10 +967,12 @@ class Common_functions
             if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && ! isset($_SERVER['HTTP_X_FORWARDED_PORT'])) {
                 return ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 443 : 80;
             }
+
             if (isset($_SERVER['HTTP_X_FORWARDED_PORT']) && is_numeric($_SERVER['HTTP_X_FORWARDED_PORT'])) {
                 return $_SERVER['HTTP_X_FORWARDED_PORT'];
             }
         }
+
         if (isset($_SERVER['SERVER_PORT']) && is_numeric($_SERVER['SERVER_PORT'])) {
             return $_SERVER['SERVER_PORT'];
         }
@@ -974,13 +991,16 @@ class Common_functions
             if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
                 return $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https';
             }
+
             if (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
                 return true;
             }
         }
+
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
             return true;
         }
+
         if ($this->httpPort() == 443) {
             return true;
         }
@@ -1030,6 +1050,7 @@ class Common_functions
         } else {
             $url = 'localhost';
         }
+
         $host = parse_url("$proto://$url", PHP_URL_HOST) ?: 'localhost';
         $host = urlencode($host);
 
@@ -1153,6 +1174,7 @@ class Common_functions
         if (is_null($hostname)) {
             return false;
         }
+
         // first validate hostname
         $valid = (preg_match("/^([a-z_\d](-*[a-z_\d])*)(\.([a-z_\d](-*[a-z_\d])*))*$/i", $hostname)    // valid chars check
                 && preg_match('/^.{1,253}$/', $hostname)                                        // overall length check
@@ -1274,6 +1296,7 @@ class Common_functions
         if ($ipv6 == '.255.255.255') {
             return false;
         }
+
         $ip_n = inet_pton($ipv6);
         $bits = 15; // 16 x 8 bit = 128bit
         $ipv6long = '';
@@ -1406,6 +1429,7 @@ class Common_functions
             foreach ($types as $t) {
                 $types_out[$t->id] = (array) $t;
             }
+
             // save to cache
             $this->address_types = $types_out;
         }
@@ -1624,6 +1648,7 @@ class Common_functions
                 $html[] = "<option value='$tmp2[0]' $selected>$tmp2[1]</option>";
             }
         }
+
         $html[] = '</select>';
 
         // result
@@ -1656,6 +1681,7 @@ class Common_functions
             $html[] = '})';
             $html[] = '</script>';
         }
+
         $timepicker_index++;
 
         // set size
@@ -1708,6 +1734,7 @@ class Common_functions
                 $html[] = "<option value='$k'>"._($v).'</option>';
             }
         }
+
         $html[] = '</select>';
 
         // result
@@ -1749,9 +1776,11 @@ class Common_functions
         if (strpos((string) $field['type'], 'varchar') !== false) {
             $maxlength = str_replace(['varchar', '(', ')'], '', (string) $field['type']);
         }
+
         if (strpos((string) $field['type'], 'int') !== false) {
             $maxlength = str_replace(['int', '(', ')'], '', (string) $field['type']);
         }
+
         // print
         $html[] = ' <input type="text" class="form-control input-sm" name="'.$field['nameNew'].$nameSuffix.'" placeholder="'.$this->print_custom_field_name($field['name']).'" value="'.$object->{$field['name']}.'" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'."\n";
 
@@ -1935,6 +1964,7 @@ class Common_functions
         } else {
             $old_permissions = [];  // fix for adding
         }
+
         // add also new groups if available
         if (is_array($new_permissions)) {
             foreach ($new_permissions as $k1 => $p1) {
@@ -2038,6 +2068,7 @@ class Common_functions
                     print "	<li><a href='".create_link('subnets', $section['id'], $parent)."'>$subnet[description] ($subnet[ip]/$subnet[mask])</a> <span class='divider'></span></li>";
                 }
             }
+
             // parent subnet
             $subnet = (array) $Subnet->fetch_subnet('id', $req['subnetId']);
             // ip set
@@ -2048,6 +2079,7 @@ class Common_functions
             } else {
                 print "	<li class='active'>$subnet[description] ($subnet[ip]/$subnet[mask])</li>";      // active subnet
             }
+
             print '</ul>';
         }
     }
@@ -2085,6 +2117,7 @@ class Common_functions
                     print "	<li><a href='".create_link('subnets', $section['id'], $parent[0])."'><i class='icon-folder-open icon-gray'></i> $subnet[description]</a> <span class='divider'></span></li>";
                 }
             }
+
             // parent subnet
             $subnet = (array) $Subnet->fetch_subnet(null, $req['subnetId']);
             print "	<li>$subnet[description]</li>";                                                                     // active subnet
@@ -2122,6 +2155,7 @@ class Common_functions
                 print "	<li class='active'>$prefix->name</li>";
             }
         }
+
         print '</ul>';
     }
 
@@ -2172,6 +2206,7 @@ class Common_functions
                         $title[] = $se->name;
                     }
                 }
+
                 // subnet
                 if (isset($get['subnetId'])) {
                     $sn = $this->fetch_object('subnets', 'id', $get['subnetId']);
@@ -2184,6 +2219,7 @@ class Common_functions
                         }
                     }
                 }
+
                 // ip address
                 if (isset($get['ipaddrid'])) {
                     $ip = $this->fetch_object('ipaddresses', 'id', $get['ipaddrid']);
@@ -2203,6 +2239,7 @@ class Common_functions
                         $title[] = ucwords(escape_input($get['section']));
                     }
                 }
+
                 if (isset($get['subnetId'])) {
                     // vlan domain
                     if ($get['section'] == 'vlan' || $get['section'] == 'vlans') {
@@ -2210,6 +2247,7 @@ class Common_functions
                         if (is_object($vd)) {
                             $title[] = $vd->name._(' domain');
                         }
+
                         if (isset($get['sPage'])) {
                             $vlan = $this->fetch_object('vlans', 'vlanId', $get['sPage']);
                             if (is_object($vlan)) {
@@ -2233,6 +2271,7 @@ class Common_functions
                             if (is_object($location)) {
                                 $title[] = $location->name;
                             }
+
                             $title[] = $rack->name;
                         }
                     } elseif ($get['section'] == 'locations') {
@@ -2356,6 +2395,7 @@ class Common_functions
                     continue;
                 }
             }
+
             // title
             if ($i['type'] == 'header') {
                 $html[] = "   <li class='dropdown-header'>".($i['text']).'</li>';
@@ -2369,10 +2409,12 @@ class Common_functions
                 $html[] = "   <li><a class='$i[class]' href='$i[href]' $i[dataparams]><i class='fa fa-$i[icon]'></i> ".$i['text'].'</a></li>';
             }
         }
+
         // remove last divider if present
         if (strpos(end($html), 'divider') !== false) {
             array_pop($html);
         }
+
         // end
         $html[] = ' </ul>';
         $html[] = '</div>';
@@ -2401,11 +2443,13 @@ class Common_functions
                     continue;
                 }
             }
+
             // save only links
             if ($i['type'] == 'link') {
                 $html[] = " <a href='$i[href]' class='btn btn-xs btn-default $i[class]' $i[dataparams] rel='tooltip' title='".$i['text']."'><i class='fa fa-$i[icon]'></i></a>";
             }
         }
+
         // end
         $html[] = ' </div>';
 

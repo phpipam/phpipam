@@ -19,6 +19,7 @@ foreach ($pcheck as $p) {
         $Result->show('danger', _('Invalid port').' ('.$p.')', true);
     }
 }
+
 $POST->port = str_replace(';', ',', (string) $POST->port);
 
 // verify subnetId

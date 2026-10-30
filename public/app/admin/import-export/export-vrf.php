@@ -75,10 +75,12 @@ if ($GET->name == 'on') {
     $worksheet->write($curRow, $curColumn, _('Name'), $format_header);
     $curColumn++;
 }
+
 if ($GET->rd == 'on') {
     $worksheet->write($curRow, $curColumn, _('RD'), $format_header);
     $curColumn++;
 }
+
 if ($GET->description == 'on') {
     $worksheet->write($curRow, $curColumn, _('Description'), $format_header);
     $curColumn++;
@@ -110,10 +112,12 @@ foreach ($all_vrfs as $vrf) {
         $worksheet->write($curRow, $curColumn, $vrf['name'], $format_text);
         $curColumn++;
     }
+
     if ($GET->rd == 'on') {
         $worksheet->write($curRow, $curColumn, $vrf['rd'], $format_text);
         $curColumn++;
     }
+
     if ($GET->description == 'on') {
         $worksheet->write($curRow, $curColumn, $vrf['description'], $format_text);
         $curColumn++;

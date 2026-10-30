@@ -11,12 +11,15 @@ require_once __DIR__.'/../../../../functions/functions.php';
 if (! isset($Database)) {
     $Database = new Database_PDO;
 }
+
 if (! isset($User)) {
     $User = new User($Database);
 }
+
 if (! isset($Admin)) {
     $Admin = new Admin($Database);
 }
+
 if (! isset($Tools)) {
     $Tools = new Tools($Database);
 }
@@ -51,6 +54,7 @@ foreach ($vlan_domains as $vlan_domain) {
     if (count($all_vlans) == 0) {
         continue;
     }
+
     // write all VLAN entries
     foreach ($all_vlans as $vlan) {
         // cast
@@ -98,18 +102,22 @@ foreach ($data as &$cdata) {
             $msg .= 'Invalid name format.';
             $action = 'error';
         }
+
         if (! preg_match('/^[0-9]+$/', (string) $cdata['number'])) {
             $msg .= 'Invalid number format.';
             $action = 'error';
         }
+
         if (preg_match("/[;'\"]/", (string) $cdata['description'])) {
             $msg .= 'Invalid characters in description.';
             $action = 'error';
         }
+
         if (! preg_match('/^[a-zA-Z0-9-_. ]+$/', (string) $cdom)) {
             $msg .= 'Invalid domain format.';
             $action = 'error';
         }
+
         if ($action != 'error') {
             if ($cdata['number'] > $User->settings->vlanMax) {
                 $msg .= _('Highest possible VLAN number is ').$User->settings->vlanMax.'!';
@@ -140,10 +148,12 @@ foreach ($data as &$cdata) {
                 $msg .= 'VLAN name will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['description'] != $edata[$cdom][$cdata['number']]['description']) {
                 $msg .= 'VLAN description will be updated.';
                 $action = 'edit';
             }
+
             // Check if the values of the custom fields have changed
             if (is_array($custom_fields)) {
                 foreach ($custom_fields as $myField) {

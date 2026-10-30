@@ -80,6 +80,7 @@ $dropdown->optgroup_open(_('Folders'));
 foreach ($folders as $folder) {
     $foldersTree->add($folder);
 }
+
 $foldersTree->walk(true);
 $dropdown->subnetsTree($foldersTree);
 
@@ -103,6 +104,7 @@ if ($section->strictMode == 0) {
     foreach ($all_subnets as $subnet) {
         $subnetsTree->add($subnet);
     }
+
     $subnetsTree->walk(false);
     $dropdown->subnetsTree($subnetsTree);
 }

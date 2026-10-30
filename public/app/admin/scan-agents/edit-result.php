@@ -37,6 +37,7 @@ if ($POST->action == 'edit' || $POST->action == 'delete') {
     if ($agent_old === false) {
         $error[] = _('Invalid agent Id');
     }
+
     // remove type and code if direct
     if (@$agent_old->type == 'direct') {
         unset($POST->type, $POST->code);
@@ -56,6 +57,7 @@ if ($POST->action != 'delete') {
             $error[] = _('Invalid agent code');
         }
     }
+
     // name must be more than 2 and alphanumberic
     if (is_blank($POST->name)) {
         $error[] = _('Invalid agent name');
@@ -94,6 +96,7 @@ if (count($error) > 0) {
 
             return false;
         }
+
         // references removed
         $Result->show('info', _('Scan agent references removed'));
     }

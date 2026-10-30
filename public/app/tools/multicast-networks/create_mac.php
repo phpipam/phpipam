@@ -25,6 +25,7 @@ if ($User->settings->enableMulticast != '1') {
 if ($Subnets->verify_cidr($POST->ip) === false) {
     exit('False');
 }
+
 if ($Subnets->is_multicast($POST->ip) === false) {
     exit('False');
 }

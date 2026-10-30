@@ -173,6 +173,7 @@ class Nat_controller extends Common_api_functions
                     }
                 }
             }
+
             array_push($out, $rr);
         }
 
@@ -205,6 +206,7 @@ class Nat_controller extends Common_api_functions
         foreach (['src', 'dst'] as $k) {
             $values[$k] = json_encode($values[$k]);
         }
+
         // $this->Response->throw_exception(500, "AAA".json_encode($values['src']));
         if (! $this->Admin->object_modify('nat', 'add', 'id', $values)) {
             $this->Response->throw_exception(500, 'NAT creation failed');
@@ -249,10 +251,12 @@ class Nat_controller extends Common_api_functions
             if (! isset($this->_params->id) || ! is_numeric($this->_params->id)) {
                 $this->Response->throw_exception(400, 'Invalid ID format');
             }
+
             if (! $this->Tools->fetch_multiple_objects('nat', 'id', $this->_params->id, 'id', true)) {
                 $this->Response->throw_exception(404, 'ID not found');
             }
         }
+
         if (in_array($this->request_method(), ['POST', 'PATCH'])) {
             // Check optional fields format
             // TBD: subnets for src & dst ?
@@ -261,20 +265,25 @@ class Nat_controller extends Common_api_functions
                     $this->Response->throw_exception(400, "Invalid value for $k (must be numeric)");
                 }
             }
+
             foreach (['src', 'dst'] as $k) {
                 $this->verify_src_dst($k);
             }
+
             $this->verify_device();
         }
+
         if ($this->request_method() == 'POST') {
             if (! isset($this->_params->name)) {
                 $this->Response->throw_exception(400, 'Missing NAT name'); // Seems to be mandatory in the GUI
             }
+
             if (! isset($this->_params->type)) {
                 $this->Response->throw_exception(400, 'Missing NAT type');
             } elseif (! in_array($this->_params->type, $this->valid_types)) {
                 $this->Response->throw_exception(400, 'Invalid type');
             }
+
             if (isset($this->_params->id)) {
                 $this->Response->throw_exception(400, 'ID should not be set for creation');
             }
@@ -314,14 +323,17 @@ class Nat_controller extends Common_api_functions
             if (! is_array($input_param)) {
                 $this->Response->throw_exception(400, "Invalid $k format (Must be an array");
             }
+
             $input_out = [];
             foreach ($input_param as $pk => $pv) {
                 if (! in_array($pk, array_keys($this->validation_data))) {
                     $this->Response->throw_exception(400, "Invalid key identifier for $k ($pk)");
                 }
+
                 if (! is_array($pv)) {
                     $this->Response->throw_exception(400, "Invalid value for $k (must be an array)");
                 }
+
                 $values = [];
                 foreach ($pv as $v) {
                     if (! is_numeric($v)) {
@@ -337,6 +349,7 @@ class Nat_controller extends Common_api_functions
                         }
                     }
                 }
+
                 array_push($input_out, [$pk => $values]);
             }
         }

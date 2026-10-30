@@ -28,16 +28,20 @@ if ($POST->action == 'edit' || $POST->action == 'add') {
     if (! is_numeric($POST->local_as)) {
         $Result->show('danger', _('Invalid local AS'), true);
     }
+
     if (! is_numeric($POST->peer_as)) {
         $Result->show('danger', _('Invalid peer AS'), true);
     }
+
     if (! $Tools->validate_ip($POST->local_address)) {
         $Result->show('danger', _('Invalid local address'), true);
     }
+
     if (! $Tools->validate_ip($POST->peer_address)) {
         $Result->show('danger', _('Invalid peer address'), true);
     }
 }
+
 if ($POST->action == 'edit' || $POST->action == 'delete') {
     if (! is_numeric($POST->id)) {
         $Result->show('danger', _('Invalid ID'), true);
@@ -49,22 +53,27 @@ if (isset($POST->vrf_id)) {
     if ($User->get_module_permissions('vrf') == User::ACCESS_NONE) {
         $Result->show('danger', _('Insufficient permissions for module VRF'), true);
     }
+
     if (! is_numeric($POST->vrf_id)) {
         $Result->show('danger', _('Invalid VRF ID'), true);
     }
 }
+
 if (isset($POST->circuit_id)) {
     if ($User->get_module_permissions('circuits') == User::ACCESS_NONE) {
         $Result->show('danger', _('Insufficient permissions for module Circuits'), true);
     }
+
     if (! is_numeric($POST->circuit_id)) {
         $Result->show('danger', _('Invalid Circuits ID'), true);
     }
 }
+
 if (isset($POST->customer_id)) {
     if ($User->get_module_permissions('customers') == User::ACCESS_NONE) {
         $Result->show('danger', _('Insufficient permissions for module Customers'), true);
     }
+
     if (! is_numeric($POST->customer_id)) {
         $Result->show('danger', _('Invalid Customer ID'), true);
     }
@@ -85,9 +94,11 @@ $values = [
 if (isset($POST->vrf_id)) {
     $values['vrf_id'] = $POST->vrf_id != 0 ? $POST->vrf_id : null;
 }
+
 if (isset($POST->circuit_id)) {
     $values['circuit_id'] = $POST->circuit_id != 0 ? $POST->circuit_id : null;
 }
+
 if (isset($POST->customer_id)) {
     $values['customer_id'] = $POST->customer_id != 0 ? $POST->customer_id : null;
 }

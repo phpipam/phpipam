@@ -56,6 +56,7 @@ try {
     $Result->show('danger', _('Error: ').$e->getMessage());
     exit();
 }
+
 print 'Found '.count($offline_addresses).".\n";
 
 // if none die, none to remove
@@ -82,6 +83,7 @@ if (count($removed_addresses) > 0 && $config['removed_addresses_send_mail']) {
             $recepients[] = ['name' => $admin->real_name, 'email' => $admin->email];
         }
     }
+
     // none?
     if (! isset($recepients)) {
         exit();
@@ -138,6 +140,7 @@ if (count($removed_addresses) > 0 && $config['removed_addresses_send_mail']) {
             // plain content
             $content_plain[] = "\t * ".$Subnets->transform_to_dotted($change['ip_addr']).' ('.$Subnets->transform_to_dotted($subnet->subnet).'/'.$subnet->mask.")\r\n";
         }
+
         $content[] = '</table>';
 
         // set content
@@ -149,6 +152,7 @@ if (count($removed_addresses) > 0 && $config['removed_addresses_send_mail']) {
         foreach ($recepients as $admin) {
             $phpipam_mail->Php_mailer->addAddress(addslashes((string) $admin['email']), addslashes((string) $admin['name']));
         }
+
         $phpipam_mail->Php_mailer->Subject = $subject;
         $phpipam_mail->Php_mailer->msgHTML($content);
         $phpipam_mail->Php_mailer->AltBody = $content_plain;

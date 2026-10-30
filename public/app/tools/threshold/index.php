@@ -75,6 +75,7 @@ else {
     foreach ($out as $k => $v) {
         $used[$k] = $v->usage->usedhosts_percent;
     }
+
     array_multisort($used, SORT_DESC, $out);
 
     // table

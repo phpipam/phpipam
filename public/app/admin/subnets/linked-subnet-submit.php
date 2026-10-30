@@ -31,6 +31,7 @@ if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
 if (! is_numeric($POST->subnetId)) {
     $Result->show('danger', _('Invalid ID'), true);
 }
+
 if (! is_numeric($POST->linked_subnet)) {
     $Result->show('danger', _('Invalid ID'), true);
 }

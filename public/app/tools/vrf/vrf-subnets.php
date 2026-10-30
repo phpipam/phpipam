@@ -32,6 +32,7 @@ if (! $slaves) {
     if ($User->get_module_permissions('vlan') >= User::ACCESS_R) {
         print "	<th class='small'>"._('VLAN').'</th>';
     }
+
     print "	<th class='small description'>"._('Subnet description').'</th>';
     print "	<th class='description'>"._('Subnet').'</th>';
     print "	<th class='small hidden-xs hidden-sm'>"._('Used').'</th>';
@@ -60,6 +61,7 @@ if (! $slaves) {
             if ($User->get_module_permissions('vlan') >= User::ACCESS_R) {
                 print is_object($vlan) ? "	<td><a href='".create_link('tools', 'vlan', $vlan->domainId, $vlan->vlanId)."'><span class='badge badge1'>$vlan->number</span></a></td>" : '<td></td>';
             }
+
             print "	<td class='small description'><a href='".create_link('subnets', $subnet['sectionId'], $subnet['id'])."'>$subnet[description]</a></td>";
             print "	<td><a href='".create_link('subnets', $subnet['sectionId'], $subnet['id'])."'>".$Subnets->transform_address($subnet['subnet'], 'dotted')."/$subnet[mask] $fullinfo</a></td>";
 
@@ -80,6 +82,7 @@ if (! $slaves) {
                 print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-tasks'></i></button>";
                 print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-times'></i></button>";
             }
+
             print '	</div>';
             print ' </td>';
             print '</tr>'."\n";

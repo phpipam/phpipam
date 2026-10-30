@@ -7,9 +7,11 @@ require_once __DIR__.'/../../../../../functions/functions.php';
 if (! isset($Database)) {
     $Database = new Database_PDO;
 }
+
 if (! isset($User)) {
     $User = new User($Database);
 }
+
 if (! isset($Tools)) {
     $Tools = new Tools($Database);
 }

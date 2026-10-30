@@ -29,6 +29,7 @@ $permission = $Subnets->check_permission($User->user, $POST->subnetId);
 if ($permission < 2) {
     $Result->show('danger', _('You cannot write to this subnet'), true);
 }
+
 // check integer
 is_numeric($POST->subnetId) ?: $Result->show('danger', _('Invalid subnet ID'), true);
 
@@ -122,6 +123,7 @@ foreach ($outFile as $line) {
         if ($action == 'edit') {
             $address_insert['id'] = $id;
         }
+
         // custom fields
         // Incorrect Value for $currIndex = 10;
         $currIndex = 10;

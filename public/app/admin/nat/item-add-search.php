@@ -26,10 +26,12 @@ $User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('dang
 if (is_blank($POST->ip)) {
     $Result->show('danger', _('Please enter IP address'), true);
 }
+
 // id
 if (! is_numeric($POST->id)) {
     $Result->show('danger', _('Invalid NAT item ID'), true);
 }
+
 // type
 if ($POST->type !== 'src' && $POST->type !== 'dst') {
     $Result->show('danger', _('Invalid NAT direction'), true);
@@ -84,12 +86,15 @@ if (count($result_addresses) > 0 || count($result_subnets) > 0) {
                     $html1[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='".$s->id."' data-object-type='subnets' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($s->subnet, 'dotted').'/'.$s->mask.' ('.$s->description.')<br>';
                 }
             }
+
             $html1[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='".$s->id."' data-object-type='subnets' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($s->subnet, 'dotted').'/'.$s->mask.' ('.$s->description.')<br>';
         }
+
         if (count($html1) == 1) {
             $html1 = [];
         }
     }
+
     if (count($result_addresses) > 0) {
         $html2[] = '<h4>Addresses</h4>';
         foreach ($result_addresses as $a) {
@@ -98,12 +103,15 @@ if (count($result_addresses) > 0 || count($result_subnets) > 0) {
                     $html2[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='".$a->id."' data-object-type='ipaddresses' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($a->ip_addr, 'dotted').' ('.$a->description.')<br>';
                 }
             }
+
             $html2[] = "<a class='btn btn-xs btn-success addNatObjectFromSearch' data-id='".$POST->id."' data-object-id='".$a->id."' data-object-type='ipaddresses' data-type='".$POST->type."'><i class='fa fa-plus'></i></a> ".$Tools->transform_address($a->ip_addr, 'dotted').' ('.$a->description.')<br>';
         }
+
         if (count($html2) == 1) {
             $html2 = [];
         }
     }
+
     // print
     print implode("\n", $html1);
     print implode("\n", $html2);

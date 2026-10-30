@@ -33,6 +33,7 @@ else {
             $Result->show('danger', $e->getMessage());
         }
     }
+
     $qrCodeWriter = new Writer(new ImageRenderer(new RendererStyle(300), new SvgImageBackEnd));
 
     // set HTML content

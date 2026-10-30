@@ -63,6 +63,7 @@ foreach ($member_circuits as $circuit) {
 
     $OSM->add_circuit($circuit_l1, $circuit_l2, $type_hash[$circuit->type]);
 }
+
 $OSM->map($height ?? null);
 
 print '<hr>';
@@ -71,4 +72,5 @@ print '<h5>'._('Circuit Type Legend').'</h5>';
 foreach ($circuit_types as $t) {
     print "<span class='badge badge1'  style='color:white;background:$t->ctcolor !important'></i>$t->ctname ($t->ctpattern Line)</span>";
 }
+
 print '</div>';

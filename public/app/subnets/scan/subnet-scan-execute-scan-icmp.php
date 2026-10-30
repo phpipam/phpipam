@@ -12,6 +12,7 @@ if (! is_numeric($POST->subnetId)) {
     $Result->show('danger', 'Invalid subnet Id', true);
     exit();
 }
+
 if (! preg_match('/[^A-Za-z0-9-]*$/', (string) $POST->type)) {
     $Result->show('danger', 'Invalid scan type', true);
     exit();
@@ -42,6 +43,7 @@ if ($User->settings->scanPingType == 'fping' && isset($script_result->values->al
             unset($script_result->values->alive[$rk]);
         }
     }
+
     // null
     if (count($script_result->values->alive) == 0) {
         unset($script_result->values->alive);
@@ -100,6 +102,7 @@ else {
             print '<th>'.$Tools->print_custom_field_name($field['name']).'</th>';
         }
     }
+
     print '	<th></th>';
     print '</tr>';
 
@@ -131,6 +134,7 @@ else {
                 print '<td>'.$custom_input['field']."</td>\n";
             }
         }
+
         // remove button
         print "<td><a href='' class='btn btn-xs btn-danger resultRemove' data-target='result$m'><i class='fa fa-times'></i></a></td>";
         print '</tr>';
@@ -158,6 +162,7 @@ else {
     print '</table>';
     print '</form>';
 }
+
 // print scan method
 print "<div class='text-right' style='margin-top:7px;'><span class='muted'>Scan method: ".$Scan->settings->scanPingType.'</span></dov>';
 

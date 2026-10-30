@@ -8,6 +8,7 @@
 if (! is_numeric($POST->subnetId) || $POST->subnetId == 0) {
     $Result->show('danger', _('Invalid ID'), true);
 }
+
 // verify that user has write permissionss for subnet
 if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
     $Result->show('danger', _('You do not have permissions to modify hosts in this subnet').'!', true);
@@ -73,6 +74,7 @@ if (count($res) > 0) {
                 $values[$f['name']] = $r[$f['name']];
             }
         }
+
         // insert
         if (! $Addresses->modify_address($values)) {
             $Result->show('danger', 'Failed to import entry '.$r['ip_addr'], false);

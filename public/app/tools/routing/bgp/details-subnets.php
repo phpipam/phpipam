@@ -31,10 +31,12 @@ if ($subnets === false) {
         print "	<th class='small'>"._('VLAN').'</th>';
         $colspan++;
     }
+
     if ($User->get_module_permissions('vrf') >= User::ACCESS_R) {
         print "	<th class='small'>"._('VRF').'</th>';
         $colspan++;
     }
+
     print " <th class='actions'></th>";
     print '</tr>';
     print '</thead>';
@@ -70,9 +72,11 @@ if ($subnets === false) {
             if ($User->get_module_permissions('vlan') >= User::ACCESS_R) {
                 print "	<td class='small'><a href='".create_link('tools', 'vlan', $vlan->domainId, $vlan->vlanId)."'><span class='badge badge1'>$vlan->number</span></a></td>";
             }
+
             if ($User->get_module_permissions('vrf') >= User::ACCESS_R) {
                 print "	<td class='small'><a href='".create_link('tools', 'vrf', $vrf->vrfId)."'><span class='badge badge1'>$vrf->name</span></a></td>";
             }
+
             // edit
             print "	<td class='actions'>";
             $links = [];
@@ -80,6 +84,7 @@ if ($subnets === false) {
                 $links[] = ['type' => 'header', 'text' => _('Edit mapping')];
                 $links[] = ['type' => 'link', 'text' => _('Delete mapping'), 'href' => '', 'class' => 'open_popup', 'dataparams' => "data-script='app/admin/routing/edit-bgp-mapping-delete.php' data-secondary='true' data-bgpid='$subnet[id]'", 'icon' => 'minus'];
             }
+
             // print links
             print $User->print_actions(0, $links);
             print '</tr>'."\n";

@@ -75,6 +75,7 @@ class Tools extends Common_functions
                 $custom_fields_query .= ',`vlans`.`'.$myField['name'].'`';
             }
         }
+
         // set query
         $query = 'SELECT vlans.vlanId,vlans.number,vlans.name,vlans.description,vlans.customer_id,subnets.subnet,subnets.mask,subnets.id AS subnetId,subnets.sectionId'.@$custom_fields_query.' FROM vlans LEFT JOIN subnets ON subnets.vlanId = vlans.vlanId where vlans.`domainId` = ? ORDER BY vlans.number ASC;';
         // fetch
@@ -119,6 +120,7 @@ class Tools extends Common_functions
                 $tags = $t->id;
                 break;
             }
+
             $tags = false;
         }
 
@@ -134,6 +136,7 @@ class Tools extends Common_functions
                 $query[] = "or `$myField[name]` like :search_term ";
             }
         }
+
         $query[] = 'or `switch` like :search_term ';
         $query[] = 'or `port` like :search_term ';              // port search
         $query[] = 'or `description` like :search_term ';       // descriptions
@@ -143,6 +146,7 @@ class Tools extends Common_functions
         if ($tags !== false) {
             $query[] = 'or `state` like :tags ';                // tag
         }
+
         $query[] = 'order by `ip_addr` asc;';
 
         // join query
@@ -218,6 +222,7 @@ class Tools extends Common_functions
                 $query[] = " or `$myField[name]` like :search_term ";
             }
         }
+
         $query[] = 'order by `subnet` asc, `mask` asc;';
 
         // join query
@@ -285,6 +290,7 @@ class Tools extends Common_functions
                 $query[] = " or `$myField[name]` like :search_term ";
             }
         }
+
         $query[] = ';';
         // join query
         $query = implode("\n", $query);
@@ -320,6 +326,7 @@ class Tools extends Common_functions
                 $query[] = " or `$myField[name]` like :search_term ";
             }
         }
+
         $query[] = ';';
         // join query
         $query = implode("\n", $query);
@@ -355,6 +362,7 @@ class Tools extends Common_functions
                 $query[] = " or `$myField[name]` like :search_term ";
             }
         }
+
         $query[] = 'order by  raw asc;';
         // join query
         $query = implode("\n", $query);
@@ -390,6 +398,7 @@ class Tools extends Common_functions
                 $query[] = " or `$myField[name]` like :search_term ";
             }
         }
+
         $query[] = 'order by number asc;';
         // join query
         $query = implode("\n", $query);
@@ -464,6 +473,7 @@ class Tools extends Common_functions
                 $query[] = " or `$myField[name]` like :search_term ";
             }
         }
+
         $query[] = 'order by name asc;';
         // join query
         $query = implode("\n", $query);
@@ -499,6 +509,7 @@ class Tools extends Common_functions
                 $query[] = " or `$myField[name]` like :search_term ";
             }
         }
+
         $query[] = ';';
         // join query
         $query = implode("\n", $query);
@@ -534,6 +545,7 @@ class Tools extends Common_functions
                 $query[] = " or `{$myField['name']}` like :search_term ";
             }
         }
+
         $query[] = ';';
         // join query
         $query = implode("\n", $query);
@@ -746,6 +758,7 @@ class Tools extends Common_functions
                         $POST->{$field['name']} = '';
                     }
                 }
+
                 // null custom fields not permitted
                 if ($field['Null'] == 'NO' && is_blank($POST->{$field['name']})) {
                     $this->Result->show('danger', $field['name'].' '._('can not be empty!'), true);
@@ -919,6 +932,7 @@ class Tools extends Common_functions
                 $query = "select * from `widgets` where `wadminonly` = 'no' and `wactive` = 'yes'; ";
             }
         }
+
         // fetch
         try {
             $widgets = $this->Database->getObjectsQuery('widgets', $query);
@@ -1018,6 +1032,7 @@ class Tools extends Common_functions
             if (! is_object($instructions)) {
                 return '';
             }
+
             $text = $instructions->instructions;
         }
 
@@ -1114,12 +1129,14 @@ class Tools extends Common_functions
                     $content[] = '</tr>';
                 }
             }
+
             $content[] = "<tr><td style='padding-top:15px;padding-bottom:3px;text-align:right;color:#ccc;'>$this->mail_font_style "._('Sent at').' '.date('Y/m/d H:i').'</font></td></tr>';
             // set alt content
             $content_plain[] = "$subject"."\r\n------------------------------\r\n";
             foreach ($values as $k => $v) {
                 $content_plain[] = $k.' => '.$v;
             }
+
             $content_plain[] = "\r\n\r\n".('Sent at').' '.date('Y/m/d H:i');
             $content[] = '</table>';
 
@@ -1132,10 +1149,12 @@ class Tools extends Common_functions
                 foreach ($recipients as $r) {
                     $phpipam_mail->Php_mailer->addAddress(addslashes(trim((string) $r->email)));
                 }
+
                 $phpipam_mail->Php_mailer->AddCC(addslashes(trim((string) $recipients_requester)));
             } else {
                 $phpipam_mail->Php_mailer->addAddress(addslashes(trim((string) $recipients_requester)));
             }
+
             $phpipam_mail->Php_mailer->Subject = $subject;
             $phpipam_mail->Php_mailer->msgHTML($content);
             $phpipam_mail->Php_mailer->AltBody = $content_plain;
@@ -1552,6 +1571,7 @@ class Tools extends Common_functions
             if ($k == 0) {
                 continue;
             }
+
             $c = trim(strstr($c, ';'."\n", true));
 
             $table = strstr($c, '`', true);
@@ -1602,6 +1622,7 @@ class Tools extends Common_functions
                     }
                 }
             }
+
             // remove also empty table
             if (count($schema_indexes[$table]) == 0) {
                 unset($schema_indexes[$table]);
@@ -1641,6 +1662,7 @@ class Tools extends Common_functions
                 if (substr($l, -1) == ',') {
                     $l = substr($l, 0, -1);
                 }
+
                 // set query and run
                 $query = "ALTER TABLE `$table` ADD ".$l;
 
@@ -1651,6 +1673,7 @@ class Tools extends Common_functions
 
                     return false;
                 }
+
                 // add warning that index was created
                 $this->Result->show('warning', _('Created index for table')." `$table` "._('named')." `$index_name`.", false);
             }
@@ -1683,10 +1706,12 @@ class Tools extends Common_functions
             if (! in_array($i->Key_name, $valid_fields)) {
                 continue;
             }
+
             // skip permanent indexes defined in schema
             if (in_array($i->Key_name, $schema_indexes['ipaddresses'])) {
                 continue;
             }
+
             // skip selected linked_field
             if ($i->Key_name == $linked_field) {
                 $linked_field_index_found = true;
@@ -1700,6 +1725,7 @@ class Tools extends Common_functions
             } catch (Exception $e) {
                 $this->Result->show('danger', $e->getMessage(), true);
             }
+
             $this->Result->show('info', _('Removing link addresses index : ').$i->Key_name);
         }
 
@@ -1732,6 +1758,7 @@ class Tools extends Common_functions
         } catch (Exception $e) {
             $this->Result->show('danger', $e->getMessage(), true);
         }
+
         $this->Result->show('info', _('Adding link addresses index : ').$linked_field);
     }
 
@@ -1761,6 +1788,7 @@ class Tools extends Common_functions
 
             return false;
         }
+
         // set releases href
         $xml = simplexml_load_string((string) $curl['result']);
 
@@ -1860,6 +1888,7 @@ class Tools extends Common_functions
         if ($out['IP address'] == $out['Network']) {
             $out['IP address'] = '/';
         }
+
         // /32 and /32 fixes
         if ($net->bitmask == 31 || $net->bitmask == 32) {
             $out['Min host IP'] = $out['Network'];
@@ -1998,6 +2027,7 @@ class Tools extends Common_functions
         foreach ($parts as $part) {
             $res .= str_pad($part, 4, '0', STR_PAD_LEFT);
         }
+
         $res = implode('.', str_split(strrev(substr($res, 0, $len)))).'.ip6.arpa';
         if ($pflen % 4 != 0) {
             $res .= ' '._('(closest parent)');
@@ -2087,6 +2117,7 @@ class Tools extends Common_functions
                     if (! in_array(strtolower((string) $ot), ['subnets', 'ipaddresses'])) {
                         continue;
                     }
+
                     $item = $this->fetch_object($ot, 'id', $id);
                     if (! is_object($item)) {
                         continue;
@@ -2137,6 +2168,7 @@ class Tools extends Common_functions
                             $hStatus = 'hidden';
                             $hTooltip = '';
                         }
+
                         if ($remove == '<span>') {
                             $remove .= "<span class='status status-$hStatus' $hTooltip></span>";
                         }
@@ -2184,12 +2216,14 @@ class Tools extends Common_functions
                             $out['subnets'][$s][] = $n->id;
                         }
                     }
+
                     if (isset($src['ipaddresses']) && is_array($src['ipaddresses'])) {
                         foreach ($src['ipaddresses'] as $s) {
                             $out['ipaddresses'][$s][] = $n->id;
                         }
                     }
                 }
+
                 // dst
                 if (is_array($dst)) {
                     if (isset($dst['subnets']) && is_array($dst['subnets'])) {
@@ -2197,6 +2231,7 @@ class Tools extends Common_functions
                             $out['subnets'][$s][] = $n->id;
                         }
                     }
+
                     if (isset($dst['ipaddresses']) && is_array($dst['ipaddresses'])) {
                         foreach ($dst['ipaddresses'] as $s) {
                             $out['ipaddresses'][$s][] = $n->id;
@@ -2235,6 +2270,7 @@ class Tools extends Common_functions
         if ($sources === false) {
             $sources = ["<span class='badge badge1 badge5 alert-danger'>"._('None').'</span>'];
         }
+
         if ($destinations === false) {
             $destinations = ["<span class='badge badge1 badge5 alert-danger'>"._('None').'</span>'];
         }
@@ -2325,6 +2361,7 @@ class Tools extends Common_functions
             $query = 'select *,concat(prefix,start) as raw from pstnPrefixes order by raw asc;';
             $params = [];
         }
+
         // fetch
         try {
             $prefixes = $this->Database->getObjectsQuery('pstnPrefixes', $query, $params);
@@ -2333,6 +2370,7 @@ class Tools extends Common_functions
 
             return false;
         }
+
         // for master + recursive we need to go from master id to next 0 (root
         if ($master && $recursive && $prefixes) {
             $master_set = false;
@@ -2348,6 +2386,7 @@ class Tools extends Common_functions
                     break;
                 }
             }
+
             $prefixes = $out;
         }
 
@@ -2396,6 +2435,7 @@ class Tools extends Common_functions
                 $root = true;
             }
         }
+
         // remove 0
         unset($parents[0]);
 
@@ -2527,6 +2567,7 @@ class Tools extends Common_functions
         if (is_array($children_prefixes[$parent])) {
             reset($children_prefixes[$parent]);
         }
+
         while ($loop && (($option = current($children_prefixes[(int) $parent])) || ($parent > $rootId))) {
             next($children_prefixes[$parent]);
 
@@ -2646,9 +2687,11 @@ class Tools extends Common_functions
                         $links[] = ['type' => 'header', 'text' => _('Manage')];
                         $links[] = ['type' => 'link', 'text' => _('Edit prefix'), 'href' => '', 'class' => 'open_popup', 'dataparams' => " data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='edit' data-id='$option[id]'", 'icon' => 'pencil'];
                     }
+
                     if ($User->get_module_permissions('pstn') >= User::ACCESS_RWA) {
                         $links[] = ['type' => 'link', 'text' => _('Delete prefix'), 'href' => '', 'class' => 'open_popup', 'dataparams' => " data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='delete' data-id='$option[id]'", 'icon' => 'times'];
                     }
+
                     $html[] = $User->print_actions($User->user->compress_actions, $links);
                     $html[] = '	</td>';
                 }
@@ -2691,6 +2734,7 @@ class Tools extends Common_functions
         if (! is_array($all_prefixes)) {
             $all_prefixes = [];
         }
+
         // folder or subnet?
         foreach ($all_prefixes as $s) {
             $children_prefixes[(int) $s->master][] = (array) $s;
@@ -2710,6 +2754,7 @@ class Tools extends Common_functions
             if (is_array($children_prefixes[$parent])) {
                 reset($children_prefixes[$parent]);
             }
+
             while ($loop && (($option = current($children_prefixes[$parent])) || ($parent > $rootId))) {
                 next($children_prefixes[$parent]);
                 // repeat
@@ -2720,6 +2765,7 @@ class Tools extends Common_functions
 
                     continue;
                 }
+
                 // selected
                 $selected = $option['id'] == $prefixId ? "selected='selected'" : '';
                 if ($option['id']) {
@@ -2732,6 +2778,7 @@ class Tools extends Common_functions
                 }
             }
         }
+
         $html[] = '</select>';
         // join and print
         print implode("\n", $html);
@@ -2837,6 +2884,7 @@ class Tools extends Common_functions
         } else {
             $details['freehosts'] = $details['maxhosts'];
         }
+
         // calculate use percentage for each type
         $details['freehosts_percent'] = round((($details['freehosts'] * 100) / $details['maxhosts']), 2);
 
@@ -2861,6 +2909,7 @@ class Tools extends Common_functions
         foreach ($this->address_types as $a) {
             $count[$a['type']] = 0;
         }
+
         // count
         if ($numbers !== false) {
             foreach ($numbers as $n) {
@@ -2993,6 +3042,7 @@ class Tools extends Common_functions
                 $query[] = ',c.`'.$f['name'].'`';
             }
         }
+
         $query[] = 'from circuits as c, circuitProviders as p where c.provider = p.id';
         $query[] = 'order by c.cid asc;';
         // fetch
@@ -3076,6 +3126,7 @@ class Tools extends Common_functions
                 $query[] = ',c.`'.$f['name'].'`';
             }
         }
+
         $query[] = 'from circuits as c, circuitProviders as p where c.provider = p.id and c.provider = ?';
         $query[] = 'order by c.cid asc;';
         // fetch
@@ -3207,6 +3258,7 @@ class Tools extends Common_functions
                 $query[] = "  `v`.`$f[name]` as `$f[name]`,";
             }
         }
+
         $query[] = '	`v`.`vlanId` as `id`';
         $query[] = '	from';
         $query[] = '	`vlans` as `v`,';
@@ -3220,6 +3272,7 @@ class Tools extends Common_functions
         } catch (Exception $e) {
             $this->Result->show('danger', $e->getMessage(), true);
         }
+
         // filter if requested
         if ($search !== false && count($domains) > 0) {
             foreach ($domains as $k => $d) {
@@ -3403,6 +3456,7 @@ class Tools extends Common_functions
                         $outFile[$m] .= $this->csv_delimiter.$data->val($m, $currLett++);
                     }
                 }
+
                 $outFile[$m] = $this->convert_encoding_to_UTF8($outFile[$m]);
             }
         }
@@ -3425,6 +3479,7 @@ class Tools extends Common_functions
         if ($handle) {
             while (($outFile[] = fgets($handle)) !== false) {
             }
+
             fclose($handle);
         } else {
             $this->Result->show('danger', _('Cannot open upload/import.csv'), true);
@@ -3520,11 +3575,13 @@ class Tools extends Common_functions
                     if (filter_var($field[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
                         $ipsm = '128';
                     }
+
                     if ($this->Subnets->is_subnet_inside_subnet($field[0].'/'.$ipsm, $this->transform_address($subnet->subnet, 'dotted').'/'.$subnet->mask) == false) {
                         $class = 'danger';
                         $errors++;
                     }
                 }
+
                 // make sure mac does not exist
                 if ($this->settings->enableMulticast == '1' && is_blank($class)) {
                     if (! is_blank($field[5]) && $this->Subnets->is_multicast($field[0])) {

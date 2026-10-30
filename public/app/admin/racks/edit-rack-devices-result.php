@@ -22,6 +22,7 @@ if ($POST->action == 'edit') {
 } else {
     $User->check_module_permissions('racks', User::ACCESS_RWA, true, true);
 }
+
 $User->check_module_permissions('devices', User::ACCESS_R, true, false);
 
 // check maintaneance mode
@@ -39,18 +40,23 @@ if (! isset($POST->devicetype) || ($POST->devicetype != 'device' && $POST->devic
 if (! is_numeric($POST->rackid)) {
     $Result->show('danger', _('Invalid rack identifier'), true);
 }
+
 if (($POST->devicetype == 'device') && ! is_numeric($POST->deviceid)) {
     $Result->show('danger', _('Invalid device identifier'), true);
 }
+
 if (! is_numeric($POST->rack_start)) {
     $Result->show('danger', _('Invalid start value'), true);
 }
+
 if (! is_numeric($POST->rack_size)) {
     $Result->show('danger', _('Invalid size value'), true);
 }
+
 if ($POST->rack_size < 1) {
     $Result->show('danger', _('Invalid size value').'!', true);
 }
+
 $POST->rack_deep = (@$POST->rack_deep == '1') ? '1' : '0';
 if ($POST->devicetype == 'subrack' && ! is_numeric($POST->subrackid)) {
     $Result->show('danger', _('Invalid rack identifier'), true);
@@ -76,6 +82,7 @@ if ($POST->devicetype == 'subrack' && $rack->subrack) {
 if ($Racks->check_device_overflow($POST->rackid, $POST->rack_start, $POST->rack_size)) {
     $Result->show('danger', _('Invalid rack position (overflow)').'!', true);
 }
+
 // check overlaps
 if ($User->settings->rackAllowOverlap != '1') {
     if ($Racks->check_device_overlap($POST->rackid, $POST->rack_start, $POST->rack_size, $POST->rack_deep)) {
@@ -112,6 +119,7 @@ switch ($POST->devicetype) {
         } else {
             $Result->show('success', _('Device added to rack').'!', false);
         }
+
         break;
 
     case 'content':
@@ -129,6 +137,7 @@ switch ($POST->devicetype) {
         } else {
             $Result->show('success', _('Device added to rack').'!', false);
         }
+
         break;
 
     case 'subrack':
@@ -137,13 +146,16 @@ switch ($POST->devicetype) {
         if ($subrack === false) {
             $Result->show('danger', _('Subrack').' '._('does not exist'), true);
         }
+
         if (! $subrack->subrack) {
             $Result->show('danger', _('Rack is not designated as a subrack'), true);
         }
+
         // is that subrack already placed somewhere?
         if ($Database->getObjectQuery('rackContents', 'SELECT * from `rackContents` where `subrackId` = ? limit 1;', [$POST->subrackid])) {
             $Result->show('danger', _('Subrack is already in a rack'), true);
         }
+
         $values = ['name' => unescape_input($subrack->name),
             'rack' => $POST->rackid,
             'rack_start' => $POST->rack_start,
@@ -156,5 +168,6 @@ switch ($POST->devicetype) {
         } else {
             $Result->show('success', _('Subrack').' '._('added to rack'), false);
         }
+
         break;
 }

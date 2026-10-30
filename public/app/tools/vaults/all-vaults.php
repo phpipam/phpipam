@@ -48,6 +48,7 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
                 print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name($field['name']).'</th>';
             }
         }
+
         print '<th></th>';
         print '</tr>';
         print '</thead>';
@@ -88,10 +89,12 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
                             if ($field['type'] == 'text') {
                                 $field['type'] = 'varchar(255)';
                             }
+
                             $Tools->print_custom_field($field['type'], $a->{$field['name']}, "\n", '<br>');
                         } else {
                             print '********';
                         }
+
                         print '</td>';
                     }
                 }
@@ -104,6 +107,7 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
                 } else {
                     print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vaults/unlock.php' data-class='500' data-id='{$a->id}' rel='tooltip' title='"._('Unlock Vault')."'><i class='fa fa-unlock'></i></button>";
                 }
+
                 print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vaults/edit.php' data-class='700' data-action='edit' data-id='{$a->id}' rel='tooltip' title='"._('Edit Vault details')."'><i class='fa fa-pencil'></i></button>";
                 print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vaults/edit.php' data-class='700' data-action='delete' data-id='{$a->id}' rel='tooltip' title='"._('Remove Vault')."'><i class='fa fa-times'></i></button>";
                 print '	</div>';

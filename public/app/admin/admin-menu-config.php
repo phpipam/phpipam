@@ -22,9 +22,11 @@ $admin_menu[_('Server management')][] = ['show' => true, 'icon' => 'fa-cogs',   
 if ($User->settings->enablePowerDNS == 1) {
     $admin_menu[_('Server management')][] = ['show' => true, 'icon' => 'fa-database',       'href' => 'powerDNS',               'name' => _('PowerDNS'),                 'description' => _('PowerDNS settings')];
 }
+
 if ($User->settings->enableDHCP == 1) {
     $admin_menu[_('Server management')][] = ['show' => true, 'icon' => 'fa-database',       'href' => 'dhcp',                   'name' => _('DHCP'),                     'description' => _('DHCP settings')];
 }
+
 $admin_menu[_('Server management')][] = ['show' => true, 'icon' => 'fa-user-secret',    'href' => 'scan-agents',            'name' => _('Scan agents'),              'description' => _('phpipam Scan agents')];
 $admin_menu[_('Server management')][] = ['show' => true, 'icon' => 'fa-language',       'href' => 'languages',              'name' => _('Languages'),                'description' => _('Manage languages')];
 $admin_menu[_('Server management')][] = ['show' => true, 'icon' => 'fa-tachometer',     'href' => 'widgets',                'name' => _('Widgets'),                  'description' => _('Manage widget settings')];
@@ -32,34 +34,41 @@ $admin_menu[_('Server management')][] = ['show' => true, 'icon' => 'fa-tag',    
 if ($User->settings->enablePSTN == 1) {
     $admin_menu[_('Server management')][] = ['show' => true, 'icon' => 'fa-phone',          'href' => 'pstn-prefixes',          'name' => _('PSTN prefixes'),            'description' => _('PSTN prefixes')];
 }
+
 $admin_menu[_('Server management')][] = ['show' => true, 'icon' => 'fa-info',           'href' => 'instructions',           'name' => _('Edit instructions'),        'description' => _('Set phpipam instructions for end users')];
 
 // IP related management
 if ($User->settings->enableCustomers == 1) {
     $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-users',          'href' => 'customers',              'name' => _('Customers'),                'description' => _('Customer management')];
 }
+
 $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-server',         'href' => 'sections',               'name' => _('Sections'),                 'description' => _('Section management')];
 $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-sitemap',        'href' => 'subnets',                'name' => _('Subnets'),                  'description' => _('Subnet management')];
 $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-cloud',          'href' => 'vlans',                  'name' => _('VLAN'),                     'description' => _('VLAN management')];
 if ($User->settings->enableVRF == 1) {
     $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-cloud',          'href' => 'vrf',                    'name' => _('VRF'),                      'description' => _('VRF management')];
 }
+
 if ($User->settings->enableNAT == 1) {
     $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-exchange',       'href' => 'nat',                    'name' => _('NAT'),                      'description' => _('NAT settings')];
 }
+
 if ($User->settings->enableRouting == 1) {
     $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-exchange',       'href' => 'routing',                'name' => _('Routing'),                  'description' => _('Routing management')];
 }
+
 $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-cloud',          'href' => 'nameservers',            'name' => _('Nameservers'),              'description' => _('Recursive nameserver sets for subnets')];
 if ($User->settings->enableFirewallZones == 1) {
     $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-fire',           'href' => 'firewall-zones',         'name' => _('Firewall Zones'),           'description' => _('Firewall zone management')];
 }
+
 $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-upload',         'href' => 'import-export',          'name' => _('Import / Export'),          'description' => _('Import/Export IP related data (VRF, VLAN, Subnets, IP, Devices)')];
 $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-cloud-download', 'href' => 'ripe-import',            'name' => _('RIPE import'),              'description' => _('Import subnets from RIPE')];
 if ($User->settings->enableIPrequests == 1 && isset($requests)) {
     $request_cnt = $requests > 0 ? " <span class='ipreqMenu'>$requests</span>" : '';
     $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-plus',           'href' => 'requests',               'name' => _('IP requests').$request_cnt, 'description' => _('Manage IP requests')];
 }
+
 $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-filter',         'href' => 'filter-fields',          'name' => _('Filter IP fields'),         'description' => _('Select which default address fields to display')];
 $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-filter',         'href' => 'required-fields',        'name' => _('Required IP fields'),       'description' => _('Select which address fields are required to be filled when creating address.')];
 $admin_menu[_('IP related management')][] = ['show' => true, 'icon' => 'fa-magic',          'href' => 'custom-fields',          'name' => _('Custom fields'),            'description' => _('Manage custom fields')];
@@ -69,12 +78,15 @@ $admin_menu[_('Device management')][] = ['show' => true, 'icon' => 'fa-desktop',
 if ($User->settings->enableRACK == 1) {
     $admin_menu[_('Device management')][] = ['show' => true, 'icon' => 'fa-bars',           'href' => 'racks',                  'name' => _('Racks'),                    'description' => _('Rack management')];
 }
+
 if ($User->settings->enableCircuits == 1) {
     $admin_menu[_('Device management')][] = ['show' => true, 'icon' => 'fa-random',         'href' => 'circuits',               'name' => _('Circuits'),                 'description' => _('Circuits management')];
 }
+
 if ($User->settings->enableSNMP == 1) {
     $admin_menu[_('Device management')][] = ['show' => true, 'icon' => 'fa-cogs',           'href' => 'snmp',                   'name' => _('SNMP'),                     'description' => _('SNMP management')];
 }
+
 if ($User->settings->enableLocations == 1) {
     $admin_menu[_('Device management')][] = ['show' => true, 'icon' => 'fa-map',            'href' => 'locations',              'name' => _('Locations'),                'description' => _('Locations')];
 }

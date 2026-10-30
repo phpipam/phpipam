@@ -33,6 +33,7 @@ if (php_sapi_name() != 'cli') {
 if (! isset($config['resolve_subnets'])) {
     $config['resolve_subnets'] = []; // Init the subnet array as empty array if not set.
 }
+
 $resolved_subnets = $Database->findObjects('subnets', 'resolveDNS', '1', 'id', true);
 if (is_array($resolved_subnets)) {
     foreach ($resolved_subnets as $s) {
@@ -66,13 +67,16 @@ else {
         } else {
             $query[] = '`subnetId` = "'.$subnetId.'" or ';
         }
+
         $m++;
     }
+
     $query[] = ')';
     // get only ip's with empty DNS
     if ($config['resolve_emptyonly'] == 1) {
         $query[] = ' and (`hostname` = "" or `hostname` is NULL ) ';
     }
+
     $query[] = 'order by `ip_addr` ASC;';
 
     // join

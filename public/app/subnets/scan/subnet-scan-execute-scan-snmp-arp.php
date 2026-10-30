@@ -17,6 +17,7 @@ print '<h5>'._('Scan results').':</h5><hr>';
 if ($User->settings->enableSNMP != '1') {
     $Result->show('danger', _('SNMP module disabled'), true);
 }
+
 // subnet check
 $subnet = $Subnets->fetch_subnet('id', $POST->subnetId);
 if ($subnet === false) {
@@ -85,6 +86,7 @@ foreach ($permitted_devices as $d) {
                 }
             }
         }
+
         // get interfaces
         $res = $Snmp->get_query('get_interfaces_ip');
         // remove those not in subnet
@@ -153,12 +155,14 @@ else {
     if (in_array('port', $selected_ip_fields)) {
         print '	<th>'._('Port').'</th>';
     }
+
     // custom
     if (isset($required_fields)) {
         foreach ($required_fields as $field) {
             print '<th>'.$Tools->print_custom_field_name($field['name']).'</th>';
         }
     }
+
     print '	<th></th>';
     print '</tr>';
 
@@ -192,6 +196,7 @@ else {
                 print "	<input type='text' class='form-control input-sm' name='port$m' value='".@$ip['port']."'>";
                 print '</td>';
             }
+
             // custom
             if (isset($required_fields)) {
                 $timepicker_index = 0;
@@ -202,6 +207,7 @@ else {
                     print '<td>'.$custom_input['field']."</td>\n";
                 }
             }
+
             // remove button
             print "<td><a href='' class='btn btn-xs btn-danger resultRemove' data-target='result$m'><i class='fa fa-times'></i></a></td>";
             print '</tr>';
@@ -238,6 +244,7 @@ print ' Scanned devices: <br>';
 foreach ($debug as $k => $d) {
     print '&middot; '.$k.'<br>';
 }
+
 print '</span>';
 print '</div>';
 

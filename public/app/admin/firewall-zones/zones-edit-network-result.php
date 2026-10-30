@@ -27,6 +27,7 @@ if ($POST->action == 'edit') {
 if ($POST->action != 'add' && $POST->action != 'delete') {
     $Result->show('danger', _('Invalid action.'), true);
 }
+
 // check the mastersubnet  ID. valid value: integer
 if ($POST->masterSubnetId && ! preg_match('/^[0-9]+$/i', (string) $POST->masterSubnetId)) {
     $Result->show('danger', _('Invalid subnet ID.'), true);

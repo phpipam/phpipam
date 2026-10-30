@@ -63,6 +63,7 @@ class phpipam_mail extends Common_functions
             $this->Php_mailer->SMTPAutoTLS = false;
             $this->Php_mailer->SMTPSecure = '';
         }
+
         // server
         $this->Php_mailer->Host = $this->mail_settings->mserver;
         $this->Php_mailer->Port = $this->mail_settings->mport;

@@ -141,6 +141,7 @@ if ($slaves) {
                         // next subnet
                         $subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow2(($pow - $free_mask - 1))));
                     }
+
                     print '</div>';
                     print "<div class='clearfix clearfix1' style='margin-bottom:10px;'></div>";
                 }

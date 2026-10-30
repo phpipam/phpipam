@@ -44,6 +44,7 @@ foreach ($POST as $key => $line) {
         unset($POST->{$key});
     }
 }
+
 // glue sections together
 $POST->sections = isset($temp) ? implode(';', $temp) : null;
 
@@ -65,6 +66,7 @@ if (is_array($custom)) {
         }
     }
 }
+
 // append customerId
 if ($User->settings->enableCustomers == '1') {
     if (is_numeric($POST->customer_id)) {
@@ -75,6 +77,7 @@ if ($User->settings->enableCustomers == '1') {
         }
     }
 }
+
 // update
 if (! $Admin->object_modify('vrf', $POST->action, 'vrfId', $values)) {
     $Result->show('danger', _('Failed to').' '.$User->get_post_action().' '._('VRF').'!', true);

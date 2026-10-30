@@ -35,6 +35,7 @@ if ($customer === false) {
     if ($User->settings->enableLocations == 1) {
         include 'map.php';
     }
+
     print '</div>';
 
     // objects
@@ -42,4 +43,5 @@ if ($customer === false) {
     include 'objects.php';
     print '</div>';
 }
+
 print '</div>';

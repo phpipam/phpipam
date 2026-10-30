@@ -11,27 +11,35 @@ require_once __DIR__.'/../../../../functions/functions.php';
 if (! isset($Database)) {
     $Database = new Database_PDO;
 }
+
 if (! isset($User)) {
     $User = new User($Database);
 }
+
 if (! isset($Admin)) {
     $Admin = new Admin($Database);
 }
+
 if (! isset($Tools)) {
     $Tools = new Tools($Database);
 }
+
 if (! isset($Sections)) {
     $Sections = new Sections($Database);
 }
+
 if (! isset($Addresses)) {
     $Addresses = new Addresses($Database);
 }
+
 if (! isset($Subnets)) {
     $Subnets = new Subnets($Database);
 }
+
 if (! isset($Devtype)) {
     $Devtype = new Devtype($Database);
 }
+
 if (! isset($Devices)) {
     $Devices = new Devtype($Database);
 }
@@ -127,10 +135,12 @@ foreach ($data as &$cdata) {
             $msg .= 'Invalid IP address.';
             $action = 'error';
         }
+
         if ((! empty($cdata['hostname'])) && (! preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", (string) $cdata['hostname']))) {
             $msg .= 'Invalid DNS name.';
             $action = 'error';
         }
+
         //       Allow all chars in description ... Why Limit it ?
         //       if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
         if ($cdata['mac']) {
@@ -155,30 +165,37 @@ foreach ($data as &$cdata) {
                 $msg .= 'Device description will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['ip_addr'] != $cedata['ip_addr']) {
                 $msg .= 'Device ip_addr will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['type'] != $cedata['type']) {
                 $msg .= 'DeviceType will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['sectionId'] != $cedata['sectionId']) {
                 $msg .= 'sectionId will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['rack'] != $cedata['rack']) {
                 $msg .= 'rack will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['rack_start'] != $cedata['rack_start']) {
                 $msg .= 'rack_start will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['rack_size'] != $cedata['rack_size']) {
                 $msg .= 'rack_size will be updated.';
                 $action = 'edit';
             }
+
             if ($cdata['location'] != $cedata['location']) {
                 $msg .= 'location will be updated.';
                 $action = 'edit';
@@ -215,5 +232,6 @@ foreach ($data as &$cdata) {
     foreach ($expfields as $cfield) {
         $rows .= '<td>'.$cdata[$cfield].'</td>';
     }
+
     $rows .= '<td>'._((string) $cdata['msg']).'</td></tr>';
 }

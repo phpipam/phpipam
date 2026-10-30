@@ -42,6 +42,7 @@ if ($firewallZones) {
         if ($counter === 0) {
             $counter = 1;
         }
+
         // set the loop counter
         $i = 1;
         if (isset($zoneObject->network)) {
@@ -55,6 +56,7 @@ if ($firewallZones) {
                     print '<td rowspan="'.$counter.'">'.$zoneObject->zone.'</td>';
                     print '<td rowspan="'.$counter.'">'.$zoneObject->description.'</td>';
                 }
+
                 // display subnet informations
                 if ($network->subnetId) {
                     // description fix
@@ -68,6 +70,7 @@ if ($firewallZones) {
                 } else {
                     print '<td>/</td>';
                 }
+
                 // display vlan informations
                 if ($network->vlanId) {
                     // name fix
@@ -76,6 +79,7 @@ if ($firewallZones) {
                 } else {
                     print '<td>/</td>';
                 }
+
                 // actions
                 if ($i === 1) {
                     // action menu
@@ -86,6 +90,7 @@ if ($firewallZones) {
                     print '</div>';
                     print '</td>';
                 }
+
                 print '</tr>';
 
                 // increase the loop counter
@@ -113,6 +118,7 @@ if ($firewallZones) {
             print '</tr>';
         }
     }
+
     print '</tbody>';
     print '</table>';
 } else {

@@ -120,10 +120,12 @@ class Params extends stdClass implements Countable
                 if ($strip_tags && ! in_array($name, $strip_exceptions, true)) {
                     $value = strip_tags($value);
                 }
+
                 if ($html_escape) {
                     $value = htmlentities($value, ENT_QUOTES, 'UTF-8');
                 }
             }
+
             $this->{$name} = $value;
         }
     }

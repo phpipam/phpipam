@@ -86,41 +86,48 @@ if (@$_REQUEST['addresses'] == 'on') {
 } else {
     $result_addresses = [];
 }
+
 // search subnets
 if (@$_REQUEST['subnets'] == 'on') {
     $result_subnets = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip'], $custom_subnet_fields);
 } else {
     $result_subnets = [];
 }
+
 // search vlans
 if (@$_REQUEST['vlans'] == 'on' && $User->get_module_permissions('vlan') >= User::ACCESS_R) {
     $result_vlans = $Tools->search_vlans($search_term, $custom_vlan_fields);
 } else {
     $result_vlans = [];
 }
+
 // search vrf
 if (@$_REQUEST['vrf'] == 'on' && $User->get_module_permissions('vrf') >= User::ACCESS_R) {
     $result_vrf = $Tools->search_vrfs($search_term, $custom_vrf_fields);
 } else {
     $result_vrf = [];
 }
+
 // search circuits
 if (@$_REQUEST['circuits'] == 'on' && $User->get_module_permissions('circuits') >= User::ACCESS_R) {
     $result_circuits = $Tools->search_circuits($search_term, $custom_circuit_fields);
 } else {
     $result_circuits = [];
 }
+
 if (@$_REQUEST['circuits'] == 'on' && $User->get_module_permissions('circuits') >= User::ACCESS_R) {
     $result_circuits_p = $Tools->search_circuit_providers($search_term, $custom_circuit_p_fields);
 } else {
     $result_circuits_p = [];
 }
+
 // search customers
 if (@$_REQUEST['customers'] == 'on' && $User->get_module_permissions('customers') >= User::ACCESS_R) {
     $result_customers = $Tools->search_customers($search_term, $custom_customer_fields);
 } else {
     $result_customers = [];
 }
+
 // search devices
 if (@$_REQUEST['devices'] == 'on' && $User->get_module_permissions('devices') >= User::ACCESS_R) {
     $result_devices = $Tools->search_devices($search_term, $custom_device_fields);
@@ -172,6 +179,7 @@ if (is_array($result_addresses) && $result_addresses != []) {
     } else {
         $colSpan--;
     }
+
     // description, note
     $worksheet->write($lineCount, $x, _('description'), $format_title);
     $x++;
@@ -184,6 +192,7 @@ if (is_array($result_addresses) && $result_addresses != []) {
     } else {
         $colSpan--;
     }
+
     // port
     if (in_array('port', $selected_ip_fields)) {
         $worksheet->write($lineCount, $x, _('port'), $format_title);
@@ -191,6 +200,7 @@ if (is_array($result_addresses) && $result_addresses != []) {
     } else {
         $colSpan--;
     }
+
     // location
     if (in_array('location', $selected_ip_fields) && $User->get_module_permissions('locations') >= User::ACCESS_R) {
         $worksheet->write($lineCount, $x, _('location'), $format_title);
@@ -198,6 +208,7 @@ if (is_array($result_addresses) && $result_addresses != []) {
     } else {
         $colSpan--;
     }
+
     // owner
     if (in_array('owner', $selected_ip_fields)) {
         $worksheet->write($lineCount, $x, _('owner'), $format_title);
@@ -205,6 +216,7 @@ if (is_array($result_addresses) && $result_addresses != []) {
     } else {
         $colSpan--;
     }
+
     // mac
     if (in_array('mac', $selected_ip_fields)) {
         $worksheet->write($lineCount, $x, _('mac'), $format_title);
@@ -212,6 +224,7 @@ if (is_array($result_addresses) && $result_addresses != []) {
     } else {
         $colSpan--;
     }
+
     // note
     if (in_array('note', $selected_ip_fields)) {
         $worksheet->write($lineCount, $x, _('note'), $format_title);
@@ -219,6 +232,7 @@ if (is_array($result_addresses) && $result_addresses != []) {
     } else {
         $colSpan--;
     }
+
     // custom
     if (is_array($custom_address_fields)) {
         foreach ($custom_address_fields as $myField) {
@@ -270,6 +284,7 @@ if (is_array($result_addresses) && $result_addresses != []) {
                 // new line
                 $lineCount++;
             }
+
             $m++;
 
             $x = 0;
@@ -280,6 +295,7 @@ if (is_array($result_addresses) && $result_addresses != []) {
                 $worksheet->write($lineCount, $x, _((string) $Addresses->address_type_index_to_type($ip['state'])));
                 $x++;
             }
+
             $worksheet->write($lineCount, $x, $ip['description']);
             $x++;
             $worksheet->write($lineCount, $x, $ip['hostname']);
@@ -292,29 +308,35 @@ if (is_array($result_addresses) && $result_addresses != []) {
                 } else {
                     $ip['switch'] = '';
                 }
+
                 $worksheet->write($lineCount, $x, $ip['switch']);
                 $x++;
             }
+
             // port
             if (in_array('port', $selected_ip_fields)) {
                 $worksheet->write($lineCount, $x, $ip['port']);
                 $x++;
             }
+
             // location
             if (in_array('location', $selected_ip_fields) && $User->get_module_permissions('locations') >= User::ACCESS_R) {
                 $worksheet->write($lineCount, $x, $ip['location']);
                 $x++;
             }
+
             // owner
             if (in_array('owner', $selected_ip_fields)) {
                 $worksheet->write($lineCount, $x, $ip['owner']);
                 $x++;
             }
+
             // mac
             if (in_array('mac', $selected_ip_fields)) {
                 $worksheet->write($lineCount, $x, $ip['mac']);
                 $x++;
             }
+
             // note
             if (in_array('note', $selected_ip_fields)) {
                 $worksheet->write($lineCount, $x, $ip['note']);
@@ -358,6 +380,7 @@ if (is_array($result_subnets) && $result_subnets != []) {
         $worksheet->write($lineCount, $rc, _('VLAN'), $format_title);
         $rc++;
     }
+
     $worksheet->write($lineCount, $rc, _('IP requests'), $format_title);
     $rc++;
     if (is_array($custom_subnet_fields)) {
@@ -391,6 +414,7 @@ if (is_array($result_subnets) && $result_subnets != []) {
                 $line['masterSubnetId'] = $Subnets->transform_to_dotted($line['masterSubnetId']['subnet']).'/'.$line['masterSubnetId']['mask'].'('.$line['masterSubnetId']['description'].')';
             }
         }
+
         // allowRequests
         if ($line['allowRequests'] == 1) {
             $line['allowRequests'] = 'yes';
@@ -418,6 +442,7 @@ if (is_array($result_subnets) && $result_subnets != []) {
             $worksheet->write($lineCount, $rc, $line['mask']);
             $rc++;
         }
+
         $worksheet->write($lineCount, $rc, $line['description']);
         $rc++;
         $worksheet->write($lineCount, $rc, $line['masterSubnetId']);
@@ -426,6 +451,7 @@ if (is_array($result_subnets) && $result_subnets != []) {
             $worksheet->write($lineCount, $rc, $line['vlanId']);
             $rc++;
         }
+
         $worksheet->write($lineCount, $rc, $line['allowRequests']);
         $rc++;
         // custom
@@ -479,6 +505,7 @@ if (is_array($result_vlans) && $result_vlans != []) {
                 $c++;
             }
         }
+
         // new line
         $lineCount++;
     }
@@ -522,6 +549,7 @@ if (is_array($result_vrf) && $result_vrf != []) {
                 $c++;
             }
         }
+
         // new line
         $lineCount++;
     }
@@ -573,6 +601,7 @@ if (is_array($result_circuits) && $result_circuits != []) {
                 $c++;
             }
         }
+
         // new line
         $lineCount++;
     }
@@ -618,6 +647,7 @@ if (is_array($result_circuits_p) && $result_circuits_p != []) {
                 $c++;
             }
         }
+
         // new line
         $lineCount++;
     }
@@ -667,6 +697,7 @@ if (is_array($result_customers) && $result_customers != []) {
                 $c++;
             }
         }
+
         // new line
         $lineCount++;
     }
@@ -712,6 +743,7 @@ if (is_array($result_devices) && $result_devices != []) {
                 $c++;
             }
         }
+
         // new line
         $lineCount++;
     }

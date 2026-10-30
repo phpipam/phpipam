@@ -44,6 +44,7 @@ $subnet = $Tools->fetch_object('subnets', 'id', $GET->subnetId);
 if (! is_object($subnet) || $Subnets->check_permission($User->user, $GET->subnetId, $subnet) == User::ACCESS_NONE) {
     $Result->fatal_http_error(404, _('Subnet not found'));
 }
+
 $subnet = (array) $subnet;
 
 // fetch all IP addresses in subnet
@@ -56,6 +57,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 if ($User->get_module_permissions('devices') < User::ACCESS_R) {
     unset($GET->device);
 }
+
 if ($User->get_module_permissions('locations') < User::ACCESS_R) {
     unset($GET->location);
 }
@@ -115,6 +117,7 @@ if ($vlan != false) {
     $worksheet->write($lineCount, $rowCount, $vlan_text, $format_vlan);
     $lineCount++;
 }
+
 $lineCount++;
 
 // set row count
@@ -125,46 +128,57 @@ if ((isset($GET->ip_addr)) && ($GET->ip_addr == 'on')) {
     $worksheet->write($lineCount, $rowCount, _('ip address'), $format_title);
     $rowCount++;
 }
+
 if ((isset($GET->tag)) && ($GET->tag == 'on')) {
     $worksheet->write($lineCount, $rowCount, _('tag'), $format_title);
     $rowCount++;
 }
+
 if ((isset($GET->description)) && ($GET->description == 'on')) {
     $worksheet->write($lineCount, $rowCount, _('description'), $format_title);
     $rowCount++;
 }
+
 if ((isset($GET->hostname)) && ($GET->hostname == 'on')) {
     $worksheet->write($lineCount, $rowCount, _('hostname'), $format_title);
     $rowCount++;
 }
+
 if ((isset($GET->firewallAddressObject)) && ($GET->firewallAddressObject == 'on')) {
     $worksheet->write($lineCount, $rowCount, _('fw object'), $format_title);
     $rowCount++;
 }
+
 if ((isset($GET->mac)) && ($GET->mac == 'on')) {
     $worksheet->write($lineCount, $rowCount, _('mac'), $format_title);
     $rowCount++;
 }
+
 if ((isset($GET->owner)) && ($GET->owner == 'on')) {
     $worksheet->write($lineCount, $rowCount, _('owner'), $format_title);
     $rowCount++;
 }
+
 if ((isset($GET->device)) && ($GET->device == 'on')) {
     $worksheet->write($lineCount, $rowCount, _('device'), $format_title);
     $rowCount++;
 }
+
 if ((isset($GET->port)) && ($GET->port == 'on')) {
     $worksheet->write($lineCount, $rowCount, _('port'), $format_title);
     $rowCount++;
 }
+
 if ((isset($GET->note)) && ($GET->note == 'on')) {
     $worksheet->write($lineCount, $rowCount, _('note'), $format_title);
     $rowCount++;
 }
+
 if ((isset($GET->location)) && ($GET->location == 'on')) {
     $worksheet->write($lineCount, $rowCount, _('location'), $format_title);
     $rowCount++;
 }
+
 if ((isset($GET->lastSeen)) && ($GET->lastSeen == 'on')) {
     $worksheet->write($lineCount, $rowCount, _('Last seen'), $format_title);
     $rowCount++;
@@ -195,6 +209,7 @@ if ($devices !== false) {
         $devices_indexed[$d->id] = (object) $d;
     }
 }
+
 // add blank
 $devices_indexed[0] = new StdClass;
 $devices_indexed[0]->hostname = 0;
@@ -207,6 +222,7 @@ if ($locations !== false) {
         $locations_indexed[$d->id] = (object) $d;
     }
 }
+
 // add blank
 $locations_indexed[0] = new StdClass;
 $locations_indexed[0]->name = 0;
@@ -226,48 +242,60 @@ foreach ($addresses as $ip) {
         $worksheet->write($lineCount, $rowCount, $Subnets->transform_address($ip['ip_addr'], 'dotted'), $format_left);
         $rowCount++;
     }
+
     if ((isset($GET->tag)) && ($GET->tag == 'on')) {
         if (@$ip_types[$ip['state']]['showtag'] == 1) {
             $worksheet->write($lineCount, $rowCount, $ip_types[$ip['state']]['type']);
         }
+
         $rowCount++;
     }
+
     if ((isset($GET->description)) && ($GET->description == 'on')) {
         $worksheet->write($lineCount, $rowCount, $ip['description']);
         $rowCount++;
     }
+
     if ((isset($GET->hostname)) && ($GET->hostname == 'on')) {
         $worksheet->write($lineCount, $rowCount, $ip['hostname']);
         $rowCount++;
     }
+
     if ((isset($GET->firewallAddressObject)) && ($GET->firewallAddressObject == 'on')) {
         $worksheet->write($lineCount, $rowCount, $ip['firewallAddressObject']);
         $rowCount++;
     }
+
     if ((isset($GET->mac)) && ($GET->mac == 'on')) {
         $worksheet->write($lineCount, $rowCount, $ip['mac']);
         $rowCount++;
     }
+
     if ((isset($GET->owner)) && ($GET->owner == 'on')) {
         $worksheet->write($lineCount, $rowCount, $ip['owner']);
         $rowCount++;
     }
+
     if ((isset($GET->device)) && ($GET->device == 'on')) {
         $worksheet->write($lineCount, $rowCount, $ip['switch']);
         $rowCount++;
     }
+
     if ((isset($GET->port)) && ($GET->port == 'on')) {
         $worksheet->write($lineCount, $rowCount, $ip['port']);
         $rowCount++;
     }
+
     if ((isset($GET->note)) && ($GET->note == 'on')) {
         $worksheet->write($lineCount, $rowCount, $ip['note']);
         $rowCount++;
     }
+
     if ((isset($GET->location)) && ($GET->location == 'on')) {
         $worksheet->write($lineCount, $rowCount, $ip['location']);
         $rowCount++;
     }
+
     if ((isset($GET->lastSeen)) && ($GET->lastSeen == 'on')) {
         $worksheet->write($lineCount, $rowCount, $ip['lastSeen']);
         $rowCount++;

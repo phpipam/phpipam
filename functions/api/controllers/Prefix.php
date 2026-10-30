@@ -294,6 +294,7 @@ class Prefix_controller extends Common_api_functions
                 // remove address
                 unset($this->_params->id2);
             }
+
             // overwrite select parameters
             $this->override_custom_fields();
         }
@@ -362,17 +363,21 @@ class Prefix_controller extends Common_api_functions
                 foreach ($subnets as $k => $s) {
                     $subnets[$k] = $this->filter_prefix_result($s);
                 }
+
                 // prepare result
                 $subnets = $this->prepare_result($subnets, 'subnets', $this->use_links, true);
             }
+
             // filter result
             if ($addresses !== false) {
                 foreach ($addresses as $k => $s) {
                     $addresses[$k] = $this->filter_addresses_result($s);
                 }
+
                 // prepare result
                 $addresses = $this->prepare_result($addresses, 'addresses', $this->use_links, true);
             }
+
             // result
             if ($subnets === false && $addresses === false) {
                 $this->Response->throw_exception(404, 'No objects found');
@@ -490,6 +495,7 @@ class Prefix_controller extends Common_api_functions
                 $this->_params->description = 'Prefix controller autocreated';
             }
         }
+
         // check for valid keys
         $values = $this->validate_keys();
 
@@ -536,10 +542,12 @@ class Prefix_controller extends Common_api_functions
             if (! isset($this->_params->description)) {
                 $this->_params->description = 'Prefix controller autocreated';
             }
+
             if (! isset($this->_params->state)) {
                 $this->_params->state = 2;
             }
         }
+
         // check for valid keys
         $values = $this->validate_keys();
 
@@ -576,6 +584,7 @@ class Prefix_controller extends Common_api_functions
         if (! in_array($this->_params->id2, $this->valid_address_types)) {
             $this->Response->throw_exception(400, 'Invalid address type');
         }
+
         // validate mask or address
         if ($this->query_type !== 'address') {
             // validate mask
@@ -603,6 +612,7 @@ class Prefix_controller extends Common_api_functions
             if (! array_key_exists($this->custom_field_name, $this->custom_fields)) {
                 $this->Response->throw_exception(400, 'Invalid custom field '.$this->custom_field_name);
             }
+
             // reset keys
             $this->set_valid_keys('ipaddresses');
         } else {
@@ -686,6 +696,7 @@ class Prefix_controller extends Common_api_functions
         } else {
             $limit = '';
         }
+
         // set query and params
         $query = 'select * from `subnets` where `'.$this->custom_field_name."` = ? $limit order by `".$this->custom_field_orderby.'` '.$this->custom_field_order_direction.';';
         $params = [$this->_params->id];
@@ -695,6 +706,7 @@ class Prefix_controller extends Common_api_functions
         } catch (Exception $e) {
             $this->Response->throw_exception(500, 'Error: '.$e->getMessage());
         }
+
         // remove if they have slaves for addresses query
         if ($this->query_type == 'address') {
             $subnets = $this->remove_if_has_slaves($subnets);
@@ -736,6 +748,7 @@ class Prefix_controller extends Common_api_functions
         if ($subnet === false) {
             $this->Response->throw_exception(404, 'Subnet does not exist');
         }
+
         // get usage
         $subnet_usage = $this->Subnets->calculate_subnet_usage($subnet);
 
@@ -756,6 +769,7 @@ class Prefix_controller extends Common_api_functions
         if ($subnets === false) {
             return false;
         }
+
         // search first available prefix on found addresses
         foreach ($subnets as $s) {
             $available = $this->search_first_available_subnet($s->id, $this->_params->id3);
@@ -800,6 +814,7 @@ class Prefix_controller extends Common_api_functions
         if ($subnets === false) {
             return false;
         }
+
         // search first available prefix on found addresses
         foreach ($subnets as $s) {
             $available = $this->search_first_available_address($s->id);

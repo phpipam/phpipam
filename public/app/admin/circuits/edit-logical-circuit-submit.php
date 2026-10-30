@@ -48,6 +48,7 @@ $id_list = $POST->circuit_list !== '' ? explode('.', rtrim((string) $POST->circu
 if (count($id_list) != count(array_unique($id_list))) {
     $Result->show('danger', _('Remove duplicates of circuit').'!', true);
 }
+
 if ($POST->action == 'add' && count($id_list) == 0) {
     $Result->show('danger', _('No circuits selected').'!', true);
 }
@@ -102,8 +103,10 @@ if ($Admin->object_modify('circuitsLogical', $POST->action, 'id', $values)) {
             if (! $Admin->object_modify('circuitsLogicalMapping', 'add', 'id', $values)) {
                 $Result->show('danger', _('Error inserting mapping.'));
             }
+
             $order++;
         }
+
         // all ok
         $Result->show('success', _('Logical Circuit').' '.$User->get_post_action().' '._('successful').'!', false);
     } else {

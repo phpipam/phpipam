@@ -104,6 +104,7 @@ else {
     if ($gateway !== false) {
         $tmp['gateway'] = $Subnets->transform_address($gateway->ip_addr, 'dotted');
     }
+
     // set vlan
     $vlan = $Tools->fetch_object('vlans', 'vlanId', $subnet['vlanId']);
     $tmp['vlan'] = $vlan == false ? '' : $vlan->number.' - '.$vlan->description;

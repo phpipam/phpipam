@@ -63,12 +63,14 @@ if ($all_vrf_entries !== false) {
         $vrf_ids[$d['vrfId']] = $d;
     }
 }
+
 if ($all_curcuit_entries !== false) {
     foreach ($all_curcuit_entries as $d) {
         $d = (array) $d;
         $circuit_ids[$d['id']] = $d;
     }
 }
+
 if ($all_customer_entries !== false) {
     foreach ($all_customer_entries as $d) {
         $d = (array) $d;

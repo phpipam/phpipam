@@ -71,6 +71,7 @@ class Responses extends Result
             $content = explode(';', (string) $_SERVER['CONTENT_TYPE']);
             $_SERVER['CONTENT_TYPE'] = array_shift($content);
         }
+
         // not set, presume json
         if (! isset($_SERVER['CONTENT_TYPE']) || strlen((string) @$_SERVER['CONTENT_TYPE']) == 0) {
         }
@@ -218,18 +219,23 @@ class Responses extends Result
         if (isset($tmp['message'])) {
             $this->result['message'] = $tmp['message'];
         }
+
         if (isset($tmp['id'])) {
             $this->result['id'] = $tmp['id'];
         }
+
         if (isset($tmp['subnetId'])) {
             $this->result['subnetId'] = $tmp['subnetId'];
         }
+
         if (isset($tmp['data'])) {
             $this->result['data'] = $tmp['data'];
         }
+
         if (isset($tmp['ip'])) {
             $this->result['ip'] = $tmp['ip'];
         }
+
         if ($this->time !== false) {
             $this->result['time'] = round($this->time, 3);
         }
@@ -328,6 +334,7 @@ class Responses extends Result
         if (is_object($obj)) {
             $obj = (array) $obj;
         }
+
         if (is_array($obj)) {
             $new = [];
             foreach ($obj as $key => $val) {

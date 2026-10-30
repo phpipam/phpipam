@@ -72,10 +72,12 @@ if ($GET->tid == 'on') {
     $worksheet->write($curRow, $curColumn, _('id'), $format_header);
     $curColumn++;
 }
+
 if ($GET->tname == 'on') {
     $worksheet->write($curRow, $curColumn, _('Name'), $format_header);
     $curColumn++;
 }
+
 if ($GET->tdescription == 'on') {
     $worksheet->write($curRow, $curColumn, _('Description'), $format_header);
     $curColumn++;
@@ -92,10 +94,12 @@ foreach ($devtypes as $dt) {
         $worksheet->write($curRow, $curColumn, $dt['tid'], $format_text);
         $curColumn++;
     }
+
     if ($GET->tname == 'on') {
         $worksheet->write($curRow, $curColumn, $dt['tname'], $format_text);
         $curColumn++;
     }
+
     if ($GET->tdescription == 'on') {
         $worksheet->write($curRow, $curColumn, $dt['tdescription'], $format_text);
         $curColumn++;

@@ -42,6 +42,7 @@ if ($POST->action != 'delete') {
     if (strlen((string) $POST->bgcolor) < 4) {
         $Result->show('danger', _('Invalid bg color'), true);
     }
+
     if (strlen((string) $POST->fgcolor) < 4) {
         $Result->show('danger', _('Invalid fg color'), true);
     }

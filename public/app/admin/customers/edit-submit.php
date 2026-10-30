@@ -46,15 +46,19 @@ if ($POST->action != 'delete') {
     if (strlen((string) $POST->title) < 3) {
         $Result->show('danger', _('Invalid Title'), true);
     }
+
     if (strlen((string) $POST->address) < 3) {
         $Result->show('danger', _('Invalid Address'), true);
     }
+
     if (strlen((string) $POST->city) < 3) {
         $Result->show('danger', _('Invalid City'), true);
     }
+
     if (strlen((string) $POST->state) < 3) {
         $Result->show('danger', _('Invalid State'), true);
     }
+
     // validate postcode
     if (! $Tools->validate_postcode($POST->postcode, $POST->state)) {
         $Result->show('danger', _('Invalid Postcode'), true);

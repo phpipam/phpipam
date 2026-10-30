@@ -36,6 +36,7 @@ foreach ($untranslated as $u) {
         $all_translations[] = $str;
     }
 }
+
 // unique
 $all_translations = array_unique($all_translations);
 
@@ -63,6 +64,7 @@ foreach ($new as $tr) {
     $text[] = "msgid \"$tr\"";
     $text[] = "msgstr \"\"\n";
 }
+
 // join text
 $text = implode("\n", $text);
 
@@ -77,6 +79,7 @@ function get_string_between($string, $start, $end)
     if ($ini == 0) {
         return '';
     }
+
     $ini += strlen((string) $start);
     $len = strpos($string, (string) $end, $ini) - $ini;
 

@@ -11,12 +11,15 @@ require_once __DIR__.'/../../../../functions/functions.php';
 if (! isset($Database)) {
     $Database = new Database_PDO;
 }
+
 if (! isset($User)) {
     $User = new User($Database);
 }
+
 if (! isset($Admin)) {
     $Admin = new Admin($Database);
 }
+
 if (! isset($Tools)) {
     $Tools = new Tools($Database);
 }
@@ -62,6 +65,7 @@ foreach ($data as &$cdata) {
             $msg .= 'Invalid name format.';
             $action = 'error';
         }
+
         if (preg_match("/[;'\"]/", (string) $cdata['description'])) {
             $msg .= 'Invalid characters in description.';
             $action = 'error';

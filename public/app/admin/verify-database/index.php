@@ -28,6 +28,7 @@ if (count($errors = $Tools->verify_database()) > 0) {
                 print "<a class='btn btn-xs btn-default btn-tablefix' style='margin-left:8px;' href='' data-tableid='$table' data-fieldid='' data-type='table'><i class='fa fa-magic fa-pad-right'></i>"._('Fix table').'</a>';
                 print "<div id='fix-result-$table' style='display:none'></div>";
             }
+
             print '</li>'."\n";
         }
 
@@ -54,6 +55,7 @@ if (count($errors = $Tools->verify_database()) > 0) {
                     print "<a class='btn btn-xs btn-default btn-tablefix' style='margin-left:8px;'  href='' data-tableid='$table' data-fieldid='$f' data-type='field'><i class='fa fa-magic fa-pad-right'></i>"._('Fix field').'</a>';
                     print "<div id='fix-result-$table$f' style='display:none'></div>";
                 }
+
                 print '</li>'."\n";
             }
         }

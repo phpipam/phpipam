@@ -118,6 +118,7 @@ class Addresses_controller extends Common_api_functions
             } else {
                 $subnet = $this->Tools->fetch_object('subnets', 'id', $this->_params->id2);
             }
+
             if ($subnet->isFull == 1) {
                 $this->Response->throw_exception(404, 'No free addresses found');
             }
@@ -143,12 +144,14 @@ class Addresses_controller extends Common_api_functions
                         $result_filtered = $r;
                     }
                 }
+
                 if (count($result) == 0) {
                     $result = false;
                 } else {
                     $result = $result_filtered;
                 }
             }
+
             if ($result == false) {
                 $this->Response->throw_exception(404, 'No addresses found');
             } else {
@@ -174,6 +177,7 @@ class Addresses_controller extends Common_api_functions
                                     unset($result[$k]);
                                 }
                             }
+
                             // any left
                             if (count($result) == 0) {
                                 $result = false;
@@ -279,6 +283,7 @@ class Addresses_controller extends Common_api_functions
             if (! $this->Addresses->validate_address($this->_params->id2)) {
                 $this->Response->throw_exception(400, 'Invalid address');
             }
+
             // search
             $result = $this->Tools->fetch_multiple_objects('ipaddresses', 'ip_addr', $this->Subnets->transform_address($this->_params->id2, 'decimal'));
             // check result
@@ -317,6 +322,7 @@ class Addresses_controller extends Common_api_functions
             } else {
                 return ['code' => 200, 'data' => $this->prepare_result($result, $this->_params->controller, false, false)];
             }
+
             // false
         } else {
             $this->Response->throw_exception(400, 'Invalid Id');
@@ -346,9 +352,11 @@ class Addresses_controller extends Common_api_functions
                 $subnet = $this->Tools->fetch_object('subnets', 'id', $this->_params->id2);
                 unset($this->_params->id2);
             }
+
             if ($subnet === false) {
                 $this->Response->throw_exception(400, 'Invalid subnet identifier');
             }
+
             if ($subnet->isFull == 1) {
                 $this->Response->throw_exception(404, 'No free addresses found (subnet is full)');
             }
@@ -406,9 +414,11 @@ class Addresses_controller extends Common_api_functions
         if (isset($this->_params->ip)) {
             $this->Response->throw_exception(400, 'IP address cannot be changed');
         }
+
         if (isset($this->_params->ip_addr)) {
             $this->Response->throw_exception(400, 'IP address cannot be changed');
         }
+
         if (isset($this->_params->subnetId)) {
             $this->Response->throw_exception(400, 'Subnet cannot be changed');
         }
@@ -472,6 +482,7 @@ class Addresses_controller extends Common_api_functions
                     }
                 }
             }
+
             if (count($result) == 0 || $result === false) {
                 $this->Response->throw_exception(404, 'No addresses found');
             } else {
@@ -536,6 +547,7 @@ class Addresses_controller extends Common_api_functions
         if (! is_numeric(@$this->_params->id2)) {
             $this->Response->throw_exception(400, 'Invalid tag identifier');
         }
+
         // check db
         if (! $this->Tools->fetch_object('ipTags', 'id', $this->_params->id2)) {
             $this->Response->throw_exception(404, 'Address tag does not exist');
@@ -619,6 +631,7 @@ class Addresses_controller extends Common_api_functions
             if ($this->validate_mac($this->_params->mac) === false) {
                 $this->Response->throw_exception(400, 'Invalid MAC address');
             }
+
             // normalize
             $this->_params->mac = $this->reformat_mac_address($this->_params->mac, 1);
         }
@@ -628,6 +641,7 @@ class Addresses_controller extends Common_api_functions
             if (! empty($this->_params->switch) && ! is_numeric($this->_params->switch)) {
                 $this->Response->throw_exception(400, 'Device does not exist');
             }
+
             if ($this->_params->switch > 0 && $this->Tools->fetch_object('devices', 'id', $this->_params->switch) === false) {
                 $this->Response->throw_exception(400, 'Device does not exist');
             }
@@ -638,6 +652,7 @@ class Addresses_controller extends Common_api_functions
             if (! empty($this->_params->state) && ! is_numeric($this->_params->state)) {
                 $this->Response->throw_exception(400, 'Invalid state');
             }
+
             if ($this->Tools->fetch_object('ipTags', 'id', $this->_params->state) === false) {
                 $this->Response->throw_exception(400, 'Tag does not exist');
             }
@@ -677,6 +692,7 @@ class Addresses_controller extends Common_api_functions
                 ];
             }
         }
+
         // result
         if (count($clogs_formatted) > 0) {
             return $clogs_formatted;

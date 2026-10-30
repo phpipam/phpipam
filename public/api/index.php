@@ -80,6 +80,7 @@ try {
     if (! is_object($app)) {
         $Response->throw_exception(400, 'Invalid application id');
     }
+
     // check that app is enabled
     if ($app->app_permissions == 0) {
         $Response->throw_exception(503, 'Application disabled');
@@ -98,6 +99,7 @@ try {
             if ($decoded === false) {
                 $Response->throw_exception(503, 'Invalid enc_request');
             }
+
             $decoded = $decoded[0] == '?' ? substr($decoded, 1) : $decoded;
             parse_str($decoded, $encrypted_params);
             $encrypted_params['app_id'] = $_GET['app_id'];
@@ -110,6 +112,7 @@ try {
             if ($encrypted_params === false) {
                 $Response->throw_exception(503, 'Invalid enc_request');
             }
+
             $encrypted_params = db_json_decode($encrypted_params, true);
             $encrypted_params['app_id'] = $_GET['app_id'];
 
@@ -220,12 +223,14 @@ try {
     if (empty($Params->controller)) {
         $Response->throw_exception(400, 'Request is not valid');
     }
+
     // verify permissions for delete/create/edit if controller is not user (needed for auth)
     if ($Params->controller != 'user') {
         if (in_array($request_method, ['POST', 'PATCH', 'PUT', 'DELETE']) && $app->app_permissions < 2) {
             $Response->throw_exception(401, 'invalid permissions');
         }
     }
+
     // verify content type
     $Response->validate_content_type();
 

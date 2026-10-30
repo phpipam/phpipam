@@ -48,6 +48,7 @@ if (is_file($path_doc) && preg_match('/\.md$/', (string) $document)) {
                     $id = str_replace(' ', '-', $id);
                     $e->setAttribute('id', $id);
                 }
+
                 if ($e->hasAttribute('href')) {
                     $value = $e->getAttribute('href');
                     if (strpos($value, '#') === 0) {
@@ -55,6 +56,7 @@ if (is_file($path_doc) && preg_match('/\.md$/', (string) $document)) {
                         $e->setAttribute('href', create_link("tools/documentation/$document").$value);
                     }
                 }
+
                 if ($e->hasAttribute('src')) {
                     $value = $e->getAttribute('src');
                     if (strpos($value, 'http://') !== 0 && strpos($value, 'https://') !== 0) {
@@ -86,8 +88,10 @@ if (is_file($path_doc) && preg_match('/\.md$/', (string) $document)) {
                 $contents[$file] = "- [$file](".create_link("tools/documentation/$doc").')';
             }
         }
+
         closedir($dh);
     }
+
     ksort($contents);
 
     $html = $Parsedown->text(implode("\n", $contents)) ?: '';

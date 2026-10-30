@@ -32,6 +32,7 @@ if ($logical_circuits !== false) {
         print '	<td>'.$circuit->member_count.'</td>';
         print '</tr>'."\n";
     }
+
     print '</tbody>';
     print '</table>';
 } else {

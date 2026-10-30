@@ -165,6 +165,7 @@ class PingThread
         } else {
             $response = null;
         }
+
         fclose($this->sockets[1]);
 
         $this->sockets[0] = null;
@@ -269,6 +270,7 @@ class PingThread
         if ($pid == -1) {
             throw new Exception($this->getError(PingThread::COULD_NOT_FORK), PingThread::COULD_NOT_FORK);
         }
+
         if ($pid) {
             // parent
             $this->pid = $pid;

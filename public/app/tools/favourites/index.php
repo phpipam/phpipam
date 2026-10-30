@@ -39,6 +39,7 @@ if (empty($favourite_subnets)) {
     if ($User->get_module_permissions('vlan') >= User::ACCESS_R) {
         print "	<th class='hidden-xs hidden-sm'>"._('VLAN').'</th>';
     }
+
     print "	<th class='hidden-xs hidden-sm'>"._('Used').'</th>';
     print '	<th></th>';
     print '</tr>';
@@ -108,6 +109,7 @@ if (empty($favourite_subnets)) {
             print '</tr>';
         }
     }
+
     print '</tbody>';
     print '</table>';
 }

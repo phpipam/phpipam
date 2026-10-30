@@ -39,6 +39,7 @@ if ($POST->action != 'delete') {
     if (strlen((string) $POST->name) < 2) {
         $Result->show('danger', _('Invalid name'), true);
     }
+
     if (strlen((string) $POST->content) < 2) {
         $Result->show('danger', _('Invalid content'), true);
     }

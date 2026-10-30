@@ -103,6 +103,7 @@ class phpipam_rack extends Tools
             foreach ($all_racks as $r) {
                 $out[$r->id] = $r;
             }
+
             // save
             $this->all_racks = (object) $out;
         }
@@ -210,6 +211,7 @@ class phpipam_rack extends Tools
             if (is_array($rack_devices)) {
                 $devices = array_merge($devices, $rack_devices);
             }
+
             if (is_array($rack_contents)) {
                 $devices = array_merge($devices, $rack_contents);
             }
@@ -220,6 +222,7 @@ class phpipam_rack extends Tools
                 if (! is_numeric($d->rack_size) || $d->rack_size == 0) {
                     $d->rack_size = 1;
                 }
+
                 if (property_exists($current_device, 'hostname') == property_exists($d, 'hostname')) {
                     // $current_device and $d are of the same type = device or rack_content item
                     // Skip current device/rack_content
@@ -322,6 +325,7 @@ class phpipam_rack extends Tools
         } else {
             $rack_name = $rack->name;
         }
+
         $rack_content = [];
 
         // set freeform content
@@ -343,20 +347,24 @@ class phpipam_rack extends Tools
                         if ($c->rack_deep) {
                             $rd['name'] = '['._('F').'] '.$rd['name'];
                         }
+
                         // remove name if not permitted
                         if (! $draw_names) {
                             unset($rd['name']);
                         }
+
                         // populate the subrack data
                         if ($c->subrackId) {
                             $rd['url'] = escape_input(create_link('tools', 'racks', $c->subrackId));
                             if ($recursion) {
                                 $rd['subrack'] = $this->compile_rack_contents($c->subrackId, $deviceId, ! $is_back, $draw_names, false);
                             }
+
                             if (count($rd['subrack']->getContent()) == 0) {
                                 unset($rd['subrack']);
                             }
                         }
+
                         // save content
                         $rack_content[] = new RackContent($rd);
                     } else {
@@ -374,16 +382,19 @@ class phpipam_rack extends Tools
                             if (! $draw_names) {
                                 unset($rd['name']);
                             }
+
                             // populate the subrack data
                             if ($c->subrackId) {
                                 $rd['url'] = escape_input(create_link('tools', 'racks', $c->subrackId));
                                 if ($recursion) {
                                     $rd['subrack'] = $this->compile_rack_contents($c->subrackId, $deviceId, $is_back, $draw_names, false);
                                 }
+
                                 if (count($rd['subrack']->getContent()) == 0) {
                                     unset($rd['subrack']);
                                 }
                             }
+
                             // save content
                             $rack_content[] = new RackContent($rd);
                         }
@@ -405,19 +416,23 @@ class phpipam_rack extends Tools
                         if ($c->rack_deep) {
                             $rd['name'] = '['._('F').'] '.$rd['name'];
                         }
+
                         // remove name if not permitted
                         if (! $draw_names) {
                             unset($rd['name']);
                         }
+
                         if ($c->subrackId) {
                             $rd['url'] = escape_input(create_link('tools', 'racks', $c->subrackId));
                             if ($recursion) {
                                 $rd['subrack'] = $this->compile_rack_contents($c->subrackId, $deviceId, $is_back, $draw_names, false);
                             }
+
                             if (count($rd['subrack']->getContent()) == 0) {
                                 unset($rd['subrack']);
                             }
                         }
+
                         // save content
                         $rack_content[] = new RackContent($rd);
                     } else {
@@ -435,15 +450,18 @@ class phpipam_rack extends Tools
                             if (! $draw_names) {
                                 unset($rd['name']);
                             }
+
                             if ($c->subrackId) {
                                 $rd['url'] = escape_input(create_link('tools', 'racks', $c->subrackId));
                                 if ($recursion) {
                                     $rd['subrack'] = $this->compile_rack_contents($c->subrackId, $deviceId, ! $is_back, $draw_names, false);
                                 }
+
                                 if (count($rd['subrack']->getContent()) == 0) {
                                     unset($rd['subrack']);
                                 }
                             }
+
                             // save content
                             $rack_content[] = new RackContent($rd);
                         }
@@ -478,10 +496,12 @@ class phpipam_rack extends Tools
                         if ($d->rack_deep) {
                             $rd['name'] = '['._('F').'] '.$rd['name'];
                         }
+
                         // remove name if not permitted
                         if (! $draw_names) {
                             unset($rd['name']);
                         }
+
                         // save content
                         $rack_content[] = new RackContent($rd);
                     } else {
@@ -502,6 +522,7 @@ class phpipam_rack extends Tools
                             if (! $draw_names) {
                                 unset($rd['name']);
                             }
+
                             // save content
                             $rack_content[] = new RackContent($rd);
                         }
@@ -526,10 +547,12 @@ class phpipam_rack extends Tools
                         if ($d->rack_deep) {
                             $rd['name'] = '['._('F').'] '.$rd['name'];
                         }
+
                         // remove name if not permitted
                         if (! $draw_names) {
                             unset($rd['name']);
                         }
+
                         // save content
                         $rack_content[] = new RackContent($rd);
                     } else {
@@ -550,6 +573,7 @@ class phpipam_rack extends Tools
                             if (! $draw_names) {
                                 unset($rd['name']);
                             }
+
                             // save content
                             $rack_content[] = new RackContent($rd);
                         }
@@ -605,6 +629,7 @@ class phpipam_rack extends Tools
                             continue 2;
                         }
                     }
+
                     $out[] = $r;
                 }
             }
@@ -638,6 +663,7 @@ class phpipam_rack extends Tools
         if (! is_object($rack)) {
             return true;
         }
+
         $device_size = ($device_size > 0) ? $device_size - 1 : 0;
 
         if ($device_start > $rack->size && $rack->hasBack) {
@@ -647,9 +673,11 @@ class phpipam_rack extends Tools
 
             return false;
         }
+
         if ($device_start + $device_size > $rack->size) {
             return true;
         }
+
         if ($device_start < 1) {
             return true;
         }
@@ -684,17 +712,20 @@ class phpipam_rack extends Tools
                 $request = array_merge($request, range($device_start + $rack->size, $device_start + $rack->size + $device_size - 1));
             }
         }
+
         $rack_devices = $this->fetch_rack_devices($rack->id) ?: [];
         foreach ($rack_devices as $d) {
             // bypass comparison if it's the current device
             if ($d->id == $current_device_id) {
                 continue;
             }
+
             foreach (range($d->rack_start, $d->rack_start + $d->rack_size - 1) as $ru) {
                 if (in_array($ru, $request)) {
                     return true;
                 }
             }
+
             // if the device is deep, then check the other side of the device
             if ($d->rack_deep && $d->rack_start > $rack->size) {
                 foreach (range($d->rack_start - $rack->size, $d->rack_start - $rack->size + $d->rack_size - 1) as $ru) {
@@ -710,12 +741,14 @@ class phpipam_rack extends Tools
                 }
             }
         }
+
         $rack_content = $this->fetch_rack_contents($rack->id) ?: [];
         foreach ($rack_content as $c) {
             // bypass comparison if it's the current content
             if ($c->id == $current_content_id) {
                 continue;
             }
+
             foreach (range($c->rack_start, $c->rack_start + $c->rack_size - 1) as $ru) {
                 if (in_array($ru, $request)) {
                     return true;
@@ -839,6 +872,7 @@ class RackDrawer extends Common_functions
 
             $y += $this->unitYSize;
         }
+
         imagecopy($this->template, $bottom, 0, $y, 0, 0, $this->rackXSize, $this->bottomYSize);
 
         $this->drawNameplate();
@@ -1218,6 +1252,7 @@ class RackDrawer_SVG extends Common_functions
             if ($content->getUrl()) {
                 $queue[] = "<a href='{$content->getUrl()}' target='_parent'>";
             }
+
             $class = ($content->isActive()) ? 'active' : 'inactive';
             $queue[] = "<rect class='{$class}' width='{$w}' height='{$h}' x='{$this->marginSides}' y='{$yPos}' style='fill:{$content->getBgcolor()};' />";
             $y = $yPos + $this->unitYSize - 6; // the height of the rect plus one RU and reduced by 6
@@ -1236,11 +1271,13 @@ class RackDrawer_SVG extends Common_functions
                     $blade_h = (($w - $subrack_margin - $this->unitYSize) / $inner_ru) - $subrack_margin;
                     $transform = " transform='rotate(270,{$this->marginSides},".($yPos + $h).")'";
                 }
+
                 $cornerstone_x = $this->marginSides + $subrack_margin;
                 $cornerstone_y = $yPos + $h + $this->unitYSize;
                 if (strlen((string) $content->getName()) > 0) {
                     $queue[] = "<text class='device' x='".($cornerstone_x + ($blade_w / 2))."' y='".($cornerstone_y - 6)."' style='fill:{$content->getFgcolor()};stroke:{$content->getFgcolor()}' {$transform}>{$content->getName()}</text>";
                 }
+
                 foreach ($content->getSubrack()->getContent() as $blade) {
                     $this_y = $cornerstone_y + (($blade->getStartLocation() - 0) * ($blade_h + $subrack_margin));
                     $this_h = ($blade_h * $blade->getSize()) + ($subrack_margin * ($blade->getSize() - 1));
@@ -1251,6 +1288,7 @@ class RackDrawer_SVG extends Common_functions
                     if (strlen((string) $content->getName()) > 0) {
                         $queue[] = "<text class='device' x='".($this->marginSides + ($blade_w / 2))."' y='".($this_y + (.7 * $blade_h * $blade->getSize()))."' style='fill:{$blade->getFgcolor()};stroke:{$blade->getFgcolor()};font-size:10px;' {$transform}>{$blade->getName()}</text>";
                     }
+
                     // Chrome won't render nested <a>
                     // if ($blade->getUrl()) $queue[] = "</a>";
                 }
@@ -1260,9 +1298,11 @@ class RackDrawer_SVG extends Common_functions
                     $queue[] = "<text class='device' x='".($x_center)."' y='{$y}' style='fill:{$content->getFgcolor()};stroke:{$content->getFgcolor()}'>{$content->getName()}</text>";
                 }
             }
+
             if ($content->getUrl()) {
                 $queue[] = '</a>';
             }
+
             // place the queue onto the stack
             if ($content->isActive()) {
                 $keepOnTop = $queue;
@@ -1270,6 +1310,7 @@ class RackDrawer_SVG extends Common_functions
                 $output = array_merge($output, $queue);
             }
         }
+
         $output = array_merge($output, $keepOnTop);
         $this->svgData = array_merge($this->svgData, $output);
     }

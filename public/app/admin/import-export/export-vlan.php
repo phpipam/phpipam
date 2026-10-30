@@ -75,14 +75,17 @@ if ($GET->name == 'on') {
     $worksheet->write($curRow, $curColumn, _('Name'), $format_header);
     $curColumn++;
 }
+
 if ($GET->number == 'on') {
     $worksheet->write($curRow, $curColumn, _('Number'), $format_header);
     $curColumn++;
 }
+
 if ($GET->domain == 'on') {
     $worksheet->write($curRow, $curColumn, _('Domain'), $format_header);
     $curColumn++;
 }
+
 if ($GET->description == 'on') {
     $worksheet->write($curRow, $curColumn, _('Description'), $format_header);
     $curColumn++;
@@ -120,6 +123,7 @@ foreach ($vlan_domains as $vlan_domain) {
         if (count($all_vlans) == 0) {
             continue;
         }
+
         // write all VLAN entries
         foreach ($all_vlans as $vlan) {
             // cast
@@ -132,14 +136,17 @@ foreach ($vlan_domains as $vlan_domain) {
                 $worksheet->write($curRow, $curColumn, $vlan['name'], $format_text);
                 $curColumn++;
             }
+
             if ($GET->number == 'on') {
                 $worksheet->write($curRow, $curColumn, $vlan['number'], $format_text);
                 $curColumn++;
             }
+
             if ($GET->domain == 'on') {
                 $worksheet->write($curRow, $curColumn, $vlan_domain['name'], $format_text);
                 $curColumn++;
             }
+
             if ($GET->description == 'on') {
                 $worksheet->write($curRow, $curColumn, $vlan['description'], $format_text);
                 $curColumn++;

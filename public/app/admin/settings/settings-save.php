@@ -39,6 +39,7 @@ $statuses = explode(';', $POST->pingStatus);
 if (count($statuses) != 2) {
     $Result->show('danger', _('Invalid ping status intervals'), true);
 }
+
 if (! is_numeric($statuses[0]) || ! is_numeric($statuses[1])) {
     $Result->show('danger', _('Invalid ping status intervals'), true);
 }

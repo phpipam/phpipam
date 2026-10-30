@@ -44,6 +44,7 @@ if (($GET->page == 'administration' && $GET->section == 'users' && $GET->sPage =
             print "<div class='clearfix'></div>";
         }
     }
+
     print ' </ul>';
     print '</div>';
 } else {
@@ -53,5 +54,6 @@ if (($GET->page == 'administration' && $GET->section == 'users' && $GET->sPage =
             print '<tr><td>'._((string) $perm_names[$key]).'</td><td>'.$User->print_permission_badge($user[$key]).'</td></tr>';
         }
     }
+
     print '</table>';
 }

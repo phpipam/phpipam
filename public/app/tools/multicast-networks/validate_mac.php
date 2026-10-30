@@ -25,6 +25,7 @@ if ($User->settings->enableMulticast != '1') {
 if (is_blank($POST->vlanId)) {
     $POST->vlanId = 0;
 }
+
 if (is_blank($POST->id)) {
     $POST->id = 0;
 }
@@ -33,12 +34,15 @@ if (is_blank($POST->id)) {
 if (strlen((string) $POST->mac) > 21) {
     exit('True');
 }
+
 if (! is_numeric($POST->sectionId)) {
     exit('True');
 }
+
 if (! is_numeric($POST->vlanId)) {
     exit('True');
 }
+
 if (! is_numeric($POST->id)) {
     exit('True');
 }
@@ -47,6 +51,7 @@ if (! is_numeric($POST->id)) {
 if ($Subnets->validate_ip($POST->ip) === false) {
     exit('True');
 }
+
 if ($Subnets->is_multicast($POST->ip) === false) {
     exit('True');
 }

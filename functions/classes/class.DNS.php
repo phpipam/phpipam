@@ -147,6 +147,7 @@ class DNS extends Common_functions
                             unset($nsarray[$k]);
                         }
                     }
+
                     // save active
                     if (count($nsarray) > 0) {
                         $this->ns = $nsarray;
@@ -248,6 +249,7 @@ class DNS extends Common_functions
                             if ($this->print_error) {
                                 $this->Result->show('warning', _('DNS error')." ($ns): ".$this->resolve_error);
                             }
+
                             $this->dead_ns = array_unique($this->dead_ns);
                         }
                     }
@@ -294,6 +296,7 @@ class DNS extends Common_functions
                     }
                 }
             }
+
             // multiple return
             if ($this->multiple) {
                 return $res_m;

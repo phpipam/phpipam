@@ -30,6 +30,7 @@ if ($POST->action != 'add') {
         $Result->show('danger', _('Invalid ID'), true);
     }
 }
+
 // Title and path must be present!
 if ($POST->action != 'delete') {
     if (is_blank($POST->wtitle) || is_blank($POST->wfile)) {

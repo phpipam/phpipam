@@ -68,16 +68,19 @@ $hostnames = [];          // Array with detected hostnames
 if (php_sapi_name() != 'cli') {
     exit("discoveryCheck-Fatal-Error: This script can only be run from cli!\n");
 }
+
 // test to see if threading is available
 if (! PingThread::available($errmsg)) {
     exit("discoveryCheck-Fatal-Error: Threading is required for scanning subnets - Error: $errmsg\n");
 }
+
 // verify fping / ping path
 if ($Scan->icmp_type == 'fping' && ! file_exists($Scan->settings->scanFPingPath)) {
     exit("discoveryCheck-Fatal-Error: Invalid fping path!\n");
 } elseif (! file_exists($Scan->settings->scanPingPath)) {
     exit("discoveryCheck-Fatal-Error: Invalid ping path!\n");
 }
+
 // verify date.timezone
 if (is_blank(ini_get('date.timezone'))) {
     print 'discoveryCheck-Warning: date.timezone is not set in '.php_ini_loaded_file()."\n";
@@ -110,6 +113,7 @@ if ($scan_subnets !== false) {
 if (empty($scan_subnets)) {
     exit("discoveryCheck: No subnets are marked for new hosts checking\n");
 }
+
 if ($Scan->get_debugging()) {
     print "discoveryCheck: Using $Scan->icmp_type\n--------------------\n\n";
     print_r($scan_subnets);
@@ -153,6 +157,7 @@ if ($Scan->icmp_type == 'fping') {
             $scan_subnets[$index]->discovered = $thread->ipc_recv_data();
             $thread->getExitCode();
         }
+
         unset($threads);
     }
 
@@ -166,6 +171,7 @@ if ($Scan->icmp_type == 'fping') {
                     unset($scan_subnets[$sk]->discovered[$rk]);
                 }
             }
+
             // rekey
             $scan_subnets[$sk]->discovered = array_values($scan_subnets[$sk]->discovered);
         }
@@ -204,6 +210,7 @@ if ($Scan->icmp_type == 'fping') {
                 $addresses[$index] = null;
             }
         }
+
         unset($threads);
     }
 
@@ -215,6 +222,7 @@ if ($Scan->icmp_type == 'fping') {
     foreach ($addresses as $a) {
         $add_tmp[$a['subnetId']][] = $Subnets->transform_to_dotted($a['ip_addr']);
     }
+
     // add to scan_subnets as result
     foreach ($scan_subnets as $sk => $s) {
         if (isset($add_tmp[$s->id])) {
@@ -276,6 +284,7 @@ if ($discovered > 0 && $config['discovery_check_send_mail']) {
             $recepients[] = ['name' => $admin->real_name, 'email' => $admin->email];
         }
     }
+
     // none?
     if (! isset($recepients)) {
         exit();
@@ -326,6 +335,7 @@ if ($discovered > 0 && $config['discovery_check_send_mail']) {
                 }
             }
         }
+
         $content[] = '</table>';
 
         // set content
@@ -337,6 +347,7 @@ if ($discovered > 0 && $config['discovery_check_send_mail']) {
         foreach ($recepients as $admin) {
             $phpipam_mail->Php_mailer->addAddress(addslashes((string) $admin['email']), addslashes((string) $admin['name']));
         }
+
         $phpipam_mail->Php_mailer->Subject = $subject;
         $phpipam_mail->Php_mailer->msgHTML($content);
         $phpipam_mail->Php_mailer->AltBody = $content_plain;

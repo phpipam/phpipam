@@ -37,6 +37,7 @@ if (! isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WIT
     if (! $widget = $Tools->fetch_object('widgets', 'wfile', $GET->section)) {
         $Result->show('danger', _('Invalid widget'), true);
     }
+
     // reset size and limit
     $height = 350;
     $slimit = 5;
@@ -105,6 +106,7 @@ else {
     foreach ($out as $k => $v) {
         $used[$k] = $v->usage->usedhosts_percent;
     }
+
     array_multisort($used, SORT_DESC, $out);
 
     // table

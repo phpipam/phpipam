@@ -11,18 +11,23 @@ require_once __DIR__.'/../../../../functions/functions.php';
 if (! isset($Database)) {
     $Database = new Database_PDO;
 }
+
 if (! isset($User)) {
     $User = new User($Database);
 }
+
 if (! isset($Admin)) {
     $Admin = new Admin($Database);
 }
+
 if (! isset($Tools)) {
     $Tools = new Tools($Database);
 }
+
 if (! isset($Sections)) {
     $Sections = new Sections($Database);
 }
+
 if (! isset($Subnets)) {
     $Subnets = new Subnets($Database);
 }
@@ -69,6 +74,7 @@ $vrf_name = [];
 if (! $all_vrfs) {
     $all_vrfs = [];
 }
+
 // insert default VRF in the list
 array_splice($all_vrfs, 0, 0, (object) [['vrfId' => '0', 'name' => 'default', 'rd' => '0:0']]);
 foreach ($all_vrfs as $vrf) {

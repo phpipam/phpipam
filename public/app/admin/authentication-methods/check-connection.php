@@ -23,6 +23,7 @@ $auth_settings = $Admin->fetch_object('usersAuthMethod', 'id', $POST->id);
 if ($auth_settings === false) {
     $Result->show('danger', _('Invalid ID'), true, true);
 }
+
 // set params
 $parameters = new Params(db_json_decode($auth_settings->params));
 
@@ -36,6 +37,7 @@ if ($auth_settings->type == 'AD' || $auth_settings->type == 'LDAP' || $auth_sett
         if ($auth_settings->type == 'NetIQ') {
             $params->account_suffix = '';
         }
+
         // set options
         $options = [
             'base_dn' => $parameters->base_dn,
@@ -54,6 +56,7 @@ if ($auth_settings->type == 'AD' || $auth_settings->type == 'LDAP' || $auth_sett
         // catch AD error
         $Result->show('danger', $e, true, true);
     }
+
     // result
     foreach ($controllers as $c) {
         $fp = @fsockopen($c, $parameters->ad_port, $errno, $errstr, 3);

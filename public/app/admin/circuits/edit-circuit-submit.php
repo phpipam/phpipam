@@ -36,6 +36,7 @@ $Admin->validate_action();
 if ($POST->action != 'add' && ! is_numeric($POST->id)) {
     $Result->show('danger', _('Invalid ID'), true);
 }
+
 if (! is_numeric($POST->provider)) {
     $Result->show('danger', _('Invalid ID'), true);
 }
@@ -84,6 +85,7 @@ if ($POST->device1 == '0') {
     if ($Tools->fetch_object('devices', 'id', $deviceId) === false) {
         $Result->show('danger', _('Invalid device A').'!', true);
     }
+
     // save
     $POST->device1 = $deviceId;
     $POST->location1 = 0;
@@ -92,6 +94,7 @@ if ($POST->device1 == '0') {
     if ($Tools->fetch_object('locations', 'id', $locationId) === false) {
         $Result->show('danger', _('Invalid location A').'!', true);
     }
+
     // save
     $POST->device1 = 0;
     $POST->location1 = $locationId;
@@ -105,6 +108,7 @@ if ($POST->device2 == '0') {
     if ($Tools->fetch_object('devices', 'id', $deviceId) === false) {
         $Result->show('danger', _('Invalid device B').'!', true);
     }
+
     // save
     $POST->device2 = $deviceId;
     $POST->location2 = 0;
@@ -113,6 +117,7 @@ if ($POST->device2 == '0') {
     if ($Tools->fetch_object('locations', 'id', $locationId) === false) {
         $Result->show('danger', _('Invalid location B').'!', true);
     }
+
     // save
     $POST->device2 = 0;
     $POST->location2 = $locationId;

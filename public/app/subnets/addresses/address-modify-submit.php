@@ -49,6 +49,7 @@ foreach ($required_ip_fields as $k => $f) {
         unset($required_ip_fields[$k]);
     }
 }
+
 // checks
 if (is_array($required_ip_fields) && $action != 'delete') {
     // remove modules not enabled from required fields
@@ -64,6 +65,7 @@ if (is_array($required_ip_fields) && $action != 'delete') {
             $required_field_errors[] = ucwords((string) $required_field).' '._('is required');
         }
     }
+
     // Check that certain required fields are not zero
     foreach (['customer_id', 'switch', 'location'] as $drop_down_field) {
         if (in_array($drop_down_field, $required_ip_fields)) {
@@ -72,6 +74,7 @@ if (is_array($required_ip_fields) && $action != 'delete') {
             }
         }
     }
+
     // check
     if (count($required_field_errors) > 0) {
         array_unshift($required_field_errors, _('Please fix following errors:'));
@@ -163,6 +166,7 @@ if (! is_blank(strstr((string) $POST->ip_addr, '-'))) {
         if ($Addresses->validate_ip($POST->start) === false) {
             $Result->show('danger', _('Invalid IP address').'!', true);
         }
+
         if ($Addresses->validate_ip($POST->stop) === false) {
             $Result->show('danger', _('Invalid IP address').'!', true);
         }
@@ -213,6 +217,7 @@ if (! is_blank(strstr((string) $POST->ip_addr, '-'))) {
             if ($c != 0) {
                 unset($POST->is_gateway);
             }
+
             $c++;
 
             // reset IP address field
@@ -223,6 +228,7 @@ if (! is_blank(strstr((string) $POST->ip_addr, '-'))) {
                 if ($Subnets->is_multicast($POST->ip_addr)) {
                     $POST->mac = $Subnets->create_multicast_mac($Subnets->transform_address($POST->ip_addr, 'dotted'));
                 }
+
                 if ($Subnets->is_multicast($POST->ip_addr)) {
                     if (! $User->is_admin(false)) {
                         $mtest = $Subnets->validate_multicast_mac($POST->mac, $subnet['sectionId'], $subnet['vlanId'], MCUNIQUE);
@@ -256,6 +262,7 @@ if (! is_blank(strstr((string) $POST->ip_addr, '-'))) {
                     $errors[] = _('Cannot').' '.$POST->action.' '._('IP address').' '.$Addresses->transform_to_dotted($m);
                 }
             }
+
             // next IP
             $m = gmp_strval(gmp_add($m, 1));
         }
@@ -315,6 +322,7 @@ else {
         $Subnets->check_permission($User->user, $POST->newSubnet) > User::ACCESS_R ?: $Result->show('danger', _('Cannot edit IP address'), true);
         $POST->ip_addr = $address_old['ip'];
     }
+
     // if errors are present print them, else execute query!
     if (0 && $verify) {
         $Result->show('danger', _('Error').": $verify (".escape_input($POST->ip_addr).')', true);
@@ -338,6 +346,7 @@ else {
                 }
             }
         }
+
         // move checks
         if ($action == 'move') {
             // check if not already used in new subnet
@@ -345,6 +354,7 @@ else {
                 $Result->show('danger', _('IP address').' '.escape_input($POST->ip_addr).' '._('already existing in selected network').'!', true);
             }
         }
+
         // multicast check
         if ($User->settings->enableMulticast == 1 && $subnet_is_multicast) {
             if (! $User->is_admin(false)) {

@@ -53,20 +53,24 @@ if (isset($argv[1])) {
 if (php_sapi_name() != 'cli') {
     exit(json_encode(['status' => 1, 'error' => 'This script can only be run from cli!']));
 }
+
 // check input parameters
 if (! isset($argv[1]) || ! isset($argv[2])) {
     exit(json_encode(['status' => 1, 'error' => 'Missing required input parameters']));
 }
+
 // test to see if threading is available
 if ($Scan->settings->scanPingType != 'fping') {
     if (! PingThread::available($errmsg)) {
         exit(json_encode(['status' => 1, 'error' => "Threading is required for scanning subnets - Error: $errmsg\n"]));
     }
 }
+
 // check script
 if ($argv[1] != 'update' && $argv[1] != 'discovery') {
     exit(json_encode(['status' => 1, 'error' => 'Invalid scan type!']));
 }
+
 // verify cidr
 if (! is_numeric($argv[2])) {
     if ($Subnets->verify_cidr_address($argv[2]) !== true) {
@@ -98,6 +102,7 @@ if ($Scan->settings->scanPingType == 'fping') {
     if ($retval == 3) {
         exit(json_encode(['status' => 1, 'error' => 'invalid command line arguments']));
     }
+
     if ($retval == 4) {
         exit(json_encode(['status' => 1, 'error' => 'system call failure']));
     }
@@ -158,6 +163,7 @@ else {
                 $out['error'][] = $scan_addresses[$index];
             }
         }
+
         unset($threads);
     }
 }

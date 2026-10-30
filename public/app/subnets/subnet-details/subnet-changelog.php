@@ -77,6 +77,7 @@ else {
         } else {
             print "	<td><a href='".create_link('subnets', $GET->section, $GET->subnetId)."'>$subnet[ip]/$subnet[mask]</a></td>";
         }
+
         print "	<td><span class='badge badge1 badge5'>"._(ucwords((string) $l['caction'])).'</span></td>';
         print "	<td><span class='badge badge1 badge5 $bclass'>"._(ucwords("$l[cresult]")).'</span></td>';
         print "	<td class='text-muted'>$l[cdate]</td>";
@@ -122,6 +123,7 @@ if ($clogsSlaves) {
         } else {
             print "	<td><a href='".create_link('subnets', $l['sectionId'], $l['id'])."'>".$Subnets->transform_to_dotted($l['subnet'])."/$l[mask]</a></td>";
         }
+
         print "	<td>$l[description]</td>";
         print '	<td>'._("$l[caction]").'</td>';
         print '	<td>'._("$l[cresult]").'</td>';

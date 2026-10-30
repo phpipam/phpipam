@@ -226,6 +226,7 @@ class DHCP_kea extends Common_functions
         if (isset($this->config['Dhcp4'])) {
             $this->ipv4_used = true;
         }
+
         if (isset($this->config['Dhcp6'])) {
             $this->ipv6_used = true;
         }
@@ -312,6 +313,7 @@ class DHCP_kea extends Common_functions
                             $l[9] = 'expired-reclaimed';
                             break;
                     }
+
                     // save only active
                     if ($l[4] > time()) {
                         $leases_parsed[] = [
@@ -364,6 +366,7 @@ class DHCP_kea extends Common_functions
         if (is_blank($lease_database['host'])) {
             $lease_database['host'] = 'localhost';
         }
+
         // open DB connection
         $this->init_database_conection($lease_database['user'], $lease_database['password'], $lease_database['host'], 3306, $lease_database['name']);
         // set query
@@ -374,12 +377,14 @@ class DHCP_kea extends Common_functions
         } else {
             throw new Exception('IPv6 leases not yet!');
         }
+
         // fetch leases
         try {
             $leases = $this->Database_kea->getObjectsQuery('lease4', $query);
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
+
         // save leases
         if (count($leases) > 0) {
             // we need array
@@ -501,6 +506,7 @@ class DHCP_kea extends Common_functions
                                     $this->reservations4[$m]['options'][$o['name']] = $o['data'];
                                 }
                             }
+
                             // classes
                             if (isset($r['client-classes'])) {
                                 $this->reservations4[$m]['classes'] = [];
@@ -536,6 +542,7 @@ class DHCP_kea extends Common_functions
         if (is_blank($reservations_database['host'])) {
             $reservations_database['host'] = 'localhost';
         }
+
         // open DB connection
         $this->init_database_conection($reservations_database['user'], $reservations_database['password'], $reservations_database['host'], 3306, $reservations_database['name']);
         // set query
@@ -544,12 +551,14 @@ class DHCP_kea extends Common_functions
         } else {
             $query = 'select * from `hosts`;';
         }
+
         // fetch leases
         try {
             $reservations = $this->Database_kea->getObjectsQuery('hosts', $query);
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
+
         // save leases
         if (count($reservations) > 0) {
             // we need array

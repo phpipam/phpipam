@@ -67,16 +67,20 @@ class Table extends Common_functions
             if (! is_numeric($_GET['subpage'])) {
                 $this->Result->show('danger', _('Invalid subpage'), true);
             }
+
             $this->subpage = $_GET['subpage'];
         }
+
         // limit
         if (isset($_GET['limit'])) {
             if ($_GET['limit'] == 'all') {
                 $_GET['limit'] = 1000000;
             }
+
             if (! is_numeric($_GET['limit'])) {
                 $this->Result->show('danger', _('Invalid limit'), true);
             }
+
             $this->limit = $_GET['limit'];
         }
 
@@ -108,6 +112,7 @@ class Table extends Common_functions
                 $selected = $l == $this->subpage ? 'selected' : '';
                 $html[] = "<option value='$l' $selected>$l</option>";
             }
+
             $html[] = '</select>';
             $html[] = '</form>';
 
@@ -129,6 +134,7 @@ class Table extends Common_functions
         } else {
             $html[] = " <li><a href='".create_link('subnets', $_GET['section']).'?subpage='.($this->filters['subpage'] - 1).'&limit='.$this->filters['limit']."'><span aria-hidden='true'>«</span><span class='sr-only'>"._('Previous').'</span></a></li> ';
         }
+
         // one page
         if ($this->filters['pagenum'] == 1) {
             return false;
@@ -143,12 +149,14 @@ class Table extends Common_functions
                 }
             }
         }
+
         // next
         if ($this->filters['pagenum'] == $this->filters['subpage']) {
             $html[] = " <li class='disabled'><a><span aria-hidden='true'>»</span><span class='sr-only'>"._('Next').'</span></a></li>';
         } else {
             $html[] = " <li><a href='".create_link('subnets', $_GET['section']).'?subpage='.($this->filters['subpage'] + 1).'&limit='.$this->filters['limit']."'><span aria-hidden='true'>»</span><span class='sr-only'>"._('Next').'</span></a></li> ';
         }
+
         // finish
         $html[] = '</ul>';
 

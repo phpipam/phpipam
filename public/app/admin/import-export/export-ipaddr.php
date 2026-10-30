@@ -60,6 +60,7 @@ if ($all_sections !== false) {
             }
         }
     }
+
     // set new array
     $sections_sorted = @$sectionssorted;
 }
@@ -96,18 +97,22 @@ if ($GET->section == 'on') {
     $worksheet->write($curRow, $curColumn, _('Section'), $format_header);
     $curColumn++;
 }
+
 if ($GET->ip_addr == 'on') {
     $worksheet->write($curRow, $curColumn, _('IP Address'), $format_header);
     $curColumn++;
 }
+
 if ($GET->hostname == 'on') {
     $worksheet->write($curRow, $curColumn, _('Hostname'), $format_header);
     $curColumn++;
 }
+
 if ($GET->description == 'on') {
     $worksheet->write($curRow, $curColumn, _('Description'), $format_header);
     $curColumn++;
 }
+
 if ($GET->vrf == 'on') {
     $worksheet->write($curRow, $curColumn, _('VRF'), $format_header);
     $curColumn++;
@@ -116,6 +121,7 @@ if ($GET->vrf == 'on') {
     if (! $all_vrfs) {
         $all_vrfs = [];
     }
+
     // prepare list for easy processing
     $vrfs = [];
     $vrfs[0] = 'default';
@@ -124,18 +130,22 @@ if ($GET->vrf == 'on') {
         $vrfs[$vrf['vrfId']] = $vrf['name'];
     }
 }
+
 if ($GET->subnet == 'on') {
     $worksheet->write($curRow, $curColumn, _('Subnet'), $format_header);
     $curColumn++;
 }
+
 if ($GET->mac == 'on') {
     $worksheet->write($curRow, $curColumn, _('MAC'), $format_header);
     $curColumn++;
 }
+
 if ($GET->owner == 'on') {
     $worksheet->write($curRow, $curColumn, _('Owner'), $format_header);
     $curColumn++;
 }
+
 if ($GET->device == 'on') {
     $worksheet->write($curRow, $curColumn, _('Device'), $format_header);
     $curColumn++;
@@ -148,16 +158,19 @@ if ($GET->device == 'on') {
         }
     }
 }
+
 if ($GET->note == 'on') {
     $worksheet->write($curRow, $curColumn, _('Note'), $format_header);
     $curColumn++;
 }
+
 if ($GET->tag == 'on') {
     $worksheet->write($curRow, $curColumn, _('Tag'), $format_header);
     $curColumn++;
     // get IP address types
     $ip_types = $Addresses->addresses_types_fetch();
 }
+
 if ($GET->gateway == 'on') {
     $worksheet->write($curRow, $curColumn, _('Gateway'), $format_header);
     $curColumn++;
@@ -237,6 +250,7 @@ if ($all_sections !== false) {
                         if (! isset($vrfs[$subnet['vrfId']])) {
                             $vrfs[$subnet['vrfId']] = '';
                         }
+
                         $worksheet->write($curRow, $curColumn, $vrfs[$subnet['vrfId']], $format_text);
                         $curColumn++;
                     }
@@ -307,6 +321,7 @@ if ($all_sections !== false) {
         }
     }
 }
+
 // new line
 $curRow++;
 

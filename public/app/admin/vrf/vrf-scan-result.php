@@ -78,6 +78,7 @@ if (count($res) > 0) {
                 $values[$f['name']] = $r[$f['name']];
             }
         }
+
         // insert vrfs
         if (! $Admin->object_modify('vrf', 'add', 'vrfId', $values)) {
             $Result->show('danger', _('Failed to import entry').' '.$r['number'].' '.$r['name'], false);

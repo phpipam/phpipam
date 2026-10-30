@@ -45,9 +45,11 @@ if ($POST->action != 'delete') {
     if (strlen((string) $POST->name) < 3 || strlen((string) $POST->name) > 64) {
         $error[] = 'Invalid name';
     }
+
     if (strlen((string) $POST->username) < 3 || strlen((string) $POST->username) > 64) {
         $error[] = 'Invalid username';
     }
+
     if (strlen((string) $POST->password) < 3 || strlen((string) $POST->password) > 64) {
         $error[] = 'Invalid password';
     }

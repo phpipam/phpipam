@@ -45,6 +45,7 @@ function cmp_subnets($a, $b)
 
     return ($a['subnet_dec'] < $b['subnet_dec']) ? -1 : 1;
 }
+
 usort($subnets_all, 'cmp_subnets');
 
 // recompute parents
@@ -75,6 +76,7 @@ if (isset($subnets_all)) {
                 $POST->masterSubnetId = $master->id;
             }
         }
+
         // include edit script
         include __DIR__.'/../../admin/subnets/edit-result.php';
     }

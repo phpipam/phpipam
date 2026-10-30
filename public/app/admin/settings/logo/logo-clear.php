@@ -25,6 +25,7 @@ try {
     if (! is_writable($file)) {
         throw new Exception("File $file not writable");
     }
+
     // remove
     unlink($file);
     // ok

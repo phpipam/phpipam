@@ -11,12 +11,15 @@ require_once __DIR__.'/../../../../functions/functions.php';
 if (! isset($Database)) {
     $Database = new Database_PDO;
 }
+
 if (! isset($User)) {
     $User = new User($Database);
 }
+
 if (! isset($Result)) {
     $Result = new Result;
 }
+
 if (! isset($Tools)) {
     $Tools = new Tools($Database);
 }
@@ -54,6 +57,7 @@ foreach ($expfields as $expfield) {
     } else {
         $Result->show('danger', _('Internal error: missing import field mapping.'), true, true);
     }
+
     // prepare header row for preview table
     $hrow .= '<th>'.escape_input($expfield).'</th>';
     // prepare select field to transfer to actual import file
@@ -99,8 +103,10 @@ if (strtolower((string) $filetype) == 'csv') {
                 $record[$fieldmap[$col]] = escape_input(trim((string) $val));
             }
         }
+
         $data[] = $record;
     }
+
     fclose($filehdl);
 }
 // read first row from XLS
@@ -127,6 +133,7 @@ elseif (strtolower((string) $filetype) == 'xls') {
                 $record[$fieldmap[$col]] = escape_input(trim((string) $Tools->convert_encoding_to_UTF8($xls->val($row, $col, $sheet))));
             }
         }
+
         $data[] = $record;
     }
 }

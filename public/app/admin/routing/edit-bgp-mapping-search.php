@@ -27,6 +27,7 @@ $search_txt = isset($POST->subnet) ? $POST->subnet : '';
 if (! is_numeric($bgp_id)) {
     $Result->show('danger', _('Invalid ID'), true);
 }
+
 if (strlen($search_txt) < 2) {
     $Result->show('danger', _('Please enter at least 2 characters.'), true);
 }
@@ -67,6 +68,7 @@ if (is_array($subnets) && $subnets != []) {
             $cnt++;
         }
     }
+
     print '</table>';
     // none
     if ($cnt == 0) {

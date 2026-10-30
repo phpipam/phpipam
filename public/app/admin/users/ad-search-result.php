@@ -33,6 +33,7 @@ $params = new Params(db_json_decode($server->params));
 if (is_blank($params->adminUsername) || is_blank($params->adminPassword)) {
     $Result->show('danger', _('Missing credentials'), true);
 }
+
 // at least 2 chars
 if (strlen((string) $POST->dname) < 2) {
     $Result->show('danger', _('Please enter at least 2 characters'), true);
@@ -43,6 +44,7 @@ try {
     if ($server->type == 'NetIQ') {
         $params->account_suffix = '';
     }
+
     // set options
     $options = [
         'base_dn' => $params->base_dn,
@@ -113,5 +115,6 @@ if (! isset($userinfo['count'])) {
             print '</tr>';
         }
     }
+
     print '</table>';
 }

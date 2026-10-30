@@ -46,6 +46,7 @@ elseif ($User->settings->enableRouting != '1') {
         if (! isset($GET->subnetId)) {
             $GET->subnetId = 'bgp';
         }
+
         // menu
         include __DIR__.'/menu.php';
         // include

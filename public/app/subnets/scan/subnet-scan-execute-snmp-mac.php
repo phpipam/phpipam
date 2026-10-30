@@ -22,6 +22,7 @@ if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
 if ($User->settings->enableSNMP != '1') {
     $Result->show('danger', _('SNMP module disabled'), true);
 }
+
 // subnet check
 $subnet = $Subnets->fetch_object('subnets', 'id', $POST->subnetId);
 if ($subnet === false) {
@@ -65,6 +66,7 @@ if ($devices_used_arp !== false) {
         }
     }
 }
+
 // filter out not in this section
 if ($devices_used_mac !== false) {
     foreach ($devices_used_mac as $d) {
@@ -81,6 +83,7 @@ if ($devices_used_mac !== false) {
 if (! isset($permitted_devices_arp)) {
     $Result->show('danger', _('No devices for SNMP ARP query available'), true);
 }
+
 if (! isset($permitted_devices_mac)) {
     $Result->show('danger', _('No devices for SNMP MAC address query available'), true);
 }
@@ -225,6 +228,7 @@ else {
             return -1;
         }
     }
+
     // sort ip addresses
     usort($found, 'sort_array');
 
@@ -248,6 +252,7 @@ else {
             print '<th>'.$Tools->print_custom_field_name($field['name']).'</th>';
         }
     }
+
     print '	<th></th>';
     print '</tr>';
 
@@ -268,6 +273,7 @@ else {
         } else {
             print "<td><span class='ip-address'>$ip[ip]</span></td>";
         }
+
         // description, ip, device
         print '<td>';
         print "	<input type='text' class='form-control input-sm' name='description$m'>";
@@ -293,6 +299,7 @@ else {
         if (! is_blank(@$ip['port_alias'])) {
             print "	<i class='fa fa-info-circle' rel='tooltip' title='Interface description: $ip[port_alias]'></i>";
         }
+
         print '</td>';
         // custom
         if (isset($required_fields)) {
@@ -304,6 +311,7 @@ else {
                 print '<td>'.$custom_input['field']."</td>\n";
             }
         }
+
         // remove button
         print "<td><a href='' class='btn btn-xs btn-danger resultRemove resultRemoveMac' data-target='result$m'><i class='fa fa-times'></i></a></td>";
         print '</tr>';
@@ -339,6 +347,7 @@ print ' Scanned devices: <br>';
 foreach ($debug as $k => $d) {
     print '&middot; '.$k.'<br>';
 }
+
 print '</span>';
 print '</div>';
 
