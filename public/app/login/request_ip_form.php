@@ -183,7 +183,7 @@ if (@$config['requests_public'] === false) {
     // check for requests guide
     $instructions = $Tools->parsedown_instructions(2);
 
-    if (strlen($instructions) > 0) {
+    if ((string) $instructions !== '') {
         print "<div id='login' class='request'>";
         print "<div class='requestIP'>";
         print $instructions;

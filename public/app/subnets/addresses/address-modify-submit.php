@@ -135,9 +135,9 @@ foreach ($POST as $k => $v) {
 $Tools->update_POST_custom_fields('ipaddresses', $action, $POST);
 
 // we need old address details for mailing or if we are editing address
-if ($action == 'edit' || $action == 'delete' || $action == 'move') {
+if (in_array($action, ['edit', 'delete', 'move'])) {
     $address_old = (array) $Addresses->fetch_address(null, $POST->id);
-    if (empty($address_old) || (int) $address_old['subnetId'] !== (int) $POST->subnetId) {
+    if ($address_old === [] || (int) $address_old['subnetId'] !== (int) $POST->subnetId) {
         $Result->show('danger', _('Invalid address for selected subnet'), true);
     }
 }

@@ -79,7 +79,7 @@ class Responses extends Result
         elseif ($_SERVER['CONTENT_TYPE'] == 'application/x-www-form-urlencoded') {
         }
         // set, verify
-        elseif (! ($_SERVER['CONTENT_TYPE'] == 'application/xml' || $_SERVER['CONTENT_TYPE'] == 'application/json')) {
+        elseif ($_SERVER['CONTENT_TYPE'] != 'application/xml' && $_SERVER['CONTENT_TYPE'] != 'application/json') {
             $this->throw_exception(415, 'Invalid Content type '.$_SERVER['CONTENT_TYPE']);
         }
     }

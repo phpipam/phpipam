@@ -69,11 +69,8 @@ class OpenStreetMap extends Common_functions
         if (! is_object($object) || ! property_exists($object, 'lat') || ! property_exists($object, 'long')) {
             return false;
         }
-        if (filter_var($object->lat, FILTER_VALIDATE_FLOAT) === false || filter_var($object->long, FILTER_VALIDATE_FLOAT) === false) {
-            return false;
-        }
 
-        return true;
+        return filter_var($object->lat, FILTER_VALIDATE_FLOAT) !== false && filter_var($object->long, FILTER_VALIDATE_FLOAT) !== false;
     }
 
     /**

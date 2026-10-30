@@ -78,11 +78,7 @@ class PingThread
         $required_functions = ['posix_getpid', 'posix_getppid', 'posix_mkfifo', 'posix_kill',
             'pcntl_fork', 'pcntl_waitpid', 'pcntl_wifexited', 'pcntl_wexitstatus', 'pcntl_signal'];
 
-        if ($errmsg = php_feature_missing($required_extensions, $required_functions)) {
-            return false;
-        }
-
-        return true;
+        return ! $errmsg = php_feature_missing($required_extensions, $required_functions);
     }
 
     /**
@@ -282,7 +278,7 @@ class PingThread
 
             pcntl_signal(SIGTERM, [$this, 'signalHandler']);
             $arguments = func_get_args();
-            if (! empty($arguments)) {
+            if ($arguments !== []) {
                 call_user_func_array($this->runnable, $arguments);
             } else {
                 call_user_func($this->runnable);
@@ -320,7 +316,7 @@ class PingThread
 
             pcntl_signal(SIGTERM, [$this, 'signalHandler']);
             $array_args = func_get_args();
-            if (! empty($array_args)) {
+            if ($array_args !== []) {
                 $results = call_user_func_array($this->runnable, $array_args);
             } else {
                 $results = call_user_func($this->runnable);
@@ -381,9 +377,8 @@ class PingThread
      */
     protected function signalHandler($_signal)
     {
-        switch ($_signal) {
-            case SIGTERM:
-                exit(0);
+        if ($_signal === SIGTERM) {
+            exit(0);
         }
     }
 }

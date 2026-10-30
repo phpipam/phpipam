@@ -38,7 +38,7 @@ if (Config::ValueOf('proxy_enabled')) {
 set_ui_language();
 
 // * http only cookies -------------------
-if (php_sapi_name() != 'cli') {
+if (PHP_SAPI != 'cli') {
     ini_set('session.cookie_httponly', 1);
 }
 

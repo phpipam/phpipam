@@ -279,7 +279,7 @@ class Logging extends Common_functions
      */
     private function get_user_name()
     {
-        if (php_sapi_name() === 'cli') {
+        if (PHP_SAPI === 'cli') {
             return null;
         }
 
@@ -594,7 +594,7 @@ class Logging extends Common_functions
         }
 
         if ($direction !== null) {
-            if ($direction != 'next' && $direction != 'prev' && $direction != '') {
+            if (! in_array($direction, ['next', 'prev', ''])) {
                 $this->Result->show('danger', _('Invalid direction'), true);
 
                 return false;
@@ -797,6 +797,8 @@ class Logging extends Common_functions
         else {
             return true;
         }
+
+        return null;
     }
 
     /**
@@ -813,7 +815,7 @@ class Logging extends Common_functions
         $this->get_active_user_id();
 
         // null and from cli, set admin user
-        if ($this->user === null && php_sapi_name() == 'cli') {
+        if ($this->user === null && PHP_SAPI == 'cli') {
             $this->user_id = 1;
         }
 
@@ -1528,14 +1530,12 @@ class Logging extends Common_functions
 
         // new root
         if ($v == 0) {
-            $v = _('Root');
-        } else {
-            $section = $this->Sections->fetch_section('id', $v);
-            $v = $section->name;
+            return _('Root');
         }
 
-        // result
-        return $v;
+        $section = $this->Sections->fetch_section('id', $v);
+
+        return $section->name;
     }
 
     /**

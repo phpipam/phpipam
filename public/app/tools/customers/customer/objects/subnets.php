@@ -75,7 +75,7 @@ if (isset($objects['subnets'])) {
         }
 
         // slaves info
-        $has_slaves = $Subnets->has_slaves($slave_subnet['id']) ? true : false;
+        $has_slaves = (bool) $Subnets->has_slaves($slave_subnet['id']);
 
         // description
         $has_slaves_ind = $has_slaves ? " <i class='fa fa-folder'></i> " : '';

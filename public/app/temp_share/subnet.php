@@ -22,7 +22,7 @@ if (count($subnet) == 0) {
     $Result->show('danger', _('Subnet does not exist'), true);
 }  // die if empty
 $subnet_detailed = $Subnets->get_network_boundaries($subnet['subnet'], $subnet['mask']);           // set network boundaries
-$slaves = $Subnets->has_slaves($subnet['id']) ? true : false;                                      // check if subnet has slaves and set slaves flag true/false
+$slaves = (bool) $Subnets->has_slaves($subnet['id']);                                      // check if subnet has slaves and set slaves flag true/false
 
 // permissions
 $subnet_permission = 1;            // subnet permission

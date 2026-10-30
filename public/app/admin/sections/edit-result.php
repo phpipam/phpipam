@@ -49,7 +49,7 @@ if ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
                 $out[] = $s;
             }
 
-            $num_subnets = $num_subnets + count($subnets);
+            $num_subnets += count($subnets);
         }
 
         // fetch subsection subnets
@@ -60,7 +60,7 @@ if ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
                     $out[] = $sss;
                 }
 
-                $num_subnets = $num_subnets + count($subsection_subnets);
+                $num_subnets += count($subsection_subnets);
             }
 
             // count all addresses that will be deleted!

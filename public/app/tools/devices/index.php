@@ -15,10 +15,7 @@ if ($User->get_module_permissions('devices') == User::ACCESS_NONE) {
 elseif (isset($GET->subnetId)) {
     // device by types ?
     if (
-        $GET->subnetId == 'type' ||
-        $GET->subnetId == 'section' ||
-        $GET->subnetId == 'rack' ||
-        $GET->subnetId == 'location'
+        in_array($GET->subnetId, ['type', 'section', 'rack', 'location'])
     ) {
         include __DIR__.'/all-devices.php';
     }
@@ -41,7 +38,7 @@ elseif (isset($GET->subnetId)) {
         }
         if ($User->settings->enableCircuits == '1') {
             $cnt_circuits = $Tools->count_database_objects('circuits', 'device1', $device->id);
-            $cnt_circuits = $cnt_circuits + $Tools->count_database_objects('circuits', 'device2', $device->id);
+            $cnt_circuits += $Tools->count_database_objects('circuits', 'device2', $device->id);
         }
         ?>
 

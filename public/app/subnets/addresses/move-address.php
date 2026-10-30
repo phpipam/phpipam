@@ -36,7 +36,7 @@ is_numeric($POST->id) || is_blank($POST->id) ?: $Result->show('danger', _('Inval
 $address = (array) $Addresses->fetch_address(null, $POST->id);
 $subnet = (array) $Subnets->fetch_subnet(null, $POST->subnetId);
 
-if (empty($address) || empty($subnet) || (int) $address['subnetId'] !== (int) $subnet['id']) {
+if ($address === [] || $subnet === [] || (int) $address['subnetId'] !== (int) $subnet['id']) {
     $Result->show('danger', _('Invalid address for selected subnet'), true);
 }
 

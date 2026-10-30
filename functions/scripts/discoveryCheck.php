@@ -65,7 +65,7 @@ $address_change = [];          // Array with differences, can be used to email t
 $hostnames = [];          // Array with detected hostnames
 
 // script can only be run from cli
-if (php_sapi_name() != 'cli') {
+if (PHP_SAPI != 'cli') {
     exit("discoveryCheck-Fatal-Error: This script can only be run from cli!\n");
 }
 
@@ -150,7 +150,7 @@ if ($Scan->icmp_type == 'fping') {
             print 'discoveryCheck-Warning: Failed to start scanning pool, spawned '.count($threads).' of '.$Scan->settings->scanMaxThreads."\n";
         }
 
-        if (empty($threads)) {
+        if ($threads === []) {
             exit("discoveryCheck-Fatal-Error: Unable to spawn scanning pool\n");
         }
 
@@ -201,7 +201,7 @@ if ($Scan->icmp_type == 'fping') {
             print 'discoveryCheck-Warning: Failed to start scanning pool, spawned '.count($threads).' of '.$Scan->settings->scanMaxThreads."\n";
         }
 
-        if (empty($threads)) {
+        if ($threads === []) {
             exit("discoveryCheck-Fatal-Error: Unable to spawn scanning pool\n");
         }
 

@@ -21,7 +21,7 @@ $User->is_admin();
 // fetch all available LDAP servers
 $servers = $Admin->fetch_all_objects('usersAuthMethod');
 foreach ($servers as $k => $s) {
-    if ($s->type != 'AD' && $s->type != 'LDAP' && $s->type != 'NetIQ') {
+    if (! in_array($s->type, ['AD', 'LDAP', 'NetIQ'])) {
         unset($servers[$k]);
     }
 }

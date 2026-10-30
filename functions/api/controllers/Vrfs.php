@@ -131,6 +131,8 @@ class Vrfs_controller extends Common_api_functions
                 return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
             }
         }
+
+        return null;
     }
 
     /**
@@ -154,6 +156,8 @@ class Vrfs_controller extends Common_api_functions
             // set result
             return ['code' => 201, 'message' => 'VRF created', 'id' => $this->Admin->lastId, 'location' => '/api/'.$this->_params->app_id.'/vrfs/'.$this->Admin->lastId.'/'];
         }
+
+        return null;
     }
 
     /**
@@ -183,6 +187,8 @@ class Vrfs_controller extends Common_api_functions
             // set result
             return ['code' => 200, 'message' => 'VRF updated'];
         }
+
+        return null;
     }
 
     /**
@@ -210,6 +216,8 @@ class Vrfs_controller extends Common_api_functions
             // set result
             return ['code' => 200, 'message' => 'VRF deleted'];
         }
+
+        return null;
     }
 
     /* @validations ---------- */

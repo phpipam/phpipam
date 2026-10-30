@@ -282,7 +282,7 @@ class Prefix_controller extends Common_api_functions
     public function set_query_type()
     {
         // get subnets in address selection query
-        if ($this->_params->id2 == 'address' || $this->_params->id2 == 'addresses' || $this->_params->id2 == 'ip') {
+        if (in_array($this->_params->id2, ['address', 'addresses', 'ip'])) {
             // set query type
             $this->query_type = 'address';
             // type provided ?
@@ -299,7 +299,7 @@ class Prefix_controller extends Common_api_functions
             $this->override_custom_fields();
         }
         // get single address
-        elseif ($this->_params->id3 == 'address' || $this->_params->id3 == 'addresses' || $this->_params->id3 == 'ip') {
+        elseif (in_array($this->_params->id3, ['address', 'addresses', 'ip'])) {
             // set query type
             $this->query_type = 'address';
             // overwrite select parameters
@@ -440,6 +440,8 @@ class Prefix_controller extends Common_api_functions
                 return ['code' => 200, 'data' => $available];
             }
         }
+
+        return null;
     }
 
     /**
@@ -512,6 +514,8 @@ class Prefix_controller extends Common_api_functions
             // set result
             return ['code' => 201, 'message' => 'Subnet created', 'id' => $this->Subnets->lastInsertId, 'data' => $this->Tools->transform_address($values['subnet'], 'dotted').'/'.$values['mask'], 'location' => '/api/'.$this->_params->app_id.'/subnets/'.$this->Subnets->lastInsertId.'/'];
         }
+
+        return null;
     }
 
     /**
@@ -565,6 +569,8 @@ class Prefix_controller extends Common_api_functions
             // set result
             return ['code' => 201, 'message' => 'Address created', 'id' => $this->Addresses->lastId, 'subnetId' => $this->master_subnet->id, 'data' => $this->Addresses->transform_address($this->_params->ip_addr, 'dotted'), 'location' => '/api/'.$this->_params->app_id.'/addresses/'.$this->Addresses->lastId.'/'];
         }
+
+        return null;
     }
 
     /**
@@ -782,7 +788,7 @@ class Prefix_controller extends Common_api_functions
         }
 
         // did we found any
-        return $available === false ? false : $available;
+        return (bool) $available;
     }
 
     /**
@@ -827,7 +833,7 @@ class Prefix_controller extends Common_api_functions
         }
 
         // did we found any
-        return $available === false ? false : $available;
+        return (bool) $available;
     }
 
     /**

@@ -52,7 +52,7 @@
     <!-- Used switch portsh-->
     <li><b><?php print _('Device search tips'); ?></b>
         <ul>
-            <li><?php print _('You can get all used / available ports and connected IP\'s / hostnames in some device by entering device name in search field'); ?></li>
+            <li><?php print _("You can get all used / available ports and connected IP's / hostnames in some device by entering device name in search field"); ?></li>
         </ul>
     
     </li>

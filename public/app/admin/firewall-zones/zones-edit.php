@@ -33,7 +33,7 @@ if (! preg_match('/^[0-9]+$/i', (string) $POST->id)) {
     $Result->show('danger', _('Invalid ID. Do not manipulate the POST values!'), true);
 }
 // validate $POST->action values
-if ($POST->action != 'add' && $POST->action != 'edit' && $POST->action != 'delete') {
+if (! in_array($POST->action, ['add', 'edit', 'delete'])) {
     $Result->show('danger', _('Invalid action. Do not manipulate the POST values!'), true);
 }
 

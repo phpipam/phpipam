@@ -1239,11 +1239,8 @@ class Subnets extends Common_functions
         }
 
         $cnt = $this->count_database_objects('subnets', 'masterSubnetId', $subnetId);
-        if ($cnt == 0) {
-            return false;
-        }
 
-        return true;
+        return $cnt != 0;
     }
 
     /**
@@ -1655,7 +1652,7 @@ class Subnets extends Common_functions
         $pos = $length - 3;
 
         if ($length > 8) {
-            $number = '~'.substr((string) $number, 0, $length - $pos).'&middot;10^<sup>'.$pos.'</sup>';
+            return '~'.substr((string) $number, 0, $length - $pos).'&middot;10^<sup>'.$pos.'</sup>';
         }
 
         return $number;
@@ -1867,6 +1864,8 @@ class Subnets extends Common_functions
         } else {
             return false;
         }
+
+        return null;
     }
 
     /**
@@ -1966,7 +1965,7 @@ class Subnets extends Common_functions
             return false;
         }
 
-        return $res[0]->cnt == 0 ? false : true;
+        return $res[0]->cnt != 0;
     }
 
     /**
@@ -2283,6 +2282,8 @@ class Subnets extends Common_functions
         if ($this->get_max_netmask($cidr[0]) < $cidr[1]) {
             return _('Invalid netmask');
         }
+
+        return null;
     }
 
     /**
@@ -2397,7 +2398,7 @@ class Subnets extends Common_functions
         // Re-index
         $overlaping = array_values(array_filter($overlaping));
 
-        if (empty($overlaping)) {
+        if ($overlaping === []) {
             return false;
         }
 
@@ -2979,7 +2980,7 @@ class Subnets extends Common_functions
         }
 
         // return
-        return $res == 0 ? false : true;
+        return $res != 0;
     }
 
     /**
@@ -3168,7 +3169,7 @@ class Subnets extends Common_functions
             $mac_tmp = explode('.', (string) $address);
             // check 3rd octet
             if ($mac_tmp[1] >= 128) {
-                $mac_tmp[1] = $mac_tmp[1] - 128;
+                $mac_tmp[1] -= 128;
             }
 
             // create mac
@@ -3308,7 +3309,7 @@ class Subnets extends Common_functions
         }
 
         // multicast check
-        if (! ($mac_delimited[0] == '33' && $mac_delimited[1] == '33') && ! ($mac_delimited[0] == '01' && $mac_delimited[1] == '00' && $mac_delimited[2] == '5e')) {
+        if (($mac_delimited[0] != '33' || $mac_delimited[1] != '33') && ! ($mac_delimited[0] == '01' && $mac_delimited[1] == '00' && $mac_delimited[2] == '5e')) {
             return _('Not multicast MAC address');
         }
 
@@ -3584,7 +3585,7 @@ class Subnets extends Common_functions
             }
 
             // if some exist print next ul
-            if ($subnets) {
+            if ($subnets !== []) {
                 // print subnet
                 if ($open == 'open') {
                     $html[] = '<ul class="submenu submenu-'.$open.'">';
@@ -3695,7 +3696,7 @@ class Subnets extends Common_functions
             }
 
             // if some exist print next ul
-            if ($subnets) {
+            if ($subnets !== []) {
                 // print subnet
                 if ($open == 'open') {
                     $html[] = '<ul class="submenu submenu-'.$open.'">';

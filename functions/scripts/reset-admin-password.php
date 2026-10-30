@@ -23,7 +23,7 @@ $User = new User($Database, true);
 $Result = new Result;
 
 // script can only be run from cli
-if (php_sapi_name() != 'cli') {
+if (PHP_SAPI != 'cli') {
     $Result->show_cli('This script can only be run from cli', true);
 }
 

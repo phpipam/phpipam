@@ -623,7 +623,7 @@ class PowerDNS extends Common_functions
             return false;
         }
 
-        if (! is_array($domain) || empty($domain)) {
+        if (! is_array($domain) || $domain === []) {
             return false;
         }
 
@@ -1142,6 +1142,8 @@ class PowerDNS extends Common_functions
         ];
         // update
         $this->update_domain_record_content($content);
+
+        return null;
     }
 
     /**
@@ -1730,7 +1732,7 @@ class PowerDNS extends Common_functions
         }
 
         // result
-        return $count == 0 ? false : true;
+        return $count != 0;
     }
 
     /**

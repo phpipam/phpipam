@@ -96,7 +96,7 @@ if (isset($latlng['lat']) && isset($latlng['lng'])) {
     $values['lat'] = $latlng['lat'];
     $values['long'] = $latlng['lng'];
 } else {
-    if (! (Config::ValueOf('offline_mode') || Config::ValueOf('disable_geoip_lookups'))) {
+    if (! Config::ValueOf('offline_mode') && ! Config::ValueOf('disable_geoip_lookups')) {
         $Result->show('warning', _('Failed to update location lat/lng from Nominatim').'.<br>'.$latlng['error'], false);
     }
 }

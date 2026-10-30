@@ -50,7 +50,7 @@ if (isset($argv[1])) {
  */
 
 // script can only be run from cli
-if (php_sapi_name() != 'cli') {
+if (PHP_SAPI != 'cli') {
     exit(json_encode(['status' => 1, 'error' => 'This script can only be run from cli!']));
 }
 
@@ -108,7 +108,7 @@ if ($Scan->settings->scanPingType == 'fping') {
     }
 
     // parse result
-    if (empty($Scan->fping_result)) {
+    if ($Scan->fping_result === []) {
         exit(json_encode(['status' => 0, 'values' => ['alive' => null]]));
     }
 
@@ -146,7 +146,7 @@ else {
             $result['debug'] .= 'Failed to start scanning pool, spawned '.count($threads).' of '.$Scan->settings->scanMaxThreads."\n";
         }
 
-        if (empty($threads)) {
+        if ($threads === []) {
             exit(json_encode(['status' => 1, 'error' => 'Unable to spawn scanning pool']));
         }
 

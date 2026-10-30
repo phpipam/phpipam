@@ -7,7 +7,7 @@
  */
 
 // only from cli
-if (php_sapi_name() != 'cli') {
+if (PHP_SAPI != 'cli') {
     exit('Cli only!');
 }
 

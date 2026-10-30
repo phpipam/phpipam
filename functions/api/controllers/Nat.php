@@ -146,6 +146,8 @@ class Nat_controller extends Common_api_functions
         } else {
             $this->Response->throw_exception(400, 'Invalid ID format');
         }
+
+        return null;
     }
 
     /**
@@ -174,7 +176,7 @@ class Nat_controller extends Common_api_functions
                 }
             }
 
-            array_push($out, $rr);
+            $out[] = $rr;
         }
 
         return $out;
@@ -343,14 +345,14 @@ class Nat_controller extends Common_api_functions
                         $func = $this->validation_data[$pk]['function'];
                         $object = $this->validation_data[$pk]['object']->$func('id', $v);
                         if ($object) {
-                            array_push($values, $v);
+                            $values[] = $v;
                         } else {
                             $this->Response->throw_exception(404, "ID not found for type $pk, ID: $v");
                         }
                     }
                 }
 
-                array_push($input_out, [$pk => $values]);
+                $input_out[] = [$pk => $values];
             }
         }
     }
@@ -376,5 +378,7 @@ class Nat_controller extends Common_api_functions
         } else {
             $this->Response->throw_exception(400, 'Invalid ID format');
         }
+
+        return null;
     }
 }

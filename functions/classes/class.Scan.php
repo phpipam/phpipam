@@ -198,7 +198,7 @@ class Scan extends Common_functions
     private function set_php_exec()
     {
         // Invoked via CLI, use current php-cli binary if known (>php5.3)
-        if (php_sapi_name() === 'cli' && defined('PHP_BINARY')) {
+        if (PHP_SAPI === 'cli' && defined('PHP_BINARY')) {
             $this->php_exec = PHP_BINARY;
 
             return;
@@ -227,7 +227,7 @@ class Scan extends Common_functions
             $this->os_type = 'FreeBSD';
         } elseif (PHP_OS == 'Linux' || PHP_OS == 'OpenBSD') {
             $this->os_type = 'Linux';
-        } elseif (PHP_OS == 'WIN32' || PHP_OS == 'Windows' || PHP_OS == 'WINNT') {
+        } elseif (in_array(PHP_OS, ['WIN32', 'Windows', 'WINNT'])) {
             $this->os_type = 'Windows';
         }
     }
@@ -588,26 +588,25 @@ class Scan extends Common_functions
      */
     public function ping_set_exit_code_explains()
     {
-        $explain_codes[0] = 'SUCCESS';
-        $explain_codes[1] = 'OFFLINE';
-        $explain_codes[2] = 'ERROR';
-        $explain_codes[3] = 'UNKNOWN ERROR';
-        $explain_codes[64] = 'EX_USAGE';
-        $explain_codes[65] = 'EX_DATAERR';
-        $explain_codes[68] = 'EX_NOHOST';
-        $explain_codes[70] = 'EX_SOFTWARE';
-        $explain_codes[71] = 'EX_OSERR';
-        $explain_codes[72] = 'EX_OSFILE';
-        $explain_codes[73] = 'EX_CANTCREAT';
-        $explain_codes[74] = 'EX_IOERR';
-        $explain_codes[75] = 'EX_TEMPFAIL';
-        $explain_codes[77] = 'EX_NOPERM';
-        $explain_codes[255] = 'EX_NOT_SUPPORTED';
-        $explain_codes[1000] = _('Invalid ping path');
-        $explain_codes[1001] = _('Scanning disabled');
-
-        // return codes
-        return $explain_codes;
+        return [
+            0 => 'SUCCESS',
+            1 => 'OFFLINE',
+            2 => 'ERROR',
+            3 => 'UNKNOWN ERROR',
+            64 => 'EX_USAGE',
+            65 => 'EX_DATAERR',
+            68 => 'EX_NOHOST',
+            70 => 'EX_SOFTWARE',
+            71 => 'EX_OSERR',
+            72 => 'EX_OSFILE',
+            73 => 'EX_CANTCREAT',
+            74 => 'EX_IOERR',
+            75 => 'EX_TEMPFAIL',
+            77 => 'EX_NOPERM',
+            255 => 'EX_NOT_SUPPORTED',
+            1000 => _('Invalid ping path'),
+            1001 => _('Scanning disabled'),
+        ];
     }
 
     /**
@@ -705,7 +704,7 @@ class Scan extends Common_functions
             // don't update statuses for never seen addresses !
             if ($last_seen_date !== false && ! is_null($last_seen_date) && strlen($last_seen_date) > 2 && $last_seen_date != '0000-00-00 00:00:00' && $last_seen_date != '1970-01-01 00:00:01' && $last_seen_date != '1970-01-01 01:00:00') {
                 // don't update reserved to offline
-                if (! ($tag_id == 1 && $old_tag_id == 3)) {
+                if ($tag_id != 1 || $old_tag_id != 3) {
                     try {
                         $this->Database->updateObject('ipaddresses', ['id' => $address_id, 'state' => $tag_id], 'id');
                     } catch (Exception $e) {
@@ -804,7 +803,7 @@ class Scan extends Common_functions
         }
 
         // we should support only up to 4094 hosts!
-        if ($Subnets->max_hosts($subnet) > 4096 && php_sapi_name() != 'cli') {
+        if ($Subnets->max_hosts($subnet) > 4096 && PHP_SAPI != 'cli') {
             if ($die) {
                 exit(json_encode(['status' => 1, 'error' => _('Scanning from GUI is only available for subnets up to /20 or 4096 hosts!')]));
             }

@@ -39,7 +39,7 @@ if ($POST->action != 'add' && $POST->action != 'delete') {
 }
 
 // validate type
-if (! in_array($POST->type, ['type'])) {
+if ($POST->type != 'type') {
     $Result->show('danger', _('Invalid type'), true);
 }
 

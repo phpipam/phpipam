@@ -102,6 +102,8 @@ class Subnets_controller extends Common_api_functions
             // set result
             return ['code' => 201, 'message' => 'Subnet created', 'id' => $this->Subnets->lastInsertId, 'data' => $this->Addresses->transform_address($values['subnet'], 'dotted').'/'.$values['mask'], 'location' => '/api/'.$this->_params->app_id.'/subnets/'.$this->Subnets->lastInsertId.'/'];
         }
+
+        return null;
     }
 
     /**
@@ -291,6 +293,8 @@ class Subnets_controller extends Common_api_functions
         else {
             $this->Response->throw_exception(404, 'Invalid Id');
         }
+
+        return null;
     }
 
     /**
@@ -532,6 +536,8 @@ class Subnets_controller extends Common_api_functions
         } else {
             return ['code' => 200, 'message' => 'Subnet permissions updated', 'data' => $this->_params->permissions_text];
         }
+
+        return null;
     }
 
     /**
@@ -716,6 +722,8 @@ class Subnets_controller extends Common_api_functions
         }
 
         $this->Response->throw_exception(404, 'No changelogs found');
+
+        return null;
     }
 
     /* @helper methods ---------- */

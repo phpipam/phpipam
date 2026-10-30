@@ -22,7 +22,7 @@ require __DIR__.'/upgrade_queries/upgrade_queries_1.8.php';
 require __DIR__.'/upgrade_queries/upgrade_queries_1.9.php';
 
 // output if required
-if (! defined('VERSION') && php_sapi_name() == 'cli') {
+if (! defined('VERSION') && PHP_SAPI == 'cli') {
     // version check
     if (! isset($argv[1])) {
         exit("Please provide version\n");

@@ -8,7 +8,7 @@
  */
 
 // script can only be run from cli
-if (php_sapi_name() != 'cli') {
+if (PHP_SAPI != 'cli') {
     exit('This script can only be run from cli!');
 }
 
@@ -60,7 +60,7 @@ try {
 print 'Found '.count($offline_addresses).".\n";
 
 // if none die, none to remove
-if (! is_array($offline_addresses) || empty($offline_addresses)) {
+if (! is_array($offline_addresses) || $offline_addresses === []) {
     exit();
 }
 

@@ -1677,6 +1677,8 @@ class Tools extends Common_functions
                 $this->Result->show('warning', _('Created index for table')." `$table` "._('named')." `$index_name`.", false);
             }
         }
+
+        return null;
     }
 
     /**
@@ -1931,24 +1933,21 @@ class Tools extends Common_functions
      */
     private function define_ipv4_address_types()
     {
-        // define classes
-        $classes = [];
-        $classes['private A'] = '10.0.0.0/8';
-        $classes['private B'] = '172.16.0.0/12';
-        $classes['private C'] = '192.168.0.0/16';
-        $classes['Loopback'] = '127.0.0.0/8';
-        $classes['Link-local'] = '169.254.0.0/16';
-        $classes['Reserved (IANA)'] = '192.0.0.0/24';
-        $classes['TEST-NET-1'] = '192.0.2.0/24';
-        $classes['IPv6 to IPv4 relay'] = '192.88.99.0/24';
-        $classes['Network benchmark'] = '198.18.0.0/15';
-        $classes['TEST-NET-2'] = '198.51.100.0/24';
-        $classes['TEST-NET-3'] = '203.0.113.0/24';
-        $classes['Multicast'] = '224.0.0.0/4';
-        $classes['Reserved'] = '240.0.0.0/4';
-
-        // result
-        return $classes;
+        return [
+            'private A' => '10.0.0.0/8',
+            'private B' => '172.16.0.0/12',
+            'private C' => '192.168.0.0/16',
+            'Loopback' => '127.0.0.0/8',
+            'Link-local' => '169.254.0.0/16',
+            'Reserved (IANA)' => '192.0.0.0/24',
+            'TEST-NET-1' => '192.0.2.0/24',
+            'IPv6 to IPv4 relay' => '192.88.99.0/24',
+            'Network benchmark' => '198.18.0.0/15',
+            'TEST-NET-2' => '198.51.100.0/24',
+            'TEST-NET-3' => '203.0.113.0/24',
+            'Multicast' => '224.0.0.0/4',
+            'Reserved' => '240.0.0.0/4',
+        ];
     }
 
     /**
@@ -2061,23 +2060,22 @@ class Tools extends Common_functions
      */
     private function define_ipv6_address_types()
     {
-        $all_types[10] = 'NET_IPV6_NO_NETMASK';
-        $all_types[1] = 'NET_IPV6';                // NET_IPV6_UNASSIGNED
-        $all_types[11] = 'NET_IPV6_RESERVED';
-        $all_types[12] = 'NET_IPV6_RESERVED_NSAP';
-        $all_types[13] = 'NET_IPV6_RESERVED_IPX';
-        $all_types[14] = 'NET_IPV6_RESERVED_UNICAST_GEOGRAPHIC';
-        $all_types[22] = 'NET_IPV6_UNICAST_PROVIDER';
-        $all_types[31] = 'NET_IPV6_MULTICAST';
-        $all_types[42] = 'NET_IPV6_LOCAL_LINK';
-        $all_types[43] = 'NET_IPV6_LOCAL_SITE';
-        $all_types[51] = 'NET_IPV6_IPV4MAPPING';
-        $all_types[52] = 'NET_IPV6_UNSPECIFIED';
-        $all_types[53] = 'NET_IPV6_LOOPBACK';
-        $all_types[1001] = 'NET_IPV6_UNKNOWN_TYPE';
-
-        // response
-        return $all_types;
+        return [
+            1 => 'NET_IPV6',
+            10 => 'NET_IPV6_NO_NETMASK',
+            11 => 'NET_IPV6_RESERVED',
+            12 => 'NET_IPV6_RESERVED_NSAP',
+            13 => 'NET_IPV6_RESERVED_IPX',
+            14 => 'NET_IPV6_RESERVED_UNICAST_GEOGRAPHIC',
+            22 => 'NET_IPV6_UNICAST_PROVIDER',
+            31 => 'NET_IPV6_MULTICAST',
+            42 => 'NET_IPV6_LOCAL_LINK',
+            43 => 'NET_IPV6_LOCAL_SITE',
+            51 => 'NET_IPV6_IPV4MAPPING',
+            52 => 'NET_IPV6_UNSPECIFIED',
+            53 => 'NET_IPV6_LOOPBACK',
+            1001 => 'NET_IPV6_UNKNOWN_TYPE',
+        ];
     }
 
     /**
@@ -2511,6 +2509,8 @@ class Tools extends Common_functions
             // result
             return $cnt->cnt > 0;
         }
+
+        return null;
     }
 
     /**
@@ -2579,8 +2579,8 @@ class Tools extends Common_functions
 
                 // margin
                 $margin = (count($parent_stack) * 10) - 10;
-                $margin = $margin * 1.5;
-                $margin = $margin.'px';
+                $margin *= 1.5;
+                $margin .= 'px';
             }
 
             // count levels
@@ -2703,7 +2703,7 @@ class Tools extends Common_functions
             }
             // Has slave subnets
             elseif (! empty($children_prefixes[$option['id']])) {
-                array_push($parent_stack, $option['master']);
+                $parent_stack[] = $option['master'];
                 $parent = $option['id'];
             }
         }
@@ -2772,7 +2772,7 @@ class Tools extends Common_functions
                 }
                 // Has slave subnets
                 elseif (! empty($children_prefixes[$option['id']])) {
-                    array_push($parent_stack_prefixes, $option['master']);
+                    $parent_stack_prefixes[] = $option['master'];
                     $parent = $option['id'];
                 }
             }
@@ -3702,7 +3702,7 @@ class Tools extends Common_functions
     public function verify_translation($code)
     {
         // verify that proper files exist
-        return ! file_exists(__DIR__."/../locale/$code/LC_MESSAGES/phpipam.mo") ? false : true;
+        return file_exists(__DIR__."/../locale/$code/LC_MESSAGES/phpipam.mo");
     }
 
     /**

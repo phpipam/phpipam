@@ -55,7 +55,7 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
     // We will reformat everything to pem format !
     //
     // process cer
-    if ($filename == 'cer' || $filename == 'pem' || $filename == 'crt') {
+    if (in_array($filename, ['cer', 'pem', 'crt'])) {
         // detect BEGIN CERTIFICATE
         if (strpos((string) file_get_contents($_FILES['file']['tmp_name']), 'BEGIN CERTIFICATE') !== false) {
             $certificate = trim(file_get_contents($_FILES['file']['tmp_name']));

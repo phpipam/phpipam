@@ -106,6 +106,8 @@ class Addresses extends Common_functions
         if ($this->address_types[$state]['showtag'] == 1) {
             return "<i class='fa fa-".$this->address_types[$state]['type']." fa-tag state' rel='tooltip' style='color:".$this->address_types[$state]['bgcolor']."' title='"._((string) $this->address_types[$state]['type'])."'></i>";
         }
+
+        return null;
     }
 
     /**
@@ -679,6 +681,8 @@ class Addresses extends Common_functions
             $this->Log->write(_('Address DNS resolved'), _('Address').' '.$ip.' '._('resolved').'.<hr>'.$this->array_to_log((array) $hostname), 0);
             $this->Log->write_changelog('ip_addr', 'edit', 'success', ['id' => $id, 'hostname' => ''], ['id' => $id, 'hostname' => $hostname], $this->mail_changelog);
         }
+
+        return null;
     }
 
     /**
@@ -764,6 +768,8 @@ class Addresses extends Common_functions
         } else {
             return true;
         }
+
+        return null;
     }
 
     /**
@@ -831,7 +837,7 @@ class Addresses extends Common_functions
 
         // result
         if ($cnt === true) {
-            return $count->cnt == 0 ? false : true;
+            return $count->cnt != 0;
         }
 
         return is_null($count) ? false : $count->id;
@@ -1074,7 +1080,7 @@ class Addresses extends Common_functions
         $id = $id === null ? $this->lastId : $id;
         $this->ptr_link($id, $this->PowerDNS->lastId);
         // ok
-        if ($print_error && php_sapi_name() != 'cli') {
+        if ($print_error && PHP_SAPI != 'cli') {
             $this->Result->show('success', _('PTR record created'), false);
         }
 
@@ -1122,10 +1128,12 @@ class Addresses extends Common_functions
             // update
             $this->PowerDNS->update_domain_record($domain->id, $update, $print_error);
             // ok
-            if ($print_error && php_sapi_name() != 'cli') {
+            if ($print_error && PHP_SAPI != 'cli') {
                 $this->Result->show('success', _('PTR record updated'), false);
             }
         }
+
+        return null;
     }
 
     /**
@@ -1149,7 +1157,7 @@ class Addresses extends Common_functions
             // remove
             $this->PowerDNS->remove_domain_record($domain->id, $address->PTR);
             // ok
-            if ($print_error && php_sapi_name() != 'cli') {
+            if ($print_error && PHP_SAPI != 'cli') {
                 $this->Result->show('success', _('PTR record removed'), false);
             }
         }
@@ -1522,10 +1530,10 @@ class Addresses extends Common_functions
         $address = $this->transform_address($address, 'dotted');
         // ipv6
         if ($this->identify_address($address) == 'IPv6') {
-            return $this->Net_IPv6->checkIPv6($address) ? true : false;
+            return $this->Net_IPv6->checkIPv6($address);
         }
 
-        return $this->Net_IPv4->validateIP($address) ? true : false;
+        return $this->Net_IPv4->validateIP($address);
     }
 
     /**
@@ -1784,7 +1792,7 @@ class Addresses extends Common_functions
         }
 
         // return
-        return $res == 0 ? false : true;
+        return $res != 0;
     }
 
     /**

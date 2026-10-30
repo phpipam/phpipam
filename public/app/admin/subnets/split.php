@@ -60,7 +60,7 @@ for ($mask = ($subnet->mask + 1); $mask <= $max_new_mask; $mask++) {
 
     // next
     $m++;
-    $n = $n * 2;
+    $n *= 2;
 
     // max number = 16!
     if ($n > 256) {

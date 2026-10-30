@@ -131,7 +131,7 @@ class Circuits_controller extends Common_api_functions
      *      - /providers/{id}/              returns providers details
      *      - /providers/{id}/circuits/     returns all circuits belonging to provider
      *
-     * @return void|array
+     * @return null|mixed[]
      */
     #[Override]
     public function GET()
@@ -186,6 +186,8 @@ class Circuits_controller extends Common_api_functions
                 return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
             }
         }
+
+        return null;
     }
 
     /**
@@ -221,6 +223,8 @@ class Circuits_controller extends Common_api_functions
 
             return ['code' => 201, 'message' => "{$this->type_text} created", 'id' => $this->Admin->lastId, 'location' => '/api/'.$this->_params->app_id.'/circuits/providers/'.$this->Admin->lastId.'/'];
         }
+
+        return null;
     }
 
     /**
@@ -231,7 +235,7 @@ class Circuits_controller extends Common_api_functions
      *
      * @method PATCH
      *
-     * @return void|array
+     * @return null|mixed[]
      */
     #[Override]
     public function PATCH()
@@ -256,6 +260,8 @@ class Circuits_controller extends Common_api_functions
             // set result
             return ['code' => 200, 'message' => "{$this->type_text} updated"];
         }
+
+        return null;
     }
 
     /**
@@ -266,7 +272,7 @@ class Circuits_controller extends Common_api_functions
      *
      * @method DELETE
      *
-     * @return void|array
+     * @return null|mixed[]
      */
     #[Override]
     public function DELETE()
@@ -292,6 +298,8 @@ class Circuits_controller extends Common_api_functions
             // set result
             return ['code' => 200, 'message' => "{$this->type_text} deleted"];
         }
+
+        return null;
     }
 
     /* @validations ---------- */

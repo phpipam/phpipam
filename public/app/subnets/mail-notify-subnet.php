@@ -28,7 +28,7 @@ $id = $POST->id;
 
 // fetch subnet, vlan and nameservers
 $subnet = (array) $Subnets->fetch_subnet(null, $POST->id);
-if (empty($subnet) || $Subnets->check_permission($User->user, $POST->id) < User::ACCESS_R) {
+if ($subnet === [] || $Subnets->check_permission($User->user, $POST->id) < User::ACCESS_R) {
     $Result->show('danger', _('Invalid ID'), true);
 }
 

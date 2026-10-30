@@ -58,8 +58,8 @@ try {
         $options['use_ssl'] = $params->ldap_security == 'ssl';
         $options['use_tls'] = $params->ldap_security == 'tls';
     } else {
-        $options['use_ssl'] = $params->use_ssl ? true : false;
-        $options['use_tls'] = $params->use_tls ? true : false;
+        $options['use_ssl'] = (bool) $params->use_ssl;
+        $options['use_tls'] = (bool) $params->use_tls;
     }
 
     // AD

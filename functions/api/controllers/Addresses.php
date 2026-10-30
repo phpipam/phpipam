@@ -324,6 +324,8 @@ class Addresses_controller extends Common_api_functions
         } else {
             $this->Response->throw_exception(400, 'Invalid Id');
         }
+
+        return null;
     }
 
     /**
@@ -392,6 +394,8 @@ class Addresses_controller extends Common_api_functions
 
             return ['code' => 201, 'message' => 'Address created', 'id' => $this->Addresses->lastId, 'location' => '/api/'.$this->_params->app_id.'/addresses/'.$this->Addresses->lastId.'/'];
         }
+
+        return null;
     }
 
     /**
@@ -451,6 +455,8 @@ class Addresses_controller extends Common_api_functions
             // set result
             return ['code' => 200, 'message' => 'Address updated'];
         }
+
+        return null;
     }
 
     /**
@@ -514,6 +520,8 @@ class Addresses_controller extends Common_api_functions
             // set result
             return ['code' => 200, 'message' => 'Address deleted'];
         }
+
+        return null;
     }
 
     /* @validations ---------- */
@@ -696,5 +704,7 @@ class Addresses_controller extends Common_api_functions
         }
 
         $this->Response->throw_exception(404, 'No changelogs found');
+
+        return null;
     }
 }

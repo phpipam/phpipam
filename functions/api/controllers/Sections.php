@@ -159,6 +159,8 @@ class Sections_controller extends Common_api_functions
 
             return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
         }
+
+        return null;
     }
 
     /**
@@ -198,6 +200,8 @@ class Sections_controller extends Common_api_functions
             // set result
             return ['code' => 201, 'message' => 'Section created', 'id' => $this->Sections->lastInsertId, 'location' => '/api/'.$this->_params->app_id.'/sections/'.$this->Sections->lastInsertId.'/'];
         }
+
+        return null;
     }
 
     /**
@@ -228,6 +232,8 @@ class Sections_controller extends Common_api_functions
             // set result
             return ['code' => 200, 'data' => null];
         }
+
+        return null;
     }
 
     /**
@@ -259,6 +265,8 @@ class Sections_controller extends Common_api_functions
             // set result
             return ['code' => 200, 'data' => null];
         }
+
+        return null;
     }
 
     /**
@@ -318,5 +326,7 @@ class Sections_controller extends Common_api_functions
         }
 
         $this->Response->throw_exception(404, 'No changelogs found');
+
+        return null;
     }
 }

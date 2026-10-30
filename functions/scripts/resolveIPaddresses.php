@@ -25,7 +25,7 @@ $DNS = new DNS($Database);
 $Result = new Result;
 
 // cli required
-if (php_sapi_name() != 'cli') {
+if (PHP_SAPI != 'cli') {
     $Result->show_cli("cli only\n", true);
 }
 

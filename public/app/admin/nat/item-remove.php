@@ -30,7 +30,7 @@ $nat !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
 
 // disable edit on delete
 $readonly = $POST->action == 'delete' ? 'readonly' : '';
-$link = $readonly ? false : true;
+$link = ! (bool) $readonly;
 ?>
 
 <!-- header -->

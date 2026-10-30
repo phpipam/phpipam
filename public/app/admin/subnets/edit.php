@@ -51,7 +51,7 @@ else {
 if ($POST->action != 'add') {
     $subnet_old_details = (array) $Subnets->fetch_subnet(null, $POST->subnetId);
     // false id
-    if (empty($subnet_old_details)) {
+    if ($subnet_old_details === []) {
         $Result->show('danger', _('Invalid subnetId'), true, true);
     }
 }

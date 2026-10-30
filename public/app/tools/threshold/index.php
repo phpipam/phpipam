@@ -58,7 +58,7 @@ else {
     // count usage
     foreach ($out as $k => $s) {
         // check if subnet has slaves and set slaves flag true/false
-        $slaves = $Subnets->has_slaves($s->id) ? true : false;
+        $slaves = (bool) $Subnets->has_slaves($s->id);
 
         // calculate usage
         $subnet_usage = $Subnets->calculate_subnet_usage($s);

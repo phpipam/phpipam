@@ -53,7 +53,7 @@ if ($POST->action != 'add') {
 
 // disable edit on delete
 $readonly = $POST->action == 'delete' ? 'readonly' : '';
-$link = $readonly ? false : true;
+$link = ! (bool) $readonly;
 
 // fetch custom fields
 $custom = $Tools->fetch_custom_fields('pstnNumbers');

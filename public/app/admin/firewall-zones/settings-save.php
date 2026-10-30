@@ -92,13 +92,7 @@ if ($POST->autogen) {
 if ($POST->pattern) {
     foreach ($POST->pattern as $pattern) {
         if (
-            $pattern != 'patternIndicator'
-            && $pattern != 'patternZoneName'
-            && $pattern != 'patternIPType'
-            && $pattern != 'patternHost'
-            && $pattern != 'patternFQDN'
-            && $pattern != 'patternSeparator'
-            && $pattern != ''
+            ! in_array($pattern, ['patternIndicator', 'patternZoneName', 'patternIPType', 'patternHost', 'patternFQDN', 'patternSeparator', ''])
         ) {
             $Result->show('danger', _('Invalid pattern value.'), true);
         }

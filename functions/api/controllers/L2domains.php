@@ -113,6 +113,8 @@ class L2domains_controller extends Common_api_functions
                 }
             }
         }
+
+        return null;
     }
 
     /**
@@ -139,6 +141,8 @@ class L2domains_controller extends Common_api_functions
             // set result
             return ['code' => 201, 'message' => 'L2 domain created', 'id' => $this->Admin->lastId, 'location' => '/api/'.$this->_params->app_id.'/l2domains/'.$this->Admin->lastId.'/'];
         }
+
+        return null;
     }
 
     /**
@@ -167,6 +171,8 @@ class L2domains_controller extends Common_api_functions
             // set result
             return ['code' => 200, 'message' => 'L2 domain updated'];
         }
+
+        return null;
     }
 
     /**
@@ -194,6 +200,8 @@ class L2domains_controller extends Common_api_functions
             // set result
             return ['code' => 200, 'message' => 'L2 domain deleted and vlans migrated to default domain'];
         }
+
+        return null;
     }
 
     /* @validations ---------- */

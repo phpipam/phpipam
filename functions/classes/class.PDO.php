@@ -243,21 +243,21 @@ abstract class DB
         $dsn = $this->makeDsn();
 
         try {
-            $attr_multi_statements = version_compare(PHP_VERSION, '8.5.0', '<') ? PDO::MYSQL_ATTR_MULTI_STATEMENTS : Mysql::ATTR_MULTI_STATEMENTS;
+            $attr_multi_statements = PHP_VERSION_ID < 80500 ? PDO::MYSQL_ATTR_MULTI_STATEMENTS : Mysql::ATTR_MULTI_STATEMENTS;
 
             if ($this->ssl) {
-                $this->pdo = new PDO($dsn, $this->username, $this->password, array_merge([$attr_multi_statements => false, (array) $this->ssl]));
+                $this->pdo = new PDO($dsn, $this->username, $this->password, [$attr_multi_statements => false, (array) $this->ssl]);
             } else {
                 $this->pdo = new PDO($dsn, $this->username, $this->password, [$attr_multi_statements => false]);
             }
 
             $this->setErrMode(PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $pdoException) {
-            throw new Exception('Could not connect to database! '.$pdoException->getMessage());
+            throw new Exception('Could not connect to database! '.$pdoException->getMessage(), $pdoException->getCode(), $pdoException);
         }
 
         try {
-            $this->pdo->query('SET NAMES \''.$this->charset.'\';');
+            $this->pdo->query("SET NAMES '".$this->charset."';");
             $this->set_names = true;
         } catch (Exception $exception) {
             $this->set_names = false;
@@ -591,7 +591,7 @@ abstract class DB
             $this->connect();
         }
 
-        $like === true ? $operator = 'LIKE' : $operator = '=';
+        $operator = $like === true ? 'LIKE' : '=';
 
         $tableName = $this->escape($tableName);
         $statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'` where `'.$method.'` '.$operator.' ?;');
@@ -1043,8 +1043,8 @@ abstract class DB
         $table = $this->escape($table);
         $field = $this->escape($field);
         $sortField = $this->escape($sortField);
-        $like === true ? $operator = 'LIKE' : $operator = '=';
-        $negate === true ? $negate_operator = 'NOT ' : $negate_operator = '';
+        $operator = $like === true ? 'LIKE' : '=';
+        $negate_operator = $negate === true ? 'NOT ' : '';
 
         $result_fields = $this->escape_result_fields($result_fields);
 
@@ -1273,7 +1273,7 @@ class Database_PDO extends DB
 
         $this->ssl = false;
         if (@$db['ssl'] === true) {
-            if (version_compare(PHP_VERSION, '8.5.0', '<')) {
+            if (PHP_VERSION_ID < 80500) {
                 $this->pdo_ssl_opts = [
                     'ssl_key' => PDO::MYSQL_ATTR_SSL_KEY,
                     'ssl_cert' => PDO::MYSQL_ATTR_SSL_CERT,

@@ -251,7 +251,7 @@ class Tools_controller extends Common_api_functions
                 }
             }
             // locations
-            elseif ($this->_params->id == 'locations' && ($this->_params->id3 == 'subnets' || $this->_params->id3 == 'racks' || $this->_params->id3 == 'devices' || $this->_params->id3 == 'ipaddresses')) {
+            elseif ($this->_params->id == 'locations' && (in_array($this->_params->id3, ['subnets', 'racks', 'devices', 'ipaddresses']))) {
                 // fetch
                 $result = $this->Tools->fetch_multiple_objects($this->_params->id3, 'location', $this->_params->id2, 'id', true);
             }
@@ -332,6 +332,8 @@ class Tools_controller extends Common_api_functions
                 return ['code' => 200, 'data' => $this->prepare_result($result, 'tools/'.$this->_params->id, true, false)];
             }
         }
+
+        return null;
     }
 
     /**

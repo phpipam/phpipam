@@ -85,7 +85,7 @@ foreach ($tools_menu as $k => $item) {
 <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm icon-ul">
 
     <!-- Dash lock/unlock -->
-    <?php if ($GET->page == 'dashboard' && ! ($User->is_admin(false) !== true && (is_blank($User->user->groups) || $User->user->groups === 'null'))) { ?>
+    <?php if ($GET->page == 'dashboard' && ($User->is_admin(false) === true || ! is_blank($User->user->groups) && $User->user->groups !== 'null')) { ?>
         <li class="w-lock">
             <a href="#" rel='tooltip' class="icon-li" data-placement='bottom' title="<?php print _('Click to reorder widgets'); ?>"><i class='fa fa-dashboard'></i></a>
         </li>

@@ -280,7 +280,7 @@ class phpipamSNMP extends Common_functions
         try {
             $res = $this->snmp_session->{$type}($query_num);
         } catch (Exception $exception) {
-            throw new Exception("<strong>$this->snmp_hostname</strong>: ".$exception->getMessage().'<br> oid: '.$query);
+            throw new Exception("<strong>$this->snmp_hostname</strong>: ".$exception->getMessage().'<br> oid: '.$query, $exception->getCode(), $exception);
         }
 
         // check for errors
@@ -329,6 +329,8 @@ class phpipamSNMP extends Common_functions
         $this->set_snmp_timeout($device->snmp_timeout);
         // set SNMPv3 security
         $this->set_snmpv3_security($device);
+
+        return null;
     }
 
     /**
@@ -387,7 +389,7 @@ class phpipamSNMP extends Common_functions
      */
     private function set_snmp_version($version = 1)
     {
-        if ($version == 1 || $version == 2 || $version == 3) {
+        if (in_array($version, [1, 2, 3])) {
             $this->snmp_version = $version;
         }
     }

@@ -94,7 +94,7 @@ class Admin extends Common_functions
     public function is_admin()
     {
         // user not required for cli
-        if (php_sapi_name() != 'cli') {
+        if (PHP_SAPI != 'cli') {
             // initialize user class
             $this->User = new User($this->Database);
             // save settings
@@ -310,6 +310,8 @@ class Admin extends Common_functions
 
             return false;
         }
+
+        return null;
     }
 
     /**
@@ -333,6 +335,8 @@ class Admin extends Common_functions
 
             return false;
         }
+
+        return null;
     }
 
     /**
@@ -720,7 +724,7 @@ class Admin extends Common_functions
         $field['fieldDefault'] = is_blank($field['fieldDefault']) ? null : $field['fieldDefault'];
 
         // character set if needed
-        if ($field['fieldType'] == 'varchar' || $field['fieldType'] == 'text' || $field['fieldType'] == 'set' || $field['fieldType'] == 'enum') {
+        if (in_array($field['fieldType'], ['varchar', 'text', 'set', 'enum'])) {
             $charset = 'CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
         } else {
             $charset = '';

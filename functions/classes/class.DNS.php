@@ -155,6 +155,8 @@ class DNS extends Common_functions
 
             return false;
         }
+
+        return null;
     }
 
     /**
@@ -216,6 +218,8 @@ class DNS extends Common_functions
         else {
             return ['class' => '',          'address' => $address, 'name' => $hostname];
         }
+
+        return null;
     }
 
     /**

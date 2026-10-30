@@ -224,7 +224,7 @@ if ($Rewrite->is_api()) {
     <!-- page sections / menu -->
     <div class="content">
     <div id="sections_overlay">
-            <?php if ($GET->page != 'login' && $GET->page != 'request_ip' && $GET->page != 'upgrade' && $GET->page != 'install' && $User->user->passChange != 'Yes') {
+            <?php if (! in_array($GET->page, ['login', 'request_ip', 'upgrade', 'install']) && $User->user->passChange != 'Yes') {
                 include __DIR__.'/app/sections/index.php';
             }?>
     </div>
@@ -283,8 +283,7 @@ if ($Rewrite->is_api()) {
                     print "<td id='subnetsLeft'>";
                     print "<div id='leftMenu' class='menu-".escape_input($GET->page)."'>";
                     if (
-                        $GET->page == 'subnets' || $GET->page == 'vlan' ||
-                           $GET->page == 'vrf' || $GET->page == 'folder'
+                        in_array($GET->page, ['subnets', 'vlan', 'vrf', 'folder'])
                     ) {
                         include __DIR__.'/app/subnets/subnets-menu.php';
                     } elseif ($GET->page == 'tools') {

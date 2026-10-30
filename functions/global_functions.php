@@ -49,7 +49,7 @@ function create_link($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null,
         }
     }
 
-    if (empty($parts)) {
+    if ($parts === []) {
         return BASE;
     }
 

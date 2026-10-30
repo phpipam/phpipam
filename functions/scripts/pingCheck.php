@@ -73,7 +73,7 @@ $now = time();
 $nowdate = date('Y-m-d H:i:s');
 
 // script can only be run from cli
-if (php_sapi_name() != 'cli') {
+if (PHP_SAPI != 'cli') {
     exit("pingCheck-Fatal-Error: This script can only be run from cli!\n");
 }
 
@@ -197,7 +197,7 @@ if ($Scan->icmp_type == 'fping') {
             print 'pingCheck-Warning: Failed to start scanning pool, spawned '.count($threads).' of '.$Scan->settings->scanMaxThreads."\n";
         }
 
-        if (empty($threads)) {
+        if ($threads === []) {
             exit("pingCheck-Fatal-Error: Unable to spawn scanning pool\n");
         }
 
@@ -218,7 +218,7 @@ if ($Scan->icmp_type == 'fping') {
             // loop addresses
             foreach ($addresses[$s['id']] as $ak => $a) {
                 // offline host
-                if (array_search($Subnets->transform_to_dotted($a), $subnets[$sk]['result']) === false) {
+                if (! in_array($Subnets->transform_to_dotted($a), $subnets[$sk]['result'])) {
                     // new change = null
                     $addresses2[$s['id']][$ak]['lastSeenNew'] = null;
                     // save to out array
@@ -271,7 +271,7 @@ if ($Scan->icmp_type == 'fping') {
             print 'pingCheck-Warning: Failed to start scanning pool, spawned '.count($threads).' of '.$Scan->settings->scanMaxThreads."\n";
         }
 
-        if (empty($threads)) {
+        if ($threads === []) {
             exit("pingCheck-Fatal-Error: Unable to spawn scanning pool\n");
         }
 
@@ -397,7 +397,7 @@ if ($Scan->get_debugging()) {
 }
 
 // all done, mail diff?
-if (! empty($address_change) && $config['ping_check_send_mail']) {
+if ($address_change !== [] && $config['ping_check_send_mail']) {
     // check for recipients
     foreach ($Tools->fetch_multiple_objects('users', 'role', 'Administrator') as $admin) {
         if ($admin->mailNotify == 'Yes') {

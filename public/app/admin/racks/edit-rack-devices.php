@@ -34,7 +34,7 @@ if ($POST->action != 'add' && ! is_numeric($POST->rackid)) {
 }
 
 // device type?
-if (! isset($POST->devicetype) || ($POST->devicetype != 'device' && $POST->devicetype != 'content' && $POST->devicetype != 'subrack')) {
+if (! isset($POST->devicetype) || (! in_array($POST->devicetype, ['device', 'content', 'subrack']))) {
     $Result->show('danger', _('Invalid device type'), true, true);
 }
 

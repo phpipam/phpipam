@@ -66,7 +66,7 @@ if ($POST->action == 'add' || $POST->action == 'edit') {
     $POST->prefix_number = $Tools->prefix_normalize($prefix->prefix.$POST->number);
 
     // number must be inside range
-    if (! ($POST->prefix_number >= $prefix->prefix_raw_start && $POST->prefix_number <= $prefix->prefix_raw_stop)) {
+    if ($POST->prefix_number < $prefix->prefix_raw_start || $POST->prefix_number > $prefix->prefix_raw_stop) {
         $Result->show('danger', _('Number not inside prefix'), true);
     }
 }

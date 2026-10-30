@@ -39,7 +39,7 @@ class Common_api_functions
     /**
      * _params provided from request
      *
-     * @var API_Params
+     * @var API_params
      */
     public $_params;
 
@@ -315,7 +315,7 @@ class Common_api_functions
 
         // Reindex results to start at index 0.
         if (is_array($result)) {
-            $result = array_values($result);
+            return array_values($result);
         }
 
         // return
@@ -373,7 +373,7 @@ class Common_api_functions
             $result2[] = $r;    // save match
         }
 
-        if (empty($result2)) {
+        if ($result2 === []) {
             $this->Response->throw_exception(404, _('No results (filter applied)'));
         }
 

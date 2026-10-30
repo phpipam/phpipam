@@ -157,7 +157,7 @@ class User extends Common_functions
         // initialize Crypto
         $this->Crypto = new Crypto;
 
-        if (php_sapi_name() !== 'cli') {
+        if (PHP_SAPI !== 'cli') {
             // register new session
             $this->register_session();
             // check timeout
@@ -363,6 +363,8 @@ class User extends Common_functions
         } else {
             return false;
         }
+
+        return null;
     }
 
     /**
@@ -517,14 +519,7 @@ class User extends Common_functions
         // save current redirect value
         if (isset($_SERVER['SCRIPT_URL'])) {
             if (
-                $_SERVER['SCRIPT_URL'] == '/login/' ||
-                $_SERVER['SCRIPT_URL'] == 'logout' ||
-                $_SERVER['SCRIPT_URL'] == '?page=login' ||
-                $_SERVER['SCRIPT_URL'] == '?page=logout' ||
-                $_SERVER['SCRIPT_URL'] == 'index.php?page=login' ||
-                $_SERVER['SCRIPT_URL'] == 'index.php?page=logout' ||
-                $_SERVER['SCRIPT_URL'] == '/' ||
-                $_SERVER['SCRIPT_URL'] == '%2f'
+                in_array($_SERVER['SCRIPT_URL'], ['/login/', 'logout', '?page=login', '?page=logout', 'index.php?page=login', 'index.php?page=logout', '/', '%2f'])
             ) {
                 return;
             }
@@ -1602,6 +1597,8 @@ class User extends Common_functions
         }
 
         $this->Result->show('danger', _('No crypt types supported'), true);
+
+        return null;
     }
 
     /**
@@ -1744,6 +1741,8 @@ class User extends Common_functions
                 return false;
             }
         }
+
+        return null;
     }
 
     /**
@@ -1819,6 +1818,8 @@ class User extends Common_functions
         else {
             $this->block_add_entry();
         }
+
+        return null;
     }
 
     /**
@@ -2066,7 +2067,7 @@ class User extends Common_functions
      * @param  int  $required_level
      * @param  bool  $die
      * @param  bool  $popup
-     * @return bool|void
+     * @return bool
      */
     public function check_l2domain_permissions($l2domain, $required_level = 1, $die = true, $popup = false)
     {
@@ -2075,9 +2076,9 @@ class User extends Common_functions
         // return or die ?
         if ($die === true && ! $valid) {
             $this->Result->show('danger', _('You do not have permissions to access this object'), true, $popup);
-        } else {
-            return $valid;
         }
+
+        return (bool) $valid;
     }
 
     /**
@@ -2137,7 +2138,7 @@ class User extends Common_functions
      * @param  int  $required_level
      * @param  bool  $die
      * @param  bool  $popup
-     * @return bool|void
+     * @return bool
      */
     public function check_module_permissions($module_name = '', $required_level = User::ACCESS_R, $die = true, $popup = false)
     {
@@ -2146,9 +2147,9 @@ class User extends Common_functions
         // return or die ?
         if ($die === true && ! $valid) {
             $this->Result->show('danger', _('You do not have permissions to access this module'), true, $popup);
-        } else {
-            return $valid;
         }
+
+        return (bool) $valid;
     }
 
     /**
@@ -2273,7 +2274,7 @@ class FakeUser
     /**
      * Settings object
      *
-     * @var StdClass
+     * @var object
      */
     public $settings;
 

@@ -28,7 +28,7 @@ if ($auth_settings === false) {
 $parameters = new Params(db_json_decode($auth_settings->params));
 
 // AD?
-if ($auth_settings->type == 'AD' || $auth_settings->type == 'LDAP' || $auth_settings->type == 'NetIQ') {
+if (in_array($auth_settings->type, ['AD', 'LDAP', 'NetIQ'])) {
     // set controllers
     $controllers = explode(';', str_replace(' ', '', (string) $parameters->domain_controllers));
 

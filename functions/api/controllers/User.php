@@ -144,6 +144,8 @@ class User_controller extends Common_api_functions
         else {
             $this->Response->throw_exception(400, 'Invalid identifier');
         }
+
+        return null;
     }
 
     /**
@@ -409,11 +411,7 @@ class User_controller extends Common_api_functions
         }
 
         // expired
-        if ($this->User->user->token_valid_until < date('Y-m-d H:is:')) {
-            return false;
-        }
-
-        return true;
+        return $this->User->user->token_valid_until >= date('Y-m-d H:is:');
     }
 
     /**

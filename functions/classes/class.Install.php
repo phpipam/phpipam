@@ -98,6 +98,8 @@ class Install extends Common_functions
 
             return true;
         }
+
+        return null;
     }
 
     /**
@@ -213,6 +215,8 @@ class Install extends Common_functions
                 }
             }
         }
+
+        return null;
     }
 
     /**

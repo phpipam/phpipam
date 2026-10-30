@@ -1081,26 +1081,26 @@ class FirewallZones extends Common_functions
             switch ($pattern) {
                 case 'patternIndicator':
                     if ($zone->indicator == 0) {
-                        $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][0];
+                        $firewallAddressObject .= $firewallZoneSettings['indicator'][0];
                     } else {
-                        $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][1];
+                        $firewallAddressObject .= $firewallZoneSettings['indicator'][1];
                     }
 
                     break;
                 case 'patternZoneName':
-                    $firewallAddressObject = $firewallAddressObject.$zone->zone;
+                    $firewallAddressObject .= $zone->zone;
                     break;
                 case 'patternIPType':
                     // check if the subnet is v4 or v6
                     if (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                        $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][0];
+                        $firewallAddressObject .= $firewallZoneSettings['ipType'][0];
                     } elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-                        $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
+                        $firewallAddressObject .= $firewallZoneSettings['ipType'][1];
                     }
 
                     break;
                 case 'patternSeparator':
-                    $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['separator'];
+                    $firewallAddressObject .= $firewallZoneSettings['separator'];
                     break;
             }
         }
@@ -1114,7 +1114,7 @@ class FirewallZones extends Common_functions
                 $firewallAddressObject = $firewallAddressObject.str_replace(':', (string) $firewallZoneSettings['separator'], (string) $this->Subnets->transform_to_dotted($zone->subnet)).'-'.$zone->mask;
             }
         } elseif ($firewallZoneSettings['subnetPatternValues'][$firewallZoneSettings['subnetPattern']] == 'description') {
-            $firewallAddressObject = $firewallAddressObject.str_replace(' ', (string) $firewallZoneSettings['separator'], strtolower((string) $zone->subnetDescription));
+            $firewallAddressObject .= str_replace(' ', (string) $firewallZoneSettings['separator'], strtolower((string) $zone->subnetDescription));
         }
 
         // get subnet information to compare against the changes
@@ -1169,33 +1169,33 @@ class FirewallZones extends Common_functions
             switch ($pattern) {
                 case 'patternIndicator':
                     if ($zone->indicator == 0) {
-                        $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][0];
+                        $firewallAddressObject .= $firewallZoneSettings['indicator'][0];
                     } else {
-                        $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][1];
+                        $firewallAddressObject .= $firewallZoneSettings['indicator'][1];
                     }
 
                     break;
                 case 'patternZoneName':
-                    $firewallAddressObject = $firewallAddressObject.$zone->zone;
+                    $firewallAddressObject .= $zone->zone;
                     break;
                 case 'patternIPType':
                     // check if the subnet is v4 or v6
                     if (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                        $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][0];
+                        $firewallAddressObject .= $firewallZoneSettings['ipType'][0];
                     } elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-                        $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
+                        $firewallAddressObject .= $firewallZoneSettings['ipType'][1];
                     }
 
                     break;
                 case 'patternHost':
                     $hostName = explode('.', (string) $dnsName);
-                    $firewallAddressObject = $firewallAddressObject.$hostName[0];
+                    $firewallAddressObject .= $hostName[0];
                     break;
                 case 'patternFQDN':
-                    $firewallAddressObject = $firewallAddressObject.$dnsName;
+                    $firewallAddressObject .= $dnsName;
                     break;
                 case 'patternSeparator':
-                    $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['separator'];
+                    $firewallAddressObject .= $firewallZoneSettings['separator'];
                     break;
             }
         }
@@ -1230,33 +1230,33 @@ class FirewallZones extends Common_functions
             switch ($pattern) {
                 case 'patternIndicator':
                     if ($zone->indicator == 0) {
-                        $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][0];
+                        $firewallAddressObject .= $firewallZoneSettings['indicator'][0];
                     } else {
-                        $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][1];
+                        $firewallAddressObject .= $firewallZoneSettings['indicator'][1];
                     }
 
                     break;
                 case 'patternZoneName':
-                    $firewallAddressObject = $firewallAddressObject.$zone->zone;
+                    $firewallAddressObject .= $zone->zone;
                     break;
                 case 'patternIPType':
                     // check if the subnet is v4 or v6
                     if (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                        $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][0];
+                        $firewallAddressObject .= $firewallZoneSettings['ipType'][0];
                     } elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-                        $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
+                        $firewallAddressObject .= $firewallZoneSettings['ipType'][1];
                     }
 
                     break;
                 case 'patternHost':
                     $hostName = explode('.', (string) $dnsName);
-                    $firewallAddressObject = $firewallAddressObject.$hostName[0];
+                    $firewallAddressObject .= $hostName[0];
                     break;
                 case 'patternFQDN':
-                    $firewallAddressObject = $firewallAddressObject.$dnsName;
+                    $firewallAddressObject .= $dnsName;
                     break;
                 case 'patternSeparator':
-                    $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['separator'];
+                    $firewallAddressObject .= $firewallZoneSettings['separator'];
                     break;
             }
         }
@@ -1319,33 +1319,33 @@ class FirewallZones extends Common_functions
                 switch ($pattern) {
                     case 'patternIndicator':
                         if ($zone->indicator == 0) {
-                            $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][0];
+                            $firewallAddressObject .= $firewallZoneSettings['indicator'][0];
                         } else {
-                            $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][1];
+                            $firewallAddressObject .= $firewallZoneSettings['indicator'][1];
                         }
 
                         break;
                     case 'patternZoneName':
-                        $firewallAddressObject = $firewallAddressObject.$zone->zone;
+                        $firewallAddressObject .= $zone->zone;
                         break;
                     case 'patternIPType':
                         // check if the subnet is v4 or v6
                         if (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                            $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][0];
+                            $firewallAddressObject .= $firewallZoneSettings['ipType'][0];
                         } elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-                            $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
+                            $firewallAddressObject .= $firewallZoneSettings['ipType'][1];
                         }
 
                         break;
                     case 'patternHost':
                         $hostName = explode('.', (string) $ipaddress->hostname);
-                        $firewallAddressObject = $firewallAddressObject.$hostName[0];
+                        $firewallAddressObject .= $hostName[0];
                         break;
                     case 'patternFQDN':
-                        $firewallAddressObject = $firewallAddressObject.$ipaddress->hostname;
+                        $firewallAddressObject .= $ipaddress->hostname;
                         break;
                     case 'patternSeparator':
-                        $firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['separator'];
+                        $firewallAddressObject .= $firewallZoneSettings['separator'];
                         break;
                 }
             }

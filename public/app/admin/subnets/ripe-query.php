@@ -39,7 +39,7 @@ $res = $Subnets->resolve_ripe_arin($POST->subnet);
 
         // leave only varchar and text
         foreach ($custom_fields as $k => $f) {
-            if (! (strpos((string) $f['type'], 'varchar') !== false || $f['type'] == 'text')) {
+            if (strpos((string) $f['type'], 'varchar') === false && $f['type'] != 'text') {
                 unset($custom_fields[$k]);
             }
         }

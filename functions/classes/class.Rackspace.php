@@ -662,22 +662,14 @@ class phpipam_rack extends Tools
         $device_size = ($device_size > 0) ? $device_size - 1 : 0;
 
         if ($device_start > $rack->size && $rack->hasBack) {
-            if ($device_start + $device_size > 2 * $rack->size) {
-                return true;
-            }
-
-            return false;
+            return $device_start + $device_size > 2 * $rack->size;
         }
 
         if ($device_start + $device_size > $rack->size) {
             return true;
         }
 
-        if ($device_start < 1) {
-            return true;
-        }
-
-        return false;
+        return $device_start < 1;
     }
 
     /**
@@ -875,7 +867,7 @@ class RackDrawer extends Common_functions
 
         header('Content-type: image/png');
         imagepng($this->template);
-        if (version_compare(PHP_VERSION, '8.5.0', '<')) {
+        if (PHP_VERSION_ID < 80500) {
             // phpcs:ignore
             imagedestroy($this->template);
             // phpcs:enable
@@ -931,7 +923,7 @@ class RackDrawer extends Common_functions
                 $this->topYSize + $this->unitYSize * ($this->rack->getSpace() - ($content->getStartLocation() + $content->getSize()));
 
             imagecopy($this->template, $img, $this->rackInsideXOffset + 1, $yPos, 0, 0, $this->rackInsideXSize - 2, $pixelSize);
-            if (version_compare(PHP_VERSION, '8.5.0', '<')) {
+            if (PHP_VERSION_ID < 80500) {
                 // phpcs:ignore
                 imagedestroy($img);
                 // phpcs:enable
@@ -1269,7 +1261,7 @@ class RackDrawer_SVG extends Common_functions
 
                 $cornerstone_x = $this->marginSides + $subrack_margin;
                 $cornerstone_y = $yPos + $h + $this->unitYSize;
-                if (strlen((string) $content->getName()) > 0) {
+                if ((string) $content->getName() !== '') {
                     $queue[] = "<text class='device' x='".($cornerstone_x + ($blade_w / 2))."' y='".($cornerstone_y - 6)."' style='fill:{$content->getFgcolor()};stroke:{$content->getFgcolor()}' {$transform}>{$content->getName()}</text>";
                 }
 
@@ -1280,7 +1272,7 @@ class RackDrawer_SVG extends Common_functions
                     // Chrome won't render nested <a>
                     // if ($blade->getUrl()) $queue[] = "<a href='{$blade->getUrl()}' target='_parent'>";
                     $queue[] = "<rect class='{$class}' width='{$blade_w}' height='{$this_h}' x='{$cornerstone_x}' y='{$this_y}' style='fill:{$blade->getBgcolor()};' {$transform} />";
-                    if (strlen((string) $content->getName()) > 0) {
+                    if ((string) $content->getName() !== '') {
                         $queue[] = "<text class='device' x='".($this->marginSides + ($blade_w / 2))."' y='".($this_y + (.7 * $blade_h * $blade->getSize()))."' style='fill:{$blade->getFgcolor()};stroke:{$blade->getFgcolor()};font-size:10px;' {$transform}>{$blade->getName()}</text>";
                     }
 
@@ -1288,8 +1280,8 @@ class RackDrawer_SVG extends Common_functions
                     // if ($blade->getUrl()) $queue[] = "</a>";
                 }
             } else {
-                $y = $y + (($size - 1) * $this->unitYSize / 2); // increase the height by .5RU for each device whose size exceeds 1 RU
-                if (strlen((string) $content->getName()) > 0) {
+                $y += ($size - 1) * $this->unitYSize / 2; // increase the height by .5RU for each device whose size exceeds 1 RU
+                if ((string) $content->getName() !== '') {
                     $queue[] = "<text class='device' x='".($x_center)."' y='{$y}' style='fill:{$content->getFgcolor()};stroke:{$content->getFgcolor()}'>{$content->getName()}</text>";
                 }
             }

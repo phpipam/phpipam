@@ -136,7 +136,7 @@ if ($GET->subnetId != 0 && count($device) > 0) {
         print '</tr>';
 
         // set show
-        if ($device['snmp_version'] == '1' || $device['snmp_version'] == '2' || $device['snmp_version'] == '3') {
+        if (in_array($device['snmp_version'], ['1', '2', '3'])) {
             // version
             print '<tr>';
             print ' <th>'._('Community').'</th>';

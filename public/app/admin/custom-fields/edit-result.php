@@ -68,11 +68,11 @@ if ($POST->action == 'delete') {
 
     // boolean
     if ($POST->fieldType == 'bool') {
-        if ($POST->fieldSize != '' && $POST->fieldSize != 0 && $POST->fieldSize != 1) {
+        if (! in_array($POST->fieldSize, ['', 0, 1])) {
             $errors[] = _('Boolean values can only be 0 or 1');
         }
 
-        if ($POST->fieldDefault != '' && $POST->fieldDefault != 0 && $POST->fieldDefault != 1) {
+        if (! in_array($POST->fieldDefault, ['', 0, 1])) {
             $errors[] = _('Default boolean values can only be 0 or 1');
         }
     }

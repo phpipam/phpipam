@@ -34,7 +34,7 @@ elseif (! is_object($location)) {
     }
 
     // resize ?
-    $resize = @$resize === false ? false : true;
+    $resize = @$resize !== false;
 
     // no long/lat
     if ((! is_blank($location->long) && ! is_blank($location->lat))) {

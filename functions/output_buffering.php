@@ -6,7 +6,7 @@ function outputbuf_send()
 }
 
 // Don't enable output buffering for cli
-if (php_sapi_name() !== 'cli') {
+if (PHP_SAPI !== 'cli') {
     // Buffer output and send gzcompressed at script completion.
     // Improves page loading times on low bandwith/high latency connections.
     if (! function_exists('ob_gzhandler') || ! ob_start('ob_gzhandler')) {

@@ -205,6 +205,8 @@ class Devices_controller extends Common_api_functions
             // set result
             return ['code' => 201, 'message' => 'Device created', 'id' => $this->Admin->lastId, 'location' => '/api/'.$this->_params->app_id.'/devices/'.$this->Admin->lastId.'/'];
         }
+
+        return null;
     }
 
     /**
@@ -237,6 +239,8 @@ class Devices_controller extends Common_api_functions
             // fetch the updated object and hand it back to the client
             return ['code' => 200, 'message' => 'Device updated', 'id' => $this->Admin->lastId, 'location' => '/api/'.$this->_params->app_id.'/devices/'.$values['id'].'/'];
         }
+
+        return null;
     }
 
     /**
@@ -264,6 +268,8 @@ class Devices_controller extends Common_api_functions
             // set result
             return ['code' => 200, 'message' => 'Device deleted'];
         }
+
+        return null;
     }
 
     /**

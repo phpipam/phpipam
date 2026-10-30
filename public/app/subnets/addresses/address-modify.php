@@ -76,7 +76,7 @@ if ($action == 'all-add') {
     $address['customer_id'] = null;
 } else {
     $address = (array) $Addresses->fetch_address(null, $id);
-    if (empty($address) || (int) $address['subnetId'] !== (int) $subnetId) {
+    if ($address === [] || (int) $address['subnetId'] !== (int) $subnetId) {
         $Result->show('danger', _('Invalid address for selected subnet'), true, true);
     }
     // save old mac for multicast check

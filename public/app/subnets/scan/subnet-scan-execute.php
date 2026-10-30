@@ -34,7 +34,7 @@ $type = ! empty($POST->type) ? $POST->type : '';
 // flag for ajax-loaded
 $ajax_loaded = isset($POST->ajax_loaded);
 
-if (! ($type === 'snmp-route' || ($type === 'snmp-route-all' && $ajax_loaded))) {
+if ($type !== 'snmp-route' && ($type !== 'snmp-route-all' || ! $ajax_loaded)) {
     // subnet Id must be a integer
     if (! is_numeric($POST->subnetId)) {
         $Result->show('danger', _('Invalid ID'), true);

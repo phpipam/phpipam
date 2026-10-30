@@ -72,7 +72,7 @@ class Rewrite
      */
     public function __construct()
     {
-        if (php_sapi_name() !== 'cli') {
+        if (PHP_SAPI !== 'cli') {
             // process request URI
             $this->process_request_uri();
             // formulate GET request
@@ -88,7 +88,7 @@ class Rewrite
      */
     private function set_api_flag()
     {
-        if (! empty($this->uri_parts) && $this->uri_parts[0] == 'api') {
+        if ($this->uri_parts !== [] && $this->uri_parts[0] == 'api') {
             $this->is_api = true;
         }
     }

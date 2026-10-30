@@ -19,7 +19,7 @@ if ($subnet === false) {
 }
 $subnet = (array) $subnet;
 $subnet_detailed = $Subnets->get_network_boundaries($subnet['subnet'], $subnet['mask']);           // set network boundaries
-$slaves = $Subnets->has_slaves($subnet['id']) ? true : false;                                      // check if subnet has slaves and set slaves flag true/false
+$slaves = (bool) $Subnets->has_slaves($subnet['id']);                                      // check if subnet has slaves and set slaves flag true/false
 
 // if subnet is requested but is folder redirect
 if ($subnet['isFolder'] == 1) {

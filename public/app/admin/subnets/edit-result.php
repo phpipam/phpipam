@@ -253,7 +253,7 @@ else {
 }
 
 /* If no errors are present execute request */
-if (! empty($errors)) {
+if ($errors !== []) {
     // unique
     $errors = array_unique($errors);
     print '<div class="alert alert-danger"><strong>'._('Please fix following problems').'</strong>:';

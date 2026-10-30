@@ -73,7 +73,7 @@ if (! class_exists('PEAR')) {
 }
 
 // Check for Composer issues
-if (! class_exists('\Composer\InstalledVersions')) {
+if (! class_exists(InstalledVersions::class)) {
     $missingPkg[] = _('Missing vendor/autoload.php.');
 } else {
     foreach ($requiredPks as $package) {
@@ -118,7 +118,7 @@ if (PHP_INT_SIZE == 4) {
     $error[] = _('Detected PHP version: ').phpversion().' >= '.PHPIPAM_PHP_UNTESTED.'<br><br>';
     $error[] = _('phpIPAM is not yet compatible with this version of php.').' '._('You may encounter issues & errors.').'<br><br>';
     $error[] = _('Please set <q>$allow_untested_php_versions=true;</q> in config.php to continue at your own risk.');
-} elseif (! empty($missingExt)) {
+} elseif ($missingExt !== []) {
     $error[] = '<strong>'._('The following required PHP extensions are missing').':</strong><br><hr>';
     $error[] = '<ul>'."\n";
     foreach ($missingExt as $missing) {
@@ -127,7 +127,7 @@ if (PHP_INT_SIZE == 4) {
 
     $error[] = '</ul><hr>'."\n";
     $error[] = _('Please recompile PHP to include missing extensions and restart Apache.');
-} elseif (! empty($missingFns)) {
+} elseif ($missingFns !== []) {
     $error[] = '<strong>'._('The following required PHP functions are missing').':</strong><br><hr>';
     $error[] = '<ul>'."\n";
     foreach ($missingFns as $missing) {
@@ -139,7 +139,7 @@ if (PHP_INT_SIZE == 4) {
 } elseif (is_dir(__DIR__.'/../vendor')) {
     $error[] = '<strong>'._("'functions/vendor' folder found").':</strong><br><hr>';
     $error[] = _('Please follow the "Prepare for composer package management" instructions in UPDATE.md to resolve this issue.');
-} elseif (! empty($missingPkg)) {
+} elseif ($missingPkg !== []) {
     $error[] = '<strong>'._('The following composer issues are present').':</strong><br><hr>';
     $error[] = '<ul>'."\n";
     foreach ($missingPkg as $missing) {

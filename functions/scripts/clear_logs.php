@@ -8,7 +8,7 @@
  */
 
 // script can only be run from cli
-if (php_sapi_name() != 'cli') {
+if (PHP_SAPI != 'cli') {
     exit('This script can only be run from cli!');
 }
 

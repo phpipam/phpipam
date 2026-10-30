@@ -54,7 +54,7 @@ if ($User->get_module_permissions('locations') >= User::ACCESS_R) {
 // owner and note
 if ((in_array('owner', $selected_ip_fields)) && (in_array('note', $selected_ip_fields))) {
     print '<th class="hidden-sm hidden-xs">'._('Owner').'</th><th></th>'."\n";
-    $address_span = $address_span + 2;
+    $address_span += 2;
 } elseif (in_array('owner', $selected_ip_fields)) {
     print '<th class="hidden-sm hidden-xs">'._('Owner').'</th>'."\n";
     $address_span++;

@@ -120,7 +120,7 @@ class Result
         }
 
         // cli or GUI
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI == 'cli') {
             print $this->show_cli_message($text);
         } else {
             // return or print

@@ -112,7 +112,7 @@ $oldMType = strstr((string) @$fieldval['Type'], '(', true);
 $oldMSize = str_replace(['(', ')'], '', (string) strstr((string) @$fieldval['Type'], '(', false));
 
 // exceptions
-if (@$fieldval['Type'] == 'text' || @$fieldval['Type'] == 'date' || @$fieldval['Type'] == 'datetime' || @$fieldval['Type'] == 'set' || @$fieldval['Type'] == 'enum') {
+if (in_array(@$fieldval['Type'], ['text', 'date', 'datetime', 'set', 'enum'])) {
     $oldMType = @$fieldval['Type'];
 }
 ?>

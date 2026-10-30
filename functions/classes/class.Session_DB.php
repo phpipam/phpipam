@@ -67,7 +67,7 @@ final class Session_DB implements SessionHandlerInterface
             // Note: Database->getObject() does not support non-numeric id's. Use findObject().
             $session = $this->Database->findObject('php_sessions', 'id', $id);
 
-            if (is_object($session) && strlen($session->data) > 0) {
+            if (is_object($session) && (string) $session->data !== '') {
                 return (string) $session->data;
             }
         } catch (PDOException $pdoException) {

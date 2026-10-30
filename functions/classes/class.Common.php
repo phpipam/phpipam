@@ -735,7 +735,7 @@ class Common_functions
         // loop
         if (is_array($fields)) {
             foreach ($fields as $k => $v) {
-                if (! (is_null($v) || is_blank($v))) {
+                if (! is_null($v) && ! is_blank($v)) {
                     $out[$k] = $v;
                 }
             }
@@ -909,7 +909,7 @@ class Common_functions
         $origLen = mb_strlen((string) $text);
         // cut unwanted chars
         if ($origLen > $chars) {
-            $text = mb_substr((string) $text, 0, $chars - 3).'...';
+            return mb_substr((string) $text, 0, $chars - 3).'...';
         }
 
         return $text;
@@ -1001,11 +1001,7 @@ class Common_functions
             return true;
         }
 
-        if ($this->httpPort() == 443) {
-            return true;
-        }
-
-        return false;
+        return $this->httpPort() == 443;
     }
 
     /**
@@ -1015,7 +1011,7 @@ class Common_functions
      */
     public function get_user_ip()
     {
-        if (php_sapi_name() === 'cli') {
+        if (PHP_SAPI === 'cli') {
             return null;
         }
 
@@ -1204,11 +1200,7 @@ class Common_functions
      */
     public function validate_ip($ip)
     {
-        if (filter_var($ip, FILTER_VALIDATE_IP) === false) {
-            return false;
-        }
-
-        return true;
+        return filter_var($ip, FILTER_VALIDATE_IP) !== false;
     }
 
     /**
@@ -1226,11 +1218,7 @@ class Common_functions
             return true;
         }
 
-        if (preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', $mac) != 1) {
-            return false;
-        }
-
-        return true;
+        return preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', $mac) == 1;
     }
 
     /**
@@ -1520,7 +1508,7 @@ class Common_functions
             $result['result_code'] = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             $result['error_msg'] = curl_error($curl);
 
-            if (version_compare(PHP_VERSION, '8.5.0', '<')) {
+            if (PHP_VERSION_ID < 80500) {
                 // phpcs:ignore
                 curl_close($curl);
                 // phpcs:ignore
@@ -1751,11 +1739,7 @@ class Common_functions
      */
     private function create_custom_field_input_textarea($field, $object, $disabled_text, $nameSuffix = '')
     {
-        $html = [];
-        $html[] = ' <textarea class="form-control input-sm" name="'.$field['nameNew'].$nameSuffix.'" placeholder="'.$this->print_custom_field_name($field['name']).'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'.$object->{$field['name']}.'</textarea>'."\n";
-
-        // result
-        return $html;
+        return [' <textarea class="form-control input-sm" name="'.$field['nameNew'].$nameSuffix.'" placeholder="'.$this->print_custom_field_name($field['name']).'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'.$object->{$field['name']}.'</textarea>'."\n"];
     }
 
     /**
@@ -2191,7 +2175,7 @@ class Common_functions
             }
 
             // install, upgrade
-            if ($get['page'] == 'temp_share' || $get['page'] == 'request_ip' || $get['page'] == 'opensearch') {
+            if (in_array($get['page'], ['temp_share', 'request_ip', 'opensearch'])) {
                 $title[] = ucwords(escape_input($get['page']));
             }
             // sections, subnets

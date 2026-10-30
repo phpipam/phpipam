@@ -185,7 +185,7 @@ class DHCP_kea extends Common_functions
     {
         // open
         $this->Database_kea = new Database_PDO($username, $password, $host, $port, $dbname);
-        $this->Database_kea->html_escape_enabled = $this->api ? false : true;
+        $this->Database_kea->html_escape_enabled = ! (bool) $this->api;
     }
 
     /**
@@ -382,7 +382,7 @@ class DHCP_kea extends Common_functions
         try {
             $leases = $this->Database_kea->getObjectsQuery('lease4', $query);
         } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
+            throw new Exception($exception->getMessage(), $exception->getCode(), $exception);
         }
 
         // save leases
@@ -556,7 +556,7 @@ class DHCP_kea extends Common_functions
         try {
             $reservations = $this->Database_kea->getObjectsQuery('hosts', $query);
         } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
+            throw new Exception($exception->getMessage(), $exception->getCode(), $exception);
         }
 
         // save leases

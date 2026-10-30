@@ -150,6 +150,8 @@ class Vlans_controller extends Common_api_functions
                 return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
             }
         }
+
+        return null;
     }
 
     /**
@@ -176,6 +178,8 @@ class Vlans_controller extends Common_api_functions
             // set result
             return ['code' => 201, 'message' => 'Vlan created', 'id' => $this->Admin->lastId, 'location' => '/api/'.$this->_params->app_id.'/vlans/'.$this->Admin->lastId.'/'];
         }
+
+        return null;
     }
 
     /**
@@ -205,6 +209,8 @@ class Vlans_controller extends Common_api_functions
             // set result
             return ['code' => 200, 'message' => 'Vlan updated'];
         }
+
+        return null;
     }
 
     /**
@@ -232,6 +238,8 @@ class Vlans_controller extends Common_api_functions
             // set result
             return ['code' => 200, 'message' => 'Vlan deleted'];
         }
+
+        return null;
     }
 
     /* @validations ---------- */

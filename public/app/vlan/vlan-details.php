@@ -14,7 +14,7 @@ $User->check_module_permissions('vlan', User::ACCESS_R, true, false);
 $vlan = (array) $vlan;
 
 // not existing
-if (! $vlan) {
+if ($vlan === []) {
     $Result->show('danger', _('Invalid VLAN id'), true);
 }
 

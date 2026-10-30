@@ -45,7 +45,7 @@ if ($POST->action != 'delete') {
 
     // permissions must be 0,1,2
     if ($POST->app_security != 'user') {
-        if (! ($POST->app_permissions == 0 || $POST->app_permissions == 1 || $POST->app_permissions == 2 || $POST->app_permissions == 3)) {
+        if (! (in_array($POST->app_permissions, [0, 1, 2, 3]))) {
             $error[] = 'Invalid permissions';
         }
     }

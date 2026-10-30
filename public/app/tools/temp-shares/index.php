@@ -86,7 +86,7 @@ elseif (! is_object($temp_shares)) {
                     $logText[] = $l->date." <span class='text-muted'>(IP $l->ipaddr)</span>";
                 }
             }
-            if (empty($logText)) {
+            if ($logText === []) {
                 $logText[] = "<span class='text-muted'>"._('No access').'</span>';
             }
             $logText = implode('<br>', $logText);

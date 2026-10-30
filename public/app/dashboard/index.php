@@ -127,7 +127,7 @@ foreach ($uwidgets as $uv) {
     }
 
     // calculate current size
-    $currSize = $currSize + $wsize;
+    $currSize += $wsize;
 
     // ok, we have sizes, we need to split them into chunks of 12
     if ($currSize > 12) {

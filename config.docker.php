@@ -7,17 +7,17 @@
 function file_env($var, $default)
 {
     $env_filename = getenv($var.'_FILE');
-
     if ($env_filename === false) {
         return getenv($var) ?: $default;
-    } elseif (is_readable($env_filename)) {
-        return trim(file_get_contents($env_filename), "\n\r");
-    } else {
-        // no i10n, gettext not yet loaded
-        error_log("$var:$env_filename can not be read");
-
-        return $default;
     }
+
+    if (is_readable($env_filename)) {
+        return trim(file_get_contents($env_filename), "\n\r");
+    }
+    // no i10n, gettext not yet loaded
+    error_log("$var:$env_filename can not be read");
+
+    return $default;
 }
 
 /**
@@ -31,12 +31,14 @@ function file_env($var, $default)
  *  If you access the login page at http://company.website/phpipam/ =  define('BASE', "/phpipam/");
  *  If you access the login page at http://company.website/ipam/    =  define('BASE', "/ipam/");
  */
-getenv('IPAM_BASE') ? define('BASE', getenv('IPAM_BASE')) : false;
+if (getenv('IPAM_BASE')) {
+    define('BASE', getenv('IPAM_BASE'));
+}
 
 /**
  * Import default values
  */
-require 'config.dist.php';
+require __DIR__.'/config.dist.php';
 
 /**
  * Disable installation helper scripts /app/install/ after initial setup

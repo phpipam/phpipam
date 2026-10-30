@@ -28,12 +28,12 @@ $id = $POST->id;
 
 // fetch address, subnet, vlan and nameservers
 $address = (array) $Addresses->fetch_address(null, $id);
-if (empty($address) || $Subnets->check_permission($User->user, $address['subnetId']) === User::ACCESS_NONE) {
+if ($address === [] || $Subnets->check_permission($User->user, $address['subnetId']) === User::ACCESS_NONE) {
     $Result->show('danger', _('Invalid ID'), true);
 }
 
 $subnet = (array) $Subnets->fetch_subnet(null, $address['subnetId']);
-if (empty($subnet)) {
+if ($subnet === []) {
     $Result->show('danger', _('Invalid ID'), true);
 }
 $vlan = (array) $Tools->fetch_object('vlans', 'vlanId', $subnet['vlanId']);

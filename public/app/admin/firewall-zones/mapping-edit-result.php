@@ -24,7 +24,7 @@ if ($POST->action == 'edit') {
 }
 
 // validate the action type
-if ($POST->action != 'add' && $POST->action != 'delete' && $POST->action != 'edit') {
+if (! in_array($POST->action, ['add', 'delete', 'edit'])) {
     $Result->show('danger', _('Invalid action.'), true);
 }
 

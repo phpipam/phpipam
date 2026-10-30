@@ -125,6 +125,8 @@ class Search_controller extends Common_api_functions
         }
 
         $this->Response->throw_exception(400, 'Please provide search string');
+
+        return null;
     }
 
     /**

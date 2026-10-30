@@ -56,7 +56,7 @@ if ($Tools->fetch_object('circuitProviders', 'id', $POST->provider) === false) {
 $all_types = $Tools->fetch_all_objects('circuitTypes', 'ctname');
 $type_id_array = [];
 foreach ($all_types as $t) {
-    array_push($type_id_array, $t->id);
+    $type_id_array[] = $t->id;
 }
 
 if (! in_array($POST->type, $type_id_array)) {

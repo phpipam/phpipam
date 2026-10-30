@@ -19,7 +19,7 @@ $admins = $Admin->fetch_multiple_objects('users', 'role', 'Administrator');
 $auth_methods = $Admin->fetch_all_objects('usersAuthMethod');
 if ($auth_methods !== false) {
     foreach ($auth_methods as $k => $m) {
-        if (! ($m->type == 'AD' || $m->type == 'LDAP')) {
+        if ($m->type != 'AD' && $m->type != 'LDAP') {
             unset($auth_methods[$k]);
         }
     }

@@ -96,7 +96,7 @@ foreach ($slave_subnets as $slave_subnet) {
     $fullinfo = ($slave_subnet['isFull'] == 1 || ($calculate['freehosts'] <= 0)) ? " <span class='badge badge1 badge2 badge4'>"._('Full').'</span>' : '';
 
     // slaves info
-    $has_slaves = $Subnets->has_slaves($slave_subnet['id']) ? true : false;
+    $has_slaves = (bool) $Subnets->has_slaves($slave_subnet['id']);
 
     // description
     $has_slaves_ind = $has_slaves ? " <i class='fa fa-folder'></i> " : '';

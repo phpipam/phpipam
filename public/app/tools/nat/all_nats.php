@@ -95,7 +95,7 @@ elseif ($User->check_module_permissions('nat', User::ACCESS_R, false, false) ===
         foreach ($all_nats as $n) {
             // policy
             if ($n->policy == 'Yes') {
-                $n->type = $n->type.' policy';
+                $n->type .= ' policy';
             }
             // save
             $nats_reordered[$n->type][] = $n;
