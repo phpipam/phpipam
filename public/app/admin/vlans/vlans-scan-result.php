@@ -22,8 +22,10 @@ $User->check_user_session();
 $User->check_maintaneance_mode();
 // perm check popup
 $User->check_module_permissions('vlan', User::ACCESS_RWA, true, true);
-// validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 // check for number of input values
 $max = ini_get('max_input_vars');

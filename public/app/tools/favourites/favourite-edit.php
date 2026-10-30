@@ -14,8 +14,9 @@ $Subnets = new Subnets($Database);
 // verify that user is logged in
 $User->check_user_session();
 
-// validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true, true) : '';
+if ($User->Crypto->csrf_validate($POST->csrf) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true, true);
+}
 
 // checks
 is_numeric($POST->subnetId) ?: $Result->show('danger', _('Invalid ID'), true, true);

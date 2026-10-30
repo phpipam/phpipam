@@ -25,8 +25,9 @@ if ($POST->action == 'edit') {
 // fetch custom fields
 $custom = $Tools->fetch_custom_fields('nat');
 
-// validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 // validations
 if ($POST->action == 'delete' || $POST->action == 'edit') {

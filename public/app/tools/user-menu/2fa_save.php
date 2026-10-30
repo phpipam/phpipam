@@ -21,8 +21,9 @@ $User->check_user_session();
 // check if site is demo
 $User->is_demo();
 
-// validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 // change ?
 if ($POST->{'2fa'} && $User->user->{'2fa'}) {

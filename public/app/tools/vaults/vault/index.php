@@ -13,21 +13,15 @@ elseif (! is_numeric($GET->subnetId)) {
 } else {
     // set vaultx pass variable
     $vault_id = 'vault'.$GET->subnetId;
-    // fetch vault
     $vault = $Tools->fetch_object('vaults', 'id', $GET->subnetId);
 
-    // validate vault id
-    if ($vault === false) {
+    if (! is_object($vault)) {
         $Result->show('danger', _('Invalid ID'), false);
-    }
-    // check if key is present
-    else {
+    } else {
         // details
         if (isset($GET->sPage)) {
-            // print cert details
             include 'vault-item-details-general.php';
         } else {
-            // print details
             include 'vault-details-general.php';
         }
     }

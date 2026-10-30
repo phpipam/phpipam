@@ -25,8 +25,9 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
 
 // fetch vault
 $vault = $Admin->fetch_object('vaults', 'id', $POST->id);
-// validate vault id
-$vault === false ? $Result->show('danger', _('Invalid ID'), true, true) : null;
+if (! is_object($vault)) {
+    $Result->show('danger', _('Invalid ID'), true, true);
+}
 
 // delete session
 unset($_SESSION['vault'.$vault->id]);

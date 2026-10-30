@@ -22,8 +22,9 @@ if ($POST->action == 'edit') {
     $User->check_module_permissions('devices', User::ACCESS_RWA, true, true);
 }
 
-// validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 // ID, port snd community must be numeric
 if (! is_numeric($POST->device_id)) {

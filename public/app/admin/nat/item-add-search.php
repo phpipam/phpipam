@@ -19,8 +19,9 @@ $User->check_user_session();
 // validate permissions
 $User->check_module_permissions('nat', User::ACCESS_RW, true, true);
 
-// validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 // length
 if (is_blank($POST->ip)) {

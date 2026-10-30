@@ -20,7 +20,9 @@ $User->check_user_session();
 // check maintaneance mode
 $User->check_maintaneance_mode();
 
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 // permissions
 $permission = $Subnets->check_permission($User->user, $POST->subnetId);

@@ -13,8 +13,9 @@ $Result = new Result;
 // verify that user is logged in
 $User->check_user_session();
 
-// create csrf token
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 // perm check popup
 if ($POST->action == 'edit') {

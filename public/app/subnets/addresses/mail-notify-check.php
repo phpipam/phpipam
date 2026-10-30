@@ -13,7 +13,9 @@ $Result = new Result;
 $User = new User($Database);
 $Tools = new Tools($Database);
 
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 // verify that user is logged in
 $User->check_user_session();

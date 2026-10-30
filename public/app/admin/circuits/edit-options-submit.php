@@ -24,8 +24,9 @@ if ($POST->action == 'edit') {
     $User->check_module_permissions('circuits', User::ACCESS_RWA, true, false);
 }
 
-// validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 // empty
 if (is_blank($POST->option)) {

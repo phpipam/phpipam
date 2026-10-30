@@ -17,8 +17,9 @@ $Result = new Result;
 $User->check_user_session();
 // admin check
 $User->is_admin();
-// validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 // some verifications
 if ((empty($POST->current)) || (empty($POST->next))) {

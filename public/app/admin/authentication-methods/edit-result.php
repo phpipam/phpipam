@@ -23,8 +23,10 @@ $User->is_demo();
 // check maintaneance mode
 $User->check_maintaneance_mode();
 
-// validate & remove csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
+
 unset($POST->csrf_cookie);
 
 // get action

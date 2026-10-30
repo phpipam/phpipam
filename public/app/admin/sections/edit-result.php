@@ -22,8 +22,10 @@ $User->check_user_session();
 $User->is_demo();
 // check maintaneance mode
 $User->check_maintaneance_mode();
-// validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 // If confirm is not set print delete warning
 if ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {

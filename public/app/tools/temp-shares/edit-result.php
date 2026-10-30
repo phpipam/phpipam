@@ -17,7 +17,9 @@ $Result = new Result;
 // verify that user is logged in
 $User->check_user_session();
 
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 /* checks */
 if ($User->settings->tempShare != 1) {

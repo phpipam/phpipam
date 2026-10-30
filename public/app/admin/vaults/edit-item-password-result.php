@@ -25,13 +25,15 @@ if ($User->get_module_permissions('vaults') < User::ACCESS_RW) {
     $Result->show('danger', _('Insufficient privileges').'.', true, true);
 }
 
-// validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 // fetch vault details
 $vault = $Admin->fetch_object('vaults', 'id', $POST->vaultId);
-// null ?
-$vault === false ? $Result->show('danger', _('Invalid ID'), true) : null;
+if (! is_object($vault)) {
+    $Result->show('danger', _('Invalid ID'), true);
+}
 
 // fetch custom fields
 $custom = $Tools->fetch_custom_fields('vaultItems');
