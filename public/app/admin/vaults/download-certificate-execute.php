@@ -123,8 +123,8 @@ try {
             $content = 'Incorrect format';
         }
     }
-} catch (Exception $e) {
-    $content = $e->getMessage();
+} catch (Exception $exception) {
+    $content = $exception->getMessage();
 }
 
 // headers

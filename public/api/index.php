@@ -309,9 +309,9 @@ try {
         // Execute the GET read requests without lock.
         $result = $controller->{$request_method}();
     }
-} catch (Exception $e) {
+} catch (Exception $exception) {
     // catch any exceptions and report the problem
-    $result = $e->getMessage();
+    $result = $exception->getMessage();
 
     // set flag if it came from Result, just to be sure
     if ($Response->exception !== true) {

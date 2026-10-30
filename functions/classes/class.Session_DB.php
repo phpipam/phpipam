@@ -36,8 +36,8 @@ final class Session_DB implements SessionHandlerInterface
     {
         try {
             $this->Database->connect();
-        } catch (PDOException $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (PDOException $pdoException) {
+            $this->Result->show('danger', $pdoException->getMessage(), false);
 
             return false;
         }
@@ -70,8 +70,8 @@ final class Session_DB implements SessionHandlerInterface
             if (is_object($session) && strlen($session->data) > 0) {
                 return (string) $session->data;
             }
-        } catch (PDOException $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (PDOException $pdoException) {
+            $this->Result->show('danger', $pdoException->getMessage(), false);
 
             return false;
         }
@@ -97,8 +97,8 @@ final class Session_DB implements SessionHandlerInterface
 
         try {
             $this->Database->insertObject('php_sessions', $values, false, true, false);
-        } catch (PDOException $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (PDOException $pdoException) {
+            $this->Result->show('danger', $pdoException->getMessage(), false);
 
             return false;
         }
@@ -115,8 +115,8 @@ final class Session_DB implements SessionHandlerInterface
     {
         try {
             $this->Database->deleteObject('php_sessions', $id);
-        } catch (PDOException $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (PDOException $pdoException) {
+            $this->Result->show('danger', $pdoException->getMessage(), false);
 
             return false;
         }
@@ -136,7 +136,7 @@ final class Session_DB implements SessionHandlerInterface
         $rowCount = 0;
         try {
             $this->Database->runQuery('DELETE FROM php_sessions WHERE `access` < ?', [time() - $max], $rowCount);
-        } catch (PDOException $e) {
+        } catch (PDOException $pdoException) {
             return false;
         }
 

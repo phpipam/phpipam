@@ -98,8 +98,8 @@ class DHCP extends Common_functions
         // init
         try {
             $this->DHCP_server = new $dhcp_class($this->dhcp_settings);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
     }
 
@@ -236,8 +236,8 @@ class DHCP extends Common_functions
         // get leases
         try {
             $this->DHCP_server->get_leases($type);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), false);
         }
 
         // return leases

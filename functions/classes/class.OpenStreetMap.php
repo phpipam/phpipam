@@ -402,8 +402,8 @@ class OpenStreetMap extends Common_functions
             }
 
             $this->update_geo_cache($address, json_encode($results));
-        } catch (Exception $e) {
-            $results = ['lat' => null, 'lng' => null, 'error' => $e->getMessage()];
+        } catch (Exception $exception) {
+            $results = ['lat' => null, 'lng' => null, 'error' => $exception->getMessage()];
         }
 
         // Ensure we hold the exclusive database lock for a minimum of 1 second

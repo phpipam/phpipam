@@ -77,9 +77,9 @@ try {
     $groups = $adldap->group()->search(adLDAP::ADLDAP_SECURITY_GLOBAL_GROUP, true, "*$esc_dfilter*");
 
     // echo $adldap->getLastError();
-} catch (adLDAPException $e) {
+} catch (adLDAPException $adldapException) {
     $Result->show('danger', $adldap->getLastError(), false);
-    $Result->show('danger', $e->getMessage(), true);
+    $Result->show('danger', $adldapException->getMessage(), true);
 }
 
 // check for found

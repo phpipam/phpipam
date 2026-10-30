@@ -42,7 +42,7 @@ class Install extends Common_functions
         // Log object
         try {
             $this->Database->connect();
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
         }
     }
 
@@ -112,8 +112,8 @@ class Install extends Common_functions
         // execute
         try {
             $this->Database_root->runQuery($query);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
     }
 
@@ -129,8 +129,8 @@ class Install extends Common_functions
         // execute
         try {
             $this->Database_root->runQuery($query);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
     }
 
@@ -157,8 +157,8 @@ class Install extends Common_functions
 
             $this->Database_root->runQuery("GRANT ALL ON `$db_name`.* TO '$esc_user'@'$webhost';");
             $this->Database_root->runQuery('FLUSH PRIVILEGES;');
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
     }
 
@@ -231,8 +231,8 @@ class Install extends Common_functions
         // try to connect
         try {
             $this->Database->connect();
-        } catch (Exception $e) {
-            $this->exception = $e->getMessage();
+        } catch (Exception $exception) {
+            $this->exception = $exception->getMessage();
             // redirect ?
             if ($redirect == true) {
                 $this->redirect_to_install();
@@ -258,7 +258,7 @@ class Install extends Common_functions
         // try to fetch count
         try {
             $result = $this->Database->getObjectQuery('no_html_escape', $query);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             if ($redirect === true) {
                 $this->redirect_to_install();
             }
@@ -334,8 +334,8 @@ class Install extends Common_functions
     {
         try {
             $this->Database->updateObject('users', ['password' => $adminpass, 'passChange' => 'No', 'username' => 'Admin'], 'username');
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), false);
         }
 
         return true;
@@ -352,8 +352,8 @@ class Install extends Common_functions
     {
         try {
             $this->Database->updateObject('settings', ['siteTitle' => $siteTitle, 'siteURL' => $siteURL, 'id' => 1], 'id');
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), false);
         }
 
         return true;
@@ -390,7 +390,7 @@ class Upgrade extends Install
         // check DB connection
         try {
             $this->Database->connect();
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
         }
 
         // get old version
@@ -548,15 +548,15 @@ class Upgrade extends Install
 
             // All good, commit changes
             $this->Database->commit();
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             // Something went wrong, revert all upgrade changes
             $this->Database->rollBack();
             // write log
             $this->Log = new Logging($this->Database);
-            $this->Log->write(_('Database upgrade'), $e->getMessage().'<br>'._('query: ').$query, 2);
+            $this->Log->write(_('Database upgrade'), $exception->getMessage().'<br>'._('query: ').$query, 2);
             // fail
             print '<h3>'._('Upgrade failed')." !</h3><hr style='margin:30px;'>";
-            $this->Result->show('danger', $e->getMessage().'<hr>'._('Failed query').': <pre>'.$query.'</pre>', false);
+            $this->Result->show('danger', $exception->getMessage().'<hr>'._('Failed query').': <pre>'.$query.'</pre>', false);
 
             // print failure
             $this->Result->show('danger', _('Failed to upgrade database!'), false);

@@ -177,9 +177,9 @@ class Admin extends Common_functions
         // execute
         try {
             $this->Database->insertObject($table, $values);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
-            $this->Log->write($table.' '._('object creation'), _('Failed to create new').' '.$table.' '._('database object').'.<hr>'.$e->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values_log, 'NULL')), 2);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Log->write($table.' '._('object creation'), _('Failed to create new').' '.$table.' '._('database object').'.<hr>'.$exception->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values_log, 'NULL')), 2);
 
             return false;
         }
@@ -212,9 +212,9 @@ class Admin extends Common_functions
         // execute
         try {
             $this->Database->updateObject($table, $values, $key);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
-            $this->Log->write($table.' '._('object').' '.$values[$key].' '._('edit'), _('Failed to edit object').' '.$key = $values[$key].' '._('in')." $table.<hr>".$e->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values_log, 'NULL')), 2);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Log->write($table.' '._('object').' '.$values[$key].' '._('edit'), _('Failed to edit object').' '.$key = $values[$key].' '._('in')." $table.<hr>".$exception->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values_log, 'NULL')), 2);
 
             return false;
         }
@@ -246,9 +246,9 @@ class Admin extends Common_functions
         // execute
         try {
             $this->Database->updateMultipleObjects($table, $ids, $values);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
-            $this->Log->write($table.' '._('multiple objects edit'), _('Failed to edit multiple objects in')." $table.<hr>".$e->getMessage().'<hr>'.$this->array_to_log($ids).'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values, 'NULL')), 2);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Log->write($table.' '._('multiple objects edit'), _('Failed to edit multiple objects in')." $table.<hr>".$exception->getMessage().'<hr>'.$this->array_to_log($ids).'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values, 'NULL')), 2);
 
             return false;
         }
@@ -274,9 +274,9 @@ class Admin extends Common_functions
         // execute
         try {
             $this->Database->deleteRow($table, $field, $id);
-        } catch (Exception $e) {
-            $this->Log->write($table.' '._('object').' '.$id.' '._('delete'), _('Failed to delete object').' '.$field = $id.' '._('in').' '.$table.'.<hr>'.$e->getMessage(), 2);
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Log->write($table.' '._('object').' '.$id.' '._('delete'), _('Failed to delete object').' '.$field = $id.' '._('in').' '.$table.'.<hr>'.$exception->getMessage(), 2);
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -305,8 +305,8 @@ class Admin extends Common_functions
 
         try {
             $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", [$new_value, $old_value]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -328,8 +328,8 @@ class Admin extends Common_functions
 
         try {
             $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", [$new_value, $old_value]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -350,8 +350,8 @@ class Admin extends Common_functions
 
         try {
             $this->Database->emptyTable($table);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -769,8 +769,8 @@ class Admin extends Common_functions
         // execute
         try {
             $res = $this->Database->runQuery($query, $params);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
             $this->Log->write(_('Custom field').' '.$field['action'], _('Custom field').' '.$field['action'].' '._('failed').' ('.$field['name'].').<hr>'.$this->array_to_log($field), 2);
 
             return false;
@@ -807,8 +807,8 @@ class Admin extends Common_functions
         // update database
         try {
             $this->object_edit('settings', $key = 'id', ['id' => 1, 'hiddenCustomFields' => $hidden_json]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), true);
         }
 
         // ok
@@ -842,8 +842,8 @@ class Admin extends Common_functions
         // execute
         try {
             $res = $this->Database->runQuery($query, ['comment' => $old['Comment']]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }

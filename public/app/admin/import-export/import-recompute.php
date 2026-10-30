@@ -63,9 +63,9 @@ try {
         }
     }
     $Database->commit();
-} catch (Exception $e) {
+} catch (Exception $exception) {
     $Database->rollBack();
-    throw $e;
+    throw $exception;
 }
 
 print "<table class='table table-condensed table-hover' id='resultstable'><tbody>";

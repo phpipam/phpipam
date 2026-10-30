@@ -36,8 +36,8 @@ $query = 'SELECT INET_NTOA(`subnet`) AS `subnet`,`id`,`mask`,`description` FROM 
 
 try {
     $subnets = $Database->getObjectsQuery('subnets', $query, ["$search_txt%", "%$search_txt%"]);
-} catch (Exception $e) {
-    print $Result->show('danger', $e->getMessage(), true);
+} catch (Exception $exception) {
+    print $Result->show('danger', $exception->getMessage(), true);
 }
 
 // printout

@@ -703,8 +703,8 @@ class Prefix_controller extends Common_api_functions
         // search
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query, $params);
-        } catch (Exception $e) {
-            $this->Response->throw_exception(500, 'Error: '.$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Response->throw_exception(500, 'Error: '.$exception->getMessage());
         }
 
         // remove if they have slaves for addresses query
@@ -856,8 +856,8 @@ class Prefix_controller extends Common_api_functions
         // search
         try {
             $objects = $this->Database->findObjects($type, $this->external_identifier_field, $this->_params->id2, 'id');
-        } catch (Exception $e) {
-            $this->Response->throw_exception(500, 'Error: '.$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Response->throw_exception(500, 'Error: '.$exception->getMessage());
         }
 
         // result

@@ -131,8 +131,8 @@ class FirewallZones extends Common_functions
         // execute
         try {
             $maxZone = $this->Database->getObjectsQuery('firewallZones', 'SELECT MAX(CAST(zone as UNSIGNED)) as zone FROM firewallZones WHERE generator NOT LIKE 2;');
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -185,8 +185,8 @@ class FirewallZones extends Common_functions
         // execute
         try {
             $uniqueZone = $this->Database->getObjectsQuery('firewallZones', $query, $params);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -231,8 +231,8 @@ class FirewallZones extends Common_functions
 						having  deviceId is not NULL order by firewallZones.id ASC;');
         }
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         // try to fetch all subnet and vlan informations for all zones
@@ -254,8 +254,8 @@ class FirewallZones extends Common_functions
 						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId ORDER BY subnet ASC;');
         }
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         // modify the zone output values
@@ -314,8 +314,8 @@ class FirewallZones extends Common_functions
 						having  deviceId is not NULL AND mappingId = ?;', $id);
         }
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         // try to fetch all subnet and vlan informations for all zones
@@ -338,8 +338,8 @@ class FirewallZones extends Common_functions
 						HAVING zoneId = ? ORDER BY subnet ASC;', $mapping[0]->id);
         }
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         // modify the zone output values
@@ -385,8 +385,8 @@ class FirewallZones extends Common_functions
         }
 
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         // return the values
@@ -426,8 +426,8 @@ class FirewallZones extends Common_functions
 						HAVING firewallZoneSubnet.subnetId = ?;', $id);
         }
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         if ($info) {
@@ -463,8 +463,8 @@ class FirewallZones extends Common_functions
             $zones = $this->Database->getObjectsQuery('firewallZones', 'SELECT * FROM firewallZones;');
         }
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         // try to fetch all subnet and vlan informations for all zones
@@ -486,8 +486,8 @@ class FirewallZones extends Common_functions
 						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId ORDER BY subnet ASC;');
         }
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         // modify the zone output values
@@ -533,8 +533,8 @@ class FirewallZones extends Common_functions
         }
 
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         // try to fetch all subnet and vlan informations for this zone
@@ -556,8 +556,8 @@ class FirewallZones extends Common_functions
 						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId HAVING zoneId = ? ORDER BY subnet ASC;', $id);
         }
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         // modify the zone output values
@@ -670,8 +670,8 @@ class FirewallZones extends Common_functions
 						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId HAVING zoneId = ? ORDER BY subnet ASC;', $id);
         }
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         $rowspan = count($networkInformation);
@@ -720,8 +720,8 @@ class FirewallZones extends Common_functions
         }
 
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         if (! count($networkInformation) > 0) {
@@ -749,8 +749,8 @@ class FirewallZones extends Common_functions
         }
 
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         if (! count($networkInformation) > 0) {
@@ -790,8 +790,8 @@ class FirewallZones extends Common_functions
         }
 
         // throw exception
-        catch (Exception $e) {
-            $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        catch (Exception $exception) {
+            $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         // return dummy value or false
@@ -858,9 +858,9 @@ class FirewallZones extends Common_functions
         // execute insert
         try {
             $this->Database->insertObject('firewallZones', $values);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
-            $this->Log->write(_('Firewall zone create'), _('Failed to add new firewall zone').'.<hr>'.$e->getMessage(), 2, $this->User->username);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Log->write(_('Firewall zone create'), _('Failed to add new firewall zone').'.<hr>'.$exception->getMessage(), 2, $this->User->username);
 
             return false;
         }
@@ -868,8 +868,8 @@ class FirewallZones extends Common_functions
         // fetch the highest inserted id, matching the zone name
         try {
             $lastId = $this->Database->getObjectsQuery('firewallZones', 'SELECT MAX(id) AS id FROM firewallZones WHERE zone = ? ;', $values['zone']);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -906,9 +906,9 @@ class FirewallZones extends Common_functions
         // execute
         try {
             $this->Database->updateObject('firewallZones', $values, 'id');
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
-            $this->Log->write(_('Firewall zone edit'), _('Failed to edit firewall zone').'.<hr>'.$e->getMessage(), 2, $this->User->username);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Log->write(_('Firewall zone edit'), _('Failed to edit firewall zone').'.<hr>'.$exception->getMessage(), 2, $this->User->username);
 
             return false;
         }
@@ -933,9 +933,9 @@ class FirewallZones extends Common_functions
         // delete mappings
         try {
             $this->Database->deleteRow('firewallZoneMapping', 'zoneId', $id);
-        } catch (Exception $e) {
-            $this->Log->write(_('Firewall zone and mappings delete'), _('Failed to delete firewall zone mappings of')." $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Log->write(_('Firewall zone and mappings delete'), _('Failed to delete firewall zone mappings of')." $old_zone->zone<hr>".$exception->getMessage(), 2, $this->User->username);
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -943,9 +943,9 @@ class FirewallZones extends Common_functions
         // delete zone
         try {
             $this->Database->deleteRow('firewallZones', 'id', $id);
-        } catch (Exception $e) {
-            $this->Log->write(_('Firewall zone delete'), _('Failed to delete firewall zone')." $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Log->write(_('Firewall zone delete'), _('Failed to delete firewall zone')." $old_zone->zone<hr>".$exception->getMessage(), 2, $this->User->username);
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -997,9 +997,9 @@ class FirewallZones extends Common_functions
         // execute
         try {
             $this->Database->insertObject('firewallZoneMapping', $values);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
-            $this->Log->write(_('Firewall zone mapping create'), _('Failed to add new firewall zone mapping').'.<hr>'.$e->getMessage(), 2, $this->User->username);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Log->write(_('Firewall zone mapping create'), _('Failed to add new firewall zone mapping').'.<hr>'.$exception->getMessage(), 2, $this->User->username);
 
             return false;
         }
@@ -1021,9 +1021,9 @@ class FirewallZones extends Common_functions
         // execute
         try {
             $this->Database->updateObject('firewallZoneMapping', $values, 'id');
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
-            $this->Log->write(_('Firewall zone mapping edit'), _('Failed to edit firewall zone mapping').'.<hr>'.$e->getMessage(), 2, $this->User->username);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Log->write(_('Firewall zone mapping edit'), _('Failed to edit firewall zone mapping').'.<hr>'.$exception->getMessage(), 2, $this->User->username);
 
             return false;
         }
@@ -1048,9 +1048,9 @@ class FirewallZones extends Common_functions
         // delete mapping
         try {
             $this->Database->deleteRow('firewallZoneMapping', 'id', $id);
-        } catch (Exception $e) {
-            $this->Log->write(_('Firewall zone mapping delete'), _('Failed to delete firewall zone mapping').' '.$old_mapping->zone.'.<hr>'.$e->getMessage(), 2, $this->User->username);
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Log->write(_('Firewall zone mapping delete'), _('Failed to delete firewall zone mapping').' '.$old_mapping->zone.'.<hr>'.$exception->getMessage(), 2, $this->User->username);
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -1305,8 +1305,8 @@ class FirewallZones extends Common_functions
 
         try {
             $ipaddresses = $this->Database->getObjectsQuery('ipaddresses', 'SELECT id, hostname FROM ipaddresses WHERE subnetId = ? ', $subnetId);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }

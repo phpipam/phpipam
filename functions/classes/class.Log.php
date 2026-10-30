@@ -561,8 +561,8 @@ class Logging extends Common_functions
         // execute
         try {
             $this->Database->insertObject('logs', $values);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -645,8 +645,8 @@ class Logging extends Common_functions
         // fetch
         try {
             $logs = $this->Database->getObjectsQuery('logs', implode("\n", $query), $params);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), false);
 
             return false;
         }
@@ -665,8 +665,8 @@ class Logging extends Common_functions
         // fetch
         try {
             $id = $this->Database->getObjectQuery('logs', 'select id from logs order by id desc limit 1;');
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), false);
 
             return false;
         }
@@ -853,8 +853,8 @@ class Logging extends Common_functions
         // execute
         try {
             $this->Database->insertObject('changelog', $values);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -1724,8 +1724,8 @@ class Logging extends Common_functions
         // fetch
         try {
             $logs = $this->Database->getObjectsQuery('changelog', $query, $filter ? ['expr' => $expr] : null);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), false);
 
             return false;
         }
@@ -1777,8 +1777,8 @@ class Logging extends Common_functions
         // fetch
         try {
             $logs = $this->Database->getObjectQuery('changelog', $query, ['id' => $id]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), false);
 
             return false;
         }
@@ -1893,8 +1893,8 @@ class Logging extends Common_functions
         // fetch
         try {
             $logs = $this->Database->getObjectsQuery('changelog', $query, [$coid, $object_type]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), false);
 
             return false;
         }

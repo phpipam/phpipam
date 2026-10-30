@@ -182,8 +182,8 @@ class Addresses extends Common_functions
 
         try {
             $address = $this->Database->getObjectQuery('ipaddresses', "SELECT * FROM `ipaddresses` where `$method` = ? limit 1;", [$id]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -208,8 +208,8 @@ class Addresses extends Common_functions
     {
         try {
             $address = $this->Database->getObjectQuery('ipaddresses', 'SELECT * FROM `ipaddresses` where `ip_addr` = ? and `subnetId` = ? limit 1;', [$ip_addr, $subnetId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -243,7 +243,7 @@ class Addresses extends Common_functions
                     $this->cache_write('ipaddresses', 'id', $address);
                 }
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $addresses = [];
         }
 
@@ -274,8 +274,8 @@ class Addresses extends Common_functions
         try {
             $query = "SELECT * FROM `ipaddresses` WHERE `state`<>4 AND `$linked_field` IN (SELECT `$linked_field` FROM `ipaddresses` WHERE `subnetId`=? AND LENGTH(`$linked_field`)>0) ORDER BY LPAD(ip_addr,39,0)";
             $linked_subnet_addrs = $this->Database->getObjectsQuery('ipaddresses', $query, [$address->subnetId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -435,9 +435,9 @@ class Addresses extends Common_functions
         // execute
         try {
             $this->Database->insertObject('ipaddresses', $address);
-        } catch (Exception $e) {
-            $this->Log->write(_('Address create'), _('Failed to create new address').'.<hr>'.$e->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($address, 'NULL')), 2);
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Log->write(_('Address create'), _('Failed to create new address').'.<hr>'.$exception->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($address, 'NULL')), 2);
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -499,9 +499,9 @@ class Addresses extends Common_functions
         // execute
         try {
             $this->Database->updateObject('ipaddresses', $address, $id1, $id2);
-        } catch (Exception $e) {
-            $this->Log->write(_('Address edit'), _('Failed to edit address').' '.$address['ip_addr'].'.<hr>'.$e->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($address, 'NULL')), 2);
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Log->write(_('Address edit'), _('Failed to edit address').' '.$address['ip_addr'].'.<hr>'.$exception->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($address, 'NULL')), 2);
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -550,9 +550,9 @@ class Addresses extends Common_functions
         // execute
         try {
             $this->Database->deleteRow('ipaddresses', $field, $value, $field2, $value2);
-        } catch (Exception $e) {
-            $this->Log->write(_('Address delete'), _('Failed to delete address').' '.$address['ip_addr'].'.<hr>'.$e->getMessage().'<hr>'.$this->array_to_log((array) $address_old), 2);
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Log->write(_('Address delete'), _('Failed to delete address').' '.$address['ip_addr'].'.<hr>'.$exception->getMessage().'<hr>'.$this->array_to_log((array) $address_old), 2);
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -587,8 +587,8 @@ class Addresses extends Common_functions
         // execute
         try {
             $this->Database->updateObject('ipaddresses', ['subnetId' => $address['newSubnet'], 'id' => $address['id']]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -612,8 +612,8 @@ class Addresses extends Common_functions
         // fetch all nats
         try {
             $all_nats = $this->Database->getObjectsQuery('nat', 'select * from `nat` where `src` like :id or `dst` like :id', ['id' => '%"'.$obj_id.'"%']);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -776,8 +776,8 @@ class Addresses extends Common_functions
     {
         try {
             $this->Database->updateObject('ipaddresses', ['subnetId' => $subnetId, 'is_gateway' => 0], 'subnetId');
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -823,8 +823,8 @@ class Addresses extends Common_functions
         // fetch
         try {
             $count = $this->Database->getObjectQuery('ipaddresses', $query, [$subnetId, $address]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1167,8 +1167,8 @@ class Addresses extends Common_functions
         // execute
         try {
             $this->Database->updateObject('ipaddresses', ['id' => $address_id, 'PTR' => $ptr_id]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -1187,8 +1187,8 @@ class Addresses extends Common_functions
         // execute
         try {
             $this->Database->updateObject('ipaddresses', ['id' => $address_id, 'PTR' => 0]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -1206,8 +1206,8 @@ class Addresses extends Common_functions
     {
         try {
             $this->Database->runQuery('update `ipaddresses` set `PTR` = 0 where `subnetId` = ?;', [$subnet_id]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1237,8 +1237,8 @@ class Addresses extends Common_functions
     {
         try {
             $indexes = $this->Database->getObjectsQuery('ipaddresses', 'select `PTR` from `ipaddresses` where `PTR` != 0 and `subnetId` = ?;', [$subnetId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1353,8 +1353,8 @@ class Addresses extends Common_functions
 
         try {
             $addresses = $this->Database->getObjectsQuery('ipaddresses', "SELECT $fields FROM `ipaddresses` where `subnetId` = ? order by `$order[0]` $order[1];", [$subnetId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1382,8 +1382,8 @@ class Addresses extends Common_functions
     {
         try {
             $count = $this->Database->numObjectsFilter('ipaddresses', 'subnetId', $subnetId);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1422,8 +1422,8 @@ class Addresses extends Common_functions
         // fetch
         try {
             $addresses = $this->Database->getObjectsQuery('ipaddresses', $query);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1486,8 +1486,8 @@ class Addresses extends Common_functions
         // fetch
         try {
             $addresses = $this->Database->getObjectsQuery('ipaddresses', $query, $ids);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1568,8 +1568,8 @@ class Addresses extends Common_functions
     {
         try {
             $cnt = $this->Database->numObjectsFilter('ipaddresses', 'hostname', $hostname);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1757,8 +1757,8 @@ class Addresses extends Common_functions
     {
         try {
             $res = $this->Database->getObjectsQuery('ipaddresses', 'select distinct(`subnetId`) from `ipaddresses` order by `subnetId` asc;');
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1777,8 +1777,8 @@ class Addresses extends Common_functions
     {
         try {
             $res = $this->Database->numObjectsFilter('subnets', 'id', $id);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }

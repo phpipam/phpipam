@@ -19,8 +19,8 @@
 // try to fetch
 try {
     $Database->getObjectsQuery('settings', 'SELECT * FROM settings LIMIT 1;');
-} catch (Exception $e) {
-    $Result->show('danger', _('Error').':<hr>'.$e->getMessage(), false);
+} catch (Exception $exception) {
+    $Result->show('danger', _('Error').':<hr>'.$exception->getMessage(), false);
     $error = true;
 
     // text

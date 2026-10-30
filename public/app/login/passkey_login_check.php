@@ -59,7 +59,7 @@ try {
         'success' => true,
         'credential_ids' => $updatedCredential->getStorageId(),
     ]);
-} catch (Exception $e) {
+} catch (Exception $exception) {
     // set header type
     header('Content-Type: text/html; charset=utf-8');
     header('HTTP/1.1 403 Unauthorized');

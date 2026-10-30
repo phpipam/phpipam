@@ -28,7 +28,7 @@ try {
     // Send json challenge to user
     header('Content-type: application/json');
     print json_encode($challenge->getBase64());
-} catch (Exception $e) {
+} catch (Exception $exception) {
     header('Content-Type: text/html; charset=utf-8');
     header('HTTP/1.1 403 Unauthorized');
     exit();

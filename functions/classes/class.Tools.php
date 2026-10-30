@@ -81,8 +81,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $vlans = $this->Database->getObjectsQuery('vlans', $query, [$domainId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -155,8 +155,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $result = $this->Database->getObjectsQuery('ipaddresses', $query, ['low' => $low, 'high' => $high, 'search_term' => "%$search_term%", 'tags' => $tags]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -231,8 +231,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $result = $this->Database->getObjectsQuery('subnets', $query, ['low' => $low, 'high' => $high, 'search_term' => "%$search_term%"]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -298,8 +298,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $search = $this->Database->getObjectsQuery('vlans', $query, ['search_term' => "%$search_term%"]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -334,8 +334,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $search = $this->Database->getObjectsQuery('vrf', $query, ['search_term' => "%$search_term%"]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -370,8 +370,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $search = $this->Database->getObjectsQuery('pstnPrefixes', $query, ['search_term' => "%$search_term%"]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -406,8 +406,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $search = $this->Database->getObjectsQuery('pstnNumbers', $query, ['search_term' => "%$search_term%"]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -445,8 +445,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $search = $this->Database->getObjectsQuery('circuits', $query, ['search_term' => "%$search_term%"]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -481,8 +481,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $search = $this->Database->getObjectsQuery('circuitProviders', $query, ['search_term' => "%$search_term%"]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -517,8 +517,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $search = $this->Database->getObjectsQuery('customers', $query, ['search_term' => "%$search_term%"]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -553,8 +553,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $search = $this->Database->getObjectsQuery('devices', $query, ['search_term' => "%$search_term%"]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -785,8 +785,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $fields = $this->Database->getObjectsQuery('no_html_escape', $query, []);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), false);
 
             return false;
         }
@@ -895,8 +895,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $field_data = $this->Database->getObjectQuery('no_html_escape', "show full columns from `$table` where `Field` = ?;", [$field]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), false);
 
             return false;
         }
@@ -935,8 +935,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $widgets = $this->Database->getObjectsQuery('widgets', $query);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), false);
 
             return false;
         }
@@ -1061,8 +1061,8 @@ class Tools extends Common_functions
 			ORDER BY LPAD(s1.subnet,39,0);';
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), false);
 
             return null;
         }
@@ -1371,8 +1371,8 @@ class Tools extends Common_functions
         $query = 'SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = "'.$this->Database->dbname.'" AND table_name = ?;';
         try {
             $count = $this->Database->getObjectQuery('no_html_escape', $query, [$tablename]);
-        } catch (Exception $e) {
-            ! $quit ?: $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            ! $quit ?: $this->Result->show('danger', $exception->getMessage(), true);
 
             return false;
         }
@@ -1398,8 +1398,8 @@ class Tools extends Common_functions
         $query = "DESCRIBE `$tablename` `$fieldname`;";
         try {
             $count = $this->Database->getObjectQuery('no_html_escape', $query);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
 
             return false;
         }
@@ -1417,8 +1417,8 @@ class Tools extends Common_functions
         $query = 'update `settings` set `dbverified`=1 where `id` = 1; ';
         try {
             $this->Database->runQuery($query);
-        } catch (Exception $e) {
-            ! $this->debugging ?: $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
         }
     }
 
@@ -1486,8 +1486,8 @@ class Tools extends Common_functions
         // fix
         try {
             $this->Database->runQuery($query);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Update: ').$e->getMessage().'<br>'._('query').': '.$query, true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Update: ').$exception->getMessage().'<br>'._('query').': '.$query, true);
 
             return false;
         }
@@ -1515,8 +1515,8 @@ class Tools extends Common_functions
         // fix
         try {
             $this->Database->runQuery($query);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Update: ').$e->getMessage().'<br>'._('query').': '.$query, true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Update: ').$exception->getMessage().'<br>'._('query').': '.$query, true);
 
             return false;
         }
@@ -1596,8 +1596,8 @@ class Tools extends Common_functions
     {
         try {
             return $this->Database->getObjectsQuery('no_html_escape', "SHOW INDEX from `$table` where `Key_name` != 'PRIMARY';", []);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Invalid query for')." `.$table.` "._('database index check : ').$e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Invalid query for')." `.$table.` "._('database index check : ').$exception->getMessage(), true);
         }
     }
 
@@ -1754,8 +1754,8 @@ class Tools extends Common_functions
         // Create selected linked_field index if not exists.
         try {
             $this->Database->runQuery("ALTER TABLE `ipaddresses` ADD INDEX (`$linked_field`);");
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
 
         $this->Result->show('info', _('Adding link addresses index : ').$linked_field);
@@ -1825,8 +1825,8 @@ class Tools extends Common_functions
         $query = "update `settings` set `vcheckDate`='".date('Y-m-d H:i:s')."';";
         try {
             $this->Database->runQuery($query);
-        } catch (Exception $e) {
-            ! $this->debugging ?: $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
         }
     }
 
@@ -2364,8 +2364,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $prefixes = $this->Database->getObjectsQuery('pstnPrefixes', $query, $params);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3047,8 +3047,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $circuits = $this->Database->getObjectsQuery('circuits', implode("\n", $query), []);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
 
         // return
@@ -3073,8 +3073,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $circuits = $this->Database->getObjectsQuery('circuitsLogical', implode("\n", $query), [$circuit_id]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
 
         // return
@@ -3099,8 +3099,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $circuits = $this->Database->getObjectsQuery('circuits', implode("\n", $query2), $logical_circuit_id);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
 
         return count($circuits) > 0 ? $circuits : false;
@@ -3131,8 +3131,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $circuits = $this->Database->getObjectsQuery('circuits', implode("\n", $query), [$provider_id]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
 
         // return
@@ -3156,8 +3156,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $circuits = $this->Database->getObjectsQuery('circuits', $query, ['deviceid' => $device_id]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
 
         // return
@@ -3269,8 +3269,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $domains = $this->Database->getObjectsQuery('vlans', implode("\n", $query));
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
 
         // filter if requested
@@ -3331,8 +3331,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query, [$type, $id]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
 
         // return
@@ -3621,8 +3621,8 @@ class Tools extends Common_functions
 
         try {
             $count = $this->Database->getObjectQuery('ipaddresses', $query);
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
 
         /* return true if it exists */
@@ -3663,8 +3663,8 @@ class Tools extends Common_functions
 
         try {
             $stats = $this->Database->getObjectsQuery('subnets', $query);
-        } catch (Exception $e) {
-            ! $this->debugging ?: $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), true);
 
             return false;
         }
@@ -3683,8 +3683,8 @@ class Tools extends Common_functions
         // fetch
         try {
             $addresses = $this->Database->getObjectsQuery('ipaddresses', 'select `id`,`subnetId`,`ip_addr`,`hostname` from `ipaddresses` where length(`hostname`)>1 order by `subnetId` asc;');
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), false);
 
             return false;
         }

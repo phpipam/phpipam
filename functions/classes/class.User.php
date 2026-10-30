@@ -570,7 +570,7 @@ class User extends Common_functions
         // execute
         try {
             $this->Database->updateObject('settings', ['id' => 1, 'maintaneanceMode' => $maintaneance_mode], 'id');
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
         }
     }
 
@@ -632,8 +632,8 @@ class User extends Common_functions
     {
         try {
             $lang = $this->Database->findObject('lang', 'l_id', $this->settings->defaultLang);
-        } catch (Exception $e) {
-            $this->debugging ?: $this->Result->show('danger', _('Database error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->debugging ?: $this->Result->show('danger', _('Database error: ').$exception->getMessage());
         }
 
         return $lang;
@@ -730,7 +730,7 @@ class User extends Common_functions
         // update
         try {
             $this->Database->updateObject('users', ['favourite_subnets' => $new_favourites, 'id' => $this->user->id], 'id');
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             return false;
         }
 
@@ -753,7 +753,7 @@ class User extends Common_functions
         // update
         try {
             $this->Database->updateObject('users', ['favourite_subnets' => $new_favourites, 'id' => $this->user->id], 'id');
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             return false;
         }
 
@@ -899,8 +899,8 @@ class User extends Common_functions
     {
         try {
             $langs = $this->Database->getObjects('lang', 'l_id');
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -919,8 +919,8 @@ class User extends Common_functions
         // fetch from db
         try {
             $lang = $this->Database->findObject('lang', 'l_id', $this->user->lang);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), true);
 
             return false;
         }
@@ -938,8 +938,8 @@ class User extends Common_functions
     {
         try {
             $method = $this->Database->getObject('usersAuthMethod', $this->authmethodid);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), true);
         }
 
         // save method name if existing
@@ -1075,9 +1075,9 @@ class User extends Common_functions
         try {
             // Initialize adLDAP
             $dirconn = new adLDAP($dirparams);
-        } catch (adLDAPException $e) {
-            $this->Log->write(_('Directory connection error'), _('Failed to connect').': '.$e->getMessage(), 2);
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), true);
+        } catch (adLDAPException $adldapException) {
+            $this->Log->write(_('Directory connection error'), _('Failed to connect').': '.$adldapException->getMessage(), 2);
+            $this->Result->show('danger', _('Error: ').$adldapException->getMessage(), true);
         }
 
         return $dirconn;
@@ -1126,9 +1126,9 @@ class User extends Common_functions
                 $this->Log->write($method.' '._('login'), _('User').' '.$username.' '._('failed to authenticate against').' '.$method, 1, $username);
                 $this->Result->show('danger', _('Invalid username or password'), true);
             }
-        } catch (adLDAPException $e) {
-            $this->Log->write(_('Error'), _('Something went wrong during auth: ').$e->getMessage(), 2, $username);
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), true);
+        } catch (adLDAPException $adldapException) {
+            $this->Log->write(_('Error'), _('Something went wrong during auth: ').$adldapException->getMessage(), 2, $username);
+            $this->Result->show('danger', _('Error: ').$adldapException->getMessage(), true);
         }
     }
 
@@ -1393,8 +1393,8 @@ class User extends Common_functions
                 $this->block_ip();
                 $this->Log->write(_('User login'), _('Failed passkey login'), 2, $this->get_passkey_user_id());
             }
-        } catch (Exception $e) {
-            header('HTTP/1.1 500 '.$e->getMessage());
+        } catch (Exception $exception) {
+            header('HTTP/1.1 500 '.$exception->getMessage());
 
             return;
         }
@@ -1412,8 +1412,8 @@ class User extends Common_functions
         $user_id = $user_id === false ? $this->user->id : $user_id;
         try {
             return $this->Database->findObjects('passkeys', 'user_id', $user_id);
-        } catch (Exception $e) {
-            ! $this->debugging ?: $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
         }
     }
 
@@ -1427,8 +1427,8 @@ class User extends Common_functions
     {
         try {
             return $this->Database->findObject('passkeys', 'keyId', $keyId);
-        } catch (Exception $e) {
-            ! $this->debugging ?: $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
         }
     }
 
@@ -1447,9 +1447,9 @@ class User extends Common_functions
 
             // ok
             return true;
-        } catch (Exception $e) {
-            header('HTTP/1.1 500 '.$e->getMessage());
-            throw $e;
+        } catch (Exception $exception) {
+            header('HTTP/1.1 500 '.$exception->getMessage());
+            throw $exception;
         }
     }
 
@@ -1466,8 +1466,8 @@ class User extends Common_functions
             $this->Database->updateObject('passkeys', ['id' => $id, 'comment' => $comment]);
 
             return true;
-        } catch (Exception $e) {
-            $this->debugging ?: $this->Result->show('danger', _('Database error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->debugging ?: $this->Result->show('danger', _('Database error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -1485,8 +1485,8 @@ class User extends Common_functions
             $this->Database->deleteObject('passkeys', $id);
 
             return true;
-        } catch (Exception $e) {
-            $this->debugging ?: $this->Result->show('danger', _('Database error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->debugging ?: $this->Result->show('danger', _('Database error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -1506,8 +1506,8 @@ class User extends Common_functions
 
             // ok
             return true;
-        } catch (Exception $e) {
-            header('HTTP/1.1 500 '.$e->getMessage());
+        } catch (Exception $exception) {
+            header('HTTP/1.1 500 '.$exception->getMessage());
 
             return false;
         }
@@ -1640,8 +1640,8 @@ class User extends Common_functions
     {
         try {
             $this->Database->updateObject('users', ['password' => $this->crypt_user_pass($password), 'passChange' => 'No', 'id' => $this->user->id], 'id');
-        } catch (Exception $e) {
-            $this->Result->show('danger', $e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', $exception->getMessage(), true);
         }
 
         $this->Result->show('success', _('Hi').', '.$this->user->real_name.', '._('your password was updated').". <a class='btn btn-sm btn-default' href='".create_link('dashboard')."'>Dashboard</a>", false);
@@ -1689,8 +1689,8 @@ class User extends Common_functions
         // update
         try {
             $this->Database->updateObject('users', $items);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
             $this->Log->write(_('User self update'), _('User self update failed').'!<br>'.$log, 2);
 
             return false;
@@ -1716,8 +1716,8 @@ class User extends Common_functions
         // update
         try {
             $this->Database->updateObject('users', ['widgets' => $widgets, 'id' => $this->user->id]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -1756,7 +1756,7 @@ class User extends Common_functions
         // update
         try {
             $this->Database->updateObject('users', ['lastActivity' => date('Y-m-d H:i:s'), 'id' => $this->user->id]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
         }
     }
 
@@ -1791,8 +1791,8 @@ class User extends Common_functions
         // fetch
         try {
             $cnt = $this->Database->getObjectQuery('loginAttempts', $query, [$this->ip]);
-        } catch (Exception $e) {
-            ! $this->debugging ?: $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
         }
 
         // verify
@@ -1843,8 +1843,8 @@ class User extends Common_functions
         $query = 'DELETE FROM `loginAttempts` WHERE `datetime` < DATE_SUB(NOW(), INTERVAL 5 MINUTE); ';
         try {
             $this->Database->runQuery($query);
-        } catch (Exception $e) {
-            ! $this->debugging ?: $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
         }
     }
 
@@ -1859,8 +1859,8 @@ class User extends Common_functions
         $query = 'UPDATE `loginAttempts` SET `count`=`count`+1 WHERE `ip` = ?; ';
         try {
             $this->Database->runQuery($query, [$this->ip]);
-        } catch (Exception $e) {
-            ! $this->debugging ?: $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
         }
     }
 
@@ -1873,8 +1873,8 @@ class User extends Common_functions
     {
         try {
             $this->Database->insertObject('loginAttempts', ['ip' => $this->ip, 'count' => 1]);
-        } catch (Exception $e) {
-            ! $this->debugging ?: $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
         }
     }
 
@@ -1887,8 +1887,8 @@ class User extends Common_functions
     {
         try {
             $this->Database->deleteRow('loginAttempts', 'ip', $this->ip);
-        } catch (Exception $e) {
-            ! $this->debugging ?: $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
         }
     }
 

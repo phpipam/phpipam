@@ -381,8 +381,8 @@ class DHCP_kea extends Common_functions
         // fetch leases
         try {
             $leases = $this->Database_kea->getObjectsQuery('lease4', $query);
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+        } catch (Exception $exception) {
+            throw new Exception($exception->getMessage());
         }
 
         // save leases
@@ -555,8 +555,8 @@ class DHCP_kea extends Common_functions
         // fetch leases
         try {
             $reservations = $this->Database_kea->getObjectsQuery('hosts', $query);
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+        } catch (Exception $exception) {
+            throw new Exception($exception->getMessage());
         }
 
         // save leases

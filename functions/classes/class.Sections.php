@@ -96,10 +96,10 @@ class Sections extends Common_functions
         // execute
         try {
             $this->Database->insertObject('sections', $values);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
             // write log and changelog
-            $this->Log->write(_('Sections create'), _('Failed to create new section').'.<hr>'.$e->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values, 'NULL')), 2);
+            $this->Log->write(_('Sections create'), _('Failed to create new section').'.<hr>'.$exception->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values, 'NULL')), 2);
 
             return false;
         }
@@ -132,9 +132,9 @@ class Sections extends Common_functions
         // execute
         try {
             $this->Database->updateObject('sections', $values, 'id');
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
-            $this->Log->write(_('Section').' '.$old_section->name.' '._('edit'), _('Failed to edit section').' '.$old_section->name.'.<hr>'.$e->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values, 'NULL')), 2);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Log->write(_('Section').' '.$old_section->name.' '._('edit'), _('Failed to edit section').' '.$old_section->name.'.<hr>'.$exception->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values, 'NULL')), 2);
 
             return false;
         }
@@ -273,8 +273,8 @@ class Sections extends Common_functions
 
         try {
             $subsections = $this->Database->getObjectsQuery('sections', 'SELECT * FROM `sections` where `masterSection` = ?;', [$sectionId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -318,8 +318,8 @@ class Sections extends Common_functions
         // fetch
         try {
             $vlans = $this->Database->getObjectsQuery('subnets', $query, [$sectionId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -341,8 +341,8 @@ class Sections extends Common_functions
         // fetch
         try {
             $vrfs = $this->Database->getObjectsQuery('subnets', $query, [$sectionId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }

@@ -52,8 +52,8 @@ $query = "select
 // fetch
 try {
     $offline_addresses = $Database->getObjectsQuery('ipaddresses', $query);
-} catch (Exception $e) {
-    $Result->show('danger', _('Error: ').$e->getMessage());
+} catch (Exception $exception) {
+    $Result->show('danger', _('Error: ').$exception->getMessage());
     exit();
 }
 

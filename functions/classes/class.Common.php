@@ -177,7 +177,7 @@ class Common_functions
         // fetch
         try {
             $result = $this->Database->getObjectQuery('no_html_escape', "SELECT VERSION() AS 'version';");
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             return '';
         }
 
@@ -212,8 +212,8 @@ class Common_functions
         // fetch
         try {
             $res = $this->Database->getObjects($table, $sortField, $sortAsc);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -276,8 +276,8 @@ class Common_functions
         $query = "SELECT * FROM `$table` WHERE `$method` = :method LIMIT 1;";
         try {
             $res = $this->Database->getObjectQuery($table, $query, ['method' => $value]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -311,8 +311,8 @@ class Common_functions
 
         try {
             $res = $this->Database->findObjects($table, $field, $value, $sortField, $sortAsc, $like, false, $result_fields);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -342,8 +342,8 @@ class Common_functions
         // if null
         try {
             $cnt = $this->Database->numObjectsFilter($table, $field, $val, $like);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -362,8 +362,8 @@ class Common_functions
     {
         try {
             $cnt = $this->Database->getGroupBy($table, $field);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -395,8 +395,8 @@ class Common_functions
         try {
             $query = 'SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?;';
             $schema = $this->Database->getObjectsQuery('no_html_escape', $query, [$this->Database->dbname, $tableName]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return $results;
         }
@@ -1525,8 +1525,8 @@ class Common_functions
                 curl_close($curl);
                 // phpcs:ignore
             }
-        } catch (Exception $e) {
-            $result['error_msg'] = $e->getMessage();
+        } catch (Exception $exception) {
+            $result['error_msg'] = $exception->getMessage();
         }
 
         return $result;
@@ -1545,7 +1545,7 @@ class Common_functions
         // execute
         try {
             $this->Database->updateObject('locations', ['id' => $id, 'lat' => $lat, 'long' => $lng], 'id');
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             return false;
         }
 

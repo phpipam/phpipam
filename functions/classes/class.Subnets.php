@@ -247,9 +247,9 @@ class Subnets extends Common_functions
         // execute
         try {
             $this->Database->insertObject('subnets', $values);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
-            $this->Log->write(_('Subnet creation'), _('Failed to add new subnet').'.<hr>'.$e->getMessage(), 2);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Log->write(_('Subnet creation'), _('Failed to add new subnet').'.<hr>'.$exception->getMessage(), 2);
 
             return false;
         }
@@ -292,9 +292,9 @@ class Subnets extends Common_functions
         // execute
         try {
             $this->Database->updateObject('subnets', $values, 'id');
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
-            $this->Log->write(_('Subnet edit'), _('Failed to edit subnet').'.<hr>'.$e->getMessage(), 2);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Log->write(_('Subnet edit'), _('Failed to edit subnet').'.<hr>'.$exception->getMessage(), 2);
 
             return false;
         }
@@ -341,9 +341,9 @@ class Subnets extends Common_functions
         // delete subnet
         try {
             $this->Database->deleteRow('subnets', 'id', $id);
-        } catch (Exception $e) {
-            $this->Log->write(_('Subnet delete'), _('Failed to delete subnet').' '.$old_subnet->name.'.<hr>'.$e->getMessage(), 2);
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+        } catch (Exception $exception) {
+            $this->Log->write(_('Subnet delete'), _('Failed to delete subnet').' '.$old_subnet->name.'.<hr>'.$exception->getMessage(), 2);
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
 
             return false;
         }
@@ -372,9 +372,9 @@ class Subnets extends Common_functions
         // execute
         try {
             $this->Database->deleteRow('ipaddresses', 'subnetId', $subnetId);
-        } catch (Exception $e) {
-            $this->Log->write(_('Subnet truncate'), _('Failed to truncate subnet').' '.$old_subnet->description.' '._('id').' '.$old_subnet->id.'.<hr>'.$e->getMessage(), 2);
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), true);
+        } catch (Exception $exception) {
+            $this->Log->write(_('Subnet truncate'), _('Failed to truncate subnet').' '.$old_subnet->description.' '._('id').' '.$old_subnet->id.'.<hr>'.$exception->getMessage(), 2);
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), true);
         }
 
         $this->Log->write(_('Subnet truncate'), _('Subnet').' '.$old_subnet->description.' '._('id').' '.$old_subnet->id.' '._('truncated'), 0);
@@ -397,9 +397,9 @@ class Subnets extends Common_functions
         // execute
         try {
             $this->Database->updateObject('subnets', ['id' => $subnetId, 'subnet' => $subnet, 'mask' => $mask], 'id');
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
-            $this->Log->write(_('Subnet edit'), _('Failed to resize subnet').' '.$old_subnet->description.' '._('id').' '.$old_subnet->id.'.<hr>'.$e->getMessage(), 2);
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Log->write(_('Subnet edit'), _('Failed to resize subnet').' '.$old_subnet->description.' '._('id').' '.$old_subnet->id.'.<hr>'.$exception->getMessage(), 2);
 
             return false;
         }
@@ -510,8 +510,8 @@ class Subnets extends Common_functions
         // fetch all nats
         try {
             $all_nats = $this->Database->getObjectsQuery('nat', 'select * from `nat` where `src` like :id or `dst` like :id', ['id' => '%"'.$obj_id.'"%']);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -615,8 +615,8 @@ class Subnets extends Common_functions
 
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query, [$sectionId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -755,8 +755,8 @@ class Subnets extends Common_functions
         // fetch
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -776,8 +776,8 @@ class Subnets extends Common_functions
     {
         try {
             $subnets = $this->Database->getObjects('subnets');
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -830,8 +830,8 @@ class Subnets extends Common_functions
 
         try {
             $overlaping_subnets = $this->Database->getObjectsQuery('subnets', implode("\n", $query));
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -859,7 +859,7 @@ class Subnets extends Common_functions
                     $this->cache_write('subnets', 'id', $subnet);
                 }
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $subnets = [];
         }
 
@@ -907,8 +907,8 @@ class Subnets extends Common_functions
 				WHERE s.scanAgent = ? AND s.$discoverytype = 1 AND s.isFolder = 0 AND s.mask > 0 AND s.subnet < 4294967296 AND child.id IS NULL;";
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query, [$agentId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -947,8 +947,8 @@ class Subnets extends Common_functions
         // fetch
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query, $params);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -994,8 +994,8 @@ class Subnets extends Common_functions
 
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', 'select * from subnets where `linked_subnet` = ?', [$subnetId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1041,8 +1041,8 @@ class Subnets extends Common_functions
         // fetch
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query, $params);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1084,8 +1084,8 @@ class Subnets extends Common_functions
         // fetch
         try {
             $agents = $this->Database->getObjects('scanAgents');
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1111,8 +1111,8 @@ class Subnets extends Common_functions
         // fetch
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query, [$agentId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1133,8 +1133,8 @@ class Subnets extends Common_functions
         // fetch
         try {
             $gateway = $this->Database->getObjectQuery('ipaddresses', $query, [$subnetId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1309,8 +1309,8 @@ class Subnets extends Common_functions
                 $this->slaves_full[$slave->id] = $slave;
                 $this->slaves[] = (int) $slave->id;
             }
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
         }
     }
 
@@ -1413,8 +1413,8 @@ class Subnets extends Common_functions
         // search
         try {
             $subnet = $this->Database->getObjectQuery('subnets', 'select * from `subnets` where `subnet`=? and `mask`=? and `sectionId`=?;', [$this->transform_address($tmp[0], 'decimal'), $tmp[1], $sectionId]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1538,8 +1538,8 @@ class Subnets extends Common_functions
                     ['id' => $subnet->id]
                 );
             }
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
         }
 
         return [$iptags, [], []];
@@ -1636,8 +1636,8 @@ class Subnets extends Common_functions
                     ['id' => $subnet->id]
                 );
             }
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
         }
 
         return [$iptags, $leaf_nodes, $full_nodes];
@@ -1960,8 +1960,8 @@ class Subnets extends Common_functions
 
         try {
             $res = $this->Database->getObjectsQuery('ipaddresses', $query, [$subnet->id, $network, $broadcast]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -2952,8 +2952,8 @@ class Subnets extends Common_functions
     {
         try {
             $res = $this->Database->getObjectsQuery('subnets', "select distinct(`masterSubnetId`) from `subnets` where `masterSubnetId` != '0' order by `masterSubnetId` asc;");
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -2972,8 +2972,8 @@ class Subnets extends Common_functions
     {
         try {
             $res = $this->Database->numObjectsFilter('subnets', 'id', $id);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -2992,8 +2992,8 @@ class Subnets extends Common_functions
     {
         try {
             $res = $this->Database->getObjectsQuery('subnets', "select * from `subnets` where `threshold` != 0 and `threshold` is not null limit $limit;");
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3016,8 +3016,8 @@ class Subnets extends Common_functions
         // search
         try {
             $res = $this->Database->getObjectsQuery('ipaddresses', "select ipaddresses.* from `ipaddresses` join subnets on ipaddresses.subnetId = subnets.id where subnets.pingSubnet = 1 and `lastSeen` between ? and ? order by lastSeen desc limit $limit;", [date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) - $timelimit), date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) - (int) str_replace(';', '', (string) strstr((string) $this->settings->pingStatus, ';')))]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3043,8 +3043,8 @@ class Subnets extends Common_functions
         // fetch
         try {
             $res = $this->Database->getObjectsQuery('subnets', $query);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3089,8 +3089,8 @@ class Subnets extends Common_functions
         // fetch
         try {
             $res = $this->Database->getObjectsQuery('ipaddresses', $query);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3204,8 +3204,8 @@ class Subnets extends Common_functions
         // fetch
         try {
             $res = $this->Database->getObjectsQuery('ipaddresses', $query, [$mac, $address_id]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3253,8 +3253,8 @@ class Subnets extends Common_functions
         // fetch
         try {
             $res = $this->Database->getObjectsQuery('ipaddresses', $query, [$mac, $address_id]);
-        } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage());
+        } catch (Exception $exception) {
+            $this->Result->show('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3464,9 +3464,9 @@ class Subnets extends Common_functions
                     return false;
                 }
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->Database->rollBack();
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), true);
+            $this->Result->show('danger', _('Error: ').$exception->getMessage(), true);
 
             return false;
         }

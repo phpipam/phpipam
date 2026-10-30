@@ -279,8 +279,8 @@ class phpipamSNMP extends Common_functions
         // try
         try {
             $res = $this->snmp_session->{$type}($query_num);
-        } catch (Exception $e) {
-            throw new Exception("<strong>$this->snmp_hostname</strong>: ".$e->getMessage().'<br> oid: '.$query);
+        } catch (Exception $exception) {
+            throw new Exception("<strong>$this->snmp_hostname</strong>: ".$exception->getMessage().'<br> oid: '.$query);
         }
 
         // check for errors
@@ -895,9 +895,9 @@ class phpipamSNMP extends Common_functions
             }
 
             return strtoupper(implode(':', $mac_parts));
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             if (Config::ValueOf('debugging')) {
-                $this->Result->show('info', $e->getMessage().': "'.escape_input($input).'"', false);
+                $this->Result->show('info', $exception->getMessage().': "'.escape_input($input).'"', false);
             }
 
             return '';
@@ -916,9 +916,9 @@ class phpipamSNMP extends Common_functions
             [$type, $value] = $this->extract_type_and_value($input);
 
             return escape_input($value);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             if (Config::ValueOf('debugging')) {
-                $this->Result->show('info', $e->getMessage().': "'.escape_input($input).'"', false);
+                $this->Result->show('info', $exception->getMessage().': "'.escape_input($input).'"', false);
             }
 
             return '';

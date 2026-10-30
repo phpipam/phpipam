@@ -233,11 +233,11 @@ try {
     } else {
         header('Location: '.create_link('dashboard'));
     }
-} catch (Exception $e) {
+} catch (Exception $exception) {
     print _('Fatal SAML error').': ';
 
     if (filter_var($params->debugprotocol, FILTER_VALIDATE_BOOLEAN)) {
-        print escape_input($e->getMessage());
+        print escape_input($exception->getMessage());
     }
 
     exit();

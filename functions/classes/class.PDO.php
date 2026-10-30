@@ -252,14 +252,14 @@ abstract class DB
             }
 
             $this->setErrMode(PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            throw new Exception('Could not connect to database! '.$e->getMessage());
+        } catch (PDOException $pdoException) {
+            throw new Exception('Could not connect to database! '.$pdoException->getMessage());
         }
 
         try {
             $this->pdo->query('SET NAMES \''.$this->charset.'\';');
             $this->set_names = true;
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->set_names = false;
         }
     }
@@ -514,12 +514,12 @@ abstract class DB
 
             // Run $result_query using cte temporary table results
             $results = $this->getObjectsQuery($tableName, $results_query);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             if ($cleanup) {
                 $this->runQuery('DROP TABLE IF EXISTS cte_query, cte_0, cte_last;');
             }
 
-            throw $e;
+            throw $exception;
         }
 
         // Cleanup and return results

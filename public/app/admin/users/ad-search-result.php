@@ -81,8 +81,8 @@ try {
     $userinfo = $adldap->user()->info("*$esc_dname*", ['*'], false, $server->type);
 
     // echo $adldap->getLastError();
-} catch (adLDAPException $e) {
-    $Result->show('danger', $e->getMessage(), true);
+} catch (adLDAPException $adldapException) {
+    $Result->show('danger', $adldapException->getMessage(), true);
 }
 
 // check for found

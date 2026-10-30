@@ -48,7 +48,7 @@ try {
         'challengeB64' => $challenge->getBase64(),
         'credential_ids' => $credentialContainer->getBase64Ids(),
     ]);
-} catch (Exception $e) {
+} catch (Exception $exception) {
     header('Content-Type: text/html; charset=utf-8');
     header('HTTP/1.1 403 Unauthorized');
     exit();

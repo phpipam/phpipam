@@ -629,8 +629,8 @@ class Scan extends Common_functions
 
         try {
             $this->Database->updateObject('ipaddresses', $update_ipaddress, 'id');
-        } catch (Exception $e) {
-            ! $this->debugging ?: $this->Result->show('danger', $e->getMessage(), false);
+        } catch (Exception $exception) {
+            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
             // log
             ! $this->debugging ?: $this->Log->write(_('Status update'), _('Failed to update address status.'), 0);
         }
@@ -650,7 +650,7 @@ class Scan extends Common_functions
         // execute
         try {
             $this->Database->updateObject('scanAgents', ['id' => $id, 'last_access' => $datetime], 'id');
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
         }
     }
 
@@ -668,7 +668,7 @@ class Scan extends Common_functions
         // update
         try {
             $this->Database->updateObject('subnets', ['id' => $subnet_id, 'lastScan' => $datetime], 'id');
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
         }
     }
 
@@ -686,7 +686,7 @@ class Scan extends Common_functions
         // update
         try {
             $this->Database->updateObject('subnets', ['id' => $subnet_id, 'lastDiscovery' => $datetime], 'id');
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
         }
     }
 
