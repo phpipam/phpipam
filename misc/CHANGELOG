@@ -16,6 +16,7 @@
     + Removed git submodules, full migration to composer (see UPDATE.md);
     + Removed support for mcrypt;
     + Open MySQL connections with Pdo\Mysql::ATTR_MULTI_STATEMENTS=false;
+    + 2FA and passkey improvements;
 
     Security Fixes:
     ----------------------------

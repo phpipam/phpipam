@@ -83,13 +83,19 @@ if (array_key_exists('2fa', $subpages)) { ?>
 <div id="userModSelf2faResult" style="margin-bottom:90px;display:none"></div>
 
     <?php
+    $html = [];
 
     if ($passkey_only) {
         $Result->show('warning alert-absolute', _('You can only login to your account using passkeys').'.', false);
-    } elseif ((string) $User->user->{'2fa_secret'} !== '' && $User->user->{'2fa'}) {
+    } elseif ((string) $User->user->{'2fa_secret'} !== '' && (int) $User->user->{'2fa'} === 1) {
+        $html[] = '<hr><br>';
+        $html[] = '<div style="width:500px;">';
+        $html[] = '		'._('2FA Activated').'.';
+        $html[] = '		<hr>'._('You can reset your 2fa token in Administration -> Server Management -> 2FA').':<br><br>';
+        $html[] = '</div>';
+    } elseif ((string) $User->user->{'2fa_secret'} !== '' && (int) $User->user->{'2fa'} === 2) {
         $qrCodeWriter = new Writer(new ImageRenderer(new RendererStyle(300), new SvgImageBackEnd));
 
-        $html = [];
         $html[] = '<hr><br>';
         $html[] = '<div class="loginForm row" style="width:500px;">';
         $html[] = '		'._('Details for your preferred authenticator application are below. Please write down your details, otherwise you will not be able to login to phpipam').'.';
@@ -102,9 +108,9 @@ if (array_key_exists('2fa', $subpages)) { ?>
         $html[] = $qrCodeWriter->writeString("otpauth://totp/phpIPAM:$username?secret=".$User->user->{'2fa_secret'});
         $html[] = '		</div><br>';
         $html[] = '</div>';
-
-        print implode("\n", $html);
     }
+
+    print implode("\n", $html);
     ?>
 
 
