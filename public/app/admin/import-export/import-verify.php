@@ -53,56 +53,58 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
         print '{"status":"error", "error":"Invalid document type"}';
         exit;
     }
+
     // if cannot move
-    elseif (! move_uploaded_file($_FILES['file']['tmp_name'], $upload_dir.'data_import.'.$filetype)) {
+    if (! move_uploaded_file($_FILES['file']['tmp_name'], $upload_dir.'data_import.'.$filetype)) {
         print '{"status":"error", "error":"Cannot move file to upload dir"}';
         exit;
     }
+
     // other errors
-    elseif ($_FILES['file']['error'] != 0) {
+    if ($_FILES['file']['error'] != 0) {
         print '{"status":"error", "error":"Error: '.$_FILES['file']['error'].'" }';
         exit;
-    } else {
-        // default - success
-
-        // grab first row from CSV
-        if (strtolower($filetype) == 'csv') {
-            /* get file to string */
-            $filehdl = fopen(__DIR__.'/../../admin/import-export/upload/data_import.csv', 'r');
-            $data = fgets($filehdl);
-            fclose($filehdl);
-
-            // set delimiter
-            // $Tools->set_csv_delimiter ($filehdl);
-            $Tools->set_csv_delimiter($data);
-
-            /* format file */
-            $data = str_replace(["\r\n", "\r", "\n"], '', (string) $data); // remove line break
-            $data = str_getcsv($data, $Tools->csv_delimiter, '"', '\\');
-
-            foreach ($data as $col) {
-                $firstrow[] = $col;
-            }
-        }
-        // grab first row from XLS
-        elseif (strtolower($filetype) == 'xls') {
-            // get excel object
-            require_once __DIR__.'/../../../../functions/php-excel-reader/excel_reader2.php';             // excel reader 2.21
-            $data = new Spreadsheet_Excel_Reader('upload/data_import.xls', false);
-            $sheet = 0;
-            $row = 1;
-
-            for ($col = 1; $col <= $data->colcount($sheet); $col++) {
-                $firstrow[] = $data->val($row, $col, $sheet);
-            }
-        }
-
-        print '{"status":"success","expfields":'.json_encode($expfields, true).',"impfields":'.json_encode($firstrow, true).',"filetype":'.json_encode($filetype, true).'}';
-        exit;
     }
+
+    // default - success
+    // grab first row from CSV
+    if (strtolower($filetype) == 'csv') {
+        /* get file to string */
+        $filehdl = fopen(__DIR__.'/../../admin/import-export/upload/data_import.csv', 'r');
+        $data = fgets($filehdl);
+        fclose($filehdl);
+
+        // set delimiter
+        // $Tools->set_csv_delimiter ($filehdl);
+        $Tools->set_csv_delimiter($data);
+
+        /* format file */
+        $data = str_replace(["\r\n", "\r", "\n"], '', (string) $data); // remove line break
+        $data = str_getcsv($data, $Tools->csv_delimiter, '"', '\\');
+
+        foreach ($data as $col) {
+            $firstrow[] = $col;
+        }
+    }
+    // grab first row from XLS
+    elseif (strtolower($filetype) == 'xls') {
+        // get excel object
+        require_once __DIR__.'/../../../../functions/php-excel-reader/excel_reader2.php';             // excel reader 2.21
+        $data = new Spreadsheet_Excel_Reader('upload/data_import.xls', false);
+        $sheet = 0;
+        $row = 1;
+
+        for ($col = 1; $col <= $data->colcount($sheet); $col++) {
+            $firstrow[] = $data->val($row, $col, $sheet);
+        }
+    }
+
+    print '{"status":"success","expfields":'.json_encode($expfields, true).',"impfields":'.json_encode($firstrow, true).',"filetype":'.json_encode($filetype, true).'}';
+    exit;
 }
+
 // error
-elseif (isset($_FILES['file']['error'])) {
+if (isset($_FILES['file']['error'])) {
     print '{"status":"error","error":"'.$_FILES['file']['error'].'"}';
     exit;
 }

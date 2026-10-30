@@ -183,9 +183,9 @@ class LockForUpdateMySQL extends LockForUpdateBase
         } catch (PDOException $e) {
             if ($e->errorInfo[1] == 1205) {
                 throw new Exception(sprintf(_('MySQL wait timeout exceeded after %0.4f seconds'), microtime(true) - $start_time));
-            } else {
-                throw new Exception(sprintf(_('Unexpected SQL error: %s'), $e->getMessage()));
             }
+
+            throw new Exception(sprintf(_('Unexpected SQL error: %s'), $e->getMessage()));
         } catch (Exception $e) {
             throw new Exception(sprintf(_('Unexpected general error: %s'), $e->getMessage()));
         }

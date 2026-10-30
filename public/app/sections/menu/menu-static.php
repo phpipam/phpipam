@@ -79,5 +79,5 @@ if ($sections !== false) {
 
 
 <?php
-include 'menu-tools-admin.php';
+include __DIR__.'/menu-tools-admin.php';
 ?>

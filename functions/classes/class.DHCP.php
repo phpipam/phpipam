@@ -193,9 +193,9 @@ class DHCP extends Common_functions
         // return subnets
         if ($type == 'IPv6') {
             return $this->DHCP_server->subnets6;
-        } else {
-            return $this->DHCP_server->subnets4;
         }
+
+        return $this->DHCP_server->subnets4;
     }
 
     /**
@@ -243,9 +243,9 @@ class DHCP extends Common_functions
         // return leases
         if ($type == 'IPv6') {
             return $this->DHCP_server->leases6;
-        } else {
-            return $this->DHCP_server->leases4;
         }
+
+        return $this->DHCP_server->leases4;
     }
 
     /**
@@ -286,9 +286,9 @@ class DHCP extends Common_functions
         // return leases
         if ($type == 'IPv6') {
             return $this->DHCP_server->reservations6;
-        } else {
-            return $this->DHCP_server->reservations4;
         }
+
+        return $this->DHCP_server->reservations4;
     }
 
     /* @write methods --------------- */

@@ -222,11 +222,13 @@ else {
         // same
         if ($a['ip'] == $b['ip']) {
             return 0;
-        } elseif ($a['ip'] > $b['ip']) {
-            return 1;
-        } else {
-            return -1;
         }
+
+        if ($a['ip'] > $b['ip']) {
+            return 1;
+        }
+
+        return -1;
     }
 
     // sort ip addresses

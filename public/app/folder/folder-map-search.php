@@ -78,6 +78,6 @@ if (is_numeric(@$_GET['ipaddrid'])) {
         print "<h4 style='margin-top:30px;'>"._('Result').':</h4><hr>';
 
         // include
-        include 'folder-map.php';
+        include __DIR__.'/folder-map.php';
     }
 }

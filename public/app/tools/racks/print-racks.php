@@ -44,6 +44,6 @@ else {
     if (! isset($GET->subnetId)) {
         include __DIR__.'/print-racks-list.php';
     } else {
-        include 'print-racks-map.php';
+        include __DIR__.'/print-racks-map.php';
     }
 }

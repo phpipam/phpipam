@@ -63,14 +63,12 @@ print 'Found '.count($offline_addresses).".\n";
 if (! is_array($offline_addresses) || empty($offline_addresses)) {
     exit();
 }
-// remove
-else {
-    foreach ($offline_addresses as $a) {
-        // save
-        $removed_addresses[] = $a;
-        // remove
-        $Addresses->modify_address($a);
-    }
+
+foreach ($offline_addresses as $a) {
+    // save
+    $removed_addresses[] = $a;
+    // remove
+    $Addresses->modify_address($a);
 }
 
 // all done, mail diff?

@@ -110,14 +110,14 @@ if ($Scan->settings->scanPingType == 'fping') {
     // parse result
     if (empty($Scan->fping_result)) {
         exit(json_encode(['status' => 0, 'values' => ['alive' => null]]));
-    } else {
-        // check each line
-        foreach ($Scan->fping_result as $l) {
-            // split
-            $field = array_filter(explode(' ', (string) $l));
-            // create result
-            $out['alive'][] = $Subnets->transform_to_decimal($field[0]);
-        }
+    }
+
+    // check each line
+    foreach ($Scan->fping_result as $l) {
+        // split
+        $field = array_filter(explode(' ', (string) $l));
+        // create result
+        $out['alive'][] = $Subnets->transform_to_decimal($field[0]);
     }
 }
 // pear / ping

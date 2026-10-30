@@ -138,9 +138,9 @@ if ($GET->page == 'login') {
     print '<div class="loginForm row">';
 
     if ($include_main_login_form) {
-        include_once 'login_form.php';
+        include_once __DIR__.'/login_form.php';
     } else {
-        include_once 'login_form_sso.php';
+        include_once __DIR__.'/login_form_sso.php';
     }
 
     /* show request module if enabled in config file */
@@ -160,7 +160,7 @@ if ($GET->page == 'login') {
         print '</div>';
     }
 } elseif ($GET->page == 'request_ip') {
-    include_once 'request_ip_form.php';
+    include_once __DIR__.'/request_ip_form.php';
 } else {
     $GET->subnetId = '404';
     print "<div id='error'>";

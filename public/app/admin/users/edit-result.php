@@ -212,5 +212,5 @@ if (is_array($passkeys_to_remove)) {
 
 // mail user
 if ($Admin->verify_checkbox($POST->notifyUser) != 0) {
-    include 'edit-notify.php';
+    include __DIR__.'/edit-notify.php';
 }

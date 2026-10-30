@@ -91,9 +91,9 @@ class FirewallZones extends Common_functions
         $firewallZoneSettings = db_json_decode($this->settings->firewallZoneSettings, true);
         if ($firewallZoneSettings['padding'] == 'on') {
             return str_pad(dechex($zone), $firewallZoneSettings['zoneLength'], '0', STR_PAD_LEFT);
-        } else {
-            return dechex($zone);
         }
+
+        return dechex($zone);
     }
 
     /**
@@ -109,11 +109,13 @@ class FirewallZones extends Common_functions
         // execute based on action
         if ($firewallZoneSettings['zoneGenerator'] == 0 || $firewallZoneSettings['zoneGenerator'] == 1) {
             return $this->generate_numeric_zone_name($firewallZoneSettings['zoneLength'], $firewallZoneSettings['zoneGenerator']);
-        } elseif ($firewallZoneSettings['zoneGenerator'] == 2) {
-            return $this->validate_text_zone_name($values);
-        } else {
-            return $this->Result->show('danger', _('Invalid generator ID'), true);
         }
+
+        if ($firewallZoneSettings['zoneGenerator'] == 2) {
+            return $this->validate_text_zone_name($values);
+        }
+
+        return $this->Result->show('danger', _('Invalid generator ID'), true);
     }
 
     /**
@@ -795,9 +797,9 @@ class FirewallZones extends Common_functions
         // return dummy value or false
         if ($deleteRow) {
             return 'success';
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -825,13 +827,17 @@ class FirewallZones extends Common_functions
         // execute based on action
         if ($action == 'add') {
             return $this->zone_add($values, $network);
-        } elseif ($action == 'edit') {
-            return $this->zone_edit($values);
-        } elseif ($action == 'delete') {
-            return $this->zone_delete($values['id']);
-        } else {
-            return $this->Result->show('danger', _('Invalid action'), true);
         }
+
+        if ($action == 'edit') {
+            return $this->zone_edit($values);
+        }
+
+        if ($action == 'delete') {
+            return $this->zone_delete($values['id']);
+        }
+
+        return $this->Result->show('danger', _('Invalid action'), true);
     }
 
     /**
@@ -964,17 +970,20 @@ class FirewallZones extends Common_functions
 
         // null empty values
         $values = $this->reformat_empty_array_fields($values, null);
-
         // execute based on action
         if ($action == 'add') {
             return $this->mapping_add($values);
-        } elseif ($action == 'edit') {
-            return $this->mapping_edit($values);
-        } elseif ($action == 'delete') {
-            return $this->mapping_delete($values['id']);
-        } else {
-            return $this->Result->show('danger', _('Invalid action'), true);
         }
+
+        if ($action == 'edit') {
+            return $this->mapping_edit($values);
+        }
+
+        if ($action == 'delete') {
+            return $this->mapping_delete($values['id']);
+        }
+
+        return $this->Result->show('danger', _('Invalid action'), true);
     }
 
     /**

@@ -9,7 +9,7 @@ if (! file_exists(Config::config_file_path())) {
 
 /* API check - process API if requested */
 if ($Rewrite->is_api()) {
-    require 'api/index.php';
+    require __DIR__.'/api/index.php';
 } else {
     header('Cache-Control: no-cache, must-revalidate'); // HTTP 1.1
     header('Pragma: no-cache');                         // HTTP 1.0
@@ -38,23 +38,23 @@ if ($Rewrite->is_api()) {
 
     /** include proper subpage **/
     if ($GET->page == 'install') {
-        require 'app/install/index.php';
+        require __DIR__.'/app/install/index.php';
     } elseif ($GET->page == '2fa') {
-        require 'app/login/2fa/index.php';
+        require __DIR__.'/app/login/2fa/index.php';
     } elseif ($GET->page == 'upgrade') {
-        require 'app/upgrade/index.php';
+        require __DIR__.'/app/upgrade/index.php';
     } elseif ($GET->page == 'login') {
-        require 'app/login/index.php';
+        require __DIR__.'/app/login/index.php';
     } elseif ($GET->page == 'temp_share') {
-        require 'app/temp_share/index.php';
+        require __DIR__.'/app/temp_share/index.php';
     } elseif ($GET->page == 'request_ip') {
-        require 'app/login/index.php';
+        require __DIR__.'/app/login/index.php';
     } elseif ($GET->page == 'opensearch') {
-        require 'app/tools/search/opensearch.php';
+        require __DIR__.'/app/tools/search/opensearch.php';
     } elseif ($GET->page == 'saml2') {
-        require 'app/saml2/index.php';
+        require __DIR__.'/app/saml2/index.php';
     } elseif ($GET->page == 'saml2-idp') {
-        require 'app/saml2/idp.php';
+        require __DIR__.'/app/saml2/idp.php';
     } else {
         // verify that user is logged in
         $User->check_user_session();
@@ -209,7 +209,7 @@ if ($Rewrite->is_api()) {
         </div>
         <!-- usermenu -->
         <div class="col-lg-3 col-lg-offset-0 col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-6 col-xs-12 " id="user_menu">
-                <?php include 'app/sections/user-menu.php'; ?>
+                <?php include __DIR__.'/app/sections/user-menu.php'; ?>
         </div>
     </div>
 
@@ -225,7 +225,7 @@ if ($Rewrite->is_api()) {
     <div class="content">
     <div id="sections_overlay">
             <?php if ($GET->page != 'login' && $GET->page != 'request_ip' && $GET->page != 'upgrade' && $GET->page != 'install' && $User->user->passChange != 'Yes') {
-                include 'app/sections/index.php';
+                include __DIR__.'/app/sections/index.php';
             }?>
     </div>
     </div>
@@ -238,31 +238,31 @@ if ($Rewrite->is_api()) {
             /* error */
             if ($GET->page == 'error') {
                 print "<div id='error' class='container'>";
-                include_once 'app/error.php';
+                include_once __DIR__.'/app/error.php';
                 print '</div>';
             }
             /* We are not "switched" & password reset required */
             elseif (! isset($_SESSION['realipamusername']) && $User->user->passChange == 'Yes') {
                 print "<div id='dashboard' class='container'>";
-                include_once 'app/tools/pass-change/form.php';
+                include_once __DIR__.'/app/tools/pass-change/form.php';
                 print '</div>';
             }
             /* dashboard */
             elseif (! isset($GET->page) || $GET->page == 'dashboard') {
                 print "<div id='dashboard'>";
-                include_once 'app/dashboard/index.php';
+                include_once __DIR__.'/app/dashboard/index.php';
                 print '</div>';
             }
             /* widgets */
             elseif ($GET->page == 'widgets') {
                 print "<div id='dashboard' class='container'>";
-                include_once 'app/dashboard/widgets/index.php';
+                include_once __DIR__.'/app/dashboard/widgets/index.php';
                 print '</div>';
             }
             /* all sections */
             elseif ($GET->page == 'subnets' && is_blank($GET->section)) {
                 print "<div id='dashboard' class='container'>";
-                include_once 'app/sections/all-sections.php';
+                include_once __DIR__.'/app/sections/all-sections.php';
                 print '</div>';
             }
             /* content */
@@ -286,11 +286,11 @@ if ($Rewrite->is_api()) {
                         $GET->page == 'subnets' || $GET->page == 'vlan' ||
                            $GET->page == 'vrf' || $GET->page == 'folder'
                     ) {
-                        include 'app/subnets/subnets-menu.php';
+                        include __DIR__.'/app/subnets/subnets-menu.php';
                     } elseif ($GET->page == 'tools') {
-                        include 'app/tools/tools-menu.php';
+                        include __DIR__.'/app/tools/tools-menu.php';
                     } elseif ($GET->page == 'administration') {
-                        include 'app/admin/admin-menu.php';
+                        include __DIR__.'/app/admin/admin-menu.php';
                     }
                     print '</div>';
                     print '</td>';
@@ -301,42 +301,42 @@ if ($Rewrite->is_api()) {
                 // subnets
                 if ($GET->page == 'subnets') {
                     if ($GET->sPage == 'address-details') {
-                        include 'app/subnets/addresses/address-details-index.php';
+                        include __DIR__.'/app/subnets/addresses/address-details-index.php';
                     } elseif (! isset($GET->subnetId)) {
-                        include 'app/sections/section-subnets.php';
+                        include __DIR__.'/app/sections/section-subnets.php';
                     } else {
-                        include 'app/subnets/index.php';
+                        include __DIR__.'/app/subnets/index.php';
                     }
                 }
                 // vrf
                 elseif ($GET->page == 'vrf') {
-                    include 'app/tools/vrf/index.php';
+                    include __DIR__.'/app/tools/vrf/index.php';
                 }
                 // vlan
                 elseif ($GET->page == 'vlan') {
-                    include 'app/vlan/index.php';
+                    include __DIR__.'/app/vlan/index.php';
                 }
                 // folder
                 elseif ($GET->page == 'folder') {
-                    include 'app/folder/index.php';
+                    include __DIR__.'/app/folder/index.php';
                 }
                 // tools
                 elseif ($GET->page == 'tools') {
                     if (! isset($GET->section)) {
-                        include 'app/tools/index.php';
+                        include __DIR__.'/app/tools/index.php';
                     } else {
                         if (! isset($tools_menu_items[$GET->section])) {
                             header('Location: '.create_link('error', '400'));
                             exit();
-                        } elseif (! file_exists('app/tools/'.$GET->section.'/index.php') && ! file_exists('app/tools/custom/'.$GET->section.'/index.php')) {
+                        }
+                        if (! file_exists('app/tools/'.$GET->section.'/index.php') && ! file_exists('app/tools/custom/'.$GET->section.'/index.php')) {
                             header('Location: '.create_link('error', '404'));
                             exit();
+                        }
+                        if (file_exists('app/tools/'.$GET->section.'/index.php')) {
+                            include 'app/tools/'.$GET->section.'/index.php';
                         } else {
-                            if (file_exists('app/tools/'.$GET->section.'/index.php')) {
-                                include 'app/tools/'.$GET->section.'/index.php';
-                            } else {
-                                include 'app/tools/custom/'.$GET->section.'/index.php';
-                            }
+                            include 'app/tools/custom/'.$GET->section.'/index.php';
                         }
                     }
                 }
@@ -346,19 +346,19 @@ if ($Rewrite->is_api()) {
                     $Admin = new Admin($Database);
 
                     if (! isset($GET->section)) {
-                        include 'app/admin/index.php';
+                        include __DIR__.'/app/admin/index.php';
                     } elseif ($GET->subnetId == 'section-changelog') {
-                        include 'app/sections/section-changelog.php';
+                        include __DIR__.'/app/sections/section-changelog.php';
                     } else {
                         if (! isset($admin_menu_items[$GET->section])) {
                             header('Location: '.create_link('error', '400'));
                             exit();
-                        } elseif (! file_exists('app/admin/'.$GET->section.'/index.php')) {
+                        }
+                        if (! file_exists('app/admin/'.$GET->section.'/index.php')) {
                             header('Location: '.create_link('error', '404'));
                             exit();
-                        } else {
-                            include 'app/admin/'.$GET->section.'/index.php';
                         }
+                        include 'app/admin/'.$GET->section.'/index.php';
                     }
                 }
                 // default - error
@@ -390,7 +390,7 @@ if ($Rewrite->is_api()) {
     <div id="prettyLinks" style="display:none"><?php print $User->settings->prettyLinks; ?></div>
 
     <!-- Page footer -->
-    <div class="footer"><?php include 'app/footer.php'; ?></div>
+    <div class="footer"><?php include __DIR__.'/app/footer.php'; ?></div>
 
     <!-- export div -->
     <div class="exportDIV"></div>

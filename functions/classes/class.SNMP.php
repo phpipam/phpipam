@@ -518,9 +518,9 @@ class phpipamSNMP extends Common_functions
     {
         if (method_exists($this, $query)) {
             return $this->{$query}();
-        } else {
-            throw new Exception(_('Invalid query'));
         }
+
+        throw new Exception(_('Invalid query'));
     }
 
     /**

@@ -277,7 +277,7 @@ if ($POST->action != 'add') {
     <tr>
         <td class="middle"><?php print _('VLAN'); ?></td>
         <td id="vlanDropdown">
-            <?php include 'edit-vlan-dropdown.php'; ?>
+            <?php include __DIR__.'/edit-vlan-dropdown.php'; ?>
          </td>
         <td class="info2"><?php print _('Select VLAN'); ?></td>
     </tr>
@@ -320,7 +320,7 @@ if ($POST->action != 'add') {
     <tr>
         <td class="middle"><?php print _('Nameservers'); ?></td>
         <td id="nameserverDropdown">
-            <?php include 'edit-nameserver-dropdown.php'; ?>
+            <?php include __DIR__.'/edit-nameserver-dropdown.php'; ?>
         </td>
         <td class="info2"><?php print _('Select nameserver set'); ?></td>
     </tr>

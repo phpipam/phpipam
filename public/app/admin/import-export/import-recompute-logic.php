@@ -38,7 +38,7 @@ $User->check_user_session();
 $User->is_admin();
 
 // Load colors and icons
-include 'import-constants.php';
+include __DIR__.'/import-constants.php';
 
 $rlist = [];
 $pass_inputs = ''; // Pass fields from one page to another

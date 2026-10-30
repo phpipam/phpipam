@@ -3,7 +3,7 @@
 
 <?php
 if ($User->get_module_permissions('locations') >= User::ACCESS_RW) {
-    include 'menu.php';
+    include __DIR__.'/menu.php';
 }
 ?>
 

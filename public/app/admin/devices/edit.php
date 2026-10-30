@@ -213,7 +213,7 @@ foreach ($types as $name) {
 
         <?php if ($User->get_module_permissions('racks') >= User::ACCESS_R) { ?>
     <tbody id="rack" style="<?php print $display; ?>">
-            <?php include 'edit-rack-dropdown.php'; ?>
+            <?php include __DIR__.'/edit-rack-dropdown.php'; ?>
     </tbody>
     <tr>
         <td colspan="2"><hr></td>

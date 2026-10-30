@@ -356,17 +356,20 @@ class PowerDNS extends Common_functions
     {
         // strip tags
         $values = $this->strip_input_tags($values);
-
         // execute based on action
         if ($action == 'add') {
             return $this->domain_add($values);
-        } elseif ($action == 'edit') {
-            return $this->domain_change($values);
-        } elseif ($action == 'delete') {
-            return $this->domain_delete($values);
-        } else {
-            return $this->Result->show('danger', _('Invalid action'), true);
         }
+
+        if ($action == 'edit') {
+            return $this->domain_change($values);
+        }
+
+        if ($action == 'delete') {
+            return $this->domain_delete($values);
+        }
+
+        return $this->Result->show('danger', _('Invalid action'), true);
     }
 
     /**
@@ -884,17 +887,20 @@ class PowerDNS extends Common_functions
     {
         // strip tags
         $values = $this->strip_input_tags($values);
-
         // execute based on action
         if ($action == 'add') {
             return $this->add_domain_record($values);
-        } elseif ($action == 'edit') {
-            return $this->update_domain_record($values['domain_id'], $values);
-        } elseif ($action == 'delete') {
-            return $this->remove_domain_record($values['domain_id'], $values['id']);
-        } else {
-            return $this->Result->show('danger', _('Invalid action'), true);
         }
+
+        if ($action == 'edit') {
+            return $this->update_domain_record($values['domain_id'], $values);
+        }
+
+        if ($action == 'delete') {
+            return $this->remove_domain_record($values['domain_id'], $values['id']);
+        }
+
+        return $this->Result->show('danger', _('Invalid action'), true);
     }
 
     /**
@@ -1116,9 +1122,9 @@ class PowerDNS extends Common_functions
         // if not set exit
         if ($soa === false) {
             return false;
-        } else {
-            $soa = $soa[0];
         }
+
+        $soa = $soa[0];
 
         // update serial it not autoserial
         $soa_serial = explode(' ', (string) $soa->content);
@@ -1605,9 +1611,9 @@ class PowerDNS extends Common_functions
         // create name
         if ($bits == 1) {
             return $zone[2].'.'.$zone[1].'.'.$zone[0].'.in-addr.arpa';
-        } else {
-            return $zone[1].'.'.$zone[0].'.in-addr.arpa';
         }
+
+        return $zone[1].'.'.$zone[0].'.in-addr.arpa';
     }
 
     /**

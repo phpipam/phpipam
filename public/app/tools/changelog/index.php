@@ -70,7 +70,7 @@ if ($User->settings->enableChangelog == 1) {
     <div class="normalTable logs" style="clear:both;">
     <?php
     // printout
-    include_once 'changelog-print.php';
+    include_once __DIR__.'/changelog-print.php';
 } else {
     $Result->show('info', _('Change logging is disabled. You can enable it under administration').'!', false);
 } ?>

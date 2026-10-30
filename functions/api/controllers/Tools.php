@@ -605,9 +605,9 @@ class Tools_controller extends Common_api_functions
     {
         if ($this->Tools->validate_json_string($obj) !== false) {
             return db_json_decode($obj, true);
-        } else {
-            return [];
         }
+
+        return [];
     }
 
     /**

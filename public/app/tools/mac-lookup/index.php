@@ -28,9 +28,9 @@ $User->check_user_session();
 <?php
 /* include results if IP address is posted */
 if (! is_blank($POST->mac)) {
-    include 'results.php';
+    include __DIR__.'/results.php';
 } else {
-    include 'tips.php';
+    include __DIR__.'/tips.php';
 }
 ?>
 </div>

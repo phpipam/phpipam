@@ -26,9 +26,9 @@ elseif ($User->settings->enablePSTN != '1') {
 } else {
     // all prefixes
     if (! isset($GET->subnetId)) {
-        include 'all-prefixes.php';
+        include __DIR__.'/all-prefixes.php';
     } else { // single prefixes
         $isMaster = $Tools->count_database_objects('pstnPrefixes', 'master', $GET->subnetId) != 0;
-        include 'single-prefix.php';
+        include __DIR__.'/single-prefix.php';
     }
 }

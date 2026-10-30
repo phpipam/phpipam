@@ -217,9 +217,9 @@ class Circuits_controller extends Common_api_functions
             // set result
             if ($this->type == 'circuits') {
                 return ['code' => 201, 'message' => "{$this->type_text} created", 'id' => $this->Admin->lastId, 'location' => '/api/'.$this->_params->app_id.'/circuits/'.$this->Admin->lastId.'/'];
-            } else {
-                return ['code' => 201, 'message' => "{$this->type_text} created", 'id' => $this->Admin->lastId, 'location' => '/api/'.$this->_params->app_id.'/circuits/providers/'.$this->Admin->lastId.'/'];
             }
+
+            return ['code' => 201, 'message' => "{$this->type_text} created", 'id' => $this->Admin->lastId, 'location' => '/api/'.$this->_params->app_id.'/circuits/providers/'.$this->Admin->lastId.'/'];
         }
     }
 

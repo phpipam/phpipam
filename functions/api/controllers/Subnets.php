@@ -318,18 +318,18 @@ class Subnets_controller extends Common_api_functions
             if ($this->_params->id2 == 'resize') {
                 return $this->subnet_resize();
             }
+
             // split
-            elseif ($this->_params->id2 == 'split') {
+            if ($this->_params->id2 == 'split') {
                 return $this->subnet_split();
             }
+
             // permissions
-            elseif ($this->_params->id2 == 'permissions') {
+            if ($this->_params->id2 == 'permissions') {
                 return $this->subnet_change_permissions();
             }
-            // error
-            else {
-                $this->Response->throw_exception(400, 'Invalid parameters');
-            }
+
+            $this->Response->throw_exception(400, 'Invalid parameters');
         }
         // ok, normal update
         else {
@@ -388,14 +388,13 @@ class Subnets_controller extends Common_api_functions
             if ($this->_params->id2 == 'truncate') {
                 return $this->subnet_truncate();
             }
+
             // remove
-            elseif ($this->_params->id2 == 'permissions') {
+            if ($this->_params->id2 == 'permissions') {
                 return $this->subnet_remove_permissions();
             }
-            // error
-            else {
-                $this->Response->throw_exception(400, 'Invalid parameters');
-            }
+
+            $this->Response->throw_exception(400, 'Invalid parameters');
         }
         // ok, delete subnet
         else {
@@ -714,9 +713,9 @@ class Subnets_controller extends Common_api_functions
         // result
         if (count($clogs_formatted) > 0) {
             return $clogs_formatted;
-        } else {
-            $this->Response->throw_exception(404, 'No changelogs found');
         }
+
+        $this->Response->throw_exception(404, 'No changelogs found');
     }
 
     /* @helper methods ---------- */

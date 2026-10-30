@@ -41,5 +41,5 @@ $addresses = $Addresses->fetch_subnet_addresses($folder['id'], @$sort['field'], 
 
 // print Folder details
 print "<div class='subnetDetails'>";
-include_once 'folder-menu.php';
+include_once __DIR__.'/folder-menu.php';
 print '</div>';

@@ -20,9 +20,9 @@ elseif (! is_numeric($GET->subnetId)) {
     } else {
         // details
         if (isset($GET->sPage)) {
-            include 'vault-item-details-general.php';
+            include __DIR__.'/vault-item-details-general.php';
         } else {
-            include 'vault-details-general.php';
+            include __DIR__.'/vault-details-general.php';
         }
     }
 }

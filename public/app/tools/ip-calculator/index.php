@@ -24,9 +24,9 @@ if (! isset($GET->subnetId)) {
 <!-- details -->
 <?php
 if ($GET->subnetId == 'ip-calculator') {
-    include 'ip-calculator.php';
+    include __DIR__.'/ip-calculator.php';
 } elseif ($GET->subnetId == 'bw-calculator') {
-    include 'bw-calculator.php';
+    include __DIR__.'/bw-calculator.php';
 } else {
     $Result->show('danger', _('Invalid request'), false);
 }

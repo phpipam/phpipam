@@ -34,33 +34,33 @@ if ($User->get_module_permissions('circuits') == User::ACCESS_NONE) {
 elseif (! isset($GET->subnetId) || ($GET->subnetId == 'providers' && ! isset($GET->sPage))) {
     // all circuits
     if (! isset($GET->subnetId)) {
-        include 'physical-circuits/all-circuits.php';
+        include __DIR__.'/physical-circuits/all-circuits.php';
     }
     // all providers
     else {
-        include 'providers/all-providers.php';
+        include __DIR__.'/providers/all-providers.php';
     }
 } else {
     // specific provider
     if ($GET->subnetId == 'providers') {
-        include 'providers/provider-details.php';
+        include __DIR__.'/providers/provider-details.php';
     } elseif ($GET->subnetId == 'logical') {
         if (isset($GET->sPage)) {
-            include 'logical-circuits/logical-circuit-details.php';
+            include __DIR__.'/logical-circuits/logical-circuit-details.php';
         } else {
-            include 'logical-circuits/logical-circuits.php';
+            include __DIR__.'/logical-circuits/logical-circuits.php';
         }
     }
     // map
     elseif ($GET->subnetId == 'circuit_map') {
-        include 'all-circuits-map.php';
+        include __DIR__.'/all-circuits-map.php';
     }
     // settings
     elseif ($GET->subnetId == 'options') {
-        include 'options.php';
+        include __DIR__.'/options.php';
     }
     // specific circuit
     else {
-        include 'physical-circuits/circuit-details.php';
+        include __DIR__.'/physical-circuits/circuit-details.php';
     }
 }

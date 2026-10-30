@@ -356,12 +356,12 @@ class User extends Common_functions
     {
         if ($this->isadmin) {
             return true;
+        }
+
+        if ($die) {
+            $this->Result->show('danger', _('Administrator level privileges required'), true);
         } else {
-            if ($die) {
-                $this->Result->show('danger', _('Administrator level privileges required'), true);
-            } else {
-                return false;
-            }
+            return false;
         }
     }
 
@@ -375,7 +375,6 @@ class User extends Common_functions
     {
         // set url
         $url = $this->createURL();
-
         // not authenticated
         if ($this->authenticated === false) {
             // error print for AJAX
@@ -388,8 +387,9 @@ class User extends Common_functions
                 $this->Result->show('danger', _('Please login first')."!<hr><a class='btn btn-sm btn-default' href='".$url.create_link('login')."'>"._('Login').'</a>', true, true);
                 exit();
             }
+
             // timeout
-            elseif ($this->timeout) {
+            if ($this->timeout) {
                 // set redirect cookie
                 $this->set_redirect_cookie();
                 // redirect
@@ -398,29 +398,31 @@ class User extends Common_functions
                 }
 
                 exit();
-            } else {
-                // set redirect cookie
-                $this->set_redirect_cookie();
-                // redirect
-                if ($redirect) {
-                    header('Location:'.$url.create_link('login'));
-                }
-
-                exit();
             }
+
+            // set redirect cookie
+            $this->set_redirect_cookie();
+            // redirect
+            if ($redirect) {
+                header('Location:'.$url.create_link('login'));
+            }
+
+            exit();
         }
+
         // authenticated, do we need to do 2fa ?
-        elseif (isset($_SESSION['2fa_required']) && $ignore_2fa !== true) {
+        if (isset($_SESSION['2fa_required']) && $ignore_2fa !== true) {
             header('Location:'.$url.create_link('2fa'));
             exit();
         }
+
         // disabled
-        elseif ($this->user->disabled == 'Yes') {
+        if ($this->user->disabled == 'Yes') {
             header('Location:'.$url.create_link('login'));
             exit();
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**
@@ -704,11 +706,13 @@ class User extends Common_functions
         // execute
         if ($action == 'remove') {
             return $this->remove_favourite($subnetId);
-        } elseif ($action == 'add') {
-            return $this->add_favourite($subnetId);
-        } else {
-            return false;
         }
+
+        if ($action == 'add') {
+            return $this->add_favourite($subnetId);
+        }
+
+        return false;
     }
 
     /**
@@ -1583,15 +1587,21 @@ class User extends Common_functions
     {
         if (CRYPT_SHA512 == 1) {
             return '$6$rounds=3000$';
-        } elseif (CRYPT_SHA256 == 1) {
-            return '$5$rounds=3000$';
-        } elseif (CRYPT_BLOWFISH == 1) {
-            return '$2y$'.str_pad(random_int(4, 31), 2, 0, STR_PAD_LEFT).'$';
-        } elseif (CRYPT_MD5 == 1) {
-            return '$5$rounds=3000$';
-        } else {
-            $this->Result->show('danger', _('No crypt types supported'), true);
         }
+
+        if (CRYPT_SHA256 == 1) {
+            return '$5$rounds=3000$';
+        }
+
+        if (CRYPT_BLOWFISH == 1) {
+            return '$2y$'.str_pad(random_int(4, 31), 2, 0, STR_PAD_LEFT).'$';
+        }
+
+        if (CRYPT_MD5 == 1) {
+            return '$5$rounds=3000$';
+        }
+
+        $this->Result->show('danger', _('No crypt types supported'), true);
     }
 
     /**
@@ -1603,15 +1613,21 @@ class User extends Common_functions
     {
         if (CRYPT_SHA512 == 1) {
             return 'CRYPT_SHA512';
-        } elseif (CRYPT_SHA256 == 1) {
-            return 'CRYPT_SHA256';
-        } elseif (CRYPT_BLOWFISH == 1) {
-            return 'CRYPT_BLOWFISH';
-        } elseif (CRYPT_MD5 == 1) {
-            return 'CRYPT_MD5';
-        } else {
-            return _('No crypt types supported');
         }
+
+        if (CRYPT_SHA256 == 1) {
+            return 'CRYPT_SHA256';
+        }
+
+        if (CRYPT_BLOWFISH == 1) {
+            return 'CRYPT_BLOWFISH';
+        }
+
+        if (CRYPT_MD5 == 1) {
+            return 'CRYPT_MD5';
+        }
+
+        return _('No crypt types supported');
     }
 
     /**

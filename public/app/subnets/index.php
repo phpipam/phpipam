@@ -16,10 +16,8 @@ $subnet = $Subnets->fetch_subnet(null, $GET->subnetId);                         
 if ($subnet === false) {
     header('Location: '.create_link('subnets', $GET->section));
     exit();
-}  // redirect if false
-else {
-    $subnet = (array) $subnet;
 }
+$subnet = (array) $subnet;
 $subnet_detailed = $Subnets->get_network_boundaries($subnet['subnet'], $subnet['mask']);           // set network boundaries
 $slaves = $Subnets->has_slaves($subnet['id']) ? true : false;                                      // check if subnet has slaves and set slaves flag true/false
 
@@ -127,25 +125,25 @@ if ($User->settings->enableNAT == 1) {
         <!-- details -->
         <?php
         if (! isset($GET->sPage)) {
-            include 'subnet-details/subnet-details.php';
+            include __DIR__.'/subnet-details/subnet-details.php';
         }
 if ($GET->sPage == 'permissions') {
-    include 'subnet-details/subnet-permissions.php';
+    include __DIR__.'/subnet-details/subnet-permissions.php';
 }
 if ($User->settings->enableNAT == 1 && $GET->sPage == 'nat') {
-    include 'subnet-details/subnet-nat.php';
+    include __DIR__.'/subnet-details/subnet-nat.php';
 }
 if ($GET->sPage == 'changelog') {
-    include 'subnet-details/subnet-changelog.php';
+    include __DIR__.'/subnet-details/subnet-changelog.php';
 }
 if ($GET->sPage == 'location') {
-    include 'subnet-details/subnet-location.php';
+    include __DIR__.'/subnet-details/subnet-location.php';
 }
 if ($GET->sPage == 'map') {
-    include 'subnet-details/subnet-map.php';
+    include __DIR__.'/subnet-details/subnet-map.php';
 }
 if ($GET->sPage == 'mapsearch') {
-    include 'subnet-details/subnet-map-search.php';
+    include __DIR__.'/subnet-details/subnet-map-search.php';
 }
 ?>
 
@@ -155,7 +153,7 @@ if ($GET->sPage == 'mapsearch') {
     <!-- subnet graph -->
         <?php if ($GET->sPage != 'location') { ?>
     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <?php include 'subnet-details/subnet-graph.php'; ?>
+            <?php include __DIR__.'/subnet-details/subnet-graph.php'; ?>
     </div>
         <?php } ?>
 
@@ -171,7 +169,7 @@ if ($slaves) {
         }
     }
     $slave_subnets = array_values($slave_subnets);
-    include 'subnet-slaves.php';
+    include __DIR__.'/subnet-slaves.php';
 }
         ?>
     </div>
@@ -181,7 +179,7 @@ if ($slaves) {
         <?php
         if (! $slaves) {
             $addresses = $Addresses->fetch_subnet_addresses($subnet['id']);
-            include 'addresses/print-address-table.php';
+            include __DIR__.'/addresses/print-address-table.php';
         }
         ?>
     </div>
@@ -192,7 +190,7 @@ if ($slaves) {
         if (! $slaves && $User->settings->visualLimit > 0) {
             $max_visual_hosts_subnet = (object) ['subnet' => '10.0.0.0', 'mask' => $User->settings->visualLimit, 'isPool' => true];
             if ($Subnets->max_hosts($subnet) <= $Subnets->max_hosts($max_visual_hosts_subnet)) {
-                include 'subnet-visual.php';
+                include __DIR__.'/subnet-visual.php';
             }
         }
         ?>
@@ -207,7 +205,7 @@ if ($slaves) {
             if (count($addresses) > 0) {
                 // set flag
                 $orphaned = true;
-                include 'addresses/print-address-table.php';
+                include __DIR__.'/addresses/print-address-table.php';
             }
         }
         ?>

@@ -35,12 +35,12 @@ if ($logical_circuit !== false) {
     print "<div class='col-xs-12 col-md-6'>";
     // details
     print "<div class='col-xs-12'>";
-    include 'logical-circuit-details-general.php';
+    include __DIR__.'/logical-circuit-details-general.php';
     print '</div>';
 
     // connection points
     print "<div class='col-xs-12' style='margin-top:20px'>";
-    include 'logical-circuit-details-members.php';
+    include __DIR__.'/logical-circuit-details-members.php';
     print '</div>';
     print '</div>';
 
@@ -50,7 +50,7 @@ if ($logical_circuit !== false) {
     print "<div class='col-xs-12 col-md-6'>";
     if ($User->settings->enableLocations == 1 && $User->get_module_permissions('locations') >= User::ACCESS_R) {
         print "<div class='col-xs-12'>";
-        include 'logical-circuit-details-map.php';
+        include __DIR__.'/logical-circuit-details-map.php';
         print '</div>';
     }
 

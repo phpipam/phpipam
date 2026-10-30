@@ -37,14 +37,14 @@ if ($bgp === false) {
     // details
     //
     print "<div class='col-xs-12'>";
-    include 'details-general.php';
+    include __DIR__.'/details-general.php';
     print '</div>';
 
     //
     // subnets
     //
     print "<div class='col-xs-12' style='margin-top:50px;'>";
-    include 'details-subnets.php';
+    include __DIR__.'/details-subnets.php';
     print '</div>';
 
     print '</div>';

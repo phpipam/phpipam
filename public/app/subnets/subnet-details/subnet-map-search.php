@@ -31,5 +31,5 @@ if (is_numeric($GET->ipaddrid)) {
     print "<h4 style='margin-top:30px;'>"._('Result').':</h4><hr>';
 
     // include
-    include 'subnet-map.php';
+    include __DIR__.'/subnet-map.php';
 }

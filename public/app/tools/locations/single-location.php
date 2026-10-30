@@ -213,7 +213,7 @@ if (! is_numeric($GET->subnetId)) {
 
             // map
             print "<div class='col-xs-12 col-sm-12 col-md-6 col-lg-7'>";
-            include 'single-location-map.php';
+            include __DIR__.'/single-location-map.php';
             print '</div>';
 
             print '</div>';

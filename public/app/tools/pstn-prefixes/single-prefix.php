@@ -195,17 +195,17 @@ elseif (! is_numeric($GET->subnetId)) {
             // graph
             print "<div class='col-xs-12 col-sm-12 col-md-6 col-lg-4'>";
             print '<h4>'._('Utilization').'</h4><hr>';
-            include 'single-prefix-graph.php';
+            include __DIR__.'/single-prefix-graph.php';
             print '</div>';
 
             // addresses
             print "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='margin-top:40px;'>";
             if ($isMaster) {
                 print '<h4>'._('Belonging prefixes').'</h4><hr>';
-                include 'single-prefix-slaves-list.php';
+                include __DIR__.'/single-prefix-slaves-list.php';
             } else {
                 print '<h4>'._('Belonging Numbers').'</h4><hr>';
-                include 'single-prefix-numbers.php';
+                include __DIR__.'/single-prefix-numbers.php';
             }
             print '</div>';
         }

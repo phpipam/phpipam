@@ -27,20 +27,20 @@ if ($customer === false) {
 } else {
     // details
     print "<div class='cols-xs-12 col-md-6'>";
-    include 'details.php';
+    include __DIR__.'/details.php';
     print '</div>';
 
     // map
     print "<div class='cols-xs-12 col-md-6'>";
     if ($User->settings->enableLocations == 1) {
-        include 'map.php';
+        include __DIR__.'/map.php';
     }
 
     print '</div>';
 
     // objects
     print "<div class='cols-xs-12'>";
-    include 'objects.php';
+    include __DIR__.'/objects.php';
     print '</div>';
 }
 

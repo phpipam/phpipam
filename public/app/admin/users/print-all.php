@@ -134,7 +134,7 @@ foreach ($users as $user) {
     } else {
         print '<td>';
         print "<btn class='btn btn-xs btn-default toggle-module-permissions'>Show <i class='fa fa-angle-down'></i></btn><div class='hidden module-permissions'>";
-        include 'print_module_permissions.php';
+        include __DIR__.'/print_module_permissions.php';
         print '</div>';
         print '</td>';
     }

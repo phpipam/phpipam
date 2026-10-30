@@ -47,5 +47,5 @@ if (! isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WIT
 }
 
 // get subnets statistic
-require 'top10_hosts_lib.php';
+require __DIR__.'/top10_hosts_lib.php';
 top10_widget('IPv4', true, $height, $slimit);

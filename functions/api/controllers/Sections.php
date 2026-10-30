@@ -124,8 +124,9 @@ class Sections_controller extends Common_api_functions
             if ($this->_params->id2 == 'changelog') {
                 return ['code' => 200, 'data' => $this->section_changelog()];
             }
+
             // fetch by id
-            elseif (is_numeric($this->_params->id)) {
+            if (is_numeric($this->_params->id)) {
                 $result = $this->Sections->fetch_section('id', $this->_params->id);
                 // check result
                 if ($result === false) {
@@ -133,9 +134,7 @@ class Sections_controller extends Common_api_functions
                 } else {
                     return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
                 }
-            }
-            // Custom fields not supported
-            elseif ($this->_params->id == 'custom_fields') {
+            } elseif ($this->_params->id == 'custom_fields') {
                 $this->Response->throw_exception(409, 'Custom fields not supported');
             }
             // fetch by name
@@ -156,9 +155,9 @@ class Sections_controller extends Common_api_functions
             // check result
             if ($result === false) {
                 return ['code' => 200, 'message' => 'No sections available'];
-            } else {
-                return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
             }
+
+            return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
         }
     }
 
@@ -316,8 +315,8 @@ class Sections_controller extends Common_api_functions
         // result
         if (count($clogs_formatted) > 0) {
             return $clogs_formatted;
-        } else {
-            $this->Response->throw_exception(404, 'No changelogs found');
         }
+
+        $this->Response->throw_exception(404, 'No changelogs found');
     }
 }

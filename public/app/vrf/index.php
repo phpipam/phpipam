@@ -16,11 +16,11 @@ if ($User->get_module_permissions('vrf') == User::ACCESS_NONE) {
 } else {
     // print VRF details
     print "<div class='subnetDetails'>";
-    include_once 'vrf-details.php';
+    include_once __DIR__.'/vrf-details.php';
     print '</div>';
 
     // Subnets in VRF
     print '<div class="ipaddresses_overlay">';
-    include_once 'vrf-subnets.php';
+    include_once __DIR__.'/vrf-subnets.php';
     print '</div>';
 }

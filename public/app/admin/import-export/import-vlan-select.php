@@ -106,7 +106,7 @@ $templatetype = 'vlans';
 // print upload section
 print "<div id='uplmsg'>";
 print '<h4>'._('Upload file').'</h4><hr>';
-include 'import-button.php';
+include __DIR__.'/import-button.php';
 print '</div>';
 
 ?>

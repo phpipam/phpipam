@@ -19,7 +19,7 @@ if ($User->get_module_permissions('customers') == User::ACCESS_NONE) {
 }
 // load subpage
 elseif (! isset($GET->subnetId)) {
-    include 'all-customers.php';
+    include __DIR__.'/all-customers.php';
 } else {
-    include 'customer/index.php';
+    include __DIR__.'/customer/index.php';
 }

@@ -145,7 +145,7 @@ else {
         } else {
             // verify that page exists
             if (! file_exists(__DIR__.'/'.$GET->section.'.php')) {
-                include 'invalid_install_type.php';
+                include __DIR__.'/invalid_install_type.php';
             } else {
                 include __DIR__.'/'.$GET->section.'.php';
             }

@@ -307,25 +307,25 @@ class Common_functions
         // null table
         if (is_null($table) || is_blank($table)) {
             return false;
-        } else {
-            try {
-                $res = $this->Database->findObjects($table, $field, $value, $sortField, $sortAsc, $like, false, $result_fields);
-            } catch (Exception $e) {
-                $this->Result->show('danger', _('Error: ').$e->getMessage());
-
-                return false;
-            }
-
-            // save to cache
-            if ($result_fields === '*' && is_array($res)) { // Only cache objects containing all fields
-                foreach ($res as $r) {
-                    $this->cache_write($table, null, $r);
-                }
-            }
-
-            // result
-            return (is_array($res) && $res != []) ? $res : false;
         }
+
+        try {
+            $res = $this->Database->findObjects($table, $field, $value, $sortField, $sortAsc, $like, false, $result_fields);
+        } catch (Exception $e) {
+            $this->Result->show('danger', _('Error: ').$e->getMessage());
+
+            return false;
+        }
+
+        // save to cache
+        if ($result_fields === '*' && is_array($res)) { // Only cache objects containing all fields
+            foreach ($res as $r) {
+                $this->cache_write($table, null, $r);
+            }
+        }
+
+        // result
+        return (is_array($res) && $res != []) ? $res : false;
     }
 
     /**
@@ -449,9 +449,9 @@ class Common_functions
             }
 
             return count($recipients) > 0 ? $recipients : false;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -792,14 +792,14 @@ class Common_functions
             }
 
             return 'IPv6';
-        } else {
-            // decimal representation
-            if (strlen((string) $address) < 12) {
-                return 'IPv4';
-            }
-
-            return 'IPv6';
         }
+
+        // decimal representation
+        if (strlen((string) $address) < 12) {
+            return 'IPv4';
+        }
+
+        return 'IPv6';
     }
 
     /**
@@ -1058,9 +1058,9 @@ class Common_functions
 
         if (($proto == 'http' && $port == 80) || ($proto == 'https' && $port == 443)) {
             return "$proto://$host";
-        } else {
-            return "$proto://$host:$port";
         }
+
+        return "$proto://$host:$port";
     }
 
     /**
@@ -1142,9 +1142,9 @@ class Common_functions
 
             if (in_array($action, $valid_actions)) {
                 return escape_input(ucwords(_((string) $action)));
-            } else {
-                return _('Invalid $_POST action');
             }
+
+            return _('Invalid $_POST action');
         }
 
         return '';
@@ -1178,21 +1178,22 @@ class Common_functions
         // first validate hostname
         $valid = (preg_match("/^([a-z_\d](-*[a-z_\d])*)(\.([a-z_\d](-*[a-z_\d])*))*$/i", $hostname)    // valid chars check
                 && preg_match('/^.{1,253}$/', $hostname)                                        // overall length check
-                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $hostname));                // length of each label
+                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $hostname));
+        // length of each label
         // if it fails return immediately
         if (! $valid) {
             return $valid;
         }
-        // than validate root_domain if requested
-        elseif ($permit_root_domain) {
+
+        if ($permit_root_domain) {
             return $valid;
-        } else {
-            if (strpos((string) $hostname, '.') !== false) {
-                return $valid;
-            } else {
-                return false;
-            }
         }
+
+        if (strpos((string) $hostname, '.') !== false) {
+            return $valid;
+        }
+
+        return false;
     }
 
     /**
@@ -1205,9 +1206,9 @@ class Common_functions
     {
         if (filter_var($ip, FILTER_VALIDATE_IP) === false) {
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**
@@ -1223,11 +1224,13 @@ class Common_functions
         // we permit empty
         if (is_blank($mac)) {
             return true;
-        } elseif (preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', $mac) != 1) {
-            return false;
-        } else {
-            return true;
         }
+
+        if (preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', $mac) != 1) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -1370,13 +1373,13 @@ class Common_functions
         // no change
         if ($this->identify_address_format($address) == $format) {
             return $address;
-        } else {
-            if ($this->identify_address_format($address) == 'dotted') {
-                return $this->transform_to_decimal($address);
-            } else {
-                return $this->transform_to_dotted($address);
-            }
         }
+
+        if ($this->identify_address_format($address) == 'dotted') {
+            return $this->transform_to_decimal($address);
+        }
+
+        return $this->transform_to_dotted($address);
     }
 
     /**
@@ -1389,9 +1392,9 @@ class Common_functions
     {
         if ($this->identify_address($address) == 'IPv4') {
             return $this->long2ip4($address);
-        } else {
-            return $this->long2ip6($address);
         }
+
+        return $this->long2ip6($address);
     }
 
     /**
@@ -1404,9 +1407,9 @@ class Common_functions
     {
         if ($this->identify_address($address) == 'IPv4') {
             return sprintf('%u', ip2long($address));
-        } else {
-            return $this->ip2long6($address);
         }
+
+        return $this->ip2long6($address);
     }
 
     /**
@@ -1470,12 +1473,8 @@ class Common_functions
         $error[8] = 'JSON_ERROR_UNSUPPORTED_TYPE';
         $error[9] = 'JSON_ERROR_INVALID_PROPERTY_NAME';
         $error[10] = 'JSON_ERROR_UTF16';
-        // return def
-        if (isset($error[$error_int])) {
-            return $error[$error_int];
-        } else {
-            return 'JSON_ERROR_UNKNOWN';
-        }
+
+        return $error[$error_int] ?? 'JSON_ERROR_UNKNOWN';
     }
 
     /**
@@ -1861,9 +1860,9 @@ class Common_functions
 
         if ($deviceId === false) {
             return $this->createURL().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&is_back=$is_back";
-        } else {
-            return $this->createURL().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&deviceId=$deviceId&is_back=$is_back";
         }
+
+        return $this->createURL().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&deviceId=$deviceId&is_back=$is_back";
     }
 
     /**
@@ -2190,8 +2189,9 @@ class Common_functions
             if ($get['page'] == 'dashboard') {
                 return $this->settings->siteTitle.' '._('Dashboard');
             }
+
             // install, upgrade
-            elseif ($get['page'] == 'temp_share' || $get['page'] == 'request_ip' || $get['page'] == 'opensearch') {
+            if ($get['page'] == 'temp_share' || $get['page'] == 'request_ip' || $get['page'] == 'opensearch') {
                 $title[] = ucwords(escape_input($get['page']));
             }
             // sections, subnets
@@ -2359,9 +2359,9 @@ class Common_functions
     {
         if (count($items) > 0) {
             return $compress == '1' ? $this->print_actions_dropdown($items, $left_align, $print_text) : $this->print_actions_buttons($items);
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     /**

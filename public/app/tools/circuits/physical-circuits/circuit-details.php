@@ -38,12 +38,12 @@ if ($circuit !== false) {
     print "<div class='col-xs-12 col-md-6'>";
     // details
     print "<div class='col-xs-12'>";
-    include 'circuit-details-general.php';
+    include __DIR__.'/circuit-details-general.php';
     print '</div>';
 
     // connection points
     print "<div class='col-xs-12' style='margin-top:20px'>";
-    include 'circuit-details-points.php';
+    include __DIR__.'/circuit-details-points.php';
     print '</div>';
     print '</div>';
 
@@ -53,7 +53,7 @@ if ($circuit !== false) {
     print "<div class='col-xs-12 col-md-6'>";
     if ($User->settings->enableLocations == 1) {
         print "<div class='col-xs-12'>";
-        include 'circuit-details-map.php';
+        include __DIR__.'/circuit-details-map.php';
         print '</div>';
     }
 
@@ -64,7 +64,7 @@ if ($circuit !== false) {
     //
     print "<div class='col-xs-12' style='margin-top:50px;'>";
     print "<div class='col-xs-12'>";
-    include 'circuit-details-provider.php';
+    include __DIR__.'/circuit-details-provider.php';
     print '</div>';
     print '</div>';
 
@@ -75,7 +75,7 @@ if ($circuit !== false) {
     //
     print "<div class='col-xs-12' style='margin-top:50px;'>";
     print "<div class='col-xs-12'>";
-    include 'circuit-details-logical-parents.php';
+    include __DIR__.'/circuit-details-logical-parents.php';
     print '</div>';
     print '</div>';
     print '</div>';

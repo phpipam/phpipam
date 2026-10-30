@@ -36,6 +36,6 @@ $text = $Subnets->create_multicast_mac($POST->ip);
 // print mas
 if ($text === false) {
     exit('False');
-} else {
-    print $text;
 }
+
+print $text;

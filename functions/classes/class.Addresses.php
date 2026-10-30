@@ -101,10 +101,10 @@ class Addresses extends Common_functions
         // result
         if (! isset($this->address_types[$state])) {
             return '';
-        } else {
-            if ($this->address_types[$state]['showtag'] == 1) {
-                return "<i class='fa fa-".$this->address_types[$state]['type']." fa-tag state' rel='tooltip' style='color:".$this->address_types[$state]['bgcolor']."' title='"._((string) $this->address_types[$state]['type'])."'></i>";
-            }
+        }
+
+        if ($this->address_types[$state]['showtag'] == 1) {
+            return "<i class='fa fa-".$this->address_types[$state]['type']." fa-tag state' rel='tooltip' style='color:".$this->address_types[$state]['bgcolor']."' title='"._((string) $this->address_types[$state]['type'])."'></i>";
         }
     }
 
@@ -123,9 +123,9 @@ class Addresses extends Common_functions
         // return
         if (isset($this->address_types[$index])) {
             return $this->address_types[$index]['type'];
-        } else {
-            return $index;
         }
+
+        return $index;
     }
 
     /**
@@ -151,9 +151,9 @@ class Addresses extends Common_functions
         // return
         if (isset($states_assoc[$type])) {
             return $states_assoc[$type]['id'];
-        } else {
-            return $type;
         }
+
+        return $type;
     }
 
     /**
@@ -178,23 +178,23 @@ class Addresses extends Common_functions
 
         if (is_object($cached)) {
             return $cached;
-        } else {
-            try {
-                $address = $this->Database->getObjectQuery('ipaddresses', "SELECT * FROM `ipaddresses` where `$method` = ? limit 1;", [$id]);
-            } catch (Exception $e) {
-                $this->Result->show('danger', _('Error: ').$e->getMessage());
-
-                return false;
-            }
-
-            // save to addresses cache
-            if (is_object($address)) {
-                $this->cache_write('ipaddresses', $method, $address);
-            }
-
-            // result
-            return ! is_null($address) ? $address : false;
         }
+
+        try {
+            $address = $this->Database->getObjectQuery('ipaddresses', "SELECT * FROM `ipaddresses` where `$method` = ? limit 1;", [$id]);
+        } catch (Exception $e) {
+            $this->Result->show('danger', _('Error: ').$e->getMessage());
+
+            return false;
+        }
+
+        // save to addresses cache
+        if (is_object($address)) {
+            $this->cache_write('ipaddresses', $method, $address);
+        }
+
+        // result
+        return ! is_null($address) ? $address : false;
     }
 
     /**
@@ -345,19 +345,24 @@ class Addresses extends Common_functions
         // execute based on action
         if ($address['action'] == 'add') {
             return $this->modify_address_add($address);
-        }                            // create new address
-        elseif ($address['action'] == 'edit') {
-            return $this->modify_address_edit($address);
-        }                           // modify existing address
-        elseif ($address['action'] == 'delete') {
-            return $this->modify_address_delete($address);
-        }                         // delete address
-        elseif ($address['action'] == 'move') {
-            return $this->modify_address_move($address);
-        }                           // move to new subnet
-        else {
-            return $this->Result->show('danger', _('Invalid action'), true);
         }
+
+        // create new address
+        if ($address['action'] == 'edit') {
+            return $this->modify_address_edit($address);
+        }
+
+        // modify existing address
+        if ($address['action'] == 'delete') {
+            return $this->modify_address_delete($address);
+        }
+
+        // delete address
+        if ($address['action'] == 'move') {
+            return $this->modify_address_move($address);
+        }
+
+        return $this->Result->show('danger', _('Invalid action'), true);
     }
 
     /**
@@ -827,9 +832,9 @@ class Addresses extends Common_functions
         // result
         if ($cnt === true) {
             return $count->cnt == 0 ? false : true;
-        } else {
-            return is_null($count) ? false : $count->id;
         }
+
+        return is_null($count) ? false : $count->id;
     }
 
     /**
@@ -913,48 +918,48 @@ class Addresses extends Common_functions
         if ($this->settings->enablePowerDNS != 1) {
             return false;
         }
-        // enabled, proceed
-        else {
-            // first check if subnet selected for PTR records
-            $this->initialize_subnets_object();
-            $subnet = $this->Subnets->fetch_subnet('id', $address['subnetId']);
-            if ($subnet->DNSrecursive != '1') {
+
+        // first check if subnet selected for PTR records
+        $this->initialize_subnets_object();
+        $subnet = $this->Subnets->fetch_subnet('id', $address['subnetId']);
+        if ($subnet->DNSrecursive != '1') {
+            return false;
+        }
+
+        // ignore if PTRignore set
+        if ($address['PTRignore'] == '1') {
+            // validate db
+            $this->pdns_validate_connection();
+            // remove if it exists
+            if ($this->ptr_exists($address['PTR'])) {
+                $this->ptr_delete($address, false);
+
                 return false;
             }
 
-            // ignore if PTRignore set
-            if ($address['PTRignore'] == '1') {
-                // validate db
-                $this->pdns_validate_connection();
-                // remove if it exists
-                if ($this->ptr_exists($address['PTR'])) {
-                    $this->ptr_delete($address, false);
-
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-
-            // validate db
-            $this->pdns_validate_connection();
-
-            // to object
-            $address = (object) $address;
-            // execute based on action
-            if ($action == 'add') {
-                return $this->ptr_add($address, $print_error);
-            }                         // create new PTR
-            elseif ($action == 'edit') {
-                return $this->ptr_edit($address, $print_error);
-            }                        // modify existing PTR
-            elseif ($action == 'delete') {
-                return $this->ptr_delete($address, $print_error);
-            }                      // delete PTR
-            else {
-                return $this->Result->show('danger', _('Invalid PDNS action'), true);
-            }
+            return true;
         }
+
+        // validate db
+        $this->pdns_validate_connection();
+        // to object
+        $address = (object) $address;
+        // execute based on action
+        if ($action == 'add') {
+            return $this->ptr_add($address, $print_error);
+        }
+
+        // create new PTR
+        if ($action == 'edit') {
+            return $this->ptr_edit($address, $print_error);
+        }
+
+        // modify existing PTR
+        if ($action == 'delete') {
+            return $this->ptr_delete($address, $print_error);
+        }
+
+        return $this->Result->show('danger', _('Invalid PDNS action'), true);
     }
 
     /**
@@ -1059,21 +1064,21 @@ class Addresses extends Common_functions
             $this->Result->show('warning', _('Domain does not exist').'.', false);
 
             return false;
-        } else {
-            // formulate new record
-            $record = $this->PowerDNS->formulate_new_record($domain->id, $this->PowerDNS->get_ip_ptr_name($this->transform_address($address->ip_addr, 'dotted')), 'PTR', $address->hostname, $values->ttl);
-            // insert record
-            $this->PowerDNS->add_domain_record($record, false);
-            // link to address
-            $id = $id === null ? $this->lastId : $id;
-            $this->ptr_link($id, $this->PowerDNS->lastId);
-            // ok
-            if ($print_error && php_sapi_name() != 'cli') {
-                $this->Result->show('success', _('PTR record created'), false);
-            }
-
-            return true;
         }
+
+        // formulate new record
+        $record = $this->PowerDNS->formulate_new_record($domain->id, $this->PowerDNS->get_ip_ptr_name($this->transform_address($address->ip_addr, 'dotted')), 'PTR', $address->hostname, $values->ttl);
+        // insert record
+        $this->PowerDNS->add_domain_record($record, false);
+        // link to address
+        $id = $id === null ? $this->lastId : $id;
+        $this->ptr_link($id, $this->PowerDNS->lastId);
+        // ok
+        if ($print_error && php_sapi_name() != 'cli') {
+            $this->Result->show('success', _('PTR record created'), false);
+        }
+
+        return true;
     }
 
     /**
@@ -1247,9 +1252,9 @@ class Addresses extends Common_functions
             }
 
             return $out;
-        } else {
-            return [];
         }
+
+        return [];
     }
 
     /**
@@ -1519,10 +1524,8 @@ class Addresses extends Common_functions
         if ($this->identify_address($address) == 'IPv6') {
             return $this->Net_IPv6->checkIPv6($address) ? true : false;
         }
-        // ipv4
-        else {
-            return $this->Net_IPv4->validateIP($address) ? true : false;
-        }
+
+        return $this->Net_IPv4->validateIP($address) ? true : false;
     }
 
     /**

@@ -63,6 +63,6 @@ $text = $Subnets->validate_multicast_mac($POST->mac, $POST->sectionId, $POST->vl
 // validate mac
 if ($text === true) {
     exit('True');
-} else {
-    print $text;
 }
+
+print $text;

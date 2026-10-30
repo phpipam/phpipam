@@ -39,7 +39,6 @@ if (strpos((string) $_FILES['file']['name'], '/') !== false) {
 
 /* list of permitted file extensions */
 $allowed = ['xls', 'csv'];
-
 /* no errors */
 if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
     // wrong extension
@@ -49,17 +48,18 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
     }
 
     // if cannot move
-    elseif (! move_uploaded_file($_FILES['file']['tmp_name'], 'upload/import.'.$filename)) {
+    if (! move_uploaded_file($_FILES['file']['tmp_name'], 'upload/import.'.$filename)) {
         print '{"status":"error", "error":"Cannot move file to upload dir"}';
         exit;
-    } else {
-        // default - success
-        print '{"status":"success"}';
-        exit;
     }
+
+    // default - success
+    print '{"status":"success"}';
+    exit;
 }
+
 // error
-elseif (isset($_FILES['file']['error'])) {
+if (isset($_FILES['file']['error'])) {
     print '{"status":"error","error":"'.$_FILES['file']['error'].'"}';
     exit;
 }

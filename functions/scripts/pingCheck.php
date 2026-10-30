@@ -85,7 +85,9 @@ if (! PingThread::available($errmsg)) {
 // verify fping / ping path
 if ($Scan->icmp_type == 'fping' && ! file_exists($Scan->settings->scanFPingPath)) {
     exit("pingCheck-Fatal-Error: Invalid fping path!\n");
-} elseif (! file_exists($Scan->settings->scanPingPath)) {
+}
+
+if (! file_exists($Scan->settings->scanPingPath)) {
     exit("pingCheck-Fatal-Error: Invalid ping path!\n");
 }
 

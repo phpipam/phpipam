@@ -879,12 +879,12 @@ class Prefix_controller extends Common_api_functions
                 'order' => $this->custom_field_orderby,
                 'direction' => $this->custom_field_order_direction,
             ];
-        } else {
-            return [
-                'name' => $this->custom_field_name_addr,
-                'order' => $this->custom_field_orderby_addr,
-                'direction' => $this->custom_field_order_direction_addr,
-            ];
         }
+
+        return [
+            'name' => $this->custom_field_name_addr,
+            'order' => $this->custom_field_orderby_addr,
+            'direction' => $this->custom_field_order_direction_addr,
+        ];
     }
 }

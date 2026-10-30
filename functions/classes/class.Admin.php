@@ -139,18 +139,24 @@ class Admin extends Common_functions
         // execute based on action
         if ($action == 'add') {
             return $this->object_add($table, $values, $values_log);
-        } elseif ($action == 'edit') {
-            return $this->object_edit($table, $field, $values, $values_log);
-        } elseif ($action == 'edit-multiple') {
-            return $this->object_edit_multiple($table, $field, $values);
-        }       // $field = array of ids
-        elseif ($action == 'delete') {
-            return $this->object_delete($table, $field, $values[$field]);
-        } else {
-            $this->Result->show('danger', _('Invalid action'), true);
-
-            return false;
         }
+
+        if ($action == 'edit') {
+            return $this->object_edit($table, $field, $values, $values_log);
+        }
+
+        if ($action == 'edit-multiple') {
+            return $this->object_edit_multiple($table, $field, $values);
+        }
+
+        // $field = array of ids
+        if ($action == 'delete') {
+            return $this->object_delete($table, $field, $values[$field]);
+        }
+
+        $this->Result->show('danger', _('Invalid action'), true);
+
+        return false;
     }
 
     /**
@@ -340,20 +346,20 @@ class Admin extends Common_functions
         // null table
         if (is_null($table) || is_blank($table)) {
             return false;
-        } else {
-            try {
-                $this->Database->emptyTable($table);
-            } catch (Exception $e) {
-                $this->Result->show('danger', _('Error: ').$e->getMessage());
-
-                return false;
-            }
-
-            // result
-            $this->Log->write(_('Database table cleared').': '.$table, null, 0);
-
-            return true;
         }
+
+        try {
+            $this->Database->emptyTable($table);
+        } catch (Exception $e) {
+            $this->Result->show('danger', _('Error: ').$e->getMessage());
+
+            return false;
+        }
+
+        // result
+        $this->Log->write(_('Database table cleared').': '.$table, null, 0);
+
+        return true;
     }
 
     /**

@@ -28,12 +28,12 @@ print '</ul>';
 // details or map?
 if ($GET->sPage == 'details') {
     // details
-    include 'folder-details.php';
+    include __DIR__.'/folder-details.php';
 
     // Subnets in Folder
     if ($slaves !== false) {
         print '<div class="ipaddresses_overlay">';
-        include_once 'folder-subnets.php';
+        include_once __DIR__.'/folder-subnets.php';
         print '</div>';
     }
 
@@ -62,12 +62,12 @@ elseif ($GET->sPage == 'mapsearch') {
     // Subnets in Folder
     if ($slaves !== false) {
         print '<div class="ipaddresses_overlay">';
-        include_once 'folder-subnets.php';
+        include_once __DIR__.'/folder-subnets.php';
         print '</div>';
     }
 
     // Subnets in Folder
-    include 'folder-map-search.php';
+    include __DIR__.'/folder-map-search.php';
 
     // empty
     if (count($addresses) == 0 && ! $slaves) {
@@ -80,11 +80,11 @@ else {
     // Subnets in Folder
     if ($slaves !== false) {
         print '<div class="ipaddresses_overlay">';
-        include_once 'folder-subnets.php';
+        include_once __DIR__.'/folder-subnets.php';
         print '</div>';
     }
 
-    include 'folder-map.php';
+    include __DIR__.'/folder-map.php';
 
     // empty
     if (count($addresses) == 0 && ! $slaves) {

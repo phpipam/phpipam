@@ -18,9 +18,9 @@ $User->check_user_session();
 $User->is_admin();
 
 // load data from uploaded file
-include 'import-load-data.php';
+include __DIR__.'/import-load-data.php';
 // check data and mark the entries to import/update
-include 'import-devtype-check.php';
+include __DIR__.'/import-devtype-check.php';
 
 ?>
 

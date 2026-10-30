@@ -133,6 +133,6 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
 
     // vault items
     if (isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) !== false) {
-        include 'vault-items.php';
+        include __DIR__.'/vault-items.php';
     }
 }

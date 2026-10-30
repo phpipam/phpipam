@@ -20,7 +20,7 @@ elseif (isset($GET->subnetId)) {
         $GET->subnetId == 'rack' ||
         $GET->subnetId == 'location'
     ) {
-        include 'all-devices.php';
+        include __DIR__.'/all-devices.php';
     }
     // by id
     else {
@@ -86,21 +86,21 @@ elseif (isset($GET->subnetId)) {
         <!-- details -->
         <?php
         if (! isset($GET->sPage)) {
-            include 'device-details/device-details.php';
+            include __DIR__.'/device-details/device-details.php';
         } elseif ($GET->sPage == 'subnets') {
-            include 'device-details/device-subnets.php';
+            include __DIR__.'/device-details/device-subnets.php';
         } elseif ($GET->sPage == 'addresses') {
-            include 'device-details/device-addresses.php';
+            include __DIR__.'/device-details/device-addresses.php';
         } elseif ($User->settings->enableNAT == 1 && $GET->sPage == 'nat') {
-            include 'device-details/device-nat.php';
+            include __DIR__.'/device-details/device-nat.php';
         } elseif ($GET->sPage == 'location') {
-            include 'device-details/device-location.php';
+            include __DIR__.'/device-details/device-location.php';
         } elseif ($GET->sPage == 'pstn-prefixes') {
-            include 'device-details/device-pstn.php';
+            include __DIR__.'/device-details/device-pstn.php';
         } elseif ($GET->sPage == 'circuits') {
-            include 'device-details/device-circuits.php';
+            include __DIR__.'/device-details/device-circuits.php';
         }
     }
 } else {
-    include 'all-devices.php';
+    include __DIR__.'/all-devices.php';
 }

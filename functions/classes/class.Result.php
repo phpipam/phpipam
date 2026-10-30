@@ -114,26 +114,26 @@ class Result
             // ok, just return success
             if ($class == 'success') {
                 return true;
-            } else {
-                return $this->throw_exception(500, $text);
-            }
-        } else {
-            // cli or GUI
-            if (php_sapi_name() == 'cli') {
-                print $this->show_cli_message($text);
-            } else {
-                // return or print
-                if ($inline) {
-                    return $this->show_message($class, $text, $popup, $popup2, $reload);
-                } else {
-                    print $this->show_message($class, $text, $popup, $popup2, $reload);
-                }
             }
 
-            // die
-            if ($this->die === true) {
-                exit();
+            return $this->throw_exception(500, $text);
+        }
+
+        // cli or GUI
+        if (php_sapi_name() == 'cli') {
+            print $this->show_cli_message($text);
+        } else {
+            // return or print
+            if ($inline) {
+                return $this->show_message($class, $text, $popup, $popup2, $reload);
             }
+
+            print $this->show_message($class, $text, $popup, $popup2, $reload);
+        }
+
+        // die
+        if ($this->die === true) {
+            exit();
         }
     }
 
@@ -235,26 +235,25 @@ class Result
         // print popup or normal
         if ($popup === false) {
             return "<div class='alert alert-".$class."'>".$text.'</div>';
-        } else {
-            // set close class for JS
-            $pclass = $popup2 === false ? 'hidePopups' : 'hidePopup2';
-            // change danger to error for popup
-            $htext = $class === 'danger' ? 'error' : escape_input($class);
-
-            $out[] = '<div class="pHeader">'._(ucwords($htext)).'</div>';
-            $out[] = '<div class="pContent">';
-            $out[] = '<div class="alert alert-'.$class.'">'.$text.'</div>';
-            $out[] = '</div>';
-            // reload
-            if ($reload === true) {
-                $out[] = '<div class="pFooter"><button class="btn btn-sm btn-default hidePopupsReload '.$pclass.'">'._('Close').'</button></div>';
-            } else {
-                $out[] = '<div class="pFooter"><button class="btn btn-sm btn-default '.$pclass.'">'._('Close').'</button></div>';
-            }
-
-            // return
-            return implode("\n", $out);
         }
+
+        // set close class for JS
+        $pclass = $popup2 === false ? 'hidePopups' : 'hidePopup2';
+        // change danger to error for popup
+        $htext = $class === 'danger' ? 'error' : escape_input($class);
+        $out[] = '<div class="pHeader">'._(ucwords($htext)).'</div>';
+        $out[] = '<div class="pContent">';
+        $out[] = '<div class="alert alert-'.$class.'">'.$text.'</div>';
+        $out[] = '</div>';
+        // reload
+        if ($reload === true) {
+            $out[] = '<div class="pFooter"><button class="btn btn-sm btn-default hidePopupsReload '.$pclass.'">'._('Close').'</button></div>';
+        } else {
+            $out[] = '<div class="pFooter"><button class="btn btn-sm btn-default '.$pclass.'">'._('Close').'</button></div>';
+        }
+
+        // return
+        return implode("\n", $out);
     }
 
     /**

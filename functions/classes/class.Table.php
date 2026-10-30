@@ -118,9 +118,9 @@ class Table extends Common_functions
 
             // return
             return $html;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     private function get_table_pagination()
@@ -138,15 +138,15 @@ class Table extends Common_functions
         // one page
         if ($this->filters['pagenum'] == 1) {
             return false;
-        } else {
-            // 1 to 5
-            for ($m = 1; $m <= $this->filters['pagenum']; $m++) {
-                // pages
-                if ($m == $this->filters['subpage']) {
-                    $html[] = " <li class='active disabled'><a>$m</a></li>";
-                } else {
-                    $html[] = " <li><a href='".create_link('subnets', $_GET['section'])."?subpage=$m&limit=".$this->filters['limit']."'>$m</a></li>";
-                }
+        }
+
+        // 1 to 5
+        for ($m = 1; $m <= $this->filters['pagenum']; $m++) {
+            // pages
+            if ($m == $this->filters['subpage']) {
+                $html[] = " <li class='active disabled'><a>$m</a></li>";
+            } else {
+                $html[] = " <li><a href='".create_link('subnets', $_GET['section'])."?subpage=$m&limit=".$this->filters['limit']."'>$m</a></li>";
             }
         }
 

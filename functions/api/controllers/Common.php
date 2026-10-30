@@ -560,8 +560,9 @@ class Common_api_functions
             // return
             return $result;
         }
+
         // subnets
-        elseif ($controller == 'subnets') {
+        if ($controller == 'subnets') {
             $result['self'] = ['GET', 'POST', 'DELETE', 'PATCH'];
             $result['addresses'] = ['GET'];
             $result['addresses/{ip}'] = ['GET'];
@@ -577,96 +578,108 @@ class Common_api_functions
             // return
             return $result;
         }
+
         // addresses
-        elseif ($controller == 'addresses') {
+        if ($controller == 'addresses') {
             $result['self'] = ['GET', 'POST', 'DELETE', 'PATCH'];
             $result['ping'] = ['GET'];
 
             // return
             return $result;
         }
+
         // tags
-        elseif ($controller == 'addresses/tags') {
+        if ($controller == 'addresses/tags') {
             $result['self'] = ['GET'];
             $result['addresses'] = ['GET'];
 
             // return
             return $result;
         }
+
         // tools - devices
-        elseif ($controller == 'tools/devices') {
+        if ($controller == 'tools/devices') {
             $result['self'] = ['GET', 'POST', 'DELETE', 'PATCH'];
             $result['addresses'] = ['GET'];
 
             // return
             return $result;
         }
+
         // tools - devices
-        elseif ($controller == 'tools/devicetypes') {
+        if ($controller == 'tools/devicetypes') {
             $result['self'] = ['GET', 'POST', 'DELETE', 'PATCH'];
             $result['devices'] = ['GET'];
 
             // return
             return $result;
         }
+
         // tools - tags
-        elseif ($controller == 'tools/iptags') {
+        if ($controller == 'tools/iptags') {
             $result['self'] = ['GET', 'POST', 'DELETE', 'PATCH'];
             $result['addresses'] = ['GET'];
 
             // return
             return $result;
         }
+
         // tools - tags
-        elseif ($controller == 'tools/vlans') {
+        if ($controller == 'tools/vlans') {
             $result['self'] = ['GET'];
             $result['subnets'] = ['GET'];
 
             // return
             return $result;
         }
+
         // tools - tags
-        elseif ($controller == 'tools/vrf') {
+        if ($controller == 'tools/vrf') {
             $result['self'] = ['GET'];
             $result['subnets'] = ['GET'];
 
             // return
             return $result;
         }
+
         // tags
-        elseif ($controller == 'iptags') {
+        if ($controller == 'iptags') {
             $result['self'] = ['GET'];
             $result['addresses'] = ['GET'];
 
             // return
             return $result;
         }
+
         // tags
-        elseif ($controller == 'devices') {
+        if ($controller == 'devices') {
             $result['self'] = ['GET'];
             $result['addresses'] = ['GET'];
 
             // return
             return $result;
         }
+
         // vlan domains
-        elseif ($controller == 'l2domains') {
+        if ($controller == 'l2domains') {
             $result['self'] = ['GET', 'POST', 'DELETE', 'PATCH'];
             $result['vlans'] = ['GET'];
 
             // return
             return $result;
         }
+
         // vlans
-        elseif ($controller == 'vlans') {
+        if ($controller == 'vlans') {
             $result['self'] = ['GET', 'POST', 'DELETE', 'PATCH'];
             $result['subnets'] = ['GET'];
 
             // return
             return $result;
         }
+
         // vrfs
-        elseif ($controller == 'vrfs') {
+        if ($controller == 'vrfs') {
             $result['self'] = ['GET', 'POST', 'DELETE', 'PATCH'];
             $result['subnets'] = ['GET'];
 
@@ -943,8 +956,9 @@ class Common_api_functions
         if (in_array($this->request_method(), ['POST', 'PUT', 'PATCH', 'DELETE'])) {
             return $this->remap_update_keys();
         }
+
         // GET
-        elseif (in_array($this->request_method(), ['GET', 'HEAD'])) {
+        if (in_array($this->request_method(), ['GET', 'HEAD'])) {
             return $this->remap_result_keys($result);
         }
     }

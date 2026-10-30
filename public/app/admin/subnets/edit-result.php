@@ -264,13 +264,13 @@ if (! empty($errors)) {
     print '</div>';
     exit();
 }
+
 /* delete confirmation */
-elseif ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
+if ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
     // for ajax to prevent reload
     print "<div style='display:none'>alert alert-danger</div>";
     // result
     print "<div class='alert alert-warning'>";
-
     // print what will be deleted
     // fetch all slave subnets
     $Subnets->fetch_subnet_slaves_recursive($POST->subnetId);
@@ -280,7 +280,6 @@ elseif ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
     }
 
     $ipcnt = $Addresses->count_addresses_in_multiple_subnets($slave_array);
-
     print '<strong>'._('Warning').'</strong>: '._('I will delete').':<ul>';
     print "	<li>$subcnt "._('subnets').'</li>';
     if ($ipcnt > 0) {
@@ -288,7 +287,6 @@ elseif ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
     }
 
     print '</ul>';
-
     print "<hr><div style='text-align:right'>";
     print _('Are you sure you want to delete above items?').' ';
     print "<div class='btn-group'>";

@@ -84,91 +84,89 @@ class Devices_controller extends Common_api_functions
             // result
             if (! $result) {
                 return $this->Response->throw_exception(404, 'No devices configured');
-            } else {
+            }
+
+            return ['code' => 200, 'data' => $this->prepare_result($result, 'devices', true, false)];
+        }
+
+        // search for devices
+        if ($this->_params->id == 'search') {
+            // verify that search params are set
+            if (isset($this->_params->id2)) {
+                // set query
+                $base_query = 'SELECT * from `devices` where ';
+
+                // Search all custom fields
+                $cfs = array_keys($this->Tools->fetch_custom_fields('devices'));
+
+                // Merge default fields with custom fields
+                $search_fields = array_merge($cfs, $this->default_search_fields);
+
+                // Using the search fields, build a string to query parameters chained together with " or "
+                $search_term = $this->_params->id2;
+                $extended_query = implode(' or ', array_map(
+                    function ($k) {
+                        return " `$k` like ? ";
+                    },
+                    $search_fields
+                ));
+
+                // Set up an array of parameters to match the query we built
+                $query_params = array_fill(0, count($search_fields), "%$search_term%");
+
+                // Put together with the base query
+                $search_query = $base_query.$extended_query;
+
+                // Search query
+                $result = $this->Database->getObjectsQuery('devices', $search_query, $query_params);
+
+                // result
+                if (! $result) {
+                    return $this->Response->throw_exception(404, 'No devices found');
+                }
+
                 return ['code' => 200, 'data' => $this->prepare_result($result, 'devices', true, false)];
             }
+
+            $this->Response->throw_exception(400, 'No search term given');
         }
-        // parameters are set
+        // not search
         else {
-            // search for devices
-            if ($this->_params->id == 'search') {
-                // verify that search params are set
-                if (isset($this->_params->id2)) {
-                    // set query
-                    $base_query = 'SELECT * from `devices` where ';
-
-                    // Search all custom fields
-                    $cfs = array_keys($this->Tools->fetch_custom_fields('devices'));
-
-                    // Merge default fields with custom fields
-                    $search_fields = array_merge($cfs, $this->default_search_fields);
-
-                    // Using the search fields, build a string to query parameters chained together with " or "
-                    $search_term = $this->_params->id2;
-                    $extended_query = implode(' or ', array_map(
-                        function ($k) {
-                            return " `$k` like ? ";
-                        },
-                        $search_fields
-                    ));
-
-                    // Set up an array of parameters to match the query we built
-                    $query_params = array_fill(0, count($search_fields), "%$search_term%");
-
-                    // Put together with the base query
-                    $search_query = $base_query.$extended_query;
-
-                    // Search query
-                    $result = $this->Database->getObjectsQuery('devices', $search_query, $query_params);
-
-                    // result
-                    if (! $result) {
-                        return $this->Response->throw_exception(404, 'No devices found');
-                    } else {
-                        return ['code' => 200, 'data' => $this->prepare_result($result, 'devices', true, false)];
-                    }
-                } else {
-                    $this->Response->throw_exception(400, 'No search term given');
-                }
+            // Id must be numeric
+            if (! is_numeric($this->_params->id)) {
+                $this->Response->throw_exception(400, 'ID must be numeric');
             }
-            // not search
-            else {
-                // Id must be numeric
-                if (! is_numeric($this->_params->id)) {
-                    $this->Response->throw_exception(400, 'ID must be numeric');
-                }
 
-                // additional parameter is set?
-                if (isset($this->_params->id2)) {
-                    // addresses
-                    if ($this->_params->id2 == 'addresses') {
-                        $result = $this->Tools->fetch_multiple_objects('ipaddresses', 'switch', $this->_params->id, 'id', true);
-                    }
-                    // subnets
-                    elseif ($this->_params->id2 == 'subnets') {
-                        $result = $this->Tools->fetch_multiple_objects('subnets', 'device', $this->_params->id, 'id', true);
-                    }
-                    // error
-                    else {
-                        $this->Response->throw_exception(400, 'Invalid parameters');
-                    }
+            // additional parameter is set?
+            if (isset($this->_params->id2)) {
+                // addresses
+                if ($this->_params->id2 == 'addresses') {
+                    $result = $this->Tools->fetch_multiple_objects('ipaddresses', 'switch', $this->_params->id, 'id', true);
                 }
-                // device details
+                // subnets
+                elseif ($this->_params->id2 == 'subnets') {
+                    $result = $this->Tools->fetch_multiple_objects('subnets', 'device', $this->_params->id, 'id', true);
+                }
+                // error
                 else {
-                    // fetch device
-                    $result = $this->Tools->fetch_object('devices', 'id', $this->_params->id);
-                    if (! $result) {
-                        $this->Response->throw_exception(404, 'Device not found');
-                    }
-                }
-
-                // all ok, prepare result
-                if ($result === false) {
-                    return $this->Response->throw_exception(404, 'No '.$this->_params->id2.' found');
-                } else {
-                    return ['code' => 200, 'data' => $this->prepare_result($result, 'devices', true, false)];
+                    $this->Response->throw_exception(400, 'Invalid parameters');
                 }
             }
+            // device details
+            else {
+                // fetch device
+                $result = $this->Tools->fetch_object('devices', 'id', $this->_params->id);
+                if (! $result) {
+                    $this->Response->throw_exception(404, 'Device not found');
+                }
+            }
+
+            // all ok, prepare result
+            if ($result === false) {
+                return $this->Response->throw_exception(404, 'No '.$this->_params->id2.' found');
+            }
+
+            return ['code' => 200, 'data' => $this->prepare_result($result, 'devices', true, false)];
         }
     }
 

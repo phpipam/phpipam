@@ -59,19 +59,24 @@ class Sections extends Common_functions
     {
         // strip tags
         $values = $this->strip_input_tags($values);
-
         // execute based on action
         if ($action == 'add') {
             return $this->section_add($values);
-        } elseif ($action == 'edit') {
-            return $this->section_edit($values);
-        } elseif ($action == 'delete') {
-            return $this->section_delete($values);
-        } elseif ($action == 'reorder') {
-            return $this->section_reorder($values);
-        } else {
-            return $this->Result->show('danger', _('Invalid action'), true);
         }
+
+        if ($action == 'edit') {
+            return $this->section_edit($values);
+        }
+
+        if ($action == 'delete') {
+            return $this->section_delete($values);
+        }
+
+        if ($action == 'reorder') {
+            return $this->section_reorder($values);
+        }
+
+        return $this->Result->show('danger', _('Invalid action'), true);
     }
 
     /**
@@ -403,9 +408,9 @@ class Sections extends Common_functions
 
             // return permitted
             return $permitted;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -460,33 +465,31 @@ class Sections extends Common_functions
         // admins always has permission rwa
         if ($user->role == 'Administrator') {
             return 3;
-        } else {
-            // fetch section details and check permissions
-            $section = $this->fetch_section('id', $sectionid);
-            $sectionP = db_json_decode($section->permissions, true);
+        }
 
-            // default permission is no access
-            $out = 0;
-
-            // for each group check permissions, save highest to $out
-            if (is_array($sectionP)) {
-                foreach ($sectionP as $sk => $sp) {
-                    // check each group if user is in it and if so check for permissions for that group
-                    if (is_array($groups)) {
-                        foreach ($groups as $uk => $up) {
-                            if ($uk == $sk) {
-                                if ($sp > $out) {
-                                    $out = $sp;
-                                }
+        // fetch section details and check permissions
+        $section = $this->fetch_section('id', $sectionid);
+        $sectionP = db_json_decode($section->permissions, true);
+        // default permission is no access
+        $out = 0;
+        // for each group check permissions, save highest to $out
+        if (is_array($sectionP)) {
+            foreach ($sectionP as $sk => $sp) {
+                // check each group if user is in it and if so check for permissions for that group
+                if (is_array($groups)) {
+                    foreach ($groups as $uk => $up) {
+                        if ($uk == $sk) {
+                            if ($sp > $out) {
+                                $out = $sp;
                             }
                         }
                     }
                 }
             }
-
-            // return permission level
-            return $out;
         }
+
+        // return permission level
+        return $out;
     }
 
     /**

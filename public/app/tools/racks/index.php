@@ -25,10 +25,10 @@ if ($User->check_module_permissions('racks', User::ACCESS_R, false) === false) {
 elseif (isset($GET->subnetId)) {
     // map
     if ($GET->subnetId == 'map') {
-        include 'print-racks.php';
+        include __DIR__.'/print-racks.php';
     } else {
-        include 'print-single-rack.php';
+        include __DIR__.'/print-single-rack.php';
     }
 } else {
-    include 'print-racks.php';
+    include __DIR__.'/print-racks.php';
 }

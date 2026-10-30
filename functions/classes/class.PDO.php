@@ -223,11 +223,13 @@ abstract class DB
     {
         if (is_int($date)) {
             return date('Y-m-d H:i:s', $date);
-        } elseif (is_string($date)) {
-            return date('Y-m-d H:i:s', strtotime($date));
-        } else {
-            return date('Y-m-d H:i:s');
         }
+
+        if (is_string($date)) {
+            return date('Y-m-d H:i:s', strtotime($date));
+        }
+
+        return date('Y-m-d H:i:s');
     }
 
     /**
@@ -345,9 +347,13 @@ abstract class DB
         if ($len > 1) {
             if ($str[0] == "'" && $str[$len - 1] == "'") {
                 return substr((string) $str, 1, -1);
-            } elseif ($str[0] == "'") {
+            }
+
+            if ($str[0] == "'") {
                 return substr((string) $str, 1);
-            } elseif ($str[$len - 1] == "'") {
+            }
+
+            if ($str[$len - 1] == "'") {
                 return substr((string) $str, 0, -1);
             }
         } elseif ($len > 0) {
@@ -962,9 +968,9 @@ abstract class DB
 
         if ($resultObj === false) {
             return null;
-        } else {
-            return $this->html_escape_strings($tableName, $resultObj);
         }
+
+        return $this->html_escape_strings($tableName, $resultObj);
     }
 
     /**
@@ -991,9 +997,9 @@ abstract class DB
 
         if ($resultObj === false) {
             return null;
-        } else {
-            return $this->html_escape_strings($tableName, $resultObj);
         }
+
+        return $this->html_escape_strings($tableName, $resultObj);
     }
 
     /**
@@ -1054,9 +1060,9 @@ abstract class DB
         // subnets
         if ($table == 'subnets' && $sortField == 'subnet') {
             return $this->getObjectsQuery($table, 'SELECT '.$result_fields.' FROM `'.$table.'` WHERE `'.$field.'`'.$negate_operator.$operator.'? ORDER BY LPAD(`subnet`,39,0) '.($sortAsc ? '' : 'DESC').';', [$value]);
-        } else {
-            return $this->getObjectsQuery($table, 'SELECT '.$result_fields.' FROM `'.$table.'` WHERE `'.$field.'`'.$negate_operator.$operator.'? ORDER BY `'.$sortField.'` '.($sortAsc ? '' : 'DESC').';', [$value]);
         }
+
+        return $this->getObjectsQuery($table, 'SELECT '.$result_fields.' FROM `'.$table.'` WHERE `'.$field.'`'.$negate_operator.$operator.'? ORDER BY `'.$sortField.'` '.($sortAsc ? '' : 'DESC').';', [$value]);
     }
 
     /**
@@ -1140,9 +1146,9 @@ abstract class DB
         // multiple
         if (! empty($field2)) {
             return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=? and `'.$field2.'`=?;', [$value, $value2]);
-        } else {
-            return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=?;', [$value]);
         }
+
+        return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=?;', [$value]);
     }
 
     /**
@@ -1322,9 +1328,9 @@ class Database_PDO extends DB
         // for installation
         if ($this->install) {
             return 'mysql:host='.$this->host.';port='.$this->port.';charset='.$this->charset;
-        } else {
-            return 'mysql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbname.';charset='.$this->charset;
         }
+
+        return 'mysql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbname.';charset='.$this->charset;
     }
 
     /**

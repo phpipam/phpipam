@@ -457,11 +457,11 @@ class DHCP_kea extends Common_functions
             // id database type is set and valid check it also
             if (! in_array($reservations_database_type, $this->reservation_types)) {
                 throw new exception('Invalid reservations database type');
-            } else {
-                // get leases
-                $type_l = 'get_reservations_'.$reservations_database_type;
-                $this->{$type_l}($reservations_database, $type);
             }
+
+            // get leases
+            $type_l = 'get_reservations_'.$reservations_database_type;
+            $this->{$type_l}($reservations_database, $type);
         }
     }
 

@@ -51,7 +51,7 @@ if ($User->is_admin(false)) {
 
 <!-- show table -->
 <div class="normalTable logs">
-        <?php include 'show-logs.php'; ?>
+        <?php include __DIR__.'/show-logs.php'; ?>
 </div>      <!-- end filter overlay div -->
 
         <?php

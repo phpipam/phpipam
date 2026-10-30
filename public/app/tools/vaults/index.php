@@ -13,10 +13,10 @@ elseif ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
 } else {
     // all vaults
     if (! isset($GET->subnetId)) {
-        include 'all-vaults.php';
+        include __DIR__.'/all-vaults.php';
     }
     // vault
     else {
-        include 'vault/index.php';
+        include __DIR__.'/vault/index.php';
     }
 }

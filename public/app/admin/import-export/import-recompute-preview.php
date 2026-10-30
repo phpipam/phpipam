@@ -19,7 +19,7 @@ $User->check_user_session();
 $User->is_admin();
 
 // Load subnets and recompute the master/nested relations
-include 'import-recompute-logic.php';
+include __DIR__.'/import-recompute-logic.php';
 
 ?>
 

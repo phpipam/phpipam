@@ -123,41 +123,37 @@ class DNS extends Common_functions
 
             return false;
         }
-        // ok
-        else {
-            // set type to remote
-            $this->dns_type = 'remote';
-            // fetch nameservers
-            $nameservers = $this->fetch_object('nameservers', 'id', $nsid);
-            // error
-            if ($nameservers === false) {
-                return false;
-            }
-            // ok
-            else {
-                if (is_blank($nameservers->namesrv1)) {
-                    return false;
-                } else {
-                    // to array
-                    $nsarray = explode(';', (string) $nameservers->namesrv1);
-                    // check against dead NSes
-                    foreach ($nsarray as $k => $nsserv) {
-                        $nsserv = trim($nsserv);
-                        if (in_array($nsserv, $this->dead_ns)) {
-                            unset($nsarray[$k]);
-                        }
-                    }
 
-                    // save active
-                    if (count($nsarray) > 0) {
-                        $this->ns = $nsarray;
-                    } else {
-                        $this->ns = [];
+        // set type to remote
+        $this->dns_type = 'remote';
+        // fetch nameservers
+        $nameservers = $this->fetch_object('nameservers', 'id', $nsid);
+        // error
+        if ($nameservers === false) {
+            return false;
+        }
 
-                        return false;
-                    }
-                }
+        if (is_blank($nameservers->namesrv1)) {
+            return false;
+        }
+
+        // to array
+        $nsarray = explode(';', (string) $nameservers->namesrv1);
+        // check against dead NSes
+        foreach ($nsarray as $k => $nsserv) {
+            $nsserv = trim($nsserv);
+            if (in_array($nsserv, $this->dead_ns)) {
+                unset($nsarray[$k]);
             }
+        }
+
+        // save active
+        if (count($nsarray) > 0) {
+            $this->ns = $nsarray;
+        } else {
+            $this->ns = [];
+
+            return false;
         }
     }
 
@@ -176,44 +172,44 @@ class DNS extends Common_functions
         $this->set_nameservers($nsid);
         // make sure it is dotted format
         $address = $this->transform_address($address, 'dotted');
-
         // if both are set ignore
         if (! is_blank($hostname) && ! is_blank($address)) {
             return ['class' => '', 'address' => $address, 'name' => $hostname];
         }
+
         // if settings permits to check or override is set
-        elseif ($this->settings->enableDNSresolving == 1 || $override === true) {
+        if ($this->settings->enableDNSresolving == 1 || $override === true) {
             // ignore if remote DNS failed
             if ($this->dns_type == 'remote' && count($this->ns) == 0) {
                 return ['class' => '',        'address' => $address, 'name' => $hostname];
             }
+
             // if address is set fetch A record
-            elseif ($address !== false && ! is_blank($address)) {
+            if ($address !== false && ! is_blank($address)) {
                 // set resolve type
                 $this->type = 'PTR';
-
                 // resolve
                 $resolved = $this->resolve_address_net_dns($address);
                 // false ?
                 if ($resolved === false) {
                     return ['class' => '',      'address' => $address, 'name' => $hostname];
-                } else {
-                    return ['class' => 'resolved', 'address' => $address, 'name' => $resolved];
                 }
+
+                return ['class' => 'resolved', 'address' => $address, 'name' => $resolved];
             }
+
             // if hostname is set fetch PTR record
-            elseif ($hostname !== false && ! is_blank($hostname)) {
+            if ($hostname !== false && ! is_blank($hostname)) {
                 // set resolve type
                 $this->type = 'A';
-
                 // resolve
                 $resolved = $this->resolve_address_net_dns($hostname);
                 // false ?
                 if ($resolved === false) {
                     return ['class' => '',          'address' => $address, 'name' => $hostname];
-                } else {
-                    return ['class' => 'resolved', 'address' => $resolved, 'name' => $hostname];
                 }
+
+                return ['class' => 'resolved', 'address' => $resolved, 'name' => $hostname];
             }
         }
         // don't check

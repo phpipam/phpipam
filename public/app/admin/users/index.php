@@ -18,7 +18,7 @@ if ($GET->subnetId == 'switch') {
 
 // print all or specific user?
 if (isset($GET->subnetId)) {
-    include 'print-user/index.php';
+    include __DIR__.'/print-user/index.php';
 } else {
-    include 'print-all.php';
+    include __DIR__.'/print-all.php';
 }

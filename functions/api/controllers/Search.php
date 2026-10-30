@@ -123,10 +123,8 @@ class Search_controller extends Common_api_functions
             // return result
             return ['code' => 200, 'data' => $result];
         }
-        // search string missing
-        else {
-            $this->Response->throw_exception(400, 'Please provide search string');
-        }
+
+        $this->Response->throw_exception(400, 'Please provide search string');
     }
 
     /**
@@ -170,9 +168,9 @@ class Search_controller extends Common_api_functions
         // result
         if (count($result) == 0) {
             return ['code' => 404, 'data' => 'No subnets found'];
-        } else {
-            return ['code' => 200, 'data' => $this->prepare_result($result, 'subnets', true, false)];
         }
+
+        return ['code' => 200, 'data' => $this->prepare_result($result, 'subnets', true, false)];
     }
 
     /**
@@ -192,9 +190,9 @@ class Search_controller extends Common_api_functions
         // result
         if (count($result) == 0) {
             return ['code' => 404, 'data' => 'No addresses found'];
-        } else {
-            return ['code' => 200, 'data' => $this->prepare_result($result, 'addresses', true, false)];
         }
+
+        return ['code' => 200, 'data' => $this->prepare_result($result, 'addresses', true, false)];
     }
 
     /**
@@ -212,9 +210,9 @@ class Search_controller extends Common_api_functions
         // result
         if (count($result) == 0) {
             return ['code' => 404, 'data' => 'No vlan found'];
-        } else {
-            return ['code' => 200, 'data' => $this->prepare_result($result, 'vlans', true, false)];
         }
+
+        return ['code' => 200, 'data' => $this->prepare_result($result, 'vlans', true, false)];
     }
 
     /**
@@ -232,8 +230,8 @@ class Search_controller extends Common_api_functions
         // result
         if (count($result) == 0) {
             return ['code' => 404, 'data' => 'No vrf found'];
-        } else {
-            return ['code' => 200, 'data' => $this->prepare_result($result, 'vrfs', true, false)];
         }
+
+        return ['code' => 200, 'data' => $this->prepare_result($result, 'vrfs', true, false)];
     }
 }

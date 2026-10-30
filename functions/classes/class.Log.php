@@ -1602,17 +1602,17 @@ class Logging extends Common_functions
                     $this->object_old[$k] = 'True';
 
                     return 'False';
-                } else {
-                    $this->object_old[$k] = 'False';
-
-                    return 'True';
                 }
-            } else {
-                return $v;
+
+                $this->object_old[$k] = 'False';
+
+                return 'True';
             }
-        } else {
+
             return $v;
         }
+
+        return $v;
     }
 
     /**
@@ -1833,9 +1833,9 @@ class Logging extends Common_functions
 
             // return result
             return $logs;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

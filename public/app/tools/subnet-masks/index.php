@@ -10,4 +10,4 @@ $User->check_user_session();
 // set popup
 $popup = false;
 // table
-include 'print-table.php';
+include __DIR__.'/print-table.php';

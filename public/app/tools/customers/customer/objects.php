@@ -26,7 +26,7 @@ if (! isset($GET->sPage)) {
 }
 
 // menu
-include 'objects/menu.php';
+include __DIR__.'/objects/menu.php';
 
 // item or error
 if (array_key_exists($GET->sPage, $Tools->get_customer_object_types())) {

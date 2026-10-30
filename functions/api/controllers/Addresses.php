@@ -246,14 +246,12 @@ class Addresses_controller extends Common_api_functions
                 $Scan->ping_set_exit(false);
                 // check address
                 $this->validate_address_id();
-
                 // set result
                 $result = [];
                 $result['scan_type'] = $Scan->icmp_type;
                 $result['exit_code'] = $Scan->ping_address($this->old_address->ip);
                 $result['result_code'] = $Scan->ping_exit_explain($result['exit_code']);
                 $result['message'] = $result['exit_code'] == 0 ? 'Address online' : 'Address offline';
-
                 // success
                 if ($result['exit_code'] == 0) {
                     $Scan->ping_update_lastseen($this->_params->id);
@@ -261,20 +259,19 @@ class Addresses_controller extends Common_api_functions
 
                 return ['code' => 200, 'data' => $result];
             }
+
             // changelog
-            elseif ($this->_params->id2 == 'changelog') {
+            if ($this->_params->id2 == 'changelog') {
                 return ['code' => 200, 'data' => $this->address_changelog()];
             }
-            // default
-            else {
-                // fetch
-                $result = $this->Addresses->fetch_address('id', $this->_params->id);
-                // check result
-                if ($result == false) {
-                    $this->Response->throw_exception(404, 'Invalid Id');
-                } else {
-                    return ['code' => 200, 'data' => $this->prepare_result($result, $this->_params->controller, true, true)];
-                }
+
+            // fetch
+            $result = $this->Addresses->fetch_address('id', $this->_params->id);
+            // check result
+            if ($result == false) {
+                $this->Response->throw_exception(404, 'Invalid Id');
+            } else {
+                return ['code' => 200, 'data' => $this->prepare_result($result, $this->_params->controller, true, true)];
             }
         }
         // ip address ?
@@ -391,9 +388,9 @@ class Addresses_controller extends Common_api_functions
             // set result
             if ($this->_params->id == 'first_free') {
                 return ['code' => 201, 'message' => 'Address created', 'id' => $this->Addresses->lastId, 'location' => '/api/'.$this->_params->app_id.'/addresses/'.$this->Addresses->lastId.'/', 'data' => $this->Addresses->transform_address($this->_params->ip_addr, 'dotted')];
-            } else {
-                return ['code' => 201, 'message' => 'Address created', 'id' => $this->Addresses->lastId, 'location' => '/api/'.$this->_params->app_id.'/addresses/'.$this->Addresses->lastId.'/'];
             }
+
+            return ['code' => 201, 'message' => 'Address created', 'id' => $this->Addresses->lastId, 'location' => '/api/'.$this->_params->app_id.'/addresses/'.$this->Addresses->lastId.'/'];
         }
     }
 
@@ -696,8 +693,8 @@ class Addresses_controller extends Common_api_functions
         // result
         if (count($clogs_formatted) > 0) {
             return $clogs_formatted;
-        } else {
-            $this->Response->throw_exception(404, 'No changelogs found');
         }
+
+        $this->Response->throw_exception(404, 'No changelogs found');
     }
 }

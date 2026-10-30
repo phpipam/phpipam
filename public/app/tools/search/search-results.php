@@ -35,11 +35,11 @@ $selected_ip_fields = explode(';', (string) $selected_ip_fields);
 
 // all are off?
 if (is_blank($GET->addresses) && is_blank($GET->subnets) && is_blank($GET->vlans) && is_blank($GET->vrf) && is_blank($GET->pstn) && is_blank($GET->circuits) && is_blank($GET->customers) && is_blank($GET->devices)) {
-    require 'search-tips.php';
+    require __DIR__.'/search-tips.php';
 }
 // empty request
 elseif (is_blank($GET->ip)) {
-    require 'search-tips.php';
+    require __DIR__.'/search-tips.php';
 }
 // ok, search results print
 else {

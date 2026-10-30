@@ -180,9 +180,9 @@ class Scan extends Common_functions
             // die or print?
             if ($this->icmp_exit) {
                 exit(json_encode(['status' => 1, 'error' => _('Invalid scan method.')]));
-            } else {
-                $this->Result->show('danger', _('Invalid scan method.'), true);
             }
+
+            $this->Result->show('danger', _('Invalid scan method.'), true);
         }
         // ok
         else {
@@ -295,9 +295,9 @@ class Scan extends Common_functions
     {
         if ($this->icmp_exit) {
             exit(1001);
-        } else {
-            return 1001;
         }
+
+        return 1001;
     }
 
     /**
@@ -343,9 +343,9 @@ class Scan extends Common_functions
         // return result for web or cmd
         if ($this->icmp_exit) {
             exit($retval);
-        } else {
-            return $retval;
         }
+
+        return $retval;
     }
 
     /**
@@ -365,9 +365,9 @@ class Scan extends Common_functions
             // return result for web or cmd
             if ($this->icmp_exit) {
                 exit(255);
-            } else {
-                return 255;
             }
+
+            return 255;
         }
 
         // Check for PEAR_Error
@@ -375,49 +375,49 @@ class Scan extends Common_functions
             // return result for web or cmd
             if ($this->icmp_exit) {
                 exit($ping->code);
-            } else {
-                return $ping->code;
             }
+
+            return $ping->code;
         }
 
         // check for errors
         if ($ping->pear->isError($ping)) {
             if ($this->icmp_exit) {
                 exit($ping->getMessage());
-            } else {
-                return $ping->getMessage();
             }
+
+            return $ping->getMessage();
+        }
+
+        // set count and timeout
+        $ping->setArgs(['count' => $this->icmp_timeout, 'timeout' => $this->icmp_timeout]);
+        // execute
+        $ping_response = $ping->ping($address);
+        // check response for error
+        if ($ping->pear->isError($ping_response)) {
+            $result['code'] = 2;
         } else {
-            // set count and timeout
-            $ping->setArgs(['count' => $this->icmp_timeout, 'timeout' => $this->icmp_timeout]);
-            // execute
-            $ping_response = $ping->ping($address);
-            // check response for error
-            if ($ping->pear->isError($ping_response)) {
-                $result['code'] = 2;
-            } else {
-                // all good
-                if ($ping_response->_transmitted == $ping_response->_received) {
-                    $result['code'] = 0;
-                    $this->rtt = 'RTT: '.strstr((string) $ping_response->_round_trip['avg'], '.', true);
-                }
-                // ping loss
-                elseif ($ping_response->_received == 0) {
-                    $result['code'] = 1;
-                }
-                // failed
-                else {
-                    $result['code'] = 3;
-                }
+            // all good
+            if ($ping_response->_transmitted == $ping_response->_received) {
+                $result['code'] = 0;
+                $this->rtt = 'RTT: '.strstr((string) $ping_response->_round_trip['avg'], '.', true);
+            }
+            // ping loss
+            elseif ($ping_response->_received == 0) {
+                $result['code'] = 1;
+            }
+            // failed
+            else {
+                $result['code'] = 3;
             }
         }
 
         // return result for web or cmd
         if ($this->icmp_exit) {
             exit($result['code']);
-        } else {
-            return $result['code'];
         }
+
+        return $result['code'];
     }
 
     /**
@@ -456,9 +456,9 @@ class Scan extends Common_functions
         // return result for web or cmd
         if ($this->icmp_exit) {
             exit($retval);
-        } else {
-            return $retval;
         }
+
+        return $retval;
     }
 
     /**
@@ -529,9 +529,9 @@ class Scan extends Common_functions
         // return result for web or cmd
         if ($this->icmp_exit) {
             exit($retval);
-        } else {
-            return $retval;
         }
+
+        return $retval;
     }
 
     /**
@@ -547,17 +547,17 @@ class Scan extends Common_functions
             if (! file_exists('"'.preg_replace('`(?<!^) `', '^ ', escapeshellcmd($path)).'"')) {
                 if ($this->icmp_exit) {
                     exit($this->ping_exit_explain(1000));
-                } else {
-                    return $this->Result->show('danger', _($this->ping_exit_explain(1000)), true);
                 }
+
+                return $this->Result->show('danger', _($this->ping_exit_explain(1000)), true);
             }
         } else {
             if (! file_exists(escapeshellcmd($path))) {
                 if ($this->icmp_exit) {
                     exit($this->ping_exit_explain(1000));
-                } else {
-                    return $this->Result->show('danger', _($this->ping_exit_explain(1000)), true);
                 }
+
+                return $this->Result->show('danger', _($this->ping_exit_explain(1000)), true);
             }
         }
     }
@@ -772,14 +772,13 @@ class Scan extends Common_functions
         if ($type == 'discovery') {
             return is_numeric($subnet) ? $this->prepare_addresses_to_discover_subnetId($subnet, $die) : $this->prepare_addresses_to_discover_subnet($subnet);
         }
+
         // update addresses statuses
-        elseif ($type == 'update') {
+        if ($type == 'update') {
             return $this->prepare_addresses_to_update($subnet);
         }
-        // fail
-        else {
-            exit(json_encode(['status' => 1, 'error' => _('Invalid scan type provided.')]));
-        }
+
+        exit(json_encode(['status' => 1, 'error' => _('Invalid scan type provided.')]));
     }
 
     /**
@@ -799,18 +798,18 @@ class Scan extends Common_functions
         if ($subnet === false) {
             if ($die) {
                 exit(json_encode(['status' => 1, 'error' => _('Invalid subnet ID provided.')]));
-            } else {
-                return [];
             }
+
+            return [];
         }
 
         // we should support only up to 4094 hosts!
         if ($Subnets->max_hosts($subnet) > 4096 && php_sapi_name() != 'cli') {
             if ($die) {
                 exit(json_encode(['status' => 1, 'error' => _('Scanning from GUI is only available for subnets up to /20 or 4096 hosts!')]));
-            } else {
-                return [];
             }
+
+            return [];
         }
 
         // set array of addresses to scan, exclude existing!
@@ -823,9 +822,9 @@ class Scan extends Common_functions
         if (count($ip) == 0) {
             if ($die) {
                 exit(json_encode(['status' => 1, 'error' => "Didn't find any address to scan!"]));
-            } else {
-                return [];
             }
+
+            return [];
         }
 
         // return
@@ -907,9 +906,9 @@ class Scan extends Common_functions
 
             // return
             return $scan_addresses;
-        } else {
-            return [];
         }
+
+        return [];
     }
 }
 

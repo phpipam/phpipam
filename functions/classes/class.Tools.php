@@ -650,22 +650,21 @@ class Tools extends Common_functions
         if ($this->Net_IPv6->checkIPv6($address) == false) {
             // return 0
             return ['high' => 0, 'low' => 0];
-        } else {
-            // fake mask
-            if (strpos((string) $address, '/') == 0) {
-                $address .= '/128';
-            }
-
-            // parse address
-            $parsed = $this->Net_IPv6->parseAddress($address);
-
-            // result
-            $return['low'] = gmp_strval($this->transform_address($parsed['start'], 'decimal'));
-            $return['high'] = gmp_strval($this->transform_address($parsed['end'], 'decimal'));
-
-            // return result array low/high
-            return $return;
         }
+
+        // fake mask
+        if (strpos((string) $address, '/') == 0) {
+            $address .= '/128';
+        }
+
+        // parse address
+        $parsed = $this->Net_IPv6->parseAddress($address);
+        // result
+        $return['low'] = gmp_strval($this->transform_address($parsed['start'], 'decimal'));
+        $return['high'] = gmp_strval($this->transform_address($parsed['end'], 'decimal'));
+
+        // return result array low/high
+        return $return;
     }
 
     /**
@@ -1205,9 +1204,9 @@ class Tools extends Common_functions
             }
 
             return count($recipients) > 0 ? $recipients : false;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -1347,13 +1346,13 @@ class Tools extends Common_functions
         // return array
         if (isset($error)) {
             return $error;
-        } else {
-            // update check field
-            $this->update_db_verify_field();
-
-            // return empty array
-            return [];
         }
+
+        // update check field
+        $this->update_db_verify_field();
+
+        // return empty array
+        return [];
     }
 
     /**
@@ -1440,9 +1439,9 @@ class Tools extends Common_functions
         // check
         if (strpos($file, "DROP TABLE IF EXISTS `$table`;") > 0) {
             return false;
-        } else {
-            return $file;
         }
+
+        return $file;
     }
 
     /**
@@ -1540,11 +1539,11 @@ class Tools extends Common_functions
         // if false all indexes are ok, otherwise fix
         if ($missing === false) {
             return true;
-        } else {
-            foreach ($missing as $table => $index_id) {
-                foreach ($index_id as $index_name) {
-                    $this->fix_missing_index($table, $index_name);
-                }
+        }
+
+        foreach ($missing as $table => $index_id) {
+            foreach ($index_id as $index_name) {
+                $this->fix_missing_index($table, $index_name);
             }
         }
 
@@ -1812,9 +1811,9 @@ class Tools extends Common_functions
 
             // none
             return false;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -3014,9 +3013,9 @@ class Tools extends Common_functions
 
             // return
             return count($objects) > 0 ? $objects : false;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -3193,45 +3192,46 @@ class Tools extends Common_functions
             // check
             if ($device === false) {
                 return false;
-            } else {
-                $array = [
-                    'type' => 'devices',
-                    'id' => $device->id,
-                    'name' => $device->hostname,
-                    'icon' => '',
-                    'location' => is_null($device->location) || $device->location == 0 ? null : $device->location,
-                    'rack' => is_null($device->rack) || $device->rack == 0 ? null : $device->rack,
-                ];
-                // check rack location if not configured
-                if ($array['location'] == null && $array['rack'] != null) {
-                    $rack_location = $this->fetch_object('racks', 'id', $array['rack']);
-                    $array['location'] = $rack_location !== false ? $rack_location->location : null;
-                }
-
-                // result
-                return $array;
             }
+
+            $array = [
+                'type' => 'devices',
+                'id' => $device->id,
+                'name' => $device->hostname,
+                'icon' => '',
+                'location' => is_null($device->location) || $device->location == 0 ? null : $device->location,
+                'rack' => is_null($device->rack) || $device->rack == 0 ? null : $device->rack,
+            ];
+            // check rack location if not configured
+            if ($array['location'] == null && $array['rack'] != null) {
+                $rack_location = $this->fetch_object('racks', 'id', $array['rack']);
+                $array['location'] = $rack_location !== false ? $rack_location->location : null;
+            }
+
+            // result
+            return $array;
         }
+
         // check location
-        elseif (is_numeric($locationId) && $locationId != 0) {
+        if (is_numeric($locationId) && $locationId != 0) {
             // fetch location
             $location = $this->fetch_object('locations', 'id', $locationId);
             // check
             if ($location === false) {
                 return false;
-            } else {
-                return [
-                    'type' => 'locations',
-                    'id' => $location->id,
-                    'name' => $location->name,
-                    'icon' => 'fa-map',
-                    'location' => $location->id,
-                    'rack' => null,
-                ];
             }
-        } else {
-            return false;
+
+            return [
+                'type' => 'locations',
+                'id' => $location->id,
+                'name' => $location->name,
+                'icon' => 'fa-map',
+                'location' => $location->id,
+                'rack' => null,
+            ];
         }
+
+        return false;
     }
 
     /**

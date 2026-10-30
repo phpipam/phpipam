@@ -132,9 +132,9 @@ class User_controller extends Common_api_functions
                     // admins or all
                     if ($this->_params->id == 'admins') {
                         return ['code' => 200, 'data' => $this->User->fetch_multiple_objects('users', 'role', 'Administrator', 'id', true, false, '*')];
-                    } else {
-                        return ['code' => 200, 'data' => $this->User->fetch_all_objects('users', 'id', true)];
                     }
+
+                    return ['code' => 200, 'data' => $this->User->fetch_all_objects('users', 'id', true)];
                 }
             } else {
                 return ['code' => 200, 'data' => ['expires' => $this->token_expires]];
@@ -402,18 +402,18 @@ class User_controller extends Common_api_functions
         if (is_blank($this->User->user->token)) {
             return false;
         }
+
         // date not set
-        elseif (is_blank($this->User->user->token_valid_until)) {
+        if (is_blank($this->User->user->token_valid_until)) {
             return false;
         }
+
         // expired
-        elseif ($this->User->user->token_valid_until < date('Y-m-d H:is:')) {
+        if ($this->User->user->token_valid_until < date('Y-m-d H:is:')) {
             return false;
         }
-        // ok
-        else {
-            return true;
-        }
+
+        return true;
     }
 
     /**

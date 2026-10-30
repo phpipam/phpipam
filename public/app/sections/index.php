@@ -80,21 +80,21 @@ require __DIR__.'/../admin/admin-menu-config.php';
         // static?
         if ($User->user->menuType == 'Static') {
             // static menu
-            include 'menu/menu-static.php';
+            include __DIR__.'/menu/menu-static.php';
         } else {
             // dashboard, tools menu
             if (! isset($GET->page) || $GET->page == 'dashboard' || $GET->page == 'tools') {
-                include 'menu/menu-tools.php';
+                include __DIR__.'/menu/menu-tools.php';
             }
             // admin menu
             elseif ($GET->page == 'administration') {
-                include 'menu/menu-administration.php';
+                include __DIR__.'/menu/menu-administration.php';
             } else {
-                include 'menu/menu-sections.php';
+                include __DIR__.'/menu/menu-sections.php';
             }
 
             // tools and admin menu
-            include 'menu/menu-tools-admin.php';
+            include __DIR__.'/menu/menu-tools-admin.php';
         }
 ?>
     </div>   <!-- end menu div -->

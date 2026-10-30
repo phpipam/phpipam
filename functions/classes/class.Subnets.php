@@ -153,21 +153,28 @@ class Subnets extends Common_functions
     {
         // strip tags
         $values = $this->strip_input_tags($values);
-
         // execute based on action
         if ($action == 'add') {
             return $this->subnet_add($values);
-        } elseif ($action == 'edit') {
-            return $this->subnet_edit($values, $mail_changelog);
-        } elseif ($action == 'delete') {
-            return $this->subnet_delete($values['id']);
-        } elseif ($action == 'truncate') {
-            return $this->subnet_truncate($values['id']);
-        } elseif ($action == 'resize') {
-            return $this->subnet_resize($values['id'], $values['subnet'], $values['mask']);
-        } else {
-            return $this->Result->show('danger', _('Invalid action'), true);
         }
+
+        if ($action == 'edit') {
+            return $this->subnet_edit($values, $mail_changelog);
+        }
+
+        if ($action == 'delete') {
+            return $this->subnet_delete($values['id']);
+        }
+
+        if ($action == 'truncate') {
+            return $this->subnet_truncate($values['id']);
+        }
+
+        if ($action == 'resize') {
+            return $this->subnet_resize($values['id'], $values['subnet'], $values['mask']);
+        }
+
+        return $this->Result->show('danger', _('Invalid action'), true);
     }
 
     /**
@@ -983,25 +990,25 @@ class Subnets extends Common_functions
     {
         if (! is_numeric($subnetId)) {
             return false;
-        } else {
-            try {
-                $subnets = $this->Database->getObjectsQuery('subnets', 'select * from subnets where `linked_subnet` = ?', [$subnetId]);
-            } catch (Exception $e) {
-                $this->Result->show('danger', _('Error: ').$e->getMessage());
-
-                return false;
-            }
-
-            // check
-            if (is_array($subnets)) {
-                foreach ($subnets as $s) {
-                    $this->cache_write('subnets', 'id', $s);
-                }
-            }
-
-            // result
-            return (is_array($subnets) && $subnets != []) ? $subnets : false;
         }
+
+        try {
+            $subnets = $this->Database->getObjectsQuery('subnets', 'select * from subnets where `linked_subnet` = ?', [$subnetId]);
+        } catch (Exception $e) {
+            $this->Result->show('danger', _('Error: ').$e->getMessage());
+
+            return false;
+        }
+
+        // check
+        if (is_array($subnets)) {
+            foreach ($subnets as $s) {
+                $this->cache_write('subnets', 'id', $s);
+            }
+        }
+
+        // result
+        return (is_array($subnets) && $subnets != []) ? $subnets : false;
     }
 
     /**
@@ -1229,14 +1236,14 @@ class Subnets extends Common_functions
         // NULL subnetId cannot have slaves
         if (is_null($subnetId)) {
             return false;
-        } else {
-            $cnt = $this->count_database_objects('subnets', 'masterSubnetId', $subnetId);
-            if ($cnt == 0) {
-                return false;
-            } else {
-                return true;
-            }
         }
+
+        $cnt = $this->count_database_objects('subnets', 'masterSubnetId', $subnetId);
+        if ($cnt == 0) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -1768,9 +1775,9 @@ class Subnets extends Common_functions
         // return boundaries
         if ($ipversion == 'IPv4') {
             return $this->get_IPv4_network_boundaries($address, $netmask);
-        } else {
-            return $this->get_IPv6_network_boundaries($address, $netmask);
         }
+
+        return $this->get_IPv6_network_boundaries($address, $netmask);
     }
 
     /**
@@ -2003,14 +2010,15 @@ class Subnets extends Common_functions
         }
 
         $range_size = gmp_strval(gmp_add(gmp_sub($address2, $address1), 1));
-
         if ($range_size <= 0) {
             return false;
-        } elseif ($range_size == 1) {
-            return ['ip' => $this->transform_to_dotted($address1), 'hosts' => '1'];
-        } else {
-            return ['ip' => $this->transform_to_dotted($address1).' - '.$this->transform_to_dotted($address2), 'hosts' => $range_size];
         }
+
+        if ($range_size == 1) {
+            return ['ip' => $this->transform_to_dotted($address1), 'hosts' => '1'];
+        }
+
+        return ['ip' => $this->transform_to_dotted($address1).' - '.$this->transform_to_dotted($address2), 'hosts' => $range_size];
     }
 
     /**
@@ -2197,19 +2205,22 @@ class Subnets extends Common_functions
         if (($net = $this->Net_IPv4->parseAddress($cidr)) && ! PEAR::isError($net)) {
             if (! $this->Net_IPv4->validateIP($net->ip)) {
                 return _('Invalid IP address!');
-            }                                                        // validate IP
-            elseif (($net->network != $net->ip) && ($issubnet)) {
-                return _('IP address cannot be subnet! (Consider using').' '.$net->network.')';
-            }       // network must be same as provided IP address
-            elseif (! $this->Net_IPv4->validateNetmask($net->netmask)) {
-                return _('Invalid netmask').' '.$net->netmask;
-            }                                        // validate netmask
-            else {
-                return true;
             }
-        } else {
-            return _('Invalid CIDR format!');
+
+            // validate IP
+            if (($net->network != $net->ip) && ($issubnet)) {
+                return _('IP address cannot be subnet! (Consider using').' '.$net->network.')';
+            }
+
+            // network must be same as provided IP address
+            if (! $this->Net_IPv4->validateNetmask($net->netmask)) {
+                return _('Invalid netmask').' '.$net->netmask;
+            }
+
+            return true;
         }
+
+        return _('Invalid CIDR format!');
     }
 
     /**
@@ -2228,19 +2239,21 @@ class Subnets extends Common_functions
         // validate
         if (! $this->Net_IPv6->checkIPv6($cidr)) {
             return _('Invalid IPv6 address!');
-        } else {
-            $subnet = $this->Net_IPv6->getNetmask($cidr);           // validate subnet
-            $subnet = $this->Net_IPv6->compress($subnet);           // get subnet part
-            $subnetParse = $this->cidr_network_and_mask($cidr);
-            // Compress entered IPv4/IPv6 address
-            $subnetParse[0] = inet_ntop(inet_pton($subnetParse[0]));
-            // validate that subnet is subnet
-            if (($subnetParse[0] != $subnet) && ($issubnet)) {
-                return _('IP address cannot be subnet! (Consider using').' '.$subnet.'/'.$subnetParse[1].')';
-            } else {
-                return true;
-            }
         }
+
+        $subnet = $this->Net_IPv6->getNetmask($cidr);
+        // validate subnet
+        $subnet = $this->Net_IPv6->compress($subnet);
+        // get subnet part
+        $subnetParse = $this->cidr_network_and_mask($cidr);
+        // Compress entered IPv4/IPv6 address
+        $subnetParse[0] = inet_ntop(inet_pton($subnetParse[0]));
+        // validate that subnet is subnet
+        if (($subnetParse[0] != $subnet) && ($issubnet)) {
+            return _('IP address cannot be subnet! (Consider using').' '.$subnet.'/'.$subnetParse[1].')';
+        }
+
+        return true;
     }
 
     /**
@@ -2575,7 +2588,6 @@ class Subnets extends Common_functions
         $c2_network = $this->decimal_network_address($c2_decimal, $c2_mask);
         $c1_broadcast = $this->decimal_broadcast_address($c1_decimal, $c1_mask);
         $c2_broadcast = $this->decimal_broadcast_address($c2_decimal, $c2_mask);
-
         if ($c1_mask >= $c2_mask) {
             // cidr1 is smaller than (or=) cidr2. Does cidr1 overlap cidr2?
             if (gmp_cmp($c1_broadcast, $c2_network) < 0) {
@@ -2587,21 +2599,23 @@ class Subnets extends Common_functions
             }
 
             return true;
-        } elseif ($check_if_nested === true) {
+        }
+
+        if ($check_if_nested === true) {
             // cidr1 doesn't fit inside cidr2.
             return false;
-        } else {
-            // cidr1 is bigger than cidr2. Does cidr2 overlap cidr1?
-            if (gmp_cmp($c2_broadcast, $c1_network) < 0) {
-                return false; // cidr2 ends before cidr1 starts
-            }
-
-            if (gmp_cmp($c2_network, $c1_broadcast) > 0) {
-                return false; // cidr2 starts after cidr1 ends
-            }
-
-            return true;
         }
+
+        // cidr1 is bigger than cidr2. Does cidr2 overlap cidr1?
+        if (gmp_cmp($c2_broadcast, $c1_network) < 0) {
+            return false; // cidr2 ends before cidr1 starts
+        }
+
+        if (gmp_cmp($c2_network, $c1_broadcast) > 0) {
+            return false; // cidr2 starts after cidr1 ends
+        }
+
+        return true;
     }
 
     /**
@@ -2630,10 +2644,10 @@ class Subnets extends Common_functions
         // if child same as parent return error
         if ($cidr == $this->transform_address($master_details->subnet).'/'.$master_details->mask) {
             return false;
-        } else {
-            // check
-            return $this->is_subnet_inside_subnet($cidr, $this->transform_to_dotted($master_details->subnet).'/'.$master_details->mask);
         }
+
+        // check
+        return $this->is_subnet_inside_subnet($cidr, $this->transform_to_dotted($master_details->subnet).'/'.$master_details->mask);
     }
 
     /**
@@ -3050,13 +3064,17 @@ class Subnets extends Common_functions
         // create
         if (count($res) > 0 && count($res2) > 0) {
             return $res2 + $res;
-        } elseif (count($res) > 0) {
-            return $res;
-        } elseif (count($res2) > 0) {
-            return $res2;
-        } else {
-            return false;
         }
+
+        if (count($res) > 0) {
+            return $res;
+        }
+
+        if (count($res2) > 0) {
+            return $res2;
+        }
+
+        return false;
     }
 
     /**
@@ -3097,9 +3115,9 @@ class Subnets extends Common_functions
 
             // return result
             return $res2;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -3248,7 +3266,9 @@ class Subnets extends Common_functions
                 // overlap requirement
                 if ($unique_required == 'vlan' && $vlan_details->domainId == $line->domainId) {
                     return true;
-                } elseif ($unique_required == 'section' && $sectionId == $line->sectionId) {
+                }
+
+                if ($unique_required == 'section' && $sectionId == $line->sectionId) {
                     return true;
                 }
             }
@@ -3281,20 +3301,23 @@ class Subnets extends Common_functions
         if (is_blank($mac)) {
             return true;
         }
+
         // validate mac
-        elseif (preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', $mac) != 1) {
+        if (preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', $mac) != 1) {
             return _('Invalid MAC address');
         }
+
         // multicast check
-        elseif (! ($mac_delimited[0] == '33' && $mac_delimited[1] == '33') && ! ($mac_delimited[0] == '01' && $mac_delimited[1] == '00' && $mac_delimited[2] == '5e')) {
+        if (! ($mac_delimited[0] == '33' && $mac_delimited[1] == '33') && ! ($mac_delimited[0] == '01' && $mac_delimited[1] == '00' && $mac_delimited[2] == '5e')) {
             return _('Not multicast MAC address');
         }
+
         // check if it already exists
-        elseif ($this->multicast_address_exists($this->reformat_mac_address($mac, 4), $sectionId, $vlanId, $unique_required, $address_id)) {
+        if ($this->multicast_address_exists($this->reformat_mac_address($mac, 4), $sectionId, $vlanId, $unique_required, $address_id)) {
             return _('MAC address already exists');
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**
@@ -3933,11 +3956,13 @@ class Subnets extends Common_functions
         // ripe or arin?
         if (in_array($subnet_check, $this->ripe)) {
             return $this->query_ripe($subnet);
-        } elseif (in_array($subnet_check, $this->arin)) {
-            return $this->query_arin($subnet);
-        } else {
-            return ['result' => 'error', 'error' => "$subnet "._('Not RIPE or ARIN subnet')];
         }
+
+        if (in_array($subnet_check, $this->arin)) {
+            return $this->query_arin($subnet);
+        }
+
+        return ['result' => 'error', 'error' => "$subnet "._('Not RIPE or ARIN subnet')];
     }
 
     /**
@@ -3963,18 +3988,18 @@ class Subnets extends Common_functions
         if ($ripe_result['result_code'] !== 200) {
             // return array
             return ['result' => 'error', 'error' => _('Error connecting to RIPE REST API').' : '.$ripe_result['error_msg']];
-        } else {
-            $out = [];
-            // loop
-            if (isset($ripe_result['result']->objects->object[0]->attributes->attribute)) {
-                foreach ($ripe_result['result']->objects->object[0]->attributes->attribute as $v) {
-                    $out[$v->name] = $v->value;
-                }
-            }
-
-            // return array
-            return ['result' => 'success', 'data' => array_filter($out)];
         }
+
+        $out = [];
+        // loop
+        if (isset($ripe_result['result']->objects->object[0]->attributes->attribute)) {
+            foreach ($ripe_result['result']->objects->object[0]->attributes->attribute as $v) {
+                $out[$v->name] = $v->value;
+            }
+        }
+
+        // return array
+        return ['result' => 'success', 'data' => array_filter($out)];
     }
 
     /**
@@ -4001,34 +4026,34 @@ class Subnets extends Common_functions
         if ($arin_result['result_code'] !== 200) {
             // return array
             return ['result' => 'error', 'error' => _('Error connecting to ARIN REST API').' : '.$arin_result['error_msg']];
-        } else {
-            $out = [];
-            // loop
-            if (isset($arin_result['result']->nets->net)) {
-                foreach ($arin_result['result']->nets->net as $k => $v) {
-                    // netblocks ?
-                    if ($k == 'netBlocks') {
-                        foreach ($v->netBlock as $k1 => $v1) {
-                            $out[$k1] = $v1->{'$'};
-                        }
-                    } else {
-                        $out[$k] = $v->{'$'};
+        }
+
+        $out = [];
+        // loop
+        if (isset($arin_result['result']->nets->net)) {
+            foreach ($arin_result['result']->nets->net as $k => $v) {
+                // netblocks ?
+                if ($k == 'netBlocks') {
+                    foreach ($v->netBlock as $k1 => $v1) {
+                        $out[$k1] = $v1->{'$'};
                     }
+                } else {
+                    $out[$k] = $v->{'$'};
                 }
             }
-
-            // do some formats
-            if (array_key_exists('cidrLength', $out) && array_key_exists('startAddress', $out)) {
-                $out = array_merge(['CIDR' => $out['startAddress'].'/'.$out['cidrLength']], $out);
-                $out = array_merge(['NetRange' => $out['startAddress'].' - '.$out['endAddress']], $out);
-                unset($out['startAddress'], $out['endAddress'], $out['cidrLength']);
-            }
-
-            unset($out['orgRef'], $out['parentNetRef'], $out['version'], $out['registrationDate']);
-
-            // return array
-            return ['result' => 'success', 'data' => array_filter($out)];
         }
+
+        // do some formats
+        if (array_key_exists('cidrLength', $out) && array_key_exists('startAddress', $out)) {
+            $out = array_merge(['CIDR' => $out['startAddress'].'/'.$out['cidrLength']], $out);
+            $out = array_merge(['NetRange' => $out['startAddress'].' - '.$out['endAddress']], $out);
+            unset($out['startAddress'], $out['endAddress'], $out['cidrLength']);
+        }
+
+        unset($out['orgRef'], $out['parentNetRef'], $out['version'], $out['registrationDate']);
+
+        // return array
+        return ['result' => 'success', 'data' => array_filter($out)];
     }
 
     /**
@@ -4081,35 +4106,34 @@ class Subnets extends Common_functions
             $this->Result->show('danger', "$errstr ($errno)", false);
 
             return false;
-        } else {
-            // fetch result
-            fwrite($ripe_connection, '-i origin as'.$as."\r\n");
-            // save result to var out
-            $out = '';
-            while (! feof($ripe_connection)) {
-                $out .= fgets($ripe_connection);
-            }
-
-            // parse it
-            $out = explode("\n", $out);
-
-            // we only want lines starting with route or route6
-            $subnet = [];
-            foreach ($out as $line) {
-                if (substr($line, 0, 6) == 'route:' || substr($line, 0, 7) == 'route6:') {
-                    // replace route6 with route
-                    $line = str_replace('route6:', 'route:', $line);
-                    // only take IP address
-                    $line = explode('route:', $line);
-                    $line = trim($line[1]);
-                    // set result
-                    $subnet[] = $line;
-                }
-            }
-
-            // return
-            return $subnet;
         }
+
+        // fetch result
+        fwrite($ripe_connection, '-i origin as'.$as."\r\n");
+        // save result to var out
+        $out = '';
+        while (! feof($ripe_connection)) {
+            $out .= fgets($ripe_connection);
+        }
+
+        // parse it
+        $out = explode("\n", $out);
+        // we only want lines starting with route or route6
+        $subnet = [];
+        foreach ($out as $line) {
+            if (substr($line, 0, 6) == 'route:' || substr($line, 0, 7) == 'route6:') {
+                // replace route6 with route
+                $line = str_replace('route6:', 'route:', $line);
+                // only take IP address
+                $line = explode('route:', $line);
+                $line = trim($line[1]);
+                // set result
+                $subnet[] = $line;
+            }
+        }
+
+        // return
+        return $subnet;
     }
 
     /**

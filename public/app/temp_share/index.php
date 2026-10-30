@@ -131,9 +131,9 @@ $max_width = (@$temp_objects[$GET->section]->type == 'ipaddresses' || isset($GET
                     }
                     unset($address);
 
-                    include 'address.php';
+                    include __DIR__.'/address.php';
                 } else {
-                    include 'subnet.php';
+                    include __DIR__.'/subnet.php';
                 }
             } else {
                 // set object
@@ -144,7 +144,7 @@ $max_width = (@$temp_objects[$GET->section]->type == 'ipaddresses' || isset($GET
                 // fetch subnet
                 $subnet = (array) $Subnets->fetch_subnet(null, $address['subnetId']);
 
-                include 'address.php';
+                include __DIR__.'/address.php';
             }
         }
 

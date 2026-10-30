@@ -232,18 +232,19 @@ class PingThread
     public function join($wait = true)
     {
         $pid = pcntl_waitpid($this->pid, $status, $wait ? 0 : WNOHANG);
-
         if ($pid === -1) {
             // Error
             return -1;
-        } elseif ($pid === 0) {
+        }
+
+        if ($pid === 0) {
             // child is still alive
             return 0;
-        } else {
-            $this->exitCode = pcntl_wexitstatus($status);
-
-            return $pid;
         }
+
+        $this->exitCode = pcntl_wexitstatus($status);
+
+        return $pid;
     }
 
     /**
@@ -305,10 +306,13 @@ class PingThread
     {
         $results = null;
         $pid = pcntl_fork();
-
-        if ($pid == -1) { // error forking, no child is created
+        if ($pid == -1) {
+            // error forking, no child is created
             throw new Exception($this->getError(PingThread::COULD_NOT_FORK), PingThread::COULD_NOT_FORK);
-        } elseif ($pid) {// parent
+        }
+
+        if ($pid) {
+            // parent
             $this->pid = $pid;
         } else { // child
             $this->pid = posix_getpid(); // pid (child)
@@ -367,11 +371,7 @@ class PingThread
      */
     public function getError($_code)
     {
-        if (isset($this->errors[$_code])) {
-            return $this->errors[$_code];
-        } else {
-            return 'No such error code '.$_code.'! Quit inventing errors!!!';
-        }
+        return $this->errors[$_code] ?? 'No such error code '.$_code.'! Quit inventing errors!!!';
     }
 
     /**

@@ -35,28 +35,31 @@ $filename = end($filename);
 
 /* list of permitted file extensions */
 $allowed = ['png'];
-
 /* no errors */
 if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
     // wrong extension
     if (! in_array(strtolower((string) $filename), $allowed)) {
         print '{"status":"error", "error":"Invalid document type - allowed '.implode(';', $allowed).'"}';
         exit;
-    } elseif ($_FILES['file']['size'] > 1024000) {
+    }
+
+    if ($_FILES['file']['size'] > 1024000) {
         print '{"status":"error","error":"Sorry, file limit is 1Mb"}';
         exit;
     }
+
     // if cannot move
-    elseif (! move_uploaded_file($_FILES['file']['tmp_name'], str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'].BASE.'css/images/logo/logo.png'))) {
+    if (! move_uploaded_file($_FILES['file']['tmp_name'], str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'].BASE.'css/images/logo/logo.png'))) {
         print '{"status":"error", "error":"Cannot move file to upload dir. You can upload file manually to '.str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'].BASE.'css/images/logo/logo.png').'"}';
         exit;
-    } else {
-        print '{"status":"success"}';
-        exit;
     }
+
+    print '{"status":"success"}';
+    exit;
 }
+
 // error
-elseif (isset($_FILES['file']['error'])) {
+if (isset($_FILES['file']['error'])) {
     print '{"status":"error","error":"'.$_FILES['file']['error'].'"}';
     exit;
 }

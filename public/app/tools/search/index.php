@@ -88,9 +88,9 @@ if (isset($_COOKIE['search_parameters'])) {
 <?php
 /* include results if IP address is posted */
 if ($searchTerm) {
-    include 'search-results.php';
+    include __DIR__.'/search-results.php';
 } else {
-    include 'search-tips.php';
+    include __DIR__.'/search-tips.php';
 }
 ?>
 </div>

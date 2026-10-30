@@ -27,7 +27,7 @@ $User->check_user_session();
     // set popup
     $popup = true;
 // table
-include 'print-table.php';
+include __DIR__.'/print-table.php';
 ?>
 </div>
 

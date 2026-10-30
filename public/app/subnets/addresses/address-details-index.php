@@ -130,42 +130,42 @@ if (count($address) > 1) {
 
     // address details
     if (! isset($GET->tab)) {
-        include 'address-details/address-details.php';
+        include __DIR__.'/address-details/address-details.php';
     }
 
     // address details
     if ($User->is_admin(false)) {
         if ($GET->tab == 'permissions') {
-            include 'address-details/address-details-permissions.php';
+            include __DIR__.'/address-details/address-details-permissions.php';
         }
     }
 
     // nat
     if ($User->settings->enableNAT == 1) {
         if ($GET->tab == 'nat') {
-            include 'address-details/address-details-nat.php';
+            include __DIR__.'/address-details/address-details-nat.php';
         }
     }
 
     // Linked addresses
     if ($GET->tab == 'linked') {
-        include 'address-details/address-details-linked.php';
+        include __DIR__.'/address-details/address-details-linked.php';
     }
 
     // Multicast addresses
     if ($mcast) {
         if ($GET->tab == 'multicast') {
-            include 'address-details/address-details-multicast.php';
+            include __DIR__.'/address-details/address-details-multicast.php';
         }
     }
 
     if ($GET->tab == 'location') {
-        include 'address-details/address-details-location.php';
+        include __DIR__.'/address-details/address-details-location.php';
     }
 
     // changelog
     if ($GET->tab == 'changelog') {
-        include 'address-details/address-changelog.php';
+        include __DIR__.'/address-details/address-changelog.php';
     }
 }
 // not exisitng

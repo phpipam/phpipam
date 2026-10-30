@@ -52,10 +52,6 @@ class Config
             self::read_config();
         }
 
-        if (isset(self::$config->{$name})) {
-            return self::$config->{$name};
-        } else {
-            return $default_value;
-        }
+        return self::$config->{$name} ?? $default_value;
     }
 }

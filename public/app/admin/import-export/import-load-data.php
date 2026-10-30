@@ -38,7 +38,7 @@ if (isset($GET->filetype)) {
 }
 
 // Load colors and icons
-include 'import-constants.php';
+include __DIR__.'/import-constants.php';
 
 $hrow = '<td></td>';
 $hiddenfields = '';
