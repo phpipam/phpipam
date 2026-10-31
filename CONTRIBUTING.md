@@ -12,9 +12,14 @@ We actively welcome your pull requests.
 3. Avoid unnessary changes to white-space and formatting to make reviews easier.
 4. Document the feature or bugfix in the pull request description.
 5. Test compatibility with all PHP versions supported by the `develop` branch listed in README.md. \
-Example: Test for PHP 8.2 compatibility
+Example: Test for PHP 8.2 compatibility and format code
 ```bash
+# Check php 8.2 compatibility
 ./vendor/bin/phpcs -p functions public --standard=PHPCompatibility --exclude=PHPCompatibility.Attributes.NewAttributes --colors --runtime-set testVersion 8.2
+
+# Format code before submitting PR
+./vendor/bin/rector
+./vendor/bin/pint -p
 ```
 
 Pull requests will be merged into the `develop` branch and backported to the current `stable` point-release branch where appropiate.

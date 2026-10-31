@@ -358,9 +358,9 @@ if (isset($error)) { ?>
             <td colspan="2">
                 <?php
             if ($User->settings->rackImageFormat == 'svg') {
-                print '<object data="'.$Tools->create_rack_link($rack->id).'" style="width:auto;height:auto;"></object>';
+                print '<object data="'.$Tools->create_rack_link($rack->id, null, false).'" style="width:auto;height:auto;"></object>';
             } else {
-                print '<img src="'.$Tools->create_rack_link($rack->id).'" style="width:200px;">';
+                print '<img src="'.$Tools->create_rack_link($rack->id, null, false).'" style="width:200px;">';
             }
             if ($rack->hasBack != '0') {
                 if ($User->settings->rackImageFormat == 'svg') {
@@ -400,7 +400,7 @@ if (isset($error)) { ?>
     <?php if (! ($User->settings->enableLocations == 1 && ! is_blank($rack->location) && $rack->location != 0)) { ?>
     <div class="col-xs-12 col-md-6">
         <?php
-        if ($rack->hasBack != '0') {
+        if ($rack->hasBack == 1) {
             if ($User->settings->rackImageFormat == 'svg') {
                 print '<object data="'.$Tools->create_rack_link($rack->id, null, true).'" style="width:auto;height:auto;margin-left:5px;float:right;"></object>';
             } else {
@@ -408,9 +408,9 @@ if (isset($error)) { ?>
             }
         }
         if ($User->settings->rackImageFormat == 'svg') {
-            print '<object data="'.$Tools->create_rack_link($rack->id).'" style="width:auto;height:auto;float:right;"></object>';
+            print '<object data="'.$Tools->create_rack_link($rack->id, null, false).'" style="width:auto;height:auto;float:right;"></object>';
         } else {
-            print '<img src="'.$Tools->create_rack_link($rack->id).'" style="width:200px;float:right;">';
+            print '<img src="'.$Tools->create_rack_link($rack->id, null, false).'" style="width:200px;float:right;">';
         }
         ?>
     </div>

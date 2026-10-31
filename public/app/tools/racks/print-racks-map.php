@@ -78,13 +78,13 @@ if ($User->settings->enableRACK != '1') {
                     print "<div style='height:auto;margin-bottom:30px;'>";
                     foreach ($all_racks as $r) {
                         if ($User->settings->rackImageFormat == 'svg') {
-                            print "<object data='".$Tools->create_rack_link($r->id)."'' style='width:auto;height:auto;margin-right:5px;vertical-align:bottom;'></object>";
+                            print "<object data='".$Tools->create_rack_link($r->id, null, false)."'' style='width:auto;height:auto;margin-right:5px;vertical-align:bottom;'></object>";
                             // back side?
                             if ($r->hasBack != '0') {
                                 print "<object data='".$Tools->create_rack_link($r->id, null, true)."'' style='width:auto;height:auto;margin-left:-5px;margin-right:5px;vertical-align:bottom;'></object>";
                             }
                         } else {
-                            print "<img src='".$Tools->create_rack_link($r->id)."'' style='width:180px;margin-right:5px;vertical-align:bottom'>";
+                            print "<img src='".$Tools->create_rack_link($r->id, null, false)."'' style='width:180px;margin-right:5px;vertical-align:bottom'>";
                             // back side?
                             if ($r->hasBack != '0') {
                                 print "<img src='".$Tools->create_rack_link($r->id, null, true)."'' style='width:180px;margin-left:-5px;margin-right:5px;vertical-align:bottom'>";

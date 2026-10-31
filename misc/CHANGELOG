@@ -39,6 +39,10 @@
     + Favourites, missing permission and CSRF checks;
     + Passkey enrolment can bypass TOTP;
 
+    Translations:
+    ----------------------------
+    + Updated Ukrainian translation (#4669);
+
 == 1.8.0
 
     Bugfixes:

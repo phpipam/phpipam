@@ -59,8 +59,8 @@ print '</tr>';
 
 // subnets
 $m = 0;  // counter
-if (is_array($fsubnets)) {
-    foreach ($fsubnets as $f) {
+if (is_array($favourite_subnets)) {
+    foreach ($favourite_subnets as $f) {
         // must be either subnet or folder
         if (count($f) > 0) {
             // stop processing if we've hit the max
