@@ -62,7 +62,7 @@ class Net_DNS2_RR_TLSA extends Net_DNS2_RR
     protected function rrToString()
     {
         return $this->cert_usage . ' ' . $this->selector . ' ' . 
-            $this->matching_type . ' ' . base64_encode($this->certificate);
+            $this->matching_type . ' ' . base64_encode((string) $this->certificate);
     }
 
     /**
@@ -100,7 +100,7 @@ class Net_DNS2_RR_TLSA extends Net_DNS2_RR
             //
             // unpack the format, keytag and algorithm
             //
-            $x = unpack('Cusage/Cselector/Ctype', $this->rdata);
+            $x = unpack('Cusage/Cselector/Ctype', (string) $this->rdata);
 
             $this->cert_usage       = $x['usage'];
             $this->selector         = $x['selector'];
@@ -109,7 +109,7 @@ class Net_DNS2_RR_TLSA extends Net_DNS2_RR
             //
             // copy the certificate
             //
-            $this->certificate  = substr($this->rdata, 3, $this->rdlength - 3);
+            $this->certificate  = substr((string) $this->rdata, 3, $this->rdlength - 3);
 
             return true;
         }
@@ -130,7 +130,7 @@ class Net_DNS2_RR_TLSA extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->certificate) > 0) {
+        if (strlen((string) $this->certificate) > 0) {
 
             $data = pack(
                 'CCC', $this->cert_usage, $this->selector, $this->matching_type

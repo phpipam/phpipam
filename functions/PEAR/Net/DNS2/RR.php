@@ -228,7 +228,7 @@ abstract class Net_DNS2_RR
 
         foreach ($chunks as $r) {
 
-            $r = trim($r);
+            $r = trim((string) $r);
             if (strlen($r) == 0) {
                 continue;
             }
@@ -303,7 +303,7 @@ abstract class Net_DNS2_RR
 
         $this->ttl      = $rr['ttl'];
         $this->rdlength = $rr['rdlength'];
-        $this->rdata    = substr($packet->rdata, $packet->offset, $rr['rdlength']);
+        $this->rdata    = substr((string) $packet->rdata, $packet->offset, $rr['rdlength']);
 
         return $this->rrSet($packet);
     }
@@ -374,7 +374,7 @@ abstract class Net_DNS2_RR
         //
         // add the RR
         //
-        $data .= pack('n', strlen($rdata)) . $rdata;
+        $data .= pack('n', strlen((string) $rdata)) . $rdata;
 
         return $data;
     }
@@ -546,12 +546,12 @@ abstract class Net_DNS2_RR
 
             case isset(Net_DNS2_Lookups::$classes_by_name[strtoupper($value)]):
 
-                $class = strtoupper(array_shift($values));
+                $class = strtoupper((string) array_shift($values));
                 break;
 
             case isset(Net_DNS2_Lookups::$rr_types_by_name[strtoupper($value)]):
 
-                $type = strtoupper(array_shift($values));
+                $type = strtoupper((string) array_shift($values));
                 break 2;
                 break;
 

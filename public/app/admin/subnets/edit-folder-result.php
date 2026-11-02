@@ -1,0 +1,183 @@
+<?php
+
+/**
+ * Function to add / edit / delete section
+ ********************************************/
+
+/* functions */
+require_once __DIR__.'/../../../../functions/functions.php';
+
+// initialize user object
+$Database = new Database_PDO;
+$User = new User($Database);
+$Admin = new Admin($Database, false);
+$Subnets = new Subnets($Database);
+$Sections = new Sections($Database);
+$Addresses = new Addresses($Database);
+$Tools = new Tools($Database);
+$Result = new Result;
+
+// verify that user is logged in
+$User->check_user_session();
+// check maintaneance mode
+$User->check_maintaneance_mode();
+
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
+
+// ID must be numeric
+if ($POST->action == 'add') {
+    if (! is_numeric($POST->sectionId)) {
+        $Result->show('danger', _('Invalid ID'), true);
+    }
+} else {
+    if (! is_numeric($POST->subnetId)) {
+        $Result->show('danger', _('Invalid ID'), true);
+    }
+}
+
+// verify that user has permissions to add subnet
+if ($POST->action == 'add') {
+    if ($Sections->check_permission($User->user, $POST->sectionId) != 3) {
+        $Result->show('danger', _('You do not have permissions to add new subnet in this section').'!', true);
+    }
+}
+// otherwise check subnet permission
+else {
+    if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
+        $Result->show('danger', _('You do not have permissions to add edit/delete this subnet').'!', true);
+    }
+}
+
+// we need old values for mailing
+$subnet_old_details = [];
+if ($POST->action == 'edit' || $POST->action == 'delete') {
+    $subnet_old_details = (array) $Subnets->fetch_subnet(null, $POST->subnetId);
+}
+
+// get section details
+$section = (array) $Sections->fetch_section(null, $POST->sectionId);
+
+// remove subnet-specific fields
+unset($POST->subnet, $POST->allowRequests, $POST->showName, $POST->pingSubnet, $POST->discoverSubnet);
+unset($subnet_old_details['subnet'], $subnet_old_details['allowRequests'], $subnet_old_details['showName'], $subnet_old_details['pingSubnet'], $subnet_old_details['discoverSubnet']);
+
+// Set permissions if adding new subnet
+if ($POST->action == 'add') {
+    // root
+    if ($POST->masterSubnetId == 0) {
+        $POST->permissions = $section['permissions'];
+    }
+    // nested - inherit parent permissions
+    else {
+        // get parent
+        $parent = $Subnets->fetch_subnet(null, $POST->masterSubnetId);
+        $POST->permissions = $parent->permissions;
+    }
+} elseif ($POST->action == 'edit') {
+    /* for nesting - MasterId cannot be the same as subnetId! */
+    if ($POST->masterSubnetId == $POST->subnetId) {
+        $Result->show('danger', _('Folder cannot nest behind itself!'), true);
+    }
+}
+
+// check for name length - 2 is minimum!
+if (strlen((string) $POST->description) < 2 && $POST->action != 'delete') {
+    $Result->show('danger', _('Folder name must have at least 2 characters').'!', true);
+}
+
+// delete and not yet confirmed
+if ($POST->action == 'delete' && ! isset($POST->deleteconfirm)) {
+    // for ajax to prevent reload
+    print "<div style='display:none'>alert alert-danger</div>";
+    // result
+    print "<div class='alert alert-warning'>";
+
+    // print what will be deleted
+    // fetch all slave subnets
+    $Subnets->fetch_subnet_slaves_recursive($POST->subnetId);
+    $subcnt = count($Subnets->slaves);
+    foreach ($Subnets->slaves as $s) {
+        $slave_array[$s] = $s;
+    }
+
+    $ipcnt = $Addresses->count_addresses_in_multiple_subnets($slave_array);
+
+    print '<strong>'._('Warning').'</strong>: '._('I will delete').':<ul>';
+    print "	<li>$subcnt "._('subnets').'</li>';
+    if ($ipcnt > 0) {
+        print "	<li>$ipcnt "._('IP addresses').'</li>';
+    }
+
+    print '</ul>';
+
+    print "<hr><div style='text-align:right'>";
+    print _('Are you sure you want to delete above items?').' ';
+    print "<div class='btn-group'>";
+    print "	<a class='btn btn-sm btn-danger editFolderSubmitDelete' id='editFolderSubmitDelete' data-subnetId='".escape_input($POST->subnetId)."'>"._('Confirm').'</a>';
+    print '</div>';
+    print '</div>';
+    print '</div>';
+}
+// execute
+else {
+    // create array of default update values
+    $values = [
+        'id' => $POST->subnetId,
+        'isFolder' => 1,
+        'masterSubnetId' => $POST->masterSubnetId,
+        'description' => $POST->description,
+    ];
+    // for new subnets we add permissions
+    if ($POST->action == 'add') {
+        $values['permissions'] = $POST->permissions;
+        $values['sectionId'] = $POST->sectionId;
+    } else {
+        // if section change
+        if ($POST->sectionId != $POST->sectionIdNew) {
+            $values['sectionId'] = $POST->sectionIdNew;
+        }
+    }
+
+    // fetch custom fields
+    $update = $Tools->update_POST_custom_fields('subnets', $POST->action, $POST);
+    $values = array_merge($values, $update);
+
+    // execute
+    if (! $Subnets->modify_subnet($POST->action, $values)) {
+        $Result->show('danger', _('Error editing folder'), true);
+    } else {
+        // update also all slave subnets!
+        if (isset($values['sectionId']) && $POST->action == 'edit') {
+            $Subnets->reset_subnet_slaves_recursive();
+            $Subnets->fetch_subnet_slaves_recursive($POST->subnetId);
+            $Subnets->remove_subnet_slaves_master($POST->subnetId);
+
+            if (is_array($Subnets->slaves)) {
+                foreach ($Subnets->slaves as $slaveId) {
+                    $Admin->object_modify('subnets', 'edit', 'id', ['id' => $slaveId, 'sectionId' => $values['sectionId']]);
+                }
+            }
+        }
+        // delete
+        elseif ($POST->action == 'delete') {
+            $Subnets->reset_subnet_slaves_recursive();
+            $Subnets->fetch_subnet_slaves_recursive($POST->subnetId);
+            $Subnets->remove_subnet_slaves_master($POST->subnetId);
+
+            if (is_array($Subnets->slaves)) {
+                foreach ($Subnets->slaves as $slaveId) {
+                    $Admin->object_modify('subnets', 'delete', 'id', ['id' => $slaveId]);
+                }
+            }
+        }
+
+        // edit success
+        if ($POST->action == 'delete') {
+            $Result->show('success', _('Folder, IP addresses and all belonging subnets deleted successfully').'!', false);
+        } else {
+            $Result->show('success', _('Folder').' '.$User->get_post_action().' '._('successful').'!', true);
+        }
+    }
+}

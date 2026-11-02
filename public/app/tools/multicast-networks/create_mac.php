@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * creates mac address from provided IP address
+ */
+
+// include required scripts
+require_once __DIR__.'/../../../../functions/functions.php';
+
+// initialize required objects
+$Database = new Database_PDO;
+$Result = new Result;
+$User = new User($Database);
+$Subnets = new Subnets($Database);
+
+// verify that user is logged in
+$User->check_user_session();
+
+// check that multicast is enabled
+if ($User->settings->enableMulticast != '1') {
+    exit('False');
+}
+
+// validations
+if ($Subnets->verify_cidr($POST->ip) === false) {
+    exit('False');
+}
+
+if ($Subnets->is_multicast($POST->ip) === false) {
+    exit('False');
+}
+
+// get mac
+$text = $Subnets->create_multicast_mac($POST->ip);
+
+// print mas
+if ($text === false) {
+    exit('False');
+}
+
+print $text;

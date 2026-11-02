@@ -115,7 +115,7 @@ class Net_DNS2_BitMap
 
         foreach ($data as $rr) {
         
-            $rr = strtoupper($rr);
+            $rr = strtoupper((string) $rr);
 
             //
             // get the type id for the RR

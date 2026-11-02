@@ -57,38 +57,38 @@ class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
     * The BIFF/Excel version (5).
     * @var integer
     */
-    var $_BIFF_version = 0x0500;
+    public $_BIFF_version = 0x0500;
 
     /**
     * The byte order of this architecture. 0 => little endian, 1 => big endian
     * @var integer
     */
-    var $_byte_order;
+    public $_byte_order;
 
     /**
     * The string containing the data of the BIFF stream
     * @var string
     */
-    var $_data;
+    public $_data;
 
     /**
     * The size of the data in bytes. Should be the same as strlen($this->_data)
     * @var integer
     */
-    var $_datasize;
+    public $_datasize;
 
     /**
     * The maximum length for a BIFF record. See _addContinue()
     * @var integer
     * @see _addContinue()
     */
-    var $_limit;
+    public $_limit;
 
     /**
     * The temporary dir for storing the OLE file
     * @var string
     */
-    var $_tmp_dir;
+    public $_tmp_dir;
 
     /**
     * Constructor

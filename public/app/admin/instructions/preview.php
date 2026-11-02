@@ -1,0 +1,27 @@
+<?php
+/* functions */
+require_once __DIR__.'/../../../../functions/functions.php';
+
+// initialize user object
+$Database = new Database_PDO;
+$User = new User($Database);
+$Tools = new Tools($Database);
+$Result = new Result;
+
+// verify that user is logged in
+$User->check_user_session();
+// admin check
+$User->is_admin();
+
+// vaidate cookie
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+
+$instructions = $_POST['instructions'] ?? '';
+$markdown = $Tools->parsedown_instructions(0, true, $instructions)
+
+?>
+<div class="normalTable" style="padding: 5px;">
+  <div class='instructions well'>
+    <?php print $markdown; ?>
+  </div>
+</div>

@@ -99,7 +99,7 @@ class Net_DNS2_RR_NSEC extends Net_DNS2_RR
             // parse out the RR's from the bitmap
             //
             $this->type_bit_maps = Net_DNS2_BitMap::bitMapToArray(
-                substr($this->rdata, $offset - $packet->offset)
+                substr((string) $this->rdata, $offset - $packet->offset)
             );
 
             return true;
@@ -121,7 +121,7 @@ class Net_DNS2_RR_NSEC extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->next_domain_name) > 0) {
+        if (strlen((string) $this->next_domain_name) > 0) {
 
             $data = $packet->compress($this->next_domain_name, $packet->offset);
             $bitmap = Net_DNS2_BitMap::arrayToBitMap($this->type_bit_maps);

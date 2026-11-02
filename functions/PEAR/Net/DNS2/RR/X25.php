@@ -98,9 +98,9 @@ class Net_DNS2_RR_X25 extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->psdnaddress) > 0) {
+        if (strlen((string) $this->psdnaddress) > 0) {
 
-            $data = chr(strlen($this->psdnaddress)) . $this->psdnaddress;
+            $data = chr(strlen((string) $this->psdnaddress)) . $this->psdnaddress;
             
             $packet->offset += strlen($data);
 

@@ -37,7 +37,7 @@ require_once 'PEAR.php';
 * OLE_ChainedBlockStream::stream_open().
 * @var  array
 */
-$GLOBALS['_OLE_INSTANCES'] = array();
+$GLOBALS['_OLE_INSTANCES'] = [];
 
 /**
 * OLE package base class.
@@ -55,43 +55,43 @@ class OLE extends PEAR
     * The file handle for reading an OLE container
     * @var resource
     */
-    var $_file_handle;
+    public $_file_handle;
 
     /**
     * Array of PPS's found on the OLE container
     * @var array
     */
-    var $_list;
+    public $_list;
 
     /**
     * Root directory of OLE container
     * @var OLE_PPS_Root
     */
-    var $root;
+    public $root;
 
     /**
     * Big Block Allocation Table
     * @var array  (blockId => nextBlockId)
     */
-    var $bbat;
+    public $bbat;
 
     /**
     * Short Block Allocation Table
     * @var array  (blockId => nextBlockId)
     */
-    var $sbat;
+    public $sbat;
 
     /**
     * Size of big blocks. This is usually 512.
     * @var  int  number of octets per block.
     */
-    var $bigBlockSize;
+    public $bigBlockSize;
 
     /**
     * Size of small blocks. This is usually 64.
     * @var  int  number of octets per block
     */
-    var $smallBlockSize;
+    public $smallBlockSize;
 
 
     /**
@@ -99,7 +99,7 @@ class OLE extends PEAR
     * @access public
     */
     public function __construct() {
-        $this->_list = array();
+        $this->_list = [];
     }
 
     /**
@@ -170,11 +170,11 @@ class OLE extends PEAR
         $mbatFirstBlockId = $this->_readInt4($fh);
         // Number of blocks in Master Block Allocation Table
         $mbbatBlockCount = $this->_readInt4($fh);
-        $this->bbat = array();
+        $this->bbat = [];
 
         // Remaining 4 * 109 bytes of current block is beginning of Master
         // Block Allocation Table
-        $mbatBlocks = array();
+        $mbatBlocks = [];
         for ($i = 0; $i < 109; $i++) {
             $mbatBlocks[] = $this->_readInt4($fh);
         }
@@ -201,7 +201,7 @@ class OLE extends PEAR
         }
 
         // Read short block allocation table (SBAT)
-        $this->sbat = array();
+        $this->sbat = [];
         $shortBlockCount = $sbbatBlockCount * $this->bigBlockSize / 4;
         $sbatFh = $this->getStream($sbatFirstBlockId);
         for ($blockId = 0; $blockId < $shortBlockCount; $blockId++) {
@@ -314,12 +314,12 @@ class OLE extends PEAR
             switch ($type) {
             case OLE_PPS_TYPE_ROOT:
                 require_once 'OLE/PPS/Root.php';
-                $pps = new OLE_PPS_Root(null, null, array());
+                $pps = new OLE_PPS_Root(null, null, []);
                 $this->root = $pps;
                 break;
             case OLE_PPS_TYPE_DIR:
                 $pps = new OLE_PPS(null, null, null, null, null,
-                                   null, null, null, null, array());
+                                   null, null, null, null, []);
                 break;
             case OLE_PPS_TYPE_FILE:
                 require_once 'OLE/PPS/File.php';
@@ -335,8 +335,8 @@ class OLE extends PEAR
             $pps->NextPps = $this->_readInt4($fh);
             $pps->DirPps  = $this->_readInt4($fh);
             fseek($fh, 20, SEEK_CUR);
-            $pps->Time1st = OLE::OLE2LocalDate(fread($fh, 8));
-            $pps->Time2nd = OLE::OLE2LocalDate(fread($fh, 8));
+            $pps->Time1st = $this->OLE2LocalDate(fread($fh, 8));
+            $pps->Time2nd = $this->OLE2LocalDate(fread($fh, 8));
             $pps->_StartBlock = $this->_readInt4($fh);
             $pps->Size = $this->_readInt4($fh);
             $pps->No = count($this->_list);
@@ -354,8 +354,8 @@ class OLE extends PEAR
         // Initialize $pps->children on directories
         foreach ($this->_list as $pps) {
             if ($pps->Type == OLE_PPS_TYPE_DIR || $pps->Type == OLE_PPS_TYPE_ROOT) {
-                $nos = array($pps->DirPps);
-                $pps->children = array();
+                $nos = [$pps->DirPps];
+                $pps->children = [];
                 while ($nos) {
                     $no = array_pop($nos);
                     if ($no != -1) {
@@ -553,14 +553,14 @@ class OLE extends PEAR
         $factor = pow(2,32);
         $high_part = 0;
         for ($i = 0; $i < 4; $i++) {
-            list(, $high_part) = unpack('C', $string[(7 - $i)]);
+            list(, $high_part) = unpack('C', (string) $string[(7 - $i)]);
             if ($i < 3) {
                 $high_part *= 0x100;
             }
         }
         $low_part = 0;
         for ($i = 4; $i < 8; $i++) {
-            list(, $low_part) = unpack('C', $string[(7 - $i)]);
+            list(, $low_part) = unpack('C', (string) $string[(7 - $i)]);
             if ($i < 7) {
                 $low_part *= 0x100;
             }

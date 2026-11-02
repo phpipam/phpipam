@@ -14,10 +14,9 @@
  *
  *    if ($Params->ip==....)    // No warning if $_POST['ip'] is undefined.
  */
-
 #[AllowDynamicProperties]
-class Params extends stdClass implements Countable {
-
+class Params extends stdClass implements Countable
+{
     /**
      * Default value to return for undefined class properties
      *
@@ -28,22 +27,23 @@ class Params extends stdClass implements Countable {
     /**
      * Class constructor
      *
-     * @param array|object $args
-     * @param mixed $default
-     * @param bool  $strip_tags
-     * @param bool  $html_escape
+     * @param  array|object  $args
+     * @param  mixed  $default
+     * @param  bool  $strip_tags
+     * @param  bool  $html_escape
      */
-    public function __construct($args = [], $default = null, $strip_tags = false, $html_escape = false) {
+    public function __construct($args = [], $default = null, $strip_tags = false, $html_escape = false)
+    {
         $this->read($args, $strip_tags, $html_escape);
         $this->____default = $default;
     }
 
     /**
      * Params class is countable
-     *
-     * @return int
      */
-    public function count() : int {
+    #[Override]
+    public function count(): int
+    {
         return count($this->as_array());
     }
 
@@ -52,46 +52,48 @@ class Params extends stdClass implements Countable {
      *
      * @return array
      */
-    public function as_array() {
+    public function as_array()
+    {
         $values = get_object_vars($this);
         unset($values['____default']);
+
         return $values;
     }
 
     /**
      * __get()
      *
-     * @param string $name
+     * @param  string  $name
      * @return mixed
      */
-    public function __get($name) {
-        if (isset($this->{$name}))
-            return $this->{$name};
-
-        return $this->____default;
+    public function __get($name)
+    {
+        return $this->{$name} ?? $this->____default;
     }
 
     /**
      * __set()
      *
-     * @param string $name
-     * @param mixed $value
+     * @param  string  $name
+     * @param  mixed  $value
      * @return void
      */
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         $this->{$name} = $value;
     }
 
     /**
      * Read array of arguments
      *
-     * @param array|object $args
-     * @param bool $strip_tags
-     * @param bool $html_escape
+     * @param  array|object  $args
+     * @param  bool  $strip_tags
+     * @param  bool  $html_escape
      * @return void
      */
-    public function read($args, $strip_tags = false, $html_escape = false) {
-        if (!is_array($args) && !is_object($args)) {
+    public function read($args, $strip_tags = false, $html_escape = false)
+    {
+        if (! is_array($args) && ! is_object($args)) {
             return;
         }
 
@@ -115,13 +117,15 @@ class Params extends stdClass implements Countable {
 
         foreach ($args as $name => $value) {
             if (is_string($value)) {
-                if ($strip_tags && !in_array($name, $strip_exceptions, true)) {
+                if ($strip_tags && ! in_array($name, $strip_exceptions, true)) {
                     $value = strip_tags($value);
                 }
+
                 if ($html_escape) {
                     $value = htmlentities($value, ENT_QUOTES, 'UTF-8');
                 }
             }
+
             $this->{$name} = $value;
         }
     }

@@ -154,7 +154,7 @@ class Net_IPv6
 
         if(false === strrpos($ip, '/')) {
 
-            return array($addr, $spec);
+            return [$addr, $spec];
 
         }
 
@@ -167,7 +167,7 @@ class Net_IPv6
 
         }
 
-        return array($addr, $spec);
+        return [$addr, $spec];
 
     }
     // }}}
@@ -620,7 +620,7 @@ class Net_IPv6
 
         if(true == $leadingZeros) {
 
-            $uipT    = array();
+            $uipT    = [];
             $uiparts = explode(':', $uip);
 
             foreach($uiparts as $p) {
@@ -666,7 +666,7 @@ class Net_IPv6
      * @param String  $ip    a valid IPv6-address (hex format)
      * @param boolean $force if true the address will be compresses as best as possible (since 1.2.0)
      *
-     * @return tring the compressed IPv6-address (hex format)
+     * @return string the compressed IPv6-address (hex format)
      * @access public
      * @see    Uncompress()
      * @static
@@ -734,8 +734,8 @@ class Net_IPv6
 
         }
 
-        $cip = preg_replace('/((^:)|(:$))/', '', $cip);
-        $cip = preg_replace('/((^:)|(:$))/', '::', $cip);
+        $cip = preg_replace('/((^:)|(:$))/', '', (string) $cip);
+        $cip = preg_replace('/((^:)|(:$))/', '::', (string) $cip);
 
         if ('' != $netmask) {
 
@@ -792,7 +792,7 @@ class Net_IPv6
     public static function isCompressible($ip)
     {
 
-        return (bool)($ip != Net_IPv6::compress($address));
+        return (bool)($ip != Net_IPv6::compress($ip));
 
     }
 
@@ -832,7 +832,7 @@ class Net_IPv6
             $pos      = strrpos($ip, ':');
 
             if(false === $pos) {
-            	return array("", $ip);
+            	return ["", $ip];
             }
 
             $ip[$pos] = '_';
@@ -842,7 +842,7 @@ class Net_IPv6
 
         } else {
 
-            return array($ip, "");
+            return [$ip, ""];
 
         }
     }
@@ -878,7 +878,7 @@ class Net_IPv6
         $count  = 0;
 
         if (!empty($ipPart[0])) {
-            $ipv6 = explode(':', $ipPart[0]);
+            $ipv6 = explode(':', (string) $ipPart[0]);
 
             foreach($ipv6 as $element) { // made a validate precheck
                 if(!preg_match('/[0-9a-fA-F]*/', $element)) {
@@ -895,7 +895,7 @@ class Net_IPv6
                 }
 
                 $dec = hexdec($ipv6[$i]);
-                $hex = strtoupper(preg_replace("/^[0]{1,3}(.*[0-9a-fA-F])$/",
+                $hex = strtoupper((string) preg_replace("/^[0]{1,3}(.*[0-9a-fA-F])$/",
                                                 "\\1",
                                                 $ipv6[$i]));
 
@@ -914,12 +914,12 @@ class Net_IPv6
 
             } else if (6 == $count and !empty($ipPart[1])) {
 
-                $ipv4  = explode('.', $ipPart[1]);
+                $ipv4  = explode('.', (string) $ipPart[1]);
                 $count = 0;
 
                 for ($i = 0; $i < count($ipv4); $i++) {
 
-                    if ($ipv4[$i] >= 0 && (integer)$ipv4[$i] <= 255
+                    if ($ipv4[$i] >= 0 && (int)$ipv4[$i] <= 255
                         && preg_match("/^\d{1,3}$/", $ipv4[$i])) {
 
                         $count++;
@@ -1011,7 +1011,7 @@ class Net_IPv6
         $endAddress   = Net_IPv6::_bin2Ip(Net_IPv6::_ip2Bin($ip)
                                           | ($binNetmask ^ $maxNetmask));
 
-        return array('start' => $startAddress, 'end' => $endAddress);
+        return ['start' => $startAddress, 'end' => $endAddress];
     }
 
     // }}}

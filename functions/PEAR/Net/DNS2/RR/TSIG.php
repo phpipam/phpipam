@@ -131,7 +131,7 @@ class Net_DNS2_RR_TSIG extends Net_DNS2_RR
         $out = $this->cleanString($this->algorithm) . '. ' . 
             $this->time_signed . ' ' . 
             $this->fudge . ' ' . $this->mac_size . ' ' .
-            base64_encode($this->mac) . ' ' . $this->original_id . ' ' . 
+            base64_encode((string) $this->mac) . ' ' . $this->original_id . ' ' . 
             $this->error . ' '. $this->other_length;
 
         if ($this->other_length > 0) {
@@ -158,7 +158,7 @@ class Net_DNS2_RR_TSIG extends Net_DNS2_RR
         //
         // this assumes it's passed in base64 encoded.
         //
-        $this->key = preg_replace('/\s+/', '', array_shift($rdata));
+        $this->key = preg_replace('/\s+/', '', (string) array_shift($rdata));
 
         //
         // the rest of the data is set to default
@@ -207,7 +207,7 @@ class Net_DNS2_RR_TSIG extends Net_DNS2_RR
             //
             $x = unpack(
                 '@' . $offset . '/ntime_high/Ntime_low/nfudge/nmac_size', 
-                $this->rdata
+                (string) $this->rdata
             );
 
             $this->time_signed  = Net_DNS2::expandUint32($x['time_low']);
@@ -221,7 +221,7 @@ class Net_DNS2_RR_TSIG extends Net_DNS2_RR
             //
             if ($this->mac_size > 0) {
             
-                $this->mac = substr($this->rdata, $offset, $this->mac_size);
+                $this->mac = substr((string) $this->rdata, $offset, $this->mac_size);
                 $offset += $this->mac_size;
             }
 
@@ -230,7 +230,7 @@ class Net_DNS2_RR_TSIG extends Net_DNS2_RR
             //
             $x = unpack(
                 '@' . $offset . '/noriginal_id/nerror/nother_length', 
-                $this->rdata
+                (string) $this->rdata
             );
         
             $this->original_id  = $x['original_id'];
@@ -256,7 +256,7 @@ class Net_DNS2_RR_TSIG extends Net_DNS2_RR
                 //
                 $x = unpack(
                     'nhigh/nlow', 
-                    substr($this->rdata, $offset + 6, $this->other_length)
+                    substr((string) $this->rdata, $offset + 6, $this->other_length)
                 );
                 $this->other_data = $x['low'];
             }
@@ -280,7 +280,7 @@ class Net_DNS2_RR_TSIG extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->key) > 0) {
+        if (strlen((string) $this->key) > 0) {
 
             //
             // create a new packet for the signature-
@@ -318,7 +318,7 @@ class Net_DNS2_RR_TSIG extends Net_DNS2_RR
             //
             // add the algorithm name without compression
             //
-            $sig_data .= Net_DNS2_Packet::pack(strtolower($this->algorithm));
+            $sig_data .= Net_DNS2_Packet::pack(strtolower((string) $this->algorithm));
 
             //
             // add the rest of the values
@@ -336,14 +336,14 @@ class Net_DNS2_RR_TSIG extends Net_DNS2_RR
             // sign the data
             //
             $this->mac = $this->_signHMAC(
-                $sig_data, base64_decode($this->key), $this->algorithm
+                $sig_data, base64_decode((string) $this->key), $this->algorithm
             );
             $this->mac_size = strlen($this->mac);
 
             //
             // compress the algorithm
             //
-            $data = Net_DNS2_Packet::pack(strtolower($this->algorithm));
+            $data = Net_DNS2_Packet::pack(strtolower((string) $this->algorithm));
 
             //
             // pack the time, fudge and mac size
@@ -358,7 +358,7 @@ class Net_DNS2_RR_TSIG extends Net_DNS2_RR
             //
             if ($this->error == Net_DNS2_Lookups::RCODE_BADTIME) {
 
-                $this->other_length = strlen($this->other_data);
+                $this->other_length = strlen((string) $this->other_data);
                 if ($this->other_length != 6) {
 
                     return null;
@@ -416,7 +416,7 @@ class Net_DNS2_RR_TSIG extends Net_DNS2_RR
                 );
             }
 
-            return hash_hmac(self::$hash_algorithms[$algorithm], $data, $key, true);
+            return hash_hmac(self::$hash_algorithms[$algorithm], $data, (string) $key, true);
         }
 
         //

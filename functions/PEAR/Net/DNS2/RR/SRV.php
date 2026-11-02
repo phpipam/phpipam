@@ -102,7 +102,7 @@ class Net_DNS2_RR_SRV extends Net_DNS2_RR
             //
             // unpack the priority, weight and port
             //
-            $x = unpack('npriority/nweight/nport', $this->rdata);
+            $x = unpack('npriority/nweight/nport', (string) $this->rdata);
 
             $this->priority = $x['priority'];
             $this->weight   = $x['weight'];
@@ -130,7 +130,7 @@ class Net_DNS2_RR_SRV extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->target) > 0) {
+        if (strlen((string) $this->target) > 0) {
 
             $data = pack('nnn', $this->priority, $this->weight, $this->port);
             $packet->offset += 6;

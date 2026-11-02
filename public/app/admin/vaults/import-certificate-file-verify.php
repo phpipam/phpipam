@@ -1,0 +1,100 @@
+<?php
+
+// include required scripts
+require_once __DIR__.'/../../../../functions/functions.php';
+
+// initialize user object, if not already set
+if (! isset($Database)) {
+    $Database = new Database_PDO;
+}
+
+if (! isset($User)) {
+    $User = new User($Database);
+}
+
+if (! isset($Tools)) {
+    $Tools = new Tools($Database);
+}
+
+// verify that user is logged in, to guard against direct access of page and possible exploits
+$User->check_user_session();
+
+// make sure user has access
+if ($User->get_module_permissions('vaults') < User::ACCESS_RW) {
+    $Result->show('danger', _('Insufficient privileges').'.', true, true);
+}
+
+// Don't corrupt output with php errors!
+disable_php_errors();
+
+/*
+ * CSV import verify + parse data
+ *************************************************/
+
+/* get extension */
+$filename = $_FILES['file']['name'];
+$filename = explode('.', (string) $filename);
+$filename = end($filename);
+
+/* list of permitted file extensions */
+$allowed = ['cer', 'pem', 'crt', 'p12', 'pfx'];
+/* no errors */
+if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
+    // wrong extension
+    if (! in_array(strtolower((string) $filename), $allowed)) {
+        print '{"status":"error", "error":"Invalid document type - allowed '.implode(',', $allowed).'"}';
+        exit;
+    }
+
+    if ($_FILES['file']['size'] > 1024000) {
+        print '{"status":"error","error":"Sorry, file limit is 1Mb"}';
+        exit;
+    }
+
+    //
+    // We will reformat everything to pem format !
+    //
+    // process cer
+    if (in_array($filename, ['cer', 'pem', 'crt'])) {
+        // detect BEGIN CERTIFICATE
+        if (strpos((string) file_get_contents($_FILES['file']['tmp_name']), 'BEGIN CERTIFICATE') !== false) {
+            $certificate = trim(file_get_contents($_FILES['file']['tmp_name']));
+        }
+        // binary
+        else {
+            $certificate = '-----BEGIN CERTIFICATE-----'.PHP_EOL;
+            $certificate .= chunk_split(base64_encode(file_get_contents($_FILES['file']['tmp_name'])), 64, PHP_EOL);
+            $certificate .= '-----END CERTIFICATE-----'.PHP_EOL;
+        }
+    }
+    // process p12
+    elseif ($filename == 'p12' || $filename == 'pfx') {
+        $password = $POST->pkey_pass;
+        $convert = openssl_pkcs12_read(file_get_contents($_FILES['file']['tmp_name']), $results, $password);
+        if (! $convert) {
+            print '{"status":"error","error":"'.openssl_error_string().'"}';
+            exit;
+        }
+
+        $certificate = implode("\n", $results);
+    }
+    // error
+    else {
+        print '{"status":"error","error":"Invalid format"}';
+        exit;
+    }
+
+    // ok
+    print '{"status":"success","certificate":"'.base64_encode((string) $certificate).'"}';
+    exit;
+}
+
+// error
+if (isset($_FILES['file']['error'])) {
+    print '{"status":"error","error":"'.$_FILES['file']['error'].'"}';
+    exit;
+}
+
+/* default - error */
+print '{"status":"error","error":"Empty or too big file (limit '.ini_get('post_max_size').')"}';
+exit;

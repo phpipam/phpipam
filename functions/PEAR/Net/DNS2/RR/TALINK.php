@@ -106,10 +106,10 @@ class Net_DNS2_RR_TALINK extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if ( (strlen($this->previous) > 0) || (strlen($this->next) > 0) ) {
+        if ( (strlen((string) $this->previous) > 0) || (strlen((string) $this->next) > 0) ) {
 
-            $data = chr(strlen($this->previous)) . $this->previous . 
-                chr(strlen($this->next)) . $this->next;
+            $data = chr(strlen((string) $this->previous)) . $this->previous . 
+                chr(strlen((string) $this->next)) . $this->next;
 
             $packet->offset += strlen($data);
 

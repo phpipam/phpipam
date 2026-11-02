@@ -45,25 +45,25 @@ class OLE_ChainedBlockStream extends PEAR
      * The OLE container of the file that is being read.
      * @var OLE
      */
-    var $ole;
+    public $ole;
 
     /**
      * Parameters specified by fopen().
      * @var array
      */
-    var $params;
+    public $params;
 
     /**
      * The binary data of the file.
      * @var  string
      */
-    var $data;
+    public $data;
 
     /**
      * The file pointer.
      * @var  int  byte offset
      */
-    var $pos;
+    public $pos;
 
     /**
      * Implements support for fopen().
@@ -85,7 +85,7 @@ class OLE_ChainedBlockStream extends PEAR
         }
 
         // 25 is length of "ole-chainedblockstream://"
-        parse_str(substr($path, 25), $this->params);
+        parse_str(substr((string) $path, 25), $this->params);
         if (!isset($this->params['oleInstanceId'],
                    $this->params['blockId'],
                    $GLOBALS['_OLE_INSTANCES'][$this->params['oleInstanceId']])) {
@@ -209,9 +209,9 @@ class OLE_ChainedBlockStream extends PEAR
      */
     function stream_stat()
     {
-        return array(
+        return [
             'size' => strlen($this->data),
-            );
+            ];
     }
 
     // Methods used by stream_wrapper_register() that are not implemented:

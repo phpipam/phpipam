@@ -47,25 +47,25 @@ define("OP_LTE",        0x07);
 */
 class Spreadsheet_Excel_Writer_Validator
 {
-   var $_type;
-   var $_style;
-   var $_fixedList;
-   var $_blank;
-   var $_incell;
-   var $_showprompt;
-   var $_showerror;
-   var $_title_prompt;
-   var $_descr_prompt;
-   var $_title_error;
-   var $_descr_error;
-   var $_operator;
-   var $_formula1;
-   var $_formula2;
+   public $_type;
+   public $_style;
+   public $_fixedList;
+   public $_blank;
+   public $_incell;
+   public $_showprompt;
+   public $_showerror;
+   public $_title_prompt;
+   public $_descr_prompt;
+   public $_title_error;
+   public $_descr_error;
+   public $_operator;
+   public $_formula1;
+   public $_formula2;
     /**
     * The parser from the workbook. Used to parse validation formulas also
     * @var Spreadsheet_Excel_Writer_Parser
     */
-    var $_parser;
+    public $_parser;
 
     function __construct(&$parser)
     {
@@ -180,13 +180,13 @@ class Spreadsheet_Excel_Writer_Validator
 
    function _getData()
    {
-      $title_prompt_len = strlen($this->_title_prompt);
-      $descr_prompt_len = strlen($this->_descr_prompt);
-      $title_error_len = strlen($this->_title_error);
-      $descr_error_len = strlen($this->_descr_error);
+      $title_prompt_len = strlen((string) $this->_title_prompt);
+      $descr_prompt_len = strlen((string) $this->_descr_prompt);
+      $title_error_len = strlen((string) $this->_title_error);
+      $descr_error_len = strlen((string) $this->_descr_error);
 
-      $formula1_size = strlen($this->_formula1);
-      $formula2_size = strlen($this->_formula2);
+      $formula1_size = strlen((string) $this->_formula1);
+      $formula2_size = strlen((string) $this->_formula2);
 
       $data  = pack("V", $this->_getOptions());
       $data .= pack("vC", $title_prompt_len, 0x00) . $this->_title_prompt;

@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * Script to print racks
+ ***************************/
+
+// verify that user is logged in
+$User->check_user_session();
+// verify module permissions
+$User->check_module_permissions('racks', User::ACCESS_RW, true);
+
+// fetch custom fields
+$custom = $Tools->fetch_custom_fields('racks');
+
+// get hidden fields
+$hidden_custom_fields = db_json_decode($User->settings->hiddenCustomFields, true);
+$hidden_custom_fields = is_array(@$hidden_custom_fields['racks']) ? $hidden_custom_fields['racks'] : [];
+
+// perm check
+if ($User->get_module_permissions('racks') == User::ACCESS_NONE) {
+    $Result->show('danger', _('You do not have permissions to access this module'), false);
+} elseif (isset($GET->subnetId)) {
+    include __DIR__.'/print-single-rack.php';
+} else {
+    include __DIR__.'/print-racks.php';
+}

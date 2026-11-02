@@ -1,0 +1,40 @@
+<?php
+
+require_once __DIR__.'/../../../../functions/functions.php';
+
+// Classes
+$Database = new Database_PDO;
+$User = new User($Database);
+$Result = new Result;
+$Password_check = new Password_check;
+
+// user must be authenticated
+$User->check_user_session();
+
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
+
+// Check old password
+if (! hash_equals($User->user->password, crypt((string) $POST->oldpassword, (string) $User->user->password))) {
+    $Result->show('danger', _('Invalid password'), true);
+}
+
+// Check new password != old password
+if ($POST->ipampassword1 == $POST->oldpassword) {
+    $Result->show('danger', _('New password must be different'), true);
+}
+
+// Enforce password policy
+$policy = (db_json_decode($User->settings->passwordPolicy, true));
+$Password_check->set_requirements($policy, explode(',', (string) $policy['allowedSymbols']));
+if (! $Password_check->validate($POST->ipampassword1)) {
+    $Result->show('danger alert-danger ', _('Password validation errors').':<br> - '.implode('<br> - ', $Password_check->get_errors()), true);
+}
+
+if ($POST->ipampassword1 != $POST->ipampassword2) {
+    $Result->show('danger', _('New passwords do not match'), true);
+}
+
+// update pass
+$User->update_user_pass($POST->ipampassword1);

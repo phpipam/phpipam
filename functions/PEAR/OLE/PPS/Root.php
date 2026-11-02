@@ -20,7 +20,7 @@
 // $Id: Root.php,v 1.10 2008/02/02 21:00:37 schmidt Exp $
 
 
-require_once( dirname(__FILE__) . '/../PPS.php');
+require_once( __DIR__ . '/../PPS.php');
 require_once 'System.php';
 
 /**
@@ -36,7 +36,7 @@ class OLE_PPS_Root extends OLE_PPS
     * The temporary dir for storing the OLE file
     * @var string
     */
-    var $_tmp_dir;
+    public $_tmp_dir;
 
     /**
     * Constructor
@@ -132,7 +132,7 @@ class OLE_PPS_Root extends OLE_PPS
             }
         }
         // Make an array of PPS's (for Save)
-        $aList = array();
+        $aList = [];
         $this->_savePpsSetPnt($aList);
         // calculate values for header
         list($iSBDcnt, $iBBcnt, $iPPScnt) = $this->_calcSize($aList); //, $rhInfo);
@@ -172,7 +172,7 @@ class OLE_PPS_Root extends OLE_PPS
     function _calcSize(&$raList)
     {
         // Calculate Basic Setting
-        list($iSBDcnt, $iBBcnt, $iPPScnt) = array(0,0,0);
+        list($iSBDcnt, $iBBcnt, $iPPScnt) = [0,0,0];
         $iSmallLen = 0;
         $iSBcnt = 0;
         for ($i = 0; $i < count($raList); $i++) {
@@ -196,7 +196,7 @@ class OLE_PPS_Root extends OLE_PPS
         $iBdCnt = $this->_BIG_BLOCK_SIZE / OLE_PPS_SIZE;
         $iPPScnt = (floor($iCnt/$iBdCnt) + (($iCnt % $iBdCnt)? 1: 0));
 
-        return array($iSBDcnt, $iBBcnt, $iPPScnt);
+        return [$iSBDcnt, $iBBcnt, $iPPScnt];
     }
 
     /**
@@ -318,7 +318,7 @@ class OLE_PPS_Root extends OLE_PPS
                             fwrite($FILE, $sBuff);
                         }
                     } else {
-                        fwrite($FILE, $raList[$i]->_data);
+                        fwrite($FILE, (string) $raList[$i]->_data);
                     }
 
                     if ($raList[$i]->Size % $this->_BIG_BLOCK_SIZE) {
@@ -408,7 +408,7 @@ class OLE_PPS_Root extends OLE_PPS
     {
         // Save each PPS WK
         for ($i = 0; $i < count($raList); $i++) {
-            fwrite($this->_FILEH_, $raList[$i]->_getPpsWk());
+            fwrite($this->_FILEH_, (string) $raList[$i]->_getPpsWk());
         }
         // Adjust for Block
         $iCnt = count($raList);

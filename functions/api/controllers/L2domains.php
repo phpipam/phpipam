@@ -1,0 +1,271 @@
+<?php
+
+/**
+ *  phpIPAM API class to work with VLAN domains
+ */
+class L2domains_controller extends Common_api_functions
+{
+    /**
+     * __construct function
+     *
+     * @param  Database_PDO  $Database
+     * @param  Tools  $Tools
+     * @param  API_params  $params
+     * @param  Responses  $Response
+     */
+    public function __construct($Database, $Tools, $params, $Response)
+    {
+        $this->Database = $Database;
+        $this->Tools = $Tools;
+        $this->_params = $params;
+        $this->Response = $Response;
+        // init required objects
+        $this->init_object('Admin', $Database);
+        $this->init_object('Subnets', $Database);
+        // set valid keys
+        $this->set_valid_keys('vlanDomains');
+    }
+
+    /**
+     * Returns json encoded options
+     *
+     * @return void
+     */
+    #[Override]
+    public function OPTIONS()
+    {
+        // validate
+        $this->validate_options_request();
+
+        // methods
+        $result = [];
+        $result['methods'] = [
+            ['href' => '/api/l2domains/'.$this->_params->app_id.'/',      'methods' => [['rel' => 'options', 'method' => 'OPTIONS']]],
+            ['href' => '/api/l2domains/'.$this->_params->app_id.'/{id}/',     'methods' => [['rel' => 'read',     'method' => 'GET'],
+                ['rel' => 'create', 'method' => 'POST'],
+                ['rel' => 'update', 'method' => 'PATCH'],
+                ['rel' => 'delete', 'method' => 'DELETE']]],
+        ];
+
+        // result
+        return ['code' => 200, 'data' => $result];
+    }
+
+    /**
+     * Read domain functions
+     *
+     *  identifier can be:
+     *      - /                 // will return all domains
+     *      - /{id}/
+     *      - /{id}/vlans/
+     *      - /custom_fields/
+     *      - /all/             // will return all domains
+     *
+     * @return void
+     */
+    #[Override]
+    public function GET()
+    {
+        // all domains
+        if (! isset($this->_params->id) || $this->_params->id == 'all') {
+            $result = $this->Tools->fetch_all_objects('vlanDomains', 'id', true);
+            // check result
+            if ($result === false) {
+                $this->Response->throw_exception(404, 'No domains configured');
+            } else {
+                return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
+            }
+        } else {
+            // set
+            // custom fields
+            if ($this->_params->id == 'custom_fields') {
+                if (count($this->custom_fields) == 0) {
+                    $this->Response->throw_exception(404, 'No custom fields defined');
+                } else {
+                    return ['code' => 200, 'data' => $this->custom_fields];
+                }
+            } elseif (@$this->_params->id2 == 'vlans') {
+                // vlans
+                // validate domain
+                $this->validate_domain();
+                // save result
+                $result = $this->Tools->fetch_multiple_objects('vlans', 'domainId', $this->_params->id, 'vlanId', true);
+                // check result
+                if ($result == null) {
+                    $this->Response->throw_exception(404, 'No vlans belonging to this domain');
+                } else {
+                    return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
+                }
+            } else {
+                // id
+                // validate domain
+                $this->validate_domain();
+                // result
+                $result = $this->Tools->fetch_object('vlanDomains', 'id', $this->_params->id);
+                // check result
+                if ($result == null) {
+                    $this->Response->throw_exception(404, 'Invalid domain id');
+                } else {
+                    return ['code' => 200, 'data' => $this->prepare_result($result, null, true, true)];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Creates new domain
+     *
+     * @return void
+     */
+    #[Override]
+    public function POST()
+    {
+        // remap keys
+        $this->remap_keys();
+
+        // check for valid keys
+        $values = $this->validate_keys();
+
+        // validate input
+        $this->validate_domain_edit();
+
+        // execute update
+        if (! $this->Admin->object_modify('vlanDomains', 'add', 'id', $values)) {
+            $this->Response->throw_exception(500, 'Domain creation failed');
+        } else {
+            // set result
+            return ['code' => 201, 'message' => 'L2 domain created', 'id' => $this->Admin->lastId, 'location' => '/api/'.$this->_params->app_id.'/l2domains/'.$this->Admin->lastId.'/'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Updates existing domain
+     *
+     * @return void
+     */
+    #[Override]
+    public function PATCH()
+    {
+        // remap keys
+        $this->remap_keys();
+
+        // verify
+        $this->validate_domain_edit();
+        // check that it exists
+        $this->validate_domain();
+
+        // validate and prepare keys
+        $values = $this->validate_keys();
+
+        // execute update
+        if (! $this->Admin->object_modify('vlanDomains', 'edit', 'id', $values)) {
+            $this->Response->throw_exception(500, 'Domain edit failed');
+        } else {
+            // set result
+            return ['code' => 200, 'message' => 'L2 domain updated'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Deletes existing domain
+     *
+     * @return void
+     */
+    #[Override]
+    public function DELETE()
+    {
+        // check that domain exists
+        $this->validate_domain_edit();
+
+        // set variables for update
+        $values = [];
+        $values['id'] = $this->_params->id;
+
+        // execute delete
+        if (! $this->Admin->object_modify('vlanDomains', 'delete', 'id', $values)) {
+            $this->Response->throw_exception(500, 'L2 domain delete failed');
+        } else {
+            // delete references, reset to default
+            $this->Admin->update_object_references('vlans', 'domainId', $this->_params->id, 1);
+
+            // set result
+            return ['code' => 200, 'message' => 'L2 domain deleted and vlans migrated to default domain'];
+        }
+
+        return null;
+    }
+
+    /* @validations ---------- */
+
+    /**
+     * Validates domains
+     *
+     * @return void
+     */
+    private function validate_domain()
+    {
+        // validate id
+        if (! isset($this->_params->id)) {
+            $this->_params->id = 1;
+        }
+
+        // validate number
+        if (! is_numeric($this->_params->id)) {
+            $this->Response->throw_exception(400, 'Domain id must be numeric');
+        }
+
+        // check that it exists
+        if ($this->Tools->fetch_object('vlanDomains', 'id', $this->_params->id) === false) {
+            $this->Response->throw_exception(404, 'Invalid domain id');
+        }
+    }
+
+    /**
+     * Validates domain on edit
+     *
+     * @return void
+     */
+    private function validate_domain_edit()
+    {
+        // delete checks
+        if ($this->request_method() == 'DELETE') {
+            // we cannot delete default domain
+            if (@$this->_params->id == 1 && $this->request_method() == 'DELETE') {
+                $this->Response->throw_exception(409, 'Default domain cannot be deleted');
+            }
+
+            // ID must be numeric
+            if (! is_numeric($this->_params->id)) {
+                $this->Response->throw_exception(400, 'Domain id must be numeric');
+            }
+
+            // check that it exists
+            if ($this->Tools->fetch_object('vlanDomains', 'id', $this->_params->id) === false) {
+                $this->Response->throw_exception(404, 'Invalid domain id');
+            }
+        } elseif ($this->request_method() == 'POST') {
+            // create checks
+            // name must be present
+            if (@$this->_params->name == '' || ! isset($this->_params->name)) {
+                $this->Response->throw_exception(400, 'Domain name is mandatory');
+            }
+        } elseif ($this->request_method() == 'PATCH') {
+            // update checks
+            // ID must be numeric
+            if (! is_numeric($this->_params->id)) {
+                $this->Response->throw_exception(400, 'Invalid domain id');
+            }
+
+            // name must be present
+            if (@$this->_params->name == '' && isset($this->_params->name)) {
+                $this->Response->throw_exception(400, 'Domain name is mandatory');
+            }
+        }
+    }
+}

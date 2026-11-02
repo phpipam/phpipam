@@ -108,7 +108,7 @@ class Net_DNS2_RR_HIP extends Net_DNS2_RR
     protected function rrFromString(array $rdata)
     {
         $this->pk_algorithm     = array_shift($rdata);
-        $this->hit              = strtoupper(array_shift($rdata));
+        $this->hit              = strtoupper((string) array_shift($rdata));
         $this->public_key       = array_shift($rdata);
 
         //
@@ -124,7 +124,7 @@ class Net_DNS2_RR_HIP extends Net_DNS2_RR
         // store the lengths; 
         //
         $this->hit_length       = strlen(pack('H*', $this->hit));
-        $this->pk_length        = strlen(base64_decode($this->public_key));        
+        $this->pk_length        = strlen(base64_decode((string) $this->public_key));        
 
         return true;
     }
@@ -145,7 +145,7 @@ class Net_DNS2_RR_HIP extends Net_DNS2_RR
             //
             // unpack the algorithm and length values
             //
-            $x = unpack('Chit_length/Cpk_algorithm/npk_length', $this->rdata);
+            $x = unpack('Chit_length/Cpk_algorithm/npk_length', (string) $this->rdata);
 
             $this->hit_length   = $x['hit_length'];
             $this->pk_algorithm = $x['pk_algorithm'];
@@ -156,16 +156,16 @@ class Net_DNS2_RR_HIP extends Net_DNS2_RR
             //
             // copy out the HIT value
             //
-            $hit = unpack('H*', substr($this->rdata, $offset, $this->hit_length));
+            $hit = unpack('H*', substr((string) $this->rdata, $offset, $this->hit_length));
             
-            $this->hit = strtoupper($hit[1]);
+            $this->hit = strtoupper((string) $hit[1]);
             $offset += $this->hit_length;
 
             //
             // copy out the public key
             //
             $this->public_key = base64_encode(
-                substr($this->rdata, $offset, $this->pk_length)
+                substr((string) $this->rdata, $offset, $this->pk_length)
             );
             $offset += $this->pk_length;
 
@@ -200,7 +200,7 @@ class Net_DNS2_RR_HIP extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if ( (strlen($this->hit) > 0) && (strlen($this->public_key) > 0) ) {
+        if ( (strlen((string) $this->hit) > 0) && (strlen((string) $this->public_key) > 0) ) {
 
             //
             // pack the length, algorithm and HIT values
@@ -216,7 +216,7 @@ class Net_DNS2_RR_HIP extends Net_DNS2_RR
             //
             // add the public key
             //
-            $data .= base64_decode($this->public_key);
+            $data .= base64_decode((string) $this->public_key);
 
             //
             // add the offset

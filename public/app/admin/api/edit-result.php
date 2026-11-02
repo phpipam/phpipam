@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * Script to display api edit result
+ *************************************/
+
+/* functions */
+require_once __DIR__.'/../../../../functions/functions.php';
+
+// initialize user object
+$Database = new Database_PDO;
+$User = new User($Database);
+$Admin = new Admin($Database);
+$Result = new Result;
+
+// verify that user is logged in
+$User->check_user_session();
+// admin check
+$User->is_admin();
+
+// check if site is demo
+$User->is_demo();
+// check maintaneance mode
+$User->check_maintaneance_mode();
+
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
+
+/* checks */
+$error = [];
+
+if ($POST->action != 'delete') {
+    // code must be exactly 32 chars long and alphanumeric if app_security = crypt
+    if ($POST->app_security == 'crypt') {
+        if (strlen((string) $POST->app_code) != 32 || ! preg_match('#^[a-zA-Z0-9-_=]+$#', (string) $POST->app_code)) {
+            $error[] = 'Invalid application code';
+        }
+    }
+
+    // name must be more than 2 and alphanumeric
+    if (strlen((string) $POST->app_id) < 3 || strlen((string) $POST->app_id) > 12 || ! preg_match('#^[a-zA-Z0-9-_=]+$#', (string) $POST->app_id)) {
+        $error[] = 'Invalid application id';
+    }
+
+    // permissions must be 0,1,2
+    if ($POST->app_security != 'user') {
+        if (! (in_array($POST->app_permissions, [0, 1, 2, 3]))) {
+            $error[] = 'Invalid permissions';
+        }
+    }
+
+    // lock check
+    if (filter_var($POST->app_lock_wait, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'max_range' => 3600]]) === false) {
+        $error[] = _('Invalid lock wait value. Valid range 1-3600 (Default: 30)');
+    }
+
+    // api_allow_unsafe check
+    if ($POST->app_security == 'none' && Config::ValueOf('api_allow_unsafe') !== true) {
+        $error[] = 'API server requires SSL. Please set $api_allow_unsafe in config.php to override';
+    }
+}
+
+// default lock_wait
+if ($POST->app_lock_wait == '') {
+    $POST->app_lock_wait = 30;
+}
+
+// die if errors
+if (count($error) > 0) {
+    $Result->show('danger', $error, true);
+} else {
+    // create array of values for modification
+    $values = [
+        'id' => $POST->id,
+        'app_id' => $POST->app_id,
+        'app_code' => $POST->app_code,
+        'app_permissions' => $POST->app_permissions,
+        'app_security' => $POST->app_security,
+        'app_lock_type' => $POST->app_lock_type,
+        'app_lock_wait' => $POST->app_lock_wait,
+        'app_nest_custom_fields' => $POST->app_nest_custom_fields,
+        'app_show_links' => $POST->app_show_links,
+        'app_comment' => $POST->app_comment,
+    ];
+
+    // execute
+    if (! $Admin->object_modify('api', $POST->action, 'id', $values)) {
+        $Result->show('danger', _('API').' '.$User->get_post_action().' '._('error'), true);
+    } else {
+        $Result->show('success', _('API').' '.$User->get_post_action().' '._('success'), true);
+    }
+}

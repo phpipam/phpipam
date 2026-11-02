@@ -1,321 +1,331 @@
 <?php
 
 /**
+ *  Class for printing outputs and saving logs to database
  *
- *	Class for printing outputs and saving logs to database
- *
- *	Severity indexes:
- *		0 = success
- *		1 = warning
- *		2 = error
- *
+ *  Severity indexes:
+ *      0 = success
+ *      1 = warning
+ *      2 = error
  */
+class Result
+{
+    /**
+     * error code handler
+     *
+     * @var mixed
+     */
+    public $errors;
 
-class Result {
+    /**
+     *  what to do when failed - result shows result, exception throws exception (for API)
+     *
+     * (default value: "result")
+     *
+     * @var string
+     */
+    public $exit_method = 'result';
 
-	/**
-	 * error code handler
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $errors;
+    /**
+     * Die flag
+     *
+     * (default value: false)
+     *
+     * @var bool
+     */
+    public $die = false;
 
-	/**
-	 *  what to do when failed - result shows result, exception throws exception (for API)
-	 *
-	 * (default value: "result")
-	 *
-	 * @var string
-	 * @access public
-	 */
-	public $exit_method = "result";
+    /**
+     * result handler
+     *
+     * (default value: null)
+     *
+     * @var mixed
+     */
+    public $result;
 
-	/**
-	 * Die flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $die = false;
+    /**
+     * is exception set?
+     *
+     * (default value: false)
+     *
+     * @var bool
+     */
+    public $exception = false;
 
-	/**
-	 * result handler
-	 *
-	 * (default value: null)
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $result = null;
+    /**
+     * __construct function
+     */
+    public function __construct()
+    {
+        $this->set_error_codes();
+    }
 
-	/**
-	 * is exception set?
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $exception = false;
+    /**
+     * Sets error code object
+     *
+     *  http://www.restapitutorial.com/httpstatuscodes.html
+     *
+     * @return void
+     */
+    private function set_error_codes()
+    {
+        // OK
+        $this->errors[200] = _('OK');
+        $this->errors[201] = _('Created');
+        $this->errors[202] = _('Accepted');
+        $this->errors[204] = _('No Content');
+        // Client errors
+        $this->errors[400] = _('Bad Request');
+        $this->errors[401] = _('Unauthorized');
+        $this->errors[403] = _('Forbidden');
+        $this->errors[404] = _('Not Found');
+        $this->errors[405] = _('Method Not Allowed');
+        $this->errors[409] = _('Conflict');
+        $this->errors[415] = _('Unsupported Media Type');
+        // Server errors
+        $this->errors[500] = _('Internal Server Error');
+        $this->errors[501] = _('Not Implemented');
+        $this->errors[503] = _('Service Unavailable');
+        $this->errors[505] = _('HTTP Version Not Supported');
+        // $this->errors[511] = _("Network Authentication Required";
+    }
 
-	/**
-	 * __construct function
-	 *
-	 * @access public
-	 */
-	public function __construct() {
-		$this->set_error_codes ();
-	}
+    /**
+     * Show result
+     *
+     * @param  string  $class  (default: "muted")              result class - danger, success, warning, info
+     * @param  string|array|object  $text  (default: "No value provided")  text to display
+     * @param  bool  $die  (default: false)                    controls stop of php execution
+     * @param  bool  $popup  (default: false)                  print result as popup
+     * @param  bool  $inline  (default: false)                 return, not print
+     * @param  bool  $popup2  (default: false)                 close for JS for popup2
+     * @param  bool  $reload  (default: false)                 reload
+     * @return string
+     */
+    public function show($class = 'muted', $text = 'No value provided', $die = false, $popup = false, $inline = false, $popup2 = false, $reload = false)
+    {
 
-	/**
-	 * Sets error code object
-	 *
-	 *	http://www.restapitutorial.com/httpstatuscodes.html
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function set_error_codes () {
-		// OK
-		$this->errors[200] = _("OK");
-		$this->errors[201] = _("Created");
-		$this->errors[202] = _("Accepted");
-		$this->errors[204] = _("No Content");
-		// Client errors
-		$this->errors[400] = _("Bad Request");
-		$this->errors[401] = _("Unauthorized");
-		$this->errors[403] = _("Forbidden");
-		$this->errors[404] = _("Not Found");
-		$this->errors[405] = _("Method Not Allowed");
-		$this->errors[409] = _("Conflict");
-		$this->errors[415] = _("Unsupported Media Type");
-		// Server errors
-		$this->errors[500] = _("Internal Server Error");
-		$this->errors[501] = _("Not Implemented");
-		$this->errors[503] = _("Service Unavailable");
-		$this->errors[505] = _("HTTP Version Not Supported");
-		//$this->errors[511] = _("Network Authentication Required";
-	}
+        // set die
+        $this->die = $die;
 
-	/**
-	 * Show result
-	 *
-	 * @access public
-	 * @param string $class (default: "muted")				result class - danger, success, warning, info
-	 * @param string|array|object $text (default: "No value provided")	text to display
-	 * @param bool $die (default: false)					controls stop of php execution
-	 * @param bool $popup (default: false)					print result as popup
-	 * @param bool $inline (default: false)					return, not print
-	 * @param bool $popup2 (default: false)					close for JS for popup2
-	 * @param bool $reload (default: false)					reload
-	 * @return void
-	 */
-	public function show($class="muted", $text="No value provided", $die=false, $popup=false, $inline = false, $popup2 = false, $reload = false) {
+        // API - throw exception
+        if ($this->exit_method == 'exception') {
+            // ok, just return success
+            if ($class == 'success') {
+                return true;
+            }
 
-		# set die
-		$this->die = $die;
+            return $this->throw_exception(500, $text);
+        }
 
-		# API - throw exception
-		if($this->exit_method == "exception")  {
-			# ok, just return success
-			if ($class=="success") 		{ return true; }
-			else						{ return $this->throw_exception (500, $text); }
-		}
-		else {
-			# cli or GUI
-			if (php_sapi_name()=="cli") { print $this->show_cli_message ($text); }
-			else {
-				# return or print
-				if ($inline) 			{ return $this->show_message ($class, $text, $popup, $popup2, $reload); }
-				else					{ print  $this->show_message ($class, $text, $popup, $popup2, $reload); }
-			}
+        // cli or GUI
+        if (PHP_SAPI == 'cli') {
+            print $this->show_cli_message($text);
+        } else {
+            // return or print
+            if ($inline) {
+                return $this->show_message($class, $text, $popup, $popup2, $reload);
+            }
 
-			# die
-			if($this->die===true)	{die(); }
-		}
-	}
+            print $this->show_message($class, $text, $popup, $popup2, $reload);
+        }
 
-	/**
-	 * Return HTTP status code and message. eg 404 not found/permission denied error
-	 *
-	 * @param int $code
-	 * @param string $message
-	 * @return void
-	 */
-	public function fatal_http_error($code, $message = "") {
-		http_response_code($code);
-		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest") {
-			$this->show("danger", $message, true, true);
-		} else {
-			$this->show("danger", $message, true);
-		}
-	}
+        // die
+        if ($this->die === true) {
+            exit();
+        }
+    }
 
-	/**
-	 * Alias for show method for backwards compatibility
-	 *
-	 * @access public
-	 * @param string|array|object $text (default: "No value provided")
-	 * @param bool $die (default: false)
-	 * @return void
-	 */
-	public function show_cli ($text="No value provided", $die=false) {
-		$this->show(false, $text, $die, false, false, false);
-	}
+    /**
+     * Return HTTP status code and message. eg 404 not found/permission denied error
+     *
+     * @param  int  $code
+     * @param  string  $message
+     * @return void
+     */
+    public function fatal_http_error($code, $message = '')
+    {
+        http_response_code($code);
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+            $this->show('danger', $message, true, true);
+        } else {
+            $this->show('danger', $message, true);
+        }
+    }
 
-	/**
-	 * Shows result for cli functions
-	 *
-	 * @access public
-	 * @param string $text (default: "No value provided")
-	 * @return void
-	 */
-	public function show_cli_message ($text="No value provided") {
-		// array - join
-		if (is_array($text) && sizeof($text)>0) {
-			// 1 element
-			if(sizeof( $text )==1) {
-				$text = $text[0];
-			}
-			// multiple - format
-			else {
-				foreach( $text as $l ) { $out[] = "\t* $l"; }
-				// join
-				$text = implode("\n", $out);
-			}
-		}
-		# print
-		return $text."\n";
-	}
+    /**
+     * Alias for show method for backwards compatibility
+     *
+     * @param  string|array|object  $text  (default: "No value provided")
+     * @param  bool  $die  (default: false)
+     * @return void
+     */
+    public function show_cli($text = 'No value provided', $die = false)
+    {
+        $this->show(false, $text, $die, false, false, false);
+    }
 
-	/**
-	 * Show GUI result
-	 *
-	 * @access public
-	 * @param mixed $class
-	 * @param string|array|object $text
-	 * @param mixed $popup
-	 * @param mixed $popup2
-	 * @param bool $reload
-	 * @return void
-	 */
-	public function show_message ($class, $text, $popup, $popup2, $reload) {
-		// to array if object
-		if (is_object($text))   { $text = (array) $text; }
-		// format if array
-		if(is_array($text)) {
-			// single value
-			if(sizeof( $text )==1) {
-				$out = $text;
-			}
-			// multiple values
-			else {
-				$out[] = "<ul>";
-				foreach( $text as $l ) { $out[] = "<li>$l</li>"; }
-				$out[] = "</ul>";
-			}
-			// join
-			$text = implode("\n", $out);
-		}
+    /**
+     * Shows result for cli functions
+     *
+     * @param  string  $text  (default: "No value provided")
+     * @return void
+     */
+    public function show_cli_message($text = 'No value provided')
+    {
+        // array - join
+        if (is_array($text) && $text != []) {
+            // 1 element
+            if (count($text) == 1) {
+                $text = $text[0];
+            } else {
+                // multiple - format
+                foreach ($text as $l) {
+                    $out[] = "\t* $l";
+                }
 
-		# print popup or normal
-		if($popup===false) {
-			return "<div class='alert alert-".$class."'>".$text."</div>";
-		}
-		else {
-			// set close class for JS
-			$pclass = $popup2===false ? "hidePopups" : "hidePopup2";
-			// change danger to error for popup
-			$htext = $class==="danger" ? "error" : escape_input($class);
+                // join
+                $text = implode("\n", $out);
+            }
+        }
 
-			$out[] = '<div class="pHeader">'._(ucwords($htext)).'</div>';
-			$out[] = '<div class="pContent">';
-			$out[] = '<div class="alert alert-'.$class.'">'.$text.'</div>';
-			$out[] = '</div>';
-			// reload
-			if($reload===true)
-			$out[] = '<div class="pFooter"><button class="btn btn-sm btn-default hidePopupsReload '.$pclass.'">'._('Close').'</button></div>';
-			else
-			$out[] = '<div class="pFooter"><button class="btn btn-sm btn-default '.$pclass.'">'._('Close').'</button></div>';
+        // print
+        return $text."\n";
+    }
 
-			// return
-			return implode("\n", $out);
-		}
-	}
+    /**
+     * Show GUI result
+     *
+     * @param  mixed  $class
+     * @param  string|array|object  $text
+     * @param  mixed  $popup
+     * @param  mixed  $popup2
+     * @param  bool  $reload
+     * @return void
+     */
+    public function show_message($class, $text, $popup, $popup2, $reload)
+    {
+        // to array if object
+        if (is_object($text)) {
+            $text = (array) $text;
+        }
 
-	/**
-	 * Sets new header and throws exception
-	 *
-	 * @access public
-	 * @param int $code
-	 * @param mixed $exception
-	 * @return void
-	 */
-	public function throw_exception ($code, $exception) {
-		// set failed
-		$this->exception = true;
+        // format if array
+        if (is_array($text)) {
+            // single value
+            if (count($text) == 1) {
+                $out = $text;
+            } else {
+                // multiple values
+                $out[] = '<ul>';
+                foreach ($text as $l) {
+                    $out[] = "<li>$l</li>";
+                }
 
-		// set success
-		$this->result['success'] = false;
-		// set exit code
-		$this->result['code'] 	 = $code;
+                $out[] = '</ul>';
+            }
 
-		// set message
-		$this->result['message'] = $exception;
+            // join
+            $text = implode("\n", $out);
+        }
 
-		// set header
-		$this->set_header ();
+        // print popup or normal
+        if ($popup === false) {
+            return "<div class='alert alert-".$class."'>".$text.'</div>';
+        }
 
-		// throw exception
-		throw new Exception($exception);
-	}
+        // set close class for JS
+        $pclass = $popup2 === false ? 'hidePopups' : 'hidePopup2';
+        // change danger to error for popup
+        $htext = $class === 'danger' ? 'error' : escape_input($class);
+        $out[] = '<div class="pHeader">'._(ucwords($htext)).'</div>';
+        $out[] = '<div class="pContent">';
+        $out[] = '<div class="alert alert-'.$class.'">'.$text.'</div>';
+        $out[] = '</div>';
+        // reload
+        if ($reload === true) {
+            $out[] = '<div class="pFooter"><button class="btn btn-sm btn-default hidePopupsReload '.$pclass.'">'._('Close').'</button></div>';
+        } else {
+            $out[] = '<div class="pFooter"><button class="btn btn-sm btn-default '.$pclass.'">'._('Close').'</button></div>';
+        }
 
-	/**
-	 * Sets location header for newly created objects
-	 *
-	 * @access protected
-	 * @param mixed $location
-	 * @return void
-	 */
-	protected function set_location_header ($location) {
-		# validate location header
-		if(!preg_match('/^[a-zA-Z0-9\-\_\/.]+$/i',$location)) {
-			$this->throw_exception (500, "Invalid location header");
-		}
-		# set
-		header("Location: ".$location);
-	}
+        // return
+        return implode("\n", $out);
+    }
 
-	/**
-	 * Sets header based on provided HTTP code
-	 *
-	 * @access protected
-	 * @return void
-	 */
-	protected function set_header () {
-		// wrong code
-		if(!isset($this->errors[$this->result['code']])) {
-			$this->throw_exception (500, _("Invalid result code"));
-		}
+    /**
+     * Sets new header and throws exception
+     *
+     * @param  int  $code
+     * @param  mixed  $exception
+     * @return void
+     */
+    public function throw_exception($code, $exception)
+    {
+        // set failed
+        $this->exception = true;
 
-		// 401 - add location
-		if ($this->result['code']==401) {
-			$this->set_location_header ("/api/".$_REQUEST['app_id']."/user/");
-		}
-		header("HTTP/1.1 ".$this->result['code']." ".$this->errors[$this->result['code']]);
-	}
+        // set success
+        $this->result['success'] = false;
+        // set exit code
+        $this->result['code'] = $code;
 
-	/**
-	 * __destruct function
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function __destruct() {
-		// exit if required
-		if ($this->die === true)	{ die(); }
-	}
+        // set message
+        $this->result['message'] = $exception;
+
+        // set header
+        $this->set_header();
+
+        // throw exception
+        throw new Exception($exception);
+    }
+
+    /**
+     * Sets location header for newly created objects
+     *
+     * @param  mixed  $location
+     * @return void
+     */
+    protected function set_location_header($location)
+    {
+        // validate location header
+        if (! preg_match('/^[a-zA-Z0-9\-\_\/.]+$/i', (string) $location)) {
+            $this->throw_exception(500, 'Invalid location header');
+        }
+
+        // set
+        header('Location: '.$location);
+    }
+
+    /**
+     * Sets header based on provided HTTP code
+     *
+     * @return void
+     */
+    protected function set_header()
+    {
+        // wrong code
+        if (! isset($this->errors[$this->result['code']])) {
+            $this->throw_exception(500, _('Invalid result code'));
+        }
+
+        // 401 - add location
+        if ($this->result['code'] == 401) {
+            $this->set_location_header('/api/'.$_REQUEST['app_id'].'/user/');
+        }
+
+        header('HTTP/1.1 '.$this->result['code'].' '.$this->errors[$this->result['code']]);
+    }
+
+    /**
+     * __destruct function
+     */
+    public function __destruct()
+    {
+        // exit if required
+        if ($this->die === true) {
+            exit();
+        }
+    }
 }

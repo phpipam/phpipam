@@ -20,7 +20,7 @@
 // $Id: File.php,v 1.12 2008/02/02 21:00:37 schmidt Exp $
 
 
-require_once( dirname(__FILE__) . '/../PPS.php');
+require_once( __DIR__ . '/../PPS.php');
 require_once 'System.php';
 
 /**
@@ -36,7 +36,7 @@ class OLE_PPS_File extends OLE_PPS
     * The temporary dir for storing the OLE file
     * @var string
     */
-    var $_tmp_dir;
+    public $_tmp_dir;
 
     /**
     * The constructor
@@ -59,7 +59,7 @@ class OLE_PPS_File extends OLE_PPS
             null,
             null,
             '',
-            array());
+            []);
     }
 
     /**

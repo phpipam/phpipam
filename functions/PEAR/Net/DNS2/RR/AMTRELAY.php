@@ -97,7 +97,7 @@ class Net_DNS2_RR_AMTRELAY extends Net_DNS2_RR
         $this->precedence   = array_shift($rdata);
         $this->discovery    = array_shift($rdata);
         $this->relay_type   = array_shift($rdata);
-        $this->relay        = trim(strtolower(trim(array_shift($rdata))), '.');
+        $this->relay        = trim(strtolower(trim((string) array_shift($rdata))), '.');
 
         //
         // if there's anything else other than 0 in the discovery value, then force it to one, so
@@ -159,7 +159,7 @@ class Net_DNS2_RR_AMTRELAY extends Net_DNS2_RR
             //
             // parse off the first two octets
             //
-            $x = unpack('Cprecedence/Csecond', $this->rdata);
+            $x = unpack('Cprecedence/Csecond', (string) $this->rdata);
 
             $this->precedence   = $x['precedence'];
             $this->discovery    = ($x['second'] >> 7) & 0x1;
@@ -176,7 +176,7 @@ class Net_DNS2_RR_AMTRELAY extends Net_DNS2_RR
                 break;
 
             case self::AMTRELAY_TYPE_IPV4:
-                $this->relay = inet_ntop(substr($this->rdata, $offset, 4));
+                $this->relay = inet_ntop(substr((string) $this->rdata, $offset, 4));
                 break;
 
             case self::AMTRELAY_TYPE_IPV6:
@@ -185,7 +185,7 @@ class Net_DNS2_RR_AMTRELAY extends Net_DNS2_RR
                 // PHP's inet_ntop returns IPv6 addresses in their compressed form, but we want to keep 
                 // with the preferred standard, so we'll parse it manually.
                 //
-                $ip = unpack('n8', substr($this->rdata, $offset, 16));
+                $ip = unpack('n8', substr((string) $this->rdata, $offset, 16));
                 if (count($ip) == 8) {
                     $this->relay = vsprintf('%x:%x:%x:%x:%x:%x:%x:%x', $ip);
                 } else
@@ -245,7 +245,7 @@ class Net_DNS2_RR_AMTRELAY extends Net_DNS2_RR
             break;
 
         case self::AMTRELAY_TYPE_DOMAIN:
-            $data .= pack('Ca*', strlen($this->relay), $this->relay);
+            $data .= pack('Ca*', strlen((string) $this->relay), $this->relay);
             break;
 
         default:

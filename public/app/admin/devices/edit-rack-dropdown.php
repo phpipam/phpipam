@@ -1,0 +1,155 @@
+<?php
+require_once __DIR__.'/../../../../functions/functions.php';
+
+$ajax_loaded = false;
+if (! isset($User) || ! is_object($User)) {
+    // initialize user object
+    $Database = new Database_PDO;
+    $User = new User($Database);
+    $Racks = new phpipam_rack($Database);
+    $Result = new Result;
+
+    $ajax_loaded = true;
+}
+// verify that user is logged in
+$User->check_user_session();
+// perm check popup
+if ($POST->action == 'edit') {
+    $User->check_module_permissions('devices', User::ACCESS_RW, true, true);
+} else {
+    $User->check_module_permissions('devices', User::ACCESS_RWA, true, true);
+}
+
+/**
+ * Print dropdown menu for rack selection of device
+ *
+ * We need following inputs from $POST:
+ *  - rackid        (id of rack)
+ *  - device_id     (id of device)
+ */
+
+// show only for numeric (set) rackid
+if ($POST->rackid > 0 || @$device['rack'] > 0) {
+    // load objects for ajax-loaded stuff
+    if ($ajax_loaded) {
+        // validate in inputs
+        if (! is_numeric($POST->rackid)) {
+            print "<tr><td colspan='2'>".$Result->show('danger', _('Invalid ID'), false, false, true).'</td></tr>';
+            exit();
+        }
+        // fetch rack
+        $rack = $User->fetch_object('racks', 'id', $POST->rackid);
+        if ($rack === false) {
+            print "<tr><td colspan='2'>".$Result->show('danger', _('Invalid rack'), false, false, true).'</td></tr>';
+            exit();
+        }
+
+        if (isset($POST->deviceid)) {
+            if (! is_numeric($POST->deviceid)) {
+                print "<tr><td colspan='2'>".$Result->show('danger', _('Invalid ID'), false, false, true).'</td></tr>';
+                exit();
+            }
+            // fetch device
+            $device = $User->fetch_object('devices', 'id', $POST->deviceid);
+            if ($device === false) {
+                print "<tr><td colspan='2'>".$Result->show('danger', _('Invalid device'), false, false, true).'</td></tr>';
+                exit();
+            }
+            $device = (array) $device;
+        } else {
+            $device = [];
+        }
+    }
+    // fetch rack details if set on edit
+    else {
+        if (@$device['rack'] > 0) {
+            $rack = $User->fetch_object('racks', 'id', $device['rack']);
+        }
+    }
+
+    // check permissions
+    $User->check_module_permissions('racks', User::ACCESS_R, true, false);
+
+    // rack devices
+    $rack_devices = $Racks->fetch_rack_devices($rack->id);
+    $rack_contents = $Racks->fetch_rack_contents($rack->id);
+
+    // available spaces
+    [$available, $available_back] = $Racks->free_u($rack, $rack_devices, $rack_contents, $device);
+    ?>
+    <script>
+    $(document).ready(function(){
+        if ($("[rel=tooltip]").length) {
+            $("[rel=tooltip]").tooltip();
+        }
+
+        /* bootstrap switch */
+        var switch_options = {
+            onColor: 'default',
+            offColor: 'default',
+            onText: 'Yes',
+            offText: 'No',
+            size: "mini"
+        };
+        $(".input-switch").bootstrapSwitch(switch_options);
+    });
+    </script>
+
+    <tr>
+        <td></td>
+        <td>
+            <a class="showRackPopup btn btn-xs btn-default" rel='tooltip' data-placement='right' data-rackid="<?php print @$rack->id; ?>" data-deviceid='<?php print @$device['id']; ?>' title='<?php print _('Show rack'); ?>'><i class='fa fa-server'></i></a>
+        </td>
+    </tr>
+
+    <tr>
+        <td><?php print _('Start position'); ?></td>
+        <td>
+            <select name="rack_start" class="form-control input-sm input-w-auto" style="min-width:70px">
+            <?php
+            // print available spaces
+            if ($rack->hasBack != '0') {
+                print "<optgroup label='"._('Front')."'>";
+                foreach ($available as $a) {
+                    $selected = $a == $device['rack_start'] ? 'selected' : '';
+                    print "<option value='$a' $selected>$a</option>";
+                }
+                print '</optgroup>';
+
+                print "<optgroup label='"._('Back')."'>";
+                foreach ($available_back as $k => $a) {
+                    $selected = $k == $device['rack_start'] ? 'selected' : '';
+                    print "<option value='$k' $selected>$a</option>";
+                }
+                print '</optgroup>';
+            } else {
+                foreach ($available as $a) {
+                    $selected = $a == @$device['rack_start'] ? 'selected' : '';
+                    print "<option value='$a' $selected>$a</option>";
+                }
+            }
+    ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><?php print _('Size'); ?> (U)</td>
+        <td>
+            <input type="text" name="rack_size" size="2" class="form-control input-w-auto input-sm" style="width:100px;" placeholder="1" value="<?php print @$device['rack_size']; ?>">
+        </td>
+    </tr>
+    <tr>
+        <td><?php print _('Full Depth'); ?></td>
+        <td>
+            <input type="checkbox" class="input-switch" name="rack_deep" value="1" <?php if (@$device['rack_deep'] == 1) {
+                print 'checked';
+            } ?>>
+        </td>
+    </tr>
+    <?php
+}
+// set hidden values
+else {
+    print "<input type='hidden' name='rack_start' value='0'>";
+    print "<input type='hidden' name='rack_size' value='0'>";
+}

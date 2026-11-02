@@ -67,7 +67,7 @@ class Net_Ping
     * @var string
     * @access private
     */
-    var $_ping_path = "";
+    public $_ping_path = "";
 
     /**
     * Array with the result from the ping execution
@@ -75,7 +75,7 @@ class Net_Ping
     * @var array
     * @access private
     */
-    var $_result = array();
+    public $_result = [];
 
     /**
     * OS_Guess instance
@@ -83,7 +83,7 @@ class Net_Ping
     * @var object
     * @access private
     */
-    var $_OS_Guess = "";
+    public $_OS_Guess = "";
 
     /**
     * OS_Guess->getSysname result
@@ -91,7 +91,7 @@ class Net_Ping
     * @var string
     * @access private
     */
-    var $_sysname = "";
+    public $_sysname = "";
 
     /**
     * Ping command arguments
@@ -99,7 +99,7 @@ class Net_Ping
     * @var array
     * @access private
     */
-    var $_args = array();
+    public $_args = [];
 
     /**
     * Indicates if an empty array was given to setArgs
@@ -107,7 +107,7 @@ class Net_Ping
     * @var boolean
     * @access private
     */
-    var $_noArgs = true;
+    public $_noArgs = true;
 
     /**
     * Contains the argument->option relation
@@ -115,7 +115,7 @@ class Net_Ping
     * @var array
     * @access private
     */
-    var $_argRelation = array();
+    public $_argRelation = [];
 
     //pear
     public $pear;
@@ -239,7 +239,7 @@ class Net_Ping
     public static function _setPingPath($sysname)
     {
         $status    = '';
-        $output    = array();
+        $output    = [];
         $ping_path = '';
 
         if ("windows" == $sysname) {
@@ -268,7 +268,7 @@ class Net_Ping
     */
     function _createArgList()
     {
-        $retval     = array();
+        $retval     = [];
 
         $timeout    = "";
         $iface      = "";
@@ -378,7 +378,7 @@ class Net_Ping
     function ping($host)
     {
         if($this->_noArgs) {
-            $this->setArgs(array('count' => 3));
+            $this->setArgs(['count' => 3]);
         }
 
         $argList = $this->_createArgList();
@@ -388,7 +388,7 @@ class Net_Ping
         // success), users may call the ping() method repeatedly to
         // perform unrelated ping tests Make sure we don't have raw data
         // from a previous call laying in the _result array.
-        $this->_result = array();
+        $this->_result = [];
 
         exec($cmd, $this->_result);
 
@@ -420,13 +420,13 @@ class Net_Ping
     */
     function checkHost($host, $severely = true)
     {
-    	$matches = array();
+    	$matches = [];
 
-        $this->setArgs(array("count" => 10,
+        $this->setArgs(["count" => 10,
                              "size"  => 32,
                              "quiet" => null,
                              "deadline" => 10
-                             )
+                             ]
                        );
         $res = $this->ping($host);
         if ($this->pear->isError($res)) {
@@ -467,52 +467,52 @@ class Net_Ping
     */
     function _initArgRelation()
     {
-        $this->_argRelation["sunos"] = array(
+        $this->_argRelation["sunos"] = [
                                              "timeout"   => NULL,
                                              "ttl"       => "-t",
                                              "count"     => " ",
                                              "quiet"     => "-q",
                                              "size"      => " ",
                                              "iface"     => "-i"
-                                             );
+                                             ];
 
-        $this->_argRelation["freebsd"] = array (
+        $this->_argRelation["freebsd"] =  [
                                                 "timeout"   => "-t",
                                                 "ttl"       => "-m",
                                                 "count"     => "-c",
                                                 "quiet"     => "-q",
                                                 "size"      => NULL,
                                                 "iface"     => NULL
-                                                );
+                                                ];
 
-        $this->_argRelation["netbsd"] = array (
+        $this->_argRelation["netbsd"] =  [
                                                "timeout"   => "-w",
                                                "iface"     => "-I",
                                                "ttl"       => "-T",
                                                "count"     => "-c",
                                                "quiet"     => "-q",
                                                "size"      => "-s"
-                                               );
+                                               ];
 
-        $this->_argRelation["openbsd"] = array (
+        $this->_argRelation["openbsd"] =  [
                                                 "timeout"   => "-w",
                                                 "iface"     => "-I",
                                                 "ttl"       => "-t",
                                                 "count"     => "-c",
                                                 "quiet"     => "-q",
                                                 "size"      => "-s"
-                                                );
+                                                ];
 
-        $this->_argRelation["darwin"] = array (
+        $this->_argRelation["darwin"] =  [
                                                "timeout"   => "-t",
                                                "iface"     => NULL,
                                                "ttl"       => NULL,
                                                "count"     => "-c",
                                                "quiet"     => "-q",
                                                "size"      => NULL
-                                               );
+                                               ];
 
-        $this->_argRelation["linux"] = array (
+        $this->_argRelation["linux"] =  [
                                               "timeout"   => "-W",
                                               "iface"     => NULL,
                                               "ttl"       => "-t",
@@ -520,9 +520,9 @@ class Net_Ping
                                               "quiet"     => "-q",
                                               "size"      => "-s",
                                               "deadline"  => "-w"
-                                              );
+                                              ];
 
-        $this->_argRelation["linuxdebian"] = array (
+        $this->_argRelation["linuxdebian"] =  [
                                               "timeout"   => "-W",
                                               "iface"     => NULL,
                                               "ttl"       => "-t",
@@ -530,9 +530,9 @@ class Net_Ping
                                               "quiet"     => "-q",
                                               "size"      => "-s",
                                               "deadline"  => "-w",
-                                              );
+                                              ];
 
-        $this->_argRelation["linuxredhat8"] = array (
+        $this->_argRelation["linuxredhat8"] =  [
                                               "timeout"   => NULL,
                                               "iface"     => "-I",
                                               "ttl"       => "-t",
@@ -540,9 +540,9 @@ class Net_Ping
                                               "quiet"     => "-q",
                                               "size"      => "-s",
                                               "deadline"  => "-w"
-                                              );
+                                              ];
 
-        $this->_argRelation["linuxredhat9"] = array (
+        $this->_argRelation["linuxredhat9"] =  [
                                               "timeout"   => "-W",
                                               "iface"     => "-I",
                                               "ttl"       => "-t",
@@ -550,34 +550,34 @@ class Net_Ping
                                               "quiet"     => "-q",
                                               "size"      => "-s",
                                               "deadline"  => "-w"
-                                              );
+                                              ];
 
-        $this->_argRelation["windows"] = array (
+        $this->_argRelation["windows"] =  [
                                                 "timeout"   => "-w",
                                                 "iface"     => NULL,
                                                 "ttl"       => "-i",
                                                 "count"     => "-n",
                                                 "quiet"     => NULL,
                                                 "size"      => "-l"
-                                                 );
+                                                 ];
 
-        $this->_argRelation["hpux"] = array (
+        $this->_argRelation["hpux"] =  [
                                              "timeout"   => NULL,
                                              "iface"     => NULL,
                                              "ttl"       => "-t",
                                              "count"     => "-n",
                                              "quiet"     => NULL,
                                              "size"      => " "
-                                             );
+                                             ];
 
-        $this->_argRelation["aix"] = array (
+        $this->_argRelation["aix"] =  [
                                             "timeout"   => "-i",
                                             "iface"     => NULL,
                                             "ttl"       => "-T",
                                             "count"     => "-c",
                                             "quiet"     => NULL,
                                             "size"      => "-s"
-                                            );
+                                            ];
     }  /* function _initArgRelation() */
 } /* class Net_Ping */
 
@@ -597,7 +597,7 @@ class Net_Ping_Result
     * @var array
     * @access private
     */
-    var $_icmp_sequence = array(); /* array($sequence_number => $time ) */
+    public $_icmp_sequence = []; /* array($sequence_number => $time ) */
 
     /**
     * The target's IP Address
@@ -605,7 +605,7 @@ class Net_Ping_Result
     * @var string
     * @access private
     */
-    var $_target_ip;
+    public $_target_ip;
 
     /**
     * Number of bytes that are sent with each ICMP request
@@ -613,7 +613,7 @@ class Net_Ping_Result
     * @var int
     * @access private
     */
-    var $_bytes_per_request;
+    public $_bytes_per_request;
 
     /**
     * The total number of bytes that are sent with all ICMP requests
@@ -621,7 +621,7 @@ class Net_Ping_Result
     * @var int
     * @access private
     */
-    var $_bytes_total;
+    public $_bytes_total;
 
     /**
     * The ICMP request's TTL
@@ -629,7 +629,7 @@ class Net_Ping_Result
     * @var int
     * @access private
     */
-    var $_ttl;
+    public $_ttl;
 
     /**
     * The raw Net_Ping::result
@@ -637,7 +637,7 @@ class Net_Ping_Result
     * @var array
     * @access private
     */
-    var $_raw_data = array();
+    public $_raw_data = [];
 
     /**
     * The Net_Ping::_sysname
@@ -645,7 +645,7 @@ class Net_Ping_Result
     * @var int
     * @access private
     */
-    var $_sysname;
+    public $_sysname;
 
     /**
     * Statistical information about the ping
@@ -653,7 +653,7 @@ class Net_Ping_Result
     * @var int
     * @access private
     */
-    var $_round_trip = array(); /* array('min' => xxx, 'avg' => yyy, 'max' => zzz) */
+    public $_round_trip = []; /* array('min' => xxx, 'avg' => yyy, 'max' => zzz) */
 
 
     /**
@@ -743,11 +743,11 @@ class Net_Ping_Result
         // succesful ICMP reply which ping printed.
         for ( $i=1; $i<count($upper); $i++ ) {
             // anything like "64 bytes " at the front of any line in $upper??
-            if ( preg_match('/^\s*(\d+)\s*bytes/i', $upper[$i], $matches) ) {
+            if ( preg_match('/^\s*(\d+)\s*bytes/i', (string) $upper[$i], $matches) ) {
                 return( (int)$matches[1] );
             }
             // anything like "bytes=64" in any line in the buffer??
-            if ( preg_match('/bytes=(\d+)/i', $upper[$i], $matches) ) {
+            if ( preg_match('/bytes=(\d+)/i', (string) $upper[$i], $matches) ) {
                 return( (int)$matches[1] );
             }
         }
@@ -755,7 +755,7 @@ class Net_Ping_Result
         // Some flavors of ping give two numbers, as in "n(m) bytes", on
         // the first line. We'll take the first number and add 8 for the
         // 8 bytes of header and such in an ICMP ECHO REQUEST.
-        if ( preg_match('/(\d+)\(\d+\)\D+$/', $upper[0], $matches) ) {
+        if ( preg_match('/(\d+)\(\d+\)\D+$/', (string) $upper[0], $matches) ) {
             return( (int)(8+$matches[1]) );
         }
 
@@ -765,7 +765,7 @@ class Net_Ping_Result
         // ping flavors just put the number of data (ie, payload) bytes
         // if they don't specify both numbers as n(m). So we add 8 bytes
         // for the ICMP headers.
-        if ( preg_match('/(\d+)\D+$/', $upper[0], $matches) ) {
+        if ( preg_match('/(\d+)\D+$/', (string) $upper[0], $matches) ) {
             return( (int)(8+$matches[1]) );
         }
 
@@ -796,16 +796,16 @@ class Net_Ping_Result
         // don't show "time=" (that I've seen examples from) also match
         // this methodology.
 
-        $results = array();
+        $results = [];
         for ( $i=1; $i<count($upper); $i++ ) {
             // by our definition, it's not a success line if we can't
             // find the time
-            if ( preg_match('/=\s*([\d+\.]+)\s*ms/i', $upper[$i], $matches) ) {
+            if ( preg_match('/=\s*([\d+\.]+)\s*ms/i', (string) $upper[$i], $matches) ) {
                 // float cast deals neatly with values like "126." which
                 // some pings generate
                 $rtt = (float)$matches[1];
                 // does the line have an obvious sequence number?
-                if ( preg_match('/icmp_seq\s*=\s*([\d+]+)/i', $upper[$i], $matches) ) {
+                if ( preg_match('/icmp_seq\s*=\s*([\d+]+)/i', (string) $upper[$i], $matches) ) {
                     $results[$matches[1]] = $rtt;
                 }
                 else {
@@ -826,7 +826,7 @@ class Net_Ping_Result
     function _parseResultDetailLoss($lower)
     {
         for ( $i=1; $i<count($lower); $i++ ) {
-            if ( preg_match('/(\d+)%/', $lower[$i], $matches) ) {
+            if ( preg_match('/(\d+)%/', (string) $lower[$i], $matches) ) {
                 $this->_loss = (int)$matches[1];
                 return;
             }
@@ -842,7 +842,7 @@ class Net_Ping_Result
     {
         for ( $i=1; $i<count($lower); $i++ ) {
             // the second number on the line
-            if ( preg_match('/^\D*\d+\D+(\d+)/', $lower[$i], $matches) ) {
+            if ( preg_match('/^\D*\d+\D+(\d+)/', (string) $lower[$i], $matches) ) {
                 $this->_received = (int)$matches[1];
                 return;
             }
@@ -869,10 +869,10 @@ class Net_Ping_Result
         // separated by slashes.
         $p2 = '[0-9\.]+/[0-9\.]+/[0-9\.]+/?[0-9\.]*';
 
-        $results = array();
-        $matches = array();
+        $results = [];
+        $matches = [];
         for ( $i=(count($lower)-1); $i>=0; $i-- ) {
-            if ( preg_match('|('.$p1.')[^0-9]+('.$p2.')|i', $lower[$i], $matches) ) {
+            if ( preg_match('|('.$p1.')[^0-9]+('.$p2.')|i', (string) $lower[$i], $matches) ) {
                 break;
             }
         }
@@ -906,8 +906,8 @@ class Net_Ping_Result
         // layout.
         $p3 = '[a-z]+\s*=\s*([0-9\.]+).*';
         for ( $i=(count($lower)-1); $i>=0; $i-- ) {
-            if ( preg_match('/min.*max/i', $lower[$i]) ) {
-                if ( preg_match('/'.$p3.$p3.$p3.'/i', $lower[$i], $matches) ) {
+            if ( preg_match('/min.*max/i', (string) $lower[$i]) ) {
+                if ( preg_match('/'.$p3.$p3.$p3.'/i', (string) $lower[$i], $matches) ) {
                     $results['min'] = $matches[1];
                     $results['max'] = $matches[2];
                     $results['avg'] = $matches[3];
@@ -932,7 +932,7 @@ class Net_Ping_Result
         // put the target IP on the first line, but some only list it
         // in successful ping packet lines.
         for ( $i=0; $i<count($upper); $i++ ) {
-            if ( preg_match('/(\d+\.\d+\.\d+\.\d+)/', $upper[$i], $matches) ) {
+            if ( preg_match('/(\d+\.\d+\.\d+\.\d+)/', (string) $upper[$i], $matches) ) {
                 return( $matches[0] );
             }
         }
@@ -950,7 +950,7 @@ class Net_Ping_Result
     {
         for ( $i=1; $i<count($lower); $i++ ) {
             // the first number on the line
-            if ( preg_match('/^\D*(\d+)/', $lower[$i], $matches) ) {
+            if ( preg_match('/^\D*(\d+)/', (string) $lower[$i], $matches) ) {
                 $this->_transmitted = (int)$matches[1];
                 return;
             }
@@ -966,7 +966,7 @@ class Net_Ping_Result
     {
         //extract TTL from first icmp echo line
         for ( $i=1; $i<count($upper); $i++ ) {
-            if (   preg_match('/ttl=(\d+)/i', $upper[$i], $matches)
+            if (   preg_match('/ttl=(\d+)/i', (string) $upper[$i], $matches)
                 && (int)$matches[1] > 0
                 ) {
                 return( (int)$matches[1] );
@@ -990,11 +990,11 @@ print_r($this);
 exit;
 }
         // Trim empty elements from the front
-        while ( preg_match('/^\s*$/', $data[0]) ) {
+        while ( preg_match('/^\s*$/', (string) $data[0]) ) {
             array_splice($data, 0, 1);
         }
         // Trim empty elements from the back
-        while ( preg_match('/^\s*$/', $data[(count($data)-1)]) ) {
+        while ( preg_match('/^\s*$/', (string) $data[(count($data)-1)]) ) {
             array_splice($data, -1, 1);
         }
     }
@@ -1008,12 +1008,12 @@ exit;
     */
     function _parseResultSeparateParts($data, &$upper, &$lower)
     {
-        $upper = array();
-        $lower = array();
+        $upper = [];
+        $lower = [];
 
         // find the blank line closest to the end
         $dividerIndex = count($data) - 1;
-        while ( !preg_match('/^\s*$/', $data[$dividerIndex]) ) {
+        while ( !preg_match('/^\s*$/', (string) $data[$dividerIndex]) ) {
             $dividerIndex--;
             if ( $dividerIndex < 0 ) {
                 break;

@@ -144,7 +144,7 @@ class Net_DNS2_RR_SOA extends Net_DNS2_RR
             //
             $x = unpack(
                 '@' . $offset . '/Nserial/Nrefresh/Nretry/Nexpire/Nminimum/', 
-                $packet->rdata
+                (string) $packet->rdata
             );
 
             $this->serial   = Net_DNS2::expandUint32($x['serial']);
@@ -172,7 +172,7 @@ class Net_DNS2_RR_SOA extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->mname) > 0) {
+        if (strlen((string) $this->mname) > 0) {
     
             $data = $packet->compress($this->mname, $packet->offset);
             $data .= $packet->compress($this->rname, $packet->offset);

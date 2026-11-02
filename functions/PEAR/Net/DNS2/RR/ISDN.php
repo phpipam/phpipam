@@ -96,7 +96,7 @@ class Net_DNS2_RR_ISDN extends Net_DNS2_RR
             //
             // look for a SA (sub address) - it's optional
             //
-            if ( (strlen($this->isdnaddress) + 1) < $this->rdlength) {
+            if ( (strlen((string) $this->isdnaddress) + 1) < $this->rdlength) {
 
                 $this->sa = Net_DNS2_Packet::label($packet, $packet->offset);
             } else {
@@ -123,12 +123,12 @@ class Net_DNS2_RR_ISDN extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->isdnaddress) > 0) {
+        if (strlen((string) $this->isdnaddress) > 0) {
 
-            $data = chr(strlen($this->isdnaddress)) . $this->isdnaddress;
+            $data = chr(strlen((string) $this->isdnaddress)) . $this->isdnaddress;
             if (!empty($this->sa)) {
 
-                $data .= chr(strlen($this->sa));
+                $data .= chr(strlen((string) $this->sa));
                 $data .= $this->sa;
             }
 

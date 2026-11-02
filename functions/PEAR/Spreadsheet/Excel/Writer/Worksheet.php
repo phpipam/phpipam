@@ -32,8 +32,8 @@
 *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-require_once( dirname(__FILE__) . '/Parser.php');
-require_once( dirname(__FILE__) . '/BIFFwriter.php');
+require_once( __DIR__ . '/Parser.php');
+require_once( __DIR__ . '/BIFFwriter.php');
 
 /**
 * Class for generating Excel Spreadsheets
@@ -49,311 +49,311 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     * Name of the Worksheet
     * @var string
     */
-    var $name;
+    public $name;
 
     /**
     * Index for the Worksheet
     * @var integer
     */
-    var $index;
+    public $index;
 
     /**
     * Reference to the (default) Format object for URLs
     * @var object Format
     */
-    var $_url_format;
+    public $_url_format;
 
     /**
     * Reference to the parser used for parsing formulas
     * @var object Format
     */
-    var $_parser;
+    public $_parser;
 
     /**
     * Filehandle to the temporary file for storing data
     * @var resource
     */
-    var $_filehandle;
+    public $_filehandle;
 
     /**
     * Boolean indicating if we are using a temporary file for storing data
     * @var bool
     */
-    var $_using_tmpfile;
+    public $_using_tmpfile;
 
     /**
     * Maximum number of rows for an Excel spreadsheet (BIFF5)
     * @var integer
     */
-    var $_xls_rowmax;
+    public $_xls_rowmax;
 
     /**
     * Maximum number of columns for an Excel spreadsheet (BIFF5)
     * @var integer
     */
-    var $_xls_colmax;
+    public $_xls_colmax;
 
     /**
     * Maximum number of characters for a string (LABEL record in BIFF5)
     * @var integer
     */
-    var $_xls_strmax;
+    public $_xls_strmax;
 
     /**
     * First row for the DIMENSIONS record
     * @var integer
     * @see _storeDimensions()
     */
-    var $_dim_rowmin;
+    public $_dim_rowmin;
 
     /**
     * Last row for the DIMENSIONS record
     * @var integer
     * @see _storeDimensions()
     */
-    var $_dim_rowmax;
+    public $_dim_rowmax;
 
     /**
     * First column for the DIMENSIONS record
     * @var integer
     * @see _storeDimensions()
     */
-    var $_dim_colmin;
+    public $_dim_colmin;
 
     /**
     * Last column for the DIMENSIONS record
     * @var integer
     * @see _storeDimensions()
     */
-    var $_dim_colmax;
+    public $_dim_colmax;
 
     /**
     * Array containing format information for columns
     * @var array
     */
-    var $_colinfo;
+    public $_colinfo;
 
     /**
     * Array containing the selected area for the worksheet
     * @var array
     */
-    var $_selection;
+    public $_selection;
 
     /**
     * Array containing the panes for the worksheet
     * @var array
     */
-    var $_panes;
+    public $_panes;
 
     /**
     * The active pane for the worksheet
     * @var integer
     */
-    var $_active_pane;
+    public $_active_pane;
 
     /**
     * Bit specifying if panes are frozen
     * @var integer
     */
-    var $_frozen;
+    public $_frozen;
 
     /**
     * Bit specifying if the worksheet is selected
     * @var integer
     */
-    var $selected;
+    public $selected;
 
     /**
     * The paper size (for printing) (DOCUMENT!!!)
     * @var integer
     */
-    var $_paper_size;
+    public $_paper_size;
 
     /**
     * Bit specifying paper orientation (for printing). 0 => landscape, 1 => portrait
     * @var integer
     */
-    var $_orientation;
+    public $_orientation;
 
     /**
     * The page header caption
     * @var string
     */
-    var $_header;
+    public $_header;
 
     /**
     * The page footer caption
     * @var string
     */
-    var $_footer;
+    public $_footer;
 
     /**
     * The horizontal centering value for the page
     * @var integer
     */
-    var $_hcenter;
+    public $_hcenter;
 
     /**
     * The vertical centering value for the page
     * @var integer
     */
-    var $_vcenter;
+    public $_vcenter;
 
     /**
     * The margin for the header
     * @var float
     */
-    var $_margin_head;
+    public $_margin_head;
 
     /**
     * The margin for the footer
     * @var float
     */
-    var $_margin_foot;
+    public $_margin_foot;
 
     /**
     * The left margin for the worksheet in inches
     * @var float
     */
-    var $_margin_left;
+    public $_margin_left;
 
     /**
     * The right margin for the worksheet in inches
     * @var float
     */
-    var $_margin_right;
+    public $_margin_right;
 
     /**
     * The top margin for the worksheet in inches
     * @var float
     */
-    var $_margin_top;
+    public $_margin_top;
 
     /**
     * The bottom margin for the worksheet in inches
     * @var float
     */
-    var $_margin_bottom;
+    public $_margin_bottom;
 
     /**
     * First row to reapeat on each printed page
     * @var integer
     */
-    var $title_rowmin;
+    public $title_rowmin;
 
     /**
     * Last row to reapeat on each printed page
     * @var integer
     */
-    var $title_rowmax;
+    public $title_rowmax;
 
     /**
     * First column to reapeat on each printed page
     * @var integer
     */
-    var $title_colmin;
+    public $title_colmin;
 
     /**
     * First row of the area to print
     * @var integer
     */
-    var $print_rowmin;
+    public $print_rowmin;
 
     /**
     * Last row to of the area to print
     * @var integer
     */
-    var $print_rowmax;
+    public $print_rowmax;
 
     /**
     * First column of the area to print
     * @var integer
     */
-    var $print_colmin;
+    public $print_colmin;
 
     /**
     * Last column of the area to print
     * @var integer
     */
-    var $print_colmax;
+    public $print_colmax;
 
     /**
     * Whether to use outline.
     * @var integer
     */
-    var $_outline_on;
+    public $_outline_on;
 
     /**
     * Auto outline styles.
     * @var bool
     */
-    var $_outline_style;
+    public $_outline_style;
 
     /**
     * Whether to have outline summary below.
     * @var bool
     */
-    var $_outline_below;
+    public $_outline_below;
 
     /**
     * Whether to have outline summary at the right.
     * @var bool
     */
-    var $_outline_right;
+    public $_outline_right;
 
     /**
     * Outline row level.
     * @var integer
     */
-    var $_outline_row_level;
+    public $_outline_row_level;
 
     /**
     * Whether to fit to page when printing or not.
     * @var bool
     */
-    var $_fit_page;
+    public $_fit_page;
 
     /**
     * Number of pages to fit wide
     * @var integer
     */
-    var $_fit_width;
+    public $_fit_width;
 
     /**
     * Number of pages to fit high
     * @var integer
     */
-    var $_fit_height;
+    public $_fit_height;
 
     /**
     * Reference to the total number of strings in the workbook
     * @var integer
     */
-    var $_str_total;
+    public $_str_total;
 
     /**
     * Reference to the number of unique strings in the workbook
     * @var integer
     */
-    var $_str_unique;
+    public $_str_unique;
 
     /**
     * Reference to the array containing all the unique strings in the workbook
     * @var array
     */
-    var $_str_table;
+    public $_str_table;
 
     /**
     * Merged cell ranges
     * @var array
     */
-    var $_merged_ranges;
+    public $_merged_ranges;
 
     /**
     * Charset encoding currently used when calling writeString()
     * @var string
     */
-    var $_input_encoding;
+    public $_input_encoding;
 
     /**
     * Constructor
@@ -402,9 +402,9 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $this->_dim_rowmax     = 0;
         $this->_dim_colmin     = $colmax + 1;
         $this->_dim_colmax     = 0;
-        $this->_colinfo        = array();
-        $this->_selection      = array(0,0,0,0);
-        $this->_panes          = array();
+        $this->_colinfo        = [];
+        $this->_selection      = [0,0,0,0];
+        $this->_panes          = [];
         $this->_active_pane    = 3;
         $this->_frozen         = 0;
         $this->selected        = 0;
@@ -439,14 +439,14 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $this->_fit_width       = 0;
         $this->_fit_height      = 0;
 
-        $this->_hbreaks         = array();
-        $this->_vbreaks         = array();
+        $this->_hbreaks         = [];
+        $this->_vbreaks         = [];
 
         $this->_protect         = 0;
         $this->_password        = null;
 
-        $this->col_sizes        = array();
-        $this->_row_sizes        = array();
+        $this->col_sizes        = [];
+        $this->_row_sizes        = [];
 
         $this->_zoom            = 100;
         $this->_print_scale     = 100;
@@ -457,11 +457,11 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $this->_outline_right     = 1;
         $this->_outline_on        = 1;
 
-        $this->_merged_ranges     = array();
+        $this->_merged_ranges     = [];
 
         $this->_input_encoding    = '';
 
-        $this->_dv                = array();
+        $this->_dv                = [];
 
         $this->_tmp_dir = $tmp_dir;
 
@@ -697,7 +697,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         }
         // don't check rowmin, rowmax, etc... because we don't know when this
         // is going to be called
-        $this->_merged_ranges[] = array($first_row, $first_col, $last_row, $last_col);
+        $this->_merged_ranges[] = [$first_row, $first_col, $last_row, $last_col];
     }
 
     /**
@@ -763,7 +763,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     */
     function setColumn($firstcol, $lastcol, $width, $format = null, $hidden = 0, $level = 0)
     {
-        $this->_colinfo[] = array($firstcol, $lastcol, $width, &$format, $hidden, $level);
+        $this->_colinfo[] = [$firstcol, $lastcol, $width, &$format, $hidden, $level];
 
         // Set width to zero if column is hidden
         $width = ($hidden) ? 0 : $width;
@@ -784,7 +784,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     */
     function setSelection($first_row,$first_column,$last_row,$last_column)
     {
-        $this->_selection = array($first_row,$first_column,$last_row,$last_column);
+        $this->_selection = [$first_row,$first_column,$last_row,$last_column];
     }
 
     /**
@@ -1175,19 +1175,19 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         if (is_null($token))
             $token = '';
 
-        if (preg_match("/^([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))?$/", $token)) {
+        if (preg_match("/^([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))?$/", (string) $token)) {
             // Match number
             return $this->writeNumber($row, $col, $token, $format);
-        } elseif (preg_match("/^[fh]tt?p:\/\//", $token)) {
+        } elseif (preg_match("/^[fh]tt?p:\/\//", (string) $token)) {
             // Match http or ftp URL
             return $this->writeUrl($row, $col, $token, '', $format);
-        } elseif (preg_match("/^mailto:/", $token)) {
+        } elseif (preg_match("/^mailto:/", (string) $token)) {
             // Match mailto:
             return $this->writeUrl($row, $col, $token, '', $format);
-        } elseif (preg_match("/^(?:in|ex)ternal:/", $token)) {
+        } elseif (preg_match("/^(?:in|ex)ternal:/", (string) $token)) {
             // Match internal or external sheet link
             return $this->writeUrl($row, $col, $token, '', $format);
-        } elseif (preg_match("/^=/", $token)) {
+        } elseif (preg_match("/^=/", (string) $token)) {
             // Match formula
             return $this->writeFormula($row, $col, $token, $format);
         } elseif ($token == '') {
@@ -1284,6 +1284,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     * @access private
     * @param string $data The binary data to append
     */
+    #[\Override]
     function _append($data)
     {
         if ($this->_using_tmpfile) {
@@ -1316,20 +1317,20 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         if (preg_match("/([A-I]?[A-Z]):([A-I]?[A-Z])/", $cell, $match)) {
             list($no_use, $col1) =  $this->_cellToRowcol($match[1] .'1'); // Add a dummy row
             list($no_use, $col2) =  $this->_cellToRowcol($match[2] .'1'); // Add a dummy row
-            return(array($col1, $col2));
+            return([$col1, $col2]);
         }
 
         // Convert a cell range: 'A1:B7'
         if (preg_match("/\$?([A-I]?[A-Z]\$?\d+):\$?([A-I]?[A-Z]\$?\d+)/", $cell, $match)) {
             list($row1, $col1) =  $this->_cellToRowcol($match[1]);
             list($row2, $col2) =  $this->_cellToRowcol($match[2]);
-            return(array($row1, $col1, $row2, $col2));
+            return([$row1, $col1, $row2, $col2]);
         }
 
         // Convert a cell reference: 'A1' or 'AD2000'
         if (preg_match("/\$?([A-I]?[A-Z]\$?\d+)/", $cell)) {
             list($row1, $col1) =  $this->_cellToRowcol($match[1]);
-            return(array($row1, $col1));
+            return([$row1, $col1]);
         }
 
         // TODO use real error codes
@@ -1365,7 +1366,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $row--;
         $col--;
 
-        return(array($row, $col));
+        return([$row, $col]);
     }
 
     /**
@@ -1809,7 +1810,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
             return -1;
         }
 
-        $formlen    = strlen($formula);    // Length of the binary string
+        $formlen    = strlen((string) $formula);    // Length of the binary string
         $length     = 0x16 + $formlen;     // Length of the record data
 
         $header    = pack("vv",      $record, $length);
@@ -1985,7 +1986,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $options     = pack("V", 0x08);
 
         // Convert the URL type and to a null terminated wchar string
-        $url         = join("\0", preg_split("''", $url, -1, PREG_SPLIT_NO_EMPTY));
+        $url         = join("\0", preg_split("''", (string) $url, -1, PREG_SPLIT_NO_EMPTY));
         $url         = $url . "\0\0\0";
 
         // Pack the length of the URL as chars (not wchars)
@@ -2041,11 +2042,11 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         // Strip URL type and change Unix dir separator to Dos style (if needed)
         //
         $url = preg_replace('/^external:/', '', $url);
-        $url = preg_replace('/\//', "\\", $url);
+        $url = preg_replace('/\//', "\\", (string) $url);
 
         // Write the visible label
         if ($str == '') {
-            $str = preg_replace('/\#/', ' - ', $url);
+            $str = preg_replace('/\#/', ' - ', (string) $url);
         }
         $str_error = $this->writeString($row1, $col1, $str, $format);
         if (($str_error == -2) or ($str_error == -3)) {
@@ -2058,10 +2059,10 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         //   otherwise, absolute
 
         $absolute    = 0x02; // Bit mask
-        if (!preg_match("/\\\/", $url)) {
+        if (!preg_match("/\\\/", (string) $url)) {
             $absolute    = 0x00;
         }
-        if (preg_match("/^\.\.\\\/", $url)) {
+        if (preg_match("/^\.\.\\\/", (string) $url)) {
             $absolute    = 0x00;
         }
         $link_type               = 0x01 | $absolute;
@@ -2085,7 +2086,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
             $sheet       = '';
         }*/
         $dir_long = $url;
-        if (preg_match("/\#/", $url)) {
+        if (preg_match("/\#/", (string) $url)) {
             $link_type |= 0x08;
         }
 
@@ -2095,11 +2096,11 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $link_type   = pack("V", $link_type);
 
         // Calculate the up-level dir count e.g.. (..\..\..\ == 3)
-        $up_count    = preg_match_all("/\.\.\\\/", $dir_long, $useless);
+        $up_count    = preg_match_all("/\.\.\\\/", (string) $dir_long, $useless);
         $up_count    = pack("v", $up_count);
 
         // Store the short dos dir name (null terminated)
-        $dir_short   = preg_replace("/\.\.\\\/", '', $dir_long) . "\0";
+        $dir_short   = preg_replace("/\.\.\\\/", '', (string) $dir_long) . "\0";
 
         // Store the long dir name as a wchar string (non-null terminated)
         //$dir_long       = join("\0", preg_split('//', $dir_long));
@@ -2392,11 +2393,11 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
 
         // Swap last row/col for first row/col as necessary
         if ($rwFirst > $rwLast) {
-            list($rwFirst, $rwLast) = array($rwLast, $rwFirst);
+            list($rwFirst, $rwLast) = [$rwLast, $rwFirst];
         }
 
         if ($colFirst > $colLast) {
-            list($colFirst, $colLast) = array($colLast, $colFirst);
+            list($colFirst, $colLast) = [$colLast, $colFirst];
         }
 
         $header   = pack("vv",         $record, $length);
@@ -2820,11 +2821,11 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
 
         // Swap last row/col for first row/col as necessary
         if ($first_row > $last_row) {
-            list($first_row, $last_row) = array($last_row, $first_row);
+            list($first_row, $last_row) = [$last_row, $first_row];
         }
 
         if ($first_col > $last_col) {
-            list($first_col, $last_col) = array($last_col, $first_col);
+            list($first_col, $last_col) = [$last_col, $first_col];
         }
 
         $header   = pack("vv",    $record, $length);
@@ -3470,7 +3471,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $header  = pack("Vvvvv", 0x000c, $width, $height, 0x01, 0x18);
         $data    = $header . $data;
 
-        return (array($width, $height, $size, $data));
+        return ([$width, $height, $size, $data]);
     }
 
     /**

@@ -134,7 +134,7 @@ class Net_DNS2_RR_OPT extends Net_DNS2_RR
     {
         $this->option_code      = array_shift($rdata);
         $this->option_data      = array_shift($rdata);
-        $this->option_length    = strlen($this->option_data);
+        $this->option_length    = strlen((string) $this->option_data);
 
         $x = unpack('Cextended/Cversion/Cdo/Cz', pack('N', $this->ttl));
 
@@ -175,7 +175,7 @@ class Net_DNS2_RR_OPT extends Net_DNS2_RR
             //
             // unpack the code and length
             //
-            $x = unpack('noption_code/noption_length', $this->rdata);
+            $x = unpack('noption_code/noption_length', (string) $this->rdata);
 
             $this->option_code      = $x['option_code'];
             $this->option_length    = $x['option_length'];
@@ -183,7 +183,7 @@ class Net_DNS2_RR_OPT extends Net_DNS2_RR
             //
             // copy out the data based on the length
             //
-            $this->option_data      = substr($this->rdata, 4);
+            $this->option_data      = substr((string) $this->rdata, 4);
         }
 
         return true;

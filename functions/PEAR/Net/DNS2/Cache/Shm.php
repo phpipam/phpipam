@@ -23,8 +23,9 @@
  */
 class Net_DNS2_Cache_Shm extends Net_DNS2_Cache
 {
-    /*
+    /**
      * resource id of the shared memory cache
+     * @var resource|false
      */
     private $_cache_id = false;
 
@@ -151,7 +152,7 @@ class Net_DNS2_Cache_Shm extends Net_DNS2_Cache
         //
         // if there's no cache file set, then there's nothing to do
         //
-        if (strlen($this->cache_file) == 0) {
+        if (strlen((string) $this->cache_file) == 0) {
             return;
         }
 
@@ -251,10 +252,12 @@ class Net_DNS2_Cache_Shm extends Net_DNS2_Cache
                 $o = shmop_write($this->_cache_id, $data, 0);
             }
 
-            //
             // close the segment
-            //
-            shmop_close($this->_cache_id);
+            if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+                // phpcs:ignore
+                shmop_close($this->_cache_id);
+                // phpcs:ignore
+            }
 
             //
             // unlock

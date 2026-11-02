@@ -86,7 +86,7 @@ class Net_DNS2_RR_RT extends Net_DNS2_RR
             //
             // unpack the preference
             //
-            $x = unpack('npreference', $this->rdata);
+            $x = unpack('npreference', (string) $this->rdata);
 
             $this->preference       = $x['preference'];
             $offset                 = $packet->offset + 2;
@@ -112,7 +112,7 @@ class Net_DNS2_RR_RT extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->intermediatehost) > 0) {
+        if (strlen((string) $this->intermediatehost) > 0) {
 
             $data = pack('n', $this->preference);
             $packet->offset += 2;

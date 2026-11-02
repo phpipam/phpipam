@@ -1,19 +1,22 @@
-== 1.8.3
+== 1.9.0
 
     Bugfixes:
     ----------------------------
-    + Dynamic authentication API endpoints returns 409 (#4640);
-
-    Security Fixes:
-    ----------------------------
-    + 2FA activation, bypass CSRF checks;
-    + Insecure direct object references;
-
-== 1.8.2
-
-    Bugfixes:
-    ----------------------------
+    + PHP8 compatibility fixes;
+    + Rack SVG image errors (#4595);
     + Rack dropdown fails to populate while editing a device (#4602);
+    + Dynamic authentication API endpoints returns 409 (#4640);
+    + Passkey enrolment issues;
+
+    Enhancements, changes:
+    ----------------------------
+    + Minimum PHP version raised to 8.2.0;
+    + HTML files moved to 'public' folder (see UPDATE.md);
+    + API controllers moved to 'functions/api/controllers' folder (see UPDATE.md);
+    + Removed git submodules, full migration to composer (see UPDATE.md);
+    + Removed support for mcrypt;
+    + Open MySQL connections with Pdo\Mysql::ATTR_MULTI_STATEMENTS=false;
+    + 2FA and passkey improvements;
 
     Security Fixes:
     ----------------------------
@@ -29,13 +32,16 @@
     + Custom field reordering, missing CSRF checks;
     + Subnet permissions can be rewritten by any authenticated user;
     + Cross subnet and ping insecure direct object references;
+    + 2FA activation, bypass CSRF checks;
+    + Insecure direct object references (x2);
+    + Reflected Cross-Site Scripting (XSS) in /upgrade/index.php;
+    + Reflected Cross-Site Scripting (XSS) in show-rack-popup.php;
+    + Favourites, missing permission and CSRF checks;
+    + Passkey enrolment can bypass TOTP;
 
-== 1.8.1
-
-    Bugfixes:
+    Translations:
     ----------------------------
-    + PHP8 compatibility fixes;
-    + Rack SVG image errors (#4595);
+    + Updated Ukrainian translation (#4669);
 
 == 1.8.0
 

@@ -1,0 +1,391 @@
+<?php
+
+/**
+ *  phpIPAM API class to work with NAT
+ */
+class Nat_controller extends Common_api_functions
+{
+    /**
+     * _params provided
+     *
+     * @var mixed
+     */
+    public $_params;
+
+    /**
+     * custom_fields
+     *
+     * @var mixed
+     */
+    public $custom_fields;
+
+    /**
+     * Database object
+     *
+     * @var mixed
+     */
+    protected $Database;
+
+    /**
+     * Addresses object from master Addresses class
+     *
+     * @var mixed
+     */
+    public $Addresses;
+
+    /**
+     * Devices objects from master Devices class
+     *
+     * @var mixed
+     **/
+    public $Devices;
+
+    /**
+     *  Response handler
+     *
+     * @var mixed
+     */
+    protected $Response;
+
+    /**
+     * Master Tools object
+     *
+     * @var mixed
+     */
+    protected $Tools;
+
+    /**
+     * valid src & dst sub-fields
+     *
+     * @var array
+     **/
+    protected $valid_subfields;
+
+    /**
+     * Indirection using variable name to data
+     *
+     * @var array
+     **/
+    protected $validation_data;
+
+    /**
+     * List of valid NAT types
+     *
+     * @var array
+     **/
+    protected $valid_types;
+
+    /**
+     * __construct function
+     *
+     * @param  Database_PDO  $Database
+     * @param  Tools  $Tools
+     * @param  API_params  $params
+     * @param  Responses  $Response
+     */
+    public function __construct($Database, $Tools, $params, $Response)
+    {
+        $this->Database = $Database;
+        $this->Response = $Response;
+        $this->Tools = $Tools;
+        $this->_params = $params;
+        $this->init_object('Admin', $Database);
+        $this->init_object('Addresses', $Database);
+        $this->init_object('Devices', $Database);
+        $this->set_valid_keys('nat');
+        $this->valid_types = ['source', 'destination', 'static'];
+        $this->validation_data = [
+            'ipaddresses' => [
+                'object' => $this->Addresses,
+                'function' => 'fetch_address',
+            ],
+        ];
+    }
+
+    /**
+     * Returns json encoded options and version
+     *
+     * @return void
+     */
+    #[Override]
+    public function OPTIONS()
+    {
+        // validate
+        $this->validate_options_request();
+
+        // methods
+        $result = [];
+        $result['methods'] = [
+            ['href' => '/api/'.$this->_params->app_id.'/nat/',       'methods' => [['rel' => 'options', 'method' => 'OPTIONS']]],
+            ['href' => '/api/'.$this->_params->app_id.'/nat/{id}/',  'methods' => [['rel' => 'read',    'method' => 'GET'],
+                ['rel' => 'create',  'method' => 'POST'],
+                ['rel' => 'update',  'method' => 'PATCH'],
+                ['rel' => 'delete',  'method' => 'DELETE']]],
+        ];
+
+        return ['code' => 200, 'data' => $result];
+    }
+
+    /**
+     * GET NAT functions
+     *
+     *  ID can be:
+     *      - /                     // returns all NATs
+     *      - /{id}/                // returns NAT details
+     *
+     *  If no ID is provided all nats are returned
+     *
+     * @return void
+     */
+    #[Override]
+    public function GET()
+    {
+        // Get all NATs from DB
+        if (! isset($this->_params->id) || $this->_params->id == 'all') {
+            $result = $this->Tools->fetch_all_objects('nat', 'id');
+
+            return ['code' => 200, 'data' => $this->convert_from_DB($result), true, true]; // $this->prepare_result ($result, null, true, true));
+        } elseif (isset($this->_params->id) && is_numeric($this->_params->id)) {
+            $result = $this->Tools->fetch_multiple_objects('nat', 'id', $this->_params->id, 'id', true);
+
+            return ['code' => 200, 'data' => $this->convert_from_DB($result), true, true];
+        } else {
+            $this->Response->throw_exception(400, 'Invalid ID format');
+        }
+
+        return null;
+    }
+
+    /**
+     * Convert DB<>API format (especially for JSON-formatted fields)
+     * APÏ shows a valid data structure instead of JSON-formatted field
+     *
+     * @param  mixed  $results
+     * @return array list of formatted results
+     **/
+    private function convert_from_DB($results)
+    {
+        $out = [];
+        foreach ($results as $r) {
+            $rr = [
+                'src' => [],
+                'dst' => [],
+            ];
+            foreach ($r as $k => $v) {
+                if ($k != 'src' && $k != 'dst') {
+                    $rr[$k] = $v;
+                } else {
+                    // Better source and destination presentation (json decode values from DB)
+                    $jd = (array) db_json_decode($v, true);
+                    if ($jd && $jd['ipaddresses']) {
+                        $rr[$k] = ['ipaddresses' => $jd['ipaddresses']];
+                    }
+                }
+            }
+
+            $out[] = $rr;
+        }
+
+        return $out;
+    }
+
+    /**
+     * HEAD, no response
+     *
+     * @return void
+     */
+    #[Override]
+    public function HEAD()
+    {
+        return $this->GET();
+    }
+
+    /**
+     * Creates new NAT
+     *
+     * @return void
+     */
+    #[Override]
+    public function POST()
+    {
+        // check for valid keys
+        $values = $this->validate_keys();
+        // validate input format
+        $this->validate_nat_edit();
+        foreach (['src', 'dst'] as $k) {
+            $values[$k] = json_encode($values[$k]);
+        }
+
+        // $this->Response->throw_exception(500, "AAA".json_encode($values['src']));
+        if (! $this->Admin->object_modify('nat', 'add', 'id', $values)) {
+            $this->Response->throw_exception(500, 'NAT creation failed');
+        }
+
+        return ['code' => 201, 'message' => 'NAT created', 'id' => $this->Admin->lastId, 'location' => '/api'.$this->_params->app_id.'/nat/'.$this->Admin->lastId.'/'];
+    }
+
+    /**
+     * Updates existing NAT
+     *
+     * @return void
+     */
+    #[Override]
+    public function PATCH()
+    {
+        // check for valid keys
+        $values = $this->validate_keys();
+        // validate input format
+        $this->validate_nat_edit();
+        foreach (['src', 'dst'] as $k) {
+            if (array_key_exists($k, $values)) {
+                $values[$k] = json_encode($values[$k]);
+            }
+        }
+
+        if (! $this->Admin->object_modify('nat', 'edit', 'id', $values)) {
+            $this->Response->throw_exception(500, 'NAT modification failed');
+        }
+
+        return ['code' => 200, 'message' => 'NAT modified', 'id' => $this->_params->id, 'location' => '/api'.$this->_params->app_id.'/nat/'.$this->Admin->lastId.'/'];
+    }
+
+    /**
+     * Validates request's fields. Throw exception including error message if failing.
+     *
+     * @return void
+     **/
+    private function validate_nat_edit()
+    {
+        if (in_array($this->request_method(), ['PATCH', 'DELETE'])) {
+            if (! isset($this->_params->id) || ! is_numeric($this->_params->id)) {
+                $this->Response->throw_exception(400, 'Invalid ID format');
+            }
+
+            if (! $this->Tools->fetch_multiple_objects('nat', 'id', $this->_params->id, 'id', true)) {
+                $this->Response->throw_exception(404, 'ID not found');
+            }
+        }
+
+        if (in_array($this->request_method(), ['POST', 'PATCH'])) {
+            // Check optional fields format
+            // TBD: subnets for src & dst ?
+            foreach (['src_port', 'dst_port'] as $k) {
+                if ($this->_params->$k && ! is_numeric($this->_params->$k)) {
+                    $this->Response->throw_exception(400, "Invalid value for $k (must be numeric)");
+                }
+            }
+
+            foreach (['src', 'dst'] as $k) {
+                $this->verify_src_dst($k);
+            }
+
+            $this->verify_device();
+        }
+
+        if ($this->request_method() == 'POST') {
+            if (! isset($this->_params->name)) {
+                $this->Response->throw_exception(400, 'Missing NAT name'); // Seems to be mandatory in the GUI
+            }
+
+            if (! isset($this->_params->type)) {
+                $this->Response->throw_exception(400, 'Missing NAT type');
+            } elseif (! in_array($this->_params->type, $this->valid_types)) {
+                $this->Response->throw_exception(400, 'Invalid type');
+            }
+
+            if (isset($this->_params->id)) {
+                $this->Response->throw_exception(400, 'ID should not be set for creation');
+            }
+        }
+    }
+
+    /**
+     * Verify the device ID provided by the user is valid
+     *
+     * @return bool
+     **/
+    private function verify_device()
+    {
+        if (isset($this->_params->device)) {
+            if (is_numeric($this->_params->device)) {
+                $result = $this->Tools->fetch_object('devices', 'id', $this->_params->device);
+                if (! $result) {
+                    $this->Response->throw_exception(400, 'Device ID not found');
+                }
+            } else {
+                $this->Response->throw_exception(400, 'Wrong format for device ID (must be numeric)');
+            }
+        }
+    }
+
+    /**
+     * Verify user-provided "src" or "dst" parameters. Checking format is valid and the provided IDs are actually real.
+     *
+     * @param  string  $k
+     * @return bool
+     **/
+    private function verify_src_dst($k)
+    {
+        if ($this->_params->$k) {
+            // $input_param = (array) db_json_decode($this->_params->$k);
+            $input_param = $this->_params->$k;
+            if (! is_array($input_param)) {
+                $this->Response->throw_exception(400, "Invalid $k format (Must be an array");
+            }
+
+            $input_out = [];
+            foreach ($input_param as $pk => $pv) {
+                if (! in_array($pk, array_keys($this->validation_data))) {
+                    $this->Response->throw_exception(400, "Invalid key identifier for $k ($pk)");
+                }
+
+                if (! is_array($pv)) {
+                    $this->Response->throw_exception(400, "Invalid value for $k (must be an array)");
+                }
+
+                $values = [];
+                foreach ($pv as $v) {
+                    if (! is_numeric($v)) {
+                        $this->Response->throw_exception(400, "Invalid value $v (must be an integer)");
+                    } else {
+                        // Validate IDs !
+                        $func = $this->validation_data[$pk]['function'];
+                        $object = $this->validation_data[$pk]['object']->$func('id', $v);
+                        if ($object) {
+                            $values[] = $v;
+                        } else {
+                            $this->Response->throw_exception(404, "ID not found for type $pk, ID: $v");
+                        }
+                    }
+                }
+
+                $input_out[] = [$pk => $values];
+            }
+        }
+    }
+
+    /**
+     * Deletes existing NAT
+     *
+     * @return void
+     */
+    #[Override]
+    public function DELETE()
+    {
+        $values = $this->validate_keys();
+        $this->validate_nat_edit();
+        if (isset($this->_params->id) && is_numeric($this->_params->id)) {
+            // $values = array();
+            // $values['id'] = $this->_params->id;
+            if (! $this->Admin->object_modify('nat', 'delete', 'id', $values)) {
+                $this->Response->throw_exception(500, 'NAT delete failed');
+            } else {
+                return ['code' => 200, 'message' => 'NAT deleted'];
+            }
+        } else {
+            $this->Response->throw_exception(400, 'Invalid ID format');
+        }
+
+        return null;
+    }
+}

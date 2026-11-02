@@ -87,7 +87,7 @@ class Net_DNS2_RR_L64 extends Net_DNS2_RR
             //
             // unpack the values
             //
-            $x = unpack('npreference/n4locator', $this->rdata);
+            $x = unpack('npreference/n4locator', (string) $this->rdata);
    
             $this->preference = $x['preference'];
  
@@ -118,12 +118,12 @@ class Net_DNS2_RR_L64 extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->locator64) > 0) {
+        if (strlen((string) $this->locator64) > 0) {
       
             //
             // break out the locator64
             //
-            $n = explode(':', $this->locator64);
+            $n = explode(':', (string) $this->locator64);
     
             //
             // pack the data

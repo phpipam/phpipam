@@ -191,7 +191,7 @@ class Net_DNS2_RR_LOC extends Net_DNS2_RR
             //
             $x = unpack(
                 'Cver/Csize/Choriz_pre/Cvert_pre/Nlatitude/Nlongitude/Naltitude', 
-                $this->rdata
+                (string) $this->rdata
             );
 
             //

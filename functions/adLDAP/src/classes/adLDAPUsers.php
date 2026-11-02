@@ -34,8 +34,8 @@
  * @version 4.0.4
  * @link http://adldap.sourceforge.net/
  */
-require_once(dirname(__FILE__) . '/../adLDAP.php');
-require_once(dirname(__FILE__) . '/../collections/adLDAPUserCollection.php');
+require_once(__DIR__ . '/../adLDAP.php');
+require_once(__DIR__ . '/../collections/adLDAPUserCollection.php');
 
 /**
 * USER FUNCTIONS
@@ -103,7 +103,7 @@ class adLDAPUsers {
         //$add["name"][0]=$attributes["firstname"]." ".$attributes["surname"];
 
         // Set the account control attribute
-        $control_options = array("NORMAL_ACCOUNT");
+        $control_options = ["NORMAL_ACCOUNT"];
         if (!$attributes["enabled"]) { 
             $control_options[] = "ACCOUNTDISABLE"; 
         }
@@ -168,7 +168,7 @@ class adLDAPUsers {
     */
     public function delete($username, $isGUID = false) 
     {      
-        $userinfo = $this->info($username, array("*"), $isGUID);
+        $userinfo = $this->info($username, ["*"], $isGUID);
         $dn = $userinfo[0]['distinguishedname'][0];
         $result = $this->adldap->folder()->delete($dn);
         if ($result != true) { 
@@ -192,7 +192,7 @@ class adLDAPUsers {
         if (!$this->adldap->getLdapBind()) { return false; }
         
         // Search the directory for their information
-        $info = @$this->info($username, array("memberof", "primarygroupid"), $isGUID);
+        $info = @$this->info($username, ["memberof", "primarygroupid"], $isGUID);
         $groups = $this->adldap->utilities()->niceNames($info[0]["memberof"]); // Presuming the entry returned is our guy (unique usernames)
 
         if ($recursive === true){
@@ -236,7 +236,7 @@ class adLDAPUsers {
         }
         $filter = ($type == "NetIQ" or $type == "LDAP") ? "(&(objectClass=person)({$filter}))":"(&(objectCategory=person)({$filter}))";
         if ($fields === NULL) { 
-            $fields = array("samaccountname","mail","memberof","department","displayname","telephonenumber","primarygroupid","objectsid"); 
+            $fields = ["samaccountname","mail","memberof","department","displayname","telephonenumber","primarygroupid","objectsid"]; 
         }
         if (!in_array("objectsid", $fields)) {
             $fields[] = "objectsid";
@@ -335,9 +335,9 @@ class adLDAPUsers {
         if (!$this->adldap->getLdapBind()) { return false; }
         if (!function_exists('bcmod')) { throw new adLDAPException("Missing function support [bcmod] http://www.php.net/manual/en/book.bc.php"); };
         
-        $userInfo = $this->info($username, array("pwdlastset", "useraccountcontrol"), $isGUID);
+        $userInfo = $this->info($username, ["pwdlastset", "useraccountcontrol"], $isGUID);
         $pwdLastSet = $userInfo[0]['pwdlastset'][0];
-        $status = array();
+        $status = [];
         
         if ($userInfo[0]['useraccountcontrol'][0] == '66048') {
             // Password does not expire
@@ -354,7 +354,7 @@ class adLDAPUsers {
          //
          // Although Microsoft chose to use a different base and unit for time measurements.
          // This function will convert them to Unix timestamps
-         $sr = ldap_read($this->adldap->getLdapConnection(), $this->adldap->getBaseDn(), 'objectclass=*', array('maxPwdAge'));
+         $sr = ldap_read($this->adldap->getLdapConnection(), $this->adldap->getBaseDn(), 'objectclass=*', ['maxPwdAge']);
          if (!$sr) {
              return false;
          }
@@ -378,13 +378,13 @@ class adLDAPUsers {
          //
          // Unfortunately the maths involved are too big for PHP integers, so I've had to require
          // BCMath functions to work with arbitrary precision numbers.
-         if (bcmod($maxPwdAge, 4294967296) === '0') {
+         if (bcmod((string) $maxPwdAge, 4294967296) === '0') {
             return "Domain does not expire passwords";
         }
         
         // Add maxpwdage and pwdlastset and we get password expiration time in Microsoft's
         // time units.  Because maxpwd age is negative we need to subtract it.
-        $pwdExpire = bcsub($pwdLastSet, $maxPwdAge);
+        $pwdExpire = bcsub((string) $pwdLastSet, (string) $maxPwdAge);
     
         // Convert MS's time to Unix time
         $status['expiryts'] = bcsub(bcdiv($pwdExpire, '10000000'), '11644473600');
@@ -425,10 +425,10 @@ class adLDAPUsers {
         // Set the account control attribute (only if specified)
         if (array_key_exists("enabled", $attributes)){
             if ($attributes["enabled"]){ 
-                $controlOptions = array("NORMAL_ACCOUNT"); 
+                $controlOptions = ["NORMAL_ACCOUNT"]; 
             }
             else { 
-                $controlOptions = array("NORMAL_ACCOUNT", "ACCOUNTDISABLE"); 
+                $controlOptions = ["NORMAL_ACCOUNT", "ACCOUNTDISABLE"]; 
             }
             $mod["userAccountControl"][0] = $this->accountControl($controlOptions);
         }
@@ -452,7 +452,7 @@ class adLDAPUsers {
     public function disable($username, $isGUID = false)
     {
         if ($username === NULL) { return "Missing compulsory field [username]"; }
-        $attributes = array("enabled" => 0);
+        $attributes = ["enabled" => 0];
         $result = $this->modify($username, $attributes, $isGUID);
         if ($result == false) { return false; }
         
@@ -469,7 +469,7 @@ class adLDAPUsers {
     public function enable($username, $isGUID = false)
     {
         if ($username === NULL) { return "Missing compulsory field [username]"; }
-        $attributes = array("enabled" => 1);
+        $attributes = ["enabled" => 1];
         $result = $this->modify($username, $attributes, $isGUID);
         if ($result == false) { return false; }
         
@@ -498,7 +498,7 @@ class adLDAPUsers {
             return false; 
         }
                 
-        $add=array();
+        $add=[];
         $add["unicodePwd"][0] = $this->encodePassword($password);
         
         $result = @ldap_mod_replace($this->adldap->getLdapConnection(), $userDn, $add);
@@ -543,7 +543,7 @@ class adLDAPUsers {
     */
     public function dn($username, $isGUID=false)
     {
-        $user = $this->info($username, array("cn"), $isGUID);
+        $user = $this->info($username, ["cn"], $isGUID);
         if ($user[0]["dn"] === NULL) { 
             return false; 
         }
@@ -565,13 +565,13 @@ class adLDAPUsers {
         
         // Perform the search and grab all their details
         $filter = "(&(objectClass=user)(samaccounttype=" . adLDAP::ADLDAP_NORMAL_ACCOUNT .")(objectCategory=person)(cn=" . $search . "))";
-        $fields = array("samaccountname","displayname");
+        $fields = ["samaccountname","displayname"];
         $sr = ldap_search($this->adldap->getLdapConnection(), $this->adldap->getBaseDn(), $filter, $fields);
         $entries = ldap_get_entries($this->adldap->getLdapConnection(), $sr);
 
-        $usersArray = array();
+        $usersArray = [];
         for ($i=0; $i<$entries["count"]; $i++){
-            if ($includeDescription && strlen($entries[$i]["displayname"][0])>0){
+            if ($includeDescription && strlen((string) $entries[$i]["displayname"][0])>0){
                 $usersArray[$entries[$i]["samaccountname"][0]] = $entries[$i]["displayname"][0];
             } elseif ($includeDescription){
                 $usersArray[$entries[$i]["samaccountname"][0]] = $entries[$i]["samaccountname"][0];
@@ -597,7 +597,7 @@ class adLDAPUsers {
         if ($username === null){ return "Missing compulsory field [username]"; }
         
         $filter = "samaccountname=" . $username; 
-        $fields = array("objectGUID"); 
+        $fields = ["objectGUID"]; 
         $sr = @ldap_search($this->adldap->getLdapConnection(), $this->adldap->getBaseDn(), $filter, $fields); 
         if (ldap_count_entries($this->adldap->getLdapConnection(), $sr) > 0) { 
             $entry = @ldap_first_entry($this->adldap->getLdapConnection(), $sr); 
@@ -626,13 +626,13 @@ class adLDAPUsers {
             $searchParams = "(" . $searchField . "=" . $searchFilter . ")";
         }                           
         $filter = "(&(objectClass=user)(samaccounttype=" . adLDAP::ADLDAP_NORMAL_ACCOUNT .")(objectCategory=person)" . $searchParams . ")";
-        $fields = array("samaccountname","displayname");
+        $fields = ["samaccountname","displayname"];
         $sr = ldap_search($this->adldap->getLdapConnection(), $this->adldap->getBaseDn(), $filter, $fields);
         $entries = ldap_get_entries($this->adldap->getLdapConnection(), $sr);
 
-        $usersArray = array();
+        $usersArray = [];
         for ($i=0; $i < $entries["count"]; $i++) {
-            if ($includeDescription && strlen($entries[$i]["displayname"][0]) > 0) {
+            if ($includeDescription && strlen((string) $entries[$i]["displayname"][0]) > 0) {
                 $usersArray[$entries[$i]["samaccountname"][0]] = $entries[$i]["displayname"][0];
             }
             else if ($includeDescription) {
@@ -663,7 +663,7 @@ class adLDAPUsers {
         if ($container === null) { return "Missing compulsory field [container]"; }
         if (!is_array($container)) { return "Container must be an array"; }
         
-        $userInfo = $this->info($username, array("*"));
+        $userInfo = $this->info($username, ["*"]);
         $dn = $userInfo[0]['distinguishedname'][0];
         $newRDn = "cn=" . $username;
         $container = array_reverse($container);
@@ -685,7 +685,7 @@ class adLDAPUsers {
     public function getLastLogon($username) {
         if (!$this->adldap->getLdapBind()) { return false; }
         if ($username === null) { return "Missing compulsory field [username]"; }
-        $userInfo = $this->info($username, array("lastLogonTimestamp"));
+        $userInfo = $this->info($username, ["lastLogonTimestamp"]);
         $lastLogon = adLDAPUtils::convertWindowsTimeToUnixTime($userInfo[0]['lastLogonTimestamp'][0]);
         return $lastLogon;
     }

@@ -46,14 +46,14 @@
 * Before asking questions, please read the Documentation at
 * http://adldap.sourceforge.net/wiki/doku.php?id=api
 */
-require_once(dirname(__FILE__).'/collections/adLDAPCollection.php');
-require_once(dirname(__FILE__).'/classes/adLDAPGroups.php');
-require_once(dirname(__FILE__).'/classes/adLDAPUsers.php');
-require_once(dirname(__FILE__).'/classes/adLDAPFolders.php');
-require_once(dirname(__FILE__).'/classes/adLDAPUtils.php');
-require_once(dirname(__FILE__).'/classes/adLDAPContacts.php');
-require_once(dirname(__FILE__).'/classes/adLDAPExchange.php');
-require_once(dirname(__FILE__).'/classes/adLDAPComputers.php');
+require_once(__DIR__.'/collections/adLDAPCollection.php');
+require_once(__DIR__.'/classes/adLDAPGroups.php');
+require_once(__DIR__.'/classes/adLDAPUsers.php');
+require_once(__DIR__.'/classes/adLDAPFolders.php');
+require_once(__DIR__.'/classes/adLDAPUtils.php');
+require_once(__DIR__.'/classes/adLDAPContacts.php');
+require_once(__DIR__.'/classes/adLDAPExchange.php');
+require_once(__DIR__.'/classes/adLDAPComputers.php');
 
 class adLDAP {
 
@@ -115,7 +115,7 @@ class adLDAP {
      *
      * @var array
      */
-    protected $domainControllers = array("dc01.mydomain.local");
+    protected $domainControllers = ["dc01.mydomain.local"];
 
     /**
      * Optional account with higher privileges for searching
@@ -588,7 +588,7 @@ class adLDAP {
     * @throws Exception - if unable to bind to Domain Controller
     * @return bool
     */
-    public function __construct($options = array()) {
+    public function __construct($options = []) {
         // You can specifically overide any of the default configuration options setup above
         if (count($options) > 0) {
             if (array_key_exists("account_suffix", $options)) { $this->accountSuffix = $options["account_suffix"]; }
@@ -641,10 +641,11 @@ class adLDAP {
     {
         // Connect to the AD/LDAP server as the username/password
         $domainController = $this->randomController();
+        $port = (int) $this->adPort;
         if ($this->useSSL) {
-            $this->ldapConnection = ldap_connect("ldaps://".$domainController, $this->adPort);
+            $this->ldapConnection = ldap_connect("ldaps://$domainController:$port");
         } else {
-            $this->ldapConnection = ldap_connect($domainController, $this->adPort);
+            $this->ldapConnection = ldap_connect("ldap://$domainController:$port");
         }
 
         // Set some ldap options for talking to AD
@@ -753,7 +754,7 @@ class adLDAP {
      */
     public function findBaseDn()
     {
-        $namingContext = $this->getRootDse(array('defaultnamingcontext'));
+        $namingContext = $this->getRootDse(['defaultnamingcontext']);
         return $namingContext[0]['defaultnamingcontext'][0];
     }
 
@@ -763,7 +764,7 @@ class adLDAP {
     * @param string[] $attributes The attributes you wish to query e.g. defaultnamingcontext
     * @return array
     */
-    public function getRootDse($attributes = array("*", "+")) {
+    public function getRootDse($attributes = ["*", "+"]) {
         if (!$this->ldapBind) { return (false); }
 
         $sr = @ldap_read($this->ldapConnection, "(objectclass=*)", 'objectClass=*', $attributes);
@@ -824,10 +825,10 @@ class adLDAP {
         // LDAP doesn't like NULL attributes, only set them if they have values
         // If you wish to remove an attribute you should set it to a space
         // TO DO: Adapt user_modify to use ldap_mod_delete to remove a NULL attribute
-        $mod = array();
+        $mod = [];
 
         // Check every attribute to see if it contains 8bit characters and then UTF8 encode them
-        array_walk($attributes, array($this, 'encode8bit'));
+        array_walk($attributes, [$this, 'encode8bit']);
 
         if ($attributes["address_city"]) { $mod["l"][0] = $attributes["address_city"]; }
         if ($attributes["address_code"]) { $mod["postalCode"][0] = $attributes["address_code"]; }

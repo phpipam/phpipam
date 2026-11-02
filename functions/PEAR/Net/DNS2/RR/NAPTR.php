@@ -131,7 +131,7 @@ class Net_DNS2_RR_NAPTR extends Net_DNS2_RR
             //
             // unpack the order and preference
             //
-            $x = unpack('norder/npreference', $this->rdata);
+            $x = unpack('norder/npreference', (string) $this->rdata);
             
             $this->order        = $x['order'];
             $this->preference   = $x['preference'];
@@ -163,13 +163,13 @@ class Net_DNS2_RR_NAPTR extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if ( (isset($this->order)) && (strlen($this->services) > 0) ) {
+        if ( (isset($this->order)) && (strlen((string) $this->services) > 0) ) {
             
             $data = pack('nn', $this->order, $this->preference);
 
-            $data .= chr(strlen($this->flags)) . $this->flags;
-            $data .= chr(strlen($this->services)) . $this->services;
-            $data .= chr(strlen($this->regexp)) . $this->regexp;
+            $data .= chr(strlen((string) $this->flags)) . $this->flags;
+            $data .= chr(strlen((string) $this->services)) . $this->services;
+            $data .= chr(strlen((string) $this->regexp)) . $this->regexp;
 
             $packet->offset += strlen($data);
 

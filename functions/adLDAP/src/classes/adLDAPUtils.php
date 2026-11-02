@@ -34,7 +34,7 @@
  * @version 4.0.4
  * @link http://adldap.sourceforge.net/
  */
-require_once(dirname(__FILE__) . '/../adLDAP.php');
+require_once(__DIR__ . '/../adLDAP.php');
 
 /**
 * UTILITY FUNCTIONS
@@ -63,15 +63,15 @@ class adLDAPUtils {
     public function niceNames($groups)
     {
 
-        $groupArray = array();
+        $groupArray = [];
         for ($i=0; $i<$groups["count"]; $i++){ // For each group
             $line = $groups[$i];
 
-            if (strlen($line)>0) {
+            if (strlen((string) $line)>0) {
                 // More presumptions, they're all prefixed with CN=
                 // so we ditch the first three characters and the group
                 // name goes up to the first comma
-                $bits=explode(",", $line);
+                $bits=explode(",", (string) $line);
                 $groupArray[] = substr($bits[0], 3, (strlen($bits[0])-3));
             }
         }

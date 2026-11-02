@@ -65,8 +65,8 @@ class Net_DNS2_RR_HINFO extends Net_DNS2_RR
         $data = $this->buildString($rdata);
         if (count($data) == 2) {
 
-            $this->cpu  = trim($data[0], '"');
-            $this->os   = trim($data[1], '"');
+            $this->cpu  = trim((string) $data[0], '"');
+            $this->os   = trim((string) $data[1], '"');
 
             return true;
         }
@@ -111,9 +111,9 @@ class Net_DNS2_RR_HINFO extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->cpu) > 0) {
+        if (strlen((string) $this->cpu) > 0) {
 
-            $data = pack('Ca*Ca*', strlen($this->cpu), $this->cpu, strlen($this->os), $this->os);
+            $data = pack('Ca*Ca*', strlen((string) $this->cpu), $this->cpu, strlen((string) $this->os), $this->os);
 
             $packet->offset += strlen($data);
 

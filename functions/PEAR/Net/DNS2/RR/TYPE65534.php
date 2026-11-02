@@ -41,7 +41,7 @@ class Net_DNS2_RR_TYPE65534 extends Net_DNS2_RR
      */
     protected function rrToString()
     {
-        return base64_encode($this->private_data);
+        return base64_encode((string) $this->private_data);
     }
 
     /**
@@ -93,11 +93,11 @@ class Net_DNS2_RR_TYPE65534 extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->private_data) > 0) {
+        if (strlen((string) $this->private_data) > 0) {
 
             $data = $this->private_data;
 
-            $packet->offset += strlen($data);
+            $packet->offset += strlen((string) $data);
 
             return $data;
         }

@@ -1,0 +1,61 @@
+<?php
+
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
+use PragmaRX\Google2FA\Google2FA;
+
+// verify that user is logged in
+$User->check_user_session(true, true);
+
+// if 2fa is not needed redirect to /
+if ($User->twofa_required() === false) {
+    header('Location:'.$url.create_link());
+}
+// generate and print code
+else {
+    // init class
+    $ga = new Google2FA;
+
+    // create secret
+    $secret = (string) $User->user->{'2fa_secret'};
+    $username = strtolower((string) $User->user->username).'@'.(string) $User->settings->{'2fa_name'};
+
+    if ($secret === '') {
+        $secret = $ga->generateSecretKey(User::TOTP_SECRET_LEN);
+
+        // save secret to DB
+        try {
+            $Admin = new Admin($Database, false);
+            $Admin->object_modify('users', 'edit', 'id', ['id' => $User->user->id, '2fa' => 2, '2fa_secret' => $secret]);
+        } catch (exception $e) {
+            $Result->show('danger', $e->getMessage());
+        }
+    }
+
+    $qrCodeWriter = new Writer(new ImageRenderer(new RendererStyle(300), new SvgImageBackEnd));
+
+    // set HTML content
+    $html = [];
+    $html[] = '<div id="login">';
+    $html[] = '<div class="loginForm row">';
+    $html[] = '	<div>';
+    $html[] = '		<legend style="margin-top:10px;">'._('Two-factor authentication details').'</legend>';
+    $html[] = '	</div>';
+    $html[] = '	<div>';
+    $html[] = '		'._('Details for your preferred authenticator application are below. Please write down your details, otherwise you will not be able to login to phpipam');
+    $html[] = '		<div style="border: 2px dashed red;margin:20px;padding: 10px" class="text-center row">';
+    $html[] = '			<div class="col-xs-12" style="padding:5px 10px 3px 20px;"><strong>'._('Account').': <span style="color:red; font-size: 16px">'.$username.'</span></strong></div>';
+    $html[] = '			<div class="col-xs-12" style="padding:0px 10px 3px 20px;"><strong>'._('Secret').' : <span style="color:red; font-size: 16px">'.$secret.'</span></strong></div>';
+    $html[] = '		</div>';
+    $html[] = '		<div class="text-center">';
+    $html[] = '		<hr>'._('You can also scan following QR code with your preferred authenticator application').':<br><br>';
+    $html[] = $qrCodeWriter->writeString("otpauth://totp/phpIPAM:$username?secret=$secret");
+    $html[] = '		</div>';
+    $html[] = '	</div>';
+    $html[] = '</div>';
+    $html[] = '</div>';
+
+    print implode("\n", $html);
+}

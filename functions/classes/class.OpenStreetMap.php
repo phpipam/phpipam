@@ -22,10 +22,8 @@
  * ====================================================
  * Service can be switched via SQL "UPDATE nominatim SET url='https://newurl/search' WHERE id=1;";
  */
-
 class OpenStreetMap extends Common_functions
 {
-
     /**
      * List of locations & circuits added to map for de-duplication
      *
@@ -47,45 +45,39 @@ class OpenStreetMap extends Common_functions
      */
     private $polydata = [];
 
-
     /**
      * Constructor
-     *
-     * @param   Database_PDO  $database
-     * @return  void
      */
     public function __construct(Database_PDO $database)
     {
         parent::__construct();
 
         $this->Database = $database;
-        $this->Result = new Result();
+        $this->Result = new Result;
     }
 
-    ################### Mapping functions
+    // ################## Mapping functions
 
     /**
      * Validate $object contains valid ->lat and ->long values
      *
-     * @param   StdClass $object
-     * @return  bool
+     * @param  StdClass  $object
+     * @return bool
      */
     private function validate_lat_long($object)
     {
-        if (!is_object($object) || !property_exists($object, 'lat') || !property_exists($object, 'long')) {
+        if (! is_object($object) || ! property_exists($object, 'lat') || ! property_exists($object, 'long')) {
             return false;
         }
-        if (filter_var($object->lat, FILTER_VALIDATE_FLOAT) === false || filter_var($object->long, FILTER_VALIDATE_FLOAT) === false) {
-            return false;
-        }
-        return true;
+
+        return filter_var($object->lat, FILTER_VALIDATE_FLOAT) !== false && filter_var($object->long, FILTER_VALIDATE_FLOAT) !== false;
     }
 
     /**
      * Add location object to map
      *
-     * @param   StdClass  $location
-     * @return  bool
+     * @param  StdClass  $location
+     * @return bool
      */
     public function add_location($location)
     {
@@ -95,8 +87,8 @@ class OpenStreetMap extends Common_functions
     /**
      * Add customer object to map
      *
-     * @param   StdClass  $location
-     * @return  bool
+     * @param  StdClass  $customer
+     * @return bool
      */
     public function add_customer($customer)
     {
@@ -106,24 +98,24 @@ class OpenStreetMap extends Common_functions
     /**
      * Add location/customer object to map
      *
-     * @param   StdClass  $object
-     * @param   string    $type
-     * @return  bool
+     * @param  StdClass  $object
+     * @param  string  $type
+     * @return bool
      */
     private function add_object($object, $type)
     {
-        if (!$this->validate_lat_long($object)) {
+        if (! $this->validate_lat_long($object)) {
             return false;
         }
 
-        if ($type == "locations") {
+        if ($type == 'locations') {
             $title = $object->name;
-            $desc  = $object->description;
-            $id    = $object->id;
-        } elseif ($type == "customers") {
+            $desc = $object->description;
+            $id = $object->id;
+        } elseif ($type == 'customers') {
             $title = $object->title;
-            $desc  = $object->note;
-            $id    = $object->title;
+            $desc = $object->note;
+            $id = $object->title;
         } else {
             return false;
         }
@@ -135,14 +127,14 @@ class OpenStreetMap extends Common_functions
         $this->markers["$type-$id"] = 1;
 
         // Add geoJSON location marker data to map
-        $popuptxt = "<h5><a href='" . create_link("tools", $type, $id) . "'>" . $title . "</a></h5>";
-        $popuptxt .= is_string($desc) ? "<span class=\'text-muted\'>" . $desc . "</span>" : "";
-        $popuptxt = str_replace(["\r\n", "\n", "\r"], "<br>", $popuptxt);
+        $popuptxt = "<h5><a href='".create_link('tools', $type, $id)."'>".$title.'</a></h5>';
+        $popuptxt .= is_string($desc) ? "<span class=\'text-muted\'>".$desc.'</span>' : '';
+        $popuptxt = str_replace(["\r\n", "\n", "\r"], '<br>', $popuptxt);
 
         $this->geodata[] = [
-            "type" => "Feature",
-            "properties" => ["name" => $title, "popupContent" => $popuptxt],
-            "geometry"   => ["type" => "Point", "coordinates" => [$object->long, $object->lat]]
+            'type' => 'Feature',
+            'properties' => ['name' => $title, 'popupContent' => $popuptxt],
+            'geometry' => ['type' => 'Point', 'coordinates' => [$object->long, $object->lat]],
         ];
 
         return true;
@@ -151,17 +143,17 @@ class OpenStreetMap extends Common_functions
     /**
      * Add circuit object to map
      *
-     * @param   StdClass $location1  Location of A end
-     * @param   StdClas  $location2  Location of B end
-     * @param   StdClass $type       Circuit circuitType object (color & dotted)
-     * @return  bool
+     * @param  StdClass  $location1  Location of A end
+     * @param  StdClass  $location2  Location of B end
+     * @param  StdClass  $type  Circuit circuitType object (color & dotted)
+     * @return bool
      */
     public function add_circuit($location1, $location2, $type)
     {
         $this->add_location($location1);
         $this->add_location($location2);
 
-        if (!$this->validate_lat_long($location1) || !$this->validate_lat_long($location2)) {
+        if (! $this->validate_lat_long($location1) || ! $this->validate_lat_long($location2)) {
             return false;
         }
 
@@ -173,8 +165,8 @@ class OpenStreetMap extends Common_functions
         $this->markers["circuit-{$location2->id}-{$location1->id}"] = 1;
 
         // Add polyLine data for circuit.
-        $ctcolor   = (is_object($type) && isset($type->ctcolor))   ? $type->ctcolor   : "Red";
-        $ctpattern = (is_object($type) && isset($type->ctpattern)) ? $type->ctpattern : "Solid";
+        $ctcolor = (is_object($type) && isset($type->ctcolor)) ? $type->ctcolor : 'Red';
+        $ctpattern = (is_object($type) && isset($type->ctpattern)) ? $type->ctpattern : 'Solid';
 
         $this->polydata["$ctcolor::::$ctpattern"][] = [[$location1->lat, $location1->long], [$location2->lat, $location2->long]];
 
@@ -184,18 +176,19 @@ class OpenStreetMap extends Common_functions
     /**
      * Output OpenStreetMap HTML/JS
      *
-     * @param   null|int  $height
-     * @return  void
+     * @param  null|int  $height
+     * @return void
      */
     public function map($height = null)
     {
-        if (sizeof($this->geodata) == 0) {
-            $this->Result->show("info", _("No Locations with coordinates configured"), false);
+        if (count($this->geodata) == 0) {
+            $this->Result->show('info', _('No Locations with coordinates configured'), false);
+
             return;
         }
 
-?>
-        <div style="width:100%; height:<?php print isset($height) ? $height : "600px" ?>;" id="map_overlay">
+        ?>
+        <div style="width:100%; height:<?php print $height ?? '600px' ?>;" id="map_overlay">
             <div id="osmap" style="width:100%; height:100%;"></div>
         </div>
         <script>
@@ -266,24 +259,24 @@ class OpenStreetMap extends Common_functions
             var layer = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', layerOptions);
             map.addLayer(layer);
         </script>
-<?php
+        <?php
     }
 
-    ################### Geocoding functions
+    // ################## Geocoding functions
 
     /**
      * Generate binary sha256 of address string. Ignore whitespace & case.
      *
-     * @param   string $address
-     * @return  string
+     * @param  string  $address
+     * @return string
      */
     private function hash_from_address($address)
     {
         $address_min = preg_replace('#\s+#', ' ', mb_strtolower($address));
-        $hash = openssl_digest(trim($address_min), 'sha256', true);
+        $hash = openssl_digest(trim((string) $address_min), 'sha256', true);
 
-        if (!is_string($hash) || strlen($hash) != 32) {
-            throw new \Exception(_('openssl_digest failure'));
+        if (! is_string($hash) || strlen($hash) != 32) {
+            throw new Exception(_('openssl_digest failure'));
         }
 
         return $hash;
@@ -292,9 +285,9 @@ class OpenStreetMap extends Common_functions
     /**
      * Search for cached results
      *
-     * @param   string  $address
-     * @param   string  $only_recent
-     * @return  StdClass|false
+     * @param  string  $address
+     * @param  string  $only_recent
+     * @return object|false
      */
     private function search_geo_cache($address, $only_recent = true)
     {
@@ -305,7 +298,7 @@ class OpenStreetMap extends Common_functions
         } else {
             $query = 'SELECT * FROM `nominatim_cache` WHERE `sha256`=?;';
         }
-        $cached_result = $this->Database->getObjectQuery("nominatim_cache", $query, [$hash]);
+        $cached_result = $this->Database->getObjectQuery('nominatim_cache', $query, [$hash]);
 
         return is_object($cached_result) ? $cached_result : false;
     }
@@ -313,20 +306,20 @@ class OpenStreetMap extends Common_functions
     /**
      * Store results in cache.
      *
-     * @param   string  $address
-     * @param   string  $json
-     * @return  void
+     * @param  string  $address
+     * @param  string  $json
+     * @return void
      */
     private function update_geo_cache($address, $json)
     {
-        if (!is_string($address) || !is_string($json)) {
+        if (! is_string($address) || ! is_string($json)) {
             return;
         }
 
         $values = [
             'sha256' => $this->hash_from_address($address),
             'query' => $address,
-            'lat_lng' => $json
+            'lat_lng' => $json,
         ];
 
         $this->Database->insertObject('nominatim_cache', $values, false, true);
@@ -335,29 +328,31 @@ class OpenStreetMap extends Common_functions
     /**
      * Perform Geocoding lookup
      *
-     * @param   string  $address
-     * @return  array
+     * @param  string  $address
+     * @return array
      */
     public function get_latlng_from_address($address)
     {
         $results = ['lat' => null, 'lng' => null, 'error' => null];
 
-        if (!is_string($address) || is_blank($address)) {
+        if (! is_string($address) || is_blank($address)) {
             $results['error'] = _('invalid address');
+
             return $results;
         }
 
         if (Config::ValueOf('offline_mode') || Config::ValueOf('disable_geoip_lookups')) {
             $result['error'] = _('Internet access disabled in config.php');
+
             return $result;
         }
+
+        $elapsed = -microtime(true);
 
         try {
             // Obtain exclusive MySQL row lock
             $Lock = new LockForUpdateMySQL($this->Database, 'nominatim', 1);
             $Lock->obtain_lock(-1);
-
-            $elapsed = -microtime(true);
 
             // Check cached results from the last 24h
             $cached_result = $this->search_geo_cache($address, true);
@@ -370,10 +365,10 @@ class OpenStreetMap extends Common_functions
 
             $locked_row = $Lock->get_locked_resource();
             $url = $locked_row->url;
-            $url = $url . "?format=json&q=" . rawurlencode($address);
+            $url = $url.'?format=json&q='.rawurlencode($address);
             $headers = [
-                'User-Agent: phpIPAM/' . VERSION_VISIBLE . ' (Open source IP address management)',
-                'Referer: ' . $this->createURL() . create_link()
+                'User-Agent: phpIPAM/'.VERSION_VISIBLE.' (Open source IP address management)',
+                'Referer: '.$this->createURL().create_link(),
             ];
 
             // fetch geocoding data with proxy settings from config.php
@@ -389,13 +384,13 @@ class OpenStreetMap extends Common_functions
                     }
                 }
 
-                throw new \Exception($lookup['error_msg']);
+                throw new Exception($lookup['error_msg']);
             }
 
             $geo = db_json_decode($lookup['result'], true);
 
-            if (!is_array($geo)) {
-                throw new \Exception(_('Invalid json response from nominatim'));
+            if (! is_array($geo)) {
+                throw new Exception(_('Invalid json response from nominatim'));
             }
 
             if (isset($geo['0']['lat']) && isset($geo['0']['lon'])) {
@@ -404,8 +399,8 @@ class OpenStreetMap extends Common_functions
             }
 
             $this->update_geo_cache($address, json_encode($results));
-        } catch (\Exception $e) {
-            $results = ['lat' => null, 'lng' => null, 'error' => $e->getMessage()];
+        } catch (Exception $exception) {
+            $results = ['lat' => null, 'lng' => null, 'error' => $exception->getMessage()];
         }
 
         // Ensure we hold the exclusive database lock for a minimum of 1 second

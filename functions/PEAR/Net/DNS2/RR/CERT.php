@@ -113,7 +113,7 @@ class Net_DNS2_RR_CERT extends Net_DNS2_RR
     protected function rrToString()
     {
         return $this->format . ' ' . $this->keytag . ' ' . $this->algorithm . 
-            ' ' . base64_encode($this->certificate);
+            ' ' . base64_encode((string) $this->certificate);
     }
 
     /**
@@ -133,7 +133,7 @@ class Net_DNS2_RR_CERT extends Net_DNS2_RR
         $this->format = array_shift($rdata);
         if (!is_numeric($this->format)) {
 
-            $mnemonic = strtoupper(trim($this->format));
+            $mnemonic = strtoupper(trim((string) $this->format));
             if (!isset($this->cert_format_name_to_id[$mnemonic])) {
 
                 return false;
@@ -156,7 +156,7 @@ class Net_DNS2_RR_CERT extends Net_DNS2_RR
         $this->algorithm = array_shift($rdata);
         if (!is_numeric($this->algorithm)) {
 
-            $mnemonic = strtoupper(trim($this->algorithm));
+            $mnemonic = strtoupper(trim((string) $this->algorithm));
             if (!isset(Net_DNS2_Lookups::$algorithm_name_to_id[$mnemonic])) {
 
                 return false;
@@ -199,7 +199,7 @@ class Net_DNS2_RR_CERT extends Net_DNS2_RR
             //
             // unpack the format, keytag and algorithm
             //
-            $x = unpack('nformat/nkeytag/Calgorithm', $this->rdata);
+            $x = unpack('nformat/nkeytag/Calgorithm', (string) $this->rdata);
 
             $this->format       = $x['format'];
             $this->keytag       = $x['keytag'];
@@ -208,7 +208,7 @@ class Net_DNS2_RR_CERT extends Net_DNS2_RR
             //
             // copy the certificate
             //
-            $this->certificate  = substr($this->rdata, 5, $this->rdlength - 5);
+            $this->certificate  = substr((string) $this->rdata, 5, $this->rdlength - 5);
 
             return true;
         }
@@ -229,7 +229,7 @@ class Net_DNS2_RR_CERT extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->certificate) > 0) {
+        if (strlen((string) $this->certificate) > 0) {
 
             $data = pack('nnC', $this->format, $this->keytag, $this->algorithm) . $this->certificate;
 

@@ -25,7 +25,6 @@ $db['port'] = 3306;
  ******************************/
 $db['webhost'] = '';
 
-
 /**
  *  SSL options for MySQL
  *
@@ -36,7 +35,7 @@ $db['webhost'] = '';
      All settings can be commented out or set to NULL if not needed
 
  ******************************/
-$db['ssl']        = false;                             // true/false, enable or disable SSL as a whole
+$db['ssl'] = false;                             // true/false, enable or disable SSL as a whole
 // $db['ssl_key']    = '/path/to/cert.key';               // path to an SSL key file. Only makes sense combined with ssl_cert
 // $db['ssl_cert']   = '/path/to/cert.crt';               // path to an SSL certificate file. Only makes sense combined with ssl_key
 // $db['ssl_ca']     = '/path/to/ca.crt';                 // path to a file containing SSL CA certs
@@ -44,7 +43,7 @@ $db['ssl']        = false;                             // true/false, enable or 
 // $db['ssl_cipher'] = 'HIGH:!PSK:!SHA:!MD5:!RC4:!aNULL'; // one or more SSL Ciphers, see openssl ciphers -v '....'
 // $db['ssl_verify'] = true;                            // Verify Common Name (CN) of server certificate?
 
-$db['tmptable_engine_type'] = "MEMORY";                // Temporary table type to construct complex queries (MEMORY, InnoDB)
+$db['tmptable_engine_type'] = 'MEMORY';                // Temporary table type to construct complex queries (MEMORY, InnoDB)
 $db['use_cte'] = 1;                                    // Use recursive CTE queries [>=MariaDB 10.2.2, >=MySQL 8.0] (0=disabled, 1=autodetect, 2=force enable)
 
 /**
@@ -67,20 +66,19 @@ $trust_x_forwarded_headers = false;
  * Mail sending and other parameters for pingCheck and DiscoveryCheck scripts
  ******************************/
 
-# pingCheck.php script parameters
-$config['ping_check_send_mail']        = true;       // true/false, send or not mail on ping check
-$config['ping_check_method']           = false;      // false/ping/pear/fping, reset scan method
-# discoveryCheck.php script parameters
-$config['discovery_check_send_mail']   = true;       // true/false, send or not mail on discovery check
-$config['discovery_check_method']      = false;      // false/ping/pear/fping, reset scan method
-# remove_offline_addresses.php script parameters
+// pingCheck.php script parameters
+$config['ping_check_send_mail'] = true;       // true/false, send or not mail on ping check
+$config['ping_check_method'] = false;      // false/ping/pear/fping, reset scan method
+// discoveryCheck.php script parameters
+$config['discovery_check_send_mail'] = true;       // true/false, send or not mail on discovery check
+$config['discovery_check_method'] = false;      // false/ping/pear/fping, reset scan method
+// remove_offline_addresses.php script parameters
 $config['removed_addresses_send_mail'] = true;       // true/false, send mail or not on removing inactive addresses
 $config['removed_addresses_timelimit'] = 86400 * 7;  // int, after how many seconds of inactivity address will be deleted (7 days)
-# resolveIPaddresses.php script parameters
-$config['resolve_emptyonly']           = true;       // if true it will only update the ones without DNS entry!
-$config['resolve_verbose']             = true;       // verbose response - prints results, cron will email it to you!
-$config['disable_main_login_form']     = false;      // disable main login form if you want use another authentification method by default (SAML, LDAP, etc.)
-
+// resolveIPaddresses.php script parameters
+$config['resolve_emptyonly'] = true;       // if true it will only update the ones without DNS entry!
+$config['resolve_verbose'] = true;       // verbose response - prints results, cron will email it to you!
+$config['disable_main_login_form'] = false;      // disable main login form if you want use another authentification method by default (SAML, LDAP, etc.)
 
 /**
  * php debugging on/off
@@ -91,15 +89,14 @@ $config['disable_main_login_form']     = false;      // disable main login form 
 $debugging = false;
 
 /*
- * API Crypt security provider. "mcrypt" or "openssl*"
+ * API Crypt security provider."openssl-*"
  * Supported methods:
  *    openssl-128-cbc (alias openssl, openssl-128) *default
  *    openssl-256-cbc (alias openssl-256)
  *
  * default as of 1.3.2 "openssl-128-cbc"
  ******************************/
-// $api_crypt_encryption_library = "mcrypt";
-
+// $api_crypt_encryption_library = "openssl-128-cbc";
 
 /**
  * Allow API calls over HTTP (security = none)
@@ -114,7 +111,6 @@ $api_allow_unsafe = false;
  *
  * Can be overwritten via "api-stringify-results: 0|1" header in API requests.
  */
-
 $api_stringify_results = false;
 
 /**
@@ -122,7 +118,7 @@ $api_stringify_results = false;
  *  increases security
  *  optional
  ******************************/
-$phpsessname = "phpipam";
+$phpsessname = 'phpipam';
 
 /**
  * Cookie SameSite settings ("None", "Lax"=Default, "Strict")
@@ -130,15 +126,14 @@ $phpsessname = "phpipam";
  * - "Lax" required for SAML2, some SAML topologies may require "None".
  * - "None" requires HTTPS (implies "Secure;")
  */
-$cookie_samesite = "Lax";
+$cookie_samesite = 'Lax';
 
 /**
  * Session storage - files or database
  *
  * @var string
  */
-$session_storage = "database";
-
+$session_storage = 'database';
 
 /**
  * Path to access phpipam in site URL, http:/url/BASE/
@@ -151,32 +146,33 @@ $session_storage = "database";
  *  If you access the login page at http://company.website/ipam/    =  define('BASE', "/ipam/");
  *
  ******************************/
-if(!defined('BASE'))
-define('BASE', "/");
-
+if (! defined('BASE')) {
+    define('BASE', '/');
+}
 
 /**
  * Multicast unique mac requirement - section or vlan
  ******************************/
-if(!defined('MCUNIQUE'))
-define('MCUNIQUE', "section");
+if (! defined('MCUNIQUE')) {
+    define('MCUNIQUE', 'section');
+}
 
 /**
  * Permit private subpages - private apps under /app/tools/custom/<custom_app_name>/index.php
  ******************************/
-$private_subpages = array();
+$private_subpages = [];
 
 /**
  * proxy connection details
  ******************************/
-$proxy_enabled  = false;                                  // Enable/Disable usage of the Proxy server
-$proxy_server   = 'myproxy.something.com';                // Proxy server FQDN or IP
-$proxy_port     = '8080';                                 // Proxy server port
-$proxy_user     = 'USERNAME';                             // Proxy Username
-$proxy_pass     = 'PASSWORD';                             // Proxy Password
+$proxy_enabled = false;                                  // Enable/Disable usage of the Proxy server
+$proxy_server = 'myproxy.something.com';                // Proxy server FQDN or IP
+$proxy_port = '8080';                                 // Proxy server port
+$proxy_user = 'USERNAME';                             // Proxy Username
+$proxy_pass = 'PASSWORD';                             // Proxy Password
 $proxy_use_auth = false;                                  // Enable/Disable Proxy authentication
 
-$offline_mode   = false;                                  // Offline mode, disable all server-side Internet requests (proxy/OpenStreetMap)
+$offline_mode = false;                                  // Offline mode, disable all server-side Internet requests (proxy/OpenStreetMap)
 
 /**
  * OpenStreetMap
@@ -193,10 +189,10 @@ $disable_geoip_lookups = false;                           // Disable address geo
 /**
  * General tweaks
  ******************************/
-$config['logo_width']             = 220;                    // logo width
-$config['requests_public']        = true;                   // Show IP request module on login page
+$config['logo_width'] = 220;                    // logo width
+$config['requests_public'] = true;                   // Show IP request module on login page
 $config['split_ip_custom_fields'] = false;                  // Show custom fields in separate table when editing IP address
-$config['footer_message']         = "";                     // Custom message included in the footer of every page
+$config['footer_message'] = '';                     // Custom message included in the footer of every page
 
 /**
  * PHP CLI binary for scanning and network discovery.

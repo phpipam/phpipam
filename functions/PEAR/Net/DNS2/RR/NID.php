@@ -87,7 +87,7 @@ class Net_DNS2_RR_NID extends Net_DNS2_RR
             //
             // unpack the values
             //
-            $x = unpack('npreference/n4nodeid', $this->rdata);
+            $x = unpack('npreference/n4nodeid', (string) $this->rdata);
 
             $this->preference = $x['preference'];
 
@@ -118,12 +118,12 @@ class Net_DNS2_RR_NID extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->nodeid) > 0) {
+        if (strlen((string) $this->nodeid) > 0) {
 
             //
             // break out the node id
             //
-            $n = explode(':', $this->nodeid);
+            $n = explode(':', (string) $this->nodeid);
 
             //
             // pack the data

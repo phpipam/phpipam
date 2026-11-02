@@ -139,7 +139,7 @@ class Net_DNS2_RR_SSHFP extends Net_DNS2_RR
             //
             // unpack the algorithm and finger print type
             //
-            $x = unpack('Calgorithm/Cfp_type', $this->rdata);
+            $x = unpack('Calgorithm/Cfp_type', (string) $this->rdata);
 
             $this->algorithm    = $x['algorithm'];
             $this->fp_type      = $x['fp_type'];
@@ -167,8 +167,8 @@ class Net_DNS2_RR_SSHFP extends Net_DNS2_RR
             //
             // parse the finger print; this assumes SHA-1
             //
-            $fp = unpack('H*a', substr($this->rdata, 2));
-            $this->fingerprint = strtolower($fp['a']);
+            $fp = unpack('H*a', substr((string) $this->rdata, 2));
+            $this->fingerprint = strtolower((string) $fp['a']);
 
             return true;
         }
@@ -189,7 +189,7 @@ class Net_DNS2_RR_SSHFP extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->fingerprint) > 0) {
+        if (strlen((string) $this->fingerprint) > 0) {
 
             $data = pack(
                 'CCH*', $this->algorithm, $this->fp_type, $this->fingerprint

@@ -317,14 +317,14 @@ class Net_DNS2_PrivateKey
 
                 'rsa' => [
 
-                    'n'                 => base64_decode($this->_modulus),
-                    'e'                 => base64_decode($this->_public_exponent),
-                    'd'                 => base64_decode($this->_private_exponent),
-                    'p'                 => base64_decode($this->_prime1),
-                    'q'                 => base64_decode($this->_prime2),
-                    'dmp1'              => base64_decode($this->_exponent1),
-                    'dmq1'              => base64_decode($this->_exponent2),
-                    'iqmp'              => base64_decode($this->_coefficient)
+                    'n'                 => base64_decode((string) $this->_modulus),
+                    'e'                 => base64_decode((string) $this->_public_exponent),
+                    'd'                 => base64_decode((string) $this->_private_exponent),
+                    'p'                 => base64_decode((string) $this->_prime1),
+                    'q'                 => base64_decode((string) $this->_prime2),
+                    'dmp1'              => base64_decode((string) $this->_exponent1),
+                    'dmq1'              => base64_decode((string) $this->_exponent2),
+                    'iqmp'              => base64_decode((string) $this->_coefficient)
                 ]
             ];
 
@@ -339,11 +339,11 @@ class Net_DNS2_PrivateKey
 
                 'dsa' => [
 
-                    'p'                 => base64_decode($this->prime),
-                    'q'                 => base64_decode($this->subprime),
-                    'g'                 => base64_decode($this->base),
-                    'priv_key'          => base64_decode($this->private_value),
-                    'pub_key'           => base64_decode($this->public_value)
+                    'p'                 => base64_decode((string) $this->prime),
+                    'q'                 => base64_decode((string) $this->subprime),
+                    'g'                 => base64_decode((string) $this->base),
+                    'priv_key'          => base64_decode((string) $this->private_value),
+                    'pub_key'           => base64_decode((string) $this->public_value)
                 ]
             ];
 

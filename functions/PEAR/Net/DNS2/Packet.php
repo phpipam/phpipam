@@ -304,7 +304,7 @@ class Net_DNS2_Packet
                 }
 
                 $elem = '';
-                $elem = substr($packet->rdata, $offset, $xlen);
+                $elem = substr((string) $packet->rdata, $offset, $xlen);
 
                 //
                 // escape literal dots in certain cases (SOA rname)
@@ -346,11 +346,11 @@ class Net_DNS2_Packet
 
         if (($xlen + $offset) > $packet->rdlength) {
 
-            $name = substr($packet->rdata, $offset);
+            $name = substr((string) $packet->rdata, $offset);
             $offset = $packet->rdlength;
         } else {
 
-            $name = substr($packet->rdata, $offset, $xlen);
+            $name = substr((string) $packet->rdata, $offset, $xlen);
             $offset += $xlen;
         }
 
