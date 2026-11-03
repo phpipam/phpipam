@@ -1,11 +1,5 @@
 <?php
 
-// auto-set base if not already defined
-if (! defined('BASE')) {
-    $root = substr((string) $_SERVER['DOCUMENT_ROOT'], -1) == '/' ? substr((string) $_SERVER['DOCUMENT_ROOT'], 0, -1) : $_SERVER['DOCUMENT_ROOT'];   // fix for missing / in some environments
-    define('BASE', substr(str_replace((string) $root, '', (string) realpath(__DIR__.'/../public/app')), 0, -3));
-}
-
 // global and missing functions
 require_once __DIR__.'/global_functions.php';
 
@@ -15,6 +9,12 @@ require_once __DIR__.'/output_buffering.php';
 // config file ------------------
 require_once __DIR__.'/classes/class.Config.php';
 $config = Config::ValueOf('config');
+
+// auto-set base if not already defined
+if (! defined('BASE')) {
+    $root = substr((string) $_SERVER['DOCUMENT_ROOT'], -1) == '/' ? substr((string) $_SERVER['DOCUMENT_ROOT'], 0, -1) : $_SERVER['DOCUMENT_ROOT'];   // fix for missing / in some environments
+    define('BASE', substr(str_replace((string) $root, '', (string) realpath(__DIR__.'/../public/app')), 0, -3));
+}
 
 // proxy to use for every internet access like update check
 if (Config::ValueOf('proxy_enabled')) {
