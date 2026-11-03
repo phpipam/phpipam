@@ -20,6 +20,7 @@ require __DIR__.'/upgrade_queries/upgrade_queries_1.6.php';
 require __DIR__.'/upgrade_queries/upgrade_queries_1.7.php';
 require __DIR__.'/upgrade_queries/upgrade_queries_1.8.php';
 require __DIR__.'/upgrade_queries/upgrade_queries_1.9.php';
+require __DIR__.'/upgrade_queries/upgrade_queries_2.0.php';
 
 // output if required
 if (! defined('VERSION') && PHP_SAPI == 'cli') {
