@@ -573,6 +573,8 @@ class Tools extends Common_functions
      */
     public function reformat_IPv4_for_search($address)
     {
+        $result = ['high' => '', 'low' => ''];
+
         // remove % sign if present
         $address = str_replace('%', '', (string) $address);
         // we need Addresses class
@@ -580,12 +582,14 @@ class Tools extends Common_functions
 
         // if subnet is provided we have all data
         if (strpos($address, '/') > 0) {
-            // Initialize PEAR NET object
             $this->initialize_pear_net_IPv4();
-            $net = $this->Net_IPv4->parseAddress($address);
 
-            $result['low'] = $Addresses->transform_to_decimal($net->network);
-            $result['high'] = $Addresses->transform_to_decimal($net->broadcast);
+            $net = $this->Net_IPv4->parseAddress($address);
+            if (! PEAR::isError($net)) {
+                $result['low'] = $Addresses->transform_to_decimal($net->network);
+                $result['high'] = $Addresses->transform_to_decimal($net->broadcast);
+            }
+
         } else {
             // else calculate options
             // if subnet is not provided maybe wildcard is, so explode it to array
@@ -636,15 +640,12 @@ class Tools extends Common_functions
      */
     public function reformat_IPv6_for_search($address)
     {
-        // parse address
+        $return = ['high' => '', 'low' => ''];
+
         $this->initialize_pear_net_IPv6();
 
-        $return = [];
-
-        // validate
         if ($this->Net_IPv6->checkIPv6($address) == false) {
-            // return 0
-            return ['high' => 0, 'low' => 0];
+            return $return;
         }
 
         // fake mask
@@ -1838,17 +1839,18 @@ class Tools extends Common_functions
      * Calculates IPv4 results from provided CIDR address
      *
      * @param  mixed  $cidr
-     * @return array
+     * @return array|false
      */
     private function calculate_IPv4_calc_results($cidr)
     {
-        // initialize subnets Class
         $Subnets = new Subnets($this->Database);
-        // Initialize PEAR NET object
         $this->initialize_pear_net_IPv4();
 
         // parse address
         $net = $this->Net_IPv4->parseAddress($cidr);
+        if (PEAR::isError($net)) {
+            return false;
+        }
 
         // set ip address type
         $out = [];
