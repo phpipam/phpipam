@@ -31,8 +31,8 @@ if (! defined('PHPIPAM_PHP_UNTESTED')) {
     define('PHPIPAM_PHP_UNTESTED', '8.6');  // PHP 8.6 or greater is untested, use at own risk and expect issues
 }
 
-if (phpversion() < PHPIPAM_PHP_MIN || phpversion() >= PHPIPAM_PHP_UNTESTED) {
-    $_SESSION['footer_warnings']['php_version'] = _('Unsupported PHP version ').phpversion();
+if (version_compare(PHP_VERSION, PHPIPAM_PHP_MIN, '<') || version_compare(PHP_VERSION, PHPIPAM_PHP_UNTESTED, '>=')) {
+    $_SESSION['footer_warnings']['php_version'] = _('Unsupported PHP version ').PHP_VERSION;
 }
 
 // Empty missing arrays to prevent errors
@@ -109,13 +109,13 @@ if (PHP_INT_SIZE == 4) {
     /* 32-bit systems */
     $error[] = '<strong>'._('Not 64-bit system').'!</strong><br><hr>';
     $error[] = _('From release 1.4 on 64bit system is required!');
-} elseif (phpversion() < PHPIPAM_PHP_MIN && ! Config::ValueOf('allow_untested_php_versions', false)) {
+} elseif (version_compare(PHP_VERSION, PHPIPAM_PHP_MIN, '<') && ! Config::ValueOf('allow_untested_php_versions', false)) {
     $error[] = '<strong>'._('Unsupported PHP version').'!</strong><br><hr>';
     $error[] = _('Minimum PHP version required').': '.PHPIPAM_PHP_MIN.'<br>';
-    $error[] = _('Detected PHP version: ').phpversion();
-} elseif (phpversion() >= PHPIPAM_PHP_UNTESTED && ! Config::ValueOf('allow_untested_php_versions', false)) {
+    $error[] = _('Detected PHP version: ').PHP_VERSION;
+} elseif (version_compare(PHP_VERSION, PHPIPAM_PHP_UNTESTED, '>=') && ! Config::ValueOf('allow_untested_php_versions', false)) {
     $error[] = '<strong>'._('Unsupported PHP version').'!</strong><br><hr>';
-    $error[] = _('Detected PHP version: ').phpversion().' >= '.PHPIPAM_PHP_UNTESTED.'<br><br>';
+    $error[] = _('Detected PHP version: ').PHP_VERSION.' >= '.PHPIPAM_PHP_UNTESTED.'<br><br>';
     $error[] = _('phpIPAM is not yet compatible with this version of php.').' '._('You may encounter issues & errors.').'<br><br>';
     $error[] = _('Please set <q>$allow_untested_php_versions=true;</q> in config.php to continue at your own risk.');
 } elseif ($missingExt !== []) {
