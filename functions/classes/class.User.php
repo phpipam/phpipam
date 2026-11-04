@@ -827,6 +827,9 @@ class User extends Common_functions
             case 'auth_local':
                 $this->auth_local($username, $password);
                 break;
+            case 'auth_http':
+                $this->auth_http($username, $password);
+                break;
             case 'auth_AD':
                 $this->auth_AD($username, $password);
                 break;
