@@ -4,28 +4,31 @@
  * Script tomanage custom IP fields
  ****************************************/
 
-
 /* functions */
-require_once  __DIR__ . '/../../../../functions/functions.php';
+require_once __DIR__.'/../../../../functions/functions.php';
 
-# initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
-$Result 	= new Result ();
+// initialize user object
+$Database = new Database_PDO;
+$User = new User($Database);
+$Admin = new Admin($Database);
+$Result = new Result;
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
-# admin check
+// admin check
 $User->is_admin();
-# validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
-# some verifications
-if( (empty($POST->current)) || (empty($POST->next)) ) 							{ $Result->show("danger", _('Fields cannot be empty')."!", true); }
-
+// some verifications
+if ((empty($POST->current)) || (empty($POST->next))) {
+    $Result->show('danger', _('Fields cannot be empty').'!', true);
+}
 
 /* reorder */
-if(!$Admin->reorder_custom_fields($POST->table, $POST->next, $POST->current)) 	{ $Result->show("danger", _('Reordering failed')."!", true); }
-else 																					{ $Result->show("success", _('Fields reordered successfully')."!");}
-
+if (! $Admin->reorder_custom_fields($POST->table, $POST->next, $POST->current)) {
+    $Result->show('danger', _('Reordering failed').'!', true);
+} else {
+    $Result->show('success', _('Fields reordered successfully').'!');
+}

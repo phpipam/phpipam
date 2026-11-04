@@ -1,27 +1,29 @@
 <?php
 
 /**
- *
  *set users widgets
- *
  */
 
-# include required scripts
-require_once  __DIR__ . '/../../../../functions/functions.php';
+// include required scripts
+require_once __DIR__.'/../../../../functions/functions.php';
 
-# initialize required objects
-$Database 	= new Database_PDO;
-$Result		= new Result;
-$User		= new User ($Database);
+// initialize required objects
+$Database = new Database_PDO;
+$Result = new Result;
+$User = new User($Database);
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
-# check if site is demo
+// check if site is demo
 $User->is_demo();
 
-# validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
+    $Result->show('danger', _('Invalid CSRF cookie'), true);
+}
 
 /* save widgets */
-if (!$User->self_update_widgets ($POST->widgets)) 	{ $Result->show("danger", _('Error updating'),true); }
-else 													{ $Result->show("success", _('Widgets updated'),true); }
+if (! $User->self_update_widgets($POST->widgets)) {
+    $Result->show('danger', _('Error updating'), true);
+} else {
+    $Result->show('success', _('Widgets updated'), true);
+}

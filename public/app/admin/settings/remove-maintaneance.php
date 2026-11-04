@@ -1,26 +1,29 @@
 <?php
 
 /**
- *	Site settings
+ *  Site settings
  **************************/
 
 /* functions */
-require_once  __DIR__ . '/../../../../functions/functions.php';
+require_once __DIR__.'/../../../../functions/functions.php';
 
-# initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
-$Result 	= new Result ();
+// initialize user object
+$Database = new Database_PDO;
+$User = new User($Database);
+$Admin = new Admin($Database);
+$Result = new Result;
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
-# admin check
+// admin check
 $User->is_admin();
 
-# set update values
-$values = ["id"=>1,
-				"maintaneanceMode" => 0
-				];
-if(!$Admin->object_modify("settings", "edit", "id", $values))	{ $Result->show("danger",  _("Cannot update settings"), true, true, false, false, true); }
-else															{ $Result->show("success", _("Maintaneance mode removed"), true, true, false, false, true); }
+// set update values
+$values = ['id' => 1,
+    'maintaneanceMode' => 0,
+];
+if (! $Admin->object_modify('settings', 'edit', 'id', $values)) {
+    $Result->show('danger', _('Cannot update settings'), true, true, false, false, true);
+} else {
+    $Result->show('success', _('Maintaneance mode removed'), true, true, false, false, true);
+}

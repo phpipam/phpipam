@@ -4,9 +4,9 @@
  * Script to manage sections
  *************************************************/
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
-# admin check
+// admin check
 $User->is_admin();
 ?>
 
@@ -14,18 +14,18 @@ $User->is_admin();
 <hr><br>
 
 
-<?php $Result->show("info alert-absolute",  _('This script imports subnets from RIPE database for specific AS. Enter desired AS to search for subnets'), false); ?>
+<?php $Result->show('info alert-absolute', _('This script imports subnets from RIPE database for specific AS. Enter desired AS to search for subnets'), false); ?>
 
 <form name="ripeImport" id="ripeImport" style="margin-top:50px;clear:both;" class="form-inline">
-	<div class="form-group">
-		<input class="search form-control input-sm" placeholder="<?php print _('AS number'); ?>" name="as" type="text">
-	</div>
-	<div class="form-group">
-		<button type="submit" class="btn btn-sm btn-default"><?php print _('Search'); ?></button>
-	</div>
+    <div class="form-group">
+        <input class="search form-control input-sm" placeholder="<?php print _('AS number'); ?>" name="as" type="text">
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-sm btn-default"><?php print _('Search'); ?></button>
+    </div>
 </form>
 
 <!-- result -->
 <div class="content" style="margin-top:10px;">
-	<div class="ripeImportTelnet"></div>
+    <div class="ripeImportTelnet"></div>
 </div>

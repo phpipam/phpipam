@@ -436,7 +436,8 @@ VALUES
   (11, 'zh_CN.UTF-8', 'Chinese'),
   (12, 'ja_JP.UTF-8', 'Japanese'),
   (13, 'zh_TW.UTF-8', 'Chinese traditional (繁體中文)'),
-  (14, 'it_IT.UTF-8', 'Italian');
+  (14, 'it_IT.UTF-8', 'Italian'),
+  (15, 'uk_UA.UTF-8', 'Ukrainian (Українська)');
 
 
 # Dump of table vlans
@@ -1101,5 +1102,5 @@ CREATE TABLE `nominatim_cache` (
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
-UPDATE `settings` SET `version` = "1.9";
-UPDATE `settings` SET `dbversion` = 47;
+UPDATE `settings` SET `version` = "2.0";
+UPDATE `settings` SET `dbversion` = 48;

@@ -5,77 +5,82 @@
  *************************************/
 
 /* functions */
-require_once __DIR__ . '/../../../../functions/functions.php';
-require_once __DIR__ . '/../../../../functions/adLDAP/src/adLDAP.php';
+require_once __DIR__.'/../../../../functions/functions.php';
+require_once __DIR__.'/../../../../functions/adLDAP/src/adLDAP.php';
 
-# initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
-$Result 	= new Result ();
+// initialize user object
+$Database = new Database_PDO;
+$User = new User($Database);
+$Admin = new Admin($Database);
+$Result = new Result;
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
-# admin check
+// admin check
 $User->is_admin();
 
-# fetch server
-$server = $Admin->fetch_object("usersAuthMethod", "id", $POST->server);
-$server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
+// fetch server
+$server = $Admin->fetch_object('usersAuthMethod', 'id', $POST->server);
+$server !== false ?: $Result->show('danger', _('Invalid server ID'), true);
 
-//parse parameters
+// parse parameters
 $params = db_json_decode($server->params);
 
-//no login parameters
-if(is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword))	{ $Result->show("danger", _("Missing credentials"), true); }
-
-//open connection
-try {
-	if($server->type == "NetIQ") { $params->account_suffix = ""; }
-	//set options
-	$options = [
-			'base_dn'=>$params->base_dn,
-			'account_suffix'=>$params->account_suffix,
-			'domain_controllers'=>explode(";",(string) $params->domain_controllers),
-			'use_ssl'=>$params->use_ssl,
-			'use_tls'=>$params->use_tls,
-			'ad_port'=>$params->ad_port
-			];
-	//AD
-	$adldap = new adLDAP($options);
-
-	//try to login with higher credentials for search
-	$authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
-	if ($authUser == false) {
-		$Result->show("danger", _("Invalid credentials"), true);
-	}
-
-	// set OpenLDAP flag
-	if($server->type == "LDAP") { $adldap->setUseOpenLDAP(true); }
-
-	//fetch all groups
-	$all_groups = $Admin->fetch_all_objects ("userGroups", "g_id");
-	if($all_groups !== false) {
-		foreach($all_groups as $k=>$g) {
-			//members
-			$domain_group_members = $adldap->group()->members($g->g_name);
-			//false
-			if($domain_group_members!==false) {
-				foreach($domain_group_members as $m) {
-					if($m==$POST->username) {
-						$membership[] = $g->g_id;
-					}
-				}
-			}
-		}
-	}
-
-	# if something set print it
-	if (isset($membership)) {
-		print trim(implode(";", array_filter($membership)));
-	}
-
+// no login parameters
+if (is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword)) {
+    $Result->show('danger', _('Missing credentials'), true);
 }
-catch (adLDAPException $e) {
-	$Result->show("danger", $e->getMessage(), true);
+
+// open connection
+try {
+    if ($server->type == 'NetIQ') {
+        $params->account_suffix = '';
+    }
+
+    // set options
+    $options = [
+        'base_dn' => $params->base_dn,
+        'account_suffix' => $params->account_suffix,
+        'domain_controllers' => explode(';', (string) $params->domain_controllers),
+        'use_ssl' => $params->use_ssl,
+        'use_tls' => $params->use_tls,
+        'ad_port' => $params->ad_port,
+    ];
+    // AD
+    $adldap = new adLDAP($options);
+
+    // try to login with higher credentials for search
+    $authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
+    if ($authUser == false) {
+        $Result->show('danger', _('Invalid credentials'), true);
+    }
+
+    // set OpenLDAP flag
+    if ($server->type == 'LDAP') {
+        $adldap->setUseOpenLDAP(true);
+    }
+
+    // fetch all groups
+    $all_groups = $Admin->fetch_all_objects('userGroups', 'g_id');
+    if ($all_groups !== false) {
+        foreach ($all_groups as $g) {
+            // members
+            $domain_group_members = $adldap->group()->members($g->g_name);
+            // false
+            if ($domain_group_members !== false) {
+                foreach ($domain_group_members as $m) {
+                    if ($m == $POST->username) {
+                        $membership[] = $g->g_id;
+                    }
+                }
+            }
+        }
+    }
+
+    // if something set print it
+    if (isset($membership)) {
+        print trim(implode(';', array_filter($membership)));
+    }
+} catch (adLDAPException $adldapException) {
+    $Result->show('danger', $adldapException->getMessage(), true);
 }

@@ -171,22 +171,38 @@ const startLogin = async (e) => {
         return
     }
 
+    const userName = $('form#login input[name=ipamusername]').val();
+    if (!userName) {
+        $('#loginCheckPasskeys').html("<div class='alert alert-danger'>Enter valid Username</div>").show();
+        return
+    }
+
     // show login window
     showSpinner();
 
     try {
         // get and parse challenge
-        const challengeReq = await fetch('app/tools/user-menu/passkey_challenge.php')
-        const challengeB64 = await challengeReq.json()
-        const challenge    = atob(challengeB64) // base64-decode
+        const response = await fetch('app/tools/user-menu/passkey_challenge_login.php', {
+                method: 'POST',
+                body: 'username=' + userName,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                },
+            })
+
+        const data = await response.json()
 
         // Format for WebAuthn API
         const getOptions = {
             publicKey: {
-                challenge: Uint8Array.from(challenge, c => c.charCodeAt(0)),
-                allowCredentials: [],
-                mediation: 'conditional',
+                challenge: Uint8Array.from(atob(data.challengeB64), c => c.charCodeAt(0)),
+                allowCredentials: data.credential_ids.map(id => ({
+                    id: Uint8Array.from(atob(id), c => c.charCodeAt(0)),
+                    type: 'public-key',
+                })),
             },
+            timeout: 30000,
+            userVerification: "optional",
         }
 
         // Call the WebAuthn browser API and get the response. This may throw, which you

@@ -4,11 +4,11 @@
  * Script to get all active IP requests
  ****************************************/
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
 
-# set tools
+// set tools
 $tools = true;
 
-# use admin
-include(__DIR__."/../../admin/requests/index.php");
+// use admin
+include __DIR__.'/../../admin/requests/index.php';

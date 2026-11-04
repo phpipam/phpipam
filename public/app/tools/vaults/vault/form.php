@@ -1,4 +1,4 @@
-<h4 style='margin-top:50px;'><?php print _("Enter Vault password"); ?></h4><hr>
+<h4 style='margin-top:50px;'><?php print _('Enter Vault password'); ?></h4><hr>
 
 <form method="post">
 <table id="userModSelf" class="table table-condensed">

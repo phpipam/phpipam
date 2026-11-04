@@ -1,26 +1,28 @@
 <?php
 /* functions */
-require_once  __DIR__ . '/../../../../functions/functions.php';
+require_once __DIR__.'/../../../../functions/functions.php';
 
-# initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
-$Tools	 	= new Tools ($Database);
-$Result 	= new Result ();
+// initialize user object
+$Database = new Database_PDO;
+$User = new User($Database);
+$Admin = new Admin($Database);
+$Tools = new Tools($Database);
+$Result = new Result;
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
 
-# perm check popup
-if ($POST->action == "edit") {
-	$User->check_module_permissions("routing", User::ACCESS_RW, true, true);
+// perm check popup
+if ($POST->action == 'edit') {
+    $User->check_module_permissions('routing', User::ACCESS_RW, true, true);
 } else {
-	$User->check_module_permissions("routing", User::ACCESS_RWA, true, true);
+    $User->check_module_permissions('routing', User::ACCESS_RWA, true, true);
 }
 
-# ID must be numeric
-if($POST->action!="add" && !is_numeric($POST->bgpid))		{ $Result->show("danger", _("Invalid ID"), true, true); }
+// ID must be numeric
+if ($POST->action != 'add' && ! is_numeric($POST->bgpid)) {
+    $Result->show('danger', _('Invalid ID'), true, true);
+}
 ?>
 
 <!-- header -->
@@ -28,17 +30,20 @@ if($POST->action!="add" && !is_numeric($POST->bgpid))		{ $Result->show("danger",
 
 <!-- content -->
 <div class="pContent">
-	<?php
-	# submit
-	if(!$Admin->object_modify ("routing_subnets", "delete", "id", ["id"=>$POST->bgpid]))  { $Result->show("danger",  _("Mapping removal failed"), false); }
-	else																  			   { $Result->show("success", _("Mapping removed"), false); }
-	?>
+    <?php
+    // submit
+    if (! $Admin->object_modify('routing_subnets', 'delete', 'id', ['id' => $POST->bgpid])) {
+        $Result->show('danger', _('Mapping removal failed'), false);
+    } else {
+        $Result->show('success', _('Mapping removed'), false);
+    }
+?>
 
 </div>
 
 <!-- footer -->
 <div class="pFooter">
-	<div class="btn-group">
-		<button class="btn btn-sm btn-default hidePopupsReload"><?php print _('Close'); ?></button>
-	</div>
+    <div class="btn-group">
+        <button class="btn btn-sm btn-default hidePopupsReload"><?php print _('Close'); ?></button>
+    </div>
 </div>
