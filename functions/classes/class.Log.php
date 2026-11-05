@@ -1770,9 +1770,10 @@ class Logging extends Common_functions
             // query
             $query = 'select
 		    			`u`.`real_name`,`o`.`id`,`o`.`ip_addr`,`o`.`description`,`o`.`id`,`o`.`subnetId`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`
-						from `changelog` as `c`, `users` as `u`, `ipaddresses` as `o`
-						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
-						and (';
+						from `changelog` as `c`
+						left join `users` as `u` on `c`.`cuser` = `u`.`id`
+						join `ipaddresses` as `o` on `c`.`coid`=`o`.`id`
+						where (';
 
             $args = [];
             foreach ($ips as $ip) {
@@ -1841,14 +1842,15 @@ class Logging extends Common_functions
         // query
         if ($long) {
             $query = "select *
-						from `changelog` as `c`, `users` as `u`, `$object_typeTable` as `o`
-						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
-						and `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
+						from `changelog` as `c`
+						left join `users` as `u` on `c`.`cuser` = `u`.`id`
+						join `$object_typeTable` as `o` on `c`.`coid`=`o`.`id`
+						where `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
         } else {
             $query = "select *
-						from `changelog` as `c`, `users` as `u`
-						where `c`.`cuser` = `u`.`id`
-						and `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
+						from `changelog` as `c`
+						left join `users` as `u` on `c`.`cuser` = `u`.`id`
+						where `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
         }
 
         // fetch
@@ -1908,9 +1910,10 @@ class Logging extends Common_functions
 
                 // set query
                 $query = 'select
-							`u`.`real_name`,`o`.`sectionId`,`o`.`subnet`,`o`.`mask`,`o`.`isFolder`,`o`.`description`,`o`.`id`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`  from `changelog` as `c`, `users` as `u`, `subnets` as `o`
-							where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
-							and (';
+							`u`.`real_name`,`o`.`sectionId`,`o`.`subnet`,`o`.`mask`,`o`.`isFolder`,`o`.`description`,`o`.`id`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`  from `changelog` as `c`
+							left join `users` as `u` on `c`.`cuser` = `u`.`id`
+							join `subnets` as `o` on `c`.`coid`=`o`.`id`
+							where (';
                 foreach ($this->Subnets->slaves as $slaveId) {
 
                     $query .= '`c`.`coid` = ? or ';
