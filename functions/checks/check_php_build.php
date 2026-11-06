@@ -68,7 +68,7 @@ foreach ($requiredFns as $fn) {
 $pear_class = 'PEAR.php';
 @include_once $pear_class;
 
-if (! class_exists('PEAR')) {
+if (! class_exists(PEAR::class)) {
     $missingExt[] = 'php PEAR support';
 }
 

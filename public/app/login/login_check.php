@@ -35,14 +35,12 @@ if (! empty($POST->ipamusername) && ! empty($POST->ipampassword)) {
     // captcha check
     else {
         // check captcha
-        $captcha_code = isset($_SESSION['securimage_code_value']) ? $_SESSION['securimage_code_value']['default'] : '';
-        if ($captcha_code == '') {
-            $Result->die('danger', _('Missing security code'));
-        }
-
-        if (strtolower($POST->captcha) != strtolower((string) $captcha_code)) {
+        $captcha = new SecurimagePHP8;
+        if (! isset($_SESSION['captchaId']) || ! $captcha->check($POST->captcha, $_SESSION['captchaId'])) {
             $Result->die('danger', _('Invalid security code'));
         }
+
+        unset($_SESSION['captchaId']);
     }
 
     // all good, try to authenticate user
