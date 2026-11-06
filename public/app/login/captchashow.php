@@ -14,9 +14,14 @@ disable_php_errors();
 $Database = new Database_PDO;
 $User = new User($Database);
 
+// Delete previous captcha data for this session.
+unset($_SESSION['securimage_data']);
+$_SESSION['captchaId'] = $User->Crypto->generate_html_safe_token();
+
 // options
 $options = [
     'image_width' => 425,       // width of captcha image in pixels
+    'captchaId' => $_SESSION['captchaId'],
     'image_height' => 50,        // height of captcha image in pixels
     'code_length' => 6,         // # of characters for captcha code
     'image_bg_color' => '#ffffff', // hex color for image background
@@ -32,8 +37,7 @@ $options = [
     'use_database' => false,
 ];
 
-// construct
-$captcha = new Securimage($options);
+$captcha = new SecurimagePHP8($options);
 
 // show the image, this sends proper HTTP headers
 $captcha->show();

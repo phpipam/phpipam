@@ -96,8 +96,19 @@ if (file_exists(__DIR__.'/../vendor/autoload.php')) {
 
         return true;
     }, E_ALL);
-    require_once __DIR__.'/../vendor/autoload.php';
+    try {
+        require_once __DIR__.'/../vendor/autoload.php';
+    } catch (Exception $exception) {
+        $composer_autoload_err = $exception->getMessage();
+    }
+
     set_error_handler($old_handler, E_ALL);
+}
+
+// Allow dynamic properties for Securimage class
+if (class_exists(Securimage::class)) {
+    #[AllowDynamicProperties]
+    final class SecurimagePHP8 extends Securimage {}
 }
 
 // create default GET parameters
