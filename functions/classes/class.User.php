@@ -1085,27 +1085,29 @@ class User extends Common_functions
      * @param  string  $password
      * @return void
      */
-    private function directory_authenticate ($authparams, $username, $password, $loginname = null) {
+    private function directory_authenticate($authparams, $username, $password, $loginname = null, $directory = null)
+    {
         // $username is the directory bind identity; $loginname is the phpIPAM username.
         if ($loginname === null) {
             $loginname = $username;
         }
+
         // set method
         $method = $this->ldap ? 'LDAP' : 'AD';
         // connect
-        $adldap = $this->directory_connect($authparams);
+        $adldap = $directory ?: $this->directory_connect($authparams);
 
         // authenticate
         try {
             if ($adldap->authenticate($username, $password)) {
-                # check login restrictions for authenticated user
-                $this->check_login_restrictions ($loginname);
+                // check login restrictions for authenticated user
+                $this->check_login_restrictions($loginname);
 
                 // save to session
                 $this->write_session_parameters();
 
-                $this->Log->write($method." "._("login"), _("User")." " . $this->user->real_name ." "._("logged in via")." ".$method, 0, $loginname);
-                $this->Result->show("success", $method." "._("Login successful"));
+                $this->Log->write($method.' '._('login'), _('User').' '.$this->user->real_name.' '._('logged in via').' '.$method, 0, $loginname);
+                $this->Result->show('success', $method.' '._('Login successful'));
 
                 // write last logintime
                 $this->update_login_time();
@@ -1114,14 +1116,13 @@ class User extends Common_functions
             } else {
                 // add blocked count
                 $this->block_ip();
-                $this->log_failed_access ($loginname);
-                $this->Log->write($method." "._("login"), _("User")." ".$loginname." "._("failed to authenticate against")." ".$method, 1, $loginname);
-                $this->Result->show("danger", _("Invalid username or password"), true);
-
+                $this->log_failed_access($loginname);
+                $this->Log->write($method.' '._('login'), _('User').' '.$loginname.' '._('failed to authenticate against').' '.$method, 1, $loginname);
+                $this->Result->show('danger', _('Invalid username or password'), true);
             }
-        } catch (adLDAPException $e) {
-            $this->Log->write( _("Error"), _("Something went wrong during auth: ") . $e->getMessage(), 2, $loginname);
-            $this->Result->show("danger", _("Error: ") . $e->getMessage(), true);
+        } catch (adLDAPException $adldapException) {
+            $this->Log->write(_('Error'), _('Something went wrong during auth: ').$adldapException->getMessage(), 2, $loginname);
+            $this->Result->show('danger', _('Error: ').$adldapException->getMessage(), true);
         }
     }
 
@@ -1157,41 +1158,50 @@ class User extends Common_functions
 
         // Resolve the user's actual DN by searching the configured UID
         // attribute. LDAP DNs do not have to contain the UID as their RDN.
-        $uidAttr = !empty($authparams['uid_attr']) ? $authparams['uid_attr'] : 'uid';
-        if (!preg_match('/^[a-zA-Z][a-zA-Z0-9-]*$/', $uidAttr)) {
-            $this->Result->show("danger", _("Invalid LDAP UID attribute"), true);
+        $uidAttr = ! empty($authparams['uid_attr']) ? $authparams['uid_attr'] : 'uid';
+        if (! preg_match('/^[a-zA-Z][a-zA-Z0-9-]*$/', $uidAttr)) {
+            $this->Result->show('danger', _('Invalid LDAP UID attribute'), true);
+
             return;
         }
 
-        $searchBase = !empty($authparams['users_base_dn'])
+        $searchBase = ! empty($authparams['users_base_dn'])
             ? $authparams['users_base_dn']
             : $authparams['base_dn'];
 
         $ldap = $this->directory_connect($authparams);
-        if (!$ldap) {
+        if (! $ldap) {
             return;
         }
 
         $connection = $ldap->getLdapConnection();
         $escapedUsername = ldap_escape($username, '', LDAP_ESCAPE_FILTER);
-        $filter = "(" . $uidAttr . "=" . $escapedUsername . ")";
-        $search = @ldap_search($connection, $searchBase, $filter, array('dn'), 0, 2);
-        $entries = ($search !== false) ? ldap_get_entries($connection, $search) : false;
+        $filter = '('.$uidAttr.'='.$escapedUsername.')';
+        $search = @ldap_search($connection, $searchBase, $filter, ['dn'], 0, 2);
+        $entries = $search !== false ? ldap_get_entries($connection, $search) : false;
 
-        // Require exactly one match: never authenticate an ambiguous UID.
-        if ($entries === false || $entries['count'] !== 1 || empty($entries[0]['dn'])) {
+        // Never authenticate an ambiguous UID.
+        if ($entries !== false && $entries['count'] > 1) {
             $this->block_ip();
             $this->log_failed_access($username);
-            $this->Log->write("LDAP "._("login"), _("Could not resolve a unique LDAP DN for user")." ".$username, 1, $username);
-            $this->Result->show("danger", _("Invalid username or password"), true);
+            $this->Log->write('LDAP '._('login'), _('Could not resolve a unique LDAP DN for user').' '.$username, 1, $username);
+            $this->Result->show('danger', _('Invalid username or password'), true);
+
             return;
         }
 
-        $userDn = $entries[0]['dn'];
+        if ($entries === false || $entries['count'] === 0 || empty($entries[0]['dn'])) {
+            // Fall back to the previous DN pattern if searching is unavailable or finds no entry.
+            $userDn = $uidAttr.'='.ldap_escape($username, '', LDAP_ESCAPE_DN).','.$searchBase;
+        } else {
+            $userDn = $entries[0]['dn'];
+        }
+
         // Bind with the resolved DN, but retain the short username for
         // phpIPAM restrictions, logs and user mapping.
-        $this->directory_authenticate($authparams, $userDn, $password, $username);
+        $this->directory_authenticate($authparams, $userDn, $password, $username, $ldap);
     }
+
     /**
      * NetIQ authentication
      * same as AD authentication, only add cn= before username
