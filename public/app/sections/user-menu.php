@@ -98,6 +98,6 @@ if ($GET->subnets != 'on' && $GET->addresses != 'on' && $GET->vlans != 'on' && $
     <span class="info"><?php print _('Logged in as'); ?>  <?php print '&nbsp;'._((string) $User->user->role); ?></span><br>
 
     <!-- logout -->
-    <a  href="<?php print create_link('login'); ?>"><?php print _('Logout'); ?>  <i class="fa fa-pad-left fa-sign-out"></i></a>
+    <a  href="<?php print create_link('logout'); ?>?csrf_cookie=<?php print $User->Crypto->csrf_session_token(); ?>"><?php print _('Logout'); ?>  <i class="fa fa-pad-left fa-sign-out"></i></a>
     <?php } ?>
 </div>
