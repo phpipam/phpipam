@@ -225,16 +225,6 @@ class User extends Common_functions
     }
 
     /**
-     * destroys session
-     *
-     * @return void
-     */
-    public function destroy_session()
-    {
-        session_destroy();
-    }
-
-    /**
      * sets session name if specified in config file
      *
      * @return void
@@ -312,7 +302,7 @@ class User extends Common_functions
     {
         // if checked for subpages first check if $user is array
         if (! is_array($this->user)) {
-            if (isset($_SESSION['ipamusername']) && ! is_blank($_SESSION['ipamusername'])) {
+            if (isset($_SESSION['ipamusername']) && (string) $_SESSION['ipamusername'] !== '') {
                 // save username
                 $this->username = $_SESSION['ipamusername'];
                 // check for timeout
@@ -383,7 +373,7 @@ class User extends Common_functions
                 // for AJAX always check origin
                 $this->check_referrer();
                 // kill session
-                $this->destroy_session();
+                $this->logout();
                 // error
                 $this->Result->die('danger', _('Please login first')."!<hr><a class='btn btn-sm btn-default' href='".$url.create_link('login')."'>"._('Login').'</a>', true);
                 exit();
@@ -642,7 +632,17 @@ class User extends Common_functions
      */
     public function fetch_available_auth_method_types()
     {
-        return ['AD', 'LDAP', 'NetIQ', 'Radius', 'SAML2'];
+        return ['AD', 'http', 'LDAP', 'NetIQ', 'Radius', 'SAML2'];
+    }
+
+    /**
+     * Sets available $_SERVER HTTP authentication types
+     *
+     * @return array
+     */
+    public function fetch_available_server_http_auth_vars()
+    {
+        return ['PHP_AUTH_USER', 'AUTH_USER', 'LOGON_USER', 'REMOTE_USER'];
     }
 
     /**
@@ -787,6 +787,44 @@ class User extends Common_functions
      */
 
     /**
+     * Logout the current user
+     *
+     * @return void
+     */
+    public function logout()
+    {
+        $this->authenticated = false;
+        $this->user = null;
+
+        session_destroy();
+    }
+
+    /**
+     * Check if HTTP username exists
+     *
+     * @param  string  $username
+     * @return bool
+     */
+    public function is_valid_http_user($username)
+    {
+        if (! is_string($username) || $username === '') {
+            return false;
+        }
+
+        try {
+            $user = $this->Database->findObject('users', 'username', $username);
+        } catch (Exception $exception) {
+            return false;
+        }
+
+        if (! is_object($user)) {
+            return false;
+        }
+
+        return $user->authMethod == 2;
+    }
+
+    /**
      * Main function for authenticating users
      *
      *    > tries to fetch user details from database by username
@@ -802,6 +840,10 @@ class User extends Common_functions
     {
         // first we need to check if username exists
         $this->fetch_user_details($username);
+        if (! is_object($this->user)) {
+            return;
+        }
+
         // set method type if set, otherwise presume local auth
         $this->authmethodid = ! is_blank(@$this->user->authMethod) ? $this->user->authMethod : 1;
 
@@ -818,7 +860,9 @@ class User extends Common_functions
 
         if ($saml !== false) {
             $authmethodtype = 'auth_SAML2';
-        } elseif ($authmethodtype == 'auth_SAML2') {
+        }
+
+        if ($authmethodtype == 'auth_SAML2' && $saml === false) {
             $this->Result->die('danger', _('Please use')." <a href='".create_link('saml2')."'>"._('login').'</a>!');
         }
 
@@ -827,11 +871,11 @@ class User extends Common_functions
             case 'auth_local':
                 $this->auth_local($username, $password);
                 break;
-            case 'auth_http':
-                $this->auth_http($username, $password);
-                break;
             case 'auth_AD':
                 $this->auth_AD($username, $password);
+                break;
+            case 'auth_http':
+                $this->auth_http($username, $password);
                 break;
             case 'auth_LDAP':
                 $this->auth_LDAP($username, $password);
@@ -947,6 +991,37 @@ class User extends Common_functions
     }
 
     /**
+     * Return HTTP authenticated user e.g $_SERVER['PHP_AUTH_USER']
+     *
+     * @return string
+     */
+    public function fetch_http_auth_user()
+    {
+        $auth_method = $this->fetch_object('usersAuthMethod', 'id', 2);
+        if (! is_object($auth_method)) {
+            return '';
+        }
+
+        $auth_method->params = db_json_decode($auth_method->params);
+        $server_var = $auth_method->params->prefix ?? 'PHP_AUTH_USER';
+        if (! in_array($server_var, $this->fetch_available_server_http_auth_vars())) {
+            $server_var = 'PHP_AUTH_USER';
+        }
+
+        $prefix = (string) ($auth_method->params->prefix ?? '');
+        $user_name = (string) ($_SERVER[$server_var] ?? '');
+
+        if ($prefix !== '' &&
+            strlen($user_name) > strlen($prefix) &&
+            substr($user_name, 0, strlen($prefix)) === $prefix
+        ) {
+            $user_name = substr($user_name, strlen($prefix));
+        }
+
+        return $user_name;
+    }
+
+    /**
      * local user authentication method, authenticates users through local DB entry
      * we provide user object from DB, and username/password entered by users
      *
@@ -981,7 +1056,7 @@ class User extends Common_functions
             $this->Log->write(_('User login'), _('Invalid username or password'), 2, $username);
 
             // apache
-            if (! empty($_SERVER['PHP_AUTH_USER']) && $this->api !== true) {
+            if ($this->fetch_http_auth_user() !== '' && $this->api !== true) {
                 $this->show_http_login();
             } else {
                 $this->Result->die('danger', _('Invalid username or password'));
@@ -999,20 +1074,29 @@ class User extends Common_functions
      */
     public function auth_http($username, $password)
     {
-        // check login restrictions for authenticated user
-        $this->check_login_restrictions($username);
+        if ((string) $username === $this->fetch_http_auth_user() && (string) $password === '') {
+            // check login restrictions for authenticated user
+            $this->check_login_restrictions($username);
 
-        // save to session
-        $this->write_session_parameters();
+            // save to session
+            $this->write_session_parameters();
 
-        $this->Result->warn('success', _('Login successful'));
-        $this->Log->write(_('User login'), _('User').' '.$this->user->real_name.' '._('logged in'), 0, $username);
+            $this->Log->write(_('User login'), _('User').' '.$this->user->real_name.' '._('logged in'), 0, $username);
+            $this->Result->warn('success', _('Login successful'));
 
-        // write last logintime
-        $this->update_login_time();
+            // write last logintime
+            $this->update_login_time();
 
-        // remove possible blocked IP
-        $this->block_remove_entry();
+            // remove possible blocked IP
+            $this->block_remove_entry();
+        } else {
+            // add blocked count
+            $this->block_ip();
+            $this->log_failed_access($username);
+
+            $this->Log->write(_('User login'), _('Invalid auth_http attempt'), 2, $username);
+            $this->Result->die('danger', _('Invalid username or password'));
+        }
     }
 
     /**

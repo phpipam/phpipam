@@ -45,6 +45,8 @@ if ($Rewrite->is_api()) {
         require __DIR__.'/app/upgrade/index.php';
     } elseif ($GET->page == 'login') {
         require __DIR__.'/app/login/index.php';
+    } elseif ($GET->page == 'logout') {
+        require __DIR__.'/app/logout/index.php';
     } elseif ($GET->page == 'temp_share') {
         require __DIR__.'/app/temp_share/index.php';
     } elseif ($GET->page == 'request_ip') {

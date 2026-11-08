@@ -22,7 +22,9 @@ $csrf = $User->Crypto->csrf_session_token();
 if ($POST->action != 'add') {
     $auth_method = $Admin->fetch_object('usersAuthMethod', 'id', $POST->id);
     if ($auth_method->protected == 'Yes') {
-        $Result->die('danger', _('Method cannot be change as it is protected'), true);
+        if ($POST->action != 'edit' || $POST->id != 2) {
+            $Result->die('danger', _('Method cannot be change as it is protected'), true);
+        }
     }
 }
 
