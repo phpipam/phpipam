@@ -1055,7 +1055,7 @@ class User extends Common_functions
                 $dirparams['use_ssl'] = true;
             }
             // The authentication-method form stores these keys in camelCase.
-            if (isset($authparams['adminUsername']) && isset($authparams['adminPassword'])) {
+            if (! is_blank(@$authparams['adminUsername']) && ! is_blank(@$authparams['adminPassword'])) {
                 $dirparams['admin_username'] = $authparams['adminUsername'];
                 $dirparams['admin_password'] = $authparams['adminPassword'];
             }
