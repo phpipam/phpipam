@@ -101,16 +101,19 @@ if (! isset($userinfo['count'])) {
     print "<table class='table table-striped'>";
 
     unset($userinfo['count']);
-    if (count(@$userinfo) > 0 && isset($userinfo)) {
-        // loop
+    if (is_array($userinfo)) {
         foreach ($userinfo as $u) {
+            $u_displayname = escape_input($u['displayname'][0] ?? '');
+            $u_samaccountname = escape_input($u['samaccountname'][0] ?? '');
+            $u_mail = escape_input($u['mail'][0] ?? '');
+
             print '<tr>';
-            print '	<td>'.escape_input($u['displayname'][0]).'</td>';
-            print '	<td>'.escape_input($u['samaccountname'][0]).'</td>';
-            print '	<td>'.escape_input($u['mail'][0]).'</td>';
+            print '	<td>'.$u_displayname.'</td>';
+            print '	<td>'.$u_samaccountname.'</td>';
+            print '	<td>'.$u_mail.'</td>';
             // actions
             print " <td style='width:10px;'>";
-            print "		<a href='' class='btn btn-sm btn-default btn-success userselect' data-uname='".escape_input($u['displayname'][0])."' data-username='".escape_input($u['samaccountname'][0])."' data-email='".escape_input($u['mail'][0])."' data-server='".escape_input($POST->server)."' data-server-type='".$server->type."'>"._('Select').'</a>';
+            print "		<a href='' class='btn btn-sm btn-default btn-success userselect' data-uname='".$u_displayname."' data-username='".$u_samaccountname."' data-email='".$u_mail."' data-server='".escape_input($POST->server)."' data-server-type='".$server->type."'>"._('Select').'</a>';
             print '	</td>';
             print '</tr>';
         }
