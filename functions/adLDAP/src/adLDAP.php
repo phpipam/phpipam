@@ -641,11 +641,15 @@ class adLDAP {
     {
         // Connect to the AD/LDAP server as the username/password
         $domainController = $this->randomController();
-        $port = (int) $this->adPort;
-        if ($this->useSSL) {
-            $this->ldapConnection = ldap_connect("ldaps://$domainController:$port");
+        $port = $this->adPort;
+
+        $host_with_port = filter_var($domainController, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) ? '['.$domainController.']' : $domainController;
+        $host_with_port = $host_with_port.':'.$port;
+
+        if ($this->useSSL && !$this->useTLS) {
+            $this->ldapConnection = ldap_connect("ldaps://$host_with_port");
         } else {
-            $this->ldapConnection = ldap_connect("ldap://$domainController:$port");
+            $this->ldapConnection = ldap_connect("ldap://$host_with_port");
         }
 
         // Set some ldap options for talking to AD
@@ -922,7 +926,7 @@ class adLDAP {
      */
     protected function randomController()
     {
-        mt_srand(doubleval(microtime()) * 100000000); // For older PHP versions
+        mt_srand( (int) (doubleval(microtime()) * 100000000)); // For older PHP versions
         /*if (sizeof($this->domainControllers) > 1) {
             $adController = $this->domainControllers[array_rand($this->domainControllers)];
             // Test if the controller is responding to pings
