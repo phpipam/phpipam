@@ -59,7 +59,7 @@ if ($domain === false) {
 $existing_vlans = $Tools->fetch_multiple_objects('vlans', 'domainId', $domain->id, 'vlanId');
 if ($existing_vlans !== false) {
     foreach ($existing_vlans as $v) {
-        $ex_vlans[$v->number] = $name;
+        $ex_vlans[$v->number] = $v->number;
     }
 }
 
@@ -201,7 +201,7 @@ else {
     if (isset($errors)) {
         print '<hr>';
         foreach ($errors as $e) {
-            print $Result->warn('warning', $e);
+            print $Result->warn('warning', escape_input($e));
         }
     }
 }

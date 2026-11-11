@@ -258,7 +258,7 @@ if ($errors !== []) {
     $errors = array_unique($errors);
     print '<div class="alert alert-danger"><strong>'._('Please fix following problems').'</strong>:';
     foreach ($errors as $error) {
-        print '<br>'.$error;
+        print '<br>'.escape_input($error);
     }
 
     print '</div>';

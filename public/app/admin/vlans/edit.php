@@ -64,7 +64,7 @@ if ($POST->action == 'add') {
         if (! is_numeric($POST->number)) {
             $Result->die('danger', _('Invalid ID'), true);
         }
-        $vlan->number = $POST->number;
+        $vlan->number = (int) $POST->number;
     }
 } else {
     $vlan_domain = $Admin->fetch_object('vlanDomains', 'id', $vlan->domainId);

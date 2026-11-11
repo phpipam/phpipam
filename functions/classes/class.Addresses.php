@@ -1238,7 +1238,7 @@ class Addresses extends Common_functions
      * Returns array of all ptr indexes in current subnet
      *
      * @param  mixed  $subnetId
-     * @return void
+     * @return array|false
      */
     public function ptr_get_subnet_indexes($subnetId)
     {

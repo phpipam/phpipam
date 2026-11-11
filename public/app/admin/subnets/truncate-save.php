@@ -40,7 +40,7 @@ if ($subnetPerm < 3) {
 // for orphaned
 if ($subnet === false) {
     $subnet = new StdClass;
-    $subnet->id = $POST->subnetId;
+    $subnet->id = (int) $POST->subnetId;
 }
 
 // truncate network

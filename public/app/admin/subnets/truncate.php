@@ -38,7 +38,7 @@ if ($subnetPerm < 3) {
 // on empty subnet it means it came from database validity check, fake id !
 if ($subnet === false) {
     $subnet = new StdClass;
-    $subnet->id = $POST->subnetId;
+    $subnet->id = (int) $POST->subnetId;
 }
 
 // set prefix - folder or subnet

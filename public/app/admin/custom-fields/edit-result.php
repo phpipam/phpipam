@@ -99,7 +99,7 @@ if (! empty($errors)) {
     print '<div class="alert alert alert-danger">'._('Please correct the following errors').':'."\n";
     print '<ul>'."\n";
     foreach ($errors as $error) {
-        print '<li style="text-align:left">'.$error.'</li>'."\n";
+        print '<li style="text-align:left">'.escape_input($error).'</li>'."\n";
     }
 
     print '</ul>'."\n";

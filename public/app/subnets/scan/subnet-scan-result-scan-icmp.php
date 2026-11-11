@@ -50,7 +50,7 @@ foreach ($POST as $key => $line) {
     // verify that it is not already in table!
     if (substr((string) $key, 0, 2) == 'ip') {
         if ($Addresses->address_exists($line, $POST->subnetId) === true) {
-            $Result->die('danger', "IP address $line already exists!");
+            $Result->die('danger', 'IP address '.escape_input($line).' already exists!');
         }
     }
 }
