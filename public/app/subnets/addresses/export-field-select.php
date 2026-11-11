@@ -159,6 +159,6 @@ print '</form>';
 <div class="pFooter">
     <div class="btn-group">
         <button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-        <button class="btn btn-sm btn-success" id="exportSubnet" csrf="<?php print $GET->csrf; ?>"><i class="fa fa-download"></i> <?php print _('Export'); ?></button>
+        <button class="btn btn-sm btn-success" id="exportSubnet" csrf="<?php print escape_input($GET->csrf); ?>"><i class="fa fa-download"></i> <?php print _('Export'); ?></button>
     </div>
 </div>

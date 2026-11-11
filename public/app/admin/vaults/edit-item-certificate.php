@@ -46,7 +46,7 @@ if ($POST->action != 'add') {
 } else {
     // generate new code
     $item = new Params;
-    $item->vaultId = $POST->vaultid;
+    $item->vaultId = (int) $POST->vaultid;
     // title
     $title = _('Add new certificate');
 }

@@ -131,6 +131,6 @@ try {
 header('Cache-Control: private');
 header('Content-Description: File Transfer');
 header('Content-type: application/octet-stream');
-header('Content-Disposition: attachment; filename="'.$vault_item_values->name.'.'.$GET->certtype.'"');
+header('Content-Disposition: attachment; filename="'.$vault_item_values->name.'.'.escape_input($GET->certtype).'"');
 
 print $content;

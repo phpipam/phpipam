@@ -43,7 +43,7 @@ foreach ($allSubnets as $subnet) {
     // set subnet details for importing
     $subnet_import['subnet'] = $Subnets->transform_to_decimal($_temp[0]);
     $subnet_import['mask'] = $_temp[1];
-    $subnet_import['sectionId'] = $POST->{'section-'.$m};
+    $subnet_import['sectionId'] = (int) ($POST->{'section-'.$m});
     $subnet_import['description'] = $POST->{'description-'.$m};
     $subnet_import['vlanId'] = $POST->{'vlan-'.$m};
     $subnet_import['vrfId'] = $POST->{'vrf-'.$m};
@@ -67,7 +67,7 @@ foreach ($allSubnets as $subnet) {
 if (isset($errors)) {
     print '<div class="alert alert-danger alert-absolute">'._('Please fix the following errors before inserting').':<hr>'."\n";
     foreach ($errors as $line) {
-        print $line.'<br>';
+        print escape_input($line).'<br>';
     }
 
     print '</div>';

@@ -85,7 +85,7 @@ if ($POST->noZone == 1) {
                     print $Subnets->transform_to_dotted($network->subnet).'/'.$network->mask.'</td>';
                 }
             }
-            print '<input type="hidden" name="network['.$key.']" value="'.$network->id.'">';
+            print '<input type="hidden" name="network['.escape_input($key).']" value="'.$network->id.'">';
             print '</tr>';
             $i++;
         }
@@ -135,7 +135,7 @@ if ($POST->operation == 'checkMapping') {
                     <?php print _('Firewall to map'); ?>
                 </td>
                 <td>
-                    <select name="deviceId" class="form-control input-sm input-w-auto input-max-200" <?php print $readonly; ?>>
+                    <select name="deviceId" class="form-control input-sm input-w-auto input-max-200" <?php print $readonly ?? ''; ?>>
                     <option value="0"><?php print _('Select firewall'); ?></option>
                     <?php
                     if ($devices !== false) {
@@ -164,7 +164,7 @@ if ($POST->operation == 'checkMapping') {
                     <?php print _('Interface'); ?>
                 </td>
                 <td>
-                    <input type="text" class="form-control input-sm" name="interface" placeholder="<?php print _('Firewall interface'); ?>" value="<?php print $mapping->interface; ?>" <?php print $readonly; ?>>
+                    <input type="text" class="form-control input-sm" name="interface" placeholder="<?php print _('Firewall interface'); ?>" value="<?php print $mapping->interface; ?>" <?php print $readonly ?? ''; ?>>
                 </td>
             </tr>
             <tr>
@@ -173,7 +173,7 @@ if ($POST->operation == 'checkMapping') {
                     <?php print _('Zone alias'); ?>
                 </td>
                 <td>
-                    <input type="text" class="form-control input-sm" name="alias" placeholder="<?php print _('Local zone alias'); ?>" value="<?php print $mapping->alias; ?>" <?php print $readonly; ?>>
+                    <input type="text" class="form-control input-sm" name="alias" placeholder="<?php print _('Local zone alias'); ?>" value="<?php print $mapping->alias; ?>" <?php print $readonly ?? ''; ?>>
                 </td>
             </tr>
         </table>

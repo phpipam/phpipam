@@ -46,7 +46,7 @@ if ($POST->action != 'add') {
 } else {
     // generate new code
     $item = new Params;
-    $item->vaultId = $POST->vaultid;
+    $item->vaultId = (int) $POST->vaultid;
     // title
     $title = _('Add new password');
 }
@@ -125,7 +125,7 @@ $custom = $Tools->fetch_custom_fields('vaultItems');
                 // disabled
                 $cust_disabled = $POST->action == 'delete';
                 // create input > result is array (required, input(html), timepicker_index)
-                $custom_input = $Tools->create_custom_field_input($field, $item, $timepicker_index, $disabled);
+                $custom_input = $Tools->create_custom_field_input($field, $item, $timepicker_index, $disabled ?? false);
                 // add datepicker index
                 $timepicker_index++;
                 // print

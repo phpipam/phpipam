@@ -19,6 +19,8 @@ $Log = new Logging($Database, $User->settings);
 $Zones = new FirewallZones($Database);
 $Ping = new Scan($Database);
 
+$errors = [];
+
 // verify that user is logged in
 $User->check_user_session();
 // check maintaneance mode
@@ -202,7 +204,7 @@ if (! is_blank(strstr((string) $POST->ip_addr, '-'))) {
         // result
         print "<div class='alert alert-warning'>";
         print '<strong>'._('Warning').'</strong>: '._('Are you sure you want to delete IP address range').'?';
-        print "<hr>$range<div style='text-align:right'>";
+        print '<hr>'.escape_input($range)."<div style='text-align:right'>";
         print "<div class='btn-group'>";
         print "	<a class='btn btn-sm btn-danger editIPSubmitDelete' id='editIPSubmitDelete'>"._('Confirm').'</a>';
         print '</div>';
