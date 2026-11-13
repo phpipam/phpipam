@@ -28,16 +28,16 @@ if ($POST->action == 'edit') {
 
 // validate $POST->action values
 if ($POST->action != 'add' && $POST->action != 'delete') {
-    $Result->show('danger', _('Invalid action. Do not manipulate the POST values!').'<button class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true);
+    $Result->die('danger', _('Invalid action. Do not manipulate the POST values!').'<button class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>');
 }
 // validate $POST->id values
 if ($POST->id && ! preg_match('/^[0-9]+$/i', (string) $POST->id)) {
-    $Result->show('danger', _('Invalid ID. Do not manipulate the POST values!').'<button style="margin-left:50px;" class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true);
+    $Result->die('danger', _('Invalid ID. Do not manipulate the POST values!').'<button style="margin-left:50px;" class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>');
 }
 // validate $POST->sectionId values
 if ($POST->id && $POST->subnetId != '') {
     if (! preg_match('/^[0-9]+$/i', (string) $POST->subnetId)) {
-        $Result->show('danger', _('Invalid subnet ID. Do not manipulate the POST values!').'<button class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true);
+        $Result->die('danger', _('Invalid subnet ID. Do not manipulate the POST values!').'<button class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>');
     }
 }
 
@@ -79,7 +79,7 @@ if ($POST->action == 'delete') { ?>
     } else {
         $network = $Subnets->transform_to_dotted($subnet->subnet).'/'.$subnet->mask;
     }
-    $Result->show('warning', '<strong>'._('Warning').':</strong><br>'._('You are about to remove the following Network from the firewall zone:<br>'.$network), false); ?>
+    $Result->warn('warning', '<strong>'._('Warning').':</strong><br>'._('You are about to remove the following Network from the firewall zone:<br>'.$network)); ?>
                 <input type="hidden" name="masterSubnetId" value="<?php print escape_input($POST->subnetId); ?>">
             </td>
 <?php } else {

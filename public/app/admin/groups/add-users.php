@@ -20,7 +20,7 @@ $User->is_admin();
 
 // id must be numeric
 if (! is_numeric($POST->g_id)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // get group details
@@ -74,7 +74,7 @@ $missing = $Admin->group_fetch_missing_users($POST->g_id);
     </form>
 
     <?php } else {
-        $Result->show('info', _('No available users to add to group'), false);
+        $Result->warn('info', _('No available users to add to group'));
     } ?>
 </div>
 

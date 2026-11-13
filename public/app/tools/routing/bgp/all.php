@@ -16,7 +16,7 @@ $csrf = $User->Crypto->csrf_session_token();
 
 // check that rack support isenabled
 if ($User->settings->enableRouting != '1') {
-    $Result->show('danger', _('Routing module disabled.'), false);
+    $Result->warn('danger', _('Routing module disabled.'));
 } else {
     // fetch all BGP entries
     $all_bgp_entries = $Tools->fetch_all_objects('routing_bgp', 'peer_name', true);
@@ -61,7 +61,7 @@ if ($User->settings->enableRouting != '1') {
     // none
     if ($all_bgp_entries === false) {
         print '<tr>';
-        print " <td colspan='$colspan'>".$Result->show('info', _('No BGP information available'), false, false, true).'</td>';
+        print " <td colspan='$colspan'>".$Result->warn('info', _('No BGP information available'), false, true).'</td>';
         print '</tr>';
     }
     // print

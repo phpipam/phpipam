@@ -20,17 +20,17 @@ $User->check_maintaneance_mode();
 
 // make sure user has access
 if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
-    $Result->show('danger', _('Insufficient privileges').'.', true, true);
+    $Result->die('danger', _('Insufficient privileges').'.', true);
 }
 
 // fetch vault
 $vault = $Admin->fetch_object('vaults', 'id', $POST->id);
 if (! is_object($vault)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // delete session
 unset($_SESSION['vault'.$vault->id]);
 
 // OK, redirect
-$Result->show('success', _('Vault locked').'.', false, true, false, false, true);
+$Result->warn('success', _('Vault locked').'.', true, false, false, true);

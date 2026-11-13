@@ -22,17 +22,17 @@ $User->check_user_session();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // ID must be numeric
 if (! is_numeric($POST->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // verify that user has write permissions for subnet
 if ($Subnets->check_permission($User->user, $POST->subnetId) < 3) {
-    $Result->show('danger', _('You do not have permissions to resize subnet').'!', true);
+    $Result->die('danger', _('You do not have permissions to resize subnet').'!');
 }
 
 // fetch old subnet details and set new
@@ -55,7 +55,7 @@ $values = ['id' => $POST->subnetId,
     'mask' => $POST->newMask,
 ];
 if (! $Subnets->modify_subnet('resize', $values)) {
-    $Result->show('danger', _('Error resizing subnet').'!', true);
+    $Result->die('danger', _('Error resizing subnet').'!');
 } else {
-    $Result->show('success', _('Subnet resized successfully').'!', true);
+    $Result->die('success', _('Subnet resized successfully').'!');
 }

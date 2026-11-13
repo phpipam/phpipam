@@ -28,12 +28,12 @@ if ($POST->action == 'edit') {
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->switchid)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // available devices set
@@ -51,7 +51,7 @@ $POST->sections = ! empty($temp) ? implode(';', $temp) : null;
 
 // Hostname must be present
 if ($POST->hostname == '') {
-    $Result->show('danger', _('Hostname is mandatory').'!', true);
+    $Result->die('danger', _('Hostname is mandatory').'!');
 }
 
 // rack checks
@@ -62,37 +62,37 @@ if ($POST->rack !== '0' && $User->get_module_permissions('racks') > User::ACCESS
     } else {
         // validate position and size
         if (! is_numeric($POST->rack)) {
-            $Result->show('danger', _('Invalid rack identifier').'!', true);
+            $Result->die('danger', _('Invalid rack identifier').'!');
         }
 
         if (! is_numeric($POST->rack_start)) {
-            $Result->show('danger', _('Invalid rack start position').'!', true);
+            $Result->die('danger', _('Invalid rack start position').'!');
         }
 
         if (! is_numeric($POST->rack_size)) {
-            $Result->show('danger', _('Invalid rack size').'!', true);
+            $Result->die('danger', _('Invalid rack size').'!');
         }
 
         $POST->rack_deep = (isset($POST->rack_deep) && $POST->rack_deep == '1') ? '1' : '0';
         if ($POST->rack != 0 && $POST->rack_size < 1) {
-            $Result->show('danger', _('Invalid rack size').'!', true);
+            $Result->die('danger', _('Invalid rack size').'!');
         }
 
         // validate rack
         $rack = $Racks->fetch_rack_details($POST->rack);
         if (! is_object($rack)) {
-            $Result->show('danger', _('Rack does not exist').'!', true);
+            $Result->die('danger', _('Rack does not exist').'!');
         }
 
         // check overflow
         if ($Racks->check_device_overflow($POST->rack, $POST->rack_start, $POST->rack_size)) {
-            $Result->show('danger', _('Invalid rack position (overflow)').'!', true);
+            $Result->die('danger', _('Invalid rack position (overflow)').'!');
         }
 
         // check overlaps
         if ($User->settings->rackAllowOverlap != '1') {
             if ($Racks->check_device_overlap($POST->rack, $POST->rack_start, $POST->rack_size, $POST->rack_deep, $POST->switchid)) {
-                $Result->show('danger', _('Overlaps with existing rack item').'!', true);
+                $Result->die('danger', _('Overlaps with existing rack item').'!');
             }
         }
     }
@@ -128,7 +128,7 @@ if ($User->get_module_permissions('locations') == User::ACCESS_NONE) {
 
 // update device
 if ($Admin->object_modify('devices', $POST->action, 'id', $values)) {
-    $Result->show('success', _('Device').' '.$User->get_post_action().' '._('successful').'!', false);
+    $Result->warn('success', _('Device').' '.$User->get_post_action().' '._('successful').'!');
 }
 
 if ($POST->action == 'delete') {

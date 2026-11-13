@@ -100,24 +100,24 @@ $max_width = (@$temp_objects[$GET->section]->type == 'ipaddresses' || isset($GET
     <?php
     // disabled
     if ($settings->tempShare != 1) {
-        $Result->show('danger', _('Temporary sharing disabled'), false);
+        $Result->warn('danger', _('Temporary sharing disabled'));
     }
     // none
     elseif (! is_array($temp_objects)) {
         $Log->write(_('Temporary share access'), $GET->section, 2);
-        $Result->show('danger', _('Invalid share key')."! <a href='".create_link('login')."' class='btn btn-sm btn-default'>Login</a>", false);
+        $Result->warn('danger', _('Invalid share key')."! <a href='".create_link('login')."' class='btn btn-sm btn-default'>Login</a>");
     }
     // try to fetch object
     elseif (! array_key_exists((string) $GET->section, $temp_objects)) {
         $Log->write(_('Temporary share access'), $GET->section, 2);
-        $Result->show('danger', _('Invalid share key')."! <a href='".create_link('login')."' class='btn btn-sm btn-default'>Login</a>", false);
+        $Result->warn('danger', _('Invalid share key')."! <a href='".create_link('login')."' class='btn btn-sm btn-default'>Login</a>");
     }
     // ok, include script
     else {
         // check if expired
         if (time() > $temp_objects[$GET->section]->validity) {
             $Log->write(_('Temporary share access'), $GET->section, 2);
-            $Result->show('danger', _('Share expired').'!', false);
+            $Result->warn('danger', _('Share expired').'!');
         } else {
             // log
             $Log->write(_('Temporary share access'), $GET->section, 0);
@@ -127,7 +127,7 @@ $max_width = (@$temp_objects[$GET->section]->type == 'ipaddresses' || isset($GET
                 if (isset($GET->subnetId)) {
                     $address = $Addresses->fetch_address(null, $GET->subnetId);
                     if (! is_object($address) || $address->subnetId != $temp_objects[$GET->section]->id) {
-                        $Result->show('danger', _('Invalid ID'), true);
+                        $Result->die('danger', _('Invalid ID'));
                     }
                     unset($address);
 
@@ -150,7 +150,7 @@ $max_width = (@$temp_objects[$GET->section]->type == 'ipaddresses' || isset($GET
 
         // write validity
         print '<hr>';
-        $Result->show('info', '<strong>Notification</strong><hr>'._('Share expires on ').date('Y-m-d H:i:s', $temp_objects[$GET->section]->validity), false);
+        $Result->warn('info', '<strong>Notification</strong><hr>'._('Share expires on ').date('Y-m-d H:i:s', $temp_objects[$GET->section]->validity));
     }
 ?>
 

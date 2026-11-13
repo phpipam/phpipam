@@ -21,7 +21,7 @@ $User->check_maintaneance_mode();
 
 // make sure user has access
 if ($User->get_module_permissions('vaults') < User::ACCESS_RW) {
-    $Result->show('danger', _('Insufficient privileges').'.', true, true);
+    $Result->die('danger', _('Insufficient privileges').'.', true);
 }
 
 // print content
@@ -92,7 +92,7 @@ elseif ($POST->type == 'website') {
 else {
     $html[] = '<tr>';
     $html[] = '<td></td>';
-    $html[] = "<td colspan='2'>".$Result->show('danger', _('Invalid certificate type'), false, false, true).'</td>';
+    $html[] = "<td colspan='2'>".$Result->warn('danger', _('Invalid certificate type'), false, true).'</td>';
     $html[] = '</tr>';
 }
 

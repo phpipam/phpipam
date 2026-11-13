@@ -33,7 +33,7 @@ if ($User->check_module_permissions('circuits', User::ACCESS_RWA, false, false))
 }
 // user is not admin
 else {
-    $html[] = $Result->show('danger', _('Administrative privileges required'), false);
+    $html[] = $Result->warn('danger', _('Administrative privileges required'));
 }
 
 // print HTML

@@ -19,11 +19,11 @@ $User->check_user_session();
 
 // perm check
 if ($User->get_module_permissions('locations') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 // check that location support isenabled
 elseif ($User->settings->enableLocations != '1') {
-    $Result->show('danger', _('Locations module disabled.'), false);
+    $Result->warn('danger', _('Locations module disabled.'));
 } else {
     // fetch all locations
     $all_locations = $Tools->fetch_all_objects('locations', 'name');
@@ -59,7 +59,7 @@ elseif ($User->settings->enableLocations != '1') {
     // if none than print
     if ($all_locations === false) {
         print '<tr>';
-        print " <td colspan='$colspan'>".$Result->show('info', _('No Locations configured'), false, false, true).'</td>';
+        print " <td colspan='$colspan'>".$Result->warn('info', _('No Locations configured'), false, true).'</td>';
         print '</tr>';
     } else {
         foreach ($all_locations as $l) {
@@ -81,7 +81,7 @@ elseif ($User->settings->enableLocations != '1') {
             if (! is_blank($l->lat) || is_blank($l->long)) {
                 print "<td><span class='text-muted'>$l->lat / $l->long</span></td>";
             } else {
-                print '<td>'.$Result->show('warning', _('Location not set'), false, false, true).'</td>';
+                print '<td>'.$Result->warn('warning', _('Location not set'), false, true).'</td>';
             }
             // custom
             if (is_array($custom)) {

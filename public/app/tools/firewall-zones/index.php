@@ -15,7 +15,7 @@ $Zones = new FirewallZones($Database);
 $User->check_user_session();
 // perm check
 if ($User->get_module_permissions('fwzones') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 
 // fetch all zone mappings
@@ -127,6 +127,6 @@ if ($firewallZoneMapping) {
     print '</table>';
 } else {
     // print an info if there are no zones in the database
-    $Result->show('info', _('No firewall zones configured'), false);
+    $Result->warn('info', _('No firewall zones configured'));
 }
 ?>

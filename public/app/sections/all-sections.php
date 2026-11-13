@@ -150,7 +150,7 @@ $colspan = 8;
         // none
         if ($count == 0) {
             print '<tr>';
-            print "	<td colspan='$colspan'>".$Result->show('info', _('No sections available'), false, false, true).'</td>';
+            print "	<td colspan='$colspan'>".$Result->warn('info', _('No sections available'), false, true).'</td>';
             print '</tr>';
         }
     }

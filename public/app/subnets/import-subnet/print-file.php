@@ -23,7 +23,7 @@ $filetype = explode('.', (string) $POST->filetype);
 $filetype = end($filetype);
 
 // check integer
-is_numeric($POST->subnetId) ?: $Result->show('danger', _('Invalid subnet ID'), true);
+is_numeric($POST->subnetId) ?: $Result->die('danger', _('Invalid subnet ID'));
 
 $csrf = $User->Crypto->csrf_session_token();
 
@@ -34,7 +34,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 $subnet = $Subnets->fetch_subnet('id', $POST->subnetId);
 
 if ($subnet === false || $Subnets->check_permission($User->user, $POST->subnetId, $subnet) === User::ACCESS_NONE) {
-    $Result->show('danger', _('Invalid subnet ID'), true);
+    $Result->die('danger', _('Invalid subnet ID'));
 }
 
 // Parse file

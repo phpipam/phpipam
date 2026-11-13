@@ -19,11 +19,11 @@ $temp_shares = db_json_decode($User->settings->tempAccess);
 <?php
 // module disabled
 if ($User->settings->tempShare != 1) {
-    $Result->show('warning alert-absolute', _('Temporary sharing disabled'), false);
+    $Result->warn('warning alert-absolute', _('Temporary sharing disabled'));
 }
 // none
 elseif (! is_object($temp_shares)) {
-    $Result->show('info alert-absolute', _('No temporary shares available'), false);
+    $Result->warn('info alert-absolute', _('No temporary shares available'));
 } else {
     ?>
 <table class="table sorted table-striped table-hover table-top" data-cookie-id-table="shares">

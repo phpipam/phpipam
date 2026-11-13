@@ -68,7 +68,7 @@ if (is_array($custom_fields) && $custom_fields != []) {
 } else {
     print '<tr>';
     print "	<td colspan='2'>";
-    $Result->show('muted', _('No custom fields'), false);
+    $Result->warn('muted', _('No custom fields'));
     print '	</td>';
     print '</tr>';
 }

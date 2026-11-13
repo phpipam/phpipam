@@ -5,7 +5,7 @@ $User->check_user_session();
 
 // perm check
 if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 } else {
     // title
     print '<h4>'._('Vaults').'</h4><hr>';
@@ -117,7 +117,7 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
             }
         } else {
             print '<tr class="text-top">';
-            print '	<td colspan="'.$colspan.'">'.$Result->show('info', _('No vaults created'), false, false, true).'</td>';
+            print '	<td colspan="'.$colspan.'">'.$Result->warn('info', _('No vaults created'), false, true).'</td>';
             print '</tr>';
         }
 

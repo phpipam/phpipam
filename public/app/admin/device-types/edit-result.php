@@ -25,27 +25,27 @@ if ($POST->action == 'edit') {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->tid)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // name must be present! */
 if ($POST->tname == '') {
-    $Result->show('danger', _('Name is mandatory').'!', false);
+    $Result->warn('danger', _('Name is mandatory').'!');
 }
 
 // checks
 if ($POST->action != 'delete') {
     if (strlen((string) $POST->bgcolor) < 4) {
-        $Result->show('danger', _('Invalid bg color'), true);
+        $Result->die('danger', _('Invalid bg color'));
     }
 
     if (strlen((string) $POST->fgcolor) < 4) {
-        $Result->show('danger', _('Invalid fg color'), true);
+        $Result->die('danger', _('Invalid fg color'));
     }
 }
 
@@ -59,9 +59,9 @@ $values = ['tid' => $POST->tid,
 
 // update
 if (! $Admin->object_modify('deviceTypes', $POST->action, 'tid', $values)) {
-    $Result->show('danger', _('Failed to').' '.$User->get_post_action().' '._('device type').'!', false);
+    $Result->warn('danger', _('Failed to').' '.$User->get_post_action().' '._('device type').'!');
 } else {
-    $Result->show('success', _('Device type').' '.$User->get_post_action().' '._('successful').'!', false);
+    $Result->warn('success', _('Device type').' '.$User->get_post_action().' '._('successful').'!');
 }
 
 if ($POST->action == 'delete') {

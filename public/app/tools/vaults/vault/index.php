@@ -5,18 +5,18 @@ $User->check_user_session();
 
 // perm check
 if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 // check that vauld id is numeric
 elseif (! is_numeric($GET->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), false);
+    $Result->warn('danger', _('Invalid ID'));
 } else {
     // set vaultx pass variable
     $vault_id = 'vault'.$GET->subnetId;
     $vault = $Tools->fetch_object('vaults', 'id', $GET->subnetId);
 
     if (! is_object($vault)) {
-        $Result->show('danger', _('Invalid ID'), false);
+        $Result->warn('danger', _('Invalid ID'));
     } else {
         // details
         if (isset($GET->sPage)) {

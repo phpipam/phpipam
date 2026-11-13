@@ -20,7 +20,7 @@ $admin = $User->is_admin(false);
 
 // check that rack support isenabled
 if ($User->settings->enableRACK != '1') {
-    $Result->show('danger', _('RACK management disabled.'), false);
+    $Result->warn('danger', _('RACK management disabled.'));
 }
 // print racks
 else {

@@ -24,19 +24,19 @@ $User->check_maintaneance_mode();
 
 // fetch server
 $server = $Admin->fetch_object('usersAuthMethod', 'id', $POST->server);
-$server !== false ?: $Result->show('danger', _('Invalid server ID'), true);
+$server !== false ?: $Result->die('danger', _('Invalid server ID'));
 
 // parse parameters
 $params = new Params(db_json_decode($server->params));
 
 // no login parameters
 if (is_blank($params->adminUsername) || is_blank($params->adminPassword)) {
-    $Result->show('danger', _('Missing credentials'), true);
+    $Result->die('danger', _('Missing credentials'));
 }
 
 // at least 2 chars
 if (strlen((string) $POST->dname) < 2) {
-    $Result->show('danger', _('Please enter at least 2 characters'), true);
+    $Result->die('danger', _('Please enter at least 2 characters'));
 }
 
 // open connection
@@ -73,7 +73,7 @@ try {
     // try to login with higher credentials for search
     $authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
     if (! $authUser) {
-        $Result->show('danger', _('Invalid credentials').'<br>'.$adldap->getLastError(), true);
+        $Result->die('danger', _('Invalid credentials').'<br>'.$adldap->getLastError());
     }
 
     // search for domain user!
@@ -82,7 +82,7 @@ try {
 
     // echo $adldap->getLastError();
 } catch (adLDAPException $adldapException) {
-    $Result->show('danger', $adldapException->getMessage(), true);
+    $Result->die('danger', $adldapException->getMessage());
 }
 
 // check for found

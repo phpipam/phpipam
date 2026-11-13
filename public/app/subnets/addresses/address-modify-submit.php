@@ -25,7 +25,7 @@ $User->check_user_session();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // validate action
@@ -79,7 +79,7 @@ if (is_array($required_ip_fields) && $action != 'delete') {
     // check
     if (count($required_field_errors) > 0) {
         array_unshift($required_field_errors, _('Please fix following errors:'));
-        $Result->show('danger', implode('<br> - ', $required_field_errors), true);
+        $Result->die('danger', implode('<br> - ', $required_field_errors));
     }
 }
 
@@ -89,10 +89,10 @@ if (! is_blank($POST->hostname)) {
 }
 
 // required fields
-isset($POST->action) ?: $Result->show('danger', _('Missing required fields').' action', true);
-isset($POST->subnet) ?: $Result->show('danger', _('Missing required fields').' subnet', true);
-isset($POST->subnetId) ?: $Result->show('danger', _('Missing required fields').' subnetId', true);
-isset($POST->id) ?: $Result->show('danger', _('Missing required fields').' id', true);
+isset($POST->action) ?: $Result->die('danger', _('Missing required fields').' action');
+isset($POST->subnet) ?: $Result->die('danger', _('Missing required fields').' subnet');
+isset($POST->subnetId) ?: $Result->die('danger', _('Missing required fields').' subnetId');
+isset($POST->id) ?: $Result->die('danger', _('Missing required fields').' id');
 
 // ptr
 if (! isset($POST->PTRignore)) {
@@ -113,12 +113,12 @@ if (isset($firewallZoneSettings['autogen']) && $firewallZoneSettings['autogen'] 
 
 // set and check permissions
 $subnet_permission = $Subnets->check_permission($User->user, $POST->subnetId);
-$subnet_permission > 1 ?: $Result->show('danger', _('Cannot edit IP address'), true);
+$subnet_permission > 1 ?: $Result->die('danger', _('Cannot edit IP address'));
 
 // fetch subnet
 $subnet = (array) $Subnets->fetch_subnet(null, $POST->subnetId);
 if ($POST->verifydatabase !== 'yes') {
-    count($subnet) > 0 ?: $Result->show('danger', _('Invalid subnet'), true);
+    count($subnet) > 0 ?: $Result->die('danger', _('Invalid subnet'));
 }
 
 foreach ($POST as $k => $v) {
@@ -138,7 +138,7 @@ $Tools->update_POST_custom_fields('ipaddresses', $action, $POST);
 if (in_array($action, ['edit', 'delete', 'move'])) {
     $address_old = (array) $Addresses->fetch_address(null, $POST->id);
     if ($address_old === [] || (int) $address_old['subnetId'] !== (int) $POST->subnetId) {
-        $Result->show('danger', _('Invalid address for selected subnet'), true);
+        $Result->die('danger', _('Invalid address for selected subnet'));
     }
 }
 
@@ -165,11 +165,11 @@ if (! is_blank(strstr((string) $POST->ip_addr, '-'))) {
     // verify both IP addresses
     if ($subnet['isFolder'] == '1') {
         if ($Addresses->validate_ip($POST->start) === false) {
-            $Result->show('danger', _('Invalid IP address').'!', true);
+            $Result->die('danger', _('Invalid IP address').'!');
         }
 
         if ($Addresses->validate_ip($POST->stop) === false) {
-            $Result->show('danger', _('Invalid IP address').'!', true);
+            $Result->die('danger', _('Invalid IP address').'!');
         }
     } else {
         $Addresses->address_within_subnet($POST->start, $subnet, true);
@@ -182,12 +182,12 @@ if (! is_blank(strstr((string) $POST->ip_addr, '-'))) {
 
     // start cannot be higher than stop!
     if ($start > $stop) {
-        $Result->show('danger', _('Invalid address range').'!', true);
+        $Result->die('danger', _('Invalid address range').'!');
     }
 
     // we can manage only 4096 IP's at once!
     if (gmp_strval(gmp_sub($stop, $start)) > 4096) {
-        $Result->show('danger', _('Only 4096 IP addresses at once').'!', true);
+        $Result->die('danger', _('Only 4096 IP addresses at once').'!');
     }
 
     // set limits
@@ -234,7 +234,7 @@ if (! is_blank(strstr((string) $POST->ip_addr, '-'))) {
                     if (! $User->is_admin(false)) {
                         $mtest = $Subnets->validate_multicast_mac($POST->mac, $subnet['sectionId'], $subnet['vlanId'], MCUNIQUE);
                         if ($mtest !== true) {
-                            $Result->show('danger', _($mtest), true);
+                            $Result->die('danger', _($mtest));
                         }
                     }
                 }
@@ -256,7 +256,7 @@ if (! is_blank(strstr((string) $POST->ip_addr, '-'))) {
             // if it already exist for add skip it !
             if ($Addresses->address_exists($m, $POST->subnetId) && $action == 'add') {
                 // Add Warnings if it exists
-                $Result->show('warning', _('IP address').' '.$Addresses->transform_address($m, 'dotted').' '._('already existing in selected network').'!', false);
+                $Result->warn('warning', _('IP address').' '.$Addresses->transform_address($m, 'dotted').' '._('already existing in selected network').'!');
             } else {
                 // if it fails set error log
                 if (! $Addresses->modify_address($POST->as_array(), false)) {
@@ -271,13 +271,13 @@ if (! is_blank(strstr((string) $POST->ip_addr, '-'))) {
         // print errors if they exist
         if (isset($errors)) {
             $log = $Log->array_to_log($errors);
-            $Result->show('danger', $log, false);
+            $Result->warn('danger', $log);
             $Log->write(_('IP address modification'), _('Error').' '.$action.' '._('range').' '.$POST->start.' - '.$POST->stop."<br> $log", 2);
         } else {
             // reset IP for mailing
             $POST->ip_addr = $POST->start.' - '.$POST->stop;
             // log and changelog
-            $Result->show('success', _('Range').' '.escape_input($POST->start).' - '.escape_input($POST->stop).' '.$User->get_post_action().' '._('successful').'!', false);
+            $Result->warn('success', _('Range').' '.escape_input($POST->start).' - '.escape_input($POST->stop).' '.$User->get_post_action().' '._('successful').'!');
             $Log->write(_('IP address modification'), _('Range').' '.$POST->start.' - '.$POST->stop.' '.$action.' '._('successful').'!', 0);
 
             // send changelog mail
@@ -297,7 +297,7 @@ else {
         if ($POST->unique == 1 && ! is_blank($POST->hostname)) {
             // check if unique
             if (! $Addresses->is_hostname_unique($POST->hostname)) {
-                $Result->show('danger', _('Hostname is not unique').'!', true);
+                $Result->die('danger', _('Hostname is not unique').'!');
             }
         }
     }
@@ -307,7 +307,7 @@ else {
         if (! is_blank($POST->mac)) {
             $POST->mac = trim((string) $POST->mac);
             if ($User->validate_mac($POST->mac) === false) {
-                $Result->show('danger', _('Invalid MAC address').'!', true);
+                $Result->die('danger', _('Invalid MAC address').'!');
             }
             // normalize
             else {
@@ -319,14 +319,14 @@ else {
     // reset subnet if move
     if ($action == 'move') {
         $subnet = (array) $Subnets->fetch_subnet(null, $POST->newSubnet);
-        count($subnet) > 0 ?: $Result->show('danger', _('Invalid destination subnet'), true);
-        $Subnets->check_permission($User->user, $POST->newSubnet) > User::ACCESS_R ?: $Result->show('danger', _('Cannot edit IP address'), true);
+        count($subnet) > 0 ?: $Result->die('danger', _('Invalid destination subnet'));
+        $Subnets->check_permission($User->user, $POST->newSubnet) > User::ACCESS_R ?: $Result->die('danger', _('Cannot edit IP address'));
         $POST->ip_addr = $address_old['ip'];
     }
 
     // if errors are present print them, else execute query!
     if (0 && $verify) {
-        $Result->show('danger', _('Error').": $verify (".escape_input($POST->ip_addr).')', true);
+        $Result->die('danger', _('Error').": $verify (".escape_input($POST->ip_addr).')');
     }  // TODO: Set undefined variable $verify
     else {
         // set update type for update to single
@@ -335,7 +335,7 @@ else {
         // check for duplicate entryon adding new address
         if ($action == 'add') {
             if ($Addresses->address_exists($POST->ip_addr, $POST->subnetId)) {
-                $Result->show('danger', _('IP address').' '.escape_input($POST->ip_addr).' '._('already existing in selected network').'!', true);
+                $Result->die('danger', _('IP address').' '.escape_input($POST->ip_addr).' '._('already existing in selected network').'!');
             }
         }
 
@@ -343,7 +343,7 @@ else {
         if ($action == 'edit') {            // if IP is the same than it can already exist!
             if ($Addresses->transform_address($POST->ip_addr, 'decimal') != $POST->ip_addr_old) {
                 if ($Addresses->address_exists($POST->ip_addr, $POST->subnetId)) {
-                    $Result->show('danger', _('IP address').' '.escape_input($POST->ip_addr).' '._('already existing in selected network').'!', true);
+                    $Result->die('danger', _('IP address').' '.escape_input($POST->ip_addr).' '._('already existing in selected network').'!');
                 }
             }
         }
@@ -352,7 +352,7 @@ else {
         if ($action == 'move') {
             // check if not already used in new subnet
             if ($Addresses->address_exists($POST->ip_addr, $POST->newSubnet)) {
-                $Result->show('danger', _('IP address').' '.escape_input($POST->ip_addr).' '._('already existing in selected network').'!', true);
+                $Result->die('danger', _('IP address').' '.escape_input($POST->ip_addr).' '._('already existing in selected network').'!');
             }
         }
 
@@ -361,7 +361,7 @@ else {
             if (! $User->is_admin(false)) {
                 $mtest = $Subnets->validate_multicast_mac($POST->mac, $subnet['sectionId'], $subnet['vlanId'], MCUNIQUE);
                 if ($mtest !== true) {
-                    $Result->show('danger', _($mtest), true);
+                    $Result->die('danger', _($mtest));
                 }
             }
         }
@@ -384,18 +384,18 @@ else {
         else {
             // fail
             if (! $Addresses->modify_address($POST->as_array())) {
-                $Result->show('danger', _('Error inserting IP address').'!', false);
+                $Result->warn('danger', _('Error inserting IP address').'!');
             }
             // success, save log file and send email
             else {
-                $Result->show('success', _("IP $action successful"), false);
+                $Result->warn('success', _("IP $action successful"));
                 // try to ping
                 if ($subnet['pingSubnet'] == '1' && $action == 'add') {
                     $pingRes = $Ping->ping_address($Subnets->transform_address($POST->ip_addr, 'dotted'));
                     // update status
                     if ($pingRes == 0) {
                         // print alive
-                        $Result->show('success', _('IP address').' '.$Subnets->transform_address($POST->ip_addr, 'dotted').' '._('is alive'), false);
+                        $Result->warn('success', _('IP address').' '.$Subnets->transform_address($POST->ip_addr, 'dotted').' '._('is alive'));
                         // update status
                         @$Ping->ping_update_lastseen($Addresses->lastId);
                     }

@@ -29,65 +29,65 @@ $User->check_module_permissions('devices', User::ACCESS_R, true, false);
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // device type?
 if (! isset($POST->devicetype) || (! in_array($POST->devicetype, ['device', 'content', 'subrack']))) {
-    $Result->show('danger', _('Invalid device type'), true, true);
+    $Result->die('danger', _('Invalid device type'), true);
 }
 
 // ID must be numeric
 if (! is_numeric($POST->rackid)) {
-    $Result->show('danger', _('Invalid rack identifier'), true);
+    $Result->die('danger', _('Invalid rack identifier'));
 }
 
 if (($POST->devicetype == 'device') && ! is_numeric($POST->deviceid)) {
-    $Result->show('danger', _('Invalid device identifier'), true);
+    $Result->die('danger', _('Invalid device identifier'));
 }
 
 if (! is_numeric($POST->rack_start)) {
-    $Result->show('danger', _('Invalid start value'), true);
+    $Result->die('danger', _('Invalid start value'));
 }
 
 if (! is_numeric($POST->rack_size)) {
-    $Result->show('danger', _('Invalid size value'), true);
+    $Result->die('danger', _('Invalid size value'));
 }
 
 if ($POST->rack_size < 1) {
-    $Result->show('danger', _('Invalid size value').'!', true);
+    $Result->die('danger', _('Invalid size value').'!');
 }
 
 $POST->rack_deep = (@$POST->rack_deep == '1') ? '1' : '0';
 if ($POST->devicetype == 'subrack' && ! is_numeric($POST->subrackid)) {
-    $Result->show('danger', _('Invalid rack identifier'), true);
+    $Result->die('danger', _('Invalid rack identifier'));
 }
 
 // name
 if ($POST->devicetype == 'content' && (! isset($POST->name) || trim($POST->name === ''))) {
-    $Result->show('danger', _('Invalid device name'), true);
+    $Result->die('danger', _('Invalid device name'));
 }
 
 // validate rack
 $rack = $Admin->fetch_object('racks', 'id', $POST->rackid);
 if ($rack === false) {
-    $Result->show('danger', _('Rack does not exist'), true);
+    $Result->die('danger', _('Rack does not exist'));
 }
 
 // prevent nesting subracks
 if ($POST->devicetype == 'subrack' && $rack->subrack) {
-    $Result->show('danger', _('Nesting subracks is not allowed').'!', true);
+    $Result->die('danger', _('Nesting subracks is not allowed').'!');
 }
 
 // check overflow
 if ($Racks->check_device_overflow($POST->rackid, $POST->rack_start, $POST->rack_size)) {
-    $Result->show('danger', _('Invalid rack position (overflow)').'!', true);
+    $Result->die('danger', _('Invalid rack position (overflow)').'!');
 }
 
 // check overlaps
 if ($User->settings->rackAllowOverlap != '1') {
     if ($Racks->check_device_overlap($POST->rackid, $POST->rack_start, $POST->rack_size, $POST->rack_deep)) {
-        $Result->show('danger', _('Overlaps with existing rack item').'!', true);
+        $Result->die('danger', _('Overlaps with existing rack item').'!');
     }
 }
 
@@ -96,7 +96,7 @@ switch ($POST->devicetype) {
         // validate device
         $device = $Admin->fetch_object('devices', 'id', $POST->deviceid);
         if ($device === false) {
-            $Result->show('danger', _('Invalid Device ID'), true);
+            $Result->die('danger', _('Invalid Device ID'));
         }
 
         // set update values
@@ -116,9 +116,9 @@ switch ($POST->devicetype) {
 
         // update rack
         if (! $Admin->object_modify('devices', 'edit', 'id', $values)) {
-            $Result->show('danger', _('Failed to add device to rack').'!', false);
+            $Result->warn('danger', _('Failed to add device to rack').'!');
         } else {
-            $Result->show('success', _('Device added to rack').'!', false);
+            $Result->warn('success', _('Device added to rack').'!');
         }
 
         break;
@@ -134,9 +134,9 @@ switch ($POST->devicetype) {
 
         // add content
         if (! $Admin->object_modify('rackContents', 'add', null, $values)) {
-            $Result->show('danger', _('Failed to add device to rack').'!', false);
+            $Result->warn('danger', _('Failed to add device to rack').'!');
         } else {
-            $Result->show('success', _('Device added to rack').'!', false);
+            $Result->warn('success', _('Device added to rack').'!');
         }
 
         break;
@@ -145,16 +145,16 @@ switch ($POST->devicetype) {
         // validate the subrack
         $subrack = $Admin->fetch_object('racks', 'id', $POST->subrackid);
         if ($subrack === false) {
-            $Result->show('danger', _('Subrack').' '._('does not exist'), true);
+            $Result->die('danger', _('Subrack').' '._('does not exist'));
         }
 
         if (! $subrack->subrack) {
-            $Result->show('danger', _('Rack is not designated as a subrack'), true);
+            $Result->die('danger', _('Rack is not designated as a subrack'));
         }
 
         // is that subrack already placed somewhere?
         if ($Database->getObjectQuery('rackContents', 'SELECT * from `rackContents` where `subrackId` = ? limit 1;', [$POST->subrackid])) {
-            $Result->show('danger', _('Subrack is already in a rack'), true);
+            $Result->die('danger', _('Subrack is already in a rack'));
         }
 
         $values = ['name' => unescape_input($subrack->name),
@@ -165,9 +165,9 @@ switch ($POST->devicetype) {
             'subrackId' => $subrack->id,
         ];
         if (! $Admin->object_modify('rackContents', 'add', null, $values)) {
-            $Result->show('danger', _('Failed to add subrack to rack').'!', false);
+            $Result->warn('danger', _('Failed to add subrack to rack').'!');
         } else {
-            $Result->show('success', _('Subrack').' '._('added to rack'), false);
+            $Result->warn('success', _('Subrack').' '._('added to rack'));
         }
 
         break;

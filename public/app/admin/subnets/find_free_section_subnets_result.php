@@ -21,21 +21,21 @@ $User->check_user_session();
 
 // verify that user has permissions to add subnet
 if ($Sections->check_permission($User->user, $POST->sectionid) != 3) {
-    $Result->show('danger', _('You do not have permissions to add new subnet in this section').'!', true);
+    $Result->die('danger', _('You do not have permissions to add new subnet in this section').'!');
 }
 
 // verify integers for mask and results
 if (! is_numeric($POST->mask) || ! is_numeric($POST->results)) {
-    $Result->show('danger', _('Invalid parameters').'!', true);
+    $Result->die('danger', _('Invalid parameters').'!');
 }
 
 // mask check
 if ($POST->version == 'IPv4' && ($POST->mask < 8 || $POST->mask > 32)) {
-    $Result->show('danger', _('Invalid mask').'!', true);
+    $Result->die('danger', _('Invalid mask').'!');
 }
 
 if ($POST->version == 'IPv6' && ($POST->mask < 8 || $POST->mask > 128)) {
-    $Result->show('danger', _('Invalid mask').'!', true);
+    $Result->die('danger', _('Invalid mask').'!');
 }
 
 // start and end checks
@@ -45,12 +45,12 @@ if (
     || $POST->subnet_start > $POST->subnet_end
     || $POST->subnet_start == $POST->subnet_end
 ) {
-    $Result->show('danger', _('Invalid range').'!', true);
+    $Result->die('danger', _('Invalid range').'!');
 }
 
 // version check
 if ($Subnets->identify_address($POST->subnet_start) !== $Subnets->identify_address($POST->subnet_end)) {
-    $Result->show('danger', _('Invalid range').'!', true);
+    $Result->die('danger', _('Invalid range').'!');
 }
 
 $version = $Subnets->identify_address($POST->subnet_start);
@@ -84,11 +84,11 @@ if ($section_subnets !== false) {
 
 // no subnets
 if (count($all_subnets) == 0) {
-    $Result->show('warning', _('No subnets found').'!', true);
+    $Result->die('warning', _('No subnets found').'!');
 }
 // single
 elseif (count($all_subnets) == 1) {
-    $Result->show('warning', _('Only one subnet found').'!', true);
+    $Result->die('warning', _('Only one subnet found').'!');
 }
 // process
 else {
@@ -132,7 +132,7 @@ if (count($available_subnets) > 0) {
 
     print '</div>';
 } else {
-    $Result->show('info', _('No available subnets found selected for mask').'!', false);
+    $Result->warn('info', _('No available subnets found selected for mask').'!');
 }
 
 print "<div class='hidden'>alert-danger</div>";

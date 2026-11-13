@@ -25,7 +25,7 @@ $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['circuits']) ? $hidden_fields['circuits'] : [];
 
 // check
-is_numeric($GET->subnetId) ?: $Result->show('danger', _('Invalid ID'), true);
+is_numeric($GET->subnetId) ?: $Result->die('danger', _('Invalid ID'));
 
 // title - subnets
 print '<h4>'._('Belonging Circuits').'</h4><hr>';
@@ -35,11 +35,11 @@ $device_circuits = $Tools->fetch_all_device_circuits($device->id);
 
 // headers
 if ($User->settings->enableCircuits != '1') {
-    $Result->show('danger', _('Circuits module disabled.'), false);
+    $Result->warn('danger', _('Circuits module disabled.'));
 } else {
     // print
     if ($device_circuits === false) {
-        $Result->show('info', _('No circuits'), false);
+        $Result->warn('info', _('No circuits'));
     } else {
         // table
         print '<table id="circuitManagement" class="table sorted table-condensed table-striped table-top" data-cookie-id-table="device_circuits">';

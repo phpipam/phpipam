@@ -9,7 +9,7 @@ $subnet = $Tools->fetch_object('subnets', 'id', $temp_objects[$GET->section]->id
 
 // subnet id must be numeric
 if (! is_numeric($subnet->id)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // cast
@@ -19,7 +19,7 @@ $subnet = (array) $subnet;
 $custom_fields = $Tools->fetch_custom_fields('subnets');                                           // custom fields
 $subnet = (array) $Subnets->fetch_subnet(null, $subnet['id']);                                     // subnet details
 if (count($subnet) == 0) {
-    $Result->show('danger', _('Subnet does not exist'), true);
+    $Result->die('danger', _('Subnet does not exist'));
 }  // die if empty
 $subnet_detailed = $Subnets->get_network_boundaries($subnet['subnet'], $subnet['mask']);           // set network boundaries
 $slaves = (bool) $Subnets->has_slaves($subnet['id']);                                      // check if subnet has slaves and set slaves flag true/false
@@ -28,7 +28,7 @@ $slaves = (bool) $Subnets->has_slaves($subnet['id']);                           
 $subnet_permission = 1;            // subnet permission
 $section_permission = 1;            // section permission
 if ($subnet_permission == 0) {
-    $Result->show('danger', _('You do not have permission to access this network'), true);
+    $Result->die('danger', _('You do not have permission to access this network'));
 }
 
 // fetch VLAN details

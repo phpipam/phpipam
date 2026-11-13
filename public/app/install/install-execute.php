@@ -22,19 +22,19 @@ $Result = new Result;
 // Manually start session as we do not have $User.
 session_start();
 if ($Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // make sure it is properly requested
 if (! isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') {
-    $Result->show('danger', _('Invalid request'), true);
+    $Result->die('danger', _('Invalid request'));
 }
 
 // if already installed ignore!
 if ($Install->check_table('widgets', false) && $POST->dropdb != 'on') {
     // check for possible errors
     if (count($errors = $Tools->verify_database()) == 0) {
-        $Result->show('danger', _('Database already installed'), true);
+        $Result->die('danger', _('Database already installed'));
     }
 }
 
@@ -49,8 +49,8 @@ $migrate = $POST->install_type === 'migrate';
 // try to install new database */
 if ($Install->install_database($POST->mysqlrootuser, $POST->mysqlrootpass, $dropdb, $createdb, $creategrants, $migrate)) {
     if ($migrate) {
-        $Result->show('success alert-block', _('Database installed successfully!').' <a href="'.create_link().'" class="btn btn-sm btn-default">'._('Continue').'</a>', true, false, false, false, false);
+        $Result->die('success alert-block', _('Database installed successfully!').' <a href="'.create_link().'" class="btn btn-sm btn-default">'._('Continue').'</a>', false, false, false, false);
     } else {
-        $Result->show('success alert-block', _('Database installed successfully!').' <a href="index.php?page=install&section=install_automatic&subnetId=configure" class="btn btn-sm btn-default">'._('Continue').'</a>', true);
+        $Result->die('success alert-block', _('Database installed successfully!').' <a href="index.php?page=install&section=install_automatic&subnetId=configure" class="btn btn-sm btn-default">'._('Continue').'</a>');
     }
 }

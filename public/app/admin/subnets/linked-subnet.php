@@ -23,7 +23,7 @@ $csrf = $User->Crypto->csrf_session_token();
 
 // ID must be numeric
 if (! is_numeric($POST->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // get all IPv6 subnets

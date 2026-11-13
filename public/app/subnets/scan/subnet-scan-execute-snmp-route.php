@@ -17,12 +17,12 @@ $Snmp = new phpipamSNMP;
 
 // scan disabled
 if ($User->settings->enableSNMP != '1') {
-    $Result->show('danger', 'SNMP module disabled', true, true, false, true);
+    $Result->die('danger', 'SNMP module disabled', true, false, true);
 }
 
 // check section permissions
 if ($Sections->check_permission($User->user, $POST->sectionId) != 3) {
-    $Result->show('danger', _('You do not have permissions to add new subnet in this section').'!', true, true);
+    $Result->die('danger', _('You do not have permissions to add new subnet in this section').'!', true);
 }
 
 // fetch devices that use get_routing_table query
@@ -33,7 +33,7 @@ $masks = $Subnets->get_ipv4_masks();
 
 // if none set die
 if ($devices_used === false) {
-    $Result->show('danger', _('No devices for SNMP route table query available').'!', true, true, false, true);
+    $Result->die('danger', _('No devices for SNMP route table query available').'!', true, false, true);
 }
 
 // ok, we have devices, connect to each device and do query
@@ -60,11 +60,11 @@ foreach ($devices_used as $d) {
 
 // none and errors
 if (count($found) == 0 && isset($errors)) {
-    $Result->show('info', _('No new subnets found')."</div><hr><div class='alert alert-warning'>".implode('<hr>', $errors).'</div>', true, true);
+    $Result->die('info', _('No new subnets found')."</div><hr><div class='alert alert-warning'>".implode('<hr>', $errors).'</div>', true);
 }
 // none
 elseif (count($found) == 0) {
-    $Result->show('info', _('No new subnets found').'!', true, true);
+    $Result->die('info', _('No new subnets found').'!', true);
 }
 // ok
 else {
@@ -136,7 +136,7 @@ else {
 if (isset($errors)) {
     print '<hr>';
     foreach ($errors as $e) {
-        print $Result->show('warning', $e, false, false, true);
+        print $Result->warn('warning', $e, false, true);
     }
 }
 

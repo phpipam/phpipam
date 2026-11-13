@@ -226,6 +226,6 @@ if (isset($objects['ipaddresses'])) {
 
     <?php
 } else {
-    $Result->show('info', _('No objects'));
+    $Result->warn('info', _('No objects'));
 }
 ?>

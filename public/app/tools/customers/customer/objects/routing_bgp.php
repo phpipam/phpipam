@@ -50,7 +50,7 @@ if (isset($objects['routing_bgp'])) {
     // none
     if ($all_bgp_entries === false) {
         print '<tr>';
-        print " <td colspan='$colspan'>".$Result->show('info', _('No BGP information available'), false, false, true).'</td>';
+        print " <td colspan='$colspan'>".$Result->warn('info', _('No BGP information available'), false, true).'</td>';
         print '</tr>';
     }
     // print
@@ -110,5 +110,5 @@ if (isset($objects['routing_bgp'])) {
     print '</tbody>';
     print '</table>';
 } else {
-    $Result->show('info', _('No objects'));
+    $Result->warn('info', _('No objects'));
 }

@@ -88,13 +88,13 @@ if (isset($errors)) {
         ];
 
         if (! $Admin->object_modify('subnets', 'add', 'id', $values)) {
-            $Result->show('danger', _('Failed to import subnet').' '.$Subnets->transform_to_dotted($subnet_import['subnet']).'/'.$subnet_import['mask'], false);
+            $Result->warn('danger', _('Failed to import subnet').' '.$Subnets->transform_to_dotted($subnet_import['subnet']).'/'.$subnet_import['mask']);
             $errors_import_failed++;
         }
     }
 
     // check if all is ok and print it!
     if ($errors_import_failed == 0) {
-        $Result->show('success', _('Import successful').'!', false);
+        $Result->warn('success', _('Import successful').'!');
     }
 }

@@ -10,19 +10,19 @@ foreach ($POST as $k => $p) {
     if (strpos((string) $k, 'sectionId') !== false) {
         $section = $Sections->fetch_section('id', $p);
         if ($section === false) {
-            $Result->show('danger', _('Invalid section Id'), true, false, false, true);
+            $Result->die('danger', _('Invalid section Id'), false, false, true);
         }
     }
 }
 
 // scan disabled
 if ($User->settings->enableSNMP != '1') {
-    $Result->show('danger', _('SNMP module disabled'), true);
+    $Result->die('danger', _('SNMP module disabled'));
 }
 
 // check section permissions
 if ($Sections->check_permission($User->user, $POST->sectionId) != 3) {
-    $Result->show('danger', _('You do not have permissions to add new subnet in this section').'!', true);
+    $Result->die('danger', _('You do not have permissions to add new subnet in this section').'!');
 }
 
 // loop
@@ -77,5 +77,5 @@ if (isset($subnets_all)) {
         include __DIR__.'/../../admin/subnets/edit-result.php';
     }
 } else {
-    $Result->show('danger', 'No subnets selected', true);
+    $Result->die('danger', 'No subnets selected');
 }

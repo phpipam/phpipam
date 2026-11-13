@@ -21,25 +21,25 @@ $User->check_maintaneance_mode();
 
 // make sure user has access
 if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
-    $Result->show('danger', _('Insufficient privileges').'.', true, true);
+    $Result->die('danger', _('Insufficient privileges').'.', true);
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // fetch vault
 $vault = $Admin->fetch_object('vaults', 'id', $POST->vaultId);
 if (! is_object($vault)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // test
 if ($User->Crypto->decrypt($vault->test, $POST->vaultpass) === false) {
-    $Result->show('danger', _('Invalid master password'), true);
+    $Result->die('danger', _('Invalid master password'));
 } else {
     // write session
     $_SESSION['vault'.$vault->id] = $POST->vaultpass;
     // OK, redirect
-    $Result->show('success', _('Vault unlocked, redirecting...'), false);
+    $Result->warn('success', _('Vault unlocked, redirecting...'));
 }

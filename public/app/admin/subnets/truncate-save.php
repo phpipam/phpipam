@@ -20,12 +20,12 @@ $User->check_user_session();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // id must be numeric
 if (! is_numeric($POST->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // get subnet details
@@ -34,7 +34,7 @@ $subnet = $Subnets->fetch_subnet('id', $POST->subnetId);
 // verify that user has write permissions for subnet
 $subnetPerm = $Subnets->check_permission($User->user, $subnet->id);
 if ($subnetPerm < 3) {
-    $Result->show('danger', _('You do not have permissions to resize subnet').'!', true);
+    $Result->die('danger', _('You do not have permissions to resize subnet').'!');
 }
 
 // for orphaned
@@ -45,9 +45,9 @@ if ($subnet === false) {
 
 // truncate network
 if (! $Subnets->subnet_truncate($subnet->id)) {
-    $Result->show('danger', _('Failed to truncate subnet'), false);
+    $Result->warn('danger', _('Failed to truncate subnet'));
 } else {
-    $Result->show('success', _('Subnet truncated successfully').'!', false);
+    $Result->warn('success', _('Subnet truncated successfully').'!');
 }
 
 // check for DNS PTR records
@@ -66,11 +66,11 @@ if ($User->settings->enablePowerDNS == '1' && $subnet->DNSrecursive == '1') {
             // remove existing records and links
             $PowerDNS->remove_all_ptr_records($domain->id, $ptr_indexes);
             // ok
-            $Result->show('success', 'PTR records removed', false);
+            $Result->warn('success', 'PTR records removed');
         }
     }
     // error
     else {
-        $Result->show('danger', 'Cannot connect to powerDNS database', false);
+        $Result->warn('danger', 'Cannot connect to powerDNS database');
     }
 }

@@ -10,7 +10,7 @@ $User->check_user_session();
 $User->check_module_permissions('circuits', User::ACCESS_R, true, false);
 
 // check
-is_numeric($GET->sPage) ?: $Result->show('danger', _('Invalid ID'), true);
+is_numeric($GET->sPage) ?: $Result->die('danger', _('Invalid ID'));
 
 // fetch provider
 $provider = $Tools->fetch_object('circuitProviders', 'id', $GET->sPage);
@@ -123,7 +123,7 @@ if ($provider !== false) {
 
     // print
     if ($provider_circuits === false) {
-        $Result->show('info', _('No circuits'), false);
+        $Result->warn('info', _('No circuits'));
     } else {
         // table
         print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="circu_prov_details">';
@@ -216,5 +216,5 @@ if ($provider !== false) {
 
     print '</div>';
 } else {
-    $Result->show('danger', _('Invalid provider id'), true);
+    $Result->die('danger', _('Invalid provider id'));
 }

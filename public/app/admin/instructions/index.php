@@ -79,5 +79,5 @@ if ($GET->subnetId == 1 || $GET->subnetId == 2) {
     <div class="instructionsPreview"></div>
     <?php
 } else {
-    $Result->show('danger', _('Invalid ID'), false);
+    $Result->warn('danger', _('Invalid ID'));
 }

@@ -22,7 +22,7 @@ $User->is_admin();
 $User->is_demo();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // valid params
@@ -43,7 +43,7 @@ foreach ($passwordPolicy as $k => $f) {
         if (is_blank($POST->{$k})) {
             $passwordPolicy[$k] = 0;
         } elseif (! is_numeric($POST->{$k})) {
-            $Result->show('danger', _('Values must be numeric'), true);
+            $Result->die('danger', _('Values must be numeric'));
         } else {
             $passwordPolicy[$k] = $POST->{$k};
         }
@@ -60,9 +60,9 @@ if (! is_blank($POST->allowedSymbols)) {
 $values = ['id' => 1, 'passwordPolicy' => json_encode($passwordPolicy)];
 
 if (! $Admin->object_modify('settings', 'edit', 'id', $values)) {
-    $Result->show('danger', _('Cannot update settings'), true);
+    $Result->die('danger', _('Cannot update settings'));
 } else {
-    $Result->show('success', _('Settings updated successfully'), false);
+    $Result->warn('success', _('Settings updated successfully'));
 }
 
 // if required check all user sertings and force them to update password
@@ -70,6 +70,6 @@ if ($POST->enforce == 1) {
     try {
         $Database->runQuery("update `users` set `passChange` = 'Yes' where `authMethod` = 1;");
     } catch (Exception $e) {
-        $Result->show('danger', _('Error updating users: ').$e->getMessage(), false);
+        $Result->warn('danger', _('Error updating users: ').$e->getMessage());
     }
 }

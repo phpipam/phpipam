@@ -16,7 +16,7 @@ if (! isset($colspan)) {
 
 // check
 if ($subnets === false) {
-    $Result->show('info', _('BGP has no mapped subnets').'!', false);
+    $Result->warn('info', _('BGP has no mapped subnets').'!');
 } else {
     // table
     print '<table class="table slaves sorted table-striped table-condensed table-hover table-full table-top" data-cookie-id-table="vrf_subnets_slaves">'."\n";
@@ -98,6 +98,6 @@ if ($subnets === false) {
 
     // no because of permissions
     if ($m == 0) {
-        $Result->show('info', _('BGP has no mapped subnets').'!', false);
+        $Result->warn('info', _('BGP has no mapped subnets').'!');
     }
 }

@@ -283,7 +283,7 @@ if ($POST->action == 'edit') { ?>
         } ?>">
             <td></td>
             <td colspan="2">
-            <?php $Result->show('info', _('Permission changes will be propagated to all nested subnets').'!', false); ?>
+            <?php $Result->warn('info', _('Permission changes will be propagated to all nested subnets').'!'); ?>
             </td>
         </tr>
         <?php } ?>

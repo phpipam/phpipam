@@ -27,12 +27,12 @@ if ($POST->action == 'edit') {
 
 // validate $POST->id values
 if (! preg_match('/^[0-9]+$/i', (string) $POST->id)) {
-    $Result->show('danger', _('Invalid ID. Do not manipulate the POST values!'), true);
+    $Result->die('danger', _('Invalid ID. Do not manipulate the POST values!'));
 }
 
 // validate $POST->action values
 if (! in_array($POST->action, ['add', 'edit', 'delete'])) {
-    $Result->show('danger', _('Invalid action. Do not manipulate the POST values!'), true);
+    $Result->die('danger', _('Invalid action. Do not manipulate the POST values!'));
 }
 
 // disable edit on delete
@@ -167,7 +167,7 @@ if (! isset($mapping) || ! is_object($mapping)) {
     <?php
     // print delete warning
     if ($POST->action == 'delete') {
-        $Result->show('warning', '<strong>'._('Warning').':</strong> '._('You are about to remove the firewall to zone mapping!'), false);
+        $Result->warn('warning', '<strong>'._('Warning').':</strong> '._('You are about to remove the firewall to zone mapping!'));
     }
 ?>
 </div>

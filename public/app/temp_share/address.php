@@ -26,7 +26,7 @@ $statuses = explode(';', (string) $settings->pingStatus);
 
 // checks
 if (count($subnet) == 0) {
-    $Result->show('danger', _('Subnet does not exist'), true);
+    $Result->die('danger', _('Subnet does not exist'));
 }                                  // subnet doesn't exist
 
 // resolve dns name
@@ -238,5 +238,5 @@ if (count($address) > 1) {
 }
 // not exisitng
 else {
-    $Result->show('danger', _('IP address not existing in database').'!', true);
+    $Result->die('danger', _('IP address not existing in database').'!');
 }

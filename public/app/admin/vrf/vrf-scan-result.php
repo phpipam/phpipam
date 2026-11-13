@@ -26,7 +26,7 @@ $User->check_module_permissions('vrf', User::ACCESS_RWA, true, false);
 // check for number of input values
 $max = ini_get('max_input_vars');
 if (count($POST) >= ini_get('max_input_vars')) {
-    $Result->show('danger', _('Number of discovered hosts exceed maximum possible defined by php.ini - set to ')." $max <hr>"._('Please adjust your php.ini settings for value `max_input_vars`'), true);
+    $Result->die('danger', _('Number of discovered hosts exceed maximum possible defined by php.ini - set to ')." $max <hr>"._('Please adjust your php.ini settings for value `max_input_vars`'));
 }
 
 // fetch custom fields and check for required
@@ -81,17 +81,17 @@ if (count($res) > 0) {
 
         // insert vrfs
         if (! $Admin->object_modify('vrf', 'add', 'vrfId', $values)) {
-            $Result->show('danger', _('Failed to import entry').' '.$r['number'].' '.$r['name'], false);
+            $Result->warn('danger', _('Failed to import entry').' '.$r['number'].' '.$r['name']);
             $errors++;
         }
     }
 
     // success if no errors
     if ($errors == 0) {
-        $Result->show('success', _('Scan results added to database').'!', true);
+        $Result->die('success', _('Scan results added to database').'!');
     }
 }
 // error
 else {
-    $Result->show('danger', _('No entries available'), true);
+    $Result->die('danger', _('No entries available'));
 }

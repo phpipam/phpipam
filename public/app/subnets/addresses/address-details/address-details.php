@@ -420,5 +420,5 @@ if (count($address) > 1) {
 }
 // not exisitng
 else {
-    $Result->show('danger', _('IP address not existing in database').'!', true);
+    $Result->die('danger', _('IP address not existing in database').'!');
 }

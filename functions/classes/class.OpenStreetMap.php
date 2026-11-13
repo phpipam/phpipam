@@ -182,7 +182,7 @@ class OpenStreetMap extends Common_functions
     public function map($height = null)
     {
         if (count($this->geodata) == 0) {
-            $this->Result->show('info', _('No Locations with coordinates configured'), false);
+            $this->Result->warn('info', _('No Locations with coordinates configured'));
 
             return;
         }

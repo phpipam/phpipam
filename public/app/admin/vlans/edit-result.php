@@ -26,7 +26,7 @@ if ($POST->action == 'edit') {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // fetch custom fields
@@ -39,7 +39,7 @@ if ($User->settings->vlanDuplicate == 0 && ($POST->action == 'add' || $POST->act
     if ($check_vlan !== false) {
         foreach ($check_vlan as $v) {
             if ($v->vlanId != $POST->vlanid && $v->number == $POST->number) {
-                $Result->show('danger', _('VLAN already exists'), true);
+                $Result->die('danger', _('VLAN already exists'));
             }
         }
     }
@@ -49,26 +49,26 @@ if ($User->settings->vlanDuplicate == 0 && ($POST->action == 'add' || $POST->act
 if (isset($POST->unique)) {
     if ($POST->unique == 'on') {
         if ($Tools->fetch_object('vlans', 'number', $POST->number) !== false) {
-            $Result->show('danger', _('VLAN already exists in another domain!'), true);
+            $Result->die('danger', _('VLAN already exists in another domain!'));
         }
     }
 }
 
 // if number too high
 if ($POST->number > $User->settings->vlanMax && $POST->action != 'delete') {
-    $Result->show('danger', _('Highest possible VLAN number is ').$User->settings->vlanMax.'!', true);
+    $Result->die('danger', _('Highest possible VLAN number is ').$User->settings->vlanMax.'!');
 }
 
 if ($POST->action == 'add') {
     if ($POST->number < 0) {
-        $Result->show('danger', _('VLAN number cannot be negative').'!', true);
+        $Result->die('danger', _('VLAN number cannot be negative').'!');
     } elseif (! is_numeric($POST->number)) {
-        $Result->show('danger', _('Not number').'!', true);
+        $Result->die('danger', _('Not number').'!');
     }
 }
 
 if (is_blank($POST->name)) {
-    $Result->show('danger', _('Name is required').'!', true);
+    $Result->die('danger', _('Name is required').'!');
 }
 
 // formulate update query
@@ -104,9 +104,9 @@ if ($User->settings->enableCustomers == '1') {
 
 // update
 if (! $Admin->object_modify('vlans', $POST->action, 'vlanId', $values)) {
-    $Result->show('danger', _('Failed to '.$User->get_post_action().' VLAN').'!', true);
+    $Result->die('danger', _('Failed to '.$User->get_post_action().' VLAN').'!');
 } else {
-    $Result->show('success', _('VLAN '.$User->get_post_action().' successful').'!', false);
+    $Result->warn('success', _('VLAN '.$User->get_post_action().' successful').'!');
 }
 
 // remove all references if delete

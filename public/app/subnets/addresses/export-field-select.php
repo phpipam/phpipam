@@ -21,11 +21,11 @@ $User->check_user_session();
 $User->check_maintaneance_mode();
 
 // validate csrf cookie
-$User->Crypto->csrf_validate($GET->csrf) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+$User->Crypto->csrf_validate($GET->csrf) === false ? $Result->die('danger', _('Invalid CSRF cookie')) : '';
 
 // set and check permissions
 $subnet_permission = $Subnets->check_permission($User->user, $POST->subnetId);
-$subnet_permission > 0 ?: $Result->show('danger', _('You do not have access to this network'), true);
+$subnet_permission > 0 ?: $Result->die('danger', _('You do not have access to this network'));
 
 ?>
 

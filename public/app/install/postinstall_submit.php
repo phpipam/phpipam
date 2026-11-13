@@ -22,22 +22,22 @@ $Result = new Result;
 // only permit if Admin user has default pass !!!
 $admin = $Admin->fetch_object('users', 'username', 'Admin');
 if ($admin->password != '$6$rounds=3000$JQEE6dL9NpvjeFs4$RK5X3oa28.Uzt/h5VAfdrsvlVe.7HgQUYKMXTJUsud8dmWfPzZQPbRbk8xJn1Kyyt4.dWm4nJIYhAV2mbOZ3g.') {
-    $Result->show('danger', 'Not allowed!', true);
+    $Result->die('danger', 'Not allowed!');
 }
 // update
 else {
     // check lengths
     if (strlen((string) $POST->password1) < 8) {
-        $Result->show('danger', _('Password must be at least 8 characters long!'), true);
+        $Result->die('danger', _('Password must be at least 8 characters long!'));
     }
 
     if (strlen((string) $POST->password2) < 8) {
-        $Result->show('danger', _('Password must be at least 8 characters long!'), true);
+        $Result->die('danger', _('Password must be at least 8 characters long!'));
     }
 
     // check password match
     if ($POST->password1 != $POST->password2) {
-        $Result->show('danger', _('Passwords do not match'), true);
+        $Result->die('danger', _('Passwords do not match'));
     }
 
     // Crypt password
@@ -46,5 +46,5 @@ else {
     // all good, update password!
     $Install->postauth_update($POST->password1, $POST->siteTitle, $POST->siteURL);
     // ok
-    $Result->show('success', _('Settings updated, installation complete!')."<hr><a class='btn btn-sm btn-default' href='".create_link('login')."'>"._('Proceed to login.').'</a>', false);
+    $Result->warn('success', _('Settings updated, installation complete!')."<hr><a class='btn btn-sm btn-default' href='".create_link('login')."'>"._('Proceed to login.').'</a>');
 }

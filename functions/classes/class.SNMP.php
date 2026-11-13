@@ -352,7 +352,7 @@ class phpipamSNMP extends Common_functions
         if ($this->validate_ip($ip)) {
             $this->snmp_host = $ip;
         } else {
-            $this->Result->show('danger', _('Invalid device IP address'), true, true, false, true);
+            $this->Result->die('danger', _('Invalid device IP address'), true, false, true);
         }
     }
 
@@ -908,7 +908,7 @@ class phpipamSNMP extends Common_functions
             return strtoupper(implode(':', $mac_parts));
         } catch (Exception $exception) {
             if (Config::ValueOf('debugging')) {
-                $this->Result->show('info', $exception->getMessage().': "'.escape_input($input).'"', false);
+                $this->Result->warn('info', $exception->getMessage().': "'.escape_input($input).'"');
             }
 
             return '';
@@ -929,7 +929,7 @@ class phpipamSNMP extends Common_functions
             return escape_input($value);
         } catch (Exception $exception) {
             if (Config::ValueOf('debugging')) {
-                $this->Result->show('info', $exception->getMessage().': "'.escape_input($input).'"', false);
+                $this->Result->warn('info', $exception->getMessage().': "'.escape_input($input).'"');
             }
 
             return '';

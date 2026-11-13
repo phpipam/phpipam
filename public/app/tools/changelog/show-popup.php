@@ -17,13 +17,13 @@ $User->check_user_session();
 
 // validate numeric id
 if (! is_numeric($POST->cid)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch item
 $clog = $Log->fetch_changelog($POST->cid);
 if ($clog == false) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // validate permissions
@@ -39,7 +39,7 @@ if ($clog->ctype == 'subnet') {
 
 // die if not ok
 if ($permission == 0) {
-    $Result->show('danger', _('Invalid permission'), true, true);
+    $Result->die('danger', _('Invalid permission'), true);
 }
 
 // format type

@@ -17,14 +17,14 @@ try {
     // get SAML2 settings from db
     $dbobj = $Tools->fetch_object('usersAuthMethod', 'type', 'SAML2');
     if (! $dbobj) {
-        $Result->show('danger', _('SAML settings not found in database'), true);
+        $Result->die('danger', _('SAML settings not found in database'));
     }
 
     // decode authentication module params
     $params = new Params(db_json_decode($dbobj->params, true));
 
     if (empty($params->idpx509cert) && ! empty($params->idpcertfingerprint)) {
-        $Result->show('danger', _('Please login as admin and update SAML authentication settings'), true);
+        $Result->die('danger', _('Please login as admin and update SAML authentication settings'));
     }
 
     // if using advanced settings, instantiate without db settings
@@ -96,13 +96,13 @@ try {
     $errors = $auth->getErrors();
     // check if errors are present
     if (! empty($errors)) {
-        $Result->show('danger', implode('<br>', $errors), true);
+        $Result->die('danger', implode('<br>', $errors));
         exit();
     }
 
     // is user authenticated
     if (! $auth->isAuthenticated()) {
-        $Result->show('danger', 'Not authenticated', true);
+        $Result->die('danger', 'Not authenticated');
         exit();
     }
 
@@ -123,7 +123,7 @@ try {
 
     // Validate username
     if (! isset($username) || ! is_string($username) || is_blank($username)) {
-        $Result->show('danger', _('Could not extract valid username from SAML response').' : '.$username_source, true);
+        $Result->die('danger', _('Could not extract valid username from SAML response').' : '.$username_source);
     }
 
     // Attempt JIT if enabled
@@ -153,9 +153,9 @@ try {
         //       "modules" = "*:1,vlan:3"
 
         if (empty($auth->getAttribute('display_name')[0])) {
-            $Result->show('danger', _('Mandatory SAML JIT attribute missing').' : display_name (string)', true);
+            $Result->die('danger', _('Mandatory SAML JIT attribute missing').' : display_name (string)');
         } elseif (! filter_var($auth->getAttribute('email')[0], FILTER_VALIDATE_EMAIL)) {
-            $Result->show('danger', _('Mandatory SAML JIT attribute missing').' : email (string)', true);
+            $Result->die('danger', _('Mandatory SAML JIT attribute missing').' : email (string)');
         }
 
         $values = [];
@@ -166,7 +166,7 @@ try {
             // User exists in DB. Check this is a SAML account.
 
             if ($existing_user->authMethod != $dbobj->id) {
-                $Result->show('danger', _('Requested SAML user is not configured for SAML authentication').' : '.$username, true);
+                $Result->die('danger', _('Requested SAML user is not configured for SAML authentication').' : '.$username);
             }
 
             $action = 'edit';
@@ -227,7 +227,7 @@ try {
         // Construct admin object for helper functions
         $Admin = new Admin($Database, false);
         if (! $Admin->object_modify('users', $action, 'id', $values)) {
-            $Result->show('danger', _('Failed to create/update SAML JIT user').' : '.$username, true);
+            $Result->die('danger', _('Failed to create/update SAML JIT user').' : '.$username);
         }
     }
 

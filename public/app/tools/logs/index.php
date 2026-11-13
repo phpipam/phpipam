@@ -23,7 +23,7 @@ if ($User->is_admin(false)) {
     <?php
 // print if syslog
     if ($User->settings->log == 'syslog') {
-        $Result->show('warning', _('Log files are sent to syslog'));
+        $Result->warn('warning', _('Log files are sent to syslog'));
     } else {
         ?>
 
@@ -60,7 +60,7 @@ if ($User->is_admin(false)) {
 // for non admins
 else {
     print '<h4>'._('Log files').':</h4><hr>';
-    $Result->show('danger alert-absolute', _('Administrative privileges required!'), false);
+    $Result->warn('danger alert-absolute', _('Administrative privileges required!'));
 }
 
 ?>

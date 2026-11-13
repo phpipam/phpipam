@@ -123,5 +123,5 @@ if ($firewallZones) {
     print '</table>';
 } else {
     // print an info if there are no zones in the database
-    $Result->show('info', _('No firewall zones configured'), false);
+    $Result->warn('info', _('No firewall zones configured'));
 }

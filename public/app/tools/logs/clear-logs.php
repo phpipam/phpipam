@@ -17,12 +17,12 @@ $Result = new Result;
 $User->check_user_session();
 
 if ($User->Crypto->csrf_validate($GET->csrf) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // truncate logs table
 if (! $Admin->truncate_table('logs')) {
-    $Result->show('danger', _('Error clearing logs').'!', true);
+    $Result->die('danger', _('Error clearing logs').'!');
 } else {
-    $Result->show('success', _('Logs cleared successfully').'!', true);
+    $Result->die('success', _('Logs cleared successfully').'!');
 }

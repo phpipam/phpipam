@@ -27,7 +27,7 @@ if ($POST->action == 'edit') {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // validate action
@@ -35,12 +35,12 @@ $Admin->validate_action();
 
 // IDs must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // Logical circuit ID must be present
 if ($POST->logical_cid == '') {
-    $Result->show('danger', _('Logical Circuit ID is mandatory').'!', true);
+    $Result->die('danger', _('Logical Circuit ID is mandatory').'!');
 }
 
 // Validate to make sure there aren't duplicates of the same circuit in the list of circuit ids
@@ -48,11 +48,11 @@ if ($POST->logical_cid == '') {
 $POST->circuit_list = str_replace('undefined.', '', (string) $POST->circuit_list);
 $id_list = $POST->circuit_list !== '' ? explode('.', rtrim((string) $POST->circuit_list, '.')) : [];
 if (count($id_list) != count(array_unique($id_list))) {
-    $Result->show('danger', _('Remove duplicates of circuit').'!', true);
+    $Result->die('danger', _('Remove duplicates of circuit').'!');
 }
 
 if ($POST->action == 'add' && count($id_list) == 0) {
-    $Result->show('danger', _('No circuits selected').'!', true);
+    $Result->die('danger', _('No circuits selected').'!');
 }
 
 // set update values
@@ -73,7 +73,7 @@ if ($Admin->object_modify('circuitsLogical', $POST->action, 'id', $values)) {
     // If this is a new circuit, save id of insert and process
     if ($POST->id == '') {
         if ($Admin->lastId == null) {
-            $Result->show('danger', _('Logical circuit added, but failed to create mapping').'!', true);
+            $Result->die('danger', _('Logical circuit added, but failed to create mapping').'!');
         } else {
             $POST->id = $Admin->lastId;
         }
@@ -84,7 +84,7 @@ if ($Admin->object_modify('circuitsLogical', $POST->action, 'id', $values)) {
         try {
             $Database->deleteObjectsByIdentifier('circuitsLogicalMapping', 'logicalCircuit_id', $POST->id);
         } catch (Exception $e) {
-            $Result->show('danger', _('Error dropping mapping: ').$e->getMessage());
+            $Result->warn('danger', _('Error dropping mapping: ').$e->getMessage());
         }
     }
 
@@ -103,19 +103,19 @@ if ($Admin->object_modify('circuitsLogical', $POST->action, 'id', $values)) {
 
             // insert to mapping
             if (! $Admin->object_modify('circuitsLogicalMapping', 'add', 'id', $values)) {
-                $Result->show('danger', _('Error inserting mapping.'));
+                $Result->warn('danger', _('Error inserting mapping.'));
             }
 
             $order++;
         }
 
         // all ok
-        $Result->show('success', _('Logical Circuit').' '.$User->get_post_action().' '._('successful').'!', false);
+        $Result->warn('success', _('Logical Circuit').' '.$User->get_post_action().' '._('successful').'!');
     } else {
         if ($POST->action == 'delete') {
-            $Result->show('success', _('Logical Circuit').' '.$User->get_post_action().' '._('successful').'!', false);
+            $Result->warn('success', _('Logical Circuit').' '.$User->get_post_action().' '._('successful').'!');
         } else {
-            $Result->show('warning', _('No circuits selected').'!', false);
+            $Result->warn('warning', _('No circuits selected').'!');
         }
     }
 }

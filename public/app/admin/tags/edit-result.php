@@ -22,7 +22,7 @@ $User->is_admin();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // fetch old values
@@ -34,20 +34,20 @@ if ($POST->action == 'delete') {
 
 /* checks */
 if ($POST->action == 'delete' && $old_tag->locked != 'No') {
-    $Result->show('danger', _('Cannot delete locked tag'), true);
+    $Result->die('danger', _('Cannot delete locked tag'));
 }
 
 if ($POST->action != 'delete') {
     if (strlen((string) $POST->type) < 3) {
-        $Result->show('danger', _('Invalid tag name'), true);
+        $Result->die('danger', _('Invalid tag name'));
     }
 
     if (strlen((string) $POST->bgcolor) < 4) {
-        $Result->show('danger', _('Invalid bg color'), true);
+        $Result->die('danger', _('Invalid bg color'));
     }
 
     if (strlen((string) $POST->fgcolor) < 4) {
-        $Result->show('danger', _('Invalid fg color'), true);
+        $Result->die('danger', _('Invalid fg color'));
     }
 }
 
@@ -63,9 +63,9 @@ $values = ['id' => $POST->id,
 
 // execute
 if (! $Admin->object_modify('ipTags', $POST->action, 'id', $values)) {
-    $Result->show('danger', _('Tag').' '.$User->get_post_action()._(' error'), true);
+    $Result->die('danger', _('Tag').' '.$User->get_post_action()._(' error'));
 } else {
-    $Result->show('success', _('Tag').' '.$User->get_post_action()._(' success'), false);
+    $Result->warn('success', _('Tag').' '.$User->get_post_action()._(' success'));
 }
 
 // reset if delete to online

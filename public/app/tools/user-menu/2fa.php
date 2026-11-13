@@ -21,7 +21,7 @@ if (array_key_exists('2fa', $subpages)) { ?>
         $Admin = new Admin($Database, false);
         // update user
         if ($Admin->object_modify('users', 'edit', 'id', ['id' => $User->user->id, '2fa' => 2, '2fa_secret' => $User->user->{'2fa_secret'}]) === false) {
-            $Result->show('danger', _('Failed to activate 2fa for user'), true, true, false, false, true);
+            $Result->die('danger', _('Failed to activate 2fa for user'), true, false, false, true);
         }
     }
 
@@ -86,7 +86,7 @@ if (array_key_exists('2fa', $subpages)) { ?>
     $html = [];
 
     if ($passkey_only) {
-        $Result->show('warning alert-absolute', _('You can only login to your account using passkeys').'.', false);
+        $Result->warn('warning alert-absolute', _('You can only login to your account using passkeys').'.');
     } elseif ((string) $User->user->{'2fa_secret'} !== '' && (int) $User->user->{'2fa'} === 1) {
         $html[] = '<hr><br>';
         $html[] = '<div style="width:500px;">';
@@ -116,5 +116,5 @@ if (array_key_exists('2fa', $subpages)) { ?>
 
     <?php
 } else {
-    $Result->show('warning', _('Two-factor authentication').' '._('disabled'), false);
+    $Result->warn('warning', _('Two-factor authentication').' '._('disabled'));
 }

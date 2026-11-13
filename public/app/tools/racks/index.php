@@ -19,7 +19,7 @@ $csrf = $User->Crypto->csrf_session_token();
 // verify module permissions
 if ($User->check_module_permissions('racks', User::ACCESS_R, false) === false) {
     print '<h4>'._('Racks').'</h4><hr>';
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 // all racks or one ?
 elseif (isset($GET->subnetId)) {

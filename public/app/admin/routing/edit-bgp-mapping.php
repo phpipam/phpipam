@@ -21,7 +21,7 @@ $User->check_module_permissions('routing', User::ACCESS_RW, true);
 $bgp = $Admin->fetch_object('routing_bgp', 'id', $POST->bgpid);
 // false
 if ($bgp === false) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // mapped subnets

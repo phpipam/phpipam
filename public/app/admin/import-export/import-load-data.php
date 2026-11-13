@@ -34,7 +34,7 @@ $reqfields = explode('|', (string) $GET->reqfields);
 if (isset($GET->filetype)) {
     $filetype = $GET->filetype;
 } else {
-    $Result->show('danger', _('Error: could not read the uploaded file type!'), true, true);
+    $Result->die('danger', _('Error: could not read the uploaded file type!'), true);
 }
 
 // Load colors and icons
@@ -48,14 +48,14 @@ foreach ($expfields as $expfield) {
     if (isset($GET->{'importFields__'.str_replace(' ', '_', trim($expfield))})) {
         $impfield = $GET->{'importFields__'.str_replace(' ', '_', trim($expfield))};
         if (in_array($expfield, $reqfields) && ($impfield == '-')) {
-            $Result->show('danger', _('Error: missing required field mapping for expected field').' <b>'.$expfield.'</b>.'._('Please check field matching in previous window.'), true, true);
+            $Result->die('danger', _('Error: missing required field mapping for expected field').' <b>'.$expfield.'</b>.'._('Please check field matching in previous window.'), true);
         } else {
             if ($impfield != '-') {
                 $impfields[$impfield] = $expfield;
             }
         }
     } else {
-        $Result->show('danger', _('Internal error: missing import field mapping.'), true, true);
+        $Result->die('danger', _('Internal error: missing import field mapping.'), true);
     }
 
     // prepare header row for preview table
@@ -97,7 +97,7 @@ if (strtolower((string) $filetype) == 'csv') {
         foreach ($cols as $val) {
             $col++;
             if ($col > $hcol) {
-                $Result->show('danger', _('Extra column found on line ').$row._(' in CSV file. CSV delimiter used in value field?'), true);
+                $Result->die('danger', _('Extra column found on line ').$row._(' in CSV file. CSV delimiter used in value field?'));
             } else {
                 // read each row into a dictionary with expected fields as keys
                 $record[$fieldmap[$col]] = escape_input(trim((string) $val));
@@ -128,7 +128,7 @@ elseif (strtolower((string) $filetype) == 'xls') {
         $record = [];
         for ($col = 1; $col <= $xls->colcount($sheet); $col++) {
             if ($col > $hcol) {
-                $Result->show('danger', _('Extra column found on line ').$row._(' in XLS file. Please check input file.'), true);
+                $Result->die('danger', _('Extra column found on line ').$row._(' in XLS file. Please check input file.'));
             } else {
                 $record[$fieldmap[$col]] = escape_input(trim((string) $Tools->convert_encoding_to_UTF8($xls->val($row, $col, $sheet))));
             }

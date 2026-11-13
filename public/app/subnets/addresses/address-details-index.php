@@ -12,15 +12,15 @@ $PowerDNS = new PowerDNS($Database);
 
 // checks
 if (! is_numeric($GET->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 if (! is_numeric($GET->section)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 if (! is_numeric($GET->ipaddrid)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // get IP a nd subnet details
@@ -50,11 +50,11 @@ $section_permission = $Sections->check_permission($User->user, $subnet['sectionI
 
 // checks
 if (count($subnet) == 0) {
-    $Result->show('danger', _('Subnet does not exist'), true);
+    $Result->die('danger', _('Subnet does not exist'));
 }                                  // subnet doesn't exist
 
 if ($subnet_permission == 0) {
-    $Result->show('danger', _('You do not have permission to access this network'), true);
+    $Result->die('danger', _('You do not have permission to access this network'));
 }      // not allowed to access
 
 // resolve dns name
@@ -170,5 +170,5 @@ if (count($address) > 1) {
 }
 // not exisitng
 else {
-    $Result->show('danger', _('IP address not existing in database').'!', true);
+    $Result->die('danger', _('IP address not existing in database').'!');
 }

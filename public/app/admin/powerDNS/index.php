@@ -30,13 +30,13 @@ $User->check_module_permissions('pdns', User::ACCESS_R, true, false);
     if ($test !== false) {
         $test_ttl = db_json_decode($User->settings->powerDNS);
         if (is_null($test_ttl->ttl)) {
-            $Result->show('warning', "Please set <a href='".create_link('administration', 'powerDNS', 'defaults')."'>default powerDNS values</a>!", false);
+            $Result->warn('warning', "Please set <a href='".create_link('administration', 'powerDNS', 'defaults')."'>default powerDNS values</a>!");
         }
     }
     // errors
     if (isset($PowerDNS->db_check_error)) {
         foreach ($PowerDNS->db_check_error as $err) {
-            $Result->show('warning', $err);
+            $Result->warn('warning', $err);
         }
     }
     ?>
@@ -57,7 +57,7 @@ $User->check_module_permissions('pdns', User::ACCESS_R, true, false);
 
     // check
     if (! in_array($GET->subnetId, $tabs)) {
-        $Result->show('danger', 'Invalid request', true);
+        $Result->die('danger', 'Invalid request');
     }
 
     // print
@@ -81,7 +81,7 @@ $User->check_module_permissions('pdns', User::ACCESS_R, true, false);
 
     // include file
     if (! file_exists(__DIR__.'/'.$filename)) {
-        $Result->show('danger', 'Invalid request', true);
+        $Result->die('danger', 'Invalid request');
     } else {
         include __DIR__.'/'.$filename;
     }
@@ -90,7 +90,7 @@ $User->check_module_permissions('pdns', User::ACCESS_R, true, false);
 
     <?php
 } else {
-    $Result->show('info', _('Please enable powerDNS module under server management'), false);
+    $Result->warn('info', _('Please enable powerDNS module under server management'));
 }
 ?>
 </div>

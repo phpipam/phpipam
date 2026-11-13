@@ -53,7 +53,7 @@ $query = "select
 try {
     $offline_addresses = $Database->getObjectsQuery('ipaddresses', $query);
 } catch (Exception $exception) {
-    $Result->show('danger', _('Error: ').$exception->getMessage());
+    $Result->warn('danger', _('Error: ').$exception->getMessage());
     exit();
 }
 
@@ -157,8 +157,8 @@ if (count($removed_addresses) > 0 && $config['removed_addresses_send_mail']) {
         // send
         $phpipam_mail->Php_mailer->send();
     } catch (PHPMailer\PHPMailer\Exception $e) {
-        $Result->show_cli('Mailer Error: '.$e->errorMessage(), true);
+        $Result->die(false, 'Mailer Error: '.$e->errorMessage());
     } catch (Exception $e) {
-        $Result->show_cli('Mailer Error: '.$e->getMessage(), true);
+        $Result->die(false, 'Mailer Error: '.$e->getMessage());
     }
 }

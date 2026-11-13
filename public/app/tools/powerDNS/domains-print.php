@@ -33,7 +33,7 @@ switch ($type) {
         break;
         // error
     default:
-        $Result->show('danger', 'Invalid request', true);
+        $Result->die('danger', 'Invalid request');
         break;
 }
 
@@ -89,11 +89,11 @@ if ($GET->sPage == 'search' && ! is_blank($POST->{'domain-filter'})) {
 <?php
 // none - filtered
 if ($domains === false && isset($POST->{'domain-filter'})) {
-    $Result->show('info alert-absolute', _('No records found for filter ')."'".escape_input($POST->{'domain-filter'})."'", false);
+    $Result->warn('info alert-absolute', _('No records found for filter ')."'".escape_input($POST->{'domain-filter'})."'");
 }
 // none
 elseif ($domains === false) {
-    $Result->show('info alert-absolute', _('No domains configured'), false);
+    $Result->warn('info alert-absolute', _('No domains configured'));
 } else {
     ?>
 

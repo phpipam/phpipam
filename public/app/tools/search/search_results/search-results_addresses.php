@@ -218,5 +218,5 @@ if (is_array($result_addresses)) {
 </table>
 <?php
 if ($n == 0) {
-    $Result->show('info', _('No results'), false);
+    $Result->warn('info', _('No results'));
 }

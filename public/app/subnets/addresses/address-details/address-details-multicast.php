@@ -75,8 +75,8 @@ if ($mtest !== true) {
 
         print '</table>';
     } else {
-        $Result->show('info', _('No duplicated addresses found'), false);
+        $Result->warn('info', _('No duplicated addresses found'));
     }
 } else {
-    $Result->show('info', _('No duplicated addresses found'), false);
+    $Result->warn('info', _('No duplicated addresses found'));
 }

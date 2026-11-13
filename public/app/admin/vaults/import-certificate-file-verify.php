@@ -21,7 +21,7 @@ $User->check_user_session();
 
 // make sure user has access
 if ($User->get_module_permissions('vaults') < User::ACCESS_RW) {
-    $Result->show('danger', _('Insufficient privileges').'.', true, true);
+    $Result->die('danger', _('Insufficient privileges').'.', true);
 }
 
 // Don't corrupt output with php errors!

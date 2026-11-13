@@ -151,7 +151,7 @@ class Scan extends Common_functions
         $this->Log = new Logging($this->Database, $settings);
 
         if ($this->icmp_type != 'none' && $errmsg = php_feature_missing(null, ['exec'])) {
-            $this->Result->show('danger', $errmsg, true);
+            $this->Result->die('danger', $errmsg);
         }
     }
 
@@ -182,7 +182,7 @@ class Scan extends Common_functions
                 exit(json_encode(['status' => 1, 'error' => _('Invalid scan method.')]));
             }
 
-            $this->Result->show('danger', _('Invalid scan method.'), true);
+            $this->Result->die('danger', _('Invalid scan method.'));
         } else {
             // ok
             $this->icmp_type = $method;
@@ -546,7 +546,7 @@ class Scan extends Common_functions
                     exit($this->ping_exit_explain(1000));
                 }
 
-                return $this->Result->show('danger', _($this->ping_exit_explain(1000)), true);
+                return $this->Result->die('danger', _($this->ping_exit_explain(1000)));
             }
         } else {
             if (! file_exists(escapeshellcmd($path))) {
@@ -554,7 +554,7 @@ class Scan extends Common_functions
                     exit($this->ping_exit_explain(1000));
                 }
 
-                return $this->Result->show('danger', _($this->ping_exit_explain(1000)), true);
+                return $this->Result->die('danger', _($this->ping_exit_explain(1000)));
             }
         }
     }
@@ -626,7 +626,7 @@ class Scan extends Common_functions
         try {
             $this->Database->updateObject('ipaddresses', $update_ipaddress, 'id');
         } catch (Exception $exception) {
-            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
+            ! $this->debugging ?: $this->Result->warn('danger', $exception->getMessage());
             // log
             ! $this->debugging ?: $this->Log->write(_('Status update'), _('Failed to update address status.'), 0);
         }

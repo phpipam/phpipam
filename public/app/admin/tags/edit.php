@@ -26,7 +26,7 @@ $Admin->validate_action();
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch api for edit / add
@@ -34,7 +34,7 @@ if ($POST->action != 'add') {
     // fetch api details
     $tag = $Admin->fetch_object('ipTags', 'id', $POST->id);
     // null ?
-    $tag === false ? $Result->show('danger', _('Invalid ID'), true, true) : null;
+    $tag === false ? $Result->die('danger', _('Invalid ID'), true) : null;
 } else {
     $tag = new Params;
 }

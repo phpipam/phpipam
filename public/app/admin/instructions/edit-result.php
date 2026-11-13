@@ -22,7 +22,7 @@ $User->is_admin();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 $instructions = $_POST['instructions'] ?? '';
@@ -35,7 +35,7 @@ if ($POST->id == '1' || $POST->id == '2') {
         try {
             $Database->updateObject('instructions', ['id' => $POST->id, 'instructions' => $instructions], 'id');
         } catch (Exception $e) {
-            $Result->show('danger', _('Error: ').$e->getMessage(), false);
+            $Result->warn('danger', _('Error: ').$e->getMessage());
             $Log->write(_('Instructions updated'), _('Failed to update instructions').'<hr>'.$e->getMessage(), 1);
         }
     }
@@ -44,7 +44,7 @@ if ($POST->id == '1' || $POST->id == '2') {
         try {
             $Database->insertObject('instructions', ['id' => $POST->id, 'instructions' => $instructions], false, true, false);
         } catch (Exception $e) {
-            $Result->show('danger', _('Error: ').$e->getMessage(), false);
+            $Result->warn('danger', _('Error: ').$e->getMessage());
             $Log->write(_('Instructions updated'), _('Failed to update instructions').'<hr>'.$e->getMessage(), 1);
         }
     }
@@ -53,8 +53,8 @@ if ($POST->id == '1' || $POST->id == '2') {
     if (! isset($e)) {
         // ok
         $Log->write(_('Instructions updated'), _('Instructions updated succesfully'), 0);
-        $Result->show('success', _('Instructions updated successfully'), true);
+        $Result->die('success', _('Instructions updated successfully'));
     }
 } else {
-    $Result->show('danger', _('Invalid ID'), false);
+    $Result->warn('danger', _('Invalid ID'));
 }

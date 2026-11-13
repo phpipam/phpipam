@@ -17,14 +17,14 @@ $mac = isset($POST->mac) ? escape_input(trim($POST->mac)) : '';
 
 // validate
 if ($User->validate_mac($mac) === false) {
-    $Result->show('warning', _('Invalid MAC address provided').' - '.$mac, false);
+    $Result->warn('warning', _('Invalid MAC address provided').' - '.$mac);
 } else {
     // check
     $mac_vendor = $User->get_mac_address_vendor_details($mac, $prefix);
 
     // print
     if ($mac_vendor == '') {
-        $Result->show('info', _('No matches found for prefix').' '.$mac, false);
+        $Result->warn('info', _('No matches found for prefix').' '.$mac);
     } else {
         $mac = strtoupper((string) $User->reformat_mac_address($mac, 1));
 

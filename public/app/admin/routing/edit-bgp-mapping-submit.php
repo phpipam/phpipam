@@ -30,7 +30,7 @@ $values = [
 
 // submit
 if (! $Admin->object_modify('routing_subnets', 'add', 'id', $values)) {
-    $Result->show('danger', _('Mapping').' '.$User->get_post_action().' '._('failed'), false);
+    $Result->warn('danger', _('Mapping').' '.$User->get_post_action().' '._('failed'));
 } else {
-    $Result->show('success', _('Mapping').' '.$User->get_post_action().' '._('successful'), false);
+    $Result->warn('success', _('Mapping').' '.$User->get_post_action().' '._('successful'));
 }

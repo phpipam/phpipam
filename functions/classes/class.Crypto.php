@@ -65,7 +65,7 @@ class Crypto
             return $hash;
         }
 
-        $this->Result->show('danger', _('Error: ')._('Unsupported hash_hmac algo')." ($algo)", true);
+        $this->Result->die('danger', _('Error: ')._('Unsupported hash_hmac algo')." ($algo)");
 
         return false;
     }
@@ -123,7 +123,7 @@ class Crypto
                 break;
 
             default:
-                $this->Result->show('danger', _('Error: ')._('Unsupported encryption method').': '.escape_input($method), true);
+                $this->Result->die('danger', _('Error: ')._('Unsupported encryption method').': '.escape_input($method));
         }
 
         return $retval;

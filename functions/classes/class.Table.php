@@ -65,7 +65,7 @@ class Table extends Common_functions
         // page
         if (isset($_GET['subpage'])) {
             if (! is_numeric($_GET['subpage'])) {
-                $this->Result->show('danger', _('Invalid subpage'), true);
+                $this->Result->die('danger', _('Invalid subpage'));
             }
 
             $this->subpage = $_GET['subpage'];
@@ -78,7 +78,7 @@ class Table extends Common_functions
             }
 
             if (! is_numeric($_GET['limit'])) {
-                $this->Result->show('danger', _('Invalid limit'), true);
+                $this->Result->die('danger', _('Invalid limit'));
             }
 
             $this->limit = $_GET['limit'];

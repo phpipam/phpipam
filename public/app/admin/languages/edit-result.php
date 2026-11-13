@@ -24,16 +24,16 @@ $User->is_demo();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // verify that description is present if action != delete
 if ($POST->action != 'delete' && strlen((string) $POST->l_code) < 2) {
-    $Result->show('danger', _('Code must be at least 2 characters long'), true);
+    $Result->die('danger', _('Code must be at least 2 characters long'));
 }
 
 if ($POST->action != 'delete' && strlen((string) $POST->l_name) < 2) {
-    $Result->show('danger', _('Name must be at least 2 characters long'), true);
+    $Result->die('danger', _('Name must be at least 2 characters long'));
 }
 
 // create update array
@@ -44,7 +44,7 @@ $values = ['l_id' => $POST->l_id,
 
 // update
 if (! $Admin->object_modify('lang', $POST->action, 'l_id', $values)) {
-    $Result->show('danger', _('Language '.$User->get_post_action().' error'), true);
+    $Result->die('danger', _('Language '.$User->get_post_action().' error'));
 } else {
-    $Result->show('success', _('Language '.$User->get_post_action().' success'), true);
+    $Result->die('success', _('Language '.$User->get_post_action().' success'));
 }

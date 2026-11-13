@@ -30,7 +30,7 @@ $Admin->validate_action();
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->tid)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 // set delete flag
 $readonly = $POST->action == 'delete' ? 'readonly' : '';
@@ -46,7 +46,7 @@ if ($POST->action == 'add') {
 if (($POST->action == 'edit') || ($POST->action == 'delete')) {
     $device = $Admin->fetch_object('deviceTypes', 'tid', $POST->tid);
     // fail if false
-    $device === false ? $Result->show('danger', _('Invalid ID'), true) : null;
+    $device === false ? $Result->die('danger', _('Invalid ID')) : null;
 }
 ?>
 

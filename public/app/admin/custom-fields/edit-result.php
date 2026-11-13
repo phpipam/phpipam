@@ -23,7 +23,7 @@ $User->is_admin();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 /* checks */
@@ -106,8 +106,8 @@ if (! empty($errors)) {
     print '</div>'."\n";
 } else {
     if (! $Admin->update_custom_field_definition($POST->as_array())) {
-        $Result->show('danger', _('Failed to '.$User->get_post_action().' field'), true);
+        $Result->die('danger', _('Failed to '.$User->get_post_action().' field'));
     } else {
-        $Result->show('success', _('Field '.$User->get_post_action().' success'), true);
+        $Result->die('success', _('Field '.$User->get_post_action().' success'));
     }
 }

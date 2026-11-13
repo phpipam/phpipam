@@ -7,7 +7,7 @@ $User->check_user_session();
 
 // subnet id must be numeric
 if (! is_numeric($GET->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // fetch subnet related stuff
@@ -30,7 +30,7 @@ if ($subnet['isFolder'] == 1) {
 $subnet_permission = $Subnets->check_permission($User->user, $subnet['id']);                       // subnet permission
 $section_permission = $Sections->check_permission($User->user, $subnet['sectionId']);               // section permission
 if ($subnet_permission == 0) {
-    $Result->show('danger', _('You do not have permission to access this network'), true);
+    $Result->die('danger', _('You do not have permission to access this network'));
 }
 
 // fetch VLAN details
@@ -45,7 +45,7 @@ if ($subnet['sectionId'] != $GET->section) {
     if (! is_object($sd)) {
         $sd = new Params;
     }
-    $Result->show('warning', _('Subnet is in section')." <a href='".create_link('subnets', $sd->id, $subnet['id'])."'>".$sd->name.'</a>!', false);
+    $Result->warn('warning', _('Subnet is in section')." <a href='".create_link('subnets', $sd->id, $subnet['id'])."'>".$sd->name.'</a>!');
 }
 
 // get usage

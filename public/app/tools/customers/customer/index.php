@@ -23,7 +23,7 @@ print "<div class='row'>";
 
 // invalid ?
 if ($customer === false) {
-    $Result->show('danger', _('Invalid customer'), false);
+    $Result->warn('danger', _('Invalid customer'));
 } else {
     // details
     print "<div class='cols-xs-12 col-md-6'>";

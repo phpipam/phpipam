@@ -18,25 +18,25 @@ $Snmp = new phpipamSNMP;
 
 // scan disabled
 if ($User->settings->enableSNMP != '1') {
-    $Result->show('danger', 'SNMP module disabled', true, $ajax_loaded);
+    $Result->die('danger', 'SNMP module disabled', $ajax_loaded);
 }
 
 // section check
 if (! is_numeric($POST->sectionId)) {
-    $Result->show('danger', 'Invalid section Id', true, $ajax_loaded);
+    $Result->die('danger', 'Invalid section Id', $ajax_loaded);
 }
 if (! is_numeric($POST->subnetId)) {
-    $Result->show('danger', 'Invalid subnet Id', true, $ajax_loaded);
+    $Result->die('danger', 'Invalid subnet Id', $ajax_loaded);
 }
 
 $section = $Subnets->fetch_object('sections', 'id', $POST->sectionId);
 if ($section === false) {
-    $Result->show('danger', 'Invalid section Id', true, $ajax_loaded);
+    $Result->die('danger', 'Invalid section Id', $ajax_loaded);
 }
 
 // check section permissions
 if ($Subnets->check_permission($User->user, $POST->sectionId) != 3) {
-    $Result->show('danger', _('You do not have permissions to add new subnet in this section').'!', true, $ajax_loaded);
+    $Result->die('danger', _('You do not have permissions to add new subnet in this section').'!', $ajax_loaded);
 }
 
 // fetch devices that use get_routing_table query
@@ -49,7 +49,7 @@ foreach ($devices_used as $d) {
 
 // if none set die
 if ($devices_used === false) {
-    $Result->show('danger', 'No devices for SNMP route table query available'.'!', true, $ajax_loaded);
+    $Result->die('danger', 'No devices for SNMP route table query available'.'!', $ajax_loaded);
 }
 
 $found = [];
@@ -77,11 +77,11 @@ foreach ($devices_used as $d) {
 }
 // none and errors
 if (count($found) == 0 && isset($errors)) {
-    $Result->show('info', _('No new subnets found')."</div><hr><div class='alert alert-warning'>".implode('<hr>', $errors).'</div>', true, $ajax_loaded);
+    $Result->die('info', _('No new subnets found')."</div><hr><div class='alert alert-warning'>".implode('<hr>', $errors).'</div>', $ajax_loaded);
 }
 // none
 elseif (count($found) == 0) {
-    $Result->show('info', _('No new subnets found').'!', true, $ajax_loaded);
+    $Result->die('info', _('No new subnets found').'!', $ajax_loaded);
 }
 // ok
 else {
@@ -170,7 +170,7 @@ else {
         if ($POST->subnetId !== '0') {
             $subnet = $Tools->fetch_object('subnets', 'id', $POST->subnetId);
             if ($subnet === false) {
-                $Result->show('info', _('Invalid subnet ID').'!', true, true, false, true);
+                $Result->die('info', _('Invalid subnet ID').'!', true, false, true);
             }
         }
         // fetch device
@@ -314,7 +314,7 @@ else {
                 }
                 // none
                 if ($dc == 0) {
-                    print "<tr><td colspan='$colspan'>".$Result->show('info', _('No subnets found'), false, false, true).'</td></tr>';
+                    print "<tr><td colspan='$colspan'>".$Result->warn('info', _('No subnets found'), false, true).'</td></tr>';
                 }
                 print '</tbody>';
             }
@@ -333,7 +333,7 @@ if ($m > 0) {
 if (isset($errors)) {
     print '<hr>';
     foreach ($errors as $e) {
-        print $Result->show('warning', $e, false, false, true);
+        print $Result->warn('warning', $e, false, true);
     }
 }
 

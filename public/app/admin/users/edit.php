@@ -40,7 +40,7 @@ if ($POST->action != 'add') {
     $user = $Admin->fetch_object('users', 'id', $POST->id);
     // false
     if ($user === false) {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 } else {
     $user = new Params;
@@ -379,7 +379,7 @@ $(document).ready(function(){
                 }
             }
         } else {
-            $Result->show('danger', _('No groups configured'), false);
+            $Result->warn('danger', _('No groups configured'));
         }
 
         ?>

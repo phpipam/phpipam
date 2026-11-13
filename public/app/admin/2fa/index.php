@@ -96,9 +96,9 @@ if (($User->settings->{'2fa_provider'} != 'none')) {
 }
 
 if (($User->settings->{'2fa_provider'} == 'none')) {
-    $Result->show('info', _('2fa is disabled'), false);
+    $Result->warn('info', _('2fa is disabled'));
 } elseif ($twofa_users == false) {
-    $Result->show('info', _('No users have 2fa enabled'), false);
+    $Result->warn('info', _('No users have 2fa enabled'));
 } else {
     $html = [];
     $html[] = "<table class='table table-condensed table-top table-auto1 sorted' data-cookie-id-table='admin_2fa'>";

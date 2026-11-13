@@ -86,7 +86,7 @@ if ($passwords !== false) {
 } else {
     print '<tr>';
     print "	<td colspan='$csize'>";
-    $Result->show('info', _('No items'));
+    $Result->warn('info', _('No items'));
     print '	</td>';
     print '</tr>';
 }

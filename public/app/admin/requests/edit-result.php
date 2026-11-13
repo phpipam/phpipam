@@ -22,12 +22,12 @@ $User->check_user_session();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // verify permissions
 if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
-    $Result->show('danger', _('You do not have permissions to process this request').'!', true);
+    $Result->die('danger', _('You do not have permissions to process this request').'!');
 }
 
 // fetch subnet
@@ -42,9 +42,9 @@ if ($POST->action == 'reject') {
         'adminComment' => $POST->adminComment,
     ];
     if (! $Admin->object_modify('requests', 'edit', 'id', $values)) {
-        $Result->show('danger', _('Failed to reject IP request'), true);
+        $Result->die('danger', _('Failed to reject IP request'));
     } else {
-        $Result->show('success', _('Request has been rejected'), false);
+        $Result->warn('success', _('Request has been rejected'));
     }
 
     // send mail
@@ -57,7 +57,7 @@ else {
 
     // check if already existing and die
     if ($Addresses->address_exists($Addresses->transform_address($POST->ip_addr, 'decimal'), $subnet['id'])) {
-        $Result->show('danger', _('IP address already exists'), true);
+        $Result->die('danger', _('IP address already exists'));
     }
 
     // insert to ipaddresses table
@@ -80,7 +80,7 @@ else {
     $values = array_merge($values, $update);
 
     if (! $Addresses->modify_address($values)) {
-        $Result->show('danger', _('Failed to create IP address'), true);
+        $Result->die('danger', _('Failed to create IP address'));
     }
 
     // accept message
@@ -90,9 +90,9 @@ else {
         'adminComment' => $comment,
     ];
     if (! $Admin->object_modify('requests', 'edit', 'id', $values2)) {
-        $Result->show('danger', _('Cannot confirm IP address'), true);
+        $Result->die('danger', _('Cannot confirm IP address'));
     } else {
-        $Result->show('success', _('IP request accepted/rejected'), false);
+        $Result->warn('success', _('IP request accepted/rejected'));
     }
 
     // send mail

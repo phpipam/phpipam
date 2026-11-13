@@ -22,7 +22,7 @@ $csrf = $User->Crypto->csrf_session_token();
 
 // ID must be numeric
 if (! is_numeric($POST->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // get subnet details
@@ -31,12 +31,12 @@ $subnet = $Subnets->fetch_subnet(null, $POST->subnetId);
 // verify that user has write permissions for subnet
 $subnetPerm = $Subnets->check_permission($User->user, $subnet->id);
 if ($subnetPerm < 3) {
-    $Result->show('danger', _('You do not have permissions to resize subnet').'!', true, true);
+    $Result->die('danger', _('You do not have permissions to resize subnet').'!', true);
 }
 
 // check if it has slaves - if yes it cannot be split!
 if ($Subnets->has_slaves($subnet->id)) {
-    $Result->show('danger', _('Only subnets that have no nested subnets can be split').'!', true, true);
+    $Result->die('danger', _('Only subnets that have no nested subnets can be split').'!', true);
 }
 
 // calculate max mask
@@ -44,7 +44,7 @@ $max_new_mask = $Subnets->identify_address($Subnets->transform_to_dotted($subnet
 
 // die if too small
 if ($max_new_mask < $subnet->mask) {
-    $Result->show('danger', _('Subnet too small to be split'), true, true);
+    $Result->die('danger', _('Subnet too small to be split'), true);
 }
 
 $n = 2;     // step

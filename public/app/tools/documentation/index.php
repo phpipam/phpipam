@@ -27,7 +27,7 @@ $path_doc = realpath("$path_root/$document");
 $html = '';
 
 if (strpos((string) $path_doc, (string) $path_root) !== 0) {
-    $Result->show('danger', _('Requested resource is not inside doc directory'), true);
+    $Result->die('danger', _('Requested resource is not inside doc directory'));
 }
 
 if (is_file($path_doc) && preg_match('/\.md$/', (string) $document)) {
@@ -96,7 +96,7 @@ if (is_file($path_doc) && preg_match('/\.md$/', (string) $document)) {
 
     $html = $Parsedown->text(implode("\n", $contents)) ?: '';
 } else {
-    $Result->show('danger', _('Invalid request'), true);
+    $Result->die('danger', _('Invalid request'));
 }
 
 print $Subnets->print_breadcrumbs($Sections, $Subnets, $GET->as_array());

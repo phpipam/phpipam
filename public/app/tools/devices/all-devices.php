@@ -113,7 +113,7 @@ print '<tbody>';
 if ($devices === false) {
     $colspan = 6 + $colspanCustom;
     print '<tr>';
-    print "	<td colspan='$colspan'>".$Result->show('info', _('No results').'!', false, false, true).'</td>';
+    print "	<td colspan='$colspan'>".$Result->warn('info', _('No results').'!', false, true).'</td>';
     print '</tr>';
 }
 // result

@@ -17,24 +17,24 @@ $Zones = new FirewallZones($Database);
 $User->check_user_session();
 // perm check
 if ($User->get_module_permissions('fwzones') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 
 // validate $POST->operation values
 if ($POST->operation != 'subnet2zone') {
-    $Result->show('danger', _('Invalid operation. Do not manipulate the POST values!'), true);
+    $Result->die('danger', _('Invalid operation. Do not manipulate the POST values!'));
 }
 
 // validate $POST->subnetId values
 if (! preg_match('/^[0-9]+$/i', (string) $POST->subnetId)) {
-    $Result->show('danger', _('Invalid subnet ID. Do not manipulate the POST values!'), true);
+    $Result->die('danger', _('Invalid subnet ID. Do not manipulate the POST values!'));
 }
 
 $firewallZones = $Zones->get_zones();
 
 // no zones
 if (! is_array($firewallZones)) {
-    $Result->show('danger', _('No zones available'), true, true);
+    $Result->die('danger', _('No zones available'), true);
 }
 ?>
 

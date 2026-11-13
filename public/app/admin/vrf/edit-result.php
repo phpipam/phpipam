@@ -26,7 +26,7 @@ if ($POST->action == 'edit') {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // fetch custom fields
@@ -34,7 +34,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
 
 // Hostname must be present!
 if ($POST->name == '') {
-    $Result->show('danger', _('Name is mandatory'), true);
+    $Result->die('danger', _('Name is mandatory'));
 }
 
 // set sections
@@ -81,9 +81,9 @@ if ($User->settings->enableCustomers == '1') {
 
 // update
 if (! $Admin->object_modify('vrf', $POST->action, 'vrfId', $values)) {
-    $Result->show('danger', _('Failed to').' '.$User->get_post_action().' '._('VRF').'!', true);
+    $Result->die('danger', _('Failed to').' '.$User->get_post_action().' '._('VRF').'!');
 } else {
-    $Result->show('success', _('VRF').' '.$User->get_post_action().' '._('successful').'!', false);
+    $Result->warn('success', _('VRF').' '.$User->get_post_action().' '._('successful').'!');
 }
 
 // remove all references if delete

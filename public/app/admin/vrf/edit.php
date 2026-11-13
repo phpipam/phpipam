@@ -33,7 +33,7 @@ $Admin->validate_action();
 // get VRF
 if ($POST->action != 'add') {
     $vrf = $Admin->fetch_object('vrf', 'vrfid', $POST->vrfid);
-    $vrf !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+    $vrf !== false ?: $Result->die('danger', _('Invalid ID'), true);
 } else {
     $vrf = new Params;
 }
@@ -173,7 +173,7 @@ if ($sections !== false) {
     <?php
 // print delete warning
 if ($POST->action == 'delete') {
-    $Result->show('warning', '<strong>'._('Warning').':</strong> '._('removing VRF will also remove VRF reference from belonging subnets!'), false);
+    $Result->warn('warning', '<strong>'._('Warning').':</strong> '._('removing VRF will also remove VRF reference from belonging subnets!'));
 }
 ?>
 </div>

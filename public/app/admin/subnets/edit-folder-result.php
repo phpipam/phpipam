@@ -23,30 +23,30 @@ $User->check_user_session();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // ID must be numeric
 if ($POST->action == 'add') {
     if (! is_numeric($POST->sectionId)) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }
 } else {
     if (! is_numeric($POST->subnetId)) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }
 }
 
 // verify that user has permissions to add subnet
 if ($POST->action == 'add') {
     if ($Sections->check_permission($User->user, $POST->sectionId) != 3) {
-        $Result->show('danger', _('You do not have permissions to add new subnet in this section').'!', true);
+        $Result->die('danger', _('You do not have permissions to add new subnet in this section').'!');
     }
 }
 // otherwise check subnet permission
 else {
     if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
-        $Result->show('danger', _('You do not have permissions to add edit/delete this subnet').'!', true);
+        $Result->die('danger', _('You do not have permissions to add edit/delete this subnet').'!');
     }
 }
 
@@ -78,13 +78,13 @@ if ($POST->action == 'add') {
 } elseif ($POST->action == 'edit') {
     /* for nesting - MasterId cannot be the same as subnetId! */
     if ($POST->masterSubnetId == $POST->subnetId) {
-        $Result->show('danger', _('Folder cannot nest behind itself!'), true);
+        $Result->die('danger', _('Folder cannot nest behind itself!'));
     }
 }
 
 // check for name length - 2 is minimum!
 if (strlen((string) $POST->description) < 2 && $POST->action != 'delete') {
-    $Result->show('danger', _('Folder name must have at least 2 characters').'!', true);
+    $Result->die('danger', _('Folder name must have at least 2 characters').'!');
 }
 
 // delete and not yet confirmed
@@ -146,7 +146,7 @@ else {
 
     // execute
     if (! $Subnets->modify_subnet($POST->action, $values)) {
-        $Result->show('danger', _('Error editing folder'), true);
+        $Result->die('danger', _('Error editing folder'));
     } else {
         // update also all slave subnets!
         if (isset($values['sectionId']) && $POST->action == 'edit') {
@@ -175,9 +175,9 @@ else {
 
         // edit success
         if ($POST->action == 'delete') {
-            $Result->show('success', _('Folder, IP addresses and all belonging subnets deleted successfully').'!', false);
+            $Result->warn('success', _('Folder, IP addresses and all belonging subnets deleted successfully').'!');
         } else {
-            $Result->show('success', _('Folder').' '.$User->get_post_action().' '._('successful').'!', true);
+            $Result->die('success', _('Folder').' '.$User->get_post_action().' '._('successful').'!');
         }
     }
 }

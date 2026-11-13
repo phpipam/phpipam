@@ -29,7 +29,7 @@ try {
     // remove
     unlink($file);
     // ok
-    $Result->show('success', 'Logo removed');
+    $Result->warn('success', 'Logo removed');
 } catch (Exception $exception) {
-    $Result->show('danger', 'Cannot remove logo file '.$file.' - error '.$exception->getMessage());
+    $Result->warn('danger', 'Cannot remove logo file '.$file.' - error '.$exception->getMessage());
 }

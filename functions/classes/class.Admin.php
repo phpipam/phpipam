@@ -154,7 +154,7 @@ class Admin extends Common_functions
             return $this->object_delete($table, $field, $values[$field]);
         }
 
-        $this->Result->show('danger', _('Invalid action'), true);
+        $this->Result->die('danger', _('Invalid action'));
 
         return false;
     }
@@ -178,7 +178,7 @@ class Admin extends Common_functions
         try {
             $this->Database->insertObject($table, $values);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
             $this->Log->write($table.' '._('object creation'), _('Failed to create new').' '.$table.' '._('database object').'.<hr>'.$exception->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values_log, 'NULL')), 2);
 
             return false;
@@ -213,7 +213,7 @@ class Admin extends Common_functions
         try {
             $this->Database->updateObject($table, $values, $key);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
             $this->Log->write($table.' '._('object').' '.$values[$key].' '._('edit'), _('Failed to edit object').' '.$key = $values[$key].' '._('in')." $table.<hr>".$exception->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values_log, 'NULL')), 2);
 
             return false;
@@ -247,7 +247,7 @@ class Admin extends Common_functions
         try {
             $this->Database->updateMultipleObjects($table, $ids, $values);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
             $this->Log->write($table.' '._('multiple objects edit'), _('Failed to edit multiple objects in')." $table.<hr>".$exception->getMessage().'<hr>'.$this->array_to_log($ids).'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values, 'NULL')), 2);
 
             return false;
@@ -276,7 +276,7 @@ class Admin extends Common_functions
             $this->Database->deleteRow($table, $field, $id);
         } catch (Exception $exception) {
             $this->Log->write($table.' '._('object').' '.$id.' '._('delete'), _('Failed to delete object').' '.$field = $id.' '._('in').' '.$table.'.<hr>'.$exception->getMessage(), 2);
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -306,7 +306,7 @@ class Admin extends Common_functions
         try {
             $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", [$new_value, $old_value]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -331,7 +331,7 @@ class Admin extends Common_functions
         try {
             $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", [$new_value, $old_value]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -355,7 +355,7 @@ class Admin extends Common_functions
         try {
             $this->Database->emptyTable($table);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -639,13 +639,13 @@ class Admin extends Common_functions
             try {
                 $this->Database->runQuery("update `ipaddresses` set `$field` = replace(`$field`, ?, ?);", [$search, $replace]);
             } catch (Exception $e) {
-                $this->Result->show('danger alert-absolute', _('Error: ').$e->getMessage(), true);
+                $this->Result->die('danger alert-absolute', _('Error: ').$e->getMessage());
             }
 
             // ok, print count
-            $this->Result->show('success alert-absolute', $count.' '._('items replaced successfully').'!', false);
+            $this->Result->warn('success alert-absolute', $count.' '._('items replaced successfully').'!');
         } else {
-            $this->Result->show('info alert-absolute', _('No records found to replace.'), false);
+            $this->Result->warn('info alert-absolute', _('No records found to replace.'));
         }
     }
 
@@ -680,7 +680,7 @@ class Admin extends Common_functions
     public function update_custom_field_definition($field)
     {
         if (! is_array($field) || ! isset($field['fieldType'])) {
-            $this->Result->show('danger', _('Error: ')._('Invalid custom field type'));
+            $this->Result->warn('danger', _('Error: ')._('Invalid custom field type'));
 
             return false;
         }
@@ -689,7 +689,7 @@ class Admin extends Common_functions
             case 'varchar':
             case 'int':
                 if (! isset($field['fieldSize']) || filter_var($field['fieldSize'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) === false) {
-                    $this->Result->show('danger', _('Error: ')._('Invalid custom field size'));
+                    $this->Result->warn('danger', _('Error: ')._('Invalid custom field size'));
 
                     return false;
                 }
@@ -703,7 +703,7 @@ class Admin extends Common_functions
                 $field['ftype'] = $field['fieldType'];
                 break;
             case 'set':
-                $this->Result->show('danger', _('Error: ')._('SET functionality not fully implemented, please change to ENUM'));
+                $this->Result->warn('danger', _('Error: ')._('SET functionality not fully implemented, please change to ENUM'));
 
                 return false;
             case 'enum':
@@ -715,7 +715,7 @@ class Admin extends Common_functions
                 $field['ftype'] = $field['fieldType'].'('.implode(',', $data).')';
                 break;
             default:
-                $this->Result->show('danger', _('Error: ')._('Invalid custom field type'));
+                $this->Result->warn('danger', _('Error: ')._('Invalid custom field type'));
 
                 return false;
         }
@@ -774,7 +774,7 @@ class Admin extends Common_functions
         try {
             $res = $this->Database->runQuery($query, $params);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
             $this->Log->write(_('Custom field').' '.$field['action'], _('Custom field').' '.$field['action'].' '._('failed').' ('.$field['name'].').<hr>'.$this->array_to_log($field), 2);
 
             return false;
@@ -812,7 +812,7 @@ class Admin extends Common_functions
         try {
             $this->object_edit('settings', $key = 'id', ['id' => 1, 'hiddenCustomFields' => $hidden_json]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), true);
+            $this->Result->die('danger', _('Error: ').$exception->getMessage());
         }
 
         // ok
@@ -847,7 +847,7 @@ class Admin extends Common_functions
         try {
             $res = $this->Database->runQuery($query, ['comment' => $old['Comment']]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }

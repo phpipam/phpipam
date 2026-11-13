@@ -21,16 +21,16 @@ $User->check_module_permissions('nat', User::ACCESS_RW, true, true);
 
 // validate id
 if (! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 // validate type
 if (! in_array($POST->type, ['src', 'dst'])) {
-    $Result->show('danger', _('Invalid NAT direction'), true, true);
+    $Result->die('danger', _('Invalid NAT direction'), true);
 }
 
 // get NAT object
 $nat = $Admin->fetch_object('nat', 'id', $POST->id);
-$nat !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+$nat !== false ?: $Result->die('danger', _('Invalid ID'), true);
 
 // new cookie
 $csrf_cookie = $User->Crypto->csrf_session_token();

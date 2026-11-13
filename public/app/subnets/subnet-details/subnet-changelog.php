@@ -19,7 +19,7 @@ $subnet = (array) $Subnets->fetch_subnet('id', $GET->subnetId);
 // permissions
 $permission = $Subnets->check_permission($User->user, $GET->subnetId);
 if ($permission == 0) {
-    $Result->show('danger', _('You do not have permission to access this network'), true);
+    $Result->die('danger', _('You do not have permission to access this network'));
 }
 
 // header

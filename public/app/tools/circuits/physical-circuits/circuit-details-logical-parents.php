@@ -36,5 +36,5 @@ if ($logical_circuits !== false) {
     print '</tbody>';
     print '</table>';
 } else {
-    $Result->show('info', _('This circuit is not a member of any logical circuit.'));
+    $Result->warn('info', _('This circuit is not a member of any logical circuit.'));
 }

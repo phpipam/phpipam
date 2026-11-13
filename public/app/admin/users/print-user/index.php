@@ -10,7 +10,7 @@ $user = $Admin->fetch_object('users', 'id', $GET->subnetId);
 
 // invalid?
 if ($user === false) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // fetch user lang
@@ -48,7 +48,7 @@ if (! isset($GET->sPage)) {
 
 // check
 if (! array_key_exists($GET->sPage, $subpages)) {
-    $Result->show('danger', 'Invalid request', true);
+    $Result->die('danger', 'Invalid request');
 }
 
 // print

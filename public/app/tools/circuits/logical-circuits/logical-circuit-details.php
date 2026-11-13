@@ -10,7 +10,7 @@ $User->check_user_session();
 $User->check_module_permissions('circuits', User::ACCESS_R, true, false);
 
 // check
-is_numeric($GET->sPage) ?: $Result->show('danger', _('Invalid ID'), true);
+is_numeric($GET->sPage) ?: $Result->die('danger', _('Invalid ID'));
 
 // fetch circuit
 $logical_circuit = $Tools->fetch_object('circuitsLogical', 'id', $GET->sPage);
@@ -58,5 +58,5 @@ if ($logical_circuit !== false) {
 
     print '</div>';
 } else {
-    $Result->show('danger', _('Invalid circuit id'), true);
+    $Result->die('danger', _('Invalid circuit id'));
 }

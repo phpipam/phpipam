@@ -23,23 +23,23 @@ $User->check_module_permissions('vlan', User::ACCESS_RW, true, false);
 
 // checks
 if (! is_numeric($POST->newDomainId)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 if (! is_numeric($POST->vlanid)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // verify that new exists
 $vlan_domain = $Admin->fetch_object('vlanDomains', 'id', $POST->newDomainId);
 if ($vlan_domain === false) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // fetch vlan
 $vlan = $Admin->fetch_object('vlans', 'vlanid', $POST->vlanid);
 if ($vlan === false) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // check that it is not already set !
@@ -48,7 +48,7 @@ if ($User->settings->vlanDuplicate == 0) {
     if ($check_vlan !== false) {
         foreach ($check_vlan as $v) {
             if ($v->number == $vlan->number) {
-                $Result->show('danger', _('VLAN already exists'), true);
+                $Result->die('danger', _('VLAN already exists'));
             }
         }
     }
@@ -61,7 +61,7 @@ $values = [
 ];
 // update
 if (! $Admin->object_modify('vlans', 'edit', 'vlanid', $values)) {
-    $Result->show('danger', _('Failed to move VLAN to new domain').'!', true);
+    $Result->die('danger', _('Failed to move VLAN to new domain').'!');
 } else {
-    $Result->show('success', _('VLAN moved to new domain successfully').'!', false);
+    $Result->warn('success', _('VLAN moved to new domain successfully').'!');
 }

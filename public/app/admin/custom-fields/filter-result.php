@@ -41,5 +41,5 @@ if (count($POST) > 0) {
 
 /* save */
 if ($Admin->save_custom_fields_filter($table, $filtered_fields)) {
-    $Result->show('success', _('Filter saved'));
+    $Result->warn('success', _('Filter saved'));
 }

@@ -18,11 +18,11 @@ $hidden_custom_fields = is_array(@$hidden_custom_fields['pstnPrefixes']) ? $hidd
 
 // perm check
 if ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 // check that prefix support isenabled
 elseif ($User->settings->enablePSTN != '1') {
-    $Result->show('danger', _('PSTN prefixes module disabled.'), false);
+    $Result->warn('danger', _('PSTN prefixes module disabled.'));
 } else {
     // all prefixes
     if (! isset($GET->subnetId)) {

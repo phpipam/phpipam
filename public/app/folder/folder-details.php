@@ -11,18 +11,18 @@ $csrf = $User->Crypto->csrf_session_token();
 
 // must be numeric
 if (! is_numeric($GET->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 if (! is_numeric($GET->section)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // die if empty or not folder
 if (count($folder) == 0) {
-    $Result->show('danger', _('Folder does not exist'), true);
+    $Result->die('danger', _('Folder does not exist'));
 }
 if ($folder['isFolder'] != 1) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // get vlan
@@ -37,7 +37,7 @@ if ($folder['sectionId'] != $GET->section) {
     if (! is_object($sd)) {
         $sd = new Params;
     }
-    $Result->show('warning', "Folder is in section <a href='".create_link('folder', $sd->id, $folder['id'])."'>".$sd->name.'</a>!', false);
+    $Result->warn('warning', "Folder is in section <a href='".create_link('folder', $sd->id, $folder['id'])."'>".$sd->name.'</a>!');
 }
 ?>
 

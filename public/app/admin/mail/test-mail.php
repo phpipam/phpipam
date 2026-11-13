@@ -28,7 +28,7 @@ try {
 
     // verify admin mail and name
     if (is_blank($mail_settings->mAdminMail) || is_blank($mail_settings->mAdminName)) {
-        $Result->show('danger', _('Mail settings are missing. Please set admin mail and name!'), true);
+        $Result->die('danger', _('Mail settings are missing. Please set admin mail and name!'));
     }
 
     // initialize mailer
@@ -50,10 +50,10 @@ try {
     // send
     $phpipam_mail->Php_mailer->send();
 } catch (PHPMailer\PHPMailer\Exception $e) {
-    $Result->show('danger', 'Mailer Error: '.$e->errorMessage(), true);
+    $Result->die('danger', 'Mailer Error: '.$e->errorMessage());
 } catch (Exception $e) {
-    $Result->show('danger', 'Mailer Error: '.$e->getMessage(), true);
+    $Result->die('danger', 'Mailer Error: '.$e->getMessage());
 }
 
 // if error not sent print ok
-$Result->show('success alert-absolute', 'Message sent to site admin ('.$User->settings->siteAdminMail.')!', true);
+$Result->die('success alert-absolute', 'Message sent to site admin ('.$User->settings->siteAdminMail.')!');

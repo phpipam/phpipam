@@ -101,7 +101,7 @@ if ($sections !== false) {
     <?php
     // print delete warning
     if ($POST->action == 'delete') {
-        $Result->show('warning', _('Warning').':</strong> '._('removing vlan domain will move all belonging vlans to default domain').'!', false);
+        $Result->warn('warning', _('Warning').':</strong> '._('removing vlan domain will move all belonging vlans to default domain').'!');
     }
 ?>
 </div>

@@ -15,7 +15,7 @@ $Admin->validate_action();
 // ID must be numeric */
 if ($POST->action != 'add') {
     if (! is_numeric($POST->id)) {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 
     // fetch method settings
@@ -273,7 +273,7 @@ $(document).ready(function() {
     $error = php_feature_missing(['xml', 'date', 'zlib', 'openssl', 'gettext', 'dom']);
 if (is_string($error)) {
     $Log->write('SAML2 login', $error, 2);
-    $Result->show('danger', $error, false);
+    $Result->warn('danger', $error);
 }
 ?>
 </div>
@@ -303,7 +303,7 @@ if (is_string($error)) {
     if ($POST->action == 'delete') {
         $users = $Admin->fetch_multiple_objects('users', 'authMethod', @$method_settings->id);
         if (is_array($users)) {
-            $Result->show('warning', count($users)._(' users have this method for logging in. They will be reset to local auth!'), false);
+            $Result->warn('warning', count($users)._(' users have this method for logging in. They will be reset to local auth!'));
         }
     }
 ?>

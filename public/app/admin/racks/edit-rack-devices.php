@@ -30,12 +30,12 @@ $Admin->validate_action();
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->rackid)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // device type?
 if (! isset($POST->devicetype) || (! in_array($POST->devicetype, ['device', 'content', 'subrack']))) {
-    $Result->show('danger', _('Invalid device type'), true, true);
+    $Result->die('danger', _('Invalid device type'), true);
 }
 
 // remove or add ?
@@ -43,7 +43,7 @@ if ($POST->action == 'remove') {
     // fetch rack details
     $rack = $Admin->fetch_object('racks', 'id', $POST->rackid);
     // validate csrf cookie
-    $User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true, true) : '';
+    $User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->die('danger', _('Invalid CSRF cookie'), true) : '';
     switch ($POST->devicetype) {
         case 'device':
             // set values
@@ -54,17 +54,17 @@ if ($POST->action == 'remove') {
             ];
             // update
             if (! $Admin->object_modify('devices', 'edit', 'id', $values)) {
-                $Result->show('success', _('Failed to remove device from rack').'!', true, true);
+                $Result->die('success', _('Failed to remove device from rack').'!', true);
             } else {
-                $Result->show('success', _('Device removed from rack').'!', false, true);
+                $Result->warn('success', _('Device removed from rack').'!', true);
             }
             break;
 
         case 'content':
             if (! $Admin->object_modify('rackContents', 'delete', 'id', ['id' => $POST->deviceid])) {
-                $Result->show('success', _('Failed to remove device from rack').'!', true, true);
+                $Result->die('success', _('Failed to remove device from rack').'!', true);
             } else {
-                $Result->show('success', _('Device removed from rack').'!', false, true);
+                $Result->warn('success', _('Device removed from rack').'!', true);
             }
             break;
     }
@@ -89,7 +89,7 @@ $csrf = $User->Crypto->csrf_session_token();
 $rack = $Admin->fetch_object('racks', 'id', $POST->rackid);
 // check
 if ($rack === false) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 // fetch existing devices
 $rack_devices = $Racks->fetch_rack_devices($rack->id);
@@ -126,11 +126,11 @@ $(document).ready(function(){
 <?php
 // no devides
 if ($POST->devicetype == 'device' && (! isset($devices) || count($devices) == 0)) {
-    $Result->show('info', _('No devices available'), false);
+    $Result->warn('info', _('No devices available'));
 } elseif ($POST->devicetype == 'subrack' && (! isset($subracks) || count($subracks) == 0)) {
-    $Result->show('info', _('No subracks available'), false);
+    $Result->warn('info', _('No subracks available'));
 } elseif ($POST->devicetype == 'subrack' && $rack->subrack) {
-    $Result->show('info', _('Nesting subracks is not allowed'), false);
+    $Result->warn('info', _('Nesting subracks is not allowed'));
     // unsetting the array suppresses the "Add" button
     unset($subracks);
 } else {

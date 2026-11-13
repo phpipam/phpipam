@@ -14,16 +14,16 @@ $User->check_user_session();
 <?php
 // check that nat support isenabled
 if ($User->settings->enableNAT != '1') {
-    $Result->show('danger', _('NAT module disabled.'), false);
+    $Result->warn('danger', _('NAT module disabled.'));
 }
 // no access
 elseif ($User->check_module_permissions('nat', User::ACCESS_R, false, false) === false) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 } else {
     // fetch nat
     $n = $Tools->fetch_object('nat', 'id', $GET->subnetId);
     if ($n === false) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }
 
     // get custom fields

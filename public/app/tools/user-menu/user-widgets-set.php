@@ -18,12 +18,12 @@ $User->check_user_session();
 $User->is_demo();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 /* save widgets */
 if (! $User->self_update_widgets($POST->widgets)) {
-    $Result->show('danger', _('Error updating'), true);
+    $Result->die('danger', _('Error updating'));
 } else {
-    $Result->show('success', _('Widgets updated'), true);
+    $Result->die('success', _('Widgets updated'));
 }

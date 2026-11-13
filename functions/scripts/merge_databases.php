@@ -54,7 +54,7 @@ $settings = $Tools->get_settings();
 $settings_old = $Tools_old->get_settings();
 
 if ($settings->version !== $settings_old->version) {
-    $Result->show('danger', "Versions do not match ($settings->version vs $settings_old->version) !");
+    $Result->warn('danger', "Versions do not match ($settings->version vs $settings_old->version) !");
 }
 
 /**
@@ -505,7 +505,7 @@ foreach ($new_data as $table => $field) {
         try {
             $Database->insertObject($table, $var, false, false, false);
         } catch (Exception $e) {
-            $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$e->getMessage());
         }
     }
 }

@@ -17,24 +17,24 @@ $Result = new Result;
 // verify that user is logged in
 $User->check_user_session();
 
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->die('danger', _('Invalid CSRF cookie')) : '';
 
 print '<div class="pHeader">'._('Remove temporary share').'</div>';
 print '<div class="pContent">';
 
 /* checks */
 if ($User->settings->tempShare != 1) {
-    $Result->show('danger', _('Temporary sharing disabled'), true);
+    $Result->die('danger', _('Temporary sharing disabled'));
 }
 if (strlen((string) $POST->code) != 32) {
-    $Result->show('danger', _('Invalid code'), true);
+    $Result->die('danger', _('Invalid code'));
 }
 
 // remove object
 $old_access = db_json_decode($User->settings->tempAccess, true);
 // check that it exists
 if (! isset($old_access[$POST->code])) {
-    $Result->show('danger', _('Code does not exist'), true);
+    $Result->die('danger', _('Code does not exist'));
 }
 // remove
 unset($old_access[$POST->code]);
@@ -44,9 +44,9 @@ $new_access = ! is_array($old_access) ? '' : json_encode(array_filter($old_acces
 
 // execute
 if (! $Admin->object_modify('settings', 'edit', 'id', ['id' => 1, 'tempAccess' => $new_access])) {
-    $Result->show('danger', _('Temporary share delete error'), true);
+    $Result->die('danger', _('Temporary share delete error'));
 } else {
-    $Result->show('success', _('Temporary share deleted'), false);
+    $Result->warn('success', _('Temporary share deleted'));
 }
 
 ?>

@@ -35,7 +35,7 @@ $custom = $Tools->fetch_custom_fields('circuitProviders');
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->providerid)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch provider details
@@ -43,7 +43,7 @@ if (($POST->action == 'edit') || ($POST->action == 'delete')) {
     $provider = $Admin->fetch_object('circuitProviders', 'id', $POST->providerid);
     // false
     if ($provider === false) {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 }
 // defaults

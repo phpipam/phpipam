@@ -22,11 +22,11 @@ $User->check_module_permissions('nat', User::ACCESS_RW, true, true);
 $User->check_maintaneance_mode();
 
 // validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true, true) : '';
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->die('danger', _('Invalid CSRF cookie'), true) : '';
 
 // get NAT object
 $nat = $Admin->fetch_object('nat', 'id', $POST->id);
-$nat !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+$nat !== false ?: $Result->die('danger', _('Invalid ID'), true);
 
 // disable edit on delete
 $readonly = $POST->action == 'delete' ? 'readonly' : '';
@@ -55,7 +55,7 @@ $src_new = json_encode(array_filter($s ?? []));
 $dst_new = json_encode(array_filter($d ?? []));
 
 if ($Admin->object_modify('nat', 'edit', 'id', ['id' => $POST->id, 'src' => $src_new, 'dst' => $dst_new]) !== false) {
-    $Result->show('success', 'Object removed', false);
+    $Result->warn('success', 'Object removed');
 }
 ?>
 </div>

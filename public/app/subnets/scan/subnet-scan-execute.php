@@ -25,7 +25,7 @@ $User->check_user_session();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // scan type
@@ -37,29 +37,29 @@ $ajax_loaded = isset($POST->ajax_loaded);
 if ($type !== 'snmp-route' && ($type !== 'snmp-route-all' || ! $ajax_loaded)) {
     // subnet Id must be a integer
     if (! is_numeric($POST->subnetId)) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }
 
     // verify that user has write permissionss for subnet
     if ($Subnets->check_permission($User->user, $POST->subnetId) < 2) {
-        $Result->show('danger', _('You do not have permissions to modify hosts in this subnet').'!', true, true);
+        $Result->die('danger', _('You do not have permissions to modify hosts in this subnet').'!', true);
     }
 
     // fetch subnet details
     $subnet = $Subnets->fetch_subnet(null, $POST->subnetId);
-    $subnet !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+    $subnet !== false ?: $Result->die('danger', _('Invalid ID'), true);
 
     // fake sectionId for snmp-route-all scan
     $POST->sectionId = $subnet->sectionId;
 
     // full
     if ($POST->type != 'update-icmp' && $subnet->isFull == 1) {
-        $Result->show('warning', _('Cannot scan as subnet is market as used'), true, true);
+        $Result->die('warning', _('Cannot scan as subnet is market as used'), true);
     }
 
     // verify php path
     if (! file_exists($Scan->php_exec)) {
-        $Result->show('danger', _('Invalid php path'), true, true);
+        $Result->die('danger', _('Invalid php path'), true);
     }
 }
 
@@ -78,5 +78,5 @@ switch ($type) {
         require __DIR__."/../../subnets/scan/subnet-scan-execute-$type.php";
         break;
     default:
-        $Result->show('danger', _('Invalid scan type').' ('.$type.')', true);
+        $Result->die('danger', _('Invalid scan type').' ('.$type.')');
 }

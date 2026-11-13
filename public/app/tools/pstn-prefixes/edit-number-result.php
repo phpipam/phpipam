@@ -21,37 +21,37 @@ if ($POST->action == 'edit') {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // validations
 if ($POST->action == 'delete' || $POST->action == 'edit') {
     if ($Admin->fetch_object('pstnNumbers', 'id', $POST->id) === false) {
-        $Result->show('danger', _('Invalid PSTN number identifier'), false);
+        $Result->warn('danger', _('Invalid PSTN number identifier'));
     }
 }
 
 if ($POST->action == 'add' || $POST->action == 'edit') {
     // name
     if (strlen((string) $POST->name) < 3) {
-        $Result->show('danger', _('Name must have at least 3 characters'), true);
+        $Result->die('danger', _('Name must have at least 3 characters'));
     }
 
     // number
     if (! is_numeric($POST->number)) {
-        $Result->show('danger', _('Number must be numeric'), true);
+        $Result->die('danger', _('Number must be numeric'));
     }
 
     // check prefix
     $prefix = $Tools->fetch_object('pstnPrefixes', 'id', $POST->prefix);
     if ($prefix === false) {
-        $Result->show('danger', _('Invalid prefix'), true);
+        $Result->die('danger', _('Invalid prefix'));
     }
 
     // duplicate check
     if ($POST->action == 'add') {
         if ($Tools->check_number_duplicates($prefix->id, $POST->number)) {
-            $Result->show('danger', _('Duplicate number'), true);
+            $Result->die('danger', _('Duplicate number'));
         }
     }
 
@@ -67,7 +67,7 @@ if ($POST->action == 'add' || $POST->action == 'edit') {
 
     // number must be inside range
     if ($POST->prefix_number < $prefix->prefix_raw_start || $POST->prefix_number > $prefix->prefix_raw_stop) {
-        $Result->show('danger', _('Number not inside prefix'), true);
+        $Result->die('danger', _('Number not inside prefix'));
     }
 }
 
@@ -93,7 +93,7 @@ $values = array_merge($values, $update);
 
 // execute update
 if (! $Admin->object_modify('pstnNumbers', $POST->action, 'id', $values)) {
-    $Result->show('danger', _('Number').' '.$User->get_post_action().' '._('failed'), false);
+    $Result->warn('danger', _('Number').' '.$User->get_post_action().' '._('failed'));
 } else {
-    $Result->show('success', _('Number').' '.$User->get_post_action().' '._('successful'), false);
+    $Result->warn('success', _('Number').' '.$User->get_post_action().' '._('successful'));
 }

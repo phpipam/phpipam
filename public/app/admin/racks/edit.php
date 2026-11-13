@@ -35,7 +35,7 @@ $custom = $Tools->fetch_custom_fields('racks');
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->rackid)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch device details

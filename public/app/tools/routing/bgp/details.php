@@ -4,7 +4,7 @@
 $User->check_module_permissions('routing', User::ACCESS_R, true, false);
 
 // check
-is_numeric($GET->sPage) ?: $Result->show('danger', _('Invalid ID'), true);
+is_numeric($GET->sPage) ?: $Result->die('danger', _('Invalid ID'));
 
 // back link
 print "<div'>";
@@ -14,7 +14,7 @@ print '</div>';
 // fetch bgp details
 $bgp = $Tools->fetch_object('routing_bgp', 'id', $GET->sPage);
 if ($bgp === false) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 } else {
     // circuit fetch
     if ($User->settings->enableCircuits == '1') {

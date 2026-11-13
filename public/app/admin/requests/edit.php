@@ -27,14 +27,14 @@ $request = $Admin->fetch_object('requests', 'id', $POST->requestid);
 
 // fail
 if ($request === false) {
-    $Result->show('danger', _('Request does not exist'), true, true);
+    $Result->die('danger', _('Request does not exist'), true);
 } else {
     $request = (array) $request;
 }
 
 // verify permissions
 if ($Subnets->check_permission($User->user, $request['subnetId']) != 3) {
-    $Result->show('danger', _('You do not have permissions to process this request').'!', true, true);
+    $Result->die('danger', _('You do not have permissions to process this request').'!', true);
 }
 
 // set IP address
@@ -77,7 +77,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
     <?php
     // if error / warning message provided
     if (isset($errmsg)) {
-        $Result->show($errmsg_class, $errmsg, false, false);
+        $Result->warn($errmsg_class, $errmsg, false);
         print '<hr>';
     }
 // error check

@@ -27,8 +27,8 @@ $csrf = $User->Crypto->csrf_session_token();
 $Tools->validate_action(false);
 
 // validate post
-is_numeric($POST->subnetId) ?: $Result->show('danger', _('Invalid subnet ID'), true, true);
-is_numeric($POST->id) || is_blank($POST->id) ?: $Result->show('danger', _('Invalid ID'), true, true);
+is_numeric($POST->subnetId) ?: $Result->die('danger', _('Invalid subnet ID'), true);
+is_numeric($POST->id) || is_blank($POST->id) ?: $Result->die('danger', _('Invalid ID'), true);
 
 // get posted values
 $subnetId = escape_input($POST->subnetId);
@@ -38,12 +38,12 @@ $id = escape_input($POST->id);
 // fetch subnet
 $subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
 if ($subnet === []) {
-    $Result->show('danger', _('Invalid subnet'), true, true);
+    $Result->die('danger', _('Invalid subnet'), true);
 }
 
 // set and check permissions
 $subnet_permission = $Subnets->check_permission($User->user, $subnet['id']);
-$subnet_permission > 1 ?: $Result->show('danger', _('Cannot edit IP address details').'! <br>'._('You do not have write access for this network'), true, true);
+$subnet_permission > 1 ?: $Result->die('danger', _('Cannot edit IP address details').'! <br>'._('You do not have write access for this network'), true);
 
 // set selected address and required addresses fields array
 $selected_ip_fields = $Tools->explode_filtered(';', $User->settings->IPfilter);
@@ -54,7 +54,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 // if subnet is full we cannot any more ip addresses
 if (($action == 'add' || $action == 'all-add') && ($subnet['isFull'] == 1 && $subnet['isFolder'] != 1)) {
-    $Result->show('warning', _('Cannot add address as subnet is market as used'), true, true);
+    $Result->die('warning', _('Cannot add address as subnet is market as used'), true);
 }
 
 // if action is not add then fetch current details, otherwise fetch first available IP address
@@ -77,7 +77,7 @@ if ($action == 'all-add') {
 } else {
     $address = (array) $Addresses->fetch_address(null, $id);
     if ($address === [] || (int) $address['subnetId'] !== (int) $subnetId) {
-        $Result->show('danger', _('Invalid address for selected subnet'), true, true);
+        $Result->die('danger', _('Invalid address for selected subnet'), true);
     }
     // save old mac for multicast check
     $address['mac_old'] = @$address['mac'];

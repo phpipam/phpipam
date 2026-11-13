@@ -35,7 +35,7 @@ $custom = $Tools->fetch_custom_fields('routing_bgp');
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->bgpid)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch bgp details
@@ -43,7 +43,7 @@ if (($POST->action == 'edit') || ($POST->action == 'delete')) {
     $bgp = $Admin->fetch_object('routing_bgp', 'id', $POST->bgpid);
     // false
     if ($bgp === false) {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 }
 // defaults

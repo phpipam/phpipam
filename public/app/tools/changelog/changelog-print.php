@@ -11,7 +11,7 @@ $User->check_user_session();
 if (isset($GET->subnetId)) {
     // validate $GET->subnetId
     if (! preg_match('/^[A-Za-z0-9.#*%<>_ \\-]+$/', $GET->subnetId)) {
-        $Result->show('danger', _('Invalid search string').'!', true);
+        $Result->die('danger', _('Invalid search string').'!');
     }
 }
 
@@ -28,7 +28,7 @@ if (isset($GET->sPage)) {
 
 // numeric check
 if (! is_numeric($input_climit) || $input_climit < 1) {
-    $Result->show('danger', _('Invalid limit').'!', true);
+    $Result->die('danger', _('Invalid limit').'!');
 }
 
 // get clog entries
@@ -49,7 +49,7 @@ if (count($clogs) == 0) {
 else {
     // if more that configured print it!
     if (count($clogs) == $input_climit) {
-        $Result->show('warning alert-absolute', _('Output has been limited to last').' '.$input_climit.' '._('lines').'!', false);
+        $Result->warn('warning alert-absolute', _('Output has been limited to last').' '.$input_climit.' '._('lines').'!');
     }
 
     // printout

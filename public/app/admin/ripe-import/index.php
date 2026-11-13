@@ -14,7 +14,7 @@ $User->is_admin();
 <hr><br>
 
 
-<?php $Result->show('info alert-absolute', _('This script imports subnets from RIPE database for specific AS. Enter desired AS to search for subnets'), false); ?>
+<?php $Result->warn('info alert-absolute', _('This script imports subnets from RIPE database for specific AS. Enter desired AS to search for subnets')); ?>
 
 <form name="ripeImport" id="ripeImport" style="margin-top:50px;clear:both;" class="form-inline">
     <div class="form-group">

@@ -106,13 +106,13 @@ $html[] = '</tr>';
 // IPv4 not configured
 if ($subnets4 === false) {
     $html[] = '<tr>';
-    $html[] = " <td colspan='4'>".$Result->show('info', _('IPv4 not configured on DHCP server'), false, false, true).'</td>';
+    $html[] = " <td colspan='4'>".$Result->warn('info', _('IPv4 not configured on DHCP server'), false, true).'</td>';
     $html[] = '</tr>';
 }
 // no subnets found
 elseif (count($subnets4) == 0) {
     $html[] = '<tr>';
-    $html[] = " <td colspan='4'>".$Result->show('info', _('No IPv4 subnets'), false, false, true).'</td>';
+    $html[] = " <td colspan='4'>".$Result->warn('info', _('No IPv4 subnets'), false, true).'</td>';
     $html[] = '</tr>';
 } else {
     foreach ($subnets4 as $s) {
@@ -128,13 +128,13 @@ $html[] = '</tr>';
 // IPv6 not configured
 if ($subnets6 === false) {
     $html[] = '<tr>';
-    $html[] = " <td colspan='4'>".$Result->show('info', _('IPv6 not configured on DHCP server'), false, false, true).'</td>';
+    $html[] = " <td colspan='4'>".$Result->warn('info', _('IPv6 not configured on DHCP server'), false, true).'</td>';
     $html[] = '</tr>';
 }
 // no subnets found
 elseif (count($subnets6) == 0) {
     $html[] = '<tr>';
-    $html[] = " <td colspan='4'>".$Result->show('info', _('No IPv6 subnets'), false, false, true).'</td>';
+    $html[] = " <td colspan='4'>".$Result->warn('info', _('No IPv6 subnets'), false, true).'</td>';
     $html[] = '</tr>';
 } else {
     foreach ($subnets6 as $s) {

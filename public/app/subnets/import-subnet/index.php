@@ -23,18 +23,18 @@ $permission = $Subnets->check_permission($User->user, $POST->subnetId);
 
 // die if write not permitted
 if ($permission < 2) {
-    $Result->show('danger', _('You cannot write to this subnet'), true);
+    $Result->die('danger', _('You cannot write to this subnet'));
 }
 
 // fetch subnet details
 $subnet = $Subnets->fetch_subnet(null, $POST->subnetId);
 if (! is_object($subnet)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // full
 if ($POST->type != 'update-icmp' && $subnet->isFull == 1) {
-    $Result->show('warning', _('Cannot scan as subnet is market as used'), true, true);
+    $Result->die('warning', _('Cannot scan as subnet is market as used'), true);
 }
 
 // get custom fields
@@ -63,7 +63,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 $standard_fields = ['ip address', 'ip state', 'description', 'hostname', 'fw_object', 'mac', 'owner', 'device', 'port', 'notes', 'location'];
 
 if (! is_writable(__DIR__.'/upload')) {
-    $Result->show('danger', _("'app/subnets/import-subnet/upload' folder is not writeable."), false, false);
+    $Result->warn('danger', _("'app/subnets/import-subnet/upload' folder is not writeable."), false);
 }
 ?>
 

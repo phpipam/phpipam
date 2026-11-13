@@ -24,7 +24,7 @@ $User->is_demo();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 /* checks */
@@ -68,7 +68,7 @@ if ($POST->app_lock_wait == '') {
 
 // die if errors
 if (count($error) > 0) {
-    $Result->show('danger', $error, true);
+    $Result->die('danger', $error);
 } else {
     // create array of values for modification
     $values = [
@@ -86,8 +86,8 @@ if (count($error) > 0) {
 
     // execute
     if (! $Admin->object_modify('api', $POST->action, 'id', $values)) {
-        $Result->show('danger', _('API').' '.$User->get_post_action().' '._('error'), true);
+        $Result->die('danger', _('API').' '.$User->get_post_action().' '._('error'));
     } else {
-        $Result->show('success', _('API').' '.$User->get_post_action().' '._('success'), true);
+        $Result->die('success', _('API').' '.$User->get_post_action().' '._('success'));
     }
 }

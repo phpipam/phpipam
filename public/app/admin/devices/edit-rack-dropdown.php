@@ -34,25 +34,25 @@ if ($POST->rackid > 0 || @$device['rack'] > 0) {
     if ($ajax_loaded) {
         // validate in inputs
         if (! is_numeric($POST->rackid)) {
-            print "<tr><td colspan='2'>".$Result->show('danger', _('Invalid ID'), false, false, true).'</td></tr>';
+            print "<tr><td colspan='2'>".$Result->warn('danger', _('Invalid ID'), false, true).'</td></tr>';
             exit();
         }
         // fetch rack
         $rack = $User->fetch_object('racks', 'id', $POST->rackid);
         if ($rack === false) {
-            print "<tr><td colspan='2'>".$Result->show('danger', _('Invalid rack'), false, false, true).'</td></tr>';
+            print "<tr><td colspan='2'>".$Result->warn('danger', _('Invalid rack'), false, true).'</td></tr>';
             exit();
         }
 
         if (isset($POST->deviceid)) {
             if (! is_numeric($POST->deviceid)) {
-                print "<tr><td colspan='2'>".$Result->show('danger', _('Invalid ID'), false, false, true).'</td></tr>';
+                print "<tr><td colspan='2'>".$Result->warn('danger', _('Invalid ID'), false, true).'</td></tr>';
                 exit();
             }
             // fetch device
             $device = $User->fetch_object('devices', 'id', $POST->deviceid);
             if ($device === false) {
-                print "<tr><td colspan='2'>".$Result->show('danger', _('Invalid device'), false, false, true).'</td></tr>';
+                print "<tr><td colspan='2'>".$Result->warn('danger', _('Invalid device'), false, true).'</td></tr>';
                 exit();
             }
             $device = (array) $device;

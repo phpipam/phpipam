@@ -72,7 +72,7 @@ class DHCP extends Common_functions
 
         // validate and set server type
         if (! in_array($server_type, $this->dhcp_server_types)) {
-            $this->Result->show('danger', _('Invalid server type').' '.$server_type, true);
+            $this->Result->die('danger', _('Invalid server type').' '.$server_type);
         } else {
             $this->dhcp_selected_type = $server_type;
         }
@@ -99,7 +99,7 @@ class DHCP extends Common_functions
         try {
             $this->DHCP_server = new $dhcp_class($this->dhcp_settings);
         } catch (Exception $exception) {
-            $this->Result->show('danger', $exception->getMessage(), true);
+            $this->Result->die('danger', $exception->getMessage());
         }
     }
 
@@ -111,7 +111,7 @@ class DHCP extends Common_functions
     private function verify_class_file()
     {
         if (! file_exists(__DIR__.'/class.DHCP.'.$this->dhcp_selected_type.'.php')) {
-            $this->Result->show('danger', _('Missing class file').' /functions/classes/class.DHCP.'.$this->dhcp_selected_type.'.php', true);
+            $this->Result->die('danger', _('Missing class file').' /functions/classes/class.DHCP.'.$this->dhcp_selected_type.'.php');
         } else {
             require __DIR__.'/class.DHCP.'.$this->dhcp_selected_type.'.php';
         }
@@ -126,7 +126,7 @@ class DHCP extends Common_functions
     private function validate_dhcp_type_method($method)
     {
         if (! method_exists($this->DHCP_server, $method)) {
-            $this->Result->show('danger', _('Method')." `$method` "._('does not exist in class').' `class.DHCP'.$this->dhcp_selected_type.'.php`', true);
+            $this->Result->die('danger', _('Method')." `$method` "._('does not exist in class').' `class.DHCP'.$this->dhcp_selected_type.'.php`');
         }
     }
 
@@ -237,7 +237,7 @@ class DHCP extends Common_functions
         try {
             $this->DHCP_server->get_leases($type);
         } catch (Exception $exception) {
-            $this->Result->show('danger', $exception->getMessage(), false);
+            $this->Result->warn('danger', $exception->getMessage());
         }
 
         // return leases

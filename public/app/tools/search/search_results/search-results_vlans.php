@@ -89,5 +89,5 @@ if (count($result_vlans) > 0) {
 </table>
 <?php
 if (count($result_vlans) == 0) {
-    $Result->show('info', _('No results'), false);
+    $Result->warn('info', _('No results'));
 }

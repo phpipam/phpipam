@@ -55,8 +55,8 @@ if (! is_blank($User->settings->link_field)) {
 
         print '</table>';
     } else {
-        $Result->show('info', _('No linked addresses found'), false);
+        $Result->warn('info', _('No linked addresses found'));
     }
 } else {
-    $Result->show('info', _('Address linking disabled'), false);
+    $Result->warn('info', _('Address linking disabled'));
 }

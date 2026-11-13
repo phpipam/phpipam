@@ -14,11 +14,11 @@ if (! isset($location)) {
 
 // perm check
 if ($User->get_module_permissions('locations') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 // if none than print
 elseif (! is_object($location)) {
-    $Result->show('info', 'Invalid location', false);
+    $Result->warn('info', 'Invalid location');
 } else {
     $OSM = new OpenStreetMap($Database);
 

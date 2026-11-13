@@ -14,7 +14,7 @@ $User->check_user_session();
 $User->is_admin();
 
 // vaidate cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->die('danger', _('Invalid CSRF cookie')) : '';
 
 $instructions = $_POST['instructions'] ?? '';
 $markdown = $Tools->parsedown_instructions(0, true, $instructions)

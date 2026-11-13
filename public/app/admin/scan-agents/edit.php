@@ -26,7 +26,7 @@ $Admin->validate_action();
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch api for edit / add
@@ -34,7 +34,7 @@ if ($POST->action != 'add') {
     // fetch api details
     $agent = $Admin->fetch_object('scanAgents', 'id', $POST->id);
     // null ?
-    $agent === false ? $Result->show('danger', _('Invalid ID'), true) : null;
+    $agent === false ? $Result->die('danger', _('Invalid ID')) : null;
     // title
     $title = $User->get_post_action().' '._('agent').' '.$agent->name;
 } else {
@@ -47,7 +47,7 @@ if ($POST->action != 'add') {
 
 // die if direct and delete
 if ($agent->type == 'direct' && $POST->action == 'delete') {
-    $Result->show('danger', _('Cannot remove localhost scan agent'), true, true);
+    $Result->die('danger', _('Cannot remove localhost scan agent'), true);
 }
 ?>
 

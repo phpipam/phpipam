@@ -15,7 +15,7 @@ if (! isset($GET->sPage)) {
 }
 // check
 if (! array_key_exists($GET->sPage, $tabs)) {
-    $Result->show('danger', 'Invalid request', true);
+    $Result->die('danger', 'Invalid request');
 }
 
 // print
@@ -54,7 +54,7 @@ if ($GET->sPage == 'details') {
     // empty
     if (count($addresses) == 0 && ! $slaves) {
         print '<hr>';
-        $Result->show('info alert-absolute', _('Folder is empty'), false);
+        $Result->warn('info alert-absolute', _('Folder is empty'));
     }
 }
 // mask search
@@ -72,7 +72,7 @@ elseif ($GET->sPage == 'mapsearch') {
     // empty
     if (count($addresses) == 0 && ! $slaves) {
         print '<hr>';
-        $Result->show('info alert-absolute', _('Folder is empty'), false);
+        $Result->warn('info alert-absolute', _('Folder is empty'));
     }
 }
 // default map
@@ -89,6 +89,6 @@ else {
     // empty
     if (count($addresses) == 0 && ! $slaves) {
         print '<hr>';
-        $Result->show('info alert-absolute', _('Folder is empty'), false);
+        $Result->warn('info alert-absolute', _('Folder is empty'));
     }
 }

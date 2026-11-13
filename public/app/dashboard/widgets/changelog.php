@@ -36,7 +36,7 @@ if ($User->settings->log != 'syslog') {
 
 // syslog
 if ($User->settings->log == 'syslog') {
-    $Result->show('warning', _('Changelog files are sent to syslog'), false);
+    $Result->warn('warning', _('Changelog files are sent to syslog'));
 }
 // print
 else {

@@ -16,7 +16,7 @@ $User = new User($Database);
 $User->check_user_session();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // fetch passkey
@@ -24,19 +24,19 @@ $passkey = $User->get_user_passkey_by_keyId($POST->keyid);
 
 // validate
 if (is_null($passkey) || ($passkey->user_id != $User->user->id)) {
-    $Result->show('danger', _('Passkey not found'), true);
+    $Result->die('danger', _('Passkey not found'));
 }
 
 if ($POST->action == 'edit' || $POST->action == 'add') {
     if ($User->rename_passkey($passkey->id, $POST->comment)) {
-        $Result->show('success', _('Passkey renamed'), false);
+        $Result->warn('success', _('Passkey renamed'));
     } else {
-        $Result->show('danger', _('Failed to rename passkey'), false);
+        $Result->warn('danger', _('Failed to rename passkey'));
     }
 } else {
     if ($User->delete_passkey($passkey->id)) {
-        $Result->show('success', _('Passkey removed'), false);
+        $Result->warn('success', _('Passkey removed'));
     } else {
-        $Result->show('danger', _('Failed to remove passkey'), false);
+        $Result->warn('danger', _('Failed to remove passkey'));
     }
 }

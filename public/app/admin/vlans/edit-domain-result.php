@@ -26,22 +26,22 @@ if ($POST->action == 'edit') {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // we cannot delete default domain
 if ($POST->id == 1 && $POST->action == 'delete') {
-    $Result->show('danger', _('Default domain cannot be deleted'), true);
+    $Result->die('danger', _('Default domain cannot be deleted'));
 }
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // Hostname must be present
 if ($POST->name == '') {
-    $Result->show('danger', _('Name is mandatory').'!', true);
+    $Result->die('danger', _('Name is mandatory').'!');
 }
 
 // set sections
@@ -71,7 +71,7 @@ $values = [
 
 // update domain
 if ($Admin->object_modify('vlanDomains', $POST->action, 'id', $values)) {
-    $Result->show('success', _('Domain').' '.$User->get_post_action().' '._('successful').'!', false);
+    $Result->warn('success', _('Domain').' '.$User->get_post_action().' '._('successful').'!');
 }
 
 // if delete move all vlans to default domain!

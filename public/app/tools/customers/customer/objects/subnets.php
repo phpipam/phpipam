@@ -154,5 +154,5 @@ if (isset($objects['subnets'])) {
     print '</tbody>';
     print '</table>'."\n";
 } else {
-    $Result->show('info', _('No objects'));
+    $Result->warn('info', _('No objects'));
 }

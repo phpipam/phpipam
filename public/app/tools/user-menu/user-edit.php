@@ -20,37 +20,37 @@ $User->check_user_session();
 $User->is_demo();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // verify email
 if (! filter_var($POST->email, FILTER_VALIDATE_EMAIL)) {
-    $Result->show('danger alert-absolute', _('Email not valid!'), true);
+    $Result->die('danger alert-absolute', _('Email not valid!'));
 }
 
 // verify lang
 if (! is_numeric($POST->lang)) {
-    $Result->show('danger alert-absolute', _('Invalid language!'), true);
+    $Result->die('danger alert-absolute', _('Invalid language!'));
 }
 
 // verify password if changed (not empty)
 if (! is_blank($POST->password1)) {
     if ($POST->password1 != $POST->password2) {
-        $Result->show('danger alert-absolute', _('Passwords do not match!'), true);
+        $Result->die('danger alert-absolute', _('Passwords do not match!'));
     }
 
     // validate pass against policy
     $policy = (db_json_decode($User->settings->passwordPolicy, true));
     $Password_check->set_requirements($policy, explode(',', (string) $policy['allowedSymbols']));
     if (! $Password_check->validate($POST->password1)) {
-        $Result->show('danger alert-danger ', _('Password validation errors').':<br> - '.implode('<br> - ', $Password_check->get_errors()), true);
+        $Result->die('danger alert-danger ', _('Password validation errors').':<br> - '.implode('<br> - ', $Password_check->get_errors()));
     }
 }
 
 // Verify Theme
 if (! empty($POST->theme)) {
     if (! in_array($POST->theme, ['default', 'white', 'dark'])) {
-        $Result->show('danger alert-absolute', _('Invalid theme'), true);
+        $Result->die('danger alert-absolute', _('Invalid theme'));
     }
 }
 
@@ -61,7 +61,7 @@ if ($User->settings->dbversion >= 40 && $User->settings->passkeys == 1) {
     // check
     if (isset($POST->passkey_only)) {
         if (count($user_passkeys) == 0) {
-            $Result->show('warning alert-absolute', _('There are no passkeys set for user. Resetting passkey login only to false.'), false);
+            $Result->warn('warning alert-absolute', _('There are no passkeys set for user. Resetting passkey login only to false.'));
             print "<div class='clearfix'></div>";
             $POST->passkey_only = 0;
         } else {
@@ -77,9 +77,9 @@ $POST->compressOverride = $POST->compressOverride == 'Uncompress' ? 'Uncompress'
 
 // Update user
 if (! $User->self_update($POST)) {
-    $Result->show('danger alert-absolute', _('Error updating user account!'), true);
+    $Result->die('danger alert-absolute', _('Error updating user account!'));
 } else {
-    $Result->show('success alert-absolute', _('Account updated successfully'), false);
+    $Result->warn('success alert-absolute', _('Account updated successfully'));
 }
 
 // update language

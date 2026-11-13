@@ -9,7 +9,7 @@
 
     <div class="hContent">
     <div style="padding:10px;">
-        <?php $Result->show('danger', _('This installation type does not exist. Please select a valid installation method!'), false); ?>
+        <?php $Result->warn('danger', _('This installation type does not exist. Please select a valid installation method!')); ?>
 
         <a href="<?php print create_link('install', null, null, null, null, true); ?>" class="btn btn-sm btn-default"><i class='fa fa-angle-left'></i> <?php print _('Back'); ?></a>
 

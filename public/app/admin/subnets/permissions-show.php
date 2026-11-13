@@ -23,11 +23,11 @@ $csrf = $User->Crypto->csrf_session_token();
 
 // ID must be numeric
 if (! is_numeric($POST->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 if ($Sections->check_permission($User->user, $POST->subnetId) != User::ACCESS_RWA) {
-    $Result->show('danger', _('You do not have permissions to add edit/delete this subnet').'!', true);
+    $Result->die('danger', _('You do not have permissions to add edit/delete this subnet').'!');
 }
 
 // get all groups
@@ -145,7 +145,7 @@ if ($groups) {
     </tr>
     <tr class="warning2">
         <td colspan="2">
-        <?php $Result->show('info', _('Permission changes will be propagated to all nested subnets').'!', false); ?>
+        <?php $Result->warn('info', _('Permission changes will be propagated to all nested subnets').'!'); ?>
         </td>
     </tr>
     <tr>

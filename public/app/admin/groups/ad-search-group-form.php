@@ -28,7 +28,7 @@ foreach ($servers as $k => $s) {
 
 // die if no servers
 if (count($servers) == 0) {
-    $Result->show('danger', _('No servers available'), true, true);
+    $Result->die('danger', _('No servers available'), true);
 }
 ?>
 

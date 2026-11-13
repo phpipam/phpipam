@@ -98,5 +98,5 @@ if (isset($objects['vrf'])) {
 
     print '</table>';
 } else {
-    $Result->show('info', _('No objects'));
+    $Result->warn('info', _('No objects'));
 }

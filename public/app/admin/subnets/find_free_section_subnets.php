@@ -20,11 +20,11 @@ $Result = new Result;
 $User->check_user_session();
 
 // validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true) : '';
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->die('danger', _('Invalid CSRF cookie')) : '';
 
 // verify that user has permissions to add subnet
 if ($Sections->check_permission($User->user, $POST->sectionid) != 3) {
-    $Result->show('danger', _('You do not have permissions to add new subnet in this section').'!', true, true);
+    $Result->die('danger', _('You do not have permissions to add new subnet in this section').'!', true);
 }
 
 // fetch all section subnets

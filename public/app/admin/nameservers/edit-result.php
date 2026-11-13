@@ -21,7 +21,7 @@ $User->is_admin();
 // check maintaneance mode
 $User->check_maintaneance_mode();
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // Name and primary nameserver must be present!
@@ -41,11 +41,11 @@ if ($POST->action != 'delete') {
     $POST->read($nservers_reindexed);
 
     if ($POST->name == '') {
-        $Result->show('danger', _('Name is mandatory'), true);
+        $Result->die('danger', _('Name is mandatory'));
     }
 
     if (trim($POST->namesrv - 1) == '') {
-        $Result->show('danger', _('Primary nameserver is mandatory'), true);
+        $Result->die('danger', _('Primary nameserver is mandatory'));
     }
 }
 
@@ -82,9 +82,9 @@ $values = ['id' => $POST->nameserverid,
 ];
 // update
 if (! $Admin->object_modify('nameservers', $POST->action, 'id', $values)) {
-    $Result->show('danger', _('Failed to').' '.$User->get_post_action().' '._('nameserver set').'!', true);
+    $Result->die('danger', _('Failed to').' '.$User->get_post_action().' '._('nameserver set').'!');
 } else {
-    $Result->show('success', _('Nameserver set').' '.$User->get_post_action().' '._('successful').'!', false);
+    $Result->warn('success', _('Nameserver set').' '.$User->get_post_action().' '._('successful').'!');
 }
 
 // remove all references if delete

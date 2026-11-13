@@ -15,7 +15,7 @@ $Admin->validate_action();
 // ID must be numeric */
 if ($POST->action != 'add') {
     if (! is_numeric($POST->id)) {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 
     // feth method settings
@@ -44,7 +44,7 @@ $delete = $POST->action == 'delete' ? 'disabled' : '';
     <?php
     // make sure LDAP is supported !
     if (! in_array('ldap', get_loaded_extensions())) {
-        $Result->show('danger', _('ldap extension not enabled in php').'!<hr>', false);
+        $Result->warn('danger', _('ldap extension not enabled in php').'!<hr>');
     }
 ?>
 
@@ -195,7 +195,7 @@ $delete = $POST->action == 'delete' ? 'disabled' : '';
         // check for matching users
         $users = $Admin->fetch_multiple_objects('users', 'authMethod', @$method_settings->id);
         if (is_array($users)) {
-            $Result->show('warning', count($users)._(' users have this method for logging in. They will be reset to local auth!'), false);
+            $Result->warn('warning', count($users)._(' users have this method for logging in. They will be reset to local auth!'));
         }
     }
 ?>

@@ -15,7 +15,7 @@ $vlan = (array) $vlan;
 
 // not existing
 if ($vlan === []) {
-    $Result->show('danger', _('Invalid VLAN id'), true);
+    $Result->die('danger', _('Invalid VLAN id'));
 }
 
 // get custom VLAN fields

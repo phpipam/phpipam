@@ -22,17 +22,17 @@ $User->check_user_session();
 $User->is_demo();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // change ?
 if ($POST->{'2fa'} && $User->user->{'2fa'}) {
-    $Result->show('info', _('No change'), true);
+    $Result->die('info', _('No change'));
 }
 
 // can user change ?
 if (! $User->settings->{'2fa_userchange'}) {
-    $Result->show('danger', _('You are not allowed to change 2fa settings. Please contact system administrator.'), true);
+    $Result->die('danger', _('You are not allowed to change 2fa settings. Please contact system administrator.'));
 }
 
 // init values
@@ -53,7 +53,7 @@ else {
 
 // update
 if (! $Admin->object_modify('users', 'edit', 'id', $values)) {
-    $Result->show('danger alert-absolute', _('2fa update error'), true);
+    $Result->die('danger alert-absolute', _('2fa update error'));
 } else {
-    $Result->show('success alert-absolute', _('2fa update success'), true);
+    $Result->die('success alert-absolute', _('2fa update success'));
 }

@@ -26,36 +26,36 @@ if ($POST->action == 'edit') {
 }
 
 // validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true, true, false, true) : '';
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->die('danger', _('Invalid CSRF cookie'), true, false, true) : '';
 
 // ID, port snd community must be numeric
 if (! is_numeric($POST->device_id)) {
-    $Result->show('danger', _('Invalid ID'), true, true, false, true);
+    $Result->die('danger', _('Invalid ID'), true, false, true);
 }
 if (! is_numeric($POST->snmp_version)) {
-    $Result->show('danger', _('Invalid version'), true, true, false, true);
+    $Result->die('danger', _('Invalid version'), true, false, true);
 }
 if ($POST->snmp_version != 0) {
     if (! is_numeric($POST->snmp_port)) {
-        $Result->show('danger', _('Invalid port'), true, true, false, true);
+        $Result->die('danger', _('Invalid port'), true, false, true);
     }
     if (! is_numeric($POST->snmp_timeout)) {
-        $Result->show('danger', _('Invalid timeout'), true, true, false, true);
+        $Result->die('danger', _('Invalid timeout'), true, false, true);
     }
     if ($POST->snmp_timeout > 10000) {
-        $Result->show('danger', _('Invalid timeout').' > 10,000ms (10s)', true, true, false, true);
+        $Result->die('danger', _('Invalid timeout').' > 10,000ms (10s)', true, false, true);
     }
 }
 
 // version can be 0, 1 or 2
 if ($POST->snmp_version < 0 || $POST->snmp_version > 3) {
-    $Result->show('danger', _('Invalid version'), true, true, false, true);
+    $Result->die('danger', _('Invalid version'), true, false, true);
 }
 
 // validate device
 $device = $Admin->fetch_object('devices', 'id', $POST->device_id);
 if ($device === false) {
-    $Result->show('danger', _('Invalid device'), true, true, false, true);
+    $Result->die('danger', _('Invalid device'), true, false, true);
 }
 
 // set new snmp variables
@@ -126,10 +126,10 @@ if (isset($queries)) {
             $debug[$query]['oid'] = $Snmp->snmp_queries[$query]->oid;
             $debug[$query]['result'] = $Snmp->last_result;
 
-            $res[] = $Result->show('success', "<strong>$query</strong>: OK<br><span class='text-muted'>".$Snmp->snmp_queries[$query]->description.'</span>', false, false, true);
+            $res[] = $Result->warn('success', "<strong>$query</strong>: OK<br><span class='text-muted'>".$Snmp->snmp_queries[$query]->description.'</span>', false, true);
         } catch (Exception $e) {
             // fail
-            $res[] = $Result->show('danger', "<strong>$query</strong><br><span class='text-muted'>".$Snmp->snmp_queries[$query]->description.'</span><hr> '.$e->getMessage(), false, false, true);
+            $res[] = $Result->warn('danger', "<strong>$query</strong><br><span class='text-muted'>".$Snmp->snmp_queries[$query]->description.'</span><hr> '.$e->getMessage(), false, true);
         }
     }
 
@@ -143,9 +143,9 @@ if (isset($queries)) {
     $res[] = '</pre>';
 
     // print
-    $Result->show('Query result', implode('', $res), false, true, false, true);
+    $Result->warn('Query result', implode('', $res), true, false, true);
 } else {
-    $Result->show('warning', _('No queries'), false, true, false, true);
+    $Result->warn('warning', _('No queries'), true, false, true);
 }
 ?>
 

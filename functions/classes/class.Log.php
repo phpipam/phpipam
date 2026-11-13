@@ -331,7 +331,7 @@ class Logging extends Common_functions
                 try {
                     $user_id = $this->Database->getObjectQuery('users', 'select * from `users` where `username` = ? limit 1', [$_SESSION['ipamusername']]);
                 } catch (Exception $e) {
-                    $this->Result->show('danger', _('Database error: ').$e->getMessage());
+                    $this->Result->warn('danger', _('Database error: ').$e->getMessage());
                 }
             }
 
@@ -360,7 +360,7 @@ class Logging extends Common_functions
         $this->log_username = $username ?? $this->log_username;
 
         // validate
-        ! is_null($this->log_command) ?: $this->Result->show('danger', _('Invalid log command'));
+        ! is_null($this->log_command) ?: $this->Result->warn('danger', _('Invalid log command'));
 
         // execute
         if ($this->log_type == 'syslog') {
@@ -562,7 +562,7 @@ class Logging extends Common_functions
         try {
             $this->Database->insertObject('logs', $values);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -588,14 +588,14 @@ class Logging extends Common_functions
 
         // check for lastId - must be numeric
         if (! is_numeric($logCount)) {
-            $this->Result->show('danger', _('Invalid logcount value'), true);
+            $this->Result->die('danger', _('Invalid logcount value'));
 
             return false;
         }
 
         if ($direction !== null) {
             if (! in_array($direction, ['next', 'prev', ''])) {
-                $this->Result->show('danger', _('Invalid direction'), true);
+                $this->Result->die('danger', _('Invalid direction'));
 
                 return false;
             }
@@ -646,7 +646,7 @@ class Logging extends Common_functions
         try {
             $logs = $this->Database->getObjectsQuery('logs', implode("\n", $query), $params);
         } catch (Exception $exception) {
-            $this->Result->show('danger', $exception->getMessage(), false);
+            $this->Result->warn('danger', $exception->getMessage());
 
             return false;
         }
@@ -666,7 +666,7 @@ class Logging extends Common_functions
         try {
             $id = $this->Database->getObjectQuery('logs', 'select id from logs order by id desc limit 1;');
         } catch (Exception $exception) {
-            $this->Result->show('danger', $exception->getMessage(), false);
+            $this->Result->warn('danger', $exception->getMessage());
 
             return false;
         }
@@ -855,7 +855,7 @@ class Logging extends Common_functions
         try {
             $this->Database->insertObject('changelog', $values);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1623,7 +1623,7 @@ class Logging extends Common_functions
     {
         // limit check
         if (! is_numeric($limit)) {
-            $this->Result->show('danger', _('Invalid limit'), true);
+            $this->Result->die('danger', _('Invalid limit'));
 
             return false;
         }
@@ -1686,7 +1686,7 @@ class Logging extends Common_functions
         try {
             $logs = $this->Database->getObjectsQuery('changelog', $query, $filter ? ['expr' => $expr] : null);
         } catch (Exception $exception) {
-            $this->Result->show('danger', $exception->getMessage(), false);
+            $this->Result->warn('danger', $exception->getMessage());
 
             return false;
         }
@@ -1705,7 +1705,7 @@ class Logging extends Common_functions
     {
         // limit check
         if (! is_numeric($id)) {
-            $this->Result->show('danger', _('Invalid ID'), true);
+            $this->Result->die('danger', _('Invalid ID'));
 
             return false;
         }
@@ -1739,7 +1739,7 @@ class Logging extends Common_functions
         try {
             $logs = $this->Database->getObjectQuery('changelog', $query, ['id' => $id]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', $exception->getMessage(), false);
+            $this->Result->warn('danger', $exception->getMessage());
 
             return false;
         }
@@ -1787,7 +1787,7 @@ class Logging extends Common_functions
             try {
                 $logs = $this->Database->getObjectsQuery('changelog', $query, array_filter($args));
             } catch (Exception $e) {
-                $this->Result->show('danger', $e->getMessage(), false);
+                $this->Result->warn('danger', $e->getMessage());
 
                 return false;
             }
@@ -1812,7 +1812,7 @@ class Logging extends Common_functions
     {
         // limit check
         if (! is_numeric($limit)) {
-            $this->Result->show('danger', _('Invalid limit'), true);
+            $this->Result->die('danger', _('Invalid limit'));
 
             return false;
         }
@@ -1833,7 +1833,7 @@ class Logging extends Common_functions
                 break;
                 // error
             default:
-                $this->Result->show('danger', _('Invalid object type'), true);
+                $this->Result->die('danger', _('Invalid object type'));
 
                 return false;
         }
@@ -1855,7 +1855,7 @@ class Logging extends Common_functions
         try {
             $logs = $this->Database->getObjectsQuery('changelog', $query, [$coid, $object_type]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', $exception->getMessage(), false);
+            $this->Result->warn('danger', $exception->getMessage());
 
             return false;
         }
@@ -1875,14 +1875,14 @@ class Logging extends Common_functions
     {
         // limit check
         if (! is_numeric($limit)) {
-            $this->Result->show('danger', _('Invalid limit'), true);
+            $this->Result->die('danger', _('Invalid limit'));
 
             return false;
         }
 
         // $subnetId check
         if (! is_numeric($subnetId)) {
-            $this->Result->show('danger', _('Invalid subnet Id'), true);
+            $this->Result->die('danger', _('Invalid subnet Id'));
 
             return false;
         }
@@ -1924,7 +1924,7 @@ class Logging extends Common_functions
                 try {
                     $logs = $this->Database->getObjectsQuery('changelog', $query, $args);
                 } catch (Exception $e) {
-                    $this->Result->show('danger', $e->getMessage(), false);
+                    $this->Result->warn('danger', $e->getMessage());
 
                     return false;
                 }
@@ -2109,9 +2109,9 @@ class Logging extends Common_functions
             // send
             $phpipam_mail->Php_mailer->send();
         } catch (PHPMailer\PHPMailer\Exception $e) {
-            $this->Result->show('danger', _('Mailer Error').': '.$e->errorMessage(), true);
+            $this->Result->die('danger', _('Mailer Error').': '.$e->errorMessage());
         } catch (Exception $e) {
-            $this->Result->show('danger', _('Mailer Error').': '.$e->getMessage(), true);
+            $this->Result->die('danger', _('Mailer Error').': '.$e->getMessage());
         }
 
         // ok

@@ -32,7 +32,7 @@ $Admin->validate_action();
 // get NAT object
 if ($POST->action != 'add') {
     $nat = $Admin->fetch_object('nat', 'id', $POST->id);
-    $nat !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+    $nat !== false ?: $Result->die('danger', _('Invalid ID'), true);
 } else {
     $nat = new Params;
 }
@@ -167,7 +167,7 @@ $devices = $Tools->fetch_all_objects('devices', 'hostname');
             if ($sources !== false) {
                 print implode('<br>', $sources);
             } else {
-                print $Result->show('info', _('No objects'), false, false, true);
+                print $Result->warn('info', _('No objects'), false, true);
             }
             ?>
             </td>
@@ -203,7 +203,7 @@ $devices = $Tools->fetch_all_objects('devices', 'hostname');
             if ($destinations !== false) {
                 print implode('<br>', $destinations);
             } else {
-                print $Result->show('info', _('No objects'), false, false, true);
+                print $Result->warn('info', _('No objects'), false, true);
             }
             ?>
             </td>

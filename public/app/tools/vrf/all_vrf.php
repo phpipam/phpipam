@@ -50,7 +50,7 @@ $custom_size = count($custom) - count($hidden_fields);
 
 // first check if they exist!
 if ($all_vrfs === false) {
-    $Result->show('info', _('No VRFs configured').'!', false);
+    $Result->warn('info', _('No VRFs configured').'!');
 } else {
     print '<table id="vrfManagement" class="table sorted table-striped table-top table-hover" data-cookie-id-table="admin_vrf">'."\n";
 

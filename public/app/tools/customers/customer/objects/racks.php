@@ -110,5 +110,5 @@ if (isset($objects['racks'])) {
     print '</tbody>';
     print '</table>';
 } else {
-    $Result->show('info', _('No objects'));
+    $Result->warn('info', _('No objects'));
 }

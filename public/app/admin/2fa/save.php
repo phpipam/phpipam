@@ -22,18 +22,18 @@ $User->is_admin();
 $User->is_demo();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // check 2fa_provider
 $providers = ['none', 'Google_Authenticator'];
 if (! in_array($POST->{'2fa_provider'}, $providers)) {
-    $Result->show('danger', _('Invalid provider'), true);
+    $Result->die('danger', _('Invalid provider'));
 }
 
 // verify name
 if (strlen((string) $POST->{'2fa_name'}) > 32 || is_blank($POST->{'2fa_name'})) {
-    $Result->show('danger', _('Invalid application name'), true);
+    $Result->die('danger', _('Invalid application name'));
 }
 
 // change
@@ -48,9 +48,9 @@ $values = [
 ];
 // update
 if (! $Admin->object_modify('settings', 'edit', 'id', $values)) {
-    $Result->show('danger', _('Cannot update settings'), false);
+    $Result->warn('danger', _('Cannot update settings'));
 } else {
-    $Result->show('success', _('Settings updated successfully'), false);
+    $Result->warn('success', _('Settings updated successfully'));
 }
 
 // force ?
@@ -60,7 +60,7 @@ if (isset($POST->{'2fa_force'})) {
         $old_status = $new_status == 1 ? 0 : 1;
         // update
         if ($Admin->update_object_references('users', '2fa', $old_status, $new_status) === false) {
-            $Result->show('danger', _('Failed to update all users!'), false);
+            $Result->warn('danger', _('Failed to update all users!'));
         }
     }
 }

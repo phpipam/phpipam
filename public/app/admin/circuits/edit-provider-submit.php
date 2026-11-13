@@ -27,19 +27,19 @@ if ($POST->action == 'edit') {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // validate action
 $Admin->validate_action();
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->providerid)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // Hostname must be present
 if ($POST->name == '') {
-    $Result->show('danger', _('Name is mandatory').'!', true);
+    $Result->die('danger', _('Name is mandatory').'!');
 }
 
 // set update values
@@ -56,7 +56,7 @@ $values = array_merge($values, $update);
 
 // update device
 if ($Admin->object_modify('circuitProviders', $POST->action, 'id', $values)) {
-    $Result->show('success', _('Provider').' '.$User->get_post_action().' '._('successful').'!', false);
+    $Result->warn('success', _('Provider').' '.$User->get_post_action().' '._('successful').'!');
 }
 
 if ($POST->action == 'delete') {

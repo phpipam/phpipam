@@ -21,7 +21,7 @@ $User->check_user_session();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // permissions
@@ -29,11 +29,11 @@ $permission = $Subnets->check_permission($User->user, $POST->subnetId);
 
 // die if write not permitted
 if ($permission < 2) {
-    $Result->show('danger', _('You cannot write to this subnet'), true);
+    $Result->die('danger', _('You cannot write to this subnet'));
 }
 
 // check integer
-is_numeric($POST->subnetId) ?: $Result->show('danger', _('Invalid subnet ID'), true);
+is_numeric($POST->subnetId) ?: $Result->die('danger', _('Invalid subnet ID'));
 
 // set filetype
 $filetype = explode('.', (string) $POST->filetype);
@@ -45,7 +45,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 // fetch subnet
 $subnet = $Subnets->fetch_subnet('id', $POST->subnetId);
 if ($subnet === false) {
-    $Result->show('danger', _('Invalid subnet ID'), true);
+    $Result->die('danger', _('Invalid subnet ID'));
 }
 
 // Parse file
@@ -153,12 +153,12 @@ foreach ($outFile as $line) {
 
 // print success if no errors
 if ($errors == 0) {
-    $Result->show('success', _('Import successful'), false);
+    $Result->warn('success', _('Import successful'));
     // erase file on success
     unlink('upload/import.'.$filetype);
 }
 
 // print
-$Result->show('success', _("Created $add addresses, skipped ".count($invalid_lines)." entries and edited $edit addresses"), false);
+$Result->warn('success', _("Created $add addresses, skipped ".count($invalid_lines)." entries and edited $edit addresses"));
 
 print '<br><br>';

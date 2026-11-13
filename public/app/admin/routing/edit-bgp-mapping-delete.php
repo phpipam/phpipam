@@ -21,7 +21,7 @@ if ($POST->action == 'edit') {
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->bgpid)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 ?>
 
@@ -33,9 +33,9 @@ if ($POST->action != 'add' && ! is_numeric($POST->bgpid)) {
     <?php
     // submit
     if (! $Admin->object_modify('routing_subnets', 'delete', 'id', ['id' => $POST->bgpid])) {
-        $Result->show('danger', _('Mapping removal failed'), false);
+        $Result->warn('danger', _('Mapping removal failed'));
     } else {
-        $Result->show('success', _('Mapping removed'), false);
+        $Result->warn('success', _('Mapping removed'));
     }
 ?>
 

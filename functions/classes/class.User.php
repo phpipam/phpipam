@@ -358,7 +358,7 @@ class User extends Common_functions
         }
 
         if ($die) {
-            $this->Result->show('danger', _('Administrator level privileges required'), true);
+            $this->Result->die('danger', _('Administrator level privileges required'));
         } else {
             return false;
         }
@@ -385,7 +385,7 @@ class User extends Common_functions
                 // kill session
                 $this->destroy_session();
                 // error
-                $this->Result->show('danger', _('Please login first')."!<hr><a class='btn btn-sm btn-default' href='".$url.create_link('login')."'>"._('Login').'</a>', true, true);
+                $this->Result->die('danger', _('Please login first')."!<hr><a class='btn btn-sm btn-default' href='".$url.create_link('login')."'>"._('Login').'</a>', true);
                 exit();
             }
 
@@ -545,9 +545,9 @@ class User extends Common_functions
     {
         if ($this->settings->maintaneanceMode == '1' && $this->user->username != 'Admin') {
             if ($is_popup) {
-                $this->Result->show('warning', "<i class='fa fa-info'></i> "._('System is running in maintenance mode').' !', true, true);
+                $this->Result->die('warning', "<i class='fa fa-info'></i> "._('System is running in maintenance mode').' !', true);
             } else {
-                $this->Result->show('warning text-center nomargin', "<i class='fa fa-info'></i> "._('System is running in maintenance mode').' !', true);
+                $this->Result->die('warning text-center nomargin', "<i class='fa fa-info'></i> "._('System is running in maintenance mode').' !');
             }
         }
     }
@@ -595,7 +595,7 @@ class User extends Common_functions
         }
 
         // print that is can be deleted
-        $this->Result->show('warning', '$config[resolve_subnets] '._('was migrated to database. It can be deleted from config.php'), false);
+        $this->Result->warn('warning', '$config[resolve_subnets] '._('was migrated to database. It can be deleted from config.php'));
     }
 
     /**
@@ -613,7 +613,7 @@ class User extends Common_functions
         if ((! isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') && ($_SERVER['HTTP_ORIGIN'] != $_SERVER['HTTP_HOST'])) {
             // write log and die
             $this->Log->write('referrer_check', _('Page not referred properly'), 0);
-            $this->Result->show('danger', _('Page not referred properly'), true);
+            $this->Result->die('danger', _('Page not referred properly'));
         }
     }
 
@@ -627,7 +627,7 @@ class User extends Common_functions
         try {
             $lang = $this->Database->findObject('lang', 'l_id', $this->settings->defaultLang);
         } catch (Exception $exception) {
-            $this->debugging ?: $this->Result->show('danger', _('Database error: ').$exception->getMessage());
+            $this->debugging ?: $this->Result->warn('danger', _('Database error: ').$exception->getMessage());
         }
 
         return $lang;
@@ -674,7 +674,7 @@ class User extends Common_functions
             try {
                 $fsubnet = $this->Database->getObjectQuery('subnets', $query, [$id]);
             } catch (Exception $e) {
-                $this->Result->show('danger', _('Error: ').$e->getMessage());
+                $this->Result->warn('danger', _('Error: ').$e->getMessage());
 
                 return [];
             }
@@ -819,7 +819,7 @@ class User extends Common_functions
         if ($saml !== false) {
             $authmethodtype = 'auth_SAML2';
         } elseif ($authmethodtype == 'auth_SAML2') {
-            $this->Result->show('danger', _('Please use')." <a href='".create_link('saml2')."'>"._('login').'</a>!', true);
+            $this->Result->die('danger', _('Please use')." <a href='".create_link('saml2')."'>"._('login').'</a>!');
         }
 
         // authenticate
@@ -847,7 +847,7 @@ class User extends Common_functions
                 break;
             default:
                 $this->Log->write(_('User login'), _('Error: Invalid authentication method'), 2);
-                $this->Result->show('danger', _('Error: Invalid authentication method'), true);
+                $this->Result->die('danger', _('Error: Invalid authentication method'));
         }
     }
 
@@ -865,14 +865,14 @@ class User extends Common_functions
             try {
                 $user = $this->Database->findObject('users', 'username', $username);
             } catch (Exception $e) {
-                $this->Result->show('danger', _('Error: ').$e->getMessage(), true);
+                $this->Result->die('danger', _('Error: ').$e->getMessage());
             }
 
             if (! is_object($user)) {
                 $this->block_ip();
                 $this->log_failed_access($username);
                 $this->Log->write(_('User login'), _('Invalid username'), 2, $username);
-                $this->Result->show('danger', _('Invalid username or password'), true);
+                $this->Result->die('danger', _('Invalid username or password'));
             }
 
             // admin?
@@ -897,7 +897,7 @@ class User extends Common_functions
         try {
             $langs = $this->Database->getObjects('lang', 'l_id');
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -917,7 +917,7 @@ class User extends Common_functions
         try {
             $lang = $this->Database->findObject('lang', 'l_id', $this->user->lang);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), true);
+            $this->Result->die('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -936,7 +936,7 @@ class User extends Common_functions
         try {
             $method = $this->Database->getObject('usersAuthMethod', $this->authmethodid);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), true);
+            $this->Result->die('danger', _('Error: ').$exception->getMessage());
         }
 
         // save method name if existing
@@ -964,7 +964,7 @@ class User extends Common_functions
             // save to session
             $this->write_session_parameters();
 
-            $this->Result->show('success', _('Login successful'));
+            $this->Result->warn('success', _('Login successful'));
             $this->Log->write(_('User login'), _('User').' '.$this->user->real_name.' '._('logged in'), 0, $username);
 
             // write last logintime
@@ -984,7 +984,7 @@ class User extends Common_functions
             if (! empty($_SERVER['PHP_AUTH_USER']) && $this->api !== true) {
                 $this->show_http_login();
             } else {
-                $this->Result->show('danger', _('Invalid username or password'), true);
+                $this->Result->die('danger', _('Invalid username or password'));
             }
         }
     }
@@ -1005,7 +1005,7 @@ class User extends Common_functions
         // save to session
         $this->write_session_parameters();
 
-        $this->Result->show('success', _('Login successful'));
+        $this->Result->warn('success', _('Login successful'));
         $this->Log->write(_('User login'), _('User').' '.$this->user->real_name.' '._('logged in'), 0, $username);
 
         // write last logintime
@@ -1073,7 +1073,7 @@ class User extends Common_functions
             $dirconn = new adLDAP($dirparams);
         } catch (adLDAPException $adldapException) {
             $this->Log->write(_('Directory connection error'), _('Failed to connect').': '.$adldapException->getMessage(), 2);
-            $this->Result->show('danger', _('Error: ').$adldapException->getMessage(), true);
+            $this->Result->die('danger', _('Error: ').$adldapException->getMessage());
         }
 
         return $dirconn;
@@ -1108,7 +1108,7 @@ class User extends Common_functions
                 $this->write_session_parameters();
 
                 $this->Log->write($method.' '._('login'), _('User').' '.$this->user->real_name.' '._('logged in via').' '.$method, 0, $username);
-                $this->Result->show('success', $method.' '._('Login successful'));
+                $this->Result->warn('success', $method.' '._('Login successful'));
 
                 // write last logintime
                 $this->update_login_time();
@@ -1119,11 +1119,11 @@ class User extends Common_functions
                 $this->block_ip();
                 $this->log_failed_access($username);
                 $this->Log->write($method.' '._('login'), _('User').' '.$username.' '._('failed to authenticate against').' '.$method, 1, $username);
-                $this->Result->show('danger', _('Invalid username or password'), true);
+                $this->Result->die('danger', _('Invalid username or password'));
             }
         } catch (adLDAPException $adldapException) {
             $this->Log->write(_('Error'), _('Something went wrong during auth: ').$adldapException->getMessage(), 2, $username);
-            $this->Result->show('danger', _('Error: ').$adldapException->getMessage(), true);
+            $this->Result->die('danger', _('Error: ').$adldapException->getMessage());
         }
     }
 
@@ -1234,7 +1234,7 @@ class User extends Common_functions
             $authenticated = $client->accessRequestEapMsChapV2($username, $password);
         } else {
             // fault
-            $this->Result->show('danger', _('Invalid radius authentication method'), true);
+            $this->Result->die('danger', _('Invalid radius authentication method'));
         }
 
         // authenticate user
@@ -1245,7 +1245,7 @@ class User extends Common_functions
             $this->write_session_parameters();
 
             $this->Log->write(_('Radius login'), _('User').' '.$this->user->real_name.' '._('logged in via radius'), 0, $username);
-            $this->Result->show('success', _('Radius login successful'));
+            $this->Result->warn('success', _('Radius login successful'));
 
             // write last logintime
             $this->update_login_time();
@@ -1256,7 +1256,7 @@ class User extends Common_functions
             $this->block_ip();
             $this->log_failed_access($username);
             $this->Log->write(_('Radius login'), _('Failed to authenticate user on radius server'), 2, $username);
-            $this->Result->show('danger', _('Invalid username or password'), true);
+            $this->Result->die('danger', _('Invalid username or password'));
             // debug ?
             if ($this->debugging) {
                 print "<pre style='width:700px;margin:auto;margin-top:10px;'>";
@@ -1281,7 +1281,7 @@ class User extends Common_functions
         $this->write_session_parameters();
 
         $this->Log->write(_('SAML2 login'), _('User').' '.$this->user->real_name.' '._('logged in via SAML2'), 0, $username);
-        $this->Result->show('success', _('SAML2 login successful'));
+        $this->Result->warn('success', _('SAML2 login successful'));
 
         // write last logintime
         $this->update_login_time();
@@ -1301,7 +1301,7 @@ class User extends Common_functions
         if ($this->user->disabled == 'Yes') {
             $this->log_failed_access($username);
             $this->Log->write(_('login'), _('User account is disabled'), 2, $username);
-            $this->Result->show('danger', _('User account is disabled'), true);
+            $this->Result->die('danger', _('User account is disabled'));
         } elseif ($this->settings->dbversion >= 40 && $this->settings->{'passkeys'} == '1') {
             // is passkey login enforced ?
             if ($this->user->passkey_only == 1) {
@@ -1312,7 +1312,7 @@ class User extends Common_functions
                 if (count($user_passkeys) > 0) {
                     $this->log_failed_access($username);
                     $this->Log->write(_('Passkey login'), _('Passkey required for login'), 2, $username);
-                    $this->Result->show('danger', _('Only passkey authentication is possible for this account'), true);
+                    $this->Result->die('danger', _('Only passkey authentication is possible for this account'));
                 }
             }
         }
@@ -1403,7 +1403,7 @@ class User extends Common_functions
         try {
             return $this->Database->findObjects('passkeys', 'user_id', $user_id);
         } catch (Exception $exception) {
-            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
+            ! $this->debugging ?: $this->Result->warn('danger', $exception->getMessage());
         }
     }
 
@@ -1418,7 +1418,7 @@ class User extends Common_functions
         try {
             return $this->Database->findObject('passkeys', 'keyId', $keyId);
         } catch (Exception $exception) {
-            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
+            ! $this->debugging ?: $this->Result->warn('danger', $exception->getMessage());
         }
     }
 
@@ -1457,7 +1457,7 @@ class User extends Common_functions
 
             return true;
         } catch (Exception $exception) {
-            $this->debugging ?: $this->Result->show('danger', _('Database error: ').$exception->getMessage(), false);
+            $this->debugging ?: $this->Result->warn('danger', _('Database error: ').$exception->getMessage());
 
             return false;
         }
@@ -1476,7 +1476,7 @@ class User extends Common_functions
 
             return true;
         } catch (Exception $exception) {
-            $this->debugging ?: $this->Result->show('danger', _('Database error: ').$exception->getMessage(), false);
+            $this->debugging ?: $this->Result->warn('danger', _('Database error: ').$exception->getMessage());
 
             return false;
         }
@@ -1591,7 +1591,7 @@ class User extends Common_functions
             return '$5$rounds=3000$';
         }
 
-        $this->Result->show('danger', _('No crypt types supported'), true);
+        $this->Result->die('danger', _('No crypt types supported'));
 
         return null;
     }
@@ -1633,10 +1633,10 @@ class User extends Common_functions
         try {
             $this->Database->updateObject('users', ['password' => $this->crypt_user_pass($password), 'passChange' => 'No', 'id' => $this->user->id], 'id');
         } catch (Exception $exception) {
-            $this->Result->show('danger', $exception->getMessage(), true);
+            $this->Result->die('danger', $exception->getMessage());
         }
 
-        $this->Result->show('success', _('Hi').', '.$this->user->real_name.', '._('your password was updated').". <a class='btn btn-sm btn-default' href='".create_link('dashboard')."'>Dashboard</a>", false);
+        $this->Result->warn('success', _('Hi').', '.$this->user->real_name.', '._('your password was updated').". <a class='btn btn-sm btn-default' href='".create_link('dashboard')."'>Dashboard</a>");
     }
 
     /**
@@ -1682,7 +1682,7 @@ class User extends Common_functions
         try {
             $this->Database->updateObject('users', $items);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
             $this->Log->write(_('User self update'), _('User self update failed').'!<br>'.$log, 2);
 
             return false;
@@ -1709,7 +1709,7 @@ class User extends Common_functions
         try {
             $this->Database->updateObject('users', ['widgets' => $widgets, 'id' => $this->user->id]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1731,7 +1731,7 @@ class User extends Common_functions
             try {
                 $this->Database->updateObject('users', ['lastLogin' => date('Y-m-d H:i:s'), 'id' => $this->user->id]);
             } catch (Exception $e) {
-                $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+                $this->Result->warn('danger', _('Error: ').$e->getMessage());
 
                 return false;
             }
@@ -1786,7 +1786,7 @@ class User extends Common_functions
         try {
             $cnt = $this->Database->getObjectQuery('loginAttempts', $query, [$this->ip]);
         } catch (Exception $exception) {
-            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
+            ! $this->debugging ?: $this->Result->warn('danger', $exception->getMessage());
         }
 
         // verify
@@ -1839,7 +1839,7 @@ class User extends Common_functions
         try {
             $this->Database->runQuery($query);
         } catch (Exception $exception) {
-            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
+            ! $this->debugging ?: $this->Result->warn('danger', $exception->getMessage());
         }
     }
 
@@ -1855,7 +1855,7 @@ class User extends Common_functions
         try {
             $this->Database->runQuery($query, [$this->ip]);
         } catch (Exception $exception) {
-            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
+            ! $this->debugging ?: $this->Result->warn('danger', $exception->getMessage());
         }
     }
 
@@ -1869,7 +1869,7 @@ class User extends Common_functions
         try {
             $this->Database->insertObject('loginAttempts', ['ip' => $this->ip, 'count' => 1]);
         } catch (Exception $exception) {
-            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
+            ! $this->debugging ?: $this->Result->warn('danger', $exception->getMessage());
         }
     }
 
@@ -1883,7 +1883,7 @@ class User extends Common_functions
         try {
             $this->Database->deleteRow('loginAttempts', 'ip', $this->ip);
         } catch (Exception $exception) {
-            ! $this->debugging ?: $this->Result->show('danger', $exception->getMessage(), false);
+            ! $this->debugging ?: $this->Result->warn('danger', $exception->getMessage());
         }
     }
 
@@ -2069,7 +2069,7 @@ class User extends Common_functions
         $valid = $this->get_l2domain_permissions($l2domain) >= $required_level;
         // return or die ?
         if ($die === true && ! $valid) {
-            $this->Result->show('danger', _('You do not have permissions to access this object'), true, $popup);
+            $this->Result->die('danger', _('You do not have permissions to access this object'), $popup);
         }
 
         return (bool) $valid;
@@ -2140,7 +2140,7 @@ class User extends Common_functions
         $valid = $this->get_module_permissions($module_name) >= $required_level;
         // return or die ?
         if ($die === true && ! $valid) {
-            $this->Result->show('danger', _('You do not have permissions to access this module'), true, $popup);
+            $this->Result->die('danger', _('You do not have permissions to access this module'), $popup);
         }
 
         return (bool) $valid;
@@ -2256,7 +2256,7 @@ class User extends Common_functions
      */
     public function is_demo($popup = false)
     {
-        ! defined('IS_DEMO') ?: $this->Result->show('danger', '<h4>Demo website !</h4><hr>This script is disabled in demo page!', true, $popup);
+        ! defined('IS_DEMO') ?: $this->Result->die('danger', '<h4>Demo website !</h4><hr>This script is disabled in demo page!', $popup);
     }
 }
 

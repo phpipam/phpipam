@@ -24,20 +24,20 @@ if ($POST->action == 'edit') {
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // validations
 if ($POST->action == 'delete' || $POST->action == 'edit') {
     if ($Admin->fetch_object('locations', 'id', $POST->id) === false) {
-        $Result->show('danger', _('Invalid Location object identifier'), false);
+        $Result->warn('danger', _('Invalid Location object identifier'));
     }
 }
 
 if ($POST->action == 'add' || $POST->action == 'edit') {
     // name
     if (is_blank($POST->name)) {
-        $Result->show('danger', _('Name must have at least 1 character'), true);
+        $Result->die('danger', _('Name must have at least 1 character'));
     }
 
     // lat, long
@@ -45,14 +45,14 @@ if ($POST->action == 'add' || $POST->action == 'edit') {
         // lat
         if (! is_blank($POST->lat)) {
             if (! preg_match('/^(\-?\d+(\.\d+)?).\s*(\-?\d+(\.\d+)?)$/', (string) $POST->lat)) {
-                $Result->show('danger', _('Invalid Latitude'), true);
+                $Result->die('danger', _('Invalid Latitude'));
             }
         }
 
         // long
         if (! is_blank($POST->long)) {
             if (! preg_match('/^(\-?\d+(\.\d+)?).\s*(\-?\d+(\.\d+)?)$/', (string) $POST->long)) {
-                $Result->show('danger', _('Invalid Longitude'), true);
+                $Result->die('danger', _('Invalid Longitude'));
             }
         }
 
@@ -65,7 +65,7 @@ if ($POST->action == 'add' || $POST->action == 'edit') {
                 $POST->long = $latlng['lng'];
             } else {
                 if (! Config::ValueOf('offline_mode')) {
-                    $Result->show('warning', _('Failed to update location lat/lng from Nominatim').'.<br>'.$latlng['error'], false);
+                    $Result->warn('warning', _('Failed to update location lat/lng from Nominatim').'.<br>'.$latlng['error']);
                 }
             }
         }
@@ -88,9 +88,9 @@ $values = array_merge($values, $update);
 
 // execute update
 if (! $Admin->object_modify('locations', $POST->action, 'id', $values)) {
-    $Result->show('danger', _('Location').' '.$User->get_post_action().' '._('failed'), false);
+    $Result->warn('danger', _('Location').' '.$User->get_post_action().' '._('failed'));
 } else {
-    $Result->show('success', _('Location').' '.$User->get_post_action().' '._('successful'), false);
+    $Result->warn('success', _('Location').' '.$User->get_post_action().' '._('successful'));
 }
 
 // remove all references

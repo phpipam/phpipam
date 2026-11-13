@@ -23,7 +23,7 @@ $csrf = $User->Crypto->csrf_session_token();
 
 // id must be numeric
 if (! is_numeric($POST->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // get subnet details
@@ -32,7 +32,7 @@ $subnet = $Subnets->fetch_subnet(null, $POST->subnetId);
 // verify that user has write permissions for subnet
 $subnetPerm = $Subnets->check_permission($User->user, $subnet->id);
 if ($subnetPerm < 3) {
-    $Result->show('danger', _('You do not have permissions to resize subnet').'!', true, true);
+    $Result->die('danger', _('You do not have permissions to resize subnet').'!', true);
 }
 
 // on empty subnet it means it came from database validity check, fake id !

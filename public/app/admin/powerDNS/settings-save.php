@@ -24,18 +24,18 @@ $User->is_demo();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // validations
 if (is_blank($POST->name)) {
-    $Result->show('danger', 'Invalid database name', true);
+    $Result->die('danger', 'Invalid database name');
 }
 
 if (is_blank($POST->port)) {
     $POST->port = 3306;
 } elseif (! is_numeric($POST->port)) {
-    $Result->show('danger', 'Invalid port number', true);
+    $Result->die('danger', 'Invalid port number');
 }
 
 // formulate json
@@ -68,9 +68,9 @@ $values_new = ['id' => 1,
     'powerDNS' => json_encode($values),
 ];
 if (! $Admin->object_modify('settings', 'edit', 'id', $values_new)) {
-    $Result->show('danger', _('Cannot update settings'), false);
+    $Result->warn('danger', _('Cannot update settings'));
 } else {
-    $Result->show('success', _('Settings updated successfully'), false);
+    $Result->warn('success', _('Settings updated successfully'));
 }
 
 // autoserial change - set default SOA for all records !

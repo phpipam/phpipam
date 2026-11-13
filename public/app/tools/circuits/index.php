@@ -28,7 +28,7 @@ require __DIR__.'/../../tools/circuits/menu.php';
 
 // perm check
 if ($User->get_module_permissions('circuits') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 // load subpage
 elseif (! isset($GET->subnetId) || ($GET->subnetId == 'providers' && ! isset($GET->sPage))) {

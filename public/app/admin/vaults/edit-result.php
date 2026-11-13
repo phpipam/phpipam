@@ -22,11 +22,11 @@ $User->check_maintaneance_mode();
 
 // make sure user has access
 if ($User->get_module_permissions('vaults') < User::ACCESS_RWA) {
-    $Result->show('danger', _('Insufficient privileges').'.', true, true);
+    $Result->die('danger', _('Insufficient privileges').'.', true);
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // fetch custom fields
@@ -46,20 +46,20 @@ if ($POST->action != 'delete') {
 // ad - check secret length
 if ($POST->action == 'add') {
     if (strlen((string) $POST->secret) < 8) {
-        $Result->show('danger', _('Secret must be at least 8 characters long!'), true);
+        $Result->die('danger', _('Secret must be at least 8 characters long!'));
     }
 
     // enforce password policy
     $policy = (db_json_decode($User->settings->passwordPolicy, true));
     $Password_check->set_requirements($policy, explode(',', (string) $policy['allowedSymbols']));
     if (! $Password_check->validate($POST->secret)) {
-        $Result->show('danger alert-danger ', _('Secret validation errors').':<br> - '.implode('<br> - ', $Password_check->get_errors()), true);
+        $Result->die('danger alert-danger ', _('Secret validation errors').':<br> - '.implode('<br> - ', $Password_check->get_errors()));
     }
 }
 
 // die if errors
 if (count($error) > 0) {
-    $Result->show('danger', $error, true);
+    $Result->die('danger', $error);
 } else {
     // create array of values for modification
     $values = [
@@ -87,8 +87,8 @@ if (count($error) > 0) {
 
     // execute
     if (! $Admin->object_modify('vaults', $POST->action, 'id', $values)) {
-        $Result->show('danger', _('Vault').' '.$User->get_post_action().' '._('error'), true);
+        $Result->die('danger', _('Vault').' '.$User->get_post_action().' '._('error'));
     } else {
-        $Result->show('success', _('Vault').' '.$User->get_post_action().' '._('success'), true);
+        $Result->die('success', _('Vault').' '.$User->get_post_action().' '._('success'));
     }
 }

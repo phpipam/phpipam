@@ -47,7 +47,7 @@ if (! isset($GET->subnetId)) {
 
 // check
 if (! array_key_exists($GET->subnetId, $subpages)) {
-    $Result->show('danger', 'Invalid request', true);
+    $Result->die('danger', 'Invalid request');
 }
 
 // print

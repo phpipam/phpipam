@@ -35,7 +35,7 @@ $custom = $Tools->fetch_custom_fields('circuits');
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->circuitid)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch circuit details
@@ -43,7 +43,7 @@ if (($POST->action == 'edit') || ($POST->action == 'delete')) {
     $circuit = $Admin->fetch_object('circuits', 'id', $POST->circuitid);
     // false
     if ($circuit === false) {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 }
 // defaults
@@ -60,7 +60,7 @@ $all_locations = $Tools->fetch_all_objects('locations', 'name');
 // no providers
 if ($circuit_providers === false) {
     $btn = $User->get_module_permissions('circuits') >= User::ACCESS_RWA ? "<hr><a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='add' data-providerid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add provider').'</a>' : '';
-    $Result->show('danger', _('No circuit providers configured.'.'<hr>'.$btn), true, true);
+    $Result->die('danger', _('No circuit providers configured.'.'<hr>'.$btn), true);
 }
 
 // get types

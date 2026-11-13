@@ -15,15 +15,15 @@ $User->check_user_session();
 
 // perm check
 if ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 // validate
 elseif (! is_numeric($GET->subnetId)) {
-    $Result->show('danger', _('Invalid Id'), true);
+    $Result->die('danger', _('Invalid Id'));
 } else {
     // check that location support isenabled
     if ($User->settings->enablePSTN != '1') {
-        $Result->show('danger', _('PSTN prefixes module disabled.'), false);
+        $Result->warn('danger', _('PSTN prefixes module disabled.'));
     } else {
         // fetch all prefixes
         $prefix = $Tools->fetch_object('pstnPrefixes', 'id', $GET->subnetId);
@@ -32,7 +32,7 @@ elseif (! is_numeric($GET->subnetId)) {
         $cfields = $Tools->fetch_custom_fields('pstnPrefixes');
 
         if ($prefix === false) {
-            $Result->show('danger', _('Prefix not found'), false);
+            $Result->warn('danger', _('Prefix not found'));
         } else {
             // raw prefix number
             $prefix->prefix_raw = $Tools->prefix_normalize($prefix->prefix);

@@ -26,32 +26,32 @@ if ($POST->action == 'edit') {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // fetch old record
 if ($POST->action != 'add') {
     $record = $PowerDNS->fetch_record($POST->id);
-    $record !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+    $record !== false ?: $Result->die('danger', _('Invalid ID'), true);
 }
 
 // edit and add - check that smth is in name and content!
 if ($POST->action != 'delete') {
     if (strlen((string) $POST->name) < 2) {
-        $Result->show('danger', _('Invalid name'), true);
+        $Result->die('danger', _('Invalid name'));
     }
 
     if (strlen((string) $POST->content) < 2) {
-        $Result->show('danger', _('Invalid content'), true);
+        $Result->die('danger', _('Invalid content'));
     }
 }
 
 // dont permit modifications on slave domain
 $domain = $PowerDNS->fetch_domain($POST->domain_id);
-$domain !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+$domain !== false ?: $Result->die('danger', _('Invalid ID'), true);
 
 if (strtolower((string) $domain->type) == 'slave') {
-    $Result->show('danger', _('Adding domain record on slave zone is not permitted'), true);
+    $Result->die('danger', _('Adding domain record on slave zone is not permitted'));
 }
 
 // validate and set values

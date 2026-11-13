@@ -174,7 +174,7 @@ class Subnets extends Common_functions
             return $this->subnet_resize($values['id'], $values['subnet'], $values['mask']);
         }
 
-        return $this->Result->show('danger', _('Invalid action'), true);
+        return $this->Result->die('danger', _('Invalid action'));
     }
 
     /**
@@ -248,7 +248,7 @@ class Subnets extends Common_functions
         try {
             $this->Database->insertObject('subnets', $values);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
             $this->Log->write(_('Subnet creation'), _('Failed to add new subnet').'.<hr>'.$exception->getMessage(), 2);
 
             return false;
@@ -282,7 +282,7 @@ class Subnets extends Common_functions
         if (isset($values['isPool']) && $old_subnet->isPool == 1 && $values['isPool'] == 0) {
             if ($this->network_or_broadcast_address_in_use($old_subnet)) {
                 $errmsg = _('Can not disable isPool, network or broadcast address is allocated');
-                $this->Result->show('danger', $errmsg, false);
+                $this->Result->warn('danger', $errmsg);
                 $this->Log->write(_('Subnet edit'), _('Failed to edit subnet').'.<hr>'.$errmsg, 2);
 
                 return false;
@@ -293,7 +293,7 @@ class Subnets extends Common_functions
         try {
             $this->Database->updateObject('subnets', $values, 'id');
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
             $this->Log->write(_('Subnet edit'), _('Failed to edit subnet').'.<hr>'.$exception->getMessage(), 2);
 
             return false;
@@ -343,7 +343,7 @@ class Subnets extends Common_functions
             $this->Database->deleteRow('subnets', 'id', $id);
         } catch (Exception $exception) {
             $this->Log->write(_('Subnet delete'), _('Failed to delete subnet').' '.$old_subnet->name.'.<hr>'.$exception->getMessage(), 2);
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -374,7 +374,7 @@ class Subnets extends Common_functions
             $this->Database->deleteRow('ipaddresses', 'subnetId', $subnetId);
         } catch (Exception $exception) {
             $this->Log->write(_('Subnet truncate'), _('Failed to truncate subnet').' '.$old_subnet->description.' '._('id').' '.$old_subnet->id.'.<hr>'.$exception->getMessage(), 2);
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), true);
+            $this->Result->die('danger', _('Error: ').$exception->getMessage());
         }
 
         $this->Log->write(_('Subnet truncate'), _('Subnet').' '.$old_subnet->description.' '._('id').' '.$old_subnet->id.' '._('truncated'), 0);
@@ -398,7 +398,7 @@ class Subnets extends Common_functions
         try {
             $this->Database->updateObject('subnets', ['id' => $subnetId, 'subnet' => $subnet, 'mask' => $mask], 'id');
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
             $this->Log->write(_('Subnet edit'), _('Failed to resize subnet').' '.$old_subnet->description.' '._('id').' '.$old_subnet->id.'.<hr>'.$exception->getMessage(), 2);
 
             return false;
@@ -479,7 +479,7 @@ class Subnets extends Common_functions
             // replace all subnetIds in IP addresses to new subnet
             if (count($ids) > 0) {
                 if (! $Admin->object_modify('ipaddresses', 'edit-multiple', $ids, ['subnetId' => $this->lastInsertId])) {
-                    $this->Result->show('danger', _('Failed to move IP address'), true);
+                    $this->Result->die('danger', _('Failed to move IP address'));
                 }
             }
         }
@@ -487,7 +487,7 @@ class Subnets extends Common_functions
         // do we need to remove old subnet?
         if ($group != 'yes') {
             if (! $Admin->object_modify('subnets', 'delete', 'id', ['id' => $subnet_old->id])) {
-                $this->Result->show('danger', _('Failed to remove old subnet'), true);
+                $this->Result->die('danger', _('Failed to remove old subnet'));
             }
         }
 
@@ -511,7 +511,7 @@ class Subnets extends Common_functions
         try {
             $all_nats = $this->Database->getObjectsQuery('nat', 'select * from `nat` where `src` like :id or `dst` like :id', ['id' => '%"'.$obj_id.'"%']);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -544,7 +544,7 @@ class Subnets extends Common_functions
 
                     if ($Admin->object_modify('nat', 'edit', 'id', ['id' => $nat->id, 'src' => $src_new, 'dst' => $dst_new]) !== false) {
                         if ($print) {
-                            $this->Result->show('success', _('Subnet removed from NAT'), false);
+                            $this->Result->warn('success', _('Subnet removed from NAT'));
                         }
                     }
                 }
@@ -616,7 +616,7 @@ class Subnets extends Common_functions
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query, [$sectionId]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -756,7 +756,7 @@ class Subnets extends Common_functions
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -777,7 +777,7 @@ class Subnets extends Common_functions
         try {
             $subnets = $this->Database->getObjects('subnets');
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -831,7 +831,7 @@ class Subnets extends Common_functions
         try {
             $overlaping_subnets = $this->Database->getObjectsQuery('subnets', implode("\n", $query));
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -908,7 +908,7 @@ class Subnets extends Common_functions
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query, [$agentId]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -948,7 +948,7 @@ class Subnets extends Common_functions
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query, $params);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -995,7 +995,7 @@ class Subnets extends Common_functions
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', 'select * from subnets where `linked_subnet` = ?', [$subnetId]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1042,7 +1042,7 @@ class Subnets extends Common_functions
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query, $params);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1085,7 +1085,7 @@ class Subnets extends Common_functions
         try {
             $agents = $this->Database->getObjects('scanAgents');
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1112,7 +1112,7 @@ class Subnets extends Common_functions
         try {
             $subnets = $this->Database->getObjectsQuery('subnets', $query, [$agentId]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1134,7 +1134,7 @@ class Subnets extends Common_functions
         try {
             $gateway = $this->Database->getObjectQuery('ipaddresses', $query, [$subnetId]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1307,7 +1307,7 @@ class Subnets extends Common_functions
                 $this->slaves[] = (int) $slave->id;
             }
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
         }
     }
 
@@ -1410,7 +1410,7 @@ class Subnets extends Common_functions
         try {
             $subnet = $this->Database->getObjectQuery('subnets', 'select * from `subnets` where `subnet`=? and `mask`=? and `sectionId`=?;', [$this->transform_address($tmp[0], 'decimal'), $tmp[1], $sectionId]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1535,7 +1535,7 @@ class Subnets extends Common_functions
                 );
             }
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
         }
 
         return [$iptags, [], []];
@@ -1633,7 +1633,7 @@ class Subnets extends Common_functions
                 );
             }
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
         }
 
         return [$iptags, $leaf_nodes, $full_nodes];
@@ -1965,7 +1965,7 @@ class Subnets extends Common_functions
         try {
             $res = $this->Database->getObjectsQuery('ipaddresses', $query, [$subnet->id, $network, $broadcast]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -2675,11 +2675,11 @@ class Subnets extends Common_functions
 
         // new mask must be > 8
         if ($mask < 8) {
-            $this->Result->show('danger', _('New mask must be at least /8').'!', true);
+            $this->Result->die('danger', _('New mask must be at least /8').'!');
         }
 
         if (! is_numeric($mask)) {
-            $this->Result->show('danger', _('Mask must be an integer').'!', true);
+            $this->Result->die('danger', _('Mask must be an integer').'!');
 
         }
 
@@ -2690,12 +2690,12 @@ class Subnets extends Common_functions
         // verify new address
         $verify = $this->verify_cidr_address($this->transform_address($subnet, 'dotted').'/'.$mask);
         if ($verify !== true) {
-            $this->Result->show('danger', $verify, true);
+            $this->Result->die('danger', $verify);
         }
 
         // same mask - ignore
         if ($mask == $mask_old) {
-            $this->Result->show('warning', _('New network is same as old network'), true);
+            $this->Result->die('warning', _('New network is same as old network'));
         } elseif ($mask < $mask_old) {
             // if we are expanding network get new network address!
             // Checks for strict mode
@@ -2707,12 +2707,12 @@ class Subnets extends Common_functions
                     if ($parent_subnet->isFolder != 1) {
                         // check that new is inside its master subnet
                         if (! $this->verify_subnet_nesting($parent_subnet->id, $this->transform_to_dotted($subnet).'/'.$mask)) {
-                            $this->Result->show('danger', _('New subnet not in master subnet').'!', true);
+                            $this->Result->die('danger', _('New subnet not in master subnet').'!');
                         }
 
                         // it cannot be same !
                         if ($parent_subnet->mask == $mask) {
-                            $this->Result->show('danger', _('New subnet cannot be same as master subnet').'!', true);
+                            $this->Result->die('danger', _('New subnet cannot be same as master subnet').'!');
                         }
 
                         // fetch all slave subnets and validate
@@ -2723,7 +2723,7 @@ class Subnets extends Common_functions
                                     // not self
                                     if ($ss->id != $subnetId) {
                                         if ($this->verify_overlapping($this->transform_to_dotted($subnet).'/'.$mask, $this->transform_to_dotted($ss->subnet).'/'.$ss->mask)) {
-                                            $this->Result->show('danger', _('Subnet overlaps with').' '.$this->transform_to_dotted($ss->subnet).'/'.$ss->mask, true);
+                                            $this->Result->die('danger', _('Subnet overlaps with').' '.$this->transform_to_dotted($ss->subnet).'/'.$ss->mask);
                                         }
                                     }
                                 }
@@ -2740,7 +2740,7 @@ class Subnets extends Common_functions
                                 if ($fs->id != $subnetId) {
                                     // verify that all nested are inside its parent
                                     if ($this->verify_overlapping($this->transform_to_dotted($subnet).'/'.$mask, $this->transform_to_dotted($fs->subnet).'/'.$fs->mask)) {
-                                        $this->Result->show('danger', _('Subnet overlaps with').' '.$this->transform_to_dotted($fs->subnet).'/'.$fs->mask, true);
+                                        $this->Result->die('danger', _('Subnet overlaps with').' '.$this->transform_to_dotted($fs->subnet).'/'.$fs->mask);
                                     }
                                 }
                             }
@@ -2751,7 +2751,7 @@ class Subnets extends Common_functions
                     $section_subnets = $this->fetch_section_subnets($section->id);
                     $overlap = $this->verify_subnet_resize_overlapping($section->id, $this->transform_to_dotted($subnet).'/'.$mask, $subnetId, $vrfId);
                     if ($overlap !== false) {
-                        $this->Result->show('danger', $overlap, true);
+                        $this->Result->die('danger', $overlap);
                     }
                 }
             }
@@ -2783,12 +2783,12 @@ class Subnets extends Common_functions
                     foreach ($nested as $nested_subnet) {
                         // if masks and subnets match they are same, error!
                         if ($nested_subnet->subnet == $subnet && $nested_subnet->mask == $mask) {
-                            $this->Result->show('danger', _('Subnet is same as').' '.$this->transform_to_dotted($nested_subnet->subnet)."/$nested_subnet->mask - $nested_subnet->description)", true);
+                            $this->Result->die('danger', _('Subnet is same as').' '.$this->transform_to_dotted($nested_subnet->subnet)."/$nested_subnet->mask - $nested_subnet->description)");
                         }
 
                         // verify that all nested are inside its parent
                         if (! $this->is_subnet_inside_subnet($this->transform_to_dotted($nested_subnet->subnet).'/'.$nested_subnet->mask, $this->transform_to_dotted($subnet).'/'.$mask)) {
-                            $this->Result->show('danger', _('Nested subnet out of new subnet').'!<br>('.$this->transform_to_dotted($nested_subnet->subnet)."/$nested_subnet->mask - $nested_subnet->description)", true);
+                            $this->Result->die('danger', _('Nested subnet out of new subnet').'!<br>('.$this->transform_to_dotted($nested_subnet->subnet)."/$nested_subnet->mask - $nested_subnet->description)");
                         }
                     }
                 }
@@ -2835,7 +2835,7 @@ class Subnets extends Common_functions
                 break;
                 // otherwise die
             default:
-                $this->Result->show('danger', _('Invalid number of subnets'), true);
+                $this->Result->die('danger', _('Invalid number of subnets'));
         }
 
         // set new mask
@@ -2894,7 +2894,7 @@ class Subnets extends Common_functions
                     foreach ($newsubnets as $new_subnet) {
                         $new_subnet = (object) $new_subnet;
                         if ($this->verify_overlapping($this->transform_to_dotted($new_subnet->subnet).'/'.$new_subnet->mask, $this->transform_to_dotted($nested_subnet->subnet).'/'.$nested_subnet->mask) === true) {
-                            $this->Result->show('danger', _('Subnet overlapping - ').$this->transform_to_dotted($new_subnet->subnet).'/'.$new_subnet->mask.' '._('overlaps with').' '.$this->transform_to_dotted($nested_subnet->subnet).'/'.$nested_subnet->mask, true);
+                            $this->Result->die('danger', _('Subnet overlapping - ').$this->transform_to_dotted($new_subnet->subnet).'/'.$new_subnet->mask.' '._('overlaps with').' '.$this->transform_to_dotted($nested_subnet->subnet).'/'.$nested_subnet->mask);
                         }
                     }
                 }
@@ -2955,7 +2955,7 @@ class Subnets extends Common_functions
         try {
             $res = $this->Database->getObjectsQuery('subnets', "select distinct(`masterSubnetId`) from `subnets` where `masterSubnetId` != '0' order by `masterSubnetId` asc;");
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -2975,7 +2975,7 @@ class Subnets extends Common_functions
         try {
             $res = $this->Database->numObjectsFilter('subnets', 'id', $id);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -2995,7 +2995,7 @@ class Subnets extends Common_functions
         try {
             $res = $this->Database->getObjectsQuery('subnets', "select * from `subnets` where `threshold` != 0 and `threshold` is not null limit $limit;");
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3019,7 +3019,7 @@ class Subnets extends Common_functions
         try {
             $res = $this->Database->getObjectsQuery('ipaddresses', "select ipaddresses.* from `ipaddresses` join subnets on ipaddresses.subnetId = subnets.id where subnets.pingSubnet = 1 and `lastSeen` between ? and ? order by lastSeen desc limit $limit;", [date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) - $timelimit), date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) - (int) str_replace(';', '', (string) strstr((string) $this->settings->pingStatus, ';')))]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3046,7 +3046,7 @@ class Subnets extends Common_functions
         try {
             $res = $this->Database->getObjectsQuery('subnets', $query);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3092,7 +3092,7 @@ class Subnets extends Common_functions
         try {
             $res = $this->Database->getObjectsQuery('ipaddresses', $query);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3110,7 +3110,7 @@ class Subnets extends Common_functions
             try {
                 $res2 = $this->Database->getObjectsQuery('subnets', $query);
             } catch (Exception $e) {
-                $this->Result->show('danger', _('Error: ').$e->getMessage());
+                $this->Result->warn('danger', _('Error: ').$e->getMessage());
 
                 return false;
             }
@@ -3207,7 +3207,7 @@ class Subnets extends Common_functions
         try {
             $res = $this->Database->getObjectsQuery('ipaddresses', $query, [$mac, $address_id]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3256,7 +3256,7 @@ class Subnets extends Common_functions
         try {
             $res = $this->Database->getObjectsQuery('ipaddresses', $query, [$mac, $address_id]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3461,14 +3461,14 @@ class Subnets extends Common_functions
                         $name = $s->description;
                     }
 
-                    $this->Result->show('danger', _('Failed to set subnet permissions for subnet')." $name!", true);
+                    $this->Result->die('danger', _('Failed to set subnet permissions for subnet')." $name!");
 
                     return false;
                 }
             }
         } catch (Exception $exception) {
             $this->Database->rollBack();
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), true);
+            $this->Result->die('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -3476,9 +3476,9 @@ class Subnets extends Common_functions
         // ok
         $this->Database->commit();
         if (count($subnets) > 1) {
-            $this->Result->show('success', _('Subnet permissions recursively set').'!');
+            $this->Result->warn('success', _('Subnet permissions recursively set').'!');
         } else {
-            $this->Result->show('success', _('Subnet permissions set').'!');
+            $this->Result->warn('success', _('Subnet permissions set').'!');
         }
 
         return true;
@@ -3534,13 +3534,13 @@ class Subnets extends Common_functions
         // must be numeric
         if (isset($_GET['section'])) {
             if (! is_numeric($_GET['section'])) {
-                $this->Result->show('danger', _('Invalid ID'), true);
+                $this->Result->die('danger', _('Invalid ID'));
             }
         }
 
         if (isset($_GET['subnetId'])) {
             if (! is_numeric($_GET['subnetId'])) {
-                $this->Result->show('danger', _('Invalid ID'), true);
+                $this->Result->die('danger', _('Invalid ID'));
             }
         }
 
@@ -3654,13 +3654,13 @@ class Subnets extends Common_functions
         // must be numeric
         if (isset($_GET['section'])) {
             if (! is_numeric($_GET['section'])) {
-                $this->Result->show('danger', _('Invalid ID'), true);
+                $this->Result->die('danger', _('Invalid ID'));
             }
         }
 
         if (isset($_GET['subnetId'])) {
             if (! is_numeric($_GET['subnetId'])) {
-                $this->Result->show('danger', _('Invalid ID'), true);
+                $this->Result->die('danger', _('Invalid ID'));
             }
         }
 
@@ -3756,7 +3756,7 @@ class Subnets extends Common_functions
     {
         // must be integer
         if (! is_numeric($sectionId)) {
-            $this->Result->show('danger', _('Invalid ID'), true);
+            $this->Result->die('danger', _('Invalid ID'));
         }
 
         $folders = [];
@@ -3837,7 +3837,7 @@ class Subnets extends Common_functions
 
         // must be integer
         if (isset($_GET['subnetId']) && ! is_numeric($_GET['subnetId'])) {
-            $this->Result->show('danger', _('Invalid ID'), true);
+            $this->Result->die('danger', _('Invalid ID'));
         }
 
         $parent = $this->fetch_subnet(null, $subnetMasterId);
@@ -3907,7 +3907,7 @@ class Subnets extends Common_functions
 
         // must be integer
         if (! is_numeric(@$subnetMasterId)) {
-            $this->Result->show('danger', _('Invalid ID'), true);
+            $this->Result->die('danger', _('Invalid ID'));
         }
 
         $parent = $this->fetch_subnet(null, $subnetMasterId);
@@ -4098,13 +4098,13 @@ class Subnets extends Common_functions
     {
         // numeric check
         if (filter_var($as, FILTER_VALIDATE_INT) === false) {
-            $this->Result->show('danger', _('Invalid AS'), false);
+            $this->Result->warn('danger', _('Invalid AS'));
         }
 
         // open connection
         $ripe_connection = fsockopen('whois.ripe.net', 43, $errno, $errstr, 5);
         if (! $ripe_connection) {
-            $this->Result->show('danger', "$errstr ($errno)", false);
+            $this->Result->warn('danger', "$errstr ($errno)");
 
             return false;
         }

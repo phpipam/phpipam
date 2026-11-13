@@ -33,7 +33,7 @@ foreach ($POST as $k => $v) {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 /* checks */
@@ -41,7 +41,7 @@ if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
 // ID must be numeric
 if ($POST->action == 'edit' || $POST->action == 'delete') {
     if (! is_numeric($POST->userId)) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }
 }
 
@@ -49,7 +49,7 @@ if ($POST->action == 'edit' || $POST->action == 'delete') {
 if ($POST->action != 'delete') {
     // validate authMethod
     $auth_method = $Admin->fetch_object('usersAuthMethod', 'id', $POST->authMethod);
-    $auth_method !== false ?: $Result->show('danger', _('Invalid authentication method'), true);
+    $auth_method !== false ?: $Result->die('danger', _('Invalid authentication method'));
 
     // if password changes check and hash passwords
     if ($auth_method->type != 'local') {
@@ -60,14 +60,14 @@ if ($POST->action != 'delete') {
     if (! is_blank($POST->password1) || ($POST->action == 'add') && $auth_method->type == 'local') {
         // checks
         if ($POST->password1 != $POST->password2) {
-            $Result->show('danger', _('Passwords do not match'), true);
+            $Result->die('danger', _('Passwords do not match'));
         }
 
         // enforce password policy
         $policy = (db_json_decode($User->settings->passwordPolicy, true));
         $Password_check->set_requirements($policy, explode(',', (string) $policy['allowedSymbols']));
         if (! $Password_check->validate($POST->password1)) {
-            $Result->show('danger alert-danger ', _('Password validation errors').':<br> - '.implode('<br> - ', $Password_check->get_errors()), true);
+            $Result->die('danger alert-danger ', _('Password validation errors').':<br> - '.implode('<br> - ', $Password_check->get_errors()));
         }
 
         // hash passowrd
@@ -76,12 +76,12 @@ if ($POST->action != 'delete') {
 
     // general checks
     if (is_blank($POST->real_name)) {
-        $Result->show('danger', _('Real name field is mandatory!'), true);
+        $Result->die('danger', _('Real name field is mandatory!'));
     }
 
     // email format must be valid
     if (! $Tools->validate_email($POST->email)) {
-        $Result->show('danger', _('Invalid email address!'), true);
+        $Result->die('danger', _('Invalid email address!'));
     }
 
     // username must not already exist (if action is add)
@@ -89,29 +89,29 @@ if ($POST->action != 'delete') {
         // username > 8 chars
         if ($auth_method->type == 'local') {
             if (strlen((string) $POST->username) < 3) {
-                $Result->show('danger', _('Username must be at least 3 characters long!'), true);
+                $Result->die('danger', _('Username must be at least 3 characters long!'));
             }
         } else {
             if (is_blank($POST->username)) {
-                $Result->show('danger', _('Username must be at least 1 character long!'), true);
+                $Result->die('danger', _('Username must be at least 1 character long!'));
             }
         }
 
         // check duplicate
         if ($Admin->fetch_object('users', 'username', $POST->username) !== false) {
-            $Result->show('danger', _('User').' '.escape_input($POST->username).' '._('already exists!'), true);
+            $Result->die('danger', _('User').' '.escape_input($POST->username).' '._('already exists!'));
         }
     }
 }
 
 // admin user cannot be deleted
 if ($POST->action == 'delete' && $POST->userId == 1) {
-    $Result->show('danger', _('Admin user cannot be deleted'), true);
+    $Result->die('danger', _('Admin user cannot be deleted'));
 }
 
 // admin user cannot be disabled
 if ($POST->disabled == 'Yes' && $POST->userId == 1) {
-    $Result->show('danger', _('Admin user cannot be disabled'), true);
+    $Result->die('danger', _('Admin user cannot be disabled'));
 }
 
 // formulate update values
@@ -198,9 +198,9 @@ if ($User->settings->dbversion >= 40 && $User->settings->passkeys == 1) {
 
 // execute
 if (! $Admin->object_modify('users', $POST->action, 'id', $values)) {
-    $Result->show('danger', _('User').' '.$User->get_post_action().' '._('failed').'!', true);
+    $Result->die('danger', _('User').' '.$User->get_post_action().' '._('failed').'!');
 } else {
-    $Result->show('success', _('User').' '.$User->get_post_action().' '._('successful').'!', false);
+    $Result->warn('success', _('User').' '.$User->get_post_action().' '._('successful').'!');
 }
 
 // remove passkeys if required

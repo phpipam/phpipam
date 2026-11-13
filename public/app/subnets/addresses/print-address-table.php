@@ -42,13 +42,13 @@ $DNS = new DNS($Database, $User->settings, true);
 // checks
 if ($location !== 'customers') {
     if (count($subnet) == 0) {
-        $Result->show('danger', _('Subnet does not exist'), true);
+        $Result->die('danger', _('Subnet does not exist'));
     }                                  // subnet doesn't exist
     if ($subnet_permission == 0) {
-        $Result->show('danger', _('You do not have permission to access this network'), true);
+        $Result->die('danger', _('You do not have permission to access this network'));
     }      // not allowed to access
     if (! is_numeric($GET->subnetId)) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }                                             // subnet id must be numeric
 }
 

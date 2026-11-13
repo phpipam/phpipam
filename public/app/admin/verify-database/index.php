@@ -23,7 +23,7 @@ if (count($errors = $Tools->verify_database()) > 0) {
             print $table.' ';
             // get fix
             if (! $fix = $Tools->get_table_fix($table)) {
-                $Result->show('danger', _('Cannot get fix for table')." $table!", true);
+                $Result->die('danger', _('Cannot get fix for table')." $table!");
             } else {
                 print "<a class='btn btn-xs btn-default btn-tablefix' style='margin-left:8px;' href='' data-tableid='$table' data-fieldid='' data-type='table'><i class='fa fa-magic fa-pad-right'></i>"._('Fix table').'</a>';
                 print "<div id='fix-result-$table' style='display:none'></div>";
@@ -50,7 +50,7 @@ if (count($errors = $Tools->verify_database()) > 0) {
                 print 'Table `'.$table.'`: missing field `'.$f.'`;';
                 // get fix
                 if (! $fix = $Tools->get_field_fix($table, $f)) {
-                    $Result->show('danger', _('Cannot get fix for table field ')." `$table` `$f`!", true);
+                    $Result->die('danger', _('Cannot get fix for table field ')." `$table` `$f`!");
                 } else {
                     print "<a class='btn btn-xs btn-default btn-tablefix' style='margin-left:8px;'  href='' data-tableid='$table' data-fieldid='$f' data-type='field'><i class='fa fa-magic fa-pad-right'></i>"._('Fix field').'</a>';
                     print "<div id='fix-result-$table$f' style='display:none'></div>";
@@ -66,7 +66,7 @@ if (count($errors = $Tools->verify_database()) > 0) {
         print "<div class='clearfix'></div>";
     }
 } else {
-    $Result->show('success', _('All tables and fields are installed properly'), false);
+    $Result->warn('success', _('All tables and fields are installed properly'));
 }
 
 // we will also check for invalid subnets and addresses
@@ -74,7 +74,7 @@ print '<h4>'._('Invalid subnets').'</h4><hr>';
 
 $invalid_subnets = $Subnets->find_invalid_subnets();
 if ($invalid_subnets === false) {
-    $Result->show('success', _('No invalid subnets detected'), false);
+    $Result->warn('success', _('No invalid subnets detected'));
 } else {
     print 'Found following invalid subnets (with unexisting parent subnet):<hr>';
     // loop
@@ -90,7 +90,7 @@ print '<h4>'._('Invalid addresses').'</h4><hr>';
 
 $invalid_subnets = $Addresses->find_invalid_addresses();
 if ($invalid_subnets === false) {
-    $Result->show('success', _('No invalid addresses detected'), false);
+    $Result->warn('success', _('No invalid addresses detected'));
 } else {
     print 'Found following invalid addresses (with unexisting subnet):<hr>';
     // loop
@@ -109,5 +109,5 @@ if ($invalid_subnets === false) {
 print '<h4>'._('Missing indexes').'</h4><hr>';
 
 if ($Tools->verify_database_indexes() === true) {
-    $Result->show('success', _('No missing indexes detected'), false);
+    $Result->warn('success', _('No missing indexes detected'));
 }

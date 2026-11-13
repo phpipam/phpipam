@@ -20,22 +20,22 @@ $User->check_user_session();
 $User->check_module_permissions('nat', User::ACCESS_RW, true, true);
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // length
 if (is_blank($POST->ip)) {
-    $Result->show('danger', _('Please enter IP address'), true);
+    $Result->die('danger', _('Please enter IP address'));
 }
 
 // id
 if (! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid NAT item ID'), true);
+    $Result->die('danger', _('Invalid NAT item ID'));
 }
 
 // type
 if ($POST->type !== 'src' && $POST->type !== 'dst') {
-    $Result->show('danger', _('Invalid NAT direction'), true);
+    $Result->die('danger', _('Invalid NAT direction'));
 }
 
 // set searchterm
@@ -117,5 +117,5 @@ if (count($result_addresses) > 0 || count($result_subnets) > 0) {
     print implode("\n", $html1);
     print implode("\n", $html2);
 } else {
-    $Result->show('info', _('No results found'), false);
+    $Result->warn('info', _('No results found'));
 }

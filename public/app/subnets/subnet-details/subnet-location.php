@@ -5,7 +5,7 @@ $User->check_user_session();
 
 // perm check
 if ($User->get_module_permissions('locations') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), true);
+    $Result->die('danger', _('You do not have permissions to access this module'));
 }
 // only if set
 elseif (is_numeric($subnet['location'])) {
@@ -29,8 +29,8 @@ elseif (is_numeric($subnet['location'])) {
         $location = $loc_old;
         $subnet = (array) $subnet;
     } else {
-        $Result->show('info', _('Location not set !'), false);
+        $Result->warn('info', _('Location not set !'));
     }
 } else {
-    $Result->show('info', _('Location not set !'), false);
+    $Result->warn('info', _('Location not set !'));
 }

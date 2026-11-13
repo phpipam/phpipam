@@ -9,7 +9,7 @@ $User->check_user_session();
 
 // perm check
 if ($User->get_module_permissions('devices') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 
 // fetch all devices

@@ -21,11 +21,11 @@ print '<h4>'._('Routing information').'</h4><hr>';
 
 // perm check
 if ($User->get_module_permissions('routing') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 // check that location support isenabled
 elseif ($User->settings->enableRouting != '1') {
-    $Result->show('danger', _('Routing module disabled.'), false);
+    $Result->warn('danger', _('Routing module disabled.'));
 } else {
     // specific entry details
     if (isset($GET->sPage)) {
@@ -37,7 +37,7 @@ elseif ($User->settings->enableRouting != '1') {
         } elseif ($GET->subnetId == 'ospf') {
             include __DIR__.'/ospf/details.php';
         } else {
-            $Result->show('danger', _('Invalid routing module.'), false);
+            $Result->warn('danger', _('Invalid routing module.'));
         }
     }
     // all entries
@@ -55,7 +55,7 @@ elseif ($User->settings->enableRouting != '1') {
         } elseif ($GET->subnetId == 'ospf') {
             include __DIR__.'/ospf/all.php';
         } else {
-            $Result->show('danger', _('Invalid routing module.'), false);
+            $Result->warn('danger', _('Invalid routing module.'));
         }
     }
 }

@@ -9,7 +9,7 @@ $User->is_demo();
 
 // validate subnetId and type
 if (! is_numeric($POST->subnetId)) {
-    $Result->show('danger', 'Invalid subnet Id', true);
+    $Result->die('danger', 'Invalid subnet Id');
     exit();
 }
 
@@ -18,7 +18,7 @@ $cmd = sprintf("%s '%s/../../../../functions/scan/subnet-scan-icmp-execute.php' 
 
 // save result to $output
 if (exec($cmd, $output, $retval) === false) {
-    $Result->show('danger', _('Exec failed').': '.escape_input($cmd), true);
+    $Result->die('danger', _('Exec failed').': '.escape_input($cmd));
 }
 
 // format result back to object
@@ -27,7 +27,7 @@ $script_result = db_json_decode($output[0]);
 
 // json error
 if (json_last_error() !== JSON_ERROR_NONE) {
-    $Result->show('danger', 'Invalid JSON response'.' - '.$Scan->json_error_decode(json_last_error()).' - '.$output[0], true);
+    $Result->die('danger', 'Invalid JSON response'.' - '.$Scan->json_error_decode(json_last_error()).' - '.$output[0]);
 }
 
 // set blank values
@@ -126,19 +126,19 @@ if ($script_result->status == 0) {
 <?php
 // die if error
 if ($retval != 0) {
-    $Result->show('danger', "Error executing scan! Error code - $retval", false);
+    $Result->warn('danger', "Error executing scan! Error code - $retval");
 }
 // error?
 elseif ($script_result->status === 1) {
-    $Result->show('danger', $script_result->error, false);
+    $Result->warn('danger', $script_result->error);
 }
 // empty
 elseif (! isset($script_result->values)) {
-    $Result->show('info', _('Subnet is empty').'!', false);
+    $Result->warn('info', _('Subnet is empty').'!');
 }
 // no ip addresses - error in script
 elseif (! isset($res)) {
-    $Result->show('info', _('Error').'!', false);
+    $Result->warn('info', _('Error').'!');
 }
 // ok
 else {

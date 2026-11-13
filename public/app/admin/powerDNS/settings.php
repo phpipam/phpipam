@@ -109,35 +109,35 @@ $(document).ready(function() {
         // multiple ?
         if (isset($PowerDNS->db_check_error)) {
             foreach ($PowerDNS->db_check_error as $err) {
-                $Result->show('warning', $err);
+                $Result->warn('warning', $err);
             }
             // none
             if ($PowerDNS->active_db === false) {
-                $Result->show('danger', 'All database connections failed', false);
+                $Result->warn('danger', 'All database connections failed');
             }
             // print active
             else {
                 // set to array
                 $active_db = explode(';', (string) $PowerDNS->db_settings->host);
                 // print
-                $Result->show('success ', 'Database connection ok'.'. '._('Active database').': '.$active_db[$PowerDNS->active_db]);
+                $Result->warn('success ', 'Database connection ok'.'. '._('Active database').': '.$active_db[$PowerDNS->active_db]);
             }
         }
         // none selected
         elseif ($PowerDNS->active_db === false) {
-            $Result->show('danger', 'All database connections failed', false);
+            $Result->warn('danger', 'All database connections failed');
         }
         // else
         else {
             print "<div class='clearfix'></div>";
-            $Result->show('success ', 'All database connections ok');
+            $Result->warn('success ', 'All database connections ok');
         }
     } else {
         // connection to selected database
         if ($test == false) {
-            $Result->show('danger ', 'Failed to connect to database:<hr> '.$PowerDNS->error, false);
+            $Result->warn('danger ', 'Failed to connect to database:<hr> '.$PowerDNS->error);
         } else {
-            $Result->show('success ', 'Database connection ok'.'.');
+            $Result->warn('success ', 'Database connection ok'.'.');
         }
     }
 

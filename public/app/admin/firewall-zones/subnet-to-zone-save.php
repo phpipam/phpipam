@@ -25,27 +25,27 @@ if ($POST->action == 'edit') {
 
 // validate $POST->subnetId values
 if (! preg_match('/^[0-9]+$/i', (string) $POST->subnetId)) {
-    $Result->show('danger', _('Invalid subnet ID. Do not manipulate the POST values!'), true);
+    $Result->die('danger', _('Invalid subnet ID. Do not manipulate the POST values!'));
 }
 
 // validate $POST->zoneId values
 if (! preg_match('/^[0-9]+$/i', (string) $POST->zoneId) || $POST->zoneId == 0) {
-    $Result->show('danger', _('Invalid or no zone ID. '), true);
+    $Result->die('danger', _('Invalid or no zone ID. '));
 }
 
 // validate $POST->deviceId values
 if ($POST->deviceId && ! preg_match('/^[0-9]+$/i', (string) $POST->deviceId)) {
-    $Result->show('danger', _('Invalid device ID. Do not manipulate the POST values!'), true);
+    $Result->die('danger', _('Invalid device ID. Do not manipulate the POST values!'));
 }
 
 // check the zone alias. valid values are alphanumeric characters and special characters like ".-_: "
 if ($POST->alias && ! preg_match('/^[0-9a-z.\/\-_ :]+$/i', (string) $POST->alias)) {
-    $Result->show('danger', _('Invalid zone alias value.'), true);
+    $Result->die('danger', _('Invalid zone alias value.'));
 }
 
 // check the interface name. valid values are alphanumeric characters and special characters like ".-_/: "
 if ($POST->interface && ! preg_match('/^[0-9a-z.\/\-_ :]+$/i', (string) $POST->interface)) {
-    $Result->show('danger', _('Invalid interface.'), true);
+    $Result->die('danger', _('Invalid interface.'));
 }
 
 // check if there is any device mapping necessary
@@ -59,15 +59,15 @@ if ($POST->deviceId) {
     ];
     // modify
     if (! $Zones->modify_mapping('add', $values)) {
-        $Result->show('danger', _('Cannot add mapping'), true);
+        $Result->die('danger', _('Cannot add mapping'));
     }
 }
 
 // check and then add the network to the zone if possible
 if ($Zones->check_zone_network($POST->subnetId)) {
     if (! $Zones->add_zone_network($POST->zoneId, $POST->subnetId)) {
-        $Result->show('danger', _('Cannot add this network to a zone.'), true);
+        $Result->die('danger', _('Cannot add this network to a zone.'));
     } else {
-        $Result->show('success', _('Zone modified successfully'), true);
+        $Result->die('success', _('Zone modified successfully'));
     }
 }

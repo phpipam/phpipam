@@ -29,7 +29,7 @@ $Admin->validate_action();
 // get Nameserver sets
 if ($POST->action != 'add') {
     $nameservers = $Admin->fetch_object('nameservers', 'id', $POST->nameserverid);
-    $nameservers !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+    $nameservers !== false ?: $Result->die('danger', _('Invalid ID'), true);
 } else {
     $nameservers = new Params;
 }
@@ -139,7 +139,7 @@ if ($sections !== false) {
     <?php
     // print delete warning
     if ($POST->action == 'delete') {
-        $Result->show('warning', '<strong>'._('Warning').':</strong> '._('removing nameserver set will also remove all references from belonging subnets!'), false);
+        $Result->warn('warning', '<strong>'._('Warning').':</strong> '._('removing nameserver set will also remove all references from belonging subnets!'));
     }
 ?>
 </div>

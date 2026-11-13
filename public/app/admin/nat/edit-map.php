@@ -22,17 +22,17 @@ if ($POST->action == 'edit') {
 
 // validations
 if ($POST->object_type !== 'subnets' && $POST->object_type !== 'ipaddresses') {
-    $Result->show('danger', _('Invalid type'), true, true);
+    $Result->die('danger', _('Invalid type'), true);
 }
 
 $nat = $Admin->fetch_object('nat', 'id', $POST->id);
 if ($nat === false) {
-    $Result->show('danger', _('Invalid Id'), true, true);
+    $Result->die('danger', _('Invalid Id'), true);
 }
 
 $object = $Admin->fetch_object($POST->object_type, 'id', $POST->object_id);
 if ($object === false) {
-    $Result->show('danger', _('Invalid object Id'), true, true);
+    $Result->die('danger', _('Invalid object Id'), true);
 }
 
 $n = $nat;

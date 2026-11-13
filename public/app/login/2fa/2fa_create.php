@@ -30,7 +30,7 @@ else {
             $Admin = new Admin($Database, false);
             $Admin->object_modify('users', 'edit', 'id', ['id' => $User->user->id, '2fa' => 2, '2fa_secret' => $secret]);
         } catch (exception $e) {
-            $Result->show('danger', $e->getMessage());
+            $Result->warn('danger', $e->getMessage());
         }
     }
 

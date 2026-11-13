@@ -44,7 +44,7 @@ if ($User->get_module_permissions('nat') >= User::ACCESS_RWA) {
 
 // print
 if ($User->get_module_permissions('nat') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), true);
+    $Result->die('danger', _('You do not have permissions to access this module'));
 } elseif (isset($all_nats_per_object['ipaddresses'][$address['id']])) {
     foreach ($all_nats_per_object['ipaddresses'][$address['id']] as $nat) {
         // set object
@@ -62,7 +62,7 @@ if ($User->get_module_permissions('nat') == User::ACCESS_NONE) {
 } else {
     print '<tr>';
     print " <td colspan='4'>";
-    print $Result->show('info', _('No NAT translations for this address'), false, false, true);
+    print $Result->warn('info', _('No NAT translations for this address'), false, true);
     print ' </td>';
     print '</tr>';
 }

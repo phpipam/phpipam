@@ -18,17 +18,17 @@ $User->check_user_session();
 // admin check
 $User->is_admin();
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // some verifications
 if ((empty($POST->current)) || (empty($POST->next))) {
-    $Result->show('danger', _('Fields cannot be empty').'!', true);
+    $Result->die('danger', _('Fields cannot be empty').'!');
 }
 
 /* reorder */
 if (! $Admin->reorder_custom_fields($POST->table, $POST->next, $POST->current)) {
-    $Result->show('danger', _('Reordering failed').'!', true);
+    $Result->die('danger', _('Reordering failed').'!');
 } else {
-    $Result->show('success', _('Fields reordered successfully').'!');
+    $Result->warn('success', _('Fields reordered successfully').'!');
 }

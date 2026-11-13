@@ -369,7 +369,7 @@ class PowerDNS extends Common_functions
             return $this->domain_delete($values);
         }
 
-        return $this->Result->show('danger', _('Invalid action'), true);
+        return $this->Result->die('danger', _('Invalid action'));
     }
 
     /**
@@ -389,7 +389,7 @@ class PowerDNS extends Common_functions
         } catch (Exception $exception) {
             // write log
             $this->Log->write(_('PowerDNS domain create'), _('Failed to create PowerDNS domain').': '.$exception->getMessage().'<hr>'.$this->array_to_log((array) $values), 2);
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -418,7 +418,7 @@ class PowerDNS extends Common_functions
         } catch (Exception $exception) {
             // write log
             $this->Log->write(_('PowerDNS domain edit'), _('Failed to edit PowerDNS domain').': '.$exception->getMessage().'<hr>'.$this->array_to_log((array) $values), 2);
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -446,7 +446,7 @@ class PowerDNS extends Common_functions
         } catch (Exception $exception) {
             // write log
             $this->Log->write(_('PowerDNS domain delete'), _('Failed to delete PowerDNS domain').': '.$exception->getMessage().'<hr>'.$this->array_to_log((array) $old_domain), 2);
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -468,7 +468,7 @@ class PowerDNS extends Common_functions
         try {
             $res = $this->Database_pdns->getObjects('domains', 'id');
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -495,7 +495,7 @@ class PowerDNS extends Common_functions
         try {
             $res = $this->Database_pdns->findObjects('domains', 'name', '%.arpa', 'name', true, true, true);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -522,7 +522,7 @@ class PowerDNS extends Common_functions
         try {
             $res = $this->Database_pdns->findObjects('domains', 'name', '%.in-addr.arpa', 'name', true, true);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -549,7 +549,7 @@ class PowerDNS extends Common_functions
         try {
             $res = $this->Database_pdns->findObjects('domains', 'name', '%.ip6.arpa', 'name', true, true);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -594,7 +594,7 @@ class PowerDNS extends Common_functions
         try {
             $domain = $this->Database_pdns->getObject('domains', $id);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -618,7 +618,7 @@ class PowerDNS extends Common_functions
         try {
             $domain = $this->Database_pdns->findObjects('domains', 'name', $name);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -647,7 +647,7 @@ class PowerDNS extends Common_functions
         try {
             $records = $this->Database_pdns->getObjectsQuery('records', $query, [$domain_id]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -671,7 +671,7 @@ class PowerDNS extends Common_functions
         try {
             $records = $this->Database_pdns->getObjectsQuery('records', $query, [$domain_id, $type]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -695,7 +695,7 @@ class PowerDNS extends Common_functions
         try {
             $records = $this->Database_pdns->getObjectsQuery('records', $query, [$domain_id]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -719,7 +719,7 @@ class PowerDNS extends Common_functions
         try {
             $records = $this->Database_pdns->getObjectsQuery('records', $query, [$domain_id, $type]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -742,7 +742,7 @@ class PowerDNS extends Common_functions
         try {
             $record = $this->Database_pdns->getObject('records', $record_id);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -766,7 +766,7 @@ class PowerDNS extends Common_functions
         try {
             $records = $this->Database_pdns->getObjectsQuery('records', $query, [$hostname, $ip]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -791,7 +791,7 @@ class PowerDNS extends Common_functions
         try {
             $records = $this->Database_pdns->getObjectQuery('records', $query, [$domain_id, $type, $name]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -815,7 +815,7 @@ class PowerDNS extends Common_functions
         try {
             $records = $this->Database_pdns->findObjects('records', $field, $value, $sortField, $sortAsc);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -836,7 +836,7 @@ class PowerDNS extends Common_functions
         try {
             $records = $this->Database_pdns->findObjects('records', 'content', $hostname, 'content', 'asc');
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -867,7 +867,7 @@ class PowerDNS extends Common_functions
         try {
             $records = $this->Database_pdns->getObjectsQuery('records', $query);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -900,7 +900,7 @@ class PowerDNS extends Common_functions
             return $this->remove_domain_record($values['domain_id'], $values['id']);
         }
 
-        return $this->Result->show('danger', _('Invalid action'), true);
+        return $this->Result->die('danger', _('Invalid action'));
     }
 
     /**
@@ -924,7 +924,7 @@ class PowerDNS extends Common_functions
         } catch (Exception $exception) {
             // write log
             $this->Log->write(_('PowerDNS record create'), _('Failed to create PowerDNS domain record').': '.$exception->getMessage().'<hr>'.$this->array_to_log((array) $record), 2);
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), true);
+            $this->Result->die('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -935,7 +935,7 @@ class PowerDNS extends Common_functions
         // print ?
         if ($print_success) {
             if ($this->api !== true) {
-                $this->Result->show('success', _('Record created'));
+                $this->Result->warn('success', _('Record created'));
             }
         }
 
@@ -960,7 +960,7 @@ class PowerDNS extends Common_functions
     {
         // validate domain
         if ($this->fetch_domain($domain_id) === false) {
-            $this->Result->show('danger', _('Invalid domain id'), true);
+            $this->Result->die('danger', _('Invalid domain id'));
         }
 
         // checks
@@ -980,7 +980,7 @@ class PowerDNS extends Common_functions
         // print ?
         if ($print_success) {
             if ($this->api !== true) {
-                $this->Result->show('success', _('Record updated'));
+                $this->Result->warn('success', _('Record updated'));
             }
         }
 
@@ -1000,7 +1000,7 @@ class PowerDNS extends Common_functions
     {
         // validate domain
         if ($this->fetch_domain($domain_id) === false) {
-            $this->Result->show('danger', _('Invalid domain id'), true);
+            $this->Result->die('danger', _('Invalid domain id'));
         }
 
         // remove record
@@ -1011,7 +1011,7 @@ class PowerDNS extends Common_functions
         // print ?
         if ($print_success) {
             if ($this->api !== true) {
-                $this->Result->show('success', _('Record deleted'));
+                $this->Result->warn('success', _('Record deleted'));
             }
         }
 
@@ -1035,7 +1035,7 @@ class PowerDNS extends Common_functions
         } catch (Exception $exception) {
             // write log
             $this->Log->write(_('PowerDNS record delete'), _('Failed to delete PowerDNS domain record').': '.$exception->getMessage().'<hr>'.$this->array_to_log((array) $old_record), 2);
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), true);
+            $this->Result->die('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1066,7 +1066,7 @@ class PowerDNS extends Common_functions
         try {
             $this->Database_pdns->runQuery($query, [$hostname, $ip]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1096,7 +1096,7 @@ class PowerDNS extends Common_functions
         } catch (Exception $exception) {
             // write log
             $this->Log->write(_('PowerDNS record update'), _('Failed to update PowerDNS domain record').': '.$exception->getMessage().'<hr>'.$this->array_to_log((array) $content), 2);
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), true);
+            $this->Result->die('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1203,7 +1203,7 @@ class PowerDNS extends Common_functions
             foreach ($ns as $s) {
                 // validate
                 if ($this->validate_hostname($s) === false) {
-                    $this->Result->show('danger', _('Invalid NS')." $s", true);
+                    $this->Result->die('danger', _('Invalid NS')." $s");
                 }
 
                 // save
@@ -1222,7 +1222,7 @@ class PowerDNS extends Common_functions
         }
 
         // all good, print it !
-        $this->Result->show('success', _('Default records created'), false);
+        $this->Result->warn('success', _('Default records created'));
 
         return true;
     }
@@ -1316,12 +1316,12 @@ class PowerDNS extends Common_functions
         // a record check
         if ($record->type == 'A') {
             if (filter_var($record->content, FILTER_VALIDATE_IP) === false) {
-                $this->Result->show('danger', _('A record must be an IP address'), true);
+                $this->Result->die('danger', _('A record must be an IP address'));
             }
         } elseif ($record->type == 'AAAA') {
             // AAA records check
             if (filter_var($record->content, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
-                $this->Result->show('danger', _('AAAA record must be an IP address'), true);
+                $this->Result->die('danger', _('AAAA record must be an IP address'));
             }
         }
     }
@@ -1339,12 +1339,12 @@ class PowerDNS extends Common_functions
     {
         // integer
         if (! is_numeric($domain_id)) {
-            $this->Result->show('danger', _('Domain id must be an integer'), true);
+            $this->Result->die('danger', _('Domain id must be an integer'));
         }
 
         // check for domain record
         if ($this->fetch_domain($domain_id) === false) {
-            $this->Result->show('danger', _('Domain does not exist'), true);
+            $this->Result->die('danger', _('Domain does not exist'));
         }
 
         // ok
@@ -1388,7 +1388,7 @@ class PowerDNS extends Common_functions
 
         // for all other record types null is ok, otherwise URI is required
         if (! is_blank($name) && ! $this->validate_hostname($name)) {
-            $this->Result->show('danger', _('Invalid record name'), true);
+            $this->Result->die('danger', _('Invalid record name'));
         }
 
         // ok
@@ -1409,7 +1409,7 @@ class PowerDNS extends Common_functions
         if (isset($type)) {
             // check record type
             if (! in_array($type, (array) $this->record_types)) {
-                $this->Result->show('danger', _('Invalid record type'), true);
+                $this->Result->die('danger', _('Invalid record type'));
             }
         }
 
@@ -1430,12 +1430,12 @@ class PowerDNS extends Common_functions
     {
         // check numberfic
         if (! is_numeric($ttl)) {
-            $this->Result->show('danger', _('Invalid TTL'), true);
+            $this->Result->die('danger', _('Invalid TTL'));
         }
 
         // check range
         if ($ttl < 0 || $ttl > 2147483647) {
-            $this->Result->show('danger', _('TTL range is from 0 to 2147483647'), true);
+            $this->Result->die('danger', _('TTL range is from 0 to 2147483647'));
         }
 
         // ok
@@ -1452,12 +1452,12 @@ class PowerDNS extends Common_functions
     {
         // check numberfic
         if (! is_numeric($ttl)) {
-            $this->Result->show('danger', _('Invalid NXDOMAIN TTL'), true);
+            $this->Result->die('danger', _('Invalid NXDOMAIN TTL'));
         }
 
         // check range
         if ($ttl < 0 || $ttl > 10800) {
-            $this->Result->show('danger', _('NXDOMAIN TTL range is from 0 to 10800'), true);
+            $this->Result->die('danger', _('NXDOMAIN TTL range is from 0 to 10800'));
         }
 
         // ok
@@ -1474,12 +1474,12 @@ class PowerDNS extends Common_functions
     {
         // check numberfic
         if (! is_numeric($refresh)) {
-            $this->Result->show('danger', _('Invalid refresh TTL'), true);
+            $this->Result->die('danger', _('Invalid refresh TTL'));
         }
 
         // check range
         if ($refresh < 1200 || $refresh > 2147483647) {
-            $this->Result->show('danger', _('Refresh TTL range is from 1200 to 2147483647'), true);
+            $this->Result->die('danger', _('Refresh TTL range is from 1200 to 2147483647'));
         }
 
         // ok
@@ -1497,12 +1497,12 @@ class PowerDNS extends Common_functions
         // validate numbric
         if (! is_null($prio) && ! is_blank($prio)) {
             if (! is_numeric($prio)) {
-                $this->Result->show('danger', _('Invalid priority value'), true);
+                $this->Result->die('danger', _('Invalid priority value'));
             }
 
             // range
             if ($prio < 0 || $prio > 1000) {
-                $this->Result->show('danger', _('Priority range is from 0 to 1000'), true);
+                $this->Result->die('danger', _('Priority range is from 0 to 1000'));
             }
         }
 
@@ -1521,7 +1521,7 @@ class PowerDNS extends Common_functions
         // validate numbric
         if (! is_blank($int) && ! is_null($int) && $int !== false) {
             if (! is_numeric($int)) {
-                $this->Result->show('danger', _('Invalid integer value'), true);
+                $this->Result->die('danger', _('Invalid integer value'));
             }
         }
 
@@ -1544,7 +1544,7 @@ class PowerDNS extends Common_functions
             $this->Database_pdns->runQuery('update `records` set `name` = replace(`name`, ?, ?) where where `domain_id` = ?;', [$old_name, $name, $domain_id]);
         } catch (Exception $exception) {
             // write log
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1566,7 +1566,7 @@ class PowerDNS extends Common_functions
         } catch (Exception $exception) {
             // write log
             $this->Log->write(_('PowerDNS domain truncate'), _('Failed to remove all PowerDNS domain records').': '.$exception->getMessage().'<hr>'.$this->array_to_log((array) $domain_id), 2);
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1575,7 +1575,7 @@ class PowerDNS extends Common_functions
         $this->Log->write(_('PowerDNS domain truncate'), _('PowerDNS domain records truncated').'.<hr>'.$this->array_to_log((array) $domain_id), 0);
 
         // ok
-        $this->Result->show('success', _('All records for domain removed'));
+        $this->Result->warn('success', _('All records for domain removed'));
 
         return true;
     }
@@ -1699,7 +1699,7 @@ class PowerDNS extends Common_functions
         try {
             $res = $this->Database_pdns->getObjectQuery('records', 'select count(*) as `cnt` from `records` where `domain_id` = ? and `name`=? and `type`=? and `content`=?;', [$domain_id, $name, $type, $content]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1725,7 +1725,7 @@ class PowerDNS extends Common_functions
         try {
             $count = $this->Database_pdns->numObjectsFilter('records', 'id', $ptr_id);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -1772,7 +1772,7 @@ class PowerDNS extends Common_functions
         } catch (Exception $exception) {
             // write log
             $this->Log->write(_('PowerDNS records delete'), _('Failed to delete all PowerDNS domain PTR records').': '.$exception->getMessage().'<hr>'.$this->array_to_log((array) $domain_id), 2);
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }

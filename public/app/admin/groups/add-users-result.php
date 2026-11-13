@@ -25,7 +25,7 @@ $User->check_maintaneance_mode();
 
 // id must be numeric
 if (! is_numeric($POST->gid)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // parse result
@@ -37,7 +37,7 @@ foreach ($POST as $k => $p) {
 
 // verify that description is present if action != delete
 if (strlen($POST->gid == 0)) {
-    $Result->show('danger', _('Error - no group ID'), true);
+    $Result->die('danger', _('Error - no group ID'));
 }
 
 // add each user to group
@@ -65,5 +65,5 @@ if (isset($errors)) {
     print '</ul>';
     print '</div>';
 } else {
-    $Result->show('success', _('Users added to group'), true);
+    $Result->die('success', _('Users added to group'));
 }

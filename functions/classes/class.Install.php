@@ -115,7 +115,7 @@ class Install extends Common_functions
         try {
             $this->Database_root->runQuery($query);
         } catch (Exception $exception) {
-            $this->Result->show('danger', $exception->getMessage(), true);
+            $this->Result->die('danger', $exception->getMessage());
         }
     }
 
@@ -132,7 +132,7 @@ class Install extends Common_functions
         try {
             $this->Database_root->runQuery($query);
         } catch (Exception $exception) {
-            $this->Result->show('danger', $exception->getMessage(), true);
+            $this->Result->die('danger', $exception->getMessage());
         }
     }
 
@@ -160,7 +160,7 @@ class Install extends Common_functions
             $this->Database_root->runQuery("GRANT ALL ON `$db_name`.* TO '$esc_user'@'$webhost';");
             $this->Database_root->runQuery('FLUSH PRIVILEGES;');
         } catch (Exception $exception) {
-            $this->Result->show('danger', $exception->getMessage(), true);
+            $this->Result->die('danger', $exception->getMessage());
         }
     }
 
@@ -204,12 +204,12 @@ class Install extends Common_functions
                     try {
                         $this->Database_root->runQuery('drop database if exists `'.$this->db['name'].'`;');
                     } catch (Exception $e) {
-                        $this->Result->show('danger', _('Cannot drop database: ').$e->getMessage(), true);
+                        $this->Result->die('danger', _('Cannot drop database: ').$e->getMessage());
                     }
 
                     // print error
-                    $this->Result->show('danger', _('Cannot install sql SCHEMA file').': '.$e->getMessage().'<br>'._('query that failed').": <pre>$q</pre>", false);
-                    $this->Result->show('info', _('Database dropped'), false);
+                    $this->Result->warn('danger', _('Cannot install sql SCHEMA file').': '.$e->getMessage().'<br>'._('query that failed').": <pre>$q</pre>");
+                    $this->Result->warn('info', _('Database dropped'));
 
                     return false;
                 }
@@ -339,7 +339,7 @@ class Install extends Common_functions
         try {
             $this->Database->updateObject('users', ['password' => $adminpass, 'passChange' => 'No', 'username' => 'Admin'], 'username');
         } catch (Exception $exception) {
-            $this->Result->show('danger', $exception->getMessage(), false);
+            $this->Result->warn('danger', $exception->getMessage());
         }
 
         return true;
@@ -357,7 +357,7 @@ class Install extends Common_functions
         try {
             $this->Database->updateObject('settings', ['siteTitle' => $siteTitle, 'siteURL' => $siteURL, 'id' => 1], 'id');
         } catch (Exception $exception) {
-            $this->Result->show('danger', $exception->getMessage(), false);
+            $this->Result->warn('danger', $exception->getMessage());
         }
 
         return true;
@@ -494,11 +494,11 @@ class Upgrade extends Install
     public function upgrade_database()
     {
         if ($this->old_version == VERSION.DBVERSION) {
-            $this->Result->show('danger', _('Database already at latest version'), true);
+            $this->Result->die('danger', _('Database already at latest version'));
         } else {
             // check db connection
             if ($this->check_db_connection(false) === false) {
-                $this->Result->show('danger', _('Cannot connect to database'), true);
+                $this->Result->die('danger', _('Cannot connect to database'));
             } else {
                 // execute
                 return $this->upgrade_database_execute();
@@ -559,18 +559,18 @@ class Upgrade extends Install
             $this->Log->write(_('Database upgrade'), $exception->getMessage().'<br>'._('query: ').$query, 2);
             // fail
             print '<h3>'._('Upgrade failed')." !</h3><hr style='margin:30px;'>";
-            $this->Result->show('danger', $exception->getMessage().'<hr>'._('Failed query').': <pre>'.$query.'</pre>', false);
+            $this->Result->warn('danger', $exception->getMessage().'<hr>'._('Failed query').': <pre>'.$query.'</pre>');
 
             // print failure
-            $this->Result->show('danger', _('Failed to upgrade database!'), false);
+            $this->Result->warn('danger', _('Failed to upgrade database!'));
             print "<div class='text-right'><a class='btn btn-sm btn-default' href='".create_link('administration', 'verify-database')."'>"._('Go to administration and fix').'</a></div><br><hr><br>';
 
             if (count($queries_ok) > 0) {
-                $this->Result->show('success', _('Succesful queries').': <pre>'.implode('<br>', $queries_ok).'</pre>', false);
+                $this->Result->warn('success', _('Succesful queries').': <pre>'.implode('<br>', $queries_ok).'</pre>');
             }
 
             if (count($queries) > 0) {
-                $this->Result->show('warning', _('Not executed queries').': <pre>'.implode('<br>', $queries).'</pre>', false);
+                $this->Result->warn('warning', _('Not executed queries').': <pre>'.implode('<br>', $queries).'</pre>');
             }
 
             return false;

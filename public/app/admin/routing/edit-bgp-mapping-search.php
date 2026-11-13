@@ -25,11 +25,11 @@ $bgp_id = $POST->bgp_id ?? '';
 $search_txt = $POST->subnet ?? '';
 
 if (! is_numeric($bgp_id)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 if (strlen($search_txt) < 2) {
-    $Result->show('danger', _('Please enter at least 2 characters.'), true);
+    $Result->die('danger', _('Please enter at least 2 characters.'));
 }
 
 $query = 'SELECT INET_NTOA(`subnet`) AS `subnet`,`id`,`mask`,`description` FROM `subnets` WHERE (INET_NTOA(`subnet`) LIKE ? OR `description` LIKE ?) AND `subnet` > 1 AND `isFolder` = 0;';
@@ -37,7 +37,7 @@ $query = 'SELECT INET_NTOA(`subnet`) AS `subnet`,`id`,`mask`,`description` FROM 
 try {
     $subnets = $Database->getObjectsQuery('subnets', $query, ["$search_txt%", "%$search_txt%"]);
 } catch (Exception $exception) {
-    print $Result->show('danger', $exception->getMessage(), true);
+    print $Result->die('danger', $exception->getMessage());
 }
 
 // printout
@@ -72,8 +72,8 @@ if (is_array($subnets) && $subnets != []) {
     print '</table>';
     // none
     if ($cnt == 0) {
-        print $Result->show('info', 'No subnets found', true);
+        print $Result->die('info', 'No subnets found');
     }
 } else {
-    print $Result->show('info', 'No subnets found', true);
+    print $Result->die('info', 'No subnets found');
 }

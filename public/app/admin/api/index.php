@@ -107,7 +107,7 @@ $app_perms_text = ['SSL with User token' => 'ssl_token', 'SSL with App code toke
         print '</div>';
         print "<div class='clearfix'></div>";
     } else {
-        $Result->show('info alert-nomargin', _('No Apps available').'!', false);
+        $Result->warn('info alert-nomargin', _('No Apps available').'!');
     }
     ?>
 
@@ -116,5 +116,5 @@ $app_perms_text = ['SSL with User token' => 'ssl_token', 'SSL with App code toke
 
     <?php
 } else {
-    $Result->show('info', _('Please enable API module under server management'), false);
+    $Result->warn('info', _('Please enable API module under server management'));
 }

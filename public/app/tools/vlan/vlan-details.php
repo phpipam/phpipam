@@ -14,13 +14,13 @@ $vlan = (array) $Tools->fetch_object('vlans', 'vlanId', $GET->sPage);
 
 // not existing
 if (! isset($vlan['domainId'])) {
-    $Result->show('danger', _('Invalid VLAN id'), true);
+    $Result->die('danger', _('Invalid VLAN id'));
 }
 
 // fetch l2 domain
 $vlan_domain = $Tools->fetch_object('vlanDomains', 'id', $vlan['domainId']);
 if ($vlan_domain === false) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // Check user has read level permission to l2domain (or die with warning)

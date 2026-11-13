@@ -132,7 +132,7 @@ if ($subnets !== false) {
             // no subnets
             if (count($addresses) == 0) {
                 print "<tr><td colspan='$colSpan'>";
-                $Result->show('info', _('Subnets has no hosts').'!', false);
+                $Result->warn('info', _('Subnets has no hosts').'!');
                 print '</td></tr>';
             } else {
                 foreach ($addresses as $address) {
@@ -336,7 +336,7 @@ if ($subnets !== false) {
 
 // none
 if ($subnet_count === 0) {
-    print "<tr><td colspan='$colSpan'>".$Result->show('info', _('No multicast subnets available'), false).'</td></tr>';
+    print "<tr><td colspan='$colSpan'>".$Result->warn('info', _('No multicast subnets available')).'</td></tr>';
 }
 
 ?>

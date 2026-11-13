@@ -47,7 +47,7 @@ $colspan_dhcp = 4;
     // none
     if (! is_array($numbers)) {
         print '<tr>';
-        print " <td colspan='$colspan'>".$Result->show('info', _('No numbers'), false, false, true).'</td>';
+        print " <td colspan='$colspan'>".$Result->warn('info', _('No numbers'), false, true).'</td>';
         print '</tr>';
     } else {
         // add raw

@@ -21,19 +21,19 @@ $csrf = $User->Crypto->csrf_session_token();
 
 // checks
 if ($User->settings->tempShare != 1) {
-    $Result->show('danger', _('Temporary sharing disabled'), true, true);
+    $Result->die('danger', _('Temporary sharing disabled'), true);
 }
 if ($POST->type != 'subnets' && $POST->type != 'ipaddresses') {
-    $Result->show('danger', _('Invalid type'), true, true);
+    $Result->die('danger', _('Invalid type'), true);
 }
 if (! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch object details
 $object = $Tools->fetch_object($POST->type, 'id', $POST->id);
 if (! is_object($object)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // set share details
@@ -41,7 +41,7 @@ $share = new StdClass;
 // set details
 if ($POST->type == 'subnets') {
     if ($Subnets->check_permission($User->user, $object->id) < User::ACCESS_RW) {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 
     $tmp[] = _('Share type: subnet');
@@ -49,7 +49,7 @@ if ($POST->type == 'subnets') {
     $tmp[] = $object->description;
 } else {
     if ($Subnets->check_permission($User->user, $object->subnetId) < User::ACCESS_RW) {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 
     $tmp[] = _('Share type: IP address');

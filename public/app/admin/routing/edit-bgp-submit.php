@@ -14,7 +14,7 @@ $Result = new Result;
 $User->check_user_session();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // perm check popup
@@ -27,56 +27,56 @@ if ($POST->action == 'edit') {
 // validate
 if ($POST->action == 'edit' || $POST->action == 'add') {
     if (! is_numeric($POST->local_as)) {
-        $Result->show('danger', _('Invalid local AS'), true);
+        $Result->die('danger', _('Invalid local AS'));
     }
 
     if (! is_numeric($POST->peer_as)) {
-        $Result->show('danger', _('Invalid peer AS'), true);
+        $Result->die('danger', _('Invalid peer AS'));
     }
 
     if (! $Tools->validate_ip($POST->local_address)) {
-        $Result->show('danger', _('Invalid local address'), true);
+        $Result->die('danger', _('Invalid local address'));
     }
 
     if (! $Tools->validate_ip($POST->peer_address)) {
-        $Result->show('danger', _('Invalid peer address'), true);
+        $Result->die('danger', _('Invalid peer address'));
     }
 }
 
 if ($POST->action == 'edit' || $POST->action == 'delete') {
     if (! is_numeric($POST->id)) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }
 }
 
 // permission recheck for modules
 if (isset($POST->vrf_id)) {
     if ($User->get_module_permissions('vrf') == User::ACCESS_NONE) {
-        $Result->show('danger', _('Insufficient permissions for module VRF'), true);
+        $Result->die('danger', _('Insufficient permissions for module VRF'));
     }
 
     if (! is_numeric($POST->vrf_id)) {
-        $Result->show('danger', _('Invalid VRF ID'), true);
+        $Result->die('danger', _('Invalid VRF ID'));
     }
 }
 
 if (isset($POST->circuit_id)) {
     if ($User->get_module_permissions('circuits') == User::ACCESS_NONE) {
-        $Result->show('danger', _('Insufficient permissions for module Circuits'), true);
+        $Result->die('danger', _('Insufficient permissions for module Circuits'));
     }
 
     if (! is_numeric($POST->circuit_id)) {
-        $Result->show('danger', _('Invalid Circuits ID'), true);
+        $Result->die('danger', _('Invalid Circuits ID'));
     }
 }
 
 if (isset($POST->customer_id)) {
     if ($User->get_module_permissions('customers') == User::ACCESS_NONE) {
-        $Result->show('danger', _('Insufficient permissions for module Customers'), true);
+        $Result->die('danger', _('Insufficient permissions for module Customers'));
     }
 
     if (! is_numeric($POST->customer_id)) {
-        $Result->show('danger', _('Invalid Customer ID'), true);
+        $Result->die('danger', _('Invalid Customer ID'));
     }
 }
 
@@ -110,9 +110,9 @@ $values = array_merge($values, $update);
 
 // execute update
 if (! $Admin->object_modify('routing_bgp', $POST->action, 'id', $values)) {
-    $Result->show('danger', _('BGP').' '.$User->get_post_action().' '._('failed'), false);
+    $Result->warn('danger', _('BGP').' '.$User->get_post_action().' '._('failed'));
 } else {
-    $Result->show('success', _('BGP').' '.$User->get_post_action().' '._('successful'), false);
+    $Result->warn('success', _('BGP').' '.$User->get_post_action().' '._('successful'));
 }
 
 // add

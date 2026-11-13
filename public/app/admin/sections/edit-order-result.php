@@ -28,7 +28,7 @@ foreach ($otmp as $ot) {
 
 // update
 if (! $Sections->modify_section('reorder', $order)) {
-    $Result->show('danger', _('Section reordering failed'), true);
+    $Result->die('danger', _('Section reordering failed'));
 } else {
-    $Result->show('success', _('Section reordering successful'), true);
+    $Result->die('success', _('Section reordering successful'));
 }

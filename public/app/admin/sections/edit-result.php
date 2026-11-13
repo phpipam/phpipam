@@ -24,7 +24,7 @@ $User->is_demo();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // If confirm is not set print delete warning
@@ -105,7 +105,7 @@ else {
     [$removed_permissions, $changed_permissions, $new_permissions] = $Sections->get_permission_changes($POST->as_array(), $old_permissions);
 
     if (! in_array($POST->subnetOrdering, array_keys($Subnets->get_valid_subnet_orderings(true)))) {
-        $Result->show('danger', _('Invalid subnetOrdering'), true);
+        $Result->die('danger', _('Invalid subnetOrdering'));
     }
 
     // set variables for update
@@ -125,9 +125,9 @@ else {
 
     // execute update
     if (! $Sections->modify_section($POST->action, $values)) {
-        $Result->show('danger', _('Section').' '.$User->get_post_action().' '._('failed'), false);
+        $Result->warn('danger', _('Section').' '.$User->get_post_action().' '._('failed'));
     } else {
-        $Result->show('success', _('Section').' '.$User->get_post_action().' '._('successful'), false);
+        $Result->warn('success', _('Section').' '.$User->get_post_action().' '._('successful'));
     }
 
     // delegate

@@ -26,7 +26,7 @@ $Result = new Result;
 
 // cli required
 if (PHP_SAPI != 'cli') {
-    $Result->show_cli("cli only\n", true);
+    $Result->die(false, "cli only\n");
 }
 
 // set all subnet ids
@@ -102,7 +102,7 @@ if (is_array($ipaddresses)) {
             ];
             // execute
             if (! $Admin->object_modify('ipaddresses', 'edit', 'id', $values)) {
-                $Result->show_cli('Failed to update address '.$Subnets->transform_to_dotted($ip->ip_addr));
+                $Result->warn(false, 'Failed to update address '.$Subnets->transform_to_dotted($ip->ip_addr));
             }
 
             // set text

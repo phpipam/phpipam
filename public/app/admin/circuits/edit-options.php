@@ -31,7 +31,7 @@ $Admin->validate_action(false);
 
 // validate type
 if ($POST->type != 'type') {
-    $Result->show('danger', _('Invalid type'), true, true);
+    $Result->die('danger', _('Invalid type'), true);
 }
 
 // disabled

@@ -25,7 +25,7 @@ $User->is_demo();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // remove users from this group if delete and remove group from sections
@@ -34,14 +34,14 @@ if ($POST->action == 'delete') {
     $Admin->remove_group_from_sections($POST->g_id);
 } else {
     if (strlen((string) $POST->g_name) < 2) {
-        $Result->show('danger', _('Name must be at least 2 characters long').'!', true);
+        $Result->die('danger', _('Name must be at least 2 characters long').'!');
     }
 }
 
 // unique name
 if ($POST->action == 'add') {
     if ($Admin->fetch_object('userGroups', 'g_name', $POST->g_name) !== false) {
-        $Result->show('danger', _('Group already exists').'!', true);
+        $Result->die('danger', _('Group already exists').'!');
     }
 }
 
@@ -56,9 +56,9 @@ $values = array_merge($values, $update);
 
 /* try to execute */
 if (! $Admin->object_modify('userGroups', $POST->action, 'g_id', $values)) {
-    $Result->show('danger', _('Group').' '.$User->get_post_action().' '._('error').'!', false);
+    $Result->warn('danger', _('Group').' '.$User->get_post_action().' '._('error').'!');
 } else {
-    $Result->show('success', _('Group').' '.$User->get_post_action().' '._('success').'!', false);
+    $Result->warn('success', _('Group').' '.$User->get_post_action().' '._('success').'!');
 }
 
 // from list of usernames provided from AD result if some user matches add him to group

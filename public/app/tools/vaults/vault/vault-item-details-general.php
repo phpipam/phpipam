@@ -6,7 +6,7 @@ $User->check_user_session();
 // printout
 // perm check
 if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 } else {
     print '<h4>'._('Certificate details').'</h4>';
     print '<hr>';
@@ -17,7 +17,7 @@ if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
 
     // test
     if (isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) === false) {
-        $Result->show('danger', _('Cannot unlock vault'), false);
+        $Result->warn('danger', _('Cannot unlock vault'));
     } else {
         // fetch item
         $vault_item = $Tools->fetch_object('vaultItems', 'id', $GET->sPage);

@@ -19,7 +19,7 @@ $User->check_user_session();
 
 // make sure user has access
 if ($User->get_module_permissions('vaults') < User::ACCESS_RW) {
-    $Result->show('danger', _('Insufficient privileges').'.', true, true);
+    $Result->die('danger', _('Insufficient privileges').'.', true);
 }
 
 // create csrf token
@@ -30,7 +30,7 @@ $Admin->validate_action();
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch api for edit / add
@@ -38,7 +38,7 @@ if ($POST->action != 'add') {
     // fetch vault details
     $item = $Admin->fetch_object('vaultItems', 'id', $POST->id);
     // null ?
-    $item === false ? $Result->show('danger', _('Invalid ID'), true) : null;
+    $item === false ? $Result->die('danger', _('Invalid ID')) : null;
     // to json and decode
     $item_objects = db_json_decode($User->Crypto->decrypt($item->values, $_SESSION['vault'.$item->vaultId]));
     // title

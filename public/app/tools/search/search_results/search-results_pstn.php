@@ -92,7 +92,7 @@ if (count($result_pstn) > 0) {
 
 <?php
 if (count($result_pstn) == 0) {
-    $Result->show('info', _('No results'), false);
+    $Result->warn('info', _('No results'));
 }
 ?>
 
@@ -169,5 +169,5 @@ if (count($result_pstnn) > 0) {
 </table>
 <?php
 if (count($result_pstnn) == 0) {
-    $Result->show('info', _('No results'), false);
+    $Result->warn('info', _('No results'));
 }

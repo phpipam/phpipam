@@ -18,7 +18,7 @@ $tabs = ['subnets', 'leases', 'reservations'];
     <?php
     // validate DHCP settings - JSON
     if ($Tools->validate_json_string($User->settings->DHCP) === false) {
-        $Result->show('danger', 'Error parsing DHCP settings: '.$Tools->json_error, false);
+        $Result->warn('danger', 'Error parsing DHCP settings: '.$Tools->json_error);
     } else {
         // parse and verify settings
         $dhcp_db = db_json_decode($User->settings->DHCP, true);
@@ -39,7 +39,7 @@ $tabs = ['subnets', 'leases', 'reservations'];
 
         // check
         if (! in_array($GET->subnetId, $tabs)) {
-            $Result->show('danger', 'Invalid request', true);
+            $Result->die('danger', 'Invalid request');
         }
 
         // print
@@ -58,7 +58,7 @@ $tabs = ['subnets', 'leases', 'reservations'];
 
         // include file
         if (! file_exists(__DIR__.$filename)) {
-            $Result->show('danger', 'Invalid request', true);
+            $Result->die('danger', 'Invalid request');
         } else {
             include __DIR__.$filename;
         }
@@ -68,9 +68,9 @@ $tabs = ['subnets', 'leases', 'reservations'];
     }
 } else {
     if ($User->get_module_permissions('dhcp') == User::ACCESS_NONE) {
-        $Result->show('danger', _('You do not have permissions to access this module'), false);
+        $Result->warn('danger', _('You do not have permissions to access this module'));
     } else {
-        $Result->show('info', _('Please enable DHCP module under server management'), false);
+        $Result->warn('info', _('Please enable DHCP module under server management'));
     }
 }
 ?>

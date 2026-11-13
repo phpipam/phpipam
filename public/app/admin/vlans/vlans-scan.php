@@ -25,17 +25,17 @@ $csrf = $User->Crypto->csrf_session_token();
 
 // scan disabled
 if ($User->settings->enableSNMP != '1') {
-    $Result->show('danger', _('SNMP module disabled'), true, true);
+    $Result->die('danger', _('SNMP module disabled'), true);
 }
 
 // domain Id must be int
 if (! is_numeric($POST->domainId)) {
-    $Result->show('danger', _('Invalid domain Id'), true, true);
+    $Result->die('danger', _('Invalid domain Id'), true);
 }
 // fetch domain
 $domain = $Tools->fetch_object('vlanDomains', 'id', $POST->domainId);
 if ($domain === false) {
-    $Result->show('danger', _('Invalid domain Id'), true, true);
+    $Result->die('danger', _('Invalid domain Id'), true);
 }
 
 // fetch devices that use get_routing_table query
@@ -43,7 +43,7 @@ $scan_devices = $Tools->fetch_multiple_objects('devices', 'snmp_queries', '%get_
 
 // if none set die
 if ($scan_devices === false) {
-    $Result->show('danger', _('No devices for SNMP VLAN query available'), true, true);
+    $Result->die('danger', _('No devices for SNMP VLAN query available'), true);
 }
 
 ?>

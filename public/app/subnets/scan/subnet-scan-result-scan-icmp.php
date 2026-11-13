@@ -6,12 +6,12 @@
 
 // subnet Id must be a integer
 if (! is_numeric($POST->subnetId) || $POST->subnetId == 0) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // verify that user has write permissionss for subnet
 if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
-    $Result->show('danger', _('You do not have permissions to modify hosts in this subnet').'!', true);
+    $Result->die('danger', _('You do not have permissions to modify hosts in this subnet').'!');
 }
 
 // fetch custom fields and check for required
@@ -50,7 +50,7 @@ foreach ($POST as $key => $line) {
     // verify that it is not already in table!
     if (substr((string) $key, 0, 2) == 'ip') {
         if ($Addresses->address_exists($line, $POST->subnetId) === true) {
-            $Result->show('danger', "IP address $line already exists!", true);
+            $Result->die('danger', "IP address $line already exists!");
         }
     }
 }
@@ -77,17 +77,17 @@ if (count($res) > 0) {
 
         // insert
         if (! $Addresses->modify_address($values)) {
-            $Result->show('danger', 'Failed to import entry '.$r['ip_addr'], false);
+            $Result->warn('danger', 'Failed to import entry '.$r['ip_addr']);
             $errors++;
         }
     }
 
     // success if no errors
     if ($errors == 0) {
-        $Result->show('success', _('Scan results added to database').'!', true);
+        $Result->die('success', _('Scan results added to database').'!');
     }
 }
 // error
 else {
-    $Result->show('danger', _('No entries available'), true);
+    $Result->die('danger', _('No entries available'));
 }

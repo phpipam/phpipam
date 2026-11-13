@@ -20,21 +20,21 @@ $User->check_user_session();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // check subnet permissions
 if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
-    $Result->show('danger', _('You do not have permissions to add edit/delete this subnet').'!', true);
+    $Result->die('danger', _('You do not have permissions to add edit/delete this subnet').'!');
 }
 
 // ID must be numeric
 if (! is_numeric($POST->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 if (! is_numeric($POST->linked_subnet)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // submit
@@ -45,5 +45,5 @@ $values = [
 
 // verify that user has write permissions for subnet
 if ($Subnets->modify_subnet('edit', $values) !== false) {
-    $Result->show('success', _('Subnet linked'), false);
+    $Result->warn('success', _('Subnet linked'));
 }

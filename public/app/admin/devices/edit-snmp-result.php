@@ -23,42 +23,42 @@ if ($POST->action == 'edit') {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // ID, port snd community must be numeric
 if (! is_numeric($POST->device_id)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 if (! is_numeric($POST->snmp_version)) {
-    $Result->show('danger', _('Invalid version'), true);
+    $Result->die('danger', _('Invalid version'));
 }
 
 if ($POST->snmp_version != 0) {
     if (! is_numeric($POST->snmp_port)) {
-        $Result->show('danger', _('Invalid port'), true);
+        $Result->die('danger', _('Invalid port'));
     }
 
     if (! is_numeric($POST->snmp_timeout)) {
-        $Result->show('danger', _('Invalid timeout'), true);
+        $Result->die('danger', _('Invalid timeout'));
     }
 }
 
 // version can be 0, 1 or 2
 if ($POST->snmp_version < 0 || $POST->snmp_version > 3) {
-    $Result->show('danger', _('Invalid version'), true);
+    $Result->die('danger', _('Invalid version'));
 }
 
 // validate device
 $device = $Admin->fetch_object('devices', 'id', $POST->device_id);
 if ($device === false) {
-    $Result->show('danger', _('Invalid device'), true);
+    $Result->die('danger', _('Invalid device'));
 }
 
 // validate device ip
 if ($Admin->validate_ip($device->ip_addr) === false) {
-    $Result->show('danger', _('Invalid device IP address'), true);
+    $Result->die('danger', _('Invalid device IP address'));
 }
 
 // set snmp queries
@@ -92,7 +92,7 @@ $values = [
 
 // update device
 if (! $Admin->object_modify('devices', 'edit', 'id', $values)) {
-    $Result->show('danger', _('SNMP edit failed').'!', false);
+    $Result->warn('danger', _('SNMP edit failed').'!');
 } else {
-    $Result->show('success', _('SNMP edit successful').'!', false);
+    $Result->warn('success', _('SNMP edit successful').'!');
 }

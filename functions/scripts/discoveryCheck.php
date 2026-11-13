@@ -46,7 +46,7 @@ if (@$config['discovery_check_method']) {
 
 // Check if scanning has been disabled
 if ($Scan->icmp_type == 'none') {
-    $Result->show('danger', _('Scanning disabled').' (scanPingType=None)', true, true);
+    $Result->die('danger', _('Scanning disabled').' (scanPingType=None)', true);
 }
 
 // set ping statuses
@@ -356,8 +356,8 @@ if ($discovered > 0 && $config['discovery_check_send_mail']) {
         // send
         $phpipam_mail->Php_mailer->send();
     } catch (PHPMailer\PHPMailer\Exception $e) {
-        $Result->show_cli(_('Mailer Error').': '.$e->errorMessage(), true);
+        $Result->die(false, _('Mailer Error').': '.$e->errorMessage());
     } catch (Exception $e) {
-        $Result->show_cli(_('Mailer Error').': '.$e->getMessage(), true);
+        $Result->die(false, _('Mailer Error').': '.$e->getMessage());
     }
 }

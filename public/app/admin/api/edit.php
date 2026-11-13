@@ -26,7 +26,7 @@ $Admin->validate_action();
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->appid)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch api for edit / add
@@ -34,7 +34,7 @@ if ($POST->action != 'add') {
     // fetch api details
     $api = $Admin->fetch_object('api', 'id', $POST->appid);
     // null ?
-    $api === false ? $Result->show('danger', _('Invalid ID'), true) : null;
+    $api === false ? $Result->die('danger', _('Invalid ID')) : null;
     // title
     $title = $User->get_post_action().' '._('api').' '.$api->app_id;
 } else {

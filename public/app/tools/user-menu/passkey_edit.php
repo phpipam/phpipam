@@ -26,7 +26,7 @@ $passkey = $User->get_user_passkey_by_keyId($POST->keyid);
 
 // validate
 if (is_null($passkey)) {
-    $Result->show('danger', _('Passkey not found'), true, true);
+    $Result->die('danger', _('Passkey not found'), true);
 }
 ?>
 
@@ -39,7 +39,7 @@ if (is_null($passkey)) {
 
     <?php
     if ($POST->action == 'add') {
-        $Result->show('success', _('New passkey succesfully registered!'));
+        $Result->warn('success', _('New passkey succesfully registered!'));
         print '<hr>';
     }
 ?>
@@ -70,7 +70,7 @@ if (is_null($passkey)) {
 
     <?php
     if ($POST->action == 'delete') {
-        $Result->show('danger', _('You are about to delete your passkey ').$passkey->comment.'!', false);
+        $Result->warn('danger', _('You are about to delete your passkey ').$passkey->comment.'!');
     }
 ?>
 </form>

@@ -13,15 +13,15 @@ $User->check_user_session();
 
 // validate
 if (! is_numeric($GET->subnetId)) {
-    $Result->show('danger', _('Invalid Id'), true);
+    $Result->die('danger', _('Invalid Id'));
 } else {
     // perm check
     if ($User->get_module_permissions('locations') == User::ACCESS_NONE) {
-        $Result->show('danger', _('You do not have permissions to access this module'), false);
+        $Result->warn('danger', _('You do not have permissions to access this module'));
     }
     // check that location support isenabled
     elseif ($User->settings->enableLocations != '1') {
-        $Result->show('danger', _('Locations module disabled.'), false);
+        $Result->warn('danger', _('Locations module disabled.'));
     } else {
         // fetch all locations
         $location = $Tools->fetch_object('locations', 'id', $GET->subnetId);
@@ -30,7 +30,7 @@ if (! is_numeric($GET->subnetId)) {
         $cfields = $Tools->fetch_custom_fields('locations');
 
         if ($location === false) {
-            $Result->show('danger', _('Location not found'), false);
+            $Result->warn('danger', _('Location not found'));
         } else {
             // grid
             print "<div class='row'>";
@@ -72,7 +72,7 @@ if (! is_numeric($GET->subnetId)) {
             if (is_blank($location->lat) || is_blank($location->long)) {
                 print '<tr>';
                 print '	<th></th>';
-                print '	<td>'.$Result->show('warning', _('Location not set'), false, false, true).'</td>';
+                print '	<td>'.$Result->warn('warning', _('Location not set'), false, true).'</td>';
                 print '</tr>';
             }
 
@@ -132,7 +132,7 @@ if (! is_numeric($GET->subnetId)) {
             // none
             if ($objects === false) {
                 print '<tr>';
-                print "	<td colspan='2'>".$Result->show('info', _('No objects'), false, false, true).'</td>';
+                print "	<td colspan='2'>".$Result->warn('info', _('No objects'), false, true).'</td>';
                 print '</tr>';
             } else {
                 // reindex

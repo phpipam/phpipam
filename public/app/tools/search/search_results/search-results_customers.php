@@ -99,5 +99,5 @@ if (is_array($result_customers)) {
 <?php
 // no customers
 if (count($result_customers) == 0) {
-    $Result->show('info', _('No results'), false);
+    $Result->warn('info', _('No results'));
 }

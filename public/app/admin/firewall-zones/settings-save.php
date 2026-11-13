@@ -27,64 +27,64 @@ if ($POST->action == 'edit') {
 
 // check for the maximum length of the zone name, it has to be between 3 and 31. also be sure that this value is decimal.
 if (($POST->zoneLength < 1) || ($POST->zoneLength > 31)) {
-    $Result->show('danger', _('Invalid zone name length parameter. A valid valid value is between 1 and 31.'), true);
+    $Result->die('danger', _('Invalid zone name length parameter. A valid valid value is between 1 and 31.'));
 }
 
 $ipType = $POST->ipType;
 // validate the IPv4 type alias.
 if (! is_array($ipType) || count($ipType) < 2 || ! preg_match('/^[a-z0-9\-\_.]+$/i', (string) $ipType[0])) {
-    $Result->show('danger', _('Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed.'), true);
+    $Result->die('danger', _('Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed.'));
 }
 
 // validate the IPv6 type alias.
 if (! is_array($ipType) || count($ipType) < 2 || ! preg_match('/^[a-z0-9\-\_.]+$/i', (string) $ipType[1])) {
-    $Result->show('danger', _('Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed.'), true);
+    $Result->die('danger', _('Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed.'));
 }
 
 // validate the separator character.
 if (! preg_match('/^[\-\_.]+$/i', (string) $POST->separator)) {
-    $Result->show('danger', _('Invalid separator. Only &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed.'), true);
+    $Result->die('danger', _('Invalid separator. Only &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed.'));
 }
 
 $indicator = $POST->indicator;
 // validate the indicator for own firewall zones.
 if (! is_array($indicator) || count($indicator) < 2 || ! preg_match('/^[a-z0-9\-\_.]+$/i', (string) $indicator[0])) {
-    $Result->show('danger', _('Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed.'), true);
+    $Result->die('danger', _('Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed.'));
 }
 
 // validate the IPv6 type alias.
 if (! is_array($indicator) || count($indicator) < 2 || ! preg_match('/^[a-z0-9\-\_.]+$/i', (string) $indicator[1])) {
-    $Result->show('danger', _('Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed.'), true);
+    $Result->die('danger', _('Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed.'));
 }
 
 // validate the zoneGenerator value.
 if (! preg_match('/^[0-3]$/i', (string) $POST->zoneGenerator)) {
-    $Result->show('danger', _('Invalid zone generator method. Do not manipulate the POST values!'), true);
+    $Result->die('danger', _('Invalid zone generator method. Do not manipulate the POST values!'));
 }
 
 // validate the hidden values (zoneGeneratorType).
 if (! is_array($POST->zoneGeneratorType) || $POST->zoneGeneratorType !== ['decimal', 'hex', 'text']) {
-    $Result->show('danger', _('Invalid zone generator types. Do not manipulate the POST values!'), true);
+    $Result->die('danger', _('Invalid zone generator types. Do not manipulate the POST values!'));
 }
 
 // validate the padding checkbox value
 if ($POST->padding) {
     if ($POST->padding != 'on' && $POST->padding != 'off') {
-        $Result->show('danger', _('Invalid padding value. Use the checkbox to set the padding value to on or off.'), true);
+        $Result->die('danger', _('Invalid padding value. Use the checkbox to set the padding value to on or off.'));
     }
 }
 
 // validate the strictMode checkbox value
 if ($POST->strictMode) {
     if ($POST->strictMode != 'on' && $POST->strictMode != 'off') {
-        $Result->show('danger', _('Invalid padding value. Use the checkbox to set the padding value to on or off.'), true);
+        $Result->die('danger', _('Invalid padding value. Use the checkbox to set the padding value to on or off.'));
     }
 }
 
 // validate the autogen checkbox value
 if ($POST->autogen) {
     if ($POST->autogen != 'on' && $POST->autogen != 'off') {
-        $Result->show('danger', _('Invalid autogen value. Use the checkbox to set the autogen value to on or off.'), true);
+        $Result->die('danger', _('Invalid autogen value. Use the checkbox to set the autogen value to on or off.'));
     }
 }
 
@@ -94,26 +94,26 @@ if ($POST->pattern) {
         if (
             ! in_array($pattern, ['patternIndicator', 'patternZoneName', 'patternIPType', 'patternHost', 'patternFQDN', 'patternSeparator', ''])
         ) {
-            $Result->show('danger', _('Invalid pattern value.'), true);
+            $Result->die('danger', _('Invalid pattern value.'));
         }
     }
 } else {
-    $Result->show('danger', _('Please select at least one item to generate a valid name pattern.'), true);
+    $Result->die('danger', _('Please select at least one item to generate a valid name pattern.'));
 }
 
 // validate device type ID.
 if (! preg_match('/^[0-9]+$/i', (string) $POST->deviceType)) {
-    $Result->show('danger', _('Invalid device type.'), true);
+    $Result->die('danger', _('Invalid device type.'));
 }
 
 // validate the hidden values (subnetPatternValues).
 if (! is_array($POST->subnetPatternValues) || $POST->subnetPatternValues !== ['network', 'description']) {
-    $Result->show('danger', _('Invalid subnet name types. Do not manipulate the POST values!'), true);
+    $Result->die('danger', _('Invalid subnet name types. Do not manipulate the POST values!'));
 }
 
 // validate the subnetPattern value.
 if (! preg_match('/^[0-1]$/i', (string) $POST->subnetPattern)) {
-    $Result->show('danger', _('Invalid subnet name. Do not manipulate the POST values!'), true);
+    $Result->die('danger', _('Invalid subnet name. Do not manipulate the POST values!'));
 }
 
 // formulate json
@@ -159,7 +159,7 @@ $values = ['id' => 1,
 
 // update the settings, alert or reply the success message.
 if (! $Admin->object_modify('settings', 'edit', 'id', $values)) {
-    $Result->show('danger', _('Cannot update settings'), true);
+    $Result->die('danger', _('Cannot update settings'));
 } else {
-    $Result->show('success', _('Settings updated successfully'), true);
+    $Result->die('success', _('Settings updated successfully'));
 }

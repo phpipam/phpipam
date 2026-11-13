@@ -28,7 +28,7 @@ if ($POST->action == 'edit') {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // checks / validation
@@ -36,7 +36,7 @@ if ($POST->action != 'delete') {
     // fqdn
     if ($POST->action == 'add') {
         if ($Tools->validate_hostname($POST->name) === false) {
-            $Result->show('danger', _('Invalid domain name'), true);
+            $Result->die('danger', _('Invalid domain name'));
         }
     }
 
@@ -48,44 +48,44 @@ if ($POST->action != 'delete') {
             $masters = array_filter(explode(',', (string) $POST->master));
             foreach ($masters as $m) {
                 if (! filter_var($m, FILTER_VALIDATE_IP)) {
-                    $Result->show('danger', _('Master must be an IP address').' - '.$m, true);
+                    $Result->die('danger', _('Master must be an IP address').' - '.$m);
                 }
             }
         } else {
             if (! filter_var($POST->master, FILTER_VALIDATE_IP)) {
-                $Result->show('danger', _('Master must be an IP address').' - '.escape_input($POST->master), true);
+                $Result->die('danger', _('Master must be an IP address').' - '.escape_input($POST->master));
             }
         }
     }
 
     // type
     if (! in_array($POST->type, (array) $PowerDNS->domain_types)) {
-        $Result->show('danger', _('Invalid domain type'), true);
+        $Result->die('danger', _('Invalid domain type'));
     }
 
     // new domain
     if ($POST->action == 'add' && ! isset($POST->manual)) {
         if ($Tools->validate_email($POST->hostmaster) === false) {
-            $Result->show('danger', _('Invalid domain hostmaster'), true);
+            $Result->die('danger', _('Invalid domain hostmaster'));
         }
     }
 
     // if slave master must be present
     if ($POST->type == 'SLAVE') {
         if (is_blank($POST->master)) {
-            $Result->show('danger', _('Please set master server(s) if domain type is SLAVE'), true);
+            $Result->die('danger', _('Please set master server(s) if domain type is SLAVE'));
         } else {
             if (strpos((string) $POST->master, ',') !== false) {
                 // to array and trim, check each
                 $masters = array_filter(explode(',', (string) $POST->master));
                 foreach ($masters as $m) {
                     if (! filter_var($m, FILTER_VALIDATE_IP)) {
-                        $Result->show('danger', _('Master must be an IP address').' - '.$m, true);
+                        $Result->die('danger', _('Master must be an IP address').' - '.$m);
                     }
                 }
             } else {
                 if (! filter_var($POST->master, FILTER_VALIDATE_IP)) {
-                    $Result->show('danger', _('Master must be an IP address').' - '.escape_input($POST->master), true);
+                    $Result->die('danger', _('Master must be an IP address').' - '.escape_input($POST->master));
                 }
             }
         }
@@ -119,9 +119,9 @@ if ($POST->action == 'add' && ! isset($POST->manual)) {
 
 // update
 if (! $PowerDNS->domain_edit($POST->action, $values)) {
-    $Result->show('danger', _('Failed to').' '.$User->get_post_action().' '._('domain').'!', true);
+    $Result->die('danger', _('Failed to').' '.$User->get_post_action().' '._('domain').'!');
 } else {
-    $Result->show('success', _('Domain').' '.$User->get_post_action().' '._('successful').'!', false);
+    $Result->warn('success', _('Domain').' '.$User->get_post_action().' '._('successful').'!');
 }
 
 // create default records

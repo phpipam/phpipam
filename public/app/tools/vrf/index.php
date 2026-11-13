@@ -9,7 +9,7 @@ $User->check_user_session();
 
 // perm check
 if ($User->get_module_permissions('vrf') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 // display single VRF or all ?
 elseif (is_numeric($GET->subnetId)) {
@@ -19,7 +19,7 @@ elseif (is_numeric($GET->subnetId)) {
     if ($vrf === false) {
         print "<div class='subnetDetails'>";
         print '<h3>'._('Error').'</h3><hr>';
-        $Result->show('danger', _('Invalid VRF id'), false);
+        $Result->warn('danger', _('Invalid VRF id'));
         print '</div>';
     } else {
         // print VRF details

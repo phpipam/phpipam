@@ -213,7 +213,7 @@ class Common_functions
         try {
             $res = $this->Database->getObjects($table, $sortField, $sortAsc);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -277,7 +277,7 @@ class Common_functions
         try {
             $res = $this->Database->getObjectQuery($table, $query, ['method' => $value]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -312,7 +312,7 @@ class Common_functions
         try {
             $res = $this->Database->findObjects($table, $field, $value, $sortField, $sortAsc, $like, false, $result_fields);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -343,7 +343,7 @@ class Common_functions
         try {
             $cnt = $this->Database->numObjectsFilter($table, $field, $val, $like);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -363,7 +363,7 @@ class Common_functions
         try {
             $cnt = $this->Database->getGroupBy($table, $field);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -396,7 +396,7 @@ class Common_functions
             $query = 'SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?;';
             $schema = $this->Database->getObjectsQuery('no_html_escape', $query, [$this->Database->dbname, $tableName]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return $results;
         }
@@ -1119,7 +1119,7 @@ class Common_functions
         $valid_actions = $this->get_valid_actions();
 
         if (! in_array($action, $valid_actions)) {
-            $this->Result->show('danger', _('Invalid action!'), true, $popup);
+            $this->Result->die('danger', _('Invalid action!'), $popup);
         }
     }
 

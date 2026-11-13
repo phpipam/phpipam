@@ -9,7 +9,7 @@ $custom_fields_v = $Tools->fetch_custom_fields('vaults');
 // printout
 // perm check
 if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 } else {
     print '<h4>'._('Vault details')." - $vault->name</h4>";
     print '<hr>';

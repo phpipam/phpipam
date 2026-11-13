@@ -23,7 +23,7 @@ if (! isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WIT
 
 // if syslog print
 if ($User->settings->log == 'syslog') {
-    $Result->show('warning', _('Log files are sent to syslog'));
+    $Result->warn('warning', _('Log files are sent to syslog'));
 } else {
     // fetch widget parameters
     $wparam = $Tools->get_widget_params('access_logs');

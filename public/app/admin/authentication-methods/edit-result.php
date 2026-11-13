@@ -24,7 +24,7 @@ $User->is_demo();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 unset($POST->csrf_cookie);
@@ -38,7 +38,7 @@ if ($action == 'add') {
 } else {
     // check id
     if (! is_numeric($POST->id)) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }
 }
 
@@ -53,17 +53,17 @@ $values = [
 if ($POST->type == 'SAML2') {
     // The JIT & SAML mapped user options are mutually exclusive.
     if (filter_var($POST->jit, FILTER_VALIDATE_BOOLEAN) && ! empty($POST->MappedUser)) {
-        $Result->show('danger', _('The JIT and mapped user options are mutually exclusive'), true);
+        $Result->die('danger', _('The JIT and mapped user options are mutually exclusive'));
     }
 
     // Validate Prettify links is enabled for strict mode.
     if (filter_var($POST->strict, FILTER_VALIDATE_BOOLEAN) && ! filter_var($User->settings->prettyLinks, FILTER_VALIDATE_BOOLEAN)) {
-        $Result->show('danger', _('Strict mode requires global setting "Prettify links"=yes'), true);
+        $Result->die('danger', _('Strict mode requires global setting "Prettify links"=yes'));
     }
 
     // Verify that the private certificate and key are provided if Signing Authn Requests is set
     if ($action != 'delete' && filter_var(['spsignauthn'], FILTER_VALIDATE_BOOLEAN) && (empty($POST->spx509cert) || empty($POST->spx509key))) {
-        $Result->show('danger', _('SP (Client) certificate and key are required to sign Authn requests'), true);
+        $Result->die('danger', _('SP (Client) certificate and key are required to sign Authn requests'));
     }
 }
 
@@ -97,9 +97,9 @@ if ($action == 'add') {
 
 // update
 if (! $Admin->object_modify('usersAuthMethod', $action, 'id', $values, $values_log)) {
-    $Result->show('danger', _('Failed to edit authentication method'), false);
+    $Result->warn('danger', _('Failed to edit authentication method'));
 } else {
-    $Result->show('success', _('Authentication method updated'), false);
+    $Result->warn('success', _('Authentication method updated'));
 }
 
 // if delete also reset all users that have thos auth method

@@ -21,18 +21,18 @@ $User->is_admin();
 
 /* verifications */
 if (! isset($POST->tableid) || is_blank($POST->tableid)) {
-    $Result->show('danger', _('Wrong parameters'), true);
+    $Result->die('danger', _('Wrong parameters'));
 } else {
     // fix table
     if ($POST->type == 'table') {
         $Tools->fix_table($POST->tableid);
-        $Result->show('success', _('Table fixed'));
+        $Result->warn('success', _('Table fixed'));
     }
     // fix field
     elseif ($POST->type == 'field') {
         $Tools->fix_field($POST->tableid, $POST->fieldid);
-        $Result->show('success', _('Field fixed'));
+        $Result->warn('success', _('Field fixed'));
     } else {
-        $Result->show('danger', _('Wrong parameters'), true);
+        $Result->die('danger', _('Wrong parameters'));
     }
 }

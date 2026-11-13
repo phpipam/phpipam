@@ -29,18 +29,18 @@ $csrf = $User->Crypto->csrf_session_token();
 $Tools->validate_action(false);
 
 // validate post
-is_numeric($POST->subnetId) ?: $Result->show('danger', _('Invalid ID'), true);
-is_numeric($POST->id) || is_blank($POST->id) ?: $Result->show('danger', _('Invalid ID'), true);
+is_numeric($POST->subnetId) ?: $Result->die('danger', _('Invalid ID'));
+is_numeric($POST->id) || is_blank($POST->id) ?: $Result->die('danger', _('Invalid ID'));
 
 // fetch address and subnet
 $address = (array) $Addresses->fetch_address(null, $POST->id);
 $subnet = (array) $Subnets->fetch_subnet(null, $POST->subnetId);
 
 if ($address === [] || $subnet === [] || (int) $address['subnetId'] !== (int) $subnet['id']) {
-    $Result->show('danger', _('Invalid address for selected subnet'), true);
+    $Result->die('danger', _('Invalid address for selected subnet'));
 }
 
-$Subnets->check_permission($User->user, $address['subnetId']) > 1 ?: $Result->show('danger', _('Cannot edit IP address'), true);
+$Subnets->check_permission($User->user, $address['subnetId']) > 1 ?: $Result->die('danger', _('Cannot edit IP address'));
 
 // fetch all slave subnets
 $Subnets->fetch_subnet_slaves_recursive($subnet['id']);

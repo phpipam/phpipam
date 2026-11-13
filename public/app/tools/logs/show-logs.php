@@ -129,5 +129,5 @@ foreach ($logs as $log) {
 
 
 <?php if (count($logs) == 0) {
-    $Result->show('info', _('No logs available').'!', true);
+    $Result->die('info', _('No logs available').'!');
 } ?>

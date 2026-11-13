@@ -18,11 +18,11 @@ $User->check_user_session();
 
 // tls check
 if (! $Tools->isHttps()) {
-    $Result->show('danger alert-absolute', _('TLS is required for passcode authentication'), false);
+    $Result->warn('danger alert-absolute', _('TLS is required for passcode authentication'));
 }
 // are passkeys enabled ?
 elseif (! $User->settings->dbversion >= 40 && $User->settings->passkeys == 1) {
-    $Result->show('danger alert-absolute', _('Passkey authentication is disabled'), false);
+    $Result->warn('danger alert-absolute', _('Passkey authentication is disabled'));
 }
 // is
 else {
@@ -31,11 +31,11 @@ else {
 
     // passkey 0nly ?
     if (count($user_passkeys) > 0 && $User->user->passkey_only == 1) {
-        $Result->show('warning alert-absolute', _('You can login to your account with with passkeys only').'.<hr>'._('This can be changed under Account details tab').'.');
+        $Result->warn('warning alert-absolute', _('You can login to your account with with passkeys only').'.<hr>'._('This can be changed under Account details tab').'.');
     } elseif ($User->user->passkey_only == 1) {
-        $Result->show('warning alert-absolute', _('You can login to your account with normal authentication method only untill you create passkeys'.'.<hr>'._('This can be changed under Account details tab.')));
+        $Result->warn('warning alert-absolute', _('You can login to your account with normal authentication method only untill you create passkeys'.'.<hr>'._('This can be changed under Account details tab.')));
     } else {
-        $Result->show('warning alert-absolute', _('You can login to your account with normal authentication method or with passkeys'.'.<hr>'._('This can be changed under Account details tab.')));
+        $Result->warn('warning alert-absolute', _('You can login to your account with normal authentication method or with passkeys'.'.<hr>'._('This can be changed under Account details tab.')));
     }
     print "<div class='clearfix'></div>";
 

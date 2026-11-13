@@ -20,7 +20,7 @@
 try {
     $Database->getObjectsQuery('settings', 'SELECT * FROM settings LIMIT 1;');
 } catch (Exception $exception) {
-    $Result->show('danger', _('Error').':<hr>'.$exception->getMessage(), false);
+    $Result->warn('danger', _('Error').':<hr>'.$exception->getMessage());
     $error = true;
 
     // text
@@ -34,7 +34,7 @@ try {
     print '</div>';
 }
 if ($error === false) {
-    $Result->show('success', _('Database connection successful'), false);
+    $Result->warn('success', _('Database connection successful'));
 }
 ?>
         </div>

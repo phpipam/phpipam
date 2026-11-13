@@ -27,7 +27,7 @@ if ($POST->action == 'edit') {
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // validate action
@@ -39,31 +39,31 @@ $Admin->validate_action();
 
 // IDs must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // add / edit validations
 if ($POST->action != 'delete') {
     // check strings
     if (strlen((string) $POST->title) < 3) {
-        $Result->show('danger', _('Invalid Title'), true);
+        $Result->die('danger', _('Invalid Title'));
     }
 
     if (strlen((string) $POST->address) < 3) {
-        $Result->show('danger', _('Invalid Address'), true);
+        $Result->die('danger', _('Invalid Address'));
     }
 
     if (strlen((string) $POST->city) < 3) {
-        $Result->show('danger', _('Invalid City'), true);
+        $Result->die('danger', _('Invalid City'));
     }
 
     if (strlen((string) $POST->state) < 3) {
-        $Result->show('danger', _('Invalid State'), true);
+        $Result->die('danger', _('Invalid State'));
     }
 
     // validate postcode
     if (! $Tools->validate_postcode($POST->postcode, $POST->state)) {
-        $Result->show('danger', _('Invalid Postcode'), true);
+        $Result->die('danger', _('Invalid Postcode'));
     }
 }
 
@@ -97,11 +97,11 @@ if (isset($latlng['lat']) && isset($latlng['lng'])) {
     $values['long'] = $latlng['lng'];
 } else {
     if (! Config::ValueOf('offline_mode') && ! Config::ValueOf('disable_geoip_lookups')) {
-        $Result->show('warning', _('Failed to update location lat/lng from Nominatim').'.<br>'.$latlng['error'], false);
+        $Result->warn('warning', _('Failed to update location lat/lng from Nominatim').'.<br>'.$latlng['error']);
     }
 }
 
 // update customer
 if ($Admin->object_modify('customers', $POST->action, 'id', $values)) {
-    $Result->show('success', _('Customer').' '.$User->get_post_action().' '._('successful').'!', false);
+    $Result->warn('success', _('Customer').' '.$User->get_post_action().' '._('successful').'!');
 }

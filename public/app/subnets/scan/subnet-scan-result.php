@@ -18,13 +18,13 @@ $User->check_user_session();
 
 // check if $POST input data has been truncated (canary=true input dropped)
 if (! isset($POST->canary)) {
-    $Result->show('danger', _('phpIPAM received truncated POST data').'<br>'._('Please check your webserver and/or php.ini setting:').' `max_input_vars` = '.ini_get('max_input_vars'), true);
+    $Result->die('danger', _('phpIPAM received truncated POST data').'<br>'._('Please check your webserver and/or php.ini setting:').' `max_input_vars` = '.ini_get('max_input_vars'));
 } else {
     unset($POST->canary);
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 $type = $POST->type;
@@ -38,5 +38,5 @@ switch ($type) {
         require "subnet-scan-result-$type.php";
         break;
     default:
-        $Result->show('danger', _('Invalid scan type').' ('.$type.')', true);
+        $Result->die('danger', _('Invalid scan type').' ('.$type.')');
 }

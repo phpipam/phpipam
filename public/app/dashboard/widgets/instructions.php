@@ -38,7 +38,7 @@ $widget = $Tools->fetch_object('widgets', 'wfile', 'instructions');
 if (! isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') {
     // get widget details
     if (! $widget = $Tools->fetch_object('widgets', 'wfile', $GET->section)) {
-        $Result->show('danger', _('Invalid widget'), true);
+        $Result->die('danger', _('Invalid widget'));
     }
 
     // reset size and limit

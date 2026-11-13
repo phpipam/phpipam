@@ -22,7 +22,7 @@ $User->check_module_permissions('racks', User::ACCESS_R, true, true);
 
 // check that rack support isenabled
 if ($User->settings->enableRACK != '1') {
-    $Result->show('danger', _('RACK management disabled.'), true, true, false, true);
+    $Result->die('danger', _('RACK management disabled.'), true, false, true);
 } else {
     // validate integer
     if (! is_numeric($POST->rackid)) {
@@ -46,7 +46,7 @@ if ($User->settings->enableRACK != '1') {
 <div class="pContent text-center">
     <?php
     if (isset($error)) {
-        $Result->show('danger', _((string) $error), true, true, false, true);
+        $Result->die('danger', _((string) $error), true, false, true);
     } else {
         ?>
         <img src="<?php print $Tools->create_rack_link($rack->id, $POST->deviceid); ?>" style='width:180px;'>

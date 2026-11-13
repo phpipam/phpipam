@@ -11,7 +11,7 @@ $User->check_module_permissions('vrf', User::ACCESS_R, true, false);
 
 // not existing
 if (! is_object($vrf)) {
-    $Result->show('danger', _('Invalid VRF id'), true);
+    $Result->die('danger', _('Invalid VRF id'));
     exit(0);
 }
 

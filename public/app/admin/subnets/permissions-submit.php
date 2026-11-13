@@ -21,11 +21,11 @@ $User->check_user_session();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 if ($Sections->check_permission($User->user, $POST->subnetId) != User::ACCESS_RWA) {
-    $Result->show('danger', _('You do not have permissions to add edit/delete this subnet').'!', true);
+    $Result->die('danger', _('You do not have permissions to add edit/delete this subnet').'!');
 }
 
 // fetch old subnet

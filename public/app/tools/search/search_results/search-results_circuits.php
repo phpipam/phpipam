@@ -93,7 +93,7 @@ if (count($result_circuits) > 0) {
 </table>
 <?php
 if (count($result_circuits) == 0) {
-    $Result->show('info', _('No results'), false);
+    $Result->warn('info', _('No results'));
 }
 ?>
 
@@ -151,5 +151,5 @@ if (count($result_circuits_p) > 0) {
 </table>
 <?php
 if (count($result_circuits_p) == 0) {
-    $Result->show('info', _('No results'), false);
+    $Result->warn('info', _('No results'));
 }

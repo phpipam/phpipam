@@ -27,12 +27,12 @@ print "<div class='alert-danger hidden'></div>";
 
 // scan disabled
 if ($User->settings->enableSNMP != '1') {
-    $Result->show('danger', _('SNMP module disabled'), true);
+    $Result->die('danger', _('SNMP module disabled'));
 }
 
 // admin check
 if ($User->is_admin() !== true) {
-    $Result->show('danger', _('Admin privileges required'), true);
+    $Result->die('danger', _('Admin privileges required'));
 }
 
 // set class
@@ -59,7 +59,7 @@ foreach ($POST as $k => $p) {
 
 // if none set die
 if (! isset($scan_devices)) {
-    $Result->show('danger', _('No devices for SNMP VRF query available'), true);
+    $Result->die('danger', _('No devices for SNMP VRF query available'));
 }
 
 // init result array
@@ -92,12 +92,12 @@ foreach ($scan_devices as $d) {
 
 // none and errors
 if (count($new_vrfs) == 0 && isset($errors) && is_array($errors)) {
-    $Result->show('info', _('No vrfs found'), false);
-    $Result->show('warning', implode('<hr>', $errors), false);
+    $Result->warn('info', _('No vrfs found'));
+    $Result->warn('warning', implode('<hr>', $errors));
 }
 // none
 elseif (count($new_vrfs) == 0) {
-    $Result->show('info', _('No vrfs found').'!', false);
+    $Result->warn('info', _('No vrfs found').'!');
 }
 // ok
 else {
@@ -182,7 +182,7 @@ else {
     if (isset($errors) && is_array($errors)) {
         print '<hr>';
         foreach ($errors as $e) {
-            print $Result->show('warning', $e, false);
+            print $Result->warn('warning', $e);
         }
     }
 }

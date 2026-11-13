@@ -23,13 +23,13 @@ $User->check_module_permissions('nat', User::ACCESS_RW, true, true);
 
 // get NAT object
 $nat = $Admin->fetch_object('nat', 'id', $POST->id);
-$nat !== false ?: $Result->show('danger', _('Invalid ID'), true);
+$nat !== false ?: $Result->die('danger', _('Invalid ID'));
 
 // static NAT checks
 if ($nat->type == 'static') {
     // static NAT can only have IP address
     if ($POST->object_type != 'ipaddresses') {
-        // $Result->show("danger", _("Static NAT can only contain IP address"), true);
+        // $Result->die("danger", _("Static NAT can only contain IP address"));
     }
 
     // decode
@@ -59,7 +59,7 @@ if ($nat->type == 'static') {
 
         if (isset($nat_src['ipaddresses'])) {
             if (count($nat_src['ipaddresses']) > 0) {
-                $Result->show('danger', _('Static NAT can only have 1 source address'), true);
+                $Result->die('danger', _('Static NAT can only have 1 source address'));
             }
         }
     }
@@ -70,7 +70,7 @@ if ($nat->type == 'static') {
 
         if (isset($nat_dst['ipaddresses'])) {
             if (count($nat_dst['ipaddresses']) > 0) {
-                $Result->show('danger', _('Static NAT can only have 1 destination address'), true);
+                $Result->die('danger', _('Static NAT can only have 1 destination address'));
             }
         }
     }
@@ -82,7 +82,7 @@ if ($nat->type == 'static') {
 
 // validate type
 if ($POST->type !== 'src' && $POST->type !== 'dst') {
-    $Result->show('danger', _('Invalid type'), true);
+    $Result->die('danger', _('Invalid type'));
 }
 
 // if type (subnets, ipaddresses) is set and id than just link
@@ -95,12 +95,12 @@ if (isset($POST->object_type) && isset($POST->object_id)) {
 
     // validate object type
     if (! in_array($obj_type, ['subnets', 'ipaddresses'])) {
-        $Result->show('danger', _('Invalid object type'), true);
+        $Result->die('danger', _('Invalid object type'));
     }
 
     // validate object id
     if (! is_numeric($obj_id)) {
-        $Result->show('danger', _('Invalid object id'), true);
+        $Result->die('danger', _('Invalid object id'));
     }
 
     // validate object
@@ -130,13 +130,13 @@ if (isset($POST->object_type) && isset($POST->object_id)) {
 
         // update
         if ($Admin->object_modify('nat', 'edit', 'id', ['id' => $nat_id, 'src' => $nat->src, 'dst' => $nat->dst])) {
-            $Result->show('success', 'Object added', false);
+            $Result->warn('success', 'Object added');
         } else {
-            $Result->show('danger', 'Failed to add object', false);
+            $Result->warn('danger', 'Failed to add object');
         }
     } else {
-        $Result->show('danger', _('Invalid object identifier'), true);
+        $Result->die('danger', _('Invalid object identifier'));
     }
 } else {
-    $Result->show('danger', _('Missing object type or id'), true);
+    $Result->die('danger', _('Missing object type or id'));
 }

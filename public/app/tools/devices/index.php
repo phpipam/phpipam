@@ -9,7 +9,7 @@ $User->check_user_session();
 
 // perm check
 if ($User->get_module_permissions('devices') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 // details
 elseif (isset($GET->subnetId)) {
@@ -22,7 +22,7 @@ elseif (isset($GET->subnetId)) {
     // by id
     else {
         // check
-        is_numeric($GET->subnetId) ?: $Result->show('danger', _('Invalid ID'), true);
+        is_numeric($GET->subnetId) ?: $Result->die('danger', _('Invalid ID'));
 
         // fetch device
         $device = $Tools->fetch_object('devices', 'id', $GET->subnetId);

@@ -24,7 +24,7 @@ $User->is_demo();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 /* checks */
@@ -47,7 +47,7 @@ if ($POST->action == 'edit' || $POST->action == 'delete') {
 
 // die if direct and delete
 if (@$agent_old->type == 'direct' && $POST->action == 'delete') {
-    $Result->show('danger', _('Cannot remove localhost scan agent'), true);
+    $Result->die('danger', _('Cannot remove localhost scan agent'));
 }
 
 // checks for edit / add
@@ -67,7 +67,7 @@ if ($POST->action != 'delete') {
 
 // die if errors
 if (count($error) > 0) {
-    $Result->show('danger', $error, true);
+    $Result->die('danger', $error);
 } else {
     // create array of values for modification
     $values = ['id' => $POST->id,
@@ -81,9 +81,9 @@ if (count($error) > 0) {
 
     // execute
     if (! $Admin->object_modify('scanAgents', $POST->action, 'id', $values)) {
-        $Result->show('danger', _('Agent '.$User->get_post_action().' error'), true);
+        $Result->die('danger', _('Agent '.$User->get_post_action().' error'));
     } else {
-        $Result->show('success', _('Agent '.$User->get_post_action().' success'), false);
+        $Result->warn('success', _('Agent '.$User->get_post_action().' success'));
     }
 
     // delete - unset scanning in all subnets
@@ -93,12 +93,12 @@ if (count($error) > 0) {
         try {
             $Database->runQuery($query, [$POST->id]);
         } catch (Exception $e) {
-            $Result->show('danger', _('Error: ').$e->getMessage());
+            $Result->warn('danger', _('Error: ').$e->getMessage());
 
             return false;
         }
 
         // references removed
-        $Result->show('info', _('Scan agent references removed'));
+        $Result->warn('info', _('Scan agent references removed'));
     }
 }

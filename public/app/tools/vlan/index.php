@@ -17,7 +17,7 @@ if (count($vlan_domains) == 1) {
 
 // perm check
 if ($User->get_module_permissions('vlan') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 // search vlan requested
 elseif ($GET->subnetId == 'all') {

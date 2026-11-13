@@ -141,5 +141,5 @@ print '</table>';
 
 // show text if no results
 if ($m == 0) {
-    $Result->show('info', _('No results'), false);
+    $Result->warn('info', _('No results'));
 }

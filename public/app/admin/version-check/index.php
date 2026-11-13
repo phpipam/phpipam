@@ -16,18 +16,18 @@ $version_delta = is_string($version) ? $Tools->cmp_version_strings(VERSION_VISIB
 if (is_string($version)) {
     // print result
     if ($version_delta == 0) {
-        $Result->show('success', _('Latest version').' ('.VERSION_VISIBLE.') '._('already installed').'!', false);
+        $Result->warn('success', _('Latest version').' ('.VERSION_VISIBLE.') '._('already installed').'!');
     } elseif ($version_delta > 0) {
-        $Result->show('success', _('Development version').' ('.VERSION_VISIBLE.') '._('installed! Latest production version is').' '.$version, false);
+        $Result->warn('success', _('Development version').' ('.VERSION_VISIBLE.') '._('installed! Latest production version is').' '.$version);
     } else {
-        $Result->show('danger', _('New version of phpipam available').':</b><hr>'._('Installed version').': '.VERSION_VISIBLE.'<br>'._('Available version').': '.$version.'<br><br>'._('You can download new version')." <a href='https://github.com/phpipam/phpipam/releases/tag/v$version'>"._('GitHub').'</a>'.' ( '._('archive').' <a href="https://sourceforge.net/projects/phpipam/files/current/phpipam-'.$version.'.tar/download">'._('SourceForge').'</a> ).', false);
+        $Result->warn('danger', _('New version of phpipam available').':</b><hr>'._('Installed version').': '.VERSION_VISIBLE.'<br>'._('Available version').': '.$version.'<br><br>'._('You can download new version')." <a href='https://github.com/phpipam/phpipam/releases/tag/v$version'>"._('GitHub').'</a>'.' ( '._('archive').' <a href="https://sourceforge.net/projects/phpipam/files/current/phpipam-'.$version.'.tar/download">'._('SourceForge').'</a> ).');
     }
 } else {
-    $Result->show('danger', _('Version check failed').'!', false);
+    $Result->warn('danger', _('Version check failed').'!');
 }
 
 if ($Tools->cmp_version_strings(VERSION, $User->settings->version) != 0) {
-    $Result->show('danger', _('Incompatible php and database schema versions').': php=v'.VERSION.', db=v'.$User->settings->version, false);
+    $Result->warn('danger', _('Incompatible php and database schema versions').': php=v'.VERSION.', db=v'.$User->settings->version);
 }
 
 // Show version info
@@ -95,7 +95,7 @@ if ($version_delta > 0) {
     $commit_log = shell_exec('git log -n100');
 
     if (! is_string($commit_log)) {
-        $Result->show('info', 'Git not available', false);
+        $Result->warn('info', 'Git not available');
     } else {
         // title
         print "<h4 style='margin-top:40px;'>Commit log (local) [Last 100]</h4><hr>";

@@ -24,7 +24,7 @@ $User->is_demo();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // set update query
@@ -42,7 +42,7 @@ $values = ['id' => 1,
 
 // update
 if (! $Admin->object_modify('settingsMail', 'edit', 'id', $values)) {
-    $Result->show('danger', _('Cannot update settings').'!', true);
+    $Result->die('danger', _('Cannot update settings').'!');
 } else {
-    $Result->show('success', _('Settings updated successfully').'!', true);
+    $Result->die('success', _('Settings updated successfully').'!');
 }

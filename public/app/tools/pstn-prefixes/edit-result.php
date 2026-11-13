@@ -21,41 +21,41 @@ if ($POST->action == 'edit') {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // validations
 if ($POST->action == 'delete' || $POST->action == 'edit') {
     if ($Admin->fetch_object('pstnPrefixes', 'id', $POST->id) === false) {
-        $Result->show('danger', _('Invalid PSTN object identifier'), false);
+        $Result->warn('danger', _('Invalid PSTN object identifier'));
     }
 }
 
 if ($POST->action == 'add' || $POST->action == 'edit') {
     // name
     if (strlen((string) $POST->name) < 3) {
-        $Result->show('danger', _('Name must have at least 3 characters'), true);
+        $Result->die('danger', _('Name must have at least 3 characters'));
     }
 
     // prefix
     if (! $POST->prefix) {
-        $Result->show('danger', _('Prefix can not be empty!'), true);
+        $Result->die('danger', _('Prefix can not be empty!'));
     }
 
     // number
     if (! is_numeric($POST->start)) {
-        $Result->show('danger', _('Start must be numeric'), true);
+        $Result->die('danger', _('Start must be numeric'));
     }
 
     if (! is_numeric($POST->stop)) {
-        $Result->show('danger', _('Stop must be numeric'), true);
+        $Result->die('danger', _('Stop must be numeric'));
     }
 
     // check master
     if ($POST->master != 0) {
         $master_prefix = $Tools->fetch_object('pstnPrefixes', 'id', $POST->master);
         if ($master_prefix === false) {
-            $Result->show('danger', _('Invalid master prefix'), true);
+            $Result->die('danger', _('Invalid master prefix'));
         }
 
         // ranges
@@ -72,14 +72,14 @@ if ($POST->action == 'add' || $POST->action == 'edit') {
             $POST->prefix_raw_start == $master_prefix->prefix_raw_start &&
             $POST->prefix_raw_stop == $master_prefix->prefix_raw_stop
         ) {
-            $Result->show('danger', _('Prefix cannot be same as master'), true);
+            $Result->die('danger', _('Prefix cannot be same as master'));
         }
 
         if (
             $POST->prefix_raw_start < $master_prefix->prefix_raw_start ||
             $POST->prefix_raw_stop > $master_prefix->prefix_raw_stop
         ) {
-            $Result->show('danger', _('Prefix not inside its master'), true);
+            $Result->die('danger', _('Prefix not inside its master'));
         }
     }
 }
@@ -107,14 +107,14 @@ if ($POST->action == 'add' && $POST->master == 0) {
             // if it begins before
             if ($POST->prefix_raw_start < $master_prefix->prefix_raw_start) {
                 if ($POST->prefix_raw_stop >= $master_prefix->prefix_raw_start) {
-                    $Result->show('danger', $overlap_text, true);
+                    $Result->die('danger', $overlap_text);
                 }
             } elseif ($POST->prefix_raw_start > $master_prefix->prefix_raw_start) {
                 if ($POST->prefix_raw_start <= $master_prefix->prefix_raw_stop) {
-                    $Result->show('danger', $overlap_text, true);
+                    $Result->die('danger', $overlap_text);
                 }
             } else {
-                $Result->show('danger', $overlap_text, true);
+                $Result->die('danger', $overlap_text);
             }
         }
     }
@@ -143,9 +143,9 @@ $values = array_merge($values, $update);
 
 // execute update
 if (! $Admin->object_modify('pstnPrefixes', $POST->action, 'id', $values)) {
-    $Result->show('danger', _('Prefix').' '.$User->get_post_action().' '._('failed'), false);
+    $Result->warn('danger', _('Prefix').' '.$User->get_post_action().' '._('failed'));
 } else {
-    $Result->show('success', _('Prefix').' '.$User->get_post_action().' '._('successful'), false);
+    $Result->warn('success', _('Prefix').' '.$User->get_post_action().' '._('successful'));
 }
 
 // if delete remove all slaves

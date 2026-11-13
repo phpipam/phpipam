@@ -31,14 +31,14 @@ if ($POST->action == 'edit') {
 // get Location object
 if ($POST->action != 'add') {
     $number = $Admin->fetch_object('pstnNumbers', 'id', $POST->id);
-    $number !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+    $number !== false ?: $Result->die('danger', _('Invalid ID'), true);
 
     $prefix = $Admin->fetch_object('pstnPrefixes', 'id', $number->prefix);
 } else {
     // id is required
     if (isset($POST->id)) {
         $prefix = $Admin->fetch_object('pstnPrefixes', 'id', $POST->id);
-        $prefix !== false ?: $Result->show('danger', _('Invalid prefix ID'), true, true);
+        $prefix !== false ?: $Result->die('danger', _('Invalid prefix ID'), true);
 
         $number = new Params;
 
@@ -47,7 +47,7 @@ if ($POST->action != 'add') {
         $number->deviceId = $prefix->deviceId;
         $number->state = 2;
     } else {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 }
 

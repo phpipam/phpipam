@@ -25,7 +25,7 @@ $User->check_maintaneance_mode();
 $User->check_module_permissions('vlan', User::ACCESS_RWA, true, true);
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // fake error
@@ -33,12 +33,12 @@ print "<div class='alert-danger hidden'></div>";
 
 // scan disabled
 if ($User->settings->enableSNMP != '1') {
-    $Result->show('danger', _('SNMP module disabled'), true);
+    $Result->die('danger', _('SNMP module disabled'));
 }
 
 // admin check
 if ($User->is_admin() !== true) {
-    $Result->show('danger', _('Admin privileges required'), true);
+    $Result->die('danger', _('Admin privileges required'));
 }
 
 // set class
@@ -46,13 +46,13 @@ $Snmp = new phpipamSNMP;
 
 // domain Id must be int
 if (! is_numeric($POST->domainId)) {
-    $Result->show('danger', _('Invalid domain Id'), true);
+    $Result->die('danger', _('Invalid domain Id'));
 }
 
 // fetch domain
 $domain = $Tools->fetch_object('vlanDomains', 'id', $POST->domainId);
 if ($domain === false) {
-    $Result->show('danger', _('Invalid domain Id'), true);
+    $Result->die('danger', _('Invalid domain Id'));
 }
 
 // get existing vlans
@@ -76,7 +76,7 @@ foreach ($POST as $k => $p) {
 
 // if none set die
 if (! isset($scan_devices)) {
-    $Result->show('danger', _('No devices for SNMP VLAN query available'), true);
+    $Result->die('danger', _('No devices for SNMP VLAN query available'));
 }
 
 // init result array
@@ -109,12 +109,12 @@ foreach ($scan_devices as $d) {
 
 // none and errors
 if (count($new_vlans) == 0 && isset($errors)) {
-    $Result->show('info', _('No VLANS found'), false);
-    $Result->show('warning', implode('<hr>', $errors), false);
+    $Result->warn('info', _('No VLANS found'));
+    $Result->warn('warning', implode('<hr>', $errors));
 }
 // none
 elseif (count($new_vlans) == 0) {
-    $Result->show('info', _('No VLANS found').'!', false);
+    $Result->warn('info', _('No VLANS found').'!');
 }
 // ok
 else {
@@ -201,7 +201,7 @@ else {
     if (isset($errors)) {
         print '<hr>';
         foreach ($errors as $e) {
-            print $Result->show('warning', $e, false);
+            print $Result->warn('warning', $e);
         }
     }
 }

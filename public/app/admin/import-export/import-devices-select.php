@@ -115,7 +115,7 @@ if (is_array($custom_fields)) {
 
 <?php
 if (! is_writable(__DIR__.'/upload')) {
-    $Tools->Result->show('danger', _("'app/admin/import-export/upload' folder is not writeable."), false, false);
+    $Tools->Result->warn('danger', _("'app/admin/import-export/upload' folder is not writeable."), false);
 }
 
 // print template form

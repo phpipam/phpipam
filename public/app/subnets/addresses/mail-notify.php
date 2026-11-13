@@ -19,7 +19,7 @@ $Addresses = new Addresses($Database);
 $User->check_user_session();
 
 // id must be numeric
-is_numeric($POST->id) || is_blank($POST->id) ?: $Result->show('danger', _('Invalid ID'), true);
+is_numeric($POST->id) || is_blank($POST->id) ?: $Result->die('danger', _('Invalid ID'));
 
 $csrf = $User->Crypto->csrf_session_token();
 
@@ -29,12 +29,12 @@ $id = $POST->id;
 // fetch address, subnet, vlan and nameservers
 $address = (array) $Addresses->fetch_address(null, $id);
 if ($address === [] || $Subnets->check_permission($User->user, $address['subnetId']) === User::ACCESS_NONE) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 $subnet = (array) $Subnets->fetch_subnet(null, $address['subnetId']);
 if ($subnet === []) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 $vlan = (array) $Tools->fetch_object('vlans', 'vlanId', $subnet['vlanId']);
 $nameservers = (array) $Tools->fetch_object('nameservers', 'id', $subnet['nameserverId']);
@@ -46,8 +46,8 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 $subnet_calculation = $Tools->calculate_ip_calc_results($subnet['ip'].'/'.$subnet['mask']);
 
 // checks
-count($address) > 0 ?: $Result->show('danger', _('Invalid ID'), true);
-count($subnet) > 0 ?: $Result->show('danger', _('Invalid subnet'), true);
+count($address) > 0 ?: $Result->die('danger', _('Invalid ID'));
+count($subnet) > 0 ?: $Result->die('danger', _('Invalid subnet'));
 
 // set title
 $title = _('IP address details').' :: '.$address['ip'];

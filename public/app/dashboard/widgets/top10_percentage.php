@@ -30,7 +30,7 @@ $height = filter_var($wparam->height, FILTER_VALIDATE_INT, ['options' => ['defau
 if (! isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') {
     // get widget details
     if (! $widget = $Tools->fetch_object('widgets', 'wfile', $GET->section)) {
-        $Result->show('danger', _('Invalid widget'), true);
+        $Result->die('danger', _('Invalid widget'));
     }
 
     // reset size and limit

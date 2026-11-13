@@ -37,7 +37,7 @@ final class Session_DB implements SessionHandlerInterface
         try {
             $this->Database->connect();
         } catch (PDOException $pdoException) {
-            $this->Result->show('danger', $pdoException->getMessage(), false);
+            $this->Result->warn('danger', $pdoException->getMessage());
 
             return false;
         }
@@ -71,7 +71,7 @@ final class Session_DB implements SessionHandlerInterface
                 return (string) $session->data;
             }
         } catch (PDOException $pdoException) {
-            $this->Result->show('danger', $pdoException->getMessage(), false);
+            $this->Result->warn('danger', $pdoException->getMessage());
 
             return false;
         }
@@ -116,7 +116,7 @@ final class Session_DB implements SessionHandlerInterface
         try {
             $this->Database->insertObject('php_sessions', $values, false, true, false);
         } catch (PDOException $pdoException) {
-            $this->Result->show('danger', $pdoException->getMessage(), false);
+            $this->Result->warn('danger', $pdoException->getMessage());
 
             return false;
         }
@@ -134,7 +134,7 @@ final class Session_DB implements SessionHandlerInterface
         try {
             $this->Database->deleteObject('php_sessions', $id);
         } catch (PDOException $pdoException) {
-            $this->Result->show('danger', $pdoException->getMessage(), false);
+            $this->Result->warn('danger', $pdoException->getMessage());
 
             return false;
         }

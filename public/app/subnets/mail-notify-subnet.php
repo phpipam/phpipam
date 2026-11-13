@@ -19,7 +19,7 @@ $Addresses = new Addresses($Database);
 $User->check_user_session();
 
 // id must be numeric
-is_numeric($POST->id) || is_blank($POST->id) ?: $Result->show('danger', _('Invalid ID'), true);
+is_numeric($POST->id) || is_blank($POST->id) ?: $Result->die('danger', _('Invalid ID'));
 
 $csrf = $User->Crypto->csrf_session_token();
 
@@ -29,7 +29,7 @@ $id = $POST->id;
 // fetch subnet, vlan and nameservers
 $subnet = (array) $Subnets->fetch_subnet(null, $POST->id);
 if ($subnet === [] || $Subnets->check_permission($User->user, $POST->id) < User::ACCESS_R) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 $vlan = (array) $Tools->fetch_object('vlans', 'vlanId', $subnet['vlanId']);
@@ -44,7 +44,7 @@ $vrf = array_merge(['name' => null, 'description' => null], $vrf);
 $custom_fields = $Tools->fetch_custom_fields('subnets');
 
 // checks
-count($subnet) > 0 ?: $Result->show('danger', _('Invalid subnet'), true);
+count($subnet) > 0 ?: $Result->die('danger', _('Invalid subnet'));
 
 // set title
 $title = _('Subnet details').' :: '.$Subnets->transform_address($subnet['subnet'], 'dotted').'/'.$subnet['mask'];

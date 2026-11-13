@@ -58,11 +58,11 @@ if ($User->settings->enableNAT == 1 && $User->get_module_permissions('nat') >= U
     } else {
         print '<tr>';
         print " <td colspan='4'>";
-        print $Result->show('info', _('No NAT translations for this device'), false, false, true);
+        print $Result->warn('info', _('No NAT translations for this device'), false, true);
         print ' </td>';
         print '</tr>';
     }
     print '</table>';
 } else {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }

@@ -49,6 +49,6 @@ if ($groups !== false) {
 
     print '</table>';
 } else {
-    $Result->show('info', _('No groups available'));
+    $Result->warn('info', _('No groups available'));
 }
 ?>

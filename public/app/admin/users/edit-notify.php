@@ -24,7 +24,7 @@ try {
 
     // verify admin mail and name
     if (is_blank($mail_settings->mAdminMail) || is_blank($mail_settings->mAdminName)) {
-        $Result->show('danger', _('Cannot send mail, mail settings are missing. Please set them under administration > Mail Settings !'), true);
+        $Result->die('danger', _('Cannot send mail, mail settings are missing. Please set them under administration > Mail Settings !'));
     }
 
     // initialize mailer
@@ -99,10 +99,10 @@ try {
     // send
     $phpipam_mail->Php_mailer->send();
 } catch (PHPMailer\PHPMailer\Exception $e) {
-    $Result->show('danger', 'Mailer Error: '.$e->errorMessage(), true);
+    $Result->die('danger', 'Mailer Error: '.$e->errorMessage());
 } catch (Exception $e) {
-    $Result->show('danger', 'Mailer Error: '.$e->getMessage(), true);
+    $Result->die('danger', 'Mailer Error: '.$e->getMessage());
 }
 
 // if error not sent print ok
-$Result->show('success', _('Notification mail for new account sent').'!', true);
+$Result->die('success', _('Notification mail for new account sent').'!');

@@ -21,7 +21,7 @@ $User->is_admin();
 
 // fetch server
 $server = $Admin->fetch_object('usersAuthMethod', 'id', $POST->server);
-$server !== false ?: $Result->show('danger', _('Invalid server ID'), true);
+$server !== false ?: $Result->die('danger', _('Invalid server ID'));
 
 // create csrf token
 $csrf = $User->Crypto->csrf_session_token();
@@ -31,19 +31,19 @@ $params = db_json_decode($server->params);
 
 if ($server->type == 'LDAP') {
     // Just discovered that adLDAP flat out won't work for normal ldap groups. Stop LDAP here.
-    $Result->show('danger', _('Only AD group search is supported right now. Sorry.'), true);
+    $Result->die('danger', _('Only AD group search is supported right now. Sorry.'));
 
     return;
 }
 
 // no login parameters
 if (is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword)) {
-    $Result->show('danger', _('Missing credentials'), true);
+    $Result->die('danger', _('Missing credentials'));
 }
 
 // at least 2 chars
 if (strlen((string) $POST->dfilter) < 2) {
-    $Result->show('danger', _('Please enter at least 2 characters'), true);
+    $Result->die('danger', _('Please enter at least 2 characters'));
 }
 
 // open connection
@@ -68,7 +68,7 @@ try {
     if (isset($params->adminUsername) && isset($params->adminPassword)) {
         $authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
         if (! $authUser) {
-            $Result->show('danger', _('Invalid credentials'), true);
+            $Result->die('danger', _('Invalid credentials'));
         }
     }
 
@@ -78,8 +78,8 @@ try {
 
     // echo $adldap->getLastError();
 } catch (adLDAPException $adldapException) {
-    $Result->show('danger', $adldap->getLastError(), false);
-    $Result->show('danger', $adldapException->getMessage(), true);
+    $Result->warn('danger', $adldap->getLastError());
+    $Result->die('danger', $adldapException->getMessage());
 }
 
 // check for found

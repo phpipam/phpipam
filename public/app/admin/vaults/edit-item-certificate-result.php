@@ -22,17 +22,17 @@ $User->check_maintaneance_mode();
 
 // make sure user has access
 if ($User->get_module_permissions('vaults') < User::ACCESS_RW) {
-    $Result->show('danger', _('Insufficient privileges').'.', true, true);
+    $Result->die('danger', _('Insufficient privileges').'.', true);
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // fetch vault details
 $vault = $Admin->fetch_object('vaults', 'id', $POST->vaultId);
 if (! is_object($vault)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // fetch custom fields
@@ -43,7 +43,7 @@ $error = [];
 // cert check
 if ($POST->action == 'add') {
     // print_r(base64_decode($POST->certificate));
-    // if(openssl_x509_parse(base64_decode($POST->certificate))===false) { $Result->show("danger", _("Cannot parse certificate"), true); }
+    // if(openssl_x509_parse(base64_decode($POST->certificate))===false) { $Result->die("danger", _("Cannot parse certificate")); }
 }
 // for edits without certificate get old value!
 elseif ($POST->action == 'edit') {
@@ -66,7 +66,7 @@ if ($POST->action != 'delete') {
 
 // die if errors
 if (count($error) > 0) {
-    $Result->show('danger', $error, true);
+    $Result->die('danger', $error);
 } else {
     // values to encrypt
     $values_array = [
@@ -77,7 +77,7 @@ if (count($error) > 0) {
 
     // remove certificate if not present
     if ($POST->action != 'delete' && is_blank($POST->certificate)) {
-        $Result->show('danger', _('Invalid certificate'), true);
+        $Result->die('danger', _('Invalid certificate'));
     }
 
     // print "<pre>";
@@ -110,8 +110,8 @@ if (count($error) > 0) {
 
     // execute
     if (! $Admin->object_modify('vaultItems', $POST->action, 'id', $values)) {
-        $Result->show('danger', _('Vault item').' '.$User->get_post_action().' '._('error'), true);
+        $Result->die('danger', _('Vault item').' '.$User->get_post_action().' '._('error'));
     } else {
-        $Result->show('success', _('Vault item').' '.$User->get_post_action().' '._('success'), true);
+        $Result->die('success', _('Vault item').' '.$User->get_post_action().' '._('success'));
     }
 }

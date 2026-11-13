@@ -70,7 +70,7 @@ if ($all_agents !== false) {
     print '</tbody>';
     print '</table>';
 } else {
-    $Result->show('info alert-nomargin', _('No agents available').'!', false);
+    $Result->warn('info alert-nomargin', _('No agents available').'!');
 }
 ?>
 <hr>

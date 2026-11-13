@@ -32,13 +32,13 @@ $custom = $Tools->fetch_custom_fields('devices');
 
 // ID must be numeric
 if (! is_numeric($POST->switchid)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch device details
 $device = $Admin->fetch_object('devices', 'id', $POST->switchid);
 if ($device === false) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // set show

@@ -141,7 +141,7 @@ else {
         // validate install type
         $install_types = ['install_automatic', 'install_manual', 'install_mysqlimport'];
         if (! in_array($GET->section, $install_types)) {
-            $Result->show('danger', 'Invalid request', false);
+            $Result->warn('danger', 'Invalid request');
         } else {
             // verify that page exists
             if (! file_exists(__DIR__.'/'.$GET->section.'.php')) {

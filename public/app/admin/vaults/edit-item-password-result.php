@@ -22,17 +22,17 @@ $User->check_maintaneance_mode();
 
 // make sure user has access
 if ($User->get_module_permissions('vaults') < User::ACCESS_RW) {
-    $Result->show('danger', _('Insufficient privileges').'.', true, true);
+    $Result->die('danger', _('Insufficient privileges').'.', true);
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // fetch vault details
 $vault = $Admin->fetch_object('vaults', 'id', $POST->vaultId);
 if (! is_object($vault)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // fetch custom fields
@@ -59,7 +59,7 @@ if ($POST->action != 'delete') {
 
 // die if errors
 if (count($error) > 0) {
-    $Result->show('danger', $error, true);
+    $Result->die('danger', $error);
 } else {
     // compose values to be encrypted
     $values_array = [
@@ -94,8 +94,8 @@ if (count($error) > 0) {
 
     // execute
     if (! $Admin->object_modify('vaultItems', $POST->action, 'id', $values)) {
-        $Result->show('danger', _('Vault item').' '.$User->get_post_action().' '._('error'), true);
+        $Result->die('danger', _('Vault item').' '.$User->get_post_action().' '._('error'));
     } else {
-        $Result->show('success', _('Vault item').' '.$User->get_post_action().' '._('success'), true);
+        $Result->die('success', _('Vault item').' '.$User->get_post_action().' '._('success'));
     }
 }

@@ -20,7 +20,7 @@ $User->is_admin();
 
 // id must be numeric
 if (! is_numeric($POST->g_id)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // get group details
@@ -74,7 +74,7 @@ $existing = $Admin->group_fetch_users($POST->g_id);
     </form>
 
     <?php } else {
-        $Result->show('info', _('No users in this group'), false);
+        $Result->warn('info', _('No users in this group'));
     } ?>
 </div>
 

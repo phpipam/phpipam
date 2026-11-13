@@ -19,7 +19,7 @@ $User->check_user_session();
 
 // make sure user has access
 if ($User->get_module_permissions('vaults') < User::ACCESS_RW) {
-    $Result->show('danger', _('Insufficient privileges').'.', true, true);
+    $Result->die('danger', _('Insufficient privileges').'.', true);
 }
 
 // set vaultx pass variable
@@ -28,7 +28,7 @@ $vault_id = 'vault'.$POST->vaultid;
 $vault = $Tools->fetch_object('vaults', 'id', $POST->vaultid);
 // test pass
 if (isset($_SESSION[$vault_id]) && $User->Crypto->decrypt($vault->test, $_SESSION[$vault_id]) === false) {
-    $Result->show('danger', _('Cannot unlock vault'), true, true);
+    $Result->die('danger', _('Cannot unlock vault'), true);
 }
 
 // fetch item

@@ -30,7 +30,7 @@ if ($POST->action == 'edit') {
 // get Location object
 if ($POST->action != 'add') {
     $prefix = $Admin->fetch_object('pstnPrefixes', 'id', $POST->id);
-    $prefix !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+    $prefix !== false ?: $Result->die('danger', _('Invalid ID'), true);
 
     $master_prefix = $Admin->fetch_object('pstnPrefixes', 'id', $prefix->master);
 } else {
@@ -45,7 +45,7 @@ if ($POST->action != 'add') {
     if (isset($POST->id)) {
         if ($POST->id != 0) {
             $master_prefix = $Admin->fetch_object('pstnPrefixes', 'id', $POST->id);
-            $master_prefix !== false ?: $Result->show('danger', _('Invalid master ID'), true, true);
+            $master_prefix !== false ?: $Result->die('danger', _('Invalid master ID'), true);
 
             $prefix->master = $master_prefix->id;
             $prefix->prefix = $master_prefix->prefix;

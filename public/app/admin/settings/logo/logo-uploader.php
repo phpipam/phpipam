@@ -19,7 +19,7 @@ $User->check_user_session();
 $User->is_admin();
 
 // validate csrf cookie
-$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->show('danger', _('Invalid CSRF cookie'), true, true) : '';
+$User->Crypto->csrf_validate($POST->csrf_cookie) === false ? $Result->die('danger', _('Invalid CSRF cookie'), true) : '';
 
 // clear identifier
 $clear = true;
@@ -42,7 +42,7 @@ if (! file_exists(__DIR__.'/../../../../css/images/logo/logo.png')) {
 <div class="pContent">
 
     <?php if (! is_writable(__DIR__.'/../../../../css/images/logo')) {
-        $Result->show('danger', _("'css/images/logo' folder is not writeable."), false, false);
+        $Result->warn('danger', _("'css/images/logo' folder is not writeable."), false);
     } ?>
 
     <h4><?php print _('Current'); ?><?php if ($clear) {

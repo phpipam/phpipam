@@ -12,7 +12,7 @@ $User->check_module_permissions('racks', User::ACCESS_R, true);
 
 // check that rack support isenabled
 if ($User->settings->enableRACK != '1') {
-    $Result->show('danger', _('RACK management disabled.'), false);
+    $Result->warn('danger', _('RACK management disabled.'));
 } else {
     // validate integer
     if (! is_numeric($GET->subnetId)) {
@@ -47,7 +47,7 @@ if (isset($error)) { ?>
         <a href='javascript:history.back()' class='btn btn-sm btn-default' style='margin-bottom:10px;'><i class='fa fa-chevron-left'></i> <?php print _('Racks'); ?></a>
     </div>
     <br>
-    <?php $Result->show('danger', $error, false); ?>
+    <?php $Result->warn('danger', $error); ?>
     <?php
 } else {
     // customer

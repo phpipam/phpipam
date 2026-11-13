@@ -23,12 +23,12 @@ $User->check_maintaneance_mode();
 
 // make sure correct object is applied
 if (! array_key_exists((string) $POST->object, $Tools->get_customer_object_types())) {
-    $Result->show('danger', _('Invalid object'), true, true);
+    $Result->die('danger', _('Invalid object'), true);
 }
 
 // ID must be numeric
 if (! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid object ID'), true, true);
+    $Result->die('danger', _('Invalid object ID'), true);
 }
 
 // set field
@@ -41,5 +41,5 @@ if ($POST->object == 'vlans') {
 
 // unlink
 if ($Admin->object_modify($POST->object, 'edit', $field, [$field => $POST->id, 'customer_id' => null]) !== false) {
-    $Result->show('success', _('Object removed'), true, true, false, false, true);
+    $Result->die('success', _('Object removed'), true, false, false, true);
 }

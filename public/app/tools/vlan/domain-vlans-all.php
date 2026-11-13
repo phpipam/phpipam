@@ -40,7 +40,7 @@ print '</div>';
 // no VLANS?
 if ($vlans === false) {
     print '<hr>';
-    $Result->show('info', _('No VLANS configured'), false);
+    $Result->warn('info', _('No VLANS configured'));
 } else {
     // table
     print "<table class='table sorted vlans table-condensed table-top' data-cookie-id-table='tools_vl_all_domains'>";

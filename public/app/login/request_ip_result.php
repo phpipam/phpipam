@@ -23,17 +23,17 @@ if (! $User->is_authenticated() && @$config['requests_public'] === false) {
 if ($Tools->settings->enableIPrequests == 1) {
     // verify MAC Address
     if (! $Tools->validate_mac($POST->mac)) {
-        $Result->show('danger', _('Please provide valid mac address').'! ('._('mac').': '.escape_input($POST->mac).')', true);
+        $Result->die('danger', _('Please provide valid mac address').'! ('._('mac').': '.escape_input($POST->mac).')');
     }
 
     // verify hostname
     if (! $Tools->validate_hostname($POST->hostname)) {
-        $Result->show('danger', _('Please provide valid hostname').'! ('._('hostname').': '.escape_input($POST->hostname).')', true);
+        $Result->die('danger', _('Please provide valid hostname').'! ('._('hostname').': '.escape_input($POST->hostname).')');
     }
 
     // verify email
     if (! $Tools->validate_email($POST->requester)) {
-        $Result->show('danger', _('Please provide valid email address').'! ('._('requester').': '.escape_input($POST->requester).')', true);
+        $Result->die('danger', _('Please provide valid email address').'! ('._('requester').': '.escape_input($POST->requester).')');
     }
 
     // formulate insert values
@@ -55,12 +55,12 @@ if ($Tools->settings->enableIPrequests == 1) {
     $values = array_merge($values, $update);
 
     if (! $Admin->object_modify('requests', 'add', 'id', $values)) {
-        $Result->show('danger', _('Error submitting new IP address request'), true);
+        $Result->die('danger', _('Error submitting new IP address request'));
     } else {
-        $Result->show('success', _('Request submitted successfully'));
+        $Result->warn('success', _('Request submitted successfully'));
         // send mail
         $Tools->ip_request_send_mail('new', $values);
     }
 } else {
-    $Result->show('danger', _('IP requests disabled'), true);
+    $Result->die('danger', _('IP requests disabled'));
 }

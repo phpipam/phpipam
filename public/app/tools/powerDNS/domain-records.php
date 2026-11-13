@@ -17,7 +17,7 @@ $domain = $PowerDNS->fetch_domain($GET->ipaddrid);
 
 // validate
 if ($domain === false) {
-    $Result->show('danger', _('Invalid domain'), false);
+    $Result->warn('danger', _('Invalid domain'));
 } else {
     // set order
     $PowerDNS->set_query_values(10000, 'name,type', ' asc');
@@ -119,7 +119,7 @@ if ($domain === false) {
     <?php
 // none
     if ($records === false) {
-        $Result->show('info', _('Domain has no records'), false);
+        $Result->warn('info', _('Domain has no records'));
     } else {
         ?>
 <!--  -->

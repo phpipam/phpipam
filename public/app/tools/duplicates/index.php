@@ -24,7 +24,7 @@ $duplicate_address = $Addresses->fetch_duplicate_addresses();
 print '<h4>'._('Duplicated subnets').'</h4>';
 
 if (! $User->is_admin(false)) {
-    $Result->show('info', _('Administrative privileges required'));
+    $Result->warn('info', _('Administrative privileges required'));
 } elseif (empty($duplicate_subnets)) {
     print "<blockquote style='margin-top:20px;margin-left:20px;'>";
     print '<p>'._('No duplicate subnets found').'</p>';
@@ -104,7 +104,7 @@ if (! $User->is_admin(false)) {
 print '<h4>'._('Duplicated hosts').'</h4>';
 
 if (! $User->is_admin(false)) {
-    $Result->show('info', _('Administrative privileges required'));
+    $Result->warn('info', _('Administrative privileges required'));
 } elseif (empty($duplicate_address)) {
     print "<blockquote style='margin-top:20px;margin-left:20px;'>";
     print '<p>'._('No duplicate addresses found').'</p>';

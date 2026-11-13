@@ -14,13 +14,13 @@ $csrf_ffss = $User->Crypto->csrf_session_token();
 
 // ID must be numeric
 if (! is_numeric($GET->section)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // Admin check, otherwise load requested subnets
 if ($GET->section == 'Administration') {
     if (! $User->is_admin()) {
-        $Result->show('danger', _('Sorry, must be admin'), true);
+        $Result->die('danger', _('Sorry, must be admin'));
     } else {
         require __DIR__.'/../admin/admin-menu.php';
     }
@@ -65,12 +65,12 @@ else {
 
     // no access
     if ($section_permission == 0) {
-        $Result->show('danger', _('You do not have access to this section'), true);
+        $Result->die('danger', _('You do not have access to this section'));
     }
 
     // invalid section id
     if (count($section) == 0) {
-        $Result->show('danger', _('Section does not exist'), true);
+        $Result->die('danger', _('Section does not exist'));
     }
 
     // expand all folders?

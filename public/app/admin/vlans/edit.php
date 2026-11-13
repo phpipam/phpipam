@@ -62,7 +62,7 @@ if ($POST->action == 'add') {
     }
     if (isset($POST->number)) {
         if (! is_numeric($POST->number)) {
-            $Result->show('danger', _('Invalid ID'), true, true);
+            $Result->die('danger', _('Invalid ID'), true);
         }
         $vlan->number = $POST->number;
     }
@@ -70,7 +70,7 @@ if ($POST->action == 'add') {
     $vlan_domain = $Admin->fetch_object('vlanDomains', 'id', $vlan->domainId);
 }
 if ($vlan_domain === false) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 ?>
 
@@ -217,7 +217,7 @@ if (count($custom) > 0) {
     <?php
 // print delete warning
 if ($POST->action == 'delete') {
-    $Result->show('warning', _('Warning').':</strong> '._('removing VLAN will also remove VLAN reference from belonging subnets').'!', false);
+    $Result->warn('warning', _('Warning').':</strong> '._('removing VLAN will also remove VLAN reference from belonging subnets').'!');
 }
 ?>
 </div>

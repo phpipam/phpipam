@@ -28,23 +28,23 @@ if ($POST->action == 'edit') {
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->rackid)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // Hostname must be present
 if ($POST->name == '') {
-    $Result->show('danger', _('Name is mandatory').'!', true);
+    $Result->die('danger', _('Name is mandatory').'!');
 }
 
 // rack checks
 // validate position and size
 if (! is_numeric($POST->size)) {
-    $Result->show('danger', _('Invalid rack size').'!', true);
+    $Result->die('danger', _('Invalid rack size').'!');
 }
 
 if (isset($POST->row) && strlen($POST->row) == 0) {
@@ -52,7 +52,7 @@ if (isset($POST->row) && strlen($POST->row) == 0) {
 }
 
 if (isset($POST->row) && ! is_numeric($POST->row)) {
-    $Result->show('danger', _('Row').' '._('must be numeric').'!', true);
+    $Result->die('danger', _('Row').' '._('must be numeric').'!');
 }
 
 if (isset($POST->subrack) && $POST->subrack != '1') {
@@ -62,16 +62,16 @@ if (isset($POST->subrack) && $POST->subrack != '1') {
 // validate rack
 if ($POST->action == 'edit') {
     if (! is_numeric($POST->rackid)) {
-        $Result->show('danger', _('Invalid rack identifier').'!', true);
+        $Result->die('danger', _('Invalid rack identifier').'!');
     }
 
     $rack_details = $Racks->fetch_rack_details($POST->rackid);
     if ($rack_details === false) {
-        $Result->show('danger', _('Rack does not exist').'!', true);
+        $Result->die('danger', _('Rack does not exist').'!');
     }
 } elseif ($POST->action == 'delete') {
     if (! is_numeric($POST->rackid)) {
-        $Result->show('danger', _('Invalid rack identifier').'!', true);
+        $Result->die('danger', _('Invalid rack identifier').'!');
     }
 }
 
@@ -80,7 +80,7 @@ if ($POST->subrack == '1') {
     $rack_content = $Racks->fetch_rack_contents($rack_details->id) ?: [];
     foreach ($rack_content as $c) {
         if ($c->subrackId > 0) {
-            $Result->show('danger', _('Nesting subracks is not allowed').'!', true);
+            $Result->die('danger', _('Nesting subracks is not allowed').'!');
         }
     }
 }
@@ -95,13 +95,13 @@ if ($POST->action == 'edit' && $POST->hasBack == '1' && $POST->size < $rack_deta
             // front devices
             if ($d->rack_start <= $rack_details->size) {
                 if (($d->rack_start + $d->rack_size - 1) > $POST->size) {
-                    $Result->show('danger', _('Device')." $d->hostname ".('is out of bounds for new rack size'.'!'), true);
+                    $Result->die('danger', _('Device')." $d->hostname ".('is out of bounds for new rack size'.'!'));
                 }
             }
             // back devices
             else {
                 if (($d->rack_start - $rack_details->size + $d->rack_size - 1) > $POST->size) {
-                    $Result->show('danger', _('Device')." $d->hostname ".('is out of bounds for new rack size'.'!'), true);
+                    $Result->die('danger', _('Device')." $d->hostname ".('is out of bounds for new rack size'.'!'));
                 }
             }
         }
@@ -115,13 +115,13 @@ if ($POST->action == 'edit' && $POST->hasBack == '1' && $POST->size < $rack_deta
             // front devices
             if ($d->rack_start <= $rack_details->size) {
                 if (($d->rack_start + $d->rack_size - 1) > $POST->size) {
-                    $Result->show('danger', _('Device')." $d->hostname ".('is out of bounds for new rack size'.'!'), true);
+                    $Result->die('danger', _('Device')." $d->hostname ".('is out of bounds for new rack size'.'!'));
                 }
             }
             // back devices
             else {
                 if (($d->rack_start - $rack_details->size + $d->rack_size - 1) > $POST->size) {
-                    $Result->show('danger', _('Device')." $d->hostname ".('is out of bounds for new rack size'.'!'), true);
+                    $Result->die('danger', _('Device')." $d->hostname ".('is out of bounds for new rack size'.'!'));
                 }
             }
         }
@@ -162,7 +162,7 @@ if ($User->settings->enableCustomers == '1' && $User->get_module_permissions('cu
 
 // update rack
 if ($Admin->object_modify('racks', $POST->action, 'id', $values)) {
-    $Result->show('success', _('Rack').' '.$User->get_post_action().' '._('successful').'!', false);
+    $Result->warn('success', _('Rack').' '.$User->get_post_action().' '._('successful').'!');
 }
 
 if ($POST->action == 'delete') {

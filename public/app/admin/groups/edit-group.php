@@ -32,13 +32,13 @@ if ($POST->action == 'add') {
 } else {
     // ID
     if (! is_numeric($POST->id)) {
-        $Result->show('danger', _('Invalid Id'), true, true);
+        $Result->die('danger', _('Invalid Id'), true);
     }
 
     // fetch all group details
     $group = (array) $Admin->fetch_object('userGroups', 'g_id', $POST->id);
     // false die
-    $group !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+    $group !== false ?: $Result->die('danger', _('Invalid ID'), true);
 
     $title = $User->get_post_action().' '._('group').' '.$group['g_name'];
 }

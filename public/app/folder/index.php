@@ -5,11 +5,11 @@ $User->check_user_session();
 
 // must be numeric
 if (! is_numeric($GET->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 if (! is_numeric($GET->section)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // save folder ID
@@ -32,7 +32,7 @@ $folder = (array) $folder;
 $folder_permission = $Subnets->check_permission($User->user, $folder['id']);                       // subnet permission
 $folder_permission_section = $Sections->check_permission($User->user, $folder['sectionId']);                // section permission
 if ($folder_permission == 0) {
-    $Result->show('danger', _('You do not have permission to access this network'), true);
+    $Result->die('danger', _('You do not have permission to access this network'));
 }
 
 // get all slaves and addresses

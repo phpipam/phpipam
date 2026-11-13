@@ -47,7 +47,7 @@ print '</thead>';
 // no customers
 if ($customers === false) {
     print '<tr>';
-    print "	<td colspan='3'>".$Result->show('info', _('No results').'!', false, false, true).'</td>';
+    print "	<td colspan='3'>".$Result->warn('info', _('No results').'!', false, true).'</td>';
     print '</tr>';
 }
 // result

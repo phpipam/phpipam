@@ -42,7 +42,7 @@ if (is_array($subnets)) {
 if ($User->settings->enableIPrequests == 1) {
     // if no subnets exist print it!
     if (! isset($html)) {
-        $Result->show('info', _('No subnets available'), false);
+        $Result->warn('info', _('No subnets available'));
     } else {
         ?>
 

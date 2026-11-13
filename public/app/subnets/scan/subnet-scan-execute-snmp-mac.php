@@ -15,24 +15,24 @@ print '<h5>'._('Scan results').':</h5><hr>';
 
 // verify that user has write permissionss for subnet
 if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
-    $Result->show('danger', _('You do not have permissions to modify hosts in this subnet').'!', true, true);
+    $Result->die('danger', _('You do not have permissions to modify hosts in this subnet').'!', true);
 }
 
 // scan disabled
 if ($User->settings->enableSNMP != '1') {
-    $Result->show('danger', _('SNMP module disabled'), true);
+    $Result->die('danger', _('SNMP module disabled'));
 }
 
 // subnet check
 $subnet = $Subnets->fetch_object('subnets', 'id', $POST->subnetId);
 if ($subnet === false) {
-    $Result->show('danger', _('Invalid subnet Id'), true);
+    $Result->die('danger', _('Invalid subnet Id'));
 }
 
 // fetch vlan
 $vlan = $Tools->fetch_object('vlans', 'vlanId', $subnet->vlanId);
 if ($vlan === false) {
-    $Result->show('danger', _('Subnet must have VLAN assigned for MAC address query'), true);
+    $Result->die('danger', _('Subnet must have VLAN assigned for MAC address query'));
 }
 
 // set class
@@ -81,11 +81,11 @@ if ($devices_used_mac !== false) {
 
 // if none set die
 if (! isset($permitted_devices_arp)) {
-    $Result->show('danger', _('No devices for SNMP ARP query available'), true);
+    $Result->die('danger', _('No devices for SNMP ARP query available'));
 }
 
 if (! isset($permitted_devices_mac)) {
-    $Result->show('danger', _('No devices for SNMP MAC address query available'), true);
+    $Result->die('danger', _('No devices for SNMP MAC address query available'));
 }
 
 // first we need ARP table to fetchIP <> MAC mappings
@@ -116,7 +116,7 @@ foreach ($permitted_devices_arp as $d) {
 
 // if none found via ARP die
 if (! isset($found_arp)) {
-    $Result->show('danger', _('No new hosts found from ARP scan, MAC address scan will not be performed'), true);
+    $Result->die('danger', _('No new hosts found from ARP scan, MAC address scan will not be performed'));
 }
 
 // ok, we have devices, connect to each device and do query
@@ -146,7 +146,7 @@ foreach ($permitted_devices_mac as $d) {
 
 // if none found via ARP die
 if (! isset($found_mac)) {
-    $Result->show('danger', _('No MAC address found via MAC address scan'), true);
+    $Result->die('danger', _('No MAC address found via MAC address scan'));
 }
 
 // now check for match
@@ -184,12 +184,12 @@ foreach ($found as $k => $f) {
 
 // none and errors
 if (count($found) == 0 && isset($errors)) {
-    $Result->show('info', _('No new hosts found'), false);
-    $Result->show('warning', implode('<hr>', $errors), false);
+    $Result->warn('info', _('No new hosts found'));
+    $Result->warn('warning', implode('<hr>', $errors));
 }
 // none
 elseif (count($found) == 0) {
-    $Result->show('info', _('No new hosts found').'!', false);
+    $Result->warn('info', _('No new hosts found').'!');
 }
 // ok
 else {
@@ -336,7 +336,7 @@ else {
     if (isset($errors)) {
         print '<hr>';
         foreach ($errors as $e) {
-            print $Result->show('warning', $e, false);
+            print $Result->warn('warning', $e);
         }
     }
 }

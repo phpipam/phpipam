@@ -28,7 +28,7 @@ $Admin->validate_action();
 // fetch widget
 if ($POST->action != 'add') {
     $w = $Admin->fetch_object('widgets', 'wid', $POST->wid);
-    $w !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+    $w !== false ?: $Result->die('danger', _('Invalid ID'), true);
 } else {
     $w = new Params;
 }

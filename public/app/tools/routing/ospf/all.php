@@ -14,7 +14,7 @@ $User->check_module_permissions('routing', User::ACCESS_R, true);
 
 // check that rack support isenabled
 if ($User->settings->enableRouting != '1') {
-    $Result->show('danger', _('Routing module disabled.'), false);
+    $Result->warn('danger', _('Routing module disabled.'));
 } else {
-    $Result->show('danger', _('Not implemented.'), false);
+    $Result->warn('danger', _('Not implemented.'));
 }

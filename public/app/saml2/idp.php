@@ -14,14 +14,14 @@ if (! isset($Database)) {
 // get SAML2 settings from db
 $dbobj = $Tools->fetch_object('usersAuthMethod', 'type', 'SAML2');
 if (! $dbobj) {
-    $Result->show('danger', _('SAML settings not found in database'), true);
+    $Result->die('danger', _('SAML settings not found in database'));
 }
 
 // decode authentication module params
 $params = new Params(db_json_decode($dbobj->params, true));
 
 if (empty($params->idpx509cert) && ! empty($params->idpcertfingerprint)) {
-    $Result->show('danger', _('Please login as admin and update SAML authentication settings'), true);
+    $Result->die('danger', _('Please login as admin and update SAML authentication settings'));
 }
 
 try {

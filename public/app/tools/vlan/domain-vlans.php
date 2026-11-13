@@ -12,7 +12,7 @@ $User->check_module_permissions('vlan', User::ACCESS_R, true, false);
 // fetch l2 domain
 $vlan_domain = $Tools->fetch_object('vlanDomains', 'id', $GET->subnetId);
 if ($vlan_domain === false) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // Check user has read level permission to l2domain (or die with warning)
@@ -64,7 +64,7 @@ if ($User->is_admin(false) === true && $User->settings->enableSNMP == 1) { ?>
 <?php
 // no VLANS?
 if (empty($vlans)) {
-    $Result->show('info', _('No VLANS configured'), false);
+    $Result->warn('info', _('No VLANS configured'));
 } else {
     // table
     print "<table class='table sorted vlans table-condensed table-top' data-cookie-id-table='tools_vlan_2'>";

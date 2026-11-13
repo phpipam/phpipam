@@ -28,5 +28,5 @@ if ($GET->subnetId == 'ip-calculator') {
 } elseif ($GET->subnetId == 'bw-calculator') {
     include __DIR__.'/bw-calculator.php';
 } else {
-    $Result->show('danger', _('Invalid request'), false);
+    $Result->warn('danger', _('Invalid request'));
 }

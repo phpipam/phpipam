@@ -25,28 +25,28 @@ if ($POST->action == 'edit') {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // empty
 if (is_blank($POST->option)) {
-    $Result->show('danger', _('Value cannot be empty'), true);
+    $Result->die('danger', _('Value cannot be empty'));
 }
 
 // validate action
 if ($POST->action != 'add' && $POST->action != 'delete') {
-    $Result->show('danger', _('Invalid action'), true);
+    $Result->die('danger', _('Invalid action'));
 }
 
 // validate type
 if ($POST->type != 'type') {
-    $Result->show('danger', _('Invalid type'), true);
+    $Result->die('danger', _('Invalid type'));
 }
 
 // defaults must be present
 if ($POST->type == 'type') {
     if ($POST->option == 'Default') {
-        $Result->show('danger', _('Default value cannot be deleted'), true);
+        $Result->die('danger', _('Default value cannot be deleted'));
     }
 }
 
@@ -59,9 +59,9 @@ $values = [
 ];
 // execute
 if (! $Admin->object_modify('circuitTypes', $POST->action, 'id', $values)) {
-    $Result->show('danger', _('Option '.$User->get_post_action().' error'), true);
+    $Result->die('danger', _('Option '.$User->get_post_action().' error'));
 } else {
-    $Result->show('success', _('Option '.$User->get_post_action().' success'), false);
+    $Result->warn('success', _('Option '.$User->get_post_action().' success'));
 }
 
 // updates values to default

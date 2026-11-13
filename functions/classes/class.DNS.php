@@ -246,7 +246,7 @@ class DNS extends Common_functions
                         if (strpos($this->resolve_error, 'timeout') !== false) {
                             $this->dead_ns[] = $ns;
                             if ($this->print_error) {
-                                $this->Result->show('warning', _('DNS error')." ($ns): ".$this->resolve_error);
+                                $this->Result->warn('warning', _('DNS error')." ($ns): ".$this->resolve_error);
                             }
 
                             $this->dead_ns = array_unique($this->dead_ns);
@@ -271,7 +271,7 @@ class DNS extends Common_functions
                     // loop
                     foreach ($dns_exception_list as $ns => $val) {
                         if ($this->print_error) {
-                            $this->Result->show('warning', _('DNS error')." ($ns): ".$this->resolve_error);
+                            $this->Result->warn('warning', _('DNS error')." ($ns): ".$this->resolve_error);
                         }
                     }
                 }

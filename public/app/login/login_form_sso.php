@@ -5,9 +5,9 @@
         if ($User->is_authenticated() === true) {
             // print result
             if (isset($GET->section) && $GET->section == 'timeout') {
-                $Result->show('success', _('You session has timed out'));
+                $Result->warn('success', _('You session has timed out'));
             } else {
-                $Result->show('success', _('You have logged out'));
+                $Result->warn('success', _('You have logged out'));
             }
 
             // write log
@@ -20,7 +20,7 @@
         // check if SAML2 login is possible
         $saml2settings = $Tools->fetch_object('usersAuthMethod', 'type', 'SAML2');
         if (is_object($saml2settings)) {
-            $Result->show('success', _('You can login with SAML2').' <a href="'.create_link('saml2').'">('.$saml2settings->description.') '._('here').'</a>!', false);
+            $Result->warn('success', _('You can login with SAML2').' <a href="'.create_link('saml2').'">('.$saml2settings->description.') '._('here').'</a>!');
         }
 
         ?>
@@ -31,7 +31,7 @@
 
         <?php
         if ($composer_autoload_err !== false) {
-            $Result->show('warning', $composer_autoload_err, false);
+            $Result->warn('warning', $composer_autoload_err);
         }
         ?>
 

@@ -28,7 +28,7 @@ $User->is_demo();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // validations
@@ -64,7 +64,7 @@ $values = ['id' => 1,
     'powerDNS' => json_encode($values),
 ];
 if (! $Admin->object_modify('settings', 'edit', 'id', $values)) {
-    $Result->show('danger', _('Cannot update settings'), true);
+    $Result->die('danger', _('Cannot update settings'));
 } else {
-    $Result->show('success', _('Settings updated successfully'), true);
+    $Result->die('success', _('Settings updated successfully'));
 }

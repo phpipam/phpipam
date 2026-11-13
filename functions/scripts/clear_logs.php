@@ -22,14 +22,14 @@ $Result = new Result;
 
 // truncate logs table
 if (! $Admin->truncate_table('logs')) {
-    $Result->show('danger', _('Error clearing logs').'!', true);
+    $Result->die('danger', _('Error clearing logs').'!');
 } else {
-    $Result->show('success', _('Logs cleared successfully').'!', false);
+    $Result->warn('success', _('Logs cleared successfully').'!');
 }
 
 // truncate logs table
 if (! $Admin->truncate_table('changelog')) {
-    $Result->show('danger', _('Error clearing changelogs').'!', true);
+    $Result->die('danger', _('Error clearing changelogs').'!');
 } else {
-    $Result->show('success', _('Changelogs cleared successfully').'!', false);
+    $Result->warn('success', _('Changelogs cleared successfully').'!');
 }

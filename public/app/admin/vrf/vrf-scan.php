@@ -19,7 +19,7 @@ $User->check_user_session();
 
 // scan disabled
 if ($User->settings->enableSNMP != '1') {
-    $Result->show('danger', _('SNMP module disabled'), true, true);
+    $Result->die('danger', _('SNMP module disabled'), true);
 }
 // perm check
 $User->check_module_permissions('vrf', User::ACCESS_RWA, true, false);
@@ -29,7 +29,7 @@ $scan_devices = $Tools->fetch_multiple_objects('devices', 'snmp_queries', '%get_
 
 // if none set die
 if ($scan_devices === false) {
-    $Result->show('danger', _('No devices for SNMP VRF query available'), true, true);
+    $Result->die('danger', _('No devices for SNMP VRF query available'), true);
 }
 
 ?>

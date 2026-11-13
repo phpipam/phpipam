@@ -32,7 +32,7 @@ $Admin->validate_action();
 // get Location object
 if ($POST->action != 'add') {
     $location = $Admin->fetch_object('locations', 'id', $POST->id);
-    $location !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+    $location !== false ?: $Result->die('danger', _('Invalid ID'), true);
 } else {
     $location = new Params;
 }

@@ -96,5 +96,5 @@ if (count($result_devices) > 0) {
 </table>
 <?php
 if (count($result_devices) == 0) {
-    $Result->show('info', _('No results'), false);
+    $Result->warn('info', _('No results'));
 }

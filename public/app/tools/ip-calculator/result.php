@@ -23,7 +23,7 @@ $cidr = $POST->cidr;
 
 // verify input CIDR and die if errors
 $errors = $Subnets->verify_cidr_address($cidr, false);
-$errors === true ?: $Result->show('danger alert-absolute', _('Invalid input').': '.$errors, true);
+$errors === true ?: $Result->die('danger alert-absolute', _('Invalid input').': '.$errors);
 
 // fetch all sections
 $all_sections = $Sections->fetch_all_sections();

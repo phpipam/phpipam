@@ -27,15 +27,15 @@ $subnet = $Subnets->fetch_subnet('id', $POST->subnetId);
 
 // checks
 if ($subnet === false) {
-    $Result->show('danger', _('Invalid subnet'), true);
+    $Result->die('danger', _('Invalid subnet'));
 }
 
 if ($subnet->DNSrecursive != 1) {
-    $Result->show('danger', _('Automatic PTR creation for this subnet is disabled'), true);
+    $Result->die('danger', _('Automatic PTR creation for this subnet is disabled'));
 }
 
 if ($User->settings->enablePowerDNS != 1) {
-    $Result->show('danger', _('PowerDNS not enabled'), true);
+    $Result->die('danger', _('PowerDNS not enabled'));
 }
 
 // set zone

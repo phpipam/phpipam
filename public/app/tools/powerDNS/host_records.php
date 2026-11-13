@@ -14,7 +14,7 @@ $unique_ips = $PowerDNS->search_unique_ips();
 
 // validate
 if (! is_array($unique_ips)) {
-    $Result->show('info', _('No host records available'), false);
+    $Result->warn('info', _('No host records available'));
 } else {
     // set order
     $PowerDNS->set_query_values(10000, 'name,type', ' asc');

@@ -101,7 +101,7 @@ if (! $slaves) {
             print '<tr>';
             print "<td colspan='7' class='visible-md visible-lg'>";
             print "<td colspan='3' class='visible-xs visible-sm'>";
-            $Result->show('info', _('VLAN has no belonging subnets').'!', false);
+            $Result->warn('info', _('VLAN has no belonging subnets').'!');
             print '</td>';
             print '</tr>';
         }

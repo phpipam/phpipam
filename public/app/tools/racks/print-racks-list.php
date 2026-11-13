@@ -14,7 +14,7 @@ $User->check_module_permissions('racks', User::ACCESS_R, true);
 
 // check that rack support isenabled
 if ($User->settings->enableRACK != '1') {
-    $Result->show('danger', _('RACK management disabled.'), false);
+    $Result->warn('danger', _('RACK management disabled.'));
 } else {
     // init racks object
     $Racks = new phpipam_rack($Database);
@@ -55,7 +55,7 @@ if ($User->settings->enableRACK != '1') {
     // none
     if ($Racks->all_racks === false) {
         print '<tr>';
-        print " <td colspan='".$colspan."'>".$Result->show('info', _('No racks available'), false, false, true).'</td>';
+        print " <td colspan='".$colspan."'>".$Result->warn('info', _('No racks available'), false, true).'</td>';
         print '</tr>';
     }
     // print

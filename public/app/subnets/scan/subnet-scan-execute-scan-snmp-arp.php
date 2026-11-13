@@ -15,18 +15,18 @@ print '<h5>'._('Scan results').':</h5><hr>';
 
 // scan disabled
 if ($User->settings->enableSNMP != '1') {
-    $Result->show('danger', _('SNMP module disabled'), true);
+    $Result->die('danger', _('SNMP module disabled'));
 }
 
 // subnet check
 $subnet = $Subnets->fetch_subnet('id', $POST->subnetId);
 if ($subnet === false) {
-    $Result->show('danger', _('Invalid subnet Id'), true);
+    $Result->die('danger', _('Invalid subnet Id'));
 }
 
 // verify that user has write permissionss for subnet
 if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
-    $Result->show('danger', _('You do not have permissions to modify hosts in this subnet').'!', true, true);
+    $Result->die('danger', _('You do not have permissions to modify hosts in this subnet').'!', true);
 }
 
 // set class
@@ -63,7 +63,7 @@ if ($devices_used !== false) {
 
 // if none set die
 if (! isset($permitted_devices)) {
-    $Result->show('danger', _('No devices for SNMP ARP query available'), true);
+    $Result->die('danger', _('No devices for SNMP ARP query available'));
 }
 
 $found = [];
@@ -110,12 +110,12 @@ foreach ($permitted_devices as $d) {
 
 // none and errors
 if (count($found) == 0 && isset($errors)) {
-    $Result->show('info', _('No new hosts found'), false);
-    $Result->show('warning', implode('<hr>', $errors), false);
+    $Result->warn('info', _('No new hosts found'));
+    $Result->warn('warning', implode('<hr>', $errors));
 }
 // none
 elseif (count($found) == 0) {
-    $Result->show('info', _('No new hosts found').'!', false);
+    $Result->warn('info', _('No new hosts found').'!');
 }
 // ok
 else {
@@ -231,7 +231,7 @@ else {
     if (isset($errors)) {
         print '<hr>';
         foreach ($errors as $e) {
-            print $Result->show('warning', $e, false);
+            print $Result->warn('warning', $e);
         }
     }
 }

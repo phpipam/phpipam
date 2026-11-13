@@ -21,12 +21,12 @@ $User->check_user_session();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // id must be numeric
 if (! is_numeric($POST->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // get subnet details
@@ -35,11 +35,11 @@ $subnet_old = $Subnets->fetch_subnet(null, $POST->subnetId);
 // verify that user has write permissions for subnet
 $subnetPerm = $Subnets->check_permission($User->user, $subnet_old->id);
 if ($subnetPerm < 3) {
-    $Result->show('danger', _('You do not have permissions to resize subnet').'!', true);
+    $Result->die('danger', _('You do not have permissions to resize subnet').'!');
 }
 
 // verify
 $Subnets->subnet_split($subnet_old, $POST->number, $POST->prefix, $POST->group, $POST->custom_fields);
 
 // all good
-$Result->show('success', _('Subnet split successfully').'!', true);
+$Result->die('success', _('Subnet split successfully').'!');

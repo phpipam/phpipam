@@ -26,7 +26,7 @@ if (substr((string) $POST->as, 0, 2) == 'AS' || substr((string) $POST->as, 0, 2)
 
 // numeric
 if (! is_numeric($POST->as)) {
-    $Result->show('danger', _('Invalid AS'), true);
+    $Result->die('danger', _('Invalid AS'));
 }
 
 // fetch subnets form ripe
@@ -40,10 +40,10 @@ $vrfs = $Admin->fetch_all_objects('vrf', 'vrfId');
 // none found
 if (count(@$subnet) == 0) {
     print '<hr>';
-    $Result->show('danger alert-absolute', _('No subnets found').'!', true);
+    $Result->die('danger alert-absolute', _('No subnets found').'!');
 } else {
     if (count(@$subnet) > 1000) {
-        $Result->show('danger alert-absolute', _('Limiting results to 1000 subnets').'!', false);
+        $Result->warn('danger alert-absolute', _('Limiting results to 1000 subnets').'!');
     }
 
     // form

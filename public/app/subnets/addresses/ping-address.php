@@ -25,27 +25,27 @@ $User->check_maintaneance_mode(true);
 $tagChange = false;
 
 // validate post
-is_numeric($POST->subnetId) ?: $Result->show('danger', _('Invalid ID'), true, true, false, true);
+is_numeric($POST->subnetId) ?: $Result->die('danger', _('Invalid ID'), true, false, true);
 if (is_numeric($POST->id)) {
-    ! is_blank($POST->id) ?: $Result->show('danger', _('Invalid ID'), true, true, false, true);
+    ! is_blank($POST->id) ?: $Result->die('danger', _('Invalid ID'), true, false, true);
     // fetch address
     $address = (array) $Addresses->fetch_address(null, $POST->id);
     if ($address === [] || (int) $address['subnetId'] !== (int) $POST->subnetId) {
-        $Result->show('danger', _('Invalid address for selected subnet'), true, true, false, true);
+        $Result->die('danger', _('Invalid address for selected subnet'), true, false, true);
     }
 }
 // from adding new IP, validate
 else {
     $validate = $Subnets->identify_address($POST->id) == 'IPv4' ? filter_var($POST->id, FILTER_VALIDATE_IP) : filter_var($POST->id, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     if ($validate === false) {
-        $Result->show('danger', _('Invalid IP address'), true, true, false, true);
+        $Result->die('danger', _('Invalid IP address'), true, false, true);
     } else {
         $address['ip'] = $POST->id;
     }
 }
 // set and check permissions
 $subnet_permission = $Subnets->check_permission($User->user, $POST->subnetId);
-$subnet_permission > 1 ?: $Result->show('danger', _('Cannot edit IP address details').'! <br>'._('You do not have write access for this network'), true, true);
+$subnet_permission > 1 ?: $Result->die('danger', _('Cannot edit IP address details').'! <br>'._('You do not have write access for this network'), true);
 
 // try to ping it
 $pingRes = $Ping->ping_address($address['ip']);
@@ -81,30 +81,30 @@ if ($Ping->settings->updateTags == 1 && isset($address['state']) && $Subnets->ad
     <?php
     // online
     if ($pingRes == 0) {
-        $Result->show('success', _('IP address')." $address[ip] "._('is alive'), false);
+        $Result->warn('success', _('IP address')." $address[ip] "._('is alive'));
     }
     // offline
     elseif ($pingRes == 1 || $pingRes == 2) {
-        $Result->show('danger', _('IP address')." $address[ip] "._('is not alive'), false);
+        $Result->warn('danger', _('IP address')." $address[ip] "._('is not alive'));
     }
     // error
     else {
         // fetch error code
         $ecode = $Ping->ping_exit_explain($pingRes);
-        $Result->show('danger', _('Error').": $ecode ($pingRes)", false);
+        $Result->warn('danger', _('Error').": $ecode ($pingRes)");
     }
 
 // tag change
 if ($tagChange !== false) {
-    $Result->show('info', _("Address state changed to $tagChange"), false);
+    $Result->warn('info', _("Address state changed to $tagChange"));
 }
 
 // hr
 print '<hr>';
-$Result->show('muted pull-right', '('.$Ping->settings->scanPingType.')', false);
+$Result->warn('muted pull-right', '('.$Ping->settings->scanPingType.')');
 // additional notes
 if (isset($Ping->rtt)) {
-    $Result->show('muted pull-right', $Ping->rtt.' ms', false);
+    $Result->warn('muted pull-right', $Ping->rtt.' ms');
 }
 ?>
 </div>

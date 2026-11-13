@@ -21,14 +21,14 @@ $User->is_admin();
 
 // fetch server
 $server = $Admin->fetch_object('usersAuthMethod', 'id', $POST->server);
-$server !== false ?: $Result->show('danger', _('Invalid server ID'), true);
+$server !== false ?: $Result->die('danger', _('Invalid server ID'));
 
 // parse parameters
 $params = db_json_decode($server->params);
 
 // no login parameters
 if (is_blank(@$params->adminUsername) || is_blank(@$params->adminPassword)) {
-    $Result->show('danger', _('Missing credentials'), true);
+    $Result->die('danger', _('Missing credentials'));
 }
 
 // open connection
@@ -52,7 +52,7 @@ try {
     // try to login with higher credentials for search
     $authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
     if ($authUser == false) {
-        $Result->show('danger', _('Invalid credentials'), true);
+        $Result->die('danger', _('Invalid credentials'));
     }
 
     // set OpenLDAP flag
@@ -82,5 +82,5 @@ try {
         print trim(implode(';', array_filter($membership)));
     }
 } catch (adLDAPException $adldapException) {
-    $Result->show('danger', $adldapException->getMessage(), true);
+    $Result->die('danger', $adldapException->getMessage());
 }

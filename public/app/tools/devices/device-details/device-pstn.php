@@ -14,7 +14,7 @@ $hidden_fields = db_json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['pstnPrefixes']) ? $hidden_fields['pstnPrefixes'] : [];
 
 // check
-is_numeric($GET->subnetId) ?: $Result->show('danger', _('Invalid ID'), true);
+is_numeric($GET->subnetId) ?: $Result->die('danger', _('Invalid ID'));
 
 // title - subnets
 print '<h4>'._('Belonging PSTN prefixes').'</h4><hr>';
@@ -30,11 +30,11 @@ print "<table id='switchMainTable' class='devices table table-striped table-top 
 
 // headers
 if ($User->settings->enablePSTN != '1') {
-    $Result->show('danger', _('PSTN prefixes module disabled.'), false);
+    $Result->warn('danger', _('PSTN prefixes module disabled.'));
 }
 // perm check
 elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 } else {
     $colspan = 6;
     // table
@@ -68,7 +68,7 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
     // if none than print
     if ($subprefixes === false) {
         print '<tr>';
-        print " <td colspan='$colspan'>".$Result->show('info', _('No PSTN prefixes attached to device'), false, false, true).'</td>';
+        print " <td colspan='$colspan'>".$Result->warn('info', _('No PSTN prefixes attached to device'), false, true).'</td>';
         print '</tr>';
     } else {
         // print

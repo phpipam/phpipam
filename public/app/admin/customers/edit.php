@@ -32,7 +32,7 @@ $custom = $Tools->fetch_custom_fields('customers');
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch customer for edit / add
@@ -40,7 +40,7 @@ if ($POST->action != 'add') {
     // fetch api details
     $customer = $Tools->fetch_object('customers', 'id', $POST->id);
     // null ?
-    $customer === false ? $Result->show('danger', _('Invalid ID'), true) : null;
+    $customer === false ? $Result->die('danger', _('Invalid ID')) : null;
     // title
     $title = ucwords((string) $POST->action).' '._('customer').' '.$customer->title;
 } else {

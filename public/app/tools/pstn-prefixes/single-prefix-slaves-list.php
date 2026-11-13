@@ -5,11 +5,11 @@ $User->check_user_session();
 
 // check that location support isenabled
 if ($User->settings->enablePSTN != '1') {
-    $Result->show('danger', _('PSTN prefixes module disabled.'), false);
+    $Result->warn('danger', _('PSTN prefixes module disabled.'));
 }
 // perm check
 elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 } else {
     $colspan = $User->get_module_permissions('devices') >= User::ACCESS_R ? 8 : 7;
 
@@ -49,7 +49,7 @@ elseif ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
     // if none than print
     if ($subprefixes === false) {
         print '<tr>';
-        print " <td colspan='$colspan'>".$Result->show('info', _('No PSTN prefixes configured'), false, false, true).'</td>';
+        print " <td colspan='$colspan'>".$Result->warn('info', _('No PSTN prefixes configured'), false, true).'</td>';
         print '</tr>';
     } else {
         // add raw before loop

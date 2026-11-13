@@ -22,26 +22,26 @@ $csrf = $User->Crypto->csrf_session_token();
 
 // ID must be numeric
 if (! is_numeric($POST->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // verify that user has write permissionss for subnet
 if ($Subnets->check_permission($User->user, $POST->subnetId) < 2) {
-    $Result->show('danger', _('You do not have permissions to modify hosts in this subnet').'!', true, true);
+    $Result->die('danger', _('You do not have permissions to modify hosts in this subnet').'!', true);
 }
 
 // Check if scanning has been disabled
 if ($User->settings->scanPingType == 'none') {
-    $Result->show('danger', _('Scanning disabled').' (scanPingType=None)', true, true);
+    $Result->die('danger', _('Scanning disabled').' (scanPingType=None)', true);
 }
 
 // fetch subnet details
 $subnet = $Subnets->fetch_subnet(null, $POST->subnetId);
-$subnet !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+$subnet !== false ?: $Result->die('danger', _('Invalid ID'), true);
 
 // IPv6 scanning is not supported
 if ($Subnets->identify_address($subnet->subnet) == 'IPv6') {
-    $Result->show('danger', _('IPv6 scanning is not supported').'!', true, true);
+    $Result->die('danger', _('IPv6 scanning is not supported').'!', true);
 }
 
 // fix description
@@ -57,7 +57,7 @@ $subnet->description = ! is_blank($subnet->description) ? '('.$subnet->descripti
     <?php
     // verify date.timezone
     if (is_blank(ini_get('date.timezone'))) {
-        $Result->show('warning', _('Online & offline results may be unreliable: date.timezone not set in ').php_ini_loaded_file());
+        $Result->warn('warning', _('Online & offline results may be unreliable: date.timezone not set in ').php_ini_loaded_file());
     }
 ?>
     <table class="table table-noborder table-condensed table-scan">

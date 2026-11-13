@@ -33,8 +33,8 @@ if (array_key_exists($GET->sPage, $Tools->get_customer_object_types())) {
     if (file_exists(__DIR__.'/objects/'.$GET->sPage.'.php')) {
         include 'objects/'.$GET->sPage.'.php';
     } else {
-        $Result->show('danger', _('Invalid subpage'), false);
+        $Result->warn('danger', _('Invalid subpage'));
     }
 } else {
-    $Result->show('danger', _('Invalid subpage'), false);
+    $Result->warn('danger', _('Invalid subpage'));
 }

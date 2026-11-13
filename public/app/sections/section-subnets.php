@@ -7,7 +7,7 @@ $User->check_user_session();
 
 // must be numeric
 if (! is_numeric($GET->section)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 $section = $Sections->fetch_section(null, $GET->section);

@@ -13,10 +13,10 @@ $csrf = $User->Crypto->csrf_session_token();
 
 // must be numeric
 if (! is_numeric($GET->subnetId)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 if (! is_numeric($GET->section)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // set master folder ID to check for slaves
@@ -72,7 +72,7 @@ if ($slaves) {
         if ($m == 0) {
             print '<tr>';
             print "<td colspan='2'>";
-            $Result->show('info', _('Folder has no subfolders').'!', false);
+            $Result->warn('info', _('Folder has no subfolders').'!');
             print '</td>';
             print '</tr>';
         }
@@ -201,7 +201,7 @@ if ($slaves) {
             print '<tr>';
             print "<td colspan='7' class='visible-md visible-lg'>";
             print "<td colspan='4' class='visible-xs visible-sm'>";
-            $Result->show('info', _('Folder has no belonging subnets').'!', false);
+            $Result->warn('info', _('Folder has no belonging subnets').'!');
             print '</td>';
             print '</tr>';
         }
@@ -210,5 +210,5 @@ if ($slaves) {
     }
 } else {
     print '<hr>';
-    $Result->show('info', _('Folder has no subfolders or belonging subnets').'!', false);
+    $Result->warn('info', _('Folder has no subfolders or belonging subnets').'!');
 }

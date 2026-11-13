@@ -14,7 +14,7 @@ $User = new User($Database);
 $Tools = new Tools($Database);
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // verify that user is logged in
@@ -23,7 +23,7 @@ $User->check_user_session();
 // verify each recipient
 foreach (explode(',', (string) $POST->recipients) as $rec) {
     if (! filter_var(trim($rec), FILTER_VALIDATE_EMAIL)) {
-        $Result->show('danger', _('Invalid email address').' - '.$rec, true);
+        $Result->die('danger', _('Invalid email address').' - '.$rec);
     }
 }
 
@@ -68,10 +68,10 @@ try {
     // send
     $phpipam_mail->Php_mailer->send();
 } catch (PHPMailer\PHPMailer\Exception $e) {
-    $Result->show('danger', 'Mailer Error: '.$e->errorMessage(), true);
+    $Result->die('danger', 'Mailer Error: '.$e->errorMessage());
 } catch (Exception $e) {
-    $Result->show('danger', 'Mailer Error: '.$e->getMessage(), true);
+    $Result->die('danger', 'Mailer Error: '.$e->getMessage());
 }
 
 // all good
-$Result->show('success', _('Sending mail succeeded').'!', true);
+$Result->die('success', _('Sending mail succeeded').'!');

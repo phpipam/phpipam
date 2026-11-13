@@ -22,13 +22,13 @@ $User->check_module_permissions('vlan', User::ACCESS_RW, true, true);
 // fetch vlan details
 $vlan = $Admin->fetch_object('vlans', 'vlanid', $POST->vlanid);
 if ($vlan === false) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch current domain
 $vlan_domain = $Admin->fetch_object('vlanDomains', 'id', $vlan->domainId);
 if ($vlan_domain === false) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch all l2 domains
@@ -84,7 +84,7 @@ foreach ($vlan_domains as $d) {
     </form>
 
     <?php if ($m == 0) {
-        $Result->show('warning', _('No domains available!'), false);
+        $Result->warn('warning', _('No domains available!'));
     } ?>
 
 </div>

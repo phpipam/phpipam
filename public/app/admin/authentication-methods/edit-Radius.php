@@ -15,7 +15,7 @@ $Admin->validate_action();
 // ID must be numeric */
 if ($POST->action != 'add') {
     if (! is_numeric($POST->id)) {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 
     // feth method settings
@@ -156,7 +156,7 @@ foreach ($values as $v) {
     // check for socket support !
     if (! in_array('sockets', get_loaded_extensions())) {
         $Log->write(_('Radius login'), _('php Socket extension missing!'), 2);
-        $Result->show('danger', _('php Socket extension missing!'), false);
+        $Result->warn('danger', _('php Socket extension missing!'));
     }
 ?>
 </div>
@@ -185,7 +185,7 @@ foreach ($values as $v) {
     if ($POST->action == 'delete') {
         $users = $Admin->fetch_multiple_objects('users', 'authMethod', @$method_settings->id);
         if (is_array($users)) {
-            $Result->show('warning', count($users)._(' users have this method for logging in. They will be reset to local auth!'), false);
+            $Result->warn('warning', count($users)._(' users have this method for logging in. They will be reset to local auth!'));
         }
     }
 ?>

@@ -16,7 +16,7 @@ print '<hr>';
 
 // none
 if ($agents === false) {
-    $Result->show('info', _('No agents available'), false);
+    $Result->warn('info', _('No agents available'));
 }
 // print
 else {
@@ -93,14 +93,14 @@ else {
             if ($cnt === 0) {
                 print '<tr>';
                 print '	<td colspan=7>';
-                $Result->show('info', _('No subnets available'), false);
+                $Result->warn('info', _('No subnets available'));
                 print '	</td>';
                 print '</tr>';
             }
         } else {
             print '<tr>';
             print '	<td colspan=7>';
-            $Result->show('info', _('No subnets'), false);
+            $Result->warn('info', _('No subnets'));
             print '	</td>';
             print '</tr>';
         }

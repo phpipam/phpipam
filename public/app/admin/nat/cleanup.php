@@ -99,15 +99,15 @@ if (is_array($address_ids)) {
 
 // Results
 if ($removed_subnets !== []) {
-    $Result->show('info', _('Removed').' '.count($removed_subnets).' '._('subnets').'<hr>Ids: '.implode('; ', $removed_subnets));
+    $Result->warn('info', _('Removed').' '.count($removed_subnets).' '._('subnets').'<hr>Ids: '.implode('; ', $removed_subnets));
 } else {
-    $Result->show('info', _('No subnets removed from NAT'));
+    $Result->warn('info', _('No subnets removed from NAT'));
 }
 
 if ($removed_addresses !== []) {
-    $Result->show('info', _('Removed').' '.count($removed_addresses).' '._('addresses').'<hr>Ids: '.implode('; ', $removed_addresses));
+    $Result->warn('info', _('Removed').' '.count($removed_addresses).' '._('addresses').'<hr>Ids: '.implode('; ', $removed_addresses));
 } else {
-    $Result->show('info', _('No addresses removed from NAT'));
+    $Result->warn('info', _('No addresses removed from NAT'));
 }
 ?>
 </div>

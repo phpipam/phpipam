@@ -76,7 +76,7 @@ class Sections extends Common_functions
             return $this->section_reorder($values);
         }
 
-        return $this->Result->show('danger', _('Invalid action'), true);
+        return $this->Result->die('danger', _('Invalid action'));
     }
 
     /**
@@ -97,7 +97,7 @@ class Sections extends Common_functions
         try {
             $this->Database->insertObject('sections', $values);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
             // write log and changelog
             $this->Log->write(_('Sections create'), _('Failed to create new section').'.<hr>'.$exception->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values, 'NULL')), 2);
 
@@ -133,7 +133,7 @@ class Sections extends Common_functions
         try {
             $this->Database->updateObject('sections', $values, 'id');
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage(), false);
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
             $this->Log->write(_('Section').' '.$old_section->name.' '._('edit'), _('Failed to edit section').' '.$old_section->name.'.<hr>'.$exception->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values, 'NULL')), 2);
 
             return false;
@@ -179,7 +179,7 @@ class Sections extends Common_functions
                 $this->Database->deleteRow('sections', 'id', $id);
             } catch (Exception $e) {
                 $this->Log->write(_('Section').' '.$old_section->name.' '._('delete'), _('Failed to delete section').' '.$old_section->name.'.<hr>'.$e->getMessage().'<hr>'.$this->array_to_log($this->reformat_empty_array_fields($values, 'NULL')), 2);
-                $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+                $this->Result->warn('danger', _('Error: ').$e->getMessage());
 
                 return false;
             }
@@ -207,7 +207,7 @@ class Sections extends Common_functions
             try {
                 $this->Database->updateObject('sections', ['order' => $o, 'id' => $key], 'id');
             } catch (Exception $e) {
-                $this->Result->show('danger', _('Error: ').$e->getMessage(), false);
+                $this->Result->warn('danger', _('Error: ').$e->getMessage());
 
                 return false;
             }
@@ -274,7 +274,7 @@ class Sections extends Common_functions
         try {
             $subsections = $this->Database->getObjectsQuery('sections', 'SELECT * FROM `sections` where `masterSection` = ?;', [$sectionId]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -319,7 +319,7 @@ class Sections extends Common_functions
         try {
             $vlans = $this->Database->getObjectsQuery('subnets', $query, [$sectionId]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }
@@ -342,7 +342,7 @@ class Sections extends Common_functions
         try {
             $vrfs = $this->Database->getObjectsQuery('subnets', $query, [$sectionId]);
         } catch (Exception $exception) {
-            $this->Result->show('danger', _('Error: ').$exception->getMessage());
+            $this->Result->warn('danger', _('Error: ').$exception->getMessage());
 
             return false;
         }

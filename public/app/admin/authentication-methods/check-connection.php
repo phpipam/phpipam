@@ -21,7 +21,7 @@ $User->is_admin();
 // feth settings
 $auth_settings = $Admin->fetch_object('usersAuthMethod', 'id', $POST->id);
 if ($auth_settings === false) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // set params
@@ -54,18 +54,18 @@ if (in_array($auth_settings->type, ['AD', 'LDAP', 'NetIQ'])) {
         }
     } catch (adLDAPException $e) {
         // catch AD error
-        $Result->show('danger', $e, true, true);
+        $Result->die('danger', $e, true);
     }
 
     // result
     foreach ($controllers as $c) {
         $fp = @fsockopen($c, $parameters->ad_port, $errno, $errstr, 3);
         if ($fp === false) {
-            $Result->show('danger', "$c: $errstr ($errno)", false, true);
+            $Result->warn('danger', "$c: $errstr ($errno)", true);
         } else {
-            $Result->show('success', "$c: "._('AD network connection ok').'!', false, true);
+            $Result->warn('success', "$c: "._('AD network connection ok').'!', true);
         }
     }
 } else {
-    $Result->show('danger', _('Check not implemented'), true, true);
+    $Result->die('danger', _('Check not implemented'), true);
 }

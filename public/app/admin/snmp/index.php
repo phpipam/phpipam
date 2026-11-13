@@ -37,7 +37,7 @@ $hidden_custom_fields = is_array(@$hidden_custom_fields['devices']) ? $hidden_cu
 <?php
 /* first check if they exist! */
 if ($User->settings->enableSNMP === false) {
-    $Result->show('danger alert-absolute', _('SNMP module disabled').'!', false);
+    $Result->warn('danger alert-absolute', _('SNMP module disabled').'!');
 }
 /* Print them out */
 else {
@@ -69,7 +69,7 @@ else {
         // devices
         print ' <td>';
         if ($devices_used === false) {
-            $Result->show('info', _('No devices'), false);
+            $Result->warn('info', _('No devices'));
         } else {
             foreach ($devices_used as $d) {
                 print "<a href='".create_link('tools', 'devices', $d->id)."'>".$d->hostname.'</a><br>';

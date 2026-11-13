@@ -19,7 +19,7 @@ $User->check_user_session();
 
 // make sure user has access
 if ($User->get_module_permissions('vaults') < User::ACCESS_RWA) {
-    $Result->show('danger', _('Insufficient privileges').'.', true, true);
+    $Result->die('danger', _('Insufficient privileges').'.', true);
 }
 
 // create csrf token
@@ -30,7 +30,7 @@ $Admin->validate_action();
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch vault for edit / add
@@ -38,7 +38,7 @@ if ($POST->action != 'add') {
     // fetch vault details
     $vault = $Admin->fetch_object('vaults', 'id', $POST->id);
     // null ?
-    $vault === false ? $Result->show('danger', _('Invalid ID'), true) : null;
+    $vault === false ? $Result->die('danger', _('Invalid ID')) : null;
     // title
     $title = $User->get_post_action().' '._('vault').' '.$vault->name;
 } else {

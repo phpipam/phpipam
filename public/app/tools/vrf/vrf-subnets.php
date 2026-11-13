@@ -95,7 +95,7 @@ if (! $slaves) {
     if ($m == 0) {
         print '<tr>';
         print "<td colspan='6' class='visible-md visible-lg'>";
-        $Result->show('info', _('VRF has no belonging subnets').'!', false);
+        $Result->warn('info', _('VRF has no belonging subnets').'!');
         print '</td>';
         print '</tr>';
     }

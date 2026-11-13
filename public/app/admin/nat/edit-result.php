@@ -26,29 +26,29 @@ if ($POST->action == 'edit') {
 $custom = $Tools->fetch_custom_fields('nat');
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // validations
 if ($POST->action == 'delete' || $POST->action == 'edit') {
     if ($Admin->fetch_object('nat', 'id', $POST->id) === false) {
-        $Result->show('danger', _('Invalid NAT object identifier'), false);
+        $Result->warn('danger', _('Invalid NAT object identifier'));
     }
 }
 
 if ($POST->action == 'add' || $POST->action == 'edit') {
     // name
     if (strlen((string) $POST->name) < 3) {
-        $Result->show('danger', _('Name must have at least 3 characters'), true);
+        $Result->die('danger', _('Name must have at least 3 characters'));
     }
 
     if (! in_array($POST->type, ['source', 'static', 'destination'])) {
-        $Result->show('danger', _('Invalid NAT type'), true);
+        $Result->die('danger', _('Invalid NAT type'));
     }
 
     if (isset($POST->device)) {
         if (! is_numeric($POST->device)) {
-            $Result->show('danger', _('Invalid device'), true);
+            $Result->die('danger', _('Invalid device'));
         }
     }
 }
@@ -90,9 +90,9 @@ if (is_array($custom)) {
 
 // execute update
 if (! $Admin->object_modify('nat', $POST->action, 'id', $values)) {
-    $Result->show('danger', _('NAT').' '.$User->get_post_action().' '._('failed'), false);
+    $Result->warn('danger', _('NAT').' '.$User->get_post_action().' '._('failed'));
 } else {
-    $Result->show('success', _('NAT').' '.$User->get_post_action().' '._('successful'), false);
+    $Result->warn('success', _('NAT').' '.$User->get_post_action().' '._('successful'));
 }
 
 // add

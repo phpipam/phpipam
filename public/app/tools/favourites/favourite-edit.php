@@ -15,15 +15,15 @@ $Subnets = new Subnets($Database);
 $User->check_user_session();
 
 if ($User->Crypto->csrf_validate($POST->csrf) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true, true);
+    $Result->die('danger', _('Invalid CSRF cookie'), true);
 }
 
 // checks
-is_numeric($POST->subnetId) ?: $Result->show('danger', _('Invalid ID'), true, true);
+is_numeric($POST->subnetId) ?: $Result->die('danger', _('Invalid ID'), true);
 
 // execute action
 if (! $User->edit_favourite($POST->action, $POST->subnetId)) {
-    $Result->show('danger', _('Error editing favourite'), true, true);
+    $Result->die('danger', _('Error editing favourite'), true);
 } else {
     print 'success';
 }

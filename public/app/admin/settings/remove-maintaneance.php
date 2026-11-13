@@ -23,7 +23,7 @@ $values = ['id' => 1,
     'maintaneanceMode' => 0,
 ];
 if (! $Admin->object_modify('settings', 'edit', 'id', $values)) {
-    $Result->show('danger', _('Cannot update settings'), true, true, false, false, true);
+    $Result->die('danger', _('Cannot update settings'), true, false, false, true);
 } else {
-    $Result->show('success', _('Maintaneance mode removed'), true, true, false, false, true);
+    $Result->die('success', _('Maintaneance mode removed'), true, false, false, true);
 }

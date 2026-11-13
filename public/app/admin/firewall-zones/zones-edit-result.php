@@ -30,33 +30,33 @@ $firewallZoneSettings = db_json_decode($User->settings->firewallZoneSettings, tr
 // validations
 // validate the action type
 if (! in_array($POST->action, ['add', 'delete', 'edit'])) {
-    $Result->show('danger', _('Invalid action.'), true);
+    $Result->die('danger', _('Invalid action.'));
 }
 
 // check the zone name. valid values are alphanumeric characters and special characters like ".-_ "
 if ($POST->zone && ! preg_match('/^[0-9a-z.\-_ ]+$/i', (string) $POST->zone)) {
-    $Result->show('danger', _('Invalid zone name value.'), true);
+    $Result->die('danger', _('Invalid zone name value.'));
 }
 
 if ($firewallZoneSettings['zoneGenerator'] == '2') {
     if (is_blank($POST->zone) || strlen((string) $POST->zone) > $firewallZoneSettings['zoneLength']) {
-        $Result->show('danger', _('Invalid zone name length.'), true);
+        $Result->die('danger', _('Invalid zone name length.'));
     }
 }
 
 // check the zone indicator ID. valid values are 0 or 1.
 if ($POST->indicator && ! preg_match('/^[0-1]$/i', (string) $POST->indicator)) {
-    $Result->show('danger', _('Invalid indicator ID.'), true);
+    $Result->die('danger', _('Invalid indicator ID.'));
 }
 
 // check the generator value. valid value: integer
 if ($POST->generator && ! preg_match('/^[0-9]+$/i', (string) $POST->generator)) {
-    $Result->show('danger', _('Invalid generator ID.'), true);
+    $Result->die('danger', _('Invalid generator ID.'));
 }
 
 // check the padding value. valid value: on or off
 if ($POST->padding && ! preg_match('/^(on|off)$/i', (string) $POST->padding)) {
-    $Result->show('danger', _('Invalid padding setting.'), true);
+    $Result->die('danger', _('Invalid padding setting.'));
 }
 
 // transform the padding checkbox values into 1 or 0
@@ -74,7 +74,7 @@ $description = trim(htmlspecialchars((string) $POST->description));
 // generate a unique zone name if the generator is set to decimal or hex
 if (! $POST->zone && $POST->action == 'add') {
     if (! $zone = $Zones->generate_zone_name()) {
-        $Result->show('danger', _('Cannot generate zone name'), true);
+        $Result->die('danger', _('Cannot generate zone name'));
     }
 } else {
     $zone = $POST->zone;
@@ -84,7 +84,7 @@ if (! $POST->zone && $POST->action == 'add') {
 if ($POST->generator == 2) {
     $textSettings = [$POST->zone, $POST->id];
     if (! $zone = $Zones->generate_zone_name($textSettings)) {
-        $Result->show('danger', _('Cannot validate zone name'), true);
+        $Result->die('danger', _('Cannot validate zone name'));
     }
 }
 
@@ -109,7 +109,7 @@ if ($POST->generator != 2 && $POST->action == 'edit') {
 
 // update
 if (! $Zones->modify_zone($POST->action, $values)) {
-    $Result->show('danger', _('Cannot add zone'), true);
+    $Result->die('danger', _('Cannot add zone'));
 } else {
-    $Result->show('success', _('Zone modified successfully'), true);
+    $Result->die('success', _('Zone modified successfully'));
 }

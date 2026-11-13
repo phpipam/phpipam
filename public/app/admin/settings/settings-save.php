@@ -24,7 +24,7 @@ $User->is_admin();
 $User->is_demo();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // check for http/https
@@ -38,34 +38,34 @@ $POST->pingStatus = str_replace(',', ';', (string) $POST->pingStatus);      // c
 $statuses = explode(';', $POST->pingStatus);
 
 if (count($statuses) != 2) {
-    $Result->show('danger', _('Invalid ping status intervals'), true);
+    $Result->die('danger', _('Invalid ping status intervals'));
 }
 
 if (! is_numeric($statuses[0]) || ! is_numeric($statuses[1])) {
-    $Result->show('danger', _('Invalid ping status intervals'), true);
+    $Result->die('danger', _('Invalid ping status intervals'));
 }
 
 // verify email
 if (filter_var($POST->siteAdminMail, FILTER_VALIDATE_EMAIL) === false) {
-    $Result->show('danger', _('Invalid email'), true);
+    $Result->die('danger', _('Invalid email'));
 }
 
 // verify numbers
 if (! is_numeric($POST->vlanMax)) {
-    $Result->show('danger', _('Invalid value for Max VLAN number'), true);
+    $Result->die('danger', _('Invalid value for Max VLAN number'));
 }
 
 // verify snmp support
 if ($Admin->verify_checkbox($POST->enableSNMP) == 1) {
     if (! in_array('snmp', get_loaded_extensions())) {
-        $Result->show('danger', _('Missing snmp support in php'), true);
+        $Result->die('danger', _('Missing snmp support in php'));
     }
 }
 
 // verify racktables gd support
 if ($Admin->verify_checkbox($POST->enableRACK) == 1) {
     if (! in_array('gd', get_loaded_extensions())) {
-        $Result->show('danger', _('Missing gd support in php'), true);
+        $Result->die('danger', _('Missing gd support in php'));
     }
 }
 
@@ -75,7 +75,7 @@ if ($POST->link_field == 'None') {
 }
 
 if (! in_array($POST->subnetOrdering, array_keys($Subnets->get_valid_subnet_orderings(false)))) {
-    $Result->show('danger', _('Invalid subnetOrdering'), true);
+    $Result->die('danger', _('Invalid subnetOrdering'));
 }
 
 // set update values
@@ -141,7 +141,7 @@ $values = ['id' => 1,
 $Tools->verify_linked_field_indexes($POST->link_field);
 
 if (! $Admin->object_modify('settings', 'edit', 'id', $values)) {
-    $Result->show('danger', _('Cannot update settings'), true);
+    $Result->die('danger', _('Cannot update settings'));
 } else {
-    $Result->show('success', _('Settings updated successfully'), true);
+    $Result->die('success', _('Settings updated successfully'));
 }

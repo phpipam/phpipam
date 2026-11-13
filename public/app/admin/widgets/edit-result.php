@@ -22,20 +22,20 @@ $User->is_admin();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // ID must be numeric */
 if ($POST->action != 'add') {
     if (! is_numeric($POST->wid)) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }
 }
 
 // Title and path must be present!
 if ($POST->action != 'delete') {
     if (is_blank($POST->wtitle) || is_blank($POST->wfile)) {
-        $Result->show('danger', _('Filename and title are mandatory').'!', true);
+        $Result->die('danger', _('Filename and title are mandatory').'!');
     }
 }
 
@@ -55,7 +55,7 @@ $values = ['wid' => $POST->wid,
 ];
 // update
 if (! $Admin->object_modify('widgets', $POST->action, 'wid', $values)) {
-    $Result->show('danger', _('Widget '.$User->get_post_action().' error').'!', true);
+    $Result->die('danger', _('Widget '.$User->get_post_action().' error').'!');
 } else {
-    $Result->show('success', _('Widget '.$User->get_post_action().' success').'!', true);
+    $Result->die('success', _('Widget '.$User->get_post_action().' success').'!');
 }

@@ -28,20 +28,20 @@ $Admin->validate_action();
 // ID must be numeric
 if ($POST->action != 'add') {
     if (! is_numeric($POST->subnetId)) {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 }
 
 // verify that user has permissions to add subnet
 if ($POST->action == 'add') {
     if ($Sections->check_permission($User->user, $POST->sectionId) != 3) {
-        $Result->show('danger', _('You do not have permissions to add new subnet in this section').'!', true, true);
+        $Result->die('danger', _('You do not have permissions to add new subnet in this section').'!', true);
     }
 }
 // otherwise check subnet permission
 else {
     if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
-        $Result->show('danger', _('You do not have permissions to add edit/delete this subnet').'!', true, true);
+        $Result->die('danger', _('You do not have permissions to add edit/delete this subnet').'!', true);
     }
 }
 

@@ -21,7 +21,7 @@ $Tools = new Tools($Database);
 $User->check_user_session();
 // perm check
 if ($User->get_module_permissions('fwzones') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 
 // generate a dropdown list for all subnets within a section
@@ -31,7 +31,7 @@ if ($POST->operation == 'fetchSectionSubnets') {
             $sectionId = $POST->sectionId;
             print $Subnets->print_mastersubnet_dropdown_menu($sectionId);
         } else {
-            $Result->show('danger', _('Invalid ID.'), true);
+            $Result->die('danger', _('Invalid ID.'));
         }
     }
 }
@@ -43,7 +43,7 @@ if ($POST->operation == 'deliverZoneDetail') {
             // return the zone details
             $Zones->get_zone_detail($POST->zoneId);
         } else {
-            $Result->show('danger', _('Invalid zone ID.'), true);
+            $Result->die('danger', _('Invalid zone ID.'));
         }
     }
 }
@@ -54,7 +54,7 @@ if ($POST->netZoneId) {
         // return the zone details
         $Zones->get_zone_network($POST->netZoneId);
     } else {
-        $Result->show('danger', _('Invalid netZone ID.'), true);
+        $Result->die('danger', _('Invalid netZone ID.'));
     }
 }
 

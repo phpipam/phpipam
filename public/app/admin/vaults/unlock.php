@@ -21,18 +21,18 @@ $csrf = $User->Crypto->csrf_session_token();
 
 // make sure user has access
 if ($User->get_module_permissions('vaults') == User::ACCESS_NONE) {
-    $Result->show('danger', _('Insufficient privileges').'.', true, true);
+    $Result->die('danger', _('Insufficient privileges').'.', true);
 }
 
 // ID must be numeric
 if (! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch vault details
 $vault = $Admin->fetch_object('vaults', 'id', $POST->id);
 // null ?
-$vault === false ? $Result->show('danger', _('Invalid ID'), true) : null;
+$vault === false ? $Result->die('danger', _('Invalid ID')) : null;
 
 ?>
 

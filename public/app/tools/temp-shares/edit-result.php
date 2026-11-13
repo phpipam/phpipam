@@ -18,39 +18,39 @@ $Result = new Result;
 $User->check_user_session();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 /* checks */
 if ($User->settings->tempShare != 1) {
-    $Result->show('danger', _('Temporary sharing disabled'), true);
+    $Result->die('danger', _('Temporary sharing disabled'));
 }
 
 if ($POST->type != 'subnets' && $POST->type != 'ipaddresses') {
-    $Result->show('danger', _('Invalid type'), true);
+    $Result->die('danger', _('Invalid type'));
 }
 
 if (! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 if (strlen((string) $POST->code) != 32) {
-    $Result->show('danger', _('Invalid code'), true);
+    $Result->die('danger', _('Invalid code'));
 }
 
 if ($POST->validity < date('Y-m-d H:i:s')) {
-    $Result->show('danger', _('Invalid date'), true);
+    $Result->die('danger', _('Invalid date'));
 }
 
 if ($POST->validity > date('Y-m-d H:i:s', strtotime('+ 7 days'))) {
-    $Result->show('danger', _('1 week is max validity time'), true);
+    $Result->die('danger', _('1 week is max validity time'));
 }
 
 // verify each recipient
 if (! is_blank($POST->email)) {
     foreach (explode(',', (string) $POST->email) as $rec) {
         if (! filter_var(trim($rec), FILTER_VALIDATE_EMAIL)) {
-            $Result->show('danger', _('Invalid email address').' - '.$rec, true);
+            $Result->die('danger', _('Invalid email address').' - '.$rec);
         }
     }
 }
@@ -58,12 +58,12 @@ if (! is_blank($POST->email)) {
 // fetch object
 $object = $Admin->fetch_object($POST->type, 'id', $POST->id);
 if (! is_object($object)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 if ($POST->type == 'subnets') {
     if ($Subnets->check_permission($User->user, $object->id) < User::ACCESS_RW) {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 
     $tmp[] = _('Share type: subnet');
@@ -71,7 +71,7 @@ if ($POST->type == 'subnets') {
     $tmp[] = "\t".$object->description;
 } else {
     if ($Subnets->check_permission($User->user, $object->subnetId) < User::ACCESS_RW) {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 
     $tmp[] = _('Share type: IP address');
@@ -105,14 +105,14 @@ if (! is_array($old_access)) {
 
 $new_access = json_encode(array_merge($old_access, array_filter($new_access)));
 if (strlen($new_access) > 65535) {
-    $Result->show('danger', _('Maximum number of shares exceeded'), true, true);
+    $Result->die('danger', _('Maximum number of shares exceeded'), true);
 }
 
 // execute
 if (! $Admin->object_modify('settings', 'edit', 'id', ['id' => 1, 'tempAccess' => $new_access])) {
-    $Result->show('danger', _('Temporary share create error'), true);
+    $Result->die('danger', _('Temporary share create error'));
 } else {
-    $Result->show('success', _('Temporary share created'), false);
+    $Result->warn('success', _('Temporary share created'));
 }
 
 // send mail
@@ -159,11 +159,11 @@ if (! is_blank($POST->email)) {
         // send
         $phpipam_mail->Php_mailer->send();
     } catch (PHPMailer\PHPMailer\Exception $e) {
-        $Result->show('danger', 'Mailer Error: '.$e->errorMessage(), true);
+        $Result->die('danger', 'Mailer Error: '.$e->errorMessage());
     } catch (Exception $e) {
-        $Result->show('danger', 'Mailer Error: '.$e->getMessage(), true);
+        $Result->die('danger', 'Mailer Error: '.$e->getMessage());
     }
 
     // all good
-    $Result->show('success', _('Sending mail succeeded').'!', true);
+    $Result->die('success', _('Sending mail succeeded').'!');
 }

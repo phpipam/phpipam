@@ -25,37 +25,37 @@ if ($POST->action == 'edit') {
 
 // validate the action type
 if (! in_array($POST->action, ['add', 'delete', 'edit'])) {
-    $Result->show('danger', _('Invalid action.'), true);
+    $Result->die('danger', _('Invalid action.'));
 }
 
 // check the zone alias. valid values are alphanumeric characters and special characters like ".-_: "
 if ($POST->alias && ! preg_match('/^[0-9a-z.\/\-_ :]+$/i', (string) $POST->alias)) {
-    $Result->show('danger', _('Invalid zone alias value.'), true);
+    $Result->die('danger', _('Invalid zone alias value.'));
 }
 
 // check the interface name. valid values are alphanumeric characters and special characters like ".-_/: "
 if ($POST->interface && ! preg_match('/^[0-9a-z.\/\-_ :]+$/i', (string) $POST->interface)) {
-    $Result->show('danger', _('Invalid interface.'), true);
+    $Result->die('danger', _('Invalid interface.'));
 }
 
 if ($POST->action != 'delete') {
     // check the zone  ID. valid value: integer
     if (! preg_match('/^[0-9]+$/i', (string) $POST->zoneId)) {
-        $Result->show('danger', _('Invalid zone ID.'), true);
+        $Result->die('danger', _('Invalid zone ID.'));
     } elseif (preg_match('/^0$/i', (string) $POST->zoneId)) {
-        $Result->show('danger', _('Invalid zone ID.'), true);
+        $Result->die('danger', _('Invalid zone ID.'));
     }
 
     // check the device ID. valid value: integer
     if (! preg_match('/^[0-9]+$/i', (string) $POST->deviceId)) {
-        $Result->show('danger', _('Invalid device ID.'), true);
+        $Result->die('danger', _('Invalid device ID.'));
     } elseif (preg_match('/^0$/i', (string) $POST->deviceId)) {
-        $Result->show('danger', _('Please select a device.'), true);
+        $Result->die('danger', _('Please select a device.'));
     }
 
     // check the mapping ID. valid value: integer
     if ($POST->id && ! preg_match('/^[0-9]+$/i', (string) $POST->id)) {
-        $Result->show('danger', _('Invalid mapping ID.'), true);
+        $Result->die('danger', _('Invalid mapping ID.'));
     }
 }
 
@@ -68,7 +68,7 @@ $values = ['id' => $POST->id,
 ];
 // modify
 if (! $Zones->modify_mapping($POST->action, $values)) {
-    $Result->show('danger', _('Cannot add mapping'), true);
+    $Result->die('danger', _('Cannot add mapping'));
 } else {
-    $Result->show('success', _('Mapping modified successfully'), true);
+    $Result->die('success', _('Mapping modified successfully'));
 }

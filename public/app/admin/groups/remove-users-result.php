@@ -25,7 +25,7 @@ $User->check_maintaneance_mode();
 
 // id must be numeric
 if (! is_numeric($POST->gid)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // parse result
@@ -60,5 +60,5 @@ if (isset($errors)) {
     print '</ul>';
     print '</div>';
 } else {
-    $Result->show('success', _('Users removed from group'), true);
+    $Result->die('success', _('Users removed from group'));
 }

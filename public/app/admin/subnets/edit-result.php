@@ -26,19 +26,19 @@ $User->check_user_session();
 $User->check_maintaneance_mode();
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // if show name than description must be set
 if ($POST->showName == 1 && is_blank($POST->description)) {
-    $Result->show('danger', _('Please enter subnet description to show as name!'), true);
+    $Result->die('danger', _('Please enter subnet description to show as name!'));
 }
 
 // we need old values for mailing
 if ($POST->action == 'edit' || $POST->action == 'delete') {
     $old_subnet_details = $Subnets->fetch_subnet('id', $POST->subnetId);
     if ($old_subnet_details === false) {
-        $Result->show('danger', _('Invalid subnet Id'), true);
+        $Result->die('danger', _('Invalid subnet Id'));
     }
 }
 
@@ -88,12 +88,12 @@ if ($POST->action == 'add') {
 
     // ID must be numeric value
     if (! is_numeric($POST->sectionId)) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }
 
     // verify that user has permissions to add subnet
     if ($Sections->check_permission($User->user, $POST->sectionId) != 3) {
-        $Result->show('danger', _('You do not have permissions to add new subnet in this section').'!', true);
+        $Result->die('danger', _('You do not have permissions to add new subnet in this section').'!');
     }
 
     // verify cidr
@@ -171,16 +171,16 @@ if ($POST->action == 'add') {
 elseif ($POST->action == 'edit') {
     // validate IDs
     if (! is_numeric($POST->subnetId)) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }
 
     if (! is_numeric($POST->sectionId)) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }
 
     // check subnet permissions
     if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
-        $Result->show('danger', _('You do not have permissions to add edit/delete this subnet').'!', true);
+        $Result->die('danger', _('You do not have permissions to add edit/delete this subnet').'!');
     }
 
     // for nesting - MasterId cannot be the same as subnetId
@@ -239,16 +239,16 @@ elseif ($POST->action == 'edit') {
 else {
     // validate IDs
     if (! is_numeric($POST->subnetId)) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }
 
     if (! is_numeric($POST->sectionId)) {
-        $Result->show('danger', _('Invalid ID'), true);
+        $Result->die('danger', _('Invalid ID'));
     }
 
     // check subnet permissions
     if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
-        $Result->show('danger', _('You do not have permissions to add edit/delete this subnet').'!', true);
+        $Result->die('danger', _('You do not have permissions to add edit/delete this subnet').'!');
     }
 }
 
@@ -327,7 +327,7 @@ else {
     // location
     if (isset($POST->location)) {
         if (! is_numeric($POST->location)) {
-            $Result->show('danger', _('Invalid location value'), true);
+            $Result->die('danger', _('Invalid location value'));
         }
 
         $values['location'] = $POST->location;
@@ -347,7 +347,7 @@ else {
     // threshold
     if (isset($POST->threshold)) {
         if (! is_numeric($POST->threshold)) {
-            $Result->show('danger', _('Invalid threshold value'), true);
+            $Result->die('danger', _('Invalid threshold value'));
         }
 
         $values['threshold'] = $POST->threshold;
@@ -377,7 +377,7 @@ else {
 
     // execute
     if (! $Subnets->modify_subnet($POST->action, $values)) {
-        $Result->show('danger', _('Error editing subnet'), true);
+        $Result->die('danger', _('Error editing subnet'));
     } else {
         // if add save id !
         if ($POST->action == 'add') {
@@ -398,15 +398,15 @@ else {
 
         // edit success
         if ($POST->action == 'delete') {
-            $Result->show('success', _('Subnet, IP addresses and all belonging subnets deleted successfully').'!', false);
+            $Result->warn('success', _('Subnet, IP addresses and all belonging subnets deleted successfully').'!');
         }
         // create - for redirect
         elseif ($POST->action == 'add') {
-            $Result->show('success', _('Subnet').' '.$User->get_post_action().' '._('successful').'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false);
+            $Result->warn('success', _('Subnet').' '.$User->get_post_action().' '._('successful').'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>');
         }
         //
         else {
-            $Result->show('success', _('Subnet').' '.$User->get_post_action().' '._('successful').'!', false);
+            $Result->warn('success', _('Subnet').' '.$User->get_post_action().' '._('successful').'!');
         }
     }
 
@@ -463,7 +463,7 @@ else {
         // powerDNS class
         $PowerDNS = new PowerDNS($Database);
         if ($PowerDNS->db_check() === false) {
-            $Result->show('danger', _('Cannot connect to powerDNS database'), true);
+            $Result->die('danger', _('Cannot connect to powerDNS database'));
         }
 
         // set zone
@@ -561,10 +561,10 @@ else {
                     }
 
                     // print
-                    $Result->show('success', "$cnt "._('PTR records created'));
+                    $Result->warn('success', "$cnt "._('PTR records created'));
                     // error
                     if ($err != 0) {
-                        $Result->show('warning', "$err "._('invalid hostnames'));
+                        $Result->warn('warning', "$err "._('invalid hostnames'));
                     }
                 }
             }

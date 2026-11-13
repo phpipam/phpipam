@@ -11,7 +11,7 @@ $User->check_module_permissions('vlan', User::ACCESS_R, true, false);
 
 // not existing
 if (! $vrf) {
-    $Result->show('danger', _('Invalid VRF id'), true);
+    $Result->die('danger', _('Invalid VRF id'));
 }
 
 // get custom VLAN fields

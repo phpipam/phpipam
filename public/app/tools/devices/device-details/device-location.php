@@ -27,6 +27,6 @@ if ($User->settings->enableLocations == '1' && $User->get_module_permissions('lo
             $location = $loc_old;
         }
     } else {
-        $Result->show('info', _('Location is not set for this device'), false);
+        $Result->warn('info', _('Location is not set for this device'));
     }
 }

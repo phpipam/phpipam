@@ -24,7 +24,7 @@ $Result = new Result;
 
 // script can only be run from cli
 if (PHP_SAPI != 'cli') {
-    $Result->show_cli('This script can only be run from cli', true);
+    $Result->die(false, 'This script can only be run from cli');
 }
 
 // check if argv[1] provided, if not check readline support and wait for user pass
@@ -35,7 +35,7 @@ if (isset($argv[1])) {
     $available_extensions = get_loaded_extensions();
     // not in array
     if (! in_array('readline', $available_extensions)) {
-        $Result->show_cli("readline php extension is required.\nOr provide password as first argument", true);
+        $Result->die(false, "readline php extension is required.\nOr provide password as first argument");
     } else {
         // read password
         $password = trim(readline('Enter new admin password: '));
@@ -44,7 +44,7 @@ if (isset($argv[1])) {
 
 // validate password
 if (strlen((string) $password) < 8) {
-    $Result->show_cli('Password must be at least 8 characters long', true);
+    $Result->die(false, 'Password must be at least 8 characters long');
 }
 
 // hash password
@@ -67,17 +67,17 @@ if ($User->settings->dbversion >= 40) {
 
 // update password
 if (! $Admin->object_modify('users', 'edit', 'id', $values)) {
-    $Result->show_cli('Failed to update Admin password', false);
+    $Result->warn(false, 'Failed to update Admin password');
 } else {
-    $Result->show_cli('Admin password updated', false);
+    $Result->warn(false, 'Admin password updated');
 }
 
 // debug ?
 if ($debugging) {
-    $Result->show_cli('---------');
-    $Result->show_cli('Crypt type: '.$crypt_type);
-    $Result->show_cli('Password: '.$password_crypted);
-    $Result->show_cli('---------');
+    $Result->warn(false, '---------');
+    $Result->warn(false, 'Crypt type: '.$crypt_type);
+    $Result->warn(false, 'Password: '.$password_crypted);
+    $Result->warn(false, '---------');
 }
 
 // fail
@@ -131,7 +131,7 @@ try {
     // send
     $phpipam_mail->Php_mailer->send();
 } catch (PHPMailer\PHPMailer\Exception $e) {
-    $Result->show_cli('Mailer Error: '.$e->errorMessage(), true);
+    $Result->die(false, 'Mailer Error: '.$e->errorMessage());
 } catch (Exception $e) {
-    $Result->show_cli('Mailer Error: '.$e->getMessage(), true);
+    $Result->die(false, 'Mailer Error: '.$e->getMessage());
 }

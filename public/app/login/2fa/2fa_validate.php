@@ -16,7 +16,7 @@ $User->check_user_session(true, true);
 
 // validate csrf cookie
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // if 2fa is not needed redirect to /
@@ -25,7 +25,7 @@ if ($User->twofa_required() === false) {
 }
 // length check
 elseif (strlen((string) $POST->code) !== 6) {
-    $Result->show('danger', _('Invalid code length'));
+    $Result->warn('danger', _('Invalid code length'));
 }
 // generate and print code
 else {
@@ -38,7 +38,7 @@ else {
         $ga = new Google2FA;
         // validate
         if ($ga->verifyKey((string) $User->user->{'2fa_secret'}, (string) $POST->code, 2)) {
-            $Result->show('success', _('Code validated. Redirecting...'));
+            $Result->warn('success', _('Code validated. Redirecting...'));
             // remove 2fa flag from session
             unset($_SESSION['2fa_required']);
 
@@ -48,12 +48,12 @@ else {
                 $Admin->object_modify('users', 'edit', 'id', ['id' => $User->user->id, '2fa' => 1]);
             }
         } else {
-            $Result->show('danger', _('Invalid code'));
+            $Result->warn('danger', _('Invalid code'));
             // update block count
             $User->block_ip();
         }
     } else {
         $Log->write(_('Login IP blocked'), _('Login from IP address').' '.$User->get_user_ip().' '._('was blocked because of 5 minute block after 5 failed 2fa attempts'), 1);
-        $Result->show('danger', _('You have been blocked for 5 minutes due to 2fa authentication failures'), true);
+        $Result->die('danger', _('You have been blocked for 5 minutes due to 2fa authentication failures'));
     }
 }

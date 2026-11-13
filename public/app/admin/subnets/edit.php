@@ -28,13 +28,13 @@ $Admin->validate_action();
 // verify that user has permissions to add subnet
 if ($POST->action == 'add') {
     if ($Sections->check_permission($User->user, $POST->sectionId) != 3) {
-        $Result->show('danger', _('You do not have permissions to add new subnet in this section').'!', true, true);
+        $Result->die('danger', _('You do not have permissions to add new subnet in this section').'!', true);
     }
 }
 // otherwise check subnet permission
 else {
     if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
-        $Result->show('danger', _('You do not have permissions to add edit/delete this subnet').'!', true, true);
+        $Result->die('danger', _('You do not have permissions to add edit/delete this subnet').'!', true);
     }
 }
 
@@ -52,7 +52,7 @@ if ($POST->action != 'add') {
     $subnet_old_details = (array) $Subnets->fetch_subnet(null, $POST->subnetId);
     // false id
     if ($subnet_old_details === []) {
-        $Result->show('danger', _('Invalid subnetId'), true, true);
+        $Result->die('danger', _('Invalid subnetId'), true);
     }
 }
 // we are adding new subnet

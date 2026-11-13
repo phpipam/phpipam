@@ -10,7 +10,7 @@ $User->check_user_session();
 $User->check_module_permissions('devices', User::ACCESS_R, true, false);
 
 // check
-is_numeric($GET->subnetId) ?: $Result->show('danger', _('Invalid ID'), true);
+is_numeric($GET->subnetId) ?: $Result->die('danger', _('Invalid ID'));
 
 // cast
 $device = (array) $device;

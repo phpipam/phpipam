@@ -36,7 +36,7 @@ $pdns = $PowerDNS->db_settings;
 // get VRF
 if ($POST->action != 'add') {
     $domain = $PowerDNS->fetch_domain($POST->id);
-    $domain !== false ?: $Result->show('danger', _('Invalid ID'), true, true);
+    $domain !== false ?: $Result->die('danger', _('Invalid ID'), true);
 } else {
     $domain = new Params;
 }
@@ -251,7 +251,7 @@ $readonly = $POST->action == 'delete' ? 'readonly' : '';
     <?php
     // print delete warning
     if ($POST->action == 'delete') {
-        $Result->show('warning', '<strong>'._('Warning').':</strong> '._('removing Domain will also remove all referenced entries!'), false);
+        $Result->warn('warning', '<strong>'._('Warning').':</strong> '._('removing Domain will also remove all referenced entries!'));
     }
 ?>
 </div>

@@ -19,11 +19,11 @@ $User->check_user_session();
 
 // perm check
 if ($User->get_module_permissions('pstn') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 // check that location support isenabled
 elseif ($User->settings->enablePSTN != '1') {
-    $Result->show('danger', _('PSTN prefixes module disabled.'), false);
+    $Result->warn('danger', _('PSTN prefixes module disabled.'));
 } else {
     // fetch all locations
     $all_prefixes = $Tools->fetch_all_prefixes();
@@ -63,7 +63,7 @@ elseif ($User->settings->enablePSTN != '1') {
     // if none than print
     if ($all_prefixes === false) {
         print '<tr>';
-        print " <td colspan='$colspan'>".$Result->show('info', _('No PSTN prefixes configured'), false, false, true).'</td>';
+        print " <td colspan='$colspan'>".$Result->warn('info', _('No PSTN prefixes configured'), false, true).'</td>';
         print '</tr>';
     } else {
         $html = $Tools->print_menu_prefixes($User->user, $all_prefixes, $custom);
@@ -71,7 +71,7 @@ elseif ($User->settings->enablePSTN != '1') {
             print implode("\n", $html);
         } else {
             print '<tr>';
-            print " <td colspan='$colspan'>".$Result->show('info', _('No PSTN prefixes available'), false, false, true).'</td>';
+            print " <td colspan='$colspan'>".$Result->warn('info', _('No PSTN prefixes available'), false, true).'</td>';
             print '</tr>';
         }
     }

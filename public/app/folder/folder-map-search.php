@@ -70,7 +70,7 @@ if (is_numeric(@$_GET['ipaddrid'])) {
     // validate
     if (! in_array($_GET['ipaddrid'], $masks)) {
         print "<h4 style='margin-top:30px;'>"._('Result').':</h4><hr>';
-        $Result->show('danger', _('Invalid mask'), false);
+        $Result->warn('danger', _('Invalid mask'));
     } else {
         $from_search = true;
         $from_search_mask = $_GET['ipaddrid'];

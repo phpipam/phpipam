@@ -34,7 +34,7 @@ $custom = $Tools->fetch_custom_fields('devices');
 
 // ID must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->switchid)) {
-    $Result->show('danger', _('Invalid ID'), true, true);
+    $Result->die('danger', _('Invalid ID'), true);
 }
 
 // fetch device details
@@ -43,7 +43,7 @@ if (($POST->action == 'edit') || ($POST->action == 'delete')) {
     $device['type'] = ($device['type'] > 0) ? $device['type'] : 0;
     // false
     if ($device === false) {
-        $Result->show('danger', _('Invalid ID'), true, true);
+        $Result->die('danger', _('Invalid ID'), true);
     }
 }
 // defaults

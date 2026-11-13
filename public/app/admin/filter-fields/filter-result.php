@@ -27,7 +27,7 @@ $values = ['id' => 1,
 
 // update
 if (! $Admin->object_modify('settings', 'edit', 'id', $values)) {
-    $Result->show('danger alert-absolute', _('Update failed'), true);
+    $Result->die('danger alert-absolute', _('Update failed'));
 } else {
-    $Result->show('success alert-absolute', _('Update successful'), true);
+    $Result->die('success alert-absolute', _('Update successful'));
 }

@@ -12,17 +12,17 @@ disable_php_errors();
 
 // scan disabled
 if ($User->settings->enableSNMP != '1') {
-    $Result->show('danger', 'SNMP module disabled', true);
+    $Result->die('danger', 'SNMP module disabled');
 }
 // subnet check
 $subnet = $Subnets->fetch_subnet('id', $POST->subnetId);
 if ($subnet === false) {
-    $Result->show('danger', 'Invalid subnet Id', true);
+    $Result->die('danger', 'Invalid subnet Id');
 }
 
 // verify that user has write permissionss for subnet
 if ($Subnets->check_permission($User->user, $POST->subnetId) != 3) {
-    $Result->show('danger', _('You do not have permissions to modify hosts in this subnet').'!', true, true);
+    $Result->die('danger', _('You do not have permissions to modify hosts in this subnet').'!', true);
 }
 
 // set class
@@ -57,7 +57,7 @@ if (count($all_subnet_hosts) > 0) {
 
     // if none set die
     if (! isset($permitted_devices)) {
-        $Result->show('danger', 'No devices for SNMP ARP query available', true);
+        $Result->die('danger', 'No devices for SNMP ARP query available');
     }
 
     // ok, we have devices, connect to each device and do query
@@ -87,7 +87,7 @@ if (count($all_subnet_hosts) > 0) {
             }
             $found[$d->id] = $res;
         } catch (Exception $e) {
-            $Result->show('danger', '<pre>'._('Error').': '.$e.'</pre>', false);
+            $Result->warn('danger', '<pre>'._('Error').': '.$e.'</pre>');
 
             exit();
         }
@@ -104,7 +104,7 @@ if (count($all_subnet_hosts) > 0) {
 <?php
 // empty
 if (count($all_subnet_hosts) == 0) {
-    $Result->show('info', _('Subnet is empty').'!', false);
+    $Result->warn('info', _('Subnet is empty').'!');
 }
 // ok
 else {

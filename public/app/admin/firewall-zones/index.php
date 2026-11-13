@@ -9,7 +9,7 @@
 $User->check_user_session();
 // perm check
 if ($User->get_module_permissions('fwzones') == User::ACCESS_NONE) {
-    $Result->show('danger', _('You do not have permissions to access this module'), false);
+    $Result->warn('danger', _('You do not have permissions to access this module'));
 }
 ?>
 
@@ -34,7 +34,7 @@ if ($User->settings->enableFirewallZones == 1) {
 
     // check
     if (! in_array($GET->subnetId, $tabs)) {
-        $Result->show('danger', 'Invalid request', true);
+        $Result->die('danger', 'Invalid request');
     }
 
     // print
@@ -49,7 +49,7 @@ if ($User->settings->enableFirewallZones == 1) {
     <?php
 // include content
     if (! file_exists(__DIR__.'/'.$GET->subnetId.'.php')) {
-        $Result->show('danger', 'Invalid request', true);
+        $Result->die('danger', 'Invalid request');
     } else {
         include __DIR__.'/'.$GET->subnetId.'.php';
     }
@@ -58,7 +58,7 @@ if ($User->settings->enableFirewallZones == 1) {
 
     <?php
 } else {
-    $Result->show('info', _('Please enable the firewall zone module under server management'), false);
+    $Result->warn('info', _('Please enable the firewall zone module under server management'));
 }
 ?>
 </div>

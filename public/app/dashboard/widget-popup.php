@@ -49,7 +49,7 @@ print '</ul>';
 
 // print empty
 if ($m == 0) {
-    $Result->show('info', _('All available widgets are already on dashboard'), false);
+    $Result->warn('info', _('All available widgets are already on dashboard'));
 }
 ?>
 </div>

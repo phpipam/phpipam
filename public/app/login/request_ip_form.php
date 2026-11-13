@@ -2,7 +2,7 @@
 // disable requests module for public
 if (@$config['requests_public'] === false) {
     print "<div id='login' style='padding:20px;padding-bottom:0px;'>";
-    $Result->show('danger', _('Public IP requests are disabled'), false);
+    $Result->warn('danger', _('Public IP requests are disabled'));
     print '</div>';
 } else {
     ?>

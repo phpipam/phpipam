@@ -27,7 +27,7 @@ if ($POST->action == 'edit') {
 }
 
 if ($User->Crypto->csrf_validate($POST->csrf_cookie) === false) {
-    $Result->show('danger', _('Invalid CSRF cookie'), true);
+    $Result->die('danger', _('Invalid CSRF cookie'));
 }
 
 // validate action
@@ -35,21 +35,21 @@ $Admin->validate_action();
 
 // IDs must be numeric
 if ($POST->action != 'add' && ! is_numeric($POST->id)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 if (! is_numeric($POST->provider)) {
-    $Result->show('danger', _('Invalid ID'), true);
+    $Result->die('danger', _('Invalid ID'));
 }
 
 // Hostname must be present
 if ($POST->cid == '') {
-    $Result->show('danger', _('Circuit ID is mandatory').'!', true);
+    $Result->die('danger', _('Circuit ID is mandatory').'!');
 }
 
 // validate provider
 if ($Tools->fetch_object('circuitProviders', 'id', $POST->provider) === false) {
-    $Result->show('danger', _('Invalid provider').'!', true);
+    $Result->die('danger', _('Invalid provider').'!');
 }
 
 // validate type
@@ -60,20 +60,20 @@ foreach ($all_types as $t) {
 }
 
 if (! in_array($POST->type, $type_id_array)) {
-    $Result->show('danger', _('Invalid type').'!', true);
+    $Result->die('danger', _('Invalid type').'!');
 }
 
 // status
 $statuses = ['Active', 'Inactive', 'Reserved'];
 if (! in_array($POST->status, $statuses)) {
-    $Result->show('danger', _('Invalid status').'!', true);
+    $Result->die('danger', _('Invalid status').'!');
 }
 
 // Check if circuit is part of a larger circuit
 if ($POST->action == 'delete') {
     $logical_circuit_array = $Tools->fetch_all_logical_circuits_using_circuit($POST->id);
     if (! empty($logical_circuit_array)) {
-        $Result->show('danger', _('Circuit is currently used in a larger logical circuit').'!', true);
+        $Result->die('danger', _('Circuit is currently used in a larger logical circuit').'!');
     }
 }
 
@@ -84,7 +84,7 @@ if ($POST->device1 == '0') {
 } elseif (strpos((string) $POST->device1, 'device_') !== false) {
     $deviceId = str_replace('device_', '', (string) $POST->device1);
     if ($Tools->fetch_object('devices', 'id', $deviceId) === false) {
-        $Result->show('danger', _('Invalid device A').'!', true);
+        $Result->die('danger', _('Invalid device A').'!');
     }
 
     // save
@@ -93,7 +93,7 @@ if ($POST->device1 == '0') {
 } else {
     $locationId = str_replace('location_', '', (string) $POST->device1);
     if ($Tools->fetch_object('locations', 'id', $locationId) === false) {
-        $Result->show('danger', _('Invalid location A').'!', true);
+        $Result->die('danger', _('Invalid location A').'!');
     }
 
     // save
@@ -107,7 +107,7 @@ if ($POST->device2 == '0') {
 } elseif (strpos((string) $POST->device2, 'device_') !== false) {
     $deviceId = str_replace('device_', '', (string) $POST->device2);
     if ($Tools->fetch_object('devices', 'id', $deviceId) === false) {
-        $Result->show('danger', _('Invalid device B').'!', true);
+        $Result->die('danger', _('Invalid device B').'!');
     }
 
     // save
@@ -116,7 +116,7 @@ if ($POST->device2 == '0') {
 } else {
     $locationId = str_replace('location_', '', (string) $POST->device2);
     if ($Tools->fetch_object('locations', 'id', $locationId) === false) {
-        $Result->show('danger', _('Invalid location B').'!', true);
+        $Result->die('danger', _('Invalid location B').'!');
     }
 
     // save
@@ -152,5 +152,5 @@ if ($User->settings->enableCustomers == '1' && $User->get_module_permissions('cu
 
 // update
 if ($Admin->object_modify('circuits', $POST->action, 'id', $values)) {
-    $Result->show('success', _('Circuit').' '.$User->get_post_action().' '._('successful').'!', false);
+    $Result->warn('success', _('Circuit').' '.$User->get_post_action().' '._('successful').'!');
 }
