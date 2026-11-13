@@ -11,6 +11,7 @@ use Rector\CodingStyle\Rector\FuncCall\StrictInArrayRector;
 use Rector\CodingStyle\Rector\If_\AlternativeIfToBracketRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Config\RectorConfig;
+use Rector\Custom\CustomRenameResultShowMethods;
 use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
 use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector;
@@ -33,6 +34,10 @@ use Rector\ValueObject\PhpVersion;
 return RectorConfig::configure()
     ->withPhpVersion(PhpVersion::PHP_82)
     ->withPhpSets(php72: true)
+    ->withAttributesSets()
+    ->withRules([
+        CustomRenameResultShowMethods::class,
+    ])
     ->withPaths([
         __DIR__.'/functions',
         __DIR__.'/public',

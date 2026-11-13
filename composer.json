@@ -69,5 +69,10 @@
     "laravel/pint": "^1.29",
     "phpcompatibility/php-compatibility": "^10.0.0@dev",
     "phpstan/phpstan": "^2.1"
-  }
+  },
+  "autoload-dev": {
+        "psr-4": {
+            "Rector\\Custom\\": "functions/rector"
+        }
+    }
 }
