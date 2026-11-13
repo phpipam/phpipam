@@ -101,7 +101,7 @@ class Result
      * @param  bool  $inline  (default: false)                 return, not print
      * @param  bool  $popup2  (default: false)                 close for JS for popup2
      * @param  bool  $reload  (default: false)                 reload
-     * @return string
+     * @return mixed
      */
     public function show($class = 'muted', $text = 'No value provided', $die = false, $popup = false, $inline = false, $popup2 = false, $reload = false)
     {
@@ -135,6 +135,38 @@ class Result
         if ($this->die === true) {
             exit();
         }
+    }
+
+    /**
+     * Alias of show - print or return string
+     *
+     * @param  string  $class  (default: "muted")              result class - danger, success, warning, info
+     * @param  string|array|object  $text  (default: "No value provided")  text to display
+     * @param  bool  $popup  (default: false)                  print result as popup
+     * @param  bool  $inline  (default: false)                 return, not print
+     * @param  bool  $popup2  (default: false)                 close for JS for popup2
+     * @param  bool  $reload  (default: false)                 reload
+     * @return string
+     */
+    public function warn($class = 'muted', $text = 'No value provided', $popup = false, $inline = false, $popup2 = false, $reload = false)
+    {
+        return $this->show($class, $text, false, $popup, $inline, $popup2, $reload);
+    }
+
+    /**
+     * Alias of show - never return
+     *
+     * @param  string  $class  (default: "muted")              result class - danger, success, warning, info
+     * @param  string|array|object  $text  (default: "No value provided")  text to display
+     * @param  bool  $popup  (default: false)                  print result as popup
+     * @param  bool  $inline  (default: false)                 return, not print
+     * @param  bool  $popup2  (default: false)                 close for JS for popup2
+     * @param  bool  $reload  (default: false)                 reload
+     * @return never
+     */
+    public function die($class = 'muted', $text = 'No value provided', $popup = false, $inline = false, $popup2 = false, $reload = false)
+    {
+        $this->show($class, $text, true, $popup, $inline, $popup2, $reload);
     }
 
     /**
