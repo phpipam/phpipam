@@ -80,6 +80,24 @@ final class Session_DB implements SessionHandlerInterface
     }
 
     /**
+     * create_sid
+     */
+    public function create_sid(): string
+    {
+        return session_create_id();
+    }
+
+    /**
+     * validateId
+     *
+     * @param  string  $sid
+     */
+    public function validateId($sid): bool
+    {
+        return true;
+    }
+
+    /**
      * Save session data
      *
      * @param  string  $id

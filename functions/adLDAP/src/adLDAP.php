@@ -586,7 +586,7 @@ class adLDAP {
     *
     * @param array $options Array of options to pass to the constructor
     * @throws Exception - if unable to bind to Domain Controller
-    * @return bool
+    * @return void
     */
     public function __construct($options = []) {
         // You can specifically overide any of the default configuration options setup above
@@ -618,7 +618,7 @@ class adLDAP {
             throw new adLDAPException('No LDAP support for PHP.  See: http://www.php.net/ldap');
         }
 
-        return $this->connect();
+        $this->connect();
     }
 
     /**
@@ -926,7 +926,7 @@ class adLDAP {
      */
     protected function randomController()
     {
-        mt_srand( (int) (doubleval(microtime()) * 100000000)); // For older PHP versions
+        mt_srand( (int) (microtime(true) * 100000000)); // For older PHP versions
         /*if (sizeof($this->domainControllers) > 1) {
             $adController = $this->domainControllers[array_rand($this->domainControllers)];
             // Test if the controller is responding to pings

@@ -212,6 +212,7 @@ class Result
             if (count($text) == 1) {
                 $text = $text[0];
             } else {
+                $out = [];
                 // multiple - format
                 foreach ($text as $l) {
                     $out[] = "\t* $l";
