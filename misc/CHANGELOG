@@ -5,6 +5,10 @@
     + PHP8 compatibility fixes;
     + BASE not read from config.php;
 
+    Enhancements, changes:
+    ----------------------------
+    + Add vendormacs.json update script to functions/scripts;
+
 == 1.9.0
 
     Bugfixes:
