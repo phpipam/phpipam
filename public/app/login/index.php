@@ -4,16 +4,20 @@ header('X-XSS-Protection:1; mode=block');
 require __DIR__.'/../../../functions/checks/check_php_build.php'; // check for support for PHP modules and database connection
 
 // http auth
-if (! empty($_SERVER['PHP_AUTH_USER'])) {
+$http_auth_user = $User->fetch_http_auth_user();
+if ($User->is_valid_http_user($http_auth_user)) {
     // try to authenticate
-    $User->authenticate($_SERVER['PHP_AUTH_USER'], '');
+    $User->authenticate($http_auth_user, '');
+
     // Redirect user where he came from, if unknown go to dashboard.
-    if ($redirect = $User->get_redirect_cookie()) {
-        header('Location: '.$redirect);
-    } else {
-        header('Location: '.create_link('dashboard'));
+    if ($User->is_authenticated()) {
+        if ($redirect = $User->get_redirect_cookie()) {
+            header('Location: '.$redirect);
+        } else {
+            header('Location: '.create_link('dashboard'));
+        }
+        exit();
     }
-    exit();
 }
 // disable requests module for public
 if (@$config['requests_public'] === false) {
@@ -94,7 +98,7 @@ if (@$config['requests_public'] === false) {
     <!-- logo -->
     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <?php
-    if (file_exists('css/images/logo/logo.png')) {
+    if (file_exists(__DIR__.'/../../css/images/logo/logo.png')) {
         // set width
         $logo_width = $config['logo_width'] ?? 220;
         print "<img style='max-width:".$logo_width."px;margin:10px;margin-top:20px;' src='css/images/logo/logo.png'>";

@@ -81,7 +81,7 @@ foreach ($masks as $m) {
 <td colspan="<?php print $colspan; ?>">
     <form>
     <div class="input-group pull-right">
-      <input type="text" class="form-control input-sm" name='mask' placeholder="<?php print _('Enter mask'); ?>" value='<?php print $posted_mask; ?>'>
+      <input type="text" class="form-control input-sm" name='mask' placeholder="<?php print _('Enter mask'); ?>" value='<?php print escape_input($posted_mask); ?>'>
       <span class="input-group-btn">
         <button class="btn btn-default input-sm" type="submit"><?php print _('Update'); ?></button>
       </span>

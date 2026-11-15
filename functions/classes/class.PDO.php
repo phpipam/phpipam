@@ -166,6 +166,19 @@ abstract class DB
     }
 
     /**
+     * Returns pdo_mysql attribute constant
+     *
+     *	PHP 8.4+ provides Pdo\Mysql::ATTR_*, PDO::MYSQL_ATTR_* is deprecated in PHP 8.5
+     *
+     * @param  string  $name  //e.g. SSL_KEY
+     * @return int
+     */
+    protected function mysql_attr($name)
+    {
+        return class_exists(Mysql::class) ? constant(Mysql::class.'::ATTR_'.$name) : constant('PDO::MYSQL_ATTR_'.$name);
+    }
+
+    /**
      * Process /db/SCHEMA and load columns commented with "__no_html_escape__"
      *
      * @return void
@@ -243,8 +256,7 @@ abstract class DB
         $dsn = $this->makeDsn();
 
         try {
-            $attr_multi_statements = PHP_VERSION_ID < 80500 ? PDO::MYSQL_ATTR_MULTI_STATEMENTS : Mysql::ATTR_MULTI_STATEMENTS;
-
+            $attr_multi_statements = $this->mysql_attr('MULTI_STATEMENTS');
             if ($this->ssl) {
                 $this->pdo = new PDO($dsn, $this->username, $this->password, [$attr_multi_statements => false, (array) $this->ssl]);
             } else {
@@ -1273,28 +1285,17 @@ class Database_PDO extends DB
 
         $this->ssl = false;
         if (@$db['ssl'] === true) {
-            if (PHP_VERSION_ID < 80500) {
-                $this->pdo_ssl_opts = [
-                    'ssl_key' => PDO::MYSQL_ATTR_SSL_KEY,
-                    'ssl_cert' => PDO::MYSQL_ATTR_SSL_CERT,
-                    'ssl_ca' => PDO::MYSQL_ATTR_SSL_CA,
-                    'ssl_cipher' => PDO::MYSQL_ATTR_SSL_CIPHER,
-                    'ssl_capath' => PDO::MYSQL_ATTR_SSL_CAPATH,
-                ];
-            } else {
-                $this->pdo_ssl_opts = [
-                    'ssl_key' => Mysql::ATTR_SSL_KEY,
-                    'ssl_cert' => Mysql::ATTR_SSL_CERT,
-                    'ssl_ca' => Mysql::ATTR_SSL_CA,
-                    'ssl_cipher' => Mysql::ATTR_SSL_CIPHER,
-                    'ssl_capath' => Mysql::ATTR_SSL_CAPATH,
-                ];
-            }
+            $this->pdo_ssl_opts = [
+                'ssl_key' => $this->mysql_attr('SSL_KEY'),
+                'ssl_cert' => $this->mysql_attr('SSL_CERT'),
+                'ssl_ca' => $this->mysql_attr('SSL_CA'),
+                'ssl_cipher' => $this->mysql_attr('SSL_CIPHER'),
+                'ssl_capath' => $this->mysql_attr('SSL_CAPATH'),
+            ];
 
             $this->ssl = [];
-
             if ($db['ssl_verify'] === false) {
-                $this->ssl[1014] = false;   // PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT=1014 exists as of PHP 7.0.18 and PHP 7.1.4.
+                $this->ssl[$this->mysql_attr('SSL_VERIFY_SERVER_CERT')] = false;
             }
 
             foreach ($this->pdo_ssl_opts as $key => $pdoopt) {

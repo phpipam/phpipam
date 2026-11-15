@@ -50,11 +50,12 @@ foreach ($GET as $key => $value) {
         $rlist[$matches[1]]['IPv4'] = ($GET->{'recomputeSectionIPv4_'.$matches[1]} == 'on');
         $rlist[$matches[1]]['IPv6'] = ($GET->{'recomputeSectionIPv6_'.$matches[1]} == 'on');
         $rlist[$matches[1]]['CVRF'] = ($GET->{'recomputeSectionCVRF_'.$matches[1]} == 'on');
+
         // Build hidden form inputs
-        $pass_inputs .= "<input name='".$key."' type='hidden' value='".$value."' style='display:none;'>";
-        $pass_inputs .= "<input name='recomputeSectionIPv4_".$matches[1]."' type='hidden' value='".$GET->{'recomputeSectionIPv4_'.$matches[1]}."' style='display:none;'>";
-        $pass_inputs .= "<input name='recomputeSectionIPv6_".$matches[1]."' type='hidden' value='".$GET->{'recomputeSectionIPv6_'.$matches[1]}."' style='display:none;'>";
-        $pass_inputs .= "<input name='recomputeSectionCVRF_".$matches[1]."' type='hidden' value='".$GET->{'recomputeSectionCVRF_'.$matches[1]}."' style='display:none;'>";
+        $pass_inputs .= "<input name='".escape_input($key)."' type='hidden' value='".escape_input($value)."' style='display:none;'>";
+        $pass_inputs .= "<input name='recomputeSectionIPv4_".escape_input($matches[1])."' type='hidden' value='".escape_input($GET->{'recomputeSectionIPv4_'.$matches[1]})."' style='display:none;'>";
+        $pass_inputs .= "<input name='recomputeSectionIPv6_".escape_input($matches[1])."' type='hidden' value='".escape_input($GET->{'recomputeSectionIPv6_'.$matches[1]})."' style='display:none;'>";
+        $pass_inputs .= "<input name='recomputeSectionCVRF_".escape_input($matches[1])."' type='hidden' value='".escape_input($GET->{'recomputeSectionCVRF_'.$matches[1]})."' style='display:none;'>";
     }
 }
 

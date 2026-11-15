@@ -14,7 +14,7 @@
             $Log->write(_('User logged out'), _('User').' '.$User->username.' '._('has logged out'), 0, $User->username);
 
             // destroy session
-            $User->destroy_session();
+            $User->logout();
         }
 
         // check if SAML2 login is possible

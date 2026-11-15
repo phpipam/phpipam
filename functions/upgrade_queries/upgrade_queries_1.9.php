@@ -18,3 +18,7 @@ $upgrade_queries['1.9.48'][] = '-- Add Ukrainian (uk_UA.UTF-8) translation';
 $upgrade_queries['1.9.48'][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Ukrainian (Українська)', 'uk_UA.UTF-8');";
 $upgrade_queries['1.9.48'][] = '-- Database version bump';
 $upgrade_queries['1.9.48'][] = "UPDATE `settings` SET `dbversion` = '48';";
+
+$upgrade_queries['1.91.48'] = [];
+$upgrade_queries['1.91.48'][] = '-- Version update';
+$upgrade_queries['1.91.48'][] = "UPDATE `settings` set `version` = '1.91';";

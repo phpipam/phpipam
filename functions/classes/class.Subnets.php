@@ -1783,14 +1783,16 @@ class Subnets extends Common_functions
      *
      * @param  mixed  $address
      * @param  mixed  $netmask
-     * @return array
+     * @return array|false
      */
     private function get_IPv4_network_boundaries($address, $netmask)
     {
-        // Initialize PEAR NET object
         $this->initialize_pear_net_IPv4();
-        // parse IP address
         $net = $this->Net_IPv4->parseAddress($address.'/'.$netmask);
+
+        if (PEAR::isError($net)) {
+            return false;
+        }
 
         // return boundaries
         return (array) $net;

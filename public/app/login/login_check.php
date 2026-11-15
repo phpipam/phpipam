@@ -26,23 +26,18 @@ if (! empty($POST->ipamusername) && ! empty($POST->ipampassword)) {
     // check for failed logins and captcha
     if ($User->blocklimit > $cnt) {
         // all good
-    }
-    // count set, captcha required
-    elseif (! isset($POST->captcha)) {
+    } elseif (! isset($POST->captcha)) {
+        // count set, captcha required
         $Log->write(_('Login IP blocked'), _('Login from IP address').' '.$User->get_user_ip().' '._('was blocked because of 5 minute block after 5 failed 2fa attempts'), 1);
         $Result->show('danger', _('You have been blocked for 5 minutes due to authentication failures'), true);
-    }
-    // captcha check
-    else {
+    } else {
         // check captcha
-        $captcha_code = isset($_SESSION['securimage_code_value']) ? $_SESSION['securimage_code_value']['default'] : '';
-        if ($captcha_code == '') {
-            $Result->show('danger', _('Missing security code'), true);
-        }
-
-        if (strtolower($POST->captcha) != strtolower((string) $captcha_code)) {
+        $captcha = new SecurimagePHP8;
+        if (! isset($_SESSION['captchaId']) || ! $captcha->check($POST->captcha, $_SESSION['captchaId'])) {
             $Result->show('danger', _('Invalid security code'), true);
         }
+
+        unset($_SESSION['captchaId']);
     }
 
     // all good, try to authenticate user

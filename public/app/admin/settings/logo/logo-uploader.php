@@ -42,7 +42,7 @@ if (! file_exists(__DIR__.'/../../../../css/images/logo/logo.png')) {
 <div class="pContent">
 
     <?php if (! is_writable(__DIR__.'/../../../../css/images/logo')) {
-        $Result->show('danger', _("'css/images/logo' folder is not writeable."), false, false);
+        $Result->show('danger', _("'public/css/images/logo' folder is not writeable."), false, false);
     } ?>
 
     <h4><?php print _('Current'); ?><?php if ($clear) {

@@ -185,10 +185,11 @@ try {
         $values['role'] = filter_var($auth->getAttribute('is_admin')[0], FILTER_VALIDATE_BOOLEAN) ? 'Administrator' : 'User';
 
         // Parse groups
-        if (count($auth->getAttribute('groups')) > 1) {
-            $saml_groups = $auth->getAttribute('groups') ?? [];
+        $saml_groups_attr = $auth->getAttribute('groups') ?? [];
+        if (count($saml_groups_attr) > 1) {
+            $saml_groups = $saml_groups_attr;
         } else {
-            $saml_groups = array_map('trim', explode(',', (string) $auth->getAttribute('groups')[0])) ?: [];
+            $saml_groups = array_map('trim', explode(',', (string) ($saml_groups_attr[0] ?? ''))) ?: [];
         }
 
         $ug = [];

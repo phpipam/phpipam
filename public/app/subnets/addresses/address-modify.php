@@ -37,8 +37,8 @@ $id = escape_input($POST->id);
 
 // fetch subnet
 $subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
-if (strpos((string) $_SERVER['HTTP_REFERER'], 'verify-database') == 0) {
-    count($subnet) > 0 ?: $Result->show('danger', _('Invalid subnet'), true, true);
+if ($subnet === []) {
+    $Result->show('danger', _('Invalid subnet'), true, true);
 }
 
 // set and check permissions
@@ -101,6 +101,7 @@ if ($action == 'add') {
     $act = 'delete';
 } else {
     $btnName = '';
+    $act = '';
 }
 
 // set delete flag
@@ -127,6 +128,7 @@ if ($act == 'add' && $User->settings->enableMulticast == 1) {
 }
 
 // all locations
+$locations = false;
 if ($User->settings->enableLocations == '1') {
     $locations = $Tools->fetch_all_objects('locations', 'name');
 }
@@ -240,7 +242,8 @@ if (is_numeric($POST->stopIP) > 0) {
             <input type="hidden" name="addressId"   value="<?php print $address['id']; ?>">
             <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             <?php
-if (strpos((string) $_SERVER['HTTP_REFERER'], 'verify-database') != 0) {
+$http_referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (strpos($http_referer, 'verify-database') > 0) {
     print "<input type='hidden' name='verifydatabase' value='yes'>";
 }
 ?>

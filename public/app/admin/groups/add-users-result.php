@@ -59,7 +59,7 @@ if (isset($errors)) {
     print _('Failed to add users').':<hr>';
     print '<ul>';
     foreach ($errors as $e) {
-        print "<li>$e</li>";
+        print '<li>'.escape_input($e).'</li>';
     }
 
     print '</ul>';
