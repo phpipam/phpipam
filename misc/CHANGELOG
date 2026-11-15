@@ -4,6 +4,7 @@
     ----------------------------
     + PHP8 compatibility fixes;
     + BASE not read from config.php;
+    + logo.php upload fixes;
 
     Enhancements, changes:
     ----------------------------

@@ -49,8 +49,8 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
     }
 
     // if cannot move
-    if (! move_uploaded_file($_FILES['file']['tmp_name'], str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'].BASE.'css/images/logo/logo.png'))) {
-        print '{"status":"error", "error":"Cannot move file to upload dir. You can upload file manually to '.str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'].BASE.'css/images/logo/logo.png').'"}';
+    if (! move_uploaded_file($_FILES['file']['tmp_name'], __DIR__.'/../../../../css/images/logo/logo.png')) {
+        print '{"status":"error", "error":"Cannot move file to upload dir. You can upload file manually to public/css/images/logo/logo.png"}';
         exit;
     }
 
