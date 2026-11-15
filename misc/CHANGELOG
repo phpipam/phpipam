@@ -3,6 +3,7 @@
     Bugfixes:
     ----------------------------
     + PHP8 compatibility fixes;
+    + BASE not read from config.php;
 
 == 1.9.0
 
