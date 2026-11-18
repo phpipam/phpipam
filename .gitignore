@@ -7,6 +7,13 @@ public/app/dashboard/widgets/custom/
 public/app/subnets/import-subnet/upload/
 public/css/*/images/logo/logo.png
 vendor
+.agents
+.chatgpt
+.claude
 .continue
+.cline
+.clinerules
+.codex
 .idea
+.openai
 .vscode
