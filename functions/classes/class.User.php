@@ -1003,7 +1003,7 @@ class User extends Common_functions
         }
 
         $auth_method->params = db_json_decode($auth_method->params);
-        $server_var = $auth_method->params->prefix ?? 'PHP_AUTH_USER';
+        $server_var = $auth_method->params->server_var ?? 'PHP_AUTH_USER';
         if (! in_array($server_var, $this->fetch_available_server_http_auth_vars())) {
             $server_var = 'PHP_AUTH_USER';
         }
