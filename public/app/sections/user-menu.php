@@ -98,7 +98,7 @@ if ($GET->subnets != 'on' && $GET->addresses != 'on' && $GET->vlans != 'on' && $
     <span class="info"><?php print _('Logged in as'); ?>  <?php print '&nbsp;'._((string) $User->user->role); ?></span><br>
 
     <!-- logout -->
-    <?php $logout_link = create_link('logout'); ?>
-    <a href="<?php print $logout_link.(strpos($logout_link, '?') === false ? '?' : '&').'csrf_cookie='.$User->Crypto->csrf_session_token(); ?>"><?php print _('Logout'); ?>  <i class="fa fa-pad-left fa-sign-out"></i></a>
+    <?php $prettyLinks = ($User->settings->prettyLinks ?? 'No') == 'Yes' ? '?' : '&'; ?>
+    <a href="<?php print create_link('logout').$prettyLinks.'csrf_cookie='.$User->Crypto->csrf_session_token(); ?>"><?php print _('Logout'); ?>  <i class="fa fa-pad-left fa-sign-out"></i></a>
     <?php } ?>
 </div>
