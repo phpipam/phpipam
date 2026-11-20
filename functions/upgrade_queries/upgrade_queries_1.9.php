@@ -22,3 +22,7 @@ $upgrade_queries['1.9.48'][] = "UPDATE `settings` SET `dbversion` = '48';";
 $upgrade_queries['1.91.48'] = [];
 $upgrade_queries['1.91.48'][] = '-- Version update';
 $upgrade_queries['1.91.48'][] = "UPDATE `settings` set `version` = '1.91';";
+
+$upgrade_queries['1.92.48'] = [];
+$upgrade_queries['1.92.48'][] = '-- Version update';
+$upgrade_queries['1.92.48'][] = "UPDATE `settings` set `version` = '1.92';";
