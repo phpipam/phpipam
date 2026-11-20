@@ -4104,9 +4104,7 @@ class Subnets extends Common_functions
         // open connection
         $ripe_connection = fsockopen('whois.ripe.net', 43, $errno, $errstr, 5);
         if (! $ripe_connection) {
-            $this->Result->warn('danger', "$errstr ($errno)");
-
-            return false;
+            $this->Result->die('danger', "$errstr ($errno)");
         }
 
         // fetch result
