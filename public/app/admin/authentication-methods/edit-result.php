@@ -85,7 +85,7 @@ if ($POST->type == 'SAML2') {
     }
 
     // Verify that the private certificate and key are provided if Signing Authn Requests is set
-    if ($action != 'delete' && filter_var(['spsignauthn'], FILTER_VALIDATE_BOOLEAN) && (empty($POST->spx509cert) || empty($POST->spx509key))) {
+    if ($action != 'delete' && filter_var($POST->spsignauthn, FILTER_VALIDATE_BOOLEAN) && (empty($POST->spx509cert) || empty($POST->spx509key))) {
         $Result->show('danger', _('SP (Client) certificate and key are required to sign Authn requests'), true);
     }
 }
