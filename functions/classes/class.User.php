@@ -632,7 +632,7 @@ class User extends Common_functions
      */
     public function fetch_available_auth_method_types()
     {
-        return ['AD', 'http', 'LDAP', 'NetIQ', 'Radius', 'SAML2'];
+        return ['AD', 'LDAP', 'NetIQ', 'Radius', 'SAML2'];
     }
 
     /**
@@ -795,8 +795,17 @@ class User extends Common_functions
     {
         $this->authenticated = false;
         $this->user = null;
+        $this->username = null;
 
-        session_destroy();
+        $_SESSION = [];
+
+        if (ini_get('session.use_cookies') && ! headers_sent()) {
+            setcookie_samesite(session_name(), '', -86400, true, $this->isHttps());
+        }
+
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_destroy();
+        }
     }
 
     /**
@@ -840,9 +849,6 @@ class User extends Common_functions
     {
         // first we need to check if username exists
         $this->fetch_user_details($username);
-        if (! is_object($this->user)) {
-            return;
-        }
 
         // set method type if set, otherwise presume local auth
         $this->authmethodid = ! is_blank(@$this->user->authMethod) ? $this->user->authMethod : 1;
@@ -875,7 +881,7 @@ class User extends Common_functions
                 $this->auth_AD($username, $password);
                 break;
             case 'auth_http':
-                $this->auth_http($username, $password);
+                $this->auth_http($username);
                 break;
             case 'auth_LDAP':
                 $this->auth_LDAP($username, $password);
@@ -1069,12 +1075,11 @@ class User extends Common_functions
      * by the web server so just create the session
      *
      * @param  mixed  $username
-     * @param  mixed  $password
      * @return void
      */
-    public function auth_http($username, $password)
+    public function auth_http($username)
     {
-        if ((string) $username === $this->fetch_http_auth_user() && (string) $password === '') {
+        if ((string) $username === $this->fetch_http_auth_user()) {
             // check login restrictions for authenticated user
             $this->check_login_restrictions($username);
 

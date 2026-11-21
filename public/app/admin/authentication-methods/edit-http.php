@@ -35,6 +35,7 @@ $delete = $POST->action == 'delete' ? 'disabled' : '';
 
 <!-- content -->
 <div class="pContent">
+    <?php print $Result->show('warning', _('This method moves the responsibility of authenticating users to the webserver / reverse-proxy.<br>Ensure unauthenticated and direct user requests can not reach this host.<br>Incorrect configuration can result in login bypass and account takeover.'))?>
 
     <form id="editAuthMethod" name="editAuthMethod">
     <table class="editAuthMethod table table-noborder table-condensed">

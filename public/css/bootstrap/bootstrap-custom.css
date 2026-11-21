@@ -600,6 +600,26 @@ div#user_menu span.info {
 div#user_menu a {
 	color: white;
 }
+/* logout is a POST form, keep the button looking like the other links */
+div#user_menu form.logoutForm {
+	display: inline;
+
+	margin: 0px;
+	padding: 0px;
+}
+div#user_menu button.linkButton {
+	border: none;
+	background: none;
+	padding: 0px;
+	margin: 0px;
+
+	font: inherit;
+	line-height: inherit;
+	color: white;
+	text-align: right;
+
+	cursor: pointer;
+}
 div#user_menu #searchForm {
 	margin-bottom: 5px;
 }
