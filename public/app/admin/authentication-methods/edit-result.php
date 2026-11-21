@@ -34,12 +34,35 @@ $action = $POST->action;
 
 // for adding remove id
 if ($action == 'add') {
+    if ($POST->type == 'http') {
+        $Result->die('danger', _('Only one http method allowed'), true);
+    }
+
     unset($POST->id);
 } else {
-    // check id
-    if (! is_numeric($POST->id)) {
+    // if edit check if protected?
+    $auth_method = $Admin->fetch_object('usersAuthMethod', 'id', $POST->id);
+    if (! is_object($auth_method)) {
         $Result->die('danger', _('Invalid ID'));
     }
+
+    if ($auth_method->type !== $POST->type) {
+        $Result->die('danger', _('Invalid method type'), true);
+    }
+
+    if ($auth_method->protected == 'Yes') {
+        if ($POST->action != 'edit' || $POST->id != 2) {
+            $Result->die('danger', _('Method cannot be change as it is protected'), true);
+        }
+    }
+}
+
+// check for permitted auth methods
+$permitted_methods = $User->fetch_available_auth_method_types();
+$permitted_methods[] = 'http';
+
+if (! in_array($POST->type, $permitted_methods)) {
+    $Result->die('danger', _('Invalid method type'), true);
 }
 
 // set update query

@@ -19,8 +19,20 @@ $User->is_admin();
 $csrf = $User->Crypto->csrf_session_token();
 
 // if edit check if protected?
-if ($POST->action != 'add') {
+if ($POST->action == 'add') {
+    if ($POST->type == 'http') {
+        $Result->die('danger', _('Only one http method allowed'), true);
+    }
+} else {
     $auth_method = $Admin->fetch_object('usersAuthMethod', 'id', $POST->id);
+    if (! is_object($auth_method)) {
+        $Result->die('danger', _('Invalid ID'));
+    }
+
+    if ($auth_method->type !== $POST->type) {
+        $Result->die('danger', _('Invalid method type'), true);
+    }
+
     if ($auth_method->protected == 'Yes') {
         if ($POST->action != 'edit' || $POST->id != 2) {
             $Result->die('danger', _('Method cannot be change as it is protected'), true);
@@ -30,12 +42,15 @@ if ($POST->action != 'add') {
 
 // check for permitted auth methods
 $permitted_methods = $User->fetch_available_auth_method_types();
+$permitted_methods[] = 'http';
+
+if (! in_array($POST->type, $permitted_methods)) {
+    $Result->die('danger', _('Invalid method type'), true);
+}
 
 // route to proper auth method editing
 if (! file_exists(__DIR__.'/edit-'.$POST->type.'.php')) {
     $Result->die('danger', _('Invalid method type'), true);
-} elseif (! in_array($POST->type, $permitted_methods)) {
-    $Result->die('danger', _('Invalid method type'), true);
-} else {
-    include 'edit-'.$POST->type.'.php';
 }
+
+include __DIR__.'/edit-'.$POST->type.'.php';

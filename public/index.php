@@ -1,11 +1,13 @@
 <?php
-/* site functions */
-require_once __DIR__.'/../functions/functions.php';
 
 /* config */
+require_once __DIR__.'/../functions/classes/class.Config.php';
 if (! file_exists(Config::config_file_path())) {
     exit("<br><hr>-- config.php file missing! Please copy default config file `config.dist.php` to `config.php` and set configuration! --<hr><br>phpipam installation documentation: <a href='http://phpipam.net/documents/installation/'>http://phpipam.net/documents/installation/</a>");
 }
+
+/* site functions */
+require_once __DIR__.'/../functions/functions.php';
 
 /* API check - process API if requested */
 if ($Rewrite->is_api()) {
