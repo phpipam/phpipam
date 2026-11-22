@@ -724,22 +724,19 @@ html {
                 color: $color_gray_3 !important;
 
             }
-            &.ip-0 {
-                color: white !important;
-            }
+            // foreground colour is configured per tag (ipTags.fgcolor) and set
+            // inline, so it must not be overridden here
+            // -> https://github.com/phpipam/phpipam/issues/3950
             &.ip-1 {
                 border-color: $alert_red_2;
                 background-color: rgba(255,0,0,0.05) !important;
-                color: white !important;
             }
             &.ip-2 {
                 border-color: $alert_green_3;
                 background: rgba(0,255,0,0.05) !important;
-                color: white !important;
             }
             &.ip-4 {
                 border-color: $color_blue_1;
-                color: $color_blue_2 !important;
             }
         }
     }

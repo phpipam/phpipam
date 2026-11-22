@@ -5,6 +5,7 @@
     + PHP8 compatibility fixes;
     + BASE not read from config.php;
     + logo.php upload fixes;
+    + Label colours overwritten by dark theme CSS (#3950);
 
     Enhancements, changes:
     ----------------------------
