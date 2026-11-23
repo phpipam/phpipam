@@ -632,7 +632,13 @@ class User extends Common_functions
      */
     public function fetch_available_auth_method_types()
     {
-        return ['AD', 'LDAP', 'NetIQ', 'Radius', 'SAML2'];
+        $types = ['AD', 'LDAP', 'NetIQ', 'Radius', 'SAML2'];
+
+        if ($this->settings->dbversion >= 49) {
+            $types[] = 'OIDC';
+        }
+
+        return $types;
     }
 
     /**
