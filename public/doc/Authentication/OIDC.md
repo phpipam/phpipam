@@ -12,12 +12,23 @@
   * [Scopes](#scopes)
   * [Username claim](#username-claim)
   * [Use userinfo endpoint](#use-userinfo-endpoint)
+  * [Enable JIT](#enable-jit)
+  * [Name claim, Email claim](#name-claim-email-claim)
+  * [Groups claim](#groups-claim)
+  * [Administrator group](#administrator-group)
+  * [Modules claim](#modules-claim)
   * [Debugging](#debugging)
 * [Provisioning users](#provisioning-users)
+* [Automatic user (JIT) provisioning](#automatic-user-jit-provisioning)
 * [Verify connection](#verify-connection)
 * [Security notes](#security-notes)
 * [Troubleshooting](#troubleshooting)
 * [Limitations](#limitations)
+
+Identity provider guides:
+
+* [OpenID Connect with Keycloak](OIDC-with-Keycloak.md)
+* [OpenID Connect with Kanidm](OIDC-with-Kanidm.md)
 
 ## Overview
 
@@ -105,19 +116,72 @@ phpIPAM usernames are case insensitive.
 
 Also fetch claims from the provider's userinfo endpoint. Claims from the userinfo endpoint override profile claims of the ID token (e.g. `name`, `email`), protocol claims (`iss`, `sub`, `aud`, ...) always come from the ID token.
 
+### Enable JIT
+
+Create phpIPAM users at their first login and update them at every login from the ID token claims (just-in-time provisioning).
+
+If JIT is not enabled all OIDC users must be created in phpIPAM first, see [Provisioning users](#provisioning-users).
+
+See [Automatic user (JIT) provisioning](#automatic-user-jit-provisioning).
+
+### Name claim, Email claim
+
+Claims used for the real name and the email address of JIT users. Defaults: `name` and `email`.
+
+If the name claim is missing `given_name family_name` and then the username are used. A valid email address is required.
+
+### Groups claim
+
+Claim with the user's group names, as a JSON array or a comma separated string. Default: `groups`.
+
+The names are matched exactly (case sensitive) against phpIPAM group names (*Administration > Groups*), names without a matching phpIPAM group are ignored.
+
+Leave blank to manage group membership in phpIPAM, JIT then never changes the groups of existing users.
+
+### Administrator group
+
+Name of a group in the [groups claim](#groups-claim) whose members get the phpIPAM `Administrator` role. All other JIT users get the `User` role.
+
+Leave blank to manage the role in phpIPAM, new JIT users then get the `User` role.
+
+### Modules claim
+
+Claim with module permissions, as a comma separated string or a JSON array of `module:level` entries.
+Levels: 0=None, 1=Read, 2=Read/Write, 3=Admin. `*` matches all modules. E.g. `*:1,vlan:3` gives admin permissions on VLANs and read permissions on everything else.
+
+Leave blank to manage module permissions in phpIPAM, new JIT users then get no module permissions.
+
 ### Debugging
 
 Show the technical reason for a failed login on the login page. The reason is always written to the phpIPAM log. Do not enable in production.
 
 ## Provisioning users
 
-Create the users in phpIPAM (*Administration > Users*) with the same username as the [username claim](#username-claim) and select the OIDC authentication method.
+Without [JIT](#enable-jit), create the users in phpIPAM (*Administration > Users*) with the same username as the [username claim](#username-claim) and select the OIDC authentication method.
 
 A login is refused if:
 
 * no phpIPAM user matches the username claim
 * the matching phpIPAM user uses a different authentication method (e.g. the local `Admin` account)
 * the phpIPAM user is disabled
+
+## Automatic user (JIT) provisioning
+
+With [JIT](#enable-jit) enabled every successful OIDC login creates or updates the phpIPAM user named by the [username claim](#username-claim):
+
+| phpIPAM field | Source | Required |
+|---|---|---|
+| Real name | [name claim](#name-claim-email-claim), `given_name family_name` or the username | no |
+| Email | [email claim](#name-claim-email-claim) | yes |
+| Role | membership of the [administrator group](#administrator-group) | no |
+| Groups | [groups claim](#groups-claim) matched to phpIPAM group names | no |
+| Module permissions | [modules claim](#modules-claim) | no |
+
+Settings left blank are not synced. Changes made in phpIPAM to values that are synced are overwritten at the next login.
+
+JIT never changes a user that uses another authentication method, e.g. a local user with the same name. Such logins are refused.
+
+Administrators have access to all groups and modules regardless of their group and module settings.
 
 ## Verify connection
 
