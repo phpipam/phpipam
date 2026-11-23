@@ -100,12 +100,80 @@ try {
         throw new OIDC_Exception(_('User is not configured for OIDC authentication'), 'Existing account uses a different authentication method', 2, true);
     }
 
-    if (! is_object($oidc_user)) {
+    $oidc_jit = filter_var($oidc_params->jit, FILTER_VALIDATE_BOOLEAN);
+
+    if (! is_object($oidc_user) && ! $oidc_jit) {
         throw new OIDC_Exception(_('User is not provisioned in phpIPAM'), 'No phpIPAM account for this user');
     }
 
-    if ($oidc_user->disabled == 'Yes') {
+    if (is_object($oidc_user) && $oidc_user->disabled == 'Yes') {
         throw new OIDC_Exception(_('User account is disabled'), 'Account is disabled');
+    }
+
+    /* just-in-time provisioning: create the user or update it from the claims */
+    if ($oidc_jit) {
+        $oidc_values = [];
+
+        $oidc_name_claim = is_blank($oidc_params->name_claim) ? 'name' : $oidc_params->name_claim;
+        $oidc_real_name = OIDC::get_claim($oidc_claims, $oidc_name_claim);
+        if (! is_string($oidc_real_name) || trim($oidc_real_name) === '') {
+            $oidc_real_name = implode(' ', array_filter([OIDC::get_claim($oidc_claims, 'given_name'), OIDC::get_claim($oidc_claims, 'family_name')], 'is_string'));
+        }
+
+        $oidc_real_name = mb_substr(trim(strip_tags($oidc_real_name)), 0, 128);
+        $oidc_values['real_name'] = $oidc_real_name !== '' ? $oidc_real_name : $oidc_username;
+
+        $oidc_email_claim = is_blank($oidc_params->email_claim) ? 'email' : $oidc_params->email_claim;
+        $oidc_email = OIDC::get_claim($oidc_claims, $oidc_email_claim);
+        if (! is_string($oidc_email) || strlen($oidc_email) > 254 || ! filter_var($oidc_email, FILTER_VALIDATE_EMAIL)) {
+            throw new OIDC_Exception(_('The identity provider did not supply a valid email address'), sprintf('Claim "%s" is missing or not a valid email address', $oidc_email_claim));
+        }
+
+        $oidc_values['email'] = $oidc_email;
+
+        // blank claim settings leave groups, role and modules to be managed in phpIPAM
+        $oidc_groups = is_blank($oidc_params->groups_claim) ? null : OIDC::claim_to_list(OIDC::get_claim($oidc_claims, $oidc_params->groups_claim));
+
+        $Admin = new Admin($Database, false);
+
+        if (! is_blank($oidc_params->admin_group)) {
+            $oidc_values['role'] = in_array($oidc_params->admin_group, $oidc_groups ?? [], true) ? 'Administrator' : 'User';
+        } elseif (! is_object($oidc_user)) {
+            $oidc_values['role'] = 'User';
+        }
+
+        if ($oidc_groups !== null) {
+            $oidc_values['groups'] = $Admin->jit_groups_json($oidc_groups);
+        } elseif (! is_object($oidc_user)) {
+            $oidc_values['groups'] = json_encode([]);
+        }
+
+        if (! is_blank($oidc_params->modules_claim)) {
+            $oidc_modules = OIDC::get_claim($oidc_claims, $oidc_params->modules_claim);
+            $oidc_modules = is_array($oidc_modules) ? implode(',', array_filter($oidc_modules, 'is_string')) : (is_string($oidc_modules) ? $oidc_modules : '');
+            $oidc_values['module_permissions'] = $Admin->jit_modules_json($oidc_modules, $User->get_modules_with_permissions());
+        } elseif (! is_object($oidc_user)) {
+            $oidc_values['module_permissions'] = json_encode([]);
+        }
+
+        $oidc_action = null;
+        if (is_object($oidc_user)) {
+            // write only what changed, values read from the database are html escaped
+            $oidc_values = array_filter($oidc_values, fn ($value, $key) => unescape_input((string) ($oidc_user->{$key} ?? '')) !== (string) $value, ARRAY_FILTER_USE_BOTH);
+            if ($oidc_values !== []) {
+                $oidc_action = 'edit';
+                $oidc_values['id'] = $oidc_user->id;
+            }
+        } else {
+            $oidc_action = 'add';
+            $oidc_values['username'] = $oidc_username;
+            $oidc_values['authMethod'] = $oidc_method->id;
+            $oidc_values['lang'] = $User->settings->defaultLang;
+        }
+
+        if ($oidc_action !== null && ! $Admin->object_modify('users', $oidc_action, 'id', $oidc_values)) {
+            throw new OIDC_Exception(_('Failed to create or update the phpIPAM user'), sprintf('JIT %s failed', $oidc_action));
+        }
     }
 
     // authenticate() reports refusals through Result, turn them into exceptions for the redirect below

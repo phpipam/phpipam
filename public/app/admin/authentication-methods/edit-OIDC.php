@@ -31,6 +31,9 @@ if ($POST->action != 'add') {
     $method_settings->params->token_auth_method = 'client_secret_basic';
     $method_settings->params->scopes = OIDC::DEFAULT_SCOPES;
     $method_settings->params->username_claim = 'preferred_username';
+    $method_settings->params->name_claim = 'name';
+    $method_settings->params->email_claim = 'email';
+    $method_settings->params->groups_claim = 'groups';
 }
 
 $oidc_params = $method_settings->params;
@@ -176,6 +179,41 @@ $(document).ready(function() {
             <?php print _('Also read claims from the userinfo endpoint'); ?>
         </td>
     </tr>
+
+    <tr>
+        <td colspan="3"><hr></td>
+    </tr>
+
+    <!-- JIT -->
+    <tr>
+        <td><?php print _('Enable JIT'); ?></td>
+        <td>
+            <input type="checkbox" class="input-switch" value="1" name="jit" <?php print filter_var($oidc_params->jit, FILTER_VALIDATE_BOOLEAN) ? 'checked' : ''; ?> <?php print $is_disabled; ?> >
+        </td>
+        <td class="info2">
+            <?php print _('Create and update users from claims at every login'); ?>
+        </td>
+    </tr>
+
+    <?php
+    $jit_claims = [
+        'name_claim' => [_('Name claim'), _('Real name, default name')],
+        'email_claim' => [_('Email claim'), _('Email address, default email')],
+        'groups_claim' => [_('Groups claim'), _('Group names matched to phpIPAM groups').'<br>'._('blank=manage groups in phpIPAM')],
+        'admin_group' => [_('Administrator group'), _('Members of this group are Administrators').'<br>'._('blank=manage role in phpIPAM')],
+        'modules_claim' => [_('Modules claim'), _('Module permissions, e.g. *:1,vlan:3').'<br>'._('blank=manage modules in phpIPAM')],
+    ];
+foreach ($jit_claims as $name => [$label, $help]) { ?>
+    <tr>
+        <td><?php print $label; ?></td>
+        <td>
+            <input type="text" name="<?php print $name; ?>" class="form-control input-sm" value="<?php print escape_input($oidc_params->{$name}); ?>" <?php print $is_disabled; ?> >
+        </td>
+        <td class="base_dn info2">
+            <?php print $help; ?>
+        </td>
+    </tr>
+    <?php } ?>
 
     <tr>
         <td colspan="3"><hr></td>

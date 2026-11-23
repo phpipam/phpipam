@@ -630,6 +630,38 @@ class OIDC extends Common_functions
     }
 
     /**
+     * Turn a list claim (JSON array or comma separated string) into a list of names
+     *
+     * Strings are split on commas only, names may contain spaces.
+     *
+     * @param  mixed  $value
+     * @return array
+     */
+    public static function claim_to_list($value)
+    {
+        if (is_string($value)) {
+            $value = explode(',', $value);
+        }
+
+        if (! is_array($value)) {
+            return [];
+        }
+
+        $names = [];
+        foreach ($value as $name) {
+            if ((is_string($name) || is_int($name)) && trim((string) $name) !== '') {
+                $names[] = trim((string) $name);
+            }
+
+            if (count($names) >= 1000) {
+                break;
+            }
+        }
+
+        return array_values(array_unique($names));
+    }
+
+    /**
      * Validate a username taken from a claim, false if unusable
      *
      * @param  mixed  $username

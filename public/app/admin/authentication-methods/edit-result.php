@@ -137,6 +137,23 @@ if ($POST->type == 'OIDC' && $action != 'delete') {
     if (! preg_match('/^[\x21\x23-\x7E]{1,255}$/', $POST->username_claim)) {
         $Result->die('danger', _('Invalid username claim'));
     }
+
+    // JIT claim names, blank means not mapped
+    foreach (['name_claim', 'email_claim', 'groups_claim', 'modules_claim'] as $oidc_claim) {
+        $POST->{$oidc_claim} = trim((string) $POST->{$oidc_claim});
+        if ($POST->{$oidc_claim} !== '' && ! preg_match('/^[\x21\x23-\x7E]{1,255}$/', $POST->{$oidc_claim})) {
+            $Result->die('danger', _('Invalid claim name').': '.escape_input($POST->{$oidc_claim}));
+        }
+    }
+
+    $POST->admin_group = trim((string) $POST->admin_group);
+    if (mb_strlen($POST->admin_group) > 255) {
+        $Result->die('danger', _('Invalid administrator group'));
+    }
+
+    if ($POST->admin_group !== '' && $POST->groups_claim === '') {
+        $Result->die('danger', _('Administrator group requires a groups claim'));
+    }
 }
 
 // remove processed params
