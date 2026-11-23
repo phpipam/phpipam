@@ -12,6 +12,7 @@
   * [Scopes](#scopes)
   * [Username claim](#username-claim)
   * [Use userinfo endpoint](#use-userinfo-endpoint)
+  * [Auto-redirect](#auto-redirect)
   * [Enable JIT](#enable-jit)
   * [Name claim, Email claim](#name-claim-email-claim)
   * [Groups claim](#groups-claim)
@@ -115,6 +116,16 @@ phpIPAM usernames are case insensitive.
 ### Use userinfo endpoint
 
 Also fetch claims from the provider's userinfo endpoint. Claims from the userinfo endpoint override profile claims of the ID token (e.g. `name`, `email`), protocol claims (`iss`, `sub`, `aud`, ...) always come from the ID token.
+
+### Auto-redirect
+
+Send users that open the login page, or any page while logged out, straight to the identity provider instead of showing the login page.
+
+* `/login/?local=1` (`index.php?page=login&local=1` without *Prettify links*) shows the login form for local accounts, also if `$config['disable_main_login_form']` is set in config.php.
+* After logging out, or when the session timed out, the login page is shown with a *Login with* button, otherwise the user would be logged in again by the identity provider's session.
+* After a failed OIDC login the login page with the error is shown. Automatic redirects also stop after 3 attempts within 2 minutes.
+
+To show only the OIDC button without redirecting, leave auto-redirect disabled and set `$config['disable_main_login_form'] = true;` in config.php.
 
 ### Enable JIT
 
