@@ -184,6 +184,24 @@ $(document).ready(function() {
         <td colspan="3"><hr></td>
     </tr>
 
+    <!-- auto-redirect -->
+    <tr>
+        <td><?php print _('Auto-redirect'); ?></td>
+        <td>
+            <input type="checkbox" class="input-switch" value="1" name="auto_redirect" <?php print filter_var($oidc_params->auto_redirect, FILTER_VALIDATE_BOOLEAN) ? 'checked' : ''; ?> <?php print $is_disabled; ?> >
+        </td>
+        <td class="info2">
+            <?php
+            $local_login = create_link('login');
+print _('Send users from the login page to the identity provider').'<br>'._('Local login').': '.escape_input($local_login.(strpos($local_login, '?') === false ? '?' : '&').'local=1');
+?>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="3"><hr></td>
+    </tr>
+
     <!-- JIT -->
     <tr>
         <td><?php print _('Enable JIT'); ?></td>

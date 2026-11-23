@@ -14,4 +14,4 @@ if (session_status() === PHP_SESSION_ACTIVE) {
 }
 
 header('X-XSS-Protection:1; mode=block');
-header('Location: '.create_link());
+header('Location: '.create_link('login', 'logout'));

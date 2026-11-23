@@ -21,6 +21,8 @@
 
             // destroy session
             $User->logout();
+        } elseif ($GET->section == 'logout') {
+            $Result->warn('success', _('You have logged out'));
         }
 
         // check if SAML2 login is possible
