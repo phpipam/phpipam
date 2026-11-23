@@ -85,6 +85,7 @@ require_once __DIR__.'/classes/class.Password_check.php';        // Class for pa
 require_once __DIR__.'/classes/class.Session_DB.php';            // Class for storing sessions to database
 require_once __DIR__.'/classes/class.LockForUpdate.php';         // Class for MySQL row locking
 require_once __DIR__.'/classes/class.OpenStreetMap.php';         // Class for OpenStreetMap
+require_once __DIR__.'/classes/class.OIDC.php';                  // Class for OpenID Connect login
 
 // Load composer vendor/autoload.php and save error message if it fails
 $composer_autoload_err = false;

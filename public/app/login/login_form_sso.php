@@ -1,6 +1,12 @@
     <!-- login response -->
     <div id="loginCheck" class="col-xs-12 text-center">
         <?php
+        // failed OpenID Connect login
+        if (isset($_SESSION['oidc_error'])) {
+            $Result->warn('danger', escape_input((string) $_SESSION['oidc_error']));
+            unset($_SESSION['oidc_error']);
+        }
+
         // deauthenticate user
         if ($User->is_authenticated() === true) {
             // print result
@@ -23,8 +29,19 @@
             $Result->warn('success', _('You can login with SAML2').' <a href="'.create_link('saml2').'">('.$saml2settings->description.') '._('here').'</a>!');
         }
 
+        // check if OpenID Connect login is possible
+        $oidcsettings = $User->settings->dbversion >= 49 ? $Tools->fetch_object('usersAuthMethod', 'type', 'OIDC') : false;
+
         ?>
     </div>
+
+    <?php if (is_object($oidcsettings)) { ?>
+    <div class="col-xs-12" style="padding-top:15px;">
+        <a class="btn btn-sm btn-default oidc_login" href="<?php print create_link('oidc'); ?>" style="width:100%;">
+            <i class="fa fa-sign-in fa-pad-right"></i><?php print _('Login with').' '.$oidcsettings->description; ?>
+        </a>
+    </div>
+    <?php } ?>
 
     <?php if ($User->settings->dbversion >= 40 && $User->settings->passkeys == 1) { ?>
     <div class="col-xs-12" style="padding-top:20px;">
