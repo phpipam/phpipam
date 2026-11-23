@@ -16,6 +16,7 @@ $requiredPks = [
     'dapphp/radius',
     'dapphp/securimage',
     'erusev/parsedown',
+    'firebase/php-jwt',
     'firehed/cbor',
     'firehed/webauthn',
     'onelogin/php-saml',
