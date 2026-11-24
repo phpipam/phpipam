@@ -8,6 +8,7 @@ In general upgrading phpIPAM is a 6 step process:
 1. Upgrade phpIPAM code
 1. Update webserver configuration [ *upgrading from phpIPAM < v1.9.0 ]
 1. Upgrade phpIPAM database.
+1. Rollback - Restore old installation and database
 
 __Before upgrading ensure you backup your MySQL database__
 
@@ -81,7 +82,7 @@ phpIPAM version 1.9.0 switched to [composer](https://getcomposer.org/) exclusive
 
 Before you upgrade to 1.9.0 or above from 1.8.x or below, remove legacy git submodules by running `git submodule deinit`.
 
-__Ensure you have a backup your SQL database and config.php before proceeding__
+__Ensure you have a backup of your SQL database and config.php before proceeding__
 
 (adjust directories etc. according to your installation):
 
@@ -117,8 +118,8 @@ If you are using `master` branch on GitHub simply pull the latest stable release
 
 ```console
 [root@ipam:/]$ cd /var/www/phpipam
-[root@ipam:/var/www/phpipam]$ git pull
-[root@ipam:/var/www/phpipam]$ git checkout -b master origin/master
+[root@ipam:/var/www/phpipam]$ git checkout master
+[root@ipam:/var/www/phpipam]$ git pull --ff-only
 [root@ipam:/var/www/phpipam]$ composer install --no-dev --no-scripts
 ```
 
@@ -131,8 +132,9 @@ If you use specific branch, pull down new code, switch to desired branch and upd
 
 ```console
 [root@ipam:/]$ cd /var/www/phpipam
-[root@ipam:/var/www/phpipam]$ git pull
-[root@ipam:/var/www/phpipam]$ git checkout -b 1.9 origin/1.9
+[root@ipam:/var/www/phpipam]$ git fetch --all
+[root@ipam:/var/www/phpipam]$ git checkout 1.9
+[root@ipam:/var/www/phpipam]$ git pull --ff-only
 [root@ipam:/var/www/phpipam]$ composer install --no-dev --no-scripts
 ```
 
@@ -144,8 +146,9 @@ If you use specific branch, pull down new code, switch to desired branch and upd
 
 ```console
 [root@ipam:/]$ cd /var/www/phpipam
-[root@ipam:/var/www/phpipam]$ git pull
-[root@ipam:/var/www/phpipam]$ git checkout -b 1.8 origin/1.8
+[root@ipam:/var/www/phpipam]$ git fetch --all
+[root@ipam:/var/www/phpipam]$ git checkout 1.8
+[root@ipam:/var/www/phpipam]$ git pull --ff-only
 [root@ipam:/var/www/phpipam]$ git submodule update --init --recursive
 [root@ipam:/var/www/phpipam]$ cd functions
 [root@ipam:/var/www/phpipam/functions]$ composer install --no-dev --no-scripts
@@ -153,7 +156,7 @@ If you use specific branch, pull down new code, switch to desired branch and upd
 
 # Manual release upgrade
 
-To manually extract new phpipam release head over to [https://github.com/phpipam/phpipam/releases](https://github.com/phpipam/phpipam/releases), check assets and download files. Than extract new code and copy over old config.php file.
+To manually extract new phpipam release head over to [https://github.com/phpipam/phpipam/releases](https://github.com/phpipam/phpipam/releases), check assets and download files. Then extract new code and restore your saved config.php file.
 
 (adjust directories etc. according to your installation):
 
@@ -182,20 +185,19 @@ To upgrade your phpIPAM database to latest version choose from the multiple opti
 
 ## Automatic database upgrade
 
-Open browser and follow upgrade procedure.
+Navigate to your phpIPAM URL and follow upgrade procedure.
 
 ## Manual query import
 
-In case you have some problems you can manually import each MySQL update statement directly into the database. All upgrade queries are available by following the instructions in `db/UPDATE.sql`, start from the statement that contains a version higher than current.
+If the automatic upgrade fails, generate the queries for your current schema version and apply to mysql manually.
 
-Alternatively you can use the script below to output the queries needed to upgrade the MySQL database manually.
-
-Assuming your old version is v1.5:
+Administration -> Tools -> Version check shows both phpIPAM and database schema version. Specify your current 3 digit version number (e.g 1.9.0 / 1.9.3)
 
 ```console
-[root@ipam:/]$ cd /var/www/phpipam
-[root@ipam:/var/www/phpipam]$ php functions/upgrade_queries.php 1.5
+php functions/upgrade_queries.php 1.9.3 > /tmp/manual_upgrade.sql
+mysql -h 'database_host' -u 'username' -p 'database_name' < /tmp/manual_upgrade.sql
 ```
+
 
 # Restore old installation and database
 
@@ -206,6 +208,6 @@ In case anything goes wrong the restore procedure is simple:
 - Load old database backed up before starting upgrade
 
 ```console
-[root@ipam:/var/www/phpipam]$ mysql -h `database_host` -u `username` -p `database_name` <db/bkp/phpipam_migration_backup.db
+[root@ipam:/var/www/phpipam]$ mysql -h 'database_host' -u 'username' -p 'database_name' <db/bkp/phpipam_migration_backup.db
 Enter password:
 ```
