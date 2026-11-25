@@ -6,6 +6,7 @@
     + BASE not read from config.php;
     + logo.php upload fixes;
     + Label colours overwritten by dark theme CSS (#3950);
+    + fping scan result validation and thread wait handling;
 
     Enhancements, changes:
     ----------------------------

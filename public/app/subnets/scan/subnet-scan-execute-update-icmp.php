@@ -30,6 +30,11 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     $Result->die('danger', 'Invalid JSON response'.' - '.$Scan->json_error_decode(json_last_error()).' - '.$output[0]);
 }
 
+// an error answer carries no values at all, the blank values below need an object to work on
+if (! isset($script_result->values)) {
+    $script_result->values = new stdClass;
+}
+
 // set blank values
 if (! isset($script_result->values->alive) || is_null($script_result->values->alive)) {
     $script_result->values->alive = [];

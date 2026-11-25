@@ -107,7 +107,24 @@ if ($Scan->settings->scanPingType == 'fping') {
         exit(json_encode(['status' => 1, 'error' => 'system call failure']));
     }
 
-    // parse result
+    // fping exit status: 0 = all hosts reachable, 1 = some hosts were unreachable. Only these
+    // two mean the subnet was actually scanned. Everything else (address not found, invalid
+    // arguments, system call failure) means we learned nothing about the hosts.
+    if ($retval !== 0 && $retval !== 1) {
+        exit(json_encode(['status' => 1, 'error' => 'fping terminated with return code '.$retval.' for subnet '.$subnet_cidr]));
+    }
+
+    // A usable exit code is not enough on its own, fping must also have reported on the hosts.
+    // Not a single host report means we cannot tell a subnet where every host is unreachable
+    // from one that was never probed at all (bad arguments, name resolution failure, an output
+    // format we do not parse). Reporting the first one back without any live host is correct,
+    // the caller marks the hosts as offline, but doing the same for the second one would show
+    // every host in the subnet as down without having checked any of them.
+    if ((int) $Scan->fping_lines < 1) {
+        exit(json_encode(['status' => 1, 'error' => 'fping reported no hosts for subnet '.$subnet_cidr]));
+    }
+
+    // parse result - an empty list with a scanned subnet means nobody answered
     if ($Scan->fping_result === []) {
         exit(json_encode(['status' => 0, 'values' => ['alive' => null]]));
     }

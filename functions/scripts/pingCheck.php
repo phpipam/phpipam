@@ -21,7 +21,7 @@
  *      *\/15 * * * *  /usr/local/bin/php /<sitepath>/functions/scripts/pingCheck.php > /dev/null 2>&1
  *
  *
- *  In case of problems set reset_debugging to true
+ *  In case of problems set $scan_debugging to true
  *
  *  Statuses:
  *      0 = online
@@ -31,6 +31,8 @@
 // include required scripts
 require_once __DIR__.'/../functions.php';
 require_once __DIR__.'/../classes/class.Thread.php';
+
+$scan_debugging = false;
 
 // initialize objects
 $Database = new Database_PDO;
@@ -42,10 +44,10 @@ $Scan = new Scan($Database);
 $DNS = new DNS($Database);
 $Result = new Result;
 
-// set exit flag to true
+// Set Scan flags
 $Scan->ping_set_exit(true);
-// set debugging
-$Scan->set_debugging(false);
+$Scan->set_debugging($scan_debugging);
+
 // fetch agent
 $agent = $Tools->fetch_object('scanAgents', 'id', 1);
 // change scan type?
@@ -60,6 +62,13 @@ if ($Scan->icmp_type == 'none') {
 
 // set ping statuses
 $statuses = explode(';', (string) $Scan->settings->pingStatus);
+$statuses[0] = (int) ($statuses[0] ?? 0);
+$statuses[1] = (int) ($statuses[1] ?? 0);
+
+if ($statuses[0] <= 0 || $statuses[1] <= 0 || $statuses[0] >= $statuses[1]) {
+    exit("pingCheck-Fatal-Error: Invalid Administration->Settings->Ping status intervals\n");
+}
+
 // set mail override flag
 if (! isset($config['ping_check_send_mail'])) {
     $config['ping_check_send_mail'] = true;
@@ -67,10 +76,11 @@ if (! isset($config['ping_check_send_mail'])) {
 
 // response for mailing
 $address_change = [];          // Array with differences, can be used to email to admins
+$update_lastseen = 0;
 
 // set now for whole script
 $now = time();
-$nowdate = date('Y-m-d H:i:s');
+$nowdate = date('Y-m-d H:i:s', $now);
 
 // script can only be run from cli
 if (PHP_SAPI != 'cli') {
@@ -92,7 +102,7 @@ if (! file_exists($Scan->settings->scanPingPath)) {
 }
 
 // verify date.timezone
-if (is_blank(ini_get('date.timezone'))) {
+if ((string) ini_get('date.timezone') === '') {
     print 'pingCheck-Warning: date.timezone is not set in '.php_ini_loaded_file()."\n";
     print "pingCheck-Warning: Online/Offline calculations may be unreliable due to incorrect local time.\n\n";
 }
@@ -103,7 +113,7 @@ if (empty($scan_subnets)) {
     exit("pingCheck: No subnets are marked for checking status updates\n");
 }
 
-if ($Scan->get_debugging()) {
+if ($scan_debugging) {
     print_r($scan_subnets);
 }
 
@@ -157,8 +167,10 @@ foreach ($scan_subnets as $s) {
         }
     }
 
-    // save update time
-    $Scan->update_subnet_scantime($s->id, $nowdate);
+    // save update time, the fping scan only stamps the subnets it really scanned, below
+    if ($Scan->icmp_type != 'fping') {
+        $Scan->update_subnet_scantime($s->id, $nowdate);
+    }
 }
 
 // if none die
@@ -166,12 +178,18 @@ if (empty($addresses)) {
     exit("pingCheck: No addresses to check\n");
 }
 
-if ($Scan->get_debugging()) {
+if ($scan_debugging) {
     print "pingCheck: Using $Scan->icmp_type\n--------------------\n\n";
     print_r($addresses);
 }
 
 /* scan */
+print 'pingCheck: Scanning with Timezone: "'.ini_get('date.timezone').'" from: "'.php_ini_loaded_file()."\"\n";
+print 'pingCheck: Alive hosts will be updated with last_seen: '.$nowdate."\n";
+print "pingCheck: Administration->Settings->Ping status intervals\n";
+print 'pingCheck:   warning: last_seen more than '.(int) $statuses[0].' seconds ago ('.date('Y-m-d H:i:s', $now - (int) $statuses[0]).")\n";
+print 'pingCheck:   offline: last_seen more than '.(int) $statuses[1].' seconds ago ('.date('Y-m-d H:i:s', $now - (int) $statuses[1]).")\n";
+print 'pingCheck: Scan method: '.$Scan->icmp_type."\n\n";
 
 $z = 0;         // addresses array index
 
@@ -203,8 +221,44 @@ if ($Scan->icmp_type == 'fping') {
 
         // wait for all the threads to finish
         foreach ($threads as $index => $thread) {
-            $subnets[$index]['result'] = $thread->ipc_recv_data();
+            $response = $thread->ipc_recv_data();
             $thread->getExitCode();
+
+            // Scan process died before reporting anything, do not change the state of
+            // any host in this subnet
+            if (! is_array($response) || ! isset($response['results']) || ! is_array($response['results'])) {
+                print 'pingCheck-Warning: fping scan for subnet '.$subnets[$index]['cidr'].' returned no result'."\n";
+
+                continue;
+            }
+
+            // fping exit status: 0 = all hosts reachable, 1 = some hosts were
+            // unreachable. Only these two mean the subnet was actually scanned.
+            // Everything else (invalid arguments, system call failure, usage error,
+            // missing or non-executable binary) means we learned nothing about the
+            // hosts, so their state must not be changed.
+            $retcode = (int) ($response['retval'] ?? -1);
+            if ($retcode !== 0 && $retcode !== 1) {
+                print 'pingCheck-Warning: fping terminated with return code '.$retcode.' for subnet '.$subnets[$index]['cidr']."\n";
+
+                continue;
+            }
+
+            // A usable exit code is not enough on its own, fping must also have reported on
+            // the hosts. Not a single host report means we cannot tell a subnet where every
+            // host is unreachable from one that was never probed at all (bad arguments, name
+            // resolution failure, an output format we do not parse), so nothing is known
+            // about its hosts and their state must not be changed.
+            $lines = (int) ($response['lines'] ?? 0);
+            if ($lines < 1) {
+                print 'pingCheck-Warning: fping reported no hosts for subnet '.$subnets[$index]['cidr']."\n";
+
+                continue;
+            }
+
+            // Empty result with a normal exit code means the subnet was scanned and no
+            // host answered, so those hosts are gone.
+            $subnets[$index]['result'] = $response['results'];
         }
 
         unset($threads);
@@ -212,9 +266,18 @@ if ($Scan->icmp_type == 'fping') {
 
     $Database->connect();
 
+    // Only the subnets whose fping run produced a usable result were actually scanned
+    foreach ($subnets as $s) {
+        if (isset($s['result'])) {
+            $Scan->update_subnet_scantime($s['id'], $nowdate);
+        }
+    }
+
     // now we must remove all non-existing hosts
     foreach ($subnets as $sk => $s) {
-        if (! empty($s['result']) && is_array($addresses[$s['id']])) {
+        // Only a subnet with a usable fping result can change host state, an empty
+        // result with a normal exit code means "scanned, nobody answered".
+        if (isset($s['result']) && is_array($s['result']) && is_array($addresses[$s['id']] ?? null)) {
             // loop addresses
             foreach ($addresses[$s['id']] as $ak => $a) {
                 // offline host
@@ -230,7 +293,9 @@ if ($Scan->icmp_type == 'fping') {
                     // save to out array
                     $address_change[] = $addresses2[$s['id']][$ak];
                     // update status
-                    $Scan->ping_update_lastseen($addresses2[$s['id']][$ak]['id'], $nowdate);
+                    if ($Scan->ping_update_lastseen($addresses2[$s['id']][$ak]['id'], $nowdate)) {
+                        $update_lastseen++;
+                    }
                 }
 
                 // resolve hostnames
@@ -300,7 +365,9 @@ if ($Scan->icmp_type == 'fping') {
     // update all active statuses
     foreach ($addresses as $a) {
         if ($a['newStatus'] == 0) {
-            $Scan->ping_update_lastseen($a['id'], $nowdate);
+            if ($Scan->ping_update_lastseen($a['id'], $nowdate)) {
+                $update_lastseen++;
+            }
         }
 
         // resolve hostnames
@@ -384,10 +451,10 @@ foreach ($address_change as $k => $change) {
 
 // update scan time
 $Scan->ping_update_scanagent_checktime(1, $nowdate);
-print 'pingCheck: Scan complete, '.count($address_change)." updates\n";
+print 'pingCheck: Scan complete: '.count($address_change).' state updates, '.$update_lastseen." last_seen updates\n";
 
 // print change
-if ($Scan->get_debugging()) {
+if ($scan_debugging) {
     print "\n";
     print "pingCheck: Address changes:\n----------\n";
     print_r($address_change);

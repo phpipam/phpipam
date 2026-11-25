@@ -93,6 +93,21 @@ class Scan extends Common_functions
     public $fping_result = [];
 
     /**
+     * exit code of the last fping run
+     *
+     * @var int
+     */
+    public $fping_retval = -1;
+
+    /**
+     * number of hosts fping reported on during the last run, reachable or not.
+     * It shows that the subnet was actually enumerated.
+     *
+     * @var int
+     */
+    public $fping_lines = 0;
+
+    /**
      * Ping RTT
      *
      * @var int
@@ -102,21 +117,21 @@ class Scan extends Common_functions
     /**
      * Database
      *
-     * @var mixed
+     * @var Database_PDO
      */
     protected $Database;
 
     /**
      * Subnets
      *
-     * @var mixed
+     * @var Subnets
      */
     protected $Subnets;
 
     /**
      * Addresses
      *
-     * @var mixed
+     * @var Addresses
      */
     protected $Addresses;
 
@@ -489,7 +504,7 @@ class Scan extends Common_functions
      *
      * @param  mixed  $subnet_cidr  //CIDR
      * @param  bool  $return_result
-     * @return int
+     * @return array|int - array of reachable addresses if $return_result is true, fping exit code otherwise
      */
     public function ping_address_method_fping_subnet($subnet_cidr, $return_result = false)
     {
@@ -500,10 +515,20 @@ class Scan extends Common_functions
         // execute command, return $retval
         exec($cmd, $output, $retval);
 
+        // save exit code, it is not returned when the addresses are returned
+        $this->fping_retval = $retval;
+
         // save result
+        $lines = 0;
         if (is_array($output)) {
             foreach ($output as $line) {
                 $match = preg_match('/xmt\/rcv\/%loss = \d+\/\d+\/(\d+)%/', $line, $matches);
+
+                // count every host fping reported on, reachable or not: it is the only
+                // proof that the subnet was enumerated and not just rejected
+                if ($match) {
+                    $lines++;
+                }
 
                 // no match or 100% packet loss
                 if (! $match || $matches[1] == 100) {
@@ -517,6 +542,7 @@ class Scan extends Common_functions
 
         // save to var
         $this->fping_result = $out;
+        $this->fping_lines = $lines;
 
         // return result?
         if ($return_result) {
@@ -610,8 +636,9 @@ class Scan extends Common_functions
      * Update lastseen field for specific IP address
      *
      * @param  int  $id
-     * @param  datetime  $datetime
-     * @return void
+     * @param  datetime|null  $datetime
+     * @param  string|null  $mac
+     * @return bool - true on success, false if the address could not be updated
      */
     public function ping_update_lastseen($id, $datetime = null, $mac = null)
     {
@@ -626,10 +653,22 @@ class Scan extends Common_functions
         try {
             $this->Database->updateObject('ipaddresses', $update_ipaddress, 'id');
         } catch (Exception $exception) {
-            ! $this->debugging ?: $this->Result->warn('danger', $exception->getMessage());
-            // log
-            ! $this->debugging ?: $this->Log->write(_('Status update'), _('Failed to update address status.'), 0);
+            // log - do not print anything, callers decide how to report the failure
+            try {
+                $this->Log->write(_('Status update'), _('Failed to update address status.').' Id: '.$id, 2);
+            } catch (Exception $log_exception) {
+                // the database is probably the part that failed, do not fail over the log entry
+            }
+
+            // only print when debugging is on
+            if ($this->debugging === true) {
+                $this->Result->warn('danger', _('Failed to update address status.'));
+            }
+
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -953,14 +992,19 @@ function telnet_address($address, $port)
 /**
  *  fping subnet helper for fping threading, all methods
  *
+ *  The addresses, the fping exit code and the number of hosts fping reported on are returned
+ *  together: the scan runs in a child process that is killed once this callback returns, so the
+ *  parent cannot read the exit code from the process status (see PingThread::getExitCode()).
+ *
  * @param  string  $subnet_cidr
- * @param  bool  $return
- * @return int
+ * @return array - ['retval' => int, 'lines' => int, 'results' => array]
  */
-function fping_subnet($subnet_cidr, $return = true)
+function fping_subnet($subnet_cidr)
 {
     global $Scan;
 
     // scan
-    return $Scan->ping_address_method_fping_subnet($subnet_cidr, $return);
+    $results = $Scan->ping_address_method_fping_subnet($subnet_cidr, true);
+
+    return ['retval' => (int) $Scan->fping_retval, 'lines' => (int) $Scan->fping_lines, 'results' => $results];
 }

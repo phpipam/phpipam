@@ -15,15 +15,17 @@
  *  so we are only forking separate subnets
  *
  *  Script must be run from cron, here is a crontab example, 1x/day should be enough:
- *      0 1 * * *  /usr/local/bin/php /<sitepath>/functions/scripts/pingCheck.php > /dev/null 2>&1
+ *      0 1 * * *  /usr/local/bin/php /<sitepath>/functions/scripts/discoveryCheck.php > /dev/null 2>&1
  *
  *
- *  In case of problems set reset_debugging to true
+ *  In case of problems set $scan_debugging to true
  */
 
 // include required scripts
 require_once __DIR__.'/../functions.php';
 require_once __DIR__.'/../classes/class.Thread.php';
+
+$scan_debugging = false;
 
 // initialize objects
 $Database = new Database_PDO;
@@ -35,10 +37,10 @@ $Scan = new Scan($Database);
 $DNS = new DNS($Database);
 $Result = new Result;
 
-// set exit flag to true
+// Set Scan flags
 $Scan->ping_set_exit(true);
-// set debugging
-$Scan->set_debugging(false);
+$Scan->set_debugging($scan_debugging);
+
 // change scan type?
 if (@$config['discovery_check_method']) {
     $Scan->reset_scan_method($config['discovery_check_method']);
@@ -49,8 +51,6 @@ if ($Scan->icmp_type == 'none') {
     $Result->die('danger', _('Scanning disabled').' (scanPingType=None)', true);
 }
 
-// set ping statuses
-$statuses = explode(';', (string) $Scan->settings->pingStatus);
 // set mail override flag
 if (! isset($config['discovery_check_send_mail'])) {
     $config['discovery_check_send_mail'] = true;
@@ -58,7 +58,7 @@ if (! isset($config['discovery_check_send_mail'])) {
 
 // set now for whole script
 $now = time();
-$nowdate = date('Y-m-d H:i:s');
+$nowdate = date('Y-m-d H:i:s', $now);
 
 // response for mailing
 $address_change = [];          // Array with differences, can be used to email to admins
@@ -84,7 +84,7 @@ if (! file_exists($Scan->settings->scanPingPath)) {
 }
 
 // verify date.timezone
-if (is_blank(ini_get('date.timezone'))) {
+if ((string) ini_get('date.timezone') === '') {
     print 'discoveryCheck-Warning: date.timezone is not set in '.php_ini_loaded_file()."\n";
     print "discoveryCheck-Warning: Online/Offline calculations may be unreliable due to incorrect local time.\n\n";
 }
@@ -100,8 +100,10 @@ if ($scan_subnets !== false) {
     // loop
     foreach ($scan_subnets as $s) {
         $addresses_tmp[$s->id] = $Scan->prepare_addresses_to_scan('discovery', $s->id, false);
-        // save discovery time
-        $Scan->update_subnet_discoverytime($s->id, $nowdate);
+        // save discovery time, the fping scan only stamps the subnets it really scanned
+        if ($Scan->icmp_type != 'fping') {
+            $Scan->update_subnet_discoverytime($s->id, $nowdate);
+        }
     }
 
     // reindex
@@ -116,10 +118,15 @@ if (empty($scan_subnets)) {
     exit("discoveryCheck: No subnets are marked for new hosts checking\n");
 }
 
-if ($Scan->get_debugging()) {
+if ($scan_debugging) {
     print "discoveryCheck: Using $Scan->icmp_type\n--------------------\n\n";
     print_r($scan_subnets);
 }
+
+/* scan */
+print 'discoveryCheck: Scanning with Timezone: "'.ini_get('date.timezone').'" from: "'.php_ini_loaded_file()."\"\n";
+print 'discoveryCheck: Discovered hosts will be created with last_seen: '.$nowdate."\n";
+print 'discoveryCheck: Scan method: '.$Scan->icmp_type."\n\n";
 
 $z = 0;         // array index
 
@@ -156,14 +163,58 @@ if ($Scan->icmp_type == 'fping') {
 
         // wait for all the threads to finish
         foreach ($threads as $index => $thread) {
-            $scan_subnets[$index]->discovered = $thread->ipc_recv_data();
+            $response = $thread->ipc_recv_data();
             $thread->getExitCode();
+
+            $subnet_cidr = $Subnets->transform_to_dotted($scan_subnets[$index]->subnet).'/'.$scan_subnets[$index]->mask;
+
+            // Scan process died before reporting anything, trust nothing for this subnet
+            if (! is_array($response) || ! isset($response['results']) || ! is_array($response['results'])) {
+                print 'discoveryCheck-Warning: fping scan for subnet '.$subnet_cidr.' returned no result'."\n";
+
+                continue;
+            }
+
+            // fping exit status: 0 = all hosts reachable, 1 = some hosts were
+            // unreachable. Only these two mean the subnet was actually scanned.
+            // Everything else (invalid arguments, system call failure, usage error,
+            // missing or non-executable binary) means no host list was produced, so
+            // nothing is known for this subnet.
+            $retcode = (int) ($response['retval'] ?? -1);
+            if ($retcode !== 0 && $retcode !== 1) {
+                print 'discoveryCheck-Warning: fping terminated with return code '.$retcode.' for subnet '.$subnet_cidr."\n";
+
+                continue;
+            }
+
+            // A usable exit code is not enough on its own, fping must also have reported on
+            // the hosts. Not a single host report means we cannot tell a subnet that was never
+            // probed at all (bad arguments, name resolution failure, an output format we do not
+            // parse) from one where nobody answered, so nothing is known about this subnet.
+            $lines = (int) ($response['lines'] ?? 0);
+            if ($lines < 1) {
+                print 'discoveryCheck-Warning: fping reported no hosts for subnet '.$subnet_cidr."\n";
+
+                continue;
+            }
+
+            // Empty result with a normal exit code means the subnet was scanned and
+            // no host answered.
+            $scan_subnets[$index]->discovered = $response['results'];
         }
 
         unset($threads);
     }
 
     $Database->connect();
+
+    // Only the subnets whose fping run produced a usable result were actually scanned, so
+    // only those get a new last discovery time.
+    foreach ($scan_subnets as $s) {
+        if (isset($s->discovered)) {
+            $Scan->update_subnet_discoverytime($s->id, $nowdate);
+        }
+    }
 
     // fping finds all subnet addresses, we must remove existing ones !
     foreach ($scan_subnets as $sk => $s) {
@@ -234,7 +285,7 @@ if ($Scan->icmp_type == 'fping') {
 }
 
 // print change
-if ($Scan->get_debugging()) {
+if ($scan_debugging) {
     print "\n";
     print "discoveryCheck: Discovered addresses:\n----------\n";
     print_r($scan_subnets);
@@ -318,7 +369,7 @@ if ($discovered > 0 && $config['discovery_check_send_mail']) {
         $content_plain[] = _('phpIPAM found')." $discovered "._('new hosts')."\r\n------------------------------";
         // Changes
         foreach ($scan_subnets as $s) {
-            if (is_array($s->discovered)) {
+            if (isset($s->discovered) && is_array($s->discovered)) {
                 foreach ($s->discovered as $ip) {
                     // set subnet
                     $subnet = $Subnets->fetch_subnet(null, $s->id);

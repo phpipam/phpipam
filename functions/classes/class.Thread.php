@@ -17,6 +17,31 @@ class PingThread
     const IPC_SOCKET_FAILED = 20;
 
     /**
+     * results returned by join() when the child could not be waited for
+     *
+     * WAIT_INTERRUPTED - the wait was interrupted by a caught signal, the child is still
+     *                    running and can be waited for again
+     * WAIT_NO_CHILD    - there is no child to wait for, it was already reaped or the thread
+     *                    was never started
+     */
+    const WAIT_INTERRUPTED = -1;
+
+    const WAIT_NO_CHILD = -2;
+
+    /**
+     * errno values reported by pcntl_get_last_error(), PHP does not provide them.
+     * They are 4 and 10 on Linux and the BSDs.
+     */
+    const EINTR = 4;
+
+    const ECHILD = 10;
+
+    /**
+     * Time getExitCode() waits between join attempts (microseconds)
+     */
+    const WAIT_RETRY_DELAY = 100000;
+
+    /**
      * possible errors
      *
      * @var array
@@ -145,7 +170,7 @@ class PingThread
     /**
      * Read FPing response from child process
      *
-     * @return mixed
+     * @return array|null - data reported by the child, null if it reported nothing
      */
     public function ipc_recv_data()
     {
@@ -157,7 +182,8 @@ class PingThread
         fclose($this->sockets[0]);
         $response = fgets($this->sockets[1]);
         if (is_string($response) && ! is_blank($response)) {
-            $response = db_json_decode($response);
+            // decode as array, the reported data is read with array access
+            $response = db_json_decode($response, true);
         } else {
             $response = null;
         }
@@ -223,14 +249,36 @@ class PingThread
     /**
      * Blocks until the thread has exited
      *
-     * @return mixed
+     * @param  bool  $wait  - false to check the child without blocking
+     * @return int - pid of the reaped child, 0 if it is still alive, PingThread::WAIT_INTERRUPTED
+     *             if the wait was interrupted and PingThread::WAIT_NO_CHILD if there is no child
      */
     public function join($wait = true)
     {
+        // Thread was never started - waiting would wait for any child of this process
+        if (empty($this->pid)) {
+            return self::WAIT_NO_CHILD;
+        }
+
         $pid = pcntl_waitpid($this->pid, $status, $wait ? 0 : WNOHANG);
         if ($pid === -1) {
-            // Error
-            return -1;
+            // pcntl_waitpid() reports every failure as -1, pcntl_get_last_error() is the only
+            // way to tell them apart and it holds the value just until the next pcntl call, so
+            // read it here.
+            $errno = pcntl_get_last_error();
+
+            if ($errno === self::EINTR) {
+                // a caught signal interrupted the wait, the child is still running
+                return self::WAIT_INTERRUPTED;
+            }
+
+            if ($errno === self::ECHILD) {
+                // the child was already reaped, or there never was one
+                return self::WAIT_NO_CHILD;
+            }
+
+            // any other error: there is nothing to wait for either
+            return self::WAIT_NO_CHILD;
         }
 
         if ($pid === 0) {
@@ -238,7 +286,10 @@ class PingThread
             return 0;
         }
 
-        $this->exitCode = pcntl_wexitstatus($status);
+        // Only a child that terminated normally has an exit code. pcntl_wexitstatus()
+        // returns 0 for a child that was killed by a signal, which would look like a
+        // successful scan, so report -1 instead.
+        $this->exitCode = pcntl_wifexited($status) ? pcntl_wexitstatus($status) : -1;
 
         return $pid;
     }
@@ -246,11 +297,18 @@ class PingThread
     /**
      * return exit code of child (waits if still alive)
      *
-     * @return int
+     * @return int - exit code of the child, -1 if it did not exit normally
      */
     public function getExitCode()
     {
-        $this->join();
+        // join() returning WAIT_NO_CHILD cannot be re-joined.
+        while (true) {
+            if ($this->join() !== self::WAIT_INTERRUPTED) {
+                break;
+            }
+
+            usleep(self::WAIT_RETRY_DELAY);
+        }
 
         return $this->exitCode;
     }
@@ -339,6 +397,7 @@ class PingThread
      */
     public function stop($_signal = SIGKILL, $_wait = false)
     {
+        // join() returns 0 only for a child that is still running
         if ($this->join(false) === 0) {
             posix_kill($this->pid, $_signal);
             if ($_wait) {
@@ -351,7 +410,7 @@ class PingThread
      * alias of stop();
      *
      * @param  int  $_signal
-     * @return bool
+     * @return void
      */
     public function kill($_signal = SIGKILL, $_wait = false)
     {
