@@ -107,7 +107,7 @@ $delete = $POST->action == 'delete' ? 'disabled' : '';
     <tr>
         <td><?php print _('Use SSL'); ?></td>
         <td>
-            <select name="use_ssl" class="form-control input-sm input-w-auto" <?php print $delete; ?>>
+            <select id="use_ssl" name="use_ssl" class="form-control input-sm input-w-auto" <?php print $delete; ?>>
                 <option value="0" <?php if (@$method_settings->params->use_ssl == 0) {
                     print 'selected';
                 } ?>><?php print _('false'); ?></option>
@@ -117,7 +117,7 @@ $delete = $POST->action == 'delete' ? 'disabled' : '';
             </select>
         </td>
         <td class="info2">
-            <?php print _('Use SSL (LDAPS), your server needs to be setup (default: false)'); ?><br>
+            <?php print _('Connect with ldaps:// (port 636)'); ?>
         </td>
     </tr>
 
@@ -125,7 +125,7 @@ $delete = $POST->action == 'delete' ? 'disabled' : '';
     <tr>
         <td><?php print _('Use TLS'); ?></td>
         <td>
-            <select name="use_tls" class="form-control input-sm input-w-auto" <?php print $delete; ?>>
+            <select id="use_tls" name="use_tls" class="form-control input-sm input-w-auto" <?php print $delete; ?>>
                 <option value="0" <?php if (@$method_settings->params->use_tls == 0) {
                     print 'selected';
                 } ?>><?php print _('false'); ?></option>
@@ -135,7 +135,7 @@ $delete = $POST->action == 'delete' ? 'disabled' : '';
             </select>
         </td>
         <td class="info2">
-            <?php print _('If you wish to use TLS you should ensure that useSSL is set to false and vice-versa (default: false)'); ?>
+            <?php print _('Connect with ldap:// and STARTTLS (port 389)'); ?>
         </td>
     </tr>
 
@@ -144,10 +144,11 @@ $delete = $POST->action == 'delete' ? 'disabled' : '';
     <tr>
         <td><?php print _('AD port'); ?></td>
         <td>
-            <input type="text" name="ad_port" class="form-control input-sm input-w-100" value="<?php print @$method_settings->params->ad_port; ?>" <?php print $delete; ?>>
+            <input type="text" id="ad_port" name="ad_port" class="form-control input-sm input-w-100" value="<?php print @$method_settings->params->ad_port; ?>" <?php print $delete; ?>>
         </td>
         <td class="port info2">
-            <?php print _('The default port for LDAP non-SSL connections'); ?>: 389 (SSL=636)
+            <?php print _('Default port for LDAP & STARTTLS connections'); ?>: 389<br>
+            <?php print _('Default port for LDAPS connections'); ?>: 636<br>
         </td>
     </tr>
 
@@ -169,6 +170,9 @@ $delete = $POST->action == 'delete' ? 'disabled' : '';
 
     </table>
     </form>
+
+    <!-- Connection security validation warning -->
+    <div id="adSecurityWarning"></div>
 </div>
 
 
@@ -176,7 +180,7 @@ $delete = $POST->action == 'delete' ? 'disabled' : '';
 <div class="pFooter">
     <div class="btn-group">
         <button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-        <button class='btn btn-sm btn-default submit_popup <?php if ($POST->action == 'delete') {
+        <button id="submitAuthMethod" class='btn btn-sm btn-default submit_popup <?php if ($POST->action == 'delete') {
             print 'btn-danger';
         } else {
             print 'btn-success';
@@ -204,3 +208,55 @@ $delete = $POST->action == 'delete' ? 'disabled' : '';
     <!-- Result -->
     <div id="editAuthMethodResult"></div>
 </div>
+
+<?php
+// validation of the connection security settings, deleting an invalid method must stay possible
+if ($POST->action != 'delete') {
+    ?>
+<script>
+$(document).ready(function () {
+    // SSL (LDAPS, ldaps://, port 636) and TLS (STARTTLS, ldap:// + start_tls, port 389)
+    // are mutually exclusive. Warn if the port does not match the selected security option.
+    var validate_ad_security = function () {
+        var use_ssl = $('#use_ssl').val();
+        var use_tls = $('#use_tls').val();
+        var ad_port = $.trim($('#ad_port').val());
+        var html = '';
+        var valid = true;
+
+        if (use_ssl == '1' && use_tls == '1') {
+            html = '<div class="alert alert-danger"><?php print _('SSL and STARTTLS cannot both be enabled.'); ?></div>';
+            valid = false;
+        } else if (use_ssl == '1' && ad_port != '636') {
+            html = '<div class="alert alert-warning"><?php print _('Standard ldaps:// port is 636.'); ?></div>';
+        } else if (use_tls == '1' && ad_port != '389') {
+            html = '<div class="alert alert-warning"><?php print _('Standard ldap:// + STARTTLS port is 389.'); ?></div>';
+        } else if (use_ssl != '1' && use_tls != '1' && ad_port != '389') {
+            html = '<div class="alert alert-warning"><?php print _('Standard unencrypted ldap:// port is 389.'); ?></div>';
+        }
+
+        $('#adSecurityWarning').html(html);
+
+        return valid;
+    };
+
+    // re-validate whenever a security setting or the port changes
+    $('#use_ssl, #use_tls').on('change', validate_ad_security);
+    $('#ad_port').on('keyup change', validate_ad_security);
+
+    // validate the stored settings on load
+    validate_ad_security();
+
+    // block saving when SSL and TLS are both enabled
+    $('#submitAuthMethod').on('click', function (e) {
+        if (! validate_ad_security()) {
+            e.stopImmediatePropagation();
+
+            return false;
+        }
+    });
+});
+</script>
+<?php
+}
+?>

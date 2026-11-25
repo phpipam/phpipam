@@ -10,6 +10,7 @@
     Enhancements, changes:
     ----------------------------
     + Add vendormacs.json update script to functions/scripts;
+    + Active Directory authentication SSL/TLS and port validation;
 
     Security Fixes:
     ----------------------------
