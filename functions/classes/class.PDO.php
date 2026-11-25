@@ -258,7 +258,7 @@ abstract class DB
         try {
             $attr_multi_statements = $this->mysql_attr('MULTI_STATEMENTS');
             if ($this->ssl) {
-                $this->pdo = new PDO($dsn, $this->username, $this->password, [$attr_multi_statements => false, (array) $this->ssl]);
+                $this->pdo = new PDO($dsn, $this->username, $this->password, [$attr_multi_statements => false] + (array) $this->ssl);
             } else {
                 $this->pdo = new PDO($dsn, $this->username, $this->password, [$attr_multi_statements => false]);
             }
