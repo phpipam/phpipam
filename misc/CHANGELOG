@@ -4,6 +4,10 @@
     ----------------------------
     + PHP8 compatibility fixes;
 
+    Enhancements, changes:
+    ----------------------------
+    + Active Directory authentication SSL/TLS and port validation;
+
 == 1.9.1
 
     Bugfixes:
