@@ -475,6 +475,7 @@ class Upgrade extends Install
     {
         $query = str_replace('DELIMITER $$', '', $query);       // remove DELIMITER $$ start statement
         $query = str_replace('DELIMITER $', '', $query);        // remove DELIMITER $  end statement
+        $query = str_replace('DELIMITER ;', '', $query);        // remove DELIMITER ; end statement
         $query = str_replace('END $$', 'END;', $query);     // Replace END $$ with END;
 
         // result
