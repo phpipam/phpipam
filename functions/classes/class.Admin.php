@@ -615,6 +615,60 @@ class Admin extends Common_functions
     }
 
     /**
+     * Map group names from an identity provider to phpIPAM groups
+     *
+     * Names are matched exactly against the group names.
+     *
+     * @param  array  $names
+     * @return string users.groups JSON, same format as the user admin page
+     */
+    public function jit_groups_json($names)
+    {
+        $groups = [];
+        foreach ($this->fetch_all_objects('userGroups', 'g_id') ?: [] as $group) {
+            if (in_array(unescape_input($group->g_name), $names, true)) {
+                $groups[$group->g_id] = (string) $group->g_id;
+            }
+        }
+
+        return json_encode($groups);
+    }
+
+    /**
+     * Parse module permissions from an identity provider
+     *
+     * Comma separated module:level entries, level 0=None, 1=Read, 2=Read/Write, 3=Admin.
+     * "*" matches all modules, e.g. "*:1,vlan:3".
+     *
+     * @param  string  $spec
+     * @param  array  $modules  modules with permissions, see User::get_modules_with_permissions()
+     * @return string users.module_permissions JSON, same format as the user admin page
+     */
+    public function jit_modules_json($spec, $modules)
+    {
+        $levels = [];
+        foreach (explode(',', (string) $spec) as $entry) {
+            if (strpos($entry, ':') !== false) {
+                [$module_name, $module_perm] = array_map('trim', explode(':', $entry));
+                $levels[$module_name] = (string) filter_var($module_perm, FILTER_VALIDATE_INT, ['options' => ['default' => 0, 'min_range' => 0, 'max_range' => 3]]);
+            }
+        }
+
+        $permissions = [];
+        foreach ($modules as $module) {
+            if (array_key_exists('*', $levels)) {
+                $permissions[$module] = $levels['*'];
+            }
+
+            if (array_key_exists((string) $module, $levels)) {
+                $permissions[$module] = $levels[$module];
+            }
+        }
+
+        return json_encode($permissions);
+    }
+
+    /**
      *  @search/replace fields
      *  --------------------------------
      */
