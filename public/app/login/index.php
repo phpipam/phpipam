@@ -19,6 +19,25 @@ if ($User->is_valid_http_user($http_auth_user)) {
         exit();
     }
 }
+// OpenID Connect auto-redirect, /login/?local=1 shows the login form instead
+if ($GET->page == 'login' && ! isset($_GET['local']) && ! $User->is_authenticated() && $User->settings->dbversion >= 49
+    && ! in_array($GET->section, ['logout', 'timeout'], true) && ! isset($_SESSION['oidc_error'])) {
+    $oidc_method = $Tools->fetch_object('usersAuthMethod', 'type', 'OIDC');
+    if (is_object($oidc_method) && filter_var(db_json_decode($oidc_method->params, true)['auto_redirect'] ?? false, FILTER_VALIDATE_BOOLEAN)) {
+        // stop redirect loops: at most 3 automatic redirects within 2 minutes
+        $oidc_auto_redirect = $_SESSION['oidc_auto_redirect'] ?? [0, time()];
+        if (time() - $oidc_auto_redirect[1] > 120) {
+            $oidc_auto_redirect = [0, time()];
+        }
+
+        if ($oidc_auto_redirect[0] < 3) {
+            $_SESSION['oidc_auto_redirect'] = [$oidc_auto_redirect[0] + 1, $oidc_auto_redirect[1]];
+            header('Location: '.create_link('oidc'));
+            exit();
+        }
+    }
+}
+
 // disable requests module for public
 if (@$config['requests_public'] === false) {
     $User->settings->enableIPrequests = 0;
@@ -135,7 +154,8 @@ if (isset($User->settings->defaultLang) && ! is_null($User->settings->defaultLan
                 // include proper subpage
 if ($GET->page == 'login') {
     // disable main login form if you want use another authentification method by default (SAML, LDAP, etc.)
-    $include_main_login_form = ! isset($config['disable_main_login_form']) || ! $config['disable_main_login_form'];
+    // ?local=1 always shows the login form, e.g. for the local admin when the identity provider is down
+    $include_main_login_form = ! isset($config['disable_main_login_form']) || ! $config['disable_main_login_form'] || isset($_GET['local']);
 
     print '<div id="login">';
     print '<form name="login" id="login" action="'.BASE.'" class="form-inline" method="post">';

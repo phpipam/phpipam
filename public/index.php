@@ -59,6 +59,8 @@ if ($Rewrite->is_api()) {
         require __DIR__.'/app/saml2/index.php';
     } elseif ($GET->page == 'saml2-idp') {
         require __DIR__.'/app/saml2/idp.php';
+    } elseif ($GET->page == 'oidc') {
+        require __DIR__.'/app/oidc/index.php';
     } else {
         // verify that user is logged in
         $User->check_user_session();
