@@ -658,7 +658,7 @@ DROP TABLE IF EXISTS `usersAuthMethod`;
 
 CREATE TABLE `usersAuthMethod` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `type` ENUM('local','http','AD','LDAP','NetIQ','Radius','SAML2') NOT NULL DEFAULT 'local',
+  `type` ENUM('local','http','AD','LDAP','NetIQ','Radius','SAML2','OIDC') NOT NULL DEFAULT 'local',
   `params` text DEFAULT NULL, /* __no_html_escape__ */
   `protected` ENUM('Yes','No') NOT NULL DEFAULT 'Yes',
   `description` text,
@@ -1103,4 +1103,4 @@ CREATE TABLE `nominatim_cache` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "2.0";
-UPDATE `settings` SET `dbversion` = 48;
+UPDATE `settings` SET `dbversion` = 49;

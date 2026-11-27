@@ -23,6 +23,10 @@ if ($POST->action == 'add') {
     if ($POST->type == 'http') {
         $Result->die('danger', _('Only one http method allowed'), true);
     }
+
+    if ($POST->type == 'OIDC' && is_object($Admin->fetch_object('usersAuthMethod', 'type', 'OIDC'))) {
+        $Result->die('danger', _('Only one OIDC method allowed'), true);
+    }
 } else {
     $auth_method = $Admin->fetch_object('usersAuthMethod', 'id', $POST->id);
     if (! is_object($auth_method)) {

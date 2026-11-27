@@ -632,7 +632,13 @@ class User extends Common_functions
      */
     public function fetch_available_auth_method_types()
     {
-        return ['AD', 'LDAP', 'NetIQ', 'Radius', 'SAML2'];
+        $types = ['AD', 'LDAP', 'NetIQ', 'Radius', 'SAML2'];
+
+        if ($this->settings->dbversion >= 49) {
+            $types[] = 'OIDC';
+        }
+
+        return $types;
     }
 
     /**
@@ -842,13 +848,26 @@ class User extends Common_functions
      *
      * @param  string  $username
      * @param  string  $password
-     * @param  bool  $saml
+     * @param  bool|string  $sso  false: password login
+     *                            true|'SAML2': user asserted by a validated SAML2 response
+     *                            'OIDC': user asserted by a validated OpenID Connect ID token
      * @return void
      */
-    public function authenticate($username, $password, $saml = false)
+    public function authenticate($username, $password, $sso = false)
     {
+        // legacy callers pass true for SAML2
+        if ($sso === true) {
+            $sso = 'SAML2';
+        }
+
         // first we need to check if username exists
-        $this->fetch_user_details($username);
+        if ($sso === 'OIDC') {
+            // identity comes from the ID token only, never from an existing session
+            $this->reset_authentication_state();
+            $this->fetch_user_details($username, true);
+        } else {
+            $this->fetch_user_details($username);
+        }
 
         // set method type if set, otherwise presume local auth
         $this->authmethodid = ! is_blank(@$this->user->authMethod) ? $this->user->authMethod : 1;
@@ -864,12 +883,28 @@ class User extends Common_functions
         // set method name variable
         $authmethodtype = $this->authmethodtype;
 
-        if ($saml !== false) {
+        if ($sso === 'SAML2') {
             $authmethodtype = 'auth_SAML2';
+        } elseif ($sso === 'OIDC') {
+            $this->check_oidc_auth_method($username);
+        } elseif ($sso !== false) {
+            $this->Result->die('danger', _('Error: Invalid authentication method'));
         }
 
-        if ($authmethodtype == 'auth_SAML2' && $saml === false) {
+        if ($authmethodtype == 'auth_SAML2' && $sso !== 'SAML2') {
             $this->Result->die('danger', _('Please use')." <a href='".create_link('saml2')."'>"._('login').'</a>!');
+        }
+
+        if ($authmethodtype == 'auth_OIDC' && $sso !== 'OIDC') {
+            // password or API login attempt for an account that must use the identity provider
+            $this->block_ip();
+            $this->log_failed_access($username);
+            $this->Log->write(_('User login'), _('Password login attempted for OIDC account'), 1, $username);
+            if ($this->api) {
+                $this->Result->die('danger', _('Invalid username or password'));
+            }
+
+            $this->Result->die('danger', _('Please use')." <a href='".create_link('oidc')."'>"._('OIDC login').'</a>!');
         }
 
         // authenticate
@@ -894,6 +929,9 @@ class User extends Common_functions
                 break;
             case 'auth_SAML2':
                 $this->auth_SAML2($username);
+                break;
+            case 'auth_OIDC':
+                $this->auth_OIDC($username);
                 break;
             default:
                 $this->Log->write(_('User login'), _('Error: Invalid authentication method'), 2);
@@ -1376,6 +1414,73 @@ class User extends Common_functions
         $this->update_login_time();
         // remove possible blocked IP
         $this->block_remove_entry();
+    }
+
+    /**
+     * OpenID Connect auth
+     *
+     * The caller has already verified the ID token and mapped it to $username.
+     *
+     * @param  string  $username
+     * @return void
+     */
+    private function auth_OIDC($username)
+    {
+        // check login restrictions for authenticated user
+        $this->check_login_restrictions($username);
+
+        // save to session
+        $this->write_session_parameters();
+
+        $this->Log->write(_('OIDC login'), _('User').' '.$this->user->real_name.' '._('logged in via OIDC'), 0, $username);
+        $this->Result->warn('success', _('OIDC login successful'));
+
+        // write last logintime
+        $this->update_login_time();
+        // remove possible blocked IP
+        $this->block_remove_entry();
+    }
+
+    /**
+     * Refuse an OIDC login unless the account is assigned to the OIDC authentication method
+     *
+     * Stops a verified ID token for "Admin" or any other local or directory
+     * account from logging in as that account.
+     *
+     * @param  string  $username
+     * @return void
+     */
+    private function check_oidc_auth_method($username)
+    {
+        $oidc = $this->fetch_object('usersAuthMethod', 'type', 'OIDC');
+
+        if ($this->authmethodtype !== 'auth_OIDC' || ! is_object($oidc) || (int) $this->authmethodid !== (int) $oidc->id) {
+            $this->block_ip();
+            $this->log_failed_access($username);
+            $this->Log->write(_('OIDC login'), _('User is not configured for OIDC authentication'), 2, $username);
+            $this->Result->die('danger', _('User is not configured for OIDC authentication'));
+        }
+    }
+
+    /**
+     * Forget any previously authenticated user before a new identity is established
+     *
+     * Clears the session as well, so state such as an earlier user switch
+     * or a pending 2FA prompt cannot carry over to the new user.
+     *
+     * @return void
+     */
+    private function reset_authentication_state()
+    {
+        $this->authenticated = false;
+        $this->user = null;
+        $this->username = null;
+        $this->isadmin = false;
+        $this->twofa = false;
+
+        if ($this->api !== true && session_status() === PHP_SESSION_ACTIVE) {
+            $_SESSION = [];
+        }
     }
 
     /**

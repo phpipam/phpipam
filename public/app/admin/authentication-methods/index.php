@@ -23,6 +23,11 @@ $all_method_types = $User->fetch_available_auth_method_types();
 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 <?php
 foreach ($all_method_types as $type) {
+    // only one OIDC method is supported
+    if ($type == 'OIDC' && is_object($Admin->fetch_object('usersAuthMethod', 'type', 'OIDC'))) {
+        continue;
+    }
+
     print "<li><a class='open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='add' data-type='$type'><i class='fa fa-plus'></i> "._('Create new ').$type._(' authentication').'</a></li>';
 }
 ?>
@@ -70,6 +75,7 @@ foreach ($all_methods as $method) {
             'adminPassword',
             'secret',
             'spx509key',
+            'client_secret',
         ];
         $params = db_json_decode($method->params);
         foreach ($params as $key => $parameter) {
@@ -122,6 +128,7 @@ foreach ($all_methods as $method) {
         <li><?php print _('NetIQ authentication'); ?></li>
         <li><?php print _('Radius authentication'); ?></li>
         <li><?php print _('SAMLv2 authentication'); ?></li>
+        <li><?php print _('OpenID Connect (OIDC) authentication'); ?></li>
         <li><?php print _('Passkey authentication'); ?></li>
     </ul>
     <br>

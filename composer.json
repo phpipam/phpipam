@@ -49,6 +49,7 @@
     "dapphp/radius": "^3.0",
     "dapphp/securimage": "^4.0.2",
     "erusev/parsedown": "^1.8",
+    "firebase/php-jwt": "^7.2",
     "firehed/cbor": "^0.1.0",
     "firehed/webauthn": "^0.9.1",
     "onelogin/php-saml": "^4.3",

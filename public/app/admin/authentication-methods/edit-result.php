@@ -38,6 +38,10 @@ if ($action == 'add') {
         $Result->die('danger', _('Only one http method allowed'), true);
     }
 
+    if ($POST->type == 'OIDC' && is_object($Admin->fetch_object('usersAuthMethod', 'type', 'OIDC'))) {
+        $Result->die('danger', _('Only one OIDC method allowed'), true);
+    }
+
     unset($POST->id);
 } else {
     // if edit check if protected?
@@ -90,6 +94,51 @@ if ($POST->type == 'SAML2') {
     }
 }
 
+if ($POST->type == 'OIDC' && $action != 'delete') {
+    $POST->issuer = trim((string) $POST->issuer);
+    if (! OIDC::is_https_url($POST->issuer) || ! is_null(parse_url($POST->issuer, PHP_URL_QUERY)) || ! is_null(parse_url($POST->issuer, PHP_URL_FRAGMENT))) {
+        $Result->die('danger', _('Issuer must be an https URL without query or fragment'));
+    }
+
+    $POST->client_id = trim((string) $POST->client_id);
+    if (! preg_match('/^[\x20-\x7E]{1,255}$/', $POST->client_id)) {
+        $Result->die('danger', _('Invalid client ID'));
+    }
+
+    // the stored secret is never sent to the browser, blank keeps it
+    if ($action == 'edit' && is_blank($POST->client_secret)) {
+        $POST->client_secret = (string) (db_json_decode($auth_method->params, true)['client_secret'] ?? '');
+    } elseif ($POST->client_secret !== ($_POST['client_secret'] ?? null)) {
+        $Result->die('danger', _('Client secret must not contain HTML tags'));
+    }
+
+    if (is_blank($POST->client_secret)) {
+        $Result->die('danger', _('Client secret is required'));
+    }
+
+    if (! in_array($POST->token_auth_method, ['client_secret_basic', 'client_secret_post'], true)) {
+        $Result->die('danger', _('Invalid client authentication method'));
+    }
+
+    $oidc_scopes = preg_split('/\s+/', trim((string) $POST->scopes), -1, PREG_SPLIT_NO_EMPTY);
+    foreach ($oidc_scopes as $oidc_scope) {
+        if (! preg_match('/^[\x21\x23-\x5B\x5D-\x7E]+$/', $oidc_scope)) {
+            $Result->die('danger', _('Invalid scope').': '.escape_input($oidc_scope));
+        }
+    }
+
+    if (! in_array('openid', $oidc_scopes, true)) {
+        array_unshift($oidc_scopes, 'openid');
+    }
+
+    $POST->scopes = implode(' ', $oidc_scopes);
+
+    $POST->username_claim = trim((string) $POST->username_claim);
+    if (! preg_match('/^[\x21\x23-\x7E]{1,255}$/', $POST->username_claim)) {
+        $Result->die('danger', _('Invalid username claim'));
+    }
+}
+
 // remove processed params
 unset($POST->id, $POST->type, $POST->description, $POST->action);
 $values['params'] = json_encode($POST);
@@ -101,6 +150,7 @@ $secure_keys = [
     'idpx509cert',
     'spx509cert',
     'spx509key',
+    'client_secret',
 ];
 // log values
 $values_log = $values;
